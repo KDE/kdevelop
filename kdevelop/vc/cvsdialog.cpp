@@ -16,6 +16,8 @@
 CvsDialog::CvsDialog(const char *command, const char *text)
     : QDialog(0, "", true), childproc(0)
 {
+
+    
     setCaption( i18n("CVS") );
 
     cmd = command;
@@ -49,7 +51,7 @@ CvsDialog::CvsDialog(const char *command, const char *text)
     buttonbox->layout();
 
     layout->activate();
-    resize(sizeHint());
+    resize(560,280);
 }
 
 

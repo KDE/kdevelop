@@ -1473,6 +1473,7 @@ void CKDevelop::slotHelpAbout(){
                         "Pascal Krahmer <pascal@beast.de>\n"
 			"Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
                         "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
+			"Jörgen Olsson<jorgen@cenacle.net>\n"
                         "Martin Piskernig <martin.piskernig@stuwo.at>\n\n"
                         "See The KDevelop User Manual, Chapter Authors\n"
                         "for further information.\n\n"

@@ -1782,9 +1782,14 @@ void CKAppWizard::slotCppHeaderClicked() {
 
 void CKAppWizard::slotProcessExited() {
 
-	QString directory = directoryline->text();
-	QString prj_str;
-  prj_str = directory + "/" + namelow + ".kdevprj";
+  QString directory = directoryline->text();
+  QString prj_str;
+  if (vsBox->currentItem() != 0) {
+    prj_str = QDir::homeDirPath() + "/kdeveloptemp/" + namelow + ".kdevprj";
+  }
+  else {
+    prj_str = directory + "/" + namelow + ".kdevprj";
+  }
   project = new CProject(prj_str);
   project->readProject();
   project->setKDevPrjVersion("1.0beta1");
@@ -2253,25 +2258,25 @@ void CKAppWizard::slotProcessExited() {
     QString file2 = QString(tokener.nextToken()) + "/ksgml2html";
     if(QFile::exists(file2)) {
       KShellProcess process;
-		 	QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
- 			process.clearArguments();
- 			process << "cp"; // copy is your friend :-)
- 			process << nif_template;
- 			process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
- 			process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
-		 	break;
+      QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+      process.clearArguments();
+      process << "cp"; // copy is your friend :-)
+      process << nif_template;
+      process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+      break;
     }
   }
-
+  
   KShellProcess p;
   QDir dir;
 	if (vsBox->currentItem() == 1) {
-		dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
-		QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
-										 (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
-										 (QString) " " + releaseline->text();
-		p << import;
-    p.start(KProcess::Block, KProcess::AllOutput);
+	  dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
+	  QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
+	    (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
+	    (QString) " " + releaseline->text();
+	  p << import;
+	  p.start(KProcess::Block, KProcess::AllOutput);
 	}
 
 	if (vsBox->currentItem() != 0) {

@@ -1,7 +1,17 @@
+1999-07-31 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* replaced the automoc in qt.tgz,normal.tgz,mini.tgz with a slightly modified version 
+	Thanks to "Armin L. Schneider" <armin.schneider@uumail.de>
+	* fixed bug with configure.in generation in custom-project mode
+	
 1999-07-31 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* cpp_template is in the templategroup now
 	* fixed cursorproblem in applicationwizard
 	* worked on vcs in applicationwizard
+	
+1999-07-30  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed the annoying focus-bug with startuplogo/tipoftheday on other wm's than kwm
+	* the setup skip the kdelibs-doc generation, if a documentation was found, 
+	will be important for the upcoming KDK
 
 1999-07-30 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* now the applicationwizard uses ksgml2html too

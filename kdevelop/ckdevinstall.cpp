@@ -225,28 +225,28 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	hint_label = new QLabel( this, "Label_5" );
 	hint_label->setGeometry( 40, 100, 440, 170 );
 	{
-		QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-		QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-		QPalette palette( normal, disabled, active );
-		hint_label->setPalette( palette );
+	  QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+	  QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
+	  QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+	  QPalette palette( normal, disabled, active );
+	  hint_label->setPalette( palette );
 	}
 	{
-		QFont font( "LucidaTypewriter", 12, 50, 0 );
-		font.setStyleHint( (QFont::StyleHint)0 );
-		font.setCharSet( (QFont::CharSet)0 );
-		hint_label->setFont( font );
+	  QFont font( "LucidaTypewriter", 12, 50, 0 );
+	  font.setStyleHint( (QFont::StyleHint)0 );
+	  font.setCharSet( (QFont::CharSet)0 );
+	  hint_label->setFont( font );
 	}
 	hint_label->setFrameStyle( 33 );
 	hint_label->setText(i18n("This installation program will check your system for helper programs needed by KDevelop. "
 				"Also your documentation will be set up automatically."
-	                          "  Choose 'Proceed` to invoke the automatic detection and the "
-	                          "documentation generator. 'Help' will give more information about the installation."
-	                          " Choosing 'Cancel' will stop the installation and KDevelop will be started without setting the initial"
-	                          "values needed for proper functionality.") );
+				 "  Choose 'Proceed` to invoke the automatic detection and the "
+				 "documentation generator. 'Help' will give more information about the installation."
+				 " Choosing 'Cancel' will stop the installation and KDevelop will be started without setting the initial"
+				 "values needed for proper functionality.") );
 	hint_label->setAlignment( 1316 );
 	hint_label->setMargin( -1 );
-
+	
 	help_button = new QPushButton( this, "PushButton_6" );
 	help_button->setGeometry( 50, 310, 110, 30 );
 	help_button->setText(i18n("Help") );
@@ -525,6 +525,7 @@ void CKDevInstall::slotAuto() // proceed >>
   if ( progress.wasCancelled() )
     break;
     if(CToolClass::searchInstProgram("make")){
+
       make=true;
     }
   }
@@ -698,59 +699,101 @@ void CKDevInstall::slotAuto() // proceed >>
   	QString qt_testfile="classes.html";
   	QString qt="";
 
-	  QDir* qt_dir=new QDir();
+	QDir* qt_dir=new QDir();
   	if(qt_dir->cd("/usr/local/qt/html/"))
-    	if(qt_dir->exists("classes.html"))
-      	qt="/usr/local/qt/html/";
-
-	  if(qt_dir->cd("/usr/local/lib/qt/html/"))
+	  if(qt_dir->exists("classes.html"))
+	    qt="/usr/local/qt/html/";
+	
+	if(qt_dir->cd("/usr/local/lib/qt/html/"))
   	  if(qt_dir->exists("classes.html"))
-    	  qt="/usr/local/lib/qt/html/";
-
-	  if(qt_dir->cd("/usr/lib/qt/html/"))
+	    qt="/usr/local/lib/qt/html/";
+	
+	if(qt_dir->cd("/usr/lib/qt/html/"))
   	  if(qt_dir->exists("classes.html"))
-    	  qt="/usr/lib/qt/html/";
-
-	  if(qt_dir->cd("/usr/lib/qt/doc/html/"))
-  		if(qt_dir->exists("classes.html"))
-      	qt="/usr/lib/qt/doc/html/";
-
-	  if(qt_dir->cd("/usr/X11/lib/qt/html/"))
+	    qt="/usr/lib/qt/html/";
+	
+	if(qt_dir->cd("/usr/lib/qt/doc/html/"))
+	  if(qt_dir->exists("classes.html"))
+	    qt="/usr/lib/qt/doc/html/";
+	
+	if(qt_dir->cd("/usr/X11/lib/qt/html/"))
   	  if(qt_dir->exists("classes.html"))
-    	  qt="/usr/X11/lib/qt/html/";
-
-	  if(qt_dir->cd("/usr/X11/lib/qt/doc/html/"))
+	    qt="/usr/X11/lib/qt/html/";
+	
+	if(qt_dir->cd("/usr/X11/lib/qt/doc/html/"))
   	  if(qt_dir->exists("classes.html"))
-     	 qt="/usr/X11/lib/qt/doc/html/";
-
-	  if(qt_dir->cd("/usr/doc/qt-doc/html/"))
+	    qt="/usr/X11/lib/qt/doc/html/";
+	
+	if(qt_dir->cd("/usr/doc/qt-doc/html/"))
   	  if(qt_dir->exists("classes.html"))
-    	  qt="/usr/doc/qt-doc/html/";
-
-	  if(!qt.isEmpty())
+	    qt="/usr/doc/qt-doc/html/";
+	
+	if(!qt.isEmpty())
   	  qt_test=false;
-	  else
+	else
   	  qt_test=true;
-
-	  if(!qt_test){
+	
+	if(!qt_test){
   	  config->setGroup("Doc_Location");
-    	config->writeEntry("doc_qt",qt);
-	 	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n"+qt
- 	   				+"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
-		}
-  	else{  // return to the setup to set it manually ?
-    	int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
-      	                                            "be detected. Please insert the correct path\n"
-        	                                          "to your Qt-documentation manually. Do you want\n"
-          	                                        "to set it now ?\n "),KMsgBox::QUESTION);
- 	   if(result==1){
-				hint_label->setGeometry( 40, 150, 440, 120 );
-    		hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
-      	return;
-			}
-  	}
+	  config->writeEntry("doc_qt",qt);
+	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n"+qt
+								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
 	}
+  	else{  // return to the setup to set it manually ?
+	  int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
+								  "be detected. Please insert the correct path\n"
+								  "to your Qt-documentation manually. Do you want\n"
+								  "to set it now ?\n "),KMsgBox::QUESTION);
+	  if(result==1){
+	    hint_label->setGeometry( 40, 150, 440, 120 );
+	    hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
+	    return;
+	  }
+  	}
+  }
   
+  //ok it follows some stupid code, but it works:-) --Sandy 
+  kde_test=false;
+  config->setGroup("Doc_Location");
+  QString dir = "/opt/kde/share/doc/kdelibs/"; // normal dists :-)
+ 
+  QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
+
+  if(QFileInfo(kde_testfile).exists()){
+    config->writeEntry("doc_kde",dir);
+    kde_test=true;
+  }
+
+  if(!kde_test){
+    dir = "/usr/share/doc/kdelibs/"; // Redhat 6.0
+    kde_testfile=dir+"kdecore/index.html"; 
+    
+    if(QFileInfo(kde_testfile).exists()){
+      config->writeEntry("doc_kde",dir);
+      kde_test=true;
+    }
+  }
+  if(!kde_test){
+    dir = "/usr/local/kde/share/doc/kdelibs/"; // another kde location
+    kde_testfile=dir+"kdecore/index.html"; 
+
+    if(QFileInfo(kde_testfile).exists()){
+      config->writeEntry("doc_kde",dir);
+      kde_test=true;
+    }
+  }
+  
+  if (kde_test) {
+    KMsgBox::message(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
+								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
+     slotProcessExited(0);
+     return; //ok, nothing more to do, we are leaving	
+  }
+  
+
+
+
+
   QDir* kde_dir=new QDir();
 
   if(!kdoc && !perl)
@@ -774,25 +817,28 @@ void CKDevInstall::slotAuto() // proceed >>
     kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
     config->setGroup("Doc_Location");
     config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
-		config->sync();
+    config->sync();
     CUpdateKDEDocDlg dlg(this,"test",shell_process, config);
     if(!dlg.exec()){
-			slotProcessExited(shell_process);
+      slotProcessExited(shell_process);
     }
+
+
+    
     auto_button->setEnabled(false);
     hint_label->setText(i18n("                Creating KDE documentation                           "
-	                          "                                                             "
-	                          "               Please wait...                           "
-	                          "                                                               "
-	                          "                                                               ") );
-
+			     "                                                             "
+			     "               Please wait...                           "
+			     "                                                               "
+			     "                                                               ") );
+    
   }
   
 }
 void CKDevInstall::slotCancel()
 {
   int result=KMsgBox::yesNo(this,i18n("Warning"), i18n("\n\nThis will exit the automatic installation process\n"
-							"and start KDevelop with the default values !\n\n"
+						       "and start KDevelop with the default values !\n\n"
 							"If you choose 'Continue', you will have to set all\n"
 							"installation values manually in the KDevelop Setup\n"
 							"dialog available in the options menu.\n\n "),KMsgBox::STOP,i18n("Continue"),i18n("Back"));

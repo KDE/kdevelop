@@ -66,17 +66,18 @@ int main(int argc, char* argv[]) {
       if (QString(argv[1]) != "--setup")
 				kdevelop->slotProjectOpenCmdl(argv[1]);
     }
-    
+    if(bStartLogo){
+      start_logo->close();
+      delete start_logo;
+    }
+  
     a.getConfig()->setGroup("TipOfTheDay");
     bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
     if(showTip){
     	kdevelop->slotHelpTipOfDay();
     }
   }
-  if(bStartLogo){
-    start_logo->close();
-  }
-  delete start_logo;
+  
   int rc = a.exec();
   return rc;
 }

@@ -960,6 +960,9 @@ void CProject::addMakefileAmToProject(QString rel_name,TMakefileAmInfo info){
 }
 
 void CProject::updateConfigureIn(){
+
+  if( isCustomProject()) return; // do nothing
+
   QString abs_filename = getProjectDir() + "/configure.in";
   QFile file(abs_filename);
   QStrList list;
