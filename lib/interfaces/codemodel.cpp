@@ -101,6 +101,8 @@ void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
     FunctionList functionList = source->functionList();
     FunctionDefinitionList functionDefinitionList = source->functionDefinitionList();
     VariableList variableList = source->variableList();
+    EnumList enumList = source->enumList();
+    TypeAliasList typeAliasList = source->typeAliasList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	addNamespace( ns, *it );
@@ -112,6 +114,10 @@ void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
 	ns->addFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	ns->addVariable( *it );
+    for( EnumList::Iterator it=enumList.begin(); it!=enumList.end(); ++it )
+	ns->addEnum( *it );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	ns->addTypeAlias( *it );
 }
 
 void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
@@ -126,6 +132,8 @@ void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
     FunctionList functionList = source->functionList();
     FunctionDefinitionList functionDefinitionList = source->functionDefinitionList();
     VariableList variableList = source->variableList();
+    EnumList enumList = source->enumList();
+    TypeAliasList typeAliasList = source->typeAliasList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	removeNamespace( ns, *it );
@@ -137,9 +145,21 @@ void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
 	ns->removeFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	ns->removeVariable( *it );
+    for( EnumList::Iterator it=enumList.begin(); it!=enumList.end(); ++it )
+	ns->removeEnum( *it );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	ns->removeTypeAlias( *it );
 
-    if( ns->namespaceList().isEmpty() && ns->classList().isEmpty() && ns->functionList().isEmpty() && ns->functionDefinitionList().isEmpty() && ns->variableList().isEmpty() )
+    if( ns->namespaceList().isEmpty() && 
+    	ns->classList().isEmpty() && 
+	ns->functionList().isEmpty() && 
+	ns->functionDefinitionList().isEmpty() && 
+	ns->variableList().isEmpty() &&
+	ns->enumList().isEmpty() && 
+	ns->typeAliasList().isEmpty() )
+    {
         target->removeNamespace( ns );
+    }
 }
 
 bool CodeModel::addFile( FileDom file )
@@ -153,6 +173,8 @@ bool CodeModel::addFile( FileDom file )
     FunctionList functionList = file->functionList();
     FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
     VariableList variableList = file->variableList();
+    EnumList enumList = file->enumList();
+    TypeAliasList typeAliasList = file->typeAliasList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	addNamespace( m_globalNamespace, *it );
@@ -164,6 +186,10 @@ bool CodeModel::addFile( FileDom file )
 	m_globalNamespace->addFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	m_globalNamespace->addVariable( *it );
+    for( EnumList::Iterator it=enumList.begin(); it!=enumList.end(); ++it )
+	m_globalNamespace->addEnum( *it );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	m_globalNamespace->addTypeAlias( *it );
 
     m_files.insert( file->name(), file );
     return true;
@@ -177,6 +203,8 @@ void CodeModel::removeFile( FileDom file )
     FunctionList functionList = file->functionList();
     FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
     VariableList variableList = file->variableList();
+    EnumList enumList = file->enumList();
+    TypeAliasList typeAliasList = file->typeAliasList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	removeNamespace( m_globalNamespace, *it );
@@ -188,7 +216,11 @@ void CodeModel::removeFile( FileDom file )
 	m_globalNamespace->removeFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	m_globalNamespace->removeVariable( *it );
-
+    for( EnumList::Iterator it=enumList.begin(); it!=enumList.end(); ++it )
+	m_globalNamespace->removeEnum( *it );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	m_globalNamespace->removeTypeAlias( *it );
+	
     m_files.remove( file->name() );
 }
 
@@ -605,6 +637,64 @@ void ClassModel::removeEnum( EnumDom e )
     m_enumerators.remove( e->name() );
 }
 
+TypeAliasList ClassModel::typeAliasList( )
+{
+    TypeAliasList l;
+    QMap<QString, TypeAliasList>::Iterator it = m_typeAliases.begin();
+    while( it != m_typeAliases.end() ){
+	l += *it;
+	++it;
+    }
+
+    return l;
+}
+
+const TypeAliasList ClassModel::typeAliasList( ) const
+{
+    TypeAliasList l;
+    QMap<QString, TypeAliasList>::ConstIterator it = m_typeAliases.begin();
+    while( it != m_typeAliases.end() ){
+	l += *it;
+	++it;
+    }
+
+    return l;
+}
+
+bool ClassModel::hasTypeAlias( const QString & name ) const
+{
+    return m_typeAliases.contains( name );
+}
+
+TypeAliasList ClassModel::typeAliasByName( const QString & name )
+{
+    return m_typeAliases.contains( name ) ? m_typeAliases[ name ] : TypeAliasList();
+}
+
+const TypeAliasList ClassModel::typeAliasByName( const QString & name ) const
+{
+    return m_typeAliases.contains( name ) ? m_typeAliases[ name ] : TypeAliasList();
+}
+
+bool ClassModel::addTypeAlias( TypeAliasDom typeAlias )
+{
+    if( typeAlias->name().isEmpty() )
+	return false;
+
+    m_typeAliases[ typeAlias->name() ].push_back( typeAlias );
+    return true;
+}
+
+void ClassModel::removeTypeAlias( TypeAliasDom typeAlias )
+{
+    m_typeAliases[ typeAlias->name() ].remove( typeAlias );
+
+    if( m_typeAliases[typeAlias->name()].isEmpty() )
+	m_typeAliases.remove( typeAlias->name() );
+}
+
+
+
 // ------------------------------------------------------------------------
 ArgumentModel::ArgumentModel( CodeModel* model )
     : CodeModelItem( Argument, model)
@@ -875,7 +965,14 @@ void ClassModel::read( QDataStream & stream )
 	e->read( stream );
 	addEnum( e );
     }
-    
+
+    m_typeAliases.clear();
+    stream >> n;
+    for( int i=0; i<n; ++i ){
+	TypeAliasDom typeAlias = codeModel()->create<TypeAliasModel>();
+	typeAlias->read( stream );
+	addTypeAlias( typeAlias );
+    }
 }
 
 void ClassModel::write( QDataStream & stream ) const
@@ -908,6 +1005,12 @@ void ClassModel::write( QDataStream & stream ) const
     stream << int( enum_list.size() );
     for( EnumList::ConstIterator it = enum_list.begin(); it!=enum_list.end(); ++it )
 	(*it)->write( stream );    
+	
+    const TypeAliasList type_alias_list = typeAliasList();
+    stream << int( type_alias_list.size() );
+    for( TypeAliasList::ConstIterator it = type_alias_list.begin(); it!=type_alias_list.end(); ++it )
+	(*it)->write( stream );    
+	
 }
 
 void NamespaceModel::read( QDataStream & stream )
@@ -1124,5 +1227,35 @@ void EnumeratorModel::write( QDataStream & stream ) const
 void EnumModel::removeEnumerator( EnumeratorDom e )
 {
     m_enumerators.remove( e->name() );
+}
+
+// ---------------------------------------------------------------
+TypeAliasModel::TypeAliasModel( CodeModel * model )
+    : CodeModelItem( TypeAlias, model )
+{
+}
+
+void TypeAliasModel::read( QDataStream & stream )
+{
+    CodeModelItem::read( stream );
+    
+    stream >> m_type;
+}
+
+void TypeAliasModel::write( QDataStream & stream ) const
+{
+    CodeModelItem::write( stream );
+    
+    stream << m_type;
+}
+
+QString TypeAliasModel::type( ) const
+{
+    return m_type;
+}
+
+void TypeAliasModel::setType( const QString & type )
+{
+    m_type = type;
 }
 

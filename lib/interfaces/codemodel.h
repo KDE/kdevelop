@@ -35,7 +35,7 @@ class VariableModel;
 class ArgumentModel;
 class EnumModel;
 class EnumeratorModel;
-class QRegExp;
+class TypeAliasModel;
 
 typedef KSharedPtr<CodeModelItem> ItemDom;
 typedef KSharedPtr<FileModel> FileDom;
@@ -46,6 +46,7 @@ typedef KSharedPtr<FunctionDefinitionModel> FunctionDefinitionDom;
 typedef KSharedPtr<VariableModel> VariableDom;
 typedef KSharedPtr<ArgumentModel> ArgumentDom;
 typedef KSharedPtr<EnumModel> EnumDom;
+typedef KSharedPtr<TypeAliasModel> TypeAliasDom;
 typedef KSharedPtr<EnumeratorModel> EnumeratorDom;
 
 typedef QValueList<ItemDom> ItemList;
@@ -57,6 +58,7 @@ typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList;
 typedef QValueList<VariableDom> VariableList;
 typedef QValueList<ArgumentDom> ArgumentList;
 typedef QValueList<EnumDom> EnumList;
+typedef QValueList<TypeAliasDom> TypeAliasList;
 typedef QValueList<EnumeratorDom> EnumeratorList;
 
 template <class ItemList>
@@ -149,6 +151,7 @@ public:
 	FunctionDefinition,
 	Enum,
 	Enumerator,
+	TypeAlias,
 
 	Custom = 1000
     };
@@ -193,6 +196,7 @@ public:
     virtual bool isArgument() const { return false; }
     virtual bool isEnum() const { return false; }
     virtual bool isEnumerator() const { return false; }
+    virtual bool isTypeAlias() const { return false; }
     virtual bool isCustom() const { return false; }
 
     virtual void read( QDataStream& stream );
@@ -264,6 +268,14 @@ public:
     bool addVariable( VariableDom var );
     void removeVariable( VariableDom var );
 
+    TypeAliasList typeAliasList();
+    const TypeAliasList typeAliasList() const;
+    bool hasTypeAlias( const QString& name ) const;
+    TypeAliasList typeAliasByName( const QString& name );
+    const TypeAliasList typeAliasByName( const QString& name ) const;
+    bool addTypeAlias( TypeAliasDom typeAlias );
+    void removeTypeAlias( TypeAliasDom typeAlias );
+    
     EnumList enumList();
     const EnumList enumList() const;
     bool hasEnum( const QString& name ) const;
@@ -282,6 +294,7 @@ private:
     QMap<QString, FunctionList> m_functions;
     QMap<QString, FunctionDefinitionList> m_functionDefinitions;
     QMap<QString, VariableDom> m_variables;
+    QMap<QString, TypeAliasList> m_typeAliases;
     QMap<QString, EnumDom> m_enumerators;
 
 private:
@@ -549,5 +562,31 @@ private:
     void operator = ( const EnumeratorModel& source );
     friend class CodeModel;
 };
+
+class TypeAliasModel: public CodeModelItem
+{
+protected:
+    TypeAliasModel( CodeModel* model );
+
+public:
+    typedef TypeAliasDom Ptr;
+
+    virtual bool isTypeAlias() const { return true; }
+    
+    QString type() const;
+    void setType( const QString& type );
+    
+    virtual void read( QDataStream& stream );
+    virtual void write( QDataStream& stream ) const;
+
+private:
+    QString m_type;
+    
+private:
+    TypeAliasModel( const TypeAliasModel& source );
+    void operator = ( const TypeAliasModel& source );
+    friend class CodeModel;
+};
+
 
 #endif // _CODEMODEL_H_
