@@ -1,15 +1,5 @@
 <part id="p04" label="IV">
 <title>Developer Tools and Support</title>
-<toc>
-<title>In this part</title>
-<tocpart><tocentry/>
-<tocchap><tocentry><emphasis role="strong">15 Creating Documentation</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">16 Packaging and Distributing Code</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">17 Managing Source Code with CVS</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">18 The KDevelop IDE: The Integrated Development Environment for KDE</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">19 Licensing Issues</emphasis></tocentry></tocchap>
-</tocpart>
-</toc>
 &ch15;
 &ch16;
 &ch17;

@@ -1,14 +1,7 @@
 <part id="p05" label="V">
 <title>Appendixes</title>
-<toc>
-<title>In this Part</title>
-<tocpart><tocentry/>
-<tocchap><tocentry><emphasis role="strong">A KDE-Related Licenses</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">B KDE Class Reference</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">C Answers</emphasis></tocentry></tocchap>
-</tocpart>
-</toc>
 &app01;
 &app02;
 &app03;
 </part>
+<index id="indexchapter"/>

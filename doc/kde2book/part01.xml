@@ -1,17 +1,5 @@
 <part label="1" id="p01">
 <title>Fundamentals of KDE Application Programming</title>
-<toc>
-<title>In this part</title>
-<tocpart>
-<tocentry/>
-<tocchap><tocentry><emphasis role="strong">1 The K Desktop Environment Background</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">2 A Simple KDE Application</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">3 The Qt Toolkit</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">4 Creating Custom KDE Widgets</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">5 KDE User Interface Compliance</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">6 KDE Style Reference</emphasis></tocentry></tocchap>
-</tocpart>
-</toc>
 &ch01;
 &ch02;
 &ch03;

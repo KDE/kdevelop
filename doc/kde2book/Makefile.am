@@ -1,3 +1,6 @@
+KDE_LANG = en
+KDE_DOCS = AUTO
+
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/kde2book
 
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs

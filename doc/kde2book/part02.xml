@@ -1,15 +1,5 @@
 <part label="II" id="p02">
 <title>Advanced KDE Widgets and UI Design Techniques</title>
-<toc>
-<title>In this part</title>
-<tocpart><tocentry/>
-<tocchap><tocentry><emphasis role="strong"> 7 Further KDE Compliance</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong"> 8 Using Dialog Boxes</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong"> 9 Constructing a Responsive User Interface</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">10 Complex-Function KDE Widgets</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">11 Alternative Application Types</emphasis></tocentry></tocchap>
-</tocpart>
-</toc>
 &ch07;
 &ch08;
 &ch09;

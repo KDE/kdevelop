@@ -1,13 +1,5 @@
 <part label="III" id="p03">
 <title>Application Interaction and Integration</title>
-<toc>
-<title>In this part</title>
-<tocpart><tocentry/>
-<tocchap><tocentry><emphasis role="strong">12 Creating and Using Components (KParts)</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">13 DCOP&mdash;Desktop Communication Protocol</emphasis></tocentry></tocchap>
-<tocchap><tocentry><emphasis role="strong">14 Multimedia</emphasis></tocentry></tocchap>
-</tocpart>
-</toc>
 &ch12;
 &ch13;
 &ch14;
