@@ -218,7 +218,8 @@ void DigraphView::parseDotResults(const QStringList &list)
 
 void DigraphView::process()
 {
-    if (!KGlobal::dirs()->findExe("dot")) {
+    QString cmd = KGlobal::dirs()->findExe("dot");
+    if (cmd.isEmpty()) {
         KMessageBox::sorry(0, i18n("You don't have 'dot' installed.\nIt can be downloaded from www.graphviz.org."));
         return;
     }
@@ -235,12 +236,11 @@ void DigraphView::process()
         is << (*it) << endl;
     is << "}" << endl;
     ifile.close();
-#if 0
-    KShellProcess proc("/bin/sh");
-    proc << QString("dot -Tplain %1 -o %2").arg(ifile.name()).arg(ofile.name());
+
+    KProcess proc;
+    proc << cmd << "-Tplain" << ifile.name() << "-o" << ofile.name();
     proc.start(KProcess::Block);
-#endif
-    ::system(QString("dot -Tplain %1 -o %2").arg(ifile.name()).arg(ofile.name()));
+
     QTextStream &os = *ofile.textStream();
     while (!os.atEnd()) 
         results << os.readLine();
