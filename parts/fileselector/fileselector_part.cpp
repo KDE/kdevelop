@@ -9,7 +9,7 @@
 #include <kstddirs.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
-#include <kfileviewitem.h>
+#include <kfileitem.h>
 
 #include <kdevcore.h>
 #include <kdevapi.h>
@@ -29,18 +29,18 @@ FileSelectorPart::FileSelectorPart(KDevApi *api, QObject *parent, const char *na
 	m_filetree = new FileSelectorWidget(this);
 
 	connect( m_filetree->dirOperator(),
-			  SIGNAL(fileSelected(const KFileViewItem*)),
+			  SIGNAL(fileSelected(const KFileItem*)),
 			  this,
-			  SLOT(fileSelected(const KFileViewItem*)));
+			  SLOT(fileSelected(const KFileItem*)));
 
     m_filetree->setCaption(i18n("File Selector"));
 	core()->embedWidget(m_filetree, KDevCore::SelectView, i18n("FileSel"));
 
 }
 
-void FileSelectorPart::fileSelected(const KFileViewItem *file)
+void FileSelectorPart::fileSelected(const KFileItem *file)
 {
-  KURL u(file->urlString());
+  KURL u(file->url());
 
   core()->gotoSourceFile( u );
 }
