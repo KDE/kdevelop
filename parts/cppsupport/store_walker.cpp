@@ -720,7 +720,14 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
         klass = container->getStructByName( className );
 
     if( !klass && includeImports ){
-        QStringList imports = m_imports.back();
+
+        QStringList imports;
+        QValueList<QStringList>::Iterator lIt = m_imports.begin();
+        while( lIt != m_imports.end() ){
+           imports += (*lIt );
+           ++lIt;
+        }
+
         QStringList::Iterator impIt = imports.begin();
         while( impIt != imports.end() ){
             ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container, false );
