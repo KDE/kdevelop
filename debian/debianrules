@@ -63,25 +63,75 @@ if (@ARGV && $ARGV[0] eq 'update') {
   exit;
 }
 
+if (@ARGV && $ARGV[0] eq 'cleanup') {
+
+if (-d "debian/tmp/usr/share/config") {
+	if (! -d "debian/tmp/$kde_confdir") {
+	  system("mv debian/tmp/usr/share/config debian/tmp/$kde_confdir");
+	}
+}
+system("rm -f `find debian/ -name \".anchors\"`");
+system("chmod 755 debian/*preinst debian/*postinst");
+
+exit;
+}
+
+$QTDIR="/usr/lib/qt2";
+$kde_prefix="/usr";
+$kde_htmldir="$kde_prefix/share/doc/kde/HTML";
+$kde_icondir="$kde_prefix/share/icons";
+$kde_sounddir="$kde_prefix/share/sounds";
+$kde_datadir="$kde_prefix/share/apps";
+$kde_locale="$kde_prefix/share/locale";
+$kde_confdir="/etc/kde2";
+$kde_cgidir="$kde_prefix/lib/cgi-bin";
+$kde_appsdir="$kde_prefix/share/applnk";
+$kde_mimedir="$kde_prefix/share/mimelnk";
+$kde_wallpaperdir="$kde_prefix/share/wallpapers";
+$kde_bindir="$kde_prefix/bin";
+$kde_servicesdir="$kde_prefix/share/services";
+$kde_servicetypesdir="$kde_prefix/share/servicetypes";
+$kde_includedir="$kde_prefix/include/kde";
+$kde_libdir="$kde_prefix/lib";
+$mandir="$kde_prefix/share/man"; 
+$infodir="$kde_prefix/share/info";
+$IDL="$kde_bindir/cuteidl";
+$DCOPIDL="$kde_bindir/dcopidl";
+$DCOPIDL2CPP="$kde_bindir/dcopidl2cpp";
+$KDB2HTML="$kde_bindir/kdb2html";
+$MCOPIDL="$kde_bindir/mcopidl";
+$ARTSCCONFIG="$kde_bindir/artsc-config";
+
 if (@ARGV && $ARGV[0] eq 'echodirs') {
-  print STDOUT "export kde_htmldir=/usr/doc/kde/HTML\n";
-  print STDOUT "export kde_appsdir=/usr/share/applnk\n";
-  print STDOUT "export kde_icondir=/usr/share/icons\n";
-  print STDOUT "export kde_sounddir=/usr/share/sounds\n";
-  print STDOUT "export kde_datadir=/usr/share/apps\n";
-  print STDOUT "export kde_locale=/usr/share/locale\n";
-  print STDOUT "export kde_cgidir=/usr/lib/cgi-bin\n";
-  print STDOUT "export kde_confdir=/etc/kde2\n";
-  print STDOUT "export kde_mimedir=/usr/share/mimelnk\n";
-  print STDOUT "export kde_toolbardir=/usr/share/toolbar\n";
-  print STDOUT "export kde_wallpaperdir=/usr/share/wallpapers\n";
-  print STDOUT "export kde_bindir=/usr/bin\n";
-  print STDOUT "export kde_partsdir=/usr/lib/parts\n";
-  print STDOUT "export includedir=/usr/include/kde\n";
-  print STDOUT "export libdir=/usr/lib\n";
-  print STDOUT "export QTDIR=/usr/lib/qt2beta\n";
-  print STDOUT "export micodir=/usr/lib\n";
-  print STDOUT "export pythondir=/usr/lib\n";
+  print STDOUT "export kde_htmldir=$kde_htmldir\n";
+  print STDOUT "export kde_appsdir=$kde_appsdir\n";
+  print STDOUT "export kde_icondir=$kde_icondir\n";
+  print STDOUT "export kde_sounddir=$kde_sounddir\n";
+  print STDOUT "export kde_datadir=$kde_datadir\n";
+  print STDOUT "export kde_cgidir=$kde_cgidir\n";
+  print STDOUT "export kde_locale=$kde_locale\n";
+  print STDOUT "export kde_confdir=$kde_confdir\n";
+  print STDOUT "export kde_mimedir=$kde_mimedir\n";
+  print STDOUT "export kde_wallpaperdir=$kde_wallpaperdir\n";
+  print STDOUT "export kde_bindir=$kde_bindir\n";
+  print STDOUT "export kde_servicesdir=$kde_servicesdir\n";
+  print STDOUT "export kde_servicetypesdir=$kde_servicetypesdir\n";
+  print STDOUT "export kde_includedir=$kde_includedir\n";
+  print STDOUT "export kde_libdir=$kde_libdir\n";
+  print STDOUT "export mandir=$mandir\n";
+  print STDOUT "export infodir=$infodir\n";
+  print STDOUT "export QTDIR=$QTDIR\n";
+  print STDOUT "export kde_prefix=$kde_prefix\n";
+  print STDOUT "export INSTALL_DATA=install -p -c -m 644\n";
+  print STDOUT "export IDL=$IDL\n";
+  print STDOUT "export DCOPIDL=$DCOPIDL\n";
+  print STDOUT "export DCOPIDL2CPP=$DCOPIDL2CPP\n";
+  print STDOUT "export KDB2HTML=$KDB2HTML\n";
+  print STDOUT "export MCOPIDL=$MCOPIDL\n";
+  print STDOUT "export ARTSCCONFIG=$ARTSCCONFIG\n";
+  print STDOUT "configkde=--disable-debug --disable-rpath --prefix=\$(kde_prefix) --libexecdir=\$(kde_bindir) --with-qt-dir=\$(QTDIR) --mandir=\$(mandir) --infodir=\$(infodir)\n";
+  print STDOUT "configkdevelop=--enable-docbase --enable-kdoc2 --disable-debug --disable-rpath --libdir=\$(kde_libdir) --includedir=\$(kde_includedir) --with-qt-dir=\$(QTDIR) --mandir=\$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html\n";
+  print STDOUT "configkdepim=--with-extra-includes=/usr/include/libpisock --enable-shared --disable-rpath --prefix=\$(kde_prefix) --libexecdir=\$(kde_bindir) --with-qt-dir=\$(QTDIR) --mandir=\$(mandir) --infodir=\$(infodir)\n";
   exit
 }
 
@@ -101,9 +151,10 @@ sub docwanted {
         local $dir = $File::Find::dir;
         $dir =~ s/^$origPwd//;
 	if ($dir =~ /debian/) { return 0 ; }
+	if ($dir =~ /build/) { return 0 ; }
 	if ( ( /debian/ ) or ( /^INSTALL$/ ) or ( /^LICENSE$/ ) 
 	or ( /^ARTISTIC$/ ) or ( /^COPYING$/ ) ) { return 0 ; } 
-	if ( (! /CVS/ )
+	if ( (! /CVS/ ) 
 	and ( /^[A-Z]*$/ or /^README$/ or /^ChangeLog$/ or /lsm$/ or /SWALLOW/
 	or /^TODO$/ or /^kdedoc$/ or /Header/ or /Documentation/ or /Tutorial/ ) )
 	{	
@@ -125,25 +176,20 @@ if ($pwd =~ ?^(.*/)build_([^/]*)$?) {
   }
 }
 
-if (! -d "debian/tmp/usr/doc/$package") {
-	mkdir("-p", "debian/tmp/usr/doc/$package") ;
+if (! -d "debian/tmp/usr/share/doc/$package") {
+	mkdir("-p", "debian/tmp/usr/share/doc/$package") ;
 }
-
-if (! -d "debian/tmp/usr/share/pixmaps") {
-       mkdir("-p", "debian/tmp/usr/share/pixmaps");
-}
-
 
 if (@docs) {
        chdir($origPwd);
-       cp( "-aP", @docs, "debian/tmp/usr/doc/$package") ;
-       if (-f "debian/tmp/usr/doc/$package/ChangeLog") {
-	  mv("debian/tmp/usr/doc/$package/ChangeLog", 
-		"debian/tmp/usr/doc/$package/changelog");
+       cp( "-aP", @docs, "debian/tmp/usr/share/doc/$package") ;
+       if (-f "debian/tmp/usr/share/doc/$package/ChangeLog") {
+	  mv("debian/tmp/usr/share/doc/$package/ChangeLog", 
+		"debian/tmp/usr/share/doc/$package/changelog");
 	}
-	if (-f "debian/tmp/usr/doc/$package/CHANGES") {
-	  mv("debian/tmp/usr/doc/$package/CHANGES",
-		"debian/tmp/usr/doc/$package/changelog");
+	if (-f "debian/tmp/usr/share/doc/$package/CHANGES") {
+	  mv("debian/tmp/usr/share/doc/$package/CHANGES",
+		"debian/tmp/usr/share/doc/$package/changelog");
 	}
 }
 
@@ -155,19 +201,20 @@ if (-d "debian/doc-base") {
         }
         while (<debian/doc-base/*>) {
                   cp( "-a", $_, "debian/tmp/usr/share/doc-base")
-                    unless (-d $_ || /Makefile/);
+                    unless (-d $_);
         }
+#        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
 }
 
 
 # Create debian/menu files
 
 sub findkdelnk {
-	/\.kdelnk$/ && push @lnkfiles, "$File::Find::dir/$_" ;
+	/\.desktop$/ && push @lnkfiles, "$File::Find::dir/$_" ;
 }
 
-if (-d "debian/tmp/usr/share/applnk") {
-	find(\&findkdelnk,"debian/tmp/usr/share/applnk");
+if (-d "debian/tmp/$kde_appsdir") {
+	find(\&findkdelnk,"debian/tmp/$kde_appsdir");
 }
 
 if (-e "debian/menu.in") {
@@ -240,17 +287,17 @@ foreach $file (@lnkfiles) {
 	}
 	if (defined $kdelnk{"Icon"}) {
    	        $icon=$kdelnk{"Icon"} ;
-		if (! -f "debian/tmp/usr/share/icons/$icon" ) {
+		if (! -f "debian/tmp/$kde_icondir/mini/$prog.png" ) {
                    $icon="";
 	        } else {
-		  system("/usr/bin/X11/convert -map /usr/X11R6/include/X11/pixmaps/cmap.xpm debian/tmp/usr/share/icons/$icon debian/tmp/usr/share/pixmaps/$icon");
-	  	  $icon="/usr/share/pixmaps/" . $icon ;
+	  	  $icon="/$kde_icondir/mini/$prog.png";
                }
 	}
 	($kdelnk=$file) =~ s/^.*tmp// ;
 	print MENU "?package($package):\\\n" ;
 	print MENU "	needs=$type{$prog}\\\n" ;
 	print MENU "	section=$sect{$prog}\\\n" ;
+	print MENU "	hints=\"KDE\"\\\n" ;
 	print MENU "	title=\"$kdelnk{Name}\"\\\n" ;
 	print MENU "	command=$prog\\\n" ;
 	print MENU "	icon=\"$icon\"\n\n" ;

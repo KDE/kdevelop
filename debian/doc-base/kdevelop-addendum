@@ -5,5 +5,5 @@ Abstract: The KDE 2 information guide to development, I/O slaves and KOM/OpenPar
 Section: Apps/Programming
 
 Format: HTML
-Index: /usr/doc/kde/HTML/en/kdevelop/addendum/index.html
-Files: /usr/doc/kde/HTML/en/kdevelop/addendum/*.html
+Index: /usr/share/doc/kde/HTML/en/kdevelop/addendum/index.html
+Files: /usr/share/doc/kde/HTML/en/kdevelop/addendum/*.html

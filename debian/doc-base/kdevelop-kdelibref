@@ -5,5 +5,5 @@ Abstract: The Reference Guide to C++ Application Design for the K Desktop Enviro
 Section: Apps/Programming
 
 Format: HTML
-Index: /usr/doc/kde/HTML/en/kdevelop/kde_libref/index.html
-Files: /usr/doc/kde/HTML/en/kdevelop/kde_libref/*.html
+Index: /usr/share/doc/kde/HTML/en/kdevelop/kde_libref/index.html
+Files: /usr/share/doc/kde/HTML/en/kdevelop/kde_libref/*.html

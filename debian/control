@@ -1,14 +1,15 @@
 Source: kdevelop
-Section: contrib/devel
-Priority: extra
+Section: devel
+Priority: optional
 Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>
-Standards-Version: 2.5.0
+Build-Depends: debhelper, kdelibs3-dev (>= 4:2.1-beta2-2), gettext, autoconf, automake, libtool
+Standards-Version: 3.2.1
 
 Package: kdevelop
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake, kdebase
+Depends: ${shlibs:Depends}, autoconf, automake, kdebase-libs
 Recommends: make
-Suggests: qt-dev, qt-doc, kdelibs2g-dev, kdelibs-doc, htdig, sgmltools, gettext, a2ps, enscript, gv
+Suggests: qt-dev, qt-doc, kdelibs3-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 

@@ -5,4 +5,4 @@
 SUBDIRS = doc-base
 
 EXTRA_DIST = changelog conffiles control copyright doc-base.tutorial \
-	     doc-base.user kderules menu.in postinst prerm rules undocumented
+	     doc-base.user debianrules menu postinst prerm rules undocumented
