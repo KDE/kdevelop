@@ -1310,27 +1310,26 @@ void CKAppWizard::okPermited()
 
   QString outPath=locateLocal("appdata","");
   KStandardDirs::makeDir(outPath);
-  cppedit->setName(outPath+"/cpp");
-  cppedit->setEdited(true);
-  {
-    QFile fileIODev(outPath+"/cpp");
-    if (fileIODev.open(IO_ReadWrite))
-    {
-      QTextStream textStream(&fileIODev);
-      cppedit->saveText(&textStream);
-    }
-  }
 
-  hedit->setName(outPath+"/header");
-  hedit->setEdited(true);
+  QFile cppFile(outPath+"/cpp");
+  if (cppFile.open(IO_WriteOnly))
   {
-    QFile fileIODev(outPath+"/header");
-    if (fileIODev.open(IO_ReadWrite))
-    {
-      QTextStream textStream(&fileIODev);
-      hedit->saveText(&textStream);
-    }
+    QString cppStr = cppedit->text();
+    QTextStream textStream(&cppFile);
+    textStream << cppStr;
   }
+  cppFile.flush();
+  cppFile.close();
+
+  QFile headerFile(outPath+"/header");
+  if (headerFile.open(IO_WriteOnly))
+  {
+    QString heditStr = hedit->text();
+    QTextStream textStream(&headerFile);
+    textStream << heditStr;
+  }
+  headerFile.flush();
+  headerFile.close();
 
   // making the entries-filename unique... so two Kdevelops on the same
   //  account can let run the ApplicationWizard concurrent
