@@ -432,9 +432,6 @@
                                 <property name="text">
                                     <string>Update &amp;Config</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+C</string>
-                                </property>
                                 <property name="autoDefault">
                                     <bool>true</bool>
                                 </property>

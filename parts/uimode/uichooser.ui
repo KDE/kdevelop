@@ -43,9 +43,6 @@
                     <property name="text">
                         <string>I&amp;DEAl window mode</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -59,9 +56,6 @@
                     </property>
                     <property name="text">
                         <string>C&amp;hildframe window mode</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+H</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All tool views are initially docked to the mainframe.
@@ -88,9 +82,6 @@ A typical example of this user interface mode is KDEStudio, our friend C++-IDE i
                     </property>
                     <property name="text">
                         <string>To&amp;plevel window mode</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+P</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All editor, browser and tool views will be toplevel windows (directly on desktop).
@@ -267,9 +258,6 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                             </property>
                             <property name="text">
                                 <string>Open &amp;new tab after current tab</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+N</string>
                             </property>
                         </widget>
                         <widget class="QCheckBox" row="1" column="0">

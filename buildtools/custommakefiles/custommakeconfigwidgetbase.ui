@@ -26,9 +26,6 @@
             <property name="text">
                 <string>A&amp;bort on first error</string>
             </property>
-            <property name="accel">
-                <string>Alt+B</string>
-            </property>
         </widget>
         <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
@@ -96,9 +93,6 @@
                     <property name="text">
                         <string>&amp;Add</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>false</bool>
                     </property>
@@ -110,9 +104,6 @@
                     <property name="text">
                         <string>Co&amp;py</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+P</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>false</bool>
                     </property>
@@ -123,9 +114,6 @@
                     </property>
                     <property name="text">
                         <string>Re&amp;move</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+M</string>
                     </property>
                     <property name="autoDefault">
                         <bool>false</bool>

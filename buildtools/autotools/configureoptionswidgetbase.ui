@@ -89,9 +89,6 @@
                     <property name="text">
                         <string>&amp;Add</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>false</bool>
                     </property>

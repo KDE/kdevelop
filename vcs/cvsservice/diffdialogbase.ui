@@ -40,9 +40,6 @@
                     <property name="text">
                         <string>Local copy and &amp;HEAD</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+H</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -53,9 +50,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Local copy and BASE</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -76,9 +70,6 @@
                             <property name="text">
                                 <string>Local copy and an arbitrary &amp;revision:</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
-                            </property>
                         </widget>
                         <widget class="QLineEdit">
                             <property name="name">
@@ -96,9 +87,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Two arbitrary revisions/tags:</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">

@@ -55,9 +55,6 @@
                     <property name="text">
                         <string>&amp;Add to changelog:</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
@@ -120,9 +117,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;OK</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

@@ -71,9 +71,6 @@
                                 <property name="text">
                                     <string>&amp;Add</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -82,9 +79,6 @@
                                 <property name="text">
                                     <string>&amp;Edit</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -92,9 +86,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
                                 </property>
                             </widget>
                             <spacer>

@@ -110,9 +110,6 @@
             <property name="text">
                 <string>Display static &amp;members</string>
             </property>
-            <property name="accel">
-                <string>Alt+M</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>Displaying static members makes GDB slower in
 producing data within KDE and Qt.
@@ -128,9 +125,6 @@ check this option.</string>
             </property>
             <property name="text">
                 <string>Try settings &amp;breakpoints on library loading</string>
-            </property>
-            <property name="accel">
-                <string>Alt+B</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>If GDB hasn't seen a library that will be loaded via
@@ -149,9 +143,6 @@ If you are not "dlopen"ing libs then leave this unchecked.</string>
             <property name="text">
                 <string>Display &amp;demangled names</string>
             </property>
-            <property name="accel">
-                <string>Alt+D</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>When displaying the disassembled code you
 can select to see the methods' mangled names.
@@ -164,9 +155,6 @@ However, non-mangled names are easier to read.</string>
             </property>
             <property name="text">
                 <string>Enable &amp;floating toolbar</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Use the floating toolbar. This toolbar always stays
@@ -183,9 +171,6 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
             </property>
             <property name="text">
                 <string>Enable separate &amp;terminal for application IO</string>
-            </property>
-            <property name="accel">
-                <string>Alt+T</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>This allows you to enter terminal input when your

@@ -41,9 +41,6 @@
                 <property name="text">
                     <string>Show snippet's text in &amp;tooltip</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+T</string>
-                </property>
                 <property name="checked">
                     <bool>true</bool>
                 </property>
