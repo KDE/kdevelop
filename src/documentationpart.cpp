@@ -15,6 +15,7 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcursor.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <khtml_part.h>
