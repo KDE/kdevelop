@@ -24,20 +24,8 @@ CustomizeDialog::CustomizeDialog(QWidget *parent, const char *name)
     : KDialogBase(TreeList, i18n("Customize KDevelop"), Ok|Cancel,
                   Ok, parent, "customize dialog")
 {
-    ComponentManager::self()->createConfigWidgets(this);
 }
 
 
 CustomizeDialog::~CustomizeDialog()
 {}
-
-/*
-void CustomizeDialog::addPage(QWidget *page, const QString &title)
-{
-    if (page)
-        {
-            QFrame *frame = KDialogBase::addPage(title, QString::null);
-            page->reparent(frame, 0, QPoint(0,0), false);
-        }
-}
-*/

@@ -41,7 +41,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp \
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp \
-	doctreeconfdlg.cpp grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp editorview.cpp docbrowserview.cpp
+	grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp editorview.cpp docbrowserview.cpp
 
 kdevelop_METASOURCES = AUTO
 # the library search path. 
@@ -69,7 +69,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \
-	makeview.h grepdlg.h outputview.h doctreeconfdlg.h ckdevaccel.h editorview.h docbrowserview.h
+	makeview.h grepdlg.h outputview.h ckdevaccel.h editorview.h docbrowserview.h
 
 EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \

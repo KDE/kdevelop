@@ -1245,6 +1245,7 @@ void CKDevelop::slotOptionsConfigureA2ps(){
 void CKDevelop::slotOptionsCustomize(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
   CustomizeDialog *dlg = new CustomizeDialog(this, "customize kdevelop dialog");
+  ComponentManager::self()->createConfigWidgets(dlg);
   dlg->exec();
   delete dlg;
 }

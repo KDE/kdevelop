@@ -108,8 +108,10 @@ void CKAppWizard::initPages(){
   
   applications = new QListView( widget0, "applications" );
   applications->setGeometry( 20, 170, 170, 250 );
+  applications->setFrameStyle( QListView::Panel | QListView::Sunken );
+  applications->setLineWidth( 2 );
   applications->setRootIsDecorated( TRUE );
-  applications->addColumn( i18n("Applications"), -1 );
+  applications->addColumn( "" );
   applications->setColumnWidthMode( 0, QListView::Maximum );
   applications->setColumnAlignment( 0, 1 );
   applications->setSorting (-1,FALSE);
@@ -126,36 +128,22 @@ void CKAppWizard::initPages(){
   apphelp->setMargin( -1 );
   
   othersentry = new QListViewItem (applications, i18n("Others"));
-  othersentry->setExpandable (true);
   othersentry->setOpen (TRUE);
-  othersentry->sortChildItems (0,FALSE);
   customprojitem = new QListViewItem (othersentry,i18n("custom project"));
   
   ccppentry = new QListViewItem (applications, i18n("Terminal"));
-  ccppentry->setExpandable (true);
   ccppentry->setOpen (TRUE);
-  ccppentry->sortChildItems (0,FALSE);
   cppitem = new QListViewItem (ccppentry,i18n("C++"));
   citem = new QListViewItem (ccppentry,i18n("C"));
 
   qtentry = new QListViewItem (applications, i18n("Qt"));
-  qtentry->setExpandable (true);
   qtentry->setOpen (TRUE);
-  qtentry->sortChildItems (0,FALSE);
-  //qtminiitem = new QListViewItem (qtentry,"Mini");
   qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
   
   kdeentry = new QListViewItem (applications,i18n("KDE"));
-  kdeentry->setExpandable (true);
   kdeentry->setOpen (TRUE);
-  kdeentry->sortChildItems (0,FALSE);
-  //komitem = new QListViewItem (kdeentry,"KOM");
-  //corbaitem = new QListViewItem (kdeentry,"Corba");
   kdeminiitem = new QListViewItem (kdeentry,i18n("Mini"));
   kdenormalitem = new QListViewItem (kdeentry,i18n("Normal"));
-  
-  applications->setFrameStyle( QListView::Panel | QListView::Sunken );
-  applications->setLineWidth( 2 );
   
   separator0 = new KSeparator (widget0);
   separator0->setGeometry(0,160,515,5);

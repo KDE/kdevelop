@@ -86,8 +86,8 @@ DocTreeViewConfigWidget::DocTreeViewConfigWidget(DocTreeView *doctree, QWidget *
                            "the documentation tree:"), othersTab);
     othersView = new KListView(othersTab);
     othersView->setAllColumnsShowFocus(true);
-    othersView->setColumnWidth(0, 30);
-    othersView->setColumnWidth(1, 30);
+    othersView->setColumnWidth(0, 70);
+    othersView->setColumnWidth(1, 70);
     othersView->addColumn(i18n("Title"));
     othersView->addColumn(i18n("URL"));
     QVBox *buttonbox = new QVBox(othersTab);

@@ -32,7 +32,6 @@
 #include "ctoolclass.h"
 #include "customizedlg.h"
 #include "doctreeviewconfigwidget.h"
-#include "doctreeconfdlg.h"
 #include "doctreeview.h"
 
 #if HAVE_CONFIG_H
@@ -628,18 +627,21 @@ void DocTreeView::slotRightButtonPressed(QListViewItem *item, const QPoint &p, i
 
 void DocTreeView::slotConfigure()
 {
-    DocTreeConfigDialog::Page page;
+    DocTreeViewConfigWidget::Page page;
     if (contextItem == folder_kdevelop || contextItem->parent() == folder_kdevelop)
-        page = DocTreeConfigDialog::KDevelop;
+        page = DocTreeViewConfigWidget::KDevelop;
     else if (contextItem == folder_kdelibs || contextItem->parent() == folder_kdelibs)
-        page = DocTreeConfigDialog::Libraries;
+        page = DocTreeViewConfigWidget::Libraries;
     else
-        page = DocTreeConfigDialog::Others;
-    DocTreeConfigDialog dlg(page, this);
-    if (dlg.exec() == QDialog::Accepted)
-        {
-            folder_kdevelop->refresh();
-            folder_kdelibs->refresh();
-            folder_others->refresh();
-        }
+        page = DocTreeViewConfigWidget::Others;
+
+    CustomizeDialog *dlg = new CustomizeDialog(this, "customize doctreeview");
+    QFrame *frame = dlg->addPage(i18n("Documentation Tree"));
+    QBoxLayout *vbox = new QVBoxLayout(frame);
+    DocTreeViewConfigWidget *w =
+        new DocTreeViewConfigWidget(this, frame, "doctreeview config widget");
+    w->showPage(page);
+    vbox->addWidget(w);
+    connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+    dlg->exec();
 }

@@ -1,3 +1,8 @@
+1999-11-18  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Removed DocTreeConfDlg; a thin wrapper around
+	  DocTreeViewWidget is used instead
+	* Removed extraneous stuff in appwizard
+	
 1999-11-18  Falk Brettschneider <gigafalk@yahoo.com>
         * Improved "Window" menu
         * MDI system uses KDE-look theme now
