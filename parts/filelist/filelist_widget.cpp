@@ -11,6 +11,7 @@
 
 #include <qheader.h>
 #include <qpixmap.h>
+#include <qtimer.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -28,6 +29,11 @@
 #include "filelist_item.h"
 
 
+/**
+ * 
+ * @param part 
+ * @return 
+ */
 FileListWidget::FileListWidget(FileListPart *part)
  : KListView(0, "filelist widget"), QToolTip( viewport() ), _part( part )
 {
@@ -55,7 +61,7 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
 
-	refreshFileList();
+	QTimer::singleShot(0, this, SLOT(refreshFileList()));
 }
 
 
