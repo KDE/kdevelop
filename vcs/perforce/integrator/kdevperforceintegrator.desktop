@@ -18,5 +18,5 @@ ServiceTypes=KDevelop/VCSIntegrator
 X-KDE-Library=libperforceintegrator
 X-KDevelop-Default=false
 X-KDevelop-VCS=Perforce
-X-KDevelop-VCSPlugin=KDevPerforce
+X-KDevelop-VCSPlugin=kdevperforce
 X-KDevelop-Version=3

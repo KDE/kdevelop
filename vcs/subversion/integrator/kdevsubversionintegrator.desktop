@@ -19,5 +19,5 @@ ServiceTypes=KDevelop/VCSIntegrator
 X-KDE-Library=libsubversionintegrator
 X-KDevelop-Default=false
 X-KDevelop-VCS=Subversion
-X-KDevelop-VCSPlugin=KDevsubversion
+X-KDevelop-VCSPlugin=kdevsubversion
 X-KDevelop-Version=3
