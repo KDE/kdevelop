@@ -1,12 +1,49 @@
 #!/usr/bin/env ruby
 
 
+NoTarget   = 0
+Executable = 1
+StaticLib  = 2
+SharedLib  = 3
+Part       = 4
+
+class BuildTarget
+   def initialize(name, type)
+      @name=name
+      @type=type
+      @sources=Array.new
+      @uis=Array.new
+      @ldadd=""
+      @libadd=""
+      @ldflags=""
+   end
+   
+   def addSourceFiles(files)
+      files.split.each do |currentSource|
+         if currentSource =~ /^\S+\.ui$/
+            @uis.push(currentSource)
+         else
+            @sources.push(currentSource)
+         end
+      end
+   end
+   
+   attr_reader :name, :type, :sources, :uis, :ldadd, :libadd, :ldflags
+   attr_writer :ldadd, :libadd, :ldflags
+   
+end
+
 class CMakeFile
    def initialize(amFile)
       @amFile=amFile
       amFile =~ /(.*)Makefile.am/
       @path=$1
       @listsFile=@path+"CMakeLists.txt.x"
+
+      @targets=Array.new
+      
+      @includeDirs=""
+      
       parseFile
    end
    
@@ -29,14 +66,186 @@ class CMakeFile
       end   
    end
 
+   def addTarget(line)
+      type=NoTarget
+      targets=""
+      
+      if line =~ /^\s*lib_LTLIBRARIES\s*=\s*(\S+.*)/
+         targets=$1
+         type=SharedLib
+      elsif line =~ /^\s*noinst_LTLIBRARIES\s*=\s*(\S+.*)/
+         targets=$1
+         type=StaticLib
+      elsif line =~ /^\s*kde_module_LTLIBRARIES\s*=\s*(\S+.*)/
+         targets=$1
+         type=Part
+      elsif line =~ /^\s*bin_PROGRAMS\s*=\s*(\S+.*)$/
+         targets=$1
+         type=Executable
+      else
+         return false
+      end
+      
+      if type==Executable
+         targets.split.each{ |current| @targets.push(BuildTarget.new(current, type)) }
+      else
+         targets.split.each{ |current| @targets.push(BuildTarget.new($1, type)) if current =~ /lib(\S+)\.la/  }
+      end
+      return true
+   end
+               
+   def addSourcesToTarget(line)
+      type=SharedLib
+      if line =~ /^\s*lib(\S+)_la_SOURCES\s*=\s*(\S+.*)$/
+         targetName=$1
+         sources=$2
+      elsif line =~ /^\s*lib(\S+)_SOURCES\s*=\s*(\S+.*)$/
+         target=$1
+         sources=$2
+         type=Executable
+      end
+      
+      @targets.each do |buildTarget|
+         if (type==Executable)
+            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+               buildTarget.addSourceFiles(sources)
+               return
+            end
+         else
+            if (buildTarget.name==targetName)
+               buildTarget.addSourceFiles(sources)
+               return
+            end
+         end
+      end
+   end 
+   
+   def addLdflags(line)
+      type=SharedLib
+      if line =~ /^\s*lib(\S+)_la_LDFLAGS\s*=\s*(\S+.*)$/
+         targetName=$1
+         sources=$2
+      elsif line =~ /^\s*lib(\S+)_LDFLAGS\s*=\s*(\S+.*)$/
+         target=$1
+         sources=$2
+         type=Executable
+      end
+      
+      @targets.each do |buildTarget|
+         if (type==Executable)
+            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+               buildTarget.ldflags=sources
+               return
+            end
+         else
+            if (buildTarget.name==targetName)
+               buildTarget.ldflags=sources
+               return
+            end
+         end
+      end
+   end 
+   
+   def addLdadd(line)
+      type=SharedLib
+      if line =~ /^\s*lib(\S+)_la_LDADD\s*=\s*(\S+.*)$/
+         targetName=$1
+         sources=$2
+      elsif line =~ /^\s*lib(\S+)_LDADD\s*=\s*(\S+.*)$/
+         target=$1
+         sources=$2
+         type=Executable
+      end
+      
+      @targets.each do |buildTarget|
+         if (type==Executable)
+            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+               buildTarget.ldadd=sources
+               return
+            end
+         else
+            if (buildTarget.name==targetName)
+               buildTarget.ldadd=sources
+               return
+            end
+         end
+      end
+   end 
+   
+   def addLibadd(line)
+      type=SharedLib
+      if line =~ /^\s*lib(\S+)_la_LIBADD\s*=\s*(\S+.*)$/
+         targetName=$1
+         sources=$2
+      elsif line =~ /^\s*lib(\S+)_LIBADD\s*=\s*(\S+.*)$/
+         target=$1
+         sources=$2
+         type=Executable
+      end
+      
+      @targets.each do |buildTarget|
+         if (type==Executable)
+            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+               buildTarget.libadd=sources
+               return
+            end
+         else
+            if (buildTarget.name==targetName)
+               buildTarget.libadd=sources
+               return
+            end
+         end
+      end
+   end 
+   
    def evalLine(line)
       if line =~ /^\s*METASOURCES\s*=\s*AUTO\s*$/
          @automoc=true
-         printf("line: %s\n", line)
+         return
       end
+      
+      if addTarget(line)
+         return
+      end
+      
+      if line =~ /^\s*\S+_SOURCES\s*=/
+         addSourcesToTarget(line)
+         return
+      end
+      
+      if line =~ /^\s*INCLUDES\s*=\s*(\S+.*)$/
+         @includeDirs=$1
+         return
+      end
+      
+      if line =~ /^\s*\S+_LDFLAGS\s*=/
+         addLdflags(line)
+         return
+      end
+      
+      if line =~ /^\s*\S+_LDADD\s*=/
+         addLdadd(line)
+         return
+      end
+      
+      if line =~ /^\s*\S+_LIBADD\s*=/
+         addLibadd(line)
+         return
+      end
+      
+      
    end
       
    def createListsFile
+      @targets.each do |buildTarget|
+         printf("-------------------------------\n")
+         printf("%s, %d\n", buildTarget.name, buildTarget.type)
+         printf("ldadd: %s\n", buildTarget.ldadd)
+         printf("libadd: %s\n", buildTarget.libadd)
+         printf("ldflags: %s\n", buildTarget.ldflags)
+         buildTarget.sources.each{ |currentFile| printf("src: %s\n", currentFile)}
+         buildTarget.uis.each{ |currentFile| printf("ui: %s\n", currentFile)}
+      end
    end
 end
 
