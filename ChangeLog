@@ -1,3 +1,7 @@
+1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
+	* Converted the classview from KTreeList to QListView. Minor fixes to the
+	  parser.
+	
 1999-03-23  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed panner-devider bug in switching when Browsertoolbar is disabled
   * fixed menubar disableCommand bug for the disabling of menuitems on startup
