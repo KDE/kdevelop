@@ -24,6 +24,7 @@
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qhbox.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
@@ -47,22 +48,29 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     varTree_ = new VariableTree(this);
     QLabel *label = new QLabel(i18n("Expression to watch:"), this);
 
-    watchVarEditor_ = new KHistoryCombo(this, "var-to-watch editor");
+    QHBox *watchEntry = new QHBox( this );
+
+    watchVarEditor_ = new KHistoryCombo( watchEntry, "var-to-watch editor");
 
 //    watchVarEntry_ = new KLineEdit(this);
 
-    QPushButton *addButton = new QPushButton(i18n("Add"), this);
+    QPushButton *addButton = new QPushButton(i18n("Add"), watchEntry );
 
-    QBoxLayout *watchEntry = new QHBoxLayout();
-    watchEntry->addWidget(label);
+    QBoxLayout * vbox = new QVBoxLayout();
+
+//    QBoxLayout *watchEntry = new QHBoxLayout();
+//    watchEntry->addWidget(label);
 //    watchEntry->addWidget(watchVarEntry_);
-    watchEntry->addWidget(watchVarEditor_);
-    watchEntry->setStretchFactor(watchVarEditor_, 1);
-    watchEntry->addWidget(addButton);
+//    watchEntry->addWidget(watchVarEditor_);
+//    watchEntry->setStretchFactor(watchVarEditor_, 1);
+//    watchEntry->addWidget(addButton);
+
+    vbox->addWidget( label );
+    vbox->addWidget( watchEntry );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
     topLayout->addWidget(varTree_, 10);
-    topLayout->addLayout(watchEntry);
+    topLayout->addLayout( vbox );
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
     connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
