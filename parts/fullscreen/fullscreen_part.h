@@ -28,7 +28,7 @@ public slots:
     void slotToggleFullScreen();
 
 private:
-    KAction* m_pFullScreen;
+    KToggleFullScreenAction* m_pFullScreen;
     bool m_bFullScreen;
 };
 
