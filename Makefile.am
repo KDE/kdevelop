@@ -68,6 +68,6 @@ DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
 DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
 
 ## Use Search engine (Versions 1.3.4 and above only!)
-DOXYGEN_SEARCHENGINE = NO
+DOXYGEN_SEARCHENGINE = YES
 
 include Doxyfile.am

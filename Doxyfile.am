@@ -64,7 +64,11 @@ apidox-am-yes:
 		echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
 		echo "HTML_OUTPUT            = html" >> Doxyfile; \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
-			echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+			if test "$(DOXYGEN_SEARCHENGINE)" == "YES"; then \
+				echo "HTML_HEADER            = apidocs/common/appheader.html" >> Doxyfile ;\
+			else \
+				echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+			fi ;\
 			echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
 			echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
 		else \
