@@ -65,6 +65,8 @@ public slots:
   void slotRemoveBreakpoint();
   void slotClearAllBreakpoints();
   void slotEditBreakpoint();
+  void slotToggleBPEnabled();
+  void slotToggleBPEnabled(const QString& fileName, int lineNo);
   void slotGotoBreakpointSource();
   void slotUnableToSetBPNow(int BPNo);
 

@@ -201,8 +201,15 @@ void BreakpointManager::breakpointPopup(Breakpoint* BP)
   KPopupMenu popup("Breakpoint menu");
   popup.insertItem( i18n("Remove breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
   popup.insertItem( i18n("Edit breakpoint"),              this, SLOT(slotEditBreakpoint()) );
-  popup.insertItem( i18n("Clear all breakpoints"),        this, SLOT(slotClearAllBreakpoints()) );
+  if (BP->isEnabled())
+    popup.insertItem( i18n("Disable breakpoint"),         this, SLOT(slotToggleBPEnabled()) );
+  else
+    popup.insertItem( i18n("Enable breakpoint"),          this, SLOT(slotToggleBPEnabled()) );
+
   int id = popup.insertItem( i18n("Display source code"), this, SLOT(slotGotoBreakpointSource()) );
+  popup.insertSeparator();
+  popup.insertItem( i18n("Clear all breakpoints"),        this, SLOT(slotClearAllBreakpoints()) );
+
   popup.setItemEnabled(id, BP->hasSourcePosition());
   popup.exec(QCursor::pos());
 }
@@ -305,6 +312,45 @@ void BreakpointManager::slotEditBreakpoint(const QString& fileName, int lineNo)
   {
     delete fpBP;
     modifyBreakpoint(found);
+  }
+}
+
+/***************************************************************************/
+
+void BreakpointManager::slotToggleBPEnabled(const QString& fileName, int lineNo)
+{
+  FilePosBreakpoint* fpBP = new FilePosBreakpoint(fileName, lineNo);
+
+  int found = findIndex(fpBP);
+  if (found >= 0)
+  {
+    delete fpBP;
+    Breakpoint* BP = (Breakpoint*)item(found);
+    BP->setEnabled(!BP->isEnabled());
+    BP->setPending(true);
+    BP->setActionModify(true);
+    emit publishBPState(BP);
+
+    BP->configureDisplay();
+    repaint();
+  }
+}
+
+/***************************************************************************/
+
+void BreakpointManager::slotToggleBPEnabled()
+{
+  int BPIdx;
+  if ((BPIdx = currentItem()) >= 0)
+  {
+    Breakpoint* BP = (Breakpoint*)item(BPIdx);
+    BP->setEnabled(!BP->isEnabled());
+    BP->setPending(true);
+    BP->setActionModify(true);
+    emit publishBPState(BP);
+
+    BP->configureDisplay();
+    repaint();
   }
 }
 

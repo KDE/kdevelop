@@ -1509,6 +1509,11 @@ void CKDevelop::initDebugger()
     connect(  cpp_widget,     SIGNAL(editBreakpoint(const QString&,int)),
               brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
 
+    connect(  header_widget,  SIGNAL(toggleBPEnabled(const QString&,int)),
+              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
+    connect(  cpp_widget,     SIGNAL(toggleBPEnabled(const QString&,int)),
+              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
+
     connect(  header_widget,  SIGNAL(toggleBreakpoint(const QString&,int)),
               brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
     connect(  cpp_widget,     SIGNAL(toggleBreakpoint(const QString&,int)),

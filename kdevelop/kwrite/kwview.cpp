@@ -98,31 +98,33 @@ void releaseBuffer(void *user) {
 
 KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) :
   QWidget(write),
-	kWrite(write),
-	kWriteDoc(doc),
-	kWriteView(view),
-	LMBIsBreakpoint(true),
-	cursorOnLine(0),
-	menuId_LMBBrkpoint(0),
-	menuId_LMBBookmark(0),
-	menuId_editBrkpoint(0)
+  kWrite(write),
+  kWriteDoc(doc),
+  kWriteView(view),
+  LMBIsBreakpoint(true),
+  cursorOnLine(0),
+  menuId_LMBBrkpoint(0),
+  menuId_LMBBookmark(0),
+  menuId_editBrkpoint(0)
 {
-	setBackgroundColor(colorGroup().background());
-	setGeometry ( 2, 2, iconBorderWidth, iconBorderHeight);
+  setBackgroundColor(colorGroup().background());
+  setGeometry ( 2, 2, iconBorderWidth, iconBorderHeight);
 
-	selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
-	selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
-	selectMenu.insertSeparator();
-	selectMenu.insertItem(i18n("Toggle breakpoint"), kWrite, SLOT(slotToggleBreakpoint()));
-	menuId_editBrkpoint = selectMenu.insertItem(i18n("Edit breakpoint"), this, SLOT(slotEditBreakpoint()));
-	selectMenu.insertItem(i18n("Clear all breakpoints"), kWrite, SIGNAL(clearAllBreakpoints()));
-	selectMenu.insertSeparator();
-	menuId_LMBBrkpoint  = selectMenu.insertItem(i18n("LMB sets breakpoints"), this, SLOT(slotLMBMenuToggle()));
-	menuId_LMBBookmark  = selectMenu.insertItem(i18n("LMB sets bookmarks"),   this, SLOT(slotLMBMenuToggle()));
-	selectMenu.setCheckable(true);
-	
-	selectMenu.setItemChecked(menuId_LMBBrkpoint, LMBIsBreakpoint);
-	selectMenu.setItemChecked(menuId_LMBBookmark, !LMBIsBreakpoint);
+  selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
+  selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
+  selectMenu.insertSeparator();
+  selectMenu.insertItem(i18n("Toggle breakpoint"), kWrite, SLOT(slotToggleBreakpoint()));
+  menuId_editBrkpoint   = selectMenu.insertItem(i18n("Edit breakpoint"), this, SLOT(slotEditBreakpoint()));
+  menuId_enableBrkpoint = selectMenu.insertItem(i18n("Enable breakpoint"), this, SLOT(slotToggleBPEnabled()));
+  selectMenu.insertSeparator();
+  selectMenu.insertItem(i18n("Clear all breakpoints"), kWrite, SIGNAL(clearAllBreakpoints()));
+  selectMenu.insertSeparator();
+  menuId_LMBBrkpoint  = selectMenu.insertItem(i18n("LMB sets breakpoints"), this, SLOT(slotLMBMenuToggle()));
+  menuId_LMBBookmark  = selectMenu.insertItem(i18n("LMB sets bookmarks"),   this, SLOT(slotLMBMenuToggle()));
+  selectMenu.setCheckable(true);
+
+  selectMenu.setItemChecked(menuId_LMBBrkpoint, LMBIsBreakpoint);
+  selectMenu.setItemChecked(menuId_LMBBookmark, !LMBIsBreakpoint);
 }
 
 
@@ -187,7 +189,7 @@ void KIconBorder::paintBreakpoint(int line)
   TextLine* tLine = kWriteDoc->textLine(line);
 	if (tLine && (tLine->getBPId() != 0))
 	{
-		QPixmap bpPix;
+    QPixmap bpPix;
     if (!tLine->isBPEnabled())
     {
       #include "pix/breakpoint_gr.xpm"
@@ -195,19 +197,19 @@ void KIconBorder::paintBreakpoint(int line)
     }
     else
     {
-		  if (tLine->isBPPending())
-		  {
+      if (tLine->isBPPending())
+      {
         #include "pix/breakpoint_bl.xpm"
-			  bpPix = QPixmap(breakpoint_bl_xpm);
-			 }
+        bpPix = QPixmap(breakpoint_bl_xpm);
+      }
       else
       {
         #include "pix/breakpoint.xpm"
-				bpPix = QPixmap(breakpoint_xpm);
+        bpPix = QPixmap(breakpoint_xpm);
       }
     }
 
-		showIcon(bpPix, line * kWriteDoc->getFontHeight() - kWriteView->getYPos());
+    showIcon(bpPix, line * kWriteDoc->getFontHeight() - kWriteView->getYPos());
   }
 }
 
@@ -274,8 +276,22 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
     {
       if (TextLine* tline=kWriteDoc->textLine(cursorOnLine))
       {
-	      selectMenu.setItemEnabled (menuId_editBrkpoint, tline->getBPId() != 0 );
-        selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
+        if (tline->getBPId())
+        {
+          selectMenu.setItemEnabled (menuId_editBrkpoint, true);
+          selectMenu.setItemEnabled (menuId_enableBrkpoint, true);
+          if (tline->isBPEnabled())
+            selectMenu.changeItem(menuId_enableBrkpoint, i18n("Disable breakpoint"));
+          else
+            selectMenu.changeItem(menuId_enableBrkpoint, i18n("Enable breakpoint"));
+          selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
+        }
+        else
+        {
+          selectMenu.setItemEnabled (menuId_editBrkpoint, false);
+          selectMenu.setItemEnabled (menuId_enableBrkpoint, false);
+          selectMenu.changeItem(menuId_enableBrkpoint, i18n("Enable breakpoint"));
+        }
       }
       break;
     }
@@ -300,6 +316,11 @@ void KIconBorder::slotLMBMenuToggle()
 void KIconBorder::slotEditBreakpoint()
 {
   emit kWrite->editBreakpoint(QString(kWriteDoc->fileName()), cursorOnLine+1);
+}
+
+void KIconBorder::slotToggleBPEnabled()
+{
+  emit kWrite->toggleBPEnabled(QString(kWriteDoc->fileName()), cursorOnLine+1);
 }
 
 /** toggles a bookmark */

@@ -132,6 +132,8 @@ protected:
     void slotLMBMenuToggle();
     /**  */
     void slotEditBreakpoint();
+    /** */
+    void slotToggleBPEnabled();
 
   private:
     KWrite *kWrite;
@@ -147,6 +149,7 @@ protected:
   	int menuId_LMBBrkpoint;
 	  int menuId_LMBBookmark;
 	  int menuId_editBrkpoint;
+    int menuId_enableBrkpoint;
 };
 
 class KWriteView : public QWidget {
@@ -363,6 +366,7 @@ class KWrite : public QWidget {
 
     // dbg
     void toggleBreakpoint( const QString&, int );
+    void toggleBPEnabled( const QString&, int );
     void editBreakpoint( const QString&, int );
     void deleteLine( int );
     void clearAllBreakpoints();

@@ -1166,21 +1166,21 @@ void CKDevelop::setToolMenuProcess(bool enable){
 
 void CKDevelop::switchToWorkspace(int id){
   workspace = id;
-  if(id == 1){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,true);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
-  }
-  if(id == 2){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,true);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
-  }
-  if(id == 3){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
-  }
+//  if(id == 1){
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,true);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
+//  }
+//  if(id == 2){
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,true);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
+//  }
+//  if(id == 3){
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
+//    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
+//  }
   TWorkspace ws = prj->getWorkspace(id);
   if(ws.show_output_view){
     showOutputView(true);
@@ -1196,16 +1196,23 @@ void CKDevelop::switchToWorkspace(int id){
 void CKDevelop::showTreeView(bool show){
   if(bAutoswitch)
   {
-    if(show){
-      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-        return; // it's already visible){
+    if(show)
+    {
+      // This is a hack to get around some startup problems
+      if(treedock->isVisible())
+      {
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+        return;
       }
-      else{
-				slotViewTTreeView();
+      else
+      {
+        slotViewTTreeView();
       }
     }
-    else{
-      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+    else
+    {
+      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+      {
         return; // it's already unvisible){
       }
       else{

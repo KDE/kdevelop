@@ -359,7 +359,7 @@ public:
   /** opens the project options dialog */
   void slotProjectOptions();
   /** selects the project workspace */
-  void slotProjectWorkspaces(int);
+//  void slotProjectWorkspaces(int);
   void slotProjectMessages();
   void slotProjectAPI();
   void slotProjectManual();

@@ -764,27 +764,28 @@ void CKDevelop::slotProjectGenerate(){
   next_job="load_new_prj";
 }
 
-void  CKDevelop::slotProjectWorkspaces(int id){
-  if(project_menu->isItemChecked(id)){
-    return; // we are already in this workspace
-  }
-  saveCurrentWorkspaceIntoProject();
-  
-  // and now the new workspace
-  switch(id){
-  case ID_PROJECT_WORKSPACES_1:
-    switchToWorkspace(1);
-    break;
-  case ID_PROJECT_WORKSPACES_2:
-    switchToWorkspace(2);
-    break;
-  case ID_PROJECT_WORKSPACES_3:
-    switchToWorkspace(3);
-    break;
-  }
-   
-}
-
+// This is no longer being used - remove
+//void  CKDevelop::slotProjectWorkspaces(int id){
+//  if(project_menu->isItemChecked(id)){
+//    return; // we are already in this workspace
+//  }
+//  saveCurrentWorkspaceIntoProject();
+//
+//  // and now the new workspace
+//  switch(id){
+//  case ID_PROJECT_WORKSPACES_1:
+//    switchToWorkspace(1);
+//    break;
+//  case ID_PROJECT_WORKSPACES_2:
+//    switchToWorkspace(2);
+//    break;
+//  case ID_PROJECT_WORKSPACES_3:
+//    switchToWorkspace(3);
+//    break;
+//  }
+//
+//}
+//
 void CKDevelop::slotProjectAddNewTranslationFile(){
   CAddNewTranslationDlg dlg(this,0,prj);
   QString file;
@@ -1317,7 +1318,7 @@ bool CKDevelop::readProjectFile(QString file){
   }
   
   enableCommand(ID_PROJECT_REMOVE_FILE);
-  enableCommand(ID_PROJECT_WORKSPACES);
+//  enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
