@@ -8,39 +8,28 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef __FILECREATE_WIDGET_H__
-#define __FILECREATE_WIDGET_H__
 
 
-#include <qwidget.h>
-#include <qstring.h>
+#ifndef __KDEVPART_FILECREATE_FILEDIALOG_H__
+#define __KDEVPART_FILECREATE_FILEDIALOG_H__
 
-#include <klistview.h>
+#include <kfiledialog.h>
 
-#include "filecreate_typechooser.h"
+namespace FileCreate {
 
-class KDevProject;
-class FileCreatePart;
+  class FileDialog : public KFileDialog {
 
-class FileCreateFileType;
+  public:
+    FileDialog(const QString& startDir, const QString& filter,
+               QWidget *parent, const char *name,
+               bool modal, QWidget * extraWidget);
+    virtual ~FileDialog();
 
-class FileCreateWidget : public KListView, public FileCreateTypeChooser
-{
-  Q_OBJECT
-    
-public:
-		  
-  FileCreateWidget(FileCreatePart *part);
-  ~FileCreateWidget();
+    virtual void initGUI();
 
-  virtual void refresh();
+  
+  };
 
-public slots:
-  void slotTypeSelected(QListViewItem * item);
-//public:
-//  void filetypeSelected(const FileCreateFileType * filetype);
-
-};
-
+}
 
 #endif

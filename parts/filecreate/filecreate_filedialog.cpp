@@ -8,39 +8,30 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef __FILECREATE_WIDGET_H__
-#define __FILECREATE_WIDGET_H__
+#include "filecreate_filedialog.h"
 
+#include <kdeversion.h>
 
-#include <qwidget.h>
-#include <qstring.h>
+namespace FileCreate {
 
-#include <klistview.h>
-
-#include "filecreate_typechooser.h"
-
-class KDevProject;
-class FileCreatePart;
-
-class FileCreateFileType;
-
-class FileCreateWidget : public KListView, public FileCreateTypeChooser
-{
-  Q_OBJECT
-    
-public:
-		  
-  FileCreateWidget(FileCreatePart *part);
-  ~FileCreateWidget();
-
-  virtual void refresh();
-
-public slots:
-  void slotTypeSelected(QListViewItem * item);
-//public:
-//  void filetypeSelected(const FileCreateFileType * filetype);
-
-};
-
-
+  FileDialog::FileDialog(const QString& startDir, const QString& filter,
+                         QWidget *parent, const char *name,
+                         bool modal, QWidget * extraWidget) :
+#if KDE_VERSION >= 310
+    KFileDialog(startDir, filter, parent, name, modal, extraWidget) {
+#else
+    KFileDialog(startDir, filter, parent, name, modal) {
+      setPreviewWidget(extraWidget);
 #endif
+
+  }
+
+  FileDialog::~FileDialog() { } 
+
+
+  void FileDialog::initGUI()
+  {
+    KFileDialog::initGUI();
+  }
+  
+}

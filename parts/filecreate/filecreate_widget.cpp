@@ -54,12 +54,15 @@ void FileCreateWidget::refresh() {
   for(FileCreateFileType * filetype = filetypes.first();
       filetype!=NULL;
       filetype=filetypes.next()) {
-    FileCreateListItem * listitem = new FileCreateListItem( this, filetype );
-    QPtrList<FileCreateFileType> subtypes = filetype->subtypes();
-    for(FileCreateFileType * subtype = subtypes.first();
-        subtype!=NULL;
-        subtype=subtypes.next()) {
-      new FileCreateListItem( listitem, subtype );
+    if (filetype->enabled()) {
+      FileCreateListItem * listitem = new FileCreateListItem( this, filetype );
+      QPtrList<FileCreateFileType> subtypes = filetype->subtypes();
+      for(FileCreateFileType * subtype = subtypes.first();
+          subtype!=NULL;
+          subtype=subtypes.next()) {
+        if (subtype->enabled())
+          new FileCreateListItem( listitem, subtype );
+      }
     }
   }
 }

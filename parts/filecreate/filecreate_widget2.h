@@ -11,7 +11,7 @@
 #ifndef __FILECREATE_WIDGET2_H__
 #define __FILECREATE_WIDGET2_H__
 
-
+#include <kdeversion.h>
 #include <qtable.h>
 #include <qstring.h>
 #include <qmap.h>
@@ -49,6 +49,7 @@ private:
 private slots:
   virtual void slotCellSelected(int row, int col);
   virtual void slotDoSelection();
+
   
 };
 

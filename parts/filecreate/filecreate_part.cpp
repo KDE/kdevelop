@@ -36,9 +36,13 @@
 #include "filecreate_widget2.h"
 #include "filecreate_part.h"
 #include "filecreate_filetype.h"
+#include "filecreate_filedialog.h"
 
 typedef KGenericFactory<FileCreatePart> FileCreateFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreate" ) );
+
+using namespace FileCreate;
+
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin(parent, name), m_selectedWidget(-1)
@@ -58,7 +62,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   m_numWidgets = 2;
   
   //setWidget(new FileCreateWidget2(this));
-  selectWidget(1);
+  selectWidget(0);
   
   
 }
@@ -269,14 +273,14 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   KURL selectedURL;
 
   KDialogBase * dialogBase = NULL;
-  FileCreateWidget2 * filetypeWidget = NULL;
+  FileCreateWidget * filetypeWidget = NULL;
 
-  KFileDialog * fileDialogWidget = NULL;  
+  FileDialog * fileDialogWidget = NULL;  
   
   // If the file type (extension) is unknown, we're going to need to ask
   if (ext==QString::null) {
     m_filedialogFiletype = NULL;
-    filetypeWidget = new FileCreateWidget2(this);
+    filetypeWidget = new FileCreateWidget(this);
     connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *) ) ,
              this, SLOT(slotNoteFiletype(const FileCreateFileType *)) );
     filetypeWidget->refresh();
@@ -289,13 +293,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     if (dir==QString::null)
       dir=project()->projectDirectory();
 
-#if (KDE_VERSION >= 310)
-    fileDialogWidget = new KFileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
-#else
-    // ###TODO: what about KDE 3.0.x???
-    fileDialogWidget = new KFileDialog(dir, "*." + ext, 0, "New file", true);
-#endif
-    projectURL = fileDialogWidget->baseURL();
+    fileDialogWidget = new FileCreate::FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
 
     dialogBase = fileDialogWidget;
                    
@@ -338,7 +336,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 
     // if there was a type to be chosen, store it
     if (filetypeWidget) {
-      filetypeWidget = NULL; // deleted as reparented in KFileDialog
+      filetypeWidget = NULL; // deleted already as reparented in KFileDialog or KDialogBase
       if (m_filedialogFiletype) {
         ext = m_filedialogFiletype->ext();
         subtype = m_filedialogFiletype->subtypeRef();
