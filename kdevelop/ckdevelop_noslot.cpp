@@ -710,10 +710,12 @@ void CKDevelop::readOptions(){
 
 	/////////////////////////////////////////
 	// BAR STATUS
-	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
-	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
-	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
-	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
+
+// not movable anymore :-(
+//	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
+//	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
+//	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
+//	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
 
 
   KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
@@ -881,8 +883,9 @@ void CKDevelop::saveOptions(){
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
   
-  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
-  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
+// not moveable anymore :-(
+//  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
+//  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
@@ -1040,4 +1043,9 @@ EditorView* CKDevelop::getCurrentEditorView(){
       return static_cast<EditorView*>(win);
 
     return 0;
+}
+
+void CKDevelop::resizeEvent(QResizeEvent* rse){
+  // if necessary, adjust the 4 system buttons of a maximized MDI view to the right-hand side
+  mdi_main_frame->setSysButtonsAtMenuPosition();
 }

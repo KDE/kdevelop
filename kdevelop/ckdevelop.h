@@ -161,6 +161,9 @@ public:
   /** Get the current project. */
   CProject* getProject()                 {return prj;}
 
+  /** do something more when resizing */
+  void resizeEvent(QResizeEvent* rse);
+  
  public slots:
 
   void enableCommand(int id_);
