@@ -1,5 +1,5 @@
 /***************************************************************************
-                          defines.h  -  description
+                                 defines.h
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
@@ -15,18 +15,25 @@
  *                                                                         *
  ***************************************************************************/
 
+/**
+ * in this file you´ll find some definations needed in many places of the
+ * kdlgedit code.
+*/
+
 
 #ifndef KDLG_DEFINES_H
 #define KDLG_DEFINES_H
 
-#define KDLGEDIT_VERSION_STR "0.1"
-#define KDEVELOP_VERSION_STR "0.3.1"
+#define KDLGEDIT_VERSION_STR "0.1"         // version of the dialog editor
+#define KDEVELOP_VERSION_STR "0.3.1"       // version of kdevelop
 
-#define MAX_WIDGETCOLS_PER_LINE 4
+#define MAX_WIDGETCOLS_PER_LINE 2          // defines up to which column in the property
+					   // view a widget can be inserted
 
-#define MAX_WIDGETS_PER_DIALOG 128
-#define MAX_ENTRYS_PER_WIDGET 64
+#define MAX_WIDGETS_PER_DIALOG 128         // maximum count of items/widgets in the main widget
+#define MAX_ENTRYS_PER_WIDGET 64           // maximum count of child items/widgets per widget
                       	
+// defines which type of input is allowed for an property
 #define ALLOWED_STRING      1
 #define ALLOWED_BOOL        2
 #define ALLOWED_INT         3
@@ -37,9 +44,10 @@
 #define ALLOWED_CURSOR      8
 #define ALLOWED_BGMODE      9
 
-#define RULER_WIDTH  20
-#define RULER_HEIGHT  20
+#define RULER_WIDTH  22                    // width of the vertical ruler
+#define RULER_HEIGHT  22                   // height of the horizontal ruler
 
+// defines the point the user has clicked on the widget in order to move/resize it
 #define RESIZE_MOVE            0
 #define RESIZE_TOP_LEFT        1
 #define RESIZE_TOP_RIGHT       2
@@ -50,6 +58,7 @@
 #define RESIZE_MIDDLE_LEFT     7
 #define RESIZE_MIDDLE_RIGHT    8
 
+// defines how many groups (i.e. general or appearance) are allowed in the property view
 #define MAX_MAIN_ENTRYS 16
 
 #endif

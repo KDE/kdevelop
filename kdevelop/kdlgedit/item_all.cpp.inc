@@ -16,7 +16,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 void CALLER_ITEMCLASS_NAME::MyWidget::mouseReleaseEvent ( QMouseEvent * )
 {
   isMBPressed = false;
-  KDlgPropWidget *pw = parentObject->getEditWidget()->getCKDevelClass()->kdlg_get_prop_widget();
+  KDlgPropWidget *pw = parentObject->getEditWidget()->getCKDevel()->kdlg_get_prop_widget();
   if (pw)
     pw->refillList(parentObject);
 }
@@ -56,7 +56,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mouseMoveEvent ( QMouseEvent *e )
       parentObject->getProps()->setProp_Value("Width",QString().setNum(w));
       parentObject->getProps()->setProp_Value("Height",QString().setNum(h));
       if (isMainwidget && !noMainWidget) { parentObject->getEditWidget()->verticalRuler()->setRange(0,h); parentObject->getEditWidget()->horizontalRuler()->setRange(0,w);}
-      AdvListView *lv = parentObject->getEditWidget()->getCKDevelClass()->kdlg_get_prop_widget()->getListView();
+      AdvListView *lv = parentObject->getEditWidget()->getCKDevel()->kdlg_get_prop_widget()->getListView();
       if (lv)
         lv->setGeometryEntrys(x,y,w,h);
   }

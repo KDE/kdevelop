@@ -1,4 +1,8 @@
 1999-04-09 Pascal Krahmer <pascal@beast.de>
+        * fixed some bug in the save/open methods.
+        * added documentation to most classes.
+
+1999-04-09 Pascal Krahmer <pascal@beast.de>
         * removed includes for kdlg files from ckdevelop in order to save compiling time
         * fixed some conversation errors for some compilers in ckdevelop_init.cpp.
           (.., kdlgedit,... -> ,..(QObject*) kdlgedit,..) (for accelerators)

@@ -58,9 +58,19 @@ class KDlgItems : public QWidget  {
     KDlgItems(CKDevelop *CKPar, QWidget *parent=0, const char *name=0);
     ~KDlgItems();
 
+    /**
+     * returns a pointer on the QListView child widget of this class.
+    */
     QListView *getTreeList() { return treelist; }
 
+    /**
+     * refills the list with <i>wd</i> as root (main-) widget.
+    */
     void addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm=0);
+
+    /**
+     * refills the list in order to actualize it.
+    */
     void refreshList();
 
   public slots:

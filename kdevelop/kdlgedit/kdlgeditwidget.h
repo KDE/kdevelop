@@ -33,36 +33,84 @@ class CKDevelop;
 class KRuler;
 class QTextStream;
 
+/**
+ * This is the edit widget you can see in the center of the kdevelop window.
+*/
 class KDlgEditWidget : public QWidget  {
   Q_OBJECT
   public:
     KDlgEditWidget(CKDevelop* parCKD, QWidget *parent=0, const char *name=0);
     ~KDlgEditWidget();
 
-    KDlgItemDatabase *database() { return dbase; }
-
+    /**
+     * Adds an item to the dialog and asks where to add it if nessessary.
+     * The desired type of widget is given to the first parameter as string (i.e. "QLineEdit").
+    */
     bool addItem(QString);
+
+    /**
+     * Adds an item to the specified item.
+     * The desired type of widget is given to the second parameter as string (i.e. "QLineEdit").
+    */
     KDlgItem_Widget *addItem(KDlgItem_Base*, QString);
 
+    /**
+     * returns a pointer to the main widget.
+    */
     KDlgItem_Widget *mainWidget() { return main_widget; }
+
+    /**
+     * sets the pointer to the main widget.
+    */
     void setMainWidget(KDlgItem_Widget *mw) { main_widget = mw; }
+
+    /**
+     * returns a pointer to the selected widget or 0 if none is selected.
+    */
     KDlgItem_Base *selectedWidget() { return selected_widget; }
 
+    /**
+     * selects the specified item.
+    */
     void selectWidget(KDlgItem_Base*);
+
+    /**
+     * deselects the selected item.
+    */
     void deselectWidget();
 
+    /**
+     * returns a pointer to the CKDevelop class which has created this class.
+    */
     CKDevelop *getCKDevel() { return pCKDevel; }
 
     KRuler *horizontalRuler() { return rulh; }
     KRuler *verticalRuler() { return rulv; }
-    CKDevelop *getCKDevelClass() { return pCKDevel; }
 
+    /**
+     * saves the complete dialog to the file <i>fname</i>
+    */
     bool saveToFile( QString fname );
-    void saveWidget( KDlgItem_Widget *, QTextStream *, int deep = 0);
 
+    /**
+     * saves the item <i>wid</i> to the textstream <i>t</i> with <i>deep</i>*2 spaces before every line.
+    */
+    void saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep = 0);
+
+    /**
+     * opens a dialog from the file <i>fname</i>
+    */
     bool openFromFile( QString fname );
-    void openWidget( KDlgItem_Widget *, QTextStream * );
   protected:
+    int dlgfilelinecnt;
+
+    QString dlgReadLine( QTextStream *t );
+    bool readGrp_Ignore( QTextStream *t );
+    bool readGrp_Information( QTextStream *t );
+    bool readGrp_SessionManagement( QTextStream *t );
+    bool readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, QTextStream *t, QString ctype );
+    bool readGroup( KDlgEditWidget *edwid, QTextStream *t );
+
 
     virtual void resizeEvent ( QResizeEvent * );
 
