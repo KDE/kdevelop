@@ -43,8 +43,8 @@ DistpartDialog::DistpartDialog(DistpartPart *part)
             this, SLOT(slotokayPushButtonPressed()));
     connect(cancelPushButton, SIGNAL(clicked()),
             this, SLOT(slotcancelPushButtonPressed()));
-    connect(help_PushButton, SIGNAL(clicked()),
-            this, SLOT(slothelp_PushButtonPressed()));
+/*    connect(help_PushButton, SIGNAL(clicked()),
+            this, SLOT(slothelp_PushButtonPressed()));*/
     connect(createSrcArchPushButton, SIGNAL(clicked()),
             this, SLOT(slotcreateSrcArchPushButtonPressed()));
     connect(resetSrcPushButton, SIGNAL(clicked()),
@@ -92,9 +92,9 @@ void DistpartDialog::slotcancelPushButtonPressed() {
 }
 //    QPushButton* help_PushButton;
 
-void DistpartDialog::slothelp_PushButtonPressed() {
+/*void DistpartDialog::slothelp_PushButtonPressed() {
     QMessageBox::about(this,i18n("Distpart Help"),i18n("In order to build a RPM package :\n\t1) Create a source archive\n\t2) Generate a SPEC File\n\t3) Build the package"));
-}
+}*/
 
 //    QPushButton* createSrcArchPushButton;
 void DistpartDialog::slotcreateSrcArchPushButtonPressed() {

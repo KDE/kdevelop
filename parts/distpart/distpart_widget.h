@@ -61,7 +61,7 @@ public slots:
     //    QPushButton* cancelPushButton;
     void slotcancelPushButtonPressed();
     //    QPushButton* help_PushButton;
-    void slothelp_PushButtonPressed();
+//    void slothelp_PushButtonPressed();
     //    QPushButton* createSrcArchPushButton;
     void slotcreateSrcArchPushButtonPressed();
     //    QPushButton* resetSrcPushButton;

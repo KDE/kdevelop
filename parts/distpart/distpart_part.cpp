@@ -18,7 +18,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Distribution", "dist", parent, name ? name : "DistpartPart") {
-  
+
     kdDebug(9007) << "DistpartPart::DistpartPart()" << endl;
     setInstance(DistpartFactory::instance());
 
@@ -29,9 +29,9 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
                              actionCollection(), "make_dist" );
 
     m_action->setStatusText(i18n("Make source and binary distribution"));
-    m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"));
+    m_action->setWhatsThis(i18n("<b>Project distribution && publishing</b><p>Helps users package and publish their software."));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
-    
+
     m_dialog = new DistpartDialog(this);
 
     // Package types

@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>703</width>
-            <height>712</height>
+            <width>623</width>
+            <height>549</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -143,7 +143,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Source Distribution</string>
+                    <string>&amp;Source Distribution</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -159,7 +159,7 @@
                             <cstring>customProjectCheckBox</cstring>
                         </property>
                         <property name="text">
-                            <string>Use custom options</string>
+                            <string>&amp;Use custom options</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget" row="2" column="0">
@@ -189,7 +189,7 @@
                                             <cstring>bzipCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Use bzip2 instead of gzip</string>
+                                            <string>Use &amp;bzip2 instead of gzip</string>
                                         </property>
                                     </widget>
                                     <widget class="QLayoutWidget">
@@ -208,10 +208,10 @@
                                                     <cstring>archiveNameLabel</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&lt;b&gt;Archive name format: &lt;/b&gt;&lt;br&gt;
-%n - File name &lt;br&gt;
-%v - File version &lt;br&gt;
-%d - Date of archive</string>
+                                                    <string>&lt;b&gt;Archive name format: &lt;/b&gt;&lt;br&gt; %n - File name &lt;br&gt; %v - File version &lt;br&gt; %d - Date of archive</string>
+                                                </property>
+                                                <property name="buddy" stdset="0">
+                                                    <cstring>archNameFormatLineEdit</cstring>
                                                 </property>
                                             </widget>
                                             <widget class="QLineEdit">
@@ -256,7 +256,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Create Source Archive</string>
+                                    <string>Create Source &amp;Archive</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton">
@@ -272,7 +272,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Reset</string>
+                                    <string>R&amp;eset</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -282,7 +282,7 @@
                             <cstring>fileListLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>File list:</string>
+                            <string>File &amp;list:</string>
                         </property>
                     </widget>
                 </grid>
@@ -292,7 +292,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Package Information</string>
+                    <string>&amp;Package Information</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -308,7 +308,10 @@
                             <cstring>appNameLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Application name:</string>
+                            <string>&amp;Application name:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>appNameLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="2" column="1">
@@ -321,7 +324,10 @@
                             <cstring>licenseLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>License:</string>
+                            <string>&amp;License:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>licenseLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="5" column="0">
@@ -329,7 +335,10 @@
                             <cstring>summaryLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Summary:</string>
+                            <string>S&amp;ummary:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>summaryLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="3" column="1">
@@ -342,7 +351,10 @@
                             <cstring>groupLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Group:</string>
+                            <string>&amp;Group:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>groupLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="0">
@@ -350,7 +362,10 @@
                             <cstring>vendorLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Vendor:</string>
+                            <string>Ve&amp;ndor:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>vendorLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="0" column="1">
@@ -373,7 +388,10 @@
                             <cstring>releaseLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Release:</string>
+                            <string>R&amp;elease:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>releaseLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="6" column="1">
@@ -386,7 +404,10 @@
                             <cstring>versionLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Version:</string>
+                            <string>&amp;Version:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>versionLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QButtonGroup" row="0" column="2" rowspan="9" colspan="1">
@@ -394,7 +415,7 @@
                             <cstring>advancedOptionsGroupBox</cstring>
                         </property>
                         <property name="title">
-                            <string>Advanced Package Options</string>
+                            <string>Advanced Package Op&amp;tions</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -545,7 +566,10 @@
                             <cstring>packagerLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Packager:</string>
+                            <string>Pac&amp;kager:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>packagerLineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="8" column="0">
@@ -553,7 +577,10 @@
                             <cstring>projectDescriptionLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Description:</string>
+                            <string>&amp;Description:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>projectDescriptionMultilineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="8" column="1">
@@ -561,7 +588,10 @@
                             <cstring>TextLabel1</cstring>
                         </property>
                         <property name="text">
-                            <string>Changelog:</string>
+                            <string>C&amp;hangelog:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>projectChangelogMultilineEdit</cstring>
                         </property>
                     </widget>
                     <widget class="QMultiLineEdit" row="9" column="0">
@@ -581,7 +611,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Project Publishing</string>
+                    <string>P&amp;roject Publishing</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -622,7 +652,7 @@
                                             <cstring>genHTMLCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Generate HTML information page</string>
+                                            <string>Generate &amp;HTML information page</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="1" column="1">
@@ -630,7 +660,7 @@
                                             <cstring>useRPMInfoCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>User information generated by RPM</string>
+                                            <string>&amp;User information generated by RPM</string>
                                         </property>
                                     </widget>
                                     <spacer row="1" column="0">
@@ -685,7 +715,7 @@
                                             <cstring>genHTMLPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Generate</string>
+                                            <string>&amp;Generate</string>
                                         </property>
                                     </widget>
                                     <widget class="QPushButton">
@@ -693,7 +723,7 @@
                                             <cstring>resetHTMLPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Reset</string>
+                                            <string>R&amp;eset</string>
                                         </property>
                                     </widget>
                                 </vbox>
@@ -713,7 +743,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Remote Options</string>
+                            <string>Re&amp;mote Options</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -754,7 +784,10 @@
                                             <cstring>fileSubmissionLabel</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>File submission list:</string>
+                                            <string>File su&amp;bmission list:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>uploadFileListBox</cstring>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -909,6 +942,9 @@
                     <property name="text">
                         <string>&amp;OK</string>
                     </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -935,14 +971,6 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>help_PushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                </widget>
             </hbox>
         </widget>
     </vbox>
@@ -989,7 +1017,6 @@
     <tabstop>uploadFileListBox</tabstop>
     <tabstop>okayPushButton</tabstop>
     <tabstop>cancelPushButton</tabstop>
-    <tabstop>help_PushButton</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
