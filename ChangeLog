@@ -1,3 +1,7 @@
+2000-04-11 Walter Tasin  <tasin@kdevelop.de>
+	* first created Makefile.am for shared libs
+	  uses the project settings for the _LDADD flag
+
 2000-04-10 Walter Tasin  <tasin@kdevelop.de>
 	* shared library support
 	  this allows you now to convert a static library (i. e.
