@@ -47,19 +47,19 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
   QGridLayout* innerGrid = new QGridLayout(bg,3,2,15,7);
   QPixmap pm;
 
-  QRadioButton* childframe = new QRadioButton( i18n("Childframe Mode"), bg );
-  innerGrid->addWidget(childframe,0,0);
-  QLabel* pictureLabelCF = new QLabel(bg);
-  pm.load(locate("appdata", "pics/childfrm.png"));
-  pictureLabelCF->setPixmap(pm);
-  innerGrid->addWidget(pictureLabelCF,0,1);
-
   QRadioButton* toplevel = new QRadioButton( i18n("Toplevel Mode"), bg );
   innerGrid->addWidget(toplevel,1,0);
   QLabel* pictureLabelTL = new QLabel(bg);
   pm.load(locate("appdata", "pics/toplevel.png"));
   pictureLabelTL->setPixmap(pm);
   innerGrid->addWidget(pictureLabelTL,1,1);
+
+  QRadioButton* childframe = new QRadioButton( i18n("Childframe Mode"), bg );
+  innerGrid->addWidget(childframe,0,0);
+  QLabel* pictureLabelCF = new QLabel(bg);
+  pm.load(locate("appdata", "pics/childfrm.png"));
+  pictureLabelCF->setPixmap(pm);
+  innerGrid->addWidget(pictureLabelCF,0,1);
 
   QRadioButton* tabpage = new QRadioButton( i18n("Tab Page Mode"), bg );
   innerGrid->addWidget(tabpage,2,0);

@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kprocess.h>
+#include <ksimpleconfig.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -378,6 +379,11 @@ void CKDevInstall::slotFinished()
   m_config->writeEntry("MDI mode", m_pInstallState->userInterfaceMode);
 
   m_config->sync();
+
+  // get rid of possible old docking states
+  KSimpleConfig conf(locate("config", "kdeveloprc"));
+  conf.deleteGroup(QString("dock_setting_default"), true);
+  conf.sync();
 
   kapp->startServiceByDesktopName("kdevelop");
 }

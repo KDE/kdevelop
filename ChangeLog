@@ -1,3 +1,10 @@
+2001-07-30  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: The order of Toplevel and Childframe mode were mixed up
+    * bugfix: delete the [dock_setting_default] section
+              before starting kdevelop for the first time
+              (hint of Waldo Bastian, after message freeze we could provide an
+              appropriate reset button in the GUI)
+
 2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: debugging with Toplevel MDI mode works properly now
       (focus problem in QextMDI and DocViewMan::doSwitchToFile fixed)
