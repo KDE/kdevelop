@@ -25,7 +25,6 @@
 #include <qclipbrd.h>
 
 #include <kmsgbox.h>
-#include <kaccel.h>
 #include <kcursor.h>
 #include <klocale.h>
 
@@ -233,73 +232,73 @@ void CKDevelop::initView(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::initKeyAccel(){
-  accel = new KAccel( this );
+  accel = new CKDevAccel( this );
   //file menu
-  accel->connectItem( KAccel::New, this, SLOT(slotFileNew()) );
-  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()) );
-  accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()) );
+  accel->connectItem( KAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW );
+  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
+  accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE );
   
-  accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
+  accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE );
   
   accel->insertItem(i18n("Save As"), "SaveAs", "");
-  accel->connectItem( "SaveAs", this, SLOT(slotFileSaveAs()) );
+  accel->connectItem( "SaveAs", this, SLOT(slotFileSaveAs()), true, ID_FILE_SAVE_AS);
   
   accel->insertItem(i18n("Save All"), "SaveAll", "");
-  accel->connectItem( "SaveAll", this, SLOT(slotFileSaveAll()) );
+  accel->connectItem( "SaveAll", this, SLOT(slotFileSaveAll()), true, ID_FILE_SAVE_ALL);
   
-  accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()) );
-  accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()) );
+  accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()), true, ID_FILE_PRINT );
+  accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()), true, ID_FILE_QUIT );
 
   //edit menu  
-  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
+  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
   
   accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
-  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
+  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO  );
 
-  accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
-  accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
-  accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
+  accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT );
+  accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY );
+  accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE );
 
   accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
-  accel->connectItem( "Indent", this, SLOT(slotEditIndent() ) );
+  accel->connectItem( "Indent", this, SLOT(slotEditIndent() ), true, ID_EDIT_INDENT );
   
   accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
-  accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ) );
+  accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ), true, ID_EDIT_UNINDENT );
 
   accel->insertItem( i18n("Insert File"), "InsertFile", "");
-  accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()) );
+  accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
   
-  accel->connectItem( KAccel::Find, this, SLOT(slotEditSearch() ) );
+  accel->connectItem( KAccel::Find, this, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
-  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
+  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ), true, ID_EDIT_REPEAT_SEARCH );
 
-  accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ) );
+  accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ), true, ID_EDIT_REPLACE );
 
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
-  accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ) );
+  accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "GrepSearch", this, SLOT(slotEditSearchText() ) );
 
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
-  accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ) );
+  accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );
   
   accel->insertItem(i18n("Deselect All"), "DeselectAll", "");
-  accel->connectItem("DeselectAll", this, SLOT(slotEditDeselectAll()));
+  accel->connectItem("DeselectAll", this, SLOT(slotEditDeselectAll()), true, ID_EDIT_DESELECT_ALL);
   
   accel->insertItem(i18n("Invert Selection"), "Invert Selection", "");
-  accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()));
+  accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()), true, ID_EDIT_INVERT_SELECTION);
 
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
-  accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
+  accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()), true, ID_VIEW_GOTO_LINE );
 
   accel->insertItem( i18n("Next Error"), "NextError",IDK_VIEW_NEXT_ERROR);
-  accel->connectItem( "NextError", this, SLOT( slotViewNextError()) );
+  accel->connectItem( "NextError", this, SLOT( slotViewNextError()), true, ID_VIEW_NEXT_ERROR );
   
   accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
-  accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()) );
+  accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()), true, ID_VIEW_PREVIOUS_ERROR  );
 
   accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg","");
   accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
@@ -308,24 +307,24 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem("Dialog Editor", this, SLOT(switchToKDlgEdit()) );
   
   accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
-  accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()) );
+  accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()), true, ID_VIEW_TREEVIEW );
   
   accel->insertItem( i18n("Toogle Output-View"), "Output-View",IDK_VIEW_OUTPUTVIEW);
-  accel->connectItem( "Output-View", this, SLOT(slotViewTOutputView()) );
+  accel->connectItem( "Output-View", this, SLOT(slotViewTOutputView()), true, ID_VIEW_OUTPUTVIEW );
   
   accel->insertItem( i18n("Toolbar"), "Toolbar", "");
-  accel->connectItem( "Toolbar", this, SLOT(slotViewTStdToolbar()) );
+  accel->connectItem( "Toolbar", this, SLOT(slotViewTStdToolbar()), true, ID_VIEW_TOOLBAR );
   
   accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", "");
-  accel->connectItem( "Browser-Toolbar", this, SLOT(slotViewTBrowserToolbar()) );
+  accel->connectItem( "Browser-Toolbar", this, SLOT(slotViewTBrowserToolbar()), true, ID_VIEW_BROWSER_TOOLBAR );
 	
   accel->insertItem( i18n("Statusbar"), "Statusbar", "");
-  accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()) );
+  accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR );
   
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
-  
+
   accel->insertItem( i18n("Refresh"), "Refresh", "");
-  accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()) );
+  accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()), true, ID_VIEW_REFRESH );
   
   accel->insertItem( i18n("Graphical Classview"), "CVViewTree", "");
   accel->connectItem( "CVViewTree", this, SLOT(slotClassbrowserViewTree()));
@@ -350,7 +349,7 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem("Add new Translation File", this, SLOT(slotProjectAddNewTranslationFile()) );
   
   accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
-  accel->connectItem("FileProperties", this, SLOT(slotProjectFileProperties() ) );
+  accel->connectItem("FileProperties", this, SLOT(slotProjectFileProperties() ), true, ID_PROJECT_FILE_PROPERTIES );
   
   accel->insertItem(i18n("Make messages and merge"), "MakeMessages", "");
   accel->connectItem("MakeMessages", this, SLOT(slotProjectMessages()) );
@@ -365,15 +364,15 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem("Source-tgz", this, SLOT(slotProjectMakeDistSourceTgz()) );
  	
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
-  accel->connectItem("ProjectOptions", this, SLOT(slotProjectOptions() ) );
+  accel->connectItem("ProjectOptions", this, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
   
   
   //build menu
   accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
-  accel->connectItem( "CompileFile", this, SLOT( slotBuildCompileFile()) );
+  accel->connectItem( "CompileFile", this, SLOT( slotBuildCompileFile()), true, ID_BUILD_COMPILE_FILE );
   
   accel->insertItem( i18n("Make"), "Make", IDK_BUILD_MAKE );
-  accel->connectItem( "Make", this, SLOT(slotBuildMake() ) );
+  accel->connectItem( "Make", this, SLOT(slotBuildMake() ), true, ID_BUILD_MAKE );
   
   accel->insertItem( i18n("Rebuild All"), "RebuildAll", "");
   accel->connectItem( "RebuildAll", this, SLOT(slotBuildRebuildAll()) );
@@ -382,13 +381,13 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "CleanRebuildAll", this, SLOT(slotBuildCleanRebuildAll()) );
   
   accel->insertItem( i18n("Stop process"), "Stop_proc", IDK_BUILD_STOP);
-  accel->connectItem( "Stop_proc", this, SLOT(slotBuildStop() ) );
+  accel->connectItem( "Stop_proc", this, SLOT(slotBuildStop() ), true, ID_BUILD_STOP );
   
   accel->insertItem( i18n("Execute"), "Run", IDK_BUILD_RUN);
-  accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
+  accel->connectItem( "Run", this, SLOT(slotBuildRun() ), true, ID_BUILD_RUN );
   
   accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
-  accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ) );
+  accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
   
   accel->insertItem( i18n("Debug"), "BuildDebug", "");
   accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()) );
@@ -404,30 +403,29 @@ void CKDevelop::initKeyAccel(){
   
   
   //   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
-  //   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ) );
+  //   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ), true, ID_BUILD_MAKE_WITH );
   
   // Tools-menu
   
   // Bookmarks-menu
   accel->insertItem( i18n("Add Bookmark"), "Add_Bookmarks", IDK_BOOKMARKS_ADD);
-  accel->connectItem( "Add_Bookmarks", this, SLOT(slotBookmarksAdd() ) );
+  accel->connectItem( "Add_Bookmarks", this, SLOT(slotBookmarksAdd() ), true, ID_BOOKMARKS_ADD );
 
   accel->insertItem( i18n("Clear Bookmarks"), "Clear_Bookmarks", IDK_BOOKMARKS_CLEAR);
-  accel->connectItem( "Clear_Bookmarks", this, SLOT(slotBookmarksClear() ) );
+  accel->connectItem( "Clear_Bookmarks", this, SLOT(slotBookmarksClear() ), true, ID_BOOKMARKS_CLEAR );
 
   //Help menu
   accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
   
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
-  accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
+  accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ), true, ID_HELP_SEARCH_TEXT );
 
   accel->insertItem( i18n("Search for Help on"), "HelpSearch", "");
   accel->connectItem( "HelpSearch", this, SLOT(slotHelpSearch()) );
   
   // Tab-Switch
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
-  accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ) );
-
+  accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ));
 
   accel->readSettings();
 }
@@ -1200,7 +1198,7 @@ if(bKDevelop){
     accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
 
-    accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
+    accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()), true, ID_VIEW_PREVIEW);
 //    accel->connectItem( KAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()) );
     accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()) );
@@ -1259,6 +1257,8 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
 
 
 
