@@ -138,6 +138,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
    ,m_pCurrentFocusedWindow(0)
    ,m_pStretchSpace(0)
    ,m_layoutIsPending(FALSE)
+   ,m_bSwitchedOn(FALSE)
 {
    m_pFrm = parent;
    m_pButtonList = new QList<QextMdiTaskBarButton>;
@@ -145,7 +146,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
 //QT30   setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
    setFocusPolicy(NoFocus);
-   parent->moveToolBar( this, dock);
+   parent->moveToolBar( this, dock); //XXX obsolete!
 }
 
 QextMdiTaskBar::~QextMdiTaskBar()
@@ -178,21 +179,41 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    setStretchableWidget( m_pStretchSpace);
    m_pStretchSpace->show();
 
-   b->show();
-//   show();
+   if (m_bSwitchedOn) {
+      b->show();
+      show();
+   }
    return b;
 }
 
 void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar)
 {
    QextMdiTaskBarButton *b=getButton(win_ptr);
-   if(b){
+   if (b){
       m_pButtonList->removeRef(b);
       if( haveToLayoutTaskBar) layoutTaskBar();
    }
    if (m_pButtonList->count() == 0) {
       if (m_pStretchSpace != 0L) {
-         m_pStretchSpace->hide();
+         delete m_pStretchSpace;
+         m_pStretchSpace = 0L;
+         hide();
+      }
+   }
+}
+
+void QextMdiTaskBar::switchOn(bool bOn)
+{
+   m_bSwitchedOn = bOn;
+   if (!bOn) {
+      hide();
+   }
+   else {
+      if (m_pButtonList->count() > 0) {
+         show();
+      }
+      else {
+         hide();
       }
    }
 }
@@ -316,7 +337,9 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
 {
    if (!m_layoutIsPending) {
-      layoutTaskBar( rse->size().width());
+      if (m_pButtonList->count() != 0) {
+         layoutTaskBar( rse->size().width());
+      }
    }
 }
 

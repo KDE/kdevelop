@@ -216,11 +216,7 @@ void QextMdiMainFrm::slot_toggleTaskBar()
 {
    if (!m_pTaskBar)
       return;
-   if (m_pTaskBar->isVisible()){
-      m_pTaskBar->hide();
-   } else {
-      m_pTaskBar->show();
-   }
+   m_pTaskBar->switchOn( !m_pTaskBar->isSwitchedOn());
 }
 
 void QextMdiMainFrm::resizeEvent(QResizeEvent *e)
@@ -273,8 +269,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 
    // embed the view depending on the current MDI mode
    if (m_mdiMode == QextMdi::TabPageMode) {
+      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
       KDockWidget* pCover = createDockWidget( pWnd->name(),
-                                              pWnd->icon() ? *(pWnd->icon()) : QPixmap(),
+                                              wndIcon,
                                               0L,  // parent
                                               pWnd->caption(),
                                               pWnd->tabCaption());
@@ -363,7 +360,8 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       QHBoxLayout* pLayout = new QHBoxLayout( pToolView, 0, -1, "internal_qextmdichildview_layout");
       pWnd->reparent( pToolView, QPoint(0,0));
       pToolView->setName( pWnd->name());
-      pToolView->setIcon( pWnd->icon() ? *(pWnd->icon()) : QPixmap());
+      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
+      pToolView->setIcon( wndIcon);
       pToolView->setCaption( pWnd->caption());
       QApplication::sendPostedEvents();
       pLayout->addWidget( pWnd);
@@ -379,8 +377,9 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       pToolView->setGeometry(r);
    }
    else {   // add (and dock) the toolview as DockWidget view
+      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
       KDockWidget* pCover = createDockWidget( pToolView->name(),
-                                              pToolView->icon() ? *(pToolView->icon()) : QPixmap(),
+                                              wndIcon,
                                               0L,  // parent
                                               pToolView->caption(),
                                               tabCaption );
@@ -654,7 +653,7 @@ QPopupMenu * QextMdiMainFrm::windowPopup(QextMdiChildView * pWnd,bool bIncludeTa
 }
 
 //================ taskBarPopup =================//
-QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup)
+QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool /*bIncludeWindowPopup*/)
 {
    //returns the g_pTaskBarPopup filled according to the QextMdiChildView state
    m_pTaskBarPopup->clear();
@@ -672,7 +671,6 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
    m_pTaskBarPopup->insertSeparator();
    m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,FALSE));  //alvoid recursion
    return m_pTaskBarPopup;
-   bIncludeWindowPopup = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
 void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
@@ -1123,8 +1121,9 @@ void QextMdiMainFrm::switchToTabPageMode()
       QextMdiChildView* pView = it4.current();
       if( pView->isToolView())
          continue;
+      const QPixmap& wndIcon = pView->icon() ? *(pView->icon()) : QPixmap();
       pCover = createDockWidget( pView->name(),
-                                 pView->icon() ? *(pView->icon()) : QPixmap(),
+                                 wndIcon,
                                  0L,  // parent
                                  pView->caption(),
                                  pView->tabCaption());
@@ -1151,20 +1150,20 @@ void QextMdiMainFrm::switchToTabPageMode()
    if (pCover) {
       if (m_pWinList->count() > 1) { // note: with only 1 page we haven't already tabbed widgets
          // set the first page as active page
-#if !defined(NO_KDE2) && (QT_VERSION < 300)
-         KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
-         if (pTab)
-            pTab->setVisiblePage(pRemActiveWindow);
-#else
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
          QTabWidget* pTab = (QTabWidget*) pCover->parentWidget()->parentWidget();
          if (pTab)
             pTab->showPage(pRemActiveWindow);
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
+         if (pTab)
+            pTab->setVisiblePage(pRemActiveWindow);
 #endif
       }
       pRemActiveWindow->setFocus();
    }
 
-   m_pTaskBar->hide();
+   m_pTaskBar->switchOn(FALSE);
    //qDebug("TabPageMode on");
 }
 
@@ -1189,7 +1188,7 @@ void QextMdiMainFrm::finishTabPageMode()
          pParent->close();
          delete pParent;
       }
-      m_pTaskBar->show();
+      m_pTaskBar->switchOn(TRUE);
    }
 }
 
@@ -1456,14 +1455,14 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
 void QextMdiMainFrm::showViewTaskBar()
 {
    if (m_pTaskBar)
-      m_pTaskBar->show();
+      m_pTaskBar->switchOn(TRUE);
 }
 
 /** Hides the view taskbar. This should be connected with your "View" menu. */
 void QextMdiMainFrm::hideViewTaskBar()
 {
    if (m_pTaskBar)
-      m_pTaskBar->hide();
+      m_pTaskBar->switchOn(FALSE);
 }
 
 //=============== fillWindowMenu ===============//
