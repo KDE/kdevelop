@@ -1,0 +1,7 @@
+# QMake application
+[General]
+Name=Application
+Icon=qmakeapp.png
+Category=C++/QMake project
+Comment=Generate a QMake/Qt based application (crossplatform compatable)
+FileTemplates=h,CStyle,cpp,CStyle
