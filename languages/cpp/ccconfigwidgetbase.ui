@@ -218,9 +218,6 @@
                                 <property name="text">
                                     <string>Automatic c&amp;ode completion</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+O</string>
-                                </property>
                             </widget>
                             <spacer row="3" column="0">
                                 <property name="name">
@@ -245,9 +242,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Automatic &amp;arguments hint</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                             </widget>
                         </grid>
