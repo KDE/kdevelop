@@ -170,7 +170,7 @@ OptimizationTab::OptimizationTab(GccOptionsPlugin::Type type, QWidget *parent, c
     QVButtonGroup *group = new QVButtonGroup(i18n("Optimization Level"), this);
     Odefault = new QRadioButton(i18n("Default"), group);
     Odefault->setChecked(true);
-    O0 = new QRadioButton(i18n("No Optimization"), group);
+    O0 = new QRadioButton(i18n("No optimization"), group);
     O1 = new QRadioButton(i18n("Level 1"), group);
     O2 = new QRadioButton(i18n("Level 2"), group);
 

@@ -764,21 +764,21 @@ void CKDevSetupDlg::addUserInterfaceTab()
   QGridLayout* innerGrid = new QGridLayout(bg,3,2,15,7);
   QPixmap pm;
 
-  QRadioButton* childframe = new QRadioButton( i18n("Childframe Mode"), bg );
+  QRadioButton* childframe = new QRadioButton( i18n("Childframe mode"), bg );
   innerGrid->addWidget(childframe,0,0);
   QLabel* pictureLabelCF = new QLabel(bg);
   pm.load(locate("appdata", "pics/childfrm.png"));
   pictureLabelCF->setPixmap(pm);
   innerGrid->addWidget(pictureLabelCF,0,1);
 
-  QRadioButton* toplevel = new QRadioButton( i18n("Toplevel Mode"), bg );
+  QRadioButton* toplevel = new QRadioButton( i18n("Toplevel mode"), bg );
   innerGrid->addWidget(toplevel,1,0);
   QLabel* pictureLabelTL = new QLabel(bg);
   pm.load(locate("appdata", "pics/toplevel.png"));
   pictureLabelTL->setPixmap(pm);
   innerGrid->addWidget(pictureLabelTL,1,1);
 
-  QRadioButton* tabpage = new QRadioButton( i18n("Tab Page Mode"), bg );
+  QRadioButton* tabpage = new QRadioButton( i18n("Tab page mode"), bg );
   innerGrid->addWidget(tabpage,2,0);
   QLabel* pictureLabelTP = new QLabel(bg);
   pm.load(locate("appdata", "pics/tabpage.png"));

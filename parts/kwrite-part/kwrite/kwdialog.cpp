@@ -444,7 +444,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 //  opt2->setFixedSize(opt2->sizeHint());
   opt3 = new QCheckBox(i18n("&Word wrap"),g1);
 //  opt3->setFixedSize(opt3->sizeHint());
-  opt4 = new QCheckBox(i18n("Replace &Tabs"),g1);
+  opt4 = new QCheckBox(i18n("Replace &tabs"),g1);
 //  opt4->setFixedSize(opt4->sizeHint());
   opt5 = new QCheckBox(i18n("Remove trailing &spaces"),g1);
 //  opt5->setFixedSize(opt5->sizeHint());
