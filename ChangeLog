@@ -1,3 +1,17 @@
+2003-01-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* cppsupport:
+	  - improve new class dialog
+	    - refactor and improve class generation code
+	    - support file templates
+	    - cosmetic improvements
+	    - layout improvements
+	    - add option for objective-c
+	    - add new file templates
+	* lib/util:
+	  - enhance FileTemplate
+	  - start a Locate facility
+	* doctreeview: improve library doc dialog
+
 2003-01-07  Julian Rockey <linux@jrockey.com>
 	* Added PyQT template (QT application framework for Python) to appwizard
 
