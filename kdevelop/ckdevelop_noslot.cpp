@@ -1085,7 +1085,7 @@ void CKDevelop::create_tags()
       // TODO ".deps" directories may not always be in first level subdirectories or may not at all exist
       // TODO let user config this as an option
       // TODO is this portable? (grep -e / max command line length)
-      files = files + " `grep -h -e \"^/.* :$\" */.deps/*.P | sort -u | cut -d \" \" -f 1`";
+      files = files + " `egrep -h -e \"^/.* :$\" */.deps/*.P */.deps/*.Po */.deps/*.Plo | sort -u | cut -d \" \" -f 1`";
   }
   // set the name of the output file
   QString tagfile = getProject()->getProjectDir() + "/tags";

@@ -2020,7 +2020,7 @@ void CClassParser::reset()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseFile( ifstream &file )
+void CClassParser::parseFile( std::ifstream &file )
 {
   reset();
 
@@ -2050,7 +2050,7 @@ bool CClassParser::parse( const char *file )
   REQUIRE1( "Valid filename", file != NULL, false );
   REQUIRE1( "Valid filename length", strlen( file ) > 0, false );
 
-  ifstream f( file );
+  std::ifstream f( file );
   currentFile = file;
 
   // Remove all items with references to this file.

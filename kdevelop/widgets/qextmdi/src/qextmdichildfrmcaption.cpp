@@ -33,7 +33,7 @@
 #include "qextmdichildfrm.h"
 #include "qextmdichildarea.h"
 #include "qextmdimainfrm.h"
-#include <iostream.h>
+#include <iostream>
 //////////////////////////////////////////////////////////////////////////////
 // Class   : QextMdiChildFrmCaption
 // Purpose : An MDI label that draws the title

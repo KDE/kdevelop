@@ -22,7 +22,7 @@
 #include <qlist.h>
 #include <qstack.h>
 #include <FlexLexer.h>
-#include <fstream.h>
+#include <fstream>
 #include "tokenizer.h"
 #include "ClassStore.h"
 
@@ -251,7 +251,7 @@ private: // Private methods
   /** Parse a file.
    * @param file Stream to parse from.
    */
-  void parseFile( ifstream &file );
+  void parseFile( std::ifstream &file );
 
   /** Reset the internal variables */
   void reset();

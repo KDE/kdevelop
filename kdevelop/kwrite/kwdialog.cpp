@@ -309,92 +309,129 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
   QLabel *label1;
   QLabel *label2;
   QLabel *label3;
-  QLabel *indentLabel;
+  QLabel *label4;
   QPushButton *button1, *button2;
   char buf[8];
 
+  //Uncomment to restore old layout
+  //#define VERTICAL_LAYOUT
+
   QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
-  opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
-  opt_tab = new QCheckBox(i18n("&Tab Indent"),g1);
-  opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
-  opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
-  opt4 = new QCheckBox(i18n("&Replace Tabs"),g1);
-  opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
-  opt6 = new QCheckBox(i18n("Wrap &Cursor"),g1);
-  opt7 = new QCheckBox(i18n("&Auto Brackets"),g1);
-  opt15 = new QCheckBox(i18n("&Highlight Brackets"),g1);
-  opt8 = new QCheckBox(i18n("&Show tabs"), g1);
+  eopt1 = new QCheckBox(i18n("&Word Wrap"),g1);
+  eopt2 = new QCheckBox(i18n("&Replace Tabs"),g1);
+  eopt3 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
+  eopt4 = new QCheckBox(i18n("Wrap &Cursor"),g1);
+  eopt5 = new QCheckBox(i18n("&Auto Brackets"),g1);
+  eopt6 = new QCheckBox(i18n("&Highlight Brackets"),g1);
+  eopt7 = new QCheckBox(i18n("Sh&ow tabs"), g1);
+  // shortcuts: achorsw
+  eopt1->setChecked(flags & cfWordWrap);
+  eopt2->setChecked(flags & cfReplaceTabs);
+  eopt3->setChecked(flags & cfRemoveSpaces);
+  eopt4->setChecked(flags & cfWrapCursor);
+  eopt5->setChecked(flags & cfAutoBrackets);
+  eopt6->setChecked(flags & cfHighlightBrackets);
+  eopt7->setChecked(flags & cfShowTabs);
+  // g1->setMinimumHeight(8+8+8+6*4+9*(opt1->sizeHint().height()));
 
-//  g1->setMinimumHeight(8+8+8+6*4+9*(opt1->sizeHint().height()));
+  QGroupBox *g2 = new QGroupBox(i18n("Indentation Options"),this);
+  iopt1 = new QCheckBox(i18n("Enter &Indents"),g2);
+  iopt2 = new QCheckBox(i18n("Ta&b Indents"),g2);
+  iopt3 = new QCheckBox(i18n("Bac&kspace Unindents"),g2);
+  iopt4 = new QCheckBox(i18n("Indent Brac&es"),g2);
+  iopt5 = new QCheckBox(i18n("Indent Pare&ntheses"),g2); // unimplemented
+  // shortcuts: beikn
+  iopt1->setChecked(flags & cfAutoIndent);
+  iopt2->setChecked(flags & cfTabIndent);
+  iopt3->setChecked(flags & cfBackspaceIndent);
+  iopt4->setChecked(flags & cfIndentBraces);
+  iopt5->setChecked(flags & cfIndentParentheses);
+  iopt5->hide(); // FIXME cfIndentParentheses flag unimplemented yet
 
-  opt1->setChecked(flags & cfAutoIndent);
-  opt_tab->setChecked(flags & cfTabIndent);
-  opt2->setChecked(flags & cfBackspaceIndent);
-  opt3->setChecked(flags & cfWordWrap);
-  opt4->setChecked(flags & cfReplaceTabs);
-  opt5->setChecked(flags & cfRemoveSpaces);
-  opt6->setChecked(flags & cfWrapCursor);
-  opt7->setChecked(flags & cfAutoBrackets);
-  opt8->setChecked(flags & cfShowTabs);
+  QGroupBox *g3 = new QGroupBox(i18n("Selection Options"),this);
+  // This cannot be "Select options" because it doesn't seem to be correct english
+  // grammar to me. Select is a verb, selection is a noun. It's an i18n nightmare
+  // because of that, e.g. in Polish, it translates to "Choose options", with Choose
+  // being a verb.
+  sopt1 = new QCheckBox(i18n("&Persistent Selections"),g3);
+  sopt2 = new QCheckBox(i18n("&Multiple Selections"),g3);
+  sopt3 = new QCheckBox(i18n("&Vertical Selections"),g3);
+  sopt4 = new QCheckBox(i18n("&Delete On Input"),g3);
+  sopt5 = new QCheckBox(i18n("&Toggle Old"),g3);
+  sopt6 = new QCheckBox(i18n("A&uto Copy"),g3);
+  // shortcuts: dmptuv
+  //g3->setMinimumHeight(8+8+8+6*4+6*(opt9->sizeHint().height()));
+  sopt1->setChecked(flags & cfPersistent);
+  sopt2->setChecked(flags & cfKeepSelection);
+  sopt3->setChecked(flags & cfVerticalSelect);
+  sopt4->setChecked(flags & cfDelOnInput);
+  sopt5->setChecked(flags & cfXorSelect);
+  sopt6->setChecked(flags & cfAutoCopy);
 
-  QGroupBox *g2 = new QGroupBox(i18n("Select Options"),this);
-  opt9 = new QCheckBox(i18n("&Persistent Selections"),g2);
-  opt10 = new QCheckBox(i18n("&Multiple Selections"),g2);
-  opt11 = new QCheckBox(i18n("&Vertical Selections"),g2);
-  opt12 = new QCheckBox(i18n("&Delete On Input"),g2);
-  opt13 = new QCheckBox(i18n("&Toggle Old"),g2);
-  opt14 = new QCheckBox(i18n("A&uto Copy"),g2);
+  #ifdef VERTICAL_LAYOUT
+  #define parent this
+  #else
+  #define parent g1
+  #endif
 
-  g2->setMinimumHeight(8+8+8+6*4+6*(opt9->sizeHint().height()));
-
-  opt9->setChecked(flags & cfPersistent);
-  opt10->setChecked(flags & cfKeepSelection);
-  opt11->setChecked(flags & cfVerticalSelect);
-  opt12->setChecked(flags & cfDelOnInput);
-  opt13->setChecked(flags & cfXorSelect);
-  opt14->setChecked(flags & cfAutoCopy);
-  opt15->setChecked(flags & cfHighlightBrackets);
-
-  e1 = new QLineEdit(this);
+  e1 = new QLineEdit(parent);
   sprintf(buf,"%d",wrapAt);
   e1->setText(buf);
   e1->setValidator( new KIntValidator( e1 ) );
-  label1 = new QLabel(e1,i18n("Wrap Words At:"),this);
+  label1 = new QLabel(e1,i18n("Wrap Words At:"),parent);
   int max = label1->sizeHint().width();
 
-  e2 = new QLineEdit(this);
+  #ifndef VERTICAL_LAYOUT
+  #undef parent
+  #define parent g2
+  #endif
+
+  e2 = new QLineEdit(parent);
   sprintf(buf,"%d",tabWidth);
   e2->setText(buf);
   e2->setValidator( new KIntValidator( e2 ) );
-  label2 = new QLabel(e2,i18n("Tab Width:"),this);
+  label2 = new QLabel(e2,i18n("Tab Width:"),parent);
   if (label2->sizeHint().width()>max)
     max = label2->sizeHint().width();
 
-  e3 = new QLineEdit(this);
+  #ifndef VERTICAL_LAYOUT
+  #undef parent
+  #define parent g1
+  #endif
+
+  e3 = new QLineEdit(parent);
   sprintf(buf,"%d",undoSteps);
   e3->setText(buf);
   e3->setValidator( new KIntValidator( e3 ) );
-  label3 = new QLabel(e3,i18n("Undo steps:"),this);
+  label3 = new QLabel(e3,i18n("Undo steps:"),parent);
   if (label3->sizeHint().width()>max)
     max = label3->sizeHint().width();
 
-  indentEdit = new QLineEdit(this);
-  sprintf(buf,"%d",indentLength);
-  indentEdit->setText(buf);
-  indentEdit->setValidator( new KIntValidator( indentEdit ) );
-  indentLabel = new QLabel(indentEdit,i18n("Indent Length:"),this);
-  if (indentLabel->sizeHint().width()>max)
-    max = indentLabel->sizeHint().width();
+  #ifndef VERTICAL_LAYOUT
+  #undef parent
+  #define parent g2
+  #endif
 
+  e4 = new QLineEdit(parent);
+  sprintf(buf,"%d",indentLength);
+  e4->setText(buf);
+  e4->setValidator( new KIntValidator( e4 ) );
+  label4 = new QLabel(e4,i18n("Indentation Length"),parent);
+    max = label4->sizeHint().width();
+
+  #undef parent
+
+  #ifdef VERTICAL_LAYOUT
   label1->setFixedSize( max, label1->sizeHint().height() );
   label2->setFixedSize( max, label2->sizeHint().height() );
   label3->setFixedSize( max, label3->sizeHint().height() );
-  indentLabel->setFixedSize( max, indentLabel->sizeHint().height() );
+  label4->setFixedSize( max, label4->sizeHint().height() );
+  #endif
 
   e1->setFixedSize( max, e1->sizeHint().height() );
   e2->setFixedSize( max, e2->sizeHint().height() );
   e3->setFixedSize( max, e3->sizeHint().height() );
-  indentEdit->setFixedSize( max, indentEdit->sizeHint().height() );
+  e4->setFixedSize( max, e4->sizeHint().height() );
 
   button1 = new QPushButton(i18n("&OK"),this);
   button1->setFixedSize(button1->sizeHint());
@@ -408,43 +445,84 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
 
   QVBoxLayout *mainLayout = new QVBoxLayout(this, 8, 4);
 
-  QHBoxLayout *vbl6 = new QHBoxLayout();
-  mainLayout->addLayout( vbl6 );
+  QHBoxLayout *hbl1 = new QHBoxLayout();
+  mainLayout->addLayout( hbl1 );
 
-  QVBoxLayout *vbl3 = new QVBoxLayout();
-  vbl6->addLayout( vbl3 );
+  #ifdef VERTICAL_LAYOUT
+  QVBoxLayout *vbl4 = new QVBoxLayout();
+  hbl1->addLayout( vbl4 );
+  #endif
 
-  vbl3->addWidget( g1 );
-
+  // Edit options
   QVBoxLayout *vbl1 = new QVBoxLayout(g1, 8, 4);
   vbl1->addSpacing(8);
-  vbl1->addWidget( opt1,0,AlignLeft );
-  vbl1->addWidget( opt_tab,0,AlignLeft );
-  vbl1->addWidget( opt2,0,AlignLeft );
-  vbl1->addWidget( opt3,0,AlignLeft );
-  vbl1->addWidget( opt4,0,AlignLeft );
-  vbl1->addWidget( opt5,0,AlignLeft );
-  vbl1->addWidget( opt6,0,AlignLeft );
-  vbl1->addWidget( opt7,0,AlignLeft );
-  vbl1->addWidget( opt15,0,AlignLeft );
-  vbl1->addWidget( opt8,0,AlignLeft );
+  vbl1->addWidget( eopt1,0,AlignLeft );
+  vbl1->addWidget( eopt2,0,AlignLeft );
+  vbl1->addWidget( eopt3,0,AlignLeft );
+  vbl1->addWidget( eopt4,0,AlignLeft );
+  vbl1->addWidget( eopt5,0,AlignLeft );
+  vbl1->addWidget( eopt6,0,AlignLeft );
+  vbl1->addWidget( eopt7,0,AlignLeft );
+  #ifndef VERTICAL_LAYOUT
+  vbl1->addStretch();
+  vbl1->addSpacing(8);
+  vbl1->addWidget( label1,0,AlignLeft );
+  vbl1->addWidget( e1,0,AlignLeft);
+  vbl1->addSpacing(8);
+  vbl1->addWidget( label3,0,AlignLeft );
+  vbl1->addWidget( e3,0,AlignLeft);
+  #endif
 
-  vbl3->addSpacing( 10 );
-  vbl3->addWidget( g2 );
-
+  // Indentation options
   QVBoxLayout *vbl2 = new QVBoxLayout(g2, 8, 4);
   vbl2->addSpacing(8);
-  vbl2->addWidget( opt9,0,AlignLeft );
-  vbl2->addWidget( opt10,0,AlignLeft );
-  vbl2->addWidget( opt11,0,AlignLeft );
-  vbl2->addWidget( opt12,0,AlignLeft );
-  vbl2->addWidget( opt13,0,AlignLeft );
-  vbl2->addWidget( opt14,0,AlignLeft );
+  vbl2->addWidget( iopt1,0,AlignLeft );
+  vbl2->addWidget( iopt2,0,AlignLeft );
+  vbl2->addWidget( iopt3,0,AlignLeft );
+  vbl2->addWidget( iopt4,0,AlignLeft );
+  vbl2->addWidget( iopt5,0,AlignLeft );
+  #ifndef VERTICAL_LAYOUT
+  vbl2->addStretch();
+  vbl2->addSpacing(8);
+  vbl2->addWidget( label2,0,AlignLeft );
+  vbl2->addWidget( e2,0,AlignLeft);
+  vbl2->addSpacing(8);
+  vbl2->addWidget( label4,0,AlignLeft );
+  vbl2->addWidget( e4,0,AlignLeft);
+  #endif
 
-  vbl6->addSpacing( 10 );
+  // Selection options
+  QVBoxLayout *vbl3 = new QVBoxLayout(g3, 8, 4);
+  vbl3->addSpacing(8);
+  vbl3->addWidget( sopt1,0,AlignLeft );
+  vbl3->addWidget( sopt2,0,AlignLeft );
+  vbl3->addWidget( sopt3,0,AlignLeft );
+  vbl3->addWidget( sopt4,0,AlignLeft );
+  vbl3->addWidget( sopt5,0,AlignLeft );
+  vbl3->addWidget( sopt6,0,AlignLeft );
+  #ifndef VERTICAL_LAYOUT
+  vbl3->addStretch();
+  #endif
 
+  #ifdef VERTICAL_LAYOUT
+  vbl4->addWidget( g1 );
+  vbl4->addSpacing( 10 );
+  vbl4->addWidget( g2 );
+  vbl4->addSpacing( 10 );
+  vbl4->addWidget( g3 );
+
+  hbl1->addSpacing( 10 );
+  #else
+  hbl1->addWidget( g1 );
+  hbl1->addSpacing( 10 );
+  hbl1->addWidget( g2 );
+  hbl1->addSpacing( 10 );
+  hbl1->addWidget( g3 );
+  #endif
+
+  #ifdef VERTICAL_LAYOUT
   QVBoxLayout *vbl5 = new QVBoxLayout();
-  vbl6->addLayout( vbl5 );
+  hbl1->addLayout( vbl5 );
 
   vbl5->addWidget( label1,0,AlignLeft );
   vbl5->addWidget( e1,0,AlignLeft );
@@ -454,22 +532,24 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
   vbl5->addSpacing( 20 );
   vbl5->addWidget( label3,0,AlignLeft );
   vbl5->addWidget( e3,0,AlignLeft );
-  vbl5->addWidget( indentEdit,0,AlignLeft );
   vbl5->addSpacing( 20 );
-  vbl5->addWidget( indentLabel,0,AlignLeft );
-  vbl5->addWidget( indentEdit,0,AlignLeft );
+  vbl5->addWidget( label4,0,AlignLeft );
+  vbl5->addWidget( e4,0,AlignLeft );
+  #endif
 
   mainLayout->addSpacing( 10 );
   mainLayout->addStretch( 1 );
 
-  QHBoxLayout *vbl4 = new QHBoxLayout();
-  mainLayout->addLayout( vbl4 );
-  vbl4->addStretch( 1 );
-  vbl4->addWidget(button1);
-  vbl4->addWidget(button2);
+  QHBoxLayout *hbl2 = new QHBoxLayout();
+  mainLayout->addLayout( hbl2 );
+  hbl2->addStretch( 1 );
+  hbl2->addWidget(button1);
+  hbl2->addWidget(button2);
 
   mainLayout->activate();
   resize(minimumSize());
+
+  #undef VERTICAL_LAYOUT
 
 }
 
@@ -477,23 +557,27 @@ int SettingsDialog::getFlags() {
   int flags;
 
   flags = 0;
-  if (opt1->isChecked()) flags |= cfAutoIndent;
-  if (opt_tab->isChecked()) flags |= cfTabIndent;
-  if (opt2->isChecked()) flags |= cfBackspaceIndent;
-  if (opt3->isChecked()) flags |= cfWordWrap;
-  if (opt4->isChecked()) flags |= cfReplaceTabs;
-  if (opt5->isChecked()) flags |= cfRemoveSpaces;
-  if (opt6->isChecked()) flags |= cfWrapCursor;
-  if (opt7->isChecked()) flags |= cfAutoBrackets;
-  if (opt8->isChecked()) flags |= cfShowTabs;
 
-  if (opt9->isChecked()) flags |= cfPersistent;
-  if (opt10->isChecked()) flags |= cfKeepSelection;
-  if (opt11->isChecked()) flags |= cfVerticalSelect;
-  if (opt12->isChecked()) flags |= cfDelOnInput;
-  if (opt13->isChecked()) flags |= cfXorSelect;
-  if (opt14->isChecked()) flags |= cfAutoCopy;
-  if (opt15->isChecked()) flags |= cfHighlightBrackets;
+  if (eopt1->isChecked()) flags |= cfWordWrap;
+  if (eopt2->isChecked()) flags |= cfReplaceTabs;
+  if (eopt3->isChecked()) flags |= cfRemoveSpaces;
+  if (eopt4->isChecked()) flags |= cfWrapCursor;
+  if (eopt5->isChecked()) flags |= cfAutoBrackets;
+  if (eopt6->isChecked()) flags |= cfHighlightBrackets;
+  if (eopt7->isChecked()) flags |= cfShowTabs;
+
+  if (iopt1->isChecked()) flags |= cfAutoIndent;
+  if (iopt2->isChecked()) flags |= cfTabIndent;
+  if (iopt3->isChecked()) flags |= cfBackspaceIndent;
+  if (iopt4->isChecked()) flags |= cfIndentBraces;
+  if (iopt5->isChecked()) flags |= cfIndentParentheses;
+
+  if (sopt1->isChecked()) flags |= cfPersistent;
+  if (sopt2->isChecked()) flags |= cfKeepSelection;
+  if (sopt3->isChecked()) flags |= cfVerticalSelect;
+  if (sopt4->isChecked()) flags |= cfDelOnInput;
+  if (sopt5->isChecked()) flags |= cfXorSelect;
+  if (sopt6->isChecked()) flags |= cfAutoCopy;
   return flags;
 }
 
@@ -510,7 +594,7 @@ int SettingsDialog::getUndoSteps() {
 }
 
 int SettingsDialog::getIndentLength() {
-  return atoi(indentEdit->text());
+  return atoi(e4->text());
 }
 
 ColorDialog::ColorDialog(QColor *colors, QWidget *parent, const char *name)

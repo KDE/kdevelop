@@ -33,9 +33,11 @@ class TextLine {
     void wrap(TextLine *nextLine, int pos);
     void unWrap(TextLine *nextLine, int pos);
 
-    void removeSpaces();
+    void removeTrailingWhitespace();
     int firstChar(); // find index of first non-ws char
     int lastChar(); // find index of last non-ws char
+    int indentTabs(); // find count of leading tabs in indentation
+    int indentSpaces(); // find count of trailing whitespace (after tabs) in indentation
 
     char getChar(int pos) const;
 
@@ -100,7 +102,7 @@ class TextLine {
     int bpID;
     bool bpEnabled;
     bool bpPending;
-		bool bookmarked;
+    bool bookmarked;
 };
 
 const int nAttribs = 32;
@@ -208,8 +210,12 @@ class KWriteDoc : public QObject {
 #ifdef QT_I18N
     void insertChar(KWriteView *, VConfig &, char *, int len);
 #endif
+    int seekIndentRef(QList<TextLine> &, int & tabs, int & spaces);
+    int seekIndentRef(QList<TextLine> &);
     void newLine(KWriteView *, VConfig &);
-    void tab(KWriteView *view, VConfig &c);
+    void tab(KWriteView *, VConfig &);
+    void shiftTab(KWriteView *, VConfig &);
+    void commonTab(KWriteView *, VConfig &, bool add = true);
     void killLine(KWriteView *, VConfig &);
     void backspace(KWriteView *, VConfig &);
     void del(KWriteView *, VConfig &);
@@ -235,7 +241,7 @@ class KWriteDoc : public QObject {
     void updateFontData();
     void setTabWidth(int);
     void setIndentLength(int length);
-    void updateLines(int startLine = 0, int endLine = 0xffffff, int flags = 0);
+    void updateLines(int startLine = 0, int curLine = -1, int endLine = 0xffffff, int flags = 0);
     void updateMaxLength(const TextLine *);
     void updateMaxLengthSimple(  QList<TextLine> &contents );
 

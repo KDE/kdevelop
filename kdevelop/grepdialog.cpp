@@ -344,7 +344,7 @@ void GrepDialog::slotSearch()
 
     childproc = new KShellProcess();
     *childproc << filepattern;
-    *childproc << "|" << "xargs" << "grep" << "-n";
+    *childproc << "|" << "xargs" << "egrep" << "-n";
     *childproc << (QString("-e '") + pattern + "'");
 
     connect( childproc, SIGNAL(processExited(KProcess *)),

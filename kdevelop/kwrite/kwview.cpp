@@ -1200,9 +1200,10 @@ X      : cut
               else kWrite->toggleOverwrite();
             break;
         case Key_Tab:
-            //if (e->state() & ShiftButton) ; // TODO: jump to enclosing brace
-              //else
             kWriteDoc->tab(this,c);
+            break;
+        case Key_BackTab:
+            kWriteDoc->shiftTab(this,c);
             break;
 /*        case Key_F9:
             printf("text() %s\n", kWrite->text().data());

@@ -59,6 +59,9 @@ const int cfShowTabs          = 32768;
 const int cfHighlightBrackets = 65536;
 const int cfTabIndent         = 1L << 17;
 
+const int cfIndentBraces      = 1L << 18;
+const int cfIndentParentheses = 1L << 19;
+
 
 //update flags
 const int ufDocGeometry     = 1;

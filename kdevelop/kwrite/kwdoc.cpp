@@ -162,9 +162,9 @@ void TextLine::unWrap(TextLine *nextLine, int pos) {
   nextLine->del(0,pos);
 }
 
-void TextLine::removeSpaces() {
+void TextLine::removeTrailingWhitespace() {
 
-  while (len > 0 && text[len - 1] == ' ') len--;
+  while (len > 0 && text[len - 1] <= 32) len--;
 }
 
 int TextLine::firstChar() {
@@ -183,6 +183,27 @@ int TextLine::lastChar() {
   while (z > 0 && (unsigned char) text[z] <= 32)
     z--; // skip ws
   return (z > 0) ? z : -1;
+}
+
+int TextLine::indentTabs() {
+  int z;
+
+  z = 0;
+  while (z < len && (unsigned char) text[z] == '\t')
+    z++;
+  return z;
+}
+
+int TextLine::indentSpaces() {
+  int y, z;
+
+  z = indentTabs();
+  y = 0;
+  while (z < len && (unsigned char) text[z] <= 32) {
+    z++; // skip ws after tabs
+    y++;
+  }
+  return y;
 }
 
 char TextLine::getChar( int pos ) const {
@@ -238,7 +259,6 @@ const char* TextLine::getString() {
 const char* TextLine::getText() {
   return text;
 }
-
 
 void TextLine::select(bool sel, int start, int end) {
   int z;
@@ -1058,11 +1078,85 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
   recordEnd(view,c);
 }
 
+// Here's the indentation behaviour so that everybody knows
+// what the code is supposed to do.
+
+// "enter indents" -- special behaviour of newline
+// 1. generally, the new line is filled with same whitespace as
+//    the first non-empty line above it
+// 2. if the current cursor is enclosed by the brace pair,
+//    the closing brace gets delegated to a new line of its own
+//    TODO: check for "normal text" attribute, do not indent otherwise
+// 3. if either the last character, or a character preceding the cursor
+//    is an opening brace, the new line is indented a level deeper
+//    TODO: check for "normal text" attribute, do not indent otherwise
+// 4. TODO: if a parenthesis with "normal text" attribute is opened,
+//    and not closed, newline will indent to one cell to the right
+//    of the opened parenthesis -- say continuation of if (a || <newline> ...
+// (1) is enabled by cfAutoIndent
+// (2,3) are enabled by cfIndentBraces
+// (4) is enabled by cfIndentParentheses
+
+// "tab indents" -- special behaviour of tab & shift-tab
+// 1. treat the first non-empty line above the current one as baseline
+// 2. if the current line has closing brace "}" as its first character,
+//    then decrease the baseline indentation by one level
+// (tab)
+// 3. if the current line has less indentation than the baseline,
+//    replicate the baseline indentation here
+// 4. if the current line has same or more indentation than the
+//    baseline, add one indentation level
+// (3,4) are enabled by cfTabIndent
+// (shift-tab)
+// 3. if the current line has more indentation than the baseline,
+//    replicate the baseline indentation here
+// 4. if the current line hase same or less indentation than the
+//    baseline, remove one indentation level
+// (3,4) are enabled by cfTabIndent
+
+// "backspace (un)indents" -- special behaviour of backspace before text
+// 1. set indentation to that of the first non-empty line above
+//    it that has less indentation than the current line
+// (1) is enabled by cfBackspaceIndent
+
+// NB. 2.1's behaviour was (somewhat) working due to lucky circumstances.
+// I dream that this implementation works because it was meant to ;-)
+
+// -- The (hopefully not) mess in newLine() and tab() below is
+//    courtesy of Kuba Ober (kuba@mareimbrium.org), yell at him
+//    if you have flames / ideas / bugreports.
+
 #ifdef DEBUG
 #include <iostream>
 #endif
 
+int KWriteDoc::seekIndentRef(QList<TextLine> & contents, int & tabs, int & spaces) {
+  int cells;
+  TextLine * textLine = contents.current();
+  do {
+    tabs = textLine->indentTabs();
+    spaces = textLine->indentSpaces();
+    cells = tabs * tabChars + spaces;
+    if (cells > 0 || (cells == 0 && textLine->firstChar() == 0)) // we've got our position so we're done
+      break;
+    textLine = contents.prev();
+  } while (textLine != 0);
+  return cells;
+}
+
+int KWriteDoc::seekIndentRef(QList<TextLine> & contents) {
+  int tabs;
+  int spaces;
+  return seekIndentRef(contents, tabs, spaces);
+}
+
 void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
+  // NB: silent assumption is that what indentSpaces() counts
+  // indeed consists of all spaces. If somebody types tab, tab,
+  // space, tab, text, and tabs are *not* indents and are *not*
+  // replaced with spaces, then this will be borken as it used to
+  // be in 2.1-release, but such an antisocial behaviour should be
+  // damned anyway ;-)) Kuba
 
   recordStart(c.cursor);
 
@@ -1072,54 +1166,131 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
     c.cursor.y++;
     c.cursor.x = 0;
   } else {
-    // indent the new line
+    // insert new line and indent it
 
-    // find the column to indent to
     TextLine* textLine = contents.at(c.cursor.y); // check the current line
     // NB: accessing the list like that is expensive
 
-    // compute where to indent to
-    int pos = textLine->firstChar(); // first non-ws char
+    // check if the user wants to insert a line before this one
     bool prevLine = false;
-    if (pos > c.cursor.x) {  // what the user wants is to
-      c.cursor.x = pos;     // insert a line before this one!
+    if (textLine->firstChar() > c.cursor.x) {
+      c.cursor.x = textLine->firstChar();
       prevLine = true;
     }
-    // seek a first char in previous lines
-    do {
-      pos = textLine->firstChar();
-      if (!prevLine && textLine->getChar(textLine->lastChar())=='{')
-        // opening brace
-        pos += indentLength;
-      if (pos >= 0) // we've got our position
-        break;     // terminate loop
-      textLine = contents.prev();
-    } while (textLine);
 
-    // insert the newline and indent the cursor
+    // find out current indentation level --
+    // seek the first char in this first non-empty line, starting at
+    // current line
+    int tabs = 0; // how many tabs were used in indentation found
+    int spaces = 0; // how many spaces were used in indentation found
+    int cells = 0; // how many character cells were used (ie. accounting tab width)
+
+    cells = seekIndentRef(contents, tabs, spaces);
+
+    // check if we want to newline after an opening brace,
+    // and if there's a closing brace following the opening one
+    // (i.e. if auto brackets were used)
+    bool openingBrace = false;
+    bool closingBrace = false;
+
+    if (!prevLine && (c.flags & cfIndentBraces)) {
+      int lastChar = textLine->lastChar();
+      openingBrace = (c.cursor.x > lastChar && textLine->getChar(lastChar)=='{') ||
+                     (c.cursor.x > 0 && textLine->getChar(c.cursor.x - 1)=='{');
+      closingBrace = openingBrace &&
+                     (c.cursor.x > 0) &&
+                     (textLine->getChar(c.cursor.x)=='}');
+    }
+
+    // seek to the line with opening parenthesis if
+    // there's a closing parenthesis in the current line,
+    // like this:
+    // <spc><spc>if (a ||              <-- get indentation from here!
+    // <spc><spc><spc><spc><spc><spc>b) {
+    // TODO: we assume that the closing parenthesis is just one
+    // character away, this may not be true -- right now I'm a coward ;-) - Kuba
+
+    if (c.cursor.x > 2 && textLine->getChar(c.cursor.x - 3) == ')') {
+       BracketMark bm;
+       PointStruc csr(c.cursor.x - 2, c.cursor.y);
+       #ifdef DEBUG
+       std::cerr << "line " << c.cursor.y << ", will indent using line with matching ()" << std::endl;
+       #endif
+       newBracketMark(csr, bm);
+       // if matching bracket is found, get the indentation
+       // depth from that line
+       if (bm.eXPos >= 0) {
+         #ifdef DEBUG
+         std::cerr << "matched bracket at line: " << bm.cursor.y << std::endl;
+         #endif
+         TextLine* textLine = contents.at(bm.cursor.y);
+         spaces = textLine->indentSpaces();
+         tabs = textLine->indentTabs();
+         cells = tabs * tabChars + spaces;
+       }
+    }
+
+    // insert the newline
     recordAction(KWAction::newLine,c.cursor); // insert and record newline
     c.cursor.y++;
     c.cursor.x = 0;
-    if (pos > 0) {
-      char* buf = new char[pos];
-      memset(buf, ' ', pos);
+
+    // if there is a closing brace, insert another newline and indent
+    if (closingBrace) {
+      if (c.flags & cfReplaceTabs) {
+        tabs = 0;
+        spaces = cells;
+      }
+
+      recordAction(KWAction::newLine,c.cursor);
+      c.cursor.y++;
+
+      if (cells > 0) {
+        char* buf = new char[tabs + spaces];
+        if (tabs > 0) memset(buf, '\t', tabs);
+        if (spaces > 0) memset(buf + tabs, ' ', spaces);
+        PointStruc linebeg(0, c.cursor.y);
+        recordInsert(linebeg, &buf[0], tabs + spaces);
+      }
+
+      c.cursor.y--;
+    }
+
+    // increase indentation if we're after a brace
+    if (openingBrace) {
+      cells += indentLength;
+      tabs = cells / tabChars;
+      spaces = cells % tabChars;
+    }
+
+    // indent the line where the cursor ends up
+    if (cells > 0) {
+      if (c.flags & cfReplaceTabs) {
+        tabs = 0;
+        spaces = cells;
+      }
+
+      char* buf = new char[tabs + spaces];
+      memset(buf, '\t', tabs);
+      memset(buf + tabs, ' ', spaces);
       PointStruc linebeg(0, c.cursor.y);
-      recordInsert(linebeg, &buf[0], pos);
-      c.cursor.x = pos;
+      recordInsert(linebeg, &buf[0], tabs + spaces);
+      delete[] buf;
+      c.cursor.x = tabs + spaces;
     }
   }
 
   recordEnd(view,c);
 }
 
-void KWriteDoc::tab(KWriteView *view, VConfig &c) {
+void KWriteDoc::commonTab(KWriteView * view, VConfig & c, bool add) {
 
   recordStart(c.cursor);
 
   if (!(c.flags & cfTabIndent)) {
     // auto indentation hasn't been chosen
     // insert regular tab like we know it
-    insertChar(view, c, '\t');
+    if (add) insertChar(view, c, '\t');
   } else {
     // indent the new line
 
@@ -1127,65 +1298,90 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
     TextLine* textLine = contents.at(c.cursor.y); // check the current line
     // NB: accessing the list like that is expensive
 
-    // compute where to indent to
-    bool setCursor = false;
-    int indentPos = 0;		// first non-ws char
-    int indent = 0;		// how many chars to indent
-    if (textLine->getChar(textLine->firstChar())=='}') {
-      // closing brace
-      indent -= indentLength;
-      setCursor = true;
-    }
-    // seek a first char in previous lines
+    // find out baseline indentation level
+    int cells = 0; // how many character cells were used (ie. accounting tab width)
+
     textLine = contents.prev();
-    while (textLine) {
-      indentPos = textLine->firstChar();
-      if (textLine->getChar(textLine->lastChar())=='{') // opening brace
-        indent += indentLength;
+
+    cells = seekIndentRef(contents);
+
+    // adjust indentation levels for opening brace in this line
+    if (textLine->getChar(textLine->lastChar())=='{') { // opening brace
+      cells += indentLength;
+    }
+
+    textLine = contents.at(c.cursor.y);
+
+    // adjust baseline for closing brace in this line
+    if (textLine->getChar(textLine->firstChar())=='}') {
+      cells -= indentLength;
+      if (cells < 0) cells = 0;
       #ifdef DEBUG
-      std::cerr << "indent pos=" << indentPos << std::endl;
+      std::cerr << "adjusted (}) to cells=" << cells << std::endl;
       #endif
-      if (indentPos >= 0) // we've got our position
-        break;     // terminate loop
-      textLine = contents.prev();
     }
-    indentPos += indent;
 
+    // get current indentation level
+    int curCells = textLine->indentTabs() * tabChars + textLine->indentSpaces();
+
+    // select desired indentation
+    int indentPos = 0;
+    if (add) {
+      if (curCells < cells)
+        indentPos = cells; // at least the baseline
+      else
+        indentPos = curCells + indentLength; // allow indenting past it
+    } else {
+      if (curCells > cells)
+        indentPos = cells; // at most the baseline
+      else {
+        indentPos = curCells - indentLength; // allow un-indenting past it
+        if (indentPos < 0) indentPos = 0;
+      }
+    }
+
+    #ifdef DEBUG
+    std::cerr << "curCells " << curCells << " cells " << cells;
+    std::cerr << " indentPos " << indentPos << std::endl;
+    #endif
+
+    int tabs = indentPos / tabChars;
+    int spaces = indentPos % tabChars;
+
+    if (c.flags & cfReplaceTabs) {
+      tabs = 0;
+      spaces = indentPos;
+    }
+
+    // reindent
+    int remove = (textLine->firstChar() >= 0) ? textLine->firstChar() : textLine->length();
+
+    char * buf = new char[tabs + spaces];
     if (indentPos > 0) {
-
-      // if the line does not start on indent pos align it there
-      textLine = contents.at(c.cursor.y);
-      int curPos = textLine->firstChar();
-      if (curPos < indentPos) {
-        // indent
-        int len = indentPos-curPos;
-        char* buf = new char[len];
-        memset(buf, ' ', len);
-        PointStruc linebeg(0, c.cursor.y);
-        recordInsert(linebeg, &buf[0], len);
-        c.cursor.x += len;
-        delete[] buf;
-      }
-      else if (curPos > indentPos) {
-        // unindent
-        PointStruc beg(indentPos, c.cursor.y);
-        recordDelete(beg, curPos-indentPos);
-        c.cursor.x -= curPos-indentPos;
-      }
-
-      if (c.cursor.x < curPos)
-      // if cursor before the first char then align cursor
-      // with the start of indentation
-        setCursor = true;
+      if (tabs > 0) memset(buf, '\t', tabs);
+      if (spaces > 0) memset(buf + tabs, ' ', spaces);
     }
 
-    if (setCursor) {
-      c.cursor.x = indentPos;
-    }
+    PointStruc beg(0, c.cursor.y);
+    recordReplace(beg, remove, &buf[0], tabs + spaces);
 
+    delete[] buf;
+
+    // restore cursor position
+    c.cursor.x += tabs + spaces;
+    if (remove > 0)
+      c.cursor.x -= remove;
   }
 
   recordEnd(view,c);
+}
+
+void KWriteDoc::tab(KWriteView *view, VConfig &c) {
+  commonTab(view, c, true);
+}
+
+void KWriteDoc::shiftTab(KWriteView *view, VConfig &c) {
+  commonTab(view, c, false);
 }
 
 void KWriteDoc::killLine(KWriteView *view, VConfig &c) {
@@ -1375,7 +1571,7 @@ void KWriteDoc::setIndentLength(int length){
   indentLength = length;
 }
 
-void KWriteDoc::updateLines(int startLine, int endLine, int flags)
+void KWriteDoc::updateLines(int startLine, int curLine, int endLine, int flags)
 {
   TextLine *textLine;
   int line, lastLine;
@@ -1395,8 +1591,8 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
     textLine = contents.at(line);
     if (line <= endLine)
     {
-      if (flags & cfRemoveSpaces)
-        textLine->removeSpaces();
+      if ((flags & cfRemoveSpaces) && (line != curLine))
+        textLine->removeTrailingWhitespace();
       updateMaxLength(textLine);
     }
 
@@ -3209,7 +3405,7 @@ void KWriteDoc::recordEnd(KWriteView *view, PointStruc &cursor, int flags) {
   view->updateCursor(cursor);
 
   optimizeSelection();
-  if (tagStart <= tagEnd) updateLines(tagStart,tagEnd,flags);
+  if (tagStart <= tagEnd) updateLines(tagStart,cursor.y,tagEnd,flags);
   setModified(true);
   newUndo();
 }
@@ -3249,7 +3445,7 @@ void KWriteDoc::doActionGroup(KWActionGroup *g, int flags) {
   }
   
   optimizeSelection();
-  if (tagStart <= tagEnd) updateLines(tagStart,tagEnd,flags);
+  if (tagStart <= tagEnd) updateLines(tagStart,-1,tagEnd,flags);
   setModified(true);
   newUndo();
 }
@@ -3518,7 +3714,7 @@ void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm)
         x = 0;
       }
       if (textLine->getAttr(x) == attr) {
-        //try to find opposite bracked
+        //try to find opposite bracket
         ch = textLine->getChar(x);
         if (ch == bracket) count++; //same bracket : increase counter
         if (ch == opposite) {

@@ -29,7 +29,7 @@
 #include "khtmlview.h"
 #include "qextmdimainfrm.h"
 
-#include <iostream.h>
+#include <iostream>
 using namespace std;
 
 
