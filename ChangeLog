@@ -2,6 +2,9 @@
 	* correcting recognition of multi-var-declaration inside a scope
 	* virtual operator functions were not recognized well.
 	* adding suggestion from J. Ansorg <Jockel123@gmx.de>
+        * removing segfault in classparser posted by
+	  Xiaowen Wang <swangken@cfdlab.ae.utexas.edu>
+	  but this still doesn´t handles structs like classes
 
 2000-04-30  Ralf Funken <RFunken@kdevelop.de>
 	* Comitted corrected german tutorial
