@@ -187,8 +187,9 @@ void QtDesignerIntegration::openSource(const QString &formName)
     if (!m_implementations.contains(formName))
         if (!selectImplementation(formName))
             return;
-    
-    m_part->partController()->editDocument(KURL(m_implementations[formName]->fileName()), -1, -1);
+    QString impl = m_implementations[formName]->fileName();
+    processImplementationName(impl);
+    m_part->partController()->editDocument(KURL(impl), -1, -1);
 }
 
 #include "qtdesignerintegration.moc"
