@@ -62,13 +62,13 @@ void CRealFileView::initPopups()
 {
   installed_file_menu.setTitle(i18n("Installed"));
   installed_file_menu.insertItem(i18n("Remove from Project..."),this,SLOT(slotRemoveFileFromProject()));
-  installed_file_menu.insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
   installed_file_menu.insertSeparator();
   installed_file_menu.insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 
   other_file_menu.setTitle(i18n("Other"));
   other_file_menu.insertItem(i18n("Add to Project..."),this,SLOT(slotAddFileToProject()));
-  other_file_menu.insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
   //other_file_menu->insertSeparator();
   //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 }

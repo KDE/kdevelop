@@ -63,7 +63,7 @@ void CLogFileView::initPopups()
   file_pop.setTitle("File");
   file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
   file_pop.insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
-  file_pop.insertItem(i18n("Delete File..."),this,SLOT(slotFileDelete()));
+  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Delete File..."),this,SLOT(slotFileDelete()));
   file_pop.insertSeparator();
   file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
   

@@ -108,7 +108,7 @@ void CClassView::initPopups()
   classPopup.insertSeparator();
   id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()));
   classPopup.setItemEnabled( id, false );
-  id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
+  id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()));
   classPopup.setItemEnabled(id, false );
 
   // Method popup
@@ -116,14 +116,14 @@ void CClassView::initPopups()
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
   methodPopup.insertSeparator();
-  id = methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
+  id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
   methodPopup.setItemEnabled( id, false );
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
   attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   attributePopup.insertSeparator();
-  id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
   attributePopup.setItemEnabled( id, false );
 
   // Slot popup
@@ -131,15 +131,13 @@ void CClassView::initPopups()
   slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
   slotPopup.insertSeparator();
-  id = slotPopup.insertItem( i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
+  id = slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
   slotPopup.setItemEnabled( id, false );
 
   // Folder popup
   folderPopup.setTitle( i18n( "Folder" ) );
   folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()));
-  folderPopup.insertItem( i18n("Delete Folder..."), this, SLOT( slotFolderDelete()));
-  folderPopup.insertSeparator();
-  folderPopup.insertItem( i18n( "Move items to/from folder..." ), this, SLOT(slotMoveToFolder()));
+  id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()));
 
 }
 
