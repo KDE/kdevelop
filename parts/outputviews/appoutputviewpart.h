@@ -19,6 +19,7 @@
 
 
 class AppOutputWidget;
+class KProcess;
 
 class AppOutputViewPart : public KDevAppFrontend
 {
@@ -41,6 +42,7 @@ signals:
 private slots:
     void slotStopButtonClicked(KDevPlugin*);
     void slotProcessExited();
+    void slotProcessExited( KProcess * );
 
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
