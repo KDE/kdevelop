@@ -21,6 +21,7 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
+#include "vc/versioncontrol.h"
 #include "debug.h"
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
@@ -30,6 +31,7 @@ CProject::CProject(QString file)
 {
   valid = false;
   prjfile = file;
+  vc = 0;
 
   ptStringMap = new QString[PT_END_POS];
   ptStringMap[ CORBA_SOURCE ] = "CORBA_SOURCE";
@@ -42,6 +44,8 @@ CProject::CProject(QString file)
 }
 
 CProject::~CProject(){
+  if(vc)
+    delete vc;
   delete []ptStringMap;
 }
 
@@ -59,6 +63,7 @@ bool CProject::readProject(){
   QFileInfo fileinfo(prjfile);
   dir = fileinfo.dirPath() + "/";
   setSourcesHeaders();
+  vc = VersionControl::getVersionControl(getVCSystem());
   valid = true;
   return true;
 }

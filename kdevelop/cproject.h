@@ -26,6 +26,10 @@
 #include <qfileinfo.h>
 #include <ksimpleconfig.h>
 
+
+class VersionControl;
+
+
 /** This type defines the different types that can 
   * exist in a project. 
   * @author Jonas Nordin
@@ -169,7 +173,10 @@ public: // Methods to store project options
   /** Store the project version. */
   void setVersion(const char *version)        { writeGroupEntry( "General", "version",version ); }
 
-  /** Store the classview tree. */
+  /** Store the name of version control system */
+  void setVCSystem(const char *vc)            { writeGroupEntry( "General", "version_control", vc ); }
+
+    /** Store the classview tree. */
   void setClassViewTree( const char *tree )   { writeGroupEntry( "General", "classview_tree", tree ); }
 
   /** at the moment only an english sgmlfile in docs/en/ */
@@ -222,6 +229,9 @@ public: // Methods to fetch project options
   /** Fetch the projects' version. */
   QString getVersion()        { return readGroupEntry( "General", "version" ); }
 
+  /** Fetch the name of the version control system */
+  QString getVCSystem()       { return readGroupEntry( "General", "version_control" ); }
+
   /** Fetch the classview tree. */
   QString getClassViewTree()  { return readGroupEntry( "General", "classview_tree" ); }
 
@@ -266,6 +276,8 @@ public: // Public queries
   /** Return the project dir. */
   QString getProjectDir()  { return dir; }
 
+  /** Return the version control object */
+  VersionControl *getVersionControl() { return vc; }
   /* return the sources(.cpp,.c,.C,.cxx) */
   QStrList& getSources()   { return cpp_files; }
 
@@ -360,7 +372,10 @@ protected: // Protected attributes
 
   /** The project directory. */
   QString dir;
-  
+
+  /** Version control object */
+  VersionControl *vc;
+    
   /** A list of all cpp-files in the project*/
   QStrList cpp_files;
 
