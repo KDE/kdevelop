@@ -16,6 +16,7 @@
 #include <kdialogbase.h>
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
+#include <kstatusbar.h>
 
 #include <kdevapi.h>
 #include <kdevplugin.h>
@@ -246,6 +247,8 @@ void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList co
 	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
 	{
 		QString name = (*it)->name();
+		TopLevel::getInstance()->statusBar()->message( i18n("Loading plugin: %1").arg( (*it)->genericName() ) );
+		
 		kdDebug(9000) << "-----------------------------> load part " << name << endl;
 		
 		// Check if it is already loaded or should be ignored

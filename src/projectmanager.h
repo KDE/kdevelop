@@ -68,7 +68,7 @@ private slots:
 
   void updateActiveLangMenu();
   void switchLanguage(const QString& lang);
-
+  
 private:
   ProjectManager();
 

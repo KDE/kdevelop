@@ -24,6 +24,8 @@ class QDomDocument;
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <ktempfile.h>
+#include <kmenubar.h>
+#include <kstatusbar.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -237,12 +239,24 @@ bool ProjectManager::loadProject(const KURL &url)
   if( url.path() == projectFile().path() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
-        i18n("Are you sure you want to reload the current project?")) == KMessageBox::No)
+        i18n("Are you sure you want to reopen the current project?")) == KMessageBox::No)
       return false;
   }
+  
+  TopLevel::getInstance()->main()->menuBar()->setEnabled( false );
+  kapp->setOverrideCursor( waitCursor );
 
   if( projectLoaded() && !closeProject() )
-    return false;
+  {
+	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+	kapp->restoreOverrideCursor();
+	return false;  
+  }
+
+  // @fixme without this, the old project's plugins aren't properly unloaded 
+  // and the new project will crash. This is a clear indication we need to 
+  // have a look at the plugin unload handling
+  kapp->processEvents();
 
   m_info = new ProjectInfo;
   m_info->m_projectURL = url;
@@ -252,6 +266,8 @@ bool ProjectManager::loadProject(const KURL &url)
     delete m_info; m_info = 0;
     m_openRecentProjectAction->removeURL(url);
     saveSettings();
+	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+	kapp->restoreOverrideCursor();
     return false;
   }
 
@@ -261,15 +277,20 @@ bool ProjectManager::loadProject(const KURL &url)
 
   if( !loadLanguageSupport(m_info->m_language) ) {
     delete m_info; m_info = 0;
+	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+	kapp->restoreOverrideCursor();
     return false;
   }
 
   if( !loadProjectPart() ) {
     unloadLanguageSupport();
     delete m_info; m_info = 0;
+	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+	kapp->restoreOverrideCursor();
     return false;
-}
+  }
 
+  TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
   loadLocalParts();
 
   // shall we try to load a session file from network?? Probably not.
@@ -289,6 +310,11 @@ bool ProjectManager::loadProject(const KURL &url)
 
   Core::getInstance()->doEmitProjectOpened();
 
+  TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+  kapp->restoreOverrideCursor();
+  
+  TopLevel::getInstance()->statusBar()->message( i18n("Project loaded."), 3000 );
+  
   return true;
 }
 

@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Jakob Simon-Gaarde", I18N_NOOP("QMake projectmanager"), "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("F@lk Brettschneider", I18N_NOOP("MDI modes, QEditor, bugfixes"), "falkbr@kdevelop.org");
   aboutData.addAuthor("Mario Scalas", I18N_NOOP("PartExplorer, redesign of CvsPart, patches, bugs(fixes)"), "mario.scalas@libero.it");
-  aboutData.addAuthor("Jens Dagerbo", I18N_NOOP("Replace plugin, Bookmarks plugin, Overall improvements and patches"), "jens.dagerbo@swipnet.se");
+  aboutData.addAuthor("Jens Dagerbo", I18N_NOOP("Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches"), "jens.dagerbo@swipnet.se");
   aboutData.addAuthor("Julian Rockey", I18N_NOOP("Filecreate part and other bits and patches"), "linux@jrockey.com");
   aboutData.addCredit("Ajay Guleria", I18N_NOOP("ClearCase support"), "ajay_guleria@yahoo.com");
   aboutData.addCredit("Marek Janukowicz", I18N_NOOP("Ruby support"), "child@t17.ds.pwr.wroc.pl");
@@ -94,8 +94,6 @@ int main(int argc, char *argv[])
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
-
-  splash->showMessage( i18n( "Loading Project" ) );
 
   delete splash;
 
