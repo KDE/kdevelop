@@ -1,5 +1,8 @@
 2001-07-23  F@lk Brettschneider <falk@kdevelop.org>
     * speed up KWriteView by avoiding unnecessary focusInEvent processing
+    * focus problem of Toplevel MDI mode hopefully solved
+      (never set the focus to another widget when a closeView is pending!, it confuses the DocViewMan)
+    * some speed optimization in QextMDI
     
 2001-07-22  F@lk Brettschneider <falk@kdevelop.org>
     * several bugfixes concerning the Toplevel MDI mode

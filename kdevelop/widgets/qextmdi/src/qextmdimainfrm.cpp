@@ -539,8 +539,8 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
          }
       }
       else if (m_pWinList->count() > 0) {
-         m_pWinList->last()->activate();
-         m_pWinList->last()->setFocus();
+//crash?         m_pWinList->last()->activate();
+//crash?         m_pWinList->last()->setFocus();
       }
    }
 

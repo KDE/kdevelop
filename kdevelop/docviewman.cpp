@@ -798,7 +798,7 @@ bool DocViewMan::closeView(QWidget* pWnd)
   // the first object we'll find is the layout,
   // the second test will be successful for the one and only embedded widget
   for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {
-    if (pChild->inherits("QWidget")) {
+    if (pChild->isWidgetType()) {
       pView = (QWidget*) pChild;
       if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
         if (checkAndSaveFileOfCurrentEditView(true) != KMessageBox::Cancel) {
@@ -900,7 +900,7 @@ void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
   QWidget* pView = 0L;
   QObject* pChild;
   for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {
-    if (pChild->inherits("QWidget")) {
+    if (pChild->isWidgetType()) {
       pView = (QWidget*) pChild;
     }
   }

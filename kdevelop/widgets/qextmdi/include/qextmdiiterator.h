@@ -30,12 +30,15 @@
 template<class Item>
 class QextMdiIterator {
 public:
+   virtual ~QextMdiIterator() {}
+
    virtual void first() = 0;
    virtual void last() = 0;
    virtual void next() = 0;
    virtual void prev() = 0;
    virtual bool isDone() const = 0;
    virtual Item currentItem() const = 0;
+
 protected:
    QextMdiIterator() {}
 };

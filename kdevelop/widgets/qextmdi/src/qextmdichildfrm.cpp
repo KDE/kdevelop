@@ -161,6 +161,7 @@ QextMdiChildFrm::~QextMdiChildFrm()
    delete m_pRestoreButtonPixmap;
    delete m_pCloseButtonPixmap;
    delete m_pUndockButtonPixmap;
+   delete m_pSystemMenu;
 }
 
 //============ mousePressEvent =============//

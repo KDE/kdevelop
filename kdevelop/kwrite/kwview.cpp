@@ -1886,7 +1886,7 @@ void KWrite::search() {
   // If the user has marked some text we use that otherwise
   // use the word under the cursor.
   QString str;
-  if (kWriteDoc->hasMarkedText())
+  if (kWriteDoc && kWriteDoc->hasMarkedText())
     str = markedText();
   if (str.isEmpty())
     str = currentWord();
