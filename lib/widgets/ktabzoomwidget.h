@@ -29,6 +29,8 @@ public:
   void raiseWidget(QWidget *widget);
   void lowerWidget(QWidget *widget);
 
+  void lowerAllWidgets();
+
 
 private slots:
 

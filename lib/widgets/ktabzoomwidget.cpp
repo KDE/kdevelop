@@ -158,6 +158,16 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
 }
 
 
+void KTabZoomWidget::lowerAllWidgets()
+{
+    for ( KWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
+    {
+        d->m_popup->hide();
+        d->m_tabBar->unsetButtons();
+    }
+}
+
+
 void KTabZoomWidget::calculateGeometry()
 {
   switch (d->m_tabPosition)
