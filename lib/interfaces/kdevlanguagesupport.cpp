@@ -21,12 +21,8 @@ KMimeType::List KDevLanguageSupport::mimeTypes()
     return KMimeType::List();
 }
 
-QString KDevLanguageSupport::formatTag( const Tag& tag )
+QString KDevLanguageSupport::formatTag( const Tag& /*tag*/ )
 {
-// class Tag is undefined therefore gcc-2.x does not want cast it - let then there be "unused" warning for gcc<3.0 !
-#if __GNUC__ >= 3
-    Q_UNUSED( tag );
-#endif
     return QString::null;
 }
 
@@ -44,19 +40,16 @@ void KDevLanguageSupport::addClass()
 {
 }
 
-void KDevLanguageSupport::addMethod( ClassDom klass )
+void KDevLanguageSupport::addMethod( ClassDom /*klass*/ )
 {
-    Q_UNUSED( klass );
 }
 
-void KDevLanguageSupport::implementVirtualMethods( ClassDom klass )
+void KDevLanguageSupport::implementVirtualMethods( ClassDom /*klass*/ )
 {
-    Q_UNUSED( klass );
 }
 
-void KDevLanguageSupport::addAttribute( ClassDom klass )
+void KDevLanguageSupport::addAttribute( ClassDom /*klass*/ )
 {
-    Q_UNUSED( klass );
 }
 
 QStringList KDevLanguageSupport::subclassWidget(const QString& /*formName*/)
@@ -69,9 +62,8 @@ QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const
     return QStringList();
 }
 
-QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool shortDescription )
+QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool /*shortDescription*/ )
 {
-    Q_UNUSED( shortDescription );
     return item->name();
 }
 

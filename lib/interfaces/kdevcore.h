@@ -21,6 +21,7 @@
 class KDialogBase;
 class KDevPlugin;
 class KAction;
+class CodeModelItem;
 
 namespace KParts
 {
@@ -45,7 +46,13 @@ public:
     * <strong>We reserve enum values until 1000 (yeah, it is one thousand )
     * for kdevelop official context types.</strong>
     */
-    enum { EditorContext, DocumentationContext, ClassContext, FileContext };
+    enum 
+    { 
+	EditorContext, 
+	DocumentationContext, 
+	FileContext,
+	CodeModelItemContext
+    };
 
     /**
     * Implements this in the context so we can provide rtti
@@ -231,35 +238,33 @@ private:
 /**
  * A context for the popup menu in class views.
  */
-class ClassContext : public Context
+class CodeModelItemContext : public Context
 {
 public:
     /**
     * Builds the context.
-    * @param classname
+    * @param item
     */
-    ClassContext( const QString &classname );
+    CodeModelItemContext( const CodeModelItem* item );
 
     /**
     * Destructor.
     */
-    virtual ~ClassContext();
+    virtual ~CodeModelItemContext();
 
     virtual int type() const;
 
     /**
-    * Returs the classname for the selected item. including its scope
-    * (i.e. namespace).
-    * (currently not used)
+    * Returs the code model item for the selected item.
     */
-    QString classname() const;
+    const CodeModelItem* item() const;
 
 private:
     class Private;
     Private *d;
 
-    ClassContext( const ClassContext &);
-    ClassContext &operator=( const ClassContext &);
+    CodeModelItemContext( const CodeModelItemContext &);
+    CodeModelItemContext &operator=( const CodeModelItemContext &);
 };
 
 /**

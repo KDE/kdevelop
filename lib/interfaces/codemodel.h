@@ -108,11 +108,14 @@ public:
     bool addFile( FileDom file );
     void removeFile( FileDom file  );
 
-    NamespaceDom globalNamespace();
     const NamespaceDom globalNamespace() const;
 
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
+    
+private:
+    void addNamespace( NamespaceDom target, NamespaceDom source );
+    void removeNamespace( NamespaceDom target, NamespaceDom source );
 
 private:
     QMap<QString, FileDom> m_files;

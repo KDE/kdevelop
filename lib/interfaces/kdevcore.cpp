@@ -275,45 +275,45 @@ QString DocumentationContext::selection() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// class ClassContext
+// class CodeModelItemContext
 ///////////////////////////////////////////////////////////////////////////////
 
-class ClassContext::Private
+class CodeModelItemContext::Private
 {
 public:
-    Private( const QString &classname ) : m_classname(classname) {}
+    Private( const CodeModelItem* item ) : m_item( item ) {}
 
-    QString m_classname;
+    const CodeModelItem* m_item;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ClassContext::ClassContext( const QString &classname )
-    : Context(), d( new Private( classname ))
+CodeModelItemContext::CodeModelItemContext( const CodeModelItem* item )
+    : Context(), d( new Private(item) )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ClassContext::~ClassContext()
+CodeModelItemContext::~CodeModelItemContext()
 {
-    kdDebug() << "ClassContext::~ClassContext()" << endl;
+    kdDebug() << "CodeModelItemContext::~CodeModelItemContext()" << endl;
     delete d;
     d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int ClassContext::type() const
+int CodeModelItemContext::type() const
 {
-    return Context::ClassContext;
+    return Context::CodeModelItemContext;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString ClassContext::classname() const
+const CodeModelItem* CodeModelItemContext::item() const
 {
-    return d->m_classname;
+    return d->m_item;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

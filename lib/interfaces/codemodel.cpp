@@ -82,6 +82,66 @@ const FileDom CodeModel::fileByName( const QString & name ) const
     return m_files.contains(name) ? m_files[ name ] : FileDom();
 }
 
+void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
+{
+    if( source->name().isEmpty() ){
+	return;
+    } else if( !target->hasNamespace(source->name()) ){
+	NamespaceDom ns = this->create<NamespaceModel>();
+	ns->setName( source->name() );
+	ns->setFileName( source->fileName() ); // FIXME: ROBE
+	ns->setScope( source->scope() );
+	target->addNamespace( ns );
+    }
+
+    NamespaceDom ns = target->namespaceByName( source->name() );
+
+    NamespaceList namespaceList = source->namespaceList();
+    ClassList classList = source->classList();
+    FunctionList functionList = source->functionList();
+    FunctionDefinitionList functionDefinitionList = source->functionDefinitionList();
+    VariableList variableList = source->variableList();
+
+    for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	addNamespace( ns, *it );
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	ns->addClass( *it );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	ns->addFunction( *it );
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+	ns->addFunctionDefinition( *it );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	ns->addVariable( *it );
+}
+
+void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
+{
+    if( source->name().isEmpty() || !target->hasNamespace(source->name()) )
+	return;
+
+    NamespaceDom ns = target->namespaceByName( source->name() );
+
+    NamespaceList namespaceList = source->namespaceList();
+    ClassList classList = source->classList();
+    FunctionList functionList = source->functionList();
+    FunctionDefinitionList functionDefinitionList = source->functionDefinitionList();
+    VariableList variableList = source->variableList();
+
+    for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	removeNamespace( ns, *it );
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	ns->removeClass( *it );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	ns->removeFunction( *it );
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+	ns->removeFunctionDefinition( *it );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	ns->removeVariable( *it );
+
+    if( ns->namespaceList().isEmpty() && ns->classList().isEmpty() && ns->functionList().isEmpty() && ns->functionDefinitionList().isEmpty() && ns->variableList().isEmpty() )
+        target->removeNamespace( ns );
+}
+
 bool CodeModel::addFile( FileDom file )
 {
     if( file->name().isEmpty() )
@@ -95,7 +155,7 @@ bool CodeModel::addFile( FileDom file )
     VariableList variableList = file->variableList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
-	m_globalNamespace->addNamespace( *it );
+	addNamespace( m_globalNamespace, *it );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	m_globalNamespace->addClass( *it );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
@@ -119,7 +179,7 @@ void CodeModel::removeFile( FileDom file )
     VariableList variableList = file->variableList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
-	m_globalNamespace->removeNamespace( *it );
+	removeNamespace( m_globalNamespace, *it );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	m_globalNamespace->removeClass( *it );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
@@ -129,8 +189,6 @@ void CodeModel::removeFile( FileDom file )
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	m_globalNamespace->removeVariable( *it );
 
-    kdDebug(9000) << "------------------------------> remove file: " << file->name() << endl;
-    kdDebug(9000) << "------------------------------> contains file: " << m_files.contains( file->name() ) << endl;
     m_files.remove( file->name() );
 }
 
@@ -692,11 +750,6 @@ int VariableModel::access( ) const
 void VariableModel::setAccess( int access )
 {
     m_access = access;
-}
-
-NamespaceDom CodeModel::globalNamespace( )
-{
-    return m_globalNamespace;
 }
 
 const NamespaceDom CodeModel::globalNamespace( ) const
