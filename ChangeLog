@@ -1,3 +1,6 @@
+2003-03-13 Julian Rockey <linux@jrockey.com>
+	* CTRL-/ does buffer switching, emacs-style
+	
 2003-03-11 Julian Rockey <linux@jrockey.com>
 	* parts/filecreate
 	  - finally got round to replacing file dialog with smaller, leaner widget
