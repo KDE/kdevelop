@@ -13,6 +13,7 @@
 	* ported the code abbreviation plugin to KDevPlugin
 	* ported the astyle plugin to KDevPlugin
 	* ported the classview plugin to KDevPlugin
+	* ported the ctags plugin to KDevPlugin
 	* extended gideon to load global KDevPlugin components
 	* centralized the trader queries for KDevelop/Part (Plugin) with
 	the additional constraint for the plugin scope into a static
