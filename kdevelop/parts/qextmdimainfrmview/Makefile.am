@@ -6,9 +6,9 @@ lib_LTLIBRARIES = libkdevqextmdimainfrmview.la
 libkdevqextmdimainfrmview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevqextmdimainfrmview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(top_builddir)/kdevelop/widgets/qextmdi/libkdevqextmdi.la $(LIB_KDEUI)
 
-libkdevqextmdimainfrmview_la_SOURCES = main.cpp mdimainfrmcomponent.cpp mdiframe.cpp
+libkdevqextmdimainfrmview_la_SOURCES = main.cpp mdimainfrmcomponent.cpp mdiframe.cpp mdiview.cpp
 
-noinst_HEADERS = main.h mdimainfrmcomponent.h mdiframe.h
+noinst_HEADERS = main.h mdimainfrmcomponent.h mdiframe.h mdiview.h
 
 METASOURCES = AUTO
 

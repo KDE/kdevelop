@@ -1,3 +1,20 @@
+/***************************************************************************
+         mdimainfrmfactory.cpp  - the library factory
+                             -------------------
+    begin                : Thu Jul 27 2000
+    copyright            : (C) 2000 by Falk Brettschneider
+    email                : <Falk Brettschneider> falk@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <kdebug.h>
 #include <kinstance.h>
 #include "main.h"
@@ -31,7 +48,7 @@ MdiMainFrmFactory::~MdiMainFrmFactory()
 QObject *MdiMainFrmFactory::create(QObject *parent, const char *name,
                                 const char *classname, const QStringList &args)
 {
-    kdDebug(9005) << "Building MdiMainFrameComponent" << endl;
+    kdDebug(9005) << "running MdiMainFrmFactory::create..." << endl;
 
     QObject *obj = new MdiMainFrmComponent(parent, name);
     emit objectCreated(obj);

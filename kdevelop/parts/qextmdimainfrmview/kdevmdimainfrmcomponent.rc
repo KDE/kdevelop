@@ -22,8 +22,10 @@
      <Action name="toplevel_mode" />
      <Action name="childframe_mode" />
      <Separator/>
+     <ActionList name="views_docklist" />
    </Menu>
    <Separator/>
+   <ActionList name="viewlist" />
  </Menu>
 </MenuBar>
 </kpartgui>
