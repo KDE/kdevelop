@@ -981,7 +981,7 @@ public:
   KDockWidget* getDockWidgetFromName( const QString& dockName );
 
   /**
-   * Enables opaque resizing. Opaque resizing is initially turned off.
+   * Enables opaque resizing. Opaque resizing defaults to KGlobalSettings::opaqueResize().
    * Call this method before you create any dock widgets!
    */
   void setSplitterOpaqueResize(bool b=true);
@@ -1183,7 +1183,7 @@ private:
   /**
    * State variable if there is a drag process active.
    */
-  bool draging;
+  bool dragging;
 
   /**
    * State variable if there is an undock process active

@@ -1776,13 +1776,19 @@ KDockManager::KDockManager( QWidget* mainWindow , const char* name )
   ,autoCreateDock(0L)
   ,storeW(0)
   ,storeH(0)
-  ,draging(false)
+  ,dragging(false)
   ,undockProcess(false)
   ,dropCancel(true)
 {
   d = new KDockManagerPrivate;
   d->mainDockWidget=0;
+  
+//#ifndef NO_KDE2
+//  d->splitterOpaqueResize = KGlobalSettings::opaqueResize();
+//#else
   d->splitterOpaqueResize = false;
+//#endif
+  
   d->splitterKeepSize = false;
   d->splitterHighResolution = false;
   d->m_readDockConfigMode = WrapExistingWidgetsOnly; // default as before
@@ -1888,7 +1894,7 @@ bool KDockManager::eventFilter( QObject *obj, QEvent *event )
         break;
       case QEvent::MouseButtonRelease:
         if ( ((QMouseEvent*)event)->button() == LeftButton ){
-          if ( draging ){
+          if ( dragging ){
             if ( !dropCancel )
               drop();
             else
@@ -1905,12 +1911,12 @@ bool KDockManager::eventFilter( QObject *obj, QEvent *event )
               delete childDockWidgetList;
               childDockWidgetList = 0L;
           }
-          draging = false;
+          dragging = false;
           dropCancel = true;
         }
         break;
       case QEvent::MouseMove:
-        if ( draging ) {
+        if ( dragging ) {
 
 #ifdef BORDERLESS_WINDOWS
 //BEGIN TEST
@@ -2096,7 +2102,7 @@ void KDockManager::startDrag( KDockWidget* w )
   }
 
   curPos = KDockWidget::DockDesktop;
-  draging = true;
+  dragging = true;
 
   QApplication::setOverrideCursor(QCursor(sizeAllCursor));
 }
