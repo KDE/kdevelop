@@ -1289,29 +1289,6 @@ void DocViewMan::saveModifiedFiles()
 
         if (qYesNo == KMessageBox::Yes) {
           kdDebug() << " KMessageBox::Yes" << "\n";
-          /* please someone review this fix and throw this stuff
-             out (rokrau 04/14/01)
-          kdDebug() << " create file_info" << "\n";
-          QFileInfo file_info(pDoc->fileName());
-          bool isModified;
-          kdDebug() << " use blind widget " << "\n";
-
-          KWriteDoc* pNewDoc = new KWriteDoc(&m_highlightManager);
-          CEditWidget* pBlindWidget = new CEditWidget(0L, 0, pDoc);
-
-          pBlindWidget->setName(pDoc->fileName());
-          pBlindWidget->setText(pDoc->text());
-          pBlindWidget->toggleModified(true);
-
-          kdDebug() << "doSave" << "\n";
-          pBlindWidget->doSave();
-          isModified = pBlindWidget->isModified();
-
-          delete pBlindWidget;
-          delete pNewDoc;
-          kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
-          pDoc->setModified(isModified);
-          */
           bool isModified=true;
           if (CEditWidget* pEditView=getFirstEditView(pDoc)) {
             pEditView->doSave();
@@ -1329,7 +1306,12 @@ void DocViewMan::saveModifiedFiles()
             mod |= (pDoc->fileName().right(2)==".h" || pDoc->fileName().right(4)==".hxx");
 #endif
             iFileList.append(pDoc->fileName());
-            pDoc->setLastFileModifDate(file_info.lastModified());
+
+            // file_info.lastModified has not recognized here the file modif time has changed
+            // maybe a sync problem, maybe a Qt bug?
+            // anyway, we have to create another file info, this works then.
+            QFileInfo fileInfoSavedFile(pDoc->fileName());
+            pDoc->setLastFileModifDate(fileInfoSavedFile.lastModified());
           }
         }
       }
