@@ -2891,8 +2891,9 @@ void CKAppWizard::slotProcessExited() {
 
     // reset now projectfile to actual directory
     project=new CProject(QString(projectlocationline->text()) + "/" + namelow + ".kdevprj");
-		project->prepareToReadProject();
-    project->readProject();
+		if (project->prepareToReadProject()) {
+      project->readProject();
+    }
   }
 
 
@@ -2911,8 +2912,10 @@ void CKAppWizard::slotMakeEnd() {
   directorytext = directoryline->text();
   QString cvscommand;
 
-  project->writeProject ();
-  project->updateMakefilesAm ();
+  if (project->isValid()) {
+    project->writeProject ();
+    project->updateMakefilesAm ();
+  }
   QString message=messageline->text();
   if (!message.isEmpty())
    message.replace(QRegExp("'"), "'\"'\"'");

@@ -127,7 +127,9 @@ bool CProject::createEmptyProject()
 }
 
 void CProject::writeProject(){
-  config->sync();
+  if (config) {
+    config->sync();
+  }
 }
 
 /*********************************************************************
