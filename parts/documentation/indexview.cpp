@@ -44,7 +44,7 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
     
     QHBoxLayout *hl = new QHBoxLayout(this, 0, 0);
     m_edit = new KLineEdit(this);
-    hl->addWidget(new QLabel(m_edit, i18n("Se&arch"), this));
+    hl->addWidget(new QLabel(m_edit, i18n("&Look for:"), this));
     hl->addWidget(m_edit);
     l->addLayout(hl);
 

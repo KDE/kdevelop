@@ -17,63 +17,21 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "editcatalogdlg.h"
+#ifndef DOC_UTILS_H
+#define DOC_UTILS_H
 
-#include <qlabel.h>
+#include <qstring.h>
 
-#include <klineedit.h>
-#include <kurlrequester.h>
-#include <kurlcompletion.h>
+class KURLRequester;
 
-#include "docutils.h"
-#include "kdevdocumentationplugin.h"
+namespace DocUtils{
 
-EditCatalogDlg::EditCatalogDlg(DocumentationPlugin *plugin, QWidget* parent,
-    const char* name, bool modal, WFlags fl)
-    :EditCatalogBase(parent,name, modal,fl), m_plugin(plugin)
-{
-    if (m_plugin->hasCapability(DocumentationPlugin::CustomDocumentationTitles))
-    {
-        titleLabel->setEnabled(true);
-        titleEdit->setEnabled(true);
-    }
-    locationURL->setMode(m_plugin->catalogLocatorProps().first);
-    locationURL->setFilter(m_plugin->catalogLocatorProps().second);
+/**Returns an url selected in KURLRequester but does not
+resolve environment variables.*/
+QString envURL(KURLRequester *req);
+/**Resolves environment variables in url.*/
+QString noEnvURL(const QString &url);
+
 }
 
-EditCatalogDlg::~EditCatalogDlg()
-{
-}
-
-/*$SPECIALIZATION$*/
-void EditCatalogDlg::locationURLChanged(const QString &text)
-{
-    titleEdit->setText(m_plugin->catalogTitle(DocUtils::noEnvURL(text)));
-}
-
-void EditCatalogDlg::accept()
-{
-    QDialog::accept();
-}
-
-QString EditCatalogDlg::title() const
-{
-    return titleEdit->text();
-}
-
-QString EditCatalogDlg::url() const
-{
-    return DocUtils::envURL(locationURL);
-}
-
-void EditCatalogDlg::setTitle(const QString &title)
-{
-    titleEdit->setText(title);
-}
-
-void EditCatalogDlg::setURL(const QString &url)
-{
-    locationURL->setURL(url);
-}
-
-#include "editcatalogdlg.moc"
+#endif

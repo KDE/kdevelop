@@ -27,8 +27,9 @@ class DocumentationPart;
 class ContentsView;
 class IndexView;
 class DocumentationCatalogItem;
-class KTabWidget;
+class QToolBox;
 class KListBox;
+class SearchView;
 
 class DocumentationWidget : public QWidget
 {
@@ -43,13 +44,14 @@ public:
     KListBox *index() const;
 
 protected slots:
-    void tabChanged(QWidget *w);
+    void tabChanged(int t);
 
 private:
     DocumentationPart *m_part;
     ContentsView *m_contents;
     IndexView *m_index;
-    KTabWidget *m_tab;
+    SearchView *m_search;
+    QToolBox *m_tab;
 };
 
 #endif

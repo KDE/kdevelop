@@ -25,6 +25,7 @@
 
 class DocumentationWidget;
 class KListBox;
+class KConfig;
 class KDialogBase;
 class ConfigWidgetProxy;
 class DocumentationPlugin;
@@ -41,12 +42,14 @@ public:
     ~DocumentationPart();
     
     void emitIndexSelected(KListBox *indexBox);
+    bool configure();
 
 signals:
     void indexSelected(KListBox *indexBox);
     
 protected:
     void loadDocumentationPlugins();
+    KConfig *config();
     
 protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
@@ -58,6 +61,7 @@ private:
     QValueList<DocumentationPlugin*> m_plugins;
     
 friend class DocGlobalConfigWidget;
+friend class SearchView;
 };
 
 #endif

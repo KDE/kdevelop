@@ -34,6 +34,7 @@ public:
     enum Type { Collection, Catalog, Book, Document };
 
     DocumentationItem(Type type, KListView *parent, const QString &name);
+    DocumentationItem(Type type, KListView *parent, DocumentationItem *after, const QString &name);
     DocumentationItem(Type type, DocumentationItem *parent, const QString &name);
 
     virtual void setURL(const KURL &url) { m_url = url; }
@@ -209,12 +210,13 @@ public:
     virtual void createTOC(DocumentationCatalogItem *item) = 0;
     /**Sets the URL to the catalog.*/
     virtual void setCatalogURL(DocumentationCatalogItem *item) = 0;
-    virtual KURL::List fullTextSearchLocations() = 0;
+    virtual QStringList fullTextSearchLocations() = 0;
 
     /**Loads catalog configuration and fills configurationView with ConfigurationItem objects.*/
     virtual void loadCatalogConfiguration(KListView *configurationView) = 0;
     /**Saves catalog configuration basing on configurationView and 
-    deletedConfigurationItems contents.*/
+    deletedConfigurationItems contents. If you use KConfig to store configuration,
+    it is important that you call KConfig::sync() method after saving.*/
     virtual void saveCatalogConfiguration(KListView *configurationView) = 0;
     /**Adds new catalog to a configuration.*/
     virtual void addCatalogConfiguration(KListView *configurationView, 

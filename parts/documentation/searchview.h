@@ -17,63 +17,52 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "editcatalogdlg.h"
+#ifndef SEARCHVIEW_H
+#define SEARCHVIEW_H
 
-#include <qlabel.h>
+#include <qwidget.h>
 
-#include <klineedit.h>
-#include <kurlrequester.h>
-#include <kurlcompletion.h>
+class DocumentationPart;
+class KLineEdit;
+class KComboBox;
+class KListView;
+class KPushButton;
+class KProcess;
+class QListViewItem;
 
-#include "docutils.h"
-#include "kdevdocumentationplugin.h"
-
-EditCatalogDlg::EditCatalogDlg(DocumentationPlugin *plugin, QWidget* parent,
-    const char* name, bool modal, WFlags fl)
-    :EditCatalogBase(parent,name, modal,fl), m_plugin(plugin)
+class SearchView: public QWidget
 {
-    if (m_plugin->hasCapability(DocumentationPlugin::CustomDocumentationTitles))
-    {
-        titleLabel->setEnabled(true);
-        titleEdit->setEnabled(true);
-    }
-    locationURL->setMode(m_plugin->catalogLocatorProps().first);
-    locationURL->setFilter(m_plugin->catalogLocatorProps().second);
-}
+    Q_OBJECT
+public:
+    SearchView(DocumentationPart *part, QWidget *parent = 0, const char *name = 0);
+    ~SearchView();
+    
+protected slots:
+    void updateConfig();
+    void updateIndex();
+    void search();
 
-EditCatalogDlg::~EditCatalogDlg()
-{
-}
+    void htsearchStdout(KProcess *, char *buffer, int len);
+    void htsearchExited(KProcess *);
+    void executed(QListViewItem *item);
 
-/*$SPECIALIZATION$*/
-void EditCatalogDlg::locationURLChanged(const QString &text)
-{
-    titleEdit->setText(m_plugin->catalogTitle(DocUtils::noEnvURL(text)));
-}
+protected:
+    void runHtdig(const QString &arg);
+    
+    void analyseSearchResults();
 
-void EditCatalogDlg::accept()
-{
-    QDialog::accept();
-}
+private:
+    DocumentationPart *m_part;
+    
+    KLineEdit *m_edit;
+    KComboBox *m_searchMethodBox;
+    KComboBox *m_sortMethodBox;
+    KListView *m_view;
+    KPushButton *m_configButton;
+    KPushButton *m_indexButton;
+    KPushButton *m_goSearchButton;
+    
+    QString searchResult;
+};
 
-QString EditCatalogDlg::title() const
-{
-    return titleEdit->text();
-}
-
-QString EditCatalogDlg::url() const
-{
-    return DocUtils::envURL(locationURL);
-}
-
-void EditCatalogDlg::setTitle(const QString &title)
-{
-    titleEdit->setText(title);
-}
-
-void EditCatalogDlg::setURL(const QString &url)
-{
-    locationURL->setURL(url);
-}
-
-#include "editcatalogdlg.moc"
+#endif

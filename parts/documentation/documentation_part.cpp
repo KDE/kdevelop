@@ -20,6 +20,7 @@
 #include "documentation_part.h"
 
 #include <qwhatsthis.h>
+#include <qlayout.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -133,6 +134,24 @@ void DocumentationPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page
             break;
         }
     }
+}
+
+KConfig *DocumentationPart::config()
+{
+    return DocumentationFactory::instance()->config();
+}
+
+bool DocumentationPart::configure()
+{
+    KDialogBase dlg(KDialogBase::Plain, i18n("Documentation Settings"),
+                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_widget,
+                    "docsettings dialog");
+
+    QVBoxLayout *l = new QVBoxLayout(dlg.plainPage(), 0, 0);
+    DocGlobalConfigWidget *w1 = new DocGlobalConfigWidget(this, m_widget, dlg.plainPage());
+    l->addWidget(w1);
+    connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
+    return (dlg.exec() == QDialog::Accepted);
 }
 
 #include "documentation_part.moc"

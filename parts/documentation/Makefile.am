@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevdocumentation.la
 libkdevdocumentation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdocumentation_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdocumentation_la_SOURCES = documentation_part.cpp documentation_widget.cpp contentsview.cpp indexview.cpp docglobalconfigwidgetbase.ui docglobalconfigwidget.cpp docconfiglistview.cpp editcatalogdlgbase.ui editcatalogdlg.cpp
+libkdevdocumentation_la_SOURCES = documentation_part.cpp documentation_widget.cpp contentsview.cpp indexview.cpp docglobalconfigwidgetbase.ui docglobalconfigwidget.cpp docconfiglistview.cpp editcatalogdlgbase.ui editcatalogdlg.cpp docutils.cpp searchview.cpp
 
 METASOURCES = AUTO
 
@@ -14,5 +14,5 @@ service_DATA = kdevpart_documentation.desktop
 rcdir = $(kde_datadir)/kdevdocumentation
 rc_DATA = kdevpart_documentation.rc
 
-noinst_HEADERS = contentsview.h indexview.h docglobalconfigwidget.h docconfiglistview.h editcatalogdlg.h
-SUBDIRS =  plugins
+noinst_HEADERS = contentsview.h indexview.h docglobalconfigwidget.h docconfiglistview.h editcatalogdlg.h docutils.h searchview.h
+SUBDIRS = plugins tools data

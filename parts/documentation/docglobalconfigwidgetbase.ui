@@ -125,6 +125,131 @@
                 <attribute name="title">
                     <string>Full Text &amp;Search</string>
                 </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer20</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>190</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout5</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="4" column="0">
+                                <property name="name">
+                                    <cstring>htsearchbinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>htse&amp;arch executable:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>htsearchbinEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="4" column="1">
+                                <property name="name">
+                                    <cstring>htsearchbinEdit</cstring>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="1">
+                                <property name="name">
+                                    <cstring>spacer6</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Minimum</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KURLRequester" row="0" column="1">
+                                <property name="name">
+                                    <cstring>databaseDirEdit</cstring>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="3" column="1">
+                                <property name="name">
+                                    <cstring>htmergebinEdit</cstring>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>htdigbinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>htdi&amp;g executable:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>htdigbinEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="2" column="1">
+                                <property name="name">
+                                    <cstring>htdigbinEdit</cstring>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>databaseDirLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Database di&amp;rectory:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>databaseDirEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>htmergebinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>ht&amp;merge executable:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>htmergebinEdit</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -137,6 +262,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>addCollectionButton</sender>
@@ -163,11 +290,29 @@
         <slot>collectionsBoxCurrentChanged(int)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>tabWidget2</tabstop>
+    <tabstop>addCollectionButton</tabstop>
+    <tabstop>editCollectionButton</tabstop>
+    <tabstop>removeCollectionButton</tabstop>
+    <tabstop>databaseDirEdit</tabstop>
+    <tabstop>htdigbinEdit</tabstop>
+    <tabstop>htmergebinEdit</tabstop>
+    <tabstop>htsearchbinEdit</tabstop>
+</tabstops>
 <slots>
     <slot>addCollectionButtonClicked()</slot>
     <slot>editCollectionButtonClicked()</slot>
     <slot>removeCollectionButtonClicked()</slot>
     <slot>collectionsBoxCurrentChanged( int )</slot>
+    <slot>updateConfig()</slot>
+    <slot>updateIndex()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

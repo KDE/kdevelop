@@ -44,6 +44,13 @@ DocumentationItem::DocumentationItem(DocumentationItem::Type type, Documentation
     init();
 }
 
+DocumentationItem::DocumentationItem(DocumentationItem::Type type, KListView *parent, 
+    DocumentationItem *after, const QString &name)
+    :KListViewItem(parent, after, name), m_type(type)
+{
+    init();
+}
+
 void DocumentationItem::init( )
 {
     QString icon;

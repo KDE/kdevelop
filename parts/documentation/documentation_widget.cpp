@@ -20,11 +20,11 @@
 #include "documentation_widget.h"
 
 #include <qlayout.h>
+#include <qtoolbox.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
-#include <ktabwidget.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -34,34 +34,38 @@
 #include "documentation_part.h"
 #include "contentsview.h"
 #include "indexview.h"
+#include "searchview.h"
 
 DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     :QWidget(0, "documentation widget"), m_part(part)
 {
     QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
     
-    m_tab = new KTabWidget(this);
+    m_tab = new QToolBox(this);
     l->addWidget(m_tab);
     
     m_contents = new ContentsView(this);
-    m_tab->addTab(m_contents, i18n("Contents"));
+    m_tab->addItem(m_contents, i18n("Contents"));
     
     m_index = new IndexView(this);
-    m_tab->addTab(m_index, i18n("Index"));
+    m_tab->addItem(m_index, i18n("Index"));
     
-    connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(tabChanged(QWidget* )));
+    m_search = new SearchView(m_part, this);
+    m_tab->addItem(m_search, i18n("Search"));
+    
+    connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 }
 
 DocumentationWidget::~DocumentationWidget()
 {
 }
 
-void DocumentationWidget::tabChanged(QWidget * w)
+void DocumentationWidget::tabChanged(int t)
 {
-    if (w == m_index)
-    {
+    if (!m_tab->item(t))
+        return;
+    if (m_tab->item(t) == m_index)
         m_part->emitIndexSelected(m_index->indexBox());
-    }
 }
 
 KListBox *DocumentationWidget::index() const

@@ -52,7 +52,7 @@ protected:
     /*$PROTECTED_FUNCTIONS$*/
     DocumentationPlugin *activePlugin();
     KListView *activeView();
-
+    
 protected slots:
     /*$PROTECTED_SLOTS$*/
 
@@ -65,3 +65,4 @@ private:
 };
 
 #endif
+
