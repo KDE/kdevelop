@@ -71,7 +71,7 @@ void CParsedStruct::out()
   if( !comment.isEmpty() )
     cout << "   " << comment << "\n";
 
-  cout << "   " << name << "\n";
+  cout << "   " << path() << "\n";
   for( attributeIterator.toFirst();
        attributeIterator.current();
        ++attributeIterator )
