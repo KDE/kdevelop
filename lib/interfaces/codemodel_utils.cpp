@@ -293,5 +293,22 @@ AllFunctionDefinitions allFunctionDefinitionsDetailed( const FileDom & dom )
     return list;
 }
 
+bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefinitionDom & def )
+{
+	if (dec->scope() == def->scope() && dec->name() == def->name() && dec->resultType() == def->resultType() && dec->isConstant() == def->isConstant())
+	{
+		const ArgumentList defList = def->argumentList(), decList = dec->argumentList();
+		if (defList.size() != decList.size())
+			return false;
+		
+		size_t n = defList.size();
+		for(size_t i = 0; i < n; ++i)
+			if (defList[i]->type() != decList[i]->type())
+				return false;
+		
+		return true;
+	}
+	return false;
 }
 
+}//end of namespace CodeModeUtils

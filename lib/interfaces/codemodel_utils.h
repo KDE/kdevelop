@@ -85,6 +85,7 @@ void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, Funct
     if( pred(fun) )
 	lst << fun;
 }
+;
 
 #if 0
 template <class Pred>
@@ -185,6 +186,31 @@ void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<Funct
 void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<FunctionDefinitionDom, Scope> &relations, const NamespaceDom &nsdom);
 void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom, QMap<FunctionDefinitionDom, Scope> &relations);
 }
+
+/**
+ * Compare a declaration and a defintion of a function.
+ * @param dec declaration
+ * @param def definition
+ * @return true, if dec is the declaration of the functiondefinition def, false otherwise
+ * @author Jonas Jacobi <j.jacobi@gmx.de>
+ */
+bool compareDeclarationToDefinition(const FunctionDom& dec, const FunctionDefinitionDom& def);
+
+/**
+ * Predicate for use with findFunctionDefintions. Searches for a defintion matching a declaration.
+ * @author Jonas Jacobi
+ */
+class PredDefinitionMatchesDeclaration{
+public:
+	PredDefinitionMatchesDeclaration(const FunctionDom& func) : m_declaration(func){};
+	bool operator() (const FunctionDefinitionDom& def) const
+	{
+		return compareDeclarationToDefinition(m_declaration, def);
+	}
+	
+private:
+	const FunctionDom m_declaration;
+};
 
 FunctionList allFunctions(const FileDom &dom);
 AllFunctions allFunctionsDetailed(const FileDom &dom);
