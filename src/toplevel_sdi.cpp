@@ -525,10 +525,10 @@ void TopLevelSDI::slotTextChanged() {
         return;
 
     QString t = m_tabWidget->tabLabel( w );
-    if ( t.right( 1 ) != "*" )
+    if ( t.right( 1 ) != "*" ){
         t += "*";
-
-    m_tabWidget->changeTab( w, t );
+	m_tabWidget->changeTab( w, t );
+    }
 }
 
 void TopLevelSDI::slotUpdateModifiedFlags() {
