@@ -273,7 +273,7 @@ KMultiTabBarButton::KMultiTabBarButton(const QPixmap& pic,const QString& text, Q
 		int id,QWidget *parent,KMultiTabBar::KMultiTabBarPosition pos,KMultiTabBar::KMultiTabBarStyle style)
 	:QPushButton(QIconSet(),text,parent),m_style(style)
 {
-	setIconSet(pic);
+	if (!pic.isNull()) setIconSet(pic);
 	setText(text);
 	m_position=pos;
   	if (popup) setPopup(popup);
@@ -377,7 +377,7 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 	:KMultiTabBarButton(text,0,id,parent,pos,style)
 {
 	d=new KMultiTabBarTabPrivate();
-	setIcon(pic);
+	if (!pic.isNull()) setIcon(pic);
 	m_expandedSize=24;
 	setToggleButton(true);
 }
@@ -409,7 +409,9 @@ void KMultiTabBarTab::setIcon(const QString& icon)
 
 void KMultiTabBarTab::setIcon(const QPixmap& icon)
 {
-
+	if (m_style == KMultiTabBar::KDEV3) {
+		return;
+	}
 	if ((m_position==KMultiTabBar::Left) || (m_position==KMultiTabBar::Right)) {
 	        QWMatrix rotateMatrix;
 		if (m_position==KMultiTabBar::Left)
@@ -724,7 +726,7 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	}
 	m_l->setMargin(0);
 	m_l->setAutoAdd(false);
-	
+
 	m_internal=new KMultiTabBarInternal(this,bm);
 	setPosition((bm==KMultiTabBar::Vertical)?KMultiTabBar::Right:KMultiTabBar::Bottom);
 	setStyle(VSNET);
@@ -752,7 +754,8 @@ KMultiTabBar::~KMultiTabBar() {
 int KMultiTabBar::appendButton(const QPixmap &pic ,int id,QPopupMenu *popup,const QString&)
 {
 	KMultiTabBarButton  *btn;
-	m_buttons.append(btn= new KMultiTabBarButton(pic,QString::null,
+	m_buttons.append(btn= new KMultiTabBarButton((m_internal->m_style==KDEV3) ? QPixmap() : pic,
+			QString::null,
 			popup,id,this,m_position,m_internal->m_style));
 	m_l->insertWidget(0,btn);
 	btn->show();
@@ -762,7 +765,7 @@ int KMultiTabBar::appendButton(const QPixmap &pic ,int id,QPopupMenu *popup,cons
 
 int KMultiTabBar::appendTab(const QPixmap &pic ,int id ,const QString& text)
 {
- m_internal->appendTab(pic,id,text);
+ m_internal->appendTab( (m_internal->m_style==KDEV3) ? QPixmap() : pic, id, text );
  return 0;
 }
 
@@ -815,7 +818,7 @@ bool KMultiTabBar::isTabRaised(int id) const
 	{
 		return ttab->isOn();
 	}
-	
+
 	return false;
 }
 
