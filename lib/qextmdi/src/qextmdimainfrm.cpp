@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 #include <qclipboard.h>
-#include <qobjcoll.h>
+#include <qobjectlist.h>
 #ifndef NO_KDE
 #include <kmenubar.h>
 #include <kapplication.h>
