@@ -1,0 +1,36 @@
+<!DOCTYPE kdevelop >
+<kdevelop>
+ <general>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+  <keywords>
+   <keyword>KDE</keyword>
+   <keyword>kioslave</keyword>
+  </keywords>
+ </general>
+ <kdevautoproject>
+  <general>
+  </general>
+ </kdevautoproject>
+ <kdevfileview>
+  <groups>
+   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+   <group pattern="*.po;*.ts" name="Translations" />
+   <group pattern="*" name="Others" />
+  </groups>
+ </kdevfileview>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+</kdevelop>
