@@ -1,3 +1,9 @@
+2002-04-10  Harald Fernengel <harry@kdevelop.org>
+        * Jumping to error messages now also works on localized versions of "make"
+          Error messages that contain Utf8 characters only work under KDE3,
+          the non-Utf8 strings under KDE2 as well as KDE3.
+          Workaround for KDE2: "export LANG=C"
+
 2002-04-03  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Removed Objective-C support (moving the changes to KDEVELOP_2_BRANCH).
