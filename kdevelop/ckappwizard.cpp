@@ -314,7 +314,7 @@ void CKAppWizard::initPages()
   versionline->setFontPropagation( QWidget::NoChildren );
   versionline->setPalettePropagation( QWidget::NoChildren );
   versionline->setText( "" );
-  versionline->setValidator( new KFloatValidator( versionline ) );
+//  versionline->setValidator( new KFloatValidator( versionline ) );
   versionline->setMaxLength( 32767 );
   versionline->setEchoMode( QLineEdit::Normal );
   versionline->setFrame( TRUE );

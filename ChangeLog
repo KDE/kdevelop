@@ -1,4 +1,7 @@
 2001-02-24  jbb <jbb@kdevelop.org>
+    * Remove restriction on version numbers
+
+2001-02-24  jbb <jbb@kdevelop.org>
     * Fixed: after a distclean if the qt dir wasn't entered then the
       configure args ended up being "--with-qt-dir= ". This failed the
       qt configure test.

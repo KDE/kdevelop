@@ -104,7 +104,7 @@ void CPrjOptionsDlg::addGeneralPage()
   version_edit = new QLineEdit( generalPage, "version_edit" );
   grid->addWidget(version_edit,1,2);
   version_edit->setText( prj_info->getVersion() );
-  version_edit->setValidator( new KFloatValidator( version_edit ));
+//  version_edit->setValidator( new KFloatValidator( version_edit ));
   QWhatsThis::add(version_label, i18n("Set your project version number here."));
   QWhatsThis::add(version_edit, i18n("Set your project version number here."));
 
