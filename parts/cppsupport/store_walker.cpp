@@ -13,6 +13,7 @@
 #include "ast_utils.h"
 
 #include <classstore.h>
+#include <parsedclasscontainer.h>
 #include <parsedscopecontainer.h>
 #include <kdebug.h>
 #include <qfileinfo.h>
@@ -145,12 +146,12 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     TypeSpecifierAST* typeSpec = ast->typeSpec();
     GroupAST* funSpec = ast->functionSpecifier();
     GroupAST* storageSpec = ast->storageSpecifier();
-    
+
     if( !ast->initDeclarator() )
 	return;
 
     DeclaratorAST* d = ast->initDeclarator()->declarator();
-    
+
     if( !d->declaratorId() )
 	return;
 
@@ -180,7 +181,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	    ++it;
 	}
     }
-    
+
     int startLine, startColumn;
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
@@ -199,9 +200,11 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	}
     }
 
-    ParsedClass* cl = m_currentClass;
-    if( !cl )
-	cl = getClassByName( m_store, scope.join(".") );
+    ParsedClassContainer* cl = getClassByName( m_store, scope.join(".") );
+    if( cl == 0 )
+        cl = m_store->getScopeByName( scope.join(".") );
+    if( cl == 0 )
+        cl = m_currentContainer;
 
     ParsedMethod* method = new ParsedMethod();
     method->setName( id );
@@ -209,17 +212,16 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( d, method );
 
-    ParsedClassContainer* c = cl ? (ParsedClassContainer*) cl : (ParsedClassContainer*) m_currentContainer;
     if( cl )
 	method->setAccess( m_currentAccess );
     if( isStatic )
 	method->setIsStatic( isStatic );
     if( cl && isVirtual )
 	method->setIsVirtual( isVirtual );
-    
+
     bool isDestructor = id.startsWith("~");
     method->setIsDestructor( isDestructor );
-    
+
     bool isConstructor = cl && typeSpec == 0 && id == cl->name();
     method->setIsConstructor( isConstructor );
 
@@ -233,7 +235,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	    method->setType( text );
     }
 
-    ParsedMethod* m = c->getMethod( method );
+    ParsedMethod* m = cl->getMethod( method );
     bool isStored = m != 0;
 
     if( m != 0 )
@@ -245,13 +247,15 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     method->setDefinedOnLine( startLine );
     method->setDefinedInFile( m_fileName );
 
-    if( !isStored && cl ){
+    ParsedClass* klass = dynamic_cast<ParsedClass*>( cl );
+
+    if( !isStored && klass ){
 	if( m_inSlots )
-	    cl->addSlot( method );
+	    klass->addSlot( method );
 	else if( m_inSignals )
-	    cl->addSignal( method );
+	    klass->addSignal( method );
 	else
-	    cl->addMethod( method );
+	    klass->addMethod( method );
     } else if( !isStored )
 	m_currentContainer->addMethod( method );
 
@@ -311,9 +315,9 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	inStore = m_store->hasClass( klass->path() );
     else 
 	inStore = m_store->hasStruct( klass->path() );
-    
+
     if( inStore ){
-	ParsedClass* parsedClassRef = getClassByName( m_store, klass->path() );	
+	ParsedClass* parsedClassRef = getClassByName( m_store, klass->path() );
 	parsedClassRef->setDeclaredOnLine( klass->declaredOnLine() );
 	parsedClassRef->setDeclaredInFile( klass->declaredInFile() );
 	parsedClassRef->setDeclaredInScope( klass->declaredInScope() );
@@ -359,7 +363,6 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
     QPtrList<EnumeratorAST> l = ast->enumeratorList();
     QPtrListIterator<EnumeratorAST> it( l );
     while( it.current() ){
-        kdDebug(9007) << "-------------> m_currentContainer = " << m_currentContainer->path() << endl;
 	ParsedAttribute* attr = findOrInsertAttribute( m_currentContainer, it.current()->id()->text() );
 	attr->setType( "int" );
 	attr->setIsStatic( true );
@@ -406,10 +409,27 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	t = t->subDeclarator();
 
     QString id;
-    if( t )
-	id = t->declaratorId()->text();
+    if( t && t->declaratorId() && t->declaratorId()->unqualifiedName() )
+	id = t->declaratorId()->unqualifiedName()->text();
 
-    ParsedAttribute* attr = findOrInsertAttribute( m_currentContainer, id );
+    QStringList scope = m_currentScope;
+    if( d->declaratorId() && d->declaratorId()->nestedName() ){
+        NestedNameSpecifierAST* nestedName = d->declaratorId()->nestedName();
+	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+	while( it.current() ){
+	    scope << it.current()->text();
+	    ++it;
+	}
+    }
+
+    ParsedClassContainer* cl = getClassByName( m_store, scope.join(".") );
+    if( cl == 0 )
+        cl = m_store->getScopeByName( scope.join(".") );
+    if( cl == 0 )
+        cl = m_currentContainer;
+
+    ParsedAttribute* attr = findOrInsertAttribute( cl, id );
 
     bool isFriend = false;
     bool isVirtual = false;
@@ -489,7 +509,7 @@ ParsedAttribute * StoreWalker::findOrInsertAttribute( ParsedClassContainer * sco
     return attr;
 }
 
-void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec, 
+void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec,
 					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl )
 {
     bool isFriend = false;
