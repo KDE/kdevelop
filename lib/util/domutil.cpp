@@ -39,6 +39,20 @@ QDomElement DomUtil::elementByPath(const QDomDocument &doc, const QString &path)
 }
 
 
+QDomElement DomUtil::elementByPath(const QDomElement& elem, const QString &path)
+{
+    QStringList l = QStringList::split('/', path);
+
+    QDomElement el = elem;
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        el = el.namedItem(*it).toElement();
+    }
+
+    return el;
+}
+
+
 QString DomUtil::readEntry(const QDomDocument &doc, const QString &path, const QString &defaultEntry)
 {
     QDomElement el = elementByPath(doc, path);
@@ -48,18 +62,43 @@ QString DomUtil::readEntry(const QDomDocument &doc, const QString &path, const Q
         return el.firstChild().toText().data();
 }
 
+QString DomUtil::readEntry(const QDomElement& elem, const QString &path, const QString &defaultEntry)
+{
+    QDomElement el = elementByPath(elem, path);
+    if (el.isNull())
+        return defaultEntry;
+    else
+        return el.firstChild().toText().data();
+}
+
+
+QString DomUtil::readEntryAux(const QDomDocument &doc, const QString &path)
+{
 /// @todo consider whether it's okay to accept empty string == default value
 /// if not use the below type
 ///typedef pair<bool,QString> EltInfo;
 
-QString DomUtil::readEntryAux(const QDomDocument &doc, const QString &path)
-{
     QDomElement el = elementByPath(doc, path);
     if (el.isNull())
         return QString::null;
     else
         return el.firstChild().toText().data();
 }
+
+
+QString DomUtil::readEntryAux(const QDomElement &elem, const QString &path)
+{
+/// @todo consider whether it's okay to accept empty string == default value
+/// if not use the below type
+///typedef pair<bool,QString> EltInfo;
+
+    QDomElement el = elementByPath(elem, path);
+    if (el.isNull())
+        return QString::null;
+    else
+        return el.firstChild().toText().data();
+}
+
 
 int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path, int defaultEntry)
 {
@@ -71,9 +110,29 @@ int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path, int defa
 }
 
 
+int DomUtil::readIntEntry(const QDomElement &elem, const QString &path, int defaultEntry)
+{
+    QString entry = readEntryAux(elem, path);
+    if (entry.isNull())
+      return defaultEntry;
+    else
+      return entry.toInt();
+}
+
+
 bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path, bool defaultEntry)
 {
     QString entry = readEntryAux(doc, path);
+    if (entry.isNull())
+      return defaultEntry;
+    else
+      return entry == "TRUE" || entry == "true";
+}
+
+
+bool DomUtil::readBoolEntry(const QDomElement &elem, const QString &path, bool defaultEntry)
+{
+    QString entry = readEntryAux(elem, path);
     if (entry.isNull())
       return defaultEntry;
     else
@@ -97,11 +156,27 @@ QStringList DomUtil::readListEntry(const QDomDocument &doc, const QString &path,
 }
 
 
+QStringList DomUtil::readListEntry(const QDomElement &elem, const QString &path, const QString &tag)
+{
+    QStringList list;
+
+    QDomElement el = elementByPath(elem, path);
+    QDomElement subEl = el.firstChild().toElement();
+    while (!subEl.isNull()) {
+        if (subEl.tagName() == tag)
+            list << subEl.firstChild().toText().data();
+        subEl = subEl.nextSibling().toElement();
+    }
+
+    return list;
+}
+
+
 DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QString &path, const QString &tag,
                                              const QString &firstAttr, const QString &secondAttr)
 {
     PairList list;
-    
+
     QDomElement el = elementByPath(doc, path);
     QDomElement subEl = el.firstChild().toElement();
     while (!subEl.isNull()) {
@@ -112,7 +187,27 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
         }
         subEl = subEl.nextSibling().toElement();
     }
-    
+
+    return list;
+}
+
+
+DomUtil::PairList DomUtil::readPairListEntry(const QDomElement &elem, const QString &path, const QString &tag,
+                                             const QString &firstAttr, const QString &secondAttr)
+{
+    PairList list;
+
+    QDomElement el = elementByPath(elem, path);
+    QDomElement subEl = el.firstChild().toElement();
+    while (!subEl.isNull()) {
+        if (subEl.tagName() == tag) {
+            QString first = subEl.attribute(firstAttr);
+            QString second = subEl.attribute(secondAttr);
+            list << Pair(first, second);
+        }
+        subEl = subEl.nextSibling().toElement();
+    }
+
     return list;
 }
 
@@ -137,7 +232,23 @@ QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it)
         el = DomUtil::namedChildElement( el, *it );
-        
+
+    while (!el.firstChild().isNull())
+        el.removeChild(el.firstChild());
+
+    return el;
+}
+
+
+QDomElement DomUtil::createElementByPath(QDomElement &elem, const QString &path)
+{
+    QStringList l = QStringList::split('/', path);
+
+    QDomElement el = elem;
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it)
+        el = DomUtil::namedChildElement( el, *it );
+
     while (!el.firstChild().isNull())
         el.removeChild(el.firstChild());
 
@@ -150,7 +261,15 @@ void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &
     QDomElement el = createElementByPath(doc, path);
     el.appendChild(doc.createTextNode(value));
 }
-    
+
+
+void DomUtil::writeEntry(QDomElement& elem, const QString &path, const QString &value)
+{
+    QDomElement el = createElementByPath(elem, path);
+    // FIXME: this toDocument() invocation probably makes things go BUMMM
+    el.appendChild(elem.toDocument().createTextNode(value));
+}
+
 
 void DomUtil::writeIntEntry(QDomDocument &doc, const QString &path, int value)
 {
@@ -158,9 +277,21 @@ void DomUtil::writeIntEntry(QDomDocument &doc, const QString &path, int value)
 }
 
 
+void DomUtil::writeIntEntry(QDomElement &elem, const QString &path, int value)
+{
+    writeEntry(elem, path, QString::number(value));
+}
+
+
 void DomUtil::writeBoolEntry(QDomDocument &doc, const QString &path, bool value)
 {
     writeEntry(doc, path, value? "true" : "false");
+}
+
+
+void DomUtil::writeBoolEntry(QDomElement &elem, const QString &path, bool value)
+{
+    writeEntry(elem, path, value? "true" : "false");
 }
 
 
@@ -173,6 +304,22 @@ void DomUtil::writeListEntry(QDomDocument &doc, const QString &path, const QStri
     for (it = value.begin(); it != value.end(); ++it) {
         QDomElement subEl = doc.createElement(tag);
         subEl.appendChild(doc.createTextNode(*it));
+        el.appendChild(subEl);
+    }
+}
+
+
+void DomUtil::writeListEntry(QDomElement &elem, const QString &path, const QString &tag,
+                             const QStringList &value)
+{
+    QDomElement el = createElementByPath(elem, path);
+
+    QStringList::ConstIterator it;
+    for (it = value.begin(); it != value.end(); ++it) {
+        // FIXME: this toDocument() invocation probably makes things go BUMMM
+        QDomElement subEl = elem.toDocument().createElement(tag);
+        // FIXME: this toDocument() invocation probably makes things go BUMMM
+        subEl.appendChild(elem.toDocument().createTextNode(*it));
         el.appendChild(subEl);
     }
 }
@@ -192,6 +339,24 @@ void DomUtil::writePairListEntry(QDomDocument &doc, const QString &path, const Q
         el.appendChild(subEl);
     }
 }
+
+
+void DomUtil::writePairListEntry(QDomElement &elem, const QString &path, const QString &tag,
+                                 const QString &firstAttr, const QString &secondAttr,
+                                 const PairList &value)
+{
+    QDomElement el = createElementByPath(elem, path);
+
+    PairList::ConstIterator it;
+    for (it = value.begin(); it != value.end(); ++it) {
+        // FIXME: this toDocument() invocation probably makes things go BUMMM
+        QDomElement subEl = elem.toDocument().createElement(tag);
+        subEl.setAttribute(firstAttr, (*it).first);
+        subEl.setAttribute(secondAttr, (*it).second);
+        el.appendChild(subEl);
+    }
+}
+
 
 DomPath DomUtil::resolvPathStringExt(const QString pathstring)
 {

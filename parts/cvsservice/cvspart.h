@@ -46,9 +46,9 @@ class CvsPart : public KDevVersionControl
     friend class CvsPartImpl;
 
 public:
-    // Standard constructor.
+    //! Standard constructor.
     CvsPart( QObject *parent, const char *name, const QStringList & );
-    // Destructor.
+    //! Destructor.
     virtual ~CvsPart();
 
     /**
@@ -66,10 +66,11 @@ public:
     virtual void fetchFromRepository();
 
 private slots:
-    // Add menu items binded to cvs operations' slots to @p popup, using
-    // data in @p context.
-    // Not that @p context _must_ be FileContext-type, otherwise will do
-    // nothing.
+    /** Add menu items binded to cvs operations' slots to @p popup, using
+     * data in @p context.
+     * Not that @p context _must_ be FileContext-type, otherwise will do
+     * nothing.
+     */
     void contextMenu( QPopupMenu *popup, const Context *context );
 
     // Cvs operations (menubar)
@@ -109,24 +110,26 @@ private slots:
     void slotAddFilesToProject(const QStringList &);
     void slotRemovedFilesFromProject(const QStringList &);
 
-    // Adds a configuration widget (for properly configuring CVS command-line options)
-    // and adds it to @p dlg.
+    /** Adds a configuration widget (for properly configuring CVS command-line options)
+     * and adds it to @p dlg.
+     */
     void projectConfigWidget( KDialogBase *dlg );
 
-    // Called when the user wishes to stop an operation.
+    //! Called when the user wishes to stop an operation.
     void slotStopButtonClicked( KDevPlugin* );
 
 private:
     void init();
     void setupActions();
-    // Returns the KURL for the currently focused document, if there is any
+    //! Returns the KURL for the currently focused document, if there is any
     bool urlFocusedDocument( KURL &url );
 
-    // A list of KURLs of the files to be "operated" on (to be committed, added, removed, ...)
+    //! A list of KURLs of the files to be "operated" on (to be committed, added, removed, ...)
     KURL::List m_urls;
 
-    // This is a pointer to the d->form used for collecting data about CVS project creation (used
-    // by the ApplicationWizard in example)
+    /** This is a pointer to the d->form used for collecting data about CVS project creation (used
+     * by the ApplicationWizard in example)
+     */
     QGuardedPtr<CvsForm> m_cvsConfigurationForm;
 
     // Actions

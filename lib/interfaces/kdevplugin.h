@@ -231,7 +231,7 @@ public:
     QStringList registeredVersionControls() const;
 
     /**
-     * Remove (<u>not</u> delete) @p vcs to the list of the registered VCS.
+     * Remove (<B>not</B> delete) @p vcs to the list of the registered VCS.
      */
     void unregisterVersionControl( KDevVersionControl *vcs );
 

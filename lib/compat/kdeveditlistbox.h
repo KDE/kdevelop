@@ -95,7 +95,7 @@ public:
        * Create an editable listbox.
        *
        * The same as the other constructor, additionally it takes
-       * @title, which will be the title of the frame around the listbox.
+       * @p title, which will be the title of the frame around the listbox.
        */
       KEditListBox(const QString& title, QWidget *parent = 0,
 		   const char *name = 0, bool checkAtEntering=false,

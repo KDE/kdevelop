@@ -45,7 +45,7 @@ KDevelop part is available as a New Project type: <code>C++->KDevelop->KDevelop 
 
 \section LSupp Language Support
 
-<bold>Language support</bold> can be written either as a source tree build or as a
+<B>Language support</B> can be written either as a source tree build or as a
 standalone part (check out KDevelop part (Standalone build) application
 template in KDevelop).
 
@@ -82,7 +82,7 @@ If you write (or have) a language parser, your language support can have
 and methods - their names, names of source files, location in source files,
 etc.). Class store libraries can be found at <code>lib/catalog</code> and <code>lib/sourceinfo</code>.
 
-KDevelop provides class browsers that extract information from a <bold>class store</bold> and display it in a tree view and toolbar selectors of scopes, classes and methods.
+KDevelop provides class browsers that extract information from a <B>class store</B> and display it in a tree view and toolbar selectors of scopes, classes and methods.
 
 Catalog is the new persistant class store for KDevelop written by Roberto Raggi and everybody is highly encouraged to use it. Take a look at
 <code>parts/cppsupport</code> for an example of using catalog. <code>parts/pascalsupport</code> is completely based on a catalog (which is filled by a pascal parser - check <code>pascal.tree.g</code> grammar file). Catalog is stored on disk in the database file (Berkeley db) If you use catalog, your class browser will be <code>parts/classbrowser</code>.
@@ -99,15 +99,15 @@ from having such. There is a hand-written c/c++ parser (<code>lib/cppparser</cod
 
 \section PrReport Problem Reporter
 
-If you have a language parser, you can implement <bold>problem reporter</bold>
+If you have a language parser, you can implement <B>problem reporter</B>
 functionality for your language. The problem reporter catches errors
 reported by a parser and displays it in a problem reporter view.
 <code>parts/javasupport</code>, <code>parts/adasupport</code>, <code>parts/pascalsupport</code> and <code>parts/cppsupport</code> have problem reporters.
 
 \section PrManag Project Manager
 
-The language support is important, but it is unusable without a <bold>project
-manager</bold> that can manage projects written on this language. KDevelop
+The language support is important, but it is unusable without a <B>project
+manager</B> that can manage projects written on this language. KDevelop
 currently provides several project managers. They are:
 
   - Automake manager
@@ -140,18 +140,18 @@ in, you can modify <code>parts/customproject</code> to use a specific build tool
 
 \subsection AppWiz Application Wizard Templates
 
-<bold>Application wizard</bold> templates should be also written. Appwizard templates are simple to create - consult <code>parts/appwizard/README</code> and look at
+<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult <code>parts/appwizard/README</code> and look at
 <code>parts/appwizard/rubyhello</code>, <code>parts/appwizard/pascalhello</code>, or <code>parts/appwizard/adahello</code>.
 
 \subsection FCreateTpl File Create Templates
 
-Another thing to do is to create <bold>file create templates</bold>. They are prototypes for a source files of your language. These prototypes are placed in
+Another thing to do is to create <B>file create templates</B>. They are prototypes for a source files of your language. These prototypes are placed in
 <code>parts/filecreate/file-templates</code> dir and have names equal to the extensions of language source files. The description of the prototypes is placed
 in <code>parts/filecreate/template-info.xml</code>. Consult <code>parts/filecreate/README</code> for further information.
 
 \subsection CdAbbr Code Abbreviation Templates
 
-KDevelop has a support for <bold>code abbreviations</bold> so you can add some predefined abbreviations to your language support. Take <code>parts/cppsupport/cpptemplates</code> as an example.
+KDevelop has a support for <B>code abbreviations</B> so you can add some predefined abbreviations to your language support. Take <code>parts/cppsupport/cpptemplates</code> as an example.
 
 \section Editor Language Editor
 
@@ -166,7 +166,7 @@ c-based languages) you can extend astyle library (<code>lib/astyle</code>) that 
 \section Debugger Debugger Support
 
 The last thing to have a complete language support in KDevelop is to
-write a <bold>debugger support</bold>. KDevelop already provides GDB support
+write a <B>debugger support</B>. KDevelop already provides GDB support
 (<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
 
 \section MiscInf Other Info

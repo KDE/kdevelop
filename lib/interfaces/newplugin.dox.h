@@ -60,7 +60,7 @@ Create a factory class <code>FooFactory</code> which inherits
 
 into the source file, so that the factory can be accessed by KDE's library
 loader. Keep in mind that the name of the method <code>init_libfoo()</code> is
-required for a library with the name </code>libfoo.so<code>.
+required for a library with the name <code>libfoo.so</code>.
 
 This may be simplified by the use of the
 <code>K_EXPORT_COMPONENT_FACTORY</code> macro which is defined in

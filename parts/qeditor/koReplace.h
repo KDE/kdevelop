@@ -94,7 +94,6 @@ public:
      * of replacement strings. @p strings might get truncated if it is
      * too long.
      *
-     * @param history The replacement history.
      * @see #replacementHistory
      */
     void setReplacementHistory( const QStringList &strings );
@@ -200,7 +199,7 @@ public:
      * and displays the prompt-for-replace dialog before doing the replace.
      *
      * @param text The text fragment to modify.
-     * @param exposeOnReplace The region to expose
+     * @param expose The region to expose
      * @return False if the user elected to discontinue the replace.
      */
     bool replace(QString &text, const QRect &expose);

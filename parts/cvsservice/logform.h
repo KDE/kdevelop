@@ -35,11 +35,11 @@ public:
     void start( const QString &workDir, const QString &pathName );
 
 k_dcop:
-    // Connect this part with job's DCOP reference
+    //! Connect this part with job's DCOP reference
     void slotJobExited( bool normalExit, int exitStatus );
     void slotReceivedOutput( QString someOutput );
     void slotReceivedErrors( QString someErrors );
-    // This is called by the cvs job when requested diff job is finished
+    //! This is called by the cvs job when requested diff job is finished
     void slotDiffFinished( bool normalExit, int exitStatus );
 
 public slots:

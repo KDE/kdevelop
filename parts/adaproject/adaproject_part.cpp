@@ -83,7 +83,7 @@ AdaProjectPart::~AdaProjectPart()
 
 /**
  * This should really be merged with FileTreeWidget::matchesHidePattern()
- * and put in its own class.
+ * and put in its own class. Currently this is repeated in scriptprojectpart.cpp, pascalproject_part.cpp, adaproject_part.cpp
  */
 static bool matchesPattern(const QString &fileName, const QStringList &patternList)
 {

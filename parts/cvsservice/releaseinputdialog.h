@@ -27,7 +27,6 @@ public:
     * C-tor
     * @param releaseMsg the custom message to display when prompting the user
     * @param parent
-    * @param name
     * @param enforceNotNullInput the dialog will accept only not null input
     */
     ReleaseInputDialog( const QString &releaseMsg, QWidget* parent = 0,

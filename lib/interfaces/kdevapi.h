@@ -97,7 +97,7 @@ public:
 
     /**
     * Returns a reference to current project, or null if no project is loaded.
-    * @ref KDeveProject
+    * @ref KDevProject
     */
     KDevProject *project() const;
     /**
@@ -198,7 +198,7 @@ public:
     KDevCreateFile *createFile() const;
     /**
     * Set the object encharged for creating new files from templates.
-    * @param dom
+    * @param createFile
     */
     void setCreateFile( KDevCreateFile *createFile );
 
@@ -210,7 +210,7 @@ public:
     KDevSourceFormatter *sourceFormatter() const;
     /**
     * Set the Document Object Model for the current project.
-    * @param dom
+    * @param sourceFormatter
     */
     void setSourceFormatter(KDevSourceFormatter *sourceFormatter);
 
