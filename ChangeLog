@@ -1,4 +1,7 @@
-2001-26-12  Harald Fernengel <harry@bnro.de>
+2001-12-26  Walter Tasin <tasin@kdevelop.org>
+    * Solving problem with "no src files" in c-template
+
+2001-12-26  Harald Fernengel <harry@bnro.de>
     * bugfix: Setup wizard builds documentation now using the right paths
 
 2001-12-18  F@lk Brettschneider <falk@kdevelop.org>
