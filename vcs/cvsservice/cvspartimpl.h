@@ -51,7 +51,7 @@ public:
     //! Available Cvs operations
     enum CvsOperation
     {
-        opFakeStub, opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag
+        opFakeStub, opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag, opEdit, opUnEdit, opEditors
     };
 
     /**
@@ -97,6 +97,21 @@ public:
     * @param binary is the file binary or plain text
     */
     virtual void add( const KURL::List& urlList, bool binary = false );
+    /**
+    * Mark the specified files (as KURL) for beeing edited
+    * @param urlList
+    */
+    virtual void edit( const KURL::List& urlList );
+    /**
+    * Remove editing mark from the specified files (as KURL)
+    * @param urlList
+    */
+    virtual void unedit( const KURL::List& urlList );
+    /**
+    * Show list of editors for the specified files (as KURL)
+    * @param urlList
+    */
+    virtual void editors( const KURL::List& urlList );
     /**
     * Remove the specified files (as KURL) from repository.
     * @param urlList

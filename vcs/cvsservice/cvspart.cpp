@@ -85,7 +85,7 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 						  name ? name : "CvsService" ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
-    actionRemoveSticky( 0 ),
+    actionRemoveSticky( 0 ), actionEdit( 0 ), actionEditors(0), actionUnEdit(0),
     actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 ),
     actionTag( 0 ), actionUnTag( 0 ),
     actionLogin( 0), actionLogout( 0 ),
@@ -160,6 +160,21 @@ void CvsServicePart::setupActions()
         actionCollection(), "cvsservice_add" );
     actionAdd->setToolTip( i18n("Add file to repository") );
     actionAdd->setWhatsThis( i18n("<b>Add to repository</b><p>Adds file to repository.") );
+
+    actionEdit = new KAction( i18n("&Edit files"), 0, this, SLOT(slotActionEdit()),
+        actionCollection(), "cvsservice_edit" );
+    actionEdit->setToolTip( i18n("Mark as beeing edited") );
+    actionEdit->setWhatsThis( i18n("<b>Mark as beeing edited</b><p>Mark the files as beeing edited.") );
+
+    actionUnEdit = new KAction( i18n("&Unedit files"), 0, this, SLOT(slotActionUnEdit()),
+        actionCollection(), "cvsservice_unedit" );
+    actionUnEdit->setToolTip( i18n("Remove editing mark from files") );
+    actionUnEdit->setWhatsThis( i18n("<b>Remove editing mark</b><p>Remove the editing mark from the files.") );
+
+    actionEditors = new KAction( i18n("&Show editors"), 0, this, SLOT(slotActionEditors()),
+        actionCollection(), "cvsservice_editors" );
+    actionEditors->setToolTip( i18n("Show editors") );
+    actionEditors->setWhatsThis( i18n("<b>Show editors</b><p>Shows the list of users who are editing files.") );
 
     actionAddBinary = new KAction( i18n("Add to Repository as &Binary"), 0, this,
         SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
@@ -313,6 +328,12 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
             id = subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
             subMenu->setWhatsThis(id, i18n("<b>Generate log</b><p>Produces log for this file."));
         }
+        id = subMenu->insertItem( actionEditors->text(), this, SLOT(slotEditors()) );
+        subMenu->setWhatsThis(id, i18n("<b>Show editors</b><p>Shows the list of users who are editing files."));
+        id = subMenu->insertItem( actionEdit->text(), this, SLOT(slotEdit()) );
+        subMenu->setWhatsThis(id, i18n("<b>Mark as beeing edited</b><p>Mark the files as beeing edited."));
+        id = subMenu->insertItem( actionUnEdit->text(), this, SLOT(slotUnEdit()) );
+        subMenu->setWhatsThis(id, i18n("<b>Remove editing mark</b><p>Remove the editing mark from the files."));
         id = subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
         subMenu->setWhatsThis(id, i18n("<b>Add to repository</b><p>Adds file to repository."));
         id = subMenu->insertItem( actionAddBinary->text(), this, SLOT(slotAddBinary()) );
@@ -413,6 +434,38 @@ void CvsServicePart::slotActionAdd()
     if (urlFocusedDocument( currDocument ))
     {
         m_impl->add( currDocument, false );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotActionEdit()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        m_impl->edit( currDocument );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotActionEditors()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        m_impl->editors( currDocument );
+    }
+}
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotActionUnEdit()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        m_impl->unedit( currDocument );
     }
 }
 
@@ -534,6 +587,27 @@ void CvsServicePart::slotUpdate()
 void CvsServicePart::slotAdd()
 {
     m_impl->add( m_urls, false );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotEdit()
+{
+    m_impl->edit( m_urls );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotUnEdit()
+{
+    m_impl->unedit( m_urls );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotEditors()
+{
+    m_impl->editors( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -8,26 +8,21 @@ libkdevcvsservice_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcvsservice_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML) -lcvsservice
 
-libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp \
-    cvsformbase.ui cvsform.cpp \
-    commitdialogbase.ui commitdlg.cpp \
-    cvsoptionswidgetbase.ui cvsoptionswidget.cpp \
-    cvsprocesswidget.cpp \
-    cvsentry.cpp cvsdir.cpp changelog.cpp cvsoptions.cpp \
-    checkoutdialogbase.ui checkoutdialog.cpp \
-    tagdialog.cpp tagdialogbase.ui \
-    diffdialogbase.ui diffdialog.cpp \
-    releaseinputdialogbase.ui releaseinputdialog.cpp \
-    cvslogdialog.cpp cvslogpage.cpp cvsdiffpage.cpp diffwidget.cpp \
-    jobscheduler.cpp \
-    bufferedstringreader.cpp \
-    cvsfileinfoprovider.cpp cvsservicedcopIface.skel
+libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp cvsformbase.ui \
+	cvsform.cpp commitdialogbase.ui commitdlg.cpp cvsoptionswidgetbase.ui \
+	cvsoptionswidget.cpp cvsprocesswidget.cpp cvsentry.cpp cvsdir.cpp changelog.cpp \
+	cvsoptions.cpp checkoutdialogbase.ui checkoutdialog.cpp tagdialog.cpp tagdialogbase.ui \
+	diffdialogbase.ui diffdialog.cpp releaseinputdialogbase.ui releaseinputdialog.cpp \
+	cvslogdialog.cpp cvslogpage.cpp cvsdiffpage.cpp diffwidget.cpp jobscheduler.cpp \
+	bufferedstringreader.cpp cvsfileinfoprovider.cpp cvsservicedcopIface.skel editorsdialogbase.ui \
+	editorsdialog.cpp
 
 noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h \
-    cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h cvsoptionswidgetbase.h \
-    cvspart.h cvspartimpl.h cvsprocesswidget.h tagdialog.h tagdialogbase.h diffdialog.h \
-    cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h cvsfileinfoprovider.h \
-    cvsservicedcopIface.h bufferedstringreader.h
+	cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h \
+	cvsoptionswidgetbase.h cvspart.h cvspartimpl.h cvsprocesswidget.h tagdialog.h tagdialogbase.h \
+	diffdialog.h cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h \
+	cvsfileinfoprovider.h cvsservicedcopIface.h bufferedstringreader.h editorsdialog.h \
+	editorsdialogbase.h
     
 METASOURCES = AUTO
 

@@ -10,6 +10,9 @@
                 <Action name="cvsservice_commit" />
                 <Action name="cvsservice_diff" />
                 <Action name="cvsservice_log" />
+                <Action name="cvsservice_editors" />
+                <Action name="cvsservice_edit" />
+                <Action name="cvsservice_unedit" />
                 <Action name="cvsservice_add" />
                 <Action name="cvsservice_add_bin" />
                 <Action name="cvsservice_remove" />

@@ -45,6 +45,7 @@
 #include "diffdialog.h"
 #include "releaseinputdialog.h"
 #include "cvslogdialog.h"
+#include "editorsdialog.h"
 
 #include "changelog.h"
 #include "cvsoptions.h"
@@ -471,6 +472,57 @@ void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 
     m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
+
+    doneOperation();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::unedit( const KURL::List& urlList)
+{
+    kdDebug(9006) << "CvsServicePartImpl::unedit()" << endl;
+
+    if (!prepareOperation( urlList, opUnEdit ))
+        return;
+
+    DCOPRef cvsJob = m_cvsService->unedit( fileList() );
+
+    m_scheduler->schedule( cvsJob );
+    connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
+
+    doneOperation();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::edit( const KURL::List& urlList)
+{
+    kdDebug(9006) << "CvsServicePartImpl::edit()" << endl;
+
+    if (!prepareOperation( urlList, opEdit ))
+        return;
+
+    DCOPRef cvsJob = m_cvsService->edit( fileList() );
+
+    m_scheduler->schedule( cvsJob );
+    connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
+
+    doneOperation();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::editors( const KURL::List& urlList)
+{
+    kdDebug(9006) << "CvsServicePartImpl::editors()" << endl;
+
+    if (!prepareOperation( urlList, opEditors ))
+        return;
+
+    EditorsDialog * f = new EditorsDialog( m_cvsService );
+    f->show();
+    //the dialog will do all the work
+    f->startjob( fileList()[0] );
 
     doneOperation();
 }

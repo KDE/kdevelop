@@ -84,6 +84,9 @@ private slots:
 
     void slotActionCommit();
     void slotActionUpdate();
+    void slotActionEditors();
+    void slotActionEdit();
+    void slotActionUnEdit();
     void slotActionAdd();
     void slotActionAddBinary();
     void slotActionRemove();
@@ -98,6 +101,9 @@ private slots:
     // Cvs operations (context menu)
     void slotCommit();
     void slotUpdate();
+    void slotEditors();
+    void slotEdit();
+    void slotUnEdit();
     void slotAdd();
     void slotAddBinary();
     void slotRemove();
@@ -148,6 +154,9 @@ private:
         *actionRemove,
         *actionUpdate,
         *actionRemoveSticky,
+        *actionEditors,
+        *actionEdit,
+        *actionUnEdit,
         *actionAddToIgnoreList,
         *actionRemoveFromIgnoreList,
         *actionTag,
