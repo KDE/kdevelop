@@ -130,8 +130,10 @@ void NewMainWindow::init() {
     createStatusBar();
 
     createGUI(0);
-    
-    readDockConfig(kapp->config());
+
+	QString uimode = QString( "kdevuimode%1rc" ).arg( m_mdiMode );
+	KConfig uiConfig( uimode, true );
+	readDockConfig( &uiConfig );
 
     m_pMainWindowShare->init();
 	
@@ -578,55 +580,9 @@ void NewMainWindow::createGUI(KParts::Part *part) {
 void NewMainWindow::loadSettings() {
     KConfig *config = kapp->config();
 
-//	loadMDISettings();
-
     ProjectManager::getInstance()->loadSettings();
     applyMainWindowSettings(config, "Mainwindow");
 }
-/*
-void NewMainWindow::loadMDISettings()
-{
-  KConfig *config = kapp->config();
-  config->setGroup("UI");
-
-  int mdiMode = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
-  switch (mdiMode)
-  {
-  case KMdi::ToplevelMode:
-    {
-      int childFrmModeHt = config->readNumEntry("Childframe mode height", kapp->desktop()->height() - 50);
-      resize(width(), childFrmModeHt);
-      switchToToplevelMode();
-    }
-    break;
-
-  case KMdi::ChildframeMode:
-    break;
-
-  case KMdi::TabPageMode:
-    {
-      int childFrmModeHt = config->readNumEntry("Childframe mode height", kapp->desktop()->height() - 50);
-      resize(width(), childFrmModeHt);
-      switchToTabPageMode();
-    }
-    break;
-  case KMdi::IDEAlMode:
-    {
-      switchToIDEAlMode();
-    }
-
-  default:
-    break;
-  }
-
-  // restore a possible maximized Childframe mode
-  bool maxChildFrmMode = config->readBoolEntry("maximized childframes", true);
-  setEnableMaximizedChildFrmMode(maxChildFrmMode);
-
-  // teatime - what does this do??
-  readDockConfig(0L, "dockSession_version1");
-}
-*/
 
 void NewMainWindow::setUserInterfaceMode( const QString & )
 {
@@ -652,8 +608,11 @@ void NewMainWindow::saveSettings()
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->saveSettings();
-    writeDockConfig(config);
     saveMainWindowSettings(config, "Mainwindow");
+
+	QString uimode = QString( "kdevuimode%1rc" ).arg( m_mdiMode );
+	KConfig uiConfig( uimode );
+	writeDockConfig( &uiConfig );
 
 	QValueList<QWidget*> widgetList = m_pToolViews->keys();
 	QValueList<QWidget*>::Iterator it = widgetList.begin();
