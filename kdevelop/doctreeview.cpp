@@ -30,6 +30,8 @@
 #include <kpopupmenu.h>
 #include <kstddirs.h>
 #include <kprocess.h>
+#include <kdebug.h>
+#include <kfilterdev.h>
 
 #include <qdir.h>
 #include <qfile.h>
@@ -38,7 +40,7 @@
 #include <qlist.h>
 #include <qlineedit.h>
 #include <qregexp.h>
-
+#include <qdom.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -354,17 +356,40 @@ void DocTreeKDevelopFolder::refresh()
 class DocTreeKDELibsBook : public ListViewBookItem
 {
 public:
+
+    #if KDE_QTVER >= 3
+    DocTreeKDELibsBook( KDevListViewItem *parent, const QString &text,
+                        const QString &libname, const QString &);
+    #else
     DocTreeKDELibsBook( KDevListViewItem *parent, const QString &text,
                         const QString &libname);
+    #endif
+    
     void relocatehtml();
     virtual void setOpen(bool o);
 private:
+
+    #if KDE_QTVER >= 3
+    QString tagFile;
+    int readDoxygenTag(const QDomDocument &d);
+    #else
     int readKdoc2Index(FILE *f);
+    QString idx_filename;
+    #endif
+
     static QString locatehtml(const QString& libname);
     QString name;
-    QString idx_filename;
 };
 
+#if KDE_QTVER >= 3
+DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const QString & text,
+                                        const QString &libname, const QString & tag = 0 )
+    : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
+{
+     tagFile = tag;
+     setExpandable( QFile::exists(tagFile) );
+}
+#else
 DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const QString & text,
                                         const QString &libname )
     : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
@@ -393,12 +418,31 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const QString 
         }
 
 }
+#endif
 
 void DocTreeKDELibsBook::relocatehtml()
 {
   setIdent(locatehtml(name));
 }
 
+#if KDE_QTVER >= 3
+QString DocTreeKDELibsBook::locatehtml(const QString& libname)
+{
+    KConfig *config = KGlobal::config();
+    config->setGroup("Doc_Location");
+    QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
+
+    if (!libname)
+    {
+        if (qt_path.right(1) != "/")
+          qt_path= qt_path+"/";
+        return qt_path + "index.html";
+    }
+
+    return kde_path + libname + "/html/index.html";
+}
+#else
 QString DocTreeKDELibsBook::locatehtml(const QString& libname)
 {
     KConfig *config = KGlobal::config();
@@ -464,7 +508,55 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
     }
   return "";  // only to kill warnings - IMHO there should be only 1 return at the end - W. Tasin
 }
+#endif
 
+#if KDE_QTVER >= 3
+int DocTreeKDELibsBook::readDoxygenTag(const QDomDocument &d)
+{
+    int count=0;
+    QString classname;
+    ListViewDocItem* class_doc=0;
+
+    KConfig *config = KGlobal::config();
+    config->setGroup("Doc_Location");
+    QString baseurl;
+    if (!name.isEmpty()){
+        baseurl = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+        baseurl += name + "/html/";
+    }
+    else
+        baseurl = config->readEntry("doc_qt", QT_DOCDIR);
+    
+    QDomNodeList classes = d.elementsByTagName("compound");
+    for (int i = 0; i < classes.count(); ++i)
+    {
+        QDomNode item = classes.item(i);
+        QString filename = item.namedItem("filename").toElement().text();
+        classname = item.namedItem("name").toElement().text();
+        class_doc= new ListViewDocItem(this, classname, baseurl + filename);
+        count++;
+        
+        QDomNodeList members = item.childNodes();
+        //kdDebug() << "members " << members.count() << endl;
+        for (int m = 0; m < members.count(); ++m)
+        {
+            QDomNode member = members.item(m);
+            //kdDebug() << "member " << member.nodeName() << endl;
+            if (member.nodeName() == "member")
+            {
+                QString membername = member.namedItem("name").toElement().text();
+                QString anchor = member.namedItem("anchor").toElement().text();
+                // QString arglist = member.namedItem("arglist").toElement().text();  //doesn't look too good, commented out
+                if(class_doc && !classname.isEmpty())
+                  new ListViewDocItem(class_doc, membername /* + arglist */, baseurl + filename + "#" + anchor); // here the arglist, too
+             }
+         }
+    }
+    sortChildItems(0, true);
+    
+	return count;
+}
+#else
 int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 {
     char buf[512];
@@ -552,11 +644,33 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
       }
     }
     sortChildItems(0, true);
-    
+
     return count;
 }
+#endif
 
+#if KDE_QTVER >= 3
+void DocTreeKDELibsBook::setOpen(bool o)
+{
+  int count=0;
+  if (o && childCount() == 0)
+  {
+    QIODevice *dev = KFilterDev::deviceForFile( tagFile );
+    QDomDocument d;
+    d.setContent( dev );
+    count=readDoxygenTag(d);
+    delete dev;
 
+    if (count==0)
+    {
+      setExpandable(false);
+      o=false;
+    }
+
+  }
+  ListViewBookItem::setOpen(o);
+}
+#else
 void DocTreeKDELibsBook::setOpen(bool o)
 {
   int count=0;
@@ -583,6 +697,7 @@ void DocTreeKDELibsBook::setOpen(bool o)
   }
   ListViewBookItem::setOpen(o);
 }
+#endif
 
 
 class DocTreeKDELibsFolder : public ListViewFolderItem
@@ -606,7 +721,52 @@ void DocTreeKDELibsFolder::changePathes()
        child->relocatehtml();
     }
 }
+#if KDE_QTVER >= 3
+void DocTreeKDELibsFolder::refresh()
+{
+    ListViewFolderItem::refresh();
+    list.clear();
+    //list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"), 0));
 
+    // if we have kdoc2 index files, get the reference directory
+    QString docu_dir, libname, msg, tagF;
+    KConfig* config=KGlobal::config();
+    config->setGroup("Doc_Location");
+    docu_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    if (!docu_dir.isEmpty())
+    {
+      QDir d;
+      d.setPath(docu_dir);
+
+      if(!d.exists())
+        return;
+
+      const QFileInfoList *subDirList = d.entryInfoList(QDir::Dirs); // get the subdirs
+      QFileInfoListIterator it( *subDirList );
+      QFileInfo *subDir;
+      while ( (subDir=it.current()) ) {
+        
+        if( (subDir->fileName()!=".") && (subDir->fileName()!="..") )
+        {
+            tagF = docu_dir + subDir->fileName() + "/" + subDir->fileName() + ".tag" ;
+            if ( QFile::exists(tagF) )  ;
+            else if( QFile::exists(tagF + ".gz")) tagF += ".gz";
+
+            if( QFile::exists(tagF) ){
+                libname = subDir->fileName();
+                if ( libname!=QString("qt") ){
+                    msg.sprintf( i18n("%s-Library"),libname.ascii() );
+                    list.append(new DocTreeKDELibsBook(this, msg, libname, tagF));
+                }
+                else
+                    list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"), 0, tagF));
+            }
+        }
+        ++it;
+      }
+    }
+}
+#else
 void DocTreeKDELibsFolder::refresh()
 {
     ListViewFolderItem::refresh();
@@ -646,6 +806,7 @@ void DocTreeKDELibsFolder::refresh()
     }
 }
 
+#endif
 
 /*************************************/
 /* Folder "Documentation Base"       */

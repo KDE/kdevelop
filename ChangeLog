@@ -1,3 +1,7 @@
+2003-01-14  Ralf Nolden <nolden@kde.org>
+    * Added patch for displaying doxygen-generated api-docs from KDE 3
+      originally by Stephan Kulow <coolo@kde.org>, adapted by Dirk Schmidt <Dreisam-RD@gmx.de>
+ 
 2002-10-31  F@lk Brettschneider <falk@kdevelop.org>
     * Applied a modified version of Tim Alley's patch to make jump-to-error work on Red Hat 8.0 again
 

@@ -1773,7 +1773,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( KStdAccel::Find, this, SLOT(slotEditSearch() ), true, IDK_EDIT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
-  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
+  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch(/*int*//* 'int' doesn't work with KDE/Qt3.1*/) ), true, ID_EDIT_REPEAT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search Back"), "RepeatSearchBack",IDK_EDIT_REPEAT_SEARCH_BACK );
   accel->connectItem( "RepeatSearchBack", this, SLOT(slotEditRepeatSearchBack() ), true, ID_EDIT_REPEAT_SEARCH_BACK );
@@ -2122,6 +2122,7 @@ void DocViewMan::slotEditSearch(){
 
 void DocViewMan::slotEditRepeatSearch(int back)
 {
+	//kdDebug() << "back " << back << endl;
   emit sig_newStatus(i18n("Repeating last search..."));
   doRepeatSearch(m_pParent->getDocSearchText(), back);
   emit sig_newStatus(i18n("Ready."));

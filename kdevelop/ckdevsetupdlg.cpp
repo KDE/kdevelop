@@ -1015,8 +1015,13 @@ void CKDevSetupDlg::slotKDEClicked(){
      dir = dir + "/";
     }
 
+    #if KDE_QTVER >= 3
+    QString kde_testfile = dir + "kdecore/kdecore.tag";
+    if( !QFile::exists(kde_testfile) && !QFile::exists(kde_testfile+".gz") )
+    #else
     QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
     if(!QFileInfo(kde_testfile).exists())
+    #endif
       KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                    "KDE-library documentation. Please choose the\n"
                                    "correct path or choose 'Update' to create a new\n"
