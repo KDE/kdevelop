@@ -1,32 +1,20 @@
-/********************************************************************
-* Name    : Implementation of a classStore.                         *
-* ------------------------------------------------------------------*
-* File    : ClassStore.cpp                                          *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Sun Mar 21 11:43:47 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ClassStore.cc  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include "ClassStore.h"
 #include <iostream.h>
@@ -97,6 +85,38 @@ void CClassStore::wipeout()
   globalContainer.clear();
 }
 
+
+/*-------------------------------- CClassStore::removeWithReferences()
+ * removeWithReferences()
+ *   Remove all items in the store with references to the file.
+ *
+ * Parameters:
+ *   aFile          The file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::removeWithReferences( const char *aFile )
+{
+  CParsedClass *aClass;
+
+  // Remove all classes with reference to this file.
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    aClass = classIterator.current();
+
+    // Remove the class if any of the files are the supplied one.
+    if( aClass->declaredInFile == aFile ||
+        aClass->definedInFile == aFile )
+      removeClass( aClass->name );
+  }
+  
+  // Remove all global functions, variables and structures.
+  globalContainer.removeWithReferences( aFile );
+}
+
 /*------------------------------------------- CClassStore::storeAll()
  * storeAll()
  *   Store all parsed classes as a database.
@@ -140,6 +160,25 @@ void CClassStore::addClass( CParsedClass *aClass )
   assert( !hasClass( aClass->name ) );
 
   classes.insert( aClass->name, aClass );
+}
+
+/*---------------------------------------- CClassStore::removeClass()
+ * removeClass()
+ *   Remove a class from the store.
+ *
+ * Parameters:
+ *   aName        Name of the class to remove
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::removeClass( const char *aName )
+{
+  assert( aName != NULL );
+  assert( strlen( aName ) > 0 );
+  assert( hasClass( aName ) );
+
+  classes.remove( aName );
 }
 
 /*------------------------------------------------- CClassStore::out()
@@ -296,7 +335,8 @@ QList<CClassTreeNode> *CClassStore::asForest()
  *-----------------------------------------------------------------*/
 bool CClassStore::hasClass( const char *aName )
 {
-  return classes.find( aName ) != NULL || globalStore.hasClass( aName );
+  return classes.find( aName ) != NULL || 
+    ( globalStore.isOpen && globalStore.hasClass( aName ) );
   //return classes.find( aName ) != NULL;
 }
 
@@ -317,7 +357,7 @@ CParsedClass *CClassStore::getClassByName( const char *aName )
 
   CParsedClass *aClass;
 
-  if( globalStore.hasClass( aName ) )
+  if( globalStore.isOpen && globalStore.hasClass( aName ) )
     aClass = globalStore.getClassByName( aName );
   else
     aClass = classes.find( aName );
@@ -469,7 +509,9 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
        classIterator.current();
        ++classIterator )
   {
-    srted.inSort( classIterator.current()->name );
+    // Only add non-subclasses.
+    if( !classIterator.current()->isSubClass() )
+      srted.inSort( classIterator.current()->name );
   }
 
   for( str = srted.first();
