@@ -3,28 +3,33 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
 <bookinfo>
-<title>KDE Application Tutorials
-</title>
+<title>KDE Application Tutorials</title>
 <subtitle>The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment</subtitle>
 <authorgroup>
 <author>
-<surname>Ralf Nolden </surname>
+<firstname>Ralf</firstname>
+<surname>Nolden</surname>
 <affiliation>
-	  <orgname>The KDevelop Team</orgname>
-<address><email><ulink url="mailto:Ralf.Nolden@post.rwth-aachen.de">&lt;Ralf.Nolden@post.rwth-aachen.de&gt;</ulink></email></address>
+<orgname>The KDevelop Team</orgname>
+<address><email>Ralf.Nolden@post.rwth-aachen.de</email></address>
 </affiliation>
 </author>
 </authorgroup>
-<date>Version 1.2 , March 21, 2000</date>
-<releaseinfo><!-- information about this particular version --></releaseinfo>
+<date>21/03/2000</date>
+<releaseinfo>1.02.00</releaseinfo>
 <abstract>
 <para>The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment, a tutorial collection on how to create KDE
 applications by examples. This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also
 licensed under the GNU General Public License; see <link linkend="Copyright">Copyright</link> for more information.</para>
-<para>KDE</para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
-
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>tutorials</keyword>
+</keywordset>
 </bookinfo>
 
 <chapter id="introduction">

@@ -3,23 +3,54 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
 <bookinfo>
-<title>The KDE 2 Developer's Guide
-</title>
+<title>The KDE 2 Developer's Guide</title>
 <subtitle>The KDE 2 information guide to development, I/O slaves and KOM/OpenParts</subtitle>
 <authorgroup>
 <author>
-<surname>Ralf Nolden, Kurt Granroth, Simon Hausmann, David Sweet, Preston Brown, Torben Weis and  Bern Wuebben</surname>
+<firstname>Ralf</firstname>
+<surname>Nolden</surname>
+</author>
+<author>
+<firstname>Kurt</firstname>
+<surname>Granroth</surname>
+</author>
+<author>
+<firstname>Simon</firstname>
+<surname>Hausmann</surname>
+</author>
+<author>
+<firstname>David</firstname>
+<surname>Sweet</surname>
+</author>
+<author>
+<firstname>Preston</firstname>
+<surname>Brown</surname>
+</author>
+<author>
+<firstname>Torben</firstname>
+<surname>Weis</surname>
+</author>
+<author>
+<firstname>Bern</firstname>
+<surname>Wuebben</surname>
 </author>
 </authorgroup>
 <date>Version 1.2, March 21, 2000</date>
-<releaseinfo><!-- information about this particular version --></releaseinfo>
+<releaseinfo>1.02.00</releaseinfo>
 <abstract>
 <para>This Handbook is a collection of various documentation about KDE 2 development. Each chapter remains the copyright of the original
 author mentioned at the beginnig of the chapters and in section <link linkend="Copyright">Copyright</link>.</para>
-<para>KDE</para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
-
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>I/O slaves</keyword>
+<keyword>KOM</keyword>
+<keyword>OpenParts</keyword>
+</keywordset>
 </bookinfo>
 
 <chapter id="preface">

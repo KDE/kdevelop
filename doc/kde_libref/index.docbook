@@ -3,27 +3,32 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
 <bookinfo>
-<title>The KDE Library Reference Guide
-</title>
+<title>The KDE Library Reference Guide</title>
 <subtitle>The Reference Guide to C++ Application Design for the K Desktop Environment (KDE)</subtitle>
 <authorgroup>
 <author>
-<surname>Ralf Nolden </surname>
+<firstname>Ralf</firstname>
+<surname>Nolden</surname>
 <affiliation>
-	  <orgname>The KDevelop Team</orgname>
-<address><email><ulink url="mailto:Ralf.Nolden@post.rwth-aachen.de">&lt;Ralf.Nolden@post.rwth-aachen.de&gt;</ulink></email></address>
+<orgname>The KDevelop Team</orgname>
+<address><email>Ralf.Nolden@post.rwth-aachen.de</email></address>
 </affiliation>
-      </author>
+</author>
 </authorgroup>
-<date>Version 1.2 , March 21, 2000</date>
-<releaseinfo><!-- information about this particular version --></releaseinfo>
+<date>21/03/2000</date>
+<releaseinfo>1.02.00</releaseinfo>
 <abstract>
 <para>This handbook is part of the KDevelop Integrated Development Environment and is also licensed under the GNU General
 Public License; see Chapter <link linkend="Copyright">Copyright</link> for more information.</para>
-<para>KDE</para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
-
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>reference</keyword>
+</keywordset>
 </bookinfo>
 
 <chapter id="introduction">

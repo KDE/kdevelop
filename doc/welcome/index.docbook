@@ -3,25 +3,32 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
-  <bookinfo>
-<title></title>
-<subtitle></subtitle>
+<bookinfo>
+<title>Welcome to KDevelop</title>
 <authorgroup>
 <author>
-<surname></surname>
+<firstname>Ralf</firstname>
+<surname>Nolden</surname>
 <affiliation>
-	  <orgname></orgname>
-<address><email><ulink url="mailto:Ralf.Nolden@post.rwth-aachen.de"></ulink></email></address>
+<orgname>The KDevelop Team</orgname>
+<address><email>Ralf.Nolden@post.rwth-aachen.de</email></address>
 </affiliation>
 </author>
 </authorgroup>
-<date></date>
-<releaseinfo><!-- information about this particular version --></releaseinfo>
+<date>26/05/2000</date>
+<releaseinfo>1.00.00</releaseinfo>
 <abstract>
-<para>KDE</para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
+<para>This is the introductory text to KDevelop</para>
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>welcome</keyword>
+</keywordset>
+</bookinfo>
 
-  </bookinfo>
 <chapter id="welcome">
 <title>Welcome To KDevelop !
 </title>
