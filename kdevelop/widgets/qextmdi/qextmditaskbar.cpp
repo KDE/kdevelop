@@ -92,23 +92,32 @@ void QextMdiTaskBarButton::setText(const QString& s)
    QButton::setText( s);
 }
 
-void QextMdiTaskBarButton::fitText(const QString& s, int newWidth)
+void QextMdiTaskBarButton::fitText(const QString& origStr, int newWidth)
 {
    QButton::setText( m_actualText);
 
    int actualWidth = sizeHint().width();
-   int realLetterCount = s.length();
+   int realLetterCount = origStr.length();
    int newLetterCount = (newWidth * realLetterCount) / actualWidth;
-   if( newLetterCount < realLetterCount) {
-      if(newLetterCount > 3)
-         QButton::setText( s.left( newLetterCount/2) + "..." + s.right( newLetterCount/2));
-      else {
-         if(newLetterCount > 1) QButton::setText( s.left( newLetterCount) + "..");
-         else QButton::setText( s.left(1));
+   int w = newWidth+1;
+   QString s = origStr;
+   while((w > newWidth) && (newLetterCount >= 1)) {
+      if( newLetterCount < realLetterCount) {
+         if(newLetterCount > 3)
+            s = origStr.left( newLetterCount/2) + "..." + origStr.right( newLetterCount/2);
+         else {
+            if(newLetterCount > 1)
+               s = origStr.left( newLetterCount) + "..";
+            else
+               s = origStr.left(1);
+         }
       }
+      QFontMetrics fm = fontMetrics();
+      w = fm.width(s);
+      newLetterCount--;
    }
-   else
-      QButton::setText( s);
+
+   QButton::setText( s);
 }
 
 QString QextMdiTaskBarButton::actualText() const
@@ -144,28 +153,27 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
 {
    if( m_pStretchSpace) {
       delete m_pStretchSpace;
-      m_pStretchSpace = 0;
-      setStretchableWidget( 0);
+      m_pStretchSpace = 0L;
+      setStretchableWidget( 0L);
    }
 
 	QextMdiTaskBarButton *b=new QextMdiTaskBarButton( this, win_ptr);
-	
    QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );	
    QObject::connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(activateView(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(buttonTextChanged(int)), this, SLOT(layoutTaskBar(int)) );
-	
 	m_pButtonList->append(b);
 	b->setToggleButton( TRUE);
 	b->setText(win_ptr->tabCaption());
 	
+	layoutTaskBar();
+		
    m_pStretchSpace = new QLabel(this, "empty");
    m_pStretchSpace->setText("");
    setStretchableWidget( m_pStretchSpace);
    m_pStretchSpace->show();
 
-	layoutTaskBar();
 	b->show();
 	return b;
 }
@@ -243,33 +251,36 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 	   allButtonsWidth += b->width();
 	}
 	
-	// reset button text
-	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
-	   b->setText( b->actualText());
-	}
-
    // calculate actual width of all taskbar buttons
    int allButtonsWidthHint = 0;
 	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
-	   int shw = b->sizeHint().width();
-	   allButtonsWidthHint += shw;
+      QFontMetrics fm = b->fontMetrics();
+      QSize sz = fm.size(ShowPrefix, b->actualText());
+	   int w = sz.width()+6;
+	   int h = sz.height()+sz.height()/8+10;
+	   w += h;
+	   allButtonsWidthHint += w;
 	} 
 
    // if there's enough space, use actual width
-   if( allButtonsWidthHint <= taskBarWidth - 10) {
+   int buttonCount = m_pButtonList->count();
+   if( (allButtonsWidthHint + 15) <= taskBarWidth) {
    	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
-	      b->setMinimumWidth( b->sizeHint().width());
+	      b->setFixedWidth( b->sizeHint().width());
 	      b->show();
 	   }
    }
    else {
       // too many buttons for actual width
-   	//if( allButtonsWidth > taskBarWidth - 10) {
-         int buttonCount = m_pButtonList->count();
-         int newButtonWidth = (taskBarWidth - 10) / buttonCount;
+      int newButtonWidth = (taskBarWidth - 15) / buttonCount;
+#if QT_VERSION > 209
+      if( orientation() == Qt::Vertical)
+         newButtonWidth = 80;
+#endif
+      if(newButtonWidth > 0)
       	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
    	      b->fitText( b->actualText(), newButtonWidth);
-	         b->setMinimumWidth( newButtonWidth);
+	         b->setFixedWidth( newButtonWidth);
 	         b->show();
    	   }
    }
