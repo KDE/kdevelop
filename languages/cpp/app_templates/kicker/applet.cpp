@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <qlcdnumber.h>
 #include <kglobal.h>
