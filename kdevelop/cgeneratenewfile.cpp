@@ -27,8 +27,10 @@ CGenerateNewFile::CGenerateNewFile(){
 }
 CGenerateNewFile::~CGenerateNewFile(){
 }
-QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj){
-  QString name  = QFileInfo(abs_name).fileName();
+QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString file_name){
+  QString name;
+  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
+   else { name  = QFileInfo(file_name).fileName(); }
    // local cpp_template
   QString cpp_header = prj->getProjectDir() + prj->getSubDir() +"/templates/cpp_template";
   if(!QFile::exists(cpp_header)){
@@ -74,8 +76,11 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj){
   return file.name();
 
 }
-QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj){
-  QString name  = QFileInfo(abs_name).fileName();
+QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString file_name){
+  QString name;
+  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
+   else { name  = QFileInfo(file_name).fileName(); }
+
   // local header_template
   QString template_header = prj->getProjectDir() + prj->getSubDir() +"/templates/header_template";
   if(!QFile::exists(template_header)){
@@ -285,3 +290,7 @@ QString CGenerateNewFile::genNifFile(QString abs_name){
     process << abs_name;
     process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
 }
+
+
+
+

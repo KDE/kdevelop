@@ -116,11 +116,26 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 
   KQuickHelp::add(destination_edit,
   KQuickHelp::add(destination_label,
-  KQuickHelp::add(destination_button, i18n("select the directory where the new\n"
+  KQuickHelp::add(destination_button, i18n("Select the directory where the new\n"
 					"source files will be copied to here."))));
 
+  template_checkbox = new QCheckBox( this, "addTemplate_checkbox");
+  template_checkbox->setGeometry(20, 130, 440, 30);
+  template_checkbox->setMinimumSize( 0, 0 );
+  template_checkbox->setMaximumSize( 32767, 32767 );
+  template_checkbox->setFocusPolicy( QWidget::TabFocus );
+  template_checkbox->setBackgroundMode( QWidget::PaletteBackground );
+  template_checkbox->setFontPropagation( QWidget::NoChildren );
+  template_checkbox->setPalettePropagation( QWidget::NoChildren );
+  template_checkbox->setText( i18n("insert header/cpp-templates to added files" ));
+  template_checkbox->setAutoRepeat( FALSE );
+  template_checkbox->setAutoResize( FALSE );
+  template_checkbox->setChecked( TRUE );
+  KQuickHelp::add(template_checkbox, i18n("Check this if you want to use a template."));
+
+
   ok_button = new QPushButton( this, "ok_button" );
-  ok_button->setGeometry( 90, 130, 100, 25 );
+  ok_button->setGeometry( 90, 180, 100, 25 );
   ok_button->setMinimumSize( 0, 0 );
   ok_button->setMaximumSize( 32767, 32767 );
   ok_button->setFocusPolicy( QWidget::TabFocus );
@@ -133,7 +148,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 	ok_button->setDefault( TRUE );
 	
   cancel_button = new QPushButton( this, "cancel_button" );
-  cancel_button->setGeometry( 220, 130, 100, 25 );
+  cancel_button->setGeometry( 220, 180, 100, 25 );
   cancel_button->setMinimumSize( 0, 0 );
   cancel_button->setMaximumSize( 32767, 32767 );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
@@ -148,7 +163,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   connect(destination_button,SIGNAL(clicked()),SLOT(destinationButtonClicked()));
   connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
-  resize( 410,175 );
+  resize( 410,225 );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
   
@@ -189,7 +204,7 @@ void CAddExistingFileDlg::OK(){
 //   }
   if(dest_name.contains(prj->getProjectDir()) == 0 ){
     KMsgBox::message(this,i18n("Error..."),
-		     i18n("You must choose a destination,that is in your project-dir!")
+		     i18n("You must choose a destination, that is in your project-dir!")
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
@@ -202,6 +217,14 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
+
+bool CAddExistingFileDlg::isTemplateChecked()
+{
+ return template_checkbox->isChecked();
+}
+
+
 
 
 

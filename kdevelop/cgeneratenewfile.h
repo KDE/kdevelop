@@ -36,8 +36,10 @@ public:
   /** destructor */
   ~CGenerateNewFile();
 
-  QString genCPPFile(QString abs_name,CProject* prj);
-  QString genHeaderFile(QString abs_name,CProject* prj);
+  /** specify file_name for other FILENAME in template. abs_name still is real filename */
+  QString genCPPFile(QString abs_name,CProject* prj, QString file_name="");
+  /** specify file_name for other FILENAME in template. abs_name still is real filename */
+  QString genHeaderFile(QString abs_name,CProject* prj, QString file_name="");
   QString genEngHandbook(QString abs_name,CProject* prj);
   QString genLEXICALFile(QString abs_name,CProject* prj);
   QString genKDELnkFile(QString abs_name,CProject* prj);
@@ -47,3 +49,6 @@ public:
   
 };
 #endif
+
+
+

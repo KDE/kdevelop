@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 
 //#include "cproject.h"
 class CProject;
@@ -43,6 +44,7 @@ public:
   ~CAddExistingFileDlg();
   QLineEdit* source_edit;
   QLineEdit* destination_edit;
+  bool isTemplateChecked();
 protected:
   CProject* prj;
   QLabel* source_label;
@@ -50,6 +52,7 @@ protected:
   QLabel* destination_label;
   QPushButton* source_button;
   QPushButton* destination_button;
+  QCheckBox* template_checkbox;
   QPushButton* ok_button;
   QPushButton* cancel_button;
  protected slots:
@@ -59,3 +62,4 @@ protected:
 };
 
 #endif
+

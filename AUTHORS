@@ -15,17 +15,17 @@
 
 ***Translations***
 
--Martin Spirk <spirk@kla.pvt.cz>   			      - Czech
+-Martin Spirk <spirk@kla.pvt.cz>   	      - Czech
 -Steen Rabol <rabol@get2net.dk>               - Danish
--Sami Kuhmonen <sami@iqs.fi>        					- Finnish
--Herve Lefebvre <hlefebvre@easynet.fr>  			- French
+-Sami Kuhmonen <sami@iqs.fi>        	      - Finnish
+-Herve Lefebvre <hlefebvre@easynet.fr>        - French
 -Martin Piskernig <martin.piskernig@stuwo.at> - German
--Pahan Szabolcs <szabczy@bigfoot.com>			    - Hungarian
+-Pahan Szabolcs <szabczy@bigfoot.com>	      - Hungarian
 -Massimo Morin <mmorin@schedsys.com>          - Italian
 -Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - Polish
 -Duarte Loreto <dnloreto@esoterica.pt>	      - Portuguese
 -Ilmar Habibulin <ilmar@ints.ru>              - Russian
--Jan Prokop <jprokop@ibl.sk>				          - Slovak
+-Jan Prokop <jprokop@ibl.sk>		      - Slovak
 -Salvador Gimeno <salgiza@eui.upv.es> 	      - Spanish
 -Patrik Adolfsson <patrik.adolfsson@iname.com>- Swedish
 -Kaðan Kongar <kongar@doruk.net.tr>           - Turkish
@@ -50,6 +50,7 @@ Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 -Gordon Tyler <gtyler@iafrica.com>
 -Huy Cuong Nguyen <huyc@iquebec.com> 
 -John R. Zedlewski <zedlwski@princeton.edu>
+-Stephan Uhlmann <suhlmann@gmx.de>
 
 
 KDevelop contains sourcecode from the following programs/classes:

@@ -1,3 +1,7 @@
+1999-08-04 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commited patch by Stephan Uhlmann (suhlmann@gmx.de>, now it's possible to 
+	insert header/cpp templates to "project->add existing files"
+
 1999-08-03  Jonas Nordin  <jonas.nordin@cenacle.se>
 	* added possibility to add signals/slots using the add method
 	  dialog.
@@ -10,7 +14,10 @@
 	* Changed some Ok -> OK according to KDE conventions
 	* 'export' is a keyword, so let's better not use
 	  it as a variable name
-
+	
+1999-08-02  Sandy Meier  <smeier@rz.uni-potsdam.de>
+        * kdevelop/tools/processesend.pl: fixed problem with empty LDFLAGS, this results to "-s" in the past
+	
 1999-08-02 The KDevelop Team
 	* KDevelop 1.0 Beta 1 released
 	

@@ -36,6 +36,7 @@
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
+#include "cgeneratenewfile.h"
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -235,6 +236,9 @@ void CKDevelop::slotProjectAddNewFile(){
 }
 
 void CKDevelop::slotAddExistingFiles(){
+  QString temp_template;
+  QFileInfo fi;
+  CGenerateNewFile genfile;
   bool copy = false;
   ProjectFileType type = DATA;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
@@ -300,9 +304,27 @@ void CKDevelop::slotAddExistingFiles(){
       
     if(copy){
       process.clearArguments();
-      process << "cp"; // copy is your friend :-)
+      process << "cat"; // copy is your friend :-) ...cat, too
+
+      fi.setFile(file);
+
+      if (add_dlg->isTemplateChecked())
+      {
+       if (CProject::getType(file)==CPP_HEADER)
+        {
+         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,fi.fileName());
+         process << temp_template;
+        }
+        else if (CProject::getType(file)==CPP_SOURCE)
+              {
+               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, fi.fileName());
+               process << temp_template;
+              }
+      }
       process << file;
-      process << dest;
+      process << ">";
+
+      process << dest+fi.fileName();
       process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
     }
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
@@ -1060,6 +1082,13 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
+
+
+
 
 
 
