@@ -1,3 +1,6 @@
+1999-05-16 Jonas Nordin <jonas.nordin@cenacle.se>
+	* implemented parsing of multiple variable declarations.
+
 1999-05-12  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* commit patch by Walter Tasin <tasin@e-technik.fh-muenchen.de>
         ( the message window shows the exit code from the application)
