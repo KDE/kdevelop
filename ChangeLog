@@ -1,3 +1,6 @@
+2003-09-06 Bernd Pol <bernd.pol@online.de>
+    * Some updates on the "KDevelop 3.0 users's manual" (docbook)
+ 
 2003-08-29 Alexander Dymo <cloudtemple@mksat.net>
     * Added the initial version of generic project manager.
       It is the replacement of script/custom/pascal/ada/haskell/etc. project managers.
