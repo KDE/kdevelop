@@ -12,23 +12,26 @@
 
 #include <qlabel.h>
 
-static QMap<QString,KDevGlobalVersionControl*> vcs_map;
+static KDevGlobalVersionControl::GlobalVcsMap vcs_map;
 
-
-KDevGlobalVersionControl::KDevGlobalVersionControl(QObject *parent, const char *name, QString id)
-        : KDevPlugin(parent, name ? name : "KDevGlobalVersionControl"), m_id(id) {
-    vcs_map.insert(m_id,this);
+KDevGlobalVersionControl::KDevGlobalVersionControl(const QString& id, QObject *parent, const char *name)
+        : KDevPlugin(parent, name ? name : "KDevGlobalVersionControl"), m_id(id)
+{
+    vcs_map.insert(m_id, this);
 }
 
 
-KDevGlobalVersionControl::~KDevGlobalVersionControl() {
+KDevGlobalVersionControl::~KDevGlobalVersionControl()
+{
     vcs_map.remove(m_id);
 }
 
-QString KDevGlobalVersionControl::getVcsName() {
+QString KDevGlobalVersionControl::getVcsName()
+{
     return m_id;
 }
 
-QMap<QString,KDevGlobalVersionControl*> KDevGlobalVersionControl::getVcsMap() {
+KDevGlobalVersionControl::GlobalVcsMap KDevGlobalVersionControl::vcsMap()
+{
     return vcs_map;
 }

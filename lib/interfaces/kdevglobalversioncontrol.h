@@ -24,16 +24,16 @@ class KDevGlobalVersionControl : public KDevPlugin {
     Q_OBJECT
 
 public:
-    KDevGlobalVersionControl(QObject *parent, const char *name, QString id);
+    KDevGlobalVersionControl(const QString& id, QObject *parent, const char *name);
     ~KDevGlobalVersionControl();
     
     QString getVcsName();
     virtual QWidget* newProjectWidget(QWidget *parent) = 0;
-    virtual void createNewProject(QString dir) = 0;
-  
+    virtual void createNewProject(const QString& dir) = 0;
 
-static QMap<QString,KDevGlobalVersionControl*> getVcsMap();
-  
+    typedef QMap<QString, KDevGlobalVersionControl*> GlobalVcsMap;
+    static GlobalVcsMap vcsMap();
+
 private:
     QString m_id;
 };
