@@ -176,8 +176,12 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   }
   else
   {
-    myProjectItem->configuration.m_target_install = false;  
+    myProjectItem->configuration.m_target_install = false;
   }
+
+  //makefile
+  myProjectItem->configuration.m_makefile = makefile_url->url();
+
   //add libs to link
   myProjectItem->configuration.m_libadd.clear();
   myProjectItem->configuration.m_librarypath.clear();
@@ -323,6 +327,9 @@ void ProjectConfigurationDlg::UpdateControls()
   {
     checkWarning->setChecked(true);
   }
+
+  //makefile
+  makefile_url->setURL(myProjectItem->configuration.m_makefile);
 
   // Target
 /*  QString targetString = myProjectItem->configuration.m_target;

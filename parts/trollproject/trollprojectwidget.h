@@ -58,6 +58,7 @@ struct ProjectConfiguration
   QString         m_objectpath;
   QString         m_uipath;
   QString         m_mocpath;
+  QString         m_makefile;
   QStringList     m_defines;
   QStringList     m_cxxflags_debug;
   QStringList     m_cxxflags_release;
@@ -266,14 +267,14 @@ public slots:
     void slotRebuildProject();
     void slotCleanProject();
     void slotExecuteProject();
-    
+
     void slotBuildFile();
-    
+
     void slotConfigureProject();
     void slotAddFiles();
     void slotNewFile();
     void slotRemoveFile();
-    
+
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
@@ -295,6 +296,9 @@ private:
     GroupItem* getInstallObject(SubprojectItem *item,const QString& objectname);
     QString getUiFileLink(const QString &path, const QString& filename);
     QString getHeader();
+    QString constructMakeCommandLine(const QString makeFileName = QString::null);
+    void startMakeCommand(const QString &dir, const QString &target);
+//    QString makeEnvironment();
 
     QVBox     *overviewContainer;
     KListView *overview;
@@ -323,6 +327,7 @@ private:
 
     DomUtil::PairList m_subclasslist;
     SubprojectItem *m_shownSubproject;
+    SubprojectItem *m_rootSubproject;
     TrollProjectPart *m_part;
 };
 

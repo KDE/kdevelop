@@ -19,6 +19,8 @@
 
 #include "trollprojectwidget.h"
 
+#include <config.h>
+
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qheader.h>
@@ -421,7 +423,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     m_part = part;
     m_shownSubproject = 0;
-
+    m_rootSubproject = 0;
 }
 
 
@@ -440,12 +442,14 @@ void TrollProjectWidget::openProject(const QString &dirName)
     item->m_RootBuffer = &(item->m_FileBuffer);
     parse(item);
     item->setOpen(true);
+    m_rootSubproject = item;
     overview->setSelected(item, true);
 }
 
 
 void TrollProjectWidget::closeProject()
 {
+    m_rootSubproject = 0;
     overview->clear();
     details->clear();
 }
@@ -767,8 +771,22 @@ void TrollProjectWidget::slotBuildProject()
 {
   m_part->partController()->saveAllFiles();
   QString dir = projectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+
+  if (!m_rootSubproject)
+    return;
+
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_rootSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_rootSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
       int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
@@ -778,7 +796,7 @@ void TrollProjectWidget::slotBuildProject()
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString buildcmd = "make";
+  QString buildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + buildcmd);
   m_part->mainWindow()->lowerView(this);
 
@@ -793,18 +811,28 @@ void TrollProjectWidget::slotBuildTarget()
   if (m_shownSubproject->isScope)
     return;
   QString dir = subprojectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_shownSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_shownSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
+    int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
+    if (r == KMessageBox::No)
+      return;
+    m_part->startQMakeCommand(dir);
   }
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString buildcmd = "make";
+  QString buildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + buildcmd);
   m_part->mainWindow()->lowerView(this);
 }
@@ -813,8 +841,21 @@ void TrollProjectWidget::slotRebuildProject()
 {
   m_part->partController()->saveAllFiles();
   QString dir = this->  projectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+
+  if (!m_rootSubproject)
+    return;
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_rootSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_rootSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
       int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
@@ -825,10 +866,10 @@ void TrollProjectWidget::slotRebuildProject()
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString rebuildcmd = "make clean && make";
+  QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + rebuildcmd);
   m_part->mainWindow()->lowerView(this);
-  
+
 }
 
 void TrollProjectWidget::slotRebuildTarget()
@@ -842,8 +883,18 @@ void TrollProjectWidget::slotRebuildTarget()
     return;
 
   QString dir = subprojectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_shownSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_shownSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
       int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
@@ -853,7 +904,7 @@ void TrollProjectWidget::slotRebuildTarget()
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString rebuildcmd = "make clean && make";
+  QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + rebuildcmd);
   m_part->mainWindow()->lowerView(this);
 }
@@ -970,8 +1021,9 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     else if (r == idBuild)
     {
-        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
-        m_part->mainWindow()->lowerView(this);
+        slotBuildTarget();
+//        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+//        m_part->mainWindow()->lowerView(this);
     }
     else if (r == idQmake)
     {
@@ -1104,7 +1156,9 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->removeValues("MOC_DIR");
   if (!item->configuration.m_mocpath.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("MOC_DIR",QString(item->configuration.m_mocpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-
+  Buffer->removeValues("MAKEFILE");
+  if (!item->configuration.m_makefile.simplifyWhiteSpace().isEmpty())
+    Buffer->setValues("MAKEFILE", item->configuration.m_makefile,FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
 
 
@@ -1122,7 +1176,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
 
   updateInstallObjects(item,Buffer);
 
-    
+
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
@@ -2142,10 +2196,10 @@ void TrollProjectWidget::parse(SubprojectItem *item)
 //    QString proname = item->path + "/" + fi.baseName() + ".pro";
     QDir dir(item->path);
     QStringList l = dir.entryList("*.pro");
-    
+
     item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
     QString proname = item->path + "/" + item->pro_file;
-    
+
     kdDebug(9024) << "Parsing " << proname << endl;
 
 
@@ -2271,7 +2325,10 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("MOC_DIR",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_mocpath = lst[0];
-      
+    item->m_FileBuffer.getValues("MAKEFILE",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_makefile = lst[0];
+
     // Install path
     item->m_FileBuffer.getValues("target.path",lst,minusListDummy);
     if (lst.count())
@@ -2333,9 +2390,10 @@ void TrollProjectWidget::slotBuildFile()
     kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
 
     m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-    m_part->startMakeCommand(buildDir, target);
+//    m_part->startMakeCommand(buildDir, target);
 
-  
+    startMakeCommand(buildDir, target);
+
 }
 
 
@@ -2378,8 +2436,21 @@ void TrollProjectWidget::slotExecuteProject()
 void TrollProjectWidget::slotCleanProject()
 {
   QString dir = this->  projectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+  if (!m_rootSubproject)
+    return;
+
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_rootSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_rootSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
       int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
@@ -2389,7 +2460,7 @@ void TrollProjectWidget::slotCleanProject()
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString rebuildcmd = "make clean";
+  QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean";
   m_part->queueCmd(dir,dircmd + rebuildcmd);
   m_part->mainWindow()->lowerView(this);
 
@@ -2406,8 +2477,18 @@ void TrollProjectWidget::slotCleanTarget()
     return;
 
   QString dir = subprojectDirectory();
-  QFileInfo fi(dir + "/Makefile");
-  QFileInfo fi2(dir + "/makefile");
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (m_shownSubproject->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(m_shownSubproject->configuration.m_makefile);
+    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
+  }
   if (!fi.exists() && !fi2.exists()) {
       int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
@@ -2416,9 +2497,110 @@ void TrollProjectWidget::slotCleanTarget()
   }
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
-  QString rebuildcmd = "make clean";
+  QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean";
   m_part->queueCmd(dir,dircmd + rebuildcmd);
   m_part->mainWindow()->lowerView(this);
+}
+
+QString TrollProjectWidget::constructMakeCommandLine(const QString makeFileName )
+{
+    QDomDocument &dom = *(m_part->projectDom());
+
+    QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
+    if (cmdline.isEmpty())
+        cmdline = MAKE_COMMAND;
+    if (!makeFileName.isEmpty())
+    {
+        cmdline += " -f " + makeFileName;
+    }
+    if (!DomUtil::readBoolEntry(dom, "/kdevtrollproject/make/abortonerror"))
+        cmdline += " -k";
+    int jobs = DomUtil::readIntEntry(dom, "/kdevtrollproject/make/numberofjobs");
+    if (jobs != 0) {
+        cmdline += " -j";
+        cmdline += QString::number(jobs);
+    }
+    if (DomUtil::readBoolEntry(dom, "/kdevtrollproject/make/dontact"))
+        cmdline += " -n";
+
+    cmdline += " ";
+    cmdline.prepend(m_part->makeEnvironment());
+
+    return cmdline;
+}
+/*
+QString TrollProjectWidget::makeEnvironment()
+{
+    // Get the make environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*(m_part->projectDom()), "/kdevtrollproject/make/envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+#if (KDE_VERSION > 305)
+        environstr += KProcess::quote((*it).second);
+#else
+        environstr += KShellProcess::quote((*it).second);
+#endif
+        environstr += " ";
+    }
+    return environstr;
+}
+*/
+void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & target )
+{
+    m_part->partController()->saveAllFiles();
+
+/*    QFileInfo fi;
+    QFileInfo fi2;
+    if (m_rootSubproject->configuration.m_makefile.isEmpty())
+    {
+        fi.setFile(dir + "/Makefile");
+        fi2.setFile(dir + "/makefile");
+    }
+    else
+    {
+        fi.setFile(m_rootSubproject->configuration.m_makefile);
+        fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
+    }
+    if (!fi.exists() && !fi2.exists()) {
+        int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
+        if (r == KMessageBox::No)
+            return;
+        m_part->startQMakeCommand(dir);
+    }
+*/
+    QDomDocument &dom = *(m_part->projectDom());
+
+    if (target=="clean")
+    {
+      QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
+      if (cmdline.isEmpty())
+          cmdline = MAKE_COMMAND;
+      cmdline += " clean";
+      QString dircmd = "cd ";
+      dircmd += dir;
+      dircmd += " && ";
+      cmdline.prepend(m_part->makeEnvironment());
+      m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
+    }
+
+    QString cmdline = constructMakeCommandLine();
+    cmdline += " ";
+    cmdline += target;
+
+    QString dircmd = "cd ";
+    dircmd += dir;
+    dircmd += " && ";
+
+    cmdline.prepend(m_part->makeEnvironment());
+    m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
 

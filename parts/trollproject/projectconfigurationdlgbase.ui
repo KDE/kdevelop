@@ -58,6 +58,9 @@
             <property name="text">
                 <string>&amp;OK</string>
             </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
         </widget>
         <widget class="QPushButton" row="1" column="2">
             <property name="name">
@@ -198,7 +201,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="3" column="0">
+                    <spacer row="4" column="0">
                         <property name="name">
                             <cstring>Spacer3</cstring>
                         </property>
@@ -211,7 +214,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>40</height>
+                                <height>120</height>
                             </size>
                         </property>
                     </spacer>
@@ -245,6 +248,24 @@
                                 </property>
                                 <property name="text">
                                     <string>installpath:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>groupBox6</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Makefile</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KURLRequester" row="0" column="0">
+                                <property name="name">
+                                    <cstring>makefile_url</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -505,11 +526,6 @@
                         <property name="name">
                             <cstring>insideinc_label</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
-                        </property>
                         <property name="text">
                             <string>Directories in&amp;side project:</string>
                         </property>
@@ -586,11 +602,6 @@
                     <widget class="QLabel" row="2" column="0">
                         <property name="name">
                             <cstring>TextLabel2_2_4</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="text">
                             <string>Directories ou&amp;tside project:</string>
@@ -774,11 +785,6 @@
                         <property name="name">
                             <cstring>outsidelib_label</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
-                        </property>
                         <property name="text">
                             <string>Link libraries ou&amp;tside project:</string>
                         </property>
@@ -959,11 +965,6 @@
                         <property name="name">
                             <cstring>insidelib_label</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
-                        </property>
                         <property name="text">
                             <string>Link convenience libraries in&amp;side project:</string>
                         </property>
@@ -1006,11 +1007,6 @@
                     <widget class="QLabel" row="2" column="0">
                         <property name="name">
                             <cstring>TextLabel2_2_4_2</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="text">
                             <string>Lib directories outside project:</string>
@@ -1301,7 +1297,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -1654,10 +1649,16 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>TabBuild</tabstop>
     <tabstop>radioApplication</tabstop>
     <tabstop>radioLibrary</tabstop>
     <tabstop>radioSubdirs</tabstop>
+    <tabstop>m_targetPath</tabstop>
+    <tabstop>Browse</tabstop>
+    <tabstop>m_targetOutputFile</tabstop>
+    <tabstop>checkInstallTarget</tabstop>
+    <tabstop>m_InstallTargetPath</tabstop>
+    <tabstop>makefile_url</tabstop>
+    <tabstop>TabBuild</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
@@ -1666,6 +1667,51 @@
     <tabstop>checkThread</tabstop>
     <tabstop>checkX11</tabstop>
     <tabstop>buttonCancel</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>staticRadio</tabstop>
+    <tabstop>pluginRadio</tabstop>
+    <tabstop>m_targetLibraryVersion</tabstop>
+    <tabstop>sharedRadio</tabstop>
+    <tabstop>exceptionCheck</tabstop>
+    <tabstop>stlCheck</tabstop>
+    <tabstop>rttiCheck</tabstop>
+    <tabstop>checkDontInheritConfig</tabstop>
+    <tabstop>insideIncMoveUpBtn</tabstop>
+    <tabstop>insideIncMoveDownBtn</tabstop>
+    <tabstop>outsideinc_listview</tabstop>
+    <tabstop>insideinc_listview</tabstop>
+    <tabstop>outsideIncAddBtn</tabstop>
+    <tabstop>outsideIncRemoveBtn</tabstop>
+    <tabstop>outsideIncEditBtn</tabstop>
+    <tabstop>outsideIncMoveUpBtn</tabstop>
+    <tabstop>outsideIncMoveDownBtn</tabstop>
+    <tabstop>outsidelib_listview</tabstop>
+    <tabstop>insideLibMoveUpBtn</tabstop>
+    <tabstop>insideLibMoveDownBtn</tabstop>
+    <tabstop>insidelib_listview</tabstop>
+    <tabstop>outsideLibAddBtn</tabstop>
+    <tabstop>outsideLibRemoveBtn</tabstop>
+    <tabstop>outsideLibEditBtn</tabstop>
+    <tabstop>outsideLibMoveUpBtn</tabstop>
+    <tabstop>outsideLibMoveDownBtn</tabstop>
+    <tabstop>outsidelibdir_listview</tabstop>
+    <tabstop>outsideLibDirAddBtn</tabstop>
+    <tabstop>outsideLibDirRemoveBtn</tabstop>
+    <tabstop>outsideLibDirEditBtn</tabstop>
+    <tabstop>outsideLibDirMoveUpBtn</tabstop>
+    <tabstop>outsideLibDirMoveDownBtn</tabstop>
+    <tabstop>m_defines</tabstop>
+    <tabstop>m_debugFlags</tabstop>
+    <tabstop>m_releaseFlags</tabstop>
+    <tabstop>buildmoveup_button</tabstop>
+    <tabstop>buildmovedown_button</tabstop>
+    <tabstop>buildorder_listview</tabstop>
+    <tabstop>mocdir_url</tabstop>
+    <tabstop>uidir_url</tabstop>
+    <tabstop>objdir_url</tabstop>
+    <tabstop>idlCmdEdit</tabstop>
+    <tabstop>idlCmdOptionsEdit</tabstop>
+    <tabstop>idlBrowseBtn</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
@@ -1706,6 +1752,9 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

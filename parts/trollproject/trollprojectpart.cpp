@@ -268,7 +268,7 @@ void TrollProjectPart::removeFiles ( const QStringList& fileList )
 
 	emit removedFilesFromProject ( fileList );
 }
-
+/*
 void TrollProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
     partController()->saveAllFiles();
@@ -314,11 +314,11 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
-    
+
     cmdline.prepend(makeEnvironment());
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
-
+*/
 
 void TrollProjectPart::startQMakeCommand(const QString &dir)
 {
@@ -328,15 +328,15 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
 //    cmdline += fi.baseName() + ".pro";
     QDir d(dir);
     QStringList l = d.entryList("*.pro");
-    
+
     cmdline += l.count()?l[0]:(fi.baseName() + ".pro");
-    
-    cmdline += QString::fromLatin1( " -o Makefile" );
+
+//    cmdline += QString::fromLatin1( " -o Makefile" );
 
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
-    
+
     cmdline.prepend(makeEnvironment());
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
