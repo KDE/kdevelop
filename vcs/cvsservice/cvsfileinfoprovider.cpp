@@ -34,6 +34,7 @@ CVSFileInfoProvider::CVSFileInfoProvider( CvsServicePart *parent, CvsService_stu
     : KDevVCSFileInfoProvider( parent, "cvsfileinfoprovider" ),
     m_requestStatusJob( 0 ), m_cvsService( cvsService ), m_cachedDirEntries( 0 )
 {
+    connect( this, SIGNAL(needStatusUpdate(const CVSDir&)), this, SLOT(updateStatusFor(const CVSDir&)));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,6 +81,7 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
         m_previousDirPath = dirPath;
     }
 
+
     // path, recursive, tagInfo: hmmm ... we may use tagInfo for collecting file tags ...
     DCOPRef job = m_cvsService->status( dirPath, true, false );
     m_requestStatusJob = new CvsJob_stub( job.app(), job.obj() );
@@ -88,6 +90,21 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
     connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     return m_requestStatusJob->execute();
+    /*
+    kdDebug(9006) << k_funcinfo << "Attempting to parse " << dirPath << " using CVS/Entries" << endl;
+    QDir qd(dirPath);
+    CVSDir cdir(qd);
+    if (cdir.isValid())
+    {
+        emit needStatusUpdate(cdir);
+        return true;
+    }*/
+}
+
+void CVSFileInfoProvider::updateStatusFor(const CVSDir& dir)
+{
+    m_cachedDirEntries = dir.cacheableDirStatus();
+    emit statusReady( *m_cachedDirEntries, m_savedCallerData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -252,3 +269,4 @@ void CVSFileInfoProvider::printOutFileInfoMap( const VCSFileInfoMap &map )
 }
 
 #include "cvsfileinfoprovider.moc"
+// kate: space-indent on; indent-width 4; replace-tabs on;

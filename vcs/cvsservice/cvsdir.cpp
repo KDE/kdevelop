@@ -162,7 +162,7 @@ QStringList CVSDir::registeredEntryList() const
     while (!t.eof())
     {
         QString line = t.readLine();
-        CVSEntry::parse( line, entry );
+        entry.parse( line, *this );
         if (entry.isValid())
             l.append( entry.fileName() );
     }
@@ -189,7 +189,7 @@ void CVSDir::refreshEntriesCache() const
     while (!t.eof())
     {
         QString line = t.readLine();
-        CVSEntry::parse( line, entry );
+        entry.parse( line, *this );
         if (entry.isValid())
             m_cachedEntries[ entry.fileName() ] = entry;
     }
@@ -207,7 +207,7 @@ CVSEntry CVSDir::fileStatus( const QString &fileName, bool refreshCache ) const
         return m_cachedEntries[ fileName ];
     }
     else
-        return CVSEntry( fileName ); // Just the file name
+        return CVSEntry( fileName, *this ); // Just the file name
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -289,7 +289,8 @@ VCSFileInfoMap CVSDir::dirStatus() const
     VCSFileInfoMap vcsInfo;
     /// Convert to VCSFileInfoMap: \FIXME : any speed improvement here?
     QStringList entries = registeredEntryList();
-    for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
+    QStringList::const_iterator it = entries.begin(), end = entries.end();
+    for ( ; it != end; ++it)
     {
         const QString &fileName = (*it);
         const CVSEntry entry = fileStatus( fileName );
@@ -307,7 +308,8 @@ VCSFileInfoMap *CVSDir::cacheableDirStatus() const
     VCSFileInfoMap *vcsInfo = new VCSFileInfoMap;
     /// Convert to VCSFileInfoMap: \FIXME : any speed improvement here?
     QStringList entries = registeredEntryList();
-    for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
+    QStringList::const_iterator it = entries.begin(), end = entries.end();
+    for ( ; it != end; ++it)
     {
         const QString &fileName = (*it);
         const CVSEntry entry = fileStatus( fileName );

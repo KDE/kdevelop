@@ -13,6 +13,7 @@
 #include <qtextstream.h>
 
 #include "cvsentry.h"
+#include "cvsdir.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static
@@ -34,9 +35,9 @@ CVSEntry::CVSEntry()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CVSEntry::CVSEntry( const QString &aLine )
+CVSEntry::CVSEntry( const QString &aLine, const CVSDir& dir )
 {
-    parse( aLine, *this );
+    parse( aLine, dir );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,6 +45,7 @@ CVSEntry::CVSEntry( const QString &aLine )
 void CVSEntry::clean()
 {
     m_type = invalidEntry;
+    m_state = Unknown;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,24 +57,49 @@ CVSEntry::EntryType CVSEntry::type() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSEntry::parse( const QString &aLine, CVSEntry &entry )
+void CVSEntry::parse( const QString &aLine, const CVSDir& dir )
 {
-    entry.clean();
+    clean();
 
-    entry.m_fields = QStringList::split( "/", aLine );
+    m_fields = QStringList::split( "/", aLine );
 
     if (aLine.startsWith( entrySeparator )) // Is a file?
     {
-        entry.m_type = fileEntry; // Is a file
+        m_type = fileEntry; // Is a file
     }
     else if (aLine.startsWith( directoryMarker )) // Must be a directory then
     {
-        entry.m_type = directoryEntry; // Is a directory
-        entry.m_fields.pop_front(); // QStringList::split() fills and empty item in head
+        m_type = directoryEntry; // Is a directory
+        m_fields.pop_front(); // QStringList::split() fills and empty item in head
+	return;
     }
     else // What the hell is this? >:-)
     {
-        entry.m_type = invalidEntry;
+        m_type = invalidEntry;
+	return;
+    }
+
+    //if we're a file, keep going
+    QDateTime entryFileDate(QDateTime::fromString(timeStamp()));
+    QDateTime realFileDate;
+    QFileInfo info(dir, m_fields[0]);
+    realFileDate = info.lastModified();
+
+    m_state = UpToDate;
+
+    if ( revision() == "0" )
+        m_state = Added;
+    else if ( revision().length() > 3 && revision()[0] == '-' )
+        m_state = Removed;
+    else if ( timeStamp().find('+') >= 0 )
+        m_state = Conflict;
+    else
+    {
+        QDateTime date( QDateTime::fromString( timeStamp() ) );
+        QDateTime fileDateUTC;
+        fileDateUTC.setTime_t( QFileInfo(dir, fileName()).lastModified().toTime_t(), Qt::UTC );
+        if ( date != fileDateUTC )
+            m_state = Modified;
     }
 }
 
@@ -134,5 +161,27 @@ VCSFileInfo CVSEntry::toVCSFileInfo() const
     if (isDirectory())
         fileState = VCSFileInfo::Directory;
 
-    return VCSFileInfo( fileName(), revision(), QString::null, fileState );
+    switch (m_state)
+    {
+        case Added:
+            fileState = VCSFileInfo::Added;
+            break;
+        case Conflict:
+            fileState = VCSFileInfo::Conflict;
+            break;
+        case Modified:
+        case Removed:
+            fileState = VCSFileInfo::Modified;
+            break;
+        case UpToDate:
+            fileState = VCSFileInfo::Uptodate;
+            break;
+        default:
+            fileState = VCSFileInfo::Unknown;
+            break;
+    }
+
+    return VCSFileInfo( fileName(), revision(), revision(), fileState );
 }
+
+//kate: space-indent on; indent-width 4; replace-tabs on;

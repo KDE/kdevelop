@@ -41,6 +41,12 @@ public:
 // -- Async interface for requesting data
     virtual bool requestStatus( const QString &dirPath, void *callerData );
 
+public slots:
+    void updateStatusFor( const CVSDir& );
+
+signals:
+    void needStatusUpdate(const CVSDir&);
+
 private:
     // DCOP Iface
     virtual void slotJobExited( bool normalExit, int exitStatus );
@@ -68,3 +74,4 @@ private:
 };
 
 #endif
+//kate: space-indent on; indent-width 4;
