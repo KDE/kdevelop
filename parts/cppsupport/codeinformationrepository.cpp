@@ -99,6 +99,11 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     	<< Catalog::QueryArgument( "scope", scope );
     tags += query( args );
     
+    args.clear();
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
+    	<< Catalog::QueryArgument( "scope", scope );
+    tags += query( args );
+    
     return tags;
 }
 
