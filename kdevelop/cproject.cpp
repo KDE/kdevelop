@@ -1,10 +1,10 @@
 /***************************************************************************
 		 cproject.cpp - the projectproperties
-		 -------------------                                         
+		 -------------------
 
-    begin                : 28 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 28 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -350,7 +350,7 @@ TFileInfo CProject::getFileInfo(const QString& rel_filename){
   info.install_location = config->readEntry("install_location");
   info.install_location.replace(QRegExp("[$][$]"), "$");
   config->setDollarExpansion(true);
-  
+
   return info;
 }
 
@@ -914,7 +914,7 @@ void CProject::updateMakefileAm(const QString& makefile)
         config->setGroup(makefile);
         if(config->readEntry("type") == "shared_library" )
         {
-          
+
           getSources(makefile,source_files);
           for(str= source_files.first();str !=0;str = source_files.next())
             sources =  str + " " + sources ;
@@ -930,7 +930,7 @@ void CProject::updateMakefileAm(const QString& makefile)
           QString type=getProjectType();
           config->setGroup(makefile);
           QString sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
-          
+
           bool sharedLibSubDir=!sharedlibLDFLAGS.isEmpty();
 
           if (!sharedLibSubDir)
@@ -1117,7 +1117,7 @@ void CProject::updateMakefileAm(const QString& makefile)
           stream << uninstall_local_str;
 
         stream << "\n";
-        
+
         config->setDollarExpansion(true);
         found = true;
       }
@@ -1375,9 +1375,9 @@ void CProject::updateConfigureIn(){
 
   QStringList makefile_list;
   QString fullLine, makefile;
-  
+
   CPrjConfChange configureIn(getProjectDir());
-  
+
   config->setGroup("General");
   makefile_list=config->readListEntry("makefiles");
   for(QStringList::Iterator it = makefile_list.begin();
@@ -1386,14 +1386,14 @@ void CProject::updateConfigureIn(){
       makefile=*it;
       fullLine+=makefile.remove(makefile.length()-3,3) + " ";
   }
-  
+
   configureIn.setLine("^[\\s]*AC_OUTPUT[\\s]*\\(", "AC_OUTPUT("+fullLine+")");
-  
-  configureIn.setLine("^[\\s]*KDE_DO_IT_ALL[\\s]*\\(", 
+
+  configureIn.setLine("^[\\s]*KDE_DO_IT_ALL[\\s]*\\(",
      "KDE_DO_IT_ALL("+getProjectName().lower()+","+getVersion()+")");
-  configureIn.setLine("^[\\s]*AM_INIT_AUTOMAKE[\\s]*\\(", 
+  configureIn.setLine("^[\\s]*AM_INIT_AUTOMAKE[\\s]*\\(",
      "AM_INIT_AUTOMAKE("+getProjectName().lower()+","+getVersion()+")");
-  
+
   configureIn.writeConfFile();
 
 }
@@ -1623,7 +1623,7 @@ bool CProject::isKDEProject()
 bool CProject::isKDE2Project()
 {
   if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kc_module" || getProjectType()=="kpart_plugin")
-     return true; 
+     return true;
   return false;
 }
 bool CProject::isQtProject(){
@@ -1964,30 +1964,4 @@ QString CProject::canonicalizeDirName(const QString& dir_name)
   return canonical_dir_name;
 }
 
-void CProject::setAutomaticCompletion( bool enable )
-{
-    config->setGroup("General");
-    config->writeEntry("automatic_completion",enable);
-    config->sync();
-
-}
-
-void CProject::setAutomaticArgsHint( bool enable )
-{
-    config->setGroup("General");
-    config->writeEntry("automatic_argshint",enable);
-    config->sync();
-}
-
-bool CProject::getAutomaticCompletion()
-{
-    config->setGroup("General");
-    return config->readBoolEntry("automatic_completion", true);
-}
-
-bool CProject::getAutomaticArgsHint()
-{
-    config->setGroup("General");
-    return config->readBoolEntry("automatic_argshint", true);
-}
 

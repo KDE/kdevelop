@@ -1,9 +1,9 @@
 /***************************************************************************
-                          cprjcompletionopts.h  -  description
+                          ccompletionopts.h  -  description
                              -------------------
-    begin                : Mon Feb 25 2002
-    copyright            : (C) 2002 by kdevelop-team
-    email                : kdevelop-team@kdevelop.org
+    begin                : Mon Feb 27 2002
+    copyright            : (C) 2002 by Roberto Raggi
+    email                : raggi@cli.di.unipi.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,28 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CPRJCOMPLETIONOPTS_H
-#define CPRJCOMPLETIONOPTS_H
+#ifndef CCOMPLETIONOPTS_H
+#define CCOMPLETIONOPTS_H
 
-#include "cprjcompletionoptsdlg.h"
+#include "ccompletionoptsdlg.h"
 
-class CProject;
+class CKDevelop;
 
 /**
-  *@author kdevelop-team
+  *@author Roberto Raggi
   */
 
-class CPrjCompletionOpts : public CPrjCompletionOptsDlg  {
-   Q_OBJECT
-public: 
-	CPrjCompletionOpts(CProject*, QWidget *parent=0, const char *name=0);
-	~CPrjCompletionOpts();
+class CCompletionOpts : public CCompletionOptsDlg  {
+    Q_OBJECT
+public:
+    CCompletionOpts(CKDevelop*, QWidget *parent=0, const char *name=0);
+    ~CCompletionOpts();
 
 public slots:
-  void slotSettingsChanged();
+    void slotSettingsChanged();
 
 private:
-  CProject* m_pProject;
+    CKDevelop* m_pDevelop;
 };
 
 #endif

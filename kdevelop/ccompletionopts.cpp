@@ -1,9 +1,9 @@
 /***************************************************************************
-                          cprjcompletionopts.cpp  -  description
+                          ccompletionopts.cpp  -  description
                              -------------------
-    begin                : Mon Feb 25 2002
-    copyright            : (C) 2002 by kdevelop-team
-    email                : kdevelop-team@kdevelop.org
+    begin                : Mon Feb 27 2002
+    copyright            : (C) 2002 by Roberto Raggi
+    email                : raggi@cli.di.unipi.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,23 +15,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cprjcompletionopts.h"
-#include "cproject.h"
+#include "ccompletionopts.h"
+#include "ckdevelop.h"
 #include <qcheckbox.h>
 
-CPrjCompletionOpts::CPrjCompletionOpts(CProject* prj, QWidget *parent, const char *name )
-: CPrjCompletionOptsDlg(parent,name), m_pProject( prj )
+CCompletionOpts::CCompletionOpts(CKDevelop* pDev,
+                                 QWidget *parent, const char *name )
+    : CCompletionOptsDlg(parent,name), m_pDevelop( pDev )
 {
-  checkBoxCompleteText->setChecked( m_pProject->getAutomaticCompletion() );
-  checkBoxArgHint->setChecked( m_pProject->getAutomaticArgsHint() );
+    checkBoxCompleteText->setChecked( m_pDevelop->getAutomaticCompletion() );
+    checkBoxArgHint->setChecked( m_pDevelop->getAutomaticArgsHint() );
 }
 
-CPrjCompletionOpts::~CPrjCompletionOpts()
+CCompletionOpts::~CCompletionOpts()
 {
 }
 
-void CPrjCompletionOpts::slotSettingsChanged()
+void CCompletionOpts::slotSettingsChanged()
 {
-  m_pProject->setAutomaticCompletion( checkBoxCompleteText->isChecked() );
-  m_pProject->setAutomaticArgsHint( checkBoxArgHint->isChecked() );
+    m_pDevelop->setAutomaticCompletion( checkBoxCompleteText->isChecked() );
+    m_pDevelop->setAutomaticArgsHint( checkBoxArgHint->isChecked() );
 }

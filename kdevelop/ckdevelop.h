@@ -254,6 +254,13 @@ public:
   /** Second part of opening a .kdevprj project from file using prjfile as filename. */
   void projectOpenCmdl_Part2(CProject* pProj);
 
+  // code completion support
+  void setAutomaticCompletion( bool );
+  void setAutomaticArgsHint( bool );
+
+  bool getAutomaticCompletion();
+  bool getAutomaticArgsHint();
+
  public slots:
 
   void enableCommand(int id_);
@@ -1034,7 +1041,7 @@ private:
 
   /** startup with editing main.(cpp|c) after appwizard */
   bool bStartupEditing;
-  
+
   bool bAutoswitch;
   bool bDefaultCV;
 //  bool bKDevelop;

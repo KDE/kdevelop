@@ -1,17 +1,17 @@
 <!DOCTYPE UI><UI>
-<class>CPrjCompletionOptsDlg</class>
+<class>CCompletionOptsDlg</class>
 <widget>
     <class>QWidget</class>
     <property stdset="1">
         <name>name</name>
-        <cstring>CPrjCompletionOptsDlg</cstring>
+        <cstring>CCompletionOptsDlg</cstring>
     </property>
     <property stdset="1">
         <name>geometry</name>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>362</width>
+            <width>358</width>
             <height>230</height>
         </rect>
     </property>

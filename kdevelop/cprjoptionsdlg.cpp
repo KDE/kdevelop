@@ -1,10 +1,10 @@
 /***************************************************************************
-                   prjoptionsdlg.cpp - the setup DLG for a project  
-                             -------------------                                         
+                   prjoptionsdlg.cpp - the setup DLG for a project
+                             -------------------
 
-    begin                : 10 Aug 1998                                        
+    begin                : 10 Aug 1998
     copyright            : (C) 1998 by Sandy Meier,Stefan Bartel
-    email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de                                     
+    email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,7 +19,6 @@
 #include "cprjoptionsdlg.h"
 #include "cprjcompopts.h"
 #include "cprjaddopts.h"
-#include "cprjcompletionopts.h"
 
 #include "cproject.h"
 #include "ctoolclass.h"
@@ -70,14 +69,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString&
   prj_info = prj;
 	sess=session;
 	currentcfg=curr;
-  
+
   configureIn.setConfDir(prj->getProjectDir());
   need_configure_in_update = false;
   need_makefile_generation = false;
 
-  
+
   addGeneralPage();
-  addCompletionOptionsPage();
   addAdditionalOptionsPage();
   addCompilerOptionsPage();
 //  addCompilerWarningsPage();
@@ -118,7 +116,7 @@ void CPrjOptionsDlg::addGeneralPage()
 
   version_edit = new QLineEdit( generalPage, "version_edit" );
   grid->addWidget(version_edit,1,2);
-  
+
   old_version = prj_info->getVersion();
   version_edit->setText( old_version );
   QWhatsThis::add(version_label, i18n("Set your project version number here."));
@@ -170,7 +168,7 @@ void CPrjOptionsDlg::addGeneralPage()
   info_label=new QLabel(generalPage,"info_label");
   grid->addWidget(info_label,0,3);
   info_label->setText(i18n("Short Information:"));
-  
+
   info_edit=new QMultiLineEdit(generalPage,"info_edit");
   grid->addMultiCellWidget(info_edit,1,8,3,5);
   QStrList short_info=prj_info->getShortInfo();
@@ -716,7 +714,7 @@ void CPrjOptionsDlg::addMakePage()
   m_job_number->setValue(settings->readNumEntry ("JobNumber"));
 
   m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
-  
+
   m_makestartpoint_line->setText(
         prj_info->getDirWhereMakeWillBeCalled(prj_info->getProjectDir()));
 
@@ -829,9 +827,6 @@ void CPrjOptionsDlg::ok()
 
   //********gcc-options***************
   compdlg->slotSettingsChanged();
-
-  //********code completion options*******
-  completionOptsDlg->slotSettingsChanged();
 
   if (old_cxxflags !=  prj_info->getCXXFLAGS().stripWhiteSpace())
     need_makefile_generation = true;
@@ -1045,7 +1040,7 @@ void CPrjOptionsDlg::ok()
   prj_info->writeProject();
   if (version_edit->text() != old_version || prjname_edit->text() != old_name)
     need_configure_in_update = true;
-    
+
   // check now for modifications inside configure.in(.in)
   if (addOptsDlg && addOptsDlg->changed())
   {
@@ -1149,16 +1144,5 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked()
     m_makestartpoint_line->setText(file);
   }
 }
-
-void CPrjOptionsDlg::addCompletionOptionsPage()
-{
-  QFrame* additionalPage = addPage(i18n("Code Completion"),i18n("Code Completion Configuration"),
-  KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
-  QGridLayout *grid = new QGridLayout(additionalPage);
-  QWhatsThis::add(additionalPage, i18n("Set some code completion options here."));
-  completionOptsDlg = new CPrjCompletionOpts(prj_info, additionalPage);
-  grid->addWidget(completionOptsDlg,0,0);
-}
-
 
 #include "cprjoptionsdlg.moc"

@@ -1,3 +1,20 @@
+/***************************************************************************
+                          cppcodecompletion.cpp  -  description
+                             -------------------
+    begin                : Sat Jul 21 2001
+    copyright            : (C) 2001 by Victor R<F6>der, 2002 by Roberto Raggi
+    email                : victor_roeder@gmx.de, raggi@cli.di.unipi.it
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 // basic idea from qtdesigner by TrollTech
 #include "kwrite/kwview.h"
 #include "kwrite/kwdoc.h"
@@ -165,14 +182,13 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
         int line = ed->cursorPosition().y();
         int col = ed->cursorPosition().x();
         if( e->type() == QEvent::KeyPress ){
-            CProject* prj = m_pDevelop->getProject();
             // kdDebug() << "Project = " << prj << endl;
             QKeyEvent* ke = (QKeyEvent*) e;
             if( ke->key() == Key_Tab && !m_edit->currentWord().isEmpty() ){
                 kdDebug() << "--------------------------> expand (disabled by Falk!)" << endl;
 //DISABLED_BY_FALK                m_edit->expandText();
 //DISABLED_BY_FALK                return TRUE;
-            } else if ( (prj && prj->getAutomaticCompletion()) &&
+            } else if ( (m_pDevelop->getAutomaticCompletion()) &&
                          (ke->key() == Key_Period ||
                           (ke->key() == Key_Greater &&
                            col > 0 && m_edit->textLine( line )[ col-1 ] == '-')) ) {
@@ -208,8 +224,7 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
                     QString add = text.mid(currentComplText.length());
                     if(item->m_entry.postfix == "()"){ // add (
                         m_edit->insertText(add + "(");
-                        CProject* prj = m_pDevelop->getProject();
-                        if( prj && prj->getAutomaticArgsHint() ){
+                        if( m_pDevelop->getAutomaticArgsHint() ){
                             completeText();
                         }
                         //	    VConfig c;
@@ -449,9 +464,9 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
                                                CClassStore* sigma )
 {
     QStringList exprs = splitExpression( expr );
-    for( QStringList::Iterator it=exprs.begin(); it!=exprs.end(); ++it ){
-        kdDebug() << "expr " << (*it) << endl;
-    }
+//    for( QStringList::Iterator it=exprs.begin(); it!=exprs.end(); ++it ){
+//        kdDebug() << "expr " << (*it) << endl;
+//    }
 
 
     SimpleVariable v_this = ctx->findVariable( "this" );

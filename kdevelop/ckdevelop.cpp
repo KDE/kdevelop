@@ -2023,7 +2023,7 @@ void CKDevelop::slotBuildCleanRebuildAll()
 void CKDevelop::RunConfigure(const QString &conf, bool ask){
 	QString args, shellcommand;
   QString vpath;
-  
+
 	if(conf==i18n("(Default)")){ // blddir=srcdir
 		args=prj->getConfigureArgs();
 	}
@@ -2031,7 +2031,7 @@ void CKDevelop::RunConfigure(const QString &conf, bool ask){
   {
 		args=m_pKDevSession->getConfigureArgs(conf);
 	}
-	
+
   if(ask){  // 	only open dialog when asked
 	  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
   	if(argdlg.exec()){
@@ -2068,9 +2068,9 @@ void CKDevelop::RunConfigure(const QString &conf, bool ask){
 		if(!dir.exists())
 			dir.mkdir(vpath);
  	}
-  
+
   QDir::setCurrent(vpath);
-  
+
 	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
 	// get all other strings
   if(conf==i18n("(Default)"))
@@ -2095,7 +2095,7 @@ void CKDevelop::RunConfigure(const QString &conf, bool ask){
 		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
 		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
 	}
- 	
+
   config->setGroup(group);
  	shellcommand += "CPP=\"" + config->readEntry("CPP","cpp") + "\" ";
  	shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
@@ -4649,3 +4649,28 @@ void CKDevelop::statusCallback(int id_){
   }
 }
 
+void CKDevelop::setAutomaticCompletion( bool enable )
+{
+    config->setGroup("CodeCompletion");
+    config->writeEntry("automatic_completion",enable);
+    config->sync();
+}
+
+void CKDevelop::setAutomaticArgsHint( bool enable )
+{
+    config->setGroup("CodeCompletion");
+    config->writeEntry("automatic_argshint",enable);
+    config->sync();
+}
+
+bool CKDevelop::getAutomaticCompletion()
+{
+    config->setGroup("CodeCompletion");
+    return config->readBoolEntry("automatic_completion", true);
+}
+
+bool CKDevelop::getAutomaticArgsHint()
+{
+    config->setGroup("CodeCompletion");
+    return config->readBoolEntry("automatic_argshint", true);
+}

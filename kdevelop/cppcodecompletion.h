@@ -1,3 +1,20 @@
+/***************************************************************************
+                          cppcodecompletion.h  -  description
+                             -------------------
+    begin                : Sat Jul 21 2001
+    copyright            : (C) 2001 by Victor R<F6>der, 2002 by Roberto Raggi
+    email                : victor_roeder@gmx.de, raggi@cli.di.unipi.it
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef __CPPCODECOMPLETION_H
 #define __CPPCODECOMPLETION_H
 

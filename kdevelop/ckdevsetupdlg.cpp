@@ -20,6 +20,7 @@
 
 #include "ckdevelop.h"
 #include "resource.h"
+#include "ccompletionopts.h"
 
 #include <kmessagebox.h>
 #include <kkeydialog.h>
@@ -60,6 +61,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
 
   addGeneralTab();
   addKeysTab();
+  addCodeCompletionTab();
   addDocTab();
   addCompilerTab();
   addDebuggerTab();
@@ -194,7 +196,7 @@ void CKDevSetupDlg::addGeneralTab()
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
-  
+
   startupEditingCheck = new QCheckBox( autoswitchGroup, "autoStartupCheck" );
   grid2->addWidget(startupEditingCheck,1,0);
   startupEditingCheck->setText(i18n("start editing \"main\"-source file"));
@@ -203,7 +205,7 @@ void CKDevSetupDlg::addGeneralTab()
   bool startupEditing=config->readBoolEntry("StartupEditing",true);
   startupEditingCheck->setChecked( startupEditing );
 
-  
+
   QWhatsThis::add(startupEditingCheck, i18n("startup with editing main.cpp or main.c\n\n"
 					      "If this is enabled, KDevelop\n"
 					      "will try to load main.cpp or main.c\n"
@@ -911,7 +913,7 @@ void CKDevSetupDlg::slotOkClicked(){
 
   bool startupEditing=startupEditingCheck->isChecked();
   config->writeEntry("StartupEditing",startupEditing);
-  
+
   bool defaultcv=defaultClassViewCheck->isChecked();
   config->writeEntry("DefaultClassView",defaultcv);
 
@@ -928,7 +930,7 @@ void CKDevSetupDlg::slotOkClicked(){
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);
-	
+
 	config->setGroup("TipOfDay");
     config->writeEntry("RunOnStart",tipDayCheck->isChecked());
 
@@ -947,7 +949,7 @@ void CKDevSetupDlg::slotOkClicked(){
 
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
   config->setGroup("General Options");
-  config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
+  config->writeEntry("ProjectDefaultDir", ppath_edit->text());
 // ---
 
   // user interface
@@ -965,6 +967,9 @@ void CKDevSetupDlg::slotOkClicked(){
   default:
     break;
   }
+
+  // code completion
+  completionOptsDlg->slotSettingsChanged();
 
 #if QT_VERSION < 300
   m_accel->setKeyDict(keyMap);
@@ -1088,5 +1093,18 @@ void CKDevSetupDlg::slotPPathClicked(){
   }
 }
 // ---
+
+void CKDevSetupDlg::addCodeCompletionTab()
+{
+    QFrame* additionalPage = addPage(i18n("Code Completion"),
+                                     i18n("Code Completion Configuration"),
+                                     KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
+    QGridLayout *grid = new QGridLayout(additionalPage);
+    QWhatsThis::add(additionalPage, i18n("Set some code completion options here."));
+    CKDevelop* pDevelop = (CKDevelop*) parent();
+    completionOptsDlg = new CCompletionOpts(pDevelop, additionalPage);
+    grid->addWidget(completionOptsDlg,0,0);
+
+}
 
 #include "ckdevsetupdlg.moc"
