@@ -1,3 +1,6 @@
+2002-12-17 F@lk Brettschneider <falk@kdevelop.org>
+	* Childframe UI mode (not maximized): opening of new views fixed concerning the positioning and resizing
+
 2002-12-16 Roberto Raggi <roberto@kdevelop.org>
 	* bugfix: useless "()" string is attached to the method declaration patch from Andreas Wuest <AndreasWuest@gmx.de>
 	* added emacs like wordwrap mode to qeditor
