@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=CTags Frontend
+Comment=CTags is a source navigation tool with support for many languages. When loaded it provides a context menu for finding type declarations/definitions and also a query dialog in the Tools menu.
 Name=KDevCTags
+GenericName=CTags Frontend
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevctags
 X-KDevelop-Scope=Project

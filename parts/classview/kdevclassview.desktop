@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Class View
+Comment=This plugin displays a graphical view of all the classes in the project, complete with methods and attributes, and provides a way of direct source navigation.
 Name=KDevClassView
+GenericName=Class View
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevclassview
 X-KDevelop-Scope=Project

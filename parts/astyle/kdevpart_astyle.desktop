@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Source code formatter
+Comment=A plugin for formatting of sourcecode according to a specified set of rules. When loaded it is found in the Tools menu.
 Name=KDevAStyle
+GenericName=Source Code Formatter
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevastyle

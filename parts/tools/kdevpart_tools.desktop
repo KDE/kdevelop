@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Tools
+Comment=This plugin provides an easy way to add external applications to the Tools menu and toolbar.
 Name=KDevTools
+GenericName=Tools menu addition
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtools

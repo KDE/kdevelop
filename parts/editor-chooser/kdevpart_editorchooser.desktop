@@ -2,9 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Editor Selection
+Comment=Provides a dialog for Editor selection.
 Name=KDevEditorChooser
+GenericName=Editor Selection
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdeveditorchooser
-X-KDevelop-Scope=Global
+X-KDevelop-Scope=Core

@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Debugger frontend
+Comment=This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.
 Name=KDevDebugger
+GenericName=Debugger frontend
 Icon=
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdebugger

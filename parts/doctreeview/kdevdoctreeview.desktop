@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Documentation tree
+Comment=A documentation control with support for browsing and searching in multiple help documents and documentation systems. 
 Name=KDevDocTreeView
+GenericName=Documentation
 Icon=mini-book1
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdoctreeview

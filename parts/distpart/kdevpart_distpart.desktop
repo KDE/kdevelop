@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Aids in building and publishing the final project.
+Comment=Aids in building and publishing the final project. Only RPM package format is supported for now.
 Name=KDevdistpart
+GenericName=Final packaging support
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdistpart

@@ -2,9 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=User-Interface Selection
+Comment=Provides a dialog for UI-mode selection.
 Name=KDevUIChooser
+GenericName=User-Interface Selection
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevuichooser
-X-KDevelop-Scope=Global
+X-KDevelop-Scope=Core

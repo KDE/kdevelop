@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Embedded Konsole
+Comment=This plugin gives KDevelop an embedded konsole for quick and easy command line access.
 Name=KDevKonsoleView
+GenericName=Embedded Konsole
 Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevkonsoleview

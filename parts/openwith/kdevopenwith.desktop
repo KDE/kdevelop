@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment="Open with" menu addon
+Comment=This plugin provides additional "open" alternatives for various context menus in KDevelop.
 Name=KDevOpenWith
+GenericName="Open with" menu addon
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevopenwith

@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=History
+Comment=This plugin provides navigation for the history of visited files, using toolbar buttons or a history list.
 Name=KDevHistory
+GenericName=History Support
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevhistory

@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=ClearCase Integration
+Comment=A plugin that provides support for Rational ClearCase, a large version control and build management system.
 Name=KDevClearCase
+GenericName=ClearCase Integration
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevclearcase
 X-KDevelop-Scope=Project

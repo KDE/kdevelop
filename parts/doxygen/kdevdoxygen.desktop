@@ -2,8 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Doxygen
+Comment=The doxygen plugin provides a way to specify and control generation of documentation for a project, based on source code content.
 Name=KDevDoxygen
+GenericName=Doxygen support
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdoxygen
 X-KDevelop-Scope=Project
