@@ -27,12 +27,14 @@ class QSocketNotifier;
 #include <qstring.h>
 
 class STTY : public QObject
-{ Q_OBJECT
-public: 
+{
+  Q_OBJECT
+
+public:
   STTY();
   ~STTY();
 
-  QString getMainTTY()    { return maintty; };
+  QString getSlave()    { return ttySlave; };
 
 private slots:
   void OutReceived(int);
@@ -49,10 +51,10 @@ private:
   int ferr;
   QSocketNotifier* out;
   QSocketNotifier* err;
-  QString maintty;
+  QString ttySlave;
 
-  char ptynam[50]; // "/dev/ptyxx" | "/dev/ptmx"
-  char ttynam[50]; // "/dev/ttyxx" | "/dev/pts/########..."
+  char pty_master[50];  // "/dev/ptyxx" | "/dev/ptmx"
+  char tty_slave[50];   // "/dev/ttyxx" | "/dev/pts/########..."
 };
 
 #endif

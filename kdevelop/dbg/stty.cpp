@@ -33,7 +33,7 @@ STTY::STTY() :
   err(0)
 {
   fout = findTTY();
-  maintty = QString(ttynam);
+  ttySlave = QString(tty_slave);
   ferr = findTTY();
 
   if (fout >= 0 && ferr >= 0)
@@ -44,7 +44,7 @@ STTY::STTY() :
     connect( err, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
   }
   else
-    maintty = "";
+    ttySlave = "";
 }
 
 STTY::~STTY()
@@ -76,7 +76,7 @@ int STTY::findTTY()
       perror("Can't open a pseudo teletype");
       return(-1);
     }
-  strncpy(ttynam, ptsname(ptyfd), 50);
+  strncpy(tty_slave, ptsname(ptyfd), 50);
   grantpt(ptyfd);
   unlockpt(ptyfd);
 //  needGrantPty = FALSE;
@@ -84,16 +84,16 @@ int STTY::findTTY()
 
   // first we try UNIX PTY's
 #ifdef TIOCGPTN
-  strcpy(ptynam,"/dev/ptmx");
-  strcpy(ttynam,"/dev/pts/");
-  ptyfd = open(ptynam,O_RDWR);
+  strcpy(pty_master,"/dev/ptmx");
+  strcpy(tty_slave,"/dev/pts/");
+  ptyfd = open(pty_master,O_RDWR);
   if (ptyfd >= 0) // got the master pty
   {
     int ptyno;
     if (ioctl(ptyfd, TIOCGPTN, &ptyno) == 0)
     { struct stat sbuf;
-      sprintf(ttynam,"/dev/pts/%d",ptyno);
-      if (stat(ttynam,&sbuf) == 0 && S_ISCHR(sbuf.st_mode))
+      sprintf(tty_slave,"/dev/pts/%d",ptyno);
+      if (stat(tty_slave,&sbuf) == 0 && S_ISCHR(sbuf.st_mode))
       {
 //        needGrantPty = FALSE;
       }
@@ -114,11 +114,11 @@ int STTY::findTTY()
 #if defined(_SCO_DS) || defined(__USLC__) /* SCO OSr5 and UnixWare */
   if (ptyfd < 0)
   { for (int idx = 0; idx < 256; idx++)
-    { sprintf(ptynam, "/dev/ptyp%d", idx);
-      sprintf(ttynam, "/dev/ttyp%d", idx);
-      if (access(ttynam, F_OK) < 0) { idx = 256; break; }
-      if ((ptyfd = open (ptynam, O_RDWR)) >= 0)
-      { if (access (ttynam, R_OK|W_OK) == 0) break;
+    { sprintf(pty_master, "/dev/ptyp%d", idx);
+      sprintf(tty_slave, "/dev/ttyp%d", idx);
+      if (access(tty_slave, F_OK) < 0) { idx = 256; break; }
+      if ((ptyfd = open (pty_master, O_RDWR)) >= 0)
+      { if (access (tty_slave, R_OK|W_OK) == 0) break;
         close(ptyfd); ptyfd = -1;
       }
     }
@@ -130,11 +130,11 @@ int STTY::findTTY()
     {
       for (const char* s4 = "0123456789abcdef"; *s4 != 0; s4++)
       {
-        sprintf(ptynam,"/dev/pty%c%c",*s3,*s4);
-        sprintf(ttynam,"/dev/tty%c%c",*s3,*s4);
-        if ((ptyfd = open(ptynam, O_RDWR)) >= 0)
+        sprintf(pty_master,"/dev/pty%c%c",*s3,*s4);
+        sprintf(tty_slave,"/dev/tty%c%c",*s3,*s4);
+        if ((ptyfd = open(pty_master, O_RDWR)) >= 0)
         {
-          if (geteuid() == 0 || access(ttynam,R_OK|W_OK) == 0)
+          if (geteuid() == 0 || access(tty_slave,R_OK|W_OK) == 0)
             break;
 
           close(ptyfd);
@@ -151,7 +151,7 @@ int STTY::findTTY()
   {
 //  if (needGrantPty && !chownpty(ptyfd,TRUE))
 //  {
-//    fprintf(stderr,"konsole: chownpty failed for device %s::%s.\n",ptynam,ttynam);
+//    fprintf(stderr,"konsole: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
 //    fprintf(stderr,"       : This means the session can be eavesdroped.\n");
 //    fprintf(stderr,"       : Make sure konsole_grantpty is installed in\n");
 //    fprintf(stderr,"       : %s and setuid root.\n",
