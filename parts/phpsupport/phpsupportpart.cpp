@@ -156,14 +156,13 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotNewClass(){
-  /*QStringList classNames = QStringList::fromStrList(*(classStore()->globalContainer.getSortedClassNameList));
-   QList<ParsedClass>* classList = m_classStore->globalContainer.getSortedClassList();
+  QStringList classNames;
+  QList<ParsedClass>* classList = classStore()->globalContainer.getSortedClassList();
   for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
-    if(pclass->name().startsWith(classStart)){
-    }
-  */
-  //PHPNewClassDlg dlg;
-  //dlg.show();
+    classNames.append(pclass->name());
+  }
+  PHPNewClassDlg dlg(classNames);
+  dlg.show();
  }
 void PHPSupportPart::slotRun(){
   KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());  
