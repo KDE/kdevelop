@@ -1,3 +1,8 @@
+1999-07-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Brought file names in kdlgedit more in line with classnames
+	* Reduced code size by about 150k. It's still horribly bloated :-(
+	* Custom projects don't have sgml docs
+
 1999-07-07 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* corrected mispellings and errors in the current documentation
 	* fixed my sgmltools to make the index...;-)
@@ -5,6 +10,7 @@
 1999-07-06 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* small bugfixes in sourcecode generation (dialog editor)
 
+>>>>>>> 1.254
 1999-07-05 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* finished the event handling chapter and updated ps/html docs
 	* cleaned the makefile.am's a bit
