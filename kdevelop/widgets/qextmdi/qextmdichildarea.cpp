@@ -181,7 +181,9 @@ void QextMdiChildArea::resizeEvent(QResizeEvent *e)
 //	QScrollView::resizeEvent(e);
 	QextMdiChildFrm *lpC=m_pZ->last();
 	if(lpC){
-		if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->resize(width(),height());
+		if(lpC->m_state == QextMdiChildFrm::Maximized)
+			lpC->resize( width() + lpC->width() - lpC->m_pClient->width(),
+							 height() + lpC->height() - lpC->m_pClient->height());
 	}
 	e = 0; // dummy!, only to avoid "unused parameters"
 }

@@ -431,16 +431,23 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 					m_state=state;
 					begin=QRect(x()+width()/2,y()+height()/2,1,1);
 					//F.B. if(bAnimate)m_pManager->animate(begin,end);
-					setGeometry(m_pManager->rect());
+					setGeometry(-m_pClient->x(), -m_pClient->y(),
+									m_pManager->width() + width() - m_pClient->width(),
+									m_pManager->height() + height() - m_pClient->height());
 					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
 					show();
+					raise();
 					break;
 				case Normal:
 //					debug("Yeppp...");
 					m_state=state;
 					//F.B. if(bAnimate)m_pManager->animate(begin,end);
 					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-					setGeometry(m_pManager->rect());
+					setGeometry(-m_pClient->x(), -m_pClient->y(),
+									m_pManager->width() + width() - m_pClient->width(),
+									m_pManager->height() + height() - m_pClient->height());
+					show();
+					raise();
 					break;
 				case Maximized:
    				break;
@@ -735,7 +742,7 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 			QEXTMDI_MDI_CHILDFRM_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR,
 			captionWidth,
 			height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR)
-		);
+			);
 	}
 }
 
@@ -800,7 +807,7 @@ void QextMdiChildFrm::showSystemMenu()
          m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
       if( state() == Normal)
          m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("&As symbol"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
       m_pSystemMenu->insertItem(tr("M&ove"),this, SLOT(minimizePressed()));
       m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(minimizePressed()));
 #endif
