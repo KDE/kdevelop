@@ -19,7 +19,13 @@
 #define _PARSEDCONTAINER_H_
 
 #include <qdatastream.h>
+#if QT_VERSION >= 300
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>

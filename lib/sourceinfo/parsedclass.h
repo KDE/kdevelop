@@ -18,10 +18,16 @@
 #ifndef _PARSEDCLASS_H_
 #define _PARSEDCLASS_H_
 
-#include <qptrlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
+#if (QT_VERSION >= 300)
+#include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 #include "parseditem.h"
 #include "parsedparent.h"
 #include "parsedattribute.h"

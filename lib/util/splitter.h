@@ -12,9 +12,15 @@
 #ifndef _SPLITTER_H_
 #define _SPLITTER_H_
 
-#include <qptrlist.h>
 #include <qvaluelist.h>
 #include <qframe.h>
+#if (QT_VERSION >= 300)
+#include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 
 class SplitterHandle;
 

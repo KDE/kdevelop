@@ -18,7 +18,13 @@
 #ifndef _PARSEDMETHOD_H_
 #define _PARSEDMETHOD_H_
 
+#if (QT_VERSION >= 300)
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 #include "parsedattribute.h"
 #include "parsedargument.h"
 
