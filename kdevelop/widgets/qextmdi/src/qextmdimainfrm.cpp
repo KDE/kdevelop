@@ -299,7 +299,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       pCover->setWidget( pToolView);
       pCover->setToolTipString( tabToolTip);
       KDockWidget* pTargetDock = 0L;
-      if ((pTargetWnd == m_dockbaseAreaOfDocumentViews->getWidget()) && (pTargetWnd == this)) {
+      if ((pTargetWnd == m_dockbaseAreaOfDocumentViews->getWidget()) || (pTargetWnd == this)) {
          pTargetDock = m_dockbaseAreaOfDocumentViews;
       }
       else if(pTargetWnd != 0L) {
