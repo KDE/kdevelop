@@ -321,12 +321,7 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
     }
 
     Tag tag;
-    if( kind == "class" )
-        tag.setKind( Tag::Kind_Class );
-    else if( kind == "struct" )
-        tag.setKind( Tag::Kind_Struct );
-    else if( kind == "union" )
-        tag.setKind( Tag::Kind_Union );
+    tag.setKind( Tag::Kind_Class );
 
     tag.setFileName( m_fileName );
     tag.setName( className );
@@ -561,13 +556,13 @@ void TagCreator::parseFunctionArguments( Tag& tag, DeclaratorAST* declarator )
 {
     ParameterDeclarationClauseAST* clause = declarator->parameterDeclarationClause();
 
+    QStringList types;
+    QStringList args;
     if( clause && clause->parameterDeclarationList() ){
         ParameterDeclarationListAST* params = clause->parameterDeclarationList();
 	QPtrList<ParameterDeclarationAST> l( params->parameterList() );
 	QPtrListIterator<ParameterDeclarationAST> it( l );
 
-	QStringList types;
-	QStringList args;
 	while( it.current() ){
 	    ParameterDeclarationAST* param = it.current();
 	    ++it;
@@ -583,9 +578,14 @@ void TagCreator::parseFunctionArguments( Tag& tag, DeclaratorAST* declarator )
 	    args << name;
 	}
 
-        tag.setAttribute( "arguments", types );
-        tag.setAttribute( "argumentNames", args );
+        if( clause->ellipsis() ){
+            types << "...";
+            args << "";
+        }
+
     }
+    tag.setAttribute( "arguments", types );
+    tag.setAttribute( "argumentNames", args );
 }
 
 QString TagCreator::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator )

@@ -78,6 +78,7 @@ private slots:
 
 private:
     void setupCodeInformationRepository();
+    QString typeName( const QString& s );
 
 private:
     QGuardedPtr<CppSupportPart> m_pSupport;

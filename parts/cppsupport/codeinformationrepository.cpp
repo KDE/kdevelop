@@ -95,7 +95,6 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
         KTextEditor::CompletionEntry entry;
         entry.text = tag.name();
 
-        entry.prefix = QString::number( tag.kind() );
         if( tag.hasAttribute("arguments") ){
             entry.text += "(";
             entry.postfix += tag.attribute( "arguments" ).toStringList().join( ", " ) + ")";
@@ -116,6 +115,36 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
     	<< Catalog::QueryArgument( "name", className );
     return query( args );
 }
+
+QStringList CodeInformationRepository::getSignatureList( const QStringList & scope, const QString & functionName )
+{
+    kdDebug(9020) << "CodeInformationRepository::getSignatureList()" << endl;
+
+    QValueList<Catalog::QueryArgument> args;
+    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
+    	<< Catalog::QueryArgument( "scope", scope )
+    	<< Catalog::QueryArgument( "name", functionName );
+
+    QValueList<Tag> tags = query( args );
+
+    QStringList list;
+    QValueList<Tag>::Iterator it = tags.begin();
+    while( it != tags.end() ){
+        const Tag& tag = *it;
+        ++it;
+
+        QString signature;
+        signature += tag.name() + "(";
+        signature += tag.attribute( "arguments" ).toStringList().join( ", " );
+        signature += ")";
+
+        list << signature;
+    }
+
+    return list;
+}
+
+
 
 
 

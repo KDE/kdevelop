@@ -30,7 +30,7 @@ public:
 
 
     QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope );
-
+    QStringList getSignatureList( const QStringList& scope, const QString& functionName );
 
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
     QValueList<Tag> getTagsInFile( const QString& fileName );

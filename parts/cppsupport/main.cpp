@@ -3,16 +3,16 @@
 #include "driver.h"
 #include "ast.h"
 #include "lexer.h"
-
-#ifdef __WALKER__
-#include "my_walker.h"
-#endif
+#include "tag_creator.h"
 
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qprocess.h>
+
+#include <catalog.h>
+#include <kstandarddirs.h>
 
 #include <iostream>
 #include <stdlib.h>
@@ -107,112 +107,90 @@ public:
 
 };
 
+void parseDirectory( Driver& driver, QDir& dir, bool rec )
+{
+  {
+    QStringList fileList = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        QString fn = dir.path() + "/" + (*it);
+        ++it;
+
+        std::cout << "parsing file " << fn << std::endl; 
+        driver.parseFile( fn );
+    }
+  }
+
+  if( rec ) {
+    QStringList fileList = dir.entryList( QDir::Dirs );
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        if( (*it).startsWith(".") ){
+            ++it;
+            continue;
+        }
+
+        QDir subdir( dir.path() + "/" + (*it) );
+        ++it; 
+
+        parseDirectory( driver, subdir, rec );
+    }
+  }
+}
+
 int main( int argc, char* argv[] )
 {
     MyDriver driver;
     driver.setResolveDependencesEnabled( true );
+    KStandardDirs stddir;   
 
-    bool showMacros = false;
-    bool showIncludePaths = false;
-
-    for( int i=1; i<argc; ++i ){
-	QString a = argv[ i ];
-	if( a == "-m" || a == "--show-macros" ){
-	    showMacros = true;
-	    continue;
-        } else if( a == "-i" || a == "--show-includes-paths" ){
-            showIncludePaths = true;
-            continue;
-	} else if( a == "-n" || a == "--nodep" ){
-	    driver.setResolveDependencesEnabled( false );
-            continue;
-	}
-
-	QFile f( argv[i] );
-
-	std::cout << "parsing " << argv[ i ];
-
-	QFileInfo info( argv[i] );
-
-	driver.parseFile( info.absFilePath()  );
-	TranslationUnitAST* translationUnit = driver.translationUnit( info.absFilePath() );
-	Q_UNUSED( translationUnit );
-	QValueList<Problem> problems = driver.problems( info.absFilePath() );
-
-	if( info.extension() == "cpp" )
-	    driver.removeAllMacrosInFile( info.absFilePath() );
-
-	if( problems.count() == 0 ){
-	    std::cout << " OK" << std::endl;
-#ifdef __WALKER__
-	    MyWalker w;
-	    w.parseTranslationUnit( translationUnit.get() );
-#endif
-	    continue;
-	}
-
-	QString contents = driver.sourceProvider()->contents(info.absFilePath());
-	QStringList lines = QStringList::split( "\n", contents, true );
-	QValueList<Problem>::Iterator it = problems.begin();
-	std::cout << " found " << problems.count() << " problems" << std::endl;
-
-	while( it != problems.end() ) {
-	    Problem p = *it++;
-	    QString textLine = lines[ p.line() ];
-
-	    std::cerr << p.line()+1 << ": " << p.text() << std::endl;
-	    std::cerr << p.line()+1 << ": " << textLine << std::endl;
-
-	    QString s = textLine.left( p.column() );
-	    s.replace( QRegExp("[^\t]"), " " );
-	    s += "^";
-
-	    std::cerr << p.line()+1 << ": " << s << std::endl;
-	}
-
-	std::cerr << std::endl;
+    if( argc < 2 ){
+        std::cerr << "usage: r++ dbname directories..." << std::endl << std::endl;     
+        return -1;
     }
 
-    std::cout << std::endl << "parsed " << driver.parsedUnits().size() << " files" << std::endl;
+    bool rec = false;
 
-    if( showIncludePaths ){
-        std::cout << std::endl << "Include Paths" << std::endl;
-	std::cout << "-----------------------------------------------------------------" << std::endl;
-        QStringList paths = driver.includePaths();
-        QStringList::Iterator it = paths.begin();
-        while( it != paths.end() ){
-            std::cout << "." << (*it) << "." << std::endl;
-            ++it;
+    QString dbFileName = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" ) + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
+    std::cout << "dbFileName = " << dbFileName << std::endl;
+    if( QFile::exists(dbFileName) ){
+        std::cerr << "database " << dbFileName << " already exists!" << std::endl << std::endl;     
+        return -1;
+    }
+
+    for( int i=2; i<argc; ++i ){
+        QString s( argv[i] );
+        if( s == "-r" || s == "--recursive" ){
+           rec = true;
+           continue; 
         }
-	std::cout << "-----------------------------------------------------------------" << std::endl;
+
+        QDir dir( s );
+        if( !dir.exists() ){
+            std::cerr << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;     
+            continue;
+        }
+        parseDirectory( driver, dir, rec ); 
     }
 
-    if( showMacros ){
-	QMap<QString, Macro> macros = driver.macros();
-        std::cout << std::endl << "Macro Table #" << macros.size() << std::endl;
-	std::cout << "-----------------------------------------------------------------" << std::endl;
-	QMap<QString, Macro>::Iterator it = macros.begin();
-	while( it != macros.end() ){
-	    Macro m = it.data();
-            QString fileName = m.fileName();
-            QString name = m.name();
-            QString body = m.body();
+    Catalog catalog;
+    catalog.open( dbFileName );
+    catalog.addIndex( "kind" );
+    catalog.addIndex( "name" );
+    catalog.addIndex( "scope" );
+    catalog.addIndex( "fileName" );
 
+    QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
+    QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
+    while( unitIt != units.end() ){
+        TagCreator w( unitIt.key(), &catalog );
+        w.parseTranslationUnit( unitIt.data() );
 
-            if( fileName.isEmpty() )
-               fileName = "<nofile>";
-            if( name.isEmpty() )
-               name = "<noname>";
-            if( body.isEmpty() )
-               body = "<nobody>";
+        TranslationUnitAST::Node node = driver.takeTranslationUnit( unitIt.key() );
+        node.reset();
 
-	    std::cout << "found macro " << name << " in file " << fileName << " with body " << body;
-
-            std::cout << std::endl;
-            ++it;
-	}
-	std::cout << "-----------------------------------------------------------------" << std::endl << std::endl;
+        ++unitIt;
     }
 
-    return -1;
+    return 0;
 }

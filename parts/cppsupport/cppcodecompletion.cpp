@@ -23,6 +23,8 @@
 #include "ast.h"
 #include "ast_utils.h"
 #include "codeinformationrepository.h"
+#include "parser.h"
+#include "lexer.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -631,9 +633,10 @@ CppCodeCompletion::completeText( )
     kdDebug(9007) << "prefix = |" << word << "|" << endl;
     kdDebug(9007) << "expr = |" << expr << "|" << endl;
 
-    QString type = evaluateExpression( expr, ctx );
+    QString type = typeName( evaluateExpression(expr, ctx) );
     if( type ){
 
+        QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
 
 	if( showArguments ){
 	    QStringList functionList = getSignatureListForClass( type, word );
@@ -642,7 +645,15 @@ CppCodeCompletion::completeText( )
 		functionList = getGlobalSignatureList( word );
 	    }
 
-	    if( functionList.count() ){
+	    if( functionList.count() == 0 ){
+		functionList = m_repository->getSignatureList( scope, word );
+	    }
+
+	    if( functionList.count() == 0 ){
+		functionList = m_repository->getSignatureList( QStringList(), word );
+	    }
+
+            if( functionList.count() ){
 		m_activeCompletion->showArgHint( functionList, "()", "," );
 	    }
 	} else {
@@ -652,7 +663,6 @@ CppCodeCompletion::completeText( )
                 // try with the catalog
                 kdDebug(9020) << "-------> looking for " << type << endl;
 
-                QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
                 entryList = m_repository->getEntriesInScope( scope );
             }
 
@@ -1121,6 +1131,41 @@ void CppCodeCompletion::setupCodeInformationRepository( )
 
         m_repository->addCatalog( QString::number(id++), catalog );
     }
+}
+
+QString CppCodeCompletion::typeName( const QString& str )
+{
+    Driver d;
+    Lexer lex( &d );
+    lex.setSource( str );
+    Parser parser( &d, &lex );
+
+    TypeSpecifierAST::Node typeSpec;
+    if( parser.parseTypeSpecifier(typeSpec) ){
+        NameAST* name = typeSpec->name();
+        
+	QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+
+        QString type;
+	while( it.current() ){
+	    if( it.current()->name() ){
+	       type += it.current()->name()->text() + "::";
+	    } 
+	    ++it;
+	}
+
+        if( name->unqualifiedName() && name->unqualifiedName()->name() ){
+            type += name->unqualifiedName()->name()->text();
+        }
+ 
+        kdDebug(9020) << "-----------> the type is = " << type << endl;
+        return type;
+    }
+    
+    kdDebug(9020) << "---------> no type found!!" << endl;
+
+    return QString::null;
 }
 
 

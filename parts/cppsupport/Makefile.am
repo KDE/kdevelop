@@ -30,4 +30,4 @@ bin_PROGRAMS =  r++
 r___LDFLAGS = $(all_libraries)
 r___SOURCES = main.cpp cppsupportfactory.h
 r___DEPENDENCIES = libkdevcppsupport.la
-r___LDADD = libkdevcppsupport.la
+r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la
