@@ -16,6 +16,7 @@
 
 #include "kdevproject.h"
 
+class KDialogBase;
 class AutoProjectWidget;
 
 
@@ -36,10 +37,10 @@ protected:
     virtual QStringList allSourceFiles();
 
 private slots:
+    void projectConfigWidget(KDialogBase *dlg);
     void slotBuild();
     void slotClean();
     void slotConfigure();
-    void slotProjectOptions();
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);

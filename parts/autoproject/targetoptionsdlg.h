@@ -12,14 +12,13 @@
 #ifndef _TARGETOPTIONSDLG_
 #define _TARGETOPTIONSDLG_
 
-#include <qdialog.h>
+#include "targetoptionsdlgbase.h"
 
 class AutoProjectWidget;
 class TargetItem;
-class QLineEdit;
 
 
-class TargetOptionsDialog : public QDialog
+class TargetOptionsDialog : public TargetOptionsDialogBase
 {
     Q_OBJECT
 
@@ -29,12 +28,16 @@ public:
     ~TargetOptionsDialog();
 
 private:
-    void init();
+    virtual void insideMoveUpClicked();
+    virtual void insideMoveDownClicked();
+    virtual void outsideMoveUpClicked();
+    virtual void outsideMoveDownClicked();
+    virtual void outsideAddClicked();
+    virtual void outsideRemoveClicked();
     virtual void accept();
     
-    QLineEdit *ldlibadd_edit;
-    QLineEdit *ldflags_edit;
-    QLineEdit *dependencies_edit;
+    void readConfig();
+    void storeConfig();
 
     TargetItem *target;
     AutoProjectWidget *m_widget;

@@ -12,17 +12,14 @@
 #ifndef _SUBPROJECTOPTIONSDLG_H_
 #define _SUBPROJECTOPTIONSDLG_H_
 
-#include <qtabdialog.h>
+#include "subprojectoptionsdlgbase.h"
 
 class AutoProjectPart;
 class AutoProjectWidget;
 class SubprojectItem;
-class QLineEdit;
-class QListView;
-class KEditListBox;
 
 
-class SubprojectOptionsDialog : public QTabDialog
+class SubprojectOptionsDialog : public SubprojectOptionsDialogBase
 {
     Q_OBJECT
     
@@ -31,26 +28,22 @@ public:
                              SubprojectItem *item, QWidget *parent=0, const char *name=0 );
     ~SubprojectOptionsDialog();
 
-private slots:
-    void cflagsClicked();
-    void cxxflagsClicked();
-    void f77flagsClicked();
-    void addPrefixClicked();
-    void removePrefixClicked();
-    
 private:
-    QWidget *createCompilerTab();
-    QWidget *createIncludeTab();
-    QWidget *createPrefixTab();
-    
-    void init();
+    virtual void cflagsClicked();
+    virtual void cxxflagsClicked();
+    virtual void fflagsClicked();
+    virtual void insideMoveUpClicked();
+    virtual void insideMoveDownClicked();
+    virtual void outsideMoveUpClicked();
+    virtual void outsideMoveDownClicked();
+    virtual void outsideAddClicked();
+    virtual void outsideRemoveClicked();
+    virtual void addPrefixClicked();
+    virtual void removePrefixClicked();
     virtual void accept();
-
-    QLineEdit *cflags_edit;
-    QLineEdit *cxxflags_edit;
-    QLineEdit *f77flags_edit;
-    QListView *prefix_view;
-    KEditListBox *include_view;
+    
+    void readConfig();
+    void storeConfig();
 
     SubprojectItem *subProject;
     AutoProjectWidget *m_widget;

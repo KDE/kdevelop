@@ -10,14 +10,17 @@
  ***************************************************************************/
 
 #include <qdom.h>
+#include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
-#include <keditlistbox.h>
 #include <kdialog.h>
+#include <keditlistbox.h>
+#include <klineeditdlg.h>
 #include <klocale.h>
+#include <knotifyclient.h>
 #include <kservice.h>
 
 #include "domutil.h"
@@ -30,7 +33,7 @@
 
 SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProjectWidget *widget,
                                                  SubprojectItem *item, QWidget *parent, const char *name)
-    : QTabDialog(parent, name, true)
+    : SubprojectOptionsDialogBase(parent, name, true)
 {
     setCaption(i18n("Subproject options for '%1'").arg(item->subdir));
 
@@ -38,117 +41,39 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     m_widget = widget;
     m_part = part;
 
-    addTab(createCompilerTab(), i18n("Compiler"));
-    addTab(createIncludeTab(), i18n("Includes"));
-    addTab(createPrefixTab(), i18n("Prefixes"));
-    
-    setCancelButton();
-    connect( this, SIGNAL(applyButtonPressed()), this, SLOT(accept()) );
-    connect( this, SIGNAL(cancelButtonPressed()), this, SLOT(reject()) );
-
-    init();
-}
-
-
-QWidget *SubprojectOptionsDialog::createCompilerTab()
-{
-    QWidget *w = new QWidget(this);
-    
-    QLabel *cflags_label      = new QLabel(i18n("Compiler flags for C Compiler (CFLAGS):"), w);
-    QLabel *cxxflags_label    = new QLabel(i18n("Compiler flags for C++ Compiler (CXXFLAGS):"), w);
-    QLabel *f77flags_label    = new QLabel(i18n("Compiler flags for Fortran Compiler (FFLAGS):"), w);
-    
-    QHBox *cflags_box   = new QHBox(w);
-    cflags_box->setSpacing(4);
-    QHBox *cxxflags_box = new QHBox(w);
-    cxxflags_box->setSpacing(4);
-    QHBox *f77flags_box = new QHBox(w);
-    f77flags_box->setSpacing(4);
-    
-    cflags_edit   = new QLineEdit(cflags_box);
-    cxxflags_edit = new QLineEdit(cxxflags_box);
-    f77flags_edit = new QLineEdit(f77flags_box);
-
     QFontMetrics fm(cflags_edit->fontMetrics());
     int wid = fm.width('X')*35;
     cflags_edit->setMinimumWidth(wid);
     cxxflags_edit->setMinimumWidth(wid);
-    f77flags_edit->setMinimumWidth(wid);
-    
-    QPushButton *cflags_button   = new QPushButton("...", cflags_box);
-    cflags_button->setFixedSize(30, 25);
-    QPushButton *cxxflags_button = new QPushButton("...", cxxflags_box);
-    cxxflags_button->setFixedSize(30, 25);
-    QPushButton *f77flags_button = new QPushButton("...", f77flags_box);
-    f77flags_button->setFixedSize(30, 25);
+    fflags_edit->setMinimumWidth(wid);
 
-    QDomDocument &doc = *m_part->document();
-    //    kdDebug(9020) << "ccompiler: " << DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompiler") << endl;
-    //    kdDebug(9020) << "hasservice: " << (bool)KService::serviceByName(DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompiler")) << endl;
-
+    QDomDocument &doc = *part->document();
     if (!KService::serviceByName(DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompiler")))
         cflags_button->setEnabled(false);
     if (!KService::serviceByName(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxcompiler")))
         cxxflags_button->setEnabled(false);
     if (!KService::serviceByName(DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77compiler")))
-        f77flags_button->setEnabled(false);
-                            
-    connect(cflags_button,   SIGNAL(clicked()), this, SLOT(cflagsClicked()));
-    connect(cxxflags_button, SIGNAL(clicked()), this, SLOT(cxxflagsClicked()));
-    connect(f77flags_button, SIGNAL(clicked()), this, SLOT(f77flagsClicked()));
+        fflags_button->setEnabled(false);
 
-    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
-    layout->addWidget(cflags_label);
-    layout->addWidget(cflags_box);
-    layout->addSpacing(6);
-    layout->addWidget(cxxflags_label);
-    layout->addWidget(cxxflags_box);
-    layout->addSpacing(6);
-    layout->addWidget(f77flags_label);
-    layout->addWidget(f77flags_box);
-
-    return w;
-}
-
-
-QWidget *SubprojectOptionsDialog::createIncludeTab()
-{
-    QWidget *w = new QWidget(this);
-
-    //    QLabel *include_label = new QLabel(i18n("Include directories:"), w);
+    insideinc_listview->header()->hide();
+    outsideinc_listview->header()->hide();
     
-    include_view = new KEditListBox(i18n("Include directories"), w);
-
-    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
-    //    layout->addWidget(include_label);
-    layout->addWidget(include_view);
-
-    return w;
-}
-
-
-QWidget *SubprojectOptionsDialog::createPrefixTab()
-{
-    QWidget *w = new QWidget(this);
-
-    QLabel *prefix_label = new QLabel(i18n("Custom prefixes:"), w);
+    insideinc_listview->setSorting(-1);
+    outsideinc_listview->setSorting(-1);
+    prefix_listview->setSorting(-1);
     
-    prefix_view = new QListView(w);
-    prefix_view->setAllColumnsShowFocus(true);
-    prefix_view->addColumn(i18n("Name"));
-    prefix_view->addColumn(i18n("Path"));
-    
-    QVBox *buttonbox = new QVBox(w);
-    buttonbox->setMargin(KDialog::spacingHint());
-    connect( new QPushButton(i18n("Add..."), buttonbox), SIGNAL(clicked()), this, SLOT(addPrefixClicked()) );
-    connect( new QPushButton(i18n("Remove"), buttonbox), SIGNAL(clicked()), this, SLOT(removePrefixClicked()) );
-
-    QGridLayout *grid = new QGridLayout(w, 2, 2, 2*KDialog::marginHint(), KDialog::spacingHint());
-    grid->addMultiCellWidget(prefix_label, 0, 0, 0, 1);
-    grid->addWidget(prefix_view, 1, 0);
-    grid->addWidget(buttonbox, 1, 1);
-    
-    return w;
+    // Insert all subdirectories as possible include directories
+    QStringList l = widget->allSubprojects();
+    QCheckListItem *lastItem = 0;
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        QCheckListItem *clitem = new QCheckListItem(insideinc_listview, *it, QCheckListItem::CheckBox);
+        if (lastItem)
+            clitem->moveItem(lastItem);
+        lastItem = clitem;
+    }
+        
+    readConfig();
 }
 
 
@@ -156,28 +81,42 @@ SubprojectOptionsDialog::~SubprojectOptionsDialog()
 {}
 
 
-void SubprojectOptionsDialog::init()
+void SubprojectOptionsDialog::readConfig()
 {
 
     cflags_edit->setText(subProject->variables["AM_CFLAGS"]);
     cxxflags_edit->setText(subProject->variables["AM_CXXFLAGS"]);
-    f77flags_edit->setText(subProject->variables["AM_FFLAGS"]);
+    fflags_edit->setText(subProject->variables["AM_FFLAGS"]);
 
     QCString includes = subProject->variables["INCLUDES"];
     QStringList l = QStringList::split(QRegExp("[ \t]"), QString(includes));
-    include_view->insertStringList(l);
-    
-    //    QStringList::ConstIterator it1;
-    //    for (it1 = l.begin(); it1 != l.end(); ++it1)
-    //        include_view->in
+
+    QListViewItem *lastItem = 0;
+    QStringList::Iterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
+        while (clitem) {
+            if (*it == ("-I$(top_srcdir)/" + clitem->text())) {
+                clitem->setOn(true);
+                break;
+            }
+            clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        }
+        if (!clitem) {
+            QListViewItem *item = new QListViewItem(outsideinc_listview, *it);
+            if (lastItem)
+                item->moveItem(lastItem);
+            lastItem = item;
+        }
+    }
     
     QMap<QCString, QCString>::ConstIterator it2;
     for (it2 = subProject->prefixes.begin(); it2 != subProject->prefixes.end(); ++it2)
-        new QListViewItem(prefix_view, it2.key(), it2.data());
+        new QListViewItem(prefix_listview, it2.key(), it2.data());
 }
 
 
-void SubprojectOptionsDialog::accept()
+void SubprojectOptionsDialog::storeConfig()
 {
     QMap<QCString, QCString> replaceMap;
     
@@ -196,25 +135,34 @@ void SubprojectOptionsDialog::accept()
     }
 
     QCString old_fflags = subProject->variables["AM_FFLAGS"];
-    QCString new_fflags = f77flags_edit->text().latin1();
+    QCString new_fflags = fflags_edit->text().latin1();
     if (new_fflags != old_fflags) {
         subProject->variables["AM_FFLAGS"] = new_fflags;
         replaceMap.insert(QCString("AM_FFLAGS"), new_fflags);
     }
 
-    QCString includes = include_view->items().join(" ").latin1();
+    QStringList includeslist;
+    QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
+    while (clitem) {
+        includeslist.append("-I$(top_srcdir)/" + clitem->text());
+        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+    }
+    clitem = static_cast<QCheckListItem*>(outsideinc_listview->firstChild());
+    while (clitem) {
+        includeslist.append(clitem->text());
+        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+    }
+    QCString includes = includeslist.join(" ").latin1();
     subProject->variables["INCLUDES"] = includes;
     replaceMap.insert("INCLUDES", includes);
     
-    for (QListViewItem *item = prefix_view->firstChild();
+    for (QListViewItem *item = prefix_listview->firstChild();
          item; item = item->nextSibling())
         replaceMap.insert(item->text(0).latin1(), item->text(1).latin1());
 
     // FIXME: take removed items into account
     
     AutoProjectTool::modifyMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
-
-    QTabDialog::accept();
 }
 
 
@@ -236,12 +184,77 @@ void SubprojectOptionsDialog::cxxflagsClicked()
 }
 
 
-void SubprojectOptionsDialog::f77flagsClicked()
+void SubprojectOptionsDialog::fflagsClicked()
 {
     QString f77compiler = DomUtil::readEntry(*m_part->document(), "/kdevautoproject/compiler/f77compiler");
-    QString new_fflags = AutoProjectTool::execFlagsDialog(f77compiler, f77flags_edit->text(), this);
+    QString new_fflags = AutoProjectTool::execFlagsDialog(f77compiler, fflags_edit->text(), this);
     if (!new_fflags.isNull())
-        f77flags_edit->setText(new_fflags);
+        fflags_edit->setText(new_fflags);
+}
+
+
+void SubprojectOptionsDialog::insideMoveUpClicked()
+{
+    if (insideinc_listview->currentItem() == insideinc_listview->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = insideinc_listview->firstChild();
+    while (item->nextSibling() != insideinc_listview->currentItem())
+        item = item->nextSibling();
+    item->moveItem(insideinc_listview->currentItem());
+}
+
+
+void SubprojectOptionsDialog::insideMoveDownClicked()
+{
+   if (insideinc_listview->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   insideinc_listview->currentItem()->moveItem(insideinc_listview->currentItem()->nextSibling());
+}
+
+
+void SubprojectOptionsDialog::outsideMoveUpClicked()
+{
+    if (outsideinc_listview->currentItem() == outsideinc_listview->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = outsideinc_listview->firstChild();
+    while (item->nextSibling() != outsideinc_listview->currentItem())
+        item = item->nextSibling();
+    item->moveItem(outsideinc_listview->currentItem());
+}
+
+
+void SubprojectOptionsDialog::outsideMoveDownClicked()
+{
+   if (outsideinc_listview->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   outsideinc_listview->currentItem()->moveItem(outsideinc_listview->currentItem()->nextSibling());
+}
+
+
+void SubprojectOptionsDialog::outsideAddClicked()
+{
+    bool ok;
+    QString dir = KLineEditDlg::getText(i18n("Add include directory:"), "-I", &ok, 0);
+    if (ok && !dir.isEmpty() && dir != "-I")
+        new QListViewItem(outsideinc_listview, dir);
+}
+
+
+void SubprojectOptionsDialog::outsideRemoveClicked()
+{
+    delete outsideinc_listview->currentItem();
 }
 
 
@@ -251,13 +264,19 @@ void SubprojectOptionsDialog::addPrefixClicked()
     if (!dlg.exec())
         return;
     
-    new QListViewItem(prefix_view, dlg.name(), dlg.path());
+    new QListViewItem(prefix_listview, dlg.name(), dlg.path());
 }
 
 
 void SubprojectOptionsDialog::removePrefixClicked()
 {
-    delete prefix_view->currentItem();
+    delete prefix_listview->currentItem();
+}
+
+
+void SubprojectOptionsDialog::accept()
+{
+    storeConfig();
 }
 
 #include "subprojectoptionsdlg.moc"

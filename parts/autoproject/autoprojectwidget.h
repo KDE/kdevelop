@@ -124,6 +124,14 @@ public:
     void closeProject();
 
     /**
+     * A list of the (relative) names of all subprojects (== subdirectories)
+     */
+    QStringList allSubprojects();
+    /**
+     * A list of the (relative) names of all libraries
+     */
+    QStringList allLibraries();
+    /**
      * A list of all files that belong to the project
      **/
     QStringList allSourceFiles();

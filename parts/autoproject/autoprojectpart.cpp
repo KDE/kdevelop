@@ -11,6 +11,7 @@
 
 #include <qwhatsthis.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -20,7 +21,7 @@
 #include "kdevmakefrontend.h"
 #include "autoprojectfactory.h"
 #include "autoprojectwidget.h"
-#include "projectoptionsdlg.h"
+#include "projectoptionswidget.h"
 #include "autoprojectpart.h"
 
 
@@ -56,16 +57,22 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name
                           this, SLOT(slotConfigure()),
                           actionCollection(), "project_configure" );
 
-    // Temporarily, will be substituted by signal connection Core::projectConfigWidget()
-    action = new KAction( i18n("Compiler &Options..."), 0,
-                          this, SLOT(slotProjectOptions()),
-                          actionCollection(), "project_options2" );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
 
 
 AutoProjectPart::~AutoProjectPart()
 {
     delete m_widget;
+}
+
+
+void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Compiler Options"));
+    ProjectOptionsWidget *w = new ProjectOptionsWidget(this, vbox, "documentation tree config widget");
+    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
 
@@ -182,13 +189,6 @@ void AutoProjectPart::slotConfigure()
     }
 
     makeFrontend()->startMakeCommand(projectDirectory(), cmdline);
-}
-
-
-void AutoProjectPart::slotProjectOptions()
-{
-    ProjectOptionsDialog dlg(this, 0, "compiler options dialog");
-    dlg.exec();
 }
 
 #include "autoprojectpart.moc"

@@ -145,7 +145,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part)
     details = new KListView(splitter, "project details widget");
     details->setRootIsDecorated(true);
     details->setFrameStyle(Panel | Sunken);
-    overview->setSorting(-1);
+    details->setSorting(-1);
     details->setLineWidth(2); 
     details->header()->hide();
     details->addColumn("");
@@ -184,6 +184,46 @@ void AutoProjectWidget::closeProject()
 {
     overview->clear();
     details->clear();
+}
+
+
+QStringList AutoProjectWidget::allSubprojects()
+{
+    int prefixlen = projectDirectory().length()+1;
+    QStringList res;
+    
+    QListViewItemIterator it(overview);
+    for (; it.current(); ++it) {
+        if (it.current() == overview->firstChild())
+            continue;
+        QString path = static_cast<SubprojectItem*>(it.current())->path;
+        res.append(path.mid(prefixlen));
+    }
+    
+    return res;
+}
+
+
+QStringList AutoProjectWidget::allLibraries()
+{
+    int prefixlen = projectDirectory().length()+1;
+    QStringList res;
+    
+    QListViewItemIterator it(overview);
+    for (; it.current(); ++it) {
+        SubprojectItem *spitem = static_cast<SubprojectItem*>(it.current());
+        QString path = spitem->path;
+        QListIterator<TargetItem> tit(spitem->targets);
+        for (; tit.current(); ++tit) {
+            QString primary = (*tit)->primary;
+            if (primary == "LIBRARIES" || primary == "LTLIBRARIES") {
+                QString fullname = path + "/" + QString((*tit)->name);
+                res.append(fullname.mid(prefixlen));
+            }
+        }
+    }
+    
+    return res;
 }
 
 
@@ -528,6 +568,13 @@ void AutoProjectWidget::parseSubdirs(SubprojectItem *item, QCString /*lhs*/, QCS
         if (newitem && static_cast<SubprojectItem*>(newitem->parent())->subdir == "pics")
             open = false;
         newitem->setOpen(open);
+
+        // Move to the bottom of the list
+        QListViewItem *lastItem = item->firstChild();
+        while (lastItem->nextSibling())
+            lastItem = lastItem->nextSibling();
+        if (lastItem != newitem)
+            newitem->moveItem(lastItem);
     }
 }
 

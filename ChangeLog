@@ -1,3 +1,13 @@
+2001-06-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* New sub project and target options dialogs.
+	  These are much more user-friend wrt convenience
+	  libraries and include directories within the
+	  project. Furthermore, the libtool options are
+	  presented in documented check boxes
+	* Put compiler options widget into the project
+	  options framework
+
 2001-06-01  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
     * Reimplemented the modified-on-disk check with the new
