@@ -1,0 +1,40 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Ruby</title>
+<base href="http://www.ruby-doc.org/"/>
+<tocsect1 name="Pickaxe Book" url="docs/ProgrammingRuby/">
+<tocsect2 name="Contents" url="docs/ProgrammingRuby/html/index.html"></tocsect2>
+<tocsect2 name="Foreword" url="docs/ProgrammingRuby/html/foreword.html"></tocsect2>
+<tocsect2 name="Preface" url="docs/ProgrammingRuby/html/preface.html"></tocsect2>
+<tocsect2 name="Roadmap" url="docs/ProgrammingRuby/html/roadmap.html"></tocsect2>
+<tocsect2 name="Ruby.new" url="docs/ProgrammingRuby/html/intro.html"></tocsect2>
+<tocsect2 name="Classes, Objects, and Variables" url="docs/ProgrammingRuby/html/tut_classes.html"></tocsect2>
+<tocsect2 name="Containers, Blocks, and Iterators" url="docs/ProgrammingRuby/html/tut_containers.html"></tocsect2>
+<tocsect2 name="Standard Types" url="docs/ProgrammingRuby/html/tut_stdtypes.html"></tocsect2>
+<tocsect2 name="More About Methods" url="docs/ProgrammingRuby/html/tut_methods.html"></tocsect2>
+<tocsect2 name="Expressions" url="docs/ProgrammingRuby/html/tut_expressions.html"></tocsect2>
+<tocsect2 name="Exceptions, Catch, and Throw" url="docs/ProgrammingRuby/html/tut_exceptions.html"></tocsect2>
+<tocsect2 name="Modules" url="docs/ProgrammingRuby/html/tut_modules.html"></tocsect2>
+<tocsect2 name="Basic Input and Output" url="docs/ProgrammingRuby/html/tut_io.html"></tocsect2>
+<tocsect2 name="Threads and Processes" url="docs/ProgrammingRuby/html/tut_threads.html"></tocsect2>
+<tocsect2 name="When Trouble Strikes" url="docs/ProgrammingRuby/html/trouble.html"></tocsect2>
+<tocsect2 name="Ruby and Its World" url="docs/ProgrammingRuby/html/rubyworld.html"></tocsect2>
+<tocsect2 name="Ruby and the Web" url="docs/ProgrammingRuby/html/web.html"></tocsect2>
+<tocsect2 name="Ruby Tk" url="docs/ProgrammingRuby/html/ext_tk.html"></tocsect2>
+<tocsect2 name="Ruby and Microsoft Windows" url="docs/ProgrammingRuby/html/win32.html"></tocsect2>
+<tocsect2 name="Extending Ruby" url="docs/ProgrammingRuby/html/ext_ruby.html"></tocsect2>
+<tocsect2 name="The Ruby Language" url="docs/ProgrammingRuby/html/language.html"></tocsect2>
+<tocsect2 name="Classes and Objects" url="docs/ProgrammingRuby/html/classes.html"></tocsect2>
+<tocsect2 name="Locking Ruby in the Safe" url="docs/ProgrammingRuby/html/taint.html"></tocsect2>
+<tocsect2 name="Reflection, ObjectSpace, and Distributed  Ruby" url="docs/ProgrammingRuby/html/ospace.html"></tocsect2>
+<tocsect2 name="Built-in Classes and Methods" url="docs/ProgrammingRuby/html/builtins.html"></tocsect2>
+<tocsect2 name="Standard Library" url="docs/ProgrammingRuby/html/lib_standard.html"></tocsect2>
+<tocsect2 name="Object-Oriented Design Libraries" url="docs/ProgrammingRuby/html/lib_patterns.html"></tocsect2>
+<tocsect2 name="Network and Web Libraries" url="docs/ProgrammingRuby/html/lib_network.html"></tocsect2>
+<tocsect2 name="Microsoft Windows Support" url="docs/ProgrammingRuby/html/lib_windows.html"></tocsect2>
+<tocsect2 name="Embedded Documentation" url="docs/ProgrammingRuby/html/rdtool.html"></tocsect2>
+<tocsect2 name="Interactive Ruby Shell" url="docs/ProgrammingRuby/html/irb.html"></tocsect2>
+<tocsect2 name="Support" url="docs/ProgrammingRuby/html/support.html"></tocsect2>
+</tocsect1>
+</kdeveloptoc>
+
