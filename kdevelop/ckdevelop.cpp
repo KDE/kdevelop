@@ -600,38 +600,38 @@ void CKDevelop::slotViewPreviousError(){
 
 void CKDevelop::slotViewTTreeView()
 {
-  bool willshow = !view_menu->isItemChecked(ID_VIEW_TREEVIEW);
-  view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
-  toolBar()->setButton(ID_VIEW_TREEVIEW, willshow);
-    if (willshow)
-      t_tab_view->show();
-    else
-      t_tab_view->hide();
+	bool willshow = !view_menu->isItemChecked(ID_VIEW_TREEVIEW);
+	view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
+	toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, willshow);
+	if (willshow)
+		makeDockVisible(dockbase_t_tab_view);
+	else
+		makeDockInvisible(dockbase_t_tab_view);
 }
 
 void CKDevelop::slotViewTOutputView()
 {
   bool willshow = !view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
   view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
-  toolBar()->setButton(ID_VIEW_OUTPUTVIEW, willshow);
+  toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
   if (willshow)
-    o_tab_view->show();
+    makeDockVisible(dockbase_o_tab_view);
   else
-    o_tab_view->hide();
+    makeDockInvisible(dockbase_o_tab_view);
 }
 
 
 void CKDevelop::slotViewTStdToolbar(){
- if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
-   view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
-    enableToolBar(KToolBar::Hide);
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show);
-  }
-
+	if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
+		view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
+		enableToolBar(KToolBar::Hide, ID_MAIN_TOOLBAR);
+	}
+	else{
+		view_menu->setItemChecked(ID_VIEW_TOOLBAR,true);
+		enableToolBar(KToolBar::Show, ID_MAIN_TOOLBAR);
+	}
 }
+
 void CKDevelop::slotViewTBrowserToolbar(){
   if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR)){
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,false);
@@ -1773,7 +1773,7 @@ void CKDevelop::enableCommand(int id_)
   accel->setItemEnabled(id_,true);
 
 //  menuBar()->setItemEnabled(id_,true);
-  toolBar()->setItemEnabled(id_,true);
+  toolBar(ID_MAIN_TOOLBAR)->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
 }
 
@@ -1783,7 +1783,7 @@ void CKDevelop::disableCommand(int id_)
   accel->setItemEnabled(id_,false);
 
 //  menuBar()->setItemEnabled(id_,false);
-  toolBar()->setItemEnabled(id_,false);
+  toolBar(ID_MAIN_TOOLBAR)->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
 }
 
@@ -2094,78 +2094,80 @@ int CKDevelop::searchToolGetNumber(QString str){
 
 
 void CKDevelop::slotProcessExited(KProcess *proc){
-  setToolMenuProcess(true);
-  slotStatusMsg(i18n("Ready."));
-  bool ready = true;
-  if (proc->normalExit()) {
-    if (next_job == make_cmd){ // rest from the rebuild all
-      messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
-      (*messages_widget) << make_cmd;
-      if(!prj->getMakeOptions().isEmpty())
-      	(*messages_widget) << prj->getMakeOptions();
-      setToolMenuProcess(false);
-      messages_widget->startJob();
-      next_job = "";
-      ready=false;
-    }
-    if ((next_job == "run"  || next_job == "run_with_args") && proc->exitStatus() == 0){
-      // rest from the buildRun
-      QString program = prj->getBinPROGRAM().lower();
+	setToolMenuProcess(true);
+	slotStatusMsg(i18n("Ready."));
+	bool ready = true;
+	if (proc->normalExit()) {
+		if (next_job == make_cmd){ // rest from the rebuild all
+			messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+			(*messages_widget) << make_cmd;
+			if(!prj->getMakeOptions().isEmpty())
+				(*messages_widget) << prj->getMakeOptions();
+			setToolMenuProcess(false);
+			messages_widget->startJob();
+			next_job = "";
+			ready=false;
+		}
+		if ((next_job == "run"  || next_job == "run_with_args") && proc->exitStatus() == 0){
+			// rest from the buildRun
+			QString program = prj->getBinPROGRAM().lower();
 
-      if(next_job == "run_with_args"){
-        QString args = prj->getExecuteArgs();
-	if(!args.isEmpty()){
-	  program = prj->getBinPROGRAM().lower() + " "+args;
+			if(next_job == "run_with_args"){
+				QString args = prj->getExecuteArgs();
+				if(!args.isEmpty()){
+					program = prj->getBinPROGRAM().lower() + " "+args;
+				}
+			}
+
+			// Warning: not every user has the current directory in his path !
+			QString exec_str;
+			if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
+				// set this tab page as current tab
+				dockbase_messages_widget->makeDockVisible();	//was:	o_tab_view->setCurrentTab(STDINSTDOUT);
+				exec_str = CToolClass::searchInstProgram("konsole")? "konsole" : "xterm";
+				exec_str += " -e /bin/sh -c './";
+				exec_str += program;
+				exec_str += ";echo \"\n";
+				exec_str += i18n("Press Enter to continue!");
+				exec_str += "\";read'";
+			} else {
+				// set this tab page as current tab
+				dockbase_outputview->makeDockVisible();//was:	o_tab_view->setCurrentTab(STDERR);
+				exec_str = "./" + program;
+			}
+			cerr << endl << "EXEC:" << exec_str;
+			setToolMenuProcess(false);
+			outputview->prepareJob(prj->getProjectDir() + prj->getSubDir());
+			(*outputview) << exec_str;
+			outputview->startJob();
+			next_job = "";
+			ready = false;
+		}
+
+		next_job = "";
 	}
-      }
-
-      // Warning: not every user has the current directory in his path !
-      QString exec_str;
-      if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
-	o_tab_view->setCurrentTab(STDINSTDOUT);
-	exec_str = CToolClass::searchInstProgram("konsole")? "konsole" : "xterm";
-        exec_str += " -e /bin/sh -c './";
-        exec_str += program;
-        exec_str += ";echo \"\n";
-        exec_str += i18n("Press Enter to continue!");
-        exec_str += "\";read'";
-      } else {
-	o_tab_view->setCurrentTab(STDERR);
-	exec_str = "./" + program;
-      }
-      cerr << endl << "EXEC:" << exec_str;
-      setToolMenuProcess(false);
-      outputview->prepareJob(prj->getProjectDir() + prj->getSubDir());
-      (*outputview) << exec_str;
-      outputview->startJob();
-      next_job = "";
-      ready = false;
-    }
-
-    next_job = "";
-  }
 #if 0
-  if (ready){ // start the error-message parser
-      QString str1; // = messages_widget->text();
+	if (ready){ // start the error-message parser
+		QString str1; // = messages_widget->text();
 
-      if(error_parser->getMode() == CErrorMessageParser::MAKE){
-	  error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-      }
-      if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-	  error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-      }
-      //enable/disable the menus/toolbars
-      if(error_parser->hasNext()){
-	  enableCommand(ID_VIEW_NEXT_ERROR);
-      }
-      else{
-	  disableCommand(ID_VIEW_NEXT_ERROR);
-      }
-  }
-  if(beep && ready){
-      XBell(kapp->getDisplay(),100); //beep :-)
-      beep = false;
-  }
+		if(error_parser->getMode() == CErrorMessageParser::MAKE){
+			error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+		}
+		if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+			error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+		}
+		//enable/disable the menus/toolbars
+		if(error_parser->hasNext()){
+			enableCommand(ID_VIEW_NEXT_ERROR);
+		}
+		else{
+			disableCommand(ID_VIEW_NEXT_ERROR);
+		}
+	}
+	if(beep && ready){
+		XBell(kapp->getDisplay(),100); //beep :-)
+		beep = false;
+	}
 #endif
 
 }
@@ -2218,8 +2220,17 @@ void CKDevelop::slotDocTreeSelected(const QString &filename){
   slotURLSelected("file:" + filename, QString(), 1);
 }
 
-void CKDevelop::slotTCurrentTab(int item){
-    t_tab_view->setCurrentTab(item);
+void CKDevelop::slotTCurrentTab(int idOfTabPage){
+	if( idOfTabPage == -1)	// is it the default value?
+		// yes, set DOC to current page/show it
+		dockbase_doc_tree->makeDockVisible();
+	else if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
+		// no, try to show the according tab page in the tree group
+		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();	// get tab control
+		pTabGroup->setVisiblePage(idOfTabPage);
+	}
+	else
+		qDebug("warning: (in CKDevelop::slotTCurrentTab) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
 }
 
 
@@ -2228,158 +2239,167 @@ void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
 }
 
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
-    editor_view = 0;
-    int type = CPP_HEADER;
-
-    if ( item->inherits("EditorView")){
-      editor_view =  static_cast<EditorView*>(item);
-      type = CProject::getType(editor_view->currentEditor()->getName());
-      enableCommand(ID_FILE_SAVE_AS);
-      enableCommand(ID_FILE_CLOSE);
-
-      enableCommand(ID_FILE_PRINT);
-
-      QString text=QApplication::clipboard()->text();
-      if(text.isEmpty())
-	disableCommand(ID_EDIT_PASTE);
-      else
-	enableCommand(ID_EDIT_PASTE);
-
-      enableCommand(ID_EDIT_INSERT_FILE);
-      enableCommand(ID_EDIT_SEARCH);
-      enableCommand(ID_EDIT_REPEAT_SEARCH);
-      enableCommand(ID_EDIT_REPLACE);
-      enableCommand(ID_EDIT_SPELLCHECK);
-      enableCommand(ID_EDIT_INDENT);
-      enableCommand(ID_EDIT_UNINDENT);
-      enableCommand(ID_EDIT_SELECT_ALL);
-      enableCommand(ID_EDIT_DESELECT_ALL);
-      enableCommand(ID_EDIT_INVERT_SELECTION);
-
-
-      slotNewUndo();
-      slotNewStatus();
-      slotNewLineColumn();
-
-      int state;
-      state = editor_view->currentEditor()->undoState();
-      //undo
-      if(state & 1)
-	enableCommand(ID_EDIT_UNDO);
-      else
-	disableCommand(ID_EDIT_UNDO);
-      //redo
-      if(state & 2)
-	enableCommand(ID_EDIT_REDO);
-      else
-	disableCommand(ID_EDIT_REDO);
-
-      slotMarkStatus();
-
-
-      if (type == CPP_HEADER){
-	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-	  if ( bDefaultCV)
-	    t_tab_view->setCurrentTab(CV);
-	  else
-	    t_tab_view->setCurrentTab(LFV);
-	}
-	disableCommand(ID_BUILD_COMPILE_FILE);
-      }
-      if (type == CPP_SOURCE){
-	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-	  if ( bDefaultCV)
-	    t_tab_view->setCurrentTab(CV);
-	  else
-	    t_tab_view->setCurrentTab(LFV);
-	}
-	cerr << "CPP_SOURCE\n";
-	if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
-	  enableCommand(ID_BUILD_COMPILE_FILE);
-	}
-      }
-    }
-
-
-
-    // Dialog Views --------------------------------------------
-
-    if ( item->inherits("DialogView")){
-      DialogView* dialog_view = static_cast<DialogView*>(item);
-      // TODO
-      dlgedit->setCurrentDialogWidget(dialog_view->dialogWidget());
-      disableCommand(ID_FILE_SAVE_AS);
-      enableCommand(ID_FILE_CLOSE);
-
-      disableCommand(ID_FILE_PRINT);
-      enableCommand(ID_EDIT_PASTE);
-
-      disableCommand(ID_EDIT_INSERT_FILE);
-      disableCommand(ID_EDIT_SEARCH);
-      disableCommand(ID_EDIT_REPEAT_SEARCH);
-      disableCommand(ID_EDIT_REPLACE);
-      disableCommand(ID_EDIT_SPELLCHECK);
-      disableCommand(ID_EDIT_INDENT);
-      disableCommand(ID_EDIT_UNINDENT);
-      enableCommand(ID_EDIT_SELECT_ALL);
-      enableCommand(ID_EDIT_DESELECT_ALL);
-      disableCommand(ID_EDIT_INVERT_SELECTION);
-      disableCommand(ID_BUILD_COMPILE_FILE);
-
-      if(bAutoswitch){	
-	  t_tab_view->setCurrentTab(DLG);
-	
-      }
-
-    }
-
-
-    if(browser_view == item){ // browser selected TODO tools
-	cerr << "BROWSER";
-	disableCommand(ID_BUILD_COMPILE_FILE);
-	disableCommand(ID_FILE_SAVE);
-	disableCommand(ID_FILE_SAVE_AS);
-	disableCommand(ID_FILE_CLOSE);
-	
-	disableCommand(ID_FILE_PRINT);
-	
-	disableCommand(ID_EDIT_UNDO);
-	disableCommand(ID_EDIT_REDO);
-	disableCommand(ID_EDIT_CUT);
-	disableCommand(ID_EDIT_PASTE);
-	disableCommand(ID_EDIT_INSERT_FILE);
-	disableCommand(ID_EDIT_SEARCH);
-	disableCommand(ID_EDIT_REPEAT_SEARCH);
-	disableCommand(ID_EDIT_REPLACE);
-	disableCommand(ID_EDIT_SPELLCHECK);
-	disableCommand(ID_EDIT_INDENT);
-	disableCommand(ID_EDIT_UNINDENT);
-	disableCommand(ID_EDIT_SELECT_ALL);
-	disableCommand(ID_EDIT_DESELECT_ALL);
-	disableCommand(ID_EDIT_INVERT_SELECTION);
-	
-	if(bAutoswitch){
-	    t_tab_view->setCurrentTab(DOC);
-//	    browser_widget->widget()->setFocus();
-//	    browser_widget->setFocus();
-	
-	    if (browser_widget->hasSelection())
-		enableCommand(ID_EDIT_COPY);
-	    else
-		disableCommand(ID_EDIT_COPY);
-
-	    setMainCaption(BROWSER);
-	}
 	editor_view = 0;
-    }
+  int type = CPP_HEADER;
+
+	if ( item->inherits("EditorView")){
+  	editor_view =  static_cast<EditorView*>(item);
+    type = CProject::getType(editor_view->currentEditor()->getName());
+    enableCommand(ID_FILE_SAVE_AS);
+    enableCommand(ID_FILE_CLOSE);
+
+		enableCommand(ID_FILE_PRINT);
+
+		QString text=QApplication::clipboard()->text();
+		if(text.isEmpty())
+			disableCommand(ID_EDIT_PASTE);
+		else
+			enableCommand(ID_EDIT_PASTE);
+
+		enableCommand(ID_EDIT_INSERT_FILE);
+		enableCommand(ID_EDIT_SEARCH);
+		enableCommand(ID_EDIT_REPEAT_SEARCH);
+		enableCommand(ID_EDIT_REPLACE);
+		enableCommand(ID_EDIT_SPELLCHECK);
+		enableCommand(ID_EDIT_INDENT);
+		enableCommand(ID_EDIT_UNINDENT);
+		enableCommand(ID_EDIT_SELECT_ALL);
+		enableCommand(ID_EDIT_DESELECT_ALL);
+		enableCommand(ID_EDIT_INVERT_SELECTION);
+
+
+		slotNewUndo();
+		slotNewStatus();
+		slotNewLineColumn();
+
+		int state;
+		state = editor_view->currentEditor()->undoState();
+		//undo
+		if(state & 1)
+			enableCommand(ID_EDIT_UNDO);
+		else
+			disableCommand(ID_EDIT_UNDO);
+		//redo
+		if(state & 2)
+			enableCommand(ID_EDIT_REDO);
+		else
+			disableCommand(ID_EDIT_REDO);
+
+		slotMarkStatus();
+
+		if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
+			// get tab control
+			KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
+			// get current tab page
+			QWidget* tmpWidget = pTabGroup->visiblePage();
+			if( !tmpWidget->inherits("KDockWidget"))
+				qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
+			KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
+			if (type == CPP_HEADER){
+				if(bAutoswitch && (currentTab == dockbase_doc_tree)){	
+					if ( bDefaultCV)
+						pTabGroup->setVisiblePage(dockbase_class_tree);
+					else
+						pTabGroup->setVisiblePage(dockbase_log_file_tree);
+				}
+				disableCommand(ID_BUILD_COMPILE_FILE);
+			}
+			if (type == CPP_SOURCE){
+				if(bAutoswitch && (currentTab == dockbase_doc_tree)){	
+					if ( bDefaultCV)
+						pTabGroup->setVisiblePage(dockbase_class_tree);
+					else
+						pTabGroup->setVisiblePage(dockbase_log_file_tree);
+				}
+				cerr << "CPP_SOURCE\n";
+				if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
+					enableCommand(ID_BUILD_COMPILE_FILE);
+				}			
+			}
+			else
+				qDebug("warning: (in CKDevelop::slotMDIGetFocus) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
+		}
+	}
 
 
 
-    //   if(item == TOOLS){
-    //         disableCommand(ID_EDIT_COPY);
-    //         setMainCaption(TOOLS);
-    //   }
-    //   //  s_tab_current = item;
+	// Dialog Views --------------------------------------------
+
+	if ( item->inherits("DialogView")){
+		DialogView* dialog_view = static_cast<DialogView*>(item);
+		// TODO
+		dlgedit->setCurrentDialogWidget(dialog_view->dialogWidget());
+		disableCommand(ID_FILE_SAVE_AS);
+		enableCommand(ID_FILE_CLOSE);
+
+		disableCommand(ID_FILE_PRINT);
+		enableCommand(ID_EDIT_PASTE);
+
+		disableCommand(ID_EDIT_INSERT_FILE);
+		disableCommand(ID_EDIT_SEARCH);
+		disableCommand(ID_EDIT_REPEAT_SEARCH);
+		disableCommand(ID_EDIT_REPLACE);
+		disableCommand(ID_EDIT_SPELLCHECK);
+		disableCommand(ID_EDIT_INDENT);
+		disableCommand(ID_EDIT_UNINDENT);
+		enableCommand(ID_EDIT_SELECT_ALL);
+		enableCommand(ID_EDIT_DESELECT_ALL);
+		disableCommand(ID_EDIT_INVERT_SELECTION);
+		disableCommand(ID_BUILD_COMPILE_FILE);
+
+		if(bAutoswitch){	
+			dockbase_widprop_split_view->makeDockVisible();	//was: t_tab_view->setCurrentTab(DLG);
+		}
+
+	}
+
+
+	if(browser_view == item){ // browser selected TODO tools
+		cerr << "BROWSER";
+		disableCommand(ID_BUILD_COMPILE_FILE);
+		disableCommand(ID_FILE_SAVE);
+		disableCommand(ID_FILE_SAVE_AS);
+		disableCommand(ID_FILE_CLOSE);
+	
+		disableCommand(ID_FILE_PRINT);
+	
+		disableCommand(ID_EDIT_UNDO);
+		disableCommand(ID_EDIT_REDO);
+		disableCommand(ID_EDIT_CUT);
+		disableCommand(ID_EDIT_PASTE);
+		disableCommand(ID_EDIT_INSERT_FILE);
+		disableCommand(ID_EDIT_SEARCH);
+		disableCommand(ID_EDIT_REPEAT_SEARCH);
+		disableCommand(ID_EDIT_REPLACE);
+		disableCommand(ID_EDIT_SPELLCHECK);
+		disableCommand(ID_EDIT_INDENT);
+		disableCommand(ID_EDIT_UNINDENT);
+		disableCommand(ID_EDIT_SELECT_ALL);
+		disableCommand(ID_EDIT_DESELECT_ALL);
+		disableCommand(ID_EDIT_INVERT_SELECTION);
+	
+		if(bAutoswitch){
+			dockbase_doc_tree->makeDockVisible();	//was: t_tab_view->setCurrentTab(DOC);
+			//	    browser_widget->widget()->setFocus();
+			//	    browser_widget->setFocus();
+	
+			if (browser_widget->hasSelection())
+				enableCommand(ID_EDIT_COPY);
+			else
+				disableCommand(ID_EDIT_COPY);
+
+			setMainCaption(BROWSER);
+		}
+		editor_view = 0;
+	}
+
+
+
+//	if(item == TOOLS){
+//		disableCommand(ID_EDIT_COPY);
+//		setMainCaption(TOOLS);
+//	}
+//	//	s_tab_current = item;
 }
 
 void CKDevelop::slotToolbarClicked(int item){

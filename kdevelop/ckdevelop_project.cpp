@@ -601,7 +601,7 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
     sizes << output_view_pos;
     view->setSizes(sizes);
 */
-    o_tab_view->show();
+    dockbase_o_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 /*    QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());

@@ -453,7 +453,7 @@ public:
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
   /** set the tree tab automatically without click */
-  void slotTCurrentTab(int item);
+  void slotTCurrentTab(int idOfTabPage);
 	
   ///////////// -- the methods for the treeview selection
   /** click action on LFV */
@@ -698,10 +698,8 @@ private:
 
   /** The tabbar for the trees. */
   KDockWidget* dockbase_t_tab_view;
-  CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
   KDockWidget* dockbase_o_tab_view;
-  CTabCtl* o_tab_view;
 
   KDockWidget* dockbase_mdi_main_frame;
   MdiFrame* mdi_main_frame;

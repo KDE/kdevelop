@@ -465,7 +465,7 @@ void CKDevelop::switchToKDevelop(){
 
   //////// change the mainview ////////
   mdi_main_frame->show();
-  t_tab_view->show();
+  dockbase_t_tab_view->show();
 
 //F.B.  top_panner->hide();
   //  top_panner->deactivate();
@@ -483,7 +483,7 @@ void CKDevelop::switchToKDevelop(){
   setStatusBar(kdev_statusbar);
 
 
-  toolBar()->show();
+  toolBar(ID_MAIN_TOOLBAR)->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
   setKeyAccel();  // initialize Keys
@@ -494,9 +494,9 @@ void CKDevelop::switchToKDevelop(){
     kdev_statusbar->hide();
 
   if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
-    enableToolBar(KToolBar::Show);
+    enableToolBar(KToolBar::Show, ID_MAIN_TOOLBAR);
   else
-    enableToolBar(KToolBar::Hide);
+    enableToolBar(KToolBar::Hide, ID_MAIN_TOOLBAR);
 
   if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
@@ -585,9 +585,9 @@ void CKDevelop::showTreeView(bool show){
 
  
      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-       t_tab_view->show();
+       dockbase_t_tab_view->show();
      else
-       t_tab_view->hide();
+       dockbase_t_tab_view->hide();
    
   if(bAutoswitch)
   {
@@ -653,14 +653,14 @@ void CKDevelop::readOptions(){
 
 
   KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
-  toolBar()->setBarPos(tool_bar_pos);
+  toolBar(ID_MAIN_TOOLBAR)->setBarPos(tool_bar_pos);
 	bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
 	if(std_toolbar){
 	  view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
-    enableToolBar(KToolBar::Show,0);
+    enableToolBar(KToolBar::Show, ID_MAIN_TOOLBAR);
   }
   else{
-    enableToolBar(KToolBar::Hide,0);
+    enableToolBar(KToolBar::Hide, ID_MAIN_TOOLBAR);
   }
 	// Browser Toolbar
   KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
@@ -699,31 +699,31 @@ void CKDevelop::readOptions(){
   int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
 
   // set initial heights of trees, mdi and output views
-  t_tab_view->resize(t_tab_view->width(),edit_view_pos);
+  dockbase_t_tab_view->resize(dockbase_t_tab_view->width(),edit_view_pos);
   mdi_main_frame->resize(mdi_main_frame->width(),edit_view_pos);
-  o_tab_view->resize(o_tab_view->width(),output_view_pos);
+  dockbase_o_tab_view->resize(dockbase_o_tab_view->width(),output_view_pos);
 
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
+    toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
   }
   else
-    o_tab_view->hide();
+    dockbase_o_tab_view->hide();
 
   bool treeview=config->readBoolEntry("show_tree_view", true);
   int tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
   edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
 
   // set initial widths of trees and  mdi views
-  t_tab_view->resize(tree_view_pos,t_tab_view->height());
+  dockbase_t_tab_view->resize(tree_view_pos,dockbase_t_tab_view->height());
   mdi_main_frame->resize(edit_view_pos,mdi_main_frame->height());
 
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-    toolBar()->setButton(ID_VIEW_TREEVIEW, true);
+    toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
   }
   else
-    t_tab_view->hide();
+    dockbase_t_tab_view->hide();
 
 	
   
@@ -771,7 +771,8 @@ void CKDevelop::readOptions(){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
 */
-    switchToKDevelop();
+	
+	switchToKDevelop();
  
 }
 
@@ -781,14 +782,14 @@ void CKDevelop::saveOptions(){
   config->writeEntry("Geometry", size() );
   
 
-  config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
+  config->writeEntry("ToolBar Position",  (int)toolBar(ID_MAIN_TOOLBAR)->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
 
 
   config->writeEntry("EditViewHeight",mdi_main_frame->height());
-  config->writeEntry("OutputViewHeight",o_tab_view->height());
+  config->writeEntry("OutputViewHeight",dockbase_o_tab_view->height());
 
-  config->writeEntry("ClassViewWidth",t_tab_view->width());
+  config->writeEntry("ClassViewWidth",dockbase_t_tab_view->width());
   config->writeEntry("EditViewWidth",mdi_main_frame->width());
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
@@ -799,7 +800,19 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
-  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
+
+	if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
+		// get tab control
+		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
+		// get current tab page
+		QWidget* tmpWidget = pTabGroup->visiblePage();
+		if( !tmpWidget->inherits("KDockWidget"))
+			qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
+		KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
+		config->writeEntry("LastActiveTree", pTabGroup->id(currentTab));	//was: value=t_tab_view->getCurrentTab()
+	}
+	else
+		qDebug("warning: (in CKDevelop::saveOptions) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
@@ -814,7 +827,9 @@ void CKDevelop::saveOptions(){
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
   config->writeEntry("Recent Projects", recent_projects);
   
-  //  writeDockConfig();
+	// write all settings concerning to the dockwidget´s stuff
+  writeDockConfig( config, "Dock Settings");
+
   config->sync();
 }
 

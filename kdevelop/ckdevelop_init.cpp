@@ -88,7 +88,6 @@ CKDevelop::CKDevelop()
   initWhatsThis();
 	
   readOptions();
-  readDockConfig();
 	
   initProject();
   setToolmenuEntries();
@@ -117,10 +116,6 @@ void CKDevelop::initView(){
   ////////////////////////
   // Outputwindow
   ////////////////////////
-  dockbase_o_tab_view = createDockWidget(i18n("Output messages"), BarIcon("filenew"));
-  o_tab_view = new CTabCtl(0,"output_tabview","output_widget");
-	dockbase_o_tab_view->setWidget(o_tab_view);
-	
   dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon("filenew"));
   messages_widget = new MakeView(0, "messages_widget");
   dockbase_messages_widget->setWidget(messages_widget);
@@ -133,58 +128,33 @@ void CKDevelop::initView(){
   outputview = new OutputView(0, "outputview");
 	dockbase_outputview->setWidget(outputview);
 
-//  o_tab_view->addTab(messages_widget,i18n("messages"));
-//  o_tab_view->addTab(grepview, i18n("search"));
-//  o_tab_view->addTab(outputview, i18n("output"));
-
-  ////////////////////////
-  // Top Panner
-  ////////////////////////
-
-  //  s_tab_current = 0;
-  dockbase_t_tab_view = createDockWidget(i18n("Tree views"), BarIcon("filenew"));
-  t_tab_view = new CTabCtl(0);
-  dockbase_t_tab_view->setWidget(t_tab_view);
-  t_tab_view->setFocusPolicy(QWidget::ClickFocus);
-
   ////////////////////////
   // Treeviews
   ////////////////////////
 
-//  class_tree = new CClassView(t_tab_view,"cv");
   dockbase_class_tree = createDockWidget(i18n("CV"), BarIcon("filenew"));
   class_tree = new CClassView(0,"cv");
   dockbase_class_tree->setWidget(class_tree);
   class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-//  log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("filenew"));
   log_file_tree = new CLogFileView(0,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree->setWidget(log_file_tree);
   //  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-//  real_file_tree = new CRealFileView(t_tab_view,"RFV");
   dockbase_real_file_tree = createDockWidget(i18n("RFV"), BarIcon("filenew"));
   real_file_tree = new CRealFileView(0,"RFV");
   dockbase_real_file_tree->setWidget(real_file_tree);
   //  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-//  doc_tree = new DocTreeView(t_tab_view,"DOC");
   dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("filenew"));
   doc_tree = new DocTreeView(0,"DOC");
   dockbase_doc_tree->setWidget(doc_tree);
   //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-//  widprop_split_view = new WidgetsPropSplitView(t_tab_view,"DLG");
   dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("filenew"));
   widprop_split_view = new WidgetsPropSplitView(0,"DLG");
   dockbase_widprop_split_view->setWidget(widprop_split_view);
-
-//  t_tab_view->addTab(class_tree,i18n("CV"));
-//  t_tab_view->addTab(log_file_tree,i18n("LFV"));
-//  t_tab_view->addTab(real_file_tree,i18n("RFV"));
-//  t_tab_view->addTab(doc_tree,i18n("DOC"));
-//  t_tab_view->addTab(widprop_split_view,i18n("DLG"));
 
   initDlgEditor();
 
@@ -221,21 +191,54 @@ void CKDevelop::initView(){
 
 
   //
-  // dock the 2 base widgets
+  // dock the widgets
   //
-  
-//  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, KDockWidget::DockBottom);
-//  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, KDockWidget::DockLeft);
-
+  // ...the output views
   dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
   dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
-  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
-
+  dockbase_o_tab_view = dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  QString nameOfOutputSuperDock = dockbase_o_tab_view->name();
+	// ...the tree views
   dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
   dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
-  dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_t_tab_view = dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  QString nameOfTreeSuperDock = dockbase_t_tab_view->name();	
+
+	// read all settings concerning to the dockwidget´s stuff
+	// Note: this has to be done _before_ we disable some dock positions
+  readDockConfig( config, "Dock Settings");
+	// recover broken pointers after the read of the configuration
+  dockbase_o_tab_view = dockManager->getDockWidgetFromName( nameOfOutputSuperDock);
+  dockbase_t_tab_view = dockManager->getDockWidgetFromName( nameOfTreeSuperDock);
+
+	// disable docking for all trees and output views
+	// (only debugger views are supposed to be able for undocking)
+	dockbase_messages_widget->setEnableDocking( KDockWidget::DockNone);
+	dockbase_messages_widget->setDockSite( KDockWidget::DockNone);	
+	dockbase_grepview->setEnableDocking( KDockWidget::DockNone);
+	dockbase_grepview->setDockSite( KDockWidget::DockNone);	
+	dockbase_outputview->setEnableDocking( KDockWidget::DockNone);
+	dockbase_outputview->setDockSite( KDockWidget::DockNone);	
+	dockbase_class_tree->setEnableDocking( KDockWidget::DockNone);
+	dockbase_class_tree->setDockSite( KDockWidget::DockNone);	
+	dockbase_log_file_tree->setEnableDocking( KDockWidget::DockNone);
+	dockbase_log_file_tree->setDockSite( KDockWidget::DockNone);	
+	dockbase_real_file_tree->setEnableDocking( KDockWidget::DockNone);
+	dockbase_real_file_tree->setDockSite( KDockWidget::DockNone);	
+	dockbase_doc_tree->setEnableDocking( KDockWidget::DockNone);
+	dockbase_doc_tree->setDockSite( KDockWidget::DockNone);	
+	dockbase_widprop_split_view->setEnableDocking( KDockWidget::DockNone);
+	dockbase_widprop_split_view->setDockSite( KDockWidget::DockNone);	
+
+	// enable docking of trees-widget and outputs-widget for some positions, only
+  dockbase_o_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
+  dockbase_o_tab_view->setDockSite( KDockWidget::DockNone);
+  dockbase_t_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
+  dockbase_t_tab_view->setDockSite( KDockWidget::DockNone);
+	dockbase_mdi_main_frame->setEnableDocking( KDockWidget::DockNone);
+	dockbase_mdi_main_frame->setDockSite( KDockWidget::DockCorner);	
 
   initKeyAccel();
 
@@ -243,6 +246,9 @@ void CKDevelop::initView(){
   mdi_main_frame->setMenuForSDIModeSysButtons(kdev_menubar);
 
   initToolBar();
+	// don´t show the dock-toolbar of KDockMainWindow, we don´t need it
+  toolBar()->hide();
+
   initStatusBar();
   
   //
@@ -860,64 +866,64 @@ void CKDevelop::initMenuBar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
    
-//  toolBar()->insertButton(Icon("filenew.png"),ID_FILE_NEW, false,i18n("New"));
+//  toolBar(ID_MAIN_TOOLBAR)->insertButton(Icon("filenew.png"),ID_FILE_NEW, false,i18n("New"));
 
-  toolBar()->insertButton(BarIcon("openprj"),ID_PROJECT_OPEN, true,i18n("Open Project"));
-  toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("open"),ID_FILE_OPEN, true,i18n("Open File"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("openprj"),ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar(ID_MAIN_TOOLBAR)->insertSeparator();
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("open"),ID_FILE_OPEN, true,i18n("Open File"));
   file_open_popup= new QPopupMenu();
   connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
-  toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
+  toolBar(ID_MAIN_TOOLBAR)->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
 
-  toolBar()->insertButton(BarIcon("save"),ID_FILE_SAVE,true,i18n("Save File"));
-//  toolBar()->insertButton(Icon("save_all.png"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("save"),ID_FILE_SAVE,true,i18n("Save File"));
+//  toolBar(ID_MAIN_TOOLBAR)->insertButton(Icon("save_all.png"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
 
-  toolBar()->insertButton(BarIcon("print"),ID_FILE_PRINT,false,i18n("Print"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("print"),ID_FILE_PRINT,false,i18n("Print"));
 
-  QFrame *separatorLine= new QFrame(toolBar());
+  QFrame *separatorLine= new QFrame(toolBar(ID_MAIN_TOOLBAR));
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine);
+  toolBar(ID_MAIN_TOOLBAR)->insertWidget(0,20,separatorLine);
 	
-  toolBar()->insertButton(BarIcon("undo"),ID_EDIT_UNDO,false,i18n("Undo"));
-  toolBar()->insertButton(BarIcon("redo"),ID_EDIT_REDO,false,i18n("Redo"));
-  toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("cut"),ID_EDIT_CUT,true,i18n("Cut"));
-  toolBar()->insertButton(BarIcon("copy"),ID_EDIT_COPY, true,i18n("Copy"));
-  toolBar()->insertButton(BarIcon("paste"),ID_EDIT_PASTE, true,i18n("Paste"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("undo"),ID_EDIT_UNDO,false,i18n("Undo"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("redo"),ID_EDIT_REDO,false,i18n("Redo"));
+  toolBar(ID_MAIN_TOOLBAR)->insertSeparator();
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("cut"),ID_EDIT_CUT,true,i18n("Cut"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("copy"),ID_EDIT_COPY, true,i18n("Copy"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("paste"),ID_EDIT_PASTE, true,i18n("Paste"));
 	
-  QFrame *separatorLine1= new QFrame(toolBar());
+  QFrame *separatorLine1= new QFrame(toolBar(ID_MAIN_TOOLBAR));
   separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine1);
+  toolBar(ID_MAIN_TOOLBAR)->insertWidget(0,20,separatorLine1);
 
-  toolBar()->insertButton(BarIcon("compfile"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
-  toolBar()->insertButton(BarIcon("make"),ID_BUILD_MAKE, false,i18n("Make"));
-  toolBar()->insertButton(BarIcon("rebuild"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
-  toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("debugger"),ID_BUILD_DEBUG, false, i18n("Debug"));
-  toolBar()->insertButton(BarIcon("run"),ID_BUILD_RUN, false,i18n("Run"));
-  toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("stop_proc"),ID_BUILD_STOP, false,i18n("Stop"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("compfile"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("make"),ID_BUILD_MAKE, false,i18n("Make"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("rebuild"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
+  toolBar(ID_MAIN_TOOLBAR)->insertSeparator();
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("debugger"),ID_BUILD_DEBUG, false, i18n("Debug"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("run"),ID_BUILD_RUN, false,i18n("Run"));
+  toolBar(ID_MAIN_TOOLBAR)->insertSeparator();
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("stop_proc"),ID_BUILD_STOP, false,i18n("Stop"));
 
-  QFrame *separatorLine2= new QFrame(toolBar());
+  QFrame *separatorLine2= new QFrame(toolBar(ID_MAIN_TOOLBAR));
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine2);
-  toolBar()->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
-  toolBar()->insertButton(BarIcon("output_win"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
-  toolBar()->setToggle(ID_VIEW_TREEVIEW);
-  toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
+  toolBar(ID_MAIN_TOOLBAR)->insertWidget(0,20,separatorLine2);
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
+  toolBar(ID_MAIN_TOOLBAR)->insertButton(BarIcon("output_win"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
+  toolBar(ID_MAIN_TOOLBAR)->setToggle(ID_VIEW_TREEVIEW);
+  toolBar(ID_MAIN_TOOLBAR)->setToggle(ID_VIEW_OUTPUTVIEW);
 
- QFrame *separatorLine3= new QFrame(toolBar());
+ QFrame *separatorLine3= new QFrame(toolBar(ID_MAIN_TOOLBAR));
  separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
- toolBar()->insertWidget(0,20,separatorLine3);
+ toolBar(ID_MAIN_TOOLBAR)->insertWidget(0,20,separatorLine3);
 
 
-  QToolButton *btnwhat = QWhatsThis::whatsThisButton(toolBar());
+  QToolButton *btnwhat = QWhatsThis::whatsThisButton(toolBar(ID_MAIN_TOOLBAR));
   QToolTip::add(btnwhat, i18n("What's this...?"));
-  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+  toolBar(ID_MAIN_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
   btnwhat->setFocusPolicy(QWidget::NoFocus);
 
-  connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
-  connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
+  connect(toolBar(ID_MAIN_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
+  connect(toolBar(ID_MAIN_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
 	
   /////////////////////
   // the second toolbar
@@ -931,7 +937,7 @@ void CKDevelop::initToolBar(){
                                            SLOT(slotClassChoiceCombo(int)),
                                            true,i18n("Classes"),160 );
 
-  QComboBox* class_combo = toolBar(1)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* class_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
 
   // Method combo
@@ -941,7 +947,7 @@ void CKDevelop::initToolBar(){
                                            ,this,SLOT(slotMethodChoiceCombo(int)),
                                            true,i18n("Methods"),240 );
 
-  QComboBox* choice_combo = toolBar(1)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox* choice_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
 
   // Classbrowserwizard click button
@@ -1022,7 +1028,7 @@ void CKDevelop::initConnections(){
   // the clipboard change signal is not needed in kwrite (jochen)
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(slotClipboardChanged()));
 
-  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTabSelected(int)));
+//REMOVE  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTabSelected(int)));
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));

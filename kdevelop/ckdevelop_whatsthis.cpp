@@ -27,7 +27,7 @@
 #include "ceditwidget.h"
  
 void CKDevelop::initWhatsThis(){
-    QWhatsThis::add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
+    QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
 																															"Shows the open project dialog "
 																															"to select a project to be opened"));
 																															
@@ -35,7 +35,7 @@ void CKDevelop::initWhatsThis(){
 																																	
 
 	
-	QWhatsThis::add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
 																													"Shows the Open file dialog to "
 																													"select a file to be opened. Holding "
 																													"the button pressed will show a popup "
@@ -47,56 +47,56 @@ void CKDevelop::initWhatsThis(){
 	
 													
 
-	QWhatsThis::add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "
 																													"editing view"));
 		
 	
 	
-	QWhatsThis::add(toolBar()->getButton(ID_FILE_PRINT),i18n("Print\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_FILE_PRINT),i18n("Print\n\n"
 	                                                        "Opens the printing dialog. There, you can "
 	                                                        "configure which printing program you wish "
 	                                                        "to use, either a2ps or ensrcipt, and print "
 	                                                        "your project files."));
 	
-	QWhatsThis::add(toolBar()->getButton(ID_EDIT_UNDO),i18n("Undo\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_EDIT_UNDO),i18n("Undo\n\n"
 	                                                        "Reverts the last editing step."));
 	
 	
 	
-	QWhatsThis::add(toolBar()->getButton(ID_EDIT_REDO),i18n("Redo\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_EDIT_REDO),i18n("Redo\n\n"
 	                                                        "If an editing step was undone, redo "
 	                                                        "lets you do this step again."));
 	
 	
 
-	QWhatsThis::add(toolBar()->getButton(ID_EDIT_CUT),i18n("Cut\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_EDIT_CUT),i18n("Cut\n\n"
 	                                                        "Cuts out the selected text and copies "
 	                                                        "it to the system clipboard."));	                                                        	
 	
 	                                                      	
 	
-	QWhatsThis::add(toolBar()->getButton(ID_EDIT_COPY),i18n("Copy\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_EDIT_COPY),i18n("Copy\n\n"
 	                                                        "Copies the selected text into the "
 	                                                        "system clipboard."));
 		
 	
 		
-	QWhatsThis::add(toolBar()->getButton(ID_EDIT_PASTE),i18n("Paste\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_EDIT_PASTE),i18n("Paste\n\n"
 	                                                          "Inserts the contents of the "
 	                                                          "system clipboard at the current "
 	                                                          "cursor position. "));
 	
 	
 	
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_COMPILE_FILE),i18n("Compile file\n\n"
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_COMPILE_FILE),i18n("Compile file\n\n"
 	                                                                  "Only compile the file opened in "
 	                                                                  "the C/C++ Files- window. The output "
 	                                                                  "is shown in the output window. If "
 	                                                                  "errors occur, clicking on the error line "
 	                                                                  "causes the file window to show you the "
 	                                                                  "line the error occured."));
-	/*	QWhatsThis::add(toolBar()->getButton(ID_KDLG_BUILD_GENERATE),i18n("Generate files\n\n"
+	/*	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_KDLG_BUILD_GENERATE),i18n("Generate files\n\n"
 																																		"This will actually generate the source "
 																																		"files for the current dialog opened. "
 																																		"The sources will be added to the project "
@@ -115,7 +115,7 @@ void CKDevelop::initWhatsThis(){
 	              "error line will open the file where the "
 	              "error was found and sets the cursor to the "
 	              "error line.");																																		
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_MAKE),build_make_str);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_MAKE),build_make_str);
 
 		
 	QString build_rebuild_all_str=i18n("Rebuild all\n\n"
@@ -124,7 +124,7 @@ void CKDevelop::initWhatsThis(){
 								"clean-option to remove all object files. "
 								"Then, configure creates new Makefiles and "
 								"the make-command will rebuild the project.");	
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_REBUILD_ALL),build_rebuild_all_str);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_REBUILD_ALL),build_rebuild_all_str);
 
 
 	QString build_run_str=i18n("Execute\n\n"
@@ -137,7 +137,7 @@ void CKDevelop::initWhatsThis(){
 	              "installed will cause some strange behavoir "
 	              "like testing the helpmenu will open an error "
 	              "message that the index.html file is not found.");	
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_RUN),build_run_str);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_RUN),build_run_str);
 
 	
 	QString build_debug_str=i18n("Debug program\n\n"
@@ -146,14 +146,14 @@ void CKDevelop::initWhatsThis(){
 	           		"by setting breakpoints in the sourcecode."
 	             	"Note that you have to open your sourcecodes in KDbg"
 	              "to access it.");
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_DEBUG),build_debug_str);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_DEBUG),build_debug_str);
 
 	
 	QString build_stop_str=i18n("Stop\n\n"
 								"If activated, the stop-command will interrupt "
 	       				"the active process. This affects make-commands "
 	           		"as well as documentation generation.");	
-	QWhatsThis::add(toolBar()->getButton(ID_BUILD_STOP),build_stop_str);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_BUILD_STOP),build_stop_str);
 
 
 	
@@ -164,7 +164,7 @@ void CKDevelop::initWhatsThis(){
 											"toggle button: if the button is pressed, "
 											"the window is open, otherwise closed.");
 											
-	QWhatsThis::add(toolBar()->getButton(ID_VIEW_OUTPUTVIEW),output);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_VIEW_OUTPUTVIEW),output);
 
 	
 	QString treeview=i18n("Tree-View\n\n"
@@ -172,7 +172,7 @@ void CKDevelop::initWhatsThis(){
 											"state of the window is displayed by the "
 											"toggle button: if the button is pressed, "
 											"the window is open, otherwise closed.");
-	QWhatsThis::add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
+	QWhatsThis::add(toolBar(ID_MAIN_TOOLBAR)->getButton(ID_VIEW_TREEVIEW),treeview);
 
 											
 	QWhatsThis::add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
