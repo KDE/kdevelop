@@ -399,18 +399,44 @@ QString MakeWidget::directory(int parag) const
 
 QString MakeWidget::guessFileName( const QString& fName, int parag ) const
 {
-	if ( fName.startsWith( "/" ) )
-		// absolut path given
-		return fName;
-	if ( fName.contains( "/" ) ) {
-		// relative path to the project dir
-		if ( m_part->project() )
-			return m_part->project()->projectDirectory() + "/" + fName;
-		else
-			return fName;
-	}
-	// else - no path given, try to guess the active directory from output
-	return directory( parag ) + fName;
+    // pathological case
+    if ( ! m_part->project() ) return fName;
+
+    QString name;
+
+    if ( fName.startsWith( "/" ) )
+    {
+        // absolute path given
+        name = fName;
+    }
+    else if ( fName.contains( "/" ) )
+    {
+        // assume relative path to the project dir
+        name = m_part->project()->projectDirectory() + "/" + fName;
+    }
+    else
+    {
+        // no path given, try to guess the active directory from output
+        name = directory( parag ) + fName;
+    }
+
+    // GNU make resolves symlinks. if "name" is a real path to a file the
+    // project know by symlink path, we need to return the symlink path
+    QStringList projectFiles = m_part->project()->allFiles();
+    QStringList::iterator it = projectFiles.begin();
+    while ( it != projectFiles.end() )
+    {
+        QString file = m_part->project()->projectDirectory() + "/" + *it;
+        if ( name == QDir(file).canonicalPath() )
+        {
+            kdDebug(9004) << "Found file in project - " << file << " == " << name << endl;
+            return file;
+        }
+        ++it;
+    }
+
+    // this should only happen if the file is not in the project
+    return name;
 }
 
 void MakeWidget::searchItem(int parag)
