@@ -314,7 +314,7 @@ void SubprojectOptionsDialog::outsideRemoveClicked()
 void SubprojectOptionsDialog::addPrefixClicked()
 {
     AddPrefixDialog dlg;
-    if (!dlg.exec())
+    if (!dlg.exec() || dlg.name().isEmpty() || dlg.path().isEmpty() )
         return;
 
     new QListViewItem(prefix_listview, dlg.name(), dlg.path());
