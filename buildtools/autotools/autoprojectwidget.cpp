@@ -52,6 +52,7 @@
 #include "autosubprojectview.h"
 #include "autodetailsview.h"
 #include "urlutil.h"
+#include "makefilehandler.h"
 
 static QString nicePrimary( const QString &primary )
 {
@@ -125,6 +126,8 @@ AutoDetailsView* AutoProjectWidget::getDetailsView ()
 void AutoProjectWidget::openProject( const QString &dirName )
 {
 	m_subprojectView->loadMakefileams ( dirName );
+	MakefileHandler mfh;
+	mfh.parse( dirName, true );
 }
 
 

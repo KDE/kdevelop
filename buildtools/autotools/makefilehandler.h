@@ -26,23 +26,23 @@ public:
     MakefileHandler();
     ~MakefileHandler();
 	
-	/**
-	 * Parse a folder that has supported makefiles in it.
-	 * \param folder, the folder to parse
-	 * \param recursive if true, subfolders will be parsed - defaults to true
-	 */
-	void parse( const QString& folder, bool recursive = true );
-	
-	/**
-	 * Get the AST for a certain path
-	 * \param folderPath the path of the folder to get an AST for
-	 */
-	void astForFolder( const QString& folderPath );
+    /**
+     * Parse a folder that has supported makefiles in it.
+     * \param folder, the folder to parse
+     * \param recursive if true, subfolders will be parsed - defaults to true
+     */
+    void parse( const QString& folder, bool recursive = true );
+        
+    /**
+     * Get the AST for a certain path
+     * \param folderPath the path of the folder to get an AST for
+     */
+    void astForFolder( const QString& folderPath );
 
 
 private:
-	class Private;
-	Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif
