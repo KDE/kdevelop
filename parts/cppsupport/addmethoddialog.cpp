@@ -328,17 +328,10 @@ void AddMethodDialog::updateGUI()
 
 void AddMethodDialog::addMethod()
 {
-    QListViewItem* item = new QListViewItem( methods );
+    QListViewItem* item = new QListViewItem( methods, "False", "Public", "Normal", "void", QString("method_%1()").arg(++m_count),
+    		sourceFile->currentText() );
     methods->setCurrentItem( item );
     methods->setSelected( item, true );
-
-    // default values
-    isInline->setChecked( false );
-    access->setCurrentText( "Public" );
-    storage->setCurrentText( "Normal" );
-    returnType->setCurrentText( "void" );
-    declarator->setText( QString("method_%1()").arg(++m_count) );
-    //sourceFile->setCurrentText( "" );
 
     returnType->setFocus();
 }

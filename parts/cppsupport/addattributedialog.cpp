@@ -223,15 +223,9 @@ void AddAttributeDialog::updateGUI()
 
 void AddAttributeDialog::addAttribute()
 {
-    QListViewItem* item = new QListViewItem( attributes );
+    QListViewItem* item = new QListViewItem( attributes, "Protected", "Normal", "int", QString("attribute_%1").arg(++m_count) );
     attributes->setCurrentItem( item );
     attributes->setSelected( item, true );
-
-    // default values
-    access->setCurrentText( "Protected" );
-    storage->setCurrentText( "Normal" );
-    returnType->setCurrentText( "int" );
-    declarator->setText( QString("attribute_%1").arg(++m_count) );
 
     returnType->setFocus();
 }
