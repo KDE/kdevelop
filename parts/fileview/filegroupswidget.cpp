@@ -17,11 +17,13 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qregexp.h>
+
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -99,7 +101,8 @@ FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fil
 }
 
 FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
-    : KListView(0, "file view widget")
+    : KListView(0, "file view widget"),
+    m_actionToggleShowNonProjectFiles( 0 )
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
@@ -115,13 +118,21 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
+    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project files"), KShortcut(),
+        this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
+
     m_part = part;
     (void) translations; // supress compiler warning
+
+    QDomDocument &dom = *m_part->projectDom();
+    m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/groups/hidenonprojectfiles") );
 }
 
 
 FileGroupsWidget::~FileGroupsWidget()
 {
+    QDomDocument &dom = *m_part->projectDom();
+    DomUtil::writeBoolEntry( dom, "/kdevfileview/groups/hidenonprojectfiles", !m_actionToggleShowNonProjectFiles->isChecked() );
 }
 
 
@@ -159,6 +170,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         FileContext context( pathName, false);
         m_part->core()->fillContextMenu(&popup, &context);
     }
+    m_actionToggleShowNonProjectFiles->plug( &popup );
 
     int res = popup.exec(p);
     if (res == customizeId) {
@@ -192,7 +204,17 @@ void FileGroupsWidget::refresh()
         lastGroup = newItem;
     }
 
-    QStringList allFiles = m_part->project()->allFiles();
+    QStringList allFiles;
+    if (m_actionToggleShowNonProjectFiles->isChecked()) {
+        // get all files in the project directory
+        QDir projectDir = m_part->project()->projectDirectory();
+        allFiles = projectDir.entryList(QDir::Files);
+        // @todo get all files in all subdirectories
+    }
+    else {
+        // get all project files
+        allFiles = m_part->project()->allFiles();
+    }
     QStringList::ConstIterator fit;
     for (fit = allFiles.begin(); fit != allFiles.end(); ++fit) {
         QListViewItem *item = firstChild();
@@ -276,5 +298,11 @@ void FileGroupsWidget::removeFiles ( const QStringList& fileList )
         removeFile ( *it );
     }
 }
+
+void FileGroupsWidget::slotToggleShowNonProjectFiles()
+{
+    refresh();
+}
+
 
 #include "filegroupswidget.moc"
