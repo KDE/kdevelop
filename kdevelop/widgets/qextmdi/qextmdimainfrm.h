@@ -32,6 +32,7 @@
 #include <qrect.h>
 #include <qpopupmenu.h>
 #include <qapplication.h>
+#include <qmenubar.h>
 
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
@@ -44,11 +45,7 @@
 class QextMdiViewCloseEvent : public QCustomEvent
 {
 public:
-#if QT_VERSION > 144
 	QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
-#else
-	QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(Event_User,pWnd) {};
-#endif
 };
 
 /**
@@ -66,12 +63,15 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 
 // attributes
 public:
-	QextMdiTaskBar          *m_pTaskBar;
 	QextMdiChildArea        *m_pMdi;
+
+protected:	
+	QextMdiTaskBar          *m_pTaskBar;
 	QList<QextMdiChildView> *m_pWinList;
 	QextMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
+   QMenuBar                *m_pMainMenuBar;
 
 // methods
 public:
@@ -85,6 +85,7 @@ public:
 	bool windowExists(QextMdiChildView *pWnd);
 	virtual void switchWindows(bool bRight);
    virtual bool event(QEvent* e);
+
 public slots:
    /**
     * One of the most important methods at all!
@@ -118,10 +119,31 @@ public slots:
     */
 	virtual void detachWindow(QextMdiChildView *pWnd);
 	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
+	/** ... */
+///	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
+   /** close all views */
+   virtual void closeAllViews();
+   /** closes the view of the active (topchild) window */
+   virtual void closeActiveView();
+   /** undocks all view windows (unix-like) */
+   virtual void switchToToplevelMode();
+   /** docks all view windows (Windows-like) */
+   virtual void switchToChildframeMode();
+   /**
+     * tells the MDI system a QMenu where it can insert buttons for
+     * the system menu, undock, minimize, restore actions.
+     * If no such menu is given, QextMDI simply overlays the buttons
+     * at the upper right-hand side of the main widget.
+     */
+   virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
+  /** Shows the view taskbar. This should be connected with your "View" menu. */
+  void showViewTaskBar();
+  /** Hides the view taskbar. This should be connected with your "View" menu. */
+  void hideViewTaskBar();
+
 protected:
 	virtual void closeEvent(QCloseEvent *e);
 	virtual void focusInEvent(QFocusEvent *);
-	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
 	virtual void createTaskBar();
 	virtual void createMdiManager();
    virtual void raiseTopLevelWidget(QWidget * ptr);
@@ -130,22 +152,24 @@ protected:
     * Additionally, this menu provides some placing actions for these views.
     */
    QPopupMenu* windowMenu() { return m_pMdi->m_pWindowMenu; };
+
 protected slots:
-	virtual void taskbarButtonLeftClicked(QextMdiChildView *pWnd);
+	virtual void activateView(QextMdiChildView *pWnd);
 	virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
    /**
     * For internal use. Called when a taskbar button must be pushed.
     * Usually, if its view raises.
     */
-	virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
-  /** close all views */
-  virtual void closeAllViews();
-  /** closes the view of the active (topchild) window */
-  virtual void closeActiveView();
-  /** undocks all view windows (unix-like) */
-  virtual void switchToToplevelMode();
-  /** docks all view windows (Windows-like) */
-  virtual void switchToChildframeMode();
+	//virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
+   void slot_insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
+   void slot_updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
+   void slot_removeSysButtonsFromMainMenu();
+
+signals: // Signals
+   /**  */
+   void insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
+   void updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
+   void removeSysButtonsFromMainMenu();
 };
 
 #endif //_QEXTMDIMAINFRM_H_

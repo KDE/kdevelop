@@ -44,8 +44,14 @@
 //============ constructor ============//
 
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
-: QMainWindow( parentWidget, name, flags),
-m_pCurrentWindow(0)
+: QMainWindow( parentWidget, name, flags)
+	,m_pMdi(0)
+   ,m_pTaskBar(0)
+	,m_pWinList(0)
+	,m_pCurrentWindow(0)
+   ,m_pWindowPopup(0)
+   ,m_pTaskBarPopup(0)
+   ,m_pMainMenuBar(0)
 {
    setRightJustification( true);
 
@@ -100,11 +106,16 @@ void QextMdiMainFrm::createMdiManager()
 {
 	m_pMdi=new QextMdiChildArea(this);
 	setCentralWidget(m_pMdi);
-	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
+//	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
 	QObject::connect( m_pMdi, SIGNAL(closeActiveView()), this, SLOT(closeActiveView()) );
 	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToToplevelMode()), this, SLOT(switchToToplevelMode()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToChildframeMode()), this, SLOT(switchToChildframeMode()) );
+	QObject::connect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                  this, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+	QObject::connect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                  this, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+   QObject::connect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SIGNAL(removeSysButtonsFromMainMenu()) );
 }
 
 //============ createTaskBar ==============//
@@ -156,7 +167,7 @@ void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach, b
 {
 	QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool,bool,QRect*)), this, SLOT(attachWindow(QextMdiChildView*,bool,bool,QRect*)) );
 	QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*)), this, SLOT(detachWindow(QextMdiChildView*)) );
-	QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
+	QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
 	QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
 	
 	//The window can be added only once :)
@@ -188,7 +199,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd,bool bShow,bool overrid
 	pWnd->youAreAttached(lpC);
 	if(!overrideGeometry && r)lpC->setGeometry(*r);
 	m_pMdi->manageChild(lpC,bShow,overrideGeometry);
-   pushNewTaskBarButton( pWnd);
+//   pushNewTaskBarButton( pWnd);
 }
 
 //============= detachWindow ==============//
@@ -209,7 +220,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 {
 	QObject::disconnect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool,bool,QRect*)), this, SLOT(attachWindow(QextMdiChildView*,bool,bool,QRect*)) );
 	QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*)), this, SLOT(detachWindow(QextMdiChildView*)) );
-	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
+	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
 	QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
 	
 	//Closes a child window. sends no close event : simply deletes it
@@ -228,7 +239,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 {
 	QObject::disconnect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool,bool,QRect*)), this, SLOT(attachWindow(QextMdiChildView*,bool,bool,QRect*)) );
 	QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*)), this, SLOT(detachWindow(QextMdiChildView*)) );
-	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
+	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
 	QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
 	
 	//Closes a child window. sends no close event : simply deletes it
@@ -310,40 +321,36 @@ void QextMdiMainFrm::switchWindows(bool bRight)
 	if(!pAct)return;
 	bRight = false; // dummy!, only to avoid "unused parameter"
 }
-//################################################
-// The following functions are called DIRECTLY
-// from the QextMdiTaskBar class.
-//################################################
-void QextMdiMainFrm::taskbarButtonLeftClicked(QextMdiChildView *pWnd)
+
+//void QextMdiMainFrm::pushNewTaskBarButton( QextMdiChildView* pWnd)
+//{
+//// TODO: if maximised --> exchange sys menu buttons
+//   m_pCurrentWindow = pWnd;
+//   taskbarButtonLeftClicked( m_pCurrentWindow);
+//}
+
+void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
 {
-	if(pWnd->isAttached()){
-		if(pWnd->hasFocus() && (pWnd->mdiParent() == m_pMdi->topChild())){
-			//F.B. pWnd->minimize();
-		} else {
-			pWnd->restore();
-         if( !(pWnd->hasFocus()) ) pWnd->setFocus();
-		}
+  	if(pWnd->isAttached()){
+      if( !(pWnd->hasFocus()) ) {
+         if( m_pCurrentWindow->isMaximized()) {
+            pWnd->mdiParent()->updateSysButtonsInMainMenu();
+         }
+         pWnd->setFocus();
+      }
 	}
    else { //not so cool...bu can not do more...
-		raiseTopLevelWidget(pWnd);
-	}
-   childWindowGainFocus(pWnd);
-}
-void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
-{
-	taskbarButtonLeftClicked( pWnd); // set focus
-	taskBarPopup( pWnd, true)->popup( QCursor::pos());
-}
-
-//################################################
-// The following functions are called DIRECTLY
-// from the QextMdiChildView class.
-//################################################
-
-void QextMdiMainFrm::childWindowGainFocus(QextMdiChildView *pWnd)
-{
+	  	raiseTopLevelWidget(pWnd);
+   }
 	m_pCurrentWindow = pWnd;
 	m_pTaskBar->setActiveButton(pWnd);
+}
+
+void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
+{
+	//taskbarButtonLeftClicked( pWnd); // set focus
+	activateView( pWnd); // set focus
+	taskBarPopup( pWnd, true)->popup( QCursor::pos());
 }
 
 void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
@@ -365,31 +372,15 @@ void QextMdiMainFrm::focusInEvent(QFocusEvent *)
 void QextMdiMainFrm::raiseTopLevelWidget(QWidget * ptr)
 {
    if(ptr->hasFocus())return;
-//#if QT_VERSION >= 200
-   // do not call this before Qt2.x because of a Qt bug
    if(ptr->isActiveWindow())return;
-//#endif
    ptr->show();
    ptr->raise();
-//#if QT_VERSION >= 200
-   // do not call this before Qt2.x because of a Qt bug
    ptr->setActiveWindow();
-//#endif
-}
-
-void QextMdiMainFrm::pushNewTaskBarButton( QextMdiChildView* pWnd)
-{
-   m_pCurrentWindow = pWnd;
-   taskbarButtonLeftClicked( m_pCurrentWindow);
 }
 
 bool QextMdiMainFrm::event( QEvent* e)
 {
-#if QT_VERSION >= 200
 	if( e->type() == QEvent::User) {
-#else
-	if( e->type() == Event_User) {
-#endif
 		QextMdiChildView* pWnd = (QextMdiChildView*)((QextMdiViewCloseEvent*)e)->data();
 		if( pWnd != 0)
 			closeWindow( pWnd);
@@ -422,10 +413,14 @@ void QextMdiMainFrm::closeActiveView()
  */
 void QextMdiMainFrm::switchToToplevelMode()
 {
+   int i = 0;
 	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
 		if( w->isAttached())
+		   i++;
 			detachWindow(w);
 	}
+	if( i > 1)
+      slot_removeSysButtonsFromMainMenu();
 }
 
 /**
@@ -437,4 +432,85 @@ void QextMdiMainFrm::switchToChildframeMode()
 		if( !w->isAttached())
 			attachWindow(w, true, true, 0);
 	}
+}
+
+/**
+ * redirect the signal for insertion of buttons to an own slot
+ * that means: If the menubar (where the buttons should be inserted) is given,
+ *             QextMDI can insert them automatically.
+ *             Otherwise only signals can be emitted to tell the outside that
+ *             someone must do this job itself.
+ */
+void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
+{
+   m_pMainMenuBar = pMenuBar;
+ 	QObject::disconnect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                     this, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+ 	QObject::connect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                  this, SLOT(slot_insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+ 	QObject::disconnect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                     this, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+ 	QObject::connect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
+	                  this, SLOT(slot_updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
+   QObject::disconnect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SIGNAL(removeSysButtonsFromMainMenu()) );
+   QObject::connect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SLOT(slot_removeSysButtonsFromMainMenu()) );
+
+}
+
+void QextMdiMainFrm::slot_insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc)
+{
+   m_pMainMenuBar->insertItem( *pSystemMenuPM, receiver, sysMenuFunc, /*accel*/0, /*id*/-1, 0);
+   if( style().guiStyle() == Qt::MotifStyle) {
+      m_pMainMenuBar->insertSeparator();
+      m_pMainMenuBar->insertItem( *pUndockPM, receiver, undockFunc);
+      m_pMainMenuBar->insertItem( *pMinPM, receiver, minFunc);
+      m_pMainMenuBar->insertItem( *pRestorePM, receiver, restoreFunc);
+      m_pMainMenuBar->insertItem( *pClosePM, receiver, closeFunc);
+   }
+}
+
+void QextMdiMainFrm::slot_updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc)
+{
+   int itemcount = m_pMainMenuBar->count();
+   // disconnect the old child frame
+   m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(0), m_pCurrentWindow->mdiParent(), sysMenuFunc);
+   if( style().guiStyle() == Qt::MotifStyle) {
+      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-4), m_pCurrentWindow->mdiParent(), undockFunc);
+      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-3), m_pCurrentWindow->mdiParent(), minFunc);
+      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-2), m_pCurrentWindow->mdiParent(), restoreFunc);
+      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-1), m_pCurrentWindow->mdiParent(), closeFunc);
+   }
+   // connect the new child frame
+   m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(0), receiver, sysMenuFunc);
+   if( style().guiStyle() == Qt::MotifStyle) {
+      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-4), receiver, undockFunc);
+      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-3), receiver, minFunc);
+      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-2), receiver, restoreFunc);
+      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-1), receiver, closeFunc);
+   }
+}
+
+void QextMdiMainFrm::slot_removeSysButtonsFromMainMenu()
+{
+   int itemcount = m_pMainMenuBar->count();
+   if( style().guiStyle() == Qt::MotifStyle) {
+      m_pMainMenuBar->removeItemAt( itemcount - 1); // close
+      m_pMainMenuBar->removeItemAt( itemcount - 2); // restore
+      m_pMainMenuBar->removeItemAt( itemcount - 3); // min
+      m_pMainMenuBar->removeItemAt( itemcount - 4); // undock
+      m_pMainMenuBar->removeItemAt( itemcount - 5); // separator
+   }
+   m_pMainMenuBar->removeItemAt( 0); // system menu
+}
+
+/** Shows the view taskbar. This should be connected with your "View" menu. */
+void QextMdiMainFrm::showViewTaskBar()
+{
+   m_pTaskBar->show();
+}
+
+/** Hides the view taskbar. This should be connected with your "View" menu. */
+void QextMdiMainFrm::hideViewTaskBar()
+{
+   m_pTaskBar->hide();
 }
