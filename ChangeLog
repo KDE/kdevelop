@@ -1,3 +1,8 @@
+2002-07-19 Daniel Engelschalt <daniel.engelschalt@gmx.net>
+	* changes concerning the classstore are taking effect without restarting
+	* parsing of project directory works again without having persistance :)
+	* fixed some annoying bugs in ccconfigwidget
+
 2002-07-17 Victor Röder <victor_roeder@gmx.de>
 	* added a simple search mechanism to the Documentation Browser
 		-> but not really efficient :-(
