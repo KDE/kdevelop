@@ -31,7 +31,10 @@
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
 
-enum{ CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE };
+typedef enum _CTOperations
+{
+  CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE
+}CTDOperations;
 
 /** */
 class CClassToolDlg : public QDialog
@@ -120,7 +123,7 @@ private: // Private attribues
  bool onlyVirtual;
 
  /** Stores what operation the user selected last. */
- int currentOperation;
+ CTDOperations currentOperation;
 
  /** Handler to view things in the tree. */
  CClassTreeHandler treeH;

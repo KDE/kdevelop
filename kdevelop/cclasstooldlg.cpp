@@ -434,6 +434,9 @@ void CClassToolDlg::changeCaption()
       caption = exportCombo.currentText();
       caption += " virtual methods";
       break;
+    default:
+      caption = "Class Tool Dialog";
+      break;
   }
 
   caption += " of class ";
@@ -621,6 +624,8 @@ void CClassToolDlg::slotExportComboChoice(int idx)
     case CTVIRT:
       viewVirtuals();
       break;
+    default:
+      break;
   }
 }
 
@@ -650,6 +655,8 @@ void CClassToolDlg::slotClassComboChoice(int idx)
       break;
     case CTVIRT:
       viewVirtuals();
+      break;
+    default:
       break;
   }
 }
