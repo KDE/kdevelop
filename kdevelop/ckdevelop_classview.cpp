@@ -560,19 +560,10 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
   int toLine = -1;
   // to get around the method combo selection, we change the type to attribute if there is one of that name
   aContainer = CVGetContainer( parentPath, parentType );
-  if(aContainer->hasAttribute(itemName))
-    itemType=THPUBLIC_ATTR;
+
   // Get the type of declaration at the index.
   switch( itemType )
   {
-    // go to declaration if an attribute is selected
-    case THPUBLIC_ATTR:
-    case THPROTECTED_ATTR:
-    case THPRIVATE_ATTR:
-      if( aContainer )
-        aAttr = aContainer->getAttributeByName( itemName );
-      if(aAttr)
-        break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
@@ -597,8 +588,17 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
       debug( "Unknown type %d in CVGotoDefinition.", itemType );
   }
 
-  if( aMethod )
+  if( aMethod ){
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+    return;
+  }
+  else
+    debug( "Couldn't find method %s::%s", parentPath, itemName );
+
+  // now a new switch for the attributes
+  if(aContainer->hasAttribute(itemName)){
+    aAttr = aContainer->getAttributeByName( itemName );
+  }
   // Fetch the line and file from the attribute if the value is set.
   if( aAttr )
   {
@@ -611,8 +611,6 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     }
   }
 
-  else
-    debug( "Couldn't find method %s::%s", parentPath, itemName );
 }
 
 /*-------------------------------------- CKDevelop::CVGotoDeclaration()
