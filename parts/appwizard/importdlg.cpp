@@ -171,7 +171,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
     QStringList patternList = QStringList::split(",", patterns);
     for (pit = patternList.begin(); pit != patternList.end(); ++pit) {
         if (!dir.entryList(*pit, QDir::Files).isEmpty()) {
-            kdDebug() << "Has files " << (*pit) << endl;
+            kdDebug(9010) << "Has files " << (*pit) << endl;
             return true;
         }
     }
@@ -182,7 +182,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
         subdir.cd(*sit);
         for (pit = patternList.begin(); pit != patternList.end(); ++pit) {
             if (!subdir.entryList(*pit, QDir::Files).isEmpty()) {
-                kdDebug() << "Has files " << (*pit) << " in " << (*sit) << endl;
+                kdDebug(9010) << "Has files " << (*pit) << " in " << (*sit) << endl;
                 return true;
             }
         }
@@ -194,7 +194,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
 
 void ImportDialog::dirChanged()
 {
-    kdDebug() << "ImportDialog::dirChanged" << endl;
+    kdDebug(9010) << "ImportDialog::dirChanged" << endl;
     QString dirName = urlinput_edit->url();
     QDir dir(dirName);
     if (!dir.exists())
@@ -417,7 +417,7 @@ void ImportDialog::projectTypeChanged( const QString &type )
 
 void ImportDialog::createProjectInfrastructure( )
 {
-    kdDebug() << "ImportDialog::createProjectInfrastructure" << endl;
+    kdDebug(9010) << "ImportDialog::createProjectInfrastructure" << endl;
     InfrastructureCmd cmd = m_infrastructure[project_combo->currentText()];
     if (!cmd.isOn)
         return;
@@ -430,7 +430,7 @@ void ImportDialog::createProjectInfrastructure( )
     }
     
     QString command = "cd " + urlinput_edit->url() + " && " + cmd.command;
-    kdDebug() << "executing " << command.ascii() << endl;
+    kdDebug(9010) << "executing " << command.ascii() << endl;
     system(command.ascii());
 }
 

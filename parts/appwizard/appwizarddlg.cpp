@@ -158,7 +158,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 			if( type == "include" )  // Add value
 			{
 				info->includes.append( templateConfig.readEntry( "File" ) );
-				kdDebug() << "Adding: " << templateConfig.readEntry( "File" ) << endl;
+				kdDebug(9010) << "Adding: " << templateConfig.readEntry( "File" ) << endl;
 			}
 		}
 
@@ -175,7 +175,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				QString file = KMacroExpander::expandMacros( ( *include ), info->subMap);
 				KConfig tmpCfg( file );
 				tmpCfg.copyTo( "", &templateConfig);
-				kdDebug() << "Merging: " << tmpCfg.name() << endl;
+				kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
 			}
 		}
 
@@ -327,13 +327,13 @@ void AppWizardDialog::loadVcs()
 	for (; serviceIt != offers.end(); ++serviceIt)
 	{
 		KService::Ptr service = *serviceIt;
-		kdDebug() << "AppWizardDialog::loadVcs: creating vcs integrator "
+		kdDebug(9010) << "AppWizardDialog::loadVcs: creating vcs integrator "
 			<< service->name() << endl;
 
 		KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
 		if (!factory) {
 			QString errorMessage = KLibLoader::self()->lastErrorMessage();
-			kdDebug() << "There was an error loading the module " << service->name() << endl <<
+			kdDebug(9010) << "There was an error loading the module " << service->name() << endl <<
 			"The diagnostics is:" << endl << errorMessage << endl;
 			exit(1);
 		}
@@ -343,10 +343,10 @@ void AppWizardDialog::loadVcs()
 		KDevVCSIntegrator *integrator = (KDevVCSIntegrator*) obj;
 
 		if (!integrator)
-			kdDebug() << "    failed to create vcs integrator " << service->name() << endl;
+			kdDebug(9010) << "    failed to create vcs integrator " << service->name() << endl;
 		else
 		{
-			kdDebug() << "    success" << endl;
+			kdDebug(9010) << "    success" << endl;
 
 			QString vcsName = service->property("X-KDevelop-VCS").toString();
 			m_vcsForm->combo->insertItem(vcsName, i);
@@ -360,10 +360,10 @@ void AppWizardDialog::loadVcs()
 				if (w)
 					m_vcsForm->stack->addWidget(w, i++);
 				else
-					kdDebug() << "    integrator widget is 0" << endl;
+					kdDebug(9010) << "    integrator widget is 0" << endl;
 			}
 			else
-				kdDebug() << "    integrator is 0" << endl;
+				kdDebug(9010) << "    integrator is 0" << endl;
 		}
 	}
 
@@ -611,7 +611,7 @@ void AppWizardDialog::accept()
 	fileIt = m_pCurrentAppInfo->fileList.begin();
 	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
 	{
-		kdDebug( 9000 ) << "Process file " << (*fileIt).source << endl;
+		kdDebug( 9010 ) << "Process file " << (*fileIt).source << endl;
 		if( m_pCurrentAppInfo->subMap[(*fileIt).option] != "false" )
 		{
 			if( !copyFile( *fileIt ) )
@@ -650,14 +650,14 @@ void AppWizardDialog::accept()
 		VCSDialog *vcs = m_integratorDialogs[id];
 		if (vcs)
 		{
-			kdDebug() << "vcs integrator dialog is ready" << endl;
+			kdDebug(9010) << "vcs integrator dialog is ready" << endl;
 			vcs->accept();
 		}
 		else
-			kdDebug() << "no vcs integrator dialog" << endl;
+			kdDebug(9010) << "no vcs integrator dialog" << endl;
 	}
 	else
-		kdDebug() << "vcs integrator wasn't selected" << endl;
+		kdDebug(9010) << "vcs integrator wasn't selected" << endl;
 
 	QWizard::accept();
 }
@@ -703,9 +703,9 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process )
 {
 	KIO::NetAccess::mkdir( dest , this );
-	kdDebug() << "Dir : " << dir->name() << " at " << dest << endl;
+	kdDebug(9010) << "Dir : " << dir->name() << " at " << dest << endl;
 	QStringList entries = dir->entries();
-	kdDebug() << "Entries : " << entries.join(",") << endl;
+	kdDebug(9010) << "Entries : " << entries.join(",") << endl;
 
 	KTempDir tdir;
 
@@ -913,8 +913,18 @@ void AppWizardDialog::openAfterGeneration()
 	if( !file.open( IO_ReadOnly ) )
 		return;
 	QDomDocument projectDOM;
-	projectDOM.setContent( &file );
+	
+	int errorLine, errorCol;
+	QString errorMsg;
+	bool success = projectDOM.setContent( &file, &errorMsg, &errorLine, &errorCol);
 	file.close();
+	if ( !success )
+	{
+		KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
+				"XML error in line %1, column %2:\n%3")
+				.arg(errorLine).arg(errorCol).arg(errorMsg));
+		return;
+	}
 
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
@@ -1121,19 +1131,19 @@ void AppWizardDialog::favouritesContextMenu(QIconViewItem* item, const QPoint& p
 
 void AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)
 {
-	kdDebug() << "AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)" << endl;
-	kdDebug() << "	dest: " << dest << endl;
+	kdDebug(9010) << "AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)" << endl;
+	kdDebug(9010) << "	dest: " << dest << endl;
 
 	if (source->permissions() & 00100)
 	{
-		kdDebug() << "source is executable" << endl;
+		kdDebug(9010) << "source is executable" << endl;
 		KIO::UDSEntry entry;
 		KURL kurl = KURL::fromPathOrURL(dest);
 		if (KIO::NetAccess::stat(kurl, entry, 0))
 		{
 			KFileItem it(entry, kurl);
 			int mode = it.permissions();
-			kdDebug() << "stat shows permissions: " << mode << endl;
+			kdDebug(9010) << "stat shows permissions: " << mode << endl;
 			KIO::chmod(KURL::fromPathOrURL(dest), mode | 00100 );
 		}
 	}
@@ -1141,8 +1151,8 @@ void AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)
 
 void AppWizardDialog::setPermissions(const installFile &file)
 {
-	kdDebug() << "AppWizardDialog::setPermissions(const installFile &file)" << endl;
-	kdDebug() << "	dest: " << file.dest << endl;
+	kdDebug(9010) << "AppWizardDialog::setPermissions(const installFile &file)" << endl;
+	kdDebug(9010) << "	dest: " << file.dest << endl;
 
 	KIO::UDSEntry sourceentry;
 	KURL sourceurl = KURL::fromPathOrURL(file.source);
@@ -1152,14 +1162,14 @@ void AppWizardDialog::setPermissions(const installFile &file)
 		int sourcemode = sourceit.permissions();
 		if (sourcemode & 00100)
 		{
-			kdDebug() << "source is executable" << endl;
+			kdDebug(9010) << "source is executable" << endl;
 			KIO::UDSEntry entry;
 			KURL kurl = KURL::fromPathOrURL(file.dest);
 			if (KIO::NetAccess::stat(kurl, entry, 0))
 			{
 				KFileItem it(entry, kurl);
 				int mode = it.permissions();
-				kdDebug() << "stat shows permissions: " << mode << endl;
+				kdDebug(9010) << "stat shows permissions: " << mode << endl;
 				KIO::chmod(KURL::fromPathOrURL(file.dest), mode | 00100 );
 			}
 		}
@@ -1212,13 +1222,13 @@ void AppWizardDialog::showTemplates(bool all)
 		for (; dit.current(); ++dit) 
 		{
 			//checking whether all children are not visible
-			kdDebug() << "check: " << dit.current()->text(0) << endl;
+			kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
 			bool visible = false;
 			QListViewItemIterator it(dit.current());
 			while ( it.current() ) {
 				if ((it.current()->childCount() == 0) && it.current()->isVisible())
 				{
-					kdDebug() << "	visible: " << it.current()->text(0) << endl;
+					kdDebug(9010) << "	visible: " << it.current()->text(0) << endl;
 					visible = true;
 					break;
 				}
