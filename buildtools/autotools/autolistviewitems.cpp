@@ -13,10 +13,15 @@
 ***************************************************************************/
 
 #include <qpainter.h>
+#include <qinputdialog.h>
+#include <qregexp.h>
 
 #include <kiconloader.h>
-
+#include "misc.h"
 #include "autolistviewitems.h"
+#include "autoprojectpart.h"
+#include "autoprojectwidget.h"
+#include "autodetailsview.h"
 
 /**
 * Class ProjectItem
@@ -105,10 +110,68 @@ TargetItem::TargetItem( QListView *lv, bool group, const QString &text )
 * Class FileItem
 */
 
-FileItem::FileItem( QListView *lv, const QString &text )
-		: ProjectItem( File, lv, text )
+FileItem::FileItem( QListView *lv, const QString &text, bool set_is_subst )
+		: is_subst(set_is_subst), ProjectItem( File, lv, text )
 {
-	setPixmap( 0, SmallIcon( "document" ) );
+	if(!is_subst)
+	{
+		setPixmap( 0, SmallIcon( "document" ) );
+	}
+	else
+	{
+		setPixmap( 0, SmallIcon( "variablenew" ) );
+	}
 }
 
 
+void FileItem::changeSubstitution()
+{
+if(!is_subst)
+return;
+
+	bool ok;
+	QString text = QInputDialog::getText(
+	                   i18n("Edit substitution"), i18n("Substitution:"), QLineEdit::Normal,
+	                   name, &ok );
+	if ( ok && !text.isEmpty() )
+	{
+		// user entered something and pressed OK
+		QString new_name = text;
+		if(new_name == name)
+			return;
+		setText(0,new_name);
+		changeMakefileEntry(new_name);
+		name = new_name;
+	}
+	else
+	{
+		// user entered nothing or pressed Cancel
+
+	}
+}
+
+void FileItem::changeMakefileEntry(const QString& new_name)
+{
+	TargetItem* target = dynamic_cast<TargetItem*>(parent());
+
+	QMap<QString,QString> replaceMap;
+
+	QString canontargetname = AutoProjectTool::canonicalize(target->name);
+	QString varname;
+	if( target->primary == "PROGRAMS" || target->primary == "LIBRARIES" || target->primary == "LTLIBRARIES" )
+		varname = canontargetname + "_SOURCES";
+	else
+		varname = target->prefix + "_" + target->primary;
+	SubprojectItem* subProject = dynamic_cast<AutoDetailsView*>(listView())->m_part->m_widget->selectedSubproject();
+	QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
+	QStringList::iterator it = sources.find(name);
+	(*it) = new_name;
+	subProject->variables[varname] = sources.join(" ");
+	replaceMap.insert(varname, subProject->variables[varname]);
+
+	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+
+	if(new_name == "")
+		target->sources.remove(this);
+
+}

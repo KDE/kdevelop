@@ -131,6 +131,7 @@ private:
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
     friend class AddSubprojectDialog;
+    friend class FileItem;
 
     // For make commands queueing
     QString constructMakeCommandLine(const QString &dir, const QString &target) const;

@@ -221,6 +221,12 @@ void AutoDetailsView::slotRemoveDetail()
 	if ( pvitem && ( pvitem->type() == ProjectItem::File ) )
 	{
 		FileItem * fitem = static_cast <FileItem*> ( selectedItem() );
+		if(fitem && fitem->is_subst)
+		{
+			fitem->changeMakefileEntry("");
+			return;
+		}
+
 		QListViewItem* sibling = fitem->nextSibling();
 
 		if ( !fitem )
@@ -359,7 +365,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
         popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
 
-		if (!fitem->name.contains(QRegExp("ui$")))
+		if (!fitem->name.contains(QRegExp("ui$")) || fitem->is_subst == true)
 		{
             popup.removeItem(idUISubclasses);
 			popup.removeItem(idViewUIH);
@@ -370,6 +376,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 			popup.removeItem(idUpdateWidgetclass);
 		}
 
+		if(fitem->is_subst == false)
 		m_part->core()->fillContextMenu( &popup, &context );
 
 		int r = popup.exec( p );
@@ -462,8 +469,13 @@ void AutoDetailsView::slotDetailsExecuted( QListViewItem *item )
 
 	QString dirName = m_widget->selectedSubproject()->path;
 	FileItem *fitem = static_cast<FileItem*>( item );
-
-	m_part->partController() ->editDocument( KURL( dirName + "/" + fitem->name ) );
+	if(fitem->is_subst)
+	{
+		fitem->changeSubstitution();
+		return;
+	}
+	
+	m_part->partController()->editDocument( KURL( dirName + "/" + fitem->name ) );
 }
 
 void AutoDetailsView::slotSetActiveTarget()

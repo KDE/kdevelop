@@ -31,6 +31,7 @@ class AutoProjectWidget;
 class AutoDetailsView : public KListView
 {
 	friend class RemoveFileDialog;
+	friend class FileItem;
 	Q_OBJECT
 
 	public:

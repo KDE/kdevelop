@@ -396,6 +396,9 @@ QStringList AutoProjectWidget::allFiles()
 			QPtrListIterator<FileItem> fit( tit.current() ->sources );
 			for ( ; fit.current(); ++fit ){
 
+				if((*fit)->is_subst)
+					continue;
+				
 				QFileInfo fileInfo( (*fit)->name );
 				if( fileInfo.extension() == "ui" ){
 				    dict.insert( relPath + fileInfo.baseName() + ".h", true );
@@ -791,7 +794,13 @@ TargetItem *AutoProjectWidget::createTargetItem( const QString &name,
 
 FileItem *AutoProjectWidget::createFileItem( const QString &name, SubprojectItem *subproject )
 {
-	FileItem * fitem = new FileItem( m_subprojectView, name );
+        bool is_subst;
+	if(name.find("$(") == 0 || name.find("${") == 0)
+	is_subst = true;
+	else
+	is_subst = false;
+	
+	FileItem * fitem = new FileItem( m_subprojectView, name, is_subst );
 	fitem->uiFileLink = m_detailView->getUiFileLink(subproject->relativePath()+"/", name );
 	m_subprojectView->takeItem( fitem );
 	fitem->name = name;

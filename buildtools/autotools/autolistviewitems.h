@@ -21,6 +21,7 @@
 
 class TargetItem;
 class FileItem;
+class AutoProjectPart;
 
 /**
 * Base class for all items appearing in ProjectOverview and ProjectDetails.
@@ -45,6 +46,7 @@ public:
 private:
 	Type typ;
 	bool bld;
+	
 };
 
 
@@ -121,10 +123,13 @@ class FileItem : public ProjectItem
 {
 
 public:
-	FileItem(QListView *lv, const QString &text);
+	FileItem(QListView *lv, const QString &text, bool set_is_subst = false );
+	void changeSubstitution();
+	void changeMakefileEntry(const QString&);
 
 	QString name;
 	QString uiFileLink;
+	const bool is_subst;
 };
 
 #endif
