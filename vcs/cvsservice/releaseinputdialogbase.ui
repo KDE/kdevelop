@@ -49,7 +49,7 @@
                         <cstring>headRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Most recent from HEAD</string>
+                        <string>&amp;Most recent from current branch</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
