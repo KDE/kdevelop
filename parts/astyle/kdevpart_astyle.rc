@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="astyle" library="libkdevastyle" version="1">
+<kpartplugin name="KDevAStyle" library="libkdevastyle" version="2">
 <MenuBar>
- <Menu name="edit"><Text>&amp;Edit</Text>
+ <Menu name="tools"><Text>&amp;Edit</Text>
   <Action name="edit_astyle"/>
  </Menu>
 </MenuBar>
