@@ -36,6 +36,7 @@ class CGfxClassTreeWindow : public QWidget
  public:
   QPushButton *m_foldbtn;
   QPushButton *m_unfoldbtn;
+  QPushButton *m_printbtn;
   QComboBox *m_classcombo;
   CGfxClassTreeScrollView *m_treescrollview;
 
@@ -61,6 +62,10 @@ class CGfxClassTreeWindow : public QWidget
 
   /** Called when a combobox item is selected */
   void itemSelected(int index);
+
+  /** Called when print button is clicked */
+  void printClicked();
+
 };
 
 

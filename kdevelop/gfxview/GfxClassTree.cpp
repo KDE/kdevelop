@@ -17,6 +17,7 @@
  ***************************************************************************/    
 #include <qwidget.h>
 #include <qpainter.h>
+#include <qpaintdevicemetrics.h>
 #include "GfxClassTree.h"
 #include <stdio.h>
 
@@ -284,6 +285,76 @@ void CGfxClassTree::SetUnfoldAll(bool unfolded)
 
   if((node = m_boxlist.first()) != NULL)
     stateChange(node);
+}
+
+
+
+/*------------------------------------ CGfxClassTree::onPrintTree()
+* onPrintTree()
+*   Print class tree
+*
+* Parameters:
+*   pr        An initialized QPrinter object
+*
+*
+* Returns:
+*   -
+*-----------------------------------------------------------------*/  
+void CGfxClassTree::onPrintTree( QPrinter *pr )
+{
+  QPainter p;
+  CGfxClassBox *node = m_boxlist.first();
+  QPaintDeviceMetrics pdm(pr);
+  int yoffs = 0;
+
+  p.begin(pr);
+  p.setPen(QColor(0x00,0x00,0x00));
+
+  while(node != NULL)
+  {
+    if(node->y() + node->height() >= pdm.height() + yoffs)
+    {
+      yoffs = node->y();
+      pr->newPage();
+    }
+
+    if(node->isVisible())
+    {
+      // Draw the box
+      p.drawRect(node->x(),
+		 node->y() - yoffs,
+		 node->width(),
+		 node->height());
+      p.drawText(node->x(),
+		 node->y() - yoffs,
+		 node->width(),
+		 node->height(),
+		 AlignHCenter|AlignVCenter,node->m_name);
+     
+      // Draw the connection
+      if(node->m_parent != NULL) 
+      {     
+	p.moveTo(node->x() + CONN_CHILD_DELTA_STARTX,
+		 node->y() + CONN_CHILD_DELTA_STARTY - yoffs);
+	
+	p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX,
+		 node->y() + CONN_CHILD_DELTA_STOPY - yoffs);
+	
+	// If abox has a sibling, draw up to sibling
+	if(node->m_sibling != NULL)
+	  p.lineTo(node->m_sibling->x() + CONN_CHILD_DELTA_STOPX,
+		   node->m_sibling->y() + CONN_CHILD_DELTA_STOPY - yoffs);
+	
+	// Else draw up to parent 
+	else
+	  p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX,
+		   node->m_parent->y() + CLASSBOXHEIGHT - yoffs);
+      }
+    }
+    node = m_boxlist.next();
+  }      
+
+  p.end();
 }
 
 

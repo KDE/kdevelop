@@ -175,18 +175,16 @@ void CGfxClassBox::SetUnfolded(bool unfolded)
 }
 
 
-/*------------------------------------------------ 
-* Unfold all ancestors
-*
+/*------------------------------------- CGfxClassBox::MakeVisible()
+* MakeVisible()
+*   Unfold all ancestors
 *
 * Parameters:
-*
+*   no_self_unfold   true=Don't unfold current level
 *
 *
 * Returns:
-*
-*
-*
+*   -
 *-----------------------------------------------------------------*/
 void CGfxClassBox::MakeVisible(bool no_self_unfold)
 {
@@ -215,8 +213,10 @@ void CGfxClassBox::ShowFoldButton()
 }
 
 
+
+
 /*--------------------------------------- CGfxClassBox::IsUnfolded()
-* CGfxClassBox::IsUnfolded()
+* IsUnfolded()
 *   Returns true if subclasses should be shown (if there are any).
 *
 * Parameters:

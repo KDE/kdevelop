@@ -19,6 +19,7 @@
 #define GFXCLASSTREE_H_INCLUDED
 
 #include <qwidget.h>
+#include <qprinter.h>
 #include "GfxClassBox.h"
 #include "../classparser/ClassStore.h"
 
@@ -71,10 +72,13 @@ class CGfxClassTree : public QWidget
   /** Fold or unfold all class boxes */
   void SetUnfoldAll(bool unfolded);
 
+  /** Print class tree */
+  void onPrintTree( QPrinter *pr );
+
   /** Implementation of resizeEvent() */
   virtual void resizeEvent(QResizeEvent *);
 
-
+  /** Implementation of paintEvent() */
   virtual void paintEvent(QPaintEvent *);
 
  signals:

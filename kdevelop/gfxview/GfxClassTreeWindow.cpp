@@ -16,12 +16,15 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include <kapp.h> 
 #include <qwidget.h>
+#include <qprinter.h>
+#include <qprintdialog.h>
+#include <qpaintdevicemetrics.h>
 #include "GfxClassTreeWindow.h"
 #include "GfxClassTree.h"
 #include "GfxClassBox.h"
-#include <stdio.h>
+
 
 
 
@@ -40,30 +43,44 @@ CGfxClassTreeWindow::CGfxClassTreeWindow(QWidget *aparent)
 {
   resize(400,400);
 
-  m_foldbtn = new QPushButton("Fold all",this);
-  m_unfoldbtn = new QPushButton("Unfold all",this);
+  // Instantiate buttons
+  m_foldbtn = new QPushButton(i18n("Fold all"),this);
+  m_unfoldbtn = new QPushButton(i18n("Unfold all"),this);
   m_classcombo = new QComboBox(true,this,"Center class");
+  m_printbtn = new QPushButton(i18n("Print"),this);
+
+  // Connect button/combo signals to their slots in this object
   connect(m_foldbtn,SIGNAL(clicked()),this,SLOT(foldClicked()));
   connect(m_unfoldbtn,SIGNAL(clicked()),this,SLOT(unfoldClicked()));
   connect(m_classcombo,SIGNAL(activated(int)),this,SLOT(itemSelected(int)));
+  connect(m_printbtn,SIGNAL(clicked()),this,SLOT(printClicked()));
 
+  // Resize'em
   m_unfoldbtn->setFixedHeight(20);
+  m_foldbtn->setFixedWidth(80);
+  m_unfoldbtn->setFixedWidth(80);
+  m_printbtn->setFixedWidth(80);
   m_foldbtn->setFixedHeight(20);
   m_classcombo->setFixedHeight(20);
+  m_printbtn->setFixedHeight(20);
   m_classcombo->setFixedWidth(160);
 
+  // Move'em
   m_unfoldbtn->move(m_foldbtn->width(),0);
   m_classcombo->move(m_unfoldbtn->x() + m_unfoldbtn->width(),0);
   m_classcombo->setSizeLimit(20);
-  //  m_classcombo->setAutoResize(true);
+  m_printbtn->move(m_classcombo->x() + m_classcombo->width(),0);
 
+  // Initialize the tree scrollview
   m_treescrollview = new CGfxClassTreeScrollView(this);
   m_treescrollview->move(0,m_foldbtn->height());
   m_treescrollview->resize(width(),height()-m_foldbtn->height());
  
+  // Show'em
   m_foldbtn->show();
   m_unfoldbtn->show();
   m_classcombo->show();
+  m_printbtn->show();
   m_treescrollview->show();
 }
 
@@ -84,6 +101,7 @@ CGfxClassTreeWindow::~CGfxClassTreeWindow()
   delete m_treescrollview;
   delete m_foldbtn;
   delete m_unfoldbtn;
+  delete m_printbtn;
 }
 
 
@@ -199,5 +217,20 @@ void CGfxClassTreeWindow::itemSelected(int index)
 
 
 
+/*----------------------------- CGfxClassTreeWindow::printClicked()
+* printClicked()
+*    Called when print button is clicked
+*
+* Parameters: 
+*  -
+*
+* Returns: 
+*  -
+*-----------------------------------------------------------------*/
+void CGfxClassTreeWindow::printClicked()
+{
+  QPrinter pr;
 
-
+  if(QPrintDialog::getPrinterSetup( &pr ))
+    m_treescrollview->m_classtree->onPrintTree( &pr );
+}

@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
+#include <qprinter.h>
 #include <qpixmap.h>
 #include "../classparser/ParsedClass.h"
 
@@ -95,7 +96,7 @@ class CGfxClassBox : public QWidget
   /** Show fold/unfold button */
   void ShowFoldButton();
 
-  /** Returns TRUE if subclass CGfxClassBoxes is to be shown */
+   /** Returns TRUE if subclass CGfxClassBoxes is to be shown */
   bool IsUnfolded();
 
   /** Returns TRUE if baseclass CGfxClassBox (m_parent) is unfolded */
