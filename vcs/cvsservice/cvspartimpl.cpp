@@ -747,7 +747,7 @@ void CvsServicePartImpl::slotDiffFinished( bool normalExit, int exitStatus )
     // Now show a message about operation ending status
     if (diff.isEmpty() && (exitStatus != 0))
     {
-        KMessageBox::information( 0, i18n("Operation aborted (process killed)"),
+        KMessageBox::information( 0, i18n("Operation aborted (process killed)."),
             i18n("CVS Diff") );
         return;
     }

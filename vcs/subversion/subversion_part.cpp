@@ -103,7 +103,7 @@ void subversionPart::setupActions() {
 	actionCommit->setToolTip( i18n("Commit file(s)") );
 	actionCommit->setWhatsThis( i18n("Commit file(s)<p>Commit file to repository if modified") );
 
-	/*    actionDiff = new KAction( i18n("&Difference between revisions"), 0, this, SLOT(slotActionDiff()),
+	/*    actionDiff = new KAction( i18n("&Difference Between Revisions"), 0, this, SLOT(slotActionDiff()),
 				actionCollection(), "subversion_diff" );
 				actionDiff->setToolTip( i18n("Build difference") );
 				actionDiff->setWhatsThis( i18n("Build difference<p>Build difference between releases") );

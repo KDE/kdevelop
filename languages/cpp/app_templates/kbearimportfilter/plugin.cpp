@@ -45,7 +45,7 @@ void $APPNAME$ImportFilterPlugin::import( const QString& fileName )
     // This method will be automatically called to start the import
     // If supplied fileName will contain the absolute path to the file to import
     if( fileName.isEmpty() || fileName.isNull() ) {
-        KMessageBox::sorry( 0, i18n("You have to select a file to import."), i18n("No file") );
+        KMessageBox::sorry( 0, i18n("You have to select a file to import."), i18n("No File") );
         m_hasError = true;
         emit progress( 100 );
         return;

@@ -604,7 +604,7 @@ void CvsPart::slotDiffFinished()
     // Now show a message about operation ending status
     if (diff.isEmpty() && (exitStatus != 0))
     {
-        KMessageBox::information( 0, i18n("Operation aborted (process killed)"), i18n("CVS Diff") );
+        KMessageBox::information( 0, i18n("Operation aborted (process killed)."), i18n("CVS Diff") );
         return;
     }
     if ( diff.isEmpty() && !err.isEmpty() )
@@ -914,7 +914,7 @@ void CvsPart::diff( const KURL::List& urlList )
     bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
     if ( !ok )
     {
-        KMessageBox::error( 0, i18n("Could not invoke CVS"), i18n("Error Invoking Command") );
+        KMessageBox::error( 0, i18n("Could not invoke CVS."), i18n("Error Invoking Command") );
         delete proc; proc = 0;
         return;
     }
