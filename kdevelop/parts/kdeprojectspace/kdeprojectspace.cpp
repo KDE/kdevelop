@@ -1,5 +1,5 @@
 /***************************************************************************
-                          kdeprojectspaceplugin.cpp  -  description
+                          kdeprojectspace.cpp
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
@@ -15,17 +15,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "kdeprojectspaceplugin.h"
+#include "kdeprojectspace.h"
+#include "main.h"
 #include <kinstance.h>
 #include <iostream.h>
 #include <kiconloader.h>
 #include <ksimpleconfig.h>
 #include <kstddirs.h>
+#include <klocale.h>
+#include <kaction.h>
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 		: AutomakeProjectSpace(parent,name){
-	cerr << "KDEProjectSpace:I'm a plugin :-)";
+	cerr << "\nKDEProjectSpace created\n";
 	
+	setInstance(KDEProjectSpaceFactory::instance());
+
 	KStandardDirs* std_dirs = KGlobal::dirs();
 	
 	// init, every plugin should do this
@@ -40,8 +45,28 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 	// projectspace
 	m_projectspace_template = std_dirs->findResource("data","kdevelop/projectspaces/kde_projectspace.tar.gz");
 	m_language = "C++";
+
+
+	//	setXMLFile("kdevkdeprojectspaceui.rc");
+	setXMLFile("/home/kde2/kdevelop/kdevelop/parts/kdeprojectspace/kdevkdeprojectspace.rc"); //test
 }
 KDEProjectSpace::~KDEProjectSpace(){
+}
+
+void KDEProjectSpace::setupGUI(){
+  cerr << "Building KDEProjectSpace GUI" << endl;
+  KAction *pAction;
+  pAction = new KAction( i18n("Add new &Translation File..."), "locale", 0, 
+			 this, SLOT( slotProjectAddNewTranslationFile() ),
+			 actionCollection(), "project_add_translation");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Adds a new language for internationalization to the project") );
+}
+
+// slots
+
+void KDEProjectSpace::slotProjectAddNewTranslationFile(){
+  cerr << "\n Add new &Translation File (KDE)... actived";
 }
 void KDEProjectSpace::modifyDefaultFiles(){
   AutomakeProjectSpace::modifyDefaultFiles();

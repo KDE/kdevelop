@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <ctoolclass.h>
 
 
 AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(parent,obj_name,true){
@@ -75,7 +76,12 @@ void AppWizard::accept(){
   }
   m_projectspace->addProject(m_project);
   generateDefaultFiles();
-  m_projectspace->writeXMLConfig();
+  if(!m_projectspace->writeXMLConfig()){
+    kdDebug(9000) << "error in writing ConfigFile" << endl;
+  }
+  else{
+    kdDebug(9000) << "ConfigFile successfully written" << endl;
+  }
   QWizard::accept();
 }
 
@@ -95,14 +101,16 @@ Project* AppWizard::getProject(){
 void AppWizard::generateDefaultFiles(){
   KShellProcess proc("/bin/sh");
   
+  QString absProjectPath = m_project->getAbsolutePath();
+  kdDebug(9000) << "creating directory: " << absProjectPath << endl;
   // create the directories
   proc << "mkdirhier";
-  proc << m_project->getAbsolutePath();
+  proc << absProjectPath;
   proc.start(KProcess::Block,KProcess::AllOutput);
   
   // untar/unzip the project
   proc.clearArguments();
-  QString args = "xzvf " + m_project_template + " -C " + m_project->getAbsolutePath();
+  QString args = "xzvf " + m_project_template + " -C " + absProjectPath;
   cerr << "AppWizard::generateDefaultFiles():" << args;
   proc << "tar";
   proc << args;

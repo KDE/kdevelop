@@ -110,10 +110,7 @@ void KDevelopCore::initActions()
     pAction->setEnabled(false);
     pAction->setStatusText( i18n("Adds existing file(s) to the project") );
     
-    pAction = new KAction( i18n("Add new &Translation File..."), "locale", 0, this, SLOT( slotProjectAddNewTranslationFile() ),
-                          m_pKDevelopGUI->actionCollection(), "project_add_translation");
-    pAction->setEnabled(false);
-    pAction->setStatusText( i18n("Adds a new language for internationalization to the project") );
+   
 
     pAction = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
                           m_pKDevelopGUI->actionCollection(), "project_options");
@@ -330,6 +327,7 @@ bool KDevelopCore::loadProjectSpace(const QString &name){
   ProjectSpace *pComp = (ProjectSpace*) pObj;
   m_pProjectSpace = pComp;
   initComponent(pComp);
+  m_pKDevelopGUI->guiFactory()->addClient( m_pProjectSpace);
   return true;
 }
 
@@ -352,54 +350,58 @@ void KDevelopCore::loadProject(const QString &fileName)
 {
 
   m_pProject = new CProject("../kdevelop.kdevprj"); // will be removed soon
-    // project must define a version control system
-    // hack until implemented
-    QString vcservice = QString::fromLatin1("CVSInterface");
+  // project must define a version control system
+  // hack until implemented
+  QString vcservice = QString::fromLatin1("CVSInterface");
 
     //ok, a little bit bootstrapping
-    KConfig config(fileName);
-    config.setGroup("General");
-    QString projectspace = config.readEntry("plugin_name");
-    if(loadProjectSpace(projectspace)){
-      m_pProjectSpace->readConfig(fileName);
-      loadLanguageSupport(m_pProjectSpace->getProgrammingLanguage());
-      loadVersionControl(vcservice);
-    }
+  QString projectSpace = ProjectSpace::projectSpacePluginName(fileName);
 
-    QListIterator<KDevComponent> it1(m_components);
-    for (; it1.current(); ++it1)
-        (*it1)->projectOpened(m_pProject);
-
-    QListIterator<KDevComponent> it2(m_components);
-    for (; it2.current(); ++it2)
+  if(loadProjectSpace(projectSpace)){
+    m_pProjectSpace->readXMLConfig(fileName);
+    m_pProjectSpace->dump();
+    loadLanguageSupport(m_pProjectSpace->getProgrammingLanguage());
+    loadVersionControl(vcservice);
+  }
+  
+  QListIterator<KDevComponent> it1(m_components);
+  for (; it1.current(); ++it1)
+    (*it1)->projectOpened(m_pProject);
+  
+  QListIterator<KDevComponent> it2(m_components);
+  for (; it2.current(); ++it2)
         (*it2)->classStoreOpened(m_pClassStore);
+  
+  
+  if (m_pVersionControl) {
+    QListIterator<KDevComponent> it3(m_components);
+       for (; it3.current(); ++it3)
+        (*it3)->versionControlOpened(m_pVersionControl);
+  }
 
-    if (m_pVersionControl) {
-        QListIterator<KDevComponent> it3(m_components);
-        for (; it3.current(); ++it3)
-            (*it3)->versionControlOpened(m_pVersionControl);
-    }
-
-    if (m_pLanguageSupport) {
-        QListIterator<KDevComponent> it4(m_components);
+  
+  if (m_pLanguageSupport) {
+    QListIterator<KDevComponent> it4(m_components);
         for (; it4.current(); ++it4)
             (*it4)->languageSupportOpened(m_pLanguageSupport);
-    }
-
-    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-    pAC->action("project_close")->setEnabled(true);
-    pAC->action("project_add_existing_files")->setEnabled(true);
-    pAC->action("project_add_translation")->setEnabled(true);
-    pAC->action("project_file_properties")->setEnabled(true);
-    pAC->action("project_options")->setEnabled(true);
-
-    ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
-
+  }
+  
+  
+  /*KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  pAC->action("project_close")->setEnabled(true);
+  pAC->action("project_add_existing_files")->setEnabled(true);
+  pAC->action("project_add_translation")->setEnabled(true);
+  pAC->action("project_file_properties")->setEnabled(true);
+  pAC->action("project_options")->setEnabled(true);
+  
+  ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
+  */
+  
 #if 1
-    // Hack to test the class viewer
-    QListIterator<KDevComponent> it5(m_components);
-    for (; it5.current(); ++it5)
-        (*it5)->savedFile("parts/classview/test.cpp");
+  // Hack to test the class viewer
+  QListIterator<KDevComponent> it5(m_components);
+  for (; it5.current(); ++it5)
+    (*it5)->savedFile("parts/classview/test.cpp");
 #endif
 }
 

@@ -24,6 +24,7 @@
 #include <qlist.h>
 #include "registeredfile.h"
 #include <ksimpleconfig.h>
+#include <qdom.h>
 
 /**-base class for all project plugins, contains  special config widgets for
      PMC (Project Managment Console) , generate/modify Makefile.am's,
@@ -58,7 +59,9 @@ class Project : public QObjectPlugin  {
   void setVersion(QString version);
   void setName(QString name);
   void setAbsolutePath(QString path);
+  void setRelativePath(QString path);
   QString getAbsolutePath();
+  QString relativePath();
   /** generate/modifiy the Makefile*/
   virtual void updateMakefile();
 
@@ -75,8 +78,13 @@ class Project : public QObjectPlugin  {
   virtual bool writeGeneralConfig(KSimpleConfig* config);
   virtual bool writeUserConfig(KSimpleConfig* config);
 
+  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
+  virtual bool writeUserConfig(QDomDocument& doc);
+  virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
+
   /* */
   virtual void showAllFiles();
+  virtual void dump();
   protected:
   QList<RegisteredFile>* m_files;
   QString m_name;
@@ -86,6 +94,7 @@ class Project : public QObjectPlugin  {
   QString m_user_project_file;
   /** absolute */
   QString m_project_file;
+  QString m_relPath;
 };
 
 #endif

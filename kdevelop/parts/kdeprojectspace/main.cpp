@@ -1,5 +1,6 @@
 #include "main.h"
-#include "kdeprojectspaceplugin.h"
+#include "kdeprojectspace.h"
+#include <kinstance.h>
 
 
 extern "C" {
@@ -13,13 +14,15 @@ extern "C" {
 
 
 KDEProjectSpaceFactory::KDEProjectSpaceFactory(QObject *parent, const char *name)
-    : KLibFactory(parent, name)
-{
+    : KLibFactory(parent, name){
+  instance();
 }
 
 
-KDEProjectSpaceFactory::~KDEProjectSpaceFactory()
-{}
+KDEProjectSpaceFactory::~KDEProjectSpaceFactory(){
+   delete s_instance;
+   s_instance = 0;
+}
 
 
 QObject *KDEProjectSpaceFactory::create(QObject *parent, const char *name,
@@ -41,4 +44,13 @@ QObject *KDEProjectSpaceFactory::create(QObject *parent, const char *name,
     QObject *obj = new KDEProjectSpace (parent, name );
     emit objectCreated(obj);
     return obj;
+}
+
+KInstance *KDEProjectSpaceFactory::s_instance = 0;
+KInstance *KDEProjectSpaceFactory::instance()
+{
+    if (!s_instance)
+        s_instance = new KInstance("kdevkdeprojectspace");
+
+    return s_instance;
 }

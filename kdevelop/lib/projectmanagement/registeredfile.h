@@ -20,14 +20,14 @@
 
 #include <qstring.h>
 #include <kconfig.h>
-
+#include <qdom.h>
 /**
   *@author Sandy Meier
   */
 
 class RegisteredFile {
 public: 
-  RegisteredFile(QString rel_name,bool dist=true,bool install=false,QString install_file="");
+  RegisteredFile(QString rel_name="",bool dist=true,bool install=false,QString install_file="");
   ~RegisteredFile();
   
   /** set the filename
@@ -51,6 +51,10 @@ public:
   void writeConfig(KConfig* config);
   /** the rel_name set in the constructor will be used*/
   void readConfig(KConfig* config);
+
+  void writeConfig(QDomDocument& doc, QDomElement& fileElement);
+  void readConfig(QDomElement& fileElement);
+  
   
  protected:
   QString m_file;

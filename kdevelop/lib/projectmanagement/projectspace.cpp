@@ -41,10 +41,27 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDev
 ProjectSpace::~ProjectSpace(){
 }
 
+QString ProjectSpace::projectSpacePluginName(QString fileName){
+  QFile file(fileName);
+  if (!file.open(IO_ReadOnly)){
+    KMessageBox::sorry(0, i18n("Can't open the file %1")
+		       .arg(fileName));
+    return "";
+  }
+  QDomDocument doc;
+  if (!doc.setContent(&file)){
+    KMessageBox::sorry(0,
+		       i18n("The file %1 does not contain valid XML").arg(fileName));
+      return "";
+  }
+  QDomElement psElement = doc.documentElement(); // get the Projectspace
+  return psElement.attribute("pluginName");
+}
 void ProjectSpace::addProject(QString file){
   
 }
 void ProjectSpace::addProject(Project* prj){
+  cerr << endl << "enter ProjectSpace::addProject";
   m_projects->append (prj);
   m_current_project = prj;
 }
@@ -79,10 +96,12 @@ void ProjectSpace::modifyDefaultFiles(){
 
 /** returns the name of the projectspace*/
 QString ProjectSpace::getName(){
+  return "";
 }
 
 /** Fetch the name of the version control system */
 QString ProjectSpace::getVCSystem(){
+  return "";
 }
 
 /** Fetch the authors name. stored in the *_user files*/
@@ -140,11 +159,16 @@ void ProjectSpace::setInfosInString(QString& text){
   	      
 }
 
-bool ProjectSpace::readXMLConfig(QString abs_filename){
-  QFile file(abs_filename);
+bool ProjectSpace::readXMLConfig(QString absFilename){
+  kdDebug(9000) << "enter ProjectSpace::readXMLConfig" << endl;
+  QFileInfo fileInfo(absFilename);
+  m_path = fileInfo.dirPath();
+  m_projectspace_file = absFilename;
+
+  QFile file(absFilename);
   if (!file.open(IO_ReadOnly)){
     KMessageBox::sorry(0, i18n("Can't open the file %1")
-		       .arg(abs_filename));
+		       .arg(absFilename));
     return false;
   }
   
@@ -153,44 +177,111 @@ bool ProjectSpace::readXMLConfig(QString abs_filename){
   // Read in file and check for a valid XML header.
   if (!doc.setContent(&file)){
     KMessageBox::sorry(0,
-		       i18n("The file %1 does not contain valid XML").arg(abs_filename));
+		       i18n("The file %1 does not contain valid XML").arg(absFilename));
       return false;
   }
   // Check for proper document type.
-  if (doc.doctype().name() != "KDevProjectSpace (General)"){
+  if (doc.doctype().name() != "KDevProjectSpace"){
       KMessageBox::sorry(0,
 			 i18n("The file %1 does not contain a valid work sheet\n"
 			      "definition, which must have a document type\n"
-			      "'KDevProjectSpace (General)'").arg(abs_filename));
+			      "'KDevProjectSpace (General)'").arg(absFilename));
       return false;
     }
+  QDomElement psElement = doc.documentElement();
+  readGlobalConfig(doc,psElement);
   return true;
 }
+
+
+
+bool ProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement){
+  m_name = psElement.attribute("name");
+  //  m_path = psElement.attribut("path");
+  m_version = psElement.attribute("version");
+  QDomElement projectsElement = psElement.namedItem("Projects").toElement();
+  if(projectsElement.isNull()){
+    cerr << "\nProjectSpace::readGlobalConfig no \"Projects\" tag found!";
+    return false;
+  }
+  Project* prj=0;
+  QDomNodeList projectList = projectsElement.elementsByTagName("Project");
+  unsigned int i;
+  for (i = 0; i < projectList.count(); ++i){
+    QDomElement projectElement = projectList.item(i).toElement();
+    QString prjPluginName = projectElement.attribute("pluginName");
+    prj = PluginLoader::getNewProject(prjPluginName);
+    if(prj != 0){
+      prj->readGlobalConfig(doc,projectElement);
+      prj->setAbsolutePath(CToolClass::getAbsolutePath(m_path,prj->relativePath()));
+      addProject(prj);
+    }
+    else {
+      cerr << "\nProjectSpace::readGlobalConfig: prj not created!";
+    }
+  }
+  return true;
+ 
+}
+bool ProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
+  return true;
+}
+
+
+// xml stuff
 bool ProjectSpace::writeXMLConfig(){
-  kdDebug(9000) << "enter ProjectSpace::writeXMLConfig" << endl;
+  kdDebug(9000) << "\nenter ProjectSpace::writeXMLConfig" << endl;
 
    // the "global" one
-  QDomDocument doc("KDevProjectSpace (General)");
+  QDomDocument doc("KDevProjectSpace");
   doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
   // save work projectspace information
-  QDomElement ps = doc.createElement("ProjectSpace");
-  doc.appendChild(ps);
-  QDomElement e = writeGeneralConfig(doc);
-  doc.appendChild( e );
- 
+  QDomElement ps = doc.appendChild(doc.createElement("ProjectSpace")).toElement();
+  
+  writeGlobalConfig(doc,ps);
   QString filename = m_path + "/" + m_name + ".kdevpsp";
-  kdDebug(9000)  << "filename:" << filename << endl;
+  kdDebug(9000)  << "filename::" << filename << endl;
   QFile file(filename);
   if (!file.open(IO_WriteOnly)){
     KMessageBox::sorry(0, i18n("Can't save file %1")
 		       .arg(filename));
     return false;
   }
-
   QTextStream s(&file);
   s << doc;
   file.close();
+  return true;
 }
+// add the data to the psElement (Projectspace)
+bool ProjectSpace::writeGlobalConfig(QDomDocument& doc, QDomElement& psElement){
+  cerr << "\nenter ProjectSpace::writeGlobalConfig";
+  // add Attributes
+  psElement.setAttribute("name",m_name);
+  //  psElement.setAttribute("path",m_path);
+  psElement.setAttribute("pluginName", m_plugin_name); // the projectspacetype name
+  psElement.setAttribute("version", m_version);
+  //  psElement.setAttribute("programmingLanguage",m_language);
+
+  // add <Projects>
+  QDomElement projectsElement = psElement.appendChild(doc.createElement("Projects")).toElement();
+  QStringList projectfiles;
+  Project* prj;
+  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
+    QDomElement prjElement = projectsElement.appendChild(doc.createElement("Project")).toElement();
+        prj->writeGlobalConfig(doc,prjElement);
+  }
+  return true;
+}
+bool ProjectSpace::writeUserConfig(QDomDocument& dom){
+  cerr << "\nenter ProjectSpace::writeUserConfig";
+  return true;
+}
+
+
+QString ProjectSpace::getProgrammingLanguage(){
+  return m_language;
+}
+
 /** read a NAME.kdevpsp and .NAME.kdevpsp
     NAME.kdevpsp contains options for all users, like cvs system
     .NAME.kdevpsp contains options from the local user:
@@ -215,7 +306,6 @@ bool ProjectSpace::readConfig(QString abs_filename){
   config->sync();
   delete config;
   return true;
- 
   
 }
 
@@ -253,12 +343,6 @@ bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
   return true;
 }
 
-bool ProjectSpace::readGeneralConfig(QDomElement& dom){
-  
-}
-bool ProjectSpace::readUserConfig(QDomElement& dom){
-  
-}
 bool ProjectSpace::readUserConfig(KSimpleConfig* config){
   config->setGroup("General");
   m_email = config->readEntry("email");
@@ -291,7 +375,7 @@ bool ProjectSpace::writeConfig(){
   writeUserConfig(config); // maybe virtual overwritten
   config->sync();
   delete config;
-  
+  return true;
 }
 
 bool ProjectSpace::writeGeneralConfig(KSimpleConfig* config){
@@ -321,31 +405,12 @@ bool ProjectSpace::writeUserConfig(KSimpleConfig* config){
   return true;
 }
 
-QDomElement ProjectSpace::writeGeneralConfig(QDomDocument& doc){
-  
-  QDomElement general = doc.createElement("General");
-  general.setAttribute("name",m_name);
-  general.setAttribute("path",m_path);
-  general.setAttribute("plugin_name", m_plugin_name); // the projectspacetype name
-  general.setAttribute("version", m_version);
-  general.setAttribute("programming_language",m_language);
-  QStringList projectfiles;
+void ProjectSpace::dump(){
+  cerr << endl << "ProjectSpace Name: " << m_name;
+  cerr << endl << "absolute Path: " << m_path;
   Project* prj;
   for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
-    // add the relative path
-    QString file = prj->getProjectFile();
-    projectfiles.append(CToolClass::getRelativePath(m_path,file));
+    prj->dump();
   }
-  //  general.setAttribut("projectfiles",projectfiles);
-  return general;
-
 }
-QDomElement ProjectSpace::writeUserConfig(QDomDocument& dom){
-}
-
-
-QString ProjectSpace::getProgrammingLanguage(){
-  return m_language;
-}
-
 #include "projectspace.moc"

@@ -14,6 +14,10 @@ public:
 
     virtual QObject* create( QObject *parent, const char *name,
                              const char *classname, const QStringList &args);
+    static KInstance *instance();
+
+private:
+    static KInstance *s_instance;
 };
 
 #endif

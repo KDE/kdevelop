@@ -38,7 +38,7 @@
 #include "newprojectdlg.h"
 #include "appwizard.h"
 #include "pluginloader.h"
-
+#include "ctoolclass.h"
 
 
 
@@ -242,9 +242,14 @@ void NewProjectDlg::slotOk(){
   kdDebug(9000) << "NewProjectDlg: set some project props" << endl;
     
   prj->setName(m_prjname_linedit->text());
+  QString relProjectPath = CToolClass::getRelativePath(m_prjspace_location_linedit->text(),
+							m_prjlocation_linedit->text());
+  prj->setRelativePath(relProjectPath);
   prj->setAbsolutePath(m_prjlocation_linedit->text());
+  kdDebug(9000) << "relative ProjectPath:" <<relProjectPath  << endl;
   
   m_current_appwizard_plugin->exec(); // exec the dialog
+  kdDebug(9000) << "ApplicationWizard exited" << endl;
   
   accept();
 }

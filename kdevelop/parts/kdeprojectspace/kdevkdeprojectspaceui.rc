@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDE" version="1">
+<MenuBar>
+ <Menu name="testprj">
+	<Action name="project_add_existing_files" />
+ </Menu>
+</MenuBar>
+</kpartgui>
+

@@ -37,6 +37,8 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   ProjectSpace(QObject* parent=0,const char* name=0,QString file="");
   ~ProjectSpace();
 
+  /** nesessary to bootstrap a ProjectSpace*/
+  static QString projectSpacePluginName(QString fileName);
   /** create a project object based on the projecfile */
   void addProject(QString file);
 
@@ -92,10 +94,6 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual bool readGeneralConfig(KSimpleConfig* config);
   virtual bool readUserConfig(KSimpleConfig* config);
 
-  virtual bool readXMLConfig(QString abs_filename);
-  virtual bool readGeneralConfig(QDomElement& dom);
-  virtual bool readUserConfig(QDomElement& dom);
-  
   /** writes a NAME.kdevpsp and .NAME.kdevpsp
       NAME.kdevpsp contains options for all users, like cvs system
       .NAME.kdevpsp contains options from the local user:
@@ -105,10 +103,16 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual bool writeUserConfig(KSimpleConfig* config);
 
   virtual bool writeXMLConfig();
-  virtual QDomElement writeGeneralConfig(QDomDocument& dom);
-  virtual QDomElement writeUserConfig(QDomDocument& dom);
+  /** add the data to the psElement (Projectspace)*/
+  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+  virtual bool writeUserConfig(QDomDocument& doc);
 
+  virtual bool readXMLConfig(QString abs_filename);
+  virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+  virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
   
+
+  virtual void dump();
 
 
 protected:

@@ -56,7 +56,12 @@ QString Project::getName(){
 QString Project::getAbsolutePath(){
   return m_abs_path;
 }
-
+QString Project::relativePath(){
+  return m_relPath;
+}
+void Project::setRelativePath(QString path){
+  m_relPath = path;
+}
 //////////////////////////////// some set methods//////////////////////
 
 /** store the project version. */
@@ -92,9 +97,18 @@ void Project::showAllFiles(){
   RegisteredFile* file;
   cerr << endl << "show all registered Files for: " << m_name;
   for(file = m_files->first(); file != 0;file =  m_files->next() ){
-    cerr << "\nFilename:" << file->getRelativeFile() << "\n";
+    cerr << "\nFilename:" << file->getRelativeFile();
   }
 }
+
+void Project::dump(){
+  cerr << endl << "Project Name: " << m_name;
+  cerr << endl << "relative Path: " << m_relPath;
+  cerr << endl << "absolute Path: " << m_abs_path;
+  cerr << endl << "Version: " << m_version;
+  showAllFiles();
+}
+
 bool Project::readConfig(QString abs_filename){
   QFileInfo file_info(abs_filename);
   m_project_file = abs_filename;
@@ -131,7 +145,7 @@ bool Project::readGeneralConfig(KSimpleConfig* config){
     file->readConfig(config);
     m_files->append(file);
   }
-  showAllFiles();
+  //  showAllFiles();
   return true;
 }
 bool Project::readUserConfig(KSimpleConfig* config){
@@ -175,6 +189,50 @@ bool Project::writeGeneralConfig(KSimpleConfig* config){
 bool Project::writeUserConfig(KSimpleConfig* config){
   config->setGroup("General");
   config->writeEntry("test","test");
+  return true;
+}
+
+bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
+  cerr << "\nenter Project::writeGlobalConfig";
+  projectElement.setAttribute("name",m_name);
+  projectElement.setAttribute("pluginName",m_plugin_name);
+  projectElement.setAttribute("relativePath",m_relPath);
+
+  // Files tag
+  QDomElement filesElement = projectElement.appendChild(doc.createElement("Files")).toElement();
+  QStringList fileList;
+  RegisteredFile* pFile;
+  for(pFile = m_files->first(); pFile != 0; pFile= m_files->next() ){
+    QDomElement fileElement = filesElement.appendChild(doc.createElement("File")).toElement();
+    pFile->writeConfig(doc,fileElement);
+  }
+  return true;
+  
+}
+bool Project::writeUserConfig(QDomDocument& dom){
+  return true;
+}
+
+bool Project::readGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
+  m_name = projectElement.attribute("name");
+  m_relPath =  projectElement.attribute("relativePath");
+
+  QDomElement filesElement = projectElement.namedItem("Files").toElement();
+  if(filesElement.isNull()){
+    cerr << "\nProjectSpace::readGlobalConfig no \"Files\" tag found!";
+    return false;
+  }
+
+  RegisteredFile* file;
+  QDomNodeList fileList = filesElement.elementsByTagName("File");
+  unsigned int i;
+  for (i = 0; i < fileList.count(); ++i){
+    QDomElement fileElement = fileList.item(i).toElement();
+    file = new RegisteredFile();
+    file->readConfig(fileElement);
+    m_files->append(file);
+  }
+  //  showAllFiles();
   return true;
 }
 

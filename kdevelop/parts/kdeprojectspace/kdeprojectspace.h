@@ -1,9 +1,9 @@
 /***************************************************************************
-                          kdeprojectspaceplugin.h  -  description
+                          kdeprojectspace.h 
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KDEPROJECTSPACEPLUGIN_H
-#define KDEPROJECTSPACEPLUGIN_H
+#ifndef KDEPROJECTSPACE_H
+#define KDEPROJECTSPACE_H
 
 #include "automakeprojectspace.h"
 #include <klibloader.h>
@@ -34,8 +34,11 @@ public:
 	virtual bool readGeneralConfig(KSimpleConfig* config);
 	virtual bool readUserConfig(KSimpleConfig* config);
 	virtual	void modifyDefaultFiles();
-
-  virtual bool writeGeneralConfig(KSimpleConfig* config);
+	virtual void setupGUI();
+	virtual bool writeGeneralConfig(KSimpleConfig* config);
 	virtual bool writeUserConfig(KSimpleConfig* config);
+	
+	protected slots:
+  void slotProjectAddNewTranslationFile();
   };
 #endif

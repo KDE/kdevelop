@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "registeredfile.h"
+#include <iostream.h>
 
 
 RegisteredFile::RegisteredFile(QString rel_name,bool dist,bool install,QString install_file){
@@ -68,4 +69,40 @@ void RegisteredFile::readConfig(KConfig* config){
   m_dist = config->readBoolEntry("dist",false);
   m_install = config->readBoolEntry("install",false);
   m_install_file = config->readEntry("install_file","");
+}
+void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
+   cerr << "\nenter RegisteredFile::writeConfig";
+   if(m_dist) {
+     fileElement.setAttribute("dist","true");
+   }
+   else{
+     fileElement.setAttribute("dist","false");
+   }
+   if(m_install){
+     fileElement.setAttribute("install","true");
+   }
+   else{
+     fileElement.setAttribute("install","false");
+   }
+  fileElement.setAttribute("file",m_file);
+  fileElement.setAttribute("installFile",m_install_file);
+}
+void RegisteredFile::readConfig(QDomElement& fileElement){
+  QString dist = fileElement.attribute("dist");
+  if(dist == "true"){
+    m_dist = true;
+  }
+  else{
+    m_dist = false;
+  }
+  QString install = fileElement.attribute("install");
+  if(install == "true"){
+    m_install = true;
+  }
+  else{
+    m_install = false;
+  }
+  m_file = fileElement.attribute("file");
+  m_install_file = fileElement.attribute("installFile");
+  
 }
