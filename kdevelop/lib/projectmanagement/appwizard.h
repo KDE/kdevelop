@@ -18,7 +18,7 @@
 #ifndef APPWIZARD_H
 #define APPWIZARD_H
 
-#include <qwizard.h>
+#include <appwizardbase.h>
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
@@ -40,7 +40,7 @@
   *@author Sandy Meier
   */
 
-class AppWizard : public QWizard, public Plugin  {
+class AppWizard : public AppWizardBase, public Plugin  {
 Q_OBJECT
 
 public: 
@@ -52,7 +52,6 @@ public:
  AppWizard(QWidget* parent=0, const char* name=0);
  virtual ~AppWizard();
  virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0);
- virtual void initDefaultPages();
  // for which workspace is this plugin
  QString  getProjectSpaceName();
  // the picture for the newProjectDialog, the QString contains the absolute path
@@ -65,29 +64,9 @@ public:
  
  protected slots:
   virtual void accept();
- 
+ virtual void slotNewHeader();
+ virtual void slotLoadHeader();
  protected:
- QLineEdit* emailline;
- QLineEdit* authorline;
-  QLineEdit* versionline;
-  QLabel* name;
-  QLabel* email;
-  QLabel* authorname;
-  QLabel* versionnumber;
-  QLabel* directory;
-
-  QCheckBox* gnufiles;
-  QCheckBox* lsmfile;
-  
-  // second page
-  QPushButton*  fnew;
-  QPushButton*  fload;
-  KEdit* fedit;
-  QCheckBox* fheader;
-  
-  // pages	
-  QWidget* m_general_page;
-  QWidget* m_fileheader_page;
   
   // others
   bool m_new_projectspace;

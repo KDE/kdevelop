@@ -24,10 +24,14 @@
 #include <kapp.h>
 #include <kcmdlineargs.h>
 #include <iostream.h>
+#include <filepropspage.h>
 
 int main(int argc, char* argv[]){
   KCmdLineArgs::init( argc, argv,"testprj","","");
   KApplication a;
+  FilePropsPage* page = new FilePropsPage();
+  page->show();
+  
   ProjectSpace* space = new ProjectSpace();
     space->setName("SPACE");
   space->setAbsolutePath("/home/smeier/testprj/jk");
@@ -48,4 +52,7 @@ int main(int argc, char* argv[]){
   // test some function in ProjectSpace
   QString rel_path = CToolClass::getRelativePath("/home/smeier/","/usr/bin/");
   cerr << endl << "ABS:" << CToolClass::getAbsolutePath("/home/smeier/",rel_path) << endl;
+  
+  a.setMainWidget(page);
+  a.exec();
 }
