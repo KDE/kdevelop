@@ -22,11 +22,8 @@
 #include <ctoolclass.h>
 #include <qfileinfo.h>
 
-Project::Project(QObject * parent, const char* name,QString filename) :  QObjectPlugin(parent,name){
+Project::Project(QObject * parent, const char* name) :  QObjectPlugin(parent,name){
   m_files = new QList<RegisteredFile>();
-  if(filename != ""){
-    readConfig(filename);
-  }
 }
 Project::~Project(){
 }
@@ -109,88 +106,17 @@ void Project::dump(){
   showAllFiles();
 }
 
-bool Project::readConfig(QString abs_filename){
-  QFileInfo file_info(abs_filename);
-  m_project_file = abs_filename;
-  m_abs_path = file_info.dirPath();
-  kdDebug(9000) << "enter Project::readConfig "  << endl;
-  // the "global" one
-  kdDebug(9000)  << "project_filename:" << m_project_file << endl;
-  KSimpleConfig* config = new KSimpleConfig(m_project_file);
-  readGeneralConfig(config); // maybe virtual overwritten
-  config->sync();
-  delete config;
-  
-  // set the m_user_project_file
-  m_user_project_file = m_abs_path + "/." + m_name + ".kdevprj2";
-  // the "local/user" one
-  kdDebug(9000)  << "user_project_filename:" << m_user_project_file << endl;
-  config = new KSimpleConfig(m_user_project_file);
-  readUserConfig(config); // maybe virtual overwritten
-  config->sync();
-  delete config;
-  return true;
-}
 
-bool Project::readGeneralConfig(KSimpleConfig* config){
-  config->setGroup("General");
-  m_name = config->readEntry("name","");
-  m_plugin_name = config->readEntry("plugin_name",""); 
-  QStringList files = config->readListEntry("files");
-  QStringList::Iterator it;
-  QString name;
-  RegisteredFile* file;
-  for(it = files.begin(); it != files.end(); ++it){
-    file = new RegisteredFile(*it);
-    file->readConfig(config);
-    m_files->append(file);
+bool Project::readUserConfig(QDomDocument& doc,QDomElement& projectElement){
+  QDomElement filesElement = projectElement.namedItem("projecttest").toElement();
+  if(filesElement.isNull()){
+    cerr << "\nProject::readUserConfig no \"projecttest\" tag found!";
+    return false;
   }
-  //  showAllFiles();
-  return true;
-}
-bool Project::readUserConfig(KSimpleConfig* config){
-  config->setGroup("General");
   return true;
 }
 
 
-bool Project::writeConfig(){
-  kdDebug(9000) << "enter Project::writeConfig "  << endl;
-  // the "global" one
-  kdDebug(9000)  << "project_filename:" << m_project_file << endl;
-  KSimpleConfig* config = new KSimpleConfig(m_project_file);
-  writeGeneralConfig(config); // maybe virtual overwritten
-  config->sync();
-  delete config;
-  
-  // the "local/user" one
-  kdDebug(9000)  << "project_filename:" << m_user_project_file << endl;
-  config = new KSimpleConfig(m_user_project_file);
-  writeUserConfig(config); // maybe virtual overwritten
-  config->sync();
-  delete config;
-  
-}
-bool Project::writeGeneralConfig(KSimpleConfig* config){
-  config->setGroup("General");
-  config->writeEntry("name",m_name);
-  config->writeEntry("plugin_name", m_plugin_name); // the projectspacetype name
-  QStringList file_list;
-  RegisteredFile* file;
-  for(file = m_files->first(); file != 0; file= m_files->next() ){
-    file->writeConfig(config);
-    file_list.append(file->getRelativeFile());
-  }
-  config->setGroup("General");
-  config->writeEntry("files",file_list);
-  return true;
-}
-
-bool Project::writeUserConfig(KSimpleConfig* config){
-  config->setGroup("General");
-  config->writeEntry("test","test");
-  return true;
-}
 
 bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
   cerr << "\nenter Project::writeGlobalConfig";
@@ -209,7 +135,8 @@ bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
   return true;
   
 }
-bool Project::writeUserConfig(QDomDocument& dom){
+bool Project::writeUserConfig(QDomDocument& doc,QDomElement& projectElement){
+  QDomElement openFilesElement = projectElement.appendChild(doc.createElement("projecttest")).toElement();
   return true;
 }
 

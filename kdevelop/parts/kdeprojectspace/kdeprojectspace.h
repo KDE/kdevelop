@@ -31,14 +31,15 @@ Q_OBJECT
 public: 
 	KDEProjectSpace(QObject* parent=0,const char* name=0);
 	~KDEProjectSpace();
-	virtual bool readGeneralConfig(KSimpleConfig* config);
-	virtual bool readUserConfig(KSimpleConfig* config);
+	
 	virtual	void modifyDefaultFiles();
 	virtual void setupGUI();
-	virtual bool writeGeneralConfig(KSimpleConfig* config);
-	virtual bool writeUserConfig(KSimpleConfig* config);
+	virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+	virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
 	
+	virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+	virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
 	protected slots:
   void slotProjectAddNewTranslationFile();
-  };
+};
 #endif

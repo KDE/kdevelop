@@ -28,9 +28,6 @@
 
 /**-base class for all project plugins, contains  special config widgets for
      PMC (Project Managment Console) , generate/modify Makefile.am's,
-     - every project has 2 own project files
-     NAME.kdevprj2 for global relevant options,
-     .NAME.kdevprj2 for local user options
      - abstract
   *@author Sandy Meier
   */
@@ -39,7 +36,7 @@ class Project : public QObjectPlugin  {
   Q_OBJECT
     
     public: 
-  Project(QObject* parent=0,const char* name=0,QString filename="");
+  Project(QObject* parent=0,const char* name=0);
   virtual ~Project();
   /*____some get methods_____ */
   
@@ -70,17 +67,10 @@ class Project : public QObjectPlugin  {
   virtual void addFile(QString abs_filename);
   virtual void removeFile(RegisteredFile* file);
 
-  virtual bool readConfig(QString abs_filename);
-  virtual bool readGeneralConfig(KSimpleConfig* config);
-  virtual bool readUserConfig(KSimpleConfig* config);
-  
-  virtual bool writeConfig();	
-  virtual bool writeGeneralConfig(KSimpleConfig* config);
-  virtual bool writeUserConfig(KSimpleConfig* config);
-
   virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
-  virtual bool writeUserConfig(QDomDocument& doc);
+  virtual bool writeUserConfig(QDomDocument& doc,QDomElement& projectElement);
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
+  virtual bool readUserConfig(QDomDocument& doc,QDomElement& projectElement);
 
   /* */
   virtual void showAllFiles();

@@ -88,24 +88,10 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual void generateDefaultFiles();
   virtual void modifyDefaultFiles();
 	
-  
-
-  virtual bool readConfig(QString abs_filename);
-  virtual bool readGeneralConfig(KSimpleConfig* config);
-  virtual bool readUserConfig(KSimpleConfig* config);
-
-  /** writes a NAME.kdevpsp and .NAME.kdevpsp
-      NAME.kdevpsp contains options for all users, like cvs system
-      .NAME.kdevpsp contains options from the local user:
-  */
-  virtual bool writeConfig();	
-  virtual bool writeGeneralConfig(KSimpleConfig* config);
-  virtual bool writeUserConfig(KSimpleConfig* config);
-
   virtual bool writeXMLConfig();
   /** add the data to the psElement (Projectspace)*/
   virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-  virtual bool writeUserConfig(QDomDocument& doc);
+  virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
 
   virtual bool readXMLConfig(QString abs_filename);
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);

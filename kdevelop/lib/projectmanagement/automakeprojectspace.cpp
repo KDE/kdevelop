@@ -50,36 +50,32 @@ void AutomakeProjectSpace::modifyDefaultFiles(){
 
 /** Store the additional arguments for configure,stored in the *_user files */
 void AutomakeProjectSpace::setConfigureArgs(QString args){
+  m_configureArgs = args;
 }
 
 /** Fetch the commandline additional arguments for configure */
-QString AutomakeProjectSpace::getConfigureArgs(){
+QString AutomakeProjectSpace::configureArgs(){
+  return m_configureArgs;
 }
 
-bool AutomakeProjectSpace::readGeneralConfig(KSimpleConfig* config){
-  config->setGroup("AutomakeProjectSpace Config");
-  
-  ProjectSpace::readGeneralConfig(config);
+  /** add the data to the psElement (Projectspace)*/
+bool AutomakeProjectSpace::writeGlobalConfig(QDomDocument& doc,QDomElement& psElement){
+  ProjectSpace::writeGlobalConfig(doc,psElement);
+  return true;
+}
+bool AutomakeProjectSpace::writeUserConfig(QDomDocument& doc,QDomElement& psElement){
+  ProjectSpace::writeUserConfig(doc,psElement);
+  return true;
 }
 
-bool AutomakeProjectSpace::readUserConfig(KSimpleConfig* config){
-  config->setGroup("AutomakeProjectSpace Config");
-  
-  ProjectSpace::readUserConfig(config);
+bool AutomakeProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement){
+  ProjectSpace::readGlobalConfig(doc,psElement);
+  return true;
+}
+bool AutomakeProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
+  ProjectSpace::readUserConfig(doc,psElement);
+  return true;
 }
 
-bool AutomakeProjectSpace::writeGeneralConfig(KSimpleConfig* config){
-  config->setGroup("AutomakeProjectSpace Config");
-  config->writeEntry("test_general","value");
-  
-  ProjectSpace::writeGeneralConfig(config);
-}
-
-bool AutomakeProjectSpace::writeUserConfig(KSimpleConfig* config){
-  config->setGroup("AutomakeProjectSpace Config");
-  config->writeEntry("test_user","value");
-  
-  ProjectSpace::writeUserConfig(config);
-}
 
 #include "automakeprojectspace.moc"
