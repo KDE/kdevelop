@@ -103,23 +103,15 @@ void ParsedMethod::addArgument( ParsedArgument *anArg )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-QString ParsedMethod::asString()
+QString ParsedMethod::asShortString()
 {
-	if ( _isObjectiveC )
-        return name();
-		
-    ParsedArgument *arg;
+    if ( _isObjectiveC ) return name();
 
+    ParsedArgument *arg;
     QString str;
-	 
-    if ( isVirtual() )
-        str += "virtual ";
-		    
-    if ( isStatic() )
-        str += "static ";
-    
-	str += type() + " " + name();
-    
+
+    str = name();
+
     if( arguments.count() > 0 ) {
         str += "( ";
         for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
@@ -132,13 +124,23 @@ QString ParsedMethod::asString()
     } else {
         str += "()";
     }
-    
-    if( isConst() )
-        str += " const";
 
-    if( isPure() )
-        str += " = 0";
+    if( isConst() ) str += " const";
+    if( isPure() ) str += " = 0";
+    return str;
+}
 
+
+QString ParsedMethod::asString()
+{
+    if ( _isObjectiveC ) return name();
+
+    ParsedArgument *arg;
+    QString str;
+
+    if ( isVirtual() ) str += "virtual ";
+    if ( isStatic() )  str += "static ";
+    str += type() + " " + asShortString();
     return str;
 }
 

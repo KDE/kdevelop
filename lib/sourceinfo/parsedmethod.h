@@ -118,6 +118,9 @@ public:
     /** Returns the object as a string(for tooltips etc) */
     virtual QString asString();
     
+    /** Returns the object as a string as it appears in the class view (without virtual, ..., type) */
+    virtual QString asShortString();
+
     /** Outputs this object to stdout */
     virtual void out();
 

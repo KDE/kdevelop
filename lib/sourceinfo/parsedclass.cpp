@@ -417,23 +417,18 @@ QStringList ParsedClass::getSortedSignalSignatureList(const QString &name)
 
 QValueList<ParsedMethod*> ParsedClass::getSortedSlotList()
 {
+    // sort the slots as the visually appear in the classview
+    QValueList<ParsedMethodInfo> srted;
+    for ( slotIterator.toFirst(); slotIterator.current(); ++slotIterator ) {
+        srted.append(ParsedMethodInfo(slotIterator.current()->asShortString(), slotIterator.current()));
+    }
+    qHeapSort(srted);
+
+    // return a list of ParsedMethod pointers sorted like the list from above
     QValueList<ParsedMethod*> retVal;
-
-    QStringList srted;
-
-    // Ok... This sucks. But I'm lazy.
-    for ( slotIterator.toFirst();
-          slotIterator.current();
-          ++slotIterator )
-        {
-            srted << slotIterator.current()->asString();
-        }
-
-    srted.sort();
-
-    QStringList::ConstIterator it;
+    QValueList<ParsedMethodInfo>::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
-        retVal.append( getSlotByNameAndArg(*it) );
+        retVal.append( (*it).method );
 
     return retVal;
 }

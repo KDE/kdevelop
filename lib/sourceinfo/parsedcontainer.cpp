@@ -221,22 +221,20 @@ ParsedMethod *ParsedContainer::getMethodByNameAndArg( const QString &aName )
 
 QValueList<ParsedMethod*> ParsedContainer::getSortedMethodList()
 {
+    // sort the methods as the visually appear in the classview
+    QValueList<ParsedMethodInfo> srted;
+    ParsedMethod* aMethod;
+    for ( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() ) {
+        srted.append(ParsedMethodInfo( aMethod->asShortString(),
+                                       getMethodByNameAndArg(aMethod->asString() )));
+    }
+    qHeapSort(srted);
+
+    // return a list of ParsedMethod pointers sorted like the list from above
     QValueList<ParsedMethod*> retVal;
-
-    QStringList srted;
-
-    // Ok... This sucks. But I'm lazy.
-    ParsedMethod *aMethod;
-    for ( aMethod = methods.first();
-          aMethod != NULL;
-          aMethod = methods.next() )
-        srted << aMethod->asString();
-
-    srted.sort();
-    
-    QStringList::ConstIterator it;
+    QValueList<ParsedMethodInfo>::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
-        retVal.append( getMethodByNameAndArg(*it) );
+        retVal.append( (*it).method );
 
     return retVal;
 }

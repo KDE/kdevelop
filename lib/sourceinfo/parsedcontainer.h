@@ -96,6 +96,26 @@ QValueList<T*> getSortedDictList( QDict<T> &dict )
  */
 class ParsedContainer : public ParsedItem
 {
+protected:  
+    struct ParsedMethodInfo {
+    // ctors
+        ParsedMethodInfo() : method(0L) {}
+        ParsedMethodInfo(QString s, ParsedMethod* m) : shortName(s), method(m) {}
+    // operators
+        ParsedMethodInfo& operator=(const ParsedMethodInfo& p) {
+            shortName = p.shortName;
+            method = p.method;
+            return *this;
+        }
+        bool operator<(const ParsedMethodInfo& p)  { return (shortName < p.shortName ? true : false);  }
+        bool operator>(const ParsedMethodInfo& p)  { return (shortName > p.shortName ? true : false);  }
+        bool operator<=(const ParsedMethodInfo& p) { return (shortName <= p.shortName ? true : false); }
+        bool operator>=(const ParsedMethodInfo& p) { return (shortName >= p.shortName ? true : false); }
+    // members
+        QString shortName;
+        ParsedMethod* method;
+    };
+
 public:
     ParsedContainer();
     ~ParsedContainer();
