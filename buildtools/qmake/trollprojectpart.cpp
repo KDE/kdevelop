@@ -209,9 +209,7 @@ QString TrollProjectPart::makeEnvironment()
 
     if( !hasQtDir && !m_defaultQtDir.isEmpty() )
     {
-        QStringList lst = availableQtDirList();
-	if( !lst.isEmpty() )
-            environstr += QString( "QTDIR=" ) + EnvVarTools::quote( m_defaultQtDir ) + QString( " " );
+         environstr += QString( "QTDIR=" ) + EnvVarTools::quote( m_defaultQtDir ) + QString( " " );
     }
 
     return environstr;
