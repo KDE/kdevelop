@@ -14,4 +14,4 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevglobalcvs.desktop
 
 rcdir = $(kde_datadir)/kdevglobalcvs
-rc_DATA = kdevglobalcvs.rc
+rc_DATA = kdevglobalcvs.rc buildcvs.sh

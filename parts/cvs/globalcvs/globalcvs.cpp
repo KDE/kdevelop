@@ -9,7 +9,10 @@
  ***************************************************************************/
 
 #include "globalcvs.h"
+#include "cvsform.h"
+#include "kdevmakefrontend.h"
 
+#include <kstandarddirs.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -17,8 +20,6 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include "cvsform.h"
-#include "kdevmakefrontend.h"
 
 typedef KGenericFactory<GlobalCvs> GlobalCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevglobalcvs, GlobalCvsFactory( "kdevglobalcvs" ) );
@@ -29,6 +30,7 @@ GlobalCvs::GlobalCvs(QObject *parent, const char *name, const QStringList &)
     setInstance(GlobalCvsFactory::instance());
     setXMLFile("kdevglobalcvs.rc");
 
+    
 /*    KAction * action = new KAction( i18n("Import Cvs Repository..."),"wizard", 0,
                                     this, SLOT(slotImportCvs()),
                                     actionCollection(), "cvs_import" );
@@ -57,7 +59,10 @@ void GlobalCvs::createNewProject(const QString& dir) {
                       " import -m " + KShellProcess::quote(form->message_edit->text()) + " " +
                       KShellProcess::quote(form->repository_edit->text()) + " " + 
                       KShellProcess::quote(form->vendor_edit->text()) + " " + 
-                      KShellProcess::quote(form->release_edit->text());
+                      KShellProcess::quote(form->release_edit->text()) + " && sh " + 
+		      locate("data","kdevglobalcvs/buildcvs.sh") + " . " +
+		      KShellProcess::quote(form->repository_edit->text()) + " " +
+		      KShellProcess::quote(form->root_edit->text());
     makeFrontend()->queueCommand(dir,command);
 }
 #include "globalcvs.moc"
