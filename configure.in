@@ -81,35 +81,38 @@ kdevelop/pics/mini/Makefile \
 kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
+doc/Makefile \
+doc/de/Makefile \
 doc/de/manual/Makefile \
 doc/de/welcome/Makefile \
-doc/de/Makefile \
-doc/fr/Makefile \
-doc/fr/welcome/Makefile \
-doc/fr/tutorial/Makefile \
-doc/pl/Makefile \
-doc/pt/manual/Makefile \
-doc/pt/programming/Makefile \
-doc/pt/Makefile \
-doc/sv/Makefile \
-doc/Makefile \
-doc/en/addendum/Makefile \
 doc/en/Makefile \
+doc/en/addendum/Makefile \
 doc/en/cref/Makefile \
 doc/en/kde_libref/Makefile \
 doc/en/manual/Makefile \
 doc/en/programming/Makefile \
 doc/en/tutorial/Makefile \
 doc/en/welcome/Makefile \
+doc/es/Makefile
+doc/fr/Makefile \
+doc/fr/tutorial/Makefile \
+doc/fr/welcome/Makefile \
+doc/nl/Makefile \
+doc/pl/Makefile \
+doc/pt/Makefile \
+doc/pt/manual/Makefile \
+doc/pt/programming/Makefile \
+doc/ru/Makefile \
+doc/ru/cref/Makefile \
+doc/ru/manual/Makefile \
+doc/ru/programming/Makefile \
+doc/ru/tutorial/Makefile \
+doc/ru/welcome/Makefile \
+doc/sv/Makefile \
 doc/zh_CN.GB2312/Makefile \
 doc/zh_CN.GB2312/tutorial/Makefile \
 doc/zh_CN.GB2312/welcome/Makefile \
-doc/ru/Makefile \
-doc/ru/cref/Makefile \
-doc/ru/welcome/Makefile \
-doc/ru/tutorial/Makefile \
-doc/ru/manual/Makefile \
-doc/ru/programming/Makefile \
-doc/nl/Makefile \
-doc/es/Makefile
 ) 
+
+
+

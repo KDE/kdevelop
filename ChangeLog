@@ -1,3 +1,7 @@
+1999-09-30 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* updated international documentation Makefile.am's and regenerated
+	  docs from sgml masters
+
 1999-09-28 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* fix: clicking on project name of RFV, caused
 	  an open-trial of the project directory
