@@ -74,7 +74,6 @@
 #include "appwizardpart.h"
 #include "filepropspage.h"
 #include "misc.h"
-#include "dataform.h"
 #include "profilesupport.h"
 #include "filetemplate.h"
 

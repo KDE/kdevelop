@@ -24,4 +24,4 @@ service_DATA = kdevappwizard.desktop
 
 rcdir = $(kde_datadir)/kdevappwizard
 rc_DATA = kdevappwizard.rc
-noinst_HEADERS = autoform.h dataform.h profilesupport.h
+noinst_HEADERS = profilesupport.h
