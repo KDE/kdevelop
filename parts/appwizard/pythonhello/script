@@ -3,6 +3,8 @@
 use gideon;
 
 initGideon();
+installFileTemplate();
+
 
 print "Installing project file\n";
 install( "${src}/template-pythonhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );

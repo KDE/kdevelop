@@ -8,13 +8,11 @@
   <keywords>
    <keyword>Python</keyword>
   </keywords>
-  <ignoreparts>
-   <part>KDevFileView</part>
-  </ignoreparts>
+  <ignoreparts/>
  </general>
  <kdevscriptproject>
   <general>
-   <activedir>src</activedir>
+   <activedir></activedir>
   </general>
   <run>
    <mainprogram>$APPNAMELC$.py</mainprogram>
@@ -29,4 +27,13 @@
    <toc>perl</toc>
   </ignoretocs>
  </kdevdoctreeview>
+ <kdevfileview>
+   <tree>
+     <hidenonprojectfiles>false</hidenonprojectfiles>
+     <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+   </tree>
+   <groups>
+     <group pattern="*.py" name="Python files" />
+   </groups>
+ </kdevfileview>
 </kdevelop>
