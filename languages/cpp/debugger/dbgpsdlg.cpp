@@ -29,6 +29,7 @@
 #include <qlistbox.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -125,8 +126,13 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 
 int Dbg_PS_Dialog::pidSelected()
 {
-    QString pidText = pids_->text(pids_->currentItem());
-    return pidText.toInt();
+	QString pidText = pids_->text(pids_->currentItem());
+	QRegExp re( "^ *[\\d]+" );
+	if ( re.search( pidText ) > -1 )
+	{
+		return re.cap( 0 ).toInt();
+	}
+	return 0;
 }
 
 /***************************************************************************/
