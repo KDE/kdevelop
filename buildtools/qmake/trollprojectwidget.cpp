@@ -1803,7 +1803,6 @@ void TrollProjectWidget::slotAddFiles()
 {
   static KURL lastVisited;
   QString cleanSubprojectDir = QDir::cleanDirPath(m_shownSubproject->path);
-  KMessageBox::information(0, QString("cleanSubprojectDir is %1").arg(cleanSubprojectDir));
   QString title, filter;
   QString otherTitle, otherFilter;
 
