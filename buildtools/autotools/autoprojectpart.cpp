@@ -1203,3 +1203,17 @@ KDevProject::Options AutoProjectPart::options() const
 }
 
 #include "autoprojectpart.moc"
+
+
+/*!
+    \fn AutoProjectPart::distFiles() const
+ */
+QStringList AutoProjectPart::distFiles() const
+{
+	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "Makefile.am configure* admin/* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in");
+	return sourceList + files;
+}

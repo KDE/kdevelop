@@ -46,6 +46,7 @@ public:
 	  
   AntProjectPart(QObject *parent, const char *name, const QStringList &args);
   ~AntProjectPart();
+    QStringList distFiles() const;
 
 
 protected:

@@ -820,3 +820,17 @@ QString CustomProjectPart::currentMakeEnvironment() const
 
 
 #include "customprojectpart.moc"
+
+
+/*!
+    \fn CustomProjectPart::distFiles() const
+ */
+QStringList CustomProjectPart::distFiles() const
+{
+   	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "*README*");
+	return sourceList + files;
+}

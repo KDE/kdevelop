@@ -496,3 +496,17 @@ QString PascalProjectPart::defaultOptions( const QString compiler ) const
 }
 
 #include "pascalproject_part.moc"
+
+
+/*!
+    \fn PascalProjectPart::distFiles() const
+ */
+QStringList PascalProjectPart::distFiles() const
+{
+   	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "Makefile");
+	return sourceList + files;
+}

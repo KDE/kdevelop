@@ -76,6 +76,7 @@ public:
     void needMakefileCvs();
     bool isDirty();
     bool isKDE() const;
+    QStringList distFiles() const;
 
 protected:
     /**

@@ -39,6 +39,7 @@ public:
     QString currentMakeEnvironment() const;
 
     bool isDirty();
+    QStringList distFiles() const;
 
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);

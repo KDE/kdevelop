@@ -62,6 +62,7 @@ public:
     KDevCompilerOptions *createCompilerOptions(const QString &name);
 
     virtual QString defaultOptions(const QString compiler) const;
+    QStringList distFiles() const;
 
 public slots:
     /**loads config from project file*/

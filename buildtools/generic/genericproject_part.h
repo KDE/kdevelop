@@ -51,6 +51,7 @@ public:
     virtual void removeFile(const QString &fileName);
 
     KDevBuildSystem *buildSystem() const;
+    QStringList distFiles() const;
     
 signals:
     void mainGroupChanged( BuildGroupItem* group );

@@ -334,3 +334,17 @@ void ScriptProjectPart::slotNewFile()
 }
 
 #include "scriptprojectpart.moc"
+
+
+/*!
+    \fn ScriptProjectPart::distFiles() const
+ */
+QStringList ScriptProjectPart::distFiles() const
+{
+   	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "*README*");
+	return sourceList + files;
+}

@@ -38,6 +38,7 @@ public:
     bool isTMakeProject() const { return m_tmakeProject; }
     bool isDirty();
     virtual Options options();
+    QStringList distFiles() const;
 
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);

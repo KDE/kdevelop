@@ -27,6 +27,7 @@
 
 #include <qwhatsthis.h>
 #include <qdir.h>
+#include <qstringlist.h>
 
 #include "kdevbuildsystem.h"
 
@@ -396,4 +397,19 @@ QStringList GenericProjectPart::allFiles( BuildTargetItem * target, QStringList&
     return fileList;
 }
 
+/*!
+    \fn GenericProjectPart::distFiles() const
+ */
+QStringList GenericProjectPart::distFiles() const
+{
+	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "*README* Makefile");
+	return sourceList + files;
+}
+
 #include "genericproject_part.moc"
+
+

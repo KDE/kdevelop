@@ -563,3 +563,17 @@ QStringList TrollProjectPart::availableQtDirList() const
 }
 
 #include "trollprojectpart.moc"
+
+
+/*!
+    \fn TrollProjectPart::distFiles() const
+ */
+QStringList TrollProjectPart::distFiles() const
+{
+	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "*.pro *.PRO Makefile");
+	return sourceList + files;
+}

@@ -456,3 +456,17 @@ QString AdaProjectPart::defaultOptions( const QString compiler )
 }
 
 #include "adaproject_part.moc"
+
+
+/*!
+    \fn AdaProjectPart::distFiles() const
+ */
+QStringList AdaProjectPart::distFiles() const
+{
+	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "Makefile");
+	return sourceList + files;
+}

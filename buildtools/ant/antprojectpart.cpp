@@ -588,3 +588,17 @@ void AntProjectPart::slotRemoveFromProject()
 
 
 #include "antprojectpart.moc"
+
+
+/*!
+    \fn AntProjectPart::distFiles() const
+ */
+QStringList AntProjectPart::distFiles() const
+{
+	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "build.xml");
+	return sourceList + files;
+}

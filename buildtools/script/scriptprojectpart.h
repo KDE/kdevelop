@@ -30,6 +30,7 @@ class ScriptProjectPart : public KDevProject
 public:
     ScriptProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~ScriptProjectPart();
+    QStringList distFiles() const;
 
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);

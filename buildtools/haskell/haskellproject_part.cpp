@@ -465,3 +465,17 @@ QString HaskellProjectPart::mainProgram()
     else
         return QDir::cleanDirPath(projectDirectory() + "/" + configMainProg);
 }
+
+
+/*!
+    \fn HaskellProjectPart::distFiles() const
+ */
+QStringList HaskellProjectPart::distFiles() const
+{
+   	QStringList sourceList = allFiles();
+	// Scan current source directory for any .pro files.
+	QString projectDir = projectDirectory();
+	QDir dir(projectDir);
+	QStringList files = dir.entryList( "*README*");
+	return sourceList + files;
+}

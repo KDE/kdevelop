@@ -103,6 +103,13 @@ public:
     * autoproject part doesn't return header files here.
     */
     virtual QStringList allFiles() const = 0;
+    
+    /**
+    * Returns a list of files that are part of the distribution
+    * but not under project control.
+    */
+    virtual QStringList distFiles() const = 0;
+    
     /**
     * Adds a list of files to the project. Provided for convenience when adding many files.
     * The given file names must be relative to the project directory.
