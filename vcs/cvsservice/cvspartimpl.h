@@ -169,8 +169,8 @@ public:
 // Helpers
 public:
     /**
-    * Stops the CVS job, both currently executing and queued
-    * (@todo note that queuing is not yet implemented)
+    * Stops the CVS job, both currently executing and queued.
+    * @todo queuing is not yet implemented
     */
     void flushJobs();
     /**
@@ -222,37 +222,58 @@ private:
     * Ideally this function will take a bunch of URLs and validate them (they are valid files,
     * are files registered in CVS, are on a supported filesystem, ...). Currently checks
     * only for files belonging to the repository ;)
-    * param @projectDirectory
-    * param @urls list of KURL to check (the list can be modified during the operation)
-    * parap @op type of cvs operation, as pecified in @see CvsOperation enum
+    * @param projectDirectory
+    * @param urls list of KURL to check (the list can be modified during the operation)
+    * @param op type of cvs operation, as pecified in @see CvsOperation enum
     */
     static void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
 
     /**
-    * Add file(s) to their respective ignore list. This means that, for example, if you
+    * Add file to it's respective ignore list. This means that, for example, if you
     * add '/home/mario/src/myprj/mylib/module1/bad.cpp' then the string 'bad.cpp' will be
     * appended to file '/home/mario/src/myprj/mylib/module1/.cvsignore'.
-    * param @projectDirectory
-    * param @urls list of urls to be added to the check list.
+    * @param projectDirectory
+    * @param url url to be added to the check list.
     */
     static void addToIgnoreList( const QString &projectDirectory, const KURL &url );
+
+    /**
+    * Add files to their respective ignore list. This means that, for example, if you
+    * add '/home/mario/src/myprj/mylib/module1/bad.cpp' then the string 'bad.cpp' will be
+    * appended to file '/home/mario/src/myprj/mylib/module1/.cvsignore'.
+    * @param projectDirectory
+    * @param urls list of urls to be added to the check list.
+    */
     static void addToIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 
     /**
-    * Remove file(s) from their respective .ignore files. As specified for @see addToIgnoreList
+    * Remove file from it's respective .ignore files. As specified for @see addToIgnoreList
     * function, this means that, for example, if you remove '/home/mario/src/myprj/mylib/module1/bad.cpp'
     * then a search for the string 'bad.cpp' will be performed on file
     * '/home/mario/src/myprj/mylib/module1/.cvsignore': if found, it will be removed, otherwise
     * nothing will be removed.
-    * param @projectDirectory
-    * param @urls list of urls to be removed from the check list.
+    * @param projectDirectory
+    * @param url url to be removed from the check list.
     */
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
+
+    /**
+    * Remove files from their respective .ignore files. As specified for @see addToIgnoreList
+    * function, this means that, for example, if you remove '/home/mario/src/myprj/mylib/module1/bad.cpp'
+    * then a search for the string 'bad.cpp' will be performed on file
+    * '/home/mario/src/myprj/mylib/module1/.cvsignore': if found, it will be removed, otherwise
+    * nothing will be removed.
+    * @param projectDirectory
+    * @param urls list of urls to be removed from the check list.
+    */
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
     /**
-    * Implementation for requesting user input when files are added to / removed from project
+    * Implementation for requesting user input when files are added to project
     */
     void addFilesToProject( const QStringList &filesToAdd );
+    /**
+    * Implementation for requesting user input when files are removed from project
+    */
     void removedFilesFromProject(const QStringList &filesToRemove);
     /**
     * Check each file in the list against CVS and returns a new list with the files
