@@ -2,7 +2,7 @@
 <class>DocTreeProjectConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>DocTreeProjectConfigWidgetBase</cstring>
+        <cstring>doctreeview_project_config_widget</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -94,9 +94,27 @@
         </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>EnableButton</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_project_config_widget</receiver>
+        <slot>enable_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>DisableButton</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_project_config_widget</receiver>
+        <slot>disable_clicked()</slot>
+    </connection>
+</connections>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot access="private">enable_clicked()</slot>
+    <slot access="private">disable_clicked()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>

@@ -21,6 +21,15 @@ class DocTreeProjectConfigWidget : public DocTreeProjectConfigWidgetBase
 {
     Q_OBJECT
 
+    enum DocType
+    {
+        QT_XML,
+        DOXYGEN,
+        KDOC,
+        TOC,
+        DEVHELP
+    };
+
 public:
     DocTreeProjectConfigWidget( DocTreeViewWidget *widget, QWidget *parent, KDevProject *project, const char *name=0 );
     //~DocTreeProjectConfigWidget();
@@ -30,15 +39,22 @@ public slots:
    // void setProject(KDevProject* project);
 
 private slots:
-    void EnableDoc();
-    void DisableDoc();
+    /** When the enable button is clicked */
+    void enable_clicked();
+
+    /** When the disable button is clicked */
+    void disable_clicked();
 
 private:
     void readConfig();
     void storeConfig();
 
     /** The documentation items to ignore */
-    QStringList m_ignoreDocs;
+    QStringList m_ignoreQT_XML;
+    QStringList m_ignoreDoxygen;
+    QStringList m_ignoreKDoc;
+    QStringList m_ignoreToc;
+    QStringList m_ignoreDevHelp;
 
     DocTreeViewWidget *m_widget;
     KDevProject *m_project;
