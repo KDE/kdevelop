@@ -119,15 +119,9 @@ if ($processes{VSSUPPORT} eq "cvs") {
   $copydes = $underDirectory . "/.cvsignore";
   copy ("$copysrc", "$copydes");
 
-  if ($processes{APPLICATION} ne "customproj") {
-#    chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/");
-#    $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
-#    system ("cp $copysrc $copydes");
-    
-#    chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/");
-#    $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
-#    system ("cp $copysrc $copydes");
- 
+  if ($processes{APPLICATION} ne "customproj")
+  {
+
     $copydes = $underDirectory . "/docs/.cvsignore";
     copy ("$copysrc", "$copydes");
     
@@ -136,18 +130,12 @@ if ($processes{VSSUPPORT} eq "cvs") {
 
     if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" ||
     	$processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal"||
-    	$processes{APPLICATION} eq "kdenormalogl" || $processes{APPLICATION} eq "kde2mdi") {
-#      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
-#      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
-#      system ("cp $copysrc $copydes");
- 
+    	$processes{APPLICATION} eq "kdenormalogl" || $processes{APPLICATION} eq "kde2mdi")
+    {
+
       $copydes = $underDirectory . "/api/.cvsignore";
       copy ("$copysrc", "$copydes");
 
-#      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/");
-#      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/.cvsignore";
-#      system ("cp $copysrc $copydes");
-#    }
       $copydes = $underDirectory . "/po/.cvsignore";
       copy ("$copysrc", "$copydes");
     }
@@ -410,31 +398,10 @@ sub condCopyProgIcons {
 
 sub condCreateApiDoc {
 
-    #if API-Files was chosen in kAppWizard
-    if ($processes{API} eq "yes") {
-	
-      #create the API-documentation
-      chdir ($underDirectory);
-      mkdir ("api", 0777);
-      if (<*.h>)
-      {
-       if ($processes{KDOC_CALL})
-       {
-         my $call=$processes{KDOC_CALL};
-         $call =~ s/\|UNDERDIRECTORY\|/$underDirectory/eg;
+    chdir ($underDirectory);
+    mkdir ("api", 0777);
 
-	 system ("$call");
-       }
-       else
-       {
-	 system ("kdoc -d $underDirectory/api/ $name *.h");
-       }
-      }
-      else
-      {
-        printflush (STDOUT,"No header files found, so no API-doc generation yet\n");
-      }
-    }
+    # has been moved to processesend.pl
 
 }
 

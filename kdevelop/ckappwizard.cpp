@@ -1013,8 +1013,15 @@ void CKAppWizard::slotOkClicked() {
   QDir dir;
   QString direct = directoryline->text();
 
-  if (direct.right(1) == "/") { direct.resize(direct.length()); }
-  direct.resize (direct.length() - (direct.length() - direct.findRev('/') - 1));
+  int pos;
+  // shouldn't happen but who knows... maybe there are some people who
+  //  will leave this field empty, so root will be assumed...
+  if (direct.isEmpty())
+    direct="/";
+  if (direct.right(1) == "/" && direct.length()>1)
+    direct=direct.left(direct.length()-1);
+  if ((pos=direct.findRev('/'))>1)
+    direct=direct.left(pos);
   dir.setPath(direct);
 
  
@@ -1138,23 +1145,33 @@ void CKAppWizard::generateEntries(const QString &filename) {
   else if (customprojitem->isSelected()) {
     entries << "customproj\n";
   }
-	if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
-			kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
-	{
-  	entries << "CONFIGARG\n";
+
+  if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
+	kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
+  {
+    entries << "CONFIGARG\n";
 
     KConfig * config = KApplication::getKApplication()->getConfig();
-		config->setGroup("QT2");
-		QString arg=config->readEntry("qt2dir");
-		if(arg.right(1) == "/")
-			arg="--with-qt-dir="+arg.remove(arg.length()-1,1);
-		if(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()){
-  		QString kde2path=config->readEntry("kde2dir");
-  		if(kde2path.right(1) == "/")
-  			arg=arg+" --prefix="+kde2path.remove(kde2path.length()-1,1);
-		}
-    entries << arg << "\n";
+    config->setGroup("QT2");
+    QString arg=config->readEntry("qt2dir", "");
+    if(!arg.isEmpty())
+    {
+      if (arg.right(1) == "/" && arg.length()>1)
+        arg=arg.left(arg.length()-1);
+      arg="--with-qt-dir="+arg;
+    }
 
+    if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+    {
+      QString kde2path=config->readEntry("kde2dir", "");
+      if(!kde2path.isEmpty())
+      {
+        if(kde2path.right(1) == "/" && kde2path.length()>1)
+          kde2path=kde2path.left(kde2path.length()-1);
+        arg=arg+" --prefix="+kde2path;
+      }
+    }
+    entries << arg << "\n";
   }
 
   entries << "NAME\n";
@@ -2152,8 +2169,9 @@ void CKAppWizard::slotCppHeaderClicked() {
 void CKAppWizard::slotProcessExited() {
 
   QString directory = directoryline->text();
+  QString direct = directoryline->text();
   QString prj_str, prj_dir;
-
+  QDir dir;
 
   // PLEASE
   /*
@@ -2170,6 +2188,14 @@ void CKAppWizard::slotProcessExited() {
     prj_dir = directory + "/";
     prj_str = prj_dir + namelow + ".kdevprj";
   }
+
+  int pos;
+  if (direct.right(1) == "/" && direct.length()>1)
+    direct=direct.left(direct.length()-1);
+  if ((pos=direct.findRev('/'))>1)
+    direct=direct.left(pos);
+  dir.setPath(direct);
+
   project = new CProject(prj_str);
   project->readProject();
   project->setKDevPrjVersion("1.2");
@@ -2650,20 +2676,7 @@ void CKAppWizard::slotProcessExited() {
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
-  if ((kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || kdeminiitem->isSelected())
-      && CToolClass::searchInstProgram("ksgml2html"))
-  {
-    KShellProcess cp_process;
-    QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
-    cp_process.clearArguments();
-    cp_process << "cp"; // copy is your friend :-)
-    cp_process << nif_template;
-    cp_process << prj_dir +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
-    cp_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
-  }
-  
   KShellProcess p;
-  QDir dir;
   if (vsBox->currentItem() == 1)
   {
    dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
@@ -2673,7 +2686,7 @@ void CKAppWizard::slotProcessExited() {
        (QString) " " + releaseline->text();
    p << import;
    p.start(KProcess::Block, KProcess::AllOutput);
-   }
+  }
 
 
    if (vsBox->currentItem() != 0)
@@ -2688,20 +2701,6 @@ void CKAppWizard::slotProcessExited() {
           p << deltemp;
           p.start(KProcess::Block, KProcess::AllOutput);
 
-	  QString direct = directoryline->text();
-          if (direct.right(1) == "/")
-          {
-            direct = direct.left(direct.length() - 1);
-  	  }
-
-          int pos;
-          pos = direct.findRev ("/");
-          direct = direct.left (pos);
-          if(direct.right(1) != "/")
-          {
-    	    direct = direct + "/";
-          }
-
           dir.setCurrent(direct);
           QString checkout = "cvs -d " + (QString) vsLocation->text() + " co " + (QString) projectlocationline->text();
           p.clearArguments();
@@ -2712,6 +2711,18 @@ void CKAppWizard::slotProcessExited() {
         project=new CProject(QString(projectlocationline->text()) + "/" + namelow + ".kdevprj");
         project->readProject();
     }
+
+  if ((kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || kdeminiitem->isSelected())
+      && CToolClass::searchInstProgram("ksgml2html"))
+  {
+    KShellProcess cp_process;
+    QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+    cp_process.clearArguments();
+    cp_process << "cp"; // copy is your friend :-)
+    cp_process << nif_template;
+    cp_process << directory +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+    cp_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+  }
 
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();

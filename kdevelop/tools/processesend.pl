@@ -41,6 +41,37 @@ else {
   system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);
 	
 }
+
+#if API-Files was chosen in kAppWizard
+if ($processes{API} eq "yes")
+{
+	
+  printflush (STDOUT,"create API documentation...\n");
+  chdir ($underDirectory);
+  #create the API-documentation
+      if (<*.h>)
+      {
+       if ($processes{KDOC_CALL})
+       {
+         my $call=$processes{KDOC_CALL};
+         $call =~ s/\|UNDERDIRECTORY\|/$underDirectory/eg;
+         printflush (STDOUT,">$call\n");
+
+	 system ("$call");
+       }
+       else
+       {
+         printflush (STDOUT,">kdoc -d $underDirectory/api/ $name *.h\n");
+	 system ("kdoc -d $underDirectory/api/ $name *.h");
+       }
+      }
+      else
+      {
+        printflush (STDOUT,"No header files found, so no API-doc generation yet\n");
+      }
+}
+
+
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
   
