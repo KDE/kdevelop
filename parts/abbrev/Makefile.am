@@ -13,5 +13,8 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevabbrev.desktop
 
+sourcesdir = $(kde_datadir)/kdevabbrev/sources
+sources_DATA = qt_classes cpp_keywords
+
 rcdir = $(kde_datadir)/kdevabbrev
 rc_DATA = kdevabbrev.rc
