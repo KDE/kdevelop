@@ -1,3 +1,7 @@
+2002-02-10  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of Roberto Raggi <raggi@cli.di.unipi.it> 
+      for codecompletion and text expansion
+    
 2002-02-09  jbb <jbb@kdevelop.org>
     * bugfix: When using gdb 5.1+ QString's wern't dispalyed correctly
     * Removed hardwired (3) from manpages so user can select appropriate page.
