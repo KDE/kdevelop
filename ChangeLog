@@ -1,3 +1,6 @@
+2003-01-07  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+  * Append to libpath in subproject configuration dialog
+
 2003-01-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* cppsupport:
 	  - improve new class dialog
@@ -571,7 +574,7 @@
         * properly move execution point
 
 2002-06-09  Matthias Hölzer-Klüpfel <mhk@kde.org>
-	* partcontroller now compares inodes instead of URLs 
+	* partcontroller now compares inodes instead of URLs
 	  when the files are local
 
 2002-06-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
@@ -835,7 +838,7 @@
 	  new files are stored
 	* cerr -> kdDebug
 2002-04-15  Matthias Hölzer-Klüpfel <mhk@kde.org>
-	
+
 	* moved window menu code from src to a plugin
 	
 2002-04-15  Simon Hausmann <hausmann@kde.org>
