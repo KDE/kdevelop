@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=PHP support
+Name=KDevPHPSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevphpsupport
+X-KDevelop-Language=PHP
+
