@@ -122,7 +122,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   addTab( w, i18n("General"));
-  
+
   // *************** Compiler options *********************
 
   QWidget *w2= new QWidget(this,"Compiler options");
@@ -270,7 +270,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   // *************** Compiler Warnings *********************
 
-  QWidget *w3= new QWidget(this,"Compiler Warnings");
+  QWidget *w3= new QWidget(this,"Warnings");
   KQuickHelp::add(w3, i18n("Set the Compiler warnings here by checking\n"
 			"the -W options you want to use."));
  
@@ -640,7 +640,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   // *************** Linker Options *********************
 
-  QWidget *w4= new QWidget(this,"Linker Options");
+  QWidget *w4= new QWidget(this,"Linker");
   KQuickHelp::add(w4, i18n("Set the Linker options and choose the\n"
 			"libraries to add to your project."));
 ldflags = " " + ldflags + " ";
@@ -852,7 +852,10 @@ ldadd = " " + ldadd + " ";
   setOkButton(i18n("OK"));
   setCancelButton(i18n("Cancel"));
   connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+
+  // **************set the button*********************
   
+
 }
 
 
@@ -881,6 +884,7 @@ void CPrjOptionsDlg::ok(){
     short_info.append(text);
   }
   prj_info->setShortInfo(short_info);
+
   //********gcc-options***************
   if (target->currentItem()) {
     text=" -b "+QString(target->currentText());
@@ -1029,4 +1033,6 @@ void CPrjOptionsDlg::ok(){
   prj_info->writeProject();
   prj_info->updateMakefilesAm();
 }
+
+
 

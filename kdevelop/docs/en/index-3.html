@@ -44,8 +44,7 @@ of a line
 creates a closing bracket in front of the cursor when a bracket (any kind)
 is opened.
 <p>Select Options:
-<br>&nbsp;
-<br>&nbsp;&nbsp;&nbsp; Persistent Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<p>&nbsp;&nbsp;&nbsp; Persistent Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 selections made stay marked after setting the cursor to a different place
 <br>&nbsp;&nbsp;&nbsp; Multiple Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 allows multiple independent selections within the text
@@ -54,7 +53,7 @@ when selecting multiple lines, the selection is also made horizontal and
 doesn't cover the whole line
 <br>&nbsp;&nbsp;&nbsp; Delete On Input:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 deletes a selection when writing in the selection.
-<br>&nbsp;&nbsp;&nbsp; Toggle&nbsp;Old:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp; Toggle Old:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 allows only one selection. A selection made gets deselected when another
 selection is made.
 <p>Wrap Words At:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -94,7 +93,7 @@ KDevelop needs some information about where the HTML- documentation is
 placed on the system. Therefore, the Documentation Path properties dialog
 needs the path of the Qt- online documentation in HTML as well as the path
 to the KDE-library documentation.
-<p><img SRC="doc-path.gif" height=246 width=470>
+<p><img SRC="kdevsetup.gif" height=246 width=470>
 <br><b><i><u>Picture 3.1: The Documentation path configuration dialog.</u></i></b>
 <p>Usually, the Qt-documentation is placed in the same directory where
 Qt is installed; e.g. if Qt resides in /usr/local/qt, the path you have
@@ -115,7 +114,7 @@ the KDE Library Doc path automatically.
 of the KDE-libraries, especially the documentation for the files installed
 on the system, the Update KDE-Documentation dialog creates a new one or
 updates existing documentations.
-<p><img SRC="doc-update.gif" height=408 width=538>
+<p><img SRC="kdevdocupdate.gif" height=408 width=538>
 <br><b><i><u>Picture 3.2: KDE Library Documentation Update.</u></i></b>
 <p>This function requires your system to have kdoc and qt2kdoc installed,
 included in the kdesdk package.
@@ -149,8 +148,8 @@ an older kdelibs version.</li>
 The "new KDE Libs Documentation path" is to be set&nbsp; for option 2 and
 3 of the installation mode.&nbsp; This is also recommended for users who
 generate a new documentation from scratch.
-<p>After pressing the OK button, KDevelop will create a subdirectory in
-the documentation path containing the kdoc reference files.&nbsp; First,
+<p>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference"
+in the documentation path containing the kdoc reference files.&nbsp; First,
 the qt library documentation classes will be indexed to connect the Qt
 documentation with the documentation to be generated for the kdelibs.&nbsp;
 So it is important that you have set up the Qt documentation path first
@@ -161,8 +160,26 @@ build with crossreferences to give browsing the most functionality.
 <br>&nbsp;
 <h2>
 <a NAME="ss3.7"></a>3.7&nbsp; Create Search Database</h2>
-
-<p><br>
+&nbsp;&nbsp;&nbsp; The Create Search Database dialog, accessed via the
+options-menu, allows the programmer to create a database to search for
+a keyword interactively.&nbsp; To create and use the documentation search
+function, you must have the program glimpse 4.1 installed.&nbsp; Preset
+are the options to index the given KDE-library documentation as well as
+the Qt-documentation, assuming the path to the documentation files were
+set in the "Documentation Path" dialog of the options- menu.&nbsp;&nbsp;
+Additionally, the index can include directories the user can set up himself
+by the "additional directories to index"-field.&nbsp; After setting a path
+to an addional directory, the "Add" - button must be pushed to set the
+path.&nbsp; A path once set can be removed from the index by selecting
+the path in the path field and pushing "Remove".
+<br>&nbsp;&nbsp;&nbsp; Furthermore, the user is offered three different
+modes for the index size: tiny, small and medium.&nbsp; The higher the
+index size, the more the index files will grow. On the other hand, a search
+in a bigger searchdatabase will be faster and more successful, so we suggest
+choosing a "medium" size.
+<br>For using the search function, see section&nbsp; <a href="index-4.html#ss4.8">4.8&nbsp;&nbsp;
+Using the Documentation Browser</a>
+<p>
 <hr><a href="index-2.html">Previous</a> <a href="index-4.html">Next</a><a href="index.html#toc3">Table
 of Contents</a>
 </body>

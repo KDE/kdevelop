@@ -134,6 +134,11 @@
 #define ID_OPTIONS_UPDATE_KDE_DOCUMENTATION 	   16060
 #define ID_OPTIONS_CREATE_SEARCHDATABASE 	       16070
 
+#define ID_OPTIONS_MAKE                 16080
+#define ID_OPTIONS_MAKE_MAKE            16081
+#define ID_OPTIONS_MAKE_GMAKE           16082
+#define ID_OPTIONS_MAKE_DMAKE           16083
+
 ///////////////////////////////////////////////////////////////////
 // Documentation-menu entries                    
 #define ID_DOC_BACK                 17010

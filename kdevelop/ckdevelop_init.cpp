@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <kmsgbox.h>
 #include "./kwrite/kwdoc.h"
+#include "ctoolclass.h"
 			
 CKDevelop::CKDevelop(){
   QString filename;
@@ -320,11 +321,12 @@ void CKDevelop::initMenu(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()), IDK_FILE_SAVE,ID_FILE_SAVE);
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0,ID_FILE_SAVE_AS); 
-  file_menu->insertItem(i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
+  file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), IDK_FILE_CLOSE,ID_FILE_CLOSE);
   file_menu->insertSeparator();
-  file_menu->insertItem(i18n("&Print..."), this, SLOT(slotFilePrint()),IDK_FILE_PRINT,ID_FILE_PRINT);
+  file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),IDK_FILE_PRINT,ID_FILE_PRINT);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()), IDK_FILE_QUIT,ID_FILE_QUIT);
 
@@ -452,7 +454,7 @@ void CKDevelop::initMenu(){
 // Build-menu entries
 
   build_menu = new QPopupMenu;
-  build_menu->insertItem(i18n("Compile File "),this, SLOT(slotBuildCompileFile()),IDK_BUILD_COMPILE_FILE,ID_BUILD_COMPILE_FILE);
+  build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile File "),this, SLOT(slotBuildCompileFile()),IDK_BUILD_COMPILE_FILE,ID_BUILD_COMPILE_FILE);
 
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"), this, 
 			 SLOT(slotBuildMake()),IDK_BUILD_MAKE,ID_BUILD_MAKE);
@@ -509,23 +511,41 @@ void CKDevelop::initMenu(){
   options_menu = new QPopupMenu;
   options_menu->insertItem(i18n("&Editor..."),this,
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
-  options_menu->insertItem(i18n("Editor-&Colors..."),this,
+  options_menu->insertItem(i18n("Editor &Colors..."),this,
 			   SLOT(slotOptionsEditorColors()),0,ID_OPTIONS_EDITOR_COLORS);
-  options_menu->insertItem(i18n("Syntax &Highlighting Defaults..."),this,
+  options_menu->insertItem(i18n("Editor &Defaults..."),this,
 			   SLOT(slotOptionsSyntaxHighlightingDefaults())
 			   ,0,ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS);
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
-			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING); 
+			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
-  options_menu->insertItem(i18n("&Documentation Path..."),this,
-		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);    
-  options_menu->insertItem(i18n("Documentation-&Browser..."),this,
+  options_menu->insertItem(i18n("Documentation &Browser..."),this,
 		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
+  options_menu->insertItem(i18n("&Documentation Path..."),this,
+		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("Update &KDE-Documentation..."),this,
 				 SLOT(slotDocUpdateKDEDocumentation()),0,ID_OPTIONS_UPDATE_KDE_DOCUMENTATION);
   options_menu->insertItem(i18n("Create &Searchdatabase..."),this,
 				 SLOT(slotCreateSearchDatabase()),0,ID_OPTIONS_CREATE_SEARCHDATABASE);
+  options_menu->insertSeparator();
+
+
+  QPopupMenu* make = new QPopupMenu;
+  make->insertItem(i18n("&Make"),ID_OPTIONS_MAKE_MAKE);
+  make->insertItem(i18n("&Gmake"),ID_OPTIONS_MAKE_GMAKE);
+  make->insertItem(i18n("&Dmake"),ID_OPTIONS_MAKE_DMAKE);
+  options_menu->insertItem("Make-&Command..",make,ID_OPTIONS_MAKE);
+  connect(make, SIGNAL(activated(int)), SLOT(slotOptionsMake(int)));
+  
+  config->setGroup("General Options");
+  make_cmd=config->readEntry("Make","make");
+	if(make_cmd=="make")
+		options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE, true);
+	if(make_cmd=="gmake")
+		options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE, true);
+	if(make_cmd=="dmake")
+		options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE, true);
 
   menuBar()->insertItem(i18n("&Options"), options_menu);
 
@@ -598,18 +618,23 @@ void CKDevelop::initMenu(){
 void CKDevelop::initToolbar(){
   QPixmap pix;
   QString  path;
-  // build the first toolbar
-
-  // insert some buttons 
   
-  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
+//  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/openprj.xpm");
+  toolBar()->insertButton(pix,ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   toolBar()->insertButton(pix,ID_FILE_OPEN, true,i18n("Open File"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE,true,i18n("Save File"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
+/*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
-
+*/
+  toolBar()->insertSeparator();
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
+	toolBar()->insertButton(pix,ID_EDIT_UNDO,false,i18n("Undo"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
+	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Undo"));
   toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
   toolBar()->insertButton(pix,ID_EDIT_COPY, true,i18n("Copy"));
@@ -619,10 +644,14 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
   
   toolBar()->insertSeparator();
-  toolBar()->insertButton(Icon("reload.xpm"),ID_VIEW_REFRESH, true,i18n("Refresh"));
 
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
+// toolBar()->insertButton(Icon("reload.xpm"),ID_VIEW_REFRESH, true,i18n("Refresh"));
+
   toolBar()->insertSeparator();
+  toolBar()->insertSeparator();
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/compfile.xpm");
+  toolBar()->insertButton(pix,ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
   toolBar()->insertButton(pix,ID_BUILD_MAKE, false,i18n("Make"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/run.xpm");
   toolBar()->insertButton(pix,ID_BUILD_RUN, false,i18n("Run"));
@@ -704,6 +733,27 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

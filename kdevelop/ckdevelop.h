@@ -189,7 +189,7 @@ public:
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
-
+  void slotOptionsMake(int id);
 
   void slotDocBack();
   void slotDocForward();
@@ -280,6 +280,7 @@ private:
   QPopupMenu* build_menu;
   QPopupMenu* project_menu;
   QPopupMenu* options_menu;
+  QPopupMenu* make;
   QPopupMenu* tools_menu;
   QPopupMenu* menu_buffers;
   QPopupMenu* menu_help;
@@ -348,11 +349,13 @@ private:
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);
   // values are "run","make" "refresh";
   QString next_job;
-
+  QString make_cmd;
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
 };
 
 #endif
+
+
 
 
 

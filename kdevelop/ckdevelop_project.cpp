@@ -60,11 +60,11 @@ bool CKDevelop::slotProjectClose(){
     // yes- save headerwidget
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.h"){
-	slotFileSaveAs();    
+				slotFileSaveAs();    
         slotFileClose();
       }
       else{
-	slotFileSave();
+				slotFileSave();
         slotFileClose();
       }
       edit_widget->toggleModified(false);      
@@ -198,7 +198,10 @@ bool CKDevelop::slotProjectClose(){
     log_file_tree->clear();
     real_file_tree->clear();
     menu_buffers->clear();
-    
+    messages_widget->clear();
+	stdin_stdout_widget->clear();
+	stderr_widget->clear();
+
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
     

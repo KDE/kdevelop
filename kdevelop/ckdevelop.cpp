@@ -313,13 +313,15 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
-  
+  config->writeEntry("Make",make_cmd);
+
   config->setGroup("Files");
   config->writeEntry("cpp_file",cpp_widget->getName());
   config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
   
   config->setGroup("Files");
+  config->writeEntry("project_file","");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
     prj->writeProject();
@@ -528,6 +530,29 @@ void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(IDS_DEFAULT);
 }
 
+void CKDevelop::slotOptionsMake(int id){
+
+  switch(id){
+  case ID_OPTIONS_MAKE_MAKE:
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,true);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,false);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,false);
+    make_cmd="make";
+    break;
+  case ID_OPTIONS_MAKE_GMAKE:
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,false);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,true);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,false);
+    make_cmd="gmake";
+    break;
+  case ID_OPTIONS_MAKE_DMAKE:
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,false);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,false);
+    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,true);
+    make_cmd="dmake";
+    break;
+  }
+}
 
 void CKDevelop::slotDocBack(){
   slotStatusMsg(i18n("Switching to last page..."));
@@ -737,7 +762,9 @@ void CKDevelop::slotDocUpdateKDEDocumentation(){
 }
 
 void CKDevelop::slotBuildCompileFile(){
-
+  if(!CToolClass::searchProgram(make_cmd)){
+    return;
+  }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
@@ -754,7 +781,7 @@ void CKDevelop::slotBuildCompileFile(){
   // get the filename of the implementation file to compile and change extension for make
   QFileInfo fileinfo(cpp_widget->getName());
   cerr << "ObjectFile= " << fileinfo.baseName()+".o";
-  process << "make" <<fileinfo.baseName()+".o";
+  process << make_cmd <<fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 
 }
@@ -792,7 +819,7 @@ void CKDevelop::slotBuildDebug(){
 }
 
 void CKDevelop::slotBuildMake(){
-  if(!CToolClass::searchProgram("make")){
+  if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -810,17 +837,17 @@ void CKDevelop::slotBuildMake(){
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
   if(!prj->getMakeOptions().isEmpty()){
-    process << "make" << prj->getMakeOptions();
+    process << make_cmd << prj->getMakeOptions();
   }
   else{
-    process << "make";
+    process << make_cmd;
   }
   
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 void CKDevelop::slotBuildRebuildAll(){
-  if(!CToolClass::searchProgram("make")){
+  if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -836,14 +863,14 @@ void CKDevelop::slotBuildRebuildAll(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
-  process << "make";
+  process << make_cmd;
   process << "clean";
-  next_job = "make"; // checked in slotProcessExited()
+  next_job = make_cmd; // checked in slotProcessExited()
   
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildCleanRebuildAll(){
-  if(!CToolClass::searchProgram("make")){
+  if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -867,7 +894,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
 }
 
 void CKDevelop::slotBuildDistClean(){
-  if(!CToolClass::searchProgram("make")){
+  if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -884,7 +911,7 @@ void CKDevelop::slotBuildDistClean(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   process.clearArguments();
-  process << "make";
+  process << make_cmd;
   process << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 
@@ -1104,14 +1131,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(IDS_DEFAULT);
   if (process.normalExit()) {
-    if (next_job == "make"){ // rest from the rebuild all
+    if (next_job == make_cmd){ // rest from the rebuild all
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
-	process << "make" << prj->getMakeOptions();
+	process << make_cmd << prj->getMakeOptions();
       }
       else{
-	process << "make";
+	process << make_cmd;
       }
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1489,9 +1516,13 @@ void CKDevelop::slotNewUndo(){
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {
-  case ID_FILE_NEW:
+/*  case ID_FILE_NEW:
     slotFileNewFile();
     break;
+*/
+  case ID_PROJECT_OPEN:
+  	slotFileOpenPrj();
+  	break;
   case ID_FILE_OPEN:
     slotFileOpenFile();
     break;
@@ -1501,7 +1532,12 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
-    
+	case ID_EDIT_UNDO:
+		slotEditUndo();
+		break;
+	case ID_EDIT_REDO:
+		slotEditRedo();
+		break;
   case ID_EDIT_COPY:
     slotEditCopy();
     break;
@@ -1514,6 +1550,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_VIEW_REFRESH:
     slotOptionsRefresh();
     break;
+  case ID_BUILD_COMPILE_FILE:
+  	slotBuildCompileFile();
+  	break;
   case ID_BUILD_MAKE:
     slotBuildMake();
     break;
@@ -1631,89 +1670,6 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
