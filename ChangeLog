@@ -1,3 +1,7 @@
+2000-01-26 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated de.po
+	* commited an updated kdevelop.pot
+
 2000-01-26 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added Qt 2.1 MDI frameapp to appwizard
 	* fixed static library behavoir for qt2/kde2 apps (_METASOURCES=AUTO) in cproject.cpp
