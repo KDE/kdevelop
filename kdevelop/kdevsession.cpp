@@ -310,6 +310,7 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
     }
     if (nMinMaxMode == 2) {
       pMDICover->maximize();
+      QApplication::sendPostedEvents();
     }
     pMDICover->setRestoreGeometry(QRect(nLeft, nTop, nWidth, nHeight));
   }
