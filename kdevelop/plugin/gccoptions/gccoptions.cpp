@@ -209,15 +209,15 @@ OptimizationTab::OptimizationTab(bool cpp, QWidget *parent, const char *name)
                                                  "after the function returns.</qt>"),
                      "-fdefer-pop");
     new FlagListItem(optBox,
-                     "-fforce-mem",         i18n("<qt>Force memory operands to be copied into registers before"
+                     "-fforce-mem",         i18n("<qt>Force memory operands to be copied into registers before "
                                                  "doing arithmetic on them.</qt>"),
                      "-fno-force-mem");
     new FlagListItem(optBox,
-                     "-fforce-addr",        i18n("<qt>Force memory address constants to be copied into registers before"
+                     "-fforce-addr",        i18n("<qt>Force memory address constants to be copied into registers before "
                                                  "doing arithmetic on them.</qt>"),
                      "-fno-force-addr");
     new FlagListItem(optBox,
-                     "-omit-frame-pointer", i18n("<qt>Don't keep the frame pointer in a register for functions that"
+                     "-omit-frame-pointer", i18n("<qt>Don't keep the frame pointer in a register for functions that "
                                                  "don't need one.</qt>"),
                      "-fno-omit-frame-pointer");
     new FlagListItem(optBox,
