@@ -1061,12 +1061,13 @@ void KWriteView::paintCursor() {
     paint.drawLine(x, y, x, h);
     paint.drawLine(x-2, y, x+2, y);
     paint.drawLine(x-2, h, x+2, h);
-  } else {
+    paint.end();
+  } else if (!drawBuffer->isNull()) {
     paint.begin(drawBuffer);
     kWriteDoc->paintTextLine(paint, cursor.y, cXPos - 2, cXPos + 3, kWrite->configFlags & cfShowTabs);
     bitBlt(this,x - 2,y, drawBuffer, 0, 0, 5, h);
+    paint.end();
   }
-  paint.end();
 }
 
 void KWriteView::paintBracketMark() {
