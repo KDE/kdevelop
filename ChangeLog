@@ -1,3 +1,19 @@
+2000-02-24 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* implementing fallback to english documentation
+	  if klocale-language or default-language documentation
+	  not found
+	* now the c_c++_documentation will not be "destroyed"
+	  on a new kdevelop installation
+	* if cref.html (or something else) wasn't found it falls
+	  back to index.html
+	  (for full implementation of these features you should
+	   install this version on clean kdevelop-doc directories
+	   $(kde_htmldir)/en/kdevelop, $(kde_htmldir)/de/kdevelop,
+	   etc.
+	   -> if you follow this KDevelop is able to find the
+	   english c_c++_reference, even if you are using another
+ 	   language by default)
+
 2000-02-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added patch by Olaf Hartig <OleBowle@gmx.de> to set default project path for
     KAppWizard and Open Project, fixed layout and KAppWizard to use it.

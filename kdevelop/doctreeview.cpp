@@ -160,8 +160,42 @@ QString DocTreeKDevelopBook::locatehtml(const char *filename)
 {
     QString pathbase = KApplication::kde_htmldir() + "/";
     QString path = pathbase + klocale->language() + "/kdevelop/" + filename;
+    QString errmsgpath = path;
+
     if (!QFileInfo(path).exists())
         path = pathbase + "default/kdevelop/" + filename;
+    // fall back to the english documentation
+    if (!QFileInfo(path).exists())
+        path = pathbase + "en/kdevelop/" + filename;
+    // get the index.html of the dir first for the klocal-dir,
+    //  then fallback
+    if (!QFileInfo(path).exists())
+    {
+      int pos=errmsgpath.findRev('/');
+
+      if (pos>=0)
+        errmsgpath=errmsgpath.left(pos);
+      if (QFileInfo(errmsgpath+"/index.html").exists())
+        path = errmsgpath + "/index.html";
+      else
+      {
+        errmsgpath=pathbase +"default/kdevelop/" + filename;
+        pos=errmsgpath.findRev('/');
+        if (pos>=0)
+          errmsgpath=errmsgpath.left(pos);
+        if (pos>=0 && QFileInfo(errmsgpath+"/index.html").exists())
+          path = errmsgpath + "/index.html";
+        else
+        {
+          errmsgpath=pathbase +"en/kdevelop/" + filename;
+          pos=errmsgpath.findRev('/');
+          if (pos>=0)
+            errmsgpath=errmsgpath.left(pos);
+          if (pos>=0 && QFileInfo(errmsgpath+"/index.html").exists())
+            path = errmsgpath + "/index.html";
+        }
+      }
+    }
     return path;
 }
 
