@@ -333,7 +333,7 @@ void GrepDialog::slotSearch()
     pattern.replace(QRegExp("%s"), pattern_combo->currentText());
     pattern.replace(QRegExp("'"), "'\\''");
 
-    QString filepattern = "`find '";
+    QString filepattern = "find '";
     filepattern += dir_combo->currentText();
     filepattern += "'";
     if (!recursive_box->isChecked())
@@ -341,14 +341,11 @@ void GrepDialog::slotSearch()
     filepattern += " \\( -name ";
     filepattern += files;
     filepattern += " \\) -print";
-    filepattern += "`";
 
     childproc = new KShellProcess();
-    *childproc << "grep";
-    *childproc << "-n";
-    *childproc << (QString("-e '") + pattern + "'");
     *childproc << filepattern;
-    *childproc << "/dev/null";
+    *childproc << "|" << "xargs" << "grep" << "-n";
+    *childproc << (QString("-e '") + pattern + "'");
 
     connect( childproc, SIGNAL(processExited(KProcess *)),
          SLOT(childExited()) );
