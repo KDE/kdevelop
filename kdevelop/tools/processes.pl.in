@@ -19,6 +19,7 @@ printflush (STDOUT,"Starting with installation\n");
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
 open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
+
 while (defined($name = <PROCESSLIST>)) {
   chomp ($name);
   chomp ($process = <PROCESSLIST>);
@@ -40,11 +41,11 @@ if ($processes{KDEICONDIR})
   $kde_miniicondir = $kde_icondir . "/mini";
 }
 
-if ($processes{VSSUPPORT} eq "none") {
+if ($processes{VSSUPPORT} eq "none"){
 	$overDirectory = $processes{DIRECTORY} . "/";
 	$underDirectory = $overDirectory . $nameLittle;
 }
-else {
+else{
 	$overDirectory = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/";
 	$underDirectory = $overDirectory . $nameLittle;
 }
@@ -64,10 +65,10 @@ setupDefaultChangings();
 printflush (STDOUT,"changing directory...\n");
 chdir ($overDirectory);
 
-if ($processes{APPLICATION} eq "customproj") {
+if ($processes{APPLICATION} eq "customproj"){
   changeCustomApp();  
 }
-else {
+else{
   unpackFiles ("template.tar");	
   if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kde2mini") {
     changeMiniApp();
@@ -81,10 +82,7 @@ else {
     changeNormalOGLApp();
   }
   elsif ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qt2normal" ||
-  				$processes{APPLICATION} eq "qt2mdi") {
-    changeQtApp();
-  }
-  elsif ($processes{APPLICATION} eq "qextmdi") {
+  				$processes{APPLICATION} eq "qt2mdi" || $processes{APPLICATION} eq "qextmdi") {
     changeQtApp();
   }
   elsif ($processes{APPLICATION} eq "cpp") {
@@ -150,20 +148,20 @@ exit;
 # this subroutine sets up the changing hash
 sub setupDefaultChangings
 {
-    $changings{"|AUTHOR|"}=$processes{AUTHOR};
-    $changings{"|EMAIL|"}=$processes{EMAIL};
-    $changings{"|VERSION|"}=$processes{VERSION};
-    $changings{"|DATE|"}=$date;
-    $changings{"|YEAR|"}=$year;
-    $changings{"|SUBDIR|"}= $nameLittle;
-    $changings{"|PRJNAME|"}=$name;
-    $changings{"|NAME|"}= $name;
-    $changings{"|NAMELITTLE|"}= $nameLittle;
-    $changings{"|NAMEBIG|"}= $nameBig;
-    $changings{"gnomehello"}= $nameLittle;
-    $changings{"hello_"}= $nameLittle . "_";
-    $changings{"gnome-hello"}= $nameLittle;
-    $changings{"GNOMEHELLO"}= $nameBig;
+  $changings{"|AUTHOR|"}=$processes{AUTHOR};
+  $changings{"|EMAIL|"}=$processes{EMAIL};
+  $changings{"|VERSION|"}=$processes{VERSION};
+  $changings{"|DATE|"}=$date;
+  $changings{"|YEAR|"}=$year;
+  $changings{"|SUBDIR|"}= $nameLittle;
+  $changings{"|PRJNAME|"}=$name;
+  $changings{"|NAME|"}= $name;
+  $changings{"|NAMELITTLE|"}= $nameLittle;
+  $changings{"|NAMEBIG|"}= $nameBig;
+  $changings{"gnomehello"}= $nameLittle;
+  $changings{"hello_"}= $nameLittle . "_";
+  $changings{"gnome-hello"}= $nameLittle;
+  $changings{"GNOMEHELLO"}= $nameBig;
 }
 
 #the subroutine for replacing words in files
@@ -182,7 +180,7 @@ sub replaceValuesInFile {
   # setup filename replacement...
   $hashref->{"|FILENAME|"}=$oldfile;
   $hashref->{"|FILENAME|"}=$newfilename if ($newfilename);
- my @lines;
+  my @lines;
   my $i=0;
   while ( defined ($line = <INPUT> ))
   {
@@ -200,13 +198,13 @@ sub replaceValuesInFile {
         $where = index($line,$word,$where);
         if ($where != -1)
         {
-	 substr($line,$where,$wordlength) = $replace;
-	 ++$where;
+	        substr($line,$where,$wordlength) = $replace;
+	        ++$where;
         }
       }
     }
 
- $lines[$i++]=$line;
+    $lines[$i++]=$line;
   }
   close (INPUT);
   open (OUTPUT,">$oldfile") || die "cannot open file: $oldfile";
@@ -234,58 +232,55 @@ sub unpackFiles {
 
 sub condCopyTemplateFiles {
 
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
+  chdir ($underDirectory);
+  mkdir ("templates", 0777);
 
-    #copying the templates in the templatedirectoy
-    if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
-    else {
-	if ($processes{HEADER} eq "yes") {
-	    copy ("$local_datadir/kdevelop/header", 
-		  "$underDirectory/templates/header_template");
-	}
+  #copying the templates in the templatedirectoy
+  if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
+  else {
+  	if ($processes{HEADER} eq "yes") {
+  	    copy ("$local_datadir/kdevelop/header",
+  		  "$underDirectory/templates/header_template");
+  	}
 	
-	if ($processes{CPP} eq "yes") {
-	    copy ("$local_datadir/kdevelop/cpp",
-		  "$underDirectory/templates/cpp_template");
-	}
-    }
-
+  	if ($processes{CPP} eq "yes") {
+  	    copy ("$local_datadir/kdevelop/cpp",
+  		  "$underDirectory/templates/cpp_template");
+  	}
+  }
 }
 
 
 sub condCopyGNUFiles {
 
-    #if GNU-Files was chosen in kAppWizard
-    if ($processes{GNU} eq "yes") {
-    
-    	#copying the GNU-Files and renamed these
-    	chdir ($templatedir);
-    	copy ("AUTHORS_template",   "$overDirectory/AUTHORS"  );
-    	copy ("COPYING_template",   "$overDirectory/COPYING"  );
-    	copy ("ChangeLog_template", "$overDirectory/ChangeLog");
-    	copy ("INSTALL_template",   "$overDirectory/INSTALL"  );
-    	copy ("README_template",    "$overDirectory/README"   );
-    	copy ("TODO_template",      "$overDirectory/TODO"     );
+  #if GNU-Files was chosen in kAppWizard
+  if ($processes{GNU} eq "yes") {
+  	#copying the GNU-Files and renamed these
+  	chdir ($templatedir);
+  	copy ("AUTHORS_template",   "$overDirectory/AUTHORS"  );
+  	copy ("COPYING_template",   "$overDirectory/COPYING"  );
+  	copy ("ChangeLog_template", "$overDirectory/ChangeLog");
+  	copy ("INSTALL_template",   "$overDirectory/INSTALL"  );
+  	copy ("README_template",    "$overDirectory/README"   );
+  	copy ("TODO_template",      "$overDirectory/TODO"     );
 
-	# replace AUTHOR and EMAIL 
-       chdir($overDirectory);
-        replaceValuesInFile(\%changings, "AUTHORS");
-    }
+  	# replace AUTHOR and EMAIL
+    chdir($overDirectory);
+    replaceValuesInFile(\%changings, "AUTHORS");
+  }
 }
 
 
 sub condCopyLsmFile {
 
-    #if LSM-Files was chosen in kAppWizard
-    if ($processes{LSM} eq "yes") {
-
-	#copying, rename and replace in the lsm-template
-	chdir ($templatedir);
-	copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
-	chdir ($overDirectory);
-        replaceValuesInFile(\%changings, "$nameLittle.lsm");
-    }
+  #if LSM-Files was chosen in kAppWizard
+  if ($processes{LSM} eq "yes") {
+  	#copying, rename and replace in the lsm-template
+  	chdir ($templatedir);
+  	copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
+  	chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "$nameLittle.lsm");
+  }
 }
 
 
@@ -311,17 +306,17 @@ sub condCopyUserDocFiles {
     }
 	}
   
-    #if USER-Docs was not chosen in kAppWizard
-    if ($processes{USER} eq "no") {
-            my %emptyIT = (
-		"$nameLittle/docs/Makefile" => "",
-		"$nameLittle/docs/en/Makefile" => "",
-#                        "SUBDIRS = docs" => ""		do you really need this???
+  #if USER-Docs was not chosen in kAppWizard
+  if ($processes{USER} eq "no") {
+    my %emptyIT = (
+  	"$nameLittle/docs/Makefile" => "",
+  	"$nameLittle/docs/en/Makefile" => "",
+    # "SUBDIRS = docs" => ""		do you really need this???
                         );
-#	chdir ($underDirectory);
-#	replaceValuesInFile(\%emptyIT, "Makefile.am");
-	chdir ($overDirectory);
-	replaceValuesInFile(\%emptyIT, "configure.in");
+    #	chdir ($underDirectory);
+    #	replaceValuesInFile(\%emptyIT, "Makefile.am");
+   	chdir ($overDirectory);
+   	replaceValuesInFile(\%emptyIT, "configure.in");
 
   }
 }
@@ -353,104 +348,102 @@ sub condCopyKdelnkFile {
 
 sub condCopyProgIcons {
 
-    #if no ProgIcon was chosen in kAppWizard
-    if ($processes{PROGICON} eq "no") {} 
+  #if no ProgIcon was chosen in kAppWizard
+  if ($processes{PROGICON} eq "no") {}
+
+  #if the default ProgIcon was chosen in kAppWizard
+  elsif ($processes{PROGICON} eq "(null)") {
+  	chdir ($kde_icondir);
+  	copy ("edit.xpm", "$underDirectory/$nameLittle.xpm");
+  	chdir ($underDirectory);
+  	chmod (0666, "$nameLittle.xpm");
+  }
     
-    #if the default ProgIcon was chosen in kAppWizard
-    elsif ($processes{PROGICON} eq "(null)") {
-	chdir ($kde_icondir);
-	copy ("edit.xpm", "$underDirectory/$nameLittle.xpm");
-	chdir ($underDirectory);
-	chmod (0666, "$nameLittle.xpm");
-    }
+  #if a new ProgIcon was chosen in kAppWizard
+  else {
+  	$icon = $kde_icondir."/".$processes{PROGICON};
+  	$copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
+  	if ($copying)  {
+  	    $icon = $local_icondir."/".$processes{PROGICON};
+  	    copy ($icon, "$underDirectory/$nameLittle.xpm");
+  	}
+  	chdir ($underDirectory);
+  	chmod (0666, "$nameLittle.xpm");
+  }
     
-    #if a new ProgIcon was chosen in kAppWizard
-    else {
-	$icon = $kde_icondir."/".$processes{PROGICON};
-	$copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
-	if ($copying)  {
-	    $icon = $local_icondir."/".$processes{PROGICON};
-	    copy ($icon, "$underDirectory/$nameLittle.xpm");
-	}
-	chdir ($underDirectory);
-	chmod (0666, "$nameLittle.xpm");
-    }
+  #if no MiniIcon was chosen in kAppWizard
+  if ($processes{MINIICON} eq "no") {}
+
+  #if the default MiniIcon was chosen in kAppWizard
+  elsif ($processes{MINIICON} eq "(null)") {
+  	chdir ($kde_miniicondir);
+  	copy ("application_settings.xpm", "$underDirectory/mini-$nameLittle.xpm");
+  	chdir ($underDirectory);
+  	chmod (0666, "mini-$nameLittle.xpm");
+  }
     
-    #if no MiniIcon was chosen in kAppWizard
-    if ($processes{MINIICON} eq "no") {}
-    
-    #if the default MiniIcon was chosen in kAppWizard
-    elsif ($processes{MINIICON} eq "(null)") {
-	chdir ($kde_miniicondir);
-	copy ("application_settings.xpm", "$underDirectory/mini-$nameLittle.xpm");
-	chdir ($underDirectory);
-	chmod (0666, "mini-$nameLittle.xpm");
-    }
-    
-    #if a new MiniIcon was chosen in kAppWizard
-    else {
-	$icon = $kde_miniicondir."/".$processes{MINIICON};
-	$copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-	if ($copying)  {
-	    $icon = $local_miniicondir."/".$processes{MINIICON};
-	    copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-	}
-	chdir ($underDirectory);
-	chmod (0666, "mini-$nameLittle.xpm");
-    }
-    
+  #if a new MiniIcon was chosen in kAppWizard
+  else {
+  	$icon = $kde_miniicondir."/".$processes{MINIICON};
+  	$copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
+  	if ($copying)  {
+  	    $icon = $local_miniicondir."/".$processes{MINIICON};
+  	    copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
+  	}
+  	chdir ($underDirectory);
+  	chmod (0666, "mini-$nameLittle.xpm");
+  }
 }
 
 
 sub condCreateApiDoc {
 
-    chdir ($underDirectory);
-    mkdir ("api", 0777);
+  chdir ($underDirectory);
+  mkdir ("api", 0777);
 
-    # has been moved to processesend.pl
+  # has been moved to processesend.pl
 
 }
 
 
 sub processCppTemplate {
 
-    my ( $file ) = @_;
-  
-    copy ("$local_datadir/kdevelop/cpp", $underDirectory);
-    chdir ($underDirectory);
-    replaceValuesInFile(\%changings, "cpp", $file);
+  my ( $file ) = @_;
 
-    open (INPUT,"$file") || die "cannot open file: $file; $!";
-    open (OUTPUT,">>cpp");
-    while ( defined ($line = <INPUT> )) {
-	print OUTPUT $line;
-    }
-    close (INPUT);
-    close (OUTPUT);
-    rename ("cpp" , $file);
-    unlink ("cpp");
+  copy ("$local_datadir/kdevelop/cpp", $underDirectory);
+  chdir ($underDirectory);
+  replaceValuesInFile(\%changings, "cpp", $file);
+
+  open (INPUT,"$file") || die "cannot open file: $file; $!";
+  open (OUTPUT,">>cpp");
+  while ( defined ($line = <INPUT> )) {
+    print OUTPUT $line;
+  }
+  close (INPUT);
+  close (OUTPUT);
+  rename ("cpp" , $file);
+  unlink ("cpp");
 
 }
 
 
 sub processHeaderTemplate {
 
-    my ( $file ) = @_;
-  
-    copy ("$local_datadir/kdevelop/header", $underDirectory);
-    chdir ($underDirectory);
-    replaceValuesInFile(\%changings, "header", $file);
+  my ( $file ) = @_;
 
-    open (INPUT,"$file") || die "cannot open file: $file; $!";
-    open (OUTPUT,">>header");
-    while ( defined ($line = <INPUT> )) {
-	print OUTPUT $line;
-    }
-    close (INPUT);
-    close (OUTPUT);
-    rename ("header" , $file);
-    unlink ("header");
+  copy ("$local_datadir/kdevelop/header", $underDirectory);
+  chdir ($underDirectory);
+  replaceValuesInFile(\%changings, "header", $file);
 
+  open (INPUT,"$file") || die "cannot open file: $file; $!";
+  open (OUTPUT,">>header");
+  while ( defined ($line = <INPUT> )) {
+  	print OUTPUT $line;
+  }
+  close (INPUT);
+  close (OUTPUT);
+  rename ("header" , $file);
+  unlink ("header");
 }
 
 
@@ -458,18 +451,18 @@ sub changeNormalApp {
 
 #    unpackFiles("normal.tar");
 #    
-    #renamed the directory
-    printflush (STDOUT, "changing files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
-    
-    #create the templatedirectory
-    condCopyTemplateFiles();
+  #renamed the directory
+  printflush (STDOUT, "changing files...\n");
+  chdir ($overDirectory);
+  rename ("skel", $nameLittle);
 
-    #Replacements in overDirectory  
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+  #create the templatedirectory
+  condCopyTemplateFiles();
+
+  #Replacements in overDirectory
+  chdir ($overDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "configure.in");
 
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
@@ -481,61 +474,61 @@ sub changeNormalApp {
 #    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 #		   "configure.in");    now fixed entry in template of normal.tar.gz
 
-    #Replacements and name changing in underDirectory
-    chdir ($underDirectory);
+  #Replacements and name changing in underDirectory
+  chdir ($underDirectory);
 
-    rename ("kbase.cpp",     $nameLittle.".cpp");
-    rename ("kbase.h",       $nameLittle.".h");
-    rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
-    rename ("kbasedoc.h",    $nameLittle."doc.h");
-    rename ("kbaseview.cpp", $nameLittle."view.cpp");
-    rename ("kbaseview.h",   $nameLittle."view.h");
-    if($processes{APPLICATION} eq "kde2normal")
-    {
-      rename ("kbaseui.rc",  $nameLittle."ui.rc");
-    }
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.cpp");
-    replaceValuesInFile(\%changings, $nameLittle.".cpp");
-    replaceValuesInFile(\%changings, $nameLittle.".h");
-    replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
-    replaceValuesInFile(\%changings, $nameLittle."view.cpp");
-    replaceValuesInFile(\%changings, $nameLittle."doc.h");
-    replaceValuesInFile(\%changings, $nameLittle."view.h");
-    if($processes{APPLICATION} eq "kdenormal")
-    {
-      replaceValuesInFile(\%changings, "resource.h");
-    }
-    if($processes{APPLICATION} eq "kde2normal")
-    {
-      replaceValuesInFile(\%changings, $nameLittle."ui.rc");
-    }
-    #Replacements in documentation directory
-    chdir ($underDirectory."/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
+  rename ("kbase.cpp",     $nameLittle.".cpp");
+  rename ("kbase.h",       $nameLittle.".h");
+  rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
+  rename ("kbasedoc.h",    $nameLittle."doc.h");
+  rename ("kbaseview.cpp", $nameLittle."view.cpp");
+  rename ("kbaseview.h",   $nameLittle."view.h");
+  if($processes{APPLICATION} eq "kde2normal")
+  {
+    rename ("kbaseui.rc",  $nameLittle."ui.rc");
+  }
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "main.cpp");
+  replaceValuesInFile(\%changings, $nameLittle.".cpp");
+  replaceValuesInFile(\%changings, $nameLittle.".h");
+  replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
+  replaceValuesInFile(\%changings, $nameLittle."view.cpp");
+  replaceValuesInFile(\%changings, $nameLittle."doc.h");
+  replaceValuesInFile(\%changings, $nameLittle."view.h");
+  if($processes{APPLICATION} eq "kdenormal")
+  {
+    replaceValuesInFile(\%changings, "resource.h");
+  }
+  if($processes{APPLICATION} eq "kde2normal")
+  {
+    replaceValuesInFile(\%changings, $nameLittle."ui.rc");
+  }
+  #Replacements in documentation directory
+  chdir ($underDirectory."/docs/en");
+  replaceValuesInFile(\%changings, "Makefile.am");
 
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
+  condCopyGNUFiles();
+  condCopyLsmFile();
+  condCopyUserDocFiles();
     
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.cpp");
-	processCppTemplate("$nameLittle.cpp");
-	processCppTemplate("${nameLittle}view.cpp");
-	processCppTemplate("${nameLittle}doc.cpp");
-    }
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("$nameLittle.h");
-	processHeaderTemplate("${nameLittle}view.h");
-	processHeaderTemplate("${nameLittle}doc.h");
+  if ($processes{CPP} eq "yes") {
+    processCppTemplate("main.cpp");
+  	processCppTemplate("$nameLittle.cpp");
+  	processCppTemplate("${nameLittle}view.cpp");
+  	processCppTemplate("${nameLittle}doc.cpp");
+  }
+  if ($processes{HEADER} eq "yes") {
+  	processHeaderTemplate("$nameLittle.h");
+  	processHeaderTemplate("${nameLittle}view.h");
+  	processHeaderTemplate("${nameLittle}doc.h");
     if($processes{APPLICATION} eq "kdenormal")
     {
     	processHeaderTemplate("resource.h");
     }
-    }
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
+  }
+  condCopyKdelnkFile();
+  condCopyProgIcons();
+  condCreateApiDoc();
     
 }
 
@@ -545,64 +538,64 @@ sub changeNormalOGLApp {
 #    unpackFiles("normalogl.tar");
 # 
    
-    #renamed the directory
-    printflush (STDOUT, "changing files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
+ #renamed the directory
+  printflush (STDOUT, "changing files...\n");
+  chdir ($overDirectory);
+  rename ("skel", $nameLittle);
+
+  #create the templatedirectory
+  condCopyTemplateFiles();
+
+  #Replacements in overDirectory
+  chdir ($overDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "configure.in");
+
+  #Replacements and name changing in underDirectory
+  chdir ($underDirectory);
+
+  rename ("kbase.cpp",     $nameLittle.".cpp");
+  rename ("kbase.h",       $nameLittle.".h");
+  rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
+  rename ("kbasedoc.h",    $nameLittle."doc.h");
+  rename ("kbaseview.cpp", $nameLittle."view.cpp");
+  rename ("kbaseview.h",   $nameLittle."view.h");
+
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "main.cpp");
+  replaceValuesInFile(\%changings, $nameLittle.".cpp");
+  replaceValuesInFile(\%changings, $nameLittle.".h");
+  replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
+  replaceValuesInFile(\%changings, $nameLittle."view.cpp");
+  replaceValuesInFile(\%changings, $nameLittle."doc.h");
+  replaceValuesInFile(\%changings, $nameLittle."view.h");
+  replaceValuesInFile(\%changings, "resource.h");
+
+  #Replacements in documentation directory
+  chdir ($underDirectory."/docs/en");
+  replaceValuesInFile(\%changings, "Makefile.am");
+
+  condCopyGNUFiles();
+  condCopyLsmFile();
+  condCopyUserDocFiles();
     
-    #create the templatedirectory
-    condCopyTemplateFiles();
-
-    #Replacements in overDirectory  
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
-
-    #Replacements and name changing in underDirectory
-    chdir ($underDirectory);
-
-    rename ("kbase.cpp",     $nameLittle.".cpp");
-    rename ("kbase.h",       $nameLittle.".h");
-    rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
-    rename ("kbasedoc.h",    $nameLittle."doc.h");
-    rename ("kbaseview.cpp", $nameLittle."view.cpp");
-    rename ("kbaseview.h",   $nameLittle."view.h");
-
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.cpp");
-    replaceValuesInFile(\%changings, $nameLittle.".cpp");
-    replaceValuesInFile(\%changings, $nameLittle.".h");
-    replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
-    replaceValuesInFile(\%changings, $nameLittle."view.cpp");
-    replaceValuesInFile(\%changings, $nameLittle."doc.h");
-    replaceValuesInFile(\%changings, $nameLittle."view.h");
-    replaceValuesInFile(\%changings, "resource.h");
-
-    #Replacements in documentation directory
-    chdir ($underDirectory."/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
-
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
+  if ($processes{CPP} eq "yes") {
+    processCppTemplate("main.cpp");
+  	processCppTemplate("$nameLittle.cpp");
+  	processCppTemplate("${nameLittle}view.cpp");
+  	processCppTemplate("${nameLittle}doc.cpp");
+  }
     
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.cpp");
-	processCppTemplate("$nameLittle.cpp");
-	processCppTemplate("${nameLittle}view.cpp");
-	processCppTemplate("${nameLittle}doc.cpp");
-    }
+  if ($processes{HEADER} eq "yes") {
+  	processHeaderTemplate("$nameLittle.h");
+  	processHeaderTemplate("${nameLittle}view.h");
+  	processHeaderTemplate("${nameLittle}doc.h");
+  	processHeaderTemplate("resource.h");
+  }
     
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("$nameLittle.h");
-	processHeaderTemplate("${nameLittle}view.h");
-	processHeaderTemplate("${nameLittle}doc.h");
-	processHeaderTemplate("resource.h");
-    }
-    
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
+  condCopyKdelnkFile();
+  condCopyProgIcons();
+  condCreateApiDoc();
     
 }
 
@@ -610,18 +603,18 @@ sub changeMiniApp {
 
 #   unpackFiles("mini.tar");
 #    
-    #renamed the directory
-    printflush (STDOUT, "changing files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
-    
-    #create the templatedirectory
-    condCopyTemplateFiles();
+  #renamed the directory
+  printflush (STDOUT, "changing files...\n");
+  chdir ($overDirectory);
+  rename ("skel", $nameLittle);
 
-    #Replacements in overDirectory  
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+  #create the templatedirectory
+  condCopyTemplateFiles();
+
+  #Replacements in overDirectory
+  chdir ($overDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "configure.in");
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
 #		   "Makefile.am");  			not needed anymore!!
@@ -632,37 +625,36 @@ sub changeMiniApp {
 #    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 #		   "configure.in");    now fixed entry in template of mini.tar.gz
 
-    #Replacements and name changing in underDirectory
-    chdir ($underDirectory);
+  #Replacements and name changing in underDirectory
+  chdir ($underDirectory);
 
-    rename ("skel.cpp", $nameLittle.".cpp");
-    rename ("skel.h",   $nameLittle.".h");
+  rename ("skel.cpp", $nameLittle.".cpp");
+  rename ("skel.h",   $nameLittle.".h");
 
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "$nameLittle.cpp");
-    replaceValuesInFile(\%changings, "$nameLittle.h");
-    replaceValuesInFile(\%changings, "main.cpp");
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "$nameLittle.cpp");
+  replaceValuesInFile(\%changings, "$nameLittle.h");
+  replaceValuesInFile(\%changings, "main.cpp");
 
-    chdir ($underDirectory."/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
+  chdir ($underDirectory."/docs/en");
+  replaceValuesInFile(\%changings, "Makefile.am");
 
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
+  condCopyGNUFiles();
+  condCopyLsmFile();
+  condCopyUserDocFiles();
     
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.cpp");
-	processCppTemplate("$nameLittle.cpp");
-    }
+  if ($processes{CPP} eq "yes") {
+    processCppTemplate("main.cpp");
+  	processCppTemplate("$nameLittle.cpp");
+  }
     
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("$nameLittle.h");
-    }
+  if ($processes{HEADER} eq "yes") {
+  	processHeaderTemplate("$nameLittle.h");
+  }
 
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
-    
+  condCopyKdelnkFile();
+  condCopyProgIcons();
+  condCreateApiDoc();
 }
 
 
@@ -747,48 +739,50 @@ sub changeQtApp {
 
 #    unpackFiles("qt.tar");
 #    
-    #renamed the directory
-    printflush (STDOUT, "changing files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
-    
-    #create the templatedirectory
-    condCopyTemplateFiles();
+  #renamed the directory
+  printflush (STDOUT, "changing files...\n");
+  chdir ($overDirectory);
+  rename ("skel", $nameLittle);
 
-    #Replacements in overDirectory  
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+  #create the templatedirectory
+  condCopyTemplateFiles();
 
-    #Replacements and name changing in underDirectory
-    chdir ($underDirectory);
+  #Replacements in overDirectory
+  chdir ($overDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "configure.in");
 
-      rename ("bank.dsp",     $nameLittle.".dsp") if ( -e "bank.dsp" );
-      rename ("bank.dsw",     $nameLittle.".dsw") if ( -e "bank.dsw" );
-      rename ("bank.pro",     $nameLittle.".pro") if ( -e "bank.pro" );
+  #Replacements and name changing in underDirectory
+  chdir ($underDirectory);
+  rename ("bank.dsp",     $nameLittle.".dsp") if ( -e "bank.dsp" );
+  rename ("bank.dsw",     $nameLittle.".dsw") if ( -e "bank.dsw" );
+  rename ("bank.pro",     $nameLittle.".pro") if ( -e "bank.pro" );
 
-    rename ("bank.cpp",     $nameLittle.".cpp");
-    rename ("bank.h",       $nameLittle.".h");
-    rename ("bankdoc.cpp",  $nameLittle."doc.cpp");
-    rename ("bankdoc.h",    $nameLittle."doc.h");
-    rename ("bankview.cpp", $nameLittle."view.cpp");
-    rename ("bankview.h",   $nameLittle."view.h");
-    
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.cpp");
-    replaceValuesInFile(\%changings, "$nameLittle.cpp");
-    replaceValuesInFile(\%changings, "$nameLittle.h");
+  rename ("bank.cpp",     $nameLittle.".cpp");
+  rename ("bank.h",       $nameLittle.".h");
+  rename ("bankdoc.cpp",  $nameLittle."doc.cpp");
+  rename ("bankdoc.h",    $nameLittle."doc.h");
+  rename ("bankview.cpp", $nameLittle."view.cpp");
+  rename ("bankview.h",   $nameLittle."view.h");
 
-      replaceValuesInFile(\%changings, "$nameLittle.dsp") if ( -e "$nameLittle.dsp" );
-      replaceValuesInFile(\%changings, "$nameLittle.dsw") if ( -e "$nameLittle.dsw" );
-      replaceValuesInFile(\%changings, "$nameLittle.pro") if ( -e "$nameLittle.pro" );
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "main.cpp");
+  replaceValuesInFile(\%changings, "$nameLittle.cpp");
+  replaceValuesInFile(\%changings, "$nameLittle.h");
 
-    replaceValuesInFile(\%changings, "${nameLittle}doc.cpp");
-    replaceValuesInFile(\%changings, "${nameLittle}view.cpp");
-    replaceValuesInFile(\%changings, "${nameLittle}doc.h");
-    replaceValuesInFile(\%changings, "${nameLittle}view.h");
+  replaceValuesInFile(\%changings, "$nameLittle.dsp") if ( -e "$nameLittle.dsp" );
+  replaceValuesInFile(\%changings, "$nameLittle.dsw") if ( -e "$nameLittle.dsw" );
+  replaceValuesInFile(\%changings, "$nameLittle.pro") if ( -e "$nameLittle.pro" );
+
+  replaceValuesInFile(\%changings, "${nameLittle}doc.cpp");
+  replaceValuesInFile(\%changings, "${nameLittle}view.cpp");
+  replaceValuesInFile(\%changings, "${nameLittle}doc.h");
+  replaceValuesInFile(\%changings, "${nameLittle}view.h");
+
+  if ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qextmdi")
+  {
     replaceValuesInFile(\%changings, "resource.h");
-
+  }
 #    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.cpp");
 #    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.h");
 #    replaceOldFile($name."AppView", $name."View",  "skel.cpp");
@@ -798,43 +792,44 @@ sub changeQtApp {
 #    |NAME|Doc, |NAME|View
 #
 
-    chdir ($underDirectory."/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
+  chdir ($underDirectory."/docs/en");
+  replaceValuesInFile(\%changings, "Makefile.am");
 
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
+  condCopyGNUFiles();
+  condCopyLsmFile();
+  condCopyUserDocFiles();
+
+  if ($processes{CPP} eq "yes") {
+    processCppTemplate("main.cpp");
+  	processCppTemplate("$nameLittle.cpp");
+  	processCppTemplate("${nameLittle}view.cpp");
+  	processCppTemplate("${nameLittle}doc.cpp");
+  }
     
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.cpp");
-	processCppTemplate("$nameLittle.cpp");
-	processCppTemplate("${nameLittle}view.cpp");
-	processCppTemplate("${nameLittle}doc.cpp");
+  if ($processes{HEADER} eq "yes") {
+  	processHeaderTemplate("$nameLittle.h");
+  	processHeaderTemplate("${nameLittle}view.h");
+  	processHeaderTemplate("${nameLittle}doc.h");
+    if ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qextmdi"){
+    	processHeaderTemplate("resource.h");
     }
-    
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("$nameLittle.h");
-	processHeaderTemplate("${nameLittle}view.h");
-	processHeaderTemplate("${nameLittle}doc.h");
-	processHeaderTemplate("resource.h");
-    }
-    
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
+  }
+  condCopyKdelnkFile();
+  condCopyProgIcons();
+  condCreateApiDoc();
     
 }
 
 
 sub changeCustomApp {
 
-    mkdir ($nameLittle, 0777);
+  mkdir ($nameLittle, 0777);
 
-    #create the templatedirectory
-    condCopyTemplateFiles();
+  #create the templatedirectory
+  condCopyTemplateFiles();
 
-    condCopyGNUFiles();
-    condCopyLsmFile();
+  condCopyGNUFiles();
+  condCopyLsmFile();
     
 }
 
@@ -842,57 +837,57 @@ sub changeGnomeApp {
 
 #    unpackFiles("c.tar");
 #
-    #renamed the directory
-    printflush (STDOUT, "changing files...\n");
-    chdir ($overDirectory);
-    rename ("src", $nameLittle);
-    rename ("gnome-hello.desktop",$nameLittle . ".desktop");
+  #renamed the directory
+  printflush (STDOUT, "changing files...\n");
+  chdir ($overDirectory);
+  rename ("src", $nameLittle);
+  rename ("gnome-hello.desktop",$nameLittle . ".desktop");
 
-    chdir ("pixmaps");
-    rename ("gnome-hello-logo.png",$nameLittle . "-logo.png");
+  chdir ("pixmaps");
+  rename ("gnome-hello-logo.png",$nameLittle . "-logo.png");
 
-    chdir ($underDirectory);
-    rename ("hello.h", "main.h");
-    rename ("hello.c", "main.c");
+  chdir ($underDirectory);
+  rename ("hello.h", "main.h");
+  rename ("hello.c", "main.c");
 
-    #create the templatedirectory
-    condCopyTemplateFiles();
+  #create the templatedirectory
+  condCopyTemplateFiles();
 
-    #replaced skel with the projectname in different files
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
-    replaceValuesInFile(\%changings, $nameLittle . ".desktop");
+  #replaced skel with the projectname in different files
+  chdir ($overDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "configure.in");
+  replaceValuesInFile(\%changings, $nameLittle . ".desktop");
 
-    chdir ($underDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.c");
-    replaceValuesInFile(\%changings, "app.c");
-    replaceValuesInFile(\%changings, "app.h");
-    replaceValuesInFile(\%changings, "menus.c");
-    replaceValuesInFile(\%changings, "menus.h");
+  chdir ($underDirectory);
+  replaceValuesInFile(\%changings, "Makefile.am");
+  replaceValuesInFile(\%changings, "main.c");
+  replaceValuesInFile(\%changings, "app.c");
+  replaceValuesInFile(\%changings, "app.h");
+  replaceValuesInFile(\%changings, "menus.c");
+  replaceValuesInFile(\%changings, "menus.h");
 
 #    chdir ($underDirectory . "/docs/en");
 #    replaceValuesInFile(\%changings, "Makefile.am");
 
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
+  condCopyGNUFiles();
+  condCopyLsmFile();
+  condCopyUserDocFiles();
 
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.c");
-	processCppTemplate("app.c");
-	processCppTemplate("menus.c");
-    }
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("main.h");
-	processHeaderTemplate("app.h");
-	processHeaderTemplate("menus.h");
-    }
+  if ($processes{CPP} eq "yes") {
+    processCppTemplate("main.c");
+  	processCppTemplate("app.c");
+  	processCppTemplate("menus.c");
+  }
+  if ($processes{HEADER} eq "yes") {
+  	processHeaderTemplate("main.h");
+  	processHeaderTemplate("app.h");
+  	processHeaderTemplate("menus.h");
+ }
 
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
+  condCopyKdelnkFile();
+  condCopyProgIcons();
+  condCreateApiDoc();
 
 }
 
