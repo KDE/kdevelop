@@ -13,7 +13,8 @@
 #define _KDEVELOPCORE_H_
 
 
-#include <qlist.h>
+#include <kdevelopcorebase.h>
+
 
 class KDevelop;
 class KDevComponent;
@@ -30,7 +31,8 @@ class ProjectSpace;
 class Project;
 
 
-class KDevelopCore : QObject
+//class KDevelopCore : QObject
+class KDevelopCore : KDevelopCoreBase
 {
     Q_OBJECT
     
@@ -80,8 +82,6 @@ private slots:
 
 private:
     KDevelop *m_pKDevelopGUI;
-    QList<KDevComponent> m_components;
-    QList<KDevComponent> m_runningComponents;
     KDevApi *m_api;
     KDevelopIface *m_dcop;
 };

@@ -11,7 +11,7 @@ KDevComponent::~KDevComponent()
 {
 }
 
-KDevelopCore *KDevComponent::TheCore()
+KDevelopCoreBase *KDevComponent::TheCore()
 {
     return m_pCore;
 }
@@ -51,7 +51,7 @@ KDevAppFrontend *KDevComponent::appFrontend()
     return m_api->appFrontend;
 }
 
-void KDevComponent::setupInternal(KDevelopCore * pCore, KDevApi *api)
+void KDevComponent::setupInternal(KDevelopCoreBase * pCore, KDevApi *api)
 {
     // Give them direct access to the KDevelop core.
     m_pCore = pCore;

@@ -37,8 +37,7 @@
 
 
 KDevelopCore::KDevelopCore(KDevelop *pGUI)
-    : QObject(pGUI, "kdevelop core")
-    ,m_pKDevelopGUI(pGUI)
+:KDevelopCoreBase (pGUI, "kdevelop core") ,m_pKDevelopGUI(pGUI)
 {
     m_dcop = new KDevelopIface(this);
     m_api = new KDevApi();
@@ -268,19 +267,6 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(url);
 
     return true;
-}
-
-
-/*  They have changed the subproject they are using, we should notify
-    all the components, to give them a chance to react. */
-void KDevelopCore::changeProjectSpace ()
-{
-    kdDebug(9000) << "KDevelopCore::changeProjectSpace" << endl;
-
-    // Notification
-    QListIterator<KDevComponent> it1(m_components);
-    for (; it1.current(); ++it1)
-        (*it1)->projectChanged();
 }
 
 

@@ -22,6 +22,7 @@
 #include <kparts/part.h>
 #include <qdom.h>
 #include <kaction.h>
+#include <kdevelopcorebase.h>
 #include <qlist.h>
 
 class KDevVersionControl;
@@ -37,7 +38,6 @@ class KAboutData;
 class KDevNode;
 class KDevFileNode;
 class KDevApi;
-class KDevelopCore;
 
 
 /**
@@ -64,7 +64,7 @@ public:
        to traverse the component list and raise events which can cascade to
        all other components.
      */
-    KDevelopCore *TheCore();
+    KDevelopCoreBase *TheCore();
     /**
      * Gives a reference to the current project space component
      */
@@ -155,9 +155,9 @@ private:
 
     // Internal
     friend class KDevelopCore;
-    void setupInternal(KDevelopCore * pCore, KDevApi *api);
-    KDevApi         *m_api;
-    KDevelopCore    *m_pCore;       // Points to the KDevelop core.
+    void setupInternal (KDevelopCoreBase * pCore, KDevApi *api);
+    KDevApi             *m_api;
+    KDevelopCoreBase    *m_pCore;       // Points to the KDevelop core.
 };
 
 #endif

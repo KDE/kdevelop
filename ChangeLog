@@ -1,3 +1,12 @@
+2001-01-07  Ivan Hawkes <linuxgroupie@ivanhawkes.com>
+    * Created new virtual base class for the core
+      and placed it into the lib/general lib.
+    * Derived KDevelopCore from the new base class
+    * All components are passed a copy of the
+      KDevelopCoreBase pointer on creations.
+    * This will provide a class that components can use
+      to communicate with the core and other components.
+
 2000-12-28  Ivan Hawkes <linuxgroupie@ivanhawkes.com>
     * Getting bug tracking hooked into the
       ProjectSpace.
