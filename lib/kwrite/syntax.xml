@@ -541,6 +541,71 @@
 </itemDatas>
 </language>
 
+<language name="PHP" extensions="*.php;*.php3;*.php4;*.inc" mimetype="text/x-php-src" casesensitive="1">
+<keywords>
+   <keyword> and </keyword>
+   <keyword> break </keyword>
+   <keyword> case </keyword>
+   <keyword> class </keyword>
+   <keyword> continue </keyword>
+   <keyword> default </keyword>
+   <keyword> do </keyword>
+   <keyword> else </keyword>
+   <keyword> elseif </keyword>
+   <keyword> empty </keyword>
+   <keyword> endfor </keyword>
+   <keyword> endif </keyword>
+   <keyword> endswitch </keyword>
+   <keyword> endwhile </keyword>
+   <keyword> extends </keyword>
+   <keyword> for </keyword>
+   <keyword> foreach </keyword>
+   <keyword> function </keyword>
+   <keyword> if </keyword>
+   <keyword> include </keyword>
+   <keyword> include_once </keyword>
+   <keyword> global </keyword>
+   <keyword> list </keyword>
+   <keyword> new </keyword>
+   <keyword> not </keyword>
+   <keyword> or </keyword>
+   <keyword> parent </keyword>
+   <keyword> require </keyword>
+   <keyword> require_once </keyword>
+   <keyword> return </keyword>
+   <keyword> static </keyword>
+   <keyword> switch </keyword>
+   <keyword> stdClass </keyword>
+   <keyword> this </keyword>
+   <keyword> var </keyword>
+   <keyword> xor </keyword>
+   <keyword> while </keyword>
+   <keyword> __sleep </keyword>
+   <keyword> __wakeup </keyword>
+   <keyword> define </keyword>
+</keywords>
+<types>
+    <type> bool </type>
+    <type> int </type>
+    <type> string </type>
+    <type> double </type>
+    <type> array </type>
+    <type> object </type>
+    <type> resource </type>
+    <type> null </type>
+    <type> mixed </type>
+    <type> static </type>
+</types>
+<itemDatas>
+  <itemData name="Normal Text" defStyleNum="dsNormal"/>
+  <itemData name="Keyword" defStyleNum="dsKeyword"/>
+  <itemData name="Identifier" defStyleNum="dsOthers"/>
+  <itemData name="Types" defStyleNum="dsDataType"/>
+  <itemData name="String" defStyleNum="dsString"/>
+  <itemData name="Comment" defStyleNum="dsComment"/>
+</itemDatas>
+</language>
+
 <language name="Perl" extensions="*.pl" mimetype="text/x-perl-src" casesensitive="1">
 <keywords>
   <keyword> and </keyword>

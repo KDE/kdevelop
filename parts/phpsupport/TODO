@@ -1,4 +1,4 @@
--php syntax highlighting
+-php syntax highlighting (take tfromm)
 -integrated preview (webserver support and execution with php.exe),including error message parser
 -syntax check with php.exe
 -extended classtools (new class,new function...) based on filetemplates
