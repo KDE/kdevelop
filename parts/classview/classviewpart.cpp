@@ -126,6 +126,7 @@ void ClassViewPart::setupActions( )
 {
     m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
     connect(m_functionsnav->view(), SIGNAL(activated(QListViewItem*)), navigator, SLOT(selectFunctionNav(QListViewItem*)));
+//    m_functionsnav->view()->setEditable(false);
     connect(m_functionsnav->view(), SIGNAL(focusGranted()), navigator, SLOT(functionNavFocused()));
     connect(m_functionsnav->view(), SIGNAL(focusLost()), navigator, SLOT(functionNavUnFocused()));
     m_functionsnav->setToolTip(i18n("Functions in file"));

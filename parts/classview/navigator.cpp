@@ -261,14 +261,35 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     {
         QString fullName = fullFunctionDefinitionName(*it);
         
-        FunctionNavItem *item = new FunctionNavItem(m_part,
-            m_part->m_functionsnav->view()->listView(), fullName, FunctionNavItem::Definition);
-        functionNavDefs[fullName] = item;
-        m_part->m_functionsnav->view()->addItem(item);
-        
+        if (clear || !functionNavDefs[fullName])
+        {
+            FunctionNavItem *item = new FunctionNavItem(m_part,
+                m_part->m_functionsnav->view()->listView(), fullName, FunctionNavItem::Definition);
+            functionNavDefs[fullName] = item;
+            m_part->m_functionsnav->view()->addItem(item);
+        }
+            
         //remove unnecessary items with function declarations for which a definition item was created
         if (functionNavDecls[fullName])
+        {
             m_part->m_functionsnav->view()->removeItem(functionNavDecls[fullName]);
+            functionNavDecls.remove(fullName);
+        }
+        
+        toLeave << fullName;
+    }
+        
+    kdDebug() << "leave list: " << toLeave << endl;
+    //remove items not in toLeave list
+    for (QMap<QString, QListViewItem*>::iterator it = functionNavDefs.begin();
+        it != functionNavDefs.end(); ++it)
+    {
+        if (!toLeave.contains(it.key()))
+        {
+            if (it.data())
+                m_part->m_functionsnav->view()->removeItem(it.data());
+            functionNavDefs.remove(it);
+        }
     }
 }
 
@@ -283,7 +304,7 @@ void Navigator::addFile(const QString & file)
     if (file == m_part->m_activeFileName)
     {
         kdDebug() << "Navigator::addFile, processing active file" << endl;
- //       refreshNavBars(m_part->m_activeFileName, false);
+        refreshNavBars(m_part->m_activeFileName, false);
     }
 }
 
@@ -469,8 +490,8 @@ QString Navigator::fullFunctionDefinitionName(FunctionDefinitionDom fun)
     QString funName = scope.join(".");
     if (!funName.isEmpty())
         funName += ".";
-    funName = m_part->languageSupport()->formatClassName(funName);
     funName += m_part->languageSupport()->formatModelItem(fun, true);   
+    funName = m_part->languageSupport()->formatClassName(funName);
     
     return funName;
 }
@@ -481,8 +502,8 @@ QString Navigator::fullFunctionDeclarationName(FunctionDom fun)
     QString funName = scope.join(".");
     if (!funName.isEmpty())
         funName += ".";
-    funName = m_part->languageSupport()->formatClassName(funName);
     funName += m_part->languageSupport()->formatModelItem(fun, true);   
+    funName = m_part->languageSupport()->formatClassName(funName);
     
     return funName;
 }
