@@ -1049,7 +1049,6 @@ bool Parser::parseCvQualify( GroupAST::Node& node )
     return true;
 }
 
-#if 1
 bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 {
     int start = lex->index();
@@ -1103,52 +1102,6 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
     node = ast;
     return true;
 }
-
-#else
-bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSimpleTypeSpecifier()" << endl;
-
-    int start = lex->index();
-    bool isIntegral = false;
-
-    TypeSpecifierAST::Node ast = CreateNode<TypeSpecifierAST>();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	if( tk == Token_char    || tk == Token_wchar_t  ||
-	    tk == Token_bool    || tk == Token_short    ||
-	    tk == Token_int     || tk == Token_long     ||
-	    tk == Token_signed  || tk == Token_unsigned ||
-	    tk == Token_float   || tk == Token_double   ||
-	    tk == Token_void ){
-	    lex->nextToken();
-	    isIntegral = true;
-	} else if( isIntegral ){
-	    NameAST::Node name = CreateNode<NameAST>();
-	    UPDATE_POS( name, start, lex->index() );
-	    name->setText( toString(start, lex->index()) );
-	    ast->setName( name );
-	    break;
-	} else
-	    break;
-    }
-
-    if( !isIntegral ){
-	NameAST::Node name;
-	if( !parseName(name) )
-	    return false;
-	name->setText( toString(start, lex->index()) );
-	ast->setName( name );
-    }
-
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
-#endif
 
 bool Parser::parsePtrOperator( AST::Node& node )
 {
@@ -1587,7 +1540,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 		return false;
 	    }
 	    
-	    ADVANCE( '>', '>' );
+	    ADVANCE( '>', ">" );
 	    ADVANCE( Token_class, "class" );
 	    
 	    // parse optional name
