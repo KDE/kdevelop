@@ -331,6 +331,31 @@ QString CustomProjectPart::buildDirectory()
 }
 
 
+QString CustomProjectPart::makeEnvironment()
+{
+    // Get the make environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/make/envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+#if (KDE_VERSION > 305)
+        environstr += KProcess::quote((*it).second);
+#else
+        environstr += KShellProcess::quote((*it).second);
+#endif
+        environstr += " ";
+    }
+    return environstr;
+}
+
+
 void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
     partController()->saveAllFiles();
@@ -373,6 +398,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
     dircmd += dir;
     dircmd += " && ";
 
+    cmdline.prepend(makeEnvironment());
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 

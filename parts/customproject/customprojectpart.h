@@ -69,6 +69,7 @@ private slots:
 private:
     void populateProject();
     void startMakeCommand(const QString &dir, const QString &target);
+    QString makeEnvironment();
 
     QString m_projectDirectory;
     QString m_projectName;
