@@ -1353,10 +1353,11 @@ int CClassParser::checkClassDecl()
   }
   else if( lexem != 0 ) // Attribute
   {
+    // If isImpl is true, it is simply a leading namespace in the attribute type (Falk)
     if( isMultiDecl )
-      retVal = ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
+      retVal = CP_IS_MULTI_ATTRIBUTE; // ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
     else
-      retVal = ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE );
+      retVal = CP_IS_ATTRIBUTE; // ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE );
   }
 
   return retVal;
@@ -1456,7 +1457,7 @@ CParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-    kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+    kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()" << endl;
     return 0;
   }
 
@@ -1474,7 +1475,7 @@ CParsedClass *CClassParser::parseClassHeader()
       // Fetch the name of the parent.
       aLexem = lexemStack.pop();
       if(aLexem == 0) {
-        kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+        kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()" << endl;
         return 0;
       }
 
