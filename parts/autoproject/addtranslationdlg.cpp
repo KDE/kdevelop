@@ -31,7 +31,7 @@
 AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(i18n("Add translation"));
+    setCaption(i18n("Add Translation"));
 
     m_part = part;
 

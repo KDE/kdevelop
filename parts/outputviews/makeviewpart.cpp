@@ -32,7 +32,7 @@ MakeViewPart::MakeViewPart(KDevApi *api, QObject *parent, const char *name)
     m_dcop = new KDevMakeFrontendIface(this);
 
     m_widget = new MakeWidget(this);
-    m_widget->setCaption(i18n("Messages output"));
+    m_widget->setCaption(i18n("Messages Output"));
     QWhatsThis::add(m_widget, i18n("Messages output\n\n"
                                    "The messages window shows the output of the compiler and "
                                    "used utilities like kdoc reference documentation. "

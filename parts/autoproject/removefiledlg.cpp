@@ -37,7 +37,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
                                    QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(i18n("Remove file from target"));
+    setCaption(i18n("Remove File From Target"));
 
     QStringList targets;
     

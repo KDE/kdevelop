@@ -33,7 +33,7 @@ FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
     //    setXMLFile("kdevfileview.rc");
     
     m_filetree = new FileViewWidget(this);
-    m_filetree->setCaption(i18n("File view"));
+    m_filetree->setCaption(i18n("File View"));
     QWhatsThis::add(m_filetree, i18n("File View\n\n"
                                      "The file viewer shows all files of the project, "
                                      "ins groups which can be configured by you."));

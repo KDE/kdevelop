@@ -52,7 +52,7 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
       end_(new KLineEdit(this)),
       output_(new QMultiLineEdit(this))
 {
-    setCaption(i18n("Memory/Misc viewer"));
+    setCaption(i18n("Memory/Misc Viewer"));
     // Make the top-level layout; a vertical box to contain all widgets
     // and sub-layouts.
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);

@@ -34,7 +34,7 @@
 ImportDialog::ImportDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(i18n("Import directory"));
+    setCaption(i18n("Import Directory"));
 
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 

@@ -30,7 +30,7 @@ AppOutputViewPart::AppOutputViewPart(KDevApi *api, QObject *parent, const char *
     m_dcop = new KDevAppFrontendIface(this);
 
     m_widget = new AppOutputWidget();
-    m_widget->setCaption(i18n("Application output"));
+    m_widget->setCaption(i18n("Application Output"));
     QWhatsThis::add(m_widget, i18n("Application output\n\n"
                                    "The stdout/stderr output window is a replacement for "
                                    "terminal-based application communication. Running terminal "

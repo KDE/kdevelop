@@ -51,7 +51,7 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     variableWidget = new VariableWidget();
     variableWidget->setEnabled(false);
     variableWidget->setIcon(SmallIcon("brace"));
-    variableWidget->setCaption(i18n("Variable tree"));
+    variableWidget->setCaption(i18n("Variable Tree"));
     QWhatsThis::add(variableWidget, i18n("Variable tree\n\n"
                                          "The variable tree allows you to see "
                                          "the variable values as you step "
@@ -66,7 +66,7 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     core()->embedWidget(variableWidget, KDevCore::SelectView, i18n("Watch"));
     
     breakpointWidget = new BreakpointWidget();
-    breakpointWidget->setCaption(i18n("Breakpoint list"));
+    breakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
                                            "Displays a list of breakpoints with "
                                            "their current status. Clicking on a "
@@ -78,7 +78,7 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
-    framestackWidget->setCaption(i18n("Frame stack"));
+    framestackWidget->setCaption(i18n("Frame Stack"));
     QWhatsThis::add(framestackWidget, i18n("Frame stack\n\n"
                                            "Often referred to as the \"call stack\", "
                                            "this is a list showing what function is "
@@ -91,7 +91,7 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
-    disassembleWidget->setCaption(i18n("Machine code display"));
+    disassembleWidget->setCaption(i18n("Machine Code Display"));
     QWhatsThis::add(disassembleWidget, i18n("Machine code display\n\n"
                                             "A machine code view into your running "
                                             "executable with the current instruction "

@@ -88,7 +88,7 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore * store,const QString& currentC
     classtree(store)
 {
 	// set up dialog
-  setCaption( i18n("Select function to copy") );
+  setCaption( i18n("Select Function to Copy") );
 
     resize( 400, 110 );
     Form1Layout = new QGridLayout( this );

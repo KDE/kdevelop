@@ -54,7 +54,7 @@ AddFileDialog::AddFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
                              TargetItem *item, QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(i18n("Add file to target"));
+    setCaption(i18n("Add File to Target"));
 
     QLabel *filename_label = new QLabel(i18n("&File name:"), this);
 

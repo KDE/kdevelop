@@ -41,7 +41,7 @@ ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
 
     m_classtree = new ClassViewWidget(this);
     m_classtree->setIcon(SmallIcon("CVclass"));
-    m_classtree->setCaption(i18n("Class view"));
+    m_classtree->setCaption(i18n("Class View"));
     QWhatsThis::add(m_classtree, i18n("Class View\n\n"
                                       "The class viewer shows all classes, methods and variables "
                                       "of the source files and allows switching to declarations "

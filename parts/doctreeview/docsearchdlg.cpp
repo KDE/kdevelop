@@ -35,7 +35,7 @@
 DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(i18n("Search in documentation"));
+    setCaption(i18n("Search in Documentation"));
 
     QBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
 

@@ -37,7 +37,7 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
                                                  SubprojectItem *item, QWidget *parent, const char *name)
     : SubprojectOptionsDialogBase(parent, name, true)
 {
-    setCaption(i18n("Subproject options for '%1'").arg(item->subdir));
+    setCaption(i18n("Subproject Options for '%1'").arg(item->subdir));
 
     subProject = item;
     m_widget = widget;

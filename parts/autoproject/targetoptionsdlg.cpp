@@ -30,7 +30,7 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
                                          QWidget *parent, const char *name)
     : TargetOptionsDialogBase(parent, name, true)
 {
-    setCaption( i18n("Target options for '%1'").arg(item->name) );
+    setCaption( i18n("Target Options for '%1'").arg(item->name) );
 
     target = item;
     m_widget = widget;
