@@ -50,7 +50,7 @@ project_type=normal_kde2
 sgml_file=/home/kde2/kdevelop/doc/en/index.docbook
 short_info=KDevelop - an IDE for KDE
 sub_dir=kdevelop/
-version=2.1beta2
+version=2.1
 version_control=CVS
 workspace=1
 
