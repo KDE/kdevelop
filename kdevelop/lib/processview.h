@@ -64,22 +64,13 @@ public:
      */
     virtual void childFinished(bool normal, int status);
     /**
-     * Clears the child process's arguments and changes
-     * into the directory dir.
-     */
-    void prepareJob(const QString &dir);
-    /**
      * Starts the child process.
      */
-    void startJob();
+    void startJob(const QString &dir, const QString &command);
     /**
      * Kills the child processss.
      */
     void killJob();
-    /**
-     * Sets the next argument for the child process.
-     */
-    KProcess &operator<<(const QString& arg);
     /**
      * Returns whether a process is running in this view.
      */

@@ -2,6 +2,8 @@
 	* Zeroth version of a version control interface
 	* Some cleanups in KDevComponent interface and KDevelop
 	* Removed obsolete comments
+	* Simplified ProcessView
+	* Enable/disable actions in classview correctly
 
 2000-07-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Readded configuration dialog framework

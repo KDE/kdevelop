@@ -19,6 +19,7 @@
 #include <qregexp.h>
 #include <kdialogbase.h>
 #include <klocale.h>
+#include <kprocess.h>
 #include "cproject.h"
 #include "ctoolclass.h"
 #include "grepwidget.h"
@@ -150,13 +151,12 @@ void GrepWidget::searchActivated()
     filepattern += files;
     filepattern += "`";
 
-    prepareJob("");
-    (*this) << "grep";
-    (*this) << "-n";
-    (*this) << (QString("-e '") + pattern + "'");
-    (*this) << filepattern;
-    (*this) << "/dev/null";
-    startJob();
+    QString command = "grep -n -e ";
+    command += KShellProcess::quote(pattern);
+    command += " ";
+    command += filepattern;
+    command += " /dev/null";
+    startJob("", command);
 }
 
 
@@ -189,18 +189,6 @@ void GrepWidget::insertStdoutLine(const QString &line)
                 }
         }
 }
-
-
-#if 0
-void GrepWidget::createConfigWidget(CustomizeDialog *parent)
-{
-    QFrame *frame = parent->addPage(i18n("Grep View"));
-    QBoxLayout *vbox = new QVBoxLayout(frame);
-    GrepWidgetConfigWidget *w =
-        new GrepWidgetConfigWidget(frame, "grepview config widget");
-    vbox->addWidget(w);
-}
-#endif
 
 
 void GrepWidget::projectOpened(CProject *prj)

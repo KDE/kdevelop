@@ -49,9 +49,7 @@ void MakeView::commandRequested(const QString &command)
         kdDebug(9004) << "MakeView: compilation started with project?" << endl;
     }
     
-    m_widget->prepareJob(m_prj->getProjectDir());
-    *m_widget << command;
-    m_widget->startJob();
+    m_widget->startJob(m_prj->getProjectDir(), command);
 }
 
 

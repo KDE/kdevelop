@@ -29,7 +29,7 @@ public:
     MakeWidget(MakeView *part);
     ~MakeWidget();
 
-    void startJob();
+    void startJob(const QString &dir, const QString &command);
 
 public slots:
     void nextError();

@@ -54,13 +54,17 @@ void ClassView::setupGUI()
 void ClassView::projectOpened(CProject *prj)
 {
     kdDebug(9003) << "ClassView::projectOpened()" << endl;
-    //    classWidget()->refresh(prj);
+    classes_action->setEnabled(true);
+    methods_action->setEnabled(true);
+    popup_action->setEnabled(true);
 }
 
 void ClassView::projectClosed()
 {
     kdDebug(9003) << "ClassView::projectClosed()" << endl;
-    //    classWidget()->clear();
+    classes_action->setEnabled(false);
+    methods_action->setEnabled(false);
+    popup_action->setEnabled(false);
 }
 
 

@@ -68,30 +68,19 @@ ProcessView::~ProcessView()
 }
 
 
-void ProcessView::prepareJob(const QString &dir)
+void ProcessView::startJob(const QString &dir, const QString &command)
 {
     childproc->clearArguments();
     QDir::setCurrent(dir);
-}
 
-
-void ProcessView::startJob()
-{
+    *childproc << command;
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-    // TODO: emit a signal which is connected with a slot in CKDevelop
-    // which calls o_tab_view->setCurrentTab(MESSAGES) or so...
 }
 
 
 void ProcessView::killJob()
 {
     childproc->kill();
-}
-
-
-KProcess &ProcessView::operator<<(const QString& arg)
-{
-    return (*childproc) << arg;
 }
 
 

@@ -68,9 +68,9 @@ MakeWidget::~MakeWidget()
 {}
 
 
-void MakeWidget::startJob()
+void MakeWidget::startJob(const QString &dir, const QString &command)
 {
-    ProcessView::startJob();
+    ProcessView::startJob(dir, command);
     dirstack.clear();
     dirstack.push(new QString(QDir::currentDirPath()));
 }
