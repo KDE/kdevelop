@@ -18,7 +18,7 @@
 #define _MAINWINDOWIDEAL_H_
 
 
-#include "widgets/ktabwidget.h"
+#include "widgets/kdevtabwidget.h"
 
 
 #include <kparts/mainwindow.h>
@@ -129,7 +129,7 @@ private:
 
   KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
-  KTabWidget *m_tabWidget;
+  KDevTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
 
   MainWindowShare*   m_pMainWindowShare;

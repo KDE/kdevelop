@@ -45,7 +45,7 @@
 #include <kedittoolbar.h>
 
 #include "widgets/ktabzoomwidget.h"
-#include "widgets/ktabwidget.h"
+#include "widgets/kdevtabwidget.h"
 #include "kdevplugin.h"
 
 
@@ -237,7 +237,7 @@ void MainWindowIDEAl::createFramework() {
     m_rightBar = new KTabZoomWidget (m_bottomBar, KTabZoomPosition::Right);
     m_bottomBar->addContent ( m_rightBar );
 
-    m_tabWidget = new KTabWidget(m_rightBar);
+    m_tabWidget = new KDevTabWidget(m_rightBar);
     m_tabWidget->setMargin(2);
 
     PartController::createInstance(m_tabWidget);
