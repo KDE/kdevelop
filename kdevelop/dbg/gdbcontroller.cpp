@@ -891,18 +891,18 @@ void GDBController::parseFrameSelected(char* buf)
   char lookup[3] = {BLOCK_START, SRC_POSITION, 0};
   if (char* start = strstr(buf, lookup))
   {
-    if (char* end = strchr(start, '\n'))
-    {
-      *end = 0;      // clobber the new line
+//    if (char* end = strchr(start, '\n'))  // 21/11/2000 this has already been removed
+//    {
+//      *end = 0;      // clobber the new line
       parseProgramLocation(start+2);
       return;
-    }
+//    }
   }
 
   if (!stateIsOn(s_silent))
   {
-    if (char* end = strchr(buf, '\n'))
-      *end = 0;      // clobber the new line
+//    if (char* end = strchr(buf, '\n'))    // 21/11/2000 this has already been removed
+//      *end = 0;      // clobber the new line
     emit showStepInSource("", -1, "");
     emit dbgStatus ("No source: "+QString(buf), state_);
   }
