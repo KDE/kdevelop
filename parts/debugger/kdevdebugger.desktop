@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Debugger frontend
+Name=KDevDebugger
+Icon=
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevdebugger

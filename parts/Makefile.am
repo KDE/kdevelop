@@ -2,9 +2,5 @@
 # interfaces in gideon/lib/interfaces which are in turn derived
 # from KPart. 
 
-# Make optional
-#PYTHON_SUBDIR = python
-#PYTHON_SUBDIR = 
-
 SUBDIRS = autoproject cppsupport doctreeview classview appwizard \
-	  outputviews grepview konsole $(PYTHON_SUBDIR)
+	  outputviews grepview debugger konsole $(PYTHON_SUBDIR)
