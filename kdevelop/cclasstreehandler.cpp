@@ -581,3 +581,46 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
 {
   addItem( aStruct->name, THSTRUCT, parent );
 }
+
+/*------------------------------- CClassTreeHandler::getCurrentNames()
+ * getCurrentNames()
+ *   Get the names and types of the currently selected class/declaration.
+ *   class == NULL for global declarations.
+ *
+ * Parameters:
+ *   className       Name of the parent class(if any).
+ *   declName        Name of the item(==NULL for classes).
+ *   idxType         The type of the selected item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::getCurrentNames( const char **className, 
+                                         const char **declName,
+                                         THType *idxType )
+{
+  CParsedClass *aClass = NULL;
+  QListViewItem *item;
+  QListViewItem *parent;
+
+  *idxType = itemType();
+  item = tree->currentItem();
+  parent = item->parent();
+
+  if( *idxType == THCLASS )
+  {
+    aClass = store->getClassByName( item->text(0) );
+    *className = aClass->name;
+  }
+  else if( itemType( parent ) == THCLASS )
+  {
+    aClass = store->getClassByName( parent->text(0) );
+    *className = aClass->name;
+    *declName = item->text(0);
+  }
+  else // Global item
+  {
+    *className = NULL;
+    *declName = item->text( 0 );
+  }
+}

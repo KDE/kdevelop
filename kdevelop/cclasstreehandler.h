@@ -107,6 +107,12 @@ public: // Public methods
   /** Add all signals to the view. */
   void addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent );
 
+  /** Get the names and types of the currently selected class/declaration.
+   * class == NULL for global declarations. */
+  void getCurrentNames( const char **className,
+                        const char **declName, 
+                        THType *idxType );
+
 private: // Private attributes
 
   /** The classtore. */
