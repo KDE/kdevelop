@@ -1,3 +1,9 @@
+2001-07-31  Harald Fernengel  <harry@bnro.de>
+    * cut/paste for non-source files
+
+2001-07-31 ???
+    * made it compile with gcc-3.0, too
+
 2001-07-30  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: The order of Toplevel and Childframe mode were mixed up
     * bugfix: delete the [dock_setting_default] section
@@ -41,11 +47,11 @@
     * applied patch of John Firebaugh <jfirebaugh@kde.org>. Thanks a lot!
     * bugfix: repaired Project->Rebuild, Project->DistClean/RebuildAll and
       optimized CKDevelop::slotProcessExited, needs to be tested a while
-    * QextMDI: replaced a focus-problem mega-hack (inherits('QDialog') etc.) by a neat solution  
+    * QextMDI: replaced a focus-problem mega-hack (inherits('QDialog') etc.) by a neat solution
 
 2001-07-25  rokrau@yahoo.com
     * bugfix: F12 now works without a project loaded. I've implemented this
-      somewhat reluctantly, it should work but KDevelop should be used with 
+      somewhat reluctantly, it should work but KDevelop should be used with
       a project in general. It is not really intended as a file editor.
 
 2001-07-25  F@lk Brettschneider <falk@kdevelop.org>
