@@ -122,13 +122,21 @@ void Document::invokeNC( const QString& command, bool appendFilename )
 {
   QString cmd = command;
   if ( appendFilename )
+#if (KDE_VERSION > 305)
     cmd += " " + KProcess::quote(m_file);
+#else
+    cmd += " " + KShellProcess::quote(m_file);
+#endif
 
   if ( !m_isReady ) {
     // if NEdit server is not ready yet we store the commands for later
     m_commands += cmd;
   } else {
+#if (KDE_VERSION > 305)
     cmd = "nc -noask -svrname " + KProcess::quote(serverName()) + " " + cmd;
+#else
+    cmd = "nc -noask -svrname " + KShellProcess::quote(serverName()) + " " + cmd;
+#endif
     system( cmd );
   }
 }

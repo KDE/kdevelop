@@ -445,7 +445,11 @@ void CustomProjectPart::slotExecute()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
+#if (KDE_VERSION > 305)
         environstr += KProcess::quote((*it).second);
+#else
+        environstr += KShellProcess::quote((*it).second);
+#endif
         environstr += " ";
     }
     program.prepend(environstr);
