@@ -1,8 +1,8 @@
 # Here resides the Python support part.
 # Do not confuse this with the python part responsible for KDevelop scripting
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/languages/lib/designer_integration \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util -I$(top_builddir)/languages/lib/designer_integration \
 	$(all_includes)
 SUBDIRS = app_templates file_templates doc
 
