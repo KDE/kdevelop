@@ -1,7 +1,5 @@
 2001-07-31  Harald Fernengel  <harry@bnro.de>
     * cut/paste for non-source files
-
-2001-07-31 ???
     * made it compile with gcc-3.0, too
 
 2001-07-30  F@lk Brettschneider <falk@kdevelop.org>
