@@ -2,6 +2,7 @@
     * cleaned up a little bit
     * 0L pointer checks for m_docViewManager->currentEditView() added in many slots
     * HTML docu views are saved/load to/from .kdevses
+    * bugfix: in doCloseAllDocs(): iterator got confused because of removing a doc reference from the doc list
 
 2001-03-30  F@lk Brettschneider <falk@kdevelop.org>
     * implemented KDevelop's XML-based session loading&saving (currently MDI stuff, only) in a *.kdevses file
