@@ -67,6 +67,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
 * build/configuration:
   - cross-compiling feature missing
+  - make "MIN_VERSION" configurable on new project creation
     
 * interoperability:
   - import/export 2.1-projects<-->Gideon-projects
