@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <kdebug.h>
+#include <kregexp.h>
 
 #include "cppcodecompletionparser.h"
 
@@ -195,28 +196,76 @@ QString CppCodeCompletionParser::getNodeDelimiter ( int nNode )
 
 QString CppCodeCompletionParser::getCurrentClassname ( int nLine )
 {
+	KRegExp reMethod ( "[ \t]*([A-Za-z_]+)::([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\) " ); // finds "blabla::blabla(blabla) "
+	KRegExp reConstructor ( "[ \t]*([A-Za-z_]+)::([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)[ \t\\{:]+" );
+	KRegExp reClass ( "^[ \t]*class[ \t]+([A-Za-z_]+)" );
+
+	for ( int i = nLine; i >= 0; i-- )
+	{
+		if ( reMethod.match ( ( m_pEditIface->line ( i ) + " " ) ) )
+		{
+			kdDebug ( 9007 ) << "getCurrentClassname => reMethod.match()" << endl;
+			return reMethod.group ( 1 );
+		}
+		if ( reConstructor.match ( m_pEditIface->line ( i ) ) )
+		{
+			kdDebug ( 9007 ) << "getCurrentClassname => reConstuctor.match()" << endl;
+			return reConstructor.group ( 1 );
+		}
+		if ( reClass.match ( m_pEditIface->line ( i ) ) )
+		{
+			kdDebug ( 9007 ) << "getCurrentClassname => reClass.match()" << endl;
+			return reClass.group ( 1 );
+		}
+	}
+
 	return "";
 }
 
 QString CppCodeCompletionParser::getTypeOfObject ( const QString& strObject, int nLine )
 {
-	// Lets look if its a Member of actuall class
-
-	QString strCurrentClassname;
-
-	strCurrentClassname = getCurrentClassname (nLine);
-
-	if (strCurrentClassname.isEmpty())
-		return "";
-
-	if (!m_pStore->hasClass (strCurrentClassname))
-		return "";
-
-	
+	return "";
 }
 
-QString CppCodeCompletionParser::getReturnTypeOfMethod ( const QString& strMethod )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QString CppCodeCompletionParser::getReturnTypeOfMethod ( const QString& strMethod, int nNodePos )
 {
+/*	KRegExp reMethod ( "[ \t]*([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)" );
+	QValueList<KEditor::CompletionEntry> entryList;
+
+	QString strMethodn;
+
+	if ( reMethod.match ( strMethod ) )
+		strMethodn = reMethod.group ( 1 );
+
+	ParsedScopeContainer scope = m_pStore->globalContainer;
+	QList<ParsedMethod>* pMethodList;
+
+	pMethodList = scope.getSortedMethodList();
+
+	for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+	{
+		KEditor::CompletionEntry entry;
+		entry.text = pMethod->name();
+		entry.postfix = "()";
+		entryList << entry;
+	}
+
+	return entryList;*/
 	return "";
 }
 
