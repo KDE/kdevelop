@@ -1,10 +1,8 @@
 # set the include path for X, wx
-INCLUDES = $(shell wx-config --cxxflags) $(all_includes)
+INCLUDES = $(WX_CXXFLAGS) $(all_includes)
 
 # these are the headers for your project
 noinst_HEADERS = $APPNAMELC$.h
-
-KDE_ICON = $APPNAMELC$
 
 #########################################################################
 # APPLICATION SECTION
@@ -15,9 +13,5 @@ bin_PROGRAMS = $APPNAMELC$
 
 # the application source, library search path, and link libraries
 $APPNAMELC$_SOURCES = $APPNAMELC$.cpp
-$APPNAMELC$_LDFLAGS = $(shell wx-config --libs) $(all_libraries)
-
-# this is where the desktop file will go 
-shelldesktopdir   = $(kde_appsdir)/Utilities
-shelldesktop_DATA = $APPNAMELC$.desktop
+$APPNAMELC$_LDFLAGS = $(WX_LIBS) $(all_libraries)
 

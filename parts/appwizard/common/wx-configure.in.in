@@ -1,0 +1,40 @@
+AM_INIT_AUTOMAKE($APPNAMELC$, $VERSION$)
+AC_C_BIGENDIAN
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_LIBTOOL_DLOPEN
+AC_PROG_LIBTOOL
+
+WXCONFIG=wx-config
+AC_ARG_WITH(wx-config,
+[[  --with-wx-config=FILE     Use the given path to wx-config when determining
+                            wxWindows configuration; defaults to "wx-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        WXCONFIG=$withval
+    fi
+])
+AC_MSG_CHECKING([wxWindows version])
+if wxversion=`$WXCONFIG --version`; then
+    AC_MSG_RESULT([$wxversion])
+else
+    AC_MSG_RESULT([not found])
+    AC_MSG_ERROR([wxWindows is required. Try --with-wx-config.])
+fi
+case $wxversion in
+	[2.3.3])
+		;;
+	[2.4.0])
+		;;
+	[2.4.1])
+		;;
+	*)
+		AC_MSG_ERROR([wxWindows 2.3.3 or 2.4.0 required])
+		AC_MSG_ERROR([Try --with-wx-config.])
+      ;;
+esac
+
+WX_CFLAGS="`$WXCONFIG --cppflags`"
+WX_CXXFLAGS="`$WXCONFIG --cxxflags | sed -e 's/-fno-exceptions//'`"
+WX_LIBS="`$WXCONFIG --libs`"
+

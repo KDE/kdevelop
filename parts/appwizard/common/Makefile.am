@@ -25,4 +25,5 @@ commondata_DATA = gideon.pm admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz
 		  hi16-app-app.png hi32-app-app.png kde-app.desktop kde-part.desktop \
 		  gnome-app.lsm gnome-Makefile.am gnome-Makefile.cvs \
 		  gnome-pixmaps-Makefile.am gnome-app.png \
+		  wx-configure.in.in wx-Makefile.am \
 		  COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic
