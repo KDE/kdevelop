@@ -29,7 +29,7 @@
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
 #include "trollprojectwidget.h"
-#include "projectrunoptionsdlg.h"
+#include "runoptionswidget.h"
 #include "config.h"
 
 
@@ -85,7 +85,7 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"));
-    ProjectRunOptionsDlg *optdlg = new ProjectRunOptionsDlg(this,vbox);
+    RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
     connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
 }
 
@@ -117,9 +117,9 @@ QString TrollProjectPart::projectName()
 
 QString TrollProjectPart::mainProgram()
 {
+   
     QDomDocument &dom = *projectDom();
-    return "bin/qmakeapp";
-//    return DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
+    return DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 }
 
 
@@ -227,8 +227,7 @@ void TrollProjectPart::slotClean()
 
 void TrollProjectPart::slotExecute()
 {
-    // temporary hack
-    QString program = m_widget->getCurrentTarget();
+    QString program = mainProgram();
 
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
