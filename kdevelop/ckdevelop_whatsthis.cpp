@@ -33,57 +33,6 @@
 
 void CKDevelop::initWhatsThis() {
 
-  QString build_debug_str=i18n("Debug program\n\n"
-        "Runs your program in the debugger you have chosen "
-        "(by default the internal debugger is used) "
-         "All debuggers should allow you to execute your program "
-        "step by step by setting breakpoints in the sourcecode." );
-
-  whats_this->add(toolBar()->getButton(ID_DEBUG_START),build_debug_str);
-
-  QString debug_run_str=i18n("Continue application execution\n\n"
-        "Continues the execution of your application in the "
-        "debugger. This only has affect when the application "
-        "has been halted by the debugger (ie. a breakpoint has been "
-        "activated or the interrupt was pressed).");
-  whats_this->add(toolBar()->getButton(ID_DEBUG_RUN), debug_run_str);
-
-  QString debug_step_str=i18n("Step into\n\n"
-        "Executes exactly one line of source. If the source line is "
-        "a call to a function then execution will stop after "
-        "the function has been entered ");
-  whats_this->add(toolBar()->getButton(ID_DEBUG_STEP), debug_step_str);
-
-  QString debug_next_str=i18n("Step over\n\n"
-        "Executes one line of source in the current source file. "
-        "If the source line is a call to a function the whole function "
-        "is executed and the app will stop at the line following the "
-        "function call.");
-  whats_this->add(toolBar()->getButton(ID_DEBUG_NEXT), debug_next_str);
-
-  QString debug_finish_str=i18n("Step out of\n\n"
-        "Executes the application until the currently executing "
-        "function is completed. The debugger will then display the "
-        "line after the original call to that function. If we are in "
-        "the outermost frame (ie in main()), then this operation "
-        "has no affect.");
-  whats_this->add(toolBar()->getButton(ID_DEBUG_FINISH), debug_finish_str);
-
-  QString output=i18n("Output-View\n\n"
-        "Enables/Disables the output window. The "
-        "state of the window is displayed by the "
-        "toggle button: if the button is pressed, "
-        "the window is open, otherwise closed.");
-                      
-  whats_this->add(toolBar()->getButton(ID_VIEW_OUTPUTVIEW),output);
-
-  QString treeview=i18n("Tree-View\n\n"
-        "Enables/Disables the tree window. The "
-        "state of the window is displayed by the "
-        "toggle button: if the button is pressed, "
-        "the window is open, otherwise closed.");
-  whats_this->add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
-
   whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE),
   			i18n("Compile configurations\n\n"
 				"Compile configurations allow different build processes "

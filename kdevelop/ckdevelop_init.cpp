@@ -294,7 +294,8 @@ void CKDevelop::initMenuBar() {
   pAction = KStdAction::openNew(
     this, SLOT(slotFileNew()),
     actionCollection(), "file_new" );
-  pAction->setStatusText(i18n("Creates a new file"));
+  pAction->setStatusText(
+    i18n("Creates a new file") );
 
   // XXX TODO: Use the std GUI for open. Can't use
   // KStdAction because we need a KToolBarPopupAction.
@@ -306,7 +307,8 @@ void CKDevelop::initMenuBar() {
   connect(
     file_open_popup, SIGNAL( activated( int ) ),
     this, SLOT( slotFileOpen( int ) ) );
-  pOpenAction->setStatusText( i18n("Opens an existing file") );
+  pOpenAction->setStatusText(
+    i18n("Opens an existing file") );
   pOpenAction->setWhatsThis( i18n("Open file\n\n"
         "Shows the Open file dialog to "
         "select a file to be opened. Holding "
@@ -320,39 +322,40 @@ void CKDevelop::initMenuBar() {
   pAction = KStdAction::close(
     this, SLOT(slotFileClose()),
     actionCollection(), "file_close" );
-  pAction->setStatusText(i18n("Closes the current file"));
+  pAction->setStatusText(
+    i18n("Closes the current file") );
 
   pAction = new KAction(
     i18n("Close All"), 0,
     this, SLOT(slotFileClose()),
     actionCollection(), "file_close_all" );
   pAction->setStatusText(
-    i18n("Closes all open files"));
+    i18n("Closes all open files") );
 
   pAction = KStdAction::save(
     this, SLOT(slotFileSave()),
     actionCollection(), "file_save");
   pAction->setStatusText(
-    i18n("Save the current document"));
+    i18n("Save the current document") );
 
   pAction = KStdAction::saveAs(
     this, SLOT(slotFileSaveAs()),
     actionCollection(), "file_save_as" );
   pAction->setStatusText(
-    i18n("Save the document as..."));
+    i18n("Save the document as...") );
 
   pAction = new KAction(
     i18n("Save A&ll"), "save_all", 0,
     this, SLOT(slotFileSaveAll()),
     actionCollection(), "file_save_all" );
   pAction->setStatusText(
-    i18n("Save all changed files"));
+    i18n("Save all changed files") );
 
   pAction = KStdAction::print(
     this, SLOT(slotFilePrint()),
     actionCollection(), "file_print" );
   pAction->setStatusText(
-    i18n("Prints the current document"));
+    i18n("Prints the current document") );
   pAction->setWhatsThis( i18n("Print\n\n"
     "Opens the printing dialog. There, you can "
     "configure which printing program you wish "
@@ -362,7 +365,8 @@ void CKDevelop::initMenuBar() {
   pAction = KStdAction::quit(
     this, SLOT(slotFileQuit()),
     actionCollection(), "file_quit" );
-  pAction->setStatusText(i18n("Exits the program"));
+  pAction->setStatusText(
+    i18n("Exits the program") );
 
   
 
@@ -372,12 +376,16 @@ void CKDevelop::initMenuBar() {
   pAction = KStdAction::undo(
     m_docViewManager, SLOT(slotEditUndo()),
     actionCollection(), "edit_undo" );
+  pAction->setStatusText(
+    i18n("Reverts the last editing step") );
   pAction->setWhatsThis( i18n("Undo\n\n"
     "Reverts the last editing step."));
 
   pAction = KStdAction::redo(
     m_docViewManager, SLOT(slotEditRedo()),
     actionCollection(), "edit_redo" );
+  pAction->setStatusText(
+    i18n("Re-execute the last undone step") );
   pAction->setWhatsThis( i18n("Redo\n\n"
     "If an editing step was undone, redo "
     "lets you do this step again."));
@@ -495,10 +503,30 @@ void CKDevelop::initMenuBar() {
 
 // the state of these Actions is not yet being saved in the config file,
 // therefore we set the checked state true (rokrau 02/17/02)
-        KToggleAction*
-        pToggleAction = new KToggleAction(i18n("All &Tree Tool-Views"),0,this,
-                        SLOT(slotViewTTreeView()),actionCollection(),"view_tree_all");
-        pToggleAction->setChecked(true);
+
+  KToggleAction*
+  pToggleAction = new KToggleAction(
+    i18n("Show &Tree Tool Views"), "tree_win", 0,
+    this, SLOT(slotViewTTreeView()),
+    actionCollection(), "view_tree_all" );
+  pToggleAction->setWhatsThis( i18n("Output-View\n\n"
+        "Enables/Disables the output window. The "
+        "state of the window is displayed by the "
+        "toggle button: if the button is pressed, "
+        "the window is open, otherwise closed."));
+  pToggleAction->setChecked(true);
+
+  pToggleAction = new KToggleAction(
+    i18n("Show &Output Tool Views"), "output_win", 0 ,
+    this, SLOT(slotViewTOutputView()),
+    actionCollection(),"view_out_all" );
+  pToggleAction->setWhatsThis( i18n("Tree-View\n\n"
+        "Enables/Disables the tree window. The "
+        "state of the window is displayed by the "
+        "toggle button: if the button is pressed, "
+        "the window is open, otherwise closed."));
+  pToggleAction->setChecked(true);
+
         pToggleAction = new KToggleAction(i18n("&Classes"),0,this,
                         SLOT(slotViewTClassesView()),actionCollection(),"view_tree_classes");
         pToggleAction->setChecked(true);
@@ -513,9 +541,6 @@ void CKDevelop::initMenuBar() {
         pToggleAction->setChecked(true);
         pToggleAction = new KToggleAction(i18n("&Watch"),0,this,
                         SLOT(slotViewTWatchView()),actionCollection(),"view_tree_watch");
-        pToggleAction->setChecked(true);
-        pToggleAction = new KToggleAction(i18n("All &Output Tool-Views"),0,this,
-                        SLOT(slotViewTOutputView()),actionCollection(),"view_out_all");
         pToggleAction->setChecked(true);
         pToggleAction = new KToggleAction(i18n("&Messages"),0,this,
                         SLOT(slotViewOMessagesView()),actionCollection(),"view_out_msg");
@@ -541,14 +566,6 @@ void CKDevelop::initMenuBar() {
         pToggleAction = new KToggleAction(i18n("D&ebugger"),0,this,
                         SLOT(slotViewODebuggerView()),actionCollection(),"view_out_dbg");
         pToggleAction->setChecked(true);
-        pToggleAction = new KToggleAction(i18n("Toolb&ar"),0,this,
-                        SLOT(slotViewTStdToolbar()),actionCollection(),"view_toolbar");
-        pToggleAction = new KToggleAction(i18n("&Browser-Toolbar"),0,this,
-                        SLOT(slotViewTBrowserToolbar()),actionCollection(),"view_browser");
-        pToggleAction = new KToggleAction(i18n("&Statusbar"),0,this,
-                        SLOT(slotViewTStatusbar()),actionCollection(),"view_status");
-        pToggleAction = new KToggleAction(i18n("&MDI-View-Taskbar"),0,this,
-                        SLOT(slotViewMdiViewTaskbar()),actionCollection(),"view_mdi");
         KRadioAction*
         pRadioAction = new KRadioAction(i18n("&Text only"),0,this,
                        SLOT(slotViewTabText()),actionCollection(),"view_tab_text");
@@ -622,8 +639,11 @@ void CKDevelop::initMenuBar() {
         pAction = new KAction(i18n("O&ptions..."),"configure",Key_F7,this,
                   SLOT(slotProjectOptions()),actionCollection(),"project_options");
 
+
+
   ///////////////////////////////////////////////////////////////////
   // Build
+
   pAction = new KAction(
     i18n("Compile &File"), "compfile", SHIFT+Key_F8,
     this, SLOT(slotBuildCompileFile()),
@@ -697,16 +717,26 @@ void CKDevelop::initMenuBar() {
     "like testing the helpmenu will open an error "
     "message that the index.html file is not found."));
 
-        pAction = new KAction(i18n("Execute &with Arguments..."),"exec",ALT+Key_F9,this,
-                  SLOT(slotBuildRunWithArgs()),actionCollection(),"build_exec_args");
-        pAction = new KAction(i18n("DistC&lean"),0,this,
-                  SLOT(slotBuildDistClean()),actionCollection(),"build_distclean");
-        pAction = new KAction(i18n("&Autoconf and automake"),0,this,
-                  SLOT(slotBuildAutoconf()),actionCollection(),"build_autoconf");
-        pAction = new KAction(i18n("C&onfigure..."),0,this,
-                  SLOT(slotBuildConfigure()),actionCollection(),"build_configure");
-        
-//  edit_menu->insertSeparator();
+  pAction = new KAction(
+    i18n("Execute &with Arguments..."), "exec", ALT+Key_F9,
+    this, SLOT(slotBuildRunWithArgs()),
+    actionCollection(), "build_exec_args" );
+
+  pAction = new KAction(
+    i18n("DistC&lean"), 0,
+    this, SLOT(slotBuildDistClean()),
+    actionCollection(), "build_distclean" );
+
+  pAction = new KAction(
+    i18n("&Autoconf and automake"), 0,
+    this, SLOT(slotBuildAutoconf()),
+    actionCollection(), "build_autoconf" );
+
+  pAction = new KAction(
+    i18n("C&onfigure..."), 0,
+    this, SLOT(slotBuildConfigure()),
+    actionCollection(), "build_configure" );
+
 //  edit_menu->insertItem(i18n("Expand Text"),
 //                 m_docViewManager, SLOT(slotEditExpandText()),
 //                 0,ID_EDIT_EXPAND_TEXT);
@@ -714,72 +744,191 @@ void CKDevelop::initMenuBar() {
 //                 m_docViewManager, SLOT(slotEditCompleteText()),
 //                 0,ID_EDIT_COMPLETE_TEXT);
 
-        ///////////////////////////////////////////////////////////////////
-        // Debug-menu entries
-        pAction = new KAction(i18n("&Start"),"1rightarrow",0,this,
-                  SLOT(slotBuildDebug()),actionCollection(),"debug_start");
-        pAction = new KAction(i18n("Examine core file"),"core",0,this,
-                  SLOT(slotDebugExamineCore()),actionCollection(),"debug_examine_core");
-        pAction = new KAction(i18n("Debug another executable"),"exec",0,this,
-                  SLOT(slotDebugNamedFile()),actionCollection(),"debug_other_exec");
-        pAction = new KAction(i18n("Attach to process"),"connect_creating",0,this,
-                  SLOT(slotDebugAttach()),actionCollection(),"debug_attach_process");
-        pAction = new KAction(i18n("Debug with arguments"),"exec",0,this,
-                  SLOT(slotDebugRunWithArgs()),actionCollection(),"debug_with_args");
-        pAction = new KAction(i18n("Run"),"dbgrun",0,this,
-                  SLOT(slotDebugRun()),actionCollection(),"debug_run");
-        pAction = new KAction(i18n("Run to cursor"),"dbgrunto",0,this,
-                  SLOT(lotDebugRunToCursor()),actionCollection(),"debug_run_cursor");
-        pAction = new KAction(i18n("Step over"),"dbgnext",0,this,
-                  SLOT(slotDebugStepOver()),actionCollection(),"debug_step_over");
-        pAction = new KAction(i18n("Step over instr."),"dbgnextinst",0,this,
-                  SLOT(slotDebugStepOverIns()),actionCollection(),"debug_stepi_over");
-        pAction = new KAction(i18n("Step into"),"dbgstep",0,this,
-                  SLOT(slotDebugStepInto()),actionCollection(),"debug_step_into");
-        pAction = new KAction(i18n("Step into instr."),"dbgstepinst",0,this,
-                  SLOT(slotDebugStepIntoIns()),actionCollection(),"debug_stepi_into");
-        pAction = new KAction(i18n("Step out"),"dbgstepout",0,this,
-                  SLOT(slotDebugStepOutOff()),actionCollection(),"debug_step_out");
-        pAction = new KAction(i18n("Viewers"),"dbgmemview",0,this,
-                  SLOT(slotDebugMemoryView()),actionCollection(),"debug_viewers");
-        pAction = new KAction(i18n("Interrupt"),"player_pause",0,this,
-                  SLOT(slotDebugInterrupt()),actionCollection(),"debug_interrupts");
-        pAction = new KAction(i18n("Stop"),"stop",0,this,
-                  SLOT(slotDebugStop()),actionCollection(),"debug_stop");
-        ///////////////////////////////////////////////////////////////////
-        // Tools-menu entries
-        // these are now generated on the fly in setToolmenuEntries() (rokrau 02/18/02)
 
-        ///////////////////////////////////////////////////////////////////
-        // Options-menu entries
-//        pAction = new KAction(i18n("&Enscript..."),0,this,
-//                  SLOT(slotOptionsConfigureEnscript()),actionCollection(),"options_enscript");
-        pAction = new KAction(i18n("&Editor..."),"edit",0,this,
-                  SLOT(slotOptionsEditor()),actionCollection(),"options_editor");
-        pAction = new KAction(i18n("Documentation &Browser..."),"www",0,this,
-                  SLOT(slotOptionsDocBrowser()),actionCollection(),"options_doc_browser");
-        pAction = new KAction(i18n("Tools..."),"run",0,this,
-                  SLOT(slotOptionsToolsConfigDlg()),actionCollection(),"options_tools");
-        pAction = new KAction(i18n("&KDevelop Setup..."),"configure",0,this,
-                  SLOT(slotOptionsKDevelop()),actionCollection(),"options_setup");
 
-        ///////////////////////////////////////////////////////////////////
-        // Window-menu entries
-        //   menu_buffers = new QPopupMenu;
-        KActionMenu*
-        pActionMenu = new KActionMenu(i18n("&Window"),
-                      actionCollection(),"window_menu");
-        // this hack allows to integrate the QPopupMenu, have to ask falk what he
-        // thinks about this, maybe we should make a method in qextmdimainfrm for this
-        // in fact we have to do something since we can not just overwrite the pointer
-        // and hope for the best.... duuuhuhh
+  ///////////////////////////////////////////////////////////////////
+  // Debug
 
-        // (rokrau 02/19/02)
-        m_pWindowMenu = pActionMenu->popupMenu();
-        m_pWindowMenu->setCheckable( TRUE);
-        QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
-//        kdDebug() << "in CKDevelop::initMenu(), m_pWindowMenu = "
-//                  << m_pWindowMenu << "\n";
+  pAction = new KAction(
+    i18n("&Start"), "1rightarrow", 0,
+    this, SLOT(slotBuildDebug()),
+    actionCollection(), "debug_start" );
+  pAction->setWhatsThis( i18n("Debug program\n\n"
+    "Runs your program in the debugger you have chosen "
+    "(by default the internal debugger is used) "
+    "All debuggers should allow you to execute your program "
+    "step by step by setting breakpoints in the sourcecode." ));
+
+  pAction = new KAction(i18n(
+    "Examine core file"), "core", 0,
+    this, SLOT(slotDebugExamineCore()),
+    actionCollection(), "debug_examine_core" );
+
+  pAction = new KAction(
+    i18n("Debug another executable"), "exec", 0,
+    this, SLOT(slotDebugNamedFile()),
+    actionCollection(), "debug_other_exec" );
+
+  pAction = new KAction(
+    i18n("Attach to process"), "connect_creating", 0,
+    this, SLOT(slotDebugAttach()),
+    actionCollection(), "debug_attach_process" );
+
+  pAction = new KAction(
+    i18n("Debug with arguments"), "exec", 0,
+    this, SLOT(slotDebugRunWithArgs()),
+    actionCollection(), "debug_with_args" );
+
+  pAction = new KAction(
+    i18n("Run"), "dbgrun", 0,
+    this, SLOT(slotDebugRun()),
+    actionCollection(), "debug_run" );
+  pAction->setWhatsThis( i18n("Continue application execution\n\n"
+    "Continues the execution of your application in the "
+    "debugger. This only has affect when the application "
+    "has been halted by the debugger (ie. a breakpoint has been "
+    "activated or the interrupt was pressed)."));
+
+  pAction = new KAction(
+    i18n("Run to cursor"), "dbgrunto", 0,
+    this, SLOT(lotDebugRunToCursor()),
+    actionCollection(), "debug_run_cursor" );
+
+  pAction = new KAction(
+    i18n("Step over"), "dbgnext", 0,
+    this, SLOT(slotDebugStepOver()),
+    actionCollection(), "debug_step_over" );
+  pAction->setWhatsThis( i18n("Step over\n\n"
+        "Executes one line of source in the current source file. "
+        "If the source line is a call to a function the whole function "
+        "is executed and the app will stop at the line following the "
+        "function call."));
+//   QPopupMenu* stepOverMenu = new QPopupMenu();
+//   stepOverMenu->insertItem(SmallIconSet("dbgnextinst"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
+//   connect(stepOverMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//   toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
+
+  pAction = new KAction(
+    i18n("Step over instruction"), "dbgnextinst", 0,
+    this, SLOT(slotDebugStepOverIns()),
+    actionCollection(), "debug_stepi_over" );
+
+  pAction = new KAction(
+    i18n("Step into"), "dbgstep", 0,
+    this, SLOT(slotDebugStepInto()),
+    actionCollection(), "debug_step_into" );
+  pAction->setWhatsThis( i18n("Step into\n\n"
+    "Executes exactly one line of source. If the source line is "
+    "a call to a function then execution will stop after "
+    "the function has been entered "));
+//  QPopupMenu* stepIntoMenu = new QPopupMenu();
+//  stepIntoMenu->insertItem(SmallIconSet("dbgstepinst"),i18n("Step into instr."),this,SLOT(slotDebugStepIntoIns()),0,ID_DEBUG_STEP_INST);
+//  connect(stepIntoMenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
+
+  pAction = new KAction(
+    i18n("Step into instruction"), "dbgstepinst", 0,
+    this, SLOT(slotDebugStepIntoIns()),
+    actionCollection(), "debug_stepi_into" );
+
+  pAction = new KAction(
+    i18n("Step out"), "dbgstepout", 0,
+    this, SLOT(slotDebugStepOutOff()),
+    actionCollection(), "debug_step_out" );
+  pAction->setWhatsThis( i18n("Step out of\n\n"
+    "Executes the application until the currently executing "
+    "function is completed. The debugger will then display the "
+    "line after the original call to that function. If we are in "
+    "the outermost frame (ie in main()), then this operation "
+    "has no affect."));
+
+  pAction = new KAction(
+    i18n("Viewers"), "dbgmemview", 0,
+    this, SLOT(slotDebugMemoryView()),
+    actionCollection(), "debug_viewers" );
+
+  pAction = new KAction(
+    i18n("Interrupt"), "player_pause", 0,
+    this, SLOT(slotDebugInterrupt()),
+    actionCollection(), "debug_interrupts" );
+
+  pAction = new KAction(
+    i18n("Stop"), "stop", 0,
+    this, SLOT(slotDebugStop()),
+    actionCollection(), "debug_stop" );
+
+
+
+  ///////////////////////////////////////////////////////////////////
+  // Tools
+  // these are now generated on the fly in setToolmenuEntries() (rokrau 02/18/02)
+
+
+  ///////////////////////////////////////////////////////////////////
+  // Settings
+
+  pToggleAction = KStdAction::showToolbar(
+    this, SLOT(slotViewTStdToolbar()),
+    actionCollection(), "view_toolbar" );
+
+  pToggleAction = new KToggleAction(
+    i18n("Show &Browser Toolbar"), 0,
+    this, SLOT(slotViewTBrowserToolbar()),
+    actionCollection(), "view_browser" );
+
+  pToggleAction = KStdAction::showStatusbar(
+    this, SLOT(slotViewTStatusbar()),
+    actionCollection(), "view_status" );
+
+  pToggleAction = new KToggleAction(
+    i18n("Show &MDI-View Taskbar"), 0,
+    this, SLOT(slotViewMdiViewTaskbar()),
+    actionCollection(), "view_mdi" );
+
+//  pAction = new KAction(
+//    i18n("&Enscript..."),0,
+//    this, SLOT(slotOptionsConfigureEnscript()),
+//    actionCollection(), "settings_enscript" );
+
+  pAction = new KAction(
+    i18n("&Editor..."), "edit", 0,
+    this, SLOT(slotOptionsEditor()),
+    actionCollection(), "settings_editor" );
+
+  pAction = new KAction(
+    i18n("Documentation &Browser..."), "www", 0,
+    this, SLOT(slotOptionsDocBrowser()),
+    actionCollection(), "settings_doc_browser" );
+
+  pAction = new KAction(
+    i18n("Tools..."), "run", 0,
+    this, SLOT(slotOptionsToolsConfigDlg()),
+    actionCollection(), "settings_tools" );
+
+  pAction = new KAction(
+    i18n("&KDevelop Setup..."), "configure", 0,
+    this, SLOT(slotOptionsKDevelop()),
+    actionCollection(), "settings_setup" );
+
+
+
+  ///////////////////////////////////////////////////////////////////
+  // Windows
+
+  KActionMenu*
+  pActionMenu = new KActionMenu(
+    i18n("&Window"), actionCollection(), "window_menu" );
+  // this hack allows to integrate the QPopupMenu, have to ask falk what he
+  // thinks about this, maybe we should make a method in qextmdimainfrm for this
+  // in fact we have to do something since we can not just overwrite the pointer
+  // and hope for the best.... duuuhuhh
+
+  // (rokrau 02/19/02)
+  m_pWindowMenu = pActionMenu->popupMenu();
+  m_pWindowMenu->setCheckable( TRUE);
+  connect(
+    m_pWindowMenu, SIGNAL(aboutToShow()),
+    this, SLOT(fillWindowMenu()) );
 
         ///////////////////////////////////////////////////////////////////
         // Bookmarks-menu entries
@@ -912,31 +1061,6 @@ void CKDevelop::initToolBar(){
   debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
-
-  toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
-  toolBar()->insertButton("output_win",ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
-  toolBar()->setToggle(ID_VIEW_TREEVIEW);
-  toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
-
-//  toolBar()->insertSeparator();
-
-  toolBar()->insertButton("dbgrun",ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
-  toolBar()->insertButton("dbgnext",ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
-  toolBar()->insertButton("dbgstep",ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
-  toolBar()->insertButton("dbgstepout",ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
-
-  QPopupMenu* stepOverMenu = new QPopupMenu();
-  stepOverMenu->insertItem(SmallIconSet("dbgnextinst"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
-  connect(stepOverMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
-
-  QPopupMenu* stepIntoMenu = new QPopupMenu();
-  stepIntoMenu->insertItem(SmallIconSet("dbgstepinst"),i18n("Step into instr."),this,SLOT(slotDebugStepIntoIns()),0,ID_DEBUG_STEP_INST);
-  connect(stepIntoMenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
-
-  connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
-  connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
 
   /////////////////////
   // the second toolbar

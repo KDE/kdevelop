@@ -4011,58 +4011,6 @@ void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {
-  case ID_FILE_NEW:
-    slotFileNew();
-    break;
-  case ID_PROJECT_OPEN:
-    slotProjectOpen();
-    break;
-  case ID_FILE_OPEN:
-    slotFileOpen();
-    break;
-  case ID_FILE_SAVE:
-    slotFileSave();
-    break;
-  case ID_FILE_SAVE_ALL:
-    slotFileSaveAll();
-    break;
-  case ID_FILE_PRINT:
-    slotFilePrint();
-    break;
-  case ID_EDIT_UNDO:
-  case ID_EDIT_REDO:
-  case ID_EDIT_COPY:
-  case ID_EDIT_PASTE:
-  case ID_EDIT_CUT:
-        m_docViewManager->slotToolbarClicked(item);
-    break;
-  case ID_VIEW_REFRESH:
-    slotViewRefresh();
-    break;
-  case ID_VIEW_TREEVIEW:
-    slotViewTTreeView();
-    break;
-  case ID_VIEW_OUTPUTVIEW:
-    slotViewTOutputView();
-    break;
-  case ID_BUILD_COMPILE_FILE:
-    slotBuildCompileFile();
-    break;
-  case ID_BUILD_MAKE:
-    slotBuildMake();
-    break;
-  case ID_BUILD_REBUILD_ALL:
-    slotBuildRebuildAll();
-    break;
-  case ID_BUILD_RUN:
-    slotBuildRun();
-    break;
-  case ID_BUILD_STOP:
-    slotBuildStop();
-    break;
-  case ID_TOOLS_DESIGNER:
-    startDesigner();
-    break;
   case ID_HELP_BACK:
     slotHelpBack();
     break;
@@ -4101,22 +4049,6 @@ void CKDevelop::slotToolbarClicked(int item){
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
     }
-    break;
-
-  // Redirect to code that handles menu and toolbar selection
-  // for these functions.
-  case ID_DEBUG_START:
-  case ID_DEBUG_RUN:
-  case ID_DEBUG_RUN_CURSOR:
-  case ID_DEBUG_STEP:
-  case ID_DEBUG_STEP_INST:
-  case ID_DEBUG_NEXT:
-  case ID_DEBUG_NEXT_INST:
-  case ID_DEBUG_STOP:
-  case ID_DEBUG_BREAK_INTO:
-  case ID_DEBUG_MEMVIEW:
-  case ID_DEBUG_FINISH:
-    slotDebugActivator(item);
     break;
   }
 }
@@ -4665,24 +4597,8 @@ void CKDevelop::slotActivateOView_Dbg()
 void CKDevelop::statusCallback(int id_){
   switch(id_)
   {
-//    ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
-//    ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
-//    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the current file"))
 //    ON_STATUS_MSG(ID_FILE_REVERT,                           i18n("Discard all changes and reload file"))
-//
-//    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the current document"))
-//    ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))
-//    ON_STATUS_MSG(ID_FILE_SAVE_ALL,                         i18n("Save all changed files"))
-//
-//    ON_STATUS_MSG(ID_FILE_PRINT,                            i18n("Prints the current document"))
-//
-//  //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
-//
-//    ON_STATUS_MSG(ID_FILE_QUIT,                             i18n("Exits the program"))
 
-//    ON_STATUS_MSG(ID_EDIT_UNDO,                             i18n("Reverts the last editing step"))
-//    ON_STATUS_MSG(ID_EDIT_REDO,                             i18n("Re-execute the last undone step"))
-//
 //    ON_STATUS_MSG(ID_EDIT_CUT,                              i18n("Cuts the selected section and puts it to the clipboard"))
 //    ON_STATUS_MSG(ID_EDIT_COPY,                             i18n("Copys the selected section to the clipboard"))
 //    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to current position"))
