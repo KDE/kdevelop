@@ -1,3 +1,15 @@
+2001-04-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+	* Added a plugin that let's you select the parts to load
+	  on startup
+	* Added some code to core to only load the plugins selected.
+
+2001-04-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+	* added a part to display a "Tip of the day"
+	* moved over the tips from the previous HEAD branch,
+	  which probably need a review
+
 2001-04-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Rewritten the icon border stuff from 1.x for use
