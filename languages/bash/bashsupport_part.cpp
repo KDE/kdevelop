@@ -11,7 +11,6 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <kapplication.h>
-#include <kregexp.h>
 #include <qregexp.h>
 
 #include <kiconloader.h>
@@ -216,6 +215,7 @@ void BashSupportPart::parse(const QString &fileName)
 		//KRegExp methodre("\\b([\\d\\w]+[\\s]*)\\([\\s]*\\)");
 		QRegExp methodre("^\\s*(\\w+)\\s*\\(\\s*\\)");
 		QRegExp varre( "^\\s*(\\w+)[=]" );
+		QRegExp expvarre( "^export\\s*(\\w+)[=]" );
 		QRegExp forvarre("\\bfor[\\s]+([\\d\\w]+)[\\s]+in[\\s]+");
 
 		QTextStream stream(&f);
@@ -239,6 +239,10 @@ void BashSupportPart::parse(const QString &fileName)
 			else if(varre.search(line) != -1)
 			{
 				addAttribute(varre.cap(1), m_file, lineNo);
+			}
+			else if(expvarre.search(line) != -1)
+			{
+				addAttribute(expvarre.cap(1), m_file, lineNo);
 			}
 			else if(forvarre.search(line) != -1)
 			{
@@ -384,13 +388,13 @@ void BashCodeCompletion::cursorPositionChanged()
 			return;
 		}
 
-		KRegExp prevReg("[$][\\d\\w]*\\b$");
+		QRegExp prevReg("[$][\\d\\w]*\\b$");
 
-		if ( prevReg.match(prevText.latin1()))
+		int pos = prevReg.search( prevText );
+		if (pos > -1 )
 		{
-
 			// We are in completion mode
-		      QString startMatch = prevReg.group(0);
+		      QString startMatch = prevReg.cap(0);
 		      kdDebug() << "Matching: " << startMatch << endl;
 		      m_completionBoxShow=true;
 		      m_codeInterface->showCompletionBox(getVars(startMatch),2);
