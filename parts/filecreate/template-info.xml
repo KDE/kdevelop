@@ -48,6 +48,12 @@
       <type ext="java" name="Java source" create="template" icon="source_java">
         <descr>A new empty Java source file.</descr>
       </type>
+      <type ext="f" name="Fortran source" create="template" icon="source_f">
+        <descr>A new empty Fortran source file.</descr>
+      </type>
+      <type ext="f77" name="Fortran77 source" create="template" icon="source_f">
+        <descr>A new empty Fortran77 source file.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
