@@ -24,7 +24,12 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
-#ifdef Q_OS_WIN32
+#if defined( Q_OS_WIN32 ) || defined( Q_CC_SUN )
+
+#ifndef _THROW0
+#  define _THROW0()
+#endif
+
 template <class _Tp> class AUTO_PTR {
 private:
     _Tp* _M_ptr;
