@@ -4,7 +4,7 @@
 
 extern "C" {
 
-  void *init_libkde_projectspace()
+  void *init_libkdevkdeprojectspace()
   {
     return new KDEProjectSpaceFactory;
     }

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,8 +18,9 @@
 #ifndef PROJECTSPACE_H
 #define PROJECTSPACE_H
 
-#include "qobjectplugin.h"
+#include "plugin.h"
 #include "project.h"
+#include "kdevcomponent.h"
 #include <qlist.h>
 #include <string.h>
 #include <ksimpleconfig.h>
@@ -29,7 +30,7 @@
   *@author Sandy Meier
   */
 
-class ProjectSpace : public QObjectPlugin  {
+class ProjectSpace : public KDevComponent, public Plugin  {
   Q_OBJECT
     public: 
   ProjectSpace(QObject* parent=0,const char* name=0);

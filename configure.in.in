@@ -15,9 +15,6 @@ kdevelop/plugin/Makefile \
 kdevelop/plugin/print/Makefile \
 kdevelop/plugin/gccoptions/Makefile \
 kdevelop/plugin/projectmanagement/Makefile \
-kdevelop/plugin/projectmanagement/kde_projectspace/Makefile \
-kdevelop/plugin/projectmanagement/kde_projectspace/res/Makefile \
-kdevelop/plugin/projectmanagement/java_projectspace/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/res/Makefile \
 kdevelop/plugin/projectmanagement/kdebinary_project/Makefile \
@@ -30,6 +27,8 @@ kdevelop/parts/outputviews/Makefile \
 kdevelop/parts/qextmdimainfrmview/Makefile \
 kdevelop/parts/cvs/Makefile \
 kdevelop/parts/cppsupport/Makefile \
+kdevelop/parts/kdeprojectspace/Makefile \
+kdevelop/parts/kdeprojectspace/res/Makefile \
 kdevelop/lib/Makefile \
 kdevelop/lib/projectmanagement/Makefile \
 kdevelop/classparser/Makefile \

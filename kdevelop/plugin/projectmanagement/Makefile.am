@@ -1,1 +1,1 @@
-SUBDIRS = kde_projectspace java_projectspace kdesdi_appwizard kdebinary_project
+SUBDIRS = kdesdi_appwizard kdebinary_project

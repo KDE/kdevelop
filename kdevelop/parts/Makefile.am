@@ -1,1 +1,1 @@
-SUBDIRS = grepview doctreeview classview outputviews qextmdimainfrmview dbg cvs cppsupport
+SUBDIRS = grepview doctreeview classview outputviews qextmdimainfrmview dbg cvs cppsupport kdeprojectspace

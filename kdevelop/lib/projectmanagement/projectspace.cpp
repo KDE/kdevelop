@@ -1,10 +1,10 @@
 /***************************************************************************
-                          projectspace.cpp  -  description
-                             -------------------
+			 projectspace.cpp  -  description
+	      		    -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
- ***************************************************************************/
+    email                : smeier@kdevelop.org
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -23,8 +23,8 @@
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
 
-ProjectSpace::ProjectSpace(QObject* parent,const char* name) : QObjectPlugin(parent,name){
-	m_projects = new QList<Project>;
+ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
+  m_projects = new QList<Project>;
 }
 ProjectSpace::~ProjectSpace(){
 }
@@ -55,11 +55,11 @@ void ProjectSpace::generateDefaultFiles(){
 
 /** returns the name of the projectspace*/
 QString ProjectSpace::getName(){
-  }
+}
 
-  /** Fetch the name of the version control system */
-  QString ProjectSpace::getVCSystem(){
-  }
+/** Fetch the name of the version control system */
+QString ProjectSpace::getVCSystem(){
+}
 
   /** Fetch the authors name. stored in the *_user files*/
   QString ProjectSpace::getAuthor(){

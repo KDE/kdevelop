@@ -1,0 +1,19 @@
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/projectmanagement/ -I$(top_srcdir)/kdevelop/lib/ \
+		$(all_includes)
+
+lib_LTLIBRARIES = libkdevkdeprojectspace.la
+libkdevkdeprojectspace_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+libkdevkdeprojectspace_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
+				$(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
+				$(LIB_KFILE)
+
+libkdevkdeprojectspace_la_SOURCES = kdeprojectspaceplugin.cpp main.cpp
+
+noinst_HEADERS = main.h kdeprojectspaceplugin.h
+
+METASOURCES = AUTO
+
+SUBDIRS = res
+
+servicedir = $(kde_servicesdir)
+service_DATA = kdevkdeprojectspace.desktop

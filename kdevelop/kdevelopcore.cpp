@@ -26,6 +26,7 @@
 #include "kdevversioncontrol.h"
 #include "kdevlanguagesupport.h"
 #include "kdevelopcore.h"
+#include "projectspace.h"
 
 
 KDevelopCore::KDevelopCore(KDevelop *gui)
@@ -240,11 +241,47 @@ void KDevelopCore::loadLanguageSupport(const QString &lang)
 
 void KDevelopCore::unloadLanguageSupport()
 {
-    m_components.remove(m_languagesupport);
-    delete m_languagesupport;
-    m_languagesupport = 0;
+  m_components.remove(m_languagesupport);
+  delete m_languagesupport;
+  m_languagesupport = 0;
 }
 
+void KDevelopCore::loadProjectSpace(const QString &name){
+  QString constraint = QString("[X-KDevelop-ProjectSpace] == '%1'").arg(name);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
+  if (offers.isEmpty()) {
+    KMessageBox::sorry(m_kdevelopgui,
+		       i18n("No ProjectSpace component for %1 found").arg(name));
+    return;
+  }
+  
+  KService *service = *offers.begin();
+  kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
+  
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+
+  QStringList args;
+  QVariant prop = service->property("X-KDevelop-Args");
+  if (prop.isValid())
+    args = QStringList::split(" ", prop.toString());
+    
+  QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
+				 "ProjectSpace", args);
+        
+  if (!obj->inherits("ProjectSpace")) {
+    kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
+    return;
+  }
+  ProjectSpace *comp = (ProjectSpace*) obj;
+  m_projectspace = comp;
+  initComponent(comp);
+}
+
+void KDevelopCore::unloadProjectSpace(){
+  m_components.remove(m_projectspace);
+  delete m_projectspace;
+  m_projectspace = 0;
+}
 
 void KDevelopCore::loadProject(const QString &fileName)
 {
@@ -253,7 +290,10 @@ void KDevelopCore::loadProject(const QString &fileName)
     // hack until implemented
     QString vcsystem = QString::fromLatin1("CVS");
     QString lang = QString::fromLatin1("C++");
+    // name will be stored in the projectspace file
+    QString projectspace = QString::fromLatin1("KDE");
     
+    loadProjectSpace(projectspace);
     loadVersionControl(vcsystem);
     loadLanguageSupport(lang);
 

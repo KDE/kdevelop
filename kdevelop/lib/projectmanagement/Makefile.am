@@ -3,7 +3,8 @@ INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 libkdevprojectmanagement_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0 
-libkdevprojectmanagement_la_LIBADD = $(LIB_KPARTS)
+libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
+				 $(LIB_KFILE) $(LIB_KPARTS)
 
 METASOURCES = AUTO
 

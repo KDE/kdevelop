@@ -9,7 +9,6 @@ INCLUDES = $(all_includes)
 lib_LTLIBRARIES = libkdevelop.la
 libkdevelop_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0 
 libkdevelop_la_LIBADD = $(top_srcdir)/kdevelop/classparser/libkdevclassstore.la \
-			$(top_srcdir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
 			$(LIB_KPARTS)
 
 libkdevelop_la_SOURCES = kdevcomponent.cpp kdevversioncontrol.cpp \

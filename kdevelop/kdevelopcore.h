@@ -20,6 +20,7 @@ class KDevComponent;
 class KDevVersionControl;
 class KDevLanguageSupport;
 class CProject;
+class ProjectSpace;
 
 
 class KDevelopCore : QObject
@@ -40,6 +41,8 @@ private:
     void unloadVersionControl();
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
+    void loadProjectSpace(const QString &name);
+    void unloadProjectSpace();
     void loadProject(const QString &fileName);
     void unloadProject();
 
@@ -75,6 +78,7 @@ private:
     KDevComponent *m_appfrontend;
     CProject *m_project;
     CClassStore *m_classstore;
+    ProjectSpace* m_projectspace;
 };
 
 #endif
