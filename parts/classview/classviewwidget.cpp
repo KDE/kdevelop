@@ -227,10 +227,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Classes"));
 
         QDomDocument &dom = *m_part->projectDom();
-        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy");
+        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
         int depth = 0;
         if (!foldersAsHierarchy) {
-            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders");
+            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders", 0);
             if (depth == 0)
                 depth = 2;
         }
@@ -284,10 +284,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Struct"));
 
         QDomDocument &dom = *m_part->projectDom();
-        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy");
+        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
         int depth = 0;
         if (!foldersAsHierarchy) {
-            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders");
+            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders", 0);
             if (depth == 0)
                 depth = 2;
         }

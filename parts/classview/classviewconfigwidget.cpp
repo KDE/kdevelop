@@ -35,7 +35,7 @@ void ClassViewConfigWidget::readConfig()
 {
     QDomDocument &dom = *m_part->projectDom();
     bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
-    
+
     if (foldersAsHierarchy) {
         hierarchyButton->setChecked(true);
         depthBox->setEnabled(false);
