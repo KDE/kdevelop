@@ -17,6 +17,7 @@
 #include <qstringlist.h>
 
 class QListView;
+class QComboView;
 class KURLLabel;
 
 /**
@@ -42,6 +43,7 @@ signals:
 private slots:
     void itemSelected( QListViewItem * );
     void openURL( const QString & );
+    void selectProfile(QListViewItem* item);
 
 private:
     enum Scope { Global, Project };
@@ -51,14 +53,17 @@ private:
     void saveGlobalConfig();
     void readProjectConfig();
     void saveProjectConfig();
+    void fillProfilesList();
 
     QDomDocument m_projectDom;
     Scope _scope;
 
     QListView * _pluginList;
+    QComboView *_pluginProfile;
     QLabel * _pluginDescription;
     KURLLabel * _urlLabel;
 
+    QString _profile;
 };
 
 #endif

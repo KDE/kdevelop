@@ -29,8 +29,31 @@
 #include <kapplication.h>
 #include "domutil.h"
 
+#include <qcomboview.h>
+#include <profileengine.h>
+
 #include "partselectwidget.h"
 #include "plugincontroller.h"
+
+class ProfileItem: public QListViewItem {
+public:
+    ProfileItem(QListView *parent, Profile *profile)
+        :QListViewItem(parent), m_profile(profile)
+    {
+        setText(0, profile->genericName());
+    }
+    
+    ProfileItem(QListViewItem *parent, Profile *profile)
+        : QListViewItem(parent), m_profile(profile)
+    {
+        setText(0, profile->genericName());
+    }
+    
+    Profile *profile() const { return m_profile; }
+    
+private:
+    Profile *m_profile;
+};
 
 class PluginItem : public QCheckListItem
 {
@@ -72,6 +95,23 @@ PartSelectWidget::PartSelectWidget(QWidget *parent, const char *name)
 void PartSelectWidget::init()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
+
+    QGroupBox * groupBox0 = new QGroupBox( i18n("Plugin Profile for This Project"), this );
+    groupBox0->setColumnLayout(0, Qt::Vertical );
+    groupBox0->layout()->setSpacing( 6 );
+    groupBox0->layout()->setMargin( 11 );
+    QVBoxLayout * groupBox0Layout = new QVBoxLayout( groupBox0->layout() );
+    _pluginProfile = new QComboView(false, groupBox0);
+    _profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
+    fillProfilesList();
+    _pluginProfile->setCurrentText(PluginController::getInstance()->engine().findProfile(_profile)->genericName());
+    
+    connect(_pluginProfile, SIGNAL(activated(QListViewItem* )),
+        this, SLOT(selectProfile(QListViewItem* )));
+    groupBox0Layout->addWidget(_pluginProfile);
+    QLabel *label0 = new QLabel(i18n("Note: Profile changes will take effect after the project is reloaded"), groupBox0);
+    groupBox0Layout->addWidget(label0);
+    layout->addWidget(groupBox0);
 
     QString text = (_scope==Global)?
         i18n("Plugins to Load at Startup") :
@@ -245,6 +285,8 @@ void PartSelectWidget::saveProjectConfig()
     }
 
     DomUtil::writeListEntry(m_projectDom, "/general/ignoreparts", "part", ignoreparts);
+    if (_profile != PluginController::getInstance()->currentProfile())
+        DomUtil::writeEntry(m_projectDom, "/general/profile", _profile);
     kdDebug(9000) << "xml:" << m_projectDom.toString() << endl;
 }
 
@@ -256,6 +298,33 @@ void PartSelectWidget::accept()
     else
         saveProjectConfig();
     emit accepted();
+}
+
+void PartSelectWidget::selectProfile(QListViewItem *item)
+{
+    ProfileItem *profileItem = dynamic_cast<ProfileItem*>(item);
+    if (!profileItem)
+        return;
+    _profile = profileItem->profile()->name();
+    _pluginList->clear();
+    readProjectConfig();
+}
+
+class ProfileListBuilding {
+public:
+    QListViewItem * operator() (QListViewItem *parent, Profile *profile)
+    {
+        parent->setOpen(true);
+        return new ProfileItem(parent, profile);
+    }
+};
+
+void PartSelectWidget::fillProfilesList()
+{
+    ProfileEngine &engine = PluginController::getInstance()->engine();
+    ProfileItem *item = new ProfileItem(_pluginProfile->listView(), engine.rootProfile());
+    ProfileListBuilding op;
+    engine.walkProfiles<ProfileListBuilding, QListViewItem>(op, item, engine.rootProfile());
 }
 
 #include "partselectwidget.moc"

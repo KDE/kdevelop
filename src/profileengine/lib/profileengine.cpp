@@ -242,3 +242,11 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
     }
     load = offers2;
 }
+
+Profile *ProfileEngine::findProfile(const QString & profileName)
+{
+    Profile *profile;
+    ProfileListing listing;
+    getProfileWithListing(listing, &profile, profileName);
+    return profile;
+}

@@ -87,6 +87,7 @@ public:
         QStringList &unload, KTrader::OfferList &load);
 
     Profile *rootProfile() const { return m_rootProfile; }
+    Profile *findProfile(const QString &profileName);
     
     template<class Operation>
     void walkProfiles(Operation &op, Profile *root)
