@@ -1,3 +1,6 @@
+1999-12-26 jbb <jbb@ihug.co.nz>
+	* Add special floating toolbar for the internal debugger.
+
 1999-12-23 jbb <jbb@ihug.co.nz>
 	* force debug configuration update when app is running
 
