@@ -61,17 +61,21 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
                          actionCollection(), "view_previous_window");
    action->setStatusText( i18n("Switches to the previous window") );
 
-   action = new KAction( i18n("Raise &Left Tabbar"), ALT+Key_L,
+   m_raiseLeftBar = new KAction( i18n("Raise &Left Tabbar"), ALT+Key_L,
 			 this, SLOT(raiseLeftTabbar()),
 			 actionCollection(), "raise_left_tabbar");
 
-   action = new KAction( i18n("Raise &Right Tabbar"), ALT+Key_R,
+   m_raiseRightBar = new KAction( i18n("Raise &Right Tabbar"), ALT+Key_R,
                          this, SLOT(raiseRightTabbar()),
                          actionCollection(), "raise_right_tabbar");
 
-   action = new KAction( i18n("Raise &Bottom Tabbar"), ALT+Key_U,
+   m_raiseBottomBar = new KAction( i18n("Raise &Bottom Tabbar"), ALT+Key_U,
                          this, SLOT(raiseBottomTabbar()),
                          actionCollection(), "raise_bottom_tabbar");
+
+   m_raiseLeftBar->setEnabled( false );
+   m_raiseRightBar->setEnabled( false );
+   m_raiseBottomBar->setEnabled( false );
 
    // Add window menu to the menu bar
    m_pWindowMenu = new QPopupMenu( main(), "window_menu");
@@ -79,7 +83,6 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
    menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
 
    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
-
 }
 
 
@@ -169,6 +172,10 @@ void TopLevelSDI::createFramework()
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(createGUI(KParts::Part*)));
+
+  connect( m_leftBar, SIGNAL(tabsChanged()), this, SLOT(slotLeftTabsChanged()) );
+  connect( m_rightBar, SIGNAL(tabsChanged()), this, SLOT(slotRightTabsChanged()) );
+  connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
 
   connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
   connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
@@ -261,7 +268,7 @@ void TopLevelSDI::removeView(QWidget *)
 {
 }
 
-void TopLevelSDI::setViewVisible(QWidget */*pView*/, bool /*bEnabled*/)
+void TopLevelSDI::setViewVisible(QWidget * /*pView*/, bool /*bEnabled*/)
 {
   // TODO: implement me
 }
@@ -486,10 +493,23 @@ void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar )
   if ( !tabBar )
     return;
 
-  if ( tabBar->isRaised() && !tabBar->isDocked() )
-    tabBar->lowerAllWidgets();
-  else
+  if ( tabBar->isRaised() ) {
+    if ( tabBar->isDocked() ) {
+      qDebug( "tabbar: active: %d", tabBar->isActiveWindow() );
+      if ( tabBar->hasFocus() ) {
+        if ( m_tabWidget->currentPage() )
+          m_tabWidget->currentPage()->setFocus();
+      } else {
+          tabBar->setFocus();
+      }
+    } else {
+      tabBar->lowerAllWidgets();
+      if ( m_tabWidget->currentPage() )
+	m_tabWidget->currentPage()->setFocus();
+    }
+  } else {
     tabBar->raiseWidget( 0 );
+  }
 }
 
 void TopLevelSDI::raiseLeftTabbar()
@@ -539,6 +559,27 @@ void TopLevelSDI::slotUpdateModifiedFlags()
       }
     }
   }
+}
+
+void TopLevelSDI::slotBottomTabsChanged()
+{
+  if ( !m_bottomBar )
+    return;
+  m_raiseBottomBar->setEnabled( !m_bottomBar->isEmpty() );
+}
+
+void TopLevelSDI::slotRightTabsChanged()
+{
+  if ( !m_rightBar )
+    return;
+  m_raiseRightBar->setEnabled( !m_rightBar->isEmpty() );
+}
+
+void TopLevelSDI::slotLeftTabsChanged()
+{
+  if ( !m_leftBar )
+    return;
+  m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
 }
 
 #include "toplevel_sdi.moc"

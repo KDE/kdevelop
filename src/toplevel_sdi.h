@@ -81,6 +81,10 @@ private slots:
   void slotTextChanged();
   void slotUpdateModifiedFlags();
 
+  void slotBottomTabsChanged();
+  void slotRightTabsChanged();
+  void slotLeftTabsChanged();
+
 private:
 
   virtual bool queryClose();
@@ -94,7 +98,8 @@ private:
   void moveRelativeTab(unsigned int);
   void raiseTabbar( KTabZoomWidget *tabBar );
 
-  KAction* m_stopProcesses;
+  KAction *m_stopProcesses;
+  KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar;
 
   QTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
