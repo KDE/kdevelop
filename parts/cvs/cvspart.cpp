@@ -259,7 +259,7 @@ bool CvsPart::Private::isRegisteredInRepository()
 	kdDebug(9000) << "===> pathUrl.path()      = " << pathUrl.path() << endl;
 	kdDebug(9000) << "===> dirName             = " << dirName << endl;
 	kdDebug(9000) << "===> entriesFilePath = " << entriesFilePath << endl;
-	kdDebug(9000) << "===> whatToSearch    = " << whatToSearch << endl;
+	//kdDebug(9000) << "===> whatToSearch    = " << whatToSearch << endl;
 
 	bool found = false;
 	QFile f( entriesFilePath );
