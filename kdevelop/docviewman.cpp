@@ -482,59 +482,6 @@ CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
   return pDocBr; 
 }
 
-
-//------------------------------------------------------------------------------
-// create a new empty document
-// optionally fill the data by loading a file,
-// return the document id (-1 if failed)
-//------------------------------------------------------------------------------
-/*
-QObject* DocViewMan::createDoc( int contentsType, const QString& strFileName)
-{
-  QObject*   pDoc = 0L;
-
-  switch (contentsType) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    debug("creating KWriteDoc ");
-    pDoc = new KWriteDoc( &m_highlightManager, strFileName);
-    break;
-  case DocViewMan::HTML:
-    {
-      debug("creating CDocBrowser ");
-      pDoc = new CDocBrowser(0L, "browser");
-      CDocBrowser* pDocBr = (CDocBrowser*) pDoc;
-      // some signal-slot connections
-      connect(pDocBr, SIGNAL(completed()),m_pParent, SLOT(slotDocumentDone()));
-      connect(pDocBr, SIGNAL(signalURLBack()),m_pParent,SLOT(slotHelpBack()));
-      connect(pDocBr, SIGNAL(signalURLForward()),m_pParent,SLOT(slotHelpForward()));
-      connect(pDocBr, SIGNAL(signalBookmarkToggle()),m_pParent,SLOT(slotBookmarksToggle()));
-      connect(pDocBr, SIGNAL(onURL(const QString&)),m_pParent,SLOT(slotURLonURL(const QString&)));
-      connect(pDocBr, SIGNAL(signalSearchText()),m_pParent,SLOT(slotHelpSearchText()));
-      //  connect(pDocBr, SIGNAL(goRight()), m_pParent, SLOT(slotHelpForward()));
-      //  connect(pDocBr, SIGNAL(goLeft()), m_pParent, SLOT(slotHelpBack()));
-      connect(pDocBr, SIGNAL(enableStop(int)), m_pParent, SLOT(enableCommand(int)));	
-      connect(pDocBr->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
-      connect(pDocBr, SIGNAL(signalGrepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
-      //  connect(pDocBr, SIGNAL(textSelected(KHTMLPart *, bool)),m_pParent,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
-
-      // init browser and assign URL
-      pDocBr->setDocBrowserOptions();
-      pDocBr->showURL(strFileName, true); // with reload if equal
-    }
-    break;
-  }
-
-  if (pDoc != 0L) {
-    // Add the new doc to the list
-    m_documentList.append(pDoc);
-  }
-
-  // Return the new document
-  return pDoc;
-}
-*/
-
 //-----------------------------------------------------------------------------
 // load edit document from file
 //-----------------------------------------------------------------------------
@@ -554,38 +501,8 @@ void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
 }
 
 //-----------------------------------------------------------------------------
-// load document from file
+// save document to file
 //-----------------------------------------------------------------------------
-/*
-void DocViewMan::loadDoc(int docId, const QString& strFileName, int mode)
-{
-  // find document info
-  QListIterator<DocViewNode> itDoc(m_docsAndViews);
-  for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
-  DocViewNode* pDocViewNode = itDoc.current();
-  if (!pDocViewNode)
-    return; // failed
-
-  // read
-  switch (pDocViewNode->docType) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    if(QFile::exists(strFileName)) {
-      QFile f(strFileName);
-      if (f.open(IO_ReadOnly)) {
-        KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
-        pDoc->loadFile(f);
-        f.close();
-      }
-    }
-    break;
-  case DocViewMan::HTML:
-    // TODO
-    break;
-  }
-}
-*/
-
 bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 {
   debug("DocViewMan::saveKWriteDoc !\n");
@@ -606,51 +523,6 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
   KMessageBox::sorry(0L,  i18n("An Error occured while trying to open this Document"));
   return false;
 }
-
-//-----------------------------------------------------------------------------
-// save document to file
-//-----------------------------------------------------------------------------
-/*
-bool DocViewMan::saveDoc(int docId, const QString& strFileName)
-{
-  // find document info
-  QListIterator<DocViewNode> itDoc(m_docsAndViews);
-  for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
-  DocViewNode* pDocViewNode = itDoc.current();
-
-  if (!pDocViewNode || strFileName.isEmpty())
-    return false; // failed
-
-  // write
-  switch (pDocViewNode->docType) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    {
-      QFileInfo info(strFileName);
-      if(info.exists() && !info.isWritable()) {
-        KMessageBox::sorry(0L, i18n("You do not have write permission to this file"));
-        return false;
-      }
-
-      QFile f(strFileName);
-      if (f.open(IO_WriteOnly | IO_Truncate)) {
-        KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
-        pDoc->writeFile(f);
-        pDoc->updateViews();
-        f.close();
-        return true;//kWriteDoc->setFileName(name);
-      }
-      KMessageBox::sorry(0L,  i18n("An Error occured while trying to open this Document"));
-      return false;
-    }
-    break;
-  default:
-    // nothing to do
-    break;
-  }
-  return true;
-}
-*/
 
 //-----------------------------------------------------------------------------
 // find if there is another KWriteDoc in the doc list 
@@ -687,11 +559,6 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
     QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
     m_pParent->removeWindowFromMdi( pMDICover);
     delete pMDICover;
-
-    // emit an according signal if we closed the last view
-    // if (countViews() == 0) {
-    // emit sig_lastViewClosed();
-    // }
   }
 
   if(pDoc) {
@@ -743,39 +610,23 @@ void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
 
   if(pDoc) {
     debug("getting pView !\n");
-
     KHTMLView* pView = pDoc->view();
-
     debug("pView : %d !\n", pView);
-
     if(pView) {
-
       debug("getting pMDICover !\n");
-    
       QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
-
       if(pMDICover) {
-	debug("pMDICover : %d !\n", pMDICover);
-    
-	debug("hiding pMDICover !\n");
-    
-	pMDICover->hide();
-
-	debug("reparent pView !\n");
-    
-	pView->reparent(0L, 0, QPoint(0,0));
-	QApplication::sendPostedEvents();
-	m_pParent->removeWindowFromMdi( pMDICover);
-	delete pMDICover;
+        debug("pMDICover : %d !\n", pMDICover);
+        debug("hiding pMDICover !\n");
+        pMDICover->hide();
+        debug("reparent pView !\n");
+        pView->reparent(0L, 0, QPoint(0,0));
+        QApplication::sendPostedEvents();
+        m_pParent->removeWindowFromMdi( pMDICover);
+        delete pMDICover;
       }
     }
-
-    // if (countViews() == 0) {
-    // emit sig_lastViewClosed();
-    // }
-
     debug("deleting pDoc !\n");
-    
     // Remove the document from the list
     m_documentList.removeRef(pDoc);
     // now finally, delete the document (which inclusively deletes the view)
@@ -783,124 +634,19 @@ void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
   }
 
   debug("finding new doc !\n");
-    
   CDocBrowser* pNewDoc = findCDocBrowser();
   if (pNewDoc == 0) {
     m_pCurBrowserDoc = 0L;
     m_pCurBrowserView = 0L;
   }
   
-  debug("counting documents !\n");
-    
   //   emit an according signal if we closed the last doc
+  debug("counting documents !\n");
   if (m_documentList.count() == 0) {
     emit sig_lastViewClosed();
     emit sig_lastDocClosed();
   }
 }
-
-//-----------------------------------------------------------------------------
-// close a document, causes all views to be closed
-//-----------------------------------------------------------------------------
-/*
-void DocViewMan::closeDoc(int docId)
-{
-  // find document info
-  QListIterator<DocViewNode> itDoc(m_docsAndViews);
-  for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
-  DocViewNode*   pCurDocViewNode = itDoc.current();
-  if (!pCurDocViewNode)
-    return; //failed
-
-  switch (pCurDocViewNode->docType) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    {
-      // first, disconnect all views, then delete them
-      // --> this avoids that deleting one view focuses the next dying view which would be senseless
-      QListIterator<QWidget>  itViews(pCurDocViewNode->existingViews);
-      for (; itViews.current() != 0; ++itViews) {
-        CEditWidget* pView = (CEditWidget*) itViews.current();
-        // disconnect the focus signals
-        disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
-                   this, SLOT(slot_gotFocus(CEditWidget*)));
-        // remove the view from MDI and delete the view
-        QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
-        m_pParent->removeWindowFromMdi( pMDICover);
-        delete pMDICover;
-      }
-      pCurDocViewNode->existingViews.clear();
-      // emit an according signal if we closed the last view
-      if (countViews() == 0) {
-        emit sig_lastViewClosed();
-      }
-      // now finally, delete the document
-      KWriteDoc* pDoc = (KWriteDoc*) pCurDocViewNode->pDoc;
-      delete pDoc;
-    }
-    break;
-  case DocViewMan::HTML:
-    {
-      QListIterator<QWidget>  itViews(pCurDocViewNode->existingViews);
-      for (; itViews.current() != 0; ++itViews) {
-        // remove the view from MDI
-        QWidget* pView = itViews.current();
-        QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
-        pMDICover->hide();
-        pView->reparent(0L, 0, QPoint(0,0));
-        QApplication::sendPostedEvents();
-        m_pParent->removeWindowFromMdi( pMDICover);
-        delete pMDICover;
-      }
-      pCurDocViewNode->existingViews.clear();
-      // emit an according signal if we closed the last view
-      if (countViews() == 0) {
-        emit sig_lastViewClosed();
-      }
-      // now finally, delete the document (which inclusively deletes the view)
-      CDocBrowser* pDoc = (CDocBrowser*) pCurDocViewNode->pDoc;
-      delete pDoc;
-    }
-    break;
-  }
-
-  //   remove list entry
-  int removedDocType = pCurDocViewNode->docType;
-  m_docsAndViews.remove(pCurDocViewNode);
-
-  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView, m_pCurEditDoc, m_pCurEditView
-  bool bBrowserDocFound = false;
-  bool bEditDocFound = false;
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-    int docType = itDoc.current()->docType;
-    if (docType == DocViewMan::HTML)
-      bBrowserDocFound = true;
-    else if ((docType == DocViewMan::Source) || (docType == DocViewMan::Header))
-      bEditDocFound = true;
-  }
-  switch (removedDocType) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    if (!bEditDocFound) {
-      m_pCurEditDoc = 0L;
-      m_pCurEditView = 0L;
-    }
-    break;
-  case DocViewMan::HTML:
-    if (!bBrowserDocFound) {
-      m_pCurBrowserDoc = 0L;
-      m_pCurBrowserView = 0L;
-    }
-    break;
-  }
-
-  //   emit an according signal if we closed the last doc
-  if (m_docsAndViews.count() == 0) {
-    m_currentDocType = DocViewMan::Undefined;
-    emit sig_lastDocClosed();
-  }
-}
-*/
 
 //-----------------------------------------------------------------------------
 // retrieve the document pointer
@@ -927,47 +673,6 @@ QObject* DocViewMan::docPointer(int docId) const
 KWriteDoc* DocViewMan::kwDocPointer(int docId) const
 {
   return (dynamic_cast<KWriteDoc*> (docPointer(docId)));
-}
-*/
-//-----------------------------------------------------------------------------
-// get the ids of all documents of this type or a combination of types
-//-----------------------------------------------------------------------------
-/*
-QList<int> DocViewMan::docs( int type) const
-{
-  QListIterator<DocViewNode>    itDoc(m_docsAndViews);
-  QList<int> listDocIds;
-  if (type == DocViewMan::Undefined)
-    for (; itDoc.current() != 0; ++itDoc) {
-      listDocIds.append(&(itDoc.current()->docId));
-    }
-  else
-    for (; itDoc.current() != 0; ++itDoc) {
-      if (itDoc.current()->docType & type)
-        listDocIds.append(&(itDoc.current()->docId));
-    }
-  return listDocIds;
-}
-*/
-
-//-----------------------------------------------------------------------------
-// get the id of a document displayed by a given view
-//-----------------------------------------------------------------------------
-/*
-int DocViewMan::docOfView(QWidget* pView) const
-{
-  QListIterator<DocViewNode>    itDoc(m_docsAndViews);
-  for (; itDoc.current() != 0; ++itDoc) {
-    QListIterator<QWidget>  itView(itDoc.current()->existingViews);
-    for (; itView.current() != 0; ++itView) {
-      if (itView.current() == pView) {
-        // view found
-        return itDoc.current()->docId;
-      }
-    }
-  }
-  // view not found
-  return -1;
 }
 */
 
@@ -1018,9 +723,7 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
 
   // create the view and add to MDI
   CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc);
-
   if(!pEW) return 0L;
-
   pEW->setCaption(pDoc->fileName());
 
   //connect the editor lookup function with slotHelpSText
@@ -1079,116 +782,6 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc)
 }
 
 //-----------------------------------------------------------------------------
-// create a new view for a document
-//-----------------------------------------------------------------------------
-/*
-QWidget* DocViewMan::createView(int docId)
-{
-  // find document info
-  QListIterator<DocViewNode> itDoc(m_docsAndViews);
-  for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
-  DocViewNode* pDocViewNode = itDoc.current();
-  if (!pDocViewNode)
-    return 0L; // failed, no such doc found
-
-  // get the type of document
-  int doctype = pDocViewNode->docType;
-
-  // cause a view to be created
-  QWidget*   pNewView = 0;
-
-  switch (doctype) {
-  case DocViewMan::Header:
-  case DocViewMan::Source:
-    {
-      KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
-      // create the view and add to MDI
-      CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc);
-      pNewView = pEW;
-      pNewView->setCaption( pDoc->fileName());
-
-      //connect the editor lookup function with slotHelpSText
-      connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));
-      connect( pEW, SIGNAL(newCurPos()), m_pParent, SLOT(slotNewLineColumn()));
-      connect( pEW, SIGNAL(newStatus()),m_pParent, SLOT(slotNewStatus()));
-      connect( pEW, SIGNAL(clipboardStatus(KWriteView *, bool)), m_pParent, SLOT(slotClipboardChanged(KWriteView *, bool)));
-      connect( pEW, SIGNAL(newUndo()),m_pParent, SLOT(slotNewUndo()));
-      connect( pEW, SIGNAL(bufferMenu(const QPoint&)),m_pParent, SLOT(slotBufferMenu(const QPoint&)));
-      connect( pEW, SIGNAL(grepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
-      connect( pEW->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
-    	// Connect the breakpoint manager to monitor the bp setting - even when the debugging isn't running
-      connect( pEW, SIGNAL(editBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotEditBreakpoint(const QString&,int)));
-      connect( pEW, SIGNAL(toggleBPEnabled(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleBPEnabled(const QString&,int)));
-      connect( pEW, SIGNAL(toggleBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleStdBreakpoint(const QString&,int)));
-      connect( pEW, SIGNAL(clearAllBreakpoints()), m_pParent->getBrkptManager(),   SLOT(slotClearAllBreakpoints()));
-      // connect adding watch variable from the rmb in the editors
-      connect( pEW, SIGNAL(addWatchVariable(const QString&)), m_pParent->getVarViewer()->varTree(), SLOT(slotAddWatchVariable(const QString&)));
-      if (doctype == DocViewMan::Source) {
-        connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
-      }
-      else {
-        connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
-      }
-    }
-    break;
-  case DocViewMan::HTML:
-    {
-      CDocBrowser* pDoc = (CDocBrowser*) pDocViewNode->pDoc;
-      pNewView = pDoc->view();
-      pNewView->setCaption( pDoc->currentTitle());
-      // add "what's this" entry
-      m_pParent->getWhatsThis()->add(pNewView, i18n("Documentation Browser\n\n"
-            "The documentation browser window shows the online-"
-            "documentation provided with kdevelop as well as "
-            "library class documentation created. Use the documentation "
-            "tree to switch between various parts of the documentation."));
-      pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
-    }
-    break;
-  }
-
-  if (!pNewView)
-    return 0L;  // failed, could not create view
-
-  // connect document with view
-  if (docId >= 0) {
-    // add view to view list of doc
-    pDocViewNode->existingViews.append(pNewView);
-  }
-
-  // cover it by a QextMDI childview and add that MDI system
-  QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
-  m_MDICoverList.append( pMDICover);
-  QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
-  pNewView->reparent( pMDICover, QPoint(0,0));
-  QApplication::sendPostedEvents();
-  pLayout->addWidget( pNewView);
-  pMDICover->setName( pNewView->name());
-  // captions
-  QString shortName = pNewView->caption();
-  int length = shortName.length();
-  shortName = shortName.right(length - (shortName.findRev('/') +1));
-  pMDICover->setTabCaption( shortName);
-  connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
-          this, SLOT(slot_gotFocus(QextMdiChildView*)));
-
-  // fake a gotFocus to update the currentEditView/currentBrowserView pointers _before_ adding to MDI control
-  slot_gotFocus( pMDICover);
-
-  // take it under MDI mainframe control (note: this triggers also a setFocus())
-  m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
-  // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
-  pMDICover->setFirstFocusableChildWidget(0L);
-  pMDICover->setLastFocusableChildWidget(0L);
-  // show
-  pMDICover->show();
-
-  return pNewView;
-}
-*/
-
-
-//-----------------------------------------------------------------------------
 // close a view
 //-----------------------------------------------------------------------------
 void DocViewMan::closeView(QWidget* pView)
@@ -1222,10 +815,6 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   m_pParent->removeWindowFromMdi( pMDICover);
   delete pMDICover;
 
-  // if (countViews() == 0) {
-  //  emit sig_lastViewClosed();
-  // }
-
   if (pDoc->viewCount() == 0) {
     closeKWriteDoc(pDoc);
   }
@@ -1255,131 +844,8 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
   m_pParent->removeWindowFromMdi( pMDICover);
   delete pMDICover;
 
-  // emit an according signal if we closed the last view
-  // if (countViews() == 0) {
-  //  emit sig_lastViewClosed();
-  // }
-  
   closeCDocBrowser(pDoc);
 }
-
-//-----------------------------------------------------------------------------
-// close a view
-//-----------------------------------------------------------------------------
-/*
-void DocViewMan::closeView(QWidget* pView)
-{
-  // find document info
-  bool bFound = false;
-  QList<QWidget>*   pViewList;
-  for (m_docsAndViews.first(); (m_docsAndViews.current() != 0) && (!bFound);) {
-    pViewList = &(m_docsAndViews.current()->existingViews);
-    for (pViewList->first(); (pViewList->current() != 0) && (!bFound);) {
-      if (pViewList->current() == pView) {
-        bFound = true;
-      }
-      else {
-        pViewList->next();
-      }
-    }
-    if (!bFound) {
-      m_docsAndViews.next();
-    }
-  }
-
-  if (!bFound)
-    return;
-
-  // the view was found
-  // store the current items since lists may change while deleting view and doc
-  DocViewNode*   pDocViews = m_docsAndViews.current();
-  QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
-  pMDICover->hide();
-
-  // disconnect the focus signals
-  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)), this, SLOT(slot_gotFocus(QextMdiChildView*)));
-  // remove view list entry
-  pViewList->remove(pView);
-  int docType = pDocViews->docType;
-  if (docType == DocViewMan::HTML) {
-    // get a KHTMLView out of the parent to avoid a delete, it will be deleted later in the CDocBrowser destructor
-    pView->reparent(0L,0,QPoint(0,0));
-    QApplication::sendPostedEvents();
-  }
-  // remove the view from MDI and delete the view
-  m_pParent->removeWindowFromMdi( pMDICover);
-  delete pMDICover;
-
-  // emit an according signal if we closed the last view
-  if (countViews() == 0) {
-    emit sig_lastViewClosed();
-  }
-  // check whether there are remaining views
-  if (pDocViews->existingViews.count() == 0) {
-    switch (docType) {
-    case DocViewMan::Header:
-    case DocViewMan::Source:
-      {
-        KWriteDoc* pDoc = (KWriteDoc*) pDocViews->pDoc;
-        removeFileFromEditlist( pDoc->fileName()); // this removes from edit_infos and calls closeDoc right after
-      }
-      break;
-    case DocViewMan::HTML:
-      closeDoc( pDocViews->docId);
-      break;
-    }
-  }
-}
-*/
-
-//-----------------------------------------------------------------------------
-// get number of views handled by this doc view manager
-//-----------------------------------------------------------------------------
-/*
-int DocViewMan::countViews() const
-{
-  int nViews = 0;
-  // scan the document info list
-  QListIterator<DocViewNode> it(m_docsAndViews);
-  for ( ; it.current() != 0L; ++it) {
-    nViews += it.current()->existingViews.count();
-  }
-  return nViews;
-}
-*/
-
-//-----------------------------------------------------------------------------
-// get number of views for a document
-//-----------------------------------------------------------------------------
-/*
-int DocViewMan::countViewsOfDoc(int docId) const
-{
-  // find document info
-  QListIterator<DocViewNode> it(m_docsAndViews);
-  for ( ; it.current() && (it.current()->docId != docId); ++it) {}
-  if( it.current() != 0)
-    return it.current()->existingViews.count();
-  else
-    return 0;
-}
-*/
-
-//-----------------------------------------------------------------------------
-// get all view pointer for a document
-//-----------------------------------------------------------------------------
-/*
-const QList<QWidget> DocViewMan::viewsOfDoc(int docId) const
-{
-  // find document info
-  QListIterator<DocViewNode> it(m_docsAndViews);
-  for ( ; it.current() && (it.current()->docId != docId); ++it) {}
-  if( it.current() != 0)
-    return it.current()->existingViews;
-  else
-    // return an empty list
-    return QList<QWidget>();
-}
-*/
 
 //-----------------------------------------------------------------------------
 // get the first edit view for a document
@@ -1390,23 +856,6 @@ CEditWidget* DocViewMan::getFirstEditView(KWriteDoc* pDoc) const
 
   return (dynamic_cast<CEditWidget*> (pDoc->getKWrite()));
 }
-
-//-----------------------------------------------------------------------------
-// get the type of a document
-//-----------------------------------------------------------------------------
-/*
-int DocViewMan::docType(int docId) const
-{
-  // find document info
-  QListIterator<DocViewNode> it(m_docsAndViews);
-  for ( ; it.current() && (it.current()->docId != docId); ++it) {}
-  if( it.current() != 0)
-    return it.current()->docType;
-  else
-    // not found
-    return -1;
-}
-*/
 
 //-----------------------------------------------------------------------------
 // Connected to the focus in event occures signal of CEditWidget.
