@@ -1357,7 +1357,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 		}
 	}
 	return true;
-	
+
     case Token_typename:
 	{
 	    
@@ -1514,10 +1514,12 @@ bool Parser::skipConstantExpression( AST::Node& node )
 		return false;
 	    }
 	    lex->nextToken();
+#ifdef ROB
 	} else if( tk == Token_identifier ){
 	    lex->nextToken();
 	    if( lex->lookAhead( 0 ) == Token_identifier )
 		break;
+#endif
 	} else if( tk == ',' || tk == ';' || tk == '>' ||
 		   tk == Token_assign || tk == ']' ||
 		   tk == ')' || tk == '}' || tk == ':' ){
@@ -1932,15 +1934,15 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 	return false;
     }
     lex->nextToken();
-    
+
     EnumeratorAST::Node ena = CreateNode<EnumeratorAST>();
     node = ena;
-    
+
     AST::Node id = CreateNode<AST>();
     UPDATE_POS( id, start, lex->index() );
     id->setText( toString(start, lex->index()) );
     node->setId( id );
-            
+
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
 
@@ -2002,10 +2004,12 @@ bool Parser::skipAssignmentExpression( AST::Node& node )
 		return false;
 	    } else
 		lex->nextToken();
+#ifdef ROB
 	} else if( tk == Token_identifier ){
 	    lex->nextToken();
 	    if( lex->lookAhead(0) == Token_identifier )
 		break;
+#endif
 	} else if( tk == ',' || tk == ';' ||
 		   tk == '>' || tk == ']' || tk == ')' ||
 		   tk == Token_assign ){
@@ -2417,12 +2421,14 @@ bool Parser::skipExpression( AST::Node& node )
 	    skip( '[', ']' );
 	    lex->nextToken();
 	    break;
-	    
+
+#ifdef ROB
 	case Token_identifier:
 	    lex->nextToken();
 	    if( lex->lookAhead( 0 ) == Token_identifier )
 		return true;
 	    break;
+#endif
 
 	case ';':
 	case ',':
