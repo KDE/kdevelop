@@ -57,6 +57,12 @@ Documentation viewer improvements
 Application wizard improvementes, application templates, documentation, bug fixes:
   Dominik Haumann <dhdev@gmx.de>
 
+DistPart:
+  Ian Reinhart Geiser <geiseri@kde.org>
+
+Bash Shell Support:
+  Ian Reinhart Geiser <geiseri@kde.org>
+
 Other software included in the source package:
 
 * KDE 2.0 Development Book
