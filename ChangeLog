@@ -1,3 +1,7 @@
+1999-03-26  Pascal Krahmer  <pascal@breast.de>
+        * completely reorganised and cleaned filestructure in kdlgedit
+        * items can be selected (only pushbuttons up to now)
+
 1999-03-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added Bookmarks-menu for the header and cpp widget with key-accelerators
 	
