@@ -182,8 +182,6 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 		return;
 	}
 
-	QString strTest = "dsfkjhsgklijkflhdgjl";
-
 	QString strCurLine = pEditIface->line ( nLine );
 	//strCurLine = strCurLine.left ( nCol );
 	QString strLineToCol = strCurLine.left ( nCol );
