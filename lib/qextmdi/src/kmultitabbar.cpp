@@ -24,7 +24,7 @@
 
 #include "kmultitabbar.h"
 #ifndef NO_INCLUDE_MOCFILES 
-# include "kmultitabbar.moc"
+#include "kmultitabbar.moc"
 #endif
 #include "kmultitabbar_p.h"
 #ifndef NO_INCLUDE_MOCFILES
