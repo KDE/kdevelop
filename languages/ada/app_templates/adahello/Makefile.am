@@ -1,16 +1,16 @@
 dataFiles = main.adb app.kdevelop ada-Makefile app.kdevelop.filelist
-templateName = adahello
 
 ### no need to change below:
-template_DATA = $(templateName).kdevtemplate
+template_DATA = adahello.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-$(templateName).tar.gz:
-	$(TAR) -cf $(templateName).tar -C $(srcdir) ${dataFiles}
-	$(GZIP) -9 $(templateName).tar
+adahello.tar.gz:
+	$(TAR) -cf adahello.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 adahello.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = $(templateName).tar.gz ${templateName}.png
+archive_DATA = adahello.tar.gz adahello.png
 
 CLEANFILES = *.tar.gz
+
