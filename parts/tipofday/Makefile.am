@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevtipofday.la
 libkdevtipofday_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevtipofday_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevtipofday_la_SOURCES = tipofday_factory.cpp tipofday_part.cpp ktip.cpp
+libkdevtipofday_la_SOURCES = tipofday_factory.cpp tipofday_part.cpp
 
 METASOURCES = AUTO
 KDE_ICON = AUTO
@@ -14,10 +14,6 @@ service_DATA = kdevpart_tipofday.desktop
 
 tip_DATA = tips
 tipdir = $(kde_datadir)/kdevtipofday
-
-
-pic_DATA = ktip-bulb.png ktip-background.png
-picdir = $(kde_datadir)/kdeui
 
 rc_DATA = kdevpart_tipofday.rc
 rcdir = $(kde_datadir)/kdevtipofday
