@@ -10,6 +10,7 @@
 #define YY_FLEX_MINOR_VERSION 5
 
 
+
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
 #ifdef c_plusplus
 #ifndef __cplusplus
@@ -21,18 +22,8 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#include <fstream>
-using std::istream;
-using std::ostream;
-#ifndef _WIN32
+#include <iostream.h>
 #include <unistd.h>
-#else
-#ifndef YY_ALWAYS_INTERACTIVE
-#ifndef YY_NEVER_INTERACTIVE
-extern int isatty YY_PROTO(( int ));
-#endif
-#endif
-#endif
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -740,7 +731,7 @@ goto find_rule; \
   #include "FlexLexer.h"
 
   /** This class is a stupid trick to make it possible 
-   * to access the gettext method. */
+   * to access the getText method. */
   class MyLexer : public yyFlexLexer
   {
     public:
@@ -760,7 +751,7 @@ goto find_rule; \
   static bool beginComment(MyLexer *lex);
   static void inComment(MyLexer *lex);
   static bool endComment(MyLexer *lex);
-#line 764 "tokenizer.cpp"
+#line 755 "tokenizer.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -890,7 +881,7 @@ YY_DECL
 #line 67 "./tokenizer.l"
 
     /*==============> Strip whitespace <==============*/
-#line 894 "tokenizer.cpp"
+#line 885 "tokenizer.cpp"
 
 	if ( yy_init )
 		{
@@ -1393,7 +1384,7 @@ YY_RULE_SETUP
 #line 184 "./tokenizer.l"
 ECHO;
 	YY_BREAK
-#line 1397 "tokenizer.cpp"
+#line 1388 "tokenizer.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(COMMENT):
 			case YY_STATE_EOF(PREPARSER):
@@ -1997,6 +1988,7 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
+extern "C" int isatty YY_PROTO(( int ));
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{

@@ -8,6 +8,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  debugger javadebugger distpart sourcebrowser \
 	  konsole astyle tools ctags regexptest cvs doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev \
-	  uimode editor-chooser\
+	  uimode editor-chooser openwith\
 	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 
 

@@ -2,6 +2,8 @@ Short-Term:
 
 mhk: move function areas of kdevcore into separate classes
 mhk: try to implement breakpoints with the MarkInterface
+mhk: check loading of last project file (options)
+mhk: check saving of project file when closing gideon
 
 
 Mid-Term:

@@ -1,3 +1,6 @@
+2992-94-14  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* Added a new part that provides a "Open with" file menu entry
+
 2002-04-13  Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* classstore config now in cppsupport
 	* code hinting really works now with KTextEditor

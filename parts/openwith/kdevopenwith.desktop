@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment="Open with" menu addon
+Name=KDevOpenWith
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevopenwith
+X-KDevelop-Scope=Global
