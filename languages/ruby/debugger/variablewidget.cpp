@@ -645,6 +645,8 @@ QString VarItem::typeFromValue(const QString& value)
 		return QString("Regexp");
 	} else if (QRegExp("^[\"'%<]").search(value) != -1) {
 		return QString("String");
+	} else if (QRegExp("^(\\[)|(String \\(length \\d+\\))").search(value) != -1) {
+		return QString("String");
 	} else if (QRegExp("^(\\[)|(Array \\(\\d+ element\\(s\\)\\))").search(value) != -1) {
 		return QString("Array");
 	} else if (QRegExp("^(\\{)|(Hash \\(\\d+ element\\(s\\)\\))").search(value) != -1) {

@@ -1190,6 +1190,7 @@ void RDBController::slotAcceptConnection(int masterSocket)
     emit dbgStatus ("", state_);
     
 	cmdList_.clear();
+	rdbOutputLen_ = 0;	
 	
 	// Organise any breakpoints.
     emit acceptPendingBPs();
@@ -1222,6 +1223,8 @@ void RDBController::slotReadFromSocket(int socket)
         return;
     }
 
+//    kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
+	
 	QRegExp prompt_re("(\\(rdb:(\\d+)\\) )$");
  	int promptPos = prompt_re.search(rdbOutput_, 0);
 	
@@ -1231,7 +1234,7 @@ void RDBController::slotReadFromSocket(int socket)
 		return;
 	}
 	
-  //  kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
+//    kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
 	
 	// Save the prompt, and remove it from the buffer
 	currentPrompt_ = prompt_re.cap(1).latin1();
