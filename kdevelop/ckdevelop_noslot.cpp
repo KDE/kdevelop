@@ -466,7 +466,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
 		}
   }
   //load ktranslator if clicked/loaded an po file
-  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp"){
+  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp" || (filename).right(4) == ".xbm"){
     if(!CToolClass::searchInstProgram("kpaint")){
 			return;
 		}
