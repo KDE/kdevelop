@@ -4,6 +4,7 @@
   begin      : Sun Nov 18 20:00 CET 2001
   copyright  : (C) 2001 Joseph Wenninger <jowenn@kde.org>
                (C) 2002 John Firebaugh <jfirebaugh@kde.org>
+               (C) 2002 Roberto Raggi <raggi@cli.di.unipi.it>
 
   taken from KDEVELOP:
   begin   : Sam Jul 14 18:20:00 CEST 2001

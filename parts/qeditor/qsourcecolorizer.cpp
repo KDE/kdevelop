@@ -40,6 +40,7 @@ QSourceColorizer::QSourceColorizer( QEditor* editor )
 
     QFont defaultFont = kapp->font();
     KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );  // or colorizer ?!?!?
 
     m_formats.clear();
 
@@ -57,6 +58,7 @@ QSourceColorizer::QSourceColorizer( QEditor* editor )
 QSourceColorizer::~QSourceColorizer()
 {
     KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );  // or colorizer ?!?!?
 
     while( !m_formats.empty() ){
         QMap<int, QPair<QString, QTextFormat*> >::Iterator it = m_formats.begin();

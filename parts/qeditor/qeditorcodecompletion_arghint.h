@@ -39,16 +39,15 @@ class QEditorView;
 
 class ArgHintArrow : public QButton
 {
-	Q_OBJECT
+    Q_OBJECT
+public:
+    enum Dir { Left, Right };
 
-	public:
-		enum Dir { Left, Right };
+    ArgHintArrow ( QWidget *parent, Dir d );
+    void drawButton ( QPainter *p );
 
-		ArgHintArrow ( QWidget *parent, Dir d );
-		void drawButton ( QPainter *p );
-
-	private:
-		QPixmap pix;
+private:
+    QPixmap pix;
 };
 
 
@@ -56,65 +55,65 @@ class ArgHintArrow : public QButton
 /** KDevArgHint is the base class of the porject */
 class KDevArgHint : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		/** construtor */
-		KDevArgHint ( QWidget* parent );
-		/** destructor */
-		virtual ~KDevArgHint();
+public:
+    /** construtor */
+    KDevArgHint ( QWidget* parent );
+    /** destructor */
+    virtual ~KDevArgHint();
 
 //  		bool eventFilter( QObject *o, QEvent *e );
 
 
-	public:
-		void setFunctionText ( int nFunc, const QString& strText );
-		void setArgMarkInfos ( const QString& strWrapping, const QString& strDelimiter );
-		void reset();
-		void nextArg();
-		void prevArg();
-		void setCurArg ( int nCurArg );
+public:
+    void setFunctionText ( int nFunc, const QString& strText );
+    void setArgMarkInfos ( const QString& strWrapping, const QString& strDelimiter );
+    void reset();
+    void nextArg();
+    void prevArg();
+    void setCurArg ( int nCurArg );
 //		virtual void setFont ( const QFont & );
 
-	private:
-		QAccel *ESC_accel;
-		QMap<int, QString> m_funcList;
-		QLabel* m_pFuncLabel;
-		QLabel* m_pStateLabel;
+private:
+    QAccel *ESC_accel;
+    QMap<int, QString> m_funcList;
+    QLabel* m_pFuncLabel;
+    QLabel* m_pStateLabel;
 
-		ArgHintArrow* m_pPrev;
-		ArgHintArrow* m_pNext;
+    ArgHintArrow* m_pPrev;
+    ArgHintArrow* m_pNext;
 
-		int m_nCurFunc;
-		int m_nNumFunc;
-		int m_nCurArg;
-		int m_nCurLine;
+    int m_nCurFunc;
+    int m_nNumFunc;
+    int m_nCurArg;
+    int m_nCurLine;
 
-		bool m_bMarkingEnabled;
+    bool m_bMarkingEnabled;
 
-		QString m_strArgWrapping;
-		QString m_strArgDelimiter;
+    QString m_strArgWrapping;
+    QString m_strArgDelimiter;
 
-	public slots:
-		void cursorPositionChanged (QEditorView *view, int nLine, int nCol );
+public slots:
+    void cursorPositionChanged (QEditorView *view, int nLine, int nCol );
 
-	private slots:
-		/** No descriptions */
-		void gotoNext();
+private slots:
+    /** No descriptions */
+    void gotoNext();
 
-		 /** No descriptions */
-		void gotoPrev();
+    /** No descriptions */
+    void gotoPrev();
 
-	protected:
-		  /** No descriptions */
-		void updateState();
-		QString markCurArg();
+protected:
+    /** No descriptions */
+    void updateState();
+    QString markCurArg();
 
- signals:
-		void argHintHidden();
+signals:
+    void argHintHidden();
 
- public slots:
-		void slotDone(int);
+public slots:
+    void slotDone(int);
 };
 
 #endif

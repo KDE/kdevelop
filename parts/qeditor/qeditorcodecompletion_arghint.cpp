@@ -81,64 +81,64 @@ static const char* right_xpm[] = {
 ArgHintArrow::ArgHintArrow ( QWidget *parent, Dir d )
     : QButton( parent, 0, WStyle_NormalBorder )
 {
-	setFixedSize ( 16, 16 );
+    setFixedSize ( 16, 16 );
 
-	if ( d == Left )
-		pix = QPixmap ( left_xpm );
-	else
-		pix = QPixmap ( right_xpm );
+    if ( d == Left )
+        pix = QPixmap ( left_xpm );
+    else
+        pix = QPixmap ( right_xpm );
 }
 
 void ArgHintArrow::drawButton ( QPainter *p )
 {
-	if ( isEnabled() )
-		p->drawPixmap ( 0, 0, pix );
+    if ( isEnabled() )
+        p->drawPixmap ( 0, 0, pix );
 }
 
 
 KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup ),ESC_accel(0)
 {
-	setFrameStyle ( QFrame::Box | QFrame::Plain );
-	setLineWidth ( 1 );
-			//	setBackgroundColor ( QColor ( 255, 255, 238 ) );
+    setFrameStyle ( QFrame::Box | QFrame::Plain );
+    setLineWidth ( 1 );
+    //	setBackgroundColor ( QColor ( 255, 255, 238 ) );
 
-	setPalette(QToolTip::palette());
+    setPalette(QToolTip::palette());
 
-	QHBoxLayout* hbox = new QHBoxLayout ( this );
-	hbox->setMargin ( 1 );
+    QHBoxLayout* hbox = new QHBoxLayout ( this );
+    hbox->setMargin ( 1 );
 
-	hbox->addWidget ( ( m_pPrev = new ArgHintArrow ( this , ArgHintArrow::Left ) ) );
-	hbox->addWidget ( ( m_pStateLabel = new QLabel ( this ) ) );
-	hbox->addWidget ( ( m_pNext = new ArgHintArrow ( this, ArgHintArrow::Right ) ) );
-	hbox->addWidget ( ( m_pFuncLabel = new QLabel ( this ) ) );
+    hbox->addWidget ( ( m_pPrev = new ArgHintArrow ( this , ArgHintArrow::Left ) ) );
+    hbox->addWidget ( ( m_pStateLabel = new QLabel ( this ) ) );
+    hbox->addWidget ( ( m_pNext = new ArgHintArrow ( this, ArgHintArrow::Right ) ) );
+    hbox->addWidget ( ( m_pFuncLabel = new QLabel ( this ) ) );
 
 
-	setFocusPolicy ( StrongFocus );
-	setFocusProxy ( parent );
+    setFocusPolicy ( StrongFocus );
+    setFocusProxy ( parent );
 
-				//	m_pStateLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
-	m_pStateLabel->setPalette(QToolTip::palette());
-	m_pStateLabel->setAlignment ( AlignCenter );
-	m_pStateLabel->setFont ( QToolTip::font() );
-				//	m_pFuncLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
-	m_pFuncLabel->setPalette(QToolTip::palette());
-	m_pFuncLabel->setAlignment ( AlignCenter);
-	m_pFuncLabel->setFont ( QToolTip::font() );
+    //	m_pStateLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
+    m_pStateLabel->setPalette(QToolTip::palette());
+    m_pStateLabel->setAlignment ( AlignCenter );
+    m_pStateLabel->setFont ( QToolTip::font() );
+    //	m_pFuncLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
+    m_pFuncLabel->setPalette(QToolTip::palette());
+    m_pFuncLabel->setAlignment ( AlignCenter);
+    m_pFuncLabel->setFont ( QToolTip::font() );
 
-	m_pPrev->setFixedSize ( 16, 16 );
-	m_pStateLabel->setFixedSize ( 36, 16 );
-	m_pNext->setFixedSize ( 16, 16 );
+    m_pPrev->setFixedSize ( 16, 16 );
+    m_pStateLabel->setFixedSize ( 36, 16 );
+    m_pNext->setFixedSize ( 16, 16 );
 
-	connect ( m_pPrev, SIGNAL ( clicked() ), this, SLOT ( gotoPrev() ) );
-	connect ( m_pNext, SIGNAL ( clicked() ), this, SLOT ( gotoNext() ) );
+    connect ( m_pPrev, SIGNAL ( clicked() ), this, SLOT ( gotoPrev() ) );
+    connect ( m_pNext, SIGNAL ( clicked() ), this, SLOT ( gotoNext() ) );
 
-	m_nNumFunc = m_nCurFunc = m_nCurLine = 0;
+    m_nNumFunc = m_nCurFunc = m_nCurLine = 0;
 
-	m_nCurArg = 1;
+    m_nCurArg = 1;
 
-	m_bMarkingEnabled = false;
+    m_bMarkingEnabled = false;
 
-	updateState();
+    updateState();
 }
 
 KDevArgHint::~KDevArgHint()
