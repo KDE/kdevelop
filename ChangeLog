@@ -1,3 +1,7 @@
+2000-07-27 Falk Brettschneider <falk@kdevelop.org>
+        * treat view handler components in a special way (initialize them before other ones)
+        * embedding of views improved (watch fileNew action)
+
 2000-07-23 Falk Brettschneider <falk@kdevelop.org>
         * 'Windows' menu adapted to XML GUI
         * uses QextMDI-1.0beta3 now
