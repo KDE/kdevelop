@@ -3517,14 +3517,14 @@ according *.moc.cpp file and rebuild the project.
 <p>
 <bf>Main Developers:</bf>
 
-Sandy Meier 			<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz.uni-potsdam.de>">
+Sandy Meier 			<htmlurl url="mailto:smeier@kdevelop.de" name = "<smeier@kdevelop.de>">
 (maintainer, development coordinator and homepage provider)
 <quote/Main development of: frame structure, IDE look'n feel, project management./
 
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
 <quote/Main development of: <idx/KAppWizard/, <idx/printing/ functionality/
 
-Ralf Nolden			    <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+Ralf Nolden			    <htmlurl url="mailto:rnolden@kdevelop.de" name = "<rnolden@kdevelop.de>">
 <quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help and handbooks/
 
 Jonas Nordin			  <htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
@@ -3542,7 +3542,7 @@ Jörgen Olsson       <htmlurl url="mailto:jorgen@cenacle.net" name="<jorgen@cenac
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/
 
-Walter Tasin        <htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
+Walter Tasin        <htmlurl url="mailto:tasin@kdevelop.de" name="<tasin@kdevelop.de>">
 <quote/Main development of: Enhancements and Bug fixing/
 
 John Birch          <htmlurl url="mailto:jbb@ihug.co.nz" name="<jbb@ihug.co.nz>">
@@ -3552,7 +3552,7 @@ John Birch          <htmlurl url="mailto:jbb@ihug.co.nz" name="<jbb@ihug.co.nz>"
 
 <bf>Translation coordination:</bf>
 
-Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
+Martin Piskernig		<htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskernig@kdevelop.de>">
 
 
 
@@ -3564,8 +3564,8 @@ Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<marti
 <item>Peeter Russak       <htmlurl url="mailto:pezz@tkwcy.ee" name="<pezz@tkwcy.ee>">	            - Estonian
 <item>Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
 <item>Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
-<item>Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
-<item>Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
+<item>Martin Piskernig    <htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskernig@kdevelop.de>">	-German
+<item>Ralf Funken         <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">	-German
 <item>Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
 <item>Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
 <item>Taiki Komoda        <htmlurl url="mailto:kom@kde.gr.jp" name="<kom@kde.gr.jp>">  - Japanese
@@ -3620,6 +3620,8 @@ Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<marti
 <item>Nich Hudson             <htmlurl url="mailto:nick@nthcliff.demon.co.uk" name="<nick@nthcliff.demon.co.uk>">
 <item>R. Imura                <htmlurl url="mailto:imura@cs.titech.ac.jp" name="<imura@cs.titech.ac.jp>">
 <item>Falk Brettschneider     <htmlurl url="mailto:gigafalk@yahoo.com" name="<gigafalk@yahoo.com>">
+<item>Ralf Funken             <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">
+
 </itemize>
 
 <bf>KDevelop contains sourcecode from the following applications:</bf>

@@ -1,3 +1,8 @@
+2000-03-15  Ralf Funken <rfunken@kdevelop.de>
+	* Updated Authors section in de and en manuals
+        * Updated AboutBox
+        * Updated kdevelop.pot and de.po
+
 2000-03-13 Walter Tasin  <tasin@kdevelop.de>
 	* fixing problem with double checking C/C++ compilers
 	  inside the GUI-source templates

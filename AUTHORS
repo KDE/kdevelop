@@ -2,18 +2,18 @@
 
 -Sandy Meier <smeier@kdevelop.de>
 -Stefan Heidrich <sheidric@rz.uni-potsdam.de>
--Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+-Ralf Nolden <rnolden@kdevelop.de>
 -Jonas Nordin <jonas.nordin@syncom.se>
 -Pascal Krahmer <pascal@beast.de>
 -Bernd Gehrmann <bernd@physik.hu-berlin.de>
 -Jörgen Olsson <jorgen@cenacle.net> 
 -Stefan Bartel <bartel@rz.uni-potsdam.de>
--Walter Tasin <tasin@e-technik.fh-muenchen.de> 
+-Walter Tasin <tasin@kdevelop.de>
 -John Birch <jbb@ihug.co.nz>
 
 ***Translations coordination***
 
--Martin Piskernig <martin.piskernig@stuwo.at>
+-Martin Piskernig <mpiskernig@kdevelop.de>
 
 ***Translations***
 
@@ -22,8 +22,8 @@
 -Peeter Russak <pezz@tkwcy.ee>	              - Estonian
 -Sami Kuhmonen <sami@iqs.fi>        	        - Finnish
 -Herve Lefebvre <hlefebvre@easynet.fr>        - French
--Martin Piskernig <martin.piskernig@stuwo.at> - German
--Ralf Funken <funken.ruk@netcologne.de>       - German (debugger work)
+-Martin Piskernig <mpiskernig@kdevelop.de>    - German
+-Ralf Funken <rfunken@kdevelop.de>            - German
 -Pahan Szabolcs <szabczy@bigfoot.com>	        - Hungarian
 -Massimo Morin <mmorin@schedsys.com>          - Italian
 -Taiki Komoda <kom@kde.gr.jp>                 - Japanese
@@ -73,6 +73,7 @@ KDevelop 1.1: RKocher@t-online.de (Ralph Kocher)
 -Nich Hudson <nick@nthcliff.demon.co.uk>
 -R. Imura <imura@cs.titech.ac.jp>
 -Falk Brettschneider <gigafalk@yahoo.com>
+-Ralf Funken <rfunken@kdevelop.de>
 
 KDevelop contains sourcecode from the following programs/classes:
 
