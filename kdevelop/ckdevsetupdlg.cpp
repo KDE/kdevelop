@@ -671,7 +671,7 @@ void CKDevSetupDlg::addQT2Tab()
 
   QGroupBox* kde2_box= new QGroupBox(QT2Page,"NoName");
   grid->addWidget(kde2_box,0,0);
-  kde2_box->setTitle(i18n("Qt 2.x / KDE path"));
+  kde2_box->setTitle(i18n("Qt 2.x/KDE path"));
   QGridLayout *grid2 = new QGridLayout(kde2_box,4,2,15,7);
 
   QLabel* qt2= new QLabel(kde2_box,"NoName");
