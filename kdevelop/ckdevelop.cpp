@@ -425,7 +425,7 @@ void CKDevelop::slotEditSearch(){
 void CKDevelop::slotEditRepeatSearch(){
     slotStatusMsg(i18n("Repeating last search..."));
     if(m_mdi_main_frame->activeWindow() == m_browser_view){
-	m_browser_widget->findTextNext(QRegExp(m_doc_search_text));
+	m_browser_widget->findTextNext(QRegExp(m_doc_search_text),true);
     }
     else{
 	// if m_editor_view->editor isn't shown don't proceed
@@ -2087,7 +2087,7 @@ void CKDevelop::slotDocumentDone(){
 
     if(m_prev_was_search_result){
 	m_browser_widget->findTextBegin();
-	m_browser_widget->findTextNext(QRegExp(m_doc_search_text));
+	m_browser_widget->findTextNext(QRegExp(m_doc_search_text),true);
     }
 
     if (pos!=-1)
