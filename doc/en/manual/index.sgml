@@ -2609,6 +2609,7 @@ down-arrow on the button, offers additional functionality that is also available
 <item><idx/New Class/: opens the <idx/New Class/ dialog to construct a new class
 <item>Add Method: adds a method to the selected class
 <item>Add Attribute: adds an attribute to the selected class
+<item>Show graphical classview: Opens the graphical inheritance tree
 </itemize>
 
 <sect1>Available Objects
@@ -2689,7 +2690,6 @@ Classes that make use of the selected class by an attribute in their class <idx/
 The suppliers that give <idx/attributes/ to the selected class.
 <tag/Attributes:/ The <idx/attributes/ of the class by their name
 <tag/Methods:/ The Methods of the selected class
-<tag/Virtual Methods:/ The virtual methods that a class provides
 </descrip>
 Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
 attribute value.

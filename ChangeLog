@@ -1,3 +1,7 @@
+2000-02-02 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated chapter 10 (classbrowser) in en and de manual
+	* Eliminated double shortcuts (&char) in de.po
+
 2000-01-31 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* processes.pl retrieves now the KDE-pathes
 	  by KDevelop ... good news for rpm-packagers
