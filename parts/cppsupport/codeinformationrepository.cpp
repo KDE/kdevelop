@@ -200,6 +200,11 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
 	return entry;
 
     switch( tag.kind() ){
+	case Tag::Kind_Typedef:
+	    entry.prefix = "typedef";
+	    entry.text = tag.name();
+	break;
+	
 	case Tag::Kind_Class:
 	    entry.prefix = "class";
 	    entry.text = tag.name();

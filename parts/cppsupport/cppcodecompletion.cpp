@@ -1398,6 +1398,14 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    computeCompletionEntryList( entryList, tags, isInstance );
 	}
 
+	if( !isInstance && cfg->includeTypedefs() ){
+	    args.clear();
+	    args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef )
+		<< Catalog::QueryArgument( "scope", type );
+	    tags = m_repository->query( args );
+	    computeCompletionEntryList( entryList, tags, isInstance );
+	}
+	
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
 	    << Catalog::QueryArgument( "name", type.join("::") );
