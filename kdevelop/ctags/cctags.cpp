@@ -65,7 +65,7 @@ void CTag::parse_ext()
 
 
 CTagsDataBase::CTagsDataBase()
-  : m_init(false), m_taglistdict(), m_file(QString::null)
+  : m_init(false), m_taglistdict(17,true), m_file(QString::null)
 {
   m_taglistdict.setAutoDelete(true);
   kdDebug() << "in ctags constructor\n";
@@ -81,13 +81,13 @@ void CTagsDataBase::create_tags(KShellProcess& process, CProject& project)
   // collect all files belonging to the project
   QString files;
   QStrListIterator isrc(project.getSources());
-  while (!isrc.atLast())
+  while (isrc)
   {
       files = files + *isrc + " ";
       ++isrc;
   }
   QStrListIterator ihdr(project.getHeaders());
-  while (!ihdr.atLast())
+  while (ihdr)
   {
       files = files + *ihdr + " ";
       ++ihdr;
@@ -96,7 +96,6 @@ void CTagsDataBase::create_tags(KShellProcess& process, CProject& project)
   CtagsCommand& cmd = project.ctags_cmd();
   // set the name of the output file
   m_file = project.getProjectDir() + "/tags";
-
   // use a shell_process that was already set up
   process.clearArguments();
   process << cmd.m_command;
@@ -104,7 +103,10 @@ void CTagsDataBase::create_tags(KShellProcess& process, CProject& project)
   process << cmd.m_excmd_pattern;
   process << cmd.m_file_scope;
   process << cmd.m_file_tags;
-  process << cmd.m_ctypes;
+  process << cmd.m_c_types;
+  process << cmd.m_fortran_types;
+  process << cmd.m_exclude;
+  process << cmd.m_fields;
   process << "-f" ;
   process << m_file ;
   process << files ;
@@ -135,17 +137,19 @@ void CTagsDataBase::load()
         // split line into components according to ctags manual
         QChar sep('\t');
         QStringList taglist = QStringList::split(sep,aline);
-        // tag<TAB>filename<TAB>ex command<TAB>ctags extension
+        // tag<TAB>filename<TAB>ex command"<TAB>ctags extension
         QStringList::Iterator it = taglist.begin();
         QStringList::Iterator ptag = it;
         QStringList::Iterator pfile = ++it;
         QStringList::Iterator pexcmd = ++it;
         QStringList::Iterator pext = ++it;
         //kdDebug() << "1 tag    2 filename    3 ex command    4 ctags ext\n" ;
-        //kdDebug() << (*ptag).latin1() << "    "
-        //          << (*pfile).latin1() << "    "
-        //          << (*pexcmd).latin1() << "    "
-        //          << (*pext).latin1() << "\n";
+        //if (*ptag=="CTagsDataBase") {
+        //  kdDebug() << (*ptag).latin1() << "    "
+        //            << (*pfile).latin1() << "    "
+        //            << (*pexcmd).latin1() << "    "
+        //            << (*pext).latin1() << "\n";
+        //}
         CTagList* pTagList = m_taglistdict[*ptag];
         if (!pTagList) {
           pTagList = new CTagList(*ptag);
@@ -155,6 +159,8 @@ void CTagsDataBase::load()
           }
           m_taglistdict.insert(*ptag,pTagList);
         }
+        // we can probably avoid one expensive copy here if we
+        // chage the taglist from a QValuelist to a Qlist
         pTagList->append(CTag(*pfile,*pexcmd,*pext));
       }
     }

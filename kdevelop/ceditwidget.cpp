@@ -306,6 +306,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       pop->setItemEnabled(ID_EDIT_REDO,false);
     }
 
+    // check for highlighted text first
     QString str = markedText();
     if(!str.isEmpty()){
       pop->setItemEnabled(ID_EDIT_CUT,true);
@@ -314,8 +315,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     else{
       pop->setItemEnabled(ID_EDIT_CUT,false);
       pop->setItemEnabled(ID_EDIT_COPY,false);
-    }		
-
+    }
 
     QClipboard *cb = kapp->clipboard();
     QString text=cb->text();
@@ -328,12 +328,15 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       str = word(event->x()- (iconBorderWidth-2) ,event->y());
     }
 
-    searchtext = str;
     str.replace(QRegExp("^\n"), "");
     pos=str.find("\n");
     if (pos>-1)
      str=str.left(pos);
 
+    /* this is to shorten the UI feedback, we will continue
+     * to use searchtext for the actual searches
+     */
+    searchtext = str;
     if(str.length() > 20 ){
       str = str.left(20) + "...";
     }
@@ -357,7 +360,8 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       if (tagsDB.is_init()) {
         kdDebug() << "found tags data base\n";
         // remember that we are searching for searchtext not for str!
-        if (const CTagList* taglist = tagsDB.ctaglist(searchtext))
+        const CTagList* taglist = tagsDB.ctaglist(searchtext);
+        if (taglist)
         {
           int ntags = taglist->count();
           kdDebug() << "found: " << ntags << " entries for: "

@@ -156,10 +156,10 @@ public:
     m_excmd_pattern = "--excmd=pattern";
     m_file_scope = "--file-scope=yes";
     m_file_tags = "--file-tags=yes";
-    m_ctypes = "--c-types=+px";
+    m_c_types = "--c-types=+px";
     m_fortran_types = "--fortran-types=-l+L";
-    m_exclude = "*.inc *.bck glimpse*";
-    m_fields = "+i";
+    m_exclude = "--exclude=\"*.inc *.bck glimpse*\"";
+    m_fields = "--fields=+i";
   }
   ~CtagsCommand() {}
 private:
@@ -168,7 +168,7 @@ private:
   QString m_excmd_pattern;
   QString m_file_scope;
   QString m_file_tags;
-  QString m_ctypes;
+  QString m_c_types;
   QString m_fortran_types;
   QString m_exclude;
   QString m_fields;
