@@ -369,6 +369,57 @@ QString ClassTreeAttrItem::text( int ) const
     return m_item->name();
 }
 
+ClassTreeScriptItem::ClassTreeScriptItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
+                                     ParsedScript *parsedScript)
+    : ClassTreeItem(parent, lastSibling, parsedScript)
+{
+    QString icon;
+
+    if ( !parsedScript )
+      return;
+
+    setExpandable(true);
+
+    //need a icon for scripts
+    icon = "CVpublic_var";
+    setPixmap(0, UserIcon(icon, KIcon::DefaultState, ClassViewFactory::instance()));
+}
+
+
+QString ClassTreeScriptItem::text( int ) const
+{
+    if ( !m_item )
+        return QString::null;
+    return m_item->name();
+}
+
+void ClassTreeScriptItem::setOpen(bool o)
+{
+    if ( !m_item )
+        return;
+    kdDebug(9003) << (o? "Open script item" : "Close script item") << endl;
+    if (o && childCount() == 0) {
+
+        ParsedScript *pClass = static_cast<ParsedScript*>(m_item);
+        ClassTreeItem *lastItem = 0;
+
+        // Add methods
+        QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+        QValueList<ParsedMethod*>::ConstIterator methodIt;
+        for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
+            lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
+
+        // Add attributes
+        QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+        QValueList<ParsedAttribute*>::ConstIterator attrIt;
+        for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt)
+            lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
+
+    }
+
+    ClassTreeItem::setOpen(o);
+}
+
 
 class ClassToolTip : public QToolTip
 {
@@ -475,6 +526,10 @@ void ClassTreeBase::slotItemExecuted( QListViewItem* item )
 {
     if (!item)
         return;
+
+    // toggle open state for parents
+    if (item->childCount() > 0)
+        setOpen(item, !isOpen(item));
 
     // We assume here that ALL (!) items in the list view
     // are ClassTreeItem's

@@ -21,6 +21,7 @@
 #include "parsedmethod.h"
 #include "parsedattribute.h"
 #include "classviewpart.h"
+#include "parsedscript.h"
 
 class ClassTreeItem;
 class KPopupMenu;
@@ -223,5 +224,19 @@ public:
 
     virtual QString text( int ) const;
 };
+
+class ClassTreeScriptItem : public ClassTreeItem
+{
+public:
+    ClassTreeScriptItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
+                       ParsedScript *parsedScript );
+    ~ClassTreeScriptItem()
+        {
+        }
+
+    virtual QString text( int ) const;
+    virtual void setOpen(bool o);
+};
+
 
 #endif

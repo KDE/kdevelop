@@ -372,6 +372,18 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             lastItem->setOpen(true);
     }
 
+    if (features & KDevLanguageSupport::Scripts) {
+        // Add scripts
+        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Scripts"));
+        ilastItem = 0;
+        QValueList<ParsedScript*> scriptList = store->getSortedScriptList();
+        QValueList<ParsedScript*>::ConstIterator it;
+        for (it = scriptList.begin(); it != scriptList.end(); ++it)
+            ilastItem = new ClassTreeScriptItem(lastItem, ilastItem, *it);
+        if (fromScratch)
+            lastItem->setOpen(true);
+    }
+
     if (!fromScratch)
         setTreeState(oldTreeState);
 }
