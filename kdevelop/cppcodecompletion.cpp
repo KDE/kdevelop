@@ -775,7 +775,7 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 #if QT_VERSION >=300
         if( regMethod.match(text) != -1 ){
 #else
-        if( regMethod.match(text) ){
+        if( !text.isEmpty() && regMethod.match(text) ){
 #endif
             iMethodBegin = i;
             if( classname ){
@@ -853,7 +853,7 @@ void CppCodeCompletion::completeText()
     }
 #else
     KRegExp rx("^.*[^A-Za-z0-9]+([_A-Za-z0-9]+)\\s*$");
-    if( rx.match(expr) )
+    if( !expr.isEmpty() && rx.match(expr) )
     {
         word = rx.group( 1 );
         expr = expr.left( rx.groupStart(1) );
