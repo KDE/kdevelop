@@ -44,13 +44,14 @@ These are things that must be accomplished before we can say that
 gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
 * general UI issues:
-  - new file: a File menu to create a new file 
+  - new file: a New File action in File menu & class/file views
   - no possibility of bringing back closed toolviews
   - no possibility of switching toolviews on and off
   - toplevel UI mode broken
   - Window menu allows switching files only; standard functionality missing
   - [Modified] missing in mainframe caption
-
+  - captions missing for toolbar buttons
+  
 * cppsupport:
   - new class dialog belongs in File menu
 
@@ -59,8 +60,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - navigation toolbar
 
 * editing:
-  - setting breakpoints in qeditor texteditor (the only one that is
-    working here) impossible
+  - setting breakpoints in qeditor texteditor impossible
   - RMB on qeditor doesn't have the 'Switch to declaration/definition'
     functionality
 
@@ -69,7 +69,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
     
 * interoperability:
   - import/export 2.1-projects<-->Gideon-projects
-  - version control: integration with Cervisia??
+  - version control: integration with Cervisia?
 
   
 3. Missing UIs (other than 2)
@@ -81,6 +81,7 @@ UIs that intuitively ought to be there
   - install, etc. targets besides "build" for subproject menus & toolbar
   
 
+  
 Other Issues
 ============
 
