@@ -29,6 +29,12 @@
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
             <property name="title">
                 <string>Parsing</string>
             </property>
@@ -103,82 +109,78 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>Special Words</string>
+                <string>Special Headers</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
+                <widget class="KListView" row="0" column="0" rowspan="5" colspan="1">
+                    <column>
+                        <property name="text">
+                            <string></string>
                         </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>pushButton1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Add</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>pushButton2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Remove</string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer1</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>21</width>
-                                    <height>121</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </vbox>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>specialHeaderListView</cstring>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>LastColumn</enum>
+                    </property>
                 </widget>
-                <widget class="QTable" row="0" column="0">
-                    <column>
-                        <property name="text">
-                            <string>Word</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Skip Arguments</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Replace Word With</string>
-                        </property>
-                    </column>
+                <spacer row="4" column="1">
                     <property name="name">
-                        <cstring>specialWordsTable</cstring>
+                        <cstring>spacer2</cstring>
                     </property>
-                    <property name="resizePolicy">
-                        <enum>Manual</enum>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
                     </property>
-                    <property name="numRows">
-                        <number>0</number>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                    <property name="numCols">
-                        <number>3</number>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>61</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton" row="3" column="1">
+                    <property name="name">
+                        <cstring>pushButton6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Move &amp;Down</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="1">
+                    <property name="name">
+                        <cstring>pushButton5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Move &amp;Up</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>pushButton3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Add</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>pushButton4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Remove</string>
                     </property>
                 </widget>
             </grid>
@@ -186,18 +188,6 @@
     </vbox>
 </widget>
 <connections>
-    <connection>
-        <sender>pushButton1</sender>
-        <signal>clicked()</signal>
-        <receiver>ConfigureProblemReporter</receiver>
-        <slot>addSpecialWord()</slot>
-    </connection>
-    <connection>
-        <sender>pushButton2</sender>
-        <signal>clicked()</signal>
-        <receiver>ConfigureProblemReporter</receiver>
-        <slot>removeCurrentSpecialWord()</slot>
-    </connection>
     <connection>
         <sender>delaySlider</sender>
         <signal>valueChanged(int)</signal>
@@ -210,20 +200,56 @@
         <receiver>ConfigureProblemReporter</receiver>
         <slot>bgParserCheckbox_toggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>pushButton3</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>addSpecialHeader()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton4</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>removeSpecialHeader()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton5</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>moveUpSpecialHeader()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton6</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>moveDownSpecialHeader()</slot>
+    </connection>
 </connections>
+<tabstops>
+    <tabstop>bgParserCheckbox</tabstop>
+    <tabstop>delaySlider</tabstop>
+    <tabstop>specialHeaderListView</tabstop>
+    <tabstop>pushButton3</tabstop>
+    <tabstop>pushButton4</tabstop>
+    <tabstop>pushButton5</tabstop>
+    <tabstop>pushButton6</tabstop>
+</tabstops>
 <includes>
     <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
 </includes>
 <slots>
     <slot>init()</slot>
     <slot>destroy()</slot>
-    <slot>loadSpecialWords()</slot>
-    <slot>storeSpecialWords()</slot>
-    <slot>addSpecialWord()</slot>
-    <slot>removeCurrentSpecialWord()</slot>
     <slot>accept()</slot>
     <slot>bgParserCheckbox_toggled( bool b )</slot>
     <slot access="protected">setDelayLabel( int delay )</slot>
+    <slot>addSpecialHeader()</slot>
+    <slot>removeSpecialHeader()</slot>
+    <slot>moveUpSpecialHeader()</slot>
+    <slot>moveDownSpecialHeader()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

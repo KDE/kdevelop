@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include "codeinformationrepository.h"
+#include "cpp_tags.h"
+
 #include <kdebug.h>
 
 // TODO: move in utils.cpp
@@ -236,7 +238,7 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
     
     QValueList<Tag>::ConstIterator it = tags.begin();
     while( it != tags.end() ){
-	const Tag& tag = *it;
+	Tag tag = *it;
 	++it;
 	
 	KTextEditor::CompletionEntry entry;
@@ -258,8 +260,9 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 		
 		entry.text += "(";
 		
-		QStringList arguments = tag.attribute( "arguments" ).toStringList();
-		QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
+		CppFunction<Tag> tagInfo( tag );
+		QStringList arguments = tagInfo.arguments();
+		QStringList argumentNames = tagInfo.argumentNames();
 		
 		QString signature;
 		for( uint i=0; i<arguments.size(); ++i ){

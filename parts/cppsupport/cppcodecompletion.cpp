@@ -25,6 +25,7 @@
 #include "parser.h"
 #include "lexer.h"
 #include "tree_parser.h"
+#include "cpp_tags.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -889,11 +890,13 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
-	    const Tag& tag = *it;
+	    Tag& tag = *it;
 	    ++it;
+	    
+	    CppBaseClass<Tag> tagInfo( tag );
 
-	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
-	    retVal += getSignatureListForClass( tag.attribute("baseClass").toString(), functionName, isInstance );
+	    kdDebug(9020) << "found base class " << tagInfo.baseClass() << endl;
+	    retVal += getSignatureListForClass( tagInfo.baseClass(), functionName, isInstance );
 	}
     } else {
 	retVal = pClass->getSortedMethodSignatureList( functionName );
@@ -1179,11 +1182,12 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
-	    const Tag& tag = *it;
+	    Tag& tag = *it;
 	    ++it;
 
-	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
-	    entryList += findAllEntries( tag.attribute("baseClass").toString(), false, isInstance );
+	    CppBaseClass<Tag> tagInfo( tag );
+	    kdDebug(9020) << "found base class " << tagInfo.baseClass() << endl;
+	    entryList += findAllEntries( tagInfo.baseClass(), false, isInstance );
 	}
     }
 
@@ -1221,18 +1225,19 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    const Tag& tag = tags[ 0 ]; // hmmm
 	    if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
 		return tag.name();
-	    return tag.attribute( "type" ).toString();
+	    
+	    return tag.attribute( "t" ).toString();
 	}
-
+	
         QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
         kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
         QValueList<Tag>::Iterator it = parents.begin();
         while( it != parents.end() ){
-            const Tag& tag = *it;
+            Tag& tag = *it;
             ++it;
 
-	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
-	    type = typeOf( tag.attribute( "baseClass" ).toString(), container );
+	    CppBaseClass<Tag> tagInfo( tag );
+	    type = typeOf( tagInfo.baseClass(), container );
 	    if( type )
 		return type;
         }

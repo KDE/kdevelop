@@ -12,6 +12,7 @@
 #include "tag_creator.h"
 #include "catalog.h"
 #include "ast_utils.h"
+#include "cpp_tags.h"
 
 #include <kdebug.h>
 #include <qfileinfo.h>
@@ -49,7 +50,6 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
 	nsName = ast->namespaceName()->text();
     }
 
-#if 0
     Tag tag;
     tag.setKind( Tag::Kind_Namespace );
     tag.setFileName( m_fileName );
@@ -64,7 +64,6 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
     tag.setEndPosition( line, col );
 
     m_catalog->addItem( tag );
-#endif
 
     m_currentScope.push_back( nsName );
     TreeParser::parseNamespace( ast );
@@ -226,6 +225,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
     QString scopeStr = scopeOfDeclarator( d );
 
     Tag tag;
+    CppFunction<Tag> tagBuilder( tag );
     tag.setKind( Tag::Kind_Function );
 
     tag.setFileName( m_fileName );
@@ -239,20 +239,17 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
     ast->getEndPosition( &line, &col );
     tag.setEndPosition( line, col );
 
-    QString type = typeOfDeclaration( typeSpec, d );
-    tag.setAttribute( "type", type );
+    tagBuilder.setType( typeOfDeclaration(typeSpec, d) );
 
     parseFunctionArguments( tag, d );
 
-    if( !m_currentAccess.isEmpty() ){
-        tag.setAttribute( "access", m_currentAccess );
-    }
+    tagBuilder.setAccess( stringToAccess(m_currentAccess) );
 
-    tag.setAttribute( "isFriend", isFriend );
-    tag.setAttribute( "isVirtual", isVirtual );
-    tag.setAttribute( "isStatic", isStatic );
-    tag.setAttribute( "isInline", isInline );
-    tag.setAttribute( "isPure", false );
+    tagBuilder.setFriend( isFriend );
+    tagBuilder.setVirtual( isVirtual );
+    tagBuilder.setStatic( isStatic );
+    tagBuilder.setInline( isInline );
+    tagBuilder.setPure( false );
 
     m_catalog->addItem( tag );
 
@@ -423,6 +420,8 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
     }
 
     Tag tag;
+    CppVariable<Tag> tagBuilder( tag );
+    
     tag.setKind( Tag::Kind_Variable );
     tag.setFileName( m_fileName );
     tag.setName( id );
@@ -435,14 +434,10 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
     decl->getEndPosition( &line, &col );
     tag.setEndPosition( line, col );
 
-    tag.setAttribute( "type", type );
-    tag.setAttribute( "isFriend", isFriend );
-    tag.setAttribute( "isStatic", isStatic );
-
-    QString access = m_currentAccess;
-    if( access.isNull() )
-        access = "public";
-    tag.setAttribute( "access", access );
+    tagBuilder.setType( type );
+    tagBuilder.setFriend( isFriend );
+    tagBuilder.setStatic( isStatic );
+    tagBuilder.setAccess( stringToAccess(m_currentAccess) );
 
     m_catalog->addItem( tag );
 }
@@ -501,6 +496,8 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     QString type = typeOfDeclaration( typeSpec, d );
 
     Tag tag;
+    CppFunction<Tag> tagBuilder( tag );
+    
     tag.setKind( Tag::Kind_FunctionDeclaration );
     tag.setFileName( m_fileName );
     tag.setName( id );
@@ -513,12 +510,12 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     decl->getEndPosition( &line, &col );
     tag.setEndPosition( line, col );
 
-    tag.setAttribute( "type", type );
-    tag.setAttribute( "isFriend", isFriend );
-    tag.setAttribute( "isVirtual", isVirtual );
-    tag.setAttribute( "isStatic", isStatic );
-    tag.setAttribute( "isInline", isInline );
-    tag.setAttribute( "isPure", isPure );
+    tagBuilder.setType( type );
+    tagBuilder.setFriend( isFriend );
+    tagBuilder.setVirtual( isVirtual );
+    tagBuilder.setStatic( isStatic );
+    tagBuilder.setInline( isInline );
+    tagBuilder.setPure( isPure );
 
     parseFunctionArguments( tag, d );
 
@@ -557,8 +554,11 @@ void TagCreator::parseFunctionArguments( Tag& tag, DeclaratorAST* declarator )
         }
 
     }
-    tag.setAttribute( "arguments", types );
-    tag.setAttribute( "argumentNames", args );
+    
+    CppFunction<Tag> tagBuilder( tag );
+    
+    tagBuilder.setArguments( types );
+    tagBuilder.setArgumentNames( args );
 }
 
 QString TagCreator::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator )
@@ -606,14 +606,16 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 	    baseName += baseSpecifier->name()->unqualifiedName()->name()->text();
 
 	Tag tag;
+	CppBaseClass<Tag> tagBuilder( tag );
+	
 	tag.setKind( Tag::Kind_Base_class );
 	tag.setFileName( m_fileName );
 	tag.setName( className );
 	tag.setScope( m_currentScope );
 
-	tag.setAttribute( "baseClass", baseName );
-	tag.setAttribute( "isVirtual", isVirtual );
-	tag.setAttribute( "access", access );
+	tagBuilder.setBaseClass( baseName );
+	tagBuilder.setVirtual( isVirtual );
+	tagBuilder.setAccess( stringToAccess(access) );
 
 	m_catalog->addItem( tag );
 
@@ -645,4 +647,28 @@ QString TagCreator::scopeOfDeclarator( DeclaratorAST* d )
     }
 
     return scope.join( "." );
+}
+
+int TagCreator::stringToAccess( const QString & access ) const
+{
+    QStringList l = QStringList() 
+		    << "public" << "protected" << "private" 
+		    << "public slots" << "protected slots" << "private slots"
+		    << "signals";
+ 
+    int idx = l.findIndex( access );
+    return idx == -1 ? 0 : idx+1;
+}
+
+QString TagCreator::accessToString( int id ) const
+{
+    QStringList l = QStringList() 
+		    << "public" << "protected" << "private" 
+		    << "public slots" << "protected slots" << "private slots"
+		    << "signals";
+    
+    if( l.at(id-1) != l.end() )
+	return l[ id-1 ];
+    
+    return QString::null;
 }

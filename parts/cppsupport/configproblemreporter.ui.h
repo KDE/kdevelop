@@ -5,7 +5,6 @@
 ** update this file, preserving your code. Create an init() slot in place of
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
-#include <qaccel.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -18,41 +17,10 @@ void ConfigureProblemReporter::init()
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
     delaySlider->setValue( config->readNumEntry("CppBgParserDelay", 250) );
     setDelayLabel( delaySlider->value() );
-    loadSpecialWords();
-    addSpecialWord();
-    
-    QAccel* a = new QAccel( specialWordsTable );
-    a->connectItem( a->insertItem(Key_Insert), this, SLOT(addSpecialWord()) );
-    a->connectItem( a->insertItem(Key_Delete), this, SLOT(removeCurrentSpecialWord()) );
 }
 
 void ConfigureProblemReporter::destroy()
 {
-    storeSpecialWords();
-}
-
-void ConfigureProblemReporter::loadSpecialWords()
-{
-}
-
-void ConfigureProblemReporter::storeSpecialWords()
-{
-}
-
-void ConfigureProblemReporter::addSpecialWord()
-{
-    int row = specialWordsTable->numRows();
-    specialWordsTable->insertRows( row );
-    specialWordsTable->setItem( row, 1, 
-				new QComboTableItem( specialWordsTable, 
-						     QStringList() << 
-						     "False" << "True") );						       
-}
-
-void ConfigureProblemReporter::removeCurrentSpecialWord()
-{
-    if( specialWordsTable->numRows() > 0 )
-    specialWordsTable->removeRow( specialWordsTable->currentRow() );
 }
 
 void ConfigureProblemReporter::accept()
@@ -79,4 +47,28 @@ void ConfigureProblemReporter::bgParserCheckbox_toggled( bool b )
 void ConfigureProblemReporter::setDelayLabel( int delay )
 {
     delayLabel->setText( i18n( "delay: %1 msec" ).arg( delay ) );
+}
+
+
+void ConfigureProblemReporter::addSpecialHeader()
+{
+
+}
+
+
+void ConfigureProblemReporter::removeSpecialHeader()
+{
+
+}
+
+
+void ConfigureProblemReporter::moveUpSpecialHeader()
+{
+
+}
+
+
+void ConfigureProblemReporter::moveDownSpecialHeader()
+{
+
 }
