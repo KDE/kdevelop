@@ -29,12 +29,14 @@ MakeView::MakeView(QObject *parent, const char *name)
     setXMLFile("kdevmakeview.rc");
 
     m_widget = 0;
+    m_dcop = new KDevMakeFrontendIface(this);
 }
 
 
 MakeView::~MakeView()
 {
     delete m_widget;
+    delete m_dcop;
 }
 
 

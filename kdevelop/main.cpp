@@ -22,6 +22,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
+#include <dcopclient.h>
 #include <qstringlist.h>
 #include <qstring.h>
 #include <stdlib.h>
@@ -53,6 +54,9 @@ int main(int argc, char* argv[])
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
   KApplication a;
+  a.dcopClient()->attach();
+  a.dcopClient()->registerAs("kdevelop");
+  
 //  KStartupLogo* start_logo=0L;
 //  KGuiCmdApp a(argc, argv);
   //	a.connectToKWM();

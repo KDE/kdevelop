@@ -34,6 +34,7 @@ namespace KTextEditor {
 };
 
 #include "kdeveditormanager.h"
+#include "KDevEditorManagerIface.h"
 
 #include <qwidget.h>
 
@@ -120,6 +121,7 @@ private:
   QList<KTextEditor::Document> m_documents;
   QList<KHTMLPart> m_htmldocuments;
   KLibFactory* m_factory;
+  KDevEditorManagerIface *m_dcop;
 };
 
 #endif

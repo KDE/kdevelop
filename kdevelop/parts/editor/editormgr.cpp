@@ -68,6 +68,8 @@ EditorManager::EditorManager(QObject* parent, const char* name) :
 
   m_factory = KLibLoader::self()->factory( service->library() );
   assert( m_factory );
+
+  m_dcop = new KDevEditorManagerIface(this);
 }
 
 /****************************************************************************/
@@ -75,6 +77,7 @@ EditorManager::EditorManager(QObject* parent, const char* name) :
 /** Destructor for the fileclass of the application */
 EditorManager::~EditorManager()
 {
+    delete m_dcop;
 }
 
 /****************************************************************************/

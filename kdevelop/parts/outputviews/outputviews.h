@@ -15,6 +15,7 @@
 #include <qguardedptr.h>
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "KDevMakeFrontendIface.h"
 
 
 class MakeWidget;
@@ -34,6 +35,7 @@ protected:
     
 private:
     QGuardedPtr<MakeWidget> m_widget;
+    KDevMakeFrontendIface *m_dcop;
     friend class MakeWidget;
 };
 
