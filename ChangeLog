@@ -1,3 +1,6 @@
+1999-03-22  Pascal Krahmer <pascal@beast.de>
+        * added kdlgpropwidget class
+
 1999-03-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* changed the projectmanagement to support sourcecodes in subdirs (static libraries)
