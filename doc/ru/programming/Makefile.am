@@ -49,3 +49,5 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/ru/kdevelop/programming/index-18.html
 	-rm -f $(kde_htmldir)/ru/kdevelop/programming/index-19.html
 
+doc: index.sgml
+	ksgml2html index.sgml ru
