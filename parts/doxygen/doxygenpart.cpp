@@ -480,7 +480,7 @@ void DoxygenPart::slotDocumentFunction(){
                 int eline, ecol;
                 (*ci)->getStartPosition(&sline, &scol);
                 (*ci)->getEndPosition(&eline, &ecol);
-                if(cursorLine >= sline && cursorLine <= eline && cursorCol >= scol && cursorCol <= ecol)
+                if(cursorLine >= sline && cursorLine <= eline )
                     function = *ci;
             }
             if (function == 0){
@@ -491,7 +491,7 @@ void DoxygenPart::slotDocumentFunction(){
                     int eline, ecol;
                     (*ci)->getStartPosition(&sline, &scol);
                     (*ci)->getEndPosition(&eline, &ecol);
-                    if(cursorLine >= sline && cursorLine <= eline && cursorCol >= scol && cursorCol <= ecol)
+                    if(cursorLine >= sline && cursorLine <= eline)
                         functionDef = *ci;
                 }
             }
