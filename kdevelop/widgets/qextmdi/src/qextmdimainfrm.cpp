@@ -1033,10 +1033,12 @@ void QextMdiMainFrm::switchToTabPageMode()
       setMainDockWidget(pCover);
    }
    if (pCover) {
-      // set the first page as active page
-      KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
-      if (pTab)
-         pTab->setVisiblePage(pRemActiveWindow);
+      if (m_pWinList->count() > 1) {  // note: with only 1 page we haven't already tabbed widgets
+         // set the first page as active page
+         KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
+         if (pTab)
+            pTab->setVisiblePage(pRemActiveWindow);
+      }
       pRemActiveWindow->setFocus();
    }
 
