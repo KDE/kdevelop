@@ -3,7 +3,7 @@
  <general>
   <author>$AUTHOR$</author>
   <email>$EMAIL$</email>
-  <projectmanagement>KDevTrollProject</projectmanagement>
+  <projectmanagement>KDevTMakeProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>Qt</keyword>
@@ -26,6 +26,13 @@
    <toc>perl</toc>
   </ignoretocs>
  </kdevdoctreeview>
+   <kdevtrollproject>
+    <run>
+      <mainprogram>./bin/$APPNAMELC$</mainprogram>
+      <programargs>-qws</programargs>
+    </run>
+    <envvars/>
+  </kdevtrollproject>
  <kdevdebugger>
   <general>
    <dbgshell/>
