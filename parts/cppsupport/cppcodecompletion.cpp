@@ -815,6 +815,12 @@ CppCodeCompletion::completeText( )
 	
 	if( type.isEmpty() && expr.isEmpty() ){
 	    computeSignatureList( signatureList, word, m_pSupport->classStore()->globalScope()->getSortedMethodList() );
+	    
+	    if( !word.isEmpty() ){
+		QStringList fakeType;
+		fakeType << word;
+		computeSignatureList( signatureList, word, word );
+	    }
 	} else if( !type.isEmpty() ){
 	    computeSignatureList( signatureList, word, type );
 	}
