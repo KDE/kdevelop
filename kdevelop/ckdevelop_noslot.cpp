@@ -153,6 +153,45 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
   return bChanged;
 }
 
+/*---------------------------------------- CKDevelop::setMainCaption()
+ * setMainCaption()
+ *
+ *  make the caption of the main window and sets the generated title
+ *
+ * Parameters:
+ *
+ * Returns:
+ *    nothing
+ *-----------------------------------------------------------------*/
+void CKDevelop::setMainCaption(int tab_item)
+{
+    if (bKDevelop)
+    {
+      switch(tab_item)
+      {
+          case BROWSER:
+	     kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
+                  break;
+          case TOOLS:
+	     kdev_caption="Tools - KDevelop " + version ;
+                  break;
+          default:
+	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+	      kdev_caption+= version +
+             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
+	      if (edit_widget->isModified())
+	        kdev_caption+= " *";
+                  break;
+      }
+      setCaption(kdev_caption);
+    }
+    else
+    {
+        // not using KDevelop but KDlgEdit
+    }
+}
+
+
 /*---------------------------------------- CKDevelop::isUntitled()
  * isUntitled()
  *
@@ -579,10 +618,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-      kdev_caption+= version +
-             " - ["+ QFileInfo(filename).fileName()+"]";
-      setCaption(kdev_caption);
+      setMainCaption();
       return;
     }
   }
@@ -607,10 +643,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-  kdev_caption+= version +
-      " - ["+ QFileInfo(filename).fileName()+"]";
-  setCaption(kdev_caption);
+  setMainCaption();
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
