@@ -53,7 +53,9 @@
 
 extern KGuiCmdManager cmdMngr;
 
-CKDevelop::CKDevelop(bool witharg){
+CKDevelop::CKDevelop(bool witharg)
+    : shell_process("/bin/sh");
+{
   version = VERSION;
   project=false;// no project
   beep=false; // no beep

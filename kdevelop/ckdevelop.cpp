@@ -28,7 +28,9 @@
 #include <qtoolbar.h>
 #include <qmessagebox.h>
 #include <qsplitter.h>
-
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <kmenubar.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kkeydialog.h>
@@ -915,13 +917,13 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  QString shell = getenv("SHELL");
+  //  QString shell = getenv("SHELL");
   QString flaglabel;
-  if(shell == "/bin/bash"){
+  //  if(shell == "/bin/bash"){
       flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  }
-  else{
-      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+      //  }
+      //  else{
+      //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
   }
   
 
@@ -997,7 +999,7 @@ void CKDevelop::slotBuildDistClean(){
 
 
 void CKDevelop::slotBuildConfigure(){
-    QString shell = getenv("SHELL");
+//    QString shell = getenv("SHELL");
 
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
@@ -1011,12 +1013,12 @@ void CKDevelop::slotBuildConfigure(){
 
   slotStatusMsg(i18n("Running ./configure..."));
   QString flaglabel;
-  if(shell == "/bin/bash"){
+//  if(shell == "/bin/bash"){
       flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  }
-  else{
-      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-  }
+//  }
+//  else{
+//      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+//  }
 
   showOutputView(true);
   setToolMenuProcess(false);
@@ -1496,22 +1498,20 @@ void CKDevelop::slotHelpSearch(){
 	delete help_srch_dlg;
 }
 
-void CKDevelop::slotHelpReference(){
 
-  QString file;
-  // first try the locale setting
-  file = locate("html",KGlobal::locale()->language() + "/kdevelop/reference/C/cref.html");
-  if( !QFileInfo( file ).exists() ){
-  // not found: use the default
-  	file = locate("html","default/kdevelop/reference/C/cref.html");
-  }
-  if( !QFileInfo( file ).exists() ){
-  file = locate("html",KGlobal::locale()->language() + "/kdevelop/cref.html");
-  }
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = locate("html","default/kdevelop/cref.html");
-  }
+static QString locatehtml(const QString &filename)
+{
+    QString path = locate("html", KGlobal::locale()->language() + '/' + filename);
+    if (path.isNull())
+        path = locate("html", "default/" + filename);
+    return path;
+}
+
+
+void CKDevelop::slotHelpReference(){
+  QString file = locatehtml("kdevelop/reference/C/cref.html");
+  if (file.isNull())
+      file = locatehtml("kdevelop/cref.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
@@ -1602,28 +1602,12 @@ void CKDevelop::slotHelpManual(){
 }
 
 void CKDevelop::slotHelpContents(){
-
-  QString file;
-  // first try the locale setting
-  file = locate("html",KGlobal::locale()->language()+"/kdevelop/index.html");
-  
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = locate("html","default/kdevelop/index.html");
-  }
+  QString file = locatehtml("kdevelop/index.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
 void CKDevelop::slotHelpTutorial(){
-
-  QString file;
-  // first try the locale setting
-  file = locate("html",KGlobal::locale()->language()+"/kdevelop/programming/index.html");
-
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = locate("html","default/kdevelop/programming/index.html");
-  }
+  QString file = locate("html", "kdevelop/programming/index.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	
 }
@@ -1979,11 +1963,10 @@ void CKDevelop::slotClipboardChanged()
 
 void CKDevelop::slotNewLineColumn()
 {
-  QString linenumber;
-  linenumber.sprintf(i18n("Line: %d Col: %d"), 
-     			edit_widget->currentLine() +1,
-			edit_widget->currentColumn() +1);
-  statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
+  QString str = i18n("Line: %1 Col: %2")
+      .arg(edit_widget->currentLine()+1)
+      .arg(edit_widget->currentColumn()+1);
+  statusBar()->changeItem(str, ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
   int state;
@@ -2757,8 +2740,10 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
   
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
-      if(KMessageBox::warningYesNo(0,i18n("KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?"),i18n("File not found!"))) {
-				slotOptionsKDevelop();
+      if (KMessageBox::questionYesNo(0, i18n("KDevelop couldn't find the Qt documentation.\n"
+                                             "Do you want to set the correct path?"))
+          == KMessageBox::Yes) {
+          slotOptionsKDevelop();
       }
       return;
     }
@@ -2766,8 +2751,10 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
        text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
        text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
        text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
-      if(KMessageBox::warningYesNo(0,i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),i18n("File not found!"))) {
-				slotOptionsUpdateKDEDocumentation();
+      if (KMessageBox::questionYesNo(0, i18n("KDevelop couldn't find the KDE API-Documentation.\n"
+                                             "Do you want to generate it now?"))
+          == KMessageBox::Yes) {
+          slotOptionsUpdateKDEDocumentation();
       }
       return;
     }
