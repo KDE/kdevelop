@@ -219,7 +219,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   optimize=new QCheckBox(target_group,"optimize");
   grid2->addWidget( optimize,1,0);
   optimize->setText(i18n("optimize"));
-  optimize->setChecked(!cxxflags.find("-O0") != -1);
+  int t = cxxflags.find("-O0");
+  optimize->setChecked(cxxflags.find("-O0") == -1);
 
   optimize_level=new QSpinBox(target_group,"optimize_level");
   grid2->addWidget( optimize_level,2,1);
@@ -231,6 +232,7 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   if (cxxflags.find("-O3") != -1)
     optimize_level->setValue(3);
   connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
+
 
   QLabel* optimize_level_label;
   optimize_level_label=new QLabel(target_group,"optimize_level_label");
@@ -246,6 +248,11 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   QWhatsThis::add(optimize, optimizeMsg);
   QWhatsThis::add(optimize_level, optimizeMsg);
   QWhatsThis::add(optimize_level_label, optimizeMsg);
+
+  optimize_level->setEnabled(optimize->isChecked());
+  connect(optimize, SIGNAL(toggled(bool)), optimize_level, SLOT(setEnabled(bool)) );
+  optimize_level_label->setEnabled(optimize->isChecked());
+  connect(optimize, SIGNAL(toggled(bool)), optimize_level_label, SLOT(setEnabled(bool)) );
 
   QGroupBox* debug_group;
   debug_group=new QGroupBox(compilerOptions,"debug_group");
@@ -300,6 +307,15 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
         "files in the current directory. This means "
         "compiling a file <i>foo.c</i> will produce "
         "the files <i>foo.o, foo.i</i> and<i>foo.s"));
+
+  save_temps->setEnabled(debug->isChecked());
+  connect(debug, SIGNAL(toggled(bool)), save_temps, SLOT(setEnabled(bool)) );
+  gprof_info->setEnabled(debug->isChecked());
+  connect(debug, SIGNAL(toggled(bool)), gprof_info, SLOT(setEnabled(bool)) );
+  debug_level_label->setEnabled(debug->isChecked());
+  connect(debug, SIGNAL(toggled(bool)), debug_level_label, SLOT(setEnabled(bool)) );
+  debug_level->setEnabled(debug->isChecked());
+  connect(debug, SIGNAL(toggled(bool)), debug_level, SLOT(setEnabled(bool)) );
 
   QGroupBox* compiler_group;
   compiler_group=new QGroupBox(compilerOptions,"debug_group");

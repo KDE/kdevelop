@@ -2017,16 +2017,15 @@ void KWriteDoc::delMarkedText(KWriteView *view, VConfig &c) {
 }
 
 QColor &KWriteDoc::cursorCol(int x, int y) {
-  TextLine *textLine;
-  int attr;
-  Attribute *a;
 
 //  if (x > 0) x--;
-  textLine = contents.at(y);
-  if (textLine)
-    attr = textLine->getRawAttr(x);
-  a = &attribs[attr & taAttrMask];
-  if (attr & taSelectMask) return a->selCol; else return a->col;
+  TextLine *textLine = contents.at(y);
+  int attr = (textLine) ? textLine->getRawAttr(x) : 0;
+  Attribute *a = &attribs[attr & taAttrMask];
+  if (attr & taSelectMask)
+    return a->selCol;
+  else
+    return a->col;
 }
 
 /*

@@ -1,3 +1,13 @@
+2001-06-24  jbb <jbb@kdevelop.org>
+    * bugfix: optimize options where never defaulting quite correctly
+    * so I fixed and disabled the options for optimize and debug if they
+    * wern't checked.
+    * Removed print from project files - it's not compiled anymore
+    * bugfix: added $LEXLIB to _project_ file so that regenerating the makefiles
+    * works again - I don't understand why that is so hard to do :)
+    * bugfix: Reverted Harry's debug fix for Qt3.x strings. it didn't always
+    * work - needs more thought, Harry :)
+    
 2001-06-22  Harald Fernengel  <harry@bnro.de>
    * fixed bug when file was modified outside editor
    * KDevelop can now debug Qt 3.x strings too.

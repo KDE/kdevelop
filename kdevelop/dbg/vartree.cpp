@@ -643,9 +643,9 @@ void VarItem::checkForRequests()
     ((VarTree*)listView())->emitExpandUserItem(this,
            // use the latin1() method. Shouldn't have any side-effects, but is dog-slow
            // we have to do it because the internal spec of QString has changed in Qt3
-           QCString().sprintf("%s.latin1()",
+//           QCString().sprintf("%s.latin1()",
 //           This was the old way
-//           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 
