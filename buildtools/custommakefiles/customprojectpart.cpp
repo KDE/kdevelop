@@ -508,6 +508,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
     dircmd += " && ";
 
     cmdline.prepend(makeEnvironment());
+    m_buildCommand = dircmd + cmdline;
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
