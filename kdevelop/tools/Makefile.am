@@ -5,7 +5,7 @@ EXTRA_DIST = processes.pl.in processesend.pl kimport
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
 
-bin_SCRIPTS=kimport
+bin_SCRIPTS = kimport kdevdlg2ui
 
 processes.pl: processes.pl.in
 	cp $(srcdir)/processes.pl.in processes.pl
