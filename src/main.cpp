@@ -19,6 +19,8 @@
 #include "projectmanager.h"
 #include "newmainwindow.h"
 
+#include "kdevideextension.h"
+
 static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
@@ -80,7 +82,7 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
-  TopLevel::mode = TopLevel::IDEMode;
+  KDevIDEExtension::init();
  
   QPixmap pm;
   pm.load(locate("appdata", "pics/kdevelop-splash.png"));

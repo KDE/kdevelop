@@ -284,7 +284,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
 		QDomElement viewEl = domdoc.createElement( "View0");
 		docEl.appendChild( viewEl);
 		
-		if ( dynamic_cast<DocumentationPart*>(pReadOnlyPart) )
+		if ( dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart) )
 		{
 			viewEl.setAttribute("Type", "Documentation");
 		}
@@ -314,7 +314,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
     if (!pReadOnlyPart)
       continue; // note: read-write parts are also a read-only part, they inherit from it
 
-    DocumentationPart* pDocuPart = dynamic_cast<DocumentationPart*>(pReadOnlyPart);
+    HTMLDocumentationPart* pDocuPart = dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart);
 
     /// @todo Save relative path for project sharing?
     QString url = pReadOnlyPart->url().url();

@@ -19,6 +19,8 @@
 #include "projectmanager.h"
 #include "newmainwindow.h"
 
+#include "kdevassistantextension.h"
+
 static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
-  TopLevel::mode = TopLevel::AssistantMode;
+  KDevAssistantExtension::init();
 
   QPixmap pm;
   pm.load(locate("data", "kdevelop/pics/kdevassistant-splash.png"));

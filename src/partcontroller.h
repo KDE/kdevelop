@@ -32,7 +32,7 @@ class QPopupMenu;
 class KAction;
 class KToolBarPopupAction;
 class KRecentFilesAction;
-class DocumentationPart;
+class HTMLDocumentationPart;
 class HistoryEntry;
 class KDirWatch;
 

@@ -8,7 +8,6 @@
 #include "newmainwindow.h"
 
 KDevMainWindow *TopLevel::s_instance = 0;
-TopLevel::Mode TopLevel::mode = TopLevel::IDEMode;
 
 bool TopLevel::mainWindowValid()
 {

@@ -18,9 +18,6 @@ public:
   static bool mainWindowValid();
   static void invalidateInstance(KDevMainWindow *instance);             //!< Signal that the object has been (or is about to be) destroyed
 
-  enum Mode { IDEMode, AssistantMode };
-  static Mode mode;
-
 private:
 
   static KDevMainWindow *s_instance;                                    //!< Pointer to the single KDevTopLevel object or 0L

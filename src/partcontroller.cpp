@@ -483,7 +483,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 
 void PartController::showDocument(const KURL &url, bool newWin)
 {
-  QString fixedPath = DocumentationPart::resolveEnvVarsInURL(url.url()); // possibly could env vars
+  QString fixedPath = HTMLDocumentationPart::resolveEnvVarsInURL(url.url()); // possibly could env vars
   KURL docUrl(fixedPath);
   kdDebug(9000) << "SHOW: " << docUrl.url() << endl;
 
@@ -495,10 +495,10 @@ void PartController::showDocument(const KURL &url, bool newWin)
   }
   
   
-  DocumentationPart *part = dynamic_cast<DocumentationPart*>(activePart());
+  HTMLDocumentationPart *part = dynamic_cast<HTMLDocumentationPart*>(activePart());
   if (!part || newWin)
   {
-    part = new DocumentationPart;
+    part = new HTMLDocumentationPart;
     integratePart(part,docUrl);
     connect(part, SIGNAL(fileNameChanged(KParts::ReadOnlyPart* )),
         this, SIGNAL(partURLChanged(KParts::ReadOnlyPart* )));
@@ -586,7 +586,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
   
   // yes, we're cheating again. this signal exists for katepart's 
-  // Document object and our DocumentationPart
+  // Document object and our HTMLDocumentationPart
 //  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotFileNameChanged()));
 
   // Connect to the document's views newStatus() signal in order to keep track of the
@@ -1134,7 +1134,7 @@ void PartController::slotActivePartChanged( KParts::Part * part )
 		addHistoryEntry( _partURLMap[ m_latestPart ] );
 	}
 
-	if ( dynamic_cast<DocumentationPart*>( part ) ) return;
+	if ( dynamic_cast<HTMLDocumentationPart*>( part ) ) return;
 
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
 	if ( ro_part )

@@ -67,6 +67,8 @@
 #include "mainwindowshare.h"
 #include "newmainwindow.h"
 
+#include "shellextension.h"
+
 /***************************
 WHAT'S NOT WORKING:
 
@@ -118,10 +120,7 @@ void NewMainWindow::init() {
 
     setStandardToolBarMenuEnabled( true );
 
-    if (TopLevel::mode == TopLevel::AssistantMode)
-        setXMLFile("kdevassistantui.rc");
-    else
-        setXMLFile("kdevelopui.rc");
+    setXMLFile(ShellExtension::getInstance()->xmlFile());
 
     createFramework();
     createActions();
@@ -162,7 +161,9 @@ void NewMainWindow::init() {
 			   	   
 	menuBar()->setEnabled( false );
 	
-    if ( PluginController::pluginServices().isEmpty() ) {
+    //FIXME: this checks only for global offers which is not quite correct because
+    //a profile can offer core plugins and no global plugins.
+    if ( PluginController::getInstance()->engine().allOffers(ProfileEngine::Global).isEmpty() ) {
         KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop will not work properly!\nPlease make sure "
                                        "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
                                        "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
@@ -236,7 +237,7 @@ void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
 				if(PartController::getInstance()->parts()->count() > 1)
 					tabMenu.insertItem( i18n("Close All Others"), 4 );
 
-				if(!dynamic_cast<DocumentationPart*>(ro_part))
+				if(!dynamic_cast<HTMLDocumentationPart*>(ro_part))
 				{
 					if(KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( ro_part ))
 						if(!dynamic_cast<KInterfaceDesigner::Designer*>(ro_part))
@@ -479,7 +480,8 @@ void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QS
 void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) 
 {
 	embedView( KDockWidget::DockRight, view, name, toolTip );
-	if (TopLevel::mode == TopLevel::AssistantMode)
+	//FIXME: ok, this is a rude hack
+	if (PluginController::getInstance()->currentProfile() == "KDevAssistant")
 		raiseView(view);
 }
 

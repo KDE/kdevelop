@@ -9,6 +9,8 @@
 
 #include <kdevplugincontroller.h>
 
+#include <profileengine.h>
+
 class KXMLGUIClient;
 class KService;
 class KDevPlugin;
@@ -24,11 +26,11 @@ public:
   ~PluginController();
 
   static PluginController *getInstance();
-  static KService::List pluginServices( const QString &scope = QString::null );
+//  static KService::List pluginServices( const QString &scope = QString::null );
   static QStringList argumentsFromService( const KService::Ptr &service );
 
   QString currentProfile() const { return m_profile; }
-  QString currentProfilePath() const { return m_profilePath; }
+//  QString currentProfilePath() const { return m_profilePath; }
   
   void loadInitialPlugins();
   
@@ -48,6 +50,8 @@ public:
   void removeAndForgetPart(const QString &name, KDevPlugin* part);
 
   const QValueList<KDevPlugin*> loadedPlugins();
+  
+  ProfileEngine &engine() { return m_engine; }
 
 signals:
   void loadingPlugin(const QString &plugin);
@@ -72,11 +76,13 @@ private:
 //  QDict<KDevPlugin> m_globalParts;
 //  QDict<KDevPlugin> m_localParts;
   QString m_profile;
-  QString m_profilePath;
+/*  QString m_profilePath;
   QString m_defaultProfile;
-  QString m_defaultProfilePath;
+  QString m_defaultProfilePath;*/
   
   static PluginController *s_instance;
+  
+  ProfileEngine m_engine;
 
 };
 

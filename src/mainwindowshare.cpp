@@ -63,6 +63,8 @@
 
 #include "mainwindowshare.h"
 
+#include "shellextension.h"
+
 #ifdef KDE_MAKE_VERSION
 # if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
 #  define NEED_CONFIGHACK
@@ -302,34 +304,11 @@ void MainWindowShare::slotSettings()
     KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
                     KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
                     "customization dialog");
+    dlg.setHelp("setup");
 
-    SettingsWidget *gsw;
+    ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
+    
     KConfig* config = kapp->config();
-    if (TopLevel::mode != TopLevel::AssistantMode)
-    {
-        dlg.setHelp("setup");
-        QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
-        gsw = new SettingsWidget(vbox, "general settings widget");
-
-        gsw->projects_url->setMode((int)KFile::Directory);
-
-        config->setGroup("General Options");
-        gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-        config->setGroup("MakeOutputView");
-        gsw->setMessageFont(config->readFontEntry("Messages Font"));
-        gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
-        gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
-        gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
-        gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",0));
-        config->setGroup("General Options");
-        gsw->setApplicationFont(config->readFontEntry("Application Font"));
-        gsw->changeMessageFontButton->setText(gsw->messageFont().family());
-        gsw->changeMessageFontButton->setFont(gsw->messageFont());
-        gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
-        gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
-        gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
-        gsw->embedDesignerCheckBox->setChecked(config->readBoolEntry("Embed KDevDesigner", true));
-    }
 
     config->setGroup("Global Settings Dialog");
     int height = config->readNumEntry( "Height", 600 );
@@ -344,25 +323,7 @@ void MainWindowShare::slotSettings()
     config->writeEntry( "Height", dlg.size().height() );
     config->writeEntry( "Width", dlg.size().width() );
 
-    if (TopLevel::mode != TopLevel::AssistantMode)
-    {
-        config->setGroup("General Options");
-        config->writeEntry("Embed KDevDesigner", gsw->embedDesignerCheckBox->isChecked());
-        config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-        config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
-        config->writeEntry("Application Font", gsw->applicationFont());
-        config->setGroup("MakeOutputView");
-        config->writeEntry("Messages Font",gsw->messageFont());
-        config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
-        config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
-        QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
-        config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
-        config->sync();
-        if( KDevPlugin *makeExt = API::getInstance()->pluginController()->extension("KDevelop/MakeFrontend"))
-        {
-            static_cast<KDevMakeFrontend*>(makeExt)->updateSettingsFromConfig();
-        }
-    }
+    ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
 }
 
 void MainWindowShare::slotConfigureEditors()

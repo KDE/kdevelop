@@ -29,6 +29,8 @@
 #include <kdevplugininfo.h>
 #include <kaction.h>
 
+#include <profileengine.h>
+
 #include "core.h"
 #include "api.h"
 #include "toplevel.h"
@@ -36,6 +38,8 @@
 #include "partselectwidget.h"
 
 #include "plugincontroller.h"
+
+#include "shellextension.h"
 
 // a separate method in this anonymous namespace to avoid having it all
 // inline in plugincontroller.h
@@ -77,37 +81,24 @@ PluginController::PluginController()
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
   
-  m_defaultProfile = QString::fromLatin1( "FullIDE" );
+/*  m_defaultProfile = QString::fromLatin1( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" + 
 			 KStandardDirs::kde_default( "data" ) + 
-			 QString::fromLatin1("/kdevelop/profiles/FullIDE");
+			 QString::fromLatin1("/kdevelop/profiles/FullIDE");*/
+    
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    if( args->isSet("profile") ){
+        m_profile = QString::fromLocal8Bit( args->getOption("profile") );
+    } else {
+        m_profile = ShellExtension::getInstance()->defaultProfile();
+    }
+
 }
 
 
 void PluginController::loadInitialPlugins()
-{
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-
-    loadCorePlugins();
-    
-    m_profile = QString::null;
-    if( args->isSet("profile") ){
-	m_profile = QString::fromLocal8Bit( args->getOption("profile") );
-	
-	if( m_profile[0] != '/' )
-	    m_profilePath = locate( "data", QString::fromLatin1("kdevelop/profiles/") + m_profile );
-	
-	if( m_profilePath.isEmpty() )
-	    m_profilePath = kapp->dirs()->localkdedir() +
-			    KStandardDirs::kde_default( "data" ) + 
-			    QString::fromLatin1("/kdevelop/profiles/") + m_profile;
-    }
-    
-    if( m_profile.isEmpty() || m_profilePath.isEmpty() ){
-	m_profile = m_defaultProfile;
-	m_profilePath = m_defaultProfilePath;
-    }
-    
+{    
+    loadCorePlugins();    
     loadGlobalPlugins();
 }
 
@@ -123,7 +114,7 @@ PluginController::~PluginController()
 // sense to put them in the global plugin container
 void PluginController::loadCorePlugins()
 {
-  KTrader::OfferList coreOffers = pluginServices( "Core" );
+  KTrader::OfferList coreOffers = m_engine.offers(m_profile, ProfileEngine::Core);
   for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
   {
     QString name = (*it)->name();
@@ -147,15 +138,15 @@ void PluginController::loadCorePlugins()
 
 void PluginController::loadGlobalPlugins()
 {
-  KTrader::OfferList globalOffers = pluginServices( "Global" );
-  KConfig config( m_profilePath );
+  KTrader::OfferList globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
+//  KConfig config( m_profilePath );
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
-    config.setGroup( "Plugins" );
+//    config.setGroup( "Plugins" );
 
     QString name = (*it)->name();
 	
-    // Unload it if is marked as ignored and loaded
+/*    // Unload it if is marked as ignored and loaded
     if (!config.readBoolEntry( name, true)) {
       KDevPlugin* part = m_parts[name];
       if( part ) {
@@ -164,18 +155,24 @@ void PluginController::loadGlobalPlugins()
         part->deleteLater();
       }
       continue;
-    }
+    }*/
+    
+    kdDebug() << "TRY: " << name << endl;
 
     // Check if it is already loaded
     if( m_parts[ name ] != 0 )
       continue;
+    kdDebug() << "GOOD 1: " << name << endl;
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
+    kdDebug() << "GOOD 2: " << name << endl;
 
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
+    kdDebug() << "GOOD 3: " << name << endl;
     if ( plugin ) {
+        kdDebug() << "LOADED: " << name << endl;
         m_parts.insert( name, plugin );
         integratePart( plugin );
     }
@@ -197,7 +194,7 @@ void PluginController::unloadPlugins()
 
 void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList const & loadPlugins, QStringList const & ignorePlugins  )
 {
-	KTrader::OfferList localOffers = pluginServices( "Project" );
+	KTrader::OfferList localOffers = m_engine.offers(m_profile, ProfileEngine::Project);
 	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
 	{
 		QString name = (*it)->name();
@@ -264,7 +261,7 @@ bool PluginController::checkNewService( ProjectInfo * projectInfo, const KServic
   return true;
 }
 
-KService::List PluginController::pluginServices( const QString &scope )
+/*KService::List PluginController::pluginServices( const QString &scope )
 {
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
 
@@ -274,13 +271,16 @@ KService::List PluginController::pluginServices( const QString &scope )
         constraint += QString::fromLatin1( " and [X-KDevelop-Mode] == 'AssistantMode'");
     return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ),
 	                           constraint );
-}
+}*/
 
 KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 {
-    return KParts::ComponentFactory
+    int err = 0;
+    KDevPlugin * pl = KParts::ComponentFactory
         ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
-                                                 argumentsFromService( service ) );
+                                                 argumentsFromService( service ), &err );
+    kdDebug() << "ERR: " << err << endl;
+    return pl;
 }
 
 QStringList PluginController::argumentsFromService( const KService::Ptr &service )

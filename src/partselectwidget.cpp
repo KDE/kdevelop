@@ -125,13 +125,15 @@ PartSelectWidget::~PartSelectWidget()
 
 void PartSelectWidget::readGlobalConfig()
 {
-    KTrader::OfferList globalOffers = PluginController::pluginServices( "Global" );
-    KConfig config( PluginController::getInstance()->currentProfilePath() );
-    config.setGroup("Plugins");
+    //FIXME: fix this, use new profiles arch !!!!!
+    KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
+        PluginController::getInstance()->currentProfile(), ProfileEngine::Global);
+//     KConfig config( PluginController::getInstance()->currentProfilePath() );
+//     config.setGroup("Plugins");
 
     for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
     {
-		// parse out any existing url to make it clickable
+//		parse out any existing url to make it clickable
 		QString Comment = (*it)->comment();
 		QRegExp re("\\bhttp://[\\S]*");
 		re.search( Comment );
@@ -144,7 +146,7 @@ void PartSelectWidget::readGlobalConfig()
 		}
 
         PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), Comment, url );
-        item->setOn(config.readBoolEntry((*it)->name(), true));
+        item->setOn(/*config.readBoolEntry((*it)->name(), true)*/ true);
     }
 
 	QListViewItem * first = _pluginList->firstChild();
@@ -157,7 +159,8 @@ void PartSelectWidget::readGlobalConfig()
 
 void PartSelectWidget::saveGlobalConfig()
 {
-    KConfig config( PluginController::getInstance()->currentProfilePath() );
+    //FIXME: fix this, use new profiles arch !!!!!!!!!!!!
+/*    KConfig config( PluginController::getInstance()->currentProfilePath() );
     config.setGroup("Plugins");
 
     QListViewItemIterator it( _pluginList );
@@ -166,7 +169,7 @@ void PartSelectWidget::saveGlobalConfig()
         PluginItem * item = static_cast<PluginItem*>( it.current() );
         config.writeEntry( item->name(), item->isOn() );
         ++it;
-    }
+    }*/
 }
 
 
@@ -174,7 +177,8 @@ void PartSelectWidget::readProjectConfig()
 {
     QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
 
-    KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
+    KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
+        PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
     {
 		// parse out any existing url to make it clickable
