@@ -239,6 +239,13 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
   kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
 
   KURL url = inputUrl;
+  
+  KConfig *config = kapp->config();
+  config->setGroup("General Options");
+  bool embedKDevDesigner = config->readBoolEntry("Embed KDevDesigner", true);
+  config->setGroup("General");
+  
+  kdDebug(9000) << "    - embed: " << (embedKDevDesigner ? "true" : "false") << endl;
 
   // Make sure the URL exists
 	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
@@ -316,7 +323,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		m_openNextAsText = true;
 	}
 
-	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
+	if ( !m_openNextAsText && embedKDevDesigner && MimeType->is( "application/x-designer" ) )
 	{
 		KParts::ReadOnlyPart *designerPart = qtDesignerPart();
 		if (designerPart)
@@ -329,18 +336,23 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 
 	// we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
 	// make sure we launch designer instead of embedding KUIviewer
-/*	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
+	if (!embedKDevDesigner)
 	{
-		KService::Ptr preferredApp = KServiceTypeProfile::preferredService( MimeType->name(), "Application" );
-		if ( preferredApp && preferredApp->desktopEntryName() == "designer" )
+		if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 		{
-			KRun::runURL(url, MimeType->name() );
-			return;
+			KServiceTypeProfile::OfferList offers = KServiceTypeProfile::offers(MimeType->name(), "Application");
+			for (KServiceTypeProfile::OfferList::const_iterator it = offers.begin(); it != offers.end(); ++it)
+			{
+				KService::Ptr app = (*it).service();
+				if ( app && app->desktopEntryName() == "designer" )
+				{
+					KRun::run(*app.data(), url);
+					return;
+				}
+			}
 		}
-	}*/
+	}
 	
-	KConfig *config = kapp->config();
-	config->setGroup("General");
 	QStringList texttypeslist = config->readListEntry( "TextTypes" );
 	if ( texttypeslist.contains( MimeType->name() ) )
 	{

@@ -325,6 +325,7 @@ void MainWindowShare::slotSettings()
         gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
         gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
         gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+        gsw->embedDesignerCheckBox->setChecked(config->readBoolEntry("Embed KDevDesigner", true));
     }
 
     config->setGroup("Global Settings Dialog");
@@ -343,6 +344,7 @@ void MainWindowShare::slotSettings()
     if (TopLevel::mode != TopLevel::AssistantMode)
     {
         config->setGroup("General Options");
+        config->writeEntry("Embed KDevDesigner", gsw->embedDesignerCheckBox->isChecked());
         config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
         config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
         config->writeEntry("Application Font", gsw->applicationFont());
