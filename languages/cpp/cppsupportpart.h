@@ -229,7 +229,7 @@ private:
 	struct JobData
 	{
 		QDir dir;
-		QProgressBar * progressBar;
+		QGuardedPtr<QProgressBar> progressBar;
 		QStringList::Iterator it;
 		QStringList files;
 		QMap< QString, QPair<uint, Q_LONG> > pcs;
