@@ -98,6 +98,7 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_oldMainFrmHeight(0)
    ,m_oldMainFrmMinHeight(0)
    ,m_oldMainFrmMaxHeight(0)
+   ,m_bSDIApplication(false)
    ,m_pDockbaseAreaOfDocumentViews(0L)
    ,m_pDockbaseOfTabPage(0L)
    ,m_pTempDockSession(0L)
@@ -181,13 +182,14 @@ void QextMdiMainFrm::createMdiManager()
 void QextMdiMainFrm::createTaskBar()
 {
    m_pTaskBar = new QextMdiTaskBar(this,QMainWindow::Bottom);
-   m_pTaskBar->show();
    m_pTaskBar->installEventFilter( this);
 }
 
 void QextMdiMainFrm::slot_toggleTaskBar()
 {
-   if(m_pTaskBar->isVisible()){
+   if (!m_pTaskBar)
+      return;
+   if (m_pTaskBar->isVisible()){
       m_pTaskBar->hide();
    } else {
       m_pTaskBar->show();
@@ -237,8 +239,10 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
    QObject::connect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
    m_pWinList->append(pWnd);
-   QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
-   QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+   if (m_pTaskBar) {
+      QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
+      QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+   }
 
    // embed the view depending on the current MDI mode
    if (m_mdiMode == QextMdi::TabPageMode) {
@@ -268,16 +272,19 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          attachWindow( pWnd, FALSE /*bShow*/);
       }
 
-      if( flags & QextMdi::Maximize)
+      if ( (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
          pWnd->maximize();
-      if( flags & QextMdi::Minimize)
-         pWnd->minimize();
-      if( !(flags & QextMdi::Hide)) {
-         if( pWnd->isAttached()) {
-            pWnd->mdiParent()->show();
-         }
-         else {
-            pWnd->show();
+      }
+      if (!m_bSDIApplication || (flags & QextMdi::Detach)) {
+         if (flags & QextMdi::Minimize)
+            pWnd->minimize();
+         if (!(flags & QextMdi::Hide)) {
+            if (pWnd->isAttached()) {
+               pWnd->mdiParent()->show();
+            }
+            else {
+               pWnd->show();
+            }
          }
       }
    }
@@ -320,7 +327,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
 
    // if docking is not desired, add the toolview as stay-on-top toplevel view
    if (pos == KDockWidget::DockNone) {
-      pToolView->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pToolView->isVisible());
+      pToolView->reparent(this, WType_TopLevel | WStyle_Dialog, r.topLeft(), pToolView->isVisible());
       QObject::connect( pToolView, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
       m_pWinList->append(pToolView);
       pToolView->m_bToolView = TRUE;
@@ -424,6 +431,10 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 //============== removeWindowFromMdi ==============//
 void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 {
+   //Closes a child window. sends no close event : simply deletes it
+   if (!(m_pWinList->removeRef(pWnd)))
+      return;
+
    QObject::disconnect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
    QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
    QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
@@ -431,15 +442,14 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    QObject::disconnect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
    QObject::disconnect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
 
-   //Closes a child window. sends no close event : simply deletes it
-   m_pWinList->removeRef(pWnd);
-
-   QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
-   // changed signale (mmorin)
-   if (but != 0L) {
-      QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+   if (m_pTaskBar) {
+      QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
+      // changed signale (mmorin)
+      if (but != 0L) {
+         QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+      }
+      m_pTaskBar->removeWinButton(pWnd);
    }
-   m_pTaskBar->removeWinButton(pWnd);
 
    if(pWnd->isAttached()) {
       pWnd->mdiParent()->hide();
@@ -458,7 +468,9 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
    if( m_pWinList->count() == 0L)
       m_pCurrentWindow = 0L;
 
-   m_pTaskBar->removeWinButton(pWnd, layoutTaskBar);
+   if (m_pTaskBar) {
+      m_pTaskBar->removeWinButton(pWnd, layoutTaskBar);
+   }
 
    if(pWnd->isAttached())
       m_pMdi->destroyChild(pWnd->mdiParent());
@@ -528,7 +540,9 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
 void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
 {
    m_pCurrentWindow = pWnd;
-   m_pTaskBar->setActiveButton(pWnd);
+   if (m_pTaskBar) {
+      m_pTaskBar->setActiveButton(pWnd);
+   }
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       makeWidgetDockVisible(pWnd);
@@ -636,7 +650,7 @@ void QextMdiMainFrm::switchToToplevelMode()
    // since we set some windows to toplevel, we must consider the window manager's window frame
    const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
    const int windowTitleHeight = 10; // TODO:    -"-
-   setUndockPositioningOffset( QPoint( 0, m_pTaskBar->height() + frameBorderWidth));
+   setUndockPositioningOffset( QPoint( 0, (m_pTaskBar ? m_pTaskBar->height() : 0) + frameBorderWidth));
 
    // 1.) select the dockwidgets to be undocked and store their geometry
    QObjectList* pObjList = queryList( "KDockWidget");
@@ -946,6 +960,9 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( KMenuBar* pMenuBar)
 void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 #endif
 {
+   if (m_bSDIApplication)  // there are no buttons in the menubar in this mode (although the view is always maximized)
+      return;
+
    m_pMainMenuBar = pMenuBar;
    if( m_pMainMenuBar == 0L)
       return;  // use setMenuForSDIModeSysButtons( 0L) for unsetting the external main menu!
@@ -1123,13 +1140,15 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
 /** Shows the view taskbar. This should be connected with your "View" menu. */
 void QextMdiMainFrm::showViewTaskBar()
 {
-   m_pTaskBar->show();
+   if (m_pTaskBar)
+      m_pTaskBar->show();
 }
 
 /** Hides the view taskbar. This should be connected with your "View" menu. */
 void QextMdiMainFrm::hideViewTaskBar()
 {
-   m_pTaskBar->hide();
+   if (m_pTaskBar)
+      m_pTaskBar->hide();
 }
 
 //=============== fillWindowMenu ===============//
@@ -1152,7 +1171,7 @@ void QextMdiMainFrm::fillWindowMenu()
       m_pMdiModeMenu->clear();
       m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
       m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-//DISABLED      m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+      m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
       switch (m_mdiMode) {
       case QextMdi::ToplevelMode:
          m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
@@ -1161,7 +1180,7 @@ void QextMdiMainFrm::fillWindowMenu()
          m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
          break;
       case QextMdi::TabPageMode:
-//DISABLED         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
+         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
          break;
       default:
          break;
@@ -1313,6 +1332,14 @@ void QextMdiMainFrm::setFrameDecorOfAttachedViews( int frameDecor)
          pView->mdiParent()->redecorateButtons();
    }
 }
+
+void QextMdiMainFrm::fakeSDIApplication()
+{
+   m_bSDIApplication = true;
+   if (m_pTaskBar)
+      m_pTaskBar->close();
+   m_pTaskBar = 0L;
+};
 
 #ifndef NO_INCLUDE_MOCFILES
 #include "qextmdimainfrm.moc"
