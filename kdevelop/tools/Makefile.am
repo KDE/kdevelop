@@ -1,11 +1,16 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = kdevdlg2ui kimport one2two processes.pl.in processesend.pl 
+
+####### kdevelop will overwrite this part!!! (end)############
+
 
 tools_DATA =  processesend.pl processes.pl
 
 bin_SCRIPTS = kimport kdevdlg2ui one2two
 
-EXTRA_DIST = processes.pl.in processesend.pl kimport kdevdlg2ui one2two
-
-toolsdir = $(kde_datadir)/kdevelop/tools/
+toolsdir = $(kde_datadir)/kdevelop/tools
 
 processes.pl: processes.pl.in
 	cp $(srcdir)/processes.pl.in processes.pl

@@ -21,7 +21,6 @@
 #
 # jbb@kdevelop.org 22-Nov-2000
 
-
 use File::Find;
 
 @ARGV = ('.')   unless @ARGV;
@@ -46,6 +45,7 @@ sub process()
     $count += ($all_text =~ s/klined\.h/klineedit\.h/mg);
     $count += ($all_text =~ s/kintegerline\.h/knuminput\.h/mg);
     $count += ($all_text =~ s/khtmlw\.h/khtml\.h/mg);
+    $count += ($all_text =~ s/kwizard\.h/kdialog\.h/mg);
     $count += ($all_text =~ s/kpanner\.h/qsplitter\.h/mg);
     $count += ($all_text =~ s/knewpanner\.h/qsplitter\.h/mg);
     $count += ($all_text =~ s/kclipboard\.h/qclipboard\.h/mg);
@@ -55,8 +55,6 @@ sub process()
     $count += ($all_text =~ s/ktreelist\.h/klistview\.h/mg);
     $count += ($all_text =~ s/kledlamp\.h/kled\.h/mg);
     $count += ($all_text =~ s/kcombo\.h/kcombobox\.h/mg);
-    $count += ($all_text =~ s/kbutton\.h/qtoolbutton\.h/mg);
-    $count += ($all_text =~ s/kiconloaderdialog\.h/kicondialog\.h/mg);
 
 # remove some headers
     $count += ($all_text =~ s/\s*#\s*include\s*[<"]*kstring\.h[>"]*\s*/\n/mg);
@@ -65,8 +63,6 @@ sub process()
     $count += ($all_text =~ s/\s*#\s*include\s*[<"]*htmlview\.h[>"]*\s*/\n/mg);
     $count += ($all_text =~ s/\s*#\s*include\s*[<"]*htmltoken\.h[>"]*\s*/\n/mg);
     $count += ($all_text =~ s/\s*#\s*include\s*[<"]*kdir\.h[>"]*\s*/\n/mg);
-    $count += ($all_text =~ s/\s*#\s*include\s*[<"]*kwm\.h[>"]*\s*/\n/mg);
-    $count += ($all_text =~ s/\s*#\s*include\s*[<"]*kwmmapp\.h[>"]*\s*/\n/mg);
 
 # classes
     $count += ($all_text =~ s/\bKIntegerLine\b/KIntNumInput/mg);
@@ -86,50 +82,20 @@ sub process()
     $count += ($all_text =~ s/\bKString\b/QString/mg);
     $count += ($all_text =~ s/\bKTopWidget\b/KMainWindow/mg);
     $count += ($all_text =~ s/\bKButton\b/QToolButton/mg);
-    $count += ($all_text =~ s/\bKIconLoaderDialog\b/KIconDialog/mg);
-    $count += ($all_text =~ s/\bKIconLoaderCanvas\b/KIconCanvas/mg);
-    $count += ($all_text =~ s/\bKIconLoaderButton\b/KIconButton/mg);
-    $count += ($all_text =~ s/\bKAccel::StdAccel\b/KStdAccel::StdAccel/mg);
-    $count += ($all_text =~ s/\bKDirDialog\b/KFileDialog/mg);
-    $count += ($all_text =~ s/\bKWMModuleApplication\b/KWinModule/mg);
-
-# WARNING: these two conflict if you re-run this
-#    $count += ($all_text =~ s/\bKHTMLView\b/KHTMLPart/mg);
-#    $count += ($all_text =~ s/\bKHTMLWidget\b/KHTMLView/mg);
 
 # functions
-    $count += ($all_text =~ s/klocale-\>/KGlobal::locale\(\)-\>/mg);
-    $count += ($all_text =~ s/kapp->fixedFont/KGlobalSettings::fixedFont\(\)/mg);
-    $count += ($all_text =~ s/kapp->getIconLoader\(\)/KGlobal::iconLoader\(\)/mg);
+    $count += ($all_text =~ s/kapp->fixedfont/KGlobalSettings::fixedfont\(\)/mg);
     $count += ($all_text =~ s/kapp->getConfig\(\)/KGlobal::config\(\)/mg);
     $count += ($all_text =~ s/kapp->getKCharsets\(\)/KGlobal::charsets\(\)/mg);
-    $count += ($all_text =~ s/KApplication::getKApplication\(\)->getConfig\(\)/KGlobal::config\(\)/mg);
+    $count += ($all_text =~ s/KGlobal::config\(\)\(\)/KGlobal::config\(\)/mg);
     $count += ($all_text =~ s/(?!KAccel::)keyToString/KAccel::keyToString/mg);
     $count += ($all_text =~ s/(?!KAccel::)stringToKey/KAccel::stringToKey/mg);
-    $count += ($all_text =~ s/KDirDialog::getDirectory/KFileDialog::getExistingDirectory/mg);
-    $count += ($all_text =~ s/KFileDialog::getDirectory/KFileDialog::getExistingDirectory/mg);
-    $count += ($all_text =~ s/KApplication::getKApplication\(\)->getIconLoader/KGlobal::iconLoader/mg);
-    $count += ($all_text =~ s/KApplication::localkdedir\(\)/locate\(\"\",\"\"\);\n#warning FIXME Check usage of locate from localekdedir/mg);
-    $count += ($all_text =~ s/setRulerStyle/setRulerMetricStyle/mg);
-    $count += ($all_text =~ s/KFileDialog::getOpenFileURL/KFileDialog::getOpenURL/mg);
-    $count += ($all_text =~ s/KFileDialog::getSaveFileURL/KFileDialog::getSaveURL/mg);
-
-#enums
-    $count += ($all_text =~ s/KRuler::pixel/KRuler::Pixel/mg);
-    $count += ($all_text =~ s/KRuler::horizontal/Horizontal/mg);
-    $count += ($all_text =~ s/KRuler::vertical/Vertical/mg);
-    $count += ($all_text =~ s/Event_MouseButtonPress/QEvent::MouseButtonPress/mg);
-    $count += ($all_text =~ s/Event_KeyPress/QEvent::KeyPress/mg);
-
-# Needs some work done by the user
-    $count += ($all_text =~
-           s/kapp->kde_(.*?)dir\(\)/locate\(\"$1\", \"\"\);\n#warning TODO FIXME Check usage of locate from kde_$1dir\(\)/mg);
 
     $count += ($all_text =~
-           s/KApplication::kde_(.*?)dir\(\)/locate\(\"$1\", \"\"\);\n#warning TODO FIXME Check usage of locate from kde_$1dir\(\)/mg);
+           s/KApplication::kde_(.*?)dir\(\)/locate\(\"$1\", \"something\"\);\n#warning TODO FIXME /mg);
 
 # very suspect changes
-#    $count += ($all_text =~ s/\s*const\s*char\s*\*\s*key/ QString key/mg);
+    $count += ($all_text =~ s/\s*const\s*char\s*\*\s*key/QString key/mg);
 
 # Finish
     if ($count)

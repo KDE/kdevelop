@@ -70,11 +70,6 @@ if ($processes{APPLICATION} eq "customproj"){
 }
 else{
   unpackFiles ("template.tar");	
-  if ($processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal"||
-  			$processes{APPLICATION} eq "kde2mdi"|| $processes{APPLICATION} eq "qt2normal" ||
-  				$processes{APPLICATION} eq "qt2mdi") {
-    unpackFiles ("admin.tar");	
-  }
   if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kde2mini") {
     changeMiniApp();
   }
@@ -474,7 +469,6 @@ sub changeNormalApp {
   if($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mdi")
   {
     replaceValuesInFile(\%changings, "configure.in.in");
-    replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
@@ -633,7 +627,6 @@ sub changeMiniApp {
   if($processes{APPLICATION} eq "kde2mini")
   {
     replaceValuesInFile(\%changings, "configure.in.in");
-    replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
