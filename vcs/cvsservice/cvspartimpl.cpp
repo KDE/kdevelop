@@ -82,7 +82,7 @@ CvsServicePartImpl::CvsServicePartImpl( CvsServicePart *part, const char *name )
     }
     else
     {
-        kdDebug() << "CvsServicePartImpl::CvsServicePartImpl(): somebody kills me because"
+        kdDebug(9006) << "CvsServicePartImpl::CvsServicePartImpl(): somebody kills me because"
             "I could not request a valid CvsService!!!! :-((( " << endl;
     }
 
@@ -107,7 +107,7 @@ CvsServicePartImpl::~CvsServicePartImpl()
 
 bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op )
 {
-    kdDebug() << "===> CvsServicePartImpl::prepareOperation(const KURL::List &, CvsOperation)" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     bool correctlySetup = (m_cvsService != 0) && (m_repository != 0);
     if (!correctlySetup)
@@ -121,7 +121,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
 
     if (!m_part->project())
     {
-        kdDebug(9006) << "CvsServicePartImpl::prepareOperation(): No project???" << endl;
+        kdDebug(9006) << k_funcinfo << "No project???" << endl;
         KMessageBox::sorry( 0, i18n("Open a project first.\nOperation will be aborted.") );
         return false;
     }
@@ -137,7 +137,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
         }
         else // Operation canceled
         {
-            kdDebug() << "===> Operation canceled by user request" << endl;
+            kdDebug(9006) << k_funcinfo << "Operation canceled by user request" << endl;
             return false;
         }
     }
@@ -162,7 +162,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
 
 void CvsServicePartImpl::doneOperation( const KURL::List &/*someUrls*/, CvsOperation /*op*/ )
 {
-    kdDebug(9006) << "CvsServicePartImpl::doneOperation(const KURL::List&, CvsOperation)" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     // @ todo notify clients (filetree) about changed status?)
 }
@@ -188,12 +188,12 @@ QStringList CvsServicePartImpl::fileList( bool relativeToProjectDir ) const
 
 bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9006) << "===> CvsServicePartImpl::isRegisteredInRepository() here! " << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     // KURL::directory() is a bit tricky when used on file or _dir_ paths ;-)
     KURL projectURL = KURL::fromPathOrURL( projectDirectory );
-    kdDebug(9006) << "projectURL = " << projectURL.url() << endl;
-    kdDebug(9006) << "url        = " << url.url() << endl;
+    kdDebug(9006) << k_funcinfo << "projectURL = " << projectURL.url() << endl;
+    kdDebug(9006) << k_funcinfo << "url        = " << url.url() << endl;
 
     if ( projectURL == url)
     {
@@ -206,7 +206,7 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
 
         if (!cvsdir.isValid())
         {
-            kdDebug(9006) << "===> Error: " << cvsdir.path() << " is not a valid CVS directory " << endl;
+            kdDebug(9006) << k_funcinfo << " Error: " << cvsdir.path() << " is not a valid CVS directory " << endl;
             return false;
         }
         CVSEntry entry = cvsdir.fileStatus( url.fileName() );
@@ -218,7 +218,7 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
 
 void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op )
 {
-    kdDebug(9006) << "CvsServicePartImpl::validateURLs() here!" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     // If files are to be added, we can avoid to check them to see if they are registered in the
     // repository ;)
@@ -249,7 +249,7 @@ void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::Li
 
 void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9006) << "===> CvsServicePartImpl::addToIgnoreList() here! " << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if ( url.path() == projectDirectory )
     {
@@ -273,7 +273,7 @@ void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const
 
 void CvsServicePartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, const KURL &url )
 {
-    kdDebug(9006) << "===> CvsServicePartImpl::removeFromIgnoreList() here! " << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     QStringList ignoreLines;
 
@@ -355,7 +355,7 @@ void CvsServicePartImpl::logout()
 
 bool CvsServicePartImpl::checkout()
 {
-    kdDebug() << "CvsServicePartImpl::checkout()" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     CheckoutDialog dlg( m_cvsService, mainWindow()->main()->centralWidget() );
 
@@ -389,7 +389,7 @@ bool CvsServicePartImpl::checkout()
 
 void CvsServicePartImpl::commit( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::commit() here!" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
     kdDebug(9006) << "Commit requested for " << urlList.count() << " file(s)." << endl;
 
     if (!prepareOperation( urlList, opCommit ))
@@ -420,7 +420,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
         entry.addLines( dlg.logMessage() );
         entry.addToLog( dlg.changeLogFileName() );
 
-        kdDebug( 9999 ) << " *** ChangeLog entry : " <<
+        kdDebug( 9006 ) << " *** ChangeLog entry : " <<
             entry.toString( changeLogPrependString ) << endl;
     }
 
@@ -431,7 +431,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
 
 void CvsServicePartImpl::update( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::update() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opCommit ))
         return;
@@ -461,7 +461,7 @@ void CvsServicePartImpl::update( const KURL::List& urlList )
 
 void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 {
-    kdDebug(9006) << "CvsServicePartImpl::add() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opAdd ))
         return;
@@ -478,7 +478,7 @@ void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 
 void CvsServicePartImpl::unedit( const KURL::List& urlList)
 {
-    kdDebug(9006) << "CvsServicePartImpl::unedit()" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opUnEdit ))
         return;
@@ -495,7 +495,7 @@ void CvsServicePartImpl::unedit( const KURL::List& urlList)
 
 void CvsServicePartImpl::edit( const KURL::List& urlList)
 {
-    kdDebug(9006) << "CvsServicePartImpl::edit()" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opEdit ))
         return;
@@ -512,7 +512,7 @@ void CvsServicePartImpl::edit( const KURL::List& urlList)
 
 void CvsServicePartImpl::editors( const KURL::List& urlList)
 {
-    kdDebug(9006) << "CvsServicePartImpl::editors()" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opEditors ))
         return;
@@ -529,7 +529,7 @@ void CvsServicePartImpl::editors( const KURL::List& urlList)
 
 void CvsServicePartImpl::remove( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::remove() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opRemove ))
         return;
@@ -547,7 +547,7 @@ void CvsServicePartImpl::remove( const KURL::List& urlList )
 
 void CvsServicePartImpl::removeStickyFlag( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::revert() here" << endl;
+	kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opUpdate ))
         return;
@@ -571,7 +571,7 @@ void CvsServicePartImpl::removeStickyFlag( const KURL::List& urlList )
 
 void CvsServicePartImpl::log( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::log() here: " << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opLog ))
         return;
@@ -588,7 +588,7 @@ void CvsServicePartImpl::log( const KURL::List& urlList )
 
 void CvsServicePartImpl::diff( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::diff() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opDiff ))
         return;
@@ -618,7 +618,7 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
 
 void CvsServicePartImpl::tag( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::tag() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opTag ))
         return;
@@ -642,7 +642,7 @@ void CvsServicePartImpl::tag( const KURL::List& urlList )
 
 void CvsServicePartImpl::unTag( const KURL::List& urlList )
 {
-    kdDebug(9006) << "CvsServicePartImpl::unTag() here" << endl;
+    kdDebug(9006) << k_funcinfo << endl;
 
     if (!prepareOperation( urlList, opUnTag ))
         return;
@@ -778,7 +778,7 @@ void CvsServicePartImpl::flushJobs()
 
 void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
 {
-    kdDebug( 9006 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
+    kdDebug( 9006 ) << k_funcinfo << endl;
 
     QStringList filesInCVS = checkFileListAgainstCVS( filesToAdd );
     if (filesInCVS.isEmpty())
@@ -804,7 +804,7 @@ void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
 
 void CvsServicePartImpl::removedFilesFromProject(const QStringList &filesToRemove)
 {
-    kdDebug( 9006 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
+    kdDebug( 9006 ) << k_funcinfo << endl;
 
     QStringList filesInCVS = checkFileListAgainstCVS( filesToRemove );
     if (filesInCVS.isEmpty())
@@ -865,11 +865,11 @@ void CvsServicePartImpl::slotDiffFinished( bool normalExit, int exitStatus )
     QString diff = processWidget()->output().join("\n"),
         err = processWidget()->errors().join("\n");
 
-    kdDebug( 9999 ) << "diff = " << diff << endl;
-    kdDebug( 9999 ) << "err = " << err << endl;
+    kdDebug( 9006 ) << "diff = " << diff << endl;
+    kdDebug( 9006 ) << "err = " << err << endl;
 
     if (normalExit)
-        kdDebug( 9999 ) << " *** Process died nicely with exit status = " <<
+        kdDebug( 9006 ) << " *** Process died nicely with exit status = " <<
             exitStatus << endl;
     else
         kdDebug( 9999 ) << " *** Process was killed with exit status = " <<
