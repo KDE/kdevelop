@@ -1,4 +1,6 @@
 /***************************************************************************
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
@@ -25,8 +27,10 @@
 #include <qmessagebox.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
+#include <kparts/part.h>
 #include <kprocess.h>
 #include <makeoptionswidget.h>
+
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -69,18 +73,48 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     KAction *action;
 
+    const QIconSet icon(SmallIcon("compfile",22));
+    action = new KAction( i18n("Compile &File"), icon, 0,
+                          m_widget, SLOT(slotBuildFile()),
+                          actionCollection(),"build_compilefile"  );
+
+                          
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
-                          this, SLOT(slotBuild()),
-                          actionCollection(), "build_build" );
+                          m_widget, SLOT(slotBuildProject()),
+                          actionCollection(), "build_build_project" );
 
+    action = new KAction( i18n("&Rebuild Project"),SmallIcon ( "rebuild",22 ) , 0,
+                          m_widget, SLOT(slotRebuildProject()),
+                          actionCollection(),"build_rebuild_project"  );
+    
     action = new KAction( i18n("&Clean Project"), 0,
-                          this, SLOT(slotClean()),
-                          actionCollection(), "build_clean" );
+                          m_widget, SLOT(slotCleanProject()),
+                          actionCollection(), "build_clean_project" );
 
-    action = new KAction( i18n("Execute Program"), "exec", 0,
-                          this, SLOT(slotExecute()),
-                          actionCollection(), "build_execute" );
+    action = new KAction( i18n("Execute Main Program"), "exec", 0,
+                          m_widget, SLOT(slotExecuteProject()),
+                          actionCollection(), "build_execute_project" );
 
+
+
+                          
+
+    action = new KAction( i18n("&Build Target Project"), "make_kdevelop", Key_F8,
+                          m_widget, SLOT(slotBuildTarget()),
+                          actionCollection(), "build_build_target" );
+
+    action = new KAction( i18n("&Rebuild Target Project"),SmallIcon ( "rebuild",22 ) , 0,
+                          m_widget, SLOT(slotRebuildTarget()),
+                          actionCollection(),"build_rebuild_target"  );
+
+    action = new KAction( i18n("&Clean Target Project"), 0,
+                          m_widget, SLOT(slotCleanTarget()),
+                          actionCollection(), "build_clean_target" );
+
+    action = new KAction( i18n("Execute Target Program"), "exec", 0,
+                          m_widget, SLOT(slotExecuteTarget()),
+                          actionCollection(), "build_execute_target" );
+                          
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
@@ -307,83 +341,6 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
-
-void TrollProjectPart::slotBuild()
-{
-    startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1(""));
-}
-
-
-void TrollProjectPart::slotClean()
-{
-    startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1("clean"));
-}
-
-
-void TrollProjectPart::slotExecute()
-{
-    partController()->saveAllFiles();
-
-    if( !m_executeAfterBuild && isDirty() ){
-        m_executeAfterBuild = true;
-        slotBuild();
-        return;
-    }
-
-    QString directory;
-    QString program = mainProgram();
-    int pos = program.findRev('/');
-    if (pos != -1) {
-        // Directory where the executable is
-        directory = program.left(pos+1);
-        // Executable name with a "./" prepended for execution with bash shells
-        program   = "./" + (mainProgram()).mid(pos+1);
-    }
-
-    program += " " + DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
-
-    if ( program.isEmpty() ) {
-        KMessageBox::sorry(m_widget, i18n("Please specify the executable name in the "
-            "project options dialog first."), i18n("No executable name given"));
-        return;
-    }
-
-    QDomElement docEl = projectDom()->documentElement();
-    QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
-    QDomElement envvarsEl = trollprojectEl.namedItem("run/envvars").toElement();
-
-    QString environstr;
-    QDomElement childEl = envvarsEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "envvar") {
-            environstr += childEl.attribute("name");
-            environstr += "=";
-            environstr += childEl.attribute("value");
-            environstr += " ";
-        }
-        childEl = childEl.nextSibling().toElement();
-    }
-    program.prepend(environstr);
-
-    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
-//    appFrontend()->startAppCommand(m_widget->projectDirectory(), program, inTerminal);
-    appFrontend()->startAppCommand(directory, program, inTerminal);
-}
-
-void TrollProjectPart::execute(const QString &directory, const QString &command)
-{
-    partController()->saveAllFiles();
-
-    if( !m_executeAfterBuild && isDirty() ){
-        m_executeAfterBuild = true;
-        slotBuild();
-        return;
-    }
-
-    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
-    appFrontend()->startAppCommand(directory, command, inTerminal);
-}
-
 void TrollProjectPart::queueCmd(const QString &dir, const QString &cmd)
 {
     makeFrontend()->queueCommand(dir, cmd);
@@ -411,7 +368,7 @@ void TrollProjectPart::slotCommandFinished( const QString& command )
     emit projectCompiled();
 
     if( m_executeAfterBuild ){
-        slotExecute();
+        m_widget->slotExecuteProject();
         m_executeAfterBuild = false;
     }
 }
@@ -433,6 +390,7 @@ bool TrollProjectPart::isDirty()
 
     return false;
 }
+
 
 
 #include "trollprojectpart.moc"

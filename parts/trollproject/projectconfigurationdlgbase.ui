@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>513</width>
-            <height>348</height>
+            <width>803</width>
+            <height>722</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -34,22 +34,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>buttonCancel</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Cancel</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-        </widget>
         <spacer row="1" column="0">
             <property name="name">
                 <cstring>Spacer1_2</cstring>
@@ -62,11 +46,27 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>330</width>
+                    <width>511</width>
                     <height>16</height>
                 </size>
             </property>
         </spacer>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonCancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>TabBuild</cstring>
@@ -78,28 +78,69 @@
                 <attribute name="title">
                     <string>B&amp;asics</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="0" rowspan="1" colspan="2">
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>Spacer3</cstring>
+                            <cstring>groupTemplate</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
+                        <property name="title">
+                            <string>Template</string>
                         </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioApplication</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Application</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Create an application</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioLibrary</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Library</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Create a library</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioSubdirs</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Subdirectories</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This project holds subdirectories</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>GroupBox1</cstring>
                         </property>
@@ -124,6 +165,24 @@
                                     <string>Path:</string>
                                 </property>
                             </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Output file:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_targetPath</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_targetOutputFile</cstring>
+                                </property>
+                            </widget>
                             <widget class="QPushButton" row="0" column="2">
                                 <property name="name">
                                     <cstring>Browse</cstring>
@@ -143,116 +202,47 @@
                                     <string>Browse</string>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>m_targetLibraryVersion</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Library version:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>m_targetOutputFile</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Output file:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>m_targetPath</cstring>
-                                </property>
-                            </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <spacer>
                         <property name="name">
-                            <cstring>groupTemplate</cstring>
+                            <cstring>Spacer3</cstring>
                         </property>
-                        <property name="title">
-                            <string>Template</string>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <property name="exclusive">
-                            <bool>true</bool>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLayoutWidget" row="0" column="0">
-                                <property name="name">
-                                    <cstring>layout1</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioApplication</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Application</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Create an application</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioLibrary</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Library</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Create a library</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioSubdirs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Subdirectories</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>This project holds subdirectories</string>
-                                        </property>
-                                    </widget>
-                                </vbox>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="0" column="1">
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Configuration</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="3" column="0">
                         <property name="name">
-                            <cstring>groupLibrary</cstring>
+                            <cstring>libGroup</cstring>
                         </property>
                         <property name="enabled">
                             <bool>false</bool>
                         </property>
                         <property name="title">
-                            <string>Library</string>
+                            <string>Library options</string>
                         </property>
                         <property name="exclusive">
                             <bool>true</bool>
@@ -261,47 +251,829 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLayoutWidget" row="0" column="0">
+                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>layout2</cstring>
+                                    <cstring>staticRadio</cstring>
                                 </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioShared</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Shared</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioStatic</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Static</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>false</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioPlugin</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Plugin</string>
-                                        </property>
-                                    </widget>
-                                </vbox>
+                                <property name="text">
+                                    <string>static Library</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>pluginRadio</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>plugin</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>library version</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="3" column="1">
+                                <property name="name">
+                                    <cstring>m_targetLibraryVersion</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>sharedRadio</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>shared Library</string>
+                                </property>
                             </widget>
                         </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="2" column="0">
+                        <property name="name">
+                            <cstring>groupRequirements</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Requirements</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkX11</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;X11</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>checkThread</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Thread</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires support for multi-threaded application or library.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>checkOpenGL</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Open&amp;GL</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the OpenGL (or Mesa) headers/libraries</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>exceptionCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>exceptions </string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="0">
+                                <property name="name">
+                                    <cstring>stlCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>stl</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="1">
+                                <property name="name">
+                                    <cstring>rttiCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>rtti</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkQt</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Qt</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the Qt header files/library</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBuildMode</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Build Mode</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Set project to be built in release mode</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioDebugMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Debug</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in debug mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioReleaseMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Release</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in release mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>checkWarning</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Enable &amp;warnings</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Show compiler warnings</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer row="4" column="0">
+                        <property name="name">
+                            <cstring>Spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>110</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QCheckBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>checkDontInheritConfig</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Don't inherit the configuration options of top level projects</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string></string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>incaddTab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Includes</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>insideinc_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>Directories in&amp;side project:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>insideinc_listview</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>Layout9</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2_3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>insideIncMoveUpBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Up</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>insideIncMoveDownBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Down</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer3_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>TextLabel2_2_4</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>Directories ou&amp;tside project:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>outsideinc_listview</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>outsideinc_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="1" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>insideinc_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="3" column="1">
+                        <property name="name">
+                            <cstring>layout8</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer1_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>30</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideIncAddBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideIncRemoveBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideIncEditBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideIncMoveUpBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move U&amp;p</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideIncMoveDownBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move Dow&amp;n</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>70</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>libAddTab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Libraries</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>Spacer9</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QListView" row="4" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>outsidelib_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
+                            <cstring>outsidelib_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>Link libraries ou&amp;tside project (LIBADD):</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>outsidelib_listview</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>Layout9_3</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer5_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>insideLibMoveUpBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Up</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>insideLibMoveDownBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Down</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer6_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QListView" row="1" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>insidelib_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="4" column="1">
+                        <property name="name">
+                            <cstring>layout9</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer7_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibAddBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibRemoveBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibEditBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibMoveUpBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move U&amp;p</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibMoveDownBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move Dow&amp;n</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer8_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>64</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>insidelib_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>Link convenience libraries in&amp;side project (LIBADD):</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>insidelib_listview</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>libPathTab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Library paths</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>outsidelibdir_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>TextLabel2_2_4_2</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>Lib Directories outside project:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>outsideinc_listview</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="3" column="1">
+                        <property name="name">
+                            <cstring>layout10</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer1_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibDirAddBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibDirRemoveBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibDirEditBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibDirMoveUpBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move U&amp;p</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>outsideLibDirMoveDownBtn</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move Dow&amp;n</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>70</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
                     </widget>
                 </grid>
             </widget>
@@ -420,209 +1192,95 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>buildOrderTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Configuration</string>
+                    <string>Build order</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="3" column="0">
+                    <widget class="QLayoutWidget" row="1" column="1">
                         <property name="name">
-                            <cstring>Spacer2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QCheckBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>checkDontInheritConfig</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Don't inherit the configuration options of top level projects</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string></string>
-                        </property>
-                    </widget>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>groupBuildMode</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Build Mode</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string></string>
+                            <cstring>Layout9_2</cstring>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
                             <property name="margin">
-                                <number>11</number>
+                                <number>0</number>
                             </property>
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QRadioButton">
+                            <spacer>
                                 <property name="name">
-                                    <cstring>radioDebugMode</cstring>
+                                    <cstring>Spacer2_3_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buildmoveup_button</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Debug</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in debug mode</string>
+                                    <string>Move &amp;Up</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QPushButton">
                                 <property name="name">
-                                    <cstring>radioReleaseMode</cstring>
+                                    <cstring>buildmovedown_button</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Release</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in release mode</string>
+                                    <string>Move &amp;Down</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox">
+                            <spacer>
                                 <property name="name">
-                                    <cstring>checkWarning</cstring>
+                                    <cstring>Spacer3_2_2</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Enable &amp;warnings</string>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
                                 </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Show compiler warnings</string>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
                                 </property>
-                            </widget>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
                         </vbox>
                     </widget>
-                    <widget class="QButtonGroup" row="2" column="0">
+                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>groupRequirements</cstring>
+                            <cstring>buildorder_label</cstring>
                         </property>
-                        <property name="title">
-                            <string>Requirements</string>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkQt</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Qt</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires the Qt header files/library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkOpenGL</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Open&amp;GL</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires the OpenGL (or Mesa) headers/libraries</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="2">
-                                <property name="name">
-                                    <cstring>checkX11</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;X11</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="2">
-                                <property name="name">
-                                    <cstring>checkThread</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Thread</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires support for multi-threaded application or library.</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        <property name="text">
+                            <string>Order in which sub projects are built:</string>
+                        </property>
                     </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Installation</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QGroupBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>groupBox7</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Target Installation</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="KLineEdit" row="0" column="2">
-                                <property name="name">
-                                    <cstring>m_InstallTargetPath</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>checkInstallTarget</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>install</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="1">
-                                <property name="name">
-                                    <cstring>textLabel1_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>installpath:</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="KListView" row="1" column="0">
+                    <widget class="QListView" row="1" column="0">
                         <column>
                             <property name="text">
                                 <string></string>
@@ -634,71 +1292,32 @@
                                 <bool>true</bool>
                             </property>
                         </column>
-                        <column>
-                            <property name="text">
-                                <string>Path</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
-                        <column>
-                            <property name="text">
-                                <string>Install</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
                         <property name="name">
-                            <cstring>install_list</cstring>
+                            <cstring>buildorder_listview</cstring>
                         </property>
-                        <property name="toolTip" stdset="0">
-                            <string>This feature is not yet implemented</string>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
                         </property>
                     </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>corbaTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Linker</string>
+                    <string>Corba</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>Spacer5</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>100</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>GroupBox2_2</cstring>
+                            <cstring>idlGroup</cstring>
                         </property>
                         <property name="title">
-                            <string>Linker</string>
+                            <string>Target</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -710,202 +1329,56 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_2_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Release flags:</string>
-                                </property>
-                            </widget>
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>TextLabel2_2_3</cstring>
+                                    <cstring>TextLabel1_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Debug flags:</string>
+                                    <string>idl compiler</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>compiler options</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
-                                    <cstring>m_debugFlagsLink</cstring>
+                                    <cstring>idlCmdEdit</cstring>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="1" column="1">
+                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>m_releaseFlagsLink</cstring>
+                                    <cstring>idlCmdOptionsEdit</cstring>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="2" column="1">
+                            <widget class="QPushButton" row="0" column="2">
                                 <property name="name">
-                                    <cstring>m_Libs</cstring>
-                                </property>
-                                <property name="text">
-                                    <string></string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Linking against this libs. (e.g. -L/usr/local/lib -ltest)</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Libraries:</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>&amp;Directories</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QGroupBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>GroupBox5</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Paths (-I option)</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Library path:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Include path:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Object path (OBJECTS_DIR):</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="3" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3_2_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>UI path (UI_DIR):</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="4" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3_2_2_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>MOC path (MOC_DIR):</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>m_includePath</cstring>
+                                    <cstring>idlBrowseBtn</cstring>
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
-                                <property name="toolTip" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>m_libraryPath</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                <property name="text">
+                                    <string>Browse...</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="2" column="1">
-                                <property name="name">
-                                    <cstring>m_objectPath</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="3" column="1">
-                                <property name="name">
-                                    <cstring>m_uiPath</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="4" column="1">
-                                <property name="name">
-                                    <cstring>m_mocPath</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string></string>
+                                    <string>Browse</string>
                                 </property>
                             </widget>
                         </grid>
                     </widget>
                     <spacer row="1" column="0">
                         <property name="name">
-                            <cstring>Spacer6</cstring>
+                            <cstring>spacer18</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -916,7 +1389,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>50</height>
+                                <height>171</height>
                             </size>
                         </property>
                     </spacer>
@@ -926,6 +1399,12 @@
     </grid>
 </widget>
 <connections>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
     <connection>
         <sender>Browse</sender>
         <signal>clicked()</signal>
@@ -940,9 +1419,93 @@
     </connection>
     <connection>
         <sender>radioLibrary</sender>
-        <signal>toggled(bool)</signal>
+        <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>radioLibrarytoggled(bool)</slot>
+        <slot>templateLibraryClicked(int)</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buildmoveup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buildmovedown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveDownClicked()</slot>
     </connection>
     <connection>
         <sender>buttonOk</sender>
@@ -951,10 +1514,40 @@
         <slot>updateProjectConfiguration()</slot>
     </connection>
     <connection>
-        <sender>buttonCancel</sender>
+        <sender>outsideLibDirAddBtn</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>reject()</slot>
+        <slot>outsideLibDirAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>staticRadio</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotStaticLibClicked(int)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -962,20 +1555,14 @@
     <tabstop>radioApplication</tabstop>
     <tabstop>radioLibrary</tabstop>
     <tabstop>radioSubdirs</tabstop>
-    <tabstop>m_targetPath</tabstop>
-    <tabstop>Browse</tabstop>
-    <tabstop>m_targetOutputFile</tabstop>
-    <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
-    <tabstop>m_defines</tabstop>
-    <tabstop>m_debugFlags</tabstop>
-    <tabstop>m_releaseFlags</tabstop>
-    <tabstop>m_debugFlagsLink</tabstop>
-    <tabstop>m_releaseFlagsLink</tabstop>
-    <tabstop>m_includePath</tabstop>
-    <tabstop>m_libraryPath</tabstop>
+    <tabstop>checkQt</tabstop>
+    <tabstop>checkOpenGL</tabstop>
+    <tabstop>checkThread</tabstop>
+    <tabstop>checkX11</tabstop>
+    <tabstop>buttonCancel</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
@@ -984,19 +1571,34 @@
     <slot>browseTargetPath()</slot>
     <slot>clickSubdirsTemplate()</slot>
     <slot>updateProjectConfiguration()</slot>
-    <slot>radioLibrarytoggled(bool)</slot>
+    <slot>templateLibraryClicked(int)</slot>
+    <slot>buildorderMoveUpClicked()</slot>
+    <slot>buildorderMoveDownClicked()</slot>
+    <slot>outsideIncMoveUpClicked()</slot>
+    <slot>outsideIncMoveDownClicked()</slot>
+    <slot>insideIncMoveUpClicked()</slot>
+    <slot>insideIncMoveDownClicked()</slot>
+    <slot>outsideLibMoveUpClicked()</slot>
+    <slot>outsideLibMoveDownClicked()</slot>
+    <slot>insideLibMoveUpClicked()</slot>
+    <slot>insideLibMoveDownClicked()</slot>
+    <slot>outsideIncAddClicked()</slot>
+    <slot>outsideIncRemoveClicked()</slot>
+    <slot>outsideLibAddClicked()</slot>
+    <slot>outsideLibRemoveClicked()</slot>
+    <slot>outsideLibDirMoveDownClicked()</slot>
+    <slot>outsideLibDirMoveUpClicked()</slot>
+    <slot>outsideLibDirAddClicked()</slot>
+    <slot>outsideLibDirRemoveClicked()</slot>
+    <slot>outsideLibDirEditClicked()</slot>
+    <slot>outsideLibEditClicked()</slot>
+    <slot>outsideIncEditClicked()</slot>
+    <slot>prjDepsMoveUpClicked()</slot>
+    <slot>prjDepsMoveDownClicked()</slot>
+    <slot>slotStaticLibClicked(int)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

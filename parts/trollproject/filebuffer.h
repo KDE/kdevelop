@@ -46,7 +46,7 @@ public:
   QStringList       getChildScopeNames();
   bool              findNextScope(const Caret &pos, Caret& scopeStart, Caret& scopeEnd);
   Caret             findScopeEnd(Caret pos);
-
+ 
   // Recursive scope methods
   bool              handleScopes();
   int               findChildBuffer(const QString &scopeName);
@@ -60,11 +60,11 @@ public:
   // Variable value handling
   void              removeValues(const QString &variable);
   bool              getValues(const QString &variable,QStringList &plusValues, QStringList &minusValues);
-  int               getVariableValueSetModes(const QString &variable,FileBuffer::ValueSetMode* &modes);
   void              setValues(const QString &variable,QString values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3)
                     {setValues(variable,QStringList::split(' ',values),append,valuesPerRow);}
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
+  int               getVariableValueSetModes(const QString &variable,FileBuffer::ValueSetMode* &modes);
 
 private:
   QString           m_scopeName;

@@ -1,4 +1,6 @@
 /***************************************************************************
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
@@ -54,9 +56,9 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
-    void slotBuild();
-    void slotClean();
-    void slotExecute();
+//    void slotBuild();
+//    void slotClean();
+//    void slotExecute();
     void slotCommandFinished( const QString& command );
 
 private:

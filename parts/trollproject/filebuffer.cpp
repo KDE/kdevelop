@@ -328,7 +328,7 @@ int FileBuffer::getVariableValueSetModes(const QString &variable,FileBuffer::Val
         line = line.left(line.length()-1).simplifyWhiteSpace();
         lineNum++;
         line = m_buffer[lineNum];
-	continue;
+        continue;
       }
       line = "";
     }
@@ -348,7 +348,6 @@ int FileBuffer::getVariableValueSetModes(const QString &variable,FileBuffer::Val
   }
   return numberofvariables;
 }
-
 
 /**
  * Remove values for a variable.

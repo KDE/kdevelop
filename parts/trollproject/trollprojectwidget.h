@@ -1,4 +1,6 @@
 /***************************************************************************
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
@@ -45,7 +47,6 @@ struct ProjectConfiguration
   QMakeTemplate   m_template;
   QMakeBuildMode  m_buildMode;
   QMakeWarnings   m_warnings;
-  QMakeLibMode    m_lib;
   int             m_requirements;
   QString         m_destdir;
   QString         m_target;
@@ -61,10 +62,14 @@ struct ProjectConfiguration
   QStringList     m_cxxflags_release;
   QStringList     m_lflags_debug;
   QStringList     m_lflags_release;
-  QString         m_libs;
-  bool		  m_installtarget;
-  QString	  m_installtargetpath;
-  bool		  m_inheritconfig;
+  QStringList     m_libadd;
+  QStringList     m_incadd;
+
+  QString         idl_compiler;
+  QString         idl_options;
+  QStringList     m_prjdeps;
+  QStringList     m_incdeps;
+  bool            m_inheritconfig;
 };
 
 
@@ -117,21 +122,48 @@ public:
     QStringList forms;
     QStringList forms_exclude;
 
+    QStringList images;
+    QStringList images_exclude;
+    QStringList idls;
+    QStringList idls_exclude;
+
+
+    
     ProjectConfiguration configuration;
 
     FileBuffer m_FileBuffer;
     FileBuffer *m_RootBuffer;
     bool isScope;
+    QString getRelativPath();
+    QString getDownDirs();
+    QString getLibAddPath(QString downDirs);
+    QString getLibAddObject(QString downDirs);
+    QString getIncAddPath(QString downDirs);
 
 private:
     void init();
 };
 
+class InsideCheckListItem:public QCheckListItem
+{
+public:
+  InsideCheckListItem(QListView *parent,SubprojectItem *item):QCheckListItem(parent,item->text(0),QCheckListItem::CheckBox)
+  {
+    prjItem=item;
+  }
+  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item):QCheckListItem(parent,after,item->text(0),QCheckListItem::CheckBox)
+  {
+    prjItem=item;
+  }
+  SubprojectItem *prjItem;
+};
+
+
 
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms };
+    enum GroupType {NoType, Sources, Headers, Forms,Images,IDLs };
 
     static GroupType groupTypeForExtension(const QString &ext);
 
@@ -207,19 +239,30 @@ public:
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 
+public slots:
+    void slotBuildTarget();
+    void slotRebuildTarget();
+    void slotCleanTarget();
+    void slotExecuteTarget();
+
+    void slotBuildProject();
+    void slotRebuildProject();
+    void slotCleanProject();
+    void slotExecuteProject();
+    
+    void slotBuildFile();
+    
+    void slotConfigureProject();
+    void slotAddFiles();
+    void slotNewFile();
+    void slotRemoveFile();
+    
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotDetailsSelectionChanged(QListViewItem*);
     void slotDetailsExecuted(QListViewItem *item);
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotBuildProject();
-    void slotRebuildProject();
-    void slotConfigureProject();
-    void slotRunProject();
-    void slotAddFiles();
-    void slotNewFile();
-    void slotRemoveFile();
     void slotConfigureFile();
     void slotAddSubdir(SubprojectItem *spitem=0);
     void slotCreateScope(SubprojectItem *spitem=0);
@@ -239,9 +282,16 @@ private:
     QHBox     *projectTools;
     QToolButton *addSubdirButton;
     QToolButton *createScopeButton;
-    QToolButton *buildButton;
-    QToolButton *rebuildButton;
-    QToolButton *runButton;
+
+    QToolButton *buildProjectButton;
+    QToolButton *rebuildProjectButton;
+    QToolButton *executeProjectButton;
+
+    QToolButton *buildTargetButton;
+    QToolButton *rebuildTargetButton;
+    QToolButton *executeTargetButton;
+
+    QToolButton *buildFileButton;
     QToolButton *projectconfButton;
 
     QVBox     *detailContainer;
