@@ -143,7 +143,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
     }
 
     QString file = findIncludeFile( dep );
-    findOrInsertDependenceList( fileName ).insert( fn, dep );
+    findOrInsertDependenceList( fileName ).insert( file, dep );
 
     if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
 	return;
