@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <kiconloader.h>
+#include <qfontmetrics.h>
 		 
 #include "filelist_item.h"
 
@@ -50,6 +51,11 @@ void FileListItem::setState( DocumentState state )
 			setPixmap( 0, SmallIcon("stop") );
 			break;					
 	}
+}
+
+void FileListItem::setHeight( int )
+{
+	QListViewItem::setHeight( KIcon::SizeSmall > listView()->fontMetrics().height() ? KIcon::SizeSmall : listView()->fontMetrics().height() );
 }
 
 

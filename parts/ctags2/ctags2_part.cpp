@@ -140,7 +140,7 @@ int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pa
 int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & pattern )
 {	
 	// if the file is open - get the line from the editor buffer
-	if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partController()->findOpenDocument( url ) ) )
+	if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partController()->partForURL( url ) ) )
 	{
 		kdDebug() << "the file is open - get the line from the editor buffer" << endl;
 		

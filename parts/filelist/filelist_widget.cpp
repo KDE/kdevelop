@@ -163,7 +163,7 @@ void FileListWidget::itemClicked( QListViewItem * item )
 	if ( !item ) return;
 	
 	FileListItem * listItem = static_cast<FileListItem*>( item );
-	_part->partController()->editDocument( listItem->url() );
+	_part->partController()->activatePart( _part->partController()->partForURL( listItem->url() ) );
 }
 
 void FileListWidget::activePartChanged( KParts::Part * part )
@@ -237,7 +237,7 @@ void FileListWidget::closeSelectedFiles( )
 	while ( it != list.end() )
 	{
 		kdDebug() << "Closeing " << (*it).prettyURL() << endl;
-		_part->partController()->closePartForURL( *it );
+		_part->partController()->closePart( _part->partController()->partForURL( *it ) );
 		++it;
 	}
 }
@@ -252,7 +252,7 @@ void FileListWidget::saveSelectedFiles( )
 	while ( it != list.end() )
 	{
 		kdDebug() << "Saving " << (*it).prettyURL() << endl;
-		KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( _part->partController()->findOpenDocument( *it ) );
+		KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( _part->partController()->partForURL( *it ) );
 		if ( rw_part )
 		{
 			rw_part->save();
@@ -271,7 +271,7 @@ void FileListWidget::reloadSelectedFiles( )
 	while ( it != list.end() )
 	{
 		kdDebug() << "Reloading " << (*it).prettyURL() << endl;
-		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( _part->partController()->findOpenDocument( *it ) );
+		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( _part->partController()->partForURL( *it ) );
 		if ( ro_part )
 		{
 			ro_part->openURL( *it );

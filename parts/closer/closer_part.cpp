@@ -59,6 +59,7 @@ void CloserPart::openDialog()
     }
 }
 
+// @todo use partcontroller method
 KURL::List CloserPart::openFiles()
 {
     KURL::List openfiles;
@@ -77,6 +78,7 @@ KURL::List CloserPart::openFiles()
     return openfiles;
 }
 
+// @todo use partcontroller method
 void CloserPart::closeFiles( KURL::List const & fileList )
 {
     KURL::List::ConstIterator it = fileList.begin();
@@ -84,13 +86,14 @@ void CloserPart::closeFiles( KURL::List const & fileList )
     {
         if ( KParts::ReadOnlyPart * ro_part = partForURL( *it ) )
         {
-            partController()->closePartForWidget( ro_part->widget() );
+//            partController()->closePartForWidget( ro_part->widget() );
+            partController()->closePart( ro_part );
         }
         ++it;
     }
 }
 
-// reimplemented from PartController::partForURL to avoid linking
+// @todo use partcontroller method
 KParts::ReadOnlyPart * CloserPart::partForURL( KURL const & url )
 {
     QPtrListIterator<KParts::Part> it( *partController()->parts() );

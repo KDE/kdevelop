@@ -116,7 +116,7 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 	KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
 	if ( !rw_part ) return;
 	
-	if ( rw_part->isModified() || partController()->isDirty( rw_part ) )
+	if ( partController()->documentState( rw_part->url() ) != Clean )
 	{
 		int id = popup->insertItem( i18n( "Difference to disk file" ),
 							this, SLOT(localDiff()) );

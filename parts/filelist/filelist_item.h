@@ -27,6 +27,7 @@ public:
 	KURL url();
 	DocumentState state();
 	void setState( DocumentState );
+	virtual void setHeight( int );	// override of QListViewItem::setHeight()
 	
 private:
 	KURL _url;

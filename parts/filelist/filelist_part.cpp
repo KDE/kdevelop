@@ -55,6 +55,7 @@ FileListPart::~FileListPart()
     delete m_widget;
 }
 
+// @todo remove. use partcontroller's method instead 
 KURL::List FileListPart::openFiles()
 {
     KURL::List openfiles;
