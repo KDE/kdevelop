@@ -115,6 +115,10 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
     if( !part )
         return;
+		
+	if( m_editor ){
+		reparse();
+	}
 
     m_document = dynamic_cast<KTextEditor::Document*>( part );
     if( m_document ){
