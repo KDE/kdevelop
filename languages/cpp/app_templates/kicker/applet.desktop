@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=A panel applet called $NAME$
+Comment[br]=Un arloadig panell a vez graet $NAME$
 Comment[ca]=Un applet del plafó anomenat $NAME$
 Comment[cy]=Rhaglennig panel o'r enw $NAME$
 Comment[da]=En panel-applet der hedder $NAME$
@@ -27,9 +28,7 @@ Comment[sv]=Ett panelminiprogram som kallas $NAME$
 Comment[ta]=ஒரு பானல் ஆப்லெட்  $NAME$ என்ற்உ அழைக்கப்படுகிறது
 Comment[tg]=Пайраҳаи апплети $NAME$
 Comment[uk]=Аплет панелі $NAME$
-Comment[xx]=xxA panel applet called $NAME$xx
 Comment[zh_CN]=一个称作$NAME$的面板小程序
 Name=%{APPNAMELC}
-Name[xx]=xx%{APPNAMELC}xx
 X-KDE-Library=%{APPNAMELC}_panelapplet
 X-KDE-UniqueApplet = false 
