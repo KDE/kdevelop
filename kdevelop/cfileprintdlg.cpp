@@ -38,12 +38,47 @@ CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent,
 CFilePrintDlg::~CFilePrintDlg(){
   selfChoosenFilesMultiLine->clear();
   delete(selfChoosenFilesMultiLine);
+  delete (cancelButton);
+  delete (okButton);
+  delete (qtarch_Label_91);
+  delete (qtarch_Label_90);
+  delete (endTimeMinuteLine);
+  delete (endTimeHourLine);
+  delete (qtarch_Label_89);
+  delete (qtarch_Label_88);
+  delete (beginTimeHourLine);
+  delete (beginTimeMinuteLine);
+  delete (beginDateButton);
+  delete (beginTimeButton);
+  delete (cppFilesButton);
+  delete (headerFilesButton);
+  delete (qtarch_Label_84);
+  delete (qtarch_Label_83);
+  delete (qtarch_Label_80);
+  delete (changedFilesButton);
+  delete (selfChoosenFilesButton);
+  delete (allInProjectButton);
+  delete (currentButton);
+  delete (qtarch_Label_79);
+  delete (selfChoosenFilesPushButton);
+  delete (selfChoosenFileLine);
+  delete (qtarch_Label_77);
+  delete (selfChoosenFilesAddButton);
+  delete (selfChoosenFilesDeleteButton);
+  delete (selfChoosenFilesCleanButton);
+  delete (qtarch_ButtonGroup_139);
+  delete (qtarch_ButtonGroup_142);
+  delete (qtarch_ButtonGroup_141);
+  delete (qtarch_ButtonGroup_140);
+  delete (qtarch_ButtonGroup_143);
+  delete (filewidget);
+  delete (mainwidget);
 }
 
 void CFilePrintDlg::init() {
-  QWidget *mainwidget = new QWidget(this,"filedialog");
+  mainwidget = new QWidget(this,"filedialog");
   mainwidget->resize (600,480);
-  QWidget *filewidget = new QWidget(this,"files");
+  filewidget = new QWidget(this,"files");
   filewidget->resize(600,430);
 
   qtarch_ButtonGroup_143 = new QButtonGroup( this, "ButtonGroup_143" );

@@ -92,6 +92,8 @@ protected:
     KConfig *settings;
     QTime beginTime,endTime;
     QStrList fileList;
+    QWidget *mainwidget;
+    QWidget *filewidget;
 };
 #endif // CFILEPRINTDLG
 

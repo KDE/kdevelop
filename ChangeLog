@@ -1,3 +1,6 @@
+1999-03-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* fixed many bugs like overwriting existing files, memorylinks, no settingdefault in printdialog...
+
 1999-03-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed the addExisting files-asked every time, even when a file did not exist
     and added a cancel button. TODO: in CKDevelop::addFileToProject()  proof if file already is

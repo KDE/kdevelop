@@ -40,13 +40,50 @@ CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDi
 }
 
 CPrintDlg::~CPrintDlg(){
+  delete (cancelButton);
+  delete (previewButton);
+  delete (okButton);
+  delete (printToFileButton);
+  delete (mediaCombBox);
+  delete (prettyCombBox);
+  delete (filesConfButton);
+  delete (pagePerSide);
+  delete (pageSide);
+  delete (prettyColorCheckBox);
+  delete (prettyPrintCheckBox);
+  delete (copySpinBox);
+  delete (defaultCombBox);
+  delete (formatCombBox);
+  delete (printToFileDlg);
+  delete (printerLine);
+  delete (qtarch_Label_1);
+  delete (programCombBox);
+  delete (paperCombBox);
+  delete (printToFileLine);
+  delete (printingConfButton);
+  delete (paperFormatGroup);
+  delete (qtarch_ButtonGroup_2);
+  delete (qtarch_ButtonGroup_3);
+  delete (qtarch_ButtonGroup_4);
+  delete (qtarch_ButtonGroup_6);
+  delete (qtarch_ButtonGroup_5);
+  delete (qtarch_ButtonGroup_7);
+  delete (qtarch_ButtonGroup_10);
+  delete (qtarch_ButtonGroup_11);
+  delete (qtarch_ButtonGroup_34);
+  delete (qtarch_ButtonGroup_9);
+  delete (qtarch_ButtonGroup_8);
+  delete (qtarch_ButtonGroup_35);
+  delete (printwidget);
+  delete (mainwidget);
+
 }
 
 
 void CPrintDlg::init(){
-  QWidget *mainwidget = new QWidget(this,"printdialog");
+  mainwidget = new QWidget(this,"printdialog");
   mainwidget->resize (600,480);
-  QWidget *printwidget = new QWidget(this,"printing");
+  printwidget = new QWidget(this,"printing");
   printwidget->resize(600,430);
 
   qtarch_ButtonGroup_35 = new QButtonGroup( printwidget, "ButtonGroup_35" );
@@ -121,7 +158,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_10->setTitle(i18n( "Page printing" ));
   qtarch_ButtonGroup_10->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_7;
   qtarch_ButtonGroup_7 = new QButtonGroup( printwidget, "ButtonGroup_7" );
   qtarch_ButtonGroup_7->setGeometry( 170, 200, 140, 60 );
   qtarch_ButtonGroup_7->setMinimumSize( 0, 0 );
@@ -134,7 +170,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_7->setTitle(i18n( "Copy" ));
   qtarch_ButtonGroup_7->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_5;
   qtarch_ButtonGroup_5 = new QButtonGroup( printwidget, "ButtonGroup_5" );
   qtarch_ButtonGroup_5->setGeometry( 130, 10, 210, 60 );
   qtarch_ButtonGroup_5->setMinimumSize( 0, 0 );
@@ -183,7 +218,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_3->setTitle(i18n( "Outputformat" ));
   qtarch_ButtonGroup_3->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_2;
   qtarch_ButtonGroup_2 = new QButtonGroup( printwidget, "ButtonGroup_2" );
   qtarch_ButtonGroup_2->setGeometry( 20, 10, 100, 60 );
   qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
@@ -262,7 +296,6 @@ void CPrintDlg::init(){
   programCombBox->insertItem( "lpr" );
   connect(programCombBox,SIGNAL(activated (int)),SLOT(slotProgramActivated(int)));
   
-  QLabel* qtarch_Label_1;
   qtarch_Label_1 = new QLabel( printwidget, "Label_1" );
   qtarch_Label_1->setGeometry( 140, 30, 70, 30 );
   qtarch_Label_1->setMinimumSize( 0, 0 );
@@ -943,7 +976,7 @@ void CPrintDlg::slotPreviewClicked() {
     process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       text = (QString) " --output="+ dir;
-      process = new KShellProcess();
+      // process = new KShellProcess();
       settings = kapp->getConfig();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
@@ -958,6 +991,7 @@ void CPrintDlg::slotPreviewClicked() {
       *process << "a2ps -nP " + string + " " + files + " > " + dir;
     }
     process->start(KProcess::Block,KProcess::AllOutput);
+    delete (process);
     process2 = new KShellProcess();
     if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
       *process2 << "kdehelp";
@@ -992,6 +1026,7 @@ void CPrintDlg::slotFilesConfClicked() {
   CFilePrintDlg *fileconf = new CFilePrintDlg(this, "filedialog");
   fileconf->setCaption("FilePrintDialog");
   fileconf->exec(); 
+  delete (fileconf);
 }
 
 void CPrintDlg::slotPrintingConfClicked() {
@@ -1007,6 +1042,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     settings = kapp->getConfig();
   settings->setGroup("LastSettings");
   globalpara = settings->readEntry("A2psSettings");
+  delete (a2psconf);
   }
   else
     if (prog==1) {
@@ -1020,6 +1056,7 @@ void CPrintDlg::slotPrintingConfClicked() {
       settings = kapp->getConfig();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
+      delete (enscriptconf);
     }
 }
 
@@ -1086,7 +1123,7 @@ void CPrintDlg::slotOkClicked() {
     QString text="";
     process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
-      process = new KShellProcess();
+      //  process = new KShellProcess();
       if (printToFileButton->isChecked()) {
 	dir =  printToFileLine->text();
 	text = (QString) " --output="+ dir;
@@ -1159,12 +1196,14 @@ QString CPrintDlg::createFileString() {
   test.truncate(test.findRev("/"));
   underdir = test2.remove(0,test.length());
   if (!strcmp(globalpara,"current")) {
+    delete (project);
     return oldfiles;
   }
   else if (!strcmp(globalpara,"cppFiles")) {
     for(str= project->getSources().first();str !=0;str = project->getSources().next()){
       sources =  prj_str2 + underdir + "/" + str + " " + sources ;
     }
+    delete (project);
     return sources;
   }
   else if (!strcmp(globalpara,"allFiles")) {
@@ -1172,15 +1211,18 @@ QString CPrintDlg::createFileString() {
     for(str= filelist.first();str !=0;str = filelist.next()){
       sources =  prj_str2 + "/" + str + " " + sources ;
     }
+    delete (project);
     return sources;
   }
   else if (!strcmp(globalpara,"headerFiles")) {
     for(str= project->getHeaders().first();str !=0;str = project->getHeaders().next()){
       sources =  prj_str2 + underdir + "/" + str + " " + sources ;
     }
+    delete (project);
     return sources;
   } 
   else {
+    delete (project);
     return globalpara;
   } 
 }

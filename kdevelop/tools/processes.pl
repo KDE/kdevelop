@@ -55,7 +55,7 @@ sub replaceOldFile {
   $counter = 0;
   $wordlength = length($word);
   $newfile = "newfile.txt";
-  open (INPUT,$oldfile) || die "kann Datei nicht öffnen: $!";
+  open (INPUT,$oldfile) || die "kann Datei nicht öffnen: $oldfile";
   open (OUTPUT,">$newfile");
   while ( defined ($line = <INPUT> )) {
     while ($where != -1) {

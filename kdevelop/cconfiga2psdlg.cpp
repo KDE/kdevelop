@@ -30,6 +30,41 @@ CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(paren
 }
 
 CConfigA2psDlg::~CConfigA2psDlg(){
+  delete(linesButton);
+  delete(fontsizeButton);
+  delete(cancelButton);
+  delete(defaultButton);
+  delete(okButton);
+  delete(previewButton);
+  delete(qtarch_Label_113);
+  delete(qtarch_label);
+  delete(linesPerPage);
+  delete(numberingPagesList);
+  delete(bordersButton);
+  delete(numberingLineButton);
+  delete(qtarch_Label_3);
+  delete(a2psFontSize);
+  delete(setTabSize);
+  delete(qtarch_Label_2);
+  delete(qtarch_ButtonGroup_20);
+  delete(cutLinesButton);
+  delete(replaceButton);
+  delete(headerButton);
+  delete(filenameLine);
+  delete(loginButton);
+  delete(headertextLine);
+  delete(qtarch_Label_20);
+  delete(headertextButton);
+  delete(qtarch_ButtonGroup_60);
+  delete(currentDateButton);
+  delete(interpretButton);
+  delete(printAsISOLatin);
+  delete(alignFilesButton);
+  delete(boltFontButton);
+  delete(qtarch_ButtonGroup_21);
+  delete(qtarch_ButtonGroup_177);
+  delete(qtarch_ButtonGroup_182);
+  delete(qtarch_ButtonGroup_33);
 }
 
 void CConfigA2psDlg::init() {
@@ -786,6 +821,7 @@ void CConfigA2psDlg::slotPreviewClicked() {
   process = new KShellProcess();
   *process << "a2ps -nP" + globalpara + " " + data1 + " " + data2 + " >" + dir;
   process->start(KProcess::Block,KProcess::AllOutput);
+  delete (process);
   process2 = new KShellProcess();
   if (lookProgram("gv")) {
     *process2 << "gv";

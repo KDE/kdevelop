@@ -64,11 +64,12 @@ class CKAppWizard : public KWizard {
   Q_OBJECT
 public:
   CKAppWizard(QWidget* parent=0,const char* name=0);
-  ~CKAppWizard(){};
+  ~CKAppWizard();
   void init();
   void initPages(); 
   QString getProjectFile();
   bool generatedProject();
+  void okPermited(); 
   
 public slots:
 
@@ -122,7 +123,7 @@ private:
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
   QMultiLineEdit *errOutput,*output;
-  KProcess *p,*q;
+  KShellProcess *p,*q;
   KSimpleConfig* settings;
   CProject *project;
   QStrList sub_dir_list;

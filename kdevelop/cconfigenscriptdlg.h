@@ -196,6 +196,10 @@ protected:
     QPushButton* previewButton;
     KShellProcess *process,*process2;
     KConfig *settings;
+    QWidget *tab1;
+    QWidget *tab2;
+    QWidget *tab3;
+    QWidget *tab4;
 };
 
 #endif // CCONFIGENSCRIPTDLG

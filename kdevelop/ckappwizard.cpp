@@ -23,6 +23,7 @@
 
 #include "ckappwizard.h"
 #include "debug.h"
+#include <kmsgbox.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name) : KWizard(parent,name,true){
   
@@ -31,6 +32,15 @@ setCaption(i18n("Application Wizard"));
   init();
   initPages();
   slotDefaultClicked();    
+}
+
+CKAppWizard::~CKAppWizard () {
+  delete (page0);
+  delete (page1);
+  delete (page2);
+  delete (page3);
+  delete (page4);
+  delete (page5);
 }
 
 void CKAppWizard::init(){
@@ -395,6 +405,32 @@ void CKAppWizard::slotNewCppButtonClicked() {
 
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
+  QDir dir;
+  dir.setPath(directoryline->text());
+  if (dir.exists()) {
+    if(KMsgBox::yesNo(0,"Directory exists!","WARNING!!! If you click 'OK', all files and subdirs will removed.",KMsgBox::EXCLAMATION,"Ok","Cancel")==2) {
+      return;
+    }
+    else {
+      p = new KShellProcess();
+      QString copydes = (QString) "rm -r -f " + directoryline->text() + QString ("/");
+      *p << copydes;
+      p->start(KProcess::Block,KProcess::AllOutput);
+      delete (p);
+      okPermited();
+    }
+  }
+  else {
+    p = new KShellProcess();
+    QString copydes = (QString ) "rm -r -f " + directoryline->text() + QString ("/");
+    *p << copydes;
+    p->start(KProcess::Block,KProcess::AllOutput);
+    delete (p);
+    okPermited();
+  }
+}
+
+void CKAppWizard::okPermited() {
   cancelButton->setFixedWidth(75);
   cancelButton->setEnabled(false);
   defaultButton->setEnabled(false);
@@ -480,43 +516,35 @@ void CKAppWizard::slotOkClicked() {
   namelow = namelow.lower();
   QDir directory;
   directory.mkdir(directoryline->text() + QString("/"));
-  p = new KProcess();
+  p = new KShellProcess();
   QString copysrc;
   QString copydes = directoryline->text() + QString ("/");
   if (kma->isChecked()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
-    *p << "cp";
-    *p << copysrc;
-    *p << copydes;
+    *p << "cp " + copysrc + (QString) " " + copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (kna->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
-    *p << "cp";
-    *p << copysrc;
-    *p << copydes;
+    *p << "cp " + copysrc + (QString) " " + copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   }
   else if (qta->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
-    *p << "cp";
-    *p << copysrc;
-    *p << copydes;
+    *p << "cp " + copysrc + (QString) " " + copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   }
   else {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
-    *p << "cp";
-    *p << copysrc;
-    *p << copydes;
+    *p << "cp " + copysrc + (QString) " " + copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   }
   p->clearArguments();
   connect(p,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(p,SIGNAL(receivedStdout(KProcess *, char *, int)),
-          this,SLOT(slotPerlOut(KProcess *, char *, int)));
+	  this,SLOT(slotPerlOut(KProcess *, char *, int)));
   connect(p,SIGNAL(receivedStderr(KProcess *, char *, int)),
-          this,SLOT(slotPerlErr(KProcess *, char *, int)));
+	  this,SLOT(slotPerlErr(KProcess *, char *, int)));
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   *p << "perl" << path + "processes.pl";
   p->start(KProcess::NotifyOnExit, KProcess::AllOutput);
@@ -552,8 +580,8 @@ void CKAppWizard::slotOkClicked() {
   hload->setEnabled(false);
   cppnew->setEnabled(false);
   cppload->setEnabled(false);
-
 }
+
 
 // connection of this (cancelButton)
 void CKAppWizard::slotAppEnd() {
@@ -669,8 +697,8 @@ void CKAppWizard::slotQtClicked() {
 void CKAppWizard::slotCPPClicked() {
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(true);
-  apidoc->setChecked(true);
+  apidoc->setEnabled(false);
+  apidoc->setChecked(false);
   datalink->setEnabled(false);
   datalink->setChecked(false);
   progicon->setEnabled(true);
@@ -1180,7 +1208,7 @@ void CKAppWizard::slotProcessExited() {
   project->writeProject ();
   project->updateMakefilesAm ();
 
-  q = new KProcess();
+  q = new KShellProcess();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
   connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
           this,SLOT(slotPerlOut(KProcess *, char *, int)));
