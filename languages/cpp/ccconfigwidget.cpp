@@ -36,6 +36,7 @@
 #include <knuminput.h>
 #include <kmainwindow.h>
 #include <klineedit.h>
+#include <kdeversion.h>
 // kdevelop includes
 #include <domutil.h>
 #include <kdevcoderepository.h>
@@ -175,8 +176,13 @@ void CCConfigWidget::slotRemovePCS()
 	
 	KStandardDirs *dirs =  m_pPart->instance()->dirs();
 	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + db + ".db";
-	
+
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)	
         if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n("Remove Database"), KStdGuiItem::del() ) )
+#else
+        if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n("Remove Database"),
+	 KGuiItem( "&Delete", "editdelete", "Delete item(s)" ) ) )
+#endif
 	{
 		m_pPart->removeCatalog( dbName );
 	}

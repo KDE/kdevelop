@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 #include <kdialogbase.h>
 #include <kglobalsettings.h>
+#include <kdeversion.h>
 
 #include <profile.h>
 
@@ -250,8 +251,13 @@ void ProfileEditor::addProfile()
 
 void ProfileEditor::removeProfile()
 {
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
     if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
         i18n("Remove Profile"),KStdGuiItem::del()) == KMessageBox::Continue)
+#else
+    if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
+        i18n("Remove Profile"),KGuiItem( "&Delete", "editdelete", "Delete item(s)")) == KMessageBox::Continue)
+#endif
     {
         Profile *profile = currentProfile();
         if (profile->remove())

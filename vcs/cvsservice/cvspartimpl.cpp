@@ -810,11 +810,19 @@ void CvsServicePartImpl::removedFilesFromProject(const QStringList &filesToRemov
     if (filesInCVS.isEmpty())
         return;
 
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
     int s = KMessageBox::warningContinueCancel( 0,
         i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too."),
         i18n("CVS - Files Removed From Project"),
         KStdGuiItem::del(),
         i18n("askWhenRemovingFiles") );
+#else
+    int s = KMessageBox::warningContinueCancel( 0,
+        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too."),
+        i18n("CVS - Files Removed From Project"),
+        KGuiItem( "&Delete", "editdelete", "Delete item(s)"),
+        i18n("askWhenRemovingFiles") );
+#endif
     if (s == KMessageBox::Continue)
     {
         kdDebug( 9006 ) << "Removing these files: " << filesInCVS.join( ", " ) << endl;
