@@ -164,9 +164,9 @@ void ProblemReporter::removeAllErrors( const QString& filename )
 void ProblemReporter::reparse()
 {
     kdDebug(9007) << "ProblemReporter::reparse()" << endl;
- 
+
     m_timer->stop();
-    m_cppSupport->backgroundParser()->reparse();        
+    m_cppSupport->backgroundParser()->addFile( m_filename );
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -183,8 +183,8 @@ void ProblemReporter::reportError( QString message,
 {
     if( m_markIface && m_filename == filename ){
 	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
-    }	
-    
+    }
+
     new ProblemItem( this,
 		     "error",
 		     filename,

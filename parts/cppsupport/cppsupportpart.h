@@ -22,6 +22,7 @@
 #include <qguardedptr.h>
 #include "cppsupportwidget.h"
 #include <qstring.h>
+#include <qwaitcondition.h>
 
 class ParsedMethod;
 class ParsedAttribute;
@@ -187,6 +188,8 @@ private:
     QString m_activeFileName;
 
     KListView* m_structureView;
+
+    QWaitCondition m_eventConsumed;
 };
 
 #endif

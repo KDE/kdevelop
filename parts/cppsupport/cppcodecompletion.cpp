@@ -1552,9 +1552,10 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
     
     unsigned int line, column;
     m_pCursorIface->cursorPositionReal( &line, &column );    
-        
+
+#if 0
     m_pSupport->backgroundParser()->lock();
-    TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( fileName );    
+    TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( fileName );
     AST* node = findNodeAt( ast, line, column );
 
     if( node ){
@@ -1573,6 +1574,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 	kdDebug(9007) << "------> scope = " << scope.join( "::" ) << endl;
     }
     m_pSupport->backgroundParser()->unlock();
+#endif
 }
 
 #include "cppcodecompletion.moc"

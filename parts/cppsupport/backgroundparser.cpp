@@ -32,36 +32,68 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-BackgroundParser::BackgroundParser( CppSupportPart* part )
-    : m_cppSupport( part ), m_close( false )
+BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consumed )
+    : m_consumed( consumed ), m_cppSupport( part ), m_close( false )
 {
-    m_unitDict.setAutoDelete( true );
+    m_consumed = 0;
 }
 
 BackgroundParser::~BackgroundParser()
 {
+    removeAllFiles();
+}
+
+void BackgroundParser::addFile( const QString& fileName )
+{
+    m_mutex.lock();
+    QString fn( fileName.unicode(), fileName.length() );
+    if( m_fileList.find(fn) == m_fileList.end() )
+        m_fileList.push_back( fn );
+    m_mutex.unlock();
+
+    m_canParse.wakeAll();
 }
 
 void BackgroundParser::removeAllFiles()
 {
-    lock();
+    kdDebug(9007) << "BackgroundParser::removeAllFiles()" << endl;
+    m_mutex.lock();
+
+    QMap<QString, Unit*>::Iterator it = m_unitDict.begin();
+    while( it != m_unitDict.end() ){
+        Unit* unit = it.data();
+	++it;
+	delete( unit );
+    }
     m_unitDict.clear();
     m_driver.reset();
-    unlock();
+    m_fileList.clear();
+
+    m_mutex.unlock();
+
+    m_isEmpty.wakeAll();
 }
 
 void BackgroundParser::removeFile( const QString& fileName )
 {
-    lock();
+    m_mutex.lock();
+    Unit* unit = findUnit( fileName );
     m_unitDict.remove( fileName );
+    if( unit ){
+        delete( unit );
+	unit = 0;
+    }
     m_driver.clear( fileName );
-    unlock();
+    m_mutex.unlock();
+
+    if( m_fileList.isEmpty() )
+        m_isEmpty.wakeAll();
 }
 
 Unit* BackgroundParser::parseFile( const QString& fileName, const QString& contents )
 {
     TranslationUnitAST::Node translationUnit = m_driver.parseFile( fileName, contents );
- 
+
     Unit* unit = new Unit;
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
@@ -74,7 +106,8 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 {
     Unit* unit = 0;
 
-    kapp->lock();
+    //kapp->lock();
+
     QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
     QPtrListIterator<KParts::Part> it( parts );
     while( it.current() ){
@@ -88,7 +121,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 	QString contents = editIface->text();
 	unit = parseFile( fileName, contents );
     }
-    kapp->unlock();
+    //kapp->unlock();
 
     if( !unit ){
 	QFile f( fileName );
@@ -103,32 +136,43 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
     return unit;
 }
 
-Unit* BackgroundParser::findOrCreateUnit( const QString& fileName )
+Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
 {
-    Unit* unit = 0;
+    QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
+    Unit* unit = it != m_unitDict.end() ? *it : 0;
 
-    unit = m_unitDict.find( fileName );
+    if( unit && force ){
+        m_unitDict.remove( fileName );
+	delete( unit );
+	unit = 0;
+    }
+
     if( !unit && 0 != (unit = parseFile(fileName)) )
 	m_unitDict.insert( fileName, unit );
 
     return unit;
 }
 
+Unit* BackgroundParser::findUnit( const QString& fileName )
+{
+    QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
+    return it != m_unitDict.end() ? *it : 0;
+}
+
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
-    Unit* u = findOrCreateUnit( fileName );
+    Unit* u = findUnit( fileName );
     return u ? u->translationUnit : 0;
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
-    Unit* u = findOrCreateUnit( fileName );
+    Unit* u = findUnit( fileName );
     return u ? u->problems : QValueList<Problem>();
 }
 
 void BackgroundParser::reparse()
 {
-    m_changed.wakeOne();
 }
 
 void BackgroundParser::close()
@@ -136,44 +180,55 @@ void BackgroundParser::close()
     m_close = true;
 }
 
-void BackgroundParser::run()   
+bool BackgroundParser::filesInQueue()
+{
+    m_mutex.lock();
+    int n = m_fileList.count();
+    m_mutex.unlock();
+    return n;
+}
+
+void BackgroundParser::run()
 {
     while( true ){
-	m_changed.wait();
-	
 	if( m_close )
 	    QThread::exit();
-	
-	kapp->lock();
-	
-	KTextEditor::Document* docIface=dynamic_cast<KTextEditor::Document*>(m_cppSupport->partController()->activePart());
-	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( docIface );
-	
-	QString fileName;
-	QString contents;
-	
-	if( docIface ){
-	    fileName = docIface->url().path();
-	    contents = editIface->text();
-	}
-	
-	kapp->unlock();
-	
-	if( editIface && m_cppSupport->fileExtensions().contains(QFileInfo(fileName).extension()) ){
-	    lock();
-	    Unit* unit = parseFile( fileName, contents );
-	    QValueList<Problem> problems = unit->problems;
 
-	    m_unitDict.remove( fileName );
+	while( m_fileList.isEmpty() ){
+	    if( m_close )
+	        break;
+
+            m_canParse.wait();
+	}
+
+	if( m_close )
+	    break;
+
+	m_mutex.lock();
+	QString fileName = m_fileList.front();
+	m_fileList.pop_front();
+
+	Unit* unit = findOrCreateUnit( fileName, true );
+	if( unit ){
 	    m_unitDict.insert( fileName, unit );
-
-	    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
+            KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
-	    unlock();
+	    if( m_consumed )
+	        m_consumed->wait();
 
-	    kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED !!!!!!!!!!!!!!!!!!" << endl;
+	} else {
+	    m_unitDict.remove( fileName );
 	}
+
+	m_mutex.unlock();
+
+	kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
+
+	if( m_fileList.isEmpty() )
+	    m_isEmpty.wakeAll();
     }
+
+    kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 }
 
 

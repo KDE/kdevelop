@@ -118,7 +118,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
-    
+
     m_structureView = new KListView();
     QFont f = m_structureView->font();
     f.setPointSize( 8 );
@@ -132,7 +132,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
 
-    m_backgroundParser = new BackgroundParser( this );
+    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
 
     KAction *action;
@@ -203,10 +203,13 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
+    while( m_backgroundParser->filesInQueue() > 0 )
+       m_backgroundParser->isEmpty().wait();
+    //m_backgroundParser->reparse();
     m_backgroundParser->close();
-    m_backgroundParser->reparse();
+    m_backgroundParser->canParse().wakeAll();
     m_backgroundParser->wait();
-    
+
     mainWindow( )->removeView( m_pCHWidget );
     mainWindow( )->removeView( m_problemReporter );
     mainWindow()->removeView( m_structureView );
@@ -224,9 +227,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	m_backgroundParser->lock();
 	FoundProblemsEvent* event = (FoundProblemsEvent*) ev;
 	QString fileName = event->fileName();
-	
+
 	m_problemReporter->removeAllErrors( fileName );
-	
+
 	QValueList<Problem> problems = event->problems();
 	QValueList<Problem>::ConstIterator it = problems.begin();
 	while( it != problems.end() ){
@@ -246,8 +249,10 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
     } else if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName( event->fileName().unicode(), event->fileName().length() );
-	emit fileParsed( fileName );
+	// emit fileParsed( fileName );
 	// mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
+
+	m_eventConsumed.wakeAll();
     }
 }
 
@@ -417,10 +422,10 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     if( !textHintIface )
 	return;
         
-    connect( view, SIGNAL(needTextHint(int,int,QString&)), 
+    connect( view, SIGNAL(needTextHint(int,int,QString&)),
 	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
     
-    textHintIface->enableTextHints( 1000 );    
+    textHintIface->enableTextHints( 1000 );
 }
 
 
@@ -456,8 +461,6 @@ CppSupportPart::projectClosed( )
         if( !classStore( )->storeAll( pcsFile ) )
             kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
-
-    m_backgroundParser->removeAllFiles();
 
     delete m_pCompletion;
     m_pCompletion = 0;
@@ -1143,9 +1146,12 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
 
-    store->removeWithReferences( fileName );
+    m_backgroundParser->addFile( fileName );
+    while( m_backgroundParser->filesInQueue() > 0 )
+       m_backgroundParser->isEmpty().wait();
+
     m_backgroundParser->lock();
-    TranslationUnitAST* translationUnit =  m_backgroundParser->translationUnit( fileName );
+    TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( fileName );
     if( translationUnit ){
 	StoreWalker walker( fileName, store );
 	walker.parseTranslationUnit( translationUnit );
@@ -1285,21 +1291,25 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 {
     if( !m_activeEditor )
 	return;
-    
+
+    // sync
+    while( m_backgroundParser->filesInQueue() > 0 )
+         m_backgroundParser->isEmpty().wait();
+
     m_backgroundParser->lock();
     TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
     AST* node = 0;
     if( ast && (node = findNodeAt(ast, line, column)) ){
-    
+
 	while( node && node->nodeType() != NodeType_FunctionDefinition )
 	    node = node->parent();
-	    
+
 	if( node ){
 	    int startLine, startColumn;
 	    int endLine, endColumn;
 	    node->getStartPosition( &startLine, &startColumn );
-	    node->getEndPosition( &endLine, &endColumn );	    
-	    
+	    node->getEndPosition( &endLine, &endColumn );
+
 	    if( node->text() )
 	        textHint = node->text();
 	    else
@@ -1323,6 +1333,7 @@ void CppSupportPart::slotMakeMember()
     if( !m_activeViewCursor )
         return;
 
+#if 0
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
     if( translationUnit ){
@@ -1383,6 +1394,7 @@ void CppSupportPart::slotMakeMember()
 	}
     }
     m_backgroundParser->unlock();
+#endif
 }
 
 QStringList CppSupportPart::subclassWidget(QString formName)

@@ -18,22 +18,22 @@
 #include <qthread.h>
 #include <qwaitcondition.h>
 #include <qmutex.h>
-#include <qasciidict.h>
+#include <qmap.h>
 #include <kdebug.h>
 
 class CppSupportPart;
 class TranslationUnitAST;
 
-class Unit    
+class Unit
 {
 public:
     Unit(): translationUnit( 0 ) { kdDebug(9007) << "++ Unit()" << endl; }
-    ~Unit() { kdDebug(9007) << "-- Unit()" << endl; delete translationUnit; }
-    
+    ~Unit() { kdDebug(9007) << "-- Unit()" << endl; delete translationUnit; translationUnit = 0; }
+
     QString fileName;
     QValueList<Problem> problems;
     TranslationUnitAST* translationUnit;
-    
+
 protected:
     Unit( const Unit& source );
     void operator = ( const Unit& source );
@@ -42,47 +42,47 @@ protected:
 class BackgroundParser: public QThread
 {
 public:
-    BackgroundParser( CppSupportPart* );
+    BackgroundParser( CppSupportPart*, QWaitCondition* consumed );
     virtual ~BackgroundParser();
+
+    QMutex& mutex() { return m_mutex; }
+    void lock() { m_mutex.lock(); }
+    void unlock() { m_mutex.unlock(); }
     
-    void removeAllFiles();
+    QWaitCondition& canParse() { return m_canParse; }
+    QWaitCondition& isEmpty() { return m_isEmpty; }
+
+    bool filesInQueue();
+
+    void addFile( const QString& fileName );
     void removeFile( const QString& fileName );
-    
+    void removeAllFiles();
+
     TranslationUnitAST* translationUnit( const QString& fileName );
     QValueList<Problem> problems( const QString& fileName );
-    
+
     void close();
     void reparse();
-    
-    void lock();
-    void unlock();
-    
+
     virtual void run();
-    
+
 protected:
-    Unit* findOrCreateUnit( const QString& fileName );
+    Unit* findUnit( const QString& fileName );
+    Unit* findOrCreateUnit( const QString& fileName, bool forceCreate=false );
     Unit* parseFile( const QString& fileName );
-    Unit* parseFile( const QString& fileName, const QString& contents );    
-    
+    Unit* parseFile( const QString& fileName, const QString& contents );
+
 private:
     Driver m_driver;
-    QWaitCondition m_changed;
+    QStringList m_fileList;
+    QWaitCondition m_canParse;
+    QWaitCondition m_isEmpty;
+    QWaitCondition* m_consumed;
     QMutex m_mutex;
-    
+
     CppSupportPart* m_cppSupport;
     bool m_close;
-    QAsciiDict<Unit> m_unitDict;
+    QMap<QString, Unit*> m_unitDict;
 };
-
-
-inline void BackgroundParser::lock()
-{
-    m_mutex.lock();
-}
-
-inline void BackgroundParser::unlock()
-{
-    m_mutex.unlock();
-}
 
 #endif

@@ -107,6 +107,11 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
   m_creatingNewSubclass = false;
   m_filename = filename;  
   ClassStore classcontainer;
+
+  
+  // sync
+  while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
+      m_cppSupport->backgroundParser()->isEmpty().wait();
   
   m_cppSupport->backgroundParser()->lock();
   TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
