@@ -386,8 +386,8 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     overviewContainer = new QVBox(splitter,"Projects");
     overviewContainer->setMargin ( 2 );
     overviewContainer->setSpacing ( 2 );
-    overviewContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    splitter->setResizeMode(overviewContainer, QSplitter::FollowSizeHint);
+//    overviewContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+//    splitter->setResizeMode(overviewContainer, QSplitter::FollowSizeHint);
 
     projectTools = new QHBox(overviewContainer,"Project buttons");
     projectTools->setMargin ( 2 );
@@ -490,7 +490,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     detailContainer = new QVBox(splitter,"Details");
     detailContainer->setMargin ( 2 );
     detailContainer->setSpacing ( 2 );
-    detailContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+//    detailContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     // Details Toolbar
     fileTools = new QHBox(detailContainer,"Detail buttons");
