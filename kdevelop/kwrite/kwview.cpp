@@ -1280,7 +1280,7 @@ void KWrite::loadURL(const char *url, int flags) {
     }
 
     kfmURL = u.url();
-    kfmFile.sprintf(_PATH_TMP"kwrite%i",time(0L));
+    kfmFile.sprintf(_PATH_TMP"/kwrite%i",time(0L));
     kfmAction = KWrite::GET;
     kfmFlags = flags;
 
@@ -1324,7 +1324,7 @@ void KWrite::writeURL(const char *url, int flags) {
     emit statusMsg(i18n("Waiting for KFM..."));
 
     kfmURL = url;
-    kfmFile.sprintf(_PATH_TMP"kwrite%i",time(0L));
+    kfmFile.sprintf(_PATH_TMP"/kwrite%i",time(0L));
     kfmAction = KWrite::PUT;
     kfmFlags = flags;
     if (!writeFile(kfmFile)) return;
