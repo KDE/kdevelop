@@ -14,6 +14,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>

@@ -13,6 +13,7 @@
 #include <qfile.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
 

@@ -15,6 +15,7 @@
 #include <qstack.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <qregexp.h>
 #include <kdebug.h>
 #include <klistview.h>
 #include <kmessagebox.h>
