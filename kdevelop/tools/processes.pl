@@ -6,7 +6,7 @@ $homedirectory = $ENV{HOME};
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "kann Datei nicht öffnen: $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "can not open file: $!";
 while ( defined ($name = <PROCESSLIST> )) {
   chomp ($name);
   $process = <PROCESSLIST>;
@@ -693,6 +693,8 @@ sub changeMiniApp() {
   $oldfile = "Makefile.am";
   $replace = "SUBDIRS = " . $nameLittle . " po";
   replaceOldFile($word,$replace,$oldfile);
+  $word = "skel";
+  $replace = $nameLittle;
   $oldfile = "configure.in";
   replaceOldFile($word,$replace,$oldfile);
   $word = "VERSION";

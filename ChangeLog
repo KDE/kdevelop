@@ -1,3 +1,8 @@
+1999-05-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* replace the pics in the application wizard
+	* complete the application wizard
+	* fixed some bugs in the application wizard
+
 1999-05-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* the Application Wizard store the authorname and emailaddress
 	 for the next "new project..."
