@@ -83,6 +83,9 @@ public:
 
     QString extractInterface( const ClassDom& klass );
 
+    bool isHeader(const QString fileName);
+    bool isSource(const QString fileName);
+
 signals:
     void fileParsed( const QString& fileName );
 
@@ -117,6 +120,7 @@ private slots:
     void slotMakeMember();
     void slotExtractInterface();
     void gotoLine( int line );
+    void gotoDeclarationLine( int line );
     void emitFileParsed();
 
     void slotNeedTextHint( int, int, QString& );
@@ -138,6 +142,8 @@ private:
      */
     void maybeParse( const QString& fileName );
     void removeWithReferences( const QString& fileName );
+
+    QString sourceOrHeaderCandidate();
 
     QStringList modifiedFileList();
     QString findSourceFile();

@@ -92,6 +92,7 @@
 #include <kdevpartcontroller.h>
 #include <kdevmakefrontend.h>
 #include <kdevcoderepository.h>
+#include <codemodel_utils.h>
 
 #include <domutil.h>
 #include <config.h>
@@ -435,7 +436,13 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
        if( codeModel()->hasFile(m_activeFileName) ){
            QPopupMenu* m = new QPopupMenu( popup );
            popup->insertItem( i18n("Go to definition"), m );
-           const FileDom file = codeModel()->fileByName( m_activeFileName );
+           QString candidate1;
+           if (isHeader(m_activeFileName))
+               candidate1 = sourceOrHeaderCandidate();
+           else
+               candidate1 = m_activeFileName;
+
+           const FileDom file = codeModel()->fileByName( candidate1 );
            const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
            for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
 	       QString text = (*it)->scope().join( "::");
@@ -446,6 +453,35 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	       int line, column;
 	       (*it)->getStartPosition( &line, &column );
 	       m->setItemParameter( id, line );
+           }
+
+           kdDebug() << "CppSupportPart::contextMenu 1" << endl;
+           QPopupMenu* m2 = new QPopupMenu( popup );
+           popup->insertItem( i18n("Go to declaration"), m2 );
+           QString candidate;
+           if (isSource(m_activeFileName))
+               candidate = sourceOrHeaderCandidate();
+           else
+               candidate = m_activeFileName;
+           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
+           if (!candidate.isEmpty())
+           {
+                FileDom file2 = codeModel()->fileByName( candidate );
+                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->fileName() << endl;
+
+                FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
+                for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it ){
+                    QString text = (*it)->scope().join( "::");
+                    kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
+                    if( !text.isEmpty() )
+                        text += "::";
+                        text += formatModelItem( *it, true );
+                        int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
+                        int line, column;
+                        (*it)->getStartPosition( &line, &column );
+                        m2->setItemParameter( id, line );
+                }
+                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
            }
        }
 
@@ -584,12 +620,11 @@ QString CppSupportPart::findSourceFile()
     return m_activeFileName;
 }
 
-
-void CppSupportPart::slotSwitchHeader()
+QString CppSupportPart::sourceOrHeaderCandidate()
 {
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(partController()->activePart());
     if (!doc)
-      return;
+      return "";
 
     QFileInfo fi(doc->url().path());
     QString path = fi.filePath();
@@ -621,10 +656,15 @@ void CppSupportPart::slotSwitchHeader()
     for (it = candidates.begin(); it != candidates.end(); ++it) {
         kdDebug(9007) << "Trying " << (*it) << endl;
         if (QFileInfo(*it).exists()) {
-            partController()->editDocument(*it);
-            return;
+            return *it;
         }
     }
+    return QString::null;
+}
+
+void CppSupportPart::slotSwitchHeader()
+{
+    partController()->editDocument(sourceOrHeaderCandidate());
 }
 
 void CppSupportPart::slotGotoIncludeFile()
@@ -1366,7 +1406,14 @@ void CppSupportPart::slotExtractInterface( )
 
 void CppSupportPart::gotoLine( int line )
 {
-    m_activeViewCursor->setCursorPositionReal( line, 0 );
+    if (isHeader(m_activeFileName))
+    {
+        KURL url;
+        url.setPath(sourceOrHeaderCandidate());
+        partController()->editDocument(url, line);
+    }
+    else
+        m_activeViewCursor->setCursorPositionReal( line, 0 );
 }
 
 void CppSupportPart::recomputeCodeModel( )
@@ -1393,6 +1440,38 @@ void CppSupportPart::recomputeCodeModel( )
 void CppSupportPart::emitFileParsed( )
 {
 	emit fileParsed( m_activeFileName );
+}
+
+bool CppSupportPart::isHeader( const QString fileName )
+{
+    QFileInfo fi(fileName);
+    QString ext = fi.extension();
+    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh")
+        return true;
+    else
+        return false;
+}
+
+bool CppSupportPart::isSource( const QString fileName )
+{
+    QFileInfo fi(fileName);
+    QString ext = fi.extension();
+    if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl").contains(ext))
+        return true;
+    else
+        return false;
+}
+
+void CppSupportPart::gotoDeclarationLine( int line )
+{
+    if (isHeader(m_activeFileName))
+        m_activeViewCursor->setCursorPositionReal( line, 0 );
+    else
+    {
+        KURL url;
+        url.setPath(sourceOrHeaderCandidate());
+        partController()->editDocument(url, line);
+    }
 }
 
 #include "cppsupportpart.moc"
