@@ -60,6 +60,8 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name)
   m_pUserDoc = 0;
   m_pGlobalDoc = 0;
   m_pCurrentProject =0;
+
+  m_compilers = new QList<KDevCompiler>;
 }
 
 ProjectSpace::~ProjectSpace(){
@@ -154,7 +156,8 @@ void ProjectSpace::setCurrentProject(Project* prj){
     m_pCurrentProject = prj;
 
     // Notify all components that we are switching current project.
-    TheCore()->changeProjectSpace ();
+    // FIX ME: BUG! TheCore is not known here => crash!
+//    TheCore()->changeProjectSpace ();
 
     // Update the popup menu.
     fillActiveProjectPopupMenu();
@@ -524,6 +527,28 @@ bool ProjectSpace::writeUserConfig(QDomDocument& doc,QDomElement& psElement)
 QString ProjectSpace::programmingLanguage(){
   return m_language;
 }
+
+QList<KDevCompiler>* ProjectSpace::compilers(){
+	return m_compilers;
+}
+
+KDevCompiler* ProjectSpace::compilerByName(const QString &name){
+	QListIterator<KDevCompiler> it(*m_compilers);
+  for ( ; it.current(); ++it ) {
+    KDevCompiler *comp = it.current();
+    if (*(comp->name()) == name){
+    	return comp;
+    }
+  }
+  // nothing found
+  return 0;
+}
+
+void ProjectSpace::addCompiler(KDevCompiler::CompilerID cid){
+	m_compilers->append(new KDevCompiler(cid));
+	kdDebug(9030) << "kdevcompiler added to list id=" << cid << endl;
+}
+
 QStringList ProjectSpace::allProjectNames(){
   QStringList list;
   Project* pProject=0;

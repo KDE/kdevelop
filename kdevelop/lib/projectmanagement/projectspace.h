@@ -25,6 +25,7 @@
 #include <ksimpleconfig.h>
 #include <qdom.h>
 #include "kaction.h"
+#include "KDevCompiler.h"
 
 
 // Forward declarations;
@@ -107,7 +108,16 @@ class ProjectSpace : public KDevComponent {
   QString email();
   QString company();
   QString programmingLanguage();
-  
+
+  // the compilers that ps uses
+  QList<KDevCompiler>* compilers();
+
+  // returns the name compiler named 'name' used by this project space
+  KDevCompiler* compilerByName(const QString &name);
+
+  // register a compiler for this project space
+  void addCompiler(KDevCompiler::CompilerID cid);
+
   /** generate default files, 
    * is used by the application wizard to generated all needed files, 
    * for instance the admin dir in automake projects*/
@@ -153,23 +163,34 @@ protected:
   
   /** ProjectSpace name*/
   QString m_name;
+
   /** the current absolute path to the projectspace */
   QString m_path;
+
   /** the programming language for the projectspace
       needed to load the correct languagesupport*/
   QString m_language;
+
+  // compilers we need for the project
+	QList<KDevCompiler>* m_compilers;
+
   // static
   /** projectspace template, name*/
   QString m_projectspaceTemplate;
+
   /** all projects in the ProjectSpace*/
   QList<Project>* m_pProjects;
+
   /** current active project*/
   Project* m_pCurrentProject;
+
   /** absolute*/
   QString m_userProjectspaceFile;
+
   /** absolute */
   QString m_projectspaceFile;
   QString m_version;
+
   // current User profile
   QString m_email;      // Author e-mail address.
   QString m_company;    // Company name.
