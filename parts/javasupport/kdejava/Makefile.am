@@ -73,7 +73,7 @@ kdevjavapluginapidir = $(includedir)/kdevjavapluginapi
 # here you should add all header files, which shouldn´t be installed
 noinst_HEADERS =
 
-libkdevjavapluginapi_la_LDFLAGS = $(all_libraries)  $(KDE_PLUGIN) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) $(LDFLAGS)
+libkdevjavapluginapi_la_LDFLAGS = $(all_libraries)  $(KDE_PLUGIN) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) 
 libkdevjavapluginapi_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lqtjava -lkdejava 
 
 # add here the libraries which have to be include
