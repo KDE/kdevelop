@@ -387,11 +387,11 @@ FunctionDefinitionDom Navigator::functionDefinitionAt(FunctionDefinitionDom fun,
     if (!(line >= startLine && line <= endLine))
         return FunctionDefinitionDom();
 
-    if (line == startLine && column < startColumn)
+/*    if (line == startLine && column < startColumn)
         return FunctionDefinitionDom();
 
     if (line == endLine && column > endColumn)
-        return FunctionDefinitionDom();
+        return FunctionDefinitionDom();*/
 
     return fun;
 }
@@ -474,11 +474,11 @@ FunctionDom Navigator::functionDeclarationAt(FunctionDom fun, int line, int colu
     if (!(line >= startLine && line <= endLine))
         return FunctionDom();
 
-    if (line == startLine && column < startColumn)
+/*    if (line == startLine && column < startColumn)
         return FunctionDom();
 
     if (line == endLine && column > endColumn)
-        return FunctionDom();
+        return FunctionDom();*/
 
     return fun;
 }
