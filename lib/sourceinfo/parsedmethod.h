@@ -71,13 +71,14 @@ public:
      */
     void setIsVirtual(bool aState=true)
     { isVirtual = aState; }
-
+	bool isVirtualMethod() { return isVirtual; }
     /**
      * Sets the status if this is a pure virtual method.
      * @param aState The new state. 
      */
     void setIsPure(bool aState=true)
     { isPure = aState; }
+	bool isPureMethod() { return isPure; }
     
     /**
      * Sets the status if this is a slot. 
@@ -85,6 +86,7 @@ public:
      */
     void setIsSlot(bool aState=true)
     { isSlot = aState; }
+	bool isSlotMethod() { return isSlot; }
     
     /**
      * Sets the status if this is a signal. 
@@ -92,6 +94,7 @@ public:
      */
     void setIsSignal(bool aState=true)
     { isSignal = aState; }
+	bool isSignalMethod() { return isSignal; }
     
     /**
      * Sets this method as a constructor.
@@ -99,19 +102,21 @@ public:
      */
     void setIsConstructor(bool aState=true)
     { isConstructor = aState; }
-    
+	bool isConstructorMethod() { return isConstructor; }
+
     /**
      * Sets this method as a destructor.
      * @param aState The new state.
      */
     void setIsDestructor(bool aState=true)
     { isDestructor = aState; }
-    
+	bool isDestructorMethod() { return isDestructor; }
+
     /**
      * Is the method an Objective-C method? 
      */
     void setIsObjectiveC(bool is) { isObjectiveC = is; };
-
+	bool isObjectiveCMethod() { return isObjectiveC; }
     /**
      * Makes this object a copy of the supplied object. 
      * @param aMethod Method to copy.

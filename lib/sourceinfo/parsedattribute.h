@@ -51,21 +51,26 @@ public:
 public:
     /** Sets the type. */
     void setType(const QString &aType);
-    
+    QString attributeType() { return type; }
+
     /** Sets the pos of the name between type */
     void setNamePos(int pos);
-    
+	int namePos() { return posName; }
+
     /** Sets if it is defined in the .h file. */
     void setIsInHFile(bool aState = true);
+	bool inHFile() { return isInHFile; }
     
     /** Sets the attribute's static status */
     void setIsStatic(bool aState = true);
+	bool isStaticAttribute() { return isStatic; }
     
     /** Sets the attribute's const status */
     void setIsConst(bool aState = true);
+	bool isConstAttribute() { return isConst; }
     
     /**
-     * Makes this object a copy of the supplied object. 
+     * Makes this object a copy of the supplied object.
      * @param anAttribute Attribute to copy.
      */
     virtual void copy(ParsedAttribute *anAttribute);

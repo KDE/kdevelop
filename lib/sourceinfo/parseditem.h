@@ -126,21 +126,21 @@ public:
      */
     inline void setItemType(PIType aType)
     { itemType = aType; }
-    
+    PIType parsedItemType() { return itemType; }
     /**
      * Sets the name. 
      * @param aName The new name.
      */
     inline void setName(const QString &aName)
     { name = aName; }
-    
+    QString & itemName() { return name; }
     /**
      * Sets the acess (public/protected/private)
      * @param aExport The new access
      */
     inline void setAccess(PIAccess aAccess)
     { access = aAccess; }
-    
+    PIAccess itemAccess() { return access; }
     /** 
      * Sets the scope this item is declared in.
      *
@@ -148,55 +148,59 @@ public:
      */
     inline void setDeclaredInScope(const QString &aScope)
     { declaredInScope = aScope; }
-    
+	QString & itemDeclaredInScope() { return declaredInScope; }
+
     /**
      * Sets the line where the item was defined. 
      * @param aLine 0-based line on which the item is defined.
      */
     inline void setDefinedOnLine(uint aLine)
     { definedOnLine = aLine; }
-    
+    uint itemDefinedOnLine() { return definedOnLine; }
     /**
      * Sets the line where the declaration ends.
      * @param aLine 0-based line on which the item definition ends.
      */
     inline void setDefinitionEndsOnLine(uint aLine)
     { definitionEndsOnLine = aLine; }
-
+	uint itemDefinitionEndsOnLine() { return definitionEndsOnLine; }
     /**
      * Sets the line where the item was declared. 
      * @param aLine 0-based line on which the item is declared.
      */
     inline void setDeclaredOnLine(uint aLine)
     { declaredOnLine = aLine; }
-    
+    uint itemDeclaredOnLine() { return declaredOnLine; }
+
     /**
      * Sets the line where the declaration ends.
      * @param aLine 0-based line on which the declaration ends. 
      */
     inline void setDeclarationEndsOnLine(uint aLine)
     { declarationEndsOnLine = aLine; }
-    
+	uint itemDeclarationEndsOnLine() { return declarationEndsOnLine; }
     /**
      * Sets the line where the item was defined. 
      * @param aFile Absoulute filename of the file the item is defined in.
      */
     void setDefinedInFile(const QString &aFile)
     { definedInFile = aFile; }
-    
+    const QString & itemDefinedInFile() { return definedInFile; }
     /**
      * Sets the file where the item was declared. 
      * @param aFile Absolute filename of the file the item is defined in.
      */
     void setDeclaredInFile(const QString &aFile)
     { declaredInFile = aFile; }
-    
+    const QString & itemDeclaredInFile() { return declaredInFile; }
+
     /**
      * Sets the comment of this item.
      * @param aComment Comment that belongs to this item.
      */
     void setComment(const QString &aComment)
     { comment = aComment; }
+	const QString & itemComment() { return comment; }
     
     /** Clears all item declaration fields */
     void clearDeclaration()
