@@ -9,7 +9,7 @@ KEditor::EditDocumentIface::EditDocumentIface( KEditor::Document *parent, KEdito
 
 KEditor::EditDocumentIface *KEditor::EditDocumentIface::interface(KEditor::Document *doc)
 {
-  return static_cast<KEditor::EditDocumentIface*>(doc->queryInterface("KEditor::DocumentIface"));
+  return static_cast<KEditor::EditDocumentIface*>(doc->queryInterface("KEditor::EditDocumentIface"));
 }
 
 
