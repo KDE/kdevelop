@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <klineedit.h>
+#include <kdeversion.h>
 
 #include "kdevplugin.h"
 #include "kdevproject.h"
@@ -976,7 +977,10 @@ void CppNewClassDialog::ClassGenerator::common_text()
   if (!dlg.constructors_h_edit->text().isEmpty())
   {
       advConstructorsHeader = "    " + dlg.constructors_h_edit->text();
+#if KDE_VERSION > 305      
       advConstructorsHeader.replace("\n", "\n    "); 
+#else      
+#endif      
   }
   if (!dlg.constructors_cpp_edit->text().isEmpty())
   { 
