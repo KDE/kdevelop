@@ -18,6 +18,7 @@
  <kdevscriptproject>
   <general>
    <activedir>src</activedir>
+   <includepatterns>*.php,*.phps,*.php3,*.inc</includepatterns>
   </general>
  </kdevscriptproject>
  <kdevdoctreeview>
