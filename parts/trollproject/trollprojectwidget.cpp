@@ -854,6 +854,15 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->removeValues("QMAKE_LIBDIR");
   if (item->configuration.m_librarypath.count())
     Buffer->setValues("QMAKE_LIBDIR",item->configuration.m_librarypath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("OBJECTS_DIR");
+  if (!item->configuration.m_objectpath.simplifyWhiteSpace().isEmpty())
+    Buffer->setValues("OBJECTS_DIR",QString(item->configuration.m_objectpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("UI_DIR");
+  if (!item->configuration.m_uipath.simplifyWhiteSpace().isEmpty())
+    Buffer->setValues("UI_DIR",QString(item->configuration.m_uipath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("MOC_DIR");
+  if (!item->configuration.m_mocpath.simplifyWhiteSpace().isEmpty())
+    Buffer->setValues("MOC_DIR",QString(item->configuration.m_mocpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -1649,6 +1658,15 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->configuration.m_lflags_release = lst;
     item->m_FileBuffer.getValues("QMAKE_LIBDIR",lst,minusListDummy);
     item->configuration.m_librarypath = lst;
+    item->m_FileBuffer.getValues("OBJECTS_DIR",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_objectpath = lst[0];
+    item->m_FileBuffer.getValues("UI_DIR",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_uipath = lst[0];
+    item->m_FileBuffer.getValues("MOC_DIR",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_mocpath = lst[0];
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)

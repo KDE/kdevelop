@@ -114,6 +114,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   m_projectConfiguration->m_lflags_debug = QStringList::split(" ",m_debugFlagsLink->text());
   m_projectConfiguration->m_lflags_release = QStringList::split(" ",m_releaseFlagsLink->text());
   m_projectConfiguration->m_librarypath = QStringList::split(" ",m_libraryPath->text());
+  m_projectConfiguration->m_objectpath = m_objectPath->text();
+  m_projectConfiguration->m_uipath = m_uiPath->text();
+  m_projectConfiguration->m_mocpath = m_mocPath->text();
 
   QDialog::accept();
 }
@@ -201,6 +204,9 @@ void ProjectConfigurationDlg::UpdateControls()
   m_debugFlagsLink->setText(m_projectConfiguration->m_lflags_debug.join(" "));
   m_releaseFlagsLink->setText(m_projectConfiguration->m_lflags_release.join(" "));
   m_libraryPath->setText(m_projectConfiguration->m_librarypath.join(" "));
+  m_objectPath->setText(m_projectConfiguration->m_objectpath);
+  m_uiPath->setText(m_projectConfiguration->m_uipath);
+  m_mocPath->setText(m_projectConfiguration->m_mocpath);
 
 }
 

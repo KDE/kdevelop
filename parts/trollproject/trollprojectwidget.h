@@ -53,6 +53,9 @@ struct ProjectConfiguration
   QStringList     m_includepath;
   QString         m_libraryversion;
   QStringList     m_librarypath;
+  QString         m_objectpath;
+  QString         m_uipath;
+  QString         m_mocpath;
   QStringList     m_defines;
   QStringList     m_cxxflags_debug;
   QStringList     m_cxxflags_release;
