@@ -39,5 +39,5 @@ rubyui_DATA =
 rubyuidir = $(kde_datadir)/%{APPNAMELC}
 
 %.rb: %.ui
-	$(RBUIC) -kde $< -o $@
+	$(RBUIC) -tr ${UIC_TR} -kde $< -o $@
 
