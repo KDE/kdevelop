@@ -1,7 +1,11 @@
-2003-04-19 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-04-30 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added "Core" scope plugins alternative
+    * Updated the plugin selection to be more userfriendly 
+
+2003-04-29 Amilcar Lucas <a.lucas@tu-bs.de>
     * Made the Working Directory of the debugged executable configurable
     (Finally you can run your application on it's directory, instead of $HOME)
-    
+
 2003-04-27 Alexander Dymo <cloudtemple@mksat.net>
     * Regexp tester now has "Edit" button that uses KRegExpEditor
     * Added free pascal oriented templates - GTK+ application and shared library
