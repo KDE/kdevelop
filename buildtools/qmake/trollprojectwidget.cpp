@@ -1631,6 +1631,31 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
     else
         noPathFileName = info.fileName();
 
+    GroupItem *gitem = 0;
+    QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
+    for (; it.current(); ++it)
+    {
+        if ((*it)->groupType == GroupItem::groupTypeForExtension(ext))
+        {
+            gitem = *it;
+            break;
+        }
+    }
+    if (gitem && !noPathTruncate)
+    {
+        QString addName;
+        if (fileName.startsWith("/"))
+            addName = URLUtil::relativePath(gitem->owner->path, fileName);
+        else
+            addName = URLUtil::relativePath(gitem->owner->relpath, "/" + fileName);
+        if (!addName.isEmpty())
+        {
+            if (addName[0] == '/')
+                addName = addName.mid(1);
+            noPathFileName = addName;
+        }
+    }
+
     addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
     updateProjectFile(m_shownSubproject);
     slotOverviewSelectionChanged(m_shownSubproject);
