@@ -2162,7 +2162,7 @@ void KWrite::initSearch(SConfig &s, int flags) {
     s.cursor = kWriteView->cursor;
     TextLine *textLine= kWriteDoc->textLine(s.cursor.y);
     const char *line = textLine->getText();
-    int (*cmpfct)(const char *, const char *, size_t);
+    int (*cmpfct)(const char *, const char *, unsigned int);
     if ( s.flags & sfCaseSensitive )
       cmpfct= strncmp;
     else
