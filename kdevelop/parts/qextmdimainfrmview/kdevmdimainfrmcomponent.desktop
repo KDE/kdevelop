@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Service
-Exec=blubb
-Comment=QextMDI-Mainframe
-Name=MdiMainFrmComponent
-Icon=
-ServiceTypes=KDevelop/Component/ViewHandler
-X-KDE-Library=libkdevqextmdimainfrmview
-X-KDevelop-Args=MdiMainFrmComponent
