@@ -134,12 +134,11 @@ private slots:
     void btnFilterClick();
     void autoSync();
     void autoSync( KParts::Part * );
-
+	void initialDirChangeHack();
 protected:
     void focusInEvent( QFocusEvent * );
     void showEvent( QShowEvent * );
     bool eventFilter( QObject *, QEvent * );
-    void initialDirChangeHack();
     KURL activeDocumentUrl();
 
 private:
