@@ -2,6 +2,9 @@
 
 	* Made doxygen config widget "human readable"
 	* Preset doxygen configuration so it works out of the box
+	* Added a custom layout manager to the IDEAl buttons
+	  unfortunately, only the horizontal ones stack. Someone
+	  forgot a "widthForHeight" in QLayoutItem...
 
 2002-06-23  Bernd Gehrmann  <bernd@mail.berlios.de>
 

@@ -26,6 +26,9 @@ public:
   
   void unsetButtons();
 
+  QSize sizeHint() const;
+  int heightForWidth(int width) const;
+
 
 signals:
 

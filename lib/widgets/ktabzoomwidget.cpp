@@ -123,12 +123,12 @@ void KTabZoomWidget::addContent(QWidget *content)
   case KTabZoomPosition::Left:
   case KTabZoomPosition::Top:
     d->m_layout->addWidget(d->m_tabBar);
-    d->m_layout->addWidget(d->m_content);
+    d->m_layout->addWidget(d->m_content,1);
     break;
 
   case KTabZoomPosition::Right:
   case KTabZoomPosition::Bottom:
-    d->m_layout->addWidget(d->m_content);
+    d->m_layout->addWidget(d->m_content,1);
     d->m_layout->addWidget(d->m_tabBar);
     break;
   }

@@ -9,6 +9,7 @@
 
 
 #include "ktabzoombutton.h"
+#include "ktabzoombarlayout.h"
 
 
 #include "ktabzoombar.h"
@@ -20,13 +21,12 @@ public:
 
   KTabZoomPosition::Position m_tabPosition;
   int                        m_selected;
-  QBoxLayout                 *m_layout;
+  KTabZoomBarLayout          *m_layout;
   QSignalMapper              *m_mapper;
   QIntDict<KTabZoomButton>   m_buttons;
   int                        m_count;
 
 };
-
 
 
 KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const char *name)
@@ -36,21 +36,12 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
 
   d->m_tabPosition = pos;
 
+  d->m_layout = new KTabZoomBarLayout(this, pos);
+
   if (pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
-  {
-    setFixedWidth(fontMetrics().height() + 2);
-    d->m_layout = new QVBoxLayout(this);
-    d->m_layout = new QVBoxLayout(d->m_layout);
-    d->m_layout->setDirection(QBoxLayout::BottomToTop);
-  }
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
   else
-  {
-    setFixedHeight(fontMetrics().height() + 2);
-    d->m_layout = new QHBoxLayout(this);
-    d->m_layout = new QHBoxLayout(d->m_layout);
-    d->m_layout->setDirection(QBoxLayout::RightToLeft);
-  }
-  d->m_layout->addStretch();
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
 
   d->m_selected = -1;
 
@@ -68,7 +59,7 @@ KTabZoomBar::~KTabZoomBar()
 int KTabZoomBar::addTab(QTab *tab)
 {
   KTabZoomButton *btn = new KTabZoomButton(tab->text(), this, d->m_tabPosition);
-  d->m_layout->addWidget(btn);
+  d->m_layout->add(btn);
   btn->show();
 
   int index = d->m_count++;
@@ -84,8 +75,6 @@ int KTabZoomBar::addTab(QTab *tab)
 
 void KTabZoomBar::removeTab(int index)
 {
-  kdDebug(9000) << "KTabZoomBar::removeTab" << index << endl;
-
   KTabZoomButton *button = d->m_buttons[index];
   if (!button)
     return;
@@ -145,6 +134,17 @@ void KTabZoomBar::unsetButtons()
     ++it;
   }
 }
-		
+
+
+QSize KTabZoomBar::sizeHint() const
+{
+  return d->m_layout->sizeHint();
+}
+
+
+int KTabZoomBar::heightForWidth(int width) const
+{
+  return d->m_layout->heightForWidth(width);
+}
 
 #include "ktabzoombar.moc"
