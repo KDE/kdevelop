@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>215</height>
+            <height>221</height>
         </rect>
     </property>
     <property name="caption">
@@ -262,5 +262,14 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>diffLocalHeadRadio</tabstop>
+    <tabstop>diffLocalOtherRadio</tabstop>
+    <tabstop>revOtherEdit</tabstop>
+    <tabstop>revaEdit</tabstop>
+    <tabstop>revbEdit</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
