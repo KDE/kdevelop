@@ -43,7 +43,7 @@
 #include <config.h>
 #endif
 
-CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name ) :
+CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, int mdiMode ) :
   KDialogBase ( IconList,                 // dialogFace
                 i18n("KDevelop Setup"),   // caption
                 Ok|Default|Cancel,        // buttonMask
@@ -51,10 +51,11 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name ) 
                 parent,
                 name,
                 true,                     // modal
-                true),                    // separator
-  wantsTreeRefresh(false),
-  config(KGlobal::config()),
-  m_accel(accel)
+                true)                     // separator
+  ,wantsTreeRefresh(false)
+  ,config(KGlobal::config())
+  ,m_accel(accel)
+	,m_mdiMode(mdiMode)
 {
 
   addGeneralTab();
@@ -713,9 +714,6 @@ void CKDevSetupDlg::addUserInterfaceTab()
   QFrame* UserInterfacePage = addPage(i18n("User interface"),i18n("Type of user interface"),
   KGlobal::instance()->iconLoader()->loadIcon( "window_list", KIcon::NoGroup, KIcon::SizeMedium ));
 
-  config->setGroup("General Options");
-  int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
-
   QGridLayout* grid = new QGridLayout(UserInterfacePage,3,1,15,7);
   QLabel* label = new QLabel(i18n("What kind of user interface do you want?"),UserInterfacePage);
   grid->addWidget(label,0,0);
@@ -751,7 +749,7 @@ void CKDevSetupDlg::addUserInterfaceTab()
   tabpage->setChecked(false);
 //  tabpage->setEnabled(false);//until it is usuable
 
-  switch (mdiMode) {
+  switch (m_mdiMode) {
   case QextMdi::ToplevelMode:
     toplevel->setChecked(true);
     break;
@@ -919,13 +917,13 @@ void CKDevSetupDlg::slotOkClicked(){
   config->setGroup("General Options");
   switch (bg->id(bg->selected())) {
   case 0:
-    config->writeEntry("MDI mode", QextMdi::ChildframeMode);
+	  m_mdiMode = QextMdi::ChildframeMode;
     break;
   case 1:
-    config->writeEntry("MDI mode", QextMdi::ToplevelMode);
+	  m_mdiMode = QextMdi::ToplevelMode;
     break;
   case 2:
-    config->writeEntry("MDI mode", QextMdi::TabPageMode);
+	  m_mdiMode = QextMdi::TabPageMode;
     break;
   default:
     break;

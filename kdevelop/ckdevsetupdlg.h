@@ -45,8 +45,9 @@ class CKDevSetupDlg : public KDialogBase
 {
     Q_OBJECT
 public:
-    CKDevSetupDlg( KAccel* accel, QWidget *parent=0, const char *name=0);
-    bool hasChangedPath() const {return wantsTreeRefresh;};
+  CKDevSetupDlg( KAccel* accel, QWidget *parent=0, const char *name=0, int curMdiMode = 0L);
+  bool hasChangedPath() const { return wantsTreeRefresh; };
+	int mdiMode() { return m_mdiMode; };
 
 private:
   void addGeneralTab();
@@ -119,6 +120,7 @@ private:
 
   // user interface mode
   QButtonGroup* bg;
+	int m_mdiMode;
 };
 
 #endif

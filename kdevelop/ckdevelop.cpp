@@ -2094,7 +2094,8 @@ void CKDevelop::slotOptionsSpellchecker(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
-  CKDevSetupDlg* setup= new CKDevSetupDlg(accel,this,"Setup");
+	int curMdiMode = mdiMode();	// ask QextMDI what the current mode is
+  CKDevSetupDlg* setup= new CKDevSetupDlg( accel, this, "Setup", curMdiMode);
   // setup->show();
   if (setup->exec())
   {
@@ -2103,6 +2104,7 @@ void CKDevelop::slotOptionsKDevelop(){
      doc_tree->changePathes();
      doc_tree->refresh(prj);
     }
+		curMdiMode = setup->mdiMode();	// use new set mode
   }
 
   delete setup;
@@ -2111,9 +2113,7 @@ void CKDevelop::slotOptionsKDevelop(){
   initDebugger();
 
   // the MDI mode might have changed, too
-  config->setGroup("General Options");
-  int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
-  switch (mdiMode) {
+  switch (curMdiMode) {
   case QextMdi::ToplevelMode:
     switchToToplevelMode();
     break;
@@ -2127,6 +2127,7 @@ void CKDevelop::slotOptionsKDevelop(){
     break;
   }
 
+  config->setGroup("General Options");
   // read setting whether to use the ctags search database
   bCTags = config->readBoolEntry("use_ctags", false);
 

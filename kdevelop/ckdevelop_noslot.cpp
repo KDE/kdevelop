@@ -941,6 +941,9 @@ void CKDevelop::saveOptions(){
   else
     config->writeEntry("tabviewmode", 3);
 
+	// write current chosen MDI mode
+  config->writeEntry("MDI mode", mdiMode());
+
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
   config->writeEntry("Autosave",bAutosave);
