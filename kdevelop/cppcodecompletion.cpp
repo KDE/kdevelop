@@ -9,6 +9,7 @@
 #include <qsizegrip.h>
 #include <qapplication.h>
 #include <qregexp.h>
+#include <kregexp.h>
 
 #include "codecompletion_arghint.h"
 
@@ -33,9 +34,16 @@ public:
 
 static QString purify( const QString& decl )
 {
-    QRegExp rx( "(\\*|&|\\bconst\\b)" );
     QString s = decl;
+#if QT_VERSION >=300
+    QRegExp rx( "(\\*|&|\\bconst\\b)" );
     s = s.replace( rx, "" ).simplifyWhiteSpace();
+#else
+    QRegExp rx1( "\\*" );
+    QRegExp rx2( "&" );
+    QRegExp rx3( "[ \t\b\f]+const[ \t\n\r\f]+" );
+    s = s.replace( rx1, "" ).replace( rx2, "" ).replace( rx3, "" ).simplifyWhiteSpace();
+#endif
     kdDebug() << "purify " << decl << " -- " << s << endl;
     return s;
 }
@@ -741,30 +749,45 @@ QStringList CppCodeCompletion::getFunctionList( QString strMethod )
 
 QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
+#if QT_VERSION >=300
     QRegExp regMethod ("\\s*([_\\w]+)\\s*::\\s*[~\\w_][\\w_]*\\s*\\(([^)]*)\\)\\s*[:{]");
+#else
+    QString wc("a-zA-Z_0-9"); // word char => \\w_
+    KRegExp regMethod ("\\s*(["+wc+"]+)\\s*::\\s*[~"+wc+"]["+wc+"]*\\s*\\(([^)]*)\\)\\s*[:{]");
+#endif
 
     int iMethodBegin = 0;
     QString text;
     QString strLine;
     for( int i=iLine; i>0; --i ){
         QString s = m_edit->textLine( i );
+#if QT_VERSION >=300
         s = s.replace( QRegExp("\\bconst\\b"), "" );
+#else
+        s = s.replace( QRegExp("\\s*const\\s*"), "" );
+#endif
         text.prepend( s ).simplifyWhiteSpace();
 
         if( text.isEmpty()){
             continue;
         }
 
-#warning fixme codecompletion
 #if QT_VERSION >=300
         if( regMethod.match(text) != -1 ){
+#else
+        if( regMethod.match(text) ){
+#endif
             iMethodBegin = i;
             if( classname ){
+#if QT_VERSION >=300
                 *classname = regMethod.cap( 1 );
+#else
+                *classname = regMethod.group( 1 );
+#endif
             }
             break;
         }
-#endif
+
     }
 
     if( iMethodBegin == 0 ){
@@ -773,15 +796,17 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     }
 
     QString strCopy;
-#warning fixme codecompletion
+
 #if QT_VERSION >=300
     strCopy += regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n";
+#else
+    strCopy += QString(regMethod.group( 2 )).replace( QRegExp(","), ";" ) + ";\n";
+#endif
     for( int i = iMethodBegin; i < iLine; i++ )
     {
         strCopy += m_edit->textLine( i ) + "\n";
     }
     strCopy += m_edit->textLine( iLine ).left( iCol );
-#endif
 
     return strCopy;
 }
@@ -819,18 +844,24 @@ void CppCodeCompletion::completeText()
         expr = expr.simplifyWhiteSpace();
     }
 
-#warning fixme codecompletion
 #if QT_VERSION >=300
-   QRegExp rx( "^.*([_\\w]+)\\s*$" );
+    QRegExp rx( "^.*([_\\w]+)\\s*$" );
     if( rx.exactMatch(expr) )
     {
         word = rx.cap( 1 );
         expr = expr.left( rx.pos(1) );
     }
+#else
+    KRegExp rx("^.*[^A-Za-z0-9]+([_A-Za-z0-9]+)\\s*$");
+    if( rx.match(expr) )
+    {
+        word = rx.group( 1 );
+        expr = expr.left( rx.groupStart(1) );
+    }
+#endif
 
     kdDebug() << "prefix = |" << word << "|" << endl;
     kdDebug() << "expr = |" << expr << "|" << endl;
-#endif
     
     if( showArguments ){
         QString type = evaluateExpression( expr, variableList, m_pStore );

@@ -1,3 +1,6 @@
+2002-02-17  August Hörandl  <august.hoerandl@gmx.at>
+    * cppcodecompletion.cpp: better regular expression for QT2/KDE2-codecompletion 
+
 2002-02-15  F@lk Brettschneider <falk@kdevelop.org>
     * applied new patch of Roberto Raggi <raggi@cli.di.unipi.it>
       for code completion, Ctrl+Space asks the class store (hmm...doesn't have an effect on my machine but...anyway)
