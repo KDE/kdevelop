@@ -39,6 +39,7 @@ namespace FileCreate {
     m_filename->setFocus();
     m_addToProject->setChecked(true);
 
+    m_urlreq->setMode((int) KFile::Directory);
   }
 
   NewFileChooser::~NewFileChooser() {
