@@ -350,6 +350,7 @@ void KDevFileSelector::setView(KFile::FileView view)
 
 void KDevFileSelector::slotFilterChange( const QString & nf )
 {
+    QToolTip::remove( btnFilter );
     QString f = nf.stripWhiteSpace();
     bool empty = f.isEmpty() || f == "*";
     if ( empty )
@@ -450,7 +451,7 @@ void KDevFileSelector::autoSync( KParts::Part *part )
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
     if( !doc )
 	return;
-    
+
     // as above, but using document url.
     kdDebug()<<"KDevFileSelector::autoSync( KTextEditor::Document )"<<endl;
     KURL u ( doc->url() );
@@ -566,7 +567,7 @@ KURL KDevFileSelector::activeDocumentUrl( )
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( partController->activePart() );
     if( doc )
 	return doc->url();
-    
+
     return KURL();
 }
 //END ActionLBItem
