@@ -360,11 +360,11 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
 
 	edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
+  edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
   edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-  edit_menu->insertItem(i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
+  edit_menu->insertItem(Icon("find.xpm"),i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
@@ -409,7 +409,7 @@ void CKDevelop::initMenuBar(){
   // Project-menu entries
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
-  project_menu->insertItem(i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
+  project_menu->insertItem(Icon("openprj.xpm"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   project_menu->insertSeparator();
@@ -417,7 +417,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
-  project_menu->insertItem(i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(Icon("mini/locale.xpm"),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
@@ -430,7 +430,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  project_menu->insertItem(i18n("Make &User-Manual"), this, 
+  project_menu->insertItem(Icon("mini/mini-book1.xpm"), i18n("Make &User-Manual"), this,
 			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
@@ -768,12 +768,14 @@ void CKDevelop::initConnections(){
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
+	connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
+	connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   // connect Docbrowser rb menu
   connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
@@ -790,6 +792,7 @@ void CKDevelop::initConnections(){
 	connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
 	connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
 	connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
+	connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
   // connect the windowsmenu with a method
@@ -1025,6 +1028,9 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
 
 
 

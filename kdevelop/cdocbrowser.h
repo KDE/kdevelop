@@ -51,7 +51,7 @@ public:
   void setDocBrowserOptions();
   QString currentURL();
 	QString currentTitle();
-	
+	QPopupMenu* popup(){ return doc_pop; };	
 public slots:
   void slotDocFontSize(int);
   void slotDocStandardFont(const char *);
@@ -189,6 +189,7 @@ public:
 };
 
 #endif
+
 
 
 

@@ -55,14 +55,14 @@ bool CDocBrowser::forceDefaults;
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
 
   doc_pop = new QPopupMenu();
-  doc_pop->insertItem(Icon("back.xpm"),i18n("Back"),this, SLOT(slotURLBack()),0,0);
-  doc_pop->insertItem(Icon("forward.xpm"),i18n("Forward"),this,SLOT(slotURLForward()),0,1);
+  doc_pop->insertItem(Icon("back.xpm"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
+  doc_pop->insertItem(Icon("forward.xpm"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this, SLOT(slotCopyText()),0,2);
-	doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,3);
-	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,4);
+  doc_pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
+	doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,ID_BOOKMARKS_ADD);
+	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,5);
+  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
 
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
@@ -247,18 +247,18 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
   if(this->isTextSelected()){
     QString text;
     getSelectedText(text);
-    doc_pop->setItemEnabled(2,true);
-    doc_pop->setItemEnabled(5,true);
+    doc_pop->setItemEnabled(ID_EDIT_COPY,true);
+    doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,true);
 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),5);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),ID_HELP_SEARCH_TEXT);
   }
   else{
-    doc_pop->setItemEnabled(2,false);
-    doc_pop->setItemEnabled(5,false);
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),5);
+    doc_pop->setItemEnabled(ID_EDIT_COPY,false);
+    doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
 }
@@ -624,6 +624,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
 
 
 

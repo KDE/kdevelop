@@ -48,7 +48,8 @@ public:
   void unIndent();
   void invertSelection();
   void deselectAll();
-
+	QPopupMenu* popup(){ return pop; };
+	
 public slots:
 	void spellcheck();
 	void spellcheck2(KSpell*);

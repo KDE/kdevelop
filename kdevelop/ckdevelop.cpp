@@ -1089,7 +1089,7 @@ void CKDevelop::slotBookmarksAdd(){
 		
 		uint i;
     for ( i =0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(doc_bookmarks_title_list.at(i));
+      doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
     }
 	}
 	if(edit_widget==header_widget)
@@ -1567,7 +1567,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
   prev_was_search_result=false;
-  setCaption("KDevelop " + version + ":  "+browser_widget->currentTitle());
+  setCaption(browser_widget->currentTitle()+" - KDevelop " + version);
 	
     // insert into the history-list
   if(browser_widget->currentURL().left(7) != "http://"){ // http aren't added to the history list
@@ -1954,9 +1954,9 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewStatus();
     slotNewLineColumn();
 		if(project)
-	    setCaption("KDevelop " + version + ": " +prj->getProjectName()+":  "+ edit_widget->getName());
+	    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
 		else
-	    setCaption("KDevelop " + version + ": " + edit_widget->getName());
+	    setCaption("KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
 
   }
   if (item == CPP){
@@ -1975,17 +1975,16 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewStatus();
     slotNewLineColumn();
 		if(project)
-	    setCaption("KDevelop " + version + ": " +prj->getProjectName()+":  "+ edit_widget->getName());
+	    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
 		else
-	    setCaption("KDevelop " + version + ": " + edit_widget->getName());
-
+	    setCaption("KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
   }
   if(item == BROWSER){
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
     disableCommand(ID_BUILD_COMPILE_FILE);
     browser_widget->setFocus();
-    setCaption("KDevelop " + version + ":  "+ browser_widget->currentTitle());
+    setCaption(browser_widget->currentTitle()+ " - KDevelop " + version );
   }
   if(item == TOOLS){
 		disableCommand(ID_BUILD_COMPILE_FILE);
@@ -2349,6 +2348,10 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
 
 
 

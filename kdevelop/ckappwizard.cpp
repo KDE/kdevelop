@@ -131,7 +131,7 @@ void CKAppWizard::initPages(){
   apphelp->setFontPropagation( QWidget::NoChildren );
   apphelp->setPalettePropagation( QWidget::NoChildren );
   apphelp->setText( "Label:" );
-  apphelp->setAlignment( 289 );
+  apphelp->setAlignment( 1313 );
   apphelp->setMargin( -1 );
   
   othersentry = new QListViewItem (applications, i18n("Others"));

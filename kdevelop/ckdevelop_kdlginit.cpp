@@ -127,7 +127,7 @@ void CKDevelop::initKDlgMenuBar(){
   // Project-menu entries
   kdlg_project_menu = new QPopupMenu;
   kdlg_project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
-  kdlg_project_menu->insertItem(i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
+  kdlg_project_menu->insertItem(Icon("openprj.xpm"), i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
   kdlg_project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   kdlg_project_menu->insertSeparator();
@@ -137,7 +137,7 @@ void CKDevelop::initKDlgMenuBar(){
   //  kdlg_project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
 
-  kdlg_project_menu->insertItem(i18n("Add new &Translation File..."), this,
+  kdlg_project_menu->insertItem(Icon("mini/locale.xpm"),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
@@ -145,7 +145,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_project_menu->insertItem(i18n("Make &messages"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   kdlg_project_menu->insertItem(i18n("Make &API-Doc"), this,
 				SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  kdlg_project_menu->insertItem(i18n("Make &User-Manual"), this,
+  kdlg_project_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("Make &User-Manual"), this,
 				SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
@@ -441,5 +441,6 @@ void CKDevelop::slotHelpDlgNotes()
 
   delete readmedlg;
 }
+
 
 

@@ -25,6 +25,8 @@
 #include <kapp.h>
 #include <kiconloader.h>
 
+#include "resource.h"
+
 HlManager hlManager; //highlight manager
 
 CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
@@ -33,17 +35,17 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-  pop->insertItem(Icon("undo.xpm"),i18n("Undo"),this,SLOT(undo()),0,4);
-  pop->insertItem(Icon("redo.xpm"),i18n("Redo"),this,SLOT(redo()),0,5);
+  pop->insertItem(Icon("undo.xpm"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+  pop->insertItem(Icon("redo.xpm"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
   pop->insertSeparator();
-  pop->insertItem(Icon("cut.xpm"),i18n("Cut"),this,SLOT(cut()),0,1);
-  pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this,SLOT(copy()),0,2);
-  pop->insertItem(Icon("paste.xpm"),i18n("Paste"),this,SLOT(paste()),0,3);
-  pop->setItemEnabled(1,false);
-  pop->setItemEnabled(2,false);
-  pop->setItemEnabled(3,false);
+  pop->insertItem(Icon("cut.xpm"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+  pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+  pop->insertItem(Icon("paste.xpm"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->setItemEnabled(ID_EDIT_CUT,false);
+  pop->setItemEnabled(ID_EDIT_COPY,false);
+  pop->setItemEnabled(ID_EDIT_PASTE,false);
   pop->insertSeparator();
-  pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,0);
+  pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
 
 
@@ -219,36 +221,36 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     state = undoState();
     //undo
     if(state & 1){
-      pop->setItemEnabled(4,true);
+      pop->setItemEnabled(ID_EDIT_UNDO,true);
     }
     else{
-      pop->setItemEnabled(4,false);
+      pop->setItemEnabled(ID_EDIT_UNDO,false);
     }
     //redo
     if(state & 2){
-      pop->setItemEnabled(5,true);
+      pop->setItemEnabled(ID_EDIT_REDO,true);
     }
     else{
-      pop->setItemEnabled(5,false);
+      pop->setItemEnabled(ID_EDIT_REDO,false);
     }
     
     QString str = markedText();
     if(!str.isEmpty()){
-      pop->setItemEnabled(1,true);
-      pop->setItemEnabled(2,true);
+      pop->setItemEnabled(ID_EDIT_CUT,true);
+      pop->setItemEnabled(ID_EDIT_COPY,true);
     }
     else{
-      pop->setItemEnabled(1,false);
-      pop->setItemEnabled(2,false);
+      pop->setItemEnabled(ID_EDIT_CUT,false);
+      pop->setItemEnabled(ID_EDIT_COPY,false);
     }		
 
 
     QClipboard *cb = kapp->clipboard();
     QString text=cb->text();
     if(text.isEmpty())
-      pop->setItemEnabled(3,false);
+      pop->setItemEnabled(ID_EDIT_PASTE,false);
     else
-      pop->setItemEnabled(3,true);
+      pop->setItemEnabled(ID_EDIT_PASTE,true);
     
     if(str == ""){
       str = word(event->x(),event->y());
@@ -257,7 +259,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     if(str.length() > 20 ){
       str = str.left(20) + "...";
     }
-    pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,0); // the lookup entry
+    pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
 
 
     pop->popup(this->mapToGlobal(event->pos()));
@@ -267,6 +269,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
 
 
 

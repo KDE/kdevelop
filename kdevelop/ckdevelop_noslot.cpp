@@ -251,7 +251,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      setCaption("KDevelop " + version + ":  "+prj->getProjectName()+":  " + filename);
+      setCaption(prj->getProjectName() +" - KDevelop " + version + " - [" + QFileInfo(filename).fileName()+"]");
       return;
     }
   }
@@ -276,10 +276,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
   if(project){
-    setCaption("KDevelop " + version + ":  "+prj->getProjectName()+":  "+ filename);
-  }
-  else{
-    setCaption("KDevelop " + version + ": "+ filename);
+  	setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
+ 	}
+ 	else{
+  	setCaption("KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
   }
 
 }
@@ -680,7 +680,7 @@ void CKDevelop::readOptions(){
 		
 	uint i;
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(doc_bookmarks_title_list.at(i));
+    doc_bookmarks->insertItem(Icon("mini/htlm.xpm"),doc_bookmarks_title_list.at(i));
   }
 	
   QString filename;
@@ -842,6 +842,11 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
+
+
+
 
 
 

@@ -1,3 +1,6 @@
+1999-06-09  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed label alignment in KAppWizard, added some menubar icons and statusbarhelp for editor/browser popups
+	
 1999-06-09 Pascal Krahmer <pascal@beast.de>
 	* fixed preview dialog bug
 	* added shortcut to preview dialog

@@ -83,6 +83,7 @@
 #define ID_VIEW_REFRESH             12070
 #define ID_VIEW_PREVIEW             12072
 
+#define ID_VIEW_IN_KFM							12080
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
