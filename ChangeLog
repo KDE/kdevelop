@@ -1,3 +1,8 @@
+2001-04-13  Richard Dale <duke@tipitina.demon.co.uk
+
+	* Applied patch from Oliver Strutynski to fix bug in the Java tokenizer
+	  with non US-ASCII identifiers in source files.
+
 2001-04-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* Added a plugin that let's you select the parts to load
