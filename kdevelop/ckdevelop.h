@@ -478,10 +478,6 @@ public:
   ///////////////////////
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
-  /** set the window tab automatically without click */
-  void slotSCurrentTab(int item);
-  /** click on the treeview tabs: cv,lfv,wfv,doc*/
-  void slotTTabSelected(int item);
   /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);
 	
@@ -534,7 +530,8 @@ public:
   void slotShowTools();*/
   void slotToggleLast();
 
-  void slotMenuBuffersSelected(int id);
+  // editorview related
+  void   slotEditorViewClosing(EditorView*);
 
   void slotURLSelected(KHTMLView* widget,QString url,int, QString);
   void slotDocumentDone( KHTMLView * );
@@ -752,7 +749,6 @@ private:
   QStrList doc_bookmarks_list;
   QStrList doc_bookmarks_title_list;
 	
-  QList<TEditInfo> edit_infos;
 
   ///////////////////////////////
   //some widgets for the mainview

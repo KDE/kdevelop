@@ -83,15 +83,12 @@ extern KGuiCmdManager cmdMngr;
 // editor commands
 ///////////////////////
 void CKDevelop::doCursorCommand(int cmdNum) {
-
-    //    EditorView* editor_view = getCurrentEditorView();
     if(editor_view != 0){
 	editor_view->editor->doCursorCommand(cmdNum);
     }
 }
 
 void CKDevelop::doEditCommand(int cmdNum) {
-    //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view != 0){
       editor_view->editor->doEditCommand(cmdNum);
   }
@@ -99,7 +96,6 @@ void CKDevelop::doEditCommand(int cmdNum) {
 }
 
 void CKDevelop::doStateCommand(int cmdNum) {
-    //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view != 0){
       editor_view->editor->doStateCommand(cmdNum);
   }
@@ -149,52 +145,51 @@ void CKDevelop::slotFileOpen( int id_ ){
 }
 
 void CKDevelop::slotFileClose(){
-#warning FIXME MDI stuff
    //  // if editor_view->editor isn't shown don't proceed
-//     if (editor_view->editor==0l)
-//        return;
+    if (editor_view==0)
+	return;
+    
+    slotStatusMsg(i18n("Closing file..."));
+    QString filename = editor_view->editor->getName();
+    int msg_result;
 
-//     slotStatusMsg(i18n("Closing file..."));
-//     QString filename = editor_view->editor->getName();
-//     int msg_result;
+    if(editor_view->editor->isModified()){
+	
+	// no autosave if the user intends to save a file
+	if (bAutosave)
+	    saveTimer->stop();
+	
+	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
+	// restart autosaving
+	if (bAutosave)
+	    saveTimer->start(saveTimeout);
+	
+	if (msg_result == KMessageBox::Yes){ // yes
+	
+	    if (isUntitled(filename))
+		{
+		    if (!fileSaveAs())
+			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
+		}
+	    else
+		{
+		    saveFileFromTheCurrentEditWidget();
+		    if (editor_view->editor->isModified())
+			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
+		}
+	}
+	
+	if (msg_result == KMessageBox::Cancel) // cancel
+	    {
+		setInfoModified(filename, editor_view->editor->isModified());
+		slotStatusMsg(i18n("Ready."));
+		return;
+	    }
+    }
 
-//     if(editor_view->editor->isModified()){
-	
-// 	// no autosave if the user intends to save a file
-// 	if (bAutosave)
-// 	    saveTimer->stop();
-	
-// 	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
-// 	// restart autosaving
-// 	if (bAutosave)
-// 	    saveTimer->start(saveTimeout);
-	
-// 	if (msg_result == KMessageBox::Yes){ // yes
-	
-// 	    if (isUntitled(filename))
-// 		{
-// 		    if (!fileSaveAs())
-// 			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
-// 		}
-// 	    else
-// 		{
-// 		    saveFileFromTheCurrentEditWidget();
-// 		    if (editor_view->editor->isModified())
-// 			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
-// 		}
-// 	}
-	
-// 	if (msg_result == KMessageBox::Cancel) // cancel
-// 	    {
-// 		setInfoModified(filename, editor_view->editor->isModified());
-// 		slotStatusMsg(i18n("Ready."));
-// 		return;
-// 	    }
-//     }
-
-//     removeFileFromEditlist(filename);
-//     setMainCaption();
-//     slotStatusMsg(i18n("Ready."));
+    removeFileFromEditlist(filename);
+    setMainCaption();
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileCloseAll()
@@ -705,6 +700,7 @@ void CKDevelop::slotViewPreviousError(){
   }
 #endif
 }
+
 
 void CKDevelop::slotViewTTreeView()
 {
@@ -1982,9 +1978,6 @@ void CKDevelop::slotURLSelected(KHTMLView* ,QString url,int,QString){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
       switchToKDevelop();
-  showOutputView(false);
-#warning FIXME MDI stuff
-  //  s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
@@ -2297,27 +2290,6 @@ void CKDevelop::slotProcessExited(KProcess *proc){
 }
 
 
-void CKDevelop::slotTTabSelected(int item){
-  if(item == DOC ){
-    // disable the outputview
-    showOutputView(false);
-  }
-}
-
-
-
-
-void CKDevelop::slotMenuBuffersSelected(int id){
-  TEditInfo* info;
-
-  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-    if (info->id == id){
-      switchToFile(info->filename);
-      return; // if found than return
-    }
-  }
-}
-
 
 void CKDevelop::slotLogFileTreeSelected(QString file){
   switchToFile(file);
@@ -2346,15 +2318,16 @@ void CKDevelop::slotUpdateDirFromVCS(QString dir){
     prj->getVersionControl()->update(dir);
     TEditInfo* actual_info;
     
-    QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
+#warning FIXME MDI stuff
+   //  QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
-    for ( ; it.current(); ++it ) {
-	actual_info = it.current();
-	QFileInfo file_info(actual_info->filename);
-	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-	}
-    }
+//     for ( ; it.current(); ++it ) {
+// 	actual_info = it.current();
+// 	QFileInfo file_info(actual_info->filename);
+// 	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+// 	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+// 	}
+//     }
 }
 
 void CKDevelop::slotCommitDirToVCS(QString dir){
@@ -2363,15 +2336,16 @@ void CKDevelop::slotCommitDirToVCS(QString dir){
 
     TEditInfo* actual_info;
     
-    QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
+#warning FIXME MDI stuff
+    // QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
-    for ( ; it.current(); ++it ) {
-	actual_info = it.current();
-	QFileInfo file_info(actual_info->filename);
-	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-	}
-    }
+//     for ( ; it.current(); ++it ) {
+// 	actual_info = it.current();
+// 	QFileInfo file_info(actual_info->filename);
+// 	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+// 	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+// 	}
+//     }
     
 }
 void CKDevelop::slotDocTreeSelected(QString url_file){
@@ -2392,10 +2366,6 @@ void CKDevelop::slotTCurrentTab(int item){
     t_tab_view->setCurrentTab(item);
 }
 
-void CKDevelop::slotSCurrentTab(int item){
-#warning FIXME MDI stuff
-  //    s_tab_view->setCurrentTab(item);
-}
 
 void CKDevelop::slotToggleLast() {
 #warning FIXME MDI stuff
@@ -2411,6 +2381,9 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
 
 void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
+}
+void CKDevelop::slotEditorViewClosing(EditorView* editorview){
+    editors->remove(editorview);
 }
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     editor_view = getCurrentEditorView();
@@ -2445,6 +2418,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	slotNewUndo();
 	slotNewStatus();
 	slotNewLineColumn();
+
     }
     
     if (type == CPP_HEADER){

@@ -1052,7 +1052,6 @@ void CKDevelop::initConnections(){
   connect(browser_view,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 
   // connect the windowsmenu with a method
-  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
   connect(messages_widget, SIGNAL(processExited(KProcess*)),

@@ -82,7 +82,6 @@ int main(int argc, char* argv[]) {
     kdevelop->show();
     
     a.getConfig()->setGroup("General Options");
-    kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
     kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
     
     if(!a.getConfig()->readBoolEntry("show_kdevelop",true))

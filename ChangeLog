@@ -1,3 +1,7 @@
+1999-10-30 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* some cleanup in file handling (removed edit_infos, slotMenuBuffersSelected() and slotSCurrentTab();
+	* implemented closeEvent() in editorview.cpp
+
 1999-10-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed 'Open recent project'
 	* Implemented 'Next error' and 'Previous error'

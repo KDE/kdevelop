@@ -38,6 +38,9 @@ public: // Constructor and destructor
   QDateTime  last_modified;
  protected:
   virtual void resizeEvent (QResizeEvent *e); 
+  virtual void closeEvent(QCloseEvent* e);
+ signals:
+  void closing(EditorView* editorview);
 
   
 };

@@ -39,7 +39,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ckdevinstall.cpp ckdevelop_kdlginit.cpp \
 	caddclassmethoddlg.cpp caddclassattributedlg.cpp \
 	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
-	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
+	ctreeview.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp \
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp \
@@ -67,7 +67,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
 	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
-	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
+	ctreeview.h cexecuteargdlg.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \

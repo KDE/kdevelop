@@ -148,18 +148,19 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
  *-----------------------------------------------------------------*/
 bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
 {
-  bool bChanged=false;
-  TEditInfo* actual_info;
-  for(actual_info=edit_infos.first();!bChanged && actual_info != 0;actual_info=edit_infos.next())
-  {
-   if ( actual_info->filename == sFilename)
-      { // found
-        actual_info->modified=bModified;
-        bChanged=true;
-      }
-  }
+#warning FIXME MDI stuff
+  // bool bChanged=false;
+//   TEditInfo* actual_info;
+//   for(actual_info=edit_infos.first();!bChanged && actual_info != 0;actual_info=edit_infos.next())
+//   {
+//    if ( actual_info->filename == sFilename)
+//       { // found
+//         actual_info->modified=bModified;
+//         bChanged=true;
+//       }
+//   }
 
-  return bChanged;
+//   return bChanged;
 }
 
 /*---------------------------------------- CKDevelop::setMainCaption()
@@ -670,7 +671,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   new_editorview->last_modified = fileinfo.lastModified();
 
   //connections
+  connect(new_editorview, SIGNAL(closing(EditorView*)), this, SLOT(slotEditorViewClosing(EditorView*)));
   connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
+
   connect(new_editorview->editor, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(new_editorview->editor, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(new_editorview->editor, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
@@ -684,7 +687,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   if(maximize){
       //  new_editorview->maximize(false);
   }
-  new_editorview->setFocus();
+  //  new_editorview->setFocus();
   
   //add to the editors
   editors->append(new_editorview);
@@ -1345,13 +1348,14 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
-  TEditInfo* info;
-  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-    if (info->filename == abs_filename ){
-      return true;
-    }
-  }
-  return false;
+#warning FIXME MDI stuff
+  // TEditInfo* info;
+//   for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+//     if (info->filename == abs_filename ){
+//       return true;
+//     }
+//   }
+//   return false;
 }
 
 
