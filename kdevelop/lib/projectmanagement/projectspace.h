@@ -24,6 +24,7 @@
 #include <string.h>
 #include <ksimpleconfig.h>
 #include <qdom.h>
+#include "kdevactions.h"
 class KAboutData;
 
 class FileGroup {
@@ -52,6 +53,7 @@ class ProjectSpace : public KDevComponent {
   // from KDevComponent
   void languageSupportOpened(KDevLanguageSupport *ls);
   void languageSupportClosed();
+  virtual QList<KDevFileAction>* fileActions(const QString& absFileName,const QString& projectName);
 
 
   /** nesessary to bootstrap a ProjectSpace*/
@@ -130,6 +132,8 @@ class ProjectSpace : public KDevComponent {
   protected slots:
     void slotProjectSetActivate( int id);
   void slotProjectAddExistingFiles();
+  void slotRenameFile(const QString& absFileName);
+  void slotMoveFile(const QString& absFileName);
 protected:
 
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);

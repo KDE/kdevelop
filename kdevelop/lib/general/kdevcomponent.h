@@ -21,6 +21,8 @@
 #include <qstring.h>
 #include <kparts/part.h>
 #include <qdom.h>
+#include <kaction.h>
+#include <qlist.h>
 
 class KDevVersionControl;
 class KDevLanguageSupport;
@@ -28,6 +30,8 @@ class ProjectSpace;
 class ClassStore;
 class KDialogBase;
 class KAboutData;
+class KDevFileAction;
+
 
 
 /**
@@ -111,6 +115,16 @@ public:
 
     /** returns some data about this Component, should be static?*/
     virtual KAboutData* aboutPlugin();
+  
+  /** set the assembled Fileactions for the File absFileName, asked in needFileActions(QString),
+   */
+  virtual  void setFileActions(QList<KDevFileAction>* pActions);
+  /**
+     return a list of KDevFileActions which are implemented by this component for this file
+     and project,both together are unique
+  */
+  virtual QList<KDevFileAction>* fileActions(const QString& absFileName,const QString& projectName);
+  
 
     /** write the ProjectSpace related configuration to the document
      , but only user independent data (important for multiuser projects)*/
@@ -146,7 +160,14 @@ signals:
      * component is running, the stop button is enabled. When it is pressed,
      * all components get a stopButtonClicked().
      */
-    void running(bool runs);
+  void running(bool runs);
+  /** get all fileactions for this file from every component,
+      set through setFileActions(QList<KDevFileAction>* actions);
+      assembled with QList<KDevFileAction>* fileActions(QString absFileName)
+      pWho is the sender
+   */
+  void needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName);
+
     void gotoSourceFile(const QString &fileName, int lineNo);
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();

@@ -633,4 +633,47 @@ QList<Project>* ProjectSpace::allProjects(){
   return m_pProjects;
 }
 
+QList<KDevFileAction>* ProjectSpace::fileActions(const QString& absFileName,const QString& projectName){
+  QList<KDevFileAction>* pList = new QList<KDevFileAction>;
+
+  KDevFileAction* pAction;
+  
+  
+  pAction = new KDevFileAction("Move to...","folder");
+  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
+  pAction->setProjectName(projectName);
+  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotMoveToFile(const QString&)));
+  pList->append(pAction);
+
+  pAction = new KDevFileAction("Copy to...","folder");
+  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
+  pAction->setProjectName(projectName);
+  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotCopyToFile(const QString&)));
+  pList->append(pAction);
+
+  pAction = new KDevFileAction("Rename...","folder");
+  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
+  pAction->setProjectName(projectName);
+  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotRenameFile(const QString&)));
+  pList->append(pAction);
+  
+  pAction = new KDevFileAction("Delete File...","folder");
+  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
+  pAction->setProjectName(projectName);
+  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotDeleteFile(const QString&)));
+  pList->append(pAction);
+
+  
+
+  
+  
+  return pList;
+}
+void ProjectSpace::slotRenameFile(const QString& absFileName){
+  kdDebug(9000) << "renameFile called: " <<  absFileName << endl;
+}
+void ProjectSpace::slotMoveFile(const QString& absFileName){
+  kdDebug(9000) << "moveFile called: " <<  absFileName << endl;
+}
+
 #include "projectspace.moc"

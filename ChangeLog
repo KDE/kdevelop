@@ -1,3 +1,9 @@
+2000-10-31 Sandy Meier   <smeier@kdevelop.org>
+	* implemented Framework for FileActions within KDevelop
+	* every Component can now extend the popup menues in treeviews or similar by 
+	implementing the method KDevComponent::fileActions(filename,projectname)
+	* DirectoryActions and ProjectActions will follow
+
 2000-10-29 Sandy  Meier  <smeier@kdevelop.org>
 	* implemented first version of ProjectView (similar to LFV)
 

@@ -22,12 +22,15 @@
 #include <qfileinfo.h>
 #include <kiconloader.h>
 #include <qfont.h>
-#include <kpopupmenu.h>
+#include <qpopupmenu.h>
+#include <kaction.h>
+#include "projectview.h"
 
 
-ProjectTreeWidget::ProjectTreeWidget(ProjectView *part)
+ProjectTreeWidget::ProjectTreeWidget(ProjectView *pPart)
   : QListView(0, "project tree widget"){
   m_pProjectSpace = 0;
+  m_pProjectView = pPart;
   addColumn("1");
   header()->hide();
   m_projectFileGroups.clear();
@@ -40,7 +43,7 @@ ProjectTreeWidget::~ProjectTreeWidget()
 void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoint& p,int){
   cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
-  KPopupMenu* pPopUp = createPopup(pPItem);
+  QPopupMenu* pPopUp = createPopup(pPItem);
   if(pPopUp){
     pPopUp->exec(p);
   }
@@ -121,6 +124,7 @@ void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
 	  pFileItem->setText(0,fileInfo.fileName());
 	  pFileItem->setPixmap(0,KMimeType::pixmapForURL(*fileIt,0,KIcon::Small));
 	  pFileItem->setAbsFileName(*fileIt);
+	  pFileItem->setProjectName(pProject->name());
 	  fileNames.remove(*fileIt);// remove the showed files from the filelist
 	}
       } // end for filter
@@ -217,10 +221,10 @@ void ProjectTreeWidget::createDefaultFileGroups(){
     cerr << "kdevelop (projectview/projecttreewidget): readProjectSpaceGlobalConfig: No ProjectSpace!!" << endl;
   } 
 }
-KPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
-  KPopupMenu *pPopup = new KPopupMenu();
+QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
+  QPopupMenu *pPopup = new QPopupMenu();
   if(pItem->className() == QString("ProjectSpaceItem") ){
-    //      pPopup->insertItem( i18n("Set active"),this, SLOT(slotGotoDeclaration()) );
+    pPopup->insertItem( i18n("Set active"),this, SLOT(slotGotoDeclaration()) );
   }
   if(pItem->className() == QString("ProjectItem") ){
     pPopup->insertItem( i18n("Set as Active Project"),this, SLOT(slotSetAsActiveProject()) );
@@ -233,10 +237,21 @@ KPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
   }
   if(pItem->className() == QString("FileItem") ){
     pPopup->insertItem( i18n("Open"),this, SLOT(slotOpenFile()) );
-    pPopup->insertItem( i18n("Properties..."),this, SLOT(slotFileProperties()) );
+    FileItem* pFileItem = static_cast<FileItem*>(pItem);
+    // got the action from the part/kdevelopcomponent
+    QList<KDevFileAction>* pList = 
+      m_pProjectView->assembleFileActions(pFileItem->absFileName(),pFileItem->projectName());
+    
+    KDevFileAction* pAction =0;
+    for(pAction=pList->first();pAction!=0;pAction= pList->next()){
+      pAction->plug(pPopup,-1);// add all available actions to the popupmenu
+    }
+    
   }
 
   return pPopup;
+}
+void ProjectTreeWidget::slotOpenFile(){
 }
 
 void ProjectTreeItem::paintCell( QPainter * p, const QColorGroup & cg,
@@ -258,4 +273,9 @@ void FileItem::setAbsFileName(QString fileName){
 QString FileItem::absFileName(){
   return m_absFileName;
 }
-
+void FileItem::setProjectName(QString projectName){
+  m_projectName = projectName;
+}
+QString FileItem::projectName(){
+  return m_projectName;
+}

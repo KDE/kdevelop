@@ -22,21 +22,18 @@
 #include <iostream.h>
 
 ProjectView::ProjectView(QObject *parent, const char *name)
-    : KDevComponent(parent, name)
-{
+    : KDevComponent(parent, name){
     setInstance(ProjectViewFactory::instance());
     //    setXMLFile("kdevprojectview.rc");
 }
 
 
-ProjectView::~ProjectView()
-{
+ProjectView::~ProjectView(){
     delete m_pProjectTree;
 }
 
 
-void ProjectView::setupGUI()
-{
+void ProjectView::setupGUI(){
     kdDebug(9003) << "Building ProjectTreeWidget" << endl;
 
     m_pProjectTree = new ProjectTreeWidget(this);
@@ -64,4 +61,16 @@ void ProjectView::readProjectSpaceGlobalConfig(QDomDocument& doc){
 void ProjectView::writeProjectSpaceGlobalConfig(QDomDocument& doc){
   cerr << "kdevelop (projectview): writeProjectSpaceGlobalConfig" << endl;
   m_pProjectTree->writeProjectSpaceGlobalConfig(doc);
+}
+
+void ProjectView::setFileActions(QList<KDevFileAction>* pActions){
+  cerr << "kdevelop (projectview): setFileActions" << endl;
+  m_pFileActions = pActions;
+}
+QList<KDevFileAction>* ProjectView::assembleFileActions(const QString& absFileName,const QString& projectName){
+  cerr << "kdevelop (projectview): ProjectView::assembleFileActions" << endl;
+  // and now the trick :-)
+  emit needFileActions(this,absFileName,projectName);
+  // now the m_pFileActions should be filled
+  return m_pFileActions;
 }

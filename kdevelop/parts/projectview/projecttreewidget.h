@@ -16,9 +16,11 @@
 #include "projectspace.h"
 #include <qlist.h>
 #include <qstring.h>
+#include <kaction.h>
+#include "kdevactions.h"
 
 class ProjectView;
-class KPopupMenu;
+class QPopupMenu;
 class ProjectTreeItem;
 
 
@@ -47,12 +49,15 @@ public:
     
     protected slots:
       void slotRightButtonPressed( QListViewItem* item, const QPoint&,int);
+    void    slotOpenFile();
  protected:
     void createDefaultFileGroups();
-    KPopupMenu* createPopup(ProjectTreeItem* item);
+    QPopupMenu* createPopup(ProjectTreeItem* item);
     ProjectSpace* m_pProjectSpace;
     // the "document"
     QMap<QString,QList< FileGroup> > m_projectFileGroups;
+
+    ProjectView* m_pProjectView;
 };
 
 class ProjectTreeItem : public QObject, public QListViewItem {
@@ -108,9 +113,12 @@ public:
   FileItem (ProjectTreeWidget* parent,ProjectTreeItem* after) : ProjectTreeItem(parent,after) {}
   FileItem (ProjectTreeItem* parent,ProjectTreeItem* after) : ProjectTreeItem(parent,after) {}
   void setAbsFileName(QString fileName);
+  void setProjectName(QString projectName);
   QString absFileName();
+  QString projectName();
 protected:
   QString m_absFileName;
+  QString m_projectName;
 };
 
 

@@ -64,6 +64,8 @@ void KDevelopCore::initComponent(KDevComponent *pComponent)
              this, SLOT(gotoSourceFile(const QString&, int)) );
     connect( pComponent, SIGNAL(gotoDocumentationFile(const QString&)),
              this, SLOT(gotoDocumentationFile(const QString&)) );
+    connect( pComponent,SIGNAL(needFileActions(KDevComponent*,const QString&,const QString&)),
+	     this,SLOT(needFileActions(KDevComponent*,const QString&,const QString&)));
     connect( pComponent, SIGNAL(gotoProjectApiDoc()),
              this, SLOT(gotoProjectApiDoc()) );
     connect( pComponent, SIGNAL(gotoProjectManual()),
@@ -619,6 +621,22 @@ void KDevelopCore::readProjectSpaceUserConfig(QDomDocument& doc){
   for (; it.current(); ++it){
     (*it)->readProjectSpaceGlobalConfig(doc);
   }
+}
+
+void KDevelopCore::needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName){
+  QList<KDevFileAction>* pAllList = new QList<KDevFileAction>;
+  QList<KDevFileAction>* pList=0;
+  KDevFileAction* pAction=0;
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){ // ask every component
+    pList = (*it)->fileActions(absFileName,projectName);
+    if(pList !=0){
+      for(pAction=pList->first();pAction !=0;pAction = pList->next()){
+	pAllList->append(pAction);
+      }
+    }
+  }
+  pWho->setFileActions(pAllList);
 }
 
 #include "kdevelopcore.moc"

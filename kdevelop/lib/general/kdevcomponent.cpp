@@ -1,4 +1,8 @@
 #include "kdevcomponent.h"
+#include <qwidget.h>
+#include <qpopupmenu.h>
+#include <iostream.h>
+
 
 
 
@@ -82,6 +86,11 @@ QWidget *KDevComponent::widget()
   return 0;
 }
 KAboutData* KDevComponent::aboutPlugin(){
+  return 0;
+}
+void KDevComponent::setFileActions(QList<KDevFileAction>*){
+}
+QList<KDevFileAction>* KDevComponent::fileActions(const QString&,const QString&){
   return 0;
 }
 

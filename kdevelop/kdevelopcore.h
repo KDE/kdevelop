@@ -74,6 +74,7 @@ private slots:
     void writeProjectSpaceUserConfig(QDomDocument& doc);
     void readProjectSpaceGlobalConfig(QDomDocument& doc);
     void readProjectSpaceUserConfig(QDomDocument& doc);
+    void needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName);
 
 private:
     KDevelop *m_pKDevelopGUI;
