@@ -142,7 +142,7 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("Run Options"));
     RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject", buildDirectory(), vbox);
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-    vbox = dlg->addVBoxPage(i18n("Build Options"));
+    vbox = dlg->addVBoxPage(i18n("Build Options"), i18n("Build Options"), BarIcon( "make", KIcon::SizeMedium ));
     QTabWidget *buildtab = new QTabWidget(vbox);
 
     CustomBuildOptionsWidget *w2 = new CustomBuildOptionsWidget(*projectDom(), buildtab);
