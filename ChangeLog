@@ -1,3 +1,7 @@
+2000-03-09 Walter Tasin  <tasin@kdevelop.de>
+	* fixing bug that creates problems with cvs-project generation
+	* updating framework of kdevelop
+
 2000-03-07  Ralf Nolden <rnolden@kdevelop.de>
         * made the doctree read the handbook titles itself, so it displays the books with their
          title in the index.html file
