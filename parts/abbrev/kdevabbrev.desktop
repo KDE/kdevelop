@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Abbrevation expansion
+Name=KDevAbbrev
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevabbrev
+X-KDevelop-Scope=Global
+

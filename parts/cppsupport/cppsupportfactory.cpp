@@ -42,16 +42,10 @@ CppSupportFactory::~CppSupportFactory()
 KDevPart *CppSupportFactory::createPartObject(KDevApi *api, QObject *parent,
                                               const QStringList &args)
 {
-    if (args.count() > 0 && qstrcmp(args[0].latin1(), "Cpp") == 0) {
-        kdDebug(9007) << "Building CppSupport" << endl;
-        return new CppSupportPart(true, api, parent, "cpp support part");
-    } else if (args.count() > 0 && qstrcmp(args[0].latin1(), "C") == 0) {
-        kdDebug(9007) << "Building CSupport" << endl;
-        return new CppSupportPart(false, api, parent, "c support part");
-    } else {
+    if (args.count() == 1)
+        return new CppSupportPart(args[1], api, parent, "cpp support part");
+    else {
         kdDebug(9007) << "Wrong args for kdevcppsupport library" << endl;
-        if (args.count() > 0)
-            kdDebug(9007) << args[0] << endl;
         return 0;
     }
 }

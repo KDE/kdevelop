@@ -142,13 +142,13 @@ public:
     ParsedMethod *getSlotByNameAndArg(const QString &aName);
     
     /** Gets all signals in sorted order. */
-    QPtrList<ParsedMethod> *getSortedSignalList();
+    QValueList<ParsedMethod*> getSortedSignalList();
     
     /** Gets all slots in sorted order. */
-    QPtrList<ParsedMethod> *getSortedSlotList();
+    QValueList<ParsedMethod*> getSortedSlotList();
     
     /** Gets all virtual methods. */
-    QPtrList<ParsedMethod> *getVirtualMethodList();
+    QValueList<ParsedMethod*> getVirtualMethodList();
     
     /**
      * Checks if this class has the named parent. 

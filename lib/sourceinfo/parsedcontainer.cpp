@@ -176,15 +176,13 @@ ParsedMethod *ParsedContainer::getMethod( ParsedMethod *aMethod )
  *   QPtrList<ParsedMethod> *  The methods.
  *   NULL                    If not found.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
+QValueList<ParsedMethod*> ParsedContainer::getMethodByName( const QString &aName )
 {
-    REQUIRE1( "Valid methodname", aName != NULL, new QPtrList<ParsedMethod>() );
-    REQUIRE1( "Valid methodname length", aName.length() > 0, new QPtrList<ParsedMethod>() );
+    REQUIRE1( "Valid methodname", aName != NULL, QValueList<ParsedMethod*>() );
+    REQUIRE1( "Valid methodname length", aName.length() > 0, QValueList<ParsedMethod*>() );
 
-    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
+    QValueList<ParsedMethod*> retVal;
     ParsedMethod *aMethod;
-
-    retVal->setAutoDelete( false );
 
     for ( aMethod = methods.first();
           aMethod != NULL;
@@ -192,7 +190,7 @@ QPtrList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
         // If the name matches the supplied one we append the method to the
         // returnvalue.
         if ( aMethod->name() == aName )
-            retVal->append( aMethod );
+            retVal.append( aMethod );
     }
 
     return retVal;
@@ -227,10 +225,9 @@ ParsedMethod *ParsedContainer::getMethodByNameAndArg( const QString &aName )
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedMethod> *ParsedContainer::getSortedMethodList()
+QValueList<ParsedMethod*> ParsedContainer::getSortedMethodList()
 {
-    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
-    retVal->setAutoDelete( false );
+    QValueList<ParsedMethod*> retVal;
 
     QStringList srted;
 
@@ -245,7 +242,7 @@ QPtrList<ParsedMethod> *ParsedContainer::getSortedMethodList()
 
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
-        retVal->append( getMethodByNameAndArg(*it) );
+        retVal.append( getMethodByNameAndArg(*it) );
 
     return retVal;
 }
@@ -278,7 +275,7 @@ ParsedAttribute *ParsedContainer::getAttributeByName( const QString &aName )
  * Returns:
  *   QStrList *         List of attributes in sorted order.
  *-----------------------------------------------------------------*/
-QStringList *ParsedContainer::getSortedAttributeAsStringList()
+QStringList ParsedContainer::getSortedAttributeAsStringList()
 {
     return getSortedIteratorNameList<ParsedAttribute>( attributeIterator );
 }
@@ -292,7 +289,7 @@ QStringList *ParsedContainer::getSortedAttributeAsStringList()
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedAttribute> *ParsedContainer::getSortedAttributeList()
+QValueList<ParsedAttribute*> ParsedContainer::getSortedAttributeList()
 {
     return getSortedDictList<ParsedAttribute>( attributes, false );
 }
@@ -325,7 +322,7 @@ ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
  * Returns:
  *   QStrList *       List of all structs in alpabetical order.
  *-----------------------------------------------------------------*/
-QStringList *ParsedContainer::getSortedStructNameList()
+QStringList ParsedContainer::getSortedStructNameList()
 {
     return getSortedIteratorNameList<ParsedStruct>( structIterator );
 }
@@ -339,7 +336,7 @@ QStringList *ParsedContainer::getSortedStructNameList()
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedStruct> *ParsedContainer::getSortedStructList()
+QValueList<ParsedStruct*> ParsedContainer::getSortedStructList()
 {
     return getSortedDictList<ParsedStruct>( structs, _useFullPath );
 }

@@ -137,138 +137,131 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore * store,const QString& currentC
 }
 
 /** fill the comboboxes with all classes */
-void CCloneFunctionDlg::initClasses(){
-  // populate the comboboxes
-
-	// first: templates
-	allclasses->insertItem(templates);
+void CCloneFunctionDlg::initClasses()
+{
+    // populate the comboboxes
+    
+    // first: templates
+    allclasses->insertItem(templates);
 	
-	// create list of all classes
-  ParsedClass *  curr = classtree->getClassByName(classname);
-  QString parentName;
-	if ( curr && curr->parents.first() )
-    parentName = curr->parents.first()->name();
-  QList<ParsedClass>* all = classtree->getSortedClassList();
-  for (ParsedClass* i=all->first(); i != 0; i=all->next() ) {
-      allclasses->insertItem(i->name());
-      if (i->name() == parentName)
-         allclasses->setCurrentItem(allclasses->count()-1);
-  }
-  delete (all);
- 	slotNewClass( allclasses->currentText () );
-				
-	// change methods on class selection
-	connect(allclasses, SIGNAL(highlighted(const QString&)),
-			SLOT(slotNewClass(const QString&)) );
-					
-	// Set the default focus.
-  allclasses->setFocus();
+    // create list of all classes
+    ParsedClass *curr = classtree->getClassByName(classname);
+    QString parentName;
+    if ( curr && curr->parents.first() )
+        parentName = curr->parents.first()->name();
+    
+    QValueList<ParsedClass*> all = classtree->getSortedClassList();
+    QValueList<ParsedClass*>::ConstIterator it;
+    for (it = all.begin(); it != all.end(); ++it) {
+        allclasses->insertItem((*it)->name());
+        if ((*it)->name() == parentName)
+            allclasses->setCurrentItem(allclasses->count()-1);
+    }
+
+    slotNewClass( allclasses->currentText () );
+    
+    // change methods on class selection
+    connect(allclasses, SIGNAL(highlighted(const QString&)),
+            SLOT(slotNewClass(const QString&)) );
+    
+    // Set the default focus.
+    allclasses->setFocus();
 }
 
 
 void CCloneFunctionDlg::OK()
 {
- if( strlen( methods->currentText() ) == 0 )
-    KMessageBox::information( this,
-                            i18n("You have to select a method."),
-                            i18n("No method") );
- else
-    accept();
+    if( methods->currentText().isEmpty() )
+        KMessageBox::information( this,
+                                  i18n("You have to select a method."),
+                                  i18n("No method") );
+    else
+        accept();
 }
 
 /** update methods/slots */
 void CCloneFunctionDlg::slotNewClass(const QString& name)
 {
-	QString str;
-	
-	methods->clear();
-	
-	if(name == templates) {	
-	  QString noarg (" ( )");
-	  QString oparg1( " (const "+classname+"& rhs)" );
-	  QString oparg2( " (const "+classname+"& lhs, const " + classname + "& rhs)" );
-	  // set/get attributes
-	  {
-      ParsedClass *theClass = classtree->getClassByName( classname );
-      QPtrList<ParsedAttribute>* list = theClass->getSortedAttributeList();
-	
-      ParsedAttribute* attr;
-      for ( attr=list->first(); attr != 0; attr=list->next() ) {
-         QString name = attr->name();
-         QString type = attr->type();
-         type.replace( QRegExp("[&\\*]"), "" );
-         type = type.stripWhiteSpace();
-         methods->insertItem(type + "& get" + name + "()");
-         methods->insertItem("void set" + name + "(const " + type + "& newval)" );
-      }
-      delete list;
-    }
+    ParsedClass *theClass = classtree->getClassByName( classname );
+        
+    methods->clear();
+    
+    if (name == templates) {	
+        QString noarg (" ( )");
+        QString oparg1( " (const "+classname+"& rhs)" );
+        QString oparg2( " (const "+classname+"& lhs, const " + classname + "& rhs)" );
 
-	  // operators
-    for(int i=0; i < templatescount; i++) {
-      QString op = templatesdata[i].name;
-      switch (templatesdata[i].typ) {
-        case c_copy:  /* copy constructor */
-          methods->insertItem(" "+classname + oparg1);
-          break;
-        case c_unaer_member:    /* class operator@ () */
-          methods->insertItem(classname + "& operator " + op + noarg);
-          break;
-
-        case c_member:  /* class operator@ (class) */
-          methods->insertItem(classname + "& operator " + op + oparg1);
-          break;
-
-        case c_bin_nonmember_assign:   /* friend class operator@ (class, class)
-                                          and class operator@ (class) */
-          methods->insertItem(classname + " operator " + op + "=" + oparg1);
-          //methods->insertItem("friend " + classname + "& operator " + op + "=" + oparg1 );
-          methods->insertItem(classname + " operator " + op + oparg1);
-          methods->insertItem("friend " + classname + " operator " + op + oparg2 );
-          break;
-
-        case c_bin_compare:
-          methods->insertItem("bool operator " + op + oparg1);
-          methods->insertItem("friend bool operator " + op + oparg2 );
-          break;
-
-        case inp:         /* oper >> */
+        // set/get attributes
+        QValueList<ParsedAttribute*> attrList = theClass->getSortedAttributeList();
+        QValueList<ParsedAttribute*>::ConstIterator it;
+        for (it = attrList.begin(); it != attrList.end(); ++it) {
+            QString name = (*it)->name();
+            QString type = (*it)->type();
+            type.replace( QRegExp("[&\\*]"), "" );
+            type = type.stripWhiteSpace();
+            methods->insertItem(type + "& get" + name + "()");
+            methods->insertItem("void set" + name + "(const " + type + "& newval)" );
+        }
+        
+        // operators
+        for(int i=0; i < templatescount; i++) {
+            QString op = templatesdata[i].name;
+            switch (templatesdata[i].typ) {
+            case c_copy:  /* copy constructor */
+                methods->insertItem(" "+classname + oparg1);
+                break;
+            case c_unaer_member:    /* class operator@ () */
+                methods->insertItem(classname + "& operator " + op + noarg);
+                break;
+                
+            case c_member:  /* class operator@ (class) */
+                methods->insertItem(classname + "& operator " + op + oparg1);
+                break;
+                
+            case c_bin_nonmember_assign:   /* friend class operator@ (class, class)
+                                              and class operator@ (class) */
+                methods->insertItem(classname + " operator " + op + "=" + oparg1);
+                //methods->insertItem("friend " + classname + "& operator " + op + "=" + oparg1 );
+                methods->insertItem(classname + " operator " + op + oparg1);
+                methods->insertItem("friend " + classname + " operator " + op + oparg2 );
+                break;
+                
+            case c_bin_compare:
+                methods->insertItem("bool operator " + op + oparg1);
+                methods->insertItem("friend bool operator " + op + oparg2 );
+                break;
+                
+            case inp:         /* oper >> */
  	        methods->insertItem(QString("friend istream& operator >> (istream& is, "+ classname + "& val)"));
-          break;
+                break;
+                
+            case outp:         /* oper << */
+                methods->insertItem(QString("friend ostream& operator << (ostream& os, const "+ classname + "& val)"));
+                break;
+            }
+        }
+    } else {
+        // all Methods
+        QValueList<ParsedMethod*> all;
+        QValueList<ParsedMethod*>::ConstIterator it;
 
-        case outp:         /* oper << */
-       	  methods->insertItem(QString("friend ostream& operator << (ostream& os, const "+ classname + "& val)"));
-          break;
-      }
+        all = theClass->getSortedMethodList();
+        for (it = all.begin(); it != all.end(); ++it)
+            if (! ((*it)->isDestructor() || (*it)->isConstructor()))
+                methods->insertItem((*it)->asString());
+        
+        // all slots
+        all = theClass->getSortedSlotList();
+        for (it = all.begin(); it != all.end(); ++it)
+            methods->insertItem((*it)->asString());
+        
+        // all signals
+        all = theClass->getSortedSignalList();
+        for (it = all.begin(); it != all.end(); ++it)
+            methods->insertItem((*it)->asString());
     }
-	  return;
-	}
-	
-	// all Methods
-  ParsedClass *theClass = classtree->getClassByName( name );
-	QPtrList<ParsedMethod> *implList = new QPtrList<ParsedMethod>;
-	QPtrList<ParsedMethod> *availList = new QPtrList<ParsedMethod>;
-  QPtrList<ParsedMethod> *all = theClass->getSortedMethodList();
-
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-  	if (! (i->isDestructor() || i->isConstructor()))
-      methods->insertItem(i->asString());
-	delete (all);
-	delete (implList);
-	delete (availList);
-
-	// all slots
-  all = theClass->getSortedSlotList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-      methods->insertItem(i->asString());
-	delete (all);
-	
-  // all signals
-  all = theClass->getSortedSignalList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-      methods->insertItem(i->asString());
-	delete (all);
 }
+    
 /** get the selected method */
 bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment,
                                   bool& ispriv, bool& isprot, bool& ispub,
@@ -320,36 +313,29 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
 
 ParsedMethod* CCloneFunctionDlg::searchMethod(ParsedClass *theClass, QString selected)
 {
- 	QString str;
-  QPtrList<ParsedMethod> *all = theClass->getSortedMethodList();
-  // check methods
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-      if ( selected == i->asString()) {
-	        delete (all);
-	        return i;
-	    }
-	delete (all);
+    QValueList<ParsedMethod*> all;
+    QValueList<ParsedMethod*>::ConstIterator it;
+    
+    // check methods
+    all = theClass->getSortedMethodList();
+    for (it = all.begin(); it != all.end(); ++it)
+        if (selected == (*it)->asString())
+            return *it;
 	
-	// not found - try all slot
-  all = theClass->getSortedSlotList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-     if ( selected == i->asString()) {
-	        delete (all);
-	        return i;
-	    }
-	delete (all);
+    // not found - try all slot
+    all = theClass->getSortedSlotList();
+    for (it = all.begin(); it != all.end(); ++it)
+        if (selected == (*it)->asString())
+            return *it;
 	
-	// not found - try all slot
-  all = theClass->getSortedSignalList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
-     if ( selected == i->asString()) {
-	        delete (all);
-	        return i;
-	    }
-
-	// oops 	
-	delete (all);
-	return NULL;									
+    // not found - try all slot
+    all = theClass->getSortedSignalList();
+    for (it = all.begin(); it != all.end(); ++it)
+        if (selected == (*it)->asString())
+            return *it;
+    
+    // oops
+    return 0;
 }
-#include "cclonefunctiondlg.moc"
 
+#include "cclonefunctiondlg.moc"

@@ -192,12 +192,12 @@ bool PHPCodeCompletion::checkForMethodArgHint(QString lineStr,int col,int line){
 
   ParsedClass* pClass =  m_classStore->getClassByName(className);
   if(pClass !=0){
-    QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
-    for ( ParsedMethod *pMethod = methodList->first();
-	  pMethod != 0;
-	  pMethod = methodList->next() ) {
-      if(pMethod->name() == methodName){
-	ParsedArgument* pArg = pMethod->arguments.first();
+    QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+    QValueList<ParsedMethod*>::ConstIterator methodIt;
+    
+    for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
+      if ((*methodIt)->name() == methodName){
+	ParsedArgument* pArg = (*methodIt)->arguments.first();
 	m_argWidgetShow = true;
 	QValueList <QString> functionList;
 	if(pArg){
@@ -251,12 +251,12 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
   }
   ParsedClass* pClass =  m_classStore->getClassByName(maybeInstanceOf);
   if(pClass !=0){
-    QList<ParsedAttribute>* attList = pClass->getSortedAttributeList();
-    for ( ParsedAttribute *pAttribut = attList->first();
-	  pAttribut != 0;
-	  pAttribut = attList->next() ) {
-      if(pAttribut->name() == varName){
-	return pAttribut->type();
+    QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+    QValueList<ParsedAttribute*>::ConstIterator attrIt;
+
+    for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
+      if ((*attrIt)->name() == varName){
+	return (*attrIt)->type();
       }
     }
   }
@@ -316,10 +316,11 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,in
 	  functionList.append((*it).prototype);
 	}
       }
-      QList<ParsedMethod>* methodList = m_classStore->globalContainer.getSortedMethodList();
-      for ( ParsedMethod *pMethod = methodList->first(); pMethod != 0;pMethod = methodList->next() ) {
-	if(pMethod->name() == name){
-	  ParsedArgument* pArg = pMethod->arguments.first();
+      QValueList<ParsedMethod*> methodList = m_classStore->globalContainer.getSortedMethodList();
+      QValueList<ParsedMethod*>::ConstIterator methodIt;
+      for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
+	if((*methodIt)->name() == name){
+	  ParsedArgument* pArg = (*methodIt)->arguments.first();
 	  functionList.append(name+"("+ pArg->type()+")");
 	}
       }
@@ -364,11 +365,12 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString lineStr,int col){
       }
     }
 
-    QList<ParsedMethod>* methodList = m_classStore->globalContainer.getSortedMethodList();
-    for ( ParsedMethod *pMethod = methodList->first(); pMethod != 0;pMethod = methodList->next() ) {
-      if(pMethod->name().startsWith(methodStart)){
+    QValueList<ParsedMethod*> methodList = m_classStore->globalContainer.getSortedMethodList();
+    QValueList<ParsedMethod*>::ConstIterator methodIt;
+    for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
+      if ((*methodIt)->name().startsWith(methodStart)){
 	KTextEditor::CompletionEntry e;
-	e.text = pMethod->name();
+	e.text = (*methodIt)->name();
 	e.postfix ="()";
 	list.append(e);
       }
@@ -403,16 +405,15 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int l
     ParsedClass* pClass=0;
     pClass =  m_classStore->getClassByName(newre.group(1));
     if(pClass !=0){ // exists this class?
-      QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
-      for ( ParsedMethod *pMethod = methodList->first();
-	    pMethod != 0;
-	    pMethod = methodList->next() ) {
-	if(pMethod->name() == newre.group(1)){
-	  ParsedArgument* pArg = pMethod->arguments.first();
+      QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+      QValueList<ParsedMethod*>::ConstIterator methodIt;
+      for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
+        if((*methodIt)->name() == newre.group(1)){
+	  ParsedArgument* pArg = (*methodIt)->arguments.first();
 	  m_argWidgetShow = true;
 	  QValueList <QString> functionList;
 	  if(pArg){
-	    functionList.append(pMethod->name()+"("+ pArg->type()+")");
+	    functionList.append((*methodIt)->name()+"("+ pArg->type()+")");
 	  }
 	  m_codeInterface->showArgHint ( functionList, "()", "," );
 	  return true;
@@ -430,11 +431,13 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int line){
     QString classStart = newre.group(1);
     if(start.right(2) == classStart){
       QValueList<KTextEditor::CompletionEntry> list;
-      QList<ParsedClass>* classList = m_classStore->globalContainer.getSortedClassList();
-      for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
-	if(pclass->name().startsWith(classStart)){
+
+      QValueList<ParsedClass*> classList = m_classStore->globalContainer.getSortedClassList();
+      QValueList<ParsedClass*>::ConstIterator classIt;
+      for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
+	if((*classIt)->name().startsWith(classStart)){
 	  KTextEditor::CompletionEntry e;
-	  e.text = pclass->name();
+	  e.text = (*classIt)->name();
 	  list.append(e);
 	}
       }
@@ -457,6 +460,7 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int line){
   }
   return false;
 }
+
 QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariables(QString className){
   QList<ParsedParent> parents;
   QValueList<KTextEditor::CompletionEntry> list;
@@ -464,12 +468,11 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVa
   do {
     pClass =  m_classStore->getClassByName(className);
     if(pClass !=0){
-      QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
-      for ( ParsedMethod *pMethod = methodList->first();
-	    pMethod != 0;
-	    pMethod = methodList->next() ) {
+      QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+      QValueList<ParsedMethod*>::ConstIterator methodIt;
+      for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
 	KTextEditor::CompletionEntry e;
-	e.text = pMethod->name();
+	e.text = (*methodIt)->name();
 	//	ParsedArgument* pArg = pMethod->arguments.first();
 	//	if(pArg->type() == ""){
 	e.postfix ="()";
@@ -478,12 +481,11 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVa
 	//	}
 	list.append(e);
       }
-      QList<ParsedAttribute>* attList = pClass->getSortedAttributeList();
-      for ( ParsedAttribute *pAttribut = attList->first();
-	    pAttribut != 0;
-	    pAttribut = attList->next() ) {
+      QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+      QValueList<ParsedAttribute*>::ConstIterator attrIt;
+      for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
 	KTextEditor::CompletionEntry e;
-	QString name = pAttribut->name();
+	QString name = (*attrIt)->name();
 	e.text = name.remove(0,1); // remove the trailing $
 	e.postfix ="";
 	list.append(e);
@@ -501,4 +503,5 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVa
   } while (pClass != 0);
   return list;
 }
+
 #include "phpcodecompletion.moc"

@@ -68,15 +68,14 @@ void HierarchyDialog::refresh()
     class_combo->clear();
     digraph->clear();
 
-    QList<ParsedClass> *list = m_part->classStore()->getSortedClassList();
-    QListIterator<ParsedClass> it(*list);
-    for (; it.current(); ++it) {
-        class_combo->insertItem(it.current()->name());
-        QListIterator<ParsedParent> it2(it.current()->parents);
+    QValueList<ParsedClass*> list = m_part->classStore()->getSortedClassList();
+    QValueList<ParsedClass*>::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        class_combo->insertItem((*it)->name());
+        QListIterator<ParsedParent> it2((*it)->parents);
         for (; it2.current(); ++it2)
-            digraph->addEdge(it2.current()->name(), it.current()->name());
+            digraph->addEdge(it2.current()->name(), (*it)->name());
     }
-    delete list;
 
     digraph->process();
 }

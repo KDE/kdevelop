@@ -100,31 +100,31 @@ public:
      * Fetches all classes with the named parent. 
      * @return List of all classes with the named parent.
      */
-    QList<ParsedClass> *getClassesByParent(const QString &aName);
+    QValueList<ParsedClass*> getClassesByParent(const QString &aName);
     
     /**
      * Fetches all clients of a named class. 
      * @return List of all classes that are clients of the named class.
      */
-    QList<ParsedClass> *getClassClients(const QString &aName);
+    QValueList<ParsedClass*> getClassClients(const QString &aName);
     
     /**
      * Fetches all suppliers of a named class. 
      * @return List of all classes that are suppliers of the named class.
      */
-    QList<ParsedClass> *getClassSuppliers(const QString &aName);
+    QValueList<ParsedClass*> getClassSuppliers(const QString &aName);
     
     /**
      * Get all classes in sorted order. 
      * @return A list of all classes in alpabetical order. 
      */
-    QList<ParsedClass> *getSortedClassList();
+    QValueList<ParsedClass*> getSortedClassList();
     
     /**
      * Get all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStringList *getSortedClassNameList();
+    QStringList getSortedClassNameList();
     
     /**
      * Fetches all virtual methods, both implemented and not.
@@ -134,15 +134,15 @@ public:
      * @param availList The list hat will contain the available virtual
      *  methods. */
     void getVirtualMethodsForClass( const QString &aName, 
-                                    QList<ParsedMethod> *implList,
-                                    QList<ParsedMethod> *availList );
+                                    QValueList<ParsedMethod*> *implList,
+                                    QValueList<ParsedMethod*> *availList );
     
     /**
      * Gets all global structures not declared in a scope.
      * 
      * @return A sorted list of global structures.
      */
-    QList<ParsedStruct> *getSortedStructList();
+    QValueList<ParsedStruct*> getSortedStructList();
     
 public:
     

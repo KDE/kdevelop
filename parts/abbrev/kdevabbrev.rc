@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCTags" version="1">
+<MenuBar>
+  <Menu name="edit" >
+    <Action name="edit_expandabbrev"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
+

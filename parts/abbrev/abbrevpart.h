@@ -1,0 +1,59 @@
+/***************************************************************************
+ *   Copyright (C) 2002 Roberto Raggi                                      *
+ *   raggi@cli.di.unipi.it                                                 *
+ *   Copyright (C) 2002 by Bernd Gehrmann                                  *
+ *   bernd@kdevelop.org                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef _ABBREVPART_H_
+#define _ABBREVPART_H_
+
+#include <qasciidict.h>
+#include "kdevpart.h"
+#include "ktexteditor/editinterface.h"
+#include "ktexteditor/viewcursorinterface.h"
+
+
+class KDialogBase;
+
+struct CodeTemplate {
+    QString description;
+    QString code;
+    QString suffixes;
+};
+
+
+class AbbrevPart : public KDevPart
+{
+    Q_OBJECT
+
+public:
+    AbbrevPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ~AbbrevPart();
+
+    void addTemplate(const QString &templ, const QString &descr,
+                     const QString &suffixes, const QString &code);
+    void removeTemplate(const QString &templ);
+    void clearTemplates();
+    QAsciiDictIterator<CodeTemplate> templates() const;
+    
+private slots:
+    void slotExpandAbbrev();
+    void configWidget(KDialogBase *dlg);
+
+private:
+    void load();
+    void save();
+    void insertChars(KTextEditor::EditInterface *editiface,
+                     KTextEditor::ViewCursorInterface *cursoriface,
+                     const QString &chars);
+    QAsciiDict<CodeTemplate> m_templates;
+};
+
+#endif

@@ -1,3 +1,11 @@
+2002-04-07  Bernd Gehrmann  <bernd@mail.berlios.de>
+	* Fixed existing and potential memory leaks in class store
+	  with a more modern api. Big textual changes, no changes 
+	  in semantics
+	* New class dialog, to be finished
+	* Multi-language version of Roberto's code template stuff,
+	  not tested much
+
 2002-04-06 jbb <jbb@kdevelop.org> 
 	* Fixed some crashes, mainly to do with using .latin1() on
       a null string.

@@ -15,11 +15,5 @@ ClassStoreIface::~ClassStoreIface()
 
 QStringList ClassStoreIface::getSortedClassNameList()
 {
-    QStringList res;
-    
-    QStringList *list = m_classStore->getSortedClassNameList();
-    res = *list;
-    delete list;
-    
-    return res;
+    return m_classStore->getSortedClassNameList();
 }

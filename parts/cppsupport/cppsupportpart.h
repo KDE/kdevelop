@@ -67,7 +67,6 @@ public:
     
 protected:
     virtual KDevLanguageSupport::Features features();
-    virtual void newClass();
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);
 
@@ -80,6 +79,7 @@ private slots:
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
 
+    void slotNewClass();
     void slotSwitchHeader();
     void slotGotoIncludeFile();
     void slotCompleteText();

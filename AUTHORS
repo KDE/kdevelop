@@ -21,7 +21,7 @@ KDE application templates:
 editing component:
   The KWrite authors <kwrite-devel@kde.org>
 
-QEditor part, help for code-completion:
+QEditor part, help for code-completion, abbrev part:
   Roberto Raggi <raggi@cli.di.unipi.it>
 
 Qt 3 port, various patches

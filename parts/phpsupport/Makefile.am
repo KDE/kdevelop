@@ -20,3 +20,6 @@ service_DATA = kdevphpsupport.desktop
 
 rcdir = $(kde_datadir)/kdevphpsupport
 rc_DATA = kdevphpsupport.rc
+
+templatedir = ${kde_datadir}/kdevabbrev/templates
+template_DATA = phptemplates

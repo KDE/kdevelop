@@ -201,7 +201,7 @@ ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
  * Returns:
  *   QList<ParsedClass> * The classes.
  *-----------------------------------------------------------------*/
-QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
+QValueList<ParsedClass*> ParsedClassContainer::getSortedClassList()
 {
     return getSortedDictList<ParsedClass>( classes, useFullPath() );
 }
@@ -216,25 +216,26 @@ QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-QStringList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
+QStringList ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
 {
-    QStringList *ret_val = new QStringList();
+    QStringList retVal;
     ParsedClass *act;
     
     for (classIterator.toFirst();
          (act=classIterator.current());
          ++classIterator) {
         if (bUseFullPath)
-            ret_val->append(classIterator.currentKey());
-        else
-            {
-                QString path=act->path();
-                //   path.replace(QRegExp("."),"::");
-                ret_val->append(path);
-            }
+            retVal.append(classIterator.currentKey());
+        else {
+            QString path=act->path();
+            //   path.replace(QRegExp("."),"::");
+            retVal.append(path);
+        }
     };
 
-    return ret_val;
+    retVal.sort();
+    
+    return retVal;
 }
 
 

@@ -160,56 +160,41 @@ void ClassTreeScopeItem::setOpen(bool o)
         KDevLanguageSupport::Features features = classTree()->m_part->languageSupport()->features();
         
         // Add namespaces
-        QList<ParsedScopeContainer> *scopeList = pScope->getSortedScopeList();
-        for ( ParsedScopeContainer *pScope = scopeList->first();
-              pScope != 0;
-              pScope = scopeList->next() ) {
-            lastItem = new ClassTreeScopeItem(this, lastItem, pScope);
-        }
-        delete scopeList;
+        QValueList<ParsedScopeContainer*> scopeList = pScope->getSortedScopeList();
+        QValueList<ParsedScopeContainer*>::ConstIterator it;
+        for (it = scopeList.begin(); it != scopeList.end(); ++it)
+            lastItem = new ClassTreeScopeItem(this, lastItem, *it);
 
         if (features & KDevLanguageSupport::Classes) {
             // Add classes
-            QList<ParsedClass> *classList = pScope->getSortedClassList();
-            for ( ParsedClass *pClass = classList->first();
-                  pClass != 0;
-                  pClass = classList->next() ) {
-                lastItem = new ClassTreeClassItem(this, lastItem, pClass);
-            }
-            delete classList;
+            QValueList<ParsedClass*> classList = pScope->getSortedClassList();
+            QValueList<ParsedClass*>::ConstIterator it;
+            for (it = classList.begin(); it != classList.end(); ++it)
+                lastItem = new ClassTreeClassItem(this, lastItem, *it);
         }
             
         if (features & KDevLanguageSupport::Structs) {
             // Add structs
-            QList<ParsedStruct> *structList = pScope->getSortedStructList();
-            for ( ParsedStruct *pStruct = structList->first();
-                  pStruct != 0;
-                  pStruct = structList->next() ) {
-                lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
-            }
-            delete structList;
+            QValueList<ParsedStruct*> structList = pScope->getSortedStructList();
+            QValueList<ParsedStruct*>::ConstIterator it;
+            for (it = structList.begin(); it != structList.end(); ++it)
+                lastItem = new ClassTreeStructItem(this, lastItem, *it);
         }
             
         if (features & KDevLanguageSupport::Functions) {
             // Add functions
-            QList<ParsedMethod> *methodList = pScope->getSortedMethodList();
-            for ( ParsedMethod *pMethod = methodList->first();
-                  pMethod != 0;
-                  pMethod = methodList->next() ) {
-                lastItem = new ClassTreeMethodItem(this, lastItem, pMethod);
-            }
-            delete methodList;
+            QValueList<ParsedMethod*> methodList = pScope->getSortedMethodList();
+            QValueList<ParsedMethod*>::ConstIterator it;
+            for (it = methodList.begin(); it != methodList.end(); ++it)
+                lastItem = new ClassTreeMethodItem(this, lastItem, *it);
         }
             
         if (features & KDevLanguageSupport::Variables) {
             // Add attributes
-            QList<ParsedAttribute> *attrList = pScope->getSortedAttributeList();
-            for ( ParsedAttribute *pAttr = attrList->first();
-                  pAttr != 0;
-                  pAttr = attrList->next() ) {
-                lastItem = new ClassTreeAttrItem(this, lastItem, pAttr);
-            }
-            delete attrList;
+            QValueList<ParsedAttribute*> attrList = pScope->getSortedAttributeList();
+            QValueList<ParsedAttribute*>::ConstIterator it;
+            for (it = attrList.begin(); it != attrList.end(); ++it)
+                lastItem = new ClassTreeAttrItem(this, lastItem, *it);
         }
             
     }
@@ -242,50 +227,35 @@ void ClassTreeClassItem::setOpen(bool o)
         }
 
         // Add nested structs
-        QList<ParsedStruct> *structList = pClass->getSortedStructList();
-        for ( ParsedStruct *pStruct = structList->first();
-              pStruct != 0;
-              pStruct = structList->next() ) {
-            lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
-        }
-        delete structList;
+        QValueList<ParsedStruct*> structList = pClass->getSortedStructList();
+        QValueList<ParsedStruct*>::ConstIterator structIt;
+        for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
+            lastItem = new ClassTreeStructItem(this, lastItem, *structIt);
         
         // Add methods
-        QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
-        for ( ParsedMethod *pMethod = methodList->first();
-              pMethod != 0;
-              pMethod = methodList->next() ) {
-            lastItem = new ClassTreeMethodItem(this, lastItem, pMethod);
-        }
-        delete methodList;
+        QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+        QValueList<ParsedMethod*>::ConstIterator methodIt;
+        for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
+            lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
 
         // Add slots
-        QList<ParsedMethod> *slotList = pClass->getSortedSlotList();
-        for ( ParsedMethod *pSlot = slotList->first();
-              pSlot != 0;
-              pSlot = slotList->next() ) {
-            lastItem = new ClassTreeMethodItem(this, lastItem, pSlot);
-        }
-        delete slotList;
+        QValueList<ParsedMethod*> slotList = pClass->getSortedSlotList();
+        QValueList<ParsedMethod*>::ConstIterator slotIt;
+        for (slotIt = slotList.begin(); slotIt != slotList.end(); ++slotIt)
+            lastItem = new ClassTreeMethodItem(this, lastItem, *slotIt);
 
         // Add signals
-        QList<ParsedMethod> *signalList = pClass->getSortedSignalList();
-        for ( ParsedMethod *pSignal = signalList->first();
-              pSignal != 0;
-              pSignal = signalList->next() ) {
-            lastItem = new ClassTreeMethodItem(this, lastItem, pSignal);
-        }
-        delete signalList;
+        QValueList<ParsedMethod*> signalList = pClass->getSortedSignalList();
+        QValueList<ParsedMethod*>::ConstIterator signalIt;
+        for (signalIt = signalList.begin(); signalIt != signalList.end(); ++signalIt)
+            lastItem = new ClassTreeMethodItem(this, lastItem, *signalIt);
 
         // Add attributes
-        QList<ParsedAttribute> *attrList = pClass->getSortedAttributeList();
-        for ( ParsedAttribute *pAttr = attrList->first();
-              pAttr != 0;
-              pAttr = attrList->next() ) {
-            lastItem = new ClassTreeAttrItem(this, lastItem, pAttr);
-        }
-        delete attrList;
-
+        QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+        QValueList<ParsedAttribute*>::ConstIterator attrIt;
+        for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt)
+            lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
+        
     }
     
     ClassTreeItem::setOpen(o);
@@ -310,14 +280,11 @@ void ClassTreeStructItem::setOpen(bool o)
         ClassTreeItem *lastItem = 0;
         
         // Add structs
-        QList<ParsedStruct> *structList = pStruct->getSortedStructList();
-        for ( ParsedStruct *pStruct = structList->first();
-              pStruct != 0;
-              pStruct = structList->next() ) {
+        QValueList<ParsedStruct*> structList = pStruct->getSortedStructList();
+        QValueList<ParsedStruct*>::ConstIterator structIt;
+        for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
             lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
-        }
-        delete structList;
-
+        
     }
     
     ClassTreeItem::setOpen(o);

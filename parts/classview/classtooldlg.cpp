@@ -262,9 +262,8 @@ void ClassToolDialog::refresh()
     QString oldName = class_combo->currentText();
 
     class_combo->clear();
-    QStringList *list = m_part->classStore()->getSortedClassNameList();
-    class_combo->insertStringList(*list);
-    delete list;
+    QStringList list = m_part->classStore()->getSortedClassNameList();
+    class_combo->insertStringList(list);
     setClassName(oldName);
 
     // Rebuild the tree and caption/button state
@@ -337,27 +336,24 @@ void ClassToolDialog::buildTree()
     switch (currentOperation)
         {
         case ViewParents:
-            class_tree->insertClassAndClasses(currentClass, &currentClass->parents);
+            class_tree->insertClassAndClasses(currentClass, currentClass->parents);
             break;
         case ViewChildren:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassesByParent(currentClass->name());
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassesByParent(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
-                delete list;
             }
             break;
         case ViewClients:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassClients(currentClass->name());
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassClients(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
-                delete list;
             }
             break;
         case ViewSuppliers:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassSuppliers( currentClass->name() );
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassSuppliers( currentClass->name() );
                 class_tree->insertClassAndClasses( currentClass, list );
-                delete list;
             }
             break;
         case ViewMethods:

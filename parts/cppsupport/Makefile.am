@@ -11,6 +11,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppsupportwidget.cpp \
 	                       ccconfigwidget.cpp \
 	                       ccconfigwidgetbase.ui \
+			       cppnewclassdlgbase.ui \
+			       cppnewclassdlg.cpp \
 			       classparser.cpp \
 			       tokenizer.cpp \
 			       addclassmethodui.ui \
@@ -42,3 +44,6 @@ service_DATA = kdevcppsupport.desktop kdevcsupport.desktop
 
 rcdir = $(kde_datadir)/kdevcppsupport
 rc_DATA = kdevcppsupport.rc
+
+templatedir = ${kde_datadir}/kdevabbrev/templates
+template_DATA = cpptemplates

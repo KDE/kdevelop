@@ -148,14 +148,11 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotNewClass(){
-  QStringList classNames;
-  QList<ParsedClass>* classList = classStore()->globalContainer.getSortedClassList();
-  for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
-    classNames.append(pclass->name());
-  }
+  QStringList classNames = classStore()->getSortedClassNameList();
   PHPNewClassDlg dlg(classNames,project()->projectDirectory());
   dlg.exec();
  }
+
 void PHPSupportPart::slotRun(){
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){

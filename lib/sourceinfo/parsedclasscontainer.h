@@ -64,13 +64,13 @@ public:
      * Gets all classes in sorted order. 
      * @return A list of all classes in alpabetical order. 
      */
-    QList<ParsedClass> *getSortedClassList();
+    QValueList<ParsedClass*> getSortedClassList();
 
     /**
      * Gets all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStringList *getSortedClassNameList(bool useFullPath=false);
+    QStringList getSortedClassNameList(bool useFullPath=false);
     
 public:
     

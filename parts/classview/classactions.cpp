@@ -36,14 +36,7 @@ void ClassListAction::setCurrentItem(const QString &item)
 
 void ClassListAction::refresh()
 {
-    QList<ParsedClass> *classList = m_store->getSortedClassList();
-
-    QStringList list;
-    QListIterator<ParsedClass> it(*classList);
-    for ( ; it.current(); ++it)
-        list << it.current()->name();
-
-    qHeapSort(list);
+    QStringList list = m_store->getSortedClassNameList();
 
     int idx = list.findIndex(currentText());
     if (idx == -1 && !list.isEmpty())
@@ -51,9 +44,6 @@ void ClassListAction::refresh()
     setItems(list);
     if (idx != -1)
         KSelectAction::setCurrentItem(idx);
-    else if (!list.isEmpty())
-
-    delete classList;
 }
 
 

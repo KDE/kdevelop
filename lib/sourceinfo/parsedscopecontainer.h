@@ -67,14 +67,14 @@ public:
      *
      * @return A list of all scopes in alphabetical order.
      */
-    QList<ParsedScopeContainer> *getSortedScopeList();
+    QValueList<ParsedScopeContainer*> getSortedScopeList();
     
     /**
      * Gets all scopenames in sorted order.
      *
      * @return A list of all scopenames in alphabetical order.
      */
-    QStringList *getSortedScopeNameList();
+    QStringList getSortedScopeNameList();
     
     /**
      * Adds a scope to this scope. 

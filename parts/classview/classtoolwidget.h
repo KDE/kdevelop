@@ -25,8 +25,8 @@ public:
     ClassToolWidget(ClassViewPart *part, QWidget *parent=0);
     ~ClassToolWidget();
 
-    void insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedClass> *classList);
-    void insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedParent> *parentList);
+    void insertClassAndClasses(ParsedClass *parsedClass, QValueList<ParsedClass*> classList);
+    void insertClassAndClasses(ParsedClass *parsedClass, const QPtrList<ParsedParent> &parentList);
     void insertAllClassMethods(ParsedClass *parsedClass, PIAccess filter);
     void insertAllClassAttributes(ParsedClass *parsedClass, PIAccess filter);
 

@@ -125,13 +125,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add classes
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Classes"));
         ilastItem = 0;
-        QList<ParsedClass> *classList = scope->getSortedClassList();
-        for ( ParsedClass *pClass = classList->first();
-              pClass != 0;
-              pClass = classList->next() ) {
-            ilastItem = new ClassTreeClassItem(lastItem, ilastItem, pClass);
-        }
-        delete classList;
+        QValueList<ParsedClass*> classList = scope->getSortedClassList();
+        QValueList<ParsedClass*>::ConstIterator it;
+        for (it = classList.begin(); it != classList.end(); ++it)
+            ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
@@ -140,13 +137,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add structs
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Structs"));
         ilastItem = 0;
-        QList<ParsedStruct> *structList = scope->getSortedStructList();
-        for ( ParsedStruct *pStruct = structList->first();
-              pStruct != 0;
-              pStruct = structList->next() ) {
-            ilastItem = new ClassTreeStructItem(lastItem, ilastItem, pStruct);
-        }
-        delete structList;
+        QValueList<ParsedStruct*> structList = scope->getSortedStructList();
+        QValueList<ParsedStruct*>::ConstIterator it;
+        for (it = structList.begin(); it != structList.end(); ++it)
+            ilastItem = new ClassTreeStructItem(lastItem, ilastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
@@ -155,13 +149,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add functions
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Functions"));
         ilastItem = 0;
-        QList<ParsedMethod> *methodList = scope->getSortedMethodList();
-        for ( ParsedMethod *pMethod = methodList->first();
-              pMethod != 0;
-              pMethod = methodList->next() ) {
-            ilastItem = new ClassTreeMethodItem(lastItem, ilastItem, pMethod);
-        }
-        delete methodList;
+        QValueList<ParsedMethod*> methodList = scope->getSortedMethodList();
+        QValueList<ParsedMethod*>::ConstIterator it;
+        for (it = methodList.begin(); it != methodList.end(); ++it)
+            ilastItem = new ClassTreeMethodItem(lastItem, ilastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
@@ -170,13 +161,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add attributes
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Variables"));
         ilastItem = 0;
-        QList<ParsedAttribute> *attrList = scope->getSortedAttributeList();
-        for ( ParsedAttribute *pAttr = attrList->first();
-              pAttr != 0;
-              pAttr = attrList->next() ) {
-            ilastItem = new ClassTreeAttrItem(lastItem, ilastItem, pAttr);
-        }
-        delete attrList;
+        QValueList<ParsedAttribute*> attrList = scope->getSortedAttributeList();
+        QValueList<ParsedAttribute*>::ConstIterator it;
+        for (it = attrList.begin(); it != attrList.end(); ++it)
+            ilastItem = new ClassTreeAttrItem(lastItem, ilastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
@@ -185,13 +173,10 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add namespaces
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Namespaces"));
         ilastItem = 0;
-        QList<ParsedScopeContainer> *scopeList = scope->getSortedScopeList();
-        for ( ParsedScopeContainer *pScope = scopeList->first();
-              pScope != 0;
-              pScope = scopeList->next() ) {
-            ilastItem = new ClassTreeScopeItem(lastItem, ilastItem, pScope);
-        }
-        delete scopeList;
+        QValueList<ParsedScopeContainer*> scopeList = scope->getSortedScopeList();
+        QValueList<ParsedScopeContainer*>::ConstIterator it;
+        for (it = scopeList.begin(); it != scopeList.end(); ++it)
+            ilastItem = new ClassTreeScopeItem(lastItem, ilastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
@@ -213,17 +198,16 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     
     // Global namespace?
     
-    QList<ParsedScopeContainer> *scopeList = m_part->classStore()->globalContainer.getSortedScopeList();
-    for (ParsedScopeContainer *pScope = scopeList->first(); pScope != 0; pScope = scopeList->next()) {
-        lastItem = new ClassTreeScopeItem(this, lastItem, pScope);
+    QValueList<ParsedScopeContainer*> scopeList = m_part->classStore()->globalContainer.getSortedScopeList();
+    QValueList<ParsedScopeContainer*>::ConstIterator it;
+    for (it = scopeList.begin(); it != scopeList.end(); ++it) {
+        lastItem = new ClassTreeScopeItem(this, lastItem, *it);
         if (fromScratch)
             lastItem->setOpen(true);
     }
-    delete scopeList;
 
     if (!fromScratch)
         setTreeState(oldTreeState);
 }
-
 
 #include "classviewwidget.moc"

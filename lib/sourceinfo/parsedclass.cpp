@@ -390,10 +390,9 @@ bool ParsedClass::hasVirtual()
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedMethod> *ParsedClass::getSortedSignalList()
+QValueList<ParsedMethod*> ParsedClass::getSortedSignalList()
 {
-    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
-    retVal->setAutoDelete( false );
+    QValueList<ParsedMethod*> retVal;
 
     QStringList srted;
 
@@ -409,7 +408,7 @@ QPtrList<ParsedMethod> *ParsedClass::getSortedSignalList()
 
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
-        retVal->append( getSignalByNameAndArg(*it) );
+        retVal.append( getSignalByNameAndArg(*it) );
 
     return retVal;
 }
@@ -424,10 +423,9 @@ QPtrList<ParsedMethod> *ParsedClass::getSortedSignalList()
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedMethod> *ParsedClass::getSortedSlotList()
+QValueList<ParsedMethod*> ParsedClass::getSortedSlotList()
 {
-    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
-    retVal->setAutoDelete( false );
+    QValueList<ParsedMethod*> retVal;
 
     QStringList srted;
 
@@ -443,9 +441,7 @@ QPtrList<ParsedMethod> *ParsedClass::getSortedSlotList()
 
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
-        {
-            retVal->append( getSlotByNameAndArg(*it) );
-        }
+        retVal.append( getSlotByNameAndArg(*it) );
 
     return retVal;
 }
@@ -460,16 +456,16 @@ QPtrList<ParsedMethod> *ParsedClass::getSortedSlotList()
  * Returns:
  *   QPtrList<ParsedMethod> *  The list.
  *-----------------------------------------------------------------*/
-QPtrList<ParsedMethod> *ParsedClass::getVirtualMethodList()
+QValueList<ParsedMethod*> ParsedClass::getVirtualMethodList()
 {
-    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
+    QValueList<ParsedMethod*> retVal;
 
     for ( methodIterator.toFirst();
           methodIterator.current();
           ++methodIterator )
         {
             if ( methodIterator.current()->isVirtual() )
-                retVal->append( methodIterator.current() );
+                retVal.append( methodIterator.current() );
         }
 
     return retVal;

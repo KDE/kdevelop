@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");
   aboutData.addAuthor("Dimitri van Heesch", "doxywizard", "dimitri@stack.nl");
   aboutData.addAuthor("Harald Fernengel", "Qt 3 port, patches", "harry@kdevelop.org");
-  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion", "<raggi@cli.di.unipi.it>");
+  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "raggi@cli.di.unipi.it");
+  aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
   KCmdLineArgs::init(argc, argv, &aboutData);
 
   KApplication app;

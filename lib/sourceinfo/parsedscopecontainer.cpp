@@ -163,7 +163,7 @@ void ParsedScopeContainer::removeScope( const QString &aName )
  * Returns:
  *   A sorted list of scopes.
  *-----------------------------------------------------------------*/
-QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
+QValueList<ParsedScopeContainer*> ParsedScopeContainer::getSortedScopeList()
 {
     return getSortedDictList<ParsedScopeContainer>( scopes, useFullPath() );
 }
@@ -179,7 +179,7 @@ QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
  * Returns:
  *   A list of scopenames.
  *-----------------------------------------------------------------*/
-QStringList *ParsedScopeContainer::getSortedScopeNameList()
+QStringList ParsedScopeContainer::getSortedScopeNameList()
 {
     return getSortedIteratorNameList<ParsedScopeContainer>( scopeIterator );
 }

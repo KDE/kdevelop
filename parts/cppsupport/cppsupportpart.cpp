@@ -47,6 +47,7 @@
 #include "classparser.h"
 #include "addclassmethoddlg.h"
 #include "addclassattributedlg.h"
+#include "cppnewclassdlg.h"
 #include "cppcodecompletion.h"
 
 // daniel
@@ -110,6 +111,12 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
     action->setStatusText( i18n("Type of current expression") );
     action->setWhatsThis( i18n("Type of current expression.") );
     action->setEnabled(false);
+
+    action = new KAction(i18n("New class..."), "classnew", 0,
+                         this, SLOT(slotNewClass()),
+                         actionCollection(), "project_newclass");
+    action->setStatusText( i18n("Generate a new class") );
+    action->setWhatsThis( i18n("Generate a new class") );
 
     m_pParser      = 0;
     m_pCompletion  = 0;
@@ -625,8 +632,10 @@ KDevLanguageSupport::Features CppSupportPart::features()
 }
 
 
-void CppSupportPart::newClass()
+void CppSupportPart::slotNewClass()
 {
+    CppNewClassDialog dlg;
+    dlg.exec();
 }
 
 

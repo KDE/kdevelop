@@ -40,19 +40,17 @@ KPopupMenu *ClassToolWidget::createPopup()
 }
 
 
-void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedClass> *classList)
+void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QValueList<ParsedClass*> classList)
 {
     ClassTreeItem *root = new ClassTreeClassItem(this, 0, parsedClass);
     
     ClassTreeItem *lastItem = 0;
-    
-    for ( ParsedClass *pClass = classList->first();
-          pClass != 0;
-          pClass = classList->next() )
-        {
-            lastItem = new ClassTreeClassItem(root, lastItem, pClass);
-            lastItem->setExpandable(false);
-        }
+
+    QValueList<ParsedClass*>::ConstIterator it;
+    for (it = classList.begin(); it != classList.end(); ++it) {
+        lastItem = new ClassTreeClassItem(root, lastItem, *it);
+        lastItem->setExpandable(false);
+    }
     
     if (!root->firstChild())
         root->setExpandable(false);
@@ -61,20 +59,18 @@ void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<Pars
 }
 
 
-void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedParent> *parentList)
+void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, const QPtrList<ParsedParent> &parentList)
 {
     ClassTreeItem *root = new ClassTreeClassItem(this, 0, parsedClass);
     
     ClassTreeItem *lastItem = 0;
-    
-    for( ParsedParent *pParent = parentList->first();
-         pParent != 0;
-         pParent = parentList->next() )
-        {
-            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name());
-            lastItem = new ClassTreeClassItem(root, lastItem, parentClass);
-            lastItem->setExpandable(false);
-        }
+
+    QPtrListIterator<ParsedParent> it(parentList);
+    for (; it.current(); ++it) {
+        ParsedClass *parentClass = m_part->classStore()->getClassByName((*it)->name());
+        lastItem = new ClassTreeClassItem(root, lastItem, parentClass);
+        lastItem->setExpandable(false);
+    }
     
     if (!root->firstChild())
         root->setExpandable(false);
@@ -89,15 +85,12 @@ void ClassToolWidget::addClassAndAttributes(ParsedClass *parsedClass, PIAccess f
 
     ClassTreeItem *ilastItem = 0;
     
-    QList<ParsedAttribute> *attrList = parsedClass->getSortedAttributeList();
-    for ( ParsedAttribute *pAttr = attrList->first();
-          pAttr != 0;
-          pAttr = attrList->next() )
-        {
-            if (filter == (PIAccess)-1 || filter == pAttr->access())
-                ilastItem = new ClassTreeAttrItem(*lastItem, ilastItem, pAttr);
-        }
-    delete attrList;
+    QValueList<ParsedAttribute*> attrList = parsedClass->getSortedAttributeList();
+    QValueList<ParsedAttribute*>::ConstIterator it;
+    for (it = attrList.begin(); it != attrList.end(); ++it) {
+        if (filter == (PIAccess)-1 || filter == (*it)->access())
+            ilastItem = new ClassTreeAttrItem(*lastItem, ilastItem, *it);
+    }
 
     if (!(*lastItem)->firstChild())
         (*lastItem)->setExpandable(false);
@@ -112,15 +105,12 @@ void ClassToolWidget::addClassAndMethods(ParsedClass *parsedClass, PIAccess filt
     
     ClassTreeItem *ilastItem = 0;
     
-    QList<ParsedMethod> *methodList = parsedClass->getSortedMethodList();
-    for ( ParsedMethod *pMethod = methodList->first();
-          pMethod != 0;
-          pMethod = methodList->next() )
-        {
-            if (filter == (PIAccess)-1 || filter == pMethod->access())
-                ilastItem = new ClassTreeMethodItem(*lastItem, ilastItem, pMethod);
-        }
-    delete methodList;
+    QValueList<ParsedMethod*> methodList = parsedClass->getSortedMethodList();
+    QValueList<ParsedMethod*>::ConstIterator it;
+    for (it = methodList.begin(); it != methodList.end(); ++it) {
+        if (filter == (PIAccess)-1 || filter == (*it)->access())
+            ilastItem = new ClassTreeMethodItem(*lastItem, ilastItem, *it);
+    }
     
     if (!(*lastItem)->firstChild())
         (*lastItem)->setExpandable(false);

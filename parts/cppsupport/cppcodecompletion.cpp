@@ -650,73 +650,63 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
         return entryList;
     }
 
-    QList< ParsedMethod >*    pMethodList;
-    QList< ParsedAttribute >* pAttributeList;
-    QList< ParsedMethod >*    pTmpList;
-    // creating all now
-    ParsedMethod*    pMethod;
-    ParsedAttribute* pAttr;
-    ParsedArgument*  pArg;
-
     // Load the methods, slots, signals of the current class and its parents into the list
-    pMethodList = pClass->getSortedMethodList( );
+    QValueList<ParsedMethod*> methodList;
+    QValueList<ParsedMethod*>::ConstIterator methodIt;
 
-    // add slots to pMethodList
-    pTmpList = pClass->getSortedSlotList( );
-    for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ){
-        pMethodList->append( pMethod );
-    }
-
-    // add signals to pMethodList
-    pTmpList = pClass->getSortedSignalList( );
-    for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ){
-        pMethodList->append( pMethod );
-    }
+    methodList = pClass->getSortedMethodList( );
+    methodList += pClass->getSortedSlotList( );
+    methodList += pClass->getSortedSignalList( );
 
     // get parents of all methods and add them to pMethodList
-    pMethodList = getParentMethodListForClass( pClass, pMethodList );
+    getParentMethodListForClass( pClass, &methodList );
 
     // create the completion list
-    for( pMethod = pMethodList->first( ); pMethod != 0; pMethod = pMethodList->next( ) ){
+    for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
         KTextEditor::CompletionEntry entry;
 
         // we should decide if return-types have to be shown and possibly truncate them
         // ToDo: should it be configurable ? maybe showing the return-type or not ?
         // is not that tricky :)
-        if( pMethod->type( ).length( ) > 7 )
-            entry.prefix = pMethod->type( ).left( 4 ) + "...";
+        if( (*methodIt)->type( ).length( ) > 7 )
+            entry.prefix = (*methodIt)->type( ).left( 4 ) + "...";
         else
-            entry.prefix = pMethod->type( );
+            entry.prefix = (*methodIt)->type( );
 
-        entry.text   = pMethod->name( ) + "(";
+        entry.text   = (*methodIt)->name( ) + "(";
 
         // creating postfix-text (attributes) which is not displayed when a selection was made
         QString text;
-        for( pArg = pMethod->arguments.first( ); pArg != 0; pArg = pMethod->arguments.next( ) ){
-            if( pArg != pMethod->arguments.getFirst( ) )
+        for( ParsedArgument *pArg = (*methodIt)->arguments.first( );
+             pArg != 0;
+             pArg = (*methodIt)->arguments.next( ) ){
+            if( pArg != (*methodIt)->arguments.getFirst( ) )
                 text += ", ";
             text += pArg->toString( );
         }
         text += ")";
         entry.postfix = text;
-	m_CHCommentList.append( pMethod->comment( ) );
+	m_CHCommentList.append( (*methodIt)->comment( ) );
 
         entryList << entry;
     }
 
     // Load the attributes of the current class and its parents into the list
-    pAttributeList = pClass->getSortedAttributeList( );
-    pAttributeList = getParentAttributeListForClass( pClass, pAttributeList );
+    QValueList<ParsedAttribute*> attrList;
+    QValueList<ParsedAttribute*>::ConstIterator attrIt;
 
+    attrList = pClass->getSortedAttributeList( );
+    getParentAttributeListForClass( pClass, &attrList );
+    
     // trying how it looks like - symbol needed ?
     KTextEditor::CompletionEntry entry;
     entry.text = "--- attributes";
     entryList << entry;
-    for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ){
+    for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
         KTextEditor::CompletionEntry entry;
-        entry.text = pAttr->name( );
+        entry.text = (*attrIt)->name( );
         entry.postfix = "";
-	m_CHCommentList.append( pAttr->name( ) );
+	m_CHCommentList.append( (*attrIt)->name( ) );
         entryList << entry;
     }
 
@@ -732,33 +722,28 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
     if( pScope ){
         ParsedClass* pClass = pScope->getClassByName( strClass );
         if ( pClass ){
-            QList<ParsedMethod>*    pMethodList;
-            QList<ParsedAttribute>* pAttributeList;
-            ParsedMethod*           pMethod;
-            ParsedAttribute*        pAttr;
-
             // Load the methods, slots, signals of the current class and its parents into the list
-            pMethodList = pClass->getSortedMethodList( );
-            QList<ParsedMethod>* pTmpList = pClass->getSortedSlotList( );
+            QValueList<ParsedMethod*> methodList, methodTmpList;
+            QValueList<ParsedMethod*>::ConstIterator methodIt;
 
-            for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ) {
+            methodList = pClass->getSortedMethodList( );
+
+            methodTmpList = pClass->getSortedSlotList( );
+            for (methodIt = methodTmpList.begin(); methodIt != methodTmpList.end(); ++methodIt) {
                 // trying something
-                if( pMethod->isStatic( ) )
-                    pMethodList->append( pMethod );
+                if( (*methodIt)->isStatic( ) )
+                    methodList.append(*methodIt);
                 else
-                    cerr << "rejecting: '" << pMethod->name( ) << "'" << endl;
+                    kdDebug() << "rejecting: '" << (*methodIt)->name( ) << "'" << endl;
             }
 
-            pTmpList = pClass->getSortedSignalList( );
-            for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ) {
-                pMethodList->append ( pMethod );
-            }
+            methodList += pClass->getSortedSignalList( );
+            getParentMethodListForClass( pClass, &methodList );
 
-            pMethodList = getParentMethodListForClass( pClass, pMethodList );
-            for( pMethod = pMethodList->first( ); pMethod != 0; pMethod = pMethodList->next( ) ) {
+            for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
                 KTextEditor::CompletionEntry entry;
-                entry.text = pMethod->name();
-		m_CHCommentList.append( pMethod->comment( ) );
+                entry.text = (*methodIt)->name();
+		m_CHCommentList.append( (*methodIt)->comment( ) );
                 entry.postfix = "()";
                 entryList << entry;
             }
@@ -768,20 +753,23 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
             entryList << entry;
 
             // Load the attributes of the current class and its parents into the list
-            pAttributeList = pClass->getSortedAttributeList( );
-            pAttributeList = getParentAttributeListForClass( pClass, pAttributeList );
+            QValueList<ParsedAttribute*> attrList;
+            QValueList<ParsedAttribute*>::ConstIterator attrIt;
 
-            for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ) {
-                if( pAttr->isStatic( ) ){
+            attrList = pClass->getSortedAttributeList( );
+            getParentAttributeListForClass( pClass, &attrList );
+
+            for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
+                if( (*attrIt)->isStatic( ) ){
                     KTextEditor::CompletionEntry entry;
-                    entry.prefix = pAttr->type( );
-                    entry.text = pAttr->name();
-		    m_CHCommentList.append( pAttr->comment( ) );
+                    entry.prefix = (*attrIt)->type( );
+                    entry.text = (*attrIt)->name();
+		    m_CHCommentList.append( (*attrIt)->comment( ) );
                     // needed ? entry.postfix = "";
                     entryList << entry;
                 }
                 else
-                    cerr << "rejecting: '" << pAttr->name( ) << "'" << endl;
+                    kdDebug() << "rejecting: '" << (*attrIt)->name( ) << "'" << endl;
             }
         }
     }
@@ -798,12 +786,13 @@ CppCodeCompletion::getEntryListForNamespace( const QString& strNamespace )
     ParsedScopeContainer* pScope = m_pCCStore->getScopeByName( strNamespace );
 
     if( pScope ){
-	QList< ParsedClass >* pClassList = pScope->getSortedClassList( );
-
-	for( ParsedClass* pClass = pClassList->first( ); pClass != 0; pClass = pClassList->next( ) ){
+	QValueList<ParsedClass*> classList = pScope->getSortedClassList( );
+        QValueList<ParsedClass*>::ConstIterator classIt;
+        
+        for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
 	    KTextEditor::CompletionEntry entry;
-	    entry.text = pClass->name( );
-	    m_CHCommentList.append( pClass->comment( ) );
+	    entry.text = (*classIt)->name( );
+	    m_CHCommentList.append( (*classIt)->comment( ) );
 	    // needed ? entry.postfix = "";
 	    entryList << entry;
 	}
@@ -816,20 +805,19 @@ QValueList< KTextEditor::CompletionEntry >
 CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
 {
     QValueList< KTextEditor::CompletionEntry > entryList;
-    QList< ParsedAttribute >*              pAttributeList;
-    ParsedAttribute*                       pAttr;
 
     ParsedScopeContainer* pScope = &m_pCCStore->globalContainer;
     if( pScope ){
 
         ParsedStruct* pStruct = pScope->getStructByName( strStruct );
         if ( pStruct ){
+            QValueList<ParsedAttribute*> attrList = pStruct->getSortedAttributeList();
+            QValueList<ParsedAttribute*>::ConstIterator attrIt;
 
-            pAttributeList = pStruct->getSortedAttributeList( );
-            for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ) {
+            for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
                 KTextEditor::CompletionEntry entry;
-                entry.text = pAttr->name( );
-		m_CHCommentList.append( pAttr->comment( ) );
+                entry.text = (*attrIt)->name( );
+		m_CHCommentList.append( (*attrIt)->comment( ) );
                 // needed ? entry.postfix = "";
                 entryList << entry;
             }
@@ -839,66 +827,42 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
     return entryList;
 }
 
-QList< ParsedMethod >*
-CppCodeCompletion::getParentMethodListForClass( ParsedClass* pClass, QList< ParsedMethod >* pList )
+void
+CppCodeCompletion::getParentMethodListForClass( ParsedClass* pClass, QValueList<ParsedMethod*> *pList)
 {
-    ParsedMethod* pMethod;
-    QList< ParsedParent > parentList = pClass->parents;
+    QPtrList< ParsedParent > parentList = pClass->parents;
 
     for( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
         pClass = m_pCCStore->getClassByName( pPClass->name( ) );
 
         if ( pClass ){
 
-            QList< ParsedMethod >* pTmpList = pClass->getSortedMethodList( );
-            for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ) {
-                pList->append( pMethod );
-            }
-
-            pTmpList = pClass->getSortedSlotList( );
-            for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ) {
-                pList->append( pMethod );
-            }
-
-            pTmpList = pClass->getSortedSignalList( );
-            for( pMethod = pTmpList->first( ); pMethod != 0; pMethod = pTmpList->next( ) ) {
-                pList->append( pMethod );
-            }
-
-            pList = getParentMethodListForClass( pClass, pList );
+            *pList += pClass->getSortedMethodList( );
+            *pList += pClass->getSortedSlotList( );
+            *pList += pClass->getSortedSignalList( );
+            getParentMethodListForClass(pClass, pList);
         }
         else {
             // TODO: look in ClassStore for Namespace classes
         }
     }
-
-    return pList;
 }
 
-QList< ParsedAttribute >*
-CppCodeCompletion::getParentAttributeListForClass( ParsedClass* pClass, QList< ParsedAttribute >* pList )
+void
+CppCodeCompletion::getParentAttributeListForClass( ParsedClass* pClass, QValueList<ParsedAttribute*> *pList )
 {
-    ParsedAttribute*          pAttribute;
-    QList< ParsedAttribute >* pTmpList;
-
-    QList< ParsedParent > parentList = pClass->parents;
+    QPtrList< ParsedParent > parentList = pClass->parents;
     for( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
 
         pClass = m_pCCStore->getClassByName( pPClass->name( ) );
         if ( pClass ) {
-            pTmpList = pClass->getSortedAttributeList( );
-            for( pAttribute = pTmpList->first( ); pAttribute != 0; pAttribute = pTmpList->next( ) ) {
-                pList->append( pAttribute );
-            }
-
-            pList = getParentAttributeListForClass( pClass, pList );
+            *pList += pClass->getSortedAttributeList( );
+            getParentAttributeListForClass( pClass, pList );
         }
         else {
             // TODO: look in ClassStore for Namespace classes
         }
     }
-
-    return pList;
 }
 
 QString
@@ -1361,14 +1325,14 @@ CppCodeCompletion::getTypeOfMethod( ParsedClass* pClass, const QString& name )
         return QString::null;
     }
 
-    QList<ParsedMethod>* pMethodList = pClass->getMethodByName( name );
-    if( pMethodList->count() != 0 ){
+    QValueList<ParsedMethod*> methodList = pClass->getMethodByName( name );
+    if( methodList.count() != 0 ){
         // TODO: check for method's arguments
-        QString type = pMethodList->at( 0 )->type();
+        QString type = (*methodList.begin())->type();
         return purify( type );
     }
 
-    QList<ParsedParent> parentList = pClass->parents;
+    QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
         pClass = m_pCCStore->getClassByName( pParent->name() );
         if( !pClass )
@@ -1396,7 +1360,7 @@ CppCodeCompletion::getTypeOfAttribute( ParsedClass* pClass, const QString& name 
         return purify( type );
     }
 
-    QList<ParsedParent> parentList = pClass->parents;
+    QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
         ParsedClass* pClass;
         pClass = m_pCCStore->getClassByName( pParent->name() );
@@ -1414,97 +1378,67 @@ CppCodeCompletion::getTypeOfAttribute( ParsedClass* pClass, const QString& name 
 
 QStringList CppCodeCompletion::getMethodListForClass( QString strClass, QString strMethod )
 {
-     QStringList functionList;
-
      ParsedClass* pClass = m_pCCStore->getClassByName( strClass );
      if( !pClass )
          pClass = m_pStore->getClassByName ( strClass );
-     if ( pClass )
-     {
-         QList<ParsedMethod>* pMethodList;
+     if ( !pClass )
+         return QStringList();
+     
+     QStringList functionList;
 
-         // Load the methods, slots, signals of the current class and its parents into the list
-         pMethodList = pClass->getSortedMethodList();
+     // Load the methods, slots, signals of the current class and its parents into the list
+     QValueList<ParsedMethod*> methodList;
+     QValueList<ParsedMethod*>::ConstIterator it;
 
-         QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
-         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-         {
-             if( pMethod->name() == strMethod ){
-                 QString s;
-                 s = pMethod->asString();
-                 functionList << s;
-             }
-         }
+     methodList = pClass->getSortedMethodList();
+     for (it = methodList.begin(); it != methodList.end(); ++it)
+         if ((*it)->name() == strMethod)
+             functionList << (*it)->asString();
 
-         pTmpList = pClass->getSortedSlotList();
-         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-         {
-             if( pMethod->name() == strMethod ){
-                 QString s;
-                 s = pMethod->asString();
-                 functionList << s;
-             }
-         }
+     methodList = pClass->getSortedSlotList();
+     for (it = methodList.begin(); it != methodList.end(); ++it)
+         if ((*it)->name() == strMethod)
+             functionList << (*it)->asString();
 
-         pTmpList = pClass->getSortedSignalList();
-         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-         {
-             if( pMethod->name() == strMethod ){
-                 QString s;
-                 s = pMethod->asString();
-                 functionList << s;
-             }
-         }
+     methodList = pClass->getSortedSignalList();
+     for (it = methodList.begin(); it != methodList.end(); ++it)
+         if ((*it)->name() == strMethod)
+             functionList << (*it)->asString();
 
-         getParentMethodListForClass( pClass, strMethod, functionList );
+     getParentMethodListForClass( pClass, strMethod, &functionList );
 
-     }
      return functionList;
 }
 
 void CppCodeCompletion::getParentMethodListForClass( ParsedClass* pClass,
                                                      QString strMethod,
-                                                     QStringList& methodList )
+                                                     QStringList *functionList )
 {
-    QList<ParsedParent> parentList = pClass->parents;
-
+    QPtrList<ParsedParent> parentList = pClass->parents;
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
         pClass = m_pStore->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
-            QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
-            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-            {
-                if( pMethod->name() == strMethod ){
-                    QString s;
-                    s = pMethod->asString();
-                    methodList << s;
-                }
-            }
-
-            pTmpList = pClass->getSortedSlotList();
-            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-            {
-                if( pMethod->name() == strMethod ){
-                    QString s;
-                    s = pMethod->asString();
-                    methodList << s;
-                }
-            }
-
-            pTmpList = pClass->getSortedSignalList();
-            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-            {
-                if( pMethod->name() == strMethod ){
-                    QString s;
-                    s = pMethod->asString();
-                    methodList << s;
-                }
-            }
-
-            getParentMethodListForClass ( pClass, strMethod, methodList );
+            QValueList<ParsedMethod*> methodList;
+            QValueList<ParsedMethod*>::ConstIterator it;
+            
+            methodList = pClass->getSortedMethodList();
+            for (it = methodList.begin(); it != methodList.end(); ++it)
+                if ((*it)->name() == strMethod)
+                    (*functionList) << (*it)->asString();
+            
+            methodList = pClass->getSortedSlotList();
+            for (it = methodList.begin(); it != methodList.end(); ++it)
+                if ((*it)->name() == strMethod)
+                    (*functionList) << (*it)->asString();
+            
+            methodList = pClass->getSortedSignalList();
+            for (it = methodList.begin(); it != methodList.end(); ++it)
+                if ((*it)->name() == strMethod)
+                    (*functionList) << (*it)->asString();
+            getParentMethodListForClass ( pClass, strMethod, functionList );
         }
         /*else
           {

@@ -45,14 +45,4 @@ void AppOutputWidget::childFinished(bool normal, int status)
     insertItem(new ProcessListBoxItem(s, t));
 }
 
-#if 0
-void AppOutputWidget::stopButtonClicked()
-{
-    if (isRunning()) {
-        killJob();
-        insertItem(i18n("Killed process."));
-    }
-}
-#endif
-
 #include "appoutputwidget.moc"
