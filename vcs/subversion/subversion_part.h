@@ -55,7 +55,9 @@ signals:
 private slots:
 		void contextMenu( QPopupMenu *popup, const Context *context );
 		void slotActionUpdate();
+		void slotActionCommit();
 		void slotUpdate();
+		void slotCommit();
 		void slotProjectClosed();
 		void slotProjectOpened();
 		void projectConfigWidget( KDialogBase *dlg );

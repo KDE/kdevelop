@@ -68,6 +68,24 @@ void subversionCore::update( const KURL::List& list ) {
 	}
 }
 
+void subversionCore::commit( const KURL::List& list ) {
+	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( ! servURL.protocol().startsWith( "svn" ) ) {
+		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug() << "servURL : " << servURL << endl;
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		kdDebug() << "commiting : " << *it << endl;
+		QByteArray parms;
+		QDataStream s( parms, IO_WriteOnly );
+		int cmd = 3;
+		s << cmd << *it;
+		SimpleJob * job = KIO::special(servURL, parms, true);
+		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	}
+}
+
 void subversionCore::checkout() {
 	svn_co checkoutDlg;
 

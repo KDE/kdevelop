@@ -232,6 +232,18 @@ void subversionPart::slotUpdate() {
 	m_impl->update (m_urls);
 }
 
+void subversionPart::slotActionCommit() {
+	kdDebug() << "subversion: slotActionCommit()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->commit( doc );
+	}
+}
+
+void subversionPart::slotCommit() {
+	m_impl->commit (m_urls);
+}
+
 void subversionPart::slotProjectOpened() {
 	kdDebug() << "subversion :projectOpened" << endl;
 /*	if ( g_projectWasJustCreated ) {

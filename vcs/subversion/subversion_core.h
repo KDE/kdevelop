@@ -38,6 +38,7 @@ public:
   ~subversionCore();
 	subversionWidget *processWidget() const;
 	void update( const KURL::List&);
+	void commit( const KURL::List&);
 	void checkout();
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
 
