@@ -37,7 +37,7 @@ KDevPlugin::~KDevPlugin()
 
 QString KDevPlugin::pluginName() const
 {
-    return d->name;
+    return d->pluginName;
 }
 
 QString KDevPlugin::icon() const

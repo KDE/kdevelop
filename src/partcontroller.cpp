@@ -883,7 +883,7 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
   {
     if( it.current() == part ){
         // part already embedded
-	// TODO: raise it
+	activatePart( it.current() );
 	return;
     }
   }

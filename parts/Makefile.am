@@ -1,6 +1,6 @@
 # This is the collection of parts. These are derived from various
 # interfaces in kdevelop/lib/interfaces which are in turn derived
-# from KPart. 
+# from KPart.
 
 #kdevelop: SCRIPTING_SUBDIR = scripting
 #kdevelop: QEDITOR_SUBDIR = qeditor
@@ -13,6 +13,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  debugger distpart konsole astyle tools ctags regexptest doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith history filecreate \
-          texttools javasupport javadebugger valgrind \
+          texttools javasupport javadebugger valgrind knotes \
           $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
 
