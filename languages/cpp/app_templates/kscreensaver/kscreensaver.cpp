@@ -1,10 +1,11 @@
 
 #include <stdlib.h>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kconfig.h>
 #include <qcheckbox.h>
 #include <qcolor.h>
+#include <kapplication.h>
+#include <klocale.h>
+#include <kpushbutton.h>
+#include <kconfig.h>
 #include <kglobal.h>
 #include "%{APPNAMELC}.h"
 #include "%{APPNAMELC}ui.h"

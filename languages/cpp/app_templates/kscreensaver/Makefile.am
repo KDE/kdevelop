@@ -14,6 +14,6 @@ $(templateName).tar.gz:
 	$(GZIP) -9 $(templateName).tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = $(templateName).tar.gz ${templateName}.png
+archive_DATA = $(templateName).tar.gz $(templateName).png
 
 CLEANFILES = *.tar.gz
