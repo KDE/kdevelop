@@ -161,20 +161,25 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    nextChar();
 		    int argIdx = 0;
 		    int argCount = m.argumentList().size();
-		    while( currentChar() && argIdx<argCount ){
+		    while( !currentChar().isNull() && argIdx<argCount ){
 			readWhiteSpaces();
 
 			QString arg = readArgument();
-			map[ m.argumentList()[argIdx] ] = arg;
+
+                        if( !arg.isEmpty() )
+			    map[ m.argumentList()[argIdx] ] = arg;
 
 			if( currentChar() == ',' ){
 			    nextChar();
 			    ++argIdx;
 			} else if( currentChar() == ')' ){
-                            nextChar();
 			    break;
 			}
 		    }
+                    if( currentChar() == ')' ){
+                        // valid macro
+                        nextChar();
+                    }
 		}
 	    }
 
@@ -453,7 +458,9 @@ void Lexer::processDefine( Macro& m )
 	m.setHasArguments( true );
 	nextChar();
 
-	while( currentChar() != ')' ){
+        readWhiteSpaces( false );
+
+	while( !currentChar().isNull() && currentChar() != ')' ){
 	    readWhiteSpaces( false );
 	    int startArg = currentPosition();
 	    readIdentifier();
@@ -462,7 +469,7 @@ void Lexer::processDefine( Macro& m )
 	    m.addArgument( Macro::Argument(arg) );
 
 	    readWhiteSpaces( false );
-	    if( currentChar().isNull() || currentChar() != ',' )
+	    if( currentChar() != ',' )
 		break;
 
 	    nextChar(); // skip ','
@@ -487,7 +494,8 @@ void Lexer::processDefine( Macro& m )
 		break;
 
 	    if( tk.type() != -1 ){
-		body += toString( tk );
+                QString s = toString( tk );
+		body += s;
 	    }
 	}
     }

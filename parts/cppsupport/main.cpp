@@ -163,16 +163,26 @@ int main( int argc, char* argv[] )
     std::cout << std::endl << "parsed " << driver.parsedUnits().size() << " files" << std::endl;
 
     if( showMacros ){
-        std::cout << std::endl << "Macro Table" << std::endl;
-	std::cout << "-----------------------------------------------------------------" << std::endl;
 	QMap<QString, Macro> macros = driver.macros();
+        std::cout << std::endl << "Macro Table #" << macros.size() << std::endl;
+	std::cout << "-----------------------------------------------------------------" << std::endl;
 	QMap<QString, Macro>::Iterator it = macros.begin();
 	while( it != macros.end() ){
 	    Macro m = it.data();
-            if( m.fileName() )
-	       std::cout << "found macro " << m.name() << " in file " << m.fileName();
-            if( m.body() )
-               std::cout << " with body " << m.body();
+            QString fileName = m.fileName();
+            QString name = m.name();
+            QString body = m.body();
+
+
+            if( fileName.isEmpty() )
+               fileName = "<nofile>";
+            if( name.isEmpty() )
+               name = "<noname>";
+            if( body.isEmpty() )
+               body = "<nobody>";
+
+	    std::cout << "found macro " << name << " in file " << fileName << " with body " << body;
+
             std::cout << std::endl;
             ++it;
 	}
