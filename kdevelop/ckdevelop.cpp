@@ -53,6 +53,7 @@
 #include "./dbg/memview.h"
 #include "./dbg/disassemble.h"
 #include "./kwrite/kwdoc.h"
+#include "ktipofday.h"
 
 
 #include <kcombobox.h>
@@ -66,7 +67,7 @@
 #include <krun.h>
 #include <kstddirs.h>
 #include <ktabctl.h>
-#include "ktipofday.h"
+#include <qprogressbar.h>
 
 #include <qclipbrd.h>
 #include <qdir.h>
@@ -74,7 +75,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qfont.h>
-#include <qprogressbar.h>
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qtoolbar.h>
@@ -2785,7 +2785,6 @@ void CKDevelop::slotHelpAPI(){
   if(project){
     QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "-api/index.html";
      //MB
-#ifndef WITH_KDOC2
      if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
      {
        QString api_dir =  prj->getProjectDir() + prj->getProjectName().lower() + "/";
@@ -2800,7 +2799,6 @@ void CKDevelop::slotHelpAPI(){
       }
       api_file=api_dir + "api/html/index.html";
    }
-#endif       
     //MB end
     if(!QFileInfo(api_file).exists()){
 //      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
@@ -4179,11 +4177,8 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_PROJECT_OPTIONS,                       i18n("Sets project and compiler options"))
     ON_STATUS_MSG(ID_PROJECT_MESSAGES,                      i18n("Invokes make to create the message file by extracting all i18n() macros"))
   //MB
-  //  ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API with KDoc"))
-    #ifndef WITH_KDOC2
     ON_STATUS_MSG(ID_PROJECT_DOC_TOOL,                      i18n("Switches the documentation tool (kdoc/doxygen)"))
-    #endif
-    ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API"))
+    ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API Documentation"))
   //MB end
     ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))

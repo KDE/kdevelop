@@ -38,9 +38,9 @@
 #endif
 
 class QSplitter;
-class QProgressBar;
 class QWhatsThis;
 class QTimer;
+class QProgressBar;
 
 class CProject;
 class CConfigA2psDlg;
@@ -786,11 +786,9 @@ private:
   QPopupMenu* file_menu;				
   QPopupMenu* recent_projects_menu;
   //MB
-  #ifndef WITH_KDOC2
   QPopupMenu* doctool_menu;
   enum DOCTOOL {DT_KDOC, DT_DOX};
   int doctool;
-  #endif
   //MB end
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;

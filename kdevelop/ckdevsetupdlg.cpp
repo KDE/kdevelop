@@ -412,7 +412,6 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(create_label, createMsg);
   QWhatsThis::add(create_button, createMsg);
 
-#ifdef WITH_KDOC2
   kdocCheck = new QCheckBox( docOptionsGroup, "kdocCheck" );
   grid2->addWidget(kdocCheck,2,0);
   kdocCheck->setText(i18n("Create also KDOC-reference of your project"));
@@ -429,7 +428,6 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "If this is enabled, on creating the API-Documentation KDoc creates also\n"
                     "a cross reference file of your project into the seleceted kdoc-reference\n"
                     "directory."));
-#endif
 
   // ****************** the Debugger Tab ***************************
 
@@ -748,10 +746,8 @@ void CKDevSetupDlg::slotOkClicked(){
   bool logo=logoCheck->isChecked();
   config->writeEntry("Logo",logo);
 
-#ifdef WITH_KDOC2
   bool kdoc=kdocCheck->isChecked();
   config->writeEntry("CreateKDoc",kdoc);
-#endif
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);

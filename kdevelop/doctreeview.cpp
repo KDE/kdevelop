@@ -367,7 +367,6 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const char *te
     KConfig *config = KGlobal::config();
     config->setGroup("Doc_Location");
 
-#ifdef WITH_KDOC2
     QString doc_dir, idx_path;
     doc_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     idx_path= doc_dir + "/kdoc-reference";
@@ -383,7 +382,6 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const char *te
             idx_filename += ".kdoc";
             setExpandable(QFile::exists(idx_filename) || QFile::exists(idx_filename+".gz"));
         }
-#endif
 
 }
 
@@ -405,7 +403,6 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
           qt_path= qt_path+"/";
         return qt_path + "index.html";
     }
-#ifdef WITH_KDOC2
     QString indexFile;
     indexFile =  kde_path + "/kdoc-reference/" + libname +".kdoc";
     if(!(QFile::exists(indexFile) || QFile::exists(indexFile+".gz"))){
@@ -452,14 +449,6 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
       fclose(f);
       return baseurl+"/index.html";
     }
-#else    
-    else
-    {
-        if (kde_path.right(1) != "/")
-          kde_path= kde_path+"/";
-        return kde_path + libname + "/index.html";
-    }
-#endif
   return "";  // only to kill warnings - IMHO there should be only 1 return at the end - W. Tasin
 }
 
@@ -611,8 +600,7 @@ void DocTreeKDELibsFolder::refresh()
     list.clear();
     list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"), 0));
 
-#ifdef WITH_KDOC2
-    // if we have kdoc2 index files, get the reference directory 
+    // if we have kdoc2 index files, get the reference directory
     QString docu_dir, index_path, libname, msg;
     KConfig* config=KGlobal::config();
     config->setGroup("Doc_Location");
@@ -638,15 +626,6 @@ void DocTreeKDELibsFolder::refresh()
         ++it; // increase the iterator
       }
     }
-#else  // if we don´t have kdoc2, do it the old way
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore"));
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui"));
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile"));
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw"));
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab"));
-    list.append(new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell"));
-//    setOpen(false);
-#endif
 }
 
 

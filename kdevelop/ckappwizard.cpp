@@ -1211,7 +1211,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
 
     if (!index_path.isEmpty() && !link.isEmpty())
       index_path=QString(" -L")+index_path+link;
-  #ifdef WITH_KDOC2
+
     bool bCreateKDoc;
 
     config->setGroup("General Options");
@@ -1222,10 +1222,6 @@ void CKAppWizard::generateEntries(const QString &filename) {
     else
      entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
     index_path+" *.h\n";
-  #else
-     entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-    index_path+" "+nameline->text()+" *.h\n";
-  #endif
 
     entries << "XGETTEXT\n";
     if (CToolClass::searchProgram("xgettext"))

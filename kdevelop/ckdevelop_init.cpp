@@ -48,6 +48,7 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kstdaccel.h>
+#include <qprogressbar.h>
 
 #include "./kwrite/kwdoc.h"
 
@@ -56,7 +57,6 @@
 #include <qclipbrd.h>
 #include <qframe.h>
 #include <qmessagebox.h>
-#include <qprogressbar.h>
 #include <qpopupmenu.h>
 #include <qsplitter.h>
 #include <qtoolbutton.h>
@@ -84,11 +84,7 @@ CKDevelop::CKDevelop() :
   dbg_widget(0),
   dbgInternal(false)
 {
-  //MB
-  #ifndef WITH_KDOC2
-      doctool = DT_KDOC;
-  #endif
-  //MB end
+  doctool = DT_KDOC;
 //  bKDevelop = true;
 
   version = VERSION;
@@ -706,14 +702,12 @@ void CKDevelop::initMenuBar(){
 
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   //MB
-  #ifndef WITH_KDOC2
   doctool_menu = new QPopupMenu();
   doctool_menu->insertItem(i18n("kdoc"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_KDOC);
   doctool_menu->insertItem(i18n("doxygen"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_DOXYGEN);
   doctool_menu->insertSeparator();
   doctool_menu->insertItem(i18n("Configure doxygen"), this, SLOT(slotConfigureDoxygen()),0,ID_PROJECT_DOC_TOOL_CONF_DOXYGEN);
   project_menu->insertItem(i18n("API Doc Tool..."), doctool_menu, ID_PROJECT_DOC_TOOL );
-  #endif
   //MB end
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
@@ -1116,12 +1110,12 @@ void CKDevelop::initStatusBar()
 {
   m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
   statProg = new QProgressBar(m_statusBar,"Progressbar");
-  statProg->setFixedWidth( 100 );             // arbitrary width
-  statProg->setCenterIndicator(true);
-  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
-  statProg->setLineWidth(1);
-  statProg->setMidLineWidth(3);
-  statProg->setBackgroundMode( QWidget::PaletteBackground );
+//  statProg->setFixedWidth( 100 );             // arbitrary width
+//  statProg->setCenterIndicator(true);
+//  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
+//  statProg->setLineWidth(1);
+//  statProg->setMidLineWidth(3);
+//  statProg->setBackgroundMode( QWidget::PaletteBackground );
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
@@ -1524,17 +1518,16 @@ void CKDevelop::initDebugger()
   if (dbgController)
     dbgController->reConfig();
 }
-//MB
-#ifndef WITH_KDOC2
+
 void CKDevelop::slotSwitchDocTool(){
   // kdoc used, can we switch to doxygen ?
   if(doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_KDOC))
   {
   	if(!CToolClass::searchInstProgram("doxygen"))
     {
-   	  KMessageBox::message(0,i18n("Program not found -- doxygen"),
+   	  KMessageBox::error(0,
 			  i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
-							KMessageBox::EXCLAMATION);
+				i18n("Program not found -- doxygen"));
   	  // no doxygen found
   	  return;
     }
@@ -1551,9 +1544,4 @@ void CKDevelop::slotSwitchDocTool(){
 	doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
   doctool = DT_KDOC;
 }
-#else
-void CKDevelop::slotSwitchDocTool()
-{
-}
-#endif
 //MB end

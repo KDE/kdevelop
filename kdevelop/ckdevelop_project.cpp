@@ -550,22 +550,6 @@ void CKDevelop::slotProjectNewClass(){
     QString header_file=dlg.getHeaderFile();
     switchToFile(source_file);
     switchToFile(header_file);
-// added by Alex Kern, Alexander.Kern@saarsoft.de
-//
-/*  QFileInfo header_info(header_file);
-    QFileInfo source_info(source_file);
-    TFileInfo file_info;
-    file_info.rel_name = prj->getSubDir() + source_info.fileName();
-    file_info.type = CPP_SOURCE;
-    file_info.dist = true;
-    file_info.install = false;
-    prj->addFileToProject(prj->getSubDir() + source_info.fileName(),file_info);
-
-    file_info.rel_name = prj->getSubDir() + header_info.fileName();
-    file_info.type = CPP_HEADER;
-    file_info.dist = true;
-    file_info.install = false;
-    prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);*/
     bool new_subdir1, new_subdir2;
     new_subdir1 = addFileToProject(source_file, CPP_SOURCE, false);
     new_subdir2 = addFileToProject(header_file, CPP_HEADER, false);
@@ -888,18 +872,17 @@ void CKDevelop::slotProjectMessages(){
 
 void CKDevelop::slotProjectAPI(){
   //MB
-#ifndef WITH_KDOC2
   if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
   {
 	  QString dir = prj->getProjectDir() + prj->getProjectName().lower() + "/";
 	  QString doxconf =  dir +  "Doxyfile";
  		if(!QFileInfo(doxconf).exists())
    	{
- 		    KMessageBox::message(0, i18n("Error"),
+ 		    KMessageBox::error(0,
  		    						i18n("Doxygen configuration file not found\n"
                          	"Generate a valid one:\n"		
                          	"Project->API Doc Tool->Configure doxygen"),
-                    KMessageBox::EXCLAMATION);
+                         	i18n("Error"));
     		return;
    	}
     slotDebugStop();
@@ -917,130 +900,90 @@ void CKDevelop::slotProjectAPI(){
 	  beep=true;
  	  return;
   }
-#endif
-  //MB end
-  if(!CToolClass::searchProgram("kdoc")){
-    return;
-  }
-  slotDebugStop();
-  showOutputView(true);
-
-  setToolMenuProcess(false);
-  error_parser->toogleOff();
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Creating project API-Documentation..."));
-  messages_widget->clear();
-
-  config->setGroup("Doc_Location");
-  QString idx_path, link;
-  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-          + "/kdoc-reference";
-  if (!idx_path.isEmpty())
-  {
-    QDir d;
-    d.setPath(idx_path);
-    if(!d.exists())
+  else{  // Use KDOC 2.x
+    //MB end
+    if(!CToolClass::searchProgram("kdoc")){
       return;
-    QString libname;
-    const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
-    QFileInfoListIterator it( *fileList ); // iterator
-    QFileInfo *fi; // the current file info
-    while ( (fi=it.current()) ) {  // traverse all kdoc reference files
-      libname=fi->fileName();  // get the filename
-      if(fi->isFile())
-      {
-        libname=fi->baseName();  // get only the base of the filename as library name
-        link+=" -l"+libname;
-      }
-      ++it; // increase the iterator
     }
+    slotDebugStop();
+    showOutputView(true);
+
+    setToolMenuProcess(false);
+    error_parser->toogleOff();
+    slotFileSaveAll();
+    slotStatusMsg(i18n("Creating project API-Documentation..."));
+    messages_widget->clear();
+
+    config->setGroup("Doc_Location");
+    QString idx_path, link;
+    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+            + "/kdoc-reference";
+    if (!idx_path.isEmpty())
+    {
+      QDir d;
+      d.setPath(idx_path);
+      if(!d.exists())
+        return;
+      QString libname;
+      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+      QFileInfoListIterator it( *fileList ); // iterator
+      QFileInfo *fi; // the current file info
+      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
+        libname=fi->fileName();  // get the filename
+        if(fi->isFile())
+        {
+          libname=fi->baseName();  // get only the base of the filename as library name
+          link+=" -l"+libname;
+        }
+        ++it; // increase the iterator
+      }
+    }
+
+    QDir d(prj->getProjectDir());
+    int dirlength = d.absPath().length()+1;
+
+    QString sources;
+    QStrList headerlist(prj->getHeaders());
+    QStrListIterator it(headerlist);
+    for (; it.current(); ++it)
+    {
+      QString file = it.current();
+      file.remove(0, dirlength);
+      sources += file;
+      sources += " ";
+    }
+    QDir::setCurrent(prj->getProjectDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
+    if (!link.isEmpty())
+    {
+      shell_process << ("-L" + idx_path);
+      shell_process << link;
+    }
+
+    bool bCreateKDoc;
+    config->setGroup("General Options");
+    bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+    if (bCreateKDoc)
+     shell_process << QString("-n ")+prj->getProjectName();
+
+    if (!sources.isEmpty())
+        shell_process << sources;
+
+    next_job="fv_refresh";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    beep=true;
   }
-
-//  QDir d(prj->getProjectDir() + prj->getSubDir());
-//  int dirlength = d.absPath().length()+1;
-//
-//  QString sources;
-//  QStrList headerlist(prj->getHeaders());
-//  QStrListIterator it(headerlist);
-//  for (; it.current(); ++it)
-//      {
-//          QString file = it.current();
-//          file.remove(0, dirlength);
-//          sources += file;
-//          sources += " ";
-//      }
-//
-//  shell_process.clearArguments();
-//  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
-//  shell_process << "kdoc";
-//  shell_process << "-p -d '" + prj->getProjectDir() + prj->getSubDir() +  "api'";
-//  if (!link.isEmpty())
-//      {
-//          shell_process << ("-L" + idx_path);
-//          shell_process << link;
-//      }
-
-  QDir d(prj->getProjectDir());
-  int dirlength = d.absPath().length()+1;
-
-  QString sources;
-  QStrList headerlist(prj->getHeaders());
-  QStrListIterator it(headerlist);
-  for (; it.current(); ++it)
-      {
-          QString file = it.current();
-          file.remove(0, dirlength);
-          sources += file;
-          sources += " ";
-      }
-  QDir::setCurrent(prj->getProjectDir());
-  shell_process.clearArguments();
-  shell_process << "kdoc";
-  shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
-  if (!link.isEmpty())
-      {
-          shell_process << ("-L" + idx_path);
-          shell_process << link;
-      }
-/* using the project name in the kdoc call will cause an warning
-   if you have no write permission to the kdoc-reference directory,
-   because kdoc tries to create a cross-reference file "<project_name>.kdoc(.gz)"
-
-   so I implemented a config entry to select this...
-
-   on kdoc 1 there is no possibility to disable this...
-
-   2000/02/26 - W. Tasin
-*/
-#ifdef WITH_KDOC2
-  bool bCreateKDoc;
-
-  config->setGroup("General Options");
-  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
-  if (bCreateKDoc)
-   shell_process << QString("-n ")+prj->getProjectName();
-#else
-  shell_process << prj->getProjectName();
-#endif
-
-  if (!sources.isEmpty())
-      shell_process << sources;
-
-  next_job="fv_refresh";
-  shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-  beep=true;
-
 }
 
 //MB
-#ifndef WITH_KDOC2
-
 #include <vector>
 
 void CKDevelop::slotConfigureDoxygen(){
 	// check for Doxyfile
-	KShellProcess process;
-  QString dir = prj->getProjectDir() + prj->getProjectName().lower() + "/";
+	KProcess process;
+  QString dir = prj->getProjectDir() + prj->getSubDir() + "/";
   QString file= dir + "Doxyfile";
   if(!QFileInfo(file).exists())
   {
@@ -1048,7 +991,7 @@ void CKDevelop::slotConfigureDoxygen(){
 		process.clearArguments();
     process << QString("cd '")+ dir + "' && ";
     process << "doxygen -s -g Doxyfile";
-    process.start(KShellProcess::Block,KShellProcess::AllOutput);
+    process.start(KProcess::Block,KProcess::AllOutput);
  	
     // fill file with default projectname directories, etc.
  	  QFile f( file );
@@ -1095,23 +1038,19 @@ void CKDevelop::slotConfigureDoxygen(){
 	// doxywizard ?
 	if(!CToolClass::searchInstProgram("doxywizard")) // no dialog
 	{
-   	KMessageBox::message(0,i18n("Program not found -- doxywizard "),
+   	KMessageBox::error(0,
 			QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
-							KMessageBox::EXCLAMATION);
+							i18n("Program not found -- doxywizard "));
   	return; 	
 	}
-	process.clearArguments();
-  QString s =  QString("cd '") + dir + "' && ";
+  KProcess	dox_process;
+  QString s =  "cd '" + dir + "' && ";
   s += "doxywizard Doxyfile";
   cerr << s << endl;
- 	process << s;
-  process.start(KShellProcess::DontCare,KShellProcess::AllOutput);
+ 	dox_process << s;
+  dox_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-#else
-void CKDevelop::slotConfigureDoxygen()
-{
-}
-#endif
+
 //MB end
 
 void CKDevelop::slotProjectManual(){

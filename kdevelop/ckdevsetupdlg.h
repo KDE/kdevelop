@@ -71,9 +71,7 @@ private:
   QCheckBox* logoCheck;
   QCheckBox* tipDayCheck;
   QCheckBox* lastProjectCheck;
-#ifdef WITH_KDOC2
   QCheckBox *kdocCheck;
-#endif
 
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;
