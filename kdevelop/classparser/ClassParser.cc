@@ -858,7 +858,9 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
               aClass->addSlot( aMethod );
           }
           else
+          {
             declType = checkClassDecl();
+          
             switch( declType )
             {
               case CP_IS_ATTRIBUTE:
@@ -882,6 +884,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
                 debug( "Found multi value attribute declaration" );
                 break;
             }
+          }
         }
         isStatic=false;
         break;
