@@ -30,7 +30,8 @@ qt_docdirs=""
 ],
 )
 
-qt_docdirs="/usr/doc/qt-doc/html /usr/local/qt/html /usr/local/lib/qt/html /usr/lib/qt/doc/html /usr/X11/lib/qt/html /usr/X11/lib/qt/doc/html /usr/X11R6/share/doc/qt/html"
+qt_docdirs="/usr/lib/qt2/doc/html /usr/doc/qt-doc/html /usr/local/qt/html
+/usr/local/lib/qt/html /usr/lib/qt/doc/html /usr/X11/lib/qt/html /usr/X11/lib/qt/doc/html /usr/X11R6/share/doc/qt/html"
 test -n "$QTDIR" && qt_docdirs="$QTDIR/html $QTDIR/doc/html $QTDIR/doc $qt_docdirs"
 qt_docdirs="$ac_qt_docdirs $qt_docdirs"
 AC_FIND_FILE(classes.html, $qt_docdirs, qt_docdir)
@@ -130,24 +131,6 @@ if test "$enable_docbase" = "yes"; then
 fi
 ])
 
-dnl
-dnl Check whether we use kdoc2
-dnl
-AC_DEFUN(KDEV_CHECK_KDOC2,
-[
-AC_MSG_CHECKING(for kdoc2)
-AC_ARG_ENABLE(kdoc2,
-[  --disable-kdoc2          disable kdoc2 support],
-[
-  enable_kdoc2=$enableval
-],
-enable_kdoc2=yes)
-AC_MSG_RESULT($enable_kdoc2)
-
-if test "$enable_kdoc2" = "yes"; then
-  AC_DEFINE_UNQUOTED(WITH_KDOC2)
-fi
-])
 
 dnl
 dnl Check whether we use parsing on cpp save
