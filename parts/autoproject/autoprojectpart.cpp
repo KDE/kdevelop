@@ -287,10 +287,10 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 {
     partController()->saveAllFiles();
 
-    QFileInfo fi1(dir + "/Makefile");
-    if (!fi1.exists()) {
-        QFileInfo fi2(buildDirectory() + "/configure");
-        if (!fi2.exists()) {
+    QFileInfo fi1();
+    if ( !QFile::exists(dir + "/GNUmakefile") && !QFile::exists(dir + "/makefile")
+         && ! QFile::exists(dir + "/Makefile") ) {
+        if (!QFile::exists(buildDirectory() + "/configure")) {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                               "and no configure script for this project.\n"
                                                               "Run automake & friends and configure first?"));
@@ -384,17 +384,17 @@ void AutoProjectPart::slotMakefilecvs()
     QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
-    cmdline += " -f Makefile.cvs";
     
-    QFileInfo fi(projectDirectory() + "/Makefile.cvs");
-    if (!fi.exists()) {
-        fi.setFile(projectDirectory() + "/autogen.sh");
-        if (!fi.exists()) {
-            KMessageBox::sorry(m_widget, i18n("There is neither a Makefile.cvs file nor an "
-                                              "autogen.sh script in the project directory"));
-            return;
-            cmdline = "autogen.sh";
-        }
+    if (QFile::exists(projectDirectory() + "/Makefile.cvs"))
+        cmdline += " -f Makefile.cvs";
+    else if (QFile::exists(projectDirectory() + "/Makefile.dist"))
+        cmdline += " -f Makefile.dist";
+    else if (QFile::exists(projectDirectory() + "/autogen.sh"))
+        cmdline = "./autogen.sh";
+    else {
+        KMessageBox::sorry(m_widget, i18n("There is neither a Makefile.cvs file nor an "
+                                          "autogen.sh script in the project directory."));
+        return;
     }
 
     QString dircmd = "cd ";
