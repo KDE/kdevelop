@@ -1039,7 +1039,7 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     }
     
     // Add the parent.
-    if( exportit != -1 )
+    if( exportit != -1 && !cname.isEmpty() )
     {
       aParent = new CParsedParent();
       aParent->setName( cname );
