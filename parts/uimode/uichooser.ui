@@ -113,7 +113,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                         <string>Use Tabs</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Some prefer not to have a tabbar and switch between documents using other means. Kate is one example of this.</string>
+                        <string>Some prefer not to have a tab bar and switch between documents using other means. Kate is one example of this.</string>
                     </property>
                     <vbox>
                         <property name="name">
