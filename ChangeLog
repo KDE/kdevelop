@@ -1,3 +1,8 @@
+2000-05-01 Walter Tasin  <tasin@kdevelop.de>
+	* correcting recognition of multi-var-declaration inside a scope
+	* virtual operator functions were not recognized well.
+	* adding suggestion from J. Ansorg <Jockel123@gmx.de>
+
 2000-04-30  Ralf Funken <RFunken@kdevelop.de>
 	* Comitted corrected german tutorial
 	* Comitted 1.2 de.po
@@ -12,6 +17,7 @@
 2000-04-16 Ralf Nolden <rnolden@kdevelop.de>
         * updated kdevelop.pot, de.po and documentation, fixed french
           Makefile.am installation destination
+
 2000-04-16 Sandy Meier <smeier@kdevelop.de>
 	* added a GNOME template to the Application wizard and updated the projectmangement
 
