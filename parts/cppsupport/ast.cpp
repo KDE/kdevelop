@@ -628,3 +628,130 @@ InitDeclaratorListAST::~InitDeclaratorListAST()
 {
 }
 
+// ------------------------------------------------------------------------
+DeclaratorAST::DeclaratorAST()
+    : m_isConstMethod( false )
+{
+    m_ptrOpList.setAutoDelete( true );
+    m_arrayDimensionList.setAutoDelete( true );
+}
+
+DeclaratorAST::~DeclaratorAST()    
+{
+}
+
+DeclaratorAST* DeclaratorAST::subDeclarator()
+{
+    return m_subDeclarator.get();
+}
+
+void DeclaratorAST::setSubDeclarator( DeclaratorAST::Node& subDeclarator )
+{
+    m_subDeclarator = subDeclarator;
+}
+
+NameAST* DeclaratorAST::declaratorId()
+{
+    return m_declaratorId.get();
+}
+
+void DeclaratorAST::setDeclaratorId( NameAST::Node& declaratorId )
+{
+    m_declaratorId = declaratorId;
+}
+
+AST* DeclaratorAST::bitfieldInitialization()
+{
+    return m_bitfieldInitialization.get();
+}
+
+void DeclaratorAST::setBitfieldInitialization( AST::Node& bitfieldInitialization )
+{
+    m_bitfieldInitialization = bitfieldInitialization;
+}
+
+QPtrList<AST> DeclaratorAST::arrayDimensionList()
+{
+    return m_arrayDimensionList;
+}
+
+void DeclaratorAST::addArrayDimension( AST::Node& arrayDimension )
+{
+    if( !arrayDimension.get() )
+        return;
+	
+    m_arrayDimensionList.append( arrayDimension.release() );
+}
+
+AST* DeclaratorAST::parameterDeclarationClause()
+{
+    return m_parameterDeclarationClause.get();
+}
+
+void DeclaratorAST::setParameterDeclarationClause( AST::Node& parameterDeclarationClause )
+{
+    m_parameterDeclarationClause = parameterDeclarationClause;
+}
+
+bool DeclaratorAST::isConstMethod()
+{
+    return m_isConstMethod;
+}
+
+void DeclaratorAST::setIsConstMethod( bool isConstMethod )
+{
+    m_isConstMethod = isConstMethod;
+}
+
+AST* DeclaratorAST::exceptionSpecification()
+{
+    return m_exceptionSpecification.get();
+}
+
+void DeclaratorAST::setExceptionSpecification( AST::Node& exceptionSpecification )
+{
+    m_exceptionSpecification = exceptionSpecification;
+}
+
+QPtrList<AST> DeclaratorAST::ptrOpList()
+{
+    return m_ptrOpList;
+}
+
+void DeclaratorAST::addPtrOp( AST::Node& ptrOp )
+{
+    if( !ptrOp.get() )
+        return;
+	
+    m_ptrOpList.append( ptrOp.release() );
+}
+
+
+// --------------------------------------------------------------------------
+InitDeclaratorAST::InitDeclaratorAST()
+{
+}
+
+InitDeclaratorAST::~InitDeclaratorAST()
+{
+}
+
+DeclaratorAST* InitDeclaratorAST::declarator()
+{
+    return m_declarator.get();
+}
+
+void InitDeclaratorAST::setDeclarator( DeclaratorAST::Node& declarator )
+{
+    m_declarator = declarator;
+}
+
+AST* InitDeclaratorAST::initializer()
+{
+    return m_initializer.get();
+}
+
+void InitDeclaratorAST::setInitializer( AST::Node& initializer )
+{
+    m_initializer = initializer;
+}

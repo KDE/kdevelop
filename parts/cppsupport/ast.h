@@ -493,6 +493,70 @@ private:
     void operator = ( const TypedefAST& source );
 };
 
+class DeclaratorAST: public AST
+{
+public:
+    typedef std::auto_ptr<DeclaratorAST> Node;
+    
+public:
+    DeclaratorAST();
+    virtual ~DeclaratorAST();
+    
+    QPtrList<AST> ptrOpList();
+    void addPtrOp( AST::Node& ptrOp );
+    
+    DeclaratorAST* subDeclarator();
+    void setSubDeclarator( auto_ptr<DeclaratorAST>& subDeclarator );
+    
+    NameAST* declaratorId();
+    void setDeclaratorId( NameAST::Node& declaratorId );
+    
+    AST* bitfieldInitialization();
+    void setBitfieldInitialization( AST::Node& bitfieldInitialization );
+    
+    QPtrList<AST> arrayDimensionList();
+    void addArrayDimension( AST::Node& arrayDimension );
+    
+    AST* parameterDeclarationClause();
+    void setParameterDeclarationClause( AST::Node& parameterDeclarationClause );
+    
+    bool isConstMethod();
+    void setIsConstMethod( bool isConstMethod );
+    
+    AST* exceptionSpecification();
+    void setExceptionSpecification( AST::Node& exceptionSpecification );
+    
+private:
+    QPtrList<AST> m_ptrOpList;
+    auto_ptr<DeclaratorAST> m_subDeclarator;
+    NameAST::Node m_declaratorId;
+    AST::Node m_bitfieldInitialization;
+    QPtrList<AST> m_arrayDimensionList;
+    AST::Node m_parameterDeclarationClause;
+    bool m_isConstMethod;
+    AST::Node m_exceptionSpecification;
+};
+
+class InitDeclaratorAST: public AST
+{
+public:
+    typedef std::auto_ptr<InitDeclaratorAST> Node;
+    
+public:
+    InitDeclaratorAST();
+    virtual ~InitDeclaratorAST();
+    
+    DeclaratorAST* declarator();
+    void setDeclarator( DeclaratorAST::Node& declarator );
+    
+    AST* initializer();
+    void setInitializer( AST::Node& initializer );
+    
+private:
+    DeclaratorAST::Node m_declarator;
+    AST::Node m_initializer;
+};
+
 class TemplateDeclarationAST: public DeclarationAST
 {
 public:

@@ -105,13 +105,13 @@ public /*rules*/ :
     bool parseTemplateArgument( AST::Node& node );
     bool parseTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node );
-    bool parseDeclarator( AST::Node& node );
+    bool parseDeclarator( DeclaratorAST::Node& node );
     bool parseTemplateParameterList( AST::Node& node );
     bool parseTemplateParameter( AST::Node& node );
     bool parseStorageClassSpecifier( AST::Node& node );
     bool parseFunctionSpecifier( AST::Node& node );
     bool parseInitDeclaratorList( InitDeclaratorListAST::Node& node );
-    bool parseInitDeclarator( AST::Node& node );
+    bool parseInitDeclarator( InitDeclaratorAST::Node& node );
     bool parseParameterDeclarationClause( AST::Node& node );
     bool parseCtorInitializer( AST::Node& node );
     bool parsePtrToMember( AST::Node& node );
