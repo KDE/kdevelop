@@ -516,7 +516,7 @@ void DebuggerPart::startDebugger()
     gdbOutputWidget->clear();
     
     controller->slotStart(shell, program);
-//    breakpointWidget->slotSetPendingBPs(); //This sets the breakpoint was again, so when you remove them during
+//    breakpointWidget->slotSetPendingBPs(); //This sets the breakpoints again, so when you remove them during
 					    //a debugging session, the app will still stop at those breakpoints...
 }
 
