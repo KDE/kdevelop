@@ -57,7 +57,7 @@ void KDlgDialogs::refresh(CProject* prj){
     info = prj->getDialogFileInfo(str);
     current_item = treeH->addItem( info.classname,THC_FILE, top_item );
   }
-  treeH->setLastItem( current_item );
+  if (current_item) treeH->setLastItem( current_item );
   
   setOpen(top_item, true);
 }
