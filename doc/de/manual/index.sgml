@@ -102,7 +102,7 @@ Entwicklungswerkzeuge noch einfacher zu benutzen.
 <p>
 KDevelop kann entweder auf der <idx/KDE/ Applikations-Seite (<htmlurl url="http://www.kde.org/current.html"
 name="http://www.kde.org/current.html">) oder auf der KDevelop Homepage (<htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">)
+url="http://www.kdevelop.org" name="http://www.kdevelop.org">)
 bezogen werden. Ebenso ist KDevelop auf Linux-Distributionen vorhanden, wie z.B. SuSE Linux 6.1.
 
 Wir bieten außerdem wöchentliche Snapshots des KDevelop CVS Repositories auf unserer Homepage an für die, die auf dem aktuellen Stand
@@ -112,8 +112,8 @@ KDevelop benötigt werden wie KDoc und KDbg.
 
 Wenn Sie Probleme mit der Compilierung oder Benutzung von KDevelop haben, lesen Sie bitte das Kapitel <ref id="Questions and Answers"
 name="Questions and Answers"> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket enthalten ist. Sollte Ihr Problem nicht
-behandelt sein, tragen Sie sich in die KDevelop Mailingliste <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
-"kdevelop@fara3.cs.uni-potsdam.de"> ein, indem Sie eine Email mit leerer Kopfzeile und "subscribe" als Inhalt an obige Adresse senden.
+behandelt sein, tragen Sie sich in die KDevelop Mailingliste <htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name =
+"kdevelop-request@barney.cs.uni-potsdam.de"> ein, indem Sie eine Email mit leerer Kopfzeile und "subscribe ihrer-email-addresse" als Inhalt an obige Adresse senden.
 Anfragen und Problemberichte sollten sich jedoch nur auf die Benutzung der KDevelop Entwicklungsumgebung beziehen und nicht auf ein
 Implementierungsproblem, das bei der Codierung Ihrer eigenen Applikation entstanden ist.
 
@@ -3464,13 +3464,13 @@ found. After pressing "OK", the dialog's contents is sent to the mailinglist aut
 <bf>Q:</bf> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
 
 <bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailinglist at <htmlurl
-url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">. Send a mail with an empty header and
-"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
+url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name = "kdevelop-request@barney.cs.uni-potsdam.de">. Send a mail with an empty header and
+"subscribe youremailaddress" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
 If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
 the FAQ up to date.
 
-The KDevelop Homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> also contains a mailing-list archive that allows you to browse the
+The KDevelop Homepage at <htmlurl url="http://www.kdevelop.org"
+name="http://www.kdevelop.org"> also contains a mailing-list archive that allows you to browse the
 mails already send by the subscribers, so you should look there first as most problems should have been adressed already by the team or
 other users.
 
