@@ -1,4 +1,7 @@
+c
 c This is the Hello World example
-       print *,'Hello World!'
-       stop
-       end
+c
+       program hello
+       print *,'Hello World!'
+       stop
+       end
