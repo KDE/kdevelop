@@ -203,4 +203,4 @@ void CodeCompletionIfaceImpl::slotCursorPosChanged()
 }
 
 
-// #include "codecompletion_iface_impl.moc"
+#include "codecompletion_iface_impl.moc"
