@@ -39,12 +39,11 @@ void EnvironmentVariablesWidget::addVarClicked()
 void EnvironmentVariablesWidget::editVarClicked()
 {
     AddEnvvarDialog dlg;
-    QListViewItem *item;
-    if (item = listview->selectedItem())
-    {
-        dlg.setvarname(item->text(0));
-        dlg.setvalue(item->text(1));
-    }
+    QListViewItem *item = listview->selectedItem();
+    if (  !item )
+        return;
+    dlg.setvarname(item->text(0));
+    dlg.setvalue(item->text(1));
     if (!dlg.exec())
         return;
 
@@ -65,6 +64,7 @@ EnvironmentVariablesWidget::EnvironmentVariablesWidget(QDomDocument &dom, const 
       m_dom(dom), m_configGroup(configGroup)
 {
     readEnvironment(dom, configGroup);
+    connect( listview, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( editVarClicked() ) );
 }
 
 
@@ -80,7 +80,7 @@ void EnvironmentVariablesWidget::readEnvironment(QDomDocument &dom, const QStrin
 
     DomUtil::PairList list =
         DomUtil::readPairListEntry(dom, m_configGroup, "envvar", "name", "value");
-        
+
     QListViewItem *lastItem = 0;
 
     DomUtil::PairList::ConstIterator it;
