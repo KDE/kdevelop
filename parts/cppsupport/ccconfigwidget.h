@@ -15,6 +15,7 @@
 #include "ccconfigwidgetbase.h"
 
 class CppSupportPart;
+class QButtonGroup;
 
 
 class CCConfigWidget : public CCConfigWidgetBase
@@ -35,6 +36,7 @@ signals:
 
 private:
     CppSupportPart* m_pPart;
+    QButtonGroup *bgCodeHinting;
 };
 
 #endif

@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
@@ -26,6 +27,10 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 {
     m_pPart = part;
 
+    bgCodeHinting = new QButtonGroup;
+    bgCodeHinting->insert(rbSelectView);
+    bgCodeHinting->insert(rbOutputView);
+    
     QDomDocument dom = *m_pPart->projectDom();
     cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/autoprojectpart/codecompletion/enablecc" ) );
 
@@ -51,6 +56,7 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 
 CCConfigWidget::~CCConfigWidget( )
 {
+    delete bgCodeHinting;
 }
 
 void
@@ -90,10 +96,7 @@ CCConfigWidget::accept( )
 void
 CCConfigWidget::slotEnableCH( )
 {
-    if( cbEnableCH->isChecked( ) )
-	bgCodeHinting->setEnabled( true );
-    else
-	bgCodeHinting->setEnabled( false );
+    bgCodeHinting->setEnabled( cbEnableCH->isChecked() );
 }
 
 #include "ccconfigwidget.moc"

@@ -1,167 +1,232 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>Form1</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>584</width>
-            <height>480</height>
+            <height>420</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Code Completion</string>
     </property>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QGroupBox">
+        <property name="name">
             <cstring>GroupBox6</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>30</x>
-                <y>40</y>
-                <width>500</width>
-                <height>80</height>
+                <x>11</x>
+                <y>11</y>
+                <width>562</width>
+                <height>50</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>title</name>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="title">
             <string>Code Completion</string>
         </property>
-        <widget>
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>cbEnableCC</cstring>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>30</y>
-                    <width>180</width>
-                    <height>24</height>
-                </rect>
+            <property name="margin">
+                <number>11</number>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Enable Code Completion</string>
+            <property name="spacing">
+                <number>6</number>
             </property>
-        </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>cbEnableCC</cstring>
+                </property>
+                <property name="text">
+                    <string>Enable Code &amp;Completion</string>
+                </property>
+            </widget>
+        </vbox>
     </widget>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
+    <spacer>
+        <property name="name" stdset="0">
+            <cstring>Spacer73</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Minimum</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>20</width>
+                <height>20</height>
+            </size>
+        </property>
+    </spacer>
+    <spacer>
+        <property name="name" stdset="0">
+            <cstring>Spacer74</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>20</width>
+                <height>20</height>
+            </size>
+        </property>
+    </spacer>
+    <widget class="QGroupBox">
+        <property name="name">
             <cstring>noname</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>30</x>
-                <y>150</y>
-                <width>501</width>
-                <height>210</height>
+                <x>11</x>
+                <y>93</y>
+                <width>562</width>
+                <height>151</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>title</name>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="title">
             <string>Code Hinting</string>
         </property>
-        <widget>
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>cbEnableCH</cstring>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>30</y>
-                    <width>150</width>
-                    <height>24</height>
-                </rect>
+            <property name="margin">
+                <number>11</number>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Enable Code Hinting</string>
+            <property name="spacing">
+                <number>6</number>
             </property>
-        </widget>
-        <widget>
-            <class>QButtonGroup</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>bgCodeHinting</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>40</x>
-                    <y>70</y>
-                    <width>310</width>
-                    <height>100</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>title</name>
-                <string>CodeHinting Options</string>
-            </property>
-            <widget>
-                <class>QRadioButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>rbOutputView</cstring>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>cbEnableCH</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>210</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Show CodeHinting at OutputView</string>
-                </property>
-                <property stdset="1">
-                    <name>checked</name>
-                    <bool>true</bool>
+                <property name="text">
+                    <string>Enable Code &amp;Hinting</string>
                 </property>
             </widget>
-            <widget>
-                <class>QRadioButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>rbSelectView</cstring>
+            <spacer>
+                <property name="name" stdset="0">
+                    <cstring>Spacer72</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>60</y>
-                        <width>210</width>
-                        <height>21</height>
-                    </rect>
+                <property name="orientation">
+                    <enum>Vertical</enum>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Show CodeHinting at ClassView</string>
+                <property name="sizeType">
+                    <enum>Minimum</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="text">
+                    <string>Show Code Hinting in:</string>
                 </property>
             </widget>
-        </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>Layout32</cstring>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QRadioButton" row="1" column="1">
+                        <property name="name">
+                            <cstring>rbSelectView</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Left side</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="0" column="1">
+                        <property name="name">
+                            <cstring>rbOutputView</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Bottom side</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="0">
+                        <property name="name" stdset="0">
+                            <cstring>Spacer75</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <connections>
@@ -169,8 +234,11 @@
         <sender>cbEnableCH</sender>
         <signal>clicked()</signal>
         <receiver>Form1</receiver>
-        <slot>slotEnableCH( )</slot>
+        <slot>slotEnableCH()</slot>
     </connection>
-    <slot access="protected">slotEnableCH( )</slot>
 </connections>
+<slots>
+    <slot access="protected">slotEnableCH( )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
