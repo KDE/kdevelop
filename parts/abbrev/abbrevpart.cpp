@@ -63,7 +63,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     action->setStatusText( i18n("Expand current word") );
     action->setWhatsThis( i18n("Expand current word") );
 
-    action = new KAction( i18n("Expand Abbreviation"), SHIFT + Key_Space,
+    action = new KAction( i18n("Expand Abbreviation"), CTRL + Key_L,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
 
@@ -173,7 +173,7 @@ void AbbrevPart::slotExpandText()
     }
     KTextEditor::ViewCursorInterface *cursoriface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
-    if (!cursoriface) { 
+    if (!cursoriface) {
         kdDebug() << "no viewcursoriface" << endl;
         return;
     }
