@@ -322,7 +322,7 @@ void SubprojectOptionsDialog::buildorderMoveUpClicked()
 
 void SubprojectOptionsDialog::buildorderMoveDownClicked()
 {
-   if (buildorder_listview->currentItem()->nextSibling() == 0) {
+   if (buildorder_listview->currentItem() == 0 || buildorder_listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
         return;
    }
