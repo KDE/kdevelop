@@ -970,20 +970,26 @@ void CKDevelop::slotBuildCompileFile(){
    	}
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
     cerr << QDir::currentDirPath() << endl;
+	  debug("run: %s %s %s.o\n", flags.data(), make_cmd.data(), fileinfo.baseName().data());
 	  process << flags << make_cmd << fileinfo.baseName()+".o";
   }
   else
   {
     QString makefile=actualDir+"/Makefile";
     process << make_cmd;
+	  debug("run: %s ", make_cmd.data());
     if (!QFileInfo(makefile).exists())
     {
       makefile=prj->getProjectDir()+prj->getSubDir()+"Makefile";
       if (!QFileInfo(makefile).exists())
         makefile=prj->getProjectDir()+"Makefile";
       if (QFileInfo(makefile).exists())
-        process << "-f" << makefile;
+      {
+			  process << "-f" << makefile;
+	      debug("-f %s ", makefile.data());
+			}
     }
+	  debug("%s.o\n",fileinfo.baseName().data());
     process << fileinfo.baseName()+".o";
   }
 
@@ -1955,6 +1961,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   process << flags;
   process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
   process << target;
+	debug("run: %s %s %s -f %s %s", flags.data(), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
   
   // why is this beeping business necessary? shouldn't there be a switch?
   // beep = true;
@@ -2012,7 +2019,7 @@ void CKDevelop::slotBuildCleanRebuildAll()
 }
 
 void CKDevelop::RunConfigure(const QString& conf, bool ask){
-	QString args;
+	QString args, shellcommand;
 	
 	if(conf==i18n("(Default)")){ // blddir=srcdir
 		args=prj->getConfigureArgs();
@@ -2053,7 +2060,6 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 			dir.mkdir(vpath);
 		QDir::setCurrent(vpath);
  	}
-  shell_process.clearArguments();
 	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
 	// get all other strings	
   if(conf==i18n("(Default)")){
@@ -2077,21 +2083,25 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
 	}
  	config->setGroup(group);
- 	shell_process << "CPP=\""<< config->readEntry("CPP","cpp")<< "\" ";
- 	shell_process << "CC=\"" << config->readEntry("CC","gcc")<< "\" ";
- 	shell_process << "CXX=\"" << config->readEntry("CXX","g++")<< "\" ";
-	shell_process << "CPPFLAGS=\"" << cppflags << "\" ";
-  shell_process << "CFLAGS=\"" << cflags << "\" ";			
+ 	shellcommand += "CPP=\"" + config->readEntry("CPP","cpp") + "\" ";
+ 	shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
+ 	shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
+	shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
+  shellcommand += "CFLAGS=\"" + cflags + "\" ";			
  	if(prj->getProjectType()=="normal_c"){
- 		 shell_process << "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+ 		 shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
  	}
  	else{
-     shell_process << "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+     shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
  	}
-  shell_process << "LDFLAGS=\"" + ldflags+ "\" " ;
+  shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
 	// the configure script is always in the project directory, no matter where we are
-  shell_process  << prj->getProjectDir() +"/configure "<< args;
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shellcommand += prj->getProjectDir() + "/configure " + args;
+  
+	shell_process.clearArguments();
+	shell_process << shellcommand;
+	debug("run: %s\n", shellcommand.data());
+	shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 
 }
