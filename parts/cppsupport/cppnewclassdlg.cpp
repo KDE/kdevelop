@@ -1278,11 +1278,20 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
         "}\n");
 
   if (childClass)
-    args = "QWidget *parent, const char *name, WFlags f";
+  {
+    argsH = "QWidget *parent = 0, const char *name = 0, WFlags f = 0";
+    argsCpp = "QWidget *parent, const char *name, WFlags f";
+  }
   else if (qobject)
-    args = "QObject *parent, const char *name";
+  {
+    argsH = "QObject *parent = 0, const char *name = 0";
+    argsCpp = "QObject *parent, const char *name";
+  }
   else
-    args = "";
+  {
+    argsH = "";
+    argsCpp = "";
+  }
   QString baseInitializer;
 
   if (childClass && (dlg.baseclasses_view->childCount() == 0))
@@ -1313,7 +1322,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
   constructors.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
   constructors.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  constructors.replace(QRegExp("\\$ARGS\\$"), args);
+  constructors.replace(QRegExp("\\$ARGS\\$"), argsCpp);
 
   
   //remove unnesessary carriadge returns
@@ -1403,7 +1412,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   headerGuard.replace(QRegExp("\\."),"_");
   headerGuard.replace(QRegExp("::"),"_");
   QString includeBaseHeader;
-  if (childClass) // TODO: do this only if this is a Qt class
+  if (childClass && (dlg.baseclasses_view->childCount() == 0)) // TODO: do this only if this is a Qt class
   {
     includeBaseHeader = "#include <qwidget.h>";
   }
@@ -1417,8 +1426,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       if (dlg.baseclasses_view->firstChild()->text(0) != "NSObject")
         includeBaseHeader = "#include "
             + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString("<") : QString("\""))
-            + dlg.baseclasses_view->firstChild()->text(0) 
-            + ".h"
+            + dlg.baseclasses_view->firstChild()->text(3)
             + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString(">") : QString("\""));
   } else
   {
@@ -1426,11 +1434,10 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     while ( it.current() )
     {
       if (!it.current()->text(0).isEmpty())
-        if ((!childClass) || (it.current()->text(0) != "QWidget"))
-          includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + "#include " + 
+//        if ((!childClass) || (it.current()->text(0) != "QWidget"))
+          includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + "#include " +
             (it.current()->text(2).toInt() == 0 ? QString("<") : QString("\""))
-            + it.current()->text(0) + 
-            + ".h"
+            + it.current()->text(3) +
             + (it.current()->text(2).toInt() == 0 ? QString(">") : QString("\""));
       ++it;
     }
@@ -1466,12 +1473,12 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   else if (qobject)
     inheritance += ": public QObject";
     
-  QString constructors = QString(advConstructorsHeader.isNull() ? 
+  QString constructors = QString(advConstructorsHeader.isNull() ?
     QString("    $CLASSNAME$($ARGS$);") : advConstructorsHeader )
     + QString("\n\n    ~$CLASSNAME$();");
 
   constructors.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  constructors.replace(QRegExp("\\$ARGS\\$"), args);
+  constructors.replace(QRegExp("\\$ARGS\\$"), argsH);
     
   QString qobjectStr;
   if (childClass || qobject)
@@ -1483,7 +1490,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     baseclass = dlg.baseclasses_view->firstChild()->text(0);
   //remove unnesessary carriadge returns
   beautifyHeader(classIntf, headerGuard, includeBaseHeader, author, doc, className,
-        baseclass, inheritance, qobjectStr, args,
+        baseclass, inheritance, qobjectStr, argsH,
         header, namespaceBeg, constructors, advH_public, advH_public_slots,
         advH_protected, advH_protected_slots, advH_private, advH_private_slots, namespaceEnd);
     
@@ -1497,7 +1504,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
   classIntf.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
   classIntf.replace(QRegExp("\\$QOBJECT\\$"), qobjectStr);
-  classIntf.replace(QRegExp("\\$ARGS\\$"), args);
+  classIntf.replace(QRegExp("\\$ARGS\\$"), argsH);
   classIntf.replace(QRegExp("\\$FILENAME\\$"), header);
   classIntf.replace(QRegExp("\\$NAMESPACEBEG\\$"), namespaceBeg);
   classIntf.replace(QRegExp("\\$CONSTRUCTORDECLARATIONS\\$"), constructors);
@@ -1521,10 +1528,10 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
 	QStringList fileList;
 
-	if ( project->activeDirectory().isNull() )
+	if ( project->activeDirectory().isEmpty() )
 	{
-		fileList.append ( header );
-		fileList.append ( implementation );
+		fileList.append ( project->projectDirectory() + "/" + header );
+		fileList.append ( project->projectDirectory() + "/" + implementation );
 	}
 	else
 	{

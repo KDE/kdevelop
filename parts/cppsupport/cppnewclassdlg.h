@@ -73,21 +73,21 @@ public:
     
     PListViewItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text ):
 	QListViewItem ( parent, after, text ), m_item(item) {}
-    
+
     PListViewItem ( T item,  QListViewItem * parent, const QString & text ):
 	QListViewItem ( parent, text ), m_item(item) {}
-    
+
     PListViewItem ( T item, QListView * parent, const QString & text ):
 	QListViewItem ( parent, text ), m_item(item) {}
-    
+
     PListViewItem ( T item, QListView * parent, QListViewItem * after, const QString & text ):
 	QListViewItem ( parent, after, text ), m_item(item) {}
-    
+
     T item()
     {
 	return m_item;
     }
-    
+
 private:
     T m_item;
 };
@@ -228,7 +228,8 @@ private:
       bool gtk;
       QStringList namespaces;
       QString namespaceBeg, namespaceEnd;
-      QString args;
+      QString argsH;
+      QString argsCpp;
       
       QString advH_public;
       QString advH_public_slots;
