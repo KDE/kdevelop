@@ -25,7 +25,7 @@
 //#include "ksyntaxhighlighter.h"
 
 CommitDialog::CommitDialog()
-    : QDialog(0, "", true)
+    : QDialog(0, "", true )
 {
     setCaption( i18n("CVS Commit") );
 
@@ -62,6 +62,7 @@ CommitDialog::CommitDialog()
 QStringList CommitDialog::logMessage() const
 {
 	QStringList textLines;
+//	textEdit->setText( "Bla bla bla bla\n" );
 	for (int i=0; i<textEdit->paragraphs(); ++i)
 	{
 		textLines << textEdit->text( i );

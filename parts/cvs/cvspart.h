@@ -83,9 +83,10 @@ private slots:
 	// Called when the user wishes to stop an operation.
 	void slotStopButtonClicked( KDevPlugin* );
 
-	void processExited();
 	void receivedStdout( KProcess*, char*, int );
 	void receivedStderr( KProcess*, char*, int );
+	// Display "cvs diff" results in the diff part (embedded views).
+	void slotDiffFinished();
 
 private:
 	// This implements commit operation: it is reused in several parts.
@@ -102,8 +103,6 @@ private:
 	// Returns true if the file or directory indicated in @p url has been registered in the CVS
 	// (if not, returns false since it avoid performing CVS operation)
 	bool isRegisteredInRepository();
-	// Display "cvs diff" results in the diff part (embedded views).
-	void diffFinished( const QString& diff, const QString& err, const int processExitCode = 0 );
 	// Call this every time a slot for cvs operations starts!! (It will setup the
 	// state (file/dir URL, ...).
 	// It will also display proper error messages so the caller must only exit if
@@ -126,12 +125,14 @@ private:
 	QGuardedPtr<CvsWidget> m_widget;
 	// This is a pointer to the d->form used for collecting data about CVS project creation (used
 	// by the ApplicationWizard in example)
-	CvsForm *form;
+	QGuardedPtr<CvsForm> m_cvsConfigurationForm;
 	// True if invoked from menu, false otherwise (i.e. called from context menu)
-	// Ok this is a very bad hack but I see no other solution for now.
+	// FIXME: Ok this is a very bad hack but I see no other solution for now.
 	bool invokedFromMenu;
 
+	// Shell process reference (i.e. used by 'cvs diff')
 	KProcess* proc;
+	// Buffers for process' standard output and error
 	QString stdOut, stdErr;
 
 	// Actions
@@ -142,6 +143,8 @@ private:
 		*actionRemove,
 		*actionUpdate,
 		*actionReplace;
+
+	QString m_cvsRsh;
 };
 
 #endif

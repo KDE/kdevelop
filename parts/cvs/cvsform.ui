@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>480</height>
+            <width>603</width>
+            <height>476</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,9 +30,92 @@ for your new project</string>
         <property name="spacing">
             <number>6</number>
         </property>
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>Release tag:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="6" column="1">
+            <property name="name">
+                <cstring>release_edit</cstring>
+            </property>
+            <property name="text">
+                <string>start</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Tag that will be associated with initial state</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>repository_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the name of the repository</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>CVS Repository name goes here
+Most of the thime you'll just reuse the project name</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1">
+            <property name="name">
+                <cstring>vendor_edit</cstring>
+            </property>
+            <property name="text">
+                <string>vendor</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the vendor name</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="5" column="1">
+            <property name="name">
+                <cstring>message_edit</cstring>
+            </property>
+            <property name="text">
+                <string>new project</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Repository creation message</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Message:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>CVS repository:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>Vendor tag:</string>
+            </property>
+        </widget>
         <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>TextLabel1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
             </property>
             <property name="text">
                 <string>CVS root:</string>
@@ -50,83 +133,6 @@ for your new project</string>
 e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home/cvs&lt;/tt&gt;</string>
             </property>
         </widget>
-        <widget class="QLabel" row="5" column="0">
-            <property name="name">
-                <cstring>TextLabel5</cstring>
-            </property>
-            <property name="text">
-                <string>Release tag:</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="5" column="1">
-            <property name="name">
-                <cstring>release_edit</cstring>
-            </property>
-            <property name="text">
-                <string>start</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Tag that will be associated with initial state</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>repository_edit</cstring>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Enter the name of the repository</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>CVS Repository name goes here
-Most of the thime you'll just reuse the project name</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="3" column="1">
-            <property name="name">
-                <cstring>vendor_edit</cstring>
-            </property>
-            <property name="text">
-                <string>vendor</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Enter the vendor name</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="4" column="1">
-            <property name="name">
-                <cstring>message_edit</cstring>
-            </property>
-            <property name="text">
-                <string>new project</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Repository creation message</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="4" column="0">
-            <property name="name">
-                <cstring>TextLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>Message:</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>CVS repository:</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="3" column="0">
-            <property name="name">
-                <cstring>TextLabel4</cstring>
-            </property>
-            <property name="text">
-                <string>Vendor tag:</string>
-            </property>
-        </widget>
         <widget class="QCheckBox" row="1" column="1">
             <property name="name">
                 <cstring>init_check</cstring>
@@ -136,6 +142,31 @@ Most of the thime you'll just reuse the project name</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check if you defined a new CVS Root</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>cvs_rsh</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>If you are using SSH to access the repository fill this field</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>CVS access type (&lt;tt&gt;ssh&lt;/tt&gt; for example)</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>CVS_RSH</string>
             </property>
         </widget>
     </grid>
@@ -148,5 +179,12 @@ Most of the thime you'll just reuse the project name</string>
     <tabstop>message_edit</tabstop>
     <tabstop>release_edit</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">cvsform.ui.h</include>
+</includes>
+<slots>
+    <slot>init()</slot>
+    <slot>destroy()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

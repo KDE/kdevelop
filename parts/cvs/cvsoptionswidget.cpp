@@ -3,7 +3,7 @@
 #include "cvspart.h"
 #include <qlineedit.h>
 
-#include "cvs_commonoptions.h"
+#include "cvsoptions.h"
 
 CvsOptionsWidget::CvsOptionsWidget(CvsPart *part, QWidget *parent, const char *name)
         : CvsOptionsWidgetBase(parent, name) {

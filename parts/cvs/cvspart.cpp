@@ -41,14 +41,12 @@
 #include "changelog.h"
 #include "cvspart.h"
 #include "cvswidget.h"
-#include "cvs_commonoptions.h"
+#include "cvsoptions.h"
 #include "commitdlg.h"
 #include "logform.h"
 #include "cvsform.h"
 #include "execcommand.h"
 #include "cvsoptionswidget.h"
-
-#define zero_delete(p) { delete (p); (p) = 0; }
 
 using namespace UrlFileUtilities;
 
@@ -71,7 +69,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
 CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
 	: KDevVersionControl( "KDevCvsPart", "kdevcvspart", parent, name ? name : "CVS" ),
-	form( 0 ), invokedFromMenu( true ), proc( 0 ),
+	invokedFromMenu( true ), proc( 0 ),
 	actionCommit( 0 ), actionDiff( 0 ),	actionLog( 0 ),	actionAdd( 0 ),	actionRemove( 0 ),
 	actionUpdate( 0 ), actionReplace( 0 )
 {
@@ -91,6 +89,7 @@ CvsPart::~CvsPart()
 		mainWindow()->removeView( m_widget ); // Inform toplevel, that the output view is gone
 	}
 	delete m_widget;
+	delete m_cvsConfigurationForm;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -142,7 +141,7 @@ void CvsPart::setupActions()
 QString CvsPart::cvs_rsh() const
 {
 	QDomDocument &dom = *projectDom();
-	QString env = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", default_rsh );
+	QString env = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", m_cvsRsh ); // default_rsh );
 	if ( !env.isEmpty() )
 		return QString( "CVS_RSH=" ) + KShellProcess::quote( env );
 	return QString::null;
@@ -174,11 +173,10 @@ bool CvsPart::findPaths()
 	if (!project())
 	{
 		kdDebug(9000) << "CvsPart::findPaths(): No project???" << endl;
-		KMessageBox::sorry( 0, i18n("Open a project first.\n"
-			"Operation will be aborted.") );
+		KMessageBox::sorry( 0, i18n("Open a project first.\nOperation will be aborted.") );
 		return false;
 	}
-	// From menu-bar invoked actions we use the currently focused document, otherwise we used the one
+	// From menu-bar invoked actions we use the currently focused document, otherwise we use the one
 	// pointed by the context menu.
 	if (invokedFromMenu && !retrieveUrlFocusedDocument())
 	{
@@ -281,41 +279,6 @@ bool CvsPart::isRegisteredInRepository()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::diffFinished( const QString& diff, const QString& err, const int processExitCode )
-{
-//    if (diff.isNull() && err.isNull() )
-	if (processExitCode)
-	{
-        kdDebug(9000) << "cvs diff cancelled" << endl;
-        return; // user pressed cancel or an error occured
-    }
-
-    if ( diff.isEmpty() && !err.isEmpty() )
-	{
-        KMessageBox::detailedError( 0, i18n("CVS outputted errors during diff."), err, i18n("Errors During Diff") );
-        return;
-    }
-
-    if ( !err.isEmpty() )
-	{
-        int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
-                QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
-        if ( s != KMessageBox::Continue )
-            return;
-    }
-
-    if ( diff.isEmpty() )
-	{
-        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Difference found") );
-        return;
-    }
-
-    Q_ASSERT( diffFrontend() );
-    diffFrontend()->showDiff( diff );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void CvsPart::slotImportCvs()
 {
 	// TODO
@@ -327,23 +290,26 @@ void CvsPart::createNewProject( const QString& dirName )
 {
 	kdDebug( 9000 ) << "====> CvsPart::createNewProject( const QString& )" << endl;
 
-	if (!form)
+	if (!m_cvsConfigurationForm)
 		return;
 	QString init("");
 
-	if (form->init_check->isChecked())
+	// Store rsh setting
+	m_cvsRsh = m_cvsConfigurationForm->cvs_rsh->text();
+
+	if (m_cvsConfigurationForm->init_check->isChecked())
 	{
-    	init = "cvs -d " + KShellProcess::quote(form->root_edit->text()) + " init && ";
+    	init = "cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) + " init && ";
 	}
     QString command = init + "cd " + KShellProcess::quote(dirName) +
-		" && cvs -d " + KShellProcess::quote(form->root_edit->text()) +
-		" import -m " + KShellProcess::quote(form->message_edit->text()) + " " +
-		KShellProcess::quote(form->repository_edit->text()) + " " +
-		KShellProcess::quote(form->vendor_edit->text()) + " " +
-		KShellProcess::quote(form->release_edit->text()) + " && sh " +
+		" && cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) +
+		" import -m " + KShellProcess::quote(m_cvsConfigurationForm->message_edit->text()) + " " +
+		KShellProcess::quote(m_cvsConfigurationForm->repository_edit->text()) + " " +
+		KShellProcess::quote(m_cvsConfigurationForm->vendor_edit->text()) + " " +
+		KShellProcess::quote(m_cvsConfigurationForm->release_edit->text()) + " && sh " +
 		locate("data","kdevcvs/buildcvs.sh") + " . " +
-		KShellProcess::quote(form->repository_edit->text()) + " " +
-		KShellProcess::quote(form->root_edit->text());
+		KShellProcess::quote(m_cvsConfigurationForm->repository_edit->text()) + " " +
+		KShellProcess::quote(m_cvsConfigurationForm->root_edit->text());
 
 	kdDebug( 9000 ) << "  ** Will run the following command: " << endl << command << endl;
 	kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
@@ -624,11 +590,11 @@ void CvsPart::slotDiff()
 	bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
 	if ( !ok ) {
 		KMessageBox::error( 0, i18n("Could not invoke CVS"), i18n("Error Invoking Command") );
-		zero_delete( proc );
+		delete proc; proc = 0;
 		return;
 	}
 
-	connect( proc, SIGNAL(processExited(KProcess*)),this, SLOT(processExited()) );
+	connect( proc, SIGNAL(processExited(KProcess*)),this, SLOT(slotDiffFinished()) );
 	connect( proc, SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(receivedStdout(KProcess*,char*,int)) );
 	connect( proc, SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(receivedStderr(KProcess*,char*,int)) );
 
@@ -639,22 +605,56 @@ void CvsPart::slotDiff()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::processExited()
+void CvsPart::slotDiffFinished()
 {
+    Q_ASSERT( proc );
+
 	core()->running( this, false );
 
-	if ( proc->normalExit() ) {
-		// no output
-		if ( stdOut.isNull() && ( proc->exitStatus() == 0 ) ) {
-		     stdOut = QString( "" );
-		}
-		diffFinished( stdOut, stdErr );
+	QString &diff = stdOut,
+		&err = stdErr;
+	bool normalExit = proc->normalExit();
+	int exitStatus = proc->exitStatus();
+
+	kdDebug( 9999 ) << "diff = " << diff << endl;
+	kdDebug( 9999 ) << "err = " << err << endl;
+
+	if (normalExit)
+		kdDebug( 9999 ) << " *** Process " << proc->name() << " died nicely with exit status = " << exitStatus << endl;
+	else
+		kdDebug( 9999 ) << " *** Process " << proc->name() << " was killed with exit status = " << exitStatus << endl;
+
+	// delete proc
+	delete proc; proc = 0;
+
+	// Now show a message about operation ending status
+	if (diff.isEmpty() && (exitStatus != 0))
+	{
+        KMessageBox::information( 0, i18n("Operation aborted (process killed)"), i18n("CVS Diff") );
+		return;
 	}
+    if ( diff.isEmpty() && !err.isEmpty() )
+	{
+        KMessageBox::detailedError( 0, i18n("CVS outputted errors during diff."), err, i18n("Errors During Diff") );
+        return;
+    }
 
-	stdOut = QString::null;
-	stdErr = QString::null;
+    if ( !err.isEmpty() )
+	{
+        int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
+                QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
+        if ( s != KMessageBox::Continue )
+            return;
+    }
 
-	zero_delete( proc );
+    if ( diff.isEmpty() )
+	{
+        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Difference found") );
+        return;
+    }
+
+    Q_ASSERT( diffFrontend() );
+    diffFrontend()->showDiff( diff );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -698,9 +698,8 @@ void CvsPart::projectConfigWidget( KDialogBase *dlg )
 
 QWidget* CvsPart::newProjectWidget( QWidget *parent )
 {
-    	form = new CvsForm( parent, "cvsform" );
-
-	return form;
+	m_cvsConfigurationForm = new CvsForm( parent, "cvsform" );
+	return m_cvsConfigurationForm;
 }
 
 #include "cvspart.moc"
