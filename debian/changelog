@@ -1,3 +1,9 @@
+kdevelop (1:0.4-19990614) unstable; urgency=low
+
+  * Aiiiiiiiiiie!! Fixed the broken kderules file
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sun, 13 Jun 1999 20:45:38 +0200
+
 kdevelop (1:0.4-19990613) unstable; urgency=low
 
   * New upstream CVS version
@@ -5,7 +11,7 @@ kdevelop (1:0.4-19990613) unstable; urgency=low
   * Migrated from man-pages format to undocumented format
   * Changed changelog versioning to fit the rest of the KDE package versioning
 
- -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sun, 13 Jun 1999 09:49:48 +0200
+ -- Ivan E. Moore II <rkrusty@tdyc.com>   Sun, 13 Jun 1999 09:49:48 +0200
 
 kdevelop (990531-1) experimental; urgency=low
 

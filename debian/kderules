@@ -102,8 +102,8 @@ sub docwanted {
 	/debian/ or /INSTALL/ and return 0 ;
 	/COPYING/ and return ;
 	if ( (! /CVS/ )
-	and ( /^[A-Z]*$/ or /README/ or /ChangeLog/ or /lsm$/ or /SWALLOW/
-	or /TODO/ or /kdedoc/ or /Header/ or /Documentation/ or /Tutorial/ ) )
+	and ( /^[A-Z]*$/ or /^README$/ or /^ChangeLog$/ or /lsm$/ or /SWALLOW/
+	or /^TODO$/ or /^kdedoc$/ or /Header/ or /Documentation/ or /Tutorial/ ) )
 	{	
 		if ($dir) {
 		  $_ = "$dir/$_";
@@ -135,6 +135,21 @@ if (@docs) {
 		"debian/tmp/usr/doc/$package/changelog");
 	}
 }
+
+
+# Create doc-base file
+
+if (-d "debian/doc-base") {
+        if (! -d "debian/tmp/usr/share/doc-base") {
+                  mkdir("-p", "debian/tmp/usr/share/doc-base");
+        }
+        while (<debian/doc-base/*>) {
+        	  cp( "-a", $_, "debian/tmp/usr/share/doc-base")
+                    unless (-d $_);
+        }
+#        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
+}
+
 
 # Create debian/menu files
 
