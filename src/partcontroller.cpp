@@ -410,7 +410,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		if ( part )
 		{
 			part->openURL( url );
-			integratePart( part, url, false );
+			integratePart( part, url );
 			addHistoryEntry( url, lineNum, col );
 		
 			m_openRecentAction->addURL( url );
