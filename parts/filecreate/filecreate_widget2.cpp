@@ -81,11 +81,7 @@ namespace FileCreate {
       kdDebug(9034) << "Found row, setting current to row " << changeToRow << endl;
       slotCellSelected(changeToRow,0);
       clearSelection();
-#if KDE_VERSION > 305      
       selectRow(changeToRow);
-#else
-  // TODO Qt-3.0.5 doesn't provide QTable::selectRow()
-#endif      
     }
 
   }
@@ -215,7 +211,7 @@ namespace FileCreate {
     setColumnWidth(col,maxWidth+2); // bit of extra room
   }
 
-#if QT_VERSION<310
+#if QT_VERSION < 0x030100
   void FriendlyWidget::selectRow(int row) {
     if (numCols()>0 && row<numRows()) {
       QTableSelection sel;

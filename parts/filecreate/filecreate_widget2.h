@@ -46,7 +46,7 @@ namespace FileCreate {
 	 */
 	virtual void setCurrent(const FileType * current);
 
-#if QT_VERSION<310
+#if QT_VERSION < 0x030100
         void selectRow(int row);
 #endif
 
