@@ -96,6 +96,10 @@ inline void GCatalog<Tp>::addIndex( const QCString& name )
 
 	QFileInfo fileInfo( d->dbName );
 	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
+	
+	if( (ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
+	    kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
+	}
 
         if ((ret = dbp->open(
 	    dbp BDB_OPEN_HACK, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
@@ -168,6 +172,10 @@ inline void GCatalog<Tp>::open( const QString& dbName )
 	return;
     }
 
+    if( (ret = d->dbp->set_cachesize( d->dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
+	kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
+    }
+    
     if ((ret = d->dbp->open(
 	d->dbp  BDB_OPEN_HACK, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	kdDebug() << "db_open: " << db_strerror(ret) << endl;
