@@ -1,3 +1,8 @@
+2000-03-30 Ralf Nolden <rnolden@kdevelop.de>
+        * updated am_edit for KDE 2 templates and changed structure to hold the docbook file in <projectdir>/doc/en
+        * updated Makefile.am´s for generating html output via kdb2html
+        * fixed appwizard to handle the new structure
+
 2000-03-30 Sandy Meier   <smeier@kdevelop.de>
 	* small fix in dialogeditor (no preview for fixed size)
 	* commited patch by Florent Pillet <florent.pillet@opteway.com>, 

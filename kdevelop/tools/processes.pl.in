@@ -293,8 +293,8 @@ sub condCopyUserDocFiles {
     if ($processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal" ||
   			$processes{APPLICATION} eq "kde2mdi")
     {
-    	copy ("docbook_en_template", "$underDirectory/docs/en/index.docbook");
-    	chdir ("$underDirectory/docs/en");
+    	copy ("docbook_en_template", "$overDirectory/doc/en/index.docbook");
+    	chdir ("$overDirectory/doc/en");
       replaceValuesInFile(\%changings, "index.docbook");
     }
     else

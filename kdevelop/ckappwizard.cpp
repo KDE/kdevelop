@@ -1054,43 +1054,32 @@ void CKAppWizard::slotOkClicked() {
 }
 
 void CKAppWizard::generateEntries(const QString &filename) {
+
   QString entriesfilename(filename.isEmpty() ? QString("entries") : filename);
-  KConfig *config=kapp->getConfig();
-
+  QString docu_dir, index_path, libname, link;
+  KConfig* config=kapp->getConfig();
   config->setGroup("Doc_Location");
-  QString idx_path, link;
-  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-          + "/kdoc-reference";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
-       QFileInfo(idx_path + "/qt.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/qt.kdoc").exists() )
-#endif
-      link += " -lqt";
-  // This could me made a lot smarter...
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
-       QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() )
-#endif
-      link += " -lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() ||
-       QFileInfo(idx_path + "/khtmlw.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() )
-#endif
-      link += " -lkhtmlw";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/khtml.kdoc").exists() ||
-      QFileInfo(idx_path + "/khtml.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/khtml.kdoc").exists())
-#endif
-      link += " -lkhtml";
-
+  docu_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  if (!docu_dir.isEmpty())
+  {
+    index_path= docu_dir + "/kdoc-reference";
+    QDir d;
+    d.setPath(index_path);
+    if(d.exists()){
+      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+      QFileInfoListIterator it( *fileList ); // iterator
+      QFileInfo *fi; // the current file info
+      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
+        libname=fi->fileName();  // get the filename
+        if(fi->isFile())
+        {
+          libname=" -l"+fi->baseName();  // get only the base of the filename as library name
+          link+=libname;
+        }
+        ++it; // increase the iterator
+      }
+    }
+  }
 
   ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/"+entriesfilename);
 
@@ -1203,8 +1192,8 @@ void CKAppWizard::generateEntries(const QString &filename) {
   else entries << "no\n";
   entries << "KDOC_CALL\n";
 
-  if (!idx_path.isEmpty() && !link.isEmpty())
-    idx_path=QString(" -L")+idx_path+link;
+  if (!index_path.isEmpty() && !link.isEmpty())
+    index_path=QString(" -L")+index_path+link;
 #ifdef WITH_KDOC2
   bool bCreateKDoc;
 
@@ -1212,13 +1201,13 @@ void CKAppWizard::generateEntries(const QString &filename) {
   bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
   if (bCreateKDoc)
    entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	idx_path+" -n "+nameline->text()+" *.h\n";
+	index_path+" -n "+nameline->text()+" *.h\n";
   else
    entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	idx_path+" *.h\n";
+	index_path+" *.h\n";
 #else
    entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	idx_path+" "+nameline->text()+" *.h\n";
+	index_path+" "+nameline->text()+" *.h\n";
 #endif
 
   entries << "XGETTEXT\n";
@@ -2260,7 +2249,7 @@ void CKAppWizard::slotProcessExited() {
   project->setVersion (versionline->text());
   if (userdoc->isChecked()) {
     if(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
-      project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.docbook");
+      project->setSGMLFile (directory + "/doc/en/index.docbook");
     else
       project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.sgml");
   }
@@ -2331,15 +2320,23 @@ void CKAppWizard::slotProcessExited() {
   }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
-  
-  makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
+
+  if(kde2normalitem->isSelected() || kde2miniitem->isSelected() || kde2mdiitem->isSelected())
+    makeAmInfo.rel_name = "doc/Makefile.am";
+  else
+    makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
+
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
-  makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
+  if(kde2normalitem->isSelected() || kde2miniitem->isSelected() || kde2mdiitem->isSelected())
+    makeAmInfo.rel_name = "doc/en/Makefile.am";
+  else
+    makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
+
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
@@ -2610,11 +2607,11 @@ void CKAppWizard::slotProcessExited() {
   }
   if (userdoc->isChecked() && (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()))
   {
-      fileInfo.rel_name = namelow + "/docs/en/index.docbook";
+      fileInfo.rel_name ="doc/en/index.docbook";
       fileInfo.type = DATA;
       fileInfo.dist = true;
       fileInfo.install = false;
-      project->addFileToProject (namelow + "/docs/en/index.docbook",fileInfo);
+      project->addFileToProject ("doc/en/index.docbook",fileInfo);
   }
   QStrList group_filters;
   group_filters.append("*");
@@ -2669,6 +2666,7 @@ void CKAppWizard::slotProcessExited() {
   
   group_filters.clear();
   group_filters.append("*.h");
+  group_filters.append("*.hh");
   group_filters.append("*.hxx");
   group_filters.append("*.hpp");
   group_filters.append("*.H");
