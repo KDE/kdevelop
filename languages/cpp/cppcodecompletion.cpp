@@ -6,6 +6,8 @@
    email                : victor_roeder@gmx.de
    copyright            : (C) 2002,2003 by Roberto Raggi
    email                : roberto@kdevelop.org
+   copyright            : (C) 2005 by Adam Treat
+   email                : manyoso@yahoo.com
 ***************************************************************************/
 
 /***************************************************************************
@@ -436,22 +438,25 @@ void CppCodeCompletion::slotTextChanged()
 	QString strCurLine = m_activeEditor->textLine( nLine );
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
-
+	
 	m_ccLine = 0;
 	m_ccColumn = 0;
+	
+	bool argsHint = m_pSupport->codeCompletionConfig() ->automaticArgumentsHint();
+	bool codeComplete = m_pSupport->codeCompletionConfig() ->automaticCodeCompletion();
+	bool headComplete = m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion();
+	
+	QRegExp chRx("([A-Z])|([a-z])|(\\.)");		//completes on alpha chars and '.'
+	QRegExp ch2Rx("(->)|(\\:\\:)");				//completes on "->" and "::"
 
-	if ( ( m_pSupport->codeCompletionConfig() ->automaticCodeCompletion() &&
-	        ( !ch.isEmpty() && ch != "\n" && ch != " " && ch != "\t" &&
-		  ch != ";" && ch != "{" && ch != "}" ) //TODO optimize, maybe use a qregexp
-		/*(ch == "." || ch2 == "->" || ch2 == "::") */ ) || 
-			( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
-	        ( m_pSupport->codeCompletionConfig() ->automaticArgumentsHint() && ch == "(" ) ||
-	        ( m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion() && ( ch == "\"" || ch == "<" ) &&
-	          m_includeRx.search( strCurLine ) != -1 ) )
+	if ( ( argsHint && ch == "(" ) ||
+	     ( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
+	     ( codeComplete && ( chRx.search( ch ) != -1 || ch2Rx.search( ch2 ) != -1 ) ) ||
+	     ( headComplete && ( ch == "\"" || ch == "<" ) && m_includeRx.search( strCurLine ) != -1 ) )
 	{
+		int time;
 		m_ccLine = nLine;
 		m_ccColumn = nCol;
-		int time;
 		if ( ch == "(" )
 			time = m_pSupport->codeCompletionConfig() ->argumentsHintDelay();
 		else
