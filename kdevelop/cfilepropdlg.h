@@ -1,6 +1,6 @@
 /***************************************************************************
-                          cfilepropdlg.h  -  description                              
-                             -------------------                                         
+                          cfilepropdlg.h  -  description
+                             -------------------
 
     version              :     
     begin                : Sat Oct 17 1998                                           

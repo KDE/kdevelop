@@ -169,6 +169,9 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
 }
 
 void CKDevelop::switchToKDevelop(){
+  setCaption(kdev_caption);
+
+  bKDevelop=true;
   this->setUpdatesEnabled(false);
 
   //////// change the mainview ////////
@@ -194,6 +197,7 @@ void CKDevelop::switchToKDevelop(){
   toolBar()->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
+  setKeyAccel();  // initialize Keys
   ///////// reset bar status ////////////
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
     kdev_statusbar->show();
@@ -225,16 +229,20 @@ void CKDevelop::switchToKDevelop(){
 
 }
 void CKDevelop::switchToKDlgEdit(){
+  setCaption(kdlg_caption);
+  bKDevelop=false;
   this->setUpdatesEnabled(false);
   //////// change the mainview ////////
   s_tab_view->hide();
   t_tab_view->hide();
   kdlg_tabctl->show();
   kdlg_top_panner->show();
+
   top_panner->hide();
   top_panner->deactivate();
   top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
   top_panner->show();
+
   //////// change the bars ///////////
   kdev_menubar->hide();
   kdlg_menubar->show();
@@ -259,6 +267,7 @@ void CKDevelop::switchToKDlgEdit(){
   else
     enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
 
+  setKeyAccel();  // initialize Keys
 
   ///////// reset the views status ///////////////
   if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
@@ -281,6 +290,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     if(s_tab_view->getCurrentTab() == CPP){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
+    enableCommand(ID_KDLG_BUILD_GENERATE);
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
@@ -300,6 +310,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
   else {
     
     // set the popupmenus enable or disable
+    disableCommand(ID_KDLG_BUILD_GENERATE);
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN);
     disableCommand(ID_BUILD_DEBUG);
@@ -346,6 +357,21 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -529,6 +529,9 @@ void CKDevelop::slotBuildDebug(){
   if(!prj->getBinPROGRAM()){
     slotBuildMake();
   }
+  if(!bKDevelop)
+    switchToKDevelop();
+
   showOutputView(false);
   
   slotStatusMsg(i18n("Running  "+prj->getBinPROGRAM()+"  in KDbg"));
@@ -777,26 +780,14 @@ void CKDevelop::slotBuildManual(){
 // TOOLS-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
 
-void CKDevelop::slotToolsKIconEdit(){
-
-  if(!CToolClass::searchProgram("kiconedit")){
-    return;
-  }
-
-  showOutputView(false);
-
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kiconedit");
-  swallow_widget->sWExecute();
-  swallow_widget->init();
-}
 
 void CKDevelop::slotToolsKDbg(){
 
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
+  if(!bKDevelop)
+    switchToKDevelop();
 
   showOutputView(false);
 
@@ -807,11 +798,29 @@ void CKDevelop::slotToolsKDbg(){
   swallow_widget->init();
 }
 
+void CKDevelop::slotToolsKIconEdit(){
+
+  if(!CToolClass::searchProgram("kiconedit")){
+    return;
+  }
+  if(!bKDevelop)
+    switchToKDevelop();
+
+  showOutputView(false);
+
+  s_tab_view->setCurrentTab(TOOLS);
+  swallow_widget->sWClose(false);
+  swallow_widget->setExeString("kiconedit");
+  swallow_widget->sWExecute();
+  swallow_widget->init();
+}
 
 void CKDevelop::slotToolsKTranslator(){
   if(!CToolClass::searchProgram("ktranslator")){
     return;
   }
+  if(!bKDevelop)
+    switchToKDevelop();
 
   showOutputView(false);
 
@@ -1158,11 +1167,11 @@ KDevelop contains sourcecode from KWrite 0.98
 void CKDevelop::slotKDlgViewPropView(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-    kdlg_prop_view_pos=kdlg_top_panner->separatorPos();
+    properties_view_pos=kdlg_top_panner->separatorPos();
     kdlg_top_panner->setSeparatorPos(100);
   }
   else{
-    kdlg_top_panner->setSeparatorPos(kdlg_prop_view_pos);
+    kdlg_top_panner->setSeparatorPos(properties_view_pos);
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
   }
   QRect rMainGeom= kdlg_top_panner->geometry();
@@ -1208,8 +1217,6 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 
 void CKDevelop::enableCommand(int id_)
 {
-//  kdev_menubar->setItemEnabled(id_,true);
-//  kdlg_menubar->setItemEnabled(id_,true);
   menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
@@ -1218,8 +1225,6 @@ void CKDevelop::enableCommand(int id_)
 
 void CKDevelop::disableCommand(int id_)
 {
-//  kdev_menubar->setItemEnabled(id_,false);
-//  kdlg_menubar->setItemEnabled(id_,false);
   menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
@@ -1263,6 +1268,8 @@ void CKDevelop::slotNewUndo(){
 
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
+  if(!bKDevelop)
+    switchToKDevelop();
   showOutputView(false);
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
@@ -1458,6 +1465,9 @@ void CKDevelop::slotClickedOnMessagesWidget(){
     error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
   }
   if (QFile::exists(error_filename)){
+    if(!bKDevelop)
+      switchToKDevelop();
+
     switchToFile(error_filename);
     edit_widget->setCursorPosition(error_line-1,0);
     edit_widget->setFocus();
@@ -1788,18 +1798,25 @@ void CKDevelop::closeEvent(QCloseEvent* e){
 
   config->writeEntry("view_panner_pos",view->separatorPos());
   config->writeEntry("top_panner_pos",top_panner->separatorPos());
+  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);
+  config->writeEntry("properties_view_pos", properties_view_pos);
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
+  config->writeEntry("show_properties_view",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
+  config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
+
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
+
+  config->writeEntry("show_kdevelop",bKDevelop);
 
   config->writeEntry("Autosave",bAutosave);
   config->writeEntry("Autosave Timeout",saveTimeout);
@@ -1833,18 +1850,23 @@ void CKDevelop::closeEvent(QCloseEvent* e){
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {
-/*  case ID_FILE_NEW:
-    slotFileNewFile();
+  case ID_FILE_NEW:
+    slotFileNew();
     break;
-*/
   case ID_PROJECT_OPEN:
     slotProjectOpen();
     break;
   case ID_FILE_OPEN:
     slotFileOpen();
     break;
+  case ID_KDLG_FILE_OPEN:
+    kdlgedit->slotFileOpen();
+    break;
   case ID_FILE_SAVE:
     slotFileSave();
+    break;
+  case ID_KDLG_FILE_SAVE:
+    kdlgedit->slotFileSave();
     break;
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
@@ -1855,17 +1877,32 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;
+  case ID_KDLG_EDIT_UNDO:
+    kdlgedit->slotEditUndo();
+    break;
   case ID_EDIT_REDO:
     slotEditRedo();
+    break;
+  case ID_KDLG_EDIT_REDO:
+    kdlgedit->slotEditRedo();
     break;
   case ID_EDIT_COPY:
     slotEditCopy();
     break;
+  case ID_KDLG_EDIT_COPY:
+    kdlgedit->slotEditCopy();
+    break;
   case ID_EDIT_PASTE:
     slotEditPaste();
     break;
+  case ID_KDLG_EDIT_PASTE:
+    kdlgedit->slotEditPaste();
+    break;
   case ID_EDIT_CUT:
     slotEditCut();
+    break;
+  case ID_KDLG_EDIT_CUT:
+    kdlgedit->slotEditCut();
     break;
   case ID_VIEW_REFRESH:
     slotViewRefresh();
@@ -1879,7 +1916,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_REBUILD_ALL:
   	slotBuildRebuildAll();
   	break;
-
   case ID_BUILD_DEBUG:
     slotBuildDebug();
     break;
@@ -1888,6 +1924,12 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
   case ID_BUILD_STOP:
     slotBuildStop();
+    break;
+  case ID_TOOLS_KDLGEDIT:
+    switchToKDlgEdit();
+    break;
+  case ID_KDLG_TOOLS_KDEVELOP:
+    switchToKDevelop();
     break;
   case ID_HELP_BACK:
     slotHelpBack();
@@ -1959,6 +2001,7 @@ BEGIN_STATUS_MSG(CKDevelop)
 
   
   ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
+  ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
   ON_STATUS_MSG(ID_BUILD_MAKE,                    			  i18n("Invokes make-command"))
   ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             			  i18n("Rebuilds the program"))
   ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       			  i18n("Invokes make clean and rebuild all"))
@@ -2006,6 +2049,20 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

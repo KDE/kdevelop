@@ -21,7 +21,7 @@
 #include "ckdevelop.h"
 
 void CKDevelop::initKDlg(){
-
+  kdlg_caption="KDevelop Dialogeditor: Widget_1.kdevdlg";
   kdlgedit=new KDlgEdit(this,"dialogeditor");
 
   kdlg_tabctl= new CTabCtl(top_panner);
@@ -35,7 +35,6 @@ void CKDevelop::initKDlg(){
 
   kdlg_top_panner = new KNewPanner(top_panner,"kdlg_top_panner",KNewPanner::Vertical,KNewPanner::Percent,
   			      config->readNumEntry("kdlg_top_panner_pos", 80));
-  kdlg_prop_view_pos=kdlg_top_panner->separatorPos();
 
   kdlg_edit_widget = new KDlgEditWidget(kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
   kdlg_prop_widget = new KDlgPropWidget(kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
@@ -45,10 +44,10 @@ void CKDevelop::initKDlg(){
 
   kdlg_top_panner->activate(kdlg_edit_widget,kdlg_prop_widget);// activate the top_panner
 
+  initKDlgKeyAccel();
   initKDlgMenuBar();
   initKDlgToolBar();
   initKDlgStatusBar();
-
 
 }
 
@@ -60,13 +59,17 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // File-menu entries
   kdlg_file_menu= new QPopupMenu;
-  kdlg_file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"), kdlgedit, SLOT(slotFileNew()), 0,ID_KDLG_FILE_NEW);
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
+  kdlg_file_menu->insertItem(pix,i18n("&New"), this, SLOT(slotFileNew()), 0,ID_FILE_NEW);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   kdlg_file_menu->insertItem(pix, i18n("&Open..."), kdlgedit, SLOT(slotFileOpen()), 0, ID_KDLG_FILE_OPEN);
   kdlg_file_menu->insertItem(i18n("&Close"), kdlgedit, SLOT(slotFileClose()),0, ID_KDLG_FILE_CLOSE);
   kdlg_file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   kdlg_file_menu->insertItem(pix, i18n("&Save"), kdlgedit, SLOT(slotFileSave()),0, ID_KDLG_FILE_SAVE);
+  kdlg_file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
+  kdlg_file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   kdlg_file_menu->insertSeparator();
   kdlg_file_menu->insertItem(i18n("&Quit"), this, SLOT(slotFileQuit()), 0, ID_FILE_QUIT);
 
@@ -102,9 +105,11 @@ void CKDevelop::initKDlgMenuBar(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 
+  config->setGroup("General Options");
   kdlg_view_menu->insertItem(i18n("&Properties-View"), this, SLOT(slotKDlgViewPropView()), 0, ID_KDLG_VIEW_PROPVIEW);
-  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,config->readBoolEntry("show_kdlg_prop_view",true));
+  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,config->readBoolEntry("show_properties_view",true));
 
+  kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Toolbar"), this, SLOT(slotKDlgViewToolbar()),0,ID_KDLG_VIEW_TOOLBAR);
   kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,config->readBoolEntry("show_kdlg_toolbar", true));
 
@@ -118,11 +123,53 @@ void CKDevelop::initKDlgMenuBar(){
 
   kdlg_menubar->insertItem(i18n("&View"), kdlg_view_menu);
 
+  ///////////////////////////////////////////////////////////////////
+  // Project-menu entries
+
+  // submenu for adding projectfiles
+  QPopupMenu* kdlg_p2 = new QPopupMenu;
+  kdlg_p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
+  kdlg_p2->insertItem(i18n("&Existing File(s)..."), this,
+		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
+
+  // project-menu
+  kdlg_project_menu = new QPopupMenu;
+  kdlg_project_menu->insertItem(i18n("Application Wizard..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
+  kdlg_project_menu->insertItem(i18n("New"), this, SLOT(slotProjectNew()),0, ID_PROJECT_NEW);
+  kdlg_project_menu->insertItem(i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
+  kdlg_project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
+
+  kdlg_project_menu->insertSeparator();
+  kdlg_project_menu->insertItem(i18n("&New Class..."), this,
+			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
+  kdlg_project_menu->insertItem(i18n("&Add File(s) to Project"),kdlg_p2,ID_PROJECT_ADD_FILE);
+  //  kdlg_project_menu->insertItem(i18n("&Remove File from Project"), this,
+  //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
+
+
+  kdlg_project_menu->insertSeparator();		
+  kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
+			   ,0,ID_PROJECT_FILE_PROPERTIES);
+  kdlg_project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
+  //  kdlg_project_menu->insertSeparator();		
+
+
+  //  workspaces_submenu = new QPopupMenu;
+  //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
+  //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
+  //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
+  //  kdlg_project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
+  //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
+
+  kdlg_menubar->insertItem(i18n("&Project"), kdlg_project_menu);
+
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries
 
   kdlg_build_menu = new QPopupMenu;
-
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/generate.xpm");
+  kdlg_build_menu->insertItem(pix,i18n("&Generate Sources..."),kdlgedit,SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);
+  kdlg_build_menu->insertSeparator();
   kdlg_build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
 
@@ -154,8 +201,20 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
   kdlg_tools_menu= new QPopupMenu;
-  kdlg_tools_menu->insertItem(i18n("KDevelop"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
+  kdlg_tools_menu->insertItem(i18n("&KDevelop"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
+  kdlg_tools_menu->insertItem(i18n("K&Dbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
+  kdlg_tools_menu->insertItem(i18n("K&Iconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
+  kdlg_tools_menu->insertItem(i18n("K&Translator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
   kdlg_menubar->insertItem(i18n("&Tools"), kdlg_tools_menu);
+
+
+  kdlg_options_menu = new QPopupMenu;
+  kdlg_options_menu->insertItem(i18n("Documentation &Browser..."),this,
+			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
+  kdlg_options_menu->insertSeparator();
+  kdlg_options_menu->insertItem(i18n("&KDevelop Setup..."),this,
+			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
+  kdlg_menubar->insertItem(i18n("&Options"), kdlg_options_menu);
 
   kdlg_help_menu=new QPopupMenu;
   kdlg_help_menu->insertItem(i18n("Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
@@ -194,8 +253,11 @@ void CKDevelop::initKDlgMenuBar(){
   connect(kdlg_file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(kdlg_p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(kdlg_project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(kdlg_options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 }
 
@@ -203,7 +265,13 @@ void CKDevelop::initKDlgToolBar(){
   QPixmap pix;
   QString  path;
 
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("filenew.xpm"),ID_KDLG_FILE_NEW, false,i18n("New"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/openprj.xpm");
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
+
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_FILE_NEW,false,i18n("Create New Dialog"));
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_FILE_OPEN, true,i18n("Open Dialog"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
@@ -230,6 +298,9 @@ void CKDevelop::initKDlgToolBar(){
   separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine1);
 
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/generate.xpm");
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_BUILD_GENERATE,false,i18n("Generate widget sources"));
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
   toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_BUILD_MAKE, false,i18n("Make"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/rebuild.xpm");
@@ -252,6 +323,13 @@ void CKDevelop::initKDlgToolBar(){
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,30,separatorLine2);
 
+  pix.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_TOOLS_KDEVELOP, true,i18n("Switch to edit-mode"));
+
+  QFrame *separatorLine3= new QFrame(toolBar(ID_KDLG_TOOLBAR));
+  separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,30,separatorLine3);
+
   QToolButton *btn_kdlg_what = whats_this->whatsThisButton(toolBar(ID_KDLG_TOOLBAR));
   QToolTip::add(btn_kdlg_what, i18n("What's this...?"));
   toolBar(ID_KDLG_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btn_kdlg_what->sizeHint().width(), btn_kdlg_what);
@@ -265,6 +343,7 @@ void CKDevelop::initKDlgToolBar(){
   else{
     enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
   }
+
 
 }
 
@@ -291,6 +370,85 @@ void CKDevelop::initKDlgStatusBar(){
     kdlg_statusbar->hide();
   }
 }
+
+
+void CKDevelop::initKDlgKeyAccel(){
+  accel->connectItem( KAccel::Open , kdlgedit, SLOT(slotFileOpen()) );
+  accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
+  accel->connectItem( KAccel::Save , kdlgedit, SLOT(slotFileSave()) );
+
+  //edit menu
+  accel->connectItem( KAccel::Undo , kdlgedit, SLOT(slotEditUndo()) );
+  accel->connectItem( KAccel::Cut , kdlgedit, SLOT(slotEditCut()) );
+  accel->connectItem( KAccel::Copy , kdlgedit, SLOT(slotEditCopy()) );
+  accel->connectItem( KAccel::Paste , kdlgedit, SLOT(slotEditPaste()) );
+
+  // tools-menu
+  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
+
+  accel->readSettings();
+}
+
+void CKDevelop::setKDlgCaption(){
+  setCaption(kdlg_caption);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -24,15 +24,11 @@ void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
 																															"Shows the open project dialog "
 																															"to select a project to be opened"));
-																																
-	whats_this->add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
-																													"Shows the open file dialog to "
-																													 "select a file to be opened."));																												
-	
+																																	
 	whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "
 																													"editing view"));
-	
+		
 	whats_this->add(toolBar()->getButton(ID_FILE_PRINT),i18n("Print\n\n"
 	                                                        "Opens the printing dialog. There, you can "
 	                                                        "configure which printing program you wish "
@@ -46,14 +42,16 @@ void CKDevelop::initWhatsThis(){
 	                                                        "If an editing step was undone, redo "
 	                                                        "lets you do this step again."));
 
+	
 	whats_this->add(toolBar()->getButton(ID_EDIT_CUT),i18n("Cut\n\n"
 	                                                        "Cuts out the selected text and copies "
 	                                                        "it to the system clipboard."));	                                                        	
 	
+	
 	whats_this->add(toolBar()->getButton(ID_EDIT_COPY),i18n("Copy\n\n"
 	                                                        "Copies the selected text into the "
 	                                                        "system clipboard."));
-	
+		
 	whats_this->add(toolBar()->getButton(ID_EDIT_PASTE),i18n("Paste\n\n"
 	                                                          "Inserts the contents of the "
 	                                                          "system clipboard at the current "
@@ -78,7 +76,7 @@ void CKDevelop::initWhatsThis(){
 	                                                          "error line will open the file where the "
 	                                                          "error was found and sets the cursor to the "
 	                                                          "error line."));
-	
+		
 	whats_this->add(toolBar()->getButton(ID_BUILD_REBUILD_ALL),i18n("Rebuild all\n\n"
 	                                                                "After saving all files, rebuild all "
 	                                                                "invokes the make-command set with the "
@@ -103,12 +101,12 @@ void CKDevelop::initWhatsThis(){
 	                                                          "by setting breakpoints in the sourcecode."
 	                                                          "Note that you have to open your sourcecodes in KDbg"
 	                                                          "to access it."));
-	
+		
 	whats_this->add(toolBar()->getButton(ID_BUILD_STOP),i18n("Stop\n\n"
 	                                                          "If activated, the stop-command will interrupt "
 	                                                          "the active process. This affects make-commands "
 	                                                          "as well as documentation generation."));
-	
+		
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
 	                                                    "Choosing a class will switch to the header "
 	                                                    "file where the class is declarated."));
@@ -192,6 +190,7 @@ void CKDevelop::initWhatsThis(){
 whats_this->add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
 	                                  																												
 }
+
 
 
 

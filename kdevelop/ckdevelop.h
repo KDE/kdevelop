@@ -95,7 +95,10 @@ public:
 	void initKDlgMenuBar();
 	void initKDlgToolBar();
 	void initKDlgStatusBar();
-	
+  void initKDlgKeyAccel();
+  /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
+  void setKDlgCaption();
+  		
   void enableCommand(int id_);
   void disableCommand(int id_);
 	
@@ -428,8 +431,10 @@ private:
 	QPopupMenu* kdlg_file_menu;
   QPopupMenu* kdlg_edit_menu;
   QPopupMenu* kdlg_view_menu;
+  QPopupMenu* kdlg_project_menu;
   QPopupMenu* kdlg_build_menu;
   QPopupMenu* kdlg_tools_menu;
+  QPopupMenu* kdlg_options_menu;
   QPopupMenu* kdlg_help_menu;
 	
   KMenuBar* kdev_menubar;
@@ -491,10 +496,12 @@ private:
 
   int tree_view_pos;
   int output_view_pos;
-  int kdlg_prop_view_pos;
+  int properties_view_pos;
   int workspace;
 
   QString version;
+  QString kdev_caption;
+  QString kdlg_caption;
   bool project;
   bool bViewStatusbar;
 
@@ -506,7 +513,7 @@ private:
 
   bool bAutoswitch;
   bool bDefaultCV;
-
+  bool bKDevelop;
   KProgress* statProg;
 //  QProgressBar* statProg;
   //some vars for the searchengine
@@ -531,6 +538,7 @@ private:
 };
 
 #endif
+
 
 
 

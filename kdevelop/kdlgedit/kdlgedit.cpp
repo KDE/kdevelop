@@ -51,5 +51,9 @@ void KDlgEdit::slotEditProperties(){
 void KDlgEdit::slotViewRefresh(){
 }
 
+void KDlgEdit::slotBuildGenerate(){
+}
+
+
 
 

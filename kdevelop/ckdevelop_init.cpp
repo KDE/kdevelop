@@ -38,15 +38,10 @@ CKDevelop::CKDevelop(){
   initConnections();
   initKDlg();    // create the KDialogEditor
 
-  config->setGroup("General Options");
-  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
-  if(switchKDevelop)
-    switchToKDevelop();
-  else
-    switchToKDlgEdit();
+  initWhatsThis();
+
 
   initProject();
-	cerr << "initProject\n";
   config->setGroup("Files");
   filename = config->readEntry("browser_file","");
   if(!filename.isEmpty()){
@@ -57,15 +52,31 @@ CKDevelop::CKDevelop(){
 		    "/en/kdevelop/index.html",1,"test");
     
   }
-  // if first start, the onlinehelp is shown, so outputview is false
-  // else show output view according to value in config file  -Ralf
 
+  kdev_caption=kapp->getCaption();
   config->setGroup("General Options");
   bool showOutput=config->readBoolEntry("show_output_view",false);
   if(showOutput)
   	slotViewTOutputView();
 
-  	
+  config->setGroup("General Options");
+  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
+  if(switchKDevelop){
+    switchToKDevelop();
+  }
+  else{
+    switchToKDlgEdit();
+  }
+  // initialize properties_view_pos
+  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
+    properties_view_pos=kdlg_top_panner->separatorPos();
+  }
+  else{
+    config->setGroup("General Options");
+    properties_view_pos=config->readNumEntry("properties_view_pos", 80);
+  }
+
+
 }
 
 
@@ -241,7 +252,6 @@ void CKDevelop::init(){
   initMenu();
   initToolbar();
   initStatusBar();
-  initWhatsThis();
 
   // init General variables like autosave, autoswitch and make-command
   config->setGroup("General Options");
@@ -353,12 +363,17 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Run"), "Run", IDK_BUILD_RUN);
   accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
 
-  //doc menu
+  // Tools-menu
+  accel->insertItem(i18n("KDevelop/KDialogEdit"),"KDevKDlg",IDK_TOOLS_KDEVKDLG);
+  accel->connectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
+
+  //Help menu
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
 
   accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
 
+  // Tab-Switch
   accel->insertItem( i18n("Show C Sources Window"), "ShowC",IDK_SHOW_C);
   accel->connectItem( "ShowC", this, SLOT(slotShowC() ) );
 
@@ -373,8 +388,6 @@ void CKDevelop::initKeyAccel(){
 
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
   accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ) );
-
-  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
 
   accel->readSettings();
 }
@@ -612,10 +625,10 @@ void CKDevelop::initMenu(){
 // Tools-menu entries
 
   tools_menu = new QPopupMenu;
-  tools_menu->insertItem(i18n("KDialogEdit"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
-  tools_menu->insertItem(i18n("&KDbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
-  tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
-  tools_menu->insertItem(i18n("KTranslator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
+  tools_menu->insertItem(i18n("&KDialogEdit"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
+  tools_menu->insertItem(i18n("K&Dbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
+  tools_menu->insertItem(i18n("K&Iconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
+  tools_menu->insertItem(i18n("K&Translator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
   kdev_menubar->insertItem(i18n("&Tools"), tools_menu);
 
 ///////////////////////////////////////////////////////////////////
@@ -706,8 +719,6 @@ void CKDevelop::initMenu(){
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 	
-  setKeyAccel();  // initialize Keys
-
 }
 
 void CKDevelop::initToolbar(){
@@ -772,6 +783,13 @@ void CKDevelop::initToolbar(){
   QFrame *separatorLine2= new QFrame(toolBar());
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,30,separatorLine2);
+
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
+  toolBar()->insertButton(pix,ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
+
+  QFrame *separatorLine3= new QFrame(toolBar());
+  separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,30,separatorLine3);
 
   whats_this = new QWhatsThis;  
   QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());
@@ -948,37 +966,150 @@ void CKDevelop::initProject(){
 
 
 void CKDevelop::setKeyAccel(){
-  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
-  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
-  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
-  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
-  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
-  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
+if(bKDevelop){
+    accel->disconnectItem(accel->stdAction( KAccel::Open ), kdlgedit, SLOT(slotFileOpen()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Close ) , kdlgedit, SLOT(slotFileClose()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Save ) , kdlgedit, SLOT(slotFileSave()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Undo ), kdlgedit, SLOT(slotEditUndo()) );
+    accel->disconnectItem( "Redo" , kdlgedit, SLOT(slotEditRedo()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Cut ), kdlgedit, SLOT(slotEditCut()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Copy ), kdlgedit, SLOT(slotEditCopy()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Paste ), kdlgedit, SLOT(slotEditPaste()) );
+    accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
 
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
+    accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()) );
+    accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()) );
+    accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
+    accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
+    accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
+    accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
+    accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
+    accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
+    accel->connectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
 
-  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");
+    accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
+    accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
+    accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
+    accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
+    accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
+    accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
-  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
 
-  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
+    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+    accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
+    accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
+    accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");
 
+    accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
+    accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+    accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+
+    accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+    accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
+  }
+  else{
+    accel->disconnectItem(accel->stdAction( KAccel::Open ), this, SLOT(slotFileOpen()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Close ) , this, SLOT(slotFileClose()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Save ) , this, SLOT(slotFileSave()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Undo ), this, SLOT(slotEditUndo()) );
+    accel->disconnectItem( "Redo" , this, SLOT(slotEditRedo()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Cut ), this, SLOT(slotEditCut()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Copy ), this, SLOT(slotEditCopy()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
+    accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
+
+    accel->connectItem( KAccel::Open , kdlgedit, SLOT(slotFileOpen()) );
+    accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
+    accel->connectItem( KAccel::Save , kdlgedit, SLOT(slotFileSave()) );
+    accel->connectItem( KAccel::Undo , kdlgedit, SLOT(slotEditUndo()) );
+    accel->connectItem( "Redo" , kdlgedit, SLOT(slotEditRedo()) );
+    accel->connectItem( KAccel::Cut , kdlgedit, SLOT(slotEditCut()) );
+    accel->connectItem( KAccel::Copy , kdlgedit, SLOT(slotEditCopy()) );
+    accel->connectItem( KAccel::Paste , kdlgedit, SLOT(slotEditPaste()) );
+    accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
+
+    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );
+    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KAccel::Open );
+    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_CLOSE, KAccel::Close );
+    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KAccel::Save );
+    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KAccel::Quit );
+
+    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_UNDO, KAccel::Undo );
+    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_REDO,"Redo" );
+    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_CUT, KAccel::Cut );
+    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_COPY, KAccel::Copy );
+    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_PASTE, KAccel::Paste );
+
+    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
+    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
+    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_STATUSBAR,"Statusbar");
+
+    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
+    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );
+    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN ,"Run" );
+
+    accel->changeMenuAccel(kdlg_help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+    accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = kdlgdialogs.cpp kdlgdialogs.h kdlgeditwidget.cpp kdlgeditwidget.h kdlgpropwidget.cpp kdlgpropwidget.h kdlgwidgets.cpp kdlgwidgets.h kdlgedit.cpp kdlgedit.h kdlgnewwidget.cpp kdlgnewwidget.h 
+
+####### kdevelop will overwrite this part!!! (end)############
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
 

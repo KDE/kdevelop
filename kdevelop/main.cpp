@@ -57,6 +57,9 @@ int main(int argc, char* argv[]) {
 		a.getConfig()->setGroup("General Options");
 		kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
 		kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+		if(!a.getConfig()->readBoolEntry("show_kdevelop",true))
+		  kdevelop->setKDlgCaption();
+
 		if (argc > 1)
 			kdevelop->slotProjectOpenCmdl(argv[1]);
 	
@@ -75,4 +78,9 @@ int main(int argc, char* argv[]) {
 	int rc = a.exec();
 	return rc;
 }
+
+
+
+
+
 
