@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Source code formatter
 Name=KDevAStyle
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevastyle
 X-KDevelop-Scope=Global

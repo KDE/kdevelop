@@ -9,16 +9,16 @@
 class KDialogBase;
 #include <kaction.h>
 
-#include <kdevpart.h>
+#include <kdevplugin.h>
 
 
-class AStylePart : public KDevPart
+class AStylePart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
    
-  AStylePart(KDevApi *api, QObject *parent=0, const char *name=0);
+  AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
 
 

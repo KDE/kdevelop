@@ -8,7 +8,7 @@
 #include <kdialogbase.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
-
+#include <kgenericfactory.h>
 
 #include <kdevcore.h>
 #include <kdevapi.h>
@@ -17,15 +17,15 @@
 
 #include <ktexteditor/editinterface.h>
 
-
-#include "astyle_factory.h"
 #include "astyle_part.h"
 #include "astyle_widget.h"
 #include "astyle_adaptor.h"
 
+typedef KGenericFactory<AStylePart> AStyleFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) );
 
-AStylePart::AStylePart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   setInstance(AStyleFactory::instance());
 	 

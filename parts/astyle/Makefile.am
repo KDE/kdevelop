@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevastyle.la
 libkdevastyle_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevastyle_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lktexteditor
 
-libkdevastyle_la_SOURCES = astyle_factory.cpp astyle_part.cpp ASBeautifier.cpp ASFormatter.cpp ASResource.cpp astyleconfig.ui astyle_widget.cpp astyle_adaptor.cpp
+libkdevastyle_la_SOURCES = astyle_part.cpp ASBeautifier.cpp ASFormatter.cpp ASResource.cpp astyleconfig.ui astyle_widget.cpp astyle_adaptor.cpp
 
 METASOURCES = AUTO
 
