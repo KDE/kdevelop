@@ -105,9 +105,6 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property name="tabChangesFocus">
-                <bool>true</bool>
-            </property>
             <property name="toolTip" stdset="0">
                 <string></string>
             </property>
