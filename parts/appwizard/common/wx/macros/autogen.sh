@@ -1,8 +1,6 @@
 #!/bin/sh
-
 aclocal
+libtoolize --automake --force --copy
+automake -a -c
 autoconf
-libtoolize --automake --force
-aclocal
-automake -a
 
