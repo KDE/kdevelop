@@ -494,6 +494,8 @@ void QextMdiMainFrm::switchToChildframeMode()
 void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 {
    m_pMainMenuBar = pMenuBar;
+   if( m_pMainMenuBar == 0L)
+      return;  // use setMenuForSDIModeSysButtons( 0L) for unsetting the external main menu!
 #ifdef _OS_WIN32_
    m_pUndock = new QPushButton( pMenuBar);
    m_pRestore = new QPushButton( pMenuBar);
