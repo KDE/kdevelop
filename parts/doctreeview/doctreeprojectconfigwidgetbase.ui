@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>DocTreeProjectConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,91 +8,148 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>481</width>
-            <height>275</height>
+            <width>942</width>
+            <height>870</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>projectdocdirLabel</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <property name="text">
-                <string>Location of project user documentation:</string>
-            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>projectdocdirLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Location of project user documentation:</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>userdocdirEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>userdocdirLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Location of project API documentation:</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>apidocdirEdit</cstring>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="KURLRequester" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>apidocdirEdit</cstring>
+                <cstring>layout5</cstring>
             </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>displayedDocsLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Displayed documents in documentation browser:</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KListView">
+                            <property name="name">
+                                <cstring>docListView</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>320</width>
+                                    <height>260</height>
+                                </size>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>WheelFocus</enum>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This table shows all the globaly installed documentation. Use the enable and disable buttons to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure Gideon...-&gt;Documentation Tree</string>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout3</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>EnableButton</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Enable</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>DisableButton</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Disable</string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer1</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>userdocdirLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Location of project API documentation:</string>
-            </property>
-        </widget>
-        <widget class="KURLRequester" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>userdocdirEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>displayedDocsLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Displayed documents in documentation browser:</string>
-            </property>
-        </widget>
-        <widget class="KListView" row="5" column="0" rowspan="2" colspan="1">
-            <property name="name">
-                <cstring>docListView</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>320</width>
-                    <height>260</height>
-                </size>
-            </property>
-            <property name="focusPolicy">
-                <enum>WheelFocus</enum>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This table shows all the globaly installed documentation. Use the enable and disable buttons to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure Gideon...-&gt;Documentation Tree</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="5" column="1">
-            <property name="name">
-                <cstring>EnableButton</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
-                <string>Enable</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="6" column="1">
-            <property name="name">
-                <cstring>DisableButton</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
-                <string>Disable</string>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
 <connections>
     <connection>
