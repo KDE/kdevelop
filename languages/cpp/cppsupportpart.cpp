@@ -482,19 +482,21 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	//Cache some values that are constant in this function
 	bool is_header, is_source;
 	QString source_header_candidate;
-	
+		
 	is_header = isHeader(m_activeFileName);
-	is_source = isSource(m_activeFileName);
-    
+	is_source = isSource(m_activeFileName);	
+	
         QString text;
         int atline, atcol;
         MakeMemberHelper(text,atline,atcol);
         if(!text.isEmpty())
         {
+	 m_backgroundParser->lock();
          id = popup->insertItem( i18n( "Make Member"),
                 this, SLOT( slotMakeMember() ) );
          popup->setWhatsThis( id, i18n("<b>Make member</b><p>Creates a class member function in implementation file "
                               "based on the member declaration at the current line."));
+	 m_backgroundParser->unlock();
         }
         
 	if((source_header_candidate = sourceOrHeaderCandidate()) != QString::null)
@@ -1105,16 +1107,6 @@ void CppSupportPart::MakeMemberHelper(QString& text, int& atLine, int& atColumn)
 	    text += declStr + "\n{\n}";
 	}
 
-	m_backgroundParser->unlock();
-
-	QString implFile = findSourceFile();
-
-	if( !text.isEmpty() && !implFile.isEmpty() ){
-	    partController()->editDocument( KURL( implFile ) );
-	    kapp->processEvents( 500 );
-	}
-
-	m_backgroundParser->lock();
 	translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
 	if( translationUnit ){
 	    translationUnit->getEndPosition( &atLine, &atColumn );
@@ -1135,6 +1127,18 @@ MakeMemberHelper(text,atLine,atColumn);
 
 if(!text.isEmpty())
 { 
+
+
+
+ m_backgroundParser->unlock();
+
+ QString implFile = findSourceFile();
+
+ if(!implFile.isEmpty() ){
+    partController()->editDocument( KURL( implFile ) );
+    kapp->processEvents( 500 );
+ }
+
  m_backgroundParser->lock();
 
          kdDebug() << "at line in mm: " << atLine  << " atCol: " << atColumn << endl;
