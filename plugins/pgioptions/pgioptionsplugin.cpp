@@ -240,7 +240,7 @@ void HpfTab::writeFlags(QStringList *list)
 
 
 PgiOptionsDialog::PgiOptionsDialog(PgiOptionsPlugin::Type type, QWidget *parent, const char *name)
-    : KDialogBase(Tabbed, (type == PGHPF)? i18n("PGHPF Compiler Options") : i18n("PGF77 Compiler Options"),
+    : KDialogBase(Tabbed, (type == PgiOptionsPlugin::PGHPF)? i18n("PGHPF Compiler Options") : i18n("PGF77 Compiler Options"),
                   Ok|Cancel, Ok, parent, name, true)
 {
     QVBox *vbox;
