@@ -36,7 +36,7 @@ public:
      */
     virtual QString mainProgram() = 0;
     /**
-     * Returns the toplevel directory of the project.
+     * Returns the canonical toplevel directory of the project.
      */
     virtual QString projectDirectory() = 0;
     /**
