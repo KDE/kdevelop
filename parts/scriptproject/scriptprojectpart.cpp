@@ -85,6 +85,9 @@ static bool matchesPattern(const QString &fileName, const QStringList &patternLi
 
 void ScriptProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
+    if (!languageSupport())
+        kdDebug(9015) << "ScriptProjectPart::openProject: no language support found!" << endl;
+
     m_projectDirectory = dirName;
     m_projectName = projectName;
 
