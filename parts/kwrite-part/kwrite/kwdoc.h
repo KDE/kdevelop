@@ -28,10 +28,10 @@
 #include <qfontmetrics.h>
 
 #include <kparts/browserextension.h>
+#include <ktexteditor/document.h>
 
 #include "kwview.h"
 #include "highlight.h"
-#include "ktexteditor.h"
 #include "kwbuffer.h"
 #include "kwtextline.h"
 

@@ -37,7 +37,9 @@
 #include <kconfig.h>
 #include <kspell.h>
 #include <ksconfig.h>
-#include <ktexteditor.h>
+#include <kio/job.h>
+#include <kurl.h>
+#include <ktexteditor/view.h>
 
 class KAction;
 class KToggleAction;
