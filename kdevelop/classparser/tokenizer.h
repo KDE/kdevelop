@@ -26,6 +26,8 @@
 #ifndef _TOKENIZER_H_INCLUDED
 #define _TOKENIZER_H_INCLUDED
 
+#include <errno.h>
+
 #define CPCLASS        258
 #define CPPUBLIC       259
 #define CPPROTECTED    260
@@ -55,15 +57,13 @@ typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
 
-extern int errno;
-
-#endif
-
 #ifndef YY_STACK_USED
 #define YY_STACK_USED 0
 #endif
 
 #ifndef YY_MAIN
 #define YY_MAIN 0
+#endif
+
 #endif
 
