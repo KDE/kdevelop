@@ -1,0 +1,1159 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kdevelop "<application>KDevelop</application>">
+  <!ENTITY grep "<application>grep</application>">
+  <!ENTITY egrep "<application>egrep</application>">
+  <!ENTITY ctags "<application>ctags</application>">
+  <!ENTITY doxygen "<application>doxygen</application>">
+  <!ENTITY doxywizard "<application>doxywizard</application>">
+  <!ENTITY kappname "&kdevelop;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>&kdevelop; Documentation</title>
+
+<date></date>
+<releaseinfo></releaseinfo>
+
+<authorgroup>
+<author>
+<firstname>Bernd</firstname>
+<surname>Gehrmann</surname>
+<affiliation><address><email>bernd@kdevelop.org</email></address></affiliation>
+</author>
+</authorgroup>
+
+<abstract>
+<para>This documentation describes the &kdevelop; Integrated
+Development Environment (Gideon)</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>IDE</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="overview">
+<title>Overview: Development on UNIX</title>
+
+<simplesect id="overview-buildsystems">
+<title>Build systems</title>
+
+<para>
+</para>
+
+</simplesect>
+
+
+<simplesect id="overview-debugging">
+<title>Debugging</title>
+
+<para>
+</para>
+
+</simplesect>
+
+
+<simplesect id="overview-guidevelopment">
+<title>GUI Development</title>
+
+<para>
+</para>
+
+</simplesect>
+
+
+
+</chapter>
+
+
+
+<chapter id="userinterface">
+<title>Overview: &kdevelop;'s user interface</title>
+
+<sect1 id="mainwindow">
+<title>Main window</title>
+
+<para>
+</para>
+
+</sect1>
+
+
+<sect1 id="leftside">
+<title>Left side</title>
+
+<para>
+</para>
+
+</sect1>
+
+
+<sect1 id="bottomside">
+<title>Bottom side</title>
+
+<para>
+</para>
+
+</sect1>
+
+<sect1 id="statusbar">
+<title>Status bar</title>
+
+<para>
+</para>
+
+</sect1>
+
+</chapter>
+
+
+
+<chapter id="appwizard">
+<title>Getting started: The application wizard</title>
+
+<sect1 id="newprojects">
+<title>New projects</title>
+
+<para>
+</para>
+
+</sect1>
+
+
+<sect1 id="importing">
+<title>Importing existing projects</title>
+
+<para>
+</para>
+
+</sect1>
+
+
+<sect1 id="filetemplates">
+<title>File templates</title>
+
+<para>
+</para>
+
+</sect1>
+
+</chapter>
+
+
+
+<chapter id="editing">
+<title>Editing</title>
+
+<sect1 id="keyboardmapping">
+<title>Keyboard mapping</title>
+
+<para>
+In the following, we will list the default keybindings of the
+the default editor. You can configure them as you like (how?)
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+
+<row><entry><para><keycap>
+  Left
+</keycap></para></entry>
+<entry><para>
+  Moves one character left
+</para></entry></row>
+
+<row><entry><para><keycap>
+  Right       
+</keycap></para></entry>
+<entry><para>
+  Moves one character right
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  Left   
+</keycap></keycombo></para></entry>
+<entry><para>
+  Moves one word left
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  Right  
+</keycap></keycombo></para></entry>
+<entry><para>
+  Moves one word right
+</para></entry></row>
+
+<row><entry><para><keycap>
+  Up          
+</keycap></para></entry>
+<entry><para>
+  Moves up one line
+</para></entry></row>
+
+<row><entry><para><keycap>
+  Down        
+</keycap></para></entry>
+<entry><para>
+  Moves down one line
+</para></entry></row>
+
+<row><entry><para><keycap>
+  PgUp        
+</keycap></para></entry>
+<entry><para>
+  Moves up one page
+</para></entry></row>
+
+<row><entry><para><keycap>
+    PgDn        
+</keycap></para></entry>
+<entry><para>
+  Moves down one page
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  PgUp   
+</keycap></keycombo></para></entry>
+<entry><para>
+  Moves to the beginning of the file
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  PgDn   
+</keycap></keycombo></para></entry>
+<entry><para>
+  Moves to the end of the file
+</para></entry></row>
+
+<row><entry><para><keycap>
+    Home        
+</keycap></para></entry>
+<entry><para>
+  Moves to the beginning of the line
+</para></entry></row>
+
+<row><entry><para><keycap>
+    End         
+</keycap></para></entry>
+<entry><para>
+  Moves to the end of the line
+</para></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+For all the keys above, the Shift can be pressed additionally,
+to mark from the current cursor position to the one afterwards.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+
+<row><entry><para><keycap>
+  Backspace   
+</keycap></para></entry>
+<entry><para>
+  Deletes one character left
+</para></entry></row>
+
+<row><entry><para><keycap>
+  Delete      
+</keycap></para></entry>
+<entry><para>
+  Deletes the character under the cursor
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  C
+</keycap></keycombo></para></entry>
+<entry><para>
+  Copies the selected text to the clipboard
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  V
+</keycap></keycombo></para></entry>
+<entry><para>
+  Pastes the selected text from the clipboard
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  X      
+</keycap></keycombo></para></entry>
+<entry><para>
+  Deletes the selected text and puts it into the clipboard
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Ctrl
+</keycap><keycap>
+  Z        
+</keycap></keycombo></para></entry>
+<entry><para>
+  Undo
+</para></entry></row>
+
+<row><entry><para><keycombo><keycap>
+  Shift
+</keycap><keycap>
+  Ctrl
+</keycap><keycap>
+  Z  
+</keycap></keycombo></para></entry>
+<entry><para>
+Redo
+</para></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect1>
+
+
+<sect1 id="searchinggrepping">
+<title>Searching and grepping</title>
+
+<sect2 id="searching">
+<title>Searching for text</title>
+
+<para>
+<keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>- Find 
+<keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
+</para>
+
+</sect2>
+ 
+<sect2 id="isearch">
+<title>ISearch</title>
+<para>
+The conventional search with <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find</guimenuitem></menuchoice> requires you to specify the full 
+search term before starting. Most of the time, it is much faster to search 
+incrementally. If you click into the edit field labeled 
+<guilabel>ISearch</guilabel> in the toolbar, the search is performed as you 
+type. You will find that often the desired term is already found after typing
+in 3 or 4 letters.
+</para>
+</sect2>
+
+<sect2 id="grep">
+<title>Grep</title>
+
+<para>
+Both search mechanisms described above are restricted to searching within one
+source file. An additional tool which allows you to search through a (possibly
+large) number of files is available through the
+<guimenuitem>Search in Files...</guimenuitem> item in the 
+<guimenu>Edit</guimenu> menu. It is basically a frontend for the 
+&grep;(1) program.
+</para>
+
+<para>
+In the dialog, you can specify which files are searched. There is a number of 
+wildcard patterns available in a combo box. In this way, you can easily
+restrict the find mechanism to header files. Furthermore, you specify a 
+directory where the search is started. If you check the 
+<guibutton>Recursive</guibutton> box, the search iterates through all 
+directories in the hierarchy below this one.
+</para>
+
+<para>
+The search term is in general a regular expression following POSIX syntax. 
+For example, you can use the term <literal>"\&lt;K.*"</literal> if you want to
+find all words which begin with the letter K. The following characters
+are interpreted in a special way:
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+
+<row><entry>
+  <literal>.</literal>
+</entry><entry>
+  Matches any character 
+</entry></row>
+<row><entry>
+  <literal>^</literal>
+</entry><entry>
+Matches the beginning of a line
+</entry></row>
+<row><entry>
+  <literal>$</literal>
+</entry><entry>
+  Matches the end of a line 
+</entry></row>
+<row><entry>
+  <literal>\&lt;</literal>
+</entry><entry>
+  Matches the beginning of a word 
+</entry></row>
+<row><entry>
+  <literal>\&gt;</literal>
+</entry><entry>
+  Matches the end of a word
+</entry></row>
+<row><entry>
+  <literal>?</literal>
+</entry><entry>
+  The preceding item matches less than once 
+</entry></row>
+<row><entry>
+  <literal>*</literal>
+</entry><entry>
+  The preceding item is matched zero or more times 
+</entry></row>
+<row><entry>
+  <literal>+</literal>
+</entry><entry>
+  The preceding item is matched once or more times 
+</entry></row>
+<row><entry>
+  <literal>{n}</literal>
+</entry><entry>
+  The preceding item is matched exactly n times 
+</entry></row>
+<row><entry>
+  <literal>{n,}</literal>
+</entry><entry>
+  The preceding item is matched n or more times 
+</entry></row>
+<row><entry>
+  <literal>{,n}</literal>
+</entry><entry>
+  The preceding item matches less than n times
+</entry></row>
+<row><entry>
+  <literal>{n,m}</literal>
+</entry><entry>
+  The preceding item matches at least <literal>n</literal> times but less 
+than <literal>m</literal> times
+</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+Backreferences to bracketed subexpressions are also available by the notation
+<literal>\n</literal>.
+</para>
+
+<para>
+For C++ programmers, as special bonus there are some search templates
+available for typical patterns. These allow you to search for example
+all calls of member functions of a certain object.
+</para>
+
+<para>
+Once you start the search by clicking on the <guibutton>Search</guibutton>
+button, it will be performed by an external, asynchronous process. All found 
+items will appear in the view called <guilabel>Grep</guilabel>. You can then
+jump to the found items by clicking on them. Note that grep scans the files
+as they stored in the file system. If you have modified versions of them in 
+your editor, you may get some mismatches in the line number, or some found
+items will be invalid. You can avoid this by saving all files beforehand.
+</para>
+
+</sect2>
+
+</sect1>
+  
+
+<sect1 id="newfiles">
+<title>Creating new files and classes</title>
+
+<para>
+</para>
+
+</sect1>
+
+</chapter>
+
+
+
+<chapter id="filebrowsers">
+<title>The file browsers</title>
+
+<para>
+On the left side of the main window, &kdevelop; can display various kinds of
+lists and trees for the selection of files:
+</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>File Tree</title>
+<para>
+This shows a tree view of the file hierarchy below the project directory. If 
+you click on a file, it is loaded into the editor. For files which do not
+contain text, KDevelop starts an application that can handle the respective
+MIME type. 
+</para>
+</formalpara>
+
+<para>
+The file tree is regularly updated whenever something changes in the file 
+system. For example, if you create new files or directories (even outside 
+&kdevelop;), this is immediately reflected in the file list. On Linux,
+this feature makes use of the FAM library. On other operating systems or over 
+NFS, the directories shown are polled in small intervalls.
+</para>
+
+<para>
+The file tree hides files which are usually not interesting, like object 
+files. In the <guimenuitem>Project options</guimenuitem> under 
+<guibutton>File views</guibutton>, you can configure (as a comma separated 
+list of wildcards) which patterns are used to filter out irrelevant files. 
+</para>
+
+<para>
+Furthermore, you can decide to restrict the file tree to show only files which
+belong to the currently loaded project. This can be toggled by clicking with 
+the right mouse button on the root item of the tree.
+</para>
+
+<figure id="screenshot-filetree" float="1">
+<title>A screenshot of the file tree</title>
+<mediaobject>
+<imageobject><imagedata fileref="filetree.png"/></imageobject>
+</mediaobject>
+</figure>
+
+</listitem>
+
+<listitem>
+<formalpara>
+<title>File Groups</title>
+<para>
+This shows the files belonging to the project, grouped by their file name 
+extension. As in the file tree, you can edit a file by clicking on it
+with the left mouse button.
+</para>
+</formalpara>
+
+<para>
+The groups shown in this view can be configured under
+<guibutton>File views</guibutton> in the 
+<guimenuitem>Project options</guimenuitem> dialog. In order to customize the
+view to your needs, it is helpful to understand how files are distributed on 
+the groups. For each file, &kdevelop; goes through all groups from top to 
+bottom. In each group, it looks whether the file name matches one of the 
+patterns. If there is a match, the file is shown in this group and the 
+iteration is aborted. This makes it clear that more general patterns should
+be put below more specific ones. For example, an asterisk for the 
+<guilabel>Other</guilabel> group should  be the last pattern.
+</para>
+
+</listitem>
+
+</itemizedlist>
+
+</chapter>
+
+
+
+<chapter id="classbrowser">
+<title>The class browser</title>
+
+<para>
+When working on a project in an object-oriented language, your emphasis when
+working on a project is not on the source files and their names, but on the 
+classes and their relationships. In order to help you navigating in the space
+of defined classes and symbols, &kdevelop; includes various class browsers 
+that visualize the class structure in different ways.
+</para>
+
+<sect1 id="classview">
+<title>Class view</title>
+
+<para>
+This view is shown on the left side of the main window and contains a linear
+list of all classes, variables and functions in your project. It is designed
+as a tree view. If you open a class node by clicking on bit, a list with all 
+methods and attributes of the respective class is shown.
+</para>
+
+<para>
+The class view works in two different modes. By default, all symbols are 
+grouped into "Classes", "Structs", "Functions", "Variables" and "Namespaces". 
+In the context menu of the view, you can choose 
+<guimenuitem>List by Namespaces</guimenuitem>. In this mode, the namespace
+hierarchy is shown and the symbols grouped into the respective namespace where
+they are defined. This may be more useful in projects which make heavy use of
+(nested) namespaces. It is less useful in projects without namespaces.
+</para>
+
+<para>
+You can also change the way in which class names are displayed. Normally, the
+names of the classes are shown, without the namespace in which they are defined.
+This means, you cannot immediately distinguish classes with the same name in 
+different namespaces. If you rest for a while with the mouse over an item, the
+full scoped name is shown as a tooltip though. You can decide to always
+display the fully scoped class name by choosing
+<guimenuitem>Full Identifier scopes</guimenuitem> from the context menu.
+</para>
+
+<para>
+Clicking on a class or method in the class view brings you to its definition.
+You can also jump to the declaration of a method by choosing 
+<guimenuitem>Go to declaration</guimenuitem> from the context menu. In the 
+context menu for classes are also the items
+<guimenuitem>Add method..</guimenuitem> and 
+<guimenuitem>Add attribute...</guimenuitem>. This opens dialogs where you can 
+generate new method and variable declaration in the respective class, together
+with an empty implementation.
+</para>
+
+</sect1>
+
+<sect1 id="classtools">
+<title>Class tools</title>
+
+<para>
+The class tool dialog is activated by right clicking on a class in the class
+view and choosing <guimenuitem>Class tool...</guimenuitem>.
+</para>
+
+</sect1>
+
+
+<sect1 id="classhierarchy">
+<title>Class hierarchy</title>
+
+<para>
+</para>
+
+</sect1>
+
+</chapter>
+
+
+
+<chapter id="docbrowser">
+<title>The documentation browser</title>
+
+
+<figure id="screenshot-doctreeview" float="1">
+<title>A screenshot of the documentation tree</title>
+<mediaobject>
+<imageobject><imagedata fileref="doctreeview.png"/></imageobject>
+</mediaobject>
+</figure>
+
+</chapter>
+
+
+
+<chapter id="projectmanagement">
+<title>Building and Project management</title>
+
+<para>
+This chapter deals only with compiled projects, such as C++, Java or
+Fortran projects. Projects for scripting languages like Python and
+PHP work very differently.
+</para>
+
+<sect1 id="autoproject">
+<title>Automake</title>
+
+<para>
+</para>
+
+<figure id="screenshot-automakemanager" float="1">
+<title>A screenshot of the Automake manager</title>
+<mediaobject>
+<imageobject><imagedata fileref="automakemanager.png"/></imageobject>
+</mediaobject>
+</figure>
+
+</sect1>
+
+
+
+<sect1 id="customproject">
+<title>Custom Makefiles and build scripts</title>
+
+<para>
+</para>
+
+</sect1>
+
+<sect1 id="compileroptions">
+<title>Compiler options</title>
+
+<para>
+</para>
+
+</sect1>
+
+<sect1 id="makeoptions">
+<title>Make options</title>
+
+<para>
+</para>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="debugger">
+<title>The debugger</title>
+
+<para>
+For C and C++, &kdevelop; contains an internal debugger that is directly
+integrated with the editor. Technically, it is implemented as a frontend 
+that uses the portable GNU debugger <application>gdb</application> through 
+a pipe. The debugger can be started in several ways:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+With <menuchoice><guimenu>Debug</guimenu><guimenuitem>Start</guimenuitem></menuchoice>,
+the main program of your project is loaded into the debugger.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Using <menuchoice><guimenu>Debug</guimenu>
+<guimenuitem>Start (other)</guimenuitem>
+<guimenuitem>Examine core file</guimenuitem></menuchoice> you load a core file
+into memory, which is generated by the operating system kernel when the
+program has crashed (The generation of core files may be switched off on your
+system, see <application>ulimit(1)</application>). This is useful for a
+post-mortem analysis of a program.
+</para>
+</listitem>
+
+<listitem>
+<para>
+With <menuchoice><guimenu>Debug</guimenu>
+<guimenuitem>Start (other)</guimenuitem>
+<guimenuitem>Attach to process</guimenuitem></menuchoice> you invoke the
+debugger on an already running program. You will be shown a
+process list where you can select the process which the debugger
+should take over.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Note that debugging is only possible if your project has been compiled with
+debugging information enabled. It can be activated in the 
+<guibutton>Compiler options</guibutton> dialog. When this option is switched
+on, the compiler generates additional data which allows the debugger to 
+associate file names and line numbers with addresses in the executable.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+The debugger frontend offers several views "into" the process:
+</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>Variables</title>
+<para>
+This window lists the values of all local variables at the current execution
+point of the program. It covers the variables in the complete call stack,
+i.e.  the function where the process was interrupted, the function that called
+this function, and so on up to <function>main()</function> function.
+</para>
+</formalpara>
+
+<para>
+Another branch in the variables contains watch variables. You can configure
+yourself which variables are shown here. Both local and global variables can 
+be watched. You can add variables either by clicking on the 
+<guibutton>Add</guibutton> button or pressing <keycap>RETURN</keycap> while 
+the <guilabel>Watch</guilabel> item is selected. They can be removed again 
+via the context menu.
+</para>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Breakpoints</title>
+<para>
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Frame stack</title>
+<para>
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Disassemble</title>
+<para>
+</para>
+</formalpara>
+</listitem>
+
+</itemizedlist>
+
+
+<sect1 id="settingbreakpoints">
+<title>Setting breakpoints</title>
+
+<para>
+</para>
+
+</sect1>
+
+
+<sect1 id ="debuggeroptions">
+<title>Options</title>
+
+<formalpara>
+<title>Display mangled names</title>
+<para>
+In C++, function names in the executable are "mangled", i.e. the function
+names include information about the argument types. This is necessary in 
+order to support overloading of functions. The mangling algorithm is not 
+standardized and differs even between different versions of the 
+GNU C++ compiler.
+</para>
+</formalpara>
+
+<para>
+In the disassembling window, normally unmangled names are displayed, so
+function signatures appear in the similar way as in the source code, so
+they are easily readable. Alternatively, you can decide to see mangled names.
+</para>
+
+<formalpara>
+<title>Try setting BPs on lib load</title>
+<para>
+The debugger backend <application>gdb</application> does not allow to set
+breakpoints within code that is not currently loaded. In a highly modular
+application, where often code is only loaded on demand as a plugin (using
+the libc function <function>dlopen(3)</function>), this can be incovenient. 
+Therefore, &kdevelop; rolls it own support for breakpoints in shared 
+libraries. If you set this option, it allows you to set breakpoints in 
+libraries which are not loaded. Then, whenever <application>gdb</application>
+notifies that a library is loaded, &kdevelop; tries to set the pending 
+breakpoints.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Enable floating toolbar</title>
+<para>
+</para>
+</formalpara>
+
+</sect1>
+
+</chapter> 
+  
+
+<chapter id="python">
+<title>Python</title>
+
+<para>
+</para>
+
+</chapter>
+
+
+
+<chapter id="php">
+<title>PHP</title>
+
+<para>
+</para>
+</chapter>
+
+
+
+<chapter id="cvs">
+<title>Using CVS</title>
+
+<para>
+</para>
+
+</chapter>
+
+
+
+<chapter id="externalprogs">
+<title>Leveraging external programs</title>
+
+<para>
+Although &kdevelop; is a so-called "Integrated" development environment, it
+will never contain all features that you may want to use, and the 
+capabilities of its editor will never suffice to perform often-used text
+processing tasks. As a genuine UNIX program, &kdevelop; contains several 
+possibilities to start external programs, plugin external programs to work
+on files, or use external filters to process the content of the editor.
+</para>
+
+<para>
+The most general and simple feature of this kind is the tool menu, which you
+can freely configure. This is done in the <menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>.
+dialog under <guibutton>External tools</guibutton>.
+</para>
+
+<para>
+Other tools will be discussed in the chapter "Plugin Tools".
+</para>
+
+</chapter>
+
+
+
+<chapter id="plugintools">
+<title>Plugin Tools</title>
+
+<para>
+&kdevelop; contains a large number of little tools that help you to perform
+certain task. Most of them are realized as plugins. This means, if you do not
+like one of them, you can simply  disable it in the 
+<guimenuitem>Project options</guimenuitem> dialog under
+<guibutton>Plugins</guibutton> (for project-wide plugins) or under 
+<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. 
+Plugins which are switched off do not clutter your menus and are not loaded
+into memory.
+</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>The abbrev plugin</title>
+<para>
+This plugin expands abbreviations into frequently used code snippets. It is
+activated by pressing <keycombo><keycap>Ctrl</keycap>
+<keycap>Space</keycap></keycombo>. For example, when you enter 
+<literal>"ife"</literal> into a C++ in the editor and press 
+<keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo>, you obtain
+an <literal>if-else</literal> code template and save some key strokes. The set
+of supported abbreviations depends on the programming language of the edited 
+file. For example, for PHP you will obviously be interested in other code 
+templates than for Java.
+</para>
+</formalpara>
+
+<para>
+The set of code templates is configurable. You can see
+which ones are available in the <menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>
+dialog under <guibutton>Abbreviations</guibutton>
+</para>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>The filter plugin</title>
+<para>
+This offers two features. If you select <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>Execute command</guimenuitem></menuchoice>, you can enter a shell
+command. The output of this command is inserted into the editor buffer when
+you hit the <guibutton>Start</guibutton> button.
+</para>
+</formalpara>
+
+<para>
+A related feature is available under
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Filter selection through
+command...</guimenuitem></menuchoice>.  In order to use this, you must 
+select a text area in the editor. If you now enter a shell command and hit 
+the <guibutton>Start</guibutton> button, the command is started and the 
+selection used as the standard input for it. The standard output of the 
+command is then inserted into the editor. 
+</para>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>The doxygen plugin</title>
+<para>
+This one helps you to use the &doxygen; API documentation tool 
+(<ulink url="http://www.doxygen.org"/>). You can select 
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate API 
+documentation for your current project, based on the configuration given by 
+the file <filename>Doxyfile</filename> in your project directory.
+</para>
+</formalpara>
+
+<para>
+Furthermore, you can configure &doxygen; in the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project options...</guimenuitem></menuchoice> dialog. This dialog
+is very similar to the &doxywizard; tool.
+</para>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>The ctags plugin</title>
+<para>
+Although the class browser gives you extensive insight into the symbols and
+classes of your project, you may also want to use the ctags tool. In particular,
+this one supports a lot more language than the class browser.
+</para>
+</formalpara>
+
+<para>
+You activate this plugin under <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>CTags...</guimenuitem></menuchoice>. When you start it the first
+time, you will be asked to generate a search database first. When you accept 
+this, the &ctags; program will be started and will create a file named 
+<filename>tags</filename> in your project directory. This is a text file containing
+all symbols of your source files.
+</para>
+
+<para>
+You can search in the symbol database in two ways: when the 
+<guilabel>Regular expression match</guilabel> box is checked, the text you 
+enter will be interpreted as a regular expression (POSIX flavor) and matched 
+with the existing symbols. For example, the text <literal>".*Widget"</literal>
+will search for all symbols ending with <literal>"Widget"</literal>. If the 
+box is not checked, the search will be verbatim.
+</para>
+
+<para>
+When searching, you will get a list of the matched symbols, accompanied with
+the line numbers where they are defined. You jump to the respective point by
+clicking on the list.
+</para>
+
+<para>
+For some languages, &ctags; distinguishes different kinds of symbols. For
+example, Python has classes and functions. You can selectively search only
+for classes by checking the respecting kinds in the dialog.
+</para>
+
+<para>
+The symbol database is normally not updated when your sources change.
+Consequently, after a while the line numbers will not be correct anymore
+and newly added classes and functions will be missing. Therefore you should
+update the <filename>tags</filename> file in regular intervals by pressing
+the button <guibutton>Regenerate</guibutton>.
+</para>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>The astyle plugin</title>
+<para>
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>The regexptest plugin</title>
+<para>
+Designing with regular expressions can be hard work. Often the first try at an
+expression matches too many strings. In particular, when working with a
+compiled language, the turnaround times when debugging a regular expression
+can be awkward. The regexptest plugin allows you to directly explore the
+changes in a regular expression. It is activated by choosing 
+<menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>Debug Regular Expression...</guimenuitem></menuchoice>.
+</para>
+</formalpara>
+
+<para>
+In the flavor group box, you can choose the flavor of the regular expression
+engine used. Currently supported is the flavor defined in the POSIX standard,
+which is used by the &grep; program, and the extended POSIX syntax used by the
+program &egrep;.
+</para>
+
+<para>
+When you enter an expression, you get immediate feedback about any syntax
+errors in it. By entering a text under <guilabel>Test string</guilabel>,
+you can see whether the expression matches this string. In particular, if
+your regular expression includes groups, such as <literal>"([a-z])"</literal>,
+the content of the matched subgroups will be shown in a list box.
+</para>
+</listitem>
+  
+<listitem>
+<formalpara>
+<title>The konsole plugin</title>
+<para>
+</para>
+</formalpara>
+</listitem>
+
+</itemizedlist>
+
+</chapter>
+
+
+<chapter id="appendix">
+<title>Appendix</title>
+
+
+<simplesect id="gettinginformation">
+<title>Getting information</title>
+
+<para>
+</para>
+
+</simplesect>
+
+
+<simplesect id="reportingbugs">
+<title>Reporting bugs</title>
+
+<para>
+</para>
+
+</simplesect>
+
+
+<simplesect id="licensing">
+<title>Licensing</title>
+
+<para>
+</para>
+
+</simplesect>
+
+</chapter>
+
+</book>
