@@ -1,3 +1,8 @@
+1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed the classtooldialog. All options should work now.
+	* fixed minor glitch in the classparser. Didn't handle defaultvalues
+	        without argumentnames.
+
 1999-03-23 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added new classtool dialog inspired from ISE Eiffel.
 	* fixed the ClassParser. Seems to handle the Qt includes now.
