@@ -1340,7 +1340,12 @@ void CppSupportPart::slotMakeMember()
     if( !m_activeViewCursor )
         return;
 
-#if 0
+    // sync
+    while( m_backgroundParser->filesInQueue() > 0 )
+         m_backgroundParser->isEmpty().wait();
+
+    QString text;
+	    
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
     if( translationUnit ){
@@ -1362,7 +1367,6 @@ void CppSupportPart::slotMakeMember()
 	}
 
 	if( decl && declarator && declarator->parameterDeclarationClause() ){
-	    QString text;
 
 	    text += typeSpecToString( decl->typeSpec() );
 	    if( text )
@@ -1376,32 +1380,37 @@ void CppSupportPart::slotMakeMember()
 	        scopeStr += "::";
 
 	    text += declaratorToString( declarator, scopeStr ).simplifyWhiteSpace() + "\n{\n}\n\n";
+	}
+	
+	m_backgroundParser->unlock();
 
-	    QString implFile = findSourceFile();
-
-	    if( implFile ){
-	    	partController()->editDocument( implFile );
-
-	    	KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
-	    	KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
-
-		int line = editiface->numLines() - 1;
-
-	    	if( editiface )
-	        	editiface->insertText( line, 0, text );
-		if( cursoriface )
-			cursoriface->setCursorPosition( line, 0 );
-	    } else {
-	        int line = m_activeEditor->numLines() - 1;
-		if( m_activeEditor )
-	        	m_activeEditor->insertText( line, 0, text );
-		if( m_activeViewCursor )
-			m_activeViewCursor->setCursorPosition( line, 0 );
-	    }
+	QString implFile = findSourceFile();
+	
+	if( !text.isEmpty() && !implFile.isEmpty() ){
+	    partController()->editDocument( implFile );
+	    
+	    KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+	    KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
+	    	    
+	    int line = editiface->numLines() - 1;
+	    
+	    kdDebug(9007) << "editiface = " << editiface << endl;
+	    kdDebug(9007) << "cursoriface = " << cursoriface << endl;
+	    kdDebug(9007) << "text = " << text << endl;
+	    kdDebug(9007) << "line = " << line << endl;
+	    
+	    if( editiface )
+		editiface->insertText( line, 0, text );
+	    if( cursoriface )
+		cursoriface->setCursorPosition( line, 0 );
+	} else {
+	    int line = m_activeEditor->numLines() - 1;
+	    if( m_activeEditor )
+		m_activeEditor->insertText( line, 0, text );
+	    if( m_activeViewCursor )
+		m_activeViewCursor->setCursorPosition( line, 0 );
 	}
     }
-    m_backgroundParser->unlock();
-#endif
 }
 
 QStringList CppSupportPart::subclassWidget(QString formName)

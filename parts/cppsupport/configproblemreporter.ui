@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ConfigureProblemReporter</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>390</width>
-            <height>304</height>
+            <width>588</width>
+            <height>490</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,54 +25,135 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QCheckBox">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>bgParserCheckbox</cstring>
+                <cstring>groupBox1</cstring>
             </property>
-            <property name="text">
-                <string>Enable background parsing</string>
+            <property name="title">
+                <string>Parsing</string>
             </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>bgParserCheckbox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Enable background parsing</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>delaySlider</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>2000</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>250</number>
+                    </property>
+                    <property name="pageStep">
+                        <number>500</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Right</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>250</number>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QSlider">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>delaySlider</cstring>
+                <cstring>groupBox3</cstring>
             </property>
-            <property name="maxValue">
-                <number>2000</number>
+            <property name="title">
+                <string>Special words</string>
             </property>
-            <property name="lineStep">
-                <number>250</number>
-            </property>
-            <property name="pageStep">
-                <number>500</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Right</enum>
-            </property>
-            <property name="tickInterval">
-                <number>250</number>
-            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>pushButton1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Add</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>pushButton2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Remove</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>21</width>
+                                    <height>121</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+                <widget class="QTable" row="0" column="0">
+                    <column>
+                        <property name="text">
+                            <string>Word</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Skip arguments</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Replace word with</string>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>specialWordsTable</cstring>
+                    </property>
+                    <property name="resizePolicy">
+                        <enum>Manual</enum>
+                    </property>
+                    <property name="numRows">
+                        <number>0</number>
+                    </property>
+                    <property name="numCols">
+                        <number>3</number>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>0</width>
-                    <height>101</height>
-                </size>
-            </property>
-        </spacer>
     </vbox>
 </widget>
 <connections>
@@ -82,6 +163,18 @@
         <receiver>ConfigureProblemReporter</receiver>
         <slot>bgParserCheckbox_toggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>addSpecialWord()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton2</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>removeCurrentSpecialWord()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
@@ -89,6 +182,10 @@
 <slots>
     <slot>init()</slot>
     <slot>destroy()</slot>
+    <slot>loadSpecialWords()</slot>
+    <slot>storeSpecialWords()</slot>
+    <slot>addSpecialWord()</slot>
+    <slot>removeCurrentSpecialWord()</slot>
     <slot>accept()</slot>
     <slot>bgParserCheckbox_toggled( bool b )</slot>
 </slots>
