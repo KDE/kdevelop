@@ -54,7 +54,7 @@ KFileTreeViewItem* StdFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
     bool isDirectory = lv->projectFiles().contains( fileURL.path() ) > 0;
 
     return new StdFileTreeViewItem( parent, fileItem, this, isDirectory );
-};
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // class StdFileItemFactory

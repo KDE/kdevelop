@@ -159,7 +159,7 @@ KFileTreeViewItem* VCSFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
 //            else
 //                kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
     return newItem;
-};
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // class VCSFileItemFactory
