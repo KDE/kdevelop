@@ -16,29 +16,50 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
 #include <qdir.h>
-#include <qwhatsthis.h>
+#include <kmsgbox.h>
 #include <kfiledialog.h>
+#include "ccreatedocdatabasedlg.h"
+#include <iostream.h>
+#include <kquickhelp.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include "ccreatedocdatabasedlg.h"
 
-#if HAVE_CONFIG_H
-#include "../config.h"
-#endif
-
-CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
+CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config,bool foundGlimpse,bool foundHtDig) : QDialog(parent,name,true) {
 
   setCaption(i18n("Create Search Database..."));
   this->proc = proc;
   this->conf = config;
 
+	QButtonGroup *bg = new QButtonGroup( this, 0 );
+  bg->setFrameStyle( QFrame::NoFrame );
+  bg->setExclusive( TRUE );
+  bg->setGeometry( 20, 20, 380, 50 );
+
+  QLabel* lbl;
+  lbl = new QLabel( bg, "index_engine" );
+  lbl->setGeometry( 0, 0, 100, 20 );
+  lbl->setText(i18n("Index engine :") );
+  lbl->setAlignment( 289 );
+  lbl->setMargin( -1 );
+
+  useGlimpse = new QRadioButton( i18n("Glimpse"), bg );
+  useGlimpse->setGeometry( 140, 0, 80, 20 );
+  if (foundGlimpse)
+    useGlimpse->setChecked( true );
+  else
+    useGlimpse->setEnabled( false );
+
+  useHtDig = new QRadioButton( i18n("ht://Dig"), bg );
+  useHtDig->setGeometry( 220, 0, 80, 20 );
+  if (foundGlimpse)
+    useHtDig->setChecked( false );
+  else if (foundHtDig)
+    useHtDig->setChecked( true );
+
 	QButtonGroup* qtarch_ButtonGroup_1;
 	qtarch_ButtonGroup_1 = new QButtonGroup( this, "ButtonGroup_1" );
-	qtarch_ButtonGroup_1->setGeometry( 20, 20, 190, 120 );
+	qtarch_ButtonGroup_1->setGeometry( 20, 50, 190, 120 );
 	qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
 	qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
 	qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
@@ -50,7 +71,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_1->setAlignment( 1 );
 
 	tiny_radio_button = new QRadioButton( this, "RadioButton_2" );
-	tiny_radio_button->setGeometry( 40, 40, 100, 30 );
+	tiny_radio_button->setGeometry( 40, 70, 100, 30 );
 	tiny_radio_button->setMinimumSize( 0, 0 );
 	tiny_radio_button->setMaximumSize( 32767, 32767 );
 	tiny_radio_button->setFocusPolicy( QWidget::TabFocus );
@@ -63,7 +84,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	tiny_radio_button->setChecked( TRUE );
 
 	small_radio_button = new QRadioButton( this, "RadioButton_3" );
-	small_radio_button->setGeometry( 40, 70, 100, 30 );
+	small_radio_button->setGeometry( 40, 100, 100, 30 );
 	small_radio_button->setMinimumSize( 0, 0 );
 	small_radio_button->setMaximumSize( 32767, 32767 );
 	small_radio_button->setFocusPolicy( QWidget::TabFocus );
@@ -75,7 +96,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	small_radio_button->setAutoResize( FALSE );
 
 	medium_radio_button = new QRadioButton( this, "RadioButton_4" );
-	medium_radio_button->setGeometry( 40, 100, 100, 30 );
+	medium_radio_button->setGeometry( 40, 130, 100, 30 );
 	medium_radio_button->setMinimumSize( 0, 0 );
 	medium_radio_button->setMaximumSize( 32767, 32767 );
 	medium_radio_button->setFocusPolicy( QWidget::TabFocus );
@@ -88,7 +109,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 
   QButtonGroup* qtarch_ButtonGroup_3;
 	qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
-	qtarch_ButtonGroup_3->setGeometry( 230, 20, 240, 120 );
+	qtarch_ButtonGroup_3->setGeometry( 230, 50, 240, 120 );
 	qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
 	qtarch_ButtonGroup_3->setMaximumSize( 32767, 32767 );
 	qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
@@ -100,7 +121,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_3->setAlignment( 1 );
 
 	qt_checkbox = new QCheckBox( this, "CheckBox_3" );
-	qt_checkbox->setGeometry( 250, 40, 210, 30 );
+	qt_checkbox->setGeometry( 250, 70, 210, 30 );
 	qt_checkbox->setMinimumSize( 0, 0 );
 	qt_checkbox->setMaximumSize( 32767, 32767 );
 	qt_checkbox->setFocusPolicy( QWidget::TabFocus );
@@ -113,7 +134,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qt_checkbox->setChecked( TRUE );
 
 	kde_checkbox = new QCheckBox( this, "CheckBox_1" );
-	kde_checkbox->setGeometry( 250, 70, 210, 30 );
+	kde_checkbox->setGeometry( 250, 100, 210, 30 );
 	kde_checkbox->setMinimumSize( 0, 0 );
 	kde_checkbox->setMaximumSize( 32767, 32767 );
 	kde_checkbox->setFocusPolicy( QWidget::TabFocus );
@@ -127,7 +148,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 
 	QButtonGroup* qtarch_ButtonGroup_2;
 	qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
-	qtarch_ButtonGroup_2->setGeometry( 20, 160, 450, 210 );
+	qtarch_ButtonGroup_2->setGeometry( 20, 180, 450, 210 );
 	qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
 	qtarch_ButtonGroup_2->setMaximumSize( 32767, 32767 );
 	qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
@@ -139,7 +160,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_2->setAlignment( 1 );
 
 	dir_edit = new QLineEdit( this, "LineEdit_1" );
-	dir_edit->setGeometry( 40, 190, 280, 30 );
+	dir_edit->setGeometry( 40, 210, 280, 30 );
 	dir_edit->setMinimumSize( 0, 0 );
 	dir_edit->setMaximumSize( 32767, 32767 );
 	dir_edit->setFocusPolicy( QWidget::StrongFocus );
@@ -152,19 +173,21 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_edit->setFrame( TRUE );
 
 	dir_button = new QPushButton( this, "PushButton_3" );
-	dir_button->setGeometry( 340, 190, 30, 30 );
+	dir_button->setGeometry( 340, 210, 30, 30 );
 	dir_button->setMinimumSize( 0, 0 );
 	dir_button->setMaximumSize( 32767, 32767 );
 	dir_button->setFocusPolicy( QWidget::TabFocus );
 	dir_button->setBackgroundMode( QWidget::PaletteBackground );
 	dir_button->setFontPropagation( QWidget::NoChildren );
 	dir_button->setPalettePropagation( QWidget::NoChildren );
-	dir_button->setPixmap(BarIcon("open"));
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	dir_button->setPixmap(pix);
 	dir_button->setAutoRepeat( FALSE );
 	dir_button->setAutoResize( FALSE );
 
 	dir_listbox = new QListBox( this, "ListBox_1" );
-	dir_listbox->setGeometry( 40, 240, 280, 110 );
+	dir_listbox->setGeometry( 40, 260, 280, 110 );
 	dir_listbox->setMinimumSize( 0, 0 );
 	dir_listbox->setMaximumSize( 32767, 32767 );
 	dir_listbox->setFocusPolicy( QWidget::StrongFocus );
@@ -176,7 +199,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_listbox->setMultiSelection( FALSE );
 
 	add_button = new QPushButton( this, "PushButton_4" );
-	add_button->setGeometry( 340, 240, 100, 30 );
+	add_button->setGeometry( 340, 260, 100, 30 );
 	add_button->setMinimumSize( 0, 0 );
 	add_button->setMaximumSize( 32767, 32767 );
 	add_button->setFocusPolicy( QWidget::TabFocus );
@@ -188,7 +211,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	add_button->setAutoResize( FALSE );
 
 	remove_button = new QPushButton( this, "PushButton_5" );
-	remove_button->setGeometry( 340, 280, 100, 30 );
+	remove_button->setGeometry( 340, 300, 100, 30 );
 	remove_button->setMinimumSize( 0, 0 );
 	remove_button->setMaximumSize( 32767, 32767 );
 	remove_button->setFocusPolicy( QWidget::TabFocus );
@@ -211,7 +234,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_1->insert( medium_radio_button );
 	
 	ok_button = new QPushButton( this, "PushButton_1" );
-	ok_button->setGeometry( 100, 390, 100, 30 );
+	ok_button->setGeometry( 100, 400, 100, 30 );
 	ok_button->setMinimumSize( 0, 0 );
 	ok_button->setMaximumSize( 32767, 32767 );
 	ok_button->setFocusPolicy( QWidget::TabFocus );
@@ -224,7 +247,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	ok_button->setDefault(true);
 	
 	cancel_button = new QPushButton( this, "PushButton_2" );
-	cancel_button->setGeometry( 280, 390, 100, 30 );
+	cancel_button->setGeometry( 280, 400, 100, 30 );
 	cancel_button->setMinimumSize( 0, 0 );
 	cancel_button->setMaximumSize( 32767, 32767 );
 	cancel_button->setFocusPolicy( QWidget::TabFocus );
@@ -235,7 +258,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	cancel_button->setAutoRepeat( FALSE );
 	cancel_button->setAutoResize( FALSE );
 
-	resize( 490,430 );
+	resize( 490,440 );
 	setMinimumSize( 0, 0 );
 	setMaximumSize( 32767, 32767 );
 
@@ -251,14 +274,14 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_edit->setFocus();
 
 	/*doc*/
-	QWhatsThis::add(medium_radio_button,
+	KQuickHelp::add(medium_radio_button,
 	i18n("builds a medium-size index (20-30% of the size\n"
 	     "of all files), allowing faster search."));
-	QWhatsThis::add(small_radio_button,
+	KQuickHelp::add(small_radio_button,
 			i18n("Build a small index rather than tiny (meaning 7-9%\n"
 			     "of the sizes of all files - your mileage may vary)\n"
 			     "allowing faster search."));
-	QWhatsThis::add(tiny_radio_button,
+	KQuickHelp::add(tiny_radio_button,
 			i18n("a tiny index (2-3% of the total size of all files)"));
 	
 	
@@ -271,12 +294,12 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
   QString filename = conf->readEntry("doc_kde", KDELIBS_DOCDIR) +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
-    KMessageBox::error(0, i18n("No Database created!\nThe KDE-Documentation-Path isn't set correctly."));
+    KMsgBox::message(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
     return;
   }
   filename = conf->readEntry("doc_qt", QT_DOCDIR) +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
-    KMessageBox::error(0, i18n("No Database created!\nThe Qt-Documentation-Path isn't set correctly."));
+    KMsgBox::message(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
     return;
   }
   
@@ -312,10 +335,18 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   }
   
   proc->clearArguments();
-  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop";
-  proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-  accept();
-
+  if (useGlimpse->isChecked())
+  {
+    *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop";
+    proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    accept();
+  }
+  if (useHtDig->isChecked())
+  {
+    *proc <<  "find " + dirs + " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf" + " - ; htmerge -v -s -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf";
+    proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    accept();
+  }
 }
 void CCreateDocDatabaseDlg::slotAddButtonClicked(){
   QString str = dir_edit->text();
@@ -336,7 +367,6 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
-
 
 
 

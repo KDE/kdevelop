@@ -39,7 +39,8 @@
 class CCreateDocDatabaseDlg : public QDialog  {
    Q_OBJECT
 public: 
-	CCreateDocDatabaseDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0,KConfig* config=0);
+	CCreateDocDatabaseDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0,KConfig* config=0,
+		bool foundGlimpse=false, bool foundHtDig=false);
 	~CCreateDocDatabaseDlg();
  protected slots:
 
@@ -61,7 +62,9 @@ protected:
     QPushButton* add_button;
     QPushButton* remove_button;
     QLineEdit* dir_edit;
-  
+    QRadioButton *useGlimpse;
+    QRadioButton *useHtDig;
+
   KShellProcess* proc;
   KConfig* conf;
 };
