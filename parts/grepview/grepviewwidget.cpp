@@ -178,6 +178,15 @@ void GrepViewWidget::searchActivated()
 
 void GrepViewWidget::childFinished(bool normal, int status)
 {
+    // When xargs executes grep several times (because the command line
+    // generated would be too large for a single grep) and one of those
+    // sets of files passed to grep does not contain a match, then an
+    // error status of 123 is set by xargs, even if there is a match in
+    // another set of files.
+    // Reset this false status here.
+    if (status == 123 && numRows() > 1)
+        status = 0;
+
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
 }
