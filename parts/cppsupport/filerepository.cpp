@@ -75,7 +75,7 @@ public:
     
     virtual QString contents()
     {
-	kdDebug(9032) << "SourceUnit::contents()" << endl;
+	kdDebug(9007) << "SourceUnit::contents()" << endl;
 	
 	m_fileInfo.refresh();
 	m_lastModified = m_fileInfo.lastModified();
@@ -111,7 +111,7 @@ public:
     
     virtual QString contents()
     {
-	kdDebug(9032) << "TextEditorUnit::contents()" << endl;
+	kdDebug(9007) << "TextEditorUnit::contents()" << endl;
 	return edit->text();
     }
     
