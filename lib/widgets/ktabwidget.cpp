@@ -11,7 +11,6 @@
 
 #include <qpopupmenu.h>
 
-#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kicontheme.h>
@@ -51,12 +50,7 @@ void KTabBar::closeOthersSlot()
 
 void KTabBar::mousePressEvent(QMouseEvent *e)
 {
-  bool rb = (e->button() == RightButton);
-  bool lb = (e->button() == LeftButton);
-  int handed = KGlobalSettings::mouseSettings().handed;
-
-  if((rb && handed == KGlobalSettings::KMouseSettings::RightHanded) || 
-     (lb && handed == KGlobalSettings::KMouseSettings::LeftHanded)) {
+  if(e->button() == Qt::RightButton) {
 
     QTab *tab = selectTab(e->pos() );
     if( tab == 0L ) return;
