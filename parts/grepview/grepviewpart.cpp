@@ -42,7 +42,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     m_widget = new GrepViewWidget(this);
-    m_widget->setIcon(SmallIcon("grep"));
+    m_widget->setIcon(SmallIcon("find"));
     m_widget->setCaption(i18n("Grep Output"));
     QWhatsThis::add(m_widget, i18n("Grep\n\n"
                                    "This window contains the output of a grep "

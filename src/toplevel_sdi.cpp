@@ -127,6 +127,11 @@ bool TopLevelSDI::queryClose()
 }
 
 
+void TopLevelSDI::prepareToClose()
+{
+  // seems there's nothing to do here
+}
+
 void TopLevelSDI::realClose()
 {
   saveSettings();

@@ -42,6 +42,7 @@ public:
 
   void init();
 
+  void prepareToClose();
   void realClose();
 
 signals:

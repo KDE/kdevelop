@@ -253,6 +253,11 @@ bool TopLevelMDI::queryClose()
 }
 
 
+void TopLevelMDI::prepareToClose()
+{
+  writeDockConfig();
+}
+
 void TopLevelMDI::realClose()
 {
   saveSettings();
@@ -406,7 +411,7 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QStrin
 {
   QextMdiChildView *child = wrapper(view, name);
 
-  unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
+  unsigned int mdiFlags = QextMdi::StandardAdd;
 
   addWindow(child, QPoint(0,0), mdiFlags);
 
@@ -592,6 +597,7 @@ void TopLevelMDI::loadSettings()
 {
   ProjectManager::getInstance()->loadSettings();
   loadMDISettings();
+  readDockConfig();
   applyMainWindowSettings(kapp->config(), "Mainwindow");
 }
 

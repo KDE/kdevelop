@@ -47,6 +47,7 @@ public:
 
   void init();
 
+  void prepareToClose();
   void realClose();
 
   /** Reimplemented from QextMdiChildView to handle save prompt */

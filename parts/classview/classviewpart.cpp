@@ -50,7 +50,7 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     m_classtree = new ClassViewWidget(this);
-    m_classtree->setIcon(SmallIcon("CVclass"));
+    m_classtree->setIcon(UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
     m_classtree->setCaption(i18n("Class View"));
     QWhatsThis::add(m_classtree, i18n("Class View\n\n"
                                       "The class viewer shows all classes, methods and variables "
@@ -175,7 +175,7 @@ void ClassViewPart::updatedSourceInfo()
 void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
 {
     m_widgets.append(dlg);
-    dlg->setIcon(SmallIcon("CVclass"));
+    dlg->setIcon(UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
     topLevel()->embedSelectView(dlg, i18n("Classtools"), i18n("classtools"));
     topLevel()->raiseView(dlg);
 }

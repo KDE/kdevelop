@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
 
   PluginController::getInstance()->loadInitialPlugins();
 
+  ProjectManager::getInstance()->loadDefaultProject();
   TopLevel::getInstance()->loadSettings();
   TopLevel::getInstance()->main()->show();
-  ProjectManager::getInstance()->loadDefaultProject();
 
   Core::getInstance()->doEmitCoreInitialized();
   
