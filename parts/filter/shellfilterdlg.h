@@ -33,7 +33,7 @@ public:
     void setText(const QString &str)
     { m_instr = str.local8Bit(); }
     QString text() const
-    { return QString::fromLocal8Bit(m_outstr); }
+    { return m_outstr; }
 
 private slots:
     void slotStartClicked();
