@@ -44,8 +44,8 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-02-28</date
-  <releaseinfo>&kdevrelease;</releaseinfo
+  <date>2004-02-28</date>
+  <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
     <author>
