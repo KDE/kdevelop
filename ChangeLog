@@ -1,3 +1,11 @@
+1999-12-15 jbb <jbb@ihug.co.nz>
+	* new kwrite icon border code from 
+      Christian Couder <chcouder@club-internet.fr> and
+      Roland Schäfer <RolandSchaefer@gmx.net>
+
+1999-12-15 jbb <jbb@ihug.co.nz>
+	* Added integrated front end debugger for gdb.
+
 1999-11-30 Jonas Nordin  <jonas.nordin@syncom.se>
 	* fixed add methods in all containers. 
 
