@@ -1,3 +1,8 @@
+2000-06-16 Falk Brettschneider <gigafalk@yahoo.com>
+  * more improvements in QextMDI 
+    (several signals for changing states,
+     new QextMdiMainFrm::addToolWindow(..) as new kind of MDI view
+
 2000-06-13 Falk Brettschneider <gigafalk@yahoo.com>
   * some additionally necessary improvements for considering min/max/fixed sizes of MDI views within QextMDI
 
