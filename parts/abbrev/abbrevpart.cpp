@@ -482,9 +482,11 @@ void AbbrevPart::slotTextChanged()
 	return;
     }
 
-    QChar ch = editIface->textLine( line )[ col-1 ];
+    QString textLine = editIface->textLine( line );
+    QChar ch = textLine[ col-1 ];
+    QChar currentChar = textLine[ col ];
 
-    if( m_inCompletion || !(ch.isLetterOrNumber() || ch == QChar('_')) ){
+    if( m_inCompletion || currentChar.isLetterOrNumber() || currentChar == QChar('_') || !(ch.isLetterOrNumber() || ch == QChar('_')) ){
         // reset
         m_prevLine = -1;
 	return;
