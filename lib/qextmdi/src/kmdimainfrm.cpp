@@ -466,6 +466,12 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
       const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
 
       KDockWidget *pCover=mtva->d->widgetContainer;
+
+      mtva->show(pos, pTargetWnd,percent);
+
+   }
+
+#if 0
 //      pCover->setWidget( pToolView);
 //      pCover->setToolTipString( tabToolTip);
       pCover->setDockWindowTransient(this,true);
@@ -492,7 +498,7 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
 //check      pCover->show();
       }
    }
-
+#endif
    return mtva;
   
 #if 0
