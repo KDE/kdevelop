@@ -204,6 +204,8 @@ class KWriteView : public QWidget {
     virtual void resizeEvent(QResizeEvent *);
     virtual void timerEvent(QTimerEvent *);
 
+    virtual bool focusNextPrevChild(bool next);
+    
     virtual void dragEnterEvent( QDragEnterEvent * );
 //  virtual void dragMoveEvent( QDragMoveEvent * );
 //  virtual void dragLeaveEvent( QDragLeaveEvent * );

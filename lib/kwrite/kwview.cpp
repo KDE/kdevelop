@@ -1131,6 +1131,12 @@ bool KWriteView::isTargetSelected(int x, int y) {
   return line->isSelected(x);
 }
 
+bool KWriteView::focusNextPrevChild(bool)
+{
+  return false;
+}
+
+
 void KWriteView::focusInEvent(QFocusEvent *) {
 //  debug("got focus %d",cursorTimer);
 
