@@ -575,10 +575,10 @@ void MainWindow::raiseView(QWidget *view)
     activateView(wrapper);
     KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
     if (pDock) {
-//      if ( (pDock->parentWidget() && pDock->parentWidget()->isVisible())
-//        || (!pDock->parentWidget() && pDock->isVisible()) ) {
+      if ( (pDock->parentWidget() && pDock->parentWidget()->isVisible())
+        || (!pDock->parentWidget() && pDock->isVisible()) ) {
         makeDockVisible(pDock);
-//      }
+      }
     }
   }
 }
