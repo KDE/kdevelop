@@ -43,7 +43,7 @@
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
 #include "trollprojectpart.h"
-
+#include "kdevlanguagesupport.h"
 
 #define VALUES_PER_ROW  1
 
@@ -1235,23 +1235,25 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idSubclassWidget)
         {
-          QStringList newFileNames;
-          SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + fitem->name,newFileNames);
-          dlg->exec();
-          QDomDocument &dom = *(m_part->projectDom());
-          for (uint i=0; i<newFileNames.count(); i++)
-          {
-            QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
-            QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
-            DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                                       "subclass","sourcefile", "uifile");
+            QStringList newFileNames;
+            newFileNames = m_part->languageSupport()->subclassWidget(m_shownSubproject->path + "/" + fitem->name);
+            if (!newFileNames.empty())
+            {
+                QDomDocument &dom = *(m_part->projectDom());
+                for (uint i=0; i<newFileNames.count(); i++)
+                {
+                    QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
+                    QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
+                    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                                            "subclass","sourcefile", "uifile");
 
-            list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
-            DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-            newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
-          }
+                    list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
+                    DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+                }
 
-          m_part->addFiles(newFileNames);
+                m_part->addFiles(newFileNames);
+            }
         }
         else if (r == idUpdateWidgetclass)
         {
@@ -1265,8 +1267,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             QStringList uisplit = QStringList::split('/',uifile);
             uifile=uisplit[uisplit.count()-1];
           }
-          SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + uifile,noext,dummy);
-          dlg->exec();
+          m_part->languageSupport()->updateWidget(m_shownSubproject->path + "/" + uifile, noext);
         }
 
 

@@ -27,7 +27,6 @@
 #include "projectconfigurationdlg.h"
 #include "filepropertydlg.h"
 #include "newwidgetdlg.h"
-#include "subclassingdlg.h"
 #include "domutil.h"
 
 class TrollProjectPart;
