@@ -81,8 +81,6 @@ protected:
  QButtonGroup* qtarch_ButtonGroup_5;
  QButtonGroup* qtarch_ButtonGroup_2;
  QLabel* qtarch_Label_1;
- QWidget *mainwidget;
- QWidget *printwidget;
 };
 #endif
 

@@ -33,6 +33,7 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qwhatsthis.h>
+#include <qgrid.h>
 
 //#include <iostream.h>
 //#include <string.h>
@@ -84,23 +85,15 @@ CPrintDlg::~CPrintDlg(){
   delete (qtarch_ButtonGroup_9);
   delete (qtarch_ButtonGroup_8);
   delete (qtarch_ButtonGroup_35);
-  delete (printwidget);
-  delete (mainwidget);
 
 }
 
 
 void CPrintDlg::init(){
-  mainwidget = new QWidget(this,"printdialog");
-  mainwidget->resize (600,480);
-  printwidget = new QWidget(this,"printing");
-  printwidget->resize(600,430);
+  QGridLayout *grid1 = new QGridLayout(this,6,4,15,7);
 
   ////////// Program select ///////////
-  qtarch_ButtonGroup_2 = new QButtonGroup( printwidget, "ButtonGroup_2" );
-  qtarch_ButtonGroup_2->setGeometry( 20, 10, 100, 60 );
-  qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_2->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
   qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_2->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
@@ -108,11 +101,12 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_2->setFrameStyle( 49 );
   qtarch_ButtonGroup_2->setTitle(i18n( "Program" ));
   qtarch_ButtonGroup_2->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_2,0,0);
 
-  programCombBox = new QComboBox( FALSE, printwidget, "programCombBox" );
-  programCombBox->setGeometry( 30, 30, 80, 30 );
-  programCombBox->setMinimumSize( 0, 0 );
-  programCombBox->setMaximumSize( 32767, 32767 );
+  QHBoxLayout *box1 = new QHBoxLayout( qtarch_ButtonGroup_2 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+  programCombBox = new QComboBox( FALSE, qtarch_ButtonGroup_2, "programCombBox" );
   programCombBox->setFocusPolicy( QWidget::StrongFocus );
   programCombBox->setBackgroundMode( QWidget::PaletteBackground );
   programCombBox->setFontPropagation( QWidget::NoChildren );
@@ -123,12 +117,9 @@ void CPrintDlg::init(){
   programCombBox->insertItem( "enscript" );
   programCombBox->insertItem( "lpr" );
   connect(programCombBox,SIGNAL(activated (int)),SLOT(slotProgramActivated(int)));
-
+  box1->addWidget(programCombBox);
   ////////// Printer select /////////////
-  qtarch_ButtonGroup_5 = new QButtonGroup( printwidget, "ButtonGroup_5" );
-  qtarch_ButtonGroup_5->setGeometry( 130, 10, 210, 60 );
-  qtarch_ButtonGroup_5->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_5->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_5 = new QButtonGroup( this, "ButtonGroup_5" );
   qtarch_ButtonGroup_5->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_5->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_5->setFontPropagation( QWidget::NoChildren );
@@ -136,11 +127,12 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_5->setFrameStyle( 49 );
   qtarch_ButtonGroup_5->setTitle(i18n( "Printer" ));
   qtarch_ButtonGroup_5->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_5,0,1);
 
-  qtarch_Label_1 = new QLabel( printwidget, "Label_1" );
-  qtarch_Label_1->setGeometry( 140, 30, 70, 30 );
-  qtarch_Label_1->setMinimumSize( 0, 0 );
-  qtarch_Label_1->setMaximumSize( 32767, 32767 );
+  QVBoxLayout *box2 = new QVBoxLayout( qtarch_ButtonGroup_5 );
+  box2->setMargin( 15 );
+  box2->setSpacing( 15 );
+  qtarch_Label_1 = new QLabel(  qtarch_ButtonGroup_5, "Label_1" );
   qtarch_Label_1->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
@@ -148,11 +140,9 @@ void CPrintDlg::init(){
   qtarch_Label_1->setText(i18n( "printername" ));
   qtarch_Label_1->setAlignment( 289 );
   qtarch_Label_1->setMargin( -1 );
+  box2->addWidget(qtarch_Label_1);
 
-  printerLine = new QLineEdit( printwidget, "printerLine" );
-  printerLine->setGeometry( 210, 30, 120, 30 );
-  printerLine->setMinimumSize( 0, 0 );
-  printerLine->setMaximumSize( 32767, 32767 );
+  printerLine = new QLineEdit( qtarch_ButtonGroup_5, "printerLine" );
   printerLine->setFocusPolicy( QWidget::StrongFocus );
   printerLine->setBackgroundMode( QWidget::PaletteBase );
   printerLine->setFontPropagation( QWidget::NoChildren );
@@ -161,12 +151,10 @@ void CPrintDlg::init(){
   printerLine->setMaxLength( 32767 );
   printerLine->setEchoMode( QLineEdit::Normal );
   printerLine->setFrame( TRUE );
+  box2->addWidget(printerLine);
 
 	//////////// Outputlocation /////////////
-  qtarch_ButtonGroup_6 = new QButtonGroup( printwidget, "ButtonGroup_6" );
-  qtarch_ButtonGroup_6->setGeometry( 20, 90, 290, 90 );
-  qtarch_ButtonGroup_6->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_6->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_6 = new QButtonGroup( this, "ButtonGroup_6" );
   qtarch_ButtonGroup_6->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_6->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_6->setFontPropagation( QWidget::NoChildren );
@@ -174,11 +162,11 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_6->setFrameStyle( 49 );
   qtarch_ButtonGroup_6->setTitle(i18n( "Outputlocation" ));
   qtarch_ButtonGroup_6->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_6,1,1,0,1);
 
-  printToFileButton = new QCheckBox( printwidget, "printToFileButton" );
-  printToFileButton->setGeometry( 30, 110, 270, 30 );
-  printToFileButton->setMinimumSize( 0, 0 );
-  printToFileButton->setMaximumSize( 32767, 32767 );
+  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_6,2,2,15,7);
+
+  printToFileButton = new QCheckBox(qtarch_ButtonGroup_6 , "printToFileButton" );
   printToFileButton->setFocusPolicy( QWidget::TabFocus );
   printToFileButton->setBackgroundMode( QWidget::PaletteBackground );
   printToFileButton->setFontPropagation( QWidget::NoChildren );
@@ -187,11 +175,9 @@ void CPrintDlg::init(){
   printToFileButton->setAutoRepeat( FALSE );
   printToFileButton->setAutoResize( FALSE );
   connect (printToFileButton,SIGNAL(toggled(bool)),SLOT(slotPrintToFileClicked(bool)));
+  grid2->addWidget(printToFileButton,0,0);
 
-  printToFileLine = new QLineEdit( printwidget, "printToFileLine" );
-  printToFileLine->setGeometry( 30, 140, 230, 30 );
-  printToFileLine->setMinimumSize( 0, 0 );
-  printToFileLine->setMaximumSize( 32767, 32767 );
+  printToFileLine = new QLineEdit( qtarch_ButtonGroup_6, "printToFileLine" );
   printToFileLine->setFocusPolicy( QWidget::StrongFocus );
   printToFileLine->setBackgroundMode( QWidget::PaletteBase );
   printToFileLine->setFontPropagation( QWidget::NoChildren );
@@ -200,11 +186,9 @@ void CPrintDlg::init(){
   printToFileLine->setMaxLength( 32767 );
   printToFileLine->setEchoMode( QLineEdit::Normal );
   printToFileLine->setFrame( TRUE );
+  grid2->addWidget(printToFileLine,1,0);
 
-  printToFileDlg = new QPushButton( printwidget, "PrintToFileDlg" );
-  printToFileDlg->setGeometry( 270, 140, 30, 30 );
-  printToFileDlg->setMinimumSize( 0, 0 );
-  printToFileDlg->setMaximumSize( 32767, 32767 );
+  printToFileDlg = new QPushButton( qtarch_ButtonGroup_6, "PrintToFileDlg" );
   printToFileDlg->setFocusPolicy( QWidget::TabFocus );
   printToFileDlg->setBackgroundMode( QWidget::PaletteBackground );
   printToFileDlg->setFontPropagation( QWidget::NoChildren );
@@ -214,12 +198,10 @@ void CPrintDlg::init(){
   printToFileDlg->setAutoRepeat( FALSE );
   printToFileDlg->setAutoResize( FALSE );
   connect (printToFileDlg,SIGNAL(clicked()),SLOT(slotPrintToFileDlgClicked()));
+  grid2->addWidget(printToFileDlg,1,1);
 
 	/////////// Paper format ///////////
-  paperFormatGroup = new QButtonGroup( printwidget, "PaperFormatGroup" );
-  paperFormatGroup->setGeometry( 20, 200, 140, 60 );
-  paperFormatGroup->setMinimumSize( 0, 0 );
-  paperFormatGroup->setMaximumSize( 32767, 32767 );
+  paperFormatGroup = new QButtonGroup( this, "PaperFormatGroup" );
   paperFormatGroup->setFocusPolicy( QWidget::NoFocus );
   paperFormatGroup->setBackgroundMode( QWidget::PaletteBackground );
   paperFormatGroup->setFontPropagation( QWidget::NoChildren );
@@ -227,11 +209,14 @@ void CPrintDlg::init(){
   paperFormatGroup->setFrameStyle( 49 );
   paperFormatGroup->setTitle(i18n( "Paper format" ));
   paperFormatGroup->setAlignment( 1 );
+  grid1->addWidget(paperFormatGroup,2,0);
 
-  paperCombBox = new QComboBox( FALSE, printwidget, "paperCombBox" );
-  paperCombBox->setGeometry( 30, 220, 120, 30 );
-  paperCombBox->setMinimumSize( 0, 0 );
-  paperCombBox->setMaximumSize( 32767, 32767 );
+
+
+  box1 = new QHBoxLayout( paperFormatGroup );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+  paperCombBox = new QComboBox( FALSE, paperFormatGroup, "paperCombBox" );
   paperCombBox->setFocusPolicy( QWidget::StrongFocus );
   paperCombBox->setBackgroundMode( QWidget::PaletteBackground );
   paperCombBox->setFontPropagation( QWidget::NoChildren );
@@ -240,12 +225,10 @@ void CPrintDlg::init(){
   paperCombBox->setAutoResize( FALSE );
   paperCombBox->insertItem(i18n("portrait"));
   paperCombBox->insertItem(i18n("landscape"));
+  box1->addWidget(paperCombBox);
 
 	////////// Copy //////////////
-  qtarch_ButtonGroup_7 = new QButtonGroup( printwidget, "ButtonGroup_7" );
-  qtarch_ButtonGroup_7->setGeometry( 170, 200, 140, 60 );
-  qtarch_ButtonGroup_7->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_7->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_7 = new QButtonGroup( this, "ButtonGroup_7" );
   qtarch_ButtonGroup_7->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_7->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_7->setFontPropagation( QWidget::NoChildren );
@@ -253,11 +236,13 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_7->setFrameStyle( 49 );
   qtarch_ButtonGroup_7->setTitle(i18n( "Copy" ));
   qtarch_ButtonGroup_7->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_7,2,1);
 
-  copySpinBox = new QSpinBox( printwidget, "copySpinBox" );
-  copySpinBox->setGeometry( 180, 220, 120, 30 );
-  copySpinBox->setMinimumSize( 0, 0 );
-  copySpinBox->setMaximumSize( 32767, 32767 );
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_7 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  copySpinBox = new QSpinBox( qtarch_ButtonGroup_7, "copySpinBox" );
   copySpinBox->setFocusPolicy( QWidget::StrongFocus );
   copySpinBox->setBackgroundMode( QWidget::PaletteBackground );
   copySpinBox->setFontPropagation( QWidget::NoChildren );
@@ -270,12 +255,10 @@ void CPrintDlg::init(){
   copySpinBox->setSuffix( "" );
   copySpinBox->setSpecialValueText( "" );
   copySpinBox->setWrapping( FALSE );
+  box1->addWidget(copySpinBox);
 
 	////////////// Outputmedia //////////////
-  qtarch_ButtonGroup_35 = new QButtonGroup( printwidget, "ButtonGroup_35" );
-  qtarch_ButtonGroup_35->setGeometry( 20, 280, 140, 60 );
-  qtarch_ButtonGroup_35->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_35->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_35 = new QButtonGroup( this, "ButtonGroup_35" );
   qtarch_ButtonGroup_35->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_35->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_35->setFontPropagation( QWidget::NoChildren );
@@ -283,8 +266,13 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_35->setFrameStyle( 49 );
   qtarch_ButtonGroup_35->setTitle(i18n( "Outputmedia" ));
   qtarch_ButtonGroup_35->setAlignment( 1 );
-  
-  mediaCombBox = new QComboBox( FALSE, printwidget, "mediaCombBox" );
+  grid1->addWidget(qtarch_ButtonGroup_35,3,0);
+
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_35 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  mediaCombBox = new QComboBox( FALSE, qtarch_ButtonGroup_35, "mediaCombBox" );
   mediaCombBox->setGeometry( 30, 300, 120, 30 );
   mediaCombBox->setMinimumSize( 0, 0 );
   mediaCombBox->setMaximumSize( 32767, 32767 );
@@ -294,12 +282,10 @@ void CPrintDlg::init(){
   mediaCombBox->setPalettePropagation( QWidget::NoChildren );
   mediaCombBox->setSizeLimit( 10 );
   mediaCombBox->setAutoResize( FALSE );
+  box1->addWidget(mediaCombBox);
 
   ///////// Outputformat ////////
-  qtarch_ButtonGroup_3 = new QButtonGroup( printwidget, "ButtonGroup_3" );
-  qtarch_ButtonGroup_3->setGeometry( 170, 280, 140, 60 );
-  qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_3->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
   qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_3->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
@@ -307,11 +293,12 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_3->setFrameStyle( 49 );
   qtarch_ButtonGroup_3->setTitle(i18n( "Outputformat" ));
   qtarch_ButtonGroup_3->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_3,3,1);
 
-  formatCombBox = new QComboBox( FALSE, printwidget, "formatCombBox" );
-  formatCombBox->setGeometry( 180, 300, 120, 30 );
-  formatCombBox->setMinimumSize( 0, 0 );
-  formatCombBox->setMaximumSize( 32767, 32767 );
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_3 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+  formatCombBox = new QComboBox( FALSE, qtarch_ButtonGroup_3, "formatCombBox" );
   formatCombBox->setFocusPolicy( QWidget::StrongFocus );
   formatCombBox->setBackgroundMode( QWidget::PaletteBackground );
   formatCombBox->setFontPropagation( QWidget::NoChildren );
@@ -320,12 +307,10 @@ void CPrintDlg::init(){
   formatCombBox->setAutoResize( FALSE );
   formatCombBox->insertItem( "postscript" );
   formatCombBox->insertItem( "html" );
+  box1->addWidget(formatCombBox);
 
 	////////////// Default Printsettings /////////
-  qtarch_ButtonGroup_4 = new QButtonGroup( printwidget, "ButtonGroup_4" );
-  qtarch_ButtonGroup_4->setGeometry( 20, 360, 290, 60 );
-  qtarch_ButtonGroup_4->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_4->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_4 = new QButtonGroup( this, "ButtonGroup_4" );
   qtarch_ButtonGroup_4->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_4->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_4->setFontPropagation( QWidget::NoChildren );
@@ -333,11 +318,13 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_4->setFrameStyle( 49 );
   qtarch_ButtonGroup_4->setTitle(i18n( "Default printsettings" ));
   qtarch_ButtonGroup_4->setAlignment( 1 );
+  grid1->addMultiCellWidget( qtarch_ButtonGroup_4,4,4,0,1);
 
-  defaultCombBox = new QComboBox( FALSE, printwidget, "defaultCombBox" );
-  defaultCombBox->setGeometry( 30, 380, 270, 30 );
-  defaultCombBox->setMinimumSize( 0, 0 );
-  defaultCombBox->setMaximumSize( 32767, 32767 );
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_4 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  defaultCombBox = new QComboBox( FALSE, qtarch_ButtonGroup_4, "defaultCombBox" );
   defaultCombBox->setFocusPolicy( QWidget::StrongFocus );
   defaultCombBox->setBackgroundMode( QWidget::PaletteBackground );
   defaultCombBox->setFontPropagation( QWidget::NoChildren );
@@ -345,12 +332,10 @@ void CPrintDlg::init(){
   defaultCombBox->setSizeLimit( 10 );
   defaultCombBox->setAutoResize( FALSE );
   defaultCombBox->insertItem(i18n("settings"));
+  box1->addWidget(defaultCombBox);
 
 	///////// Top buttons //////
-  filesConfButton = new QPushButton( printwidget, "filesConfButton" );
-  filesConfButton->setGeometry( 350, 30, 110, 30 );
-  filesConfButton->setMinimumSize( 0, 0 );
-  filesConfButton->setMaximumSize( 32767, 32767 );
+  filesConfButton = new QPushButton( this, "filesConfButton" );
   filesConfButton->setFocusPolicy( QWidget::TabFocus );
   filesConfButton->setBackgroundMode( QWidget::PaletteBackground );
   filesConfButton->setFontPropagation( QWidget::NoChildren );
@@ -359,11 +344,9 @@ void CPrintDlg::init(){
   filesConfButton->setAutoRepeat( FALSE );
   filesConfButton->setAutoResize( FALSE );
   connect (filesConfButton, SIGNAL(clicked()),SLOT(slotFilesConfClicked()));
+  grid1->addWidget(filesConfButton,0,2);
 
-  printingConfButton = new QPushButton( printwidget, "printingConfButton" );
-  printingConfButton->setGeometry( 470, 30, 110, 30 );
-  printingConfButton->setMinimumSize( 0, 0 );
-  printingConfButton->setMaximumSize( 32767, 32767 );
+  printingConfButton = new QPushButton( this, "printingConfButton" );
   printingConfButton->setFocusPolicy( QWidget::TabFocus );
   printingConfButton->setBackgroundMode( QWidget::PaletteBackground );
   printingConfButton->setFontPropagation( QWidget::NoChildren );
@@ -372,12 +355,10 @@ void CPrintDlg::init(){
   printingConfButton->setAutoRepeat( FALSE );
   printingConfButton->setAutoResize( FALSE );
   connect (printingConfButton,SIGNAL(clicked()),SLOT(slotPrintingConfClicked()));
+  grid1->addWidget(printingConfButton,0,3);
 
   ///////// Outprinting ////////
-  qtarch_ButtonGroup_8 = new QButtonGroup( printwidget, "ButtonGroup_8" );
-  qtarch_ButtonGroup_8->setGeometry( 320, 90, 260, 330 );
-  qtarch_ButtonGroup_8->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_8->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_8 = new QButtonGroup( this, "ButtonGroup_8" );
   qtarch_ButtonGroup_8->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_8->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_8->setFontPropagation( QWidget::NoChildren );
@@ -385,12 +366,13 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_8->setFrameStyle( 49 );
   qtarch_ButtonGroup_8->setTitle(i18n( "Outprinting" ));
   qtarch_ButtonGroup_8->setAlignment( 1 );
+  grid1->addMultiCellWidget( qtarch_ButtonGroup_8,1,4,2,3);
+
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_8,2,2,15,7);
 
   ///// Page printing ////////
-  qtarch_ButtonGroup_10 = new QButtonGroup( printwidget, "ButtonGroup_10" );
-  qtarch_ButtonGroup_10->setGeometry( 330, 110, 240, 60 );
-  qtarch_ButtonGroup_10->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_10->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_10 = new QButtonGroup( qtarch_ButtonGroup_8, "ButtonGroup_10" );
   qtarch_ButtonGroup_10->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_10->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_10->setFontPropagation( QWidget::NoChildren );
@@ -398,11 +380,14 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_10->setFrameStyle( 49 );
   qtarch_ButtonGroup_10->setTitle(i18n( "Page printing" ));
   qtarch_ButtonGroup_10->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_10,0,0);
 
-  pagePerSide = new QComboBox( FALSE, printwidget, "pagePerSide" );
-  pagePerSide->setGeometry( 340, 130, 220, 30 );
-  pagePerSide->setMinimumSize( 0, 0 );
-  pagePerSide->setMaximumSize( 32767, 32767 );
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_10 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+
+  pagePerSide = new QComboBox( FALSE,qtarch_ButtonGroup_10 , "pagePerSide" );
   pagePerSide->setFocusPolicy( QWidget::StrongFocus );
   pagePerSide->setBackgroundMode( QWidget::PaletteBackground );
   pagePerSide->setFontPropagation( QWidget::NoChildren );
@@ -411,12 +396,10 @@ void CPrintDlg::init(){
   pagePerSide->setAutoResize( FALSE );
   pagePerSide->insertItem(i18n( "one page per side" ));
   pagePerSide->insertItem(i18n( "two pages per side" ));
+  box1->addWidget(pagePerSide);
 
   ///////// Pages  /////////
-  qtarch_ButtonGroup_11 = new QButtonGroup( printwidget, "ButtonGroup_11" );
-  qtarch_ButtonGroup_11->setGeometry( 330, 190, 240, 60 );
-  qtarch_ButtonGroup_11->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_11->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_11 = new QButtonGroup( qtarch_ButtonGroup_8, "ButtonGroup_11" );
   qtarch_ButtonGroup_11->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_11->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_11->setFontPropagation( QWidget::NoChildren );
@@ -424,11 +407,13 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_11->setFrameStyle( 49 );
   qtarch_ButtonGroup_11->setTitle(i18n( "Pages" ));
   qtarch_ButtonGroup_11->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_11,1,0);
 
-  pageSide = new QComboBox( TRUE, printwidget, "pageSide" );
-  pageSide->setGeometry( 340, 210, 220, 30 );
-  pageSide->setMinimumSize( 0, 0 );
-  pageSide->setMaximumSize( 32767, 32767 );
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_11 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  pageSide = new QComboBox( TRUE, qtarch_ButtonGroup_11, "pageSide" );
   pageSide->setFocusPolicy( QWidget::StrongFocus );
   pageSide->setBackgroundMode( QWidget::PaletteBackground );
   pageSide->setFontPropagation( QWidget::NoChildren );
@@ -441,12 +426,10 @@ void CPrintDlg::init(){
   pageSide->insertItem(i18n ("all"));
   pageSide->insertItem(i18n ("odd"));
   pageSide->insertItem(i18n ("even"));
+  box1->addWidget(pageSide);
 
   ////// Pretty-print //////////
-  qtarch_ButtonGroup_9 = new QButtonGroup( printwidget, "ButtonGroup_9" );
-  qtarch_ButtonGroup_9->setGeometry( 330, 270, 240, 140 );
-  qtarch_ButtonGroup_9->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_9->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_9 = new QButtonGroup( qtarch_ButtonGroup_8, "ButtonGroup_9" );
   qtarch_ButtonGroup_9->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_9->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_9->setFontPropagation( QWidget::NoChildren );
@@ -454,11 +437,11 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->setFrameStyle( 49 );
   qtarch_ButtonGroup_9->setTitle(i18n( "Pretty-print" ));
   qtarch_ButtonGroup_9->setAlignment( 1 );
+  grid2->addMultiCellWidget(qtarch_ButtonGroup_9,2,3,0,0);
 
-  prettyPrintCheckBox = new QCheckBox( printwidget, "prettyPrintCheckBox" );
-  prettyPrintCheckBox->setGeometry( 350, 290, 110, 30 );
-  prettyPrintCheckBox->setMinimumSize( 0, 0 );
-  prettyPrintCheckBox->setMaximumSize( 32767, 32767 );
+
+  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_9,2,2,15,7);
+  prettyPrintCheckBox = new QCheckBox(qtarch_ButtonGroup_9 , "prettyPrintCheckBox" );
   prettyPrintCheckBox->setFocusPolicy( QWidget::TabFocus );
   prettyPrintCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyPrintCheckBox->setFontPropagation( QWidget::NoChildren );
@@ -467,11 +450,10 @@ void CPrintDlg::init(){
   prettyPrintCheckBox->setAutoRepeat( FALSE );
   prettyPrintCheckBox->setAutoResize( FALSE );
   connect (prettyPrintCheckBox,SIGNAL(toggled(bool)),SLOT(slotPrettyPrintClicked(bool)));
+  grid3->addWidget(prettyPrintCheckBox,0,0);
+  
+  prettyColorCheckBox = new QCheckBox(qtarch_ButtonGroup_9 , "prettyColorCheckBox" );
 
-  prettyColorCheckBox = new QCheckBox( printwidget, "prettyColorCheckBox" );
-  prettyColorCheckBox->setGeometry( 480, 290, 70, 30 );
-  prettyColorCheckBox->setMinimumSize( 0, 0 );
-  prettyColorCheckBox->setMaximumSize( 32767, 32767 );
   prettyColorCheckBox->setFocusPolicy( QWidget::TabFocus );
   prettyColorCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyColorCheckBox->setFontPropagation( QWidget::NoChildren );
@@ -479,11 +461,9 @@ void CPrintDlg::init(){
   prettyColorCheckBox->setText(i18n( "color" ));
   prettyColorCheckBox->setAutoRepeat( FALSE );
   prettyColorCheckBox->setAutoResize( FALSE );
+  grid3->addWidget(prettyColorCheckBox,0,1);
 
-  qtarch_ButtonGroup_34 = new QButtonGroup( printwidget, "ButtonGroup_34" );
-  qtarch_ButtonGroup_34->setGeometry( 350, 330, 200, 60 );
-  qtarch_ButtonGroup_34->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_34->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_34 = new QButtonGroup(qtarch_ButtonGroup_9 , "ButtonGroup_34" );
   qtarch_ButtonGroup_34->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_34->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_34->setFontPropagation( QWidget::NoChildren );
@@ -491,11 +471,15 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_34->setFrameStyle( 49 );
   qtarch_ButtonGroup_34->setTitle(i18n( "Pretty-print mode" ));
   qtarch_ButtonGroup_34->setAlignment( 1 );
+  grid3->addMultiCellWidget(qtarch_ButtonGroup_34,1,1,0,1);
 
-  prettyCombBox = new QComboBox( FALSE, printwidget, "prettyCombBox" );
-  prettyCombBox->setGeometry( 360, 350, 180, 30 );
-  prettyCombBox->setMinimumSize( 0, 0 );
-  prettyCombBox->setMaximumSize( 32767, 32767 );
+
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_34 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+  
+
+  prettyCombBox = new QComboBox( FALSE,qtarch_ButtonGroup_34, "prettyCombBox" );
   prettyCombBox->setFocusPolicy( QWidget::StrongFocus );
   prettyCombBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyCombBox->setFontPropagation( QWidget::NoChildren );
@@ -532,29 +516,24 @@ void CPrintDlg::init(){
   prettyCombBox->insertItem( "Verilog" );
   prettyCombBox->insertItem( "VHDLt" );
   prettyCombBox->setCurrentItem(2);
+  box1->addWidget(prettyCombBox);
   
-  qtarch_ButtonGroup_8->insert( prettyPrintCheckBox );
-  qtarch_ButtonGroup_8->insert( prettyColorCheckBox );
-  qtarch_ButtonGroup_9->insert( prettyPrintCheckBox );
-  qtarch_ButtonGroup_9->insert( prettyColorCheckBox );
-  qtarch_ButtonGroup_6->insert( printToFileDlg );
-  qtarch_ButtonGroup_6->insert( printToFileButton );
 
-  previewButton = new QPushButton( mainwidget, "previewButton" );
+  previewButton = new QPushButton( this, "previewButton" );
   previewButton->setText(i18n("Preview"));
-  previewButton->setGeometry( 20, 440, 100, 30 );
   connect(previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
+  grid1->addWidget(previewButton,5,0);
 
-  okButton = new QPushButton( mainwidget, "okButton" );
+  okButton = new QPushButton( this, "okButton" );
   okButton->setText(i18n("OK"));
-  okButton->setGeometry( 370, 440, 100, 30 );
-	okButton->setDefault(true);
+  okButton->setDefault(true);
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
+  grid1->addWidget(okButton,5,2);
 
-  cancelButton = new QPushButton( mainwidget, "cancelButton" );
+  cancelButton = new QPushButton( this, "cancelButton" );
   cancelButton->setText(i18n("Cancel"));
-  cancelButton->setGeometry( 480, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
+  grid1->addWidget(cancelButton,5,3);
 
   QWhatsThis::add(printingConfButton,
 	i18n("If you click this button a configdialog will be shown.\n"
@@ -621,7 +600,6 @@ void CPrintDlg::init(){
   QWhatsThis::add(printToFileButton,
 	i18n("If you wish to print to file, then check this button."));
 
-  mainwidget->show();
 }
 
 void CPrintDlg::slotProgramActivated(int i) {
