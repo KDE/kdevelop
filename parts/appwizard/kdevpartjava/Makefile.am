@@ -18,4 +18,4 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(INSTALL_DATA) ${srcdir}/script.local $(kdevpartjavadir)/script
+	$(INSTALL_DATA) script.local $(kdevpartjavadir)/script
