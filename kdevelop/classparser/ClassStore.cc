@@ -93,6 +93,7 @@ void CClassStore::wipeout()
   classes.clear();
   globalVariables.clear();
   globalFunctions.clear();
+  globalStructures.clear();
 }
 
 /*-------------------------------------- CClassStore::addGlobalVar()
