@@ -163,6 +163,10 @@
     <Action name="debug_interrupt" />
     <Action name="debug_stop" />
   </Menu>
+  <Menu name="tools">
+    <text>&amp;Tools</text>
+    <ActionList name="tool_list" />
+  </Menu>
   <Menu name="options">
     <text>&amp;Options</text>
     <Action name="options_editor" />

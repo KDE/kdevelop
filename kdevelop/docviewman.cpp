@@ -2037,7 +2037,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "DebugRunCursor", m_pParent, SLOT(slotDebugRunToCursor()), true, ID_DEBUG_RUN_CURSOR );
 
   accel->insertItem( i18n("Debug stop"), "DebugStop", 0);
-  accel->connectItem( "DebugStop", m_pParent, SLOT(slotDebugStop()), true, ID_DEBUG_STOP);
+  accel->connectItem( "DebugStop", m_pParent, SLOT(slotDebugStop()	), true, ID_DEBUG_STOP);
 
   accel->insertItem( i18n("Debug step into"), "DebugStepInto", 0);
   accel->connectItem( "DebugStepInto", m_pParent, SLOT(slotDebugStepInto()), true, ID_DEBUG_STEP);

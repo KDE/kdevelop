@@ -297,7 +297,7 @@ void CKDevSetupDlg::addKeysTab()
 #if QT_VERSION < 300
   keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
 #else
-  keyChooser = new KKeyChooser ( m_accel->actions(), keysPage, true);
+  keyChooser = new KKeyChooser ( m_accel/*->actions()*/, keysPage, true);
 #endif
   grid->addWidget(keyChooser,0,0);
 }

@@ -617,15 +617,19 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     }
   }
 
+	// this code really needs to be replaced with the KAction based
+	// stuff soon (rokrau 02/16/02)
   // Enable or disable command
-  if (CProject::getType(filename) == CPP_SOURCE){
-    if(build_menu->isItemEnabled(ID_BUILD_MAKE))            
-      enableCommand(ID_BUILD_COMPILE_FILE);
-  }
-  else
-  {
-    disableCommand(ID_BUILD_COMPILE_FILE);
-  }
+	if (CProject::getType(filename) == CPP_SOURCE){
+		KAction* pAction=actionCollection()->action("build_make");
+		if (pAction && pAction->isEnabled()) {
+			actionCollection()->action("build_compile")->setEnabled(true);
+		}
+	}
+	else
+	{
+		actionCollection()->action("build_compile")->setEnabled(false);
+	}
 
   // Ask the doc manager
   m_docViewManager->doSwitchToFile(filename, line, col,

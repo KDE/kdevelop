@@ -2180,20 +2180,25 @@ void CKDevelop::slotBuildStop(){
 
 void CKDevelop::slotToolsTool(int tool)
 {
-  if ( tool >= (int)toolList.count() )
-    return;
+	kdDebug() << "in CKDevelop::slotToolsTool(), sender is: " << sender()->name() << "\n";
+// took out the old code and fixed this, with a "crude hack(TM)"
+// i believe this must be replaced with the gideon part (rokrau 02/16/02)
+	ToolAppList::Iterator it;
+	for( it = toolList.begin(); it != toolList.end(); ++it ) {
+		if ((*it).getExeName() == sender()->name())
+			break;
+	}
+	if (it == toolList.end()) return; // this can not be, right? :-)
+	CToolApp toolApp = (*it);
+	if ( !CToolClass::searchProgram( toolApp.getExeName() ) )
+		return;
 
-  CToolApp toolApp = toolList[tool];
-
-  if ( !CToolClass::searchProgram( toolApp.getExeName() ) ){
-    return;
-  }
 //  if(!bKDevelop)
 //    switchToKDevelop();
     
 //  showOutputView(false);
 
-  QString argument = toolApp.getArgs();
+	QString argument = toolApp.getArgs();
      
   // This allows us to replace the macro %H with the header file name, %S with the source file name,
   // %T with the currently selected text, %W with the currently selected word

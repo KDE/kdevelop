@@ -168,6 +168,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   }
 
 	createGUI(0L);
+	stateChanged("no_project");
 	show();
 
 	adjustTTreesToolButtonState();
@@ -558,11 +559,11 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotDebugStop()),actionCollection(),"debug_stop");
 
   ///////////////////////////////////////////////////////////////////
-  // Tools-menu entries
+//  // Tools-menu entries
 //for now I am going to leave this menu as it is (rokrau 02/10/02)
-	tools_menu = new QPopupMenu;
-	menuBar()->insertItem(i18n("&Tools"), tools_menu);
-	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
+//	tools_menu = new QPopupMenu;
+//	menuBar()->insertItem(i18n("&Tools"), tools_menu);
+//	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
   ///////////////////////////////////////////////////////////////////
   // Options-menu entries
@@ -1215,11 +1216,22 @@ void CKDevelop::setToolmenuEntries(){
 
   CToolClass::readToolConfig(toolList);
 
-  ToolAppList::Iterator it;
-  int count = 0;
-  for( it = toolList.begin(); it != toolList.end(); ++it ) {
-    tools_menu->insertItem((*it).getLabel(),count++);
-  }
+	ToolAppList::Iterator it;
+//	int count = 0;
+
+	QList<KAction> actionList;
+	for( it = toolList.begin(); it != toolList.end(); ++it ) {
+//    tools_menu->insertItem((*it).getLabel(),count++);
+
+// this is working again but is should really be replaced by the gideon part
+// unfortunately the gideon part does not have any way to give arguments to the
+// called programs and it doesnt have a way to call non KDE programs either
+// (rokrau 02/16/02)
+
+		actionList.append(new KAction((*it).getLabel(),0,this,
+		                  SLOT(slotToolsTool(int)),actionCollection(),(*it).getExeName()));
+	}
+	plugActionList("tool_list",actionList);
 	
 //	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }

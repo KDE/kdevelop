@@ -198,7 +198,8 @@ void CKDevAccel::disconnectItem(const QString& action,
 
 void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
 {
-   KAccel::readSettings(config);
+//   KAccel::readSettings(config);
+   KAccel::readSettings();
    if (setEnableStruct)
    {
      QIntDictIterator<SActionInfo> it(m_Assoc);
