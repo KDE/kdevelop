@@ -103,7 +103,7 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part)
     grepdlg = new GrepDialog(this, "grep widget");
     connect( grepdlg, SIGNAL(searchClicked()),
 	     this, SLOT(searchActivated()) );
-    connect( this, SIGNAL(executed(QListBoxItem*)),
+    connect( this, SIGNAL(clicked(QListBoxItem*)),
              this, SLOT(slotExecuted(QListBoxItem*)) );
 
     m_part = part;
