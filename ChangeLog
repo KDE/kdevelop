@@ -7,6 +7,9 @@
 	* Big cleanup in libsourceinfo: Made internal variables
 	  private, made accessors const-correct, return QStrings
 	  now instead of references to them
+	* Changed ClassStore API to always use QStringLists instead
+	  of QStrList
+	* Compiles with QT_NO_ASCII_CAST and QT_CLEAN_NAMESPACE now
 
 2001-09-26 Victor Röder <victor_roeder@gmx.de>
 
