@@ -754,35 +754,42 @@ void CClassTreeHandler::getCurrentNames( QString &parentPath,
   bool isContainer;
 
   item = tree->currentItem();
-  aItemType = itemType();
   parent = item->parent();
-  parentType = itemType( parent );
 
   // Set the container flag
   isContainer  = ( aItemType ==THCLASS || 
                    aItemType == THSTRUCT ||
                    aItemType == THSCOPE );
 
-  // If we're viewing a container the item should be empty.
-  if( isContainer  )
-    itemName = "";
-  else
-    itemName = item->text(0);
-
   // If we're viewing a container we start the classname iteration at the
   // current item 
   if( isContainer )
   {
-    iter = item->parent();
-    parentPath = iter->text( 0 );
+    parentPath = item->text( 0 );
+    itemName = "";
+    parentType = itemType();
+    aItemType = parentType;
+
+    iter = parent;
   }
   else if( parentType != THFOLDER ) // Start at the parent.
   {
+    parentPath = parent->text( 0 );
+    itemName = item->text(0);
+    parentType = itemType( parent );
+    aItemType = itemType();
+
     iter = parent->parent();
-    parentPath = iter->text( 0 );
   }
-  else 
+  else // Global methods and attributes
+  {
+    parentPath = "";
+    itemName = item->text(0);
+    parentType = THFOLDER;
+    aItemType = itemType();
+
     iter = NULL;
+  }
 
   // Build the rest of the path
   while( iter != NULL && itemType( iter ) != THFOLDER )
