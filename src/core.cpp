@@ -97,7 +97,7 @@ QDict< KDevLicense > Core::licenses()
 
 void Core::loadLicenses()
 {
-kdDebug(9010) << "\n\n\n======================== Entering LoadLicenses" << endl;
+	// kdDebug(9010) << "======================== Entering loadLicenses" << endl;
 	KStandardDirs* dirs = KGlobal::dirs();
 	dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
 	QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
@@ -106,11 +106,12 @@ kdDebug(9010) << "\n\n\n======================== Entering LoadLicenses" << endl;
 	for (it = licNames.begin(); it != licNames.end(); ++it)
 	{
 		QString licPath( dirs->findResource( "licenses", *it ) );
-		kdDebug(9010) << "Loading license file: " << licPath << endl;
+		// kdDebug(9000) << "Loading license file: " << licPath << endl;
 		QString licName = licPath.mid( licPath.findRev('/') + 1 );
 		KDevLicense* lic = new KDevLicense( licName, licPath );
 		m_licenses.insert( licName, lic );
 	}
+	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
 }
 
 namespace MainWindowUtils{
