@@ -33,7 +33,6 @@
 #include <kdevproject.h>
 #include <kdevlanguagesupport.h>
 
-#include <doclineedit.h>
 
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"

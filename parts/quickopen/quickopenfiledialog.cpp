@@ -21,11 +21,13 @@
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
 
-#include "doclineedit.h"
 
 #include <klistbox.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kcompletion.h>
+#include <klineedit.h>
+
 
 #include <qregexp.h>
 #include <qlabel.h>
