@@ -845,7 +845,7 @@ void CKDevelop::slotBuildCompileFile(){
      process << prj->getLDFLAGS();
    }
    process  << "\" ";
-   process << make_cmd << prj->getCXXFLAGS() << fileinfo.baseName()+".o";
+   process << make_cmd << fileinfo.baseName()+".o";
   }
   else
   {

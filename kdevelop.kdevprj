@@ -318,7 +318,7 @@ ldflags=
 addcxxflags=
 ldadd=
 bin_program=kdevelop
-cxxflags=-O0 -g3 -Wall
+cxxflags= -O0 -g3 -Wall
 [kdevelop/cclasstooltreeview.cpp]
 install_location=
 dist=true
@@ -1852,7 +1852,7 @@ dist=true
 install=false
 type=SOURCE
 [General]
-make_options=-s -j1
+make_options= -s -j1
 makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdlgloader/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/toolbar/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/docs/de/Makefile.am,kdevelop/dlgs/Makefile.am,doc/de/manual/Makefile.am,doc/de/Makefile.am,doc/Makefile.am,doc/en/addendum/Makefile.am,doc/en/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/manual/Makefile.am,doc/en/programming/Makefile.am,doc/en/tutorial/Makefile.am,doc/en/welcome/Makefile.am,kdevelop/dbg/Makefile.am,
 version_control=CVS
 author=The KDevelop Team
@@ -1867,6 +1867,7 @@ sgml_file=/home/rnolden/Projects/kdevelop/doc/en/manual/index.sgml
 short_info=,
 email=
 kdevprj_version=0.3
+dir_where_make_will_be_called=
 configure_args=--enable-kdoc2
 modifyMakefiles=false
 [kdevelop/ccvaddfolderdlg.cpp]
