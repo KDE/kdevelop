@@ -53,7 +53,7 @@ GrepListBoxItem::GrepListBoxItem(const QString &fileName,
     static QRegExp re( "\t" );
 
     str1 = fileName;
-    str2 = lineNumber; 
+    str2 = lineNumber;
     str3 = text;
     // replace tab -> 8 spaces
     str3 = str3.replace( re, "        " );
@@ -73,7 +73,7 @@ void GrepListBoxItem::paint(QPainter *p)
     QFontMetrics fm = p->fontMetrics();
     QString stx = str2.right(str2.length()-1);
     int y = fm.ascent()+fm.leading()/2;
-    int x = 3; 
+    int x = 3;
 	if (show)
 	{
 		p->setPen(Qt::darkGreen);
@@ -83,13 +83,13 @@ void GrepListBoxItem::paint(QPainter *p)
     else {
     p->setPen(Qt::black);
     QFont font1(p->font());
-    QFont font2(font1); 
+    QFont font2(font1);
     font2.setBold(true);
     p->setFont(font2);
     p->drawText(x, y, stx);
     p->setFont(font1);
     x += fm.width(stx);
-    
+
     p->setPen(Qt::blue);
     p->drawText(x, y, str3);
 	}
@@ -98,6 +98,7 @@ void GrepListBoxItem::paint(QPainter *p)
 
 GrepViewWidget::GrepViewWidget(GrepViewPart *part)
     : ProcessWidget(0, "grep widget")
+    , m_matchCount(0)
 {
     grepdlg = new GrepDialog(this, "grep widget");
     connect( grepdlg, SIGNAL(searchClicked()),
@@ -123,20 +124,20 @@ static QString escape(const QString &str)
 {
     QString escaped("[]\\^$");
     QString res;
-    
+
     for (uint i=0; i < str.length(); ++i) {
         if (escaped.find(str[i]) != -1)
             res += "\\";
         res += str[i];
     }
-    
+
     return res;
 }
 
 
 void GrepViewWidget::showDialogWithPattern(QString pattern)
 {
-    // Before anything, this removes line feeds from the 
+    // Before anything, this removes line feeds from the
     // beginning and the end.
     int len = pattern.length();
     if (len > 0 && pattern[0] == '\n')
@@ -154,6 +155,8 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 
 void GrepViewWidget::searchActivated()
 {
+    m_matchCount = 0;
+
     QString files;
     // waba: code below breaks on filenames containing a ',' !!!
     QStringList filelist = QStringList::split(",", grepdlg->filesString());
@@ -199,7 +202,7 @@ void GrepViewWidget::childFinished(bool normal, int status)
     if (status == 123 && numRows() > 1)
         status = 0;
 
-    insertItem(new ProcessListBoxItem(i18n("*** %1 match found. ***", "*** %1 matches found. ***", numRows() - 1).arg(numRows() - 1), ProcessListBoxItem::Diagnostic));
+    insertItem(new ProcessListBoxItem(i18n("*** %1 match found. ***", "*** %1 matches found. ***", m_matchCount).arg(m_matchCount), ProcessListBoxItem::Diagnostic));
 
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
@@ -222,7 +225,7 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
 {
     int pos;
     QString filename, linenumber, rest;
-    
+
     QString str = line;
     if ( (pos = str.find(':')) != -1)
         {
@@ -233,7 +236,7 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
                     linenumber = str.left(pos);
                     str.remove(0, pos);
                     // filename will be displayed only once
-                    // selecting filename will display line 1 of file, 
+                    // selecting filename will display line 1 of file,
                     // otherwise, line of requested search
                     if (findItem(filename,BeginsWith|ExactMatch) == 0)
 							{
@@ -241,9 +244,10 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
 							 insertItem(new GrepListBoxItem(filename, linenumber, str, false));
 
 							}
-						else insertItem(new GrepListBoxItem(filename, linenumber, str, false)); 
+						else insertItem(new GrepListBoxItem(filename, linenumber, str, false));
 
                 }
+            m_matchCount++;
         }
 }
 

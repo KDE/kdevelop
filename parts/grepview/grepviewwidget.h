@@ -22,13 +22,13 @@ class KDevProject;
 class GrepViewWidget : public ProcessWidget
 {
     Q_OBJECT
-    
+
 public:
     GrepViewWidget(GrepViewPart *part);
     ~GrepViewWidget();
 
     void projectChanged(KDevProject *project);
-    
+
 public slots:
     void showDialog();
     void showDialogWithPattern(QString pattern);
@@ -43,6 +43,7 @@ private:
 
     GrepDialog *grepdlg;
     GrepViewPart *m_part;
+    int m_matchCount;
 };
 
 #endif
