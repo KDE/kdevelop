@@ -145,15 +145,18 @@ void CKDevelop::slotFileOpen(){
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotFileOpen( int id_ ){
+void CKDevelop::slotFileOpen( int id_ )
+{
   slotStatusMsg(i18n("Opening file..."));
 
-  QString str=file_open_list.at(id_);
-  
-  switchToFile(str);
+  int index;
+  if ((index = file_open_popup->indexOf(id_)) >=0)
+  {
+    QString str=file_open_list.at(index);
+    switchToFile(str);
+  }
 
   slotStatusMsg(i18n("Ready."));
-
 }
 
 void CKDevelop::slotFileClose()
