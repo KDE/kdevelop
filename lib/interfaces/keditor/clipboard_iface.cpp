@@ -76,3 +76,4 @@ KEditor::ClipboardDocumentIface *KEditor::ClipboardDocumentIface::interface(KEdi
 {
   return static_cast<KEditor::ClipboardDocumentIface*>(doc->queryInterface("KEditor::ClipboardDocumentIface"));
 }
+#include "clipboard_iface.moc"

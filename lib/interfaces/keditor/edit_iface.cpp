@@ -19,3 +19,4 @@ KEditor::EditDocumentIface *KEditor::EditDocumentIface::interface(KEditor::Docum
 {
   return static_cast<KEditor::EditDocumentIface*>(doc->queryInterface("KEditor::EditDocumentIface"));
 }
+#include "edit_iface.moc"

@@ -162,3 +162,4 @@ void Editor::activePartChanged(KParts::Part *part)
     emit documentActivated(_currentDocument);
   }
 }
+#include "editor.moc"

@@ -55,3 +55,4 @@ KEditor::UndoDocumentIface *KEditor::UndoDocumentIface::interface(KEditor::Docum
 {
   return static_cast<KEditor::UndoDocumentIface*>(doc->queryInterface("KEditor::UndoDocumentIface"));
 }
+#include "undo_iface.moc"

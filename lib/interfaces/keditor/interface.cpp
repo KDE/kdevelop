@@ -31,3 +31,4 @@ DocumentInterface::DocumentInterface(Document *parent, Editor *editor)
   : QObject(parent), _editor(editor), _document(parent)
 {
 }
+#include "interface.moc"

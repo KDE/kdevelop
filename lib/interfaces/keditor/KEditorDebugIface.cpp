@@ -69,3 +69,4 @@ void KEditor::DebugDocumentDCOPIface::forwardBreakPointEnabledToggled(KEditor::D
 }
 
 
+#include "KEditorDebugIface.moc"

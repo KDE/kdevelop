@@ -50,3 +50,4 @@ KEditor::CursorDocumentIface *KEditor::CursorDocumentIface::interface(KEditor::D
 {
   return static_cast<KEditor::CursorDocumentIface*>(doc->queryInterface("KEditor::CursorDocumentIface"));
 }
+#include "cursor_iface.moc"

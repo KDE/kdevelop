@@ -22,3 +22,4 @@ KEditor::StatusDocumentIface *KEditor::StatusDocumentIface::interface(KEditor::D
 {
   return static_cast<KEditor::StatusDocumentIface*>(doc->queryInterface("KEditor::StatusDocumentIface"));
 }
+#include "status_iface.moc"

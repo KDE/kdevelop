@@ -22,3 +22,4 @@ KEditor::DebugDocumentIface *KEditor::DebugDocumentIface::interface(KEditor::Doc
 {
   return static_cast<KEditor::DebugDocumentIface*>(doc->queryInterface("KEditor::DebugDocumentIface"));
 }
+#include "debug_iface.moc"
