@@ -89,8 +89,7 @@ void CClassWizardDlg::setInitialClass( const char *aClassName )
 {
   assert( aClassName != NULL && strlen( aClassName ) > 0 );
 
-	// Jonas- commented this as initialClass is not declared -Ralf
-//  initialClass = aClassName;
+  initialClass = aClassName;
 }
 
 /*********************************************************************

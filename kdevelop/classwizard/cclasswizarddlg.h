@@ -65,6 +65,9 @@ private: // Private methods
 
 private: // Private attributes
 
+  /** The classname to start viewing. */
+  QString initialClass;
+
   /** Store holding all parsed objects. */
   CClassStore *store;
 };
