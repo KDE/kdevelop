@@ -52,6 +52,7 @@ private slots:
   void slotConfigureEditors();
   void slotSettings();
   void slotActiveProcessChanged( KDevPlugin*, bool );
+  void slotActivePartChanged( KParts::Part* part );
   void slotStopPopupActivated(int);
   void slotStopMenuAboutToShow();
   void slotStopButtonPressed();

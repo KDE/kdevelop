@@ -37,6 +37,7 @@
 #include <kurlrequester.h>
 #include <kpopupmenu.h>
 
+#include <ktexteditor/document.h>
 #include <ktexteditor/configinterface.h>
 #include <kparts/partmanager.h>
 #include <kdevpartcontroller.h>
@@ -175,7 +176,11 @@ void MainWindowShare::createActions()
   action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
 
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
-  action->setStatusText( i18n("Configure editors settings") );
+  m_configureEditorAction->setStatusText( i18n("Configure editors settings") );
+  m_configureEditorAction->setEnabled( false );
+  
+  KDevPartController * partController = API::getInstance()->partController();
+  connect( partController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
 
 void MainWindowShare::slotReportBug()
@@ -437,6 +442,11 @@ void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
     return;
 
   popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
+}
+
+void MainWindowShare::slotActivePartChanged( KParts::Part * part )
+{
+    m_configureEditorAction->setEnabled( part && dynamic_cast<KTextEditor::Document*>(part) );
 }
 
 #include "mainwindowshare.moc"
