@@ -1,3 +1,6 @@
+2001-10-30  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: use Unicode for LFV --> fixes character salad with non-latin strings
+
 2001-10-29  F@lk Brettschneider <falk@kdevelop.org>
     * syntax highlighting also for *.tlh and *.inl files
       (C++ template header and source file type)
