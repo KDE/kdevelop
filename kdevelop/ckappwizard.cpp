@@ -1405,28 +1405,44 @@ void CKAppWizard::okPermited()
     hasTemplate = false;
   }
 
-  if (hasTemplate /*&& QFileInfo(copysrc).exists()*/) {
-    p << "cp";
-		p << "'" + copysrc + "'";
-		p << "'" + copydes + "';";
-
-    if( (kickeritem->isSelected()||kde2miniitem->isSelected()||
-        kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
-        qt2normalitem->isSelected()||qt2mdiitem->isSelected()) /*&& QFileInfo(adminsrc).exists()*/ )
+  if (hasTemplate)
+  {
+    if (QFileInfo(copysrc).exists())
     {
+      p << "cp";
+      p << "'" + copysrc + "'";
+      p << "'" + copydes + "';";
+
+      if( ( kickeritem->isSelected()||kde2miniitem->isSelected()||
+            kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
+            qt2normalitem->isSelected()||qt2mdiitem->isSelected()) && QFileInfo(adminsrc).exists() )
+      {
         p << "cp";
-   			p << "'" + adminsrc + "'"; 			
-   			p << "'" + admindes + "'";
-   	}
-    p.start(KProcess::Block,KProcess::AllOutput);
+        p << "'" + adminsrc + "'"; 			
+        p << "'" + admindes + "'";
+      }
+      else
+      {
+        KMessageBox::error (this, QString(i18n("The template file [%1] is missing.\n"
+                    "Please correct your KDevelop installation.")).arg(adminsrc));
+        return;
+      }
+      p.start(KProcess::Block,KProcess::AllOutput);
+    }
+    else
+    {
+      KMessageBox::error (this, QString(i18n("The template file [%1] is missing.\n"
+                          "Please correct your KDevelop installation.")).arg(copysrc));
+      return;
+    }
   }
 
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
-    this,SLOT(slotPerlOut(KProcess *, char *, int)));
+          this,SLOT(slotPerlOut(KProcess *, char *, int)));
   connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
-    this,SLOT(slotPerlErr(KProcess *, char *, int)));
+          this,SLOT(slotPerlErr(KProcess *, char *, int)));
   *q << "perl" << locate("appdata", "tools/processes.pl");
 
   if (!entriesfname.isEmpty())
