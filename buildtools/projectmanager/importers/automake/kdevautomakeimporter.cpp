@@ -235,6 +235,11 @@ void KDevAutomakeImporter::removeFromMakefile(const QString &fileName, const Env
     QDir().rename (fileName + "#", fileName);
 }
 
+QString KDevAutomakeImporter::findMakefile(ProjectFolderDom dom) const
+{
+    return dom->name() + "/Makefile.am";
+}
+
 QStringList KDevAutomakeImporter::findMakefiles(ProjectFolderDom dom) const
 {
     return const_cast<KDevAutomakeImporter*>(this)->findMakefiles(dom);

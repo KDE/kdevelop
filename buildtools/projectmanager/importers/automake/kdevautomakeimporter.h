@@ -34,6 +34,7 @@ public:
     virtual ~KDevAutomakeImporter();
     
     virtual ProjectItemDom import(ProjectFolderDom dom, const QString &fileName);
+    virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
     
 private:    

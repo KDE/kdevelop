@@ -40,6 +40,7 @@ public:
     { return 0; }
     
     virtual ProjectItemDom import(ProjectFolderDom dom, const QString &fileName) = 0;
+    virtual QString findMakefile(ProjectFolderDom dom) const = 0;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
 };
 

@@ -289,14 +289,13 @@ QStringList KDevProjectManagerPart::fileList(ProjectItemDom item)
 
 void KDevProjectManagerPart::fileDirty(const QString &fileName)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::fileDirty:" << fileName << endl;
-    import();
+    QFileInfo fileInfo(fileName);
+    if (fileInfo.extension() == "am")
+        import();
 }
 
 void KDevProjectManagerPart::fileDeleted(const QString &fileName)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::fileDeleted:" << fileName << endl;
-    
     QFileInfo fileInfo(fileName);
     if (fileInfo.extension() == "am")
         import();
@@ -304,8 +303,6 @@ void KDevProjectManagerPart::fileDeleted(const QString &fileName)
 
 void KDevProjectManagerPart::fileCreated(const QString &fileName)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::fileCreated:" << fileName << endl;
-    
     QFileInfo fileInfo(fileName);
     if (fileInfo.extension() == "am")
         import();
