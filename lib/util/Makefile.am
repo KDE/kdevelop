@@ -11,6 +11,7 @@ libkdevutil_la_SOURCES = processwidget.cpp \
 			 execcommand.cpp \
 			 ksavealldialog.cpp \
 			 filetemplate.cpp \
+			 urlutil.cpp \
 			 locate.cpp
 
 METASOURCES = AUTO
