@@ -594,7 +594,7 @@ int Lexer::macroMultiplyDivide()
 	readWhiteSpaces( false );
         if( currentChar() == '*' )
             op = 0;
-        else if( currentChar() == '/' )
+        else if( currentChar() == '/' && !(peekChar() == '*' || peekChar() == '/') )
             op = 1;
         else if( currentChar() == '%' )
             op = 2;
@@ -603,7 +603,7 @@ int Lexer::macroMultiplyDivide()
 	nextChar();
         iresult = macroPrimary();
         result = op == 0 ? (result * iresult) :
-                 op == 1 ? (result / iresult) :
+                 op == 1 ? (iresult == 0 ? 0 : (result / iresult)) :
                            (result % iresult);
     }
     return result;
