@@ -513,6 +513,9 @@ void CKDevSetupDlg::slotQtClicked(){
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
 
+    if(dir.right(1) != "/" ){
+     dir = dir + "/";
+    }
     QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
     if(!QFileInfo(qt_testfile).exists())
       KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
@@ -526,6 +529,10 @@ void CKDevSetupDlg::slotKDEClicked(){
   dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
+
+    if(dir.right(1) != "/" ){
+     dir = dir + "/";
+    }
 
     QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
     if(!QFileInfo(kde_testfile).exists())
