@@ -471,7 +471,7 @@ inline void Lexer::readWhiteSpaces( bool skipNewLine )
 
 inline void Lexer::readLineComment()
 {
-    while( currentChar() != '\n' )
+    while( !currentChar().isNull() && currentChar() != '\n' )
         nextChar();
 }
 

@@ -234,11 +234,11 @@ void Lexer::tokenize()
 	Token tk;
 	nextToken( tk );
 
-	if( currentChar().isNull() )
-	    break;
-
         if( tk.type() != -1 )
 	    addToken( tk );
+
+	if( currentChar().isNull() )
+	    break;
     }
 
     Token tk = Token( Token_eof, currentPosition(), 0 );
