@@ -95,12 +95,10 @@ signals:
 
 protected:
     virtual QSize minimumSizeHint() const;
+    void maybeScrollToBottom();
     
 protected slots:
     void slotProcessExited(KProcess*);
-
-private:
-    void maybeScrollToBottom();
 
 private:
     KProcess *childproc;
