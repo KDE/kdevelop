@@ -203,11 +203,11 @@ void CKDevelop::initView(){
   // dock the widgets
   //
   // ...the output views
-  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom, 70/*size relation in %*/);
   dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
   dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
 	// ...the tree views
-  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft, 35/*size relation in %*/);
   dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
