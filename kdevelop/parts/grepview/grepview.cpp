@@ -84,10 +84,10 @@ void GrepView::stopButtonClicked()
 }
 
 
-void GrepView::projectSpaceOpened(ProjectSpace *pProjectSpace)
+void GrepView::projectSpaceOpened()
 {
     kdDebug(9001) << "GrepView::projectSpaceOpened()" << endl;
-    m_widget->setProjectSpace(pProjectSpace);
+    m_widget->setProjectSpace(projectSpace());
 
 #if 0
     //at the moment GrepView writes only data that are user depended,
@@ -97,13 +97,6 @@ void GrepView::projectSpaceOpened(ProjectSpace *pProjectSpace)
     QDomElement grepElement = grepList.item(0).toElement();
     kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
 #endif
-}
-
-
-void GrepView::projectSpaceClosed()
-{
-    kdDebug(9001) << "GrepView::projectSpaceClosed()" << endl;
-
 #if 0
     kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
     QDomDocument doc = pProjectSpace->readUserDocument();

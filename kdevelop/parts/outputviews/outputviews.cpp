@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qwhatsthis.h>
+#include <qdir.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -22,12 +23,11 @@
 
 
 MakeView::MakeView(QObject *parent, const char *name)
-    : KDevComponent(parent,  name)
+    : KDevMakeFrontend(parent,  name)
 {
     setInstance(OutputFactory::instance());
     setXMLFile("kdevmakeview.rc");
 
-    m_pProjectSpace = 0;
     m_widget = 0;
 }
 
@@ -63,31 +63,19 @@ void MakeView::setupGUI()
 }
 
 
-void MakeView::commandRequested(const QString &command)
+void MakeView::executeMakeCommand(const QString &command)
 {
-    if (!m_pProjectSpace) {
+    if (!projectSpace()) {
         kdDebug(9004) << "MakeView: compilation started with project?" << endl;
+        return;
     }
     
-    m_widget->startJob(m_pProjectSpace->absolutePath(), command);
-}
-
-
-void MakeView::projectSpaceOpened(ProjectSpace *pProjectSpace)
-{
-    m_pProjectSpace = pProjectSpace;
-}
-
-
-void MakeView::projectSpaceClosed()
-{
-    m_pProjectSpace = 0;
-    m_widget->clear();
+    m_widget->startJob(projectSpace()->absolutePath(), command);
 }
 
 
 AppOutputView::AppOutputView(QObject *parent, const char *name)
-    : KDevComponent(parent,  name)
+    : KDevAppFrontend(parent,  name)
 {
     setInstance(OutputFactory::instance());
 }
@@ -114,8 +102,15 @@ void AppOutputView::setupGUI()
 }
 
 
+void AppOutputView::executeAppCommand(const QString &command)
+{
+    m_widget->startJob(QDir::homeDirPath(), command);
+}
+
+
 void AppOutputView::stopButtonClicked()
 {
     m_widget->stopButtonClicked();
 }
+
 #include "outputviews.moc"

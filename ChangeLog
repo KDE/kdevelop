@@ -1,3 +1,14 @@
+2000-12-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Removed many methods from KDevComponents, now using
+	  a signal/slot oriented approach
+	* Centralized part loading code into its own class
+	* Make and application frontends are only loaded for projects,
+	  and have their own service type now
+	* HTML browser
+	* Fixed i18n issues caused by string concatenation instead of QString::arg()
+	* Fixed some memory leaks related to returning QList*
+	* Fixed lots of warnings
+
 2000-12-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Implemented window layout saving per project
 	  with the help of the new XML based DockMainWindow::(read|write)Config

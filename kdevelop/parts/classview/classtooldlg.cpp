@@ -53,7 +53,6 @@ ClassToolDialog::ClassToolDialog( ClassView *part )
   comboExport = (PIExport)-1;
   currentClass = 0;
   m_part = part;
-  m_store = NULL;
 
   setWidgetValues();
   readIcons();
@@ -62,8 +61,6 @@ ClassToolDialog::ClassToolDialog( ClassView *part )
 
   connect( part, SIGNAL(setLanguageSupport(KDevLanguageSupport*)),
            this, SLOT(setLanguageSupport(KDevLanguageSupport*)) );
-  connect( part, SIGNAL(setClassStore(ClassStore*)),
-           this, SLOT(setClassStore(ClassStore*)) );
 
   m_part->registerClassToolDialog(this);
 }
@@ -200,22 +197,12 @@ void ClassToolDialog::setCallbacks()
  *                                                                   *
  ********************************************************************/
 
-void ClassToolDialog::setClassStore(ClassStore *store)
-{
-    m_store = store;
-    classTree.setClassStore(store);
-
-    if (!m_store)
-        currentOperation = ViewNone;
-    refresh();
-}
-
-
 void ClassToolDialog::setLanguageSupport(KDevLanguageSupport *ls)
 {
-    classTree.setLanguageSupport(ls);
     if (ls)
-        connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
+        connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(refresh()));
+    if (!m_part->classStore())
+        currentOperation = ViewNone;
 }
 
 
@@ -230,7 +217,7 @@ void ClassToolDialog::setClassName(const QString &name)
         }
 
     if (!name.isEmpty())
-        currentClass = m_store->getClassByName(name);
+        currentClass = m_part->classStore()->getClassByName(name);
 }
 
 
@@ -313,8 +300,8 @@ void ClassToolDialog::refresh()
     QString oldName = classCombo.currentText();
 
     classCombo.clear();
-    if (m_store) {
-        QStrList *list = m_store->getSortedClassNameList();
+    if (m_part->classStore()) {
+        QStrList *list = m_part->classStore()->getSortedClassNameList();
         classCombo.insertStrList(list);
         delete list;
         setClassName(oldName);
@@ -390,21 +377,21 @@ void ClassToolDialog::buildTree()
             break;
         case ViewChildren:
             {
-                QList<ParsedClass> *list = m_store->getClassesByParent(currentClass->name);
+                QList<ParsedClass> *list = m_part->classStore()->getClassesByParent(currentClass->name);
                 classTree.insertClassAndClasses(currentClass, list);
                 delete list;
             }
             break;
         case ViewClients:
             {
-                QList<ParsedClass> *list = m_store->getClassClients(currentClass->name);
+                QList<ParsedClass> *list = m_part->classStore()->getClassClients(currentClass->name);
                 classTree.insertClassAndClasses(currentClass, list);
                 delete list;
             }
             break;
         case ViewSuppliers:
             {
-                QList<ParsedClass> *list = m_store->getClassSuppliers( currentClass->name );
+                QList<ParsedClass> *list = m_part->classStore()->getClassSuppliers( currentClass->name );
                 classTree.insertClassAndClasses( currentClass, list );
                 delete list;
             }
@@ -419,4 +406,5 @@ void ClassToolDialog::buildTree()
             break;
         }
 }
+
 #include "classtooldlg.moc"

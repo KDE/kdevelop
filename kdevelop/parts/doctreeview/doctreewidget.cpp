@@ -27,6 +27,7 @@
 #include "doctreewidget.h"
 #include "doctreeview.h"
 #include "projectspace.h"
+#include "kdeveditormanager.h"
 
 
 class DocTreeItem : public QListViewItem
@@ -533,11 +534,11 @@ void DocTreeWidget::slotItemExecuted(QListViewItem *item)
 
     QString ident = dtitem->ident();
     if (ident == "internal:projectAPI")
-        emit m_part->gotoProjectApiDoc();
+        ident = "bla"; // get from ProjectSpace
     else if (ident == "internal:projectManual")
-        emit m_part->gotoProjectManual();
-    else if (!ident.isEmpty())
-        emit m_part->gotoDocumentationFile(ident);
+        ident = "foo"; // get from ProjectSpace
+    if (!ident.isEmpty())
+        m_part->editorManager()->gotoDocumentationFile(ident);
 }
 
 
@@ -597,10 +598,5 @@ void DocTreeWidget::projectSpaceOpened(ProjectSpace *pProjectSpace)
     folder_project->refresh();
 }
 
-
-void DocTreeWidget::projectSpaceClosed()
-{
-    folder_project->setProjectSpace(0);
-}
 
 #include "doctreewidget.moc"

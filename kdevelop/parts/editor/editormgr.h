@@ -27,25 +27,17 @@ class KURL;
 
 class KLibFactory;
 class KDialogBase;
+class KHTMLPart;
 
 namespace KTextEditor {
   class Document;
 };
 
-#include "kdevcomponent.h"
+#include "kdeveditormanager.h"
 
 #include <qwidget.h>
 
-//class EditorDock : public QWidget
-//{
-//    Q_OBJECT
-//
-//public:
-//    EditorDock( QWidget *parent=0, const char *name=0 );
-//    virtual ~EditorDock();
-//};
-
-class EditorManager : public KDevComponent
+class EditorManager : public KDevEditorManager
 {
   Q_OBJECT
 
@@ -73,7 +65,8 @@ public:
   /** saves the document under filename and format.*/	
   bool saveDocument(const KURL& url);
 
-  void gotoFile(const KURL& url, int lineNum);
+  virtual void gotoSourceFile(const KURL& url, int lineNum);
+  virtual void gotoDocumentationFile(const KURL& url);
 
 public slots:	
   /** add a opened file to the recent file list and update recent file menu*/
@@ -117,17 +110,15 @@ private:
 
 
   KTextEditor::Document* findOpenDocument(const KURL& url);
+  KHTMLPart* findOpenHTMLViewer(const KURL& url);
 
   bool documentExists(const KURL& url);
 
   bool documentIsWritable(const KURL& url);
 
-//signals:
-
-//  void embedWidget(QWidget *, const QString & partName);
-
 private:
-  QList<KTextEditor::Document> m_documents;	
+  QList<KTextEditor::Document> m_documents;
+  QList<KHTMLPart> m_htmldocuments;
   KLibFactory* m_factory;
 };
 

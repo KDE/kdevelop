@@ -27,8 +27,8 @@ EXTRA_DIST = $(toolbar_DATA)
 
 METASOURCES = AUTO
 
-servicedir = $(kde_servicesdir)
-service_DATA = kdevelopdbg.desktop
+#servicedir = $(kde_servicesdir)
+#service_DATA = kdevelopdbg.desktop
 
 rcdir = $(kde_datadir)/kdevelopdbg
 rc_DATA = kdevelopdbgui.rc

@@ -72,7 +72,7 @@ void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<Pars
          pParent != 0;
          pParent = parentList->next() )
         {
-            ParsedClass *parentClass = m_store->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
             lastItem = new ClassTreeClassItem(root, lastItem, parentClass);
             lastItem->setExpandable(false);
         }
@@ -139,7 +139,7 @@ void ClassToolWidget::insertAllClassMethods(ParsedClass *parsedClass, PIExport f
           pParent != 0;
           pParent = parsedClass->parents.next() )
         {
-            ParsedClass *parentClass = m_store->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
             if (parentClass)
                 addClassAndMethods(parentClass, filter, &lastItem);
         }
@@ -158,7 +158,7 @@ void ClassToolWidget::insertAllClassAttributes(ParsedClass *parsedClass, PIExpor
           pParent != 0;
           pParent = parsedClass->parents.next() )
         {
-            ParsedClass *parentClass = m_store->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
             if (parentClass)
                 addClassAndAttributes(parentClass, filter, &lastItem);
         }
@@ -166,4 +166,5 @@ void ClassToolWidget::insertAllClassAttributes(ParsedClass *parsedClass, PIExpor
     // Add the current class
     addClassAndAttributes(parsedClass, filter, &lastItem);
 }
+
 #include "classtoolwidget.moc"

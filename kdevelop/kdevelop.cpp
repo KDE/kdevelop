@@ -108,7 +108,7 @@ void KDevelop::readProperties(KConfig* pConfig){
 
 bool KDevelop::queryClose(){
   kdDebug(9000) << "KDevelop::queryClose" << endl;
-  m_pCore->unloadProjectSpace();
+  m_pCore->closeProjectSpace();
   return true;
   
 }

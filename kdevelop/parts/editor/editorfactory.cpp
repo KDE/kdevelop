@@ -46,11 +46,8 @@ EditorFactory::~EditorFactory()
 
 
 QObject *EditorFactory::create(QObject *parent, const char *name,
-                             const char *classname, const QStringList &args)
+                               const char */*classname*/, const QStringList &/*args*/)
 {
-    // Depending on classname, this should method should also
-    // be able to create the config dialog
-
     kdDebug(9000) << "Building editor part" << endl;
     
     QObject *obj = new EditorManager(parent, name);

@@ -7,7 +7,7 @@ libkdeveditorpart_la_LDFLAGS =  \
 
 libkdeveditorpart_la_LIBADD = \
     $(top_builddir)/kdevelop/lib/libkdevelop.la \
-    $(LIB_KDEUI)
+    $(LIB_KHTML)
 
 libkdeveditorpart_la_SOURCES = \
     editorfactory.cpp editormgr.cpp editorconfigwidget.cpp editorview.cpp

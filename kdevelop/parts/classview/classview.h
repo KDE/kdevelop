@@ -49,17 +49,13 @@ public:
     
 signals:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void setClassStore(ClassStore *store);
     
 protected:
     virtual void setupGUI();
-    virtual void languageSupportOpened(KDevLanguageSupport *ls);
-    virtual void languageSupportClosed();
-    virtual void classStoreOpened(ClassStore *store);
-    virtual void classStoreClosed();
+    virtual void languageSupportOpened();
 
 private slots:
-    void refresh();
+    void updatedSourceInfo();
     void selectedClass();
     void selectedMethod();
     void switchedDeclImpl();
@@ -86,8 +82,6 @@ private:
     ClassListAction *classes_action;
     MethodListAction *methods_action;
     DelayedPopupAction *popup_action;
-    ClassStore *m_store;
-    KDevLanguageSupport *m_langsupport;
     bool m_decl_or_impl;
 };
 

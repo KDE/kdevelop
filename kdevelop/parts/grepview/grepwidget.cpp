@@ -19,6 +19,7 @@
 #include "grepview.h"
 #include "grepdlg.h"
 #include "projectspace.h"
+#include "kdeveditormanager.h"
 
 
 class GrepListBoxItem : public ProcessListBoxItem
@@ -168,7 +169,7 @@ void GrepWidget::lineHighlighted(int line)
     if (i->isCustomItem())
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-            emit m_part->gotoSourceFile(gi->filename(), gi->linenumber());
+            m_part->editorManager()->gotoSourceFile(gi->filename(), gi->linenumber());
         }
 }
 

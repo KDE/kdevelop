@@ -30,8 +30,7 @@ protected:
     virtual void setupGUI();
     virtual void configWidgetRequested(KDialogBase *dlg);
     virtual void stopButtonClicked();
-    virtual void projectSpaceClosed();
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
+    virtual void projectSpaceOpened();
 
 private:
     QGuardedPtr<GrepWidget> m_widget;

@@ -34,13 +34,8 @@ public:
 protected:
     virtual void setupGUI();
     virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void projectSpaceClosed();
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
+    virtual void projectSpaceOpened();
     
-signals:
-    void projectAPISelected();
-    void projectManualSelected();
-
 private:
     QGuardedPtr<DocTreeWidget> m_widget;
     friend class DocTreeWidget;

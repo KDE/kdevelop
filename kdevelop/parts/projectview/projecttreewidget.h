@@ -31,6 +31,7 @@ class ProjectTreeWidget : public QListView
 public:
     ProjectTreeWidget(ProjectView* pPart);
     ~ProjectTreeWidget();
+    
     void setProjectSpace(ProjectSpace* pProjectSpace);
 
     void readProjectSpaceGlobalConfig();
@@ -45,19 +46,17 @@ public:
        </project>
     */
     void writeProjectSpaceGlobalConfig();
+    /** clears the tree and repaint it again*/
     void addedFileToProject(KDevFileNode* pNode);
     void removedFileFromProject(KDevFileNode* pNode);
-    /** clears the tree and repaint it again*/
     void refresh();
     
-    
-    
-    protected slots:
-      void slotRightButtonPressed( QListViewItem* pItem, const QPoint&,int);
-    void    slotOpenFile();
+private slots:
+    void slotRightButtonPressed( QListViewItem* pItem, const QPoint&,int);
+    void slotOpenFile();
     void slotClicked(QListViewItem* pItem);
-    
- protected:
+
+private:
     void createDefaultFileGroups();
     QPopupMenu* createPopup(ProjectTreeItem* item);
     ProjectSpace* m_pProjectSpace;

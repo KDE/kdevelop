@@ -10,21 +10,22 @@
  ***************************************************************************/
 
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kpopupmenu.h>
-#include "projecttreewidget.h"
-#include <qheader.h>
-#include <qregexp.h>
-#include <kmimetype.h>
 #include <qfileinfo.h>
-#include <kiconloader.h>
 #include <qfont.h>
+#include <qheader.h>
 #include <qpopupmenu.h>
+#include <qregexp.h>
 #include <kaction.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <kpopupmenu.h>
 #include <kdebug.h>
+#include "kdeveditormanager.h"
 #include "projectview.h"
+#include "projecttreewidget.h"
 
 
 ProjectTreeWidget::ProjectTreeWidget(ProjectView *pPart)
@@ -54,14 +55,14 @@ void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoi
 
 
 void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
-  kdDebug(9009) << "ProjectTreeWidget::slotDoubleClicked" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::slotClicked" << endl;
   if(pItem == 0) return;
 
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
   if(pPItem->className() == QString("FileItem") ){
     FileItem* pFileItem = static_cast<FileItem*>(pItem);
     // inform the part
-    emit m_pProjectView->gotoSourceFile(pFileItem->absFileName(), 0);
+    m_pProjectView->editorManager()->gotoSourceFile(pFileItem->absFileName(), 0);
   }
 }
 
@@ -100,9 +101,11 @@ void ProjectTreeWidget::refresh(){
   defaultFileGroups = m_pProjectSpace->defaultFileGroups();
 
   ProjectSpaceItem* pProjectSpaceItem = new ProjectSpaceItem(this);
-  pProjectSpaceItem->setOpen(true);  
-  pProjectSpaceItem->setText(0,"Projectspace '" + m_pProjectSpace->name() + "' : " 
-			     + QString::number(pProjects->count()) + " project(s)");
+  pProjectSpaceItem->setOpen(true);
+  QString rootstr = (pProjects->count()==1)?
+      i18n("Projectspace '%1': 1 project").arg(m_pProjectSpace->name()) :
+      i18n("Projectspace '%1': %2 projects").arg(m_pProjectSpace->name()).arg(pProjects->count());
+  pProjectSpaceItem->setText(0, rootstr);
   pProjectSpaceItem->setPixmap(0,projectSpacePixmap);
   
   

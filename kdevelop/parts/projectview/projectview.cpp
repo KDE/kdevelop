@@ -44,32 +44,34 @@ void ProjectView::setupGUI(){
 
 }
 
-void ProjectView::projectSpaceOpened(ProjectSpace *pProjectSpace){
-  kdDebug(9009) << "projectSpaceOpened" << endl;
-  m_pProjectTree->setProjectSpace(pProjectSpace);
-  m_pProjectTree->readProjectSpaceGlobalConfig();
+void ProjectView::projectSpaceOpened()
+{
+    kdDebug(9009) << "projectSpaceOpened" << endl;
+    ProjectSpace *ps = projectSpace();
+
+    if (ps) {
+        m_pProjectTree->setProjectSpace(ps);
+        m_pProjectTree->readProjectSpaceGlobalConfig();
+        
+        connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
+                 this, SLOT(addedFileToProject(KDevFileNode*)) );
+        connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
+                 this, SLOT(removedFileFromProject(KDevFileNode*)) );
+        connect( ps, SIGNAL(sigAddedProject(KDevNode*)),
+                 this, SLOT(addedProject(KDevNode*)) );
+    } else {
+        m_pProjectTree->writeProjectSpaceGlobalConfig();
+        m_pProjectTree->clear();
+    }
 }
 
   
-void ProjectView::projectSpaceClosed(){
-  kdDebug(9009) << "projectSpaceClosed" << endl;
-  m_pProjectTree->writeProjectSpaceGlobalConfig();
-  m_pProjectTree->clear();
-}
-
-
-void ProjectView::setKDevNodeActions(QList<KAction>* pActions){
-  kdDebug(9009) << "setFileActions" << endl;
-  m_pFileActions = pActions;
-}
-
-
 QList<KAction>* ProjectView::assembleKDevNodeActions(KDevNode* pNode){
   kdDebug(9009) << "ProjectView::assembleFileActions" << endl;
   // and now the trick :-)
-  emit needKDevNodeActions(this,pNode);
+  emit needKDevNodeActions(pNode,&m_pFileActions);
   // now the m_pFileActions should be filled
-  return m_pFileActions;
+  return &m_pFileActions;
 }
 
 

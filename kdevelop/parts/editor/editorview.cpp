@@ -74,7 +74,7 @@ void IconBorder::paintEvent( QPaintEvent * )
 
 void IconBorder::slotScrollValueChanged(int value)
 {
-  kdDebug(9004) << "Scroll value = " << value << endl;
+    //  kdDebug(9004) << "Scroll value = " << value << endl;
   m_scrollPos = value;
   paintEvent(0);
 }

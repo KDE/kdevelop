@@ -26,6 +26,7 @@
 #include "main.h"
 #include "classstore.h"
 #include "kdevlanguagesupport.h"
+#include "kdeveditormanager.h"
 
 
 ClassView::ClassView(QObject *parent, const char *name)
@@ -35,8 +36,6 @@ ClassView::ClassView(QObject *parent, const char *name)
     setXMLFile("kdevclassview.rc");
     
     m_decl_or_impl = false;
-    m_langsupport = 0;
-    m_store = 0;
 
     // In contrast to other widgets, we can have any number of class tool
     // dialogs. That's why we don't use QGuardedPtr here, but instead let
@@ -68,8 +67,10 @@ void ClassView::setupGUI()
 
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
+    classes_action->setClassStore(classStore());
     methods_action = new MethodListAction(i18n("Methods"), 0, this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");
+    methods_action->setClassStore(classStore());
     popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0, this, SLOT(switchedDeclImpl()),
                                            actionCollection(), "class_wizard");
     setupPopup();
@@ -87,10 +88,10 @@ void ClassView::setupPopup()
 //    popup->insertItem(i18n("View class hierarchy"), this, SLOT(selectedViewHierarchy()));
     popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
-    if (m_langsupport) {
-        bool hasAddMethod = m_langsupport->hasFeature(KDevLanguageSupport::AddMethod);
-        bool hasAddAttribute = m_langsupport->hasFeature(KDevLanguageSupport::AddAttribute);
-        bool hasNewClass =  m_langsupport->hasFeature(KDevLanguageSupport::NewClass);
+    if (languageSupport()) {
+        bool hasAddMethod = languageSupport()->hasFeature(KDevLanguageSupport::AddMethod);
+        bool hasAddAttribute = languageSupport()->hasFeature(KDevLanguageSupport::AddAttribute);
+        bool hasNewClass =  languageSupport()->hasFeature(KDevLanguageSupport::NewClass);
         if (hasAddMethod || hasAddAttribute || hasNewClass) 
             popup->insertSeparator();
         if (hasNewClass)
@@ -103,50 +104,20 @@ void ClassView::setupPopup()
 }
 
 
-void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
+void ClassView::languageSupportOpened()
 {
-    m_langsupport = ls;
-    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
+    kdDebug(9003) << "ClassView::languageSupportOpened()" << endl;
+
+    KDevLanguageSupport *ls = languageSupport();
+    if (ls)
+        connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(updatedSourceInfo()));
     emit setLanguageSupport(ls);
 
     setupPopup();
 }
 
 
-void ClassView::languageSupportClosed()
-{
-    m_langsupport = 0;
-    emit setLanguageSupport(0);
-    
-    setupPopup();
-}
-
-
-void ClassView::classStoreOpened(ClassStore *store)
-{
-    kdDebug(9003) << "ClassView::classStoreOpened()" << endl;
-    m_store = store;
-    emit setClassStore(store);
-    classes_action->setClassStore(store);
-    classes_action->refresh();
-    methods_action->setClassStore(store);
-    methods_action->refresh(classes_action->currentText());
-}
-
-
-void ClassView::classStoreClosed()
-{
-    kdDebug(9003) << "ClassView::classStoreClosed()" << endl;
-    m_store = 0;
-    emit setClassStore(0);
-    classes_action->setClassStore(0);
-    classes_action->refresh();
-    methods_action->setClassStore(0);
-    methods_action->refresh(classes_action->currentText());
-}
-
-
-void ClassView::refresh()
+void ClassView::updatedSourceInfo()
 {
     classes_action->refresh();
     methods_action->refresh(classes_action->currentText());
@@ -243,8 +214,7 @@ void ClassView::switchedDeclImpl()
 void ClassView::selectedViewHierarchy()
 {
     HierarchyDialog *dlg = new HierarchyDialog(this);
-    dlg->setClassStore(m_store);
-    dlg->setLanguageSupport(m_langsupport);
+    dlg->setLanguageSupport(languageSupport(), classStore());
     dlg->show();
 }
 #endif
@@ -294,8 +264,8 @@ void ClassView::selectedGotoImplementation()
  */
 void ClassView::selectedNewClass()
 {
-    if (m_langsupport)
-        m_langsupport->newClassRequested();
+    if (languageSupport())
+        languageSupport()->newClassRequested();
 }
 
 
@@ -304,8 +274,8 @@ void ClassView::selectedNewClass()
  */
 void ClassView::selectedAddMethod()
 {
-    if (m_langsupport)
-        m_langsupport->addMethodRequested(classes_action->currentText());
+    if (languageSupport())
+        languageSupport()->addMethodRequested(classes_action->currentText());
 }
 
 
@@ -314,15 +284,15 @@ void ClassView::selectedAddMethod()
  */
 void ClassView::selectedAddAttribute()
 {
-    if (m_langsupport)
-        m_langsupport->addAttributeRequested(classes_action->currentText());
+    if (languageSupport())
+        languageSupport()->addAttributeRequested(classes_action->currentText());
 }
 
 
 // Only for debugging
 void ClassView::dumpTree()
 {
-    m_store->out();
+    classStore()->out();
 }
 
 
@@ -332,7 +302,7 @@ ParsedClass *ClassView::getClass(const QString &className)
         return 0;
 
     kdDebug(9003) << "ClassView::getClass " << className << endl;
-    ParsedClass *pc = m_store->getClassByName(className);
+    ParsedClass *pc = classStore()->getClassByName(className);
     if (pc && !pc->isSubClass)
         classes_action->setCurrentItem(className);
     
@@ -364,7 +334,7 @@ void ClassView::gotoDeclaration(const QString &className,
         if (pc)
             ps = pc->getStructByName(memberName);
         else
-            ps = m_store->globalContainer.getStructByName(memberName);
+            ps = classStore()->globalContainer.getStructByName(memberName);
         toFile = ps->declaredInFile;
         toLine = ps->declaredOnLine;
         break;
@@ -374,7 +344,7 @@ void ClassView::gotoDeclaration(const QString &className,
         if (pc)
             pa = pc->getAttributeByName(memberName);
         else {
-            ps = m_store->globalContainer.getStructByName(className);
+            ps = classStore()->globalContainer.getStructByName(className);
             if (ps)
                 pa = ps->getAttributeByName(memberName);
         }
@@ -400,10 +370,10 @@ void ClassView::gotoDeclaration(const QString &className,
             pa = pc->getSignalByNameAndArg(memberName);
       break;
     case GlobalFunction:
-        pa = m_store->globalContainer.getMethodByNameAndArg(memberName);
+        pa = classStore()->globalContainer.getMethodByNameAndArg(memberName);
       break;
     case GlobalVariable:
-        pa = m_store->globalContainer.getAttributeByName(memberName);
+        pa = classStore()->globalContainer.getAttributeByName(memberName);
         break;
     default:
         kdDebug(9003) << "Unknown type " << (int)type << " in ClassView::gotoDeclaration." << endl;
@@ -418,7 +388,7 @@ void ClassView::gotoDeclaration(const QString &className,
     
     if (toLine != -1) {
         kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
-        emit gotoSourceFile(toFile, toLine);
+        editorManager()->gotoSourceFile(toFile, toLine);
     }
 }
 
@@ -450,13 +420,14 @@ void ClassView::gotoImplementation(const QString &className,
         }
         break;
     case GlobalFunction:
-        pm = m_store->globalContainer.getMethodByNameAndArg(memberName);
+        pm = classStore()->globalContainer.getMethodByNameAndArg(memberName);
         break;
     default:
         kdDebug(9003) << "Unknown type " << (int)type << "in ClassView::gotoImplementation." << endl;
     }
     
     if (pm)
-        emit gotoSourceFile(pm->definedInFile, pm->definedOnLine);
+        editorManager()->gotoSourceFile(pm->definedInFile, pm->definedOnLine);
 }
+
 #include "classview.moc"

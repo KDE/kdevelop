@@ -185,7 +185,7 @@ void CClassParser::parseStructDeclarations( ParsedStruct *aStruct)
             PUSH_LEXEM();
           break;
         default:
-          debug( "Found unknown struct declaration." );
+          kdDebug(9010) << "Found unknown struct declaration." << endl;
       }
 
       if( lexem != '}' )
@@ -345,7 +345,7 @@ void CClassParser::parseNamespace( ParsedScopeContainer *scope )
     // check that it is well-formed, moving to beginning of block
     getNextLexem();
     while(lexem != 0 && lexem != '{') {
-      debug("Bad namespace identifier.");
+      kdDebug(9010) << "Bad namespace identifier." << endl;
       getNextLexem();
     }
   }
@@ -1536,7 +1536,7 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          debug ("slot: %s\n", aMethod->name.data());
+          kdDebug(9010) << "slot: %s\n" << aMethod->name.data() << endl;
 
 			ParsedMethod *	pm = aClass->getMethod(*aMethod);
 			if (pm != NULL) {
@@ -1694,7 +1694,7 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
         delete aMethod;
       break;
     case CP_IS_MULTI_ATTR_IMPL:
-      debug( "Found multi attr implementation." );
+      kdDebug(9010) << "Found multi attr implementation." << endl;
       emptyStack();
       break;
     case CP_IS_MULTI_ATTRIBUTE:
@@ -1759,7 +1759,7 @@ void CClassParser::parseGenericLexem(  ParsedContainer *aContainer )
       parseTemplate();
       break;
     case CPTHROW:
-      debug( "Found throw statement." );
+      kdDebug(9010) << "Found throw statement." << endl;
       break;
   }
 }

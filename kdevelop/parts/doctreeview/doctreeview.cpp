@@ -61,15 +61,9 @@ void DocTreeView::configWidgetRequested(KDialogBase *dlg)
 }
 
 
-void DocTreeView::projectSpaceOpened(ProjectSpace *pProjectSpace)
+void DocTreeView::projectSpaceOpened()
 {
-    m_widget->projectSpaceOpened(pProjectSpace);
-}
-
-
-void DocTreeView::projectSpaceClosed()
-{
-    m_widget->projectSpaceClosed();
+    m_widget->projectSpaceOpened(projectSpace());
 }
 
 #include "doctreeview.moc"

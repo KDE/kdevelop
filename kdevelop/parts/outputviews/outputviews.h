@@ -13,13 +13,14 @@
 #define _OUTPUTVIEWS_H_
 
 #include <qguardedptr.h>
-#include "kdevcomponent.h"
+#include "kdevmakefrontend.h"
+#include "kdevappfrontend.h"
 
 
 class MakeWidget;
 class ProjectSpace;
 
-class MakeView : public KDevComponent
+class MakeView : public KDevMakeFrontend
 {
     Q_OBJECT
 
@@ -29,21 +30,17 @@ public:
 
 protected:
     virtual void setupGUI();
-    virtual void commandRequested(const QString &command);
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
-    virtual void projectSpaceClosed();
+    virtual void executeMakeCommand(const QString &command);
     
 private:
     QGuardedPtr<MakeWidget> m_widget;
     friend class MakeWidget;
-
-    ProjectSpace *m_pProjectSpace;
 };
 
 
 class AppOutputWidget;
 
-class AppOutputView : public KDevComponent
+class AppOutputView : public KDevAppFrontend
 {
     Q_OBJECT
 
@@ -53,10 +50,12 @@ public:
 
 protected:
     virtual void setupGUI();
+    virtual void executeAppCommand(const QString &command);
     virtual void stopButtonClicked();
     
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
     friend class AppOutputWidget;
 };
+
 #endif

@@ -10,7 +10,7 @@ KDevLanguageSupport::~KDevLanguageSupport()
 {
 }
 
-bool KDevLanguageSupport::hasFeature(Features feature)
+bool KDevLanguageSupport::hasFeature(Features /*feature*/)
 {
     return false;
 }
@@ -19,18 +19,18 @@ void KDevLanguageSupport::newClassRequested()
 {
 }
 
-void KDevLanguageSupport::addMethodRequested(const QString &className)
+void KDevLanguageSupport::addMethodRequested(const QString &/*className*/)
 {
 }
 
-void KDevLanguageSupport::addAttributeRequested(const QString &className)
+void KDevLanguageSupport::addAttributeRequested(const QString &/*className*/)
 {
 }
+
 QStringList KDevLanguageSupport::fileFilters(){
   QStringList list;
   list << "*";
   return list;
 }
-void KDevLanguageSupport::doInitialParsing(){
-}
+
 #include "kdevlanguagesupport.moc"

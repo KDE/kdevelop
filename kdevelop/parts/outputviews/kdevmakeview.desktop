@@ -4,6 +4,6 @@ Exec=blubb
 Comment=Compiler frontend
 Name=MakeView
 Icon=
-ServiceTypes=KDevelop/Component,KDevelop/MakeFrontend
+ServiceTypes=KDevelop/MakeFrontend
 X-KDE-Library=libkdevoutputviews
 X-KDevelop-Args=MakeView

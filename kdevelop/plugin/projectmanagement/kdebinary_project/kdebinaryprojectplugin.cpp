@@ -22,7 +22,7 @@
 
 KDEBinaryProjectPlugin::KDEBinaryProjectPlugin(QObject *parent, const char *name) 
   : Project(parent,name){
-  cerr  << "enter KDEBinaryProjectPlugin::KDEBinaryProjectPlugin" << endl;
+//  cerr  << "enter KDEBinaryProjectPlugin::KDEBinaryProjectPlugin" << endl;
   m_pAboutData=0;
 }
 KDEBinaryProjectPlugin::~KDEBinaryProjectPlugin(){

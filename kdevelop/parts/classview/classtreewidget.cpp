@@ -27,8 +27,6 @@ ClassTreeWidget::ClassTreeWidget(ClassView *part)
 {
     connect( part, SIGNAL(setLanguageSupport(KDevLanguageSupport*)),
              this, SLOT(setLanguageSupport(KDevLanguageSupport*)) );
-    connect( part, SIGNAL(setClassStore(ClassStore*)),
-             this, SLOT(setClassStore(ClassStore*)) );
 }
 
 
@@ -60,16 +58,8 @@ KPopupMenu *ClassTreeWidget::createPopup()
 
 void ClassTreeWidget::setLanguageSupport(KDevLanguageSupport *ls)
 {
-    ClassTreeBase::setLanguageSupport(ls);
     if (ls)
-        connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
-}
-
-
-void ClassTreeWidget::setClassStore(ClassStore *store)
-{
-    ClassTreeBase::setClassStore(store);
-    refresh();
+        connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(refresh()));
 }
 
 
@@ -99,7 +89,7 @@ void ClassTreeWidget::refresh()
 
 void ClassTreeWidget::buildTree(bool fromScratch)
 {
-    if (!m_store)
+    if (!m_part->classStore())
         return;
     
     KConfig *config = KGlobal::config();
@@ -116,7 +106,7 @@ void ClassTreeWidget::buildTreeByCategory(bool fromScratch)
     // TODO: Some smart open/closed state restoring if !fromScratch
     clear();
     
-    ParsedScopeContainer *scope = &m_store->globalContainer;
+    ParsedScopeContainer *scope = &m_part->classStore()->globalContainer;
     
     ClassTreeItem *ilastItem, *lastItem = 0;
 
@@ -197,7 +187,7 @@ void ClassTreeWidget::buildTreeByNamespace(bool fromScratch)
     
     // Global namespace?
     
-    QList<ParsedScopeContainer> *scopeList = m_store->globalContainer.getSortedScopeList();
+    QList<ParsedScopeContainer> *scopeList = m_part->classStore()->globalContainer.getSortedScopeList();
     for (ParsedScopeContainer *pScope = scopeList->first(); pScope != 0; pScope = scopeList->next()) {
         lastItem = new ClassTreeScopeItem(this, lastItem, pScope);
         if (fromScratch)

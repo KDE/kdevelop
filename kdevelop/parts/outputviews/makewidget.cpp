@@ -14,7 +14,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
-
+#include "kdeveditormanager.h"
 #include "outputviews.h"
 #include "makewidget.h"
 
@@ -60,6 +60,12 @@ MakeWidget::MakeWidget(MakeView *view)
 
 MakeWidget::~MakeWidget()
 {}
+
+
+void MakeWidget::setEditorManager(KDevEditorManager *em)
+{
+    m_editormanager = em;
+}
 
 
 void MakeWidget::startJob(const QString &dir, const QString &command)
@@ -131,7 +137,7 @@ void MakeWidget::lineHighlighted(int line)
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
     if (i->isCustomItem()) {
         MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-        emit m_part->gotoSourceFile(gi->filename(), gi->linenumber());
+        m_editormanager->gotoSourceFile(gi->filename(), gi->linenumber());
     }
 }
 
@@ -169,7 +175,7 @@ void MakeWidget::insertStderrLine(const QString &line)
     const int errorJadeRowGroup = 2;
 
     QString fn;
-    int row;
+    int row = -1;
     
     bool hasmatch = false;
     if (errorGccRx.match(line)) {
@@ -192,4 +198,5 @@ void MakeWidget::insertStderrLine(const QString &line)
     else
         ProcessView::insertStderrLine(line);
 }
+
 #include "makewidget.moc"

@@ -19,3 +19,9 @@ service_DATA = kdevclassview.desktop
 
 rcdir = $(kde_datadir)/kdevclassview
 rc_DATA = kdevclassview.rc
+
+
+QTDIR=/home/bernd/kdecvs2.0/qt-copy
+
+foo: digraphview.cpp
+	g++ digraphview.cpp -I$(QTDIR)/include -L$(QTDIR)/lib -L/usr/X11R6/lib -lqt -lX11 -lXext -o foo

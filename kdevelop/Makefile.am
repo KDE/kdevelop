@@ -15,7 +15,7 @@ bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
 kdevelop_SOURCES = main.cpp kdevelopcore.cpp newprojectdlg.cpp kdevelop.cpp \
-        kdevelopfactory.cpp projectoptionsdlg.cpp \
+        kdevelopfactory.cpp projectoptionsdlg.cpp partloader.cpp \
 		    newprojectdlgbase.ui
 
 kdevelop_METASOURCES = AUTO
@@ -29,7 +29,7 @@ kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
                  $(top_builddir)/kdevelop/widgets/qextmdi/src/libkdevqextmdi.la
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopfactory.h kdevelopcore.h \
+noinst_HEADERS = kdevelop.h kdevelopfactory.h kdevelopcore.h partloader.h \
                  projectoptionsdlg.h newprojectdlg.h newprojectdlgbase.h
 
 EXTRA_DIST = kdeveloprc kdevelopui.rc\

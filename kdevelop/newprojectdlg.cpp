@@ -35,6 +35,7 @@
 #include <qheader.h>
 #include <kmessagebox.h>
 #include "newprojectdlg.h"
+#include "partloader.h"
 #include "appwizard.h"
 #include "ctoolclass.h"
 
@@ -226,7 +227,8 @@ void NewProjectDlg::slotOk(){
     m_newProjectSpace = false;
   }
   if (m_newProjectSpace) {
-    m_pSelectedProjectSpace = ProjectSpace::createNewProjectSpace(m_current_prjspace_name);
+    QObject *psObj = PartLoader::loadByName(this, m_current_prjspace_name, "ProjectSpace");
+    m_pSelectedProjectSpace = static_cast<ProjectSpace*>(psObj);
     if(m_pSelectedProjectSpace == 0){
       KMessageBox::sorry(0, i18n("Sorry can't create ProjectSpace with type %1")
 		       .arg(m_current_prjspace_name));

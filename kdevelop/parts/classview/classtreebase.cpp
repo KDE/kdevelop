@@ -22,6 +22,7 @@
 
 #include "classstore.h"
 #include "kdevlanguagesupport.h"
+#include "kdeveditormanager.h"
 #include "classview.h"
 #include "classtooldlg.h"
 #include "classtreebase.h"
@@ -54,8 +55,9 @@ KPopupMenu *ClassTreeItem::createPopup()
     case PIT_CLASS:
         {
             title = i18n("Class");
-            bool hasAddMethod = classTree()->m_langsupport->hasFeature(KDevLanguageSupport::AddMethod);
-            bool hasAddAttribute = classTree()->m_langsupport->hasFeature(KDevLanguageSupport::AddAttribute);
+            KDevLanguageSupport *ls = classTree()->m_part->languageSupport();
+            bool hasAddMethod = ls->hasFeature(KDevLanguageSupport::AddMethod);
+            bool hasAddAttribute = ls->hasFeature(KDevLanguageSupport::AddAttribute);
             if (hasAddMethod)
                 popup->insertItem( i18n("Add method..."), classTree(), SLOT(slotAddMethod()));
             if (hasAddAttribute)
@@ -397,8 +399,6 @@ ClassTreeBase::ClassTreeBase(ClassView *part, QWidget *parent, const char *name)
              this, SLOT(slotRightButtonPressed(QListViewItem*, const QPoint&)) );
 
     m_part = part;
-    m_store = 0;
-    m_langsupport = 0;
 }
 
 
@@ -418,12 +418,12 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
         QString toFile;
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getImplementation(&toFile, &toLine);
-        emit m_part->gotoSourceFile(toFile, toLine);
+        m_part->editorManager()->gotoSourceFile(toFile, toLine);
     } else if (button == MidButton) {
         QString toFile;
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getDeclaration(&toFile, &toLine);
-        emit m_part->gotoSourceFile(toFile, toLine);
+        m_part->editorManager()->gotoSourceFile(toFile, toLine);
     }
 }
 
@@ -444,7 +444,7 @@ void ClassTreeBase::slotGotoDeclaration()
     int toLine = -1;
     
     contextItem->getDeclaration(&toFile, &toLine);
-    emit m_part->gotoSourceFile(toFile, toLine);
+    m_part->editorManager()->gotoSourceFile(toFile, toLine);
 }
 
 
@@ -454,29 +454,27 @@ void ClassTreeBase::slotGotoImplementation()
     int toLine = -1;
     
     contextItem->getImplementation(&toFile, &toLine);
-    emit m_part->gotoSourceFile(toFile, toLine);
+    m_part->editorManager()->gotoSourceFile(toFile, toLine);
 }
 
 
 void ClassTreeBase::slotAddMethod()
 {
-    if (m_langsupport)
-        m_langsupport->addMethodRequested(contextItem->scopedText());
+    if (m_part->languageSupport())
+        m_part->languageSupport()->addMethodRequested(contextItem->scopedText());
 }
 
 
 void ClassTreeBase::slotAddAttribute()
 {
-    if (m_langsupport)
-        m_langsupport->addAttributeRequested(contextItem->scopedText());
+    if (m_part->languageSupport())
+        m_part->languageSupport()->addAttributeRequested(contextItem->scopedText());
 }
 
 
 void ClassTreeBase::slotClassBaseClasses()
 {
     ClassToolDialog *dlg = new ClassToolDialog(m_part);
-    dlg->setClassStore(m_store);
-    dlg->setLanguageSupport(m_langsupport);
     dlg->setClassName(contextItem->scopedText());
     dlg->viewParents();
 }
@@ -485,8 +483,6 @@ void ClassTreeBase::slotClassBaseClasses()
 void ClassTreeBase::slotClassDerivedClasses()
 {
     ClassToolDialog *dlg = new ClassToolDialog(m_part);
-    dlg->setClassStore(m_store);
-    dlg->setLanguageSupport(m_langsupport);
     dlg->setClassName(contextItem->scopedText());
     dlg->viewChildren();
 }
@@ -495,20 +491,7 @@ void ClassTreeBase::slotClassDerivedClasses()
 void ClassTreeBase::slotClassTool()
 {
     ClassToolDialog *dlg = new ClassToolDialog(m_part);
-    dlg->setClassStore(m_store);
     dlg->setClassName(contextItem->scopedText());
-    dlg->setLanguageSupport(m_langsupport);
 }
 
-
-void ClassTreeBase::setClassStore(ClassStore *store)
-{
-    m_store = store;
-}
-
-
-void ClassTreeBase::setLanguageSupport(KDevLanguageSupport *ls)
-{
-    m_langsupport = ls;
-}
 #include "classtreebase.moc"

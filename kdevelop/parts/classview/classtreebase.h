@@ -35,13 +35,7 @@ public:
     ClassTreeBase( ClassView *part, QWidget *parent=0, const char *name=0 );
     ~ClassTreeBase();
 
-public slots:
-    virtual void setClassStore(ClassStore *store);
-    virtual void setLanguageSupport(KDevLanguageSupport *ls);
-
 protected:
-    ClassStore *m_store;
-    ClassView *m_part;
     ClassTreeItem *contextItem;
     virtual KPopupMenu *createPopup() = 0;
     
@@ -56,8 +50,8 @@ private slots:
     void slotClassDerivedClasses();
     void slotClassTool();
     
-private:
-    KDevLanguageSupport *m_langsupport;
+protected:
+    ClassView *m_part;
     friend class ClassTreeItem;
 };
 

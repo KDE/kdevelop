@@ -11,10 +11,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qstringlist.h>
 #include <kdebug.h>
 
 #include "cppsupport.h"
-#include "projectspace.h"
 #include "parsedclass.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
@@ -22,10 +22,10 @@
 #include "classparser.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
-#include "main.h"
 #include "kdevnodes.h"
 #include "projectspace.h"
-#include <qstringlist.h>
+#include "kdeveditormanager.h"
+#include "main.h"
 
 
 CppSupport::CppSupport(QObject *parent, const char *name)
@@ -33,9 +33,7 @@ CppSupport::CppSupport(QObject *parent, const char *name)
 {
     setInstance(CppSupportFactory::instance());
 
-    m_store = 0;
     m_parser = 0;
-    m_pProjectSpace=0;
 }
 
 
@@ -43,50 +41,52 @@ CppSupport::~CppSupport()
 {}
 
 
-void CppSupport::projectSpaceOpened(ProjectSpace *pProjectSpace)
+void CppSupport::projectSpaceOpened()
 {
     kdDebug(9007) << "CppSupport::projectSpaceOpened()" << endl;
-    m_pProjectSpace = pProjectSpace;
+    ProjectSpace *ps = projectSpace();
+        
+    if (ps) {
+        connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
+                 this, SLOT(addedFileToProject(KDevFileNode*)) );
+        connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
+                 this, SLOT(removedFileFromProject(KDevFileNode*)) );
+        m_parser = new CClassParser(classStore());
+    } else {
+        delete m_parser;
+        m_parser = 0;
+    }
 }
 
-
-void CppSupport::projectSpaceClosed()
-{
-    kdDebug(9007) << "CppSupport::projectSpaceClosed()" << endl;
-    m_pProjectSpace=0;
-}
-
-
-void CppSupport::classStoreOpened(ClassStore *store)
-{
-    m_store = store;
-    m_parser = new CClassParser(store);
-}
-
-
-void CppSupport::classStoreClosed()
-{
-    m_store = 0;
-    delete m_parser;
-    m_parser = 0;
-}
 
 void CppSupport::languageSupportOpened()
 {
+    kdDebug(9007) << "CppSupport::languageSupportOpened()" << endl;
     // At the time this method is called, all components are already
-    // loaded and notified about the project space and the class store
+    // loaded and notified about the project space and the class store?
     
-  // quick hack
-  Project* pProject = m_pProjectSpace->currentProject();
-  QStringList files;
-  if(pProject!=0){
-    files = pProject->allAbsoluteFileNames();
-    for(QStringList::Iterator it = files.begin(); it != files.end() ;++it){
-      m_parser->parse(*it);
-    }
+    // quick hack
+    Project* pProject = projectSpace()->currentProject();
+    if (pProject) {
+        QStringList files = pProject->allAbsoluteFileNames();
+        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
+            m_parser->parse(*it);
+        }
 
-    emit updateSourceInfo();
-  }
+        emit sigUpdatedSourceInfo();
+    }
+}
+
+
+void CppSupport::editorManagerOpened()
+{
+    kdDebug(9007) << "CppSupport::editorManagerOpened()" << endl;
+    KDevEditorManager *em = editorManager();
+    
+    if (em) {
+        connect( em, SIGNAL(sigSavedFile(const QString&)),
+                 this, SLOT(savedFile(const QString&)) );
+    }
 }
 
 
@@ -96,7 +96,7 @@ void CppSupport::addedFileToProject(KDevFileNode* pNode)
     QString fileName = pNode->absoluteFileName();
     m_parser->parse(fileName);
   
-    emit updateSourceInfo();
+    emit sigUpdatedSourceInfo();
 }
 
 
@@ -105,7 +105,7 @@ void CppSupport::removedFileFromProject(KDevFileNode* pNode)
     kdDebug(9007) << "CppSupport::removedFileFromProject()" << endl;
     QString fileName = pNode->absoluteFileName();
     m_parser->removeWithReferences(fileName);
-    emit updateSourceInfo();
+    emit sigUpdatedSourceInfo();
 }
 
 
@@ -114,7 +114,7 @@ void CppSupport::savedFile(const QString &fileName)
     kdDebug(9007) << "CppSupport::savedFile()" << endl;
 
     m_parser->parse(fileName);
-    emit updateSourceInfo();
+    emit sigUpdatedSourceInfo();
 }
 
 
@@ -139,7 +139,7 @@ void CppSupport::addMethodRequested(const QString &className)
     pm->setDeclaredInScope(className);
 
     int atLine = -1;
-    ParsedClass *pc = m_store->getClassByName(className);
+    ParsedClass *pc = classStore()->getClassByName(className);
     
     if (pm->isSignal) {
         for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
@@ -183,14 +183,14 @@ void CppSupport::addMethodRequested(const QString &className)
     } else 
         atLine++;
 
-    gotoSourceFile(pc->declaredInFile, atLine);
+    editorManager()->gotoSourceFile(pc->declaredInFile, atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine << " " 
                   << headerCode << endl
                   << "####################";
 
     QString cppCode = asCppCode(pm);
     
-    gotoSourceFile(pc->definedInFile, atLine);
+    editorManager()->gotoSourceFile(pc->definedInFile, atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine
                   << " " << cppCode
                   << "####################" << endl;
@@ -209,7 +209,7 @@ void CppSupport::addAttributeRequested(const QString &className)
     pa->setDeclaredInScope(className);
 
     int atLine = -1;
-    ParsedClass *pc = m_store->getClassByName(className);
+    ParsedClass *pc = classStore()->getClassByName(className);
     
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
         ParsedAttribute *attr = pc->attributeIterator.current();
@@ -235,7 +235,7 @@ void CppSupport::addAttributeRequested(const QString &className)
     } else 
         atLine++;
 
-    gotoSourceFile(pc->declaredInFile, atLine);
+    editorManager()->gotoSourceFile(pc->declaredInFile, atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine
                   << " " << headerCode
                   << "####################" << endl;

@@ -177,7 +177,8 @@ void ProjectSpace::generateDefaultFiles(){
   // untar/unzip the projectspace
   proc.clearArguments();
   QString args = "xzvf " + m_projectspaceTemplate + " -C " + m_path;
-  kdDebug(9030)  << "ProjectSpace::generateDefaultFiles():" << endl << args << endl;
+  kdDebug(9030) << "ProjectSpace::generateDefaultFiles():" << endl;
+  kdDebug(9030) << args << endl;
   proc << "tar";
   proc << args;
   proc.start(KProcess::Block,KProcess::AllOutput);
@@ -261,7 +262,7 @@ void ProjectSpace::setInfosInString(QString& text){
 }
 
 bool ProjectSpace::readConfig(QString absFilename){
-  kdDebug(9030) << "enter ProjectSpace::readXMLConfig" << endl;
+  kdDebug(9030) << "enter ProjectSpace::readConfig" << endl;
   QFileInfo fileInfo(absFilename);
   m_path = fileInfo.dirPath();
   m_projectspaceFile = absFilename;
@@ -610,34 +611,6 @@ bool ProjectSpace::saveConfig(){
   file.close();
   return true;
 }
-// factory
-ProjectSpace* ProjectSpace::createNewProjectSpace(const QString& name,QObject* parent){
-  QString constraint = QString("[Name] == '%1'").arg(name);
-  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
-  if (offers.isEmpty()) {
-    return 0;
-  }
-  
-  KService *pService = *offers.begin();
-  kdDebug(9030) << "Found ProjectSpace Component " << pService->name() << endl;
-  
-  KLibFactory *pFactory = KLibLoader::self()->factory(pService->library());
-
-  QStringList args;
-  QVariant prop = pService->property("X-KDevelop-Args");
-  if (prop.isValid())
-    args = QStringList::split(" ", prop.toString());
-  
-  QObject *pObj = pFactory->create(parent, pService->name().latin1(),
-				   "ProjectSpace", args);
-  
-  if (!pObj->inherits("ProjectSpace")) {
-    kdDebug(9030) << "Component does not inherit ProjectSpace" << endl;
-    return 0;
-  }
-  ProjectSpace *pComp = (ProjectSpace*) pObj;
-  return pComp;
-}
 void ProjectSpace::languageSupportOpened(KDevLanguageSupport *ls){
   m_pLanguageSupport = ls;
 }
@@ -667,41 +640,41 @@ Project* ProjectSpace::project(QString projectName){
       return pProject;
     }
   }
-  kdDebug(9030)  << "kdevelop (project):  ProjectSpace::project()  return 0!" << endl;
+  kdDebug(9030) << "ProjectSpace::project()  return 0!" << endl;
   return 0;
 }
 
-QList<KAction>* ProjectSpace::kdevNodeActions(KDevNode* pNode){
-  QList<KAction>* pList = new QList<KAction>;
+QList<KAction> ProjectSpace::kdevNodeActions(KDevNode* pNode){
+  QList<KAction> pList;
 
   KDevNodeAction* pAction=0;
   if(pNode->inherits("KDevFileNode")){
-    pList->append(new KActionSeparator());
+    pList.append(new KActionSeparator());
     pAction = new KDevNodeAction(pNode,"Move to...");
     connect(pAction,SIGNAL(activated(KDevNode*)),this,
 	    SLOT(slotMoveFileTo(KDevNode*)));
-    pList->append(pAction);
+    pList.append(pAction);
     
     pAction = new KDevNodeAction(pNode,"Copy to...","editcopy");
     connect(pAction,SIGNAL(activated(KDevNode*)),this,
 	    SLOT(slotCopyFileTo(KDevNode*)));
-    pList->append(pAction);
+    pList.append(pAction);
     
     pAction = new KDevNodeAction(pNode,"Rename...");
     connect(pAction,SIGNAL(activated(KDevNode*)),
 	    this,SLOT(slotRenameFile(KDevNode*)));
-    pList->append(pAction);
+    pList.append(pAction);
     
-    pList->append(new KActionSeparator());
+    pList.append(new KActionSeparator());
     pAction = new KDevNodeAction(pNode,"Remove from Project...");
     connect(pAction,SIGNAL(activated(KDevNode*)),
 	    this,SLOT(slotRemoveFileFromProject(KDevNode*)));
-    pList->append(pAction);
+    pList.append(pAction);
     
     pAction = new KDevNodeAction(pNode,"Delete File...","edittrash");
     connect(pAction,SIGNAL(activated(KDevNode*)),
 	    this,SLOT(slotDeleteFile(KDevNode*)));
-    pList->append(pAction);
+    pList.append(pAction);
   }
   return pList;
 }
@@ -730,13 +703,13 @@ void ProjectSpace::slotRenameFile(KDevNode* pNode){
     if(newName != ""){
       Project* pProject = project(projectName);
       if(pProject != 0){
-	cerr << "m_path:" << m_path << endl;
-	cerr << "relative Path:" << pProject->relativePath() << endl;
+	kdDebug(9030) << "m_path:" << m_path << endl;
+	kdDebug(9030) << "relative Path:" << pProject->relativePath() << endl;
 	QString absProjectPath = CToolClass::getAbsolutePath(m_path,pProject->relativePath());
 	QString filePath = CToolClass::getRelativePath(absProjectPath,info.dirPath() +"/");
-	cerr << "filepath:" << filePath << endl;
-	cerr << "absProjectPath:" << absProjectPath << endl;
-	cerr << "dirPath:" << info.dirPath() << endl;
+	kdDebug(9030) << "filepath:" << filePath << endl;
+	kdDebug(9030) << "absProjectPath:" << absProjectPath << endl;
+	kdDebug(9030) << "dirPath:" << info.dirPath() << endl;
 	RegisteredFile* pRegFile = pProject->file(filePath + info.fileName());
 	pRegFile->setRelativeFile(filePath + newName);
 	pNewFileNode = new KDevFileNode(info.dirPath() + "/" +newName,m_name,pProject->name());

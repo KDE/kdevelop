@@ -14,8 +14,9 @@
 
 #include "processview.h"
 
-class GrepDialog;
 class ProjectSpace;
+class KDevEditorManager;
+class GrepDialog;
 class GrepView;
 
 

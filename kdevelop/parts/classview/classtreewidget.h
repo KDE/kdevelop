@@ -25,14 +25,11 @@ public:
     ClassTreeWidget(ClassView *part);
     ~ClassTreeWidget();
 
-public slots:
-    void setClassStore(ClassStore *aStore);
-    void setLanguageSupport(KDevLanguageSupport *ls);
-
 protected:
     virtual KPopupMenu *createPopup();
 
 private slots:
+    void setLanguageSupport(KDevLanguageSupport *ls);
     void refresh();
     void slotTreeModeChanged();
     void slotScopeModeChanged();

@@ -33,18 +33,18 @@ public:
 
     QList<KAction>* assembleKDevNodeActions(KDevNode* pNode);
 
-    virtual void setKDevNodeActions(QList<KAction>* pActions);
-
 protected:
     virtual void setupGUI();
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
-    virtual void projectSpaceClosed();
-    virtual void addedFileToProject(KDevFileNode* pNode);
-    virtual void removedFileFromProject(KDevFileNode* pNode);
-    virtual void addedProject(KDevNode* pNode);
+    virtual void projectSpaceOpened();
 
+private slots:
+    void addedFileToProject(KDevFileNode* pNode);
+    void removedFileFromProject(KDevFileNode* pNode);
+    void addedProject(KDevNode* pNode);
+
+private:
     ProjectTreeWidget* m_pProjectTree;
-    QList<KAction>* m_pFileActions;
+    QList<KAction> m_pFileActions;
     friend class ProjectTreeWidget;
 };
 

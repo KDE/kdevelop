@@ -14,6 +14,55 @@ KDevComponent::~KDevComponent()
 {
 }
 
+ProjectSpace *KDevComponent::projectSpace()
+{
+    return m_projectSpace;
+}
+
+ClassStore *KDevComponent::classStore()
+{
+    return m_classStore;
+}
+
+KDevVersionControl *KDevComponent::versionControl()
+{
+    return m_versionControl;
+}
+
+KDevLanguageSupport *KDevComponent::languageSupport()
+{
+    return m_languageSupport;
+}
+
+KDevEditorManager *KDevComponent::editorManager()
+{
+    return m_editorManager;
+}
+
+KDevMakeFrontend *KDevComponent::makeFrontend()
+{
+    return m_makeFrontend;
+}
+
+KDevAppFrontend *KDevComponent::appFrontend()
+{
+    return m_appFrontend;
+}
+
+void KDevComponent::setupInternal(ProjectSpace *ps, ClassStore *cs,
+                                  KDevVersionControl *vc, KDevLanguageSupport *ls,
+                                  KDevEditorManager *em, KDevMakeFrontend *mf,
+                                  KDevAppFrontend *af)
+{
+    m_projectSpace = ps;
+    m_classStore = cs;
+    m_versionControl = vc;
+    m_languageSupport = ls;
+    m_editorManager = em;
+    m_makeFrontend = mf;
+    m_appFrontend = af;
+}
+
 void KDevComponent::setupGUI()
 {
 }
@@ -22,61 +71,24 @@ void KDevComponent::configWidgetRequested(KDialogBase*)
 {
 }
 
-void KDevComponent::commandRequested(const QString&)
-{
-}
-
 void KDevComponent::stopButtonClicked()
 {
 }
 
-void KDevComponent::projectSpaceOpened(ProjectSpace*)
+void KDevComponent::projectSpaceOpened()
 {
 }
 
-void KDevComponent::projectSpaceClosed()
+void KDevComponent::versionControlOpened()
 {
 }
 
-void KDevComponent::versionControlOpened(KDevVersionControl*)
+void KDevComponent::languageSupportOpened()
 {
 }
 
-void KDevComponent::versionControlClosed()
+void KDevComponent::editorManagerOpened()
 {
-}
-
-void KDevComponent::languageSupportOpened(KDevLanguageSupport*)
-{
-}
-
-void KDevComponent::languageSupportClosed()
-{
-}
-
-
-void KDevComponent::classStoreOpened(ClassStore*)
-{
-}
-
-void KDevComponent::classStoreClosed()
-{
-}
-void KDevComponent::addedProject(KDevNode*){
-}
-
-void KDevComponent::addedFileToProject(KDevFileNode*)
-{
-}
-
-void KDevComponent::removedFileFromProject(KDevFileNode*)
-{
-}
-
-void KDevComponent::savedFile(const QString&)
-{
-}
-void KDevComponent::gotoFile(const KURL& url, int lineNum){
 }
 
 void KDevComponent::setWidget(QWidget*)
@@ -87,13 +99,13 @@ QWidget *KDevComponent::widget()
 {
   return 0;
 }
+
 KAboutData* KDevComponent::aboutPlugin(){
   return 0;
 }
-void KDevComponent::setKDevNodeActions(QList<KAction>*){
-}
-QList<KAction>* KDevComponent::kdevNodeActions(KDevNode*){
-  return 0;
+
+QList<KAction> KDevComponent::kdevNodeActions(KDevNode*){
+  return QList<KAction>();
 }
 
 #include "kdevcomponent.moc"

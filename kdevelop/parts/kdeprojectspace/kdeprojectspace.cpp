@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "kdeprojectspace.h"
+#include "kdevmakefrontend.h"
 #include "main.h"
 #include <kinstance.h>
 #include <kiconloader.h>
@@ -250,24 +251,24 @@ QList<FileGroup> KDEProjectSpace::defaultFileGroups(){
 void KDEProjectSpace::updateMakefilesAm(){
 }
 void KDEProjectSpace::slotBuildMake(){
-    emit executeMakeCommand("make");
+    makeFrontend()->executeMakeCommand("make");
 }
 void KDEProjectSpace::slotBuildRebuildAll(){
 }
 void KDEProjectSpace::slotBuildCleanRebuildAll(){
-  emit executeMakeCommand("make clean");
+    makeFrontend()->executeMakeCommand("make clean");
 }
 void KDEProjectSpace::slotBuildExecute(){
 }
 void KDEProjectSpace::slotBuildExecuteWithArgs(){
 }
 void KDEProjectSpace::slotBuildDistClean(){
-  emit executeMakeCommand("make distclean");
+    makeFrontend()->executeMakeCommand("make distclean");
 }
 void KDEProjectSpace::slotBuildAutoconf(){
 }
 void KDEProjectSpace::slotBuildConfigure(){
-  emit executeAppCommand("./configure");
+    makeFrontend()->executeMakeCommand("./configure");
 }
 
 #include "kdeprojectspace.moc"

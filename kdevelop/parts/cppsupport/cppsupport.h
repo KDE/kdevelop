@@ -33,14 +33,9 @@ public:
     ~CppSupport();
 
 protected:
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
-    virtual void projectSpaceClosed();
-    virtual void classStoreOpened(ClassStore *store);
-    virtual void classStoreClosed();
+    virtual void projectSpaceOpened();
     virtual void languageSupportOpened();
-    virtual void addedFileToProject(KDevFileNode* pNode);
-    virtual void removedFileFromProject(KDevFileNode* pNode);
-    virtual void savedFile(const QString &fileName);
+    virtual void editorManagerOpened();
 
     virtual bool hasFeature(Features feature);
     virtual void newClassRequested();
@@ -48,14 +43,17 @@ protected:
     virtual void addAttributeRequested(const QString &className);
     virtual QStringList fileFilters();
 
+private slots:
+    void addedFileToProject(KDevFileNode* pNode);
+    void removedFileFromProject(KDevFileNode* pNode);
+    void savedFile(const QString &fileName);
+
 private:
     QString asHeaderCode(ParsedMethod *pm);
     QString asCppCode(ParsedMethod *pm);
     QString asHeaderCode(ParsedAttribute *pa);
 
-    ClassStore *m_store;
     CClassParser *m_parser;
-    ProjectSpace *m_pProjectSpace;
 };
 
 #endif

@@ -50,10 +50,7 @@ public: // Public methods to set attribute values
   void setClassName(const QString &name);
 
 public slots:
-  /** Set the store to use to search for classes. */
-  void setClassStore( ClassStore *aStore );
-
-  void setLanguageSupport( KDevLanguageSupport *ls );
+  void setLanguageSupport(KDevLanguageSupport *ls);
 
   /** View the parents of the current class. */
   void viewParents();

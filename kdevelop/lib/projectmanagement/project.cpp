@@ -142,10 +142,10 @@ void Project::showAllFiles(){
 }
 
 void Project::dump(){
-  cerr << endl << "Project Name: " << m_name;
-  cerr << endl << "relative Path: " << m_relPath;
-  cerr << endl << "absolute Path: " << m_absPath;
-  cerr << endl << "Version: " << m_version;
+  kdDebug(9030) << "Project Name: " << m_name << endl;
+  kdDebug(9030) << "relative Path: " << m_relPath << endl;
+  kdDebug(9030) << "absolute Path: " << m_absPath << endl;
+  kdDebug(9030) << "Version: " << m_version << endl;
   showAllFiles();
 }
 

@@ -22,7 +22,7 @@ KDESDIAppWizardFactory::~KDESDIAppWizardFactory()
 
 
 QObject *KDESDIAppWizardFactory::create(QObject *parent, const char *name,
-                              const char *classname, const QStringList &args)
+                                        const char */*classname*/, const QStringList &/*args*/)
 {
    
     

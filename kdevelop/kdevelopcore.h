@@ -19,6 +19,9 @@ class KDevelop;
 class KDevComponent;
 class KDevVersionControl;
 class KDevLanguageSupport;
+class KDevEditorManager;
+class KDevMakeFrontend;
+class KDevAppFrontend;
 class KDevViewHandler;
 class ProjectSpace;
 
@@ -31,8 +34,8 @@ public:
     virtual ~KDevelopCore();
 
     void loadInitialComponents();
-    bool loadProjectSpace(const QString &fileName);
-    void unloadProjectSpace();
+    bool openProjectSpace(const QString &fileName);
+    void closeProjectSpace();
     
     KDevViewHandler* viewHandler();
     // Session management
@@ -43,10 +46,6 @@ private:
     void initActions();
     void initComponent(KDevComponent *component);
     
-    void loadVersionControl(const QString &name);
-    void unloadVersionControl();
-    void loadLanguageSupport(const QString &lang);
-    void unloadLanguageSupport();
     void newFile();
     
 
@@ -58,38 +57,24 @@ private slots:
     void slotProjectOpen();
     void slotProjectOpenRecent(const KURL &url);
     void slotProjectClose();
-    void slotProjectAddNewTranslationFile();
     void slotProjectOptions();
     void slotStop();
     void slotOptionsKDevelopSetup();
     
     // Handling of component requests
-    void executeMakeCommand(const QString &command);
-    void executeAppCommand(const QString &command);
     void running(bool runs);
-    void gotoSourceFile(const QString &fileName, int lineNo);
-    void gotoDocumentationFile(const QString &fileName);
-    void gotoProjectApiDoc();
-    void gotoProjectManual();
-//    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
-//    void writeProjectSpaceUserConfig(QDomDocument& doc);
-//    void readProjectSpaceGlobalConfig(QDomDocument& doc);
-//    void readProjectSpaceUserConfig(QDomDocument& doc);
-    void needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode);
-    /** from a Projectspace*/
-    void addedFileToProject(KDevFileNode* pNode);
-    void removedFileFromProject(KDevFileNode* pNode);
-    void addedProject(KDevNode* pNode);
+    void needKDevNodeActions(KDevNode* pNode,QList<KAction>* pList);
 
 private:
     KDevelop *m_pKDevelopGUI;
     QList<KDevComponent> m_components;
     QList<KDevComponent> m_runningComponents;
-    
+
     KDevVersionControl *m_pVersionControl;
     KDevLanguageSupport *m_pLanguageSupport;
-    KDevComponent *m_pMakeFrontend;
-    KDevComponent *m_pAppFrontend;
+    KDevEditorManager *m_pEditorManager;
+    KDevMakeFrontend *m_pMakeFrontend;
+    KDevAppFrontend *m_pAppFrontend;
     ClassStore *m_pClassStore;
     ProjectSpace* m_pProjectSpace;
     KDevViewHandler* m_pViewHandler;

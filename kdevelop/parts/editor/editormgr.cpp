@@ -25,6 +25,8 @@
 
 //#include "kdevevent.h"
 
+#include <khtml_part.h>
+#include <khtmlview.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <kfiledialog.h>
@@ -41,26 +43,10 @@
 
 #include <assert.h>
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-
-//EditorDock::EditorDock( QWidget *parent, const char *name ) :
-//  QWidget(parent, name)
-//{
-//}
-//
-///****************************************************************************/
-//
-//EditorDock::~EditorDock()
-//{
-//}
-
-/****************************************************************************/
 
 /** Constructor for the fileclass of the application */
 EditorManager::EditorManager(QObject* parent, const char* name) :
-  KDevComponent(parent, name)
+  KDevEditorManager(parent, name)
 {
   assert(parent && parent->isWidgetType());
 
@@ -144,14 +130,51 @@ void EditorManager::slotEventHandler(KDevEvent* event)
 
 /****************************************************************************/
 
-void EditorManager::gotoFile(const KURL& url, int lineNum)
+void EditorManager::gotoDocumentationFile(const KURL& url)
 {
+  kdDebug(9000) << "KDevelopCore::gotoDocumentationFile File:" << url.prettyURL() << endl;
+
+  KHTMLPart *part = findOpenHTMLViewer(url);
+  if (!part) {
+    part = new KHTMLPart();
+    m_htmldocuments.append(part);
+    part->openURL(url);
+    part->view()->setFocus();
+    emit embedWidget(part->view(), DocumentView, url.path(), i18n("Editor view"));
+  }
+}
+
+
+KHTMLPart* EditorManager::findOpenHTMLViewer(const KURL& url)
+{
+  QListIterator<KHTMLPart> it(m_htmldocuments);
+  for ( ; it.current(); ++it )
+  {
+    KHTMLPart *part = it.current();
+    if (part->completeURL(QString::null, QString::null) == url)
+      return part;
+  }
+  return 0;
+}
+
+
+void EditorManager::gotoSourceFile(const KURL& url, int lineNum)
+{
+  kdDebug(9000) << "KDevelopCore::gotoSourceFile File:" << url.prettyURL()
+		<< " Line: " << QString::number(lineNum) 
+		<< endl;
+
   KTextEditor::Document *document = findOpenDocument(url);
   if (!document)
     document = openDocument(url);
 
   if (document)
   {
+#if 1
+    KTextEditor::View *view = document->views().first();
+    view->setCursorPosition (lineNum, 0);
+    view->setFocus();
+#else
     QListIterator<KTextEditor::View> it(document->views());
     for ( ; it.current(); ++it )
     {
@@ -159,6 +182,7 @@ void EditorManager::gotoFile(const KURL& url, int lineNum)
       kdDebug(9005) << "goto line: " << lineNum << endl;
       view->setCursorPosition (lineNum, 0);
     }
+#endif
   }
 }
 

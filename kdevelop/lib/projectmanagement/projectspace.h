@@ -54,13 +54,11 @@ class ProjectSpace : public KDevComponent {
   // from KDevComponent
   void languageSupportOpened(KDevLanguageSupport *ls);
   void languageSupportClosed();
-  virtual QList<KAction>* kdevNodeActions(KDevNode* pNode);
+  virtual QList<KAction> kdevNodeActions(KDevNode* pNode);
 
 
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
-  /** factory to create new ProjectSpaces */
-  static ProjectSpace* createNewProjectSpace(const QString& name,QObject* parent=0);
 
   /** returns the default files groups, can be used in ProjectView...*/
   virtual QList<FileGroup> defaultFileGroups();
@@ -158,8 +156,6 @@ protected:
   // static
   /** projectspace template, name*/
   QString m_projectspaceTemplate;
-  /** Version control object */
-//  VersionControl *vc;
 
   /** all projects in the ProjectSpace*/
   QList<Project>* m_pProjects;

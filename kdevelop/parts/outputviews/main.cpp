@@ -40,7 +40,7 @@ OutputFactory::~OutputFactory()
 
 
 QObject *OutputFactory::create(QObject *parent, const char *name,
-                               const char *classname, const QStringList &args)
+                               const char */*classname*/, const QStringList &args)
 {
     QObject *obj;
     if (args.count() > 0 && qstrcmp(args[0].latin1(), "AppOutputView") == 0) {

@@ -1,6 +1,7 @@
 /**
  * The interface to programming language specific features
  */
+
 #ifndef _KDEVLANGUAGESUPPORT_H_
 #define _KDEVLANGUAGESUPPORT_H_
 
@@ -29,6 +30,7 @@ public:
     /**
      * Opens a "New class" dialog and adds the configured
      * class to the sources.
+     * TODO: Use KDevNode stuff for this
      */
     virtual void newClassRequested();
     /**
@@ -50,17 +52,12 @@ public:
      */
     virtual QStringList fileFilters();
 
-    /**
-       the very first parse, after a ProjectSpace was opened
-     */
-    virtual void doInitialParsing();
-
 signals:
     /**
      * Emitted when the content of the classtore has been
      * modified
      */
-    void updateSourceInfo();
+    void sigUpdatedSourceInfo();
 };
 
 

@@ -12,5 +12,5 @@ noinst_HEADERS = main.h cvsinterface.h commitdialog.h
 
 METASOURCES = AUTO
 
-servicedir = $(kde_servicesdir)
-service_DATA = kdevcvsinterface.desktop
+#servicedir = $(kde_servicesdir)
+#service_DATA = kdevcvsinterface.desktop

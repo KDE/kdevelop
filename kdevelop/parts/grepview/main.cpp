@@ -40,7 +40,7 @@ GrepFactory::~GrepFactory()
 
 
 QObject *GrepFactory::create(QObject *parent, const char *name,
-                             const char *classname, const QStringList &args)
+                             const char */*classname*/, const QStringList &/*args*/)
 {
     kdDebug(9001) << "Building GrepView" << endl;
     

@@ -41,7 +41,7 @@ ProjectViewFactory::~ProjectViewFactory()
 
 
 QObject *ProjectViewFactory::create(QObject *parent, const char *name,
-                              const char *classname, const QStringList &args)
+                                    const char */*classname*/, const QStringList &/*args*/)
 {
     kdDebug(9009) << "Building ProjectView" << endl;
     
