@@ -1,4 +1,11 @@
-2000-02-01 Sandy Meier    <smeier@rz.uni-potsdam.de>
+2K-02-01 Falk Brettschneider  <gigafalk@yahoo.com>
+        * hacked the dockwidgets:
+	  - many bugfixes
+	  - floatable windows are real KDE toplevel windows now
+	  - new feature: dockback-button
+	  - minor changes + source comments
+
+2K-02-01 Sandy Meier    <smeier@rz.uni-potsdam.de>
 	* commited first version of the new dlgedit framework. It isn't finished yet!!!
 
 2K-01-21 Robert Williams  <rwilliams@kde.org>
