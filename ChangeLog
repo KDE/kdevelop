@@ -1,3 +1,7 @@
+1999-11-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Partially reverted last patch, as it didn't even compile :-(
+	* Fixed #2319: Project menu accelerators
+
 1999-11-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Bugfix for writing of initial tool configuration 
 	  by Marcus Gruendler <runner@pool.informatik.rwth-aachen.de>

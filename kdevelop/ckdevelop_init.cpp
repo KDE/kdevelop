@@ -567,10 +567,10 @@ void CKDevelop::initMenuBar(){
 
   QPopupMenu*  p2 = new QPopupMenu;
   p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
-  project_menu->insertItem(i18n("Make D&istribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
+  project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   project_menu->insertSeparator();
   
-  project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
+  project_menu->insertItem(i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  project_menu->insertSeparator();		
 
   workspaces_submenu = new QPopupMenu;
