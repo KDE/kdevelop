@@ -1,6 +1,10 @@
+2000-04-04 jbb <jbb@ihug.co.nz>
+	* Added Walter's patch to use libtool to relink project
+      so that the correct shared libraries are used when debugging.
+
 2000-04-06 Walter Tasin  <tasin@kdevelop.de>
 	* some bugfixes for symlink usage inside project base path
-          (KDevelop didn't recognized well, if a full filename,
+          (KDevelop didn't recognize well, if a full filename,
 	   which has a symlink in it, was changed)
 	* adding pragma directive for Makefile.am
 	  to switch off Makefile.am patching

@@ -1226,20 +1226,21 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 
 void CKDevelop::slotDebugAttach()
 {
-  QString underDir=prj->getProjectDir() + prj->getSubDir();
-  if (underDir.right(1)!='/')
-    underDir+='/';
-
-  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
-		prj->getBinPROGRAM();
-
   if (dbgInternal)
   {
+    QString underDir=prj->getProjectDir() + prj->getSubDir();
+    QString libtool= prj->getProjectDir() +"libtool";
+    if (underDir.right(1)!='/')
+      underDir+='/';
+
+    QString binProgram=prj->getBinPROGRAM();
+
     if (dbgController)
       slotDebugStop();
 
     slotStatusMsg(i18n("Debug running process..."));
-    // TODO - do this properly, list of processes needed
+    // Display a dialog with a list of available processes that
+    // th debugger can attach to.
     Dbg_PS_Dialog psDlg(this, "process");
     if (psDlg.exec())
     {
@@ -1250,26 +1251,27 @@ void CKDevelop::slotDebugAttach()
 
         setupInternalDebugger();
         QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString());
+        dbgController->slotStart(binProgram, QString(),
+             (isAScript(underDir+prj->getBinPROGRAM())) ? libtool : QString());
         dbgController->slotAttachTo(pid);
       }
     }
   }
   else
-    slotBuildDebug();
+    slotBuildDebug();   // Starts a debugger (external in this case)
 }
 
 
 void CKDevelop::slotDebugExamineCore()
 {
-  QString underDir=prj->getProjectDir() + prj->getSubDir();
-  if (underDir.right(1)!='/')
-    underDir+='/';
-  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
-		prj->getBinPROGRAM();
-
   if (dbgInternal)
   {
+    QString underDir=prj->getProjectDir() + prj->getSubDir();
+    QString libtool= prj->getProjectDir() +"libtool";
+    if (underDir.right(1)!='/')
+      underDir+='/';
+    QString binProgram=prj->getBinPROGRAM();
+
     if (dbgController)
       slotDebugStop();
 
@@ -1284,13 +1286,14 @@ void CKDevelop::slotDebugExamineCore()
 
         setupInternalDebugger();
         QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString());
+        dbgController->slotStart(binProgram, QString(),
+             (isAScript(underDir+prj->getBinPROGRAM())) ? libtool : QString());
         dbgController->slotCoreFile(coreFile);
       }
     }
   }
   else
-    slotBuildDebug();
+    slotBuildDebug();   // Starts a debugger (external in this case)
 }
 
 void CKDevelop::slotDebugNamedFile()
@@ -1317,7 +1320,7 @@ void CKDevelop::slotDebugNamedFile()
     }
   }
   else
-    slotBuildDebug();
+    slotBuildDebug();   // Starts a debugger (external in this case)
 }
 
 void CKDevelop::slotBuildDebug(bool bWithArgs)
@@ -1369,8 +1372,8 @@ void CKDevelop::slotStartDebugRunWithArgs()
   QString underDir=prj->getProjectDir() + prj->getSubDir();
   if (underDir.right(1)!='/')
     underDir+='/';
-  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
-		prj->getBinPROGRAM();
+  QString binProgram=prj->getBinPROGRAM();
+  QString libtool= prj->getProjectDir() +"libtool";
 
   QString args=prj->getDebugArgs();
   if (args.isEmpty())
@@ -1389,7 +1392,8 @@ void CKDevelop::slotStartDebugRunWithArgs()
 
     setupInternalDebugger();
     QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, args);
+    dbgController->slotStart(binProgram, args,
+             (isAScript(underDir+prj->getBinPROGRAM())) ? libtool : QString());
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
   }
@@ -1400,8 +1404,8 @@ void CKDevelop::slotStartDebug()
   QString underDir=prj->getProjectDir() + prj->getSubDir();
   if (underDir.right(1)!='/')
     underDir+='/';
-  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
-		prj->getBinPROGRAM();
+  QString binProgram=prj->getBinPROGRAM();
+  QString libtool= prj->getProjectDir() +"libtool";
 
   // if we can run the application, so we can clear the Makefile.am-changed-flag
   prj->clearMakefileAmChanged();
@@ -1416,7 +1420,8 @@ void CKDevelop::slotStartDebug()
 
     setupInternalDebugger();
     QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, QString());
+    dbgController->slotStart(binProgram, QString(),
+             (isAScript(underDir+prj->getBinPROGRAM())) ? libtool : QString());
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
     return;
