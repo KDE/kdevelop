@@ -119,7 +119,7 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
       StoreWalker w( filename + ".h", &classcontainer );
       w.parseTranslationUnit( translationUnit );
   }
-  m_cppSupport->backgroundParser()->lock();
+  m_cppSupport->backgroundParser()->unlock();
   
   QStringList pathsplit(QStringList::split('/',filename));
 
