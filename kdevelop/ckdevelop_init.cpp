@@ -1180,6 +1180,8 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
+  accel->changeMenuAccel(edit_menu, ID_EDIT_EXPAND_TEXT,"Expand Text" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_COMPLETE_TEXT, "Complete Text");
 
 
   accel->changeMenuAccel(view_menu,ID_TOOLS_DESIGNER ,"Dialog Editor" );
