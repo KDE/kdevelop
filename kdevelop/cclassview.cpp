@@ -115,7 +115,6 @@ void CClassView::refresh( CProject *proj )
   QStrList src;
   QStrList header;
   char *str;
-  char *s1;
   QString projDir;
 
   debug( "CClassView::refresh( proj )" );
@@ -133,27 +132,16 @@ void CClassView::refresh( CProject *proj )
   // Parse headerfiles.
   for( str = header.first(); str != NULL; str = header.next() )
   {
-    // Find a fullpath containing the filename.
-    for( s1 = list.first(); 
-         s1 != NULL && strstr( s1, str ) == NULL; 
-         s1 = list.next() )
-      ;
-
-    debug( "  parsing:[%s%s]", projDir.data(), s1 );
-    cp.parse( projDir + s1 );
+    debug( "  found: %s", str );
+    debug( "  parsing:[%s%s]", projDir.data(), str );
+    cp.parse( str );
   }
 
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
-    // Find a fullpath containing the filename.
-    for( s1 = list.first(); 
-         s1 != NULL && strstr( s1, str ) == NULL; 
-         s1 = list.next() )
-      ;
-
-    debug( "  parsing:[%s%s]", projDir.data(), s1 );
-    cp.parse( projDir + s1 );
+    debug( "  parsing:[%s%s]", projDir.data(), str );
+    cp.parse( str );
   }
 
   refresh();
