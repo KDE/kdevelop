@@ -147,6 +147,7 @@ void WizardQtDocPage::hideEvent(QHideEvent*)
   if (qt_edit)
     m_pInstallState->qt = qt_edit->text();
   delete m_vbox;
+  qt_edit = 0;
 }
 
 void WizardQtDocPage::slotQTpressed()
