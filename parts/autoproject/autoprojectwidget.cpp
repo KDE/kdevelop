@@ -373,7 +373,7 @@ QStringList AutoProjectWidget::allLibraries()
         for (; tit.current(); ++tit) {
             QString primary = (*tit)->primary;
             if (primary == "LIBRARIES" || primary == "LTLIBRARIES") {
-                QString fullname = path + "/" + QString((*tit)->name);
+                QString fullname = path + "/" + (*tit)->name;
                 res.append(fullname.mid(prefixlen));
             }
         }
@@ -457,7 +457,7 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
             if (primary != "PROGRAMS" && primary != "LIBRARIES"
                 && primary != "LTLIBRARIES" && primary != "JAVA")
                 continue;
-            QString currentTargetPath = (path + "/" + QString((*tit)->name)).mid(prefixlen);
+            QString currentTargetPath = (path + "/" + (*tit)->name).mid(prefixlen);
             bool hasTarget = (targetPath == currentTargetPath);
             kdDebug(9020) << "Compare " << targetPath
                           << " with " << currentTargetPath
@@ -589,7 +589,7 @@ void AutoProjectWidget::slotDetailsExecuted(QListViewItem *item)
     
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(item);
-    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    m_part->partController()->editDocument(KURL(dirName + "/" + fitem->name));
     m_part->topLevel()->lowerView(this);
 }
 
@@ -738,7 +738,7 @@ void AutoProjectWidget::slotSetActiveTarget()
     if (!titem)
         return;
 
-    QString targetPath = m_shownSubproject->path + "/" + QString(titem->name);
+    QString targetPath = m_shownSubproject->path + "/" + titem->name;
     targetPath = targetPath.mid(projectDirectory().length()+1);
     kdDebug(9020) << "Setting active " << targetPath << endl;
     setActiveTarget(targetPath);
@@ -907,7 +907,7 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
     // could also be checked... not trivial because the list of
     // possible prefixes can be extended dynamically (see below)
     if (primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES") {
-        QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t\n]"), rhs);
         QStringList::Iterator it1;
         for (it1 = l.begin(); it1 != l.end(); ++it1) {
             TargetItem *titem = createTargetItem(*it1, prefix, primary);
@@ -940,14 +940,14 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
         TargetItem *titem = createTargetItem("", prefix, primary);
         item->targets.append(titem);
         
-        QStringList l = QStringList::split(QRegExp("[ \t]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t]"), rhs);
         QStringList::Iterator it3;
         for (it3 = l.begin(); it3 != l.end(); ++it3) {
             FileItem *fitem = createFileItem(*it3);
             titem->sources.append(fitem);
         }
     } else if (primary == "JAVA") {
-        QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t\n]"), rhs);
         QStringList::Iterator it1;
         TargetItem *titem = createTargetItem("", prefix, primary);
         item->targets.append(titem);
@@ -971,12 +971,14 @@ void AutoProjectWidget::parsePrefix(SubprojectItem *item,
 
 
 void AutoProjectWidget::parseSubdirs(SubprojectItem *item,
-                                     const QString &/*lhs*/, QString rhs)
+                                     const QString &/*lhs*/, const QString &rhs)
 {
     // Parse a line SUBDIRS = bla bla
 
+    QString subdirs = rhs;
+    
     // Take care of KDE hacks
-    if (rhs.find("$(TOPSUBDIRS)") != -1) {
+    if (subdirs.find("$(TOPSUBDIRS)") != -1) {
         QString dirs;
         QFile subdirsfile(item->path + "/subdirs");
         if (subdirsfile.open(IO_ReadOnly)) {
@@ -988,13 +990,13 @@ void AutoProjectWidget::parseSubdirs(SubprojectItem *item,
             }
             subdirsfile.close();
         }
-        rhs.replace(QRegExp("\\$\\(TOPSUBDIRS\\)"), dirs);
+        subdirs.replace(QRegExp("\\$\\(TOPSUBDIRS\\)"), dirs);
     }
     // Do something smarter here
-    rhs.replace(QRegExp("\\$\\(AUTODIRS\\)"), "");
-    rhs.replace(QRegExp("\\$\\(COMPILE_FIRST\\)"), "");
-    rhs.replace(QRegExp("\\$\\(COMPILE_LAST\\)"), "");
-    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(rhs));
+    subdirs.replace(QRegExp("\\$\\(AUTODIRS\\)"), "");
+    subdirs.replace(QRegExp("\\$\\(COMPILE_FIRST\\)"), "");
+    subdirs.replace(QRegExp("\\$\\(COMPILE_LAST\\)"), "");
+    QStringList l = QStringList::split(QRegExp("[ \t]"), subdirs);
     l.sort();
     QStringList::Iterator it;
     for (it = l.begin(); it != l.end(); ++it) {

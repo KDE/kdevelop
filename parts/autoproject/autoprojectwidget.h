@@ -230,7 +230,7 @@ private:
     void parsePrimary(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
     void parseSubdirs(SubprojectItem *item,
-                      const QString &lhs, QString rhs);
+                      const QString &lhs, const QString &rhs);
     void parsePrefix(SubprojectItem *item,
                      const QString &lhs, const QString &rhs);
     void parse(SubprojectItem *item);

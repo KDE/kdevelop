@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -13,13 +13,13 @@
 
 #include <qdir.h>
 #include <qwidget.h>
-#include <kdebug.h>
 #include <qfile.h>
+#include <qregexp.h>
 #include <qtextstream.h>
+#include <kdebug.h>
 #include <kparts/componentfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kregexp.h>
 #include <kservice.h>
 
 #include "kdevcompileroptions.h"
@@ -74,7 +74,7 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QStr
         return;
     QTextStream stream(&f);
     
-    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
+    QRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
 
     while (!stream.atEnd()) {
         QString line;
@@ -86,9 +86,9 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QStr
         }
         line += s;
         
-        if (re.match(line.latin1())) {
-            QString lhs = re.group(1);
-            QString rhs = re.group(2);
+        if (re.exactMatch(line)) {
+            QString lhs = re.cap(1);
+            QString rhs = re.cap(2);
             variables->insert(lhs, rhs);
         }
     }
@@ -111,14 +111,14 @@ void AutoProjectTool::modifyMakefileam(const QString &fileName, QMap<QString,QSt
     }
     QTextStream outs(&fout);
     
-    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
+    QRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
     
     while (!ins.atEnd()) {
         QString line;
         QString s = ins.readLine();
-        if (re.match(s.latin1())) {
-            QString lhs = re.group(1);
-            QString rhs = re.group(2);
+        if (re.exactMatch(s)) {
+            QString lhs = re.cap(1);
+            QString rhs = re.cap(2);
             QMap<QString,QString>::Iterator it;
             for (it = variables.begin(); it != variables.end(); ++it) {
                 if (lhs == it.key())
