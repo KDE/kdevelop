@@ -531,11 +531,19 @@ void CKDevelop::slotEditReplace(){
   edit_widget->replace();
   slotStatusMsg(i18n("Ready."));
 }
+
 void CKDevelop::slotEditIndent(){
 	edit_widget->indent();
 }
 void CKDevelop::slotEditUnindent(){
 	edit_widget->unIndent();
+}
+
+void CKDevelop::slotEditComment(){
+	edit_widget->comment();
+}
+void CKDevelop::slotEditUncomment(){
+	edit_widget->unComment();
 }
 
 void CKDevelop::slotEditSpellcheck(){
@@ -2807,6 +2815,8 @@ void CKDevelop::slotSTabSelected(int item){
   enableCommand(ID_EDIT_SPELLCHECK);
   enableCommand(ID_EDIT_INDENT);
   enableCommand(ID_EDIT_UNINDENT);
+  enableCommand(ID_EDIT_COMMENT);
+  enableCommand(ID_EDIT_UNCOMMENT);
   enableCommand(ID_EDIT_SELECT_ALL);
   enableCommand(ID_EDIT_DESELECT_ALL);
   enableCommand(ID_EDIT_INVERT_SELECTION);
@@ -2893,6 +2903,8 @@ void CKDevelop::slotSTabSelected(int item){
     disableCommand(ID_EDIT_SPELLCHECK);
     disableCommand(ID_EDIT_INDENT);
     disableCommand(ID_EDIT_UNINDENT);
+    disableCommand(ID_EDIT_COMMENT);
+    disableCommand(ID_EDIT_UNCOMMENT);
     disableCommand(ID_EDIT_SELECT_ALL);
     disableCommand(ID_EDIT_DESELECT_ALL);
     disableCommand(ID_EDIT_INVERT_SELECTION);
@@ -3204,6 +3216,8 @@ void CKDevelop::statusCallback(int id_){
 	
 	ON_STATUS_MSG(ID_EDIT_INDENT,														i18n("Moves the selection to the right"))
 	ON_STATUS_MSG(ID_EDIT_UNINDENT,													i18n("Moves the selection to the left"))
+	ON_STATUS_MSG(ID_EDIT_COMMENT,													i18n("Adds // to the beginning of each selected line"))
+	ON_STATUS_MSG(ID_EDIT_UNCOMMENT,												i18n("Removes // from the beginning of each selected line"))
 	
   ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			    i18n("Selects the whole document contents"))
 	ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,											i18n("Deselects the whole document contents"))
