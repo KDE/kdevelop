@@ -12,7 +12,8 @@ mhk: implement multiple-views per document
 mhk: make the KDevPart template work standalone
 mhk: add doc comments to the lib files I changed ;)
 mhk: find a nicer way to remove dynamic menu entries from context menus
-
+mhk: load plugins dynamically
+mhk: valgrind!
 
 Long-Term:
 
