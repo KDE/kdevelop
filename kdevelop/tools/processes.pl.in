@@ -325,20 +325,29 @@ sub condCopyKdelnkFile {
 
   #if .kdelnk-file was chosen in kAppWizard
   if ($processes{KDELNK} eq "yes") {
-	
+
   	#copying, rename and replace in the kdelnk-file
   	chdir ($templatedir);
 
-    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kicker/) {
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/) {
     	copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
     	chdir ($underDirectory);
-      replaceValuesInFile(\%changings, "$nameLittle.desktop");
+        replaceValuesInFile(\%changings, "$nameLittle.desktop");
     }
     else
     {
-    	copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
-    	chdir ($underDirectory);
-      replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
+        if ($processes{APPLICATION} eq "kicker") {
+
+                move ("$underDirectory/skel.desktop","$underDirectory/$nameLittle.desktop");
+                chdir ($underDirectory);
+                replaceValuesInFile(\%changings, "$nameLittle.desktop");
+        }
+        else
+        {
+                copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
+    	        chdir ($underDirectory);
+                replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
+        }
     }
   }
 }
