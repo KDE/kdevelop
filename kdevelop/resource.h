@@ -240,6 +240,9 @@
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542
 #define	ID_CV_TOOLBAR_COMPILE_CHOICE	14543
+#define	ID_CV_VIEW_STRUCT_DECLARATION	14544
+#define	ID_CV_VIEW_CLASS_DEFINITION	14545
+
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries
