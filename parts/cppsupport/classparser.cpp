@@ -2467,6 +2467,9 @@ void CClassParser::parseFile( ifstream &file )
 bool CClassParser::parse( const QString &file )
 {
   ifstream f( QFile::encodeName(file) );
+  if( !f.good() )
+  	return false;
+	
   currentFile = file;
 
   kdDebug(9007) << "Parsing file " << file << endl;
