@@ -148,7 +148,7 @@ in, extend generic build tool via build system plugin.
 
 \subsection applicationTemplates Application Wizard Templates
 
-<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddTemplates (HowToAddTemplates.dox file)
+<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddApplicationTemplates (HowToAddApplicationTemplates.dox file)
 and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
 
 \subsection sourceFileTemplates Source File Templates

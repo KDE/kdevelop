@@ -49,7 +49,7 @@ access to common window features.
 
 \subsubsection toplevel The TopLevel Object
 
-There is only one toplevel object of class KDevMainWindow in Gideon. It can
+There is only one toplevel object of class KDevMainWindow in KDevelop. It can
 be accessed through the static function TopLevel::getInstance() (see the
 TopLevel class).
 
@@ -62,7 +62,7 @@ be viewed according to their functionalities as follows.
 
 These parts implement a KDevLanguageSupport Class interface.
 
-To add support for a new language check this page \ref howToAddProgrammingLanguages
+To add support for a new programming language check the \ref howToAddProgrammingLanguages page (doc/api/HowToAddProgrammingLanguages.dox file)
 
   - languages/ada = Support for Ada
     - (see AdaSupportPart)
@@ -193,7 +193,8 @@ operation of KDevelop.
 These parts implement a KDevPlugin Class interface.
 
   - parts/appwizard = New Project Wizard
-    - (see AppWizardPart)
+    - see AppWizardPart
+    - see \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
     .
   - parts/history = Project history
     - (see HistoryPart)
@@ -266,7 +267,8 @@ These parts implement a KDevPlugin Class interface.
     - (see DoxygenPart)
     .
   - parts/filecreate = New file creation
-    - (see FileCreatePart)
+    - see FileCreatePart
+    - see \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
     .
   - parts/fileview = File groups
     - (see FileViewPart, FileGroupsPart)

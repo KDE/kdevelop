@@ -31,9 +31,9 @@ There is also a \ref LangSupportStatus page.
 
 First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop:
   - \ref howToAddPlugins
-  - \ref howToAddProgrammingLanguages
-  - \ref howToAddTemplates
-  - \ref howToAddFileTemplates
+  - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
+  - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
+  - \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
 
 Additionally you may also want to find out \ref howToDocument.
 

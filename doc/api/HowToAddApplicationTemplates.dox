@@ -1,7 +1,7 @@
-/** \file HowToAddTemplates.dox
-  * \brief How to add templates to the application wizard
+/** \file HowToAddApplicationTemplates.dox
+  * \brief How to add application templates to the application wizard part
   */
-/** \page howToAddTemplates How to add templates to the application wizard
+/** \page howToAddApplicationTemplates How to add application templates to the application wizard part
 
 Project templates provide the developer with a basic application framework.
 This is necessary for rapid application development (RAD) and makes it even possible
@@ -46,7 +46,7 @@ Create a directory <code>template-khello</code> with the files
 
 \subsection templates_1_2 I.2. Step 2: The Files in Detail
 
-Have a look into the files! There are some variables which the applicatin
+Have a look into the files! There are some variables which the application
 wizard will replace:
 <code><pre>
     - $AUTHOR$ ...... by the author
@@ -60,7 +60,7 @@ wizard will replace:
     - $YEAR$ ........ by the year
     .
 </pre></code>
-All this can be found in <code>$KDEDIR/share/apps/kdevappwizard/template-common/gideon.pm</code>.
+All this can be found in <code>$KDEDIR/share/apps/kdevappwizard/template-common/kdevelop.pm</code>.
 \subsubsection templates_1_2a I.2.1. The Source Files
 
 The files <code>template-khello/app.cpp, template-khello/app.h</code> and

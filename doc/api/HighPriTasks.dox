@@ -73,7 +73,7 @@
   </ul>
 
 \section KDevelop2compat KDevelop 2 compatibility
-(These are things that must be accomplished before we can say that gideon
+(These are things that must be accomplished before we can say that KDevelop 3
 &gt;= kdevelop 2.x UI-wise and functionality-wise!)
 
   <ul>
