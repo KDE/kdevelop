@@ -402,12 +402,12 @@ fi
 ])
 
 dnl  **********
-dnl  Simple Check for Berkeley DB >= 3
+dnl  Simple Check for Berkeley DB = 3
 dnl  **********
 
 AC_DEFUN(KDEV_CHECK_BDB,
 [
-  AC_MSG_CHECKING(for Berkeley DB >= 3)
+  AC_MSG_CHECKING(for Berkeley DB = 3)
 
   AC_CACHE_VAL(ac_cv_bdb,
   [
@@ -437,7 +437,7 @@ AC_DEFUN(KDEV_CHECK_BDB,
    ])
 
   if test "$ac_cv_bdb" != "yes"; then
-    AC_MSG_ERROR(no - please install Berkeley DB >= 3)
+    AC_MSG_ERROR(no - please install Berkeley DB = 3 (not 4))
   else
     AC_MSG_RESULT(yes)
   fi
