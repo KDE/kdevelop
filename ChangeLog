@@ -1,3 +1,9 @@
+2003-01-05 F@lk Brettschneider <falk@kdevelop.org>
+	* MDI taskbar is back as Viewbar (TODO: read config if on/off on startup)
+	* switching the QextMDI user-interface modes now immediately and properly via Options dialog again (extended KDevTopLevel interface therefore), fixed names in the ui mode chooser dialog
+	* accept perl scripts for the loading in the text editor
+	* problem reporter accepts import/export macro in class declaration (patch by Roberto Raggi)
+
 2003-01-04 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
 	* UI-subclassing finnished in qmake manager.
     (activate by rightclicking on a ui-file)
