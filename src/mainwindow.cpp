@@ -21,6 +21,7 @@
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <qvaluelist.h>
+#include <qguardedptr.h>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -314,7 +315,7 @@ bool MainWindow::queryExit()
 
 void MainWindow::prepareToCloseViews()
 {
-  writeDockConfig();
+    //writeDockConfig();
 }
 
 KMainWindow *MainWindow::main()
@@ -344,7 +345,7 @@ void MainWindow::createFramework()
  */
 void MainWindow::createActions()
 {
-  // Create actions for the view menu
+    // Create actions for the view menu
   ViewMenuActionPrivateData ViewActionData;   // ViewActionData holds the parameter for the action
   ViewActionData.eView       = OutputView;    // The new action will be for the output tool window
   ViewActionData.pChildView  = 0L;            // It is not for a single window, but for all output tool windows
@@ -490,9 +491,15 @@ void MainWindow::addToolViewWindow(EView eView, KMdiChildView *child, const QStr
 
 void MainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
-  KMdiChildView *child = wrapper(view, name);
-  addToolViewWindow(TreeView, child, name, toolTip);
-  m_selectViews.append(child);
+    const QPixmap* wndIcon = view->icon();
+    kdDebug(9000) << "icon = " << wndIcon << endl;
+    if (!wndIcon ) { // || (wndIcon && (wndIcon->size().height() > 16))) {
+	view->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
+    }
+
+    KMdiChildView *child = wrapper(view, name);
+    addToolViewWindow(TreeView, child, name, toolTip);
+    m_selectViews.append(child);
 }
 
 void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip)
@@ -542,7 +549,7 @@ void MainWindow::removeView(QWidget *view)
     return;
   }
 
-  KMdiChildView *wrapper = m_widgetMap[view];
+  QGuardedPtr<KMdiChildView> wrapper = m_widgetMap[view];
 
   if (wrapper) {
     removeWindowFromMdi(wrapper);
@@ -564,15 +571,19 @@ void MainWindow::removeView(QWidget *view)
     // Undock the KDockWidget if there is one.
     // This will remove the corresponding tab from the output and tree views.
 
-    //KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
-    //if (pDock) {
-    //  pDock->undock();
-    //  delete pDock;
-    //}
+    QGuardedPtr<KDockWidget> pDock = dockManager->findWidgetParentDock(wrapper);
 
     // QextMDI removes and deletes the wrapper widget
     // removed by robe.. seems that this fix the crash when exit from gideon in MDI mode
     closeWindow(wrapper);
+
+    if( pDock ) {
+	pDock->undock();
+	delete (KDockWidget*) pDock;
+    } else {
+	kdDebug(9000) << "pDock already destroyed!!" << endl;
+    }
+
   }
 }
 
@@ -1150,19 +1161,19 @@ void MainWindow::switchToTabPageMode()
 
 void MainWindow::slotReactToProjectOpened()
 {
-  readDockConfig();
+    // readDockConfig( dockEl );
 
-  // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
-  // We must hide the unavailable views again because they are somehow shown again here
-  // (unfortunately, we can't avoid the flickering which is a result of that show()-hide() calling)
-  QPtrListIterator<KMdiChildView> it(m_unavailableViews);
-  for (; it.current(); ++it) {
-    KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(*it);
-    if (pWrappingDockWidget) {
-      pWrappingDockWidget->undock();
-      pWrappingDockWidget->hide();
+    // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
+    // We must hide the unavailable views again because they are somehow shown again here
+    // (unfortunately, we can't avoid the flickering which is a result of that show()-hide() calling)
+    QPtrListIterator<KMdiChildView> it(m_unavailableViews);
+    for (; it.current(); ++it) {
+	KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(*it);
+	if (pWrappingDockWidget) {
+	    pWrappingDockWidget->hide();
+	    pWrappingDockWidget->undock();
+	}
     }
-  }
 }
 
 void MainWindow::slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl)
