@@ -184,7 +184,8 @@ KPopupMenu *CDocTree::getCurrentPopup()
   
   if( strcmp( item->text(0), i18n("Others") ) == 0 )
     popup = &others_pop;
-  else if( strcmp( item->parent()->text(0), i18n("Others") ) == 0 )
+  else if( item->parent() &&
+           strcmp( item->parent()->text(0), i18n("Others") ) == 0 )
     popup = &doc_pop;
 
   return popup;
