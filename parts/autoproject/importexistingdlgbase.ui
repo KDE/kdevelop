@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ImportExistingDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -241,6 +241,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -273,6 +279,12 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                         </vbox>
@@ -401,6 +413,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -434,6 +452,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                         </vbox>
                     </widget>
@@ -450,26 +474,12 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout10</cstring>
+                <cstring>layout10</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>helpButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>buttonSpacer</cstring>
@@ -480,6 +490,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>317</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
@@ -487,6 +503,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -512,11 +531,15 @@
 <tabstops>
     <tabstop>okButton</tabstop>
     <tabstop>cancelButton</tabstop>
-    <tabstop>helpButton</tabstop>
 </tabstops>
 <includes>
-<include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include> 
-<include location="global" impldecl="in implementation">kprogress.h</include>
+    <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
+    <include location="global" impldecl="in implementation">kprogress.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ksqueezedtextlabel.h</includehint>
+    <includehint>ksqueezedtextlabel.h</includehint>
+    <includehint>kprogress.h</includehint>
+</includehints>
 </UI>

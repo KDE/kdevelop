@@ -84,10 +84,9 @@ protected slots:
 	void slotAddAll();
 	void slotRemoveAll();
 	void slotRemoveSelected();
-	void slotDropped ( KFileView* view, QDropEvent* ev );
+	void slotDropped ( QDropEvent* ev );
 
 	void slotOk();
-	void slotHelp();
 };
 
 #endif // IMPORTEXISTINGDLG_H

@@ -28,52 +28,52 @@
 
 static bool fileListContains(const QList<FileItem> &list, const QString &name)
 {
-    QListIterator<FileItem> it(list);
-    for (; it.current(); ++it)
-        if ((*it)->text(0) == name)
-            return true;
-    return false;
+	QListIterator<FileItem> it(list);
+	for (; it.current(); ++it)
+		if ((*it)->text(0) == name)
+			return true;
+	return false;
 }
 
 
 RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
-                                   TargetItem *item, const QString &filename,
-                                   QWidget *parent, const char *name)
-    : RemoveFileDlgBase(parent, name, true)
+								TargetItem *item, const QString &filename,
+								QWidget *parent, const char *name)
+	: RemoveFileDlgBase(parent, name, true)
 {
-    removeFromTargetsCheckBox = 0;
+	removeFromTargetsCheckBox = 0;
 
-    QStringList targets;
-    
-    QListIterator<TargetItem> it(spitem->targets);
-    for (; it.current(); ++it)
-        if (fileListContains((*it)->sources, filename))
-            targets.append((*it)->name);
+	QStringList targets;
 
-    if (targets.count() > 1)
-    {
-        removeFromTargetsCheckBox = new QCheckBox( fileGroupBox, "removeFromTargetsCheckBox" );
-        removeFromTargetsCheckBox->setMinimumSize( QSize( 0, 45 ) );
-        fileLayout->addWidget( removeFromTargetsCheckBox );
+	QListIterator<TargetItem> it(spitem->targets);
+	for (; it.current(); ++it)
+		if (fileListContains((*it)->sources, filename))
+			targets.append((*it)->name);
 
-        QString joinedtargets = "    *" + targets.join("\n    *");
-        removeFromTargetsCheckBox->setText ( i18n ( "The file %1 is still used by the following targets:\n%2\n"
-                                                   "Remove it from all of them?").arg(filename).arg(joinedtargets) );
-    }
+	if (targets.count() > 1)
+	{
+		removeFromTargetsCheckBox = new QCheckBox( fileGroupBox, "removeFromTargetsCheckBox" );
+		removeFromTargetsCheckBox->setMinimumSize( QSize( 0, 45 ) );
+		fileLayout->addWidget( removeFromTargetsCheckBox );
 
-    removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
-    directoryLabel->setText ( spitem->path );
-    targetLabel->setText ( item->name );
+		QString joinedtargets = "    *" + targets.join("\n    *");
+		removeFromTargetsCheckBox->setText ( i18n ( "The file %1 is still used by the following targets:\n%2\n"
+												"Remove it from all of them?").arg(filename).arg(joinedtargets) );
+	}
 
-    connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
-    connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
+	removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
+	directoryLabel->setText ( spitem->path );
+	targetLabel->setText ( item->name );
 
-    setIcon ( SmallIcon ( "editdelete.png" ) );
+	connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
+	connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
 
-    m_widget = widget;
-    subProject = spitem;
-    target = item;
-    fileName = filename;
+	setIcon ( SmallIcon ( "editdelete.png" ) );
+
+	m_widget = widget;
+	subProject = spitem;
+	target = item;
+	fileName = filename;
 }
 
 
@@ -83,57 +83,57 @@ RemoveFileDialog::~RemoveFileDialog()
 
 void RemoveFileDialog::accept()
 {
-    QMap<QString,QString> replaceMap;
-    
-    if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
-        QListIterator<TargetItem> it(subProject->targets);
-        for (; it.current(); ++it) {
-            if ((*it) != target && fileListContains((*it)->sources, fileName)) {
-                FileItem *fitem = static_cast<FileItem*>((*it)->firstChild());
-                while (fitem) {
-                    FileItem *nextitem = static_cast<FileItem*>(fitem->nextSibling());
-                    if (fitem->text(0) == fileName) {
-                        QListView *lv = fitem->listView();
-                        lv->setSelected(fitem, false);
-                        (*it)->sources.remove(fitem);
-                    }
-                    fitem = nextitem;
-                }
-                QString canontargetname = AutoProjectTool::canonicalize((*it)->name);
-                QString varname = canontargetname + "_SOURCES";
-                QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
-                sources.remove(fileName);
-                subProject->variables[varname] = sources.join(" ");
-                replaceMap.insert(varname, subProject->variables[varname]);
-            }
-        }
-    }
-    
-    FileItem *fitem = static_cast<FileItem*>(target->firstChild());
-    while (fitem) {
-        if (fitem->text(0) == fileName) {
-            QListView *lv = fitem->listView();
-            lv->setSelected(fitem, false);
-            target->sources.remove(fitem);
-            break;
-        }
-        fitem = static_cast<FileItem*>(fitem->nextSibling());
-    }
-    QString canontargetname = AutoProjectTool::canonicalize(target->name);
-    QString varname = canontargetname + "_SOURCES";
-    QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
-    sources.remove(fileName);
-    subProject->variables[varname] = sources.join(" ");
-    replaceMap.insert(varname, subProject->variables[varname]);
-    
-    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
-    
-    if (removeCheckBox->isChecked())
-        QFile::remove(subProject->path + "/" + fileName);
-        
-    m_widget->emitRemovedFile(fileName);
-        
-    QDialog::accept();
+	QMap<QString,QString> replaceMap;
+
+	if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
+		QListIterator<TargetItem> it(subProject->targets);
+		for (; it.current(); ++it) {
+			if ((*it) != target && fileListContains((*it)->sources, fileName)) {
+				FileItem *fitem = static_cast<FileItem*>((*it)->firstChild());
+				while (fitem) {
+					FileItem *nextitem = static_cast<FileItem*>(fitem->nextSibling());
+					if (fitem->text(0) == fileName) {
+						QListView *lv = fitem->listView();
+						lv->setSelected(fitem, false);
+						(*it)->sources.remove(fitem);
+					}
+					fitem = nextitem;
+				}
+				QString canontargetname = AutoProjectTool::canonicalize((*it)->name);
+				QString varname = canontargetname + "_SOURCES";
+				QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
+				sources.remove(fileName);
+				subProject->variables[varname] = sources.join(" ");
+				replaceMap.insert(varname, subProject->variables[varname]);
+			}
+		}
+	}
+
+	FileItem *fitem = static_cast<FileItem*>(target->firstChild());
+	while (fitem) {
+		if (fitem->text(0) == fileName) {
+			QListView *lv = fitem->listView();
+			lv->setSelected(fitem, false);
+			target->sources.remove(fitem);
+			break;
+		}
+		fitem = static_cast<FileItem*>(fitem->nextSibling());
+	}
+	QString canontargetname = AutoProjectTool::canonicalize(target->name);
+	QString varname = canontargetname + "_SOURCES";
+	QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
+	sources.remove(fileName);
+	subProject->variables[varname] = sources.join(" ");
+	replaceMap.insert(varname, subProject->variables[varname]);
+
+	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+
+	if (removeCheckBox->isChecked())
+		QFile::remove(subProject->path + "/" + fileName);
+
+	m_widget->emitRemovedFile(fileName);
+
+	QDialog::accept();
 }
 
 #include "removefiledlg.moc"

@@ -70,7 +70,7 @@ void KImportIconView::drawContents ( QPainter *p, int cx, int cy, int cw, int ch
         font.setFamily ( "Helvetica [Adobe]" );
         font.setPointSize ( 10 );
         p->setFont ( font );
-        p->setPen ( QPen ( KGlobalSettings::inactiveTextColor() ) );
+        p->setPen ( QPen ( KGlobalSettings::linkColor() ) );
 
         QRect rect = frameRect();
         QFontMetrics fm ( p->font() );
@@ -132,8 +132,8 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 	sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-	importView = new KImportIconView ( "Drag one or more files from above and drop it here!", destGroupBox, "destination icon view" );
-   destGroupBoxLayout->addWidget ( importView );
+	importView = new KImportIconView ( i18n ( "Drag one or more files from above and drop it here!" ), destGroupBox, "destination icon view" );
+	destGroupBoxLayout->addWidget ( importView );
 	//destGroupBoxLayout->setStretchFactor(dir, 2);
 
 	setIcon ( SmallIcon ( "fileimport.png" ) );
@@ -194,14 +194,13 @@ void ImportExistingDialog::init()
     importView->setItemsMovable ( false );
 
 	connect ( okButton, SIGNAL ( clicked () ), this, SLOT ( slotOk () ) );
-	connect ( helpButton, SIGNAL ( clicked () ), this, SLOT ( slotHelp () ) );
 
     connect ( addSelectedButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSelected() ) );
     connect ( addAllButton, SIGNAL ( clicked () ), this, SLOT ( slotAddAll() ) );
     connect ( removeSelectedButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveSelected() ) );
     connect ( removeAllButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveAll() ) );
 
-    connect ( importView, SIGNAL ( dropped( KFileView*, QDropEvent* ) ), this, SLOT ( slotDropped ( KFileView*, QDropEvent* ) ) );
+    connect ( importView, SIGNAL ( dropped( QDropEvent* ) ), this, SLOT ( slotDropped ( QDropEvent* ) ) );
 
     importView->setSelectionMode ( KFile::Multi );
 	
@@ -386,11 +385,6 @@ void ImportExistingDialog::slotOk()
 
 }
 
-void ImportExistingDialog::slotHelp()
-{
-
-}
-
 void ImportExistingDialog::slotAddSelected()
 {
 	KFileItemListIterator it ( *sourceSelector->dirOperator()->selectedItems() );
@@ -471,7 +465,7 @@ void ImportExistingDialog::slotRemoveSelected()
 }
 
 
-void ImportExistingDialog::slotDropped ( KFileView* view, QDropEvent* ev )
+void ImportExistingDialog::slotDropped ( QDropEvent* ev )
 {
     kdDebug ( 9000 ) << "ImportExistingDialog::dropped()" << endl;
 

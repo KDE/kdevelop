@@ -39,6 +39,7 @@ public:
      */
     static void parseMakefileam(const QString &filename, QMap<QString,QString> *variables);
     static void modifyMakefileam(const QString &filename, QMap<QString,QString> variables);
+	static void removeFromMakefileam(const QString &filename, QMap<QString,QString> variables);
 };
 
 #endif

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddSubprojectDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -96,10 +96,11 @@
                             </property>
                             <property name="font">
                                 <font>
+                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
-                                <string>Enter subproject name:</string>
+                                <string>Enter a new subproject name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>spEdit</cstring>
@@ -138,6 +139,12 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -163,13 +170,19 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>createButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Add</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -187,13 +200,16 @@
         </widget>
     </vbox>
 </widget>
-<includes>
-<include location="global" impldecl="in implementation">klineedit.h</include>
-</includes>
 <tabstops>
     <tabstop>spEdit</tabstop>
     <tabstop>createButton</tabstop>
     <tabstop>cancelButton</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

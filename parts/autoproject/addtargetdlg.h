@@ -27,6 +27,8 @@ public:
                      QWidget *parent=0, const char *name=0 );
     ~AddTargetDialog();
 
+protected slots:
+	virtual void slotFileNameChanged ( const QString& );
 
 private:
     virtual void primaryChanged();

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>RemoveFileDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>445</width>
+            <width>447</width>
             <height>250</height>
         </rect>
     </property>
@@ -56,7 +56,7 @@
                 <cstring>targetBox</cstring>
             </property>
             <property name="title">
-                <string>Target Information</string>
+                <string>Subproject Information</string>
             </property>
             <hbox>
                 <property name="name">
@@ -161,9 +161,9 @@
                 </size>
             </property>
             <property name="title">
-                <string>File Information</string>
+                <string>Target Information</string>
             </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -181,12 +181,6 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
                         <widget class="QLabel">
                             <property name="name">
                                 <cstring>removeLabel</cstring>
@@ -203,9 +197,17 @@
                                 <string>Also remove it from disk</string>
                             </property>
                         </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>noticeLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undelete the file!</string>
+                            </property>
+                        </widget>
                     </vbox>
                 </widget>
-            </hbox>
+            </vbox>
         </widget>
         <spacer>
             <property name="name">
@@ -216,6 +218,12 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget">
@@ -243,18 +251,21 @@
                         <enum>Expanding</enum>
                     </property>
                     <property name="sizeHint">
-			<size>
-			    <width>30</width>
-			    <height>20</height>
-			</size>
-		    </property>
-		</spacer>
+                        <size>
+                            <width>30</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>removeButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Remove</string>
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -270,7 +281,10 @@
     </vbox>
 </widget>
 <includes>
-<include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
+    <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ksqueezedtextlabel.h</includehint>
+</includehints>
 </UI>

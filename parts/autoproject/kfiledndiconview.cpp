@@ -132,7 +132,6 @@ void KFileDnDIconView::contentsDropEvent( QDropEvent* e ) {
 	KURL::List urls;
 	KURLDrag::decode( e, urls );
 	emit dropped( e );
-	emit dropped( this, e );
 }
 //-----------------------------------------------
 void KFileDnDIconView::startDrag(){

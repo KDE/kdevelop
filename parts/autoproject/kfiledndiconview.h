@@ -79,11 +79,6 @@ signals: // Signals
 	* Note: The @ref QDropEvent contains a @ref KURLDrag object.
 	*/
 	void dropped( QDropEvent* );
-	/**
-	* Emitted whenever an decodable item is dropped in the view
-	* Note: The @ref QDropEvent contains a @ref KURLDrag object.
-	*/
-	void dropped( KFileView*, QDropEvent* );
 protected slots: // Protected slots
 	/**
 	* Called when the auto timer times out. Open the current folder.
