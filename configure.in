@@ -75,6 +75,7 @@ kdevelop/classwizard/Makefile \
 kdevelop/gfxview/Makefile \
 kdevelop/kdlgedit/Makefile \
 kdevelop/kwrite/Makefile \
+kdevelop/kwrite/pix/Makefile \
 kdevelop/pics/Makefile \
 kdevelop/print/Makefile \
 kdevelop/vc/Makefile \
