@@ -327,10 +327,15 @@ void ProjectViewItem::setOpen(bool opened)
 ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *parentWidget)
     : ProjectView(manager, parentWidget)
 {
-    KAction *m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
+    m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
         actionCollection(), "project_reload");
-    
+        
+    m_actionBuildAll = new KAction(i18n("Build All"), SmallIcon("launch"), Key_F8, this, SLOT(buildAll()),
+        actionCollection(), "project_buildall");
+            
     if (KToolBar *tb = toolBar()) {
+        m_actionBuildAll->plug(tb);
+        tb->insertSeparator();
         m_actionReload->plug(tb);
 #if 0 // ###
         tb->insertButton(SmallIcon("folder_new"), -1, true);
@@ -370,6 +375,17 @@ ProjectViewItem *ProjectOverview::createProjectItem(ProjectItemDom dom, ProjectV
     return item;
 }
 
+void ProjectOverview::buildAll()
+{
+    kdDebug(9000) << "ProjectOverview::buildAll()" << endl;
+    
+    if (KDevProjectBuilder *builder = part()->defaultBuilder()) {
+        ProjectItemList item_list = projectModel()->itemList();
+        for (ProjectItemList::Iterator it = item_list.begin(); it != item_list.end(); ++it)
+            builder->build(*it);
+    }
+}
+
 void ProjectOverview::reload()
 {
     kdDebug(9000) << "ProjectOverview::reload()" << endl;
@@ -402,16 +418,21 @@ void ProjectOverview::refresh()
 ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parentWidget)
     : ProjectView(parent, parentWidget)
 {
-#if 0 // ### 
+    m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), CTRL + Key_F8, this, SLOT(build()),
+        actionCollection(), "project_build");
+            
+
     if (KToolBar *tb = toolBar()) {
+        m_actionBuild->plug(tb);
+#if 0 // ### 
         tb->insertButton(SmallIcon("filenew"), -1, true);
         tb->insertButton(SmallIcon("fileimport"), -1, true);
         tb->insertButton(SmallIcon("editdelete"), -1, true);
         tb->insertButton(SmallIcon("launch"), -1, true);
         tb->insertButton(SmallIcon("exec"), -1, true);
         tb->insertButton(SmallIcon("configure"), -1, true);
-    }
 #endif
+    }
 
     connect(listView(), SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
         this, SLOT(contextMenu(KListView *, QListViewItem *, const QPoint &)));
@@ -419,6 +440,13 @@ ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parent
 
 ProjectDetails::~ProjectDetails()
 {
+}
+
+void ProjectDetails::build()
+{
+    if (KDevProjectBuilder *builder = part()->defaultBuilder()) {
+        builder->build(m_currentItem);
+    }
 }
 
 void ProjectDetails::setCurrentItem(ProjectItemDom dom)

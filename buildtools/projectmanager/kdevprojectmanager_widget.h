@@ -156,10 +156,15 @@ public:
     
 public slots:    
     virtual void refresh();
-    virtual void reload();
+    void reload();
+    void buildAll();
     
 private slots:
     void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
+    
+private:
+    KAction *m_actionReload;
+    KAction *m_actionBuildAll;
 };
 
 class ProjectDetails: public ProjectView
@@ -171,12 +176,14 @@ public:
     
 public slots:
     void setCurrentItem(ProjectItemDom dom);
+    void build();
     
 private slots:
     void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
     
 private:
     ProjectItemDom m_currentItem;
+    KAction *m_actionBuild;
 };
 
 #endif
