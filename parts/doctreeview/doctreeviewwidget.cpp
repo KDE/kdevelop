@@ -481,6 +481,9 @@ DocTreeTocFolder::DocTreeTocFolder(const QString& name, KListView *parent, const
     setFileName( fileName );
     setIndexFileName( fileName );
     setText(0, name);
+
+    QFileInfo fi(indexFileName());
+    toc_name = fi.baseName();
 }
 
 DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context)
@@ -489,6 +492,9 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
     setFileName( fileName );
     setIndexFileName( fileName );
     
+    QFileInfo fi(indexFileName());
+    toc_name = fi.baseName();
+
     refresh();
 }
 
@@ -1597,6 +1603,10 @@ void DocTreeViewWidget::refresh()
 void DocTreeViewWidget::projectChanged(KDevProject *project)
 {
     folder_project->setProject(project);
+
+    //FIXME: this takes more time to load but don't cause crashes somewhere in KStyle
+//    QTimer::singleShot(0, this, SLOT(refresh()));
+    
     folder_project->refresh();
     if(!project)
     {
@@ -1636,6 +1646,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 
     // .. and insert all again except for ignored items
     QStringList ignoretocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
+//    kdDebug() << "        !!!!!! IGNORE TOCS: " << ignoretocs << endl;
     QStringList ignoredh = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc");
     QStringList ignoredoxygen = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredoxygen", "toc");
     QStringList ignorekdocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignorekdocs", "toc");
@@ -1658,6 +1669,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     //    for (; it2.current(); --it2) {
     for (; it2.current(); ++it2)
     {
+//        kdDebug() << "            -- name " << it2.current()->tocName() << endl;
         if (!ignoretocs.contains(it2.current()->tocName()))
             docView->insertItem(it2.current());
     }
