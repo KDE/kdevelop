@@ -57,9 +57,9 @@ void subversionCore::update( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL << endl;
+	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "updating : " << *it << endl;
+		kdDebug() << "updating : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 2;
@@ -77,9 +77,9 @@ void subversionCore::commit( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL << endl;
+	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "commiting : " << *it << endl;
+		kdDebug() << "commiting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 3;
