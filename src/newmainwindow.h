@@ -95,6 +95,8 @@ private slots:
   void fillWindowMenu();
   void openURL( int );
   void tabMoved(int from, int to);
+  void tabContext(QWidget*,const QPoint &);  
+  void tabContextActivated(int);    
    
 //  void loadMDISettings();
 
@@ -134,6 +136,8 @@ private:
   
   bool openNewTabAfterCurrent;
   bool showTabIcons;
+
+  KURL m_currentTabURL;
 };
 
 

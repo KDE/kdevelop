@@ -39,13 +39,13 @@
 #include <kiconloader.h>
 #include <kdevproject.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
 #include <kmultitabbar.h>
 #include <ktabwidget.h>
 #include <kparts/part.h>
 #include <kdockwidget.h>
 #include <knotifydialog.h>
 #include <kedittoolbar.h>
+#include <designer.h>
 
 #include "kdevplugin.h"
 #include "projectmanager.h"
@@ -104,7 +104,8 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
                                  actionCollection(), "raise_editor");
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
-	
+        
+   
 	//@fixme why is this part of KDevMainWindow?
 //    previous_output_view = NULL;
 }
@@ -207,7 +208,98 @@ void NewMainWindow::init() {
 		}
 		tabWidget()->setTabReorderingEnabled(true);
 		connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
+		connect(tabWidget(), SIGNAL(contextMenu(QWidget*,const QPoint &)), this, SLOT(tabContext(QWidget*,const QPoint &)));		
 	}
+}
+
+void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
+{
+
+	KPopupMenu tabMenu;
+
+	tabMenu.insertTitle( dynamic_cast<KMdiChildView*>(widget)->tabCaption() );
+
+	//Find the document on whose tab the user clicked
+	m_currentTabURL = QString::null;
+	QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
+	while ( KParts::Part* part = it.current()
+	      )
+	{
+		QWidget * top_widget = EditorProxy::getInstance()->topWidgetForPart( part );
+		if ( top_widget && top_widget->parentWidget() == widget)
+		{
+			if( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part))
+			{
+				m_currentTabURL = ro_part->url();
+
+				tabMenu.insertItem( i18n("Close"),0);
+
+				if(PartController::getInstance()->parts()->count() > 1)
+					tabMenu.insertItem( i18n("Close All Others"), 4 );
+
+				if(!dynamic_cast<DocumentationPart*>(ro_part))
+				{
+					if(KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( ro_part ))
+						if(!dynamic_cast<KInterfaceDesigner::Designer*>(ro_part))
+						{
+							//FIXME: we do workaround the inability of the KDevDesigner part
+							// to deal with these global actions here.
+							if(rw_part->isModified())
+								tabMenu.insertItem( i18n("Save"),1);
+
+							tabMenu.insertItem( i18n("Reload"),2);
+						}
+				}
+				else
+				{
+					tabMenu.insertItem( i18n("Duplicate"), 3 );
+					break;
+				}
+
+				//Create the file context
+				KURL::List list;
+				list << m_currentTabURL;
+				FileContext context( list );
+				Core::getInstance()->fillContextMenu(&tabMenu, &context);
+
+			}
+			break;
+		}
+		++it;
+	}
+
+	connect( &tabMenu, SIGNAL( activated(int) ), this, SLOT(tabContextActivated(int)) );
+
+	tabMenu.exec(pos);
+
+}
+
+void NewMainWindow::tabContextActivated(int id)
+{
+	if(m_currentTabURL.isEmpty())
+		return;
+
+	switch(id)
+	{
+	case 0:
+		PartController::getInstance()->closeFile(m_currentTabURL);
+		break;
+	case 1:
+		PartController::getInstance()->saveFile(m_currentTabURL);
+		break;
+	case 2:
+		PartController::getInstance()->reloadFile(m_currentTabURL);
+		break;
+	case 3:
+		PartController::getInstance()->showDocument(m_currentTabURL, true);
+		break;
+	case 4:
+		PartController::getInstance()->closeAllOthers(m_currentTabURL);
+		break;
+	default:
+		break;
+	}
+
 }
 
 NewMainWindow::~NewMainWindow() 
@@ -697,6 +789,7 @@ void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 		if ( childView )
 		{
 			childView->setMDICaption( ro_part->url().fileName() );
+			
 		}
 	}
 }
