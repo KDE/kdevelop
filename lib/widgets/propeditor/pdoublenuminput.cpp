@@ -78,7 +78,10 @@ void PDoubleNumInput::updateProperty(double val)
 void PDoubleNumInput::updateProperty(int val)
 {
 #ifdef PURE_QT
-    emit propertyChanged(m_property, QVariant(double(val/(double)pow(m_edit->digits(),10))));
+    QString format = QString("%.%1f").arg( m_edit->digits() );
+    QString strVal = QString().sprintf(format.latin1(),
+                                       (val/(float)pow(m_edit->digits(),10)) );
+    emit propertyChanged(m_property, QVariant(strVal));
 #else
     Q_UNUSED(val);
 #endif
