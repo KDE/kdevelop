@@ -38,9 +38,6 @@
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include "dummykpartsdockmainwindow.h"
-//#ifdef __BORLANDC__
-//using namespace KParts;
-//#endif
 #endif
 
 #if QT_VERSION < 300
@@ -59,6 +56,8 @@
 #include "qextmdiiterator.h"
 #include "qextmdilistiterator.h"
 #include "qextmdinulliterator.h"
+
+using namespace KParts;
 
 class QTimer;
 
@@ -205,7 +204,7 @@ public:
   * deletes the view object. So if your application wants to control that by itself, call @ref removeWindowFromMdi()
   * and call delete by yourself. See also @ref QextMdiChildView::closeEvent() for tat issue.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KParts::DockMainWindow
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public DockMainWindow
 {
    friend class QextMdiChildView;
    friend class QextMdiTaskBar;
