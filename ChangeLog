@@ -1,3 +1,6 @@
+1999-04-20 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed problem with unmatched {}.
+
 1999-04-18 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* first steps for generating sourcecode from the dialog editor
 	doesn't work correctly at the moment, so be careful!
