@@ -1183,6 +1183,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // Initialise gdb. At this stage gdb is sitting wondering what to do,
   // and to whom. Organise a few things, then set up the tty for the application,
   // and the application itself
+  queueCmd(new GDBCommand("set edit off", NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
 
