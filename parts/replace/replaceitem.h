@@ -13,6 +13,7 @@
 #define __REPLACEITEM_H__
 
 
+#include <kdeversion.h>
 #include <kdebug.h>
 
 #include "replaceview.h"
@@ -22,7 +23,11 @@ class ReplaceItem : public QCheckListItem
 public:
     // the file item
     ReplaceItem( ReplaceView * parent, ReplaceItem * after, QString file ) :
-            QCheckListItem( parent, after, file, QCheckListItem::CheckBox ),
+            QCheckListItem( parent,
+#if KDE_VERSION > 305			    
+			    after,
+#endif			    
+			    file, QCheckListItem::CheckBox ),
             _file( file ), _string( file ), _line( 0 ), _isfile( true ),
             _block( false ), _clicked( true )
     {
@@ -32,7 +37,11 @@ public:
 
     // the line item
     ReplaceItem( ReplaceItem * parent, ReplaceItem * after, QString file, QString string, int line ) :
-            QCheckListItem( parent, after, QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
+            QCheckListItem( parent,
+#if KDE_VERSION > 305			    
+			    after,
+#endif			    
+			    QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
             _file( file ), _string( string ), _line( line ), _isfile( false ),
             _block( false ), _clicked( true )
     {
