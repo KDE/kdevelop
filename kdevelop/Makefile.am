@@ -25,14 +25,18 @@ KDE_OPTIONS = nofinal
 data_DATA = kdevelop.desktop kdevelop-setup.desktop
 datadir = $(kde_appsdir)/Development
 
+tip_DATA = tips
+tipdir = $(kde_datadir)/kdevelop
+
 mime_DATA = x-kdevelop-project.desktop
 mimedir = $(kde_mimedir)/application
 
 bin_SCRIPTS = extractrc
 
 messages: rc.cpp
+	$(PREPARETIPS) > tips.cc
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) -ktr $$LIST -o $(podir)/kdevelop.pot; \
 	fi
-
+	rm -f tips.cc

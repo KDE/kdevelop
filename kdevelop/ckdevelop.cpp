@@ -2524,11 +2524,7 @@ void CKDevelop::slotHelpReference() {
 }
 
 void CKDevelop::slotHelpTipOfDay(bool force){
-  QString file=locate("html", KGlobal::locale()->language()+"/kdevelop/tip.database");
-  if(!QFileInfo(file).exists())
-  	file=locate("html", "en/kdevelop/tip.database");
-
-  KTipDialog::showTip(locate("data", file), force);
+  KTipDialog::showTip(locate("data", "kdevelop/tips"), force);
 }
 
 void CKDevelop::slotHelpHomepage(){
