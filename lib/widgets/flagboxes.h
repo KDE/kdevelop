@@ -20,6 +20,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
 
 class QSpinBox;
 class FlagListBox;
@@ -73,12 +74,19 @@ public:
     FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
                  const QString &flagstr, const QString &description,
                  const QString &offstr);
+    FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
+                 const QString &flagstr, const QString &description,
+                 const QString &offstr, const QString &defstr);
     ~FlagCheckBox()
         {}
 
 private:
     QString flag;
     QString off;
+    QString def;
+    bool includeOff;
+    bool useDef;
+    bool defSet;
     friend class FlagCheckBoxController;
 };
 

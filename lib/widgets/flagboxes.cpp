@@ -115,7 +115,7 @@ void FlagListBox::writeFlags(QStringList *list)
 
 FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
                            const QString &flagstr, const QString &description)
-    : QCheckBox(description, parent), flag(flagstr)
+    : QCheckBox(description, parent), flag(flagstr), includeOff(false), useDef(false), defSet(false)
 {
     QToolTip::add(this, flagstr);
     controller->addCheckBox(this);
@@ -125,12 +125,20 @@ FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
 FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
                            const QString &flagstr, const QString &description,
                            const QString &offstr)
-    : QCheckBox(description, parent), flag(flagstr), off(offstr)
+    : QCheckBox(description, parent), flag(flagstr), off(offstr), includeOff(false), useDef(false), defSet(false)
 {
     QToolTip::add(this, flagstr);
     controller->addCheckBox(this);
 }
 
+FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
+                           const QString &flagstr, const QString &description,
+                           const QString &offstr, const QString &defstr)
+    : QCheckBox(description, parent), flag(flagstr), off(offstr), def(defstr), includeOff(false), useDef(true), defSet(false)
+{
+    QToolTip::add(this, flagstr);
+    controller->addCheckBox(this);
+}
 
 FlagCheckBoxController::FlagCheckBoxController(QStringList multiKeys)
     :m_multiKeys(multiKeys)
@@ -183,13 +191,24 @@ void FlagCheckBoxController::readFlags(QStringList *list)
         QStringList::Iterator sli = list->find(fitem->flag);
         if (sli != list->end()) {
             fitem->setChecked(true);
+            fitem->useDef = false;
             list->remove(sli);
         }
         sli = list->find(fitem->off);
         if (sli != list->end()) {
             fitem->setChecked(false);
+            fitem->includeOff = true;
+            fitem->useDef = false;
             list->remove(sli);
         }
+        if (!fitem->def.isEmpty())
+            if (fitem->useDef && (fitem->def == fitem->flag))
+            {
+                fitem->setChecked(true);
+                fitem->defSet = true;
+            }
+        else
+            fitem->useDef = false;
     }
 }
 
@@ -199,7 +218,15 @@ void FlagCheckBoxController::writeFlags(QStringList *list)
     QPtrListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
-        if (fitem->isChecked())
+        if (fitem->isChecked() && (!fitem->useDef))
+        {
+            (*list) << fitem->flag;
+        }
+        else if ((!fitem->off.isEmpty()) && fitem->includeOff)
+            (*list) << fitem->off;
+        else if ((fitem->def == fitem->flag) && (!fitem->isChecked()))
+            (*list) << fitem->off;
+        else if ((fitem->def == fitem->off) && (fitem->isChecked()))
             (*list) << fitem->flag;
     }
 }
