@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CppNewClassDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -35,6 +35,12 @@
             <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QGroupBox" row="3" column="0">
             <property name="name">
@@ -43,61 +49,126 @@
             <property name="title">
                 <string>File Names</string>
             </property>
-            <vbox>
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>header_label</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>21</y>
+                        <width>193</width>
+                        <height>16</height>
+                    </rect>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
+                <property name="text">
+                    <string>&amp;Header:</string>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>header_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Header:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>header_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>header_edit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Insert your header file name here.
+                <property name="buddy" stdset="0">
+                    <cstring>header_edit</cstring>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>header_edit</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>42</y>
+                        <width>193</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>Insert your header file name here.
 It is automatically inserted while
 you select the classname, but you can
 still edit it afterwards.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>implementation_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Implementation:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>implementation_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>implementation_edit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Insert your implementation filename here.
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>implementation_edit</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>91</y>
+                        <width>193</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>Insert your implementation filename here.
 It is automatically inserted while
 you select the classname, but you can
 still edit it afterwards.</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>implementation_label</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>70</y>
+                        <width>193</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;Implementation:</string>
+                </property>
+                <property name="buddy" stdset="0">
+                    <cstring>implementation_edit</cstring>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>120</y>
+                        <width>100</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Name Handling:</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>none</string>
                     </property>
-                </widget>
-            </vbox>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>lower</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>upper</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>name_handler_combo</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>110</x>
+                        <y>120</y>
+                        <width>91</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
         </widget>
         <widget class="QLineEdit" row="1" column="2">
             <property name="name">
@@ -155,6 +226,12 @@ a class for the KDE libraries.</string>
             <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QLayoutWidget" row="5" column="0">
             <property name="name">
@@ -204,6 +281,12 @@ doxygen or similar tools.</string>
             <property name="sizeType">
                 <enum>Preferred</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QLayoutWidget" row="5" column="2">
             <property name="name">
@@ -228,6 +311,12 @@ doxygen or similar tools.</string>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QCheckBox">
@@ -258,6 +347,12 @@ doxygen or similar tools.</string>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
             </vbox>
@@ -316,6 +411,12 @@ doxygen or similar tools.</string>
                     <property name="sizeType">
                         <enum>Minimum</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QCheckBox">
                     <property name="name">
@@ -350,6 +451,12 @@ doxygen or similar tools.</string>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -417,6 +524,12 @@ doxygen or similar tools.</string>
         <receiver>cpp_new_class_dialog</receiver>
         <slot>classNameChanged(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>name_handler_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>nameHandlerChanged(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>
@@ -435,6 +548,7 @@ doxygen or similar tools.</string>
     <slot access="protected">classNameChanged(const QString &amp;text)</slot>
     <slot access="protected">headerChanged()</slot>
     <slot>implementationChanged()</slot>
+    <slot access="protected">nameHandlerChanged(const QString &amp;text)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

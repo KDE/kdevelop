@@ -33,10 +33,12 @@ protected:
     virtual void classNameChanged(const QString &text);
     virtual void headerChanged();
     virtual void implementationChanged();
+    virtual void nameHandlerChanged(const QString &text);
 
 private:
     bool headerModified;
     bool implementationModified;
+    QString m_parse;
     KDevPlugin *m_part;
 };
 

@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <qcombobox.h>
 
 #include "kdevplugin.h"
 #include "kdevproject.h"
@@ -37,6 +38,8 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
 	headerModified = false;
 	implementationModified = false;
 	m_part = part;
+	m_parse = DomUtil::readEntry( *m_part->projectDom(), "/cppsupportpart/newclass/filenamesetting","none");
+	name_handler_combo->setCurrentText(m_parse);
 }
 
 
@@ -44,9 +47,20 @@ CppNewClassDialog::~CppNewClassDialog()
 {}
 
 
+void CppNewClassDialog::nameHandlerChanged(const QString &text)
+{
+	qDebug("Changing name handler %s", text.latin1());
+	DomUtil::writeEntry( *m_part->projectDom(), "/cppsupportpart/newclass/filenamesetting",text);
+	m_parse = text;
+	classNameChanged(classname_edit->text());
+}
+
 void CppNewClassDialog::classNameChanged(const QString &text)
 {
 	QString str = text;
+
+	if(m_parse=="lower") str = str.lower();
+	else if(m_parse=="upper") str = str.upper();
 
 	if (!headerModified)
 		header_edit->setText(str + ".h");
