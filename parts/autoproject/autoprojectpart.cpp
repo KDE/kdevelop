@@ -458,7 +458,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
 
 /** Adds the make command for the libraries that the target depends on
-  * to the make frontend queue */
+  * to the make frontend queue (this is a recursive function) */
 void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 {
 
@@ -491,6 +491,24 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
         tdir += dependency.left(pos+1);
         tname = dependency.mid(pos+1);
       }
+      kdDebug(9020) << "Scheduling : <" << tdir << ">  target <" << tname << ">" << endl;
+
+      // Recursively queue the dependencies for building
+      SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
+      if (spi) {
+        QPtrList< TargetItem > tl = spi->targets;
+        // Cycle throught the list of targets to find the one we're looking for
+        TargetItem *ti = tl.first();
+        do {
+          if (ti->name == tname) {
+            // found it: queue it and stop looking
+            queueInternalLibDependenciesBuild(ti);
+            break;
+          }
+          ti = tl.next();
+        } while (ti);
+      }
+
       tcmd = constructMakeCommandLine(tdir, tname);
       if (!tcmd.isNull()) {
         makeFrontend()->queueCommand( tdir, tcmd);
