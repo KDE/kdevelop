@@ -85,6 +85,7 @@ void CParsedArgument::setName( const char *aName )
   assert( aName != NULL && strlen( aName ) > 0 );
 
   name = aName;
+  name = name.stripWhiteSpace();
 }
 
 /*--------------------------------------- CParsedArgument::setType()
@@ -102,6 +103,7 @@ void CParsedArgument::setType( const char *aType )
   assert( aType != NULL && strlen( aType ) > 0 );
 
   type = aType;
+  type = type.stripWhiteSpace();
 }
 
 /*********************************************************************

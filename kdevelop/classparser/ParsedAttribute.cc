@@ -90,6 +90,7 @@ void CParsedAttribute::setType( const char *aType )
   assert( aType != NULL );
 
   type = aType;
+  type = type.stripWhiteSpace();
 }
 
 /*---------------------------------- CParsedAttribute::setIsInHFile()
