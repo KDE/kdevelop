@@ -40,44 +40,6 @@ enum
   STRUCT, END_POS
 };
 
-/** Class that holds the data for a class in the view. */
-class CCVClass
-{
-public: // Constructor & Destructor
-
-  CCVClass()      {}
-  ~CCVClass()     {}
-
-public: // Public attributes.
-  
-  /** Menu ID. */
-  int id;
-
-  /** Name of the class. */
-  QString name;
-
-  /** Name of the .h file. */
-  QString hFilename;
-
-  /** Name of the .cpp file. */
-  QString implFilename;
-
-public: // Public methods to set attribute values
-
-  /** Set the menu ID of this class. */
-  void setId( int aId ) { id = aId; }
-
-  /** Set the name of the class. */
-  void setName( QString &aName ) { name = aName; }
-
-  /** Set the .h filename. */
-  void setHFilename( QString &aName ) { hFilename = aName; }
-
-  /** Set the .cpp filename. */
-  void setImplFilename( QString &aName ) { implFilename = aName; }
-};
-
-
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
   */
@@ -109,16 +71,8 @@ public: // Public attributes
 
 public: // Public queries
 
-  /** Does the class exist in the view? */
-  bool hasClass( QString &aName );
-
   /** Return the type of an object in the view. */
   int indexType( int aIdx );
-
-public: // Public methods
-
-  /** Add a class to the view. */
-  void addClass( CCVClass *aClass );
 
 public: // Public refreshmethods
   
@@ -157,6 +111,8 @@ protected: // Protected signals and slots
     void selectedProjectOptions();
     void selectedViewDeclaration(int index);
     void selectedViewDefinition(int index);
+    void signalAddMethod( CParsedMethod *aMethod );
+    void signalAddAttribute( CParsedAttribute *aAttribute );
 
 private: // Private constants
 
@@ -182,9 +138,6 @@ private: // Private attributes
   /** Array containing all pixmaps used */
   QPixmap **icons;
 
-  /** All classes in the view. */
-  QList<CCVClass> classes;
-
   /** The classparser. */	
   CClassParser cp;
 
@@ -193,11 +146,17 @@ private: // Private methods
   /** Event to be executed on a mousepress. */
   void mousePressEvent(QMouseEvent* event);
 
+  /** Fetches the currently selected class from the store. */
+  CParsedClass *getCurrentClass();
+
   /** Initialize popupmenus. */
   void initPopups();
   
   /** Initalize the icon array and read the icons from disk. */
   void readIcons();
+
+  /** Update methods/attr... of a certain class. */
+  void updateClass( CParsedClass *aClass, KPath *aPath );
 
   /** Add all methods to the view. */
   void addMethods( QList<CParsedMethod> *list, KPath &path );

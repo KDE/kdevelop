@@ -24,6 +24,7 @@
 
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
+#include "cclasstooldlg.h"
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
@@ -84,23 +85,6 @@ CClassView::~CClassView()
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------------ CClassView::addClass()
- * addClass()
- *   Add a class to be shown in the view.
- *
- * Parameters:
- *   aClass         The classdefintion.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::addClass( CCVClass *aClass )
-{
-  assert( aClass != NULL && !hasClass( aClass->name ) );
-
-  classes.append( aClass );
-}
-
 /*---------------------------------------------- CClassView::refresh()
  * refresh()
  *   Add all classes from the project. Reparse and redraw all classes 
@@ -122,7 +106,8 @@ void CClassView::refresh( CProject *proj )
 
   debug( "CClassView::refresh( proj )" );
 
-  // Reset the classparser.
+  // Reset the classparser and the view.
+  clear();
   cp.wipeout();
 
   projDir = proj->getProjectDir();
@@ -185,11 +170,7 @@ void CClassView::refresh()
     addChildItem( aPC->name, icons[ CVCLASS ], &classPath );
     classPath.push( &aPC->name );
 
-    // Add parts of the class
-    addMethods( aPC->getMethods(), classPath );
-    addAttributes( aPC->attributeIterator, classPath );
-    addSlots( aPC, classPath );
-    addSignals( aPC, classPath );
+    updateClass( aPC, &classPath );
     
     classPath.pop();
   }
@@ -240,28 +221,6 @@ void CClassView::refreshClassByName( QString &aName )
  *                          PUBLIC QUERIES                           *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------------------ CClassView::hasClass()
- * hasClass()
- *   Check if a class has been added to the view
- *
- * Parameters:
- *   aName          Name of the class to check for.
- *
- * Returns:
- *   bool           If the class exists or not.
- *-----------------------------------------------------------------*/
-bool CClassView::hasClass( QString &aName )
-{
-  CCVClass *aClass;
-
-  for( aClass = classes.first();
-       aClass != NULL && aClass->name != aName;
-       aClass = classes.next() )
-    ;
-
-  return aClass != NULL;
-}
 
 /*------------------------------------------ CClassView::indexType()
  * indexType()
@@ -377,10 +336,8 @@ void  CClassView::initPopups()
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
   classPopup.insertSeparator();
-  id = classPopup.insertItem( i18n("Base classes..."), this, SLOT(slotClassBaseClasses()));
-  classPopup.setItemEnabled(id, false );
-  id = classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
-  classPopup.setItemEnabled(id, false );
+  classPopup.insertItem( i18n("Base classes..."), this, SLOT(slotClassBaseClasses()));
+  classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
   classPopup.insertSeparator();
   id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
   classPopup.setItemEnabled(id, false );
@@ -401,6 +358,29 @@ void  CClassView::initPopups()
   attributePopup.insertSeparator();
   id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
   attributePopup.setItemEnabled( id, false );
+}
+
+void CClassView::updateClass( CParsedClass *aClass, KPath *aPath )
+{
+  KTreeListItem *top;
+  KTreeListItem *current;
+  KTreeListItem *next;
+  
+  top = itemAt( aPath );
+  current = top->getChild();
+  
+  while( current != NULL )
+  {
+    next = current->getSibling();
+    top->removeChild( current );
+    current = next;
+  }
+
+  // Add parts of the class
+  addMethods( aClass->getMethods(), *aPath );
+  addAttributes( aClass->attributeIterator, *aPath );
+  addSlots( aClass, *aPath );
+  addSignals( aClass, *aPath );
 }
 
 /*------------------------------------------ CClassView::addMethods()
@@ -547,6 +527,22 @@ void CClassView::mousePressEvent(QMouseEvent * event)
   KTreeList::mousePressEvent( event );
 }
 
+/*------------------------------------- CClassView::getCurrentClass()
+ * getCurrentClass()
+ *   Fetches the class currently selected in the tree.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass *CClassView::getCurrentClass()
+{
+  KTreeListItem *item;
+  item = itemAt( currentItem() );
+  return store->getClassByName( item->getText() );
+}
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -623,10 +619,25 @@ void CClassView::slotClassDelete()
 
 void CClassView::slotMethodNew()
 {
+  CParsedClass *aClass;
+  CParsedMethod *aMethod;
   CAddClassMethodDlg dlg(this, "methodDlg" );
-
+  QString str;
+  
   if( dlg.exec() )
   {
+    debug( "Adding method." );
+    aMethod = dlg.asSystemObj();
+    aMethod->out();
+
+    aClass = getCurrentClass();
+    if( aClass )
+    {
+      aClass->addMethod( aMethod );
+      updateClass( aClass, itemPath( currentItem() ) );
+    }
+
+    emit signalAddMethod( aMethod );
   }
 }
 
@@ -643,27 +654,24 @@ void CClassView::slotMethodDelete()
 
 void CClassView::slotAttributeNew()
 {
+  CParsedClass *aClass;
   CAddClassAttributeDlg dlg(this, "attrDlg" );
   CParsedAttribute *aAttr;
 
   if( dlg.exec() )
   {
-    debug( "Adding attribute." );
-    aAttr = new CParsedAttribute();
-    aAttr->setType( dlg.typeEdit.text() );
-    aAttr->setName( dlg.nameEdit.text() );
-
-    if( dlg.publicRb.isChecked() )
-      aAttr->setExport( PUBLIC );
-    else if( dlg.protectedRb.isChecked() )
-      aAttr->setExport( PROTECTED );
-    else if( dlg.privateRb.isChecked() )
-      aAttr->setExport( PRIVATE );
-
-    aAttr->setIsStatic( dlg.staticCb.isChecked() );
-    aAttr->setIsConst( dlg.constCb.isChecked() );
-
+    debug( "Adding attribute:" );
+    aAttr = dlg.asSystemObj();
     aAttr->out();
+
+    aClass = getCurrentClass();
+    if( aClass )
+    {
+      aClass->addAttribute( aAttr );
+      updateClass( aClass, itemPath( currentItem() ) );
+    }
+
+    emit signalAddAttribute( aAttr );
   }
 }
 
@@ -684,10 +692,22 @@ void CClassView::slotFolderNew()
 
 void CClassView::slotClassBaseClasses()
 {
+  CClassToolDlg dlg(this, "classToolDlg" );
+
+  dlg.setStore( store );
+  dlg.setClass( getCurrentClass() );
+  dlg.viewParents();
+  dlg.show();
 }
 
 void CClassView::slotClassDerivedClasses() 
 {
+  CClassToolDlg dlg(this, "classToolDlg" );
+
+  dlg.setStore( store );
+  dlg.setClass( getCurrentClass() );
+  dlg.viewChildren();
+  dlg.show();
 }
 
 void CClassView::slotViewDefinition() 
