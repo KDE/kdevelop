@@ -2813,7 +2813,6 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   // add file: directive only if it is an absolute path
   if (url_str.left(1)=="/")
      url_str=QString("file:") + url;
-
   if(url_str.contains("kdevelop/search_result.html") != 0){
     browser_widget->showURL(url_str,true); // with reload if equal
   }

@@ -1,3 +1,7 @@
+2000-03-18 Ralf Nolden <rnolden@kdevelop.de>
+        * added workaround for malformed cross-referenced url´s in HTML files by kdoc2
+          (removes file%253A/ out of url´s when requested in the docbrowser)
+
 2000-03-17 Ralf Nolden <rnolden@kdevelop.de>
         * fixed focus setting on docbrowser after autosaving/save all
         * added FAQ´s for running KDevelop1.x under KDE 2 and adding -D to projects to FAQ file and english manual
