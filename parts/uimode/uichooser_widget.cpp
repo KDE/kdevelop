@@ -27,7 +27,7 @@
 
 UIChooserWidget::UIChooserWidget(QWidget *parent, const char *name)
   : UIChooser(parent, name)
-  ,m_pMyPart(0L)
+  ,m_pMyPart(0L), _lastMode(0L)
 {
   load();
 }
@@ -42,21 +42,25 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  int mdi = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
+  int mdi = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
   
   switch (mdi)
   {
   case KMdi::ChildframeMode:
     modeMDI->setChecked(true);
+    _lastMode = modeMDI;
     break;
   case KMdi::TabPageMode:
     modeTab->setChecked(true);
+    _lastMode = modeTab;
     break;
   case KMdi::ToplevelMode:
     modeToplevel->setChecked(true);
+    _lastMode = modeToplevel;
     break;
   case KMdi::IDEAlMode:
     modeIDEAl->setChecked(true);
+    _lastMode = modeIDEAl;
     break;
   default:
     break;
@@ -68,8 +72,6 @@ void UIChooserWidget::save()
 {
   KConfig *config = kapp->config();
   config->setGroup("UI");
-
-  config->writeEntry("MajorUIMode", "QextMDI");
 
   if (modeTab->isChecked())
     config->writeEntry("MDIMode", KMdi::TabPageMode);
@@ -89,16 +91,16 @@ void UIChooserWidget::accept()
   save();
   Q_ASSERT(m_pMyPart);
   
-  if (modeIDEAl->isChecked()) {
+  if (modeIDEAl->isChecked() && _lastMode != modeIDEAl ) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
   }
-  else if (modeTab->isChecked()) {
+  else if (modeTab->isChecked() && _lastMode != modeTab ) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("TabPage");
   }
-  else if (modeToplevel->isChecked()) {
+  else if (modeToplevel->isChecked() && _lastMode != modeToplevel ) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("Toplevel");
   }
-  else if (modeMDI->isChecked()) {
+  else if (modeMDI->isChecked() && _lastMode != modeMDI ) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("Childframe");
   }
 }
