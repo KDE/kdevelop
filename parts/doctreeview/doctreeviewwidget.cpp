@@ -1069,7 +1069,15 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
     QString ident = dtitem->fileName();
     if (ident.isEmpty())
         return;
-    
+
+    // avoid empty pages when clicking on .toc files, choose its first child instead
+    if (ident.right(4) == ".toc") {
+        dtitem = dtitem->firstChild();
+        if (!dtitem) return;
+        ident = dtitem->fileName();
+        if (ident.isEmpty()) return;
+    }
+            
     kdDebug(9002) << "Showing: " << ident << endl;
     m_part->partController()->showDocument(KURL(ident), dtitem->context());
     m_part->topLevel()->lowerView(this);
