@@ -1,3 +1,12 @@
+2002-06-23  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* jbb autoproject patch: Resolve $(VARIABLES) in SUBDIRS
+	  declaration with the help of variables defined in Makefile.am
+	* Parse #kdevelop: lines in Makefile.am. This way, conditional
+	  subdirs can be resolved. See parts/Makefile.am for an example
+	* Make documentation created with the configure option
+	  --with-apidocs in kdelibs browsable
+
 2002-06-23  F@lk Brettschneider  <falk@kdevelop.org>
 	* updated QextMDI copy with its upcoming version 3
 	  - drops Qt2 support
