@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "compileroptionswidget.h"
+
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qlineedit.h>
@@ -23,7 +25,6 @@
 
 #include "kdevcompileroptions.h"
 #include "autoprojectpart.h"
-#include "compileroptionswidget.h"
 
 
 class ServiceComboBox

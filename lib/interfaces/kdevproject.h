@@ -55,9 +55,27 @@ public:
      * autoproject part doesn't return header files here.
      */
     virtual QStringList allSourceFiles() = 0;
-
+    /**
+     * Adds a file to the project. The given file name
+     * must be relative to the project directory.
+     */
+    virtual void addFile(const QString &fileName) = 0;
+    /**
+     * Removes a file from the project. The given file name
+     * must be relative to the project directory.
+     */
+    virtual void removeFile(const QString &fileName) = 0;
+    
 signals:
+    /**
+     * Emitted when a new file has been added to the
+     * project. The fileName is relative to the project directory.
+     */
     void addedFileToProject(const QString &fileName);
+    /**
+     * Emitted when a file has been removed from the
+     * project. The fileName is relative to the project directory.
+     */
     void removedFileFromProject(const QString &fileName);
 };
 

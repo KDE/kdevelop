@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addapplicationdlg.h"
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qfile.h>
@@ -25,8 +27,6 @@
 #include "misc.h"
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
-#include "addapplicationdlg.h"
-
 
 
 AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, SubprojectItem *spitem,

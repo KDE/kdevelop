@@ -39,7 +39,9 @@ protected:
     virtual QString mainProgram();
     virtual QString activeDirectory();
     virtual QStringList allSourceFiles();
-
+    virtual void addFile(const QString &fileName);
+    virtual void removeFile(const QString &fileName);
+    
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotAddTranslation();

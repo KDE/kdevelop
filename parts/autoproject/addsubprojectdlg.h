@@ -17,7 +17,7 @@
 
 class AutoProjectPart;
 class AutoProjectWidget;
-class SubProjectItem;
+class SubprojectItem;
 
 
 class AddSubprojectDialog : public QDialog

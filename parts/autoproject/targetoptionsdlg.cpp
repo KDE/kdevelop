@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "targetoptionsdlg.h"
+
 #include <qcheckbox.h>
 #include <qheader.h>
 #include <qlabel.h>
@@ -23,7 +25,6 @@
 
 #include "misc.h"
 #include "autoprojectwidget.h"
-#include "targetoptionsdlg.h"
 
 
 TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *item,

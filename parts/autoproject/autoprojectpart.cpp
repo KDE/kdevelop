@@ -9,14 +9,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "autoprojectpart.h"
+
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
+#include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kaction.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -30,7 +32,6 @@
 #include "configureoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "autoprojectwidget.h"
-#include "autoprojectpart.h"
 #include "config.h"
 
 
@@ -183,6 +184,18 @@ QString AutoProjectPart::activeDirectory()
 QStringList AutoProjectPart::allSourceFiles()
 {
     return m_widget->allSourceFiles();
+}
+
+
+void AutoProjectPart::addFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
+void AutoProjectPart::removeFile(const QString &fileName)
+{
+    // FIXME
 }
 
 

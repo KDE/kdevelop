@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addsubprojectdlg.h"
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -22,7 +24,6 @@
 #include "misc.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
-#include "addsubprojectdlg.h"
 
 
 AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidget *widget,

@@ -9,11 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "subprojectoptionsdlg.h"
+
 #include <qdom.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -29,8 +32,6 @@
 #include "addprefixdlg.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
-#include "subprojectoptionsdlg.h"
-#include <qpushbutton.h>
 
 
 SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProjectWidget *widget,

@@ -121,4 +121,16 @@ QStringList ScriptProjectPart::allSourceFiles()
     return res;
 }
 
+void ScriptProjectPart::addFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
+void ScriptProjectPart::removeFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
 #include "scriptprojectpart.moc"

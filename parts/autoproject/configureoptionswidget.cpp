@@ -9,13 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "configureoptionswidget.h"
+
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qlineedit.h>
 
 #include "domutil.h"
 #include "autoprojectpart.h"
-#include "configureoptionswidget.h"
 
 
 ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *parent, const char *name)

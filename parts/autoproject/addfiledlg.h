@@ -16,6 +16,7 @@
 
 class QCheckBox;
 class QLineEdit;
+class AutoProjectPart;
 class AutoProjectWidget;
 class SubprojectItem;
 class TargetItem;
@@ -26,8 +27,9 @@ class AddFileDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddFileDialog( AutoProjectWidget *widget, SubprojectItem *spitem,
-                   TargetItem *item, QWidget *parent=0, const char *name=0 );
+    AddFileDialog( AutoProjectPart *part, AutoProjectWidget *widget,
+                   SubprojectItem *spitem, TargetItem *item,
+                   QWidget *parent=0, const char *name=0 );
     ~AddFileDialog();
     
 protected:
@@ -37,6 +39,7 @@ private:
     QCheckBox *usetemplate_box;
     QLineEdit *filename_edit;
     
+    AutoProjectPart *m_part;
     AutoProjectWidget *m_widget;
     SubprojectItem *subProject;
     TargetItem *target;

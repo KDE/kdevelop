@@ -133,6 +133,18 @@ QStringList TrollProjectPart::allSourceFiles()
 }
 
 
+void TrollProjectPart::addFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
+void TrollProjectPart::removeFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
 void TrollProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
     partController()->saveAllFiles();

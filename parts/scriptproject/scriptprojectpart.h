@@ -38,6 +38,8 @@ protected:
     virtual QString mainProgram();
     virtual QString activeDirectory();
     virtual QStringList allSourceFiles();
+    virtual void addFile(const QString &fileName);
+    virtual void removeFile(const QString &fileName);
 
 private:
     QString m_projectDirectory;

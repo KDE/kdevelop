@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addservicedlg.h"
+
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qheader.h>
@@ -25,8 +27,6 @@
 #include "misc.h"
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
-#include "addservicedlg.h"
-
 
 
 AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *spitem,

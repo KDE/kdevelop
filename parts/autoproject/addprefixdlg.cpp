@@ -9,13 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addprefixdlg.h"
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include "addprefixdlg.h"
 
 
 AddPrefixDialog::AddPrefixDialog(QWidget *parent, const char *name)

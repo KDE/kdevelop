@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+#include "addfiledlg.h"
 
 #include <qcheckbox.h>
 #include <qfile.h>
@@ -21,37 +23,15 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 
+#include "filetemplate.h"
 #include "misc.h"
+#include "autoprojectpart.h"
 #include "autoprojectwidget.h"
-#include "addfiledlg.h"
 
 
-static void copyFile(const QString &src, const QString &dest)
-{
-    QFile inf(src);
-    if (!inf.open(IO_ReadOnly))
-        return;
-
-    QFile outf(dest);
-    if (!outf.open(IO_WriteOnly)) {
-        inf.close();
-        return;
-    }
-
-    QTextStream ins(&inf);
-    QTextStream outs(&outf);
-    while (!ins.atEnd()) {
-        QString s = ins.readLine();
-        outs << s << endl;
-    }
-
-    inf.close();
-    outf.close();
-}
-
-
-AddFileDialog::AddFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
-                             TargetItem *item, QWidget *parent, const char *name)
+AddFileDialog::AddFileDialog(AutoProjectPart *part, AutoProjectWidget *widget,
+                             SubprojectItem *spitem, TargetItem *item,
+                             QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
     setCaption(i18n("Add File to Target"));
@@ -86,6 +66,7 @@ AddFileDialog::AddFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
     layout->addWidget(frame, 0);
     layout->addWidget(buttonbox, 0);
 
+    m_part = part;
     m_widget = widget;
     subProject = spitem;
     target = item;
@@ -98,7 +79,7 @@ AddFileDialog::~AddFileDialog()
 
 void AddFileDialog::accept()
 {
-    QString name = filename_edit->text().latin1();
+    QString name = filename_edit->text();
     if (name.find('/') != -1) {
         KMessageBox::sorry(this, i18n("Please enter the file name without '/' and so on."));
         return;
@@ -122,7 +103,7 @@ void AddFileDialog::accept()
             KMessageBox::sorry(this, i18n("A file with this name already exists."));
             return;
         }
-        copyFile(srcdir + "/.gideon-filetemplate", destpath);
+        FileTemplate::copy(m_part, "cpp", destpath);
     }
 
     FileItem *fitem = m_widget->createFileItem(name);
@@ -137,7 +118,7 @@ void AddFileDialog::accept()
     
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
-    m_widget->emitAddedFile(name);
+    m_widget->emitAddedFile(subProject->path + "/" + name);
     
     QDialog::accept();
 }

@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "autoprojectwidget.h"
+
 #include <qfile.h>
 #include <qheader.h>
 #include <qsplitter.h>
@@ -37,7 +39,6 @@
 #include "addfiledlg.h"
 #include "removefiledlg.h"
 #include "autoprojectpart.h"
-#include "autoprojectwidget.h"
 
 
 static QString nicePrimary(QCString primary)
@@ -399,7 +400,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
             TargetOptionsDialog(this, titem, this, "target options dialog").exec();
         }
         else if (r == idAddFile) {
-            AddFileDialog dlg(this, activeSubproject, titem, this, "add file dialog");
+            AddFileDialog dlg(m_part, this, activeSubproject, titem, this, "add file dialog");
             if (dlg.exec())
                 slotItemExecuted(activeSubproject); // update list view
         } else if (r == idBuild) {

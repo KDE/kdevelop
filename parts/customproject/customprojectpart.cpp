@@ -218,6 +218,18 @@ QStringList CustomProjectPart::allSourceFiles()
 }
 
 
+void CustomProjectPart::addFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
+void CustomProjectPart::removeFile(const QString &fileName)
+{
+    // FIXME
+}
+
+
 QString CustomProjectPart::buildDirectory()
 {
     QString dir = DomUtil::readEntry(*projectDom(), "/kdevcustomproject/build/builddir");

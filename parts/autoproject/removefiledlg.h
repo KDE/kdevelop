@@ -15,6 +15,9 @@
 #include <qdialog.h>
 
 class QCheckBox;
+class AutoProjectWidget;
+class SubprojectItem;
+class TargetItem;
 
 
 class RemoveFileDialog : public QDialog

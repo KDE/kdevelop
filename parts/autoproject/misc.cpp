@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "misc.h"
+
 #include <qdir.h>
 #include <qwidget.h>
 #include <kdebug.h>
@@ -21,7 +23,6 @@
 #include <kservice.h>
 
 #include "kdevcompileroptions.h"
-#include "misc.h"
 
 
 static KDevCompilerOptions *createCompilerOptions(const QString &name, QObject *parent)

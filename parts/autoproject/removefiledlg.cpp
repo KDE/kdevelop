@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "removefiledlg.h"
+
 #include <qcheckbox.h>
 #include <qfile.h>
 #include <qlayout.h>
@@ -19,7 +21,6 @@
 
 #include "misc.h"
 #include "autoprojectwidget.h"
-#include "removefiledlg.h"
 
 
 static bool fileListContains(const QList<FileItem> &list, const QString &name)
