@@ -18,9 +18,14 @@
 KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
  : QWidget(0, "konsole widget"), part(0)
 {
+#ifdef NEW_EDITOR
+  connect(part->core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
+		  this, SLOT(documentActivated(KEditor::Document*)));
+#else
   connect(part->core(), SIGNAL(wentToSourceFile(const QString &)),
           this, SLOT(wentToSourceFile(const QString &)));
-
+#endif
+  
   vbox = new QVBoxLayout(this);
 }
 
@@ -61,6 +66,22 @@ void KonsoleViewWidget::activate()
 }
 
 
+#ifdef NEW_EDITOR
+void KonsoleViewWidget::documentActivated(KEditor::Document *doc)
+{
+  if (!doc || !doc->url().isLocalFile())
+	return;
+
+  QString dir = doc->url().path();
+
+  // strip filename
+  int pos = dir.findRev('/');
+  if (pos > 0)
+    dir = dir.left(pos);
+  
+  setDirectory(dir);
+}
+#endif
 void KonsoleViewWidget::wentToSourceFile(const QString &fileName)
 {
   QString dir = fileName;
@@ -70,8 +91,6 @@ void KonsoleViewWidget::wentToSourceFile(const QString &fileName)
   if (pos > 0)
     dir = dir.left(pos);
   
-  kdDebug(9000) << "GOTO: " << dir << endl;
-
   setDirectory(dir);
 }
 
