@@ -70,7 +70,8 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
 
 GrepViewPart::~GrepViewPart()
 {
-    mainWindow()->removeView( m_widget );
+	if ( m_widget )
+		mainWindow()->removeView( m_widget );
     delete m_widget;
 }
 

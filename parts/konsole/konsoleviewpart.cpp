@@ -42,7 +42,8 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 
 KonsoleViewPart::~KonsoleViewPart()
 {
-    mainWindow()->removeView( m_widget );
+    if ( m_widget )
+        mainWindow()->removeView( m_widget );
     delete m_widget;
 }
 

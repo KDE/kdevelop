@@ -113,8 +113,6 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 
 CvsServicePart::~CvsServicePart()
 {
-    if ( m_impl )
-        mainWindow()->removeView( m_impl->processWidget() );
     delete m_cvsConfigurationForm;
     delete m_impl;
 }

@@ -65,7 +65,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
 
 ValgrindPart::~ValgrindPart()
 {
-  mainWindow()->removeView( m_widget );
+  if ( m_widget )
+    mainWindow()->removeView( m_widget );
   delete m_widget;
   delete proc;
 }

@@ -69,6 +69,8 @@ GenericProjectPart::GenericProjectPart(QObject *parent, const char *name, const 
 
 GenericProjectPart::~GenericProjectPart()
 {
+    if ( m_widget )
+        mainWindow()->removeView( m_widget );
     delete (GenericProjectWidget*) m_widget;
 }
 
