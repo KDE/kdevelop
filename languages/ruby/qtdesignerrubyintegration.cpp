@@ -58,11 +58,11 @@ void QtDesignerRubyIntegration::addFunctionToClass(KInterfaceDesigner::Function 
     kdDebug() << "===============" << endl;
 
     int line, column;
-    klass->getEndPosition( &line, &column );
+    klass->getStartPosition( &line, &column );
 
     // compute the insertion point
     QPair<int,int> point;
-    point.first = line - 1;
+    point.first = line + 1;
     point.second = column;
 
     const FunctionList functionList = klass->functionList();
@@ -71,11 +71,11 @@ void QtDesignerRubyIntegration::addFunctionToClass(KInterfaceDesigner::Function 
         int funEndLine, funEndColumn;
         functionList.first()->getEndPosition(&funEndLine, &funEndColumn);
         point.second = funEndColumn;
-    }
+    } 
 
     QString str = function.function;
-    str += "\n    \n    end\n";
-    str = "    " + str;
+    str += "\n    \n    end\n\n";
+    str = "    def " + str;
 
     kdDebug() << "insert " << str << " into " << point.first << endl;
     
