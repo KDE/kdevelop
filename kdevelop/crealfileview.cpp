@@ -437,8 +437,14 @@ void CRealFileView::slotAddToRepository()
 
 void CRealFileView::slotRemoveFromRepository()
 {
-    project->getVersionControl()->remove(getFullFilename(currentItem()));
-    refresh(project);
+   QString fullfilename=getFullFilename(currentItem());
+   QString filename = getRelFilename(currentItem());
+
+   project->getVersionControl()->remove(fullfilename);
+   if (isInstalledFile(filename))
+     emit removeFileFromProject(filename);
+   emit removeFileFromEditlist(fullfilename);
+   refresh(project);
 }
  
 
@@ -504,11 +510,13 @@ void CRealFileView::slotFolderNew(){
 }
 /**  */
 void CRealFileView::slotFolderDelete(){
-    KShellProcess* childproc = new KShellProcess("/bin/sh");
+    // That´s not as simple as it look like...
+    //  you also have to delete this subdir from the project
+    //  so please don´t activate this until you have fixed this - W. Tasin 2000/04/02
+    KShellProcess childproc("/bin/sh");
     QString dir_name = getFullFilename(currentItem());
-    *childproc << "rm -rf " << dir_name;
+    childproc << "rm -rf " << dir_name;
 
-    childproc->start(KProcess::Block,
-		     KProcess::Communication(KProcess::Stdout|KProcess::Stderr));
+    childproc.start(KProcess::Block, KProcess::Communication(KProcess::Stdout|KProcess::Stderr));
     refresh(project);
 }
