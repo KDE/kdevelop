@@ -4,4 +4,4 @@ Name=Simple Hello world program
 Icon=pascalhello.png
 Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
-FileTemplates=pp,PStyle
+FileTemplates=pp-program,PStyle,pp-unit,PStyle
