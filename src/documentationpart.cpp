@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <qfile.h>
 
 #include "partcontroller.h"
