@@ -7,5 +7,8 @@ kdevdebugger_ICON = dbgnext dbgwatchvar dbgrun dbgstepout dbgmemview dbgparam db
 cppsupportdir = $(kde_datadir)/kdevcppsupport/icons
 cppsupport_ICON = classnew classwiz
 
+kdevrbdebuggerdir = $(kde_datadir)/kdevrbdebugger/icons
+kdevrbdebugger_ICON = dbgnext dbgrun dbgstepout dbgrunto dbgstep dbgrestart debugger
+
 grepdir = $(kde_datadir)/kdevgrepview/icons
 grep_ICON = grep
