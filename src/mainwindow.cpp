@@ -239,6 +239,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_toggleViewbar(0L)
   ,m_bUiModeSwitchPending(false)
 {
+  setStandardMDIMenuEnabled();
   setManagedDockPositionModeEnabled(true);
 
   resize( 800, 600 );
