@@ -18,7 +18,10 @@ applications like kedit as well as plugins for example for kdevelop or noatun.\n
         .
     .
 \ref templates_2\n
-\ref templates_3
+\ref templates_3\n
+<!-- @todo <b>Developer information:</b> The documentation for the related
+<code>"Project"->"Import Existing Project..."</code> is available here: \ref appwizard_imports
+-->
 <hr>
 
 \section templates_1 I. Example: How To Create a Simple KDE Application Template "KHello"
@@ -79,10 +82,17 @@ The application wizard looks into this file to get
     - the preview image (<code>Icon=</code>)
     - and the file templates the project uses (<code>FileTemplates=</code>).
     .
+Further information could be (not required):
+    - <code>Comment=</code> a small comment for the template. Longer comments should go into a README.devel and shown on startup
+    - <code>ShowFileAfterGeneration=</code> the file that should be opened after the generation, for instance a readme, the path is relative to the project directory
+    - <code>DefaultDestinatonDir</code> changes the default destination dir for the project (~) to your value, whereas HOMEDIR is a keyword
+    .
 
 \attention The file <code>template-khello/khello</code> must have the same name as
 the right half of the directory! If the directory is <code>template-foobar</code>
 the file must be <code>template-foobar/foobar</code>.
+
+\see AppWizardPart#_details for more information.
 
 \subsubsection templates_1_2c I.2.3. Some Additional Files
 
