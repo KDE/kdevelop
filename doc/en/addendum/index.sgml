@@ -1415,7 +1415,7 @@ KSpread, the chart automatically changes itself accordingly.
 
 There is a component for displaying graphics, and work is being done
 adapting a formula editor and a vector-oriented painting application
-(KIllustrator). For the future, adaptation of KLyx is planned to embed
+(Kontour). For the future, adaptation of KLyx is planned to embed
 Parts in LaTeX documents. Other KDE applications like KOrganizer,
 KAddressbook and KMail will be enhanced with CORBA interfaces to
 provide seamless integration in the KOffice suite.
