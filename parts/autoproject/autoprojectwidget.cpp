@@ -363,7 +363,7 @@ QStringList AutoProjectWidget::allLibraries()
 QStringList AutoProjectWidget::allFiles()
 {
 	QStack<QListViewItem> s;
-	QStringList list;
+	QMap<QString, bool> dict;
 
 	for ( QListViewItem * item = m_subprojectView->firstChild(); item;
 	        item = item->nextSibling() ? item->nextSibling() : s.pop() )
@@ -382,14 +382,11 @@ QStringList AutoProjectWidget::allFiles()
 
 				QFileInfo fileInfo( (*fit)->name );
 				if( fileInfo.extension() == "ui" ){
-				    kdDebug(902) << "-----> add " << (relPath + fileInfo.baseName() + ".h") << endl;
-				    kdDebug(902) << "-----> add " << (relPath + fileInfo.baseName() + ".cpp") << endl;
-				    
-				    list.append( relPath + fileInfo.baseName() + ".h" );
-				    list.append( relPath + fileInfo.baseName() + ".cpp" );
+				    dict.insert( relPath + fileInfo.baseName() + ".h", true );
+				    dict.insert( relPath + fileInfo.baseName() + ".cpp", true );
 				}
 
-				list.append( relPath + ( *fit ) ->name );
+				dict.insert( relPath + ( *fit ) ->name, true );
 			}
 		}
 	}
@@ -397,11 +394,11 @@ QStringList AutoProjectWidget::allFiles()
 	// Files may be in multiple targets, so we have to remove
 	// duplicates
 	QStringList res;
-
-	QStringList::ConstIterator it;
-	for ( it = list.begin(); it != list.end(); ++it )
-		if ( !res.contains( *it ) )
-                { res.append( *it ); kdDebug(9020) << "***INCLUDING " << (*it) << " in allFiles()" << endl; }
+	QMap<QString, bool>::Iterator it = dict.begin();
+	while( it != dict.end() ){
+	    res << it.key();
+	    ++it;
+	}
 
 	return res;
 }
