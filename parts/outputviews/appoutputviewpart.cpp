@@ -50,6 +50,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
 AppOutputViewPart::~AppOutputViewPart()
 {
+    mainWindow()->removeView( m_widget );
     delete m_widget;
     delete m_dcop;
 }

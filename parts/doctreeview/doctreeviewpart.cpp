@@ -87,6 +87,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 
 DocTreeViewPart::~DocTreeViewPart()
 {
+    mainWindow()->removeView( m_widget );
     delete (DocTreeViewWidget*) m_widget;
 }
 

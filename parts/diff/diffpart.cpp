@@ -117,6 +117,8 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 
 DiffPart::~DiffPart()
 {
+  mainWindow()->removeView( diffWidget );
+
   delete proc;
   delete (DiffWidget*) diffWidget;
 }
