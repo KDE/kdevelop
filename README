@@ -1,4 +1,4 @@
-KDevelop 3.0 Alpha 2 Release
+KDevelop 3.0 Alpha 3 Release
 ----------------------------
 
 Since this project is code named Gideon, the binary that builds is called
@@ -6,14 +6,16 @@ Since this project is code named Gideon, the binary that builds is called
 versions of kdevelop while still being able to experiment with this new
 version.
 
-KDE/Qt API Documentation
+KDE API Documentation
 ---------------------------
-If the Qt and KDE API documentation do not exist, they can be created
-as follows: Install kdoc and the kdelibs sources. Then
+If the KDE API documentation does not exist, it can be created
+as follows:
 
-  qt2kdoc -o ~/.kdoc /usr/lib/qt2/doc/html
-  [ goto kdelibs sources ]
-  makekdedoc
+  Install doxygen and the kdelibs sources. Then
+
+  make apidox
+  make apidox-install
+
 
 For the graphical classbrowser, you need the program 'dot'
 from the graphviz package which can be downloaded from
