@@ -27,18 +27,25 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <ksqueezedtextlabel.h>
+#include <kurl.h>
 
 #include "choosetargetdialog.h"
 
+#include "autodetailsview.h"
+#include "autolistviewitems.h"
+
 #include "misc.h"
 #include "autoprojectwidget.h"
+#include "autoprojectpart.h"
+
+#include "kdevpartcontroller.h"
 
 
-
-ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList fileList, QWidget* parent, const char* name )
+ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectPart* part, QStringList fileList, QWidget* parent, const char* name )
   : ChooseTargetDlgBase ( parent, name, false, 0 ), m_choosenSubproject ( 0 ), m_choosenTarget ( 0 )
 {
 	m_widget = widget;
+	m_part = part;
 	m_fileList = fileList;
 	m_subprojectList = widget->allSubprojectItems();
 
@@ -78,7 +85,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 		m_choosenTarget = widget->activeTarget();
 		//kdDebug ( 9000 ) << "1) Choosen target is " << m_choosenTarget->name << endl;
 		m_choosenSubproject = widget->activeSubproject();
-		choosenTargetLabel->setText ( ( widget->activeSubproject()->path + "/<b>" + m_widget->activeTarget()->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
+		choosenTargetLabel->setText ( ( widget->activeSubproject()->path + "/<b>" + m_widget->activeTarget()->name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 		subprojectComboBox->setEnabled ( false );
 		targetComboBox->setEnabled ( false );
 
@@ -157,7 +164,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 						titem->name == m_widget->activeTarget()->name )
 					{
 						targetComboBox->setCurrentItem ( titem->name );
-						choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
+						choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 						//choosenSubprojectLabel->setText ( ( spitem->path + "<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
 						m_choosenTarget = titem;
 						//kdDebug ( 9000 ) << "2) Choosen target is " << m_choosenTarget->name << endl;
@@ -167,7 +174,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 						//targetComboBox->setCurrentItem ( 0 );
 						if ( !m_choosenTarget )
 						{
-							choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
+							choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 							//choosenSubprojectLabel->setText ( ( spitem->path + "<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
 
 							m_choosenTarget = titem;
@@ -184,7 +191,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 
 void ChooseTargetDialog::slotTargetChanged ( const QString& name )
 {
-	choosenTargetLabel->setText ( ( m_choosenSubproject->path + "/<b>" + name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
+	choosenTargetLabel->setText ( ( m_choosenSubproject->path + "/<b>" + name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 
 	QPtrList <TargetItem> targetList = m_choosenSubproject->targets;
 	TargetItem* titem = targetList.first();
@@ -278,7 +285,7 @@ void ChooseTargetDialog::accept ()
 		if ( !found )
 		{
 			fitem = m_widget->createFileItem( fileName );
-            fitem->uiFileLink = m_widget->getUiFileLink(m_choosenSubproject->relpath()+"/",fileName);
+			fitem->uiFileLink = m_widget->getDetailsView()->getUiFileLink(m_choosenSubproject->relativePath()+"/",fileName);
 			m_choosenTarget->sources.append( fitem );
 			m_choosenTarget->insertItem( fitem );
 
@@ -291,7 +298,7 @@ void ChooseTargetDialog::accept ()
 
 			AutoProjectTool::modifyMakefileam( m_choosenSubproject->path + "/Makefile.am", replaceMap );
 
-			newFileList.append ( m_choosenSubproject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName );
+			newFileList.append ( m_choosenSubproject->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fileName );
 		}
 
 		if ( directory.isEmpty() || directory != m_choosenSubproject->subdir )
@@ -299,13 +306,13 @@ void ChooseTargetDialog::accept ()
 			KShellProcess proc("/bin/sh");
 
 			proc << "mv";
-			proc << KShellProcess::quote( m_widget->projectDirectory() + "/" + directory + "/" + fileName );
+			proc << KShellProcess::quote( m_part->projectDirectory() + "/" + directory + "/" + fileName );
 			proc << KShellProcess::quote( m_choosenSubproject->path + "/" + fileName );
 			proc.start(KProcess::DontCare);
-
-			kdDebug ( 9000 ) << "Moved file " << fileName << " from " << m_widget->projectDirectory() << " to " << m_choosenSubproject->path << endl;
 		}
 
+		m_part->partController()->editDocument ( KURL ( m_choosenSubproject->path + "/" + fileName ) );
+		
 		found = false;
 	}
 

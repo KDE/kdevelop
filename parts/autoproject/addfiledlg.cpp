@@ -21,11 +21,14 @@
 #include <qtextstream.h>
 
 #include <kbuttonbox.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kurl.h>
+
+#include "autolistviewitems.h"
 
 #include "filetemplate.h"
 #include "misc.h"
@@ -81,7 +84,7 @@ void AddFileDialog::accept()
 	}
 	
 	if (templateCheckBox->isChecked()) {
-		QString srcdir = m_widget->projectDirectory();
+		QString srcdir = m_part->projectDirectory();
 		QString destdir = subProject->path;
 		QString destpath = destdir + "/" + name;
 		if (QFileInfo(destpath).exists()) {
@@ -92,7 +95,7 @@ void AddFileDialog::accept()
 		    kdDebug(9020) << "cannot create file " << destpath << endl;
 	} else {
 		// create an empty file
-		QString srcdir = m_widget->projectDirectory();
+		QString srcdir = m_part->projectDirectory();
 		QString destdir = subProject->path;
 		QString destpath = destdir + "/" + name;
 		

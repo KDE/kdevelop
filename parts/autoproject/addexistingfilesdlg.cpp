@@ -37,10 +37,14 @@
 #include <kiconview.h>
 #include <ksqueezedtextlabel.h>
 
-#include "addexistingfilesdlg.h"
+#include "autolistviewitems.h"
+
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
-#include "misc.h"
+
+#include "kimporticonview.h"
+
+#include "addexistingfilesdlg.h"
 
 /*
  *  Constructs a AddExistingFilesDialog which is a child of 'parent', with the
@@ -79,7 +83,7 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 		directoryLabel->setText ( spitem->path );
 	}
 
-	sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
+	sourceSelector = new FileSelectorWidget ( m_part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
 	importView = new KImportIconView ( i18n ( "Drag one or more files from above and drop it here!" ), destGroupBox, "destination icon view" );
@@ -298,7 +302,7 @@ void AddExistingFilesDialog::slotOk()
 		m_titem->sources.append ( fitem );
 		m_titem->insertItem ( fitem );
 
-		fileList.append ( m_spitem->path.mid ( m_part->project()->projectDirectory().length() + 1 ) + "/" + ( *items )->name() );
+		fileList.append ( m_spitem->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + ( *items )->name() );
 		
 		progressBar->setValue ( progressBar->value() + 1 );
 	}

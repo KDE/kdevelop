@@ -169,9 +169,10 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 
 void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
-    m_widget->openProject(dirName);
     m_projectName = projectName;
     m_projectPath =dirName;
+    
+	m_widget->openProject(dirName);
 
     QDomDocument &dom = *projectDom();
     QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
@@ -189,7 +190,7 @@ void AutoProjectPart::closeProject()
 
 QString AutoProjectPart::projectDirectory()
 {
-    return m_widget->projectDirectory();
+    return m_projectPath;
 }
 
 

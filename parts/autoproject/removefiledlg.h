@@ -18,6 +18,7 @@
 
 class QCheckBox;
 class AutoProjectWidget;
+class AutoProjectPart;
 class SubprojectItem;
 class TargetItem;
 
@@ -27,7 +28,7 @@ class RemoveFileDialog : public RemoveFileDlgBase
     Q_OBJECT
 
 public:
-    RemoveFileDialog( AutoProjectWidget *widget, SubprojectItem *spitem,
+    RemoveFileDialog( AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
                       TargetItem *item, const QString &filename,
                       QWidget *parent=0, const char *name=0 );
     ~RemoveFileDialog();
@@ -39,7 +40,8 @@ private:
     QCheckBox *removeFromTargetsCheckBox;
     //QCheckBox *removefromdisk_box;
     
-    AutoProjectWidget *m_widget;
+    AutoProjectWidget* m_widget;
+	AutoProjectPart *m_part;
     SubprojectItem *subProject;
     TargetItem *target;
     QString fileName;

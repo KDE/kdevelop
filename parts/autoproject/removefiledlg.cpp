@@ -24,7 +24,10 @@
 #include <kdialog.h>
 #include <ksqueezedtextlabel.h>
 
+#include "autolistviewitems.h"
+
 #include "misc.h"
+#include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
 
@@ -38,7 +41,7 @@ static bool fileListContains(const QList<FileItem> &list, const QString &name)
 }
 
 
-RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
+RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
 								TargetItem *item, const QString &filename,
 								QWidget *parent, const char *name)
 	: RemoveFileDlgBase(parent, name, true)
@@ -77,6 +80,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
 	setIcon ( SmallIcon ( "editdelete.png" ) );
 
 	m_widget = widget;
+	m_part = part;
 	subProject = spitem;
 	target = item;
 	fileName = filename;
@@ -137,9 +141,7 @@ void RemoveFileDialog::accept()
 	if (removeCheckBox->isChecked())
 		QFile::remove(subProject->path + "/" + fileName);
 
-	kdDebug ( 9000 ) << "Removing file: " << subProject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName << endl;
-		
-	m_widget->emitRemovedFile ( subProject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName );
+	m_widget->emitRemovedFile ( subProject->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fileName );
 
 	QDialog::accept();
 }

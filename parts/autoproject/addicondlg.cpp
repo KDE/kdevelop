@@ -21,6 +21,8 @@
 #include <kicontheme.h>
 #include <kdeversion.h> // fix me!
 
+#include "autolistviewitems.h"
+
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 

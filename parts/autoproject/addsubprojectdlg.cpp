@@ -18,16 +18,19 @@
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
+
+#include "autolistviewitems.h"
 
 #include "kdevmakefrontend.h"
 #include "misc.h"
 #include "autoprojectpart.h"
-#include "autoprojectwidget.h"
+#include "autosubprojectview.h"
 
 
-AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidget *widget,
+AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoSubprojectView *view,
                                          SubprojectItem *item, QWidget *parent, const char *name)
     : AddSubprojectDlgBase(parent, name, true)
 {
@@ -37,7 +40,7 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
     connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
     m_subProject = item;
-    m_widget = widget;
+    m_subprojectView = view;
     m_part = part;
 }
 
@@ -110,7 +113,7 @@ void AddSubprojectDialog::accept()
     
     QFile f( dir.filePath("Makefile.am") );
     if (f.exists()) {
-        m_widget->parse( newitem );
+        m_subprojectView->parse( newitem );
     } else {
         if (!f.open(IO_WriteOnly)) {
             KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1").arg(name));
@@ -121,17 +124,17 @@ void AddSubprojectDialog::accept()
         f.close();
     }
     
-    QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
+    QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_part->projectDirectory().length()+1);
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
     
     QString cmdline = "cd ";
-    cmdline += m_widget->projectDirectory();
+    cmdline += m_part->projectDirectory();
     cmdline += " && automake ";
     cmdline += relmakefile;
     cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
     cmdline += relmakefile;
     cmdline += " ./config.status";
-    m_part->makeFrontend()->queueCommand(m_widget->projectDirectory(), cmdline);
+    m_part->makeFrontend()->queueCommand(m_part->projectDirectory(), cmdline);
     
     QDialog::accept();
 }

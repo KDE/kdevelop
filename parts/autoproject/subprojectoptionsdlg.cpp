@@ -30,6 +30,9 @@
 #include "domutil.h"
 #include "misc.h"
 #include "addprefixdlg.h"
+
+#include "autolistviewitems.h"
+
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
@@ -41,7 +44,6 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     setCaption(i18n("Subproject Options for '%1'").arg(item->subdir));
 
     subProject = item;
-    m_widget = widget;
     m_part = part;
 
     QFontMetrics fm(cflags_edit->fontMetrics());

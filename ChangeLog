@@ -1,3 +1,14 @@
+2003-02-27  Victor Röder  <victor_roeder@gmx.de>
+* Started to restructure the Autoproject part
+	-> Splitted AutoProjectWidget in
+	   * AutoSubprojectView
+	   * AutoDetailsView
+	   * AutoListViewItems
+	   * AutomakeManager (not finished)
+	-> More to come
+	-> However, an auto-tools expert would be nice now
+* Made the "C++ new class dialog" a little bit nicer
+
 2003-02-27 F@lk Brettschneider <falkbr@kdevelop.org>
 	* make-outputview: now context menu allows to disable line wrapping, to set a short and smart compiler output (good for novices) and to suppress directory navigation messages. (TODO: save this to KConfig)
 

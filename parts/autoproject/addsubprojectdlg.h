@@ -18,7 +18,7 @@
 #include "addsubprojectdlgbase.h"
 
 class AutoProjectPart;
-class AutoProjectWidget;
+class AutoSubprojectView;
 class SubprojectItem;
 
 
@@ -27,7 +27,7 @@ class AddSubprojectDialog : public AddSubprojectDlgBase
     Q_OBJECT
 
 public: 
-    AddSubprojectDialog( AutoProjectPart *part, AutoProjectWidget *widget,
+    AddSubprojectDialog( AutoProjectPart *part, AutoSubprojectView *widget,
                          SubprojectItem *item, QWidget *parent=0, const char *name=0 );
     ~AddSubprojectDialog();
 
@@ -37,7 +37,7 @@ private:
     QLineEdit *name_edit;
 
     SubprojectItem *m_subProject;
-    AutoProjectWidget *m_widget;
+    AutoSubprojectView *m_subprojectView;
     AutoProjectPart *m_part;
 };
 

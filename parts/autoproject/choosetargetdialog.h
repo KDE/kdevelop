@@ -20,6 +20,7 @@
 #include <choosetargetdlgbase.h>
 
 class AutoProjectWidget;
+class AutoProjectPart;
 class SubprojectItem;
 class TargetItem;
 
@@ -29,11 +30,12 @@ class ChooseTargetDialog : public ChooseTargetDlgBase
 {
 
 public:
-	ChooseTargetDialog(AutoProjectWidget* widget, QStringList fileList, QWidget* parent = 0, const char* name = 0);
+	ChooseTargetDialog(AutoProjectWidget* widget, AutoProjectPart* part, QStringList fileList, QWidget* parent = 0, const char* name = 0);
 	~ChooseTargetDialog();
 
 private:
 	AutoProjectWidget* m_widget;
+	AutoProjectPart* m_part;
 	QStringList m_fileList;
 	QPtrList <SubprojectItem> m_subprojectList;
 	SubprojectItem* m_choosenSubproject;

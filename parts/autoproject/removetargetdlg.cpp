@@ -33,12 +33,15 @@
 #include <ksqueezedtextlabel.h>
 #include <klocale.h>
 
+#include "autolistviewitems.h"
+
 #include "misc.h"
 
+#include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
 
-RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, SubprojectItem *spitem,
+RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
 								TargetItem *titem, QWidget* parent = 0, const char* name = 0 )
   : RemoveTargetDlgBase ( parent, name, true, 0 )
 {
@@ -60,6 +63,7 @@ RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, SubprojectIt
 	m_spitem = spitem;
 	m_titem = titem;
 	m_widget = widget;
+	m_part = part;
 
 	//kdDebug ( 9000 ) << "+++++ " << titem->primary << " " << titem->prefix << " " << titem->name << endl;
 
@@ -261,7 +265,7 @@ void RemoveTargetDialog::accept ()
 			QFile::remove(m_spitem->path + "/" + fitem->name);
 		}
 		
-		fileList.append ( m_spitem->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fitem->name );
+		fileList.append ( m_spitem->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fitem->name );
 
 		qApp->processEvents();
 

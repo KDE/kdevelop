@@ -137,7 +137,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
     QStringList list;
 
     /* read the file patterns from the project DOM */
-    QDomElement docEl = part->projectDom()->documentElement();
+    QDomElement docEl = m_part->projectDom()->documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
     QDomElement groupEl = groupsEl.firstChild().toElement();

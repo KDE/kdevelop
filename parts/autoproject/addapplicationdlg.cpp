@@ -24,6 +24,8 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 
+#include "autolistviewitems.h"
+
 #include "misc.h"
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"

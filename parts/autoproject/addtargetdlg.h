@@ -14,6 +14,7 @@
 
 #include "addtargetdlgbase.h"
 
+class AutoDetailsView;
 class AutoProjectWidget;
 class SubprojectItem;
 
@@ -34,8 +35,9 @@ private:
     virtual void primaryChanged();
     virtual void accept();
 
-    SubprojectItem *subProject;
+    SubprojectItem *m_subproject;
     AutoProjectWidget *m_widget;
+	AutoDetailsView* m_detailsView;
 };
 
 #endif

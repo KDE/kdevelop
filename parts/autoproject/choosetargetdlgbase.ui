@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Choose Target</string>
+        <string>Automake Manager - Choose Target</string>
     </property>
     <vbox>
         <property name="name">
@@ -24,7 +24,7 @@
                 <cstring>activeTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>Add new &amp;files to my active target</string>
+                <string>Add new &amp;files to my Active Target</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -49,7 +49,7 @@
                 <cstring>chooseTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>&amp;Choose another target now from automake manager</string>
+                <string>&amp;Choose another target</string>
             </property>
         </widget>
         <spacer>
@@ -172,7 +172,7 @@
                 <cstring>neverAskAgainCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Do not ask me again and use always my active target.</string>
+                <string>&amp;Do not ask me again and use always my Active Target.</string>
             </property>
         </widget>
         <spacer>

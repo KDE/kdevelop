@@ -14,17 +14,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "addexistingdirectoriesdlg.h"
-
 #include <qgroupbox.h>
 #include <qlayout.h>
 
 #include <kprogress.h>
 
+#include "autolistviewitems.h"
+
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
 
-#include "misc.h"
+#include "kimporticonview.h"
+
+#include "addexistingdirectoriesdlg.h"
 
 AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
   : AddExistingDlgBase ( parent, name, modal, fl )
@@ -49,7 +51,7 @@ AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* pa
 	sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-	importView = new KImportIconView ( "Drag one or more directories with an existing Makefile.am from above and drop it here!", destGroupBox, "destination icon view" );
+	importView = new KImportIconView ( "Drag one or more directories with an existing      Makefile.am from above and drop it here!", destGroupBox, "destination icon view" );
 	destGroupBoxLayout->addWidget ( importView );
 
 	setIcon ( SmallIcon ( "fileimport.png" ) );

@@ -22,7 +22,7 @@
 #include <qdialog.h>
 #include <kfile.h>
 
-//#include "misc.h"
+#include "misc.h"
 #include "fileselectorwidget.h"
 
 class FileSelectorWidget;
@@ -32,24 +32,6 @@ class SubprojectItem;
 class TargetItem;
 class KFileItem;
 class KImportIconView;
-
-// class KImportIconView : public KFileDnDIconView
-// {
-// 	Q_OBJECT
-// 	
-// public:
-// 	KImportIconView ( const QString& strIntro, QWidget* parent = 0, const char* name = 0 );
-// 	~KImportIconView() {}
-// 	
-// 	void somethingDropped ( bool dropped );
-// 
-// protected:
-// 	void drawContents ( QPainter *p, int cx, int cy, int cw, int ch );
-// 
-// private:
-// 	QString m_strIntro;
-// 	bool m_bDropped;
-// };
 
 class AddExistingDirectoriesDialog : public AddExistingDlgBase
 {

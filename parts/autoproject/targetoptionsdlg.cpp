@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <knotifyclient.h>
 
+#include "autolistviewitems.h"
+
 #include "misc.h"
 #include "autoprojectwidget.h"
 

@@ -26,8 +26,7 @@
 #include "addexistingdlgbase.h"
 #include "fileselectorwidget.h"
 
-//#include "misc.h"
-//#include "kfiledndiconview.h"
+#include "misc.h"
 
 class KImportIconView;
 class FileSelectorWidget;

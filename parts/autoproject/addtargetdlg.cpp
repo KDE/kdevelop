@@ -19,7 +19,10 @@
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 
+#include "autolistviewitems.h"
+
 #include "misc.h"
+#include "autodetailsview.h"
 #include "autoprojectwidget.h"
 
 
@@ -27,8 +30,9 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
 								QWidget *parent, const char *name)
 	: AddTargetDialogBase(parent, name, true)
 {
-	subProject = item;
+	m_subproject = item;
 	m_widget = widget;
+// 	m_detailsView = view;
 
 	primary_combo->setFocus();
 	primary_combo->insertItem(i18n("Program"));
@@ -102,7 +106,7 @@ void AddTargetDialog::primaryChanged()
 	prefix_combo->insertStringList(list);
 	QStringList prefixes;
 	QMap<QString,QString>::ConstIterator it;
-	for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
+	for (it = m_subproject->prefixes.begin(); it != m_subproject->prefixes.end(); ++it)
 		prefix_combo->insertItem(it.key());
 
 	// Only enable ldflags stuff for libtool libraries
@@ -143,7 +147,7 @@ void AddTargetDialog::accept()
 		return;
 	}
 
-	QListIterator<TargetItem> it(subProject->targets);
+	QListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
 			KMessageBox::sorry(this, i18n("A target with this name already exists!"));
@@ -165,19 +169,20 @@ void AddTargetDialog::accept()
 	QString ldflags = flagslist.join(" ");
 
 	TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
-	subProject->targets.append(titem);
+	m_detailsView->insertItem ( titem );
+	m_subproject->targets.append(titem);
 
 	QString canonname = AutoProjectTool::canonicalize(name);
 	QString varname = prefix + "_" + primary;
-	subProject->variables[varname] += (" " + name);
+	m_subproject->variables[varname] += (" " + name);
 
 	QMap<QString,QString> replaceMap;
-	replaceMap.insert(varname, subProject->variables[varname]);
+	replaceMap.insert(varname, m_subproject->variables[varname]);
 	replaceMap.insert(canonname + "_SOURCES", "");
 	if (primary == "LTLIBRARIES" || primary == "PROGRAMS")
 		replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
-	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+	AutoProjectTool::modifyMakefileam(m_subproject->path + "/Makefile.am", replaceMap);
 	
 	QDialog::accept();
 }

@@ -22,6 +22,7 @@
 #include <qptrlist.h>
 
 class AutoProjectWidget;
+class AutoProjectPart;
 class SubprojectItem;
 class TargetItem;
 
@@ -33,7 +34,7 @@ class RemoveTargetDialog : public RemoveTargetDlgBase
 {
 
 public:
-	RemoveTargetDialog(  AutoProjectWidget *widget, SubprojectItem *spitem,
+	RemoveTargetDialog(  AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
 						TargetItem *titem, QWidget* parent = 0, const char* name = 0 );
 	~RemoveTargetDialog();
 	
@@ -41,6 +42,7 @@ private:
 	SubprojectItem* m_spitem;
 	TargetItem* m_titem;
 	AutoProjectWidget* m_widget;
+	AutoProjectPart* m_part;
 	
 	QPtrList <SubprojectItem> dependentSubprojects;
 	
