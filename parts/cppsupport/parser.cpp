@@ -472,7 +472,12 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    AST::Node declarator;
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
 	        spec->setCvQualify( cv );
-                InitDeclaratorListAST::Node declarators;
+
+	        GroupAST::Node cv2;
+	        parseCvQualify( cv2 );
+		spec->setCv2Qualify( cv2 );
+
+		InitDeclaratorListAST::Node declarators;
 		parseInitDeclaratorList(declarators);
 	        ADVANCE( ';', ";" );
 
@@ -1865,6 +1870,10 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
     if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
         spec->setCvQualify( cv );
 
+        GroupAST::Node cv2;
+        parseCvQualify( cv2 );
+        spec->setCv2Qualify( cv2 );
+
     	InitDeclaratorListAST::Node declarators;
 	parseInitDeclaratorList( declarators );
 	ADVANCE( ';', ";" );
@@ -2683,6 +2692,10 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
 	return false;
     }
     spec->setCvQualify( cv );
+
+    GroupAST::Node cv2;
+    parseCvQualify( cv2 );
+    spec->setCv2Qualify( cv2 );
 
     InitDeclaratorListAST::Node declarators;
     parseInitDeclaratorList( declarators );
