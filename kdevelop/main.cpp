@@ -124,7 +124,8 @@ int main(int argc, char* argv[])
 
   aboutData.addCredit ("Jacek Wojdel",I18N_NOOP("Startlogo KDevelop 1.0"), "wojdel@kbs.twi.tudelft.nl");
   aboutData.addCredit ("Ralph Kocher",I18N_NOOP("Startlogo KDevelop 1.1, 1.2"), "RKocher@t-online.de");
-	
+  aboutData.addCredit ("Michel Stol (aka Wimpie)",I18N_NOOP("Startlogo KDevelop 1.4, 2.0"), "f1r3f0x@hotmail.com");
+
   aboutData.addCredit ("Martin Piskernig",I18N_NOOP("Patches/Bugfixes, Translation coordination"), "martin.piskernig@stuwo.at");
 	
 	KCmdLineArgs::init( argc, argv, &aboutData );
