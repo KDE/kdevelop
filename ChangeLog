@@ -1,3 +1,8 @@
+1999-07-23 Jonas Nordin   <jonas.nordin@cenacle.se>
+	* fixed so that protected attributes/methods are shown with the
+	  correct icon. 
+	* added item to tokenizer.
+
 1999-07-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added first version of the KScribble tutorial application
 
@@ -35,6 +40,9 @@
 1999-07-19 Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* bugreport-dialog use the bug-report-system on bugs.kde.org now
 	
+1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added german png logo, added italian translator to user manual
+
 1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed portuguese documentation Makefile.am, added png logo
 
