@@ -154,11 +154,11 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   // (this has to be after all creation of dockwidget-covered tool-views
   if (m_mdiMode == QextMdi::ToplevelMode) {
     m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
-    readDockConfig(config);
+    readDockConfig(config, "docking_version_2_0");
     m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
   }
   else {
-    readDockConfig(config);
+    readDockConfig(config, "docking_version_2_0");
   }
 
   show();

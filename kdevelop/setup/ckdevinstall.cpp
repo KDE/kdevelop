@@ -383,6 +383,7 @@ void CKDevInstall::slotFinished()
   // get rid of possible old docking states
   KSimpleConfig conf(locate("config", "kdeveloprc"));
   conf.deleteGroup(QString("dock_setting_default"), true);
+  conf.deleteGroup(QString("docking_version_2_0"), true);
   conf.sync();
 
   kapp->startServiceByDesktopName("kdevelop");

@@ -964,7 +964,7 @@ void CKDevelop::saveOptions(){
   //MB serializes menuoptions
   config->writeEntry("doc_tool_type",doctool);
   //MB end
-  writeDockConfig();
+  writeDockConfig(config, "docking_version_2_0");
   config->sync();
 }
 

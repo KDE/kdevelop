@@ -7,6 +7,8 @@
     * added Lars Beikirch's <Lars.Beikirch@gmx.net> patch for QextMDI
       concerning min/max sizes of childviews and maximized Childframe mode
       (related to QextMDI but not to KDevelop)
+    * probably last bugfix before the KDE-2.2 tag: the legendary "Bero-crash"
+      --> now we use another config file section for the docking state in KDevelop-2.0
 
 2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: debugging with Toplevel MDI mode works properly now
