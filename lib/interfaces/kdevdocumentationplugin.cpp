@@ -170,12 +170,7 @@ IndexItem::List IndexItem::urls() const
     QValueList<IndexItemProto*> itemProtos = m_listbox->items[text()];
     for (QValueList<IndexItemProto*>::const_iterator it = itemProtos.begin();
         it != itemProtos.end(); ++it)
-    {
-        IndexItemProto *proto = *it;
-        KURL::List urls = proto->urls();
-        for (KURL::List::const_iterator uit = urls.begin(); uit != urls.end(); ++uit)
-            urlList.append(qMakePair(proto->description(), *uit));
-    }
+        urlList.append(qMakePair((*it)->description(), (*it)->url()));
     return urlList;
 }
 
@@ -260,6 +255,10 @@ DocumentationPlugin::DocumentationPlugin(KConfig *pluginConfig, QObject *parent,
 {
 }
 
+DocumentationPlugin::~DocumentationPlugin()
+{
+}
+
 void DocumentationPlugin::autoSetup()
 {
     config->setGroup("General");    
@@ -335,15 +334,16 @@ void DocumentationPlugin::cacheIndex(DocumentationCatalogItem *item)
         return;
     
     QTextStream str(&cacheFile);
-    str.setEncoding(QTextStream::UnicodeUTF8);
+    str.setEncoding(QTextStream::Unicode);
     str << CACHE_VERSION << endl;
 
     QValueList<IndexItemProto*> catalogIndexes = indexes[item];
     for (QValueList<IndexItemProto*>::const_iterator it = catalogIndexes.constBegin();
         it != catalogIndexes.constEnd(); ++it)
     {
-        str << (*it)->text() << "::::" << (*it)->description() << "::::" 
-            << (*it)->urls().toStringList().join("::::") << endl;
+        str << (*it)->text() << endl;
+        str << (*it)->description() << endl;
+        str << (*it)->url().url() << endl;
     }
    
     cacheFile.close();
@@ -359,25 +359,31 @@ bool DocumentationPlugin::loadCachedIndex(IndexBox *index, DocumentationCatalogI
     kdDebug() << "Using cached index for item: " << item->text(0) << endl;
     
     QTextStream str(&cacheFile);
-    str.setEncoding(QTextStream::UnicodeUTF8);
-    QString ver = str.readLine();
+    str.setEncoding(QTextStream::Unicode);
+    QString cache = str.read();
+    QStringList cacheList = QStringList::split("\n", cache, true);
+    QString ver = cacheList.first();
     if (ver != CACHE_VERSION)
     {
         kdDebug() << "Wrong cache version: " << ver << endl;
         return false;
     }
-
-    while (!str.eof())
+    QStringList::const_iterator it = cacheList.begin();
+    it++;
+    QString s[3]; int c = 0;
+    for (; it != cacheList.end(); ++it)
     {
-        QStringList cacheItem = QStringList::split("::::", str.readLine(), false);
-        IndexItemProto *ii = new IndexItemProto(this, item, index, cacheItem.first(), cacheItem[1]);
-        QStringList::const_iterator it = cacheItem.constBegin();
-        ++it; ++it;
-        for (; it != cacheItem.constEnd(); ++it)
-            ii->addURL(KURL(*it));
+        s[c] = *it;
+        if (c == 2)
+        {
+            IndexItemProto *ii = new IndexItemProto(this, item, index, s[0], s[1]);
+            ii->addURL(KURL(s[2]));
+            c = 0;
+        }
+        else c++;
     }
-
-    cacheFile.close();    
+    cacheFile.close();
+    
     return true;
 }
 
@@ -485,15 +491,8 @@ void DocumentationPlugin::reinit(KListView *contents, IndexBox *index, QStringLi
                 kdDebug() << "    index requested " << endl;
                 loadIndex(index, namedCatalogs[it.key()]);
                 index->setDirty(true);
-//                index->refill(indexes[namedCatalogs[it.key()]]);
             }
             m_indexCreated = true;
-/*            else if (indexEnabled(namedCatalogs[it.key()]))
-                kdDebug() << "    1" << endl;
-            else if (!indexes.contains(namedCatalogs[it.key()]))
-                kdDebug() << "    2" << endl;
-            else
-                kdDebug() << "    3" << endl;                */
         }
     }
 }

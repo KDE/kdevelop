@@ -28,7 +28,7 @@
 #include <kurl.h>
 #include <kfile.h>
 
-#define CACHE_VERSION "1"
+#define CACHE_VERSION "2"
 
 class DocumentationItem: public KListViewItem
 {
@@ -84,13 +84,13 @@ public:
         const QString &text, const QString &description);
     ~IndexItemProto();
 
-    void addURL(const KURL &url) { m_urls.append(url); }
-    KURL::List urls() const { return m_urls; }
+    void addURL(const KURL &url) { m_url = url; }
+    KURL url() const { return m_url; }
     QString text() const { return m_text; }
     QString description() const { return m_description; }
     
 private:
-    KURL::List m_urls;
+    KURL m_url;
     IndexBox *m_listbox;
     QString m_text;
     QString m_description;
@@ -197,6 +197,7 @@ public:
     @endcode
     */
     DocumentationPlugin(KConfig *pluginConfig, QObject *parent =0, const char *name =0);
+    virtual ~DocumentationPlugin();
     
     /**Returns the i18n name of the plugin.*/
     virtual QString pluginName() const = 0;

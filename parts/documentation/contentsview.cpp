@@ -22,6 +22,7 @@
 #include <qheader.h>
 #include <qlayout.h>
 
+#include <kdebug.h>
 #include <klistview.h>
 
 #include <kdevpartcontroller.h>
@@ -52,6 +53,8 @@ ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
 
 ContentsView::~ContentsView()
 {
+    if (m_widget && m_widget->index())
+        m_widget->index()->clear();
 }
 
 void ContentsView::itemExecuted(QListViewItem *item, const QPoint &p, int col)

@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qtabwidget.h>
+#include <qapplication.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -134,9 +135,11 @@ void DocumentationPart::emitIndexSelected(IndexBox *indexBox)
 {
     if (!m_hasIndex)
     {
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         emit indexSelected(indexBox);
         indexBox->fill();
         m_hasIndex = true;
+        QApplication::restoreOverrideCursor();
     }
 }
 
