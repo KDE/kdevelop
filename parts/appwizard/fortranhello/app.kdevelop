@@ -28,18 +28,12 @@
     </makeenvvars>
  </kdevautoproject>
  <kdevfilecreate>
-  <useglobaltypes>
-   <type ext="f"/>
-   <type ext="f77"/>
- </useglobaltypes>
-    <filetypes>
-       <type ext="for" name="_for_files_" create="template">
-         <descr>Add_a_description_here</descr>
-       </type>
-      <type ext="fnt" name="_fnt_files_" create="template">
-         <descr>Add_a_description_here</descr>
-      </type>
-    </filetypes>
+   <useglobaltypes>
+     <type ext="F"/>
+     <type ext="f"/>
+     <type ext="f77"/>
+     <type ext="fnt"/>
+   </useglobaltypes>
  </kdevfilecreate>
  <kdevfortransupport>
     <ftnchek>
@@ -61,12 +55,10 @@
       <portabilityonly></portabilityonly>
     </ftnchek>
  </kdevfortransupport>
- <kdevfileview>
+  <kdevfileview>
     <groups>
-      <group pattern="*.f" name="Replace_with_a_nice_title" />
-      <group pattern="*.f77" name="Replace_with_a_nice_title" />
-      <group pattern="*.ftn" name="Replace_with_a_nice_title" />
-      <group pattern="*.for" name="Replace_with_a_nice_title" />
+      <group pattern="*.f" name="Preprocessed Fortran" />
+      <group pattern="*.F ; *.f77 ; *.ftn" name="Fortran77 source files" />
     </groups>
- </kdevfileview>
+  </kdevfileview>
 </kdevelop>
