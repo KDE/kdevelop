@@ -55,10 +55,12 @@ void CKDevelop::addRecentProject(const char* file)
 void CKDevelop::removeFileFromEditlist(const char *filename){
   TEditInfo* actual_info;
 
+  QString corrAbsFilename = (isUntitled(filename)) ? QString(filename) : QFileInfo(filename).absFilePath();
+
 //search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;){
     TEditInfo* next_info=edit_infos.next();
-    if (actual_info->filename == filename){ // found
+    if (actual_info->filename == corrAbsFilename){ // found
 //      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
       menu_buffers->removeItem(actual_info->id);
       if(edit_infos.removeRef(actual_info)){
@@ -69,7 +71,7 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
   }
 
   // was this file in the cpp_widget?
-  if (cpp_widget->getName() == filename)
+  if (cpp_widget->getName() == corrAbsFilename)
   {
     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
@@ -97,7 +99,7 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
   }
 
   // was this file in the header_widget?
-  if (header_widget->getName() == filename)
+  if (header_widget->getName() == corrAbsFilename)
   {
     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
@@ -141,6 +143,7 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
 {
   bool bChanged=false;
   TEditInfo* actual_info;
+
   for(actual_info=edit_infos.first();!bChanged && actual_info != 0;actual_info=edit_infos.next())
   {
    if ( actual_info->filename == sFilename)
@@ -178,11 +181,14 @@ void CKDevelop::setMainCaption(int tab_item)
           default:
 	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 	      kdev_caption+= version +
-             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
+//             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
+// reinserted again... to show which file (including the path - maybe it differs only in the path)
+// is in the editor! (W. Tasin)
+             	" - ["+ edit_widget->getName()+"] ";
 	      if (edit_widget->isModified())
                   {
                      enableCommand(ID_FILE_SAVE);
-	        kdev_caption+= " *";
+	        kdev_caption+= "*";
                   }
                   else
                   {
@@ -478,7 +484,9 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
-  filename = QFileInfo(filename).absFilePath();
+
+  filename = (isUntitled(filename)) ? filename : QFileInfo(filename).absFilePath();
+
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
@@ -487,7 +495,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
 
   // check if the file exists
   if(!QFile::exists(filename) && !isUntitled(filename)){
-    KMsgBox::message(this,i18n("Attention"),filename +i18n("\n\nFile does not exist!"));
+    KMsgBox::message(this,i18n("Attention"), filename +i18n("\n\nFile does not exist!"));
     return;
   }
 
@@ -577,18 +585,19 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
 
 
   // handle file if it was modified on disk by another editor/cvs
-  QFileInfo file_info(edit_widget->fileName());
+  QFileInfo file_info(edit_widget->getName());
 
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-      if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
-	  bForceReload = true;
-	  actual_info->last_modified = file_info.lastModified();
-      }
+    if(QMessageBox::warning(this,i18n("File modified"),"The file " + edit_widget->getName() +" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
+      bForceReload = true;
+      actual_info->last_modified = file_info.lastModified();
+    }
   }
+
   if (!bShowModifiedBox){
      actual_info->last_modified = file_info.lastModified(); 
   }
-  
+
   if (!bForceReload && filename == edit_widget->getName()){
       //    cerr << endl <<endl << "Filename:" << filename 
       // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
@@ -597,7 +606,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       return;
   }
 
-    // rescue the old file
+  // rescue the old file
   actual_info->text = edit_widget->text();
   actual_info->modified = edit_widget->isModified();
   actual_info->cursor_line = edit_widget->currentLine();
@@ -641,7 +650,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   info = new TEditInfo;
   
   info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy 
+//  info->id = menu_buffers->insertItem(filename,-2,0); // insert at first index
+  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy
   info->modified = false;
   info->cursor_line = 0;
   info->cursor_col = 0;
