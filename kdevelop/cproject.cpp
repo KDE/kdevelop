@@ -18,6 +18,7 @@
 
 #include <qdir.h>
 #include "cproject.h"
+#include <qstringlist.h>
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
@@ -963,9 +964,9 @@ void CProject::updateConfigureIn(){
 
   QString abs_filename = getProjectDir() + "/configure.in";
   QFile file(abs_filename);
-  QStrList list;
+  QStringList list;
   QTextStream stream(&file);
-  QString str;
+  QStringList::Iterator str;
   QStrList makefile_list;
   QString makefile;
     
@@ -979,35 +980,35 @@ void CProject::updateConfigureIn(){
 
   file.open(IO_WriteOnly);
   
-  for(str = list.first();str != 0;str = list.next()){
-    if(str.find("AC_OUTPUT(") != -1){ // if found
+  for(str = list.begin();str != list.end(); ++str){
+    if((*str).find("AC_OUTPUT(") != -1){ // if found
       stream << "AC_OUTPUT(";
       config.setGroup("General");
       config.readListEntry("makefiles",makefile_list);  
-      for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){
+      for(makefile = makefile_list.first();makefile != 0 ; makefile=makefile_list.next()){
 	stream << makefile.remove(makefile.length()-3,3) << " ";
       }
       stream << ")\n";
       
     }
-   //  else if(str.find("AC_PROG_LEX") != -1) {
+   //  else if((*str).find("AC_PROG_LEX") != -1) {
 //       stream << "AC_PROG_LEX" << endl;
 //     }
-//     else if(str.find("AC_DECL_YYTEXT") != -1) {
+//     else if((*str).find("AC_DECL_YYTEXT") != -1) {
 //       stream << "AC_DECL_YYTEXT" << endl;
 //     }
-    else if(str.find("KDE_DO_IT_ALL(") != -1){
+    else if((*str).find("KDE_DO_IT_ALL(") != -1){
       stream << "KDE_DO_IT_ALL(";
       stream << getProjectName().lower() << "," << getVersion();
       stream << ")\n";
     }
-    else if(str.find("AM_INIT_AUTOMAKE(") != -1){
+    else if((*str).find("AM_INIT_AUTOMAKE(") != -1){
       stream << "AM_INIT_AUTOMAKE(";
       stream << getProjectName().lower() << "," << getVersion();
       stream << ")\n";
     }
     else{
-      stream << str + "\n";
+      stream << (*str) + "\n";
     }
   }
   
