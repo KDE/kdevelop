@@ -107,6 +107,8 @@ doc/en/tutorial/Makefile \
 doc/en/welcome/Makefile \
 doc/es/Makefile \
 doc/es/welcome/Makefile \
+doc/es/cref/Makefile \
+doc/es/manual/Makefile \
 doc/fr/Makefile \
 doc/fr/tutorial/Makefile \
 doc/fr/welcome/Makefile \
