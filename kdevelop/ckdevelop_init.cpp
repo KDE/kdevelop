@@ -67,7 +67,8 @@
 extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop()
-    : search_process("/bin/sh")
+	: DockMainWindow("CKDevelop_mainwindow")
+  ,search_process("/bin/sh")
 {
   version = VERSION;
   project=false;// no project
@@ -159,21 +160,8 @@ void CKDevelop::initView(){
   ////////////////////////
 
   mdi_main_frame = new MdiFrame( this, "mdi_frame");
-
-  browser_view = new DocBrowserView(mdi_main_frame,"browser");
-  // let's go
-  browser_widget = browser_view->browser;
-  mdi_main_frame->addWindow(browser_view, // the view pointer
-                            true,         // show it
-			    true,         // attach it
-			    true,         // show it maximized
-			    0);           // initial geometry rectangle, 0 means minimumSize()
-
   // maybe we should make this configurable :-)
   mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
-  prev_was_search_result= false;
-  //init
-  browser_widget->setDocBrowserOptions();
 
 #warning FIXME should we swallow tools in KDevelop 2??
   //  swallow_widget = new KSwallowWidget(t_tab_view);
@@ -194,7 +182,7 @@ void CKDevelop::initView(){
 
 
   //
-  // dock the 3 base widgets
+  // dock the 2 base widgets
   //
   dockIn(dockbase_o_tab_view,DockBottom);
   dockIn(dockbase_t_tab_view,DockLeft);
@@ -202,10 +190,27 @@ void CKDevelop::initView(){
   // set the mainwidget
   setView(mdi_main_frame);
   initKeyAccel();
+
   initMenuBar();
+  mdi_main_frame->setMenuForSDIModeSysButtons(kdev_menubar);
+
   initToolBar();
   initStatusBar();
 
+	//
+	// open the documentation browser view on default
+	//   (just open it when the menubar is up)
+  browser_view = new DocBrowserView(mdi_main_frame,"browser");
+  browser_widget = browser_view->browser;
+  mdi_main_frame->addWindow(browser_view, // the view pointer
+                            true,         // show it
+			    true,         // attach it
+			    true,         // show it maximized
+			    0);           // initial geometry rectangle, 0 means minimumSize()
+
+  prev_was_search_result= false;
+  //init
+  browser_widget->setDocBrowserOptions();
 }
 
 /*--------------------------------------- CKDevelop::initKeyAccel()
@@ -640,8 +645,6 @@ void CKDevelop::initMenuBar(){
   // Window-menu entries
   kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->m_pMdi->m_pWindowMenu);
   kdev_menubar->insertSeparator();
-
-  mdi_main_frame->setMenuForSDIModeSysButtons(kdev_menubar);
 
   ///////////////////////////////////////////////////////////////////
   // PlugIns menu

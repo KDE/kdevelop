@@ -1,3 +1,6 @@
+2K-01-18 Falk Brettschneider  <gigafalk@yahoo.com>
+	* bugfix in CKDevelop (concerning to floatable stuff)
+	
 2K-01-15 Falk Brettschneider  <gigafalk@yahoo.com>
 	* first experimental!!! floatable version (for Toplevel-SDI mode),
 	  based on DockWidget of KDEStudio (Judin Max)
