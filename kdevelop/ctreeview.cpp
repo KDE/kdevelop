@@ -197,7 +197,7 @@ void CTreeView::slotMouseButtonClicked(int button, QListViewItem * item, const Q
 
         // If the exists a popupmenu we show it.
         if( popup )
-          popup->popup( this->mapToGlobal( mousePos ) );
+          popup->popup( mousePos ); //this->mapToGlobal( mousePos ) );
 
         break;
       }

@@ -2355,11 +2355,13 @@ void FontChanger::displayCharsets() {
   for(z = 0; z < (int) lst.count(); z++) {
     charset = *lst.at(z);
     charsetCombo->insertItem(charset);
-    if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
+    if (/*(QString)*/ font->charset == charset)
+      charsetCombo->setCurrentItem(z);
   }
   charset = "any";
   charsetCombo->insertItem(charset);
-  if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
+  if (/*(QString)*/ font->charset == charset)
+    charsetCombo->setCurrentItem(z);
 }
 
 //---------
