@@ -95,6 +95,36 @@ KDevFormatter::KDevFormatter()
   // fill
   if (config->readEntry("Fill", "Tabs") != "Tabs")
     setSpaceIndentation(config->readNumEntry("FillSpaces",2));
+  else
+    setTabIndentation();
 
-  
+  // indent
+  setSwitchIndent(config->readBoolEntry("IndentSwitches", false));
+  setClassIndent(config->readBoolEntry("IndentClasses", false));
+  setCaseIndent(config->readBoolEntry("IndentCases", false));
+  setBracketIndent(config->readBoolEntry("IndentBrackets", false));
+  setNamespaceIndent(config->readBoolEntry("IndentNamespaces", true));
+  setLabelIndent(config->readBoolEntry("IndentLabels", true));
+    
+  // continuation
+  setMaxInStatementIndentLength(config->readNumEntry("MaxStatement", 40));
+  if (config->readNumEntry("MinConditional", -1) != -1)
+    setMinConditionalIndentLength(config->readNumEntry("MinConditional"));
+
+  // brackets
+  s = config->readEntry("Brackets", "Break");
+  if (s == "Break")
+    setBracketFormatMode(BREAK_MODE);
+  if (s == "Attach")
+    setBracketFormatMode(ATTACH_MODE);
+  if (s == "Linux")
+    setBracketFormatMode(BDAC_MODE);
+
+  // padding
+  setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
+  setParenthesisPaddingMode(config->readBoolEntry("PadOperators", false));
+
+  // oneliner
+  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false)); 
+  setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
 }
