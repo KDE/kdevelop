@@ -207,7 +207,7 @@ void CEditWidget::spellcheck2(KSpell *){
  *-----------------------------------------------------------------*/
 void CEditWidget::deleteInterval( uint startAt, uint endAt )
 {
-  assert( startAt >= endAt );
+    assert( startAt <= endAt );
 
   int startPos=0;
   int endPos=0;
