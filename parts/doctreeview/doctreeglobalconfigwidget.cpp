@@ -47,12 +47,12 @@ void DocTreeGlobalConfigWidget::readConfig()
 {
     KConfig *config = DocTreeViewFactory::instance()->config();
 
-
     config->setGroup("General");
     qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));
     qtdocdirEdit->fileDialog()->setMode( KFile::Directory );
     kdelibsdoxydirEdit->setURL(config->readPathEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
     kdelibsdoxydirEdit->fileDialog()->setMode( KFile::Directory );
+    kdocCheck->setChecked( config->readBoolEntry("displayKDELibsKDoc", false) );
     
     config->setGroup("Index");
     indexKDevelopBox->setChecked(config->readEntry("IndexKDevelop"));
@@ -88,6 +88,7 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->setGroup("General");
     config->writePathEntry("qtdocdir", qtdocdirEdit->url());
     config->writePathEntry("kdelibsdocdir", kdelibsdoxydirEdit->url());
+    config->writeEntry("displayKDELibsKDoc", kdocCheck->isChecked() );
  
     config->setGroup("Index");
     config->writeEntry("IndexKDevelop", indexKDevelopBox->isChecked());

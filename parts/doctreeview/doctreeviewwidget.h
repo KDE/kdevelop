@@ -27,6 +27,7 @@ class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
 class DocTreeDocbaseFolder;
 class DocTreeQtFolder;
+class DocTreeKDELibsFolder;
 class DocTreeTocFolder;
 class DocTreeViewPart;
 class KDevProject;
@@ -68,14 +69,17 @@ private slots:
 
 protected:
 	void searchForItem ( const QString& );
+    bool initKDocKDELibs();
 
 private: 
+    bool kdelibskdoc;
     KListView* docView;
     QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
     DocTreeQtFolder *folder_qt;
     DocTreeDoxygenFolder *folder_doxygen;
+    DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
