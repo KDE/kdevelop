@@ -170,6 +170,13 @@ void CKAppWizard::initPages(){
   qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.x SDI"));
   qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
 
+  gnomeentry = new QListViewItem (applications, "GNOME");
+  gnomeentry->setExpandable (true);
+  gnomeentry->setOpen (TRUE);
+  gnomeentry->sortChildItems (0,FALSE);
+  gnomenormalitem = new QListViewItem (gnomeentry,i18n("Normal"));
+  
+
   kdeentry = new QListViewItem (applications,i18n("KDE"));
   kdeentry->setExpandable (true);
   kdeentry->setOpen (TRUE);
@@ -1125,9 +1132,10 @@ void CKAppWizard::generateEntries(const QString &filename) {
   else if (citem->isSelected()) {
     entries << "c\n";
   }
-  /*  else if (gtknormalitem->isSelected()) {
-    entries << "gtknormal\n";
-    }
+  else if (gnomenormalitem->isSelected()) {
+    entries << "gnomenormal\n";
+  }
+  /*
     else if (gtkminiitem->isSelected()) {
     entries << "gtkmini\n";
     }*/
@@ -1367,6 +1375,9 @@ void CKAppWizard::okPermited() {
   else if (citem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/c.tar.gz";
   }
+  else if (gnomenormalitem->isSelected()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/gnome.tar.gz";
+  }
   else {
     hasTemplate = false;
   }
@@ -1565,6 +1576,14 @@ void CKAppWizard::removeSources(const QString &dir)
   {
     file.remove (dir + "/" + nametext + "/tabprocessingeditwidget.cpp");
     file.remove (dir + "/" + nametext + "/tabprocessingeditwidget.h");
+  }
+  if( gnomenormalitem->isSelected()){
+    file.remove (dir + "/" + nametext + "/main.c");
+    file.remove (dir + "/" + nametext + "/main.h");
+    file.remove (dir + "/" + nametext + "/menus.c");
+    file.remove (dir + "/" + nametext + "/menus.h");
+    file.remove (dir + "/" + nametext + "/app.c");
+    file.remove (dir + "/" + nametext + "/app.h");
   }
 }
 
@@ -1911,6 +1930,34 @@ void CKAppWizard::slotApplicationClicked() {
 			   "KDevelop will not take care of any Makefiles as those are supposed to "
 			   "be included with your old project."));
   }
+  else if (gnomenormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() + "/kdevelop/pics/gnomeApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(false);
+    apidoc->setEnabled(false);
+   
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(false);
+    userdoc->setEnabled(false);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a GNOME application with session-management, "
+			   "menubar, toolbar, statusbar and initial event handling."));
+  }
+
+
   /*  else if (gtknormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
@@ -1948,6 +1995,11 @@ void CKAppWizard::slotApplicationClicked() {
   else if (ccppentry->isSelected()) {
     okButton->setEnabled(false);
     apphelp->setText (i18n("Contains all C/C++-terminal\n"
+			   "project types."));
+  }
+  else if (gnomeentry->isSelected()) {
+    okButton->setEnabled(false);
+    apphelp->setText (i18n("Contains all GNOME-compliant\n"
 			   "project types."));
   }
   /*  else if (gtkentry->isSelected()) {
@@ -2060,7 +2112,7 @@ void CKAppWizard::slotProjectnameEntry() {
   	vendorline->setText(endname.lower());
   }
 
-  if (nametext == "" || kdeentry->isSelected() || qtentry->isSelected() ||
+  if (nametext == "" || gnomeentry->isSelected() || kdeentry->isSelected() || qtentry->isSelected() ||
    	  ccppentry->isSelected() || othersentry->isSelected()) {
    	okButton->setEnabled(false);
   }
@@ -2238,6 +2290,9 @@ void CKAppWizard::slotProcessExited() {
   else if (qextmdiitem->isSelected()) {
     project->setProjectType("mdi_qextmdi");
   }
+  else if (gnomenormalitem->isSelected()) {
+    project->setProjectType("normal_gnome");
+  }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
@@ -2256,6 +2311,7 @@ void CKAppWizard::slotProcessExited() {
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g3 -Wall");
+  
   
   if (kdeminiitem->isSelected() || kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
@@ -2276,6 +2332,9 @@ void CKAppWizard::slotProcessExited() {
   }
   else if (qextmdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11 -lqextmdi");
+  }
+  else if (gnomenormalitem->isSelected()) {
+    project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
   }
 
   if(qt2normalitem->isSelected() ||qt2mdiitem->isSelected() || kde2normalitem->isSelected() ||
@@ -2309,6 +2368,10 @@ void CKAppWizard::slotProcessExited() {
   {
      sub_dir_list.append("po");
   }
+  if (gnomenormalitem->isSelected()){
+    sub_dir_list.append("macros");
+    sub_dir_list.append("pixmaps");
+  }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
@@ -2330,7 +2393,9 @@ void CKAppWizard::slotProcessExited() {
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
+  if(!gnomenormalitem->isSelected()){
+    project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
+  }
 
   if(kde2normalitem->isSelected() || kde2miniitem->isSelected() || kde2mdiitem->isSelected())
     makeAmInfo.rel_name = "doc/en/Makefile.am";
@@ -2340,9 +2405,11 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
+  if(!gnomenormalitem->isSelected()){
+    project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
+  }
   
-  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
+  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
   		 qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected()) &&
         CToolClass::searchProgram("xgettext"))
   {
@@ -2450,7 +2517,7 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (generatesource->isChecked()) {
-    QString extension= (citem->isSelected()) ? "c" : "cpp";
+    QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : "cpp";
     fileInfo.rel_name = namelow + "/main."+extension;
     fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
@@ -2459,7 +2526,60 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/main."+extension,fileInfo);
   }
   
-  if (!citem->isSelected() && !cppitem->isSelected()) {
+  if (gnomenormalitem->isSelected()){
+    if (generatesource->isChecked()) {
+
+      fileInfo.rel_name = namelow + "/main.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/main.h",fileInfo);
+
+      fileInfo.rel_name = namelow + "/app.c";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/app.c",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/app.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/app.h",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/menus.c";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/menus.c",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/menus.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/menus.h",fileInfo);
+
+      fileInfo.rel_name = namelow + ".desktop";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = true;
+      fileInfo.install_location = "$(datadir)/gnome/apps/Applications/";
+      project->addFileToProject (namelow + ".desktop",fileInfo);
+
+      fileInfo.rel_name = "pixmaps/" + namelow +"-logo.png";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = true;
+      fileInfo.install_location = "$(datadir)/pixmaps";
+      project->addFileToProject ("pixmaps/" + namelow +"-logo.png",fileInfo);
+    }
+  }
+  if (!citem->isSelected() && !cppitem->isSelected() && !gnomenormalitem->isSelected()) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
       fileInfo.type = CPP_SOURCE;
@@ -2660,7 +2780,7 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters("GNU",group_filters);
   }
   
-  if (!(cppitem->isSelected() || citem->isSelected() ||
+  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
   		qtnormalitem->isSelected()|| qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()))
   {
     group_filters.clear();
@@ -2668,7 +2788,7 @@ void CKAppWizard::slotProcessExited() {
     project->addLFVGroup (i18n("Translations"),"");
     project->setFilters(i18n("Translations"),group_filters);
   } 
-  if (!cppitem->isSelected() && !citem->isSelected()) {
+  if (!cppitem->isSelected() && !citem->isSelected() &&!gnomenormalitem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
     project->addLFVGroup (i18n("Dialogs"),"");

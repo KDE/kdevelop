@@ -394,6 +394,9 @@ void CKDevelop::slotAddExistingFiles(){
   if(new_subdir){
     newSubDir();
   }
+   if(prj->getProjectType()=="normal_gnome" && !new_subdir){
+    slotBuildAutoconf();
+  }
 
 }
 
@@ -978,6 +981,9 @@ void CKDevelop::newFile(bool add_to_project, const char* dir/*=0*/){
   }
   if(new_subdir){
     newSubDir();
+  }
+  if(prj->getProjectType()=="normal_gnome" && !new_subdir){
+    slotBuildAutoconf();
   }
   
 }

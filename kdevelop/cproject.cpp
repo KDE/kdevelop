@@ -685,7 +685,7 @@ void CProject::updateMakefileAm(QString makefile){
 	    stream << getLDADD();
 	  }
 	  
-	  if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c") {
+	  if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "normal_gnome") {
 	    stream << " $(LIBSOCKET)" << "\n";
 	  }
 	  else{

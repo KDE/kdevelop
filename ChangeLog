@@ -1,3 +1,6 @@
+2000-04-16 Sandy Meier <smeier@kdevelop.de>
+	* added a GNOME template to the Application wizard and updated the projectmangement
+
 2000-04-14 Walter Tasin  <tasin@kdevelop.de>
 	* correcting workaround for SEGFAULT in QMultiLineEdit
           (thx to Simon Derr <sderr@ensisun.imag.fr> for the hint)

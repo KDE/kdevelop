@@ -93,6 +93,9 @@ else {
   elsif ($processes{APPLICATION} eq "c") {
     changeTerminalCApp();
   }
+  elsif ($processes{APPLICATION} eq "gnomenormal") {
+    changeGnomeApp();
+  }
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
@@ -157,7 +160,10 @@ sub setupDefaultChangings
     $changings{"|NAME|"}= $name;
     $changings{"|NAMELITTLE|"}= $nameLittle;
     $changings{"|NAMEBIG|"}= $nameBig;
-
+    $changings{"gnomehello"}= $nameLittle;
+    $changings{"hello_"}= $nameLittle . "_";
+    $changings{"gnome-hello"}= $nameLittle;
+    $changings{"GNOMEHELLO"}= $nameBig;
 }
 
 #the subroutine for replacing words in files
@@ -820,6 +826,65 @@ sub changeCustomApp {
     condCopyLsmFile();
     
 }
+
+sub changeGnomeApp {
+
+#    unpackFiles("c.tar");
+#
+    #renamed the directory
+    printflush (STDOUT, "changing files...\n");
+    chdir ($overDirectory);
+    rename ("src", $nameLittle);
+    rename ("gnome-hello.desktop",$nameLittle . ".desktop");
+
+    chdir ("pixmaps");
+    rename ("gnome-hello-logo.png",$nameLittle . "-logo.png");
+
+    chdir ($underDirectory);
+    rename ("hello.h", "main.h");
+    rename ("hello.c", "main.c");
+
+    #create the templatedirectory
+    condCopyTemplateFiles();
+
+    #replaced skel with the projectname in different files
+    chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+    replaceValuesInFile(\%changings, $nameLittle . ".desktop");
+
+    chdir ($underDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.c");
+    replaceValuesInFile(\%changings, "app.c");
+    replaceValuesInFile(\%changings, "app.h");
+    replaceValuesInFile(\%changings, "menus.c");
+    replaceValuesInFile(\%changings, "menus.h");
+
+#    chdir ($underDirectory . "/docs/en");
+#    replaceValuesInFile(\%changings, "Makefile.am");
+
+    condCopyGNUFiles();
+    condCopyLsmFile();
+    condCopyUserDocFiles();
+
+    if ($processes{CPP} eq "yes") {
+        processCppTemplate("main.c");
+	processCppTemplate("app.c");
+	processCppTemplate("menus.c");
+    }
+    if ($processes{HEADER} eq "yes") {
+	processHeaderTemplate("main.h");
+	processHeaderTemplate("app.h");
+	processHeaderTemplate("menus.h");
+    }
+
+    condCopyKdelnkFile();
+    condCopyProgIcons();
+    condCreateApiDoc();
+
+}
+
 
 
 
