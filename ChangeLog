@@ -1,7 +1,7 @@
-2001-07-26 Victor Röder <victor_roeder@gmx.de>
+2001-07-27 Victor Röder <victor_roeder@gmx.de>
 	* KDevArgHint added to KWrite-part (widget that shows the function and its needed arguments)
 		Try it and type in 'test(' at the beginning of an empty line in a C++ project!
-	* showArgHint() added to CodeCompletionDocument
+	* showArgHint() added to CodeCompletionDocumentIface
 	* added some code to CppCodeCompletion (cppsupport), but only for testing
 
 2001-07-26 Sandy Meier   <smeier@kdevelop.org>
