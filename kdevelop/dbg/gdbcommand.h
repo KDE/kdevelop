@@ -57,7 +57,9 @@ enum GDBCmd
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',
 
-  DETACH          = 'z'
+  DETACH          = 'z',
+
+  WAIT            = '0'
 };
 
 #define RUNCMD      (true)
@@ -75,7 +77,7 @@ class GDBCommand : public DbgCommand
 {
 public:
   GDBCommand(const QString& command, bool isRunCmd=false, bool isInfoCmd=true,
-              char prompt=0);
+              char prompt=WAIT);
 	virtual ~GDBCommand();
 	
 	virtual QString cmdToSend();

@@ -123,6 +123,7 @@
 //
 // **************************************************************************
 
+
 GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   DbgController(),
   frameStack_(frameStack),
@@ -273,7 +274,7 @@ void GDBController::reConfig()
     }
 
     if (restart)
-      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
   }
 }
 
@@ -560,7 +561,7 @@ void GDBController::parseLine(char* buf)
             emit unableToSetBPNow(BPNo);
             queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
             queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-            queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+            queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
           }
           DBG_DISPLAY("Parsed (START_cann)<" + QString(buf) + ">");
           break;
@@ -639,7 +640,7 @@ void GDBController::parseLine(char* buf)
           setStateOn(s_silent);     // be quiet, children!!
           setStateOff(s_appBusy);   // and stop that fiddling.
           emit acceptPendingBPs();  // now go clean your rooms!
-          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
         }
         else
           actOnProgramPause(QString(buf));
@@ -1183,8 +1184,8 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // Initialise gdb. At this stage gdb is sitting wondering what to do,
   // and to whom. Organise a few things, then set up the tty for the application,
   // and the application itself
-  queueCmd(new GDBCommand("set edit off", NOTRUNCMD, NOTINFOCMD));
-  queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("set edit off", NOTRUNCMD, NOTINFOCMD, 0));
+//  queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
 
   if (config_displayStaticMembers_)
@@ -1259,7 +1260,7 @@ void GDBController::slotRun()
   if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1270,10 +1271,10 @@ void GDBController::slotRunUntil(const QString& filename, int lineNo)
     return;
 
   if (filename == "")
-    queueCmd(new GDBCommand(QString().sprintf("until %d",lineNo), RUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand(QString().sprintf("until %d",lineNo), RUNCMD, NOTINFOCMD, 0));
   else
     queueCmd(new GDBCommand(QString().sprintf("until %s:%d",
-                          filename.data(), lineNo), RUNCMD, NOTINFOCMD));
+                          filename.data(), lineNo), RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1283,7 +1284,7 @@ void GDBController::slotStepInto()
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand("step", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("step", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1293,7 +1294,7 @@ void GDBController::slotStepIntoIns()
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand("stepi", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("stepi", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1303,7 +1304,7 @@ void GDBController::slotStepOver()
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand("next", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("next", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1313,7 +1314,7 @@ void GDBController::slotStepOverIns()
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand("nexti", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("nexti", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1323,7 +1324,7 @@ void GDBController::slotStepOutOff()
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
-  queueCmd(new GDBCommand("finish", RUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("finish", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1379,7 +1380,7 @@ void GDBController::slotBPState(Breakpoint* BP)
   }
 
   if (restart)
-    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1410,7 +1411,7 @@ void GDBController::slotClearAllBreakpoints()
   queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 
   if (restart)
-    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1624,7 +1625,7 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 //    {
 //      queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
 //      queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-//      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+//      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
 //      emit unableToSetBPNow(BPNo);
 //    }
 //    return;
