@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib $(all_includes)
 
 lib_LTLIBRARIES = libkdevprintplugin.la
 libkdevprintplugin_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevprintplugin_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KDEUI)
+libkdevprintplugin_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KFILE)
 
 libkdevprintplugin_la_SOURCES = main.cpp cfileprintdlg.cpp cprintdlg.cpp \
 			        cconfigenscriptdlg.cpp cconfiga2psdlg.cpp cdatepikerdlg.cpp
