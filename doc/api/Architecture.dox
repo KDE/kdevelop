@@ -89,9 +89,6 @@ operation of KDevelop.
   - parts/grepview = A graphical grep utility
     - (see GrepViewPart)
     .
-  - parts/cvs = CVS Support
-    - (see CvsPart)
-    .
   - parts/tools = Toolbar management
     - (see ToolsPart)
     .
@@ -170,6 +167,37 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
     .
   .
 
+\subsubsection editor support Specific Parts in KDevelop
+
+These parts implement a KTextEditor interface.
+
+  - parts/nedit = KTextEditor interface for nedit
+    - (see KNEditFactory, Document, View)
+    .
+  - parts/qeditor = QEditor integration
+    - (see QEditorPart)
+    .
+  .
+
+\subsubsection VCS (Version Control System) Parts in KDevelop
+
+  - parts/cervisia = Cervisia Support
+    - (see CervisiaPart)
+    .
+  - parts/cvs = CVS Support
+    - (see CvsPart)
+    .
+  - parts/cvsservice = cvsservice Support (Cervisia interface)
+    - (see CvsServicePart)
+    .
+  - parts/perforce = Version managment system perforce integration
+    - (see PerforcePart)
+    .
+  - parts/svn = Subversion integration
+    - (see SvnPart)
+    .
+  .
+
 \subsubsection project-specific-parts Project Specific Parts in KDevelop
 
   - parts/astyle = Source code formatter
@@ -205,29 +233,14 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
   - parts/manager = Document manager
     - (see DocManager, ViewManager)
     .
-  - parts/nedit = KTextEditor interface for nedit
-    - (see KNEditFactory, Document, View)
-    .
   - parts/outputviews = Application output views
     - (see AppOutputViewPart, MakeViewPart)
-    .
-  - parts/perforce = Version managment system perforce integration
-    - (see PerforcePart)
-    .
-  - parts/qeditor = QEditor integration
-    - (see QEditorPart)
     .
   - parts/scripting = Python scripting interface
     - (see ScriptingPart)
     .
-  - parts/scriptproject = Scripting language project
-    - (see ScriptProjectPart)
-    .
   - parts/sourcenav = Source code navigation
     - (see SourceNavPart)
-    .
-  - parts/svn = Subversion integration
-    - (see SvnPart)
     .
   - parts/visualboyadvance = VisualBoy Advance integration
     - (see VisualBoyAdvance::VisualBoyAdvancePart)

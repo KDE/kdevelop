@@ -3,18 +3,18 @@
 */
 
 /**
-\mainpage The KDevelop API Documentation
+\mainpage The KDevelop %API Documentation
 
-KDevelop is an easy to use IDE for developing applications under X11.
+KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.
 
 \section intro Introduction
 
-This section contains the KDevelop online class reference for the current
-development version of KDevelop. You can also
-<a href="http://developer.kde.org/~danimo/apidocs.tar.bz2">download
-(~11&nbsp;MB)</a> the complete API documentation.  Additionally, you
-can subscribe or read the mailing lists for any additions and/or
-modifications to the API.
+This document is targeted at all those that want to add or improve KDevelop's source code.
+If you are instead looking for a user manual, just go to the help menu of your KDevelop and select KDevelop handbook.
+This documentation contains the KDevelop online class reference for the current
+development version of KDevelop.  Additionally, you
+can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or
+modifications to the %API.
 
 More information about the KDevelop architecture in form of tutorials, HOWTOs,
 and FAQs can be found at
