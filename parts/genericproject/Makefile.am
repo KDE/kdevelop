@@ -1,10 +1,12 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util -I$(top_builddir)/lib/project $(all_includes)
 METASOURCES = AUTO
 
 lib_LTLIBRARIES =  libkdevgenericproject.la
-libkdevgenericproject_la_SOURCES = detailslistview.cpp overviewlistview.cpp genericlistviewitem.cpp genericproject_part.cpp genericproject_widget.cpp variantserializer.cpp
+libkdevgenericproject_la_SOURCES = detailslistview.cpp overviewlistview.cpp genericlistviewitem.cpp \
+	genericproject_part.cpp genericproject_widget.cpp variantserializer.cpp
 libkdevgenericproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/project/libkdevproject.la $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 libkdevgenericproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkdevgenericproject_la_COMPILE_FIRST = $(top_builddir)/lib/project/removesubprojectdlgbase.h
 
 noinst_HEADERS = detailslistview.h overviewlistview.h genericlistviewitem.h genericproject_part.h genericproject_widget.h variantserializer.h
 

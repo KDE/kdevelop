@@ -33,6 +33,7 @@
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
+#include <kinstance.h>
 
 static const char* ocaml_keywords[] = {
     // OCaml keywords

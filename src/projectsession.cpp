@@ -23,6 +23,7 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kinstance.h>
 #include "ktexteditor/viewcursorinterface.h"
 #include "ktexteditor/document.h"
 

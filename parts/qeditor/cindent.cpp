@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kinstance.h>
 
 extern int indentForBottomLine( const QStringList& program, QChar typedIn );
 extern void configureCIndent( const QMap<QString, QVariant>& values );
