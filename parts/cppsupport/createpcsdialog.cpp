@@ -38,6 +38,9 @@
 #include <qregexp.h>
 #include <qlayout.h>
 
+#include <stdlib.h>
+#include <unistd.h>
+
 class CreatePCSDialog::RppDriver: public Driver
 {
 public:
