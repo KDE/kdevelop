@@ -104,7 +104,10 @@ QRect QextMdiChildView::internalGeometry() const
       return QRect(ptTopLeft, sz);
    }
    else {
-      return geometry();
+      QRect    geo = geometry();
+      QRect    frameGeo = externalGeometry();
+      return QRect(frameGeo.x(), frameGeo.y(), geo.width(), geo.height());
+//      return geometry();
    }
 }
 
@@ -123,8 +126,10 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
       QRect    newGeoQt;
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
-      newGeoQt.setWidth(newGeometry.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
-      newGeoQt.setHeight(newGeometry.height()+mdiParent()->captionHeight()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+      newGeoQt.setWidth(newGeometry.width()+nFrameSizeLeft+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
+      newGeoQt.setHeight(newGeometry.height()+nFrameSizeTop+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
+//      newGeoQt.setWidth(newGeometry.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+//      newGeoQt.setHeight(newGeometry.height()+mdiParent()->captionHeight()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
 
       // set the geometry
       mdiParent()->setGeometry(newGeoQt);
