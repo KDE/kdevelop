@@ -1,0 +1,10 @@
+/**
+@mainpage The KDevelop Designer Integration Support Library
+
+This library contains base classes to implement GUI designer integration in language support plugins.
+
+<b>Link with</b>: -ldesignerintegration
+
+<b>Include path</b>: -I\$(kde_includes)/languages/designer_integration
+*/
+
