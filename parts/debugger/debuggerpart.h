@@ -61,7 +61,7 @@ private slots:
     void slotRun();
     void slotExamineCore();
     void slotAttachProcess();
-    void slotStop();
+    void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
     void slotStepOver();

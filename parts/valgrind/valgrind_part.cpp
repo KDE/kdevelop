@@ -34,8 +34,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
            this, SLOT(receivedStderr( KProcess*, char*, int )) );
   connect( proc, SIGNAL(processExited( KProcess* )),
            this, SLOT(processExited( KProcess* )) );
-  connect( core(), SIGNAL(stopButtonClicked()),
-           this, SLOT(slotKillValgrind()) );
+  connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+           this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
   
   m_widget = new ValgrindWidget( this );
   
@@ -115,6 +115,13 @@ void ValgrindPart::slotKillValgrind()
 {
   if ( proc )
     proc->kill();
+}
+
+void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
+{
+  if ( which != 0 && which != this )
+    return;
+  slotKillValgrind();
 }
 
 void ValgrindPart::runValgrind( const QString& exec, const QString& params, const QString& valExec, const QString& valParams )

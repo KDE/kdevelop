@@ -29,6 +29,7 @@ public:
 private slots:
   void slotExecValgrind();
   void slotKillValgrind();
+  void slotStopButtonClicked( KDevPlugin* which );
   void receivedStdout( KProcess*, char*, int );
   void receivedStderr( KProcess*, char*, int );
   void processExited( KProcess* );

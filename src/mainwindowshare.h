@@ -47,7 +47,10 @@ private slots:
   void slotConfigureToolbars();
   void slotConfigureNotifications();
   void slotSettings();
-  void slotActiveProcessCountChanged( uint active );
+  void slotActiveProcessChanged( KDevPlugin*, bool );
+  void slotStopPopupActivated(int);
+  void slotStopMenuAboutToShow();
+  void slotStopButtonPressed();
   void slotNewToolbarConfig();
   void slotShowMenuBar();
 
@@ -66,9 +69,10 @@ private:
   KToggleAction*   m_toggleBrowserToolbar;
   KToggleAction*   m_toggleStatusbar;
 
-  KAction*         m_stopProcesses;                 //!< Stops all running processes
+  KToolBarPopupAction*  m_stopProcesses;                 //!< Stops all running processes
 
   KParts::MainWindow*   m_pMainWnd;
+  QPtrList<KDevPlugin>  activeProcesses;
 };
 
 #endif // __MAINWINDOWSHARE_H__

@@ -34,6 +34,9 @@ protected:
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);
 
+private slots:
+    void slotStopButtonClicked(KDevPlugin*);
+
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
     KDevAppFrontendIface *m_dcop;

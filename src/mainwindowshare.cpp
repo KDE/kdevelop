@@ -35,6 +35,7 @@
 #include <kedittoolbar.h>
 #include <kbugreport.h>
 #include <kurlrequester.h>
+#include <kpopupmenu.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -76,14 +77,18 @@ void MainWindowShare::createActions()
 
   KAction* action;
 
-  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop",
-                                 Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
+  m_stopProcesses = new KToolBarPopupAction( i18n( "&Stop" ), "stop",
+                                 Key_Escape, this, SLOT(slotStopButtonPressed()),
                                  m_pMainWnd->actionCollection(), "stop_processes" );
   m_stopProcesses->setStatusText(i18n("Stop all running processes"));
   m_stopProcesses->setEnabled( false );
+  connect(m_stopProcesses->popupMenu(), SIGNAL(aboutToShow()),
+         this, SLOT(slotStopMenuAboutToShow()));
+  connect(m_stopProcesses->popupMenu(), SIGNAL(activated(int)),
+         this, SLOT(slotStopPopupActivated(int)));
 
-  connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
-           this, SLOT(slotActiveProcessCountChanged(uint)) );
+  connect( Core::getInstance(), SIGNAL(activeProcessChanged(KDevPlugin*, bool)),
+           this, SLOT(slotActiveProcessChanged(KDevPlugin*, bool)) );
 
   action = KStdAction::showMenubar(
                 this, SLOT(slotShowMenuBar()),
@@ -197,9 +202,51 @@ void MainWindowShare::slotToggleStatusbar()
     sb->hide();
 }
 
-void MainWindowShare::slotActiveProcessCountChanged( uint active )
+void MainWindowShare::slotStopButtonPressed()
 {
-  m_stopProcesses->setEnabled( active > 0 );
+  Core::getInstance()->doEmitStopButtonPressed();
+}
+
+void MainWindowShare::slotActiveProcessChanged( KDevPlugin* plugin, bool active )
+{
+  if ( !plugin )
+    return;
+
+  if ( active ) {
+    activeProcesses.append( plugin );
+  } else {
+    activeProcesses.removeRef( plugin );
+  }
+  m_stopProcesses->setEnabled( !activeProcesses.isEmpty() );
+}
+
+void MainWindowShare::slotStopPopupActivated( int id )
+{
+  KDevPlugin* plugin = activeProcesses.at( id );
+  if ( plugin && plugin->pluginName() == m_stopProcesses->popupMenu()->text( id ) ) {
+    Core::getInstance()->doEmitStopButtonPressed( plugin );
+    return;
+  } else {
+    // oops... list has changed in the meantime
+    QString str = m_stopProcesses->popupMenu()->text( id );
+    for ( plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
+      if ( plugin->pluginName() == str ) {
+	Core::getInstance()->doEmitStopButtonPressed( plugin );
+        return;
+      }
+    }
+  }
+}
+
+void MainWindowShare::slotStopMenuAboutToShow()
+{
+  QPopupMenu* popup = m_stopProcesses->popupMenu();
+  popup->clear();
+
+  int i = 0;
+  for ( KDevPlugin* plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
+    popup->insertItem( plugin->pluginName(), i++ );
+  }
 }
 
 void MainWindowShare::slotShowMenuBar()

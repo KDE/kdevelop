@@ -34,8 +34,8 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     
     setXMLFile("kdevgrepview.rc");
 
-    connect( core(), SIGNAL(stopButtonClicked()),
-             this, SLOT(stopButtonClicked()) );
+    connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+             this, SLOT(stopButtonClicked(KDevPlugin*)) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -74,8 +74,10 @@ GrepViewPart::~GrepViewPart()
 }
 
 
-void GrepViewPart::stopButtonClicked()
+void GrepViewPart::stopButtonClicked(KDevPlugin* which)
 {
+    if ( which != 0 && which != this )
+        return;
     kdDebug(9001) << "GrepViewPart::stopButtonClicked()" << endl;
     m_widget->killJob();
 }

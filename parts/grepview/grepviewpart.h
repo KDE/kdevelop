@@ -31,7 +31,7 @@ public:
     ~GrepViewPart();
 
 private slots:
-    void stopButtonClicked();
+    void stopButtonClicked(KDevPlugin *which);
     void projectOpened();
     void projectClosed();
     void contextMenu(QPopupMenu *popup, const Context *context);

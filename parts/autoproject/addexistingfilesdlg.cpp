@@ -129,8 +129,9 @@ void AddExistingFilesDialog::init()
     connect ( importView, SIGNAL ( dropped( QDropEvent* ) ), this, SLOT ( slotDropped ( QDropEvent* ) ) );
 
     importView->setSelectionMode ( KFile::Multi );
-	
-	sourceSelector->setDir ( m_spitem->path );
+
+    Q_ASSERT( m_spitem );	
+    sourceSelector->setDir ( m_spitem->path );
 }
 
 void AddExistingFilesDialog::importItems()

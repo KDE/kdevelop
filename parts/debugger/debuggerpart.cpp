@@ -273,8 +273,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-    connect( core(), SIGNAL(stopButtonClicked()),
-             this, SLOT(slotStop()) );
+    connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+             this, SLOT(slotStop(KDevPlugin*)) );
 
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(slotActivePartChanged(KParts::Part*)) );
@@ -615,8 +615,11 @@ void DebuggerPart::slotAttachProcess()
 }
 
 
-void DebuggerPart::slotStop()
+void DebuggerPart::slotStop(KDevPlugin* which)
 {
+    if( which != 0 && which != this )
+        return;
+
     if( !controller->stateIsOn( s_dbgNotStarted ) && !controller->stateIsOn( s_shuttingDown ) )
         stopDebugger();
 }

@@ -30,7 +30,6 @@ Core *Core::getInstance()
 
 Core::Core()
   : KDevCore()
-  , m_activeProcesses( 0 )
 {
 }
 
@@ -61,11 +60,9 @@ bool Core::queryClose()
 }
 
 
-void Core::running(KDevPlugin * /* which */, bool runs)
+void Core::running(KDevPlugin * which, bool runs)
 {
-  kdDebug(9000) << "Core::running " << endl;
-  m_activeProcesses += (runs ? 1 : -1);
-  emit activeProcessCountChanged( m_activeProcesses );
+  emit activeProcessChanged( which, runs );
 }
 
 

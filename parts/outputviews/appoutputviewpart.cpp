@@ -40,8 +40,8 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
     mainWindow()->embedOutputView(m_widget, i18n("Application"), i18n("output of the executed user program"));
 
-    connect( core(), SIGNAL(stopButtonClicked()),
-             m_widget, SLOT(killJob()) );
+    connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+             this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 }
 
 
@@ -49,6 +49,13 @@ AppOutputViewPart::~AppOutputViewPart()
 {
     delete m_widget;
     delete m_dcop;
+}
+
+void AppOutputViewPart::slotStopButtonClicked( KDevPlugin* which )
+{
+    if ( which != 0 && which != this )
+        return;
+    m_widget->killJob();
 }
 
 

@@ -29,13 +29,14 @@ public:
   void doEmitProjectClosed() { emit projectClosed(); }
   void doEmitCoreInitialized() { emit coreInitialized(); }
   void doEmitProjectConfigWidget(KDialogBase *base) { emit projectConfigWidget(base); }
-  void doEmitConfigWidget(KDialogBase *base) { emit configWidget(base); };
+  void doEmitConfigWidget(KDialogBase *base) { emit configWidget(base); }
+  void doEmitStopButtonPressed(KDevPlugin* which = 0) { emit stopButtonClicked( which ); }
 
   bool queryClose();
 
 signals:
 
-  void activeProcessCountChanged( uint active );
+  void activeProcessChanged(KDevPlugin* which, bool runs);
 
 protected:
 
@@ -43,8 +44,6 @@ protected:
 
 
 private:
-  uint m_activeProcesses;
-
   static Core *s_instance;
 
 };

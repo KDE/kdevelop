@@ -194,9 +194,10 @@ signals:
     void projectClosed();
 
     /**
-     * The user has clicked the stop button.
+     * The user has clicked the stop button. The parameter is
+     * 0 if all actions should be cancelled.
      */
-    void stopButtonClicked();
+    void stopButtonClicked( KDevPlugin *which );
     /**
      * A context menu has been requested somewhere. Components
      * may hook some entries into it. More information on the

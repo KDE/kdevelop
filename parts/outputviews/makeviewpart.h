@@ -29,6 +29,9 @@ public:
     ~MakeViewPart();
     virtual QWidget* widget();
     virtual void updateSettingsFromConfig();
+
+private slots:
+    void slotStopButtonClicked(KDevPlugin*);
     
 protected:
     virtual void queueCommand(const QString &dir, const QString &command);

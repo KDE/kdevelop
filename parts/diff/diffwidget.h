@@ -49,6 +49,7 @@ private slots:
 private:
   static void searchExtParts();
   static QStringList extParts;
+  bool highlight;
 };
 
 class DiffWidget : public QWidget
