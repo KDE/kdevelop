@@ -7,7 +7,7 @@ SUBDIRS = file_templates app_templates compiler doc
 
 kde_module_LTLIBRARIES = libkdevpascalsupport.la
 libkdevpascalsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
-libkdevpascalsupport_la_LIBADD = $(top_builddir)/bdb/build_unix/libdb.a $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la $(top_builddir)/lib/catalog/libkdevcatalog.la
+libkdevpascalsupport_la_LIBADD = $(top_builddir)/bdb/libdb.la $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la $(top_builddir)/lib/catalog/libkdevcatalog.la
 
 libkdevpascalsupport_la_SOURCES = pascalsupport_part.cpp PascalLexer.cpp PascalParser.cpp PascalStoreWalker.cpp backgroundparser.cpp configproblemreporter.ui problemreporter.cpp
 
