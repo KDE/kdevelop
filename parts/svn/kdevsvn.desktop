@@ -4,6 +4,6 @@ Type=Service
 Exec=blubb
 Comment=SVN Integration
 Name=SVN
-# ServiceTypes=KDevelop/VersionControl
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevsvn
 X-KDevelop-Scope=Global
