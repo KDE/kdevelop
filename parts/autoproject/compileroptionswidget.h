@@ -9,44 +9,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <klocale.h>
+#ifndef _COMPILEROPTIONSWIDGET_H_
+#define _COMPILEROPTIONSWIDGET_H_
 
-#include "kdevcore.h"
-#include "ctagsdlg.h"
-#include "ctagsfactory.h"
-#include "ctagspart.h"
+#include "domutil.h"
+#include "compileroptionswidgetbase.h"
+
+class KDevCompilerOptions;
+class AutoProjectPart;
 
 
-CTagsPart::CTagsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+class CompilerOptionsWidget : public CompilerOptionsWidgetBase
 {
-    setInstance(CTagsFactory::instance());
-    setXMLFile("kdevctags.rc");
-
-    KAction *action;
+    Q_OBJECT
     
-    action = new KAction( i18n("CTags..."), 0,
-                          this, SLOT(slotTags()),
-                          actionCollection(), "tools_ctags" );
+public:
+    CompilerOptionsWidget( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
+    ~CompilerOptionsWidget();
 
-    m_dialog = 0;
-}
+public slots:
+    void accept();
 
+private:
+    virtual void cflagsClicked();
+    virtual void cxxflagsClicked();
+    virtual void f77flagsClicked();
 
-CTagsPart::~CTagsPart()
-{
-    delete m_dialog;
-}
+    KDevCompilerOptions *createCompilerOptions(const QString &lang);
+    QStringList cservice_names;
+    QStringList cxxservice_names;
+    QStringList f77service_names;
+    
+    AutoProjectPart *m_part;
+};
 
-
-void CTagsPart::slotTags()
-{
-    if (!m_dialog) {
-        m_dialog = new CTagsDialog(this);
-    }
-
-    m_dialog->show();
-}
-
-
-#include "ctagspart.moc"
+#endif

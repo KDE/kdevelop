@@ -6,7 +6,6 @@
  </general>
  <kdevautoproject>
   <general>
-   <mainprogram>src/$APPNAMELC</mainprogram>
   </general>
  </kdevautoproject>
  <kdevfileview>

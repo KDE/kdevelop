@@ -27,7 +27,7 @@ RegexpTestPart::RegexpTestPart(KDevApi *api, QObject *parent, const char *name)
     
     action = new KAction( i18n("Debug regular expression..."), 0,
                           this, SLOT(slotRegexpTest()),
-                          actionCollection(), "edit_regexptest" );
+                          actionCollection(), "tools_regexptest" );
 
     m_dialog = 0;
 }

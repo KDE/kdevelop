@@ -9,7 +9,14 @@ libkdevautoproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				autoprojectpart.cpp \
 				autoprojectwidget.cpp \
-				projectoptionswidget.cpp \
+				compileroptionswidget.cpp \
+				compileroptionswidgetbase.ui \
+				makeoptionswidget.cpp \
+				makeoptionswidgetbase.ui \
+				runoptionswidget.cpp \
+				runoptionswidgetbase.ui \
+				configureoptionswidget.cpp \
+				configureoptionswidgetbase.ui \
 				subprojectoptionsdlg.cpp \
 				subprojectoptionsdlgbase.ui \
 				targetoptionsdlg.cpp \
@@ -23,6 +30,7 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				addfiledlg.cpp \
 				removefiledlg.cpp \
 				addprefixdlg.cpp \
+				addenvvardlg.cpp \
 				addtranslationdlg.cpp \
 				misc.cpp
 

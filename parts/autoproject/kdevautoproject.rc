@@ -2,14 +2,15 @@
 <kpartgui name="KDevAutoProject" version="1">
 <MenuBar>
   <Menu name="build" >
-    <Action name="project_build" />
-    <Action name="project_clean" />
-    <Action name="project_distclean" />
-    <Action name="project_makefilecvs" />
-    <Separator/>
-    <Action name="project_execute" />
-    <Action name="project_configure" />
     <Action name="project_addtranslation" />
+    <Action name="build_build" />
+    <Action name="build_clean" />
+    <Action name="build_distclean" />
+    <Action name="build_makefilecvs" />
+    <Action name="build_messages" />
+    <Separator/>
+    <Action name="build_configure" />
+    <Action name="build_execute" />
   </Menu>
 </MenuBar>
 </kpartgui>

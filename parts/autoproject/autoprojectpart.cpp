@@ -23,7 +23,10 @@
 #include "kdevappfrontend.h"
 #include "autoprojectfactory.h"
 #include "autoprojectwidget.h"
-#include "projectoptionswidget.h"
+#include "compileroptionswidget.h"
+#include "makeoptionswidget.h"
+#include "runoptionswidget.h"
+#include "configureoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "autoprojectpart.h"
 #include "config.h"
@@ -49,37 +52,42 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
 
     KAction *action;
 
-    action = new KAction( i18n("&Build project"), "make_kdevelop", Key_F8,
-                          this, SLOT(slotBuild()),
-                          actionCollection(), "project_build" );
-    
-    action = new KAction( i18n("&Clean project"), 0,
-                          this, SLOT(slotClean()),
-                          actionCollection(), "project_clean" );
-    
-    action = new KAction( i18n("&Distclean"), 0,
-                          this, SLOT(slotDistClean()),
-                          actionCollection(), "project_distclean" );
-
-    action = new KAction( i18n("Run automake & friends"), 0,
-                          this, SLOT(slotMakefilecvs()),
-                          actionCollection(), "project_makefilecvs" );
-
-    action = new KAction( i18n("Run configure"), 0,
-                          this, SLOT(slotConfigure()),
-                          actionCollection(), "project_configure" );
-
-    action = new KAction( i18n("Execute program"), "exec", 0,
-                          this, SLOT(slotExecute()),
-                          actionCollection(), "project_execute" );
-
     action = new KAction( i18n("Add translation"), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
-
     if (!kde)
         action->setEnabled(false);
     
+    action = new KAction( i18n("&Build project"), "make_kdevelop", Key_F8,
+                          this, SLOT(slotBuild()),
+                          actionCollection(), "build_build" );
+    
+    action = new KAction( i18n("&Clean project"), 0,
+                          this, SLOT(slotClean()),
+                          actionCollection(), "build_clean" );
+    
+    action = new KAction( i18n("&Distclean"), 0,
+                          this, SLOT(slotDistClean()),
+                          actionCollection(), "build_distclean" );
+
+    action = new KAction( i18n("Run automake & friends"), 0,
+                          this, SLOT(slotMakefilecvs()),
+                          actionCollection(), "build_makefilecvs" );
+
+    action = new KAction( i18n("Make messages & and merge"), 0,
+                          this, SLOT(slotMakeMessages()),
+                          actionCollection(), "build_messages" );
+    if (!kde)
+        action->setEnabled(false);
+
+    action = new KAction( i18n("Run configure"), 0,
+                          this, SLOT(slotConfigure()),
+                          actionCollection(), "build_configure" );
+
+    action = new KAction( i18n("Execute program"), "exec", 0,
+                          this, SLOT(slotExecute()),
+                          actionCollection(), "build_execute" );
+
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
@@ -93,9 +101,19 @@ AutoProjectPart::~AutoProjectPart()
 
 void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Compiler Options"));
-    ProjectOptionsWidget *w = new ProjectOptionsWidget(this, vbox, "documentation tree config widget");
-    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    QVBox *vbox;
+    vbox = dlg->addVBoxPage(i18n("Compiler Options"));
+    CompilerOptionsWidget *w1 = new CompilerOptionsWidget(this, vbox);
+    connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
+    vbox = dlg->addVBoxPage(i18n("Configure Options"));
+    ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
+    connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
+    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    RunOptionsWidget *w3 = new RunOptionsWidget(this, vbox);
+    connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+    vbox = dlg->addVBoxPage(i18n("Make Options"));
+    MakeOptionsWidget *w4 = new MakeOptionsWidget(this, vbox);
+    connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 }
 
 
@@ -115,7 +133,7 @@ QString AutoProjectPart::mainProgram()
 {
     QDomDocument &doc = *document();
 
-    return DomUtil::readEntry(doc, "/kdevautoproject/general/mainprogram");
+    return DomUtil::readEntry(doc, "/kdevautoproject/run/mainprogram");
 }
 
 
@@ -223,6 +241,12 @@ void AutoProjectPart::slotMakefilecvs()
 }
 
 
+void AutoProjectPart::slotMakeMessages()
+{
+    startMakeCommand(projectDirectory(), QString::fromLatin1("package-messages"));
+}
+
+
 void AutoProjectPart::slotConfigure()
 {
     QDomDocument &doc = *document();
@@ -264,6 +288,33 @@ void AutoProjectPart::slotConfigure()
 void AutoProjectPart::slotExecute()
 {
     QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    
+    if (DomUtil::readBoolEntry(*document(), "/kdevautoproject/run/terminal")) {
+        QString terminal = "konsole -e /bin/sh -c '";
+        terminal += program;
+        terminal += "; echo \"\n";
+        terminal += i18n("Press Enter to continue!");
+        terminal += "\";read'";
+        program = terminal;
+    }
+    
+    QDomElement docEl = document()->documentElement();
+    QDomElement autoprojectEl = docEl.namedItem("kdevautoproject").toElement();
+    QDomElement envvarsEl = autoprojectEl.namedItem("envvars").toElement();
+    
+    QString environstr;
+    QDomElement childEl = envvarsEl.firstChild().toElement();
+    while (!childEl.isNull()) {
+        if (childEl.tagName() == "envvar") {
+            environstr += childEl.attribute("name");
+            environstr += "=";
+            environstr += childEl.attribute("value");
+            environstr += " ";
+        }
+        childEl = childEl.nextSibling().toElement();
+    }
+    program.prepend(environstr);
+
     appFrontend()->startAppCommand(program);
 }
 

@@ -36,8 +36,8 @@ FileViewConfigWidget::~FileViewConfigWidget()
 
 void FileViewConfigWidget::readConfig()
 {
-    QDomDocument projectDom = *m_part->document();
-    QDomElement docEl = projectDom.documentElement();
+    QDomDocument dom = *m_part->document();
+    QDomElement docEl = dom.documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
 
@@ -58,16 +58,16 @@ void FileViewConfigWidget::readConfig()
 
 void FileViewConfigWidget::storeConfig()
 {
-    QDomDocument projectDom = *m_part->document();
-    QDomElement docEl = projectDom.documentElement();
+    QDomDocument dom = *m_part->document();
+    QDomElement docEl = dom.documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     if (fileviewEl.isNull()) {
-        fileviewEl = projectDom.createElement("kdevfileview");
+        fileviewEl = dom.createElement("kdevfileview");
         docEl.appendChild(fileviewEl);
     }
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
     if (groupsEl.isNull()) {
-        groupsEl = projectDom.createElement("groups");
+        groupsEl = dom.createElement("groups");
         fileviewEl.appendChild(groupsEl);
     }
 
@@ -77,7 +77,7 @@ void FileViewConfigWidget::storeConfig()
 
     QListViewItem *item = listview->firstChild();
     while (item) {
-        QDomElement groupEl = projectDom.createElement("group");
+        QDomElement groupEl = dom.createElement("group");
         groupEl.setAttribute("name", item->text(0));
         groupEl.setAttribute("pattern", item->text(1));
         groupsEl.appendChild(groupEl);

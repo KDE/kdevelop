@@ -62,7 +62,7 @@ QString ScriptProjectPart::mainProgram()
 {
     QDomDocument &doc = *document();
 
-    return DomUtil::readEntry(doc, "/kdevscriptproject/general/mainprogram");
+    return DomUtil::readEntry(doc, "/kdevscriptproject/run/mainprogram");
 }
 
 

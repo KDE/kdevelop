@@ -15,33 +15,33 @@
 #include <kbuttonbox.h>
 #include <klocale.h>
 
-#include "addfilegroupdlg.h"
+#include "addenvvardlg.h"
 
 
-AddFileGroupDialog::AddFileGroupDialog(QWidget *parent, const char *name)
+AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add file group"));
+    setCaption(("Add environment variable"));
     
-    QLabel *title_label = new QLabel(i18n("&Title:"), this);
-    title_edit = new QLineEdit(this);
-    title_edit->setFocus();
-    title_label->setBuddy(title_edit);
+    QLabel *varname_label = new QLabel(i18n("&Name:"), this);
+    varname_edit = new QLineEdit(this);
+    varname_edit->setFocus();
+    varname_label->setBuddy(varname_edit);
 
-    QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
-    pattern_edit = new QLineEdit(this);
-    pattern_label->setBuddy(pattern_edit);
-    QFontMetrics fm(pattern_edit->fontMetrics());
-    pattern_edit->setMinimumWidth(fm.width('X')*35);
+    QLabel *value_label = new QLabel(i18n("&Value:"), this);
+    value_edit = new QLineEdit(this);
+    value_label->setBuddy(value_edit);
+    QFontMetrics fm(value_edit->fontMetrics());
+    value_edit->setMinimumWidth(fm.width('X')*35);
     
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
     
     QGridLayout *grid = new QGridLayout(2, 2);
     layout->addLayout(grid);
-    grid->addWidget(title_label, 0, 0);
-    grid->addWidget(title_edit, 0, 1);
-    grid->addWidget(pattern_label, 1, 0);
-    grid->addWidget(pattern_edit, 1, 1);
+    grid->addWidget(varname_label, 0, 0);
+    grid->addWidget(varname_edit, 0, 1);
+    grid->addWidget(value_label, 1, 0);
+    grid->addWidget(value_edit, 1, 1);
 
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
@@ -59,7 +59,7 @@ AddFileGroupDialog::AddFileGroupDialog(QWidget *parent, const char *name)
 }
 
 
-AddFileGroupDialog::~AddFileGroupDialog()
+AddEnvvarDialog::~AddEnvvarDialog()
 {}
 
-#include "addfilegroupdlg.moc"
+#include "addenvvardlg.moc"

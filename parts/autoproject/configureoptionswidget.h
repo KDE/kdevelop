@@ -9,44 +9,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <klocale.h>
+#ifndef _CONFIGUREOPTIONSWIDGET_H_
+#define _CONFIGUREOPTIONSWIDGET_H_
 
-#include "kdevcore.h"
-#include "ctagsdlg.h"
-#include "ctagsfactory.h"
-#include "ctagspart.h"
+#include "configureoptionswidgetbase.h"
+
+class AutoProjectPart;
 
 
-CTagsPart::CTagsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+class ConfigureOptionsWidget : public ConfigureOptionsWidgetBase
 {
-    setInstance(CTagsFactory::instance());
-    setXMLFile("kdevctags.rc");
-
-    KAction *action;
+    Q_OBJECT
     
-    action = new KAction( i18n("CTags..."), 0,
-                          this, SLOT(slotTags()),
-                          actionCollection(), "tools_ctags" );
+public:
+    ConfigureOptionsWidget( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
+    ~ConfigureOptionsWidget();
 
-    m_dialog = 0;
-}
+public slots:
+    void accept();
 
+private:
 
-CTagsPart::~CTagsPart()
-{
-    delete m_dialog;
-}
+    AutoProjectPart *m_part;
+};
 
-
-void CTagsPart::slotTags()
-{
-    if (!m_dialog) {
-        m_dialog = new CTagsDialog(this);
-    }
-
-    m_dialog->show();
-}
-
-
-#include "ctagspart.moc"
+#endif

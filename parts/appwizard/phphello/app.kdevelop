@@ -6,7 +6,6 @@
  </general>
  <kdevscriptproject>
   <general>
-   <mainprogram>$APPNAMELC.php</mainprogram>
   </general>
  </kdevscriptproject>
 </kdevelop>

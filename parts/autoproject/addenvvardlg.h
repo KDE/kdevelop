@@ -9,44 +9,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <klocale.h>
+#ifndef _ADDENVVARDLG_H_
+#define _ADDENVVARDLG_H_
 
-#include "kdevcore.h"
-#include "ctagsdlg.h"
-#include "ctagsfactory.h"
-#include "ctagspart.h"
+#include <qdialog.h>
+#include <qlineedit.h>
 
 
-CTagsPart::CTagsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+class AddEnvvarDialog : public QDialog
 {
-    setInstance(CTagsFactory::instance());
-    setXMLFile("kdevctags.rc");
+    Q_OBJECT
 
-    KAction *action;
+public: 
+    AddEnvvarDialog( QWidget *parent=0, const char *name=0 );
+    ~AddEnvvarDialog();
+
+    QString varname() const
+        { return varname_edit->text(); }
+    QString value() const
+        { return value_edit->text(); }
     
-    action = new KAction( i18n("CTags..."), 0,
-                          this, SLOT(slotTags()),
-                          actionCollection(), "tools_ctags" );
+private:
+    QLineEdit *varname_edit;
+    QLineEdit *value_edit;
+};
 
-    m_dialog = 0;
-}
-
-
-CTagsPart::~CTagsPart()
-{
-    delete m_dialog;
-}
-
-
-void CTagsPart::slotTags()
-{
-    if (!m_dialog) {
-        m_dialog = new CTagsDialog(this);
-    }
-
-    m_dialog->show();
-}
-
-
-#include "ctagspart.moc"
+#endif

@@ -9,9 +9,9 @@
   </ignoreparts>
  </general>
  <kdevautoproject>
-  <general>
-   <mainprogram>src/$APPNAMELC</mainprogram>
-  </general>
+  <run>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
+  </run>
  </kdevautoproject>
  <kdevdebugger>
   <general>

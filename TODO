@@ -1,3 +1,7 @@
+* Fix builddir 
+
+* Script project options 
+
 * Implement modification of build order.
 
 * Implement adding and removing sub projects.

@@ -5,9 +5,9 @@
   <primarylanguage>Java</primarylanguage>
  </general>
  <kdevautoproject>
-  <general>
+  <run>
    <mainprogram>src/$APPNAMELC</mainprogram>
-  </general>
+  </run>
  </kdevautoproject>
  <kdevfileview>
   <groups>

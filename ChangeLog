@@ -1,3 +1,17 @@
+2001-06-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Separated project options widget in 4 separate widgets 
+	  instead of one tab widget and embedded them 
+	  into the general project options dialog. This is
+	  more intuitive for the user and doesn't expose
+	  KDevelop's internal structure so much
+	* App wizard fixes and improvements in the project file structure
+	* Configurable builddir (not used yet)
+	* Configurable environment variables for program run
+	* Implemented Execute program
+	* Implemented Make messages
+	* Menu structure cleanup
+
 2001-06-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Implemented Add translation

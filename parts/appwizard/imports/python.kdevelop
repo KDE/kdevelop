@@ -10,8 +10,8 @@
   </ignoreparts>
  </general>
  <kdevscriptproject>
-  <general>
-   <mainprogram>$APPNAMELC.py</mainprogram>
-  </general>
+  <run>
+   <mainprogram>$APPNAMELC$.py</mainprogram>
+  </run>
  </kdevscriptproject>
 </kdevelop>

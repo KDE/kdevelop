@@ -9,44 +9,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <klocale.h>
+#ifndef _RUNOPTIONSWIDGET_H_
+#define _RUNOPTIONSWIDGET_H_
 
-#include "kdevcore.h"
-#include "ctagsdlg.h"
-#include "ctagsfactory.h"
-#include "ctagspart.h"
+#include "runoptionswidgetbase.h"
+
+class AutoProjectPart;
 
 
-CTagsPart::CTagsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+class RunOptionsWidget : public RunOptionsWidgetBase
 {
-    setInstance(CTagsFactory::instance());
-    setXMLFile("kdevctags.rc");
-
-    KAction *action;
+    Q_OBJECT
     
-    action = new KAction( i18n("CTags..."), 0,
-                          this, SLOT(slotTags()),
-                          actionCollection(), "tools_ctags" );
+public:
+    RunOptionsWidget( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
+    ~RunOptionsWidget();
 
-    m_dialog = 0;
-}
+public slots:
+    void accept();
 
+private:
+    virtual void addVarClicked();
+    virtual void removeVarClicked();
+    
+    AutoProjectPart *m_part;
+};
 
-CTagsPart::~CTagsPart()
-{
-    delete m_dialog;
-}
-
-
-void CTagsPart::slotTags()
-{
-    if (!m_dialog) {
-        m_dialog = new CTagsDialog(this);
-    }
-
-    m_dialog->show();
-}
-
-
-#include "ctagspart.moc"
+#endif

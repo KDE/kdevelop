@@ -38,20 +38,21 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
+    void slotAddTranslation();
     void slotBuild();
     void slotClean();
     void slotDistClean();
     void slotMakefilecvs();
+    void slotMakeMessages();
     void slotConfigure();
     void slotExecute();
-    void slotAddTranslation();
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);
     
     QGuardedPtr<AutoProjectWidget> m_widget;
     friend class AutoProjectWidget;
-    friend class ProjectOptionsWidget;
+    friend class CompilerOptionsWidget;
     friend class AddTranslationDialog;
 };
 
