@@ -1,4 +1,5 @@
 #include "packagebase.h"
+#include "packagebase.moc"
 #include "distpart_part.h"
 #include "distpart_widget.h"
 #include <qtabwidget.h>

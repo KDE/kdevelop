@@ -1,4 +1,5 @@
 #include "specsupport.h"
+#include "specsupport.moc"
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
 #include "distpart_widget.h"
@@ -178,7 +179,7 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
 //    QPushButton* srcPackagePushButton;
 void SpecSupport::slotsrcPackagePushButtonPressed() {
     QMap<QString,QString>::Iterator it;
-    
+
     QFile file1(dir + "/" + getAppSource());
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {

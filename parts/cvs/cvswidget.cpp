@@ -6,6 +6,7 @@
 #include "kdevtoplevel.h"
 #include "kdevcore.h"
 #include "cvswidget.h"
+#include "cvswidget.moc"
 #include "cvspart.h"
 
 class CvsListBoxItem : public ProcessListBoxItem {

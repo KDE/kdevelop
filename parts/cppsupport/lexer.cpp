@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include "lexer.h"
+#include "lexer.moc"
 
 using namespace std;
 
