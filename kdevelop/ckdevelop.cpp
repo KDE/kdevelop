@@ -524,7 +524,7 @@ void CKDevelop::slotOptionsKeys(){
 }
 
 void CKDevelop::slotOptionsConfigureEnscript(){
-  if (!CToolClass::searchProgram("a2ps")) {
+  if (!CToolClass::searchProgram("enscript")) {
     return;
   }
   enscriptconf = new CConfigEnscriptDlg(this, "confdialog");

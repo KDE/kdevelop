@@ -624,9 +624,10 @@ void CConfigA2psDlg::slotPreviewClicked() {
   QString dir,data1,data2,text;
   slotCreateParameters();
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
-  data1 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview1";
-  data2 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview2";
+  data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
+  data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
   process = new KShellProcess();
+  //  cerr << "a2ps -nP" + globalpara + " " + data1 + " " + data2 + " >" + dir;
   *process << "a2ps -nP" + globalpara + " " + data1 + " " + data2 + " >" + dir;
   process->start(KProcess::Block,KProcess::AllOutput);
   process2 = new KShellProcess();

@@ -2415,8 +2415,8 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
   QString dir,data1,data2,param,text;
   slotCreateParameters();
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
-  data1 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview1";
-  data2 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview2";
+  data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
+  data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
   param = (QString) " --output="+ dir;
   process = new KShellProcess();
   *process << "enscript " + globalpara + param + " " + data1 + " " + data2;
