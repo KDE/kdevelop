@@ -215,7 +215,7 @@ void PascalSupportPart::parse( const QString & fileName )
 
     } catch( antlr::ANTLRException& ex ){
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        d->problemReporter->reportError( ex.getMessage(),
+        d->problemReporter->reportError( ex.getMessage().c_str(),
                                          fileName,
                                          lexer.getLine(),
                                          lexer.getColumn() );

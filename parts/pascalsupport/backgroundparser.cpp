@@ -82,7 +82,7 @@ void BackgroundParser::run()
         kdDebug() << "19" << endl;
 
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        m_reporter->reportError( ex.getMessage(),
+        m_reporter->reportError( ex.getMessage().c_str(),
             m_fileName,
             lexer.getLine(),
             lexer.getColumn() );
