@@ -1152,7 +1152,7 @@ void GDBController::modifyBreakpoint( const Breakpoint& BP )
 
 // **************************************************************************
 
-void GDBController::slotStart(const QString& shell, const QString &application)
+void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments)
 {
     badCore_ = QString();
 
@@ -1259,25 +1259,19 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
     // Change the "Working directory" to the correct one
-    QFileInfo app(application);
-    if (config_runAppInAppDirectory_) {
-        QCString tmp( "cd " );
-        tmp += QFile::encodeName( app.dirPath() );
-        queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));
-    }
+    QCString tmp( "cd " + QFile::encodeName( run_directory ));
+    queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));
+
+    /// @todo Use run_arguments
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
     // "set enviroment" command
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
-    QString project_mananger_key = (DomUtil::readEntry(dom,"general/projectmanagement")).lower();
-    DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(dom, "/" + project_mananger_key + "/run/envvars",
-                                        "envvar", "name", "value");
     QString environstr;
     DomUtil::PairList::ConstIterator it;
-    for (it = envvars.begin(); it != envvars.end(); ++it)
+    for (it = run_envvars.begin(); it != run_envvars.end(); ++it)
     {
         environstr = "set environment ";
         environstr += (*it).first;

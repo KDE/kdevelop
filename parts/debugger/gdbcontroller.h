@@ -86,7 +86,8 @@ private:
 public slots:
     void configure();
 
-    void slotStart(const QString& shell, const QString &application);
+    void slotStart(const QString& shell, const DomUtil::PairList& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments);
+    //void slotStart(const QString& shell, const QString &application);
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
 

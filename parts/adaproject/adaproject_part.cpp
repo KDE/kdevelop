@@ -161,10 +161,85 @@ void AdaProjectPart::closeProject()
 {
 }
 
-QString AdaProjectPart::mainProgram()
+/** Retuns a PairList with the run environment variables */
+DomUtil::PairList AdaProjectPart::runEnvironmentVars()
+{
+    return DomUtil::readPairListEntry(*projectDom(), "/kdevadaproject/run/envvars", "envvar", "name", "value");
+}
+
+
+/** Retuns the currently selected run directory
+  * The returned string can be:
+  *   if run/directoryradio == executable
+  *        The directory where the executable is
+  *   if run/directoryradio == build
+  *        The directory where the executable is relative to build directory
+  *   if run/directoryradio == custom
+  *        The custom directory absolute path
+  */
+QString AdaProjectPart::runDirectory()
+{
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevadaproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevadaproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
+
+}
+
+
+/** Retuns the currently selected main program
+  * The returned string can be:
+  *   if run/directoryradio == executable
+  *        The executable name
+  *   if run/directoryradio == build
+  *        The path to executable relative to build directory
+  *   if run/directoryradio == custom or relative == false
+  *        The absolute path to executable
+  */
+QString AdaProjectPart::mainProgram(bool relative = false)
 {
     QFileInfo fi(mainSource());
     return buildDirectory() + "/" + fi.baseName();
+
+    /// FIXME: put the code below into use!
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevadaproject/run/mainprogram");
+
+    if ( directoryRadioString == "custom" )
+        return DomMainProgram;
+
+    if ( relative == false )
+        return buildDirectory() + "/" + DomMainProgram;
+
+    if ( directoryRadioString == "executable" ) {
+        int pos = DomMainProgram.findRev('/');
+        if (pos != -1)
+            return DomMainProgram.mid(pos+1);
+        return DomMainProgram;
+    }
+    else
+        return DomMainProgram;
+}
+
+
+/** Retuns a QString with the run command line arguments */
+QString AdaProjectPart::runArguments()
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevadaproject/run/programargs");
 }
 
 QString AdaProjectPart::mainSource()

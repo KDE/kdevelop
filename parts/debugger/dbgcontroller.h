@@ -17,6 +17,7 @@
 #define _DBGCONTROLLER_H_
 
 #include <qobject.h>
+#include <lib/util/domutil.h>
 
 class KProcess;
 class QString;
@@ -74,7 +75,20 @@ protected:
 public slots:
     virtual void configure()                                                = 0;
 
-    virtual void slotStart(const QString& shell, const QString &application)= 0;
+    /**
+     * Start the debugger
+     * \param shell shell
+     * \param run_envvars List with the environment variables
+     * \param run_directory Directory from where the program should be run
+     * \param application Absolute path to application
+     * \param run_arguments Command line arguments to be passed to the application
+     */
+    virtual void slotStart(const QString& shell,
+                           const DomUtil::PairList& run_envvars,
+                           const QString& run_directory,
+                           const QString &application,
+                           const QString& run_arguments)                    = 0;
+    //virtual void slotStart(const QString& shell, const QString &application)= 0;
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
     virtual void slotAttachTo(int pid)                                      = 0;
 

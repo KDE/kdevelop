@@ -535,9 +535,19 @@ void DebuggerPart::setupController()
 
 bool DebuggerPart::startDebugger()
 {
-    QString program;
-    if (project())
-        program = project()->mainProgram();
+    QString build_dir;              // Currently selected build directory
+    DomUtil::PairList run_envvars;  // List with the environment variables
+    QString run_directory;          // Directory from where the program should be run
+    QString program;                // Absolute path to application
+    QString run_arguments;          // Command line arguments to be passed to the application
+
+    if (project()) {
+        build_dir     = project()->buildDirectory();
+        run_envvars   = project()->runEnvironmentVars();
+        run_directory = project()->runDirectory();
+        program       = project()->mainProgram();
+        run_arguments = project()->runArguments();
+    }
 
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");
     if( !shell.isEmpty() )
@@ -545,7 +555,7 @@ bool DebuggerPart::startDebugger()
         QFileInfo info( shell );
         if( info.isRelative() )
         {
-            shell = project()->buildDirectory() + "/" + shell;
+            shell = build_dir + "/" + shell;
             info.setFile( shell );
         }
         if( !info.exists() )
@@ -591,7 +601,7 @@ bool DebuggerPart::startDebugger()
         floatingToolBar->show();
     }
 
-    controller->slotStart(shell, program);
+    controller->slotStart(shell, run_envvars, run_directory, program, run_arguments);
     return true;
 }
 

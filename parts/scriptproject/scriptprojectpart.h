@@ -37,15 +37,18 @@ protected:
 
     virtual QString projectDirectory();
     virtual QString projectName();
-    virtual QString mainProgram();
+    virtual QString mainProgram(bool relative = false);
     virtual QString activeDirectory();
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);
 	virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
-        virtual void removeFiles ( const QStringList& fileList );
+    virtual void removeFiles ( const QStringList& fileList );
     virtual QString buildDirectory();
-    
+    virtual QString runDirectory();
+    virtual QString runArguments();
+    virtual DomUtil::PairList runEnvironmentVars();
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotNewFile();

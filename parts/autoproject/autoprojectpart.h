@@ -44,7 +44,10 @@ public:
      */
     virtual QString projectDirectory();
     virtual QString projectName();
-    virtual QString mainProgram();
+    virtual DomUtil::PairList runEnvironmentVars();
+    virtual QString runDirectory();
+    virtual QString mainProgram(bool relative = false);
+    virtual QString runArguments();
     virtual QString activeDirectory();
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);

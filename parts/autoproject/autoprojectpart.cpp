@@ -196,8 +196,7 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 
 	m_widget->openProject(dirName);
 
-    QDomDocument &dom = *projectDom();
-    QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
+    QString activeTarget = DomUtil::readEntry(*projectDom(), "/kdevautoproject/general/activetarget");
     kdDebug(9020) << "activeTarget " << activeTarget << endl;
     if (!activeTarget.isEmpty())
         m_widget->setActiveTarget(activeTarget);
@@ -222,11 +221,81 @@ QString AutoProjectPart::projectName()
 }
 
 
-QString AutoProjectPart::mainProgram()
+/** Retuns a PairList with the run environment variables */
+DomUtil::PairList AutoProjectPart::runEnvironmentVars()
+{
+    return DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/run/envvars", "envvar", "name", "value");
+}
+
+
+/** Retuns the currently selected run directory
+  * The returned string can be:
+  *   if /kdevautoproject/run/directoryradio == executable
+  *        The directory where the executable is
+  *   if /kdevautoproject/run/directoryradio == build
+  *        The directory where the executable is relative to build directory
+  *   if /kdevautoproject/run/directoryradio == custom
+  *        The custom directory absolute path
+  */
+QString AutoProjectPart::runDirectory()
 {
     QDomDocument &dom = *projectDom();
 
-    return QDir::cleanDirPath(buildDirectory() + "/" + DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram"));
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevautoproject/run/customdirectory");
+
+    if ( DomMainProgram.isEmpty() )
+        return QString::null;
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+    return buildDirectory() + "/" + DomMainProgram;
+}
+
+
+/** Retuns the currently selected main program
+  * The returned string can be:
+  *   if /kdevautoproject/run/directoryradio == executable
+  *        The executable name
+  *   if /kdevautoproject/run/directoryradio == build
+  *        The path to executable relative to build directory
+  *   if /kdevautoproject/run/directoryradio == custom or relative == false
+  *        The absolute path to executable
+  */
+QString AutoProjectPart::mainProgram(bool relative = false)
+{
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+
+        if ( directoryRadioString == "custom" )
+            return DomMainProgram;
+
+        if ( relative == false )
+            return buildDirectory() + "/" + DomMainProgram;
+
+        if ( directoryRadioString != "executable" )
+            return DomMainProgram;
+
+        int pos = DomMainProgram.findRev('/');
+        if (pos != -1)
+            return DomMainProgram.mid(pos+1);
+        return DomMainProgram;
+}
+
+
+/** Retuns a QString with the run command line arguments */
+QString AutoProjectPart::runArguments()
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 }
 
 
@@ -313,8 +382,8 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 		{
 			if ( !messageBoxShown )
 			{
-				KMessageBox::information(m_widget, i18n("It seems that you don't have an Active Target specified!\n"
-														"Automake Manager supports this feature to 'activate' the target your currently working on.\n"
+				KMessageBox::information(m_widget, i18n("The directory you selected is not the Active Directory!\n"
+														"You should 'activate' the target you're currently working on in Automake Manager.\n"
 														"Just right-click a target and choose 'Make Target Active'."),
 														i18n ( "No Active Target found" ), "No automake manager active target warning" );
 				messageBoxShown = true;
@@ -376,10 +445,9 @@ QString AutoProjectPart::currentBuildConfig()
 
 QString AutoProjectPart::buildDirectory()
 {
-    QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
-    QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
+    QString builddir = DomUtil::readEntry(*projectDom(), prefix + "builddir");
     if (builddir.isEmpty())
         return topsourceDirectory();
     else if (builddir.startsWith("/"))
@@ -390,10 +458,9 @@ QString AutoProjectPart::buildDirectory()
 
 QString AutoProjectPart::topsourceDirectory()
 {
-    QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
-    QString topsourcedir = DomUtil::readEntry(dom, prefix + "topsourcedir");
+    QString topsourcedir = DomUtil::readEntry(*projectDom(), prefix + "topsourcedir");
     if (topsourcedir.isEmpty())
         return projectDirectory();
     else if (topsourcedir.startsWith("/"))
@@ -589,11 +656,8 @@ void AutoProjectPart::slotBuildActiveTarget()
   if ( !titem )
     return;
 
-  // Get the relative path of the active target
-  QString relpath = m_widget->activeSubproject()->path.mid( projectDirectory().length() );
-
   // build it
-  buildTarget(relpath, titem);
+  buildTarget(activeDirectory(), titem);
 
   // hide the autoproject toolbar (if not sticky)
   mainWindow()->lowerView( m_widget );
@@ -611,7 +675,7 @@ void AutoProjectPart::slotCompileFile()
     QString sourceDir = fi.dirPath();
     QString baseName = fi.baseName();
     kdDebug(9020) << "Compiling " << fileName
-                  << "in dir " << sourceDir
+                  << " in dir " << sourceDir
                   << " with baseName " << baseName << endl;
 
     QString projectDir = projectDirectory();
@@ -784,25 +848,11 @@ void AutoProjectPart::slotExecute2()
 {
     disconnect(appFrontend(), SIGNAL(processExited()), this, SLOT(slotExecute2()));
 
-    QString directory;
-    QString program = mainProgram();
-    int pos = program.findRev('/');
-    if (pos != -1) {
-        // Directory where the executable is
-        directory = program.left(pos+1);
-        // Executable name with a "./" prepended for execution with bash shells
-        program   = "./" + (mainProgram()).mid(pos+1);
-    }
-
-    program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
-
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
-    DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/run/envvars", "envvar", "name", "value");
-
+    DomUtil::PairList envvars = runEnvironmentVars();
     QString environstr;
     DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it) {
@@ -815,10 +865,16 @@ void AutoProjectPart::slotExecute2()
 #endif
         environstr += " ";
     }
-    program.prepend(environstr);
 
+    QString program = environstr + mainProgram(true) + " " + runArguments();
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
-    appFrontend()->startAppCommand(directory, program, inTerminal);
+
+    kdDebug(9020) << "runDirectory: <" << runDirectory() << ">" <<endl;
+    kdDebug(9020) << "environstr  : <" << environstr << ">" <<endl;
+    kdDebug(9020) << "mainProgram : <" << mainProgram(true) << ">" <<endl;
+    kdDebug(9020) << "runArguments: <" << runArguments() << ">" <<endl;
+
+    appFrontend()->startAppCommand(runDirectory(), program, inTerminal);
 }
 
 
@@ -831,8 +887,7 @@ void AutoProjectPart::slotAddTranslation()
 
 void AutoProjectPart::slotBuildConfigChanged(const QString &config)
 {
-    QDomDocument &dom = *projectDom();
-    DomUtil::writeEntry(dom, "/kdevautoproject/general/useconfiguration", config);
+    DomUtil::writeEntry(*projectDom(), "/kdevautoproject/general/useconfiguration", config);
     kdDebug(9020) << "Changed used configuration to " << config << endl;
 }
 

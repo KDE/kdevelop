@@ -35,7 +35,7 @@ public:
 
     /**Returns the name of the main source file without extension.
        We assume that all Ada compilers call the binary that way.  */
-    virtual QString mainProgram();
+    virtual QString mainProgram(bool relative = false);
     /**Main source file (like src/main.adb)*/
     virtual QString mainSource();
     virtual void setMainSource(QString fullPath);
@@ -45,6 +45,9 @@ public:
     virtual QString activeDirectory();
     /**The location of the main source file*/
     virtual QString buildDirectory();
+    virtual QString runDirectory();
+    virtual QString runArguments();
+    virtual DomUtil::PairList runEnvironmentVars();
 
     /**Returns everything in the project directory*/
     virtual QStringList allFiles();

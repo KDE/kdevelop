@@ -3,6 +3,7 @@
 
 #include <qstringlist.h>
 #include "kdevplugin.h"
+#include "../util/domutil.h"
 
 
 class KDevProject : public KDevPlugin
@@ -31,10 +32,6 @@ public:
 	virtual void closeProject() = 0;
 
 	/**
-	* Returns the absolute path to main binary program of the project.
-	*/
-	virtual QString mainProgram() = 0;
-	/**
 	* Returns the canonical toplevel directory of the project.
 	*/
 	virtual QString projectDirectory() = 0;
@@ -42,6 +39,22 @@ public:
 	* Returns the name of the project.
 	*/
 	virtual QString projectName() = 0;
+	/**
+	* The environment variables that sould be set before running mainProgram()
+	*/
+	virtual DomUtil::PairList runEnvironmentVars() = 0;
+	/**
+	* Returns the absolute path to main binary program of the project.
+	*/
+	virtual QString mainProgram(bool relative = false) = 0;
+	/**
+	* Absolute path (directory) from where the mainProgram() should be run
+	*/
+	virtual QString runDirectory() = 0;
+	/**
+	* The command line arguments that the mainProgram() should be run with
+	*/
+	virtual QString runArguments() = 0;
 	/**
 	* Returns the path (relative to the project directory)
 	* of the active directory. All newly generated classes
@@ -85,12 +98,12 @@ public:
 	 * Notifies the project of changes to the files. Provided for convenience when changing many files.
 	 * The given file names must be relative to the project directory.
 	 */
-    virtual void changedFiles( const QStringList & fileList );
+	virtual void changedFiles( const QStringList & fileList );
 	/**
 	* Notifies the project of a change to one of the files. The given file name
 	* must be relative to the project directory.
 	*/
-    virtual void changedFile( const QString & fileName );
+	virtual void changedFile( const QString & fileName );
 
 
 
