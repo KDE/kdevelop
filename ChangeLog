@@ -1,6 +1,3 @@
-2003-06-14 Roberto Raggi <roberto@kdevelop.org>
-    * Added the subversion support
-
 2003-06-14 Harald Fernengel <harry@kdevelop.org>
     * Added perforce to the main menu, also uses KActions now so you can
       assign your favourite keybinding to the commands.
