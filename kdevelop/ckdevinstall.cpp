@@ -790,7 +790,7 @@ void CKDevInstall::slotAuto() // proceed >>
   //ok it follows some stupid code, but it works:-) --Sandy 
   kde_test=false;
   config->setGroup("Doc_Location");
-  QString dir = "/opt/kde/share/doc/kdelibs/"; // normal dists :-)
+  QString dir = "/opt/kde/share/doc/HTML/en/kdelibs/"; // normal dists :-)
  
   QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
 
