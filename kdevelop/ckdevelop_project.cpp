@@ -269,6 +269,10 @@ void CKDevelop::slotAddExistingFiles(){
     i++;
     copy = false;
     progress.setProgress( i );
+    if (!QFile::exists((const char*)file)) {
+        KMsgBox::message(this,i18n("Attention"),file +i18n("\n\nFile does not exist!"));
+        continue;
+    }
     file_info.setFile(file);
     source_name = file_info.fileName();
     dest_name = dest + source_name;
@@ -1056,6 +1060,11 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
+
 
 
 

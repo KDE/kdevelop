@@ -757,11 +757,11 @@ void CKAppWizard::slotNewCppButtonClicked() {
 void CKAppWizard::slotOkClicked() {
   QDir dir;
   QString direct = directoryline->text();
-  QString a = directoryline->text();
-  if (a.right(1) == "/") { a.resize(a.length()); }
-  QString b = nameline->text();
-  direct.resize (a.length() - b.length());
+  
+  if (direct.right(1) == "/") { direct.resize(direct.length()); }
+  direct.resize (direct.length() - (direct.length() - direct.findRev('/') - 1));
   dir.setPath(direct);
+
   if (!dir.exists()) {
   	KMsgBox msg (0,i18n("Directory does not exists!"),
     i18n("The directory " + direct + " does not exists. If you \n"
