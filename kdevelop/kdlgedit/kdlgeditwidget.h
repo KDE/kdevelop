@@ -114,6 +114,9 @@ class KDlgEditWidget : public QWidget  {
     void setWidgetAdded(bool b = true) { was_widgetadded = b; }
     bool wasWidgetRemoved() { return was_widgetremoved; }
     void setWidgetRemoved(bool b = true) { was_widgetremoved = b; }
+    bool wasVarnameChanged() { return was_varnamechanged; }
+    void setVarnameChanged(bool b = true) { was_varnamechanged = b; }
+    void newDialog();
   public slots:
     int slot_raiseSelected() { return raiseSelected(); }
     int slot_lowerSelected() { return lowerSelected(); }
@@ -167,6 +170,7 @@ class KDlgEditWidget : public QWidget  {
     bool is_modified;
     bool was_widgetadded;
     bool was_widgetremoved;
+    bool was_varnamechanged;
 };
 
 #endif

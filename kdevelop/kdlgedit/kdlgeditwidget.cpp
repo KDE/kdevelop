@@ -84,6 +84,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   setModified(false);
   setWidgetAdded(false);
   setWidgetRemoved(false);
+  setVarnameChanged(false);
 }
 
 KDlgEditWidget::~KDlgEditWidget()
@@ -185,7 +186,7 @@ void KDlgEditWidget::slot_cutSelected()
 
 void KDlgEditWidget::slot_deleteSelected()
 {
-  if (!selectedWidget())
+  if ((!selected_widget) || (selected_widget == main_widget))
     return;
 
   KDlgItem_Widget *dummy = (KDlgItem_Widget*)selected_widget;
@@ -552,6 +553,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
   setModified(false);
   setWidgetAdded(false);
   setWidgetRemoved(false);
+  setVarnameChanged(false);
 
   return true;
 }
@@ -603,6 +605,10 @@ bool KDlgEditWidget::saveToFile( QString fname )
       printf("  kdlgedit : writing item sections\n");
       saveWidget(mainWidget(), &t);
       f.close();
+
+      setModified(false);
+      setWidgetAdded(false);
+      setWidgetRemoved(false);
     }
   else
     {
@@ -653,6 +659,21 @@ void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep)
 
   *t << sDeep << "}\n";
 }
+
+void KDlgEditWidget::newDialog()
+{
+  deselectWidget();
+  mainWidget()->deleteMyself();
+
+  getCKDevel()->kdlg_get_items_view()->refreshList();
+  selectWidget(mainWidget());
+
+  setModified(false);
+  setWidgetAdded(false);
+  setWidgetRemoved(false);
+  setVarnameChanged(false);
+}
+
 
 void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
 {

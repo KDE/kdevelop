@@ -1,3 +1,5 @@
+...das Sie über das Hilfemenü von KDevelop einen Bugreporter aufrufen und so zur Verbesserung von KDevelop beitragen können ?
+...das Sie im Dialog Editor über einen rechten Mausklick weitere Funktionen, zum Beispiel Kopieren und Einfügen, ausführen können ?
 ...das KDevelop Ihnen Schnellhilfe mit einem rechten Mausklick über Dialogfeldern anbietet ?
 ...das Sie das automatische abspeichern im KDevelop Setup Dialog einstellen können ?
 Wenn Sie Ihr Make-Programm mit zusätzliche Kommandozeilen Optionen aufrufen wollen, können Sie diese im Setup Dialog einstellen.
@@ -27,3 +29,4 @@ Wenn Sie Ihr Projekt übersetzen und eine Fehlermeldung bekommen, klicken Sie auf
 ...das Sie Ihre Bibliotheks-Dokumentation aktualisieren sollten, nachdem Sie neue Bibliotheken installiert haben ?
 ...das Sie die Syntax-Hervorhebungen des Editors konfigurieren können ?
 ...das Sie Bearbeitungsschritte Rückgängig machen und wiederherstellen können ?
+...das Sie die Reihenfolge der Dialogelemente im Dialog Editor durch einen rechten Mausklick auf das entsprechende Element ändern können ?

@@ -223,4 +223,16 @@ class AdvLvi_Cursor : public AdvLvi_Base
 };
 
 
+
+class AdvLvi_Varname : public AdvLvi_String
+{
+  Q_OBJECT
+  public:
+    AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+
+  public slots:
+    void VarnameChanged();
+};
+
+
 #endif

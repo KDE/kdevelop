@@ -716,6 +716,9 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           case ALLOWED_BGMODE:
             lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, pCKDevel, prop ));
             break;
+          case ALLOWED_VARNAME:
+            lvi->setColumnWidget(1, new AdvLvi_Varname( lv, pCKDevel, prop ));
+            break;
        }
 
     }
@@ -1210,3 +1213,13 @@ void AdvLvi_Cursor::activated( const char* s )
 }
 
 
+AdvLvi_Varname::AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0)
+  : AdvLvi_String(parent, parCKD, dpe, name)
+{
+  connect(leInput, SIGNAL(textChanged(const char *)), this, SLOT(VarnameChanged()) );
+}
+
+void AdvLvi_Varname::VarnameChanged()
+{
+  pCKDevel->kdlg_get_edit_widget()->setVarnameChanged(true);
+}

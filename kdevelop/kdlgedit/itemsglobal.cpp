@@ -251,7 +251,7 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("IsHidden",           "FALSE",        "General",        ALLOWED_BOOL);
   addProp("IsEnabled",          "TRUE",         "General",        ALLOWED_BOOL);
 
-  addProp("VarName",            "",             "C++ Code",       ALLOWED_STRING);
+  addProp("VarName",            "",             "C++ Code",       ALLOWED_VARNAME);
   addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
   addProp("ResizeToParent",     "FALSE",        "C++ Code",       ALLOWED_BOOL);
   addProp("AcceptsDrops",       "FALSE",        "C++ Code",       ALLOWED_BOOL);

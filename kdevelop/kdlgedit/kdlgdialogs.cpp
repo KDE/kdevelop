@@ -48,6 +48,7 @@ void KDlgDialogs::refresh(CProject* prj){
   // Add the root item.
   top_item = treeH->addRoot( prj->getProjectName(), THPROJECT );
 
+
   QStrList top_dialogs;
   prj->getAllTopLevelDialogs(top_dialogs);
   QString str;

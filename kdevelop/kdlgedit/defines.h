@@ -44,6 +44,7 @@
 #define ALLOWED_CURSOR      8
 #define ALLOWED_BGMODE      9
 #define ALLOWED_ORIENTATION 10
+#define ALLOWED_VARNAME     11
 
 #define RULER_WIDTH  18                    // width of the vertical ruler
 #define RULER_HEIGHT  18                   // height of the horizontal ruler
