@@ -133,8 +133,14 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     TypeSpecifierAST* typeSpec = ast->typeSpec();
     GroupAST* funSpec = ast->functionSpecifier();
     GroupAST* storageSpec = ast->storageSpecifier();
+    
+    if( !ast->initDeclarator() )
+	return;
 
     DeclaratorAST* d = ast->initDeclarator()->declarator();
+    
+    if( !d->declaratorId() )
+	return;
 
     bool isFriend = false;
     bool isVirtual = false;
