@@ -2023,7 +2023,8 @@ QColor &KWriteDoc::cursorCol(int x, int y) {
 
 //  if (x > 0) x--;
   textLine = contents.at(y);
-  attr = textLine->getRawAttr(x);
+  if (textLine)
+    attr = textLine->getRawAttr(x);
   a = &attribs[attr & taAttrMask];
   if (attr & taSelectMask) return a->selCol; else return a->col;
 }
