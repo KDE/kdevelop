@@ -1,38 +1,155 @@
-# Traduction of kdevelop string from english into italian
-# Treaduzione delle stringhe contenute in kdevelop dall'inglese in italiano
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translation Table for KDevelop into Italian
+# 
+# Tabella di traduzione per KDevelop dall'inglese all'italiano
+#
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Massimo Morin <mmorin@schedsys.com, mmorin@110.net>, 1999.
+# Walter  Tasin <tasin@e-technik.fh-muenchen.de>, 1999.
 #
-# Parole come file, directory non ha senso tradurle
-# Alcune volte traduco source in sorgente, solo se non e` riferito a codice (come in source file)
-# anche la prola project se riferita a project file non e` tradotta
-# Uso sempre la seconda persona singolare in forma IMPERATIVA PRESENTE
-# uso ' come apostrofo e ` come accento (non ho i caratter a, e i accentati :( )
-# Bug non e` tradoto come "baco" (non mi piace, preferisco l'inglese bug, anche perche` diciamo debuggare e non debacare :) )
-# La parola Report e` piu` bella di Rapporto in alcuni casi (come Bug Report)
-# tree e` molto meglio che "albero" forse "struttura" funziona meglio
-# editor non va ` tradotto (what the heck we are talking with programmers not with secretaries!)
-# "dialog editor" e` piu` bello di "editor di dialogo"
-# folder rimane folder
-# non so come tradurre ChangeLog... ChangeLog mi pare appropriato!
-# window manager rimane window manager
-# molte volte tolgo gli aggettivi "your" e "here" perche` mi smebano brutti in italiano, per cui "your program" diviene "il programma", "Add comments here" diviene "Aggiungi commenti"
-# warning sembra piu` bello di avvisi (quando non e` attenzione!)
-# widget rimane inalterato
-# syntax highlighting rimane invariato
-# bookmark rimane invariato (segnalibro non mi piace)
-# history page ????
-# clipboard e` piu` bello in inglese
+# --------------
+# CCC ;-) commenti, consigli e correzioni
+# cerca (WAT) per i miei commenti - W. Tasin <tasin@e-technik.fh-muenchen.de>
+# dovete poi cancellarli
+# --------------
 #
-#, fuzzy
+# Regole Base
+#
+# Bisogna fissarsi delle regole da cui partire, per cui parto da
+# queste; se qualcuno me ne può suggerire di altre e/o di
+# migliori....
+#
+# o  Uso sempre la seconda persona singolare in forma IMPERATIVA
+#    PRESENTE (fai, premi etc..) quando mi riferisco all'utente
+# o  Uso la prima persona singolare indicativa quando riferito al
+#    programma (compilo.... controllo....)
+# o  Parole che riferiscono a programmi all'interno di frasi le
+#    racchiudo in `' cosicchè non siano troppo ambigui
+# o  Cerco di evitare il più possibile ripetizioni di aggettivi
+#    possessivi quali "tuo, nostro..." per cui "your project" diventa "il
+#    progetto"
+# o  Gli avverbi come "here" e simili non hanno molto senso in
+#    italiano (sono proprio brutti ed ovvii) per cui se sono ripetitivi
+#    e inutili come "Add comments here" diviene "Aggiungi commenti" li
+#    tolgo 
+# o  Le parole inglesi sono ammesse in italiano ma non hanno plurale,
+#    per cui "file" diventa "il file" e "files" diventa "i file"
+# o  Non sono sicuro ma alcune parole inglesi si sono italianizzate,
+#    per cui "to click" è diventato "clickare" e "to debug"
+#    "debuggare"... vedo di usare "the comon sense (tm)"
+# o  Le abbreviazioni le tengo uguali (CV, RFV) anche perchè
+#    molte volte non so come interpretarle....
+#
+#    (WAT) spiegazione (CV = class view - struttura di classe,
+#                       RFV = real file view - presentazione di tutti i file,
+#                       LFV=logical fileview - presentazione dei file collegati
+#                       col progetto)
+#
+# # o  Uso ' come apostrofo e ` come accento (non ho i caratteri a, e i
+# #    accentati per ora :( )
+# #
+# o  (WAT) Sempre usare la vocale e con ` per è (o con ´ per ó, o con ` per ò,
+#          u con ` per ù, ecc. ...)
+#          ... c'è un programma che cambierà poi queste combinazioni
+#              nelle vocali accentate
+#          ' <= usa questo tipo di accento come apostrofo
+#
+# Traduzioni mancate
+#
+# Secondo me alcune parole inglesi hanno più significato per i
+# programmatori nella loro forma originale che non in una "possibile"
+# traduzione. Qui di seguito indico le parole non tradotte.
+#
+# -  file
+# -  directory
+# -  bug	detesto la parola "baco", anche perchè diciamo
+# 		debuggare e non debacare :)  
+# -  editor     what the heck we are talking with programmers not with
+# 		secretaries! 
+# -  ChangeLog	non mi viene niente di meglio
+# -  DistClean	è una opzione standard del make
+# -  window manager
+# -  warning 	sembra più bello di avvisi (quando non è attenzione!)
+# -  widget
+# -  syntax highlighting 
+# -  bookmark 	segnalibro non mi piace
+# -  clipboard 	è più bello di avagnetta
+# -  wizard	decisamente meglio che mago o stregone 8-)
+# -  stop	(vedi sotto)
+# -  breakpoint	meglio di "punto di interruzione"
+# -  database
+# -  logo
+# -  private protected public   sono keyword 
+# -  team       non esiste un analogo in italiano
+# -  target     quando si riferisce a regola del makefile
+# -  symbol table
+# -  shared library librerie condivise?? È più bello inalterato
+# -  touch 	quando si tratta del programma (touch)
+# -  job 	quando si tratta di job=task
+# -  cast 	promozione nei casi che ha senso, sennò invariato (eppoi si dice cast anche in italiano)
+# -  prototype  quando parliamo di prototype di funzione
+# -  signed/unsigned quando si tratta di modificatori
+# -  fixed point and floating point   non ha senso tradurre
+# -  old-style
+# -  C-style
+#
+#
+# Ambiguità
+#
+# Queste sono parole che traduco in parte ma non sono la "miglior traduzione
+# possibile" ma mi pare che il senso sia vicino (almeno nelle
+# intenzioni.... consigli???) 
+#
+# -  source	lo traduco in `sorgente', solo se non è chiaro dal
+#    		contesto altrimenti lascio inalterato
+# -  project	qualche volta ha più senso parlare di `project file'
+#    		che `file del progetto' 
+# -  report	in alcuni casi lo traduco in rapporto in altri lo
+# 		lascio inalterato (come Bug report)
+# -  tree	qualche volta `albero' va bene ma altre volte
+# 		preferisco `struttura'
+# -  dialog	qualche volta lo traduco in "finestra di dialogo" o
+#		semplicemente "finestra" ma in casi come "dialog
+#		editor" lo lascio inalterato 
+# -  history page 	la lascio come "history page" perché non so come
+# 		tradurla nel modo più sensato
+# -  view     	è vista o visualizzazione o visore???? Mah!!! Cerco
+# 		di esser consistente..... In linea di massima se è ...-View
+#		come in Output-View la traduco come Vista (Vista-Output)
+# -  All of Fame	che è l'Aula Magna??? Ahò facciamo meno i ganzi per
+# 		favore ;)
+# -  Make	se è il programma lo lascio inalterato, altrimenti lo
+# 		traduco in "Crea"
+# -  Build	preferirei lasciarlo in inglese ma penso che
+# 		"costruire" vada bene lo stesso
+# -  Clean	"elimina" mi pare più appropriato che "pulisci"
+# -  Access 	traduco con Accedi ma potrebbe essere anche "Entra" o
+# 		"Procedi" 
+# -  Severity 	=> severità ma non mi piace meglio gravità
+# -  Application 	"applicazione" ma certe volte lo lascio
+# 		inalterato come in "Application Wizard"
+# -  fail 	"fallire" ma non mi piace
+# -  stop	alcune volte rimane inalterato come semplicemente
+# 		"Stop" ma altre lo traduco con interrompi.
+# - togglebutton selettore o bottone di selezione
+# - machine   	lo traduco con sistema perchè mi pare più bello di macchina
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: KDevelop\n"
 "POT-Creation-Date: 1999-07-02 18:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Massimo Morin <mmorin@schedsys.com>\n"
+"Language-Team: Italiano <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: ENCODING\n"
@@ -43,21 +160,42 @@ msgstr "Aggiungi un membro-variabile"
 msgid "Modifiers"
 msgstr "Modificatori"
 
+msgid "You can set modifiers for the member variable here."
+msgstr ""
+
 msgid "Variable"
 msgstr "Variabile"
 
 # Potrebbe essere anche "Entra" o "Procedi" (mmorin)
+# (WAT) si tratta del tipo di accesso per un membro-variabile:
+#       "Accesso" o "Access" (dato che i punti di selezione
+#       sono public, protected e private e non vengono tradotti
+#       perché fanno parte del linguaggio C++) ?? (che facciamo?)
 msgid "Access"
-msgstr "Accedi"
+msgstr "Accesso"
+
+msgid ""
+"You can choose here whether you want the member variable\n"
+"be declared as public, protected or private."
+msgstr ""
 
 msgid "Type:"
 msgstr "Tipo:"
 
+msgid "Enter the type of the member variable here."
+msgstr ""
+
 msgid "Name:"
 msgstr "Nome:"
 
+msgid "Enter the name of the member variable here."
+msgstr ""
+
 msgid "Documentation:"
 msgstr "Documentazione:"
+
+msgid "You can enter a description of the member variable here."
+msgstr ""
 
 msgid "No type"
 msgstr "Nessun tipo"
@@ -74,11 +212,28 @@ msgstr "Devi specificare il nome della variabile."
 msgid "Add member function"
 msgstr "Aggiungi un membro-funzione"
 
+msgid "You can set modifiers for the member function here."
+msgstr ""
+
 msgid "Function"
 msgstr "Funzione"
 
+msgid ""
+"You can choose here whether you want the member function\n"
+"be declared as public, protected or private."
+msgstr ""
+
+msgid "Enter the type of the member function here."
+msgstr ""
+
 msgid "Declaration:"
 msgstr "Dichiarazione"
+
+msgid "Enter the declaration of the member function here."
+msgstr ""
+
+msgid "You can enter a description of the member function here."
+msgstr ""
 
 msgid "You have to specify a function type."
 msgstr "Devi specificare il tipo della funzione."
@@ -90,7 +245,7 @@ msgid "Add existing files to project"
 msgstr "Aggiungi files esistenti al progetto"
 
 msgid "Sourcefile(s):"
-msgstr "Sourcefile(s)"
+msgstr "File Sorgente"
 
 msgid "Destinationdir:"
 msgstr "Directory destinazione:"
@@ -99,7 +254,7 @@ msgid ""
 "Select the source files to be added\n"
 "to the project here."
 msgstr ""
-"Seleziona il source file da aggiungere\n"
+"Seleziona il sorgente da aggiungere\n"
 "in questa posizione del progetto."
 
 msgid ""
@@ -107,10 +262,10 @@ msgid ""
 "source files will be copied to here."
 msgstr ""
 "seleziona la directory in cui i nuovi\n"
-"source files verranno copiati."
+"file sorgenti verranno copiati."
 
 msgid "Source File(s)..."
-msgstr "Source File(s)..."
+msgstr "File sorgente..."
 
 msgid "Destination Directory"
 msgstr "Directory destinazione"
@@ -124,14 +279,20 @@ msgstr "Devi selezionare una destinazione che sia nella tua project directory!"
 msgid "You must choose a valid dir as a destination!"
 msgstr "Devi selezionare una directory valida come destinazione!"
 
+# (WAT)  consiglio: invece di
+#        "Aggiungi nuovo Translation File"
 msgid "Add new Translation File"
-msgstr "Aggiungi nuovo Translation File"
+msgstr "Aggiungi nuovo file di traduzione"
 
+# (WAT) si tratta della lingua parlata, non del linguaggio di programmazione
 msgid "Language:"
-msgstr "Linguaggio:"
+msgstr "Lingua:"
 
+# (WAT)  consiglio: invece di
+#        "Il tuo codice è già tradotto in tutti i linguaggi supportati."
+#   si tratta della lingua parlata, non del linguaggio di programmazione
 msgid "Your sourcecode is already translated to all supported languages."
-msgstr "Il tuo codice e` gia` tradotto in tutti i linguaggi supportati."
+msgstr "I tuoi file sorgenti sono già tradotti in tutte le lingue supportate."
 
 msgid "Bug Report"
 msgstr "Bug Report"
@@ -144,11 +305,12 @@ msgstr ""
 "di cui abbiamo bisogno per aiutarti."
 
 # Non mi piace come traduzione (mmorin)
+# (WAT) magari "Urgenza" (come errore, e come dev'essere eleminato)
 msgid "Severity"
-msgstr "Severita`"
+msgstr "Urgenza"
 
 msgid "Priority"
-msgstr "Priorita`"
+msgstr "Priorità"
 
 msgid "Your Name :"
 msgstr "Il tuo nome:"
@@ -174,21 +336,24 @@ msgstr "richiesta di modifiche"
 msgid "how do I ..."
 msgstr "come faccio a ..."
 
+# (WAT) usato con "Priorità" quindi:
 msgid "low"
-msgstr "basso"
+msgstr "bassa"
 
 msgid "medium"
-msgstr "medio"
+msgstr "media"
 
 # potrebbe essere "sopra"
+# (WAT) va bene così ;-)
 msgid "high"
-msgstr "alto"
+msgstr "alta"
 
-msgid "harmless"
-msgstr "innoffensivo"
+# (WAT) usato con "Urgenza"
+msgid "normal"
+msgstr "normale"
 
-msgid "serious"
-msgstr "serio"
+msgid "grave"
+msgstr "grave"
 
 msgid "critical"
 msgstr "critico"
@@ -218,8 +383,12 @@ msgid "app-wizard"
 msgstr "app-wizard"
 
 # non lo so, ma a me non piace .... (mmorin)
+# (WAT) è lo stesso discorso come nel tedesco
+#       (dove rimarrà la differenza tra
+#       make e build) - secondo me, è meglio dire build
+#       o come nel resto della traduzione make=make e build=costruzione
 msgid "build process"
-msgstr "procedura di costruzione"
+msgstr "procedura `build'"
 
 msgid "output window"
 msgstr "finestra di output"
@@ -236,14 +405,15 @@ msgstr "procedura di installazione"
 msgid "Error Location :"
 msgstr "Posizione dell'errore:"
 
+# (WAT) correzione: "generale"
 msgid "General information"
-msgstr "Informazione generali"
+msgstr "Informazione generale"
 
 msgid "Environment"
 msgstr "Ambiente"
 
 msgid "KDevelop version :"
-msgstr "Versine KDevelop:"
+msgstr "Versione KDevelop:"
 
 msgid "KDE version :"
 msgstr "Versione KDE:"
@@ -265,9 +435,9 @@ msgid ""
 "problem, so that we are able to help by\n"
 "your description."
 msgstr ""
-"Inserisci piu` informazioni che puoi \n"
+"Inserisci più informazioni che puoi\n"
 "relativamente al problema incontrato,\n"
-"cosicche` possiamo aiutarti basandoci su esse."
+"cosicchè possiamo aiutarti basandoci su esse."
 
 msgid "Bug Description :"
 msgstr "Descrizione del bug:"
@@ -276,7 +446,7 @@ msgid "How to repeat the error :"
 msgstr "Come ripetere l'errore:"
 
 msgid "Perhaps a bugfix or workaround ?"
-msgstr "Forse questa e` una soluzione (magari solo temporanea....)"
+msgstr "Forse questo sarebbe una soluzione (magari solo temporanea....)"
 
 msgid "Problem description"
 msgstr "Descrizione del problema"
@@ -284,18 +454,19 @@ msgstr "Descrizione del problema"
 msgid "Send E-Mail"
 msgstr "Manda email"
 
+# (WAT) correzione: descrizione
 msgid "Please fill in at least the subject and bug description!"
-msgstr "Per favore insersci almeno il soggetto e la descrione del bug!"
+msgstr "Per favore insersci almeno il soggetto e la descrizione del bug!"
 
 msgid ""
 "Bugreport was successfully submitted to the KDevelop Team.\n"
 "\t\tThank you!"
 msgstr ""
-"Bugreport e` stato inviato con successo al KDevelop Team.\n"
+"Bugreport è stato inviato con successo al KDevelop Team.\n"
 "\t\tGrazie!"
 
 msgid "Class Tool"
-msgstr ""
+msgstr "Class Tool"
 
 msgid "Class:"
 msgstr "Classe:"
@@ -303,17 +474,23 @@ msgstr "Classe:"
 msgid "All"
 msgstr "Tutto"
 
+# (WAT) correzione: usare qui il plurare
 msgid "Show parents"
-msgstr "Mostra padre"
+msgstr "Mostra padri"
 
+# (WAT) correzione: usare qui il plurare
 msgid "Show children"
-msgstr "Mostra figlio"
+msgstr "Mostra figli"
 
 # cosa sono i clients in questo contesto???? (mmorin)
+# (WAT) usato nell'utensile classe, modo inverso del
+#       "show Suppliers"
 msgid "Show clients"
 msgstr "Mostra clienti"
 
-# cosa sono i fornotori in questo contesto???? (mmorin)
+# cosa sono i fornitori in questo contesto???? (mmorin)
+# (WAT) usato nell'utensile classe, secondo me fornitori va bene
+#       mostra tutte le classe che vengono usate dalla classe indicata
 msgid "Show suppliers"
 msgstr "Mostra fornitori"
 
@@ -327,10 +504,11 @@ msgid "Show virtual methods"
 msgstr "Mostra metodi virtuali"
 
 msgid "Parents"
-msgstr "Padre"
+msgstr "Padri"
 
+# (WAT) correzione: usare qui il plurare
 msgid "Children"
-msgstr "Figlio"
+msgstr "Figli"
 
 msgid "Clients"
 msgstr "Clienti"
@@ -377,8 +555,10 @@ msgstr "Nuovo file..."
 msgid "New class..."
 msgstr "Nuova classe..."
 
+# (WAT) suggerimento: usare "cartella" invece di folder, 
+#       in tutti gli altri mess.
 msgid "Add Folder..."
-msgstr "Aggiungi folder..."
+msgstr "Aggiungi cartella..."
 
 msgid "Options..."
 msgstr "Opzioni..."
@@ -404,8 +584,9 @@ msgstr "Classi figlio..."
 msgid "Classtool..."
 msgstr "Classtool..."
 
+# (WAT) suggerimento: signal invece di segnale, per motivi di coerenza
 msgid "Add slot for signal"
-msgstr "Aggiungi slot per un segnale"
+msgstr "Aggiungi slot per un signal"
 
 msgid "Delete class"
 msgstr "Cancella classe"
@@ -426,10 +607,10 @@ msgid "Delete slot"
 msgstr "Cancella slot"
 
 msgid "Folder"
-msgstr "Folder"
+msgstr "Cartella"
 
 msgid "Delete Folder..."
-msgstr "Cancella Folder..."
+msgstr "Cancella cartella..."
 
 msgid "Structures"
 msgstr "Strutture"
@@ -446,23 +627,25 @@ msgstr "Classview grafico"
 msgid "Not found"
 msgstr "Non trovato"
 
+# (WAT) correzione: fare due righe invece di una, si tratta di
+#       un messaggio in un "message-box", così il box
+#       non usa tutto lo schermo ;-)
 msgid "This item could not be viewed. The item isn't parsed."
-msgstr "Questo elemento non puo` essere visualizzato. Questo elemento non e` stato analizzato"
+msgstr ""
+"Questo elemento non può essere visualizzato.\n"
+"Questo elemento non è stato analizzato."
 
 msgid "Are you sure you want to delete this class?"
 msgstr "Sei sicuro di voler cancellare questa classe?"
-
-msgid "Are you sure you want to delete this method?"
-msgstr "Sei sicuro di voler cancellare questo metodo?"
 
 msgid "Are you sure you want to delete this attribute?"
 msgstr "Sei sicuro di voler cancellare questo attributo?"
 
 msgid "Delete folder"
-msgstr "Cancella folder"
+msgstr "Cancella cartella"
 
 msgid "Are you sure you want to delete this folder?"
-msgstr "Sei sicuro di voler cancellare questo folder?"
+msgstr "Sei sicuro di voler cancellare questa cartella?"
 
 msgid "Create Search Database..."
 msgstr "Crea Database di Ricerca..."
@@ -505,13 +688,14 @@ msgstr ""
 "costruisce un indice di medie dimensioni (20-30% della dimensione\n"
 "di tutti i files) che permette una ricerca rapida."
 
+# (WAT) corr: costruisce, dimensioni
 msgid ""
 "Build a small index rather than tiny (meaning 7-9%\n"
 "of the sizes of all files - your mileage may vary)\n"
 "allowing faster search."
 msgstr ""
-"Costuisce un indice di dimesioni minute (circa 7-9%\n"
-"della dimensione di tutti i files - ma cio` puo` variare)\n"
+"Costruisce un indice di dimensioni minute (circa 7-9%\n"
+"della dimensione di tutti i files - ma ciò può variare)\n"
 "che permette una ricerca rapida."
 
 #, c-format
@@ -522,40 +706,52 @@ msgstr ""
 msgid "No Database created!"
 msgstr "Nessun Database creato!"
 
+# (WAT) correzione: fare due righe invece di una, si tratta di
+#       un messaggio in un "message-box", così il box
+#       non usa tutto lo schermo ;-)
 msgid "The KDE-Documentation-Path isn't set correctly."
-msgstr "Il percorso di ricerca della documentazione di KDE non e` settato correttamente."
+msgstr ""
+"Il percorso di ricerca della documentazione di KDE\n"
+"non è settato correttamente."
 
+# (WAT) correzione: vedi sopra
 msgid "The Qt-Documentation-Path isn't set correctly."
-msgstr "Il percorso di ricerca della documentazione di QT non e` settato correttamente."
+msgstr ""
+"Il percorso di ricerca della documentazione di QT\n"
+"non è settato correttamente."
 
 msgid "Select Directory..."
 msgstr "Seleziona Directory..."
 
 msgid "Add folder"
-msgstr "Aggiungi folder"
+msgstr "Aggiungi cartella"
 
 msgid "Folder name:"
-msgstr "Nome del folder:"
+msgstr "Nome della cartella:"
 
 msgid "You have to specify a foldername."
-msgstr "Devi specificare il nome del folder."
+msgstr "Devi specificare il nome della cartella."
 
 msgid "Forward"
 msgstr "Avanti"
 
+# (WAT) correzione: Bookmark (motivi di coerenza)
 msgid "Add Bookmark"
-msgstr "Aggiungi Annotazione"
+msgstr "Aggiungi Bookmark"
 
 msgid "View in new window"
 msgstr "Visualizza in una nuova finestra"
-
 
 msgid "grep: "
 msgstr "grep: "
 
 # potrebbe esse "vai a" "vedi" "cerca"
+# (WAT) correzione: cerca:
+#       si trova nel Popup-menu (menu a tendina) della documentazione
+#       (per cercare una parola
+#       in tutti i file della guida)
 msgid "look up: "
-msgstr "vedi: "
+msgstr "cerca: "
 
 msgid "Not found!"
 msgstr "Non trovato!"
@@ -602,131 +798,17 @@ msgstr "Opzioni Browser Documentazione"
 msgid "Colors"
 msgstr "Colori"
 
-msgid "Add Entry..."
-msgstr "Aggiungi Elemento..."
-
-msgid "Others"
-msgstr "Altro"
-
-msgid "Remove Entry"
-msgstr "Rimuovi Elemento"
-
-msgid "Properties..."
-msgstr "Proprieta`..."
-
-msgid "KDevelop"
-msgstr "KDevelop"
-
-msgid "User Manual"
-msgstr "Manuale Utente"
-
-msgid "Programming Handbook"
-msgstr "Programming Handbook"
-
-msgid "Tutorials"
-msgstr "Tutorial"
-
-msgid "KDE Library Reference"
-msgstr "Reference Librerie KDE"
-
-msgid "C/C++ Reference"
-msgstr "C/C++ Reference"
-
-msgid "Introduction"
-msgstr "Introduzione"
-
-msgid "Installation"
-msgstr "Installazione"
-
-msgid "Programs"
-msgstr "Programmi"
-
-msgid "Development with KDevelop"
-msgstr "Sviluppare con KDevelop"
-
-msgid "Overview"
-msgstr "Overview"
-
-msgid "The Help System"
-msgstr "Il Sistema di Aiuto"
-
-msgid "Working with the Editor"
-msgstr "Lavorare con l'Editor"
-
-msgid "Projects"
-msgstr "Progetti"
-
-msgid "Build Settings"
-msgstr "Settaggi per il Build"
-
-msgid "The Class Browser"
-msgstr "Il Class Browser"
-
-msgid "The Dialog Editor"
-msgstr "Il Dialog Editor"
-
-msgid "General Configuration"
-msgstr "Configurazioni Generali"
-
-msgid "Questions and Answers"
-msgstr "Domande e Risposte"
-
-msgid "Authors"
-msgstr "Autori"
-
-msgid "Thanks"
-msgstr "Ringraziamenti"
-
-msgid "Copyright"
-msgstr "Copyright"
-
-msgid "Qt/KDE Libraries"
-msgstr "Librerie Qt/KDE"
-
-msgid "Qt-Library"
-msgstr "Libreria Qt"
-
-msgid "KDE-Core-Library"
-msgstr "Libreria KDE-Core"
-
-msgid "KDE-UI-Library"
-msgstr "Libreria KDE-UI"
-
-msgid "KDE-KFile-Library"
-msgstr "Libreria KDE-KFile"
-
-msgid "KDE-KHTMLW-Library"
-msgstr "Libreria KDE-KHTMLW"
-
-msgid "KDE-KHTML-Library"
-msgstr "Libreria KDE-KHTML"
-
-msgid "KDE-KFM-Library"
-msgstr "Libreria KDE-KFM"
-
-msgid "KDE-KDEutils-Library"
-msgstr "Libreria KDE-KDEutils"
-
-msgid "KDE-KAB-Library"
-msgstr "Libreria KDE-KAB"
-
-msgid "KDE-KSpell-Library"
-msgstr "Libreria KDE-KSpell"
-
-msgid "Current Project"
-msgstr "Progetto Corrente"
-
-msgid "API-Documentation"
-msgstr "Documentazione API"
-
-msgid "User-Manual"
-msgstr "Manuale Utente"
+msgid "Enter the name of the entry here."
+msgstr ""
 
 msgid "File:"
 msgstr "File:"
 
-msgid "Execute with Arguments"
-msgstr "Esegui con Argomenti"
+msgid "Enter the file of the entry here."
+msgstr ""
+
+msgid "Here you can browse through the disc to select a file for the entry."
+msgstr ""
 
 msgid "Arguments: "
 msgstr "Argomenti:"
@@ -735,7 +817,7 @@ msgid "Clear Arguments"
 msgstr "Cancella Argomenti"
 
 msgid "File Properties"
-msgstr "Proprieta` File"
+msgstr "Proprietà File"
 
 msgid "Distribution"
 msgstr "Distribuzione"
@@ -743,11 +825,14 @@ msgstr "Distribuzione"
 msgid "Filetype"
 msgstr "Filetype"
 
+msgid "Installation"
+msgstr "Installazione"
+
 msgid "Size:"
 msgstr "Dimensione:"
 
 msgid "include in distribution"
-msgstr "includi in distribuzione"
+msgstr "inserisci in distribuzione"
 
 msgid "install"
 msgstr "installa"
@@ -755,14 +840,17 @@ msgstr "installa"
 msgid "Installdir + Filename:"
 msgstr "Directory di installazione + nome file"
 
+# (WAT) suggerimento: inserito
 msgid ""
 "This option sets if the actual file\n"
 "will be included in the final distri-\n"
 "bution."
 msgstr ""
 "Questa opzione indica se il file corrente\n"
-"verra` incluso nella distribuzione finale."
+"verrà inserito nella distribuzione finale."
 
+# (WAT) commento: non lo so proprio, ma mi sembra strano di
+#       settare un pulsante... non c'è un'altro nome per "checkbox"?
 msgid ""
 "This option sets if the actual file\n"
 "will be installed to the platform during\n"
@@ -775,10 +863,10 @@ msgid ""
 "Other values can be found in the Makefile"
 msgstr ""
 "Questa opzione indica se il file corrente\n"
-"sara` installato sul sistema durante il processo\n"
-"di installazione di \"make install\".\n"
-"Se il pulsante di installazione e` settato, devi\n"
-"indicare anche il path e filename sui quali procedere\n"
+"sarà installato sul sistema durante il processo\n"
+"di installazione di `make install'.\n"
+"Se l'indicatore d'installazione è attivato, devi\n"
+"riportare anche il path e filename sui quali procedere\n"
 "Possibili valori sono, ad esempio:\n"
 "$(kde_icondir)/filename\n"
 "$(kde_appsdir)/filename\n"
@@ -793,7 +881,6 @@ msgstr "Cerca:"
 msgid "&Search"
 msgstr "&Cerca"
 
-#inalterato (mmorin)
 msgid "Groupname:"
 msgstr "Groupname:"
 
@@ -818,6 +905,15 @@ msgstr "inverti tutte le modifiche"
 
 msgid "Applications"
 msgstr "Applicazioni"
+
+msgid "Label:"
+msgstr ""
+
+# (WAT) correzione: usare il plurale
+#       vuol dire altri tipi di progetti 
+#       (in programma ci sono tipi come KOM/YACC ecc.)
+msgid "Others"
+msgstr "Altri"
 
 msgid "custom project"
 msgstr "progetto personalizzato"
@@ -861,14 +957,19 @@ msgstr "Autore:"
 msgid "Email:"
 msgstr "Email:"
 
+# (WAT) suggerimento: usare qui "creare" invece di "genera"
+#       si sceglie qui di farsi creare i propri file
 msgid "generate sources and headers"
-msgstr "genera sources e headers"
+msgstr "crea sorgenti e header"
 
 msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
 msgstr "Standard File GNU (INSTALLA, LEGGIMI, COPYING...)"
 
 msgid "User-Documentation"
 msgstr "Documentazione Utente"
+
+msgid "API-Documentation"
+msgstr "Documentazione API"
 
 msgid "lsm-File - Linux Software Map"
 msgstr "File lsm - Linux Software Map"
@@ -882,45 +983,45 @@ msgstr "Icona Principale"
 msgid "Mini-Icon"
 msgstr "Mini Icona"
 
+# (WAT) correzione: "Inserisci"
 msgid ""
 "Insert your project name here. This is\n"
 "also the name of the directory where your Project\n"
 "will be created."
 msgstr ""
-"Inderisci qui il nome del progetto. Questo e`\n"
+"Inserisci qui il nome del progetto. Questo è\n"
 "anche il nome della directory in cui il Progetto\n"
-"verra` creato."
+"verrà creato."
 
-msgid ""
-"Enter the toplevel-directory of your project.\n"
-"This <b>must</b> be an <b>existing directory !!"
+msgid "Enter the toplevel-directory of your project.\n"
 msgstr ""
-"Inserisci la directory principale del progetto.\n"
-"Questa <b>deve<\b> essere una directory <b>pre-esistente<\b>!!"
 
 # verificare questa traduzione (mmorin)
+# (WAT) correzione: dell'archivio
+#       suggerimento: "finestra \"Informazione su...\"" o 
+#                     "finestra \"Info su...\""
 msgid ""
 "Set the initial version number of your project here.\n"
 "The number will be used in the about-dialog as well as for\n"
 "determining the project's package numbering for distribution."
 msgstr ""
 "Indica qui la versione iniziale del tuo progetto.\n"
-"Il numero verra` usato nella finestra \"approposito\" ed anche\n"
-"per determinare la numerazione del'archivio da distribuire."
+"Il numero verrà usato nella finestra \"Info su...\" ed anche\n"
+"per determinare la numerazione dell'archivio da distribuire."
 
 msgid ""
 "Insert your name or the development team name here. This will be used\n"
 "for adding your name as the author to all generated files of your project."
 msgstr ""
-"Inserisci qui il tuo nome, o il nome del tuo team di sviluppo. Questo sara` usato\n"
-"come autore di tutti i file generati per questo progetto."
+"Inserisci qui il tuo nome, o il nome del tuo team di sviluppo. Questo sarà usato\n"
+"come autore di tutti i file creati per questo progetto."
 
 msgid ""
 "Enter your email adress here. This will be\n"
 "used for file header information."
 msgstr ""
-"Inserisci qui il tuo email. Questo sara` usato\n"
-"nelle infirmazioni dell'header-file."
+"Inserisci qui il tuo email. Questo sarà usato\n"
+"nelle informazioni dell'header-file."
 
 msgid ""
 "Generate a HTML-based documentation set\n"
@@ -938,6 +1039,7 @@ msgstr ""
 "Genera la corrente documentazione in HTML\n"
 "partendo da un file SGML incluso nel tuo archivio."
 
+# (WAT) sugg.: meglio dire "La Linux Software Map" (come mappa, lista)
 msgid ""
 "Create a lsm-file for your project. The Linux Software Map\n"
 "is a file generally used for projects for distribution purpose and contains\n"
@@ -945,8 +1047,8 @@ msgid ""
 "of\n"
 "the end-user."
 msgstr ""
-"Crea il file lsm del progetto corrente. Il Linux Software Map\n"
-"e` un file generalmente usato durante il processo di distribuzione dell'archivio\n"
+"Crea il file lsm del progetto corrente. La Linux Software Map\n"
+"è un file generalmente usato durante il processo di distribuzione dell'archivio\n"
 "che contiene una breve descrizione the progetto, inclusi i pre-requisiti del sistema\n"
 "dell'utente finale."
 
@@ -957,7 +1059,7 @@ msgid ""
 "protocol your changes."
 msgstr ""
 "Genera l'insieme standard di file GNU per il progetto corrente.\n"
-"Questo dara` all'utente finale l'archivio completo, contente licenza d'uso\n"
+"Questo darà all'utente finale l'archivio completo, contente licenza d'uso\n"
 "il file di leggimi, ecc... oltre al file di ChangeLog che userai come\n"
 "protocollo per tutte le modifiche apportate."
 
@@ -965,16 +1067,17 @@ msgid ""
 "Add a program icon to your project that represents\n"
 "your application in the window manager."
 msgstr ""
-"Aggiungi l'icona per il programma, la quale rappresentera`\n"
+"Aggiungi l'icona per il programma, la quale rappresenterà\n"
 "l'applicazione nel window manager."
 
 msgid ""
 "Add a mini program icon to your project that is used\n"
 "for window-manager popup menus."
 msgstr ""
-"Aggiungi una mini icona per il programma, che sara` usata\n"
+"Aggiungi una mini icona per il programma, che sarà usata\n"
 "dal menu a tendina del window manager."
 
+# (WAT) correzione: collegamento
 msgid ""
 "Add a KDE link file which is installed in\n"
 "the KDE panel of the end-user. By default, your application's\n"
@@ -982,10 +1085,10 @@ msgid ""
 "change this destination by editing the installation properties\n"
 "for the link file later."
 msgstr ""
-"Aggiungi un file di collegamente a KDE installandolo nel pannello-KDE\n"
-"dell'utente finale.  Per default il file di collegamento  sara` installato\n"
-"nel menu Applicazioni. Puoi cambiare questa impostazione editando piu` tardi\n"
-"le proprieta` di installazione del collemento medesimo."
+"Aggiungi un file di collegamento a KDE installandolo nel pannello-KDE\n"
+"dell'utente finale.  Per default il file di collegamento sarà installato\n"
+"nel menu Applicazioni. Puoi cambiare questa impostazione editando più tardi\n"
+"le proprietà di installazione del collegamento medesimo."
 
 msgid ""
 "Lets you select another icon for your program\n"
@@ -1004,6 +1107,60 @@ msgstr ""
 "Permette di selezionare un'altra mini icona per il programma\n"
 "al posto dell'icona di esempio fornita dall'Application\n"
 "Wizard."
+
+msgid "Version Control System Support"
+msgstr ""
+
+msgid "vcs support"
+msgstr ""
+
+msgid "vcs location"
+msgstr ""
+
+msgid "repository in vcs"
+msgstr ""
+
+msgid "vendor tag"
+msgstr ""
+
+msgid "log message"
+msgstr ""
+
+msgid "release tag"
+msgstr ""
+
+msgid ""
+"Here you can enter the log message for the\n"
+"version control system."
+msgstr ""
+
+msgid ""
+"Here you can choose the vendor tag, which your project\n"
+"has in the version control system."
+msgstr ""
+
+msgid ""
+"Here you can choose a special pointer for the first\n"
+"entry in the version control system."
+msgstr ""
+
+msgid ""
+"Here you can choose the version control system,\n"
+"which you want to use."
+msgstr ""
+
+msgid ""
+"Here you can choose where your vcsroot loction should be.\n"
+"At the moment we only support local vs. And be sure, you\n"
+"have read and write access in the location."
+msgstr ""
+
+msgid ""
+"Here you can see the repository of your project in the\n"
+"version control system. The repository is dependend on\n"
+"the directory of your project. You can not change the\n"
+"repository direct."
+msgstr ""
 
 msgid "Headertemplate for .h-files"
 msgstr "Headertemplate per i file .h"
@@ -1025,7 +1182,7 @@ msgstr ""
 "un file header template esistente"
 
 msgid "Clears the pre-set headertemplate"
-msgstr "Rimuove gli headertemplate predefiniti"
+msgstr "Rimuove l'headertemplate predefinito"
 
 msgid "Edit your headertemplate here"
 msgstr "Edita l'headertemplate qui"
@@ -1071,26 +1228,27 @@ msgstr "Seleziona il template per l'intestazione dei file C"
 msgid "Select your template for Cpp-file headers"
 msgstr "Seleziona il template per l'intestazione dei file Cpp"
 
-msgid "Directory does not exists!"
-msgstr "Directory non esistente!"
-
-msgid "The directory "
-msgstr "La directory "
-
-msgid "Directory exists!"
-msgstr "Directory esistente!"
+msgid "sgml2html and ksgml2html do not exist!"
+msgstr ""
 
 msgid ""
-"The selected project directory already exists. If you click 'OK', all files "
-"and subdirectories of the currently chosen project directory will be deleted "
-"before a new project is going to be generated"
+"If you want to generate the user-documentation, you need one of these "
+"programs.\n"
+"If you do not have one, the user-documentation will not be generate."
 msgstr ""
-"La project directory selezionata e` gia` esistente. Se premi 'OK', tutti i file "
-"e sottodirectory nella struttura del progetto selezionato verranno cancellate "
-"prima che il nuovo progetto venga generato"
 
 msgid "Ok"
 msgstr "Ok"
+
+msgid " already exists!"
+msgstr ""
+
+msgid ""
+"The selected project directory already exists. If you\n"
+" click 'OK', all files and subdirectories of the currently chosen\n"
+" project directory will be deleted before a new project is going\n"
+" to be generated."
+msgstr ""
 
 msgid "Exit"
 msgstr "Esci"
@@ -1111,25 +1269,28 @@ msgid ""
 msgstr ""
 "Crea una applicazione Qt contenente menu, toolbar, linea di stato e supporto "
 "per la visualizzazione dei documenti via il modello generico."
-msgid "Headertemplate for .c-files"
-msgstr "Headertemplate per file .c"
 
+# (WAT) correzione: mancanza del articolo
+msgid "Headertemplate for .c-files"
+msgstr "Headertemplate per i file .c"
+
+# (WAT) correzione: mancanza del articolo
 msgid "headertemplate for .c-files"
-msgstr "headertemplate per file .c"
+msgstr "headertemplate per i file .c"
 
 msgid ""
 "Create a C application. The program will run in a terminal and doesn't "
 "contain any support for classes and Graphical User Interface."
 msgstr ""
-"Crea applicazione C. Il programma funzionera` in un terminale e non "
-"conterra` alcun supporto per classi e Interfaccia Grafica."
+"Crea applicazione C. Il programma funzionerà in un terminale e non "
+"conterrà alcun supporto per classi e Interfaccia Grafica."
 
 msgid ""
 "Create a C++ application. The program will run in a terminal and doesn't "
 "contain any support for a Graphical User Interface."
 msgstr ""
-"Crea applicazione C++. Il programma funzionera` in un terminale e non "
-"conterra` alcun supporto per l'Interfaccia Grafica."
+"Crea applicazione C++. Il programma funzionerà in un terminale e non "
+"conterrà alcun supporto per l'Interfaccia Grafica."
 
 msgid ""
 "Creates an empty project to work with existing development projects. "
@@ -1137,21 +1298,22 @@ msgid ""
 "included with your old project."
 msgstr ""
 "Crea un progetto vuoto da associare ad un progetto esistente. "
-"KDevelop non si occupera` di alcun Makefile dato che dovrebbero essere gia` "
+"KDevelop non si occuperà di alcun Makefile dato che dovrebbero essere già "
 "incluso nel progetto esistente."
 
 msgid ""
 "Contains all KDE-compliant\n"
 "project types."
 msgstr ""
-"Contiene tutti  progetti\n"
+"Contiene tutti i progetti\n"
 "conformi a KDE"
 
+# (WAT) correzione: progetti
 msgid ""
 "Contains all Qt-based\n"
 "project types."
 msgstr ""
-"Contiene tutti i progetto\n"
+"Contiene tutti i progetti\n"
 "basati su Qt"
 
 msgid ""
@@ -1164,24 +1326,40 @@ msgstr ""
 msgid "Contains all individual project types."
 msgstr "Contiene tutti i tipi di progetto individuali."
 
+msgid "Translations"
+msgstr ""
+
+msgid "Dialogs"
+msgstr "Dialog"
+
+msgid "Sources"
+msgstr ""
+
+msgid "Header"
+msgstr "Header"
+
 msgid "Creating new file..."
 msgstr "Crea nuovo file..."
 
 msgid "Ready."
 msgstr "Pronto."
 
-# Non son sicuro se e` un comando o na label.... potrebbe esse "Sto aprendo i file..." (mmorin)
+# Non son sicuro se è un comando o na label.... potrebbe esse "Sto aprendo il file..." (mmorin)
+# (WAT) si tratta del messaggio nella barra di stato, mentre scegliendo il nome del file
+#       in una finestra dialogo
 msgid "Opening file..."
-msgstr "Apertura file..."
+msgstr "Sto aprendo il file..."
 
+# (WAT) si tratta del messaggio nella barra di stato
+#       mostrato se si chiude un file ancora intitolato
 msgid "Closing file..."
-msgstr "Chiusura file..."
+msgstr "Sto chiudendo il file..."
 
 msgid "Save?"
 msgstr "Salvo?"
 
 msgid "The document was modified,save?"
-msgstr "Il documento e` stato modificato, lo salvo?"
+msgstr "Il documento è stato modificato, lo salvo?"
 
 msgid "Closing all files..."
 msgstr "Chiusura di tutti i file..."
@@ -1192,11 +1370,12 @@ msgstr "Salvataggio file"
 msgid "File "
 msgstr "File "
 
+# (WAT) corr: mess. di stato, per indicare se fosse salvato o no...
 msgid " not saved."
-msgstr " non salvato."
+msgstr " non è salvato."
 
 msgid " saved."
-msgstr " salvato."
+msgstr " è salvato."
 
 msgid "Save file as..."
 msgstr "Salva file come..."
@@ -1207,17 +1386,8 @@ msgstr "Salataggio tutti i file modificati..."
 msgid "Autosaving..."
 msgstr "Salvataggio automatico..."
 
-msgid "Untitled.h"
-msgstr "Senzatitolo.h"
-
-msgid "Untitled.cpp"
-msgstr "Senzatitolo.cpp"
-
-msgid "Untitled.c"
-msgstr "Senzatitolo.c"
-
 msgid "Exiting..."
-msgstr ""
+msgstr "Terminando..."
 
 msgid "Cutting..."
 msgstr "Taglia..."
@@ -1231,31 +1401,41 @@ msgstr "Incolla selezione..."
 msgid "Inserting file contents..."
 msgstr "Inserimento contenuto del file..."
 
-# La traduzione in del --ing e` --ando ma non capisco se e` in forma verbale "sto cercando" o
+# La traduzione in del --ing è --ando ma non capisco se è in forma verbale "sto cercando" o
 # "Cerca..."
 msgid "Searching..."
-msgstr "Cerca..."
+msgstr "Cercando..."
 
+# (WAT) corr.: Ripeto ... (perché si tratta del mess. nella barra di stato,
+#              mentre KDevelop ripete l'ultima ricerca)
 msgid "Repeating last search..."
-msgstr "Ripeti l'ultima ricerca..."
+msgstr "Ripeto l'ultima ricerca..."
 
 msgid "Searching in Files..."
 msgstr "Ricerca in File..."
 
+# (WAT) corr.: Sostituisco ... (perché si tratta del mess. nella barra di stato,
+#              mentre KDevelop fa la sostituzione)
 msgid "Replacing..."
-msgstr "Sostituisci"
+msgstr "Sostituisco..."
 
+# (WAT) corr.: Seleziono ... (perché si tratta del mess. nella barra di stato,
+#              mentre KDevelop mette tutto in rilievo)
 msgid "Selecting all..."
-msgstr "Seleziona tutto..."
+msgstr "Seleziono tutto..."
 
+# (WAT) corr.: Vado ... (v. s.)
 msgid "Switching to selected line..."
-msgstr "Salta alla line selezionata..."
+msgstr "Vado alla line selezionata..."
 
 msgid "Compiling "
 msgstr "Compila "
 
 msgid "Running "
 msgstr "Esegui "
+
+msgid "Execute with Arguments"
+msgstr "Esegui con Argomenti"
 
 msgid "Running  "
 msgstr "Esegui  "
@@ -1264,19 +1444,22 @@ msgid "Running make..."
 msgstr "Esecuzione make..."
 
 msgid "Running make clean-command "
-msgstr "Esecuzione comando 'make clean' "
+msgstr "Esecuzione comando `make clean' "
 
 msgid "Running make clean and rebuilding all..."
-msgstr "Esecuzione 'make clean' e ricompilazione di tutto..."
+msgstr "Esecuzione `make clean' e ricompilazione di tutto..."
 
 msgid "Running make distclean..."
-msgstr "Esecuzione 'make distclean'..."
+msgstr "Esecuzione `make distclean'..."
 
 msgid "Running autoconf/automake suite..."
-msgstr "Esecuzione autoconf/automake..."
+msgstr "Esecuzione `autoconf/automake'..."
+
+msgid "Configure with Arguments"
+msgstr "Configura con Argomenti"
 
 msgid "Running ./configure..."
-msgstr "Esecuzione ./configure"
+msgstr "Esecuzione `./configure'"
 
 msgid "Killing current process..."
 msgstr "Termina processi correnti..."
@@ -1308,24 +1491,29 @@ msgstr "Aggiornamento documentazione KDE-Libs..."
 msgid "Generating Documentation..."
 msgstr "Generazione Documentazione..."
 
+# (WAT) correzione: Creazione
 msgid "Creating Search Database..."
-msgstr "Crazione Database di Ricerca..."
+msgstr "Creazione Database di Ricerca..."
 
 msgid "Opening bookmark..."
 msgstr "Apertura bookmark..."
 
+# (WAT) corr.: non si tratta dell'ultima pagina, ma della pagina precedente
+#              poi vado invece di vai
 msgid "Switching to last page..."
-msgstr "Salta all'ultima pagina..."
+msgstr "Vado alla pagina precedente..."
 
 msgid "Switching to next page..."
-msgstr "Salta alla pagina successiva..."
+msgstr "Vado alla pagina successiva..."
 
 # come ca... si traduce history page "pagina storica"?
+# (WAT) comm.: secondo me 'Apertura lista delle pagine visitate' va bene... dato che viene
+#       usato solamente per le pagine guida
 msgid "Opening history page..."
-msgstr "Apertura pagina history..."
+msgstr "Apertura lista delle pagine visitate..."
 
 msgid "Reloading page..."
-msgstr "Ricarica pagine..."
+msgstr "Ricarica pagina..."
 
 msgid "You must select a text for searching the documentation!"
 msgstr "Devi selezionare il testo da ricercare nella documentazione!"
@@ -1346,31 +1534,34 @@ msgstr "Cerca Aiuto su..."
 msgid "No Project API documentation !"
 msgstr "Nessuna documentazione API!"
 
+# (WAT) corr.: documentazione
 msgid ""
 "The Project API documentation is not present.\n"
 "Would you like to generate it now ?"
 msgstr ""
-"La documentaione API del progetto non e` presente.\n"
+"La documentazione API del progetto non è presente.\n"
 "Vuoi generarla ora?"
 
+# (WAT) corr.: Vado (mess. barra di stato)
 msgid "Switching to project API Documentation..."
-msgstr "Salta alla Documentazione API del progetto..."
+msgstr "Vado alla Documentazione API del progetto..."
 
 msgid "No Project manual found !"
-msgstr "Nessun manuale del progetto e` stato trovato!"
+msgstr "Nessun manuale del progetto è stato trovato!"
 
+# (WAT) sugg.: manuale invece di handbook...
 msgid ""
 "The Project manual documentation is not present.\n"
 "Would you like to generate the handbook  now ?"
 msgstr ""
-"Il manuale del Progetto non e` presente.\n"
-"Voi generare il handbook ora?"
+"Il manuale del Progetto non è presente.\n"
+"Voi generare il manuale ora?"
 
 msgid "Switching to project Manual..."
-msgstr "Salta al Manuale del progetto..."
+msgstr "Vai al manuale del progetto..."
 
 msgid "About KDevelop..."
-msgstr "Approposito di KDevelop..."
+msgstr "Info su KDevelop..."
 
 msgid "\t   KDevelop Version "
 msgstr "\t   Versione di KDevelop "
@@ -1392,15 +1583,17 @@ msgid "Hits"
 msgstr "Trovati"
 
 # Ma vogliamo proprio tradurre failed con fallimento??? (mmorin) mah....
+# (WAT) sugg: magari *** errore/i *** (come nel tedesco ;-)
 msgid "*** failed ***\n"
-msgstr "*** fallimento ***\n"
+msgstr "*** errori/e ***\n"
 
 msgid "*** success ***\n"
 msgstr "*** successo ***\n"
 
 #, c-format
+# Dai un occhio a questo (mmorin)
 msgid "*** exit-code: %i ***\n"
-msgstr "*** codice di uscita: %i ***\n"
+msgstr "*** valore in uscita: %i ***\n"
 
 msgid "Press Enter to continue!"
 msgstr "Premi Invio per continuare!"
@@ -1408,8 +1601,35 @@ msgstr "Premi Invio per continuare!"
 msgid "*** process exited with error(s) ***\n"
 msgstr "*** errori alla terminazione dei processi ***\n"
 
+msgid "Qt-Library"
+msgstr "Libreria Qt"
+
 msgid "File not found!"
 msgstr "File non trovato!"
+
+msgid "KDE-Core-Library"
+msgstr "Libreria KDE-Core"
+
+msgid "KDE-UI-Library"
+msgstr "Libreria KDE-UI"
+
+msgid "KDE-KFile-Library"
+msgstr "Libreria KDE-KFile"
+
+msgid "KDE-KHTMLW-Library"
+msgstr "Libreria KDE-KHTMLW"
+
+msgid "KDE-KFM-Library"
+msgstr "Libreria KDE-KFM"
+
+msgid "KDE-KDEutils-Library"
+msgstr "Libreria KDE-KDEutils"
+
+msgid "KDE-KAB-Library"
+msgstr "Libreria KDE-KAB"
+
+msgid "KDE-KSpell-Library"
+msgstr "Libreria KDE-KSpell"
 
 msgid "Creates a new file"
 msgstr "Crea un nuovo file"
@@ -1443,939 +1663,992 @@ msgstr "Ripeti l'ultima modifica"
 
 msgid "Cuts the selected section and puts it to the clipboard"
 msgstr "Taglia la sezione selezionata e ponila nella clipboard"
-#--------------------------------------------------------------------------------
 
 msgid "Copys the selected section to the clipboard"
-msgstr ""
+msgstr "Copia la sezione selezionata nella clipboard"
 
 msgid "Pastes the clipboard contents to actual position"
-msgstr ""
+msgstr "Incolla il contenuto della clipboard nella posizione attuale"
 
 msgid "Inserts a file at the current position"
-msgstr ""
+msgstr "Inserisci il file nella posizione corrente"
 
 msgid "Searchs the file for an expression"
-msgstr ""
+msgstr "Cerca un'espressione nel file"
 
 msgid "Repeats the last search"
-msgstr ""
+msgstr "Ripeti la precedente ricerca"
 
 msgid "Searchs and replace expression"
-msgstr ""
+msgstr "Cerca e sostituisci espressione"
 
+# (WAT) rimane: file dialog (mmorin/WAT)
 msgid ""
 "Opens the search in files dialog to search for expressions over several files"
 msgstr ""
+"Apre la ricerca in un file dialog per ricercare espressioni su molteplici file"
 
 msgid "Moves the selection to the right"
-msgstr ""
+msgstr "Muovi la selezione a destra"
 
 msgid "Moves the selection to the left"
-msgstr ""
+msgstr "Muovi la selezione a sinistra"
 
 msgid "Selects the whole document contents"
-msgstr ""
+msgstr "Seleziona tutto il contenuto del documento"
 
 msgid "Deselects the whole document contents"
-msgstr ""
+msgstr "Deseleziona il contenuto di tutto il documento"
 
 msgid "Inverts the current selection"
-msgstr ""
+msgstr "Inverti la selezione corrente"
 
 msgid "Goes to Line Number..."
-msgstr ""
+msgstr "Vai alla linea numero..."
 
 msgid "Switches to the file and line the next error was reported"
-msgstr ""
+msgstr "Vai al file ed alla linea dell'errore successivo"
 
 msgid "Switches to the file and line the previous error was reported"
-msgstr ""
+msgstr "Vai al file ed alla linea dell'errore precedente"
 
 msgid "Enables / disables the treeview"
-msgstr ""
+msgstr "Abilita/Disabilita la visualizzazione della struttura"
 
 msgid "Enables / disables the outputview"
-msgstr ""
+msgstr "Abilita/Disabilita la visualizzazione dell'output"
 
 msgid "Enables / disables the standard toolbar"
-msgstr ""
+msgstr "Abilita/Disabilita la toolbar standard"
 
+# (WAT) corr: toolbar
 msgid "Enables / disables the browser toolbar"
-msgstr ""
+msgstr "Abilita/Disabilita la browser toolbar"
 
 msgid "Enables / disables the statusbar"
-msgstr ""
+msgstr "Abilita/Disabilita la barra di stato"
 
 msgid "Refreshes current view"
-msgstr ""
+msgstr "Aggiorna la vista corrente"
 
 msgid "Opens the current document in the KFM browser"
-msgstr ""
+msgstr "Apri il documento corrente nel browser KFM"
 
+# (WAT) corr: incompleto
 msgid "Generates a new project with Application Wizard"
-msgstr ""
+msgstr "Crea un nuovo progetto con l'Application Wizard"
 
 msgid "Opens an existing project"
-msgstr ""
+msgstr "Apri un progetto esistente"
 
 msgid "Closes the current project"
-msgstr ""
+msgstr "Chiudi il progetto corrente"
 
 msgid "Adds an existing file to the project"
-msgstr ""
+msgstr "Aggiungi al progetto un file esistente"
 
+# (WAT) corr.: lingua
 msgid "Adds a new language for internationalization to the project"
-msgstr ""
+msgstr "Aggiungi una nuova lingua per l'internazionalizzazione del progetto"
 
 msgid "Removes file from the project"
-msgstr ""
+msgstr "Rimuovi file dal progetto"
 
 msgid "Creates a new Class frame structure and files"
-msgstr ""
+msgstr "Crea una nuova struttura di classe e di file"
 
 msgid "Shows the current file properties"
-msgstr ""
+msgstr "Mostra le proprietà del file corrente"
 
 msgid "Sets project and compiler options"
-msgstr ""
+msgstr "Imposta le opzioni del progetto e del compilatore"
 
 msgid "Invokes make to create the message file by extracting all i18n() macros"
-msgstr ""
+msgstr "Invoca make per create il file di messaggi estaendo tutte le macro i18n() "
 
 msgid "Creates the Project's API with KDoc"
-msgstr ""
+msgstr "Crea le API del progetto con KDoc"
 
+# (WAT) corr.: usa singolare
 msgid "Creates the Project's User Manual with the sgml-file"
-msgstr ""
+msgstr "Crea il Manuale Utente del progetto con il file sgml"
 
 msgid "Creates distribution packages from the current project"
-msgstr ""
+msgstr "Crea la distribuzione per il progetto corrente"
 
 msgid "Creates a tar.gz file from the current project sources"
-msgstr ""
+msgstr "Crea un file tar.gz contente i sorgenti del progetto corrente"
 
+# (WAT) corr: Compila ... (coerenza)
 msgid "Compiles the current sourcefile"
-msgstr ""
+msgstr "Compila i sorgenti correnti"
 
 msgid "Generates the sourcefiles for the dialog"
-msgstr ""
+msgstr "Genera i sorgenti per il dialog"
 
 msgid "Invokes make-command"
-msgstr ""
+msgstr "Invoca il `make'"
 
 msgid "Rebuilds the program"
-msgstr ""
+msgstr "Ricostruisci i programma"
 
 msgid "Invokes make clean and rebuild all"
-msgstr ""
+msgstr "Invoca `make clean' e ricostruisci tutto"
 
 msgid "Stops make immediately"
-msgstr ""
+msgstr "Interrompi `make' immediatamente"
 
 msgid "Invokes make-command and runs the program"
-msgstr ""
+msgstr "Invoca il `make' ed esegui il programma"
 
+# (WAT) sugg.: Imposta
 msgid "Lets you set run-arguments to the binary and invokes the make-command"
-msgstr ""
+msgstr "Setta gli argomenti del binario e invoca il `make'"
 
 msgid "Invokes make and KDbg debugging the binary"
-msgstr ""
+msgstr "Invoca `make' e KDbg per debuggare il binario "
 
 msgid "Invokes make distclean and deletes all compiled files"
-msgstr ""
+msgstr "Invoca `make distclean' e cancella tutti i file compilati"
 
 msgid "Invokes automake and co."
-msgstr ""
+msgstr "Invoca `automake', etc..."
 
 msgid "Invokes ./configure"
-msgstr ""
+msgstr "Invoca ./configure"
 
 msgid "Changes to the KDevelop dialogeditor"
-msgstr ""
+msgstr "Cambia in KDevelop dialogeditor"
 
 msgid "Changes to KDevelop project editor"
-msgstr ""
+msgstr "Cambia in KDevelop project editor"
 
 msgid "Sets the Editor's behavoir"
-msgstr ""
+msgstr "Imposta il comportamento dell'Editor"
 
 msgid "Sets the Editor's colors"
-msgstr ""
+msgstr "Imposta i colori dell'Editor"
 
+# (WAT) sugg.: i colori highlight ... dato che si usa anche syntax highlighting
 msgid "Sets the highlighting default colors"
-msgstr ""
+msgstr "Imposta i colori highlight di default "
 
 msgid "Sets the highlighting colors"
-msgstr ""
+msgstr "Imposta i colori evidenziati"
 
 msgid "Configures the Browser options"
-msgstr ""
+msgstr "Configura le opzioni per il browser"
 
 msgid "Configures the Tools-Menu entries"
-msgstr ""
+msgstr "Configura gli elementi del menu Tools"
 
 msgid "Configures printing options"
-msgstr ""
+msgstr "Configura le opzioni di stampa"
 
 msgid "Configures the printer to use enscript"
-msgstr ""
+msgstr "Configura la stampate in modo che usi `enscript'"
 
 msgid "Configures the printer to use a2ps"
-msgstr ""
+msgstr "Configura la stampante in modo che usi `a2ps'"
 
 msgid "Configures KDevelop"
-msgstr ""
+msgstr "Configura KDevelop"
 
 msgid "Sets a bookmark to the current window file"
-msgstr ""
+msgstr "Imposta un bookmark nella finestra corrente"
 
 msgid "Adds a bookmark to the current window file"
-msgstr ""
+msgstr "Aggiungi un bookmark nella finestra corrente"
 
 msgid "Clears the bookmark list for the current window"
-msgstr ""
+msgstr "Elimina la lista dei bookmark della finestra corrente"
 
 msgid "Switchs to last browser page"
-msgstr ""
+msgstr "Vai alla pagina precedente"
 
 msgid "Switchs to next browser page"
-msgstr ""
+msgstr "Vai alla pagina successiva"
 
 msgid "Reloads the current browser page"
-msgstr ""
+msgstr "Ricarica la pagina corrente"
 
 msgid "Cancels the document request"
-msgstr ""
+msgstr "Annulla la richiesta del documento"
 
 msgid "Searchs the selected text in the documentation"
-msgstr ""
+msgstr "Ricerca il testo selezionato nella documentazione"
 
 msgid "Lets you search individually for an expression"
-msgstr ""
+msgstr "Permette la ricerca di una singola espressione"
 
 msgid "Switchs to KDevelop's User Manual"
-msgstr ""
+msgstr "Vai al Manuale Utente di KDevelop"
 
 msgid "Switchs to the KDevelop Programming Handbook"
-msgstr ""
+msgstr "Vai al Manuale di Programmazione di KDevelop"
 
 msgid "Opens the Tip of the Day dialog with hints for using KDevelop"
-msgstr ""
+msgstr "Apre il `Consiglio del Giorno' con suggerimenti nell'usare KDevelop"
 
 msgid "Switchs to the C/C++-Reference"
-msgstr ""
+msgstr "Vai al C/C++-Reference"
 
 msgid "Switchs to the QT-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione QT"
 
 msgid "Switchs to the KDE-Core-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione KDE-Core"
 
 msgid "Switchs to the KDE-GUI-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione KDE-GUI"
 
 msgid "Switchs to the KDE-File-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione KDE-File"
 
 msgid "Switchs to the KDE-Html-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione KDE-Html"
 
 msgid "Switchs to the project's API-Documentation"
-msgstr ""
+msgstr "Vai alla documentazione API del progetto"
 
 msgid "Switchs to the project's User-Manual"
-msgstr ""
+msgstr "Vai al Manuale Utente del progetto"
 
 msgid "Enter the KDevelop Homepage"
-msgstr ""
+msgstr "Entra nella Homepage di KDevelop"
 
 msgid "Sends a bug-report email to the KDevelop Team"
-msgstr ""
+msgstr "Manda via email un bug-report al KDevelop Team"
 
 msgid "Some information about the dialog editor..."
-msgstr ""
+msgstr "Alcune informazioni circa il dialog editor..."
 
+# what the heck is this???? (mmorin)
+# (WAT) comm: Programmer's Hall of Fame .... (inalterato)
+#       auto-glorificazione del team KDevelop ;-) - un mess. della barra di stato
 msgid "Programmer's Hall of Fame..."
-msgstr ""
+msgstr "Programmer's Hall of Fame..."
 
 msgid "Switchs to declaration/implementation"
-msgstr ""
+msgstr "Vai alla dichiarazione/implementazione"
 
 msgid "Switchs to the method's declaration"
-msgstr ""
+msgstr "Vai alla dichiarazione del metodo"
 
 msgid "Switchs to the method's definition"
-msgstr ""
+msgstr "Vai alla definizione del metodo"
 
 msgid "Opens the graphical inheritance tree"
-msgstr ""
+msgstr "Apri la struttura gerarchica in forma grafica"
 
 msgid "Opens the classtool dialog"
-msgstr ""
+msgstr "Apri il classtool dialog"
 
 msgid "Displays the inherited classes of the current class"
-msgstr ""
+msgstr "Mostra le classi ereditate dalla classe corrente"
 
 msgid "Displays the classes who inherit the current class"
-msgstr ""
+msgstr "Mostra le classi che ereditano la classe corrente"
 
 msgid "Creates a new folder"
-msgstr ""
+msgstr "Crea una nuova cartella"
 
 msgid "Deletes the current folder"
-msgstr ""
+msgstr "Elimina la cartella corrente"
 
 msgid "Deletes the current class"
-msgstr ""
+msgstr "Elimina la classe corrente"
 
 msgid "Goes to the class declaration"
-msgstr ""
+msgstr "Vai alla dichiarazione della classe"
 
 msgid "Opens the New Method dialog"
-msgstr ""
+msgstr "Apri il New Method Dialog"
 
 msgid "Deletes the current class method"
-msgstr ""
+msgstr "Elimina il metodo corrente"
 
 msgid "Creates a new attribute for the current class"
-msgstr ""
+msgstr "Crea un nuovo attributo della classe corrente"
 
 msgid "Deletes the current class attribute"
-msgstr ""
+msgstr "Elimina l'attributo corrente"
 
 msgid "Creates a virtual method"
-msgstr ""
+msgstr "Crea un metodo virtuale"
 
 msgid "Adds a signal/slot mechanism"
-msgstr ""
+msgstr "Aggiungi un meccanismo di signal/slot"
 
 msgid "Closes the current dialog"
-msgstr ""
+msgstr "Chiudi la finestra corrente"
 
 msgid "Saves the current dialog"
-msgstr ""
+msgstr "Salva il dialog corrente"
 
 msgid "Saves the current dialog under a new filename"
-msgstr ""
+msgstr "Salva il dialog corrente in un nuovo file"
 
 msgid "Enables/Disables the properties window"
-msgstr ""
+msgstr "Abilita/Disabilita la finestra delle proprietà"
 
+# traduzione terribilie, what is the "grid snap"?
+# (WAT) comm.: è un reticolo che permette di porre
+#       i widget solo in intervalli fissati
 msgid "Sets the grid size of the editing widget grid snap"
-msgstr ""
+msgstr "Imposta la dimensione del reticolo per l'editing dei widget "
 
 msgid "Lets you create a new logical file group"
-msgstr ""
+msgstr "Permette la creazione di un nuovo gruppo di file logici"
 
 msgid "Removes the selected logical file group"
-msgstr ""
+msgstr "Elimina il gruppo logico di file selezionato"
 
 msgid "Shows the group's properties"
-msgstr ""
+msgstr "Mostra le proprietà del gruppo"
 
 msgid "Displays the absolute / relative path"
-msgstr ""
+msgstr "Mostra il percorso assoluto/relativo"
 
 msgid "Deletes the selected file"
-msgstr ""
+msgstr "Cancella il file selezionato"
 
 msgid "Ready"
-msgstr ""
+msgstr "Pronto"
+
+msgid "Are you sure you want to delete this method?"
+msgstr "Sei sicuro di voler cancellare questo metodo?"
+
+msgid "//Del by KDevelop: "
+msgstr "//Del di KDevelop: "
 
 msgid "Welcome to KDevelop!"
-msgstr ""
+msgstr "Benvenuto in KDevelop"
 
 msgid "messages"
-msgstr ""
+msgstr "messaggi"
 
 msgid "stdout"
-msgstr ""
+msgstr "stdout"
 
 msgid "stderr"
-msgstr ""
+msgstr "stderr"
 
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 msgid "LFV"
-msgstr ""
+msgstr "LFV"
 
 msgid "RFV"
-msgstr ""
+msgstr "RFV"
 
 msgid "DOC"
-msgstr ""
+msgstr "DOC"
+
+msgid "Untitled.h"
+msgstr "Senzatitolo.h"
+
+msgid "Untitled.cpp"
+msgstr "Senzatitolo.cpp"
 
 msgid "Header/Reso&urce Files"
-msgstr ""
+msgstr "File Header/Riso&rse"
 
 msgid "&C/C++ Files"
-msgstr ""
+msgstr "File &C/C++"
 
 msgid "&Documentation-Browser"
-msgstr ""
+msgstr "Browser &Documentazione"
 
 msgid "Tool&s"
-msgstr ""
+msgstr "Tool&s"
 
 msgid "Save All"
-msgstr ""
+msgstr "Salva Tutto"
 
 msgid "Indent"
-msgstr ""
+msgstr "Indenta"
 
 msgid "Unindent"
-msgstr ""
+msgstr "Rimuovi indentazione"
 
 msgid "Insert File"
-msgstr ""
+msgstr "Inserisci File"
 
 msgid "Repeat Search"
-msgstr ""
+msgstr "Ripeti Ricerca"
 
 msgid "Search in Files"
-msgstr ""
+msgstr "Ricerca in File"
 
 msgid "Search selection in Files"
-msgstr ""
+msgstr "Ricerca la selezione nei File"
 
 msgid "Select All"
-msgstr ""
+msgstr "Seleziona Tutto"
 
 msgid "Deselect All"
-msgstr ""
+msgstr "Deseleziona Tutto"
 
 msgid "Invert Selection"
-msgstr ""
+msgstr "Inverti Selezione"
 
 msgid "Goto Line"
-msgstr ""
+msgstr "Vai a Linea"
 
 msgid "Next Error"
-msgstr ""
+msgstr "Errore Successivo"
 
 msgid "Previous Error"
-msgstr ""
+msgstr "Errore Precedente"
 
 msgid "Sourcecode Editor"
-msgstr ""
+msgstr "Sourcecode Editor"
 
 msgid "Dialog Editor"
-msgstr ""
+msgstr "Dialog Editor"
 
+# (WAT) sugg: (Dis)Attiva
 msgid "Toogle Tree-View"
-msgstr ""
+msgstr "(Dis)Attiva Vista-Struttura"
 
 msgid "Toogle Output-View"
-msgstr ""
+msgstr "(Dis)Attiva Vista-Output"
 
 msgid "Toolbar"
-msgstr ""
+msgstr "Toolbar"
 
 msgid "Browser-Toolbar"
-msgstr ""
+msgstr "Toolbar del Browser"
 
 msgid "Statusbar"
-msgstr ""
+msgstr "Barra di Stato"
 
 msgid "Preview dialog"
-msgstr ""
+msgstr "Finestra di Anteprima"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Aggiorna"
 
 msgid "Graphical Classview"
-msgstr ""
+msgstr "Vista Grafica Classi"
 
 msgid "New Project"
-msgstr ""
+msgstr "Nuovo Progetto"
 
 msgid "Open Project"
-msgstr ""
+msgstr "Apri Progetto"
 
 msgid "Close Project"
-msgstr ""
+msgstr "Chiudi Progetto"
 
 msgid "New Class"
-msgstr ""
+msgstr "Nuova Classe"
 
+# (WAT) corr.: usare qui singolare e plurale
 msgid "Add existing File(s)"
-msgstr ""
+msgstr "Aggiungi File esistente/i"
 
+# (WAT) corr: usare il plurale (messaggi)
 msgid "Make messages and merge"
-msgstr ""
+msgstr "Crea messaggi e fondi"
 
 msgid "Make API-Doc"
-msgstr ""
+msgstr "Crea Documentazione API"
 
-msgid "Make User-Manual"
-msgstr ""
+msgid "Make User-Manual..."
+msgstr "Crea Manuale Utente..."
 
 msgid "Make Source-tgz"
-msgstr ""
+msgstr "Crea tgz dei Sorgenti"
 
 msgid "Project options"
-msgstr ""
+msgstr "Opzioni del Progetto"
 
 msgid "Compile File"
-msgstr ""
+msgstr "Compila File"
 
+# (WAT) corr.: make del programma, quindi... inalterato
 msgid "Make"
-msgstr ""
+msgstr "Make"
 
 msgid "Rebuild All"
-msgstr ""
+msgstr "Ricostruisci Tutto"
 
 msgid "Clean/Rebuild all"
-msgstr ""
+msgstr "Elimina/Ricostruisci Tutto"
 
 msgid "Stop process"
-msgstr ""
+msgstr "Interrompi processo"
 
 msgid "Execute"
-msgstr ""
+msgstr "Esegui"
 
 msgid "Execute with arguments"
-msgstr ""
+msgstr "Esegui con argomenti"
 
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
+# inalterato (mmorin)
 msgid "DistClean"
-msgstr ""
+msgstr "DistClean"
 
 msgid "Autoconf and automake"
-msgstr ""
+msgstr "Autoconf ed automake"
 
-msgid "Configure"
-msgstr ""
+msgid "Configure..."
+msgstr "Configure..."
 
 msgid "Clear Bookmarks"
-msgstr ""
+msgstr "Elimina Bookmarks"
 
 msgid "Search Marked Text"
-msgstr ""
+msgstr "Ricerca Testo Marcato"
 
 msgid "Search for Help on"
-msgstr ""
+msgstr "Aiuto su"
 
 msgid "Toggle Last"
-msgstr ""
+msgstr "Attiva Ultimo"
 
 msgid "&New..."
-msgstr ""
+msgstr "&Nuovo..."
 
 msgid "Save &As..."
-msgstr ""
+msgstr "Salva &Come..."
 
 msgid "U&ndo"
-msgstr ""
+msgstr "&Disfai"
 
 msgid "R&edo"
-msgstr ""
+msgstr "&Rifai"
 
 msgid "In&dent"
-msgstr ""
+msgstr "Ind&enta"
 
 msgid "&Unindent"
-msgstr ""
+msgstr "Ri&muovi Indentazione"
 
 msgid "&Insert File..."
-msgstr ""
+msgstr "&Inserisci File..."
 
 msgid "&Search..."
-msgstr ""
+msgstr "&Cerca..."
 
 msgid "&Repeat Search"
-msgstr ""
+msgstr "Ripeti &Ricerca"
 
 msgid "&Replace..."
-msgstr ""
+msgstr "&Sostituisci..."
 
 msgid "&Search in Files..."
-msgstr ""
+msgstr "Ce&rca in File..."
 
 msgid "Select &All"
-msgstr ""
+msgstr "Seleziona &Tutto"
 
 msgid "Goto &Line..."
-msgstr ""
+msgstr "&Vai a Linea..."
 
 msgid "&Next Error"
-msgstr ""
+msgstr "&Errore Successivo"
 
 msgid "&Previous Error"
-msgstr ""
+msgstr "Errore &Precedente"
 
 msgid "&Dialog Editor"
-msgstr ""
+msgstr "&Dialog Editor"
 
 msgid "&Tree-View"
-msgstr ""
+msgstr "V&ista-Struttura"
 
 msgid "&Output-View"
-msgstr ""
+msgstr "Vista-&Output"
 
 msgid "&Toolbar"
-msgstr ""
+msgstr "&Toolbar"
 
 msgid "&Browser-Toolbar"
-msgstr ""
+msgstr "&Browser Toolbar"
 
 msgid "Status&bar"
-msgstr ""
+msgstr "Barra di &Stato"
 
 msgid "&Refresh"
-msgstr ""
+msgstr "&Aggiorna"
 
 msgid "New..."
-msgstr ""
+msgstr "Nuovo..."
 
 msgid "Open &recent project..."
-msgstr ""
+msgstr "Apri progetto &recente..."
 
 msgid "C&lose"
-msgstr ""
+msgstr "&Chiudi"
 
 msgid "&New Class..."
-msgstr ""
+msgstr "&Nuova Classe..."
 
 msgid "&Add existing File(s)..."
-msgstr ""
+msgstr "&Aggiungi File Esistente/i..."
 
 msgid "Add new &Translation File..."
-msgstr ""
+msgstr "Aggiungi nuovo File di &Traduzione..."
 
 msgid "&File Properties..."
-msgstr ""
+msgstr "Proprietà &File..."
 
 msgid "Make &messages and merge"
-msgstr ""
+msgstr "Crea &messaggi e fondi"
 
 msgid "Make AP&I-Doc"
-msgstr ""
+msgstr "Crea documentazione &API"
 
-msgid "Make &User-Manual"
-msgstr ""
+msgid "Make &User-Manual..."
+msgstr "Crea Manuale &Utente"
 
 msgid "&Source-tgz"
-msgstr ""
+msgstr "tgz dei &Sorgenti"
 
 msgid "Make D&istribution"
-msgstr ""
+msgstr "Crea D&istribuzione"
 
 msgid "&Options..."
-msgstr ""
+msgstr "&Opzioni..."
 
 msgid "&Project"
-msgstr ""
+msgstr "&Progetto"
 
 msgid "Compile &File"
-msgstr ""
+msgstr "Compile &File"
 
+# (WAT) corr: make del programma... quindi inalterato
 msgid "&Make"
-msgstr ""
+msgstr "&Make"
 
 msgid "&Rebuild all"
-msgstr ""
+msgstr "&Ricostruisci tutto"
 
 msgid "&Clean/Rebuild all"
-msgstr ""
+msgstr "Elimina/Ricostruisci &tutto"
 
 msgid "&Stop Build"
-msgstr ""
+msgstr "&Interrompi Creazione"
 
 msgid "&Execute"
-msgstr ""
+msgstr "&Esegui"
 
 msgid "Execute &with Arguments..."
-msgstr ""
+msgstr "Esegui &con Argomenti..."
 
 msgid "&Debug..."
-msgstr ""
+msgstr "&Debug..."
 
 msgid "DistC&lean"
-msgstr ""
+msgstr "DistC&lean"
 
 msgid "&Autoconf and automake"
-msgstr ""
+msgstr "&Autoconf e automake"
 
-msgid "C&onfigure"
-msgstr ""
+msgid "C&onfigure..."
+msgstr "C&onfigura..."
 
 msgid "&Build"
-msgstr ""
+msgstr "&Build"
 
 msgid "&Tools"
-msgstr ""
+msgstr "&Tools"
 
 msgid "&A2ps..."
-msgstr ""
+msgstr "&A2ps..."
 
 msgid "&Enscript..."
-msgstr ""
+msgstr "&Enscript..."
 
 msgid "&Editor..."
-msgstr ""
+msgstr "&Editor..."
 
 msgid "Editor &Colors..."
-msgstr ""
+msgstr "&Colori Editor..."
 
 msgid "Editor &Defaults..."
-msgstr ""
+msgstr "&Default dell'Editor"
 
 msgid "&Syntax Highlighting..."
-msgstr ""
+msgstr "&Syntax Highlighting..."
 
 msgid "Documentation &Browser..."
-msgstr ""
+msgstr "&Browser Documentazione"
 
 msgid "Configure &Printer..."
-msgstr ""
+msgstr "Configura &Stampante"
 
 msgid "Tools..."
-msgstr ""
+msgstr "Tools..."
 
 msgid "&KDevelop Setup..."
-msgstr ""
+msgstr "Settaggi &KDevelop..."
 
 msgid "&Window"
-msgstr ""
+msgstr "&Finestra"
 
 msgid "&Set Bookmark..."
-msgstr ""
+msgstr "&Imposta Bookmark..."
 
 msgid "&Add Bookmark..."
-msgstr ""
+msgstr "&Aggiungi Bookmark..."
 
 msgid "&Clear Bookmarks"
-msgstr ""
+msgstr "&Elimina Bookmark"
 
 msgid "&Header Window"
-msgstr ""
+msgstr "Finestra &Header"
 
 msgid "C/C++ &Window"
-msgstr ""
+msgstr "&Finestra C/C++"
 
 msgid "&Browser Window"
-msgstr ""
+msgstr "Finestra &Browser"
 
 msgid "Book&marks"
-msgstr ""
+msgstr "Book&mark"
 
 msgid "&Back"
-msgstr ""
+msgstr "&Indietro"
 
 msgid "&Forward"
-msgstr ""
+msgstr "&Avanti"
 
 msgid "&Search Marked Text"
-msgstr ""
+msgstr "&Cerca Testo Evidenziato"
+
+msgid "User Manual"
+msgstr "Manuale Utente"
+
+msgid "Programming Handbook"
+msgstr "Manuale di Programmazione"
 
 msgid "Tip of the Day"
-msgstr ""
+msgstr "Consiglio del Giorno"
 
 msgid "KDevelop Homepage"
-msgstr ""
+msgstr "KDevelop Homepage"
 
 msgid "Bug Report..."
-msgstr ""
+msgstr "Rapporto Bug..."
 
+# (WAT) sugg: Referenza
 msgid "C/C++-Reference"
-msgstr ""
+msgstr "Referenza C/C++"
 
 msgid "&Qt-Library"
-msgstr ""
+msgstr "Libreria &Qt"
 
 msgid "KDE-&Core-Library"
-msgstr ""
+msgstr "Libreria KDE-&Core"
 
 msgid "KDE-&GUI-Library"
-msgstr ""
+msgstr "Libreria KDE-&GUI"
 
 msgid "KDE-&KFile-Library"
-msgstr ""
+msgstr "Libreria KDE-&KFile"
 
 msgid "KDE-&HTML-Library"
-msgstr ""
+msgstr "Libreria KDE-&HTML"
 
 msgid "Project &API-Doc"
-msgstr ""
+msgstr "Doumentazione &API del Progetto"
 
 msgid "Project &User-Manual"
-msgstr ""
+msgstr "Manuale &Utente del Progetto"
 
 msgid "Goto declaration"
-msgstr ""
+msgstr "Vai alla dichiarazione"
 
 msgid "Goto definition"
-msgstr ""
+msgstr "Vai alla definizione"
 
 msgid "Goto class declaration"
-msgstr ""
+msgstr "Vai alla dichiarazione della classe"
 
 msgid "Show graphical classview"
-msgstr ""
+msgstr "Mostra il classview grafico"
 
 msgid "Open File"
-msgstr ""
+msgstr "Apri File"
 
 msgid "Save File"
-msgstr ""
+msgstr "Salva File"
 
 msgid "Compile file"
-msgstr ""
+msgstr "Compila File"
 
 msgid "Rebuild"
-msgstr ""
+msgstr "Ricostruisci"
 
 msgid "Run"
-msgstr ""
+msgstr "Esegui"
 
 msgid "Switch to the dialogeditor"
-msgstr ""
+msgstr "Vai al dialogeditor"
 
 msgid "Tree-View"
-msgstr ""
+msgstr "Vista-Struttura"
 
 msgid "Output-View"
-msgstr ""
+msgstr "Vista-Output"
 
 msgid "What's this...?"
-msgstr ""
+msgstr "Cos'è questo...?"
 
 msgid "Classes"
-msgstr ""
+msgstr "Classi"
 
 msgid "Methods"
-msgstr ""
+msgstr "Metodi"
 
 msgid "Declaration/Definition"
-msgstr ""
+msgstr "Dichiarazione/Definizione"
 
 msgid "Search Text in Documenation"
-msgstr ""
+msgstr "Cerca Testo nella Documentazione"
 
 msgid "xxxxxxxxxxxxxxxxxxxx"
-msgstr ""
+msgstr "xxxxxxxxxxxxxxxxxxxx"
 
+# (WAT) corr/sugg: usare "Linea" o "Riga"
+#       mi piace di più "Riga", però si usa in tutta la traduzione "linea" quindi:
 msgid "Line: 00000 Col: 000"
-msgstr ""
+msgstr "Linea: 00000 Col: 000"
 
 msgid " INS "
-msgstr ""
+msgstr " INS "
 
 msgid "yyyyyyyyyyyyyy"
-msgstr ""
+msgstr "yyyyyyyyyyyyyy"
 
+# (WAT) sugg: usare "Eseguo" o "Avvio"
 msgid "Starting..."
-msgstr ""
+msgstr "Parto..."
 
 msgid ""
 "Initializing last project...\n"
 "Please wait...\n"
 msgstr ""
+"Inizializzazione progetto precedente...\n"
+"Attendere prego...\n"
 
 msgid "Widgets"
-msgstr ""
-
-msgid "Dialogs"
-msgstr ""
+msgstr "Widget"
 
 msgid "Items"
-msgstr ""
+msgstr "Elementi"
 
 msgid "Widget Editor"
-msgstr ""
+msgstr "Widget Editor"
 
 msgid "Widget Properties"
-msgstr ""
+msgstr "Proprietà dei Widget"
 
 msgid "&Sourcecode Editor"
-msgstr ""
+msgstr "Editor del &Sorgente"
 
 msgid "&Widgets-View"
-msgstr ""
+msgstr "Vista-&Widget"
 
 msgid "&Properties-View"
-msgstr ""
+msgstr "Vista-&Propriertà"
 
 msgid "&Preview dialog"
-msgstr ""
+msgstr "Finestra di &Anteprima"
 
+# (WAT) sugg: &Reticolo
 msgid "&Grid..."
-msgstr ""
+msgstr "&Reticolo..."
 
 msgid "Make &messages"
-msgstr ""
+msgstr "Crea &messaggi"
 
 msgid "Make &API-Doc"
-msgstr ""
+msgstr "Crea Documentazione &API"
+
+msgid "Make &User-Manual"
+msgstr "Crea Manuale &Utente"
 
 msgid "&Generate Sources..."
-msgstr ""
+msgstr "&Genera Sorgenti..."
 
 msgid "&Generate Complete Sources..."
-msgstr ""
+msgstr "Crea &Sorgenti Completi..."
 
 msgid "&Execute  "
-msgstr ""
+msgstr "&Esegui   "
 
 msgid "Execute &with Arguments"
-msgstr ""
+msgstr "Esegui con &Argomenti"
 
 msgid "&DistClean"
-msgstr ""
+msgstr "&DistClean"
 
 msgid "&Autoconf"
-msgstr ""
+msgstr "&Autoconf"
 
 msgid "Dialog editor notes..."
-msgstr ""
+msgstr "Editor delle Annotazioni..."
 
 msgid "Save Dialog"
-msgstr ""
+msgstr "Salva Dialog"
 
 msgid "Generate Sources"
-msgstr ""
+msgstr "Genera Sorgenti"
 
 msgid "Switch to edit-mode"
-msgstr ""
+msgstr "Passa in modalità edit"
 
 msgid "Tree View"
-msgstr ""
+msgstr "Visualizza Struttura"
 
 msgid "Output View"
-msgstr ""
+msgstr "Visualizza Output"
 
 msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-msgstr ""
+msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 msgid "xxxxxxxxxxxxxx"
-msgstr ""
+msgstr "xxxxxxxxxxxxxx"
 
 msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-msgstr ""
+msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 msgid "        "
-msgstr ""
+msgstr "        "
+
+msgid "Untitled.c"
+msgstr "Senzatitolo.c"
 
 msgid "Save as new type of document?"
-msgstr ""
+msgstr "Salvo come un nuovo tipo di documento?"
 
 msgid ""
 "Do you really want to save the file\n"
 "as another type of document?"
 msgstr ""
+"Vuoi veramente salvare il file\n"
+"come un altro tipo di documento?"
 
 msgid "File exists!"
-msgstr ""
+msgstr "File esiste già!"
 
 msgid ""
 "\n"
 "The file\n"
 "\n"
 msgstr ""
+"\n"
+"Il file\n"
+"\n"
 
 msgid ""
 "\n"
@@ -2383,29 +2656,46 @@ msgid ""
 "already exists.\n"
 "Do you want overwrite the old one?\n"
 msgstr ""
+"\n"
+"\n"
+"esite già.\n"
+"Vuoi sovrascrivere quello vecchio?\n"
 
 msgid "Scanning project files..."
-msgstr ""
+msgstr "Scansione dei file del progetto..."
 
 msgid "Attention"
-msgstr ""
+msgstr "Attenzione"
 
 msgid ""
 "\n"
 "\n"
 "File does not exist!"
 msgstr ""
+"\n"
+"\n"
+"Il file non esiste!"
+
+msgid "Exit KDevelop"
+msgstr ""
+
+msgid ""
+"There is unsaved data.\n"
+"Do you really want to quit?"
+msgstr ""
 
 msgid "Closing project..."
-msgstr ""
+msgstr "Chiusura progetto..."
 
 msgid "Save changed project files ?"
-msgstr ""
+msgstr "Salvo le modifiche dei file di progetto?"
 
 msgid ""
 "The project\n"
 "\n"
 msgstr ""
+"Il progetto\n"
+"\n"
 
 msgid ""
 "\n"
@@ -2413,75 +2703,69 @@ msgid ""
 "contains changed files. Save modified file\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"contiene dei file modificati. Salvo i file modificati\n"
+"\n"
 
 msgid "Save all"
-msgstr ""
+msgstr "Salva tutto"
 
 msgid "Copying files..."
-msgstr ""
+msgstr "Copia file..."
 
 msgid "please wait..."
-msgstr ""
+msgstr "attendere prego..."
 
 msgid ""
 "You have modified the projectversion.\n"
 "We will regenerate all Makefiles now."
 msgstr ""
+"Hai modificato la versione del progetto.\n"
+"Ricreeremo tutti i Makefile ora."
 
 msgid "Running automake/autoconf and configure..."
-msgstr ""
+msgstr "Eseguo automake/autoconf e configure..."
 
 msgid "Running configure..."
-msgstr ""
+msgstr "Eseguo configure..."
 
 msgid "Opening project..."
-msgstr ""
+msgstr "Apertura progetto..."
 
 msgid "Creating a new frame application..."
-msgstr ""
+msgstr "Creazione di una nuova struttura per applicazione...."
 
+# (WAT) corr: mi sa che esiste soltanto un pot-file... quindi "del" invece di "dei"
 msgid "Creating pot-file in /po..."
-msgstr ""
+msgstr "Creazione del file pot in /po..."
 
 msgid "Creating project API-Documentation..."
-msgstr ""
-
-msgid ""
-"The KDE-library documentation is not installed.\n"
-"Please update your documentation with the options\n"
-"given in the KDevelop Setup dialog, Documentation tab.\n"
-"\n"
-"Your API-documentation will be created without\n"
-"cross-references to the KDE and Qt libraries."
-msgstr ""
-
-msgid "Warning..."
-msgstr ""
-
-msgid ""
-"The program ksgml2html wasn't found, therefore your documentation\n"
-"won't have the usual KDE logo and look.\n"
-"\n"
-"The manual will be build using sgml2html."
-msgstr ""
+msgstr "Creazione documentazione API del progetto..."
 
 msgid "Creating project Manual..."
-msgstr ""
+msgstr "Creazione Manuale del progetto..."
 
 msgid "Running make dist..."
-msgstr ""
+msgstr "Esecuzione `make dist'..."
 
 msgid ""
 "You have added a new subdir to the project.\n"
 "We will regenerate all Makefiles now."
 msgstr ""
+"Hai aggiunto una sotto-directory al progetto.\n"
+"Rigenererò tutti i Makefile ora."
 
 msgid ""
 "Open project\n"
 "\n"
 "Shows the open project dialog to select a project to be opened"
 msgstr ""
+"Apri progetto\n"
+"\n"
+"Mostra il dialog per l'apertura del progetto dal quale selezionare il progetto da aprire"
 
+# (WAT) sugg: "sorgenti" invece di "codice" (motivi di coerenza)
 msgid ""
 "Open file\n"
 "\n"
@@ -2490,12 +2774,21 @@ msgid ""
 "sources and header files. Selecting a filename on the menu will then open "
 "the file according to the file-type."
 msgstr ""
+"Apertura file\n"
+"\n"
+"Mostra la finestra di dialogo per la selezione del file da aprire. Tenendo premuto "
+"il pulsante apparirà un menu contenente tutti i file (codice ed header) del progetto. "
+"Selezionando uno di questi nomi dal menu, il file verrà aperto compatibilmente con il "
+"suo tipo."
 
 msgid ""
 "Save file\n"
 "\n"
 "Saves the file opened in the actual editing view"
 msgstr ""
+"Salva file\n"
+"\n"
+"Salva il file aperto nella corrente finestra di editing"
 
 msgid ""
 "Print\n"
@@ -2503,49 +2796,78 @@ msgid ""
 "Opens the printing dialog. There, you can configure which printing program "
 "you wish to use, either a2ps or ensrcipt, and print your project files."
 msgstr ""
+"Stampa\n"
+"\n"
+"Apre la finestra di dialogo per la stampa. Qui puoi selezionare quale programma usare "
+"tra `a2ps' o `enscript' per stampare i file del progetto."
 
 msgid ""
 "Undo\n"
 "\n"
 "Reverts the last editing step."
 msgstr ""
+"Disfai\n"
+"\n"
+"Inverte l'ultima modifica di editing."
 
 msgid ""
 "Redo\n"
 "\n"
 "If an editing step was undone, redo lets you do this step again."
 msgstr ""
+"Rifai\n"
+"\n"
+"Se una modifica è stata disfatta, rifai permette di rieseguirla ancora."
 
 msgid ""
 "Cut\n"
 "\n"
 "Cuts out the selected text and copies it to the system clipboard."
 msgstr ""
+"Taglia\n"
+"\n"
+"Taglia (cancella) il testo selezionato e lo copia nella clipboard di sistema."
 
+# why are there 2 of these in the same file after 4 lines?? (mmorin)
+# (WAT) comm/corr: stavolta viene tagliato un widget, prima era un testo
 msgid ""
 "Cut\n"
 "\n"
 "Cuts out the selected widget and copies it to the system clipboard."
 msgstr ""
+"Taglia\n"
+"\n"
+"Taglia (cancella) il widget selezionato e lo copia nella clipboard di sistema."
 
 msgid ""
 "Copy\n"
 "\n"
 "Copies the selected text into the system clipboard."
 msgstr ""
+"Copia\n"
+"\n"
+"Copia il testo selezionato nella clipboard di sistema."
 
+# (WAT) comm/corr: stavolta viene copiato un widget, prima era un testo
 msgid ""
 "Copy\n"
 "\n"
 "Copies the selected widget into the system clipboard."
 msgstr ""
+"Copia\n"
+"\n"
+"Copia il widget selezionato nella clipboard di sistema."
 
 msgid ""
 "Paste\n"
 "\n"
 "Inserts the contents of the system clipboard at the current cursor position. "
 msgstr ""
+"Incolla\n"
+"\n"
+"Inserisce il contenuto della clipboard di sistema nella posizione occupata dal cursore."
 
+# (WAT) sugg.: usare 'cliccandoci' senza "k" e poi "linea del sorgente" (coerenza)
 msgid ""
 "Compile file\n"
 "\n"
@@ -2553,7 +2875,13 @@ msgid ""
 "in the output window. If errors occur, clicking on the error line causes the "
 "file window to show you the line the error occured."
 msgstr ""
+"Compila file\n"
+"\n"
+"Compila solamente il file aperto nella finestra `C/C++ File'. L'output è mostrato "
+"nella finestra di output. Se viene generato qualche errore, cliccandoci sopra nella finestra "
+"di editing verrà mostrata la linea di codice che l'ha generato."
 
+# (WAT) corr.: ci invece di "vi"
 msgid ""
 "Generate files\n"
 "\n"
@@ -2561,7 +2889,13 @@ msgid ""
 "The sources will be added to the project if one is opened, otherwise you "
 "will be asked to select the output directory for the generated files."
 msgstr ""
+"Genera file\n"
+"\n"
+"Questo genererà automaticamente i file di codice per l'attuale finestra di dialogo. "
+"Il codice creato verrà aggiunto al progetto corrente. Se non ci sono progetti selezionati "
+"ti verrà chiesto di selezionare la directory in cui porre i file generati."
 
+# (WAT) sugg.: usare "menu `Opzioni'"
 msgid ""
 "Make\n"
 "\n"
@@ -2572,6 +2906,14 @@ msgid ""
 "on the error line will open the file where the error was found and sets the "
 "cursor to the error line."
 msgstr ""
+"Crea\n"
+"\n"
+"Invoca il comando `make' impostato nel menu d'option menu per il progetto corrente dopo "
+"aver salvato tutti i file. Questo compilerà tutte le modifiche apportate ai sorgenti "
+"dopo la scorsa compilazione.\n"
+"La finestra di output mostrerà i messaggi del compilatore. Se si verifica un errore, "
+"cliccandoci sopra si aprirà la finestra di editing contenente il file che ha generato "
+"l'errore; il cursore sarà posizionato sulla linea in questione."
 
 msgid ""
 "Rebuild all\n"
@@ -2580,6 +2922,10 @@ msgid ""
 "clean-option to remove all object files. Then, configure creates new "
 "Makefiles and the make-command will rebuild the project."
 msgstr ""
+"Ricostruisci tutto\n"
+"Dopo aver salvato tutti i file, rimuove tutti i file oggetti "
+"invocando il `comando make clean'. Successivamente, configure ricrea il nuovo "
+"Makefile e viene rieseguito il comando make per la ricostruzione del progetto."
 
 msgid ""
 "Execute\n"
@@ -2591,6 +2937,14 @@ msgid ""
 "cause some strange behavoir like testing the helpmenu will open an error "
 "message that the index.html file is not found."
 msgstr ""
+"Esegui\n"
+"\n"
+"Dopo aver salvato tutti i file, il comando `make' è invocato per ricostruire "
+"completamente il progetto; successivamente il binario generato verrà eseguito. "
+"Considera comunque che questa funzione è valida solo per eseguire il programma "
+"ma referenze a pixmap, o file html, che in teoria dovrebbero essere installati con il programma, "
+"causeranno strani comportamenti, come, ad esempio, se invocato il menu di aiuto "
+"un messaggio di errore quale \"index.html non trovato!\" verrà generato."
 
 msgid ""
 "Debug program\n"
@@ -2599,6 +2953,11 @@ msgid ""
 "execute it step by stepby setting breakpoints in the sourcecode.Note that "
 "you have to open your sourcecodes in KDbgto access it."
 msgstr ""
+"Debugga programma\n"
+"\n"
+"Apre KDbg nella finestra di tools con il programma attuale; questo ti permetterà "
+"di eseguirlo passo passo, con la possibilità di inserire breakpoint nel codice sorgente. "
+"Fai attenzione che devi caricare il codice sorgente in KDbg per poterlo accedere."
 
 msgid ""
 "Stop\n"
@@ -2606,6 +2965,11 @@ msgid ""
 "If activated, the stop-command will interrupt the active process. This "
 "affects make-commands as well as documentation generation."
 msgstr ""
+"Stop (Interrompi)\n"
+"\n"
+"Se invocato, il comando di stop interromperà l'esecuzione del processo attivo. "
+"Ciò può essere applicato non solo comando `make' ma anche alla generazione "
+"della documentazione."
 
 msgid ""
 "Dialogeditor\n"
@@ -2614,6 +2978,11 @@ msgid ""
 "you can also switch back to the editing mode by choosing the Sourcecode "
 "editor button or Sourcecode-editor from the View-menu."
 msgstr ""
+"Dialogedit"
+"\n"
+"Questo ti permetterà di andare al dialog editor interno di KDevelop. "
+"Da quest'ultimo puoi ritornare alla normale modalità di editing selezionado "
+"il bottone di Sourcecode o Sourcecode editor nel menu Viste."
 
 msgid ""
 "Sourcecode Editor\n"
@@ -2622,6 +2991,11 @@ msgid ""
 "You can switch back to the dialogeditor by choosing the Dialogeditor button "
 "in the KDevelop toolbar or by choosing Dialogeditor in the View-menu."
 msgstr ""
+"Sourcecode Editor\n"
+"\n"
+"Questo permetterà di passare al SourceCode Editor (editor dei sorgenti) dell'interfaccia IDE. "
+"Poi tornare indietro al dialogeditor selezionando il bottone DialogEditor "
+"nella toolbar di KDevelop o selezionando DialogEditor nel menu Viste."
 
 msgid ""
 "Output-View\n"
@@ -2630,6 +3004,10 @@ msgid ""
 "the toggle button: if the button is pressed, the window is open, otherwise "
 "closed."
 msgstr ""
+"Vista-Output\n"
+"\n"
+"Abilita/Disabilita la finestra di output. Lo stato della finesta è rappresentato dall'apposito "
+"pulsante di selezione: se è premuto la finestra è aperta, altrimenti essa è chiusa."
 
 msgid ""
 "Tree-View\n"
@@ -2638,6 +3016,11 @@ msgid ""
 "the toggle button: if the button is pressed, the window is open, otherwise "
 "closed."
 msgstr ""
+"Vista-Struttura\n"
+"\n"
+"Abilita/Disabilita la finestra di visualizzazione della struttura del progetto. "
+"Lo stato della finesta è rappresentato dall'apposito "
+"pulsante di selezione: se è premuto la finestra è aperta, altrimenti essa è chiusa."
 
 msgid ""
 "Classes\n"
@@ -2645,6 +3028,10 @@ msgid ""
 "Choosing a class will switch to the header file where the class is "
 "declarated."
 msgstr ""
+"Classi\n"
+"\n"
+"Selezionando la classe si aprirà il file contente la dichiarazione della "
+"classe medesima."
 
 msgid ""
 "Methods\n"
@@ -2652,6 +3039,10 @@ msgid ""
 "Allows selecting a method of the current selected class. This will switch to "
 "the implementation of the chosen class."
 msgstr ""
+"Metodi\n"
+"\n"
+"Permette la selezione del metodo nella classe corrente. Questo permetterà il passaggio "
+"alla sua implementazione nella classe selezionata."
 
 msgid ""
 "Documentation-Back\n"
@@ -2660,6 +3051,11 @@ msgid ""
 "button pressed down will open a popup menu showing the browser history. "
 "Selecting an entry will open the according page in the browser window."
 msgstr ""
+"Precedente Documentazione\n"
+"\n"
+"Questo apre la pagina di documentazione precedentemente visitata nella finestra del browser. "
+"Tenendo premuto il pulsante, si aprirà un menu a tendina che mostrerà la precedenti pagine scorse. "
+"Selezionando una delle voci permetterà l'apertura della relativa pagina nella finestra di browsing."
 
 msgid ""
 "Documentation-Forward\n"
@@ -2667,6 +3063,10 @@ msgid ""
 "This opens the next page in the history list. Holding the button pressed "
 "will show you a popup menu to browse visited pages forward."
 msgstr ""
+"Successiva Documentazione\n"
+"Questo apre la pagina successiva indicata nella lista delle pagine visitate. Tenendo premuto "
+"il pulsante, apparirà un menu a tendina che mostrerà le pagine visitate successivamente "
+"a quella attuale."
 
 msgid ""
 "Search Marked Text\n"
@@ -2676,6 +3076,12 @@ msgid ""
 "There, you can select a documentation page of your choice and open it by "
 "following the link."
 msgstr ""
+"Cerca Testo Marcato"
+"\n"
+"Usa il database di ricerca per trovare la stringa di testo selezionata e, di "
+"conseguenza, apre una pagina di sommario nella finestra di browsing contenente "
+"tutte le referenze di tale stringa. Qui puoi aprire la pagina di documentazione "
+"selezionando l'apposito link."
 
 msgid ""
 "Search for Help on...\n"
@@ -2683,6 +3089,10 @@ msgid ""
 "Opens the Search for Help on... dialog. There, you can search for a keyword "
 "in the documentation directly using the search database."
 msgstr ""
+"Cerca per Aiuto su...\n"
+"\n"
+"Apre la finestra di dialogo `Cerca per Aiuto su...'. Qui puoi effettuare la ricerca "
+"per parola chiave nella documentazione usando direttamente il database di ricerca."
 
 msgid ""
 "Class Viewer\n"
@@ -2691,7 +3101,14 @@ msgid ""
 "project files and allows switching to declarations and implementations. The "
 "right button popup-menu allows more specialized functionality."
 msgstr ""
+"Visualizzatore Classe\n"
+"\n"
+"Il visualizzatore clase mostra tutte le classi, metodi e variabili presenti nel "
+"progetto corrente, e permette il passaggio alla loro dichiarazione ed alla loro "
+"implementazione. Il pulsante destro del mouse attiva un menu a tendina che permette "
+"l'accesso a funzionalità più specializzate."
 
+# (WAT) sugg: usare qui (LFV) invece di (VLF) dato che viene mostrato così
 msgid ""
 "Logical File Viewer\n"
 "\n"
@@ -2699,13 +3116,24 @@ msgid ""
 "allow easier access e.g.to header and implementation files.The right button "
 "popup-menu allows more specialized functionality."
 msgstr ""
+"Vista Logica File - Logical File Viewer (LFV)\n"
+"\n"
+"La vista logica dei file (LFV) suddivide i file di progetto in gruppi logici "
+"per permetterne il facile accesso come, ad esempio, i file di header e di implementazione. "
+"Il pulsante di destra del mouse abilita un menu a tendina che permette l'accessp ad "
+"ulteriori e più spezializzate funzionalità."
 
+# (WAT) sugg: usare qui (RFV) invece di (VRF) dato che viene mostrato così
 msgid ""
 "Real File Viewer\n"
 "\n"
 "The real file viewer shows the project directory in it's real structure and "
 "gives access to all files."
 msgstr ""
+"Vista Reale File - Real File Viewer (RFV)\n"
+"\n"
+"La vista reale file (RFV) mostra le directory di progetto nella sua struttura "
+"originale, e permette l'accesso a tutti i file."
 
 msgid ""
 "Documentation Tree\n"
@@ -2713,6 +3141,11 @@ msgid ""
 "The documentation tree gives access to library documentation and the "
 "KDevelop manuals. Can be configured individually by right-button menu."
 msgstr ""
+"Struttura Documentazione\n"
+"\n"
+"La struttura della documentazione (DOC) permette l'accesso alla documentazione "
+"delle librerie e al manuale di KDevelop. Essa può essere configurata via il "
+"menu a tendina che si apre con la pressione del tasto destro del mouse."
 
 msgid ""
 "Widgets\n"
@@ -2721,14 +3154,36 @@ msgid ""
 "More information about the widget items can be found by What's this help on "
 "the buttons or in the KDevelop documentation. "
 msgstr ""
+"Widget\n"
+"\n"
+"Da questo puoi selezionare il widget da aggiungere al dialog al quale stai lavorando. "
+"Ulteriori informazioni sui widget in questione possono essere reperite via la funzione di "
+"aiuto `Cos'è questo' o nella documentazione di KDevelop."
 
+# questa è orrenda, non cappisco neppure io cosa significhi!!! (mmorin)
+# (WAT) commento: i componenti che metti nella vista grafica del dialog editor
+#       vengono salvati in un file col estensione .kdevdlg (chiamato dialog
+#       definition file), quindi
+#       Selezionare un dialog di questa lista, apre il proprio file
+#       delle definizioni e mostra poi questo dialogo per le modificazioni 
+#       
 msgid ""
 "Dialogs\n"
 "\n"
 "Selecting a dialog in the list will open the dialog definition file and "
 "dispay the dialog for editing."
 msgstr ""
+"Dialog\n"
+"\n"
+"Selezionando un dialog dalla lista si accederà al dialog di definizione file e "
+"mostrerà il dialog di editing."
 
+# anche questa traduzione è un pò penosa (mmorin)
+#  (WAT) corr: proprietà
+#  (WAT) comm: non ho visto un drop-down menu per scegliere i widget
+#              magari cancellato in una prima versione 
+#              Adesso si trova la lista di tutti i widget usati
+#              alle finestra più sinistra sotto la scheda `Elementi'
 msgid ""
 "Properties\n"
 "\n"
@@ -2737,7 +3192,28 @@ msgid ""
 "view or by using the drop-down menu at the top of the properties window "
 "containing a list with all used widget items."
 msgstr ""
+"Proprietà"
+"\n"
+"La finestra di proprietà mostra le proprietà del widget attualmente selezionato. "
+"Puoi passare ad un elemento diverso selezionandolo nella vista di editing od usando la"
+"lista a caduta, presente nell'intestazione della finestra medesima, la quale contiene "
+"tutti gli oggetti utilizzati."
 
+# un'altra traduzione penosa... che abbia dormito poco ieri???? (mmorin)
+# (WAT) sugg: 
+#             La finestra di Editing Widget è la finestra in cui si modifica
+#             il dialogo. All'inizio si vede un widget (il dialogo) 
+#             con un reticolo in
+#             cui vengono messi altri widget desiderati.
+#             Selezionare un widget in questa finestra lo mette in evidenza
+#             con una cornice che permette di cambiare le sue dimensioni.
+#             Le proprietà di tal widget vengono mostrate nella finestra
+#             al lato destra. Un nuovo widget può essere inserito
+#             alla finestra sinistra sotto la scheda `Widget'
+# (WAT) sugg: mi pare che non si tratta di una griglia... ma una cornice
+#             con 6 o 8 quadretti per ridimensionarlo.
+#
+#             
 msgid ""
 "Widget Editing Window\n"
 "\n"
@@ -2748,6 +3224,16 @@ msgid ""
 "are shown in the properties window at the right. New widget items can be "
 "added by choosing them on the widgets-window on the left."
 msgstr ""
+"Finestra di Editing Widget\n"
+"\n"
+"La finestra di Editing Widget è la finestra di lavoro del widget editor. "
+"Tale finestra mostra il widget in questione con il suo proprio reticolo e permette "
+"l'inserimento in esso di altri widget. "
+"Per attivare un widget basta cliccarvi sopra: apparirà su di esso una cornice "
+"che ne permette il ridimensionamento. Le proprietà del widget selezionato sono "
+"mostrate nella finestra delle proprietà alla destra della finestra di Editing. "
+"Nuovi widget possono essere aggiunti a quello corrente selezionandoli nella "
+"`finestra dei widget' alla sinistra della finestra di Editing."
 
 msgid ""
 "Header/Resource Files\n"
@@ -2756,6 +3242,11 @@ msgid ""
 "files. The statusbar shows the status of the insert/overwrite key as well as "
 "the cursor position by line and column."
 msgstr ""
+"File Header/Risorse\n"
+"\n"
+"Questa finestra mostra gli header di tutti i file presenti nel progetto, eccetto "
+"i file sorgenti. La barra di stato mostra la modalità di inserimento/sovrascrittura "
+"e la posizione del cursore (riga e colonna)."
 
 msgid ""
 "C/C++ Files\n"
@@ -2763,6 +3254,10 @@ msgid ""
 "This window shows only source files. The statusbar shows the status of the "
 "insert/overwrite key as well as the cursor position by line and column."
 msgstr ""
+"File C/C++\n"
+"\n"
+"Questa finestra mostra solo i file sorgente. La barra di stato mostra "
+"la modalità di inserimento/sovrascrittura e la posizione del cursore (riga e colonna)."
 
 msgid ""
 "Documentation Browser\n"
@@ -2771,7 +3266,20 @@ msgid ""
 "with kdevelop as well as library class documentation created. Use the "
 "documentation tree to switch between various parts of the documentation."
 msgstr ""
+"Browser Documentazione\n"
+"\n"
+"La finestra del browser della documentazione mostra la documentazione allegata "
+"a KDevelop nonchè la documentazione delle classi create. Usa la struttura da albero "
+"della documentazione per visionarne le varie parti."
 
+# Non è molto chiaro (mmorin)
+# (WAT) sugg:
+#             La finestra di messaggi viene usato dal compilatore e
+#             da utensili come kdoc (per localizzare la documentazione).
+#             Nel primo caso mostra i messaggi d'errore del compilatore.
+#             Cliccando su un tale messaggio aprirà automaticamente il
+#             file sorgente e posizionerà il cursore nella linea
+#             che ha causato l'errore o il warning.
 msgid ""
 "Messages\n"
 "\n"
@@ -2780,6 +3288,14 @@ msgid ""
 "error message. This will automatically open the source file and set the "
 "cursor to the line that caused the compiler error/warning. "
 msgstr ""
+"Messaggi\n"
+"\n"
+"La finestra di messaggi viene usata dal compilatore e vengono impiegati"
+"utility come kdoc per localizzare la documentazione. "
+"Nel caso di compilazioni, verranno mostrati messaggi d'errore "
+"generati dal compilatore.  Cliccando su un qualsiasi messaggio si aprirà "
+"automaticamente il file sorgente ed il cursore si posizionerà "
+"nella linea  che ha causato l'errore o il warning."
 
 msgid ""
 "StdErr\n"
@@ -2787,6 +3303,10 @@ msgid ""
 "The Standard Error window displays messages of running applications using "
 "the cerr function to debug."
 msgstr ""
+"StdErr\n"
+"\n"
+"La finestra di Standard Error mostra i messaggi delle applicazione lanciate "
+"via l'uso della funzione di debug cerr."
 
 msgid ""
 "The program glimpse is not installed,\n"
@@ -2804,6 +3324,19 @@ msgid ""
 "\n"
 "The KDevelop Team"
 msgstr ""
+"Il programma glimpse non è installato,\n"
+"pertanto KDevelop non può indicizzare la documentazione\n"
+"per attivare le funzionalità di aiuto. Consigliamo l'installazione\n"
+"di Glimpse e la successiva creazione del database di ricerca\n"
+"selezionando Settaggi KDevelop nel menu Opzioni.\n"
+"\n"
+"Dato che questo è l'ultimo passo del processo di installazione\n"
+"KDevelop verrà lanciato ora.\n"
+"\n"
+"Speriamo che ti diverta nell'uso di KDevelop, e che ti sia d'aiuto\n"
+"nella creazione di nuovi programmi.\n"
+"\n"
+"Il Team KDevelop"
 
 msgid ""
 "Now KDevelop will perform the last step\n"
@@ -2812,6 +3345,10 @@ msgid ""
 "help functionality and will give you the information\n"
 "you need."
 msgstr ""
+"Ora KDevelop invocherà l'ultimo passo dell'installazione. "
+"Creerà l'indice della tua documentazione. Questo attiverà "
+"una funzionalità di guida estesa che ti permetterà di trovare "
+"ogni informazione richiesta."
 
 msgid ""
 "                 Creating search database                                    "
@@ -2820,9 +3357,15 @@ msgid ""
 "                                                                             "
 "      "
 msgstr ""
+"                 Creazione del database di ricerca                           "
+"                                                                   Attendere "
+"prego...                                                                     "
+"                                                                             "
+"      "
 
+# (WAT) corr: Installazione
 msgid "Installation successful !"
-msgstr ""
+msgstr "Installazione conclusa con successo!"
 
 msgid ""
 "\n"
@@ -2833,15 +3376,22 @@ msgid ""
 "\n"
 "The KDevelop Team"
 msgstr ""
+"\n"
+"Il processo di installazione si è concluso con successo.\n"
+"\n"
+"Il Team KDevelop spera che ti diverta nell'uso del programma\n"
+"e sarà onorato di ricevere qualsiasi risposta da te.\n"
+"\n"
+"Il Team KDevelop"
 
 msgid "KDevelop Installation"
-msgstr ""
+msgstr "Installazione di KDevelop"
 
 msgid "Welcome to the KDevelop Setup !"
-msgstr ""
+msgstr "Benvenuto nella Configurazione di KDevelop!"
 
 msgid "Qt-Documentation Path:"
-msgstr ""
+msgstr "Documentazione Qt:"
 
 msgid ""
 "This installation program will check your system for helper programs needed "
@@ -2851,12 +3401,18 @@ msgid ""
 "will stop the installation and KDevelop will be started without setting the "
 "initialvalues needed for proper functionality."
 msgstr ""
+"Questo programma di installazione farà un controllo del sistema per verificare"
+"l'esistenza dei programmi di cui KDevelop ha bisogno. La documentazione verrà "
+"configurata automaticamente. Selezionando `Procedi' si invocherà la verifca "
+"automatica del sistema e la creazione della documentazione. Selezionando `Annulla' "
+"si interromperà il processo d'installazione e KDevelop verrà lanciato senza"
+"alcun settaggio iniziale."
 
 msgid "Proceed >>"
-msgstr ""
+msgstr "Procedi >>"
 
 msgid "The selected path is not correct!"
-msgstr ""
+msgstr "Il percorso selezionato non è corretto!"
 
 msgid ""
 "\n"
@@ -2864,7 +3420,11 @@ msgid ""
 "Qt-library documentation. Please choose the\n"
 "correct path."
 msgstr ""
+"\n"
+"Il percorso selezionato non conduce alla documentazione\n"
+"della libreria Qt. Prego selezionare il percorso corretto."
 
+# (WAT) sugg: non sarebbe meglio d'usare "indica" invece di "conduce"?
 msgid ""
 "\n"
 "The chosen path does not lead to the\n"
@@ -2873,13 +3433,19 @@ msgid ""
 "it will be generated automatically in one of the\n"
 "next steps"
 msgstr ""
+"\n"
+"Il percorso selezionato non porta alla documentazione\n"
+"della libreria KDE. Prego selezionare comunque `Procedi'.\n"
+"Se non hai l'apposita documentazione, essa verrà generata\n"
+"automaticamente in uno dei prossimi passi."
 
 msgid "        Automatic installation in progress... "
-msgstr ""
+msgstr "         Installazione automatica in corso... "
 
 msgid "Syntax-Highlighting"
-msgstr ""
+msgstr "Syntax-Highlighting"
 
+# (WAT) corr: Seleziona
 msgid ""
 "\n"
 "Now you can choose the Syntax-Highlighting style\n"
@@ -2889,53 +3455,73 @@ msgid ""
 "\n"
 "Which one do you want to use ?"
 msgstr ""
+"\n"
+"Seleziona ora lo stile di Syntax-Highlighting che\n"
+"KDevelop userà. Le possibile scelte sono Stile Emacs o\n"
+"lo stile di default di KWrite (ovvero `Editor Esteso')\n"
+"\n"
+"Quale di questi vuoi utilizzare?"
 
 msgid "Emacs style"
-msgstr ""
+msgstr "Stile Emacs"
 
 msgid "KWrite default"
-msgstr ""
+msgstr "Default KWrite"
 
+#  (WAT) sugg: Verifico o Sto verficando (mess. di barra...)
 msgid "Checking needed programs..."
-msgstr ""
+msgstr "Verifica programmi necessari..."
 
 msgid " was found."
-msgstr ""
+msgstr " è stato trovato."
 
 msgid " was not found."
-msgstr ""
+msgstr " non è stato trovato."
 
 msgid "KPaint"
-msgstr ""
+msgstr "KPaint"
 
 msgid " -- search functionality will not be provided\n"
-msgstr ""
+msgstr " -- la funzionalità di ricerca non sarà disponibile\n"
 
 msgid " -- generation of new frame applications will not be possible\n"
-msgstr ""
+msgstr " -- la generazione della struttura delle applicazioni non sarà disponibile\n"
 
 msgid "  -- printing available\n"
-msgstr ""
+msgstr " -- stampa disponibile\n"
 
 msgid " -- printing can only use lpr\n"
-msgstr ""
+msgstr " -- stampa solamente con comando lpr\n"
 
 msgid "Program test results"
-msgstr ""
+msgstr "Risultati del programma di test"
 
 msgid ""
 "The following results have been determined for your system:\n"
 "\n"
 " "
 msgstr ""
+"I seguenti risultati sono stati ottenuti per il tuo sistema:\n"
+"\n"
+" "
 
 msgid "Qt Documentation found"
-msgstr ""
+msgstr "Documentazione Qt trovata"
 
 msgid ""
 "\n"
 "The Qt-Documentation has been found at:\n"
 "\n"
+msgstr ""
+"\n"
+"La documentazione Qt è stata trovata in:\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"The correct path has been set.\n"
+" "
 msgstr ""
 
 msgid ""
@@ -2946,10 +3532,27 @@ msgid ""
 "to set it now ?\n"
 " "
 msgstr ""
+"\n"
+"La documentazione della libreria Qt non è stata trovata.\n"
+"Prego inserire manualmente il percorso corretto per la suddetta\n"
+"documentazione. Vuoi farlo adesso?\n"
+" "
 
+# (WAT) corr: premendo
 msgid ""
 "    Please choose your Qt-Documentation path by pushing the selection button "
 "above."
+msgstr ""
+"    Prego selezionare il percorso della Documentazione Qt premendo il bottone "
+"di selezione suindicato."
+
+msgid "KDE-Library Documentation found"
+msgstr ""
+
+msgid ""
+"\n"
+"The KDE-Library-Documentation has been found at:\n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -2961,6 +3564,13 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"\n"
+"Il programma KDoc non è stato trovato nel sistema, pertanto\n"
+"l'aggiornamento della documentazione non può essere effettuato.\n"
+"KDoc è parte del pacchetto kdesdk e può essere ottenuto\n"
+"da www.kde.org.\n"
+"\n"
+" "
 
 msgid ""
 "\n"
@@ -2973,6 +3583,13 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"\n"
+"Ora KDevelop creerà la nuova documentazione della libreria KDE.\n"
+"Per far questo hai bisogno di kdelibs e dei suoi sorgenti.\n"
+"Se non hai i sorgenti di kdelibs ti consigliamo di scaricarli da www.kde.org.\n"
+"Ti ricordiamo che la versione dei sorgenti deve essere la stessa di kdelib installato.\n"
+"\n"
+" "
 
 msgid ""
 "                Creating KDE documentation                                   "
@@ -2981,7 +3598,13 @@ msgid ""
 "                                                                             "
 "      "
 msgstr ""
+"                Creazione documentazione di KDE                              "
+"                                                                    Attendere"
+" prego...                                                                    "
+"                                                                             "
+"      "
 
+# (WAT) corr: selezioni
 msgid ""
 "\n"
 "\n"
@@ -2994,16 +3617,26 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"\n"
+"\n"
+"Questo terminerà il processo di installazione automatico\n"
+"e lancerà KDevelop con le impostazioni di default!\n"
+"\n"
+"Se selezioni `Continua' dovrai impostare tutti i valori di\n"
+"installazione manualmente nella finestra di Impostazioni disponibile\n"
+"nel menu opzioni.\n"
+" "
 
 msgid "KDevelop Setup"
-msgstr ""
+msgstr "Impostazioni KDevelop"
 
 msgid "Make-Command"
-msgstr ""
+msgstr "Comando Make"
 
 msgid "Select Make-Command:"
-msgstr ""
+msgstr "Selezione comando Make:"
 
+# (WAT) corr: questo, presente
 msgid ""
 "Make-Command\n"
 "\n"
@@ -3013,28 +3646,35 @@ msgid ""
 "add option parameters to your make-binary\n"
 "as well."
 msgstr ""
+"Comando Make"
+"\n"
+"Seleziona il tuo comando Make di sistema.\n"
+"Di solito questo è `make', per gli utenti FreeBSD\n"
+"può essere `gmake'. Tieni presente che puoi anche aggiungere\n"
+"parametri e/o opzioni per il tuo binario."
 
 msgid "Autosave"
-msgstr ""
+msgstr "Salvataggio Automatico"
 
 msgid "enable Autosave"
-msgstr ""
+msgstr "Abilita salvataggio"
 
 msgid "Select Autosave time-interval:"
-msgstr ""
+msgstr "Selezione dell'intervallo:"
 
 msgid "3 min"
-msgstr ""
+msgstr "3 min"
 
 msgid "5 min"
-msgstr ""
+msgstr "5 min"
 
 msgid "15 min"
-msgstr ""
+msgstr "15 min"
 
 msgid "30 min"
-msgstr ""
+msgstr "30 min"
 
+# (WAT) corr: selezionare
 msgid ""
 "Autosave\n"
 "\n"
@@ -3046,16 +3686,30 @@ msgid ""
 "Available are: 3 minutes, 5 minutes,\n"
 "15 minutes and 30 minutes."
 msgstr ""
+"Salvataggio Automatico\n"
+"\n"
+"Se il salvataggio automatico è abilitato, le modifiche\n"
+"ai file verranno salvate ogni volta che saranno passati\n"
+"un numero di minuti specificati.\n"
+"\n"
+"Prego selezionare l'intervallo.\n"
+"Valori ammissibili sono: 3 minuti, 5 minuti, 15 minuti\n"
+"e 30 minuti."
 
 msgid "Autoswitch"
-msgstr ""
+msgstr "`Vai a' automatico"
 
 msgid "enable Autoswitch"
-msgstr ""
+msgstr "Abilita `Vai a' automatico"
 
 msgid "use Class View as default"
-msgstr ""
+msgstr "usa Vista Classe come default"
 
+# COme traduci autoswitch?? "Posizionamento Automatico" oppure "Vai a" automatico??
+# opto per il secondo ma....
+# (WAT) comm: dato che non abbiamo tanto spazio nel dialogo... e per la coerenza tra
+#             guida e indicatori del dialogo preferisco anch'io la versione seconda.
+#             E poi la spiegazione si trova in questo mess. ...
 msgid ""
 "use Class View as default\n"
 "\n"
@@ -3066,7 +3720,25 @@ msgid ""
 "use Logical File Viewer for\n"
 "autoswitching."
 msgstr ""
+"usa Vista Classe come default\n"
+"\n"
+"Se questa opzione è abilitata, KDevelop\n"
+"si posizionerà automaticamente nella Vista Classe\n"
+"quando si attiverà il `Vai a' automatico.\n"
+"Se invece è disabilitato, KDevelop si posizionerà,\n"
+"invece, nella Vista Logica File."
 
+# mache genere di finestra apre ??? (mmorin)
+# non mi piace come traduzione :(
+# (WAT) sugg: se la modalità di `Vai a' automatico è abilitata, KDevelop
+#             salta automaticamente nella vista di lavoro e apre la finestra
+#             con il contenuto e la funzionalità richiesta.
+#             Disabilitare la modalità di `Vai a' automatico implica
+#             di aprire le finestre della vista primaria al conto suo,
+#             compresa attivare la finestra di output mentre le
+#             funzioni relative (p.e. `Build', `Make' ecc.)
+#
+#
 msgid ""
 "Autoswitch\n"
 "\n"
@@ -3080,43 +3752,84 @@ msgid ""
 "yourself, including turning on and\n"
 "off the outputwindow."
 msgstr ""
+"`Vai a' Automatico\n"
+"\n"
+"Se la modalità di `Vai a' automatico è abilitata, KDevelop\n"
+"salta automaticamente nella vista di lavoro e apre la finestra\n"
+"con il contenuto e la funzionalità richiesta.\n"
+"\n"
+"Disabilitare la modalità di `Vai a' automatico implica\n"
+"che ti devi occupare di aprire le finestre della vista primaria\n"
+"compreso attivare la finestra di output con le relative\n"
+"funzioni (p.e. `Build', `Make' ecc.), senza l'usilio di KDevelop."
 
 msgid "Startup"
-msgstr ""
+msgstr "Inizializzazione"
 
+# Ma traduciamo proprio Startup con inizializzazione??? Forse è meglio avvio 
+# comunque sia le metto entrambi nella traduzione ;) (mmorin)
+#  (WAT) comm.: secondo me va bene così
+#        corr.: avvio, inizializzazione
 msgid ""
 "Startup\n"
 "\n"
 "The Startup group offers options for\n"
 "starting KDevelop"
 msgstr ""
+"Avvio\n"
+"\n"
+"Il gruppo di Avvio permette l'accesso\n"
+"alle opzioni per l'avvio e l'inizializzazione di KDevelop"
 
 msgid "Startup Logo"
-msgstr ""
+msgstr "Logo di Avvio"
 
+# (WAT) corr: inizializzazione
 msgid ""
 "Startup Logo\n"
 "\n"
 "If Startup Logo is enabled, KDevelop will show the\n"
 "logo picture while it is starting."
 msgstr ""
+"Logo di Avvio\n"
+"\n"
+"Se il Logo di Inizializzazione è abilitato, KDevelop mostrerà\n"
+"il proprio logo durante il processo di avvio/inizializzazione."
 
+# è una label o una segnalazione all'utente?? Nel promo caso va Carica, nel secondo Caricamento
+# (WAT) comm: "Carica" va bene... è il testo del indicatore "Settaggi KDevelop" scheda "Generale"
 msgid "Load last project"
-msgstr ""
+msgstr "Carica progetto precedente"
 
+# Caricherà ma quando??? Non mi pare spieghi granchè questo messaggio!! (mmorin)
+# (WAT) comm: nel processo d'avvio... con questo indicatore settato
+#             l'ultimo progetto della sessione scorsa viene caricato
+#             automaticamente
 msgid ""
 "Load last project\n"
 "\n"
 "If Load last project is enabled, KDevelop will load\n"
 "the last project used."
 msgstr ""
+"Carica progetto precedente\n"
+"\n"
+"Se il `Carica progetto precedente' è attivo, quando si avvierà KDevelop\n"
+" esso caricherà l'ultimo progetto su cui si è lavorato."
 
+# anche questo messaggio non spiega granchè..... io so cos'è il Tip of the day but a newbie???? (mmorin)
+# (WAT) sugg.: invece di "mostrerà il consiglio del giorno" usa qui
+#              "mostrerà consigli utili per l'elaborazione con KDevelop"
 msgid ""
 "Tip of the Day\n"
 "\n"
 "If Tip of the Day is enabled, KDevelop will show the\n"
 "Tip of the Day every time it starts."
 msgstr ""
+"Consiglio del Giorno\n"
+"\n"
+"Se `Consiglio del Giorno' è abilitato, KDevelop mostrerà\n"
+"consigli utili per l'utilizzo di KDevelop\n"
+"ogni volta che lo si avvierà."
 
 msgid ""
 "Enter the path to your QT and KDE-Libs\n"
@@ -3125,9 +3838,14 @@ msgid ""
 "whereas for KDE you can create the Documentation\n"
 "easiely by pressing the Update button below."
 msgstr ""
+"Inserisci il percorso delle documentazione delle librerie Qt e KDE\n"
+"per il browser della documentazione.\n"
+"Qt di solito è fornita completa di documentazione\n"
+"mentre per KDE puoi facilmente crearla premendo il pulsante\n"
+"`Aggiorna' qui di seguito."
 
 msgid "Qt-Library-Doc:"
-msgstr ""
+msgstr "Doc Libreria Qt:"
 
 msgid ""
 "Enter the path to your QT-Documentation\n"
@@ -3138,9 +3856,14 @@ msgid ""
 "Usually the QT-Documentation is\n"
 "located in <i><blue>$QTDIR/html</i>"
 msgstr ""
+"Inserisci il percorso della documentazione Qt.\n"
+"Per inserirlo facilmente usa il pulsante alla destra.\n"
+"\n"
+"Di solito la documentazione Qt si trova in\n"
+"<i><blue>$QTDIR/html</i>"
 
 msgid "KDE-Libraries-Doc:"
-msgstr ""
+msgstr "Doc Libreria KDE:"
 
 msgid ""
 "Enter the path to your KDE-Documentation\n"
@@ -3152,12 +3875,17 @@ msgid ""
 "you can create it by selecting the Update button\n"
 "below."
 msgstr ""
+"Inserisci il percorso della documentazione KDE.\n"
+"Per inserirlo facilmente usa il pulsante alla destra.\n"
+"\n"
+"Se non hai la documentazione di kdelib installata,\n"
+"puoi crearla selezionando il bottone `Aggiorna' qui di seguito."
 
 msgid "Update KDE-Documentation :"
-msgstr ""
+msgstr "Aggiorna Documentazione KDE:"
 
 msgid "Update..."
-msgstr ""
+msgstr "Aggiornamento..."
 
 msgid ""
 "Update KDE-Documentation\n"
@@ -3172,12 +3900,21 @@ msgid ""
 "cross-reference the KDE-Documentation\n"
 "with the Qt-classes."
 msgstr ""
+"Aggiorna Documentazione KDE\n"
+"\n"
+"Questo permette di creare o di aggironare\n"
+"la documentazione HTML della libreria KDE.\n"
+"Ti ricordo che devi avere kdoc installato per\n"
+"utilizzare questa funzionalità. Inoltre devi\n"
+"avere i sorgenti di kdelibs ed il percorso per\n"
+"la documentazione Qt per attivare i riferimenti incrociati\n"
+"con la documentazione KDE e con le classi Qt."
 
 msgid "Create Search Database :"
-msgstr ""
+msgstr "Crea il database di ricerca:"
 
 msgid "Create..."
-msgstr ""
+msgstr "Creazione..."
 
 msgid ""
 "Create Search Database\n"
@@ -3189,24 +3926,35 @@ msgid ""
 "e.g. after a kdelibs-update or installing a new\n"
 "Qt-library version."
 msgstr ""
+"Creazione Database di Ricerca\n"
+"\n"
+"Questo creerà il database di ricerca per glimpse\n"
+"il quale sarà usato per trovare del testo marcato nella\n"
+"documentazione. Raccomandiamo l'aggiornamento del database\n"
+"ogni qual volta la documentazione viene modificata, come ad esempio\n"
+"dopo un aggirnamento della kdelibs or quando installi\n"
+"una nuova versione di Qt."
 
 msgid "Directories"
-msgstr ""
+msgstr "Directory"
 
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 msgid "Keys"
-msgstr ""
+msgstr "Tasti"
 
 msgid "Documentation"
-msgstr ""
+msgstr "Documentazione"
 
 msgid ""
 "The chosen path does not lead to the\n"
 "Qt-library documentation. Please choose the\n"
 "correct path."
 msgstr ""
+"Il percorso selezionato non conduce alla\n"
+"documentazione della libreria Qt. Prego selezionare\n"
+"il percorso corretto."
 
 msgid ""
 "The chosen path does not lead to the\n"
@@ -3214,56 +3962,96 @@ msgid ""
 "correct path or choose 'Update' to create a new\n"
 "documentation"
 msgstr ""
-
-msgid "New File..."
-msgstr ""
-
-msgid "Remove File from Project..."
-msgstr ""
-
-msgid "Remove File from Disc..."
-msgstr ""
-
-msgid "Group"
-msgstr ""
-
-msgid "New Group..."
-msgstr ""
-
-msgid "Remove Group"
-msgstr ""
+"Il percorso selezionato non condule alla documentazione\n"
+"della libreria KDE. Prego inserir il percorso corretto\n"
+"o selezionare `Aggiorna' per generarer una nuova documentazione"
 
 msgid "Project/LFV"
-msgstr ""
+msgstr "Progetto/LFV"
+
+msgid "New File..."
+msgstr "Nuovo File..."
 
 msgid "New Class..."
-msgstr ""
+msgstr "Nuova Classe..."
+
+msgid "New Group..."
+msgstr "Nuovo Gruppo..."
 
 msgid "Show relative path"
+msgstr "Mostra percorsi relativi"
+
+msgid "Group"
+msgstr "Gruppo"
+
+msgid "Remove Group"
+msgstr "Rimuovi Gruppo"
+
+msgid "Properties..."
+msgstr "Proprietà..."
+
+msgid "Remove File from Project..."
+msgstr "Rimuovi File dal Progetto..."
+
+msgid "Remove File from Disk..."
+msgstr "Rimuovi File dal Disco"
+
+msgid "Update"
 msgstr ""
+
+msgid "Commit"
+msgstr ""
+
+msgid "Add to Repository"
+msgstr "Aggiungi al Deposito"
+
+msgid "Remove from Repository"
+msgstr "Rimuovi dal Depositio"
 
 msgid "Group Properties..."
-msgstr ""
+msgstr "Proprietà del Gruppo..."
 
 msgid "New Group ..."
-msgstr ""
+msgstr "Nuovo Gruppo..."
 
+#, c-format
+# (WAT) comm: non si dice "sul disco"??
 msgid ""
-"Do you really want to remove the file from project?\n"
+"Do you really want to remove the file\n"
+"%s\n"
+"from project?\n"
 "\t\tIt will remain on disk."
 msgstr ""
+"Vuoi veramente cancellare il file\n"
+"%s\n"
+"dal progetto?\n"
+"\t\tEsso rimarrà su disco."
 
+# (WAT) corr: selezionato
 msgid ""
 "Do you really want to delete the selected file?\n"
 "        There is no way to restore it!"
 msgstr ""
+"Vuoi veramente cancellare il file selezionato?\n"
+"        Non ci sarà poi modo di recuperarlo!"
 
-msgid "Class Generator"
+msgid "You must choose an existing file!"
+msgstr "Devi selezionare un file esistente!"
+
+msgid "Manual-File:"
 msgstr ""
+
+msgid "Button"
+msgstr ""
+
+# (WAT) corr: Generatore
+msgid "Class Generator"
+msgstr "Generatore Classe"
 
 msgid "Classname"
-msgstr ""
+msgstr "Nome della Classe"
 
+# (WAT) corr: mantenere, un
 msgid ""
 "Insert your new classname here.\n"
 "Please try to keep some standards\n"
@@ -3271,9 +4059,13 @@ msgid ""
 "letter for your new class, if it is\n"
 "a class for a KDE-project."
 msgstr ""
+"Inserisci il nome della nuova classe.\n"
+"Prego mantenere un certo standard come usare\n"
+"la lettera maiuscola `K' come prima lettera\n"
+"della classe se essa è parte di un progetto KDE."
 
 msgid "Baseclass"
-msgstr ""
+msgstr "Classe Base"
 
 msgid ""
 "Insert the baseclass from which your new class\n"
@@ -3282,9 +4074,10 @@ msgid ""
 "be derived from QWidget. If no baseclass is named, the\n"
 "new class will not have a parent class."
 msgstr ""
-
-msgid "Header"
-msgstr ""
+"Inserisce la classe base dalla quale la tua nuova classe\n"
+"è derivata. Se attivi `genera una classe figlio di QWidget',\n"
+"la nuova classe sarà derivata da QWidget. Se non si indica nessuna\n"
+"classe base, la nuova classe non avrà classe padre."
 
 msgid ""
 "Insert your header filename here.\n"
@@ -3292,9 +4085,13 @@ msgid ""
 "you select the classname, but you can\n"
 "still edit it afterwards."
 msgstr ""
+"Inserisci il nome del file di header.\n"
+"Esso sarà automaticamente inserito quando\n"
+"selezioni il nome della classa, ma puoi comunque\n"
+"modificarlo in seguito."
 
 msgid "Impl."
-msgstr ""
+msgstr "Impl."
 
 msgid ""
 "Insert your implementation filename here.\n"
@@ -3302,26 +4099,37 @@ msgid ""
 "you select the classname, but you can\n"
 "still edit it afterwards."
 msgstr ""
+"Inserisci il nome del file di implementazione.\n"
+"Esso sarà automaticamente inserito quando\n"
+"selezioni il nome della classa, ma puoi comunque\n"
+"modificarlo in seguito."
 
+# non mi piace come traduzione (mmorin)
 msgid ""
 "Insert a short description for your new class\n"
 "here for documenation purposes. This will be used\n"
 "for the API-documentation you can create or update\n"
 "after the class is created."
 msgstr ""
+"Insersci una breve descrizione della nuova classe, con lo scopo\n"
+"di documentare il codice. Questo verrà usato per la documentazione"
+"API del progetto, che puoi comunque creare o aggiornare dopo che la classe\n"
+"è stata creata."
 
+# (WAT) corr: Eredetarietà no interfaccia
 msgid "Inheritence"
-msgstr ""
+msgstr "Ereditarietà"
 
 msgid "Additional Options"
-msgstr ""
+msgstr "Opzioni Addizionali"
 
 msgid "use header/cpp-templates"
-msgstr ""
+msgstr "usa template header/cpp"
 
 msgid "generate a QWidget-Childclass"
-msgstr ""
+msgstr "genera un classe figlio di QWidget"
 
+# (WAT) corr: saranno, aggiunti
 msgid ""
 "This offers additional options to your new class.\n"
 "If you check `use header/cpp-templates`, your name and\n"
@@ -3330,160 +4138,218 @@ msgid ""
 "will use QWidget as the baseclass. This is also useful for\n"
 "using baseclasses derived from QWidget, e.g. QDialog."
 msgstr ""
+"Questo permette di aggiungere altre opzioni alla nuova classe.\n"
+"Se selezioni `usa template header/cpp', il tuo nome\n"
+"ed il tuo email saranno aggiunti ai nuovi file creati.\n"
+"Se selezioni `crea classe figlio di QWidget' la nuova classe userà\n"
+"QWidget come classe base. Questo è utile per usare classi base derivate\n"
+"da QWidget, come ad esempio QDialog."
 
 msgid ""
 "Check here your inheritance from the chosen baseclass.\n"
 "You can derive from a baseclass as public,protected\n"
 "or private."
 msgstr ""
+"Controlla l'ereditarietà della classe dalla classe base selezionata\n"
+"Puoi derivare da una classe base in modo public, protected o private."
 
+# (WAT) corr: Devi, inserire  
 msgid "You must enter a classname!"
-msgstr ""
+msgstr "Devi inserire un nome di una classe!"
 
 msgid "You must enter a name for the header-file!"
-msgstr ""
+msgstr "Devi inserire il nome del file di header!"
 
 msgid "You must enter a name for the implementation-file!"
-msgstr ""
+msgstr "Devi inserire il nome del file di implementazione!"
 
 msgid "lsm File - Linux Software Map"
-msgstr ""
+msgstr "File lsm - Linux Software Map"
 
 msgid "kdelnk-File - for the KDE-Menu"
-msgstr ""
+msgstr "File kdelnk - per il Menu KDE"
 
 msgid "Icon (*.xpm)"
-msgstr ""
+msgstr "Icona (*.xpm)"
 
 msgid "english (.sgml)"
-msgstr ""
+msgstr "inglese (.sgml)"
 
 msgid "C/C++ Header (*.h,*.hxx)"
-msgstr ""
+msgstr "C/C++ Header (*.h,*.hxx)"
 
 msgid "C/C++ File (*.cpp,*.c,*.cc,*.C ...)"
-msgstr ""
+msgstr "File C/C++ (*.cpp,*.c,*.cc,*.C ...)"
 
 msgid "Empty Textfile"
-msgstr ""
+msgstr "File di testo vuoto"
 
 msgid "Qt/KDE Dialog (*.kdevdlg)"
+msgstr "Dialog Qt/KDE (*.kdevdlg)"
+
+msgid "Lexical File (*.l, *.ll, *.lxx, *.l++)"
+msgstr "File Lessicali (*.l, *.ll, *.lxx, *.l++)"
+
+msgid "Choose the type of the new file here."
 msgstr ""
 
 msgid "Manuals"
-msgstr ""
+msgstr "Manuali"
 
 msgid "Linux/KDE"
-msgstr ""
+msgstr "Linux/KDE"
 
 msgid "Filename:"
+msgstr "Nome file:"
+
+msgid "Enter a name for your new file here."
 msgstr ""
 
 msgid "use Template"
+msgstr "usa Template"
+
+msgid "Check this if you want to use a template."
 msgstr ""
 
 msgid "Project Options"
-msgstr ""
+msgstr "Opzioni di Progetto"
 
 msgid "add to Project"
+msgstr "aggiungi al Progetto"
+
+msgid "Check this if you want to add the new file to your project."
 msgstr ""
 
 msgid "Location:"
+msgstr "Posizione:"
+
+msgid "Enter the directory where the new file will be located."
 msgstr ""
 
+msgid "Here you can choose a directory where the new file will be located."
+msgstr ""
+
+# (WAT) corr: da "or" a "o" ;-)
 msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
-msgstr ""
+msgstr "Il nome del file deve terminare con .cpp,.c,.cc,.C,.cxx,.ec o .ecpp!"
 
+# (WAT) corr: cancellato uno spazio
 msgid "The filename must end with .h or .hxx!"
-msgstr ""
+msgstr "Il nome del file deve terminare con .h o .hxx!"
 
 msgid "The filename must end with .lsm !"
-msgstr ""
+msgstr "Il nome del file deve terminare con .lsm!"
 
 msgid "The filename must end with .kdelnk !"
-msgstr ""
+msgstr "Il nome del file deve terminare con .kdelnk!"
 
 msgid "The filename must end with .sgml !"
-msgstr ""
+msgstr "Il nome del file deve terminare con .sgml!"
 
 msgid "The filename must end with .kdevdlg !"
-msgstr ""
+msgstr "Il nome del file deve terminare con .kdevdlg!"
 
 msgid "The filename must end with .xpm !"
-msgstr ""
+msgstr "Il nome del file deve terminare con .xpm!"
+
+msgid "The filename must end with .l, .ll, .lxx or .l++ !"
+msgstr "Il nome del file deve terminare con .l, .ll, .lxx or .l++!"
 
 msgid "You must enter a filename!"
-msgstr ""
+msgstr "Devi inserire il nome di un file!"
 
+# traduzione penosa! (mmorin)
+# (WAT) comm: altro senso
+#             ... devi selezionare una directory sotto la 
+#             directory di progetto
 msgid "You must choose a location,that is in your project-dir!"
-msgstr ""
+msgstr "Devi selezionare una posizione la quale sarà la tua directory di progetto!"
 
 msgid "Files exists!"
-msgstr ""
+msgstr "I file esistono già!"
 
 msgid ""
 "You have added a file to the project that already exists.\n"
 "Do you want overwrite the old one?"
 msgstr ""
+"Hai aggiunto un file al progetto che è già presente.\n"
+"Vuoi sovrascriver quello precedente?"
+
+msgid "Information..."
+msgstr "Informazioni..."
+
+msgid ""
+"Please make sure, that you have added\n"
+"\"AM_LEX_PROG\" to your configure.in!"
+msgstr ""
+"Prego assicurarsi di aver aggiunto \"AM_LEX_PROG\"\n"
+"al file configure.in!"
 
 msgid "Set the general options of your project here."
-msgstr ""
+msgstr "Imposta le opzioni generali del progetto."
 
 msgid "Set the project name here."
-msgstr ""
+msgstr "Imposta il nome del progetto."
 
 msgid "Version:"
-msgstr ""
+msgstr "Versione:"
 
 msgid ""
 "Set your project version\n"
 "number here."
 msgstr ""
+"Imposta il numero di versione del progetto."
 
+# (WAT) corr: "o" invece di "ed"
 msgid "Insert your name or the name of your team here"
-msgstr ""
+msgstr "Inserisci il tuo nome o il nome del tuo team"
 
 msgid "Insert your email-address here"
+msgstr "Inserisci il tuo indirizzo email"
+
+msgid "Modify Makefiles"
+msgstr "Modifica Makefile"
+
+msgid "Version Control:"
 msgstr ""
 
-msgid "Handbook:"
-msgstr ""
-
-msgid ""
-"Insert your Handbook-sgml-file name.\n"
-"Usually this is index.sgml"
+msgid "None"
 msgstr ""
 
 msgid "Short Information:"
-msgstr ""
+msgstr "Breve Informazione:"
 
 msgid ""
 "Insert some useful information about\n"
 "your project here. This is only for the\n"
-"information in the project file-<b>not</n>\n"
+"information in the project file-<b>not\n"
+"\n"
 "for README etc."
 msgstr ""
 
 msgid "Set your Compiler options here"
-msgstr ""
+msgstr "Imposta le opzioni del Compilatore"
 
 msgid "Target"
-msgstr ""
+msgstr "Obiettivo"
 
 msgid ""
 "Set your target options here\n"
 "by specifying your machine type\n"
 "and GCC optimization level (0-3)"
 msgstr ""
+"Imposta le opzioni obiettivo specificando\n"
+"il tipo di sistema e i livelli di ottimizzazione\n"
+"di GCC (0-3)"
 
 msgid "Target Machine"
-msgstr ""
+msgstr "Sistema Obiettivo"
 
 msgid "your machine"
-msgstr ""
+msgstr "il tuo sistema"
 
 msgid "i386v"
-msgstr ""
+msgstr "i386v"
 
 msgid ""
 "Specify the machine type for your program.\n"
@@ -3493,10 +4359,18 @@ msgid ""
 "cross-compilers to build a binary for an intel\n"
 "machine running Unix System V."
 msgstr ""
+"Specifica il tipo di sistema per il tuo programma.\n"
+"La definizione di altri tipi di sistema, oltre al tuo,\n"
+"sono necessari solo per distibuire pacchetti precompilati.\n"
+"Si usa i386v per creare binari che funzioneranno su sistemi\n"
+"Unix System V su architettura intel."
 
 msgid "only syntax check"
-msgstr ""
+msgstr "solo controllo sintattico"
 
+# (WAT) sugg: L'impostazione del <i>-fsyntax-only</i>
+#             causa il compilatore di controllare la sintassi
+#             del tuo codice senza creare il file oggetto.
 msgid ""
 "This option sets the compiler\n"
 "to <i>-fsyntax-only</i>\n"
@@ -3504,13 +4378,19 @@ msgid ""
 "syntax-errors but doesn't do anything\n"
 "else beyond that."
 msgstr ""
+"L'impostazione del <i>-fsyntax-only</i>\n"
+"forzerà il compilatore a controllare la sintassi\n"
+"del tuo codice senza creare il file oggetto."
 
 msgid "optimize"
-msgstr ""
+msgstr "ottimizza"
 
 msgid "Optimization-level"
-msgstr ""
+msgstr "Livello di ottimizzazione"
 
+# (WAT) sugg: l'ultima frase non mi piace molte...
+#             ...Aumentare qui il livello di ottimizzazione
+#             impegna il compilatore di più, ma la velocità....
 msgid ""
 "Set the -O option for the GCC\n"
 "here. Turning off optimization\n"
@@ -3518,73 +4398,101 @@ msgid ""
 "the more time you need to compile\n"
 "but increases program speed."
 msgstr ""
+"Imposta l'opzione -O di GCC.\n"
+"Non avere alcuna ottimizzazione implica -O0.\n"
+"Aumentare qui il livello di ottimizzazione\n"
+"impegnerà di più il compilatore ma la velocità\n"
+"di esecuzione del programma sarà migliorata."
 
 msgid "Debugging"
-msgstr ""
+msgstr "Debugging"
 
 msgid "Set your debugging options here."
-msgstr ""
+msgstr "Imposta le opzioni di debug"
 
 msgid "generate debugging information"
-msgstr ""
+msgstr "Genera informazioni di debugging"
 
 msgid ""
 "Checking this turns on the -g flag\n"
 "to generate debugging information."
 msgstr ""
+"Attivare questo abilita l'opzione -g per\n"
+"la generazione delle informazioni di debugging."
 
 msgid "Debug-level"
-msgstr ""
+msgstr "Livello di Debug"
 
+# (WAT) corr: debugging
 msgid ""
 "Set the debugging level here.\n"
 "You can choose from level 1-3 which\n"
 "sets option -g1 to -g3 debugging\n"
 "level."
 msgstr ""
+"Imposta il livello di debugging.\n"
+"Puoi scegliere un livello da 1 a 3 il quale\n"
+"imposta le opzioni di debugging -g1 -g3."
 
 msgid "generate extra information for gprof"
-msgstr ""
+msgstr "crea informazioni aggiuntive per gprof"
 
 msgid ""
 "Generate extra code to write profile\n"
 "information for the analysis program\n"
 "<i>gprof</i>."
 msgstr ""
+"Genera codice aggiuntivo per l'analisi\n"
+"del profiling tramite il programma <i>gprof</i>."
 
+# come traduci intermediate? (mmorin)
 msgid "store temporary intermediate files"
-msgstr ""
+msgstr "archivia file temporaneo intermedio"
 
+# (WAT) sugg: creerà ... invece di si creeranno...
 msgid ""
 "Store the usually temporary intermediate\n"
 "files in the current directory. This means\n"
 "compiling a file <i>foo.c</i> will produce\n"
 "the files <i>foo.o, foo.i</i> and<i>foo.s"
 msgstr ""
+"Archivia i consueti file temporanei interemedi\n"
+"nella directory corrente. Questo significa che\n"
+"compilando il file <i>foo.c</i> creerà i file\n"
+"<i>foo.o</i>, <i>foo.i</i> and<i>foo.s</i>"
 
 msgid "additional options:"
-msgstr ""
+msgstr "opzioni aggiuntive:"
 
 msgid ""
 "Insert other GCC-options here\n"
 "to invoke GCC with by setting the\n"
 "CXXFLAGS-environment variable."
 msgstr ""
+"Inserisci le altre opzioni per GCC\n"
+"che andranno a settare la variabile\n"
+"di ambiente CXXFLAGS."
 
 msgid "Compiler Options"
-msgstr ""
+msgstr "Opzioni del Compilatore"
 
 msgid ""
 "Set the Compiler warnings here by checking\n"
 "the -W options you want to use."
 msgstr ""
+"Imposta il livello dei Warning del compilatore\n"
+"attivando le opzioni -W che vuoi usare."
 
+# (WAT) corr: opzione
 msgid ""
 "Compile with -Wall. This option\n"
 "includes several different warning\n"
 "parameters which are recommended to\n"
 "turn on."
 msgstr ""
+"Compila con l'opzione -Wall. Questa opzione\n"
+"include svariati altri parametri di warning\n"
+"il cui utilizzo è raccomandato."
 
 msgid ""
 "Compile with -W. This option\n"
@@ -3592,38 +4500,41 @@ msgid ""
 "which are very specific. Please read\n"
 "GCC-Info for more information."
 msgstr ""
+"Compile con opzione -W. Questa opzione\n"
+"ne attiva altre molto specifiche non incluse\n"
+"in -Wall. Prego leggere il GCC-Info per maggiori\n"
+"informazioni."
 
+# Penso che il modo tradizionale si il K&R, giusto??? (se lo è perchè non metterlo)?
+# (mmorin)
+# (WAT) comm: nella man-page di gcc si parla di traditional... mai di K&R
+#             (magari ci sono certe differenze tra usare -tradizional
+#             come opzione di gcc è lo "K&R" standard
 msgid ""
 "Warn about certain constructs\n"
 "that behave differently in traditional\n"
 "and ANSI C."
 msgstr ""
+"Informa relativamente certi construtti\n"
+"che si comportano differentemente dal modo\n"
+"tradizionale e dallo standard ANSI C."
 
 msgid ""
 "Warn if an undefined identifier is\n"
 "evaluated in an `#if' directive"
 msgstr ""
+"Informa se un identificatore non definito\n"
+"è valutato all'interno di una direttiva `#if'"
 
 msgid ""
 "Warn whenever a local variable\n"
 "shadows another local variable."
 msgstr ""
+"Informa se una variabile locale\n"
+"nasconde un'altra variabile locale."
 
-msgid ""
-"Warn whenever two distinct\n"
-"identifiers match in the first LEN\n"
-"characters. This may help you prepare\n"
-"a program that will compile with\n"
-"certain obsolete, brain-damaged\n"
-"compilers."
-msgstr ""
-
-msgid ""
-"Warn whenever an object\n"
-"of larger than LEN bytes \n"
-"is defined."
-msgstr ""
-
+# penso vi sia un errore qui: dfoverebbe essere sizeof tutto attaccato! (mmorin)
+# non è chiaro cosa significhi
 msgid ""
 "Warn about anything that\n"
 "depends on the <i>size of</i> a\n"
@@ -3633,6 +4544,10 @@ msgid ""
 "<i>void *</i> pointers and pointers\n"
 "to functions."
 msgstr ""
+"Avverte ogni volta ci sia qualcosa che dipende\n"
+"da <i>sizeof</i>, da un tipo di funzione o da un <i>void</i>.\n"
+"GNU C assegna a questi tipi la dimensione di 1 byte, quando si tratta\n"
+"di effetture calcoli con puntatori <i>void*</i> e puntatori a funzione."
 
 msgid ""
 "Warn whenever a function call is\n"
@@ -3640,6 +4555,10 @@ msgid ""
 "example, warn if <i>int malloc()</i>\n"
 "is cast to <i>anything *."
 msgstr ""
+"Avverte quando si fa un cast di una chimata a funzione\n"
+"ad un altra di tipo diverso. Ad esempio\n"
+"avverte se un <i>int malloc()</i>\n"
+"è promosso a <i>anything*."
 
 msgid ""
 "Warn whenever a pointer is cast\n"
@@ -3648,6 +4567,11 @@ msgid ""
 "warn if a <i>const char *</i> is\n"
 "cast to an ordinary <i>char *."
 msgstr ""
+"Avverte quando un puntatore è promosso\n"
+"in modo tale da eliminare il modificatore di tipo\n"
+"dal puntatore risultante. Ad esempio,\n"
+"avverte se un <i>const char*</i> è promosso\n"
+"ad un ordinario <i>char*."
 
 msgid ""
 "Warn whenever a pointer is cast such\n"
@@ -3657,6 +4581,10 @@ msgid ""
 "machines where integers can only be accessed\n"
 "at two- or four-byte boundaries."
 msgstr ""
+"Avverte quando la promozione di un puntatore richiede\n"
+"un riallineamento del puntatore risultate. Ad esempio,\n"
+"<i>char *</i> è promosso in un <i>int *</i> in un sistema\n"
+"dove gli interi sono acceduti solamente ogni due o quattro byte."
 
 msgid ""
 "Give string constants the type <i>const char[LENGTH]</i>\n"
@@ -3668,7 +4596,16 @@ msgid ""
 "and prototypes. Otherwise, it will just be a nuisance;\n"
 "this is why we did not make <i>-Wall</i> request these\n"
 "warnings."
-msgstr ""
+msgstr "" 
+"Imposta le stringhe costanti come <i>const char[LENGTH]</i>\n"
+"in modo tale che un warning venga generato se si copia\n"
+"l'indirizzo in una varibile non di tipo <i>const char *</i>. Questo\n"
+"tipo di warning permetterà di scoprire durante la compilazione\n"
+"scritture in una stringa di tipo costante. Questo ha senso solamente\n"
+"se si è usato appropriatamente il modificatore <i>const</i>\n"
+"nelle dichiarazione e nei prototipi: in caso contrario questa\n"
+"non è utile; per questo motivo con l'opzione <i>-Wall</i> non\n"  
+"include tali warning."
 
 msgid ""
 "Warn if a prototype causes a type conversion that is different\n"
@@ -3680,25 +4617,43 @@ msgid ""
 "constant expression is implicitly converted to an unsigned\n"
 "type."
 msgstr ""
+"Informa se un prototype impone una conversione di tipo differente\n"
+"da quella che si sarebbe ottenuta in assenza del prototype."
+"Questo include conversioni da fixed point a floating point e viceversa,\n"
+"e conversioni che cambiano la dimensione o il signed di un argomento\n"
+"fixed point (eccetto quando questo sarebbe accaduto durante una promozione\n"
+"automatica). Inoltre avverte se una espressione costante intera e negativa è\n"
+"implicitamente convertita in una senza segno."
 
 msgid ""
 "Warn when a comparison between signed and unsigned values\n"
 "could produce an incorrect result when the signed value\n"
 "is converted to unsigned."
 msgstr ""
+"Informa quando il confronto tra un valore unsigned e uno signed\n"
+"può produrre un risultato sbagliato quando il valore signed è\n"
+"convertito in unsigned."
 
 msgid ""
 "Warn if any functions that return structures or unions are\n"
 "defined or called. (In languages where you can return an\n"
 "array, this also elicits a warning.)"
 msgstr ""
+"Informa se qualche funzione che ritorna una structur od un union\n"
+"è definita o invocata. Il waning viene generato anche nel caso\n"
+"si ritorni un array nei linguaggi che lo permettono."
 
+# Non è granchè chiaro: è permesso se è definito prima??? (mmorin)
 msgid ""
 "Warn if a function is declared or defined without specifying\n"
 "the argument types. (An old-style function definition is\n"
 "permitted without a warning if preceded by a declaration\n"
 "which specifies the argument types.)"
 msgstr ""
+"Informa se una funzione è dichiarata o definita senza specificarne\n"
+"il tipo degli argomenti. (È permesso l'uso della definizione di tipo\n"
+"old-style se lo si precede dalla dichiarazione contente il tipo\n"
+"degli argomenti)."
 
 msgid ""
 "Warn if a global function is defined without a previous\n"
@@ -3707,6 +4662,11 @@ msgid ""
 "is to detect global functions that fail to be declared\n"
 "in header files."
 msgstr ""
+"Informa se una funzione globale è definita senza una precendente\n"
+"dichiarazione del prototype. Questo warning è attivato anche se\n"
+"la definizione stessa fa da prototype. Questo è stato\n"
+"fatto per scoprire funzioni glovali che non sono dichiarate\n"
+"nel file di header."
 
 msgid ""
 "Warn if a global function is defined without a previous\n"
@@ -3714,28 +4674,42 @@ msgid ""
 "vides a prototype. Use this option to detect global\n"
 "functions that are not declared in header files."
 msgstr ""
+"Informa se una funzione globale è definita senza una sua\n"
+"dichiarazione. L'avvertimento è generato anche se la definizione\n"
+"stessa puo essere usata come prototype.\n"
+"Si usi questa opzione per trovare funzioni\n"
+"globali non dichiarate nei file di header."
 
 msgid ""
 "Warn if anything is declared more than once in the same scope\n"
 "even in cases where multiple declaration is valid and\n"
 "changes nothing."
 msgstr ""
+"Informa se vi sono multiple dichiarazione nello stesso scope\n"
+"anche se tali dichiarazioni non modificano nulla."
 
 msgid ""
 "Warn if an <i>extern</i> declaration is\n"
 "encountered within a function."
 msgstr ""
+"Informa se una dichiarazione <i>extern</i> è\n"
+"trovata all'interno di una funzione."
 
 msgid ""
 "Warn if a function can not be inlined, and either\n"
 "it was declared as inline, or else the\n"
 "<i>-finline-functions</i> option was given."
 msgstr ""
+"Informa se una funzione non può essere posta inline,\n"
+"anche se è stata è stata dichiarata online o se\n"
+"si è usata l'opzione <i>-finline-functions</i>."
 
 msgid ""
 "Warn if an old-style (C-style) cast is used\n"
 "within a program"
 msgstr ""
+"Informa se il cast tipo old-style (C-style) è usato\n"
+"nel programma"
 
 msgid ""
 "Warn when a derived class function declaration may be an\n"
@@ -3747,34 +4721,45 @@ msgid ""
 "as a virtual function, but with a type signature that\n"
 "does not match any declarations from the base class."
 msgstr ""
+"Informa se una dichiarazione in una classe derivata\n"
+"può essere considerata un errore quando si ridefinisce\n"
+"una funzione virtuale (caso C++). In una classe derivata\n"
+"le definizioni di classi virtuali devono coinvidere con la definizione\n"
+"nella classe base. Con questa opzione, il compilatore avverte se vi\n"
+"è una redefinizione di funzione che non coincide con alcuna altra\n"
+"dichiarazione nella classe base."
 
 msgid ""
 "Warn when g++'s synthesis behavoir does\n"
 "not match that of cfront."
 msgstr ""
+"Informa quando la sintesi creata da g++\n"
+"non è uguale a quella creata fa cfront."
 
 msgid "make all Warnings into errors"
-msgstr ""
+msgstr "imponi tutti i Warning come errori"
 
 msgid "Make all warnings into errors."
-msgstr ""
+msgstr "Imponi tutti i warning come errori."
 
 msgid "Compiler Warnings"
-msgstr ""
+msgstr "Warning del Compilatore"
 
 msgid ""
 "Set the Linker options and choose the\n"
 "libraries to add to your project."
 msgstr ""
+"Imposta le opzioni del Linker e seleziona\n"
+"le librerie da aggiungere al progetto."
 
 msgid "library flags"
-msgstr ""
+msgstr "opzioni di libreria"
 
 msgid "Set your library flags here."
-msgstr ""
+msgstr "Imposta le opzioni della libreria."
 
 msgid "remove all symbol table and relocation information from the executable"
-msgstr ""
+msgstr "rimuovi tutte le symbol table e le informazioni rilocabili dall'eseguibile"
 
 msgid ""
 "If you want to use a debugger, you\n"
@@ -3782,117 +4767,139 @@ msgid ""
 "It's useless to let the compiler generate debug\n"
 "informations and to remove it with this option."
 msgstr ""
+"Se vuoi usare il debugger, devi porre tali\n"
+"informazioni nei file oggetto.\n"
+"Non è utile lasciare che il compilatore\n"
+"generi tali informazioni per poi rimuoverle\n"
+"con questa opzione."
 
 msgid "prevent using shared libraries"
-msgstr ""
+msgstr "impedisce di usare shared library"
 
 msgid ""
 "On systems that support dynamic linking,\n"
 "this prevents linking with the shared libraries.\n"
 "On other systems, this option has no effect."
 msgstr ""
+"In sistemi che prevedono l'utilizzo di shared library,\n"
+"questa opzione ne impedisce il linking.\n"
+"Negli altri sistemi, invece, questa opzione non ha effetto."
 
 msgid "additional flags:"
-msgstr ""
+msgstr "opzioni aggiuntive:"
 
 msgid ""
 "Insert other linker options here\n"
 "to invoke the linker with by setting the\n"
 "LDFLAGS-environment variable."
 msgstr ""
+"Inserisci altre opzioni di linking, in modo tale\n"
+"da impostare la variabile d'ambiente LDFLAGS."
 
 msgid "libraries"
-msgstr ""
+msgstr "librerie"
 
 msgid "Choose your libraries here."
-msgstr ""
+msgstr "Seleziona le tue librerie."
 
 msgid "X11 basics\n"
-msgstr ""
+msgstr "X11 base\n"
 
 msgid "X11 extensions\n"
-msgstr ""
+msgstr "estensioni X11\n"
 
 msgid "KDE basics"
-msgstr ""
+msgstr "KDE base"
 
 msgid "KDE user interface"
-msgstr ""
+msgstr "KDE interfaccia utente"
 
-msgid "KDE HTML widget"
+msgid ""
+"KDE HTML widget :\n"
+"this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
 msgstr ""
+"Widget KDE HTML:\n"
+"questo include -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
 
 msgid "KDE kfm functionality"
-msgstr ""
+msgstr "funzionalità di KDE kfm"
 
 msgid "KDE file handling"
-msgstr ""
+msgstr "Gestion file KDE"
 
 msgid "KDE Spell checking"
-msgstr ""
+msgstr "Controllo ortografico KDE"
 
+# come traduci addressbook? (mmorin)
 msgid "KDE addressbook"
-msgstr ""
+msgstr "Agenda KDE"
 
 msgid "additional libraries:"
-msgstr ""
+msgstr "librerie aggiuntive:"
 
 msgid "Add additional libraries here."
-msgstr ""
+msgstr "Aggiungi ulteriori librerie."
 
 msgid "Linker Options"
-msgstr ""
+msgstr "Opzioni del Linker"
 
 msgid ""
 "This dialog is for setting\n"
 "your make options."
 msgstr ""
+"Questa finestra di dialogo è per l'impostazione\n"
+"delle opzioni del `make'."
 
 msgid "Print debug information"
-msgstr ""
+msgstr "Stampa inforamzioni di debug"
 
 msgid "Continue after errors"
-msgstr ""
+msgstr "Continua dopo gli errori"
 
 msgid "Print the data base"
-msgstr ""
+msgstr "Stampa il database"
 
 msgid "Environment variables"
-msgstr ""
+msgstr "Variabili di ambiente"
 
 msgid "No built-in rules"
-msgstr ""
+msgstr "Non usare regole implicite"
 
 msgid "Touch files"
-msgstr ""
+msgstr "Touch file"
 
 msgid "Ignore all errors"
-msgstr ""
+msgstr "Ignora errori"
 
 msgid "Silent operation"
-msgstr ""
+msgstr "Opera silenziosamente"
 
 msgid "Print working directory"
-msgstr ""
+msgstr "Stampa directory di lavoro"
 
 msgid "job number"
-msgstr ""
+msgstr "job numero"
 
 msgid "set modified"
-msgstr ""
+msgstr "imposta modificato"
 
 msgid "additional options"
-msgstr ""
+msgstr "opzioni aggiuntive"
 
 msgid "Make Options"
-msgstr ""
+msgstr "Opzioni Make"
 
 msgid ""
 "Pressing the folder button lets you choose\n"
 "a file which will be set modified. This will\n"
 "recompile the file on the next build run."
 msgstr ""
-
+"Se premi il bottone con la cartella, si potrà scegliere\n"
+"un file da impostare come modificato. Questo permetterà\n"
+"di ricompilare tale file nel prossimo processo di `build'."
+#------------------------------------------------------------------------------------------
 msgid ""
 "Print  debugging  information  in  addition to normal\n"
 "processing. The debugging information tells you which\n"
@@ -3977,34 +4984,73 @@ msgstr ""
 msgid "Add File to Project..."
 msgstr ""
 
-msgid "Question"
+#, c-format
+msgid ""
+"Do you want to add the file\n"
+"%s\n"
+"to the project ?"
 msgstr ""
+"Vuoi aggiunger il file\n"
+"%s\n"
+"al progetto?"
 
-msgid "Do you want to add the file:\n"
+msgid "Question"
+msgstr "Domanda"
+
+#, c-format
+msgid ""
+"Do you really want to delete the file\n"
+"%s\n"
+"from the disk?\n"
+"There is no way to restore it!"
 msgstr ""
 
 msgid "Tools-Menu Configuration"
 msgstr ""
 
 msgid "&Add"
+msgstr "&Aggiungi"
+
+msgid "Click here to add a tool specified below."
 msgstr ""
 
 msgid "De&lete"
 msgstr ""
 
+msgid "Click here to delete an entry from the list."
+msgstr ""
+
 msgid "Move &Up"
+msgstr ""
+
+msgid "Click here to move up the selected entry."
 msgstr ""
 
 msgid "Move &Down"
 msgstr ""
 
+msgid "Click here to move down the selected entry."
+msgstr ""
+
 msgid "Executable:"
+msgstr ""
+
+msgid "Here you can browse through the disc to select an executable file."
+msgstr ""
+
+msgid "Enter the name of the executable file here."
 msgstr ""
 
 msgid "Menu Text:"
 msgstr ""
 
+msgid "Enter a menu text for the executable here."
+msgstr ""
+
 msgid "Arguments:"
+msgstr ""
+
+msgid "Enter arguments for the executable here."
 msgstr ""
 
 msgid "Executable not set!"
@@ -4089,7 +5135,8 @@ msgstr ""
 msgid ""
 "The chosen path for the KDE-Libs does not\n"
 "lead to the KDE Libraries. Please choose the\n"
-"correct path."
+"correct path.This is where you have unpacked\n"
+"e.g. a kdelibs snapshot a la /snapshot/kdelibs."
 msgstr ""
 
 msgid ""
@@ -4112,6 +5159,67 @@ msgid ""
 "KDE Libraries. Please choose the\n"
 "correct path."
 msgstr ""
+
+msgid "KDevelop"
+msgstr "KDevelop"
+
+msgid "Welcome !"
+msgstr ""
+
+msgid "Tutorials"
+msgstr "Tutorial"
+
+msgid "KDE Library Reference"
+msgstr "Referenze Librerie KDE"
+
+msgid "KDE 2 Developer Guide"
+msgstr "Guida per lo Sviluppo in KDE 2"
+
+msgid "C/C++ Reference"
+msgstr "Referenze a C/C++"
+
+msgid "Qt/KDE Libraries"
+msgstr "Librerie Qt/KDE"
+
+msgid "Qt Library"
+msgstr "Libreria Qt"
+
+msgid "KDE Core Library"
+msgstr "Libreria KDE Core"
+
+msgid "KDE UI Library"
+msgstr "Libreria KDE UI"
+
+msgid "KDE KFile Library"
+msgstr "Libreria KDE KFile"
+
+msgid "KDE HTMLW Library"
+msgstr "Libreria KDE HTMLW"
+
+msgid "KDE KAB Library"
+msgstr ""
+
+msgid "KDE KSpell Library"
+msgstr ""
+
+msgid "Documentation Base"
+msgstr ""
+
+msgid "Add Entry..."
+msgstr "Aggiungi Voce..."
+
+# (WAT) corr.: voce
+msgid "Remove Entry"
+msgstr "Rimuovi Voce"
+
+msgid "Current Project"
+msgstr "Progetto Corrente"
+
+msgid "API documentation"
+msgstr "Documentazione API"
+
+msgid "User manual"
+msgstr "Manuale Utente"
 
 msgid "Search in Files..."
 msgstr ""
@@ -4208,6 +5316,9 @@ msgid "Tipdatabase not found ! Please check your installation."
 msgstr ""
 
 msgid "ClassWizard Tool"
+msgstr ""
+
+msgid "Virtual functions"
 msgstr ""
 
 msgid "Available:"
@@ -4352,7 +5463,7 @@ msgstr ""
 
 msgid ""
 "<b>Note :</b> Since the selected item is the main widget only few of the "
-"normally available functions are enabled. Open another items' help to get "
+"normally available functions are enabled. Open another item's help to get "
 "information about the other functions.\n"
 "\n"
 msgstr ""
@@ -6267,5 +7378,171 @@ msgstr ""
 msgid "enscript default"
 msgstr ""
 
-msgid "CVS"
+msgid "CVS Commit"
 msgstr ""
+
+msgid "Log message:"
+msgstr ""
+
+msgid "Adding file to repository"
+msgstr "Aggiungi file al deposito"
+
+msgid "Removing file from repository"
+msgstr ""
+
+msgid "Updating"
+msgstr "Aggiornamento"
+
+msgid "Commiting file"
+msgstr ""
+
+msgid "CVS"
+msgstr "CVS"
+# Brain-damaged????? Comm'onnnnnnn (mmorin)
+# se trovate qualcosa di più carino...
+# (WAT) comm: eh eh eh eh ;-), anche copiato dalla man-page
+#       sugg: usa anche qui LEN invece di n
+#             dato l'opzione si chiama -Wid-clash-[len], 
+#             sostiuendo prima len con il numero desiderato, con il 
+#             numero desiderato (NB: questa opzione non funge
+#             ancora nella versione 0.4)
+# msgid ""
+# "Warn whenever two distinct\n"
+# "identifiers match in the first LEN\n"
+# "characters. This may help you prepare\n"
+# "a program that will compile with\n"
+# "certain obsolete, brain-damaged\n"
+# "compilers."
+# msgstr ""
+# "Informa quando due indentificatori distinti\n"
+# "coincidono per i primi LEN caratteri.\n"
+# "Questo può essere utile per alcuni\n"
+# "compilatori vecchi e/o rimbambiti."
+# 
+# (WAT) sugg: usa anche qui LEN invece di n
+#             dato l'opzione si chiama -Wlarger-than-[len], 
+#             sostiuendo prima len con il numero desiderato, con il 
+#             numero desiderato (NB: questa opzione non funge
+#             ancora nella versione 0.4)
+# 
+# msgid ""
+# "Warn whenever an object\n"
+# "of larger than LEN bytes \n"
+# "is defined."
+# msgstr ""
+# "Informa se un oggetto di dimensioni\n"
+# "maggiori di LEN byte è stato definito."
+# 
+# msgid "Directory exists!"
+# msgstr "Directory esistente!"
+# 
+# msgid ""
+# "Enter the toplevel-directory of your project.\n"
+# "This <b>must</b> be an <b>existing directory !!"
+# msgstr ""
+# "Inserisci la directory principale del progetto.\n"
+# "Questa <b>deve<\b> essere una directory <b>pre-esistente<\b>!!"
+# 
+# msgid "Directory does not exists!"
+# msgstr "Directory non esistente!"
+# 
+# msgid "The directory "
+# msgstr "La directory "
+# 
+# (WAT) corr: alcune, Queste vengono
+# msgid ""
+# "Insert some useful information about\n"
+# "your project here. This is only for the\n"
+# "information in the project file-<b>not</n>\n"
+# "for README etc."
+# msgstr ""
+# "Inserisci alcune informazioni utili sul progetto.\n"
+# "Queste vengono utilizzate come informazioni del progetto\n"
+# "e <b>non<\n> per il LEGGIMI ecc."
+# 
+# msgid "Removing file to repository"
+# msgstr "Rimuovi file dal deposito"
+# 
+# msgid ""
+# "The selected project directory already exists. If you click 'OK', all files "
+# "and subdirectories of the currently chosen project directory will be deleted "
+# "before a new project is going to be generated"
+# msgstr ""
+# "La project directory selezionata è già esistente. Se premi 'OK', tutti i file "
+# "e sottodirectory nella struttura del progetto selezionato verranno cancellate "
+# "prima che il nuovo progetto venga generato"
+# 
+# msgid "serious"
+# msgstr "serio"
+# 
+# msgid "Warning..."
+# msgstr "Attenzione..."
+# 
+# msgid "Make User-Manual"
+# msgstr "Crea Manuale Utente"
+# 
+# msgid ""
+# "The program ksgml2html wasn't found, therefore your documentation\n"
+# "won't have the usual KDE logo and look.\n"
+# "\n"
+# "The manual will be build using sgml2html."
+# msgstr ""
+# "Il programma ksgml2html non è stato trovato, pertanto la documentazione\n"
+# "non avrà il logo KDE e l'usuale aspetto.\n"
+# "\n"
+# "Il manuale verrà creato con sgml2html."
+# 
+# msgid "harmless"
+# msgstr "innoffensivo"
+# 
+# msgid "General Configuration"
+# msgstr "Configurazioni Generali"
+# 
+# msgid "Development with KDevelop"
+# msgstr "Sviluppare con KDevelop"
+# 
+# msgid "Authors"
+# msgstr "Autori"
+# 
+# msgid "Programs"
+# msgstr "Programmi"
+# 
+# msgid "Copyright"
+# msgstr "Copyright"
+# 
+# msgid "The Help System"
+# msgstr "Il Sistema di Aiuto"
+# 
+# msgid "Introduction"
+# msgstr "Introduzione"
+# 
+# msgid "KDE-KHTML-Library"
+# msgstr "Libreria KDE-KHTML"
+# 
+# msgid "Working with the Editor"
+# msgstr "Lavorare con l'Editor"
+# 
+# msgid "The Dialog Editor"
+# msgstr "Il Dialog Editor"
+# 
+# msgid "The Class Browser"
+# msgstr "Il Class Browser"
+# 
+# msgid "Thanks"
+# msgstr "Ringraziamenti"
+# 
+# msgid "Overview"
+# msgstr "Overview"
+# 
+# msgid "Questions and Answers"
+# msgstr "Domande e Risposte"
+# 
+# msgid "Build Settings"
+# msgstr "Settaggi per il Build"
+# 
+# msgid "Projects"
+# msgstr "Progetti"
+# 
+# msgid "User-Manual"
+# msgstr "Manuale Utente"
+# 
