@@ -286,6 +286,7 @@ void CKDevelop::initMenuBar(){
   file_menu->insertItem(SmallIconSet("fileopen"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
   file_menu->insertItem(SmallIconSet("fileclose"),i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
   file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()), 0, ID_FILE_CLOSE_ALL);
+  file_menu->insertItem(i18n("Revert"), this, SLOT(slotFileRevert()), 0, ID_FILE_REVERT);
   file_menu->insertSeparator();
   file_menu->insertItem(SmallIconSet("filesave"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);

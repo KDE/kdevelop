@@ -251,6 +251,15 @@ void CKDevelop::slotFileSaveAll()
   slotStatusMsg(i18n("Ready."));
 }
 
+void CKDevelop::slotFileRevert()
+{
+  if (!m_docViewManager->currentEditView()) return;
+  if(KMessageBox::questionYesNo(this,
+                    i18n("Reload file and lose all changes?"),
+                    i18n("Are you sure?")) == KMessageBox::Yes) {
+    switchToFile(m_docViewManager->currentEditView()->fileName(),-1,-1,true,false);
+  }
+}
 
 void CKDevelop::slotFilePrint()
 {
@@ -3459,6 +3468,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
     enableCommand(ID_FILE_CLOSE);
+    enableCommand(ID_FILE_REVERT);
 
     enableCommand(ID_FILE_PRINT);
 
@@ -3548,6 +3558,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     disableCommand(ID_FILE_SAVE);
     disableCommand(ID_FILE_SAVE_AS);
     disableCommand(ID_FILE_CLOSE);
+    disableCommand(ID_FILE_REVERT);
 
     disableCommand(ID_FILE_PRINT);
 
@@ -3707,6 +3718,8 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
+  case ID_FILE_REVERT:
+    slotFileRevert();
   case ID_FILE_PRINT:
     slotFilePrint();
     break;
@@ -4171,6 +4184,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
     ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
     ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the current file"))
+    ON_STATUS_MSG(ID_FILE_REVERT,                           i18n("Discard all changes and reload file"))
 
     ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the current document"))
     ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))

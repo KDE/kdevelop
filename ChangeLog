@@ -1,3 +1,6 @@
+2001-07-11  Harald Fernengel  <harry@bnro.de>
+    * added File->Revert Menu Entry to revert changes and reload file from disk
+
 2001-07-11  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: show/hide mechanism of MDI-view taskbar fixed
       (I had also to fix kdelibs/kdeui/ktoolbar.cpp, Please update!)

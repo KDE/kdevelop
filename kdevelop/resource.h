@@ -40,6 +40,7 @@
 
 #define ID_FILE_QUIT                10080
 #define ID_FILE_DELETE		    10090
+#define ID_FILE_REVERT              10100
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
