@@ -271,7 +271,7 @@ void DocDoxygenPlugin::createTOC(DocumentationCatalogItem* item)
     
     //KDE doxygen documentation mode (if catalog points to a index.html)
     QDir d(fi.dirPath(true));
-    QStringList fileList = d.entryList("*", QDir::Dirs);
+    QStringList fileList = d.entryList("*", QDir::Dirs, QDir::Name | QDir::Reversed);
     QStringList::ConstIterator it;
     for (it = fileList.begin(); it != fileList.end(); ++it)
     {
@@ -331,7 +331,7 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item, const QString &tag
 
     QDomElement docEl = dom.documentElement();
 
-    QDomElement childEl = docEl.firstChild().toElement();
+    QDomElement childEl = docEl.lastChild().toElement();
     while (!childEl.isNull())
     {
         if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class")
@@ -346,7 +346,7 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item, const QString &tag
                 docItem->setURL(KURL(baseUrl + filename));
             }
         }
-        childEl = childEl.nextSibling().toElement();
+        childEl = childEl.previousSibling().toElement();
     }
 }
 
