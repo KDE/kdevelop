@@ -49,7 +49,6 @@
 #include <kdatetbl.h>
 #include <kcolorbtn.h>
 #include <kled.h>
-#include <kledlamp.h>
 #include <kprogress.h>
 #include <kkeydialog.h>
 #include <krestrictedline.h>
@@ -1465,8 +1464,6 @@ QWidget* KDlgLoader::createItem(QWidget*par, QString ctype)
     return (QWidget*)new KColorButton(par);
   else if (ctype == "kled")
     return (QWidget*)new KLed(KLed::green, par);
-  else if (ctype == "kledlamp")
-    return (QWidget*)new KLedLamp(par);
   else if (ctype == "kprogress")
     return (QWidget*)new KProgress(par);
   else if (ctype == "kkeybutton")
