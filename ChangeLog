@@ -1,3 +1,12 @@
+1999-09-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed CDocBrowser: 
+		-inheritance changed to KHTMLView again
+		-fixed signals and slots to new KHTMLView api
+		-added libs books of new kde2 api (KDED etc.)
+	* TODO: KDevelop crashes on acessing the manuals exept the error
+	  page for the c-reference, tried on locatehtml() of CToolClass but
+	  no success ;-(
+
 1999-09-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed 'unknown' accelerators which listen for weird
 	  things like umlauts.
