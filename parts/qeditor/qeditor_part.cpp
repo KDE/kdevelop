@@ -522,6 +522,12 @@ void QEditorPart::setupHighlighting()
     m_modes.append( mode );
 
     mode = new HLMode;
+    mode->name = "ada";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.adb" << "*.ads";
+    m_modes.append( mode );
+
+    mode = new HLMode;
     mode->name = "sql";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.sql" << "*.SQL";

@@ -53,6 +53,7 @@
 #include "cs_colorizer.h"
 #include "ocaml_colorizer.h"
 #include "pascal_colorizer.h"
+#include "ada_colorizer.h"
 #include "sql_colorizer.h"
 
 #if defined(HAVE_PERL_MODE)
@@ -64,6 +65,7 @@
 #include "python_indent.h"
 #include "cindent.h"
 #include "pascal_indent.h"
+#include "ada_indent.h"
 
 #include "parenmatcher.h"
 #include "paragdata.h"
@@ -508,6 +510,10 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PascalColorizer(this) );
 	document()->setIndent( new PascalIndent(this) );
+    } else if( m_language == "ada" ){
+        setElectricKeys( QString::null );
+	document()->setPreProcessor( new AdaColorizer(this) );
+	document()->setIndent( new AdaIndent(this) );
     } else if( m_language == "sql" ){
 	setElectricKeys( QString::null );
 	document()->setPreProcessor( new SqlColorizer(this) );
