@@ -1348,7 +1348,7 @@ int CClassParser::checkClassDecl()
          retVal = CP_IS_METHOD;//( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
       }
       else {
-         retVal = CP_IS_METHOD_IMPL;
+         retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
       }
     }
   }
