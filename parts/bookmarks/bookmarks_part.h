@@ -24,10 +24,13 @@
 
 #include <kdevplugin.h>
 
+class KDialogBase;
+class BookmarksConfig;
+
 struct EditorData
 {
 	KURL url;
-	QValueList< QPair<int,QString> > marks;
+	QValueList< QPair<int,QStringList> > marks;
 };
 
 class BookmarksWidget;
@@ -45,6 +48,11 @@ public:
 	// reimplemented from KDevPlugin
 	void restorePartialProjectSession( const QDomElement * el );
 	void savePartialProjectSession( QDomElement * el );
+	
+	BookmarksConfig * config()
+	{
+		return _config;
+	}
 
 private slots:
 	// connected to partcontroller
@@ -60,6 +68,9 @@ private slots:
 	void removeAllBookmarksForURL( const KURL & );
 	void removeBookmarkForURL( const KURL &, int );
 
+	// connected to Core
+	void projectConfigWidget( KDialogBase * );
+	
 private:
 	bool setBookmarksForURL( KParts::ReadOnlyPart * );
 	bool clearBookmarksForURL( KParts::ReadOnlyPart * );
@@ -76,8 +87,9 @@ private:
 
 	QGuardedPtr<BookmarksWidget> _widget;
 	QDict<EditorData> _editorMap;
-	uint _context;	// the number of lines of 'context' to use in bookmark tooltip
 	bool _settingMarks;	//	are we currently in the process of setting bookmarks?
+	
+	BookmarksConfig * _config;
 };
 
 

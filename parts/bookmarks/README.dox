@@ -1,11 +1,11 @@
 /** \class BookmarksPart
-This plugin provides a navigation view for bookmarks and
-persistance to editor bookmarks in such a way that it is
-possible to have bookmarks in files that are not open and,
-when implemented, that these bookmarks are saved with the
-project.
+This plugin provides a navigation view for bookmarks and persistance to editor bookmarks 
+so that it is possible to have bookmarks in files that are not open and that these 
+bookmarks are saved with the project.
 
-\feature provides a navigation view for bookmarks
+\feature Provides a navigation view for bookmarks
+
+\feature Persists bookmarks between sessions
 
 \authors <a href="jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
 
@@ -17,7 +17,5 @@ the ReplacePart will result in katepart messing up bookmarks
 
 \requirement KDE >= 3.1.3
 
-\todo Grouping of bookmarks (?)
-
-\todo Possibility of adding a "comment" to a bookmark (?)
+\todo Various minor fixes
 */

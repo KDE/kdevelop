@@ -13,6 +13,7 @@
 #include <qheader.h>
 #include <qtooltip.h>
 #include <qpair.h>
+#include <qstylesheet.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -28,6 +29,7 @@
 
 #include "bookmarks_part.h"
 #include "bookmarks_widget.h"
+#include "bookmarks_config.h"
 
 namespace
 {
@@ -49,6 +51,26 @@ QString pad( int number )
 	return ret + QString::number( number );
 }
 
+// shamelessly lifted from kdelibs/kate/part/kateviewhelpers.cpp
+static const char* const bookmark_xpm[]={
+"12 12 4 1",
+"b c #808080",
+"a c #000080",
+"# c #0000ff",
+". c None",
+"........###.",
+".......#...a",
+"......#.##.a",
+".....#.#..aa",
+"....#.#...a.",
+"...#.#.a.a..",
+"..#.#.a.a...",
+".#.#.a.a....",
+"#.#.a.a.....",
+"#.#a.a......",
+"#...a.......",
+".aaa........"};
+
 }
 
 class BookmarkItem : public QListViewItem
@@ -59,10 +81,49 @@ public:
 			_url( url ), _line( -1 ), _isBookmark( false )
 	{}
 
-	BookmarkItem( QListViewItem * parent, KURL const & url, QPair<int,QString> mark )
+	BookmarkItem( QListViewItem * parent, KURL const & url, QPair<int,QStringList> mark )
 			: QListViewItem( parent, pad( mark.first +1 ) ),
-			_url( url ), _line( mark.first ), _isBookmark( true ), _text( mark.second )
-	{}
+			_url( url ), _line( mark.first ), _isBookmark( true ) 
+	{
+		QStringList & list = mark.second;
+		
+		uint center = ( list.count() / 2 );	// note: count is always an odd number
+
+		_code = "<qt><table><tr><td><pre>";
+		for ( uint i = 0; i < list.count(); i++)
+		{
+			QString temp = QStyleSheet::escape( list[i] );
+			
+			if ( i == center )
+			{
+				temp = "<b>" + temp + "</b>";
+			}
+			_code += temp + "\n";
+		}
+		_code += "</pre></td></tr></table></qt>";
+		
+		// @todo fix this - friend classes are ugly
+		BookmarksWidget * w = static_cast<BookmarksWidget*> ( listView() );
+		uint codeline = w->_part->config()->codeline();
+		
+		if ( codeline == 0 )
+		{
+			return;
+		}
+			
+		QString centerLine = list[ center ].stripWhiteSpace();
+		
+		if ( codeline == 1 )
+		{
+			if ( centerLine.startsWith( "//") )
+			{
+				setText( 0, text( 0 ) + "   " + centerLine );
+			}
+			return;
+		}
+		
+		setText( 0, text( 0 ) + "   " + centerLine );
+	}
 
 	KURL url()
 	{
@@ -77,7 +138,7 @@ public:
 	{
 		if ( _isBookmark )
 		{
-			return _text;
+			return _code;
 		}
 		else
 		{
@@ -94,7 +155,7 @@ private:
 	KURL _url;
 	int _line;
 	bool _isBookmark;
-	QString _text;
+	QString _code;
 
 };
 
@@ -120,6 +181,8 @@ BookmarksWidget::~BookmarksWidget()
 void BookmarksWidget::maybeTip(const QPoint &p)
 {
 //	kdDebug(0) << "ToolTip::maybeTip()" << endl;
+	
+	if ( ! _part->config()->toolTip() ) return;
 
 	BookmarkItem * item = dynamic_cast<BookmarkItem*>( itemAt( p ) );
 	QRect r = itemRect( item );
@@ -168,11 +231,11 @@ void BookmarksWidget::createURL( EditorData * data )
 		file->setOpen( true );
 		file->setPixmap( 0, SmallIcon( "document" ) );
 
-		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+		QValueListIterator< QPair<int,QStringList> > it = data->marks.begin();
 		while ( it != data->marks.end() )
 		{
 			QListViewItem * item = new BookmarkItem( file, data->url, *it );
-			item->setPixmap( 0, SmallIcon( "bookmark" ) );
+			item->setPixmap( 0, QPixmap((const char**)bookmark_xpm) );
 			++it;
 		}
 	}

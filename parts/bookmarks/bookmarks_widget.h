@@ -52,6 +52,8 @@ private:
 
 	BookmarksPart * _part;
 	BookmarkItem * _selectedItem;
+	
+	friend class BookmarkItem;
 };
 
 

@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qwhatsthis.h>
+#include <qvbox.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -19,6 +20,7 @@
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
 #include <kaction.h>
+#include <kdialogbase.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevcore.h>
@@ -27,7 +29,8 @@
 
 #include "bookmarks_widget.h"
 #include "bookmarks_part.h"
-
+#include "bookmarks_settings.h"
+#include "bookmarks_config.h"
 
 typedef KGenericFactory<BookmarksPart> BookmarksFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( "kdevbookmarks" ) )
@@ -54,13 +57,15 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	_settingMarks = false;
 
 	connect( partController(), SIGNAL( partAdded( KParts::Part * ) ), this, SLOT( partAdded( KParts::Part * ) ) );
-
+	connect( core(), SIGNAL( projectConfigWidget( KDialogBase * ) ), this, SLOT( projectConfigWidget( KDialogBase * ) ) );
+	
 	connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
 		this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
 	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
 		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
 
-	_context = 3; 	/// @todo make this a setting
+	_config = new BookmarksConfig;
+	_config->readConfig();
 
 	storeBookmarksForAllURLs();
 	updateContextStringForAll();
@@ -80,6 +85,12 @@ void BookmarksPart::partAdded( KParts::Part * part )
 	{
 		if ( setBookmarksForURL( ro_part ) )
 		{
+			updateContextStringForURL( ro_part );
+			if ( EditorData * data = _editorMap.find( ro_part->url().path() ) )
+			{
+				_widget->updateURL( data );
+			}
+			
 			// connect to this editor
 			KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
 			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksChanged() ) );
@@ -133,6 +144,13 @@ void BookmarksPart::marksChanged()
 	}
 }
 
+void BookmarksPart::projectConfigWidget( KDialogBase *dlg )
+{
+    QVBox *vbox = dlg->addVBoxPage( i18n("Bookmarks") );
+	BookmarkSettings * w = new BookmarkSettings( this, vbox );
+    connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
+}
+
 void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 {
 	kdDebug(0) << "BookmarksPart::restorePartialProjectSession()" << endl;
@@ -157,7 +175,7 @@ void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 				QString line = mark.attribute( "line" );
 				if ( line != QString::null )
 				{
-					data->marks.append( qMakePair( line.toInt(), QString::null ) );
+					data->marks.append( qMakePair( line.toInt(), QStringList() ) );
 				}
 				mark = mark.nextSibling().toElement();
 			}
@@ -196,7 +214,7 @@ void BookmarksPart::savePartialProjectSession( QDomElement * el )
 		bookmark.setAttribute( "url", it.current()->url.path() );
 		bookmarksList.appendChild( bookmark );
 
-		QValueListIterator< QPair<int,QString> > it2 = it.current()->marks.begin();
+		QValueListIterator< QPair<int,QStringList> > it2 = it.current()->marks.begin();
 		while ( it2 != it.current()->marks.end() )
 		{
 			QDomElement line = domDoc.createElement( "mark" );
@@ -229,7 +247,7 @@ void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
 
 	if ( EditorData * data = _editorMap.find( url.path() ) )
 	{
-		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+		QValueListIterator< QPair<int,QStringList> > it = data->marks.begin();
 		while ( it != data->marks.end() )
 		{
 			if ( (*it).first == line )
@@ -264,26 +282,28 @@ void BookmarksPart::updateContextStringForURL( KParts::ReadOnlyPart * ro_part )
 
 	if ( ! ( data && ed ) ) return;
 
-	QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+	QValueListIterator< QPair<int,QStringList> > it = data->marks.begin();
 	while ( it != data->marks.end() )
 	{
-		uint line = (*it).first;
+		int line = (*it).first;
 		QString textLine;
 
-		uint startline = _context > line ? 0 : line - _context;
-		uint endline = ( line + _context > ed->numLines() ) ? ed->numLines() : line + _context;
+		int context = config()->context();
+ 		int startline = context > line ? 0 : line - context;
+ 		int endline = ( line + context > ed->numLines() ) ? ed->numLines() : line + context;
 
-		for ( uint i = startline; i <= endline; i++ )
+		for ( int i = line - context; i<= line + context; i++)
 		{
-			if ( i != startline )
+			if ( i >= startline && i <= endline )
 			{
-				textLine += "\n";
+				(*it).second << ed->textLine( i );
 			}
-			textLine += ed->textLine( i );
+			else
+			{
+				(*it).second << " ";	// creating empty lines for lines outside the editor
+			}
 		}
-
-		(*it).second = textLine;
-
+		
 		++it;
 	}
 }
@@ -318,7 +338,7 @@ bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 		{
 			// we've seen this one before, apply stored bookmarks
 
-			QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+			QValueListIterator< QPair<int,QStringList> > it = data->marks.begin();
 			while ( it != data->marks.end() )
 			{
 				kdDebug(0) << "Setting bookmark. Line: " << (*it).first << endl;
@@ -383,7 +403,7 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 			{
 			    int line = it.current()->line;
 				kdDebug(0) << "Found bookmark. Line: " << line << endl;
-				data->marks.append( qMakePair( line, QString::null ) );
+				data->marks.append( qMakePair( line, QStringList() ) );
 			}
 			++it;
 		}
