@@ -21,7 +21,7 @@
 <H3><A NAME="Projects"></A> <A NAME="s8">8. Projects</A></H3>
 
 <P>
-<H3><A NAME="ss8.1">8.1 Projectmanagement</A>
+<H3><A NAME="ss8.1">8.1 Projecttypes</A>
 </H3>
 
 <P>
@@ -62,24 +62,35 @@ should be in the project's subdirectory which has the same name as the main proj
 groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
 application and delete the created source and header files. Then you can add existing files as above.
 <P>
-<H4>Creating Libraries</H4>
+<H4>Libraries</H4>
 
 <P>This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
 KDevelop.
 <P>
-<H3><A NAME="ss8.2">8.2 New Projects with KAppWizard</A>
+<H4>Multiple Targets</H4>
+
+<P>For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
+targets like packages containing several applications. As commands like "Execute" or the classbrowser require that only one
+target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
+the Makefiles and build your directories for the additional libraries or binaries to build. Nevertheless, a build-process always
+invokes your make-program independent from what actually the targets are; so these functions still can be used.
+<P>Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move
+their subdirectories in conjunction with the project files to the directory containing all sources later. Then you could load each
+target independently by its project file; this also allows executing and debugging the target.
+<P>
+<H3><A NAME="ss8.2">8.2 New Projects</A>
 </H3>
 
-<P>
-<P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
-<P>For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base
-classes for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow
-inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for
-the creation of small desktop tools or other simple applications without too much change on the existing code provided by the
-framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for
-end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).        
-<P>The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
+<P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
+framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
+section of this handbook. For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a
+complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
+and statusbar, the mainwindow inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This
+type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
+existing code provided by the framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies
+towards the KDE-libraries for end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in
+the next version of KDevelop).  
+The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
 and statusbar.
 <P>The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
 "Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
@@ -89,10 +100,9 @@ Email adress are asked for inserting them in header and cpp templates on top of 
 *.lsm file.
 <P>
 <P>
-<H3><A NAME="ss8.3">8.3 Porting existing projects</A>
+<H3><A NAME="ss8.3">8.3 External Projects</A>
 </H3>
 
-<P>
 <P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
 empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
@@ -101,32 +111,19 @@ before the conversion towards the now created entries done by KDevelop in the KD
 compiled and installed after the conversion to ensure the project's consistancy.
 <P>
 <P>
-<P>
-<H3><A NAME="ss8.4">8.4 Adding Files and Classes</A>
+<H3><A NAME="ss8.4">8.4 Editing a Project</A>
 </H3>
+
+<P>
+<P>
+<H4>Adding Files and Classes</H4>
 
 <P>Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
 need to create an new file which will get the part of the class implementation you want to move. You can specify which type the
 new file will be, including a template for pixmap files often needed to create new toolbar icons. The new file will be added to
 the project and all affected project files like Makefile.am etc will be updated.
 <P>
-<H3><A NAME="ss8.5">8.5 Generating new Classes</A>
-</H3>
-
-<P>
-<P>
-<H3><A NAME="ss8.6">8.6 Adding Translations</A>
-</H3>
-
-<P>
-<P>
-<H3><A NAME="ss8.7">8.7 Extending the Project Documentation</A>
-</H3>
-
-<P>
-<P>
-<H3><A NAME="ss8.8">8.8 Setting Project File Options</A>
-</H3>
+<H4>Setting Project File Options</H4>
 
 <P>The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
 files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
@@ -135,28 +132,13 @@ command.  It is important for documentation files as well as pixmaps to specify 
 project is build and installed by end users, so you have to set up those locations.   For standard KDE location macros you should
 look in your Makefile.am where the location macros are specified.
 <P>
-<H3><A NAME="ss8.9">8.9 General Project Options</A>
-</H3>
+<H4>Adding Translations</H4>
 
 <P>
-<P>The Project Options dialog , accessed by the project menu, lets you specify all needed parameters for your project. Those will be
-updated in the makefile.am's and the configure.in script (e.g. version number change or compiler warnings ).  After changing the
-project options, you should invoke "make clean" or "rebuild all" to compile your project with the new options.  Please mind that
-debugging is only available if the project options are set to create debugging information, the amount can be set with the debug
-level (0-3). If you add functions that belong to a library that is not included in the linker flags, your program will not link
-correctly if those are not updated, so keep track of your library linking.
 <P>
-<H3><A NAME="ss8.10">8.10 Compiler Options</A>
-</H3>
+<H4>Extending the Project Documentation</H4>
 
 <P>
-<H3><A NAME="ss8.11">8.11 Compiler Warnings</A>
-</H3>
-
-<P>
-<H3><A NAME="ss8.12">8.12 Linker Options</A>
-</H3>
-
 <P>
 <P>
 <P>

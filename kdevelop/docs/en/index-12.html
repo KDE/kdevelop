@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Questions and Answers</TITLE>
+<TITLE>The User Manual to KDevelop: General Configuration</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,111 +18,97 @@
 <A HREF="index-11.html">Previous</A>
 <A HREF="index.html#toc12">Table of Contents</A>
 </P>
-<H3><A NAME="Questions and Answers"></A> <A NAME="s12">12. Questions and Answers</A></H3>
+<H3><A NAME="General Configuration"></A> <A NAME="s12">12. General Configuration</A></H3>
 
-<P><B>Q:</B> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
-<P><B>A:</B>  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the
-KDevelop homepage. All questions should go there and will be adressed there as well.  If you stick to that, you will get the most
-help by the developers and all users having the same problems, as well as helping to keep the FAQ up to date.
-<P><B>Q:</B> Wrong JPEG library version: library is 61, caller expects 62
-<P><B>A:</B>  There are 2 ways.
-<OL>
-<LI> When the kdelibs are installed it installs header files for the
-jpeg libraries, these are version 61,  however most distributions
-(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
-from /opt/kde/include. The pukka include  file for version 62 should
-then be picked up. However looking at the  error message above it may
-be the other way round, in any case ensure  you only have on version
-of the header file, the library and that  they are consistent.
+<H3><A NAME="KDevelop Setup"></A> <A NAME="ss12.1">12.1 KDevelop Setup</A>
+</H3>
 
-It is useful to use the locate command to verify that I have
-the correct version of a library and header files e.g.
-updatedb
-locate libjpeg
-locate jpeglib
-</LI>
-<LI> You must recompiled kdesupport without jpeg
-library (./configure --with-libjpeg --with-libgif).</LI>
-</OL>
 <P>
-<P><B>Q:</B>
-<BLOCKQUOTE><CODE>
-<PRE>
-make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
- cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
- aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
- make[2]: *** [Makefile.in] Error 1
-</PRE>
-</CODE></BLOCKQUOTE>
+<H4>General</H4>
 
-<B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
-"aclocal" manually, then it will compile.
+<P><B>Make-command:</B>
+The General Options dialog lets you configure KDevelop's general settings.
+First, you should set the make-command available on your system. If the selected program does not exist,
+KDevelop will warn you the next time your're invoking a make command.
+<P><B>Autosave:</B>
+<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
 <P>
-<P><B>Q:</B>  What must i do, if configure said ,that i need giflib23.
-<P><B>A:</B>  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+<P><B>Autoswitch:</B>
+<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
+documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
+window turned off.
+Startup:
+<P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
+Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
 <P>
-<P><B>Q:</B> How can I convert a KDevelop 0.2 project to a 0.3 one?
-<P><B>A:</B> Please change the AC_OUTPUT in the configure.in to a oneline version
-<P>for example:
-old version:
-<BLOCKQUOTE><CODE>
-<PRE>
-AC_OUTPUT(Makefile \
-kdevelop/kwrite/Makefile \
-kdevelop/templates/Makefile
-)
-</PRE>
-</CODE></BLOCKQUOTE>
+<P>
+<H4><A NAME="Changing Keyboard Shortcuts"></A> Changing Keyboard Shortcuts </H4>
 
-new version:
-<BLOCKQUOTE><CODE>
-<PRE>
-AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
-</PRE>
-</CODE></BLOCKQUOTE>
+<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
+KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
+configuration can be changed by checking values like the Alt / Ctrl key etc.
 <P>
-<P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
-<BLOCKQUOTE><CODE>
-<PRE>
- /usr/lib/libqt.so:
- warning: multiple common of `QArrayT&lt;char&gt; type_info node'
-ckdevelop.o: warning: previous common is here
-ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
-ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
-ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
-ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
-short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
-exit status  make[2]: ***
-[kdevelop] Error 1  make[2]: Leaving directory
-'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
-make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
-`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
-make: *** [all-recursive-am] Error 2
-</PRE>
-</CODE></BLOCKQUOTE>
+<P>
+<H4>Documentation</H4>
 
-<B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
-them or get an updated rpm of the kdelibs from 
-<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
-<P><B>A:</B>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
 <P>
-<P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
-<P><B>A:</B> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
-added files will be included as well.
-<P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
-<P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
-automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
-according *.moc.cpp file and rebuild the project. >
+<H4>Directories</H4>
+
+<P>
+<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
+is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
+as well as the path to the KDE-library documentation.
+<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
+you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
+documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
+according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
+first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
+also setting the KDE Library Doc path automatically.
+<P>
+<H4>Options</H4>
+
+<P>
+<H4>Update KDE-Documentation</H4>
+
+<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
+installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
+function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
+up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
+/home/rnolden/kdelibs-1.1/.
+<P>Then, you can choose three different installation modes, as:
+<P>
+<UL>
+<LI> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
+installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
+newly generated documentation into the recent path.</LI>
+<LI> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
+well as above, but gives you the choice to set up a new documentation place.</LI>
+<LI> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
+the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
+kdelibs version.</LI>
+</UL>
+<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
+users who generate a new documentation from scratch.
+<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
+reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
+documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
+that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
+give browsing the most functionality.
+<P>
+<H4>Create Search Database</H4>
+
+<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
+keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
+Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
+documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
+directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
+directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
+in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
+medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
+will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
+Using the Documentation Browser
+<P>
+<P>
 <P>
 <P ALIGN="RIGHT">
 

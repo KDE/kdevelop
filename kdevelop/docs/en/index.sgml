@@ -707,22 +707,114 @@ application now offers a new functionality which is visible to the user. Now you
 your dialog will be operating with to manipulate any values. Finally, call your make-tool or "Execute" and the changed files will
 be recompiled; the result of your changes can then be tested immediately.
 
-<sect>Overview<label id="Overview">
+<sect3>The Complete Development Process
 <p>
-Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the
-output window, surrounded by the menubar, toolbars and the statusbar. This section describes the purpose of each part of the
-interface, starting by the windows, followed by the bars and the functions they provide.
-<sect1>Main Window
-<p>
+Above, we discussed the usual way how to start working on a new application using KDevelop and how to extend the user interface.
+Now, these are the standard steps where the IDE helps you, but KDevelop does more than providing tools for creating applications
+and their visual parts. The following gives a short description of the main functionality that is offered for enhancing
+application development.
 
-The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
-window for headers and any other text files like the documentation sgml's, then the C/C++ window for sourcecodes. These are
-followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconedit
-and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the registration
-of third-party programs can easily be done by a configuration dialog (see section 11, <ref id="General Configuration"
-name="configuration">). For a description of the Editor windows functionality, see chapter 7,<ref id="Working with the Editor"
-name="Working with the Editor">, and for the Helpbrowser, you should look at section <ref id="Using the Documentation Browser"
-name="Using the Documentation Browser">.
+<sect4>Sourcecode Management
+<p>
+The KDevelop IDE provides a lot of methods to the programmer to achieve his goals within the shortest time.  As described above,
+the KAppWizard and the Dialogeditor shorten the time you would usually need to get to the same result manually. But this
+didn't cover the work a programmer has to do usually: working on the implementation of his application to provide a proper
+execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
+create even non-GUI applications ?
+
+Implicitely, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
+Makefile generation and so on- this is providing full project-management, and KDevelop plays out all it's power here in any case
+of C++ application development. It is easy to understand that, after taking away the management from the programmer, he is more
+concentrated on working out the sourcecode. On the other hand, the code is usually spread over many different files across
+the project, so you can separate certain parts. But this means still working the hard way- being the developer, you still
+would have to struggle with creating these files and writing standard contents like file headers containing the date and the
+author's name as well as e.g. license terms for the code. Additionally, this requires that you have to remember where your
+functions, class declarations and implementations are in the project. Therefore, KDevelop contains the Classtools- a variety of
+actions, that allow fast work and moving the developer's focus from files to objects- classes, structures and methods. The
+classgenerator lets you create a new class including inheritance, attributes and documentation easily . For object-oriented work,
+the classbrowser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
+Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
+the new code directly. By context-menus, the browser offers even more fuctionality, like bringing you to the implementation or to
+the declaration of member functions. Then, the addition of members are done graphically by dialogs- no search for the file and the
+place you would have to add your entries. Finally, you can get an even more specialized view of your project's classes by the
+Classtool dialog, providing you trees that show the usage, contents and inheritance of classes and their objects. For more
+detailed information, see <ref id="The Classbrowser">.
+
+<sect4>Building and Executing your Application
+<p>
+The KDevelop IDE is specially designed to take away all those steps that you have to do periodically like building and executing
+your program as well as locating errors in the sourcecode.
+
+You're starting the build-process by:
+<itemize>
+<item>clicking on the symbols "Build" or "Rebuild All" in the toolbar
+<item>or selecting "Build"/"Rebuild All" from the Build-menu.
+</itemize>
+
+To execute your application, choose
+<itemize>
+<item>the symbol "Execute" or "Debug" (starting KDbg with your program) from the toolbar
+<item>by the according menuentries in the Build-menu.
+<item>or by "Execute with Arguments" to start your application with additional arguments
+</itemize>
+For more information about the build-process, see <ref id="Projects">.
+
+<sect4>Searching Program Errors
+<p>
+As naturally errors occur either during the build-process (which are detected by the compiler and are called syntactical errors
+because they result from a wrong syntax of the sources) or during the execution of the application, those have to be found and
+removed by the programmer. For locating errors, the developer needs the information what exactly caused its occurance. As
+mentioned, the compiler is able to detect syntax errors himself, resulting in that the executable can't be build (this can also
+happen by the linker when he detects "unresolved symbols"-see <ref id="Linker Options">). As he gives out a description of the
+error as detailed as possible, the error can be found and removed. During the build-process, you will see the output window pop up
+showing you what your make-tool and the compiler has to say. In case of errors or warnings, just press the mouse button over the
+error line and the editor will open the affected file and sets the cursor to the errorline. This can also be done by the entries
+in the "View"-menu, "Next Error" and "Previous Error" or by the according keyboard shortcuts. You will find that this is very
+functional and saves a lot of time to get to the error, thus for removing the cause your knowledge as a programmer is asked.
+
+Runtime Errors, which occur during execution and will mostly result in a segmentation fault, are sometimes hard to find.
+Therefore, you can enable the compiler to add information within the binary to watch the execution by the sourcecode. A debugger
+then is another program that lets you do this by starting the application and letting you set breakpoints in the code where the
+execution stops, so you can control critical implementations and by this detect at least the line that caused the error. Finding
+the real cause is another task; it depends on the programmer to locate this. The <bf/gdb/ is a debugger that is provided with the
+GNU compiler and programs like <em/ddd/ or <em/KDbg/ are frontends that allow an easier use. KDevelop therefore uses KDbg and lets
+you invoke the debugging process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
+information about debugging applications, see <ref id="Projects"> and <em/The KDevelop Programming Handbook/.
+
+<sect1>Additional Information
+<p>
+The topics addressed within this chapter are described im more detail within the documentation provided with the KDevelop IDE and
+in other documentations:
+
+<itemize>
+<item><em/The KDevelop Programming Handbook/, covering a complete introduction into GUI application design and programming with
+the Qt and KDE libraries,
+<item>this handbook, sections <ref id="Overview"> to <ref id="Projects">, describing all availiable functions within KDevelop,
+<item>this handbook, section <ref id="The Dialogeditor">, adressing the use of the dialogeditor to create your own widgets,
+<item>The <em/Online-Reference Documentation/ to the Qt library, which covers examples of using the Qt GUI-toolkit as well as a
+class reference and screenshots for the most important ready-to-use widgets included,
+<item>The <em/KDE-library Class-Reference/, generated automatically by KDevelop from the KDE-library sources, containing
+descriptions for all classes and widgets including example code for their use,
+<item>on the Internet, see:
+<itemize>
+<item><htmlurl url="http://www.troll.no"> for information about Qt and additional third-party widgets,
+<item><htmlurl url="http://www.kde.org"> for information about the KDE project and developer guidelines,
+<item><htmlurl url="http://developer.kde.org"> for additonal references to KDE application development.
+<item>on the KDevelop homepage <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">
+</itemize>
+</itemize>
+
+<sect>Overview<label id="Overview"> <p>
+Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the output
+window, surrounded by the menubar, toolbars and the statusbar. This section describes the purpose of each part of the interface,
+starting by the windows, followed by the bars and the functions they provide. <sect1>Main Window <p> The main window consists of
+four tabulators for which the left two are for editing purpose. First comes the Header-/Resource window for headers and any other
+text files like the documentation sgml's, then the C/C++ window for sourcecodes. These are followed by the Documentation window
+displaying in HTML-format. At last is the Tools window for external programs like KIconedit and KDbg which are embedded into the
+IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the registration of third-party programs can easily
+be done by a configuration dialog (see section 11, <ref id="General Configuration" name="configuration">). For a description of
+the Editor windows functionality, see chapter 7,<ref id="Working with the Editor" name="Working with the Editor">, and for the
+Helpbrowser, you should look at section <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 <sect1> The Classbrowser and Fileviewers
 <p>
 <sect2>The Class Viewer
@@ -1168,12 +1260,37 @@ The caption of the KDevelop Project Editor shows you the currently opened filena
 for the documentation browser or a text file for the editing windows. Further, the Project name is displayed, so you have constant
 control where you are and what you're currently working at.
 
+<sect1> Configuring the HTML Browser<p>
+The browser included in KDevelop is completely HTML-based, therefore you can specify the usual options like background and the
+like. You can set all preferences by the "Documentation Browser"-entry of the "Options"-menu.
+The configuration dialog shows you two tabulators; the first for setting the font preferences, the second for color selection.
+
+<sect2>Font Preferences
+<p>
+The first option for the font display is the size. Available are small, medium and large. The best display for normal use
+is set to small by default.
+For the font selection you have to specify a standard font for normal text as it appears in HTML documents; the fixed font is the
+one used for dispaying e.g. code within the HTML file.
+
+<sect2>Color Preferences
+<p>
+The color preferences dialog allows configuration of background, normal text, URL Link and followed link color. The
+colored buttons on the right are displaying the current settings; selecting a button will result in opening the "Select Color"
+dialog. There, you can specify the color either by choosing a System Color, a custom color, select the color by the multi-colored
+window or by setting the values directly. The middle contains a preview for the color selected.
+
+Further, you can specify if the browser should underline links to easier detect them visually and if you like to use your own
+colors always independent of the page's preset ones. "Apply" will execute all changes, while "OK" will apply changes and close the
+dialog. "Cancel" leaves all settings untouched and exits the configuration.
+
 <sect1> Using the Documentation Browser<label id="Using the Documentation Browser">
 <p>
 The documentation browser allows quick and easy access to all manuals and documentations that are provided with KDevelop or
 generated automatically, including online-documentation for the KDE-libraries and your project documentation. Plus, the
 Documentation Tree in the tree-view lets you customize a special "Others" folder that contains all individually added
-documentation. <sect2>Requirements
+documentation.
+
+<sect2>Requirements
 <p>
 To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
 classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the <ref id="KDevelop Setup"
@@ -1304,9 +1421,14 @@ configured here.
 To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
 
 <p>
+<sect1> Printer Setup<p>
+The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
+installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
+using the corresponding configuration dialogs.
+
 <sect>Projects<label id="Projects">
 <p>
-<sect1>Projectmanagement
+<sect1>Projecttypes
 <p>
 <sect2>Programs
 <p>
@@ -1345,23 +1467,34 @@ should be in the project's subdirectory which has the same name as the main proj
 groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
 application and delete the created source and header files. Then you can add existing files as above.
 
-<sect2>Creating Libraries
+<sect2>Libraries
 <p>
 This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
 KDevelop.
 
-<sect1> New Projects with KAppWizard<p>
+<sect2>Multiple Targets
+<p>
+For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
+targets like packages containing several applications. As commands like "Execute" or the classbrowser require that only one
+target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
+the Makefiles and build your directories for the additional libraries or binaries to build. Nevertheless, a build-process always
+invokes your make-program independent from what actually the targets are; so these functions still can be used.
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
+Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move
+their subdirectories in conjunction with the project files to the directory containing all sources later. Then you could load each
+target independently by its project file; this also allows executing and debugging the target.
 
-For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base
-classes for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow
-inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for
-the creation of small desktop tools or other simple applications without too much change on the existing code provided by the
-framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for
-end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).	
-
+<sect1> New Projects
+<p>
+The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
+framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
+section of this handbook. For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a
+complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
+and statusbar, the mainwindow inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This
+type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
+existing code provided by the framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies
+towards the KDE-libraries for end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in
+the next version of KDevelop).	
 The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
 and statusbar.
 
@@ -1374,8 +1507,8 @@ Email adress are asked for inserting them in header and cpp templates on top of 
 *.lsm file.
 
 
-<sect1> Porting existing projects<p>
-
+<sect1>External Projects
+<p>
 Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
 empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
@@ -1384,20 +1517,16 @@ before the conversion towards the now created entries done by KDevelop in the KD
 compiled and installed after the conversion to ensure the project's consistancy.
 
 
+<sect1>Editing a Project
+<p>
 
-<sect1>Adding Files and Classes<p>
+<sect2>Adding Files and Classes<p>
 Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
 need to create an new file which will get the part of the class implementation you want to move. You can specify which type the
 new file will be, including a template for pixmap files often needed to create new toolbar icons. The new file will be added to
 the project and all affected project files like Makefile.am etc will be updated.
 
-<sect1>Generating new Classes<p>
-
-<sect1>Adding Translations<p>
-
-<sect1>Extending the Project Documentation<p>
-
-<sect1>Setting Project File Options<p>
+<sect2>Setting Project File Options<p>
 The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
 files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
 included in the project as well as the installation path if the file is going to be installed by the end-user's make install
@@ -1405,18 +1534,33 @@ command.  It is important for documentation files as well as pixmaps to specify 
 project is build and installed by end users, so you have to set up those locations.   For standard KDE location macros you should
 look in your Makefile.am where the location macros are specified.
 
-<sect1> General Project Options<p>
+<sect2>Adding Translations<p>
 
-The Project Options dialog , accessed by the project menu, lets you specify all needed parameters for your project. Those will be
-updated in the makefile.am's and the configure.in script (e.g. version number change or compiler warnings ).  After changing the
-project options, you should invoke "make clean" or "rebuild all" to compile your project with the new options.  Please mind that
-debugging is only available if the project options are set to create debugging information, the amount can be set with the debug
-level (0-3). If you add functions that belong to a library that is not included in the linker flags, your program will not link
-correctly if those are not updated, so keep track of your library linking.
+<sect2>Extending the Project Documentation<p>
 
-<sect1>Compiler Options<p>
-<sect1>Compiler Warnings<p>
-<sect1>Linker Options<p>
+
+
+<sect>Build Settings
+<p>
+The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
+used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
+compilation preferences as well.. After changing the project options, you should invoke "make clean" or "rebuild all" to compile
+your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
+information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
+in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
+
+<sect1>General Options
+<p>
+The first page of the Project Options dialog sets the general options for your project. These are project name and number, the
+handbook sgml file which is used for generating a set of HTML files that are included in the project and specific information
+about the author. The short description field is for additional information that you want to include like the program's purpose
+and the like.
+
+<sect1>Compiler Options<label id="Compiler Options"> <p> <sect1>Compiler Warnings<label id="Compiler Warnings">
+<p>
+
+<sect1>Linker Options<label id="Linker Options">
+<p>
 
 
 <sect>The Classbrowser<label id="The Classbrowser">
@@ -1429,16 +1573,6 @@ correctly if those are not updated, so keep track of your library linking.
 
 
 <sect>General Configuration<label id="General Configuration">
-<sect1> Documentation Browser<p>
-    The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
-Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
-
-
-<sect1> Printer Setup<p>
-The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
-installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
-using the corresponding configuration dialogs.
-
 
 <sect1> KDevelop Setup<label id="KDevelop Setup">
 <p>
@@ -1762,6 +1896,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 <p>
 </article>
+
+
 
 
 

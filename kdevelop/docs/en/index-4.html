@@ -145,7 +145,7 @@ scans all files for methods and classes and makes them available by graphical sy
 specialized functionality to work with the sources by focusing on the classes and functions.
 <P>Selecting a class will result in opening the file that contains the declaration; on methods and functions this will
 show you the implementation. For a full description, see 
-<A HREF="index-9.html#The Classbrowser">The Classbrowser</A><P>
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A><P>
 <P>
 <H3><A NAME="ss4.3">4.3 The Development Process</A>
 </H3>
@@ -217,7 +217,7 @@ the Dialogeditor and the project management will take care of the rest. You can 
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see 
-<A HREF="index-10.html#The Dialogeditor">The Dialogeditor</A>, examples and guidelines can also be found in
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, examples and guidelines can also be found in
 <B>"The KDevelop Programming Handbook"</B>.
 <P>
 <H4>Binding New Elements</H4>
@@ -256,6 +256,120 @@ give it a new number. Then you're done- additionally you could construct another
 application now offers a new functionality which is visible to the user. Now you have to add the implementation of methods that
 your dialog will be operating with to manipulate any values. Finally, call your make-tool or "Execute" and the changed files will
 be recompiled; the result of your changes can then be tested immediately.
+<P>
+<H4>The Complete Development Process</H4>
+
+<P>Above, we discussed the usual way how to start working on a new application using KDevelop and how to extend the user interface.
+Now, these are the standard steps where the IDE helps you, but KDevelop does more than providing tools for creating applications
+and their visual parts. The following gives a short description of the main functionality that is offered for enhancing
+application development.
+<P>
+<H4>Sourcecode Management</H4>
+
+<P>The KDevelop IDE provides a lot of methods to the programmer to achieve his goals within the shortest time.  As described above,
+the KAppWizard and the Dialogeditor shorten the time you would usually need to get to the same result manually. But this
+didn't cover the work a programmer has to do usually: working on the implementation of his application to provide a proper
+execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
+create even non-GUI applications ?
+<P>Implicitely, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
+Makefile generation and so on- this is providing full project-management, and KDevelop plays out all it's power here in any case
+of C++ application development. It is easy to understand that, after taking away the management from the programmer, he is more
+concentrated on working out the sourcecode. On the other hand, the code is usually spread over many different files across
+the project, so you can separate certain parts. But this means still working the hard way- being the developer, you still
+would have to struggle with creating these files and writing standard contents like file headers containing the date and the
+author's name as well as e.g. license terms for the code. Additionally, this requires that you have to remember where your
+functions, class declarations and implementations are in the project. Therefore, KDevelop contains the Classtools- a variety of
+actions, that allow fast work and moving the developer's focus from files to objects- classes, structures and methods. The
+classgenerator lets you create a new class including inheritance, attributes and documentation easily . For object-oriented work,
+the classbrowser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
+Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
+the new code directly. By context-menus, the browser offers even more fuctionality, like bringing you to the implementation or to
+the declaration of member functions. Then, the addition of members are done graphically by dialogs- no search for the file and the
+place you would have to add your entries. Finally, you can get an even more specialized view of your project's classes by the
+Classtool dialog, providing you trees that show the usage, contents and inheritance of classes and their objects. For more
+detailed information, see 
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>
+.
+<P>
+<H4>Building and Executing your Application</H4>
+
+<P>The KDevelop IDE is specially designed to take away all those steps that you have to do periodically like building and executing
+your program as well as locating errors in the sourcecode.
+<P>You're starting the build-process by:
+<UL>
+<LI>clicking on the symbols "Build" or "Rebuild All" in the toolbar</LI>
+<LI>or selecting "Build"/"Rebuild All" from the Build-menu.</LI>
+</UL>
+<P>To execute your application, choose
+<UL>
+<LI>the symbol "Execute" or "Debug" (starting KDbg with your program) from the toolbar</LI>
+<LI>by the according menuentries in the Build-menu.</LI>
+<LI>or by "Execute with Arguments" to start your application with additional arguments</LI>
+</UL>
+
+For more information about the build-process, see 
+<A HREF="index-8.html#Projects">Projects</A>
+.
+<P>
+<H4>Searching Program Errors</H4>
+
+<P>As naturally errors occur either during the build-process (which are detected by the compiler and are called syntactical errors
+because they result from a wrong syntax of the sources) or during the execution of the application, those have to be found and
+removed by the programmer. For locating errors, the developer needs the information what exactly caused its occurance. As
+mentioned, the compiler is able to detect syntax errors himself, resulting in that the executable can't be build (this can also
+happen by the linker when he detects "unresolved symbols"-see 
+<A HREF="index-9.html#Linker Options">Linker Options</A>
+). As he gives out a description of the
+error as detailed as possible, the error can be found and removed. During the build-process, you will see the output window pop up
+showing you what your make-tool and the compiler has to say. In case of errors or warnings, just press the mouse button over the
+error line and the editor will open the affected file and sets the cursor to the errorline. This can also be done by the entries
+in the "View"-menu, "Next Error" and "Previous Error" or by the according keyboard shortcuts. You will find that this is very
+functional and saves a lot of time to get to the error, thus for removing the cause your knowledge as a programmer is asked.
+<P>Runtime Errors, which occur during execution and will mostly result in a segmentation fault, are sometimes hard to find.
+Therefore, you can enable the compiler to add information within the binary to watch the execution by the sourcecode. A debugger
+then is another program that lets you do this by starting the application and letting you set breakpoints in the code where the
+execution stops, so you can control critical implementations and by this detect at least the line that caused the error. Finding
+the real cause is another task; it depends on the programmer to locate this. The <B>gdb</B> is a debugger that is provided with the
+GNU compiler and programs like <EM>ddd</EM> or <EM>KDbg</EM> are frontends that allow an easier use. KDevelop therefore uses KDbg and lets
+you invoke the debugging process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
+information about debugging applications, see 
+<A HREF="index-8.html#Projects">Projects</A>
+ and <EM>The KDevelop Programming Handbook</EM>.
+<P>
+<H3><A NAME="ss4.4">4.4 Additional Information</A>
+</H3>
+
+<P>The topics addressed within this chapter are described im more detail within the documentation provided with the KDevelop IDE and
+in other documentations:
+<P>
+<UL>
+<LI><EM>The KDevelop Programming Handbook</EM>, covering a complete introduction into GUI application design and programming with
+the Qt and KDE libraries,</LI>
+<LI>this handbook, sections 
+<A HREF="index-5.html#Overview">Overview</A>
+ to 
+<A HREF="index-8.html#Projects">Projects</A>
+, describing all availiable functions within KDevelop,</LI>
+<LI>this handbook, section 
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
+, adressing the use of the dialogeditor to create your own widgets,</LI>
+<LI>The <EM>Online-Reference Documentation</EM> to the Qt library, which covers examples of using the Qt GUI-toolkit as well as a
+class reference and screenshots for the most important ready-to-use widgets included,</LI>
+<LI>The <EM>KDE-library Class-Reference</EM>, generated automatically by KDevelop from the KDE-library sources, containing
+descriptions for all classes and widgets including example code for their use,</LI>
+<LI>on the Internet, see:
+<UL>
+<LI>
+<A HREF="http://www.troll.no">http://www.troll.no</A> for information about Qt and additional third-party widgets,</LI>
+<LI>
+<A HREF="http://www.kde.org">http://www.kde.org</A> for information about the KDE project and developer guidelines,</LI>
+<LI>
+<A HREF="http://developer.kde.org">http://developer.kde.org</A> for additonal references to KDE application development.</LI>
+<LI>on the KDevelop homepage 
+<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A></LI>
+</UL>
+</LI>
+</UL>
 <P>
 <P ALIGN="RIGHT">
 
