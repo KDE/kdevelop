@@ -52,29 +52,52 @@ public:
 // class ResultsList
 ///////////////////////////////////////////////////////////////////////////////
 
-class ResultsList : virtual public KListView, virtual public QToolTip
+class ResultList;
+
+class ResultsToolTip: public QToolTip
+{
+public:
+    ResultsToolTip( ResultsList* parent );
+    virtual void maybeTip( const QPoint& p );
+
+private:
+    ResultsList* m_resultsList;
+};
+
+class ResultsList : public KListView
 {
 public:
     ResultsList( QWidget *parent )
-        : KListView( parent, "resultslist" ), QToolTip( viewport() ) {}
-    virtual ~ResultsList() {}
-
-    virtual void maybeTip(const QPoint &p)
+        : KListView( parent, "resultslist" )
     {
-        PropertyItem *item = dynamic_cast<PropertyItem*>( itemAt( p ) );
-        if ( item )
-        {
-            QRect r = itemRect( item );
-            if ( r.isValid() )
-                tip( r, item->tipText() );
-        }
+        this->setShowToolTips( false );
+        new ResultsToolTip( this );
     }
+
+    virtual ~ResultsList() {}
 
     void clear()
     {
         KListView::clear();
     }
 };
+
+ResultsToolTip::ResultsToolTip( ResultsList* parent )
+    : QToolTip( parent->viewport() ), m_resultsList( parent )
+{
+}
+
+void ResultsToolTip::maybeTip( const QPoint& p )
+{
+    PropertyItem *item = dynamic_cast<PropertyItem*>( m_resultsList->itemAt( p ) );
+    if ( item )
+    {
+        QRect r = m_resultsList->itemRect( item );
+        if ( r.isValid() )
+            tip( r, item->tipText() );
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // class PartExplorerForm
