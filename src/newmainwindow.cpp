@@ -159,9 +159,7 @@ void NewMainWindow::init() {
 	
 	connect( Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()) );
 	
-/////////////////////////////////////////////////////////
-// NEEDS KDELIBS HEAD post 2004-03-12
-
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
 	if ( tabWidget() )
 	{
 		KConfig *config = kapp->config();
@@ -176,8 +174,7 @@ void NewMainWindow::init() {
 		bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
 		tabWidget()->setHoverCloseButtonDelayed( CloseOnHoverDelay );
 	}
-
-/////////////////////////////////////////////////////////
+#endif
 }
 
 NewMainWindow::~NewMainWindow() {
@@ -402,7 +399,7 @@ void NewMainWindow::loadMDISettings()
 }
 */
 
-void NewMainWindow::setUserInterfaceMode(const QString& uiMode)
+void NewMainWindow::setUserInterfaceMode( const QString & )
 {
 /*	
     // immediately switch the mode likely set in the uimode part

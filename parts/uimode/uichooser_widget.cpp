@@ -21,6 +21,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 
 #include "uichooser_part.h"
 #include "kdevmainwindow.h"
@@ -31,6 +32,12 @@ UIChooserWidget::UIChooserWidget( UIChooserPart * part, QWidget *parent, const c
   ,m_part(part), _lastMode(0L)
 {
   load();
+  
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,90)
+	TabModeGroup->hide();
+	HoverCloseGroup->hide();
+	IDEAlButtonGroup->hide();
+#endif
 }
 
 void UIChooserWidget::load()
@@ -62,6 +69,7 @@ void UIChooserWidget::load()
     break;
   }
   
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)  
 	int mdistyle = config->readNumEntry( "MDIStyle", 1 );
 	switch( mdistyle )
 	{
@@ -107,6 +115,7 @@ void UIChooserWidget::load()
 	{
 		DoNotCloseOnHover->setChecked( true );
 	}
+#endif
 }
 
 
@@ -124,6 +133,7 @@ void UIChooserWidget::save()
   else
     config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
 
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
 	if ( AlwaysShowTabs->isChecked() )
 	{
 		config->writeEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
@@ -166,7 +176,7 @@ void UIChooserWidget::save()
 	{
 		config->writeEntry( "MDIStyle", 1 );
 	}
-  
+#endif  
   config->sync();
 }
 
