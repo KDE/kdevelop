@@ -1016,6 +1016,11 @@ bool PartController::closeFiles( const KURL::List & list )
 	return true;
 }
 
+bool PartController::closeFile( const KURL & url )
+{
+	return closePart( partForURL( url ) );
+}
+
 bool PartController::closeAllFiles()
 {
 	return closeFilesDialog( KURL::List() );
@@ -1026,8 +1031,22 @@ void PartController::slotCloseAllWindows()
 	closeAllFiles();
 }
 
+bool PartController::closeAllOthers( const KURL & url )
+{
+	KURL::List ignoreList;
+	ignoreList.append( url );
+	
+	return closeFilesDialog( ignoreList );	
+}
+
+
 void PartController::slotCloseOtherWindows()
 {
+	KParts::ReadOnlyPart * active = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
+	if ( !active ) return;
+	
+	closeAllOthers( active->url() );
+	/*	
 	KParts::ReadOnlyPart * active = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
 	if ( !active ) return;
 
@@ -1035,6 +1054,7 @@ void PartController::slotCloseOtherWindows()
 	ignoreList.append( active->url() );
 	
 	closeFilesDialog( ignoreList );
+	*/
 }
 
 void PartController::slotOpenFile()
@@ -1207,7 +1227,7 @@ bool PartController::reactToDirty( KURL const & url, bool )// isModified )
 {
 
 	enum DirtyAction { doNothing, alertUser, autoReload };	
-	DirtyAction action = doNothing;
+	DirtyAction action = alertUser;
 		
 	if ( action == doNothing ) return false;
 	

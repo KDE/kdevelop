@@ -82,6 +82,9 @@ public:
   
   bool readyToClose();
 
+  bool closeFile( const KURL & );
+  bool closeAllOthers( const KURL & );
+  void reloadFile( const KURL &, bool force = false );
 
 public slots:
 
@@ -148,8 +151,6 @@ private:
   bool isDirty( KURL const & url );
   bool reactToDirty( KURL const & url, bool isModified );
     
-  void reloadFile( const KURL &, bool force = false );
-  
   KURL storedURLForPart( KParts::ReadOnlyPart * );
   void updatePartURL( KParts::ReadOnlyPart * );
   bool partURLHasChanged( KParts::ReadOnlyPart * );
