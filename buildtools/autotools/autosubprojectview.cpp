@@ -18,6 +18,8 @@
 #include <qregexp.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
+#include <qtable.h>
+#include <qlayout.h>
 
 /** KDE Libs */
 #include <kaction.h>
@@ -28,6 +30,7 @@
 #include <kapplication.h>
 #include <kprocess.h>
 #include <ksqueezedtextlabel.h>
+#include <kdialogbase.h>
 
 /** KDevelop */
 #include <kdevmainwindow.h>
@@ -45,6 +48,7 @@
 #include "autoprojectpart.h"
 #include "autosubprojectview.h"
 #include "removesubprojectdialog.h"
+#include "managecustomcommand.h"
 
 namespace AutoProjectPrivate
 {
@@ -179,6 +183,9 @@ void AutoSubprojectView::initActions()
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+	otherAction = new KAction( i18n( "Manage custom commands..." ), 0, 0,
+		this, SLOT( slotManageBuildCommands() ), actions, "manage custom commands" );
+	otherAction->setWhatsThis(i18n("<b>Manage custom commands</b><p>Allows to create, edit and delete custom build commands which appears in the subproject context menu.<br>"));
 
 	connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -213,6 +220,25 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 	popup.insertSeparator();
     installSubprojectAction->plug( &popup );
     installSuSubprojectAction->plug( &popup );
+
+	KConfig *config = m_part->instance()->config();
+	bool separate = true;
+	QMap<QString,QString> customBuildCommands = config->entryMap("CustomCommands");
+	for (QMap<QString,QString>::const_iterator it = customBuildCommands.constBegin();
+		it != customBuildCommands.constEnd(); ++it)
+	{
+		if (separate)
+		{
+			popup.insertSeparator();
+			separate = false;
+		}
+		int id = popup.insertItem(it.key(), this, SLOT(slotCustomBuildCommand(int)));
+		m_commandList.append(it.data());
+		popup.setItemParameter(id, m_commandList.findIndex(it.data()));
+	}
+
+	popup.insertSeparator();
+	otherAction->plug( &popup );
 
 	popup.exec( p );
 }
@@ -858,4 +884,52 @@ void AutoSubprojectView::focusOutEvent( QFocusEvent */* e*/ )
     m_widget->setLastFocusedView(AutoProjectWidget::SubprojectView);
 }
 
+void AutoSubprojectView::slotManageBuildCommands( )
+{
+	KConfig *config = m_part->instance()->config();
+	//menu item name <-> command
+	QMap<QString, QString> customBuildCommands = config->entryMap("CustomCommands");
+	
+	KDialogBase dlg(KDialogBase::Plain, i18n("Manage Custom Commands"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
+	dlg.plainPage()->setMargin(0);
+	(new QVBoxLayout(dlg.plainPage(), 0, 0))->setAutoAdd(true);
+	
+	ManageCustomCommand *widget = new ManageCustomCommand(dlg.plainPage());
+	
+	for (QMap<QString,QString>::const_iterator it = customBuildCommands.constBegin();
+		it != customBuildCommands.constEnd(); ++it)
+	{
+		widget->commandsTable->insertRows(widget->commandsTable->numRows());
+		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 0, it.key());
+		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 1, it.data());
+	}
+	
+	widget->commandsTable->setFocus();
+	if (dlg.exec() == QDialog::Accepted)
+	{
+		config->deleteGroup("CustomCommands");
+		config->setGroup("CustomCommands");
+		for (int i = 0; i < widget->commandsTable->numRows(); ++i)
+		{
+			config->writeEntry(widget->commandsTable->text(i, 0),
+				widget->commandsTable->text(i, 1));
+		}
+	}
+	
+}
+
+void AutoSubprojectView::slotCustomBuildCommand(int val)
+{
+	QString cmd = m_commandList[val];
+	
+	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	if ( !spitem )	return;
+
+	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+
+	m_part->startMakeCommand( m_part->buildDirectory() + relpath, cmd );
+}
+
 #include "autosubprojectview.moc"
+
+// kate: space-indent off; indent-width 8; tab-width 8; show-tabs on;

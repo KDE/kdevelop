@@ -84,7 +84,10 @@ class AutoSubprojectView : public KListView
         KAction* forceReeditSubprojectAction;
         KAction* installSubprojectAction;
         KAction* installSuSubprojectAction;
-
+        KAction* otherAction;
+        
+        QStringList m_commandList;
+                
 	private slots:
 		void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 // 		void slotSubprojectExecuted(QListViewItem* item);
@@ -101,6 +104,8 @@ class AutoSubprojectView : public KListView
         void slotInstallSubproject();
         void slotInstallSuSubproject();
         void slotCleanSubproject();
+        void slotManageBuildCommands();
+        void slotCustomBuildCommand(int);
 };
 
 #endif
