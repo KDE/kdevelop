@@ -75,7 +75,7 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
     addColumn( i18n("Problem") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
-//    addColumn( i18n("Column") );
+    //addColumn( i18n("Column") );
     setAllColumnsShowFocus( TRUE );
 
     m_timer = new QTimer( this );

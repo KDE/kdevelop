@@ -167,6 +167,8 @@ void Lexer::setSource( const QString& source )
     m_source = source;
     m_buffer = source.unicode();
     m_endPtr = m_buffer + m_source.length();
+    newline( m_buffer );
+
     tokenize();
 }
 
@@ -176,7 +178,7 @@ void Lexer::reset()
     m_size = 0;
     m_lastLine = 0;
     m_tokens.resize( 5000 );
-    m_endLines.resize( 5000 );
+    m_startLineVector.resize( 5000 );
     m_source = QString::null;
     m_buffer = 0;
     m_endPtr = 0;
@@ -185,11 +187,11 @@ void Lexer::reset()
 
 void Lexer::newline( const QChar* ptr )
 {
-    if( m_lastLine == (int)m_endLines.size() ){
-        m_endLines.resize( m_endLines.size() + 1000 );
+    if( m_lastLine == (int)m_startLineVector.size() ){
+        m_startLineVector.resize( m_startLineVector.size() + 1000 );
     }
 
-    m_endLines[ m_lastLine++ ] = ptr;
+    m_startLineVector[ m_lastLine++ ] = ptr;
     m_startLine = true;
 }
 
@@ -197,16 +199,23 @@ void Lexer::getTokenPosition( const Token& token, int* line, int* col )
 {
     const QChar* ptr = token.position();
 
-    *line = m_lastLine;
+    *line = 0;
     *col = 0;
 
-    for( int i=0; i<m_lastLine; ++i ){
-        const QChar* endLinePos = m_endLines[ i ];
-        if( ptr < endLinePos ){
-            *line = i + 1;
+    int low = 0, hi = m_lastLine - 1;
+    int mid = 0;
+    while( low <= hi ){
+        mid = ( low + hi ) / 2;
+        if( ptr < m_startLineVector[mid]){
+            hi = mid - 1;
+        } else if( ptr > m_startLineVector[mid] ){
+            low = mid + 1;
+        } else {
             break;
         }
     }
+
+    *line = mid + 1;
 }
 
 void Lexer::tokenize()

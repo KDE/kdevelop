@@ -82,14 +82,18 @@ public:
 	{
 		m_children.setAutoDelete( true );
 		m_symbols.setAutoDelete( true );
+
 		if( m_parent ){
 			m_parent->addSymbolTable( this );
 		}
 	}
 
 	~SymbolTable()
-		{
+	{
+		if( m_parent && m_parent->m_children.findRef(this) ){
+			m_parent->m_children.take();
 		}
+	}
 
 	QString name() const { return m_name; }
 
@@ -127,11 +131,11 @@ public:
 	}
 
 	void dump() {
-		kdDebug(9007) << "symboltable: " << fullName() << endl;
+		//kdDebug(9007) << "symboltable: " << fullName() << endl;
 		for( QAsciiDictIterator<Symbol> it(m_symbols); it.current(); ++it ){
-			kdDebug(9007) << "symbol = " << it.current()->name() << " - kind = " << it.current()->kind() << endl;
+			//kdDebug(9007) << "symbol = " << it.current()->name() << " - kind = " << it.current()->kind() << endl;
 		}
-	 	kdDebug(9007) << endl << endl;
+	 	//kdDebug(9007) << endl << endl;
 
 		for( QPtrListIterator<SymbolTable> it(m_children); it.current(); ++it ){
 			it.current()->dump();
@@ -175,6 +179,7 @@ void Parser::setFileName( const QString& fileName )
 
 bool Parser::reportError( const Error& err )
 {
+    //kdDebug(9007) << "Parser::reportError()" << endl;
     if( m_errors < m_maxErrors ){
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
@@ -193,6 +198,7 @@ bool Parser::reportError( const Error& err )
 
 bool Parser::reportError( const QString& msg )
 {
+    //kdDebug(9007) << "Parser::reportError()" << endl;
     if( m_errors < m_maxErrors ){
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
@@ -221,6 +227,7 @@ void Parser::parseError()
 
 bool Parser::skipUntil( int token )
 {
+    //kdDebug(9007) << "Parser::skipUntil()" << endl;
     while( !lex->lookAhead(0).isNull() ){
         if( lex->lookAhead(0) == token )
             return true;
@@ -233,6 +240,7 @@ bool Parser::skipUntil( int token )
 
 bool Parser::skipUntilDeclaration()
 {
+    //kdDebug(9007) << "Parser::skipUntilDeclaration()" << endl;
     while( !lex->lookAhead(0).isNull() ){
         switch( lex->lookAhead(0) ){
         case ';':
@@ -358,11 +366,12 @@ bool Parser::parseDefinition( SymbolTable* symtab )
         return parseTemplateDeclaration( symtab );
 
     default:
-		if( parseEnumSpecifier(symtab) || parseClassSpecifier(symtab) ){
-			parseInitDeclaratorList( symtab );
-			ADVANCE( ';', ";" );
-			return true;
-		}
+        if( parseEnumSpecifier(symtab) || parseClassSpecifier(symtab) ){
+            parseInitDeclaratorList( symtab );
+            ADVANCE( ';', ";" );
+            return true;
+        }
+
         return parseDeclaration( symtab );
 
     } // end switch
@@ -827,7 +836,7 @@ bool Parser::parseDeclarator( QString& name, int& start, int& end )
         }
 		end = lex->index();
 		name = toString( start, end );
-		
+
 
         if( lex->lookAhead(0) == ':' ){
             lex->nextToken();
@@ -879,6 +888,8 @@ bool Parser::parseEnumSpecifier( SymbolTable* symtab )
 
     int index = lex->index();
 
+	parseStorageClassSpecifier();
+
     if( lex->lookAhead(0) != Token_enum ){
         return false;
     }
@@ -893,16 +904,11 @@ bool Parser::parseEnumSpecifier( SymbolTable* symtab )
         lex->setIndex( index );
         return false;
     }
-
     lex->nextToken();
 
-    if( parseEnumeratorList() ){
-    }
+    parseEnumeratorList();
 
-    if( lex->lookAhead(0) != '}' ){
-        reportError( i18n("} expected") );
-    } else
-        lex->nextToken();
+    ADVANCE( '}', "}" );
 
     return true;
 }
@@ -1177,6 +1183,7 @@ bool Parser::parseInitDeclaratorList( SymbolTable* symtab )
             break;
         }
     }
+    //kdDebug(9007) << "Parser::parseInitDeclaratorList() -- end" << endl;
     return true;
 }
 
@@ -1264,6 +1271,8 @@ bool Parser::parseClassSpecifier( SymbolTable* symtab )
     //kdDebug(9007) << "Parser::parseClassSpecifier()" << endl;
 
     int index = lex->index();
+
+	parseStorageClassSpecifier();
 
     int kind = lex->lookAhead( 0 );
     if( kind == Token_class || kind == Token_struct || kind == Token_union ){
@@ -1460,8 +1469,7 @@ bool Parser::parseEnumeratorList()
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        if( parseEnumerator() ){
-        } else {
+        if( !parseEnumerator() ){
             reportError( i18n("Enumerator expected") );
             break;
         }
@@ -1500,10 +1508,12 @@ bool Parser::parseInitDeclarator( SymbolTable* symtab )
         return false;
     }
 
-        if( !name.isEmpty() )
-            symtab->bind( name, 10 );
+    if( !name.isEmpty() )
+    	symtab->bind( name, 10 );
 
+	//kdDebug(9007) << "---> before parseInitializer()" << endl;
     parseInitializer();
+	//kdDebug(9007) << "---> after parseInitializer()" << endl;
 
     return true;
 }
@@ -1580,10 +1590,9 @@ bool Parser::parseInitializer()
             reportError( i18n(") expected") );
         } else
             lex->nextToken();
-    } else
-        return false;
+    }
 
-    return true;
+    return false;
 }
 
 bool Parser::parseMemInitializerList()
@@ -1986,9 +1995,9 @@ bool Parser::parseCondition( SymbolTable* symtab )
             lex->nextToken();
 
 			symtab->bind( name, 10 );
-			
+
             if( parseAssignmentExpression() )
-                return true;				
+                return true;
         }
     }
 
@@ -2002,7 +2011,7 @@ bool Parser::parseWhileStatement( SymbolTable* symtab )
     //kdDebug(9007) << "Parser::parseWhileStatement()" << endl;
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
-	
+
 	SymbolTable* my = new SymbolTable( "$anon$", symtab );
     if( !parseCondition(my) ){
         reportError( i18n("condition expected") );
@@ -2043,7 +2052,7 @@ bool Parser::parseForStatement( SymbolTable* symtab )
     ADVANCE( '(', "(" );
 
 	SymbolTable* my = new SymbolTable( "$anon$", symtab );
-    
+
     if( !parseForInitStatement(symtab) ){
         reportError( i18n("for initialization expected") );
     }
@@ -2100,7 +2109,7 @@ bool Parser::parseIfStatement( SymbolTable* symtab )
     ADVANCE( '(' , "(" );
 
 	SymbolTable* my = new SymbolTable( "$anon$", symtab );
-		
+
     if( !parseCondition(my) ){
         reportError( i18n("condition expected") );
     }
@@ -2128,9 +2137,9 @@ bool Parser::parseSwitchStatement( SymbolTable* symtab )
     ADVANCE( Token_switch, "switch" );
 
     ADVANCE( '(' , "(" );
-	
+
 	SymbolTable* my = new SymbolTable( "$anon$", symtab );
-	
+
     if( !parseCondition(my) ){
         reportError( i18n("condition expected") );
     }

@@ -202,7 +202,7 @@ private:
 private:
     QMemArray< Token > m_tokens;
     int m_size;
-    QMemArray< const QChar* > m_endLines;
+    QMemArray< const QChar* > m_startLineVector;
     int m_lastLine;
     QMap< QString, int > m_keywords;
     QMap< QString, int > m_operators;
