@@ -1007,7 +1007,16 @@ void CKDevelop::readOptions(){
     slotURLSelected(browser_widget,filename,1,"test");
   }
   else{
-		slotHelpContents();
+    QString strpath = KApplication::kde_htmldir().copy() + "/";
+    QString file;
+    // first try the locale setting
+    file = strpath + klocale->language() + '/' + "kdevelop/welcome/index.html";
+
+    if( !QFileInfo( file ).exists() ){
+      // not found: use the default
+      file = strpath + "default/" + "kdevelop/welcome/index.html";
+    }
+    slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
 
   bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
@@ -1187,4 +1196,6 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
 

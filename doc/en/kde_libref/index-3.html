@@ -99,10 +99,10 @@ charset. Retrieve the charsets instance with <CODE>kapp->getCharsets()</CODE>.
 <BLOCKQUOTE>Replaced by <CODE>KGlobal::charsets()</CODE> in KDE2.</BLOCKQUOTE>
 </DL>
 <P>
-<P>Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard. This will prevent you from
-problems that will always occur when hard-coding any directories into the code (see 
-<A HREF="../programming/index.html">The KDevelop Programming Handbook</A> for information about the KDE-FSS). The class also provides the needed access for the application icon
-and mini icon, current KDE fonts and session management support.
+<P>Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard.
+This will prevent you from problems that will always occur when hard-coding any directories into the code (see 
+<A HREF="../programming/index.html">The KDevelop Programming Handbook</A> for information about the KDE-FSS). The class also provides
+the needed access for the application icon and mini icon, current KDE fonts and session management support.
 <P>To use the clipboard, the according <CODE>QApplication</CODE> class already provides a clipboard object, <CODE>QApplication::clipboard()</CODE>, which
 can be used to exchange text and image data between applications (see <CODE>QClipboard</CODE>).
 <P>Internationalization is another keyword for KDE applications. This is supported by the <CODE>KLocale</CODE> object already mentioned above and
@@ -264,6 +264,13 @@ you have to call the QApplication slot <CODE>quit()</CODE>. You could do this in
 <CODE>KApplication</CODE>, things are almost the same with the difference that the according method of KDE is <CODE>setTopWidget()</CODE>.
 The only exception is when using the class <CODE>KTMainWindow</CODE> which automatically does this in its constructor (if there is no other
 topwidget).
+<P>Another way would be to set no window explicitely as a top widget or main widget at all when using several top-level widgets. As the
+application object still has to terminate with <CODE>quit()</CODE>, you can as well use a <CODE>connect()</CODE> to call it automatically if the last
+application window is closed (using <CODE>QApplication</CODE>'s <CODE>lastWindowClosed()</CODE> signal):
+<P>
+<PRE>
+QObject::connect(kapp, SIGNAL(lastWindowClosed()), kapp, SLOT(quit()));
+</PRE>
 <P>
 <H4>Using KTMainWindow</H4>
 

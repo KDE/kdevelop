@@ -453,10 +453,10 @@ charset. Retrieve the charsets instance with <tt/kapp->getCharsets()/.<footnote>
 </descrip>
 <p>
 
-Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard. This will prevent you from
-problems that will always occur when hard-coding any directories into the code (see <htmlurl url="../programming/index.html" name="The
-KDevelop Programming Handbook"> for information about the KDE-FSS). The class also provides the needed access for the application icon
-and mini icon, current KDE fonts and session management support.
+Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard.
+This will prevent you from problems that will always occur when hard-coding any directories into the code (see <htmlurl
+url="../programming/index.html" name="The KDevelop Programming Handbook"> for information about the KDE-FSS). The class also provides
+the needed access for the application icon and mini icon, current KDE fonts and session management support.
 
 To use the clipboard, the according <tt/QApplication/ class already provides a clipboard object, <tt/QApplication::clipboard()/, which
 can be used to exchange text and image data between applications (see <tt/QClipboard/).
@@ -627,6 +627,14 @@ you have to call the QApplication slot <tt/quit()/. You could do this in a deriv
 <tt/KApplication/, things are almost the same with the difference that the according method of KDE is <tt/setTopWidget()/.
 The only exception is when using the class <tt/KTMainWindow/ which automatically does this in its constructor (if there is no other
 topwidget).
+
+Another way would be to set no window explicitely as a top widget or main widget at all when using several top-level widgets. As the
+application object still has to terminate with <tt/quit()/, you can as well use a <tt/connect()/ to call it automatically if the last
+application window is closed (using <tt/QApplication/'s <tt/lastWindowClosed()/ signal):
+
+<verb>
+QObject::connect(kapp, SIGNAL(lastWindowClosed()), kapp, SLOT(quit()));
+</verb>
 
 <sect1>Using KTMainWindow
 <p>
