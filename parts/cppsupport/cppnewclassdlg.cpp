@@ -210,7 +210,7 @@ void CppNewClassDialog::accept()
                         "public:\n"
                         "  $CLASSNAME$($ARGS$);\n"
                         "  ~$CLASSNAME$();\n"
-                        "}\n"
+                        "};\n"
                         "\n"
                         "#endif\n"
                         );
