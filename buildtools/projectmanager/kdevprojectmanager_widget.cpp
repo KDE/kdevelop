@@ -163,7 +163,7 @@ void KDevProjectManagerWidget::build()
 void KDevProjectManagerWidget::updateDetails(QListViewItem *item)
 {
     kdDebug(9000) << "KDevProjectManagerWidget::updateDetails()" << endl;
-    m_details->setCurrentItem(item ? static_cast<ProjectViewItem*>(item)->dom() : ProjectWorkspaceDom(0));
+    m_details->setCurrentItem(item ? static_cast<ProjectViewItem*>(item)->dom() : ProjectItemDom( 0 ));
 }
 
 void KDevProjectManagerWidget::updateActions()
