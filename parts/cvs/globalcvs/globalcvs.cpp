@@ -54,7 +54,7 @@ void GlobalCvs::createNewProject(const QString& dir) {
                KShellProcess::quote(form->root_edit->text()) + " init && ";
     QString command = init + "cd " + KShellProcess::quote(dir) +
                       " && cvs -d " + KShellProcess::quote(form->root_edit->text()) + 
-                      " import -m '" + KShellProcess::quote(form->message_edit->text()) + "' " +
+                      " import -m " + KShellProcess::quote(form->message_edit->text()) + " " +
                       KShellProcess::quote(form->repository_edit->text()) + " " + 
                       KShellProcess::quote(form->vendor_edit->text()) + " " + 
                       KShellProcess::quote(form->release_edit->text());
