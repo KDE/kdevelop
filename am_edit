@@ -62,9 +62,11 @@ sub tag_AUTOMAKE ();
 sub tag_META_INCLUDES ();
 sub tag_METASOURCES ();
 sub tag_POFILES ();
+sub tag_DOCFILES ();
 sub tag_LOCALINSTALL();
 sub tag_IDLFILES();
 sub tag_TOPLEVEL();
+sub tag_SUBDIRS();
 
 # Some global globals...
 $verbose    = 0;        # a debug flag
@@ -193,10 +195,9 @@ sub processMakefile ($)
     local %depedmocs = ();
 
     local $metasourceTags = 0;
-    local $clean_adds = "";
     local $dep_files = "";
     local %target_adds = (); # the targets to add
-    local $subdirs_seen = 0;
+    local $kdelang    = "";
     
     $makefileDir = dirname($makefile);
     chdir ($makefileDir);
@@ -219,10 +220,17 @@ sub processMakefile ($)
 
     if ($idl_output) {
       appendLines ("$cleantarget-idl:\n\t-rm -f $idl_output\n");
-      $clean_adds .= "$cleantarget-idl ";
+      $target_adds{"$cleantarget-am"} .= "$cleantarget-idl ";
     }
 
+    if ($MakefileData =~ /\nKDE_LANG\s*=\s*(\S*)\n/) {
+      $kdelang = '$(KDE_LANG)'
+    } else {
+      $kdelang = '';
+    }
+    
     tag_POFILES ();             # language rules for po directory
+    tag_DOCFILES ();            # language rules for doc directories
     tag_TOPLEVEL ();            # language rules for po toplevel
     tag_LOCALINSTALL();         # add $(DESTDIR) before all kde_ dirs
 
@@ -258,18 +266,6 @@ sub processMakefile ($)
     }
     appendLines($final_lines . "all-am");
 
-    if ($clean_adds) {
-      $lookup = "$cleantarget-am:\s*(.*)";
-      if ($MakefileData =~ /\n($lookup)\n/) {
-	print STDOUT "$cleantarget processing <$1>\n"   if ($verbose);
-	my $newline = "$cleantarget-am: $clean_adds";
-	$newline .= $2;
-	substituteLine ($1, $newline);
-      } else {
-	print STDERR "no $cleantarget-am target found to add \"$clean_adds\" in $printname\n";
-      }
-    }
-
     my $lookup = 'DEP_FILES\s*=(.*)\n';
     if ($MakefileData =~ /\n$lookup/) {
       $lines = "DEP_FILES = $dep_files";
@@ -304,6 +300,11 @@ sub processMakefile ($)
 # And of course we open and/or create the needed make files.
 sub initialise ()
 {
+    if (! -r "Makefile.am") {
+	print STDOUT "found Makefile.in without Makefile.am\n" if ($verbose);
+	return;
+    }
+
     # Checking for files to process...
     open (FILEIN, $makefile)
       || die "Could not open $makefileDir/$makefile: $!\n";
@@ -523,7 +524,7 @@ sub tag_FINAL()
     my $lines = "$cleantarget-final:\n";
     $lines .= "\t-rm -f " . join(' ', @final_names) . "\n" if (@final_names);
     appendLines($lines);
-    $clean_adds .= "$cleantarget-final ";
+    $target_adds{"$cleantarget-am"} .= "$cleantarget-final ";
     
     foreach $finalfile (@final_names) {
       $finalfile =~ s/\.[^.]*$/.P/;
@@ -601,7 +602,9 @@ sub tag_METASOURCES ()
       }
     }
     if (@deped) {
-      $depedmocs{$program} .= join('.moc ', @deped) . ".moc"
+      $depedmocs{$program} .= " ";
+      $depedmocs{$program} .= join('.moc ', @deped) . ".moc";
+      $depedmocs{$program} .= " ";
     }
     addMocRules ();
 }
@@ -629,28 +632,19 @@ sub tag_TOPLEVEL()
   my $lookup = 'TOPLEVEL_LANG\s*=\s*(\S+)';
   return 1 if ($MakefileData !~ /\n$lookup\n/);
   my $lang = $1;
-  $subdirs_seen = 0;
 
-  if ($MakefileData =~ /\nSUBDIRS\s*=(.*)\n/) {
-    my $argument = $1;
-    if ($argument !~ /\$\(AUTODIRS\)/) {
-      print STDERR "Error: SUBDIRS and TOPLEVEL_LANG in $printname\n";
-      $errorflag = 1;
-      return 1;
-    }
-    $subdirs_seen = 1;
+  if (tag_SUBDIRS()) {
+    print STDERR "Error: TOPLEVEL_LANG without SUBDIRS = \$(AUTODIRS) in $printname\n";
+    $errorflag = 1;
+    return 1;
   }
 
-  my $subdirs = "";
   my $pofiles = "";
   my @restfiles = ();
   opendir (THISDIR, ".");
   foreach $entry (readdir(THISDIR)) {
-    next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/);
-    if (-d $entry) {
-      $subdirs .= " $entry";
-      next;
-    }
+    next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^#.*#$/ || $entry =~ /.gmo$/);
+
     if ($entry =~ /\.po$/) {
       $pofiles .= "$entry ";
       next;
@@ -659,42 +653,15 @@ sub tag_TOPLEVEL()
   }
   closedir (THISDIR);
 
-  my $lines = "SUBDIRS =$subdirs\n";
-  
-  if (!$subdirs_seen) {
-    my $targets = "all install-data install-exec installdirs install uninstall mostlyclean ";
-    $targets    .= " clean distclean maintainer-clean check installcheck info dvi";
-  
-    for $target (split(/\s+/, $targets)) {
-      $lines .= "$target-recursive ";
-
-      my $lookup = "$target:\s*(.*)";
-      $target_adds{$target} .= "$target-recursive ";
-    }
-    
-    $lines .= ":\n";
-    $lines .= "\t\@set fnord \$\(MAKEFLAGS\); amf=\$\$2; \\\n";
-    $lines .= "\ttarget=`echo \$\@ | sed s/-recursive//`; \\\n";
-    $lines .= "\tlist='\$\(SUBDIRS\)'; for subdir in \$\$list; do \\\n";
-    $lines .= "\t  echo \"Making \$\$target in \$\$subdir\"; \\\n";
-    $lines .= "\t  \(cd \$\$subdir && \$\(MAKE\) \$\(AM_MAKEFLAGS\) \$\$target\) \\\n";
-    $lines .= "\t  || case \"\$\$amf\" in *=*\) exit 1;; *k*\) fail=yes;; *\) exit 1;; esac; \\\n";
-    $lines .= "\tdone; \\\n";
-    $lines .= "\t\$\(MAKE\) \$\(AM_MAKEFLAGS\) \"\$\$target-am\" || exit 1;\n";
-    
-    appendLines($lines);
-  } else {
-    substituteLine('SUBDIRS\s*=.*', $lines);
-  }
-
   print STDOUT "pofiles found = $pofiles\n"   if ($verbose);
   handle_POFILES($pofiles, '$(TOPLEVEL_LANG)') if ($pofiles);
   
   if (@restfiles) {
     $target_adds{"install-data-am"} .= "install-nls-files ";
     $lines = "install-nls-files:\n";
+    $lines .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_locale)/$lang\n";
     for $file (@restfiles) {
-      $lines .= "\t\$(INSTALL_DATA) \$\(srcdir\)/$file \$(kde_locale)/$lang/$file\n";
+      $lines .= "\t\$(INSTALL_DATA) \$\(srcdir\)/$file \$(DESTDIR)\$(kde_locale)/$lang/$file\n";
     }
     appendLines($lines);
   }
@@ -703,6 +670,29 @@ sub tag_TOPLEVEL()
 }
 
 #-----------------------------------------------------------------------------
+
+sub tag_SUBDIRS () 
+{
+  if ($MakefileData !~ /\nSUBDIRS\s*=\s*\$\(AUTODIRS\)\s*\n/) {
+    return 1;
+  }
+
+  my $subdirs;
+
+  opendir (THISDIR, ".");
+  foreach $entry (readdir(THISDIR)) {
+    next if ($entry eq "CVS" || $entry =~ /^\./);
+    if (-d $entry) {
+      $subdirs .= " $entry";
+      next;
+    }
+  }
+  closedir (THISDIR);
+
+  my $lines = "SUBDIRS =$subdirs\n";
+  substituteLine('SUBDIRS\s*=.*', $lines);
+  return 0;
+}
 
 sub tag_IDLFILES ()
 {
@@ -763,7 +753,7 @@ sub tag_IDLFILES ()
 sub handle_POFILES($$)
 {
   my @pofiles = split(" ", $_[0]);
-  my $kdelang = $_[1];
+  my $lang = $_[1];
 
   # Build rules for creating the gmo files
   my $tmp = "";
@@ -803,8 +793,8 @@ sub handle_POFILES($$)
   
   $tmp = "install-nls-no:\n";
   $tmp .= "install-nls-yes:\n";
-  if ($kdelang) {
-    $tmp  .= "\t\$(mkinstalldirs) \$(kde_locale)/$kdelang/LC_MESSAGES\n";
+  if ($lang) {
+    $tmp  .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES\n";
   }
   $tmp .= "\t\@for base in ";
   foreach $pofile (@pofiles)
@@ -814,13 +804,13 @@ sub handle_POFILES($$)
     }
   
   $tmp .= "; do \\\n";
-  if ($kdelang) {
-    $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base.gmo \$(kde_locale)/$kdelang/LC_MESSAGES/\$\$base.mo ;\\\n";
-    $tmp .= "\t  test ! -f \$\$base.gmo || \$(INSTALL_DATA) \$\$base.gmo \$(kde_locale)/$kdelang/LC_MESSAGES/\$\$base.mo ;\\\n"
+  if ($lang) {
+    $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base.gmo \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES/\$\$base.mo ;\\\n";
+    $tmp .= "\t  test ! -f \$\$base.gmo || \$(INSTALL_DATA) \$\$base.gmo \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES/\$\$base.mo ;\\\n"
   } else {
-    $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base.gmo \$(kde_locale)/\$\$base/LC_MESSAGES/\$(PACKAGE).mo ;\\\n";
-    $tmp .= "\t  \$(mkinstalldirs) \$(kde_locale)/\$\$base/LC_MESSAGES ; \\\n";
-    $tmp .= "\t  test ! -f \$\$base.gmo || \$(INSTALL_DATA) \$\$base.gmo \$(kde_locale)/\$\$base/LC_MESSAGES/\$(PACKAGE).mo ;\\\n";
+    $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base.gmo \$(DESTDIR)\$(kde_locale)/\$\$base/LC_MESSAGES/\$(PACKAGE).mo ;\\\n";
+    $tmp .= "\t  \$(mkinstalldirs) \$(DESTDIR)\$(kde_locale)/\$\$base/LC_MESSAGES ; \\\n";
+    $tmp .= "\t  test ! -f \$\$base.gmo || \$(INSTALL_DATA) \$\$base.gmo \$(DESTDIR)\$(kde_locale)/\$\$base/LC_MESSAGES/\$(PACKAGE).mo ;\\\n";
   }
   $tmp .= "\tdone\n\n";
   appendLines ($tmp);
@@ -831,10 +821,10 @@ sub handle_POFILES($$)
   foreach $pofile (@pofiles)
     {
       $pofile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
-      if ($kdelang) {
-	$tmp .= "\trm -f \$(kde_locale)/$kdelang/LC_MESSAGES/$1.mo\n";
+      if ($lang) {
+	$tmp .= "\trm -f \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES/$1.mo\n";
       } else {
-	$tmp .= "\trm -f \$(kde_locale)/$1/LC_MESSAGES/\$(PACKAGE).mo\n";
+	$tmp .= "\trm -f \$(DESTDIR)\$(kde_locale)/$1/LC_MESSAGES/\$(PACKAGE).mo\n";
       }
     }
   appendLines($tmp);
@@ -883,7 +873,8 @@ sub tag_POFILES ()
     if ($tmp =~ /^\s*AUTO\s*$/)
     {
         opendir (THISDIR, ".");
-        $pofiles =  join(" ", grep(/\.po$/, readdir(THISDIR)));
+	next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^#.*#$/);
+	$pofiles =  join(" ", grep(/\.po$/, readdir(THISDIR)));
         closedir (THISDIR);
         print STDOUT "pofiles found = $pofiles\n"   if ($verbose);
     }
@@ -893,13 +884,6 @@ sub tag_POFILES ()
         $pofiles = $tmp;
     }
     return 1    if (!$pofiles);        # Nothing to do
-
-    my $kdelang    = "";
-    if ($MakefileData =~ /\nKDE_LANG\s*=\s*(\S*)\n/) {
-      $kdelang = '$(KDE_LANG)'
-    } else {
-      $kdelang = '';
-    }
 
     handle_POFILES($pofiles, $kdelang);
 
@@ -941,7 +925,7 @@ sub tag_LOCALINSTALL ()
   return 0;
 }
 
-sub replaceDestDir() {
+sub replaceDestDir($) {
   local $line = $_[0];
   
   if ($line =~ /^\s*\$\(mkinstalldirs\)/ || $line =~ /^\s*\$\(INSTALL\S*\)/
@@ -957,6 +941,85 @@ sub replaceDestDir() {
 }
 #-----------------------------------------------------------------------------
 
+# Returns 0 if the line was processed - 1 otherwise.
+# Errors are logged in the global $errorflags
+sub tag_DOCFILES ()
+{
+    my $lookup = 'KDE_DOCS\s*=\s*([^\n]*)';
+    return 1    if ($MakefileData !~ /\n$lookup/);
+    print STDOUT "KDE_DOCS processing <$1>\n"   if ($verbose);
+
+    tag_SUBDIRS();
+
+    my $tmp = $1;
+
+    # Either find the files in the directory (AUTO) or use
+    # only the specified po files.
+    my $files = "";
+    my $appname = $tmp;
+    $appname =~ s/^(\S*)\s*.*$/$1/;
+    if ($appname =~ /AUTO/) {
+      $appname = basename($makefileDir);
+    }
+    
+    if ($tmp !~ / - /)
+    {
+        opendir (THISDIR, ".");
+	foreach $entry (readdir(THISDIR)) {
+	  next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^#.*#$/);
+	  next if (! -f $entry);
+	  $files .= "$entry ";
+	}
+        closedir (THISDIR);
+        print STDOUT "docfiles found = $files\n"   if ($verbose);
+    }
+    else
+    {
+        $tmp =~ s/\034/ /g;
+	$tmp =~ s/^\S*\s*-\s*//;
+        $files = $tmp;
+    }
+    return 1    if (!$files);        # Nothing to do
+
+    $target_adds{"install-data-am"} .= "install-nls-\@USE_NLS\@ ";
+    $target_adds{"uninstall"} .= "uninstall-nls ";
+
+    $tmp = "install-nls-no:\n";
+    $tmp .= "install-nls-yes:\n";
+    $tmp .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname\n";
+    $tmp .= "\t\@for base in $files; do \\\n";
+    $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$base ;\\\n";
+    $tmp .= "\t  \$(INSTALL_DATA) \$(srcdir)/\$\$base \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$base ;\\\n";
+    $tmp .= "\tdone\n";
+    $tmp .= "\n";
+    $tmp .= "uninstall-nls:\n";
+    $tmp .= "\tfor base in $files; do \\\n";
+    $tmp .= "\t  rm -f \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$base ;\\\n";
+    $tmp .= "\tdone\n\n";
+    appendLines ($tmp);
+    
+    $target_adds{"distdir"} .= "distdir-nls ";
+    
+    $tmp = "distdir-nls:\n";
+    $tmp .= "\tfor file in $files; do \\\n";
+    $tmp .= "\t  cp \$(srcdir)/\$\$file \$(distdir); \\\n";
+    $tmp .= "\tdone\n";
+    
+    appendLines ($tmp);
+
+    return 0;
+}
+
+sub tag_LOCALINSTALL ()
+{
+  helper_LOCALINSTALL('install-exec-local');
+  helper_LOCALINSTALL('install-data-local');
+  helper_LOCALINSTALL('uninstall-local');
+
+  return 0;
+}
+
+#-----------------------------------------------------------------------------
 # Find headers in any of the source directories specified previously, that
 # are candidates for "moc-ing".
 sub findMocCandidates ()
@@ -1103,7 +1166,7 @@ sub addMocRules ()
       # Add extra *.moc.cpp files created for USE_AUTOMOC because they
       # aren't included in the normal *.moc clean rules.
       appendLines ("$cleantarget-metasources:\n\t-rm -f $cleanMoc\n");
-      $clean_adds .= "$cleantarget-metasources ";
+      $target_adds{"$cleantarget-am"} .= "$cleantarget-files ";
     }
   }
 
