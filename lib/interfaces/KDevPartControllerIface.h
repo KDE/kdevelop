@@ -45,7 +45,7 @@ k_dcop:
   void revertAllFiles();
 
   bool closeAllFiles();
-  uint documentState( KURL const & url );
+  uint documentState( const KURL & url );
 
 private slots:
 	
