@@ -1,4 +1,6 @@
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets -I$(top_srcdir)/lib/structure $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces \
+	-I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util \
+	-I$(top_srcdir)/lib/widgets $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
 
 bin_PROGRAMS = kdevelop kdevassistant
 

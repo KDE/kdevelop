@@ -146,16 +146,6 @@ void PluginController::loadDefaultParts()
   } else {
     kdDebug( 9000 ) << "could not load Diff frontend" << endl;
   }
-
-  // Source formatter
-  emit loadingPlugin(i18n("Loading: Source formatter"));
-  KDevSourceFormatter *sourceFormatter = loadDefaultPart< KDevSourceFormatter >( "KDevelop/SourceFormatter" );
-  if ( sourceFormatter ) {
-    API::getInstance()->setSourceFormatter( sourceFormatter );
-    integratePart( sourceFormatter );
-  } else {
-    kdDebug( 9000 ) << "could not load Source formatter" << endl;
-  }
   
   // File Create
   emit loadingPlugin( i18n("Loading: File Create") );
@@ -379,6 +369,16 @@ const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 	}
 	return plugins;
 }
+
+KDevPlugin *PluginController::extension(const QString &serviceType)
+{
+    KTrader::OfferList offers = KTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
+    if (offers.count() > 0)
+        return m_parts[offers.first()->name()];
+    else 
+        return 0;
+}
+
 
 /*
 KDevPlugin * PluginController::getPlugin( const KService::Ptr & service )

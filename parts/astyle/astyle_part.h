@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
+ *  Copyright (C) 2001 Matthias Hï¿½zer-Klpfel <mhk@caldera.de>
  */
 
 
@@ -22,7 +22,8 @@ public:
   AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
 
-  QString formatSource( const QString text, AStyleWidget * widget = 0 );
+  QString formatSource( const QString text, AStyleWidget * widget );
+  virtual QString formatSource(const QString text);
 
 
 private slots:

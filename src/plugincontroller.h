@@ -36,6 +36,8 @@ public:
   
   //  KDevPlugin * getPlugin( const KService::Ptr &service );
   
+  KDevPlugin *extension(const QString &serviceType);
+  
   void unloadPlugins( QStringList const & );
   
   void integratePart(KXMLGUIClient *part);

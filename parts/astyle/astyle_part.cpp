@@ -184,4 +184,9 @@ void AStylePart::setCursorPos( KParts::Part *part, uint line, uint col )
 	}
 }
 
+QString AStylePart::formatSource( const QString text )
+{
+    return formatSource(text, 0);
+}
+
 #include "astyle_part.moc"

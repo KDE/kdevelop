@@ -24,11 +24,13 @@ public:
 
   ~API();
 
+    KDevPlugin *queryForExtension(const QString &serviceType);
 
 protected:
 
   API();
 
+    QMap<QString, KDevPlugin*> extensions;
 
 private:
 
@@ -36,6 +38,7 @@ private:
 
   CodeModel *m_classStore;
 
+  
 };
 
 

@@ -1,6 +1,7 @@
 #include "core.h"
 #include "codemodel.h"
 #include "partcontroller.h"
+#include "plugincontroller.h"
 #include "toplevel.h"
 #include "debugger.h"
 #include "api.h"
@@ -62,5 +63,13 @@ API::~API()
 {
   delete( m_classStore );
   m_classStore = 0;
+}
+
+KDevPlugin * API::queryForExtension( const QString & serviceType )
+{
+/*    if (!m_extensions.contains(name))
+        m_extensions[name] = PluginController::getInstance()->extension(name);*/
+    
+    return PluginController::getInstance()->extension(serviceType);
 }
 
