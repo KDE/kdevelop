@@ -20,7 +20,7 @@
 #include "grepview.h"
 #include "grepdlg.h"
 #include "misc.h"
-
+#include "qregexp.h"
 
 class GrepListBoxItem : public QListBoxText
 {

@@ -838,9 +838,22 @@ void CKDevelop::slotBuildCompileFile(){
   messages_widget->prepareJob(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
-//  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+	//  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  (*messages_widget) << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+            if (!prj->getCXXFLAGS().isEmpty())
+                  (*messages_widget) << prj->getCXXFLAGS() << " ";
+            if (!prj->getAdditCXXFLAGS().isEmpty())
+                  (*messages_widget) << prj->getAdditCXXFLAGS();
+  }
+  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+                (*messages_widget) << prj->getLDFLAGS();
+  (*messages_widget) << "\" ";
   (*messages_widget) << make_cmd << fileinfo.baseName()+".o";
-  messages_widget->startJob();
+	messages_widget->startJob();
 }
 
 void CKDevelop::slotBuildRun(){
@@ -902,6 +915,19 @@ void CKDevelop::slotBuildMake(){
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
   messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  (*messages_widget) << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+     	if (!prj->getCXXFLAGS().isEmpty())
+          (*messages_widget) << prj->getCXXFLAGS() << " ";
+		  if (!prj->getAdditCXXFLAGS().isEmpty())
+    		  (*messages_widget) << prj->getAdditCXXFLAGS();
+  }
+	(*messages_widget) << "\" " << "LDFLAGS=\" " ;
+	if (!prj->getLDFLAGS().isEmpty())
+			(*messages_widget) << prj->getLDFLAGS();
+	(*messages_widget) << "\" ";
   (*messages_widget) << make_cmd;
   if(!prj->getMakeOptions().isEmpty())
       (*messages_widget) << prj->getMakeOptions();
@@ -982,7 +1008,7 @@ void CKDevelop::slotBuildRebuildAll(){
   (*messages_widget) << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
          (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
-  (*messages_widget) << "\" "<< "./configure && " << make_cmd;
+  (*messages_widget) << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
 
   beep = true;
   messages_widget->startJob();
@@ -2967,6 +2993,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 

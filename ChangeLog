@@ -1,3 +1,6 @@
+1999-10-13 Stefan Bartel <bartel@rz.uni-potsdam.de>
+	* commited patches for bugs 2118 and 2113
+
 1999-10-12  Bernd Gehrmann <bernd@physik.hu-berlin.de>
 	* The revolutionary new GrepView with syntax-highlighting :-)
         * In the doc tree, show only existing libraries
@@ -1857,6 +1860,7 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
 
 
 

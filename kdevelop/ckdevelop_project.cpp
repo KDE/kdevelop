@@ -1061,6 +1061,21 @@ void CKDevelop::newSubDir(){
   messages_widget->clear();
   showOutputView(true);
   messages_widget->prepareJob(prj->getProjectDir());
-  (*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure";
+  //(*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure";
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  (*messages_widget) << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+            if (!prj->getCXXFLAGS().isEmpty())
+                  (*messages_widget) << prj->getCXXFLAGS() << " ";
+            if (!prj->getAdditCXXFLAGS().isEmpty())
+                  (*messages_widget) << prj->getAdditCXXFLAGS();
+  }
+  (*messages_widget)  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+                (*messages_widget) << prj->getLDFLAGS();
+  (*messages_widget) << "\" ";
+  (*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure" << prj->getConfigureArgs();
+
   messages_widget->startJob();
 }
