@@ -57,8 +57,6 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
 * general UI issues:
   - new file: a New File action in File menu & class/file views
-  - no possibility of bringing back closed toolviews
-  - no possibility of switching toolviews on and off
   - toplevel UI mode broken
   - [Modified] missing in mainframe caption
   - captions missing for toolbar buttons

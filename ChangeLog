@@ -1,3 +1,7 @@
+2002-11-05 F@lk Brettschneider <falk@kdevelop.org>
+    * applied new patch of Heinz Hornung <Hornung-Heinz@t-online.de>
+      that introduces View-->TreeToolViews and View-->OutputToolViews again
+
 2002-11-03 Sebastian Kratzert <skratzert@gmx.de>
     * qt documentation-tree now is generated with informations from QT_DOCDIR/html/qt.xml
     * disabled DocIndexDlg

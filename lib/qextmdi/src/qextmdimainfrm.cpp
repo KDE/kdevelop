@@ -390,9 +390,14 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       pCover->setWidget( pToolView);
       pCover->setToolTipString( tabToolTip);
       KDockWidget* pTargetDock = 0L;
-      if ((pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) || (pTargetWnd == this)) {
-         pTargetDock = m_pDockbaseAreaOfDocumentViews;
+        // Should we dock to ourself?
+      bool DockToOurself = false;
+      if(m_pDockbaseAreaOfDocumentViews)
+      {
+        if (pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = true;
       }
+      if (pTargetWnd == this) DockToOurself = true;
+      if (DockToOurself) pTargetDock = m_pDockbaseAreaOfDocumentViews;
       else if(pTargetWnd != 0L) {
          pTargetDock = dockManager->findWidgetParentDock( pTargetWnd);
          if (!pTargetDock) {

@@ -12,7 +12,8 @@
 
 #include "kdevtoplevel.h"
 
-
+class ViewMenuAction;
+class ViewMenuActionPrivateData;
 
 /**\brief Handles the multiple document interface modes..
 
@@ -50,6 +51,8 @@ public:
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 
+  enum EView {OutputView, TreeView};
+
 protected:
 KParts::ReadOnlyPart * getPartFromWidget(const QWidget * pWidget) const;
 signals:
@@ -73,9 +76,28 @@ public slots:
   virtual void switchToTabPageMode();
 
 
-protected:
+  /** Fills the show-hide menu for the output views */
+  virtual void fillOutputToolViewsMenu();
+  /** Fills the show-hide menu for the tree views */
+  virtual void fillTreeToolViewsMenu();
 
+  /** Changes the show-hide state of a single tree or output tool window */
+  virtual void toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData);
+
+  /** Changes the show-hide state of a tool dock base (either output or tree tool view)*/
+  virtual void toggleToolDockBaseState(const ViewMenuActionPrivateData &ActionData);
+
+  /** Shows all tools views of a type (OutputView or TreeView*/
+  virtual void showAllToolWin(EView eView,bool show);
+
+  /** Updates the toggle state of the actions to show or hide the tool windows */
+  virtual void updateActionState();
+
+protected:
+  /** Reimplemented from QWidget just to get the info, that the window will now be shown */
   void resizeEvent(QResizeEvent *ev);
+  /** Adds a tool view window to the output or tree views*/
+  void addToolViewWindow(EView eView,   QextMdiChildView *child, const QString &name);
 
 
 private slots:
@@ -90,8 +112,11 @@ private slots:
   
 private:
   
+  /** Fills the show-hide menu for a tool view (output or tree view) */
+  void fillToolViewsMenu(EView eView);
+
   virtual bool queryClose();
-  
+
 
 /**\brief Creates a wrapper of type QextMdiChildView for the given view.
 
@@ -119,8 +144,8 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   void saveMDISettings();
   void loadMDISettings();
   
-  KAction* m_stopProcesses;
-  
+  KAction       * m_stopProcesses;                 //!< Stops all running processes
+
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:QextMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref TopLevelMDI::m_childViewMap "m_childViewMap"
   QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
@@ -131,6 +156,72 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   QPtrList<QextMdiChildView> m_partViews;          //!< Lists all part views
 
   bool m_closing;                                  //!< true if we are about to close or just closing
+
+  // Members for dealing with the tool views
+  bool             m_myWindowsReady;               //!< true: gideon s windows are ready
+  ViewMenuAction * m_pShowOutputViews;             //!< Shows or hides all output views
+  ViewMenuAction * m_pShowTreeViews;               //!< Shows or hides all tree views
+  KActionMenu *    m_pTreeToolViewsMenu;           //!< Menu for changing the show-hide state of the tree tool views
+  KActionMenu *    m_pOutputToolViewsMenu;         //!< Menu for changing the show-hide state of the output tool views
+  QString          m_CurrentOutputTab;             //!< Holds the previously active output tool view, if all output views have been hidden
+  QString          m_CurrentTreeTab;               //!< Holds the previously active tree tool view, if all output views have been hidden
+
+};
+
+//=========================
+/**\brief Data for ViewMenuAction
+*/
+struct ViewMenuActionPrivateData
+{
+  KDockWidget * pDockWidget;                        //!< Pointer to the KDockWidget to hide or show
+  QextMdiChildView *pChildView;
+  TopLevelMDI::EView eView;                         //!< Which tool view the action is for
+};
+
+/**\brief Mereley a KToggleAction whith some additional data to store the window
+*/
+class ViewMenuAction : public KToggleAction
+{
+ Q_OBJECT
+ public:
+  ViewMenuAction(ViewMenuActionPrivateData Data, const QString &Name);
+    /**
+     * Constructs an action with text, icon, potential keyboard
+     * shortcut, and a SLOT to call when this action is invoked by
+     * the user.
+     *
+     * If you do not want or have a keyboard shortcut, set the
+     * @p cut param to 0.
+     *
+     * This is the other common KAction used.  Use it when you
+     * @p do have a corresponding icon.
+     *
+     * @param Data The data to be used when activated.
+     * @param text The text that will be displayed.
+     * @param pix The icon to display.
+     * @param cut The corresponding keyboard shortcut.
+     * @param receiver The SLOT's parent.
+     * @param slot The SLOT to invoke to execute this action.
+     * @param parent This action's parent.
+     * @param name An internal name for this action.
+     */
+    ViewMenuAction(
+             ViewMenuActionPrivateData Data,
+             const QString& text, const QString& pix, const KShortcut& cut,
+             const QObject* receiver, const char* slot,
+             KActionCollection* parent, const char* name );
+
+  const ViewMenuActionPrivateData* getData(void)
+    {return &WindowData;}
+
+  signals:
+    void activated (const ViewMenuActionPrivateData &);
+  protected slots:
+    virtual void slotActivated();
+
+  private:
+  /**\brief The data of KToggleAction*/
+  ViewMenuActionPrivateData WindowData;    //!< My data to identify the window to hide or show
 
 };
 

@@ -38,8 +38,8 @@
     <text>&amp;View</text>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
-    <Action name="view_selectviews"/>
-    <Action name="view_outputviews"/>
+    <Action name="view_tree_tool_views"/>
+    <Action name="view_output_tool_views"/>
     <Separator/>
     <Merge/>
   </Menu>
@@ -96,6 +96,13 @@
   <text>Build Toolbar</text>
   <Merge/>
   <Action name="stop_processes"/>
+</ToolBar>
+
+<ToolBar name="viewToolBar" position="Top" iconText="IconOnly" >
+  <text>View Toolbar</text>
+  <Merge/>
+  <Action name="tree_view"/>
+  <Action name="output_view"/>
 </ToolBar>
 
 <ToolBar name="browserToolBar" position="Top" newline="true">

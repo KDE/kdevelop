@@ -30,18 +30,187 @@
 #include "toplevel.h"
 #include "toplevel_mdi.h"
 
+// ====================================================== class ViewMenuAction
+ViewMenuAction::ViewMenuAction(
+  ViewMenuActionPrivateData Data,
+  const QString &Name):
+  KToggleAction(Name),
+  WindowData (Data)
+{}
 
-TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
-  : QextMdiMainFrm(parent, name), m_closing(false)
+ViewMenuAction::ViewMenuAction(
+  ViewMenuActionPrivateData Data,
+  const QString& text, const QString& pix, const KShortcut& cut,
+  const QObject* receiver, const char* slot,
+  KActionCollection* parent, const char* name ):
+  KToggleAction(text, pix, cut, 0,0, parent, name),
+  WindowData (Data)
 {
-	KAction * action;
+  connect(this, SIGNAL(activated(const ViewMenuActionPrivateData &)), receiver, slot);
+}
 
-	action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
-  action->setStatusText( i18n("Switches to the next window") );
+void ViewMenuAction::slotActivated()
+{
+  KToggleAction::slotActivated();
+  emit activated(WindowData);
+}
 
-	action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
-  action->setStatusText( i18n("Switches to the previous window") );
 
+/** \brief The state of a single tool window (minor helper class)
+ *
+ * If a tool window (type QWidget) has to be displayed, it is wrapped by a QextMdiChildView
+ * which in turn is embedded into a KDockWidget.
+ *
+ * This class works on the KDockWidget wrapper for the tool windows.
+ *
+ * A tool window (type KDockWidget) is embedded into the main window in 2 ways depending
+ * on the number of tool windows:
+ * -# If there is just one tool window, the tool window is embedded into a KDockWidget
+ *    which is docked directely to the main window or which is top level, depending
+ *    on the mdi mode.
+ * -# If there is more than one tool window, the tool windows are put into a KDockTabWidget
+ *    which is embedded into another KDockWidget which in turn is docked to the main
+ *    window or which is top level, depending on the mdi mode.
+ * A tool windows parent can
+ * This class figures out how a single tool window is embedded. It determines the various
+ * states of the tool window, its parent tab group and its dock base if those exist.
+ *
+ * \b Usage \n
+ * if you have a KDockWidget which represents a tool window, just use
+ * \code
+ * KDockWidget *pDockWidget = ...
+ * const ToolWindowState winState(pKDockWidget);
+ * // now you can use all of winState's contents, e. g.
+ * if (winState.hasDockBaseWindow) winState.pDockBaseWindow->...
+ * ...
+ * \endcode
+ * Making winState constant makes shure nobody changes its contents after it
+ * has been created. It would have also been possible to make all members private
+ * and use access functions, but I don't think it is worth the trouble.
+ */
+class ToolWindowState
+{
+  public:
+  ToolWindowState (KDockWidget *pDockWidget);
+  bool            hasDockWidget;        //!< Is there a DockWidget (pDockWidget != 0)
+  KDockTabGroup * pTabGroup;            //!< Pointer to the parent tab group or 0
+  bool            hasTabGroup;          //!< true if there is a parent tab group
+  bool            mayBeShown;           //!< true if there is a DockWidget and it may be shown
+  bool            mayBeHide;            //!< true if there is a DockWidget and it may be hidden
+  KDockWidget   * pDockBaseWindow;      //!< Pointer to the window which contains all tool windows (may be equal to pDockWidget)
+  bool            hasDockBaseWindow;    //!< true, if there is a dockBaseWindow
+  bool            dockBaseMayBeShow;    //!< true if thre is a dock base window and it may be shown
+  bool            dockBaseMayBeHide;    //!< true if thre is a dock base window and it may be hidden
+  bool            dockBaseMayBeDockBack;//!< true if thre is a dock base window and it may be dock back
+  bool            dockBaseIsTopLevel;
+  QString         dockBaseName;
+  bool            viewMenuChecked;      //!< true if the view menu item which belongs to pDockWidget should be checked
+  bool            viewMenuEnabled;      //!< true if the view menu item which belongs to pDockWidget should be enabled
+  bool            dockBaseIsHidden;
+  bool            dockBaseIsVisible;    //!< true if there is a dock base  and it is visible
+};
+
+ToolWindowState::ToolWindowState(KDockWidget *pDockWidget)
+{
+  // Determine the state of the windows inwolved
+  hasDockWidget     = (pDockWidget != 0);
+  pTabGroup         = (hasDockWidget)?pDockWidget->parentDockTabGroup():0L;
+  hasTabGroup       = (pTabGroup != 0);
+  mayBeShown        = (hasDockWidget)?pDockWidget->mayBeShow():false;
+  mayBeHide         = (hasDockWidget)?pDockWidget->mayBeHide():false;
+
+  // Search for the dock base window
+  pDockBaseWindow = 0;
+  if (hasTabGroup)        pDockBaseWindow = pDockWidget->dockManager()->findWidgetParentDock(pTabGroup);
+  else if (hasDockWidget) pDockBaseWindow = pDockWidget->dockManager()->findWidgetParentDock(pDockWidget);
+  if (mayBeHide && !pDockBaseWindow)
+  {
+    pDockBaseWindow = pDockWidget;  // If I'm the only tool window, I'm the dock base!
+  }
+  hasDockBaseWindow     = (pDockBaseWindow !=0);
+  dockBaseMayBeDockBack = (hasDockBaseWindow)?pDockBaseWindow->isDockBackPossible():false;
+  dockBaseMayBeShow     = (hasDockBaseWindow)?pDockBaseWindow->mayBeShow():false;
+  dockBaseMayBeHide     = (hasDockBaseWindow)?pDockBaseWindow->mayBeHide():false;
+  dockBaseIsTopLevel    = (hasDockBaseWindow)?(pDockBaseWindow->parent()==0):false;
+  dockBaseName          = (hasDockBaseWindow)?(pDockBaseWindow->caption()):QString("");
+  dockBaseIsHidden      = (hasDockBaseWindow)?(pDockBaseWindow->isHidden()):false;
+  dockBaseIsVisible     = (hasDockBaseWindow)?(pDockBaseWindow->isVisible()):false;
+  viewMenuChecked       = (hasTabGroup || mayBeHide)?true:false;
+  viewMenuEnabled       = !dockBaseMayBeDockBack && !dockBaseMayBeShow && !dockBaseIsHidden;
+}
+
+/** \brief The state of a tool window's dock base (minor helper class)
+ *
+ * For a description how tool windows are embedded into the main window see ToolWindowState.
+ *
+ * This class takes a list of tool window , figures out who is the dock base window
+ * for them and determines various state flags for the dock base.
+ * Additionaly, it counts how many tool views of the list are visible (member noViews)
+ *
+ * \b Usage \n
+ * \code
+ * const ToolDockBaseState dockBaseState(m_outputViews); //TopLevelMDI::m_outputViews
+ * // now you can use all of dockBaseState's contents, e. g.
+ * if (dockBaseState.hasDockBaseWindow) dockBaseState.pDockBaseWindow->...
+ * ...
+ * \endcode
+ * Making dockBaseState constant makes shure nobody changes its contents after it
+ * has been created. It would have also been possible to make all members private
+ * and use access functions, but I don't think it is worth the trouble.
+ */
+class ToolDockBaseState
+{
+  public:
+  ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews);
+  KDockWidget      * pDockBaseWindow;      //!< Pointer to the window which contains all tool windows (may be equal to pDockWidget)
+  QextMdiChildView * pFirstToolWindow;     //!< The first tool window found
+  bool              hasDockBaseWindow;     //!< true if there is at least one parent tool window
+  bool              dockBaseIsHidden;      //!< true if there is a parent and it is hidden
+  bool              dockBaseIsVisible;     //!< true if there is a parent and it is visible
+  bool              dockBaseMayBeDockBack; //!< true if thre is a parent tool window and it may be dock back
+  int               noViews;               //!< number of single tool windows visible
+};
+
+ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
+  pDockBaseWindow      (0L),
+  pFirstToolWindow     (0L),
+  hasDockBaseWindow    (false),
+  dockBaseIsHidden     (false),
+  dockBaseIsVisible    (false),
+  dockBaseMayBeDockBack(false),
+  noViews              (0)
+{
+
+  QPtrListIterator<QextMdiChildView> it(*pViews);
+  for( ; it.current(); ++it)                                        // Iterate through all views
+  {
+    QObject *pParent=it.current()->parent();
+    if (!pParent) continue;
+    KDockWidget * pDockWidget = 0;
+    if (pParent->inherits("KDockWidget")) pDockWidget = (KDockWidget*)pParent;
+    if (!pDockWidget) continue;
+    const  ToolWindowState winState(pDockWidget);
+    if (!pFirstToolWindow && winState.viewMenuChecked) pFirstToolWindow = it.current();
+    if (winState.hasDockBaseWindow && !hasDockBaseWindow)   // Just take the firt dock base window
+    {
+      hasDockBaseWindow  = true;
+      pDockBaseWindow    = winState.pDockBaseWindow;
+      dockBaseMayBeDockBack = winState.dockBaseMayBeDockBack;
+      dockBaseIsVisible     = winState.dockBaseIsVisible;
+      if (winState.dockBaseIsHidden ||
+         (winState.dockBaseMayBeDockBack && !winState.dockBaseIsVisible))
+         dockBaseIsHidden = true;  //TODO: not just parentIsHidden = winState.parentIsHidden?
+
+    }
+    if (winState.viewMenuChecked) noViews++;
+  }
+}
+
+// ====================================================== class TopLevelMDI
+TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
+  : QextMdiMainFrm(parent, name), m_stopProcesses(0L), m_closing(false),
+    m_myWindowsReady(false),  m_pShowOutputViews(0L), m_pShowTreeViews(0L)
+{
 }
 
 
@@ -121,22 +290,47 @@ void TopLevelMDI::createFramework()
 }
 
 
+/**
+ * This function adds a number of actions to the KActionCollection of the base class
+ * KXMLGUIClient.
+ * They are added to menus by means of the GUI-File gideonui.rc.
+ */
 void TopLevelMDI::createActions()
 {
   ProjectManager::getInstance()->createActions( actionCollection() );
-  
+
   KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
   KAction *action;
-  
-  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop", 
+
+  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop",
                 Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
                 actionCollection(), "stop_processes" );
   m_stopProcesses->setStatusText(i18n("Stop all running processes"));
   m_stopProcesses->setEnabled( false );
-  
+
   connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
            this, SLOT(slotActiveProcessCountChanged(uint)) );
+
+  // Create actions for the view menu
+  ViewMenuActionPrivateData ViewActionData;   // ViewActionData holds the parameter for the action
+  ViewActionData.eView       = OutputView;    // The new action will be for the output tool window
+  ViewActionData.pChildView  = 0L;            // It is not for a single window, but for all output tool windows
+  ViewActionData.pDockWidget = 0L;            // Therefore,the window pointers are set to null
+  m_pShowOutputViews = new ViewMenuAction(ViewActionData,i18n("All Output Views"), "view_bottom",
+                CTRL + SHIFT + Key_O, this, SLOT(toggleToolDockBaseState(const ViewMenuActionPrivateData &)),
+                actionCollection(), "output_view" );
+  m_pShowOutputViews->setStatusText(i18n("Output View"));
+  m_pShowOutputViews->setEnabled( true );
+
+  ViewActionData.eView       = TreeView;      // The next action will be for the tree tool windows
+  m_pShowTreeViews = new ViewMenuAction(ViewActionData,i18n("All Tree Views"), "tree_win",
+                CTRL + SHIFT + Key_T, this, SLOT(toggleToolDockBaseState(const ViewMenuActionPrivateData &)),
+                actionCollection(), "tree_view" );
+  m_pShowTreeViews->setStatusText(i18n("Tree View"));
+  m_pShowTreeViews->setEnabled( true );
+
+  connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
 
   action = KStdAction::showMenubar(
      this, SLOT(slotShowMenuBar()),
@@ -147,7 +341,7 @@ void TopLevelMDI::createActions()
       this, SLOT(slotKeyBindings()),
       actionCollection(), "settings_configure_shortcuts" );
   action->setStatusText(i18n("Lets you configure shortcut keys"));
-           
+
   action = KStdAction::configureToolbars(
       this, SLOT(slotConfigureToolbars()),
       actionCollection(), "settings_configure_toolbars" );
@@ -156,6 +350,20 @@ void TopLevelMDI::createActions()
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText(i18n("Lets you customize KDevelop") );
+
+	action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
+  action->setStatusText( i18n("Switches to the next window") );
+
+	action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
+  action->setStatusText( i18n("Switches to the previous window") );
+
+  m_pOutputToolViewsMenu = new KActionMenu( i18n("Output Tool Views"), 0, "view_output_tool_views");
+	connect(m_pOutputToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillOutputToolViewsMenu()));
+  actionCollection()->insert(m_pOutputToolViewsMenu);
+
+  m_pTreeToolViewsMenu = new KActionMenu( i18n("Tree Tool Views"), 0, "view_tree_tool_views");
+	connect(m_pTreeToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillTreeToolViewsMenu()));
+  actionCollection()->insert(m_pTreeToolViewsMenu);
 }
 
 void TopLevelMDI::slotActiveProcessCountChanged( uint active )
@@ -193,27 +401,45 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 
 void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
 {
-  // Bugfix for addWindow() using the wrong parent when a toolview is activated...
-  // Don't activate one unless necessary & possible
-  if (m_partViews.find(activeWindow()) == -1 && m_partViews.first()) {
-    activateView(m_partViews.first());
-  }
-
   QextMdiChildView *child = wrapper(view, name);
 
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
-  
+
   addWindow(child, QPoint(0,0), mdiFlags);
 
   m_partViews.append(child);
 }
 
-
-void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
+/** Adds a tool view window to the output or tree views
+ *
+ *  First the dock base for the new tool window has to be determined.
+ *  If the GUI has already been initialized (m_myWindowsReady == true) the list of
+ *  tool views is searched for the first visible window which will the serve as dock base.
+ *
+ *  If the GUI is in the process of beeing build up (m_myWindowsReady == false)
+ *  the state of the windows can not be determined reliably. Therefore, the first
+ *  tool window of the correct type (OuputView or TreeView) will be used as dock base.
+ *
+ *  If there is no tool window (first == null) then either TopLevelMDI will serve
+ *  as dock base or the first part view, depending on the mdi mode.
+ */
+void TopLevelMDI::addToolViewWindow(EView eView,   QextMdiChildView *child, const QString &name)
 {
-  QWidget *first = m_selectViews.first();
+  // Count how many windows are visible
+  QWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
+  QPtrList<QextMdiChildView> *pViews = (eView==OutputView)?&m_outputViews:&m_selectViews;
+  if(m_myWindowsReady)
+  {
+    ToolDockBaseState dockBaseState(pViews);
+    first = dockBaseState.pFirstToolWindow;
+  }
+  else
+  {
+    if(eView == OutputView) first = m_outputViews.first();
+    else                    first = m_selectViews.first();
+  }
+  // Check, if the tool window is visible (it may have been closed using the close button)
 
-  QextMdiChildView *child = wrapper(view, name);
 
   if (!first)  // If there is no selected view yet ...
   {
@@ -222,12 +448,21 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 
     if (!first)
       first = this;
-    
-    addToolWindow(child, KDockWidget::DockLeft, first, 25, name, name);
+
+    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockBottom, first, 70, name, name);
+    else                      addToolWindow(child, KDockWidget::DockLeft, first, 25, name, name);
   }
   else
-    addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
+  {
+    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
+    else                      addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
+  }
+}
 
+void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
+{
+  QextMdiChildView *child = wrapper(view, name);
+  addToolViewWindow(TreeView, child, name);
   m_selectViews.append(child);
 }
 
@@ -239,23 +474,8 @@ void TopLevelMDI::embedSelectViewRight ( QWidget* view, const QString& title )
 
 void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 {
-  QWidget *first = m_outputViews.first();
-
   QextMdiChildView *child = wrapper(view, name);
-
-  if (!first)   // If there is no output view yet ...
-  {
-    if (mdiMode() == QextMdi::TabPageMode)
-      first = m_partViews.first();
-
-    if (!first)
-      first = this;
-
-    addToolWindow(child, KDockWidget::DockBottom, first, 70, name, name);
-  }
-  else
-    addToolWindow(child, KDockWidget::DockCenter, first, 70, name, name);
-
+  addToolViewWindow(OutputView, child, name);
   m_outputViews.append(child);
 }
 
@@ -339,7 +559,7 @@ void TopLevelMDI::loadMDISettings()
   config->setGroup("UI");
 
   int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
-  switch (mdiMode) 
+  switch (mdiMode)
   {
   case QextMdi::ToplevelMode:
     {
@@ -348,10 +568,10 @@ void TopLevelMDI::loadMDISettings()
       switchToToplevelMode();
     }
     break;
-  
+
   case QextMdi::ChildframeMode:
     break;
-  
+
   case QextMdi::TabPageMode:
     {
       int childFrmModeHt = config->readNumEntry("Childframe mode height", kapp->desktop()->height() - 50);
@@ -359,11 +579,11 @@ void TopLevelMDI::loadMDISettings()
       switchToTabPageMode();
     }
     break;
-  
+
   default:
     break;
   }
-  
+
   // restore a possible maximized Childframe mode
   bool maxChildFrmMode = config->readBoolEntry("maximized childframes", true);
   setEnableMaximizedChildFrmMode(maxChildFrmMode);
@@ -431,7 +651,7 @@ void TopLevelMDI::slotSettings()
 
   QVBox *vbox = dlg.addVBoxPage(i18n("General"));
   SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
-  
+
   KConfig* config = kapp->config();
   config->setGroup("General Options");
   gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
@@ -599,6 +819,239 @@ void TopLevelMDI::fillWindowMenu()
    }
 }
 
+/** Fills the show-hide menu for the output views */
+void TopLevelMDI::fillOutputToolViewsMenu()
+{
+  fillToolViewsMenu(OutputView);    // Fill tool-view menu for output views
+}
+
+/** Fills the show-hide menu for the tree views */
+void TopLevelMDI::fillTreeToolViewsMenu()
+{
+  fillToolViewsMenu(TreeView);      // Fill tool-view menu for tree views
+}
+
+//=============== fillToolViewsMenu ===============//
+/** Fills the show-hide menu for a tool view (output or tree view)
+ *
+ * The menu has the following entries:
+ * - An item to show or hide the dock base window ("All Tree Views" or " All Ouput Views")
+ * - A seperator
+ * - An item for each tool window. The item is disabled, if the dock base is not visible.
+ *   It is checked, if the tool window would be visible or has a tab page if the dock base
+ *   is made visible
+ */
+void TopLevelMDI::fillToolViewsMenu(
+     EView eView)
+{
+  // Handle differences between output and tree views
+  QPtrList<QextMdiChildView> *pViews        = 0L;         // The views to make a menu from
+  KActionMenu *              pActionMenu    = 0L;         // The menu to build
+  ViewMenuAction  *         pAllViewsAction = 0L;         // Pointer to action which will toggle the state of all windows
+
+  if (eView == OutputView)
+  {
+    pViews          = &m_outputViews;
+    pActionMenu     = m_pOutputToolViewsMenu;
+    pAllViewsAction = m_pShowOutputViews;
+  }
+  else
+  {
+    pViews          = &m_selectViews;
+    pActionMenu     = m_pTreeToolViewsMenu;
+    pAllViewsAction = m_pShowTreeViews;
+  }
+
+  ToolDockBaseState allToolWinState(pViews);
+
+  // Prepare fixed part of the menu
+  pActionMenu->popupMenu()->clear();                                // Remove all entries
+  pActionMenu->insert(pAllViewsAction);
+  pActionMenu->popupMenu()->insertSeparator();
+
+  // Prepare variable part of the menu
+  m_myWindowsReady = true;                                            // From now on, we can rely on the windows beeing active
+  QPtrListIterator<QextMdiChildView> it(*pViews);
+  for( ; it.current(); ++it)                                          // Iterate through all views
+  {
+     QString Name=it.current()->tabCaption();                       // Get the name of the view
+     KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
+     ViewMenuActionPrivateData ActionData;
+     ActionData.pDockWidget = pDockWidget;                          // Save the pointer to the DockWidget
+     ActionData.pChildView = it.current();                          // Save the pointer to the view
+     ActionData.eView      = eView;                                 // Save whether it is an output or tree view
+
+     ViewMenuAction* action = new ViewMenuAction(ActionData,Name);  // Action to show or hide the view window
+     connect(action,                                                // Call toggleSingleToolWin if the action is activated
+             SIGNAL(activated(const ViewMenuActionPrivateData &)),
+             this,
+             SLOT(toggleSingleToolWin(const ViewMenuActionPrivateData &)));
+
+     const  ToolWindowState winState(pDockWidget);
+     action->setChecked(winState.viewMenuChecked);
+     action->setEnabled(
+             (allToolWinState.hasDockBaseWindow && !allToolWinState.dockBaseIsHidden)
+             || (allToolWinState.noViews==0));
+     pActionMenu->insert(action);
+  }
+}
+
+/** Updates the toggle state of the actions to show or hide the tool windows */
+void TopLevelMDI::updateActionState()
+{
+    ToolDockBaseState outputToolState(&m_outputViews);
+    ToolDockBaseState treeToolState (&m_selectViews);
+
+    m_pShowOutputViews->setChecked(outputToolState.dockBaseIsVisible);
+    m_pShowTreeViews  ->setChecked(treeToolState.dockBaseIsVisible);
+
+}
+
+/** Changes the show-hide state of a tool dock base (either output or tree tool view)*/
+void TopLevelMDI::toggleToolDockBaseState(const ViewMenuActionPrivateData &ActionData)
+{
+  m_myWindowsReady = true;                                    // From now on, we can rely on the windows beeing active
+  // Handle differences between output and tree views
+  QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+  pViews = (ActionData.eView == OutputView)?&m_outputViews:&m_selectViews;
+
+  QPtrListIterator<QextMdiChildView> it(*pViews);
+  const  ToolDockBaseState allWinState(pViews);
+
+  if(allWinState.dockBaseIsVisible)           // If it is visible
+  {
+    allWinState.pDockBaseWindow->undock();    // undock it, so it is invisible
+  }
+  else if (allWinState.dockBaseMayBeDockBack) // If it may be dock back, it is invisible
+  {
+    allWinState.pDockBaseWindow->dockBack();  // Show it again
+  }
+  else if(allWinState.dockBaseIsHidden)       // In toplevel mode the tool window is just hidden
+  {
+    allWinState.pDockBaseWindow->show();      // Then show it
+  }
+  else
+  {
+    // not a single tool window found, so we show all of them
+    showAllToolWin(ActionData.eView,1);
+  }
+
+}
+
+/** Shows all tools views of a type (OutputView or TreeView*/
+void TopLevelMDI::showAllToolWin(EView eView, bool show )
+{
+  // Handle differences between output and tree views
+  QPtrList<QextMdiChildView> *pViews        = 0L;         // The views to make a menu from
+
+  pViews =(eView==OutputView)?&m_outputViews:&m_selectViews;
+
+  // If the tool window is not visible, first show it!
+  const  ToolDockBaseState allWinState(pViews);
+  if(allWinState.dockBaseIsHidden)
+  {
+    ViewMenuActionPrivateData ActionData;
+    ActionData.eView = eView;
+    ActionData.pChildView = 0;
+    ActionData.pDockWidget = 0;
+    toggleToolDockBaseState(ActionData);
+  }
+
+  // Now switch on every single tool window
+  m_myWindowsReady = true;                                            // From now on, we can rely on the windows beeing active
+  QPtrListIterator<QextMdiChildView> it(*pViews);
+  for( ; it.current(); ++it)                                          // Iterate through all views
+  {
+     QString Name=it.current()->tabCaption();                       // Get the name of the view
+     KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
+     ViewMenuActionPrivateData ActionData;
+     ActionData.pDockWidget = pDockWidget;                          // Save the pointer to the DockWidget
+     ActionData.pChildView = it.current();                          // Save the pointer to the view
+     ActionData.eView      = eView;                                 // Save whether it is an output or tree view
+     const  ToolWindowState winState(pDockWidget);
+     if(winState.viewMenuChecked != show)
+             toggleSingleToolWin(ActionData);
+  }
+
+}
+
+/** Changes the show-hide state of a single tree or output tool window */
+void TopLevelMDI::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData)
+{
+  // Determine the state of the windows inwolved
+  const  ToolWindowState winState(ActionData.pDockWidget);
+  QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+  pViews = (ActionData.eView == OutputView)?&m_outputViews:&m_selectViews;
+
+  const  ToolDockBaseState allWinState(pViews);
+  if(winState.hasTabGroup)
+  {                                                    // the window has a tab page
+    if (winState.mayBeShown)
+    {
+      QWidget *pActiveWidget=winState.pTabGroup->currentPage(); // remember the active page
+      ActionData.pDockWidget->changeHideShowState();   // pDockWidget has not not been the active page,now it is acitve
+      ActionData.pDockWidget->changeHideShowState();   // and now it is gone
+      if (allWinState.noViews > 2)                     // Is still more than one page left?
+      {                                                // Yes, so pTabGroup still exists...
+        winState.pTabGroup->showPage(pActiveWidget);              // switch back to previouse active page
+      }
+    }
+    else
+    {
+      ActionData.pDockWidget->changeHideShowState();   // and now it is gone
+    }
+  }
+  else    // It does not have a tab group
+  {
+    if (winState.hasDockWidget)
+    {
+      if(winState.mayBeHide)
+      {
+         ActionData.pDockWidget->changeHideShowState();   // and now it is gone
+      }
+      else
+      {
+        // Count how many windows are visible
+        KDockWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
+        QPtrListIterator<QextMdiChildView> it((ActionData.eView==OutputView)?m_outputViews:m_selectViews);
+        for( ; it.current(); ++it)                              // Iterate through all  views
+        {
+          KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
+          if(pDockWidget)
+          {
+            KDockTabGroup *pTabGroup = pDockWidget->parentDockTabGroup(); //  Get the TabGroup which belongs to pDockWidget
+            if (pDockWidget->mayBeHide() || pTabGroup)                    // The window exists, if it has a TabGroup or if it can be hidden
+            {
+              first = manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
+              break;
+            }
+          }
+        }
+        if (!first)
+        {
+          if (mdiMode() == QextMdi::TabPageMode)
+          {
+            first = manager()->findWidgetParentDock (m_partViews.first());
+          }
+          if (!first) first = m_pDockbaseAreaOfDocumentViews;
+          if (ActionData.eView == OutputView) ActionData.pDockWidget->manualDock(first,KDockWidget::DockBottom, 70);
+          else                                ActionData.pDockWidget->manualDock(first,KDockWidget::DockLeft  , 25);
+        }
+        else
+        {
+          ActionData.pDockWidget->manualDock(first,KDockWidget::DockCenter, 25);
+        }
+      }
+    }
+    else // It does not have a DockWidget
+    {
+         addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name());
+    }
+  }
+}
+
+
+//=============== getPartFromWidget ===============//
 KParts::ReadOnlyPart * TopLevelMDI::getPartFromWidget(const QWidget * pWidget) const
 {
   // Loop over all parts to search for a matching widget
@@ -613,18 +1066,18 @@ KParts::ReadOnlyPart * TopLevelMDI::getPartFromWidget(const QWidget * pWidget) c
 
 void TopLevelMDI::switchToToplevelMode(void)
 {
-  QextMdiMainFrm::switchToToplevelMode();
   saveMDISettings();
+  QextMdiMainFrm::switchToToplevelMode();
 }
 
 void TopLevelMDI::switchToChildframeMode(void)
 {
-  QextMdiMainFrm::switchToChildframeMode();
   saveMDISettings();
+  QextMdiMainFrm::switchToChildframeMode();
 }
 void TopLevelMDI::switchToTabPageMode(void)
 {
-  QextMdiMainFrm::switchToTabPageMode();
   saveMDISettings();
+  QextMdiMainFrm::switchToTabPageMode();
 }
 #include "toplevel_mdi.moc"
