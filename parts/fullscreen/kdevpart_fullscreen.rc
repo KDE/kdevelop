@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="fullscreen" library="libfullscreenplugin" version="1">
+<kpartplugin name="fullscreen" library="libfullscreenplugin" version="2">
 <MenuBar>
   <Menu name="view">
     <Text>&amp;View</Text>
@@ -7,6 +7,6 @@
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
-  <Action name="fullscreen"/>
+  <Action name="fullscreen" group="zoom_operations"/>
 </ToolBar>
 </kpartplugin>
