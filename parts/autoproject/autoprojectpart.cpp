@@ -446,23 +446,29 @@ void AutoProjectPart::slotBuild()
 
 void AutoProjectPart::slotBuildActiveTarget()
 {
-  kdDebug( 9020 ) << "Starting to execute build Active Target" << endl;
+  // Get a pointer to the active target
   TargetItem* titem = m_widget->activeTarget();
 
   if ( !titem )
     return;
 
+  // Calculate the complete name of the target and store it in name
   QString name = titem->name;
-  kdDebug( 9020 ) << "Active Target.name :" << name << endl;
-  if ( titem->primary == "LIBRARIES" )
-    name + ".a";
-  else if ( titem->primary == "LTLIBRARIES" )
-    name + ".la";
-  else if ( titem->primary == "KDEDOCS" )
+  if ( titem->primary == "KDEDOCS" )
     name = "index.cache.bz2";
 
+  // Calculate the full path of the active target and store it in path
+  QString path = buildDirectory();
+  if (!path.endsWith("/") && !path.isEmpty())
+    path += "/";
   QString relpath = m_widget->activeSubproject()->path.mid( projectDirectory().length() );
-  startMakeCommand( buildDirectory() + relpath, titem->name );
+  if (relpath.at(0) == '/')
+    path += relpath.mid(1);
+  else
+    path += relpath;
+  
+  // Call make
+  startMakeCommand( path, name );
 }
 
 
