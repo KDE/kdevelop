@@ -3224,20 +3224,11 @@ bleibt der Breakpoint "schwebend". In jedem Falle wird anschließend ein "continu
 
 Dies ist als "lazy breakpoints" bekannt.
 
-Dennoch müssen Sie vorsichtig sein. Wenn Sie versehentlich eine Unterbrechung in einer Datei setzen, die absolut nichts mit Ihrem 
-Programm zu tun hat, sie gehört also weder zu Ihrem Programm noch zu irgendeiner dynamischen Bibliothek Ihres Projektes, wird dieser 
-Breakpoint immer "schwebend" bleiben. Dies kann nicht verhindert werden, da er zu einer dynamischen Bibliothek gehören könnte. 
-
-Das Problem der "schwebenden" Unterbrechungen ist folgendes:
-Wenn Sie "Über Funktion" in einer Codezeile anwenden, die ein dlopen enthält oder zu einem dlopen führt, hängt es vom übersprungenen Code ab, was passieren wird. 
-Das dlopen wird von gdb abgefangen, wodurch die Ausführung unterbrochen wird. Nun gibt es zwei 
-Möglichkeiten, entweder gibt es dort "schwebende" Breakpoints, dann werden Sie als aktiv markiert und das anschließende "continue" 
-führt zu diesem Punkt. Oder es gibt keine, dann führt "continue" bis zur nächsten Eingabeaufforderung oder direkt zum Programmende. 
-Nichts von dem ist das, was erwartet wurde. Aus diesem Grund wird bei "Über Funktion" kein "continue" ausgeführt, sondern das 
-Programm bleibt angehalten und der "Gestoppt" Zustand wird in der Statuszeile angezeigt. Der Framestack befindet sich in der Routine 
-die den Stop verursacht hat.
-
-Es gibt keinen Ausweg aus dieser Situation, aber so konnte das Problem ein wenig abgemildert werden.
+Es kann jedoch zu einem Problem kommen, wenn Sie das "Über Funktion" Kommando benutzen und über Code springen, der eine Bibliothek lädt. 
+Es wird eine Unterbrechung beim Laden der Bibliothek ausgelöst, und der Debugger würde normalerweise ein "continue" ausführen (d.h. er würde
+bis zur nächsten Unterbrechung oder bis zum Ende des Codes ausführen). Der Benutzer erwartet jedoch, daß das Programm in der nächsten Zeile 
+anhält. Deshalb wird in dieser Situation kein "continue" ausgeführt, sondern wir lassen das Programm an diesem Punkt (dies wird irgendwo innerhalb 
+des dlopen Kommandos sein). Das mag etwas verwirren, kann aber nicht vermieden werden.
 
 <chapt>CVS Integration
 <p>
@@ -3682,9 +3673,9 @@ Weiterhin danken wir Jochen Wilhelmy für das Angebot seines Programms kwrite und
 
 Dank sei auch dem KDE Team und Stephan Kulow gesagt, die uns die Möglichkeit gaben, KDevelop über das CVS System zu bearbeiten.
 
-Wir hoffen, das unsere freie Arbeit an diesem Produkt zu einer besseren Akzeptanz freier Software und ihrer Entwicklung
+Wir hoffen, daß unsere freie Arbeit an diesem Produkt zu einer besseren Akzeptanz freier Software und ihrer Entwicklung
 führt. Ohne die Hilfe und den Idealismus vieler wäre die KDevelop Entwicklungsumgebung nicht in solch einer kurzen Zeit realisiert worden und wir sind
-Stolz daüber, das uns scnon so viele Benutzer über ihre guten Erfahrungen mit KDevelop berichteten und KDevelop zu seiner Bestimmung
+Stolz daüber, daß uns schon so viele Benutzer über ihre guten Erfahrungen mit KDevelop berichteten und KDevelop zu seiner Bestimmung
 brachten: Freien Software-Programmierern zu helfen, eine bessere Welt zu gestalten, in der die Benutzer die Freiheit haben,
 auszuwählen.
 

@@ -1,3 +1,7 @@
+2000-02-25 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated de.po and kdevelop.pot
+	* Changed en and de manual (chapter debugging)
+
 2000-02-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added new class support and new file support to real file view and classviewer
 	* added mkdir in realfileview
