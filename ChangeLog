@@ -1,3 +1,9 @@
+1999-08-04  Jonas Nordin  <jonas.nordin@cenacle.se>
+	* fixed parsing problems with methods using classpecification in
+	  returnvalues.
+	* fixed parsing problems with global forward declarations and their
+	  implementation(Bug#1644).
+
 1999-08-04 Jonas Nordin   <jonas.nordin@cenacle.se>
 	* Started to make the classparser respect namespaces.
 	* added menu for signals.
