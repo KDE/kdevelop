@@ -1,3 +1,7 @@
+2002-02-02  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: taskbar flickering on session loading
+    * bugfix: .kdevses in TabPage mode saves views as 'attached', not as 'detached' any more
+
 2002-01-31  F@lk Brettschneider <falk@kdevelop.org>
     * applied internationalization patch of Sergey A. Sukiyazov <corwin@micom.don.ru> and
       Sergey A. Boldyrev <oranta@micom.don.ru> (modified a little bit by myself). Thanks!

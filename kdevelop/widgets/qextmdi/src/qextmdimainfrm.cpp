@@ -1581,6 +1581,15 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
 }
 
 /** Shows the view taskbar. This should be connected with your "View" menu. */
+bool QextMdiMainFrm::isViewTaskBarOn()
+{
+   bool bOn = false;
+   if (m_pTaskBar)
+      bOn = m_pTaskBar->isSwitchedOn();
+   return bOn;
+}
+
+/** Shows the view taskbar. This should be connected with your "View" menu. */
 void QextMdiMainFrm::showViewTaskBar()
 {
    if (m_pTaskBar)

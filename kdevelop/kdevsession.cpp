@@ -242,7 +242,10 @@ void KDevSession::setConfigureArgs(const QString& configname,  const QString& co
 void KDevSession::recreateDocs(QDomElement& el){
   QDomElement mainframeEl = el.namedItem("Mainframe").toElement();
   bool bMaxMode = (bool) mainframeEl.attribute("MaximizeMode", "0").toInt();
-  ((QextMdiMainFrm*)m_pDocViewMan->parent())->setEnableMaximizedChildFrmMode(bMaxMode);
+  QextMdiMainFrm* pMainWidget = (QextMdiMainFrm*) qApp->mainWidget();
+  pMainWidget->setEnableMaximizedChildFrmMode(bMaxMode);
+  bool bTaskBarWasOn = pMainWidget->isViewTaskBarOn();
+  pMainWidget->hideViewTaskBar();
 
   // read the information about the documents
   QDomElement docsAndViewsEl = el.namedItem("DocsAndViews").toElement();
@@ -284,7 +287,7 @@ void KDevSession::recreateDocs(QDomElement& el){
 
   QextMdiChildView* pLastView = 0L;
   QextMdiChildFrm*  pLastFrm = 0L;
-  QextMdiIterator<QextMdiChildView*>* winListIter = ((QextMdiMainFrm*)m_pDocViewMan->parent())->createIterator();
+  QextMdiIterator<QextMdiChildView*>* winListIter = pMainWidget->createIterator();
   for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
     pLastView = winListIter->currentItem();
     if (bMaxMode && pLastView->isAttached()) {
@@ -307,6 +310,9 @@ void KDevSession::recreateDocs(QDomElement& el){
     for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
       winListIter->currentItem()->show();
     }
+  }
+  if (bTaskBarWasOn) {
+     pMainWidget->showViewTaskBar();
   }
 }
 
@@ -393,7 +399,8 @@ void KDevSession::saveViewGeometry( QWidget* pView, QDomElement viewEl)
   viewEl.setAttribute( "Height", geom.height());
 
   // MDI stuff
-  viewEl.setAttribute( "Attach", pMDICover->isAttached());
+  QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
+  viewEl.setAttribute( "Attach", pMDICover->isAttached() || (mdiMode == QextMdi::TabPageMode));
 }
 
 //-------------- Falk's Views restoring ---------//

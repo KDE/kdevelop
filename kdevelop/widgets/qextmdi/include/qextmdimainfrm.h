@@ -490,6 +490,10 @@ public slots:
    */
    virtual void switchToTabPageMode();
    virtual void finishTabPageMode();
+   /*
+   * @return if the view taskbar should be shown if there are MDI views
+   */
+   bool isViewTaskBarOn();
    /**
    * Shows the view taskbar. This should be connected with your "View" menu. 
    */
