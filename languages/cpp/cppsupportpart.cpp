@@ -100,7 +100,7 @@ enum { KDEV_DB_VERSION = 5 };
 enum { KDEV_PCS_VERSION = 4 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
-QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";;
+QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
 
 QStringList CppSupportPart::m_sourceExtensions = QStringList::split( ",", "c,C,cc,cpp,c++,cxx,m,mm,M" );
 QStringList CppSupportPart::m_headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );
