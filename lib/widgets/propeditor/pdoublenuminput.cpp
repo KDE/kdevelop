@@ -77,7 +77,7 @@ void PDoubleNumInput::updateProperty(double val)
 }
 void PDoubleNumInput::updateProperty(int val)
 {
-    emit propertyChanged(m_property, QVariant(val));
+    emit propertyChanged(m_property, QVariant(double(val/(double)pow(m_edit->digits(),10))));
 }
 
 }
