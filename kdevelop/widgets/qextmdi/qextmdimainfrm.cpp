@@ -101,6 +101,8 @@ void QextMdiMainFrm::createMdiManager()
 	m_pMdi=new QextMdiChildArea(this);
 	setCentralWidget(m_pMdi);
 	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
+	QObject::connect( m_pMdi, SIGNAL(closeActiveView()), this, SLOT(closeActiveView()) );
+	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
 }
 
 //============ createTaskBar ==============//
@@ -148,7 +150,7 @@ void QextMdiMainFrm::closeEvent(QCloseEvent *e)
 }
 
 //================ addWindow ================//
-void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach)
+void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach, bool bMaximized, QRect* pNormalSizeRect)
 {
 	QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool,bool,QRect*)), this, SLOT(attachWindow(QextMdiChildView*,bool,bool,QRect*)) );
 	QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*)), this, SLOT(detachWindow(QextMdiChildView*)) );
@@ -160,23 +162,17 @@ void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach)
 	QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
 	QObject::connect( pWnd, SIGNAL(windowCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
 
-/*F.B.	QextMdiChildViewPackedProperty * prop = g_pOptions->m_pWinPropertiesList->findProperty(pWnd->caption());
-	if(prop){
-		QextMdiChildViewProperty p;
-		g_pOptions->m_pWinPropertiesList->unpackProperty(&p,prop);
-		pWnd->setProperties(&p);
-		if(p.isDocked){
-			attachWindow(pWnd,bShow,false,&(p.rect)); //attach , do not cascade
-			if(p.isMaximized)pWnd->maximize();
-		} else {
-			pWnd->setGeometry(p.rect);
-			if(bShow)pWnd->show();
-			pWnd->youAreDetached();
-			if(bShow)pWnd->setFocus();
-		}
-	} else F.B.*/
-	if( bAttach)
-   	attachWindow(pWnd,bShow,true,0);
+	if( bAttach) {
+		if( pNormalSizeRect == 0)
+	   	attachWindow( pWnd, bShow, true, 0);
+		else
+			attachWindow( pWnd, bShow, false, pNormalSizeRect);	// do not cascade
+	}
+	else {	// don't attach
+		if( pNormalSizeRect != 0)
+			pWnd->setGeometry( *pNormalSizeRect);
+	}			
+	if( bMaximized) pWnd->maximize();
 }
 
 //============ attachWindow ============//
@@ -236,6 +232,8 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 	//Closes a child window. sends no close event : simply deletes it
 //F.B.	pWnd->saveProperties();
 	m_pWinList->removeRef(pWnd);
+	if( m_pWinList->count() == 0)
+		m_pCurrentWindow = 0;
 	
 	QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
 	QObject::disconnect( pWnd, SIGNAL(windowCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
@@ -348,11 +346,8 @@ void QextMdiMainFrm::childWindowGainFocus(QextMdiChildView *pWnd)
 
 void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
 {
-	if(pWnd==m_pCurrentWindow) {
-		//closeWindow(pWnd);
-		QextMdiViewCloseEvent* ce = new QextMdiViewCloseEvent( pWnd);
-		QApplication::postEvent( this, ce);
-	}
+	QextMdiViewCloseEvent* ce = new QextMdiViewCloseEvent( pWnd);
+	QApplication::postEvent( this, ce);
 }
 
 //##################################################
@@ -399,4 +394,23 @@ bool QextMdiMainFrm::event( QEvent* e)
 		return true;
 	}
 	return QMainWindow::event( e);		
+}
+
+/**
+ * close all views
+ */
+void QextMdiMainFrm::closeAllViews()
+{
+	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
+		w->close();
+	}
+}
+
+/**
+ * closes the view of the active (topchild) window
+ */
+void QextMdiMainFrm::closeActiveView()
+{
+	if( m_pCurrentWindow != 0)
+		m_pCurrentWindow->close();
 }

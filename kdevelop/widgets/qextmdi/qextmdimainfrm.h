@@ -91,7 +91,7 @@ public slots:
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
     */
-	virtual void addWindow(QextMdiChildView *pWnd,bool bShow, bool bAttach = true);
+	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach, bool bMaximized, QRect* pNormalSizeRect = 0);
    /**
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
@@ -138,6 +138,10 @@ protected slots:
     * Usually, if its view raises.
     */
 	virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
+  /** close all views */
+  virtual void closeAllViews();
+  /** closes the view of the active (topchild) window */
+  virtual void closeActiveView();
 };
 
 #endif //_QEXTMDIMAINFRM_H_
