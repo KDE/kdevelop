@@ -37,6 +37,7 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
 
+#ifndef KDE_USE_FINAL
 #ifdef _OS_WIN32_
  #include "win_undockbutton.xpm"
  #include "win_minbutton.xpm"
@@ -47,6 +48,7 @@
  #include "kde_minbutton.xpm"
  #include "kde_restorebutton.xpm"
  #include "kde_closebutton.xpm"
+#endif
 #endif
 
 //============ constructor ============//
