@@ -380,8 +380,8 @@ void CKDevelop::slotViewTTreeView(){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
   QRect rMainGeom= top_panner->geometry();
-  top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
+  top_panner->resize(rMainGeom.width(),rMainGeom.height());
 }
 void CKDevelop::showTreeView(bool show){
   if(bAutoswitch)
@@ -406,9 +406,9 @@ void CKDevelop::showTreeView(bool show){
       }
     }
     QRect rMainGeom= top_panner->geometry();
-    top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
     top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-   }
+    top_panner->resize(rMainGeom.width(),rMainGeom.height());
+  }
 }
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -421,8 +421,8 @@ void CKDevelop::slotViewTOutputView(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
   QRect rMainGeom= view->geometry();
-  view->resize(rMainGeom.width()-1,rMainGeom.height());
   view->resize(rMainGeom.width()+1,rMainGeom.height());
+  view->resize(rMainGeom.width(),rMainGeom.height());
 }
 
 void CKDevelop::showOutputView(bool show){
@@ -447,8 +447,8 @@ void CKDevelop::showOutputView(bool show){
       }
     }
     QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
+    view->resize(rMainGeom.width(),rMainGeom.height());
   }
 }
 void CKDevelop::slotViewTStdToolbar(){

@@ -1,3 +1,8 @@
+1999-03-15  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* changed the main.cpp in cpp.tar.gz
+	* fixed the resize bug by switching to the treeview and outputview
+
 1999-03-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed saving of changed key-configuration in the Setup dialog
 	* fixed autosaving to be disabled during processes (if a process runs and then files are saved, the build process would be confused)
