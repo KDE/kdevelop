@@ -539,9 +539,9 @@ CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
 	if( leftParen != -1 )
 	    e = e.left( leftParen );
 
-	e = e.replace( QRegExp("::"), "." );
-	if( e.endsWith(".") )
-	    e = e.left( e.length() - 1 );
+	//e = e.replace( QRegExp("::"), "." );
+	if( e.endsWith("::") )
+	    e = e.left( e.length() - 2 );
 
 	type = QString::null;
 	if( it == exprList.begin() ){
@@ -876,10 +876,13 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
     m_pSupport->backgroundParser()->unlock();
 }
 
-ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, ParsedScopeContainer* container, const QStringList& imports )
+ParsedClassContainer* CppCodeCompletion::findContainer( const QString& n, ParsedScopeContainer* container, const QStringList& imports )
 {
     if( !container )
         container = m_pSupport->classStore()->globalScope();
+
+    QString name = n;
+    name = name.replace( QRegExp("::"), "." );
 
     QStringList path = QStringList::split( ".", name );
     QStringList::Iterator it = path.begin();
