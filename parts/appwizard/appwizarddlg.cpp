@@ -165,7 +165,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     m_vcs = new VcsForm();
 
     int i=0;
-    m_vcs->combo->insertItem("None",i);
+    m_vcs->combo->insertItem(i18n("no version control system", "None"),i);
     //m_vcs->stack->addWidget(new QLabel(QString("plop"),m_vcs->stack),i++);
     m_vcs->stack->addWidget(0,i++);
 
@@ -177,7 +177,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
     }
     m_vcs->stack->raiseWidget(0);
-    addPage(m_vcs,"Version Control System");
+    addPage(m_vcs,i18n("Version Control System"));
 
     nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
@@ -270,7 +270,7 @@ void AppWizardDialog::licenseChanged()
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         QString style = (*it).style;
         QMultiLineEdit *edit = (*it).edit;
-        
+
         QString text;
         if (style == "CStyle") {
             text = str;
@@ -382,7 +382,7 @@ void AppWizardDialog::accept()
     m_cmdline += KShellProcess::quote(templateFiles.join(","));
 
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
-    
+
     if (m_vcs->stack->id(m_vcs->stack->visibleWidget())) {
         KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::vcsMap()[m_vcs->combo->currentText()];
         if (pVC) {
@@ -454,7 +454,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
 void AppWizardDialog::destButtonClicked()
 {
     QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
-                                                      "Project Location" );
+                                                      i18n("Project Location") );
     if(!dir.isEmpty())
         dest_edit->setText(dir);
 }
@@ -474,7 +474,7 @@ void AppWizardDialog::projectLocationChanged()
   QDir qd(dest_edit->text());
   if (!qd.exists())
   {
-    finalLoc_label->setText(finalLoc_label->text() + " (invalid)");
+    finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
     m_pathIsValid=false;
   }
   else

@@ -87,7 +87,7 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
     // Add window menu to the menu bar
     m_pWindowMenu = new QPopupMenu( main(), "window_menu");
     m_pWindowMenu->setCheckable( TRUE);
-    menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
+    menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
 
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
 }
@@ -139,7 +139,7 @@ void TopLevelSDI::prepareToCloseViews()
 void TopLevelSDI::realClose()
 {
   saveSettings();
-  
+
   m_closing = true;
   close();
 }
@@ -247,7 +247,7 @@ void TopLevelSDI::moveRelativeTab(int n) {
     if (m_leftBar->hasFocus()) bar = m_leftBar;
     if (m_rightBar->hasFocus()) bar = m_rightBar;
     if (m_bottomBar->hasFocus()) bar = m_bottomBar;
-    
+
     if (bar) {
     if(bar->count()) {
             int index = bar->indexOf(bar->current());
@@ -257,7 +257,7 @@ void TopLevelSDI::moveRelativeTab(int n) {
         }
         return;
     }
-    
+
     //Default : editor
     if(m_tabWidget->count()) {
             int index = m_tabWidget->currentPageIndex();
@@ -316,9 +316,9 @@ void TopLevelSDI::slotFillWindowMenu() {
     m_pWindowMenu->clear();       // Erase whole window menu
 
     // Construct fixed enties of the window menu
-    int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
-    int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
-    int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+    int closeId         = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+    int closeAllId      = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+    int closeAllOtherId = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
     m_pWindowMenu->insertSeparator();
 
     // Loop over all parts and add them to the window menu
@@ -427,7 +427,7 @@ void TopLevelSDI::slotTextChanged() {
     }
 }
 
-void TopLevelSDI::slotUpdateModifiedFlags() 
+void TopLevelSDI::slotUpdateModifiedFlags()
 {
     QString newTitle;
     QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));

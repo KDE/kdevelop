@@ -7,7 +7,7 @@
 
   This code was originally written by Judin Maxim, from the
 	KDEStudio project.
-	
+
   It was then updated with later code from konsole (KDE).
 
 	It has also been enhanced with an idea from the code in kdbg
@@ -63,12 +63,14 @@
 #include <qintdict.h>
 #include <qsocketnotifier.h>
 #include <qstring.h>
+#include <qfile.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
 #include "stty.h"
+
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
@@ -88,9 +90,9 @@ static int chownpty(int fd, int grant)
         /* We pass the master pseudo terminal as file descriptor PTY_FILENO. */
         if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
             ::exit(1);
-        
+
         QString path = locate("exe", BASE_CHOWN);
-        execle(path.latin1(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
+        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
         ::exit(1); // should not be reached
     }
     if (pid > 0) {
@@ -99,7 +101,7 @@ static int chownpty(int fd, int grant)
         int rc = waitpid (pid, &w, 0);
         if (rc != pid)
             ::exit(1);
-        
+
         //    { // signal from other child, behave like catchChild.
         //      // guess this gives quite some control chaos...
         //      Shell* sh = shells.find(rc);
@@ -140,12 +142,12 @@ STTY::~STTY()
 {
     if (pid_)
         ::kill(pid_, SIGTERM);
-    
+
     if (out) {
         ::close(fout);
         delete out;
     }
-    
+
     //  if ( err )
     //  {
     //    ::close( ferr );
@@ -159,9 +161,9 @@ int STTY::findTTY()
 {
     int ptyfd = -1;
     bool needGrantPty = TRUE;
-    
+
     // Find a master pty that we can open ////////////////////////////////
-    
+
 #ifdef __sgi__
     ptyfd = open("/dev/ptmx",O_RDWR);
     if (ptyfd < 0) {
@@ -173,7 +175,7 @@ int STTY::findTTY()
     unlockpt(ptyfd);
     needGrantPty = FALSE;
 #endif
-    
+
     // first we try UNIX PTY's
 #ifdef TIOCGPTN
     strcpy(pty_master,"/dev/ptmx");
@@ -196,7 +198,7 @@ int STTY::findTTY()
         }
     }
 #endif
-    
+
 #if defined(_SCO_DS) || defined(__USLC__) /* SCO OSr5 and UnixWare */
     if (ptyfd < 0) {
         for (int idx = 0; idx < 256; idx++)
@@ -218,31 +220,31 @@ int STTY::findTTY()
                 if ((ptyfd = open(pty_master, O_RDWR)) >= 0) {
                     if (geteuid() == 0 || access(tty_slave, R_OK|W_OK) == 0)
                         break;
-                    
+
                     close(ptyfd);
                     ptyfd = -1;
                 }
             }
-            
+
             if (ptyfd >= 0)
                 break;
         }
     }
-    
+
     if (ptyfd >= 0) {
         if (needGrantPty && !chownpty(ptyfd, TRUE)) {
             fprintf(stderr,"kdevelop: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
             fprintf(stderr,"        : This means the session can be eavesdroped.\n");
             fprintf(stderr,"        : Make sure konsole_grantpty is installed and setuid root.\n");
         }
-        
+
         ::fcntl(ptyfd, F_SETFL, O_NDELAY);
 #ifdef TIOCSPTLCK
         int flag = 0;
         ioctl(ptyfd, TIOCSPTLCK, &flag); // unlock pty
 #endif
     }
-    
+
     return ptyfd;
 }
 
@@ -252,7 +254,7 @@ void STTY::OutReceived(int f)
 {
     char buf[1024];
     int n;
-    
+
     // read until socket is empty. We shouldn't be receiving a continuous
     // stream of data, so the loop is unlikely to cause problems.
     while ((n = ::read(f, buf, sizeof(buf)-1)) > 0) {
@@ -271,15 +273,15 @@ void STTY::OutReceived(int f)
 bool STTY::findExternalTTY(const QString &termApp)
 {
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
-    
+
     char fifo[] = FIFO_FILE;
     int fifo_fd;
     if ((fifo_fd = mkstemp(fifo)) == -1)
         return false;
-    
+
     ::close(fifo_fd);
     ::unlink(fifo);
-    
+
     // create a fifo that will pass in the tty name
 #ifdef HAVE_MKFIFO
     if (::mkfifo(fifo, S_IRUSR|S_IWUSR) < 0)
@@ -287,19 +289,19 @@ bool STTY::findExternalTTY(const QString &termApp)
         if (::mknod(fifo, S_IFIFO | S_IRUSR|S_IWUSR, 0) < 0)
 #endif
             return false;
-    
+
     int pid = ::fork();
     if (pid < 0) {             // No process
         ::unlink(fifo);
         return false;
     }
-    
+
     if (pid == 0) {            // child process
         /*
          * Spawn a console that in turn runs a shell script that passes us
          * back the terminal name and then only sits and waits.
          */
-        
+
         const char* prog      = appName.latin1();
         QString script = QString("tty>") + QString(fifo) +
             QString(";"                  // fifo name
@@ -308,49 +310,49 @@ bool STTY::findExternalTTY(const QString &termApp)
                     "while :;do sleep 3600;done");
         const char* scriptStr = script.latin1();
         const char* end       = 0;
-        
+
         ::execlp( prog,       prog,
                   //              "-name",    "debugio",
                   //              "-title",   "kdevelop: Program output",
-                  "-caption", i18n("kdevelop: Debug application console").latin1(),
+                  "-caption", i18n("kdevelop: Debug application console").local8Bit().data(),
                   "-e",       "sh",
                   "-c",       scriptStr,
                   end);
-        
+
         // Should not get here, as above should always work
         ::exit(1);
     }
-    
+
     // parent process
     if (pid <= 0)
         ::exit(1);
-    
+
     // Open the communication between us (the parent) and the
     // child (the process running on a tty console)
     fifo_fd = ::open(fifo, O_RDONLY);
     if (fifo_fd < 0)
         return false;
-    
+
     // Get the ttyname from the fifo buffer that the child process
     // has sent.
     char ttyname[50];
     int n = ::read(fifo_fd, ttyname, sizeof(ttyname)-sizeof(char));
-    
+
     ::close(fifo_fd);
     ::unlink(fifo);
-    
+
     // No name??
     if (n <= 0)
         return false;
-    
+
     // remove whitespace
     ttyname[n] = 0;
     if (char* newline = strchr(ttyname, '\n'))
         *newline = 0;      // clobber the new line
-    
+
     ttySlave = ttyname;
     pid_ = pid;
-    
+
     return true;
 }
 

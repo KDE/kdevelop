@@ -126,7 +126,7 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 	if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
 	{
 		destStaticLabel->setText ( i18n ( "Target:" ) );
-		
+
 		if ( titem->name && !titem->name.isEmpty() )
 		{
 			targetLabel->setText ( titem->name );
@@ -137,7 +137,7 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 			targetLabel->setText ( "" );
 			destLabel->setText ( "" );
 		}
-		
+
 		directoryLabel->setText ( spitem->path );
 	}
 
@@ -168,13 +168,13 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
         destStaticLabel->setText ( i18n ( "Subproject:" ) );
         destLabel->setText ( spitem->subdir );
         targetLabel->setText ( i18n ( "none" ) );
-        directoryLabel->setText ( i18n ( spitem->path ) );
+        directoryLabel->setText ( spitem->path );
     }
 
     sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
     sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-    importView = new KImportIconView ( "Drag one or more directories with an existing Makefile.am from above and drop it here!", destGroupBox, "destination icon view" );
+    importView = new KImportIconView ( i18n("Drag one or more directories with an existing Makefile.am from above and drop it here!"), destGroupBox, "destination icon view" );
     destGroupBoxLayout->addWidget ( importView );
 
     setIcon ( SmallIcon ( "fileimport.png" ) );
@@ -215,7 +215,7 @@ void ImportExistingDialog::init()
     connect ( importView, SIGNAL ( dropped( QDropEvent* ) ), this, SLOT ( slotDropped ( QDropEvent* ) ) );
 
     importView->setSelectionMode ( KFile::Multi );
-	
+
 	sourceSelector->setDir ( m_spitem->path );
 }
 
@@ -223,12 +223,12 @@ void ImportExistingDialog::importItems()
 {
 	// items added via button or drag 'n drop
 	KFileItemListIterator itemList ( m_importList );
-	
+
 	// items already added to the importView
 	KFileItemListIterator importedList ( *importView->items() );
 
 	QListViewItem* child = m_titem->firstChild();
-	
+
 	QStringList duplicateList;
 
 	while ( child )
@@ -272,11 +272,11 @@ void ImportExistingDialog::importItems()
 
 	if ( duplicateList.count() > 0 )
 	{
-		if ( KMessageBox::warningContinueCancelList ( this, i18n (
-																		"The following file(s) already exist(s) in the target!\n"
-																		"Press Continue to import only the new files.\n"
-																		"Press Cancel to abort the complete import." ),
-																		duplicateList, "Warning", KGuiItem ( i18n ( "Continue" ) ) ) == KMessageBox::Cancel )
+		if ( KMessageBox::warningContinueCancelList ( this, i18n ("The following file(s) already exist(s) in the target!\n"
+                                                                  "Press Continue to import only the new files.\n"
+                                                                  "Press Cancel to abort the complete import." ),
+                                                      duplicateList, i18n("Warning"), KGuiItem ( i18n ( "Continue" ) ) )
+             == KMessageBox::Cancel )
 		{
 			m_importList.clear();
 			return;
@@ -284,7 +284,7 @@ void ImportExistingDialog::importItems()
 	}
 
 	itemList.toFirst();
-	
+
 	for ( ; itemList.current(); ++itemList )
 	{
 		if ( !( *itemList )->isDir() )
@@ -292,7 +292,7 @@ void ImportExistingDialog::importItems()
 			importView->insertItem ( ( *itemList ) );
 		}
 	}
-	
+
 	importView->somethingDropped ( true );
 
 	m_importList.clear();
@@ -303,10 +303,10 @@ void ImportExistingDialog::importItems()
 void ImportExistingDialog::slotOk()
 {
 	if ( importView->items()->count() == 0 ) QDialog::accept();
-    
+
 	progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
-	
+
 	qApp->processEvents();
 
 	KFileItemListIterator items ( *importView->items() );
@@ -330,11 +330,12 @@ void ImportExistingDialog::slotOk()
 
 	if ( outsideList.count() > 0 )
 	{
-		if ( KMessageBox::questionYesNoList ( this, i18n (
-																		"The following file(s) are not in the Subproject directory.\n"
-																		"Press Link to add the files by creating symbolic links.\n"
-																		"Press Copy to copy the files into the directory." ),
-																		stringList, "Warning", KGuiItem ( i18n ( "Link (recommended)" ) ), KGuiItem ( i18n ( "Copy (not recommended)" ) ) ) == KMessageBox::No )
+		if ( KMessageBox::questionYesNoList ( this, i18n ("The following file(s) are not in the Subproject directory.\n"
+                                                          "Press Link to add the files by creating symbolic links.\n"
+                                                          "Press Copy to copy the files into the directory." ),
+                                              stringList, i18n("Warning"), KGuiItem ( i18n ( "Link (recommended)" ) ),
+                                              KGuiItem ( i18n ( "Copy (not recommended)" ) ) )
+             == KMessageBox::No )
 		{
 			// Copy files into the Subproject directory
 			KFileItemListIterator it ( outsideList ) ;
@@ -389,12 +390,12 @@ void ImportExistingDialog::slotOk()
 		m_titem->insertItem ( fitem );
 
 		fileList.append ( m_spitem->path.mid ( m_part->project()->projectDirectory().length() + 1 ) + "/" + ( *items )->name() );
-		
+
 		progressBar->setValue ( progressBar->value() + 1 );
-		
+
 		m_part->partController()->editDocument ( KURL ( m_spitem->path + "/" + ( *items )->name() ) );
 	}
-	
+
 	m_widget->emitAddedFiles ( fileList );
 
 	AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
@@ -430,7 +431,7 @@ void ImportExistingDialog::slotAddAll()
 			m_importList.append ( ( *it ) );
 		}
 	}
-	
+
 	importItems();
 }
 
@@ -490,7 +491,7 @@ void ImportExistingDialog::slotDropped ( QDropEvent* ev )
 	KURL::List urls;
 
 	KURLDrag::decode( ev, urls );
-	
+
 	KFileItem* item = 0L;
 	KMimeType::Ptr type = 0L;
 
@@ -500,7 +501,7 @@ void ImportExistingDialog::slotDropped ( QDropEvent* ev )
  		if ( ( *it ).isLocalFile() ) // maybe unnecessary
  		{
 			type = KMimeType::findByURL ( ( *it ).url() );
-			
+
 			if ( type->name() != KMimeType::defaultMimeType() )
 			{
 				item = new KFileItem ( ( *it ).url() , type->name(), 0 );

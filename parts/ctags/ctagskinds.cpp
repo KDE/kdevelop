@@ -61,7 +61,7 @@ static CTagsKindMapping kindMappingC[] = {
     { 'e', I18N_NOOP("enumerator")          },
     { 'f', I18N_NOOP("function")            },
     { 'g', I18N_NOOP("enumeration")         },
-    { 'm', I18N_NOOP("member")              }, 
+    { 'm', I18N_NOOP("member")              },
     { 'n', I18N_NOOP("namespace")           },
     { 'p', I18N_NOOP("prototype")           },
     { 's', I18N_NOOP("struct")              },
@@ -275,7 +275,7 @@ static CTagsExtensionMapping extensionMapping[] = {
 static CTagsKindMapping *findKindMapping(const QString &extension)
 {
     const char *pextension = extension.latin1();
-    
+
     CTagsExtensionMapping *pem = extensionMapping;
     while (pem->extension != 0) {
         if (strcmp(pem->extension, pextension) == 0)
@@ -296,7 +296,7 @@ QString CTagsKinds::findKind(char kindChar, const QString &extension)
         CTagsKindMapping *pkm = kindMapping;
         while (pkm->verbose != 0) {
             if (pkm->abbrev == kindChar)
-                return i18n(QString::fromLatin1(pkm->verbose));
+                return i18n(pkm->verbose);
             ++pkm;
         }
     }

@@ -9,3 +9,6 @@ lib$APPNAMELC$_la_LIBADD = $(LIB_KDEUI)
 
 $APPNAMELC$_DATA = $APPNAMELC$.desktop
 $APPNAMELC$dir = $(kde_datadir)/kicker/applets
+
+messages: rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot

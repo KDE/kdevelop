@@ -26,7 +26,7 @@
 #include <klistbox.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
-#include <ksqueezedtextlabel.h>  
+#include <ksqueezedtextlabel.h>
 
 #include "choosetargetdialog.h"
 
@@ -37,24 +37,24 @@
 
 ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList fileList, QWidget* parent, const char* name )
   : ChooseTargetDlgBase ( parent, name, false, 0 ), m_choosenSubproject ( 0 ), m_choosenTarget ( 0 )
-{	
+{
 	m_widget = widget;
 	m_fileList = fileList;
 	m_subprojectList = widget->allSubprojectItems();
-	
+
 	subprojectComboBox->setAutoCompletion ( true );
 	targetComboBox->setAutoCompletion ( true );
-	
+
 	setIcon ( SmallIcon ( "target_kdevelop" ) );
 	/*QStringList historyList;*/
-	
+
 	SubprojectItem* spitem = m_subprojectList.first();
-	
+
 	for ( ; spitem; spitem = m_subprojectList.next() )
 	{
 		QPtrList <TargetItem> targetList = spitem->targets;
 		TargetItem* titem = targetList.first();
-		
+
 		// Only insert Subproject which have a "regular" target
 		for ( ; titem; titem = targetList.next() )
 		{
@@ -62,17 +62,17 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 					titem->primary == "LTLIBRARIES" || titem->primary == "JAVA" )
 			{
 				subprojectComboBox->insertItem ( SmallIcon ( "folder" ), spitem->subdir );
-				
+
 				//historyList.append ( spitem->subdir );
 				//subprojectComboBox->addToHistory ( spitem->subdir );
-				
+
 				break;
 			}
 		}
 	}
-	
+
 	//subprojectComboBox->setHistoryItems ( historyList, true );
-	
+
 	if ( widget->activeTarget() && widget->activeSubproject() )
 	{
 		m_choosenTarget = widget->activeTarget();
@@ -83,7 +83,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 		//choosenTargetGroupBox->setEnabled ( false );
 		subprojectComboBox->setEnabled ( false );
 		targetComboBox->setEnabled ( false );
-		
+
 		subprojectComboBox->setCurrentItem ( widget->activeSubproject()->subdir );
 		slotSubprojectChanged ( widget->activeSubproject()->subdir );
 	}
@@ -95,14 +95,14 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 		chooseTargetRadioButton->setChecked ( true );
 		activeTargetRadioButton->setEnabled ( false );
 		neverAskAgainCheckBox->setEnabled ( false );
-		
+
 		//subprojectComboBox->setCurrentItem ( 0 );
-		
+
 		//kdDebug ( 9000 ) << "current text: " << subprojectComboBox->text(0) << endl;
-		
+
 		slotSubprojectChanged ( subprojectComboBox->text(0) );
 	}
-	
+
 	QStringList::iterator it;
 	QString fileName;
 
@@ -117,13 +117,13 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 		{
 			fileName = ( *it );
 		}
-	
+
 		newFilesListBox->insertItem ( SmallIcon ( "document" ), fileName );
 	}
-	
+
 	connect ( activeTargetRadioButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotActiveTargetToggled ( bool ) ) );
 	connect ( chooseTargetRadioButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotChooseTargetToggled ( bool ) ) );
-	
+
 	connect ( subprojectComboBox, SIGNAL ( activated ( const QString& ) ), this, SLOT ( slotSubprojectChanged ( const QString& ) ) );
 	connect ( targetComboBox, SIGNAL ( activated ( const QString& ) ), this, SLOT ( slotTargetChanged ( const QString& ) ) );
 }
@@ -137,31 +137,31 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 {
 	m_choosenTarget = 0;
 	SubprojectItem* spitem = m_subprojectList.first();
-	
+
 	for ( ; spitem; spitem = m_subprojectList.next() )
 	{
 		if ( spitem->subdir == name )
 		{
 			QPtrList <TargetItem> targetList = spitem->targets;
 			TargetItem* titem = targetList.first();
-			
+
 			targetComboBox->clear();
-			
+
 /*			choosenSubprojectLabel->setText ( ( spitem->path + "<b>" + ->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );*/
-			
+
 			m_choosenSubproject = spitem;
-			
+
 			for ( ; titem; titem = targetList.next() )
 			{
 				if ( titem->primary == "PROGRAMS" || titem->primary == "LIBRARIES" ||
 						titem->primary == "LTLIBRARIES" || titem->primary == "JAVA" )
 				{
 					targetComboBox->insertItem ( SmallIcon ( "target_kdevelop" ), titem->name );
-					
+
 					//targetComboBox->addToHistory ( titem->name );
-					
+
 					// if the Active Target is in the currently selected Subproject
-					if ( m_widget->activeTarget() && 
+					if ( m_widget->activeTarget() &&
 						titem->name == m_widget->activeTarget()->name )
 					{
 						targetComboBox->setCurrentItem ( titem->name );
@@ -177,7 +177,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 						{
 							choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
 							//choosenSubprojectLabel->setText ( ( spitem->path + "<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
-					
+
 							m_choosenTarget = titem;
 						}
 						//kdDebug ( 9000 ) << "2a) Choosen target is " << m_choosenTarget->name << endl;
@@ -193,17 +193,17 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 void ChooseTargetDialog::slotTargetChanged ( const QString& name )
 {
 	choosenTargetLabel->setText ( ( m_choosenSubproject->path + "/<b>" + name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
-	
+
 	QPtrList <TargetItem> targetList = m_choosenSubproject->targets;
 	TargetItem* titem = targetList.first();
-	
+
 	for ( ; titem; titem = targetList.next() )
 	{
 		if ( titem->name == name )
 		{
 			m_choosenTarget = titem;
 			//kdDebug ( 9000 ) << "4) Choosen target is " << m_choosenTarget->name << endl;
-			
+
 			break;
 		}
 	}
@@ -251,15 +251,15 @@ void ChooseTargetDialog::accept ()
 		return;
 
 	//kdDebug ( 9000 ) << "3) Choosen target is " << m_choosenTarget->name << endl;
-	
+
 	QStringList newFileList;
 	QStringList::iterator it;
 	QString directory, fileName;
-	
+
 	for ( it = m_fileList.begin(); it != m_fileList.end(); ++it )
 	{
 		bool found = false;
-		
+
 		int pos = ( *it ).findRev('/');
 		if (pos != -1)
 		{
@@ -270,17 +270,17 @@ void ChooseTargetDialog::accept ()
 		{
 			fileName = ( *it );
 		}
-		
+
 		FileItem * fitem = m_choosenTarget->sources.first();
 		for ( ; fitem; fitem = m_choosenTarget->sources.next() )
 		{
 			if ( fitem->name == fileName )
 			{
-				KMessageBox::error ( this, i18n ( "The file %1 already exists in the choosen target!\nThe file will be created but will not be added to the target.\nRename the file and select 'Add Existing Files' from the Automake Manager." ).arg ( fitem->name ) );
+				KMessageBox::error ( this, i18n ( "The file %1 already exists in the chosen target!\nThe file will be created but will not be added to the target.\nRename the file and select 'Add Existing Files' from the Automake Manager." ).arg ( fitem->name ) );
 				found = true;
 			}
 		}
-		
+
 		if ( !found )
 		{
 			fitem = m_widget->createFileItem( fileName );
@@ -298,7 +298,7 @@ void ChooseTargetDialog::accept ()
 
 			newFileList.append ( m_choosenSubproject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName );
 		}
-		
+
 		if ( directory.isEmpty() || directory != m_choosenSubproject->subdir )
 		{
 			KShellProcess proc("/bin/sh");
@@ -307,15 +307,15 @@ void ChooseTargetDialog::accept ()
 			proc << KShellProcess::quote( m_widget->projectDirectory() + "/" + directory + "/" + fileName );
 			proc << KShellProcess::quote( m_choosenSubproject->path + "/" + fileName );
 			proc.start(KProcess::DontCare);
-			
+
 			kdDebug ( 9000 ) << "Moved file " << fileName << " from " << m_widget->projectDirectory() << " to " << m_choosenSubproject->path << endl;
 		}
-		
+
 		found = false;
 	}
-	
+
 	m_widget->emitAddedFiles( newFileList );
-	
+
 	QDialog::accept();
 }
 

@@ -38,15 +38,15 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     m_widget = widget;
 
     if (item->primary == "PROGRAMS") {
-        insidelib_label->setText("Link convenience libraries inside project (LDADD)");
-        outsidelib_label->setText("Link libraries outside project (LDADD)");
+        insidelib_label->setText(i18n("Link convenience libraries inside project (LDADD)"));
+        outsidelib_label->setText(i18n("Link libraries outside project (LDADD)"));
     }
 
     insidelib_listview->header()->hide();
     outsidelib_listview->header()->hide();
     insidelib_listview->setSorting(-1);
     outsidelib_listview->setSorting(-1);
-    
+
     // Insert all convenience libraries as possible linked libraries
     QStringList l = widget->allLibraries();
     QStringList::ConstIterator it;
@@ -90,7 +90,7 @@ void TargetOptionsDialog::readConfig()
     }
     ldflagsother_edit->setText(l1.join(" "));
     dependencies_edit->setText(target->dependencies);
-    
+
     QString addstr = (target->primary == "PROGRAMS")? target->ldadd : target->libadd;
     QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr);
 
@@ -145,7 +145,7 @@ void TargetOptionsDialog::storeConfig()
 
     QString canonname = AutoProjectTool::canonicalize(target->name);
     QMap<QString, QString> replaceMap;
-    
+
     if (target->primary == "PROGRAMS") {
         QString old_ldadd = target->ldadd;
         if (new_addstr != old_ldadd) {
@@ -153,7 +153,7 @@ void TargetOptionsDialog::storeConfig()
             replaceMap.insert(canonname + "_LDADD", new_addstr);
         }
     }
-    
+
     if (target->primary == "LIBRARIES" || target->primary == "LTLIBARIES") {
         QString old_libadd = target->libadd;
         if (new_addstr != old_libadd) {
@@ -161,7 +161,7 @@ void TargetOptionsDialog::storeConfig()
             replaceMap.insert(canonname + "_LIBADD", new_addstr);
         }
     }
-    
+
     QString old_ldflags = target->ldflags;
     if (new_ldflags != old_ldflags) {
         target->ldflags = new_ldflags;

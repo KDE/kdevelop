@@ -9,6 +9,7 @@
 #include <kinstance.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 Plugin$APPNAME$::Plugin$APPNAME$( QObject* parent, const char* name )
     : Plugin( parent, name )
@@ -101,6 +102,7 @@ extern "C"
 {
   void* init_lib$APPNAMELC$plugin()
   {
+    KGlobal::locale()->insertCatalogue("$APPNAMELC$");
     return new $APPNAME$Factory;
   }
 }

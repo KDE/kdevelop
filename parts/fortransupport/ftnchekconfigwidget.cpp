@@ -30,10 +30,10 @@ public:
         : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
           flag(flagstr), desc(description)
     {}
-    
+
     static void readFlagsToListView(QListView *listview, QStringList *list);
     static void writeFlagsFromListView(QListView *listview, QStringList *list);
-    
+
 private:
     QString flag;
     QString desc;
@@ -58,7 +58,7 @@ void FtnchekItem::readFlagsToListView(QListView *listview, QStringList *list)
 void FtnchekItem::writeFlagsFromListView(QListView *listview, QStringList *list)
 {
     (*list).clear();
-    
+
     QListViewItem *item = listview->firstChild();
     for (; item; item = item->nextSibling()) {
         FtnchekItem *flitem = static_cast<FtnchekItem*>(item);
@@ -80,7 +80,7 @@ protected:
         QListView *listview = static_cast<QListView*>(parentWidget());
         QListViewItem *item = listview->itemAt(pos);
         FtnchekItem *flitem = static_cast<FtnchekItem*>(item);
-        
+
         if (item)
             tip(listview->itemRect(item), flitem->desc);
     }
@@ -169,39 +169,39 @@ FtnchekConfigWidget::FtnchekConfigWidget(QDomDocument &projectDom, QWidget *pare
 
     arguments_listview->header()->hide();
     new FtnchekToolTip(arguments_listview);
-    
+
     common_listview->header()->hide();
     new FtnchekToolTip(common_listview);
-    
+
     truncation_listview->header()->hide();
     new FtnchekToolTip(truncation_listview);
-    
+
     usage_listview->header()->hide();
     new FtnchekToolTip(usage_listview);
-    
+
     f77_listview->header()->hide();
     new FtnchekToolTip(f77_listview);
-    
+
     portability_listview->header()->hide();
     new FtnchekToolTip(portability_listview);
 
     for (const char **p = arguments_flags; *p; p += 2)
-        new FtnchekItem(arguments_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(arguments_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     for (const char **p = common_flags; *p; p += 2)
-        new FtnchekItem(common_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(common_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     for (const char **p = truncation_flags; *p; p += 2)
-        new FtnchekItem(truncation_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(truncation_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     for (const char **p = usage_flags; *p; p += 2)
-        new FtnchekItem(usage_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(usage_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     for (const char **p = f77_flags; *p; p += 2)
-        new FtnchekItem(f77_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(f77_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     for (const char **p = portability_flags; *p; p += 2)
-        new FtnchekItem(portability_listview, QString::fromLatin1(*p), i18n(*(p+1)));
+        new FtnchekItem(portability_listview, QString::fromUtf8(*p), i18n(*(p+1)));
 
     readConfig();
 }
@@ -239,7 +239,7 @@ void FtnchekConfigWidget::readConfig()
     portabilityall_button->setChecked(DomUtil::readBoolEntry(dom, "/kdevfortransupport/ftnchek/portabilityall"));
 
     QStringList list;
-    
+
     list = QStringList::split(',', DomUtil::readEntry(dom, "/kdevfortransupport/ftnchek/argumentsonly"));
     FtnchekItem::readFlagsToListView(arguments_listview, &list);
     list = QStringList::split(',', DomUtil::readEntry(dom, "/kdevfortransupport/ftnchek/commononly"));

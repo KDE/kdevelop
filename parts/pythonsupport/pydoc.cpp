@@ -10,6 +10,8 @@
 #include <kinstance.h>
 #include <kprocess.h>
 #include <kdeversion.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 using namespace KIO;
 
@@ -31,7 +33,7 @@ void PydocProtocol::get(const KURL& url)
     mimeType("text/html");
     key = url.path();
 
-#if (KDE_VERSION > 305)    
+#if (KDE_VERSION > 305)
     QString cmd = KProcess::quote(python);
     cmd += " ";
     cmd += KProcess::quote(script);
@@ -44,11 +46,11 @@ void PydocProtocol::get(const KURL& url)
     cmd += " -w ";
     cmd += KShellProcess::quote(key);
 #endif
-    
+
     FILE *fd = popen(cmd.data(), "r");
     char buffer[4096];
     QByteArray array;
-    
+
     while (!feof(fd)) {
         int n = fread(buffer, 1, 2048, fd);
         if (n == -1) {
@@ -59,7 +61,7 @@ void PydocProtocol::get(const KURL& url)
         data(array);
         array.resetRawData(buffer, n);
     }
-    
+
     pclose(fd);
     finished();
 }
@@ -74,7 +76,7 @@ void PydocProtocol::mimetype(const KURL&)
 
 QCString PydocProtocol::errorMessage()
 {
-    return QCString( "<html><body bgcolor=\"#FFFFFF\">Error in pydoc</body></html>" );
+    return QCString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in pydoc").local8Bit() + "</body></html>" );
 }
 
 
@@ -83,10 +85,10 @@ void PydocProtocol::stat(const KURL &/*url*/)
     UDSAtom uds_atom;
     uds_atom.m_uds = KIO::UDS_FILE_TYPE;
     uds_atom.m_long = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
-    
+
     UDSEntry uds_entry;
     uds_entry.append(uds_atom);
-    
+
     statEntry(uds_entry);
     finished();
 }
@@ -103,15 +105,16 @@ extern "C" {
     int kdemain(int argc, char **argv)
     {
         KInstance instance( "kio_pydoc" );
-        
+        KGlobal::locale()->setMainCatalogue("kdevelop");
+
         if (argc != 4) {
             fprintf(stderr, "Usage: kio_pydoc protocol domain-socket1 domain-socket2\n");
             exit(-1);
         }
-        
+
         PydocProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         return 0;
     }
 

@@ -40,93 +40,93 @@ $APPNAME$::$APPNAME$()
     QPixmap openIcon, saveIcon, printIcon;
 
     QToolBar * fileTools = new QToolBar( this, "file operations" );
-    fileTools->setLabel( "File Operations" );
+    fileTools->setLabel( tr("File Operations") );
 
     openIcon = QPixmap( fileopen );
     QToolButton * fileOpen
-	= new QToolButton( openIcon, "Open File", QString::null,
+	= new QToolButton( openIcon, tr("Open File"), QString::null,
 			   this, SLOT(choose()), fileTools, "open file" );
 
     saveIcon = QPixmap( filesave );
     QToolButton * fileSave
-	= new QToolButton( saveIcon, "Save File", QString::null,
+	= new QToolButton( saveIcon, tr("Save File"), QString::null,
 			   this, SLOT(save()), fileTools, "save file" );
 
     printIcon = QPixmap( fileprint );
     QToolButton * filePrint
-	= new QToolButton( printIcon, "Print File", QString::null,
+	= new QToolButton( printIcon, tr("Print File"), QString::null,
 			   this, SLOT(print()), fileTools, "print file" );
 
 
     (void)QWhatsThis::whatsThisButton( fileTools );
 
-    const char * fileOpenText = "<p><img source=\"fileopen\"> "
+    QString fileOpenText = tr("<p><img source=\"fileopen\"> "
 	         "Click this button to open a <em>new file</em>. <br>"
                  "You can also select the <b>Open</b> command "
-                 "from the <b>File</b> menu.</p>";
+                 "from the <b>File</b> menu.</p>");
 
     QWhatsThis::add( fileOpen, fileOpenText );
 
     QMimeSourceFactory::defaultFactory()->setPixmap( "fileopen", openIcon );
 
-    const char * fileSaveText = "<p>Click this button to save the file you "
+    QString fileSaveText = tr("<p>Click this button to save the file you "
                  "are editing. You will be prompted for a file name.\n"
                  "You can also select the <b>Save</b> command "
-                 "from the <b>File</b> menu.</p>";
+                 "from the <b>File</b> menu.</p>");
 
     QWhatsThis::add( fileSave, fileSaveText );
 
-    const char * filePrintText = "Click this button to print the file you "
+    QString filePrintText = tr("Click this button to print the file you "
                  "are editing.\n You can also select the Print "
-                 "command from the File menu.";
+                 "command from the File menu.");
 
     QWhatsThis::add( filePrint, filePrintText );
 
 
     QPopupMenu * file = new QPopupMenu( this );
-    menuBar()->insertItem( "&File", file );
+    menuBar()->insertItem( tr("&File"), file );
 
 
-    file->insertItem( "&New", this, SLOT(newDoc()), CTRL+Key_N );
+    file->insertItem( tr("&New"), this, SLOT(newDoc()), CTRL+Key_N );
 
     int id;
-    id = file->insertItem( openIcon, "&Open...",
+    id = file->insertItem( openIcon, tr("&Open..."),
 			   this, SLOT(choose()), CTRL+Key_O );
     file->setWhatsThis( id, fileOpenText );
 
-    id = file->insertItem( saveIcon, "&Save",
+    id = file->insertItem( saveIcon, tr("&Save"),
 			   this, SLOT(save()), CTRL+Key_S );
     file->setWhatsThis( id, fileSaveText );
 
-    id = file->insertItem( "Save &As...", this, SLOT(saveAs()) );
+    id = file->insertItem( tr("Save &As..."), this, SLOT(saveAs()) );
     file->setWhatsThis( id, fileSaveText );
 
     file->insertSeparator();
 
-    id = file->insertItem( printIcon, "&Print...",
+    id = file->insertItem( printIcon, tr("&Print..."),
 			   this, SLOT(print()), CTRL+Key_P );
     file->setWhatsThis( id, filePrintText );
 
     file->insertSeparator();
 
-    file->insertItem( "&Close", this, SLOT(close()), CTRL+Key_W );
+    file->insertItem( tr("&Close"), this, SLOT(close()), CTRL+Key_W );
 
-    file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+    file->insertItem( tr("&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
     menuBar()->insertSeparator();
 
     QPopupMenu * help = new QPopupMenu( this );
-    menuBar()->insertItem( "&Help", help );
+    menuBar()->insertItem( tr("&Help"), help );
 
-    help->insertItem( "&About", this, SLOT(about()), Key_F1 );
-    help->insertItem( "About &Qt", this, SLOT(aboutQt()) );
+    help->insertItem( tr("&About"), this, SLOT(about()), Key_F1 );
+    help->insertItem( tr("About &Qt"), this, SLOT(aboutQt()) );
     help->insertSeparator();
-    help->insertItem( "What's &This", this, SLOT(whatsThis()), SHIFT+Key_F1 );
+    help->insertItem( tr("What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
 
     e = new QTextEdit( this, "editor" );
     e->setFocus();
     setCentralWidget( e );
-    statusBar()->message( "Ready", 2000 );
+    statusBar()->message( tr("Ready"), 2000 );
 
     resize( 450, 600 );
 }
@@ -142,7 +142,7 @@ $APPNAME$::~$APPNAME$()
 void $APPNAME$::newDoc()
 {
     $APPNAME$ *ed = new $APPNAME$;
-    ed->setCaption("Qt Example - Application");
+    ed->setCaption(tr("Qt Example - Application"));
     ed->show();
 }
 
@@ -153,7 +153,7 @@ void $APPNAME$::choose()
     if ( !fn.isEmpty() )
 	load( fn );
     else
-	statusBar()->message( "Loading aborted", 2000 );
+	statusBar()->message( tr("Loading aborted"), 2000 );
 }
 
 
@@ -167,7 +167,7 @@ void $APPNAME$::load( const QString &fileName )
     e->setText( ts.read() );
     e->setModified( FALSE );
     setCaption( fileName );
-    statusBar()->message( "Loaded document " + fileName, 2000 );
+    statusBar()->message( tr("Loaded document %1").arg(fileName), 2000 );
 }
 
 
@@ -181,7 +181,7 @@ void $APPNAME$::save()
     QString text = e->text();
     QFile f( filename );
     if ( !f.open( IO_WriteOnly ) ) {
-	statusBar()->message( QString("Could not write to %1").arg(filename),
+	statusBar()->message( tr("Could not write to %1").arg(filename),
 			      2000 );
 	return;
     }
@@ -194,7 +194,7 @@ void $APPNAME$::save()
 
     setCaption( filename );
 
-    statusBar()->message( QString( "File %1 saved" ).arg( filename ), 2000 );
+    statusBar()->message( tr( "File %1 saved" ).arg( filename ), 2000 );
 }
 
 
@@ -206,7 +206,7 @@ void $APPNAME$::saveAs()
 	filename = fn;
 	save();
     } else {
-	statusBar()->message( "Saving aborted", 2000 );
+	statusBar()->message( tr("Saving aborted"), 2000 );
     }
 }
 
@@ -218,7 +218,7 @@ void $APPNAME$::print()
     int pageNo = 1;
 
     if ( printer->setup(this) ) {		// printer dialog
-	statusBar()->message( "Printing..." );
+	statusBar()->message( tr("Printing...") );
 	QPainter p;
 	if( !p.begin( printer ) )               // paint on printer
 	    return;
@@ -244,9 +244,9 @@ void $APPNAME$::print()
 	    yPos = yPos + fm.lineSpacing();
 	}
 	p.end();				// send job to printer
-	statusBar()->message( "Printing completed", 2000 );
+	statusBar()->message( tr("Printing completed"), 2000 );
     } else {
-	statusBar()->message( "Printing aborted", 2000 );
+	statusBar()->message( tr("Printing aborted"), 2000 );
     }
 }
 
@@ -257,10 +257,10 @@ void $APPNAME$::closeEvent( QCloseEvent* ce )
 	return;
     }
 
-    switch( QMessageBox::information( this, "Qt Application Example",
-				      "Do you want to save the changes"
-				      " to the document?",
-				      "Yes", "No", "Cancel",
+    switch( QMessageBox::information( this, tr("Qt Application Example"),
+				      tr("Do you want to save the changes"
+				      " to the document?"),
+				      tr("Yes"), tr("No"), tr("Cancel"),
 				      0, 1 ) ) {
     case 0:
 	save();
@@ -279,13 +279,13 @@ void $APPNAME$::closeEvent( QCloseEvent* ce )
 
 void $APPNAME$::about()
 {
-    QMessageBox::about( this, "Qt Application Example",
-			"This example demonstrates simple use of "
-			"QMainWindow,\nQMenuBar and QToolBar.");
+    QMessageBox::about( this, tr("Qt Application Example"),
+			tr("This example demonstrates simple use of "
+			"QMainWindow,\nQMenuBar and QToolBar."));
 }
 
 
 void $APPNAME$::aboutQt()
 {
-    QMessageBox::aboutQt( this, "Qt Application Example" );
+    QMessageBox::aboutQt( this, tr("Qt Application Example") );
 }

@@ -47,7 +47,7 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
     setInstance(PythonSupportFactory::instance());
 
     setXMLFile("kdevpythonsupport.rc");
-    
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
@@ -124,7 +124,7 @@ void PythonSupportPart::maybeParse(const QString fileName)
 void PythonSupportPart::initialParse()
 {
     kdDebug(9014) << "initialParse()" << endl;
-    
+
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allFiles();
@@ -132,7 +132,7 @@ void PythonSupportPart::initialParse()
             kdDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
             maybeParse(project()->projectDirectory() + "/" + *it);
         }
-        
+
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
@@ -144,14 +144,14 @@ void PythonSupportPart::initialParse()
 void PythonSupportPart::addedFilesToProject(const QStringList &fileList)
 {
     kdDebug(9014) << "addedFilesToProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
 	}
-	
+
     emit updatedSourceInfo();
 }
 
@@ -159,14 +159,14 @@ void PythonSupportPart::addedFilesToProject(const QStringList &fileList)
 void PythonSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
 	kdDebug(9014) << "removedFilesFromProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
 	}
-	
+
 	emit updatedSourceInfo();
 }
 
@@ -212,9 +212,9 @@ void PythonSupportPart::parse(const QString &fileName)
     int lineNo = 0;
     while (!stream.atEnd()) {
         rawline = stream.readLine();
-        line = rawline.stripWhiteSpace().latin1();
+        line = rawline.stripWhiteSpace().local8Bit();
         if (classre.match(line)) {
-            
+
             lastClass = new ParsedClass;
             lastClass->setName(classre.group(1));
             lastClass->setDefinedInFile(fileName);
@@ -229,7 +229,7 @@ void PythonSupportPart::parse(const QString &fileName)
                 kdDebug(9014) << "Add parent" << parent->name() << endl;
                 lastClass->addParent(parent);
             }
-             
+
            if (classStore()->hasClass(lastClass->name())) {
                 ParsedClass *old = classStore()->getClassByName(lastClass->name());
                 old->setDeclaredOnLine(lastClass->declaredOnLine());
@@ -241,14 +241,14 @@ void PythonSupportPart::parse(const QString &fileName)
                 classStore()->globalScope()->addClass(lastClass);
                 classStore()->addClass(lastClass);
             }
-           
+
         } else if (methodre.match(line)) {
-            
+
             ParsedMethod *method = new ParsedMethod;
             method->setName(methodre.group(1));
             method->setDefinedInFile(fileName);
             method->setDefinedOnLine(lineNo);
-            
+
             if (lastClass && rawline.left(3) != "def") {
                 ParsedMethod *old = lastClass->getMethod(method);
                 kdDebug(9014) << "Add class method " << method->name() << endl;
@@ -261,11 +261,11 @@ void PythonSupportPart::parse(const QString &fileName)
                     classStore()->globalScope()->addMethod(method);
                 lastClass = 0;
             }
-            
+
         }
         ++lineNo;
     }
-    
+
     f.close();
 }
 

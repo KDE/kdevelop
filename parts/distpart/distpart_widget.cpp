@@ -7,6 +7,7 @@
 #include <kprocess.h>
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 #include "kdevproject.h"
 #include "domutil.h"
 
@@ -92,7 +93,7 @@ void DistpartDialog::slotcancelPushButtonPressed() {
 //    QPushButton* help_PushButton;
 
 void DistpartDialog::slothelp_PushButtonPressed() {
-    QMessageBox::about(this,"Distpart Help","In order to build a RPM package :\n\t1) Create a source archive\n\t2) Generate a SPEC File\n\t3) Build the package");
+    QMessageBox::about(this,i18n("Distpart Help"),i18n("In order to build a RPM package :\n\t1) Create a source archive\n\t2) Generate a SPEC File\n\t3) Build the package"));
 }
 
 //    QPushButton* createSrcArchPushButton;

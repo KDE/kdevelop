@@ -47,6 +47,7 @@
 #include <private/qrichtext_p.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 using namespace std;
 
@@ -56,14 +57,14 @@ MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
       ,m_clickChangesBPs(true)
       ,m_changeBookmarksAllowed(false)
       ,m_changeBreakpointsAllowed(false)
-      ,m_bookmarkDescr(tr("Bookmark"))
-      ,m_breakpointDescr(tr("Breakpoint"))
+      ,m_bookmarkDescr(i18n("Bookmark"))
+      ,m_breakpointDescr(i18n("Breakpoint"))
 {
     m_pixmapMap.insert(0x01, SmallIcon("attach"));
     m_pixmapMap.insert(0x05, SmallIcon("exec"));
     m_pixmapMap.insert(0x200, SmallIcon("stop"));
     m_pixmapMap.insert(0x400, SmallIcon("fun"));
-    
+
     setFixedWidth( 20 );
 
     connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
@@ -88,7 +89,7 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
     while ( p ) {
         if ( !p->isVisible() ) {
             p = p->next();
-            continue;    
+            continue;
         }
         if ( p->rect().y() + p->rect().height() - yOffset < 0 ) {
             p = p->next();
@@ -134,31 +135,31 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
     int toggleBookmark = 0;
     int lmbClickChangesBPs = 0;
     int lmbClickChangesBookmarks = 0;
-    
+
     QTextParagraph *p = m_editor->document()->firstParagraph();
     int yOffset = m_editor->contentsY();
     while ( p ) {
         if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
             ParagData* data = (ParagData*) p->extraData();
             if ( data->mark() & 0x02 )
-                toggleBreakPoint = m.insertItem( tr( "Clear " ) + m_breakpointDescr );
+                toggleBreakPoint = m.insertItem( i18n( "Clear %1" ).arg(m_breakpointDescr) );
             else
-                toggleBreakPoint = m.insertItem( tr( "Set " ) + m_breakpointDescr );
+                toggleBreakPoint = m.insertItem( i18n( "Set %1" ).arg(m_breakpointDescr) );
             m.setItemEnabled(toggleBreakPoint, m_changeBreakpointsAllowed);
             m.insertSeparator();
 
             if ( data->mark() & 0x01 )
-                toggleBookmark = m.insertItem( tr( "Clear " ) + m_bookmarkDescr );
+                toggleBookmark = m.insertItem( i18n( "Clear %1" ).arg(m_bookmarkDescr) );
             else
-                toggleBookmark = m.insertItem( tr( "Set " ) + m_bookmarkDescr );
+                toggleBookmark = m.insertItem( i18n( "Set %1" ).arg(m_bookmarkDescr) );
             m.setItemEnabled(toggleBookmark, m_changeBookmarksAllowed);
             m.insertSeparator();
-            
-            lmbClickChangesBPs = m.insertItem( tr( "Left mouse button click sets: " ) + m_breakpointDescr );
-            lmbClickChangesBookmarks = m.insertItem( tr( "Left mouse button click sets: " ) + m_bookmarkDescr );
+
+            lmbClickChangesBPs = m.insertItem( i18n( "Left mouse button click sets: %1" ).arg(m_breakpointDescr) );
+            lmbClickChangesBookmarks = m.insertItem( i18n( "Left mouse button click sets: %1" ).arg(m_bookmarkDescr) );
             m.setItemChecked(lmbClickChangesBPs, m_clickChangesBPs);
             m.setItemChecked(lmbClickChangesBookmarks, !m_clickChangesBPs);
-                            
+
             //m.insertSeparator();
             break;
         }
@@ -173,7 +174,7 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 
     KTextEditor::Mark mark;
     mark.line = p->paragId();
-    
+
     if ( res == toggleBookmark && m_changeBookmarksAllowed ) {
         mark.type = 0x01;
         if ( data->mark() & 0x01 ) {

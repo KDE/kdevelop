@@ -56,7 +56,7 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
       QString s;
       while ( !t.eof() ) {        // until end of file...
 	  s = t.readLine();       // line of text excluding '\n'
-	  if(lineReg.match(s.latin1())){
+	  if(lineReg.match(s.local8Bit())){
 	      e.prefix = lineReg.group(1);
 	      e.text = lineReg.group(2);
 	      //	      if(QString(lineReg.group(3)) == "void"){
@@ -108,7 +108,7 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
     kdDebug(9018) << "editor does not support the ViewCursorInterface" << endl;
     return;
   }
-  
+
   m_codeInterface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(part->widget());
   if (!m_codeInterface) { // no CodeCompletionDocument available
     kdDebug(9018) << "editor doesn't support the CodeCompletionDocumentIface" << endl;
@@ -128,7 +128,7 @@ void PHPCodeCompletion::cursorPositionChanged(){
   uint line, col;
   m_cursorInterface->cursorPositionReal(&line, &col);
   kdDebug(9018) << "PHPCodeCompletion::cursorPositionChanged:" << line << ":" << col  << endl;
-  
+
   m_currentLine = line;
   QString lineStr = m_editInterface->textLine(line);
   if(lineStr.isNull() || lineStr.isEmpty()) return; // nothing to do
@@ -136,39 +136,39 @@ void PHPCodeCompletion::cursorPositionChanged(){
   //  kdDebug(9018) << "Länge:" << lineStr.length() <<":" << endl;
   //  lineStr.replace(QRegExp("\t"),"_");
   //  kdDebug(9018) << "ZEILEohneTAB:" << lineStr <<":" << endl;
-  
+
 
   if(m_config->getCodeHinting()){
     if(checkForNewInstanceArgHint(lineStr,col,line)){
       return;
     }
-    
+
     if(checkForMethodArgHint(lineStr,col,line)){
       return;
     }
-    
+
     if(checkForGlobalFunctionArgHint(lineStr,col,line)){
       return;
     }
   }
-  
+
   if(m_config->getCodeCompletion()){
     QString restLine = lineStr.mid(col);
     if(restLine.left(1) != " " && restLine.left(1) != "\t" && !restLine.isNull()){
       kdDebug(9018) << "no codecompletion because no empty character after cursor:" << restLine << ":" << endl;
       return;
     }
-    
+
     if(checkForVariable(lineStr,col,line)){
       return;
     }
-    
+
     // $test = new XXX
     if(checkForNewInstance(lineStr,col,line)){
       return;
     }
-    
-    
+
+
     if(checkForGlobalFunction(lineStr,col)) {
       return;
     }
@@ -207,7 +207,7 @@ bool PHPCodeCompletion::checkForMethodArgHint(QString lineStr,int col,int /*line
   if(pClass !=0){
     QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
     QValueList<ParsedMethod*>::ConstIterator methodIt;
-    
+
     for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
       if ((*methodIt)->name() == methodName){
 	ParsedArgument* pArg = (*methodIt)->arguments.first();
@@ -279,11 +279,11 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
 
 QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
   kdDebug(9018) << "enter PHPCodeCompletion::searchClassNameForVariable:" << varName << ":" << endl;
-  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)").latin1());
+  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)").local8Bit());
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->textLine(i);
     if(!lineStr.isNull()){
-      if(createVarRe.match(lineStr.latin1())) { // ok found
+      if(createVarRe.match(lineStr.local8Bit())) { // ok found
 	//      cerr << endl << "match in searchClassNameForVariable:";
 	return createVarRe.group(1);
       }
@@ -298,8 +298,8 @@ QString PHPCodeCompletion::searchCurrentClassName(){
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->textLine(i);
     if(!lineStr.isNull()){
-      if(classre.match(lineStr.latin1())) { // ok found
-	return classre.group(1);
+      if(classre.match(lineStr.local8Bit())) { // ok found
+          return classre.group(1);
       }
     }
   }
@@ -324,7 +324,7 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,in
   methodStart = methodStart.left(leftBracket+1);
   //  cerr << methodStart << endl;
   KRegExp functionre("([A-Za-z_]+)[ \t]*\\(");
-  if(functionre.match(methodStart.latin1())){ // check for global functions
+  if(functionre.match(methodStart.local8Bit())){ // check for global functions
     QString name = functionre.group(1);
     int startMethod = lineStr.findRev(name,col);
     QString startString = lineStr.mid(0,startMethod);
@@ -365,7 +365,7 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString lineStr,int col){
     QString startStr =lineStr.mid(col-2,2);
     return doGlobalMethodCompletion(startStr);
   }
-  
+
   // normal case
   QString startStr =lineStr.mid(col-3,3);
   if(startStr.isNull()){
@@ -379,14 +379,14 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString lineStr,int col){
      startChar == ")" || startChar == "(" || startChar == "}" || startChar == "{"){
     methodStart = startStr.right(2);
   }
-  
+
   //kdDebug(9018)  << "Methodstart:" << methodStart  << ":" << endl;
   if(methodStart != ""){
     return doGlobalMethodCompletion(methodStart);
   }
   return false;
 }
-  
+
 bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
   //kdDebug(9018)  << "doGlobalMethodCompletion:" << methodStart  << ":" << endl;
   QValueList<KTextEditor::CompletionEntry> list;
@@ -398,7 +398,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
       list.append(e);
     }
   }
-  
+
   QValueList<ParsedMethod*> methodList = m_classStore->globalScope()->getSortedMethodList();
   QValueList<ParsedMethod*>::ConstIterator methodIt;
   for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
@@ -409,7 +409,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
       list.append(e);
     }
   }
-  
+
   if(list.count() >0){
     m_completionBoxShow=true;
     m_codeInterface->showCompletionBox(list,2);
@@ -417,7 +417,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
   }
   return false;
 }
-  
+
 
 
 bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /*line*/){
@@ -436,7 +436,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
   start = start.mid(equal,leftBracket-equal+1);
   //  cerr << "NEW: " << start << endl;
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
-  if(newre.match(start.latin1())){
+  if(newre.match(start.local8Bit())){
     ParsedClass* pClass=0;
     pClass =  m_classStore->getClassByName(newre.group(1));
     if(pClass !=0){ // exists this class?
@@ -462,7 +462,7 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");
-  if(newre.match(start.latin1())){
+  if(newre.match(start.local8Bit())){
     QString classStart = newre.group(1);
     if(start.right(2) == classStart){
       QValueList<KTextEditor::CompletionEntry> list;

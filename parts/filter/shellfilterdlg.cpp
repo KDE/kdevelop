@@ -34,7 +34,7 @@ ShellFilterDialog::ShellFilterDialog()
     combo = new QComboBox(true, this);
     combo->setDuplicatesEnabled(false);
     layout->addWidget(combo);
-    
+
     KButtonBox *buttonbox = new KButtonBox(this);
     start_button = buttonbox->addButton(i18n("&Start"));
     start_button->setDefault(true);
@@ -46,7 +46,7 @@ ShellFilterDialog::ShellFilterDialog()
              this, SLOT(slotStartClicked()) );
     connect( cancel_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
-    
+
     m_proc = 0;
 
     KConfig *config = FilterFactory::instance()->config();
@@ -59,7 +59,7 @@ ShellFilterDialog::~ShellFilterDialog()
 {
     kdDebug(9029) << "~ShellFilterDialog" << endl;
     delete m_proc;
-    
+
     // QComboBox API is a bit incomplete :-(
     QStringList list;
     for (int i=0; i < combo->count(); ++i)
@@ -99,7 +99,7 @@ int ShellFilterDialog::exec()
 
 void ShellFilterDialog::slotReceivedStdout(KProcess *, char *text, int len)
 {
-    m_outstr += QCString(text, len+1);
+    m_outstr += QString::fromLocal8Bit(text, len+1);
     kdDebug(9029) << "outstr " << m_outstr << endl;
 }
 

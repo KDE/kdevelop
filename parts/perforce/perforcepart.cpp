@@ -53,11 +53,11 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
         const FileContext *fcontext = static_cast<const FileContext*>(context);
         popupfile = fcontext->fileName();
         QFileInfo fi(popupfile);
-	popup->insertSeparator();
+        popup->insertSeparator();
 
-	KPopupMenu *sub = new KPopupMenu(popup);
+        KPopupMenu *sub = new KPopupMenu(popup);
         QString name = fi.fileName();
-	sub->insertTitle( i18n("Actions for %1").arg(name) );
+        sub->insertTitle( i18n("Actions for %1").arg(name) );
         sub->insertItem( i18n("Edit"),
                            this, SLOT(slotEdit()) );
         sub->insertItem( i18n("Revert"),
@@ -67,18 +67,18 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
         sub->insertItem( i18n("Sync"),
                            this, SLOT(slotUpdate()) );
         sub->insertSeparator();
-	sub->insertItem( i18n("Diff Against Repository"),
+        sub->insertItem( i18n("Diff Against Repository"),
 			   this, SLOT(slotDiff()) );
         sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
         sub->insertItem( i18n("Remove From Repository"),
                            this, SLOT(slotRemove()) );
-	popup->insertItem(i18n("Perforce"), sub);
-	
+        popup->insertItem(i18n("Perforce"), sub);
+
     }
 }
 
-void PerforcePart::execCommand( const QString& cmd ) 
+void PerforcePart::execCommand( const QString& cmd )
 {
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
@@ -103,7 +103,7 @@ void PerforcePart::slotEdit()
 
 void PerforcePart::slotRevert()
 {
-    if ( KMessageBox::questionYesNo( 0, 
+    if ( KMessageBox::questionYesNo( 0,
             i18n("Do you really want to revert "
                  "the file %1 and lose all your changes?").arg(popupfile) ) == KMessageBox::Yes ) {
         execCommand( "revert" );
@@ -117,7 +117,7 @@ void PerforcePart::slotCommit()
         KMessageBox::error( 0, i18n("Submitting of subdirectories is not supported") );
         return;
     }
-    
+
     CommitDialog d;
     QStringList lst;
     lst << popupfile;

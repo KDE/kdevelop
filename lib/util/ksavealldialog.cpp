@@ -27,7 +27,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
 
   QVBox *top = makeVBoxMainWidget();
 
-  (void)new QLabel( "The following files have been modified. Save them?", top );
+  (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
   KListBox* lb = new KListBox( top );
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
   lb->insertStringList( filenames );

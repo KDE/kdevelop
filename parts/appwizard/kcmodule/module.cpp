@@ -62,6 +62,7 @@ extern "C"
 
     KCModule *create_$APPNAME$(QWidget *parent, const char *name)
     {
+        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
         return new $APPNAME$(parent, "$APPNAME$");
     }
 }

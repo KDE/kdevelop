@@ -39,39 +39,39 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
                   parent, name, false)
 {
     proc = 0;
-    
+
     indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
     QDir d; d.mkdir(indexdir);
-    
+
     QGridLayout *grid = new QGridLayout(plainPage(), 5,3, spacingHint());
-    
+
     QLabel *l = new QLabel(i18n("Scanning for files"), plainPage());
     grid->addMultiCellWidget(l, 0, 0, 1, 2);
-    
+
     filesLabel = new QLabel(plainPage());
     grid->addWidget(filesLabel, 1, 2);
     setFilesScanned(0);
-    
+
     check1 = new QLabel(plainPage());
     grid->addWidget(check1, 0, 0);
-    
+
     l = new QLabel(i18n("Extracting search terms"), plainPage());
     grid->addMultiCellWidget(l, 2,2, 1,2);
-    
+
     bar = new KProgress(plainPage());
     grid->addWidget(bar, 3,2);
-    
+
     check2 = new QLabel(plainPage());
     grid->addWidget(check2, 2,0);
-    
+
     l = new QLabel(i18n("Generating index..."), plainPage());
     grid->addMultiCellWidget(l, 4,4, 1,2);
-    
+
     check3 = new QLabel(plainPage());
     grid->addWidget(check3, 4,0);
-    
+
     setState(0);
-    
+
     setMinimumWidth(300);
 }
 
@@ -110,10 +110,10 @@ void ProgressDialog::setState(int n)
 {
     QPixmap unchecked = QPixmap(locate("data", "kdevdoctreeview/pics/unchecked.xpm"));
     QPixmap checked = QPixmap(locate("data", "kdevdoctreeview/pics/checked.xpm"));
-    
-    check1->setPixmap( n > 0 ? checked : unchecked);  
-    check2->setPixmap( n > 1 ? checked : unchecked);  
-    check3->setPixmap( n > 2 ? checked : unchecked);  
+
+    check1->setPixmap( n > 0 ? checked : unchecked);
+    check2->setPixmap( n > 1 ? checked : unchecked);
+    check3->setPixmap( n > 2 ? checked : unchecked);
 }
 
 
@@ -121,16 +121,16 @@ void ProgressDialog::addDir(const QString &dir)
 {
     QDir d(dir, "*.html", QDir::Name|QDir::IgnoreCase, QDir::Files | QDir::Readable);
     QStringList list = d.entryList();
-    
+
     QStringList::ConstIterator it;
     for ( it=list.begin(); it!=list.end(); ++it ) {
         files.append(dir + "/" + *it);
         setFilesScanned(++filesScanned);
     }
-    
+
     QDir d2(dir, QString::null, QDir::Name|QDir::IgnoreCase, QDir::Dirs);
     QStringList dlist = d2.entryList();
-    
+
     for ( it=dlist.begin(); it != dlist.end(); ++it ) {
         if (*it != "." && *it != "..") {
             addDir(dir + "/" + *it);
@@ -220,7 +220,7 @@ void ProgressDialog::scanDirectories()
 
     bool indexShownLibs = true;
     bool indexHiddenLibs = true;
-    
+
     QStringList itemNames, fileNames, hiddenNames;
     DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
     DocTreeViewTool::getHiddenLibraries(&hiddenNames);
@@ -256,7 +256,7 @@ void ProgressDialog::scanDirectories()
     if (indexKDevelop) {
         //TODO Problem: they are in index.cache.bz2 :-(
     }
-    
+
     if (indexQt) {
         config->setGroup("General");
         QString qtdocdir = config->readEntry("qtdocdir", QT_DOCDIR);
@@ -274,7 +274,7 @@ void ProgressDialog::scanDirectories()
     if (indexBooks) {
         KStandardDirs *dirs = KGlobal::dirs();
         QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
-        
+
         QStringList::ConstIterator it4;
         for (it4 = tocs.begin(); it4 != tocs.end(); ++it4) {
             QFile f(*it4);
@@ -319,7 +319,7 @@ bool ProgressDialog::createConfig()
     if (wrapper.isEmpty())
         return false;
     wrapper = wrapper.left(wrapper.length()-12);
-    
+
     // locate the image dir
     QString images = locate("data", "kdevdoctreeview/pics/star.png");
     if (images.isEmpty())
@@ -329,7 +329,7 @@ bool ProgressDialog::createConfig()
     QFile f(indexdir + "/htdig.conf");
     if (f.open(IO_WriteOnly)) {
         QTextStream ts(&f);
-        
+
         ts << "database_dir:\t\t" << indexdir << endl;
         ts << "start_url:\t\t`" << indexdir << "/files`" << endl;
         ts << "local_urls:\t\thttp://localhost/=/" << endl;
@@ -340,16 +340,16 @@ bool ProgressDialog::createConfig()
         ts << "star_blank:\t\t" << images << "star_blank.png" << endl;
         ts << "compression_level:\t\t6" << endl;
         ts << "max_hop_count:\t\t0" << endl;
-        
+
         ts << "search_results_wrapper:\t" << wrapper << "wrapper.html" << endl;
         ts << "nothing_found_file:\t" << wrapper << "nomatch.html" << endl;
         ts << "syntax_error_file:\t" << wrapper << "syntax.html" << endl;
         ts << "bad_word_list:\t\t" << wrapper << "bad_words" << endl;
-        
+
         f.close();
         return true;
     }
-    
+
     return false;
 }
 
@@ -371,17 +371,17 @@ bool ProgressDialog::generateIndex()
     bool initial = true;
     bool done = false;
     int  count = 0;
-    
+
     filesToDig = files.count();
     setFilesToDig(filesToDig);
     filesDigged = 0;
-    
+
     //    QDir d; d.mkdir(indexdir);
-    
+
     while (!done) {
         // kill old process
         delete proc;
-        
+
         // prepare new process
         proc = new KProcess();
         *proc << exe << "-c" << (indexdir + "/htdig.conf");
@@ -389,23 +389,23 @@ bool ProgressDialog::generateIndex()
             *proc << "-i";
             initial = false;
         }
-        
+
         kdDebug() << "Running htdig" << endl;
-        
+
         //      connect(_proc, SIGNAL(receivedStdout(KProcess *,char*,int)),
         //	      this, SLOT(htdigStdout(KProcess *,char*,int)));
         connect(proc, SIGNAL(processExited(KProcess *)),
                 this, SLOT(htdigExited(KProcess *)));
-        
+
         htdigRunning = true;
-        
+
         // write out file
         QFile f(indexdir+"/files");
         if (!f.open(IO_WriteOnly)) {
             kdDebug() << "Could not open `files` for writing" << endl;
             return false;
 	}
-        
+
         QTextStream ts(&f);
         for (int i=0; i<CHUNK_SIZE; ++i, ++count) {
             if (count >= filesToDig) {
@@ -415,18 +415,18 @@ bool ProgressDialog::generateIndex()
             ts << "http://localhost/" + files[count] << endl;
         }
         f.close();
-        
+
         // execute htdig
-        proc->start(KProcess::NotifyOnExit, KProcess::Stdout);      
+        proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
         while (htdigRunning && proc->isRunning())
             kapp->processEvents();
-        
+
         if (!proc->normalExit() || proc->exitStatus() != 0) {
             KMessageBox::sorry(0, i18n("Running htdig failed"));
             delete proc;
             return false;
         }
-        
+
         filesDigged += CHUNK_SIZE;
         setFilesDigged(filesDigged);
         kapp->processEvents();
@@ -438,33 +438,33 @@ bool ProgressDialog::generateIndex()
     exe = config.readEntry("htmerge", kapp->dirs()->findExe("htmerge"));
     if (exe.isEmpty())
         return false;
-    
+
     delete proc;
     proc = new KProcess();
     *proc << exe << "-c" << (indexdir + "/htdig.conf");
 
     kdDebug() << "Running htmerge" << endl;
-    
+
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(htmergeExited(KProcess *)));
-    
+
     htmergeRunning = true;
-    
+
     proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
-    
+
     while (htmergeRunning && proc->isRunning())
         kapp->processEvents();
-    
+
     if (!proc->normalExit() || proc->exitStatus() != 0) {
         delete proc;
         return false;
     }
 
     delete proc;
-    
+
     setState(3);
     kapp->processEvents();
-    
+
     return true;
 }
 
@@ -473,17 +473,17 @@ bool ProgressDialog::generateIndex()
 void ProgressDialog::htdigStdout(KProcess *, char *buffer, int len)
 {
     QString line = QString(buffer).left(len);
-    
+
     int cnt=0, index=-1;
     while ( (index = line.find("http://", index+1)) > 0)
         cnt++;
     filesDigged += cnt;
-    
+
     cnt=0, index=-1;
     while ( (index = line.find("not changed", index+1)) > 0)
         cnt++;
     filesDigged -= cnt;
-    
+
     setFilesDigged(filesDigged);
 }
 
@@ -510,23 +510,23 @@ int main(int argc, char *argv[])
         { 0, 0, 0 }
     };
 #endif
-    
+
     KAboutData aboutData("kdevdoctreeview", I18N_NOOP("Gideon"),
                          "0.1", I18N_NOOP("KDE Index generator for help files."));
-    
+
     KCmdLineArgs::init(argc, argv, &aboutData);
     //    KCmdLineArgs::addCmdLineOptions(options);
-    
+
     KApplication app;
 
     KGlobal::dirs()->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
-    KGlobal::locale()->setMainCatalogue("htmlsearch");
+    KGlobal::locale()->setMainCatalogue("kdevelop");
 
     ProgressDialog *search = new ProgressDialog(0, "progress dialog");
     search->show();
     kapp->processEvents();
     QApplication::syncX();
-    
+
     //    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     // Assemble directory list
@@ -540,7 +540,7 @@ int main(int argc, char *argv[])
 
     // Do it :-)
     search->generateIndex();
-    
+
     return 0;
 }
 

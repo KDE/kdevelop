@@ -8,11 +8,13 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 extern "C"
 {
     void* init_lib$APPNAMELC$part()
     {
+        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
         return new $APPNAME$Factory;
     }
 };

@@ -13,6 +13,7 @@
 #include <klibloader.h>
 #include <kmessagebox.h>
 #include <krun.h>
+#include <klocale.h>
 
 $APPNAME$View::$APPNAME$View(QWidget *parent)
     : QWidget(parent),
@@ -29,7 +30,7 @@ $APPNAME$View::$APPNAME$View(QWidget *parent)
     //
     // the service type is like a mime type.  we say that we want all
     // applications and components that can handle HTML -- 'text/html'
-    // 
+    //
     // however, by itself, this will return such things as Netscape..
     // not what we wanted.  so we constrain it by saying that the
     // string 'KParts/ReadOnlyPart' must be found in the ServiceTypes
@@ -60,7 +61,7 @@ $APPNAME$View::$APPNAME$View(QWidget *parent)
     // and we might as well just exit now
     if (!factory)
     {
-        KMessageBox::error(this, "Could not find a suitable HTML component");
+        KMessageBox::error(this, i18n("Could not find a suitable HTML component"));
         return;
     }
 

@@ -28,6 +28,6 @@ void AppWizardUtil::guessAuthorAndEmail(QString *author, QString *email)
     // I guess we don't have to support users with longer host names ;-)
     (void) ::gethostname(hostname, sizeof hostname);
 
-    *author = pw->pw_gecos;
+    *author = QString::fromLocal8Bit(pw->pw_gecos);
     *email = QString(pw->pw_name) + "@" + hostname;
 }

@@ -23,8 +23,8 @@
 AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add Documentation Entry"));
-    
+    setCaption(i18n("Add Documentation Entry"));
+
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
     title_edit = new QLineEdit(this);
     title_edit->setFocus();
@@ -35,7 +35,7 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     url_label->setBuddy(url_edit);
     QFontMetrics fm(url_edit->fontMetrics());
     url_edit->setMinimumWidth(fm.width('X')*35);
-    
+
     QPushButton *url_button = new QPushButton("...", this);
     url_button->setFixedSize(30, 25);
 
@@ -49,9 +49,9 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     QWhatsThis::add(url_edit, s);
     s = i18n("Here you can browse through your file system to select a file for the entry.");
     QWhatsThis::add(url_button, s);
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
-    
+
     QGridLayout *grid = new QGridLayout(2, 3);
     layout->addLayout(grid);
     grid->addWidget(title_label, 0, 0);

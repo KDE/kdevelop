@@ -67,7 +67,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     topLevel()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
 
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
-    
+
     // a small hack (robe)
     classStore()->globalScope()->setName( "(default packages)" );
     classStore()->addScope( classStore()->globalScope() );
@@ -134,7 +134,7 @@ void JavaSupportPart::initialParse()
         emit updatedSourceInfo();
 
         kapp->restoreOverrideCursor();
-        topLevel()->statusBar()->message( i18n("Found %1 problems").arg(d->problemReporter->childCount()) );
+        topLevel()->statusBar()->message( i18n("Found 1 problem", "Found %n problems", d->problemReporter->childCount()) );
     }
 }
 
@@ -159,13 +159,13 @@ void JavaSupportPart::maybeParse(const QString &fileName)
 void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QString path = project()->projectDirectory() + "/" + ( *it );
 		maybeParse( path );
 	}
-	
+
 	emit updatedSourceInfo();
 }
 
@@ -173,14 +173,14 @@ void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 void JavaSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		kdDebug(9013) << "JavaSupportPart::removedFileFromProject() -- " << ( *it ) << endl;
 		QString path = project()->projectDirectory() + "/" + ( *it );
 		classStore()->removeWithReferences(path);
 	}
-	
+
 	emit updatedSourceInfo();
 }
 
@@ -232,7 +232,7 @@ void JavaSupportPart::parseContents( const QString& contents, const QString& fil
     kdDebug() << "JavaSupportPart::parseContents() -- " << fileName << endl;
 
 
-    QCString _fn = fileName.utf8();
+    QCString _fn = QFile::encodeName(fileName);
     std::string fn( _fn.data() );
 
     QCString text = contents.utf8();

@@ -105,7 +105,7 @@ void KDevRegExp::setPattern( const QString& s )
 
 bool KDevRegExp::exactMatch( const QString& str ) const
 {
-  if( d->rx->match(str.latin1()) ){
+  if( d->rx->match(str) ){
     if( d->rx->groupStart(0) == 0 && d->rx->groupEnd(0) == (int)str.length() )
       return true;
   }
@@ -115,7 +115,7 @@ bool KDevRegExp::exactMatch( const QString& str ) const
 int KDevRegExp::search( const QString& str, int index ) const
 {
   QString s = str.mid( index );
-  if( d->rx->match(s.latin1()) ){
+  if( d->rx->match(s) ){
     return index + d->rx->groupStart( 0 );
   }
   return -1;
@@ -125,7 +125,7 @@ QString KDevRegExp::cap( int grp ) const
 {
   const char* s = d->rx->group( grp );
   if( s ){
-    return QString::fromLatin1( s );
+    return QString::fromUtf8( s );
   }
   return QString::null;
 }

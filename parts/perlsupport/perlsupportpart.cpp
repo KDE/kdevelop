@@ -116,7 +116,7 @@ void PerlSupportPart::maybeParse(const QString fileName)
 void PerlSupportPart::initialParse()
 {
     kdDebug(9016) << "initialParse()" << endl;
-    
+
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allFiles();
@@ -124,7 +124,7 @@ void PerlSupportPart::initialParse()
             kdDebug(9016) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
             maybeParse(project()->projectDirectory() + "/" + *it);
         }
-        
+
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
@@ -136,14 +136,14 @@ void PerlSupportPart::initialParse()
 void PerlSupportPart::addedFilesToProject(const QStringList &fileList)
 {
 	kdDebug(9016) << "addedFilesToProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
 	}
-	
+
 	emit updatedSourceInfo();
 }
 
@@ -151,14 +151,14 @@ void PerlSupportPart::addedFilesToProject(const QStringList &fileList)
 void PerlSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     kdDebug(9016) << "removedFilesFromProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
 	}
-		
+
     emit updatedSourceInfo();
 }
 
@@ -190,7 +190,7 @@ QStringList PerlSupportPart::fileFilters()
 
 void PerlSupportPart::parse(const QString &fileName)
 {
-    QFile f(QFile::encodeName(fileName));
+    QFile f(fileName);
     if (!f.open(IO_ReadOnly))
         return;
     QTextStream stream(&f);
@@ -200,20 +200,20 @@ void PerlSupportPart::parse(const QString &fileName)
     QCString line;
     int lineNo = 0;
     while (!stream.atEnd()) {
-        line = stream.readLine().stripWhiteSpace().latin1();
+        line = stream.readLine().stripWhiteSpace().local8Bit();
         if (subre.match(line)) {
             ParsedMethod *sub = new ParsedMethod;
             sub->setName(subre.group(1));
             sub->setDefinedInFile(fileName);
             sub->setDefinedOnLine(lineNo);
-            
+
             ParsedMethod *old = classStore()->globalScope()->getMethod(sub);
             if (!old)
                 classStore()->globalScope()->addMethod(sub);
         }
         ++lineNo;
     }
-    
+
     f.close();
 }
 

@@ -34,7 +34,7 @@ ShellInsertDialog::ShellInsertDialog()
     combo = new QComboBox(true, this);
     combo->setDuplicatesEnabled(false);
     layout->addWidget(combo);
-    
+
     KButtonBox *buttonbox = new KButtonBox(this);
     start_button = buttonbox->addButton(i18n("&Start"));
     start_button->setDefault(true);
@@ -46,7 +46,7 @@ ShellInsertDialog::ShellInsertDialog()
              this, SLOT(slotStartClicked()) );
     connect( cancel_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
-    
+
     m_proc = 0;
 
     KConfig *config = FilterFactory::instance()->config();
@@ -65,7 +65,7 @@ ShellInsertDialog::~ShellInsertDialog()
     QStringList list;
     for (int i=0; i < combo->count(); ++i)
         list << combo->text(i);
-    
+
     KConfig *config = FilterFactory::instance()->config();
     config->setGroup("General");
     config->writeEntry("InsertItems", list);
@@ -82,7 +82,7 @@ int ShellInsertDialog::exec()
 void ShellInsertDialog::slotStartClicked()
 {
     start_button->setEnabled(false);
-    m_str = QString();
+    m_str = QCString();
 
     delete m_proc;
     m_proc = new KShellProcess("/bin/sh");

@@ -28,7 +28,7 @@ bool ASStringIterator::hasMoreLines() const
 
 string ASStringIterator::nextLine()
 {
-  return _is->readLine().latin1();
+  return _is->readLine().utf8().data();
 }
 
 
@@ -41,7 +41,7 @@ KDevFormatter::KDevFormatter()
 
   // style
   QString s = config->readEntry("Style");
-  if (s == "ANSI") 
+  if (s == "ANSI")
     {
       setBracketIndent(false);
       setSpaceIndentation(4);
@@ -52,7 +52,7 @@ KDevFormatter::KDevFormatter()
       return;
     }
   if (s == "KR")
-    {        
+    {
       setBracketIndent(false);
       setSpaceIndentation(4);
       setBracketFormatMode(ATTACH_MODE);
@@ -72,7 +72,7 @@ KDevFormatter::KDevFormatter()
       return;
     }
   if (s == "GNU")
-    {       
+    {
       setBlockIndent(true);
       setSpaceIndentation(2);
       setBracketFormatMode(BREAK_MODE);
@@ -104,7 +104,7 @@ KDevFormatter::KDevFormatter()
   setBracketIndent(config->readBoolEntry("IndentBrackets", false));
   setNamespaceIndent(config->readBoolEntry("IndentNamespaces", true));
   setLabelIndent(config->readBoolEntry("IndentLabels", true));
-    
+
   // continuation
   setMaxInStatementIndentLength(config->readNumEntry("MaxStatement", 40));
   if (config->readNumEntry("MinConditional", -1) != -1)
@@ -124,6 +124,6 @@ KDevFormatter::KDevFormatter()
   setParenthesisPaddingMode(config->readBoolEntry("PadOperators", false));
 
   // oneliner
-  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false)); 
+  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
   setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
 }

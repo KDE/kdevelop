@@ -12,6 +12,7 @@
 #include <kinstance.h>
 #include <kprocess.h>
 #include <kdeversion.h>
+#include <kglobal.h>
 
 using namespace KIO;
 
@@ -36,11 +37,11 @@ void PerldocProtocol::get(const KURL& url)
     if (l[0] == "functions") {
         plain = true;
         cmd += "-t -f ";
-#if (KDE_VERSION > 305)        
+#if (KDE_VERSION > 305)
         cmd += KProcess::quote(l[1]);
 #else
         cmd += KShellProcess::quote(l[1]);
-#endif        
+#endif
     } else if (l[0] == "faq") {
         cmd += "-u -q ";
 #if (KDE_VERSION > 305)
@@ -50,7 +51,7 @@ void PerldocProtocol::get(const KURL& url)
 #endif
         cmd += " | pod2html";
     } else {
-        QCString errstr(i18n("The only existing directories are functions and faq.").latin1());
+        QCString errstr(i18n("The only existing directories are functions and faq.").local8Bit());
         data(errstr);
         finished();
         return;
@@ -60,11 +61,11 @@ void PerldocProtocol::get(const KURL& url)
 
     if (plain)
         data(QCString("<blockquote>"));
-    
+
     FILE *fd = popen(cmd.data(), "r");
     char buffer[4090];
     QByteArray array;
-    
+
     while (!feof(fd)) {
         int n = fread(buffer, 1, 2048, fd);
         if (n == -1) {
@@ -75,12 +76,12 @@ void PerldocProtocol::get(const KURL& url)
         data(array);
         array.resetRawData(buffer, n);
     }
-    
+
     pclose(fd);
 
     if (plain)
         data(QCString("</blockquote>"));
-         
+
     finished();
 }
 
@@ -95,7 +96,7 @@ void PerldocProtocol::mimetype(const KURL &url)
 
 QCString PerldocProtocol::errorMessage()
 {
-    return QCString( "<html><body bgcolor=\"#FFFFFF\">Error in perldoc</body></html>" );
+    return QCString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in perldoc").local8Bit() + "</body></html>" );
 }
 
 
@@ -104,10 +105,10 @@ void PerldocProtocol::stat(const KURL &/*url*/)
     UDSAtom uds_atom;
     uds_atom.m_uds = KIO::UDS_FILE_TYPE;
     uds_atom.m_long = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
-    
+
     UDSEntry uds_entry;
     uds_entry.append(uds_atom);
-    
+
     statEntry(uds_entry);
     finished();
 }
@@ -124,15 +125,16 @@ extern "C" {
     int kdemain(int argc, char **argv)
     {
         KInstance instance( "kio_perldoc" );
-        
+        KGlobal::locale()->setMainCatalogue("kdevelop");
+
         if (argc != 4) {
             fprintf(stderr, "Usage: kio_perldoc protocol domain-socket1 domain-socket2\n");
             exit(-1);
         }
-        
+
         PerldocProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         return 0;
     }
 

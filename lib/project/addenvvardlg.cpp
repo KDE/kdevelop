@@ -21,8 +21,8 @@
 AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add Environment Variable"));
-    
+    setCaption(i18n("Add Environment Variable"));
+
     QLabel *varname_label = new QLabel(i18n("&Name:"), this);
     varname_edit = new QLineEdit(this);
     varname_edit->setFocus();
@@ -33,9 +33,9 @@ AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     value_label->setBuddy(value_edit);
     QFontMetrics fm(value_edit->fontMetrics());
     value_edit->setMinimumWidth(fm.width('X')*35);
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
-    
+
     QGridLayout *grid = new QGridLayout(2, 2);
     layout->addLayout(grid);
     grid->addWidget(varname_label, 0, 0);

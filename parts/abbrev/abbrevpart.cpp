@@ -117,7 +117,7 @@ void AbbrevPart::save()
     while( it.current() ){
         CodeTemplate* templ = it.current();
         QDomElement e = doc.createElement( "Template" );
-        e.setAttribute( "name", QString::fromLatin1(it.currentKey()) );
+        e.setAttribute( "name", it.currentKey() );
         e.setAttribute( "description", templ->description );
         e.setAttribute( "suffixes", templ->suffixes );
         e.setAttribute( "code", templ->code );

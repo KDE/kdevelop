@@ -55,13 +55,13 @@ BugList::BugList(QWidget *parent, const char *name, QString FileName,
 
     // Create the list for displaying bugs.
     pMainBugList = new QListView (pBugListBox, "mainbuglist");
-    pMainBugList->addColumn ("Bug ID",72);
-    pMainBugList->addColumn ("Description",190);
-    pMainBugList->addColumn ("Severity",60);
-    pMainBugList->addColumn ("Priority",60);
-    pMainBugList->addColumn ("Days Old",60);
-    pMainBugList->addColumn ("Package",120);
-    pMainBugList->addColumn ("Assigned To",100);
+    pMainBugList->addColumn (i18n("Bug ID"),72);
+    pMainBugList->addColumn (i18n("Description"),190);
+    pMainBugList->addColumn (i18n("Severity"),60);
+    pMainBugList->addColumn (i18n("Priority"),60);
+    pMainBugList->addColumn (i18n("Days Old"),60);
+    pMainBugList->addColumn (i18n("Package"),120);
+    pMainBugList->addColumn (i18n("Assigned To"),100);
 //    pMainBugList->setColumnAlignment (3,Qt::AlignRight);
 
     // Make the list use all columns for showing focus.
@@ -78,37 +78,37 @@ BugList::BugList(QWidget *parent, const char *name, QString FileName,
     pMaintenanceBox->setMargin (0);
 
     // Create the add button.
-    QPushButton *Add = new QPushButton( "Add", pMaintenanceBox, "add" );
+    QPushButton *Add = new QPushButton( i18n("Add"), pMaintenanceBox, "add" );
     connect (Add, SIGNAL(clicked()), this, SLOT(slotAddClicked()));
     Add->setMinimumSize (100,25);
     Add->setMaximumSize (100,25);
 
     // Create the edit button.
-    QPushButton *Edit = new QPushButton( "Edit", pMaintenanceBox, "edit");
+    QPushButton *Edit = new QPushButton( i18n("Edit"), pMaintenanceBox, "edit");
     connect (Edit, SIGNAL(clicked()), this, SLOT(slotEditClicked()));
     Edit->setMinimumSize (100,25);
     Edit->setMaximumSize (100,25);
 
     // Create the delete button.
-    QPushButton *Delete = new QPushButton( "Delete", pMaintenanceBox, "delete" );
+    QPushButton *Delete = new QPushButton( i18n("Delete"), pMaintenanceBox, "delete" );
     connect (Delete, SIGNAL(clicked()), this, SLOT(slotRemoveClicked()));
     Delete->setMinimumSize (100,25);
     Delete->setMaximumSize (100,25);
 
     // Create the completed button.
-    QPushButton *Completed = new QPushButton( "Completed", pMaintenanceBox, "completed");
+    QPushButton *Completed = new QPushButton( i18n("Completed"), pMaintenanceBox, "completed");
     connect (Completed, SIGNAL(clicked()), this, SLOT(slotCompletedClicked()));
     Completed->setMinimumSize (100,25);
     Completed->setMaximumSize (100,25);
 
     // Create the Filter button.
-    QPushButton *Filter = new QPushButton( "Filter", pMaintenanceBox, "filter");
+    QPushButton *Filter = new QPushButton( i18n("Filter"), pMaintenanceBox, "filter");
     connect (Filter, SIGNAL(clicked()), this, SLOT(slotFilter ()));
     Filter->setMinimumSize (100,25);
     Filter->setMaximumSize (100,25);
 
     // Create the Ownership button.
-    QPushButton *Ownership = new QPushButton( "My Bug", pMaintenanceBox, "Ownership");
+    QPushButton *Ownership = new QPushButton( i18n("My Bug"), pMaintenanceBox, "Ownership");
     connect (Ownership, SIGNAL(clicked()), this, SLOT(slotOwnership ()));
     Ownership->setMinimumSize (100,25);
     Ownership->setMaximumSize (100,25);
@@ -121,13 +121,13 @@ BugList::BugList(QWidget *parent, const char *name, QString FileName,
     pExitBox->setMargin (0);
 
     // Create the cancel button.
-    QPushButton *Cancel = new QPushButton( "Cancel", pExitBox, "cancel" );
+    QPushButton *Cancel = new QPushButton( i18n("Cancel"), pExitBox, "cancel" );
     connect (Cancel, SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
     Cancel->setMinimumSize (100,25);
     Cancel->setMaximumSize (100,25);
 
     // Create the close button.
-    QPushButton *Close = new QPushButton( "Close", pExitBox, "close");
+    QPushButton *Close = new QPushButton( i18n("Close"), pExitBox, "close");
     connect (Close, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     Close->setMinimumSize (100,25);
     Close->setMaximumSize (100,25);

@@ -10,3 +10,6 @@ kcm_$APPNAMELC$_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefin
 
 $APPNAMELC$_DATA = $APPNAMELC$.desktop
 $APPNAMELC$dir = $(kde_appsdir)/Settings/$APPNAME$
+
+messages: rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot

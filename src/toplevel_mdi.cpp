@@ -234,7 +234,7 @@ void TopLevelMDI::init()
   createGUI(0);
 
   if (!isFakingSDIApplication()) {
-    menuBar()->insertItem( tr("&Window"), windowMenu(), -1, menuBar()->count()-1);
+    menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, menuBar()->count()-1);
   }
 
   if ( PluginController::pluginServices().isEmpty() ) {
@@ -389,9 +389,9 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QStrin
 
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::UseQextMDISizeHint;
   addWindow(child, mdiFlags);
-  
+
   m_partViews.append(child);
-  
+
   // hack for a strange geometry problem (otherwise the childview doesn't move to the right position in the childframe)
   if ((mdiMode() == QextMdi::ChildframeMode) && isInMaximizedChildFrmMode()) {
     QWidget* v;
@@ -448,7 +448,7 @@ void TopLevelMDI::addToolViewWindow(EView eView, QextMdiChildView *child, const 
         tabName = "";
       //TODO_implement_me: }
       addToolWindow(child, KDockWidget::DockLeft, first, 25, toolTip, tabName);
-    }      
+    }
   }
   else
   {
@@ -488,7 +488,7 @@ void TopLevelMDI::setViewAvailable(QWidget *pView, bool bEnabled)
 {
   QextMdiChildView* pWrappingView = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
   if (!pWrappingView) return;
-  
+
   if (m_partViews.find(pWrappingView) != -1) {
     // TODO
   }
@@ -679,26 +679,26 @@ void TopLevelMDI::fillWindowMenu()
    if (!m_bClearingOfWindowMenuBlocked) {
       m_pWindowMenu->clear();
    }
-   int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
-   int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
-   int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+   int closeId         = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+   int closeAllId      = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+   int closeAllOtherId = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
    if (bNoViewOpened) {
       m_pWindowMenu->setItemEnabled(closeId, FALSE);
       m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
       m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
    }
    if (!bTabPageMode) {
-      int iconifyId = m_pWindowMenu->insertItem(tr("&Minimize All"), this, SLOT(iconifyAllViews()));
+      int iconifyId = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));
       if (bNoViewOpened) {
          m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
       }
    }
    m_pWindowMenu->insertSeparator();
-   m_pWindowMenu->insertItem(tr("&MDI Mode..."), m_pMdiModeMenu);
+   m_pWindowMenu->insertItem(i18n("&MDI Mode..."), m_pMdiModeMenu);
    m_pMdiModeMenu->clear();
-   m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
-   m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-   m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+   m_pMdiModeMenu->insertItem(i18n("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
+   m_pMdiModeMenu->insertItem(i18n("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+   m_pMdiModeMenu->insertItem(i18n("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
    switch (m_mdiMode) {
    case QextMdi::ToplevelMode:
       m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
@@ -714,20 +714,20 @@ void TopLevelMDI::fillWindowMenu()
    }
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
-      int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
+      int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
       m_pPlacingMenu->clear();
-      m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
-      m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-      m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
-      m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
-      m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
-      m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
-      m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      m_pPlacingMenu->insertItem(i18n("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(i18n("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(i18n("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(i18n("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(i18n("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(i18n("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(i18n("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
       if (m_mdiMode == QextMdi::ToplevelMode) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
       }
       m_pWindowMenu->insertSeparator();
-      int dockUndockId = m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
+      int dockUndockId = m_pWindowMenu->insertItem(i18n("&Dock/Undock..."), m_pDockMenu);
          m_pDockMenu->clear();
       m_pWindowMenu->insertSeparator();
       if (bNoViewOpened) {

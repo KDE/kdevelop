@@ -37,4 +37,4 @@ rc_DATA = $APPNAMELC$.rc
 rcdir = $(kde_datadir)/$APPNAMELC$
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cpp $APPNAMELC$_aboutdata.h -o $(podir)$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp $APPNAMELC$_aboutdata.h -o $(podir)/$APPNAMELC$.pot

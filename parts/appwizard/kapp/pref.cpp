@@ -10,7 +10,7 @@
 #include <qlabel.h>
 
 $APPNAME$Preferences::$APPNAME$Preferences()
-    : KDialogBase(TreeList, "$APPNAME$ Preferences",
+    : KDialogBase(TreeList, i18n("$APPNAME$ Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok)
 {
     // this is the base class for your preferences dialog.  it is now
@@ -30,7 +30,7 @@ $APPNAME$PrefPageOne::$APPNAME$PrefPageOne(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setAutoAdd(true);
 
-    new QLabel("Add something here", this);
+    new QLabel(i18n("Add something here"), this);
 }
 
 $APPNAME$PrefPageTwo::$APPNAME$PrefPageTwo(QWidget *parent)
@@ -39,6 +39,6 @@ $APPNAME$PrefPageTwo::$APPNAME$PrefPageTwo(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setAutoAdd(true);
 
-    new QLabel("Add something here", this);
+    new QLabel(i18n("Add something here"), this);
 }
 #include "pref.moc"

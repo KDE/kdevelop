@@ -23,7 +23,7 @@ class KProcess;
 class ShellFilterDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     ShellFilterDialog();
     ~ShellFilterDialog();
@@ -34,18 +34,19 @@ public:
     { m_instr = str.local8Bit(); }
     QString text() const
     { return QString::fromLocal8Bit(m_outstr); }
-    
+
 private slots:
     void slotStartClicked();
     void slotReceivedStdout(KProcess *, char *text, int len);
     void slotWroteStdin(KProcess *);
     void slotProcessExited(KProcess *);
-    
+
 private:
     QPushButton *start_button, *cancel_button;
     QComboBox *combo;
     KProcess *m_proc;
-    QCString m_instr, m_outstr;
+    QCString m_instr;
+    QString m_outstr;
 };
 
 #endif

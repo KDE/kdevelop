@@ -6,6 +6,7 @@
 
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qerrormessage.h>
@@ -20,10 +21,10 @@ SpecSupport::SpecSupport(DistpartPart * part) : packageBase(part,"Rpm") {
 
     m_part = part;
 
-    srcPackagePushButton = new QPushButton("Src Package",area());
-    buildAllPushButton = new QPushButton("Src/Binary Packages",area());
-    exportSPECPushButton = new QPushButton("Export SPEC File",area());
-    importSPECPushButton = new QPushButton("Import SPEC File",area());
+    srcPackagePushButton = new QPushButton(i18n("Src Package"),area());
+    buildAllPushButton = new QPushButton(i18n("Src/Binary Packages"),area());
+    exportSPECPushButton = new QPushButton(i18n("Export SPEC File"),area());
+    importSPECPushButton = new QPushButton(i18n("Import SPEC File"),area());
 
 
 
@@ -49,7 +50,7 @@ void SpecSupport::slotbuildAllPushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(this,"Error","You need to create a source archive first!");
+	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first!"));
 	    return;
 	}
 	else
@@ -184,7 +185,7 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(this,"Error","You need to create a source archive first!");
+	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first!"));
 	    return;
 	}
 	else

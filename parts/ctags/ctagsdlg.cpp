@@ -41,7 +41,7 @@ class CTagsResultItem : public QListBoxText
 public:
     CTagsResultItem(QListBox *parent, const QString &fileName, const QString pattern,
                     const QString &kindString)
-        : QListBoxText(parent, i18n("%1:%2 (%3)").arg(fileName).arg(pattern).arg(kindString)),
+        : QListBoxText(parent, QString("%1:%2 (%3)").arg(fileName).arg(pattern).arg(kindString)),
           m_fileName(fileName), m_pattern(pattern), m_kindString(kindString)
     {}
 
@@ -69,10 +69,10 @@ CTagsDialog::CTagsDialog(CTagsPart *part)
     tagEdit->setFocus();
     tagLabel->setBuddy(tagEdit);
     tagEdit->setMinimumWidth(fm.width('X')*30);
-    
+
     regexpBox = new QCheckBox(i18n("&Regular expression match"), this);
     regexpBox->setChecked(true);
-    
+
     QLabel *kindsLabel = new QLabel(i18n("&Kinds:"), this);
 
     kindsListView = new QListView(this);
@@ -120,7 +120,7 @@ CTagsDialog::CTagsDialog(CTagsPart *part)
              this, SLOT(slotResultClicked(QListBoxItem*)) );
     connect( resultsListBox, SIGNAL(returnPressed(QListBoxItem*)),
              this, SLOT(slotResultClicked(QListBoxItem*)) );
-    
+
     m_part = part;
     updateInfo();
 }
@@ -136,7 +136,7 @@ void CTagsDialog::updateInfo()
     m_kindStrings = m_part->kindStrings();
 
     kindsListView->clear();
-    
+
     QStringList::ConstIterator it;
     for (it = m_kindStrings.begin(); it != m_kindStrings.end(); ++it) {
         QCheckListItem *item = new QCheckListItem(kindsListView, (*it), QCheckListItem::CheckBox);
@@ -196,7 +196,7 @@ void CTagsDialog::insertResult(const CTagsTagInfoList &result, const QStringList
         QString kindString = CTagsKinds::findKind((*it).kind, extension);
         if (!kindStringList.contains(kindString))
             continue;
-        
+
         new CTagsResultItem(resultsListBox, (*it).fileName, (*it).pattern, kindString);
     }
 }
@@ -208,7 +208,7 @@ void CTagsDialog::slotRegenerate()
         KMessageBox::sorry(this, i18n("Could not create tags file"));
         return;
     }
-    
+
     m_part->loadTagsFile();
 
     updateInfo();
@@ -219,7 +219,7 @@ void CTagsDialog::slotResultClicked(QListBoxItem *item)
 {
     if (!item)
         return;
-    
+
     CTagsResultItem *ritem = static_cast<CTagsResultItem*>(item);
     QString fileName = ritem->fileName();
     if (!fileName.startsWith("/"))
@@ -231,7 +231,7 @@ void CTagsDialog::slotResultClicked(QListBoxItem *item)
         KMessageBox::sorry(0, i18n("Currently, only tags with line numbers (option -n) are supported"));
         return;
     }
-    
+
     m_part->partController()->editDocument(fileName, lineNum-1);
 }
 

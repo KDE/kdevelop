@@ -13,6 +13,7 @@
 #include "dbg.h"
 #include <fstream.h>
 #include <kdebug.h>
+#include <qfile.h>
 
 
 #define PUSH_LEXEM( ) lexemStack.push( new CParsedLexem( lexem, getText( ) ) )
@@ -28,7 +29,7 @@ CppCCParser::~CppCCParser( )
 bool
 CppCCParser::parse( const QString& file, const int iCCLine_ )
 {
-    ifstream f( file.latin1( ) );
+    ifstream f( QFile::encodeName(file) );
     if( f.is_open( ) ){
         iCCLine = iCCLine_;
         currentFile = file;
@@ -46,7 +47,7 @@ bool
 CppCCParser::parse( const QString* string, const int iCCLine_ )
 {
     if( string ){
-        istrstream s( string->latin1( ) );
+        istrstream s( string->local8Bit( ) );
         iCCLine = iCCLine_;
         currentFile = QString::null;
         parseObject( s );
@@ -63,7 +64,7 @@ bool
 CppCCParser::parse( const QString* string, const QString variable )
 {
     if( string ){
-        istrstream s( string->latin1( ) );
+        istrstream s( string->local8Bit( ) );
         iCCLine = 999999;
         currentFile = QString::null;
         m_variable = variable;
@@ -81,7 +82,7 @@ CppCCParser::parse( const QString* string, const QString variable )
 bool
 CppCCParser::parse( const QString& file, const QString variable )
 {
-    ifstream f( file.latin1( ) );
+    ifstream f( QFile::encodeName(file) );
     if( f.is_open( ) ){
         currentFile = file;
         m_variable = variable;

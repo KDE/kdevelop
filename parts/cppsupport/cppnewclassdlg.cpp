@@ -80,12 +80,12 @@ void CppNewClassDialog::accept()
 		return;
 	}
 
-	QString header = header_edit->text().simplifyWhiteSpace(); 
+	QString header = header_edit->text().simplifyWhiteSpace();
 	if (header.isEmpty()) {
 		KMessageBox::error(this, i18n("You must enter a name for the header file."));
 		return;
 	}
-	QString implementation = implementation_edit->text().simplifyWhiteSpace(); 
+	QString implementation = implementation_edit->text().simplifyWhiteSpace();
 	if (implementation.isEmpty() ){
 		KMessageBox::error(this,i18n("You must enter a name for the implementation file."));
 		return;
@@ -105,7 +105,7 @@ void CppNewClassDialog::accept()
 		subDir += project->activeDirectory() + "/";
 	QString headerPath = subDir + header;
 	QString implementationPath = subDir + implementation;
-	
+
 	if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
 		KMessageBox::error(this, i18n("Unable to add class source code "
 									"to %1 or %2!\nOne of those files already exists!\n"
@@ -170,7 +170,7 @@ void CppNewClassDialog::accept()
 
 	QFile ifile(implementationPath);
 	if (!ifile.open(IO_WriteOnly)) {
-		KMessageBox::error(this, "Cannot write to implementation file");
+		KMessageBox::error(this, i18n("Cannot write to implementation file"));
 		return;
 	}
 	QTextStream istream(&ifile);
@@ -271,7 +271,7 @@ void CppNewClassDialog::accept()
 
 	QFile hfile(headerPath);
 	if (!hfile.open(IO_WriteOnly)) {
-		KMessageBox::error(this, "Cannot write to header file");
+		KMessageBox::error(this, i18n("Cannot write to header file"));
 		return;
 	}
 	QTextStream hstream(&hfile);
@@ -280,7 +280,7 @@ void CppNewClassDialog::accept()
 
 	kdDebug(9007) << "Adding to project " << endl;
 	QStringList fileList;
-	
+
 	if ( project->activeDirectory() == QString::null )
 	{
 		fileList.append ( header );
@@ -291,7 +291,7 @@ void CppNewClassDialog::accept()
 		fileList.append ( project->activeDirectory() + "/" + header );
 		fileList.append ( project->activeDirectory() + "/" + implementation );
 	}
-	
+
 	project->addFiles ( fileList );
 /*	project->addFile(project->activeDirectory() + "/" + header);
 	project->addFile(project->activeDirectory() + "/" + implementation);*/

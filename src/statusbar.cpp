@@ -37,26 +37,26 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 
   // stretcher
   addWidget(new QWidget(this), 1);
-    
+
   _status = new QLabel(this);
   _status->setFont(KGlobalSettings::fixedFont());
   _status->setMinimumWidth(_status->fontMetrics().width("OVR, ro"));
   _status->setAlignment(QWidget::AlignCenter);
   addWidget(_status, 0, true);
-    
+
   _cursorPosition = new QLabel(this);
   _cursorPosition->setAlignment(AlignCenter);
   // Same string as in setCursorPosition()
   QString s2 = i18n(" Line: %1 Col: %2 ").arg("xxxx").arg("xxxx");
   _cursorPosition->setMinimumWidth(_cursorPosition->fontMetrics().width(s2));
   addWidget(_cursorPosition, 0, true);
-  
+
   _modified = new QLabel(this);
   _modified->setFixedWidth(_modified->fontMetrics().width("*"));
   addWidget(_modified, 0, true);
-  
+
   setEditorStatusVisible(false);
-  
+
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
           this, SLOT(activePartChanged(KParts::Part*)));
 }
@@ -95,7 +95,7 @@ void StatusBar::cursorPositionChanged()
   {
     uint line, col;
     m_cursorIface->cursorPositionReal(&line, &col);
-    setCursorPosition(line, col);    
+    setCursorPosition(line, col);
   }
 }
 
@@ -104,7 +104,7 @@ void StatusBar::setEditorStatusVisible(bool visible)
 {
   // Note: I tried to hide/show the widgets here, but that
   // causes flicker, so I just set them to be empty.
-		
+
   if (!visible)
 	{
 	  _status->setText("");
@@ -122,7 +122,7 @@ void StatusBar::setStatus(const QString &str)
 
 void StatusBar::setCursorPosition(int line, int col)
 {
-  _cursorPosition->setText(QString(" Line: %1 Col: %2 ").arg(line+1).arg(col));
+  _cursorPosition->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
 

@@ -13,7 +13,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "removetargetdlg.h"
 
 #include <qapp.h>
@@ -31,6 +31,7 @@
 #include <klistbox.h>
 #include <kprogress.h>
 #include <ksqueezedtextlabel.h>
+#include <klocale.h>
 
 #include "misc.h"
 
@@ -47,20 +48,20 @@ RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, SubprojectIt
 		targetLabel->setText ( titem->name );
 	else
 		targetLabel->setText ( "" );
-    
+
 	connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
     connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
 
-    setIcon ( SmallIcon ( "editdelete.png" ) );
-	
+    setIcon ( SmallIcon ( "editdelete" ) );
+
 	progressBar->hide();
-	
+
 	m_spitem = spitem;
 	m_titem = titem;
 	m_widget = widget;
-	
+
 	//kdDebug ( 9000 ) << "+++++ " << titem->primary << " " << titem->prefix << " " << titem->name << endl;
-	
+
 	init();
 }
 
@@ -74,12 +75,12 @@ void RemoveTargetDialog::init()
 	QPtrList <SubprojectItem> subprojectItems = m_widget->allSubprojectItems();
 
 	TargetItem* titem = 0;
-	
+
 	for ( SubprojectItem* spitem = subprojectItems.first(); spitem; spitem = subprojectItems.next() )
 	{
 		if ( m_titem->name.isEmpty() )
 			break;
-			
+
 		for ( titem = spitem->targets.first(); titem; titem = spitem->targets.next() )
 		{
 			if ( m_titem->name == titem->name )
@@ -88,38 +89,38 @@ void RemoveTargetDialog::init()
 			if ( titem->primary == "LTLIBRARIES" || titem->primary == "PROGRAMS" )
 			{
 				QString canonname = AutoProjectTool::canonicalize ( titem->name );
-				
+
 				if ( spitem->variables[canonname + "_LIBADD"].contains ( m_titem->name ) > 0 ||
 					spitem->variables[canonname + "_LDADD"].contains ( m_titem->name ) > 0 )
 				{
 					dependencyListBox->insertItem ( SmallIcon ( "target_kdevelop" ), spitem->path + " (" + titem->name + ")" );
-					
+
 					dependentSubprojects.append ( spitem );
 				}
 			}
 		}
 	}
-	
+
 	if ( dependencyListBox->count() == 0 )
-		dependencyListBox->insertItem ( "<none>" );
+		dependencyListBox->insertItem ( i18n("no dependency", "<none>") );
 }
 
 void RemoveTargetDialog::accept ()
 {
 	progressBar->show();
 	progressBar->setFormat ( i18n ( "Removing Target... %p%" ) );
-	
+
 	qApp->processEvents();
-	
+
 	QString canonname = AutoProjectTool::canonicalize ( m_titem->name );
 	QString varname = m_titem->prefix + "_" + m_titem->primary;
-	
+
 	SubprojectItem* spitem = 0;
 	TargetItem* titem = 0;
-	
+
 	QMap <QString, QString> removeMap;
 	QMap <QString, QString> replaceMap;
-	
+
 	// Remove dependencies to other targets first (stored by init() in 'dependentTargets')
 	for ( spitem = dependentSubprojects.first(); spitem; spitem = dependentSubprojects.next() )
 	{
@@ -128,7 +129,7 @@ void RemoveTargetDialog::accept ()
 			QString curVarname;
 			QString curCanonname = AutoProjectTool::canonicalize ( titem->name );
 			QStringList dependencies;
-			
+
 			if ( spitem->variables[curCanonname + "_LIBADD"].contains ( m_titem->name ) )
 				curVarname = curCanonname + "_LIBADD";
 			else
@@ -163,10 +164,10 @@ void RemoveTargetDialog::accept ()
 				AutoProjectTool::modifyMakefileam ( spitem->path + "/Makefile.am", replaceMap );
 
 				replaceMap.clear();
-			}			
+			}
 		}
 	}
-	
+
 	// handling am_edit stuff
 	if ( m_titem->primary == "KDEICON" )
 		removeMap.insert ( "KDE_ICON", "" );
@@ -174,11 +175,11 @@ void RemoveTargetDialog::accept ()
 		removeMap.insert ( "KDE_DOCS", "" );
 	else
 		removeMap.insert ( varname, "" );
-		
+
 	// if we have no such line containing blabla_SOURCES, blabla_LDFLAGS, etc.
 	// they are ignored
 	removeMap.insert ( canonname + "_SOURCES", "" );
-	
+
 	if ( m_titem->primary == "PROGRAMS" || m_titem->primary == "LTLIBRARIES" )
 	{
 		removeMap.insert ( canonname + "_LDFLAGS", "" );
@@ -186,11 +187,11 @@ void RemoveTargetDialog::accept ()
 		removeMap.insert ( canonname + "_LDADD", "" );
 		removeMap.insert ( canonname + "_LIBADD", "" );
 	}
-	
+
 	AutoProjectTool::removeFromMakefileam ( m_spitem->path + "/Makefile.am", removeMap );
-	
+
 	removeMap.clear();
-	
+
 	// if we have another "blabla_PROGRAMS" or "blabla_LTLIBRARIES" target in the same subproject
 	// check if it has an empty "blabla_LIBADD"-entry
 	if ( m_titem->primary == "PROGRAMS" || m_titem->primary == "LTLIBRARIES" )
@@ -215,28 +216,28 @@ void RemoveTargetDialog::accept ()
 			}
 		}
 	}
-	
-	
+
+
 	progressBar->setTotalSteps ( m_titem->sources.count() );
-	
+
 	QStringList fileList;
-	
+
 	for ( FileItem* fitem = m_titem->sources.first(); fitem; fitem = m_titem->sources.next() )
 	{
 		if (removeCheckBox->isChecked())
 			QFile::remove(m_spitem->path + "/" + fitem->name);
-		
+
 		fileList.append ( m_spitem->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fitem->name );
-		
+
 		qApp->processEvents();
-		
+
 		progressBar->setValue ( progressBar->value() + 1 );
 	}
-	
+
 	m_widget->emitRemovedFiles ( fileList );
 
 	m_spitem->targets.remove ( m_titem );
 
-	
+
 	QDialog::accept();
 }

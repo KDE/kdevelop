@@ -1,5 +1,5 @@
 /***************************************************************************
-    begin                : Sun Aug 8 1999                                           
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
  ***************************************************************************/
@@ -9,7 +9,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -46,9 +46,9 @@ public:
       m_breakpoint.setPending( true );
       emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     BreakpointWidget* listView() { return (BreakpointWidget*)QListViewItem::listView(); }
-    
+
     QString text( int column ) const
     {
         switch( (BreakpointWidget::Column)column ) {
@@ -70,7 +70,7 @@ public:
         }
         return QString::null;
     }
-    
+
     const QPixmap* pixmap( int column ) const
     {
         if( column != BreakpointWidget::Status )
@@ -83,13 +83,13 @@ public:
             return KDevDebugger::activeBreakpointPixmap();
         return KDevDebugger::inactiveBreakpointPixmap();
     }
-    
+
     void reset()
     {
         m_breakpoint.reset();
         listView()->repaintItem( this );
     }
-    
+
     void remove()
     {
         // Pending but the debugger hasn't started processing this BP so
@@ -105,29 +105,29 @@ public:
             emit listView()->publishBPState( m_breakpoint );
         }
     }
-    
+
     void modify()
     {
         if( !m_breakpoint.modifyDialog() )
           return;
-          
+
         m_breakpoint.setPending( true );
         m_breakpoint.setActionModify( true );
-        
+
         listView()->repaintItem( this );
         emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     void toggleEnabled()
     {
         m_breakpoint.setEnabled( !m_breakpoint.isEnabled() );
         m_breakpoint.setPending( true );
         m_breakpoint.setActionModify( true );
-        
+
         listView()->repaintItem( this );
         emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     void update( int active, int id, int hits, int ignore, const QString& condition )
     {
         m_breakpoint.setActive(active, id);
@@ -137,7 +137,7 @@ public:
         listView()->repaintItem( this );
         emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     void update( int active, int id, bool hardware )
     {
         m_breakpoint.setActive(active, id);
@@ -145,22 +145,22 @@ public:
         listView()->repaintItem( this );
         emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     void publishIfPending()
     {
         if( m_breakpoint.isPending() && !m_breakpoint.isDbgProcessing() )
             emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     void setConditional( const QString& text )
     {
         m_breakpoint.setConditional( text );
         listView()->repaintItem( this );
         emit listView()->publishBPState( m_breakpoint );
     }
-    
+
     const Breakpoint& breakpoint() { return m_breakpoint; }
-    
+
 private:
     FilePosBreakpoint m_breakpoint;
 };
@@ -169,11 +169,11 @@ BreakpointWidget::BreakpointWidget(QWidget *parent, const char *name)
     :  KListView(parent, name),
        activeFlag_(0)
 {
-    addColumn( "Status" );
-    addColumn( "File" );
-    addColumn( "Line" );
-    addColumn( "Hits" );
-    addColumn( "Condition" );
+    addColumn( i18n("Status") );
+    addColumn( i18n("File") );
+    addColumn( i18n("Line") );
+    addColumn( i18n("Hits") );
+    addColumn( i18n("Condition") );
     setColumnAlignment( Line, AlignRight );
     setColumnAlignment( Hits, AlignRight );
     setAllColumnsShowFocus( true );
@@ -235,7 +235,7 @@ BreakpointItem* BreakpointWidget::find( const Breakpoint& breakpoint ) const
         if (breakpoint.match(&BP))
             return item;
     }
-    
+
     return 0L;
 }
 
@@ -251,7 +251,7 @@ BreakpointItem* BreakpointWidget::findId(int dbgId) const
         if (BP.dbgId() == dbgId)
             return item;
     }
-    
+
     return 0L;
 }
 
@@ -267,7 +267,7 @@ BreakpointItem* BreakpointWidget::findKey(int BPKey) const
         if (BP.key() == BPKey)
             return item;
     }
-    
+
     return 0L;
 }
 
@@ -279,7 +279,7 @@ void BreakpointWidget::removeAllBreakpoints()
         BreakpointItem* item = (BreakpointItem*)it.current();
         item->remove();
     }
-    
+
     if( childCount() > 0 )
         emit clearAllBreakpoints();
 }
@@ -290,7 +290,7 @@ void BreakpointWidget::slotExecuted(QListViewItem *item)
 {
     if( !item )
         return;
-    
+
     const Breakpoint& BP = ((BreakpointItem*)item)->breakpoint();
     if (BP.hasSourcePosition())
         emit gotoSourcePosition(BP.fileName(), BP.lineNum()-1);
@@ -333,7 +333,7 @@ void BreakpointWidget::slotContextMenu(QListViewItem *item)
 }
 
 /***************************************************************************/
-    
+
 void BreakpointWidget::slotItemRenamed(QListViewItem *item, int col, const QString& text)
 {
     if( col != Condition )
@@ -410,15 +410,15 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
     //        breakpoint already hit 1 time
     // 4   breakpoint     keep y   0x0804a930 in main at main.cpp:28
     //        ignore next 6 hits
-    
+
     // Another example of a not too uncommon occurance
     // No breakpoints or watchpoints.
-    
+
     // Set the new active flag so that after we have read the
     // breakpoint list we can trim the breakpoints that have been
     // removed (temporary breakpoints do this)
     activeFlag_++;
-    
+
     // skip the first line which is the header
     while (str && (str = strchr(str, '\n'))) {
         str++;
@@ -433,21 +433,21 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
             QString condition;
             while (str && (str = strchr(str, '\n'))) {
                 str++;
-                
+
                 // The char after a newline is a digit hence it's
                 // a new breakpt. Breakout to deal with this breakpoint.
                 if (isdigit(*str)) {
                     str--;
                     break;
                 }
-                
+
                 // We're only interested in these fields here.
                 if (strncmp(str, "\tbreakpoint already hit ", 24) == 0)
                     hits = atoi(str+24);
-                
+
                 if (strncmp(str, "\tignore next ", 13) == 0)
                     ignore = atoi(str+13);
-                
+
                 if (strncmp(str, "\tstop only if ", 14) == 0) {
                     QCString condLine(str);
                     QRegExp regExp("\tstop only if ([^\n]*)");
@@ -455,13 +455,13 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
                         condition = regExp.cap(1);
                 }
             }
-            
+
             if (BreakpointItem *item = findId(id)) {
                 item->update( activeFlag_, id, hits, ignore, condition );
             }
         }
     }
-    
+
     // Remove any inactive breakpoints.
     for( QListViewItemIterator it( this ); it.current(); ++it ) {
         BreakpointItem* item = (BreakpointItem*)it.current();
@@ -480,9 +480,9 @@ void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
     BreakpointItem* item = findKey(BPKey);
     if (!item)
         return;   // Why ?? Possibly internal dbgController BPs that shouldn't get here!
-    
+
 //    item->setDbgProcessing(false);
-    
+
     if ((strncmp(str, "Breakpoint ", 11) == 0))
         startNo = str+11;
     else {
@@ -492,7 +492,7 @@ void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
         } else if ((strncmp(str, "Watchpoint ", 11) == 0))
             startNo = str+11;
     }
-    
+
     if (startNo) {
         int id = atoi(startNo);
         if (id) {

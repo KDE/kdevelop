@@ -1,7 +1,7 @@
 /***************************************************************************
                           breakpoint.cpp  -  description
-                             -------------------                                         
-    begin                : Sun Aug 8 1999                                           
+                             -------------------
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
  ***************************************************************************/
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -103,27 +103,27 @@ void Breakpoint::configureDisplay()
 {
     if (s_temporary_)
         display_ += i18n("\ttemporary");
-    
+
     if (!s_enabled_)
         display_ += i18n("\tdisabled");
-    
+
     if (!condition_.isEmpty())
         display_ += i18n("\tif %1").arg(condition_);
-    
+
     if (hits_)
         display_ += i18n("\thits %1").arg(hits_);
-    
+
     if (ignoreCount_)
         display_ += i18n("\tignore count %1").arg(ignoreCount_);
-    
+
     if (s_hardwareBP_)
         display_ = i18n("hw %1").arg(display_);
-    
+
     if (dbgId_>0) {
         QString t(display_);
-        display_ = i18n("%1 %2").arg(dbgId_).arg(display_);
+        display_ = QString("%1 %2").arg(dbgId_).arg(display_);
     }
-    
+
     if (s_pending_) {
         QString pending(i18n("Breakpoint state. The 'Pending ' state is the first state displayed",
                              "Pending "));
@@ -136,7 +136,7 @@ void Breakpoint::configureDisplay()
         if (s_actionModify_)
             pending += i18n("Breakpoint state. The 'modify ' state is appended to the other states",
                             "modify ");
-        
+
         display_ = i18n("%1>\t%2").arg(pending).arg(display_);
     }
 }
@@ -147,7 +147,7 @@ QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
         return QString("delete %1").arg(dbgId_); // jdb command - not translatable
-    
+
     return QString();
 }
 
@@ -188,7 +188,7 @@ void Breakpoint::reset()
     s_dbgProcessing_      = false;
     s_hardwareBP_         = false;
     hits_                 = 0;
-    
+
     configureDisplay();
 }
 
@@ -198,23 +198,23 @@ void Breakpoint::setActive(int active, int id)
 {
     active_           = active;
     dbgId_            = id;
-    
+
     if (s_pending_ && !(s_actionAdd_ && s_actionModify_)) {
         s_pending_ = false;
         s_actionModify_ = false;
     }
-    
+
     s_actionAdd_          = false;
     s_actionClear_        = false;
     s_actionDie_          = false;
     s_dbgProcessing_      = false;
-    
+
     if (!s_actionModify_) {
         s_changedCondition_   = false;
         s_changedIgnoreCount_ = false;
         s_changedEnable_      = false;
     }
-    
+
     configureDisplay();
 }
 /***************************************************************************/
@@ -227,7 +227,7 @@ bool Breakpoint::modifyDialog()
         setIgnoreCount(modifyBPDialog->getIgnoreCount());
         setEnabled(modifyBPDialog->isEnabled());
     }
-    
+
     delete modifyBPDialog;
     return (s_changedCondition_ || s_changedIgnoreCount_ || s_changedEnable_);
 }
@@ -262,10 +262,10 @@ QString FilePosBreakpoint::dbgSetCommand() const
         QFileInfo fi(fileName_);
         cmdStr = QString("stop at %1:%2").arg(fi.baseName()).arg(lineNo_); // jdb command
     }
-    
+
     if (isTemporary())
         cmdStr = "t"+cmdStr;  // jdb command
-    
+
     return cmdStr;
 }
 
@@ -276,12 +276,12 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
     // simple case
     if (this == brkpt)
         return true;
-    
+
     // Type case
     const FilePosBreakpoint* check = dynamic_cast<const FilePosBreakpoint*>(brkpt);
     if (!check)
         return false;
-    
+
     // member case
     return  ( (fileName_ == check->fileName_) &&
               (lineNo_ == check->lineNo_));
@@ -336,12 +336,12 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
     // simple case
     if (this == brkpt)
         return true;
-    
+
     // Type case
     const Watchpoint *check = dynamic_cast<const Watchpoint*>(brkpt);
     if (!check)
         return false;
-    
+
     // member case
     return (varName_ == check->varName_);
 }

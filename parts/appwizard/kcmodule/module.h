@@ -1,5 +1,5 @@
-#ifndef _$APPNAMEUI$_H_
-#define _$APPNAMEUI$_H_
+#ifndef _$APPNAMEUC$_H_
+#define _$APPNAMEUC$_H_
 
 #include <kcmodule.h>
 #include <kaboutdata.h>
@@ -19,7 +19,7 @@ public:
     virtual QString quickHelp() const;
     virtual const KAboutData *aboutData()
     { return myAboutData; };
-    
+
 public slots:
     void configChanged();
 

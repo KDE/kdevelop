@@ -4,6 +4,7 @@
 
 
 #include <qpopupmenu.h>
+#include <qfile.h>
 
 
 #include <kmimetype.h>
@@ -114,7 +115,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
 {
   if( url.isMalformed() )
     return;
-  
+
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
@@ -245,7 +246,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
     if ( !ptr ) {
       ptr = offers.first();
     }
-    return static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library().latin1()));
+    return static_cast<KParts::Factory*>(KLibLoader::self()->factory(QFile::encodeName(ptr->library())));
   }
 
   return 0;
@@ -258,7 +259,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
     // TODO error handling
     return; // to avoid later crash
   }
-  
+
   TopLevel::getInstance()->embedPartView(part->widget(), url.fileName(), url.url());
 
   addPart(part);
@@ -312,7 +313,7 @@ static bool urlIsEqual(const KURL &a, const KURL &b)
       return (aStat.st_dev == bStat.st_dev) && (aStat.st_ino == bStat.st_ino);
     }
   }
-  
+
   return a == b;
 }
 
@@ -512,7 +513,7 @@ void PartController::slotCloseOtherWindows()
       revertAllFiles();
     else if ( sad->result() == KSaveAllDialog::SaveAll )
       saveAllFiles();
-  }  
+  }
 
   while (parts()->count() > 1)
   {

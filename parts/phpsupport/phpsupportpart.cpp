@@ -104,7 +104,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   configData = new PHPConfigData(projectDom());
   connect(configData,  SIGNAL(configStored()),
 	  this, SLOT(slotConfigStored()));
-  
+
   m_parser = new  PHPParser(core(),classStore());
   m_codeCompletion = new  PHPCodeCompletion(configData, core(),classStore());
 
@@ -155,7 +155,7 @@ void PHPSupportPart::slotTextChanged(){
 
 void PHPSupportPart::slotConfigStored(){
   // fake a changing, this will read the configuration again and install the connects
-  slotActivePartChanged(partController()->activePart()); 
+  slotActivePartChanged(partController()->activePart());
 }
 
 
@@ -167,7 +167,7 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
   PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  
+
   vbox = dlg->addVBoxPage(i18n("PHP Parser"));
   PHPConfigParserWidget* wp = new PHPConfigParserWidget(configData,vbox, "php parser config widget");
   connect( dlg, SIGNAL(okClicked()), wp, SLOT(accept()) );
@@ -195,7 +195,7 @@ void PHPSupportPart::slotRun(){
 
 bool PHPSupportPart::validateConfig(){
   if(!configData->validateConfig()){
-    KMessageBox::information(0,"There is no configuration for executing a PHP file.\nPlease set the correct values in the next dialog.");
+    KMessageBox::information(0,i18n("There is no configuration for executing a PHP file.\nPlease set the correct values in the next dialog."));
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize PHP Mode"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, 0,
                     "php config dialog");
@@ -283,13 +283,13 @@ void PHPSupportPart::executeInTerminal(){
 void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStdout()" << endl;
   m_htmlView->write(buffer,buflen+1);
-  m_phpExeOutput += QCString(buffer,buflen+1);
+  m_phpExeOutput += QString::fromLocal8Bit(buffer,buflen+1);
 }
 
 void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStderr()" << endl;
   m_htmlView->write(buffer,buflen+1);
-  m_phpExeOutput += QCString(buffer,buflen+1);
+  m_phpExeOutput += QString::fromLocal8Bit(buffer,buflen+1);
 }
 
 void PHPSupportPart::slotPHPExeExited (KProcess* /*proc*/){
@@ -335,7 +335,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 
 void PHPSupportPart::initialParse(){
   kdDebug(9018) << "initialParse()" << endl;
-  
+
   if (project()) {
     kdDebug(9018) << "project" << endl;
     kapp->setOverrideCursor(waitCursor);
@@ -346,7 +346,7 @@ void PHPSupportPart::initialParse(){
     bar->setCenterIndicator(true);
     topLevel()->statusBar()->addWidget(bar);
     bar->show();
-    
+
     for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
       kdDebug(9018) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
       bar->setProgress(n);
@@ -367,14 +367,14 @@ void PHPSupportPart::initialParse(){
 void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 {
     kdDebug(9018) << "addedFilesToProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
 	}
-	
+
     emit updatedSourceInfo();
 }
 
@@ -382,14 +382,14 @@ void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     kdDebug(9018) << "removedFilesFromProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
 	}
-	
+
     emit updatedSourceInfo();
 }
 

@@ -31,7 +31,7 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
 {
     if (line.isEmpty())
         return;
-    
+
     QCString simplified;
     int l = line.length();
     for (int i=0; i < l; ++i)
@@ -45,12 +45,12 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
         name = subroutinere.group(1);
     else
         return;
-    
+
     ParsedMethod *method = new ParsedMethod;
     method->setName(name);
     method->setDefinedInFile(fileName);
     method->setDefinedOnLine(lineNum);
-            
+
     ParsedMethod *old = store->globalScope()->getMethod(method);
     if (!old)
         store->globalScope()->addMethod(method);
@@ -68,7 +68,7 @@ void FixedFormParser::parse(const QString &fileName)
     int lineNum=0, startLineNum=0;
     while (!stream.atEnd()) {
         ++lineNum;
-        QCString str = stream.readLine().latin1();
+        QCString str = stream.readLine().local8Bit();
         if (!str.isEmpty() && QCString("*Cc#!").find(str[0]) != -1)
             continue;
         // Continuation line

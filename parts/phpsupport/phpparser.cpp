@@ -35,7 +35,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
   KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
   KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
   KRegExp createMemberRe("\\$this->([0-9A-Za-z_]+)[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)");
-  
+
   ParsedClass *lastClass = 0;
   QString rawline;
   QCString line;
@@ -43,9 +43,9 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
   int bracketOpen = 0;
   int bracketClose = 0;
   bool inClass = false;
-  
+
   for ( QStringList::Iterator it = lines->begin(); it != lines->end(); ++it ) {
-    line = (*it).latin1();
+    line = (*it).local8Bit();
     if(!line.isNull()){
       //    cerr << "LINE" << line << endl;
       bracketOpen += line.contains("{");
@@ -55,7 +55,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
       }
       //cerr << "kdevelop (phpsupport): try match line: " << line << endl;
       if (classre.match(line)) {
-	
+
 	//  cerr << "kdevelop (phpsupport): regex match line: " << line << endl;
 	inClass= true;
 	bracketOpen = line.contains("{");
@@ -64,7 +64,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	lastClass->setName(classre.group(1));
 	lastClass->setDefinedInFile(fileName);
 	lastClass->setDefinedOnLine(lineNo);
-	
+
 	QString parentStr = classre.group(3);
 	if(parentStr !=""){
 	  ParsedParent *parent = new ParsedParent;
@@ -95,9 +95,9 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	method->setName(methodre.group(1));
 	ParsedArgument* anArg = new ParsedArgument();
 	QString arguments = methodre.group(2);
-	anArg->setType(arguments.stripWhiteSpace().latin1());
+	anArg->setType(arguments.stripWhiteSpace().local8Bit());
 	method->addArgument( anArg );
-	
+
 	method->setDefinedInFile(fileName);
 	method->setDefinedOnLine(lineNo);
 	if (lastClass && inClass) {
@@ -121,9 +121,9 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	  lastClass->addAttribute( anAttr );
 	}
       }
-      
+
       ++lineNo;
-    } // end for 
+    } // end for
   } // end if
 }
 void PHPParser::parseFile(const QString& fileName){
@@ -137,22 +137,22 @@ void PHPParser::parseFile(const QString& fileName){
   QString rawline;
   while (!stream.eof()) {
    rawline = stream.readLine();
-   list.append(rawline.stripWhiteSpace().latin1());
+   list.append(rawline.stripWhiteSpace().local8Bit());
  }
- f.close(); 
+ f.close();
  this->parseLines(&list,fileName);
- 
+
  /*
   QFile f(QFile::encodeName(fileName));
   if (!f.open(IO_ReadOnly))
     return;
   QTextStream stream(&f);
-  
+
   KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
   KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
   KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
   KRegExp createMemberRe("\\$this->([0-9A-Za-z_]+)[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)");
-  
+
   ParsedClass *lastClass = 0;
   QString rawline;
   QCString line;
@@ -160,7 +160,7 @@ void PHPParser::parseFile(const QString& fileName){
   int bracketOpen = 0;
   int bracketClose = 0;
   bool inClass = false;
-  
+
   while (!stream.eof()) {
     rawline = stream.readLine();
     line = rawline.stripWhiteSpace().latin1();
@@ -169,7 +169,7 @@ void PHPParser::parseFile(const QString& fileName){
     if(bracketOpen == bracketClose && bracketOpen !=0 && bracketClose !=0){
       inClass = false; // ok we are out ouf class
     }
-    
+
     //cerr << "kdevelop (phpsupport): try match line: " << line << endl;
     if (classre.match(line)) {
       //  cerr << "kdevelop (phpsupport): regex match line: " << line << endl;
@@ -180,7 +180,7 @@ void PHPParser::parseFile(const QString& fileName){
       lastClass->setName(classre.group(1));
       lastClass->setDefinedInFile(fileName);
       lastClass->setDefinedOnLine(lineNo);
-      
+
       QString parentStr = classre.group(3);
       if(parentStr !=""){
 	ParsedParent *parent = new ParsedParent;
@@ -198,7 +198,7 @@ void PHPParser::parseFile(const QString& fileName){
       } else {
 	m_classStore->addClass(lastClass);
       }
-      
+
     } else if (createMemberRe.match(line)) {
       if (lastClass && inClass) {
 	ParsedAttribute *att = lastClass->getAttributeByName(QString("$") + createMemberRe.group(1));
@@ -206,7 +206,7 @@ void PHPParser::parseFile(const QString& fileName){
 	  att->setType(createMemberRe.group(2));
 	}
       }
-      
+
     } else if (methodre.match(line)) {
       //	  cerr << "kdevelop (phpsupport): regex match line ( method ): " << line << endl;
       ParsedMethod *method = new ParsedMethod;
@@ -215,10 +215,10 @@ void PHPParser::parseFile(const QString& fileName){
       QString arguments = methodre.group(2);
       anArg->setType(arguments.stripWhiteSpace().latin1());
       method->addArgument( anArg );
-      
+
       method->setDefinedInFile(fileName);
       method->setDefinedOnLine(lineNo);
-      
+
       if (lastClass && inClass) {
 	//	    kdDebug(9018) << "in Class: " << line << endl;
 	ParsedMethod *old = lastClass->getMethod(method);
@@ -242,6 +242,6 @@ void PHPParser::parseFile(const QString& fileName){
     }
     ++lineNo;
   }
-  f.close(); 
+  f.close();
   */
 }

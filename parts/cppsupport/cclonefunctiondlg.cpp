@@ -31,14 +31,14 @@
 #include <qmessagebox.h>
 #include <qregexp.h>
 
-static const QString templates(i18n("Templates"));
+static const char* templates=I18N_NOOP("Templates");
 
 enum templatetype {
   c_copy,            /* copy constructor */
   c_unaer_member,    /* class operator@ () */
   c_member,          /* class operator@ (class) */
   c_bin_compare,   /* friend bool operator@ (class, class) */
-  c_bin_nonmember_assign,   
+  c_bin_nonmember_assign,
           /* friend class operator@ (class, class) and class operator@ (class)
              friend class operator@= (class, class) and class operator@= (class)*/
   inp,               /* oper >> */
@@ -90,7 +90,7 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, ClassStore *libstore, c
     classtree(store), libclasstree(libstore)
 {
 	// set up dialog
-  setCaption( i18n("Select Function to Copy") );
+    setCaption( i18n("Select Function to Copy") );
 
     resize( 400, 110 );
     Form1Layout = new QGridLayout( this );
@@ -115,7 +115,7 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, ClassStore *libstore, c
   okBtn = new QPushButton( i18n("&OK"), this );
   okBtn->setDefault( TRUE );
 
-  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, 
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
 					 QSizePolicy::Minimum );
 
   cancelBtn = new QPushButton( i18n("&Cancel"), this );
@@ -141,16 +141,16 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, ClassStore *libstore, c
 void CCloneFunctionDlg::initClasses()
 {
     // populate the comboboxes
-    
+
     // first: templates
-    allclasses->insertItem(templates);
-	
+    allclasses->insertItem(i18n(templates));
+
     // create list of all classes
     ParsedClass *curr = classtree->getClassByName(classname);
     QString parentName;
     if ( curr && curr->parents.first() )
         parentName = curr->parents.first()->name();
-    
+
     QValueList<ParsedClass*> all = classtree->getSortedClassList();
     QValueList<ParsedClass*>::ConstIterator it;
     for (it = all.begin(); it != all.end(); ++it) {
@@ -165,13 +165,13 @@ void CCloneFunctionDlg::initClasses()
         if ((*it)->name() == parentName)
             allclasses->setCurrentItem(allclasses->count()-1);
     }
-    
+
     slotNewClass( allclasses->currentText () );
-    
+
     // change methods on class selection
     connect(allclasses, SIGNAL(highlighted(const QString&)),
             SLOT(slotNewClass(const QString&)) );
-    
+
     // Set the default focus.
     allclasses->setFocus();
 }
@@ -192,7 +192,7 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 {
     methods->clear();
 
-    if (name == templates) {	
+    if (name == i18n(templates)) {
         QString noarg (" ( )");
         QString oparg1( " (const "+classname+"& rhs)" );
         QString oparg2( " (const "+classname+"& lhs, const " + classname + "& rhs)" );
@@ -211,7 +211,7 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
             methods->insertItem("void set" + name + "(const " + type + "& newval)" );
 	  }
 	}
-        
+
         // operators
         for(int i=0; i < templatescount; i++) {
             QString op = templatesdata[i].name;
@@ -222,11 +222,11 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
             case c_unaer_member:    /* class operator@ () */
                 methods->insertItem(classname + "& operator " + op + noarg);
                 break;
-                
+
             case c_member:  /* class operator@ (class) */
                 methods->insertItem(classname + "& operator " + op + oparg1);
                 break;
-                
+
             case c_bin_nonmember_assign:   /* friend class operator@ (class, class)
                                               and class operator@ (class) */
                 methods->insertItem(classname + " operator " + op + "=" + oparg1);
@@ -234,17 +234,17 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
                 methods->insertItem(classname + " operator " + op + oparg1);
                 methods->insertItem("friend " + classname + " operator " + op + oparg2 );
                 break;
-                
+
             case c_bin_compare:
                 methods->insertItem("bool operator " + op + oparg1);
                 methods->insertItem("friend bool operator " + op + oparg2 );
                 break;
-                
+
             case inp:         /* oper >> */
  	        methods->insertItem(QString("friend istream& operator >> (istream& is, "
 					    + classname + "& val)"));
                 break;
-                
+
             case outp:         /* oper << */
                 methods->insertItem(QString("friend ostream& operator << (ostream& os, const "
 					    + classname + "& val)"));
@@ -257,7 +257,7 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 	  theClass = libclasstree->getClassByName( name );
 	if (theClass == 0)
 	  return;
-    
+
         // all Methods
         QValueList<ParsedMethod*> all;
         QValueList<ParsedMethod*>::ConstIterator it;
@@ -266,19 +266,19 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
         for (it = all.begin(); it != all.end(); ++it)
             if (! ((*it)->isDestructor() || (*it)->isConstructor()))
                 methods->insertItem((*it)->asString());
-        
+
         // all slots
         all = theClass->getSortedSlotList();
         for (it = all.begin(); it != all.end(); ++it)
             methods->insertItem((*it)->asString());
-        
+
         // all signals
         all = theClass->getSortedSignalList();
         for (it = all.begin(); it != all.end(); ++it)
             methods->insertItem((*it)->asString());
     }
 }
-    
+
 /** get the selected method */
 bool CCloneFunctionDlg::getMethod(QString& type, QString& name, QString& decl, QString& comment,
                                   bool& ispriv, bool& isprot, bool& ispub,
@@ -287,9 +287,9 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& name, QString& decl, Q
   QString str;
   const QString curr = allclasses->currentText();
   const QString selected = methods->currentText();
-  if(curr == templates) {
+  if(curr == i18n(templates)) {
     static ParsedMethod result;
-    
+
     int blank    = selected.find(' ') + 1;
     if (selected.contains(QRegExp("^friend")))
       blank    = selected.find(' ', blank) + 1;
@@ -331,7 +331,7 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& name, QString& decl, Q
     isSlot = res->isSlot();
     isSignal = res->isSignal();
     isconst = res->isConst();
-    
+
     return true;
   } else
     return false;
@@ -341,25 +341,25 @@ ParsedMethod* CCloneFunctionDlg::searchMethod(ParsedClass *theClass, QString sel
 {
     QValueList<ParsedMethod*> all;
     QValueList<ParsedMethod*>::ConstIterator it;
-    
+
     // check methods
     all = theClass->getSortedMethodList();
     for (it = all.begin(); it != all.end(); ++it)
         if (selected == (*it)->asString())
             return *it;
-	
+
     // not found - try all slot
     all = theClass->getSortedSlotList();
     for (it = all.begin(); it != all.end(); ++it)
         if (selected == (*it)->asString())
             return *it;
-	
+
     // not found - try all slot
     all = theClass->getSortedSignalList();
     for (it = all.begin(); it != all.end(); ++it)
         if (selected == (*it)->asString())
             return *it;
-    
+
     // oops
     return 0;
 }

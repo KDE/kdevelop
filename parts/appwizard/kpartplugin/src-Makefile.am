@@ -16,3 +16,6 @@ lib$APPNAMELC$plugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 # is KHTMLPart)
 pluginsdir = $(kde_datadir)/khtml/kpartplugins
 plugins_DATA = plugin_$APPNAMELC$.rc
+
+messages: rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot

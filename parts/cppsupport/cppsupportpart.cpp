@@ -96,7 +96,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_problemReporter = new ProblemReporter( this );
     topLevel( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
-    
+
     m_fileRepository = new FileRepository( this );
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
@@ -335,7 +335,7 @@ CppSupportPart::projectOpened( )
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
     connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
-			 
+
     // standard project classstore - displayed in classview - widget
     m_pParser     = new CClassParser( classStore( ) );
 
@@ -439,35 +439,35 @@ static QStringList reorder(const QStringList &list)
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 	    kdDebug(9007) << "addedFilesToProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
-	
+
 		// changed - daniel
 		QString path = project()->projectDirectory() + "/" + ( *it );
 		maybeParse( path, classStore( ), m_pParser );
-		
+
 		partController()->editDocument ( KURL ( path ) );
 	}
-	
+
     emit updatedSourceInfo();
 }
 
 
 void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		kdDebug(9007) << "removedFilesFromProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
-		
+
 		QString path = project()->projectDirectory() + "/" + ( *it );
 		classStore()->removeWithReferences(path);
 	}
-	
+
 	emit updatedSourceInfo();
 }
 
@@ -589,13 +589,13 @@ void CppSupportPart::slotNewClass()
 void CppSupportPart::addMethod(const QString &className)
 {
     ParsedClass *pc = classStore()->getClassByName(className);
-    
+
     if (!pc) {
-	QMessageBox::critical(0,"Error","Please select a class !");
+	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
 	return;
     }
-    
-    CppAddMethodDialog dlg( m_pParser->getClassStore(), m_pCCParser->getClassStore(), 
+
+    CppAddMethodDialog dlg( m_pParser->getClassStore(), m_pCCParser->getClassStore(),
 			    className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
@@ -678,10 +678,10 @@ void CppSupportPart::addAttribute(const QString &className)
     ParsedClass *pc = classStore()->getClassByName(className);
 
     if (!pc) {
-	QMessageBox::critical(0,"Error","Please select a class !");
+	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
 	return;
-    }    
-    
+    }
+
     AddClassAttributeDialog dlg(m_pParser->getClassStore(), m_pCCParser->getClassStore(), 0, "attrDlg");
     if( !dlg.exec() )
       return;
@@ -690,7 +690,7 @@ void CppSupportPart::addAttribute(const QString &className)
     pa->setDeclaredInScope(className);
 
     int atLine = -1;
-    
+
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
         ParsedAttribute *attr = pc->attributeIterator.current();
         if (attr->access() == pa->access() &&
@@ -751,7 +751,7 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
     str += " ";
     str += pm->name();
 
-    /*   
+    /*
     if( pm->arguments.count() > 0 ) {
 	str += "( ";
         for ( ParsedArgument* arg = pm->arguments.first(); arg != NULL; arg = pm->arguments.next() ) {
@@ -810,7 +810,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
         str += "()";
     }
     */
-    
+
     if (pm->isConst())
         str += " const";
 
@@ -1133,15 +1133,15 @@ void CppSupportPart::implementVirtualMethods( const QString& className )
     ParsedClass *pc = classStore()->getClassByName(className);
 
     if (!pc) {
-	QMessageBox::critical(0,"Error","Please select a class !");
+	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
 	return;
-    }    
-    
+    }
+
     ImplementMethodsDialog dlg( 0, "implementMethodsDlg" );
     dlg.setPart( this );
     if( !dlg.implementMethods(pc) )
       return;
-    
+
     KMessageBox::sorry( 0, i18n("Not implemented yet ;)"), i18n("Sorry") );
 }
 

@@ -52,7 +52,7 @@ DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)
     QHBox *method_box = new QHBox(this);
     layout->addSpacing(5);
     layout->addWidget(method_box);
-    
+
     QLabel *method_label = new QLabel(i18n("&Method:"), method_box);
 
     method_combo = new QComboBox(method_box);
@@ -63,7 +63,7 @@ DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)
     QHBox *sort_box = new QHBox(this);
     layout->addSpacing(5);
     layout->addWidget(sort_box);
-    
+
     QLabel *sort_label = new QLabel(i18n("&Sort"), sort_box);
 
     sort_combo = new QComboBox(sort_box);
@@ -123,7 +123,7 @@ bool DocSearchDialog::performSearch()
              this, SLOT(htsearchStdout(KProcess *,char*,int)) );
     connect( proc, SIGNAL(processExited(KProcess *)),
              this, SLOT(htsearchExited(KProcess *)) );
-    
+
     searchResult = "";
 
     if (!proc->start(KProcess::NotifyOnExit, KProcess::Stdout)) {
@@ -141,13 +141,13 @@ bool DocSearchDialog::performSearch()
     kapp->enter_loop();
     qt_leave_modal(&blocker);
     kapp->restoreOverrideCursor();
-        
-    if (!proc->normalExit() || proc->exitStatus() != 0) { 
+
+    if (!proc->normalExit() || proc->exitStatus() != 0) {
         kdDebug() << "Error running htsearch... returning now" << endl;
         delete proc;
         return false;
     }
-    
+
     delete proc;
 
     // modify the search result
@@ -175,7 +175,7 @@ void DocSearchDialog::accept()
 
 void DocSearchDialog::htsearchStdout(KProcess *, char *buffer, int len)
 {
-    searchResult += QString(buffer).left(len);
+    searchResult += QString::fromLocal8Bit(buffer, len);
 }
 
 

@@ -50,42 +50,42 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
       pidLines_(QString())
 {
     setCaption(i18n("Attach to Process"));
-    
+
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);
-    
+
     heading_->setFont(KGlobalSettings::fixedFont());
     heading_->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     heading_->setMaximumHeight(heading_->sizeHint().height());
     heading_->setMinimumSize(heading_->sizeHint());
     topLayout->addWidget(heading_, 5);
-    
+
     topLayout->addWidget(pids_, 5);
     pids_->setFont(KGlobalSettings::fixedFont());
-    
+
     KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
     QPushButton *ok       = buttonbox->addButton(i18n("OK"));
     buttonbox->addStretch();
     QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
     buttonbox->layout();
     topLayout->addWidget(buttonbox);
-    
+
     connect(ok,     SIGNAL(clicked()),  SLOT(accept()));
     connect(cancel, SIGNAL(clicked()),  SLOT(reject()));
-    
+
     psProc_ = new KShellProcess("/bin/sh");
     *psProc_ << "ps";
     *psProc_ << "x";
     pidCmd_ = "ps x";
-    
+
     if (getuid() == 0) {
         *psProc_ << "a";
         pidCmd_ += " a";
     }
-    
+
     connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
     connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
     psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
-    
+
     // Default display to 40 chars wide, default height is okay
     resize( ((KGlobalSettings::fixedFont()).pointSize())*40, height());
     topLayout->activate();
@@ -105,7 +105,7 @@ int Dbg_PS_Dialog::pidSelected()
     QString pidText = pids_->text(pids_->currentItem());
     if (!pidText.isEmpty())
         return atoi(pidText.latin1());
-    
+
     return 0;
 }
 
@@ -113,7 +113,7 @@ int Dbg_PS_Dialog::pidSelected()
 
 void Dbg_PS_Dialog::slotReceivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-    pidLines_ += QCString(buffer, buflen+1);
+    pidLines_ += QString::fromLocal8Bit(buffer, buflen+1);
 }
 
 /***************************************************************************/
@@ -124,7 +124,7 @@ void Dbg_PS_Dialog::slotProcessExited()
     psProc_ = 0;
 
     pidLines_ += '\n';
-    
+
     int start = pidLines_.find('\n', 0);  // Skip the first line (header line)
     int pos;
     if (start != -1)
@@ -135,7 +135,7 @@ void Dbg_PS_Dialog::slotProcessExited()
             if (item.find(pidCmd_) == -1)
                 pids_->insertItem(item);
         }
-        
+
         start = pos+1;
     }
 }

@@ -9,11 +9,13 @@
 #include <klibloader.h>
 #include <qwidget.h>
 #include <qdir.h>
+#include <qfile.h>
 #include <kparts/factory.h>
 
 #include <ktrader.h>
 
 #include "docmanager.h"
+
 
 DocManager::DocManager () : QObject (0L, 0L)
 {
@@ -31,7 +33,7 @@ KTextEditor::Document *DocManager::createDoc (QString type)
   KTrader::OfferList offers = KTrader::self()->query("KTextEditor/Document");
   KService::Ptr service = *offers.begin();
 
-  factory = KLibLoader::self()->factory( service->library().latin1() );
+  factory = KLibLoader::self()->factory( QFile::encodeName(service->library()) );
   KTextEditor::Document *doc = (KTextEditor::Document *) static_cast<KParts::Factory *>(factory)->createPart( (QWidget *)0L, "nix", this, "nix", "KTextEditor::Document", 0L );
 
   docs.append (doc);

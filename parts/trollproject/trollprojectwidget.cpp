@@ -99,7 +99,7 @@ void SubprojectItem::init()
   else
   {
     isScope = true;
-    setPixmap(0, SmallIcon("qmake_scope.png"));
+    setPixmap(0, SmallIcon("qmake_scope"));
   }
 }
 
@@ -155,25 +155,25 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     QToolTip::add( addSubdirButton, i18n( "Add new subdirectory..." ) );
     // Create scope
     createScopeButton = new QToolButton ( projectTools, "Make button" );
-    createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew.png",22 ) );
+    createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew",22 ) );
     createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
     createScopeButton->setEnabled ( true );
     QToolTip::add( createScopeButton, i18n( "Create scope..." ) );
     // build
     buildButton = new QToolButton ( projectTools, "Make button" );
-    buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
+    buildButton->setPixmap ( SmallIcon ( "make_kdevelop",22 ) );
     buildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildButton->sizePolicy().hasHeightForWidth() ) );
     buildButton->setEnabled ( true );
     QToolTip::add( buildButton, i18n( "Build" ) );
     // rebuild
     rebuildButton = new QToolButton ( projectTools, "Rebuild button" );
-    rebuildButton->setPixmap ( SmallIcon ( "rebuild.png",22 ) );
+    rebuildButton->setPixmap ( SmallIcon ( "rebuild",22 ) );
     rebuildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildButton->sizePolicy().hasHeightForWidth() ) );
     rebuildButton->setEnabled ( true );
     QToolTip::add( rebuildButton, i18n( "Rebuild" ) );
     // run
     runButton = new QToolButton ( projectTools, "Run button" );
-    runButton->setPixmap ( SmallIcon ( "exec.png",22 ) );
+    runButton->setPixmap ( SmallIcon ( "exec",22 ) );
     runButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, runButton->sizePolicy().hasHeightForWidth() ) );
     runButton->setEnabled ( true );
     QToolTip::add( runButton, i18n( "Run" ) );
@@ -182,7 +182,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setStretchFactor(spacer, 1);
     // Project configuration
     projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
-    projectconfButton->setPixmap ( SmallIcon ( "configure.png",22 ) );
+    projectconfButton->setPixmap ( SmallIcon ( "configure",22 ) );
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
     QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
@@ -229,21 +229,21 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
-    addfilesButton->setPixmap ( SmallIcon ( "fileimport.png",22 ) );
+    addfilesButton->setPixmap ( SmallIcon ( "fileimport",22 ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
     QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Add new file" );
-    newfileButton->setPixmap ( SmallIcon ( "filenew.png",22 ) );
+    newfileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
     QToolTip::add( newfileButton, i18n( "Add new files" ) );
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "Remove file" );
-    removefileButton->setPixmap ( SmallIcon ( "stop.png",22 ) );
+    removefileButton->setPixmap ( SmallIcon ( "stop",22 ) );
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
@@ -254,7 +254,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Configure file button
     configurefileButton = new QToolButton ( fileTools, "Configure file" );
-    configurefileButton->setPixmap ( SmallIcon ( "configure_file.png",22 ) );
+    configurefileButton->setPixmap ( SmallIcon ( "configure_file",22 ) );
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
     QToolTip::add( configurefileButton, i18n( "Configure file" ) );
@@ -642,7 +642,7 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
   else
     spitem = m_shownSubproject;
   QString relpath = spitem->path.mid(projectDirectory().length());
-                
+
   bool ok = FALSE;
   QString subdirname = QInputDialog::getText(
                     i18n( "Add Subdirectory" ),
@@ -688,20 +688,20 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 
     if (!spitem->isScope)
     {
-      idBuild = popup.insertItem(SmallIcon("make_kdevelop.png"),i18n("Build"));
-      idQmake = popup.insertItem(SmallIcon("qmakerun.png"),i18n("Run qmake"));
+      idBuild = popup.insertItem(SmallIcon("make_kdevelop"),i18n("Build"));
+      idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create Scope..."));
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
       popup.insertSeparator();
-      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject Settings"));
+      idProjectConfiguration = popup.insertItem(SmallIcon("configure"),i18n("Subproject Settings"));
     }
     else
     {
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create Scope..."));
-      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove.png"),i18n("Remove Scope"));
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
+      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove"),i18n("Remove Scope"));
     }
-    
+
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -744,7 +744,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("TEMPLATE",QString("lib"),FileBuffer::VSM_RESET);
   if (item->configuration.m_template == QTMP_SUBDIRS)
     Buffer->setValues("TEMPLATE",QString("subdirs"),FileBuffer::VSM_RESET);
-  
+
   // Config variable
   Buffer->removeValues("CONFIG");
   QStringList configList;
@@ -765,7 +765,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (item->configuration.m_requirements & QD_X11)
     configList.append("x11");
   Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  
+
   // Config strings
   Buffer->removeValues("DESTDIR");
   if (item->configuration.m_destdir.simplifyWhiteSpace()!="")
@@ -1102,7 +1102,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
-                                                "Insert existing "+ title,
+                                                i18n("Insert existing %1").arg(title),
                                                 TRUE);
           dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
           dialog->exec();
@@ -1338,7 +1338,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->configuration.m_buildMode = QBM_RELEASE;
     item->configuration.m_warnings = QWARN_ON;
     item->configuration.m_requirements = 0;
-    item->setPixmap(0,SmallIcon("qmake_app.png"));
+    item->setPixmap(0,SmallIcon("qmake_app"));
 
     // retrieve the project configuration
     item->m_FileBuffer.getValues("TEMPLATE",lst,minusListDummy);
@@ -1348,12 +1348,12 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         item->configuration.m_template = QTMP_APPLICATION;
       if (lst[0] == "lib")
       {
-        item->setPixmap(0,SmallIcon("qmake_lib.png"));
+        item->setPixmap(0,SmallIcon("qmake_lib"));
         item->configuration.m_template = QTMP_LIBRARY;
       }
       if (lst[0] == "subdirs")
       {
-        item->setPixmap(0,SmallIcon("qmake_sub.png"));
+        item->setPixmap(0,SmallIcon("qmake_sub"));
         item->configuration.m_template = QTMP_SUBDIRS;
       }
     }

@@ -18,6 +18,7 @@
 #include "JavaStoreWalker.hpp"
 #include "JavaAST.hpp"
 #include <kdebug.h>
+#include <qfile.h>
 
 
 BackgroundParser::BackgroundParser( ProblemReporter* reporter,
@@ -25,7 +26,7 @@ BackgroundParser::BackgroundParser( ProblemReporter* reporter,
                                     const QString& filename )
     : m_reporter( reporter ),
       m_source( source.unicode(), source.length() ),
-      m_fileName( filename.unicode(), filename.length() )
+      m_fileName( filename )
 {
 }
 
@@ -35,7 +36,7 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::run()
 {
-    QCString _fn = m_fileName.utf8();
+    QCString _fn = QFile::encodeName(m_fileName);
     std::string fn( _fn.data() );
 
     QCString text = m_source.utf8();

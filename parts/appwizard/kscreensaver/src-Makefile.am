@@ -18,3 +18,6 @@ desktop_DATA = $APPNAMELC$.desktop
 desktopdir = $(kde_appsdir)/System/ScreenSavers
 
 EXTRA_DIST = $(desktop_DATA)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot
