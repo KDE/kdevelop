@@ -1,3 +1,7 @@
+2003-02-17 Hamish Rodda <meddie@yoyo.its.monash.edu.au>
+	* parts/outputviews
+		- added detection of k_lineinfo output to application output view
+
 2003-02-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * lib/structure:
 	  - fix: Trie_Impl apply() should apply only to non_empty
