@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevClassView" version="1">
+<ToolBar name="browserToolBar">
+  <Action name="class_combo" />
+  <Action name="method_combo" />
+  <Action name="class_wizard" />
+</ToolBar>
+</kpartgui>
+

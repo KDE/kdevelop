@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=C support
+Name=KDevCppSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevcppsupport
+X-KDevelop-Language=C
+X-KDevelop-Args=C
