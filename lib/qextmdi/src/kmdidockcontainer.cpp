@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// $Id$
-
 #include "kmdidockcontainer.h"
 #include <qwidgetstack.h>
 #include <qlayout.h>
