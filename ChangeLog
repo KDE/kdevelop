@@ -1,594 +1,772 @@
-2001-08-04 Victor Röder <victor_roeder@gmx.de>, Daniel Haberkorn <dhaberkorn@gmx.de>
-	* Added CppCodeCompletionParser.cpp + .h (contains only interface definition)
+2001-08-08  rokrau@yahoo.com
+    * bugfix: fixed another one of these fucking 0x0 pointer segfaults, 
+      this time too late for KDE-2.2.... shit
 
-2001-08-02  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: last fix concerning a grave GUI bug, was application crash in Toplevel mode
+              (clicked Compile when no view of two was activated)
+
+2001-08-04  jbb <jbb@kdevelop.org>
+    * Bring admin dir upto kde-2.2_release
+    * workaround: bug#30097 frank assured me that KDEHOME was not set, but .kde2 was
+      being used. This change just prefers .kde2 over .kde iff KDEHOME is not set.
+      It shouldn't hurt and I gave kdevelop-devel a day to complain ...
+
+2001-07-31  Harald Fernengel  <harry@bnro.de>
+    * cut/paste for non-source files
+    * made it compile with gcc-3.0, too
+
+2001-07-30  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: The order of Toplevel and Childframe mode were mixed up
+    * bugfix: delete the [dock_setting_default] section
+              before starting kdevelop for the first time
+              (hint of Waldo Bastian, after message freeze we could provide an
+              appropriate reset button in the GUI)
+    * added Lars Beikirch's <Lars.Beikirch@gmx.net> patch for QextMDI
+      concerning min/max sizes of childviews and maximized Childframe mode
+      (related to QextMDI but not to KDevelop)
+    * probably last bugfix before the KDE-2.2 tag: the legendary "Bero-crash"
+      --> now we use another config file section for the docking state in KDevelop-2.0
+    * added kdevelop/kdevelop/tools/kdevelop2.upd that will be installed in
+      $(kde_datadir)/kconf_update. After the first "make install" or first restart
+      of KDE the evil section [dock_setting_default] will be removed from CVS
+
+2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: debugging with Toplevel MDI mode works properly now
+      (focus problem in QextMDI and DocViewMan::doSwitchToFile fixed)
+    * some debug messages removed
+
+2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: save MDI mode to config only when leaving the program
+      (fixes problems with several opened KDevelops opened/closed in parallel)
+    * applied patch of Lars Beikirch <Lars.Beikirch@gmx.net> for QextMDI concerning some
+      internal mechanisms, e.g. reduces view-switch flickering
+
+2001-07-26  rokrau@yahoo.com
+    * bugfix: F12 without having Project loaded, 2nd attempt
+
+2001-07-26  John Firebaugh <jfirebaugh@kde.org>
+    * Bug fix for the creation of ctags database.
+      Developer's Note: The following is not a good thing to do:
+      QStringList::Iterator it = methodThatReturnsQStringListByValue().begin();
+      Why? As soon as that statement is executed, the temorary QStringList is
+      destructed and your iterator is left pointing somewhere bad. A very
+      tricky thing!
+
+2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
+    * KDE version check fixed. Now KDevelop-2.0 runs even on FreeBSD
+      with the little help of KrazyKiwi. Thanks a lot!
+    * applied patch of John Firebaugh <jfirebaugh@kde.org>. Thanks a lot!
+    * bugfix: repaired Project->Rebuild, Project->DistClean/RebuildAll and
+      optimized CKDevelop::slotProcessExited, needs to be tested a while
+    * QextMDI: replaced a focus-problem mega-hack (inherits('QDialog') etc.) by a neat solution
+
+2001-07-25  rokrau@yahoo.com
+    * bugfix: F12 now works without a project loaded. I've implemented this
+      somewhat reluctantly, it should work but KDevelop should be used with
+      a project in general. It is not really intended as a file editor.
+
+2001-07-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: memory leaks were detected in QextMDI by Purify
+    * bugfix: completed Harald's bugfix concerning the view state problem
+       (some problems happened in Toplevel MDI mode)
+
+2001-07-24  Harald Fernengel  <harry@bnro.de>
+    * fix: Save-Button is now enabled when current document gets changed
+    * fix: KDevelop now opens project files that come in as URL from konqueror (ignores the "file:")
+
+2001-07-23  Harald Fernengel  <harry@bnro.de>
+    * fix: Wheelmouse works now fine after reaching top or bottom of document
+
+2001-07-23  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+    * improved debian packaging (see debian changelog)
+    * fix: bool bug in setup that prevented finding KDE docs in KDELIBS_DOCDIR
+
+2001-07-23  rokrau@yahoo.com
+    * fix: one NULL pointer crash in docviewman
+    * several enhancements to the ctags browse implementation
+      - fixed crashes when no ctags program was found or tagging failed
+      - fixed reloading of the tags database
+      - changed ctags commandline parameters to minimize problems with older
+        versions of ctags
+      - now all source files under the current directory are tagged 
+
+2001-07-23  F@lk Brettschneider <falk@kdevelop.org>
+    * speed up KWriteView by avoiding unnecessary focusInEvent processing
+    * focus problem of Toplevel MDI mode hopefully solved
+      (never set the focus to another widget when a closeView is pending!, it confuses the DocViewMan)
+    * some speed optimization in QextMDI
     
-    * Exposed the status bar through the kdevcore interface
-    * Made cppsupport display the parsing progress in the statusbar
- 
-2001-08-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Distpart:
-	  - Fixed all layouts in distpart
-	  - The relevant signal for check boxes is toggled(bool), not released()
-	  - Use QDialog instead of QWidget and create it only on demand
-	  - Okay -> OK
-	  - Referring to generated names like Layout36 is a bad idea
-	* Put default binary name for compilers in their desktop files
-	  This default is used for the CC/CXX/F77 setting when the
-	  compiler has been changed by the user
-
-2001-07-30 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-
-	* interfaces/keditor: moc files are compiled separately, #include's
-	removed from cpp files.
-	* fix: KEditor::Editor don't emit documentActivated when there
-	isn't one.
-	
-2001-07-29 Victor Röder <victor_roeder@gmx.de>
-
-	* KDevArgHint improved, i.e. positioning, ui
-
-2001-07-26 Victor Röder <victor_roeder@gmx.de>
-
-	* KDevArgHint added to KWrite-part (widget that shows the function and its needed arguments)
-		Try it and type in 'test(' at the beginning of an empty line in a C++ project!
-	* showArgHint() added to CodeCompletionDocument
-	* added some code to CppCodeCompletion (cppsupport), but only for testing
-
-2001-07-26 Sandy Meier   <smeier@kdevelop.org>
-
-	* kwrite CodeCompletionbox is now useable, maybe someone who want make it more colorful?
-	* php code completion supports (global methods,$this->xxx and $test = new xxx) now, 
-		more will follow
-
-2001-07-26 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-
-	* debian packaging for kdevelop-3.0 branch
-	* kwrite: add path kwriteeditor_part for locating syntax.xml
-
-2001-07-22 Sandy Meier <smeier@kdevelop.org>
-
-	* implemented initial codeCompletion interface for kwrite
-	* added codeCompletion parsing to the PHP supportpart
-	    (everything is very alpha)
-	    
-2001-07-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Canonicalize target name in TargetOptionsDialog.
-	  Thanks to Ludovic LANGE <ludovic.lange@free.fr> for a patch
-	* Wait cursor while index dialog loads index files
-	* Configurable full text search in toc'ed documentation
-
-2001-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added kdoc-generated Qt/KDE index to index dialog
-	* Destroy compiled-in factories at exit. Otherwise
-	  their KConfig's don't get sync()ed
-
-2001-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Made doxygen config widget more KDE compliant, i.e.
-	  KDE icons, KFileDialog instead of QFileDialog,
-	  cleanup
-
-2001-07-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Elementary cvs support (add, remove, update, commit)
-	* doxygen plugin
-	* Added FileContext for context menus in the FileView.
-	  This should be used for the project management widgets
-	  later.
-
-2001-07-13  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Fixed bug causing 'precondition violated' messages in the C++
-          class parser
-
-2001-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Store relative instead of absolute file names in custom project
-	* Use gotoFile() instead of gotoSourceFile() in custom and
-	  script project
-	* Added Doxyfile for libkdevelop api
-
-2001-07-12  Sandy Meier   <smeier@kdevelop.org>
-
-	* implemented extended plugin loading as discussed on Linuxtag 2001
-	  see HACKING how you can use it
-	
-2001-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added for CustomProject part for projects not based
-	  on either automake or tmake/qmake
-	* Templates for C and C++ imports with custom Makefiles
-	* Fix in import dialog to substitute APPNAMELC correctly
-
-2001-07-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Extended the KEditor::EditIface a bit
-	* started to implement it in the editor parts
-
-2001-07-05  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Fixed crash in class tool attribute display. Method and attribute
-          icons now displayed correctly
-        * Regenerated sources for Java plugin api
-        * References in the class store are cleared, before a source file 
-          is parsed
-
-2001-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Quick hack for a tmake/qmake project management
-
-2001-07-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Make file views work for arbitrary mime types
-	* Switch header fix
-
-2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Added package visibility to the class browser for Java - denoted by a 
-          green rectangle against an instance variable or method.
-
-2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Added accessor methods to the Class store/parser sources, so that
-          instance variables should no longer need to be accessed directly.
-          Java plugin api sources regenerated to use the new accessor method names
-
-2001-07-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Doc index dialog remembers checked indices and
-	  categories per project
-	* GNUstep autoconf check, fixed directory
-	* Show 'Goto declaration' only for languages
-	  with declarations
-	* Small toc and index DTD change
-
-2001-07-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added TOCs for STL and Gtk libraries
-	* Removed General section in doc tree view,
-	  as all its contents are covered elsewhere
-	* Added PHP identifier index
-	* Doc tree view configurable on a per-project basis,
-	  currently preconfigured by the app wizard and
-	  import dialog; no user interface
-
-2001-06-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* TOCs for KDE2 development book and libc
-	  plus Claudiu Costins <claudiuc@work.ro> scripts
-
-2001-06-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added GNUStep documentation toc plus a script
-	  for generating it from gsdoc files
-	* Full Python toc plus a script for generating it
-	* Full PHP toc made by Claudiu Costins script
-
-2001-06-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented modification of build order of subprojects
-	* Fixed update of prefixes list
-	* Fixed update of include directory list
-	* Switch header/implementation
-
-2001-06-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Perldoc support
-	* Finished builddir support
-
-2001-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented Add subproject
-	* Fix for autoproject: allow ldflags to be
-	  added for programs, but disable libtool flags
-	* Popup menu contexts for classes, not yet used
-
-2001-06-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* let the user choose which editor part to load
-
-2001-06-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Separated project options widget in 4 separate widgets 
-	  instead of one tab widget and embedded them 
-	  into the general project options dialog. This is
-	  more intuitive for the user and doesn't expose
-	  KDevelop's internal structure so much
-	* App wizard fixes and improvements in the project file structure
-	* Configurable builddir (not used yet)
-	* Configurable environment variables for program run
-	* Implemented Execute program
-	* Implemented Make messages
-	* Menu structure cleanup
-	* Implemented Make install
-
-2001-06-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented Add translation
-	* Implemented Execute program
-	* lex fix
-
-2001-06-14  Sandy Meier <smeier@kdevelop.org>
-
-	* phpsupport: configuration handling now in PHPConfigData
-	* phpsupport: web and shell invocation works now 
-
-2001-06-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented distclean
-	* Support for autogen.sh in addition to Makefile.cvs
-
-2001-06-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Rewritten Add target dialog. Supports additional
-	  LDFLAGS now. Will add a context menu item 'Add KDE plugin'
-	  later which will set KDE_PLUGIN stuff as default
-	* Added a special kde mode to autoproject part. 
-
-2001-06-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* New part regexptest for testing regular expressions
-	* Fixed make frontend to recognize ftnchek messages
-	  correctly
-	* Changed make frontend api again so that the dir is
-	  given as parameter. Necessary for finding the 
-	  directory of an erroneous file when only one
-	  directory is built
-	* Rerun configure when project options have changed.
-
-2001-06-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Allow several commands for the make frontend to be queued
-	* Project management automatically runs configures if no
-	  Makefile exists and Makefile.cvs if no configure script
-	  exists
-
-2001-06-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Don't show Fortran options for gcc
-	* Enabled class view fixes from 06-05 :-)
-	* More import project types
-
-2001-06-09 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-    * Started to move the kwrite code from lib to the part.
-    * Added additional kwrite functions to the menues.
-
-2001-06-05 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-    * Reenabled the signals when files are loaded and
-      saved, so Bernd can test ;)
-      (This was a hotfix, I will do the real one later)
-
-2001-06-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added Add application desktop file dialog
-	* Fixed Add service dialog
-	* Some fixes in class view that I can't test currently...
-
-2001-06-04 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+2001-07-22  F@lk Brettschneider <falk@kdevelop.org>
+    * several bugfixes concerning the Toplevel MDI mode
+    * hopefully fixed the setMainCaption crash bug
+
+2001-07-21  F@lk Brettschneider <falk@kdevelop.org>
+    * big bugfix: accelerators for undocked MDI views work again! :-)
+      --> Toplevel MDI mode is really ready to use now
+    * bugfixes: focus problems with undocked views
+      (Thanks to QextMDI guru Lars Beikirch!)
+    * bugfix: system menu of maximized view (in Childframe mode)
+
+2001-07-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: disassemble tool-view works again
+    * bugfix: frame stack tool-view on/off-switch fixed
+
+2001-07-17  F@lk Brettschneider <falk@kdevelop.org>
+    * reverted Harald's patch because of the message and feature freeze (Ralf's wish is my comand ;)
+    * bugfix: step 3 to enable the restoring of the GUI also in TabPage MDI mode. Hopefully finished.
+      ==> that's why: writeDockConfig() re-enabled, KDevelop saves dock szenario to kdeveloprc file again.
+    Attention:
+      In case of a messed up dock state, please, remove section [dock_setting_default] from $HOME/.kde/share/config/kdeveloprc!
+    * default size if we start for the first time      
+    * code cleanup (KDE_2_1_1 and QTPRINTER stuff removed)
+
+2001-07-16  F@lk Brettschneider <falk@kdevelop.org>
+    * some bugfixes in QextMDI (synchronized with Dr. Baldeweg AG sources of original QextMDI)
+
+2001-07-11  Harald Fernengel  <harry@bnro.de>
+    * added File->Revert Menu Entry to revert changes and reload file from disk
+
+2001-07-11  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: show/hide mechanism of MDI-view taskbar fixed
+      (I had also to fix kdelibs/kdeui/ktoolbar.cpp, Please update!)
+    * for the haters of delayed startlogos:
+      mouse click on startlogo hides it when mainwindow is already visible
+
+2001-07-10  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: setFocus problem with inner widgets of a QextMdiChildView's focus loop fixed
+      --> blinking cursor appears again when switching to files!
+    * bugfix: some minor focus probs with QextMDI
+    * bugfix: doubleclick on GrepView entry lets cursor blink again in target code line.
+      Fuckin' hell, I've missed that so much...
+    * don't blindly open everything with KRun in CKDevelop::switchToFile, ask if it's xpm,
+      hmm....need some more types to be checked?
+    * setup wizared: syntax highlighting for .moc, .diff and .po files added
+    * applied patch of Andre Bell <andre.bell@gmx.de> (docu tree works even if no project is loaded)
+
+2001-07-09  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: strange dock-back effect fixed
+    * bugfix: bugreport of rokrau: ''2 Undesired switch between RFV and CV... fixed.
+    * bugreport of rokrau: '1 When closing a file, more than the one active file is
+      closed...tabbed MDI mode...' hopefully fixed.
+    * applied patch of Lorenzo Delana <ldelana@libero.it> (automake dir var name)
+      Thanks a lot, Lorenzo!
+
+2001-07-09  rokrau@yahoo.com
+    * Fix a null pointer crash in main.cpp. I cant leave you guys alone for 
+      a single week, can I? :-) 
+
+2001-07-07  jbb <jbb@kdevelop.org>
+    * Added qt3 string support
     
-	* Added DCOP bindings to the editor interfaces,
-	  so they are accessible for scripting.
-
-2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* New add service dialog in project management
-	  Not quite ready
-	* Bug fixes in sub project and target options dialog
-
-2001-06-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* New sub project and target options dialogs.
-	  These are much more user-friend wrt convenience
-	  libraries and include directories within the
-	  project. Furthermore, the libtool options are
-	  presented in documented check boxes
-	* Put compiler options widget into the project
-	  options framework
-
-2001-06-01  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Reimplemented the modified-on-disk check with the new
-	  editor-interface.
-	* Reimplemented the modified check before quitting.
-	* Added "Save all" and "Revert all"
-	* Added "Revert" to the editor interface.
-
-2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Made some dom writing code more robust by
-	  creating non-existent nodes in the tree
-	* Rewrote the import dialog to allow the choice between
-	  a number of import templates
-
-2001-05-31 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* switched to the new editor interface concept
-
-2001-05-31 Sandy Meier <smeier@kdevelop.org>
-	
-	* added initial php webserver/shell preview and config dialog (phpsupport)
-	* added errormessage parser/view (phpsupport) 
-	
-2001-05-31  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Added a Java JNI based plugin api, and a corresponding
-	  project template for building a plugin. Java parts are
-	  not built if a --without-java flag is used for configuration,
-	  or if no suitable versions of javac, jar etc are found.
-
-2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added a zillion other languages to ctags tag mappings
-	* Regular expression matching in ctags part
-	* Tell user about dot in configure
-
-2001-05-30  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added a ctags part
-
-2001-05-30  Thomas Fromm <tf@tfromm.com>
-
-	* Added basic Highlighting for PHP
-
-2001-05-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added a pydoc ioslave and a corresponding menu item to
-	  the python support part
-	* Added a man page item to the help menu
-
-2001-05-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* New scripting layer based on DCOP
-
-2001-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added TOCs for perl, python and PHP to the
-	  documentation tree
-	* Added python documentation index
-	* Made file view aware of files added to and
-	  removed from the project
-	* Added 'subdirs' files to KDE app templates
-	* Fixed project management regexps for tabs
-	* Fixed project management to properly emit addedFile signals
-	* Fixed auto project behaviour for prefixes with underscores
-	* LIBADD is for libraries, LDADD for programs
-	* Implemented 'Add prefix' dialog
-	* Show progress dialog when parsing files
-	* Implemented Remove file dialog in project management.
-	  Does not quite work yet :-(
-
-2001-05-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added FORTRAN 77 parser
-	* Added plugins for g77 and the Portland Group's
-	  f77 compiler and High Performance Fortran 
-	  compiler driver
-
-2001-05-24 Sandy Meier   <smeier@kdevelop.org>
-	
-	* added option (load last project on startup)
-	* saved mainview configuration on exit
-
-2001-05-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added templates for GNOME app and simple automake-
-	  based C and C++ programs
-
-2001-05-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Fixed file view and made it possible to add new
-	  groups and change the order of matched patterns
-	* Added preliminary fortran support part with a
-	  ftnchek configuration dialog. Parser follows later...
-
-2001-05-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added a new part 'FileView' which shows all files of
-	  a project sorted in groups like 'Sources' and
-	  'User Interface'. The groups can be configured
-	  by the user. A default setting is provided by the
-	  application wizard.
-
-2001-05-20 Sandy Meier   <smeier@kdevelop.org>
-	
-	* added initial PHP support including a simple php parser
-	* added "hello world" PHP template to AppWizard
-
-2001-05-20  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Added a new editor interface for debugging
-	  (breakpoints etc.)
-	* Added cast methods to the editor interfaces, so
-      you don't have to pass strings around any longer
-
-2001-05-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added kicker, kioslave and kcmodule templates
-	* Each template can define an icon which is
-	  shown in the app wizard
-	* The Big KInstance Cleanup
-
-2001-05-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Added a plugin to provide and configure a 
-	  Tools menu.
-
-2001-05-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Categorized all parts into Global or Project,
-	  so that they are either loaded at startup or
-	  at project loading time
-	* Added part selector which allows to configure
-	  the used parts both globally and on a per-
-	  project basis
-
-2001-05-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Back to KDialogBase for configuration dialogs
-
-2001-05-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added a project options dialog to which any
-	  plugin can add a tab.
-	* Debugger configuration dialog
-	* Temporarily gone back to QTabDialog for these
-	  configuration dialogs instead of KDialogBase.
-	  Not sure if this is right...
-
-2001-05-13  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-	
-	* Added a status interface to the editor interfaces
-	* Implemented display of editor status in the main
- 	  statusbar
-
-2001-05-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Changed compiler frontend to use QTextView, instead of QListBox.
-	  Now copy&paste are possible, and the view scrolls to the end of the
-	  output (unless the user has clicked otherwise)
-	* Also fixed the shortcuts
-	* Fixed buffer menu for documentation parts
-
-2001-05-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Commited the new editor framework
-	  Note that it is not yet active, as it is not yet
-	  complete. But it is evolving...
-
-2001-05-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added Python Hello world template
-	* Fixed memory leaks
-	* Fixed project files in templates to include mainprogram variable
-	* Fixed script project to not show . and .. and to go to a source
-	  file when it is clicked
-	* Implemented printing
-
-2001-05-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented proper comparing of file identities:
-	  Instead of the file name, now devno/inode are compared.
-	  Important for NFS systems, where file names may have
-	  a prefix like /tmp_mnt in some occasions
-	  This was already implemented in the HEAD branch 
-	  before the old one ;-)
-	* Implemented KDevCore::gotoFile() as a generic method
-	  to "go" to a file. Works for arbitrary mime types.
-	* Implemented KDevCore::revertAllFiles()
-	* Warning dialogs when modified files are closed or when
-	  saved/loaded files were modified outside.
-	* Implemented searching html widget
-
-2001-05-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Use flex instead of $(LEX)
-	* Made function prototypes in tokenizer.l static.
-	  Not making them 'static' explicitly makes them
-	  'extern' and causes a conflict
-	* Removed tokenizer.cpp from cvs, so it gets
-	  generated at build time
-
-2001-05-05  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-	
-	* prepared the Tip-of-the-Day plugin to make use of the
-          KTipDialog class that will soon appear in kdelibs.
-
-2001-05-01  Richard Dale <duke@tipitina.demon.co.uk>
-
-        * Removed hard coded java classpaths, and classnames. They are derived
-	  from the projectDirectory and mainProgram project attributes.
-	* Checked in jdb front end code from Oliver Strutynski. He comments:
-	  'I finished work on a first version of JDB Support. It is not at 
-          all feature complete (setting breakpoints does not work yet, hangs 
-          from time to time) but could serve as a starting point for further
-          development. The directory contains a README describing some of the 
-          parsing in the jdbcontroller.'
-
-2001-04-29  Sandy Meier  <smeier@kdevelop.org>
-	* some changes in appwizard gui (qtdesigner based),
-	templates can have a category property now
-
-2001-04-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Implemented a generic project part for scripting languages. 
-	  It essentially consists of a widget that displays all files 
-	  in all subdirectories.
-	* Changed the class view to respect the feature set of the used 
-	  language. I.e. for example for python the sections with 
-	  variables are not displayed, as in python variables are not 
-	  declared.
-	* Sanitized project loading: The user now chooses the project
-	  file in a file dialog, not the directory. The kapp, kpart 
-	  and kpartplugin appwizard scripts install a project file now.
-	* Replaced the persistence stuff (which was not yet used) in the
-	  classstore with serialization routines based on QDataStream.
-	  In principle, we could now send them around via DCOP :-)
-	* Implemented a python support part with parser
-	* Implemented a perl support part with parser
-
-2001-04-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Made configure arguments configurable
-	  Patch by Berndt Josef Wulf <wulf@dingo.ping.net.au>
-	* Don't link with libfl in cppsupport and javasupport
-	* Each part now uses its own instance and the corresponding
-	  resource directory
-
-2001-04-18  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* GDB debugger part sources copied to 'parts/javadebugger', and all names 
-          changed to JDB ones. Ready to add jdb functionality.
-
-2001-04-17  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Moved the splitter widget to lib/util, so it can be shared with parts
-        * Moved the editor part to lib/kwrite, to allow parts to access it.
-	* Added astyle part, a source code reformatter.
-
-2001-04-13  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Applied patch from Oliver Strutynski to fix bug in the Java tokenizer
-	  with non US-ASCII identifiers in source files.
-
-2001-04-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* Added a plugin that let's you select the parts to load
-	  on startup
-	* Added some code to core to only load the plugins selected.
-
-2001-04-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Added memory view widget
-	* Fixed disassemble widget to act only when it is visible
-	* Added examine core file and attach to process
-	* Cleaning widget after the debugger has finished
-	* Added status bar text and whats this
-	* Clear execution point mark when debugger has finished
-
-2001-04-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
-
-	* added a part to display a "Tip of the day"
-	* moved over the tips from the previous HEAD branch,
-	  which probably need a review
-
-2001-04-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-
-	* Rewritten the icon border stuff from 1.x for use
-	  with multiple views per document
-	* Ported the debugger frontend
-
-2001-04-06  Richard Dale <duke@tipitina.demon.co.uk>
-
-	* Added Java and Objective-C class browsing, and Java KDE project template and
-	automake support (ie the _JAVA primary). Fixed bug in class browser where a 
-	method's arguments were not being displayed (was that a bug or a feature?). 
-	Clicking on a class's instance variables in the class browser now works and 
-	takes you to the source file.
-
-
+2001-07-04  F@lk Brettschneider <falk@kdevelop.org>
+    * step 2 to enable the restoring of the GUI also in TabPage MDI mode:
+        I splitted the loading of project in 2 parts because it must call readDockConfig()
+        after the loading of .kdevses but before the loading of .kdevprj
+      ...to be continued...
+    * added Carsten Wolff <AirWulf666@gmx.net> to Authors (who patched the toolbutton states)
+      Thanks a lot.
+
+2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: initial toolbutton state fixed
+    * bugfix: prevented startup from flickering
+    * bugfix: readDockConfig() is still disabled since there are cases in tab MDI mode
+              when it screws up the user interface. But I already fixed it for Childframe MDI mode today.
+
+2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
+    * startlogo solution of gallium reactivated plus a little change by me
+      (now it as cool as Gallium programmed it but acts as Ralf wanted it to be.
+       Additionally, one can click it away to background if he dislikes it)
+      and the code doesn't bother huge class CKDevelop any more
+    * some code cleanup
+    * part 1 of fixing the treeviews/outputviews toolbutton state, not finished yet
+    * removed very annoying query-message "KDevelop was not shutdown correctly. Would you like..."
+      Sometimes it was OK, but most of the time it was not. E.g. if you started a second KDevelop.
+      Now it doesn't ask but simply avoids loading the project.
+    * removed loading/saving of tool-view states to the project file
+      (this is already done by read/writeDockState, and always made conflicts when having a .kdevprj in CVS.
+
+2001-06-29  rokrau@yahoo.com
+    * Fixed a seg fault in treehandler when clicking on class icon.
+    * Fixed kdevprj.save to reflect the correct location of ctoolclass.*.
+
+2001-06-29  jbb <jbb@kdevelop.org>
+    * bugfix: tools menu was built incorrectly - the label and exe were
+    * inadvertantly swapped.
+    * allowed full path name to be given for tool program whilst I was there.
+    * removed ctoolclass.cpp and h from setup dir - now we just have one copy
+    * in kdevelop dir. Lots of things use it ...
+    * fixed crash in kdevelop when no project but window title code wanted the
+    * prj. It was difficult to repeat. (read I couldn't...)
+
+2001-06-27  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix in QextMDI: call base class method in ::focusInEvent(), otherwise focus problems can occur
+      (bugfix supplied by Peter Zimmermann <peter.zimmermann@dr-baldeweg.de>)
+    * 0x0 access crash avoided in CKDevelop::slotProcessExited, actual reason lies deeper in the mechanism though
+
+2001-06-25  F@lk Brettschneider <falk@kdevelop.org>
+    * Now Options->Editor... also works without opened views
+    * minor changes in QextMDI
+
+2001-06-24  jbb <jbb@kdevelop.org>
+    * bugfix: optimize options where never defaulting quite correctly
+    * so I fixed and disabled the options for optimize and debug if they
+    * wern't checked.
+    * Removed print from project files - it's not compiled anymore
+    * bugfix: added $LEXLIB to _project_ file so that regenerating the makefiles
+    * works again - I don't understand why that is so hard to do :)
+    * bugfix: Reverted Harry's debug fix for Qt3.x strings. it didn't always
+    * work - needs more thought, Harry :)
+    
+2001-06-22  Harald Fernengel  <harry@bnro.de>
+   * fixed bug when file was modified outside editor
+   * KDevelop can now debug Qt 3.x strings too.
+
+2001-06-21  F@lk Brettschneider <falk@kdevelop.org>
+   * finished the redesign of the KDevelop setup by a QWizard
+   * I noticed htdig hasn't got a htdig.conf file in the KDevelop installation
+     But how is it supposed to work then?
+
+2001-06-20  F@lk Brettschneider <falk@kdevelop.org>
+   * revised view focus/activation handling:
+     Now QextMdiChildView seems to emit the activated(this) signal properly
+     (not too less and not too often)
+   * synchronized with QextMDI CVS version of Dr. Baldeweg AG Dresden
+     - signal gotFocus(..) is renamed to activated(..) now!
+     - doubleclick on icon button closes view
+     - caption and icon for undocked views,
+     - some nice little helper functionality in the classes
+     - 'Tile Pragma' repaired
+     - revised 'Windows' menu
+   * DocViewMan adapted to that new QextMDI API
+
+2001-06-18  rokrau@yahoo.com
+   * bugfix: KDevelop's treeviews now respect the user setting for 
+     single/double clicks. For this I had to change part of ctreeview
+     and also connect TreeView slots to KListView signals executed() and
+     contextMenu(). This may have introduced some other problems, please
+     test and report.
+
+2001-06-18  F@lk Brettschneider <falk@kdevelop.org>
+   * further work on kdevelop/setup (indexing, changed text, related bugfixes)
+
+2001-06-17  F@lk Brettschneider <falk@kdevelop.org>
+   * start kdevelop after its initial setup has finished
+   * creation of KDE docu outputs to user now
+   * and some bugfixes concerning to that issues
+
+2001-06-15  rokrau@yahoo.com
+   * bugfix: another attempt to fix the mysterious crash 
+     CKDevelop::setMainCaption
+
+2001-06-13  rokrau@yahoo.com
+   * bugfix: prevent an infinite loop in coutputwidget.cpp
+
+2001-06-12  rokrau@yahoo.com
+   * bugfix: kdevelop didnt open a project from the command line, instead 
+     dumped core
+   * bugfix: SIGSEV when closing a document, sometimes...
+   * cleanup: removed some functions that are not called any longer
+
+2001-06-10  F@lk Brettschneider <falk@kdevelop.org>
+   * splitted setup/ckdevinstall.h in several headers, more bugfixes for libkdevelopsetup.so
+   * activated fixed creation of kdelibs docu and indexing of docu again
+   * CTabCtl removed from CVS (KDockWidget takes the part now)
+   
+2001-06-09  F@lk Brettschneider <falk@kdevelop.org>
+   * bugfix: restore geometry on project session loading
+   * bugfix: crash if switching to TabPage mode with special case of having exactly 1 view
+
+2001-06-08  rokrau@yahoo.com
+   * Bugfix: File->Close didnt check for saved documents, just closed
+     the file.
+
+2001-06-08  rokrau@yahoo.com
+   * disabled tip.h and related code if USE_KDE_2_1_1 is set, allow cut and
+     paste for Fortran sources and added an assert for a suspected SIGSEV
+     crash
+
+2001-06-06  Ralf Nolden <nolden@kde.org>
+   * restored the spashlogo as it was before. Now it shows all of the time
+      the last project is loaded which can take a while ad which is why it worked
+      the former way :)
+   * removed the KTipOfDay class and dialog. We´re using KTipDialog from kdelibs now :)
+      tip.database changed to XML accordingly.
+
+2001-06-06  Christian Couder <christian@kdevelop.org>
+    * Moved some slots from the CKDevelop class to DocViewMan.
+    * New signal in DocViewMan to change the status message.
+
+2001-06-05  F@lk Brettschneider <falk@kdevelop.org>
+    * initially added new setup wizard (as shared library),
+      it is a quite redesigned setup app based on Ralf's old sources but now based on QWizard,
+      still unfinished and we need cool pictures for each page
+
+2001-06-04  Harald Fernengel  <harry@bnro.de>
+    * Added option to switch off bracket highlighting
+
+2001-06-04  jbb <jbb@kdevelop.org>
+    * bugfix: crash when typing F4 on empty project
+    
+2001-06-02  rokrau@yahoo.com
+    * some minor reorganization of the ctags code and a little enhancement
+      so that not only cpp files but also cxx files are found in header/source
+      switching
+
+2001-06-01  jbb <jbb@kdevelop.org>
+    * Patch from August Hörandl <august.hoerandl@gmx.at>
+        just a little "adjustment" to the clone functionalities "templates"
+        - added the copy constructor
+        - corrected operator << and >>
+
+2001-06-01  rokrau@yahoo.com
+    * initial Fortran support, Fortran files are recognized as source files
+      instead of data files and they can be compiled
+    * switch between source and header files now works also without ctags 
+      support. This is slower but shouldn't be noticable for smaller projects.
+    * the methods CKDevelop::readProperties and CKDevelop::saveProperties are, 
+      as it seems, not called from anywhere anymore, so I commented them out. 
+      This marks them for deletion in the next code cleanup.
+    * improved the implementation of the CTags support a little bit. 
+
+2001-06-01  Harald Fernengel  <harry@bnro.de>
+    * added parenthesis highlighting code (stole it from quanta, so if it isn't working
+      please don't blame me ;). Very primitive, works only for () [] and {}
+
+2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: focus problems when starting KDevelop in TabPage mode
+    * bugfix: 0L access crash in DocViewMan::slot_gotFocus (reported by Peter Zimmermann)
+
+2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
+    * kdevelop-speed-drop bug fixed (wandering through the popup menu)
+    * from-the-department:-"pointers are evil" bug fixed (reported by rokrau)
+
+2001-05-30  Christian Couder <christian@kdevelop.org>
+    * Improved a little code bookmarks.
+
+2001-05-28  F@lk Brettschneider <falk@kdevelop.org>
+    * TabPage MDI mode ready to use now, please test it!
+    * better icons for the views
+
+2001-05-27  Harald Fernengel <harry@bnro.de>
+    * bugfix: Tools-dialog got into an endless loop if all tools were deleted
+
+2001-05-27  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on TabPage mode, (land in sight!) ;
+    * File->Close(), Window->Close(), Window->CloseAll() fixed,
+      DocViewMan improved therefore, should better consider outside/inside changes now
+
+2001-05-26  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on TabPage MDI mode
+    * bugfix: 0L pointer accesses in kwrite lib fixed (important for TabPage mode session loading)
+
+2001-05-24  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: solved event timing problem with KDE's window manager on a flood of mixed show, hide and reparent events on app startup
+              --> now we hide the main widget until readDockConfig has finished
+              (you need to update your libkdeui.so (of kdelibs) to tonight's version, too!)
+    * switch between TabPage mode and Childframe mode works properly now
+
+2001-05-22  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: backswitch from Toplevel mode to Childframe mode works properly now
+    * --> that's why: enabled readDockConfig() in CKDevelop constructor again
+
+2001-05-22  Harald Fernengel <harry@bnro.de>
+    * Added 2 slots activateNextWin() and activatePrevWin() to QextMdiMainFrm.
+    * Added 2 new keyboard accels: "Goto Next Window" and "Goto Previous Window"
+      to easily cycle through the open windows.
+      default-keys: Alt-PgUp and Alt-PgDown
+
+2001-05-19  Harald Fernengel <harry@bnro.de>
+    * Added support for events. Define them in "eventsrc" and fire them via 
+      KNotifyClient::event(). Currently we have two events: "BuildSuccess" and
+      "BuildError".
+
+2001-05-19  F@lk Brettschneider <falk@kdevelop.org>
+    * fixed focus problems introduced with the bugfixes on 2001-05-18
+
+2001-05-18  F@lk Brettschneider <falk@kdevelop.org>
+    * prevent a gotFocus() signal in QextMdiChildView's activate(). Hope that helps... ;
+    * bugfix: reverted the change for setGeometry(..) called in QextMdiChildFrm::setState(), it didn't work ;
+    * applied patch for QextMDI by Lars Beikirch (lars.beikirch@gmx.net) to make a better fix for the
+      QEvent::ChildInserted/ChildRemoved problem with messageboxes and modal dialogs
+
+2001-05-17  F@lk Brettschneider <falk@kdevelop.org>
+    * probably the bugfix for the 'popupmenu speed drop' problem
+
+2001-05-16  F@lk Brettschneider <falk@kdevelop.org>
+    * evil hack in KDevSession to get rid of the event timing problem
+      when adding a flood of new views to MDI
+    * bugfix: set correct position of system popupmenu of MDI child view
+
+2001-05-16  Christian Couder <christian@kdevelop.org>
+    * Move the browser bookmark stuff from ckdevelop to docviewman.
+    * Rename some browser bookmark methods.
+    * Rename some browser bookmark attributes in docviewman.
+    * Improve browser bookmark popup menu.
+
+2001-05-15  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: statusbar resize in case of looong texts doesn't happen any more
+      (Sorry, it wasn't in KStatusBar but in KDevelop's m_statusLabel)
+    * mispelled word 'documenation' fixed      
+
+2001-05-14  rokrau@yahoo.com
+    * Check whether the CTags program is installed.
+    * Check whether the user even wants to use the CTags search database.
+      This can now be set in the Options->KDevelop Setup dialog.
+    * Removed Make Tags option, this is now automatic, if the file
+      isnt there, it is created upon loading the tags file.
+    * Made the creation and loading of the CTags database a "blocking"
+      process.
+    * Finally, if the user want to use CTags the database is
+      now loaded when the Project is opened.
+
+2001-05-14  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix in QextMDI: consider a messagebox with parent==this isn't a real child widget :-/
+      Don't insert it in the emulated internal MDI-view focus-loop.
+
+2001-05-12  rokrau@yahoo.com
+    * Update: The functionality of the CTags search implementation is
+      being concentrated in an implementation class so it can later
+      be made into a plugin. 
+    * Bugfix: F12 now leaves the cursor where it was if the file was opened.
+
+2001-05-11  jbb <jbb@kdevelop.org>
+    * Patch from August Hörandl <august.hoerandl@gmx.at>
+      updates clone dialog
+    * remove warnings from code
+    
+2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
+    * new feature: now cursor positions in views are saved/restored to/from .kdevses-Session
+
+2001-05-11  jbb <jbb@kdevelop.org>
+    * Replace the CMakeOuputWidget with one derived from 
+      qmultilineedit. Hmmm - haven't we been here before? Wel
+      not quite this does more than the old qmultilineedit widget
+      and is faster than the qlistview approach.
+      
+2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: if a file is changed outside the application,
+      it will now be noticed with focus change
+    * bugfix: removing a file from RFV or LFV should remove the views as well now
+    * bugfix: closing a view checks if the file is modified, appropriate dialogs appear
+
+2001-05-10  F@lk Brettschneider <falk@kdevelop.org>
+    * made application accelerators work also for the Toplevel MDI mode
+      which is needed for usuability.
+    * bugfix: crash on Ctrl+f when no view was open
+
+2001-05-09  F@lk Brettschneider <falk@kdevelop.org>
+    * some bugfixes in QextMDI for the view focus change in Toplevel MDI mode
+
+2001-05-09  Ralf Nolden <nolden@kde.org>
+    * fixed up the kcmodule errors, works now. TODO would be the binary 
+    (standalone) and the desktop file but I think the users will find out 
+    about that themselves.
+
+2001-05-08  rokrau@yahoo.com
+    * added F12 for switch to header/source
+    * added Edit menu entries for CTags related functionality
+
+2001-05-07  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: prevented annoying undock of output tool-views when calling Make or Run
+    * bugfix: prevented annoying switch to class_tree tool-view when stepping through code with the internal debugger
+              or opening a function subtree in VAR tool-view
+
+2001-05-06  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: annoying question 'changed outside the editor. Wanna save?'
+      although not changed is removed now.
+    * further work on toggling tree and output views on/off (needs update to latest kdeui library)
+
+2001-05-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: avoid crash when closing the app during project loading.
+
+2001-05-01  jbb <jbb@kdevelop.org>
+    * Optionally send Tools ouput to message view 
+      patch from Harald Fernengel <harry@bnro.de>
+
+2001-05-04  rokrau@yahoo.com
+    * some more polishing on the CTags search functionality.
+    * added an option to switch between header and source files per RMC
+
+2001-05-04  F@lk Brettschneider <falk@kdevelop.org>
+    * prevent project session loading from flicker
+
+2001-05-03  rokrau@yahoo.com
+    * Applied Harald Fernengel <harry@bnro.de> second set of patches for the
+      grepdialog.
+
+2001-05-03  F@lk Brettschneider <falk@kdevelop.org>
+    * bad behaviour fixed: avoid flickering when adding new maximized MDI views to the MDI system
+    * bugfix: proper reinsertion of items in mainframe's fillWindowMenu()
+
+2001-05-01  jbb <jbb@kdevelop.org>
+    * Vertical scrollbar improvements patch from Jens Zurheide <jens.zurheide@gmx.de>
+
+2001-05-01  jbb <jbb@kdevelop.org>
+    * grep dialog and write access patches from Harald Fernengel <harry@bnro.de>
+
+2001-04-30  F@lk Brettschneider <falk@kdevelop.org>
+   *  improved menu stuff for tree and output tool views
+
+2001-04-28  F@lk Brettschneider <falk@kdevelop.org>
+    * on/off switch for certain single tool views improved (common behaviour now, new popupmenus, delayed buttons)
+      (Note: requires latest KDE version from cvs!)
+
+2001-04-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: there was a bloody event cycle in layoutTaskBar()
+
+2001-04-21  rokrau@yahoo.com
+    * I have the first "working" draft of ctags support done now.
+      It's still mostly a proof of concept but I will polish it a bit
+      over time now. Select an include file and RMC will let you
+      open the file through its location in the tags file.
+
+2001-04-20  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: crash at Windows->CloseAll+Windows->Close
+    * nice icon for the MDI views
+    * 2 steps of reactivating the trees-on/off button - now for a compound group of dockwidgets
+
+2001-04-19  F@lk Brettschneider <falk@kdevelop.org>
+    * improved Options->KDevelop->User_interface page
+
+2001-04-18  jbb <jbb@kdevelop.org>
+    * Horizontal scroll bar patch from Jens Zurheide <jens.zurheide@gmx.de>
+    * null pointer test in closeWindow()
+    
+2001-04-17  rokrau@yahoo.com
+    * fixed one crash in docviewman.cpp
+    * some more integration work on the ctags support
+
+2001-04-18  F@lk Brettschneider <falk@kdevelop.org>
+    * moved the MDI mode selection to Options->KDevelop->user_interface
+    * bugfix: concerning the visibility of the MDI view taskbar
+
+2001-04-17  F@lk Brettschneider <falk@kdevelop.org>
+    * likely the bugfix for the crash when closing an MDI view
+
+2001-04-16  rokrau@yahoo.com
+    * Added preliminary ctags support, not functional yet but good enough 
+      for benchmarking.
+
+2001-04-16  F@lk Brettschneider <falk@kdevelop.org>
+    * supported set/get the setting if the mainframe is in 'maximized Childframe mode'
+      added loading of that in CKDevelop::readOptions()
+
+2001-04-12  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: switching in View->Tab_Text works again but not completely right, use latest KDE sources from HEAD (12/04/2001)
+
+2001-04-10  rokrau@yahoo.com
+
+    * some small changes that should make analysing print problems easier,
+      e.g. printing is handled by its own KShellProcess now.
+
+2001-04-10  F@lk Brettschneider <falk@kdevelop.org>
+    * splitted tree tab view and output tab view into single tool views. Still unfinished, but ready to play with it.
+      (It's a trial. If that is too complex, maybe we could replace it by the old version again later. I hope we needn't to do that.)
+
+2001-04-08  F@lk Brettschneider <falk@kdevelop.org>
+    * added MDI-view taskbar entry to "View" menu, actually it should work but it doesn't yet. :-( That taskbar problem will tear me down 6 foot deep...
+
+2001-04-07  Christian Couder <christian@kdevelop.org>
+    * Fix a bug due to the last modified attribute of the kwritedoc not
+    initialised. When we create a kwritedoc, now we check if the file exists
+    and if this is true the we set the last modified date.
+
+2001-04-08  jbb <jbb@kdevelop.org>
+    * Add manpage display to menu
+
+2001-04-07  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: ignore queryClose() and queryExit() at application startup time (which actually belongs to the
+      closing of the KMessageBox widget), this also speeds up the startup of KDevelop because we don't save the
+      whole program state to KConfig any more which is useless. And this seems to fix the problem with saving
+      toolbar states (QextMdiTaskBar) that aint already processed but are only pending in this moment.
+    * bugfix: added missing flag WDestructiveClose in the QextMdiMainFrm constructor
+    * bugfix: remove the according MDI covers from their control list when closing views
+
+2001-04-07  Christian Couder <christian@kdevelop.org>
+    * Clean the DocViewManager class.
+
+2001-04-06  jbb <jbb@kdevelop.org>
+    * Add manpage display
+
+2001-04-04  jbb <jbb@kdevelop.org>
+    * More improvements in class parser (handle throw() better) from
+    *               Daniel Engelschalt <s2697@htw-dresden.de>
+
+2001-03-31  F@lk Brettschneider <falk@kdevelop.org>
+    * cleaned up a little bit
+    * 0L pointer checks for m_docViewManager->currentEditView() added in many slots
+    * HTML docu views are saved/load to/from .kdevses
+    * bugfix: in doCloseAllDocs(): iterator got confused because of removing a doc reference from the doc list
+
+2001-03-30  F@lk Brettschneider <falk@kdevelop.org>
+    * implemented KDevelop's XML-based session loading&saving (currently MDI stuff, only) in a *.kdevses file
+    * why? Answer: To separate stuff from the project which causes CVS merge conflicts when working in teams
+    * therefore is class KDevSession now
+    * it's not finished yet for docu stuff, but works for KWriteDocs and CEditViews
+    * TODO: session of mainframe window and geometry of trees and output widgets
+
+2001-03-29  jbb <jbb@kdevelop.org>
+    * Improved struct handling in class parser from
+    *               Daniel Engelschalt <s2697@htw-dresden.de>
+    * use $(LIB_QT) $(LIB_KDECORE) etc where appropriate
+
+2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: repaired design mistake in rewritten DocViewMan: KWrite docs can have several views, consider that at closing
+    * that's why I added 2 methods KWriteDoc::viewCount() and KWriteDoc::viewList()
+
+2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: CKDevelop::doActivateView() removed; QWidget::setFocus() does the job ;)
+
+2001-03-25  Christian Couder <christian@kdevelop.org>
+    * Bid rewrite if the DocViewManager stuff.
+    * Removed the TEditInfo and DocViewNode structs.
+
+2001-03-11  bretzel <serge.lussier@videotron.ca>
+    * Added: Instanciate new static attributes in cpp file.
+    * Added: New feature: Read-Write property for new attribute and
+             Automaticly implement properties methods in cpp file.
+    * Fixed: Disabled unused undo button in Classproperties dialog
+             - No code yet for it...
+
+2001-03-21  jbb <jbb@kdevelop.org>
+    * Fixed: Crash when right click on empty space in watch window.
+
+2001-03-20  F@lk Brettschneider <falk@kdevelop.org>
+    * So this is real MDI now. Create new views for the current document
+      using "Window-->New Window"!
+    * applied bugfixes of Roland Krause <rokrau@yahoo.com>. Thanks a lot, Roland!
+
+2001-03-19  F@lk Brettschneider <falk@kdevelop.org>
+    * adapted HTML browser to DocViewMan MDI-mechanism
+      (E.g. removed browser_widget and replaced it with m_docViewManager->currentBrowserDoc())
+
+2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: switched off automatic focus - wtf, (removed enterEvent() from CEditWidget)
+
+2001-03-18  Christian Couder <christian@kdevelop.org>
+    * Fix a bug (in switchToFile) in the change I previously commited.
+    * Fix some bookmark bugs.
+
+2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
+    * applied overridden bugfix again: DocViewMan::slotFileSaveAll doesn't crash any more
+    * bugfix: possible crash in KWriteDoc::currentColumn(..)
+
+2001-03-18  Christian Couder <christian@kdevelop.org>
+    * Moved all the edit_info stuff from the CKDevelop class to the
+      DocViewMan class.
+    * Code simplified in many places in ckdevelop files.
+
+2001-03-17  jbb <jbb@kdevelop.org>
+    * Re-write message_widget to have coloured error messages - removed
+    * cerrormessageparser.cpp .h
+
+2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: added focusNextPrevChild(..) to avoid a focusOut, this enables the Tab key again, switched off subwidget focus loop
+    * bugfix: CKDevelop::slotFileSaveAll doesn't crash any more
+
+2001-03-17  jbb <jbb@kdevelop.org>
+    * add dialog for library settings - it's a bit crude :(
+
+2001-03-16  Christian Couder <christian@kdevelop.org>
+    * global bookmarks, there are still bugs and the implementation
+      will probably change.
+
+2001-03-16  F@lk Brettschneider <falk@kdevelop.org>
+    * Closing and reopen edit files should work now without crash.
+    * There were bugs in the DocViewMan...
+
+2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
+    * now QextMDI can look like an SDI application! :-)  (the 4. MDI mode we have got)
+    * new QextMdiChildView constructor added (by Eva Brucherseifer, Thanks!)
+    * some 0L pointer access bugfixes
+    * bugfix: raise on click works now also for afterwards inserted child widgets
+    * setPixmap in childview calls setPixmap in childframe as expected
+    * taskbar button count == 0L works properly now
+
+2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
+    * got rid of s_tab_view, DocViewMan::currentDocType() added and used
+    * some bugfixes (Roland Krause's crash on startup as well)
+    * switch of tree views adapted
+
+2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfixes: crash on exit (wrong type casts, forgot to remove browser view from MDI control)
+
+2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on MDI, some connect()s from init...() moved to DocViewMan::createView()
+    * some bugfixes in the DocViewMan
+
+2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
+    * clearBookmarks() is a KWriteDoc method now, KWrite::clearBookmark() just calls its KWriteDoc
+    * KWriteDoc: setFileName(), setModified(), setText(), isModified() is public now (for direct access of the document (documents are the central place in an MDI architecture))
+    * architecture changed in a way that cpp_widget and header_widget is away now, use CKDevelop::m_docViewManager for those things now
+
+2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
+    * DocViewMan bugfixes
+    * adapted these CKDevelop slots: slotOptionsEditor, slotOptionsEditorColors, slotOptionsSyntaxHighlightingDefaults, slotOptionsSyntaxHighlighting
+
+2001-03-10  F@lk Brettschneider <falk@kdevelop.org>
+    * DocViewMan improved (set/get current doc and view, delete views)
+    * replaced all edit_widget in CKDevelop by m_docViewManager->currentEditView()
+    * other MDI stuff
+
+2001-03-07  jbb <jbb@kdevelop.org>
+    * add sharedlib_rootname and sharedlib_LDFLAGS to project file. These can
+      be set against each sharedlib, which allows us to use kdevelop to
+      regenerate the Makefile.am for kdevelop.
+      Regenerate the Makefile.ams and restore the project file.
+      Add Roland's buildmake patch. This tidies up the buildmake process a good
+      deal.
+      
+2001-03-06  F@lk Brettschneider <falk@kdevelop.org>
+    * initial code for QextMDI-based MDI feature added:
+        - The DocViewMan is the MDI manager which is responsible for creating documents and multiple views on such documents ;
+        - CKDevelop::initView() adapted
+        - CKDevelop::switchToFile(..) adapted
+        - CEditWidget adapted a little bit, some methods are public now in KWriteDoc, KWriteView and KWrite
+    * the whole thing is very unusable, I just give other developers the chance to contribute, stay tuned for further development...
+
+2001-03-06  jbb <jbb@kdevelop.org>
+    * Fixed: Dirs containing "++" would cause kimport to fail.
+
+2001-02-26  jbb <jbb@kdevelop.org>
+    * Fixed: Window placement at startup was wrong
+             Screen width missed iconBorder width adjustment.
+             patch Jens Zurheide <jens.zurheide@gmx.de>
+
+2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: CPrint dialog had problems with null params.
+             based on patch from 
+             Ravikiran Rajagopal <ravi@ee.eng.ohio-state.edu> 
+
+2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: Creating a cpp project didn't work.
+
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Fixed: kimport was run directly requiring perl to be in
+      /usr/bin. This was incorrect. When this failed it revealed
+      a crash in the classparser which should not be called if
+      reading the project files failed.
+
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Remove restriction on version numbers
+
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Fixed: after a distclean if the qt dir wasn't entered then the
+      configure args ended up being "--with-qt-dir= ". This failed the
+      qt configure test.
+
+2001-02-23  jbb <jbb@kdevelop.org>
+    * Fixed Multiple tools beng started after adding a tool
+      grep support for Solaris - find params needed adjusting
+      Update of QExtMDI template.
+
+2001-02-20ish
+    * kdevelop1.4 tagged for release as KDE_2_1_RELEASE. If you 
+      want bug fixes and other small enhancements then continue to
+      extract kdevelop using the branch of KDEVELOP_1_4.
+
+2000-12-30  jbb <jbb@kdevelop.org>
+    * Ported 1.3 to kde2 - This is an interim version that
+      allows users to do away with kde1 whilst kdevelop2.0 is
+      being developed.
