@@ -60,7 +60,7 @@ binary-arch:	build
 	dh_strip
 	dh_compress
 	dh_fixperms
-	chmod 755 $(kde_datadir)/kdevelop/tools/processesend.pl
+	chmod 755 debian/tmp/$(kde_datadir)/kdevelop/tools/processesend.pl
 	dh_perl
 	dh_suidregister
 	dh_makeshlibs
