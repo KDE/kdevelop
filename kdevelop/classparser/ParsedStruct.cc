@@ -39,8 +39,6 @@
 *********************************************************************/
 
 #include "ParsedStruct.h"
-#include "ParsedItem.h"
-#include "ParsedClassItem.h"
 #include <iostream.h>
 #include <assert.h>
 
@@ -60,7 +58,6 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedStruct::CParsedStruct()
-  : memberIterator( members )
 {
   setItemType( PIT_STRUCT );
 }
@@ -84,41 +81,6 @@ CParsedStruct::~CParsedStruct()
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------- CClassParser::addMember()
- * addMember()
- *   Add a member to the structure.
- *
- * Parameters:
- *   aMember           The new member.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedStruct::addMember( CParsedAttribute *aMember )
-{
-  assert( aMember != NULL );
-
-  members.insert( aMember->name, aMember );
-}
-
-/*------------------------------------ CClassParser::getMemberByName()
- * getMemberByName()
- *   Fetch a member by using its' name.
- *
- * Parameters:
- *   aName             The name of the member.
- *
- * Returns:
- *   CParsedAttribute * The member.
- *   NULL              The member was not found.
- *-----------------------------------------------------------------*/
-CParsedAttribute *CParsedStruct::getMemberByName( const char *aName )
-{
-  assert( aName != NULL );
-
-  return members.find( aName );
-}
-
 /*------------------------------------------------- CClassStore::out()
  * out()
  *   Output this object to stdout.
@@ -131,8 +93,8 @@ CParsedAttribute *CParsedStruct::getMemberByName( const char *aName )
 void CParsedStruct::out()
 {
   cout << "   " << name << "\n";
-  for( memberIterator.toFirst();
-       memberIterator.current();
-       ++memberIterator )
-    memberIterator.current()->out();
+  for( attributeIterator.toFirst();
+       attributeIterator.current();
+       ++attributeIterator )
+    attributeIterator.current()->out();
 }

@@ -44,31 +44,17 @@
 #include <qdict.h>
 #include <qstring.h>
 #include "ParsedAttribute.h"
+#include "ParsedItem.h"
+#include "ParsedClassItem.h"
+#include "ParsedContainer.h"
 
-/** */
-class CParsedStruct : public CParsedItem, public CParsedClassItem
+/** The parsed representation of a structure */
+class CParsedStruct : public CParsedItem, public CParsedContainer
 {
 public: // Constructor & Destructor
+
   CParsedStruct();
   ~CParsedStruct();
-
-private: // Private attributes.
-  
-  /** Members of the structure. */
-  QDict<CParsedAttribute> members;
-
-public: // Public attributes.
-
-  /** Members of the structure. */
-  QDictIterator<CParsedAttribute> memberIterator;
-
-public: // Public methods to set attribute values.
-  
-  /** Add an member to the structure. */
-  void addMember( CParsedAttribute *anAttribute );
-
-  /** Fetch a member by using its' name. */
-  CParsedAttribute *getMemberByName( const char *aName );
 
 public: // Implementation of virtual methods
 
@@ -76,11 +62,12 @@ public: // Implementation of virtual methods
   virtual const char *asPersistantString( QString &str ) { return NULL;}
 
   /** Initialize the object from a persistant string. */
-  virtual void fromPersistantString( const char *str ) {}
+  virtual int fromPersistantString( const char *str, int startPos ) {return 0;}
 
   /** Output this object to stdout. */
   virtual void out();
 
 };
+
 
 #endif

@@ -49,11 +49,10 @@
 #include "ParsedAttribute.h"
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
-#include "ParsedSignalText.h"
-#include "ParsedStruct.h"
+#include "ParsedContainer.h"
 
 /** This is the representation of a class that has been parsed by the classparser.*/
-class CParsedClass : public CParsedItem
+class CParsedClass : public CParsedItem, public CParsedContainer
 {
 public: // Constructor & Destructor
 
@@ -61,15 +60,6 @@ public: // Constructor & Destructor
   ~CParsedClass();
 
 private: // Private attributes
-
-  /** List of attributes. */
-  QDict<CParsedAttribute> attributes;
-
-  /** List of methods. */
-  QList<CParsedMethod> methods;
-
-  /** All methods ordered by name and argument. */
-  QDict<CParsedMethod> methodsByNameAndArg;
 
   /** List of all slots. */
   QList<CParsedMethod> slotList;
@@ -83,16 +73,7 @@ private: // Private attributes
   /** All signals ordered by name and argument. */
   QDict<CParsedMethod> signalsByNameAndArg;
 
-  /** All structures declared in this class. */
-  QDict<CParsedStruct> structs;
-
 public: // Public attributes
-
-  /** Filename of the .h file. */
-  QString hFilename;
-
-  /** Filename of the .cc/.cpp etc file. */
-  QString implFilename;
 
   /** List with names of parentclasses(if any). */
   QList<CParsedParent> parents;
@@ -103,52 +84,25 @@ public: // Public attributes
   /** List with names of classes declared in this class(if any). */
   QStrList childClasses;
 
-  /** Iterator for the methods. */
-  QListIterator<CParsedMethod> methodIterator;
-
-  /** Iterator for the attributes. */
-  QDictIterator<CParsedAttribute> attributeIterator;
-
   /** List of slots. */
   QListIterator<CParsedMethod> slotIterator;
 
   /** List of signals. */
   QListIterator<CParsedMethod> signalIterator;
 
-  /** Iterator for the structures. */
-  QDictIterator<CParsedStruct> structIterator;
-
   /** List of signal<->slot mappings. */
   QList<CParsedSignalSlot> signalMaps;
   
-  /** List of signal->text mappings. */
-  QList<CParsedSignalText> textMaps;
-
 public: // Metods to set attribute values
-
-  /** Set the .h filename. */
-  void setHFilename( const char *aName );
-  
-  /** Set the .cc/.cpp filename. */
-  void setImplFilename( const char *aName );
 
   /** Add a parent. */
   void addParent( CParsedParent *aParent );
-
-  /** Add a struct. */
-  void addStruct( CParsedStruct *aStruct );
 
   /** Add a friend. */
   void addFriend( const char *aName )      { friends.append( aName ); }
 
   /** Add a childclass. */
   void addChildClass( const char *aName )  { childClasses.append( aName ); }
-
-  /** Add an attribute. */
-  void addAttribute( CParsedAttribute *anAttribute );
-
-  /** Add a method. */
-  void addMethod( CParsedMethod *aMethod );
 
   /** Add a signal. */
   void addSignal( CParsedMethod *aMethod );
@@ -159,37 +113,16 @@ public: // Metods to set attribute values
   /** Add a signal->slot mapping. */
   void addSignalSlotMap( CParsedSignalSlot *aSS );
 
-  /** Add a signal->slot mapping. */
-  void addSignalTextMap( CParsedSignalText *aST );
-
 public: // Public queries
 
-  /** Get a method by using its' name. */
-  CParsedMethod *getMethodByName( const char *aName );
-
-  /** Get a method by using its' name and arguments. */
-  CParsedMethod *getMethodByNameAndArg( const char *aName );
+  /** Get a method by comparing with another method. */
+  CParsedMethod *getMethod( CParsedMethod &aMethod );
 
   /** Get a signal by using its' name and arguments. */
   CParsedMethod *getSignalByNameAndArg( const char *aName );
 
   /** Get a slot by using its' name and arguments. */
   CParsedMethod *getSlotByNameAndArg( const char *aName );
-
-  /** Get a method by comparing with another method. */
-  CParsedMethod *getMethod( CParsedMethod &aMethod );
-
-  /** Get a struct by using it's name. */
-  CParsedStruct *getStructByName( const char *aName ) { return NULL; }
-
-  /** Get a attribute by using its' name. */
-  CParsedAttribute *getAttributeByName( const char *aName );
-
-  /** Get all methods in sorted order. */
-  QList<CParsedMethod> *getSortedMethodList();
-
-  /** Get all attributes in sorted order. */
-  QList<CParsedAttribute> *getSortedAttributeList();
 
   /** Get all signals in sorted order. */
   QList<CParsedMethod> *getSortedSignalList();
@@ -203,7 +136,7 @@ public: // Public queries
 public: // Implementation of virtual methods
 
   /** Initialize the object from a persistant string. */
-  virtual void fromPersistantString( const char *dataStr );
+  virtual int fromPersistantString( const char *dataStr, int startPos );
 
   /** Return a string made for persistant storage. */
   virtual const char *asPersistantString( QString &dataStr );

@@ -30,6 +30,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "ParsedClass.h"
 
@@ -49,21 +50,15 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedClass::CParsedClass()
-  : methodIterator( methods ),
-    attributeIterator( attributes ),
-    slotIterator( slotList ),
-    signalIterator( signalList ),
-    structIterator( structs )
+  : slotIterator( slotList ),
+    signalIterator( signalList )
 {
   setItemType( PIT_CLASS );
 
   parents.setAutoDelete( true );
-  attributes.setAutoDelete( true );
-  methods.setAutoDelete( true );
   signalList.setAutoDelete( true );
   slotList.setAutoDelete( true );
   signalMaps.setAutoDelete( true );
-  textMaps.setAutoDelete( true );
 }
 
 /*------------------------------------- CParsedClass::~CParsedClass()
@@ -85,40 +80,6 @@ CParsedClass::~CParsedClass()
  *                                                                   *
  ********************************************************************/
 
-/*---------------------------------- CParsedClass::setHFilename()
- * setHFilename()
- *   Set the .h filename.
- *
- * Parameters:
- *   aName            The filename.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::setHFilename( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  hFilename = aName;
-}
-  
-/*---------------------------------- CParsedClass::setImplFilename()
- * setImplFilename()
- *   Set the .cc/.cpp filename.
- *
- * Parameters:
- *   aName            The filename.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::setImplFilename( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  implFilename = aName;
-}
-
 /*----------------------------------------- CParsedClass::addParent()
  * addParent()
  *   Add a parent.
@@ -134,68 +95,6 @@ void CParsedClass::addParent( CParsedParent *aParent )
   assert( aParent != NULL );
 
   parents.append( aParent );
-}
-
-/*----------------------------------------- CParsedClass::addStruct()
- * addStruct()
- *   Add a structure.
- *
- * Parameters:
- *   aStruct          The structure description.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::addStruct( CParsedStruct *aStruct ) 
-{
-  assert( aStruct != NULL );
-  assert( !aStruct->name.isEmpty() );
-
-  aStruct->setDeclaredInClass( name );
-  structs.insert( aStruct->name, aStruct );  
-}
-
-/*-------------------------------------- CParsedClass::addAttribute()
- * addAttribute()
- *   Add an attribute.
- *
- * Parameters:
- *   anAttribute      The attribute description.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::addAttribute( CParsedAttribute *anAttribute )
-{
-  assert( anAttribute != NULL );
-  assert( !anAttribute->name.isEmpty() );
-
-  anAttribute->setDeclaredInClass( name );
-  attributes.insert( anAttribute->name, anAttribute );
-}
-
-/*------------------------------------------ CParsedClass::addMethod()
- * addMethod()
- *   Add a method.
- *
- * Parameters:
- *   aMethod          The method description.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::addMethod( CParsedMethod *aMethod )
-{
-  assert( aMethod != NULL );
-  assert( !aMethod->name.isEmpty() );
-
-  QString str;
-
-  aMethod->setDeclaredInClass( name );
-  methods.append( aMethod );
-
-  aMethod->asString( str );
-  methodsByNameAndArg.insert( str, aMethod );
 }
 
 /*------------------------------------------ CParsedClass::addSignal()
@@ -260,67 +159,42 @@ void CParsedClass::addSignalSlotMap( CParsedSignalSlot *aSS )
   signalMaps.append( aSS );
 }
 
-/*----------------------------------- CParsedClass::addSignalTextMap()
- * addSignalTextMap()
- *   Add a signal->text mapping.
- *
- * Parameters:
- *   aST              The signal to text mapping.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::addSignalTextMap( CParsedSignalText *aST )
-{
-  assert( aST != NULL );
-
-  textMaps.append( aST );
-}
-
 /*********************************************************************
  *                                                                   *
  *                           PUBLIC METHODS                          *
  *                                                                   *
  ********************************************************************/
 
-/*----------------------------------- CParsedClass::getMethodByName()
- * getMethodByName()
- *   Get a method by using its' name.
+/*------------------------------------------ CParsedClass::getMethod()
+ * getMethod()
+ *   Get a method by comparing with another method.
  *
  * Parameters:
- *   aName              Name of the method to fetch.
+ *   aMethod            Method to compare with.
  *
  * Returns:
  *   CParsedMethod *    The method.
  *   NULL               If not found.
  *-----------------------------------------------------------------*/
-CParsedMethod *CParsedClass::getMethodByName( const char *aName )
+CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
 {
   CParsedMethod *retVal = NULL;
 
   for( retVal = methods.first(); 
-       retVal != NULL && retVal->name != aName;
+       retVal != NULL && !retVal->isEqual( aMethod );
        retVal = methods.next() )
     ;
-    
-  return retVal;
-}
 
-/*----------------------------- CParsedClass::getMethodByNameAndArg()
- * getMethodByNameAndArg()
- *   Get a method by using its' name and args using the same format
- *   as in CParsedMethod::toString().
- *
- * Parameters:
- *   aName              Name and args of the method to fetch.
- *
- * Returns:
- *   CParsedMethod *    The method.
- *   NULL               If not found.
- *-----------------------------------------------------------------*/
-CParsedMethod *CParsedClass::getMethodByNameAndArg( const char *aName )
-{
-  return methodsByNameAndArg.find( aName );
+  // If none was found try with the slots.
+  if( retVal == NULL )
+  {
+    for( retVal = slotList.first(); 
+         retVal != NULL && !retVal->isEqual( aMethod );
+         retVal = slotList.next() )
+      ;
+  }
+
+  return retVal;
 }
 
 /*----------------------------- CParsedClass::getSignalByNameAndArg()
@@ -357,56 +231,6 @@ CParsedMethod *CParsedClass::getSlotByNameAndArg( const char *aName )
   return slotsByNameAndArg.find( aName );
 }
 
-/*------------------------------------------ CParsedClass::getMethod()
- * getMethod()
- *   Get a method by comparing with another method.
- *
- * Parameters:
- *   aMethod            Method to compare with.
- *
- * Returns:
- *   CParsedMethod *    The method.
- *   NULL               If not found.
- *-----------------------------------------------------------------*/
-CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
-{
-  CParsedMethod *retVal = NULL;
-
-  for( retVal = methods.first(); 
-       retVal != NULL && !retVal->isEqual( aMethod );
-       retVal = methods.next() )
-    ;
-
-  // If none was found try with the slots.
-  if( retVal == NULL )
-  {
-    for( retVal = slotList.first(); 
-         retVal != NULL && !retVal->isEqual( aMethod );
-         retVal = slotList.next() )
-      ;
-  }
-
-  return retVal;
-}
-
-/*-------------------------------- CParsedClass::getAttributeByName()
- * getAttributeByName()
- *   Get a attribute by using its' name.
- *
- * Parameters:
- *   aName              Name of the attribute to fetch.
- *
- * Returns:
- *   CParsedAttribute * The attribute.
- *   NULL               If not found.
- *-----------------------------------------------------------------*/
-CParsedAttribute *CParsedClass::getAttributeByName( const char *aName )
-{    
-  assert( aName != NULL );
-
-  return attributes.find( aName );
-}
-
 /*-------------------------------- CParsedClass::hasParent()
  * hasParent()
  *   Check if this class has the named parent. 
@@ -427,78 +251,6 @@ bool CParsedClass::hasParent( const char *aName )
     ;
 
   return aParent != NULL;
-}
-
-/*------------------------------- CParsedClass::getSortedMethodList()
- * getSortedMethodList()
- *   Get all methods in sorted order. 
- *
- * Parameters:
- *   -
- * Returns:
- *   QList<CParsedMethod> *  The sorted list.
- *-----------------------------------------------------------------*/
-QList<CParsedMethod> *CParsedClass::getSortedMethodList()
-{
-  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
-  char *str;
-  QStrList srted;
-  QString m;
-  
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( methodIterator.toFirst();
-       methodIterator.current();
-       ++methodIterator )
-  {
-    methodIterator.current()->asString( m );
-    srted.inSort( m );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getMethodByNameAndArg( str ) );
-  }
-
-  return retVal;
-}
-
-/*------------------------------- CParsedClass::getSortedAttributeList()
- * getSortedAttributeList()
- *   Get all attributes in sorted order. 
- *
- * Parameters:
- *   -
- * Returns:
- *   QList<CParsedMethod> *  The sorted list.
- *-----------------------------------------------------------------*/
-QList<CParsedAttribute> *CParsedClass::getSortedAttributeList()
-{
-  QList<CParsedAttribute> *retVal = new QList<CParsedAttribute>();
-  char *str;
-  QStrList srted;
-  
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( attributeIterator.toFirst();
-       attributeIterator.current();
-       ++attributeIterator )
-  {
-    srted.inSort( attributeIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getAttributeByName( str ) );
-  }
-
-  return retVal;
 }
 
 /*------------------------------- CParsedClass::getSortedSignalList()
@@ -591,14 +343,13 @@ void CParsedClass::out()
   CParsedParent *aParent;
   CParsedMethod *aMethod;
   CParsedSignalSlot *aSS;
-  CParsedSignalText *aST;
   char *str;
 
   sprintf( buf, "%d", definedOnLine );
   cout << "Class " << name << " @ line " << buf << "\n";
   cout << "  Defined in files:\n";
-  cout << "    " << hFilename << "\n";
-  cout << "    " << implFilename << "\n";
+  cout << "    " << declaredInFile << "\n";
+  cout << "    " << definedInFile << "\n";
   cout << "  Parents:\n";
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
     aParent->out();
@@ -620,9 +371,6 @@ void CParsedClass::out()
   cout << "  Signal to slot mappings:\n";
   for( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     aSS->out();
-  cout << "  Signal to text mapplings:\n";
-  for( aST = textMaps.first(); aST != NULL; aST= textMaps.next() )
-    aST->out();
   
   cout << endl;
 }
@@ -716,6 +464,81 @@ const char *CParsedClass::asPersistantString( QString &dataStr )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClass::fromPersistantString( const char *dataStr )
+int CParsedClass::fromPersistantString( const char *str, int startPos )
 {
+  CParsedParent *aParent;
+  CParsedMethod *aMethod;
+  CParsedAttribute *anAttribute;
+  char buf[2048];
+  int count;
+  int i;
+
+  // Fetch the classname
+  startPos = getSubString( buf, str, startPos );
+  setName( buf );
+
+  // Fetch definedOnLine.
+  startPos = getSubString( buf, str, startPos );
+  setDefinedOnLine( atoi( buf ) );
+
+  // Fetch parents
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    aParent = new CParsedParent();
+    startPos = aParent->fromPersistantString( str, startPos );
+    addParent( aParent );
+  }
+
+  // Fetch friends
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    startPos = getSubString( buf, str, startPos );
+    addFriend( buf );
+  }  
+
+  // Fetch methods
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    aMethod = new CParsedMethod();
+    startPos = aMethod->fromPersistantString( str, startPos );
+    addMethod( aMethod );
+  }
+
+  // Fetch attributes
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    anAttribute = new CParsedAttribute();
+    startPos = anAttribute->fromPersistantString( str, startPos );
+    addAttribute( anAttribute );
+  }
+
+  // Fetch signals
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    aMethod = new CParsedMethod();
+    startPos = aMethod->fromPersistantString( str, startPos );
+    addSignal( aMethod );
+  }
+
+  // Fetch slots
+  startPos = getSubString( buf, str, startPos );
+  count = atoi( buf );
+  for( i=0; i<count; i++ )
+  {
+    aMethod = new CParsedMethod();
+    startPos = aMethod->fromPersistantString( str, startPos );
+    addSlot( aMethod );
+  }
+
+  return strlen( str );
 }
