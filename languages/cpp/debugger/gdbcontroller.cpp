@@ -2017,8 +2017,11 @@ void GDBController::slotDbgWroteStdin(KProcess *)
 
 // **************************************************************************
 
-void GDBController::slotDbgProcessExited(KProcess*)
+void GDBController::slotDbgProcessExited(KProcess* process)
 {
+    if ( process->exitStatus() == 127 )
+      emit debuggerRunError(127);
+
     destroyCmds();
     state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);

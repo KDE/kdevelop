@@ -553,6 +553,8 @@ void DebuggerPart::setupController()
              this,                  SLOT(slotStatus(const QString&, int)));
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,                  SLOT(slotShowStep(const QString&, int)));
+    connect( controller,            SIGNAL(debuggerRunError(int)),
+	     this,                  SLOT(errRunningDebugger(int)));
 
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const char*)),
@@ -684,6 +686,16 @@ void DebuggerPart::slotStopDebugger()
     stateChanged( QString("stopped") );
 
     core()->running(this, false);
+}
+
+void DebuggerPart::errRunningDebugger(int errorCode)
+{
+  if (errorCode == 127)
+  {
+    KMessageBox::error(mainWindow()->main(), i18n("GDB could not be found. Please make sure it is installed"
+                                     " and in the path and try again"), i18n("Debugger not found"));
+  }
+  slotStopDebugger();
 }
 
 void DebuggerPart::projectClosed()

@@ -131,6 +131,7 @@ protected slots:
 signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
+    void debuggerRunError(int errorCode);
 
 private:
     FramestackWidget* frameStack_;

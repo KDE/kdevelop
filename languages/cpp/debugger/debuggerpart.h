@@ -88,6 +88,9 @@ private slots:
     void slotDCOPApplicationRegistered(const QCString &appId);
     void slotCloseDrKonqi();
 
+    //! There was an error running the debugger
+    void errRunningDebugger( int errorCode );
+
 private:
     KDevAppFrontend *appFrontend();
     KDevDebugger *debugger();
