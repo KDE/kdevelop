@@ -4,6 +4,7 @@ toc_DATA = python.toc perl.toc php.toc gnustep.toc
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = python.index
 
+EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustep.toc.in python.index.in
 DISTCLEANFILES = python.toc perl.toc php.toc gnustep.toc python.index
 
 perl.toc: $(srcdir)/perl.toc.in
@@ -50,10 +51,9 @@ python.index: $(srcdir)/python.index.in
 	echo "</gideonindex>" >> python.index ; \
 	echo "" >> python.index
 
-EXTRA_DIST = python.toc.in perl.toc.in php.toc.in
-
 php-toc:
-	perl ../tools/toc-php manual.html > php.toc.in
+	perl ../tools/toc-docbook \
+	  /usr/share/doc/packages/phpdoc/manual/manual.html > php.toc.in
 
 python-toc:
 	perl ../tools/toc-python \
@@ -79,7 +79,7 @@ python-toc:
 	perl ../tools/toc-python \
 	  --prefix=lib \
 	  --title=Library \
-	  --main=lib \
+	  --main=lib/lib \
 	  /usr/share/doc/packages/python/html/lib/lib.html >> python.toc.in
 
 gnustep-toc:

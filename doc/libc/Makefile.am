@@ -1,6 +1,22 @@
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/libc
+
+tocdir = ${kde_datadir}/kdevdoctreeview/tocs
+toc_DATA = libc.toc
+
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = libc.index
+
+EXTRA_DIST = libc.toc.in libc.index.in
+DISTCLEANFILES = libc.toc libc.index
+
+libc.toc: $(srcdir)/libc.toc.in
+	echo "<!DOCTYPE gideontoc>" > libc.toc ; \
+	echo "<gideontoc>" >> libc.toc ; \
+	echo "<title>libc</title>" >> libc.toc ; \
+	echo "<base href=\"$(htmldir)\"/>" >> libc.toc ; \
+	cat $(srcdir)/libc.toc.in >> libc.toc
+	echo "</gideontoc>" >> libc.toc ; \
+	echo "" >> libc.toc
 
 libc.index: $(srcdir)/libc.index.in
 	echo "<!DOCTYPE gideonindex>" > libc.index ; \
@@ -10,9 +26,6 @@ libc.index: $(srcdir)/libc.index.in
 	cat $(srcdir)/libc.index.in >> libc.index ; \
 	echo "</gideonindex>" >> libc.index ; \
 	echo "" >> libc.index
-
-DISTCLEANFILES = libc.index
-EXTRA_DIST = libc.index.in
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
@@ -24,6 +37,9 @@ install-data-local:
 
 html:
 	texi2html -split_node libc.texinfo
+
+toc:
+	perl ../tools/toc-texi libc_toc.html > libc.toc.in
 
 index:
 	perl ../tools/index-texi \

@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+
+# Copyright (C) 2001 by Claudiu Costin
+# <claudiuc@work.ro>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+
+$depth=1;
+$b3=$b2=$b1="";
+$in_processing=0;
+while (<>) {
+    chop;
+    
+    if (/Table of Contents<\/B/) {
+        $in_processing=1;
+#        print "PROCESSING\n";
+        next;
+    }
+#    last if (/><HR/ && $in_processing);
+    last if (/List of Tables/);
+    next if (!$in_processing);
+    
+    if (/HREF=\"(.+)\"/) {
+        $url=$1;
+#        print "URL $url\n";
+    }
+    if (/>(.+)<\//) {
+        $name=$1;
+        $name =~ s/\"/&quote;/g;
+        $name =~ s/&#8212;/-/g;
+#        print "NAME $name\n";
+    }
+    
+    if ($b3 =~ /><DL/i) {
+	$depth++;
+        $b3=$b2;
+        $b2=$b1;
+	$b1=$_;
+	next;
+    }
+    if ($b3 =~ /><\/DL/i) {
+	$depth--;
+	print "  "x($depth-1) . "</tocsect${depth}>\n" if ($depth != 0);
+        $b3=$b2;
+        $b2=$b1;
+	$b1=$_;
+	next;
+    }
+
+    if ($b3 =~ /><\/DT/i && $name ne "" && $url ne "") {
+#        print "****b7=$b7\n";
+#        print "****b6=$b6\n";
+#        print "****b5=$b5\n";
+#        print "****b4=$b4\n";
+#        print "****b3=$b3\n";
+#        print "****b2=$b2\n";
+#        print "****b1=$b1\n";
+#        print "****_=$_\n";
+	if ($b1 =~ /><DL/i) {
+	    print "  "x($depth-1) . "<tocsect${depth} name=\"$name\" url=\"$url\">\n";
+        } else {
+	    print "  "x($depth-1) . "<tocsect${depth} name=\"$name\" url=\"$url\"/>\n";
+        }
+    }
+
+    # a simulated delay line with 6 cells
+    $b3=$b2;
+    $b2=$b1;
+    $b1=$_;
+}
