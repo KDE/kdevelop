@@ -155,7 +155,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Compiler &amp;Options:</string>
+                <string>Compiler &amp;options:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -174,7 +174,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Pascal &amp;Compiler:</string>
+                <string>Pascal &amp;compiler:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -208,7 +208,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Compiler Co&amp;mmand:</string>
+                <string>Compiler co&amp;mmand:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -331,7 +331,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Main &amp;Source File:</string>
+                <string>Main &amp;source file:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -466,6 +466,7 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>qwidget.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

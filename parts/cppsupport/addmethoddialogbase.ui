@@ -155,7 +155,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Return Type</string>
+                                <string>Return type:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -176,7 +176,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Declarator</string>
+                                <string>Declarator:</string>
                             </property>
                         </widget>
                     </grid>
@@ -224,7 +224,7 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Storage</string>
+                                <string>Storage:</string>
                             </property>
                         </widget>
                         <widget class="QCheckBox" row="1" column="2">
@@ -240,7 +240,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Access</string>
+                                <string>Access:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -266,17 +266,17 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Public slots</string>
+                                    <string>Public Slots</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Protected slots</string>
+                                    <string>Protected Slots</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Private slots</string>
+                                    <string>Private Slots</string>
                                 </property>
                             </item>
                             <property name="name">

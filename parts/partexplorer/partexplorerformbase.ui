@@ -38,24 +38,8 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Query criteria</string>
+                <string>Query Criteria</string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>91</y>
-                        <width>418</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Additional costraints (i.e. [X-KDevelop-Scope]='Global')</string>
-                </property>
-            </widget>
             <widget class="QLineEdit">
                 <property name="name">
                     <cstring>lineEditCostraints</cstring>
@@ -64,6 +48,19 @@
                     <rect>
                         <x>11</x>
                         <y>114</y>
+                        <width>418</width>
+                        <height>24</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEditType</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>45</y>
                         <width>418</width>
                         <height>24</height>
                     </rect>
@@ -82,20 +79,23 @@
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...)</string>
+                    <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...):</string>
                 </property>
             </widget>
-            <widget class="QLineEdit">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>lineEditType</cstring>
+                    <cstring>textLabel1_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>12</x>
-                        <y>45</y>
+                        <x>11</x>
+                        <y>91</y>
                         <width>418</width>
-                        <height>24</height>
+                        <height>17</height>
                     </rect>
+                </property>
+                <property name="text">
+                    <string>Additional constraints (i.e. [X-KDevelop-Scope]='Global'):</string>
                 </property>
             </widget>
         </widget>
@@ -178,7 +178,7 @@
                         <cstring>buttonSearch</cstring>
                     </property>
                     <property name="text">
-                        <string>Search</string>
+                        <string>&amp;Search</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -186,7 +186,7 @@
                         <cstring>buttonClose</cstring>
                     </property>
                     <property name="text">
-                        <string>Close</string>
+                        <string>&amp;Close</string>
                     </property>
                 </widget>
             </hbox>
@@ -210,6 +210,7 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>qwidget.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

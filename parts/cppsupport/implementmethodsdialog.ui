@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ImplementMethodsDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -41,7 +41,7 @@
                 <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property name="resizeable">
+                <property name="resizable">
                     <bool>true</bool>
                 </property>
             </column>
@@ -82,18 +82,18 @@
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pushButton1</cstring>
+                        <cstring>pushButton2</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Cancel</string>
+                        <string>&amp;OK</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pushButton2</cstring>
+                        <cstring>pushButton1</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Ok</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -102,13 +102,13 @@
 </widget>
 <connections>
     <connection>
-        <sender>pushButton1</sender>
+        <sender>pushButton2</sender>
         <signal>clicked()</signal>
         <receiver>ImplementMethodsDialog</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
-        <sender>pushButton2</sender>
+        <sender>pushButton1</sender>
         <signal>clicked()</signal>
         <receiver>ImplementMethodsDialog</receiver>
         <slot>accept()</slot>

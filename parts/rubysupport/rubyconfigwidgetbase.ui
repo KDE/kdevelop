@@ -15,22 +15,6 @@
     <property name="caption">
         <string>Form1</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>30</x>
-                <y>20</y>
-                <width>107</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ruby interpreter</string>
-        </property>
-    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>interpreterEdit</cstring>
@@ -44,6 +28,25 @@
             </rect>
         </property>
     </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>20</y>
+                <width>107</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ruby interpreter:</string>
+        </property>
+    </widget>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qwidget.h</includehint>
+</includehints>
 </UI>

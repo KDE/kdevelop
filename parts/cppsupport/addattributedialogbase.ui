@@ -144,7 +144,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Type</string>
+                                <string>Type:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -165,7 +165,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Declarator</string>
+                                <string>Declarator:</string>
                             </property>
                         </widget>
                     </grid>
@@ -198,7 +198,7 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Storage</string>
+                                <string>Storage:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -206,7 +206,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Access</string>
+                                <string>Access:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>475</width>
-            <height>524</height>
+            <width>576</width>
+            <height>528</height>
         </rect>
     </property>
     <property name="caption">
@@ -91,7 +91,7 @@
                         <cstring>author_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Include Author Name in Class Documentation</string>
+                        <string>Include author name in class documentation</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="1" column="0">
@@ -99,7 +99,7 @@
                         <cstring>doc_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate Empty Documentation Strings</string>
+                        <string>Generate empty documentation strings</string>
                     </property>
                 </widget>
             </grid>
@@ -128,7 +128,7 @@
                         <cstring>textLabel3_2</cstring>
                     </property>
                     <property name="text">
-                        <string>#ifndef - #define Names</string>
+                        <string>#ifndef - #define names:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -136,7 +136,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>File Names:</string>
+                        <string>File names:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="0">
@@ -152,7 +152,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Same as class names</string>
+                            <string>Same as Class Names</string>
                         </property>
                     </item>
                     <property name="name">
@@ -172,12 +172,12 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Same as class names</string>
+                            <string>Same as Class Names</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Same as file names</string>
+                            <string>Same as File Names</string>
                         </property>
                     </item>
                     <property name="name">
@@ -200,7 +200,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Same as class names</string>
+                            <string>Same as Class Names</string>
                         </property>
                     </item>
                     <property name="name">
@@ -212,7 +212,7 @@
                         <cstring>textLabel3_3</cstring>
                     </property>
                     <property name="text">
-                        <string>Superclass File Names:</string>
+                        <string>Superclass file names:</string>
                     </property>
                 </widget>
             </grid>
@@ -240,4 +240,7 @@
     <slot access="protected">templateTypeChanged(int type)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qwidget.h</includehint>
+</includehints>
 </UI>
