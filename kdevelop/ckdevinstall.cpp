@@ -591,9 +591,7 @@ void CKDevInstall::slotAuto() // proceed >>
   bool designer     = CToolClass::searchInstProgram("designer");
   bool linguist     = CToolClass::searchInstProgram("linguist");
 
-	QStrList tools_exe;
-	QStrList tools_entry;
-	QStrList tools_argument;
+  ToolAppList toolList;
 
   QString found=i18n(" was found.");
   QString not_found=i18n(" was not found.");
@@ -642,83 +640,65 @@ void CKDevInstall::slotAuto() // proceed >>
   QString dbg_str;
   if(dbg){
     dbg_str="kdbg"+found+"\n";
-		tools_exe.append("kdbg");
-		tools_entry.append("K&Dbg");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("kdbg", "K&Dbg"));
+  }
   QString kiconedit_str;
   if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";
-		tools_exe.append("kiconedit");
-		tools_entry.append("K&IconEdit");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("kiconedit", "K&IconEdit"));
+  }
   else
     kiconedit_str="KIconedit"+not_found+i18n(" -- editing icons will not be possible\n");
 	
   QString ark_str;
   if(ark){
     ark_str="Archiever (ark)"+found+"\n";
-		tools_exe.append("ark");
-		tools_entry.append("&Ark");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("ark", "&Ark"));
+  }
   else
     ark_str="Archiever (ark)"+not_found+i18n(" -- viewing compressed files will not be possible\n");
 
 	QString kpaint_str;
-	if(gimp){
+  if(gimp){
     kpaint_str="GIMP"+found+"\n";
-		tools_exe.append("gimp");
-		tools_entry.append("&GIMP");
-		tools_argument.append(" ");
+    toolList.append(CToolApp("gimp", "&GIMP"));
 	}
   else if(kpaint){
       kpaint_str="KPaint"+found+"\n";
-  		tools_exe.append("kpaint");
-  		tools_entry.append("K&Paint");
-  		tools_argument.append(" ");
+      toolList.append(CToolApp("kpaint", "K&Paint"));
   }
   else
-      kpaint_str=i18n("GIMP/KPaint ")+not_found+"\n";
+    kpaint_str=i18n("GIMP/KPaint ")+not_found+"\n";
 
-	QString designer_str;
-	if(designer){
+  QString designer_str;
+  if(designer){
     designer_str="Qt Designer"+found+"\n";
-		tools_exe.append("designer");
-		tools_entry.append("&Qt Designer");
-		tools_argument.append(" -client ");
-	}
+    toolList.append(CToolApp("designer", "&Qt Designer", " -client "));
+  }
   else
     designer_str=i18n("Qt Designer")+not_found+"\n";
 	
-	QString linguist_str;
-	if(linguist){
+  QString linguist_str;
+  if(linguist){
     linguist_str="Qt Linguist"+found+"\n";
-		tools_exe.append("linguist");
-		tools_entry.append("&Qt linguist");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("linguist", "&Qt linguist"));
+  }
   else
     linguist_str=i18n("Qt Linguist")+not_found+"\n";
 
   QString ktranslator_str;
   if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
-		tools_exe.append("ktranslator");
-		tools_entry.append("K&Translator");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("ktranslator", "K&Translator"));
+  }
   else
     ktranslator_str="KTranslator"+not_found+"\n";
 
   QString kbabel_str;
   if(kbabel){
     kbabel_str="KBabel"+found+"\n";
-		tools_exe.append("kbabel");
-		tools_entry.append("K&Babel");
-		tools_argument.append(" ");
-	}
+    toolList.append(CToolApp("kbabel", "K&Babel"));
+  }
   else
     kbabel_str="KBabel"+not_found+"\n";
 
@@ -781,15 +761,12 @@ void CKDevInstall::slotAuto() // proceed >>
 
   if (!till_doc)
   {
-  KMessageBox::information(this,i18n("The following results have been determined for your system:\n\n ")
+    KMessageBox::information(this,i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str+htdig_str+htsearch_str
                   +print_str+dbg_str+kiconedit_str+ark_str+kpaint_str+ktranslator_str+kbabel_str+linguist_str+designer_str,
                   i18n("Program test results"));
 
-	config->setGroup("ToolsMenuEntries");
-	config->writeEntry("Tools_exe",tools_exe);
-	config->writeEntry("Tools_entry",tools_entry);
-	config->writeEntry("Tools_argument",tools_argument);
+    CToolClass::writeToolConfig(toolList);
 	
   }  // end of till_doc
 

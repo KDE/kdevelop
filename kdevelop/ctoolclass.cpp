@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 bool CToolClass::searchProgram(QString name, bool allowWarningMsg ){
   QStringList paths;
@@ -94,4 +95,51 @@ QString CToolClass::getRelativePath(QString source_dir,QString dest_dir){
   }
 
   return dest_dir;
+}
+
+void CToolClass::readToolConfig(ToolAppList& toolList)
+{
+  QStrList exeList, labelList, argList, outputList, paneList;
+  KConfig* config = KGlobal::config();
+
+  toolList.clear();
+
+  config->setGroup("ToolsMenuEntries");
+  config->readListEntry("Tools_exe",exeList);
+  config->readListEntry("Tools_entry",labelList);
+  config->readListEntry("Tools_argument",argList);
+  config->readListEntry("Tools_output",outputList);
+  config->readListEntry("Tools_newPane",paneList);
+
+  bool isOutput, isNewPane;
+  for (uint i = 0; i < exeList.count(); ++i) {
+    isOutput  = ( (outputList.at(i) != "0") && (outputList.at(i) != QString::null) );
+    isNewPane = ( (paneList.at(i) != "0") && (paneList.at(i) != QString::null) );
+    toolList.append( CToolApp(labelList.at(i), exeList.at(i), argList.at(i), isOutput, isNewPane) );
+  }
+}
+
+void CToolClass::writeToolConfig(const ToolAppList& toolList)
+{
+  // We save each attribute in a StringList so downward compatibility with 1.4 isn't broken
+
+  QStrList exeList, labelList, argList, outputList, paneList;
+
+  ToolAppList::ConstIterator it;
+  for (it = toolList.begin(); it != toolList.end(); ++it) {
+    exeList.append( (*it).getExeName() );
+    labelList.append( (*it).getLabel() );
+    argList.append( (*it).getArgs() );
+    outputList.append( (*it).isOutputCaptured() ? "1" : "0" );
+    paneList.append( (*it).isInNewPane() ? "1" : "0" );
+  }
+
+  KConfig* config = KGlobal::config();
+
+  config->setGroup("ToolsMenuEntries");
+  config->writeEntry( "Tools_exe",exeList );
+  config->writeEntry( "Tools_entry",labelList );
+  config->writeEntry( "Tools_argument",argList );
+  config->writeEntry( "Tools_output",outputList );
+  config->writeEntry( "Tools_newpane",paneList );
 }

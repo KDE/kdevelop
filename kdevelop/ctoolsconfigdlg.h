@@ -25,9 +25,11 @@
 #include <qlistbox.h>
 #include <qpushbt.h>
 #include <qstrlist.h>
+#include <qcheckbox.h>
 
 #include <kapp.h>
 
+#include "ctoolclass.h"
 
 /**a dialog to configure the tools-menu in the kdevelop menubar.
  *Allows configuration of menuentry, command and arguments
@@ -42,7 +44,7 @@ public:
   
 protected slots:
 
-void slotToolAdd();
+  void slotToolAdd();
   void slotToolDelete();
   void slotToolMoveUp();
   void slotToolMoveDown();
@@ -72,12 +74,11 @@ protected:
   QLineEdit* arguments_edit;
   QLabel* arguments_label;
   QPushButton* executable_button;
+  QCheckBox* output_check;
   
 private:
   KConfig* config;
-  QStrList tools_exe;
-  QStrList tools_entry;
-  QStrList tools_argument;
+  ToolAppList toolList;
 };
 
 #endif

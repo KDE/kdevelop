@@ -119,6 +119,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   m_pKDevSession = new KDevSession( m_docViewManager, "testtest");
   connect(this, SIGNAL(dockWidgetHasUndocked(KDockWidget*)), SLOT(slotDockWidgetHasUndocked(KDockWidget*)) );
 
+  m_FinishedToolProcesses.setAutoDelete( false );
+
   // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
   // We need to know what debugger we are using to set the
   // system up appropriately
@@ -1483,15 +1485,14 @@ void CKDevelop::setKeyAccel()
 }
 
 void CKDevelop::setToolmenuEntries(){
-  config = KGlobal::config();
-  config->setGroup("ToolsMenuEntries");
-	config->readListEntry("Tools_exe",tools_exe);
-	config->readListEntry("Tools_entry",tools_entry);
-	config->readListEntry("Tools_argument",tools_argument);
-	
-	uint items;
-	for(items=0;items<tools_entry.count();items++)
-		tools_menu->insertItem(tools_entry.at(items),items);
+
+  CToolClass::readToolConfig(toolList);
+
+  ToolAppList::Iterator it;
+  int count = 0;
+  for( it = toolList.begin(); it != toolList.end(); ++it ) {
+    tools_menu->insertItem((*it).getLabel(),count++);
+  }
 	
 //	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }

@@ -121,36 +121,29 @@ void CKDevelop::slotFileNew(const char* dir){
 }
 
 void CKDevelop::slotFileOpen(){
+
   slotStatusMsg(i18n("Opening file..."));
 
-  QString str;
+  QStringList strList;
 
-  //modif by Benoit Cerrina 15 Dec 99
-  if(!lastOpenDir.isEmpty())
-  {
-    str = KFileDialog::getOpenFileName(lastOpenDir,"*");
+  if(!lastOpenDir.isEmpty()) {
+    strList = KFileDialog::getOpenFileNames(lastOpenDir, "*", this);
+  } else if(project) {
+    strList = KFileDialog::getOpenFileNames(prj->getProjectDir(), "*", this);
+  } else {
+    strList = KFileDialog::getOpenFileNames(QString::null, "*", this);
   }
-  else if(project){
-    str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*");
-  }
-  else{
-    str = KFileDialog::getOpenFileName(QString::null,"*");
-  }  
-  if (!str.isEmpty())
-  {
-    int lSlashPos = str.findRev('/');
-    if (lSlashPos != -1)
-    {
-      lastOpenDir = str;
+  if (!strList.isEmpty()) {
+    int lSlashPos = strList[0].findRev('/');
+    if (lSlashPos != -1) {
+      lastOpenDir = strList[0];
       lastOpenDir.truncate(lSlashPos);
     }
   }
-  //end modif
 
-  if (!str.isEmpty()) // nocancel
-  {
-    switchToFile(str);
-  }
+  QStringList::Iterator it;
+  for( it = strList.begin(); it != strList.end(); ++it )
+    switchToFile(*it);
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -2014,7 +2007,12 @@ void CKDevelop::slotBuildStop(){
 
 void CKDevelop::slotToolsTool(int tool)
 {
-  if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
+  if ( tool >= (int)toolList.count() )
+    return;
+
+  CToolApp toolApp = toolList[tool];
+
+  if ( !CToolClass::searchProgram( toolApp.getExeName() ) ){
     return;
   }
 //  if(!bKDevelop)
@@ -2022,7 +2020,7 @@ void CKDevelop::slotToolsTool(int tool)
     
 //  showOutputView(false);
 
-  QString argument=tools_argument.at(tool);
+  QString argument = toolApp.getArgs();
      
   // This allows us to replace the macro %H with the header file name, %S with the source file name
   // and %D with the project directory name.  Any others we should have?
@@ -2037,15 +2035,52 @@ void CKDevelop::slotToolsTool(int tool)
   }
 
   QString process_call;
-  if(argument.isEmpty())
-    process_call=tools_exe.at(tool);
-  else
-    process_call=tools_exe.at(tool)+argument;
+  process_call = toolApp.getExeName();
+
+  if ( !argument.isEmpty() ) {
+    process_call += argument;
+  }
 
   kdDebug() << "Tool wanted <" << process_call << ">" << endl;
-  (void) KRun::runCommand (process_call);
+
+//  This was the old way we did it:
+//  (void) KRun::runCommand (process_call);
+
+  // We need to create a KShellProcess otherwise the STDOUT / STDERR couldn't be catched
+  // The pointer will be deleted when it emits processExited (KProcess)
+  KShellProcess* proc = new KShellProcess();
+
+  *proc << process_call;
+  if ( toolApp.isOutputCaptured() ) {
+    connect ( proc, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect ( proc, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+  }
+  connect ( proc, SIGNAL(processExited(KProcess*)), this, SLOT(slotToolProcessExited(KProcess*)));
+
+  proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+
 }
 
+void CKDevelop::slotToolProcessExited (KProcess* proc)
+{
+  // Create a singleShot driver to safely clean up the finished Process
+  if ( proc ) {
+    m_FinishedToolProcesses.append(proc);
+    QTimer::singleShot( 0, this, SLOT(cleanUpToolProcesses()) );
+  }
+  kdDebug() << "Process for Tool finished" << endl;
+}
+
+void CKDevelop::cleanUpToolProcesses()
+{
+  // Clean up all finished Processes that were started from the Tools menu.
+  KProcess* proc;
+  for ( proc=m_FinishedToolProcesses.first(); proc != 0; proc=m_FinishedToolProcesses.next() ) {
+    delete proc;
+  }
+  m_FinishedToolProcesses.clear();
+  kdDebug() << "Clean up Processes" << endl;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@
 #include "cproject.h"
 #include "ctreehandler.h"
 #include "ctags/cctags_interf.h"
+#include "ctoolclass.h"
 
 #include "resource.h"
 #include "kpp/kpp.h"
@@ -926,9 +927,8 @@ private:
 
   QStrList file_open_list;	
 
-  QStrList tools_exe;
-  QStrList tools_entry;
-  QStrList tools_argument;
+  /** QValueList containing the Tool Apps */
+  ToolAppList toolList;
 
   KCompletion* class_comp;
   KCompletion* method_comp;	
@@ -1090,6 +1090,9 @@ private:
   /** command and command line arguments to create a ctags file */
   CTagsCommandLine m_CTagsCmdLine;
 
+  /** This list stores all finished Processes that have been started via the "Tool" Menu */
+  QList<KProcess> m_FinishedToolProcesses;
+
 private slots:
   void slotdoneWithKpp();
   void slotrpmBuildProcess();
@@ -1099,6 +1102,8 @@ private slots:
   void slotDockWidgetHasUndocked(KDockWidget*);
   void fillToggleTreeViewsMenu();
   void fillToggleOutputViewsMenu();
+  void slotToolProcessExited (KProcess* proc);
+  void cleanUpToolProcesses();
 
   // en-/disable the single tool views
   void slotViewTClassesView();
