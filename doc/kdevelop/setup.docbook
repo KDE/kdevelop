@@ -351,7 +351,15 @@ KDevelop lets you use editor interfaces which have registered with &kde; and tha
 <title>Selecting a Source Format Style</title>
 
 <para>
-&kdevelop; automatically formats a source text in a predefined style. This style is highly configurable. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
+&kdevelop; automatically formats a source text in a predefined style. This style is highly configurable.
+</para>
+
+<note><para>
+The reformat source feature is currently available for C, C++, and &Java; only. Especially you cannot use it for scripting languages like &eg; PHP. This is because &kdevelop; uses the <ulink url="http://astyle.sourceforge.net/">astyle</ulink> application to implement this feature.
+</para></note>
+
+<para>
+To set up a specific format style, select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
 </para>
 
 <tip><para>
@@ -1198,11 +1206,19 @@ The main bulk of &kdevelop;'s documentation tree provides immediate access to st
 There is a special feature associated with this. To illustrate, follow these steps: In the documentation tree find an entry shortly below the &Qt;/&kde; documentation (&eg; <quote>KDE2 Development Book (kde.org)</quote>). Click on the plus sign next to it. A tree will open where you can quickly navigate to subsequent chapters nested several levels deep, all offline. But if you finally select one of the chapters, &kdevelop; will in many cases try to access a <emphasis>remote</emphasis> documentation file.
 </para>
 
+<para>
+The rationale behind this is not only to locally navigate remote documentation without wasting net access ressources, but to provide the developer with easy, structured access to the documentation he/she needs. With the tools provided here one can access almost any local or remote documentation in a structured fashion even if the original is laid out flat or structured in another way. All that is needed is access to files and/or parts of files which are displayable by the Konqueror.
+</para>
+
+<note><para>
+There is already an overwhelming lot of such <guilabel>KDevelopTOC Documentation</guilabel> available. To keep things maintainable you can limit the display to the documentation you really need on a per-project basis. See the <link  linkend="setup-docu-project">Displaying Selected Documentation in a Project</link> section how to accomplish this.
+</para></note>
+
 <sect3 id="setup-docu-TOC-files">
 <title>&kdevelop; TOC Files</title>
 
 <para>
-So you can locally navigate remote documentation without wasting net access ressources. &kdevelop; makes this possible through the use of special <quote>table of content</quote> files, which are denoted by <filename>.toc</filename> filename extensions. Any such &kdevelop; TOC file contains an &XML; structured description of the document to be accessed.
+Such structured access is made possible through the use of special <quote>table of content</quote> files, which are denoted by <filename>.toc</filename> filename extensions. Any such &kdevelop; TOC file contains an &XML; structured description of the document to be accessed.
 </para>
 
 <formalpara>
@@ -1350,7 +1366,7 @@ To remove an entry from the <guilabel>KDevelopTOC Documentation</guilabel> tab f
 <emphasis>Think twice before you click on the <guibutton>Remove</guibutton> button!</emphasis>
 </para>
 <para>
-&kdevelop; will not only remove the list entry but also delete the <filename>.toc</filename> file from the directorye. You may want to keep a backup copy if the documentation was valuable.
+&kdevelop; will not only remove the list entry but also delete the <filename>.toc</filename> file from the directory. You may want to keep a backup copy if the documentation was valuable.
 </para>
 </warning>
 
@@ -1372,7 +1388,7 @@ For historical reasons clicking the <guibutton>Edit</guibutton> button will pop 
 </para>
 
 <screenshot>
-  <mediaobject>
+  <mediaobject id="edit-doctree-TOC-entry">
     <imageobject>
       <imagedata fileref="edit-doctree-TOC-entry.png" format="PNG"/>
     </imageobject>
@@ -1415,7 +1431,10 @@ If you want to get the original documentation base address back, use the <guibut
 <title>DevHelp Documentation</title>
 
 <para>
-(... to be written ...)
+DevHelp documentation is another means of structured documentation access. It uses structured table of content files denoted by a <filename>.devhelp</filename> extension similar to <link linkend="setup-docu-TOC-files">&kdevelop; TOC files</link> to access documentation for the GNOME 2 desktop.
+</para>
+<para>
+Usually you will need the GNOME <application>gtk-doc</application> application for access, but &kdevelop; has the ability to access documentation structured by DevHelp files built in. You can control which DevHelp files should be accessible on the <guilabel>DevHelp Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page.
 </para>
 
 <screenshot>
@@ -1428,6 +1447,72 @@ If you want to get the original documentation base address back, use the <guibut
     </para></caption>
   </mediaobject>
 </screenshot>
+
+<formalpara>
+<title>How to aquire DevHelp documentation</title>
+<para>
+DevHelp files originally were accessible on the <ulink url="http://lidn.sourceforge.net/">LiDN</ulink> website, but this seems to be not maintained for some time now. More recent DevHelp documentation is available at the <ulink url="http://htmlhelp.berlios.de/books/devhelp.php">DevHelp Books Download</ulink> web page.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Find DevHelp Files</title>
+<para>
+When &kdevelop; is installed it will attempt to find all <filename>.devhelp</filename> files in the system. The files it found are listed on the <guilabel>DevHelp Documentation</guilabel> configuration page. If you want to update this display, press the <guibutton>Scan</guibutton> button to the right of the list field.
+</para>
+</formalpara>
+
+<formalpara>
+<title>The Default DevHelp Directory</title>
+<para>
+&kdevelop; usually keeps a list of the <filename>.devhelp</filename> file copies it found in the <filename class="directory">$KDEHOME/share/apps/kdevdoctreeview/devhelp/</filename> of the current user.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Adding a DevHelp File</title>
+<para>
+To add <filename>.devhelp</filename> files to the list use the <link linkend="setup-docu-button-add">Add</link> button on the right of the <guilabel>DevHelp Documentation</guilabel> configuration page. &kdevelop; will copy the <filename>.devhelp</filename> file you provided to the default DevHelp directory.
+</para>
+</formalpara>
+<note><para>
+Usually &kdevelop; will not readily be able to access a thus newly added DevHelp documention. You will have to edit this entry to provide a base access address to this documentation.
+</para></note>
+
+<formalpara>
+<title>Providing a Base Address&mdash;Edit</title>
+<para>
+To alter the base address to access a given DevHelp documentation, select the entry in the list of the <guilabel>DevHelp Documentation</guilabel> configuration page, then press the <guibutton>Edit</guibutton> button on the right.
+</para>
+</formalpara>
+
+<para>
+A <guilabel>Library Documentation</guilabel> dialog will pop up, similar to the one used for <link linkend="edit-doctree-TOC-entry">KDevelop TOC</link> files. The <guilabel>Library Name</guilabel> field shows the title of the documentation, which &kdevelop; read from the <filename>.devhelp</filename> file you selected. You cannot change this name.
+</para>
+
+<para>
+To enable the documentation access, enter the base address of the directory where the actual documentation files are located in the <guilabel>Documentation Path</guilabel> field and press OK. If you don't know the exact address (or rather want not type) click the folder-labeled button to the right of the Location field. The usual file selection dialog will then pop up where you can navigate to the file you want to be added.
+</para>
+
+<para>
+The remaining <guilabel>Library source path</guilabel> dialog field is of no importance. Just ignore it.
+</para>
+
+<formalpara>
+<title>Removing a DevHelp Entry</title>
+<para>
+To remove an entry from the <guilabel>DevHelp Documentation</guilabel> tab first select it in the list, then click on the <link linkend="setup-docu-button-remove"><guibutton>Remove</guibutton> button</link> on the configuration page.
+</para>
+</formalpara>
+
+<warning>
+<para>
+<emphasis>Think twice before you click on the <guibutton>Remove</guibutton> button!</emphasis>
+</para>
+<para>
+&kdevelop; will not only remove the list entry but also delete the <filename>.devhelp</filename> file from the directory.
+</para>
+</warning>
 
 </sect2> <!-- setup-docu-DevHelp -->
 
