@@ -1,59 +1,17 @@
-README for
+If the Qt and KDE API documentation do not exist, they can be created
+as follows: Install kdoc and the kdelibs sources. Then
 
-KDevelop 2.0 development version (pre alpha)
+  qt2kdoc -o ~/.kdoc /usr/lib/qt2/doc/html
+  [ goto kdelibs sources ]
+  makekdedoc
 
-Please do not _expect_ this version to work. However, it might :-)
-Also, the following comments might be incorrect.
+For the graphical classbrowser, you need the program 'dot'
+from the graphviz package which can be downloaded from
+www.graphviz.org. This is only a runtime dependency!
 
--------------------------------------
+There could be configure problems with the python scripting
+stuff. To disable its compilation completely, 
 
-1. What is KDevelop ?
-
-KDevelop is an easy to use IDE (Intergrated Development Enviroment) for
-Unix/X11, targeting on C++ application development; specialized on the Qt and KDE libraries.
-
-2. KDevelop-Homepage
-
-http://www.kdevelop.org
-
-
-3. Requirements
-
-In order to successfully compile und use KDevelop, you need following
-programs and libraries: 	
-
-required:
-------------------
-g++ 2.8/egcs 1.0.3 (or compatible)
-GNU make
-perl 5.004
-autoconf 2.12
-automake 1.4
-Qt 2.0
-KDE 2
-flex
-CVS 1.10
-
-optional:
------------------------
-KDE-SDK
-sgmltools
-Glimpse >= 4.1
-KIconEdit
-KDbg
-a2ps
-enscript
-Gv, Ghostview, KGhostview
-cvs >= 1.10
-
-
-
-4. Installation
-
-see INSTALL in this directory
-
-Have fun!
-							 
-The KDevelop-Team
-
-
+  * remove the KDE_CHECK_PYTHON check from configure.in.in
+  * comment out the PYTHON_SUBDIR line in parts/Makefile.am
+  * rerun make -f Makefile.dist

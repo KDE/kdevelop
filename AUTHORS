@@ -1,73 +1,32 @@
-***Main-Developers***
+Bernd Gehrmann <bernd@physik.hu-berlin.de>
 
--Sandy Meier <smeier@rz.uni-potsdam.de>
--Stefan Heidrich <sheidric@rz.uni-potsdam.de>
--Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
--Jonas Nordin <jonas.nordin@cenacle.se>
--Pascal Krahmer <pascal@beast.de>
--Bernd Gehrmann <bernd@physik.hu-berlin.de>
--Jörgen Olsson<jorgen@cenacle.net> 
--Stefan Bartel <bartel@rz.uni-potsdam.de>
--Ivan Hawkes <linuxgroupie@ivanhawkes.com>
--Omid Givi <omid@kdevelop.org>
+C++ source parser:
+  Jonas Nordin <jonas.nordin@cenacle.se>
 
-***Translations coordination***
+Context menu stuff:
+  Sandy Meier <smeier@kdevelop.org>
 
--Martin Piskernig <martin.piskernig@stuwo.at>
+htdig searching & indexing:
+  Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
 
-***Translations***
+KDE application templates:
+  Kurth Granroth <kurt@granroth.org>
 
--Martin Spirk <spirk@kla.pvt.cz>   	      - Czech
--Steen Rabol <rabol@get2net.dk>               - Danish
--Sami Kuhmonen <sami@iqs.fi>        	      - Finnish
--Herve Lefebvre <hlefebvre@easynet.fr>        - French
--Martin Piskernig <martin.piskernig@stuwo.at> - German
--Pahan Szabolcs <szabczy@bigfoot.com>	      - Hungarian
--Massimo Morin <mmorin@schedsys.com>          - Italian
--Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - Polish
--Duarte Loreto <dnloreto@esoterica.pt>	      - Portuguese
--Ilmar Habibulin <ilmar@ints.ru>              - Russian
--Jan Prokop <jprokop@ibl.sk>		      - Slovak
--Salvador Gimeno <salgiza@eui.upv.es> 	      - Spanish
--Patrik Adolfsson <patrik.adolfsson@iname.com>- Swedish
--Kaðan Kongar <kongar@doruk.net.tr>           - Turkish
--Sunchange Lee <leesongchen@263.net>          - Simpl. Chinese (GB2312)
+editing component:
+  The KWrite authors <kwrite-devel@kde.org>
 
-***startlogo*** 
+Other software included in the source package:
 
-Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
+* KDE 2.0 Development Book 
+  David Sweet, et al.
+  Copyright notices see in doc/kde2book
 
-***patches and bugfixes***
+* GNU libc documentation
+  Sandra Loosemore, Richard M. Stallman, Roland McGrath, 
+  Andrew Oram, and Ulrich Drepper   
+  Copyright notices see in doc/libc
 
--Pau Estalella Fernandez <pef@upcnet.upc.es>
--Jost Schenk <Jost@Schenk.de>
--David Barth <dbarth@videotron.ca>
--Matthias Hipp <Matthias.Hipp@gmx.de>
--Martin Piskernig <martin.piskernig@stuwo.at>
--Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
--Matthias Hoelzer-Kluepfel <mhk@caldera.de>
--Matt Koss <koss@napri.sk>
--Walter Tasin <tasin@e-technik.fh-muenchen.de>
--Torsten Uhlmann <TUhlmann@debis.com>
--Stefan Mars <mars@lysator.liu.se>
--Nikolay Liber <nikolay_liber@mail.ru>
--Gordon Tyler <gtyler@iafrica.com>
--Huy Cuong Nguyen <huyc@iquebec.com> 
--John R. Zedlewski <zedlwski@princeton.edu>
--Stephan Uhlmann <suhlmann@gmx.de>
--Charles Egan cega@oklahoma.net
--p_george <p_george@club-internet.fr>
--Lubos Lunak <l.lunak@sh.cvut.cz>
--Armin L. Schneider <armin@uumail.de.uu.net>
--Ralf Palsa <rpalsa@eso.org>
--Alexis Mikhailov" <alexis@abc.cap.ru>
--Falk Brettschneider <gigafalk@yahoo.com>
+* STL documentation
+  SGI, Inc.
+  Copyright notices see in doc/stl
 
-KDevelop contains sourcecode from the following programs/classes:
-
-KWrite 0.98	 :(c) 1998 by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
-KDE Help	 :(c) 1996 by Martin R. Jones <mjones@kde.org>
-KSwallow	 :(c) by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
-kcmlocale	 :(c) 1998 by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
-QextMDI 1.0beta1 :(c) 1999 by Falk Brettschneider <gigafalk@yahoo.com>
-DockWidget       :(c) 1999 by Judin Max <novaprint@mtu-net.ru>

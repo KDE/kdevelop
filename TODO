@@ -1,13 +1,33 @@
------TODO list for a first beta version-------
+* Distinguish vanilla c++ support from c++ + Qt extensions
+  and show signals/slots in the class view only with Qt.
 
-- the editor (using kwrite part, first prototype integration is available)
-- project management (most of the basics (multiple projects,appwizard,persistence...) is implemented,the makefile generation and Projectoptions aren't finished yet
-- documentation browser (isn't integrated yet, should be based on khtml part)
-- debugger (doesn't work)
-- assorted templates (a small KDE2 is available at the moment, some more should be added. Application Wizard plugins)
-- a new Real File View (small filemanager,a konqueror component?) 
-- grep (works)
-- make system for c++ (works)
-- classparser (the current version works, but we will need a better solution in the future)	
-- project view (works)
+* Fix the whole mess with header files which are parsed
+  whenever the source file is parsed. This is implemented
+  this way because header files don't appear in _SOURCES
+  in KDE projects :-(
 
+* In subproject options dialog, implement check list with
+  include directories.
+
+* In target options dialog, implement check list with (convenience)
+  libraries which can be linked with.
+
+* Implement modification of build order.
+
+* Change make frontend to use QTextView instead of QListBox, so
+  word wrapping can be implemented.
+
+* Perhaps use konsole part for the application frontend
+
+* Split the documentation tree in two halves, so that class lists
+  appear separately. In the current setup, one can easily get lost
+  when opening a class list.
+
+* Templates for cli programs
+
+* Complete STL index. Preferably convert STL documentation to docbook :-)
+
+* Implement reverse I-search
+
+* Check if a man page exists before offering the context menu
+  item 'Goto manpage'

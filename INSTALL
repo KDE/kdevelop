@@ -34,9 +34,6 @@ The simplest way to compile this package is:
      Running `configure' takes a while.  While running, it prints some
      messages telling which features it is checking for.
 
-     Please also have a look in the section "KDevelop Specific Controls"
-     below.
-
   2. Type `make' to compile the package.
 
   3. Type `make install' to install the programs and any data files and
@@ -79,8 +76,8 @@ Installation Names
 ==================
 
    By default, `make install' will install the package's files in
-`/opt/kde/bin', `/opt/kde/man', etc.  You can specify an
-installation prefix other than `/opt/kde/' by giving `configure' the
+`/usr/local/bin', `/usr/local/man', etc.  You can specify an
+installation prefix other than `/usr/local' by giving `configure' the
 option `--prefix=PATH'.
 
    You can specify separate installation prefixes for
@@ -165,34 +162,6 @@ operates.
 `--version'
      Print the version of Autoconf used to generate the `configure'
      script, and exit.
-
-KDevelop Specific Controls
-==========================
-
-`--with-qtdoc-dir=DIR'
-    Defines where the Qt documentation is installed.
-    This switch overrides the automatic directory determination.
-
-`--with-kdelibsdoc-dir=DIR'   where the kdelibs documentation is installed
-    Defines where the KDE library documentation is installed.
-    This switch overrides the automatic directory determination.
-
-`--with-kdocindex-dir=DIR'
-    This switch is obsolete... do not use it!
-    Index files are always searched under kdelibsdoc-dir/kdoc-reference
-
-`--enable-docbase'
-    This enables Debian docbase support. [default=disabled]
-
-`--disable-kdoc2'
-    This disables kdoc2 support. You need to use this switch if your
-    system uses a kdoc 1.x version. [default=enabled]
-
-`--enable-cpp-reparse'
-    This enables the class parsing behaviour of KDevelop.
-    If you use this switch KDevelop does reparsing of all classes also on
-    saving c/c++-sources. [default=disabled] this means only reparsing on
-    saving include-files.
 
 `configure' also accepts some other, not widely useful, options.
 

@@ -1,1 +1,1 @@
-SUBDIRS = toolbar mini misc
+SUBDIRS = mini toolbar

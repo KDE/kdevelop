@@ -1,0 +1,25 @@
+static const char * _metalist_libkwritepart_la[] = {
+"ColorConfig",
+"EditConfigTab",
+"FontChanger",
+"GotoLineDialog",
+"HighlightDialog",
+"HlManager",
+"IndentConfigTab",
+"KWBuffer",
+"KWrite",
+"KWriteBrowserExtension",
+"KWriteDoc",
+"KWriteFactory",
+"KWriteView",
+"ReplacePrompt",
+"SearchDialog",
+"SelectConfigTab",
+"StyleChanger",
+"TextEditorDocument",
+"TextEditorView",
+"UndoHistory",
+"UndoListBox",
+0};
+#include <kunload.h>
+_UNLOAD(libkwritepart_la)

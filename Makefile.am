@@ -1,40 +1,25 @@
-## kdebase/Makefile.am
-## (C) 1997 Stephan Kulow
+SUBDIRS = lib parts plugins src po doc pics
 
-AUTOMAKE_OPTIONS = foreign 1.4
-SUBDIRS = kdevelop pics doc
+EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING gideon.lsm admin
 
-install-data-local:
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo "*************** Important *************************"
-	@echo ""
-	@echo " Add "$(bindir)" to your PATH"
-	@echo ""
-	@echo " Please report bugs with our web form at"
-	@echo " http://bugs.kde.org."
-	@echo ""
-	@echo " Stephan Kulow <coolo@kde.org> and all the KDE"
-	@echo " developers wish you fun with the KDE."
-	@echo "****************************************************"
-	@echo ""
+apps_DATA = gideon.desktop
+appsdir = $(kde_appsdir)/Development
 
-$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/kdevelop.m4
-	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in kdevelop.m4 > acinclude.m4 
+$(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
+	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in
 
 $(top_srcdir)/subdirs:
-	@cd $(top_srcdir) && echo kdevelop > subdirs
-	@cd $(top_srcdir) && echo pics >> subdirs
-	@cd $(top_srcdir) && echo doc >> subdirs
+	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
 
-$(top_srcdir)/configure.in: configure.in.in
-	@cd $(top_srcdir) && cat admin/configure.in.min configure.in.in > configure.in
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/gideon.m4.in
+	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in gideon.m4.in > acinclude.m4
 
+MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
 
-MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 SUBDIRS
-
-EXTRA_DIST = admin debian kdevelop.m4 BUGS FAQ kdevelop.kdevprj kdevelop.lsm
+package-messages:
+	$(MAKE) -f admin/Makefile.common package-messages
+	$(MAKE) -C po merge
 
 dist-hook:
-	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin
+	cd $(top_distdir) && perl admin/am_edit -padmin
+	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs

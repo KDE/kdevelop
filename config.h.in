@@ -1,0 +1,43 @@
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+
+#undef QT_DOCDIR
+#undef KDELIBS_DOCDIR
+#undef WITH_DOCBASE
+
+/* The number of bytes in a char *.  */
+#undef SIZEOF_CHAR_P
+
+/* The number of bytes in a int.  */
+#undef SIZEOF_INT
+
+/* The number of bytes in a long.  */
+#undef SIZEOF_LONG
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
+/* C++ compiler supports template repository */
+#undef HAVE_TEMPLATE_REPOSITORY
+
+/* Defines if your system has the crypt function */
+#undef HAVE_CRYPT
+
+/* Define the type of the third argument for getsockname
+ */
+#undef ksize_t
+
+/* Define if the C++ compiler supports BOOL */
+#undef HAVE_BOOL
+
+/* Define if you have libz */
+#undef HAVE_LIBZ
+
+/* Define if you have libpng */
+#undef HAVE_LIBPNG
+
+/* Define if you have libjpeg */
+#undef HAVE_LIBJPEG
+

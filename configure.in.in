@@ -1,76 +1,9 @@
+#MIN_CONFIG
+
+AM_INIT_AUTOMAKE(gideon, 0.1)
 
 KDEV_PATH_QTDOC
 KDEV_PATH_KDELIBSDOC
-KDEV_PATH_KDOCINDEX
 KDEV_CHECK_DOCBASE
-KDEV_CHECK_KDOC2
+KDE_CHECK_PYTHON
 
-dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(
-Makefile
-kdevelop/Makefile \
-kdevelop/widgets/Makefile \
-kdevelop/widgets/qextmdi/Makefile \
-kdevelop/widgets/qextmdi/src/Makefile \
-kdevelop/plugin/Makefile \
-kdevelop/plugin/print/Makefile \
-kdevelop/plugin/projectmanagement/Makefile \
-kdevelop/plugin/projectmanagement/kdesdi_appwizard/Makefile \
-kdevelop/plugin/projectmanagement/kdesdi_appwizard/res/Makefile \
-kdevelop/plugin/projectmanagement/kdejavasdi_appwizard/Makefile \
-kdevelop/plugin/projectmanagement/kdejavasdi_appwizard/res/Makefile \
-kdevelop/plugin/projectmanagement/kdeobjcsdi_appwizard/Makefile \
-kdevelop/plugin/projectmanagement/kdeobjcsdi_appwizard/res/Makefile \
-kdevelop/plugin/projectmanagement/kdebinary_project/Makefile \
-kdevelop/plugin/Compilers/Makefile \
-kdevelop/plugin/Compilers/gcc/Makefile \
-kdevelop/plugin/Compilers/gpp/Makefile \
-kdevelop/plugin/Linkers/Makefile \
-kdevelop/plugin/Linkers/ld/Makefile \
-kdevelop/parts/Makefile \
-kdevelop/parts/editor/Makefile \
-kdevelop/parts/dbg/Makefile \
-kdevelop/parts/grepview/Makefile \
-kdevelop/parts/doctreeview/Makefile \
-kdevelop/parts/classview/Makefile \
-kdevelop/parts/outputviews/Makefile \
-kdevelop/parts/cvs/Makefile \
-kdevelop/parts/cppsupport/Makefile \
-kdevelop/parts/javasupport/Makefile \
-kdevelop/parts/kdeprojectspace/Makefile \
-kdevelop/parts/kdeprojectspace/res/Makefile \
-kdevelop/parts/kdejavaprojectspace/Makefile \
-kdevelop/parts/kdejavaprojectspace/res/Makefile \
-kdevelop/parts/kdeobjcprojectspace/Makefile \
-kdevelop/parts/kdeobjcprojectspace/res/Makefile \
-kdevelop/parts/projectview/Makefile \
-kdevelop/parts/buglist/Makefile \
-kdevelop/parts/SourceInfo/Makefile \
-kdevelop/kwrite_part/Makefile \
-kdevelop/lib/Makefile \
-kdevelop/lib/general/Makefile \
-kdevelop/lib/Interfaces/Makefile \
-kdevelop/lib/ComponentManager/Makefile \
-kdevelop/lib/ComponentManager/Components/Makefile \
-kdevelop/lib/kidetexteditor/Makefile \
-kdevelop/lib/projectmanagement/Makefile \
-kdevelop/lib/projectmanagement/ProjectOptions/Makefile \
-kdevelop/lib/Build/Makefile \
-kdevelop/lib/Build/KDevCompiler/Makefile \
-kdevelop/lib/Build/KDevLinker/Makefile \
-kdevelop/lib/Build/KDevMake/Makefile \
-kdevelop/templates/Makefile \
-pics/Makefile \
-pics/mini/Makefile \
-pics/toolbar/Makefile \
-pics/misc/Makefile \
-doc/Makefile \
-doc/welcome/Makefile \
-doc/manual/Makefile \
-doc/programming/Makefile \
-doc/tutorial/Makefile \
-doc/kde_libref/Makefile \
-doc/addendum/Makefile \
-doc/cref/Makefile \
-doc/kdevelop2/Makefile \
-)
