@@ -964,6 +964,7 @@ void CKDevelop::saveOptions(){
 bool CKDevelop::queryExit(){
   kdDebug() << "queryExit()..." << endl;
   if (!bStartupIsPending) {
+    QApplication::sendPostedEvents();
     saveOptions();
   }
   return true;
@@ -984,22 +985,23 @@ bool CKDevelop::queryClose(){
       return false; //not close!
     }
   }
-  else{
-    int message_result = KMessageBox::Yes;
-
+  else {
     config->writeEntry("project_file","");
 
-    // m_docViewManager->synchronizeDocAndInfo();
-
+    int message_result = KMessageBox::Yes;
     int save = m_docViewManager->noDocModified();
-
-    if (!save)
-    {
+    if (!save) {
       message_result = KMessageBox::questionYesNo(this,
                             i18n("There is unsaved data.\nDo you really want to quit?"),
                             i18n("Exit KDevelop"));
     }
-    return (message_result==KMessageBox::Yes);
+    if (message_result==KMessageBox::Yes) {
+      // close all documents
+      m_docViewManager->doCloseAllDocs();
+    }
+    else {
+      return false;
+    }
   }
   return true;
 }
