@@ -701,12 +701,6 @@ void CKDevelop::slotBuildRebuildAll(){
   }
   error_parser->reset();
   error_parser->toogleOn();
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
   showOutputView(true);
 
   setToolMenuProcess(false);
@@ -779,14 +773,6 @@ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("autoconf")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
   showOutputView(true);
   error_parser->toogleOff();
   setToolMenuProcess(false);
@@ -795,7 +781,7 @@ void CKDevelop::slotBuildAutoconf(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-  if(QFileInfo("Makefile.dist").exists())
+  if(QFileInfo(QDir::current(),"Makefile.dist").exists())
     shell_process << make_cmd << " -f Makefile.dist";
   else
     shell_process << make_cmd << " -f Makefile.cvs";

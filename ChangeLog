@@ -1,3 +1,7 @@
+1999-08-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * removed redundant output view code in slotBuildxx
+  * optional check for Makefile.cvs in slotBuildAutoconf
+
 1999-08-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* The assumption that VersionControl::isRegistered is a
 	  boolean decision was obviously a bit naive => corrected

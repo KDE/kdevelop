@@ -124,12 +124,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/cupdatekdedocdlg.cpp,/home/rnolden/Development/kdevelop/doc/en/kde_libref/index.sgml,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_noslot.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.cpp,/home/rnolden/Development/kdevelop/ChangeLog,
 show_outputview=true
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.h
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_noslot.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/tutorial/index.html
+header_file=/home/rnolden/Development/kdevelop/ChangeLog
+cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.cpp
+browser_file=file:/usr/lib/qt-1.42/doc/html/qdir.html
 [kdevelop/pics/mini/CVpublic_var.xpm]
 install_location=
 dist=true
