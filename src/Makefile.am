@@ -6,8 +6,7 @@ kdevelop_SOURCES = core.cpp partcontroller.cpp projectmanager.cpp \
 	plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp \
 	statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp projectsession.cpp \
 	mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp \
-	newmainwindow.cpp mimewarningdialog.ui main.cpp pluginsdialogbase.ui plugindialog.cpp \
-	plugindialog.h splashscreen.cpp
+	newmainwindow.cpp mimewarningdialog.ui main.cpp splashscreen.cpp
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
