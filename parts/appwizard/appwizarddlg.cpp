@@ -532,6 +532,7 @@ void AppWizardDialog::accept()
 	{
 		if( m_pCurrentAppInfo->subMap[(*archIt).option] != "false" )
 		{
+			kdDebug( 9010 ) << "unpacking archive " << (*archIt).source << endl;
 			KTar archive( (*archIt).source, "application/x-gzip" );
 			if( archive.open( IO_ReadOnly ) )
 			{
@@ -591,7 +592,7 @@ void AppWizardDialog::accept()
 
 bool AppWizardDialog::copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process )
 {
-	kdDebug() << "Copy: " << source << " to " << dest << endl;
+	kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
 	if( process )
 	{
 		// Process the file and save it at the destFile location
@@ -640,15 +641,23 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 		else if( dir->entry( (*entry) )->isFile()  )
 		{
 			const KArchiveFile *file = (KArchiveFile *) dir->entry( (*entry) );
-			KTempFile temp;
-			file->copyTo( temp.name() );
-			if ( !copyFile( temp.name(), dest + "/" + file->name() , subMap,  process ) )
+			if( !process )
 			{
-				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
-				temp.unlink();
-				return;
+				file->copyTo( dest );
 			}
-			temp.unlink();
+			else
+			{
+				KTempFile temp;
+				temp.close();	// cannot write to a still opened file
+				file->copyTo( temp.name() );	// This is plain wrong, KArchiveFile::copyTo takes a directory
+				if ( !copyFile( temp.name(), dest + "/" + file->name() , subMap,  process ) )
+				{
+					KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
+					temp.unlink();
+					return;
+				}
+				temp.unlink();
+			}
 		}
 	}
 }
