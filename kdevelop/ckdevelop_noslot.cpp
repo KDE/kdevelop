@@ -210,16 +210,16 @@ void CKDevelop::setMainCaption(int item)
       if (pCurBrowserDoc) {
         setCaption(pCurBrowserDoc->currentTitle());
         QextMdiChildView* pMDICover = (QextMdiChildView*) pCurBrowserView->parentWidget();
-	if (pMDICover) {
+        if (pMDICover) {
           pMDICover->setCaption(pCurBrowserDoc->currentURL());
           pMDICover->setTabCaption(pCurBrowserDoc->currentTitle());
-	}
+        }
       }
     }
     break;
 
   default:
-    if (pCEW) {
+    if (pCEW && activeWindow()) {
       //capt = QFileInfo(pCEW->getName()).fileName();
       QString name=pCEW->getName();
       int len=name.length();

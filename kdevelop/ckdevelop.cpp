@@ -3059,7 +3059,8 @@ void CKDevelop::slotNewStatus()
   }
   statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
-//?????  setMainCaption();
+  // and we need to set a [modified] in the caption
+  setMainCaption();
 }
 
 void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
