@@ -87,10 +87,6 @@ public void setupActions()
     KStdAction.print(this, SLOT("filePrint()"), actionCollection());
     KStdAction.quit(kapp, SLOT("quit()"), actionCollection());
 
-//    m_toolbarAction = KStdAction.showToolbar(this, SLOT("optionsShowToolbar()"), actionCollection());
-//   m_statusbarAction = KStdAction.showStatusbar(this, SLOT("optionsShowStatusbar()"), actionCollection());
-
-//    KStdAction.configureToolbars(this, SLOT("optionsConfigureToolbars()"), actionCollection());
     KStdAction.preferences(this, SLOT("optionsPreferences()"), actionCollection());
 
     // this doesn't do anything useful.  it's just here to illustrate
@@ -98,7 +94,6 @@ public void setupActions()
     KAction custom = new KAction(tr("Cus&tom Menuitem"), new KShortcut(),
                                   this, SLOT("optionsPreferences()"),
                                   actionCollection(), "custom_action");
-    createGUI();
 }
 
 protected void saveProperties(KConfig config)
