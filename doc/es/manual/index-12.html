@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>El Manual de Usuario de KDevelop: CVS Integration</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Página siguiente</A>
+ <A HREF="index-11.html">Página anterior</A>
+ <A HREF="index.html#toc12">Índice general</A>
+</P>
+<H3><A NAME="s12">12. CVS Integration</A></H3>
+
+<P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
+groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
+located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
+added or removed to the CVS by the developers.
+<P>Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
+at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
+receive the changes.
+<P>
+<H3><A NAME="ss12.1">12.1 Enabling CVS Support</A>
+</H3>
+
+<P>As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
+KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
+the option for Version Control to "CVS".
+<P>
+<H3><A NAME="ss12.2">12.2 Using CVS Commands</A>
+</H3>
+
+<P>Then the following commands are available in the LFV and RFV by context menus:
+<P>Over a file not included in the repository:
+<UL>
+<LI><B>Add to Repository</B>: adds the file to the repository. The file is set up to be added and will be introduced to the repository
+on the next <CODE>commit</CODE> command that includes the directory where the added file is located locally.</LI>
+</UL>
+<P>Over a file included in the repository:
+<UL>
+<LI><B>Update</B>: update the selected file with the CVS version</LI>
+<LI><B>Commit</B>: commit the selected file to the CVS repository</LI>
+<LI><B>Remove from Repository</B>: remove the file from the repository</LI>
+</UL>
+<P>Over a folder:
+<UL>
+<LI><B>Add</B>: adds the folder to the repository</LI>
+<LI><B>Remove</B>: removes the folder from the repository</LI>
+<LI><B>Update</B>: update the folder recursively to be in sync with the repository</LI>
+<LI><B>Commit</B>: commit any changes recursively to the repository</LI>
+</UL>
+<P>The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
+the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
+successful or not.
+<P>As the CVS commands of KDevelop only work with the <CODE>cvs</CODE> system command and its commandline options, you should have no trouble to
+use the cvs features.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Página siguiente</A>
+ <A HREF="index-11.html">Página anterior</A>
+ <A HREF="index.html#toc12">Índice general</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
