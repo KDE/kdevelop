@@ -14,6 +14,7 @@
 #define __ast_h
 
 #include <memory>
+#include <qstring.h>
 #include <qptrlist.h>
 
 class AST
@@ -68,6 +69,68 @@ private:
     void operator = ( const NameAST& source );
 };
 
+class DeclarationAST: public AST
+{
+public:
+    typedef std::auto_ptr<DeclarationAST> Ptr;
+    
+public:
+    DeclarationAST();
+    virtual ~DeclarationAST();
+    
+private:
+    DeclarationAST( const DeclarationAST& source );
+    void operator = ( const DeclarationAST& source );
+};
+
+class LinkageBodyAST: public AST
+{
+public:
+    typedef std::auto_ptr<LinkageBodyAST> Ptr;
+    
+public:
+    LinkageBodyAST();
+    virtual ~LinkageBodyAST();
+    
+    void addDeclaration( DeclarationAST::Ptr& ast );
+    QPtrList<DeclarationAST> declarations() { return m_declarations; }
+    
+private:
+    QPtrList<DeclarationAST> m_declarations;
+    
+private:
+    LinkageBodyAST( const LinkageBodyAST& source );
+    void operator = ( const LinkageBodyAST& source );
+};
+
+class LinkageSpecificationAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<LinkageSpecificationAST> Ptr;
+    
+public:
+    LinkageSpecificationAST();
+    virtual ~LinkageSpecificationAST();
+    
+    QString externType() const;
+    void setExternType( const QString& type );
+    
+    LinkageBodyAST* linkageBody();
+    void setLinkageBody( LinkageBodyAST::Ptr& linkageBody );
+    
+    DeclarationAST* declaration();
+    void setDeclaration( DeclarationAST::Ptr& decl );
+    
+private:
+    QString m_externType;
+    LinkageBodyAST::Ptr m_linkageBody;
+    DeclarationAST::Ptr m_declaration;
+        
+private:
+    LinkageSpecificationAST( const LinkageSpecificationAST& source );
+    void operator = ( const LinkageSpecificationAST& source );
+};
+
 class TranslationUnitAST: public AST
 {
 public:
@@ -77,11 +140,11 @@ public:
     TranslationUnitAST();
     virtual ~TranslationUnitAST();
     
-    void addDeclaration( AST::Ptr& ast );
-    QPtrList<AST> declarations() { return m_declarations; }
+    void addDeclaration( DeclarationAST::Ptr& ast );
+    QPtrList<DeclarationAST> declarations() { return m_declarations; }
     
 private:
-    QPtrList<AST> m_declarations;
+    QPtrList<DeclarationAST> m_declarations;
    
 private:
     TranslationUnitAST( const TranslationUnitAST& source );

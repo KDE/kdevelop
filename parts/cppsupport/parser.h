@@ -49,18 +49,18 @@ public /*rules*/ :
 
     bool parseTranslationUnit( TranslationUnitAST::Ptr& node );
 
-    bool parseDefinition( AST::Ptr& node );
-    bool parseBlockDeclaration( AST::Ptr& node );
-    bool parseLinkageSpecification( AST::Ptr& node );
-    bool parseLinkageBody( AST::Ptr& node );
-    bool parseNamespace( AST::Ptr& node );
-    bool parseNamespaceAliasDefinition( AST::Ptr& node );
-    bool parseUsing( AST::Ptr& node );
-    bool parseUsingDirective( AST::Ptr& node );
-    bool parseTypedef( AST::Ptr& node );
-    bool parseAsmDefinition( AST::Ptr& node );
-    bool parseTemplateDeclaration( AST::Ptr& node );
-    bool parseDeclaration( AST::Ptr& node );
+    bool parseDefinition( DeclarationAST::Ptr& node );
+    bool parseBlockDeclaration( DeclarationAST::Ptr& node );
+    bool parseLinkageSpecification( DeclarationAST::Ptr& node );
+    bool parseLinkageBody( LinkageBodyAST::Ptr& node );
+    bool parseNamespace( DeclarationAST::Ptr& node );
+    bool parseNamespaceAliasDefinition( DeclarationAST::Ptr& node );
+    bool parseUsing( DeclarationAST::Ptr& node );
+    bool parseUsingDirective( DeclarationAST::Ptr& node );
+    bool parseTypedef( DeclarationAST::Ptr& node );
+    bool parseAsmDefinition( DeclarationAST::Ptr& node );
+    bool parseTemplateDeclaration( DeclarationAST::Ptr& node );
+    bool parseDeclaration( DeclarationAST::Ptr& node );
     
     bool parseNestedNameSpecifier( AST::Ptr& node );
     bool parseUnqualifiedName( AST::Ptr& node );
@@ -97,7 +97,7 @@ public /*rules*/ :
     bool parseTypeId( AST::Ptr& node );
     bool parseAbstractDeclarator( AST::Ptr& node );
     bool parseParameterDeclarationList( AST::Ptr& node );
-    bool parseMemberSpecification( AST::Ptr& node );
+    bool parseMemberSpecification( DeclarationAST::Ptr& node );
     bool parseAccessSpecifier( AST::Ptr& node );
     bool parseTypeIdList( AST::Ptr& node );
     bool parseMemInitializerList( AST::Ptr& node );

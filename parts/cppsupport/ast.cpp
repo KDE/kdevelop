@@ -62,6 +62,72 @@ AST* NameAST::unqualifiedName()
 }
 
 // ------------------------------------------------------------------------
+DeclarationAST::DeclarationAST()
+{
+}
+
+DeclarationAST::~DeclarationAST()
+{
+}
+
+// ------------------------------------------------------------------------
+LinkageBodyAST::LinkageBodyAST()
+{
+    m_declarations.setAutoDelete( true );
+}
+
+LinkageBodyAST::~LinkageBodyAST()
+{
+}
+
+void LinkageBodyAST::addDeclaration( DeclarationAST::Ptr& ast )
+{
+    if( !ast.get() )
+        return;
+	
+    m_declarations.append( ast.release() );
+}
+
+// ------------------------------------------------------------------------
+LinkageSpecificationAST::LinkageSpecificationAST()
+{
+}
+
+LinkageSpecificationAST::~LinkageSpecificationAST()
+{
+}
+
+QString LinkageSpecificationAST::externType() const
+{
+    return m_externType;
+}
+
+void LinkageSpecificationAST::setExternType( const QString& type )
+{
+    m_externType = type;
+}
+
+LinkageBodyAST* LinkageSpecificationAST::linkageBody()
+{
+    return m_linkageBody.get();
+}
+
+void LinkageSpecificationAST::setLinkageBody( LinkageBodyAST::Ptr& linkageBody )
+{
+    m_linkageBody = linkageBody;
+}
+
+DeclarationAST* LinkageSpecificationAST::declaration()
+{
+    return m_declaration.get();
+}
+
+void LinkageSpecificationAST::setDeclaration( DeclarationAST::Ptr& decl )
+{
+    m_declaration = decl;
+}
+    
+// ------------------------------------------------------------------------
 TranslationUnitAST::TranslationUnitAST()
 {
     m_declarations.setAutoDelete( true );
@@ -71,7 +137,7 @@ TranslationUnitAST::~TranslationUnitAST()
 {
 }
 
-void TranslationUnitAST::addDeclaration( AST::Ptr& ast )
+void TranslationUnitAST::addDeclaration( DeclarationAST::Ptr& ast )
 {
     if( !ast.get() )
         return;
