@@ -61,6 +61,9 @@ public:
             TagCreator w( fileName, catalog );
             w.parseTranslationUnit( ast.get() );
         }
+
+	if( !isResolveDependencesEnabled() )
+	    removeAllMacrosInFile( fileName );
     }
 
     void setupLexer( Lexer* lex )
@@ -131,7 +134,7 @@ public:
 		addMacro( Macro( lst[1], lst[2] ) );
 	    }
 	    addMacro( Macro( "__cplusplus", "1" ) );
-	    
+
 	    QString incl = getenv( "INCLUDE" );
 	    QStringList includePaths = QStringList::split( ':', incl );
 	    QStringList::Iterator it = includePaths.begin();
@@ -139,7 +142,7 @@ public:
 		addIncludePath( (*it).stripWhiteSpace() );
 		++it;
 	    }
-	    
+
 	} else if ( qmakespec == "win32-borland" ) {
 	    QString incl = getenv( "INCLUDE" );
 	    QStringList includePaths = QStringList::split( ';', incl );
