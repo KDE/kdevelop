@@ -1,0 +1,296 @@
+/** \file LangSupportStatus.dox
+  * \brief Programming Languages Support Status
+  */
+
+/** \page LangSupportStatus Programming Languages Support Status
+
+<table border="1">
+    <tr>
+      <th scope=col>Feature/Language</th>
+      <th scope=col>Ada</th>
+      <th scope="col">Bash</th>
+      <th scope=col>C/C++</th>
+      <th scope=col>Fortran</th>
+      <th scope=col>Java</th>
+      <th scope=col>Pascal</th>
+      <th scope=col>Perl</th>
+      <th scope=col>PHP</th>
+      <th scope=col>Python</th>
+      <th scope=col>Ruby</th>
+      <th scope=col>SQL</th>
+    </tr>
+    <tr>
+      <td>Class wizard</td>
+      <td bgcolor="cyan">Y</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">N/A</td>
+    </tr>
+    <tr>
+      <td>Attribute/Method wizard</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">N/A</td>
+    </tr>
+    <tr>
+      <td>Qt UI subclassing</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">N/A</td>
+      <td bgcolor="green">N/A</td>
+    </tr>
+    <tr>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td>Language parser</td>
+      <td bgcolor="green">ANTLR</td>
+      <td bgcolor="yellow">Internal</td>
+      <td bgcolor="green">cppparser</td>
+      <td bgcolor="yellow">Internal</td>
+      <td bgcolor="green">ANTLR</td>
+      <td bgcolor="yellow">ANTLR</td>
+      <td bgcolor="yellow">Internal</td>
+      <td bgcolor="yellow">Internal</td>
+      <td bgcolor="yellow">Internal</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Memory Class store</td>
+      <td bgcolor="cyan">CodeModel</td>
+      <td bgcolor="green">CodeModel</td>
+      <td bgcolor="green">CodeModel</td>
+      <td bgcolor="green">CodeModel</td>
+      <td bgcolor="yellow">CodeModel</td>
+      <td bgcolor="cyan">CodeModel</td>
+      <td bgcolor="yellow">Sourceinfo</td>
+      <td bgcolor="green">CodeModel</td>
+      <td bgcolor="green">CodeModel</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+    </tr>
+    <tr>
+      <td>Persistant class store</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Catalog</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">N/A</td>
+    </tr>
+    <tr>
+      <td>Problem reporter</td>
+      <td bgcolor="cyan">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Code completion</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="cyan">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td>Application wizard templates</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Application wizard import templates</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Filecreate templates</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Abbrevation templates</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="cyan">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>Source formatter</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td>Documentation topics</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="cyan">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+    </tr>
+    <tr>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td>Debugger</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="yellow">Y</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+      <td bgcolor="red">N</td>
+    </tr>
+</table>
+<br>
+Legend:
+<br>
+<table>
+    <tr>
+      <td bgcolor="red"></td>
+      <td>Feature has not been implemented</td>
+    </tr>
+    <tr>
+      <td bgcolor="cyan"></td>
+      <td>Feature is in alpha state, the development has only been started or the feature is turned off at the moment</td>
+    </tr>
+    <tr>
+      <td bgcolor="yellow"></td>
+      <td>Feature is in beta state or it is unfinished</td>
+    </tr>
+    <tr>
+      <td bgcolor="green"></td>
+      <td>Feature is considered to be complete or complete enough for the release</td>
+    </tr>
+    <tr>
+      <td>N/A</td>
+      <td>Feature is not applicable for given language</td>
+    </tr>
+    <tr>
+      <td>Sourceinfo</td>
+      <td>Deprecated class store that should be replaced by a CodeModel
+      <br>Features implemented with Sourceinfo should not be marked as complete</td>
+    </tr>
+    <tr>
+      <td>CodeModel</td>
+      <td>New memory class store</td>
+    </tr>
+    <tr>
+      <td>Catalog</td>
+      <td>New persistant class store using Berkeley DB storage backend</td>
+    </tr>
+    <tr>
+      <td>ANTLR</td>
+      <td>Language parser is generated by ANTLR parser generator, <a href="http://www.antlr.org">www.antlr.org</a></td>
+    </tr>
+    <tr>
+      <td>cppparser</td>
+      <td>New c/c++ parser written by Roberto Raggi for KDevelop</td>
+    </tr>
+    <tr>
+      <td>Internal</td>
+      <td>Language parser is included in language support part</td>
+    </tr>
+</table>
+*/
+
