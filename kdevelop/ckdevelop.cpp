@@ -54,7 +54,7 @@
 #include "./dbg/disassemble.h"
 #include "./kwrite/kwdoc.h"
 #include "ktipofday.h"
-
+#include "wzconnectdlgimpl.h"
 
 #include <kaboutdialog.h>
 #include <kcombobox.h>
@@ -2835,7 +2835,7 @@ void CKDevelop::slotClassbrowserViewDeclaration()
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
-  if(classname==i18n("(Globals"))
+  if(classname==i18n("(Globals)"))
       CVGotoDeclaration( classname, methodname, THFOLDER, THGLOBAL_FUNCTION );
   else
     CVGotoDeclaration( classname, methodname, THCLASS, THPUBLIC_METHOD );
@@ -2858,11 +2858,11 @@ void CKDevelop::slotClassbrowserViewDefinition()
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
-  if( methodname.isEmpty() && !classname==i18n("(Globals") ){
+  if( methodname.isEmpty() && !classname==i18n("(Globals)") ){
       CVGotoDefinition( classname, "", THCLASS, THCLASS );
   }
   else{
-    if(classname==i18n("(Globals"))
+    if(classname==i18n("(Globals)"))
       CVGotoDefinition( classname, methodname, THFOLDER, THGLOBAL_FUNCTION );
     else
       CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
@@ -2884,16 +2884,14 @@ void CKDevelop::slotClassbrowserNewMethod()
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  if( !classname.isEmpty() )
-  {
-// TODO
-//    // Make class the current one
-//    CParsedClass *aClass;
-//    aClass = class_tree->store->getClassByName( classname );
-//
-//    // and do the work
-//    class_tree->slotMethodNew();
-  }
+  if (classname.isEmpty() || classname==i18n("(Globals)"))
+    return;
+
+  CParsedClass* aClass;
+  aClass = class_tree->store->getClassByName ( classname );
+
+  CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDMETH);
+  dlg -> show();
 }
 
 /*------------------------- CKDevelop::slotClassbrowserNewAttribute()
@@ -2911,16 +2909,14 @@ void CKDevelop::slotClassbrowserNewAttribute()
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  if( !classname.isEmpty() )
-  {
-// TODO
-//    // Make class the current one
-//    CParsedClass *aClass;
-//    aClass = class_tree->store->getClassByName( classname );
-//
-//    // and do the work
-//    class_tree->slotAttributeNew();
-  }
+  if  (classname.isEmpty() || classname==i18n("(Globals)"))
+    return;
+
+  CParsedClass* aClass;
+  aClass = class_tree->store->getClassByName ( classname );
+
+  CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDATTR);
+  dlg -> show();
 }
 
 /*------------------------- CKDevelop::slotClassbrowserNewSignal()
@@ -2938,16 +2934,14 @@ void CKDevelop::slotClassbrowserNewSignal()
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  if( !classname.isEmpty() )
-  {
-// TODO
-//    // Make class the current one
-//    CParsedClass *aClass;
-//    aClass = class_tree->store->getClassByName( classname );
-//
-//    // and do the work
-//    class_tree->slotSignalNew();
-  }
+  if (classname.isEmpty() || classname==i18n("(Globals)"))
+    return;
+
+  CParsedClass* aClass;
+  aClass = class_tree->store->getClassByName ( classname );
+
+  CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSIGNAL);
+  dlg -> show();
 }
 
 /*------------------------- CKDevelop::slotClassbrowserNewSlot()
@@ -2965,16 +2959,13 @@ void CKDevelop::slotClassbrowserNewSlot()
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  if( !classname.isEmpty() )
-  {
-// TODO
-//    // Make class the current one
-//    CParsedClass *aClass;
-//    aClass = class_tree->store->getClassByName( classname );
-//
-    // and do the work
-//    class_tree->slotSlotNew();
-  }
+  if (classname.isEmpty() || classname==i18n("(Globals)"))
+    return;
+  CParsedClass* aClass;
+  aClass = class_tree->store->getClassByName ( classname );
+
+  CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSLOT);
+  dlg -> show();
 }
 
 /////////////////////////////////////////////////////////////////////

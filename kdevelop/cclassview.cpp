@@ -1031,7 +1031,7 @@ void CClassView::buildInitalClassTree()
  *   A newly allocated classtool dialog.
  *-----------------------------------------------------------------*/
 // CClassToolDlg*
-CClassPropertiesDlgImpl *CClassView::createCTDlg(int pgn)
+CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
 {
   CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( (CTPACTION) pgn, NULL );
 
@@ -1060,11 +1060,11 @@ CClassPropertiesDlgImpl *CClassView::createCTDlg(int pgn)
             SLOT(slotSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod*)));
 
   tool -> setStore( store );
-  tool -> setClass( getCurrentClass() );
+  tool -> setClass( aClass );
 
   ctDlg -> setCurrentClassName( tool -> classToString() );
   ctDlg -> setStore ( store );
-  ctDlg -> setClass( getCurrentClass() );
+  ctDlg -> setClass( aClass );
   ctDlg -> setClassToolDlg( tool );
 
   return ctDlg;
@@ -1247,7 +1247,7 @@ void CClassView::slotMethodNew()
       cerr << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
       cerr << "got class: " << aClass -> name.data() << endl;
-      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDMETH);
+      CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDMETH);
       dlg -> show();
   }
 
@@ -1283,7 +1283,7 @@ void CClassView::slotAttributeNew()
       cerr << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
       cerr << "got class: " << aClass -> name.data() << endl;
-      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDATTR);
+      CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDATTR);
       dlg -> show();
   }
     // Disabling hold dialog...
@@ -1318,7 +1318,7 @@ void CClassView::slotSignalNew()
       cerr << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
       cerr << "got class: " << aClass -> name.data() << endl;
-      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDSIGNAL);
+      CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSIGNAL);
       dlg -> show();
   }
 }
@@ -1351,7 +1351,7 @@ void CClassView::slotSlotNew()
       cerr << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
       cerr << "got class: " << aClass -> name.data() << endl;
-      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDSLOT);
+      CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSLOT);
       dlg -> show();
   }
 }
@@ -1401,7 +1401,7 @@ void CClassView::slotFolderDelete()
 
 void CClassView::slotClassBaseClasses()
 {
-  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg(getCurrentClass(), (int) CTPVIEW);
 
   ctDlg->viewParents();
   ctDlg->show();
@@ -1409,7 +1409,7 @@ void CClassView::slotClassBaseClasses()
 
 void CClassView::slotClassDerivedClasses() 
 {
-  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg(getCurrentClass(), (int) CTPVIEW);
 
   ctDlg->viewChildren();
   ctDlg->show();
@@ -1417,7 +1417,7 @@ void CClassView::slotClassDerivedClasses()
 
 void CClassView::slotClassTool()
 {
-  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg(getCurrentClass(), (int) CTPVIEW);
 
   ctDlg->show();
 }

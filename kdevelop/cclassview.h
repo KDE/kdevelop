@@ -108,6 +108,13 @@ public: // Public methods
 
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
+
+  /** Create a new ClassTool dialog and setup its' attributes.
+   * @return A newly allocated classtool dialog.
+   */
+  //CClassToolDlg
+  CClassPropertiesDlgImpl*createCTDlg(CParsedClass* aClass, int pgn=0);
+
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
@@ -237,12 +244,6 @@ private: // Private attributes
   CCVToolTip * toolTip;
 
 private: // Private methods
-
-  /** Create a new ClassTool dialog and setup its' attributes.
-   * @return A newly allocated classtool dialog.
-   */
-  //CClassToolDlg
-  CClassPropertiesDlgImpl*createCTDlg(int pgn=0);
 
   /** Fetch one node from a tree string.
    * @param str        String containing the tree.

@@ -52,6 +52,7 @@
 #include <qlayout.h>
 #include <qmessagebox.h>
 #include <kurlrequester.h>
+#include <kemailsettings.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -654,10 +655,16 @@ void CKDevelop::slotProjectNewAppl(){
   
   slotStatusMsg(i18n("Creating a new frame application..."));
   config->setGroup("General Options");
-  CKAppWizard kappw(this,"zutuz",config->readEntry("author_name",""),
-		    config->readEntry("author_email",""));
-  
-  
+  KEMailSettings emailSettings;
+  QString authorName = config->readEntry("author_name","");
+  if (authorName.isEmpty())
+    authorName = emailSettings.getSetting (KEMailSettings::RealName);
+  QString emailAddress = config->readEntry("author_email", "");
+  if (emailAddress.isEmpty())
+    emailAddress = emailSettings.getSetting (KEMailSettings::EmailAddress);
+
+  CKAppWizard kappw(this,"zutuz", authorName, emailAddress);
+
   kappw.setCaption(i18n("ApplicationWizard"));
   kappw.exec();
   QString file = kappw.getProjectFile();
