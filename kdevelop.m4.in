@@ -565,7 +565,7 @@ AC_DEFUN(KDEV_CHECK_COMPAT,
 
     save_CXXFLAGS="$CXXFLAGS"
 
-    CXXFLAGS="$QT_INCLUDES $ac_kde_includes"
+    CXXFLAGS="$QT_INCLUDES -I$ac_kde_includes"
 
     AC_TRY_COMPILE([
       #include <qglobal.h>
