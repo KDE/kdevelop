@@ -2,7 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=KNotes Plugin
+Comment[fr]=Un module externe pour la gestion des annotations via le programme « KNotes ».
 Name=KDevNotes
+GenericName=KNotes Plugin
+GenericName[fr]=Gestion des annotations
 Icon=knotes
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevnotes
