@@ -18,45 +18,64 @@
 <A HREF="index-3.html">Previous</A>
 <A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="Overview"></A> <A NAME="s4">4. Overview</A> </H3>
+<H3><A NAME="Overview"></A> <A NAME="s4">4. Overview</A></H3>
 
-<P>The KDevelop main working interface is separated in three main windows: the main working field on the upper right, the treeviews
-on the upper left and the outputview on the bottom of the main window. Around that are the menubar, toolbars and the
-statusbar.Except the menubar, each item can be turned on and off to give you a flexible environment.
-<H3><A NAME="ss4.1">4.1 Main View</A>
+<P>Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the
+outputwindow, surrounded by the menubar, toolbars and the statusbar. This section describes the purpose of each part of the
+interface, starting by the windows, followed by the bars and the functions they provide.
+<P>
+<H3><A NAME="ss4.1">4.1 Main Window </A>
 </H3>
 
-<P>
-<P>The main window consists of four tabs for which the first two are for editing purpose. First comes the Header-/Resource window for
-headerfiles and any other files, then the C/C++ window for sourcecodes. These are followed by the Documentation window displaying
-all documentation in HTML-format. At last is the Tools window for the Tools integrated. The Tools are external programs like
-KIconedit and KDbg and will be displayed there. Functionality for joining these Tools with the filenames to be edited will be
-integrated in time. Since we changed the editor from KEdit to KWrite, a lot of functionality was added to KDevelop, such as
-configurable syntax-highlighting, font sizes and colored display. We hope all those who preferred other editors for writing their
-code are now willing to change to KDevelop completely.
+<P>The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
+window for headers and any other text files like the documentation sgml's, then the C/C++ window for sourcecodes. These are
+followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconedit
+and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the
+registration of third-party programs can easily be done by a configuration dialog (see the 
+<@@ref>Configurationconfiguration</A> section). For a description of the Editor windows functionality, see 
+<@@ref>Configurationconfiguration</A><@@ref>The EditorThe Editor</A>, and for the Helpbrowser, you should look at section 
+<@@ref>Configurationconfiguration</A><@@ref>The EditorThe Editor</A><@@ref>The Documetation BrowserThe Documentation Browser</A>.
 <P>
 <H3><A NAME="ss4.2">4.2 The Classviewer and Fileviewers</A>
 </H3>
 
-<P>The classviewer shows the classes of your project under the project item as well as structs.  Opening the tree will show all
-member functions and members with symbols for private, protected and public, so you can see the accessiblility of the member
-visually without switching to the header file.  Selecting the class name will open the according headerfile containing the class
-and set the cursor to the class declaration beginning. Selecting member functions will open the implementation file and place the
-cursor at the function header.  For elements, KDevelop will look for the header file and place the cursor at the line the element
-is declarated.  Mind that inline-functions are not supported by the classviewer.
-The Logical File Viewer (LFV) allows specifying filegroups to which files can be filtered, e.g.  a folder "pixmaps" or "headers".
-Individual groups can be added by the properties entry of the project menu or by a right click on the tree items.  Selecting a
-file will open it in the editing window, which is important e.g. to access the main() function as it isn't a class and so not
-displayed in the classviewer.   Pixmaps will be opened automatically in the Tools-view by KIconedit if it is installed.    The
-right button menu of the LFV allows configuring the file tree as well as adding, deleting or removing files from the project.  The
-project file and the Makefile.am's are updated automatically in that case.
+<P>
+<H4>The Classviewer</H4>
+
+<P>The classviewer shows the classes of your project as well as global functions and variables.  Opening the tree will show all
+member functions and members with symbols for attributes (private, protected and public, signals and slots), so you can see the
+properties of members visually without switching to the header file.  Selecting the class name will open the according
+headerfile containing the class and set the cursor to the class declaration beginning. Selecting member functions will open the
+implementation file and place the cursor at the function header.        For elements, KDevelop will look for the header file and place
+the cursor at the line the element is declarated.       The classviewer also provides popup-menus that offer more specified options,
+see 
+<@@ref>The ClassviewerThe Classviewer</A> for more detailed information.
+<P>
+<H4>The Logical File Viewer</H4>
+
+<P>The Logical File Viewer (LFV) allows sorting files by filters in groups. Individual groups can be added by the properties
+entry of the project menu or by a right click on the tree items. This allows a more specialized search for files that you want to
+access quickly, in the first place only showing project-included files. According to their Mime-type, the files will be opened
+when selected. You will like the LFV for things like selecting pixmaps- this will start KIconEdit (if installed on the system) in
+the Tools-window and opens the chosen picture.
+<P>
+<H4>The Real File Viewer</H4>
+
+<P>The Real File Viewer (RFV) shows the project directory tree with all files, so you can edit non-project files or files hidden by
+the LFV like configure.in and Makefiles.
+Popup-menus also provide functions like adding or removing files to the current project.
+<P>
+<H4>The Documentation Tree</H4>
+
+<P>The Documentation Tree (DOC) displays all available HTML-based documentation that is configured as books. Selecting a book will
+open the first page in the Browser window. Also, a popup-menu provides personal configuration for additional HTML-based
+documentation packages.
 <P>
 <H3><A NAME="ss4.3">4.3 Output window</A>
 </H3>
 
-<P>
-<P>The Output window is separated as well into a messages window, a stdin/stdout window and a stderr window for the following necessities:
-<P>
+<P> The Output window is separated as well into a messages window, a stdin/stdout
+window and a stderr window for the following necessities:
 <UL>
 <LI> messages window:   displays all output of the compiler. Clicking on error messages will change the edit widget to set the
 cursor to the line the compiler found an error.</LI>
@@ -67,156 +86,202 @@ produces. This is useful for testing purposes. The Output window is programmed t
 such as make or a terminal application.</LI>
 </UL>
 <P>
-<H3><A NAME="ss4.4">4.4 Editor</A>
+<H3><A NAME="ss4.4">4.4 File Mangagement and Printing</A>
 </H3>
 
-<P>The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
-The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
-<P><B>Edit Options:</B>
-<P><B>Auto Indent:</B>                                                                  this sets the edior to place the cursor below the first literal when a new line is entered.
-<P><B>Backspace Indent:</B>                                                     this option sets the cursor below the first literal of the line above when backspace is pressed.
-<P><B>Word Wrap:</B>                                                                            words are taken into the next line after the column set in "Wrap Words At:"
-<P><B>Replace Tabs:</B>                                                                 tabulators in the current text are replaced with tabulators of the "Tab Width:" value
-<P><B>Remove Trailing Spaces:</B>                               removes trailing spaces
-<P><B>Wrap Cursor:</B>                                                                  sets the cursor to the end of the last line when backspace enters the beginning of a line
-<P><B>Auto Brackets:</B>                                                                creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
-<P><B>Select Options:</B>
-<P><B>Persistent Selections:</B>        selections made stay marked after setting the cursor to a different place
-<P><B>Multiple Selections:</B>          allows multiple independent selections within the text
-<P><B>Vertical Selections:</B>          when selecting multiple lines, the selection is also made horizontal and doesn't cover the
-whole line
-<B>Delete On Input:</B>              deletes a selection when writing in the selection.
-<P><B>Toggle Old:</B>                   allows only one selection. A selection made gets deselected when another selection is made.
-<P><B>Wrap Words At:</B>                sets the maximum
+<P>This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
+according icons in the toolbar:
+<P>
+<DL>
+<DT><B>New                      Ctrl+N</B><DD><P>Opens the "New File" dialog, allowing to create a new file. The file can be created using different templates
+and the filename has to be given as well as the path where the file will be created.
+<P>
+<DT><B>Open                     Ctrl+O</B><DD><P>displays the "Open File..." dialog and lets you choose a file to be opened.
+<P>
+<DT><B>Close            Ctrl+W</B><DD><P>Closes the file in the top editing window
+<P>
+<DT><B>Save                     Ctrl+S</B><DD><P>Saves the file opened in the top editing window. If the file has not been saved yet, the "Save File As..."
+dialog will be opened to let you choose a path and filename for the file to be saved.
+<P>
+<DT><B>Save As...</B><DD><P>Opens the "Save File As..." dialog to let you save the current file under a new filename
+<P>
+<DT><B>Save All</B><DD><P>Saves all changed files
+<P>
+<DT><B>Print... Ctrl+P</B><DD><P>Opens the "Print File" dialog where you can set various options for printing either using a2ps, enscript or
+lpr
+<P>
+<DT><B>Quit                     Ctrl+Q</B><DD><P>Exits KDevelop. If files are changed, you will be asked if you want to save these files.
+<P>
+</DL>
 <P>
 <P>
-<H3><A NAME="ss4.5">4.5 Editor Colors</A>
+<P>
+<H3><A NAME="ss4.5">4.5 Editing Files</A>
 </H3>
 
-<P>The editor allows to configure the general view of the editing field by choosing colors for:
-<UL>
-<LI> background:              the editor's background</LI>
-<LI> text background:           the background of displayed text</LI>
-<LI> selected:                the color of selected text to display the selection</LI>
-<LI> found:                   the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
-<LI> selected + found:        the color of text selected to search for and found</LI>
-</UL>
+<P>Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
+are available via a context-menu in the editor.
+<DL>
+<DT><B>Undo                     Ctrl+Z</B><DD><P>Reverts the last editing operation
 <P>
-<H3><A NAME="ss4.6">4.6 Editor Defaults</A>
+<DT><B>Redo                     Ctrl+Z</B><DD><P>lets you do the last undo step again
+<P>
+<DT><B>Cut                      Ctrl+X</B><DD><P>cuts out a selection and copies it to the system clipboard.
+<P>
+<DT><B>Copy                     Ctrl+C</B><DD><P>copies a selection to the system clipboard. This also counts for seletions made in the documentation
+browser.
+<P>
+<DT><B>Paste            Ctrl+V</B><DD><P>inserts the clipboard contents at the current cursor position.
+<P>
+<DT><B>Indent           Ctrl+I</B><DD><P>Indent moves a selection to the right
+<P>
+<DT><B>UnIndent Ctrl+U</B><DD><P>UnIndent moves a selection to the left
+<P>
+<DT><B>Insert File...</B><DD><P>Lets you select a file and inserts its contents at the current cursor position
+<P>
+<DT><B>Search...                Ctrl+F</B><DD><P>Opens the Search dialog that looks for an expression in the current file. For a search across several
+files, "Search in files..." should be used.
+<P>
+<DT><B>Repeat Search    F3</B><DD><P>Repeats the last seach for an expression. This also counts for searches that were made across the
+documentation, where more than one hit was found in the same page. The next hit will be displayed by choosing "Repeat Search"
+or F3 and signed as marked.
+<P>
+<DT><B>Replace...               Ctrl+R</B><DD><P>Opens the "Search and Replace" dialog that allows the search for an expression and replaces the found
+text with a new expression.
+<P>
+<P>
+<DT><B>Search in files...</B><DD><P>Displays the "Search in files..." dialog, that handles <CODE>grep</CODE> on whole directories with wildcards.
+Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file and the
+cursor is set to the line of the search result
+<P>
+<DT><B>Select All</B><DD><P>Selects the whole text of the file currently opened in the top editing window
+<P>
+<DT><B>Deselect All</B><DD><P>Deselects the whole text of the current file. This is often used for multiple selections so you don't have
+to deselect each one seperately
+<P>
+<DT><B>Invert Selection</B><DD><P>Inverts the selection, meaning that a selection becomes deselected and text which is not selected
+becomes selected.
+<P>
+</DL>
+<P>
+<P>
+<H3><A NAME="ss4.6">4.6 View Configuration</A>
 </H3>
 
-<P>The Editor Defaults dialog lets you configure the default values for language items such as keywords etc. and the default font
-style.  When setting up the syntax highlighting (see below), those default values can be used to configure standard values
-configured here.
+<P>The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
+to jump errors in the code.
+<DL>
+<DT><B>Line...  Ctrl+L</B><DD><P>Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
+linenumber is remembered and marked, so you can either jump to that line again or just enter a new linenumber you want to see.
 <P>
-<H3><A NAME="ss4.7">4.7 Syntax-Highlighting</A>
+<DT><B>Next Error               F4</B><DD><P>Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
+give you a descriptive help what the problem is, so you can correct the error.
+<P>
+<DT><B>Previous Error           Shift+F4</B><DD><P>Jumps to the previous error that was reported.
+<P>
+<DT><B>Tree-View        Ctrl+T</B><DD><P>en/disables the Tree window on the left side of the main view containing the classbrowser, LFV, RFV and
+DOC-tree.
+<P> 
+<DT><B></B><DD><P>
+<DT><B>Output-View      Ctrl+G</B><DD><P>en/disables the Output window on the bottom of the main view.
+<P>
+<DT><B>Toolbar</B><DD><P>en/disables the toolbar.
+<P>
+<DT><B>Browser-Toolbar</B><DD><P>en/disables the browser toolbar, containing the back, forward and search buttons for the browser
+<P>
+<DT><B>Statusbar        Ctrl+B</B><DD><P>en/disables the statusbar.
+<P>
+<DT><B>Refresh</B><DD><P>rescans all files to rebuild the classbrowser. The scanning progress is shown in the statusbar progress display.
+<P>
+</DL>
+<P>
+<P>
+<H3><A NAME="ss4.7">4.7 Creating and Maintaining Projects</A>
 </H3>
 
-<P>The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
-To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
 <P>
-<H3><A NAME="ss4.8">4.8 Documentation Browser</A>
-</H3>
-
-<P>The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
-Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
-<P>
-<P>
-<H3><A NAME="ss4.9">4.9 Printer Setup</A>
-</H3>
-
-<P>The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
-installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
-using the corresponding configuration dialogs.
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+</DL>
 <P>
 <P>
-<H3><A NAME="ss4.10">4.10 KDevelop Setup</A>
+<H3><A NAME="ss4.8">4.8 Building Projects</A>
 </H3>
 
 <P>
-<H4>General</H4>
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+</DL>
+<P>
+<P>
+<H3><A NAME="ss4.9">4.9 Calling Tools</A>
+</H3>
 
-<P><B>Make-command:</B>
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
-<P><B>Autosave:</B>
-<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
-<P>
-<P><B>Autoswitch:</B>
-<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
-window turned off.
-Startup:
-<P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<P>
-<P>
-<H4>Keys</H4>
-
-<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / Ctrl key etc.
-<P>
-<P>
-<H4>Documentation</H4>
+<H3><A NAME="ss4.10">4.10 Setting Options</A>
+</H3>
 
 <P>
-<H4>Directories</H4>
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD>
+</DL>
+<P>
+<H3><A NAME="ss4.11">4.11 The Window Menu</A>
+</H3>
+
+<H3><A NAME="ss4.12">4.12 Managing Bookmarks</A>
+</H3>
 
 <P>
-<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
-<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
-documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
-according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
-first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
-also setting the KDE Library Doc path automatically.
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD>
+</DL>
 <P>
-<H4>Options</H4>
+<H3><A NAME="ss4.13">4.13 Online Help</A>
+</H3>
 
 <P>
-<H4>Update KDE-Documentation</H4>
-
-<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
-installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
-up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
-/home/rnolden/kdelibs-1.1/.
-<P>Then, you can choose three different installation modes, as:
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD>
+</DL>
 <P>
-<UL>
-<LI> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
-installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
-newly generated documentation into the recent path.</LI>
-<LI> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
-well as above, but gives you the choice to set up a new documentation place.</LI>
-<LI> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
-the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
-kdelibs version.</LI>
-</UL>
-<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
-users who generate a new documentation from scratch.
-<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
-documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
-give browsing the most functionality.
-<P>
-<H4>Create Search Database</H4>
+<H3><A NAME="ss4.14">4.14 Keyboard Shortcuts</A>
+</H3>
 
-<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
-Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
-documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
-directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
-in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
-will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-Using the Documentation Browser
+<P>
+<DL>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD><P>
+<DT><B></B><DD>
+</DL>
+<P>
 <P>
 <P>
 <P ALIGN="RIGHT">

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Questions and Answers</TITLE>
+<TITLE>The User Manual to KDevelop: The Dialogeditor</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,91 +18,11 @@
 <A HREF="index-9.html">Previous</A>
 <A HREF="index.html#toc10">Table of Contents</A>
 </P>
-<H3><A NAME="Questions and Answers"></A> <A NAME="s10">10. Questions and Answers</A></H3>
+<H3><A NAME="The Dialogeditor"></A> <A NAME="s10">10. The Dialogeditor</A></H3>
 
-<P><B>Q:</B> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
-<P><B>A:</B>  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the
-KDevelop homepage. All questions should go there and will be adressed there as well.  If you stick to that, you will get the most
-help by the developers and all users having the same problems, as well as helping to keep the FAQ up to date.
-<P><B>Q:</B> Wrong JPEG library version: library is 61, caller expects 62
-<P><B>A:</B>  There are 2 ways.
-<OL>
-<LI> When the kdelibs are installed it installs header files for the
-jpeg libraries, these are version 61,  however most distributions
-(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
-from /opt/kde/include. The pukka include  file for version 62 should
-then be picked up. However looking at the  error message above it may
-be the other way round, in any case ensure  you only have on version
-of the header file, the library and that  they are consistent.
-
-It is useful to use the locate command to verify that I have
-the correct version of a library and header files e.g.
-updatedb
-locate libjpeg
-locate jpeglib
-</LI>
-<LI> You must recompiled kdesupport without jpeg
-library (configure --with-libjpeg --with-libgif).</LI>
-</OL>
-<P>
-<P><B>Q:</B>  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
-cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
-aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
-make[2]: *** [Makefile.in] Error 1
-<P><B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
-"aclocal" manually, then it will compile.
-<P>
-<P><B>Q:</B>  What must i do, if configure said ,that i need giflib23.
-<P><B>A:</B>  Try a newer snap of kdesupport, or maybe you have another giflib installed?
-<P>
-<P><B>Q:</B> How can I convert a KDevelop 0.2 project to a 0.3 one?
-<P><B>A:</B> Please change the AC_OUTPUT in the configure.in to a oneline version
-<P>for example:
-old version AC_OUTPUT(Makefile \
-kdevelop/kwrite/Makefile \
-kdevelop/templates/Makefile
-)
-new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 <P>
 <P>
-<P><B>Q:</B>  I  get the following linker errors, what do I have to do to get KDevelop linked ?
-/usr/lib/libqt.so:
-warning: multiple common of `QArrayT&lt;char&gt; type_info node'
-ckdevelop.o: warning: previous common is here
-ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
-ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
-ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
-ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
-short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
-exit status  make[2]: ***
-[kdevelop] Error 1  make[2]: Leaving directory
-'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
-make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
-`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
-make: *** [all-recursive-am] Error 2
-<P><B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall them.  .:-(
-It's a bug in the SuSE rpm's.
 <P>
-<P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
-<P><B>A:</B>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
-<P>
-<P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
-<P><B>A:</B> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
-added files will be included as well.
-<P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
-<P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
-automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
-according *.moc.cpp file and rebuild the project. >
 <P>
 <P ALIGN="RIGHT">
 

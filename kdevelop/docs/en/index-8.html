@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: The Editor</TITLE>
+<TITLE>The User Manual to KDevelop: Projects</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,7 +18,127 @@
 <A HREF="index-7.html">Previous</A>
 <A HREF="index.html#toc8">Table of Contents</A>
 </P>
-<H3><A NAME="The Editor"></A> <A NAME="s8">8. The Editor</A></H3>
+<H3><A NAME="Projects"></A> <A NAME="s8">8. Projects</A></H3>
+
+<P>
+<H3><A NAME="ss8.1">8.1 Projectmanagement</A>
+</H3>
+
+<P>
+<H4>Programs</H4>
+
+<P>KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to
+delete it. It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all
+information for your files like the file properties, install path, distribution status and compiler options (CXXFLAGS). Setting
+file properties allows you to keep track of where the files should go.
+<P>With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard
+generates three kinds of fram applications, as:
+<UL>
+<LI>a single document interface (SDI) KDE-application including a menubar, a toolbar and a statusbar. It contains basic control
+resource management to allow extending the frame application into a unique KDE 1.1 application. The application frame also
+contains statusbar help messages as known from commercial products just like KDevelop itself. From the programmer's point of view,
+it is based on three application-specific classes leaning on the MVC-concept (Model-View-Controller). Technically, the base
+classes may not be viewed that way, but it's construction is at least created most logical to create applications with a GUI.
+</LI>
+<LI>a KDE-based application frame window. This application type offers most flexibility to those wanting to develop their
+program from scratch, but can also be used as a basis for developing wizard applications or modules.
+</LI>
+<LI>a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we
+tried to offer you a smart framework to support your application development. As Qt programming is fully supported, you should
+have no problems to create a full-functional application by using Qt only.
+</LI>
+<LI>a C++ program framework. This application type is intended for those wanting to write a terminal based C++ program. Just
+remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for KDE applications.</LI>
+</UL>
+
+For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select "New".
+The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
+type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your
+existing project and choose "Project"->"Add file(s)"->"Add existing file(s)" to copy the sources into your new project directory.
+Note that your Makefile.am's will be changed by KDevelop and you probably will have to change or delete some entries to provide
+clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
+matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
+should be in the project's subdirectory which has the same name as the main project directory. In the Logical File Viewer the
+groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
+application and delete the created source and header files. Then you can add existing files as above.
+<P>
+<H4>Creating Libraries</H4>
+
+<P>This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
+KDevelop.
+<P>
+<H3><A NAME="ss8.2">8.2 New Projects with KAppWizard</A>
+</H3>
+
+<P>
+<P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
+projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
+<P>For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base
+classes for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow
+inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for
+the creation of small desktop tools or other simple applications without too much change on the existing code provided by the
+framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for
+end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).        
+<P>The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
+and statusbar.
+<P>The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
+"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
+first or for those working on commandline programs written in C++ or C.
+<P>The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
+Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
+*.lsm file.
+<P>
+<P>
+<H3><A NAME="ss8.3">8.3 Porting existing projects</A>
+</H3>
+
+<P>
+<P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
+empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
+compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
+will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
+before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
+compiled and installed after the conversion to ensure the project's consistancy.
+<P>
+<H3><A NAME="ss8.4">8.4 Adding Files and Classes</A>
+</H3>
+
+<P>
+<H3><A NAME="ss8.5">8.5 Generating new Classes</A>
+</H3>
+
+<P>
+<H3><A NAME="ss8.6">8.6 Adding Translations</A>
+</H3>
+
+<P>
+<P>
+<H3><A NAME="ss8.7">8.7 Setting Project File Options</A>
+</H3>
+
+<P>
+<P>
+<H3><A NAME="ss8.8">8.8 General Project Options</A>
+</H3>
+
+<P>
+<P>The Project Options dialog , accessed by the project menu, lets you specify all needed parameters for your project. Those will be
+updated in the makefile.am's and the configure.in script (e.g. version number change or compiler warnings ).  After changing the
+project options, you should invoke "make clean" or "rebuild all" to compile your project with the new options.  Please mind that
+debugging is only available if the project options are set to create debugging information, the amount can be set with the debug
+level (0-3). If you add functions that belong to a library that is not included in the linker flags, your program will not link
+correctly if those are not updated, so keep track of your library linking.
+<P>
+<H3><A NAME="ss8.9">8.9 Compiler Options</A>
+</H3>
+
+<P>
+<H3><A NAME="ss8.10">8.10 Compiler Warnings</A>
+</H3>
+
+<P>
+<H3><A NAME="ss8.11">8.11 Linker Options</A>
+</H3>
 
 <P>
 <P>

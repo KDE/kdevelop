@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: The Helpsystem</TITLE>
+<TITLE>The User Manual to KDevelop: Working with the Editor</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,37 +18,55 @@
 <A HREF="index-6.html">Previous</A>
 <A HREF="index.html#toc7">Table of Contents</A>
 </P>
-<H3><A NAME="The Helpsystem"></A> <A NAME="s7">7. The Helpsystem</A></H3>
+<H3><A NAME="Working with the Editor"></A> <A NAME="s7">7. Working with the Editor</A></H3>
 
-<P>Quickhelp, Status messages, "What's this ?"
-<P>For Version 0.3 of KDevelop, we integrated an extending statusbar message system, displaying statushelp for menubar entries and
-process status for each selected function. The statusbar always shows you what KDevelop is doing. Furthermore, the statusbar shows
-the mode of the insert / overwrite key as well as displaying line and comlumn position of the cursor in the editwindow. Dialog
-fields offer quickhelp by right mouse button click so you don't have to worry about searching functions in the documentation.
-Also, the "What's this ?" button on the far right of the toolbar offers help window for the main working view. Just push the
-"What's this ?" button and click on the item you want to have a descriptive help for.
-<P>
-<H3><A NAME="ss7.1">7.1 Using the Documentation Browser</A>
+<H3><A NAME="ss7.1">7.1 Editor</A>
 </H3>
 
-<P>The documentation browser allows quick and easy access to all manuals and documentations, including a search utility that is also
-present in the editors.
-<P>Accessing Help functionality:
-<UL>
-<LI>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for.  Then
-press the right mouse button and select look up: "expression" .This can also be done by selectin "Search Marked Text" from the
-help menu, the shorcut key F3 or by selecting the Search icon from the toolbar.
-</LI>
-<LI>in the Documentation browser select the text you want to look up and press the right mouse button, select look
-up:"expression" or select "Search Marked Text" or the search icon as above.
-</LI>
-<LI>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
-on..." icon from the toolbar, opening a search dialog where you can enter the expression you search for.</LI>
-</UL>
+<P>The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
+The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
+<P><B>Edit Options:</B>
+<P><B>Auto Indent:</B>                                                                  this sets the edior to place the cursor below the first literal when a new line is entered.
+<P><B>Backspace Indent:</B>                                                     this option sets the cursor below the first literal of the line above when backspace is pressed.
+<P><B>Word Wrap:</B>                                                                            words are taken into the next line after the column set in "Wrap Words At:"
+<P><B>Replace Tabs:</B>                                                                 tabulators in the current text are replaced with tabulators of the "Tab Width:" value
+<P><B>Remove Trailing Spaces:</B>                               removes trailing spaces
+<P><B>Wrap Cursor:</B>                                                                  sets the cursor to the end of the last line when backspace enters the beginning of a line
+<P><B>Auto Brackets:</B>                                                                creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+<P><B>Select Options:</B>
+<P><B>Persistent Selections:</B>        selections made stay marked after setting the cursor to a different place
+<P><B>Multiple Selections:</B>          allows multiple independent selections within the text
+<P><B>Vertical Selections:</B>          when selecting multiple lines, the selection is also made horizontal and doesn't cover the
+whole line
+<B>Delete On Input:</B>              deletes a selection when writing in the selection.
+<P><B>Toggle Old:</B>                   allows only one selection. A selection made gets deselected when another selection is made.
+<P><B>Wrap Words At:</B>                sets the maximum
+<P>
+<P>
+<H3><A NAME="ss7.2">7.2 Editor Colors</A>
+</H3>
 
-Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu entries.
+<P>The editor allows to configure the general view of the editing field by choosing colors for:
+<UL>
+<LI> background:              the editor's background</LI>
+<LI> text background:           the background of displayed text</LI>
+<LI> selected:                the color of selected text to display the selection</LI>
+<LI> found:                   the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
+<LI> selected + found:        the color of text selected to search for and found</LI>
+</UL>
 <P>
+<H3><A NAME="ss7.3">7.3 Editor Defaults</A>
+</H3>
+
+<P>The Editor Defaults dialog lets you configure the default values for language items such as keywords etc. and the default font
+style.  When setting up the syntax highlighting (see below), those default values can be used to configure standard values
+configured here.
 <P>
+<H3><A NAME="ss7.4">7.4 Syntax-Highlighting</A>
+</H3>
+
+<P>The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
+To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
 <P>
 <P>
 <P ALIGN="RIGHT">
