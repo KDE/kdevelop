@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = src 
+SUBDIRS = src include
 
 ####### kdevelop will overwrite this part!!! (end)############
-EXTRADIST = include res
+EXTRADIST = res
