@@ -1,3 +1,6 @@
+2002-10-31  F@lk Brettschneider <falk@kdevelop.org>
+    * Applied a modified version of Tim Alley's patch to make jump-to-error work on Red Hat 8.0 again
+
 2002-10-30  F@lk Brettschneider <falk@kdevelop.org>
     * Aber einen hammer noch!!! :-)
       bugfix: jump-to-error repaired for German translation of gmake's output
