@@ -18,7 +18,7 @@
   <configurations>
    <default>
     <mainsource>src/$APPNAMELC$.pp</mainsource>
-    <compiler>FpcOptions</compiler>
+    <compiler>kdevfpcoptions</compiler>
     <compileroptions>-vr</compileroptions>
     <compilerexec>fpc</compilerexec>
    </default>

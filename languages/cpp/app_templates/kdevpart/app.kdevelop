@@ -25,17 +25,17 @@
      <configurations>
       <optimized>
         <builddir>optimized</builddir>
-        <ccompiler>GccOptions</ccompiler>
-        <cxxcompiler>GppOptions</cxxcompiler>
-        <f77compiler>G77Options</f77compiler>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
         <builddir>debug</builddir>
-        <ccompiler>GccOptions</ccompiler>
-        <cxxcompiler>GppOptions</cxxcompiler>
-        <f77compiler>G77Options</f77compiler>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
       </debug>
     </configurations>
