@@ -1,4 +1,4 @@
-2003-02-12  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+2003-02-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * lib/structure:
 	  - fix: Trie_Impl apply() should apply only to non_empty
 	    components
