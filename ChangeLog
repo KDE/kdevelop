@@ -1,3 +1,9 @@
+2003-05-16 Alexander Dymo <cloudtemple@mksat.net>
+    * Added sourceFormatter() method to KDevPlugin interface and corrected AStylePart to be
+      the default source formatter part. Astyle library is separated from the part.
+    * Added "Format Source" option to the "C++ New Class" wizard.
+    * Added an index system to the doctreeview - thanks to Marcel Turino <M.Turino@gmx.de>.
+
 2003-05-16 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
     * Trollproject: Support for custom installation groups or qmake install objects
       Each install object tells "make install" to copy user specified filesgroups to
