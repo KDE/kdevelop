@@ -117,6 +117,7 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
 
 KActionSelector::~KActionSelector()
 {
+		delete d;
 }
 
 //END Constructor/destroctor
