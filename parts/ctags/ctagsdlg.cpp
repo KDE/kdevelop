@@ -19,6 +19,7 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qtextstream.h>
+#include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -453,7 +454,7 @@ void CTagsDialog::slotSearch()
         QRegExp re("^" + tag_edit->text() + "$");
         QDictIterator<CTagsTagInfoList> it(*m_tags);
         for (; it.current(); ++it)
-            if (re.find(it.currentKey(), 0) != -1)
+            if (re.search(it.currentKey(), 0) != -1)
                 insertResult(it.current(), kindStringList);
     } else {
         // Do the exact search
