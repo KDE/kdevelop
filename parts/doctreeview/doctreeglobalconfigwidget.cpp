@@ -96,12 +96,29 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     urlDownload->setURL("http://lidn.sourceforge.net");
     connect(urlDownload, SIGNAL(leftClickedURL(const QString&)), kapp,
         SLOT(invokeBrowser(const QString&)));
+/*
     connect(extListView, SIGNAL(executed( QListViewItem *)), this,
             SLOT( extEdit()));
     connect(bListView, SIGNAL(executed( QListViewItem *)), this,
             SLOT(  pushEdit_clicked()));
     connect(dhListView, SIGNAL(executed( QListViewItem *)), this,
             SLOT(  dhEditButton_clicked()));
+*/
+#if QT_VERSION >= 0x030200
+    connect(extListView, SIGNAL( doubleClicked( QListViewItem *, const QPoint&, int ) ), this,
+            SLOT( extEdit()));
+    connect(bListView, SIGNAL( doubleClicked( QListViewItem *, const QPoint&, int ) ), this,
+            SLOT(  pushEdit_clicked()));
+    connect(dhListView, SIGNAL( doubleClicked( QListViewItem *, const QPoint&, int ) ), this,
+            SLOT(  dhEditButton_clicked()));
+#else
+    connect(extListView, SIGNAL( doubleClicked( QListViewItem * ) ), this,
+            SLOT( extEdit()));
+    connect(bListView, SIGNAL( doubleClicked( QListViewItem * ) ), this,
+            SLOT(  pushEdit_clicked()));
+    connect(dhListView, SIGNAL( doubleClicked( QListViewItem * ) ), this,
+            SLOT(  dhEditButton_clicked()));
+#endif
 
 }
 
