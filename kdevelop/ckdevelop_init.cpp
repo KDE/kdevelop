@@ -58,7 +58,8 @@
 #include "editorview.h"
 #include "docbrowserview.h"
 #include "kdevelopifaceimpl.h"
-
+#include "dlgedit/widgetspropsplitview.h"
+#include "dlgedit/dlgedit.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -120,6 +121,7 @@ void CKDevelop::initView(){
   messages_widget = new MakeView(o_tab_view, "messages_widget");
   grepview = new GrepView(o_tab_view, "grepview");
   outputview = new OutputView(o_tab_view, "outputview");
+  
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(grepview, i18n("search"));
@@ -150,27 +152,35 @@ void CKDevelop::initView(){
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
+  widprop_split_view = new WidgetsPropSplitView(t_tab_view,"DLG");
+  
   t_tab_view->addTab(class_tree,i18n("CV"));
   t_tab_view->addTab(log_file_tree,i18n("LFV"));
   t_tab_view->addTab(real_file_tree,i18n("RFV"));
   t_tab_view->addTab(doc_tree,i18n("DOC"));
+  t_tab_view->addTab(widprop_split_view,i18n("DLG"));
 
   ////////////////////////
   // Right main window
   ////////////////////////
-
+  
   mdi_main_frame = new MdiFrame( this, "mdi_frame");
   // maybe we should make this configurable :-)
   mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
 
+
+  // the dialog editor manager
+  dlgedit = new DlgEdit(widprop_split_view->getWidgetsView(),widprop_split_view->getPropertyView());
+  
+  
 #warning FIXME should we swallow tools in KDevelop 2??
   //  swallow_widget = new KSwallowWidget(t_tab_view);
   //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
-    
-//  swallow_widget = new KSwallowWidget(s_tab_view);
-//  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
-
-
+  
+  //  swallow_widget = new KSwallowWidget(s_tab_view);
+  //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
+  
+  
   ComponentManager *manager = ComponentManager::self();
   manager->registerComponent(class_tree);
   manager->registerComponent(log_file_tree);
@@ -184,9 +194,9 @@ void CKDevelop::initView(){
   //
   // dock the 2 base widgets
   //
-  dockIn(dockbase_o_tab_view,DockBottom);
+  
   dockIn(dockbase_t_tab_view,DockLeft);
-
+  dockIn(dockbase_o_tab_view,DockBottom);
   // set the mainwidget
   setView(mdi_main_frame);
   initKeyAccel();
@@ -196,8 +206,8 @@ void CKDevelop::initView(){
 
   initToolBar();
   initStatusBar();
-
-	//
+  
+  //
 	// open the documentation browser view on default
 	//   (just open it when the menubar is up)
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
@@ -521,6 +531,12 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(BarIcon("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
 
+  view_menu->insertSeparator();
+  view_menu->insertItem(i18n("&Preview dialog"),dlgedit,
+			SLOT(slotViewPreview()),0,ID_VIEW_PREVIEW);
+  view_menu->insertItem(i18n("&Grid..."),dlgedit,
+			SLOT(slotViewGridDlg()),0,ID_VIEW_GRID_DLG);
+  
   kdev_menubar->insertItem(i18n("&View"), view_menu);
   
 

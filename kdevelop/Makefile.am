@@ -16,7 +16,7 @@
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins widgets 
+SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins widgets dlgedit
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -52,7 +52,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 kdevelop_LDADD   = ./widgets/dockwidgets/libdockwidgets.a ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a \
-	./classparser/libclassparser.a ./classwizard/libclasswizard.a \
+	./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dlgedit/libdlgedit.a \
 	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 
 
 # this option you can leave out. Just, if you use "make dist", you need it

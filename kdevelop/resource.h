@@ -251,7 +251,7 @@
 #define ID_KDLG_VIEW_STATUSBAR      20240
 
 #define ID_KDLG_VIEW_REFRESH        20250
-#define ID_KDLG_VIEW_GRID           20255
+#define ID_VIEW_GRID_DLG           20255
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-Tools-menu-entries

@@ -108,8 +108,8 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Preview dialog"),kdlgedit,
 			   SLOT(slotViewPreview()),0,ID_VIEW_PREVIEW);
-  kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
-			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
+  //  kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
+  //			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
 
   kdlg_menubar->insertItem(i18n("&View"), kdlg_view_menu);
 

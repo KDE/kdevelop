@@ -60,6 +60,8 @@ class MdiFrame;
 class QextMdiChildView;
 class EditorView;
 class DocBrowserView;
+class WidgetsPropSplitView;
+class DlgEdit;
 
 #include "component.h"
 #include "ctabctl.h"
@@ -698,7 +700,7 @@ private:
   /** main class for the dialogeditor- 
    *  handles menu/toolbar etc. events specified for the dialogeditor. */
   KDlgEdit* kdlgedit;
-  
+  DlgEdit* dlgedit;
   /** If this to true, the user get a beep after a 
    *  process,slotProcessExited() */
   bool beep; 
@@ -740,6 +742,7 @@ private:
   EditorView* editor_view;
   DocBrowserView* browser_view;
 
+
   
   //  CEditWidget* edit_widget; // a pointer to the actual editwidget
   //  CEditWidget* header_widget; // the editwidget for the headers/resources
@@ -755,6 +758,8 @@ private:
   CRealFileView* real_file_tree;
   /** The documentation tree. */
   DocTreeView* doc_tree;
+  /** splitview, contains a WidgetsView and a PropertyView */
+  WidgetsPropSplitView*  widprop_split_view;
   
   /** Output from the compiler ... */
   MakeView *messages_widget;

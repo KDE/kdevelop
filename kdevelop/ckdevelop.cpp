@@ -77,6 +77,8 @@
 #include "docbrowserview.h"
 #include "componentmanager.h"
 #include "fileclosealldlg.h"
+#include "dlgedit/dialogview.h"
+#include "dlgedit/dlgedit.h"
 
 
 
@@ -2281,82 +2283,87 @@ void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
 
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     editor_view = 0;
-    if ( item->inherits("EditorView"))
-	editor_view =  static_cast<EditorView*>(item);
-   
     int type = CPP_HEADER;
-    if(editor_view !=0) {
-	type = CProject::getType(editor_view->currentEditor()->getName());
-    }
-
-    if (editor_view != 0){
-	enableCommand(ID_FILE_SAVE_AS);
-	enableCommand(ID_FILE_CLOSE);
-	
-	enableCommand(ID_FILE_PRINT);
-	
-	QString text=QApplication::clipboard()->text();
-	if(text.isEmpty())
-	    disableCommand(ID_EDIT_PASTE);
-	else
-	    enableCommand(ID_EDIT_PASTE);
-	
-	enableCommand(ID_EDIT_INSERT_FILE);
-	enableCommand(ID_EDIT_SEARCH);
-	enableCommand(ID_EDIT_REPEAT_SEARCH);
-	enableCommand(ID_EDIT_REPLACE);
-	enableCommand(ID_EDIT_SPELLCHECK);
-	enableCommand(ID_EDIT_INDENT);
-	enableCommand(ID_EDIT_UNINDENT);
-	enableCommand(ID_EDIT_SELECT_ALL);
-	enableCommand(ID_EDIT_DESELECT_ALL);
-	enableCommand(ID_EDIT_INVERT_SELECTION);
-
-
-	slotNewUndo();
-	slotNewStatus();
-	slotNewLineColumn();
-
-    }
     
-    if (type == CPP_HEADER){
+    if ( item->inherits("EditorView")){
+      editor_view =  static_cast<EditorView*>(item);
+      type = CProject::getType(editor_view->currentEditor()->getName());
+      enableCommand(ID_FILE_SAVE_AS);
+      enableCommand(ID_FILE_CLOSE);
+      
+      enableCommand(ID_FILE_PRINT);
+      
+      QString text=QApplication::clipboard()->text();
+      if(text.isEmpty())
+	disableCommand(ID_EDIT_PASTE);
+      else
+	enableCommand(ID_EDIT_PASTE);
+      
+      enableCommand(ID_EDIT_INSERT_FILE);
+      enableCommand(ID_EDIT_SEARCH);
+      enableCommand(ID_EDIT_REPEAT_SEARCH);
+      enableCommand(ID_EDIT_REPLACE);
+      enableCommand(ID_EDIT_SPELLCHECK);
+      enableCommand(ID_EDIT_INDENT);
+      enableCommand(ID_EDIT_UNINDENT);
+      enableCommand(ID_EDIT_SELECT_ALL);
+      enableCommand(ID_EDIT_DESELECT_ALL);
+      enableCommand(ID_EDIT_INVERT_SELECTION);
+      
+      
+      slotNewUndo();
+      slotNewStatus();
+      slotNewLineColumn();
+
+      int state;
+      state = editor_view->currentEditor()->undoState();
+      //undo
+      if(state & 1)
+	enableCommand(ID_EDIT_UNDO);
+      else
+	disableCommand(ID_EDIT_UNDO);
+      //redo
+      if(state & 2)
+	enableCommand(ID_EDIT_REDO);
+      else
+	disableCommand(ID_EDIT_REDO);
+      
+      slotMarkStatus();
+
+
+      if (type == CPP_HEADER){
 	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-	    if ( bDefaultCV)
-		t_tab_view->setCurrentTab(CV);
-	    else
-		t_tab_view->setCurrentTab(LFV);
+	  if ( bDefaultCV)
+	    t_tab_view->setCurrentTab(CV);
+	  else
+	    t_tab_view->setCurrentTab(LFV);
 	}
 	disableCommand(ID_BUILD_COMPILE_FILE);
-    }
-    if (type == CPP_SOURCE){
+      }
+      if (type == CPP_SOURCE){
 	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-	    if ( bDefaultCV)
-		t_tab_view->setCurrentTab(CV);
-	    else
-		t_tab_view->setCurrentTab(LFV);
+	  if ( bDefaultCV)
+	    t_tab_view->setCurrentTab(CV);
+	  else
+	    t_tab_view->setCurrentTab(LFV);
 	}
 	cerr << "CPP_SOURCE\n";
 	if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
-	    enableCommand(ID_BUILD_COMPILE_FILE);
+	  enableCommand(ID_BUILD_COMPILE_FILE);
 	}
+      }
     }
     
-    if (editor_view != 0){
-	int state;
-	state = editor_view->currentEditor()->undoState();
-	//undo
-	if(state & 1)
-	    enableCommand(ID_EDIT_UNDO);
-	else
-	    disableCommand(ID_EDIT_UNDO);
-	//redo
-	if(state & 2)
-	    enableCommand(ID_EDIT_REDO);
-	else
-	    disableCommand(ID_EDIT_REDO);
-	
-	slotMarkStatus();
-       
+    
+    
+    // Dialog Views --------------------------------------------
+
+    if ( item->inherits("DialogView")){
+      DialogView* dialog_view = static_cast<DialogView*>(item);
+      // TODO
+      dlgedit->setCurrentDialogWidget(dialog_view->dialogWidget());
+      
+      
     }
     
     if(browser_view == item){ // browser selected TODO tools
@@ -2690,7 +2697,7 @@ void CKDevelop::statusCallback(int id_){
 	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables / disables the statusbar"))
 
 	ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,											i18n("Refreshes current view"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_GRID,												i18n("Sets the grid size of the editing widget grid snap"))
+	ON_STATUS_MSG(ID_VIEW_GRID_DLG,												i18n("Sets the grid size of the editing widget grid snap"))
 
 	// LFV popups
 	ON_STATUS_MSG(ID_LFV_NEW_GROUP,													i18n("Lets you create a new logical file group"))

@@ -39,6 +39,8 @@
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 #include "editorview.h"
+#include "dlgedit/dialogview.h"
+#include "dlgedit/dialogwidget.h"
 #include "mdiframe.h"
 
 #include "./kwrite/kwdoc.h"
@@ -266,6 +268,9 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
+/** one of the most important methods in KDevelop, 
+    it creats new dialog/editor views if needed, otherwise set the focus
+*/
 void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModifiedBox){
     
     cerr << "enter switchtofile\n";
@@ -277,11 +282,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
     return;
   }
 
-  if(filename.right(8) == ".kdevdlg"){
-    switchToKDlgEdit();
-    kdlgedit->slotOpenDialog(filename);
-    return;
-  }
+  
   
   // load kiconedit if clicked/loaded  an icon
   if((filename).right(4) == ".xpm"){
@@ -333,11 +334,54 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 //     swallow_widget->init();
     return;
   }
+  
+  // dialog view (MDI)--------------------------------------------
+  cerr << "filename:" << filename << endl;
+  if((filename).right(8) == ".kdevdlg"){
+      
+      QList<QextMdiChildView> dlgviews = mdi_main_frame->childrenOfType("DialogView");
+      QListIterator<QextMdiChildView> it(dlgviews);
+      for (; it.current(); ++it) {
+	  DialogView *tmp_dlg_view = static_cast<DialogView*>(it.current());
+	  if (tmp_dlg_view->dialogWidget()->fileName() == filename ) {
+	      tmp_dlg_view->setFocus();
+	      return;
+	  }
+      }
 
+      // new dialog view
+      QextMdiChildView*act_win = mdi_main_frame->activeWindow () ;
+      bool maximize = false;
+      if(act_win != 0){
+	  maximize = act_win->isMaximized();
+      }
+      QFileInfo fileinfo(filename);
+      DialogView* new_dialogview = new DialogView(mdi_main_frame,QFileInfo(filename).fileName());
+      new_dialogview->dialogWidget()->openDialog(filename);
+      
+      //connections
+      connect(new_dialogview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
+      // default view size is 3/4 of mdi mainframe
+      new_dialogview->resize(int(double(mdi_main_frame->width()*3)/4.0),
+			     int(double(mdi_main_frame->height()*3)/4.0) );  
+  
+#warning FIXME size handling when adding MDI views
+      mdi_main_frame->addWindow( new_dialogview,  // the view pointer
+				 true,            // show it
+				 true,            // attach it
+				 true,            // show it maximized
+				 0);              // initial geometry rectangle, 0 means minimumSize()
+      if(maximize){
+	  new_dialogview->maximize(true);
+      }
+      new_dialogview->setFocus();
+      return;
+  }
+  
  
 
 
-  // and now MDI
+  // and now editor MDI----------------------------------------------------
   cerr << "filename:" << filename << endl;
   QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
   QListIterator<QextMdiChildView> it(editorviews);
