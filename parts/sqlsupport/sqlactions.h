@@ -22,10 +22,11 @@ using namespace KDevCompat;
 #endif
 
 class SQLSupportPart;
-class QComboBox;
+class KComboBox;
 
 class SqlListAction : public KWidgetAction
 {
+    Q_OBJECT
 public:
     SqlListAction( SQLSupportPart *part, const QString &text, const KShortcut& cut,
                      const QObject *receiver, const char *slot,
@@ -34,9 +35,12 @@ public:
     QString currentConnectionName() const;
     void refresh();
 
+private slots:
+    void activated(int);
+
 private:
     SQLSupportPart *m_part;
-    QComboBox* m_combo;
+    KComboBox* m_combo;
 };
 
 #endif

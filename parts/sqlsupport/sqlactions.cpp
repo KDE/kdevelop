@@ -12,7 +12,6 @@
 #include "sqlactions.h"
 
 #include <qpopupmenu.h>
-#include <qcombobox.h>
 #include <qstringlist.h>
 #include <qsqldatabase.h>
 
@@ -20,6 +19,7 @@
 #include <klocale.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
+#include <kcombobox.h>
 
 #include "kdevplugin.h"
 #include "kdevlanguagesupport.h"
@@ -29,7 +29,7 @@ SqlListAction::SqlListAction(SQLSupportPart *part, const QString &text,
 				 const KShortcut& cut,
                                  const QObject *receiver, const char *slot,
                                  KActionCollection *parent, const char *name)
-    : KWidgetAction( m_combo = new QComboBox(), text, cut, 0, 0, parent, name), m_part(part)
+    : KWidgetAction( m_combo = new KComboBox(), text, cut, 0, 0, parent, name), m_part(part)
 {
 #if (QT_VERSION >= 0x030100)
     m_combo->setEditable( false );
@@ -40,6 +40,7 @@ SqlListAction::SqlListAction(SQLSupportPart *part, const QString &text,
     m_combo->setMaximumWidth( 400 );
 
     connect( m_combo, SIGNAL(activated(const QString&)), receiver, slot );
+    connect( m_combo, SIGNAL(activated(int)), this, SLOT(activated(int)) );
 
     setShortcutConfigurable( false );
     setAutoSized( true );
@@ -65,6 +66,14 @@ QString SqlListAction::currentConnectionName() const
     return m_part->connections()[ m_combo->currentItem() - 1 ];
 }
 
+void SqlListAction::activated(int idx)
+{
+    if (idx < 1 || (int)m_part->connections().count() <= idx)
+        return;
+    const QSqlDatabase *db = QSqlDatabase::database(m_part->connections()[idx], true);
+    m_combo->changeItem( db->isOpen() ? SmallIcon( "ok" ) : SmallIcon( "no" ), 
+                         m_combo->text(idx), idx );
+}
 
 void SqlListAction::refresh()
 {
