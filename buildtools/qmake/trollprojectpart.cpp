@@ -221,7 +221,7 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"));
     RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject", buildDirectory(), vbox);
-    
+
     vbox = dlg->addVBoxPage(i18n("Make Options"));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
@@ -240,8 +240,8 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
     if (DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio") == "" ) {
         DomUtil::writeEntry(dom, "/kdevtrollproject/run/directoryradio", "executable");
     }
-    
-    KDevProject::openProject( dirName, projectName );    
+
+    KDevProject::openProject( dirName, projectName );
 }
 
 
@@ -395,15 +395,15 @@ void TrollProjectPart::removeFile(const QString & /* fileName */)
     /// \FIXME
 /*	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->removeFiles ( fileList );*/
 }
 
 void TrollProjectPart::removeFiles ( const QStringList& fileList )
 {
 /// \FIXME missing remove files functionality
-// 	QStringList::ConstIterator it;	
-// 	
+// 	QStringList::ConstIterator it;
+//
 // 	it = fileList.begin();
 //
 // 	for ( ; it != fileList.end(); ++it )
@@ -563,8 +563,32 @@ QStringList TrollProjectPart::availableQtDirList() const
     return lst;
 }
 
-#include "trollprojectpart.moc"
+QStringList recursiveProFind( const QString &currDir, const QString &baseDir )
+{
+	kdDebug() << "Dir " << currDir << endl;
+	QStringList fileList;
 
+	if( !currDir.contains( "/..") && !currDir.contains("/.") )
+	{
+		QDir dir(currDir);
+		QStringList dirList = dir.entryList(QDir::Dirs );
+		QStringList::Iterator idx = dirList.begin();
+		for( ; idx != dirList.end(); ++idx )
+		{
+			fileList += recursiveProFind( currDir + "/" + (*idx),baseDir );
+		}
+		QStringList newFiles = dir.entryList("*.pro *.PRO");
+		idx = newFiles.begin();
+		for( ; idx != newFiles.end(); ++idx )
+		{
+			QString file = currDir + "/" + (*idx);
+			fileList.append( file.remove( baseDir ) );
+		}
+	}
+
+
+	return fileList;
+}
 
 /*!
     \fn TrollProjectPart::distFiles() const
@@ -574,7 +598,11 @@ QStringList TrollProjectPart::distFiles() const
 	QStringList sourceList = allFiles();
 	// Scan current source directory for any .pro files.
 	QString projectDir = projectDirectory();
-	QDir dir(projectDir);
-	QStringList files = dir.entryList( "*.pro *.PRO Makefile");
+	QStringList files = recursiveProFind( projectDir, projectDir + "/" );
 	return sourceList + files;
 }
+
+#include "trollprojectpart.moc"
+
+
+
