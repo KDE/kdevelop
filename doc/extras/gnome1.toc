@@ -338,5 +338,87 @@
     <tocsect3 name="GnomeProcBar" url="gnomeui/gnomeprocbar.html"/>
   </tocsect2>
 </tocsect1>
+<tocsect1 name="Bonobo" url="bonobo/book1.html">
+  <tocsect2 name="Core Bonobo" url="bonobo/bonobo-core.html">
+    <tocsect3 name="Core Bonobo Objects" url="bonobo/bonobo-core.html#BONOBO-CORE-OBJECT">
+      <tocsect4 name="BonoboObject" url="bonobo/bonobo-bonobo-object.html"/>
+      <tocsect4 name="BonoboXObject" url="bonobo/bonobo-bonobo-xobject.html"/>
+      <tocsect4 name="bonobo-main" url="bonobo/bonobo-bonobo-main.html"/>
+    </tocsect3>
+    <tocsect3 name="Object Activation and Lifecycle" url="bonobo/bonobo-object-activation.html">
+      <tocsect4 name="bonobo-context" url="bonobo/bonobo-bonobo-context.html"/>
+      <tocsect4 name="bonobo-moniker-util" url="bonobo/bonobo-bonobo-moniker-util.html"/>
+      <tocsect4 name="BonoboObjectClient" url="bonobo/bonobo-bonobo-object-client.html"/>
+      <tocsect4 name="BonoboGenericFactory" url="bonobo/bonobo-bonobo-generic-factory.html"/>
+      <tocsect4 name="bonobo-exception" url="bonobo/bonobo-bonobo-exception.html"/>
+    </tocsect3>
+    <tocsect3 name="Properties" url="bonobo/bonobo-properties.html">
+      <tocsect4 name="BonoboPropertyBag" url="bonobo/bonobo-bonobo-property-bag.html"/>
+      <tocsect4 name="bonobo-property-bag-client" url="bonobo/bonobo-bonobo-property-bag-client.html"/>
+      <tocsect4 name="bonobo-arg" url="bonobo/bonobo-bonobo-arg.html"/>
+      <tocsect4 name="bonobo-property-bag-xml" url="bonobo/bonobo-bonobo-property-bag-xml.html"/>
+      <tocsect4 name="BonoboTransient" url="bonobo/bonobo-bonobo-transient.html"/>
+    </tocsect3>
+    <tocsect3 name="Notification and EventSources" url="bonobo/bonobo-notification.html">
+      <tocsect4 name="bonobo-event-source" url="bonobo/bonobo-bonobo-event-source.html"/>
+      <tocsect4 name="bonobo-listener" url="bonobo/bonobo-bonobo-listener.html"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="Storage and Persistance" url="bonobo/bonobo-storage.html">
+    <tocsect3 name="bonobo-storage" url="bonobo/bonobo-bonobo-storage.html"/>
+    <tocsect3 name="BonoboStream" url="bonobo/bonobo-bonobo-stream.html"/>
+    <tocsect3 name="BonoboStreamMem" url="bonobo/bonobo-bonobo-stream-memory.html"/>
+    <tocsect3 name="BonoboPersist" url="bonobo/bonobo-bonobo-persist.html"/>
+    <tocsect3 name="BonoboPersistFile" url="bonobo/bonobo-bonobo-persist-file.html"/>
+    <tocsect3 name="BonoboPersistStream" url="bonobo/bonobo-bonobo-persist-stream.html"/>
+    <tocsect3 name="bonobo-stream-client" url="bonobo/bonobo-bonobo-stream-client.html"/>  
+    <tocsect3 name="bonobo-storage-plugin" url="bonobo/bonobo-bonobo-storage-plugin.html"/>
+  </tocsect2>
+  <tocsect2 name="Controls" url="bonobo/bonobo-controls.html">
+    <tocsect3 name="BonoboControl" url="bonobo/bonobo-bonobo-control.html"/>
+    <tocsect3 name="BonoboControlFrame" url="bonobo/bonobo-bonobo-control-frame.html"/>
+    <tocsect3 name="BonoboPropertyControl" url="bonobo/bonobo-bonobo-property-control.html"/>  
+  </tocsect2>
+  <tocsect2 name="Bonobo Compound Documents" url="bonobo/bonobo-documents.html">
+    <tocsect3 name="Model interfaces" url="bonobo/bonobo-documents.html#BONOBO-EMBEDDABLE">
+      <tocsect4 name="BonoboClientSite" url="bonobo/bonobo-bonobo-client-site.html"/>
+      <tocsect4 name="BonoboEmbeddable" url="bonobo/bonobo-bonobo-embeddable.html"/>
+      <tocsect4 name="BonoboItemContainer" url="bonobo/bonobo-bonobo-item-container.html"/>
+    </tocsect3>
+    <tocsect3 name="View interfaces" url="bonobo/bonobo-view.html">
+      <tocsect4 name="BonoboView" url="bonobo/bonobo-bonobo-view.html"/>
+      <tocsect4 name="BonoboViewFrame" url="bonobo/bonobo-bonobo-view-frame.html"/>
+      <tocsect4 name="BonoboCanvasItem" url="bonobo/bonobo-bonobo-canvas-item.html"/>
+      <tocsect4 name="BonoboCanvasComponent" url="bonobo/bonobo-bonobo-canvas-component.html"/>
+    </tocsect3>
+    <tocsect3 name="Printing" url="bonobo/bonobo-print.html">
+      <tocsect4 name="BonoboPrint" url="bonobo/bonobo-bonobo-print.html"/>
+      <tocsect4 name="BonoboPrintClient" url="bonobo/bonobo-bonobo-print-client.html"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="Bonobo UI" url="bonobo/bonobo-ui.html">
+    <tocsect3 name="BonoboWidget" url="bonobo/bonobo-bonobo-widget.html"/>
+    <tocsect3 name="BonoboWindow" url="bonobo/bonobo-bonobo-win.html"/>
+    <tocsect3 name="BonoboUIComponent" url="bonobo/bonobo-bonobo-ui-component.html"/>
+    <tocsect3 name="BonoboUIContainer" url="bonobo/bonobo-bonobo-ui-container.html"/>
+    <tocsect3 name="bonobo-ui-util" url="bonobo/bonobo-bonobo-ui-util.html"/>
+    <tocsect3 name="bonobo-ui-node" url="bonobo/bonobo-bonobo-ui-node.html"/>
+    <tocsect3 name="BonoboUIEngine" url="bonobo/bonobo-bonobo-ui-engine.html"/>
+    <tocsect3 name="BonoboUISync" url="bonobo/bonobo-bonobo-ui-sync.html"/>
+  </tocsect2>
+  <tocsect2 name="Writing Monikers" url="bonobo/bonobo-moniker-handlers.html">
+    <tocsect3 name="BonoboMoniker" url="bonobo/bonobo-bonobo-moniker.html"/>
+    <tocsect3 name="BonoboMonikerSimple" url="bonobo/bonobo-bonobo-moniker-simple.html"/>
+    <tocsect3 name="BonoboMonikerExtender" url="bonobo/bonobo-bonobo-moniker-extender.html"/>
+    <tocsect3 name="BonoboItemHandler" url="bonobo/bonobo-bonobo-item-handler.html"/>
+  </tocsect2>    
+  <tocsect2 name="Supporting Classes" url="bonobo/bonobo-support-utilities.html">
+    <tocsect3 name="BonoboPlug" url="bonobo/bonobo-bonobo-plug.html"/>
+    <tocsect3 name="BonoboSocket" url="bonobo/bonobo-bonobo-socket.html"/>
+    <tocsect3 name="BonoboWrapper" url="bonobo/bonobo-bonobo-wrapper.html"/>
+    <tocsect3 name="BonoboSelector" url="bonobo/bonobo-bonobo-selector.html"/>
+    <tocsect3 name="bonobo-async" url="bonobo/bonobo-bonobo-async.html"/>
+  </tocsect2>
+</tocsect1>
 </kdeveloptoc>
 
