@@ -1,3 +1,10 @@
+2001-08-08   Sandy Meier  <smeier@kdevelop.org>
+	* the  code completion and arghint works now in many cases (PHP)
+	* added realtimeparser, so the classview is updated while you type :-) (PHP)
+	* fix some problems in arghintWidget 
+	* added textChanged() signal to the editor interface
+	* phpsupport display the parsing progress in the statusbar (code from Matthias)
+
 2001-08-06 Victor Röder <victor_roeder@gmx.de>
 	* Implemented several methods in CppCodeCompletionParser
 		getNode...();
