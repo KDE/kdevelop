@@ -43,7 +43,7 @@ ProjectViewFactory::~ProjectViewFactory()
 QObject *ProjectViewFactory::create(QObject *parent, const char *name,
                               const char *classname, const QStringList &args)
 {
-    kdDebug(9001) << "Building ProjectView" << endl;
+    kdDebug(9009) << "Building ProjectView" << endl;
     
     QObject *obj = new ProjectView(parent, name);
     emit objectCreated(obj);
@@ -59,4 +59,5 @@ KInstance *ProjectViewFactory::instance()
 
     return s_instance;
 }
+
 #include "main.moc"

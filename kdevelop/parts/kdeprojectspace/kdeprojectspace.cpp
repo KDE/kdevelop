@@ -18,7 +18,6 @@
 #include "kdeprojectspace.h"
 #include "main.h"
 #include <kinstance.h>
-#include <iostream.h>
 #include <kiconloader.h>
 #include <ksimpleconfig.h>
 #include <kstddirs.h>
@@ -44,8 +43,9 @@
 
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
-		: AutomakeProjectSpace(parent,name){
-	cerr << "\nKDEProjectSpace created\n";
+		: AutomakeProjectSpace(parent,name)
+{
+	kdDebug(9020) << "KDEProjectSpace created" << endl;
 	
 	setInstance(KDEProjectSpaceFactory::instance());
 
@@ -59,15 +59,15 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 
 
 	setXMLFile("kdevkdeprojectspaceui.rc");
-	//setXMLFile("/home/kde2/kdevelop/kdevelop/parts/kdeprojectspace/kdevkdeprojectspace.rc"); //test
 }
+
 KDEProjectSpace::~KDEProjectSpace(){
 }
 
 void KDEProjectSpace::setupGUI(){
 
   AutomakeProjectSpace::setupGUI(); // set actions for "set active project"
-  cerr << "Building KDEProjectSpace GUI" << endl;
+  kdDebug(9020) << "Building KDEProjectSpace GUI" << endl;
   KAction *pAction;
   pAction = new KAction( i18n("Add new &Translation File..."), "locale", 0, 
 			 this, SLOT( slotProjectAddNewTranslationFile() ),
@@ -161,11 +161,14 @@ void KDEProjectSpace::setupGUI(){
 // slots
 
 void KDEProjectSpace::slotProjectAddNewTranslationFile(){
-  cerr << "\n Add new &Translation File (KDE)... actived";
+    kdDebug(9020) << "Add new &Translation File (KDE)... actived" << endl;
 }
+
+
 void KDEProjectSpace::modifyDefaultFiles(){
   AutomakeProjectSpace::modifyDefaultFiles();
 }
+
 
  /** add the data to the psElement (Projectspace)*/
 bool KDEProjectSpace::writeGlobalConfig(QDomDocument& doc,QDomElement& psElement){
@@ -183,26 +186,29 @@ bool KDEProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement)
   AutomakeProjectSpace::readGlobalConfig(doc,psElement);
   QDomElement kdeElement = psElement.namedItem("KDEProjectSpace").toElement();
   if(kdeElement.isNull()){
-    cerr << "\nKDEProjectSpace::readGlobalConfig not \"KDEProjectSpace\" tag found!";
+    kdDebug(9020) << "KDEProjectSpace::readGlobalConfig not \"KDEProjectSpace\" tag found!" << endl;
     return false;
   }
   else{
-    cerr << "\nKDEProjectSpace::readGlobalConfig  \"KDEProjectSpace\" tag found!";
+    kdDebug(9020) << "KDEProjectSpace::readGlobalConfig  \"KDEProjectSpace\" tag found!" << endl;
   }
   return true;
 }
+
+
 bool KDEProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
   AutomakeProjectSpace::readUserConfig(doc,psElement);
   QDomElement kdeElement = psElement.namedItem("KDEProjectSpace").toElement();
   if(kdeElement.isNull()){
-    cerr << "\nKDEProjectSpace::readUserConfig not \"KDEProjectSpace\" tag found!";
+    kdDebug(9020) << "KDEProjectSpace::readUserConfig not \"KDEProjectSpace\" tag found!" << endl;
     return false;
   }
   else{
-    cerr << "\nKDEProjectSpace::readUserConfig  \"KDEProjectSpace\" tag found!";
+    kdDebug(9020) << "KDEProjectSpace::readUserConfig  \"KDEProjectSpace\" tag found!" << endl;
   }
   return true;
 }
+
 
 KAboutData* KDEProjectSpace::aboutPlugin(){
   if (m_pAboutData == 0){

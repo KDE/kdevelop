@@ -17,7 +17,6 @@
  ***************************************************************************/
 // 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
 
-#include <iostream.h>
 #include <qstring.h>
 #include <qregexp.h>
 #include <qfile.h>
@@ -1174,7 +1173,7 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
   	  if (scope->path())        // Don't produce bad class names
   	    path = scope->path() + "." + path;
   	
-      cout << "scope path is " << path << endl;
+      kdDebug(9007) << "scope path is " << path << endl;
       aClass = store->getClassByName( path );
       if( aClass != NULL)
       {
@@ -1821,7 +1820,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 
         aClass->setDeclaredInScope( classPath );
 
-        cout << "Storing class with path: " << aClass->path() << endl;
+        kdDebug(9007) << "Storing class with path: " << aClass->path() << endl;
         
         // Check if class is in the global store, add it if missing
         if( store->hasClass( aClass->path() ) ) {

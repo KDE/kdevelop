@@ -15,7 +15,6 @@
 #include <kglobal.h>
 #include <kpopupmenu.h>
 #include "projecttreewidget.h"
-#include <iostream.h>
 #include <qheader.h>
 #include <qregexp.h>
 #include <kmimetype.h>
@@ -24,6 +23,7 @@
 #include <qfont.h>
 #include <qpopupmenu.h>
 #include <kaction.h>
+#include <kdebug.h>
 #include "projectview.h"
 
 
@@ -41,8 +41,9 @@ ProjectTreeWidget::ProjectTreeWidget(ProjectView *pPart)
 ProjectTreeWidget::~ProjectTreeWidget()
 {}
 
+
 void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoint& p,int){
-  cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::slotRightButtonPressed" << endl;
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
   QPopupMenu* pPopUp = createPopup(pPItem);
   if(pPopUp){
@@ -50,8 +51,10 @@ void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoi
   }
   delete pPopUp;
 }
+
+
 void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
-  cerr << "kdevelop (projectview): ProjectTreeWidget::slotDoubleClicked" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::slotDoubleClicked" << endl;
   if(pItem == 0) return;
 
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
@@ -62,14 +65,17 @@ void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
   }
 }
 
+
 void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
-  cerr << "kdevelop (projectview): ProjectTreeWidget::setProjectSpace" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::setProjectSpace" << endl;
   m_pProjectSpace = pProjectSpace;
   if(m_projectFileGroups.isEmpty()){ // there was no ProjectView tag in the projectfile
     createDefaultFileGroups();
   }
   refresh();
 }
+
+
 void ProjectTreeWidget::refresh(){
   clear();
   ProjectItem* pProjectItem =0;
@@ -101,7 +107,7 @@ void ProjectTreeWidget::refresh(){
   
   
   for(pProject=pProjects->first();pProject !=0;pProject=pProjects->next()){ // projects
-    cerr << "kdevelop (projectview): project found" << endl;
+    kdDebug(9009) << "Project found" << endl;
     pProjectItem = new ProjectItem(pProjectSpaceItem);
     pProjectItem->setText(0,pProject->name() + " files");
     pProjectItem->setPixmap(0,projectPixmap);
@@ -156,8 +162,10 @@ void ProjectTreeWidget::refresh(){
   } // end for projects
   
 }
+
+
 void ProjectTreeWidget::readProjectSpaceGlobalConfig(QDomDocument& doc){
-  cerr << "kdevelop (projectview/projecttreewidget): readProjectSpaceGlobalConfig:" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::readProjectSpaceGlobalConfig:" << endl;
   m_projectFileGroups.clear();
   QDomNodeList projectViewList = doc.elementsByTagName("ProjectView");
 
@@ -183,8 +191,9 @@ void ProjectTreeWidget::readProjectSpaceGlobalConfig(QDomDocument& doc){
   } // end if Projectview
 }
 
+
 void ProjectTreeWidget::writeProjectSpaceGlobalConfig(QDomDocument& doc){
-  cerr << "kdevelop (projectview/projecttreewidget): writeProjectSpaceGlobalConfig" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::writeProjectSpaceGlobalConfig" << endl;
   QDomElement rootElement = doc.documentElement();
   QDomElement projectViewElement = doc.createElement("ProjectView");
   QString projectName;
@@ -211,11 +220,12 @@ void ProjectTreeWidget::writeProjectSpaceGlobalConfig(QDomDocument& doc){
  
 }
 
+
 void ProjectTreeWidget::createDefaultFileGroups(){
   // create default one
   QList<Project>* pProjects=0;
   Project* pProject=0;
-  cerr << "kdevelop (projectview/projecttreewidget): createDefaultFileGroups" << endl;
+  kdDebug(9009) << "ProjectTreeWidget::createDefaultFileGroups" << endl;
   if(m_pProjectSpace != 0) {
     QList<FileGroup>  defaultFileGroups = m_pProjectSpace->defaultFileGroups();
     pProjects = m_pProjectSpace->allProjects();
@@ -233,9 +243,11 @@ void ProjectTreeWidget::createDefaultFileGroups(){
     }
   }
   else {
-    cerr << "kdevelop (projectview/projecttreewidget): readProjectSpaceGlobalConfig: No ProjectSpace!!" << endl;
+    kdDebug(9009) << "ProjectTreeWidget::readProjectSpaceGlobalConfig: No ProjectSpace!!" << endl;
   } 
 }
+
+
 QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
   QPopupMenu *pPopup = new QPopupMenu();
   if(pItem->className() == QString("ProjectSpaceItem") ){
@@ -267,12 +279,14 @@ QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
   return pPopup;
 }
 
+
 void ProjectTreeWidget::slotOpenFile(){
 }
 
+
 void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
   // this method isn't optimized, just a first try
-  cerr << endl << "kdevelop (projectview): ProjectTreeWidget::addedFileToProject";
+  kdDebug(9009) << "ProjectTreeWidget::addedFileToProject" << endl;
 
   QString projectName = pNode->projectName();
   QList<FileGroup> fileGroups;
@@ -291,7 +305,7 @@ void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
     for ( QStringList::Iterator filterIt = filters.begin(); filterIt != filters.end(); ++filterIt ) {
       regExp.setPattern(*filterIt);
       if(fileName.contains(regExp) != 0){
-	cerr << endl << "filter GROUP found" << pFileGroup->name() << endl;
+	kdDebug(9009) << "filter GROUP found" << pFileGroup->name() << endl;
 	foundFileGroup = pFileGroup->name();
       }
     }
@@ -302,7 +316,7 @@ void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
   QListViewItem* pProjectSpaceItem = firstChild();
   QListViewItem* pProjectItem = pProjectSpaceItem->firstChild();
   QListViewItem* pTmpItem =0;
-  QListViewItem* pGroupItem =0;
+  //QListViewItem* pGroupItem =0;
   
   // get the projectItem
   for(pTmpItem =pProjectItem;pTmpItem !=0;pTmpItem = pProjectSpaceItem->nextSibling()){
@@ -335,8 +349,9 @@ void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
   
 }
 
+
 void ProjectTreeWidget::removedFileFromProject(KDevFileNode* pNode){
-  cerr << endl << "kdevelop (projectview): ProjectTreeWidget::removeFileFromProject";
+  kdDebug(9009) << "ProjectTreeWidget::removeFileFromProject" << endl;
   QString projectName = pNode->projectName();
   QString fileName= pNode->absoluteFileName();
 

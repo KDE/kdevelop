@@ -19,7 +19,6 @@
 #include "projectview.h"
 #include "projecttreewidget.h"
 #include "projectspace.h"
-#include <iostream.h>
 
 ProjectView::ProjectView(QObject *parent, const char *name)
     : KDevComponent(parent, name){
@@ -34,7 +33,7 @@ ProjectView::~ProjectView(){
 
 
 void ProjectView::setupGUI(){
-    kdDebug(9003) << "Building ProjectTreeWidget" << endl;
+    kdDebug(9009) << "Building ProjectTreeWidget" << endl;
 
     m_pProjectTree = new ProjectTreeWidget(this);
     //    w->setIcon()
@@ -42,11 +41,13 @@ void ProjectView::setupGUI(){
     
     embedWidget(m_pProjectTree, SelectView, i18n("PV"), i18n("Project View"));
 
+
 }
 
 void ProjectView::projectSpaceOpened(ProjectSpace *pProjectSpace){
   m_pProjectTree->setProjectSpace(pProjectSpace);
 }
+
   
 void ProjectView::projectSpaceClosed(){
   m_pProjectTree->clear();
@@ -54,37 +55,49 @@ void ProjectView::projectSpaceClosed(){
 
 
 void ProjectView::readProjectSpaceGlobalConfig(QDomDocument& doc){
-  cerr << "kdevelop (projectview): readProjectSpaceGlobalConfig:" << endl;
+  kdDebug(9009) << "readProjectSpaceGlobalConfig:" << endl;
   m_pProjectTree->readProjectSpaceGlobalConfig(doc);
 }
 
+
 void ProjectView::writeProjectSpaceGlobalConfig(QDomDocument& doc){
-  cerr << "kdevelop (projectview): writeProjectSpaceGlobalConfig" << endl;
+  kdDebug(9009) << "writeProjectSpaceGlobalConfig" << endl;
   m_pProjectTree->writeProjectSpaceGlobalConfig(doc);
 }
 
+
 void ProjectView::setKDevNodeActions(QList<KAction>* pActions){
-  cerr << "kdevelop (projectview): setFileActions" << endl;
+  kdDebug(9009) << "setFileActions" << endl;
   m_pFileActions = pActions;
 }
+
+
 QList<KAction>* ProjectView::assembleKDevNodeActions(KDevNode* pNode){
-  cerr << "kdevelop (projectview): ProjectView::assembleFileActions" << endl;
+  kdDebug(9009) << "ProjectView::assembleFileActions" << endl;
   // and now the trick :-)
   emit needKDevNodeActions(this,pNode);
   // now the m_pFileActions should be filled
   return m_pFileActions;
 }
+
+
 void ProjectView::addedFileToProject(KDevFileNode* pNode){
   m_pProjectTree->addedFileToProject(pNode);
 }   
+
+
 void ProjectView::removedFileFromProject(KDevFileNode* pNode){
   m_pProjectTree->removedFileFromProject(pNode);
 }
 
+
 void ProjectView::addedProject(KDevNode*){
   m_pProjectTree->refresh();
 }
+
+
 void ProjectView::fileClicked(QString absFileName){
   emit gotoSourceFile(absFileName,0);
 }
+
 #include "projectview.moc"
