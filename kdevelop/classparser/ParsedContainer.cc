@@ -450,7 +450,7 @@ void CParsedContainer::removeAttribute( const char *aName )
   //  assert( strlen( aName ) > 0 );
    if(aName == 0 ){
     cerr << "ERROR!!! in parse void CParsedContainer::removeAttribute( const char *aName )\n";
-    return 0;
+    return;
   }
 
   attributes.remove( aName );

@@ -177,7 +177,7 @@ void CToolsConfigDlg::slotToolAdd()
 	  KMsgBox::message(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
 	  return;
 	}
-	
+    	
 	tools_listbox->insertItem(menutext);
 	tools_exe.append(executable);
 	tools_entry.append(menutext);

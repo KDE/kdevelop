@@ -15,20 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#include <iostream.h>
-#include <stdlib.h>
-#include <qmessagebox.h>
-#include <qwhatsthis.h>
-#include <qfile.h>
-#include <kconfig.h>
-#include <kapp.h>
-#include <klocale.h>
-
-#include "../ctoolclass.h"
-#include "../misc.h"
 #include "cconfigenscriptdlg.h"
-
+#include <kapp.h>
+#include <iostream.h>
+#include "../ctoolclass.h"
+#include <kmsgbox.h>
+#include <kquickhelp.h>
+#include <klocale.h>
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -597,49 +590,48 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_65->insert( filenameLine );
   qtarch_ButtonGroup_66->insert( hostnameButton );
 
-  QWhatsThis::add(headerButton,
+  KQuickHelp::add(headerButton,
 	i18n("If you wish to have a page header, then check it."));
 
-  QWhatsThis::add(headertextLine,
+  KQuickHelp::add(headertextLine,
 	i18n("Here you can enter the headertext."));
 
-  QWhatsThis::add(headertextButton,
+  KQuickHelp::add(headertextButton,
 	i18n("If you wish to have a headertext, then check it."));
 
-  QWhatsThis::add(loginButton,
+  KQuickHelp::add(loginButton,
 	i18n("If you wish to print a userlogin, then check it."));
 
-  QWhatsThis::add(fancyHeaderButton,
+  KQuickHelp::add(fancyHeaderButton,
 	i18n("If you will a fancy header, then check it."));
 
-  QWhatsThis::add(filenameLine,
+  KQuickHelp::add(filenameLine,
 	i18n("If you wish to print the filenames, then check it."));
 
-  QString text;
-  text = i18n("Here you can choose, if the filename from the last '/'\n"
-              "is print, or if the full filename is print.");
-  QWhatsThis::add(qtarch_Label_21, text);
-  QWhatsThis::add(filenameSize, text);
+  KQuickHelp::add(qtarch_Label_21,
+  KQuickHelp::add(filenameSize,
+	i18n("Here you can choose, if the filename from the last '/'\n"
+	     "is print, or if the full filename is print.")));
 
-  text = i18n("Here you can set the position in the header.");
-  QWhatsThis::add(qtarch_Label_25, text);
-  QWhatsThis::add(filenamePosition, text);
+  KQuickHelp::add(qtarch_Label_25,
+  KQuickHelp::add(filenamePosition,
+	i18n("Here you can set the position in the header.")));
 
-  QWhatsThis::add(hostnamePosition,
+  KQuickHelp::add(hostnamePosition,
 	i18n("Here you can set the position in the header."));
 
-  text = i18n("Here you can choose, if the hostname up to the first\n"
-              "'.' is print, or the full hostname is print.");
-  QWhatsThis::add(qtarch_Label_23, text);
-  QWhatsThis::add(hostnameSize, text);
+  KQuickHelp::add(qtarch_Label_23,
+  KQuickHelp::add(hostnameSize,
+	i18n("Here you can choose, if the hostname up to the first\n"
+	     "'.' is print, or the full hostname is print.")));
 
-  QWhatsThis::add(loginPosition,
+  KQuickHelp::add(loginPosition,
 	i18n("Here you can set the position in the header."));
 
-  QWhatsThis::add(hostnameButton,
+  KQuickHelp::add(hostnameButton,
 	i18n("If you wish to print the hostname, then check it."));
 
-  QWhatsThis::add(headertextPosition,
+  KQuickHelp::add(headertextPosition,
 	i18n("Here you can set the position in the header."));
 
 }
@@ -1010,35 +1002,34 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   qtarch_ButtonGroup_76->insert( modificationDateButton );
   qtarch_ButtonGroup_74->insert( currentDateButton );
 
-  QWhatsThis::add(currentTimeButton,
+  KQuickHelp::add(currentTimeButton,
 	i18n("If you wish to print the current time, then check it."));
 
-  QWhatsThis::add(modificationTimeButton,
+  KQuickHelp::add(modificationTimeButton,
 	i18n("If you wish to print the modification time, then check it."));
 
-  QWhatsThis::add(modificationDateButton,
+  KQuickHelp::add(modificationDateButton,
 	i18n("If you wish to print the modification date, then check it."));
 
-  QWhatsThis::add( currentDateButton,
+  KQuickHelp::add( currentDateButton,
 	i18n("If you wish to print the current date, then check it."));
 
-  QString text;
-  text = i18n("Here you can set the format.");
-  QWhatsThis::add(modificationTimeFormat, text);
-  QWhatsThis::add(modificationDateFormat, text);
-  QWhatsThis::add(currentTimeFormat, text);
-  QWhatsThis::add(currentDateFormat, text);
+  KQuickHelp::add(modificationTimeFormat,
+  KQuickHelp::add(modificationDateFormat,
+  KQuickHelp::add(currentTimeFormat,
+  KQuickHelp::add(currentDateFormat,
+	i18n("Here you can set the format.")))));
 
-  text = i18n("Here you can set the position in the header.");
-  QWhatsThis::add(currentTimePosition, text);
-  QWhatsThis::add(modificationTimePosition, text);
-  QWhatsThis::add(currentDatePosition, text);
-  QWhatsThis::add(modificationDatePosition, text);
+  KQuickHelp::add(currentTimePosition,
+  KQuickHelp::add(modificationTimePosition,
+  KQuickHelp::add(currentDatePosition,
+  KQuickHelp::add(modificationDatePosition,
+	i18n("Here you can set the position in the header.")))));
 
-  text = i18n("Here you can choose, if you time will be printed in\n"
-              "am/pm format or in 24h format.");
-  QWhatsThis::add(currentTimeAmpm, text);
-  QWhatsThis::add(modificationTimeAmpm, text);
+  KQuickHelp::add(currentTimeAmpm,
+  KQuickHelp::add(modificationTimeAmpm,
+	i18n("Here you can choose, if you time will be printed in\n"
+	     "am/pm format or in 24h format.")));
 }
 
 void CConfigEnscriptDlg::initTab3(QWidget*parent) {
@@ -1424,61 +1415,60 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_21->insert( cutLinesButton );
   qtarch_ButtonGroup_21->insert( replaceButton );
 
-  QWhatsThis::add(bordersButton,
+  KQuickHelp::add(bordersButton,
 	i18n("If button is checked, borders around columns are printed."));
 
-  QWhatsThis::add(tocButton,
+  KQuickHelp::add(tocButton,
 	i18n("If button is checked, a summary is printed at the end."));
 
-  QWhatsThis::add(markedWrappedLinesButton,
+  KQuickHelp::add(markedWrappedLinesButton,
 	i18n("If button is checked, wrapped lines are marked in the output."));
 
-  QWhatsThis::add(numberingPagesButton,
+  KQuickHelp::add(numberingPagesButton,
 	i18n("If button is checked, the sides are numbered."));
 
-  QWhatsThis::add(numberingLineButton,
+  KQuickHelp::add(numberingLineButton,
 	i18n("Precede each line with its line number."));
 
-  QString text;
-  text = i18n("Print setting number lines per each page.");
-  QWhatsThis::add(qtarch_label, text);
-  QWhatsThis::add(linesPerPage, text);
+  KQuickHelp::add(qtarch_label,
+  KQuickHelp::add(linesPerPage,
+	i18n("Print setting number lines per each page.")));
 
-  QWhatsThis::add(alignFileList,
+  KQuickHelp::add(alignFileList,
 	i18n("Align separate input files to even align page count.\n"
 	     "This is handy for two-side and 2-up printings."));
 
-  QWhatsThis::add(valueForWrappedLine,
+  KQuickHelp::add(valueForWrappedLine,
 	i18n("Set the style of the wrap value."));
 
-  text = i18n("Specify  how high highlight bars are in lines.");
-  QWhatsThis::add(qtarch_Label_14, text);
-  QWhatsThis::add(cycleOfChange, text);
+  KQuickHelp::add(qtarch_Label_14,
+  KQuickHelp::add(cycleOfChange,
+	i18n("Specify  how high highlight bars are in lines.")));
 
-  QWhatsThis::add(numberingPagesList,
+  KQuickHelp::add(numberingPagesList,
 	i18n("Set the position in the header."));
 
-  QWhatsThis::add(highlightBarsButton,
+  KQuickHelp::add(highlightBarsButton,
 	i18n("If button is checked, highlight bars are printed."));
 
-  text = i18n("Set tabulator size to specify number.");
-  QWhatsThis::add(qtarch_Label_2, text);
-  QWhatsThis::add(setTabSize, text);
+  KQuickHelp::add(qtarch_Label_2,
+  KQuickHelp::add(setTabSize,
+	i18n("Set tabulator size to specify number.")));
 
-  QWhatsThis::add(cutLinesButton,
+  KQuickHelp::add(cutLinesButton,
 	i18n("If button is checked, lines that are too long will\n"
 	     "be cut. Otherwise enscript wraps long lines  so no\n"
 	     "information is lost."));
 
-  QWhatsThis::add(replaceButton,
+  KQuickHelp::add(replaceButton,
 	i18n("If button is checked, non printing characters are\n"
 	     "replace by space."));
 
-  QWhatsThis::add(fontForBodyButton,
+  KQuickHelp::add(fontForBodyButton,
 	i18n("If you clicked the button, a fontdialog is shown\n"
 	     "and you can select a font that is used for body text."));
 
-  QWhatsThis::add(fontForHeaderButton,
+  KQuickHelp::add(fontForHeaderButton,
 	i18n("If you clicked the button, a fontdialog is shown\n"
 	     "and you can select a font that is used for header text."));
 
@@ -1810,42 +1800,41 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_ButtonGroup_134->insert( underlayFontButton );
   qtarch_ButtonGroup_131->insert( underlayPositionDefaultButton );
 
-  QWhatsThis::add(underlayButton,
+  KQuickHelp::add(underlayButton,
 	i18n("If you wish to print underlayed text, then check it."));
 
-  QString text;
-  text = i18n("Here you can set the angle of the underlayed text.");
-  QWhatsThis::add(qtarch_Label_71, text);
-  QWhatsThis::add(underlayAngle, text);
+  KQuickHelp::add(qtarch_Label_71,
+  KQuickHelp::add(underlayAngle,
+	i18n("Here you can set the angle of the underlayed text.")));
 
-  text = i18n("Here you can set the x-position of the underlayed text.");
-  QWhatsThis::add(qtarch_ButtonGroup_133, text);
-  QWhatsThis::add(underlayXPosition, text);
+  KQuickHelp::add(qtarch_ButtonGroup_133,
+  KQuickHelp::add(underlayXPosition,
+	i18n("Here you can set the x-position of the underlayed text.")));
 
-  text = i18n("Here you can set the y-position of the underlayed text.");
-  QWhatsThis::add(qtarch_ButtonGroup_132, text);
-  QWhatsThis::add(underlayYPosition, text);
+  KQuickHelp::add(qtarch_ButtonGroup_132,
+  KQuickHelp::add(underlayYPosition,
+	i18n("Here you can set the y-position of the underlayed text.")));
 
-  text = i18n("Here you can set the underlayed text gray.\n"
-              "The lower the darker is the text.");
-  QWhatsThis::add(qtarch_Label_74, text);
-  QWhatsThis::add(underlayGray, text);
+  KQuickHelp::add(qtarch_Label_74,
+  KQuickHelp::add(underlayGray,
+	i18n("Here you can set the underlayed text gray.\n"
+	     "The lower the darker is the text.")));
 
-  QWhatsThis::add(underlayAngleDefault,
+  KQuickHelp::add(underlayAngleDefault,
 	i18n("If you wish to print the underlayed text with the\n"
 	     "default angle, then check it."));
 
-  QWhatsThis::add(underlayStyle,
+  KQuickHelp::add(underlayStyle,
 	i18n("Here you can set the style of the underlayed text."));
 
-  QWhatsThis::add(underlayPositionDefaultButton,
+  KQuickHelp::add(underlayPositionDefaultButton,
 	i18n("If you wish to print the underlayed text with the\n"
 	     "default position, then check it."));
 
-  QWhatsThis::add(underlaytextLine,
+  KQuickHelp::add(underlaytextLine,
 	i18n("Here you can enter the text."));
 
-  QWhatsThis::add(underlayFontButton,
+  KQuickHelp::add(underlayFontButton,
 	i18n("Here you can set another font by clicking on it."));
 
   
@@ -2706,7 +2695,12 @@ QString CConfigEnscriptDlg::createParameters(int i) {
     zahl = ((QString) underlayGray->text()).toFloat() / 10;
     globalpara.append(parameters.setNum(zahl));
     globalpara.append(" --ul-style=");
-    globalpara.append(underlayStyle->text(underlayStyle->currentItem()));
+    if (!strcmp (i18n (underlayStyle->text(underlayStyle->currentItem())), i18n ( "outline" ))) {
+      globalpara.append("outline");
+      }
+    else {
+      globalpara.append("filled");
+    }
     if (!underlayPositionDefaultButton->isChecked()) { 
       globalpara.append(" --ul-position=+");
       globalpara.append(underlayXPosition->text());
@@ -2750,17 +2744,14 @@ void CConfigEnscriptDlg::slotModificationAmpmClicked(int prog) {
 
 void CConfigEnscriptDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
    return;
   }
   QString dir,data1,data2,param,text;
   createParameters(0);
-#warning FIXME: temporary files
-#if 0
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
-#endif
   param = (QString) " --output="+ dir;
   process = new KShellProcess();
   *process << "enscript " + globalpara + param + " " + data1 + " " + data2;
@@ -2872,56 +2863,161 @@ bool CConfigEnscriptDlg::lookProgram(QString name) {
 void CConfigEnscriptDlg::loadSettings() {
   settings = kapp->getConfig();
   settings->setGroup("Enscript");
-  headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
-  fancyHeaderButton->setChecked(!strcmp(settings->readEntry("FancyHeader"),"true"));
-  headertextButton->setChecked(!strcmp(settings->readEntry("Headertext"),"true"));
+  if (!strcmp(settings->readEntry("Header"),"true")) {
+    headerButton->setChecked(true);
+  }
+  else {
+   headerButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("FancyHeader"),"true")) {
+ fancyHeaderButton->setChecked(true);
+  }
+  else {
+ fancyHeaderButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Headertext"),"true")) {
+  headertextButton->setChecked(true);
+  }
+  else {
+  headertextButton->setChecked(false);
+  }
   headertextLine->setText(settings->readEntry("HeadertextLine"));
-  headertextPosition->setCurrentItem((settings->readEntry("HeadertextPosition")).toInt());
-  loginButton->setChecked(!strcmp(settings->readEntry("Login"),"true"));
+    headertextPosition->setCurrentItem((settings->readEntry("HeadertextPosition")).toInt());
+  if (!strcmp(settings->readEntry("Login"),"true")) {
+  loginButton->setChecked(true);
+  }
+  else {
+  loginButton->setChecked(false);
+  }
   loginPosition->setCurrentItem((settings->readEntry("LoginPosition")).toInt());
-  filenameLine->setChecked(!strcmp(settings->readEntry("Filename"),"true"));
-  filenameSize->setCurrentItem((settings->readEntry("FilenameSize")).toInt());
+  if (!strcmp(settings->readEntry("Filename"),"true")) {
+  filenameLine->setChecked(true);
+  }
+  else {
+  filenameLine->setChecked(false);
+  }
+    filenameSize->setCurrentItem((settings->readEntry("FilenameSize")).toInt());
   filenamePosition->setCurrentItem((settings->readEntry("FilenamePosition")).toInt());
-  hostnameButton->setChecked(!strcmp(settings->readEntry("Hostname"),"true"));
+  if (!strcmp(settings->readEntry("Hostname"),"true")) {
+  hostnameButton->setChecked(true);
+  }
+  else {
+    hostnameButton->setChecked(false);
+  }
   hostnameSize->setCurrentItem((settings->readEntry("HostnameSize")).toInt());
   hostnamePosition->setCurrentItem((settings->readEntry("HostnamePosition")).toInt());
-  currentDateButton->setChecked(!strcmp(settings->readEntry("CurrentDate"),"true"));
+  if (!strcmp(settings->readEntry("CurrentDate"),"true")) {
+  currentDateButton->setChecked(true);
+  }
+  else {
+  currentDateButton->setChecked(false);
+  }
   currentDateFormat->setCurrentItem((settings->readEntry("CurrentDateFormat")).toInt());
   currentDatePosition->setCurrentItem((settings->readEntry("CurrentDatePosition")).toInt());
-  currentTimeButton->setChecked(!strcmp(settings->readEntry("CurrentTime"),"true"));
+  if (!strcmp(settings->readEntry("CurrentTime"),"true")) {
+  currentTimeButton->setChecked(true);
+  }
+  else {
+  currentTimeButton->setChecked(false);
+  }
   currentTimeAmpm->setCurrentItem((settings->readEntry("CurrentTimeAmpm")).toInt());
   currentTimeFormat->setCurrentItem((settings->readEntry("CurrentTimeFormat")).toInt());
   currentTimePosition->setCurrentItem((settings->readEntry("CurrentTimePosition")).toInt());
-  modificationDateButton->setChecked(!strcmp(settings->readEntry("ModificationDate"),"true"));
+  if (!strcmp(settings->readEntry("ModificationDate"),"true")) {
+  modificationDateButton->setChecked(true);
+  }
+  else {
+  modificationDateButton->setChecked(false);
+  }
   modificationDateFormat->setCurrentItem((settings->readEntry("ModificationDateFormat")).toInt());
   modificationDatePosition->setCurrentItem((settings->readEntry("ModificationDatePosition")).toInt());
-  modificationTimeButton->setChecked(!strcmp(settings->readEntry("ModificationTime"),"true"));
+  if (!strcmp(settings->readEntry("ModificationTime"),"true")) {
+  modificationTimeButton->setChecked(true);
+  }
+  else {
+  modificationTimeButton->setChecked(false);
+  }
   modificationTimeAmpm->setCurrentItem((settings->readEntry("ModificationTimeAmpm")).toInt());
   modificationTimeFormat->setCurrentItem((settings->readEntry("ModificationTimeFormat")).toInt());
   modificationTimePosition->setCurrentItem((settings->readEntry("ModificationTimePosition")).toInt());
-  numberingLineButton->setChecked(!strcmp(settings->readEntry("NumberingLines"),"true"));
-  bordersButton->setChecked(!strcmp(settings->readEntry("Borders"),"true"));
-  numberingPagesButton->setChecked(!strcmp(settings->readEntry("NumberingPages"),"true"));
+  if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
+  numberingLineButton->setChecked(true);
+  }
+  else {
+  numberingLineButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Borders"),"true")) {
+  bordersButton->setChecked(true);
+  }
+  else {
+  bordersButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("NumberingPages"),"true")) {
+  numberingPagesButton->setChecked(true);
+  }
+  else {
+  numberingPagesButton->setChecked(false);
+  }
   numberingPagesList->setCurrentItem((settings->readEntry("NumberingPagesPosition")).toInt());
   alignFileList->setCurrentItem((settings->readEntry("AlignFiles")).toInt());
   linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
   setTabSize->setValue((settings->readEntry("TabSize")).toInt());
   fontForHeaderButton->setText(settings->readEntry("FontForHeader"));
   fontForBodyButton->setText(settings->readEntry("FontForBody"));
-  cutLinesButton->setChecked(!strcmp(settings->readEntry("CutLines"),"true"));
-  replaceButton->setChecked(!strcmp(settings->readEntry("Replace"),"true"));
-  tocButton->setChecked(!strcmp(settings->readEntry("TOC"),"true"));
-  highlightBarsButton->setChecked(!strcmp(settings->readEntry("HighlightBars"),"true"));
+  if (!strcmp(settings->readEntry("CutLines"),"true")) {
+  cutLinesButton->setChecked(true);
+  }
+  else {
+  cutLinesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Replace"),"true")) {
+  replaceButton->setChecked(true);
+  }
+  else {
+  replaceButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("TOC"),"true")) {
+  tocButton->setChecked(true);
+  }
+  else {
+  tocButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("HighlightBars"),"true")) {
+  highlightBarsButton->setChecked(true);
+  }
+  else {
+  highlightBarsButton->setChecked(false);
+  }
   cycleOfChange->setValue((settings->readEntry("CycleOfChange")).toInt());
-  markedWrappedLinesButton->setChecked(!strcmp(settings->readEntry("WrappedLines"),"true"));
+  if (!strcmp(settings->readEntry("WrappedLines"),"true")) {
+  markedWrappedLinesButton->setChecked(true);
+  }
+  else {
+  markedWrappedLinesButton->setChecked(false);
+  }
   valueForWrappedLine->setCurrentItem((settings->readEntry("WrappedLInesValue")).toInt());
-  underlayButton->setChecked(!strcmp(settings->readEntry("Underlay"),"true"));
+  if (!strcmp(settings->readEntry("Underlay"),"true")) {
+  underlayButton->setChecked(true);
+  }
+  else {
+  underlayButton->setChecked(false);
+  }
   underlaytextLine->setText(settings->readEntry("Underlaytext"));
-  underlayPositionDefaultButton->setChecked(!strcmp(settings->readEntry("UnderlayPositionDefault"),"true"));
+  if (!strcmp(settings->readEntry("UnderlayPositionDefault"),"true")) {
+  underlayPositionDefaultButton->setChecked(true);
+  }
+  else {
+  underlayPositionDefaultButton->setChecked(false);
+  }
   underlayXPosition->setValue((settings->readEntry("UnderlayXPosition")).toInt());
   underlayYPosition->setValue((settings->readEntry("UnderlayYPosition")).toInt());
   underlayFontButton->setText(settings->readEntry("Underlayfont"));
-  underlayAngleDefault->setChecked(!strcmp(settings->readEntry("UnderlayAngleDefault"),"true"));
+  if (!strcmp(settings->readEntry("UnderlayAngleDefault"),"true")) {
+  underlayAngleDefault->setChecked(true);
+  }
+  else {
+  underlayAngleDefault->setChecked(false);
+  }
   underlayAngle->setValue((settings->readEntry("UnderlayAngle")).toInt());
   underlayGray->setValue((settings->readEntry("UnderlayGray")).toFloat());
   underlayStyle->setCurrentItem((settings->readEntry("UnderlayStyle")).toInt());
@@ -2933,3 +3029,5 @@ void CConfigEnscriptDlg::loadSettings() {
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
 }
+
+

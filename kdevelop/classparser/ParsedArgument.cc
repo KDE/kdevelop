@@ -107,7 +107,7 @@ void CParsedArgument::setType( const char *aType )
   
   if(aType == 0 ){
     cerr << "ERROR!!! in parser  CParsedArgument::setType: \n";
-    return 0;
+    return;
   }
   type = aType;
   type = type.stripWhiteSpace();

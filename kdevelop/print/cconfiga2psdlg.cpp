@@ -15,27 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#include <stdlib.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qmessagebox.h>
-#include <qwhatsthis.h>
-#include <qfile.h>
-#include <klocale.h>
-#include <kprocess.h>
-#include <kconfig.h>
-#include <kapp.h>
-
-#include "../ctoolclass.h"
-#include "../misc.h"
 #include "cconfiga2psdlg.h"
-
+#include <kapp.h>
+#include <qpixmap.h>
+#include <qlayout.h>
+#include <iostream.h>
+#include "../ctoolclass.h"
+#include <kmsgbox.h>
+#include <kquickhelp.h>
+#include <klocale.h>
 
 CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -538,106 +526,104 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_60->insert( headertextButton );
 	qtarch_ButtonGroup_20->insert( fontsizeButton );
 
-  QString text;
-  
-  QWhatsThis::add(boltFontButton,
+  KQuickHelp::add(boltFontButton,
 	i18n("Print using bold font."));
 
-  QWhatsThis::add(printAsISOLatin,
+  KQuickHelp::add(printAsISOLatin,
 	i18n("Print non ascii characters (with the high bit set)\n"
              "as ISO Latin 1 characters. These characters are\n"
 	     "printed as M- (for meta) followed by  the character\n"
 	     "of the low 7 bits."));
 
-  QWhatsThis::add(interpretButton,
+  KQuickHelp::add(interpretButton,
 	i18n("Interpret   TAB,   BS  and  FF  characters TAB\n"
              "is replaced by enough spaces  to  reach next\n"
              "tab stop while BS and FF have their meanings."));
 
-  QWhatsThis::add(currentDateButton,
+  KQuickHelp::add(currentDateButton,
 	i18n("Print the current date and time at the bottom of the\n"
              "page. This option is affected by the no surrounding\n"
              "border and the no header options."));
 
-  QWhatsThis::add(headertextButton,
+  KQuickHelp::add(headertextButton,
 	i18n("If button is checked, no filename is printed in the\n"
 	     "pages headers.Now you can use a text instead of the\n"
 	     "filename."));
 
-  text = i18n("Use this text instead of the file name in the page\n"
-              "headers for printing next (and only next) file.");
-  QWhatsThis::add(qtarch_Label_20, text);
-  QWhatsThis::add(headertextLine, text);
+  KQuickHelp::add(qtarch_Label_20,
+  KQuickHelp::add(headertextLine,
+	i18n("Use this text instead of the file name in the page\n"
+             "headers for printing next (and only next) file.")));
 
-  QWhatsThis::add(loginButton,
+  KQuickHelp::add(loginButton,
 	i18n("Print user login ID in the upper right corner of\n"
 	     "the page.  (available for Unix systems only)"));
 
-  QWhatsThis::add(filenameLine,
+  KQuickHelp::add(filenameLine,
 	i18n("Print filename ,centered, at bottom of page."));
 
-  QWhatsThis::add(headerButton,
+  KQuickHelp::add(headerButton,
 	i18n("If button is checked ,print page headers."));
 
-  QWhatsThis::add(replaceButton,
-	i18n("If button is checked, non-printing characters are\n"
-	     "replaced by a space. Otherwise non-printing characters\n"
+  KQuickHelp::add(replaceButton,
+	i18n("If button is checked ,non-printing characters are\n"
+	     "replaced by a space.Otherwise non-printing characters\n"
 	     "are replaced so that they are visible and easy to\n"
-	     "identify. Control characters are printed like ^X\n"
+	     "identify. Control characters are printed  like ^X\n"
 	     "for ctrl-x; the delete character is printed as ^?.\n"
 	     "Non ascii characters are printed as M- (for meta)\n"
              "followed by the character of the low 7 bits."));
 
-  QWhatsThis::add(cutLinesButton,
-	i18n("If button checked, lines too large will be truncated.\n"
-	     "Otherwise lines too large will be folded and printed\n"
+  KQuickHelp::add(cutLinesButton,
+	i18n("If button checked ,lines too large will be truncate.\n"
+	     "Otherwise lines  too large will be fold and be printed\n"
 	     "inside the borders. Max line size depends on format\n"
 	     "and font size used and whether line numbering has been\n"
 	     "suppressed."));
 
-  QWhatsThis::add(alignFilesButton,
-	i18n("Compact mode for a sequence of files. This option\n"
-             "allows the printing of two files in the same physical\n"
-	     "page: last page of the first file in the  left\n"
-             "(or up)  side  and first page of the second file in\n"
-             "the right (or down) side. This option is valid only\n"
+  KQuickHelp::add(alignFilesButton,
+	i18n("Compact mode for a sequence of  files.  This  option\n"
+             "allows  the printing of two files in the same physical\n"
+	     "page: last page of the first file  in  the  left\n"
+             "(or  up)  side  and first page of the second file in\n"
+             "the right (or down) side. This option is valid  only\n"
              "for twinpage mode (two pages per physical page)."));
 
-  text = i18n("Set TAB size to value. This option is\n"
-              "ignored if TAB is not interpreted.");
-  QWhatsThis::add(qtarch_Label_2, text);
-  QWhatsThis::add(setTabSize, text);
+  KQuickHelp::add(qtarch_Label_2,
+  KQuickHelp::add(setTabSize,
+	i18n("Set TAB size to value. This option is\n"
+	     "ignored if TAB is not interpreted.")));
 
-  text = i18n("Changes font size to this value.");
-  QWhatsThis::add(qtarch_Label_3, text);
-  QWhatsThis::add(a2psFontSize, text);
+  KQuickHelp::add(qtarch_Label_3,
+  KQuickHelp::add(a2psFontSize,
+	i18n("Changes font size to this value.")));
 
-  QWhatsThis::add(numberingLineButton,
+  KQuickHelp::add(numberingLineButton,
 	i18n("Output lines are preceded by line numbers,\n"
 	     "numbered sequentially from 1."));
 
-  QWhatsThis::add(bordersButton,
+  KQuickHelp::add(bordersButton,
 	i18n("Print page surrounding borders."));
 
-  text = i18n("Reset sheet numbering for each new file. Sheet\n"
-              "numbering is used to number physical pages (sheets)\n"
-              "as they are printed. Page numbering numbers the\n"
-              "logical pages, of which there are usually two per\n"
-              "physical page.");
-  QWhatsThis::add(qtarch_Label_113, text);
-  QWhatsThis::add(numberingPagesList, text);
+  KQuickHelp::add(qtarch_Label_113,
+  KQuickHelp::add(numberingPagesList,
+	i18n("Reset sheet numbering for each new file. Sheet\n"
+	     "numbering is used to number physical pages (sheets)\n"
+	     "as they are printed. Page numbering numbers the\n"
+	     "logical pages, of which there are usually two per\n"
+	     "physical page.")));
 
-  text = i18n("Set the lines per page for printing. The font size\n"
-              "is automatically scaled up to fill in the whole page.\n"
-              "The  minimum number of lines per page is set at 40\n"
-              "and maximum is at 160.");
-  QWhatsThis::add(qtarch_label, text);
-  QWhatsThis::add(linesPerPage, text);
+  KQuickHelp::add(qtarch_label,
+  KQuickHelp::add(linesPerPage,
+	i18n("Set  the  lines per page for printing. The font size\n"
+             "is automatically scaled up to fill in the whole page.\n"
+	     "The  minimum number of lines per page is set at 40\n"
+	     "and maximum is at 160.")));
 
-  QWhatsThis::add(fontsizeButton,
+  KQuickHelp::add(fontsizeButton,
 	i18n("Check this button if you wish to change the fontsize."));
 
-  QWhatsThis::add(linesButton,
+  KQuickHelp::add(linesButton,
 	i18n("Check this button if you wish to change the number of\n"
 	     "the lines per page."));
 
@@ -738,7 +724,7 @@ QString CConfigA2psDlg::slotCreateParameters() {
   globalpara = "";
   if (headerButton->isChecked()) {
     if (headertextButton->isChecked()) {
-      globalpara.append(" -H\"");
+      globalpara.append(" -b\"");
       globalpara.append(headertextLine->text());
       globalpara.append("\"");
     }
@@ -756,7 +742,7 @@ QString CConfigA2psDlg::slotCreateParameters() {
     }
   }
   else {
-    parameters.append(" -nH");
+    parameters.append(" -B");
   }
   if (numberingLineButton->isChecked()) {
     parameters.append(" -n");
@@ -825,17 +811,14 @@ QString CConfigA2psDlg::slotCreateParameters() {
 
 void CConfigA2psDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
     return;
   }
   QString dir,data1,data2,text;
   slotCreateParameters();
-#warning FIXME: temporary files
-#if 0
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
-#endif
   process = new KShellProcess();
   *process << "a2ps -nP" + globalpara + " " + data1 + " " + data2 + " >" + dir;
   process->start(KProcess::Block,KProcess::AllOutput);
@@ -956,30 +939,107 @@ void CConfigA2psDlg::loadSettings() {
   selectedProgram();
   settings = kapp->getConfig();
   settings->setGroup("A2ps");
-  headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
-  headertextButton->setChecked(!strcmp(settings->readEntry("Headertext"),"true"));
-  slotHeadertextButtonClicked();
-  headertextLine->setText(settings->readEntry("HeadertextLine"));
+  if (!strcmp(settings->readEntry("Header"),"true")) {
+    headerButton->setChecked(true);
+  }
+  else {
+    headerButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Headertext"),"true")) {
+    headertextButton->setChecked(true);
+  }
+  else {
+    headertextButton->setChecked(false);
+  }
+    slotHeadertextButtonClicked();
 
-  loginButton->setChecked(!strcmp(settings->readEntry("Login"),"true"));
-  currentDateButton->setChecked(!strcmp(settings->readEntry("DateTime"),"true"));
-  numberingLineButton->setChecked(!strcmp(settings->readEntry("NumberingLines"),"true"));
-  bordersButton->setChecked(!strcmp(settings->readEntry("Borders"),"true"));
+    headertextLine->setText(settings->readEntry("HeadertextLine"));
+
+  if (!strcmp(settings->readEntry("Login"),"true")) {
+    loginButton->setChecked(true);
+  }
+  else {
+    loginButton->setChecked(false);
+  }
+   if (!strcmp(settings->readEntry("DateTime"),"true")) {
+     currentDateButton->setChecked(true);
+   }
+   else {
+     currentDateButton->setChecked(false);
+   }
+   if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
+     numberingLineButton->setChecked(true);
+   }
+   else {
+     numberingLineButton->setChecked(false);
+   }
+  if (!strcmp(settings->readEntry("Borders"),"true")) {
+    bordersButton->setChecked(true);
+  }
+  else {
+    bordersButton->setChecked(false);
+  } 
   numberingPagesList->setCurrentItem( (settings->readEntry("NumberingPages")).toInt());
   
   setTabSize->setValue((settings->readEntry("TabSize")).toInt());
   a2psFontSize->setValue((settings->readEntry("FontsizeLine")).toInt());
   linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
-  cutLinesButton->setChecked(!strcmp(settings->readEntry("CutLines"),"true"));
-  printAsISOLatin->setChecked(!strcmp(settings->readEntry("PrintAscii"),"true"));
-  boltFontButton->setChecked(!strcmp(settings->readEntry("BoldFont"),"true"));
-  alignFilesButton->setChecked(!strcmp(settings->readEntry("AlignFiles"),"true"));
-  interpretButton->setChecked(!strcmp(settings->readEntry("Interpret"),"true"));
-  filenameLine->setChecked(!strcmp(settings->readEntry("Filename"),"true"));
+  if (!strcmp(settings->readEntry("CutLines"),"true")) {
+    cutLinesButton->setChecked(true);
+  }
+  else {
+    cutLinesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("PrintAscii"),"true")) {
+    printAsISOLatin->setChecked(true);
+  }
+  else {
+    printAsISOLatin->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("BoldFont"),"true")) {
+    boltFontButton->setChecked(true);
+  }
+  else {
+    boltFontButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("AlignFiles"),"true")) {
+    alignFilesButton->setChecked(true);
+  }
+  else {
+    alignFilesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Interpret"),"true")) {
+    interpretButton->setChecked(true);
+  }
+  else {
+    interpretButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Filename"),"true")) {
+    filenameLine->setChecked(true);
+  }
+  else {
+    filenameLine->setChecked(false);
+  }
   slotFilenameClicked();
-  replaceButton->setChecked(!strcmp(settings->readEntry("Replace"),"true"));
-  fontsizeButton->setChecked(!strcmp(settings->readEntry("Fontsize"),"true"));
-  linesButton->setChecked(!strcmp(settings->readEntry("LinesPerPage"),"true"));
+  if (!strcmp(settings->readEntry("Replace"),"true")) {
+    replaceButton->setChecked(true);
+  }
+  else {
+    replaceButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Fontsize"),"true")) {
+    fontsizeButton->setChecked(true);
+  }
+  else {
+    fontsizeButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("LinesPerPage"),"true")) {
+    linesButton->setChecked(true);
+  }
+  else {
+    linesButton->setChecked(false);
+  }
   slotFontsizeClicked();
   slotLinesClicked();
 }
+

@@ -16,27 +16,23 @@
  ***************************************************************************/
 
 
+#include "cprintdlg.h"
+#include "cfileprintdlg.h"
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
-#include <qmessagebox.h>
-#include <qwhatsthis.h>
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "../misc.h"
 #include "../ctoolclass.h"
+#include <kmsgbox.h>
 #include "../cproject.h"
+#include <kquickhelp.h>
 #include "../cdocbrowser.h"
 #include "../resource.h"
 #include "../ckdevelop.h"
-#include "cprintdlg.h"
-#include "cfileprintdlg.h"
-#include "cconfigenscriptdlg.h"
-#include "cconfiga2psdlg.h"
-
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) : QDialog(parent, name, true){
   init();
@@ -208,7 +204,9 @@ void CPrintDlg::init(){
   printToFileDlg->setBackgroundMode( QWidget::PaletteBackground );
   printToFileDlg->setFontPropagation( QWidget::NoChildren );
   printToFileDlg->setPalettePropagation( QWidget::NoChildren );
-  printToFileDlg->setPixmap(BarIcon("open"));
+  QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+  printToFileDlg->setPixmap(pix);
   printToFileDlg->setAutoRepeat( FALSE );
   printToFileDlg->setAutoResize( FALSE );
   connect (printToFileDlg,SIGNAL(clicked()),SLOT(slotPrintToFileDlgClicked()));
@@ -434,9 +432,11 @@ void CPrintDlg::init(){
   pageSide->setInsertionPolicy( QComboBox::NoInsertion );
   pageSide->setSizeLimit( 10 );
   pageSide->setAutoResize( FALSE );
-  pageSide->insertItem(i18n("all"));
-  pageSide->insertItem(i18n("odd"));
-  pageSide->insertItem(i18n("even"));
+
+ 
+  pageSide->insertItem(i18n ("all"));
+  pageSide->insertItem(i18n ("odd"));
+  pageSide->insertItem(i18n ("even"));
 
   ////// Pretty-print //////////
   qtarch_ButtonGroup_9 = new QButtonGroup( printwidget, "ButtonGroup_9" );
@@ -552,70 +552,69 @@ void CPrintDlg::init(){
   cancelButton->setGeometry( 480, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
 
-  QWhatsThis::add(printingConfButton,
+  KQuickHelp::add(printingConfButton,
 	i18n("If you click this button a configdialog will be shown.\n"
-	     "Which configdialog will be shown depends on the\n"
-	     "chosen program."));
+	     "Which configdialog will be shown is depend on the\n"
+	     "choosen program."));
 
-  QWhatsThis::add(printToFileDlg,
+  KQuickHelp::add(printToFileDlg,
 	i18n("If you click this button a filedialog will be shown."));
 
-  QWhatsThis::add(filesConfButton,
+  KQuickHelp::add(filesConfButton,
 	i18n("If you click this button the fileprintdialog will be shown."));
 
-  QWhatsThis::add(printToFileLine,
+  KQuickHelp::add(printToFileLine,
 	i18n("In this file the printing is gone."));
 
-  QString text;
-  text = i18n("In this line you can specify the printer, with which\n"
-              "you will print. If default is written in the line, the\n"
-              "default printer ($PRINTER) is choosen.");
-  QWhatsThis::add(qtarch_Label_1, text);
-  QWhatsThis::add(printerLine, text);
+  KQuickHelp::add(qtarch_Label_1,
+  KQuickHelp::add(printerLine,
+	i18n("In this line you can specify the printer, with which\n"
+	     "you will print. If default is written in the line, the\n"
+	     "default printer ($PRINTER) is choosen.")));
 
-  QWhatsThis::add(paperCombBox,
+  KQuickHelp::add(paperCombBox,
 	i18n("Here you can change the paper direction."));
 
-  QWhatsThis::add(programCombBox,
+  KQuickHelp::add(programCombBox,
 	i18n("Here you can set the program, you whish to use."));
 
-  QWhatsThis::add(formatCombBox,
+  KQuickHelp::add(formatCombBox,
 	i18n("Here you can choose, if you print out in postscript or html."));
 
-  QWhatsThis::add(defaultCombBox,
+  KQuickHelp::add(defaultCombBox,
 	i18n("Here you can choose, if you print with your personal\n"
 	     "settings. Or with some other settings."));
 
-  text = i18n("Here you can set the sides, which you will print.\n"
-              "You can also specify an interval like:\n"
-              "5-    :print from side 5 to end\n"
-              "5-10 :print from side 5 to side 10\n"
-              "-5    :print from side 1 to side 10");
-  QWhatsThis::add(qtarch_ButtonGroup_11, text);
-  QWhatsThis::add(pageSide, text);
+  KQuickHelp::add(qtarch_ButtonGroup_11,
+  KQuickHelp::add(pageSide,
+	i18n("Here you can set the sides, which you will print.\n"
+	     "You can also specify an interval like:\n"
+	     "5-    :print from side 5 to end\n"
+	     "5-10 :print from side 5 to side 10\n"
+	     "-10   :print from side 1 to side 10")));
 
-  QWhatsThis::add(pagePerSide,
+  KQuickHelp::add(pagePerSide,
 	i18n("Here you can choose, if you wish to print 1 page per\n"
 	     "physical side or 2 page."));
 
-  QWhatsThis::add(prettyCombBox,
+  KQuickHelp::add(prettyCombBox,
 	i18n("Here you can set the pretty-print-mode."));
 
-  QWhatsThis::add(mediaCombBox,
+  KQuickHelp::add(mediaCombBox,
 	i18n("Here you can change the paperformat."));
 
-  text = i18n("Here you can set, how many times you will print the files.");
-  QWhatsThis::add(qtarch_ButtonGroup_7, text);
-  QWhatsThis::add(copySpinBox, text);
+  KQuickHelp::add(qtarch_ButtonGroup_7,
+  KQuickHelp::add(copySpinBox,
+	i18n("Here you can set, how many times you will print the files.")));
 
-  QWhatsThis::add(prettyPrintCheckBox,
+  KQuickHelp::add(prettyPrintCheckBox,
 	i18n("If you wish to print in pretty-print-mode then check this button."));
 
-  QWhatsThis::add(prettyColorCheckBox,
+  KQuickHelp::add(prettyColorCheckBox,
 	i18n("If you wish to print in pretty-print-color-mode,\n"
 	     "then check this button."));
 
-  QWhatsThis::add(printToFileButton,
+  KQuickHelp::add(printToFileButton,
 	i18n("If you wish to print to file, then check this button."));
 
   mainwidget->show();
@@ -649,15 +648,15 @@ void CPrintDlg::slotProgramActivated(int i) {
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-				if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
-	  		defaultCombBox->removeItem(a);
-	  		a--;
-	  		j--;
-				}
-				if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) ||
-	    			!(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
-	  			state++;
-				}
+	if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
+	  defaultCombBox->removeItem(a);
+	  a--;
+	  j--;
+	}
+	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) ||
+	    !(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
+	  state++;
+	}
       }
       if (state == 0) {
       defaultCombBox->insertItem(i18n("enscript default"));
@@ -672,83 +671,83 @@ void CPrintDlg::slotProgramActivated(int i) {
       mediaCombBox->insertItem( "a4dj" );
       mediaCombBox->insertItem( "letterdj" );
     }
-  	else if (i==0) {
+  else if (i==0) {
     
-      prettyPrintCheckBox->setEnabled(false);
-      formatCombBox->setEnabled(false);
-      pageSide->setEnabled(false);
-      qtarch_ButtonGroup_9->setEnabled(false);
-      qtarch_ButtonGroup_11->setEnabled(false);
-      qtarch_ButtonGroup_3->setEnabled(false);
-      defaultCombBox->setEnabled(true);
-      mediaCombBox->setEnabled(true);
-      paperFormatGroup->setEnabled(true);
-      pagePerSide->setEnabled(true);
-      paperCombBox->setEnabled(true);
-      qtarch_ButtonGroup_4->setEnabled(true);
-      qtarch_ButtonGroup_10->setEnabled(true);
-      qtarch_ButtonGroup_8->setEnabled(true);
-      qtarch_ButtonGroup_35->setEnabled(true);
-      printingConfButton->setEnabled(true);
-      previewButton->setEnabled(true);
-      printToFileDlg->setEnabled(true);
-      printToFileButton->setEnabled(true);
-      qtarch_ButtonGroup_6->setEnabled(true);
-
-      prettyPrintCheckBox->setChecked(false);
-    	prettyCombBox->setEnabled(false);
-    	prettyColorCheckBox->setEnabled(false);
-    	prettyPrintCheckBox->setChecked(false);
-    	qtarch_ButtonGroup_34->setEnabled(false);
-    	//slotPrettyPrintClicked(false);
-      int j =defaultCombBox->count();
-      int state=0;
-      for (int a=0;a<j;a++) {
-				if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) ||
-	    			!(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
-	  			defaultCombBox->removeItem(a);
-	  			a--;
-	  			j--;
-				}
-				if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default"))) ||
-	    			!(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
-	  			state++;
-				}
+    prettyPrintCheckBox->setEnabled(false);
+    formatCombBox->setEnabled(false);
+    pageSide->setEnabled(false);
+    qtarch_ButtonGroup_9->setEnabled(false);
+    qtarch_ButtonGroup_11->setEnabled(false);
+    qtarch_ButtonGroup_3->setEnabled(false);
+    defaultCombBox->setEnabled(true);
+    mediaCombBox->setEnabled(true);
+    paperFormatGroup->setEnabled(true);
+    pagePerSide->setEnabled(true);
+    paperCombBox->setEnabled(true);
+    qtarch_ButtonGroup_4->setEnabled(true);
+    qtarch_ButtonGroup_10->setEnabled(true);
+    qtarch_ButtonGroup_8->setEnabled(true);
+    qtarch_ButtonGroup_35->setEnabled(true);
+    printingConfButton->setEnabled(false);
+    previewButton->setEnabled(true);
+    printToFileDlg->setEnabled(true);
+    printToFileButton->setEnabled(true);
+    qtarch_ButtonGroup_6->setEnabled(true);
+    
+    prettyPrintCheckBox->setChecked(false);
+    prettyCombBox->setEnabled(false);
+    prettyColorCheckBox->setEnabled(false);
+    prettyPrintCheckBox->setChecked(false);
+    qtarch_ButtonGroup_34->setEnabled(false);
+    //slotPrettyPrintClicked(false);
+    int j =defaultCombBox->count();
+    int state=0;
+    for (int a=0;a<j;a++) {
+      if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) ||
+	  !(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
+	defaultCombBox->removeItem(a);
+	a--;
+	j--;
       }
-      if (state == 0) {
-      	defaultCombBox->insertItem(i18n("a2ps default"));
+      if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default"))) ||
+	  !(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
+	state++;
       }
-      mediaCombBox->clear();
-      mediaCombBox->insertItem( "a4" );
-      mediaCombBox->insertItem( "a3" );
-      mediaCombBox->insertItem( "a5" );
-      mediaCombBox->insertItem( "legal" );
-      mediaCombBox->insertItem( "letter" );
     }
+    if (state == 0) {
+      defaultCombBox->insertItem(i18n("a2ps default"));
+    }
+    mediaCombBox->clear();
+    mediaCombBox->insertItem( "a4" );
+    mediaCombBox->insertItem( "a3" );
+    mediaCombBox->insertItem( "a5" );
+    mediaCombBox->insertItem( "legal" );
+    mediaCombBox->insertItem( "letter" );
+  }
   else {
     
     prettyPrintCheckBox->setEnabled(false);
-      formatCombBox->setEnabled(false);
-      pageSide->setEnabled(false);
-      qtarch_ButtonGroup_9->setEnabled(false);
-      qtarch_ButtonGroup_11->setEnabled(false);
-      qtarch_ButtonGroup_3->setEnabled(false);
-      defaultCombBox->setEnabled(false);
-      mediaCombBox->setEnabled(false);
-      paperFormatGroup->setEnabled(false);
-      pagePerSide->setEnabled(false);
-      paperCombBox->setEnabled(false);
-      qtarch_ButtonGroup_4->setEnabled(false);
-      qtarch_ButtonGroup_10->setEnabled(false);
-      qtarch_ButtonGroup_8->setEnabled(false);
-      qtarch_ButtonGroup_35->setEnabled(false);
-      printingConfButton->setEnabled(false);
-      previewButton->setEnabled(false);
-      printToFileDlg->setEnabled(true);
-      printToFileButton->setEnabled(true);
-      qtarch_ButtonGroup_6->setEnabled(false);
-
-      prettyPrintCheckBox->setChecked(false);
+    formatCombBox->setEnabled(false);
+    pageSide->setEnabled(false);
+    qtarch_ButtonGroup_9->setEnabled(false);
+    qtarch_ButtonGroup_11->setEnabled(false);
+    qtarch_ButtonGroup_3->setEnabled(false);
+    defaultCombBox->setEnabled(false);
+    mediaCombBox->setEnabled(false);
+    paperFormatGroup->setEnabled(false);
+    pagePerSide->setEnabled(false);
+    paperCombBox->setEnabled(false);
+    qtarch_ButtonGroup_4->setEnabled(false);
+    qtarch_ButtonGroup_10->setEnabled(false);
+    qtarch_ButtonGroup_8->setEnabled(false);
+    qtarch_ButtonGroup_35->setEnabled(false);
+    printingConfButton->setEnabled(false);
+    previewButton->setEnabled(false);
+    printToFileDlg->setEnabled(true);
+    printToFileButton->setEnabled(true);
+    qtarch_ButtonGroup_6->setEnabled(false);
+    
+    prettyPrintCheckBox->setChecked(false);
     prettyCombBox->setEnabled(false);
     prettyColorCheckBox->setEnabled(false);
     prettyPrintCheckBox->setChecked(false);
@@ -804,13 +803,14 @@ void CPrintDlg::slotCancelClicked() {
 void CPrintDlg::slotCreateParameters() {
    QString parameters;
   parameters = "";
+  string = "";
   if (programCombBox->currentItem()==0) {
     if (defaultCombBox->currentItem()==0) {
       if (strcmp (printerLine->text(),"default")) {
 				parameters = (QString) "-P" + printerLine->text() + (QString) " ";
       }
-      parameters = parameters + globalpara;
-      parameters = parameters + (QString) " -X" + mediaCombBox->text(mediaCombBox->currentItem());
+      //parameters = parameters + globalpara;
+      parameters = parameters + (QString) " -M" + mediaCombBox->text(mediaCombBox->currentItem());
       if (pagePerSide->currentItem()==0) {
 	parameters.append(" -1");
       }
@@ -818,10 +818,10 @@ void CPrintDlg::slotCreateParameters() {
 	parameters.append(" -2");
       }
       if (paperCombBox->currentItem()==0) {
-	parameters.append(" -p");
+	parameters.append(" -R");
       }
       else {
-	parameters.append(" -l");
+	parameters.append(" -r");
       }
     }
     else 
@@ -858,7 +858,13 @@ void CPrintDlg::slotCreateParameters() {
 	parameters.append (" --media=Letterdj");
       }
 
-      if (!strcmp(pageSide->currentText(),"all")) {
+      if (!strcmp(pageSide->currentText(),i18n ("all"))) {
+      }
+      else if (!strcmp(pageSide->currentText(),i18n ( "odd" ))) {
+	parameters.append ((QString)" --pages=odd");
+      }
+      else if (!strcmp(pageSide->currentText(),i18n( "even" ))) {
+	parameters.append ((QString)" --pages=even");
       }
       else {
 	parameters.append ((QString)" --pages=" + pageSide->currentText());
@@ -996,18 +1002,16 @@ void CPrintDlg::slotCreateParameters() {
 
 void CPrintDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMessageBox::sorry(0, i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
     return;
   }
   files = createFileString();
   if (!strcmp(files,"")) {
-    QMessageBox::information(0,"No File","No file is printing!");
+    KMsgBox::message(0,"No File","No file is printing!",KMsgBox::EXCLAMATION); 
     return;
   }
   else {
     QString dir,data1,data2,text;
-#warning FIXME: why not create this in /tmp?
-#if 0
     if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
       dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.html";
     }
@@ -1016,7 +1020,6 @@ void CPrintDlg::slotPreviewClicked() {
     }
     data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
     data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
-#endif
     process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       text = (QString) " --output="+ dir;
@@ -1027,11 +1030,11 @@ void CPrintDlg::slotPreviewClicked() {
       *process << "enscript " + string + (QString) " " + text + " " + files;
     }
     else {
-      settings = kapp->getConfig();
-      settings->setGroup("LastSettings");
-      globalpara = settings->readEntry("A2psSettings");
+      //settings = kapp->getConfig();
+      //settings->setGroup("LastSettings");
+      //  globalpara = settings->readEntry("A2psSettings");
       slotCreateParameters();
-      *process << "a2ps " + string + " -nP " + files + " > " + dir;
+      *process << "a2ps " + string + " -o " + dir + " " + files;
     }
     process->start(KProcess::Block,KProcess::AllOutput);
     delete (process);
@@ -1044,22 +1047,22 @@ void CPrintDlg::slotPreviewClicked() {
     }
     else {
       if (lookProgram("gv")) {
-				*process2 << "gv";
-				*process2 << dir;
-				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-				return;
+	*process2 << "gv";
+	*process2 << dir;
+	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	return;
       }
       else if (lookProgram("ghostview")) {
-				*process2 << "ghostview";
-				*process2 << dir;
-				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-				return;
+	*process2 << "ghostview";
+	*process2 << dir;
+	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	return;
       }
       else if (lookProgram("kghostview")) {
-				*process2 << "kghostview";
-				*process2 << dir;
-				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-				return;
+	*process2 << "kghostview";
+	*process2 << dir;
+	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	return;
       }
     }
   }
@@ -1078,7 +1081,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     if (!CToolClass::searchProgram("a2ps")) {
       return;
     }
-    CConfigA2psDlg *a2psconf = new CConfigA2psDlg(this, "confdialog");
+    a2psconf = new CConfigA2psDlg(this, "confdialog");
     a2psconf->resize(600,430);
     a2psconf->setCaption("A2ps Configdialog");
     a2psconf->exec();
@@ -1092,7 +1095,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     if (!CToolClass::searchProgram("enscript")) {
       return;
     }
-    CConfigEnscriptDlg *enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+    enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->setCaption("Enscript Configdialog");
       enscriptconf->exec(); 
@@ -1145,92 +1148,92 @@ void CPrintDlg::slotOkClicked() {
   settings->sync();
 
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    QMessageBox::information(0, i18n("Program not found!"), i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"));
+    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
     return;
   }
   if (printToFileButton->isChecked()) {
     QString filetext = printToFileLine->text();
     if (!strcmp(filetext.right(1),"/") || !strcmp(printToFileLine->text(),"")) {
-      QMessageBox::information(0, i18n("No Filename"), i18n("You need a filename.\nPlease enter one!"));
+      KMsgBox::message(0,"No Filename","You need a filename.\nPlease enter one!",KMsgBox::EXCLAMATION); 
       return;
     }
   }
   files = createFileString();
   if (!strcmp(files,"")) {
-    QMessageBox::information(0, i18n("No File"), i18n("No file is printing!"));
+    KMsgBox::message(0,"No File","No file is printing!",KMsgBox::EXCLAMATION); 
     return;
   }
   else {
     QString dir="";
     QString data1,data2;
     QString text="";
-	  process = new KShellProcess();
-  	if (programCombBox->currentItem()==1) {
+    process = new KShellProcess();
+    if (programCombBox->currentItem()==1) {
       if (printToFileButton->isChecked()) {
-				dir =  printToFileLine->text();
-				text = (QString) " --output="+ dir;
-				settings = kapp->getConfig();
-				settings->setGroup("LastSettings");
-				globalpara = settings->readEntry("EnscriptSettings");
-				slotCreateParameters();
-				process->clearArguments();
-				*process << "enscript " + string + text + " " + files;
-				cerr << "enscript " + string + text + " " + files << endl;
-				process->start(KProcess::Block,KProcess::AllOutput);
-    	}
+	dir =  printToFileLine->text();
+	text = (QString) " --output="+ dir;
+	settings = kapp->getConfig();
+	settings->setGroup("LastSettings");
+	globalpara = settings->readEntry("EnscriptSettings");
+	slotCreateParameters();
+	process->clearArguments();
+	*process << "enscript " + string + text + " " + files;
+	cerr << "enscript " + string + text + " " + files << endl;
+	process->start(KProcess::Block,KProcess::AllOutput);
+      }
       else {
-				settings = kapp->getConfig();
-				settings->setGroup("LastSettings");
-				globalpara = settings->readEntry("EnscriptSettings");
-				slotCreateParameters();
-				for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-					process->clearArguments();
-				  *process << "enscript " + string + " " + files;
-				  cerr << "enscript " + string + " " + files << endl;
-			  	process->start(KProcess::Block,KProcess::AllOutput);
-				}
-  	  }
+	settings = kapp->getConfig();
+	settings->setGroup("LastSettings");
+	globalpara = settings->readEntry("EnscriptSettings");
+	slotCreateParameters();
+	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
+	  process->clearArguments();
+	  *process << "enscript " + string + " " + files;
+	  process->start(KProcess::Block,KProcess::AllOutput);
+	}
+      }
     }
-	  else if (programCombBox->currentItem()==0) {
-  	  settings = kapp->getConfig();
-      settings->setGroup("LastSettings");
-     	globalpara = settings->readEntry("A2psSettings");
-	    slotCreateParameters();
-  	  if (printToFileButton->isChecked()) {
-				dir =  printToFileLine->text();
-				process->clearArguments();
-				*process << "a2ps " + string + " -nP " + files + " > " + dir;
-				cerr << "a2ps " + string + " -nP " + files + " > " + dir << endl;
-				process->start(KProcess::Block,KProcess::AllOutput);
-	    }
-  	  else {
-		 		for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-		 		process->clearArguments();
-			  *process << "a2ps " + string + " " + files;
-			  cerr << "a2ps " + string + " " + files << endl;
-			  process->start(KProcess::Block,KProcess::AllOutput);
-				}
-    	}
-	  }
-  	else {
-  		if (printToFileButton->isChecked()) {
-				dir =  printToFileLine->text();
-				process->clearArguments();
-				*process << "lpr " + string + " " + files + " > " + dir;
-				cerr << "lpr " + string + " " + files + " > " + dir << endl;
-				process->start(KProcess::Block,KProcess::AllOutput);
-	    }
-	    else {
+    else if (programCombBox->currentItem()==0) {
+      //settings = kapp->getConfig();
+      //settings->setGroup("LastSettings");
+      //      globalpara = settings->readEntry("A2psSettings");
+      cout << string << endl;
+      string = "";
+      slotCreateParameters();
+      if (printToFileButton->isChecked()) {
+	dir =  printToFileLine->text();
+	process->clearArguments();
+	cerr << "a2ps " + string + " -o " + dir + " " + files << endl;
+	*process << "a2ps " + string + " -o " + dir + " " + files;
+	process->start(KProcess::Block,KProcess::AllOutput);
+      }
+      else {
+	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
+	  process->clearArguments();
+	  *process << "a2ps " + string + " " + files;
+	  process->start(KProcess::Block,KProcess::AllOutput);
+	}
+      }
+    }
+    else {
+      if (printToFileButton->isChecked()) {
+	dir =  printToFileLine->text();
+	process->clearArguments();
+	*process << "lpr " + string + " " + files + " > " + dir;
+	cerr << "lpr " + string + " " + files + " > " + dir << endl;
+	process->start(KProcess::Block,KProcess::AllOutput);
+      }
+      else {
       	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-      	process->clearArguments();
-				*process << "lpr " + string + " " + files;
-				cerr << "lpr " + string + " " + files << endl;
-				process->start(KProcess::Block,KProcess::AllOutput);
-  	  	}
-  	  }	
+	  process->clearArguments();
+	  *process << "lpr " + string + " " + files;
+	  cerr << "lpr " + string + " " + files << endl;
+	  process->start(KProcess::Block,KProcess::AllOutput);
+	}
+      }	
     }
-	  delete (process);
-  	reject();
+    delete (process);
+    reject();
   }
 }
 
