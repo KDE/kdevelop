@@ -97,7 +97,29 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 
         if( tag.hasAttribute("arguments") ){
             entry.text += "(";
-            entry.postfix += tag.attribute( "arguments" ).toStringList().join( ", " ) + ")";
+	    
+	    QStringList arguments = tag.attribute( "arguments" ).toStringList();
+	    QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
+	    
+	    if( arguments.size() == 0 )
+		entry.text += ")";
+	 
+	    QString signature;
+	    for( uint i=0; i<arguments.size(); ++i ){
+		signature += arguments[ i ];
+		QString argName = argumentNames[ i ];
+		if( !argName.isEmpty() )
+		    signature += QString::fromLatin1( " " ) + argName;
+		
+		if( i != (arguments.size()-1) ){
+		    signature += ", ";
+		}
+	    }
+	    
+	    if( signature.isEmpty() )
+		entry.text += ")";
+	    else
+		entry.postfix = signature + ")";
         }
 
         entryList << entry;
@@ -135,7 +157,19 @@ QStringList CodeInformationRepository::getSignatureList( const QStringList & sco
 
         QString signature;
         signature += tag.name() + "(";
-        signature += tag.attribute( "arguments" ).toStringList().join( ", " );
+	QStringList arguments = tag.attribute( "arguments" ).toStringList();
+	QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
+	
+	for( uint i=0; i<arguments.size(); ++i ){
+	    signature += arguments[ i ];
+	    QString argName = argumentNames[ i ];
+	    if( !argName.isEmpty() )
+		signature += QString::fromLatin1( " " ) + argName;
+	    
+	    if( i != (arguments.size()-1) ){
+		signature += ", ";
+	    }
+	}
         signature += ")";
 
         list << signature;

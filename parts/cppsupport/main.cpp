@@ -142,7 +142,7 @@ int main( int argc, char* argv[] )
 {
     MyDriver driver;
     driver.setResolveDependencesEnabled( true );
-    KStandardDirs stddir;   
+    KStandardDirs stddir;
 
     if( argc < 3 ){
         std::cerr << "usage: r++ dbname directories..." << std::endl << std::endl;     
@@ -151,10 +151,17 @@ int main( int argc, char* argv[] )
 
     bool rec = false;
 
-    QString dbFileName = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" ) + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
+    QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
+
+    if( !QFile::exists(datadir + "/kdevcppsupport/pcs/") ){
+        std::cerr << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << std::endl << std::endl;
+        return -1;
+    }
+
+    QString dbFileName = datadir + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
     std::cout << "dbFileName = " << dbFileName << std::endl;
     if( QFile::exists(dbFileName) ){
-        std::cerr << "database " << dbFileName << " already exists!" << std::endl << std::endl;     
+        std::cerr << "*error* " << "database " << dbFileName << " already exists!" << std::endl << std::endl;
         return -1;
     }
 
@@ -162,15 +169,15 @@ int main( int argc, char* argv[] )
         QString s( argv[i] );
         if( s == "-r" || s == "--recursive" ){
            rec = true;
-           continue; 
+           continue;
         }
 
         QDir dir( s );
         if( !dir.exists() ){
-            std::cerr << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;     
+            std::cerr<< "*error* " << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;
             continue;
         }
-        parseDirectory( driver, dir, rec ); 
+        parseDirectory( driver, dir, rec );
     }
 
     Catalog catalog;
@@ -180,6 +187,7 @@ int main( int argc, char* argv[] )
     catalog.addIndex( "scope" );
     catalog.addIndex( "fileName" );
 
+    std::cout << "generating the DB..." << std::endl;
     QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
     QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
     while( unitIt != units.end() ){
