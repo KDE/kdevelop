@@ -66,15 +66,17 @@ BuildGroupItem::BuildGroupItem( const QString & name, BuildGroupItem * parent )
 BuildGroupItem::~ BuildGroupItem( )
 {
     while( m_targets.size() ){
-	delete m_targets.front();
-	m_targets.pop_front();
+        BuildTargetItem* target = m_targets.front();
+        m_targets.front();
+	delete target;
     }
-    
+
     while( m_subGroups.size() ){
-	delete m_subGroups.front();
+        BuildGroupItem* group = m_subGroups.front();
 	m_subGroups.pop_front();
-    }    
-    
+	delete group;
+    }
+
     if( m_parentGroup )
 	m_parentGroup->takeGroup( this );
 }
@@ -125,8 +127,9 @@ BuildTargetItem::BuildTargetItem( const QString & name, BuildGroupItem * parentG
 BuildTargetItem::~ BuildTargetItem( )
 {
     while( m_files.size() ){
-	delete m_files.front();
+        BuildFileItem* file = m_files.front();
 	m_files.pop_front();
+	delete file;
     }
 
     if( m_parentGroup )
@@ -243,7 +246,7 @@ BuildFileItem * BuildTargetItem::fileByName( const QString & fileName )
 	if( file->name() == fileName )
 	    return file;
     }
-    
+
     return 0;
 }
 
@@ -255,7 +258,7 @@ BuildTargetItem * BuildGroupItem::targetByName( const QString & targetName )
 	if( target->name() == targetName )
 	    return target;
     }
-    
+
     return 0;
 }
 
@@ -267,7 +270,7 @@ BuildGroupItem * BuildGroupItem::groupByname( const QString & groupName )
 	if( group->name() == groupName )
 	    return group;
     }
-    
+
     return 0;
 }
 
