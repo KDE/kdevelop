@@ -464,6 +464,23 @@ void MainWindowShare::slotKeyBindings()
     dlg.insert( (*it)->actionCollection() );
   }
   dlg.configure();
+  
+  // this is needed for when we have multiple embedded kateparts and change one of them
+  // maybe this should be done to more than ReadOnlyParts, but restricting for now keeps 
+  // it less heavy
+    if( const QPtrList<KParts::Part> * partlist = PartController::getInstance()->parts() )
+    {
+        QPtrListIterator<KParts::Part> it( *partlist );
+        while ( KParts::Part* part = it.current() )
+        {
+            if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
+            {
+                kdDebug(9000) << "reloading xml for: " << part->name() << endl;
+                part->reloadXML();
+            }
+            ++it;
+        }
+    }  
 }
 
 void MainWindowShare::slotConfigureToolbars()
