@@ -22,7 +22,9 @@ class KURL;
 class PartExplorerForm;
 
 /**
- * This is a "Part".  It that does all the real work in a KPart
+ * A front-end to @see KTrader class: the real job is done by the
+ * @see PartExplorerForm class which handles user input, query system
+ * configuration and (eventually) fills the property list.
  * application.
  *
  * @short Main Part

@@ -132,13 +132,13 @@ void PartExplorerForm::slotSearchRequested()
 
     if (serviceType.isNull())  // It is mandatory
     {
-        slotDisplayError( i18n("You must fill at least a field!!") );
+        slotDisplayError( i18n("You must fill at least a the service type!!") );
         return;
     }
 
     // Query for requested services
     KTrader::OfferList foundServices = KTrader::self()->query( serviceType, costraints );
-    fillWidget( foundServices );
+    fillServiceList( foundServices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ void PartExplorerForm::slotDisplayError( QString errorMessage )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void PartExplorerForm::fillWidget( const KTrader::OfferList &services )
+void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
 {
     this->resultsList->clear();
 

@@ -19,8 +19,7 @@
 class ResultsList;
 
 /**
-* Adds new signals and slots so we can do more information hiding and make
-* the PartExplorerPart more abstract.
+* The GUI for the PartExplorer.
 *
 * @author Mario Scalas
 */
@@ -34,7 +33,7 @@ public:
     /**
     * Fills the widget with data gathered for system's query.
     */
-    void fillWidget( const KTrader::OfferList &services );
+    void fillServiceList( const KTrader::OfferList &services );
 
     QString serviceType() const;
     QString costraints() const;
