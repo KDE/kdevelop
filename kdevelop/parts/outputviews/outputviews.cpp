@@ -43,7 +43,7 @@ void MakeView::setupGUI()
 }
 
 
-void MakeView::compilationStarted(const QString &command)
+void MakeView::commandRequested(const QString &command)
 {
     if (!m_prj) {
         kdDebug(9004) << "MakeView: compilation started with project?" << endl;

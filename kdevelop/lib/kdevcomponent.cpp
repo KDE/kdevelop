@@ -14,19 +14,15 @@ void KDevComponent::setupGUI()
 {
 }
 
-void KDevComponent::createConfigWidget(KDialogBase *dlg)
+void KDevComponent::configWidgetRequested(KDialogBase *dlg)
 {
 }
 
-void KDevComponent::docPathChanged()
+void KDevComponent::commandRequested(const QString &command)
 {
 }
 
-void KDevComponent::compilationStarted(const QString &command)
-{
-}
-
-void KDevComponent::compilationAborted()
+void KDevComponent::stopButtonClicked()
 {
 }
 

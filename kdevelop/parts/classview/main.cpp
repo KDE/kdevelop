@@ -31,9 +31,6 @@ ClassFactory::~ClassFactory()
 QObject *ClassFactory::create(QObject *parent, const char *name,
                              const char *classname, const QStringList &args)
 {
-    // Depending on classname, this should method should also
-    // be able to create the config dialog
-
     kdDebug(9001) << "Building ClassView" << endl;
     
     QObject *obj = new ClassView(parent, name);

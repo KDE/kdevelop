@@ -35,16 +35,11 @@ void DocTreeView::setupGUI()
 }
 
 
-void DocTreeView::createConfigWidget(KDialogBase *dlg)
+void DocTreeView::configWidgetRequested(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Documentation tree"));
-    (void) new DocTreeConfigWidget(this, vbox, "documentation tree config widget");
-}
-
-
-void DocTreeView::docPathChanged()
-{
-    m_widget->docPathChanged();
+    DocTreeConfigWidget *w = new DocTreeConfigWidget(this, vbox, "documentation tree config widget");
+    connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 
 

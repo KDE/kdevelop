@@ -31,9 +31,6 @@ GrepFactory::~GrepFactory()
 QObject *GrepFactory::create(QObject *parent, const char *name,
                              const char *classname, const QStringList &args)
 {
-    // Depending on classname, this should method should also
-    // be able to create the config dialog
-
     kdDebug(9001) << "Building GrepView" << endl;
     
     QObject *obj = new GrepView(parent, name);

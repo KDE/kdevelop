@@ -31,9 +31,6 @@ OutputFactory::~OutputFactory()
 QObject *OutputFactory::create(QObject *parent, const char *name,
                                const char *classname, const QStringList &args)
 {
-    // Depending on classname, this should method should also
-    // be able to create the config dialog
-
     QObject *obj;
     if (args.count() > 0 && qstrcmp(args[0].latin1(), "AppOutputView") == 0) {
         kdDebug(9004) << "Building MakeView" << endl;

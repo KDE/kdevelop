@@ -31,9 +31,6 @@ MdiMainFrmFactory::~MdiMainFrmFactory()
 QObject *MdiMainFrmFactory::create(QObject *parent, const char *name,
                                 const char *classname, const QStringList &args)
 {
-    // Depending on classname, this should method should also
-    // be able to create the config dialog
-
     kdDebug(9005) << "Building MdiMainFrameComponent" << endl;
 
     QObject *obj = new MdiMainFrmComponent(parent, name);

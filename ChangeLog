@@ -1,3 +1,8 @@
+2000-07-06  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Zeroth version of a version control interface
+	* Some cleanups in KDevComponent interface and KDevelop
+	* Removed obsolete comments
+
 2000-07-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Readded configuration dialog framework
 	* Renamed some 'view' variables to 'part' for clarity

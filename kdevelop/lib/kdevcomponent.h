@@ -54,16 +54,15 @@ public:
      * Creates a configuration page for use in the
      * KDevelop settings dialog.
      */
-    virtual void createConfigWidget(KDialogBase *dlg);
+    virtual void configWidgetRequested(KDialogBase *dlg);
     /**
-     * The user has changed the path to kdelibs/qt.
+     * Starts a compilation or any other command.
      */
-    virtual void docPathChanged();
-    virtual void compilationStarted(const QString &command);
+    virtual void commandRequested(const QString &command);
     /**
      * The user has aborted the compilation.
      */
-    virtual void compilationAborted();
+    virtual void stopButtonClicked();
     /**
      * A project has been opened.
      */
@@ -92,6 +91,7 @@ public:
 
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
+    void executeCommand(const QString &);
     void gotoSourceFile(const QString &, int);
     void gotoDocumentationFile(const QString &);
     void gotoProjectApiDoc();

@@ -17,7 +17,7 @@ public:
 
 protected:
     virtual void setupGUI();
-    virtual void compilationStarted(const QString &command);
+    virtual void commandRequested(const QString &command);
     virtual void projectOpened(CProject *prj);
     virtual void projectClosed();
     

@@ -3,9 +3,12 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <kmessagebox.h>
 
 #include "ClassParser.h"
 #include "kdevelop.h"
+#include "kdevcomponent.h"
+#include "kdevversioncontrol.h"
 #include "kdevelopcore.h"
 
 
@@ -13,9 +16,10 @@ KDevelopCore::KDevelopCore(KDevelop *gui)
     : QObject(gui, "kdevelop core")
 {
     m_kdevelopgui = gui;
+    m_versioncontrol = 0;
+    m_project = 0;
 
-    loadComponents();
-    initComponents();
+    loadInitialComponents();
 
     // Hack to test the class viewer
     CClassParser *classparser = new CClassParser;
@@ -35,7 +39,27 @@ KDevelopCore::~KDevelopCore()
 {}
 
 
-void KDevelopCore::loadComponents()
+void KDevelopCore::initComponent(KDevComponent *component)
+{
+    connect( component, SIGNAL(executeCommand(const QString&)),
+             this, SLOT(executeCommand(const QString&)) );
+    connect( component, SIGNAL(gotoSourceFile(const QString&, int)),
+             this, SLOT(gotoSourceFile(const QString&, int)) );
+    connect( component, SIGNAL(gotoDocumentationFile(const QString&)),
+             this, SLOT(gotoDocumentationFile(const QString&)) );
+    connect( component, SIGNAL(gotoProjectApiDoc()),
+             this, SLOT(gotoProjectApiDoc()) );
+    connect( component, SIGNAL(gotoProjectManual()),
+             this, SLOT(gotoProjectManual()) );
+    connect( component, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
+             m_kdevelopgui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
+
+    component->setupGUI();
+    m_components.append(component);
+}
+
+
+void KDevelopCore::loadInitialComponents()
 {
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
     if (offers.isEmpty())
@@ -44,7 +68,7 @@ void KDevelopCore::loadComponents()
     KTrader::OfferList::ConstIterator it;
     for (it = offers.begin(); it != offers.end(); ++it) {
         
-        kdDebug(9000) << "Found Component " << (*it)->name().latin1() << endl;
+        kdDebug(9000) << "Found Component " << (*it)->name() << endl;
         KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
 
         QStringList args;
@@ -61,36 +85,53 @@ void KDevelopCore::loadComponents()
         }
         KDevComponent *comp = (KDevComponent*) obj;
         m_kdevelopgui->guiFactory()->addClient(comp);
-        m_components.append(comp);
+        initComponent(comp);
     }
 }
 
 
-void KDevelopCore::initComponents()
+void KDevelopCore::loadVersionControl(const QString &system)
 {
-    // Connect all signals
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it) {
-        connect( *it, SIGNAL(gotoSourceFile(const QString&, int)),
-                 this, SLOT(gotoSourceFile(const QString&, int)) );
-        connect( *it, SIGNAL(gotoDocumentationFile(const QString&)),
-                 this, SLOT(gotoDocumentationFile(const QString&)) );
-        connect( *it, SIGNAL(gotoProjectApiDoc()),
-                 this, SLOT(gotoProjectApiDoc()) );
-        connect( *it, SIGNAL(gotoProjectManual()),
-                 this, SLOT(gotoProjectManual()) );
-        connect( *it, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
-                 m_kdevelopgui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
+    QString constraint = "[X-KDevelop-VersionControlSystem] == " + system;
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", constraint);
+    if (offers.isEmpty()) {
+        KMessageBox::sorry(m_kdevelopgui,
+                           i18n("No version control component for %1 found").arg(system));
+        return;
     }
 
-    // Call the setup routines
-    QListIterator<KDevComponent> it2(m_components);
-    for (; it2.current(); ++it2) {
-        (*it2)->setupGUI();
+    KService *service = *offers.begin();
+    kdDebug(9000) << "Found VersionControl Component " << service->name() << endl;
+
+    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+
+    QStringList args;
+    QVariant prop = service->property("X-KDevelop-Args");
+    if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
+    
+    QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
+                                   "KDevVersionControl", args);
+        
+    if (!obj->inherits("KDevVersionControl")) {
+        kdDebug(9000) << "Component does not inherit KDevVersionControl" << endl;
+        return;
     }
+    KDevVersionControl *comp = (KDevVersionControl*) obj;
+    m_versioncontrol = comp;
+    initComponent(comp);
+    comp->projectOpened(m_project);
 }
 
-        
+
+void KDevelopCore::unloadVersionControl()
+{
+    m_components.remove(m_versioncontrol);
+    delete m_versioncontrol;
+    m_versioncontrol = 0;
+}
+
+
 void KDevelopCore::setupKDevelop()
 {
     KDialogBase *dlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
@@ -99,11 +140,17 @@ void KDevelopCore::setupKDevelop()
     
     QListIterator<KDevComponent> it(m_components);
     for (; it.current(); ++it) {
-        (*it)->createConfigWidget(dlg);
+        (*it)->configWidgetRequested(dlg);
     }
 
     dlg->exec();
     delete dlg;
+}
+
+
+void KDevelopCore::executeCommand(const QString &command)
+{
+    kdDebug(9000) << "KDevelopCore::executeCommand " << command << endl;
 }
 
 

@@ -6,6 +6,8 @@
 
 class KDevelop;
 class KDevComponent;
+class KDevVersionControl;
+class CProject;
 
 
 class KDevelopCore : QObject
@@ -20,10 +22,13 @@ public:
     
 private:
     void initActions();
-    void loadComponents();
-    void initComponents();
+    void initComponent(KDevComponent *component);
+    void loadInitialComponents();
+    void loadVersionControl(const QString &name);
+    void unloadVersionControl();
 
 private slots:
+    void executeCommand(const QString &command);
     void gotoSourceFile(const QString &filename, int lineno);
     void gotoDocumentationFile(const QString &filename);
     void gotoProjectApiDoc();
@@ -32,6 +37,8 @@ private slots:
 private:
     KDevelop *m_kdevelopgui;
     QList<KDevComponent> m_components;
+    KDevVersionControl *m_versioncontrol;
+    CProject *m_project;
 };
 
 #endif

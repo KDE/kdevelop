@@ -2,3 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/VersionControl
 Name=KDevelop Version Control Interface
+
+[PropertyDef::VersionControlSystem]
+Type=QString

@@ -36,8 +36,10 @@ public:
     enum Page { KDevelop, Libraries, Others };
     void showPage(Page page);
 
-private slots:
+public slots:
     void accept();
+
+private slots:
     void addClicked();
     void editClicked();
     void removeClicked();

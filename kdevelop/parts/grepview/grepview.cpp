@@ -49,7 +49,7 @@ void GrepView::setupGUI()
 }
 
 
-void GrepView::createConfigWidget(KDialogBase *dlg)
+void GrepView::configWidgetRequested(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
     (void) new GrepConfigWidget(vbox, "grep config widget");
