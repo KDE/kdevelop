@@ -816,12 +816,8 @@ bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseAsmDefinition()" << endl;
 
     ADVANCE( Token_asm, "asm" );
-    ADVANCE( '(', '(' );
-
-    AST::Node lit;
-    parseStringLiteral( lit );
-
-    ADVANCE( ')', ')' );
+    skip( '(', ')' );
+    ADVANCE( ')', ")" );
     ADVANCE( ';', ';' );
 
     return true;
