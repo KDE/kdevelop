@@ -1,10 +1,12 @@
 #include <qptrlist.h>
+#include <qwhatsthis.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <klocale.h>
 
 #include <kdevcore.h>
 
@@ -24,6 +26,9 @@ FileCreateWidget::FileCreateWidget(FileCreatePart *part)
   addColumn("Extension");
 
   setRootIsDecorated(true);
+
+  QWhatsThis::add(this, i18n("This part makes the creation of new files within the project easier."));
+
   
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotTypeSelected(QListViewItem*)) );
 }
@@ -55,7 +60,7 @@ void FileCreateWidget::slotTypeSelected(QListViewItem * item) {
   
   const FileCreateFileType * filetype = fileitem->filetype();
 
-  emit filetypeSelected(filetype);
+  filetypeSelected(filetype);
 }
   
 

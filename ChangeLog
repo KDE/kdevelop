@@ -1,3 +1,8 @@
+2003-01-12 Julian Rockey <linux@jrockey.com>
+	* parts/filecreate
+	  - prettier file creation widget
+	  - support for global file templates
+
 2003-01-11 F@lk Brettschneider <falk@kdevelop.org>
 	* parts/fileview (called 'view on the project directory'):
 	  like used from KDevelop-2, directories now sorted above the files

@@ -27,8 +27,8 @@ public:
 
 public slots:
   void slotTypeSelected(QListViewItem * item);
-signals:
-  void filetypeSelected(const FileCreateFileType * filetype);
+//public:
+//  void filetypeSelected(const FileCreateFileType * filetype);
 
 };
 

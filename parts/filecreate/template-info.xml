@@ -1,0 +1,29 @@
+<?xml version = '1.0'?>
+<kdevelop>
+  <kdevfilecreate>
+    <filetypes>
+      <type ext="py" name="Python" create="template" icon="source_py">
+        <descr>A new empty Python source file.</descr>
+      </type>
+      <type ext="ui" name="QT Designer" create="no" icon="widget_doc">
+        <descr>
+        </descr>
+        <subtype ref="dialog" name="Dialog" icon="widget_doc" icon="widget_doc">
+          <descr>A new empty Dialog box.</descr>
+        </subtype>
+        <subtype ref="mainwin" name="Main window" icon="widget_doc">
+          <descr>A new empty main window.</descr>
+        </subtype>
+      </type>
+      <type ext="cpp" name="C++ source" create="template" icon="source_cpp">
+        <descr>A new empty C++ file.</descr>
+      </type>
+      <type ext="c" name="C source" create="template" icon="source_c">
+        <descr>A new empty C file.</descr>
+      </type>
+      <type ext="h" name="C/C++ header" create="template" icon="source_h">
+        <descr>A new empty header file for C or C++.</descr>
+      </type>
+    </filetypes>
+  </kdevfilecreate>
+</kdevelop>
