@@ -103,6 +103,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
                               "To speed up stepping through your code "
                               "leave the tree items closed.\n"));
     mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
+
 //    mainWindow()->setViewAvailable(variableWidget, false);
 
     rdbBreakpointWidget = new RDBBreakpointWidget( 0, "rdbBreakpointWidget" );
@@ -749,11 +750,13 @@ void RubyDebuggerPart::slotActivePartChanged( KParts::Part* part )
 void RubyDebuggerPart::restorePartialProjectSession(const QDomElement* el)
 {
     rdbBreakpointWidget->restorePartialProjectSession(el);
+	variableWidget->restorePartialProjectSession(el);
 }
 
 void RubyDebuggerPart::savePartialProjectSession(QDomElement* el)
 {
     rdbBreakpointWidget->savePartialProjectSession(el);
+	variableWidget->savePartialProjectSession(el);
 }
 
 }

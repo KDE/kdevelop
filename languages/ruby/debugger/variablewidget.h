@@ -72,6 +72,9 @@ public:
     { return varTree_; }
 
     virtual void setEnabled(bool b);
+	
+	void restorePartialProjectSession(const QDomElement* el);
+	void savePartialProjectSession(QDomElement* el);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);
@@ -314,6 +317,9 @@ public:
 
 	void setWatchExpression(char * buf, char * expr);
 	void updateWatchExpression(int id, const QString& expr);
+	
+	void restorePartialProjectSession(const QDomElement* el);
+	void savePartialProjectSession(QDomElement* el);
 };
 
 /***************************************************************************/

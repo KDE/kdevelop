@@ -113,6 +113,15 @@ void VariableWidget::focusInEvent(QFocusEvent */*e*/)
     varTree_->setFocus();
 }
 
+void VariableWidget::restorePartialProjectSession(const QDomElement* el)
+{
+	varTree_->watchRoot()->restorePartialProjectSession(el);
+}
+
+void VariableWidget::savePartialProjectSession(QDomElement* el)
+{
+	varTree_->watchRoot()->savePartialProjectSession(el);
+}
 
 // **************************************************************************
 // **************************************************************************
@@ -952,7 +961,10 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 	QString expr(expression);
 	QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
 	
-    for (QListViewItem *child = firstChild(); child != 0; child = child->nextSibling()) {
+    for (	QListViewItem *child = firstChild(); 
+			child != 0; 
+			child = child->nextSibling() ) 
+	{
         WatchVarItem *varItem = (WatchVarItem*) child;
 		if (	varItem->text(VAR_NAME_COLUMN) == expr 
 				&& varItem->displayId() == -1
@@ -971,7 +983,10 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 // expr is the thing = value part of "1: a = 1", id is the display number
 void WatchRoot::updateWatchExpression(int id, const QString& expr)
 {
-    for (QListViewItem *child = firstChild(); child != 0; child = child->nextSibling()) {
+    for (	QListViewItem *child = firstChild(); 
+			child != 0; 
+			child = child->nextSibling() ) 
+	{
         WatchVarItem *varItem = (WatchVarItem*) child;
 		if (varItem->displayId() == id) {
 			Q_ASSERT( expr.startsWith(varItem->text(VAR_NAME_COLUMN)) );
@@ -981,6 +996,50 @@ void WatchRoot::updateWatchExpression(int id, const QString& expr)
 			return;
 		}
 	}
+}
+
+void WatchRoot::savePartialProjectSession(QDomElement* el)
+{
+    QDomDocument domDoc = el->ownerDocument();
+    if (domDoc.isNull()) {
+        return;
+	}
+	
+    QDomElement watchEl = domDoc.createElement("watchExpressions");
+    
+	for (	QListViewItem *child = firstChild(); 
+			child != 0; 
+			child = child->nextSibling() )
+	{
+        QDomElement subEl = domDoc.createElement("el");
+        subEl.appendChild(domDoc.createTextNode(child->text(VAR_NAME_COLUMN)));
+        watchEl.appendChild(subEl);
+	}
+	
+    if (!watchEl.isNull()) {
+        el->appendChild(watchEl);
+	}
+	
+	return;
+}
+
+void WatchRoot::restorePartialProjectSession(const QDomElement* el)
+{
+    QDomDocument domDoc = el->ownerDocument();
+    if (domDoc.isNull()) {
+        return;
+	}
+	
+    QDomElement watchEl = el->namedItem("watchExpressions").toElement();
+    QDomElement subEl = watchEl.firstChild().toElement();
+	
+    while (!subEl.isNull()) {
+		new WatchVarItem(this, subEl.firstChild().toText().data(), UNKNOWN_TYPE);
+		
+        subEl = subEl.nextSibling().toElement();
+    }
+	
+	return;
 }
 
 // **************************************************************************
