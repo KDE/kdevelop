@@ -754,7 +754,7 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
       SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
       if (spi) {
         QPtrList< TargetItem > tl = spi->targets;
-        // Cycle throught the list of targets to find the one we're looking for
+        // Cycle through the list of targets to find the one we're looking for
         TargetItem *ti = tl.first();
         do {
           if (ti->name == tname) {

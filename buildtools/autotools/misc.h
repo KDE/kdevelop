@@ -46,7 +46,7 @@ public:
     static QStringList configureinLoadMakefiles(QString configureinpath);
 
     /**
-     * Recieves a QStringList and puts it into
+     * Receives a QStringList and puts it into
      * configure.in as arguments to AC_OUTPUT
      */
     static void configureinSaveMakefiles(QString configureinpath, QStringList makefiles);

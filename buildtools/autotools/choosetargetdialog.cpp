@@ -85,7 +85,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectP
 	if ( widget->activeTarget() && widget->activeSubproject() )
 	{
 		m_choosenTarget = widget->activeTarget();
-		//kdDebug ( 9000 ) << "1) Choosen target is " << m_choosenTarget->name << endl;
+		//kdDebug ( 9000 ) << "1) Chosen target is " << m_choosenTarget->name << endl;
 		m_choosenSubproject = widget->activeSubproject();
 		choosenTargetLabel->setText ( ( widget->activeSubproject()->path + "/<b>" + m_widget->activeTarget()->name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 		subprojectComboBox->setEnabled ( false );
@@ -169,7 +169,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 						choosenTargetLabel->setText ( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid ( m_part->projectDirectory().length() + 1 ) );
 						//choosenSubprojectLabel->setText ( ( spitem->path + "<b>" + titem->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
 						m_choosenTarget = titem;
-						//kdDebug ( 9000 ) << "2) Choosen target is " << m_choosenTarget->name << endl;
+						//kdDebug ( 9000 ) << "2) Chosen target is " << m_choosenTarget->name << endl;
 					}
 					else
 					{
@@ -181,7 +181,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 
 							m_choosenTarget = titem;
 						}
-						//kdDebug ( 9000 ) << "2a) Choosen target is " << m_choosenTarget->name << endl;
+						//kdDebug ( 9000 ) << "2a) Chosen target is " << m_choosenTarget->name << endl;
 					}
 				}
 			}
@@ -203,7 +203,7 @@ void ChooseTargetDialog::slotTargetChanged ( const QString& name )
 		if ( titem->name == name )
 		{
 			m_choosenTarget = titem;
-			//kdDebug ( 9000 ) << "4) Choosen target is " << m_choosenTarget->name << endl;
+			//kdDebug ( 9000 ) << "4) Chosen target is " << m_choosenTarget->name << endl;
 
 			break;
 		}
@@ -256,7 +256,7 @@ void ChooseTargetDialog::accept ()
 	if ( !m_choosenSubproject || !m_choosenTarget )
 		return;
 
-	//kdDebug ( 9000 ) << "3) Choosen target is " << m_choosenTarget->name << endl;
+	//kdDebug ( 9000 ) << "3) Chosen target is " << m_choosenTarget->name << endl;
 
 	QStringList newFileList;
 	QStringList::iterator it;

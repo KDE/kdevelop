@@ -138,7 +138,7 @@ private:
     friend class AddSubprojectDialog;
     friend class FileItem;
 
-    // For make commands queueing
+    // For make commands queuing
     QString constructMakeCommandLine(const QString &dir, const QString &target) const;
     void queueInternalLibDependenciesBuild(TargetItem* titem);
 };

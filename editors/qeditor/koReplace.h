@@ -152,7 +152,7 @@ private:
  *
  *
  * This class includes prompt handling etc. Also provides some
- * static functions which can be used to create custom behaviour
+ * static functions which can be used to create custom behavior
  * instead of using the class directly.
  *
  * Example
