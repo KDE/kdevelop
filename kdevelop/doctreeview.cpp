@@ -30,8 +30,11 @@
 #include "cproject.h"
 #include "doctreeview.h"
 #include <stdio.h>
-#define BEN_QLISTVIEW_BYPASS			//define this symbol for using my solution to the docview bug
-																	//undefine it to use jbb's
+
+// There are still problems with BEN's workaround in certain circumstances
+// so for the time being I've used my solution. jbb 07-02-2000
+//#define BEN_QLISTVIEW_BYPASS	//define this symbol for using my solution to the docview bug
+                                //undefine it to use jbb's
 
 /**
  * A list view item that is decorated with a doc icon.
