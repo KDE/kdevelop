@@ -1,3 +1,8 @@
+2002-06-12  F@lk Brettschneider <falk@kdevelop.org>
+    * fixed newly introduced bugs in CMakeOutputView:
+      - line wrap is on again (wrapping is cooler than loooong lines!)
+      - Qt-3.0.3, only: jump to error jumped to wrong line after the patch of Sebastian was applied
+      - scroll to bottom after insertAt as lang as you didn't click on a certain line to stay there
 2002-06-10  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Kuba Ober fixing the single-compile functionality for Custom projects
 2002-06-07  Roland Krause  <roland@ca.wai.com>
