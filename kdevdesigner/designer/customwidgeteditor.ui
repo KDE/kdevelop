@@ -283,7 +283,7 @@
                                     <cstring>editHeader</cstring>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Enter file name</string>
+                                    <string>Enter filename</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>&lt;b&gt;Change the header file's name for the selected custom widget.&lt;/b&gt;&lt;p&gt;The header file will be included by forms using the widget.&lt;/p&gt;</string>

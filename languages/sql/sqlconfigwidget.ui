@@ -51,7 +51,7 @@
             </column>
             <column>
                 <property name="text">
-                    <string>User Name</string>
+                    <string>Username</string>
                 </property>
                 <property name="pixmap">
                     <pixmap></pixmap>

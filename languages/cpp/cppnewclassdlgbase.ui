@@ -138,7 +138,7 @@ still edit it afterwards.</string>
                                     <cstring>implementation_edit</cstring>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Insert your implementation file name here.
+                                    <string>Insert your implementation filename here.
 It is automatically inserted while
 you select the classname, but you can
 still edit it afterwards.</string>

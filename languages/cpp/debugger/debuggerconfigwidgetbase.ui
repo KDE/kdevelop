@@ -228,7 +228,7 @@ Otherwise leave it unchecked.</string>
 embedded gdbstub on the target). Key command here is:
         ssh ${ruser} gdbserver jeloin:2345 "${remote##/*/}"
 where jeloin:2345 is the host and a port.
-"${remote##/*/}" is magic for remote file name without (the host local) path.
+"${remote##/*/}" is magic for remote filename without (the host local) path.
 
 The goal of "Run gdb script" (gdb commands) is to connect with that target.
 Key command in this file is: target remote dox:2345

@@ -64,10 +64,10 @@
                         <bool>false</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Change log file name path (relative to project directory)</string>
+                        <string>Change log filename path (relative to project directory)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Changelog file name path&lt;/b&gt;&lt;br/&gt;Insert here the Changelog file name you wish to use so that the message is appended</string>
+                        <string>&lt;b&gt;Changelog filename path&lt;/b&gt;&lt;br/&gt;Insert here the Changelog filename you wish to use so that the message is appended</string>
                     </property>
                 </widget>
             </hbox>

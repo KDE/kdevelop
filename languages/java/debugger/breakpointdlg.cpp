@@ -48,7 +48,7 @@ BPDialog::BPDialog(Breakpoint *BP, QWidget *parent, const char *name)
     QBoxLayout *topLayout = new QVBoxLayout(this, 10);
     QString title;
     if (BP->hasSourcePosition())
-        title = i18n("File name: %1 at line: %2").arg(BP->fileName()).arg(BP->lineNum());
+        title = i18n("Filename: %1 at line: %2").arg(BP->fileName()).arg(BP->lineNum());
     else
         title = i18n("Breakpoint");
     QLabel *label = new QLabel(this);
