@@ -41,6 +41,7 @@ class AdvListViewItem : public QListViewItem
   public:
     AdvListViewItem( QListView * parent, QString a, QString b );
     AdvListViewItem( AdvListViewItem * parent, QString a, QString b );
+    virtual ~AdvListViewItem();
 
     virtual void paintCell( QPainter *,  const QColorGroup & cg,
 			    int column, int width, int alignment );
