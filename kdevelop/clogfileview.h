@@ -34,51 +34,50 @@
   */
 
 class CLogFileView : public QListView {
-  Q_OBJECT 
-public: 
-  /** construtor */
-  CLogFileView(QWidget*parent=0,const char* name=0); 
-  /** destructor */
-  ~CLogFileView();
-
-/** starts the refresh */
-  void refresh(CProject* prj);
-  bool isGroup(QListViewItem* item);
-  bool isFile(QListViewItem* item);
-  bool leftButton();
-  bool rightButton();
-  protected:
-  void mousePressEvent(QMouseEvent* event);
-  void split(QString str,QStrList& filters);
-  protected slots:
-      void  slotRightButtonPressed( QListViewItem *,const QPoint &,int);
-  void  slotSelectionChanged( QListViewItem *);
-  void slotNewClass();
-  void slotNewFile();
-  void slotNewGroup();
-  void slotFileProp();
-  void slotFileRemove();
-  void slotFileDelete();
-  void slotGroupProp();
-  void slotGroupRemove();
-  
-  signals:
-  void selectedNewClass();
-  void selectedNewFile();
-  void selectedFileProp();
-  void selectedFileRemove();
-  void selectedGroupProp();
-  void  logFileTreeSelected(QListViewItem*);
-protected:
-KIconLoader* icon_loader;
-  KPopupMenu*  file_pop;
-  KPopupMenu*  group_pop;  
-  KPopupMenu* project_pop;
-  bool left_button;
-  bool right_button;
-  QPoint mouse_pos; // the position at the last mousepress-event
-  CProject* project;
-
+    Q_OBJECT 
+	public: 
+    /** construtor */
+    CLogFileView(QWidget*parent=0,const char* name=0); 
+    /** destructor */
+    ~CLogFileView();
+    
+    /** starts the refresh */
+    void refresh(CProject* prj);
+    bool isGroup(QListViewItem* item);
+    bool isFile(QListViewItem* item);
+    bool leftButton();
+    bool rightButton();
+ protected:
+    void mousePressEvent(QMouseEvent* event);
+    void split(QString str,QStrList& filters);
+    protected slots:
+	void  slotRightButtonPressed( QListViewItem *,const QPoint &,int);
+    void  slotSelectionChanged( QListViewItem *);
+    void slotNewClass();
+    void slotNewFile();
+    void slotNewGroup();
+    void slotFileProp();
+    void slotFileRemove();
+    void slotFileDelete();
+    void slotGroupProp();
+    void slotGroupRemove();
+    
+ signals:
+    void selectedNewClass();
+    void selectedNewFile();
+    void showFileProperties(QString);
+    void selectedFileRemove();
+    void selectedGroupProp();
+    void  logFileTreeSelected(QString);
+ protected:
+    KIconLoader* icon_loader;
+    KPopupMenu*  file_pop;
+    KPopupMenu*  group_pop;  
+    KPopupMenu* project_pop;
+    bool left_button;
+    bool right_button;
+    QPoint mouse_pos; // the position at the last mousepress-event
+    CProject* project;
 };
 #endif
 

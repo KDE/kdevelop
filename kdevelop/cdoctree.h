@@ -57,5 +57,9 @@ protected:
   void slotRemoveDocumentation();
   void slotDocumentationProp();
   void slotRightButtonPressed( QListViewItem *,const QPoint &,int);
+  void slotSelectionChanged(QListViewItem* item);
+
+ signals:
+void  fileSelected(QString url_file);
 };
 #endif

@@ -140,7 +140,6 @@ void CKDevelop::init(){
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
   real_file_tree->setFocusPolicy(QWidget::NoFocus);
-  real_file_tree->setIndentSpacing(15);
 
   doc_tree = new CDocTree(t_tab_view,"DOC",config);
   doc_tree->setFocusPolicy(QWidget::NoFocus);
@@ -157,15 +156,16 @@ void CKDevelop::init(){
   connect(class_tree, SIGNAL(selectedViewDeclaration()), SLOT(slotCVViewDeclaration()));
   connect(class_tree, SIGNAL(selectedViewDefinition()), SLOT(slotCVViewDefinition()));
 
-  connect(log_file_tree, SIGNAL(logFileTreeSelected(QListViewItem*)), SLOT(slotLogFileTreeSelected(QListViewItem*)));
+  connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
   connect(log_file_tree, SIGNAL(selectedFileRemove()), SLOT(slotProjectRemoveFile()));
-  connect(log_file_tree, SIGNAL(selectedFileProp()),SLOT(slotProjectFileProperties()));
+  connect(log_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
 
-  connect(real_file_tree, SIGNAL(singleSelected(int)), SLOT(slotRealFileTreeSelected(int)));
+  connect(real_file_tree, SIGNAL(fileSelected(QString)), SLOT(slotRealFileTreeSelected(QString)));
+  connect(real_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
 
-  connect(doc_tree, SIGNAL(selectionChanged()), SLOT(slotDocTreeSelected()));
+  connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
 
 
   // the tabbar + tabwidgets for edit and browser

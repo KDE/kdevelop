@@ -231,6 +231,8 @@ public:
   void slotProjectNewClass();
   /** opens the properties dialog for the project files */
   void slotProjectFileProperties();
+  /** opens the properties dialog for project files,rel_name is selected, used by RFV,LFV*/
+  void slotShowFileProperties(QString rel_name);
   /** opens the project options dialog */
   void slotProjectOptions();
   /** selects the project workspace */
@@ -357,11 +359,11 @@ public:
   /** click action on classviewer CV */
   void slotClassTreeSelected();
   /** click action on LFV */
-  void slotLogFileTreeSelected(QListViewItem* item);
+  void slotLogFileTreeSelected(QString file);
   /** click action on RFV */
-  void slotRealFileTreeSelected(int index);
+  void slotRealFileTreeSelected(QString file);
   /** click action on DOC */
-  void slotDocTreeSelected();
+  void slotDocTreeSelected(QString url_file);
   /** selection of classes in the browser toolbar */
   void slotClassChoiceCombo(int index);
   /** selection of methods in the browser toolbar */

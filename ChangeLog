@@ -11,7 +11,6 @@
 	* added Bookmarks-menu for the header and cpp widget with key-accelerators
 	
 1999-03-26  Pascal Krahmer  <pascal@breast.de>
->>>>>>> 1.105
         * added Rulers to the KDlgEditWidget (ToDo : Arrows in rulers should follow the mouse cursor)
         * added a first grid to the widget-items
         * fixed the widget placement bug

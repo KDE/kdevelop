@@ -384,33 +384,7 @@ void CKDevelop::slotViewTTreeView(){
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
   top_panner->resize(rMainGeom.width(),rMainGeom.height());
 }
-void CKDevelop::showTreeView(bool show){
-  if(bAutoswitch)
-  {
-    if(show){
-      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-        return; // it's already visible){
-      }
-      else{
-        top_panner->setSeparatorPos(tree_view_pos);
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-      }
-    }
-    else{
-      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-        return; // it's already unvisible){
-      }
-      else{
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-        tree_view_pos=top_panner->separatorPos();
-        top_panner->setSeparatorPos(0);
-      }
-    }
-    QRect rMainGeom= top_panner->geometry();
-    top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-    top_panner->resize(rMainGeom.width(),rMainGeom.height());
-  }
-}
+
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
@@ -428,32 +402,7 @@ void CKDevelop::slotViewTOutputView(){
   view->resize(rMainGeom.width(),rMainGeom.height());
 }
 
-void CKDevelop::showOutputView(bool show){
-  if(bAutoswitch){
-    if(show){
-      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-        return; // it's already visible
-      }
-      else{
-        view->setSeparatorPos(output_view_pos);
-        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-      }
-    }
-    else{
-      if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-        return; //it's already unvisible
-      }
-      else{
-        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-        output_view_pos=view->separatorPos();
-        view->setSeparatorPos(100);
-      }
-    }
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-    view->resize(rMainGeom.width(),rMainGeom.height());
-  }
-}
+
 void CKDevelop::slotViewTStdToolbar(){
  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
    view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
@@ -1637,165 +1586,40 @@ void CKDevelop::slotMenuBuffersSelected(int id){
 }
 
 
-void CKDevelop::slotLogFileTreeSelected(QListViewItem* item){
-  // no action on Project or Group click with left button
-  //  cerr << "SELECTED\n";
- //  if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action on child
-
-  if(!(log_file_tree->isFile(item))) return; // it is not file
-  if(!log_file_tree->leftButton()) return; // right button: return
-
-  switchToFile(prj->getProjectDir() + item->text(0));
-  //  cerr << "SELECTED2\n";
+void CKDevelop::slotLogFileTreeSelected(QString file){
+  switchToFile(file);
 }
 
-void CKDevelop::slotRealFileTreeSelected(int index){
-  if (real_file_tree->itemAt(index)->hasChild() == true) return; // no action
-  KPath* path = real_file_tree->itemPath(index);
-  QString str_path;
-  QString* str;
-  //cerr << index;
-  str = path->pop();
-  str_path =  *str + str_path;
-  while ((str = path->pop()) != 0){
-    if (str->right(1) == "/"){
-      str_path =  *str + str_path;
-    }
-    else{
-      str_path =  *str + "/"+ str_path;
-    }
-  }
-  //  cerr << str_path;
-  switchToFile(str_path);
-
+void CKDevelop::slotRealFileTreeSelected(QString file){
+  switchToFile(file);
 }
 
-void CKDevelop::slotDocTreeSelected(){
-  QString text = doc_tree->currentItem()->text(0);
-  if( text == i18n("Documentation")){
-    slotHelpContents();
-    return;
-  }
-  if (doc_tree->currentItem()->childCount() > 0) return; // no action
-
-  KLocale *kloc = KApplication::getKApplication()->getLocale();
-
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
-  QString file;
-
-  config->setGroup("Doc_Location");
-  if(text == i18n("Tutorial") ){
-    // first try the locale setting
-    file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default
-      file = strpath + "default/" + "kdevelop/tutorial.html";
+void CKDevelop::slotDocTreeSelected(QString url_file){
+    if(url_file == "API-Documentation"){
+	slotHelpAPI();
+	return;
     }
-
-    slotURLSelected(browser_widget,"file:" + file,1,"test");
-    return;
-  }
-  if(text == i18n("Manual") ){
-    // first try the locale setting
-    file = strpath + kloc->language() + '/' + "kdevelop/index.html";
-
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default
-      file = strpath + "default/" + "kdevelop/index.html";
+    if(url_file == "User-Manual"){
+	slotHelpManual();
+	return;
     }
-    slotURLSelected(browser_widget,"file:" + file,1,"test");
-    return;
-  }
-  if(text == i18n("C/C++ Reference") ){
-    // first try the locale setting
-    file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
-
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default
-      file = strpath + "default/" + "kdevelop/reference/C/cref.html";
-    }
-    if( !QFileInfo( file ).exists() ){
-      // show the translated error page
-      file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
-    }
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default error page
-      file = strpath + "default/" + "kdevelop/cref.html";
-    }
-    slotURLSelected(browser_widget,"file:" + file,1,"test");
-    return;
-  }
-  if(text == i18n("Qt-Library") ){
-    slotURLSelected(browser_widget,"file:" +config->readEntry("doc_qt") + "index.html",1,"test");
-    return;
-  }
-  if(text == i18n("KDE-Core-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdecore/index.html",1,"test");
-    return;
-  }
-  if(text == i18n("KDE-UI-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeui/index.html",1,"test");
-    return;
-  }
-  if(text == i18n("KDE-KFile-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfile/index.html",1,"test");
-    return;
-  }
-  if(text == i18n("KDE-KHTMLW-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtmlw/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("KDE-KHTML-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtml/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("KDE-KFM-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfmlib/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("KDE-KDEutils-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeutils/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("KDE-KAB-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kab/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("KDE-KSpell-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kspell/index.html",1,"test");
-     return;
-  }
-  if(text == i18n("API-Documentation") ){
-    slotHelpAPI();
-     return;
-  }
-  if(text == i18n("User-Manual") ){
-    slotHelpManual();
-     return;
-  }
-  
-  config->setGroup("Other_Doc_Location");
-  QFileInfo file_info(config->readEntry(text));
-  if(file_info.isFile()){
-    slotURLSelected(browser_widget,"file:" + config->readEntry(text),1,"test");
-  }
-
+    slotURLSelected(browser_widget,url_file,1,"test");
 }
 
 void CKDevelop::slotTCurrentTab(int item){
-  t_tab_view->setCurrentTab(item);
+    t_tab_view->setCurrentTab(item);
 }
 
 void CKDevelop::slotSCurrentTab(int item){
-  s_tab_view->setCurrentTab(item);
+    s_tab_view->setCurrentTab(item);
 }
 
 void CKDevelop::slotShowC() {
-  s_tab_view->setCurrentTab( CPP );
+    s_tab_view->setCurrentTab( CPP );
 }
 
 void CKDevelop::slotShowHeader() {
-  s_tab_view->setCurrentTab( HEADER );
+    s_tab_view->setCurrentTab( HEADER );
 }
 
 void CKDevelop::slotShowHelp() {
@@ -1817,62 +1641,6 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
   menu_buffers->popup( point );
 }
 
-void CKDevelop::closeEvent(QCloseEvent* e){
-  config->setGroup("General Options");
-  config->writeEntry("width",width());
-  config->writeEntry("height",height());
-
-  config->writeEntry("view_panner_pos",view->separatorPos());
-  config->writeEntry("top_panner_pos",top_panner->separatorPos());
-  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
-
-  config->writeEntry("tree_view_pos",tree_view_pos);
-  config->writeEntry("output_view_pos",output_view_pos);
-  config->writeEntry("properties_view_pos", properties_view_pos);
-
-  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
-  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
-  config->writeEntry("show_properties_view",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
-
-  config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
-  config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
-  config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
-
-  config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
-  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
-  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
-
-  config->writeEntry("show_kdevelop",bKDevelop);
-
-  config->writeEntry("Autosave",bAutosave);
-  config->writeEntry("Autosave Timeout",saveTimeout);
-
-  config->writeEntry("Make",make_cmd);
-
-  config->setGroup("Files");
-  config->writeEntry("cpp_file",cpp_widget->getName());
-  config->writeEntry("header_file",header_widget->getName());
-  config->writeEntry("browser_file",history_list.current());
-
-  config->setGroup("Files");
-  config->writeEntry("project_file","");
-  if(project){
-    config->writeEntry("project_file",prj->getProjectFile());
-    prj->setCurrentWorkspaceNumber(workspace);
-    saveCurrentWorkspaceIntoProject();
-    prj->writeProject();
-    if(!slotProjectClose()){ // if not ok,pressed cancel
-      e->ignore();
-      return; //not close!
-    }
-  }
-  e->accept();
-  swallow_widget->sWClose(false);
-
-  config->sync();
-  KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
-  KTMainWindow::closeEvent(e);
-}
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {
@@ -2075,8 +1843,6 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
-
-
 
 
 

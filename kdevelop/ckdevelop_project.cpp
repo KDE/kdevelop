@@ -582,7 +582,10 @@ void CKDevelop::slotProjectFileProperties(){
   dlg.show();
 }
 
-
+void CKDevelop::slotShowFileProperties(QString rel_name){
+  CFilePropDlg dlg(this,"DLG",prj);
+  dlg.show();
+}
 
 void CKDevelop::slotProjectOpen(){
   QString old_project = "";

@@ -3,7 +3,7 @@
                              -------------------                                         
 
     begin                : 3 Oct 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    copyright            : (C) 1998,1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -41,7 +41,7 @@ CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : QListView(
   doc_pop->insertSeparator();
   doc_pop->insertItem(i18n("Properties..."),this,SLOT(slotDocumentationProp()));
   connect(this,SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int )),SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
-  
+  connect(this,SIGNAL(selectionChanged(QListViewItem*)),SLOT(slotSelectionChanged( QListViewItem *)));
   setRootIsDecorated(true);
   addColumn("JK");
   header()->hide();
@@ -235,6 +235,114 @@ void CDocTree::slotDocumentationProp(){
   }
 }
 
+void CDocTree::slotSelectionChanged(QListViewItem* item){
+    cerr << "CHANGED";
+    QString text = item->text(0);
+    if (item->childCount() > 0) return; // no action
+    
+    KLocale *kloc = KApplication::getKApplication()->getLocale();
+    
+    QString strpath = KApplication::kde_htmldir().copy() + "/";
+    QString file;
+    
+    config_kdevelop->setGroup("Doc_Location");
+    
+    if(text == i18n("Tutorial") ){
+	// first try the locale setting
+	file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
+	if( !QFileInfo( file ).exists() ){
+	    // not found: use the default
+	    file = strpath + "default/" + "kdevelop/tutorial.html";
+	}
+	
+	emit fileSelected("file:" + file);
+	return;
+    }
+    if(text == i18n("Manual") ){
+	// first try the locale setting
+	file = strpath + kloc->language() + '/' + "kdevelop/index.html";
+	
+	if( !QFileInfo( file ).exists() ){
+	    // not found: use the default
+	    file = strpath + "default/" + "kdevelop/index.html";
+	}
+	emit fileSelected("file:" + file);
+	return;
+    }
+    if(text == i18n("C/C++ Reference") ){
+	// first try the locale setting
+	file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+	
+	if( !QFileInfo( file ).exists() ){
+	    // not found: use the default
+	    file = strpath + "default/" + "kdevelop/reference/C/cref.html";
+	}
+	if( !QFileInfo( file ).exists() ){
+	    // show the translated error page
+	    file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
+	}
+	if( !QFileInfo( file ).exists() ){
+	    // not found: use the default error page
+	    file = strpath + "default/" + "kdevelop/cref.html";
+	}
+	emit fileSelected("file:" + file);
+	return;
+    }
+    if(text == i18n("Qt-Library") ){
+	emit fileSelected("file:" +config_kdevelop->readEntry("doc_qt") + "index.html");
+	return;
+    }
+    if(text == i18n("KDE-Core-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kdecore/index.html");
+	return;
+    }
+    if(text == i18n("KDE-UI-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kdeui/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KFile-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kfile/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KHTMLW-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "khtmlw/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KHTML-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "khtml/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KFM-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kfmlib/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KDEutils-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kdeutils/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KAB-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kab/index.html");
+	return;
+    }
+    if(text == i18n("KDE-KSpell-Library") ){
+	emit fileSelected("file:" + config_kdevelop->readEntry("doc_kde") + "kspell/index.html");
+	return;
+    }
+    if(text == i18n("API-Documentation") ){
+	emit fileSelected("API-Documentation");
+	return;
+    }
+    if(text == i18n("User-Manual") ){
+	emit fileSelected("User-Manual");
+	return;
+    }
+    
+    config_kdevelop->setGroup("Other_Doc_Location");
+    QFileInfo file_info(config_kdevelop->readEntry(text));
+    if(file_info.isFile()){
+	emit fileSelected("file:" + config_kdevelop->readEntry(text));
+    }
+}
 
 
 

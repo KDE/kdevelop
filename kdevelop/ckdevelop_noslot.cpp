@@ -33,8 +33,7 @@ void CKDevelop::refreshTrees(){
   class_tree->refresh(prj);
   refreshClassCombo();
   log_file_tree->refresh(prj);
-  real_file_tree->refresh(prj->getProjectDir());
-  real_file_tree->setExpandLevel(1);
+  real_file_tree->refresh(prj);
  
 }
  
@@ -362,10 +361,116 @@ void CKDevelop::switchToWorkspace(int id){
   else{showTreeView(false);}
 }
 
+void CKDevelop::showTreeView(bool show){
+  if(bAutoswitch)
+  {
+    if(show){
+      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+        return; // it's already visible){
+      }
+      else{
+        top_panner->setSeparatorPos(tree_view_pos);
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+      }
+    }
+    else{
+      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+        return; // it's already unvisible){
+      }
+      else{
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+        tree_view_pos=top_panner->separatorPos();
+        top_panner->setSeparatorPos(0);
+      }
+    }
+    QRect rMainGeom= top_panner->geometry();
+    top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
+    top_panner->resize(rMainGeom.width(),rMainGeom.height());
+  }
+}
+void CKDevelop::showOutputView(bool show){
+  if(bAutoswitch){
+    if(show){
+      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+        return; // it's already visible
+      }
+      else{
+        view->setSeparatorPos(output_view_pos);
+        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+      }
+    }
+    else{
+      if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+        return; //it's already unvisible
+      }
+      else{
+        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+        output_view_pos=view->separatorPos();
+        view->setSeparatorPos(100);
+      }
+    }
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+    view->resize(rMainGeom.width(),rMainGeom.height());
+  }
+}
 
+void CKDevelop::closeEvent(QCloseEvent* e){
+  config->setGroup("General Options");
+  config->writeEntry("width",width());
+  config->writeEntry("height",height());
 
+  config->writeEntry("view_panner_pos",view->separatorPos());
+  config->writeEntry("top_panner_pos",top_panner->separatorPos());
+  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
 
+  config->writeEntry("tree_view_pos",tree_view_pos);
+  config->writeEntry("output_view_pos",output_view_pos);
+  config->writeEntry("properties_view_pos", properties_view_pos);
 
+  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
+  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
+  config->writeEntry("show_properties_view",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
+
+  config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
+  config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
+  config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
+
+  config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
+  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
+
+  config->writeEntry("show_kdevelop",bKDevelop);
+
+  config->writeEntry("Autosave",bAutosave);
+  config->writeEntry("Autosave Timeout",saveTimeout);
+
+  config->writeEntry("Make",make_cmd);
+
+  config->setGroup("Files");
+  config->writeEntry("cpp_file",cpp_widget->getName());
+  config->writeEntry("header_file",header_widget->getName());
+  config->writeEntry("browser_file",history_list.current());
+
+  config->setGroup("Files");
+  config->writeEntry("project_file","");
+  if(project){
+    config->writeEntry("project_file",prj->getProjectFile());
+    prj->setCurrentWorkspaceNumber(workspace);
+    saveCurrentWorkspaceIntoProject();
+    prj->writeProject();
+    if(!slotProjectClose()){ // if not ok,pressed cancel
+      e->ignore();
+      return; //not close!
+    }
+  }
+  e->accept();
+  swallow_widget->sWClose(false);
+
+  config->sync();
+  KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
+  KTMainWindow::closeEvent(e);
+}
 
 
 

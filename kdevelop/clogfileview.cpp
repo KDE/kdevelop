@@ -151,7 +151,9 @@ void CLogFileView::refresh(CProject* prj){
   setOpen(top_item,true);
 }
 void CLogFileView::slotSelectionChanged( QListViewItem* item){
-    emit logFileTreeSelected(item);
+    if(!(isFile(item))) return; // it is not file
+    if(!leftButton()) return; // right button: return
+    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
 }
 
 void CLogFileView::mousePressEvent(QMouseEvent* event){
@@ -210,7 +212,7 @@ void CLogFileView::slotNewFile(){
   emit selectedNewFile();
 }
 void CLogFileView::slotFileProp(){
-  emit selectedFileProp();
+  emit showFileProperties(currentItem()->text(0));
 }
 void CLogFileView::slotGroupProp(){
   QStrList filters;
