@@ -24,7 +24,7 @@
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlined.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <kapp.h>
 #include <kprocess.h>
 /**Provides an installation module checking
@@ -48,7 +48,10 @@ protected slots:
     void slotHelp();
     void slotAuto();
     void slotCancel();
-protected:
+    void slotReceivedStdout(KProcess*,char*,int);
+    void slotReceivedStderr(KProcess*,char*,int);
+    void slotProcessExited(KProcess*);
+ protected:
 	  KConfig *config;
     QFrame* main_frame;
     QLabel* welcome_label;
@@ -66,10 +69,16 @@ protected:
     QPushButton* help_button;
     QPushButton* auto_button;
     QPushButton* cancel_button;
+
+    KShellProcess* shell_process;
 private:
     bool qt_test;
     bool kde_test;
     bool successful;
+    
+    bool glimpse;
+    bool glimpseindex;
+    bool finished_glimpse;
 
 };
 

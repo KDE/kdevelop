@@ -250,7 +250,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QLabel* qt_label;
   qt_label = new QLabel( w, "qt_label" );
   qt_label->setGeometry( 20, 40, 140, 30 );
-  qt_label->setText( i18n("Qt-library:") );
+  qt_label->setText( i18n("Qt-Library-Doc:") );
   
   
   KQuickHelp::add(qt_edit,
@@ -278,7 +278,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QLabel* kde_label;
   kde_label = new QLabel( w, "kde_label" );
   kde_label->setGeometry( 20, 90, 140, 30 );
-  kde_label->setText( i18n("KDE-libraries:") );
+  kde_label->setText( i18n("KDE-Libraries-Doc:") );
   
   KQuickHelp::add(kde_edit,
   KQuickHelp::add(kde_button,
@@ -432,8 +432,14 @@ void CKDevSetupDlg::ok(){
   QString text;
   config->setGroup("Doc_Location");
   text = qt_edit->text();
+  if(text.right(1) != "/") {
+    text = text + "/";
+  }
   config->writeEntry("doc_qt",text);
   text = kde_edit->text();
+  if(text.right(1) != "/" ){
+    text = text + "/";
+  }
   config->writeEntry("doc_kde" , text);
   
   accel->setKeyDict( *dict);

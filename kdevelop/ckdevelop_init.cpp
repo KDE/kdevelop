@@ -372,6 +372,7 @@ void CKDevelop::initMenu(){
 
   menuBar()->insertItem(i18n("&File"), file_menu);
   disableCommand(ID_FILE_NEW);
+  disableCommand(ID_FILE_PRINT);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -693,7 +694,7 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
-  toolBar()->insertButton(pix,ID_FILE_PRINT,true,i18n("Print"));
+  toolBar()->insertButton(pix,ID_FILE_PRINT,false,i18n("Print"));
 
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);

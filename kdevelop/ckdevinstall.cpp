@@ -26,17 +26,87 @@
 #include <kapp.h>
 #include <kmsgbox.h>
 #include <kfiledialog.h>
-#include <kprocess.h>
 
 #include "ckdevinstall.h"
 #include "ctoolclass.h"
 #include "cupdatekdedocdlg.h"
 #include "ccreatedocdatabasedlg.h"
 
+void CKDevInstall::slotReceivedStdout(KProcess*,char* buffer,int){
+  
+}
+void CKDevInstall::slotReceivedStderr(KProcess*,char*,int){
+}
+void CKDevInstall::slotProcessExited(KProcess*){
+    if (!finished_glimpse){
+	finished_glimpse=true;
+	if(!glimpse && !glimpseindex){
+	    KMsgBox::message(this,i18n("Information"), i18n("The program glimpse is not installed,\n"
+							    "therefore KDevelop can not index your\n"
+							    "documentation to provide a proper help\n"
+							    "functionality. We advise to install glimpse\n"
+							    "and create the searchdatabase with the KDevelop\n"
+							    "Setup in the Options menu later.\n\n"
+							    "As this is the last step of the Installation\n"
+							    "process, KDevelop will be started now.\n\n"
+							    "We hope you enjoy KDevelop and that it is a useful\n"
+							    "help to create new software.\n\nThe KDevelop Team"),KMsgBox::INFORMATION);
+	    
+	    config->setGroup("General Options");
+	    config->writeEntry("Install",false);
+	    accept();
+	}
+	else{
+	    KMsgBox::message(this,i18n("Information"),i18n("Now KDevelop will perform the last step\n"
+							   "of the installation process with indexing\n"
+							   "your documentation. This will provide an extended\n"
+							   "help functionality and will give you the information\n"
+							   "you need."), KMsgBox::INFORMATION);
+	    
+	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config);
+	    if(!dlg.exec()){
+		slotProcessExited(shell_process);
+	    }
+	    hint_label->setText(i18n("                  create search database                        "
+	                          "                                                             "
+	                          "                      please wait...                           "
+	                          "                                                               "
+	                          "                                                               ") );
+	    return;
+	}
+	
+    }
+    
+    
+    KMsgBox::message(this,i18n("Installation successful !"), i18n("The installation process finished successfully.\n"
+                                                          "The KDevelop Team wishes that you will enjoy our\n"
+                                                          "program and we would be honoured for any feedback.\n\n"
+                                                          "The KDevelop Team"), KMsgBox::INFORMATION);
+
+  config->setGroup("General Options");
+  config->writeEntry("Install",false);
+
+  accept();
+    
+}
 CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
+    // shellprocess
+    finished_glimpse=false;
 
-	config = kapp->getConfig();
+    shell_process = new KShellProcess();
+    connect(shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+	    this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+    
+    connect(shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	    this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+    
+    connect(shell_process,SIGNAL(processExited(KProcess*)),
+	    this,SLOT(slotProcessExited(KProcess*) )) ;
+    
+    config = kapp->getConfig();
 
+
+	
   setCaption(i18n("KDevelop Installation"));
 
   main_frame = new QFrame( this, "Frame_2" );
@@ -209,6 +279,9 @@ void CKDevInstall::slotQTpressed()
 
     QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
     if(QFileInfo(qt_testfile).exists()){
+      if(dir.right(1) != "/"){
+	dir=dir+"/";
+      }
       config->writeEntry("doc_qt",dir);
       qt_test=false;
     }
@@ -262,8 +335,8 @@ void CKDevInstall::slotAuto() // proceed >>
   bool sgml2html=false;
   bool ksgml2html=false;
   bool kdoc=false;
-  bool glimpse=false;
-  bool glimpseindex=false;
+  glimpse=false;
+  glimpseindex=false;
   bool kdbg=false;
   bool kiconedit=false;
   bool ktranslator=false;
@@ -360,22 +433,22 @@ void CKDevInstall::slotAuto() // proceed >>
   if(sgml2html)
     sgml2html_str="sgml2html"+found;
   else
-    sgml2html_str="sgml2html"+not_found+" -- generating application handbooks will not be possible";
+    sgml2html_str="sgml2html"+not_found+" -- generating application handbooks will not be possible\n";
   QString kdoc_str;
   if(kdoc)
     kdoc_str="kdoc"+found;
   else
-    kdoc_str="kdoc"+not_found+" -- generating API-documentation will not be possible";
+    kdoc_str="kdoc"+not_found+" -- generating API-documentation will not be possible\n";
   QString kdbg_str;
   if(kdbg)
     kdbg_str="kdbg"+found;
   else
-    kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible";
+    kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
   QString kiconedit_str;
   if(kiconedit)
     kiconedit_str="KIconedit"+found;
   else
-    kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible";
+    kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible\n";
   QString ktranslator_str;
   if(ktranslator)
     ktranslator_str="KTranslator"+found;
@@ -385,17 +458,17 @@ void CKDevInstall::slotAuto() // proceed >>
   if(glimpse)
     glimpse_str="Glimpse"+found;
   else
-    glimpse_str="Glimpse"+not_found+" -- search functionality will not be provided";
+    glimpse_str="Glimpse"+not_found+" -- search functionality will not be provide\nd";
   QString glimpseindex_str;
   if(glimpseindex)
     glimpseindex_str="Glimpseindex"+found;
   else
-    glimpseindex_str="Glimpseindex"+not_found+" -- search functionality will not be provided";
+    glimpseindex_str="Glimpseindex"+not_found+" -- search functionality will not be provided\n";
   QString perl_str;
   if(perl)
     perl_str="Perl"+found;
   else
-    perl_str="Perl"+not_found+" -- generation of new frame applications will not be possible";
+    perl_str="Perl"+not_found+" -- generation of new frame applications will not be possible\n";
 
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
@@ -444,7 +517,7 @@ void CKDevInstall::slotAuto() // proceed >>
       return;
   }
 
-  KShellProcess* shell_process=new KShellProcess();
+  
   QDir* kde_dir=new QDir();
 
   if(!kdoc && !perl)
@@ -458,11 +531,7 @@ void CKDevInstall::slotAuto() // proceed >>
                                                     "package as the source package. If you don't have\n"
                                                     "the kdelibs as sources, we advise to obtain them\n"
                                                     "from www.kde.org. Mind that the sources should match\n"
-                                                    "your installed kdelibs version.\n\nATTENTION: IF YOU PRESS `OK`\n"
-                                                    "ON THE NEXT DIALOG, THE DOCUMENTATION WILL BE GENERATED\n"
-                                                    "BUT NO INDICATOR SHOWS THAT IT IS READY. PLEASE CHECK THE\n"
-                                                    "DOCUMENTATION FILES. THOSE SHOULD BE GENERATED WITHIN\n"
-                                                    "2 MINUTES !!!"), KMsgBox::INFORMATION);
+                                                    "your installed kdelibs version."), KMsgBox::INFORMATION);
 
     kde_dir->setCurrent(QDir::homeDirPath ());
     kde_dir->mkdir(".kde",false);
@@ -473,47 +542,18 @@ void CKDevInstall::slotAuto() // proceed >>
     config->setGroup("Doc_Location");
     config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
     CUpdateKDEDocDlg dlg(this,"test",shell_process, config);
-    dlg.exec();
+    if(!dlg.exec()){
+	slotProcessExited(shell_process);
+    }
+    auto_button->setEnabled(false);
+    hint_label->setText(i18n("                  update KDE documentation                                 "
+	                          "                                                             "
+	                          "               please wait...                           "
+	                          "                                                               "
+	                          "                                                               ") );
 
   }
-  if(!glimpse && !glimpseindex){
-    KMsgBox::message(this,i18n("Information"), i18n("The program glimpse is not installed,\n"
-                                                    "therefore KDevelop can not index your\n"
-                                                    "documentation to provide a proper help\n"
-                                                    "functionality. We advise to install glimpse\n"
-                                                    "and create the searchdatabase with the KDevelop\n"
-                                                    "Setup in the Options menu later.\n\n"
-                                                    "As this is the last step of the Installation\n"
-                                                    "process, KDevelop will be started now.\n\n"
-                                                    "We hope you enjoy KDevelop and that it is a useful\n"
-                                                    "help to create new software.\n\nThe KDevelop Team"),KMsgBox::INFORMATION);
-
-    config->setGroup("General Options");
-    config->writeEntry("Install",false);
-    accept();
-  }
-  else{
-    KMsgBox::message(this,i18n("Information"),i18n("Now KDevelop will perform the last step\n"
-                                                  "of the installation process with indexing\n"
-                                                  "your documentation. This will provide an extended\n"
-                                                  "help functionality and will give you the information\n"
-                                                  "you need.\n\nATTENTION: PLEASE WAIT UP TO ONE MINUTE\n"
-                                                  "AFTER PRESSING 'OK' ON THE NEXT DIALOG TO ENSURE THE\n"
-                                                  "INDEX HAS BEEN CREATED !!!"), KMsgBox::INFORMATION);
-
-    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config);
-    dlg.exec();
-  }
-
-  KMsgBox::message(this,i18n("Installation successful !"), i18n("The installation process finished successfully.\n"
-                                                          "The KDevelop Team wishes that you will enjoy our\n"
-                                                          "program and we would be honoured for any feedback.\n\n"
-                                                          "The KDevelop Team"), KMsgBox::INFORMATION);
-
-  config->setGroup("General Options");
-  config->writeEntry("Install",false);
-
-  accept();
+  
 }
 void CKDevInstall::slotCancel()
 {

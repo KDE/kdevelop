@@ -41,21 +41,21 @@ int main(int argc, char* argv[]) {
     	RESTORE(CKDevelop);
     }
     else {
-	    CKDevelop* kdevelop = new CKDevelop;
-	    a.setMainWidget(kdevelop);
-	    a.setTopWidget(kdevelop);
-	    if(bInstall){
+      CKDevelop* kdevelop = new CKDevelop;
+      a.setMainWidget(kdevelop);
+      a.setTopWidget(kdevelop);
+      if(bInstall){
         CKDevInstall* install=new CKDevInstall(kdevelop,"install");
         install->show();
         delete install;
       }
-	    kdevelop->show();
-	    a.getConfig()->setGroup("General Options");
+      kdevelop->show();
+      a.getConfig()->setGroup("General Options");
       kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
       kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
       if (argc > 1)
         kdevelop->slotProjectOpenCmdl(argv[1]);
-
+      
       a.getConfig()->setGroup("TipOfTheDay");
       bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
       if(showTip){

@@ -270,6 +270,7 @@ bool CKDevelop::slotProjectClose(){
     switchToFile(header_widget->getName());
     
     disableCommand(ID_FILE_NEW);
+    disableCommand(ID_FILE_PRINT);
     // doc menu
     disableCommand(ID_DOC_PROJECT_API_DOC);
     disableCommand(ID_DOC_USER_MANUAL);
@@ -499,6 +500,7 @@ bool CKDevelop::readProjectFile(QString file){
   // file menu
   
   enableCommand(ID_FILE_NEW);
+  enableCommand(ID_FILE_PRINT);
   // doc menu
   enableCommand(ID_DOC_PROJECT_API_DOC);
   enableCommand(ID_DOC_USER_MANUAL);
