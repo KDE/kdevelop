@@ -49,7 +49,9 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
                  pal.color(QPalette::Normal, QColorGroup::Mid));
     setPalette(pal);
 
-    childproc = new KShellProcess("/bin/sh");
+    childproc = new KProcess();
+    childproc->setUseShell(true);
+    
     procLineMaker = new ProcessLineMaker( childproc );
 
     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),

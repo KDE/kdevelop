@@ -150,12 +150,27 @@ void KTabZoomWidget::selected(int index)
 {
   calculateGeometry();
 
+  if (d->m_docked)
+  {
+    d->m_strut->show();
+    adjustStrut();
+  }
+  
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_barIndex == index)
     {
       d->m_popup->selected(i->m_index);
       d->m_popup->show();
+      return;
     }
+}
+
+
+void KTabZoomWidget::unselected()
+{
+  d->m_popup->hide();
+  d->m_tabBar->unsetButtons();
+  d->m_strut->hide();
 }
 
 
@@ -164,7 +179,7 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == widget)
     {
-      d->m_tabBar->setPressed(i->m_barIndex);
+      d->m_tabBar->setActiveIndex(i->m_barIndex);
       return;
     }
 }
@@ -172,14 +187,22 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
 
 void KTabZoomWidget::lowerAllWidgets()
 {
+  d->m_tabBar->unsetButtons();
+}
+
+
+void KTabZoomWidget::lowerWidget(QWidget *w)
+{
   if (d->m_docked)
     return;
 
-  for ( KTZWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
-  {
-    d->m_popup->hide();
-    d->m_tabBar->unsetButtons();
-  }
+  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+    if (i->m_widget == w)
+    {
+      d->m_popup->hide();
+      d->m_tabBar->unsetButtons();
+      return;
+    }
 }
 
 
@@ -203,31 +226,6 @@ void KTabZoomWidget::calculateGeometry()
     d->m_popup->setGeometry(x(), d->m_tabBar->y() - d->m_popup->height(), width(), d->m_popup->height());
     break;
   }
-}
-
-
-void KTabZoomWidget::unselected()
-{
-  if (d->m_docked)
-    return;
-
-  d->m_popup->hide();
-  d->m_tabBar->unsetButtons();
-}
-
-
-void KTabZoomWidget::lowerWidget(QWidget *w)
-{
-  if (d->m_docked)
-    return;
-
-  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
-    if (i->m_widget == w)
-    {
-      d->m_popup->hide();
-      d->m_tabBar->unsetButtons();
-      return;
-    }
 }
 
 
@@ -285,7 +283,7 @@ void KTabZoomWidget::loadSettings(KConfig *config)
   {
     KTZWidgetInfo *i=d->m_info.first();
     if (i)
-      d->m_tabBar->restore(i->m_barIndex);
+      d->m_tabBar->setActiveIndex(i->m_barIndex);
   }
 }
 

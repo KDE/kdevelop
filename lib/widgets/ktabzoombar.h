@@ -15,37 +15,26 @@ class KTabZoomBar : public QWidget
   Q_OBJECT
 
 public:
-
   KTabZoomBar(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
   ~KTabZoomBar();
 
   int addTab(const QTab &tab);
   void removeTab(int index);
 
-  void setPressed(int index, bool pressed=true);
-  
+  void setActiveIndex(int index);
   void unsetButtons();
-
-  void restore(int index);
 
   void setDockMode(bool docked);
 
-
 private slots:
-
-  void toggled(int index);
   void clicked(int index);
 
-
 signals:
-
   void selected(int index);
   void unselected();
   void docked();
 
-
 private:
-
   KTabZoomBarPrivate *d;
 
 };
