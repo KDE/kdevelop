@@ -72,22 +72,19 @@ bool Caret::operator!=(const Caret& compare)
 
 Caret Caret::operator=(const Caret& value)
 {
-  m_row = value.m_row;
-  m_idx = value.m_idx;
-  return *this;
+  
+  m_row=value.m_row;
+  m_idx=value.m_idx;
+  return Caret(m_row,m_idx);
 }
 
 Caret Caret::operator+(const Caret& value)
 {
-  m_row += value.m_row;
-  m_idx += value.m_idx;
-  return *this;
+  return Caret(m_row+value.m_row,m_idx+value.m_idx);
 }
 
 Caret Caret::operator-(const Caret& value)
 {
-  m_row -= value.m_row;
-  m_idx -= value.m_idx;
-  return *this;
+  return Caret(m_row-value.m_row,m_idx-value.m_idx);
 }
 

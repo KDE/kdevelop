@@ -1,6 +1,3 @@
-#ifndef _CARET_H_
-#define _CARET_H_
-
 class Caret
 {
   public:
@@ -20,5 +17,3 @@ class Caret
   Caret     operator-(const Caret& value);
 
 };
-
-#endif

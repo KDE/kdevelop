@@ -2,8 +2,17 @@
 #include "filebuffer.h"
 #include <qmessagebox.h>
 
-Caret FileBuffer::findInBuffer(QString subString,const Caret& startPos)
-//=====================================================================
+
+FileBuffer::~FileBuffer()
+//=======================
+{
+  for ( FileBufferList::Iterator it = m_subBuffers.begin(); it != m_subBuffers.end(); ++it ) 
+    delete *it;
+  m_subBuffers.clear();
+}
+
+Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, bool nvlToMax)
+//====================================================================================
 {
   unsigned int i=startPos.m_row;
   QString line = m_buffer[i++];
@@ -16,11 +25,14 @@ Caret FileBuffer::findInBuffer(QString subString,const Caret& startPos)
     if (i<m_buffer.count())
       line = m_buffer[i];
   }
-  return Caret(-1,-1);
+  if (nvlToMax)
+    return Caret(m_buffer.count(),0);
+  else
+    return Caret(-1,-1);
 }
 
 QString FileBuffer::pop(int row)
-//===========================
+//==============================
 {
   if ((unsigned int)row>=m_buffer.count())
     return NULL;
@@ -31,7 +43,7 @@ QString FileBuffer::pop(int row)
   return ReturnStr;
 }
 
-void FileBuffer::setValues(QString variable,QStringList values,int valuesPerRow)
+void FileBuffer::setValues(const QString &variable,QStringList values,int valuesPerRow)
 //==============================================================================
 {
   unsigned int i;
@@ -53,7 +65,7 @@ void FileBuffer::setValues(QString variable,QStringList values,int valuesPerRow)
     m_buffer.append(line);
 }
 
-QString FileBuffer::getValues(QString variable)
+QString FileBuffer::getValues(const QString &variable)
 //=============================================
 {
   Caret curPos(0,0);
@@ -92,8 +104,8 @@ QString FileBuffer::getValues(QString variable)
   return valueString.simplifyWhiteSpace();
 }
 
-void FileBuffer::removeValues(QString variable)
-//=============================================
+void FileBuffer::removeValues(const QString &variable)
+//====================================================
 {
   Caret curPos = Caret(0,0);
   bool finished = false;
@@ -115,7 +127,7 @@ void FileBuffer::removeValues(QString variable)
   }
 }
 
-void FileBuffer::bufferFile(QString fileName)
+void FileBuffer::bufferFile(const QString &fileName)
 //===========================================
 {
   m_buffer.clear();
@@ -134,7 +146,7 @@ void FileBuffer::bufferFile(QString fileName)
   dataFile.close();
 }
 
-void FileBuffer::saveBuffer(QString filename)
+void FileBuffer::saveBuffer(const QString &filename)
 //===========================================
 {
   QFile dataFile(filename);
@@ -150,4 +162,80 @@ void FileBuffer::dumpBuffer()
 {
   for ( unsigned int i=0; i<m_buffer.count(); i++ )
     printf(m_buffer[i]+"\n");
+}
+
+Caret FileBuffer::findScopeEnd(Caret pos)
+//=======================================
+{
+  int scopeDepth=1;
+  while (scopeDepth)
+  {
+    Caret nextScopeStart = findInBuffer("{",pos,true);
+    Caret nextScopeEnd = findInBuffer("}",pos,true);
+    if (nextScopeStart < nextScopeEnd)
+    {
+      scopeDepth++;
+      pos = nextScopeStart + Caret(0,1);
+    }
+    else
+    {
+      scopeDepth--;
+      pos = nextScopeEnd + Caret(0,1);
+    }
+    if (nextScopeStart==nextScopeEnd)
+      return Caret(-1,-1);
+  }
+  return pos - Caret(0,1);
+}
+
+Caret FileBuffer::findNextScope(const Caret &startSearch, Caret& scopeStart, Caret& scopeEnd)
+//====================================================================================
+{
+  scopeStart = findInBuffer("{",startSearch);
+  if (scopeStart==Caret(-1,-1))
+    return Caret(-1,-1);
+  scopeEnd = findScopeEnd(scopeStart+Caret(0,1));
+  if (scopeEnd==Caret(-1,-1))
+    return scopeEnd;
+  QString scopeIdentStr = m_buffer[scopeStart.m_row].left(scopeStart.m_idx-1);
+  QStringList scopeIdentifiers = QStringList::split(":",scopeIdentStr);
+  return scopeEnd+Caret(0,1);
+}
+
+QStringList FileBuffer::copyBlock(const Caret &blockStart, const Caret &blockEnd)
+//===============================================================================
+{
+  QStringList result;
+  QString tmp = m_buffer[blockStart.m_row];
+  result.append(tmp.right(tmp.length()-blockStart.m_idx));
+  for (int i=blockStart.m_row+1; i<blockEnd.m_row; i++)
+    result.append(m_buffer[i]);
+  tmp = m_buffer[blockEnd.m_row];
+  result.append(tmp.left(blockEnd.m_idx+1));
+  return result;
+}
+
+QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
+//===============================================================================
+{
+  QStringList result = copyBlock(blockStart,blockEnd);
+  long poprow;
+  if (blockStart.m_idx==0)
+  {
+    pop(blockStart.m_row);
+    poprow=blockStart.m_row;
+  }
+  else
+  {
+    m_buffer[blockStart.m_row] = m_buffer[blockStart.m_row].left(blockStart.m_idx);
+    poprow = blockStart.m_row+1;
+  }
+  for (int i=0; i<blockEnd.m_row-blockStart.m_row-1; i++)
+    pop(poprow);
+  QString tmp = m_buffer[poprow];
+  if (blockEnd.m_idx >= tmp.length()-1)
+    pop(poprow);
+  else
+    m_buffer[poprow] = tmp.right(tmp.length()-blockEnd.m_idx-1);
+  return result;
 }

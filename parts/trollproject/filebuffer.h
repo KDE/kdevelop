@@ -6,24 +6,43 @@
 #include <qfile.h>
 #include "caret.h"
 
+class FileBuffer;
+typedef QValueList<FileBuffer*> FileBufferList;
+
 class FileBuffer
 {
 public:
-                FileBuffer() {}
-                FileBuffer(QString fileName) {bufferFile(fileName);}
-  Caret         findInBuffer(QString subString,const Caret& startPos);
-  QString       getValues(QString variable);
-  void          bufferFile(QString fileName);
-  void          saveBuffer(QString filename);
-  void          removeValues(QString variable);
-  void          setValues(QString variable,QString values,int valuesPerRow=3)
-                {setValues(variable,QStringList::split(' ',values),valuesPerRow);}
-  void          setValues(QString variable,QStringList values,int valuesPerRow=3);
-  void          dumpBuffer();
-  QString       pop(int row);
+                  FileBuffer() {}
+                  FileBuffer(const QString &fileName) {bufferFile(fileName);}
+                  ~FileBuffer();
+
+  void            SetScopeName(const QString &scopeName) {m_scopeName=scopeName;}
+  QString         GetScopeName(const QString &scopeName) {m_scopeName=scopeName;}
+  void            SetBuffer(const QStringList &buffer) {m_buffer=buffer;}
+
+  Caret           findNextScope(const Caret &pos, Caret& scopeStart, Caret& scopeEnd);
+  Caret           findScopeEnd(Caret pos);
+  Caret           findInBuffer(const QString &subString,const Caret& startPos,bool nvlToMax=false);
+  
+  QStringList     popBlock(const Caret &blockStart, const Caret &blockEnd);
+  QStringList     copyBlock(const Caret &blockStart, const Caret &blockEnd);
+
+  void            removeValues(const QString &variable);
+  QString         getValues(const QString &variable);
+  void            setValues(const QString &variable,QString values,int valuesPerRow=3)
+                  {setValues(variable,QStringList::split(' ',values),valuesPerRow);}
+  void            setValues(const QString &variable,QStringList values,int valuesPerRow=3);
+
+  void            bufferFile(const QString &fileName);
+  void            saveBuffer(const QString &filename);
+  void            dumpBuffer();
+
+  QString         pop(int row);
 
 private:
-  QStringList   m_buffer;
+  QString         m_scopeName;
+  QStringList     m_buffer;
+  FileBufferList  m_subBuffers;
 };
 
 #endif
