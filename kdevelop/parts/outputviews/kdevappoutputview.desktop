@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Application output view
+Name=AppOutputView
+Icon=
+ServiceTypes=KDevelop/Component
+X-KDE-Library=libkdevoutputviews
+X-KDevelop-ComponentType=OutputView
+X-KDevelop-Args=AppOutputView

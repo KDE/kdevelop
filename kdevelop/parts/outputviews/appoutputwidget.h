@@ -13,24 +13,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OUTPUTVIEW_H
-#define OUTPUTVIEW_H
+#ifndef _APPOUTPUTWIDGET_H_
+#define _APPOUTPUTWIDGET_H_
 
 #include "processview.h"
 
 
-class OutputView : public ProcessView
+class AppOutputWidget : public ProcessView
 {
     Q_OBJECT
+    
 public:
-    OutputView(QWidget *parent, const char *name=0);
-    ~OutputView();
+    AppOutputWidget(QWidget *parent);
+    ~AppOutputWidget();
 
-protected:
+    void compilationAborted();
+    
+private:
     virtual void childFinished(bool normal, int status);
-
-    // Component notifications:
-    virtual void compilationAborted();
 };
 
 #endif

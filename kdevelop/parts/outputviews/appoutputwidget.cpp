@@ -1,5 +1,5 @@
 /***************************************************************************
-                             outputview.cpp
+                             appoutputwidget.cpp
                              -------------------                                         
 
     copyright            : (C) 1999 The KDevelop Team
@@ -16,51 +16,45 @@
 
 
 #include <klocale.h>
-#include "outputview.h"
+#include "outputviews.h"
+#include "appoutputwidget.h"
 
 
-OutputView::OutputView(QWidget *parent, const char *name)
-    : ProcessView(parent, name)
-{
-}
-
-
-OutputView::~OutputView()
+AppOutputWidget::AppOutputWidget(QWidget *parent)
+    : ProcessView(parent, "app output widget")
 {}
 
 
-void OutputView::childFinished(bool normal, int status)
+AppOutputWidget::~AppOutputWidget()
+{}
+
+
+void AppOutputWidget::childFinished(bool normal, int status)
 {
     QString s;
     ProcessListBoxItem::Type t;
     
-    if (normal)
-        {
-            if (status)
-                {
-                    s = i18n("*** Exited with status: %1 ***").arg(status);
-                    t = ProcessListBoxItem::Error;
-                }
-            else
-                {
-                    s = i18n("*** Exited normally ***");
-                    t = ProcessListBoxItem::Diagnostic;
-                }
-        }
-    else
-        {
-            s = i18n("*** Process aborted ***");
+    if (normal) {
+        if (status) {
+            s = i18n("*** Exited with status: %1 ***").arg(status);
             t = ProcessListBoxItem::Error;
+        } else {
+            s = i18n("*** Exited normally ***");
+            t = ProcessListBoxItem::Diagnostic;
         }
+    } else {
+        s = i18n("*** Process aborted ***");
+        t = ProcessListBoxItem::Error;
+    }
+    
     insertItem(new ProcessListBoxItem(s, t));
 }
 
 
-void OutputView::compilationAborted()
+void AppOutputWidget::compilationAborted()
 {
-    if (isRunning())
-        {
-            killJob();
-            insertItem(i18n("Killed process."));
-        }
+    if (isRunning()) {
+        killJob();
+        insertItem(i18n("Killed process."));
+    }
 }

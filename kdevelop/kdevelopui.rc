@@ -46,8 +46,7 @@
    <text>&amp;View</text>
    <Action name="view_goto_line" />
    <Separator/>
-   <Action name="view_next_error" />
-   <Action name="view_previous_error" />
+   <Merge/>
    <Separator/>
    <Action name="view_treeview" />
    <Action name="view_output_view" />

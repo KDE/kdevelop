@@ -51,8 +51,9 @@ public:
      * The user has changed the path to kdelibs/qt.
      */
     virtual void docPathChanged();
+    virtual void compilationStarted(const QString &command);
     /**
-     * The user has abort the compilation.
+     * The user has aborted the compilation.
      */
     virtual void compilationAborted();
     /**

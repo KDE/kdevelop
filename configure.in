@@ -69,6 +69,7 @@ kdevelop/parts/Makefile \
 kdevelop/parts/grepview/Makefile \
 kdevelop/parts/doctreeview/Makefile \
 kdevelop/parts/classview/Makefile \
+kdevelop/parts/outputviews/Makefile \
 kdevelop/lib/Makefile \
 kdevelop/classparser/Makefile \
 pics/Makefile \

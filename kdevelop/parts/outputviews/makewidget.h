@@ -13,39 +13,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MAKEVIEW_H
-#define MAKEVIEW_H
+#ifndef _MAKEWIDGET_H_
+#define _MAKEWIDGET_H_
 
 #include <qstack.h>
-#include "processview.h"
+#include <processview.h>
 
 
-class MakeView : public ProcessView
+class MakeView;
+
+class MakeWidget : public ProcessView
 {
     Q_OBJECT
 public:
-    MakeView(QWidget *parent, const char *name=0);
-    ~MakeView();
+    MakeWidget(MakeView *view, QWidget *parent);
+    ~MakeWidget();
 
     void startJob();
+
+public slots:
     void nextError();
     void prevError();
-signals:
-    void itemSelected(const QString &filename, int linenumber);
     
-protected slots:
+private slots:
     void lineHighlighted(int line);
 
-protected:
+private:
     virtual void childFinished(bool normal, int status);
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);
-    // Component notifications:
-    //    virtual void compilationAborted();
-    //    virtual void projectOpened(CProject *prj);
-    virtual void projectClosed();
     
 private:
+    MakeView *m_view;
     QStack<QString> dirstack;
 };
 

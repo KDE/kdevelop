@@ -1,1 +1,1 @@
-SUBDIRS = grepview doctreeview
+SUBDIRS = grepview doctreeview classview

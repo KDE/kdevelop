@@ -39,14 +39,21 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
-  setXMLFile( "/home/falk/Projekte/kde2src/kdevelop/kdevelop/kdevelopui.rc" );//!!!
+  //  setXMLFile( "/home/falk/Projekte/kde2src/kdevelop/kdevelop/kdevelopui.rc" );//!!!
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
   createGUI( 0L );
 
   // build up the inner tool views and information views
-  initCoveringDockViews();
+  // MDI view mainframe widget
+  m_dockbaseMDIMainFrm = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
+  m_dockbaseMDIMainFrm->setEnableDocking(KDockWidget::DockNone);
+  m_dockbaseMDIMainFrm->setDockSite(KDockWidget::DockCorner);
+  setView(m_dockbaseMDIMainFrm);
+  setMainDockWidget( m_dockbaseMDIMainFrm );
+
+  //  initCoveringDockViews();
   initComponents();
 }
 
@@ -104,8 +111,6 @@ void KDevelop::initActions(){
   m_paEditRepeatSearch = KStdAction::findNext( this, SLOT(slotEditRepeatSearch()),
       actionCollection(), "edit_repeat_search" );
   m_paEditReplace = KStdAction::replace( this, SLOT( slotEditReplace() ), actionCollection(), "edit_replace" );
-  m_paEditSearchInFiles = new KAction( i18n("&Search in Files..."), "grep", 0, this, SLOT( slotEditSearchInFiles() ),
-      actionCollection(), "edit_search_in_files");
   // Separator
   m_paEditSelectAll = KStdAction::selectAll( this, SLOT( slotEditSelectAll() ), actionCollection(),"edit_select_all" );
   m_paEditDeselectAll = new KAction( i18n("&Deselect All"), 0, this, SLOT( slotEditDeselectAll() ),
@@ -117,10 +122,6 @@ void KDevelop::initActions(){
   // View Menu
   ////////////////////////////////////
   m_paViewGotoLine = KStdAction::gotoLine( this, SLOT(  slotViewGotoLine() ), actionCollection(), "view_goto_line");
-  // Separator
-  m_paViewNextError = new KAction( i18n("&Next Error"), Key_F4, this, SLOT( slotViewNextError() ), actionCollection(), "view_next_error");
-  m_paViewPreviousError = new KAction( i18n("&Previous Error"), SHIFT+Key_F4,
-        this, SLOT( slotViewPreviousError() ), actionCollection(), "view_previous_error");
   // Separator
   m_paViewTreeView = new KToggleAction( i18n("&Tree-View"), "tree_win", CTRL+Key_T, actionCollection(), "view_treeview");
   m_paViewOutputView = new KToggleAction( i18n("&Output-View"), "output_win",
@@ -455,14 +456,6 @@ void KDevelop::initHelp(){
                                    "search for and an expression that "
                                    "will replace any matches.") );
 
-  m_paEditSearchInFiles->setShortText( i18n("Opens the search in files dialog to search for expressions over several files") );
-  m_paEditSearchInFiles->setWhatsThis( i18n("Search in files\n\n"
-                                   "Opens the Search in files dialog "
-                                   "to enter an expression to look up "
-                                   "over several files. Matches will be "
-                                   "displayed, you can switch to a match "
-                                   "directly.") );
-
   m_paEditSelectAll->setShortText( i18n("Selects the whole document contents") );
 //  m_paEditSelectAll->setWhatsThis(  );
 
@@ -476,12 +469,6 @@ void KDevelop::initHelp(){
   // View Actions
   m_paViewGotoLine->setShortText( i18n("Goes to Line Number...") );
 //  m_paViewGotoLine->setWhatsThis(  );
-
-  m_paViewNextError->setShortText( i18n("Switches to the file and line the next error was reported") );
-//  m_paViewNextError->setWhatsThis(  );
-
-  m_paViewPreviousError->setShortText( i18n("Switches to the file and line the previous error was reported") );
-//  m_paViewPreviousError->setWhatsThis(  );
 
   m_paViewTreeView->setShortText( i18n("Enables / disables the treeview") );
   m_paViewTreeView->setWhatsThis( i18n("Tree-View\n\n"
@@ -763,24 +750,33 @@ void KDevelop::initComponents()
     classparser->parse("parts/doctreeview/doctreewidget.cpp");
     classstore = &classparser->store;
 
-    loadComponents("SelectView", KDockWidget::DockLeft);
-    loadComponents("OutputView", KDockWidget::DockBottom);
+    loadComponents("SelectView", KDockWidget::DockLeft, 35);
+    loadComponents("OutputView", KDockWidget::DockBottom, 70);
 }
 
 
-void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos)
+void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio)
 {
+    KDockWidget *prevWidget = m_dockbaseMDIMainFrm;
+    
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
     KTrader::OfferList::Iterator it;
     if (offers.isEmpty())
         kdDebug(9000) << "No KDevelop components" << endl;
+    
     for (it = offers.begin(); it != offers.end(); ++it) {
         QVariant prop = (*it)->property("X-KDevelop-ComponentType");
-
         if (prop.isValid() && prop.toString() == type) {
             kdDebug(9000) << "Found " << type << " " << (*it)->name().latin1() << endl;
             KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
-            QObject *obj = factory->create(0, (*it)->name().latin1(), "KDevComponent");
+            
+            QStringList args;
+            prop = (*it)->property("X-KDevelop-Args");
+            if (prop.isValid()) 
+                args = QStringList::split(" ", prop.toString());
+            
+            QObject *obj = factory->create(0, (*it)->name().latin1(),
+                                           "KDevComponent", args);
 
             if (!obj->inherits("KDevComponent")) {
                 kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
@@ -789,11 +785,18 @@ void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos
             KDevComponent *comp = (KDevComponent*) obj;
             guiFactory()->addClient(comp);
 
+            KDockWidget *nextWidget = createDockWidget((*it)->name(), (*it)->icon(),
+                                                       0, (*it)->comment(), (*it)->name());
+            nextWidget->setWidget(comp->widget());
+            nextWidget->manualDock(prevWidget, pos, ratio);
+            prevWidget = nextWidget;
+            pos = KDockWidget::DockCenter;
+            
             //!!!! HACK !!!!
             //!!!!------!!!!
             //!!!! embedToolViewInGUI(..) should be called from the initialization !!!!
             //!!!! code part of every certain component, not here !!!!
-            embedToolViewInGUI(comp->widget());
+            //            embedToolViewInGUI(comp->widget());
 
             // Hack
             comp->classStoreOpened(classstore);
@@ -845,11 +848,6 @@ void KDevelop::initCoveringDockViews(){
   m_dockbaseWidPropSplitView = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"), 0L, i18n("Dialog editor"), "");
   m_dockbaseWidPropSplitView->setToolTipString(i18n("dialog editor view"));
 
-  // MDI view mainframe widget
-  m_dockbaseMDIMainFrm = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
-  setView(m_dockbaseMDIMainFrm);
-  setMainDockWidget( m_dockbaseMDIMainFrm );
-
   //
   // dock the widgets
   //
@@ -863,9 +861,6 @@ void KDevelop::initCoveringDockViews(){
   m_dockbaseRealFileTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
   m_dockbaseDocTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
   m_dockbaseWidPropSplitView->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
-
-	m_dockbaseMDIMainFrm->setEnableDocking( KDockWidget::DockNone);
-	m_dockbaseMDIMainFrm->setDockSite( KDockWidget::DockCorner);
 }
 
 /** Embed the widgets of components in the dockwidget-based GUI.

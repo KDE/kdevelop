@@ -1,5 +1,5 @@
 /***************************************************************************
-                             makeview.cpp
+                             makewidget.cpp
                              -------------------                                         
 
     copyright            : (C) 1999 The KDevelop Team
@@ -17,9 +17,12 @@
 
 #include <qdir.h>
 #include <qapplication.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
-#include "makeview.h"
+
+#include "outputviews.h"
+#include "makewidget.h"
 
 
 class MakeListBoxItem : public ProcessListBoxItem
@@ -51,19 +54,21 @@ bool MakeListBoxItem::isCustomItem()
 }
 
 
-MakeView::MakeView(QWidget *parent, const char *name)
-    : ProcessView(parent, name)
+MakeWidget::MakeWidget(MakeView *view, QWidget *parent)
+    : ProcessView(parent, "make widget")
 {
     connect( this, SIGNAL(highlighted(int)),
              this, SLOT(lineHighlighted(int)) );
+
+    m_view = view;
 }
 
 
-MakeView::~MakeView()
+MakeWidget::~MakeWidget()
 {}
 
 
-void MakeView::startJob()
+void MakeWidget::startJob()
 {
     ProcessView::startJob();
     dirstack.clear();
@@ -71,100 +76,91 @@ void MakeView::startJob()
 }
 
 
-void MakeView::nextError()
+void MakeWidget::nextError()
 {
     // Search for a custom (= error) item beginning from selected
     // item or - if none is selected - from beginning
     int count = numRows();
     for (int i = currentItem()+1; i < count; ++i)
-        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem())
-            {
-                setCurrentItem(i);
-                return;
-            }
+        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem()) {
+            setCurrentItem(i);
+            return;
+        }
             
     QApplication::beep();
 }
 
 
-void MakeView::prevError()
+void MakeWidget::prevError()
 {
     // Search for a custom (= error) item beginning from selected
     // item or - if none is selected - from end
     int cur = (currentItem() == -1)? numRows() : currentItem();
     for (int i = cur; i >= 0; --i)
-        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem())
-            {
-                setCurrentItem(i);
-                return;
-            }
+        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem()) {
+            setCurrentItem(i);
+            return;
+        }
 
     QApplication::beep();
 }
 
 
-void MakeView::childFinished(bool normal, int status)
+void MakeWidget::childFinished(bool normal, int status)
 {
     QString s;
     ProcessListBoxItem::Type t;
     
-    if (normal)
-        {
-            if (status)
-                {
-                    s = i18n("*** Exited with status: %1 ***").arg(status);
-                    t = ProcessListBoxItem::Error;
-                }
-            else
-                {
-                    s = i18n("*** Success ***");
-                    t = ProcessListBoxItem::Diagnostic;
-                }
-        }
-    else
-        {
-            s = i18n("*** Compilation aborted ***");
+    if (normal) {
+        if (status) {
+            s = i18n("*** Exited with status: %1 ***").arg(status);
             t = ProcessListBoxItem::Error;
+        } else {
+            s = i18n("*** Success ***");
+            t = ProcessListBoxItem::Diagnostic;
         }
+    } else {
+        s = i18n("*** Compilation aborted ***");
+        t = ProcessListBoxItem::Error;
+    }
+    
     insertItem(new ProcessListBoxItem(s, t));
 }
 
 
-void MakeView::lineHighlighted(int line)
+void MakeWidget::lineHighlighted(int line)
 {
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
-    if (i->isCustomItem())
-        {
-            MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-            emit itemSelected(gi->filename(), gi->linenumber());
-        }
+    if (i->isCustomItem()) {
+        MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
+        emit m_view->sourceFileSelected(gi->filename(), gi->linenumber());
+    }
 }
 
 
-void MakeView::insertStdoutLine(const QString &line)
+void MakeWidget::insertStdoutLine(const QString &line)
 {
     // KRegExp has ERE syntax
     KRegExp enterDirRx("[^\n]*: Entering directory `([^\n]*)'$");
     KRegExp leaveDirRx("[^\n]*: Leaving directory `([^\n]*)'$");
 
-    if (enterDirRx.match(line))
-        {
-            QString *dir = new QString(enterDirRx.group(1));
-            dirstack.push(dir);
-            qDebug( "Entering dir: %s", (*dir).ascii() );
-        }
-    else if (leaveDirRx.match(line))
-        {
-            qDebug( "Leaving dir: %s", leaveDirRx.group(1) );
-            QString *dir = dirstack.pop();
-            qDebug( "Now: %s", (*dir).ascii() );
-            delete dir;
-        }
+    if (enterDirRx.match(line)) {
+        QString *dir = new QString(enterDirRx.group(1));
+        dirstack.push(dir);
+        qDebug( "Entering dir: %s", (*dir).ascii() );
+    }
+    else if (leaveDirRx.match(line)) {
+        kdDebug(9004) << "Leaving dir: " << leaveDirRx.group(1) << endl;
+        QString *dir = dirstack.pop();
+        kdDebug(9004) << "Now: " << (*dir) << endl;
+        delete dir;
+    }
+    
     ProcessView::insertStdoutLine(line);
 }
 
 
-void MakeView::insertStderrLine(const QString &line)
+void MakeWidget::insertStderrLine(const QString &line)
 {
     // KRegExp has ERE syntax
     KRegExp errorGccRx("([^: \t]+):([0-9]+):.*");
@@ -178,32 +174,23 @@ void MakeView::insertStderrLine(const QString &line)
     int row;
     
     bool hasmatch = false;
-    if (errorGccRx.match(line))
-        {
-            hasmatch = true;
-            fn = errorGccRx.group(errorGccFileGroup);
-            row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
-        }
-    else if (errorJadeRx.match(line))
-        {
-            hasmatch = true;
-            fn = errorGccRx.group(errorJadeFileGroup);
-            row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
-        }
-    if (hasmatch)
-        {
-            qDebug( "Error in %s %i", fn.ascii(), row );
-            if (dirstack.top())
-                fn.prepend("/").prepend(*dirstack.top());
-            qDebug( "Path: %s", fn.ascii() );
-            insertItem(new MakeListBoxItem(line, fn, row));
-        }
+    if (errorGccRx.match(line)) {
+        hasmatch = true;
+        fn = errorGccRx.group(errorGccFileGroup);
+        row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
+    } else if (errorJadeRx.match(line)) {
+        hasmatch = true;
+        fn = errorGccRx.group(errorJadeFileGroup);
+        row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
+    }
+    
+    if (hasmatch) {
+        kdDebug(9004) << "Error in " << fn << " " << row << endl;
+        if (dirstack.top())
+            fn.prepend("/").prepend(*dirstack.top());
+        kdDebug(9004) << "Path: " << fn << endl;
+        insertItem(new MakeListBoxItem(line, fn, row));
+    }
     else
         ProcessView::insertStderrLine(line);
-}
-
-
-void MakeView::projectClosed()
-{
-    clear();
 }

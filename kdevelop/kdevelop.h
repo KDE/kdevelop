@@ -53,7 +53,7 @@ private:
 
   /** loads the components */
   void initComponents();
-  void loadComponents(const QString &type, KDockWidget::DockPosition pos);
+  void loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio);
 
   // File Actions
   KAction* m_paFileNew;
@@ -80,14 +80,11 @@ private:
   KAction* m_paEditSearch;
   KAction* m_paEditRepeatSearch;
   KAction* m_paEditReplace;
-  KAction* m_paEditSearchInFiles;
   KAction* m_paEditSelectAll;
   KAction* m_paEditDeselectAll;
   KAction* m_paEditInvertSelection;
   // View Actions
   KAction* m_paViewGotoLine;
-  KAction* m_paViewNextError;
-  KAction* m_paViewPreviousError;
   KToggleAction* m_paViewTreeView;
   KToggleAction* m_paViewOutputView;
   KToggleAction* m_paViewToolbar;

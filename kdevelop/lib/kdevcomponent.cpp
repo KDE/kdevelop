@@ -18,6 +18,10 @@ void KDevComponent::docPathChanged()
 {
 }
 
+void KDevComponent::compilationStarted(const QString &command)
+{
+}
+
 void KDevComponent::compilationAborted()
 {
 }
