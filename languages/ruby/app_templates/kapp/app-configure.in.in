@@ -6,12 +6,6 @@ AC_CHECK_KDEMAXPATHLEN
 
 AC_PROG_MAKE_SET
 
-# ruby interpreter check
-AC_PATH_PROG([RUBY],[ruby])
-if test -z "${RUBY}"  ; then
-   AC_MSG_ERROR([you need Ruby to use this program])
-fi
-
 AC_CHECK_PROG(RUBY, ruby, ruby)
 
 if test -z "$RUBY"; then
