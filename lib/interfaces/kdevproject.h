@@ -16,7 +16,20 @@ public:
     virtual void openProject(const QString &dirName) = 0;
     virtual void closeProject() = 0;
 
+    /**
+     * Returns the path (relative to the project directory)
+     * to main binary program of the project.
+     */
+    virtual QString mainProgram() = 0;
+    /**
+     * Returns the toplevel directory of the project.
+     */
     virtual QString projectDirectory() = 0;
+    /**
+     * Returns a list of all source files.
+     * TODO: This is currently a bit broken because the
+     * autoproject part doesn't return header files here.
+     */
     virtual QStringList allSourceFiles() = 0;
 
 signals:

@@ -43,6 +43,7 @@ ProjectOptionsDialog::ProjectOptionsDialog(AutoProjectPart *part, QWidget *paren
     addTab(createCompilerTab(), i18n("Compiler"));
     //    addTab(createLinkerTab(), i18n("Linker"));
     addTab(createMakeTab(), i18n("Make"));
+    addTab(createMiscTab(), i18n("Misc"));
 
     setCancelButton();
     connect( this, SIGNAL(applyButtonPressed()), this, SLOT(accept()) );
@@ -185,10 +186,32 @@ QWidget *ProjectOptionsDialog::createMakeTab()
                                         2*KDialog::marginHint(), KDialog::spacingHint());
     grid->setRowStretch(3, 4);
     grid->addMultiCellWidget(abort_box, 0, 0, 0, 1);
-    grid->addWidget(jobs_label, 1, 0);
-    grid->addWidget(jobs_box, 1, 1);
-    grid->addMultiCellWidget(dontact_box, 2, 2, 0, 1);
+    grid->addWidget(jobs_label, 2, 0);
+    grid->addWidget(jobs_box, 2, 1);
+    grid->addMultiCellWidget(dontact_box, 1, 1, 0, 1);
     
+    return w;
+}
+
+
+QWidget *ProjectOptionsDialog::createMiscTab()
+{
+    QWidget *w = new QWidget(this, "misc tab");
+
+    QLabel *mainbin_label = new QLabel(i18n("Main program (relative to project directory):"), w);
+    mainbin_edit = new QLineEdit(w);
+ 
+    QLabel *progargs_label = new QLabel(i18n("Program arguments:"), w);
+    progargs_edit = new QLineEdit(w);
+
+    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
+    layout->addWidget(mainbin_label);
+    layout->addWidget(mainbin_edit);
+    layout->addSpacing(10);
+    layout->addWidget(progargs_label);
+    layout->addWidget(progargs_edit);
+    layout->addStretch();
+
     return w;
 }
 
@@ -284,10 +307,12 @@ void ProjectOptionsDialog::init()
     cxxflags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxflags"));
     f77flags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77flags"));
 
-    kdDebug(9000) << "make";
     abort_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"));
     jobs_box->setValue(DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/dontact"));
+
+    mainbin_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/general/mainprogram"));
+    progargs_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/general/programargs"));
 }
 
 
@@ -311,6 +336,10 @@ void ProjectOptionsDialog::accept()
     DomUtil::writeIntEntry(doc, "/kdevautoproject/make/numberofjobs", jobs_box->value());
     DomUtil::writeBoolEntry(doc, "/kdevautoproject/make/dontact", dontact_box->isChecked());
 
+    DomUtil::writeEntry(doc, "/kdevautoproject/general/mainprogram", mainbin_edit->text());
+    DomUtil::writeEntry(doc, "/kdevautoproject/general/programargs", progargs_edit->text());
+ 
     QTabDialog::accept();
 }
+
 #include "projectoptionsdlg.moc"

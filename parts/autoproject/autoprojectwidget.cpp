@@ -524,4 +524,5 @@ void AutoProjectWidget::parse(SubprojectItem *item)
             parseSubdirs(item, lhs, rhs);
     }
 }
+
 #include "autoprojectwidget.moc"

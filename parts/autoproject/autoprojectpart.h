@@ -31,6 +31,7 @@ protected:
     virtual void openProject(const QString &dirName);
     virtual void closeProject();
 
+    virtual QString mainProgram();
     virtual QString projectDirectory();
     virtual QStringList allSourceFiles();
 

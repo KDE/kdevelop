@@ -83,6 +83,14 @@ void AutoProjectPart::closeProject()
 }
 
 
+QString AutoProjectPart::mainProgram()
+{
+    QDomDocument &doc = *document();
+
+    return DomUtil::readEntry(doc, "/kdevautoproject/general/mainprogram");
+}
+
+
 QString AutoProjectPart::projectDirectory()
 {
     return m_widget->projectDirectory();
