@@ -226,18 +226,33 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 	case Tag::Kind_FunctionDeclaration:
 		//case Tag::Kind_Function:
 		{
-			entry.text = tag.name();
-			entry.text += "(";
 
 			CppFunction<Tag> tagInfo( tag );
 			QStringList arguments = tagInfo.arguments();
 			QStringList argumentNames = tagInfo.argumentNames();
 
+			if ( completionMode == CppCodeCompletion::VirtualDeclCompletion )
+			{
+				//Ideally the type info would be a entry.prefix, but we need them to be
+				//inserted upon completion so they have to be part of entry.text
+				entry.text = tagInfo.type();
+				entry.text += " ";
+				entry.text += tag.name();
+			}
+			else
+				entry.text = tag.name();
+			
+			if ( !arguments.size() )
+				entry.text += "(";
+			else
+				entry.text += "( ";
+			
 			QString signature;
 			for ( uint i = 0; i < arguments.size(); ++i )
 			{
 				signature += arguments[ i ];
-				if ( completionMode == CppCodeCompletion::NormalCompletion )
+				if ( completionMode == CppCodeCompletion::NormalCompletion ||
+					 completionMode == CppCodeCompletion::VirtualDeclCompletion )
 				{
 					QString argName = argumentNames[ i ];
 					if ( !argName.isEmpty() )
@@ -258,7 +273,12 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 			if ( tagInfo.isConst() )
 				entry.postfix += " const";
 
-			if ( completionMode != CppCodeCompletion::NormalCompletion )
+			if ( completionMode == CppCodeCompletion::VirtualDeclCompletion )
+			{
+				entry.text += entry.postfix + ";";
+				entry.postfix = QString::null;
+			}
+			else if ( completionMode != CppCodeCompletion::NormalCompletion )
 			{
 				entry.text += entry.postfix;
 				entry.postfix = QString::null;

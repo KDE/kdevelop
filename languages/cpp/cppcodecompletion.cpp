@@ -2,7 +2,7 @@
                          cppcodecompletion.cpp  -  description
                             -------------------
    begin                : Sat Jul 21 2001
-   copyright            : (C) 2001 by Victor Röder
+   copyright            : (C) 2001 by Victor Rï¿½er
    email                : victor_roeder@gmx.de
    copyright            : (C) 2002,2003 by Roberto Raggi
    email                : roberto@kdevelop.org
@@ -291,6 +291,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
 	m_bArgHintShow = false;
 	m_bCompletionBoxShow = false;
+	m_blockForKeyword = false;
 	m_completionMode = NormalCompletion;
 
 	m_repository = new CodeInformationRepository( cppSupport->codeRepository() );
@@ -442,6 +443,7 @@ void CppCodeCompletion::slotTextChanged()
 	if ( ( m_pSupport->codeCompletionConfig() ->automaticCodeCompletion() &&
 	        ( !ch.isEmpty() && ch != "\n" && ch != " " && ch != "\t" && ch != ";" )  /*
 	        	(ch == "." || ch2 == "->" || ch2 == "::") */ ) || 
+			( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
 	        ( m_pSupport->codeCompletionConfig() ->automaticArgumentsHint() && ch == "(" ) ||
 	        ( m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion() && ( ch == "\"" || ch == "<" ) &&
 	          m_includeRx.search( strCurLine ) != -1 ) )
@@ -809,6 +811,7 @@ void CppCodeCompletion::completeText( )
 	QString expr, word;
 
 	DeclarationAST::Node recoveredDecl;
+	TypeSpecifierAST::Node recoveredTypeSpec;
 
 	SimpleContext* ctx = 0;
 
@@ -817,12 +820,9 @@ void CppCodeCompletion::completeText( )
 
 	if ( RecoveryPoint * recoveryPoint = d->findRecoveryPoint( line, column ) )
 	{
-		kdDebug( 9007 ) << "node-kind = " << recoveryPoint->kind << endl;
-		kdDebug( 9007 ) << "isFunDef = " << ( recoveryPoint->kind == NodeType_FunctionDefinition ) << endl;
-
 		QString textLine = m_activeEditor->textLine( recoveryPoint->startLine );
+		kdDebug( 9007 ) << "node-kind = " << nodeTypeToString( recoveryPoint->kind ) << endl;
 		kdDebug( 9007 ) << "startLine = " << textLine << endl;
-		kdDebug( 9007 ) << "node-kind = " << recoveryPoint->kind << endl;
 
 		if ( recoveryPoint->kind == NodeType_FunctionDefinition )
 		{
@@ -840,7 +840,7 @@ void CppCodeCompletion::completeText( )
 			Parser parser( &d, &lexer );
 
 			parser.parseDeclaration( recoveredDecl );
-			//kdDebug(9007) << "recoveredDecl = " << recoveredDecl.get() << endl;
+/*			kdDebug(9007) << "recoveredDecl = " << recoveredDecl.get() << endl;*/
 			if ( recoveredDecl.get() )
 			{
 
@@ -962,19 +962,65 @@ void CppCodeCompletion::completeText( )
 				kdDebug( 9007 ) << "no valid declaration to recover!!!" << endl;
 			}
 		}
+		else if ( recoveryPoint->kind == NodeType_ClassSpecifier )
+		{
+			QString textToReparse = getText( recoveryPoint->startLine, recoveryPoint->startColumn,
+			                                 recoveryPoint->endLine, recoveryPoint->endColumn, line );
+// 			kdDebug(9007) << "-------------> please reparse only text" << endl << textToReparse << endl
+// 			             << "--------------------------------------------" << endl;
+
+			Driver d;
+			Lexer lexer( &d );
+			/// @todo setup the lexer(i.e. adds macro, special words, ...
+
+			lexer.setSource( textToReparse );
+			Parser parser( &d, &lexer );
+
+			parser.parseClassSpecifier( recoveredTypeSpec );
+/*			kdDebug(9007) << "recoveredDecl = " << recoveredTypeSpec.get() << endl;*/
+			if ( recoveredTypeSpec.get() )
+			{
+
+				ClassSpecifierAST * clazz = static_cast<ClassSpecifierAST*>( recoveredTypeSpec.get() );
+
+				QString keyword = getText( line, 0, line, column ).simplifyWhiteSpace();
+	
+				kdDebug(9007) << "===========================> keyword is: " << keyword << endl;
+	
+				if ( keyword == "virtual" )
+				{
+					ctx = new SimpleContext();
+					
+					showArguments = false;
+					m_completionMode = VirtualDeclCompletion;
+
+					QPtrList<BaseSpecifierAST> baseList = clazz->baseClause()->baseSpecifierList();
+					QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
+
+					for ( ; it != baseList.end(); ++it )
+						type.append( ( *it )->name()->text() );
+
+					kdDebug(9007) << "------> found virtual keyword for class specifier '" 
+							      << clazz->text() << "'" << endl;
+				}
+				else if ( QString("virtual").find( keyword ) != -1 )
+					m_blockForKeyword = true;
+				else
+					m_blockForKeyword = false;
+			}
+		}
 	}
 
-	if ( !recoveredDecl.get() )
+	if ( !recoveredDecl.get() && !recoveredTypeSpec.get() )
 	{
 		TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
 		if ( AST * node = findNodeAt( ast, line, column ) )
 		{
-
 			kdDebug( 9007 ) << "------------------- AST FOUND --------------------" << endl;
+			kdDebug( 9007 ) << "node-kind = " << nodeTypeToString( node->nodeType() ) << endl;
 
 			if ( FunctionDefinitionAST * def = functionDefinition( node ) )
 			{
-
 				kdDebug( 9007 ) << "------> found a function definition" << endl;
 
 				int startLine, startColumn;
@@ -1041,6 +1087,10 @@ void CppCodeCompletion::completeText( )
 				}
 
 				type = evaluateExpression( expr, ctx );
+			}
+			else if ( node->nodeType() == NodeType_ClassSpecifier )
+			{
+				kdDebug( 9007 ) << "------> found a class specifier" << endl;
 			}
 		}
 	}
@@ -1426,7 +1476,7 @@ FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
 	return 0;
 }
 
-QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine, int endColumn )
+QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine, int endColumn, int omitLine )
 {
 	if ( startLine == endLine )
 	{
@@ -1438,6 +1488,9 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 
 	for ( int line = startLine; line <= endLine; ++line )
 	{
+		if ( line == omitLine )
+			continue;
+
 		QString textLine = m_activeEditor->textLine( line );
 
 		if ( line == startLine )
@@ -1513,7 +1566,7 @@ public:
 
 	virtual void parseClassSpecifier( ClassSpecifierAST* ast )
 	{
-		//insertRecoveryPoint( ast );
+		insertRecoveryPoint( ast );
 		m_currentScope.push_back( toSimpleName( ast->name() ) );
 		TreeParser::parseClassSpecifier( ast );
 		m_currentScope.pop_back();
@@ -1543,6 +1596,9 @@ private:
 
 void CppCodeCompletion::computeRecoveryPoints( )
 {
+	if ( m_blockForKeyword )
+		return;
+
 	kdDebug( 9007 ) << "CppCodeCompletion::computeRecoveryPoints" << endl;
 
 	d->recoveryPoints.clear();
@@ -1710,6 +1766,8 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 				continue;
 			else if ( m_completionMode == SignalCompletion && !info.isSignal() )
 				continue;
+			else if ( m_completionMode == VirtualDeclCompletion && !info.isVirtual() )
+				continue;
 		}
 
 		entryList << CodeInformationRepository::toEntry( tag, m_completionMode );
@@ -1801,6 +1859,8 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 		else if ( m_completionMode == SignalCompletion && !meth->isSignal() )
 			continue;
 		else if ( m_completionMode == SlotCompletion && !meth->isSlot() )
+			continue;
+		else if ( m_completionMode == VirtualDeclCompletion && !meth->isVirtual() )
 			continue;
 
 		KTextEditor::CompletionEntry entry;
@@ -2132,3 +2192,4 @@ void CppCodeCompletion::computeFileEntryList( )
 }
 
 #include "cppcodecompletion.moc"
+//kate: indent-mode csands; tab-width 4; space-indent off;

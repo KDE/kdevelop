@@ -2,7 +2,7 @@
                           cppcodecompletion.h  -  description
                              -------------------
     begin                : Sat Jul 21 2001
-    copyright            : (C) 2001 by Victor Röder
+    copyright            : (C) 2001 by Victor Rï¿½er
     email                : victor_roeder@gmx.de
     copyright            : (C) 2002,2003 by Roberto Raggi
     email                : roberto@kdevelop.org
@@ -47,7 +47,8 @@ public:
     {
         NormalCompletion,
         SignalCompletion,
-        SlotCompletion
+        SlotCompletion,
+		VirtualDeclCompletion
     };
 
 public:
@@ -117,7 +118,7 @@ private:
     void computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
 
-    QString getText( int startLine, int startColumn, int endLine, int endColumn );
+    QString getText( int startLine, int startColumn, int endLine, int endColumn, int omitLine = -1 );
 
     ClassDom findContainer( const QString& name, NamespaceDom container=0, bool includeImports=false );
     QString findClass( const QString& className );
@@ -132,6 +133,7 @@ private:
 
     bool m_bArgHintShow;
     bool m_bCompletionBoxShow;
+	bool m_blockForKeyword;
 
     unsigned int m_ccLine;
     unsigned int m_ccColumn;
