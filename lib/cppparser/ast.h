@@ -469,6 +469,9 @@ public:
 public:
     ClassSpecifierAST();
 
+    GroupAST* winDeclSpec() { return m_winDeclSpec.get(); }
+    void setWinDeclSpec( GroupAST::Node& winDeclSpec );
+    
     AST* classKey() { return m_classKey.get(); }
     void setClassKey( AST::Node& classKey );
 
@@ -479,6 +482,7 @@ public:
     void addDeclaration( DeclarationAST::Node& declaration );
 
 private:
+    GroupAST::Node m_winDeclSpec;
     AST::Node m_classKey;
     BaseClauseAST::Node m_baseClause;
     QPtrList<DeclarationAST> m_declarationList;

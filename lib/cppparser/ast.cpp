@@ -1152,3 +1152,9 @@ void ConditionAST::setExpression( AST::Node& expression )
     if( m_expression.get() ) m_expression->setParent( this );
 }
 
+void ClassSpecifierAST::setWinDeclSpec( GroupAST::Node & winDeclSpec )
+{
+    m_winDeclSpec = winDeclSpec;
+    if( m_winDeclSpec.get() ) m_winDeclSpec->setParent( this );
+}
+

@@ -368,7 +368,6 @@ void Driver::setupLexer( Lexer * lexer )
 
     // windows
     lexer->addSkipWord( "WINAPI" );
-    lexer->addSkipWord( "__declspec", SkipWordAndArguments );
     lexer->addSkipWord( "__stdcall" );
     lexer->addSkipWord( "__cdecl" );
     lexer->addSkipWord( "_cdecl" );

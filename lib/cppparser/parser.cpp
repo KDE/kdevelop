@@ -82,7 +82,7 @@ QT_STATIC_CONST_IMPL Error& Errors::ParseError = Error( 3, -1, i18n("Parse Error
     AST::Node node = CreateNode<AST>(); \
     UPDATE_POS( node, (tk), (tk)+1 );
 
-    
+
 // remove me
 enum
 {
@@ -479,10 +479,10 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     default:
         {
 	    // lex->setIndex( start );
-	    
+
 	    if( objcp && parseObjcDef(node) )
 		return true;
-	    
+
 	    lex->setIndex( start );
 
 	    GroupAST::Node storageSpec;
@@ -1780,6 +1780,9 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 	return false;
     }
 
+    GroupAST::Node winDeclSpec;
+    parseWinDeclSpec( winDeclSpec );
+
     while( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == Token_identifier )
     	lex->nextToken();
 
@@ -1801,6 +1804,7 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
     ADVANCE( '{', '{' );
 
     ClassSpecifierAST::Node ast = CreateNode<ClassSpecifierAST>();
+    ast->setWinDeclSpec( winDeclSpec );
     ast->setClassKey( classKey );
     ast->setName( name );
     ast->setBaseClause( bases );
@@ -2000,7 +2004,7 @@ bool Parser::parseExceptionSpecification( GroupAST::Node& node )
     ADVANCE( '(', "(" );
     parseTypeIdList( node );
     ADVANCE( ')', ")" );
-    
+
     return true;
 }
 
@@ -2162,12 +2166,12 @@ bool Parser::parseTypeIdList( GroupAST::Node& node )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeIdList()" << endl;
 
     int start = lex->index();
-        
+
     AST::Node typeId;
     if( !parseTypeId(typeId) ){
 	return false;
     }
-    
+
     GroupAST::Node ast = CreateNode<GroupAST>();
     ast->addNode( typeId );
 
@@ -3789,7 +3793,7 @@ bool Parser::parseIvarDeclarator( AST::Node & node )
     return false;
 }
 
-bool Parser::parseMethoDdecl( AST::Node & node )
+bool Parser::parseMethodDecl( AST::Node & node )
 {
     Q_UNUSED( node );
     return false;
@@ -3921,32 +3925,44 @@ bool Parser::parseProtocolRefs( AST::Node & node )
     return false;
 }
 
-bool Parser::parseIdentifierList( AST::Node & node )
+bool Parser::parseIdentifierList( GroupAST::Node & node )
 {
-    Q_UNUSED( node );
-    
-    if( lex->lookAhead(0) != Token_identifier )   
+    int start = lex->index();
+
+    if( lex->lookAhead(0) != Token_identifier )
 	return false;
+
+    GroupAST::Node ast = CreateNode<GroupAST>();
+
+    AST_FROM_TOKEN( tk, lex->index() );
+    ast->addNode( tk );
     lex->nextToken();
-    
+
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
+	if( lex->lookAhead(0) == Token_identifier ){
+	    AST_FROM_TOKEN( tk, lex->index() );
+	    ast->addNode( tk );
+	    lex->nextToken();
+	}
 	ADVANCE( Token_identifier, "identifier" );
     }
-    
+
+    node = ast;
+    UPDATE_POS( node, start, lex->index() );
     return true;
 }
 
 bool Parser::parseIdentifierColon( AST::Node & node )
 {
     Q_UNUSED( node );
-    
+
     if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == ':' ){
 	lex->nextToken();
 	lex->nextToken();
 	return true;
     } // ### else if PTYPENAME -> return true ;
-    
+
     return false;
 }
 
@@ -3983,39 +3999,39 @@ bool Parser::parseObjcClassDef( DeclarationAST::Node & node )
 bool Parser::parseObjcClassDecl( DeclarationAST::Node & node )
 {
     Q_UNUSED( node );
-    
+
     ADVANCE( OBJC_CLASS, "@class" );
-    
-    AST::Node idList;
+
+    GroupAST::Node idList;
     parseIdentifierList( idList );
     ADVANCE( ';', ";" );
-    
+
     return true;
 }
 
 bool Parser::parseObjcProtocolDecl( DeclarationAST::Node & node )
 {
     Q_UNUSED( node );
-    
+
     ADVANCE( OBJC_PROTOCOL, "@protocol" );
-    
-    AST::Node idList;
+
+    GroupAST::Node idList;
     parseIdentifierList( idList );
     ADVANCE( ';', ";" );
-    
+
     return true;
 }
 
 bool Parser::parseObjcAliasDecl( DeclarationAST::Node & node )
 {
     Q_UNUSED( node );
-    
+
     ADVANCE( OBJC_ALIAS, "@alias" );
-    
-    AST::Node idList;
+
+    GroupAST::Node idList;
     parseIdentifierList( idList );
     ADVANCE( ';', ";" );
-    
+
     return true;
 }
 
@@ -4028,6 +4044,23 @@ bool Parser::parseObjcProtocolDef( DeclarationAST::Node & node )
 bool Parser::parseObjcMethodDef( DeclarationAST::Node & node )
 {
     Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseWinDeclSpec( GroupAST::Node & node )
+{
+    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(0).text() == "__declspec" && lex->lookAhead(1) == '(' ){
+	int start = lex->index();
+	lex->nextToken();
+	lex->nextToken(); // skip '('
+
+	parseIdentifierList( node );
+	ADVANCE( ')', ")" );
+
+	UPDATE_POS( node, start, lex->index() );
+	return true;
+    }
+
     return false;
 }
 

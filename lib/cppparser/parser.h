@@ -86,6 +86,7 @@ public /*rules*/ :
     bool parsePtrToMember( AST::Node& node );
     bool parseEnumSpecifier( TypeSpecifierAST::Node& node );
     bool parseClassSpecifier( TypeSpecifierAST::Node& node );
+    bool parseWinDeclSpec( GroupAST::Node& node );
     bool parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parseDeclaratorId( NameAST::Node& node );
     bool parseExceptionSpecification( GroupAST::Node& node );
@@ -167,7 +168,7 @@ public /*rules*/ :
     bool parseIvarDecl( AST::Node& node ); 
     bool parseIvars( AST::Node& node ); 
     bool parseIvarDeclarator( AST::Node& node );
-    bool parseMethoDdecl( AST::Node& node ); 
+    bool parseMethodDecl( AST::Node& node ); 
     bool parseUnarySelector( AST::Node& node ); 
     bool parseKeywordSelector( AST::Node& node ); 
     bool parseSelector( AST::Node& node );
@@ -189,7 +190,7 @@ public /*rules*/ :
     bool parseObjcEncodeExpr( AST::Node& node );
     bool parseObjcString( AST::Node& node ); 
     bool parseProtocolRefs( AST::Node& node ); 
-    bool parseIdentifierList( AST::Node& node ); 
+    bool parseIdentifierList( GroupAST::Node& node ); 
     bool parseIdentifierColon( AST::Node& node );
     bool parseObjcProtocolExpr( AST::Node& node ); 
     bool parseObjcOpenBracketExpr( AST::Node& node ); 
