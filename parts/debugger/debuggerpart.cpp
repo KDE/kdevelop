@@ -309,7 +309,15 @@ void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
         QByteArray answer;
         QCString replyType;
 
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
         kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true, 5000);
+# else
+        kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true);
+# endif
+#else
+        kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true);
+#endif
 
         QDataStream d(answer, IO_ReadOnly);
         QCString appName;
@@ -336,6 +344,7 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
 #else
     kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true);
 #endif
+
     QDataStream d(answer, IO_ReadOnly);
     int pid;
     d >> pid;
