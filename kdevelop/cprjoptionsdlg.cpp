@@ -226,13 +226,30 @@ void CPrjOptionsDlg::addCompilerWarningsPage()
 //    compilerWarnings->setEnabled(false);
 }
 
+// stupid littly helper function to find out whether a desired lib
+// is in the StringList. Returns true if lib1 or lib2 has been found
+// and also removes them from the list.
+bool removeLibFromList( QStringList& libs, const QString& lib1, const QString& lib2 = QString::null )
+{
+  bool fnd = false;
+  if ( !lib1.isEmpty() && ( libs.remove( lib1 ) > 0 ) ) {
+    fnd = true;
+  }
+  if ( !lib2.isEmpty() && ( libs.remove( lib2 ) > 0 ) ) {
+    fnd = true;
+  }
+  return fnd;
+}
+
 //
 // *************** Linker Options *********************
 //
 void CPrjOptionsDlg::addLinkerPage()
 {
+  QStringList ldAdds;
 //  QString ldflags=prj_info->getLDFLAGS();
   QString ldadd=prj_info->getLDADD();
+  ldAdds = QStringList::split( " ", ldadd, false );
 
 //  old_ldflags =  ldflags.stripWhiteSpace();
   old_ldadd = ldadd.stripWhiteSpace();
@@ -245,7 +262,6 @@ void CPrjOptionsDlg::addLinkerPage()
   QWhatsThis::add(linkerOptions, i18n("Set the Linker options and choose the "
       "libraries to add to your project."));
 //  ldflags = " " + ldflags + " ";
-  ldadd = " " + ldadd + " ";
 //  QGroupBox* ldflags_group;
 //  ldflags_group=new QGroupBox(linkerOptions,"ldflags_group");
 //  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7,"grid-h");
@@ -302,122 +318,75 @@ void CPrjOptionsDlg::addLinkerPage()
   l_X11=new QCheckBox(libs_group,"l_X11");
   grid4->addWidget(l_X11,0,0);
   l_X11->setText("X11");
-  l_X11->setChecked(ldadd.find(" -lX11 ") != -1);
-  if (l_X11->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lX11 "), " " );
+  l_X11->setChecked(removeLibFromList(ldAdds, "-lX11"));
   QWhatsThis::add(l_X11, i18n("X11 basics "));
 
   l_Xext=new QCheckBox(libs_group,"l_Xext");
   grid4->addWidget(l_Xext,1,0);
   l_Xext->setText("Xext");
-  l_Xext->setChecked(ldadd.find(" -lXext ") != -1);
-  if (l_Xext->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lXext "), " " );
+  l_Xext->setChecked(removeLibFromList(ldAdds,"-lXext"));
   QWhatsThis::add(l_Xext, i18n("X11 extensions "));
 
   l_qt=new QCheckBox(libs_group,"l_qt");
   grid4->addWidget(l_qt,2,0);
   l_qt->setText("qt");
-  l_qt->setChecked((ldadd.find(" -lqt ") != -1) || (ldadd.find(" $(LIB_QT) ") != -1));
-  if (l_qt->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lqt "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_QT\\)"), "" );
-  }
+  l_qt->setChecked(removeLibFromList(ldAdds,"-lqt", "$(LIB_QT)"));
   QWhatsThis::add(l_qt, i18n("Qt"));
 
   l_kdecore=new QCheckBox(libs_group,"l_kdecore");
   grid4->addWidget(l_kdecore,3,0);
   l_kdecore->setText("kdecore");
-  l_kdecore->setChecked((ldadd.find(" -lkdecore ")  != -1) || (ldadd.find(" $(LIB_KDECORE) ") != -1));
-  if (l_kdecore->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkdecore"), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KDECORE\\)"), "" );
-  }
+  l_kdecore->setChecked(removeLibFromList(ldAdds, "-lkdecore", "$(LIB_KDECORE)"));
   QWhatsThis::add(l_kdecore, i18n("KDE basics"));
 
   l_kdeui=new QCheckBox(libs_group,"l_kdeui");
   grid4->addWidget(l_kdeui,0,1);
   l_kdeui->setText("kdeui");
-  l_kdeui->setChecked((ldadd.find(" -lkdeui ")  != -1)|| (ldadd.find(" $(LIB_KDEUI) ") != -1));
-  if (l_kdeui->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkdeui "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KDEUI\\)"), "" );
-  }
+  l_kdeui->setChecked(removeLibFromList(ldAdds, "-lkdeui", "$(LIB_KDEUI)"));
   QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
 
   l_khtml=new QCheckBox(libs_group,"l_khtml");
   grid4->addWidget(l_khtml,1,1);
   l_khtml->setText("khtml");
-  l_khtml->setChecked((ldadd.find(" -lkhtml ")  != -1) || (ldadd.find(" $(LIB_KHTML) ") != -1));
-  if (l_khtml->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkhtml "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KHTML\\)"), "" );
-  }
+  l_khtml->setChecked(removeLibFromList(ldAdds, "-lkhtml", "$(LIB_KHTML)"));
   QWhatsThis::add(l_khtml, i18n("KDE HTML widget"));
 
   l_kfm=new QCheckBox(libs_group,"l_kfm");
   grid4->addWidget(l_kfm,2,1);
   l_kfm->setText("kfm");
-  l_kfm->setChecked(ldadd.find(" -lkfm ") != -1);
-  if (l_kfm->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lkfm "), " " );
+  l_kfm->setChecked(removeLibFromList(ldAdds, "-lkfm"));
   // TODO add note that this is KDE-1 only, or remove checkbox if project isn't a KDE-1 project
   QWhatsThis::add(l_kfm, i18n("KDE kfm functionality"));
 
   l_kfile=new QCheckBox(libs_group,"l_kfile");
   grid4->addWidget(l_kfile,3,1);
   l_kfile->setText("kfile");
-  l_kfile->setChecked((ldadd.find(" -lkfile ") != -1) || (ldadd.find(" $(LIB_KFILE) ") != -1));
-  if (l_kfile->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkfile "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KFILE\\)"), "" );
-  }
+  l_kfile->setChecked(removeLibFromList(ldAdds, "-lkfile", "$(LIB_KFILE)"));
   QWhatsThis::add(l_kfile, i18n("KDE file handling"));
 
   l_kparts=new QCheckBox(libs_group,"l_kparts");
   grid4->addWidget(l_kparts,3,2);
   l_kparts->setText("kparts");
-  l_kparts->setChecked((ldadd.find(" -lkparts ") != -1) || (ldadd.find(" $(LIB_KPARTS) ") != -1));
-  if (l_kparts->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkparts "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KPARTS\\)"), "" );
-  }
+  l_kparts->setChecked(removeLibFromList(ldAdds, "-lkparts", "$(LIB_KPARTS)"));
   QWhatsThis::add(l_kparts, i18n("KDE component architecture"));
 
   l_kspell=new QCheckBox(libs_group,"l_kspell");
   grid4->addWidget(l_kspell,0,2);
   l_kspell->setText("kspell");
-  l_kspell->setChecked((ldadd.find(" -lkspell ") != -1) || (ldadd.find(" $(LIB_KSPELL) ") != -1));
-  if (l_kspell->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkspell "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KSPELL\\)"), "" );
-  }
+  l_kspell->setChecked(removeLibFromList(ldAdds, "-lkspell", "$(LIB_KSPELL)"));
   QWhatsThis::add(l_kspell, i18n("KDE Spell checking"));
 
   l_kab=new QCheckBox(libs_group,"l_kab");
   grid4->addWidget(l_kab,1,2);
   l_kab->setText("kab");
-  l_kab->setChecked((ldadd.find(" -lkab ") != -1) || (ldadd.find(" $(LIB_KAB) ") != -1));
-  if (l_kab->isChecked())
-  {
-    ldadd = ldadd.replace( QRegExp(" -lkab "), " " );
-    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KAB\\)"), "" );
-  }
+  l_kab->setChecked(removeLibFromList(ldAdds, "-lkab", "$(LIB_KAB)"));
   QWhatsThis::add(l_kab, i18n("KDE addressbook"));
 
   l_math=new QCheckBox(libs_group,"l_math");
   grid4->addWidget (l_math,0,3);
   l_math->setText("math");
-  l_math->setChecked(l_khtml->isChecked() || (ldadd.find(" -lm ") != -1));
-  if (l_math->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lm "), " " );
+  l_math->setChecked(l_khtml->isChecked() ||
+                     removeLibFromList(ldAdds, "-lm"));
   QWhatsThis::add(l_math, i18n("Math library"));
 
   QLabel* addit_ldadd_label;
@@ -429,7 +398,7 @@ void CPrjOptionsDlg::addLinkerPage()
   grid4->addMultiCellWidget(addit_ldadd,4,4,1,3);
   ldadd=ldadd.stripWhiteSpace();
 
-  addit_ldadd->setText(ldadd);
+  addit_ldadd->setText(ldAdds.join(" "));
   QWhatsThis::add(addit_ldadd_label, i18n("Add additional libraries here."));
   QWhatsThis::add(addit_ldadd, i18n("Add additional libraries here."));
   grid2->addWidget(libs_group,0,0);
