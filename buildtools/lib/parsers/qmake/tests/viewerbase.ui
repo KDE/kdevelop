@@ -1,0 +1,220 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ViewerBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ViewerBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Viewer</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="1" rowspan="4" colspan="1">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QTextEdit">
+                    <property name="name">
+                        <cstring>source</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QTabWidget">
+                    <property name="name">
+                        <cstring>tabWidget2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>2</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>tab</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string>Parse Tree</string>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QListView" row="0" column="0">
+                                <column>
+                                    <property name="text">
+                                        <string>Name</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Value 1</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Value 2</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>ast</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>tab</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string>Source to be written back</string>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QTextEdit" row="0" column="0">
+                                <property name="name">
+                                    <cstring>writeBack</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLineEdit" row="0" column="0">
+            <property name="name">
+                <cstring>allLocation</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>addAll</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Add all from the directory</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="0">
+            <property name="name">
+                <cstring>choose</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Choose file to add...</string>
+            </property>
+        </widget>
+        <widget class="QListBox" row="3" column="0">
+            <property name="name">
+                <cstring>files</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
+                </size>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>addAll</sender>
+        <signal>clicked()</signal>
+        <receiver>ViewerBase</receiver>
+        <slot>addAll_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>choose</sender>
+        <signal>clicked()</signal>
+        <receiver>ViewerBase</receiver>
+        <slot>choose_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>files</sender>
+        <signal>currentChanged(QListBoxItem*)</signal>
+        <receiver>ViewerBase</receiver>
+        <slot>files_currentChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>tabWidget2</sender>
+        <signal>selected(const QString&amp;)</signal>
+        <receiver>ViewerBase</receiver>
+        <slot>tabWidget2_selected(const QString&amp;)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>addAll_clicked()</slot>
+    <slot>choose_clicked()</slot>
+    <slot>files_currentChanged(QListBoxItem*)</slot>
+    <slot>tabWidget2_selected(const QString&amp;)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
