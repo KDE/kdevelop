@@ -646,17 +646,16 @@ void CKDevelop::slotViewGotoLine(){
 
 /** jump to the next error, based on the make output*/
 void CKDevelop::slotViewNextError(){
+  messages_widget->nextError();
+#if 0
   TErrorMessageInfo info = error_parser->getNext();
   if(info.filename != ""){
-#warning FIXME
-#if 0
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
-#endif
   }
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -676,22 +675,22 @@ void CKDevelop::slotViewNextError(){
   else{
     disableCommand(ID_VIEW_PREVIOUS_ERROR);
   }
+#endif
 }
 
 
 /** jump to the previews error, based on the make output*/
 void CKDevelop::slotViewPreviousError(){
+  messages_widget->prevError();
+#if 0
   TErrorMessageInfo info = error_parser->getPrev();
   if(info.filename != ""){
-#warning FIXME
-#if 0
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
-#endif
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep
@@ -710,6 +709,7 @@ void CKDevelop::slotViewPreviousError(){
   else{
     disableCommand(ID_VIEW_PREVIOUS_ERROR);
   }
+#endif
 }
 
 void CKDevelop::slotViewTTreeView()
@@ -790,8 +790,6 @@ void CKDevelop::slotBuildCompileFile(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  error_parser->reset();
-  error_parser->toogleOn();
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
@@ -885,8 +883,6 @@ void CKDevelop::slotBuildMake(){
 
   //save/generate dialog if needed
   kdlgedit->generateSourcecodeIfNeeded();
-  error_parser->reset();
-  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -921,8 +917,6 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  error_parser->reset();
-  error_parser->toogleOn();
   showOutputView(true);
 
   setToolMenuProcess(false);
@@ -945,8 +939,6 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  error_parser->reset();
-  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -979,8 +971,6 @@ void CKDevelop::slotBuildDistClean(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  error_parser->reset();
-  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -1002,7 +992,6 @@ void CKDevelop::slotBuildAutoconf(){
     return;
   }
   showOutputView(true);
-  error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
@@ -1033,7 +1022,6 @@ void CKDevelop::slotBuildConfigure(){
 
   showOutputView(true);
   setToolMenuProcess(false);
-  error_parser->toogleOff();
   slotFileSave();
   slotFileSaveAll();
   messages_widget->clear();
@@ -2308,7 +2296,7 @@ void CKDevelop::slotProcessExited(KProcess *proc){
     next_job = "";
   }
   if (ready){ // start the error-message parser
-#warning FIXME
+#if 0
       QString str1; // = messages_widget->text();
       
       if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -2324,6 +2312,7 @@ void CKDevelop::slotProcessExited(KProcess *proc){
       else{
 	  disableCommand(ID_VIEW_NEXT_ERROR);
       }
+#endif
   }
   if(beep && ready){
       XBell(kapp->getDisplay(),100); //beep :-)

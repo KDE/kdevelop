@@ -56,7 +56,7 @@ class AdvLvi_Base : public QWidget
     virtual void refreshItem();
 
   protected:
-    virtual void paintEvent ( QPaintEvent * );
+    //    virtual void paintEvent ( QPaintEvent * );
     KDlgPropertyEntry *propEntry;
 
     KDlgEdit *dlgedit;

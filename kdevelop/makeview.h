@@ -28,7 +28,8 @@ public:
     ~MakeView();
 
     void startJob();
-
+    void nextError();
+    void prevError();
 signals:
     void itemSelected(const QString &filename, int linenumber);
     

@@ -21,6 +21,7 @@
 
 #include <qwidget.h>
 
+class QListViewItem;
 class AdvListView;
 class KDlgItem_Base;
 class KDlgEdit;
@@ -39,6 +40,9 @@ public:
         AdvListView *getListView() { return lv; }
 protected:
         virtual void resizeEvent ( QResizeEvent * );
+
+private slots:
+        void helpRequested(QListViewItem *it);
 
 private:
         AdvListView *lv;

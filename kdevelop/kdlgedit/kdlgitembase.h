@@ -38,15 +38,20 @@ class KDlgItem_Base : public QObject
   Q_OBJECT
 
 public:
+    enum Role { Main, Container, Widget };
     /**
      * @param editwid The editwidget which creates the item.
      * @param parent The parent widget (used to create the child). Get it through the KDlgItem_Base::getItem() method of the parent items' class.
      * @param ismainwidget Is TRUE the ites cannot be moved and if it is resized, the rulers are also resized.
      * @param name Just passed to the items' widgets' constructor
     */
-    KDlgItem_Base( KDlgEditWidget* editwid = 0, QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
+    KDlgItem_Base( KDlgEditWidget* editwid, Role role,
+                   QWidget *parent=0, const char *name=0 );
     virtual ~KDlgItem_Base() { }
 
+    Role role()
+        { return rol; }
+    
     virtual void recreateItem();
 
     /**
@@ -115,18 +120,12 @@ public:
     */
     void deleteMyself();
 
-    void execContextMenu(bool ismain);
+    void execContextMenu();
     bool isItemActive;
-    bool isMainwidget;
     KDlgItem_QWidget *parentWidgetItem;
     
 public:
-    bool isMBPressed;
-    QPoint startPnt, lastPnt;
-    QRect origRect;
-    void moveRulers(QWidget *widget, QMouseEvent *e);
-    void paintCorners(QPainter *p);
-
+    //    void moveRulers(QWidget *widget, QMouseEvent *e);
 protected:
 
     enum Corner { NoCorner, TopLeft, TopRight, BottomLeft, BottomRight,
@@ -137,15 +136,24 @@ protected:
     int Prop2Int(QString name, int defaultval=0);
     QString Prop2Str(QString name);
 
-    Corner cornerForPos(QPoint pos);
-    bool getResizeCoords(Corner c, int diffx, int diffy, int *x, int *y, int *w, int *h);
-    void setMouseCursorToEdge(Corner c);
-    
-    Corner pressedEdge;
     KDlgItemDatabase *childs;
     QWidget *item;
     KDlgPropertyBase *props;
     KDlgEditWidget* editWidget;
+
+private:
+    Corner cornerForPos(QPoint pos);
+    bool getResizeCoords(Corner c, int diffx, int diffy, int *x, int *y, int *w, int *h);
+    void setMouseCursorToEdge(Corner c);
+    void moveRulers(QPoint relpos);
+    void paintCorners(QPainter *p);
+    
+    Role rol;
+    bool inPaintEvent;
+    Corner pressedEdge;
+    QPoint startPnt, lastPnt;
+    QRect origRect;
+    bool isMBPressed;
 };
 
 

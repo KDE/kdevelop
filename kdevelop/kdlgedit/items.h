@@ -39,7 +39,7 @@ class KDlgItem_QWidget : public KDlgItem_Base
   Q_OBJECT
 
 public:
-    KDlgItem_QWidget( KDlgEditWidget* editwid , QWidget *parent, bool ismainwidget, const char* name = 0 );
+    KDlgItem_QWidget( KDlgEditWidget* editwid, Role role, QWidget *parent, const char* name = 0 );
 
   #define CLASSNAME KDlgItem_QWidget       // the classname
   #define WIDGETTYPE QFrame               // type of the items widget

@@ -28,7 +28,7 @@ class KDlgItem_Base;
 class QFont;
 class QColor;
 
-QString KDlgLimitLines(QString src, unsigned maxlen = 40);
+QString KDlgLimitLines(QString src, unsigned maxlen);
 
 QFont KDlgItemsGetFont(QString desc);
 

@@ -28,7 +28,6 @@
 
 
 class AdvLvi_Base;
-class KDlgEdit;
 
 /**
  * @short Advanced QListViewItem class (allows widgets in cells)
@@ -38,29 +37,19 @@ class AdvListViewItem : public QListViewItem
   public:
     AdvListViewItem( QListView * parent, QString a, QString b );
     AdvListViewItem( AdvListViewItem * parent, QString a, QString b );
+    ~AdvListViewItem();
 
-    virtual void paintCell( QPainter *,  const QColorGroup & cg,
-			    int column, int width, int alignment );
-
-    virtual void setColumnWidget( int col, AdvLvi_Base *wp, bool activated = true );
-    virtual void clearColumnWidget( int col, bool deleteit = false );
-    virtual void clearAllColumnWidgets( bool deletethem = false );
-    virtual QWidget* getColumnWidget( int col );
-
-    virtual void activateColumnWidget( int col, bool activate = true );
-    virtual bool columnWidgetActive( int col );
-
-    virtual void testAndResizeWidget(int column);
-    virtual void testAndResizeAllWidgets();
-
-    virtual void hideWidgets();
-
+    void setColumnWidget(AdvLvi_Base *wp);
+    void testAndResizeWidget();
+    void hideWidgets();
     void updateWidgets();
-
-  protected:
-    AdvLvi_Base *colwid[MAX_WIDGETCOLS_PER_LINE];
-    bool colactivated[MAX_WIDGETCOLS_PER_LINE];
-    void init();
+    
+protected:
+    virtual void paintCell(QPainter *p, const QColorGroup &cg,
+                           int column, int width, int alignment);
+    
+private:
+    AdvLvi_Base *colwid;
 };
 
 
@@ -68,18 +57,16 @@ class AdvListView : public QListView
 {
   Q_OBJECT
   public:
-    AdvListView(KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
+    AdvListView(QWidget *parent=0, const char *name=0);
     virtual ~AdvListView();
 
-    virtual void hideAll();
-    virtual void saveOpenStats();
-    virtual void restoreOpenStats();
-    virtual void setGeometryEntrys(int x, int y, int w, int h);
-    virtual QString openStat(int i) { return openStats[i]; }
+    void hideAll();
+    void saveOpenStats();
+    void restoreOpenStats();
+    void setGeometryEntries(int x, int y, int w, int h);
     void updateWidgets();
-  protected:
 
-    virtual void mousePressEvent ( QMouseEvent * );
+protected:
     virtual void mouseMoveEvent ( QMouseEvent * );
     virtual void viewportMousePressEvent ( QMouseEvent * );
     virtual void keyPressEvent ( QKeyEvent * );
@@ -87,12 +74,8 @@ class AdvListView : public QListView
     virtual void resizeEvent ( QResizeEvent * );
     virtual void paintEvent ( QPaintEvent * );
 
-    QString openStats[MAX_MAIN_ENTRYS];
-
-    KDlgEdit *dlgedit;
-  public slots:
-    void help();
-    void linkclicked(QString);
+private:
+    QStringList openStats;
 };
 
 

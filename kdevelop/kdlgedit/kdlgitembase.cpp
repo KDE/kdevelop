@@ -33,17 +33,19 @@
 #include "itemsglobal.h"
 
 
-KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool ismainwidget, const char* name )
+KDlgItem_Base::KDlgItem_Base(KDlgEditWidget *editwid, Role role,
+                             QWidget *parent, const char *name)
   : QObject(parent,name)
 {
   editWidget = editwid;
+  rol = role;
   childs = 0;
-  isMainwidget = ismainwidget;
   item = 0;
 
   props = new KDlgPropertyBase();
   repaintItem();
 
+  inPaintEvent = false;
   isItemActive = false;
   isMBPressed = false;
 }
@@ -100,7 +102,7 @@ void KDlgItem_Base::deleteMyself()
 int KDlgItem_Base::Prop2Bool(QString name)
 {
   if (props->getProp(name))
-    return KDlgItemsIsValueTrue( props->getProp(name)->value );
+    return props->propValueAsBool(name);
   else
     return -1;
 }
@@ -129,7 +131,6 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   if ((!itm) || (!props))
     return;
 
-  int b=0;
   int x=0,y=0;
   QString str;
 
@@ -166,7 +167,7 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setBackgroundMode(QWidget::PaletteBackground);
 */
 
-  if (KDlgItemsIsValueTrue(props->getProp("IsFixedSize")->value) == 1)
+  if (props->propValueAsBool("IsFixedSize"))
     itm->setFixedSize( props->getIntFromProp("Width",itm->width()),
                        props->getIntFromProp("Height",itm->height()) );
 
@@ -177,8 +178,8 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setSizeIncrement(x,y);
 
 
-  itm->setGeometry(isMainwidget ? RULER_WIDTH : (props->getIntFromProp("X",itm->x())),
-                   isMainwidget ? RULER_HEIGHT : (props->getIntFromProp("Y",itm->y())),
+  itm->setGeometry((role()==Main) ? RULER_WIDTH : (props->getIntFromProp("X",itm->x())),
+                   (role()==Main) ? RULER_HEIGHT : (props->getIntFromProp("Y",itm->y())),
                    props->getIntFromProp("Width",itm->width()),
                    props->getIntFromProp("Height",itm->height()));
 
@@ -214,11 +215,11 @@ void KDlgItem_Base::repaintItem(QWidget *it)
 }
 
 
-void KDlgItem_Base::execContextMenu(bool ismain)
+void KDlgItem_Base::execContextMenu()
 {
     KPopupMenu phelp;
     phelp.setTitle( itemClass() );
-    if (!ismain)
+    if (!role() == Main)
         {
           phelp.insertItem( BarIcon("prev"), i18n("&Raise"),
 			    getEditWidget(), SLOT(slot_raiseSelected()) );
@@ -388,12 +389,12 @@ void KDlgItem_Base::setMouseCursorToEdge(Corner c)
 }
 
 
-void KDlgItem_Base::moveRulers(QWidget *widget, QMouseEvent *e )
+void KDlgItem_Base::moveRulers(QPoint relpos)
 {
     int gx = getEditWidget()->gridSizeX();
     int gy = getEditWidget()->gridSizeY();
-    QPoint relpos = e->pos();
-    relpos += widget->mapToGlobal(QPoint(0,0));
+    //    QPoint relpos = e->pos();
+    relpos += item->mapToGlobal(QPoint(0,0));
     relpos -= getEditWidget()->mapToGlobal(QPoint(0,0));
     int x = ((int)(relpos.x()/gx))*gx;
     int y = ((int)(relpos.y()/gy))*gy;
@@ -401,11 +402,7 @@ void KDlgItem_Base::moveRulers(QWidget *widget, QMouseEvent *e )
     getEditWidget()->verticalRuler()->slotNewValue(y);
 
     if (!isMBPressed)
-        {
-            QString xy = QString().sprintf(i18n("X:%.3d Y:%.3d "), x, y);
-            getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)xy, ID_KDLG_STATUS_XY);
-            getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem("", ID_KDLG_STATUS_WH);
-        }
+        getEditWidget()->showGeometry(x, y, -1, -1);
 }
 
 #include <iostream.h>
@@ -413,16 +410,16 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
 {
     if (e->type() == QEvent::Paint)
         {
-            QWidget *widget = (QWidget *)o;
             QPaintEvent *pe = (QPaintEvent *)e;
-            //            cout << "PaintEvent on " << widget->className() << endl;
 
-            widget->removeEventFilter(this);
-            qApp->sendEvent(widget, e);
-            widget->installEventFilter(this);
+            if (inPaintEvent)
+              return false;
+            inPaintEvent = true;
+            qApp->sendEvent((QWidget*)o, e);
+            inPaintEvent = false;
             if (isItemActive)
                 {
-                    QPainter p(widget);
+                    QPainter p(item);
                     p.setClipRect(pe->rect());
                     paintCorners(&p);
                 }
@@ -430,9 +427,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
         }
     if (e->type() == QEvent::MouseButtonPress)
         {
-            QWidget *widget = (QWidget *)o;
             QMouseEvent *mpe = (QMouseEvent *)e;
-            //            cout << "MousePressEvent on " << widget->className() << endl;
             
             getEditWidget()->selectWidget(this);
             
@@ -442,20 +437,18 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
                     isMBPressed = true;
                     startPnt = mpe->globalPos();
                     lastPnt = mpe->globalPos();
-                    origRect = widget->geometry();
+                    origRect = item->geometry();
                     pressedEdge = cornerForPos(mpe->pos());
                 }
             
             if (mpe->button() == RightButton)
                 {
-                    execContextMenu(isMainwidget);
+                    execContextMenu();
                 }
             return true;
         }
     if (e->type() == QEvent::MouseButtonRelease)
         {
-            QWidget *widget = (QWidget *)o;
-            //            cout << "MouseReleaseEvent on " << widget->className() << endl;
             isMBPressed = false;
             KDlgPropWidget *pw = getEditWidget()->getDlgEdit()->kdlg_get_prop_widget();
             if (pw)
@@ -464,11 +457,11 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
         }
     if (e->type() == QEvent::MouseMove)
         {
-            QWidget *widget = (QWidget *)o;
+            //            QWidget *widget = (QWidget *)o;
             QMouseEvent *mme = (QMouseEvent *)e;
             //            cout << "MouseMoveEvent on " << widget->className() << endl;
-            
-            moveRulers(widget, mme);
+            moveRulers(mme->pos());
+            //            moveRulers(item, mme);
             Corner c = NoCorner;
             if (isItemActive)
                 if (isMBPressed)
@@ -488,8 +481,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
             int diffy = mme->globalPos().y() - startPnt.y();
             diffx = ((int)(diffx/gx))*gx;
             diffy = ((int)(diffy/gy))*gy;
-            bool noMainWidget;
-            noMainWidget = getResizeCoords(pressedEdge, diffx, diffy, &x, &y, &w, &h);
+            bool noMainWidget = getResizeCoords(pressedEdge, diffx, diffy, &x, &y, &w, &h);
             
             if ((x!=origRect.x()) || (y!=origRect.y()))
                 {
@@ -510,33 +502,25 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
             if (h<10) h = 10;
             
             if (isMBPressed)
-                {
-                    QString xy = QString().sprintf(i18n("X:%.3d Y:%.3d "), x, y);
-                    QString wh = QString().sprintf(i18n("W:%.3d H:%.3d "), w, h);
-                    getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)xy, ID_KDLG_STATUS_XY);
-                    getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)wh, ID_KDLG_STATUS_WH);
-                }
+                getEditWidget()->showGeometry(x, y, w, h);
             
-            if ((!noMainWidget) || (!isMainwidget))
+            if (!noMainWidget || role() != Main)
                 {
-                    widget->setGeometry(x,y,w,h);
-                    if (isMainwidget)
-                        {
-                            x = 0;
-                            y = 0;
-                        }
+                    item->setGeometry(x,y,w,h);
+                    if (role() == Main)
+                      x = y = 0;
                     getProps()->setProp_Value("X",QString().setNum(x));
                     getProps()->setProp_Value("Y",QString().setNum(y));
                     getProps()->setProp_Value("Width",QString().setNum(w));
                     getProps()->setProp_Value("Height",QString().setNum(h));
-                    if (isMainwidget && !noMainWidget)
+                    if ((role()==Main) && !noMainWidget)
                         {
                             getEditWidget()->verticalRuler()->setRange(0,h);
                             getEditWidget()->horizontalRuler()->setRange(0,w);
                         }
                     AdvListView *lv = getEditWidget()->getDlgEdit()->kdlg_get_prop_widget()->getListView();
                     if (lv)
-                        lv->setGeometryEntrys(x,y,w,h);
+                        lv->setGeometryEntries(x,y,w,h);
                 }
             lastPnt = mme->pos();
             return true;

@@ -621,12 +621,10 @@ void CKDevelop::slotProjectMessages(){
   if(!CToolClass::searchProgram("xgettext")){
     return;
   }
-  error_parser->toogleOff();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating pot-file in /po..."));
-  error_parser->toogleOff();
   messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
   (*messages_widget) << make_cmd << " messages &&  cd ../po && make merge";
   messages_widget->startJob();
@@ -640,7 +638,6 @@ void CKDevelop::slotProjectAPI(){
   showOutputView(true);
 
   setToolMenuProcess(false);
-  error_parser->toogleOff();
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
@@ -694,7 +691,6 @@ void CKDevelop::slotProjectManual(){
   if(dlg.exec()){
 
 		showOutputView(true);
-		error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
 		setToolMenuProcess(false);
 		//  slotFileSaveAll();
 		slotStatusMsg(i18n("Creating project Manual..."));
@@ -753,7 +749,6 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 */  }
 
   showOutputView(true);
-  error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make dist..."));

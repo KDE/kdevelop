@@ -25,8 +25,8 @@ protected:
     class MyWidget : public QFrame
     {
       public:
-        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, const char* name = 0);
-        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, bool isMainWidget = false, const char* name = 0); 
+//        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, const char* name = 0);
+        MyWidget(KDlgItem_QWidget *wid, bool ismain, QWidget *parent=0, const char *name = 0); 
       protected:
         KDlgItem_QWidget *parentObject;
         virtual void paintEvent ( QPaintEvent *e );

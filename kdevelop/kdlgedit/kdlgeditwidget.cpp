@@ -69,7 +69,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD, KDlgEdit *dlged,
   edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
   edgeFrame->setFrameStyle(rulh->frameStyle());
 
-  main_widget = new KDlgItem_QWidget( this, this, true );
+  main_widget = new KDlgItem_QWidget( this, KDlgItem_Base::Main, this);
   selected_widget = 0;
   selectWidget(main_widget);
 
@@ -92,6 +92,18 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD, KDlgEdit *dlged,
 
 KDlgEditWidget::~KDlgEditWidget()
 {
+}
+
+
+void KDlgEditWidget::showGeometry(int x, int y, int w, int h)
+{
+    QString xy = QString().sprintf(i18n("X:%.3d Y:%.3d "), x, y);
+    getCKDevel()->kdlg_get_statusbar()->changeItem(xy, ID_KDLG_STATUS_XY);
+    if (w != -1 && h != -1)
+        {
+            QString wh = QString().sprintf(i18n("W:%.3d H:%.3d "), w, h);
+            getCKDevel()->kdlg_get_statusbar()->changeItem(wh, ID_KDLG_STATUS_WH);
+        }
 }
 
 
@@ -592,6 +604,8 @@ bool KDlgEditWidget::saveToFile( QString fname )
       t << "   LastChanged=\"" << QDateTime(QDate().currentDate(), QTime().currentTime()).toString() << "\"\n";
       t << "}\n";
 
+      // Session management does not belong in the dialog file.
+#if 0
       t << "\ndata SessionManagement\n";
       t << "{\n";
 
@@ -607,6 +621,7 @@ bool KDlgEditWidget::saveToFile( QString fname )
 
       t << "   " << "OpenedRootCount=\"" << n << "\"\n";
       t << "}\n";
+#endif
 
       printf("  kdlgedit : writing item sections\n");
       saveWidget(mainWidget(), &t);

@@ -80,14 +80,14 @@ CKDevelop::CKDevelop(bool witharg)
   initProject(witharg);
   setToolmenuEntries();
 	
-  error_parser = new CErrorMessageParser;
+//  error_parser = new CErrorMessageParser;
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
 
 CKDevelop::~CKDevelop(){
   // from Constructur... delete everything which is not constructed
   //   with a binding to the application
-  delete error_parser;
+//  delete error_parser;
 }
 
 void CKDevelop::initView(){

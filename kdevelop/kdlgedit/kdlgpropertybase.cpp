@@ -281,7 +281,6 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   //addProp("ResizeToParent",     "",             "C++ Code",       ALLOWED_BOOL);
   addProp("AcceptsDrops",       "",             "C++ Code",       ALLOWED_BOOL);
   addProp("HasFocus",           "",             "C++ Code",       ALLOWED_BOOL);
-  //  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
 
   addProp("X",                  "10",           "Geometry",       ALLOWED_INT);
   addProp("Y",                  "10",           "Geometry",       ALLOWED_INT);

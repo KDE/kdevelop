@@ -45,6 +45,10 @@ class KDlgEditWidget : public QWidget  {
     ~KDlgEditWidget();
 
     /**
+     * Shows the geometry (x,y,w,h) in KDevelop's status bar
+     */
+    void showGeometry(int x, int y, int w, int h);
+    /**
      * Adds an item to the dialog and asks where to add it if nessessary.
      * The desired type of widget is given to the first parameter as string (i.e. "QLineEdit").
     */

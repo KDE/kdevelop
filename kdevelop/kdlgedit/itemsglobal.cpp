@@ -82,8 +82,6 @@ void KDlgItemDatabase::removeItem(KDlgItem_Base *item)
   for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     if (items[i]==item)
       {
-          //        if ((deleteIt) && (items[i]))
-          //          delete items[i];
         items[i]=0;
         return;
       }
@@ -229,7 +227,6 @@ QFont KDlgItemsGetFont(QString desc)
 
   return QFont(name, size, thickness, italic);
 }
-
 
 
 QString KDlgLimitLines(QString src, unsigned maxlen)

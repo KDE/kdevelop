@@ -16,6 +16,7 @@
 
 
 #include <qdir.h>
+#include <qapplication.h>
 #include <klocale.h>
 #include <kregexp.h>
 #include "makeview.h"
@@ -67,6 +68,20 @@ void MakeView::startJob()
     ProcessView::startJob();
     dirstack.clear();
     dirstack.push(new QString(QDir::currentDirPath()));
+}
+
+
+void MakeView::nextError()
+{
+    // TODO
+    QApplication::beep();
+}
+
+
+void MakeView::prevError()
+{
+    // TODO
+    QApplication::beep();
 }
 
 

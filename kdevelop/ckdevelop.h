@@ -785,7 +785,7 @@ private:
   QValueList<int> kdlg_sizes;
   int workspace;
 
-  CErrorMessageParser* error_parser;
+    //  CErrorMessageParser* error_parser;
   QString version;
   QString kdev_caption;
   QString kdlg_caption;
