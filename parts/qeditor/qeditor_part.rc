@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="qeditor_part" version="10">
+<kpartgui name="qeditor_part" version="11">
 <MenuBar noMerge="1">
 
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_save" group="save_merge" />
     <Action name="file_save_as" group="save_merge" />
+    <Action name="file_reload" />
   </Menu>
 
   <Menu name="edit" noMerge="1"><text>&amp;Edit</text>

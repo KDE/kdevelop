@@ -374,6 +374,9 @@ protected:
      */
     virtual bool saveFile();
 
+public slots:
+    void fileReload();
+
 protected slots:
     void fileOpen();
     void fileSaveAs();

@@ -158,15 +158,15 @@ void QEditorPart::setModified(bool modified)
 
     // get a handle on our Save action and make sure it is valid
     KAction *save = m_currentView->actionCollection()->action(KStdAction::stdName(KStdAction::Save));
-    if (!save)
-        return;
+    if (save)
+        // if so, we either enable or disable it based on the current
+        // state
+        save->setEnabled(modified);
 
-    // if so, we either enable or disable it based on the current
-    // state
-    if (modified)
-        save->setEnabled(true);
-    else
-        save->setEnabled(false);
+    // same for the reload action
+    KAction *reload = m_currentView->actionCollection()->action(i18n("Reloa&d"));
+    if ( reload )
+        reload->setEnabled(modified);
 
     emit newStatus();
 }
@@ -226,6 +226,12 @@ bool QEditorPart::saveFile()
     emit fileNameChanged();
 
     return true;
+}
+
+void QEditorPart::fileReload()
+{
+    if (openURL(url()))
+        setModified( false );
 }
 
 void QEditorPart::fileOpen()

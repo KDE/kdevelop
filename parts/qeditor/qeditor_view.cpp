@@ -666,6 +666,9 @@ void QEditorView::setupActions()
     KStdAction::saveAs( doc(), SLOT(fileSaveAs()), actionCollection() );
     KStdAction::save( doc(), SLOT(save()), actionCollection() );
 
+    new KAction( i18n("Reloa&d"), "reload", Key_F5,
+                 doc(), SLOT(fileReload()), actionCollection(), "file_reload" );
+
     KStdAction::undo( doc(), SLOT(undo()), actionCollection() );
     KStdAction::redo( doc(), SLOT(redo()), actionCollection() );
 
