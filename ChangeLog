@@ -1,3 +1,6 @@
+2000-01-09 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commited patch by Holger Schurig <holger@holger.om.org>, this adds syntax-highlighting for Pascal
+
 2000-01-09 Christian Couder <chcouder@club-internet.fr>
 	* Added Benoit Cerrina's FileOpenPatch.
 
