@@ -9,6 +9,8 @@ KDEV_CHECK_DOCBASE
 #KDEV_CHECK_SVN
 #KDEV_CHECK_QEDITOR
 KDEV_CHECK_COMPAT
+KDEV_CHECK_SVN
+KDEV_CHECK_VCSCOMPAT
 #KDEV_CHECK_BDB
 KDEV_CHECK_MDI
 #KDEV_PATH_PYTHONDOCDIR
@@ -88,7 +90,6 @@ dnl  **********
 
 dnl cervisia is currently disabled
 dnl AC_ARG_ENABLE(cervisia, AC_HELP_STRING([--disable-cervisia], [disable vcs support for cervisia]), [with_cervisia=${enableval}], [with_cervisia=yes])
-AM_CONDITIONAL(include_cervisia, test "$with_cervisia" = "yes")
 
 AC_ARG_ENABLE(clearcase, AC_HELP_STRING([--disable-clearcase], [disable vcs support for clearcase]), [with_clearcase=${enableval}], [with_clearcase=yes])
 AM_CONDITIONAL(include_clearcase, test "$with_clearcase" = "yes")

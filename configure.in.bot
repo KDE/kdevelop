@@ -15,10 +15,10 @@ if test -z "$kdelibs_doxydir"; then
   echo "configure script."
 fi
 
-if test -n "$SVN_SUBDIR"; then
+if test -n "$VCSCOMPAT" -a -z "$SVN_SUBDIR"; then
   echo ""
-  echo "WARNING! You are compiling with subversion support. Please note"
-  echo "that subversion is still experimental and that compilation of that"
-  echo "part might fail with subversion versions other than 0.17."
+  echo "You're missing Subversion libraries (1.x)"
+  echo "KDevelop subversion support will not work without it,"
+  echo "consider installing it."
+  echo ""
 fi
-  
