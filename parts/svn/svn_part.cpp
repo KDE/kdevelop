@@ -261,7 +261,7 @@ svn_error_t *SvnPart::promptUser(char **result, const char *prompt, svn_boolean_
 		if (!ok)
 			return svn_error_create (0, 0, NULL, pool, "Authentification aborted"); 
 	} else {
-		text = QInputDialog::getText( i18n("Subversion authentification"), i18n(prompt_native),
+		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Password, QString::null, &ok, NULL );
 		if (!ok)
 			return svn_error_create (0, 0, NULL, pool, "Authentification aborted"); 
