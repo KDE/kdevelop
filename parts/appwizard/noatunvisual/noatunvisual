@@ -3,5 +3,5 @@
 Name=Noatun visualization plugin
 Icon=noatunplugin.png
 Category=C++/KDE
-Comment=Generates a viszalization plugin for noatun using SDL
+Comment=Generates a visualization plugin for noatun using SDL
 FileTemplates=h,CStyle,cpp,CStyle
