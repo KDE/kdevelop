@@ -1,3 +1,7 @@
+2001-08-10   Harald Fernengel <harry@bnro.de>
+	* Polished the Grep Dialog. It now remebers the last searches and search directoires, search button is now default-button
+	* find now works on non-unix platforms, too
+
 2001-08-08   Sandy Meier  <smeier@kdevelop.org>
 	* the  code completion and arghint works now in many cases (PHP)
 	* added realtimeparser, so the classview is updated while you type :-) (PHP)
