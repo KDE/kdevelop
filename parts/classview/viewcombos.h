@@ -77,14 +77,6 @@ void refreshClasses(ClassViewPart *part, KComboView *view, const QString &dom);
 void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & dom);
 void refreshFunctions(ClassViewPart *part, KComboView *view, const QString & dom);
 
-void processNamespace( ClassViewPart *part, KComboView *view, NamespaceItem * item, ProcessType type = Reload );
-void processClass( ClassViewPart *part, KComboView *view, ClassItem * item, ProcessType type = Reload );
-void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item, ProcessType type = Reload );
-
-bool removeNamespacesItems(ClassViewPart *part, QListView *view, const NamespaceDom &dom);
-void removeClassItems(ClassViewPart *part, QListView *view, const ClassDom &dom);
-void removeFunctionItems(ClassViewPart *part, QListView *view, const ClassDom &dom);
-
 NamespaceDom namespaceByName(NamespaceDom dom, QString name);
 
 }

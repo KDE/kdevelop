@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevClassView" version="7">
+<kpartgui name="KDevClassView" version="8">
 <MenuBar>
   <Menu name="project" >
       <Action name="inheritance_dia" group="project_classes" />
@@ -10,17 +10,6 @@
   <text>Browser Toolbar</text>
   <Separator/>
   <Action name="functionsnav_combo" />
-<!--  <Action name="namespaces_combo" />
-  <Action name="classes_combo" />
-  <Action name="functions_combo" /> 
-  <Action name="view_popup" />
-  <Separator/>-->
 </ToolBar>
-<!--<ToolBar name="codeNavToolBar">
-  <text>Code Navigation Toolbar</text>
-  <Action name="functionsnav_combo" />
-  <Action name="goto_button" />
-  <Separator/>
-</ToolBar> -->
 </kpartgui>
 
