@@ -272,19 +272,22 @@ void CustomProjectPart::populateProject()
         dir.setPath(s.pop());
         kdDebug(9025) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
-        QPtrListIterator<QFileInfo> it(*dirEntries);
-        for (; it.current(); ++it) {
-            QString fileName = it.current()->fileName();
-            if (fileName == "." || fileName == "..")
-                continue;
-            QString path = it.current()->absFilePath();
-            if (it.current()->isDir()) {
-                kdDebug(9025) << "Pushing: " << path << endl;
-                s.push(path);
-            }
-            else {
-                kdDebug(9025) << "Adding: " << path << endl;
-                m_sourceFiles.append(path.mid(prefixlen));
+        if ( dirEntries )
+        {
+            QPtrListIterator<QFileInfo> it(*dirEntries);
+            for (; it.current(); ++it) {
+                QString fileName = it.current()->fileName();
+                if (fileName == "." || fileName == "..")
+                    continue;
+                QString path = it.current()->absFilePath();
+                if (it.current()->isDir()) {
+                    kdDebug(9025) << "Pushing: " << path << endl;
+                    s.push(path);
+                }
+                else {
+                        kdDebug(9025) << "Adding: " << path << endl;
+                    m_sourceFiles.append(path.mid(prefixlen));
+                }
             }
         }
     } while (!s.isEmpty());
