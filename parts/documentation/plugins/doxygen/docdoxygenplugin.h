@@ -48,7 +48,9 @@ public:
     virtual QString catalogTitle(const QString& url);
     
     virtual void autoSetupPlugin();
-    
+
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin();
+        
 protected:
     void createBookTOC(DocumentationItem* item, const QString &tagUrl = QString::null, 
         const QString &baseHtmlUrl = QString::null);
@@ -57,5 +59,6 @@ protected:
     void createIndexFromTag(QDomDocument &dom, IndexBox* index, DocumentationCatalogItem* item,
         QDomElement &parentEl, const QString &prefix);
 };
+
 
 #endif

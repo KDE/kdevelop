@@ -65,7 +65,7 @@ K_EXPORT_COMPONENT_FACTORY( libdocdoxygenplugin, DocDoxygenPluginFactory(&data) 
 DocDoxygenPlugin::DocDoxygenPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocDoxygenPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(Index | FullTextSearch);
+    setCapabilities(Index | FullTextSearch | ProjectDocumentation);
     autoSetup();
 }
 
@@ -415,6 +415,11 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
         }
         childEl = childEl.nextSibling().toElement();
     }
+}
+
+ProjectDocumentationPlugin *DocDoxygenPlugin::projectDocumentationPlugin()
+{
+    return new ProjectDocumentationPlugin(this);
 }
 
 #include "docdoxygenplugin.moc"

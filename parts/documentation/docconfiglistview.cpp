@@ -31,12 +31,12 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     addColumn(i18n("Index"));
     addColumn(i18n("Search"));
     addColumn(i18n("Title"));    
-    addColumn(i18n("URL"));
+//    addColumn(i18n("URL"));
     setColumnWidthMode(0, QListView::Maximum);
     setColumnWidthMode(1, QListView::Maximum);
     setColumnWidthMode(2, QListView::Maximum);
     setColumnWidthMode(3, QListView::Maximum);
-    setColumnWidthMode(4, QListView::Maximum);
+//    setColumnWidthMode(4, QListView::Maximum);
     setAllColumnsShowFocus(true);
 
     connect(this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),

@@ -47,9 +47,11 @@
 #include "kdevdocumentationplugin.h"
 #include "configwidgetproxy.h"
 #include "kdevpartcontroller.h"
+#include "domutil.h"
 
 #include "documentation_widget.h"
 #include "docglobalconfigwidget.h"
+#include "docprojectconfigwidget.h"
 #include "contentsview.h"
 #include "find_documentation.h"
 
@@ -63,17 +65,19 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( &data ) 
 
 DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QStringList& )
     :KDevPlugin("Documentation", "doctree", parent, name ? name : "DocumentationPart" ),
-    m_hasIndex(false)
+    m_projectDocumentationPlugin(0), m_hasIndex(false)
 {
     setInstance(DocumentationFactory::instance());
     setXMLFile("kdevpart_documentation.rc");
 
     m_configProxy = new ConfigWidgetProxy(core());
     m_configProxy->createGlobalConfigPage(i18n("Documentation"), GLOBALDOC_OPTIONS);
-/*    m_configProxy->createProjectConfigPage(i18n("Project Documentation"), PROJECTDOC_OPTIONS);*/
+    m_configProxy->createProjectConfigPage(i18n("Project Documentation"), PROJECTDOC_OPTIONS);
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
     connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
         this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+    connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
+    connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
 
     m_widget = new DocumentationWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
@@ -155,8 +159,8 @@ void DocumentationPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page
         }
         case PROJECTDOC_OPTIONS:
         {
-/*            DocProjectConfigWidget *w1 = new DocProjectConfigWidget(m_widget, page, project(), "doc project config");
-            connect(dlg, SIGNAL(okClicked()), w1, SLOT(accept()));*/
+            DocProjectConfigWidget *w1 = new DocProjectConfigWidget(this, page, "doc project config");
+            connect(dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
             break;
         }
     }
@@ -409,6 +413,28 @@ void DocumentationPart::lookInDocumentationIndex(const QString &term)
 void DocumentationPart::contextLookInDocumentationIndex()
 {
     lookInDocumentationIndex(m_contextStr);
+}
+
+void DocumentationPart::projectOpened()
+{
+    QString projectDocSystem = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docsystem");
+    QString projectDocURL = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl");
+    
+    for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin();
+        it != m_plugins.constEnd(); ++it)
+    {
+        if ((*it)->hasCapability(DocumentationPlugin::ProjectDocumentation) &&
+            ((*it)->pluginName() == projectDocSystem))
+            m_projectDocumentationPlugin = (*it)->projectDocumentationPlugin();
+    }
+    if (m_projectDocumentationPlugin)
+        m_projectDocumentationPlugin->init(m_widget->contents(), m_widget->index(), projectDocURL);
+}
+
+void DocumentationPart::projectClosed()
+{
+    delete m_projectDocumentationPlugin;
+    m_projectDocumentationPlugin = 0;
 }
 
 #include "documentation_part.moc"

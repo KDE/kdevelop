@@ -28,6 +28,8 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdirwatch.h>
+#include <klocale.h>
 
 //class DocumentationItem
 
@@ -90,7 +92,7 @@ void DocumentationItem::init( )
 DocumentationCatalogItem::DocumentationCatalogItem(DocumentationPlugin* plugin,
     KListView *parent, const QString &name)
     :DocumentationItem(DocumentationItem::Catalog, parent, name), m_plugin(plugin),
-    isLoaded(false), isActivated(false)
+    isLoaded(false), isActivated(false), m_isProjectDocumentationItem(false)
 {
     setExpandable(true);
     m_plugin->addCatalog(this);
@@ -99,7 +101,7 @@ DocumentationCatalogItem::DocumentationCatalogItem(DocumentationPlugin* plugin,
 DocumentationCatalogItem::DocumentationCatalogItem(DocumentationPlugin* plugin,
     DocumentationItem *parent, const QString &name)
     :DocumentationItem(DocumentationItem::Catalog, parent, name), m_plugin(plugin),
-    isLoaded(false), isActivated(false)
+    isLoaded(false), isActivated(false), m_isProjectDocumentationItem(false)
 {
     setExpandable(true);
     m_plugin->addCatalog(this);
@@ -506,6 +508,10 @@ void DocumentationPlugin::loadCatalogConfiguration(KListView *configurationView)
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
+        if (namedCatalogs.contains(it.key())
+            && namedCatalogs[it.key()]->isProjectDocumentationItem())
+            continue;
+        
         ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
             hasCapability(Index), hasCapability(FullTextSearch));
         config->setGroup("TOC Settings");
@@ -642,16 +648,48 @@ void IndexBox::refill()
     }
 }
 
-/*void IndexBox::refill(QValueList<IndexItemProto *> &items)
+
+ProjectDocumentationPlugin::ProjectDocumentationPlugin(DocumentationPlugin *docPlugin)
+    :QObject(0, 0), m_docPlugin(docPlugin), m_catalog(0), m_contents(0), m_index(0)
 {
-    for (QValueList<IndexItemProto*>::const_iterator it = items.begin();
-        it != items.end(); ++it)
+    m_watch = new KDirWatch(this);
+    connect(m_watch, SIGNAL(dirty(const QString&)), this, SLOT(reinit()));
+    m_watch->startScan();
+}
+
+ProjectDocumentationPlugin::~ProjectDocumentationPlugin()
+{
+    deinit();
+}
+
+void ProjectDocumentationPlugin::init(KListView *contents, IndexBox *index, const QString &url)
+{
+    m_contents = contents;
+    m_index = index;
+    m_url = url;
+    
+    if (m_catalog)
+        deinit();
+    m_catalog = m_docPlugin->createCatalog(contents, i18n("Project API Documentation"), url);
+    if (m_catalog)
     {
-        IndexItemProto *proto = *it;
-        QListBoxItem *indexItem = findItem(proto->text(), Qt::CaseSensitive | Qt::ExactMatch);
-        if (!indexItem)
-            new IndexItem(this, proto->text());
+        m_catalog->setProjectDocumentationItem(true);
+        m_watch->addFile(url);
     }
-}*/
+}
+
+void ProjectDocumentationPlugin::reinit()
+{
+    deinit();
+    if (m_contents != 0 && m_index != 0 && m_url != 0)
+        init(m_contents, m_index, m_url);
+}
+
+void ProjectDocumentationPlugin::deinit()
+{
+    m_watch->removeFile(m_url);
+    delete m_catalog;
+    m_catalog = 0;
+}
 
 #include "kdevdocumentationplugin.moc"

@@ -31,6 +31,7 @@ class KConfig;
 class KDialogBase;
 class ConfigWidgetProxy;
 class DocumentationPlugin;
+class ProjectDocumentationPlugin;
 class KURL;
 class Context;
 class QPopupMenu;
@@ -68,6 +69,8 @@ public slots:
     void infoPage();
     void infoPage(const QString &term);
     void contextInfoPage();
+    void projectOpened();
+    void projectClosed();
     
 signals:
     void indexSelected(IndexBox *indexBox);
@@ -87,11 +90,13 @@ private:
     ConfigWidgetProxy *m_configProxy;
     
     QValueList<DocumentationPlugin*> m_plugins;
+    ProjectDocumentationPlugin *m_projectDocumentationPlugin;
     
     QString m_contextStr;
     bool m_hasIndex;
     
 friend class DocGlobalConfigWidget;
+friend class DocProjectConfigWidget;
 friend class SearchView;
 friend class FindDocumentation;
 };

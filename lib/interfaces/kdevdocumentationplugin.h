@@ -66,6 +66,9 @@ public:
     virtual void setOpen(bool o);
     void load();
     
+    virtual bool isProjectDocumentationItem() const { return m_isProjectDocumentationItem; }
+    virtual void setProjectDocumentationItem(bool b) { m_isProjectDocumentationItem = b; }
+    
 protected:
     virtual void activate();
     
@@ -73,6 +76,7 @@ private:
     DocumentationPlugin* m_plugin;
     bool isLoaded;
     bool isActivated;
+    bool m_isProjectDocumentationItem;
 };
 
 class IndexBox;
@@ -172,6 +176,8 @@ private:
 };
 
 
+class ProjectDocumentationPlugin;
+
 /**
 @short Documentation Plugin Interface
 
@@ -188,7 +194,8 @@ public:
     /**Capability of documentation plugin.*/
     enum Capability { Index=1 /**<index can be built for catalogs*/,
                       FullTextSearch=2 /**<full text search is possible in catalog locations*/,
-                      CustomDocumentationTitles=4 /**<user can specify titles for documentation catalogs*/ };
+                      CustomDocumentationTitles=4 /**<user can specify titles for documentation catalogs*/,
+                      ProjectDocumentation=8 /**<plugin can handle project documentation*/ };
     
     /**Constructor. Should initialize capabilities of the plugin by using setCapabilities
     protected method. For example,
@@ -297,6 +304,10 @@ public:
     and @ref createIndex).*/
     virtual bool loadCachedIndex(IndexBox *index, DocumentationCatalogItem *item);
     
+    /**Returns associated project documentation plugin. Default implementation returns zero.
+    Reimplement this if the documentation plugin can also handle project documentation.*/
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin() { return 0; }
+    
 public slots:
     /**Creates index and fills index listbox. Reimplement this only if custom
     caching algorythm is used (do not forget to reimplement also @ref cacheIndex
@@ -337,6 +348,38 @@ private:
 
 friend class IndexItemProto;
 friend class DocumentationCatalogItem;
+};
+
+
+/**
+@short Project documentation plugin
+
+Represents functionality to display project documentation catalog and index in documentation browser.
+*/
+class ProjectDocumentationPlugin: public QObject {
+    Q_OBJECT
+public:
+    ProjectDocumentationPlugin(DocumentationPlugin *docPlugin);
+    virtual ~ProjectDocumentationPlugin();
+
+    /**Initializes project documentation plugin - creates documentation catalog.*/
+    virtual void init(KListView *contents, IndexBox *index, const QString &url);
+    /**Deinitializes project documentation plugin - removes documentation catalog.*/
+    virtual void deinit();
+
+public slots:
+    /**Performs reinitialization if project documentation has changed (after building api documentation).*/
+    virtual void reinit();
+        
+protected:
+    DocumentationPlugin *m_docPlugin;
+    DocumentationCatalogItem *m_catalog;
+    
+private:
+    class KDirWatch *m_watch;
+    class KListView *m_contents;
+    class IndexBox *m_index;
+    QString m_url;
 };
 
 #endif
