@@ -482,10 +482,21 @@ void GDBController::programNoApp(const QString& msg, bool msgBox)
   state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
   destroyCmds();
 	emit dbgStatus (msg, state_);
-	if (msgBox)
-    KMsgBox::message( 0, i18n("Debug failure"), i18n("gdb message:\n")+msg,
-                          KMsgBox::EXCLAMATION);
 
+  // We're always at frame zero when the program stops
+  // and we must reset the active flag
+  currentFrame_ = 0;
+  varTree_->setActiveFlag();
+
+  // Now wipe the tree out
+  varTree_->viewport()->setUpdatesEnabled(false);
+  varTree_->trim();
+  varTree_->viewport()->setUpdatesEnabled(true);
+  varTree_->repaint();
+
+	if (msgBox)
+    KMsgBox::message(0, i18n("Error"), i18n("gdb message:\n")+msg,
+                          KMsgBox::EXCLAMATION);
 }
 
 // **************************************************************************
@@ -695,10 +706,15 @@ void GDBController::parseLine(char* buf)
       // prints on stderr with a message that there's no source. Subsequent
       // "step into"s just print line number at filename. Both start with a
       // numeric char.
+      // Also a 0x message arrives everytime the program stops
+      // In the case where there is no source available and you were
+      // then this message should appear. Otherwise a program location
+      // message will arrive immediately after this and overwrite it.
       if (isdigit(*buf))
       {
         DBG_DISPLAY("Parsed (digit)<" + QString(buf) + ">");
 //        parseProgramLocation(buf);
+        actOnProgramPause(QString(buf));
         break;
       }
 
@@ -1338,7 +1354,12 @@ void GDBController::slotSelectFrame(int frameNo)
   {
     // Have we already got these details?
     if (frame->needLocals())
+    {
+      // Add the frame params to the variable list
+      frame->setParams(frameStack_->getFrameParams(currentFrame_));
+      // and ask for the locals
       queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+    }
   }
 }
 
