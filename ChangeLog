@@ -11,6 +11,9 @@
 	* Updated de.po due to new console debugging features
 	* Updated kdevelop.pot
 
+2000-04-04 jbb <jbb@ihug.co.nz>
+	* Added console io for debugging console application.
+
 2000-04-02 Walter Tasin  <tasin@kdevelop.de>
 	* removing a file physically by RFV or LFV
 	  also removes the file from the actual edit buffers
