@@ -650,7 +650,7 @@ void CKDevSetupDlg::addQT2Tab()
 
   QGroupBox* ppath_box= new QGroupBox(QT2Page,"NoName");
   grid->addWidget( ppath_box,1,0);
-  grid2 = new QGridLayout(ppath_box,2,2,15,7);
+  grid2 = new QGridLayout(ppath_box,4,2,15,7);
   ppath_box->setTitle(i18n("Default Project Path"));
 
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
