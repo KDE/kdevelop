@@ -60,8 +60,9 @@ config3:
 	./configure $(configkdevelop) \
 	--prefix=/usr/local/kde3 \
 	--with-qt-dir=/usr/local/qt \
+	--with-qt-includes=/usr/local/qt \
 	--enable-debug \
-	--disable-rpath --with-qt-includes=/usr/include/qt \
+	--disable-rpath \
 	--with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
 	--enable-docbase \
 	--with-phpdocdir=/usr/share/doc/php4 \
