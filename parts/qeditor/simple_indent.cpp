@@ -49,7 +49,7 @@
 #include "qeditor.h"
 
 // from trolltech's editor -- START
-static int indentation( const QString &s, int tabwidth )
+static int simple_indentation( const QString &s, int tabwidth )
 {
     if ( s.simplifyWhiteSpace().length() == 0 )
         return 0;
@@ -141,7 +141,7 @@ static int indentForLine( QTextParagraph* parag, int tabwidth )
         QString raw_text = p->string()->toString();
         QString line = raw_text.stripWhiteSpace();
         if( !line.isEmpty() ){
-            ind = indentation( raw_text, tabwidth );
+            ind = simple_indentation( raw_text, tabwidth );
             break;
         }
         p = p->prev();
@@ -154,7 +154,7 @@ void SimpleIndent::indent( QTextDocument* doc, QTextParagraph* parag,
 {
     int tabwidth = editor()->tabStop();
     QString s = parag->string()->toString();
-    int oi = indentation( s, tabwidth );
+    int oi = simple_indentation( s, tabwidth );
     int ind = indentForLine( parag, tabwidth );
 
     indentLine( parag, tabwidth, oi, ind );

@@ -26,7 +26,7 @@
 #include <private/qrichtext_p.h>
 #include <kdebug.h>
 
-static int indentation( const QString &s, int tabwidth )
+static int python_indentation( const QString &s, int tabwidth )
 {
     if ( s.simplifyWhiteSpace().length() == 0 )
         return 0;

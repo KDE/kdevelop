@@ -33,7 +33,7 @@
 #include <kconfig.h>
 
 
-static const char *keywords[] = {
+static const char *cpp_keywords[] = {
     "break", "case", "continue", "default", "do", "else", "enum", "extern",
     "for", "goto", "if", "return", "sizeof", "struct",
     "switch", "typedef", "union", "while",
@@ -64,7 +64,7 @@ CppColorizer::CppColorizer( QEditor* editor )
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
     context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
-    context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
+    context0->appendChild( new KeywordsHLItem( cpp_keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "0[x|X]\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );

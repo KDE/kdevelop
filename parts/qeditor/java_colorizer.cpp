@@ -29,7 +29,7 @@
 #include <qsettings.h>
 #include <private/qrichtext_p.h>
 
-static const char *keywords[] = {
+static const char *java_keywords[] = {
     // Java keywords
     "abstract",
     "break",
@@ -94,7 +94,7 @@ JavaColorizer::JavaColorizer( QEditor* editor )
     context0->appendChild( new StringHLItem( "/*", Comment, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "'", String, 3 ) );
-    context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
+    context0->appendChild( new KeywordsHLItem( java_keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
 

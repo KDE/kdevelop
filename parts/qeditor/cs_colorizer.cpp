@@ -33,7 +33,7 @@
 #include <kconfig.h>
 
 
-static const char *keywords[] = {
+static const char *cs_keywords[] = {
     "abstract",
     "as",
     "base",
@@ -128,7 +128,7 @@ CSharpColorizer::CSharpColorizer( QEditor* editor )
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
     context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
-    context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
+    context0->appendChild( new KeywordsHLItem( cs_keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "0[x|X]\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );

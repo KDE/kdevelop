@@ -29,7 +29,7 @@
 #include <qsettings.h>
 #include <private/qrichtext_p.h>
 
-static const char *keywords[] = {
+static const char *jsp_keywords[] = {
     // Java keywords
     "abstract",
     "break",
@@ -119,7 +119,7 @@ JspColorizer::JspColorizer( QEditor* editor )
     context4->appendChild( new StringHLItem( "/*", Comment, 5 ) );
     context4->appendChild( new StringHLItem( "\"", String, 6 ) );
     context4->appendChild( new StringHLItem( "'", String, 7 ) );
-    context4->appendChild( new KeywordsHLItem( keywords, Keyword, 4 ) );
+    context4->appendChild( new KeywordsHLItem( jsp_keywords, Keyword, 4 ) );
     context4->appendChild( new RegExpHLItem( "\\d+", Constant, 4 ) );
     context4->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 4 ) );
 

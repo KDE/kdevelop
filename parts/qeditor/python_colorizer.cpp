@@ -30,7 +30,7 @@
 #include <qsettings.h>
 #include <private/qrichtext_p.h>
 
-static const char *keywords[] = {
+static const char *python_keywords[] = {
   // Python keywords
   "and",
   "assert",
@@ -73,7 +73,7 @@ PythonColorizer::PythonColorizer( QEditor* editor )
     context0->appendChild( new StringHLItem( "\"\"\"", String, 4 ) );
     context0->appendChild( new StringHLItem( "\"", String, 1 ) );
     context0->appendChild( new StringHLItem( "'", String, 2 ) );
-    context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
+    context0->appendChild( new KeywordsHLItem( python_keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
     context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
 

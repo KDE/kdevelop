@@ -61,7 +61,7 @@ CIndent::~CIndent()
     config->sync();
 }
 
-static int indentation( const QString &s )
+static int c_indentation( const QString &s )
 {
     if ( s.simplifyWhiteSpace().length() == 0 )
 	return 0;
@@ -134,7 +134,7 @@ static void indentLine( QTextParagraph *p, int &oldIndent, int &newIndent )
 
 void CIndent::indent( QTextDocument *doc, QTextParagraph *p, int *oldIndent, int *newIndent )
 {
-    int oi = indentation( p->string()->toString() );
+    int oi = c_indentation( p->string()->toString() );
     QStringList code;
     QTextParagraph *parag = doc->firstParagraph();
     while ( parag ) {

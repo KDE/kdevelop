@@ -28,7 +28,7 @@
 #include <qsettings.h>
 #include <private/qrichtext_p.h>
 
-static const char *keywords[] = {
+static const char *xml_keywords[] = {
   // XML keywords
   0
 };

@@ -27,7 +27,7 @@
 #include <private/qrichtext_p.h>
 
 
-static const char *keywords[] = {
+static const char *qmake_keywords[] = {
   // QMake keywords
   0
 };
