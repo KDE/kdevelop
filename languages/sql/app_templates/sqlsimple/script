@@ -1,4 +1,4 @@
-#!perl -I/usr/kde/3.1/share/apps/kdevappwizard/template-common
+#!/usr/bin/perl
 
 use kdevelop;
 
