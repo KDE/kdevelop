@@ -922,7 +922,9 @@ void CKDevelop::slotProjectAPI(){
         if(fi->isFile())
         {
           libname=fi->baseName();  // get only the base of the filename as library name
-          link+=" -l"+libname;
+          if (libname != QString("libkmid")) { // workaround for a strange behaviour of kdoc: don't try libkmid
+            link+=" -l"+libname;
+          }
         }
         ++it; // increase the iterator
       }
