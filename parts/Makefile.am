@@ -12,5 +12,5 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith windowmenu history \
           sourcenav texttools qeditor buglist javasupport javadebugger\
-	  $(SCRIPTING_SUBDIR)
+		$(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
 
