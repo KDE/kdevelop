@@ -1,3 +1,7 @@
+2002-04-27  August Hörandl  <august.hoerandl@gmx.at>
+	* kdevelop/cclassview.cpp: fixed wrong path for new file
+	  reviewed by Roland Krause
+
 2002-04-26  Roland Krause  <roland@ca.wai.com>
 	* fixed a crash when attempting to look at parent classes in the 
          class viewer. reviewed by HarryF

@@ -1207,7 +1207,7 @@ void CClassView::slotFileNew()
         dir = cur->text(0) + ("/" + dir);
         cur = cur->parent();
       }
-      emit selectedFileNew(dir);
+      emit selectedFileNew(project->getProjectDir() + project->getSubDir() + dir);
     }
   }
 }
