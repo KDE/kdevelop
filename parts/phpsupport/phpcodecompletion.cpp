@@ -164,7 +164,7 @@ void PHPCodeCompletion::cursorPositionChanged(){
 
 }
 
-bool PHPCodeCompletion::checkForMethodArgHint(QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForMethodArgHint(QString lineStr,int col,int /*line*/){
   //cerr << "enter checkForMethodArgHint" << endl;
   if(m_argWidgetShow){
     return false; //nothing to do
@@ -211,7 +211,7 @@ bool PHPCodeCompletion::checkForMethodArgHint(QString lineStr,int col,int line){
 
   return false;
 }
-bool PHPCodeCompletion::checkForVariable(QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForVariable(QString lineStr,int col,int /*line*/){
   //cerr  << "enter checkForVariable()" << endl;
   QString methodStart = lineStr.left(col);
   if(methodStart.right(2) != "->"){
@@ -283,9 +283,10 @@ QString PHPCodeCompletion::searchCurrentClassName(){
       return classre.group(1);
     }
   }
+  return QString::null;
 }
 
-bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForGlobalFunctionArgHint" << endl;
   if(m_argWidgetShow){
     return false; //nothing to do
@@ -385,7 +386,7 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString lineStr,int col){
   return false;
 }
 
-bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForNewInstanceArgHint" << endl;
   if(m_argWidgetShow){
     return false; //nothing to do
@@ -423,7 +424,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int l
   }
   return false;
 }
-bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");

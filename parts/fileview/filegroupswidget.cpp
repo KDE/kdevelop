@@ -120,6 +120,7 @@ FileGroupsWidget::FileGroupsWidget(FileViewPart *part)
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_part = part;
+    (void) translations; // supress compiler warning
 }
 
 

@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <iostream.h>
+#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -750,7 +751,7 @@ goto find_rule; \
   static bool beginComment(MyLexer *lex);
   static void inComment(MyLexer *lex);
   static bool endComment(MyLexer *lex);
-#line 754 "tokenizer.cpp"
+#line 755 "tokenizer.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -874,13 +875,13 @@ YY_MALLOC_DECL
 YY_DECL
 	{
 	register yy_state_type yy_current_state;
-	register char *yy_cp = NULL, *yy_bp = NULL;
+	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
 #line 67 "./tokenizer.l"
 
     /*==============> Strip whitespace <==============*/
-#line 884 "tokenizer.cpp"
+#line 885 "tokenizer.cpp"
 
 	if ( yy_init )
 		{
@@ -1383,7 +1384,7 @@ YY_RULE_SETUP
 #line 184 "./tokenizer.l"
 ECHO;
 	YY_BREAK
-#line 1387 "tokenizer.cpp"
+#line 1388 "tokenizer.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(COMMENT):
 			case YY_STATE_EOF(PREPARSER):
@@ -1987,6 +1988,7 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
+#include<unistd.h>
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{

@@ -82,7 +82,7 @@ TrollProjectPart::~TrollProjectPart()
 }
 
 
-void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
+void TrollProjectPart::projectConfigWidget(KDialogBase */*dlg*/)
 {
 }
 
@@ -134,13 +134,13 @@ QStringList TrollProjectPart::allSourceFiles()
 }
 
 
-void TrollProjectPart::addFile(const QString &fileName)
+void TrollProjectPart::addFile(const QString &/*fileName*/)
 {
     // FIXME
 }
 
 
-void TrollProjectPart::removeFile(const QString &fileName)
+void TrollProjectPart::removeFile(const QString &/*fileName*/)
 {
     // FIXME
 }

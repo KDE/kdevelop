@@ -75,7 +75,7 @@ static bool matchesPattern(const QString &fileName, const QStringList &patternLi
     QStringList::ConstIterator it;
     for (it = patternList.begin(); it != patternList.end(); ++it) {
         QRegExp re(*it, true, true);
-        if (re.search(fileName) == 0 && re.matchedLength() == fileName.length())
+        if (re.search(fileName) == 0 && re.matchedLength() == (int)fileName.length())
             return true;
     }
 

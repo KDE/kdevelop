@@ -186,7 +186,7 @@ bool FileTreeWidget::matchesHidePattern(const QString &fileName)
     QStringList::ConstIterator it;
     for (it = m_hidePatterns.begin(); it != m_hidePatterns.end(); ++it) {
         QRegExp re(*it, true, true);
-        if (re.search(fileName) == 0 && re.matchedLength() == fileName.length())
+        if (re.search(fileName) == 0 && (uint)re.matchedLength() == fileName.length())
             return true;
     }
 

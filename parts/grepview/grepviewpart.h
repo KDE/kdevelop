@@ -29,7 +29,6 @@ public:
 
 private slots:
     void slotRaiseWidget();
-    void configWidget(KDialogBase *dlg);
     void stopButtonClicked();
     void projectOpened();
     void projectClosed();

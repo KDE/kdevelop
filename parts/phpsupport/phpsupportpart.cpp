@@ -219,13 +219,13 @@ void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
   }
 }
 
-void PHPSupportPart::slotWebData(KIO::Job* job,const QByteArray& data){
+void PHPSupportPart::slotWebData(KIO::Job* /*job*/,const QByteArray& data){
   kdDebug(9018) << "slotWebData()" << endl;
   QString strData(data);
   m_phpExeOutput += strData;
 }
 
-void PHPSupportPart::slotWebResult(KIO::Job* job){
+void PHPSupportPart::slotWebResult(KIO::Job* /*job*/){
   kdDebug(9018) << "slotWebResult()" << endl;
   m_phpErrorView->parse(m_phpExeOutput);
 }
@@ -259,19 +259,19 @@ void PHPSupportPart::executeInTerminal(){
 
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
-void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen){
+void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStdout()" << endl;
   m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QCString(buffer,buflen+1);
 }
 
-void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* proc, char* buffer, int buflen){
+void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStderr()" << endl;
   m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QCString(buffer,buflen+1);
 }
 
-void PHPSupportPart::slotPHPExeExited (KProcess* proc){
+void PHPSupportPart::slotPHPExeExited (KProcess* /*proc*/){
   kdDebug(9018) << "slotPHPExeExited()" << endl;
   m_htmlView->end();
   m_phpErrorView->parse(m_phpExeOutput);

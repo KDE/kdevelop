@@ -491,7 +491,7 @@ void DebuggerPart::slotContinue()
 void DebuggerPart::slotRunToCursor()
 {
     QString fileName;
-    int lineNum;
+    int lineNum = 0;
     // FIXME: Find out current file name and line number
     controller->slotRunUntil(fileName, lineNum);
 }

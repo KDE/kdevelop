@@ -203,28 +203,28 @@ CCConfigWidget::saveCSTab( )
 
 
 void
-CCConfigWidget::slotEnableCH( bool isChecked )
+CCConfigWidget::slotEnableCH( bool /*isChecked*/)
 {
     bgCodeHinting->setEnabled( cbEnableCH->isChecked( ) );
 }
 
 
 void
-CCConfigWidget::slotEnableCC( bool isChecked )
+CCConfigWidget::slotEnableCC( bool /*isChecked*/)
 {
     // m_bChangedCC = true;
 }
 
 
 void
-CCConfigWidget::slotSetCHWindow( int window )
+CCConfigWidget::slotSetCHWindow( int /*window*/ )
 {
     // m_bChangedCHWindow = true;
 }
 
 
 void
-CCConfigWidget::slotEnablePCS( bool isChecked )
+CCConfigWidget::slotEnablePCS( bool /*isChecked*/ )
 {
 /*
     QDomDocument dom = *m_pPart->projectDom( );

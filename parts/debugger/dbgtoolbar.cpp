@@ -168,7 +168,7 @@ private:
 
 DbgButton::DbgButton(const QPixmap& pixmap, const QString& text,
                      DbgToolBar* parent, const char* name)
-    : QPushButton(parent),
+    : QPushButton(parent, name),
       pixmap_(pixmap)
 {
     setText(text);
@@ -248,7 +248,7 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
 
 DbgToolBar::DbgToolBar(DebuggerPart* part,
                        QWidget* parent, const char* name)
-    : QFrame(0, "DbgToolbar"),
+    : QFrame(0, name),
       part_(part),
       activeWindow_(0),
       winModule_(0),

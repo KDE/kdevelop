@@ -242,7 +242,7 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 
     int start_expr = expressionAt( contents, contents.length() - 1 );
     QString expr;
-    if( start_expr != contents.length() - 1 ){
+    if( start_expr != (int)contents.length() - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
         expr = expr.simplifyWhiteSpace();
     }
@@ -259,7 +259,7 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 
 void
 //CppCodeCompletion::slotTextChanged( KTextEditor::Document *pDoc, int nLine, int nCol )
-CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& text )
+CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/ )
 {
     QString strCurLine = m_pEditIface->textLine( nLine );
 
@@ -953,7 +953,7 @@ CppCodeCompletion::expandText( )
     int pos = index - 1;
     while( pos>0 && (textLine[pos].isLetterOrNumber() || textLine[pos] == '_') )
         --pos;
-    if( pos < index )
+    if( pos < (int)index )
         ++pos;
 
     QString prefix = textLine.mid( pos, index - pos + 1 );
@@ -1043,7 +1043,7 @@ CppCodeCompletion::splitExpression( const QString& text )
     QStringList l;
     int index = 0;
     QString current;
-    while( index < text.length() ){
+    while( index < (int)text.length() ){
         QChar ch = text[ index ];
         QString ch2 = text.mid( index, 2 );
 
@@ -1052,7 +1052,7 @@ CppCodeCompletion::splitExpression( const QString& text )
             ++index;
         } else if( ch == '(' ){
             int count = 0;
-            while( index < text.length() ){
+            while( index < (int)text.length() ){
                 QChar ch = text[ index ];
                 if( ch == '(' ){
                     ++count;
@@ -1066,7 +1066,7 @@ CppCodeCompletion::splitExpression( const QString& text )
             }
         } else if( ch == '[' ){
             int count = 0;
-            while( index < text.length() ){
+            while( index < (int)text.length() ){
                 QChar ch = text[ index ];
                 if( ch == '[' ){
                     ++count;
@@ -1208,7 +1208,7 @@ CppCodeCompletion::completeText( )
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
     QString expr;
-    if( start_expr != contents.length() - 1 ){
+    if( start_expr != (int)contents.length() - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
         expr = expr.stripWhiteSpace();
     }
@@ -1217,7 +1217,7 @@ CppCodeCompletion::completeText( )
     while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
         --idx;
     }
-    if( idx != expr.length() - 1 ){
+    if( idx != (int)expr.length() - 1 ){
         ++idx;
         word = expr.mid( idx ).stripWhiteSpace();
         expr = expr.left( idx ).stripWhiteSpace();
@@ -1268,7 +1268,7 @@ CppCodeCompletion::typeOf( )
 
     int start_expr = expressionAt( contents, contents.length() - 1 );
     QString expr;
-    if( start_expr != contents.length() - 1 ){
+    if( start_expr != (int)contents.length() - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
         expr = expr.simplifyWhiteSpace();
     }
@@ -1291,7 +1291,7 @@ CppCodeCompletion::typeOf( )
 }
 
 void
-CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &text)
+CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &/*text*/)
 {
     QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol-1, 1 );

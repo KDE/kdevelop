@@ -22,7 +22,6 @@
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
-//#include "grepconfigwidget.h"
 #include "grepviewwidget.h"
 
 
@@ -36,8 +35,6 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     
     setXMLFile("kdevgrepview.rc");
 
-    connect( core(), SIGNAL(configWidget(KDialogBase*)),
-             this, SLOT(configWidget(KDialogBase*)) );
     connect( core(), SIGNAL(stopButtonClicked()),
              this, SLOT(stopButtonClicked()) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
@@ -79,13 +76,6 @@ GrepViewPart::~GrepViewPart()
 void GrepViewPart::slotRaiseWidget()
 {
     topLevel()->raiseView(m_widget);
-}
-
-
-void GrepViewPart::configWidget(KDialogBase *dlg)
-{
-    //    QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
-    //    (void) new GrepConfigWidget(vbox, "grep config widget");
 }
 
 

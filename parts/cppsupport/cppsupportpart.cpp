@@ -672,22 +672,22 @@ void CppSupportPart::addMethod(const QString &className)
         for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
             ParsedMethod *meth = pc->signalIterator.current();
             if (meth->access() == pm->access() &&
-                atLine < meth->declarationEndsOnLine())
-                atLine = meth->declarationEndsOnLine();
+                atLine < (int)meth->declarationEndsOnLine())
+                atLine = (int)meth->declarationEndsOnLine();
         }
     } else if (pm->isSlot()) {
         for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
             ParsedMethod *meth = pc->slotIterator.current();
             if (meth->access() == pm->access() &&
-                atLine < meth->declarationEndsOnLine())
-                atLine = meth->declarationEndsOnLine();
+                atLine < (int)meth->declarationEndsOnLine())
+                atLine = (int)meth->declarationEndsOnLine();
         }
     } else {
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
             ParsedMethod *meth = pc->methodIterator.current();
             if (meth->access() == pm->access() &&
-                atLine < meth->declarationEndsOnLine())
-                atLine = meth->declarationEndsOnLine();
+                atLine < (int)meth->declarationEndsOnLine())
+                atLine = (int)meth->declarationEndsOnLine();
         }
     }
 
@@ -746,8 +746,8 @@ void CppSupportPart::addAttribute(const QString &className)
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
         ParsedAttribute *attr = pc->attributeIterator.current();
         if (attr->access() == pa->access() &&
-            atLine < attr->declarationEndsOnLine())
-            atLine = attr->declarationEndsOnLine();
+            atLine < (int)attr->declarationEndsOnLine())
+            atLine = (int)attr->declarationEndsOnLine();
     }
 
     QString headerCode = asHeaderCode(pa);

@@ -78,7 +78,7 @@ void SubprojectItem::init()
  * Class GroupItem
  */
 
-GroupItem::GroupItem(QListView *lv, GroupType groupType, const QString &text)
+GroupItem::GroupItem(QListView *lv, GroupType /*groupType*/, const QString &text)
     : ProjectItem(Group, lv, text)
 {
     files.setAutoDelete(true);
@@ -282,7 +282,7 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
             m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
         }
     } else if (pvitem->type() == ProjectItem::Group) {
-        GroupItem *titem = static_cast<GroupItem*>(pvitem);
+        //GroupItem *titem = static_cast<GroupItem*>(pvitem);
         KPopupMenu pop;
         int idAddFile = pop.insertItem(i18n("Add File..."));
         int r = pop.exec(p);
@@ -291,8 +291,8 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
                 //   slotItemExecuted(activeSubproject); // update list view
         }
     } else if (pvitem->type() == ProjectItem::File) {
-        FileItem *fitem = static_cast<FileItem*>(pvitem);
-        GroupItem *titem = static_cast<GroupItem*>(fitem->parent());
+        //FileItem *fitem = static_cast<FileItem*>(pvitem);
+        //GroupItem *titem = static_cast<GroupItem*>(fitem->parent());
         KPopupMenu pop;
         int idRemoveFile = pop.insertItem(i18n("Remove File..."));
         int r = pop.exec(p);

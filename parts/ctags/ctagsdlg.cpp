@@ -40,12 +40,12 @@
 
 struct CTagsKindMapping {
     char abbrev;
-    char *verbose;
+    const char *verbose;
 };
 
 
 struct CTagsExtensionMapping {
-    char *extension;
+    const char *extension;
     CTagsKindMapping *kinds;
 };
 

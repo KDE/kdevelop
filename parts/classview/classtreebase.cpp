@@ -63,7 +63,6 @@ KPopupMenu *ClassTreeItem::createPopup()
     case PIT_CLASS:
         {
             title = i18n("Class");
-            KDevLanguageSupport *ls = classTree()->m_part->languageSupport();
             bool hasAddMethod = features & KDevLanguageSupport::AddMethod;
             bool hasAddAttribute = features & KDevLanguageSupport::AddAttribute;
             if (hasAddMethod)

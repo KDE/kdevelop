@@ -90,7 +90,9 @@ class FileContext : public Context
 {
 public:
     FileContext(const QString &fileName, bool isDirectory=false)
-        : Context("file"), m_fileName(fileName) {}
+        : Context("file"),
+          m_fileName(fileName),
+          m_isDirectory(isDirectory) {}
     ~FileContext() {}
 
     QString fileName() const

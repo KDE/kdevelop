@@ -12,7 +12,7 @@
 #include "distpart_part.h"
 
 
-DistpartDialog::DistpartDialog(DistpartPart *part)
+DistpartDialog::DistpartDialog(DistpartPart */*part*/)
 	: distpart_ui(0, "distpart widget")
 {
     connect(customProjectCheckBox, SIGNAL(toggled(bool) ),
