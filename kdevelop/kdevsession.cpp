@@ -26,6 +26,7 @@
 #include "ceditwidget.h"
 #include "cdocbrowser.h"
 #include "khtmlview.h"
+#include "qextmdimainfrm.h"
 
 KDevSession::KDevSession(DocViewMan* pDocViewMan, const QString& /*fileName*/)
   : m_pDocViewMan(pDocViewMan)
@@ -45,6 +46,14 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
   int nDocs = 0;
   QString docIdStr;
 
+  // read the information about the mainframe widget
+  QDomElement mainframeEl = pOutFile->createElement("Mainframe");
+  session.appendChild( mainframeEl);
+  bool bMaxMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->isInMaximizedChildFrmMode();
+  mainframeEl.setAttribute("MaximizeMode", bMaxMode);
+
+
+  // read the information about the documents
   QDomElement docsAndViewsEl = pOutFile->createElement("DocsAndViews");
   session.appendChild( docsAndViewsEl);
   if (m_pDocViewMan->docCount() > 0) {
@@ -154,6 +163,11 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
   }
 
   QDomElement session = pInFile->documentElement();
+
+  // read the information about the mainframe widget
+  QDomElement mainframeEl = session.namedItem("Mainframe").toElement();
+  bool bMaxMode = (bool) mainframeEl.attribute("MaximizeMode", "0").toInt();
+  ((QextMdiMainFrm*)m_pDocViewMan->parent())->setEnableMaximizedChildFrmMode(bMaxMode);
 
   // read the information about the documents
   QDomElement docsAndViewsEl = session.namedItem("DocsAndViews").toElement();
