@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-Comment=GNU C Compiler (gcc)
-Name=KDevCompilerGcc
-ServiceTypes=KDevelop/KDevCompiler
-X-KDE-Library=libKDevCompilerGcc
-X-KDevelop-Language=C

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-Exec=blubb
-Comment=Class View
-Name=ClassView
-ServiceTypes=KDevelop/Component
-X-KDE-Library=libkdevclassview

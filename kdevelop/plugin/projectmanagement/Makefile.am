@@ -1,1 +1,0 @@
-SUBDIRS = kdesdi_appwizard kdejavasdi_appwizard kdeobjcsdi_appwizard kdebinary_project

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Service
-Exec=blubb
-Comment=Editor
-Name=KDevelop editor part
-Icon=
-ServiceTypes=KDevelop/EditorManager
-X-KDE-Library=libkdeveditorpart
-

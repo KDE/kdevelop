@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-Comment=GNU C++ Compiler (g++)
-Name=KDevCompilerGpp
-ServiceTypes=KDevelop/KDevCompiler
-X-KDE-Library=libKDevCompilerGpp
-X-KDevelop-Language=C++

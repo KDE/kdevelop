@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-Exec=blubb
-Comment=Project View
-Name=ProjectView
-ServiceTypes=KDevelop/Component
-X-KDE-Library=libkdevprojectview

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=ServiceType
-X-KDE-ServiceType=KDevelop/ClassStore
-Name=KDevelop Class Storace Unit
-
-[PropertyDef::X-KDevelop-Args]
-Type=QString
