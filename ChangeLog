@@ -1,3 +1,6 @@
+2000-02-23 Falk Brettschneider <gigafalk@yahoo.com>
+	* all QextMDI classes updated again with current cvs version (bugfixes, optimizations) 
+
 2000-02-18 Falk Brettschneider <gigafalk@yahoo.com>
 	* all QextMDI classes updated with current cvs version (bugfixes, optimizations)
 	  (including the patches of Massimo Morin <mmorin@schedsys.com>) 

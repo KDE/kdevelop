@@ -101,8 +101,8 @@ public:
    QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
    ~QextMdiMainFrm();
    QextMdiChildView * activeWindow();
-   virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = false);
-   virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = true);
+   virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = FALSE);
+   virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = TRUE);
    virtual void applyOptions();
    QextMdiChildView * findWindow(const QString& caption);
    bool windowExists(QextMdiChildView *pWnd);
@@ -126,7 +126,7 @@ public slots:
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
     */
-	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = true);
+	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = TRUE);
    /**
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
@@ -136,7 +136,7 @@ public slots:
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will be deleted!
     */
-	virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = true);
+	virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = TRUE);
    /**
     * Switches the QextMdiTaskBar on and off.
     */
@@ -146,12 +146,12 @@ public slots:
     * Doesn't work on QextMdiChildView which aren't added to the MDI system.
     * Use addWindow() for that.
     */
-	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=true);
+	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
    /**
     * Makes a docked QextMdiChildView undocked.
     * The view window still remains under the main frame's MDI control.
     */
-	virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=true);
+	virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
 	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 	/** ... */
 ///	virtual void childWindowGainFocus(QextMdiChildView *pWnd);

@@ -72,7 +72,7 @@ public:     // Methods
 	 */
    QWidget* focusedChildWidget();
 	/**
-	 * Returns true if this window is attached to the Mdi manager<br>
+	 * Returns TRUE if this window is attached to the Mdi manager<br>
 	 * (inline)
 	 */
 	bool isAttached();
@@ -106,7 +106,7 @@ public:     // Methods
 	bool isMinimized();//Useful only when attached (?)
 	/**
 	 * Tells if the window is minimized when attached to the Mdi manager,<br>
-	 * otherwise returns false.
+	 * otherwise returns FALSE.
 	 */
 	bool isMaximized();//Useful only when attached (?)
 	/**
@@ -118,10 +118,6 @@ public:     // Methods
 	 * You SHOULD override this function in the derived class<br>
 	 */
 	virtual QPixmap * myIconPtr();
-	/**
-	 * Must be overridden in child classes.
-	 */
-//F.B.	virtual void applyOptions();
 	/**
 	 * Minimizes this window when it is attached to the Mdi manager.<br>
 	 * Otherwise has no effect
@@ -142,8 +138,6 @@ public:     // Methods
      */
    void removeEventFilterForAllChildren();
 	
-//F.B.	virtual void setProperties(QextMdiChildViewProperty * p); //do nothing here....
-//F.B.	virtual void saveProperties();
 public slots:
 	/**
 	 * Attaches this window to the Mdi manager.<br>

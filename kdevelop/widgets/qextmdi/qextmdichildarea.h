@@ -66,23 +66,23 @@ public:		// Methods
 	* Appends a new QextMdiChildFrm to this manager.
 	* The child is shown,raised and gets focus if this window has it.
 	*/
-	void manageChild(QextMdiChildFrm *lpC,bool bShow=true,bool bCascade=true);
+	void manageChild(QextMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
 	/**
 	* Destroys a QextMdiChildFrm managed.<br>
 	* Note that if a client is attached to this child , it is deleted too!
 	*/
-	void destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild = true);
+	void destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
 	/**
 	* Destroys a QextMdiChildFrm managed.<br>
 	* Note that if a client is attached to this child , it is NOT deleted!
 	*/
-	void destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild = true);
+	void destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
 	/**
 	* Brings the child lpC to the top of the stack
-	* The children is focused if bSetFocus is true
+	* The children is focused if bSetFocus is TRUE
 	* otherwise is raised only
 	*/
-	void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=false);
+	void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=FALSE);
 	/**
 	* Returns the window menu..the menu is filled by this manager
 	* Be sure to not delete it :)

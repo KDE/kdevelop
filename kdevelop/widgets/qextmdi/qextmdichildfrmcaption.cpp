@@ -31,7 +31,7 @@
 #include "qextmdichildfrmcaption.h"
 #include "qextmdichildfrm.h"
 #include "qextmdichildarea.h"
-
+#include <iostream.h>
 //////////////////////////////////////////////////////////////////////////////
 // Class   : QextMdiChildFrmCaption
 // Purpose : An MDI label that draws the title
@@ -45,12 +45,11 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 :QWidget(parent, "qextmdi_childfrmcaption")
 {
 	m_szCaption    = tr("Unnamed");
-	m_bActive      = false;
-	m_bCanMove     = false;
+	m_bActive      = FALSE;
+	m_bCanMove     = FALSE;
 	m_pParent      = parent;
 	setBackgroundMode(NoBackground);
 	setFocusPolicy(NoFocus);
-	QObject::connect( parent, SIGNAL(releaseMouse()), this, SLOT(slot_releaseMouse()) );
 }
 
 //============== ~QextMdiChildFrmCaption =============//
@@ -64,11 +63,11 @@ QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
 void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
-      // grabMouse();
+      setMouseTracking(FALSE);
 #ifndef _OS_WIN32_
-      QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
+      QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
 #endif
-      m_bCanMove = true;
+      m_bCanMove = TRUE;
       m_offset = mapToParent( e->pos());
    }
 }
@@ -82,7 +81,7 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
       QApplication::restoreOverrideCursor();
 #endif
       releaseMouse();
-      m_bCanMove = false;
+      m_bCanMove = FALSE;
    }
 }
 
@@ -116,7 +115,7 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 {
 	if(m_bActive==bActive)return;
 	m_bActive=bActive;
-	repaint(false);
+	repaint(FALSE);
 }
 
 //=============== setCaption ===============//
@@ -124,7 +123,7 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 void QextMdiChildFrmCaption::setCaption(const QString& text)
 {
 	m_szCaption=text;
-	repaint(false);
+	repaint(FALSE);
 }
 
 //============== heightHint ===============//
@@ -170,11 +169,13 @@ void QextMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 	m_pParent->maximizePressed();
 }
 
-//============= slot_releaseMouse ===========//
-
-void QextMdiChildFrmCaption::slot_releaseMouse()
+void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
 {
-	QMouseEvent* pME = 0;	// pME is not used
-	mouseReleaseEvent( pME);
+   setMouseTracking(TRUE);
+   grabMouse();
+#ifndef _OS_WIN32_
+   QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
+#endif
+   m_bCanMove = TRUE;
+   m_offset = mapFromGlobal( QCursor::pos());
 }
-

@@ -36,10 +36,10 @@
 //============ QextMdiChildView ============//
 
 QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, WFlags f)
-: QWidget(parentWidget, name, f),
-  m_focusedChildWidget(0),
-  m_firstFocusableChildWidget(0),
-  m_lastFocusableChildWidget(0)
+: QWidget(parentWidget, name, f)
+  ,m_focusedChildWidget(0L)
+  ,m_firstFocusableChildWidget(0L)
+  ,m_lastFocusableChildWidget(0L)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption) 
@@ -75,7 +75,7 @@ void QextMdiChildView::minimize(bool bAnimate)
 	} else showMinimized();
 }
 
-void QextMdiChildView::minimize(){ minimize(true); }
+void QextMdiChildView::minimize(){ minimize(TRUE); }
 
 //============= maximize ==============//
 
@@ -89,20 +89,20 @@ void QextMdiChildView::maximize(bool bAnimate)
 	} else showMaximized();
 }
 
-void QextMdiChildView::maximize(){ maximize(true); }
+void QextMdiChildView::maximize(){ maximize(TRUE); }
 
 //============== attach ================//
 
 void QextMdiChildView::attach()
 {
-   emit attachWindow(this,true);
+   emit attachWindow(this,TRUE);
 }
 
 //============== detach =================//
 
 void QextMdiChildView::detach()
 {
-   emit detachWindow(this, true);
+   emit detachWindow(this, TRUE);
 }
 
 //=============== isMinimized ? =================//
@@ -118,8 +118,8 @@ bool QextMdiChildView::isMinimized()
 bool QextMdiChildView::isMaximized()
 {
 	if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Maximized);
-	if( size() == maximumSize()) return true;
-	else return false;
+	if( size() == maximumSize()) return TRUE;
+	else return FALSE;
 }
 
 //============== restore ================//
@@ -217,17 +217,19 @@ void QextMdiChildView::focusInEvent(QFocusEvent *)
    //qDebug("ChildView::focusInEvent");
    emit focusInEventOccurs( this);
 
-   if( m_focusedChildWidget != 0) {
+   if( m_focusedChildWidget != 0L) {
       //qDebug("ChildView::focusInEvent 2");
       m_focusedChildWidget->setFocus();
    }
    else
-      if( m_firstFocusableChildWidget != 0) {
+      if( m_firstFocusableChildWidget != 0L) {
          //qDebug("ChildView::focusInEvent 3");
          m_firstFocusableChildWidget->setFocus();
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
 }
+
+//============= eventFilter ===============//
 
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
@@ -245,7 +247,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
                      m_firstFocusableChildWidget->setFocus();
                      //qDebug("  TAB: focus is set to first");
                   }
-                  return true;
+                  return TRUE;
                 }
             }
          }
@@ -259,14 +261,14 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
                         m_firstFocusableChildWidget->setFocus();
                         //qDebug("  TAB: focus is set to first");
                      }
-                     return true;
+                     return TRUE;
                    }
                }
             }
          }
       }
    }
-   return false;                           // standard event processing
+   return FALSE;                           // standard event processing
 }
 
 /** Interpose in event loop of all current child widgets. Must be recalled after dynamic adding of new child widgets!

@@ -54,7 +54,7 @@ QextMdiTaskBarButton::QextMdiTaskBarButton(QextMdiTaskBar *pTaskBar,QextMdiChild
 :QPushButton(pTaskBar),
  m_actualText("")
 {
-   setToggleButton( true);
+   setToggleButton( TRUE);
 	m_pWindow      = win_ptr;
 	QToolTip::add(this,win_ptr->caption());
 	setFocusPolicy(NoFocus);
@@ -128,7 +128,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
 {
 	m_pFrm = parent;
 	m_pButtonList = new QList<QextMdiTaskBarButton>;
-	m_pButtonList->setAutoDelete(true);
+	m_pButtonList->setAutoDelete(TRUE);
 	setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
    setFocusPolicy(NoFocus);
@@ -155,7 +155,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
 	
 	m_pButtonList->append(b);
-	b->setToggleButton( true);
+	b->setToggleButton( TRUE);
 	b->setText(win_ptr->tabCaption());
 	
    m_pStretchSpace = new QLabel(this, "empty");

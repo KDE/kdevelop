@@ -154,14 +154,14 @@ public:
 	/**
 	* Minimizes , Maximizes or restores the window.
 	*/
-	void setState(MdiWindowState state,bool bAnimate=true);
+	void setState(MdiWindowState state,bool bAnimate=TRUE);
 	/**
 	* Returns the current state of the window
 	* Cool to have it inline...
 	*/
 	inline MdiWindowState state(){ return m_state; };
-//	virtual void hide(){ setState(Minimized,false); };
-//	virtual void show(){ setState(Normal,false); };
+//	virtual void hide(){ setState(Minimized,FALSE); };
+//	virtual void show(){ setState(Normal,FALSE); };
 	/**
 	* Forces updating the rects of the caption and so...
 	* It may be useful when setting the mdiCaptionFont of the MdiManager
@@ -175,6 +175,7 @@ public:
 public slots: // Public slots
    /** called if someone click on the "Window" menu item for this child frame window */
    void slot_clickedInWindowMenu();
+   void slot_resizeViaSystemMenu();
 
 protected:
 	virtual void resizeEvent(QResizeEvent *);
@@ -183,7 +184,7 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void leaveEvent(QEvent *);
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
-   //   virtual bool focusNextPrevChild( bool next ) { return true; };
+   //   virtual bool focusNextPrevChild( bool next ) { return TRUE; };
 	void resizeWindow(int resizeCorner, int x, int y);
 	void setResizeCursor(int resizeCorner);
    virtual void switchToMinimizeLayout();
@@ -206,8 +207,6 @@ private:
 signals: // Signals
    /** is automatically emitted when slot_clickedInWindowMenu is called */
    void clickedInWindowMenu(int);
-   /** forces a mouse release event call */
-   void releaseMouse();
 };
 
 

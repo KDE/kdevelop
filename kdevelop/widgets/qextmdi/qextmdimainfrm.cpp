@@ -66,11 +66,11 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_pTaskBarPopup(0)
    ,m_pMainMenuBar(0)
 {
-   setRightJustification( true);
+   setRightJustification( TRUE);
 
 	// Create the local list of windows
 	m_pWinList = new QList<QextMdiChildView>;
-	m_pWinList->setAutoDelete(false);
+	m_pWinList->setAutoDelete(FALSE);
 	// This seems to be needed (re-check it after Qt2.0 comed out)
 	setFocusPolicy(ClickFocus);
 	
@@ -142,10 +142,10 @@ void QextMdiMainFrm::slot_toggleTaskBar()
 {
 	if(m_pTaskBar->isVisible()){
 		m_pTaskBar->hide();
-//F.B.		g_pOptions->m_bTaskBarVisible = false;
+//F.B.		g_pOptions->m_bTaskBarVisible = FALSE;
 	} else {
 		m_pTaskBar->show();
-//F.B.		g_pOptions->m_bTaskBarVisible = true;
+//F.B.		g_pOptions->m_bTaskBarVisible = TRUE;
 	}
 }
 
@@ -161,7 +161,7 @@ F.B.*/
 	
 	// safely close the windows so properties are saved...
 	QextMdiChildView *pWnd = 0;
-	while((pWnd = m_pWinList->first()))closeWindow(pWnd, false); // without re-layout taskbar!
+	while((pWnd = m_pWinList->first()))closeWindow(pWnd, FALSE); // without re-layout taskbar!
 	delete m_pWinList;
    delete m_pTaskBarPopup;
    delete m_pWindowPopup;
@@ -198,7 +198,7 @@ void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach)
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
-	// this is done in activateView: it makes sense only if bShow==true
+	// this is done in activateView: it makes sense only if bShow==TRUE
   //  m_pCurrentWindow  = pWnd;
 
   QextMdiChildFrm *lpC=new QextMdiChildFrm(m_pMdi);
@@ -214,7 +214,6 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
   m_pMdi->manageChild(lpC,bShow);
 
   // now you set the attribute like position and cascadin/maximize etc...
-  #warning FIXME: to add method for setting the attribute
   // arrangeWindow(pWnd);
 
  // this will show it...
@@ -230,7 +229,7 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 {
 
 	// ok this part should be fine
-	// NOPE! This is not to be set if bshow is false: leave this to the activateView
+	// NOPE! This is not to be set if bshow is FALSE: leave this to the activateView
 	//  m_pCurrentWindow  = pWnd;
 
   pWnd->youAreDetached();
@@ -246,13 +245,12 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
     // this one is taking care of te
     lpC->unsetClient( m_undockPositioningOffset);
 
-    m_pMdi->destroyChild(lpC,false); //Do not focus the new top child , we loose focus...
+    m_pMdi->destroyChild(lpC,FALSE); //Do not focus the new top child , we loose focus...
   }
 
   // there should be an equivalent of manageChild... here
   //
 
-  #warning FIXME: to add method for setting the attribute
   //  arrangeWindow(pWnd);
   
   // this will show it...
@@ -323,16 +321,16 @@ QextMdiChildView * QextMdiMainFrm::activeWindow()
 bool QextMdiMainFrm::windowExists(QextMdiChildView *pWnd)
 {
 	for(QextMdiChildView *w=m_pWinList->first();w;w=m_pWinList->next()){
-		if(w == pWnd)return true;
+		if(w == pWnd)return TRUE;
 	}
-	return false;
+	return FALSE;
 }
 
 QPopupMenu * QextMdiMainFrm::windowPopup(QextMdiChildView * pWnd,bool bIncludeTaskbarPopup)
 {
 	m_pWindowPopup->clear();
 	if(bIncludeTaskbarPopup){
-		m_pWindowPopup->insertItem(tr("Window"),taskBarPopup(pWnd,false));
+		m_pWindowPopup->insertItem(tr("Window"),taskBarPopup(pWnd,FALSE));
 		m_pWindowPopup->insertSeparator();
 	}
 	return m_pWindowPopup;
@@ -356,10 +354,10 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
 //F.B.	if(pWnd->m_pView && bIncludeWindowPopup){
 		// the window has a view...get the window popup
 		m_pTaskBarPopup->insertSeparator();
-		m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,false));  //alvoid recursion
+		m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,FALSE));  //alvoid recursion
 //F.B.	}
 	return m_pTaskBarPopup;
-	bIncludeWindowPopup = false; // dummy!, only to avoid "unused parameter"
+	bIncludeWindowPopup = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
 void QextMdiMainFrm::switchWindows(bool bRight)
@@ -368,7 +366,7 @@ void QextMdiMainFrm::switchWindows(bool bRight)
 	if(!pActMdi)return;
 	QextMdiChildView * pAct = (QextMdiChildView *)pActMdi->m_pClient;
 	if(!pAct)return;
-	bRight = false; // dummy!, only to avoid "unused parameter"
+	bRight = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
 //void QextMdiMainFrm::pushNewTaskBarButton( QextMdiChildView* pWnd)
@@ -409,7 +407,7 @@ void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
 {
 	//taskbarButtonLeftClicked( pWnd); // set focus
 	activateView( pWnd); // set focus
-	taskBarPopup( pWnd, true)->popup( QCursor::pos());
+	taskBarPopup( pWnd, TRUE)->popup( QCursor::pos());
 }
 
 void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
@@ -434,7 +432,7 @@ bool QextMdiMainFrm::event( QEvent* e)
 		QextMdiChildView* pWnd = (QextMdiChildView*)((QextMdiViewCloseEvent*)e)->data();
 		if( pWnd != 0)
 			closeWindow( pWnd);
-		return true;
+		return TRUE;
 	}
 	return QMainWindow::event( e);		
 }
@@ -477,7 +475,7 @@ void QextMdiMainFrm::switchToToplevelMode()
       if( w->isAttached()) {
          if( w->isMaximized())
             w->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
-         detachWindow(w, true);
+         detachWindow(w, TRUE);
       }
    }
 }
@@ -489,7 +487,7 @@ void QextMdiMainFrm::switchToChildframeMode()
 {
 	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
 		if( !w->isAttached())
-			attachWindow(w, true);
+			attachWindow(w, TRUE);
 	}
 }
 
@@ -527,6 +525,13 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
    QPixmap* m_pMinButtonPixmap = new QPixmap( kde_minbutton);
    QPixmap* m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
    QPixmap* m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
+#endif
+
+#if QT_VERSION > 209
+   m_pUndock->setAutoRaise(TRUE);
+   m_pMinimize->setAutoRaise(TRUE);
+   m_pRestore->setAutoRaise(TRUE);
+   m_pClose->setAutoRaise(TRUE);
 #endif
 
    m_pUndock->hide();

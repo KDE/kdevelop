@@ -83,7 +83,7 @@ public:		// Construction & Destruction
 	QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
 	~QextMdiTaskBar();
 	QextMdiTaskBarButton * addWinButton(QextMdiChildView *win_ptr);
-	void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = true);
+	void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
 	QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
 	QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
 protected:

@@ -44,19 +44,19 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmCaption : public QWidget
 public:
 	QextMdiChildFrmCaption(QextMdiChildFrm *parent);
 	~QextMdiChildFrmCaption();
-public:
 	void setActive(bool bActive);
 	void setCaption(const QString& text);
 	int heightHint();
+public slots:
+   void slot_moveViaSystemMenu();
+
 protected:
 	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePressEvent(QMouseEvent *);
 	virtual void mouseDoubleClickEvent(QMouseEvent *);
 	virtual void mouseReleaseEvent(QMouseEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);
-protected slots:
-	void slot_releaseMouse();
-
+	
 // attributes
 public:
 	QString           m_szCaption;

@@ -34,7 +34,7 @@ public:
   QextMdiNullIterator() {};
   virtual void first() {}
   virtual void next()  {}
-  virtual bool isDone() const { return true; }
+  virtual bool isDone() const { return TRUE; }
   virtual Item currentItem() const {
   	/* should really never go inside here */
   	return 0;
