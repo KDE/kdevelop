@@ -187,3 +187,17 @@
 </tip>
 
 
+<tip category="KDevelop|General">
+<html>
+<p>...that you can set the installation path in "Project"->"Project Options" "Configure Options" with just adding "--prefix=/install/path/" to the "Configure arguments"-list?
+</html>
+</tip>
+
+
+<tip category="KDevelop|General">
+<html>
+<p>...that you can compilie your project in "debug-mode" and "optimized-mode"?
+</html>
+</tip>
+
+
