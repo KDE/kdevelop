@@ -283,6 +283,7 @@ void MainWindowIDEAl::moveRelativeTab(int n) {
 
             QWidget * view = (m_tabWidget->page((m_tabWidget->count()+index+n)%m_tabWidget->count()));
             m_tabWidget->showPage(view);
+            m_tabWidget->currentPage()->setFocus();
         }
 }
 
