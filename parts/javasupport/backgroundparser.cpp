@@ -206,7 +206,7 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 RefJavaAST BackgroundParser::translationUnit( const QString& fileName )
 {
     Unit* u = findUnit( fileName );
-    return u ? u->translationUnit : 0;
+    return u ? u->translationUnit : RefJavaAST();
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
