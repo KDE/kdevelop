@@ -9,10 +9,14 @@
 
 #include "api.h"
 #include "partcontroller.h"
+#include "documentationpart.h"
+
 
 void ProjectWorkspace::save()
 {  
-  // TODO: Save to a separate file for portability amoung team projects?
+  // Save to a separate file for portability amoung team projects?
+  // No, these things are exactly what the project file is for
+
   QDomDocument* dom = API::getInstance()->projectDom();
   QDomElement element = dom->documentElement();
   QDomElement wsElement = element.namedItem( "workspace" ).toElement();
@@ -53,11 +57,17 @@ void ProjectWorkspace::saveFileList( QDomElement& wsElement)
     if (!ro_part)
       continue;
 
+    QString context;
+    DocumentationPart* docpart = dynamic_cast<DocumentationPart*>(ro_part);
+    if (docpart)
+        context = docpart->context();
+
     // TODO: Save relative path for project sharing?
     QString url = ro_part->url().url();
 
     QDomElement file = wsElement.ownerDocument().createElement( "file" );
     file.setAttribute( "url", url );
+    file.setAttribute( "context", context );
     openfiles.appendChild( file );
   }
 }
@@ -71,7 +81,11 @@ void ProjectWorkspace::restoreFileList( const QDomElement& wsElement )
     if( file.tagName() != "file" )
       continue;
     KURL url( file.attribute( "url" ) );
-    PartController::getInstance()->editDocument( url );
+    QString context( file.attribute( "context" ) );
+    if (context.isNull())
+      PartController::getInstance()->editDocument( url );
+    else
+      PartController::getInstance()->showDocument( url, context );
   }
 }
 

@@ -8,6 +8,8 @@
 	  location of the docs.
 	* Settings widget for qt/kdelibs doxygen docs
 	  location (autodetected by configure if it exists).
+	* Restore documentation windows in html part
+	  instead of editor part.
 
 2002-06-13  John Firebaugh  <jfirebaugh@kde.org>
         * Debugger: be very smart about libtool.
