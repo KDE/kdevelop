@@ -28,12 +28,16 @@ namespace FileCreate {
   class FileType;
 }
 
+class KDialogBase;
+class FCConfigWidget;
+
 using namespace FileCreate;
 
 class FileCreatePart : public KDevCreateFile
 {
   Q_OBJECT
 
+  friend class FCConfigWidget;
 public:
   FileCreatePart(QObject *parent, const char *name, const QStringList &);
   virtual ~FileCreatePart();
@@ -99,6 +103,8 @@ public slots:
 
 protected slots:
   void slotNoteFiletype(const FileType * filetype);
+  void configWidget(KDialogBase *dlg);
+  void projectConfigWidget(KDialogBase *dlg);
 
 private:
   /**
@@ -111,7 +117,7 @@ private:
    * to the file type list. If enable is true, sets them all to
    * enabled=true by default.
    */
-  int readTypes(const QDomDocument & dom, bool enable);
+  int readTypes(const QDomDocument & dom, QPtrList<FileType> &m_filetypes, bool enable);
 
   /**
    * The number (index to m_availableWidgets) of the widget currently in use

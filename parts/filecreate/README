@@ -39,7 +39,7 @@ If a type has subtypes, and no subtypes are specified, then all subtypes are ass
   </type>
 </useglobaltypes>
 
-There's no GUI to configure this XML at present. Usually, it forms part of the base .kdevelop file created by the appwizard.
+Usually, this XML forms part of the base .kdevelop file created by the appwizard.
 
 Julian Rockey
 linux@jrockey.com

@@ -12,6 +12,7 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qvbox.h>
 
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -37,6 +38,7 @@
 #include "filecreate_part.h"
 #include "filecreate_filetype.h"
 #include "filecreate_filedialog.h"
+#include "fcconfigwidget.h"
 
 typedef KGenericFactory<FileCreatePart> FileCreateFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreate" ) );
@@ -51,6 +53,9 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+  connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
+  connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)));
+
 
   KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
   newAction->setStatusText( i18n("Creates a new file") );
@@ -77,6 +82,21 @@ FileCreatePart::~FileCreatePart()
   for(int c=0;c<m_numWidgets;c++)
     if (m_availableWidgets[c]) delete m_availableWidgets[c];
 }
+
+void FileCreatePart::configWidget(KDialogBase *dlg)
+{
+  QVBox *vbox = dlg->addVBoxPage(i18n("New File Wizard Options"));
+  FCConfigWidget *w = new FCConfigWidget(this, true, vbox, "filecreate config widget");
+  connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+}
+
+void FileCreatePart::projectConfigWidget( KDialogBase* dlg )
+{
+  QVBox* vbox = dlg->addVBoxPage(i18n("New File Wizard Options"));
+  FCConfigWidget* w = new FCConfigWidget( this, false, vbox, "filecreate config widget" );
+  connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
+}
+
 
 void FileCreatePart::selectWidget(int widgetNumber) {
   if (widgetNumber<0 || widgetNumber>=m_numWidgets) return;
@@ -121,7 +141,7 @@ void FileCreatePart::slotProjectOpened() {
   QDomDocument globalDom;
   if (globalXMLFile!=QString::null &&
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
-    readTypes(globalDom, false);
+    readTypes(globalDom, m_filetypes, false);
   }
 
   // read in which global templates are to be used for this project
@@ -156,7 +176,7 @@ void FileCreatePart::slotProjectOpened() {
   }
 
   // read in the list of file types for this project
-  if ( readTypes( *projectDom(), true )==0  ) {
+  if ( readTypes( *projectDom(), m_filetypes, true )==0  ) {
     // default by scanning the templates directory if no template info
     // found in project file
     QDir templDir( project()->projectDirectory() + "/templates/" );
@@ -208,7 +228,7 @@ void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & created
   }
 }
 
-int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
+int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_filetypes, bool enable) {
   int numRead = 0;
   QDomElement fileTypes = DomUtil::elementByPath(dom,"/kdevfilecreate/filetypes");
   if (!fileTypes.isNull()) {
