@@ -24,8 +24,10 @@
 #include <kicontheme.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
-#include <kwm.h>
+#warning Fixme: window manager stuff
+//#include <netwm.h>
 
+#include <qapplication.h>
 #include <qframe.h>
 #include <qlayout.h>
 #include <qpainter.h>
@@ -257,7 +259,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, Window ckDevelopWin) :
   // I do not want the user to be able to "close" this widget. If we have any
   // decoration then they can and that is bad.
   // This widget is closed when the debugger finishes i.e. they press "Stop"
-  KWM::setDecoration(winId(), KWM::noFocus|KWM::noDecoration|KWM::staysOnTop);
+//  KWM::setDecoration(winId(), KWM::noFocus|KWM::noDecoration|KWM::staysOnTop);
 
   QBoxLayout* topLayout   = new QVBoxLayout( this );
 
@@ -351,6 +353,38 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, Window ckDevelopWin) :
   topLayout->activate();
 }
 
+/*
+  if (desktop > 0) {
+    if ((int)info.desktop() != desktop)
+    {
+      info.setDesktop(desktop);
+    }
+  }
+  if (maximize) {
+    info.setState( NET::Max, 0 ); // mask );
+  }
+
+  if (iconify)
+    XIconifyWindow( qt_xdisplay(), w, qt_xscreen() );
+  if (sticky)
+    info.setState( NET::Sticky, 0 ); // mask ? );
+
+  if (staysontop)
+    info.setState( NET::StaysOnTop, 0 );  // mask ? );
+
+  XSync(qt_xdisplay(), False);
+  if (window)
+  {
+    XMapWindow(qt_xdisplay(), w);
+    XSync(qt_xdisplay(), False);
+  }
+  if (activate)
+    KWin::setCurrentDesktop( desktop );
+
+  XSync(qt_xdisplay(), False);
+*/
+
+
 // **************************************************************************
 
 DbgToolbar::~DbgToolbar()
@@ -369,17 +403,17 @@ void DbgToolbar::slotDbgKdevFocus()
   // If anyone has a way of determining what window the app is _actually_ running on
   // then please fix and send a patch.
 
-  if (KWM::activeWindow() != ckDevelopWin_)
-    activeWindow_ = KWM::activeWindow();
+//  if (KWM::activeWindow() != ckDevelopWin_)
+//    activeWindow_ = KWM::activeWindow();
 
-  KWM::activate(ckDevelopWin_);
+//  KWM::activate(ckDevelopWin_);
 }
 
 // **************************************************************************
 
 void DbgToolbar::slotDbgPrevFocus()
 {
-  KWM::activate(activeWindow_);
+//  KWM::activate(activeWindow_);
 }
 
 // **************************************************************************
@@ -426,7 +460,7 @@ void DbgToolbar::slotDock()
           KGlobal::iconLoader()->loadIcon("dbgnext", KIcon::Desktop));
 
   connect(docker_, SIGNAL(clicked()),  dbgController_,  SLOT(slotStepOver()));
-  KWM::setDockWindow(docker_->winId());
+//  KWM::setDockWindow(docker_->winId());
   docker_->show();
   docked_ = true;
 }
@@ -438,7 +472,7 @@ void DbgToolbar::slotIconifyAndDock()
   if (docked_)
     return;
 
-  KWM::setIconify(ckDevelopWin_, true);
+//  KWM::setIconify(ckDevelopWin_, true);
   slotDock();
 }
 
@@ -468,7 +502,7 @@ void DbgToolbar::slotActivateAndUndock()
   if (!docked_)
     return;
 
-  KWM::activate(ckDevelopWin_);
+//  KWM::activate(ckDevelopWin_);
   slotUndock();
 }
 
