@@ -18,6 +18,7 @@
 
 #include "ckdevelop.h"
 
+#include "./ctags/ctagsdialog_impl.h"
 #include "caddexistingfiledlg.h"
 #include "caddnewtranslationdlg.h"
 #include "cclassview.h"
@@ -1622,6 +1623,8 @@ void CKDevelop::slotTagDefinition(QString text)
       /* in the case of multiple instances we show a dialog
        * and let the user pick where he wants to go */
       else {
+        ctags_dlg->show();
+        ctags_dlg->raise();
         // so this code isnt complete yet but again,
         // the intention is to filter out the declaration
         // related options that the user has
@@ -1676,6 +1679,8 @@ void CKDevelop::slotTagDeclaration(QString text)
       /* in the case of multiple instances we show a dialog
        * and let the user pick where he wants to go */
       else {
+        ctags_dlg->show();
+        ctags_dlg->raise();
         // so this code isnt complete yet but again,
         // the intention is to filter out the declaration
         // related options that the user has

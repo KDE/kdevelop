@@ -60,6 +60,7 @@ class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
 class GrepDialog;
+class searchTagsDialogImpl;
 class KHTMLView;
 class KHTMLPart;
 class CParsedMethod;
@@ -1026,6 +1027,7 @@ private:
 
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;
+  searchTagsDialogImpl* ctags_dlg;
 
   QString lastfile;
   QString lastOpenDir;

@@ -30,6 +30,7 @@
 #include "ctabctl.h"
 #include "doctreeview.h"
 #include "grepdialog.h"
+#include "./ctags/ctagsdialog_impl.h"
 #include "kstartuplogo.h"
 #include "ckonsolewidget.h"
 
@@ -279,6 +280,7 @@ void CKDevelop::initView()
 
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
+  ctags_dlg = new searchTagsDialogImpl(this,"searchTagsDialog");
 }
 
 /*--------------------------------------- CKDevelop::initKeyAccel()

@@ -1,0 +1,321 @@
+<!DOCTYPE UI><UI>
+<class>searchTagsDialog</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>searchTagsDialog</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>500</width>
+            <height>400</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>sizePolicy</name>
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+        </sizepolicy>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>500</width>
+            <height>400</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Search in tags database</string>
+    </property>
+    <property>
+        <name>layoutMargin</name>
+    </property>
+    <property>
+        <name>layoutSpacing</name>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="4"  column="0"  rowspan="1"  colspan="3" >
+            <class>KListBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tagsListBox</cstring>
+            </property>
+        </widget>
+        <widget row="5"  column="0"  rowspan="1"  colspan="3" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>statusLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>StyledPanel</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Sunken</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>search tags database</string>
+            </property>
+        </widget>
+        <widget row="0"  column="2"  rowspan="4"  colspan="1" >
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout26</cstring>
+            </property>
+            <property>
+                <name>layoutMargin</name>
+            </property>
+            <property>
+                <name>layoutSpacing</name>
+            </property>
+            <vbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>2</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>7</number>
+                </property>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>okButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Search</string>
+                    </property>
+                    <property stdset="1">
+                        <name>accel</name>
+                        <number>0</number>
+                    </property>
+                    <property stdset="1">
+                        <name>default</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Cancel</string>
+                    </property>
+                    <property stdset="1">
+                        <name>accel</name>
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>clearButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Clear</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>doneButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Done</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget row="0"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>searchTagLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Search tag:</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget row="1"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>patternLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Exclude:</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget row="3"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>typeLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Tag type:</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget row="2"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>databaseLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Database:</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget row="2"  column="1" >
+            <class>KComboBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>databaseComboBox2</cstring>
+            </property>
+            <property stdset="1">
+                <name>editable</name>
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget row="1"  column="1" >
+            <class>KLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>excludeLineEdit</cstring>
+            </property>
+        </widget>
+        <widget row="3"  column="1" >
+            <class>KComboBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tagtypeComboBox</cstring>
+            </property>
+        </widget>
+        <widget row="0"  column="1" >
+            <class>KLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>searchTagLineEdit</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>okButton</sender>
+        <signal>clicked()</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>slotSearchTag()</slot>
+    </connection>
+    <connection>
+        <sender>clearButton</sender>
+        <signal>clicked()</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>slotClear()</slot>
+    </connection>
+    <connection>
+        <sender>doneButton</sender>
+        <signal>clicked()</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>slotGotoTag()</slot>
+    </connection>
+    <connection>
+        <sender>doneButton</sender>
+        <signal>clicked()</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>tagsListBox</sender>
+        <signal>selected(int)</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>slotGotoTag()</slot>
+    </connection>
+    <connection>
+        <sender>tagsListBox</sender>
+        <signal>selected(int)</signal>
+        <receiver>searchTagsDialog</receiver>
+        <slot>slotLBItemSelected()</slot>
+    </connection>
+    <slot access="public">slotLBItemSelected()</slot>
+    <slot access="public">slotClear()</slot>
+    <slot access="public">slotGotoTag()</slot>
+    <slot access="public">slotSearchTag()</slot>
+</connections>
+<tabstops>
+    <tabstop>searchTagLineEdit</tabstop>
+    <tabstop>excludeLineEdit</tabstop>
+    <tabstop>databaseComboBox2</tabstop>
+    <tabstop>tagtypeComboBox</tabstop>
+    <tabstop>tagsListBox</tabstop>
+    <tabstop>okButton</tabstop>
+    <tabstop>cancelButton</tabstop>
+    <tabstop>clearButton</tabstop>
+    <tabstop>doneButton</tabstop>
+</tabstops>
+</UI>

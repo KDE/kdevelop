@@ -1246,7 +1246,7 @@ install=false
 install_location=
 type=HEADER
 [kdevelop/ctags/Makefile.am]
-files=kdevelop/ctags/cctags.cpp,kdevelop/ctags/cctags.h,kdevelop/ctags/cctags_interf.h,kdevelop/ctags/cctags_interf.cpp
+files=kdevelop/ctags/cctags.cpp,kdevelop/ctags/cctags.h,kdevelop/ctags/cctags_interf.h,kdevelop/ctags/cctags_interf.cpp,kdevelop/ctags/ctagsdialog.ui,kdevelop/ctags/ctagsdialog_impl.cpp,kdevelop/ctags/ctagsdialog_impl.h
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=ctags
 sub_dirs=
@@ -1267,6 +1267,21 @@ install=false
 install_location=
 type=SOURCE
 [kdevelop/ctags/cctags_interf.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+[kdevelop/ctags/ctagsdialog.ui]
+dist=true
+install=false
+install_location=
+type=SOURCE
+[kdevelop/ctags/ctagsdialog_impl.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+[kdevelop/ctags/ctagsdialog_impl.h]
 dist=true
 install=false
 install_location=
