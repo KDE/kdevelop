@@ -141,17 +141,27 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
   
   addWindow(child, QPoint(0,0), mdiFlags);
+
+  m_partViews.append(child);
 }
 
 
 void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 {
-  QextMdiChildView *first = m_selectViews.first();
+  QWidget *first = m_selectViews.first();
 
   QextMdiChildView *child = wrapper(view, name);
 
   if (!first)
-    addToolWindow(child, KDockWidget::DockLeft, this, 25, name, name);
+  {
+    if (mdiMode() == QextMdi::TabPageMode)
+      first = m_partViews.first();
+
+    if (!first)
+      first = this;
+    
+    addToolWindow(child, KDockWidget::DockLeft, first, 25, name, name);
+  }
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
 
@@ -161,12 +171,20 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 
 void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 {
-  QextMdiChildView *first = m_outputViews.first();
+  QWidget *first = m_outputViews.first();
 
   QextMdiChildView *child = wrapper(view, name);
 
   if (!first)
-    addToolWindow(child, KDockWidget::DockBottom, this, 70, name, name);
+  {
+    if (mdiMode() == QextMdi::TabPageMode)
+      first = m_partViews.first();
+
+    if (!first)
+      first = this;
+
+    addToolWindow(child, KDockWidget::DockBottom, first, 70, name, name);
+  }
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 70, name, name);
 
@@ -184,6 +202,7 @@ void TopLevelMDI::removeView(QWidget *view)
 
     m_selectViews.remove(wrapper);
     m_outputViews.remove(wrapper);
+    m_partViews.remove(wrapper);
 
     m_widgetMap.remove(view);
 
@@ -192,7 +211,7 @@ void TopLevelMDI::removeView(QWidget *view)
     // time when the part is deleted.
     view->reparent(this, QPoint(0,0), false);
 
-    delete wrapper;
+    closeWindow(wrapper);
   }
 }
 

@@ -75,7 +75,7 @@ private:
 
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
 
-  QPtrList<QextMdiChildView> m_outputViews, m_selectViews;
+  QPtrList<QextMdiChildView> m_outputViews, m_selectViews, m_partViews;
 
 };
 

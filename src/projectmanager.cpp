@@ -289,6 +289,7 @@ void ProjectManager::integratePart(KDevPart *part)
 void ProjectManager::removePart(KDevPart *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
+   
   delete part;
 }
 
