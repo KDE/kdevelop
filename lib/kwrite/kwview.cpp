@@ -62,6 +62,7 @@
 #include <kpopupmenu.h>
 
 #include <X11/Xlib.h> //used to have XSetTransientForHint()
+#undef KeyPress
 
 #include "kwdoc.h"
 #include "kwtextline.h"
