@@ -824,9 +824,9 @@ void GDBController::parseProgramLocation(char* buf)
   }
 
   if (stateIsOn(s_appBusy))
-    actOnProgramPause("No source: "+QString(buf));
+    actOnProgramPause(i18n("No source: %1").arg(QString(buf)));
   else
-    emit dbgStatus ("No source: "+QString(buf), state_);
+    emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
 
   QRegExp regExp3("^0x[abcdef0-9]+ ");
   int start;
@@ -935,7 +935,7 @@ void GDBController::parseFrameSelected(char* buf)
 //    if (char* end = strchr(buf, '\n'))    // 21/11/2000 this has already been removed
 //      *end = 0;      // clobber the new line
     emit showStepInSource("", -1, "");
-    emit dbgStatus ("No source: "+QString(buf), state_);
+    emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
   }
 }
 
@@ -1705,7 +1705,7 @@ void GDBController::slotDbgProcessExited(KProcess*)
 {
   destroyCmds();
   state_ = s_appNotStarted|s_programExited|(state_&s_viewLocals);
-  emit dbgStatus (QString("Process exited"), state_);
+  emit dbgStatus (i18n("Process exited"), state_);
 
   GDB_DISPLAY(QString("\n(gdb) Process exited"));
 }

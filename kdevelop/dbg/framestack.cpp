@@ -18,10 +18,13 @@
 #include "framestack.h"
 #include "gdbparser.h"
 
+#include <klocale.h>
+
 #include <qlistbox.h>
 #include <qstrlist.h>
 
 #include <ctype.h>
+
 
 /***************************************************************************/
 /***************************************************************************/
@@ -34,7 +37,7 @@ FrameStack::FrameStack(QWidget * parent, const char * name, WFlags f) :
 {
   connect( this,  SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
   connect( this,  SIGNAL(selected(int)), SLOT(slotHighlighted(int)));
-  setCaption( "Frame stack" );
+//  setCaption( "Frame stack" );
   show();
 }
 
@@ -150,7 +153,7 @@ QString FrameStack::getFrameName(int frame)
     }
   }
 
-  return QString("No stack");
+  return i18n("No stack");
 }
 
 /***************************************************************************/

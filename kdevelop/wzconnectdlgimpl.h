@@ -30,8 +30,8 @@ class CParsedMethod;
 /** For what action the dialog was called and current action : */
 enum CTPACTION {CTPVIEW=0, CTPADDATTR, CTPADDMETH, CTPADDSIGNAL, CTPADDSLOT, CTPCONNECTSIG };
 struct ClsHeader {
-   char * ClsName;
-   char * Filename;
+   QString ClsName;
+   QString Filename;
 };
 
 extern ClsHeader QtKde[];

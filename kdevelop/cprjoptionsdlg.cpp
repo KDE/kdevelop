@@ -81,7 +81,7 @@ void CPrjOptionsDlg::addGeneralPage()
 {
   QFrame* generalPage = addPage(i18n("General"),i18n("General Project Information"),
 		KGlobal::instance()->iconLoader()->loadIcon( "readme", KIcon::NoGroup, KIcon::SizeMedium ));
-  QGridLayout *grid = new QGridLayout(generalPage,9,6,15,7);
+  QGridLayout *grid = new QGridLayout(generalPage,9,6,15,7,"grid-a");
   QWhatsThis::add(generalPage, i18n("Set the general options of your project here."));
 
   QLabel* prjname_label;
@@ -187,7 +187,7 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("General Compiler Options"),KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
 
   QWhatsThis::add(compilerOptions, i18n("Set your Compiler options here"));
-  QGridLayout *grid1 = new QGridLayout(compilerOptions,2,2,15,7);
+  QGridLayout *grid1 = new QGridLayout(compilerOptions,2,2,15,7,"grid-b");
   QGroupBox* target_group;
   target_group=new QGroupBox(compilerOptions,"target_group");
   grid1->addWidget(target_group,0,0);
@@ -196,7 +196,7 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
              "by specifying your machine type "
              "and GCC optimization level (0-3)"));
 
-  QGridLayout *grid2 = new QGridLayout( target_group,3,2,15,7);
+  QGridLayout *grid2 = new QGridLayout( target_group,3,2,15,7,"grid-c");
   QLabel* target_label;
   target_label=new QLabel(target_group,"target_label");
   grid2->addWidget( target_label,0,0);
@@ -267,7 +267,7 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   debug_group->setTitle(i18n("Debugging"));
   QWhatsThis::add(debug_group, i18n("Set your debugging options here."));
 
-  grid2 = new QGridLayout( debug_group,4,2,15,7);
+  grid2 = new QGridLayout( debug_group,4,2,15,7,"grid-d");
   debug=new QCheckBox(debug_group,"debug");
   grid2->addWidget(debug,0,0);
   debug->setText(i18n("generate debugging information"));
@@ -329,7 +329,7 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   compiler_group=new QGroupBox(compilerOptions,"debug_group");
   grid1->addMultiCellWidget(compiler_group,1,1,0,1);
 
-  grid2 = new QGridLayout( compiler_group,4,1,15,7);
+  grid2 = new QGridLayout( compiler_group,4,1,15,7,"grid-e");
 
   QLabel* addit_gcc_options_label;
   addit_gcc_options_label=new QLabel(compiler_group,"addit_gcc_options_label");
@@ -371,7 +371,7 @@ void CPrjOptionsDlg::addCompilerWarningsPage()
   QWhatsThis::add(compilerWarnings, i18n("Set the Compiler warnings here by checking "
       "the -W options you want to use."));
 
-  QGridLayout *grid1 = new QGridLayout(compilerWarnings,13,2,15,7);
+  QGridLayout *grid1 = new QGridLayout(compilerWarnings,13,2,15,7,"grid-f");
   w_all=new QCheckBox(compilerWarnings,"w_all");
   grid1->addWidget(w_all,0,0);
   w_all->setText("-Wall");
@@ -755,7 +755,7 @@ void CPrjOptionsDlg::addLinkerPage()
   QFrame* linkerOptions = addPage(i18n("Linker Options"),i18n("Linker Options"),
 		KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ));
 
-  QGridLayout *grid2 = new QGridLayout(linkerOptions,2,1,15,7);
+  QGridLayout *grid2 = new QGridLayout(linkerOptions,2,1,15,7,"grid-g");
   QWhatsThis::add(linkerOptions, i18n("Set the Linker options and choose the "
       "libraries to add to your project."));
   ldflags = " " + ldflags + " ";
@@ -764,7 +764,7 @@ void CPrjOptionsDlg::addLinkerPage()
 //  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(linkerOptions,"ldflags_group");
-  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7);
+  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7,"grid-h");
 
   ldflags_group->setTitle(i18n("library flags"));
   QWhatsThis::add(ldflags_group, i18n("Set your library flags here."));
@@ -821,7 +821,7 @@ void CPrjOptionsDlg::addLinkerPage()
   QGroupBox* libs_group;
   libs_group=new QGroupBox(linkerOptions,"libs_group");
 
-  QGridLayout *grid4 = new QGridLayout(libs_group,5,4,15,7);
+  QGridLayout *grid4 = new QGridLayout(libs_group,5,4,15,7,"grid-i");
   libs_group->setTitle(i18n("libraries"));
   QWhatsThis::add(libs_group, i18n("Choose your libraries here."));
 
@@ -1017,7 +1017,7 @@ void CPrjOptionsDlg::addMakePage()
   QFrame* makeOptions = addPage(i18n("Make Options"),i18n("Build Program Settings"),
 		KGlobal::instance()->iconLoader()->loadIcon( "make", KIcon::NoGroup, KIcon::SizeMedium ));
   QWhatsThis::add(makeOptions, i18n("This dialog is for setting your make options."));
-  QGridLayout *grid1 = new QGridLayout(makeOptions,7,3,15,7);
+  QGridLayout *grid1 = new QGridLayout(makeOptions,7,3,15,7, "grid-j");
 
 
   m_print_debug_info = new QCheckBox( makeOptions, "m_print_debug_info" );
@@ -1111,7 +1111,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_print_work_dir->setAutoResize( FALSE );
 
 
-  QGridLayout *grid2 = new QGridLayout(makeOptions,1,4,15,7);
+  QGridLayout *grid2 = new QGridLayout(makeOptions,1,4,15,7, "grid-k");
   grid1->addMultiCellLayout(grid2,3,3,0,2);
 
   m_job_number_label = new QLabel( makeOptions, "m_job_number_label" );
@@ -1160,7 +1160,7 @@ void CPrjOptionsDlg::addMakePage()
   m_rebuild_combo->insertItem(i18n("always rebuild"));
 
 
-  grid2 = new QGridLayout(makeOptions,3,3,15,7);
+  grid2 = new QGridLayout(makeOptions,3,3,15,7,"grid-l");
   grid1->addMultiCellLayout(grid2,4,6,0,2);
 
   m_set_modify_label = new QLabel( makeOptions, "m_set_modify_label" );
@@ -1210,7 +1210,7 @@ void CPrjOptionsDlg::addMakePage()
   m_optional_line->setBackgroundMode( QWidget::PaletteBase );
   m_optional_line->setFontPropagation( QWidget::NoChildren );
   m_optional_line->setPalettePropagation( QWidget::NoChildren );
-  m_optional_line->setText(i18n(""));
+  m_optional_line->setText("");
   m_optional_line->setMaxLength( 32767 );
   m_optional_line->setEchoMode( QLineEdit::Normal );
   m_optional_line->setFrame( TRUE );
@@ -1231,7 +1231,7 @@ void CPrjOptionsDlg::addMakePage()
   m_makestartpoint_line->setBackgroundMode( QWidget::PaletteBase );
   m_makestartpoint_line->setFontPropagation( QWidget::NoChildren );
   m_makestartpoint_line->setPalettePropagation( QWidget::NoChildren );
-  m_makestartpoint_line->setText(i18n(""));
+  m_makestartpoint_line->setText("");
   m_makestartpoint_line->setMaxLength( 32767 );
   m_makestartpoint_line->setEchoMode( QLineEdit::Normal );
   m_makestartpoint_line->setFrame( TRUE );
@@ -1396,13 +1396,13 @@ void CPrjOptionsDlg::addBinPage()
                                   KGlobal::instance()->iconLoader()->loadIcon( "exec",
                                   KIcon::NoGroup, KIcon::SizeMedium ));
 
-  QGridLayout *grid = new QGridLayout( binaryOptions ,3,2,15,7);
+  QGridLayout *grid = new QGridLayout( binaryOptions ,3,2,15,7,"grid-m");
 
   QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
   grid->addWidget(binary_box,0,0);
   binary_box->setTitle(i18n("Binary details"));
 
-  QGridLayout *grid1 = new QGridLayout( binary_box ,2,2,15,7);
+  QGridLayout *grid1 = new QGridLayout( binary_box ,2,2,15,7,"grid-n");
   QLabel* binary = new QLabel(binary_box,"binary_label");
   binary->setText(i18n("Path and Filename of binary:"));
   grid1->addWidget(binary,0,0);
@@ -1441,7 +1441,7 @@ void CPrjOptionsDlg::addBinPage()
   grid->addWidget(libtool_box,2,0);
   libtool_box->setTitle(i18n("Libtool details"));
 
-  QGridLayout *grid2 = new QGridLayout( libtool_box ,2,2,15,7);
+  QGridLayout *grid2 = new QGridLayout( libtool_box ,2,2,15,7,"grid-o");
   QLabel* libtool = new QLabel(libtool_box,"libtool_label");
   libtool->setText(i18n("Path of libtool:"));
   grid2->addWidget(libtool,0,0);

@@ -126,13 +126,13 @@ void Breakpoint::configureDisplay()
 
   if (s_pending_)
   {
-    QString pending("Pending ");
+    QString pending(i18n("Pending "));
     if (s_actionAdd_)
-      pending += "add ";
+      pending += i18n("add ");
     if (s_actionClear_)
-      pending += "clear ";
+      pending += i18n("clear ");
     if (s_actionModify_)
-      pending += "modify ";
+      pending += i18n("modify ");
 
     display_ = i18n("%1>\t%2").arg(pending).arg(display_);
   }
@@ -143,7 +143,7 @@ void Breakpoint::configureDisplay()
 QString Breakpoint::dbgRemoveCommand() const
 {
   if (dbgId_>0)
-    return i18n("delete %1").arg(dbgId_);
+    return QString("delete %1").arg(dbgId_); // gdb command - not translatable
 
   return QString();
 }
@@ -257,15 +257,15 @@ QString FilePosBreakpoint::dbgSetCommand() const
 {
   QString cmdStr;
   if (fileName_ == "")
-    cmdStr = i18n("break %1").arg(lineNo_);
+    cmdStr = QString("break %1").arg(lineNo_);  // gdb command - not translatable
   else
   {
     QFileInfo fi(fileName_);
-    cmdStr = i18n("break %1:%2").arg(fi.fileName()).arg(lineNo_);
+    cmdStr = QString("break %1:%2").arg(fi.fileName()).arg(lineNo_); // gdb command
   }
 
   if (isTemporary())
-    cmdStr = "t"+cmdStr;
+    cmdStr = "t"+cmdStr;  // gdb command
 
   return cmdStr;
 }
@@ -319,7 +319,7 @@ Watchpoint::~Watchpoint()
 
 QString Watchpoint::dbgSetCommand() const
 {
-  return QString("watch ")+varName_;
+  return QString("watch ")+varName_;    // gdb command - not translatable
 }
 
 /***************************************************************************/
@@ -476,4 +476,3 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-

@@ -45,10 +45,10 @@
  * are not built through their name. 
  * To be used in near future...
  */
-//ClsHeader QtKde[] = {
-//     { "QListViewItem", "qlistview.h" },
-//     { "", "" }
-//};
+ClsHeader QtKde[] = {
+     { QString("QListViewItem"), QString("qlistview.h") },
+     { QString(""), QString("") }
+};
 
 
 
@@ -254,8 +254,10 @@ void CClassPropertiesDlgImpl::applyAddMethod()
     aMethod->setIsVirtual( chVirtual -> isChecked() );
 
   // Set comment
-  if ( meDoc && (meDoc -> text() != "") ) comment = "/** " + meDoc -> text() + " */";
-  else comment = QString("/** ") + /*i18n(*/QString("No descriptions")/*)*/ + " */";
+  if ( meDoc && (meDoc -> text() != "") )
+    comment = "/** " + meDoc -> text() + " */";
+  else
+    comment = "/** No descriptions */";
   aMethod->setComment( comment );
   if (! currentClass )
   {
@@ -306,7 +308,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     QString strImplMethod = "";
     QString strAttrMember="";
     QString toAdd;
-    kdDebug()  << "applying signal-clot connection ..." << endl;
+    kdDebug()  << "applying signal-slot connection ..." << endl;
     if ( strSignalMethod.isEmpty() || strSlotMethod.isEmpty() || !implMethod )
     {
         kdDebug() << "Error: caugth NULL POINTER! can't be! uh ?" << endl;
@@ -416,7 +418,7 @@ void CClassPropertiesDlgImpl::slotAddSlotState(int)
         if ( signalMethod )
         {
             QList <CParsedArgument>  argList = signalMethod -> arguments;
-            kdDebug() << "build args from signal " << signalMethod -> name.data() << endl;
+            kdDebug() << "build args from signal " << strSignalMethod.data() << endl;
             CParsedArgument * arg;
             if ( argList. count() > 0 )
             {
@@ -609,11 +611,11 @@ void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
     if (classOfSig == 0){ kdDebug() << "no member class selected,..." << endl;  return; }
     meth  = classOfSig -> getSignalByNameAndArg( aName.data() );
     strSignalMethod = aName;
-    //signalMethod = meth;
+    signalMethod = meth;
     //if ( meth == 0 ) return;
     methList = currentClass -> getSortedSlotList();
     setSlotTabSlotList ( methList, true);
-    kdDebug() << "CClassPropertiesDlgImpl::slotSigSignalSelected() - signal '" << signalMethod -> name << "' selected.." << endl;
+    kdDebug() << "CClassPropertiesDlgImpl::slotSigSignalSelected() - signal '" << strSignalMethod.data() << "' selected.." << endl;
     delete methList;
 
 }
@@ -939,6 +941,9 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<CParsedMethod> * list, 
     {
         kdDebug() << "No matching slot members found..." << endl;
         lbSlotClassOfSig -> setText (i18n("no matching slots"));
+        QString Message = i18n("class") + " " + currentClass -> name + " " + i18n("has no slots matching signal declaration") + "\n"+
+                           "' " + strSignalMethod + " '";
+        KMessageBox::sorry(this, Message, i18n("Slots"));
         slotMethod = 0;
         strSlotMethod = "";
         kdDebug() << "slotMethod set to NULL " << endl;
@@ -1050,6 +1055,8 @@ void CClassPropertiesDlgImpl::setSignalsMemberList( CParsedClass* aClass, bool b
 }
 /** This function tries guess if aName is a QT or a KDE class then set filename
       of the include file according to the classname.
+      Code below needs some optimization...
+      This function only checks for QT or KDE classes...
  */
 CParsedClass* CClassPropertiesDlgImpl::unParsedClass( const QString& aName)
 {
@@ -1069,10 +1076,30 @@ CParsedClass* CClassPropertiesDlgImpl::unParsedClass( const QString& aName)
     kdDebug() << "about to parse file " << filePath.data() << endl;
     parser -> parse( filePath.data() );
     if (! parser -> store.hasClass( aName ))
-    {
+    { // Last chance to get the right file: match ClsHeader
         kdDebug() << "Parse failed for " << aName.data() << endl;
-        delete parser;
-        return NULL;
+        int I, found=0;
+        for (I = 0; !QtKde[I].ClsName.isEmpty(); I++)
+        {
+            if (QtKde[I].ClsName == aName)
+            {
+                if ( aName.find("Q") == 0 )
+                    filePath = qt2dir + "/include/" + QtKde[I].Filename;
+                else
+                if ( aName.find("K") == 0 )
+                    filePath = kde2dir + "/include/" + QtKde[I].Filename;
+                else break;
+                kdDebug() << "about to parse file " << filePath.data() << endl;
+                parser -> parse( filePath.data() );
+                found = 1;
+                break;
+            }
+        }
+        if (!found)
+        {
+            delete parser;
+            return NULL;
+        }
     }
     // Woohoo! we've got it...
     theClass = parser -> store.getClassByName( aName );
@@ -1206,6 +1233,8 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(CParsedClass* aClass, bool bClear)
     if (!mList || ( mList -> count() == 0 ) )
     {
         kdDebug()  << "no signals in class " << aClass -> name.data() << endl;
+        //QString Message = i18n("There are no signal members in class") + " " + aClass -> name;
+        //KMessageBox::sorry(this, Message, i18n("Signals"));
         return false;
     }
     sigClassList.append (aClass);

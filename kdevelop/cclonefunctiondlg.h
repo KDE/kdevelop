@@ -77,7 +77,7 @@ protected: // Private widgets
 
 private slots: // Private slots
   /** update methods */
-  void slotNewClass(const char *);
+  void slotNewClass(const QString& name);
 };
 
 #endif

@@ -36,7 +36,7 @@ BreakpointManager::BreakpointManager(QWidget* parent, const char* name, WFlags f
   QListBox(parent, name, f),
   activeFlag_(0)
 {
-  setCaption("Breakpoint manager");
+//  setCaption("Breakpoint manager");
   connect(this, SIGNAL(rightButtonClicked(QListBoxItem *, const QPoint & )),
                 SLOT(slotRightButtonClicked(QListBoxItem *, const QPoint & )));
   connect (this, SIGNAL(clicked(QListBoxItem *)), SLOT(slotClicked(QListBoxItem *)));
@@ -198,7 +198,7 @@ void BreakpointManager::slotClicked(QListBoxItem *item)
 
 void BreakpointManager::breakpointPopup(Breakpoint* BP)
 {
-KPopupMenu popup("Breakpoint menu");
+  KPopupMenu popup(i18n("Breakpoint menu"));
   popup.insertItem( i18n("Remove breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
   popup.insertItem( i18n("Edit breakpoint"),              this, SLOT(slotEditBreakpoint()) );
   if (BP->isEnabled())

@@ -1017,9 +1017,9 @@ void CKDevelop::initMenuBar(){
 void CKDevelop::initToolBar(){
 
   toolBar()->insertButton("filenew",ID_FILE_NEW, false,i18n("New"));
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   toolBar()->insertButton("project_open",ID_PROJECT_OPEN, true,i18n("Open Project"));
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   toolBar()->insertButton("fileopen",ID_FILE_OPEN, true,i18n("Open File"));
   file_open_popup= new QPopupMenu();
   connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
@@ -1033,21 +1033,21 @@ void CKDevelop::initToolBar(){
 //  QFrame *sepUndo= new QFrame(toolBar());
 //  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
 //  toolBar()->insertWidget(0,20,sepUndo);
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
 
   toolBar()->insertButton("undo",ID_EDIT_UNDO,false,i18n("Undo"));
   toolBar()->insertButton("redo",ID_EDIT_REDO,false,i18n("Redo"));
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   toolBar()->insertButton("editcut",ID_EDIT_CUT,true,i18n("Cut"));
   toolBar()->insertButton("editcopy",ID_EDIT_COPY, true,i18n("Copy"));
   toolBar()->insertButton("editpaste",ID_EDIT_PASTE, true,i18n("Paste"));
 	
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
 
   toolBar()->insertButton("compfile",ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   toolBar()->insertButton("make_kdevelop",ID_BUILD_MAKE, false,i18n("Make"));
   toolBar()->insertButton("rebuild",ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   toolBar()->insertButton("debugger",ID_DEBUG_START, false, i18n("Debug"));
   QPopupMenu* debugToolPopup = new QPopupMenu();
   debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
@@ -1058,10 +1058,10 @@ void CKDevelop::initToolBar(){
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
   toolBar()->insertButton("exec",ID_BUILD_RUN, false,i18n("Run"));
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   toolBar()->insertButton("stop",ID_BUILD_STOP, false,i18n("Stop"));
 
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
 
   toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
@@ -1069,7 +1069,7 @@ void CKDevelop::initToolBar(){
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
 
   toolBar()->insertButton("dbgrun",ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
   toolBar()->insertButton("dbgnext",ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
@@ -1139,7 +1139,7 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CV_WIZARD,
                                                classbrowser_popup);
   disableCommand(ID_CV_WIZARD);
-  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
+//  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("back",ID_HELP_BACK, false,i18n("Back"));
   history_prev = new QPopupMenu();
@@ -1154,14 +1154,14 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("reload_page",ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
 	toolBar(ID_BROWSER_TOOLBAR)->insertButton("contents", ID_HELP_CONTENTS, true, i18n("User Manual"));
 	
-  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
+//  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("help", ID_HELP_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("filefind",ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
-  toolBar()->insertSeparator();
+//  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("contexthelp",ID_HELP_WHATS_THIS,
               true,i18n("What's this...?"));

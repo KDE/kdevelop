@@ -85,8 +85,8 @@ CCloneFunctionDlg::CCloneFunctionDlg(CClassView* class_tree, QWidget *parent, co
 	slotNewClass( allclasses.currentText () );
 				
 	// change methods on class selection
-	connect(&allclasses, SIGNAL(highlighted(const char*)),
-			SLOT(slotNewClass(const char*)) );
+	connect(&allclasses, SIGNAL(highlighted(const QString&)),
+			SLOT(slotNewClass(const QString&)) );
 					
 	// Set the default focus.
   allclasses.setFocus();
@@ -104,7 +104,7 @@ void CCloneFunctionDlg::OK()
 }
 
 /** update methods/slots */
-void CCloneFunctionDlg::slotNewClass(const char *name)
+void CCloneFunctionDlg::slotNewClass(const QString& name)
 {
 	QString str;
 	
