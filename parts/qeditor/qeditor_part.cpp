@@ -35,6 +35,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <klocale.h>
 
 #include <qvbox.h>
 #include <qfile.h>
@@ -93,9 +94,6 @@ private:
     QTextCursor* m_cursor;
 };
 
-
-K_EXPORT_COMPONENT_FACTORY( libqeditorpart, QEditorPartFactory );
-
 using namespace std;
 
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
@@ -103,6 +101,8 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           const QStringList & /*args*/ )
     : KTextEditor::Document( parent, name ), m_currentView( 0 )
 {
+    QEditorPartFactory::registerDocument( this );
+
     kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
@@ -140,6 +140,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 QEditorPart::~QEditorPart()
 {
     writeConfig();
+    QEditorPartFactory::deregisterDocument( this );
 }
 
 void QEditorPart::setupActions()
@@ -218,6 +219,7 @@ void QEditorPart::setModified(bool modified)
     ReadWritePart::setModified(modified);
 }
 
+#if 0
 KAboutData *QEditorPart::createAboutData()
 {
     // the non-i18n name here must be the same as the directory in
@@ -228,6 +230,7 @@ KAboutData *QEditorPart::createAboutData()
     aboutData->addAuthor("Trolltech AS", 0, "info@trolltech.com");
     return aboutData;
 }
+#endif
 
 void QEditorPart::readConfig()
 {

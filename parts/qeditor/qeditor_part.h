@@ -31,8 +31,9 @@
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/searchinterface.h>
 #include <ktexteditor/markinterface.h>
-#include <kparts/genericfactory.h>
 #include <qptrlist.h>
+
+#include "qeditor_factory.h"
 
 class QWidget;
 class QPainter;
@@ -93,7 +94,9 @@ public:
     QSourceColorizer* colorizer() const;
     QEditorIndenter* indenter() const;
 
+#if 0
     static KAboutData *createAboutData();
+#endif
 
 
     // general options
@@ -363,7 +366,5 @@ private:
     QPtrList<KTextEditor::View> m_views;
     QPtrList<KTextEditor::Cursor> m_cursors;
 };
-
-typedef KParts::GenericFactory<QEditorPart> QEditorPartFactory;
 
 #endif // QEDITORPART_H

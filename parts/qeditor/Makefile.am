@@ -17,7 +17,38 @@ messages: rc.cpp
 kde_module_LTLIBRARIES = libqeditorpart.la
 
 # the Part's source, library search path, and link libraries
-libqeditorpart_la_SOURCES = cpp_colorizer.cpp	 qeditor_view.cpp 	java_colorizer.cpp	 parenmatcher.cpp	 qmake_colorizer.cpp 	python_colorizer.cpp	 qsourcecolorizer.cpp 	qeditor.cpp		 simple_indent.cpp 	qeditor_meta_unload.cpp  xml_colorizer.cpp 	qeditor_part.cpp	 qeditorcodecompletion.cpp 	paragdata.cpp linenumberwidget.h linenumberwidget.cpp markerwidget.cpp gotolinedialog.ui koFind.cpp koReplace.cpp levelwidget.cpp cindent.cpp yyindent.cpp cs_colorizer.cpp background_parser.cpp cpp_parser.cpp python_parser.cpp highlightingconfigpage.ui indentconfigpage.ui generalconfigpage.ui qeditor_indenter.cpp qeditor_arghint.cpp
+libqeditorpart_la_SOURCES = \
+	background_parser.cpp \
+	cindent.cpp \
+	cpp_colorizer.cpp \
+	cpp_parser.cpp \
+	cs_colorizer.cpp \
+	java_colorizer.cpp \
+	koFind.cpp \
+	koReplace.cpp \
+	levelwidget.cpp \
+	linenumberwidget.cpp \
+	markerwidget.cpp \
+	paragdata.cpp \
+	parenmatcher.cpp \
+	python_colorizer.cpp \
+	python_parser.cpp \
+	qeditor.cpp \
+	qeditor_arghint.cpp \
+	qeditor_factory.cpp \
+	qeditor_indenter.cpp \
+	qeditor_part.cpp \
+	qeditor_view.cpp \
+	qeditorcodecompletion.cpp \
+	qmake_colorizer.cpp \
+	qsourcecolorizer.cpp \
+	simple_indent.cpp \
+	xml_colorizer.cpp \
+	yyindent.cpp \
+	generalconfigpage.ui \
+	gotolinedialog.ui \
+	highlightingconfigpage.ui \
+	indentconfigpage.ui
 
 libqeditorpart_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 libqeditorpart_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE) -lktexteditor

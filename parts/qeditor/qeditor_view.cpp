@@ -51,6 +51,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     : KTextEditor::View( document, parent, name ),
       m_document( document )
 {
+    QEditorPartFactory::registerView( this );
     m_findDialog = new KoFindDialog( this, "FindDialog_0", long(KoFindDialog::FromCursor) );
     m_replaceDialog = new KoReplaceDialog( this, "ReplaceDialog_0",
                                            long(KoReplaceDialog::PromptOnReplace |
@@ -104,6 +105,7 @@ QEditorView::~QEditorView()
 {
     delete( m_pCodeCompletion );
     m_pCodeCompletion = 0;
+    QEditorPartFactory::deregisterView( this );
 }
 
 void QEditorView::configChanged()
@@ -113,7 +115,6 @@ void QEditorView::configChanged()
     setLevelWidgetVisible( m_document->showCodeFoldingMarkers() );
     m_editor->configChanged();
 }
-
 
 bool QEditorView::isMarkerWidgetVisible() const
 {
