@@ -167,10 +167,20 @@ KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {
 }
 
 bool subversionPart::isValidDirectory( const QString& dirPath) {
-	return true;
+    QString svn = "/.svn/";
+    QDir svndir( dirPath + svn );
+    QString entriesFileName = dirPath + svn + "entries";
+
+    return svndir.exists() &&
+        QFile::exists( entriesFileName );
 }
 
 void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
+// If the current project doesn't support SVN, we don't
+// want to confuse the user with a SVN popup menu.
+if(!isValidDirectory(project()->projectDirectory()))
+  return;
+  
 	kdDebug() << "contextMenu()" << endl;
 	if (context->hasType( Context::FileContext ) ||
 			context->hasType( Context::EditorContext ))
