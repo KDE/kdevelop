@@ -20,7 +20,7 @@
 #ifndef CNEWFILEDLG_H
 #define CNEWFILEDLG_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class CProject;
 class QLineEdit;
@@ -35,7 +35,7 @@ class KTabCtl;
 /** the new file dialog
   *@author Sandy Meier
   */
-class CNewFileDlg : public QDialog {
+class CNewFileDlg : public KDialogBase {
   Q_OBJECT
 public:
   /**constructor*/

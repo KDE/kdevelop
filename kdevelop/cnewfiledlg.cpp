@@ -18,7 +18,6 @@
 
 
 #include <qmessagebox.h>
-#include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
@@ -34,21 +33,21 @@
 #include "cnewfiledlg.h"
 #include "cgeneratenewfile.h"
 #include "cproject.h"
-#define LAYOUT_BORDER (10)
-
 
 CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CProject* p_prj) 
-  : QDialog(parent,name,modal,f){
+  : KDialogBase(parent,name,modal,i18n("New File..."),Ok|Cancel,Ok) {
   
   prj = p_prj;
-  setCaption(i18n("New File..."));    
 
-	QVBoxLayout * main_layout = new QVBoxLayout( this, LAYOUT_BORDER );
-	QHBoxLayout * hlayout = new QHBoxLayout();
-	main_layout->addLayout( hlayout, 1 );
+  QWidget* page = new QWidget(this);
+  setMainWidget(page);
+  
+  QVBoxLayout * main_layout = new QVBoxLayout( page, 0, spacingHint() );
 
-	// the tabview
-	tab = new KTabCtl(this);
+  QHBoxLayout * hlayout = new QHBoxLayout(main_layout);
+
+  // the tabview
+  tab = new KTabCtl(page);
   tab->setBorder(false);
 	
 
@@ -75,8 +74,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
 
-  QString text;
-  text = i18n("Choose the type of the new file here.");
+  QString text = i18n("Choose the type of the new file here.");
   QWhatsThis::add(list_cpp, text);
   QWhatsThis::add(list_manuals, text);
   QWhatsThis::add(list_linux, text);
@@ -94,56 +92,28 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	QVBoxLayout * vlayout = new QVBoxLayout();
 	hlayout->addLayout( vlayout, 1 );
 
-	label_filename = new QLabel( this, "label_filename" );
-	label_filename->setFocusPolicy( QWidget::NoFocus );
-	label_filename->setBackgroundMode( QWidget::PaletteBackground );
-	label_filename->setFontPropagation( QWidget::NoChildren );
-	label_filename->setPalettePropagation( QWidget::NoChildren );
-	label_filename->setText( i18n("Filename:") );
-	label_filename->setMinimumSize( label_filename->sizeHint() );
+	label_filename = new QLabel( i18n("Filename:"), page, "label_filename" );
 	vlayout->addWidget( label_filename, 0 );
 	
-	edit = new QLineEdit( this, "edit" );
-	edit->setFocusPolicy( QWidget::StrongFocus );
-	edit->setBackgroundMode( QWidget::PaletteBase );
-	edit->setFontPropagation( QWidget::NoChildren );
-	edit->setPalettePropagation( QWidget::NoChildren );
-	edit->setText( "" );
-	edit->setMaxLength( 32767 );
-	edit->setEchoMode( QLineEdit::Normal );
-	edit->setFrame( TRUE );
+	edit = new QLineEdit( "", page, "edit" );
 
         text = i18n("Enter a name for your new file here.");
         QWhatsThis::add(label_filename, text);
         QWhatsThis::add(edit, text);
-        edit->setMinimumSize( edit->sizeHint() );
 	vlayout->addWidget( edit, 0 );
 	
-	check_use_template = new QCheckBox( this, "check_use_template" );
-	check_use_template->setFocusPolicy( QWidget::TabFocus );
-	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
-	check_use_template->setFontPropagation( QWidget::NoChildren );
-	check_use_template->setPalettePropagation( QWidget::NoChildren );
+	check_use_template = new QCheckBox( page, "check_use_template" );
 	check_use_template->setText(i18n("use Template") );
-	check_use_template->setAutoRepeat( FALSE );
-	check_use_template->setAutoResize( FALSE );
 	QWhatsThis::add(check_use_template, i18n("Check this if you want to use a template."));
-	check_use_template->setMinimumSize( check_use_template->sizeHint() );
 	vlayout->addWidget( check_use_template, 0 );
 
 	vlayout->addStretch( 1 );
 	
-	button_group = new QButtonGroup( this, "button_group" );
-	button_group->setFocusPolicy( QWidget::NoFocus );
-	button_group->setBackgroundMode( QWidget::PaletteBackground );
-	button_group->setFontPropagation( QWidget::NoChildren );
-	button_group->setPalettePropagation( QWidget::NoChildren );
-	button_group->setFrameStyle( 49 );
-	button_group->setTitle( i18n("Project Options" ));
+	button_group = new QButtonGroup( i18n("Project Options"), page, "button_group" );
 	button_group->setAlignment( 1 );
 	main_layout->addWidget( button_group, 0 );
 
-	QGridLayout* glayout = new QGridLayout( button_group, 4, 2, LAYOUT_BORDER );
+	QGridLayout* glayout = new QGridLayout( button_group, 4, 2 );
   glayout->setRowStretch( 0, 0 );
   glayout->setRowStretch( 1, 0 );
   glayout->setRowStretch( 2, 0 );
@@ -151,52 +121,23 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   glayout->setColStretch( 0, 1 );
   glayout->setColStretch( 1, 0 );
 
-	glayout->addRowSpacing( 0, LAYOUT_BORDER );
+	glayout->addRowSpacing( 0, 10 );
 
-	check_add_project = new QCheckBox( button_group, "check_add_project" );
-	check_add_project->setFocusPolicy( QWidget::TabFocus );
-	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
-	check_add_project->setFontPropagation( QWidget::NoChildren );
-	check_add_project->setPalettePropagation( QWidget::NoChildren );
-	check_add_project->setText(i18n("add to Project") );
-	check_add_project->setAutoRepeat( FALSE );
-	check_add_project->setAutoResize( FALSE );
+	check_add_project = new QCheckBox( i18n("add to Project"), button_group, "check_add_project" );
 	QWhatsThis::add(check_add_project, i18n("Check this if you want to add the new file to your project."));
-	check_add_project->setMinimumSize( check_add_project->sizeHint() );
 	glayout->addWidget( check_add_project, 1, 0 );	
 	
-	location_label = new QLabel( button_group, "location_label" );
-	location_label->setFocusPolicy( QWidget::NoFocus );
-	location_label->setBackgroundMode( QWidget::PaletteBackground );
-	location_label->setFontPropagation( QWidget::NoChildren );
-	location_label->setPalettePropagation( QWidget::NoChildren );
-	location_label->setText(i18n("Location:") );
-	location_label->setMinimumSize( location_label->sizeHint() );
+	location_label = new QLabel( i18n("Location:"), button_group, "location_label" );
 	glayout->addWidget( location_label, 2, 0 );
 
 	prj_loc_edit = new QLineEdit( button_group, "prj_loc_edit" );
-	prj_loc_edit->setFocusPolicy( QWidget::StrongFocus );
-	prj_loc_edit->setBackgroundMode( QWidget::PaletteBase );
-	prj_loc_edit->setFontPropagation( QWidget::NoChildren );
-	prj_loc_edit->setPalettePropagation( QWidget::NoChildren );
 	prj_loc_edit->setText( prj->getProjectDir()+ prj->getSubDir());
-	prj_loc_edit->setMaxLength( 32767 );
-	prj_loc_edit->setEchoMode( QLineEdit::Normal );
-	prj_loc_edit->setFrame( TRUE );
 	QWhatsThis::add(prj_loc_edit, i18n("Enter the directory where the new file will be located."));
-	prj_loc_edit->setMinimumSize( prj_loc_edit->sizeHint() );
 	glayout->addWidget( prj_loc_edit, 3, 0 );
 
 	loc_button = new QPushButton( button_group, "loc_button" );
-	loc_button->setFocusPolicy( QWidget::TabFocus );
-	loc_button->setBackgroundMode( QWidget::PaletteBackground );
-	loc_button->setFontPropagation( QWidget::NoChildren );
-	loc_button->setPalettePropagation( QWidget::NoChildren );
 	loc_button->setPixmap(BarIcon("open"));
-	loc_button->setAutoRepeat( FALSE );
-	loc_button->setAutoResize( FALSE );
 	QWhatsThis::add(loc_button, i18n("Here you can choose a directory where the new file will be located."));
-	loc_button->setMinimumSize( loc_button->sizeHint().height(), loc_button->sizeHint().height() );
 	glayout->addWidget( loc_button, 3, 1 );
 
 	glayout->activate();
@@ -204,38 +145,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	button_group->insert( check_add_project );
 	button_group->insert( loc_button );
 
-	hlayout = new QHBoxLayout();
-	main_layout->addLayout( hlayout, 0 );
-
-	hlayout->addStretch( 1 );
-
-	ok = new QPushButton( this, "ok" );
-	ok->setFocusPolicy( QWidget::TabFocus );
-	ok->setBackgroundMode( QWidget::PaletteBackground );
-	ok->setFontPropagation( QWidget::NoChildren );
-	ok->setPalettePropagation( QWidget::NoChildren );
-	ok->setText(i18n("OK"));
-	ok->setAutoRepeat( FALSE );
-	ok->setAutoResize( FALSE );
-	ok->setDefault( TRUE );
-		
-	cancel = new QPushButton( this, "cancel" );
-	cancel->setFocusPolicy( QWidget::TabFocus );
-	cancel->setBackgroundMode( QWidget::PaletteBackground );
-	cancel->setFontPropagation( QWidget::NoChildren );
-	cancel->setPalettePropagation( QWidget::NoChildren );
-	cancel->setText(i18n("Cancel") );
-	cancel->setAutoRepeat( FALSE );
-	cancel->setAutoResize( FALSE );
-
-	ok->setFixedSize( cancel->sizeHint() );
-	cancel->setFixedSize( cancel->sizeHint() );
-
-	hlayout->addWidget( ok, 0 );
-	hlayout->addWidget( cancel, 0 );
-
 	main_layout->activate();
-	adjustSize();
 
   connect(tab,SIGNAL(tabSelected(int)),SLOT(slotTabSelected(int)));
   connect(ok,SIGNAL(clicked()),SLOT(slotOKClicked()));
