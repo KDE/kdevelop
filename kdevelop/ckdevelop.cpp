@@ -939,7 +939,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   stderr_widget->clear();
 
   QString args = prj->getExecuteArgs();
-  QString program = prj->getBinPROGRAM();
+  QString program ="./"+ prj->getBinPROGRAM();
 
   if(bWithArgs)
   {
@@ -1304,7 +1304,7 @@ void CKDevelop::slotDebugAttach()
       underDir+="/";
 
     QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram=prj->getBinPROGRAM();
+    QString binProgram="./"+prj->getBinPROGRAM();
 
     if (dbgController)
       slotDebugStop();
@@ -1355,7 +1355,7 @@ void CKDevelop::slotDebugExamineCore()
       underDir+="/";
 
     QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram=prj->getBinPROGRAM();
+    QString binProgram="./"+prj->getBinPROGRAM();
 
     if (dbgController)
       slotDebugStop();
@@ -1474,7 +1474,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
 
-  QString binProgram=prj->getBinPROGRAM();
+  QString binProgram="./"+prj->getBinPROGRAM();
   QString libtool= prj->getProjectDir() +"libtool";
 
   QString args=prj->getDebugArgs();
@@ -1518,7 +1518,7 @@ void CKDevelop::slotStartDebug()
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
 
-  QString binProgram=prj->getBinPROGRAM();
+  QString binProgram="./"+prj->getBinPROGRAM();
   QString libtool= prj->getProjectDir() +"libtool";
 
   // if we can run the application, so we can clear the Makefile.am-changed-flag
