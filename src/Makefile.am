@@ -6,7 +6,7 @@ kdevelop_SOURCES = main.cpp core.cpp partcontroller.cpp projectmanager.cpp plugi
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevelop_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/qextmdi/libkdevelopqextmdi.la $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
+kdevelop_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
 
 rcdir = $(kde_datadir)/kdevelop
 rc_DATA = kdevelopui.rc eventsrc
@@ -19,7 +19,7 @@ SUBDIRS = profiles
 noinst_HEADERS = languageselectwidget.h newmainwindow.h
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp projectmanager.cpp projectsession.cpp settingswidget.ui splashscreen.cpp statusbar.cpp toplevel.cpp generalinfowidgetbase.ui main_assistant.cpp mimewarningdialog.ui
-kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/qextmdi/libkdevelopqextmdi.la -lktexteditor $(LIB_KHTML) $(LIB_KPARTS) $(LIB_KDEUI)
+kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) -lktexteditor $(LIB_KHTML) $(LIB_KPARTS) $(LIB_KDEUI)
 
 rc_assistantdir = $(kde_datadir)/kdevassistant
 rc_assistant_DATA =  kdevassistantui.rc
