@@ -39,7 +39,8 @@ Additionally you may also want to find out \ref howToDocument.
 \section PlannedTasks Planned tasks
 
 First we need to do the \ref HighPriTasks then fix the <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>, then fix the bugs in the \ref bug and finally fix the dispersed \ref todo
-all over the code.
+all over the code.\n
+We also have a list of \ref unmaintained parts in KDevelop. You migth want to "adopt" one. :)
 
 
 \section misc Misc

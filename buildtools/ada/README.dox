@@ -5,6 +5,9 @@ It holds the project file list and tries to abstract from their specifics.
 
 \authors <a href="mailto:okellogg AT users.sourceforge.net">Oliver Kellogg</a>
 
+\unmaintained This part is currently un-maintained
+
+\deprecated This class is deprecated, use GenericProjectPart (buildtools/generic) instead.
 
 \feature Feature 1
 \feature Feature 2

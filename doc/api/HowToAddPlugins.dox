@@ -96,7 +96,7 @@ A part can access other components of the IDE via some accessors
 of <code>KDevPlugin</code>:
 
   - The <i>application core</i> via <code>core()</code>,
-  - the <i>project management</i> via <code>project()</code>,
+  - the <i>build tools</i> via <code>project()</code>,
   - the <i>programming language specific stuff</i> via
     <code>languageSupport()</code>,
   - the <i>make frontend</i> via <code>makeFrontend()</code>,

@@ -1,8 +1,8 @@
 /** \file HowToAddProgrammingLanguages.dox
-  * \brief How to add support for a programming language in KDevelop
+  * \brief How to add support for a programming language
   */
 
-/** \page howToAddProgrammingLanguages How to add support for a programming language in KDevelop
+/** \page howToAddProgrammingLanguages How to add support for a programming language
 
 \section LSupport List of things to have "complete" support of a given language in KDevelop
 
@@ -109,10 +109,10 @@ functionality for your language. The problem reporter catches errors
 reported by a parser and displays it in a problem reporter view.
 <code>parts/javasupport</code>, <code>parts/adasupport</code>, <code>parts/pascalsupport</code> and <code>parts/cppsupport</code> have problem reporters.
 
-\section PrManag Project Manager
+\section PrManag Build Tools
 
-The language support is important, but it is unusable without a <B>project
-manager</B> that can manage projects written on this language. KDevelop
+The language support is important, but it is unusable without a <B>build tool</B>
+that can manage projects written on this language. KDevelop
 currently provides several build tools. They are:
 
   - Autotools build tool
@@ -148,8 +148,8 @@ in, extend generic build tool via build system plugin.
 
 \subsection AppWiz Application Wizard Templates
 
-<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult <code>parts/appwizard/README</code> and look at
-<code>parts/appwizard/rubyhello</code>, <code>parts/appwizard/pascalhello</code>, or <code>parts/appwizard/adahello</code>.
+<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddTemplates (HowToAddTemplates.dox file)
+and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
 
 \subsection FCreateTpl File Create Templates
 

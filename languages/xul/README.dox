@@ -27,6 +27,8 @@ http://www.automatix.de/~zack/kaxulpart.png
 Presentation:
 http://www.automatix.de/~zack/kaxul.kpr
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
+
 \authors <a href="mailto:zack AT kde dot org">Zack Rusin</a>
 
 \maintainer <a href="mailto:zack AT kde dot org">Zack Rusin</a>

@@ -31,7 +31,7 @@ implements your part.
 
 On the area marked with <code>...</code> you can add optional informations. Here is an example of that:
 
-\verbinclude parts/appwizard/kdevpart/README.dox
+\verbinclude languages/cpp/app_templates/kdevpart/README.dox
 
 All these infos are optional and you should only add the link to the bugzilla database if YOUR_COMPONENT_NAME
 has been defined in that database.

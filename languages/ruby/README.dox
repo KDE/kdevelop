@@ -1,6 +1,8 @@
 /** \class RubySupportPart
 This is a Ruby support plugin
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
+
 \authors <a href="mailto:marek AT janukowicz.net">Marek Janukowicz</a>
 
 \maintainer <a href="mailto:marek AT janukowicz.net">Marek Janukowicz</a>

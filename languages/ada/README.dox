@@ -13,6 +13,8 @@ They only depend on the ANTLR C++ runtime support and on the C++ STL.
 They should be kept free of all other dependencies.
 In particular, they do not depend on Kdevelop, KDE, or Qt.
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
+
 \authors <a href="mailto:okellogg AT users.sourceforge.net">Oliver Kellogg</a>
 \authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
 

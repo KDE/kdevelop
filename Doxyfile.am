@@ -21,6 +21,7 @@ apidox-am-yes:
 		echo "STRIP_FROM_PATH        = $(PWD)/" >> Doxyfile; \
 		echo "ALIASES               += \"feature=\xrefitem features \\\"Feature(s)\\\" \\\"Features\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"maintainer=\xrefitem maintainers \\\"Maintainer(s)\\\" \\\"Maintainers\\\"\" " >> Doxyfile; \
+		echo "ALIASES               += \"unmaintained=\xrefitem unmaintained \\\"Unmaintained\\\" \\\"Unmaintained\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"requirement=\xrefitem requirements \\\"Requirement(s)\\\" \\\"Requirements\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"faq=\xrefitem FAQ \\\"F.A.Q.\\\" \\\"F.A.Q.\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"authors=\xrefitem authors \\\"Author(s)\\\" \\\"Authors\\\"\" " >> Doxyfile; \
@@ -56,8 +57,7 @@ apidox-am-yes:
 			echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
 			echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
 		fi ;\
-		echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
-		echo "EXAMPLE_PATH          += parts/appwizard/kdevpart" >> Doxyfile; \
+		echo "EXAMPLE_PATH           = $(DOXYGEN_EXAMPLE_PATH)" >> Doxyfile; \
 		echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
 		echo "SOURCE_BROWSER         = NO" >> Doxyfile ;\
 		echo "VERBATIM_HEADERS       = NO" >> Doxyfile ;\

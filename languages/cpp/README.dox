@@ -8,6 +8,7 @@ then you can play with KDevPCSImporter the code of the dialog is in parts/cppsup
 and of course lib/interfaces/kdevpcsimporter.*
 and if you want play with the c++ parser go to lib/cppparser/, the best is to start to read driver.*
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
 
 \authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
 

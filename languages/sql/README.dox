@@ -1,6 +1,8 @@
 /** \class SQLSupportPart
 This is a SQL support plugin
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
+
 \authors <a href="mailto:harry AT kdevelop.org">Harald Fernengel</a>
 
 \maintainer <a href="mailto:harry AT kdevelop.org">Harald Fernengel</a>

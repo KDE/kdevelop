@@ -15,7 +15,7 @@ reconfigure subprojects**.
 \feature Unsupported automake features will be left unchanged
 (hopefully), no major testing has been run yet (at least not by myself).
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=autoproject&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=autoproject&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number"> autoproject component at Bugzilla database</a>
 \bug Lower Automake Manager view does not update it's view when adding a subproject (and targets, etc to the new subproject)
 \bug If removing the Active Target, update the .kdevelop file, too!
 

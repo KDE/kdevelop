@@ -6,6 +6,8 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
+Consult \ref LangSupportStatus for an up to date status of this programming language support part.
+
 \authors <a href="mailto:jonas.nordin AT syncom.se">Jonas Nordin</a> Copyright (C) 1999
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a> Copyright (C) 2000-2001
 \authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2002-2003

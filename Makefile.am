@@ -17,7 +17,6 @@ install-data-local:
 	@echo ""
 	@echo "KDevelop 3.0 alpha7 has been installed."
 	@echo ""
-	@echo ""
 	@echo "***************************************************"
 
 $(top_srcdir)/acinclude.m4: $(top_srcdir)/kdevelop.m4.in
@@ -59,8 +58,10 @@ include admin/deps.am
 
 DOXYGEN_INPUT = src lib parts languages buildtools editors vcs doc/api
 
-## Exclude the application wizard templates
+## Exclude the application wizard templates, and some file templates
 DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates languages/xul/app_templates languages/pascal/ languages/java lib/antlr
+
+DOXYGEN_EXAMPLE_PATH = languages/cpp/app_templates/khello languages/cpp/app_templates/kdevpart
 
 ## Use KDE Libs tag files
 DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
