@@ -47,7 +47,7 @@ int main(int argc, char **argv)
         args->clear();
     }
 
-    int ret = app.exec();
-
-    return ret;
+    // mainWin has WDestructiveClose flag by default, so it will delete itself.
+    return app.exec();
 }
+
