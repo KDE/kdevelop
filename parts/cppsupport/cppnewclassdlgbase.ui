@@ -2,7 +2,7 @@
 <class>CppNewClassDialogBase</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>cpp_new_class_dialog</cstring>
+        <cstring>CppNewClassDlgBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -182,10 +182,8 @@ still edit it afterwards.</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Insert your new classname here.
-Please try to keep some standards
-like using an upper 'K' as the first
-letter for your new class, if it is
-a class for the KDE libraries.</string>
+You can also define template classes by specifying
+template &lt;params&gt; classname</string>
                                 </property>
                             </widget>
                             <widget class="QLabel">
@@ -448,7 +446,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <enum>StrongFocus</enum>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Insert the base class which your new class will be derived from. If you have checked 'Generate QWidget child class' the new class will be derived from QWidget. If no base class is named, the new class will not have a parent class.</string>
+                                    <string>Insert the base class which your new class will be derived from. If you have checked 'Generate QWidget child class' the new class will be derived from QWidget. If no base class is named, the new class will not have a parent class. You can also use template classes here (like BaseClass&lt;int, int&gt;)</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="2">
@@ -1053,175 +1051,175 @@ Namespace1::Namespace2::...::NamespaceN</string>
     <connection>
         <sender>ok_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>classname_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>classNameChanged(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>header_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>headerChanged()</slot>
     </connection>
     <connection>
         <sender>implementation_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>implementationChanged()</slot>
     </connection>
     <connection>
         <sender>childclass_box</sender>
         <signal>stateChanged(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>checkQWidgetInheritance(int)</slot>
     </connection>
     <connection>
         <sender>objc_box</sender>
         <signal>stateChanged(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>checkObjCInheritance(int)</slot>
     </connection>
     <connection>
         <sender>virtual_box</sender>
         <signal>stateChanged(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBaseVirtualChanged(int)</slot>
     </connection>
     <connection>
         <sender>public_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBasePublicSet()</slot>
     </connection>
     <connection>
         <sender>protected_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBaseProtectedSet()</slot>
     </connection>
     <connection>
         <sender>private_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBasePrivateSet()</slot>
     </connection>
     <connection>
         <sender>addbaseclass_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>addBaseClass()</slot>
     </connection>
     <connection>
         <sender>rembaseclass_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>remBaseClass()</slot>
     </connection>
     <connection>
         <sender>baseclasses_view</sender>
         <signal>currentChanged(QListViewItem*)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBaseSelected(QListViewItem*)</slot>
     </connection>
     <connection>
         <sender>upbaseclass_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>upbaseclass_button_clicked()</slot>
     </connection>
     <connection>
         <sender>downbaseclass_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>downbaseclass_button_clicked()</slot>
     </connection>
     <connection>
         <sender>baseclasses_view</sender>
         <signal>selectionChanged()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>baseclasses_view_selectionChanged()</slot>
     </connection>
     <connection>
         <sender>gtk_box</sender>
         <signal>stateChanged(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>gtk_box_stateChanged(int)</slot>
     </connection>
     <connection>
         <sender>basename_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>currBaseNameChanged(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>qobject_box</sender>
         <signal>stateChanged(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>qobject_box_stateChanged(int)</slot>
     </connection>
     <connection>
         <sender>access_view</sender>
         <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>access_view_mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
     <connection>
         <sender>methods_view</sender>
         <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>methods_view_mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
     <connection>
         <sender>clear_selection_button</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>clear_selection_button_clicked()</slot>
     </connection>
     <connection>
         <sender>to_constructors_list</sender>
         <signal>clicked()</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>to_constructors_list_clicked()</slot>
     </connection>
     <connection>
         <sender>class_tabs</sender>
         <signal>selected(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>newTabSelected(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>class_tabs</sender>
         <signal>currentChanged(QWidget*)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>newTabSelected(QWidget*)</slot>
     </connection>
     <connection>
         <sender>basename_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>baseclassname_changed(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>baseinclude_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>baseIncludeChanged(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>scope_box</sender>
         <signal>activated(int)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
+        <receiver>CppNewClassDlgBase</receiver>
         <slot>scopeboxActivated(int)</slot>
     </connection>
 </connections>

@@ -36,33 +36,35 @@ public:
    
     PCheckListItem ( T item, QCheckListItem * parent, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QCheckListItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item,  QListViewItem * parent, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QListView * parent, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QListView * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QListViewItem * parent, const QString & text, const QPixmap & p ):
 	QCheckListItem ( parent, text, p ), m_item(item) {}
-    
+
     PCheckListItem ( T item, QListView * parent, const QString & text, const QPixmap & p ):
 	QCheckListItem ( parent, text, p ), m_item(item) {}
-    
+
     T item()
     {
 	return m_item;
     }
-    
+
+    QString templateAddition;
+
 private:
     T m_item;
 };
@@ -70,7 +72,7 @@ private:
 template<class T>
 class PListViewItem: public QListViewItem{
 public:
-    
+
     PListViewItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text ):
 	QListViewItem ( parent, after, text ), m_item(item) {}
 
@@ -88,6 +90,7 @@ public:
 	return m_item;
     }
 
+    QString templateAddition;
 private:
     T m_item;
 };
@@ -184,7 +187,16 @@ private:
     void checkUpButtonState();
     void checkDownButtonState();
     void updateConstructorsOrder();
-    
+
+    QString classNameFormatted();
+    QString templateStrFormatted();
+    QString templateParamsFormatted();
+    QString classNameFormatted(const QString &);
+    QString templateStrFormatted(const QString &);
+    QString templateParamsFormatted(const QString &);
+    QString templateActualParamsFormatted(const QString &);
+    void removeTemplateParams(QString &);
+
     friend class ClassGenerator;
 
     // The class that translates UI input to a class
@@ -194,27 +206,29 @@ private:
       ClassGenerator(CppNewClassDialog& _dlg) : dlg(_dlg) {}
       bool generate();
 
-    private:   
+    private:
       bool validateInput();
       void common_text();
       void gen_implementation();
       void gen_interface();
-      void genMethodDeclaration(ParsedMethod *method, QString className,
+      void genMethodDeclaration(ParsedMethod *method, QString className, QString templateStr,
         QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName );
 
       void beautifyHeader(QString &templ, QString &headerGuard,
-        QString &includeBaseHeader, QString &author, QString &doc, QString &className,
+        QString &includeBaseHeader, QString &author, QString &doc, QString &className, QString &templateStr,
         QString &baseclass, QString &inheritance, QString &qobjectStr, QString &args,
         QString &header, QString &namespaceBeg, QString &constructors, QString &advH_public, QString &advH_public_slots,
-        QString &advH_protected, QString &advH_protected_slots, QString &advH_private, QString &advH_private_slots, 
-        QString &namespaceEnd);        
+        QString &advH_protected, QString &advH_protected_slots, QString &advH_private, QString &advH_private_slots,
+        QString &namespaceEnd);
       void beautifySource(QString &templ, QString &header, QString &className, QString &namespaceBeg,
         QString &constructors, QString &advCpp, QString &namespaceEnd, QString &implementation);
-        
+
       QString className;
+      QString templateStr;
+      QString templateParams;
       QString header;
       QString implementation;
-      
+
       QString advConstructorsHeader;
       QString advConstructorsSource;
 

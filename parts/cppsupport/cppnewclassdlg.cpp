@@ -126,12 +126,17 @@ void CppNewClassDialog::classNameChanged(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 header = header.upper();
                 break;
-	    default:;
+            default:;
         }
+        header = header.replace(QRegExp("(template *<.*> *)?(class *)?"), "");
         header_edit->setText(header);
     }
     if (!implementationModified) {
-        QString implementation = str + implementation_suffix;
+        QString implementation;
+        if (str.contains("template"))
+            implementation = str + "_impl" + interface_suffix;
+        else
+            implementation = str + implementation_suffix;
         switch( gen_config->fileCase() )
         {
             case ClassGeneratorConfig::LowerCase:
@@ -140,8 +145,9 @@ void CppNewClassDialog::classNameChanged(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 implementation = implementation.upper();
                 break;
-	    default:;
+            default:;
         }
+        implementation = implementation.replace(QRegExp("(template *<.*> *)?(class *)?"), "");
         implementation_edit->setText(implementation);
     }
 }
@@ -158,8 +164,9 @@ void CppNewClassDialog::baseclassname_changed(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 header = header.upper();
                 break;
-	    default:;
+            default:;
         }
+        header = header.replace(QRegExp(" *<.*>"), "");
         baseinclude_edit->setText(header);
     }
 }
@@ -378,6 +385,7 @@ void CppNewClassDialog::remBaseClassOnly()
 
 void CppNewClassDialog::remClassFromAdv(QString text)
 {
+    removeTemplateParams(text);
     QListViewItem *it = 0;
     if ((it = access_view->findItem(text, 0)))
         delete it;
@@ -650,13 +658,17 @@ void CppNewClassDialog::reloadAdvancedInheritance(bool /*clean*/)
 
 void CppNewClassDialog::parseClass(QString clName, QString inheritance)
 {
+    QString templateAdd = templateActualParamsFormatted(clName);
+    removeTemplateParams(clName);
     ParsedClass * myClass = m_part->classStore()->getClassByName(clName);
     if (! myClass)
         myClass = m_part->ccClassStore()->getClassByName(clName);
     if (myClass)
     {
         PCheckListItem<ParsedClass*> *it = new PCheckListItem<ParsedClass*>(myClass, constructors_view, myClass->name());
+        it->templateAddition = templateAdd;
         PListViewItem<ParsedClass*> *over = new PListViewItem<ParsedClass*>(myClass, methods_view, myClass->name());
+        over->templateAddition = templateAdd;
         QListViewItem *over_methods = new QListViewItem(over, i18n("Methods"));
         QListViewItem *over_slots = new QListViewItem(over, i18n("Slots (Qt-specific)"));
         PListViewItem<ParsedClass*> *access = new PListViewItem<ParsedClass*>(myClass, access_view, myClass->name());
@@ -914,8 +926,9 @@ void CppNewClassDialog::selectall_button_clicked()
 
 void CppNewClassDialog::to_constructors_list_clicked()
 {
-    QString constructor_h = classname_edit->text();
-    QString constructor_cpp = classname_edit->text() + "::" + classname_edit->text();
+    QString templateAdd = templateStrFormatted().isEmpty() ? "" : templateStrFormatted() + "\n";
+    QString constructor_h = classNameFormatted();
+    QString constructor_cpp = templateAdd + classNameFormatted() + templateParamsFormatted() + "::" + classNameFormatted();
     constructor_h += "(";
     constructor_cpp += "(";
     QString params_h;
@@ -934,6 +947,11 @@ void CppNewClassDialog::to_constructors_list_clicked()
                 //fill the base classes list
                 base += base.isEmpty() ? ": " : ", ";
                 base += curr->parent()->text(0);
+                PCheckListItem<ParsedClass*> *p;
+                if ( (p = dynamic_cast<PCheckListItem<ParsedClass*>* >(curr->parent())) )
+                {
+                    base += p->templateAddition;
+                }
                 params_h += params_h.isEmpty() ? "" : ", ";
 
                 //fill arguments for both constructor and base class initializer
@@ -982,6 +1000,16 @@ void CppNewClassDialog::updateClassStore()
 bool CppNewClassDialog::ClassGenerator::validateInput()
 {
   className = dlg.classname_edit->text().simplifyWhiteSpace();
+  QString temp = className;
+  className.replace(QRegExp("template *<.*> *(class *)?"), "");
+  templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  templateStr.replace(QRegExp(" *class *$"), "");
+
+  templateParams = templateStr;
+  templateParams.replace(QRegExp("^ *template *"), "");
+  templateParams.replace(QRegExp(" *class *"), "");
+  templateParams.simplifyWhiteSpace();
+
   if (className.isEmpty()) {
     KMessageBox::error(&dlg, i18n("You must enter a classname."));
     return false;
@@ -1098,7 +1126,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
   }
   advConstructorsHeader.replace(QRegExp("[\\n ]*$"), QString::null);
   advConstructorsSource.replace(QRegExp("[\\n ]*$"), QString::null);
-  
+
   //advanced method overriding
 
   advH_public = QString::null;
@@ -1127,8 +1155,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
 
 //        if (advCpp.isNull()) advCpp += "\n\n";
 
-        genMethodDeclaration(curr->item(), className, adv_h, &advCpp,
-            (curr->text(1) == i18n("extend")) ? true : false, curr->parent()->parent()->text(0));
+        QString bcName = curr->parent()->parent()->text(0);
+        PListViewItem<ParsedClass*> *bc;
+        if ( (bc = dynamic_cast<PListViewItem<ParsedClass*>* >(curr->parent()->parent())) )
+        {
+            bcName += bc->templateAddition;
+        }
+        genMethodDeclaration(curr->item(), className, templateStr, adv_h, &advCpp,
+            (curr->text(1) == i18n("extend")) ? true : false, bcName);
       }
     }
     ++it;
@@ -1187,17 +1221,19 @@ void CppNewClassDialog::ClassGenerator::common_text()
 }
 
 void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *method,
-    QString className, QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName )
+    QString className, QString templateStr, QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName )
 {
 /*    if ((*adv_h).isNull())
         *adv_h += "\n\n";*/
     QString methodName = method->name();
     if (!methodName.contains(QRegExp("^[a-zA-z_]")))
-	methodName = "operator" + methodName;
+        methodName = "operator" + methodName;
     *adv_h += "    " + (method->isVirtual() ? QString("virtual ") : QString(""))
-	+ (method->isStatic() ? QString("static ") : QString(""))
-	+ method->type() + " " + methodName + "(";
-    *adv_cpp += method->type() + " " + className + "::" + methodName + "(";
+        + (method->isStatic() ? QString("static ") : QString(""))
+        + method->type() + " " + methodName + "(";
+    if (!templateStr.isEmpty())
+        *adv_cpp += templateStr + "\n";
+    *adv_cpp += method->type() + " " + className + templateParams + "::" + methodName + "(";
 
     ParsedArgument *arg;
     QString bparams;
@@ -1241,6 +1277,12 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
     else
       classImpl = FileTemplate::read(dlg.m_part, "cpp");
   }
+  QFileInfo fi(implementationPath);
+  QString module = fi.baseName();
+  QString basefilename = fi.baseName(true);
+  classImpl.replace(QRegExp("\\$MODULE\\$"),module);
+  classImpl.replace(QRegExp("\\$FILENAME\\$"),basefilename);
+
   if (objc) {
     classImpl += dlg.gen_config->objcSource();
   } else if (gtk)
@@ -1268,13 +1310,13 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   QString relPath;
   for (int i = implementation.findRev('/'); i != -1; i = implementation.findRev('/', --i))
     relPath += "../";
-  
-  QString constructors = (advConstructorsSource.isNull() ? QString("$CLASSNAME$::$CLASSNAME$($ARGS$)\n"
+
+  QString constructors = (advConstructorsSource.isNull() ? QString("$TEMPLATESTR$\n$CLASSNAME$$TEMPLATEPARAMS$::$CLASSNAME$($ARGS$)\n"
     "$BASEINITIALIZER$"
     "{\n"
     "}") : advConstructorsSource)
     + QString("\n\n\n"
-        "$CLASSNAME$::~$CLASSNAME$()\n"
+        "$TEMPLATESTR$\n$CLASSNAME$$TEMPLATEPARAMS$::~$CLASSNAME$()\n"
         "{\n"
         "}\n");
 
@@ -1323,13 +1365,24 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
   constructors.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
   constructors.replace(QRegExp("\\$CLASSNAME\\$"), className);
+  if (templateStr.isEmpty())
+  {
+    constructors.replace(QRegExp("\\$TEMPLATESTR\\$\\n"), "");
+    constructors.replace(QRegExp("\\$TEMPLATEPARAMS\\$"), "");
+  }
+  else
+  {
+    constructors.replace(QRegExp("\\$TEMPLATESTR\\$"), templateStr);
+    constructors.replace(QRegExp("\\$TEMPLATEPARAMS\\$"), templateParams);
+    classImpl.replace(QRegExp("#include \"\\$HEADER\\$\"\\n"), "");
+  }
   constructors.replace(QRegExp("\\$ARGS\\$"), argsCpp);
 
-  
+
   //remove unnesessary carriadge returns
   QString hp = relPath+header;
   beautifySource(classImpl, hp, className, namespaceBeg, constructors, advCpp, namespaceEnd, implementation);
-    
+
   classImpl.replace(QRegExp("\\$HEADER\\$"), relPath+header);
   classImpl.replace(QRegExp("\\$CLASSNAME\\$"), className);
   classImpl.replace(QRegExp("\\$NAMESPACEBEG\\$"), namespaceBeg);
@@ -1341,9 +1394,8 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   if (dlg.gen_config->reformat_box->isChecked())
   {
     KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
-    if (fmt == 0)
-        qWarning("boo");
-    classImpl = fmt->formatSource(classImpl);
+    if (fmt)
+        classImpl = fmt->formatSource(classImpl);
   }
 
   kdDebug(9007) << "implementationPath = " << implementationPath << endl;
@@ -1371,6 +1423,11 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     else
       classIntf  = FileTemplate::read(dlg.m_part, "h");
   }
+  QFileInfo fi(headerPath);
+  QString module = fi.baseName();
+  QString basefilename = fi.baseName(true);
+  classIntf.replace(QRegExp("\\$MODULE\\$"),module);
+  classIntf.replace(QRegExp("\\$FILENAME\\$"),basefilename);
 
   if (objc) {
     classIntf += dlg.gen_config->objcHeader();
@@ -1500,16 +1557,17 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   if (dlg.baseclasses_view->childCount() > 0)
     baseclass = dlg.baseclasses_view->firstChild()->text(0);
   //remove unnesessary carriadge returns
-  beautifyHeader(classIntf, headerGuard, includeBaseHeader, author, doc, className,
+  beautifyHeader(classIntf, headerGuard, includeBaseHeader, author, doc, className, templateStr,
         baseclass, inheritance, qobjectStr, argsH,
         header, namespaceBeg, constructors, advH_public, advH_public_slots,
         advH_protected, advH_protected_slots, advH_private, advH_private_slots, namespaceEnd);
-    
-    
+
+
   classIntf.replace(QRegExp("\\$HEADERGUARD\\$"), headerGuard);
   classIntf.replace(QRegExp("\\$INCLUDEBASEHEADER\\$"), includeBaseHeader);
   classIntf.replace(QRegExp("\\$AUTHOR\\$"), author);
   classIntf.replace(QRegExp("\\$DOC\\$"), doc);
+  classIntf.replace(QRegExp("\\$TEMPLATE\\$"), templateStr);
   classIntf.replace(QRegExp("\\$CLASSNAME\\$"), className);
   if (dlg.baseclasses_view->childCount() > 0)
     classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
@@ -1527,10 +1585,14 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   classIntf.replace(QRegExp("\\$PRIVATESLOTS\\$"), QString("private slots:\n") + advH_private_slots);
   classIntf.replace(QRegExp("\\$NAMESPACEEND\\$"), namespaceEnd);
 
+  if (!templateStr.isEmpty())
+    classIntf.replace(QRegExp("#endif"), "#include \"" + dlg.implementation_edit->text() + "\"\n\n#endif");
+
   if (dlg.gen_config->reformat_box->isChecked())
   {
     KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
-    classIntf = fmt->formatSource(classIntf);
+    if (fmt)
+        classIntf = fmt->formatSource(classIntf);
   }
 
   QFile hfile(headerPath);
@@ -1559,10 +1621,10 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 }
 
 void CppNewClassDialog::ClassGenerator::beautifyHeader(QString &templ, QString &headerGuard,
-    QString &includeBaseHeader, QString &author, QString &doc, QString &className,
+    QString &includeBaseHeader, QString &author, QString &doc, QString &className, QString &templateStr,
     QString &baseclass, QString &inheritance, QString &qobjectStr, QString &args,
     QString &header, QString &namespaceBeg, QString &constructors, QString &advH_public, QString &advH_public_slots,
-    QString &advH_protected, QString &advH_protected_slots, QString &advH_private, QString &advH_private_slots, 
+    QString &advH_protected, QString &advH_protected_slots, QString &advH_private, QString &advH_private_slots,
     QString &namespaceEnd)
 {
     if (headerGuard.isEmpty())
@@ -1575,6 +1637,8 @@ void CppNewClassDialog::ClassGenerator::beautifyHeader(QString &templ, QString &
         templ.replace(QRegExp("\\$DOC\\$[\\n ]*"), QString::null);
     if (className.isEmpty())
         templ.replace(QRegExp("\\$CLASSNAME\\$[\\n ]*"), QString::null);
+    if (templateStr.isEmpty())
+        templ.replace(QRegExp("\\$TEMPLATE\\$[\\n ]*"), QString::null);
     if (baseclass.isEmpty())
         templ.replace(QRegExp("\\$BASECLASS\\$[\\n ]*"), QString::null);
     if (inheritance.isEmpty())
@@ -1623,6 +1687,68 @@ void CppNewClassDialog::ClassGenerator::beautifySource(QString &templ, QString &
         templ.replace(QRegExp("\\$NAMESPACEEND\\$[\\n ]*"), QString::null);
     if (implementation.isEmpty())
         templ.replace(QRegExp("\\$FILENAME\\$[\\n ]*"), QString::null);
+}
+
+QString CppNewClassDialog::classNameFormatted( )
+{
+    return classNameFormatted(classname_edit->text());
+}
+
+QString CppNewClassDialog::classNameFormatted(const QString &name )
+{
+  QString temp = name.simplifyWhiteSpace();
+  return temp.replace(QRegExp("template *<.*> *(class *)?"), "");
+}
+
+
+QString CppNewClassDialog::templateStrFormatted( )
+{
+  return templateStrFormatted(classname_edit->text());
+}
+
+QString CppNewClassDialog::templateStrFormatted(const QString &name )
+{
+  QString className = name.simplifyWhiteSpace();
+  QString temp = className;
+  className.replace(QRegExp("template *<.*> *(class *)?"), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  templateStr.replace(QRegExp(" *class *$"), "");
+  return templateStr;
+}
+
+QString CppNewClassDialog::templateParamsFormatted( )
+{
+  return templateParamsFormatted( classname_edit->text() );
+}
+
+QString CppNewClassDialog::templateParamsFormatted( const QString &name )
+{
+  QString className = name.simplifyWhiteSpace();
+  QString temp = className;
+  className.replace(QRegExp("template *<.*> *(class *)?"), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  templateStr.replace(QRegExp(" *class *$"), "");
+
+  QString templateParams = templateStr;
+  templateParams.replace(QRegExp("^ *template *"), "");
+  templateParams.replace(QRegExp(" *class *"), "");
+  templateParams.simplifyWhiteSpace();
+
+  return templateParams;
+}
+
+QString CppNewClassDialog::templateActualParamsFormatted( const QString & name)
+{
+  QString className = name.simplifyWhiteSpace();
+  QString temp = className;
+  className.replace(QRegExp("<.*> *"), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  return templateStr;
+}
+
+void CppNewClassDialog::removeTemplateParams( QString & name)
+{
+  name.replace(QRegExp("<.*> *"), "");
 }
 
 #include "cppnewclassdlg.moc"
