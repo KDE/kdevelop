@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CheckoutDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>651</width>
-            <height>466</height>
+            <width>486</width>
+            <height>470</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -43,7 +43,7 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Local destination &amp;directory:</string>
+                        <string>&amp;Local destination directory:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>workDirEdit</cstring>
@@ -62,33 +62,12 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="QComboBox" row="1" column="1">
                             <property name="name">
-                                <cstring>textLabel1</cstring>
+                                <cstring>serverPaths</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>CVS_&amp;RSH:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>cvsRshEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="0">
-                            <property name="name">
-                                <cstring>cvsRshEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>serverPathLineEdit</cstring>
+                            <property name="editable">
+                                <bool>true</bool>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="1">
@@ -239,7 +218,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Comment</string>
+                            <string>Real path</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -319,19 +298,18 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <tabstops>
-    <tabstop>cvsRshEdit</tabstop>
-    <tabstop>serverPathLineEdit</tabstop>
+    <tabstop>workURLRequester</tabstop>
+    <tabstop>serverPaths</tabstop>
     <tabstop>moduleEdit</tabstop>
     <tabstop>tagEdit</tabstop>
-    <tabstop>pruneDirsCheck</tabstop>
     <tabstop>modulesListView</tabstop>
+    <tabstop>pruneDirsCheck</tabstop>
     <tabstop>fetchModulesButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>

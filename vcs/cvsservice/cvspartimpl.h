@@ -78,8 +78,9 @@ public:
     /**
     * Do checkout of module from some remote directory. Requested data will be
     * collected here.
+	* @return true if the operation was successful
     */
-    virtual void checkout();
+    virtual bool checkout();
     /**
     * Commit the specified files (as KURL) to repository.
     * @param urlList

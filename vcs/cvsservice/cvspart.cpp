@@ -114,9 +114,8 @@ void CvsServicePart::init()
 {
     setupActions();
 
-    // Here we change the implementation
-    /// \FIXME factory pattern here? :-/
     m_impl = new CvsServicePartImpl( this );
+    // Re-route our implementation signal for when check-out finishes to the standard signal
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
 
     // Load / store project configuration every time project is opened/closed
@@ -218,8 +217,7 @@ void CvsServicePart::setupActions()
 
 bool CvsServicePart::fetchFromRepository()
 {
-    m_impl->checkout();
-    return true;
+    return m_impl->checkout();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -13,6 +13,8 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 #include <klistview.h>
 #include <kurlrequester.h>
@@ -21,6 +23,7 @@
 #include <kfiledialog.h>
 #include <kcursor.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include <dcopref.h>
 #include <cvsjob_stub.h>
@@ -82,6 +85,14 @@ CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
     // Avoid displaying 'file:/' when displaying the file
     m_base->workURLRequester->setShowLocalProtocol( false );
     m_base->workURLRequester->setMode( KFile::Directory );
+
+	// Grab the entries from $HOME/.cvspass
+	fetchUserCvsRepositories();
+	// And suggest to use the default projects dir set in KDevelop's preferences
+    KConfig *config = kapp->config();
+	config->setGroup("General Options");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+	setWorkDir( defaultProjectsDir );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,23 +104,16 @@ CheckoutDialog::~CheckoutDialog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString CheckoutDialog::cvsRsh() const
-{
-    return m_base->cvsRshEdit->text();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 QString CheckoutDialog::serverPath() const
 {
-    return m_base->serverPathLineEdit->text();
+	return m_base->serverPaths->currentText();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CheckoutDialog::setServerPath( const QString &aPath )
+void CheckoutDialog::fillServerPaths( const QStringList &serverPaths )
 {
-    m_base->serverPathLineEdit->setText( aPath );
+    m_base->serverPaths->insertStringList( serverPaths );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,9 +178,9 @@ void CheckoutDialog::slotFetchModulesList()
 
 void CheckoutDialog::slotJobExited( bool /*normalExit*/, int /*exitStatus*/ )
 {
-    kdDebug(9000) << "CheckoutDialog::slotModulesListFetched() here!" << endl;
+    kdDebug(9006) << "CheckoutDialog::slotModulesListFetched() here!" << endl;
 
-    kdDebug(9000) << "Received: " << m_job->output().join( "\n" ) << endl;
+    kdDebug(9006) << "Received: " << m_job->output().join( "\n" ) << endl;
 
 //    m_base->modulesListView->insertStringList( m_job->output() );
 }
@@ -185,7 +189,7 @@ void CheckoutDialog::slotJobExited( bool /*normalExit*/, int /*exitStatus*/ )
 
 void CheckoutDialog::slotReceivedOutput( QString someOutput )
 {
-    kdDebug( 9000 ) << " Received output: " << someOutput << endl;
+    kdDebug( 9006 ) << " Received output: " << someOutput << endl;
 
     setCursor( KCursor::arrowCursor() );
 
@@ -206,20 +210,66 @@ void CheckoutDialog::slotReceivedOutput( QString someOutput )
 
 void CheckoutDialog::slotReceivedErrors( QString someErrors )
 {
-    kdDebug( 9000 ) << " Received errors: " << someErrors << endl;
+	kdDebug( 9006 ) << " Received errors: " << someErrors << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CheckoutDialog::slotModuleSelected( QListViewItem * )
 {
-    ModuleListViewItem *aModuleItem = static_cast<ModuleListViewItem*>(
-        m_base->modulesListView->selectedItem()
-    );
-    if (!aModuleItem)
-        return;
+	ModuleListViewItem *aModuleItem = static_cast<ModuleListViewItem*>(
+		m_base->modulesListView->selectedItem()
+	);
+	if (!aModuleItem)
+		return;
 
-    m_base->moduleEdit->setText( aModuleItem->alias() );
+	m_base->moduleEdit->setText( aModuleItem->alias() );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::fetchUserCvsRepositories()
+{
+	QStringList repositories;
+
+	QFile cvspass( QDir::homeDirPath() + QDir::separator() + ".cvspass" );
+	if (!cvspass.open( IO_ReadOnly ))
+		return;
+	QByteArray data = cvspass.readAll();
+	cvspass.close();
+
+	QTextIStream istream( data );
+	// Entries are like:
+	// /1 :pserver:marios@cvs.kde.org:2401/home/kde Ahz:UIK?=d ?
+	// /1 :pserver:mario@xamel:2401/home/cvsroot aJT_d'K?=d ?
+	while (!istream.eof()) {
+		QString line = istream.readLine();
+		QStringList lineElements = QStringList::split( " ", line );
+		if (lineElements.count() > 1) {
+			repositories << lineElements[ 1 ];
+		}
+	}
+
+	fillServerPaths( repositories );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::slotOk()
+{
+	QString errorMessage = QString::null;
+
+	if (!(workDir().length() > 0) && QFile::exists( workDir() ))
+		errorMessage = i18n( "Please, choose a valid working directory" );
+	else if (!(serverPath().length() > 0))
+		errorMessage = i18n( "Please, choose a CVS server." );
+	else if (!(module().length() > 0))
+		errorMessage = i18n( "Please, fill the CVS module field." );
+
+	if (errorMessage.isNull())
+		KDialogBase::slotOk();
+	else
+		KMessageBox::error( 0, errorMessage );
 }
 
 

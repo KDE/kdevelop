@@ -353,7 +353,7 @@ void CvsServicePartImpl::logout()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServicePartImpl::checkout()
+bool CvsServicePartImpl::checkout()
 {
     kdDebug() << "CvsServicePartImpl::checkout()" << endl;
 
@@ -364,18 +364,19 @@ void CvsServicePartImpl::checkout()
         DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),
             dlg.module(), dlg.tag(), dlg.pruneDirs()
         );
-        if (!m_cvsService->ok())
-        {
+        if (!m_cvsService->ok()) {
             KMessageBox::sorry( mainWindow()->main(), i18n( "Unable to checkout" ) );
-            return;
-        }
-        // Save the path for later retrieval since slotCheckoutFinished(bool,int)
-        // will use it for return the info to the caller.
-        modulePath = dlg.workDir() + QDir::separator() + dlg.module();
+        } else {
+        	// Save the path for later retrieval since slotCheckoutFinished(bool,int)
+        	// will use it for return the info to the caller.
+			modulePath = dlg.workDir() + dlg.module();
 
-        m_scheduler->schedule( job );
-        connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotCheckoutFinished(bool,int)) );
+        	m_scheduler->schedule( job );
+        	connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotCheckoutFinished(bool,int)) );
+			return true;
+		}
     }
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -392,10 +393,10 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
     if (dlg.exec() == QDialog::Rejected)
         return;
 
-//    CvsOptions *options = CvsOptions::instance();
+    CvsOptions *options = CvsOptions::instance();
     QString logString = dlg.logMessage().join( "\n" );
 
-    DCOPRef cvsJob = m_cvsService->commit( fileList(), logString, false );
+    DCOPRef cvsJob = m_cvsService->commit( fileList(), logString, options->recursiveWhenCommitRemove() );
     if (!m_cvsService->ok())
     {
         kdDebug( 9006 ) << "Commit of " << fileList().join( ", " ) << " failed!!!" << endl;
@@ -634,8 +635,15 @@ void CvsServicePartImpl::createNewProject( const QString &dirName,
     CvsOptions *options = CvsOptions::instance();
     options->setCvsRshEnvVar( cvsRsh );
     options->setLocation( location );
+/*
+	//virtual DCOPRef import( const QString& workingDir, const QString& repository, const QString& module, const QString& ignoreList, const QString& comment, const
+    QString filesToIgnore;
+	DCOPRef cvsJob = m_cvsService->import( dirName, location, module, filesToIgnore, message, vendor, release, false );
 
-    QString rsh_preamble;
+    m_scheduler->schedule( cvsJob );
+    connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotCheckoutFinished(bool,int)) );
+*/
+	QString rsh_preamble;
     if ( !options->cvsRshEnvVar().isEmpty() )
         rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->cvsRshEnvVar() );
 
@@ -851,7 +859,7 @@ void CvsServicePartImpl::slotCheckoutFinished( bool exitStatus, int )
     kdDebug() << "CvsServicePartImpl::slotCheckoutFinished(): job ended with status == "
         << exitStatus << endl;
     // Return a null string if the operation was not succesfull
-    if (exitStatus)
+    if (!exitStatus)
         modulePath = QString::null;
 
     kdDebug() << "   I'll emit modulePath == " << modulePath << endl;
@@ -861,7 +869,7 @@ void CvsServicePartImpl::slotCheckoutFinished( bool exitStatus, int )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServicePartImpl::slotJobFinished( bool exitStatus, int exitCode )
+void CvsServicePartImpl::slotJobFinished( bool /*exitStatus*/, int exitCode )
 {
     // Return a null string if the operation was not succesfull
     kdDebug() << "CvsServicePartImpl::slotJobFinished(): job ended with code == "

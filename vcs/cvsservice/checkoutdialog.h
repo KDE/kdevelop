@@ -19,6 +19,7 @@ class CvsService_stub;
 class CvsJob_stub;
 class CheckoutDialogBase;
 class QListViewItem;
+//class QStringList;
 
 /**
 * This dialog widget will collect all useful informazion about the module the
@@ -34,24 +35,22 @@ public:
         const char *name = 0, WFlags f = 0 );
     virtual ~CheckoutDialog();
 
-    /**
-    * @return the value which will be used for setting $CVS_RSH env variable
-    */
-    QString cvsRsh() const;
+	virtual void slotOk();
+
     /**
     * @return a server path string (i.e. :pserver:marios@cvs.kde.org:/home/kde)
     */
     QString serverPath() const;
     /**
-    * @param aPath a valid path string for "cvs -d" option
+    * @param serverPaths a list of server location to use when filling the widget
     */
-    void setServerPath( const QString &aPath );
+	void fillServerPaths( const QStringList &serverPaths );
     /**
     * @return the directory which the user has fetched the module in
     */
     QString workDir() const;
     /**
-    * @param aDir directory which fetched modules will be put in
+    * @param aDir directory which fetched modules will be put in (ending with '/')
     */
     void setWorkDir( const QString &aDir );
     /**
@@ -76,6 +75,12 @@ private slots:
     virtual void slotReceivedErrors( QString someErrors );
 
 private:
+	/**
+	 * Retrives the known servers from $HOME/.cvspass file
+	 * @return a list of server locations (:pserver:user@server.somewhere:/cvsroot)
+	 */
+	void fetchUserCvsRepositories();
+
     CvsService_stub *m_service;
     CvsJob_stub *m_job;
 
