@@ -1,6 +1,10 @@
+2003-08-26 Harald Fernengel <harry@kdevelop.org>
+    * Added version information for plugins to prevent opening
+      binary incompatible plugins from old versions.
+
 2003-08-10 jbb <jbb@kdevelop.org>
     * Roger Larsson's patch that adds remote debugging.
-    
+
 2003-08-03 jbb <jbb@kdevelop.org>
     * fixes for debugger startup problems
     * fixes for debugger shutdown
