@@ -56,4 +56,4 @@ Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevreplace
-X-KDevelop-Version=1
+X-KDevelop-Version=2

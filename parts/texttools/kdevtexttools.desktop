@@ -53,5 +53,5 @@ GenericName[xx]=xxText Structurexx
 GenericName[zh_CN]=文件结构
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtexttools
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global

@@ -57,4 +57,4 @@ GenericName[zh_CN]=应用程序向导
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevappwizard
 X-KDevelop-Scope=Core
-X-KDevelop-Version=1
+X-KDevelop-Version=2

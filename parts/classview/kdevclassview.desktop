@@ -54,5 +54,5 @@ GenericName[xx]=xxClass Viewxx
 GenericName[zh_CN]=类查看器
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevclassview
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Project

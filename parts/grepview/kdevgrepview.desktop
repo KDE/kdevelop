@@ -56,5 +56,5 @@ GenericName[zh_CN]=Grep前端
 Icon=find
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevgrepview
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global

@@ -57,6 +57,6 @@ GenericName[zh_CN]=用户界面选择
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevuichooser
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Core
 X-KDevelop-Mode=AssistantMode

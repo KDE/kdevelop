@@ -58,4 +58,4 @@ Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Core
 X-KDE-Library=libkdevfullscreen
-X-KDevelop-Version=1
+X-KDevelop-Version=2

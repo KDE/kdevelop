@@ -49,4 +49,4 @@ GenericName[zh_CN]=文件创建
 Icon=kdevelop
 ServiceTypes=KDevelop/CreateFile
 X-KDE-Library=libkdevfilecreate
-X-KDevelop-Version=1
+X-KDevelop-Version=2

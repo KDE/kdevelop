@@ -55,6 +55,6 @@ GenericName[xx]=xxShell Filtering and Insertionxx
 GenericName[zh_CN]=Shell过滤和插入
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevfilter
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global
 

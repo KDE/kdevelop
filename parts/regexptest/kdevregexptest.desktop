@@ -53,6 +53,6 @@ GenericName[xx]=xxRegular Expression Testerxx
 GenericName[zh_CN]=正则表达式测试
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global
 

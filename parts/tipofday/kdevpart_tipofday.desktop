@@ -56,5 +56,5 @@ GenericName[zh_CN]=日积月累
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtipofday
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Core

@@ -55,4 +55,4 @@ GenericName[zh_CN]=源代码格式化
 Icon=kdevelop
 ServiceTypes=KDevelop/SourceFormatter
 X-KDE-Library=libkdevastyle
-X-KDevelop-Version=1
+X-KDevelop-Version=2

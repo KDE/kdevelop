@@ -55,6 +55,6 @@ GenericName[xx]=xxAbbreviation Expansionxx
 GenericName[zh_CN]=缩写扩展
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevabbrev
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global
 

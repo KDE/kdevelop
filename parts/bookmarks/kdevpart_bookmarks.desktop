@@ -57,4 +57,4 @@ Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Project
 X-KDE-Library=libkdevbookmarks
-X-KDevelop-Version=1
+X-KDevelop-Version=2

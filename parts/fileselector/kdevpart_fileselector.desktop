@@ -57,6 +57,6 @@ GenericName[zh_CN]=文件选择器
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevfileselector
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Global
 X-KDevelop-Mode=AssistantMode

@@ -32,4 +32,4 @@ Name[sv]=Kchm-del
 Name[xx]=xxKChmPartxx
 ServiceTypes=KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkchmpart
-X-KDevelop-Version=1
+X-KDevelop-Version=2
