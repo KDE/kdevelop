@@ -388,9 +388,7 @@ void  CDocBrowser::urlSelected ( const QString &url, int button, int state, cons
 void  CDocBrowser::urlSelected ( const QString &url, int button, int state, const QString &_target, KParts::URLArgs args)
 {
   KHTMLPart::urlSelected (url, button, state,_target, args);
-
-  KURL cURL = completeURL( url );
-  showURL( cURL.url() ) ;
+  showURL( KURL(baseURL(),url).url() );
 }
 #endif
 
