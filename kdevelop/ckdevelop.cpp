@@ -314,11 +314,20 @@ void CKDevelop::slotFileSaveAll(){
 void CKDevelop::slotFilePrint(){
   QString file;
   slotFileSave();
-  file = edit_widget->getName();
-  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
-  printerdlg->resize(600,480);
-  printerdlg->exec(); 
-  delete (printerdlg);
+/*  if (s_tab_view->getCurrentTab() == BROWSER) {
+  	file = browser_widget->currentURL();
+  	CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus", TRUE);
+  	printerdlg->resize(600,480);
+	  printerdlg->exec();
+  	delete (printerdlg);
+  }
+  else { */
+	  file = edit_widget->getName();
+	  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
+	  printerdlg->resize(600,480);
+	  printerdlg->exec();
+  	delete (printerdlg);
+//	}
 }
 
 void CKDevelop::slotFileQuit(){
@@ -2203,206 +2212,3 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

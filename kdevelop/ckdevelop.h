@@ -568,7 +568,7 @@ private:
   
   
   KIconLoader icon_loader;
-  KProcess process; // for tools,compiler,make,kodc
+  KShellProcess process; // for tools,compiler,make,kodc
   KShellProcess appl_process; //only for selfmade appl
   KShellProcess shell_process; // for kdoc,sgmltools ...
   KShellProcess search_process; // search with glimpse

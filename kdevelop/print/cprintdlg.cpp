@@ -29,14 +29,18 @@
 #include <kmsgbox.h>
 #include "../cproject.h"
 #include <kquickhelp.h>
+#include "../cdocbrowser.h"
+#include "../resource.h"
+#include "../ckdevelop.h"
 
-CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDialog(parent, name, true){
+CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) : QDialog(parent, name, true){
   init();
   loadSettings();
   string = "";
   globalpara = "";
-  oldfiles = (QString) edittab;
+	oldfiles = (QString) edittab;
   files = createFileString();
+  doctab = html;
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -1153,56 +1157,63 @@ void CPrintDlg::slotOkClicked() {
     QString dir="";
     QString data1,data2;
     QString text="";
-    process = new KShellProcess();
-    if (programCombBox->currentItem()==1) {
-      //  process = new KShellProcess();
-      if (printToFileButton->isChecked()) {
-	dir =  printToFileLine->text();
-	text = (QString) " --output="+ dir;
-	settings = kapp->getConfig();
-	settings->setGroup("LastSettings");
-	globalpara = settings->readEntry("EnscriptSettings");
-	slotCreateParameters();
-	*process << "enscript " + string + text + " " + files;
-	process->start(KProcess::Block,KProcess::AllOutput);
-      }
-      else {
-	settings = kapp->getConfig();
-	settings->setGroup("LastSettings");
-	globalpara = settings->readEntry("EnscriptSettings");
-	slotCreateParameters();
-	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	  *process << "enscript " + string + " " + files;
-	  process->start(KProcess::Block,KProcess::AllOutput);
-	}
-      }
+/*    if (doctab) {
+    	KHTMLView htmlPage;
+    	htmlPage.openURL (oldfiles);
+    	htmlPage.print();
     }
-    else if (programCombBox->currentItem()==0) {
-      settings = kapp->getConfig();
-      settings->setGroup("LastSettings");
-      globalpara = settings->readEntry("A2psSettings");
-      slotCreateParameters();
-      if (printToFileButton->isChecked()) {
-	dir =  printToFileLine->text();
-	*process << "a2ps -nP " + string + " " + files + " >" + dir;
-	process->start(KProcess::Block,KProcess::AllOutput);
-      }
-      else {
-	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	  *process << "a2ps " + string + " " + files;
-	  process->start(KProcess::Block,KProcess::AllOutput);
-	}
-      }
+    else { */
+	    process = new KShellProcess();
+  	  if (programCombBox->currentItem()==1) {
+    	  //  process = new KShellProcess();
+      	if (printToFileButton->isChecked()) {
+					dir =  printToFileLine->text();
+					text = (QString) " --output="+ dir;
+					settings = kapp->getConfig();
+					settings->setGroup("LastSettings");
+					globalpara = settings->readEntry("EnscriptSettings");
+					slotCreateParameters();
+					*process << "enscript " + string + text + " " + files;
+					process->start(KProcess::Block,KProcess::AllOutput);
+    	  }
+      	else {
+					settings = kapp->getConfig();
+					settings->setGroup("LastSettings");
+					globalpara = settings->readEntry("EnscriptSettings");
+					slotCreateParameters();
+					for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
+					  *process << "enscript " + string + " " + files;
+				  	process->start(KProcess::Block,KProcess::AllOutput);
+					}
+  	    }
+    	}
+	    if (programCombBox->currentItem()==0) {
+  	    settings = kapp->getConfig();
+    	  settings->setGroup("LastSettings");
+      	globalpara = settings->readEntry("A2psSettings");
+	      slotCreateParameters();
+  	    if (printToFileButton->isChecked()) {
+					dir =  printToFileLine->text();
+					*process << "a2ps -nP " + string + " " + files + " >" + dir;
+					process->start(KProcess::Block,KProcess::AllOutput);
+	      }
+  	    else {
+					for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
+				  *process << "a2ps " + string + " " + files;
+				  process->start(KProcess::Block,KProcess::AllOutput);
+					}
+    	  }
+	    }
+  	  else {
+    	  for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
+				*process << "lpr " + string + " " + files;
+				process->start(KProcess::Block,KProcess::AllOutput);
+  	    }
+    	}
+	    delete (process);
+  	  reject();
     }
-    else {
-      for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	*process << "lpr " + string + " " + files;
-	process->start(KProcess::Block,KProcess::AllOutput);
-      }
-    }
-    delete (process);
-    reject();
-  }
+ // }
 }
 
 QString CPrintDlg::createFileString() {
@@ -1300,6 +1311,18 @@ void CPrintDlg::loadSettings() {
   formatCombBox->setCurrentItem(settings->readNumEntry("OutputFormat"));
   defaultCombBox->setCurrentItem(settings->readNumEntry("Default"));
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
