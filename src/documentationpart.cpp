@@ -17,6 +17,16 @@
 
 #include "documentationpart.h"
 
+struct DocumentationHistoryEntry {
+    KURL url;
+	int id;
+	
+	DocumentationHistoryEntry() {}
+    DocumentationHistoryEntry( const KURL& u ): url( u ) 
+	{
+		id = abs( QTime::currentTime().msecsTo( QTime() ) );	// nasty, but should provide a reasonably unique number
+	}
+};
 
 DocumentationPart::DocumentationPart()
   : KHTMLPart(0L, 0L, 0L, "DocumentationPart", BrowserViewGUI )
@@ -43,6 +53,37 @@ DocumentationPart::DocumentationPart()
   printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
+
+//BEGIN documentation history stuff  
+    
+  m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
+    this, SLOT(slotBack()),
+    actions, "browser_back");
+  m_backAction->setEnabled( false );
+  m_backAction->setToolTip(i18n("Back"));
+  m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the <b>documentation</b> browsing history."));
+
+  connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
+         this, SLOT(slotBackAboutToShow()));
+  connect(m_backAction->popupMenu(), SIGNAL(activated(int)),
+         this, SLOT(slotPopupActivated(int)));
+
+  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0,
+    this, SLOT(slotForward()),
+    actions, "browser_forward");
+  m_forwardAction->setEnabled( false );
+  m_forwardAction->setToolTip(i18n("Forward"));
+  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the <b>documentation</b> browsing history."));
+
+  connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
+         this, SLOT(slotForwardAboutToShow()));
+  connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
+         this, SLOT(slotPopupActivated(int)));
+  
+  m_restoring = false;
+  m_Current = m_history.end();
+//END documentation history stuff  
+  
 }
 
 void DocumentationPart::popup( const QString & url, const QPoint & p )
@@ -108,7 +149,7 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
     KURL kurl (DocumentationPart::url().upURL());
     kurl.addPath(url);
     if (kurl.isValid())
-        PartController::getInstance()->showDocument(kurl, url);
+      openURL( kurl );
   }
 }
 
@@ -280,19 +321,28 @@ bool DocumentationPart::openURL(const KURL &url)
   
   bool retval = KHTMLPart::openURL(newUrl);
   if ( retval )
+  {
     emit fileNameChanged();
-
+	if ( !m_restoring ) 
+	{
+		addHistoryEntry();
+	}
+  }
+  
+  m_backAction->setEnabled( m_Current != m_history.begin() );
+  m_forwardAction->setEnabled( m_Current != m_history.fromLast() );
+  
   return retval;
 }
 
 void DocumentationPart::openURLRequest(const KURL &url)
 {
-  PartController::getInstance()->showDocument(url, context());
+	openURL( url );
 }
 
 void DocumentationPart::slotReload( )
 {
-    PartController::getInstance()->showDocument(url(), m_context);
+	openURL( url() );
 }
 
 void DocumentationPart::slotStop( )
@@ -323,6 +373,118 @@ void DocumentationPart::slotDuplicate( )
 void DocumentationPart::slotPrint( )
 {
     view()->print();
+}
+
+void DocumentationPart::slotBack()
+{
+	if ( m_Current != m_history.begin() )
+	{
+		--m_Current;
+		m_restoring = true;
+		openURL( (*m_Current).url );
+		m_restoring = false;
+	}
+}
+
+void DocumentationPart::slotForward()
+{
+	if (  m_Current != m_history.fromLast() )
+	{
+		++m_Current;
+		m_restoring = true;
+		openURL( (*m_Current).url );
+		m_restoring = false;
+	}
+}
+
+void DocumentationPart::slotBackAboutToShow()
+{
+	KPopupMenu *popup = m_backAction->popupMenu();
+	popup->clear();
+
+	if ( m_Current == m_history.begin() ) return;
+
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	--it;
+	
+	int i = 0;
+	while( i < 10 )
+	{
+		if ( it == m_history.begin() )
+		{
+			popup->insertItem( (*it).url.url(), (*it).id );
+			return;
+		} 
+		
+		popup->insertItem( (*it).url.url(), (*it).id );
+		++i;
+		--it;
+	} 
+}
+
+void DocumentationPart::slotForwardAboutToShow()
+{
+	KPopupMenu *popup = m_forwardAction->popupMenu();
+	popup->clear();
+
+	if ( m_Current == m_history.fromLast() ) return;
+
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	++it;
+	
+	int i = 0;
+	while( i < 10 )
+	{
+		if ( it == m_history.fromLast() )
+		{
+			popup->insertItem( (*it).url.url(), (*it).id );
+			return;
+		} 
+		
+		popup->insertItem( (*it).url.url(), (*it).id );
+		++i;
+		++it;
+	} 
+}
+
+void DocumentationPart::slotPopupActivated( int id )
+{
+	kdDebug(9000) << "id: " << id << endl;
+
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
+	while( it != m_history.end() )
+	{
+		kdDebug(9000) << "(*it).id: " << (*it).id << endl;
+		if ( (*it).id == id )
+		{
+			m_Current = it;
+			m_restoring = true;
+			openURL( (*m_Current).url );
+			m_restoring = false;
+			return;
+		}
+		++it;
+	}
+}
+
+void DocumentationPart::addHistoryEntry()
+{
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	
+	// if We're not already the last entry, we truncate the list here before adding an entry
+	if ( it != m_history.end() && it != m_history.fromLast() )
+	{
+		m_history.erase( ++it, m_history.end() );
+	}
+	
+	DocumentationHistoryEntry newEntry( url() );
+		
+	// Only save the new entry if it is different from the last
+	if ( newEntry.url != (*m_Current).url )
+	{
+		m_history.append( newEntry );
+		m_Current = m_history.fromLast();
+	}
 }
 
 #include "documentationpart.moc"

@@ -5,6 +5,7 @@
 #include <khtml_part.h>
 
 class KAction;
+class DocumentationHistoryEntry;
 
 class DocumentationPart : public KHTMLPart
 {
@@ -36,7 +37,24 @@ private slots:
   void slotDuplicate();
   void slotPrint();
 
+	void slotBack();
+	void slotForward();
+	void slotBackAboutToShow();
+	void slotForwardAboutToShow();
+  
+	void slotPopupActivated( int id );
+	void addHistoryEntry();
+  
+  
 private:
+
+	QValueList< DocumentationHistoryEntry > m_history;
+	QValueList< DocumentationHistoryEntry >::Iterator m_Current;
+
+	KToolBarPopupAction* m_backAction;
+	KToolBarPopupAction* m_forwardAction;
+	
+	bool m_restoring;
 
   QString m_context;
   KAction *stopAction;
