@@ -486,7 +486,7 @@ typedef u_int32_t tsl_t;
 	int __one = 1;			\
 	int __r;			\
 	tsl_t *__l = (tsl);		\
-	asm volatile ("			\
+	__asm volatile ("			\
 0:					\
 	lwarx %0,0,%1;			\
 	cmpwi %0,0;			\
@@ -621,7 +621,7 @@ typedef unsigned char tsl_t;
 #define  MUTEX_SET(tsl) ({           \
 	register tsl_t *__l = (tsl);          \
 	int __r;              \
-	asm volatile("mov $1,%%rax; lock; xchgb %1,%%al; xor $1,%%rax"\
+	__asm volatile("mov $1,%%rax; lock; xchgb %1,%%al; xor $1,%%rax"\
 		: "=&a" (__r), "=m" (*__l)          \
 		: "1" (*__l)            \
 		);                \
