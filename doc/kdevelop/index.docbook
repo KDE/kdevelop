@@ -41,7 +41,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-02-11</date>
+  <date>2004-02-13</date>
   <releaseinfo>3.0.0</releaseinfo>
 
   <authorgroup>
@@ -213,7 +213,7 @@ The information in this chapter is meant as a quick reference for a head start o
 </itemizedlist>
 
 <itemizedlist>
-  <title>Projects</title>
+<title>Projects</title>
 
   <listitem>
     <formalpara id="nutshell-new-project">
@@ -235,11 +235,23 @@ The information in this chapter is meant as a quick reference for a head start o
 </itemizedlist>
 
 <itemizedlist>
-  <title><link linkend="automake-manager">&automanag;</link></title>
+<title>Compilation</title>
+  <listitem>
+    <formalpara id="nutshell-compilemsg-detail">
+    <title><link linkend="setup-main-compile">Missing detail in compilation messages</link></title>
+    <para>
+    If during compilations you miss some valuable information in the <guilabel>Messages Output View</guilabel> window, you may have selected a too low level of messages detail. Right click in the window and select another detail level from the menu which will pop up.
+    </para>
+    </formalpara>
+  </listitem>
+</itemizedlist>
+
+<itemizedlist>
+<title><link linkend="automake-manager">&automanag;</link></title>
+
     <listitem>
       <formalpara id="nutshell-new-project-file">
       <title>Create New Files in a Project</title>
-
       <para>
       Select the subproject in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Create New File...</guimenuitem>.
       </para>
@@ -1924,50 +1936,30 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 </screenshot>
 
 <para>
-We will discuss these configurations in a different order, split up into the main topics of <link linkend="setup-general">General Configuration</link>, <link linkend="setup-docu">Configuring the Documentation Tree</link>, and <link linkend="setup-advanced">Advanced Configuration</link> which will provide for a more intuitive reading. You may as well directly jump to a certain configuration selection through one of the following links.
+We will discuss these configurations in a different order, split up into the main topics of <link linkend="setup-general">General Configuration</link>, <link linkend="setup-docu">Configuring the Documentation Tree</link>, and <link linkend="setup-advanced">Advanced Configuration</link> which makes for a more intuitive reading.
 </para>
-
-<itemizedlist>
-  <listitem><para>
-  <link linkend="setup-main">General</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-plugins">Plugins</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-format">Source Formatter</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-ui">User Interface</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-editor">Editor</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-abbrev">Abbreviations</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-menu-standard">Tools Menu</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-menu-external">External Tools</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-snippets">Code Snippets</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-fileselector">File Selector</link>
-  </para></listitem>
-  <listitem><para>
-  <link linkend="setup-docu">Documentation Tree</link>
-  </para></listitem>
-</itemizedlist>
+<para>
+If you want directly look up a certain configuration item use one of the following links.
+</para>
+<simplelist>
+  <member><link linkend="setup-main">General</link></member>
+  <member><link linkend="setup-plugins">Plugins</link></member>
+  <member><link linkend="setup-format">Source Formatter</link></member>
+  <member><link linkend="setup-ui">User Interface</link></member>
+  <member><link linkend="setup-editor">Editor</link></member>
+  <member><link linkend="setup-abbrev">Abbreviations</link></member>
+  <member><link linkend="setup-menu-standard">Tools Menu</link></member>
+  <member><link linkend="setup-menu-external">External Tools</link></member>
+  <member><link linkend="setup-snippets">Code Snippets</link></member>
+  <member><link linkend="setup-fileselector">File Selector</link></member>
+  <member><link linkend="setup-docu">Documentation Tree</link></member>
+</simplelist>
 
 <sect1 id="setup-general">
 <title>General Configuration</title>
 
 <para>
-General configuration concerns more common tasks of tayloring &kdevelop; as there are:
+General configuration concerns the more common tasks of tayloring &kdevelop; as there are:
 </para>
 <itemizedlist>
   <listitem><para>
@@ -2001,7 +1993,7 @@ General configuration concerns more common tasks of tayloring &kdevelop; as ther
 <title>General Setup</title>
 
 <para>
-The <guilabel>General</guilabel> configuration dialog page allows you to define some basic &kdevelop; behaviour which seldom will change in your everyday work. This concerns:
+The <guilabel>General</guilabel> configuration dialog allows you to define some basic &kdevelop; behaviour which seldom will change in everyday work. This concerns:
 </para>
 <itemizedlist>
   <listitem>
@@ -2069,7 +2061,6 @@ Mark this checkbox if you want to continue to work with the last project you wor
 
 <formalpara id="setup-main-projects">
 <title>Default projects directory</title>
-
 <para>
 By default, &kdevelop; uses a common parent directory for all new projects. Enter the absolute path of this common directory in the box or select it from your directory structure. &kdevelop; will place the any new project here as a subdirectory.
 </para>
@@ -2079,64 +2070,339 @@ You may of course change the directory path of a new project at the time you set
 </para></note>
 
 <formalpara id="setup-main-messages-font">
-<title><guilabel>Messages Output View</guilabel> window font</title>
-
+<title>Messages Output View window font</title>
 <para>
+To select a font suitable for the <guilabel>Messages Output View</guilabel> window press the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
 </formalpara>
+<note><para>
+On first startup, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Messages Output View</guilabel> window font.
+</para></note>
 
 <formalpara id="setup-main-wrap">
 <title>Line wrapping</title>
-
 <para>
+By default, &kdevelop; will wrap long lines around in the <guilabel>Messages Output View</guilabel> window so that valuable information will not be easily overlooked. In some cases this will clutter long message lists. Remove the checkbox mark if you do not want the lines wrap around.
 </para>
 </formalpara>
+<tip><para>
+There is an alternative way to switch the line wrapping. Just right click in the <guilabel>Messages Output View</guilabel> window and mark/unmark the <guimenuitem>Line Wrapping</guimenuitem> entry in the menu which will pop up.
+</para></tip>
 
 <formalpara id="setup-main-navigation">
 <title>Directory navigation messages</title>
-
 <para>
+The <command>Make</command> tool usually will display messages like <quote>Entering directory</quote>, or <quote>Leaving directory</quote> when it switches the directories it currently works in. As this clutters the messages list in the <guilabel>Messages Output View</guilabel> window, &kdevelop; suppresses those messages by default. Mark the checkbox if you want to protocol which directories <command>Make</command> worked in.
 </para>
 </formalpara>
+<note><para>
+Changes in this setting effect the processing of new messages only. Old directory navigation messages will be kept visible when you switch this feature off.
+</para></note>
 
 <formalpara id="setup-main-compile">
 <title>Compiler output</title>
-
 <para>
+&kdevelop; preprocesses the messages the <guilabel>Messages Output View</guilabel> window receives during the build processes in order to filter superfluous information. You can control the level of detail &kdevelop; will display using the radio buttons in this field.
 </para>
 </formalpara>
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Very Short</guilabel></term>
+    <listitem><para>
+    Displays only warnings, errors, and the filenames which are compiled.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Short</guilabel></term>
+    <listitem><para>
+    Suppresses all compiler flags and formats the output to be more readable.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Full</guilabel></term>
+    <listitem><para>
+    Displays all output messages unmodified.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<tip><para>
+There is an alternative way to switch the compiler output detail. Just right click in the <guilabel>Messages Output View</guilabel> window and select the according detail level from the popup menu.
+</para></tip>
 
 <formalpara id="setup-main-applications-font">
-<title><guilabel>Application Output View</guilabel> window font</title>
-
+<title>Application Output View window font</title>
 <para>
+The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are informations the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
 </para>
 </formalpara>
+<para>
+To select a font suitable for the <guilabel>Application Output View</guilabel> window press the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
+</para>
+<note><para>
+On first startup, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Application Output View</guilabel> window font.
+</para></note>
 
 </sect2> <!-- setup-main -->
 
 <sect2 id="setup-ui">
 <title>Selecting the User Interface</title>
 
+<indexterm zone="setup-ui">
+  <primary>user interface</primary>
+  <secondary>switch modes</secondary></indexterm>
+<indexterm zone="setup-ui">
+  <primary>switch UI modes</primary></indexterm>
+
 <para>
-(... to be written ...)
+As already said in the <link linkend="uimodes-survey">Available User Interface Modes</link> chapter there are four different ways the &kdevelop; work area may be set up, namely:
 </para>
+<itemizedlist>
+  <listitem><para>
+  <link linkend="ideal-desc">IDEAl Mode</link>
+  </para></listitem>
+  <listitem><para>
+  <link linkend="mdi-desc">Child Frame Windows Mode</link>
+  </para></listitem>
+  <listitem><para>
+  <link linkend="tabbed-desc">Tabbed Pages Mode</link>
+  </para></listitem>
+  <listitem><para>
+  <link linkend="toplevel-desc">Toplevel Windows Mode</link>
+  </para></listitem>
+</itemizedlist>
+
+<para>
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="select-user-interface-0.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Select a user interface mode
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+Select the radio button of the user interface mode you want to switch to, then press <guibutton>OK</guibutton>.
+</para>
+
 </sect2> <!-- setup-ui -->
 
 <sect2 id="setup-editor">
 <title>Selecting an Editor</title>
 
 <para>
-(... to be written ...)
+&kdevelop; allows you to select your favorite text editor tool. Mark the <guilabel>Editor</guilabel> entry in the left hand side selections tree of the <guilabel>Configure KDevelop</guilabel> window. The following dialog will be displayed to the right.
 </para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-editor.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Select an editor
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+To select a new editor, click on the arrow on the drop down list field. Depending on the editor parts interfaces your &kde; version has compiled in you will be provided with a list of editors you may select from (see the <link linkend="setup-editor-kparts">Important</link> note below for this). Click on the editor of your liking and press <guilabel>OK</guilabel>. Currently there are tree possibilities:
+</para>
+<variablelist>
+  <varlistentry>
+  <term><guilabel>Embedded Advanced Text Editor</guilabel></term>
+  <listitem><para>
+  This is the &kde; standard <application>Kate</application> editor part.
+  </para></listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><guilabel>Embedded Vim Component</guilabel></term>
+  <listitem>
+    <para>
+    This provides the look and feel of the base Linux <application>vi</application> editor.
+    </para>
+    <note><itemizedlist>
+      <listitem><para>
+      You need to have a suitable <application>Vim</application> application installed. Have a look at the <ulink url="http://www.freehackers.org/kvim/">KVim</ulink> website for more information.
+      </para></listitem>
+      <listitem><para>
+      Furthermore you need to configure the KParts Vim component in the <guilabel>&kde; Control Center</guilabel> (<menuchoice><guimenuitem>KDE Components</guimenuitem><guimenuitem>Vim Component Configuration</guimenuitem></menuchoice>) before you can use it.
+      </para></listitem>
+    </itemizedlist></note>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><guilabel>Qt Designer Based Text Editor</guilabel></term>
+  <listitem><para>
+  This is the editor Qt provides in its <application>Designer</application> component.
+  </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<para>
+These editor interfaces are fully integrated in the &kdevelop; IDE concept. Particularly the possibility to jump to the offending source code line by just clicking on an error message in the <guilabel>Messages Output View</guilabel> window has been provided.
+</para>
+
+<note><para>
+Changing the editor will not effect already open files. There are two possibilities to proceed. Either close all open text windows and reopen them one by one. Or simply close the whole project and reopen it again. The windows will then automatically open under the new text editor interface.
+</para></note>
+
+<important id="setup-editor-kparts"><para>
+KDevelop lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
+</para></important>
 </sect2> <!-- setup-editor -->
 
 <sect2 id="setup-format">
 <title>Selecting a Source Format Style</title>
 
 <para>
+&kdevelop; automatically formats a source text in a predefined style. This style is highly configurable. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menu bar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
+</para>
+
+<note><para>
+Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitely use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
+</para></note>
+
+<sect3 id="setup-format-general">
+<title>General Formatting Setup</title>
+
+<para>
+The <guilabel>General</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog allows you to select one of five predefined source format styles.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="SF-general.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Source format style general setup
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+A formatted source example will be displayed in the field to the right. If none of the predefined styles is to your liking, you may press the top <guilabel>User defined</guilabel> radio button and define your own source formatting style style preferences on the other two tabs which will become available then.
+</para>
+
+<note><para>
+Currently only the predefined source formatting styles will be demonstrated by an example text. If you decide to define your own style, no example display will be available. You have to experiment on an actual source text to taylor the settings to your liking.
+</para></note>
+
+</sect3> <!-- setup-format-general -->
+
+<sect3 id="setup-format-indent">
+<title>Indentation Style Setup</title>
+
+<para>
+Proper indentation is the main means to enhance readability of a source text. I you selected the <guilabel>Indentation</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog you will be presented with a series of indentation formatting choices grouped into three boxes as following.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="SF-indent.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Source format indentation style setup
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<formalpara>
+<title>Default Settings</title>
+<para>
+The preset format choices will cause the source text to resemble the ANSI formatting style:
+</para>
+</formalpara>
+<screen>
+namespace foospace
+{
+  int Foo()
+  {
+    if (isBar)
+    {
+      bar();
+      return 1;
+    }
+    else
+      return 0;
+  }
+}
+</screen>
+
+<formalpara>
+<title>Defining Indentation Width and Characters</title>
+<para>
+The radio buttons grouped in the <guilabel>Filling</guilabel> box define how indentations in the source text will be drawn.
+</para>
+</formalpara>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Use tabs</guilabel></term>
+    <listitem>
+    <para>
+    This will cause the editor to insert a tab character for every indentation level. The indentation width is predefined in the editor settings. Use <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Editor...</guimenuitem></menuchoice> to define the tabulator width.
+    </para>
+    <note><para>
+    The actual tab width definition procedure depends on the editor you selected in the <link linkend="setup-editor">Selecting an Editor</link> configuration step. You will have to look up the corresponding editor help to find out.
+    </para></note>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Use spaces</guilabel></term>
+    <listitem><para>
+    If you select this radio button, the editor will enter a number of spaces for each indentation level. Change the number from the default 2 to the indentation width you prefer.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<formalpara>
+<title>Indented Entities</title>
+<para>
+This defines which of the (C/C++) entities the source formatter will extra indent beyond the current indentation level.
+</para>
+</formalpara>
+<para>
+By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> will be extra indented. You may want to experiment with various settings to taylor those extra indents to your liking.
+</para>
+
+<formalpara>
+<title>Continuation</title>
+<para>
 (... to be written ...)
 </para>
+</formalpara>
+
+</sect3> <!-- setup-format-inden -->
+
+<sect3 id="setup-format-other">
+<title>Other Formatting Setup</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="SF-other.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Other source format style settings
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect3> <!-- setup-format-other -->
+
 </sect2> <!-- setup-format -->
 
 <sect2 id="setup-snippets">
