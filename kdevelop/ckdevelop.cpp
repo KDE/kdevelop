@@ -1520,18 +1520,21 @@ void CKDevelop::slotStartDebug()
     return;
   }
 
-  showOutputView(false);
-  showTreeView(false);
+//  showOutputView(false);
+//  showTreeView(false);
 
   slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
                 binProgram.data(), dbgExternalCmd.data()));
 
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
+  KShellProcess process("/bin/sh");
+  process << dbgExternalCmd+ " " + binProgram;
+  process.start(KProcess::DontCare);
+//  s_tab_view->setCurrentTab(TOOLS);
+//  swallow_widget->sWClose(false);
 //  QDir::setCurrent(prj->getProjectDir());
-  swallow_widget->setExeString(dbgExternalCmd+ " " + binProgram);
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+//  swallow_widget->setExeString(dbgExternalCmd+ " " + binProgram);
+//  swallow_widget->sWExecute();
+//  swallow_widget->init();
 }
 
 void CKDevelop::setDebugMenuProcess(bool enable)
@@ -2164,7 +2167,7 @@ void CKDevelop::slotToolsTool(int tool){
   if(!bKDevelop)
     switchToKDevelop();
     
-  showOutputView(false);
+//  showOutputView(false);
 
   QString argument=tools_argument.at(tool);
  		
@@ -2175,16 +2178,22 @@ void CKDevelop::slotToolsTool(int tool){
   if(project){
     argument.replace( QRegExp("%D"), prj->getProjectDir() );
   }
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  if(argument.isEmpty()){
-    swallow_widget->setExeString(tools_exe.at(tool));
 
+//  s_tab_view->setCurrentTab(TOOLS);
+//  swallow_widget->sWClose(false);
+  QString process_call;
+  if(argument.isEmpty()){
+//    swallow_widget->setExeString(tools_exe.at(tool));
+      process_call=tools_exe.at(tool);
   } else {
-    swallow_widget->setExeString(tools_exe.at(tool)+argument);
+//    swallow_widget->setExeString(tools_exe.at(tool)+argument);
+      process_call=tools_exe.at(tool)+argument;
   }
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+//  swallow_widget->sWExecute();
+//  swallow_widget->init();
+  KShellProcess process("/bin/sh");
+  process << process_call;
+  process.start(KProcess::DontCare);
 }
 
 

@@ -252,8 +252,8 @@ void CKDevelop::initView(){
   browser_widget->setDocBrowserOptions();
 
 
-  swallow_widget = new KSwallowWidget(s_tab_view);
-  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
+//  swallow_widget = new KSwallowWidget(s_tab_view);
+//  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
 //  swallow_widget->setFocusPolicy(QWidget::NoFocus);
 
   
@@ -261,7 +261,7 @@ void CKDevelop::initView(){
   s_tab_view->addTab(header_widget,i18n("Header/Reso&urce Files"));
   s_tab_view->addTab(cpp_widget,i18n("&C/C++ Files"));
   s_tab_view->addTab(browser_widget,i18n("&Documentation-Browser"));
-  s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
+//  s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 
 
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner

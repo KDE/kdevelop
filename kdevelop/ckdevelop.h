@@ -931,7 +931,7 @@ private:
   CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;
-  KSwallowWidget* swallow_widget;
+//  KSwallowWidget* swallow_widget;
  
   /** The classview. */
   CClassView* class_tree;

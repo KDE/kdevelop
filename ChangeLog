@@ -1,3 +1,6 @@
+2000-12-08  Ralf Nolden <nolden@kde.org>
+  * removed Tools-widget and replaced tool calls with KProcess calls
+
 2000-12-05  Ralf Nolden <nolden@kde.org>
   * fixed MDI templates with the help of Pascal Francq <pfrancq@ulb.ac.be>
     that fixes the crashes on exiting
