@@ -4,11 +4,15 @@
 int main( int argc, char *argv[] )
 {
   CClassParser cp;
+  int start;
   
-  for( int i=1; i < argc; i++ )
+  start = ( strcmp( argv[ 1 ], "-store" ) == 0 ? 2 : 1 );
+  for( int i=start; i < argc; i++ )
   {
-    cout << "Parsing: " << argv[ i ] << "\n";
+    cout << "Parsing: [" << argv[ i ] << "]\n";
     cp.parse( argv[ i ] );
+    if( start == 2 )
+      cp.store.storeAll( "foo" );
   }
 
   cp.out();
