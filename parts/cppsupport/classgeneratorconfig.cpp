@@ -202,9 +202,7 @@ void ClassGeneratorConfig::storeConfig()
 
         KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
 
-        qWarning("1");        
         saveTemplateText( dirs->saveLocation("newclasstemplates")+"cpp_header", cppHeader() );
-        qWarning("2");        
         saveTemplateText( dirs->saveLocation("newclasstemplates")+"cpp_source", cppSource() );
         saveTemplateText( dirs->saveLocation("newclasstemplates")+"objc_header", objcHeader() );
         saveTemplateText( dirs->saveLocation("newclasstemplates")+"objc_source", objcSource() );
