@@ -5,7 +5,7 @@ SUBDIRS = templates subclassing_template newclass_templates file_templates \
 
 INCLUDES = -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat \
 	-I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/designer_integration \
+	-I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/designer_integration -I$(top_builddir)/lib/designer_integration \
 	-I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
