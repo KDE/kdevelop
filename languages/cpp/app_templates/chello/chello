@@ -8,3 +8,24 @@ Comment=Generates a simple Hello world program in C
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=src/APPNAMELC.c
+
+[LIBS]
+Type= Value
+ValueType=QString
+Widget= OPT_LIBS
+Comment= Optional libraries to link to.
+Default= -lm
+
+[INCLUDES]
+Type= Value
+ValueType=QString
+Widget= OPT_INCS
+Comment= Optional include path.
+Default= -I/usr/include
+
+[CFLAGS]
+Type= Value
+ValueType=QString
+Widget= CFLAGS
+Comment= Optional CFLAGS to define in the makefile.
+Default= -O2
