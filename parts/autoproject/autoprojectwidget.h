@@ -236,13 +236,15 @@ private slots:
     void slotSetActiveTarget();
 
 private:
-    void parsePrimary(SubprojectItem *item,
+    void parseKDEDOCS(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
     void parseKDEICON(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
+    void parsePrimary(SubprojectItem *item,
+                      const QString &lhs, const QString &rhs);
     void parsePrefix(SubprojectItem *item,
                      const QString &lhs, const QString &rhs);
-    void parseSubdirs(SubprojectItem *item,
+    void parseSUBDIRS(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
     void parse(SubprojectItem *item);
 

@@ -879,9 +879,8 @@ void AutoProjectWidget::emitRemovedFile(const QString &name)
 void AutoProjectWidget::parsePrimary(SubprojectItem *item,
                                      const QString &lhs, const QString &rhs)
 {
-    kdDebug(9020) << "parsePrimary" << endl;
-    
     // Parse line foo_bar = bla bla
+
     int pos = lhs.findRev('_');
     QString prefix = lhs.left(pos);
     QString primary = lhs.right(lhs.length()-pos-1);
@@ -961,6 +960,33 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
 }
 
 
+void AutoProjectWidget::parseKDEDOCS(SubprojectItem *item,
+                                     const QString &/*lhs*/, const QString &/*rhs*/)
+{
+    // Handle the line KDE_ICON =
+    // (actually, no parsing is involved here)
+
+    QString prefix = "kde_docs";
+    QString primary = "DATA";
+    
+    TargetItem *titem = createTargetItem("", prefix, primary);
+    item->targets.append(titem);
+
+    QDir d(item->path);
+    QStringList l = d.entryList(QDir::Files);
+
+    QRegExp re("Makefile.*|\\..*|.*~|index.cache.bz2");
+    
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        if (!re.exactMatch(*it)) {
+            FileItem *fitem = createFileItem(*it);
+            titem->sources.append(fitem);
+        }
+    }
+}
+
+
 void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
                                      const QString &lhs, const QString &rhs)
 {
@@ -977,8 +1003,7 @@ void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
     item->targets.append(titem);
 
     QDir d(item->path);
-    QStringList entryList = d.entryList(QDir::Files);
-    QStringList l;
+    QStringList l = d.entryList(QDir::Files);
     
     QString regexp;
     
@@ -994,17 +1019,12 @@ void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
     kdDebug(9020) << "Filtering with regexp " << regexp << endl;
     QRegExp re(regexp);
     
-    QStringList::ConstIterator it1;
-    for (it1 = entryList.begin(); it1 != entryList.end(); ++it1) {
-        //        kdDebug(9020) << "Match " << (*it1) << " is " << re.exactMatch(*it1) << endl;
-        if (re.exactMatch(*it1))
-            l.append(*it1);
-    }
-        
-    QStringList::ConstIterator it2;
-    for (it2 = l.begin(); it2 != l.end(); ++it2) {
-        FileItem *fitem = createFileItem(*it2);
-        titem->sources.append(fitem);
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        if (re.exactMatch(*it)) {
+            FileItem *fitem = createFileItem(*it);
+            titem->sources.append(fitem);
+        }
     }
 }
     
@@ -1019,7 +1039,7 @@ void AutoProjectWidget::parsePrefix(SubprojectItem *item,
 }
 
 
-void AutoProjectWidget::parseSubdirs(SubprojectItem *item,
+void AutoProjectWidget::parseSUBDIRS(SubprojectItem *item,
                                      const QString &/*lhs*/, const QString &rhs)
 {
     // Parse a line SUBDIRS = bla bla
@@ -1099,14 +1119,16 @@ void AutoProjectWidget::parse(SubprojectItem *item)
     for (it=item->variables.begin(); it!=item->variables.end(); ++it) {
         QString lhs = it.key();
         QString rhs = it.data();
-        if (lhs.right(5) == "_ICON")
+        if (lhs == "KDE_DOCS")
+            parseKDEDOCS(item, lhs, rhs);
+        else if (lhs.right(5) == "_ICON")
             parseKDEICON(item, lhs, rhs);
         else if (lhs.find('_') > 0)
             parsePrimary(item, lhs, rhs);
         else if (lhs.right(3) == "dir")
             parsePrefix(item, lhs, rhs);
         else if (lhs == "SUBDIRS")
-            parseSubdirs(item, lhs, rhs);
+            parseSUBDIRS(item, lhs, rhs);
     }
 }
 

@@ -5,6 +5,7 @@
 	  duplicates anymore
 	* Handle AUTODIRS
 	* Handle foo_ICON
+	* Handle KDE_DOCS
 
 2002-04-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
 	

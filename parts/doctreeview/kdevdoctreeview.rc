@@ -6,9 +6,5 @@
   <Action name="help_fulltextsearch"/>
   <Action name="help_manpage"/>
  </Menu>
- <Menu name="buffers">
-  <Action name="window_doctreeview"/>
- </Menu>
-</MenuBar>
 </kpartgui>
 
