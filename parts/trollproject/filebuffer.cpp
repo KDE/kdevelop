@@ -465,7 +465,7 @@ void FileBuffer::dumpBuffer()
 //===========================
 {
   for ( unsigned int i=0; i<m_buffer.count(); i++ )
-    printf(m_buffer[i]+"\n");
+    printf("%s\n", m_buffer[i].latin1());
 }
 
 Caret FileBuffer::findScopeEnd(Caret pos)
