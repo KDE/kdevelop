@@ -986,7 +986,7 @@ void CClassView::slotMethodDelete()
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName, 
-                                                 &parentType, &itemType );
+                                                 parentType, itemType );
 
   emit signalMethodDelete( parentPath, itemName );
 }
@@ -1074,8 +1074,7 @@ void CClassView::slotViewDefinition()
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
-                                                 &parentType,
-                                                 &itemType );
+                                                 parentType, itemType );
 
   slotViewDefinition( parentPath, itemName, parentType, itemType );
 }
@@ -1089,7 +1088,7 @@ void CClassView::slotViewDeclaration()
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
-                                                 &parentType, &itemType );
+                                                 parentType, itemType );
 
   slotViewDeclaration( parentPath, itemName, parentType, itemType );
 }
