@@ -26,7 +26,7 @@ typedef KGenericFactory<DiffPart> DiffFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) );
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevDiffFrontend(parent, name)
 {
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
@@ -41,6 +41,24 @@ DiffPart::~DiffPart()
 {
 }
 
+void DiffPart::openURL( const KURL& url )
+{
+  DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
+
+  diffDlg->openURL( url );
+  diffDlg->exec();
+  delete diffDlg;
+}
+
+void DiffPart::showDiff( const QString& diff )
+{
+  DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
+
+  diffDlg->setDiff( diff );
+  diffDlg->exec();
+  delete diffDlg; 
+}
+
 void DiffPart::slotExecDiff()
 {
   KURL url = KFileDialog::getOpenURL( QString::null, QString::null, 0, i18n("Please select a patch file") );
@@ -48,11 +66,7 @@ void DiffPart::slotExecDiff()
   if ( url.isEmpty() )
     return;
 
-  DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
-
-  diffDlg->openURL( url );
-  diffDlg->exec();
-  delete diffDlg;
+  openURL( url );
 }
 
 #include "diffpart.moc"

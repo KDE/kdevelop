@@ -16,6 +16,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <ktempfile.h>
  
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
@@ -56,6 +57,11 @@ DiffDlg::DiffDlg( QWidget *parent, const char *name ):
 
 DiffDlg::~DiffDlg()
 {
+  KTempFile* tmpFile = 0;
+  for ( tmpFile = fileCleanupHandler.first(); tmpFile; tmpFile = fileCleanupHandler.next() ) {
+    delete tmpFile;
+  }
+  fileCleanupHandler.clear();
 }
 
 void DiffDlg::loadKomparePart( QWidget* parent )
@@ -106,6 +112,23 @@ void DiffDlg::slotFinished()
       }
     }
   }
+}
+
+void DiffDlg::setDiff( const QString& diff )
+{
+  if ( komparePart ) {
+    // workaround until kompare can view patches directly
+    KTempFile* tmpFile = new KTempFile();
+    fileCleanupHandler.append( tmpFile ); // make sure it gets erased
+    tmpFile->setAutoDelete( true );
+    *(tmpFile->textStream()) << diff;
+    tmpFile->close();
+    openURL( tmpFile->name() );
+    return;
+  }
+
+  slotAppend( diff );
+  slotFinished();
 }
 
 void DiffDlg::openURL( const KURL& url )

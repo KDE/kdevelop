@@ -13,14 +13,19 @@
 #define _DIFFPART_H_
 
 #include "kdevplugin.h"
+#include "kdevdifffrontend.h"
 
-class DiffPart : public KDevPlugin
+class DiffPart : public KDevDiffFrontend
 {
     Q_OBJECT
 
 public:
     DiffPart( QObject *parent, const char *name, const QStringList & );
-    ~DiffPart();
+    virtual ~DiffPart();
+
+    void openURL( const KURL& url );
+    void showDiff( const QString& diff );
+    void showDiff( const KURL &url1, const KURL &url2 ) { /* TODO */ }
 
 public slots:
     void slotExecDiff();

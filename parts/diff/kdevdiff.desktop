@@ -2,9 +2,8 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Difference between files
+Comment=Difference Viewer
 Name=KDevDiff
-ServiceTypes=KDevelop/Plugin
+ServiceTypes=KDevelop/DiffFrontend
 X-KDE-Library=libkdevdiff
-X-KDevelop-Scope=Global
 

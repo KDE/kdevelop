@@ -12,10 +12,13 @@
 #ifndef _DIFFDLG_H_
 #define _DIFFDLG_H_
 
+#include <qptrlist.h>
+
 #include <kdialogbase.h>
 #include <kurl.h>
 
 class QTextEdit;
+class KTempFile;
 
 namespace KIO {
   class Job;
@@ -31,11 +34,13 @@ class DiffDlg : public KDialogBase
 
 public:
     DiffDlg( QWidget *parent = 0, const char *name = 0 );
-    ~DiffDlg();
+    virtual ~DiffDlg();
 
 public slots:
     /** The URL has to point to a diff file */
     void openURL( const KURL& url );
+    /** Pass a diff file in here */
+    void setDiff( const QString& diff );
 
 private slots:
     /** clears the difference viewer */
@@ -57,6 +62,7 @@ private:
     QTextEdit* te;
     KIO::Job* job;
     KParts::ReadOnlyPart* komparePart;
+    QPtrList<KTempFile> fileCleanupHandler;
 
 };
 
