@@ -128,3 +128,10 @@ QString CVSEntry::tag() const
         return QString::null;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+VCSFileInfo CVSEntry::toVCSFileInfo() const
+{
+    return VCSFileInfo( fileName(), revision(), "--", VCSFileInfo::Unknown );
+}
+

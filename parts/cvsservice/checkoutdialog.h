@@ -13,7 +13,7 @@
 #define CHECKOUTDIALOG_H
 
 #include <kdialogbase.h>
-#include <dcopobject.h>
+#include "cvsservicedcopiface.h"
 
 class CvsService_stub;
 class CvsJob_stub;
@@ -26,10 +26,9 @@ class QListViewItem;
 *
 * @author Mario Scalas
 */
-class CheckoutDialog : public KDialogBase, public DCOPObject
+class CheckoutDialog : public KDialogBase, virtual public CVSServiceDCOPIface
 {
     Q_OBJECT
-    K_DCOP
 public:
     CheckoutDialog( CvsService_stub *cvsService, QWidget *parent = 0,
         const char *name = 0, WFlags f = 0 );
@@ -68,14 +67,14 @@ public:
     */
     QString tag() const;
 
-k_dcop:
-    void modulesListFetched( bool normalExit, int exitStatus );
-    void receivedOutput( QString someOutput );
-
 private slots:
     void slotModuleSelected( QListViewItem *item );
     void slotFetchModulesList();
     void slotSelectWorkDirList();
+    // DCOP Iface
+    virtual void slotJobExited( bool normalExit, int exitStatus );
+    virtual void slotReceivedOutput( QString someOutput );
+    virtual void slotReceivedErrors( QString someErrors );
 
 private:
     CvsService_stub *m_service;

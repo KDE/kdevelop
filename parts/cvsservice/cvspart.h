@@ -60,6 +60,8 @@ public:
     * Fetch a module from remote repository, so it can be used for importing
     */
     virtual void fetchFromRepository();
+
+    virtual KDevVCSFileInfoProvider *fileInfoProvider() const;
     /**
     * Check if the directory is a valid CVS directory.
     */

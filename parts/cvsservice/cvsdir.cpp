@@ -171,6 +171,14 @@ QStringList CVSDir::registeredEntryList() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+bool CVSDir::isRegistered( const QString fileName ) const
+{
+    CVSEntry entry = fileStatus( fileName );
+    return entry.isValid() && entry.fileName() == fileName;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void CVSDir::refreshEntriesCache() const
 {
     m_cachedEntries.clear();
@@ -189,7 +197,7 @@ void CVSDir::refreshEntriesCache() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CVSEntry CVSDir::fileState( const QString &fileName, bool refreshCache ) const
+CVSEntry CVSDir::fileStatus( const QString &fileName, bool refreshCache ) const
 {
     if (refreshCache)
         refreshEntriesCache();
@@ -272,3 +280,22 @@ void CVSDir::doNotIgnoreFile( const QString &fileName )
         f.writeBlock( cachedOutputFile );
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+VCSFileInfoMap CVSDir::dirStatus() const
+{
+    VCSFileInfoMap vcsInfo;
+    // Convert to VCSFileInfoMap: @fixme : any speed improvement here?
+    QStringList entries = registeredEntryList();
+    for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
+    {
+        const QString &fileName = (*it);
+        const CVSEntry entry = fileStatus( fileName );
+
+        vcsInfo.insert( fileName, entry.toVCSFileInfo() );
+    }
+
+    return vcsInfo;
+}
+

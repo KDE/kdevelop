@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 200?-2003 by KDevelop Authors                           *
+ *   Copyright (C) 2003 by KDevelop Authors                           *
  *   www.kdevelop.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -12,21 +12,21 @@
 #ifndef CVSDIFFPAGE_H
 #define CVSDIFFPAGE_H
 
-#include <dcopobject.h>
+#include "cvsservicedcopiface.h"
 #include <qwidget.h>
 
 class CvsJob_stub;
 class CvsService_stub;
 class QTextEdit;
+class DiffWidget;
 
 /**
 Implementation for the form displaying 'cvs diff' output.
 
 @author KDevelop Authors
 */
-class CVSDiffPage : public QWidget, public DCOPObject
+class CVSDiffPage : public QWidget, virtual public CVSServiceDCOPIface
 {
-    K_DCOP
     Q_OBJECT
 public:
     CVSDiffPage( CvsService_stub *cvsService, QWidget *parent=0, const char *name=0, int flags=0 );
@@ -35,13 +35,15 @@ public:
     void startDiff( const QString &fileName, const QString &v1, const QString &v2 );
     void cancel();
 
-k_dcop:
-    void slotDiffJobExited( bool normalExit, int exitStatus );
-    void slotReceivedOutput( QString someOutput );
-    void slotReceivedErrors( QString someErrors );
+//private slots:
+    // DCOP Iface
+    virtual void slotJobExited( bool normalExit, int exitStatus );
+    virtual void slotReceivedOutput( QString someOutput );
+    virtual void slotReceivedErrors( QString someErrors );
 
 private:
-    QTextEdit *m_diffText;
+    //QTextEdit *m_diffText;
+    DiffWidget *m_diffText;
 
     CvsService_stub *m_cvsService;
     CvsJob_stub *m_cvsDiffJob;

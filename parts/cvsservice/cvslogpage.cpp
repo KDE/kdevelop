@@ -34,7 +34,7 @@
 
 CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char *name, int )
     : QWidget( parent, name? name : "logformpage" ),
-    DCOPObject(),
+    DCOPObject( "CvsLogPageDCOPIface" ),
     m_cvsService( cvsService ), m_cvsLogJob( 0 )
 {
     QLayout *thisLayout = new QVBoxLayout( this );
@@ -73,7 +73,7 @@ void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
     m_cvsLogJob = new CvsJob_stub( job.app(), job.obj() );
 
     // establish connections to the signals of the cvs m_job
-    connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotLogJobExited(bool, int)", true );
+    connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
     // We'll read the ouput directly from the job ...
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
@@ -107,7 +107,7 @@ void CVSLogPage::parseLogContent( const QString& text )
 */
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSLogPage::slotLogJobExited( bool normalExit, int exitStatus )
+void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
 {
 //    m_part->core()->running( m_part, false );
     if (!normalExit)

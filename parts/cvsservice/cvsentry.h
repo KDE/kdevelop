@@ -13,6 +13,7 @@
 #define CVSENTRY_H
 
 #include <qstringlist.h>
+#include <kdevvcsfileinfoprovider.h>
 
 class CVSEntry
 {
@@ -30,7 +31,7 @@ public:
     CVSEntry( const QString &aLine );
 
     void clean();
-
+    VCSFileInfo toVCSFileInfo() const;
     bool isValid() const { return type() != invalidEntry; }
 
     EntryType type() const;

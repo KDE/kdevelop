@@ -15,7 +15,7 @@
 #include <qtextedit.h>
 #include <qstringlist.h>
 
-#include <dcopobject.h>
+#include "cvsservicedcopiface.h"
 
 class CvsServicePart;
 class DCOPRef;
@@ -23,9 +23,8 @@ class CvsJob_stub;
 class CvsService_stub;
 class QStyleSheetItem;
 
-class CvsProcessWidget : public QTextEdit, public DCOPObject
+class CvsProcessWidget : public QTextEdit, virtual public CVSServiceDCOPIface
 {
-    K_DCOP
     Q_OBJECT
 public:
     CvsProcessWidget( CvsService_stub *service, CvsServicePart *part,
@@ -46,11 +45,11 @@ public:
     QStringList output() const { return m_output; }
     QStringList errors() const { return m_errors; }
 
-k_dcop:
-    //! Connect this part with job's DCOP reference
-    void slotJobExited( bool normalExit, int exitStatus );
-    void slotReceivedOutput( QString someOutput );
-    void slotReceivedErrors( QString someErrors );
+//private slots:
+    //! DCOP Iface
+    virtual void slotJobExited( bool normalExit, int exitStatus );
+    virtual void slotReceivedOutput( QString someOutput );
+    virtual void slotReceivedErrors( QString someErrors );
 
 signals:
     void jobFinished( bool normalExit, int exitStatus );

@@ -102,6 +102,10 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
     setXMLFile( "kdevcvsservicepart.rc" );
 
     init();
+
+    // @fixme (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
+    // of KDevVersionControl
+    setVersionControl( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,6 +126,7 @@ void CvsServicePart::init()
     // @fixme factory pattern here? :-/
     m_impl = new CvsServicePartImpl( this );
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
+    connect( m_impl, SIGNAL(fileStateChanged(const VCSFileInfoList&)), SIGNAL(fileStateChanged(const VCSFileInfoList&)) );
 
     // Load / store project configuration every time project is opened/closed
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -223,6 +228,13 @@ void CvsServicePart::setupActions()
 void CvsServicePart::fetchFromRepository()
 {
     m_impl->checkout();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVCSFileInfoProvider *CvsServicePart::fileInfoProvider() const
+{
+    return m_impl->fileInfoProvider();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -641,7 +653,7 @@ void CvsServicePart::slotProjectOpened()
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );
-    if (cvsdir.isValid())
+    if (!cvsdir.isValid())
     {
         kdDebug(9000) << "Project has no CVS Support: too bad!! :-(" << endl;
         return;
@@ -670,7 +682,7 @@ void CvsServicePart::slotProjectClosed()
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );
-    if (cvsdir.isValid())
+    if (!cvsdir.isValid())
     {
         kdDebug(9000) << "Project had no CVS Support: too bad!! :-(" << endl;
         return;

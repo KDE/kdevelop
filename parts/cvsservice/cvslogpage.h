@@ -12,7 +12,7 @@
 #ifndef CVSLOGPAGE_H
 #define CVSLOGPAGE_H
 
-#include <dcopobject.h>
+#include "cvsservicedcopiface.h"
 #include <qwidget.h>
 
 class CvsJob_stub;
@@ -24,9 +24,8 @@ Implementation for the form displaying 'cvs log' output.
 
 @author KDevelop Authors
 */
-class CVSLogPage : public QWidget, public DCOPObject
+class CVSLogPage : public QWidget, virtual public CVSServiceDCOPIface
 {
-    K_DCOP
     Q_OBJECT
 public:
     CVSLogPage( CvsService_stub *cvsService, QWidget *parent=0, const char *name=0, int flags=0 );
@@ -35,17 +34,16 @@ public:
     void startLog( const QString &workDir, const QString &pathName );
     void cancel();
 
-k_dcop:
-    void slotLogJobExited( bool normalExit, int exitStatus );
-    void slotReceivedOutput( QString someOutput );
-    void slotReceivedErrors( QString someErrors );
-
 signals:
     // Emitted when the user click upon a link
     void diffRequested( const QString &pathName, const QString &revA, const QString &revB );
 
 private slots:
     void slotLinkClicked( const QString &link );
+    // DCOP Iface
+    virtual void slotJobExited( bool normalExit, int exitStatus );
+    virtual void slotReceivedOutput( QString someOutput );
+    virtual void slotReceivedErrors( QString someErrors );
 
 //private:
 //    void parseLogContent( const QString& text );

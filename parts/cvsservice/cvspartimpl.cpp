@@ -50,6 +50,7 @@
 #include "cvsdir.h"
 #include "cvsentry.h"
 #include "jobscheduler.h"
+#include "cvsfileinfoprovider.h"
 
 #include "cvspart.h"
 #include "cvspartimpl.h"
@@ -77,6 +78,7 @@ CvsServicePartImpl::CvsServicePartImpl( CvsServicePart *part, const char *name )
     {
         m_widget = new CvsProcessWidget( m_cvsService, part, 0, "cvsprocesswidget" );
         m_scheduler = new DirectScheduler( m_widget );
+        m_fileInfoProvider = new CVSFileInfoProvider( part, m_cvsService );
     }
     else
     {
@@ -98,6 +100,7 @@ CvsServicePartImpl::~CvsServicePartImpl()
         delete m_widget;
     }
     delete m_scheduler;
+    delete m_fileInfoProvider;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,17 +151,37 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
     }
 
     URLUtil::dump( urls );
-
-    m_fileList = URLUtil::toRelativePaths( projectDirectory(), urls );
+    // Save for later use
+    m_urlList = urls;
+    m_lastOperation = op;
 
     return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServicePartImpl::doneOperation()
+void CvsServicePartImpl::doneOperation( const KURL::List &/*someUrls*/, CvsOperation /*op*/ )
 {
-    // Done operation
+    kdDebug(9000) << "CvsServicePartImpl::doneOperation(const KURL::List&, CvsOperation)" << endl;
+
+    // @ todo notify clients (filetree) about changed status?)
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+const KURL::List &CvsServicePartImpl::urlList() const
+{
+    return m_urlList;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QStringList CvsServicePartImpl::fileList( bool relativeToProjectDir ) const
+{
+    if (relativeToProjectDir)
+        return URLUtil::toRelativePaths( projectDirectory(), urlList() );
+    else
+        return urlList().toStringList();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,7 +209,7 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
             kdDebug(9000) << "===> Error: " << cvsdir.path() << " is not a valid CVS directory " << endl;
             return false;
         }
-        CVSEntry entry = cvsdir.fileState( url.fileName() );
+        CVSEntry entry = cvsdir.fileStatus( url.fileName() );
         return entry.isValid();
     }
 }
@@ -372,10 +395,10 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
 //    CvsOptions *options = CvsOptions::instance();
     QString logString = dlg.logMessage().join( "\n" );
 
-    DCOPRef cvsJob = m_cvsService->commit( m_fileList, logString, false );
+    DCOPRef cvsJob = m_cvsService->commit( fileList(), logString, false );
     if (!m_cvsService->ok())
     {
-        kdDebug( 9000 ) << "Commit of " << m_fileList.join( ", " ) << " failed!!!" << endl;
+        kdDebug( 9000 ) << "Commit of " << fileList().join( ", " ) << " failed!!!" << endl;
         return;
     }
 
@@ -394,7 +417,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
             entry.toString( changeLogPrependString ) << endl;
     }
 
-    doneOperation();
+    doneOperation( KURL::List( fileList() ), opCommit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -415,7 +438,7 @@ void CvsServicePartImpl::update( const KURL::List& urlList )
     if (dlg.isRevert())
         additionalOptions = additionalOptions + " " + options->revertOptions();
 
-    DCOPRef cvsJob = m_cvsService->update( m_fileList,
+    DCOPRef cvsJob = m_cvsService->update( fileList(),
         options->recursiveWhenUpdate(),
         options->createDirsWhenUpdate(),
         options->pruneEmptyDirsWhenUpdate(),
@@ -436,7 +459,7 @@ void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
     if (!prepareOperation( urlList, opAdd ))
         return;
 
-    DCOPRef cvsJob = m_cvsService->add( m_fileList, binary );
+    DCOPRef cvsJob = m_cvsService->add( fileList(), binary );
 
     m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
@@ -453,7 +476,7 @@ void CvsServicePartImpl::remove( const KURL::List& urlList )
     if (!prepareOperation( urlList, opRemove ))
         return;
 
-    DCOPRef cvsJob = m_cvsService->remove( m_fileList, true );
+    DCOPRef cvsJob = m_cvsService->remove( fileList(), true );
 
     m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
@@ -473,7 +496,7 @@ void CvsServicePartImpl::removeStickyFlag( const KURL::List& urlList )
 
     CvsOptions *options = CvsOptions::instance();
 
-    DCOPRef cvsJob = m_cvsService->update( m_fileList,
+    DCOPRef cvsJob = m_cvsService->update( fileList(),
         options->recursiveWhenUpdate(),
         options->createDirsWhenUpdate(),
         options->pruneEmptyDirsWhenUpdate(),
@@ -498,7 +521,7 @@ void CvsServicePartImpl::log( const KURL::List& urlList )
     CVSLogDialog* f = new CVSLogDialog( m_cvsService );
     f->show();
     // Form will do all the work
-    f->startLog( projectDirectory(), m_fileList[0] );
+    f->startLog( projectDirectory(), fileList()[0] );
 
     doneOperation();
 }
@@ -517,7 +540,7 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
         return;
 
     CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->diff( m_fileList[0], dlg.revA(),
+    DCOPRef cvsJob = m_cvsService->diff( fileList()[0], dlg.revA(),
                 dlg.revB(), options->diffOptions(), options->contextLines() );
     if (!m_cvsService->ok())
     {
@@ -547,7 +570,7 @@ void CvsServicePartImpl::tag( const KURL::List& urlList )
     if (dlg.exec() != QDialog::Accepted)
         return;
 
-    DCOPRef cvsJob = m_cvsService->createTag( m_fileList, dlg.tagName(),
+    DCOPRef cvsJob = m_cvsService->createTag( fileList(), dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
     m_scheduler->schedule( cvsJob );
@@ -571,7 +594,7 @@ void CvsServicePartImpl::unTag( const KURL::List& urlList )
     if (dlg.exec() != QDialog::Accepted)
         return;
 
-    DCOPRef cvsJob = m_cvsService->createTag( m_fileList, dlg.tagName(),
+    DCOPRef cvsJob = m_cvsService->createTag( fileList(), dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
     m_scheduler->schedule( cvsJob );
@@ -684,6 +707,20 @@ void CvsServicePartImpl::flushJobs()
     processWidget()->cancelJob();
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::emitFileStateModified( const KURL::List &/*urls*/, VCSFileInfo::FileState &/*commonState*/ )
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVCSFileInfoProvider *CvsServicePartImpl::fileInfoProvider() const
+{
+    return m_fileInfoProvider;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // SLOTS here!
 ///////////////////////////////////////////////////////////////////////////////
@@ -757,11 +794,20 @@ void CvsServicePartImpl::slotCheckoutFinished( bool exitStatus, int )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServicePartImpl::slotJobFinished( bool /*exitStatus*/, int exitCode )
+void CvsServicePartImpl::slotJobFinished( bool exitStatus, int exitCode )
 {
     // Return a null string if the operation was not succesfull
     kdDebug() << "CvsServicePartImpl::slotJobFinished(): job ended with code == "
         << exitCode << endl;
+
+    // Operation has been successfull
+    if (!exitStatus)
+        return;
+
+    // 1. Assemble the CVSFileInfoList
+    // 2. notify all clients
+
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

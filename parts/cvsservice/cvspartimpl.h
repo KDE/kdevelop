@@ -17,6 +17,9 @@
 #include <qguardedptr.h>
 #include <kurl.h>
 
+#include <kdevversioncontrol.h>
+#include <kdevvcsfileinfoprovider.h>
+
 class CvsServicePart;
 class KDialogBase;
 class KURL;
@@ -27,7 +30,8 @@ class KDevCore;
 class KDevDiffFrontend;
 class QDir;
 class JobScheduler;
-
+class KDevVCSFileInfoProvider;
+class CVSFileInfoProvider;
 
 /**
 * @short This is the base class for implementation of the core service.
@@ -47,7 +51,7 @@ public:
     //! Available Cvs operations
     enum CvsOperation
     {
-        opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag
+        opFakeStub, opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag
     };
 
     /**
@@ -151,9 +155,13 @@ public:
         const QString &release, bool mustInitRoot );
 
     /**
-    * Check if the directory is valid as CVS directory (has the /CVS/ dir inside)
+    * @return true if the directory is valid as CVS directory (has the /CVS/ dir inside) (FORWARDER)
     */
     virtual bool isValidDirectory( const QDir &dir ) const;
+    /**
+    * @return a reference to the custom FileInforProvider object (FORWARDER)
+    */
+    KDevVCSFileInfoProvider *fileInfoProvider() const;
 
 // Helpers
 public:
@@ -192,12 +200,15 @@ private:
     * @return true and the valid URLs paths in m_fileList if the operation can be performed,
     *         false otherwise.
     */
-    virtual bool prepareOperation( const KURL::List &someUrls, CvsOperation op );
+    bool prepareOperation( const KURL::List &someUrls, CvsOperation op );
     /**
     * Call this every time a slot for cvs operations ends!! (It will restore the state for a new
-    * operation).
+    * operation) and notify clients about changes.
     */
-    virtual void doneOperation();
+    void doneOperation( const KURL::List &someUrls = KURL::List(), CvsOperation op = opFakeStub );
+
+    void emitFileStateModified( const KURL::List &urls, VCSFileInfo::FileState &commonState );
+
     /**
     *   @return true if the @p url is present in CVS/Entry file
     */
@@ -257,6 +268,7 @@ private:
     // Used for storing module path between start and ending of check-out
     QString modulePath;
 
+    CVSFileInfoProvider *m_fileInfoProvider;
     JobScheduler *m_scheduler;
     // Reference to owner part
     CvsServicePart *m_part;
@@ -265,9 +277,19 @@ private:
     //! (_Must_ be initialized by derived class)
     QGuardedPtr<CvsProcessWidget> m_widget;
 
-    //! These are the file path (relative to project directory) of the files the operation
+    //! Urls which to work upon
+    const KURL::List &urlList() const;
+    //! @param relativeToProjectDir if true paths will be provided as relative to project directory,
+    //! as absolute paths otherwise
+    //! @return These are the file path contained in the urls provided for convenience
     //! has been requested for.
-    QStringList m_fileList;
+    QStringList fileList( bool relativeToProjectDir = true ) const;
+    //! Last operation type: we save it so we can retrieve and use in slot*Exited()
+    CvsOperation lastOperation() const;
+
+    // Both this data members are set by prepareOperation() method
+    KURL::List m_urlList;
+    CvsOperation m_lastOperation;
 };
 
 #endif

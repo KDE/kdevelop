@@ -46,7 +46,14 @@ public:
     * @param refreshCache update internal cache re-parsing "<dirPath>/CVS/Entries"
     * @return an empty CVSEntry if the file is not present
     */
-    CVSEntry fileState( const QString &fileName, bool refreshCache = false ) const;
+    CVSEntry fileStatus( const QString &fileName, bool refreshCache = false ) const;
+    /**
+    */
+    VCSFileInfoMap dirStatus() const;
+    /**
+    * @return true if the file is registered into repository, false otherwise
+    */
+    bool isRegistered( const QString fileName ) const;
     /**
     * Check if the specified @p fileName is in "<CVSDIR>/.cvsignore" and, if not,
     * append it.
@@ -88,7 +95,8 @@ private:
 
     QString m_cvsDir;
 
-    mutable QMap<QString,CVSEntry> m_cachedEntries;
+    typedef QMap<QString,CVSEntry> CVSEntriesCacheMap;
+    mutable CVSEntriesCacheMap m_cachedEntries;
 };
 
 #endif
