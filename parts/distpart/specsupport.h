@@ -27,6 +27,8 @@ private:
     void parseDotRpmmacros();
     bool createRpmDirectoryFromMacro(const QString & name);
     
+    bool getInfo(QString s, QString motif, void (packageBase::*func)(QString));
+    
     DistpartPart * m_part;
     QMap<QString,QString> map;
     QPushButton *buildAllPushButton, *exportSPECPushButton, *importSPECPushButton, *srcPackagePushButton;

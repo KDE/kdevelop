@@ -10,6 +10,7 @@
 
 #include "distpart_widget.h"
 #include "specsupport.h"
+#include "lsmsupport.h"
 
 typedef KGenericFactory<DistpartPart> DistpartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );
@@ -25,23 +26,23 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
                              actionCollection(), "make_dist" );
 
     m_action->setStatusText(i18n("Make Source and Binary Distribution"));
-    m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"
-                                "fnork fnork blub.... \n"
-                                "bork bork bork....."));
+    m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
     m_dialog = new DistpartDialog(this);
     
     // set up package
     //KURL projectURL;  // we need to get this from the base project
-    thePackage = new SpecSupport(this);
+    RpmPackage = new SpecSupport(this);
+//    LsmPackage = new LsmSupport(this);
     //thePackage->loadFile(projectURL);
 }
 
 
 DistpartPart::~DistpartPart() {
     delete m_dialog;
-    delete thePackage;
+    delete RpmPackage;
+//    delete LsmPackage;
 }
 
 DistpartDialog* DistpartPart::getDlg() {

@@ -15,6 +15,7 @@
 #include <qlayout.h>
 #include <qnetwork.h>
 #include <qurloperator.h>
+#include <qmessagebox.h>
 #include "distpart_part.h"
 #include <qdir.h>
 #include <qfile.h>
@@ -85,8 +86,9 @@ void DistpartDialog::slotcancelPushButtonPressed() {
 //    QPushButton* help_PushButton;
 
 void DistpartDialog::slothelp_PushButtonPressed() {
-    emit help();
+    QMessageBox::about(this,"Distpart Help","In order to build a RPM package :\n\t1) Create a source archive\n\t2) Generate a SPEC File\n\t3) Build the package");
 }
+
 //    QPushButton* createSrcArchPushButton;
 void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     QString dist = (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? "make dist-bzip2" : "make dist";

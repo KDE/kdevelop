@@ -41,6 +41,19 @@ public:
    virtual QString getAppSource();
    virtual QStringList getAppFileList();
    
+   virtual void setAppName(QString);
+   virtual void setAppVersion(QString);
+   virtual void setAppRevision(QString);
+   virtual void setAppGroup(QString);
+   virtual void setAppPackager(QString);
+   virtual void setAppURL(QString);
+   virtual void setAppSummary(QString);
+   virtual void setAppVendor(QString);
+   virtual void setAppLicense(QString);
+   virtual void setAppArch(QString);
+   virtual void setAppDescription(QString);
+   virtual void setAppChangelog(QString);
+   
    private:
    DistpartPart * m_part;
    DistpartDialog * m_dlg;

@@ -30,7 +30,7 @@ public slots:
     void hide();
 
 private:
-    packageBase *thePackage;
+    packageBase *RpmPackage, *LsmPackage;
     QGuardedPtr<DistpartDialog> m_dialog;
     KAction *m_action;
 };

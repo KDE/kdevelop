@@ -14,6 +14,7 @@ packageBase::packageBase(DistpartPart * part, QString name) {
 
 packageBase::~packageBase() {}
 
+
 QVBox * packageBase::area() {
     return box;
 }
@@ -24,7 +25,9 @@ bool packageBase::generatePackage(QString &error) {
 
 bool packageBase::saveFile(KURL /*theFile*/) {}
 
+
 bool packageBase::loadFile(KURL /*theFile*/) {}
+
 
 
 QString packageBase::getAppName() {
@@ -77,9 +80,54 @@ QString packageBase::getAppChangelog() {
 
 QString packageBase::getAppSource() {
     return (m_dlg->getappNameFormatLineEditText() + "-" + m_dlg->getversionLineEditText() +
-	    ((m_dlg->getcustomProjectCheckBoxState() && m_dlg->getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz"));
+            ((m_dlg->getcustomProjectCheckBoxState() && m_dlg->getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz"));
 }
 
 QStringList packageBase::getAppFileList() {
     return QStringList();
+}
+
+void packageBase::setAppName(QString name) {
+    m_dlg->setappNameFormatLineEditText(name);
+}
+
+void packageBase::setAppVersion(QString version){
+    m_dlg->setversionLineEditText(version);
+}
+
+void packageBase::setAppRevision(QString revision){
+    m_dlg->setreleaseLineEditText(revision);
+}
+
+void packageBase::setAppGroup(QString group){
+    m_dlg->setgroupLineEditText(group);
+}
+
+void packageBase::setAppPackager(QString packager){
+    m_dlg->setpackagerLineEditText(packager);
+}
+
+void packageBase::setAppURL(QString url){}
+
+void packageBase::setAppSummary(QString summary){
+    m_dlg->setsummaryLineEditText(summary);
+}
+
+void packageBase::setAppVendor(QString vendor){
+    m_dlg->setvendorLineEditText(vendor);
+}
+
+void packageBase::setAppLicense(QString licence){
+    m_dlg->setlicenseLineEditText(licence);
+}
+
+void packageBase::setAppArch(QString arch){
+}
+
+void packageBase::setAppDescription(QString description){
+    m_dlg->setprojectDescriptionMultilineEditText(description);
+}
+
+void packageBase::setAppChangelog(QString changelog){
+    m_dlg->setprojectChangelogMultilineEditText(changelog);
 }
