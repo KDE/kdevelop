@@ -55,6 +55,23 @@ configure-stamp:
 				--sysconfdir=$(kde_confdir) \
 				--with-kdelibsdoxy-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs \
 				--with-pythondir=/usr \
+				--enable-scripting \
+				--enable-ada \
+				--enable-python \
+				--enable-cpp \
+				--enable-perl \
+				--enable-php \
+				--enable-fortran \
+				--enable-sql \
+				--enable-bash \
+				--enable-ruby \
+				--enable-pascal \
+				--enable-autoproject \
+				--enable-scriptproject \
+				--enable-trollproject \
+				--enable-customproject \
+				--enable-cvs \
+				--enable-vba \
 				$(configkdevelop) \
 				--disable-final \
 				$(JAVA_FLAGS)
@@ -112,8 +129,9 @@ install: build
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
-	-install -d $(CURDIR)/debian/tmp/usr/share/gideon
-	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/share/gideon
+	-install -d $(CURDIR)/debian/tmp/usr/share/kdevelop
+	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/share/kdevelop
+	-rm -f debian/tmp/usr/share/mimelnk/text/x-pascal.desktop
 
 	dh_install --list-missing
 

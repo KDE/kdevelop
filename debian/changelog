@@ -1,3 +1,72 @@
+kdevelop (4:2.999-0cvs20031006) unstable; urgency=low
+
+  * Updated CVS sources
+  * Changed the packages to kdevelop* rather than gideon*
+  * The packages now conflict with the gideon packages
+  * The kdevelop package now contains all lib*.so.* and lib*.so files in
+    /usr/lib
+  * The kdevelop-dev package now contains all lib*.la files in /usr/lib
+
+ -- Norman Jordan <njordan@debian.org>  Mon,  6 Oct 2003 13:03:35 -0700
+
+gideon (1:2.999-0cvs20030928) unstable; urgency=low
+
+  * Updated CVS sources
+  * Updated the gideon-doc package to include the gideon HTML documentation
+  * Removed the x-pascal.desktop file from gideon-data
+
+ -- Norman Jordan <njordan@debian.org>  Sun, 28 Sep 2003 15:27:30 -0700
+
+gideon (1:2.999-0cvs20030918) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the libraries without a package to the gideon package
+
+ -- Norman Jordan <njordan@debian.org>  Thu, 18 Sep 2003 03:47:53 -0700
+
+gideon (1:2.999-0cvs20030909) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Tue,  9 Sep 2003 23:56:47 -0700
+
+gideon (1:2.999-0cvs20030905) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Thu,  5 Sep 2003 18:36:53 -0700
+
+gideon (1:2.999-0cvs20030820) unstable; urgency=low
+
+  * Updated CVS sources
+  * Updated the build-depends and suggests fields
+    - Removed obsolete packages
+
+ -- Norman Jordan <njordan@debian.org>  Wed, 20 Aug 2003 16:15:24 -0700
+
+gideon (1:2.999-0cvs20030815) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added some extra arguments for when configure is run
+    + Enabled all of the language support options
+  * Added python2.2-dev / python2.3-dev to the build depends
+
+ -- Norman Jordan <njordan@debian.org>  Tue, 15 Aug 2003 03:18:32 -0700
+
+gideon (1:2.999-0cvs20030802) unstable; urgency=low
+
+  * Updated CVS sources
+  * Built against KDE 3.1.3
+  * Fixed to compile with GCC 3.3
+
+ -- Norman Jordan <njordan@debian.org>  Sat,  2 Aug 2003 05:03:12 -0700
+
+gideon (1:2.999-0cvs20030719) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Sat, 19 Jul 2003 14:14:26 -0700
+
 gideon (1:2.999-0cvs20030716) unstable; urgency=low
 
   * Updated the Debian menu entry to use the name KDevelop 3.0
