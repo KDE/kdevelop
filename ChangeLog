@@ -1,3 +1,6 @@
+2002-05-25  Harald Fernengel <harry@kdevelop.org>
+	* use KApplicationTree in tools-part to avoid code duplication
+
 2002-05-21  Roberto Raggi  <raggi@cli.di.unipi.it>
 	* qeditor: Implemented markinterface
 	* qeditor: Implemented searchinterface	
