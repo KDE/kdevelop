@@ -149,6 +149,12 @@ void DiffWidget::setDiff( const QString& diff )
   slotFinished();
 }
 
+void DiffWidget::showMessage( const QString& message )
+{
+  setKompareVisible( false );
+  te->setText( message );
+}
+
 void DiffWidget::openURL( const KURL& url )
 {
   if ( komparePart ) {

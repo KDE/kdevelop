@@ -42,6 +42,8 @@ public slots:
     void setDiff( const QString& diff );
     /** clears the difference viewer */
     void slotClear();
+    /** shows a status message */
+    void showMessage( const QString& message );
 
 private slots:
     /** appends a piece of "diff" */

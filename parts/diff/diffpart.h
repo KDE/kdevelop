@@ -13,11 +13,14 @@
 #define _DIFFPART_H_
 
 #include <qguardedptr.h>
+#include <qcstring.h>
 
 #include "kdevplugin.h"
 #include "kdevdifffrontend.h"
 
+class KProcess;
 class DiffWidget;
+class QCString;
 
 class DiffPart : public KDevDiffFrontend
 {
@@ -29,14 +32,27 @@ public:
 
     void openURL( const KURL& url );
     void showDiff( const QString& diff );
+    void showMessage( const QString& message );
     void showDiff( const KURL &, const KURL & ) { /* TODO */ }
 
 public slots:
     void slotExecDiff();
 
+private slots:
+    void contextMenu( QPopupMenu* popup, const Context* context );
+    void localDiff();
+    void processExited( KProcess* p );
+    void receivedStdout( KProcess* p, char* buf, int buflen );
+    void receivedStderr( KProcess* p, char* buf, int buflen );
+    void wroteStdin( KProcess* p );
+
 private:
     QGuardedPtr<DiffWidget> diffWidget;
-
+    KURL popupFile;
+    KProcess* proc;
+    QCString buffer;
+    QString resultBuffer;
+    QString resultErr;
 };
 
 #endif
