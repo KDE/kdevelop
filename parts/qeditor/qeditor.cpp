@@ -42,6 +42,7 @@
 
 #include "qeditor.h"
 #include "cpp_parser.h"
+#include "python_parser.h"
 
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
@@ -372,7 +373,7 @@ void QEditor::repaintChanged()
 
 QString QEditor::textLine( uint line ) const
 {
-    if ( line < 0 || line >= lines() )
+    if ( int(line) >= lines() )
 	return QString::null;
 
     QString str = document()->paragAt( line )->string()->toString();
@@ -407,6 +408,7 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( new PythonParser(this) );
     } else if( m_language == "xml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
@@ -439,7 +441,7 @@ void QEditor::setText( const QString& text )
     setTextFormat( KTextEdit::AutoText );
 }
 
-void QEditor::slotCursorPositionChanged( int line, int )
+void QEditor::slotCursorPositionChanged( int /*line*/, int )
 {
 #if 0
     if( line != m_currentLine ){
@@ -483,6 +485,10 @@ BackgroundParser* QEditor::parser() const
 
 void QEditor::setBackgroundParser( BackgroundParser* parser )
 {
+    if( m_parser ){
+        delete( m_parser );
+        m_parser = 0;
+    }
     m_parser = parser;
 }
 

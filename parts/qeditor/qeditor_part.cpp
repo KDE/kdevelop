@@ -780,9 +780,11 @@ void QEditorPart::configDialog()
     connect( &dlg, SIGNAL(okClicked()), generalPage, SLOT(accept()) );
 
 
-    HighlightingConfigPage* hlPage = new HighlightingConfigPage( dlg.addVBoxPage(i18n("Highlighting")) );
-    hlPage->setEditor( this );
-    connect( &dlg, SIGNAL(okClicked()), hlPage, SLOT(accept()) );
+    if( colorizer() ){
+        HighlightingConfigPage* hlPage = new HighlightingConfigPage( dlg.addVBoxPage(i18n("Highlighting")) );
+        hlPage->setEditor( this );
+        connect( &dlg, SIGNAL(okClicked()), hlPage, SLOT(accept()) );
+    }
 
     if( indenter() ){
         (void) indenter()->createConfigPage( this, &dlg );
