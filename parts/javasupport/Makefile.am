@@ -11,7 +11,7 @@ kde_module_LTLIBRARIES = libkdevjavasupport.la
 libkdevjavasupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
 libkdevjavasupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la                                 $(top_builddir)/lib/antlr/src/libantlr.la                                 $(top_builddir)/lib/catalog/libkdevcatalog.la
 
-libkdevjavasupport_la_SOURCES = javasupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui javanewclassdlgbase.ui javanewclassdlg.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp implementmethodsdialog.ui subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp KDevJavaSupportIface.cpp KDevJavaSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp javasupportfactory.cpp codeinformationrepository.cpp doxydoc.cpp JavaLexer.cpp JavaRecognizer.cpp JavaStoreWalker.cpp driver.cpp
+libkdevjavasupport_la_SOURCES = javasupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui javanewclassdlgbase.ui javanewclassdlg.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp KDevJavaSupportIface.cpp KDevJavaSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp javasupportfactory.cpp codeinformationrepository.cpp doxydoc.cpp JavaLexer.cpp JavaRecognizer.cpp JavaStoreWalker.cpp driver.cpp
 
 EXTRA_DIST = java.g java.tree.g java.store.g
 

@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
 libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 
-libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui cppnewclassdlgbase.ui cppnewclassdlg.cpp kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp implementmethodsdialog.ui ast_utils.cpp store_walker.cpp realtime_classbrowser.cpp subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp KDevCppSupportIface.cpp KDevCppSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp cppsupportfactory.cpp tag_creator.cpp codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp
+libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui cppnewclassdlgbase.ui cppnewclassdlg.cpp kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp ast_utils.cpp store_walker.cpp subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp KDevCppSupportIface.cpp KDevCppSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp cppsupportfactory.cpp tag_creator.cpp codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp
 
 
 

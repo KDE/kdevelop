@@ -228,7 +228,7 @@ QString AntProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AntProjectPart::mainProgram(bool relative = false)
+QString AntProjectPart::mainProgram(bool relative)
 {
 	return QString::null;
 

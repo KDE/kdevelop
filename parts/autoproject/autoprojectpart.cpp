@@ -277,7 +277,7 @@ QString AutoProjectPart::runDirectory()
   *   if /kdevautoproject/run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AutoProjectPart::mainProgram(bool relative = false)
+QString AutoProjectPart::mainProgram(bool relative)
 {
     QDomDocument &dom = *projectDom();
 

@@ -54,7 +54,7 @@ public:
     virtual ~CppSupportPart();
 
     bool isValid() const { return m_valid; }
-    
+
     Catalog* projectCatalog() { return m_projectCatalog; }
 
     ProblemReporter* problemReporter() { return m_problemReporter; }
@@ -88,7 +88,6 @@ protected:
     virtual QString unformatClassName(const QString &name);
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);
-    virtual void implementVirtualMethods( const QString& className );
 
 private slots:
     void activePartChanged(KParts::Part *part);
@@ -112,8 +111,6 @@ private slots:
     void slotCompleteText();
     void slotMakeMember();
 
-    // code completion related slots - called from config-widget
-    void slotNodeSelected( QListViewItem* item );
     void slotNeedTextHint( int, int, QString& );
 
     /**
@@ -152,8 +149,6 @@ private:
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
     QString m_activeFileName;
-
-    KListView* m_structureView;
 
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;

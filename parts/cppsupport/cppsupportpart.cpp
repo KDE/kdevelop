@@ -16,12 +16,10 @@
 #include "cppsupportpart.h"
 #include "cppsupport_events.h"
 #include "problemreporter.h"
-#include "implementmethodsdialog.h"
 #include "backgroundparser.h"
 #include "store_walker.h"
 #include "ast.h"
 #include "ast_utils.h"
-#include "realtime_classbrowser.h"
 #include "cppnewclassdlg.h"
 #include "cppcodecompletion.h"
 #include "ccconfigwidget.h"
@@ -116,12 +114,12 @@ public:
 	: KDevDriver( cppSupport )
     {
     }
-    
+
     void fileParsed( const QString& fileName )
     {
 	kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
 	TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
-	
+
         if( cppSupport()->problemReporter() ){
 	    cppSupport()->problemReporter()->removeAllProblems( fileName );
 
@@ -132,7 +130,7 @@ public:
 	        cppSupport()->problemReporter()->reportProblem( fileName, p );
 	    }
 	}
-	
+
 	cppSupport()->removeWithReferences( fileName );
 	StoreWalker walker( fileName, cppSupport()->classStore() );
 	walker.parseTranslationUnit( ast.get() );
@@ -149,9 +147,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
-    
+
     m_driver = new CppDriver( this );
-    
+
     setXMLFile("kdevcppsupport.rc");
 
     m_projectCatalog = 0;
@@ -172,19 +170,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
-
-#ifdef ENABLE_FILE_STRUCTURE
-    m_structureView = new KListView();
-    QFont f = m_structureView->font();
-    f.setPointSize( 8 );
-    m_structureView->setFont( f );
-    m_structureView->setSorting( 0 );
-    m_structureView->addColumn( "" );
-    m_structureView->header()->hide();
-    mainWindow()->embedSelectViewRight( m_structureView, i18n("File Structure"), i18n("Show the structure for the current source unit") );
-    connect( m_structureView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
-    connect( m_structureView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
-#endif
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -230,7 +215,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
              SLOT( projectConfigWidget( KDialogBase* ) ) );
-    
+
     new KDevCppSupportIface( this );
     //(void) dcopClient();
 }
@@ -240,7 +225,7 @@ CppSupportPart::~CppSupportPart()
 {
     delete( m_driver );
     m_driver = 0;
-    
+
     if( m_backgroundParser ){
 	//    while( m_backgroundParser->filesInQueue() > 0 )
 	//       m_backgroundParser->isEmpty().wait();
@@ -253,7 +238,7 @@ CppSupportPart::~CppSupportPart()
 
     codeRepository()->setMainCatalog( 0 );
     delete( m_projectCatalog );
-    
+
     QPtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
         ++it;
@@ -261,26 +246,20 @@ CppSupportPart::~CppSupportPart()
     }
 
     mainWindow( )->removeView( m_problemReporter );
-#ifdef ENABLE_FILE_STRUCTURE
-    mainWindow()->removeView( m_structureView );
-#endif
 
     delete m_pCompletion;
-#ifdef ENABLE_FILE_STRUCTURE
-    delete m_structureView;
-#endif
     delete m_problemReporter;
 }
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
     kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
-    
+
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
-	
-	kdDebug(9007) << "----------> file " << fileName << " parsed" << endl; 
+
+	kdDebug(9007) << "----------> file " << fileName << " parsed" << endl;
 
         if( m_problemReporter ){
 	    m_problemReporter->removeAllProblems( fileName );
@@ -299,9 +278,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		StoreWalker walker( fileName, cppSupport()->classStore() );
 		walker.parseTranslationUnit( ast );
 	    }
-	    m_backgroundParser->unlock();	    
+	    m_backgroundParser->unlock();
 #endif
-	}	
+	}
 	emit fileParsed( fileName );
     }
 }
@@ -326,10 +305,6 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     kdDebug(9032) << "CppSupportPart::activePartChanged()" << endl;
 
     bool enabled = false;
-
-#ifdef ENABLE_FILE_STRUCTURE
-    m_structureView->clear();
-#endif
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
@@ -372,15 +347,15 @@ void
 CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
-    
+
     m_projectCatalog = new Catalog();
 #if 0
     m_projectCatalog->open( project()->projectDirectory() + "/project.db" );
-    
+
     QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
     for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
 	m_projectCatalog->addIndex( (*idxIt).utf8() );
-    
+
     codeRepository()->setMainCatalog( m_projectCatalog );
 #endif
 
@@ -396,13 +371,13 @@ CppSupportPart::projectOpened( )
     QDir::setCurrent( project()->projectDirectory() );
 
     m_timestamp.clear();
-    
+
     m_pCompletion = new CppCodeCompletion( this );
     m_projectClosed = false;
 
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
-    
+
     QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
@@ -411,7 +386,7 @@ void
 CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
-    
+
     m_pCompletionConfig->store();
 
     if( m_backgroundParser )
@@ -477,7 +452,7 @@ static QStringList reorder(const QStringList &list)
 
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it){
-	QString fileName = *it;	
+	QString fileName = *it;
         if (headerExtensions.contains(QFileInfo(*it).extension()))
             headers << (*it);
         else
@@ -750,18 +725,18 @@ CppSupportPart::parseProject( )
 
 	    if( (n%5) == 0 ){
 	        kapp->processEvents();
-		
+
 		if( m_projectClosed )
 		    return false;
 	    }
-	    
+
 	    if( isValidSource(absFilePath) ){
 		QDateTime t = fileInfo.lastModified();
 		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
 		    continue;
-	    	    
+
 		m_driver->parseFile( absFilePath );
-	    
+
 		m_timestamp[ absFilePath ] = t;
 	    }
         }
@@ -810,23 +785,6 @@ CppSupportPart::maybeParse( const QString& fileName )
     m_driver->parseFile( fileName );
 }
 
-void CppSupportPart::implementVirtualMethods( const QString& className )
-{
-    ParsedClass *pc = classStore()->getClassByName(className);
-
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
-	return;
-    }
-
-    ImplementMethodsDialog dlg( 0, "implementMethodsDlg" );
-    dlg.setPart( this );
-    if( !dlg.implementMethods(pc) )
-      return;
-
-    KMessageBox::sorry( 0, i18n("Not implemented yet ;)"), i18n("Sorry") );
-}
-
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 {
     if( 1 || !m_activeEditor )
@@ -859,21 +817,11 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
     m_backgroundParser->unlock();
 }
 
-void CppSupportPart::slotNodeSelected( QListViewItem* item )
-{
-    if( !item || !m_activeSelection || !m_activeViewCursor)
-	return;
-
-    m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
-				     item->text(3).toInt(), item->text(4).toInt() );
-    m_activeViewCursor->setCursorPositionReal(item->text(1).toInt(), item->text(2).toInt());
-}
-
 void CppSupportPart::slotMakeMember()
 {
     if( !m_activeViewCursor || !m_valid )
         return;
-    
+
     // sync
     while( m_backgroundParser->filesInQueue() > 0 )
          m_backgroundParser->isEmpty().wait();

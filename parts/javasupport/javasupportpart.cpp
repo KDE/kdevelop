@@ -16,7 +16,6 @@
 #include "javasupportpart.h"
 #include "javasupport_events.h"
 #include "problemreporter.h"
-#include "implementmethodsdialog.h"
 #include "backgroundparser.h"
 #include "JavaStoreWalker.hpp"
 #include "JavaAST.hpp"
@@ -674,23 +673,6 @@ JavaSupportPart::maybeParse( const QString& fileName )
         m_backgroundParser->removeFile( fileName );
 
     //partController()->blockSignals( false );
-}
-
-void JavaSupportPart::implementVirtualMethods( const QString& className )
-{
-    ParsedClass *pc = classStore()->getClassByName(className);
-
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
-	return;
-    }
-
-    ImplementMethodsDialog dlg( 0, "implementMethodsDlg" );
-    dlg.setPart( this );
-    if( !dlg.implementMethods(pc) )
-      return;
-
-    KMessageBox::sorry( 0, i18n("Not implemented yet ;)"), i18n("Sorry") );
 }
 
 void JavaSupportPart::slotNeedTextHint( int line, int column, QString& textHint )

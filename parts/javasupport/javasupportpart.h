@@ -89,7 +89,6 @@ protected:
     virtual QString unformatClassName(const QString &name);
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);
-    virtual void implementVirtualMethods( const QString& className );
 
 private slots:
     void activePartChanged(KParts::Part *part);

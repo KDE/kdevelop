@@ -250,7 +250,7 @@ QString TrollProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString TrollProjectPart::mainProgram(bool relative = false)
+QString TrollProjectPart::mainProgram(bool relative)
 {
     QDomDocument &dom = *projectDom();
 
