@@ -45,7 +45,7 @@ private slots:
     void slotContextGotoManpage();
 //  void slotContextLookupIndex();
     void slotContextFulltextSearch();
-    void insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int pagenumber );
+    void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber );
 
 
     
