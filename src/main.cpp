@@ -49,6 +49,8 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("F@lk Brettschneider", I18N_NOOP("MDI modes, QEditor, bugfixes"), "falkbr@kdevelop.org");
   aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "cloudtemple@mksat.net");
   aboutData.addAuthor("Mario Scalas", I18N_NOOP("PartExplorer, redesign of CvsPart, patches, bugs(fixes)"), "mario.scalas@libero.it");
+  aboutData.addAuthor("Amilcar do Carmo Lucas", I18N_NOOP("Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
+  aboutData.addAuthor("Jens Dagerbo", I18N_NOOP("Replace plugin, Bookmarks plugin, Overall improvements and patches"), "jens.dagerbo@swipnet.se");
 
   aboutData.addCredit("The KWrite authors", I18N_NOOP("Kate editor component"), "kwrite-devel@kde.org");
   aboutData.addCredit("The KHTML authors", I18N_NOOP("HTML documentation component"), "kwrite-devel@kde.org");
@@ -62,10 +64,8 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Stephane ANCELOT", I18N_NOOP("Patches"), "sancelot@free.fr");
   aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
   aboutData.addCredit("Julian Rockey", I18N_NOOP("Filecreate part and other bits and patches"), "linux@jrockey.com");
-  aboutData.addCredit("Amilcar do Carmo Lucas", I18N_NOOP("Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
   aboutData.addCredit("Ajay Guleria", I18N_NOOP("ClearCase support"), "ajay_guleria@yahoo.com");
   aboutData.addCredit("Marek Janukowicz", I18N_NOOP("Ruby support"), "child@t17.ds.pwr.wroc.pl");
-  aboutData.addCredit("Jens Dagerbo", I18N_NOOP("Replace part, patches"), "jens.dagerbo@swipnet.se");
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
 aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "okellogg@users.sourceforge.net");
