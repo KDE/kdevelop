@@ -5,8 +5,8 @@
 *   Benoit.Cerrina@writeme.com                                            *
 *   Copyright (C) 2002 by Bernd Gehrmann                                  *
 *   bernd@kdevelop.org                                                    *
-*   Copyright (C) 2003 by Eray Ozkural <erayo@cs.bilkent.edu.tr>          *
-*   bernd@kdevelop.org                                                    *
+*   Copyright (C) 2003 by Eray Ozkural                                    *
+*   <erayo@cs.bilkent.edu.tr>                                             *
 *   Copyright (C) 2003 by Alexander Dymo                                  *
 *   cloudtemple@mksat.net                                                 *
 *                                                                         *
@@ -180,11 +180,14 @@ void CppNewClassDialog::checkQWidgetInheritance(int val)
 
     if (val)
     {
-        addBaseClass();
-        basename_edit->setText("QWidget");
-        constructors_cpp_edit->append(classname_edit->text() + "::" + classname_edit->text() +
+        if (baseclasses_view->childCount() == 0)
+        {
+            addBaseClass();
+            basename_edit->setText("QWidget");
+        }
+/*        constructors_cpp_edit->append(classname_edit->text() + "::" + classname_edit->text() +
             "(QWidget *parent, const char *name):\n    QWidget(parent, name)\n{\n}\n");
-        constructors_h_edit->append(classname_edit->text() + "(QWidget *parent, const char *name);\n");
+        constructors_h_edit->append(classname_edit->text() + "(QWidget *parent, const char *name);\n");*/
     }
 
     if (val && (baseclasses_view->childCount() > 1))
@@ -197,8 +200,15 @@ void CppNewClassDialog::checkQWidgetInheritance(int val)
 void CppNewClassDialog::qobject_box_stateChanged(int val)
 {
     if ( childclass_box->isChecked() )
-	return;
+        return;
 
+    if (baseclasses_view->childCount() == 0)
+    {
+        addBaseClass();
+        basename_edit->setText("QObject");
+    }
+
+    
     objc_box->setEnabled(!val);
     gtk_box->setEnabled(!val);
 }
@@ -1192,20 +1202,31 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   QString relPath;
   for (int i = implementation.findRev('/'); i != -1; i = implementation.findRev('/', --i))
     relPath += "../";
-  args = childClass? "QWidget *parent, const char *name" : "";
+  if (childClass)
+    args = "QWidget *parent, const char *name, WFlags f";
+  else if (qobject)
+    args = "QObject *parent, const char *name";
+  else
+    args = "";
   QString baseInitializer;
 
   if (childClass && (dlg.baseclasses_view->childCount() == 0))
-    baseInitializer = "  : QWidget(parent, name)";
+    baseInitializer = "  : QWidget(parent, name, f)";
+  else if (qobject && (dlg.baseclasses_view->childCount() == 0))
+    baseInitializer = "  : QObject(parent, name)";
   else if (dlg.baseclasses_view->childCount() != 0)
   {
     QListViewItemIterator it( dlg.baseclasses_view );
+    baseInitializer += " : ";
     while ( it.current() )
     {
       if (!it.current()->text(0).isNull())
       {
-        baseInitializer += " : ";
+        if (baseInitializer != " : ")
+          baseInitializer += ", ";
         if (childClass && (baseInitializer == " : "))
+          baseInitializer += it.current()->text(0) + "(parent, name, f)";
+        else if (qobject && (baseInitializer == " : "))
           baseInitializer += it.current()->text(0) + "(parent, name)";
         else
           baseInitializer += it.current()->text(0) + "()";
@@ -1376,6 +1397,8 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       ++it;
     }
   }
+  else if (qobject)
+    inheritance += ": public QObject";
 
   QString qobjectStr;
   if (childClass || qobject)
