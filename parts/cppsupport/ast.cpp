@@ -228,7 +228,8 @@ QString NameAST::text() const
         ++it;
     }
 
-    str += m_unqualifiedName->text();
+    if( m_unqualifiedName.get() )
+	str += m_unqualifiedName->text();
 
     return str;
 }
