@@ -193,7 +193,7 @@ void MainWindowIDEAl::createFramework() {
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)),
             PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
     connect(m_tabWidget, SIGNAL(closeWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
-    connect(m_tabWidget, SIGNAL(closeOthers(const QWidget *)), PartController::getInstance(), SLOT(slotCloseAllButPartForWidget(const QWidget *)));
+    connect(m_tabWidget, SIGNAL(closeOthers(QWidget *)), PartController::getInstance(), SLOT(slotCloseAllButPartForWidget(QWidget *)));
 
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));

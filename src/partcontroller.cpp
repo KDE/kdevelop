@@ -603,10 +603,9 @@ void PartController::slotClosePartForWidget( const QWidget* w)
   closePartForWidget(w);
 }
 
-void PartController::slotCloseAllButPartForWidget(const QWidget* w)
+void PartController::slotCloseAllButPartForWidget(QWidget* w)
 {
-  QWidget *w2 = w;
-  slotCurrentChanged(w2);
+  slotCurrentChanged(w);
   slotCloseOtherWindows();  
 }
 
