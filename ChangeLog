@@ -1,3 +1,8 @@
+1999-10-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed 'Open recent project'
+	* Implemented 'Next error' and 'Previous error'
+	* Redone some overwritten changes
+
 1999-10-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Again rewritten the widget wrappers. Now widgets with
 	  children (like QScrollView) are handled correctly and

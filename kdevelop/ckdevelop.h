@@ -60,7 +60,6 @@ class CLogFileView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
-class CErrorMessageParser;
 class CEditWidget;
 class QextMdiMainFrm;
 class QextMdiChildView;

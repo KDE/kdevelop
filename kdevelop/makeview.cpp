@@ -73,14 +73,32 @@ void MakeView::startJob()
 
 void MakeView::nextError()
 {
-    // TODO
+    // Search for a custom (= error) item beginning from selected
+    // item or - if none is selected - from beginning
+    int count = numRows();
+    for (int i = currentItem()+1; i < count; ++i)
+        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem())
+            {
+                setCurrentItem(i);
+                return;
+            }
+            
     QApplication::beep();
 }
 
 
 void MakeView::prevError()
 {
-    // TODO
+    // Search for a custom (= error) item beginning from selected
+    // item or - if none is selected - from end
+    int cur = (currentItem() == -1)? numRows() : currentItem();
+    for (int i = cur; i >= 0; --i)
+        if (static_cast<ProcessListBoxItem*>(item(i))->isCustomItem())
+            {
+                setCurrentItem(i);
+                return;
+            }
+
     QApplication::beep();
 }
 
@@ -157,19 +175,28 @@ void MakeView::insertStderrLine(const QString &line)
     const int errorGccRowGroup = 2;
     const int errorJadeRowGroup = 2;
 
-    // TODO: Consider directories in file name
+    QString fn;
+    int row;
+    
+    bool hasmatch = false;
     if (errorGccRx.match(line))
         {
-            QString fn = errorGccRx.group(errorGccFileGroup);
-            int row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
-            cout << "Gcc error in " << fn << " at line: " << row << endl;
-            insertItem(new MakeListBoxItem(line, fn, row));
+            hasmatch = true;
+            fn = errorGccRx.group(errorGccFileGroup);
+            row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
         }
     else if (errorJadeRx.match(line))
         {
-            QString fn = errorGccRx.group(errorJadeFileGroup);
-            int row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
-            cout << "Jade error in " << fn << " at line: " << row << endl;
+            hasmatch = true;
+            fn = errorGccRx.group(errorJadeFileGroup);
+            row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
+        }
+    if (hasmatch)
+        {
+            cout << "Error in " << fn << " at line: " << row << endl;
+            if (dirstack.top())
+                fn.prepend("/").prepend(*dirstack.top());
+            cout << "Path: " << fn << endl;
             insertItem(new MakeListBoxItem(line, fn, row));
         }
     else

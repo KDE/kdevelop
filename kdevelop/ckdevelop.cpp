@@ -795,20 +795,8 @@ void CKDevelop::slotBuildCompileFile(){
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 	//  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  (*messages_widget) << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-
-            if (!prj->getCXXFLAGS().isEmpty())
-		(*messages_widget) << prj->getCXXFLAGS() << " ";
-            if (!prj->getAdditCXXFLAGS().isEmpty())
-		(*messages_widget) << prj->getAdditCXXFLAGS();
-	}
-    (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-    if (!prj->getLDFLAGS().isEmpty())
-	(*messages_widget) << prj->getLDFLAGS();
-    (*messages_widget) << "\" ";
+  // This should not be necessary thanks autoconf:
+  //(*messages_widget) << prj->getCompilationEnvironment();
     (*messages_widget) << make_cmd << fileinfo.baseName()+".o";
     messages_widget->startJob();
 }
@@ -885,21 +873,9 @@ void CKDevelop::slotBuildMake(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
-  messages_widget->clear();
   messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  (*messages_widget) << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-     	if (!prj->getCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getCXXFLAGS() << " ";
-		  if (!prj->getAdditCXXFLAGS().isEmpty())
-    		  (*messages_widget) << prj->getAdditCXXFLAGS();
-  }
-	(*messages_widget) << "\" " << "LDFLAGS=\" " ;
-	if (!prj->getLDFLAGS().isEmpty())
-			(*messages_widget) << prj->getLDFLAGS();
-	(*messages_widget) << "\" ";
+  // This should not be necessary thanks autoconf:
+  //(*messages_widget) << prj->getCompilationEnvironment();
   (*messages_widget) << make_cmd;
   if(!prj->getMakeOptions().isEmpty())
       (*messages_widget) << prj->getMakeOptions();
@@ -941,23 +917,12 @@ void CKDevelop::slotBuildRebuildAll(){
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
-  messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
   messages_widget->prepareJob(prj->getProjectDir());
   (*messages_widget) << make_cmd << "distclean && " << make_cmd 
 		<< " -f Makefile.dist && ";
-  (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-       if (!prj->getCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-  }
-  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
-  (*messages_widget) << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
+  (*messages_widget) << prj->getCompilationEnvironment();
+  (*messages_widget) << "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
 
   beep = true;
   messages_widget->startJob();
@@ -995,7 +960,6 @@ void CKDevelop::slotBuildAutoconf(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
-  messages_widget->clear();
   messages_widget->prepareJob(prj->getProjectDir());
   (*messages_widget) << make_cmd;
   if(QFileInfo(QDir::current(),"Makefile.dist").exists())
@@ -1025,20 +989,9 @@ void CKDevelop::slotBuildConfigure(){
   setToolMenuProcess(false);
   slotFileSave();
   slotFileSaveAll();
-  messages_widget->clear();
   messages_widget->prepareJob(prj->getProjectDir());
-  (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-      if (!prj->getCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-      if (!prj->getAdditCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-  }
-  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
-  (*messages_widget)  << "\" "<< "./configure " << argdlg.getArguments();
+  (*messages_widget) << prj->getCompilationEnvironment();
+  (*messages_widget)  << "./configure " << argdlg.getArguments();
   messages_widget->startJob();
   beep = true;
 }
@@ -2318,8 +2271,8 @@ void CKDevelop::slotProcessExited(KProcess *proc){
       
     next_job = "";
   }
-  if (ready){ // start the error-message parser
 #if 0
+  if (ready){ // start the error-message parser
       QString str1; // = messages_widget->text();
       
       if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -2335,12 +2288,12 @@ void CKDevelop::slotProcessExited(KProcess *proc){
       else{
 	  disableCommand(ID_VIEW_NEXT_ERROR);
       }
-#endif
   }
   if(beep && ready){
       XBell(kapp->getDisplay(),100); //beep :-)
       beep = false;
   }
+#endif
   
 }
 

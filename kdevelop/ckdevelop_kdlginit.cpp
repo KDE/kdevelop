@@ -266,8 +266,8 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_KDLG_FILE_SAVE);
   disableCommand(ID_KDLG_FILE_SAVE_AS);
  
-  disableCommand(ID_VIEW_NEXT_ERROR);
-  disableCommand(ID_VIEW_PREVIOUS_ERROR);
+  // Why??  disableCommand(ID_VIEW_NEXT_ERROR);
+  //  disableCommand(ID_VIEW_PREVIOUS_ERROR);
 
   disableCommand(ID_EDIT_UNDO);
   disableCommand(ID_EDIT_REDO);
