@@ -15,12 +15,15 @@ public:
     virtual void removeItem(QListViewItem *it);
     virtual void renameItem(QListViewItem *it, const QString &newName);
 
+    virtual void setDefaultText(const QString &text);
+
     virtual void clear();
 
     int defaultWidth();
 private:
     KCompletion m_comp;
     int m_defaultWidth;
+    QString m_defaultText;
 };
 
 #endif

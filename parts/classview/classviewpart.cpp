@@ -36,6 +36,7 @@
 #include <kdevlanguagesupport.h>
 #include <kcomboview.h>
 #include <kdevpartcontroller.h>
+#include <kdevproject.h>
 #include <urlutil.h>
 
 #include <codemodel.h>
@@ -76,6 +77,9 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(activePartChanged(KParts::Part*)));
+
+    m_classes->view()->setDefaultText(EmptyClasses);
+    m_functions->view()->setDefaultText(EmptyFunctions);
 }
 
 
@@ -92,8 +96,9 @@ ClassViewPart::~ClassViewPart()
 void ClassViewPart::slotProjectOpened( )
 {
     connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
-    connect( languageSupport(), SIGNAL(aboutToRemoveSourceInfo(const QString& )), this, SLOT(refresh()));
-    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(refresh()));
+    connect( languageSupport(), SIGNAL(aboutToRemoveSourceInfo(const QString& )), this, SLOT(removeFile(const QString&)));
+    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(addFile(const QString& )));
+//    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(refresh()));
 }
 
 void ClassViewPart::slotProjectClosed( )
@@ -190,6 +195,7 @@ void ClassViewPart::setupActions( )
 
 void ClassViewPart::refresh( )
 {
+    kdDebug() << "ClassViewPart::refresh" << endl;
     ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
 }
 
@@ -198,8 +204,8 @@ void ClassViewPart::selectNamespace( QListViewItem * item )
     NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
     if (!ni)
         return;
-    ViewCombosOp::refreshClasses(this, m_classes->view(), ni->dom());
-    ViewCombosOp::refreshFunctions(this, m_functions->view(), ni->dom());
+    ViewCombosOp::refreshClasses(this, m_classes->view(), ni->dom()->name());
+    ViewCombosOp::refreshFunctions(this, m_functions->view(), ni->dom()->name());
 }
 
 void ClassViewPart::selectClass( QListViewItem * item )
@@ -452,11 +458,11 @@ void ClassViewPart::syncCombos( )
         else
             kdDebug() << "namespace data empty" << endl;
 
-        for (QMap<NamespaceModel*, NamespaceItem*>::const_iterator it = nsmap.begin();
+        for (QMap<QString, NamespaceItem*>::const_iterator it = nsmap.begin();
             it != nsmap.end(); ++it)
         {
             kdDebug() << " in nsmap " << it.key() << " data " << it.data() << endl;
-            kdDebug() << " in nsmap " << it.key()->name() << " data " << it.data()->text(0) << endl;
+            kdDebug() << " in nsmap " << it.key() << " data " << it.data()->text(0) << endl;
         }
 
         kdDebug() << " in nsmap is ? " << nsdom.data() << endl;
@@ -467,10 +473,10 @@ void ClassViewPart::syncCombos( )
                 return;
         }
 
-        if (nsdom.data() && nsmap[nsdom.data()])
+        if (nsdom.data() && nsmap[nsdom->name()])
         {
             kdDebug() << "trying namespace " << nsdom->name() << endl;
-            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom.data()]);
+            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom->name()]);
         }
         else
         {
@@ -525,11 +531,11 @@ void ClassViewPart::syncCombos( )
         else
             kdDebug() << "namespace data empty" << endl;
 
-        for (QMap<NamespaceModel*, NamespaceItem*>::const_iterator it = nsmap.begin();
+        for (QMap<QString, NamespaceItem*>::const_iterator it = nsmap.begin();
             it != nsmap.end(); ++it)
         {
             kdDebug() << " in nsmap " << it.key() << " data " << it.data() << endl;
-            kdDebug() << " in nsmap " << it.key()->name() << " data " << it.data()->text(0) << endl;
+            kdDebug() << " in nsmap " << it.key() << " data " << it.data()->text(0) << endl;
         }
 
         kdDebug() << " in nsmap is ? " << nsdom.data() << endl;
@@ -540,10 +546,10 @@ void ClassViewPart::syncCombos( )
                 return;
         }
 
-        if (nsdom.data() && nsmap[nsdom.data()])
+        if (nsdom.data() && nsmap[nsdom->name()])
         {
             kdDebug() << "trying namespace " << nsdom->name() << endl;
-            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom.data()]);
+            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom->name()]);
         }
         else
         {
@@ -689,41 +695,146 @@ void ClassViewPart::unfocusNamespaces( )
 //    m_namespaces->view()->lineEdit()->deselect();
 }
 
-//TODO: implement
 void ClassViewPart::removeFile( const QString & fileName )
 {
-/*    bool removeCurrentNs = false;
-    NamespaceItem *ni = dynamic_cast<NamespaceItem*>(m_namespaces->view()->currentItem());
-    if (ni && (ni->dom()->fileName() == fileName))
-        removeCurrentNs = true;
-
-    FileDom dom = m_part->codeModel()->fileByName( fn );
-    if( !dom )
+    QString fn = URLUtil::canonicalPath( fileName );
+    if( !project()->isProjectFile(fn) )
         return;
-    ViewCombosOp::removeNamespacesItems(m_namespaces->view()->listView(), dom);
 
-    if (removeCurrentNs)
-    {
-        ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
+    FileDom file = codeModel()->fileByName(fileName);
+    if (!file)
         return;
-    }
-*/
-/*    ClassItem *ci = dynamic_cast<ClassItem*>(m_classes->view()->currentItem());
-    if (ci)
-    {
-        if (ci->dom()->fileName() == fileName)
-        {
-            ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
-            delete ni;
-            return;
-        }
-    }*/
 
+    if (ViewCombosOp::removeNamespacesItems(this, m_namespaces->view()->listView(), model_cast<NamespaceDom>(file)))
+        if (nsmap[codeModel()->globalNamespace()->name()])
+            m_namespaces->view()->setCurrentActiveItem(nsmap[codeModel()->globalNamespace()->name()]);
+
+    ViewCombosOp::removeClassItems(this, m_namespaces->view()->listView(), model_cast<ClassDom>(file));
+
+    ViewCombosOp::removeFunctionItems(this, m_namespaces->view()->listView(), model_cast<ClassDom>(file));
 }
 
-//TODO: implement
 void ClassViewPart::addFile( const QString & fileName )
 {
+    QString fn = URLUtil::canonicalPath( fileName );
+    if( !project()->isProjectFile(fn) )
+        return;
+
+    FileDom file = codeModel()->fileByName(fileName);
+    if (!file)
+        return;
+
+    //check for namespaces in file
+    NamespaceList namespaceList = file->namespaceList();
+    for (NamespaceList::const_iterator it = namespaceList.begin(); it != namespaceList.end(); ++it)
+    {
+        NamespaceDom nsdom = *it;
+        if (nsmap.contains(nsdom->name()))
+        {
+            //namespace item exists - update
+            NamespaceItem *ns = nsmap[nsdom->name()];
+            ns->setText(0, languageSupport()->formatModelItem(nsdom));
+            if (m_namespaces->view()->currentItem() == ns)
+            {
+                //reload this and dependent combos because namespace item is currently selected
+                m_namespaces->view()->setCurrentText(languageSupport()->formatModelItem(nsdom));
+
+                //check classes
+                updateClassesForAdd(nsdom);
+                //check functions
+                updateFunctionsForAdd(model_cast<ClassDom>(nsdom));
+            }
+            //refresh info about nested namespaces
+            kdDebug() << "nested ns check for " << nsdom->name() << endl;
+            ViewCombosOp::processNamespace(this, m_namespaces->view(), ns, ViewCombosOp::Refresh);
+        }
+        else
+        {
+            //namespace item does not exist - create
+            NamespaceItem *item = new NamespaceItem(this, m_namespaces->view()->listView(), languageSupport()->formatModelItem(nsdom), nsdom);
+            m_namespaces->view()->addItem(item);
+            item->setOpen(true);
+            ViewCombosOp::processNamespace(this, m_namespaces->view(), item);
+        }
+    }
+
+    if (m_namespaces->view()->currentItem())
+    {
+        NamespaceItem *ni = dynamic_cast<NamespaceItem*>(m_namespaces->view()->currentItem());
+        if (ni && (ni->dom() == codeModel()->globalNamespace()))
+        {
+            //check for classes in file (global namespace)
+            updateClassesForAdd(model_cast<NamespaceDom>(file));
+
+            //check for funtions in file (global namespace);
+            updateFunctionsForAdd(model_cast<ClassDom>(file));
+        }
+    }
+}
+
+void ClassViewPart::updateFunctionsForAdd( ClassDom cldom )
+{
+    FunctionList functionList = cldom->functionList();
+    for (FunctionList::const_iterator it3 = functionList.begin();
+        it3 != functionList.end(); ++it3)
+    {
+        FunctionDom fndom = *it3;
+        if (fnmap.contains(fndom))
+        {
+            //function item exists - update
+            FunctionItem *fn = fnmap[fndom];
+            fn->setText(0, languageSupport()->formatModelItem(fndom, true));
+            fn->setup();
+            if (m_functions->view()->currentItem() == fn)
+            {
+                //reload this combo because function item is currently selected
+                m_functions->view()->setCurrentText(languageSupport()->formatModelItem(fndom, true));
+            }
+            //refresh info about nested functions
+            ViewCombosOp::processFunction(this, m_functions->view(), fn, ViewCombosOp::Refresh);
+        }
+        else
+        {
+            //function item does not exists - create
+            FunctionItem *item = new FunctionItem(this, m_functions->view()->listView(), languageSupport()->formatModelItem(fndom, true), fndom);
+            m_functions->view()->addItem(item);
+            item->setOpen(true);
+            ViewCombosOp::processFunction(this, m_functions->view(), item);
+        }
+    }
+}
+
+void ClassViewPart::updateClassesForAdd( NamespaceDom nsdom )
+{
+    ClassList classList = nsdom->classList();
+    for (ClassList::const_iterator it2 = classList.begin(); it2 != classList.end(); ++it2)
+    {
+        ClassDom cldom = *it2;
+        if (clmap.contains(cldom))
+        {
+            //class item exists - update
+            ClassItem *cl = clmap[cldom];
+            cl->setText(0, languageSupport()->formatModelItem(cldom));
+            if (m_classes->view()->currentItem() == cl)
+            {
+                //reload this and dependent combos because class item is currently selected
+                m_classes->view()->setCurrentText(languageSupport()->formatModelItem(cldom));
+
+                //check functions
+                updateFunctionsForAdd(cldom);
+            }
+            //refresh info about nested classes
+            ViewCombosOp::processClass(this, m_classes->view(), cl, ViewCombosOp::Refresh);
+        }
+        else
+        {
+            //class item does not exists - create
+            ClassItem *item = new ClassItem(this, m_classes->view()->listView(), languageSupport()->formatModelItem(cldom), cldom);
+            m_classes->view()->addItem(item);
+            item->setOpen(true);
+            ViewCombosOp::processClass(this, m_classes->view(), item);
+        }
+    }
 }
 
 #include "classviewpart.moc"

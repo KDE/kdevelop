@@ -56,6 +56,17 @@ public:
 
     bool langHasFeature(KDevLanguageSupport::Features feature);
 
+    QMap<QString, NamespaceItem*> nsmap;
+    QMap<ClassDom, ClassItem*> clmap;
+    QMap<FunctionDom, FunctionItem*> fnmap;
+
+    KListViewAction *m_namespaces;
+    KListViewAction *m_classes;
+    KListViewAction *m_functions;
+
+    void updateClassesForAdd(NamespaceDom nsdom);
+    void updateFunctionsForAdd(ClassDom cldom);
+
 private slots:
     void selectNamespace(QListViewItem*);
     void selectClass(QListViewItem*);
@@ -85,7 +96,7 @@ private slots:
 
     void syncCombos();
     void activePartChanged(KParts::Part*);
-    
+
 private:
     void setupActions();
 
@@ -94,16 +105,10 @@ private:
     FunctionDom syncFunctions(const ClassDom &dom);
 
     QGuardedPtr<ClassViewWidget> m_widget;
-    QMap<NamespaceModel*, NamespaceItem*> nsmap;
-    QMap<ClassModel*, ClassItem*> clmap;
-    QMap<FunctionModel*, FunctionItem*> fnmap;
 
     bool sync;
 
     KAction *m_followCode;
-    KListViewAction *m_namespaces;
-    KListViewAction *m_classes;
-    KListViewAction *m_functions;
     KToolBarPopupAction *m_popupAction;
 
     QString m_activeFileName;

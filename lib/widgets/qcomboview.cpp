@@ -221,6 +221,16 @@ void QComboView::setCurrentItem( QListViewItem *item )
         return;
     }
 
+    if (!item)
+    {
+        d->current = 0;
+        if ( d->ed ) {
+//            d->ed->setText( "" );
+            d->updateLinedGeometry();
+        }
+        return;
+    }
+
     d->current = item;
     d->completeAt = 0;
     if ( d->ed ) {
@@ -295,6 +305,15 @@ QSize QComboView::sizeHint() const
 
 void QComboView::internalActivate( QListViewItem * item )
 {
+    if (!item)
+    {
+        d->current = 0;
+        if ( d->ed ) {
+//            d->ed->setText( "" );
+            d->updateLinedGeometry();
+        }
+        return;
+    }
     popDownListView();
     d->poppedUp = FALSE;
 
@@ -320,6 +339,15 @@ void QComboView::internalActivate( QListViewItem * item )
 
 void QComboView::internalHighlight( QListViewItem * item )
 {
+    if (!item)
+    {
+        d->current = 0;
+        if ( d->ed ) {
+//            d->ed->setText( "" );
+            d->updateLinedGeometry();
+        }
+        return;
+    }
     emit highlighted( item );
     QString t = item->text(0);
     if ( !t.isNull() )

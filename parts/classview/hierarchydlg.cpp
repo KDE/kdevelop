@@ -139,7 +139,7 @@ void HierarchyDialog::slotNamespaceComboChoice( QListViewItem * item )
     NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
     if (!ni)
         return;
-    ViewCombosOp::refreshClasses(m_part, class_combo, ni->dom());
+    ViewCombosOp::refreshClasses(m_part, class_combo, ni->dom()->name());
 }
 
 void HierarchyDialog::processNamespace( QString prefix, NamespaceDom dom )

@@ -25,6 +25,11 @@ void KComboView::addItem(QListViewItem *it)
 
 void KComboView::removeItem(QListViewItem *it)
 {
+    if (it == currentItem())
+    {
+        setCurrentItem(0);
+        setCurrentText(m_defaultText);
+    }
     m_comp.removeItem(it->text(0));
     delete it;
 }
@@ -40,11 +45,18 @@ void KComboView::clear( )
 {
     m_comp.clear();
     QComboView::clear();
+
+    setCurrentText(m_defaultText);
 }
 
 int KComboView::defaultWidth( )
 {
     return m_defaultWidth;
+}
+
+void KComboView::setDefaultText( const QString & text )
+{
+    m_defaultText = text;
 }
 
 #include "kcomboview.moc"
