@@ -1,3 +1,8 @@
+2002-12-05 F@lk Brettschneider <falk@kdevelop.org>
+    * now also parts can load/save the project-related session by overriding the base class method in KDevPlugin
+    * as an example, I moved changed some c++-debugger stuff to write to .kdevses instead of .kdevelop
+      (since every user has its own settings and the .kdevelop file would conflict in CVS)
+
 2002-12-04 Caleb Tennis <caleb@aei-tech.com>
     * Added ability to open ui.h files easily in QMake Manager with right click popupmenu.
 

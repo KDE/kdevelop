@@ -11,8 +11,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "debuggerpart.h"
-
 #include <qdir.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -52,6 +50,8 @@
 #include "processlinemaker.h"
 
 #include <iostream>
+
+#include "debuggerpart.h"
 
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
@@ -286,8 +286,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     setupController();
     
-    if( project() )
-        projectOpened();
+//    if( project() )
+//        projectOpened();
 }
 
 
@@ -327,35 +327,35 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
 }
 
 
-void DebuggerPart::projectOpened()
-{
-    QDomElement bpsElement = DomUtil::elementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
-    QDomElement bpElement = bpsElement.firstChild().toElement();
-    while( !bpElement.isNull() ) {
-        QString filename = bpElement.attribute( "file" );
-        int lineNum = bpElement.attribute( "line" ).toInt();
-        // TODO: restore condition
-        breakpointWidget->slotToggleBreakpoint( filename, lineNum );
-        bpElement = bpElement.nextSibling().toElement();
-    }
-}
-
-
-void DebuggerPart::projectClosed()
-{
-    QDomElement bpsElement = DomUtil::createElementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
-    DomUtil::makeEmpty( bpsElement );
-    const QPtrList<Breakpoint> bps = breakpointWidget->breakpoints();
-    for( QPtrListIterator<Breakpoint> it( bps ); it.current(); ++it ) {
-        Breakpoint* bp = it.current();
-        QDomElement bpElement = bpsElement.ownerDocument().createElement( "breakpoint" );
-        bpElement.setAttribute( "file", bp->fileName() );
-        bpElement.setAttribute( "line", bp->lineNum() - 1 );
-        bpElement.setAttribute( "condition", bp->conditional() );
-        bpsElement.appendChild( bpElement );
-    }
-}
-
+//void DebuggerPart::projectOpened()
+//{
+//    QDomElement bpsElement = DomUtil::elementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
+//    QDomElement bpElement = bpsElement.firstChild().toElement();
+//    while( !bpElement.isNull() ) {
+//        QString filename = bpElement.attribute( "file" );
+//        int lineNum = bpElement.attribute( "line" ).toInt();
+//        // TODO: restore condition
+//        breakpointWidget->slotToggleBreakpoint( filename, lineNum );
+//        bpElement = bpElement.nextSibling().toElement();
+//    }
+//}
+//
+//
+//void DebuggerPart::projectClosed()
+//{
+//    QDomElement bpsElement = DomUtil::createElementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
+//    DomUtil::makeEmpty( bpsElement );
+//    const QPtrList<Breakpoint> bps = breakpointWidget->breakpoints();
+//    for( QPtrListIterator<Breakpoint> it( bps ); it.current(); ++it ) {
+//        Breakpoint* bp = it.current();
+//        QDomElement bpElement = bpsElement.ownerDocument().createElement( "breakpoint" );
+//        bpElement.setAttribute( "file", bp->fileName() );
+//        bpElement.setAttribute( "line", bp->lineNum() - 1 );
+//        bpElement.setAttribute( "condition", bp->conditional() );
+//        bpsElement.appendChild( bpElement );
+//    }
+//}
+//
 
 void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
@@ -512,13 +512,6 @@ void DebuggerPart::startDebugger()
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
-    
-    bool enableFloatingToolBar = DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar");
-
-    if (enableFloatingToolBar) {
-        floatingToolBar = new DbgToolBar(this, topLevel()->main());
-        floatingToolBar->show();
-    }
     
     gdbOutputWidget->clear();
     
@@ -760,6 +753,93 @@ void DebuggerPart::slotActivePartChanged( KParts::Part* part )
   KTextEditor::ViewCursorInterface *iface
       = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
   action->setEnabled( iface != 0 );
+}
+
+void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
+{
+  QDomElement generalEl = el->namedItem("general").toElement();
+  if (!generalEl.isNull()) {
+    bool enableFloatingToolBar = bool(generalEl.attribute( "dbgToolbar", "0").toInt());
+    if (enableFloatingToolBar) {
+      floatingToolBar = new DbgToolBar(this, topLevel()->main());
+      floatingToolBar->show();
+    }
+  }
+
+  QDomElement breakpointListEl = el->namedItem("breakpointList").toElement();
+  if (!breakpointListEl.isNull()) {
+    QDomElement breakpointEl;
+    int id;
+    for (breakpointEl = breakpointListEl.firstChild().toElement(), id = 10000;
+         !breakpointEl.isNull();
+         breakpointEl = breakpointEl.nextSibling().toElement(), id++)
+    {
+      // read from session
+      QString fileName = breakpointEl.attribute( "fileName", "");
+      if (fileName.isEmpty()) {
+        continue;
+      }
+      int lineNum = breakpointEl.attribute( "lineNum", "0").toInt();
+      bool bEnabled = bool(breakpointEl.attribute( "enabled", "1").toInt());
+      int dbgId = breakpointEl.attribute( "dbgId", "-1").toInt();
+      QString condition = breakpointEl.attribute( "condition", "");
+
+      // recreate breakpoint
+      breakpointWidget->slotToggleBreakpoint( fileName, lineNum );
+      if (!bEnabled) {
+        breakpointWidget->slotToggleBreakpointEnabled( fileName, lineNum );
+      }
+
+      // make it visible in the editor view
+      debugger()->setBreakpoint(fileName, lineNum, dbgId, bEnabled, false);
+
+      QPtrList<Breakpoint> bpList = breakpointWidget->breakpoints();
+      QPtrListIterator<Breakpoint> it(bpList);
+      for (; it.current(); ++it) {
+        Breakpoint* bp = it.current();
+        if (bp->fileName() == fileName && (bp->lineNum()-1) == lineNum) {
+          bp->setConditional(condition);
+          bp->setDbgId(dbgId);
+          break;
+        }
+      }
+    }
+  }
+}
+
+void DebuggerPart::savePartialProjectSession(QDomElement* el)
+{
+  QDomDocument domDoc = el->ownerDocument();
+  if (domDoc.isNull()) { return; }
+
+  if (floatingToolBar) {
+    // (hmm...shouldn't this be written to the application config file (gideonrc)?
+    //  otherwise you would need to set it again and again in every project)
+    QDomElement generalEl = domDoc.createElement("general");
+    generalEl.setAttribute("dbgToolbar", true);
+    el->appendChild(generalEl);
+  }
+  
+  QDomElement breakpointListEl = domDoc.createElement("breakpointList");
+  QPtrList<Breakpoint> bpList = breakpointWidget->breakpoints();
+  QPtrListIterator<Breakpoint> it(bpList);
+  for (int i = 0; it.current(); ++it, i++) {
+    Breakpoint* bp = it.current();
+    QString bpIndex;
+    bpIndex.setNum(i);
+    QDomElement breakpointEl = domDoc.createElement("breakpoint"+bpIndex);
+
+    breakpointEl.setAttribute("fileName", bp->fileName());
+    breakpointEl.setAttribute("lineNum", bp->lineNum() - 1); // why -1?
+    breakpointEl.setAttribute("enabled", bp->isEnabled());
+    breakpointEl.setAttribute("condition", bp->conditional());
+    breakpointEl.setAttribute("dbgId", bp->dbgId());
+
+    breakpointListEl.appendChild(breakpointEl);
+  }
+  if (!breakpointListEl.isNull()) {
+    el->appendChild(breakpointListEl);
+  }
 }
 
 #include "debuggerpart.moc"

@@ -15,6 +15,7 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 
+class QDomElement;
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -114,7 +115,25 @@ public:
      */
     KDevDebugger *debugger();
 
+    /**
+     * To restore any settings which differs from project to project,
+     * you can override this base class method to read in from a certain subtree
+     * of the project session file.
+     * During project loading, respectively project session (.kdevses) loading,
+     * this method will be called to give a chance to adapt the part to
+     * the newly loaded project. For instance, the debugger part might restore the
+     * set breakpoints from the previous debug session for the certain project.
+     *
+     * Note: Take attention to the difference to common not-project-related session stuff.
+     *       They belong to the application rc file (kdeveloprc or gideonrc)
+     */
+    virtual void restorePartialProjectSession(const QDomElement* el);
 
+    /**
+     * See @ restorePartialProjectSession. This is the other way round, the same just for saving.
+     */
+    virtual void savePartialProjectSession(QDomElement* el);
+    
 private:
     KDevApi *m_api;
     class Private;

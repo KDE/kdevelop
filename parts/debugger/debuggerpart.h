@@ -39,14 +39,16 @@ class DebuggerPart : public KDevPlugin
 public:
     DebuggerPart( QObject *parent, const char *name, const QStringList & );
     ~DebuggerPart();
+    virtual void restorePartialProjectSession(const QDomElement* el);
+    virtual void savePartialProjectSession(QDomElement* el);
 
 private slots:
     void guiClientAdded(KXMLGUIClient*);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void toggleBreakpoint();
     void contextWatch();
-    void projectOpened();
-    void projectClosed();
+//    void projectOpened();
+//    void projectClosed();
     void projectConfigWidget(KDialogBase *dlg);
     void slotActivePartChanged(KParts::Part*);
     

@@ -199,7 +199,7 @@ bool ProjectManager::loadProject(const KURL &url)
   // first restore the project session stored in a .kdevses file
   QString projSessionFileName = m_info->m_fileName.left(m_info->m_fileName.length()-8); // without ".kdevelop"
   projSessionFileName += "kdevses"; // suffix for a KDevelop session file
-  if (!m_pProjectSession->restoreFromFile(projSessionFileName)) {
+  if (!m_pProjectSession->restoreFromFile(projSessionFileName, m_info->m_localParts)) {
     debug("error during restoring of the KDevelop session !\n");
   }
 
@@ -221,7 +221,7 @@ bool ProjectManager::closeProject()
   QString sessionFileName = m_info->m_fileName;
   sessionFileName = sessionFileName.left( sessionFileName.length() - 8); // without "kdevelop"
   sessionFileName += "kdevses";
-  m_pProjectSession->saveToFile(sessionFileName);
+  m_pProjectSession->saveToFile(sessionFileName, m_info->m_localParts);
 
   if( !closeProjectSources() )
     return false;

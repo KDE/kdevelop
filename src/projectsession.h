@@ -19,9 +19,11 @@
 
 #include <qobject.h>
 #include <qdom.h>
+#include <qdict.h>
 
 class QWidget;
 class KURL;
+class KDevPlugin;
 
 /**
  * This class stores and restores the last situation before the certain project
@@ -38,11 +40,14 @@ public:
   virtual ~ProjectSession();
 
   /** Opens the .kdevses file and saves the project session in XML format to it. */
-  bool saveToFile(const QString& fileName);
+  bool saveToFile(const QString& fileName, const QDict<KDevPlugin>& projectPlugins);
   /** Opens the .kdevses file and loads the project session from it. */
-  bool restoreFromFile(const QString& fileName);
+  bool restoreFromFile(const QString& fileName, const QDict<KDevPlugin>& projectPlugins);
 
 signals:
+  void sig_restoreMainWindowProperties(const QDomElement* el);
+  void sig_saveMainWindowProperties(QDomElement* el);
+
   void sig_restoreAdditionalViewProperties(const QString& viewName, const QDomElement* el);
   void sig_saveAdditionalViewProperties(const QString& viewName, QDomElement* el);
 

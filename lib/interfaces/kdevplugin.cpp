@@ -1,3 +1,5 @@
+#include <qdom.h>
+
 #include "kdevplugin.h"
 #include "kdevpartcontroller.h"
 
@@ -86,6 +88,16 @@ KDevPartController *KDevPlugin::partController()
 KDevDebugger *KDevPlugin::debugger()
 {
     return m_api->debugger();
+}
+
+void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
+{
+  // there's still nothing to do in the base class
+}
+
+void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
+{
+  // there's still nothing to do in the base class
 }
 
 #include "kdevplugin.moc"

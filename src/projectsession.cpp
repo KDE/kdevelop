@@ -31,6 +31,7 @@
 #include "domutil.h"
 #include "documentationpart.h"
 #include "toplevel.h"
+#include "kdevplugin.h"
 
 #include "projectsession.h"
 
@@ -64,7 +65,7 @@ void ProjectSession::initXMLTree()
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::restoreFromFile(const QString& sessionFileName)
+bool ProjectSession::restoreFromFile(const QString& sessionFileName, const QDict<KDevPlugin>& projectPlugins)
 {
   bool bFileOpenOK = true;
 
@@ -98,6 +99,21 @@ bool ProjectSession::restoreFromFile(const QString& sessionFileName)
   if (bFileOpenOK) {
     recreateDocs(session);
   }
+
+  // now also let the project-related plugins load their session stuff
+  QDomElement pluginListEl = session.namedItem("pluginList").toElement();
+  QDictIterator<KDevPlugin> it(projectPlugins);
+  for ( ; it.current(); ++it) {
+    KDevPlugin* pPlugin = it.current();
+    Q_ASSERT(pPlugin->instance());
+    QString pluginName = pPlugin->instance()->instanceName();
+    QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
+    if (!pluginEl.isNull()) {
+      // now plugin, load what you find!
+      pPlugin->restorePartialProjectSession(&pluginEl);
+    }
+  }
+
   return true;
 }
 
@@ -209,7 +225,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::saveToFile(const QString& sessionFileName)
+bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDevPlugin>& projectPlugins)
 {
 
   QString section, keyword;
@@ -304,6 +320,38 @@ bool ProjectSession::saveToFile(const QString& sessionFileName)
 
   docsAndViewsEl.setAttribute("NumberOfDocuments", nDocs);
 
+
+  // now also let the project-related plugins save their session stuff
+  // read the information about the documents
+  QDomElement pluginListEl = session.namedItem("pluginList").toElement();
+  if (pluginListEl.isNull()) {
+    pluginListEl = domdoc.createElement("pluginList");
+    session.appendChild( pluginListEl);
+  }
+  else {
+    // we need to remove the old ones before memorizing the current ones (to avoid merging)
+    QDomNode n = pluginListEl.firstChild();
+    while ( !n.isNull() ) {
+      QDomNode toBeRemoved = n;
+      n = n.nextSibling();
+      pluginListEl.removeChild(toBeRemoved);
+    }
+  }
+
+  QDictIterator<KDevPlugin> pluginIter(projectPlugins);
+  for ( ; pluginIter.current(); ++pluginIter) {
+    KDevPlugin* pPlugin = pluginIter.current();
+    Q_ASSERT(pPlugin->instance());
+    QString pluginName = pPlugin->instance()->instanceName();
+    QDomElement pluginEl = domdoc.createElement(pluginName);
+    // now plugin, save what you have!
+    pPlugin->savePartialProjectSession(&pluginEl);
+    // if the plugin wrote anything, accept it for the session, otherwise forget it
+    if (pluginEl.hasChildNodes() || pluginEl.hasAttributes()) {
+      pluginListEl.appendChild(pluginEl);
+    }
+  }
+  
   // Write it out to the session file on disc
   QFile f(sessionFileName);
   if ( f.open(IO_WriteOnly) ) {    // file opened successfully
