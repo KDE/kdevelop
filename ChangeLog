@@ -1,3 +1,10 @@
+2001-11-06  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: some dangerous uninstall rules
+    * cleanup some warnings on kicker and kioslave template
+    * $local_datadir (the path to local-appdata) is passed by kdevelop 
+      to the perl scripts.
+      (some little cleanups on processes.pl)
+ 
 2001-11-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: attributes with namespace prefix in variable type are displayed in class parser now
 
