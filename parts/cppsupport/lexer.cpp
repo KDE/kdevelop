@@ -576,7 +576,6 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 		++ptr;
 	    }
 	    m.setBody( body );
-	    qDebug( "body of %s is %s", m.name().latin1(), m.body().latin1() );
 	}
     } else if( directive == "undef" ){
 	ptr = readWhiteSpaces( ptr, false );
