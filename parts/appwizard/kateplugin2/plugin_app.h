@@ -18,6 +18,8 @@
 #include <klibloader.h>
 #include <klocale.h>
 
+class $APPNAME$ConfigPage;
+
 class KatePluginFactory : public KLibFactory
 {
     Q_OBJECT
@@ -55,7 +57,10 @@ public slots:
     void slotApplyConfig($APPNAME$ConfigPage*);
 
 private:
-    void initConfigPage( GotoFileConfigPage* );
+    void initConfigPage( $APPNAME$ConfigPage* );
+
+private:
+    QPtrList<class PluginView> m_views;
 };
 
 

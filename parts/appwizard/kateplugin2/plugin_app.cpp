@@ -7,6 +7,10 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kfiledialog.h>
+
+#include <qlayout.h>
+#include <qlabel.h>
 
 class PluginView : public KXMLGUIClient
 {
@@ -88,7 +92,7 @@ void KatePlugin$APPNAME$::slotInsertHello()
         kv->insertText ("Hello World");
 }
 
-Kate::PluginConfigPage* KatePluginGotoFile::configPage (uint, QWidget *w, const char* name)
+Kate::PluginConfigPage* KatePlugin$APPNAME$::configPage (uint, QWidget *w, const char* name)
 {
     $APPNAME$ConfigPage* p = new $APPNAME$ConfigPage(this, w);
     initConfigPage( p );
@@ -102,7 +106,7 @@ void KatePlugin$APPNAME$::initConfigPage( $APPNAME$ConfigPage* p )
     // NOTE: KatePlugin$APPNAME$ is friend of $APPNAME$ConfigPage
 }
 
-void KatePluginGotoFile::slotApplyConfig( GotoFileConfigPage* p )
+void KatePlugin$APPNAME$::slotApplyConfig( $APPNAME$ConfigPage* p )
 {
     // TODO: save $APPNAME$ConfigPage here
     // NOTE: KatePlugin$APPNAME$ is friend of $APPNAME$ConfigPage
@@ -112,7 +116,7 @@ void KatePluginGotoFile::slotApplyConfig( GotoFileConfigPage* p )
 /**
  * $APPNAME$ConfigPage
  */
-$APPNAME$ConfigPage::GotoFileConfigPage (QObject* parent /*= 0L*/, QWidget *parentWidget /*= 0L*/)
+$APPNAME$ConfigPage::$APPNAME$ConfigPage (QObject* parent /*= 0L*/, QWidget *parentWidget /*= 0L*/)
     : Kate::PluginConfigPage( parentWidget )
 {
     QVBoxLayout* lo = new QVBoxLayout( this, 0, 0, "config_page_layout" );
