@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=QuickOpen
+Comment[xx]=xxQuickOpenxx
+Name=KDevQuickOpen
+Name[sv]=KDevelop QuickOpen
+Name[xx]=xxKDevQuickOpenxx
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Project
+X-KDE-Library=libkdevquickopen
+X-KDevelop-Version=1

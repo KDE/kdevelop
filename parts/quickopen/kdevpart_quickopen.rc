@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="quickopen" library="libquickopenplugin" version="1">
+<MenuBar>
+ <Menu name="file">
+  <Action name="file_quickopen" group="open_merge"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>
