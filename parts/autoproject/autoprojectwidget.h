@@ -161,9 +161,28 @@ public:
     bool kdeMode() const
     { return m_kdeMode; }
 
+    /**
+     * Sets the given target active. The argument is given
+     * relative to the project directory.
+     */
     void setActiveTarget(const QString &targetPath);
-    QString activeTarget();
+    /**
+     * Returns the active target as path relative to
+     * the project directory.
+     */
+    QString activeDirectory();
 
+    /**
+     * Adds a file to the active target. The argument must
+     * not contain / characters.
+     */
+    void addFile(const QString &name);
+    /**
+     * Removes the file fileName from the directory directory.
+     * (not implemented currently)
+     */
+    void removeFile(const QString &fileName);
+    
     TargetItem *createTargetItem(const QCString &name,
                                  const QCString &prefix, const QCString &primary);
     FileItem *createFileItem(const QString &name);
@@ -183,10 +202,11 @@ private:
 
     KListView *overview;
     KListView *details;
-    SubprojectItem *shownSubproject;
-    AutoProjectPart *m_part;
     bool m_kdeMode;
-    QString m_activeTarget;
+    AutoProjectPart *m_part;
+    SubprojectItem *m_shownSubproject;
+    SubprojectItem *m_activeSubproject;
+    TargetItem * m_activeTarget;
 };
 
 #endif

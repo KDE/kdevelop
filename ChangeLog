@@ -3,6 +3,8 @@
 	* Implemented setting active target in autoproject
 	  part and set a default one in most app templates
 	* Set resize policy of list views to LastColumn
+	* In auto project, open active directory at startup
+	* Implemented addFile in auto project
 
 2002-04-20  Bernd Gehrmann  <bernd@mail.berlios.de>
 

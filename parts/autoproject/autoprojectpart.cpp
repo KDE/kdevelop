@@ -174,16 +174,7 @@ QString AutoProjectPart::mainProgram()
 
 QString AutoProjectPart::activeDirectory()
 {
-    QString target = m_widget->activeTarget();
-    if (target.isNull())
-        return QString::null;
-    
-    int pos = target.findRev('/');
-    QString directory = (pos != -1)? target.left(pos) : target;
-    kdDebug(9020) << "Active target: " << target
-                  << ", directory: " << directory << endl;
-
-    return directory;
+    return m_widget->activeDirectory();
 }
 
 
@@ -195,13 +186,31 @@ QStringList AutoProjectPart::allSourceFiles()
 
 void AutoProjectPart::addFile(const QString &fileName)
 {
-    // FIXME
+    QString directory, name;
+    int pos = fileName.findRev('/');
+    if (pos != -1) {
+        directory = fileName.left(pos);
+        name = fileName.mid(pos+1);
+    } else {
+        name = fileName;
+    }
+
+    kdDebug(9020) << "Adding " << name
+                  << " to directory " << directory << endl;
+
+    if (directory != m_widget->activeDirectory()) {
+        KMessageBox::information(m_widget, i18n("File %1 will not be added to a target.")
+                                 .arg(fileName));
+        return;
+    }
+    
+    m_widget->addFile(name);
 }
 
 
 void AutoProjectPart::removeFile(const QString &fileName)
 {
-    // FIXME
+    m_widget->removeFile(fileName);
 }
 
 

@@ -107,6 +107,7 @@ void AddFileDialog::accept()
     }
 
     FileItem *fitem = m_widget->createFileItem(name);
+    target->sources.append(fitem);
     target->insertItem(fitem);
     
     QCString canontargetname = AutoProjectTool::canonicalize(target->name);
