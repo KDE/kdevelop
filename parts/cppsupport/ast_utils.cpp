@@ -197,6 +197,7 @@ QString typeSpecToString( TypeSpecifierAST* typeSpec )
     text += typeSpec->text();
 
     if( typeSpec->cv2Qualify() ){
+        text += " ";
         QPtrList<AST> l = typeSpec->cv2Qualify()->nodeList();
         QPtrListIterator<AST> it( l );
 	while( it.current() ){
@@ -207,10 +208,10 @@ QString typeSpecToString( TypeSpecifierAST* typeSpec )
 	}
     }
 
-    return text.simplifyWhiteSpace();
+    return text.stripWhiteSpace();
 }
 
-QString declaratorToString( DeclaratorAST* declarator )
+QString declaratorToString( DeclaratorAST* declarator, const QString& scope )
 {
    if( !declarator )
        return QString::null;
@@ -224,8 +225,10 @@ QString declaratorToString( DeclaratorAST* declarator )
    }
    text += " ";
 
+   text += scope;
+
    if( declarator->declaratorId() )
-       text += declarator->declaratorId()->text() + " ";
+       text += declarator->declaratorId()->text();
 
    QPtrList<AST> arrays = declarator->arrayDimensionList();
    QPtrListIterator<AST> it( arrays );

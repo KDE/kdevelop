@@ -1381,8 +1381,11 @@ void CppSupportPart::slotMakeMember()
 	    QStringList scope;
 	    scopeOfNode( decl, scope );
 
-	    text += scope.size() ? scope.join("::") + QString::fromLatin1("::") : QString::fromLatin1("");
-	    text += declaratorToString( declarator ).simplifyWhiteSpace() + "\n{\n}\n\n";
+	    QString scopeStr = scope.join( "::" );
+	    if( scopeStr )
+	        scopeStr += "::";
+
+	    text += declaratorToString( declarator, scopeStr ).simplifyWhiteSpace() + "\n{\n}\n\n";
 
 	    QString implFile = findSourceFile();
 

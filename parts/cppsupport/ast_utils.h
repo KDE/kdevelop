@@ -27,6 +27,6 @@ void buildView( AST* ast, KTextEditor::EditInterface*, QListViewItem* parent );
 void scopeOfNode( AST* ast, QStringList& );
 void printDeclarations( AST* ast );
 QString typeSpecToString( TypeSpecifierAST* typeSpec );
-QString declaratorToString( DeclaratorAST* declarator );
+QString declaratorToString( DeclaratorAST* declarator, const QString& scope = QString::null );
 
 #endif // __ast_utils_h
