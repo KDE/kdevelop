@@ -129,7 +129,7 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 
 void QextMdiChildFrmCaption::setCaption(const QString& text)
 {
-   m_szCaption=text;
+   m_szCaption = text;
    repaint(FALSE);
 }
 
@@ -165,8 +165,41 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 #else // in case of Unix: KDE look
    r.setLeft(r.left()+22); //Shift the text after the icon
 #endif
-   p.drawText(r,AlignVCenter|AlignLeft|SingleLine,m_szCaption);
+
+   int captionWidthForText = width() - 5*heightHint();   // = width - width_for_buttons
+   QString text = abbreviateText( m_szCaption, captionWidthForText);
+   p.drawText( r, AlignVCenter|AlignLeft|SingleLine, text);
    
+}
+
+//=============== abbreviateText ===============//
+
+QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
+{
+   QFontMetrics fm = fontMetrics();
+   int actualWidth = fm.width( origStr);
+
+   int realLetterCount = origStr.length();
+   int newLetterCount = (maxWidth * realLetterCount) / actualWidth;
+   int w = maxWidth+1;
+   QString s = origStr;
+   while((w > maxWidth) && (newLetterCount >= 1)) {
+      if( newLetterCount < realLetterCount) {
+         if(newLetterCount > 3)
+            s = origStr.left( newLetterCount/2) + "..." + origStr.right( newLetterCount/2);
+         else {
+            if(newLetterCount > 1)
+               s = origStr.left( newLetterCount) + "..";
+            else
+               s = origStr.left(1);
+         }
+      }
+      QFontMetrics fm = fontMetrics();
+      w = fm.width(s);
+      newLetterCount--;
+   }
+
+   return s;
 }
 
 //============= mouseDoubleClickEvent ===========//
