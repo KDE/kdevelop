@@ -1,6 +1,24 @@
+/***************************************************************************
+                          ccwvirtualmethodview.cpp  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include <qmessagebox.h>
 #include <klocale.h>
 #include "ccwvirtualmethodview.h"
+#include <qregexp.h>
 
 /*********************************************************************
  *                                                                   *
@@ -221,7 +239,10 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
   {
     // Create the string like <classname>::<methodname>
     aMethod->asString( str );
-    str = aMethod->declaredInClass + "::" + str;
+    str = aMethod->declaredInScope + "::" + str;
+
+    // Replace all . with ::.
+    str.replace( QRegExp( "\\." ), "::" );
 
     // Add to the view.
     availLb.inSort( str );
