@@ -181,13 +181,13 @@ bool ProjectManager::loadProject(const KURL &url)
 
   getGeneralInfo();
 
-  if( !loadProjectPart() ) {
+  if( !loadLanguageSupport() ) {
     delete m_info; m_info = 0;
     return false;
   }
 
-  if( !loadLanguageSupport() ) {
-    unloadProjectPart();
+  if( !loadProjectPart() ) {
+    unloadLanguageSupport();
     delete m_info; m_info = 0;
     return false;
   }
@@ -381,6 +381,9 @@ void ProjectManager::unloadProjectPart()
 
 bool ProjectManager::loadLanguageSupport()
 {
+
+  kdDebug(9000) << "Looking for language support for " << m_info->m_language << endl;
+
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
                            QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(m_info->m_language));
