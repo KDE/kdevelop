@@ -1,7 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Fortran Source File
-Comment[de]=Fortran-Quellcodedatei
+Comment[ca]=Fitxer font Fortran
+Comment[da]=Fortran kildefil
+Comment[de]=Fortran-Quelltextdatei
+Comment[es]=Archivo de fuente Fortran
+Comment[et]=Fortran lähtefail
+Comment[fr]=Fichier source Fortran
+Comment[hu]=Fortran forrásfájl
+Comment[it]=File sorgente per Fortran
+Comment[nl]=Fortran Bronbestand
+Comment[pt]=Ficheiro de Código em Fortran
+Comment[pt_BR]=Arquivo Fonte do Fortran
+Comment[ru]=Исходный файл Fortran
+Comment[sr]=Fortran изворни фајл
+Comment[sv]=Fortran källkodsfil
+Comment[ta]=Fortran மூலக்கோப்பு
+Comment[xx]=xxFortran Source Filexx
+Comment[zh_CN]=Fortran源文件
 Hidden=false
 Icon=source_f
 MimeType=text/x-fortran

@@ -3,16 +3,21 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 Name=KDevelop Plugin
+Name[ca]=Connector per a KDevelop
 Name[da]=KDevelop plugin
 Name[de]=KDevelop-Plugin
 Name[es]=Extensión de KDevelop
+Name[et]=KDevelopi plugin
+Name[fr]=Module externe de KDevelop
 Name[hu]=KDevelop-bővítőmodul
 Name[it]=Plugin di KDevelop
 Name[pt]='Plugin' do KDevelop
 Name[pt_BR]=Plugin do KDevelop
-Name[sr]=KDevelop-ов прикључак
+Name[ru]=Модуль KDevelop
+Name[sr]=KDevelop-ов додатак
 Name[sv]=KDevelop insticksmodul
 Name[xx]=xxKDevelop Pluginxx
+Name[zh_CN]=KDevelop插件
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

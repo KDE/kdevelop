@@ -4,15 +4,22 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Diff Frontend Interface
+Name[ca]=Interfície de l'entorn per a diff
 Name[da]=Diff-forende grænseflade
-Name[de]=Diff-Benutzerschnittstelle
+Name[de]=Schnittstelle für Diff-Oberflächen (KDevelop)
 Name[es]=Interfaz del entorno de diff
+Name[et]=Diff kasutajaliides
+Name[fr]=Interface du programme « Diff »
 Name[hu]=Diff-kezelési felület
 Name[it]=Interfaccia a Diff
+Name[nl]=Diff Frontend-interface
+Name[pt]=Interface para o 'Diff'
 Name[pt_BR]=Interface de Frontend do Diff
+Name[ru]=Интерфейс системы нахождения различий
 Name[sr]=Интерфејс diff сучеља
 Name[sv]=Gränssnitt för jämförelse
 Name[xx]=xxDiff Frontend Interfacexx
+Name[zh_CN]=Diff前端接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

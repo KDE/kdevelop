@@ -4,16 +4,22 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Project
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Interface
+Name[ca]=Interfície de projecte per a KDevelop
 Name[da]=KDevelop projektgrænseflade
-Name[de]=KDevelop-Projekt-Schnittstelle
+Name[de]=Projekt-Schnittstelle (KDevelop)
 Name[es]=Interfaz de projecto de KDevelop
+Name[et]=KDevelopi projektiliides
+Name[fr]=Interface de projet de KDevelop
 Name[hu]=KDevelop projektkezelő felület
 Name[it]=Interfaccia KDevelop di progetto
+Name[nl]=KDevelop Projectinterface
 Name[pt]=Interface de Projecto do KDevelop
 Name[pt_BR]=Interface de Projeto do KDevelop
+Name[ru]=Интерфейс проекта
 Name[sr]=KDevelop-ов интерфејс пројекта
 Name[sv]=KDevelop projektgränssnitt
 Name[xx]=xxKDevelop Project Interfacexx
+Name[zh_CN]=KDevelop项目接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

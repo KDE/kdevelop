@@ -1,6 +1,21 @@
 [Desktop Entry]
 Comment=HTML Help Document
-Comment[de]=HTML-Hilfe-Dokument
+Comment[ca]=Document d'ajuda HTML
+Comment[da]=HTML Hjælpedokument
+Comment[de]=HTML-Hilfedatei
+Comment[es]=Documento de ayuda HTML
+Comment[et]=HTML abiinfo dokument
+Comment[fr]=Document d'aide en HTML
+Comment[hu]=HTML dokumentáció
+Comment[it]=Progetto per la guida HTML
+Comment[nl]=HTML Helpdocument
+Comment[pt]=Documento de Ajuda em HTML
+Comment[pt_BR]=Documento de Ajuda HTML
+Comment[ru]=Документ HTML Help
+Comment[sr]=HTML документ помоћи
+Comment[sv]=HTML hjälpdokument
+Comment[xx]=xxHTML Help Documentxx
+Comment[zh_CN]=HTML帮助文档
 Hidden=false
 Icon=help
 MimeType=application/chm

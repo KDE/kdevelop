@@ -1,15 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=KDevelop Project File
+Comment[ca]=Fitxer de projecte de KDevelop
 Comment[da]=KDevelop projektfil
+Comment[de]=KDevelop Projektdatei
+Comment[el]=Αρχείο εργασίας KDevelop
 Comment[es]=Archivo de proyecto de KDevelop
+Comment[et]=KDevelopi projektifail
+Comment[fr]=Fichier de projet de KDevelop
 Comment[hu]=KDevelop projektfájl
+Comment[it]=File di progetto per KDevelop
+Comment[nl]=KDevelop Projectbestand
 Comment[pt]=Ficheiro de Projecto do KDevelop
 Comment[pt_BR]=Arquivo de Projeto do KDevelop
-Comment[sr]=KDevelop-ов фајл пројекта
+Comment[ru]=Файл проекта KDevelop
+Comment[sr]=KDevelop-ов пројектни фајл
 Comment[sv]=KDevelop projektfil
 Comment[xx]=xxKDevelop Project Filexx
-Comment[de]=KDevelop-Projektdatei
+Comment[zh_CN]=KDevelop项目文件
 DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType
