@@ -1,0 +1,17 @@
+[!Global!]
+IconName=kdevelop
+Comment=KDevelop
+
+[BuildSuccess]
+Name=Build successful
+Name[de]=Programmerzeugung erfolgreich
+Comment=build process finished successfully
+Comment[de]=Erzeugung erfolgreich
+default_presentation=0
+
+[BuildError]
+Name=Build error
+Name[de]=Fehler bei Programmerzeugung
+Comment=build process finished with errors
+Comment[de]=Fehler bei Erzeugung
+default_presentation=0
