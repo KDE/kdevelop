@@ -113,5 +113,4 @@ void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
 {
 }
 
-#include "addexistingdirectoriesdlg.h"
 #include "addexistingdirectoriesdlg.moc"
