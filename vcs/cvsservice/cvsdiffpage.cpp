@@ -98,7 +98,7 @@ void CVSDiffPage::slotJobExited( bool normalExit, int /*exitStatus*/ )
     }
     else
     {
-        KMessageBox::error( this, i18n("An error occured during diffing."), i18n( "Error During Diff"));
+        KMessageBox::error( this, i18n("An error occurred during diffing."), i18n( "Error During Diff"));
     }
 }
 
