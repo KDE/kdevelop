@@ -164,8 +164,12 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       if(pMaximizedChild->m_state != QextMdiChildFrm::Maximized)pMaximizedChild=0;
       m_pZ->setAutoDelete(TRUE);
       m_pZ->append(lpC);
-      if(pMaximizedChild)lpC->setState(QextMdiChildFrm::Maximized,FALSE); //do not animate the change
       lpC->raise();
+      if(pMaximizedChild){
+         lpC->setState(QextMdiChildFrm::Maximized,FALSE); //do not animate the change
+         lpC->m_pClient->resize(size());
+         qApp->processOneEvent();
+      }
       if(pMaximizedChild){
          pMaximizedChild->setState(QextMdiChildFrm::Normal,FALSE);
       }
@@ -394,13 +398,13 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
    int numToHandle=((numVisible > maxWnds) ? maxWnds : numVisible);
    int xQuantum=width()/colstable[numToHandle-1];
    if(xQuantum < ((lpTop->minimumSize().width() > m_defaultChildFrmSize.width()) ? lpTop->minimumSize().width() : m_defaultChildFrmSize.width())){
-      if(colrecall[numToHandle-1]==0)debug("Tile : Not enouh space");
+      if(colrecall[numToHandle-1]==0)qDebug("Tile : Not enough space");
       else tileAllInternal(colrecall[numToHandle-1]);
       return;
    }
    int yQuantum=height()/rowstable[numToHandle-1];
    if(yQuantum < ((lpTop->minimumSize().height() > m_defaultChildFrmSize.height()) ? lpTop->minimumSize().height() : m_defaultChildFrmSize.height())){
-      if(rowrecall[numToHandle-1]==0)debug("Tile : Not enough space");
+      if(rowrecall[numToHandle-1]==0)qDebug("Tile : Not enough space");
       else tileAllInternal(rowrecall[numToHandle-1]);
       return;
    }

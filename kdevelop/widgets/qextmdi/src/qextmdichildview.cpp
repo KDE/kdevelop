@@ -177,7 +177,7 @@ void QextMdiChildView::minimize(bool bAnimate)
 
 void QextMdiChildView::showMinimized()
 {
-   qDebug("is minimized now");
+   //qDebug("is minimized now");
    emit isMinimizedNow();
    QWidget::showMinimized();
 }
@@ -198,7 +198,7 @@ void QextMdiChildView::maximize(bool bAnimate)
 
 void QextMdiChildView::showMaximized()
 {
-   qDebug("is maximized now");
+   //qDebug("is maximized now");
    emit isMaximizedNow();
    QWidget::showMaximized();
 }
@@ -273,7 +273,7 @@ void QextMdiChildView::restore()
 
 void QextMdiChildView::showNormal()
 {
-   qDebug("is restored now");
+   //qDebug("is restored now");
    emit isRestoredNow();
    QWidget::showNormal();
 }
@@ -283,7 +283,6 @@ void QextMdiChildView::showNormal()
 void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
 {
    lpC->setCaption(m_szCaption);
-   //F.B. lpC->setIconPointer(myIconPtr()); //It is ok to set a NULL icon too here
 }
 
 //================ youAreDetached =============//
@@ -380,15 +379,15 @@ void QextMdiChildView::resizeEvent(QResizeEvent* e)
    if( m_stateChanged) {
       m_stateChanged = FALSE;
       if( isMaximized()) {
-         qDebug("is maximized now");
+         //qDebug("is maximized now");
          emit isMaximizedNow();
       }
       else if( isMinimized()) {
-         qDebug("is minimized now");
+         //qDebug("is minimized now");
          emit isMinimizedNow();
       }
       else {   // is restored
-         qDebug("is restored now");
+         //qDebug("is restored now");
          emit isRestoredNow();
       }
    }
@@ -583,8 +582,9 @@ void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 
 void QextMdiChildView::show()
 {
-   if( mdiParent() != 0L)
-      mdiParent()->show();
+   QWidget* pParent = mdiParent();
+   if( pParent != 0L && pParent->isVisible())
+      pParent->show();
    QWidget::show();
 }
 

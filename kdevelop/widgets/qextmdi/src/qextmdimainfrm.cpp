@@ -270,13 +270,14 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    }
    else {
       if( (flags & QextMdi::Detach) || (m_mdiMode == QextMdi::ToplevelMode)) {
-         detachWindow( pWnd, FALSE /*bShow*/ ); // FALSE to avoid flickering
+         detachWindow( pWnd); // using TRUE from the default parameter list
       } else {
-         attachWindow( pWnd, FALSE /*bShow*/);
+         attachWindow( pWnd); // -"-
       }
 
       if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
-         pWnd->maximize();
+         if (!pWnd->isMaximized())
+            pWnd->maximize();
       }
       if (!m_bSDIApplication || (flags & QextMdi::Detach)) {
          if (flags & QextMdi::Minimize)
@@ -393,7 +394,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
       m_mdiMode = QextMdi::ChildframeMode;
-      qDebug("TopLevelMode off");
+      //qDebug("TopLevelMode off");
       emit leftTopLevelMode();
    }
 
@@ -768,7 +769,7 @@ void QextMdiMainFrm::switchToToplevelMode()
    }
 
    m_mdiMode = QextMdi::ToplevelMode;
-   qDebug("ToplevelMode on");
+   //qDebug("ToplevelMode on");
 }
 
 void QextMdiMainFrm::finishToplevelMode()
@@ -828,7 +829,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
-      qDebug("TopLevelMode off");
+      //qDebug("TopLevelMode off");
       emit leftTopLevelMode();
    }
 
@@ -878,7 +879,7 @@ void QextMdiMainFrm::switchToTabPageMode()
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
-      qDebug("TopLevelMode off");
+      //qDebug("TopLevelMode off");
       emit leftTopLevelMode();
       QApplication::sendPostedEvents();
 
@@ -934,7 +935,7 @@ void QextMdiMainFrm::switchToTabPageMode()
    }
 
    m_pTaskBar->hide();
-   qDebug("TabPageMode on");
+   //qDebug("TabPageMode on");
 }
 
 void QextMdiMainFrm::finishTabPageMode()
@@ -1083,7 +1084,7 @@ void QextMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
 {
    if (bEnable) {
       m_bMaximizedChildFrmMode = TRUE;
-      qDebug("MaximizeMode on");
+      //qDebug("MaximizeMode on");
 
       QextMdiChildFrm* pCurrentChild = m_pMdi->topChild();
       if( !pCurrentChild)
@@ -1113,7 +1114,7 @@ void QextMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
       if (!m_bMaximizedChildFrmMode) return;  // already set, nothing to do
 
       m_bMaximizedChildFrmMode = FALSE;
-      qDebug("MaximizeMode off");
+      //qDebug("MaximizeMode off");
 
       QextMdiChildFrm* pFrmChild = m_pMdi->topChild();
       if (!pFrmChild) return;
@@ -1187,7 +1188,6 @@ void QextMdiMainFrm::hideViewTaskBar()
 //=============== fillWindowMenu ===============//
 void QextMdiMainFrm::fillWindowMenu()
 {
-   int entryCount = 10;
    bool bTabPageMode = FALSE;
    if (m_mdiMode == QextMdi::TabPageMode)
       bTabPageMode = TRUE;
@@ -1236,9 +1236,7 @@ void QextMdiMainFrm::fillWindowMenu()
          m_pDockMenu->clear();
       m_pWindowMenu->insertSeparator();
    }
-   else {
-      entryCount = 5;
-   }
+   int entryCount = m_pWindowMenu->count();
 
    // for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
    int i=100;

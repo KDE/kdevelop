@@ -281,8 +281,6 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
          b->setFixedWidth( b->sizeHint().width());
          b->show();
       }
-      if (b)
-         qDebug("button width: %d", b->sizeHint().width());
    }
    else {
       // too many buttons for actual width

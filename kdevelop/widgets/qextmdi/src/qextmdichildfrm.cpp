@@ -495,7 +495,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          m_pClient->m_stateChanged = TRUE;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
-         m_pClient->show();
+//???         m_pClient->show();
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
          setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
@@ -511,19 +511,24 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          raise();
          break;
       case Normal:
+        {
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
-         show();
+//???         show();
          m_pClient->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-         setGeometry(-m_pClient->x(), -m_pClient->y(),
-                         m_pManager->width() + width() - m_pClient->width(),
-                     m_pManager->height() + height() - m_pClient->height());
+         QRect maximizedFrmRect(-m_pClient->x(), -m_pClient->y(),
+                                m_pManager->width() + width() - m_pClient->width(),
+                                m_pManager->height() + height() - m_pClient->height());
+         if (geometry() != maximizedFrmRect) {
+            setGeometry(maximizedFrmRect);
+         }
          raise();
+        }
          break;
       case Maximized:
          break;
