@@ -18,7 +18,7 @@ kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
 			  kdevlanguagesupport.h kdevversioncontrol.h kdevdifffrontend.h \
 			  kdevmakefrontend.h kdevappfrontend.h kdevcompileroptions.h \
 			  KDevMakeFrontendIface.h KDevAppFrontendIface.h KDevCoreIface.h \
-			  kdevplugin.h kdevdebugger.h \
+			  kdevplugin.h kdevdebugger.h kdevcreatefile.h \
 			  kde30x_markinterfaceextension.h
 
 noinst_HEADERS = kdevapi.h
