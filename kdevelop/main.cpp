@@ -122,6 +122,7 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Ravikiran Rajagopal",I18N_NOOP("Patches/Bugfixes"), "ravi@ee.eng.ohio-state.edu");
   aboutData.addCredit ("Carsten Wolff",I18N_NOOP("Patches/Bugfixes"), "AirWulf666@gmx.net");
   aboutData.addCredit ("Lorenzo Delana",I18N_NOOP("Patches/Bugfixes"), "ldelana@libero.it");
+  aboutData.addCredit ("Andre Alexander Bell",I18N_NOOP("Patches/Bugfixes"), "andre.bell@gmx.de");
 
   aboutData.addCredit ("Jacek Wojdel",I18N_NOOP("Startlogo KDevelop 1.0"), "wojdel@kbs.twi.tudelft.nl");
   aboutData.addCredit ("Ralph Kocher",I18N_NOOP("Startlogo KDevelop 1.1, 1.2"), "RKocher@t-online.de");

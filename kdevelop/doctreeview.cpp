@@ -919,6 +919,12 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
 
     folder_kdevelop->setOpen(true);
     folder_kdelibs->setOpen(true);
+
+    folder_kdevelop->refresh();
+    folder_kdelibs->refresh();
+    folder_others->refresh();
+    folder_project->refresh();
+
     toolTip = new DocToolTip( this );
     
     connect( this,
