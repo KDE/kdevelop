@@ -36,7 +36,9 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     : DocTreeGlobalConfigWidgetBase(parent, name)
 {
     m_part = part;
-    m_ignoreTocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
+    QDomDocument d;
+    if(m_part->projectDom()) d = *m_part->projectDom();
+    m_ignoreTocs = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoretocs", "toc");
     m_widget = widget;
     readConfig();
 }
