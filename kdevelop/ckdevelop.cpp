@@ -3658,6 +3658,55 @@ QString CKDevelop::getProjectName()
   return (prj) ? prj->getProjectName() : QString("");
 }
 
+/**
+ * Overridden from its base class QextMdiMainFrm. Adds additional entries to the "Window" menu.
+ */
+void CKDevelop::fillWindowMenu()
+{
+  QextMdiMainFrm::fillWindowMenu();
+  windowMenu()->insertItem(i18n("New &Window"), this, SLOT(slotCreateNewViewWindow()), 0, -1, 0);
+}
+
+/**
+ * The slot for the main menu entry "Window->New Window".
+ * Creates and shows a new MDI view window depending on the last focused view type
+ */
+void CKDevelop::slotCreateNewViewWindow()
+{
+  slotStatusMsg(i18n("Creating new view window..."));
+
+  int curDocType = m_docViewManager->currentDocType();
+  if (curDocType == DocViewMan::Undefined)
+    curDocType = DocViewMan::HTML;
+
+  QWidget* pNewView = 0L;
+  int docId = -1; // invalid
+
+  // retrieve the current document; create it, if it doesn't exist
+  switch (curDocType) {
+  case DocViewMan::Source:
+  case DocViewMan::Header:
+    {
+      KWriteDoc* pCurEditDoc = m_docViewManager->currentEditDoc();
+      if (!pCurEditDoc) break;
+      docId = m_docViewManager->findDoc( pCurEditDoc->fileName());
+    }
+    break;
+  case DocViewMan::HTML:
+    // a CDocBrowser always has got 1 view, only
+    docId = m_docViewManager->createDoc( DocViewMan::HTML, DocTreeKDevelopBook::locatehtml("about/intro.html"));
+    break;
+  }
+
+  // create a new view
+  pNewView = m_docViewManager->createView( docId);
+  // raise and activate
+  if (pNewView)
+    activateView( (QextMdiChildView*)pNewView->parentWidget());
+
+  slotStatusMsg(i18n("Ready."));
+}
+
 void CKDevelop::statusCallback(int id_){
   switch(id_)
   {

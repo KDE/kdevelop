@@ -721,6 +721,14 @@ public:
    *  Dispatches this 'event' to m_docViewMan which will delete the closed view
    */
   virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = true);
+  /**
+   * Overridden from its base class QextMdiMainFrm. Adds additional entries to the "Window" menu.
+   */
+  virtual void fillWindowMenu();
+  /**
+   * Creates and shows a new MDI view window depending on the last focused view type
+   */
+  void slotCreateNewViewWindow();
 
 protected: // Protected methods
 
