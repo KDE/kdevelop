@@ -8,3 +8,8 @@ libdocumentation_interfaces_la_SOURCES = kdevdocumentationplugin.cpp
 partincludedir_HEADERS = kdevdocumentationplugin.h
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdevelopdocumentationplugins.desktop
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces
+DOXYGEN_PROJECTNAME = KDevelop Documentation Part Interfaces Library
+DOXYGEN_DOCDIRPREFIX = kdevdoc
+include ../../../Doxyfile.am

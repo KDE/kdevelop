@@ -30,10 +30,18 @@
 
 #define CACHE_VERSION "3"
 
+/**Documentation list item.
+Stores the type of a documentation it represents and an URL.*/
 class DocumentationItem: public KListViewItem
 {
 public:
-    enum Type { Collection, Catalog, Book, Document };
+    /**Type of documentation which is represented by this item.*/
+    enum Type {
+        Collection    /**<Collection - a collection of catalogs, folder with catalogs.*/,
+        Catalog       /**<Catalog - a term which defines a document or a group of documents.*/, 
+        Book          /**<Book - a document with nested documents.*/, 
+        Document      /**<Document.*/
+    };
 
     DocumentationItem(Type type, KListView *parent, const QString &name);
     DocumentationItem(Type type, KListView *parent, KListViewItem *after, const QString &name);
@@ -54,6 +62,7 @@ private:
 
 class DocumentationPlugin;
 
+/**Documentation catalog list item.*/
 class DocumentationCatalogItem: public DocumentationItem
 {
 public:
@@ -81,6 +90,8 @@ private:
 
 class IndexBox;
 
+/**Prototype of index item.
+Prototypes represent an index are used to build index items after index generation.*/
 class IndexItemProto
 {
 public:
@@ -100,6 +111,7 @@ private:
     QString m_description;
 };
 
+/**Documentation index item.*/
 class IndexItem: public QListBoxText {
 public:
     typedef QPair<QString, KURL> URL;
@@ -113,6 +125,7 @@ private:
     IndexBox *m_listbox;
 };
 
+/**Documentation index view.*/
 class IndexBox: public KListBox{
 public:
     IndexBox(QWidget *parent = 0, const char *name = 0);
@@ -135,6 +148,7 @@ class QPainter;
 class QColorGroup;
 class QFontMetrics;
 
+/**Documentation configuration item.*/
 class ConfigurationItem: public QCheckListItem
 {
 public:
@@ -253,6 +267,7 @@ public:
     /**Builds index for given catalog. This method should fill index with
     IndexItem objects.
     @param index the listbox which contains index items
+    @param item the catalog item that holds an index being built
     */
     virtual void createIndex(IndexBox *index, DocumentationCatalogItem *item) = 0;
 
