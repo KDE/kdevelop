@@ -70,6 +70,10 @@ struct ApplicationInfo
     QString defaultDestDir;
     QString fileTemplates;
     QStringList openFilesAfterGeneration;
+    QString templateFile;
+    QMap<QString,QString> subMap;
+    QStringList includes;
+    
     AutoPropertyMap subValues;
     QValueList<installFile> fileList;
     QValueList<installArchive> archList;
@@ -144,6 +148,7 @@ private: //methods
 	
 	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process );
 	bool copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process );
+	QString kdevRoot(const QString &templateName ) const;
 	
 private: //data
 

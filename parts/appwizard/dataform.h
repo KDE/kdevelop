@@ -25,16 +25,11 @@
 #include <kdebug.h>
 #include <qvariant.h>
 
-/**
-A widget that will connect a QMap<key,QVariant> to a form.
- 
- 
-@author Ian Reinhart Geiser
-*/
+
 class key
 {
 public:
-	key( const QString &w="", const QString &p="") : widget(w),property(p){;}
+	key( const QString &w="", const QString &p="text") : widget(w),property(p){;}
 	virtual ~key(){;}
 	QString widget;
 	QString property;
@@ -47,6 +42,12 @@ public:
 
 typedef QMap<key,QVariant> PropertyMap;
 
+/**
+A widget that will connect a QMap<key,QVariant> to a form.
+ 
+ 
+@author Ian Reinhart Geiser
+*/
 class DataForm : public QObject
 {
 	Q_OBJECT
@@ -54,7 +55,14 @@ public:
 	DataForm(QWidget *parent = 0, const char *name = 0);
 	~DataForm();
 
+	/**
+	* Attach a propertymap to the dataform.
+	*/
 	void setMap( PropertyMap *map ) { m_dataMap = map; }
+	
+	/**
+	* Attach a widget to the dataform.
+	*/
 	void setForm( QWidget *form ) { m_form = form; }
 	
 	/**
@@ -64,6 +72,16 @@ public:
 	* the widget name.
 	*/
 	QMap<QString,QString> createPropertyMap(bool fullKey = false) const;
+	
+	/**
+	* Populates an existing QMap<QString,QString> with values from
+	* the form that is compatable with KMacroExpander.  This will
+	* overwrite any duplicate keys already in the map.
+	* @arg fullKey will cause the Map to contain long keys
+	* consisting of widget.property vs short keys are just
+	* the widget name.
+	*/
+	void fillPropertyMap(QMap<QString,QString> *map, bool fullKey = false) const;
 	
 public slots:
 	void updateView();

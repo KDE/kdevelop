@@ -69,16 +69,20 @@ void DataForm::updateData( )
 QMap<QString,QString> DataForm::createPropertyMap( bool fullKey  ) const
 {
 	QMap<QString,QString> propMap;
+	fillPropertyMap( &propMap, fullKey );
+	return propMap;
+}
+
+void DataForm::fillPropertyMap( QMap< QString, QString > * map, bool fullKey ) const
+{
 	PropertyMap::Iterator idx = m_dataMap->begin();
 	for( ; idx != m_dataMap->end(); ++idx )
 	{
 		QString key = idx.key().widget;
-		if( fullKey )
-			 key = key + "." + idx.key().property;
+		if( fullKey ) key = key + "." + idx.key().property;
 		QString value = idx.data().toString();
-		propMap.insert( key,value );
+		map->insert( key,value );
 	}
-	return propMap;
 }
 
 

@@ -113,11 +113,15 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     QStringList::Iterator it;
     for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
         kdDebug(9010) << (*it) << endl;
-		KConfig templateConfig(KGlobal::dirs()->findResource("apptemplates", *it));
-        templateConfig.setGroup("General");
+		
 
         ApplicationInfo *info = new ApplicationInfo;
+		info->templateFile = KGlobal::dirs()->findResource("apptemplates", *it);
         info->templateName = (*it);
+		
+		KConfig templateConfig(info->templateFile);
+        templateConfig.setGroup("General");
+		
         info->name = templateConfig.readEntry("Name");
         info->icon = templateConfig.readEntry("Icon");
         info->comment = templateConfig.readEntry("Comment");
@@ -136,14 +140,44 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->category = category;
 		info->sourceArchive = templateConfig.readEntry("Archive");
 		
-		// Grab properties and file/dir list
+		// Grab includes list
 		QStringList groups = templateConfig.groupList();
 		groups.remove("General");
 		QStringList::Iterator group = groups.begin();
 		for(  ; group != groups.end(); ++group)
 		{
 			templateConfig.setGroup( (*group) );
-			QString type = templateConfig.readEntry("Type", "value");
+			QString type = templateConfig.readEntry("Type").lower();
+			if( type == "include" )  // Add value
+			{
+				info->includes.append( templateConfig.readEntry( "File" ) );
+				kdDebug() << "Adding: " << templateConfig.readEntry( "File" ) << endl;
+			}
+		}
+		
+		// Build builtins map to bootstrap.
+		QString source = kdevRoot( info->templateName );
+		info->subMap.insert("kdevelop", source );
+		
+		// Add includes to the main template...
+		QStringList::Iterator include = info->includes.begin();
+		for( ; include != info->includes.end(); ++include)
+		{
+			if( !(*include).isEmpty() )
+			{
+				QString file = KMacroExpander::expandMacros( ( *include ), info->subMap);
+				KConfig tmpCfg( file );
+				tmpCfg.copyTo( "", &templateConfig);
+				kdDebug() << "Merging: " << tmpCfg.name() << endl;
+			}
+		}
+		
+		groups = templateConfig.groupList();  // Must get this again since its changed!
+		group = groups.begin();
+		for(  ; group != groups.end(); ++group)
+		{
+			templateConfig.setGroup( (*group) );
+			QString type = templateConfig.readEntry("Type", "value").lower();
 			kdDebug(9010) << "Reading " <<  (*group) << " of type " << type << endl;
 			if( type == "value" )  // Add value
 			{
@@ -191,6 +225,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				info->message = templateConfig.readEntry( "Comment" );
 			}
 		}
+	
+		
         m_appsInfo.append(info);
     }
 
@@ -345,6 +381,14 @@ void AppWizardDialog::licenseChanged()
 	}
 }
 
+QString AppWizardDialog::kdevRoot(const QString &templateName ) const
+{
+	QString source;
+    QFileInfo finfo(templateName);
+    QDir dir(finfo.dir());
+    dir.cdUp();
+    return dir.absPath();
+}
 
 void AppWizardDialog::accept()
 {
@@ -359,11 +403,7 @@ void AppWizardDialog::accept()
         return;
     }
 	
-	QString source;
-    QFileInfo finfo(m_pCurrentAppInfo->templateName);
-    QDir dir(finfo.dir());
-    dir.cdUp();
-    source = dir.absPath();
+	QString source = kdevRoot( m_pCurrentAppInfo->templateName );
 
 	// Unpack template archive to temp dir, and get the name
 	
@@ -383,19 +423,18 @@ void AppWizardDialog::accept()
 	templateArchive.close();
 			
 	// Build KMacroExpander map
-	QMap<QString,QString> subMap = m_customOptions->dataForm()->createPropertyMap(); 
-	kdDebug(9010) << "subMap size " << subMap.size() << endl;
-	// Add builtins
-	subMap.insert("APPNAME", appname_edit->text() );
-	subMap.insert("APPNAMELC", appname_edit->text().lower() );
-	subMap.insert("APPNAMEUC", appname_edit->text().upper() );
-	subMap.insert("AUTHOR", author_edit->text() );
-	subMap.insert("EMAIL", email_edit->text() );
-	subMap.insert("VERSION", version_edit->text());
-	subMap.insert("src", archDir.name() );
-	subMap.insert("kdevelop", source );
-	subMap.insert("dest", finalLoc_label->text() );
-	subMap.insert("LICENSE", license_combo->currentText() );
+	m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap); 
+	
+	m_pCurrentAppInfo->subMap.insert("src", archDir.name() );
+	m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
+	m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
+	m_pCurrentAppInfo->subMap.insert("APPNAMELC", appname_edit->text().lower() );
+	m_pCurrentAppInfo->subMap.insert("APPNAMEUC", appname_edit->text().upper() );
+	m_pCurrentAppInfo->subMap.insert("AUTHOR", author_edit->text() );
+	m_pCurrentAppInfo->subMap.insert("EMAIL", email_edit->text() );
+	m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
+	m_pCurrentAppInfo->subMap.insert("LICENSE", license_combo->currentText() );
+	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
 
 	// Add template files to the fileList
 	installDir templateDir;
@@ -417,7 +456,7 @@ void AppWizardDialog::accept()
 		QTextStream temps(&f);
 		temps << templateText;
 		f.flush();
-		subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), KMacroExpander::expandMacros(templateText , subMap)  );
+		m_pCurrentAppInfo->subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), KMacroExpander::expandMacros(templateText , m_pCurrentAppInfo->subMap)  );
 
 		installFile file;
 		file.source = tempFile->name();
@@ -436,7 +475,6 @@ void AppWizardDialog::accept()
         if( lic )
         {
             QStringList files( lic->copyFiles() );
-			// Not sure why this wont work
 			QStringList::Iterator it = files.begin();
 			for( ; it != files.end(); ++it )
 			{
@@ -447,7 +485,7 @@ void AppWizardDialog::accept()
 				m_pCurrentAppInfo->fileList.append( file );
 			}
 			
-			subMap.insert("LICENSEFILE", files.first()  ); 
+			m_pCurrentAppInfo->subMap.insert("LICENSEFILE", files.first()  ); 
         }
     }
 	
@@ -455,21 +493,21 @@ void AppWizardDialog::accept()
 	QValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
 	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
 	{
-		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , subMap);
-		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , subMap);
+		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , m_pCurrentAppInfo->subMap);
+		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap);
 	}
 	
 	QValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
 	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
 	{
-		(*archIt).source = KMacroExpander::expandMacros((*archIt).source , subMap);
-		(*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , subMap);
+		(*archIt).source = KMacroExpander::expandMacros((*archIt).source , m_pCurrentAppInfo->subMap);
+		(*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , m_pCurrentAppInfo->subMap);
 	}
 	
 	QValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
 	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
 	{
-		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , subMap);
+		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
 	}
 	
 	// Create dirs
@@ -477,7 +515,7 @@ void AppWizardDialog::accept()
 	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
 	{
 		kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
-		if( subMap[(*dirIt).option] != "false" )
+		if( m_pCurrentAppInfo->subMap[(*dirIt).option] != "false" )
 		{
 			
 			if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
@@ -491,12 +529,12 @@ void AppWizardDialog::accept()
 	archIt = m_pCurrentAppInfo->archList.begin();
 	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
 	{
-		if( subMap[(*archIt).option] != "false" )
+		if( m_pCurrentAppInfo->subMap[(*archIt).option] != "false" )
 		{
 			KTar archive( (*archIt).source, "application/x-gzip" );
 			if( archive.open( IO_ReadOnly ) )
 			{
-				unpackArchive( archive.directory(), (*archIt).dest, subMap, (*archIt).process );
+				unpackArchive( archive.directory(), (*archIt).dest, m_pCurrentAppInfo->subMap, (*archIt).process );
 			}
 			else
 			{
@@ -514,9 +552,9 @@ void AppWizardDialog::accept()
 	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
 	{
 		kdDebug( 9000 ) << "Process file " << (*fileIt).source << endl;
-		if( subMap[(*fileIt).option] != "false" )
+		if( m_pCurrentAppInfo->subMap[(*fileIt).option] != "false" )
 		{
-			if( !copyFile( (*fileIt).source, (*fileIt).dest, subMap, (*fileIt).process ) )
+			if( !copyFile( (*fileIt).source, (*fileIt).dest, m_pCurrentAppInfo->subMap, (*fileIt).process ) )
 			{
 				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( (*fileIt).dest) );
 				return;
@@ -543,7 +581,7 @@ void AppWizardDialog::accept()
 		}
     }
     
-	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, subMap));
+	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	QWizard::accept();
 }
 
@@ -600,7 +638,7 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 			const KArchiveFile *file = (KArchiveFile *) dir->entry( (*entry) );
 			KTempFile temp;
 			file->copyTo( temp.name() );
-			if ( !copyFile( temp.name(), dest + "//" + file->name() , subMap,  process ) )
+			if ( !copyFile( temp.name(), dest + "/" + file->name() , subMap,  process ) )
 			{
 				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
 				temp.unlink();
@@ -633,7 +671,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             QDir dir(fi.dir());
             dir.cdUp();
             QPixmap pm;
-            pm.load(dir.filePath("template-" + fi.fileName() + "/" + info->icon));
+            pm.load(dir.filePath(info->icon));
             icon_label->setPixmap(pm);
         } else {
             icon_label->clear();
