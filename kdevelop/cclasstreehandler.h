@@ -45,6 +45,22 @@ public: // Public methods to set attribute values.
 
 public: // Public methods
 
+  /** 
+   * Add a list of global namespaces to the view.
+   *
+   * @param list List of all global namespaces.
+   * @param parent Parent item of all namespaces.
+   */
+  void addScopes( QList<CParsedScopeContainer> *list, QListViewItem *parent );
+
+  /**
+   * Add a scope to the the view.
+   * 
+   * @param aScope Scope to add.
+   * @param parent Parent to add the item to.
+   */
+  void addScope( CParsedScopeContainer *aScope, QListViewItem *parent );
+
   /** Update methods/attr... of a certain class. */
   void updateClass( CParsedClass *aClass, QListViewItem *parent );
 
@@ -58,6 +74,32 @@ public: // Public methods
   /** Add all subclasses from the class. */
   void addSubclassesFromClass( CParsedClass *aClass,
                                QListViewItem *parent );
+
+  /**
+   * Add all structures from a class.
+   * 
+   * @param aClass Class that holds the structs.
+   * @param parent Parent to add the structs to.
+   * @param filter Which items to show.
+   */
+  void addStructsFromClass( CParsedClass *aClass,
+                            QListViewItem *parent,
+                            CTHFilter filter );
+    
+  /** Add a structure to the view. */
+  void addStruct( CParsedStruct *aStruct,
+                  QListViewItem *parent );
+
+  /** 
+   * Add a list of structures to the view. 
+   *
+   * @param list   List with structures.
+   * @param parent Parent to add the structs to.
+   * @param filter Tells which items to show.
+   */
+  void addStructs( QList<CParsedStruct> *list,
+                   QListViewItem *parent,
+                   CTHFilter filter );
 
   /** Add the selected methods from the class. */
   void addMethodsFromClass( CParsedClass *aClass, QListViewItem *parent,
@@ -97,10 +139,6 @@ public: // Public methods
   /** Add a list of global structures to the view. */
   void addGlobalStructs( QList<CParsedStruct> *list,
                          QListViewItem *parent );
-
-  /** Add a structure to the view. */
-  void addStruct( CParsedStruct *aStruct,
-                  QListViewItem *parent );
 
   /** Add all signals to the view. */
   void addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent );

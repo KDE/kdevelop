@@ -81,6 +81,79 @@ void CClassTreeHandler::setStore( CClassStore *aStore )
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------ CClassTreeHandler::addScopes()
+ * addScopes()
+ *   Add a list of scope to add to the view.
+ *
+ * Parameters:
+ *   list            List of scopes.
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addScopes( QList<CParsedScopeContainer> *list,  
+                                    QListViewItem *parent )
+{
+  CParsedScopeContainer *scope;
+
+  for( scope = list->first();
+       scope != NULL;
+       scope = list->next())
+    addScope( scope, parent );
+}
+
+/*------------------------------------- CClassTreeHandler::addScope()
+ * addScope()
+ *   Add a scope to the view.
+ *
+ * Parameters:
+ *   aMethod         Method to add
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/ 
+void CClassTreeHandler::addScope( CParsedScopeContainer *aScope,
+                                  QListViewItem *parent )
+{
+  assert( aScope != NULL );
+  assert( parent != NULL );
+
+  QList<CParsedScopeContainer> *scopeList;
+  QList<CParsedClass> *classList;
+  QList<CParsedStruct> *structList;
+  QList<CParsedMethod> *methodList;
+  QList<CParsedAttribute> *attrList;
+
+  QListViewItem *item = addItem( aScope->name, THNAMESPACE, parent );
+  
+  // Add namespaces
+  scopeList = aScope->getSortedScopeList();
+  addScopes( scopeList, item );
+  delete scopeList;
+
+  // Add classes
+  classList = aScope->getSortedClassList();
+  addClasses( classList, item );
+  delete classList;
+
+  // Add structs
+  structList = aScope->getSortedStructList();
+  addStructs( structList, item, CTHALL );
+  delete structList;
+
+  // Add functions
+  methodList = aScope->getSortedMethodList();
+  addMethods( methodList, item, CTHALL );
+  delete methodList;
+
+  // Add variables
+  attrList = aScope->getSortedAttributeList();
+  addAttributes( attrList, item, CTHALL );
+  delete attrList;
+}
+
 /*---------------------------------- CClassTreeHandler::updateClass()
  * updateClass()
  *   Update the class in the view using the supplied parent.
@@ -113,6 +186,7 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
 
   // Add parts of the class
   addSubclassesFromClass( aClass, parent );
+  addStructsFromClass( aClass, parent, CTHALL );
   addMethodsFromClass( aClass, parent, CTHALL );
   addSlotsFromClass( aClass, parent );
   addSignalsFromClass( aClass, parent );
@@ -214,6 +288,91 @@ void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
   }
 }
 
+/*-------------------------- CClassTreeHandler::addStructsFromClass()
+ * addStructsFromClass()
+ *   Add a the selected structures from the class to the view. 
+ *
+ * Parameters:
+ *   aClass       Class with structs to add.
+ *   parent       The parent item.
+ *   filter       The selection.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addStructsFromClass( CParsedClass *aClass,
+                                             QListViewItem *parent,
+                                             CTHFilter filter )
+{
+  assert( aClass != NULL );
+  assert( parent != NULL );
+
+  QList<CParsedStruct> *list;
+
+  list = aClass->getSortedStructList();
+  addStructs( list, parent, filter );
+  delete list;
+}
+
+/*------------------------------------ CClassTreeHandler::addStructs()
+ * addStructs()
+ *   Add all structs from a list to the view.
+ * Parameters:
+ *   list            List with all structs to add
+ *   parent          The parent item.
+ *   filter          The selection.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addStructs( QList<CParsedStruct> *list,
+                                    QListViewItem *parent,
+                                    CTHFilter filter )
+{
+  assert( list != NULL );
+  assert( parent != NULL );
+
+  CParsedStruct *aStruct;
+
+  // Add the structures
+  for( aStruct = list->first();
+       aStruct != NULL;
+       aStruct = list->next() )
+  {
+    if( filter == CTHALL || filter == (CTHFilter)aStruct->exportScope )
+      addStruct( aStruct, parent );
+  }
+}
+
+/*------------------------------------ CClassTreeHandler::addStruct()
+ * addStruct()
+ *   Add a struct to the view.
+ *
+ * Parameters:
+ *   aStruct         Structure to add
+ *   parent          The parent item.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
+                                   QListViewItem *parent )
+{
+  QListViewItem *root;
+  CParsedAttribute *anAttr;
+  QList<CParsedAttribute> *list;
+
+  root = addItem( aStruct->name, THSTRUCT, parent );
+
+  list = aStruct->getSortedAttributeList();
+
+  for( anAttr = list->first();
+       anAttr != NULL;
+       anAttr = list->next() )
+  {
+    addAttribute( anAttr, root );
+  }
+
+  delete list;
+}
+
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()
  * addMethodsFromClass()
  *   Add a the selected methods from the class to the view. 
@@ -244,13 +403,12 @@ void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass,
 
 /*------------------------------------ CClassTreeHandler::addMethods()
  * addMethods()
- *   Add all methods from a class to the view.
+ *   Add a list of methods to the view.
  *
  * Parameters:
- *   aPC             Class that holds the data.
+ *   list            List of methods to add.
  *   parent          The parent item.
  *   filter          The selection.
- *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
@@ -332,11 +490,12 @@ void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass,
 
 /*--------------------------------- CClassTreeHandler::addAttributes()
  * addAttributes()
- *   Add all attributes from a class to the view.
+ *   Add a list of attributes to the view.
  *
  * Parameters:
- *   aPC             Class that holds the data.
- *   parent       The parent item.
+ *   list            List of methods to add.
+ *   parent          The parent item.
+ *   filter          The selection.
  *
  * Returns:
  *   -
@@ -569,38 +728,6 @@ void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
        aStruct != NULL;
        aStruct = list->next() )
     addStruct( aStruct, parent );
-}
-
-/*------------------------------------ CClassTreeHandler::addStruct()
- * addStruct()
- *   Add a struct to the view.
- *
- * Parameters:
- *   aStruct         Structure to add
- *   parent          The parent item.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
-                                   QListViewItem *parent )
-{
-  QListViewItem *root;
-  CParsedAttribute *anAttr;
-  QList<CParsedAttribute> *list;
-
-  root = addItem( aStruct->name, THSTRUCT, parent );
-
-  list = aStruct->getSortedAttributeList();
-
-  for( anAttr = list->first();
-       anAttr != NULL;
-       anAttr = list->next() )
-  {
-    addAttribute( anAttr, root );
-  }
-
-  delete list;
 }
 
 /*------------------------------- CClassTreeHandler::getCurrentNames()
