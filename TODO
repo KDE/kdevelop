@@ -16,7 +16,6 @@ High priority tasks!
     (projectDirectory() != $(top_builddir) in general)
 
 * UI bugs:
-  - view-taskbar missing
   - editor options dialog missing when all views are closed
   - messages view should hold place when scrolled but new output is
     being added
