@@ -19,7 +19,6 @@
 
 #include "lexer.h"
 #include "lookup.h"
-#include "lexer.moc"
 #include "keywords.lut.h"
 
 #include <kdebug.h>
