@@ -40,7 +40,7 @@ public:
     {
         KInstance *instance = KGenericFactory<AbbrevPart>::createInstance();
         KStandardDirs *dirs = instance->dirs();
-        dirs->addResourceType( "codetemplates", 
+        dirs->addResourceType( "codetemplates",
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );
         return instance;
     }
@@ -62,7 +62,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           actionCollection(), "edit_expandtext" );
     action->setStatusText( i18n("Expand current word") );
     action->setWhatsThis( i18n("Expand current word") );
-    
+
     action = new KAction( i18n("Expand Abbreviation"), SHIFT + Key_Space,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
@@ -194,7 +194,9 @@ void AbbrevPart::slotExpandText()
     } else if (entries.count() == 1) {
         uint line, col;
         cursoriface->cursorPositionReal(&line, &col);
-        editiface->insertText(line, col, entries[0].text.mid(word.length()));
+        QString txt = entries[0].text.mid(word.length());
+        editiface->insertText( line, col, txt );
+        cursoriface->setCursorPositionReal( line, col + txt.length() );
     } else {
         completioniface->showCompletionBox(entries, word.length());
     }

@@ -1,0 +1,24 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="qeditor_part" version="1">
+<MenuBar>
+  <Menu name="file">
+	<Action name="file_open"/>
+	<Separator/>
+	<Action name="file_save"/>
+	<Action name="file_save_as"/>
+  </Menu>
+  <Menu name="edit">
+	  <Action name="edit_undo"/>
+	  <Action name="edit_redo"/>
+  </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar">
+  <Action name="file_open"/>
+  <Action name="file_save"/>
+  <Action name="file_print"/>
+  <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+</ToolBar>
+</kpartgui>
