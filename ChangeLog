@@ -1,3 +1,7 @@
+2003-06-15 Harald Fernengel <harry@kdevelop.org>
+    * Added notification if a file has been modified outside the IDE
+      (IDEAl mode only for now).
+
 2003-06-14 Harald Fernengel <harry@kdevelop.org>
     * Added perforce to the main menu, also uses KActions now so you can
       assign your favourite keybinding to the commands.
