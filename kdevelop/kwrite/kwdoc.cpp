@@ -3293,9 +3293,9 @@ void KWriteDoc::updateBMPopup(QPopupMenu* popup)
           QString buf;
 
           if (z < 9) {
-	    buf.sprintf("%s &%d; %s : %d ",
-			fName.data(),
+	    buf.sprintf("&%d %s; %s : %d ",
 			z,
+			fName.data(),
 			i18n("Line").data(), 
 			line + 1);
 	    popup->setAccel(ALT+kw_bookmark_keys[z - 1],z);

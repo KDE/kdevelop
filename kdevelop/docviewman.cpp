@@ -1542,7 +1542,7 @@ void DocViewMan::gotoCodeBookmark(int n) {
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
     if(pDoc) {
-      if(text.startsWith(pDoc->fileName())) {
+      if(text.contains(pDoc->fileName() + ";")) {
         m_pParent->switchToFile(pDoc->fileName());
         pDoc->gotoBookmark(text);
         return;
