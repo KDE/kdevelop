@@ -1427,7 +1427,8 @@ void MainWindow::setWindowMenu(QPopupMenu *menu)
 
 void MainWindow::setCaption( const QString & caption )
 {
-	if ( KDevProject * project = API::getInstance()->project() )
+	KDevProject * project = API::getInstance()->project();
+	if ( project && !caption.isEmpty() )
 	{
 		QString projectname = project->projectName();
 		
@@ -1438,6 +1439,10 @@ void MainWindow::setCaption( const QString & caption )
 		}
 			
 		KMdiMainFrm::setCaption( projectname + " - " + caption );
+	}
+	else
+	{
+		KMdiMainFrm::setCaption( caption );
 	}
 }
 
