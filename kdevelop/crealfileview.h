@@ -108,8 +108,9 @@ protected slots:
   /**  */
   void slotFileNew();
   void slotUpdateMakefileAm();
-  void slotChangeToStatic();
-  void slotChangeToShared();
+//  void slotChangeToStatic();
+//  void slotChangeToShared();
+  void slotLibProperties();
 
 private: // Popupmenus
   KPopupMenu *popup;
@@ -131,7 +132,6 @@ private: // Private methods
   QString getRelFilename(QListViewItem* pItem);
   QString getFullFilename(QListViewItem* pItem);
   bool isInstalledFile(QString filename);
-
 };
 #endif
 

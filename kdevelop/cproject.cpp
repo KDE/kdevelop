@@ -20,6 +20,7 @@
 
 #include "vc/versioncontrol.h"
 #include "ctoolclass.h"
+#include "clibpropdlgimpl.h"
 
 #include <kprocess.h>
 #include <kconfigbase.h>
@@ -220,12 +221,15 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config->writeEntry("classname",info.classname);
 
 }
-// void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
-//   QString rel_name = info.rel_name;
-//   config->setGroup(rel_name);
-//   config->writeEntry("type",info.type);
-//   config->writeEntry("sub_dirs",info.sub_dirs);
-// }
+
+void CProject::writeMakefileAmInfo(const TMakefileAmInfo* info)
+{
+  config->setGroup(info->rel_name);
+  config->writeEntry("type", info->type);
+  config->writeEntry("sub_dirs", info->sub_dirs);
+  config->writeEntry("sharedlib_LDFLAGS",info->sharedlibLDFLAGS);
+  config->writeEntry("sharedlib_rootname", info->sharedlibRootName);
+}
 
 /*********************************************************************
  *                                                                   *
@@ -311,6 +315,8 @@ TMakefileAmInfo CProject::getMakefileAmInfo(const QString& rel_name){
   info.rel_name = rel_name;
   info.type = config->readEntry("type");
   config->readListEntry("sub_dirs",info.sub_dirs);
+  info.sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
+  info.sharedlibRootName = config->readEntry("sharedlib_rootname");
 
   return info;
 }
@@ -558,8 +564,21 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
       { // the first makefileam
         if(info.type == CPP_SOURCE )
         {
-          makefileaminfo.type = "static_library"; // cool
-          createLibraryMakefileAm(makefile_name, "static");
+          // set the defaults
+          makefileaminfo.type = "static_library";
+          makefileaminfo.sharedlibLDFLAGS = "-version_flags 0:0:1";
+          QDir dir(getDir(makefile_name));
+          makefileaminfo.sharedlibRootName = dir.dirName();
+
+          // allow user to adjust defaults if they want
+          TMakefileAmInfo tmpInfo = makefileaminfo;
+          CLibPropDlgImpl dlg(&tmpInfo);
+          if (dlg.exec())
+            makefileaminfo = tmpInfo;
+
+          // update project file THEN create makefile
+          writeMakefileAmInfo(&makefileaminfo);
+          createLibraryMakefileAm(&makefileaminfo);
         }
         else
           makefileaminfo.type = "normal";
@@ -1026,6 +1045,12 @@ void CProject::updateMakefileAm(const QString& makefile)
   file.close();
 }
 
+void CProject::refreshMakefileAm(TMakefileAmInfo* info)
+{
+  writeMakefileAmInfo(info);
+  updateMakefileAm(info->rel_name);
+}
+
 QString CProject::getDir(const QString& rel_name){
   int pos = rel_name.findRev('/');
   return rel_name.left(pos+1);
@@ -1401,48 +1426,48 @@ void CProject::getAllStaticLibraries(QStrList& libs){
   }
 }
 
-void CProject::changeLibraryType(const QString &makefile, const QString &type)
-{
-  writeGroupEntry(makefile, "type", type+"_library");
-}
+//void CProject::changeLibraryType(const QString &makefile, const QString &type)
+//{
+//  writeGroupEntry(makefile, "type", type+"_library");
+//}
 
-void CProject::createLibraryMakefileAm(const QString &makefile, const QString &type)
+void CProject::createLibraryMakefileAm(const TMakefileAmInfo* info)
+//const QString &makefile, const QString &type)
 {
+  QString abs_filename = getProjectDir() + info->rel_name;
 
-  QString abs_filename = getProjectDir() + makefile;
-  QString lib_template = locate("data", "kdevelop/templates/MAM_"+type+"_template");
+//  QString lib_template = locate("data", "kdevelop/templates/MAM_"+type+"_template");
   QFile fileDest(abs_filename);
-  QFile file(lib_template);
-  QStrList list;
-  QString str;
+//  QFile file(lib_template);
+//  QStrList list;
+//  QString str;
 
   QTextStream streamDest(&fileDest);
-  QTextStream stream(&file);
-  if(file.open(IO_ReadOnly))
-  { // read the template
-    while(!stream.eof())
-    {
-      list.append(stream.readLine());
-    }
-  }
-  file.close();
+//  QTextStream stream(&file);
+//  if(file.open(IO_ReadOnly))
+//  { // read the template
+//    while(!stream.eof())
+//    {
+//      list.append(stream.readLine());
+//    }
+//  }
+//  file.close();
 
   // save the old file
   if (QFileInfo(abs_filename).exists())
     QDir().rename(abs_filename, abs_filename+".old");
 
-  QDir dir(getDir(makefile));
+//  QDir dir(getDir(makefile));
   if(fileDest.open(IO_WriteOnly))
   { // write the Makefile.am
-    for(str = list.first();str != 0;str = list.next())
-    {
-      str.replace(QRegExp("\\|LIBNAME\\|"), dir.dirName());
-      str.replace(QRegExp("\\|LIBADD\\|"), getLDADD());
-      streamDest << str << "\n";
-    }
+//    for(str = list.first();str != 0;str = list.next())
+//    {
+//      str.replace(QRegExp("\\|LIBNAME\\|"), dir.dirName());
+//      str.replace(QRegExp("\\|LIBADD\\|"), getLDADD());
+//      streamDest << str << "\n";
+//    }
+    fileDest.close();
   }
-  fileDest.close();
-
 }
 
 /*-------------------------------------- CProject::setInfosInString()

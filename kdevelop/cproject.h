@@ -55,8 +55,9 @@ typedef enum _Project_enum
   */
 struct TMakefileAmInfo {
   QString rel_name;
-  /** normal,prog_main,static_library*/
-  QString type;
+  QString type;               /** normal,prog_main,static_library*/
+  QString sharedlibLDFLAGS;
+  QString sharedlibRootName;
   QStrList sub_dirs;
 };
 
@@ -452,7 +453,8 @@ public: // Public methods
   void removeLFVGroup(const QString& name);
   void writeFileInfo(TFileInfo info);
   void writeDialogFileInfo(TDialogFileInfo info);
-  //  void writeMakefileAmInfo(TMakefileAmInfo info);
+  void writeMakefileAmInfo(const TMakefileAmInfo* info);
+
   /** return true if a new subdir was added to the project*/
   bool addFileToProject(QString rel_name,TFileInfo info);
   bool addDialogFileToProject(const QString& rel_name,TDialogFileInfo info);
@@ -462,10 +464,13 @@ public: // Public methods
 
   void updateConfigureIn();
   void updateMakefilesAm();
-  void changeLibraryType(const QString &makefile, const QString &type);
-  void createLibraryMakefileAm(const QString &makefile, const QString &type);
+//  void changeLibraryType(const QString &makefile, const QString &type);
+//  void createLibraryMakefileAm(const QString &makefile, const QString &type);
+  void createLibraryMakefileAm(const TMakefileAmInfo* info);
+
   //  void createBinMakefileAm();
   void updateMakefileAm(const QString& makefile);
+  void refreshMakefileAm(TMakefileAmInfo* info);
 
   /** read the projectfile */
   bool readProject();

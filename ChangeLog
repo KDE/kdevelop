@@ -1,3 +1,6 @@
+2001-03-17  jbb <jbb@kdevelop.org>
+    * add dialog for library settings - it's a bit crude :(
+
 2001-03-16  F@lk Brettschneider <falk@kdevelop.org>
     * Closing and reopen edit files should work now without crash.
     * There were bugs in the DocViewMan...
