@@ -1,5 +1,30 @@
+2005-03-01  Matt Rogers <mattr@kde.org>
+ * Fix bug 71926 by not using beautifyToolTip since it breaks i18n
+ * Fix bug 71708 by giving the environment variable dialogs a parent
+   so they can't get hidden behind other windows
+
+2005-02-23  Alexander Dymo <adymo@kdevelop.org>
+ * Fix compilation on KDE 3.2
+
+2005-02-22  Alexander Neundorf <neundorf@kde.org>
+ * Added partial support for building kdevelop with cmake
+
+2005-02-22  Alexander Dymo <adymo@kdevelop.org>
+ * Added a qmake parser to help implementing a much better qmake project
+   manager
+
+2005-02-17  Jens Dagerbo <jens.dagerbo@swipnet.se>
+ * Add the 'Configure Toolbox' and 'Edit Custom Widget' menu items back to
+   the tools menu when designer intergration is activated.
+
+2005-02-07  Matt Rogers <mattr@kde.org>
+ * Pull information from the CVS/Entries file to populate version control
+   information in the file tree on first load. This eliminates the need to
+   use 'Sync with Repository' when KDevelop is first loaded, but it is needed
+   to update the version control info.
+
 2005-02-02  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
-* Fixed Java KDE app framework template so it compiles
+ * Fixed Java KDE app framework template so it compiles
 
 2005-02-01 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Implemented a fix for BR 91757 which also removes the silly runtime dependency we had on kdebase
