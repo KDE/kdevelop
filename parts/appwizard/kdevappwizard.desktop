@@ -18,3 +18,4 @@ GenericName[xx]=xxApplication Wizardxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevappwizard
 X-KDevelop-Scope=Core
+X-KDevelop-Version=1
