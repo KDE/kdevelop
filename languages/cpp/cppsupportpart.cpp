@@ -842,9 +842,13 @@ CppSupportPart::parseProject( )
     QDataStream stream;
     QMap< QString, QPair<uint, Q_LONG> > pcs;
 
+    QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
+    
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
-    if( f.open(IO_ReadOnly) ){
+    if( !QFile::exists( skip_file_name ) && f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
+ 
+        createIgnorePCSFile();
 
 	QString sig;
 	int pcs_version = 0;
@@ -922,6 +926,8 @@ CppSupportPart::parseProject( )
 
     kapp->restoreOverrideCursor( );
     mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    
+    QFile::remove( skip_file_name );
 
     return true;
 }
@@ -1343,10 +1349,12 @@ void CppSupportPart::saveProjectSourceInfo( )
 
     if( !project() || fileList.isEmpty() )
 	return;
-
+    
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( !f.open( IO_WriteOnly ) )
 	return;
+    
+    createIgnorePCSFile();    
 
     QDataStream stream( &f );
     QMap<QString, Q_ULONG> offsets;
@@ -1378,6 +1386,9 @@ void CppSupportPart::saveProjectSourceInfo( )
 	stream << offset;
 	stream.device()->at( end );
     }
+    
+    QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
+    QFile::remove( skip_file_name );
 }
 
 QString CppSupportPart::extractInterface( const ClassDom& klass )
@@ -1662,6 +1673,19 @@ void CppSupportPart::slotFunctionHint( )
 	funName += formatModelItem( fun, true );
 	
 	mainWindow()->statusBar()->message( funName, 2000 );
+    }
+}
+
+void CppSupportPart::createIgnorePCSFile( )
+{
+    static QCString skip_me( "ignore me\n" );
+    
+    QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
+    QFile skip_pcs_file( skip_file_name );
+    if( skip_pcs_file.open(IO_WriteOnly) )
+    {
+        skip_pcs_file.writeBlock( skip_me );
+        skip_pcs_file.close();
     }
 }
 

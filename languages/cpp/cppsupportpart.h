@@ -152,6 +152,7 @@ private:
      */
     void maybeParse( const QString& fileName );
     void removeWithReferences( const QString& fileName );
+    void createIgnorePCSFile();
 
     QString sourceOrHeaderCandidate();
 
