@@ -8,7 +8,7 @@
   
   <Menu name="tools">
     <text>&amp;Tools</text>
-    <Action name="show_notes"/>
+    <Action name="show_notes" group="tools_project_operations" />
   </Menu>
   
 </MenuBar>

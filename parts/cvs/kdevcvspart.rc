@@ -2,7 +2,7 @@
 <kpartgui name="KDevCvsPart" version="1">
 <MenuBar>
     <Menu name="tools">
-        <Menu name="version_control">
+        <Menu name="version_control" group="tools_project_operations">
             <Text>&amp;Version Control</Text>
             <Merge />
             <Menu name="version_control_tools_cvs">

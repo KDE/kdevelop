@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui >
-<kpartgui version="8" name="gideon" >
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="9" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -10,37 +10,43 @@
     <Separator/>
     <DefineGroup name="save_merge"/>
     <Action name="file_save_all"/>
+    <Separator/>
     <DefineGroup name="revert_merge"/>
     <Action name="file_revert_all"/>
     <Separator/>
     <DefineGroup name="print_merge"/>
     <Merge/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <Action name="file_close"/>
     <DefineGroup name="close_merge"/>
     <Action name="file_close_all"/>
     <Action name="file_closeother"/>
-    <Action name="file_switchto"/>
     <Separator/>
     <Action name="file_quit"/>
   </Menu>
-  <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
+  <Menu name="edit"><text>&amp;Edit</text>
     <DefineGroup name="edit_undo_merge"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <DefineGroup name="edit_paste_merge"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <DefineGroup name="edit_select_merge"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <DefineGroup name="edit_find_merge"/>
-    <Separator/>
+    <DefineGroup name="kdev_edit_find_merge"/>
+    <Action name="dummy_separator"/>
+    <DefineGroup name="edit_astyle"/>
+    <Action name="dummy_separator"/>
     <Merge/>
   </Menu>
   <Menu name="view">
     <text>&amp;View</text>
+    <DefineGroup name="history_operations"/>
+    <Action name="dummy_separator"/>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
     <Action name="view_first_window"/>
     <Action name="view_last_window"/>
+    <Action name="file_switchto"/>
     <Separator/>
     <Action name="view_tree_tool_views"/>
     <Action name="view_output_tool_views"/>
@@ -49,7 +55,11 @@
     <Action name="raise_bottom_tabbar"/>
     <Action name="raise_editor"/>
     <Separator/>
+    <DefineGroup name="error_operations"/>
+    <Action name="dummy_separator"/>
     <Merge/>
+    <Action name="dummy_separator"/>
+    <DefineGroup name="view_operations"/>
   </Menu>
   <Menu name="project">
     <text>&amp;Project</text>
@@ -73,13 +83,13 @@
   <Menu name="tools">
     <text>&amp;Tools</text>
     <DefineGroup name="tools_operations"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <DefineGroup name="tools_file_operations"/>
-    <Separator/>
-    <DefineGroup name="tools_project_operations"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
     <DefineGroup name="tools_language_operations"/>
-    <Separator/>
+    <Action name="dummy_separator"/>
+    <DefineGroup name="tools_project_operations"/>
+    <Action name="dummy_separator"/>
     <Merge/>
   </Menu>
   <Menu name="window">

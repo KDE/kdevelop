@@ -2,8 +2,8 @@
 <kpartgui name="KDevHistory" version="2">
 <MenuBar>
  <Menu name="view">
-   <Action name="history_back"/>
-   <Action name="history_forward"/>
+   <Action name="history_back" group="history_operations"/>
+   <Action name="history_forward" group="history_operations"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">

@@ -2,7 +2,7 @@
 <kpartplugin name="svn" library="libsvnplugin" version="1">
 <MenuBar>
  <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="plugin_action"/>
+  <Action name="plugin_action" group="tools_project_operations"/>
  </Menu>
 </MenuBar>
 <ToolBar name="extraToolBar">

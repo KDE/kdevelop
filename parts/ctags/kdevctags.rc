@@ -2,7 +2,7 @@
 <kpartgui name="KDevCTags" version="1">
 <MenuBar>
   <Menu name="tools" >
-    <Action name="tools_ctags"/>
+    <Action name="tools_ctags" group="tools_language_operations"/>
   </Menu>
 </MenuBar>
 </kpartgui>

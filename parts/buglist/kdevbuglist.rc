@@ -2,7 +2,7 @@
 <kpartgui name="KDevBugList" version="2">
 <MenuBar>
  <Menu name="tools">
-  <Action name="bug_tracking"/>
+  <Action name="bug_tracking" group="tools_project_operations"/>
  </Menu>
 </MenuBar>
 </kpartgui>

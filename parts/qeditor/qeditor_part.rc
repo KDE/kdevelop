@@ -5,7 +5,7 @@
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_save" group="save_merge" />
     <Action name="file_save_as" group="save_merge" />
-    <Action name="file_reload" />
+    <Action name="file_reload" group="revert_merge"/>
   </Menu>
 
   <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
@@ -14,18 +14,21 @@
     <Action name="edit_cut" group="edit_paste_merge" />
     <Action name="edit_copy" group="edit_paste_merge" />
     <Action name="edit_paste" group="edit_paste_merge" />
-    <Action name="edit_select_all" group="edit_paste_merge" />
+    <Action name="edit_select_all" group="edit_select_merge" />
     <Action name="edit_find" group="edit_find_merge" />
     <Action name="edit_replace" group="edit_find_merge" />
-    <Action name="go_goto_line" />
-    <Action name="edit_expand_all_blocks" />
-    <Action name="edit_collapse_all_blocks" />
+    <Action name="go_goto_line" group="edit_find_merge"/>
+  </Menu>
+  
+  <Menu name="view" noMerge="1"><text>&amp;View</text>
+    <Action name="edit_expand_all_blocks" group="view_operations"/>
+    <Action name="edit_collapse_all_blocks" group="view_operations" />  
   </Menu>
 
   <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
-    <Action name="tools_start_macro" />
-    <Action name="tools_stop_macro" />
-    <Action name="tools_execute_macro" />
+    <Action name="tools_start_macro" group="tools_operations"/>
+    <Action name="tools_stop_macro" group="tools_operations"/>
+    <Action name="tools_execute_macro" group="tools_operations"/>
   </Menu>
 
   <Menu name="settings" noMerge="1"><text>&amp;Settings</text>

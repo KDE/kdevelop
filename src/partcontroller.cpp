@@ -134,6 +134,8 @@ void PartController::setupActions()
     this, SLOT(slotSwitchTo()),
     ac, "file_switchto");
 
+  new KActionSeparator(ac, "dummy_separator");
+
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotBackAboutToShow()));
   connect(m_backAction->popupMenu(), SIGNAL(activated(int)),

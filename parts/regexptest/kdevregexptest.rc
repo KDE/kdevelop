@@ -2,7 +2,7 @@
 <kpartgui name="KDevRegExpTest" version="1">
 <MenuBar>
   <Menu name="tools" >
-    <Action name="tools_regexptest"/>
+    <Action name="tools_regexptest" name="tools_file_operations"/>
   </Menu>
 </MenuBar>
 </kpartgui>

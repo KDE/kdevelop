@@ -5,7 +5,7 @@
         <Menu name="version_control">
             <Text>&amp;Version Control</Text>
             <Merge />
-            <Menu name="version_control_tools_cvsservice">
+            <Menu name="version_control_tools_cvsservice" group="tools_project_operations">
                 <Text>&amp;CVS Service</Text>
                 <Action name="cvsservice_commit" />
                 <Action name="cvsservice_diff" />

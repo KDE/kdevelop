@@ -2,8 +2,8 @@
 <kpartgui name="KDevFilter" version="1">
 <MenuBar>
   <Menu name="tools" >
-    <Action name="tools_insertshell"/>
-    <Action name="tools_filtershell"/>
+    <Action name="tools_insertshell" group="tools_file_operations"/>
+    <Action name="tools_filtershell" group="tools_file_operations"/>
   </Menu>
 </MenuBar>
 </kpartgui>

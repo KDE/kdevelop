@@ -2,7 +2,7 @@
 <kpartplugin name="valgrind" library="libvalgrindplugin" version="2">
 <MenuBar>
  <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="tools_valgrind"/>
+  <Action name="tools_valgrind" group="tools_project_operations"/>
  </Menu>
 </MenuBar>
 </kpartplugin>
