@@ -1236,7 +1236,6 @@ void CKDevelop::showOutputView(bool show){
 }
 void CKDevelop::readOptions()
 {
-  readDockConfig();
   config->setGroup("General Options");
 
   /////////////////////////////////////////
@@ -1281,55 +1280,25 @@ void CKDevelop::readOptions()
 
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop
-  // SETTING MAIN PANNER
-  // set a default value for the splitter in pos
-	QValueList<int> pos;
-	pos << 520 << 80;
-	// initialize both values with 0 to set the splitter to default values if the
-	// entry is empty...KConfig really misses a default value here!
-  mainSplitterPos << 0 << 0;
-	mainSplitterPos=config->readIntListEntry("mainSplitterPos");
-	if(mainSplitterPos.first()==0)
-	  mainSplitterPos=pos;
+  /////////////////////	
 
-	bool outputview= config->readBoolEntry("show_output_view", true);
-//	if(outputview){
-  if(outputdock->mayBeShow()){
+	config->setGroup("dock_setting_default");
+	// settings just turned around...true is false and false is true ;-)
+	bool outputview= config->readBoolEntry("Output-View:visible", true);
+	if(!outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-    output_view_pos=config->readNumEntry("output_view_pos", 80);
-//    mainSplitter->setSizes(mainSplitterPos);
 	}
-	else{
-//	  o_tab_view->hide();
-//	    outputdock->hide();
-	}
-  // SETTING TOP PANNER
-  // set a default value for the splitter in pos
-	pos.clear();
-	pos << 200 << 600;
-	// initialize both values with 0 to set the splitter to default values if the
-	// entry is empty...KConfig really misses a default value here!
-	topSplitterPos << 0 << 0;
-	topSplitterPos=config->readIntListEntry("topSplitterPos");
-	if(topSplitterPos.first()==0)
-	  topSplitterPos=pos;
-	
-	bool treeview=config->readBoolEntry("show_tree_view", true);
-//	if(treeview){
-  if(treedock->mayBeShow()){
+	bool treeview=config->readBoolEntry("Tree-View:visible", true);
+	if(!treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-
-//    topSplitter->setSizes(topSplitterPos);
 	}
-	else{
-//	  t_tab_view->hide();
-//	  treedock->hide();
-	}
+/////////////////////
 
 
-  	
+
+  config->setGroup("General Options");
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
   bAutosave=config->readBoolEntry("Autosave",true);
@@ -1385,7 +1354,6 @@ void CKDevelop::readOptions()
 }
 
 void CKDevelop::saveOptions(){
-  writeDockConfig();
 	
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
@@ -1394,12 +1362,6 @@ void CKDevelop::saveOptions(){
 //  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
-
-//  config->writeEntry("mainSplitterPos",mainSplitter->sizes());
-//  config->writeEntry("topSplitterPos", topSplitter->sizes());
-
-//  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
-//  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
@@ -1416,9 +1378,6 @@ void CKDevelop::saveOptions(){
   else
     config->writeEntry("tabviewmode", 3);
 
-
-//  config->writeEntry("show_kdevelop",bKDevelop);
-
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
   config->writeEntry("Autosave",bAutosave);
@@ -1430,13 +1389,12 @@ void CKDevelop::saveOptions(){
   config->writeEntry("browser_file",history_list.current());
   config->writeEntry("doc_bookmarks", doc_bookmarks_list);
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
-//  config->writeEntry("Recent Projects", recent_projects);
   saveRecentProjectMenu();
 
   //MB serializes menuoptions
   config->writeEntry("doc_tool_type",doctool);
   //MB end
-
+  writeDockConfig();
   config->sync();
 }
 

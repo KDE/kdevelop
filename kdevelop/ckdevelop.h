@@ -881,6 +881,7 @@ private:
   CTabCtl* o_tab_view;
   KDockWidget* treedock;
   KDockWidget* outputdock;
+  KDockWidget* main;
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources

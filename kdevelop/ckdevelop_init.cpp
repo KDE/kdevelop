@@ -126,19 +126,23 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   setKeyAccel();
 
   readOptions();
+
   slotViewRefresh();
   if(start_logo)
     start_logo->raise();
 
   initDebugger();
+  initWhatsThis();
+
+
   show();
+
 
   setDebugMenuProcess(false);
   setToolmenuEntries();
 
   error_parser = new CErrorMessageParser;
 
-  initWhatsThis();
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
 
@@ -176,9 +180,34 @@ void CKDevelop::initView()
   //  s_tab_current = 0;
   topSplitter = new QSplitter(QSplitter::Horizontal, mainSplitter, "topSplitter"); //,QSplitter::Absolute);
 
-  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0, i18n("Tree-View"));
+
+  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), this, i18n("Tree-View"));
   t_tab_view = new CTabCtl(treedock);
   treedock->setWidget(t_tab_view);
+
+  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), this, i18n("Output-View"));
+  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
+  outputdock->setWidget(o_tab_view);
+
+  main = createDockWidget( "Editor",SmallIcon("kdevelop") , this );
+  s_tab_view = new CTabCtl(main);
+  main->setWidget( s_tab_view );
+  setView(main);
+  setMainDockWidget( main );
+	
+  treedock->manualDock(main, KDockWidget::DockLeft, 35/*size relation in %*/);
+  outputdock->manualDock(main, KDockWidget::DockBottom, 70/*size relation in %*/);
+
+  readDockConfig(config);
+	
+	main->setEnableDocking( KDockWidget::DockNone);
+	main->setDockSite( KDockWidget::DockCorner);	
+
+	treedock->setDockSite( KDockWidget::DockCorner);	
+	treedock->setEnableDocking( KDockWidget::DockCorner);
+	outputdock->setDockSite( KDockWidget::DockCorner);	
+	outputdock->setEnableDocking( KDockWidget::DockCorner);
+
 
 //  t_tab_view = new CTabCtl(topSplitter);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
@@ -230,11 +259,6 @@ void CKDevelop::initView()
 
   // the tabbar + tabwidgets for edit and browser
 
-  KDockWidget* main = createDockWidget( "Editor",SmallIcon("kdevelop") , this );
-  setMainDockWidget( main );
-
-  s_tab_view = new CTabCtl(main);
-  main->setWidget( s_tab_view );
 
 
 //  s_tab_view = new CTabCtl(topSplitter);
@@ -289,12 +313,9 @@ void CKDevelop::initView()
   // Outputwindow
   ////////////////////////
 	
-  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
-  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
-  outputdock->setWidget(o_tab_view);
 
 //  o_tab_view = new CTabCtl(mainSplitter, "output_tabview","output_widget");
-  mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
+//  mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
 
   messages_widget = new COutputWidget(o_tab_view);
   messages_widget->setFocusPolicy(QWidget::ClickFocus);
@@ -317,15 +338,6 @@ void CKDevelop::initView()
 
   // set the mainwidget
 //  setCentralWidget(mainSplitter);
-  main->setEnableDocking(KDockWidget::DockNone);
-  outputdock->setEnableDocking(KDockWidget::DockCorner);
-  treedock->setEnableDocking(KDockWidget::DockCorner);
-  outputdock->setDockSite(KDockWidget::DockNone);
-  treedock->setDockSite(KDockWidget::DockNone);
-
-  main->manualDock(getMainDockWidget(), KDockWidget::DockCenter);
-  outputdock->manualDock(getMainDockWidget(), KDockWidget::DockBottom, 80);
-  treedock->manualDock(getMainDockWidget(), KDockWidget::DockLeft, 20);
 
 
   initKeyAccel();
