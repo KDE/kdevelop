@@ -40,6 +40,7 @@ void KDevDriver::setupProject()
 
 void KDevDriver::setupLexer( Lexer* lexer )
 {
+	Driver::setupLexer( lexer );
 	lexer->setReportMessages( true );
 	lexer->setReportWarnings( true );
 }

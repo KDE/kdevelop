@@ -912,7 +912,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName, isInstance );
 
 	QValueList<Tag> parents = m_repository->getBaseClassList( className );
-	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+	kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
 	    Tag& tag = *it;
@@ -920,7 +920,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 
 	    CppBaseClass<Tag> tagInfo( tag );
 
-	    kdDebug(9020) << "found base class " << tagInfo.baseClass() << endl;
+	    kdDebug(9007) << "found base class " << tagInfo.baseClass() << endl;
 	    retVal += getSignatureListForClass( tagInfo.baseClass(), functionName, isInstance );
 	}
     } else {
@@ -1204,14 +1204,14 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	QStringList scope = QStringList::split( "::", type );
 	entryList = m_repository->getEntriesInScope( scope, isInstance );
 	QValueList<Tag> parents = m_repository->getBaseClassList( type ); // type or scope?
-	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+	kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
 	    Tag& tag = *it;
 	    ++it;
 
 	    CppBaseClass<Tag> tagInfo( tag );
-	    kdDebug(9020) << "found base class " << tagInfo.baseClass() << endl;
+	    kdDebug(9007) << "found base class " << tagInfo.baseClass() << endl;
 	    entryList += findAllEntries( tagInfo.baseClass(), false, isInstance );
 	}
     }
@@ -1245,7 +1245,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
     } else {
 	QStringList path = QStringList::split( ".", scope->path() );
 	QValueList<Tag> tags = m_repository->getTagsInScope( name, path );
-        kdDebug(9020) << "------> #" << tags.size() << " tags in scope " << scope->path() << endl;
+        kdDebug(9007) << "------> #" << tags.size() << " tags in scope " << scope->path() << endl;
 
 	QValueList<Tag>::Iterator tit = tags.begin();
 	while( tit != tags.end() ){
@@ -1258,7 +1258,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	}
 
         QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
-        kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+        kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
         QValueList<Tag>::Iterator it = parents.begin();
         while( it != parents.end() ){
             Tag& tag = *it;

@@ -56,7 +56,7 @@ void CodeInformationRepository::removeCatalog( const QString & id )
 
 QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: QueryArgument> & args )
 {
-    kdDebug(9020) << "CodeInformationRepository::query()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::query()" << endl;
 
     QValueList<Tag> tags;
 
@@ -73,7 +73,7 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
 
 QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileName )
 {
-    kdDebug(9020) << "CodeInformationRepository::getTagsInFile()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getTagsInFile()" << endl;
 
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "fileName", fileName );
@@ -94,7 +94,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
 
 QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool isInstance )
 {
-    kdDebug(9020) << "CodeInformationRepository::getTagsInScope()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getTagsInScope()" << endl;
 
     QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
@@ -133,7 +133,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
 
 QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance, bool recompute )
 {
-    kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getEntriesInScope()" << endl;
 
     if( !recompute && !scope.size() && m_globalEntries.size() )
 	return m_globalEntries;
@@ -148,7 +148,7 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 
 QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
 {
-    kdDebug(9020) << "CodeInformationRepository::getBaseClasseList()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getBaseClasseList()" << endl;
 
     if( className.isEmpty() )
         return QValueList<Tag>();
@@ -161,7 +161,7 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
 
 QStringList CodeInformationRepository::getSignatureList( const QStringList & scope, const QString & functionName, bool /*isInstance*/ )
 {
-    kdDebug(9020) << "CodeInformationRepository::getSignatureList()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getSignatureList()" << endl;
 
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
@@ -203,7 +203,7 @@ QStringList CodeInformationRepository::getSignatureList( const QStringList & sco
 
 QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStringList & scope )
 {
-    kdDebug(9020) << "CodeInformationRepository::getClassOrNamespaceList()" << endl;
+    kdDebug(9007) << "CodeInformationRepository::getClassOrNamespaceList()" << endl;
 
     QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
