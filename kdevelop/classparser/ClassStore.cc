@@ -499,6 +499,20 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
   return retVal;
 }
 
+/*-------------------------- CClassStore::getClassesReferencingFile()
+ * getClassesReferencingFile()
+ *   Get all classes referencing(==declared in) a certain file. 
+ *
+ * Parameters:
+ *   aFile                 File to look for.
+ * Returns:
+ *   QList<CParsedClass> * The classes.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CClassStore::getClassesReferencingFile( const char *aFile )
+{
+  return globalContainer.getClassesReferencingFile( aFile );
+}
+
 /*------------------------------------ CClassStore::getSortedClassList()
  * getSortedClassList()
  *   Get all classes in sorted order.
@@ -545,10 +559,10 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
                                              QList<CParsedMethod> *implList,
                                              QList<CParsedMethod> *availList )
 {
+  QList<CParsedMethod> alist, ilist;
   CParsedClass *aClass;
   CParsedParent *aParent;
   CParsedClass *parentClass;
-  QList<CParsedMethod> *list;
   CParsedMethod *aMethod;
   QDict<char> added;
   QString str;
@@ -572,11 +586,11 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
       parentClass = getClassByName( aParent->name );
       if( parentClass != NULL )
       {
-        list = parentClass->getVirtualMethodList();
+        getVirtualMethodsForClass(aParent->name, &ilist, &alist);
 
-        for( aMethod = list->first();
+        for( aMethod = alist.first();
              aMethod != NULL;
-             aMethod = list->next() )
+             aMethod = alist.next() )
         {
           // Check if we already have the method.
           if( aClass->getMethod( *aMethod ) != NULL )
@@ -587,10 +601,21 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
           else if( !aMethod->isConstructor && !aMethod->isDestructor )
             availList->append( aMethod );
         }
-        
-        delete list;
       }
+    }
 
+    // Add all virtual methods defined in THIS class.
+    for( aClass->methodIterator.toFirst();
+         aClass->methodIterator.current();
+         ++aClass->methodIterator )
+    {
+      aMethod = aClass->methodIterator.current();
+      if( aMethod->isVirtual && !aMethod->isPrivate() &&
+          !aMethod->isConstructor && !aMethod->isDestructor &&
+          added.find( aMethod->asString( str ) ) == NULL )
+      {
+        availList->append( aMethod );
+      }
     }
   }
 }

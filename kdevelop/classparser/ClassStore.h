@@ -44,6 +44,18 @@ public: // Public attributes
 
 public: // Public queries
 
+  /** Returns the number of parsed classes. */
+  int classCount() { return globalContainer.classCount(); }
+
+  /** Returns the number of global methods. */
+  int methodCount() { return globalContainer.methodCount(); }
+    
+  /** Returns the number of global attributes. */
+  int attributeCount() { return globalContainer.attributeCount(); }
+
+  /** Returns the number of global structures. */
+  int structCount() { return globalContainer.structCount(); }
+
   /** Tells if a class exists in the store. 
    * @param aName Classname to check if it exists.
    */
@@ -79,6 +91,12 @@ public: // Public queries
    * @return List of all classes that are suppliers of the named class.
    */
   QList<CParsedClass> *getClassSuppliers( const char *aName );
+
+  /** Get all classes referencing(==declared in) a certain file. 
+   * @param aFile File to look for.
+   * @returns A list of classnames. 
+   */
+  QList<CParsedClass> *getClassesReferencingFile( const char *aFile );
 
   /** Get all classes in sorted order. 
    * @return A list of all classes in alpabetical order. 
