@@ -58,5 +58,4 @@ KDevFileSelector=false
 KDevScripting=false
 
 [UI]
-MDI mode=1
-MajorUIMode=sdi
+MajorUIMode=IDEAl
