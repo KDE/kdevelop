@@ -34,7 +34,7 @@ CProject::CProject(QString file)
   prjfile = file;
   vc = 0;
 
-  ptStringMap = new QString[PT_END_POS];
+  ptStringMap = new QString[(unsigned)PT_END_POS];
   ptStringMap[ CORBA_SOURCE ] = "CORBA_SOURCE";
   ptStringMap[ CPP_SOURCE ] = "SOURCE";
   ptStringMap[ CPP_HEADER ] = "HEADER";
@@ -627,6 +627,10 @@ void CProject::updateMakefileAm(QString makefile){
   setKDevelopWriteArea(makefile);
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
+
+  if (makefile.right(11)!="Makefile.am")
+    return;
+
   QStrList list;
   QStrList files;
   QStrList subdirs;
