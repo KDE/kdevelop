@@ -24,6 +24,5 @@ Description[pt_BR]=ioslave de Subversão
 Description[ru]=Обработчик ввода-вывода Subversion
 Description[sv]=Subversion I/O-slav
 Description[uk]=Підлеглий В/В Subversion
-Description[xx]=xxSubversion ioslavexx
 maxInstances=5
 class=:internet

@@ -22,12 +22,11 @@ Name[pt_BR]=Plugin do KDevelop
 Name[ru]=Модуль KDevelop
 Name[sl]=Vstavek za KDevelop
 Name[sr]=KDevelop-ов прикључак
-Name[sr@Latn]=KDevelop-ov dodatak
+Name[sr@Latn]=KDevelop-ov priključak
 Name[sv]=KDevelop insticksmodul
 Name[ta]=KDevelop  சொருகு
 Name[tg]=Модули KDevelop
 Name[uk]=Втулок KDevelop
-Name[xx]=xxKDevelop Pluginxx
 Name[zh_CN]=KDevelop 插件
 
 # versioning - prevent DLL hell

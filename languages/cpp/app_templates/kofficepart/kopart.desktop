@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC}
 X-KDE-Library=lib%{APPNAMELC}part
 MimeType=application/x-%{APPNAMELC}

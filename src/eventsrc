@@ -2,7 +2,6 @@
 IconName=kdevelop
 Comment=KDevelop
 Comment[hi]=के-डेवलप
-Comment[xx]=xxKDevelopxx
 
 [ProcessSuccess]
 Name=Process successful
@@ -30,7 +29,6 @@ Name[sv]=Processen lyckades
 Name[ta]=செயல்முறை வெற்றி
 Name[tg]=Амал бо мувафақият ба анҷом расид
 Name[uk]=Процес успішний
-Name[xx]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Comment=Process finished successfully
 Comment[ca]=Procés finalitzat amb èxit
@@ -55,7 +53,6 @@ Comment[sr@Latn]=Proces je uspešno završen
 Comment[sv]=Processen avslutades med lyckat resultat
 Comment[ta]=வெற்றிகரமாக முடிவடைந்த செயலாக்கம்
 Comment[tg]=Амал бо мувафақият ба анҷом расид
-Comment[xx]=xxProcess finished successfullyxx
 Comment[zh_CN]=处理成功完成
 default_presentation=0
 
@@ -86,7 +83,6 @@ Name[sv]=Processfel
 Name[ta]=செயல்முறை பிழை
 Name[tg]=Ҳангоми иҷро намудани амал хатогие дида мешавад
 Name[uk]=Помилка процесу
-Name[xx]=xxProcess errorxx
 Name[zh_CN]=处理失败
 Comment=Process finished with errors
 Comment[ca]=Procés finalitzat amb errors
@@ -113,6 +109,5 @@ Comment[sv]=Processen avslutades med fel
 Comment[ta]=பிழையுடன் முடிவடைந்த செயலாக்கம்
 Comment[tg]=Ҳангоми иҷро намудани амал хатогие дида мешавад
 Comment[uk]=Процес завершився з помилками
-Comment[xx]=xxProcess finished with errorsxx
 Comment[zh_CN]=处理失败
 default_presentation=0
