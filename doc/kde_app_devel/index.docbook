@@ -36,6 +36,8 @@
 <holder>Caleb Tennis</holder>
 </copyright>
 
+<!-- ROLES_OF_TRANSLATORS -->
+
 <legalnotice>&FDLNotice;</legalnotice>
 
 <abstract>
@@ -1381,6 +1383,17 @@ use of the provided functionality and feel more comfortable.
 <title>References</title>
 </chapter>
 -->
+<chapter id="credits">
+<title>Credits</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<!--CREDITS_FOR_TRANSLATORS-->
+
+</chapter> <!-- credits -->
+
 <appendix id="bibliography">
 <title>Bibliography</title>
 <bibliography>
