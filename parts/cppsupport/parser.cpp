@@ -1398,7 +1398,7 @@ bool Parser::parseParameterDeclaration( AST::Node& /*node*/ )
     AST::Node decl;
     if( !parseDeclarator(decl) ){
 	lex->setIndex( index );
-	parseAbstractDeclarator(decl);
+	//removed parseAbstractDeclarator(decl);
     }
     
     if( lex->lookAhead(0) == '=' ){
