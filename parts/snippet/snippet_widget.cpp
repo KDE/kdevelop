@@ -215,7 +215,7 @@ void SnippetWidget::insertIntoActivView(QString text)
 
 
 /*!
-    \fn SnippetPart::writeConfig()
+    \fn SnippetWidget::writeConfig()
     Write the cofig file
  */
 void SnippetWidget::writeConfig()
@@ -267,7 +267,7 @@ void SnippetWidget::writeConfig()
 
 
 /*!
-    \fn SnippetPart::initConfig()
+    \fn SnippetWidget::initConfig()
     Initial read the cofig file
  */
 void SnippetWidget::initConfig()
@@ -370,8 +370,8 @@ void SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
 }
 
 
+//  fn SnippetWidget::parseText(QString text)
 /*!
-    \fn SnippetWidget::parseText(QString text)
     This function is used to parse the given QString for variables. If found the user will be prompted
     for a replacement value. It returns the string text with all replacements made
  */
@@ -442,8 +442,8 @@ QString SnippetWidget::parseText(QString text, QString del)
 }
 
 
+//  fn SnippetWidget::showMultiVarDialog()
 /*!
-    \fn SnippetWidget::showMultiVarDialog()
     This function constructs a dialog which contains a label and a linedit for every
     variable that is stored in the given map except the double-delimiter entry
     It return true if everything was ok and false if the user hit cancel
@@ -580,8 +580,8 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
 }
 
 
+//  fn SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> * mapSave)
 /*!
-    \fn SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> * mapSave)
     This function constructs a dialog which contains a label and a linedit for the given variable
     It return either the entered value or an empty string if the user hit cancel
  */
