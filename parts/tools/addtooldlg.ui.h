@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include <qheader.h>
+#include <kurlrequester.h>
 #include "kapplicationtree.h"
 
 void AddToolDialog::init()
