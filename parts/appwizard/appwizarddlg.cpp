@@ -45,7 +45,10 @@
 #include <kfiledialog.h>
 #include <kapplication.h>
 
-#include "kdevglobalversioncontrol.h"
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
+
+#include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -56,6 +59,8 @@
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
     : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0)
 {
+	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
+
     helpButton()->hide();
     templates_listview->header()->hide();
 
@@ -161,36 +166,52 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     m_sdi_fileprops_page->setClassFileProps(*props_temp);
     */
-
+	loadVcs();
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
     //    licenseChanged();
 
-    m_vcs = new VcsForm();
-
-    int i=0;
-    m_vcs->combo->insertItem(i18n("no version control system", "None"),i);
-    //m_vcs->stack->addWidget(new QLabel(QString("plop"),m_vcs->stack),i++);
-    m_vcs->stack->addWidget(0,i++);
-
-    KDevGlobalVersionControl::GlobalVcsMap map = KDevGlobalVersionControl::vcsMap();
-    for (KDevGlobalVersionControl::GlobalVcsMap::Iterator it = map.begin(); it != map.end(); ++it) {
-	if ( !(*it) )
-            continue;
-        m_vcs->combo->insertItem(it.key(),i);
-        m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
-    }
-    m_vcs->stack->raiseWidget(0);
-    addPage(m_vcs,i18n("Version Control System"));
-
-//    nextButton()->setEnabled(!appname_edit->text().isEmpty());
     nextButton()->setEnabled(false);
+//    nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
-
 
 AppWizardDialog::~AppWizardDialog()
 {}
+
+void AppWizardDialog::loadVcs()
+{
+    m_vcsForm = new VcsForm();
+
+    int i=0;
+    m_vcsForm->combo->insertItem( i18n("no version control system", "None"), i );
+    m_vcsForm->stack->addWidget( 0, i++ );
+
+	// We query for all vcs plugins for KDevelop
+	const KDevVersionControl::VersionControlMap availableVcs = KDevVersionControl::getRegisteredVCS();
+
+	kdDebug( 9000 ) << "  ** Starting examining services ..." << endl;
+
+	for(KDevVersionControl::VersionControlMap::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
+	{
+		KDevVersionControl *vcs = (*it);
+		QString vcsName = vcs->pluginName();
+		kdDebug( 9000 ) << "  =====> Found VCS: " << vcsName << endl;
+
+		QWidget *newProjectWidget = vcs->newProjectWidget( m_vcsForm->stack );
+		if (newProjectWidget) {
+			m_vcsForm->combo->insertItem( vcsName, i );
+			m_vcsForm->stack->addWidget( newProjectWidget, i++ );
+		}
+		else
+		{
+			kdDebug( 9000 ) << "  ** Warning: VCS has not widget. Skipping. " << endl;
+		}
+	}
+
+	kdDebug( 9000 ) << "  ** Done examining services ..." << endl;
+	addPage( m_vcsForm, i18n("Version Control System") );
+}
 
 
 void AppWizardDialog::textChanged()
@@ -398,11 +419,16 @@ void AppWizardDialog::accept()
 
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
 
-    if (m_vcs->stack->id(m_vcs->stack->visibleWidget())) {
-        KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::vcsMap()[m_vcs->combo->currentText()];
+    if (m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget())) {
+        KDevVersionControl* pVC = KDevVersionControl::getRegisteredVCS()[m_vcsForm->combo->currentText()];
         if (pVC) {
+			kdDebug( 9000 ) << "Creating new project with selected VCS ..." << endl;
             pVC->createNewProject(finalLoc_label->text());
         }
+		else
+		{
+			kdDebug( 9000 ) << "Could not grab the selected VCS: " << m_vcsForm->combo->currentText() << endl;
+		}
     }
 
     QWizard::accept();

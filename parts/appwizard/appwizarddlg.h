@@ -27,7 +27,7 @@ class QVBox;
 #include <qlineedit.h>
 #include <qlabel.h>
 
-#include "kdevglobalversioncontrol.h"
+#include "kdevversioncontrol.h"
 #include "appwizarddlgbase.h"
 #include "vcs_form.h"
 
@@ -41,11 +41,11 @@ struct ApplicationInfo
     QString defaultDestDir;
     QString showFileAfterGeneration;
     QString fileTemplates;
-    
+
     QListViewItem *item; // item pointer to the listview
-    
+
     ApplicationInfo()
-	: item( 0 ) 
+	: item( 0 )
     {}
 };
 
@@ -55,7 +55,7 @@ struct AppWizardFileTemplate
     QString suffix;
     QString style;
     QMultiLineEdit *edit;
-    
+
     AppWizardFileTemplate()
 	: edit( 0 )
     {}
@@ -79,17 +79,20 @@ protected:
     virtual void textChanged();
     virtual void licenseChanged();
     virtual void destButtonClicked();
-    virtual void projectNameChanged();    
+    virtual void projectNameChanged();
     virtual void projectLocationChanged();
     virtual void accept();
 
 private:
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
+	void loadVcs();
 
     QPtrList<ApplicationInfo> m_appsInfo;
     QValueList<AppWizardFileTemplate> m_fileTemplates;
     QDict<QListViewItem> m_categoryMap; //store the category name and the pointer in the treeview
+	// A list of currently available version control systems
+	QDict<KDevVersionControl> m_availVcs;
 
     AppWizardPart *m_part;
     QWidget *m_lastPage;
@@ -97,7 +100,7 @@ private:
     QPtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
-    VcsForm *m_vcs;
+    VcsForm *m_vcsForm;
     bool m_pathIsValid;
 };
 
