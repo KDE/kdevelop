@@ -49,7 +49,7 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
     if (m_global)
     {
         loadGlobalConfig(fc_view);
-        fc_tabs->setTabLabel(tab1, "Global Types");
+        fc_tabs->setTabLabel(tab1, i18n("Global Types") );
         fc_tabs->setTabEnabled(tab2, false);
         fc_tabs->setTabEnabled(tab3, false);
         delete tab2;
