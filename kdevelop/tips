@@ -74,7 +74,7 @@ select "look up" in the right button popup menu.
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>If you want to add your own documentations to the documentation tree, click with the right mouse button on the
+<p>If you want to add your own documentation to the documentation tree, click with the right mouse button on the
 "Others" entry in the tree. Then configure the path and entry name.
 </html>
 </tip>
@@ -138,7 +138,7 @@ with a right button menu and insert it into your sources?
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you should keep your library documentations up to date after installing new libraries?
+<p>...that you should keep your library documentation up to date after installing new libraries?
 </html>
 </tip>
 <tip category="KDevelop|General">
