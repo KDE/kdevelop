@@ -46,7 +46,7 @@ AM_CONDITIONAL(include_java, test "$java" = "yes")
 AC_ARG_ENABLE(pascal, AC_HELP_STRING([--disable-pascal], [disable Pascal programming language support (default=enabled)]), [pascal=${enableval}], [pascal=yes])
 AM_CONDITIONAL(include_pascal, test "$pascal" = "yes")
 
-AC_ARG_ENABLE(perl, AC_HELP_STRING([--disable-perl], [disable perl programming language support (default=enabled)]), [perl=${enableval}], [perl=no])
+AC_ARG_ENABLE(perl, AC_HELP_STRING([--disable-perl], [disable perl programming language support (default=enabled)]), [perl=${enableval}], [perl=yes])
 AM_CONDITIONAL(include_perl, test "$perl" = "yes")
 
 AC_ARG_ENABLE(php, AC_HELP_STRING([--disable-php], [disable PHP programming language support (default=enabled)]), [php=${enableval}], [php=yes])
