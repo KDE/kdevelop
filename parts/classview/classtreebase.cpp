@@ -511,6 +511,8 @@ void ClassTreeBase::setTreeState(TreeState state)
 }
 
 
+
+  
 void ClassTreeBase::slotItemExecuted( QListViewItem* item )
 {
     if (!item)
@@ -546,7 +548,7 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     if (ctitem->isOrganizer())
         return;
 
-    if (button == LeftButton) {
+    if (button == MidButton) {
         QString toFile;
         int toLine = -1;
         ctitem->getDeclaration(&toFile, &toLine);
