@@ -20,7 +20,7 @@ kde_module_LTLIBRARIES = libqeditorpart.la
 libqeditorpart_la_SOURCES = cindent.cpp cpp_colorizer.cpp cs_colorizer.cpp java_colorizer.cpp koFind.cpp koReplace.cpp levelwidget.cpp linenumberwidget.cpp markerwidget.cpp paragdata.cpp parenmatcher.cpp python_colorizer.cpp qeditor.cpp qeditor_arghint.cpp qeditor_factory.cpp qeditor_indenter.cpp qeditor_part.cpp qeditor_view.cpp qeditorcodecompletion.cpp qmake_colorizer.cpp qsourcecolorizer.cpp simple_indent.cpp xml_colorizer.cpp yyindent.cpp generalconfigpage.ui gotolinedialog.ui highlightingconfigpage.ui indentconfigpage.ui jsp_colorizer.cpp ocaml_colorizer.cpp python_indent.cpp qeditor_settings.cpp qeditor_texthint.cpp qeditor_browserextension.cpp pascal_colorizer.cpp pascal_indent.cpp ada_colorizer.cpp ada_indent.cpp sql_colorizer.cpp
 
 libqeditorpart_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-libqeditorpart_la_LIBADD = $(LIB_KPARTS) $(LIB_KFILE) -lktexteditor $(top_builddir)/lib/interfaces/libkdevinterfaces.la
+libqeditorpart_la_LIBADD = $(LIB_KPARTS) $(LIB_KFILE) -lktexteditor $(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 
 # this is where the desktop file will go 
 partdesktopdir = $(kde_servicesdir)
