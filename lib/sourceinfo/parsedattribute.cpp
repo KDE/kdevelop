@@ -23,7 +23,6 @@
 #include "parsedattribute.h"
 #include "programmingbycontract.h"
 
-
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -81,7 +80,7 @@ ParsedAttribute::~ParsedAttribute()
 void ParsedAttribute::setType( const QString &aType )
 {
     REQUIRE( "Valid type", aType != NULL );
-    
+
     _type = aType;
     _type = _type.stripWhiteSpace();
 }
@@ -233,6 +232,9 @@ void ParsedAttribute::out()
             break;
         case PIE_PRIVATE:
             cout << "private ";
+            break;
+        case PIE_PACKAGE:
+            cout << "";
             break;
         case PIE_GLOBAL:
             cout << "";

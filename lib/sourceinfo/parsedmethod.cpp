@@ -157,6 +157,9 @@ void ParsedMethod::out()
         case PIE_PRIVATE:
             cout << "private ";
             break;
+        case PIE_PACKAGE:
+            cout << "";
+            break;
         case PIE_GLOBAL:
             cout << "";
             break;

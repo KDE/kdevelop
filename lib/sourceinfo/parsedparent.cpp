@@ -113,6 +113,9 @@ void ParsedParent::out()
         case PIE_PRIVATE:
             cout << "private";
             break;
+        case PIE_PACKAGE:
+            cout << "";
+            break;
         default:
             cerr << "Internal error";
         }
