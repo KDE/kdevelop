@@ -20,7 +20,8 @@ class ImportExistingDialog : public ImportExistingDlgBase
     Q_OBJECT
 
 public:
-    ImportExistingDialog( AutoProjectPart* part, KFile::Mode, const QString& destLabel, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ImportExistingDialog( AutoProjectPart* part, SubprojectItem* spitem, TargetItem* titem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ImportExistingDialog( AutoProjectPart* part, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ImportExistingDialog();
 
 private:

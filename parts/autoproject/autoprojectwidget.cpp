@@ -623,7 +623,7 @@ void AutoProjectWidget::slotAddSubproject()
 
 void AutoProjectWidget::slotAddExistingSubproject()
 {
-    ImportExistingDialog ( m_part, KFile::Directory, m_activeSubproject->path, this, "Add existing subprojects to this subproject" ).exec();
+    ImportExistingDialog ( m_part, m_activeSubproject, this, "Add existing subprojects to this subproject" ).exec();
 }
 
 void AutoProjectWidget::slotAddTarget()
@@ -674,7 +674,7 @@ void AutoProjectWidget::slotAddNewFile()
 
 void AutoProjectWidget::slotAddExistingFile()
 {
-    ImportExistingDialog ( m_part, KFile::Files, m_activeTarget->name, this, "Add existing files to this target" ).exec();
+    ImportExistingDialog ( m_part, m_activeSubproject, m_activeTarget, this, "Add existing files to this target" ).exec();
 }
 
 void AutoProjectWidget::slotBuildTarget()
