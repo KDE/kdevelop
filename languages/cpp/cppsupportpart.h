@@ -62,7 +62,7 @@ public:
     QString specialHeaderName( bool local=false ) const;
     void updateParserConfiguration();
 
-    ProblemReporter* problemReporter() { return isValid() ? m_problemReporter : 0; }
+    ProblemReporter* problemReporter() { return isValid() ? static_cast<ProblemReporter *>(m_problemReporter) : 0; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     CppCodeCompletion* codeCompletion() { return m_pCompletion; }
     CppCodeCompletionConfig* codeCompletionConfig() { return m_pCompletionConfig; }
