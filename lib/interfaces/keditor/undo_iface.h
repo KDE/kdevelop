@@ -31,25 +31,11 @@ signals:
   void undoAvailable(bool available);
   void redoAvailable(bool available);
   
-};
 
-
-class UndoEditorIface : public KEditor::EditorInterface
-{
-  Q_OBJECT
-
-public:
-
-  UndoEditorIface(Editor *parent);
-
-
-public slots:
+private slots:
 
   void undoChanged();
 
-
-private slots:
-		
   void slotUndo();
   void slotRedo();
 
@@ -57,8 +43,6 @@ private slots:
 private:
 
   KAction *_undoAction, *_redoAction;
-
-  UndoDocumentIface *documentIface();
 
 };
 

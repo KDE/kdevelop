@@ -30,37 +30,23 @@ signals:
   void copyAvailable(bool available);
 
 
-};
-
-
-class ClipboardEditorIface : public KEditor::EditorInterface
-{
-  Q_OBJECT
-
-public:
-
-  ClipboardEditorIface(Editor *parent);
-
-
 public slots:
-
+		 
   void clipboardChanged();
-
-
+ 
+ 
 private slots:
-
+		 
   void slotCopy();
   void slotCut();
   void slotPaste();
 
 
 private:
-  
+
   KAction *_cutAction, *_copyAction, *_pasteAction;
-
+   
   bool hasClipboard();
-
-  ClipboardDocumentIface *documentIface();
 
 };
 

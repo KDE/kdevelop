@@ -24,11 +24,20 @@ using namespace KEditor;
 
 
 EditorTest::EditorTest()
-    : KParts::MainWindow( 0L, "EditorTest" )
+  : KParts::MainWindow( 0L, "EditorTest" )
 {
   setupActions();
   
   setXMLFile("editortest_shell.rc");
+
+  tabWidget = new QTabWidget(this);
+  setCentralWidget(tabWidget);
+
+  partManager = new KParts::PartManager(this);
+
+  connect(partManager, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(createGUI(KParts::Part*)));
+
+  createGUI(0);
 
   statusBar()->show();
 
@@ -42,16 +51,17 @@ EditorTest::EditorTest()
   KLibFactory *factory = KLibLoader::self()->factory(service->library());
   if (factory)
   {
-    m_editor = static_cast < Editor* > (factory->create(this,
-                                        "editortest_part", "KParts::ReadWritePart" ));
+    m_editor = static_cast < Editor* > (factory->create(this, "editor"));
 
     if (m_editor)
-    {
-      setCentralWidget(m_editor->widget());
+	{
+	  KParts::MainWindow::factory()->addClient(m_editor);
 
-      createGUI(m_editor);
-
-    }
+	  connect(m_editor, SIGNAL(partCreated(KParts::Part*)), this, SLOT(slotPartCreated(KParts::Part*)));
+	  connect(m_editor, SIGNAL(viewCreated(QWidget*)), this, SLOT(slotViewCreated(QWidget*)));
+	  connect(m_editor, SIGNAL(activatePart(KParts::Part*)), this, SLOT(slotPartActivated(KParts::Part*)));
+	  connect(m_editor, SIGNAL(activateView(QWidget*)), this, SLOT(slotViewActivated(QWidget*)));
+	}
   }
   else
   {
@@ -60,63 +70,42 @@ EditorTest::EditorTest()
   }
 }
 
+
 EditorTest::~EditorTest()
-{}
-
-
-
-void EditorTest::load(const KURL& url)
 {
-  m_editor->openURL( url );
 }
+
 
 void EditorTest::setupActions()
 {
   KStdAction::quit(kapp, SLOT(quit()), actionCollection());
-  new KAction("Insert 'Hello'", 0, this, SLOT(insertText()), actionCollection(), "test_insert");
-  new KAction("Append 'Hello'", 0, this, SLOT(appendText()), actionCollection(), "test_append");
 }
 
 
-void EditorTest::saveProperties(KConfig* /*config*/)
+void EditorTest::slotPartCreated(KParts::Part *part)
 {
-  // the 'config' object points to the session managed
-  // config file.  anything you write here will be available
-  // later when this app is restored
+  partManager->addPart(part);
+  partManager->addManagedTopLevelWidget(part->widget());
 }
 
 
-
-void EditorTest::readProperties(KConfig* /*config*/)
+void EditorTest::slotViewCreated(QWidget *view)
 {
-  // the 'config' object points to the session managed
-  // config file.  this function is automatically called whenever
-  // the app is being restored.  read in here whatever you wrote
-  // in 'saveProperties'
+  tabWidget->addTab(view, view->caption());
+  view->show();
+  tabWidget->showPage(view);
 }
 
 
-void EditorTest::insertText()
+void EditorTest::slotPartActivated(KParts::Part *part)
 {
-/*
-  int line, col;
-  CursorIface *cursor = (CursorIface*)m_editor->getInterface("CursorIface");
-  if (cursor)
-	cursor->getCursorPosition(line, col);
-  EditIface *edit = (EditIface*)m_editor->getInterface("EditIface");
-  if (edit)
-	edit->insertAt("Hello", line, col);
-*/
+  partManager->setActivePart(part);
 }
 
 
-void EditorTest::appendText()
+void EditorTest::slotViewActivated(QWidget *view)
 {
-/*		
-  EditIface *edit = (EditIface*)m_editor->getInterface("EditIface");
-  if (edit)
-    edit->append("Hello");
-*/
+  tabWidget->showPage(view);
 }
 
 

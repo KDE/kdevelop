@@ -25,8 +25,6 @@ public:
 
   KActionCollection *actionCollection();
 
-  QWidget *widget();
-  
   Editor *editor();
   
 

@@ -20,12 +20,6 @@ KActionCollection *EditorInterface::actionCollection()
 }
 
 
-QWidget *EditorInterface::widget()
-{
-  return _editor->widget();
-}
-
-
 Editor *EditorInterface::editor()
 {
   return _editor;

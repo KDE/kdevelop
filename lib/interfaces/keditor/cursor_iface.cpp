@@ -13,64 +13,30 @@
 using namespace KEditor;
 
 
-CursorEditorIface::CursorEditorIface(Editor *parent)
-  : EditorInterface(parent)
+CursorDocumentIface::CursorDocumentIface(Document *parent, Editor *editor)
+  : DocumentInterface(parent, editor)
 {
-  _goto = KStdAction::gotoLine(this, SLOT(slotGotoLine()), actionCollection(), "go_goto_line");
-
-  connect(parent, SIGNAL(documentAdded()), this, SLOT(documentChanged()));
-  connect(parent, SIGNAL(documentRemoved()), this, SLOT(documentChanged()));
-  connect(parent, SIGNAL(documentActivated(Document*)), this, SLOT(documentChanged()));
-
-  documentChanged();
+  KStdAction::gotoLine(this, SLOT(slotGotoLine()), parent->actionCollection(), "go_goto_line");
 }
 
 
-void CursorEditorIface::documentChanged()
+void CursorDocumentIface::slotGotoLine()
 {
-  Document *doc = editor()->currentDocument();
-  if (!doc)
-  {
-	_goto->setEnabled(false);
-	return;
-  }
+  GotoLineDlg dlg(0, "goto_dialog", true);
 
-  _goto->setEnabled(doc->getInterface("KEditor::CursorDocumentIface"));
-}
-
-
-void CursorEditorIface::slotGotoLine()
-{
-  Document *doc = editor()->currentDocument();
-  if (!doc)
-    return;
-
-  CursorDocumentIface *iface = (CursorDocumentIface*) doc->getInterface("KEditor::CursorDocumentIface");
-  if (!iface)
-    return;
-
-  GotoLineDlg dlg(widget(), "goto_dialog", true);
-
-  dlg.LineNumber->setMaxValue(iface->numberOfLines());
+  dlg.LineNumber->setMaxValue(numberOfLines());
   dlg.LineNumber->setFocus();
 
   int col, line;
 
-  iface->getCursorPosition(line, col);
+  getCursorPosition(line, col);
 
   dlg.LineNumber->setValue(line);
   
   if (dlg.exec() != QDialog::Accepted)
 	return;
   
-  iface->setCursorPosition(dlg.LineNumber->value(), 0);
-}
-
-
-
-CursorDocumentIface::CursorDocumentIface(Document *parent, Editor *editor)
-  : DocumentInterface(parent, editor)
-{
+  setCursorPosition(dlg.LineNumber->value(), 0);
 }
 
 

@@ -5,6 +5,7 @@
 #include <qstring.h>
 
 
+#include <kxmlguiclient.h>
 #include <kparts/part.h>
 class KAction;
 
@@ -28,7 +29,7 @@ class Editor;
  * A document can be queried for more complex interfaces.
  */
 
-class Document : public QObject
+class Document : public KParts::Part
 {
   Q_OBJECT
   		
@@ -134,12 +135,19 @@ protected:
   Editor *parent() { return _parent; };
 
 
+protected slots:
+
+  void slotSave();
+  void slotSaveAs();
+  void slotClose();
+
+
 private:
 
   Editor *_parent;
 
   QString _fileName;
-  
+
 };
 
 
@@ -184,9 +192,11 @@ private:
  * \endcode
  */
 
-class Editor : public KParts::ReadOnlyPart
+class Editor : public QObject, virtual public KXMLGUIClient
 {
   Q_OBJECT
+
+  friend class Document;
 
 public:
 
@@ -195,12 +205,10 @@ public:
    *
    * Create an instance of the Editor part.
    *
-   * \param parentWidget The parent widget for the part.
-   * \param widgetName The name for the part widget.
    * \param parent The parent part.
    * \param name The name for the part.
    */
-  Editor(QWidget *parentWidget, const char *widgetName, QObject *parent=0, const char *name=0);
+  Editor(QObject *parent=0, const char *name=0);
 
   /**
    * \brief Deallocate the part's ressources.
@@ -227,43 +235,39 @@ public:
    * a subset of the available interfaces, so users of the part should
    * always test if a given interface is provided.
    *
-   * Here are some of the most common interfaces:
-   *   - ClipboardEditorIface Access to the clipboard (cut, copy, paste)
-   *   - UndoEditorIface Access to the Undo/Redo mechanism
    */
   EditorInterface *getInterface(QString ifname);
 
   virtual Document *getDocument(const QString &filename=QString::null) = 0;
-  virtual void closeDocument(Document *doc) = 0;
   virtual Document *currentDocument() = 0;
   
-
+  void addView(QWidget *view);
+  void addPart(KParts::Part *part);
+  
+		  
 signals:
 
   void documentActivated(Document *doc);
   void documentAdded();
   void documentRemoved();
 
-
-protected:
-
-  virtual bool openFile();
-
+  void partCreated(KParts::Part *part);
+  void viewCreated(QWidget *view);
+  void activatePart(KParts::Part *part);
+  void activateView(QWidget *view);
+  
 
 private slots:
 		
   void slotLoadFile();
-  void slotSaveFile();
-  void slotSaveFileAs();
   void slotNewFile();
-  void slotCloseFile();
 
   void documentCountChanged();
 
 			   
 private:
 			   
-  KAction *_openAction, *_saveAction, *_saveAsAction, *_newAction, *_closeAction;
+  KAction *_openAction, *_newAction;
 
 };
 

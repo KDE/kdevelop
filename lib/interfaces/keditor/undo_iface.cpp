@@ -13,69 +13,33 @@ using namespace KEditor;
 UndoDocumentIface::UndoDocumentIface(Document *parent, Editor *editor)
   : DocumentInterface(parent, editor)
 {
-  UndoEditorIface *iface = (UndoEditorIface*)editor->getInterface("KEditor::UndoEditorIface");
-  if (iface)
-  {
-    connect(this, SIGNAL(undoAvailable(bool)), iface, SLOT(undoChanged()));
-	connect(this, SIGNAL(redoAvailable(bool)), iface, SLOT(undoChanged()));
-  }
+  _undoAction = KStdAction::undo(this, SLOT(slotUndo()), parent->actionCollection(), "edit_undo");
+  _redoAction = KStdAction::redo(this, SLOT(slotRedo()), parent->actionCollection(), "edit_redo");
+
+  connect(this, SIGNAL(undoAvailable(bool)), this, SLOT(undoChanged()));
+  connect(this, SIGNAL(redoAvailable(bool)), this, SLOT(undoChanged()));
+
+  _undoAction->setEnabled(false);
+  _redoAction->setEnabled(false);
 }
 
 
-
-
-UndoEditorIface::UndoEditorIface(Editor *parent)
-  : EditorInterface(parent)
+void UndoDocumentIface::undoChanged()
 {
-  _undoAction = KStdAction::undo(this, SLOT(slotUndo()), actionCollection(), "edit_undo");
-  _redoAction = KStdAction::redo(this, SLOT(slotRedo()), actionCollection(), "edit_redo");
-
-  connect(parent, SIGNAL(documentAdded()), this, SLOT(undoChanged()));
-  connect(parent, SIGNAL(documentRemoved()), this, SLOT(undoChanged()));
-  connect(parent, SIGNAL(documentActivated(Document*)), this, SLOT(undoChanged()));
-	  
-  undoChanged();
+  _undoAction->setEnabled(undoAvailable());
+  _redoAction->setEnabled(redoAvailable());
 }
 
 
-void UndoEditorIface::undoChanged()
+void UndoDocumentIface::slotUndo()
 {
-  UndoDocumentIface *iface = documentIface();
-  if (!iface)
-  {
-    _undoAction->setEnabled(false);
-    _redoAction->setEnabled(false);
-	return;
-  }
-
-  _undoAction->setEnabled(iface->undoAvailable());
-  _redoAction->setEnabled(iface->redoAvailable());
+  (void) undo();
 }
 
 
-void UndoEditorIface::slotUndo()
+void UndoDocumentIface::slotRedo()
 {
-  UndoDocumentIface *iface = documentIface();
-  if (iface)
-    iface->undo();
-}
-
-
-void UndoEditorIface::slotRedo()
-{
-  UndoDocumentIface *iface = documentIface();
-  if (iface)
-    iface->redo();
-}
-
-
-UndoDocumentIface *UndoEditorIface::documentIface()
-{
-  Document *doc = editor()->currentDocument();
-  if (!doc)
-	return 0;
-
-  return (UndoDocumentIface*) doc->getInterface("KEditor::UndoDocumentIface");
+  (void) redo();
 }
 
 

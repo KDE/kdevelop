@@ -29,30 +29,13 @@ public:
 signals:
 
   void cursorPositionChanged(int line, int col);
-  
-};
-
-
-class CursorEditorIface : public KEditor::EditorInterface
-{
-  Q_OBJECT
-
-public:
-
-  CursorEditorIface(Editor *editor);
 
 
 private slots:
-
+	   
   void slotGotoLine();
 
-  void documentChanged();
 
-  
-private:
-
-  KAction *_goto;
-  
 };
 
 

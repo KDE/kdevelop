@@ -48,7 +48,6 @@ int main(int argc, char **argv)
         {
           EditorTest *widget = new EditorTest;
           widget->show();
-          widget->load( args->url( i ) );
         }
       }
       args->clear();

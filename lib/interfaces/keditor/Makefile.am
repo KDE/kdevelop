@@ -1,4 +1,4 @@
-SUBDIRS = . test
+#SUBDIRS = . test
 
 INCLUDES = $(all_includes)
 

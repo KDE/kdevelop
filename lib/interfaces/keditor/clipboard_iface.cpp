@@ -16,94 +16,53 @@
 using namespace KEditor;
 
 
-ClipboardEditorIface::ClipboardEditorIface(Editor *parent)
-  : EditorInterface(parent)
+ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)  : DocumentInterface(parent, editor)
 {
-  _cutAction = KStdAction::cut(this, SLOT(slotCut()), actionCollection(), "edit_cut");
-  _copyAction = KStdAction::copy(this, SLOT(slotCopy()), actionCollection(), "edit_copy");
-  _pasteAction = KStdAction::paste(this, SLOT(slotPaste()), actionCollection(), "edit_paste");
+  _cutAction = KStdAction::cut(this, SLOT(slotCut()), parent->actionCollection(), "edit_cut");
+  _copyAction = KStdAction::copy(this, SLOT(slotCopy()), parent->actionCollection(), "edit_copy");
+  _pasteAction = KStdAction::paste(this, SLOT(slotPaste()), parent->actionCollection(), "edit_paste");
 
   _cutAction->setEnabled(false);
   _copyAction->setEnabled(false);
 
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
-  connect(parent, SIGNAL(documentAdded()), this, SLOT(clipboardChanged()));
-  connect(parent, SIGNAL(documentRemoved()), this, SLOT(clipboardChanged()));
-  connect(parent, SIGNAL(documentActivated(Document*)), this, SLOT(clipboardChanged()));
+  connect(this, SIGNAL(copyAvailable(bool)), this, SLOT(clipboardChanged()));
 
-  clipboardChanged();
+  // set the initial state of the paste action
+  //
+  // Note: it would sound reasonable to call 'clipboardChanged'
+  // here, but as we are in the constructor, and clipboardChanged
+  // calls abstract functions, this would fail.
+  QString text = QApplication::clipboard()->text();
+  _pasteAction->setEnabled(!text.isEmpty());
 }
 
 
-void ClipboardEditorIface::clipboardChanged()
+void ClipboardDocumentIface::clipboardChanged()
 {
-kdDebug() << "CLIPBOARD changed" << endl;
-
-  ClipboardDocumentIface *iface = documentIface();
-kdDebug() << "  iface: " << iface << endl;  
-  if (!iface)
-	{
-	  _pasteAction->setEnabled(false);
-	  _cutAction->setEnabled(false);
-	  _copyAction->setEnabled(false);
-	  return;
-	}
-  
   QString text = QApplication::clipboard()->text();
   _pasteAction->setEnabled(!text.isEmpty());
 
-  _cutAction->setEnabled(iface->copyAvailable());
-  _copyAction->setEnabled(iface->copyAvailable());  
+  _cutAction->setEnabled(copyAvailable());
+  _copyAction->setEnabled(copyAvailable());
 }
 
 
-void ClipboardEditorIface::slotCut()
+void ClipboardDocumentIface::slotCut()
 {
-  ClipboardDocumentIface *iface = documentIface();   
-  if (!iface)     
-	return;  
- 
-  (void) iface->cut();
+  (void) cut();
 }
 
 
-void ClipboardEditorIface::slotCopy()
+void ClipboardDocumentIface::slotCopy()
 {
-  ClipboardDocumentIface *iface = documentIface();
-  if (!iface)
-	return;
-
-  (void) iface->copy();
+  (void) copy();
 }
 
 
-void ClipboardEditorIface::slotPaste()
+void ClipboardDocumentIface::slotPaste()
 {
-  ClipboardDocumentIface *iface = documentIface();
-  if (!iface)
-    return;
-
-  (void) iface->paste();
-}
-
-
-ClipboardDocumentIface *ClipboardEditorIface::documentIface()
-{
-  Document *doc = editor()->currentDocument();
-  if (!doc)
-	return 0;
-
-  return (ClipboardDocumentIface*) doc->getInterface("KEditor::ClipboardDocumentIface");
-}
-
-
-
-ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)
-  : DocumentInterface(parent, editor)
-{
-  ClipboardEditorIface *iface = (ClipboardEditorIface*)editor->getInterface("KEditor::ClipboardEditorIface");
-  if (iface)
-    connect(this, SIGNAL(copyAvailable(bool)), iface, SLOT(clipboardChanged()));
+  (void) paste();
 }
 
 
