@@ -1,3 +1,8 @@
+2003-04-27 Alexander Dymo <cloudtemple@mksat.net>
+    * Regexp tester now has "Edit" button that uses KRegExpEditor
+    * Added free pascal oriented templates - GTK+ application and shared library
+    * Implemented "Run options" (envvars, program arguments) for pascal project manager
+
 2003-04-26 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented all documented compiler options in free pascal compiler plugin.
 
