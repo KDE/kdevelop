@@ -27,7 +27,7 @@ using namespace KBear;
 
 
 typedef KGenericFactory<KBear$APPNAME$Plugin> KBear$APPNAME$PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$, KBear$APPNAME$PluginFactory( "kbear$APPNAMELC$" ) );
+K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$, KBear$APPNAME$PluginFactory( "kbear$APPNAMELC$" ) )
 
 KBear$APPNAME$Plugin::KBear$APPNAME$Plugin(QObject *parent, const char*, const QStringList& )
     : KBearPlugin( parent, "KBear$APPNAME$Plugin" )

@@ -16,7 +16,7 @@
 #include "$APPNAMELC$_part.h"
 
 typedef KGenericFactory<$APPNAME$Part> $APPNAME$Factory;
-K_EXPORT_COMPONENT_FACTORY( libkdev$APPNAMELC$, $APPNAME$Factory( "kdev$APPNAMELC$" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdev$APPNAMELC$, $APPNAME$Factory( "kdev$APPNAMELC$" ) )
 
 $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringList& )
 : KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "$APPNAME$Part" )

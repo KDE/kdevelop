@@ -29,7 +29,7 @@
 //#include "KDevComponentManager.h"
 
 typedef KGenericFactory<BugListComponent> BugListFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevbuglist, BugListFactory( "kdevbuglist" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevbuglist, BugListFactory( "kdevbuglist" ) )
 
 
 BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &)

@@ -44,7 +44,7 @@ private:
 
 
 typedef KGenericFactory<ClassBrowserPart> ClassBrowserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclassbrowser, ClassBrowserFactory( "kdevclassbrowser" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevclassbrowser, ClassBrowserFactory( "kdevclassbrowser" ) )
 
 ClassBrowserPart::ClassBrowserPart( QObject* parent, const char* name, const QStringList& )
     : KDevPlugin("ClassBrowser", "classbrowser", parent, name ? name : "ClassBrowserPart" )

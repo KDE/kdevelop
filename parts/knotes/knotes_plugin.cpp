@@ -33,7 +33,7 @@
 #include "knotes_part.h"
 
 typedef KGenericFactory<KNotesPlugin> KNotesPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevnotes, KNotesPluginFactory( "kdevnotes" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevnotes, KNotesPluginFactory( "kdevnotes" ) )
 
 KNotesPlugin::KNotesPlugin( QObject* parent, const char *name, const QStringList &)
     : KDevPlugin(i18n("Notes"), "knotes", parent, name ? name : "KDevNotes" ), m_part(0)

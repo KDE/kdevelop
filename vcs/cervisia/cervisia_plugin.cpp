@@ -39,7 +39,7 @@
 #endif
 
 typedef KGenericFactory<CervisiaPlugin> CervisiaPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcervisia, CervisiaPluginFactory( "kdevcervisia" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcervisia, CervisiaPluginFactory( "kdevcervisia" ) )
 
 CervisiaPlugin::CervisiaPlugin(  QObject *parent, const char *name, const QStringList &arguments )
     : KDevVersionControl( "CervisiaPlugin", "cervisiaplugin", parent, name ? name : "CervisiaPlugin" ),

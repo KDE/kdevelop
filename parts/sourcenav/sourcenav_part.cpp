@@ -39,7 +39,7 @@ int Anchor::nextID()
 }
 
 typedef KGenericFactory<SourceNavPart> SourceNavFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsourcenav, SourceNavFactory( "kdevsourcenav" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevsourcenav, SourceNavFactory( "kdevsourcenav" ) )
 
 SourceNavPart::SourceNavPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("SourceNav", "sourcenav", parent, name ? name : "SourceNavPart")

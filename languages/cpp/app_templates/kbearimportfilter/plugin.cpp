@@ -19,7 +19,7 @@ using namespace KBear;
 
 
 typedef KGenericFactory<$APPNAME$ImportFilterPlugin> $APPNAME$ImportFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$importfilter, $APPNAME$ImportFilterPluginFactory( "kbear$APPNAMELC$importfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$importfilter, $APPNAME$ImportFilterPluginFactory( "kbear$APPNAMELC$importfilter" ) )
 
 $APPNAME$ImportFilterPlugin::$APPNAME$ImportFilterPlugin(QObject *parent, const char *name, const QStringList& )
     : SiteImportFilterPluginIface( parent, name ), m_hasError( false )

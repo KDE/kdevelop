@@ -32,7 +32,7 @@ extern "C" {
 
 typedef KDevGenericFactory<ScriptingPart> ScriptingFactory;
 static const KAboutData data("kdevscripting", ("Python Scripting Support"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( &data ) )
 
 ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("PythonScripting", "scripting", parent, name ? name : "ScriptingPart")
