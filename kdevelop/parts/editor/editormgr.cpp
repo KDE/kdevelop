@@ -68,7 +68,7 @@ EditorManager::EditorManager(QObject* parent, const char* name) :
 
   // Get the factory that spits out the right ktexteditor parts
   // TODO: just take the first one at the moment.
-  KTrader::OfferList offers = KTrader::self()->query( "KTextEditor/Document" );
+  KTrader::OfferList offers = KTrader::self()->query( "KIDETextEditor/Document" );
   assert( offers.count() >= 1 );
   KService::Ptr service = *offers.begin();
 
@@ -159,7 +159,7 @@ void EditorManager::gotoFile(const KURL& url, int lineNum)
 KTextEditor::Document* EditorManager::newDocument()
 {
   KTextEditor::Document *document = static_cast<KTextEditor::Document *>(
-                      m_factory->create( (QWidget*)parent(), 0, "KTextEditor::Document" ) );
+                      m_factory->create( (QWidget*)parent(), 0, "KIDETextEditor::Document" ) );
   assert( document );
   document->setText("");
   m_documents.append(document);
@@ -178,7 +178,7 @@ KTextEditor::Document* EditorManager::openDocument(const KURL& url)
     return 0;
 
   KTextEditor::Document *document = static_cast<KTextEditor::Document *>(
-                            m_factory->create( (QWidget*)parent(), 0, "KTextEditor::Document" ) );
+                            m_factory->create( (QWidget*)parent(), 0, "KIDETextEditor::Document" ) );
   assert( document );
   m_documents.append(document);
   document->openURL(url);

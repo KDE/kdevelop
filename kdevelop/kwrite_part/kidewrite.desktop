@@ -75,5 +75,5 @@ DocPath=kwrite/kwrite.html
 Type=Application
 Terminal=0
 ServiceTypes=KIDETextEditor/Document
-X-KDE-Library=libidekwritepart
+X-KDE-Library=libkidewritepart
 InitialPreference=8
