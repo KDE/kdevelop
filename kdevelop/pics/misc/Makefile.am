@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = about_logo.bmp customApp.bmp dlg_firstrun.bmp gnomeApp.bmp kAppWizard.bmp kdemdi.bmp miniApp.bmp normalApp.bmp normalOglApp.bmp qextmdi.bmp qtApp.bmp qtmdi.bmp startlogo.png terminalApp.bmp tipday.bmp 
+EXTRA_DIST = about_logo.png customApp.png gnomeApp.png kAppWizard.png kdemdi.png miniApp.png normalApp.png qextmdi.png qtApp.png qtmdi.png startlogo.png terminalApp.png tipday.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 
