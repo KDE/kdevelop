@@ -317,7 +317,7 @@ void DocTreeKDELibsFolder::refresh()
     QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
     QString idx_path = kde_path + "/kdoc-reference";
     
-    QString path = locate("appdata", "documentation");
+    QString path = locate("appdata", "tools/documentation");
     KSimpleConfig docconfig(path);
     docconfig.setGroup("Contents");
     QStringList entries = docconfig.readListEntry("LibrariesEntries");
@@ -504,9 +504,12 @@ DocTreeWidget::DocTreeWidget(DocTreeView *view, QWidget *parentWidget)
     folder_others   = new DocTreeOthersFolder(this);
 #ifdef WITH_DOCBASE
     folder_docbase  = new DocTreeDocbaseFolder(this);
+    folder_docbase->refresh();
 #endif
     folder_kdelibs  = new DocTreeKDELibsFolder(this);
+    folder_kdelibs->refresh();   
     folder_kdevelop = new DocTreeKDevelopFolder(this);
+    folder_kdevelop->refresh();
 
     connect( this, SIGNAL(pressed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
