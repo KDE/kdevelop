@@ -1,4 +1,8 @@
 2002-06-04  Roland Krause  <roland@ca.wai.com>
+    * Applied a fix to the coutputwidget. This is mine and Harry's but not
+      Kuba's solution. The coutputwidget will still use RichText so we can 
+      have bullets. "Isch geb mir die Kugel..."
+2002-06-04  Roland Krause  <roland@ca.wai.com>
     * Applied Kuba's patches for indentation, editor settings and
       compilation fixes for gcc-3
     * Snuck in a fix for finding dependency files for ctags (.P .Po .Plo)

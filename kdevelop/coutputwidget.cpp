@@ -141,7 +141,15 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         append(line);
         break;
       default:
-        append("<font color=\"black\">" + line + "</font>");
+//  (rokrau 05/31/02) nasty, nasty
+#if QT_VERSION == 304
+          if (line[0] != '\n') {
+#endif
+            line ="<font color=\"black\">" + line + "</font>";
+            append(line);
+#if QT_VERSION == 304
+          }
+#endif
         break;
     }
 
