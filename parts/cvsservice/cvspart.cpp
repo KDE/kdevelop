@@ -215,8 +215,11 @@ void CvsPart::createNewProject( const QString &dirName )
     if (!m_cvsConfigurationForm)
         return;
 
-    // FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
-    // createNewProject() is called _before_ projectOpened() signal is emitted.
+    // @fixme: actually there is no way to inform that a _new_ ("just created")
+	// project has been opened because projectOpened() is emitted after the project
+	// has been created :-/ So the only way to inform that slotProjectOpened() to not
+	// load default settings (overriding the CvsOptions instance is to set this flag
+	// here ...
     g_projectWasJustCreated = true;
 
     m_impl->createNewProject( dirName,
@@ -331,8 +334,7 @@ void CvsPart::slotActionCommit()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->commit( m_urls );
+        m_impl->commit( KURL::KURL(currDocument) );
     }
 }
 
@@ -343,8 +345,7 @@ void CvsPart::slotActionUpdate()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->update( m_urls );
+        m_impl->update( KURL::KURL(currDocument) );
     }
 }
 
@@ -355,8 +356,7 @@ void CvsPart::slotActionAdd()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->add( m_urls, false );
+        m_impl->add( KURL::KURL(currDocument), false );
     }
 }
 
@@ -365,10 +365,9 @@ void CvsPart::slotActionAdd()
 void CvsPart::slotActionAddBinary()
 {
     KURL currDocument;
-    if (urlFocusedDocument( currDocument ))
+	if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->add( m_urls, true );
+        m_impl->add( KURL::KURL(currDocument), true );
     }
 }
 
@@ -379,8 +378,7 @@ void CvsPart::slotActionRemove()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->remove( m_urls );
+        m_impl->remove( KURL::KURL(currDocument) );
     }
 }
 
@@ -391,8 +389,7 @@ void CvsPart::slotActionRevert()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->revert( m_urls );
+        m_impl->revert( KURL::KURL(currDocument) );
     }
 }
 
@@ -403,8 +400,7 @@ void CvsPart::slotActionLog()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->log( m_urls );
+        m_impl->log( KURL::KURL(currDocument) );
     }
 }
 
@@ -415,8 +411,7 @@ void CvsPart::slotActionDiff()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->diff( m_urls );
+        m_impl->diff( KURL::KURL(currDocument) );
     }
 }
 
@@ -427,8 +422,7 @@ void CvsPart::slotActionTag()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->tag( m_urls );
+        m_impl->tag( KURL::KURL(currDocument) );
     }
 }
 
@@ -439,8 +433,7 @@ void CvsPart::slotActionUnTag()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->unTag( m_urls );
+        m_impl->unTag( KURL::KURL(currDocument) );
     }
 }
 
@@ -451,8 +444,7 @@ void CvsPart::slotActionAddToIgnoreList()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->addToIgnoreList( m_urls );
+        m_impl->addToIgnoreList( KURL::KURL(currDocument) );
     }
 }
 
@@ -463,8 +455,7 @@ void CvsPart::slotActionRemoveFromIgnoreList()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_urls << currDocument;
-        m_impl->removeFromIgnoreList( m_urls );
+        m_impl->removeFromIgnoreList( KURL::KURL(currDocument) );
     }
 }
 

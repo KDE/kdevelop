@@ -26,12 +26,17 @@ class CvsProcessWidget : public QTextEdit, public DCOPObject
     K_DCOP
     Q_OBJECT
 public:
-    CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name );
+    CvsProcessWidget( CvsService_stub *service, CvsPart *part,
+		QWidget *parent, const char *name );
     virtual ~CvsProcessWidget();
 
-    bool startJob();
     bool startJob( const DCOPRef &aJob );
 
+	/**
+	* @return true if there is already a job pending, false otherwise
+	* (another job can be requested)
+	*/
+	bool isAlreadyWorking() const;
     void cancelJob();
 
     virtual void clear();
@@ -54,7 +59,8 @@ private:
     CvsJob_stub *m_job;
 
     QStyleSheetItem *m_goodStyle,
-        *m_errorStyle;
+        *m_errorStyle,
+		*m_infoStyle;
 
     QString m_output,
         m_errors;

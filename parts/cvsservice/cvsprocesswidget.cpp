@@ -15,6 +15,8 @@
 #include <dcopref.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
@@ -33,32 +35,41 @@
 
 CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name )
     : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_service( service ), m_job( 0 ),
-    m_goodStyle( 0 ), m_errorStyle( 0 )
+    m_goodStyle( 0 ), m_errorStyle( 0 ), m_infoStyle( 0 )
 {
     setReadOnly( true );
-
-    // create a DCOP stub for the non-concurrent cvs job
-    m_job = new CvsJob_stub( m_service->app(), "NonConcurrentJob" );
-    // establish connections to the signals of the cvs m_job
-    connectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
-    connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
-    connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
 
     //    connect( this, SIGNAL(highlighted(int)), this, SLOT(slotLineHighlighted(int)) );
     setTextFormat( Qt::LogText );
     m_goodStyle = new QStyleSheetItem( styleSheet(), "goodtag" );
-    m_goodStyle->setColor( "green" );
+    m_goodStyle->setColor( "darkgreen" );
 
     m_errorStyle = new QStyleSheetItem( styleSheet(), "errortag" );
     m_errorStyle->setColor( "red" );
     m_errorStyle->setFontWeight( QFont::Bold );
+
+	m_infoStyle = new QStyleSheetItem( styleSheet(), "infotag" );
+    m_infoStyle->setColor( "blue" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsProcessWidget::~CvsProcessWidget()
 {
-    delete m_job;
+	if (m_job)
+	{
+		delete m_job;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsProcessWidget::isAlreadyWorking() const
+{
+	if (m_job)
+		return m_job->isRunning();
+	else
+		return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,26 +83,25 @@ void CvsProcessWidget::clear()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsProcessWidget::startJob()
+bool CvsProcessWidget::startJob( const DCOPRef &aJob )
 {
-    kdDebug() << "CvsProcessWidget::startJob() here!" << endl;
-/*
-    if (!m_job)
-    {
-        delete m_job;
-        m_job = 0;
-    }
+    kdDebug() << "CvsProcessWidget::startJob(const DCOPRef &) here!" << endl;
+
+    clear();
+    m_part->mainWindow()->raiseView( this );
+    m_part->core()->running( m_part, true );
+
     // create a DCOP stub for the non-concurrent cvs job
-    m_job = new CvsJob_stub( m_service->appId(), "NonConcurrentJob" );
+	if (m_job)
+	{
+		delete m_job;
+		m_job = 0;
+	}
+	 m_job = new CvsJob_stub( aJob.app(), aJob.obj() );
     // establish connections to the signals of the cvs m_job
     connectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
     connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
-*/
-    clear();
-
-    m_part->mainWindow()->raiseView( this );
-    m_part->core()->running( m_part, true );
 
     // get command line and add it to output buffer
     QString cmdLine = m_job->cvsCommand();
@@ -102,34 +112,9 @@ bool CvsProcessWidget::startJob()
     // disconnect 3rd party slots from our signals
     disconnect( SIGNAL(jobFinished(bool, int)) );
 
+	append( "<infotag>Started job: " + cmdLine + " </infotag>" );
+
     return m_job->execute();
-}
-
-bool CvsProcessWidget::startJob( const DCOPRef &aJob )
-{
-    kdDebug() << "CvsProcessWidget::startJob(const DCOPRef &) here!" << endl;
-
-    clear();
-    m_part->mainWindow()->raiseView( this );
-    m_part->core()->running( m_part, true );
-
-    // create a DCOP stub for the non-concurrent cvs job
-    CvsJob_stub job( m_service->app(), aJob.obj() );
-    // establish connections to the signals of the cvs m_job
-    connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
-    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
-    connectDCOPSignal( job.app(), job.obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
-
-    // get command line and add it to output buffer
-    QString cmdLine = job.cvsCommand();
-    m_part->mainWindow()->statusBar()->message( cmdLine );
-
-    kdDebug() << "Running: " << cmdLine << endl;
-
-    // disconnect 3rd party slots from our signals
-    disconnect( SIGNAL(jobFinished(bool, int)) );
-
-    return job.execute();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,7 +122,12 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
 void CvsProcessWidget::cancelJob()
 {
     kdDebug() << "CvsProcessWidget::cancelJob() here!" << endl;
-    // @fixme : what to do here? ;-)
+
+	m_job->cancel();
+	delete m_job; m_job = 0;
+
+	append( "<infotag>Job canceled by user request</infotag>" );
+
     m_part->mainWindow()->raiseView( this );
     m_part->core()->running( m_part, true );
 }
@@ -148,7 +138,10 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 {
     kdDebug() << "CvsProcessWidget::slotJobExited(bool, int) here!" << endl;
 
-    m_part->core()->running( m_part, false );
+	QString exitMsg = "<infotag>Job finished with exitCode == %1</infotag>";
+	append( exitMsg.arg( exitStatus) );
+
+	m_part->core()->running( m_part, false );
     m_part->mainWindow()->statusBar()->message( "Done CVS command ...", 2000 );
 
     emit jobFinished( normalExit, exitStatus );

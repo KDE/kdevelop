@@ -61,7 +61,8 @@ CvsPartImpl::~CvsPartImpl()
 
 bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op )
 {
-    KURL::List urls =someUrls;
+	kdDebug() << "===> CvsPartImpl::prepareOperation(const KURL::List &, CvsOperation)" << endl;
+    KURL::List urls = someUrls;
 
     if (!m_part->project())
     {
@@ -70,6 +71,22 @@ bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op 
         return false;
     }
 
+	if (m_widget->isAlreadyWorking())
+	{
+		if (KMessageBox::warningYesNo( 0,
+			i18n("Another CVS operation is executing: do you want to cancel it \n"
+			     "and start this new one?"),
+			i18n("CVS: Operation already pending ")) == KMessageBox::Yes)
+		{
+			m_widget->cancelJob();
+		}
+		else // Operation canceled
+		{
+			kdDebug() << "===> Operation canceled by user request" << endl;
+			return false;
+		}
+	}
+
     validateURLs( projectDirectory(),  urls, op );
     if (urls.count() <= 0) // who knows? ;)
     {
@@ -77,7 +94,8 @@ bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op 
         KMessageBox::sorry( 0, i18n("None of the file(s) you selected seems to be valid for repository.") );
         return false;
     }
-    URLUtil::dump( urls );
+
+	URLUtil::dump( urls );
 
     m_fileList = URLUtil::toRelativePaths( projectDirectory(), urls );
 

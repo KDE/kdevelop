@@ -200,7 +200,7 @@ void CvsServiceImpl::remove( const KURL::List& urlList )
 
     DCOPRef cvsJob = m_cvsService->remove( m_fileList, true  );
 
-    processWidget()->startJob();
+    processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
@@ -233,7 +233,7 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
 
     DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, revertOptions );
 
-    processWidget()->startJob();
+    processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
@@ -328,7 +328,7 @@ void CvsServiceImpl::unTag( const KURL::List& urlList )
     DCOPRef cvsJob = m_cvsService->createTag( m_fileList, dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
-    processWidget()->startJob();
+    processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
