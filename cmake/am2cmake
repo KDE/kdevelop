@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+
+class CMakeFile
+   def initialize(amFile)
+      @amFile=amFile
+      amFile =~ /(.*)Makefile.am/
+      @path=$1
+      @listsFile=@path+"CMakeLists.txt.x"
+      parseFile
+   end
+   
+   def parseFile
+      lines=IO.readlines(@amFile)
+      cummLine=""
+      appendNextLine=false
+      for line in lines do
+         appendNextLine=(line[line.length-2, 1]=='\\')
+         
+         if appendNextLine
+            cummLine+=line[0, line.length-2]
+         else
+            cummLine+=line[0, line.length-1]
+            if not cummLine.empty? 
+               evalLine(cummLine)
+               cummLine=""
+            end
+         end
+      end   
+   end
+
+   def evalLine(line)
+      if line =~ /^\s*METASOURCES\s*=\s*AUTO\s*$/
+         @automoc=true
+         printf("line: %s\n", line)
+      end
+   end
+      
+   def createListsFile
+   end
+end
+
+def convertAmFile(amFile)
+   cmake=CMakeFile.new(amFile)
+   cmake.createListsFile
+end
+
+Dir["**/Makefile.am"].each{ |currentFile| convertAmFile(currentFile)}
+
