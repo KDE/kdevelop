@@ -1,8 +1,11 @@
+2001-04-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: there was a bloody event cycle in layoutTaskBar()
+
 2001-04-21  rokrau@yahoo.com
-    * I have the first "working" draft of ctags support done now. 
-      It's still mostly a proof of concept but I will polish it a bit 
-      over time now. Select an include file and RMC will let you 
-      open the file through its location in the tags file. 
+    * I have the first "working" draft of ctags support done now.
+      It's still mostly a proof of concept but I will polish it a bit
+      over time now. Select an include file and RMC will let you
+      open the file through its location in the tags file.
 
 2001-04-20  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: crash at Windows->CloseAll+Windows->Close
