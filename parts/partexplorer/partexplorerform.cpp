@@ -130,7 +130,7 @@ void PartExplorerForm::slotSearchRequested()
     kdDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
         " serviceType = " << serviceType << ", costraints = " << costraints << endl;
 
-    if (serviceType.isNull() && serviceType.isNull())
+    if (serviceType.isNull())  // It is mandatory
     {
         slotDisplayError( i18n("You must fill at least a field!!") );
         return;
