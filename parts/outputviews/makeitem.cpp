@@ -130,8 +130,8 @@ QString ActionItem::text( EOutputLevel outputLevel )
 	if ( outputLevel < eFull )
 	{
 		if ( m_tool.isEmpty() )
-			return QString(m_action).append("<b>").append(m_file).append("</b>");
-		return QString(m_action).append("<b>").append(m_file).append("</b>").append(" (").append(m_tool).append(")");
+			return QString(m_action).append(" <b>").append(m_file).append("</b>");
+		return QString(m_action).append(" <b>").append(m_file).append("</b>").append(" (").append(m_tool).append(")");
 	}
 	return MakeItem::text( outputLevel );
 }
