@@ -84,7 +84,7 @@ namespace FileCreate {
 #if KDE_VERSION > 305      
       selectRow(changeToRow);
 #else
-  // TODO Qt-3.0.5 doesn't proved QTable::selectRow()
+  // TODO Qt-3.0.5 doesn't provide QTable::selectRow()
 #endif      
     }
 
