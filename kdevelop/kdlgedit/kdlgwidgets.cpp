@@ -236,11 +236,11 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   QToolTip::add(buttons[btnsCount-1],QString(wd));
   macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget        ,i18n(
                  "This will insert a QWidget to the dialog.\n"
-                 "Such an item may have serveral children items\n"
+                 "Such an item may have several children items\n"
                  "or even more QWidgets as children. That means\n"
                  "this item lets you create complex hierarchies\n"
                  "for you dialog.\n\n"
-                 "Another think you will need this item type for\n"
+                 "Another thing you will need this item type for\n"
                  "are widgets like the tab view which need several\n"
                  "widgets they can bring to the top."));
 
