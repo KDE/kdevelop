@@ -210,6 +210,13 @@ void RDBParser::setItem(TrimmableItem *parent, const QString &varName,
     switch (dataType) {
     case typeHash:
     case typeArray:
+		// Don't set the name in the value column yet, as it gets
+		// set when the pp command returns with the array or hash
+		// expansion
+        item->setCache(value);
+        item->setExpandable(true);
+        break;
+
     case typeReference:
         item->setText(ValueCol, value);
         item->setCache(value);

@@ -519,7 +519,11 @@ VarItem::~VarItem()
 QString VarItem::key(int /*column*/, bool /*ascending*/) const 
 {
 	QString key_ = text(VarNameCol);
-	if (key_.startsWith("$")) {
+	QRegExp arrayelement_re("\\[(\\d+)\\]");
+	
+	if (arrayelement_re.search(key_) != -1) {
+		return key_.sprintf("%.6d", arrayelement_re.cap(1).toInt());
+	} else if (key_.startsWith("$")) {
 		return key_.prepend("1001");
 	} else if (key_.startsWith("@@")) {
 		return key_.prepend("1002");
@@ -579,15 +583,7 @@ void VarItem::setText(int column, const QString &data)
     setActive();
     if (column == ValueCol) {
 		updateType();
-		
-		// If an Array or Hash item has been expanded via a pp command,
-		// the name of the value is changed. But it shouldn't be highlighted
-		// in red. Hence, this reg exp to test for that case.
-		QRegExp specialname_re("(Array|Hash) \\(\\d+ element\\(s\\)\\)");
-		
-		highlight_ = (	!text(column).isEmpty()
-						&& text(column) != data
-						&& specialname_re.search(data) == -1 );
+		highlight_ = (!text(column).isEmpty() && text(column) != data);
     }
 
     QListViewItem::setText(column, strData);
