@@ -54,8 +54,8 @@
 #include "./dbg/disassemble.h"
 
 //#include "./kwrite/kwdoc.h"
-#include <../../kate-cvs/interfaces/document.h>
-#include <../../kate-cvs/interfaces/view.h>
+#include <kate/document.h>
+#include <kate/view.h>
 
 #include "wzconnectdlgimpl.h"
 #include "docviewman.h"
@@ -204,7 +204,7 @@ void CKDevelop::slotFileSave()
   }
 
   slotStatusMsg(i18n("Ready."));
-  if (m_docViewManager->currentEditView()->isModified())
+  if (m_docViewManager->currentEditDoc()->isModified())
     slotStatusHelpMsg(i18n("File %1 not saved.").arg(sShownFilename));
   else
     slotStatusHelpMsg(i18n("File %1 saved.").arg(sShownFilename));
@@ -2175,9 +2175,9 @@ void CKDevelop::slotToolsTool(int tool)
     argument.replace( QRegExp("%H"), fName );
     argument.replace( QRegExp("%S"), fName );
   }
-  CEditWidget* cev = m_docViewManager->currentEditView();
+  Kate::View* cev = m_docViewManager->currentEditView();
   if (cev) {
-    QString mText = cev->markedText();
+    QString mText = ced->selection();
     QString cWord = cev->currentWord();
     KRun::shellQuote(mText); // encode the strings for the shell
     KRun::shellQuote(cWord);
@@ -3057,7 +3057,7 @@ void CKDevelop::slotNewStatus()
 //    this cant be done without another API change in Kate,
 //    maybe we can get around this (rokrau 08/08/01)
 //    config = m_docViewManager->currentEditView()->config();
-    if (m_docViewManager->currentEditView()->isModified()) {
+    if (m_docViewManager->currentEditDoc()->isModified()) {
       enableCommand(ID_FILE_SAVE);
     } else {
       disableCommand(ID_FILE_SAVE);
@@ -3137,23 +3137,25 @@ void CKDevelop::slotNewLineColumn()
 {
   if (!m_docViewManager->currentEditView()) return;
   QString linenumber;
-  linenumber = i18n("Line: %1 Col: %2").arg(m_docViewManager->currentEditView ()->currentLine() +1).arg(m_docViewManager->currentEditView()->currentColumn() +1);
+  uint line, column;
+  m_docViewManager->currentEditView()->cursorPosition(&line,&column);
+  linenumber = i18n("Line: %1 Col: %2").arg(line+1).arg(column+1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo()
 {
-  if (!m_docViewManager->currentEditView()) return;
-  int state;
-  state = m_docViewManager->currentEditView()->undoState();
+  if (!m_docViewManager->currentEditDoc()) return;
+  uint undoCount = m_docViewManager->currentEditDoc()->undoCount();
+  uint redoCount = m_docViewManager->currentEditDoc()->redoCount();
   //undo
-  if(state & 1){
+  if(undoCount){
     enableCommand(ID_EDIT_UNDO);
   }
   else{
     disableCommand(ID_EDIT_UNDO);
   }
   //redo
-  if(state & 2){
+  if(redoCount){
     enableCommand(ID_EDIT_REDO);
   }
   else{
@@ -3787,25 +3789,28 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     slotNewLineColumn();
   }
 
-  if (!(m_docViewManager->curDocIsBrowser()))
-  {
-    int state = 0;
-    if (m_docViewManager->currentEditView())
-      state = m_docViewManager->currentEditView()->undoState();
+    if (!(m_docViewManager->curDocIsBrowser()))
+    {
+    uint undoCount = m_docViewManager->currentEditDoc()->undoCount();
+    uint redoCount = m_docViewManager->currentEditDoc()->redoCount();
     //undo
-    if(state & 1)
+    if(undoCount){
       enableCommand(ID_EDIT_UNDO);
-    else
+    }
+    else{
       disableCommand(ID_EDIT_UNDO);
+    }
     //redo
-    if(state & 2)
+    if(redoCount){
       enableCommand(ID_EDIT_REDO);
-    else
+    }
+    else{
       disableCommand(ID_EDIT_REDO);
+    }
 
     QString str;
-    if (m_docViewManager->currentEditView())
-      str = m_docViewManager->currentEditView()->markedText();
+    if (m_docViewManager->currentEditDoc())
+      str = m_docViewManager->currentEditDoc()->selection();
     if(str.isEmpty()){
       disableCommand(ID_EDIT_CUT);
       disableCommand(ID_EDIT_COPY);
