@@ -1384,9 +1384,9 @@ long KDlgLoader::setProperty_kde(QWidget* w, QString name, QString val, QString 
       if (name == "isedit")            // isEdit
         {
           if (isValTrue(val, -1) == 1)
-            ((KKeyButton*)w)->setEdit(true);
+            ((KKeyButton*)w)->setEditing(true);
           else if (isValTrue(val, -1) == 0)
-            ((KKeyButton*)w)->setEdit(false);
+            ((KKeyButton*)w)->setEditing(false);
           Return(KDLGERR_SUCCESS)
         }
     }
@@ -1467,7 +1467,7 @@ QWidget* KDlgLoader::createItem(QWidget*par, QString ctype)
   else if (ctype == "kprogress")
     return (QWidget*)new KProgress(par);
   else if (ctype == "kkeybutton")
-    return (QWidget*)new KKeyButton("keybutton",par);
+    return (QWidget*)new KKeyButton(par, "keybutton");
   else if (ctype == "krestrictedline")
     return (QWidget*)new KRestrictedLine(par);
   else if (ctype == "kseparator")
