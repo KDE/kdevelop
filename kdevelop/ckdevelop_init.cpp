@@ -947,8 +947,12 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
-  connect(class_tree, SIGNAL(selectedViewDeclaration(const char *, const char *,THType)), SLOT(slotCVViewDeclaration(const char *, const char *,THType)));
-  connect(class_tree, SIGNAL(selectedViewDefinition(const char *, const char *,THType)), SLOT(slotCVViewDefinition(const char *, const char *,THType)));
+  connect(class_tree, 
+          SIGNAL(selectedViewDeclaration(const char *, const char *,THType,THType)), 
+          SLOT(slotCVViewDeclaration(const char *, const char *,THType,THType)));
+  connect(class_tree, 
+          SIGNAL(selectedViewDefinition(const char *, const char *,THType,THType)), 
+          SLOT(slotCVViewDefinition(const char *, const char *,THType,THType)));
   connect(class_tree, SIGNAL(signalAddMethod(const char *)), SLOT(slotCVAddMethod(const char * )));
   connect(class_tree, SIGNAL(signalAddAttribute(const char *)), SLOT(slotCVAddAttribute(const char * )));
   connect(class_tree, SIGNAL(signalMethodDelete(const char *,const char *)), SLOT(slotCVDeleteMethod(const char *,const char *)));

@@ -354,7 +354,7 @@ void CClassView::refresh()
 
   // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
-  structList = store->globalContainer.getSortedStructList();
+  structList = store->getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
   delete structList;
 
@@ -830,7 +830,7 @@ void CClassView::buildInitalClassTree()
 
   // Save the tree.
   asTreeStr( str );
-  project->setClassViewTree( str );
+  //  project->setClassViewTree( str );
 }
 
 /*----------------------------------------- CClassView::createCTDlg()
@@ -847,8 +847,8 @@ CClassToolDlg *CClassView::createCTDlg()
   CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
 
   connect( ctDlg, 
-           SIGNAL( signalViewDeclaration(const char *, const char *, THType, THType ) ),
-           SLOT(slotViewDeclaration(const char *, const char *, THType, THType ) ) );
+           SIGNAL( signalViewDeclaration(const char *,const char *,THType,THType ) ),
+           SLOT(slotViewDeclaration(const char *,const char *,THType,THType ) ) );
                    
   connect( ctDlg, 
            SIGNAL( signalViewDefinition(const char *, const char *, THType, THType ) ),
@@ -1092,9 +1092,6 @@ void CClassView::slotViewDeclaration()
                                                  itemName,
                                                  parentType,
                                                  itemType );
-
-  cout << "Viewdeclaration: " << parentPath.data() << ", " 
-       << itemName.data() << endl;
 
   slotViewDeclaration( parentPath, itemName, parentType, itemType );
 }
