@@ -865,12 +865,14 @@ extern "C" {
 #define org_kde_koala_KDevLanguageSupport_Signals 32L
 #undef org_kde_koala_KDevLanguageSupport_Slots
 #define org_kde_koala_KDevLanguageSupport_Slots 64L
+#undef org_kde_koala_KDevLanguageSupport_Declarations
+#define org_kde_koala_KDevLanguageSupport_Declarations 128L
 #undef org_kde_koala_KDevLanguageSupport_NewClass
-#define org_kde_koala_KDevLanguageSupport_NewClass 128L
+#define org_kde_koala_KDevLanguageSupport_NewClass 512L
 #undef org_kde_koala_KDevLanguageSupport_AddMethod
-#define org_kde_koala_KDevLanguageSupport_AddMethod 256L
+#define org_kde_koala_KDevLanguageSupport_AddMethod 1024L
 #undef org_kde_koala_KDevLanguageSupport_AddAttribute
-#define org_kde_koala_KDevLanguageSupport_AddAttribute 512L
+#define org_kde_koala_KDevLanguageSupport_AddAttribute 2048L
 /*
  * Class:     org_kde_koala_KDevLanguageSupport
  * Method:    addAttribute
@@ -951,7 +953,11 @@ JNIEXPORT void JNICALL Java_org_kde_koala_KDevLanguageSupport_setFeatures
 JNIEXPORT void JNICALL Java_org_kde_koala_KDevLanguageSupport_setFileFilters
   (JNIEnv *, jobject, jobjectArray);
 
-
+/*
+ * Class:     org_kde_koala_KDevLanguageSupport
+ * Method:    updatedJavaSourceInfo
+ * Signature: ()V
+ */
 JNIEXPORT void JNICALL Java_org_kde_koala_KDevLanguageSupport_updatedJavaSourceInfo
   (JNIEnv *, jobject);
 
@@ -986,7 +992,6 @@ private:
 	QStringList _fileFilters;
 
 };
-
 
 #ifdef __cplusplus
 }

@@ -869,10 +869,10 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_KDevMakeFrontend_isRunning
 
 /*
  * Class:     org_kde_koala_KDevMakeFrontend
- * Method:    startMakeCommand
+ * Method:    queueCommand
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_org_kde_koala_KDevMakeFrontend_queueMakeCommand
+JNIEXPORT void JNICALL Java_org_kde_koala_KDevMakeFrontend_queueCommand
   (JNIEnv *, jobject, jstring, jstring);
 
 #ifdef __cplusplus

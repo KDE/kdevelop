@@ -869,6 +869,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_Core_embedWidget
 
 /*
  * Class:     org_kde_koala_Core
+ * Method:    fillContextMenu
+ * Signature: (Lorg/kde/qt/QPopupMenu;Lorg/kde/koala/Context;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_Core_fillContextMenu
+  (JNIEnv *, jobject, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_Core
  * Method:    finalize
  * Signature: ()V
  */

@@ -25,6 +25,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedParent_finalize
 
 /*
  * Class:     org_kde_koala_ParsedParent
+ * Method:    isPackage
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedParent_isPackage
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedParent
  * Method:    isPrivate
  * Signature: ()Z
  */

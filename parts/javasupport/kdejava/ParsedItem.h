@@ -149,6 +149,14 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedItem_isGlobal
 
 /*
  * Class:     org_kde_koala_ParsedItem
+ * Method:    isPackage
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedItem_isPackage
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
  * Method:    isPrivate
  * Signature: ()Z
  */

@@ -877,14 +877,6 @@ JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_core
 
 /*
  * Class:     org_kde_koala_KDevPart
- * Method:    document
- * Signature: ()Lorg/kde/qt/QDomDocument;
- */
-JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_projectDom
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_KDevPart
  * Method:    finalize
  * Signature: ()V
  */
@@ -929,6 +921,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_KDevPart_newKDevPart__Lorg_kde_koala_K
  * Signature: ()Lorg/kde/koala/KDevProject;
  */
 JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_project
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_KDevPart
+ * Method:    projectDom
+ * Signature: ()Lorg/kde/qt/QDomDocument;
+ */
+JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_projectDom
   (JNIEnv *, jobject);
 
 /*
