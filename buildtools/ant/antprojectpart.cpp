@@ -17,6 +17,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <keditlistbox.h>
+#include <kurlrequester.h>
 
 
 #include <kdevcore.h>
@@ -50,9 +51,14 @@ AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringL
   m_buildProjectAction = new KAction(i18n("&Build Project"), "make_kdevelop", Key_F8,
 		                     this, SLOT(slotBuild()),
 				     actionCollection(), "build_build" );
+  m_buildProjectAction->setToolTip(i18n("Build project"));
+  m_buildProjectAction->setWhatsThis(i18n("<b>Build project</b><p>Executes <b>ant dist</b> command to build the project."));
 
   KActionMenu *menu = new KActionMenu(i18n("Build &Target"),
                                       actionCollection(), "build_target" );
+  menu->setToolTip(i18n("Build target"));
+  menu->setWhatsThis(i18n("<b>Build target</b><p>Executes <b>ant target_name</b> command to build the specified target."));
+
   m_targetMenu = menu->popupMenu();
 
   connect(m_targetMenu, SIGNAL(activated(int)), this, SLOT(slotTargetMenuActivated(int)));
@@ -450,7 +456,7 @@ void AntProjectPart::projectConfigWidget(KDialogBase *dlg)
   QVBox *vbox = dlg->addVBoxPage(i18n("Ant Options"));
   m_antOptionsWidget = new AntOptionsWidget(vbox);
 
-  m_antOptionsWidget->BuildXML->setText(m_antOptions.m_buildXML);
+  m_antOptionsWidget->BuildXML->setURL(m_antOptions.m_buildXML);
 
   switch (m_antOptions.m_verbosity)
   {
@@ -495,7 +501,7 @@ void AntProjectPart::optionsAccepted()
   if (!m_antOptionsWidget || !m_classPathWidget)
     return;
 
-  m_antOptions.m_buildXML = m_antOptionsWidget->BuildXML->text();
+  m_antOptions.m_buildXML = m_antOptionsWidget->BuildXML->url();
 
   switch (m_antOptionsWidget->Verbosity->currentItem())
   {
@@ -519,7 +525,7 @@ void AntProjectPart::optionsAccepted()
     QCheckTableItem *item =(QCheckTableItem*) m_antOptionsWidget->Properties->item(i,0);
     m_antOptions.m_defineProperties.replace(key, item->isChecked());
   }
-  
+
   m_classPath = m_classPathWidget->ClassPath->items();
 
   m_antOptionsWidget = 0;
@@ -544,11 +550,17 @@ void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 
   popup->insertSeparator();
   if (inProject)
-    popup->insertItem( i18n("Remove From Project: %1").arg(popupstr),
+  {
+    int id = popup->insertItem( i18n("Remove From Project: %1").arg(popupstr),
                        this, SLOT(slotRemoveFromProject()) );
+    popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the project."));
+  }
   else
-    popup->insertItem( i18n("Add to Project: %1").arg(popupstr),
+  {
+    int id = popup->insertItem( i18n("Add to Project: %1").arg(popupstr),
                        this, SLOT(slotAddToProject()) );
+    popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file from the project."));
+  }
 }
 
 
