@@ -138,8 +138,42 @@ typeDefinition { QStringList bases; QString className; ParsedClass* klass = 0; }
 						}
 		)
 	|	#(INTERFACE_DEF mm:modifiers IDENT
+						{
+						klass = new ParsedClass;
+						QString name = QString::fromUtf8( #IDENT->getText().c_str(), #IDENT->getText().length() );
+						QStringList path = QStringList::split( ".", name );
+						className = path.back();
+						klass->setName( path.back() );
+
+						klass->setDeclaredInFile( m_fileName );
+						klass->setDefinedInFile( m_fileName );
+						klass->setDeclaredOnLine( #IDENT->getLine() );
+						klass->setDefinedOnLine( #IDENT->getLine() );
+						klass->setDeclaredInScope( m_currentScope.join(".") );
+
+						bool innerClass = !m_currentScope.isEmpty();
+						if( innerClass )
+						    m_currentContainer->addClass( klass );
+						else
+						    m_store->addClass( klass );
+
+						}
 		bases=extendsClause
-		interfaceBlock[klass] )
+						{
+						m_currentScope.push_back( className );
+						ParsedClass* oldClass = m_currentClass;
+						ParsedClassContainer* oldContainer = m_currentContainer;
+
+						m_currentContainer = klass;
+						m_currentClass = klass;
+						}
+		interfaceBlock[klass]
+						{
+						m_currentContainer = oldContainer;
+						m_currentClass = oldClass;
+						m_currentScope.pop_back();
+						}
+		)
 	;
 
 typeSpec returns [ QString tp ]
@@ -168,11 +202,11 @@ builtInType
     |   "double"
     ;
 
-modifiers returns [ QStringList l ] 
+modifiers returns [ QStringList l ]
 	:	#( MODIFIERS (m:modifier { l << #m->getText().c_str(); } )* )
 	;
 
-modifier 
+modifier
     :   "private"
     |   "public"
     |   "protected"
