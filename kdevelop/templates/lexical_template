@@ -17,7 +17,11 @@
 
 %{
 /* Comments and definitions goes here. So does options. */
-
+/* Specifically, if you want to use more than one lexical file in each */
+/* project you will have to use the option '%option prefix="whatever"'.*/
+/* This will replace the "yy" part in function and variable names with */
+/* the string "whatever". For more information, as well as documentation */
+/* of other options, see the GNU Flex manual. */
 %}
 
 %%
