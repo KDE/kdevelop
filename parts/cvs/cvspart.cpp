@@ -668,7 +668,7 @@ void CvsPart::commit( const KURL::List& urlList )
 
     QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
     // 1. Commit changes to the actual file
-    QString command = buildCommitCmd( project()->projectDirectory(), fileList, dlg.logMessage().join( "" ) );
+    QString command = buildCommitCmd( project()->projectDirectory(), fileList, dlg.logMessage().join( "\n" ) );
 
     kdDebug( 9000 ) << "I'll run commit with this command: " << command << endl;
 
