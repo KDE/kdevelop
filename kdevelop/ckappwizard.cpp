@@ -1701,7 +1701,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
     if (!qtnormalitem->isSelected()) {
       fileInfo.install = true;
-      fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+      fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
     }
     else {
       fileInfo.install = false;

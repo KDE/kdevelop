@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The KDE Library Reference Guide: Classes of KDE Applications</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="KDE, KDevelop, kdelibs, KDE library">
-<META NAME="description" CONTENT="The KDE Library Reference Guide">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -21,7 +21,7 @@
 <H3><A NAME="s3">3. Classes of KDE Applications</A></H3>
 
 <P>The KDE libraries, in conjunction with the Qt library, are providing developers a complete framework for application design. As KDE is
-targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11-
+targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11 -
 but as the libraries are already encapsulating the complex graphics subsystem, you don't have to know about that in most cases. If
 you're already familiar with Qt, KDE won't make too much difference in regards of using classes and widgets.
 <P>Beginners, on the other hand, have a lot of problems in the sections of
@@ -30,6 +30,7 @@ you're already familiar with Qt, KDE won't make too much difference in regards o
 <LI>Application design with GUI components</LI>
 <LI>Application parts</LI>
 <LI>Widget construction</LI>
+<LI>Inter-widget communication (Signals and slots)</LI>
 </UL>
 <P>The following will help you to understand, where you will generally find classes used in KDE applications, including the according
 replacements of Qt classes for those developers that are familiar with Qt, but didn't make use of KDE libraries. These will be the
@@ -56,8 +57,8 @@ application objects, their behavior and creation.You will learn about:
 </H3>
 
 <P>
-<P>Generally, a KDE application has to be started with creating an instance (and only one!) of the class <CODE>KApplication</CODE>, which is
-provided by the <CODE>kdecore</CODE> library. The class <CODE>KApplication</CODE> itself is derived from the according Qt class <CODE>QApplication</CODE>.
+<P>Generally, a KDE application has to be started by creating an instance (and only one!) of the class <CODE>KApplication</CODE>, which is
+provided by the <CODE>kdecore</CODE> library. The class <CODE>KApplication</CODE> is derived from the according Qt class <CODE>QApplication</CODE>.
 <P>What happens exactly is that <CODE>QApplication</CODE> manages the application event queue, which means it processes events from the underlying
 window system to its child objects, such as mouse movements or keyboard events. This is also the reason, why only one instance of
 <CODE>KApplication</CODE> can be declared and why this has to be the first thing the <CODE>main()</CODE> function executes.
@@ -98,7 +99,7 @@ charset. Retrieve the charsets instance with <CODE>kapp->getCharsets()</CODE>.
 <BLOCKQUOTE>Replaced by <CODE>KGlobal::charsets()</CODE> in KDE2.</BLOCKQUOTE>
 </DL>
 <P>
-<P>Further, the KApplication class provides you with the needed methods to access the KDE File System Standard. This will prevent you from
+<P>Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard. This will prevent you from
 problems that will always occur when hard-coding any directories into the code (see 
 <A HREF="programming.html">The KDevelop Programming Handbook</A> for information about the KDE-FSS). The class also provides the needed access for the application icon and mini
 icon, current KDE fonts and session management support.
@@ -110,12 +111,12 @@ is always used with the macro <CODE>i18n()</CODE> of <CODE>kapp.h</CODE>.
 strings into an application message file that then can be translated.
 <P>At least, the <CODE>KApplication</CODE> already constructs a help menu that can be inserted into a menu bar the application may contain with a
 predefined (can be turned on/off) KDE hint dialog and your application's about dialog.
-<P>You should notice that <CODE>KApplication</CODE> has to be lead with:
+<P>The following advice should be taken into account when dealing with the <CODE>KApplication</CODE> class:
 <P>
 <UL>
-<LI>creating the <CODE>KApplication</CODE> object at the beginning of the <CODE>main()</CODE> function</LI>
-<LI>executing the application with <CODE>exec()</CODE> at the end of the <CODE>main()</CODE> function</LI>
-<LI>terminating the application with calling the <CODE>quit()</CODE> slot function.</LI>
+<LI>create the <CODE>KApplication</CODE> object at the beginning of the <CODE>main()</CODE> function</LI>
+<LI>execute the application with <CODE>exec()</CODE> at the end of the <CODE>main()</CODE> function</LI>
+<LI>terminate the application with calling the <CODE>quit()</CODE> slot function.</LI>
 </UL>
 <P>Using <CODE>KApplication</CODE>, you are able to catch the following event signals:
 <P>
@@ -136,24 +137,24 @@ be in most cases <CODE>saveYourself()</CODE> and <CODE>shutDown()</CODE> (whereb
 </H3>
 
 <P>
-<P>Finally, an application usually wants to process commandline options. Those are entered by the user if he started the application from
-a console for the reason to either start it non-graphically for any processing reasons the application may be capable to execute or to
-start the application with a file. This is also important to interact with filemanagers that can include your application to the list
-of those that open a mime-type automatically when called with a filename. The <CODE>main()</CODE> function therefore is constructed with the
-declaration
+<P>An application usually wants to be able to process command line options. Those are entered by the user if he started the application from
+a console or from within a kdelnk file. Command line options are very often used to start an application with a certain file.
+This also enables  filemanagers to call your application properly and use the mime-type mechanism included in KDE.
+To be able to process command line options,  the <CODE>main()</CODE> function should be constructed with the declaration
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
 int main(int argc(), const char* argv[])
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>Thereby, <CODE>argc()</CODE> is the number of commandline options and the array <CODE>argv[]</CODE> actually contains the commandline option's texts.
+<P>Here, <CODE>argc()</CODE> is the number of commandline options and the array <CODE>argv[]</CODE> actually contains the commandline option's texts.
 As the <CODE>QApplication</CODE> constructor is executed before the <CODE>KApplication</CODE>, it is sufficient to know what is processed by possible
 options first. The already read options are automatically removed from the array and cannot be read after the <CODE>KApplication</CODE>
 instance is declared:
 <P>(taken from the Qt 1.42 online reference of <CODE>QApplication</CODE>)
 <UL>
-<LI><B>-nograb</B>, tells Qt to never grab the mouse or the keyboard.</LI>
+<LI><B>-nograb</B>, tells Qt to never grab the mouse or the keyboard. (If you are running your program
+in a debugger, this option is automatically enabled).</LI>
 <LI><B>-sync</B> (only under X11), switches to synchronous mode for debugging.</LI>
 <LI><B>-display</B> display, sets the X display (default is $DISPLAY).</LI>
 <LI><B>-geometry</B> geometry, sets the client geometry of the main widget.</LI>
@@ -163,7 +164,8 @@ calculated).</LI>
 <LI><B>-fg</B> or -foreground color, sets the default foreground color.</LI>
 <LI><B>-name</B> name, sets the application name.</LI>
 <LI><B>-title</B> title, sets the application title (caption).</LI>
-<LI><B>-style=</B> style, sets the application GUI style. Possible values are motif and windows</LI>
+<LI><B>-style=</B> style, sets the application GUI style. Possible values are motif and windows. By default, the global
+KDE style setting is used.</LI>
 <LI><B>-visual</B> TrueColor, forces the application to use a TrueColor visual on an 8-bit display.</LI>
 <LI><B>-ncols</B> count, limits the number of colors allocated in the color cube on a 8-bit display, if the application is using the
 QApplication::ManyColor color specification. If count is 216 then a 6x6x6 color cube is used (ie. 6 levels of red, 6 of green, and 6 of
@@ -246,7 +248,7 @@ KWM::setDockWindow(mywidget->winID());
 widgets (visible user interfaces) except the about dialog similar to the <CODE>QApplication</CODE> class as a popup menu, but that isn't seen
 anywhere. Therefore, any application needs a top-widget to make itself visible.
 <P>When it comes to the visible parts, the programmer generally is free to choose which widget he wants to derive from or use directly as
-his main window. It can be a simple <CODE>QLabel</CODE> as well as the improved <CODE>KTMainWindow</CODE> that supplies all needed objects for a usual
+his main window. It can be a simple <CODE>QLabel</CODE> as well as the advanced <CODE>KTMainWindow</CODE> that supplies all needed objects for a usual
 desktop application.
 <P>
 <H4>General Rules</H4>
@@ -260,7 +262,7 @@ close button of the window to exit the window. He expects the application to be 
 you have to call the QApplication slot <CODE>quit()</CODE>. You could do this in a derived class by a re-implementation of
 <CODE>QWidget::closeEvent()</CODE>, but with the method <CODE>setMainWidget()</CODE> this is already done. Now, in any case of using widgets with
 <CODE>KApplication</CODE>, things are almost the same with the difference that the according method of KDE is <CODE>setTopWidget()</CODE>.
-The only exception is when using the class <CODE>KTMainWindow</CODE> who automatically does this in its constructor (if there is no other
+The only exception is when using the class <CODE>KTMainWindow</CODE> which automatically does this in its constructor (if there is no other
 topwidget).
 <P>
 <H4>Using KTMainWindow</H4>

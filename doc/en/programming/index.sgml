@@ -3660,6 +3660,90 @@ setColor( &amp;color );
 
 </descrip>
 
+<chapt>Licensing
+<p>
+This section deals with questions that come up in regards to licensing applications that are created with the KDevelop IDE. First, we
+will have a look at the default behavoir, discuss adavantages of licensing your applications under the GPL and finally will cover
+issues that come up when developing commercial applications.
+
+<sect>The GPL License
+<p>
+The KDevelop IDE itself is licensed under the GNU General Public License. This license ensures that any user can copy, modify and
+redistribute the KDevelop sourcecode package under the terms of this license. The license itself guarantees this as well as the rights
+of the KDevelop Team members as the authors of this product.
+
+Out of this reason and the dedication to help free software authors developing their products, all KDevelop generated frameworks
+contain a GPL licensing reference as well as a copy of the license as well. Developers on the other hand <em/can/ use this license as a
+base for distributing their product but are in no way bound to do so.
+
+The author, when using the GPL as the license for his product, also takes advantage out of this:
+
+<itemize>
+<item>you can use any existing code also licensed under the GPL and include it into your package,
+<item>your code has a copyright license that protects your rights as the original author,
+<item>the re-use of your code by other authors improve the general development of free applications.
+</itemize>
+
+
+<sect>KDE and Qt Licensing Issues
+<p>
+Especially the Qt licensing caused a lot of trouble for the KDE development community until Qt 2.0 which comes with the new QPL
+license. The Troll Tech company, as the owner and creator of Qt, delivers the Unix version of the library free of charge, but with the
+restriction that you cannot change the delivered code and redistribute it without an explicit agreement on their side. This was the
+reason why many free software developers tended to condemn this licensing, as it wasn't absolutely free, especially to do any changes.
+On the other hand, the Qt library offers a lot of advantages that make it also very attractive for developing commercial applications:
+
+<itemize>
+<item>By buying a commercial license, you can write portable applications for Unix and Windows platforms
+<item>The provided classes and application framework are providing a good solution for easy application design
+<item>You can develop for Unices without being dependend on the GPL licensing when holding a commercial license
+</itemize>
+
+The KDE project on the other hand chose the Qt library as a base for developing a desktop environment for Unix systems as well as an
+extended application framework enhancing the facilities of the capabilities Qt provides. Developers can make use of KDE's advantages by
+using the provided libraries, distributed as the KDE libraries.
+
+The KDE libraries themselves are distributed under the LGPL, the GNU Library General Public License. What does this mean to application
+developers ?
+
+<sect1>Non-commercial Development
+<p>
+For non-commercial development, the Qt library is provided free of charge. Your application can make use of the library as far as it
+does not change the library and the developer delivers his application sourcecode free of charge as well.
+
+The LGPL of the KDE libraries ensures using the KDE libraries as well for non-commercial development. You can make use of the KDE
+libraries as you like to or your application may require.
+
+<sect1>Commercial Development
+<p>
+For commercial developement, the Troll Tech company offers buying a commercial license. This allows using the Qt library for
+development purposes as your application or project may require. You can ship your application in any form, as binaries only or by
+sourcecode, independed of any GPL licensing.
+
+When using the KDE libraries, you have to watch the LGPL license, which explicitely allows commercial development using the library
+distributed under the LGPL. You just have to watch the rules of the license to know the restrictions that may arise when using the KDE
+libraries as a base for commercial application development based on KDE.
+
+<sect>Your Product License
+<p>
+
+Hereby, the KDevelop Team, as the authors of the KDevelop Integrated Development Environment, allows you to distribute any application
+that has been created by and with using the KDevelop IDE under a license of your choice; only depending on licensing terms that arise
+from the restrictions that are given by the use of code that is placed in libraries the final product uses. These are:
+
+<itemize>
+<item>For Qt applications: The restrictions of the Qt license that apply to the status of your distribution, whether it may be for
+non-commercial (free) software or commercial purpose.
+<item>For KDE applications: The restrictions of the Qt license according to the status of your distribution <em/plus/ the restrictions
+of the LGPL (GNU Library General Public License) as shipped with your copy of the used KDE libraries.
+<item>for all other pre-generated sourcecode you are free to choose the license
+</itemize>
+
+Therefore you can change the default licensing as it is included with any KDevelop generated application framework or base application
+towards your choice, only by watching the restrictions that arise from any library that is linked to your application.
+
+If you have any additional questions about licensing, feel free to ask the KDevelop Team.
+
 
 <chapt>References
 <p>

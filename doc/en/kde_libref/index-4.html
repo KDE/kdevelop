@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The KDE Library Reference Guide: Event Handling</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="KDE, KDevelop, kdelibs, KDE library">
-<META NAME="description" CONTENT="The KDE Library Reference Guide">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -20,31 +20,32 @@
 </P>
 <H3><A NAME="s4">4. Event Handling</A></H3>
 
-<P>This chapter has a major meaning for those that want to have a better insight into the internals of KDE and Qt programming as well as
-explaining details of event handling in general. Additionally, the Signals and Slots mechanism is explained in detail as resources
-about the meaning and usage of signals and slots are somehow hard to find in other documentation as known from users; also the
-translated version allows non-english beginners a better understanding than originals.
-<P>Event handling therefore covers the communication of an application here - the communication between the objects and between objects
-and the user. Especially beginners have a hard time to work themselves into the event processing and many misconstructions only appear
-because of a lack of knowledge. The signals and slots are originally not a part of event handling on themselves but are used during the
-event processing often and are a major reason why simple widget elements such as buttons don't have to be inherited by the programmer.
+<P>This chapter will illuminate some of the internals of KDE/Qt programming, and will dive into the fascinating subject of event handling as well. It is meant for people who feel they need deeper insight to the more advanced topics of Qt based programming. In particular the Signals and Slots mechanism is explained in detail. This because users have indicated that resources
+about the meaning and usage of signals and slots are somehow hard to find in other 
+documentation. For non-english persons the translated version are available, offering easier access 
+than the originals.
+<P>Event handling covers the communication of an application. Withn that, we mean the interaction between different objects and between objects
+and the user. Beginners in particular have a hard time to learn the mechanisms underlying event handling. Many of the misconstructions found in beginners' code can be attributed to a lack of understanding of the Qt signals and slots framework. 
+<P>Signals and slots are formally not a part of event handling but are used during the
+event processing often and are a major reason why simple widget elements such as buttons 
+can be usd in such a simple way.
 <P>
 <P>
 <H3><A NAME="ss4.1">4.1 Signals and Slots</A>
 </H3>
 
-<P>This section covers the Qt mechanism of advanced object communication. In this context, objects are the instances of classes that are
+<P>This section covers the Qt concept of advanced object communication. 
+In this context objects are the instances of classes that are
 created during runtime by the application. The instances normally don't know about each other, but they have to communicate to allow
-method calls of other object's methods. The usual way for XWindow has been using virtual methods, but this lead to a very complex and
-not very safe way to solve this. The Qt library offers a far more better solution to this by a mechanism that is called signals and
-slots.
+method calls of other object's methods. The usual way for XWindow has been using function pointers, but this lead to very complex code. It also gives no opportunity for the compiler to check types (a function pointer is actually just a (void*) pointer).
+<P>The Qt library offers a far better solution to this by a mechanism that is called signals and slots.
 <P>Before going into the technical details, I'll explain the mechanism by a comparison to everyday-life. Imagine you have a bunch of
 people somewhere and someone looks into the sky. He sees a balloon and points with his finger to the balloon and says: "Hey, there's a
 balloon !". Now, what do other people do that are standing around him ?  One who is interested in balloons will look up as well and
 have a look at it, maybe take a picture with a camera. Others won't because they were never interested in balloons and don't want to
 know about it; they just ignore what was said.
-<P>With Signals and Slots, things are just the same, except that instead of people objects interact. Objects are instances of classes that
-send out a signal in a certain situation. Other objects might be interested in that kind of signal and react to it. While humans have
+<P>With Signals and Slots, things are just the same, except that instead of people objects interact. Objects are instances of classes that can
+send out a signal in a certain situation. Objects which are interested in that kind of signal react to it, others do not. While humans have
 the choice to react interactively, class objects can't because they have no ears. But they can provide a kind of ears that listen to
 signals that were sent out. Then, those special kind of ears have to be connected to the signal an object emits to provide the medium
 to transmit the message to the receiver. Any kind of ears that could react won't if they are not connected with the signal and
@@ -63,16 +64,16 @@ watch_out(){                        i_see_it(){
   }
 }
 
-connect (Person_1, SIGNAL( balloon_seen()), Person_2, SLOT(i_see_it()));
+connect (Person_1, SIGNAL(balloon_seen()), Person_2, SLOT(i_see_it()));
 </PRE>
 <HR>
-<P>This would be explaining more about the functionality. The class that builds Person_1 provides a signal balloon_seen(). Also it has a
+<P>This explains more about the functionality. The class that builds Person_1 provides a signal balloon_seen(). Also it has a
 method watch_out() that symbolizes that he watches for something. If this method detects that a balloon is there, it emits the signal
 and transmits the message to the outside of its responsibility. After the emit, Person_1 is not responsible for any actions that
 follow as a reaction to this signal; it just does the message invocation.
 <P>Now, the table contains the other persons Person_2 and Person_3. Both provide methods that are slots; Person_2 has one slot that is
-called i_see_it() and Person_3 a slot not_interested().  Those slots are just like any method with the difference that they can be
-connected to a signal and therefore build a receiver for the connection. They will execute the slot implementation when the object
+called i_see_it() and Person_3 a slot not_interested().  Those slots are just like any method with the difference that they can also be
+connected to a signal and build a receiver for the connection. They will execute the slot implementation when the object
 receives the signal message. In this case, we have a typical connection method at the last line. The connect() takes Person_1 as a
 signaler object. It connects the signal balloon_seen() that the object may send out when he sees a balloon with Person_2. Person_2 is
 then the receiver object. Now, the receiver has to do something with the signal; we have to tell him, which method to execute whenever
@@ -85,34 +86,33 @@ another connect though, just with Person_3 instead of Person_2 and the according
 <P>
 <H4>Requirements</H4>
 
-<P>This way of object communication is by default not provided by C++ - its a part of the Qt library that depends on the usage of certain
-classes either by inheritance of your own classes or by using the class that provides this functionality. Additionally, the signals and
-slots have to be declared as such in the class-declaration for two good reasons:
+<P>This way of object communication is not provided by C++; it is a part of the Qt library.
+<P>If you want to use Signals and
+slots they have to be declared as such in the class-declaration for two good reasons:
 <P>
 <OL>
-<LI>you know which signals and slots a class provides and the parameters</LI>
-<LI>the moc (Meta Object Compiler) of Qt can create the implementation for signals and slots automatically and include it to the
-compile process</LI>
+<LI>you know which signals and slots a class provides and the parameters they need</LI>
+<LI>the moc (Meta Object Compiler) of Qt can create the implementation for signals and slots automatically and include it to the compile process (since signals and slots are not part of the C++ standard, your C++ compiler wont do that)</LI>
 </OL>
-<P>Now, we're going into the details of the Qt library. To make use of the signal/slot mechanism, you have to:
+<P>Now, we're going into the details of the Qt library. To make use of the signal/slot mechanism, you <B>have</B> to:
 <P>
 <UL>
 <LI>inherit from <CODE>QObject</CODE> or any subclass of <CODE>QObject</CODE></LI>
 <LI>add the macro Q_OBJECT at the beginning of the class-declaration (<B>without a semicolon !</B>)</LI>
 <LI>run <B>moc</B> over the header file to produce an implementation file to be compiled</LI>
 </UL>
-<P>Normally, KDE and Qt applications constructed with automake and autoconf already contain a way to run moc automatically. This is done by
+<P>Normally, KDE and Qt applications constructed with automake and autoconf (amongst them all programs made with KDevelop) already run moc when necessary. This is done by
 the program <CODE>automoc</CODE>, which also does everything needed to create the meta object implementation for signals and slots as well as
 incorporating the correct headers for the implementation and the inclusion into the build-process. So you don't have to take care of
 updating any moc output files after changing header file implementations nor about the integration of the moc source file output into
 the project. Those will be automatically generated by detection of the Q_OBJECT macro in the class declaration.
-<P>Further, you should read yourself into the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
-on using signal and slot declarations within classes.
+<P>If you have further questions please read the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
+on using signals and slots.
 <P>
 <P>
-<H4>Emission of Signals</H4>
+<H4>Emitting Signals</H4>
 
-<P>This part now actually describes the several ways of signal emission. It is important to know where signals are emitted and for what
+<P>This part describes the several ways of signal emission. It is important to know where signals are emitted and for what
 purpose you would do so.
 <P>We separate two ways of signal usage, one which is the usual way through sub-classing <CODE>QObject</CODE>, and the other to use the
 <CODE>QSignal</CODE> class from within classes that don't want to inherit from <CODE>QObject</CODE> but want to use the signal emission features.
@@ -121,7 +121,7 @@ signal that a class object will emit has to be inserted in the class declaration
 <P>Example:
 <HR>
 <PRE>
-class Foo::public QObject{
+class Foo : public QObject{
   Q_OBJECT
 
 public:
@@ -134,9 +134,8 @@ signals:
 </PRE>
 <HR>
 
-This shows the insertion into the class-declaration and also shows that you can use signals to emit values as well. This is one of the
-best features and is widely used throughout KDE and Qt.
-<P>Now, this shows only one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
+This shows the insertion into the class declaration and also shows that you can use signals to emit values as well. This is one of the best features and is widely used throughout KDE and Qt.
+<P>Now, this shows one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
 <CODE>emit</CODE> in connection with the signal name and the transmitted actual parameters. The place where to emit is usually within a method
 that is processed and wants to inform about the state of the object by the signal to outside objects.
 <H4>Comment</H4>
@@ -176,20 +175,20 @@ happened, we have also included the exact information about where we have done t
 <LI>create the signal in the constructor with <B>new</B></LI>
 <LI>destroy the signal in the destructor with <B>delete</B></LI>
 <LI>implement the <CODE>connect()</CODE> method by calling <CODE>connect(receiver, member)</CODE> on the signal to emit</LI>
-<LI>add the emission at any place in your class code with <CODE>yoursignal->activate()</CODE></LI>
+<LI>emit the signal at any place in your class code with <CODE>yoursignal->activate()</CODE></LI>
 </OL>
 <P>
 <P>
 <H4>Slot Implementation</H4>
 
 <P>After explaining the ways of how to produce signals by objects, those can only be of important use if an application's classes provide
-slots that get connected with signals. The slot themselves are normal C++ class member functions, therefore can be called any place any
-time you need to, only depending on the access rights. They just have an additional feature that they can be called automatically
+slots that get connected with signals. The slots themselves are normal C++ class member functions and can therefore be called any place any
+time you need to, only depending on the class access rights. They just have an additional feature that they can be called automatically
 during runtime by their connected signals. The main difference is the declaration of the methods within the class:
 <P>
 <HR>
 <PRE>
-class Foo::public QObject{
+class Foo : public QObject{
   Q_OBJECT
 
 public:
@@ -216,7 +215,7 @@ the Qt online reference documentation, section <EM>The Meta Object Compiler</EM>
 
 <P>The last section of this chapter deals with connecting signals and slots. As stated in the Signals section, there are two ways to
 produce signals, and in the Slots section we saw that slots are methods which have modifiers as well.
-<P>When it comes to connecting them, you generally will use the static method of <CODE>QObject</CODE> to send a signal to a method:
+<P>When it comes to connecting signals and slots, you generally will use the static method of <CODE>QObject</CODE> to send a signal to a method:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
@@ -239,26 +238,26 @@ implementations that don't require using any transmitted parameter only have to 
 This avoids the unused parameter warnings you usually get when declaring formal parameters which aren't processed in the method. The
 slot methods itself can also have less parameters than the signal emits.
 <P>Also, signals can be forwarded. This means, you can use the <CODE>connect()</CODE> method to connect two signals, meaning that the sender's
-signal will cause the receiver to emit the connected signal. A signal can furthermore be connected to several slots, where the slot
-execution depends on the connection order.
+signal will cause the receiver to emit the connected signal.
+If several slots are connected to one signal, the slots will be ececuted one after the other, in an arbitrary order, when the signal is emitted. (Qt documentation: metaobjects.html)
 <P>
 <H3><A NAME="ss4.2">4.2 The Event Queue</A>
 </H3>
 
-<P>As the previous chapter dealt with the object communication by Qt's signal/slot mechanism, we know how an application can arrange
-a certain functionality. But this leaves out the events the user produces. Generally, he communicates with an
+<P>The previous chapter dealt with the object communication by Qt's signal/slot mechanism and we know how an application can arrange
+a certain functionality. 
+But we have not yet discussed the events produced by the user. Generally, he communicates with an
 application by the keyboard and the mouse. When running an application under XWindow, the X11 protocol ensures that the right
-application is called to process the events - so only the application object receives the event and therefore has to provide means to
+application is called to process the events. Only the application object receives the event and can provide means to
 handle them. This is called event handling. The application object therefore has to keep an event queue when initialized where events
 run into and get processed to the right application window. The application itself is running in a so-called <CODE>main event loop</CODE>,
 which indicates that it waits for user interaction until the user quits the application either via the <CODE>quit()</CODE> slot or by calling
 <CODE>exit()</CODE>. The <CODE>exit()</CODE> function also returns the value to the main() function's call of <CODE>exec()</CODE> to terminate. If the number
-<CODE>exit()</CODE> is called with is higher than 0, errors occurred. The <CODE>exec()</CODE> function call in <CODE>main()</CODE> also starts the event
-handling.
-<P>The event handling executes fetching the window system events it claims responsible to process. Usually this means that the event queue
-fills up with events the user releases and which are processed to the application object. By the <CODE>QEvent</CODE> class, all events are
-translated into Qt events which can therefore be handled much easier.
-<P>The translated event is then processed by <CODE>QApplication</CODE>'s <CODE>notify()</CODE> function. This sends all receivers that are derived from
+<CODE>exit()</CODE> is called with is higher than 0, an error has occurred. The <CODE>exec()</CODE> function call in <CODE>main()</CODE> starts the event handling.
+<P>X11 event handling starts by defining the events the window is willing to process. All other
+events are already filtered out. The events which are selected, go into the event queue and
+wait to be processed. Typical events include the XExposeEvent, XDestroyWindowEvent and XResizeRequestEvent. All these events have to be handled by the application. Fortunately (for you) Qt takes care of most of the event processing. This is done using the <CODE>QEvent</CODE> class; the Qt event abstraction.
+<P>This QEvent is then processed by <CODE>QApplication</CODE>'s <CODE>notify()</CODE> function. This sends all receivers which are derived from
 <CODE>QObject</CODE> and are part of the application the according event with <CODE>receiver->event(QEvent* event)</CODE>. The application objects
 therefore get notified about any event that happened and can process the event via the re-implemented <CODE>event()</CODE> method of
 <CODE>QObject</CODE> if needed. <CODE>QObject</CODE> also allows a self-created event filter functionality by installing an event filter on the
@@ -269,9 +268,8 @@ know that the object didn't sign responsible for the event. If the event was suc
 <P>
 <H4>Processing Events</H4>
 
-<P>Now, Qt and KDE applications will use a graphical interface to make themselves visible. A window of the application on the other hand
-has to be derived from <CODE>QWidget</CODE>, as this is the baseclass for any graphical object drawn in windows. Independent of how the widget
-is created, the application object notices all widgets that are created and keeps a list of these. Further, the windows can have
+<P>Qt and KDE applications use a graphical interface to make themselves visible to the user. Application windows are deived from <CODE>QWidget</CODE>, the baseclass for any graphical object drawn in windows. Independent of how the widget
+is created, the application object notices all widgets that are created and keeps a list of these. Furthermore, the windows can have
 several states dependent on how they are created.
 <P>The <CODE>QWidget</CODE> class is most important to understand because it re-implements the <CODE>event()</CODE> method already to transform the
 incoming event to some commonly occurring events, e.g. a mouse event, and creates appropriate filter event functions which are easier
@@ -299,7 +297,7 @@ towards the application object.
 widget of course. If it has, and the main widget gets closed, the application terminates automatically by calling <CODE>quit()</CODE>.
 The <CODE>QApplication</CODE> method <CODE>mainWidget()</CODE> returns the pointer to the main widget.
 </LI>
-<LI><B>top widget:</B> a top widget is a widget which has 0 as its parent. All other widgets that have non-zero parents are
+<LI><B>top widget:</B> a top widget is a widget which has no parent. All widgets that have non-zero parents are
 sub-widgets of the parent. The list of top level widgets can be found with <CODE>QApplication::topLevelWidgets()</CODE>. If an application
 doesn't have a main widget but only top widgets, connect <CODE>quit()</CODE> to <CODE>QApplication::lastWindowClosed()</CODE> to terminate the
 application, otherwise the application object will still exist even if all windows are closed. The application finds the currently
@@ -401,7 +399,7 @@ window on the desktop. This window can be manipulated by the user through action
 <P>These are incoming events that are sent to the application. The event type is determined by <CODE>QWidget</CODE>'s <CODE>event()</CODE>
 re-implementation and converted to the according event class that provides methods to handle the event specifically. Now, when you have a
 look at the <CODE>QWidget</CODE> class, a lot of methods are provided for window manipulation, e.g. <CODE>resize()</CODE>. You're using these methods,
-but I guess you never thought about their way of execution. In effect, these methods work the other way round: they produce an event
+but you probably never thought about their way of execution. In effect, these methods work the other way round: they produce an event
 that is sent to the display by <CODE>qt_</CODE> functions to execute actions like simulating a user action. This way, events can also be
 produced to gain synthetic events ( see below ).
 <P>Within a window, the widgets are arranged somehow. As each widget is treated like a separate window internally (it always is a
@@ -695,11 +693,14 @@ The event handlers are all implemented as public and reimplementations should pr
 Qt implementation. It causes a <CODE>QDragResponseEvent</CODE> that accepts/rejects the drag action.
 <P>
 <H4>Comment</H4>
-KDE 1.x also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has
-been left out because this will be removed in KDE 2 and only the Qt 2.0 implementation is going to be used with an extended
-implementation of the XDND protocol. You should use the Qt drag'n drop functionality as this can be ported easily to Qt 2.0
-and KDE 2 without any major problems.
+KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
+left out because this will be removed in KDE 2 and only the Qt implementation is going to be used with an extended implementation of
+the XDND protocol.
 <P>
+<H4>Comment</H4>
+There exists a zoo of DND protocols. At the moment of writing, the Qt DND protocol does
+<EM>not</EM> support the Motif DND protocol (as used by for instance Netscape and GNOME).
+Please be aware of this if you reimplement the Qt DND functions.
 <P>
 <P>
 <H3><A NAME="ss4.3">4.3 QWidget Virtual Methods</A>
@@ -708,7 +709,7 @@ and KDE 2 without any major problems.
 <P>
 <P>As the event handling generally is implemented by virtual protected methods, especially the <CODE>event()</CODE> method provided by
 <CODE>QObject</CODE>, the <CODE>QWidget</CODE> class reimplements this function in order to sort out the incoming event and convert it to other event
-types that can be handled by more specialized classes. Further, it calls the provided additional virtual methods by default
+types that can be handled by more specialized classes. Furthermore, it calls the provided additional virtual methods by default
 implementations. The programmer has a good advantage by this pre-selection of events as the widgets he creates are all derived from
 <CODE>QWidget</CODE> and therefore will need one or more special event handler implementation. The most common events that are processed are
 mouse events and for text input mostly keyboard events. The other events mostly deal with focus handling, which moves on the keyboard
@@ -783,7 +784,7 @@ program internally), call repaint() here.
 
 <P>In addition to the normal processing of the event queue that is provided by the application object, the programmer can influence the
 default behavior by installing event filters. As explained above, all <CODE>QObject</CODE> inherited classes use event processing through the
-<CODE>event()</CODE> method. Instead of writing a completely new event handling in situations where you only need some events processed by your
+<CODE>event()</CODE> method. Instead of writing a completely new event handler in situations where you only need some events processed by your
 own methods, you should write an event filter. The event filter gets installed where you like to and filters out the event directly
 when <CODE>QObject::event()</CODE> is called internally.
 <P>To write an event filter, your class has to overwrite the <CODE>QObject::eventFilter()</CODE> method and call <CODE>installEventFilter()</CODE> as
@@ -847,7 +848,7 @@ KDebug
 <H3><A NAME="ss4.5">4.5 Synthetic Events</A>
 </H3>
 
-<P>Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections in brief.
+<P>Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections briefly.
 <P>We saw that the application object receives the window system events, processes them and creates event objects from the classes the
 library provides. The converted event can then be handled by event handlers that are specialized on the event class to retrieve further
 information about the event. Finally, we can influence the event handling itself by installing event filters and overwriting provided
@@ -966,12 +967,13 @@ knowledge about application behavior.
 <UL>
 <LI>An application can communicate internally by signals and slots</LI>
 <LI>Signals are sent out without caring about who will catch it</LI>
-<LI>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access
-attribute</LI>
+<LI>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access attribute</LI>
+<LI>Slots cannot have default arguments</LI>
+<LI>Slots return void</LI>
 <LI>The user communicates with the application through the window system</LI>
 <LI>The window system reports the events to the application</LI>
 <LI>The application converts window system events to <CODE>QEvent</CODE>s</LI>
-<LI>The events are proceeded through an eventual application global event filter</LI>
+<LI>The events are processed through an optional application global event filter</LI>
 <LI>The event that passes the filter gets forwarded to the according window e.g. the current modal window</LI>
 <LI>The widget receives the event and can have an event filter that comes first when the reimplemented <CODE>QObject::event()</CODE> is
 called.</LI>

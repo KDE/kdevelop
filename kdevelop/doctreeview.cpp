@@ -219,7 +219,7 @@ void DocTreeKDevelopFolder::refresh()
     ListViewFolderItem::refresh();
 
     (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
-                                   "manual/index.html", true);
+                                   "index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
                                    "programming/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),

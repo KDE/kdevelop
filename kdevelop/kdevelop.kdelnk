@@ -2,15 +2,15 @@
 [KDE Desktop Entry]
 BinaryPattern=kdevelop;
 Type=Application
-Exec=kdevelop
+Exec=kdevelop %i %m -caption %c
 MimeType=application/x-kdevelop-project;
 Icon=kdevelop.xpm
-MiniIcon=mini-kdevelop.xpm
+MiniIcon=kdevelop.xpm
 DocPath=kdevelop/index.html
+Terminal=0
+Name=KDevelop 1.0 Beta 1
+Name[de]=KDevelop 1.0 Beta 1
+Name[fr]=KDevelop 1.0 Beta 1
 Comment=An Integrated Development Environment for C++/Qt/KDE
 Comment[de]=Eine Entwicklungsumgebung für KDE
 Comment[fr]=Un Environnement de Développement Intégré pour C++/Qt/KDE
-Terminal=0
-Name=KDevelop 0.4
-Name[de]=KDevelop 0.4
-Name[fr]=KDevelop 0.4

@@ -10,6 +10,7 @@ DocPath=kdevelop/index.html
 Comment=KDevelop Setup
 Comment[fr]=Configuration de KDevelop
 Terminal=0
-Name=Setup
-Name[de]=Setup
-Name[fr]=Configuration
+Name=KDevelop Setup
+Name[de]=KDevelop Setup
+Name[fr]=KDevelop Configuration
+

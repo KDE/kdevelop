@@ -1,6 +1,6 @@
 EXTRA_DIST = tip.database
 
-SUBDIRS = . manual
+SUBDIRS = manual
 		
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/pt/kdevelop/

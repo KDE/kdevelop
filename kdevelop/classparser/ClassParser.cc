@@ -15,10 +15,12 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+// 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
 
 #include <iostream.h>
 #include <qregexp.h> 
 #include <assert.h>
+#include <kapp.h>
 #include "ClassParser.h"
 
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
@@ -1382,6 +1384,7 @@ void CClassParser::parseToplevel()
     else
       parseTopLevelLexem();
 
+    kapp->processEvents();  // Jonas: added this here to process pending events as mentioned
     getNextLexem();
   }
 }

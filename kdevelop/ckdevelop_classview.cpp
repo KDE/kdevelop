@@ -696,3 +696,8 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
       methodCombo->setCurrentItem( i );
   }
 }
+
+
+
+
+

@@ -7,8 +7,8 @@
 <inst>The KDevelop Team
 <date>Version 0.2 , Mon July 7, 1999
 <abstract>
-This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
-Public License; see <ref id="Copyright" name="Copyright"> for more information.
+This handbook is part of the KDevelop Integrated Development Environment and is also licensed under the GNU General
+Public License; see Chapter <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
 
 <toc>
@@ -17,11 +17,11 @@ Public License; see <ref id="Copyright" name="Copyright"> for more information.
 <p>
 <sect>What KDE provides
 <p>
-As the K Desktop Environment offers an easy way for application designers to offer their products with an intuitive way of user
-interaction, it provides all means to solve common tasks by a set of library classes that extend the facilities of the Qt toolkit.
-This also allows a unique look to applications as well as interaction with other programs and the window manager. This handbook
-therefore intends to provide an introduction into the usage of the KDE libraries that ship with the KDE to enable developers to find
-easy solutions for common programming issues and explains why certain techniques and classes should be used when creating applications
+The K Desktop Environment offers an easy way for application designers to equip their products with an intuitive way of user
+interaction. It provides all means to solve common tasks using a set of library classes that extend the facilities of the Qt toolkit.
+This allows for a unique look and feel to applications as well as interaction with other programs and the window manager. This handbook
+provides an introduction to the usage of the KDE libraries, shipped with KDE, to enable developers to find
+easy solutions for common programming issues. It also explains why certain techniques and classes should be used when creating applications
 that are targeting the K Desktop Environment.
 
 Basically, KDE offers a set of standards that allow a unique look and usage of applications that should be watched when designing
@@ -40,7 +40,7 @@ care about what their program is intended to do and where KDE can help. There, K
 where necessary. If both libraries offer similar solutions, KDE developers should (in most cases) use the methods provided by the KDE
 libraries.
 
-Here, KDE offers a set of widgets that can be used for creating application specific dialogs and views. Examples are
+KDE offers a set of widgets that can be used for creating application specific dialogs and views. Examples are
 <itemize>
 <item>KSeparator, offering a common separator line
 <item>KColorButton, offering a push button displaying a color
@@ -96,7 +96,7 @@ on topics.
 <chapt>Class Categories
 <p>
 The KDE/Qt C++ class libraries offer easy solutions to extend applications dramatically with a minimum amount of coding on the side of
-the application programmer. This chapter therefore sorts the classes provided towards their usage by certain categories:
+the application programmer. This chapter sorts the classes provided towards their usage by certain categories:
 
 <itemize>
 <item>Baseclass
@@ -143,9 +143,10 @@ create a KDE application either by creating a class instance or by inheritance. 
 
 <sect1>Application objects of KDE
 <p>
-The K Desktop Environment provides a set of functionality that an application can use to integrate into the KDE. The class
-<tt/KApplication/ therefore is the baseclass for any application that targets KDE. A KDE application only contains one object of the
-class <tt/KApplication/ that is created in the application's <tt/main()/ function. The <tt/KApplication/ object is responsible for
+The K Desktop Environment provides functionality that an application can use to integrate into the KDE. This functionality
+is implemented in the class
+<tt/KApplication/ and should therefore be the baseclass for any application that targets KDE. A KDE application only contains one object of the
+class <tt/KApplication/. This is created in the application's <tt/main()/ function. The <tt/KApplication/ object is responsible for
 providing the basic interfaces and objects towards the desktop and interprets the command-line arguments of an application. As the
 instance is a non-visible, but the main application object, the following rules have to be watched:
 
@@ -346,7 +347,8 @@ of Qt. Those are:
 <item><tt/KFilePreviewDialog/
 </itemize>
 
-For loading and saving files, use the class <tt/QFile/ which operates with streams.
+For loading and saving files, use the class <tt/QFile/ which operates with streams. If you want network transparent
+file access, consider using <tt/KFile/.
 
 <sect1>Data Objects
 <p>
@@ -371,7 +373,7 @@ terminated or ended. See <tt/KProcess/ for details.
 <chapt>Classes of KDE Applications
 <p>
 The KDE libraries, in conjunction with the Qt library, are providing developers a complete framework for application design. As KDE is
-targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11-
+targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11 -
 but as the libraries are already encapsulating the complex graphics subsystem, you don't have to know about that in most cases. If
 you're already familiar with Qt, KDE won't make too much difference in regards of using classes and widgets.
 
@@ -381,6 +383,7 @@ Beginners, on the other hand, have a lot of problems in the sections of
 <item>Application design with GUI components
 <item>Application parts
 <item>Widget construction
+<item>Inter-widget communication (Signals and slots)
 </itemize>
 
 The following will help you to understand, where you will generally find classes used in KDE applications, including the according
@@ -409,8 +412,8 @@ For information about Qt application design, see the Qt online reference documen
 <sect>The Application Instance
 <p>
 
-Generally, a KDE application has to be started with creating an instance (and only one!) of the class <tt/KApplication/, which is
-provided by the <tt/kdecore/ library. The class <tt/KApplication/ itself is derived from the according Qt class <tt/QApplication/.
+Generally, a KDE application has to be started by creating an instance (and only one!) of the class <tt/KApplication/, which is
+provided by the <tt/kdecore/ library. The class <tt/KApplication/ is derived from the according Qt class <tt/QApplication/.
 
 What happens exactly is that <tt/QApplication/ manages the application event queue, which means it processes events from the underlying
 window system to its child objects, such as mouse movements or keyboard events. This is also the reason, why only one instance of
@@ -450,7 +453,7 @@ charset. Retrieve the charsets instance with <tt/kapp->getCharsets()/.<footnote>
 </descrip>
 <p>
 
-Further, the KApplication class provides you with the needed methods to access the KDE File System Standard. This will prevent you from
+Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard. This will prevent you from
 problems that will always occur when hard-coding any directories into the code (see <htmlurl url="programming.html" name="The KDevelop
 Programming Handbook"> for information about the KDE-FSS). The class also provides the needed access for the application icon and mini
 icon, current KDE fonts and session management support.
@@ -467,12 +470,12 @@ strings into an application message file that then can be translated.
 At least, the <tt/KApplication/ already constructs a help menu that can be inserted into a menu bar the application may contain with a
 predefined (can be turned on/off) KDE hint dialog and your application's about dialog.
 
-You should notice that <tt/KApplication/ has to be lead with:
+The following advice should be taken into account when dealing with the <tt/KApplication/ class:
 
 <itemize>
-<item>creating the <tt/KApplication/ object at the beginning of the <tt/main()/ function
-<item>executing the application with <tt/exec()/ at the end of the <tt/main()/ function
-<item>terminating the application with calling the <tt/quit()/ slot function.
+<item>create the <tt/KApplication/ object at the beginning of the <tt/main()/ function
+<item>execute the application with <tt/exec()/ at the end of the <tt/main()/ function
+<item>terminate the application with calling the <tt/quit()/ slot function.
 </itemize>
 
 Using <tt/KApplication/, you are able to catch the following event signals:
@@ -495,24 +498,24 @@ You will be able to communicate with the KWM window manager as well by the accor
 <sect>Commandline Argument Processing
 <p>
 
-Finally, an application usually wants to process commandline options. Those are entered by the user if he started the application from
-a console for the reason to either start it non-graphically for any processing reasons the application may be capable to execute or to
-start the application with a file. This is also important to interact with filemanagers that can include your application to the list
-of those that open a mime-type automatically when called with a filename. The <tt/main()/ function therefore is constructed with the
-declaration
+An application usually wants to be able to process command line options. Those are entered by the user if he started the application from
+a console or from within a kdelnk file. Command line options are very often used to start an application with a certain file.
+This also enables  filemanagers to call your application properly and use the mime-type mechanism included in KDE.
+ To be able to process command line options,  the <tt/main()/ function should be constructed with the declaration
 
 <tscreen><verb>
 int main(int argc(), const char* argv[])
 </verb></tscreen>
 
-Thereby, <tt/argc()/ is the number of commandline options and the array <tt/argv[]/ actually contains the commandline option's texts.
+Here, <tt/argc()/ is the number of commandline options and the array <tt/argv[]/ actually contains the commandline option's texts.
 As the <tt/QApplication/ constructor is executed before the <tt/KApplication/, it is sufficient to know what is processed by possible
 options first. The already read options are automatically removed from the array and cannot be read after the <tt/KApplication/
 instance is declared:
 
 (taken from the Qt 1.42 online reference of <tt/QApplication/)
 <itemize>
-<item><bf/-nograb/, tells Qt to never grab the mouse or the keyboard.
+<item><bf/-nograb/, tells Qt to never grab the mouse or the keyboard. (If you are running your program
+in a debugger, this option is automatically enabled).
 <item><bf/-sync/ (only under X11), switches to synchronous mode for debugging.
 <item><bf/-display/ display, sets the X display (default is $DISPLAY).
 <item><bf/-geometry/ geometry, sets the client geometry of the main widget.
@@ -522,7 +525,8 @@ calculated).
 <item><bf/-fg/ or -foreground color, sets the default foreground color.
 <item><bf/-name/ name, sets the application name.
 <item><bf/-title/ title, sets the application title (caption).
-<item><bf/-style=/ style, sets the application GUI style. Possible values are motif and windows
+<item><bf/-style=/ style, sets the application GUI style. Possible values are motif and windows. By default, the global
+KDE style setting is used.
 <item><bf/-visual/ TrueColor, forces the application to use a TrueColor visual on an 8-bit display.
 <item><bf/-ncols/ count, limits the number of colors allocated in the color cube on a 8-bit display, if the application is using the
 QApplication::ManyColor color specification. If count is 216 then a 6x6x6 color cube is used (ie. 6 levels of red, 6 of green, and 6 of
@@ -606,7 +610,7 @@ widgets (visible user interfaces) except the about dialog similar to the <tt/QAp
 anywhere. Therefore, any application needs a top-widget to make itself visible.
 
 When it comes to the visible parts, the programmer generally is free to choose which widget he wants to derive from or use directly as
-his main window. It can be a simple <tt/QLabel/ as well as the improved <tt/KTMainWindow/ that supplies all needed objects for a usual
+his main window. It can be a simple <tt/QLabel/ as well as the advanced <tt/KTMainWindow/ that supplies all needed objects for a usual
 desktop application.
 
 <sect1>General Rules
@@ -621,7 +625,7 @@ close button of the window to exit the window. He expects the application to be 
 you have to call the QApplication slot <tt/quit()/. You could do this in a derived class by a re-implementation of
 <tt/QWidget::closeEvent()/, but with the method <tt/setMainWidget()/ this is already done. Now, in any case of using widgets with
 <tt/KApplication/, things are almost the same with the difference that the according method of KDE is <tt/setTopWidget()/.
-The only exception is when using the class <tt/KTMainWindow/ who automatically does this in its constructor (if there is no other
+The only exception is when using the class <tt/KTMainWindow/ which automatically does this in its constructor (if there is no other
 topwidget).
 
 <sect1>Using KTMainWindow
@@ -643,24 +647,27 @@ have to take care of that to re-implement an application specific instance for y
 
 <chapt>Event Handling
 <p>
-This chapter has a major meaning for those that want to have a better insight into the internals of KDE and Qt programming as well as
-explaining details of event handling in general. Additionally, the Signals and Slots mechanism is explained in detail as resources
-about the meaning and usage of signals and slots are somehow hard to find in other documentation as known from users; also the
-translated version allows non-english beginners a better understanding than originals.
+This chapter will illuminate some of the internals of KDE/Qt programming, and will dive into the fascinating subject of event handling as well. It is meant for people who feel they need deeper insight to the more advanced topics of Qt based programming. In particular the Signals and Slots mechanism is explained in detail. This because users have indicated that resources
+about the meaning and usage of signals and slots are somehow hard to find in other 
+documentation. For non-english persons the translated version are available, offering easier access 
+ than the originals.
 
-Event handling therefore covers the communication of an application here - the communication between the objects and between objects
-and the user. Especially beginners have a hard time to work themselves into the event processing and many misconstructions only appear
-because of a lack of knowledge. The signals and slots are originally not a part of event handling on themselves but are used during the
-event processing often and are a major reason why simple widget elements such as buttons don't have to be inherited by the programmer.
+Event handling covers the communication of an application. Withn that, we mean the interaction between different objects and between objects
+and the user. Beginners in particular have a hard time to learn the mechanisms underlying event handling. Many of the misconstructions found in beginners' code can be attributed to a lack of understanding of the Qt signals and slots framework. 
+
+Signals and slots are formally not a part of event handling but are used during the
+event processing often and are a major reason why simple widget elements such as buttons 
+can be usd in such a simple way.
 
 
 <sect>Signals and Slots
 <p>
-This section covers the Qt mechanism of advanced object communication. In this context, objects are the instances of classes that are
+This section covers the Qt concept of advanced object communication. 
+In this context objects are the instances of classes that are
 created during runtime by the application. The instances normally don't know about each other, but they have to communicate to allow
-method calls of other object's methods. The usual way for XWindow has been using virtual methods, but this lead to a very complex and
-not very safe way to solve this. The Qt library offers a far more better solution to this by a mechanism that is called signals and
-slots.
+method calls of other object's methods. The usual way for XWindow has been using function pointers, but this lead to very complex code. It also gives no opportunity for the compiler to check types (a function pointer is actually just a (void*) pointer).
+
+The Qt library offers a far better solution to this by a mechanism that is called signals and slots.
 
 Before going into the technical details, I'll explain the mechanism by a comparison to everyday-life. Imagine you have a bunch of
 people somewhere and someone looks into the sky. He sees a balloon and points with his finger to the balloon and says: "Hey, there's a
@@ -668,8 +675,8 @@ balloon !". Now, what do other people do that are standing around him ?  One who
 have a look at it, maybe take a picture with a camera. Others won't because they were never interested in balloons and don't want to
 know about it; they just ignore what was said.
 
-With Signals and Slots, things are just the same, except that instead of people objects interact. Objects are instances of classes that
-send out a signal in a certain situation. Other objects might be interested in that kind of signal and react to it. While humans have
+With Signals and Slots, things are just the same, except that instead of people objects interact. Objects are instances of classes that can
+send out a signal in a certain situation. Objects which are interested in that kind of signal react to it, others do not. While humans have
 the choice to react interactively, class objects can't because they have no ears. But they can provide a kind of ears that listen to
 signals that were sent out. Then, those special kind of ears have to be connected to the signal an object emits to provide the medium
 to transmit the message to the receiver. Any kind of ears that could react won't if they are not connected with the signal and
@@ -688,17 +695,17 @@ watch_out(){                        i_see_it(){
   }
 }
 
-connect (Person_1, SIGNAL( balloon_seen()), Person_2, SLOT(i_see_it()));
+connect (Person_1, SIGNAL(balloon_seen()), Person_2, SLOT(i_see_it()));
 </code>
 
-This would be explaining more about the functionality. The class that builds Person_1 provides a signal balloon_seen(). Also it has a
+This explains more about the functionality. The class that builds Person_1 provides a signal balloon_seen(). Also it has a
 method watch_out() that symbolizes that he watches for something. If this method detects that a balloon is there, it emits the signal
 and transmits the message to the outside of its responsibility. After the emit, Person_1 is not responsible for any actions that
 follow as a reaction to this signal; it just does the message invocation.
 
 Now, the table contains the other persons Person_2 and Person_3. Both provide methods that are slots; Person_2 has one slot that is
-called i_see_it() and Person_3 a slot not_interested().  Those slots are just like any method with the difference that they can be
-connected to a signal and therefore build a receiver for the connection. They will execute the slot implementation when the object
+called i_see_it() and Person_3 a slot not_interested().  Those slots are just like any method with the difference that they can also be
+connected to a signal and build a receiver for the connection. They will execute the slot implementation when the object
 receives the signal message. In this case, we have a typical connection method at the last line. The connect() takes Person_1 as a
 signaler object. It connects the signal balloon_seen() that the object may send out when he sees a balloon with Person_2. Person_2 is
 then the receiver object. Now, the receiver has to do something with the signal; we have to tell him, which method to execute whenever
@@ -712,17 +719,17 @@ another connect though, just with Person_3 instead of Person_2 and the according
 
 <sect1>Requirements
 <p>
-This way of object communication is by default not provided by C++ - its a part of the Qt library that depends on the usage of certain
-classes either by inheritance of your own classes or by using the class that provides this functionality. Additionally, the signals and
-slots have to be declared as such in the class-declaration for two good reasons:
+This way of object communication is not provided by C++; it is a part of the Qt library.
+
+If you want to use Signals and
+slots they have to be declared as such in the class-declaration for two good reasons:
 
 <enum>
-<item>you know which signals and slots a class provides and the parameters
-<item>the moc (Meta Object Compiler) of Qt can create the implementation for signals and slots automatically and include it to the
-compile process
+<item>you know which signals and slots a class provides and the parameters they need
+<item>the moc (Meta Object Compiler) of Qt can create the implementation for signals and slots automatically and include it to the compile process (since signals and slots are not part of the C++ standard, your C++ compiler wont do that)
 </enum>
 
-Now, we're going into the details of the Qt library. To make use of the signal/slot mechanism, you have to:
+Now, we're going into the details of the Qt library. To make use of the signal/slot mechanism, you <bf/have/ to:
 
 <itemize>
 <item>inherit from <tt/QObject/ or any subclass of <tt/QObject/
@@ -730,19 +737,19 @@ Now, we're going into the details of the Qt library. To make use of the signal/s
 <item>run <bf/moc/ over the header file to produce an implementation file to be compiled
 </itemize>
 
-Normally, KDE and Qt applications constructed with automake and autoconf already contain a way to run moc automatically. This is done by
+Normally, KDE and Qt applications constructed with automake and autoconf (amongst them all programs made with KDevelop) already run moc when necessary. This is done by
 the program <tt/automoc/, which also does everything needed to create the meta object implementation for signals and slots as well as
 incorporating the correct headers for the implementation and the inclusion into the build-process. So you don't have to take care of
 updating any moc output files after changing header file implementations nor about the integration of the moc source file output into
 the project. Those will be automatically generated by detection of the Q_OBJECT macro in the class declaration.
 
-Further, you should read yourself into the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
-on using signal and slot declarations within classes.
+If you have further questions please read the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
+on using signals and slots.
 
 
-<sect1>Emission of Signals
+<sect1>Emitting Signals
 <p>
-This part now actually describes the several ways of signal emission. It is important to know where signals are emitted and for what
+This part describes the several ways of signal emission. It is important to know where signals are emitted and for what
 purpose you would do so.
 
 We separate two ways of signal usage, one which is the usual way through sub-classing <tt/QObject/, and the other to use the
@@ -753,7 +760,7 @@ signal that a class object will emit has to be inserted in the class declaration
 
 Example:
 <code>
-class Foo::public QObject{
+class Foo : public QObject{
   Q_OBJECT
 
 public:
@@ -764,10 +771,9 @@ signals:
   void myParameterSignal(int, int);
 };
 </code>
-This shows the insertion into the class-declaration and also shows that you can use signals to emit values as well. This is one of the
-best features and is widely used throughout KDE and Qt.
+This shows the insertion into the class declaration and also shows that you can use signals to emit values as well. This is one of the best features and is widely used throughout KDE and Qt.
 
-Now, this shows only one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
+Now, this shows one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
 <tt/emit/ in connection with the signal name and the transmitted actual parameters. The place where to emit is usually within a method
 that is processed and wants to inform about the state of the object by the signal to outside objects.
 <comment>The keyword <tt/emit/ is technically only an empty #define, therefore the C++ -compiler only sees a normal method call. The
@@ -808,19 +814,19 @@ To use <tt/QSignal/, write a normal C++ class. Then add the following:
 <item>create the signal in the constructor with <bf/new/
 <item>destroy the signal in the destructor with <bf/delete/
 <item>implement the <tt/connect()/ method by calling <tt/connect(receiver, member)/ on the signal to emit
-<item>add the emission at any place in your class code with <tt/yoursignal->activate()/
+<item>emit the signal at any place in your class code with <tt/yoursignal->activate()/
 </enum>
 
 
 <sect1>Slot Implementation
 <p>
 After explaining the ways of how to produce signals by objects, those can only be of important use if an application's classes provide
-slots that get connected with signals. The slot themselves are normal C++ class member functions, therefore can be called any place any
-time you need to, only depending on the access rights. They just have an additional feature that they can be called automatically
+slots that get connected with signals. The slots themselves are normal C++ class member functions and can therefore be called any place any
+time you need to, only depending on the class access rights. They just have an additional feature that they can be called automatically
 during runtime by their connected signals. The main difference is the declaration of the methods within the class:
 
 <code>
-class Foo::public QObject{
+class Foo : public QObject{
   Q_OBJECT
 
 public:
@@ -848,7 +854,7 @@ the Qt online reference documentation, section <em/The Meta Object Compiler/.</f
 The last section of this chapter deals with connecting signals and slots. As stated in the Signals section, there are two ways to
 produce signals, and in the Slots section we saw that slots are methods which have modifiers as well.
 
-When it comes to connecting them, you generally will use the static method of <tt/QObject/ to send a signal to a method:
+When it comes to connecting signals and slots, you generally will use the static method of <tt/QObject/ to send a signal to a method:
 
 <tscreen><verb>
 bool connect(const QObject* sender, const char* signal,
@@ -872,27 +878,27 @@ This avoids the unused parameter warnings you usually get when declaring formal 
 slot methods itself can also have less parameters than the signal emits.
 
 Also, signals can be forwarded. This means, you can use the <tt/connect()/ method to connect two signals, meaning that the sender's
-signal will cause the receiver to emit the connected signal. A signal can furthermore be connected to several slots, where the slot
-execution depends on the connection order.
+signal will cause the receiver to emit the connected signal.
+If several slots are connected to one signal, the slots will be ececuted one after the other, in an arbitrary order, when the signal is emitted. (Qt documentation: metaobjects.html)
 
 <sect>The Event Queue
 <p>
-As the previous chapter dealt with the object communication by Qt's signal/slot mechanism, we know how an application can arrange
-a certain functionality. But this leaves out the events the user produces. Generally, he communicates with an
+The previous chapter dealt with the object communication by Qt's signal/slot mechanism and we know how an application can arrange
+a certain functionality. 
+But we have not yet discussed the events produced by the user. Generally, he communicates with an
 application by the keyboard and the mouse. When running an application under XWindow, the X11 protocol ensures that the right
-application is called to process the events - so only the application object receives the event and therefore has to provide means to
+application is called to process the events. Only the application object receives the event and can provide means to
 handle them. This is called event handling. The application object therefore has to keep an event queue when initialized where events
 run into and get processed to the right application window. The application itself is running in a so-called <tt/main event loop/,
 which indicates that it waits for user interaction until the user quits the application either via the <tt/quit()/ slot or by calling
 <tt/exit()/. The <tt/exit()/ function also returns the value to the main() function's call of <tt/exec()/ to terminate. If the number
-<tt/exit()/ is called with is higher than 0, errors occurred. The <tt/exec()/ function call in <tt/main()/ also starts the event
-handling.
+<tt/exit()/ is called with is higher than 0, an error has occurred. The <tt/exec()/ function call in <tt/main()/ starts the event handling.
 
-The event handling executes fetching the window system events it claims responsible to process. Usually this means that the event queue
-fills up with events the user releases and which are processed to the application object. By the <tt/QEvent/ class, all events are
-translated into Qt events which can therefore be handled much easier.
+X11 event handling starts by defining the events the window is willing to process. All other
+events are already filtered out. The events which are selected, go into the event queue and
+wait to be processed. Typical events include the XExposeEvent, XDestroyWindowEvent and XResizeRequestEvent. All these events have to be handled by the application. Fortunately (for you) Qt takes care of most of the event processing. This is done using the <tt/QEvent/ class; the Qt event abstraction.
 
-The translated event is then processed by <tt/QApplication/'s <tt/notify()/ function. This sends all receivers that are derived from
+This QEvent is then processed by <tt/QApplication/'s <tt/notify()/ function. This sends all receivers which are derived from
 <tt/QObject/ and are part of the application the according event with <tt/receiver->event(QEvent* event)/. The application objects
 therefore get notified about any event that happened and can process the event via the re-implemented <tt/event()/ method of
 <tt/QObject/ if needed. <tt/QObject/ also allows a self-created event filter functionality by installing an event filter on the
@@ -903,9 +909,8 @@ know that the object didn't sign responsible for the event. If the event was suc
 
 <sect1>Processing Events
 <p>
-Now, Qt and KDE applications will use a graphical interface to make themselves visible. A window of the application on the other hand
-has to be derived from <tt/QWidget/, as this is the baseclass for any graphical object drawn in windows. Independent of how the widget
-is created, the application object notices all widgets that are created and keeps a list of these. Further, the windows can have
+Qt and KDE applications use a graphical interface to make themselves visible to the user. Application windows are deived from <tt/QWidget/, the baseclass for any graphical object drawn in windows. Independent of how the widget
+is created, the application object notices all widgets that are created and keeps a list of these. Furthermore, the windows can have
 several states dependent on how they are created.
 
 The <tt/QWidget/ class is most important to understand because it re-implements the <tt/event()/ method already to transform the
@@ -938,7 +943,7 @@ The specialized behavior of the widgets depending on their creation is then:
 widget of course. If it has, and the main widget gets closed, the application terminates automatically by calling <tt/quit()/.
 The <tt/QApplication/ method <tt/mainWidget()/ returns the pointer to the main widget.
 
-<item><bf/top widget:/ a top widget is a widget which has 0 as its parent. All other widgets that have non-zero parents are
+<item><bf/top widget:/ a top widget is a widget which has no parent. All widgets that have non-zero parents are
 sub-widgets of the parent. The list of top level widgets can be found with <tt/QApplication::topLevelWidgets()/. If an application
 doesn't have a main widget but only top widgets, connect <tt/quit()/ to <tt/QApplication::lastWindowClosed()/ to terminate the
 application, otherwise the application object will still exist even if all windows are closed. The application finds the currently
@@ -1038,7 +1043,7 @@ window on the desktop. This window can be manipulated by the user through action
 These are incoming events that are sent to the application. The event type is determined by <tt/QWidget/'s <tt/event()/
 re-implementation and converted to the according event class that provides methods to handle the event specifically. Now, when you have a
 look at the <tt/QWidget/ class, a lot of methods are provided for window manipulation, e.g. <tt/resize()/. You're using these methods,
-but I guess you never thought about their way of execution. In effect, these methods work the other way round: they produce an event
+but you probably never thought about their way of execution. In effect, these methods work the other way round: they produce an event
 that is sent to the display by <tt/qt_/ functions to execute actions like simulating a user action. This way, events can also be
 produced to gain synthetic events ( see below ).
 
@@ -1354,11 +1359,15 @@ The event handlers are all implemented as public and reimplementations should pr
 <bf/Note:/ the system event <tt/Event_DragResponse/ is automatically handled by the application object internally through the
 Qt implementation. It causes a <tt/QDragResponseEvent/ that accepts/rejects the drag action.
 
-<comment>KDE 1.x also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has
-been left out because this will be removed in KDE 2 and only the Qt 2.0 implementation is going to be used with an extended
-implementation of the XDND protocol. You should use the Qt drag'n drop functionality as this can be ported easily to Qt 2.0
-and KDE 2 without any major problems.</comment>
+<comment>KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
+left out because this will be removed in KDE 2 and only the Qt implementation is going to be used with an extended implementation of
+the XDND protocol.</comment>
 
+<comment>
+There exists a zoo of DND protocols. At the moment of writing, the Qt DND protocol does
+<em/not/ support the Motif DND protocol (as used by for instance Netscape and GNOME).
+Please be aware of this if you reimplement the Qt DND functions.
+</comment>
 
 
 <sect>QWidget Virtual Methods
@@ -1366,7 +1375,7 @@ and KDE 2 without any major problems.</comment>
 
 As the event handling generally is implemented by virtual protected methods, especially the <tt/event()/ method provided by
 <tt/QObject/, the <tt/QWidget/ class reimplements this function in order to sort out the incoming event and convert it to other event
-types that can be handled by more specialized classes. Further, it calls the provided additional virtual methods by default
+types that can be handled by more specialized classes. Furthermore, it calls the provided additional virtual methods by default
 implementations. The programmer has a good advantage by this pre-selection of events as the widgets he creates are all derived from
 <tt/QWidget/ and therefore will need one or more special event handler implementation. The most common events that are processed are
 mouse events and for text input mostly keyboard events. The other events mostly deal with focus handling, which moves on the keyboard
@@ -1439,7 +1448,7 @@ program internally), call repaint() here.
 <p>
 In addition to the normal processing of the event queue that is provided by the application object, the programmer can influence the
 default behavior by installing event filters. As explained above, all <tt/QObject/ inherited classes use event processing through the
-<tt/event()/ method. Instead of writing a completely new event handling in situations where you only need some events processed by your
+<tt/event()/ method. Instead of writing a completely new event handler in situations where you only need some events processed by your
 own methods, you should write an event filter. The event filter gets installed where you like to and filters out the event directly
 when <tt/QObject::event()/ is called internally.
 
@@ -1501,7 +1510,7 @@ KDebug</comment>
 
 <sect>Synthetic Events
 <p>
-Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections in brief.
+Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections briefly.
 
 We saw that the application object receives the window system events, processes them and creates event objects from the classes the
 library provides. The converted event can then be handled by event handlers that are specialized on the event class to retrieve further
@@ -1619,12 +1628,13 @@ knowledge about application behavior.
 <itemize>
 <item>An application can communicate internally by signals and slots
 <item>Signals are sent out without caring about who will catch it
-<item>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access
-attribute
+<item>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access attribute
+<item>Slots cannot have default arguments
+<item>Slots return void
 <item>The user communicates with the application through the window system
 <item>The window system reports the events to the application
 <item>The application converts window system events to <tt/QEvent/s
-<item>The events are proceeded through an eventual application global event filter
+<item>The events are processed through an optional application global event filter
 <item>The event that passes the filter gets forwarded to the according window e.g. the current modal window
 <item>The widget receives the event and can have an event filter that comes first when the reimplemented <tt/QObject::event()/ is
 called.

@@ -1,9 +1,10 @@
 # KDE Config File  
 [KDE Desktop Entry]
 Type=Application
-Exec=|PRJNAME|  
-Icon=|PRJNAME|.xpm
-DocPath=|PRJNAME|/index.html
+Exec=|NAMELITTLE| -caption "%c" %i %m  
+Icon=|NAMELITTLE|.xpm
+MiniIcon=|NAMELITTLE|.xpm
+DocPath=|NAMELITTLE|/index.html
 Comment=
 Comment[de]=
 Terminal=0
