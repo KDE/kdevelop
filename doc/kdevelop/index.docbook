@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop 3</application>">
   <!ENTITY apache "<application>Apache</application>">
-  <!ENTITY appwizard "Application Wizard">
+  <!ENTITY appwizard "application wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
   <!ENTITY automake "<command>automake</command>">
   <!ENTITY ctags "<command>ctags</command>">
@@ -164,8 +164,28 @@ You will here find information on the following topics:
 <chapter id="unixdev">
 <title>Development on UNIX</title>
 
+<indexterm zone="unixdev"><primary>development</primary></indexterm>
+<indexterm zone="unixdev">
+  <primary>UNIX</primary>
+  <secondary>development</secondary></indexterm>
+
 <sect1 id="history">
 <title>Some historical remarks</title>
+
+<indexterm zone="history"><primary>history</primary></indexterm>
+<indexterm zone="history"><primary>scripting languages</primary></indexterm>
+<indexterm zone="history">
+  <primary>UNIX</primary>
+  <secondary>history</secondary></indexterm>
+<indexterm zone="history">
+  <primary>UNIX</primary>
+  <secondary>pipe</secondary></indexterm>
+<indexterm zone="history">
+  <primary>UNIX</primary>
+  <secondary>shell</secondary></indexterm>
+<indexterm zone="history">
+  <primary>shell</primary>
+  <secondary>UNIX</secondary></indexterm>
 
 <para>
 From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
@@ -191,6 +211,12 @@ All these scripting languages have in common that they are widely portable betwe
 
 <sect2 id="unixdev-SL-Perl">
 <title>&perl;</title>
+
+<indexterm zone="unixdev-SL-Perl"><primary>Perl</primary></indexterm>
+<indexterm zone="unixdev-SL-Perl">
+  <primary>scripting languages</primary>
+  <secondary>Perl</secondary></indexterm>
+
 <para>
 &perl; has become popular as a text processing and system administration language. In the beginning of the World Wide Web, CGI scripts written in &perl; were a widely used method to create dynamic web pages from databases. Today, this method has been replaced mostly by the <command>mod_perl</command> plugin for the &apache; web server. Among &perl;'s strengths are its built-in support for advanced regular expression matching and its rich archive of freely distributed modules, see: <ulink url="http://cpan.org">CPAN</ulink>.
 </para>
@@ -198,6 +224,12 @@ All these scripting languages have in common that they are widely portable betwe
 
 <sect2 id="unixdev-SL-Python">
 <title>Python</title>
+
+<indexterm zone="unixdev-SL-Python"><primary>Python</primary></indexterm>
+<indexterm zone="unixdev-SL-Python">
+  <primary>scripting languages</primary>
+  <secondary>Python</secondary></indexterm>
+
 <para>
 &python; shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped, in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding API, which makes it the language of choice for making C and C++ programs scriptable.
 </para>
@@ -205,6 +237,12 @@ All these scripting languages have in common that they are widely portable betwe
 
 <sect2 id="unixdev-SL-PHP">
 <title>PHP</title>
+
+<indexterm zone="unixdev-SL-PHP"><primary>PHP</primary></indexterm>
+<indexterm zone="unixdev-SL-PHP">
+  <primary>scripting languages</primary>
+  <secondary>PHP</secondary></indexterm>
+
 <para>
 &php; was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
 </para>
@@ -215,6 +253,14 @@ All these scripting languages have in common that they are widely portable betwe
 
 <sect1 id="unixdev-dcop">
 <title>The DCOP interface</title>
+
+<indexterm zone="unixdev-dcop"><primary>DCOP</primary></indexterm>
+<indexterm zone="unixdev-dcop">
+  <primary>scripting languages</primary>
+  <secondary>DCOP</secondary></indexterm>
+<indexterm zone="unixdev-dcop">
+  <primary>communication</primary>
+  <secondary>DCOP</secondary></indexterm>
 
 <para>
 Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protocol. DCOP stands for <emphasis>Desktop COmmunikation Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
@@ -260,11 +306,47 @@ To accomplish this, the basic tools you need are
   </para></listitem>
 </itemizedlist>
 </para>
+
 <para>
 When you have a large project consisting of possibly hundreds of source code files, the process of compiling may become quite laborsome. You do not want to recompile all files each time you have changed only some of them. Instead, you only want to compile those files which are affected by the changes. In general, it is not obvious which these are. When you e.g. change a function prototype in a header file, you need to compile every file which includes this header file.
 </para>
+
 <sect2 id="unixdev-buildsystems-make">
 <title>The make process</title>
+
+<!-- ### clutters the index
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary>
+  <secondary>Makefile</secondary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary>
+  <secondary>rule</secondary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary>
+  <secondary>target</secondary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary>
+  <secondary>dependencies</secondary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary>
+  <secondary>commands</secondary></indexterm>
+-->
+
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>make</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>Makefile</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>rule</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>recompilations</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>target</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>dependencies</primary></indexterm>
+<indexterm zone="unixdev-buildsystems-make">
+  <primary>commands</primary></indexterm>
+
 <para>
 A tool which takes care of recompilations is <command>make</command>. It keeps track of all work using a set of <emphasis>rules</emphasis> which describe what to do in case some piece of information (usually a source or object code file) was changed. All rules belonging to a certain project are stored in a so-called <filename>Makefile</filename> which is processed by <command>make</command> any time you want to update your work.
 </para>
@@ -309,6 +391,14 @@ There are some tutorials available:
 <sect1 id="unixdev-guidevelopment">
 <title>GUI development</title>
 
+<indexterm zone="unixdev-guidevelopment">
+  <primary>GUI</primary></indexterm>
+<indexterm zone="unixdev-guidevelopment">
+  <primary>graphical user interface</primary></indexterm>
+<indexterm zone="unixdev-guidevelopment">
+  <primary>user interface</primary>
+  <secondary>GUI</secondary></indexterm>
+
 <para>
 Application developers become even more encumbered by having to not only create program libraries and logic, but also provide an easy to use custom built user interface that is both intuitive and functional.  Most programmers receive little to no training in GUI development, and as a result user interfaces are <ulink url="http://www.rha.com/ui_hall_of_shame.htm">poorly designed</ulink>.
 </para>
@@ -325,6 +415,17 @@ For &kde; GUI development there is a style guide available. It is found in the <
 
 <sect1 id="unixdev-ide">
 <title>Integrating concepts and tools: the IDE</title>
+
+<indexterm zone="unixdev-ide">
+  <primary>IDE</primary></indexterm>
+<indexterm zone="unixdev-ide">
+  <primary>integrated development environment</primary></indexterm>
+<indexterm zone="unixdev-ide">
+  <primary>development</primary>
+  <secondary>IDE</secondary></indexterm>
+<indexterm zone="unixdev-ide">
+  <primary>environment</primary>
+  <secondary>IDE</secondary></indexterm>
 
 <para>
 There are separate tools available for almost any step in the programming process - planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming process will most likely become quite cumbersome.
@@ -347,8 +448,17 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
 <chapter id="kdevelopinstall">
 <title>Installing &kdevelop;</title>
 
-<sect1 id="howto">
+<indexterm zone="kdevelopinstall">
+  <primary>installation</primary></indexterm>
+
+<sect1 id="kdevelopinstall-howto">
 <title>How to obtain &kdevelop;</title>
+
+<indexterm zone="kdevelopinstall-howto">
+  <primary>obtain &kdevelop;</primary></indexterm>
+<indexterm zone="kdevelopinstall-howto">
+  <primary>&kdevelop;</primary>
+  <secondary>obtain</secondary></indexterm>
 
 <para>
 &kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink> &kdevelop; is also available from many different Linux distributions.
@@ -357,11 +467,21 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
 <sect2 id="howto-cvs">
 <title>Get daily &kdevelop; snapshots from &CVS;</title>
 
+<indexterm zone="howto-cvs">
+  <primary>CVS</primary></indexterm>
+
 <para>Anonymous &CVS; repository snapshots are available.  The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">:pserver:anonymous@anoncvs.kde.org:/home/kde</filename>.
 </para>
 
 <sect3 id="howto-cvs-co">
 <title>Initial &CVS; checkout</title>
+
+<indexterm zone="howto-cvs-co">
+  <primary>checkout</primary></indexterm>
+<indexterm zone="howto-cvs-co">
+  <primary>&kdevelop;</primary>
+  <secondary>CVS</secondary>
+  <tertiary>checkout</tertiary></indexterm>
 
 <para>
 To obtain an initial version of &kdevelop; you must download it (this is a so-called <emphasis>checkout</emphasis> operation) from anonymous &CVS;. Just follow these steps. (We assume you want to put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
@@ -396,6 +516,13 @@ Once you successfully checked out your &kdevelop; version, you may keep up with 
 
 <sect3 id="howto-cvs-up">
 <title>Keeping your &CVS; copy actual</title>
+
+<indexterm zone="howto-cvs-up">
+  <primary>update</primary></indexterm>
+<indexterm zone="howto-cvs-up">
+  <primary>&kdevelop;</primary>
+  <secondary>CVS</secondary>
+  <tertiary>update</tertiary></indexterm>
 
 <para>
 After you checked out (and successfully compiled) &kdevelop; from CVS as shown above, you'll want to keep it up to date in order to get all the patches. Follow these steps. (We again assume you have put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
@@ -436,41 +563,80 @@ Now you can compile a new &kdevelop; version as shown in the <link linkend="comp
 
 <sect1 id="requirements">
 <title>&kdevelop; requirements</title>
+
+<indexterm zone="requirements">
+  <primary>requirements</primary></indexterm>
+<indexterm zone="requirements">
+  <primary>&kdevelop;</primary>
+  <secondary>requirements</secondary></indexterm>
+
 <para>
 In order to successfully compile and use &kdevelop;, you need the following programs and libraries. They are available on most platforms as distribution packages and thereby can be installed easily.
 </para>
 
 <itemizedlist>
 <title>Required:</title>
-  <listitem><para><application>gcc/g++</application> 2.95.3 or greater (or compatible)</para></listitem>
-  <listitem><para><application>&gnu; make</application> (or compatible)</para></listitem>
-  <listitem><para>&perl; 5.004</para></listitem>
-  <listitem><para><application>autoconf</application> 2.52 or greater</para></listitem>
-  <listitem><para><application>automake</application> 1.6.1 or greater</para></listitem>
-  <listitem><para><application>flex</application> 2.5.4</para></listitem>
-  <listitem><para><application>Qt</application> 3.0.3 or greater</para></listitem>
-  <listitem><para><application>KDE</application> 3.0.4 or greater</para></listitem>
+  <listitem><para>
+    <application>gcc/g++</application> 2.95.3 or greater (or compatible)
+    <indexterm><primary>gcc</primary></indexterm>
+    <indexterm><primary>g++</primary></indexterm></para>
+  </listitem>
+  <listitem><para>
+    <application>&gnu; make</application> (or compatible)
+    <indexterm><primary>make</primary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    &perl; 5.004
+    <indexterm><primary>Perl</primary></indexterm>
+	</para></listitem>
+  <listitem><para>
+    <application>autoconf</application> 2.52 or greater
+    <indexterm><primary>autoconf</primary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    <application>automake</application> 1.6.1 or greater
+    <indexterm><primary>automake</primary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    <application>flex</application> 2.5.4
+    <indexterm><primary>flex</primary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    <application>Qt</application> 3.0.3 or greater
+    <indexterm><primary>Qt</primary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    <application>KDE</application> 3.0.4 or greater
+    <indexterm><primary>KDE</primary></indexterm>
+  </para></listitem>
 </itemizedlist>
 
 <itemizedlist>
 <title>Optional:</title>
   <listitem><para>
-  The <application>ctags</application> source navigation tool, from <ulink url="http://ctags.sourceforge.net">http://ctags.sourceforge.net</ulink>, which enables you fast access to declarations and definitions by a few simple clicks on a name in the editor.
+    The <application>ctags</application> source navigation tool, from <ulink url="http://ctags.sourceforge.net">http://ctags.sourceforge.net</ulink>, which enables you fast access to declarations and definitions by a few simple clicks on a name in the editor.
+    <indexterm><primary>ctags</primary></indexterm>
   </para></listitem>
   <listitem><para>
-  <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This
+    <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This
   <!-- ### temporarily disabled until the graphial class browser works again
   allows you to navigate in a graphical view of your classes' dependencies. Likewise the <application>dot</application> //-->
   tool is needed in conjunction with &doxygen; below if you want to have class relationships graphically displayed (which is highly recommended).
+    <indexterm><primary>dot</primary></indexterm>
   </para></listitem>
   <listitem><para>
-  The &doxygen; documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+    The &doxygen; documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+    <indexterm><primary>doxygen</primary></indexterm>
   </para></listitem>
   <listitem><para>
-  <application>valgrind</application> from <ulink url="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</ulink> helps you to find memory management problems in your applications.
+    <application>valgrind</application> from <ulink url="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</ulink> helps you to find memory management problems in your applications.
+    <indexterm><primary>valgrind</primary></indexterm>
   </para></listitem>
   <listitem><para>
-  <application>CVS</application> from <ulink url="http://www.cvshome.org">http://www.cvshome.org</ulink> if you want to use the &CVS; versioning system.
+    <application>CVS</application> from <ulink url="http://www.cvshome.org">http://www.cvshome.org</ulink> if you want to use the &CVS; versioning system.
+    <indexterm>
+	  <primary>CVS</primary>
+	  <secondary>requirements</secondary></indexterm>
   </para></listitem>
   <listitem><para>
   Any other compiler and/or tool in case you want to develop for another language/platform than <acronym>C++</acronym>/&kde; or use some special facility.
@@ -482,6 +648,15 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   <listitem>
     <para>
     You can circumvent the need for &autoconf; >= 2.52 and &automake; >= 1.6.1. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
+    <indexterm>
+	  <primary>autoconf</primary>
+	  <secondary>circumvent version need</secondary></indexterm>
+    <indexterm>
+	  <primary>automake</primary>
+	  <secondary>circumvent version need</secondary></indexterm>
+    <indexterm>
+	  <primary>version need</primary>
+	  <secondary>circumvent for autoconf/automake</secondary></indexterm>
     </para>
     <para>
       <prompt>(your-kdevelop-directory)&gt; </prompt>
@@ -506,8 +681,29 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 <sect1 id="compileandinstall">
 <title>&kdevelop; compilation and installation</title>
 
+<indexterm zone="compileandinstall">
+  <primary>&kdevelop;</primary>
+  <secondary>compilation</secondary></indexterm>
+<indexterm zone="compileandinstall">
+  <primary>&kdevelop;</primary>
+  <secondary>installation</secondary></indexterm>
+
 <sect2 id="compileandinstall-preliminaries">
 <title>Preliminary steps</title>
+
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>preliminaries</primary>
+  <secondary>&kdevelop; installation</secondary></indexterm>
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>KDEDIR</primary></indexterm>
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>QTDIR</primary></indexterm>
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>LD_LIBRARY_PATH</primary></indexterm>
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>LIBRARY_PATH</primary></indexterm>
+<indexterm zone="compileandinstall-preliminaries">
+  <primary>PATH</primary></indexterm>
 
 <para>
 Before entering the compile sequence you must make sure all libraries and tools are available to the make system. To accomplish this some environment variables need to be properly set. The actual steps to be performed depend on the console shell you use.
@@ -552,6 +748,13 @@ setenv PATH $QTDIR/bin:$KDEDIR/bin:$PATH
 <sect2 id="compileandinstall-make">
 <title>Compile &kdevelop;</title>
 
+<indexterm zone="compileandinstall-make">
+  <primary>make</primary>
+  <secondary>&kdevelop; installation</secondary></indexterm>
+<indexterm zone="compileandinstall-make">
+  <primary>compiling</primary>
+  <secondary>&kdevelop;</secondary></indexterm>
+
 <note><para>
 In the following discussion we assume that you have put your &kdevelop; sources in the <filename class="directory">~/kde3src/kdevelop</filename> directory.
 </para></note>
@@ -565,6 +768,7 @@ In case you use a &kdevelop; snapshot from &CVS; the initial compilation steps d
 
 <formalpara id="compileandinstall-make-cvs-co">
 <title>After a CVS checkout</title>
+
 <para>
 You should initialize the make system after a fresh checkout. The same is true every time you need to start over from scratch. (Note that you must have access to the &CVS; repository for the clean-up.) Type:
 </para>
@@ -664,6 +868,16 @@ That was all. If you installed &kdevelop; in the default &kde; directory you can
 <sect2 id="compileandinstall-bsd">
 <title>How to compile on FreeBSD</title>
 
+<indexterm zone="compileandinstall-bsd">
+  <primary>compiling</primary>
+  <secondary>&kdevelop; on BSD</secondary></indexterm>
+<indexterm zone="compileandinstall-bsd">
+  <primary>&kdevelop;</primary>
+  <secondary>compilation</secondary>
+  <tertiary>on BSD</tertiary></indexterm>
+<indexterm zone="compileandinstall-bsd">
+  <primary>BSD</primary></indexterm>
+
 <para>
 If you want compile and install &kdevelop; on a <acronym>FreeBSD</acronym> system follow the normal instructions but after
 </para>
@@ -749,6 +963,17 @@ Then you can continue with the normal <command>configure</command> and <command>
 <sect3 id="compileandinstall-options-dir">
 <title>Non-default installation directory</title>
 
+<indexterm zone="compileandinstall-options-dir">
+  <primary>&kdevelop;</primary>
+  <secondary>installation</secondary>
+  <tertiary>non-default directory</tertiary></indexterm>
+<indexterm zone="compileandinstall-options-dir">
+  <primary>non-default directory</primary></indexterm>
+<indexterm zone="compileandinstall-options-dir">
+  <primary>KDEDIRS</primary></indexterm>
+<indexterm zone="compileandinstall-options-dir">
+  <primary>kbuildsycoca</primary></indexterm>
+
 <para>
 By default <command>configure</command> prepares the <acronym>IDE</acronym> to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option> option:
 </para>
@@ -809,6 +1034,12 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 <chapter id="kdevelopoverview">
 <title>Overview: &kdevelop;'s features</title>
 
+<indexterm zone="kdevelopoverview">
+  <primary>&kdevelop;</primary>
+  <secondary>overview</secondary></indexterm>
+<indexterm zone="kdevelopoverview">
+  <primary>overview</primary></indexterm>
+
 <para>
 &kdevelop; integrates a lot of tools, scripts, and templates in a common user interface. Basically it consists of
 <itemizedlist>
@@ -844,6 +1075,23 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 
 <sect1 id="uimodes-overview">
 <title>Available user interface modes</title>
+
+<indexterm zone="uimodes-overview">
+  <primary>&kdevelop;</primary>
+  <secondary>user interface modes</secondary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>user interface</primary>
+  <secondary>&kdevelop; modes</secondary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>UI modes</primary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>Child Frame Windows</primary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>Tabbed Pages</primary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>Toplevel Windows</primary></indexterm>
+<indexterm zone="uimodes-overview">
+  <primary>IDEAl</primary></indexterm>
 
 <para>
 &kdevelop; offers developers four separate user interface modes (click on the mode name to view an example):
@@ -899,6 +1147,12 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 <sect2 id="uimodes-switch">
 <title>How to switch user interface modes</title>
 
+<indexterm zone="uimodes-switch">
+  <primary>user interface</primary>
+  <secondary>switch modes</secondary></indexterm>
+<indexterm zone="uimodes-switch">
+  <primary>switch UI modes</primary></indexterm>
+
 <para>
 To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure Gideon...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand field. This will get you to the settings page shown below.
 </para>
@@ -933,6 +1187,32 @@ Select the radio button of the user interface mode you want to switch to, then p
 
 <sect2 id="maximize-workspace">
 <title>How to maximize the work space area</title>
+
+<indexterm zone="maximize-workspace">
+  <primary>&kdevelop;</primary>
+  <secondary>work space</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>&kdevelop;</primary>
+  <secondary>maximize work space</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>user interface</primary>
+  <secondary>work space</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>user interface</primary>
+  <secondary>menubar</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>user interface</primary>
+  <secondary>full screen mode</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>full screen mode</primary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>menubar</primary>
+  <secondary>hide/unhide</secondary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>hide menubar</primary></indexterm>
+<indexterm zone="maximize-workspace">
+  <primary>unhide menubar</primary></indexterm>
+
 <para>
 To maximize space, there is a full-screen window mode available which expands the mainframe area to the screen borders. Additional space can be reclaimed by hiding the menubar. And you can of course hide any toolbar as usual in <application>KDE</application> applications.
 </para>
@@ -970,6 +1250,9 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 <sect1 id="makesystems">
 <title>Project management systems</title>
 
+<indexterm zone="makesystems">
+  <primary>project management</primary></indexterm>
+
 <para>
 Globally, a project will rely on some form of project management system.  &kdevelop; offers four <emphasis>project management systems</emphasis> the programmer can select from when creating a new project.
 
@@ -992,6 +1275,13 @@ Globally, a project will rely on some form of project management system.  &kdeve
 <sect2 id="automake-project">
 <title>Automake project</title>
 
+<indexterm zone="automake-project">
+  <primary>projects</primary>
+  <secondary>automake</secondary></indexterm>
+<indexterm zone="automake-project">
+  <primary>automake</primary>
+  <secondary>projects</secondary></indexterm>
+
 <para>
 Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the &gnu; standard development tools. They provide
 <itemizedlist>
@@ -1008,6 +1298,13 @@ Projects created with &kdevelop;'s Automake Project Manager make it very easy fo
 <sect2 id="qmake-project">
 <title>QMake project</title>
 
+<indexterm zone="qmake-project">
+  <primary>projects</primary>
+  <secondary>qmake</secondary></indexterm>
+<indexterm zone="qmake-project">
+  <primary>qmake</primary>
+  <secondary>projects</secondary></indexterm>
+
 <para>
 For developers who enjoy the flexibility and feel of &qt;'s qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
 </para>
@@ -1018,6 +1315,22 @@ For more information on the QMake project manager see the <citetitle>qmake User 
 
 <sect2 id="ant-project">
 <title>ANT project</title>
+
+<indexterm zone="ant-project">
+  <primary>projects</primary>
+  <secondary>ant</secondary></indexterm>
+<indexterm zone="ant-project">
+  <primary>ant</primary>
+  <secondary>projects</secondary></indexterm>
+<indexterm zone="ant-project">
+  <primary>projects</primary>
+  <secondary>Java</secondary></indexterm>
+<indexterm zone="ant-project">
+  <primary>Java</primary>
+  <secondary>projects</secondary></indexterm>
+<indexterm zone="ant-project">
+  <primary>development</primary>
+  <secondary>Java</secondary></indexterm>
 
 <para>
 Java developers may want to use the Apache ANT project manager for their projects. To set up a new Ant project in &kdevelop; select <menuchoice><guimenu>Project</guimenu>
@@ -1034,6 +1347,15 @@ For more information see <ulink url="http://ant.apache.org/">The Apache Ant Proj
 <sect2 id="custom-project">
 <title>Custom project</title>
 
+<indexterm zone="custom-project">
+  <primary>projects</primary>
+  <secondary>custom</secondary></indexterm>
+<indexterm zone="custom-project">
+  <primary>custom projects</primary></indexterm>
+<indexterm zone="custom-project">
+  <primary>Makefile</primary>
+  <secondary>custom projects</secondary></indexterm>
+
 <para>
 If you prefer to maintain your own <filename>Makefiles</filename> for your project you may use the custom project option of &kdevelop;. This may be feasible in unusually structured projects or if you want to retain full control over the <command>make</command> process.
 </para>
@@ -1044,6 +1366,14 @@ Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and co
 
 <sect2 id="makesystems-distribution">
 <title>How to distribute your application</title>
+
+<indexterm zone="makesystems-distribution">
+  <primary>distribution</primary></indexterm>
+<indexterm zone="makesystems-distribution">
+  <primary>application</primary>
+  <secondary>distribution</secondary></indexterm>
+<indexterm zone="makesystems-distribution">
+  <primary>binary packages</primary></indexterm>
 
 <para>
 The distribution of your applications does not require the end-user to have anything different installed other than
@@ -1103,6 +1433,9 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 <chapter id="appwizard">
 <title>Getting started: the &appwizard;</title>
 
+<indexterm zone="appwizard">
+  <primary>&appwizard;</primary></indexterm>
+
 <para>
 In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
 </para>
@@ -1112,6 +1445,10 @@ Organizing all development work in projects allows you to easily switch between 
 
 <sect1 id="newprojects">
 <title>New projects</title>
+
+<indexterm zone="newprojects">
+  <primary>project</primary>
+  <secondary>new</secondary></indexterm>
 
 <para>
 Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
@@ -1149,6 +1486,19 @@ Let's look at all this in more detail now ...
 <sect2 id="newprojects-start">
 <title>Initial steps</title>
 
+<indexterm zone="newprojects-start">
+  <primary>dialog</primary>
+  <secondary>Create New Project</secondary></indexterm>
+<indexterm zone="newprojects-start">
+  <primary>project</primary>
+  <secondary>Create New Project dialog</secondary></indexterm>
+<indexterm zone="newprojects-start">
+  <primary>project</primary>
+  <secondary>templates</secondary></indexterm>
+<indexterm zone="newprojects-start">
+  <primary>templates</primary>
+  <secondary>project</secondary></indexterm>
+
 <para>
 To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  The <guilabel>Create New Project</guilabel> dialog will pop up showing an initial <guilabel>General</guilabel> page:
 </para>
@@ -1171,22 +1521,95 @@ As you see, this dialog is divided into an upper and a lower part. In the upper 
 <sect3 id="newprojects-start-type">
 <title>Select programming language and application type</title>
 
+<indexterm zone="newprojects-start-type">
+  <primary>project</primary>
+  <secondary>application type</secondary></indexterm>
+<indexterm zone="newprojects-start-type">
+  <primary>project</primary>
+  <secondary>programming language</secondary></indexterm>
+<indexterm zone="newprojects-start-type">
+  <primary>project</primary>
+  <secondary>language</secondary></indexterm>
+<indexterm zone="newprojects-start-type">
+  <primary>language</primary></indexterm>
+<indexterm zone="newprojects-start-type">
+  <primary>programming language</primary></indexterm>
+<indexterm zone="newprojects-start-type">
+  <primary>application</primary>
+  <secondary>type</secondary></indexterm>
+
 <para>
 The left hand side of the upper part in this dialog is where you do the selection work. When it shows up, you'll find there a list of folders each labeled with a programming language, as for instance:
 </para>
 <itemizedlist>
-  <listitem><para>Ada</para></listitem>
-  <listitem><para>C</para></listitem>
-  <listitem><para>C++</para></listitem>
-  <listitem><para>Fortran</para></listitem>
-  <listitem><para>Java</para></listitem>
-  <listitem><para>PHP</para></listitem>
-  <listitem><para>Pascal</para></listitem>
-  <listitem><para>Perl</para></listitem>
-  <listitem><para>Python</para></listitem>
-  <listitem><para>Ruby</para></listitem>
-  <listitem><para>Shell</para></listitem>
+  <listitem><para>
+    Ada
+	<indexterm>
+	  <primary>Ada</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    C
+	<indexterm>
+	  <primary>C</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    C++
+	<indexterm>
+	  <primary>C++</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Fortran
+	<indexterm>
+	  <primary>Fortran</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Java
+	<indexterm>
+	  <primary>Java</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    PHP
+	<indexterm>
+	  <primary>PHP</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Pascal
+	<indexterm>
+	  <primary>Pascal</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Perl
+	<indexterm>
+	  <primary>Perl</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Python
+	<indexterm>
+	  <primary>Python</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Ruby
+	<indexterm>
+	  <primary>Ruby</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Shell
+	<indexterm>
+	  <primary>shell</primary>
+	  <secondary>new project</secondary></indexterm>
+  </para></listitem>
 </itemizedlist>
+
 <para>
 To be precise, these folders do not contain real programming tools actually. They do lead to pre-defined <emphasis>templates</emphasis> you can use as a starting point for development in that language. To get an idea of what is provided, just open the folders one after the other. There will be a series of subfolders on some, one or more simple entries only on others. The subfolders you see organize the available templates according to some tasks, the simple entries name the templates you may select.
 </para>
@@ -1200,6 +1623,47 @@ Select the template which best fits your application's goals as a starting point
 
 <sect3 id="newprojects-start-general">
 <title>Provide general information</title>
+
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>properties</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>properties</primary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>application</primary>
+  <secondary>name</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>name</primary>
+  <secondary>application</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>directory</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>directory</primary>
+  <secondary>project</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>path</primary>
+  <secondary>new project</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>author</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>email</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>author</primary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>email</primary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>main.cpp</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>main.cpp</primary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>project</primary>
+  <secondary>license</secondary></indexterm>
+<indexterm zone="newprojects-start-general">
+  <primary>license</primary></indexterm>
 
 <para>
 The lower part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page is a framed field labeled <guilabel>Properties</guilabel>. You must provide some general information about your project here so that the &appwizard; knows how to build the initial structure.
@@ -1303,6 +1767,59 @@ Once you have correctly entered all this information stuff, press the <guibutton
 <sect2 id="newprojects-start-cvs">
 <title>Supply version system information</title>
 
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>new project</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>root</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>root</primary>
+  <secondary>CVS</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>local</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>remote</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>local CVS</primary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>:local:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>remote CVS</primary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>:pserver:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>:ext:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>:local:</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>:pserver:</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>:ext:</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>CVS</primary>
+  <secondary>repository</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>repository</primary>
+  <secondary>CVS</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>project</primary>
+  <secondary>CVS</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>database</primary>
+  <secondary>CVS</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>version</primary>
+  <secondary>database</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs">
+  <primary>version</primary>
+  <secondary>CVS</secondary></indexterm>
+
 <para>
 In a second step the &appwizard; will lead you to the <guilabel>Version Control System</guilabel> page where you can decide which version control system you want to use.
 </para>
@@ -1352,6 +1869,11 @@ A version control system such as &CVS; (which means <quote>Concurrent Versions S
 </para>
 <para><userinput><filename class="directory">/home/devel/cvsroot</filename></userinput> (where <filename>devel</filename> simply denotes the <quote>developing</quote> user, just for example)
 </para>
+
+<note><para>
+In fact, this is a short form. Exactly, the local &cvs; root should be addressed using the <computeroutput>:local:</computeroutput> prefix. The short form is only allowed in cases where the filename starts with a slash (<computeroutput>/</computeroutput>). The full name for our example local &cvs; root would exactly look like: <filename class="directory">:local:/home/devel/cvsroot</filename>
+</para></note>
+
 <para>
 Enter the name of the &cvs; root directory your system has been set up for in the <guilabel>CVS root</guilabel> field. In principle you can select any name, even use multiple &cvs; databases, but it is advisable that you stick to the &cvs; root once set up.
 </para>
@@ -1414,6 +1936,10 @@ In principle you can use any name for the &cvs; repository of your project files
 Just enter the repository name you want to use in the <guilabel>CVS repository</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page. In our example this is: <userinput>YourNewApplication</userinput>
 </para>
 
+<warning><para>
+<emphasis>Take care not to use a repository which already exists!</emphasis> The &CVS; system does not warn about duplicate files but will shovel everything in which does not produce a formal conflict. You will mess up everything!
+</para></warning>
+
 <formalpara>
 <title>The remaining fields</title>
 <para>
@@ -1461,7 +1987,7 @@ Afer you have entered all &CVS; related information, click the <guibutton>Next &
 If you want to correct an error on the previous <guilabel>Create New Project</guilabel> page, just press the <guibutton>&lt; Back</guibutton> button. The &appwizard; will remember your settings on the current page, so you can easily proceed when you come back.
 </para></note>
 
-</sect2> <!-- newprojects-start-cv -->
+</sect2> <!-- newprojects-start-cvs -->
 
 <sect2 id="newprojects-start-templates">
 <title>Supply header/source templates</title>
@@ -1497,6 +2023,15 @@ As you might have noticed, the applications manager did readily fill in some inf
 
 <sect3 id="newprojects-start-templates-edit">
 <title>How to edit the templates</title>
+
+<indexterm zone="newprojects-start-templates-edit">
+  <primary>templates</primary>
+  <secondary>project</secondary>
+  <tertiary>edit</tertiary></indexterm>
+<indexterm zone="newprojects-start-templates-edit">
+  <primary>project</primary>
+  <secondary>templates</secondary>
+  <tertiary>edit</tertiary></indexterm>
 
 <para>
 The templates you set up in the <guilabel>Create New Project</guilabel> dialog will later be processed whenever you command &kdevelop; to set up a new source and/or header file. The information you provided here will be included at top as a documentation header, before the code parts begin.
@@ -1566,11 +2101,19 @@ The templates you define here will come in effect only after the &appwizard; has
 <sect2 id="newprojects-start-build">
 <title>Build the initial project files</title>
 
+<indexterm zone="newprojects-start-build">
+  <primary>project</primary>
+  <secondary>new</secondary>
+  <tertiary>build</tertiary></indexterm>
+<indexterm zone="newprojects-start-build">
+  <primary>project</primary>
+  <secondary>initial build</secondary></indexterm>
+
 <para>
 Almost everything is done now. On the last templates page the <guibutton>Next &gt;</guibutton> button will have changed to read <guibutton>Finish</guibutton> now.
 </para>
 <para>
-Think twice before you click on it. You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again.
+<emphasis>Think twice before you click on it!</emphasis> You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again. In case you use local CVS, do not forget to double-check the <emphasis>CVS repository</emphasis> name (there should be no subdirectory with that name in the CVS root directory already - if it does, try another repository name).
 </para>
 <para>
 If ever you don't want the new project be built, abort the <guilabel>Create New Project</guilabel> dialog by the <guibutton>Cancel</guibutton> button. Oterwise click <guibutton>Finish</guibutton> and watch in the <guilabel>Messages</guilabel> window how the &appwizard; initiates the project.
@@ -1598,8 +2141,17 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
 <sect1 id="appwizard-behind">
 <title>Behind the scenes</title>
 
+<indexterm zone="appwizard-behind">
+  <primary>project</primary>
+  <secondary>new</secondary>
+  <tertiary>build</tertiary></indexterm>
+<indexterm zone="appwizard-behind">
+  <primary>cvs</primary>
+  <secondary>new project</secondary>
+  <tertiary>build</tertiary></indexterm>
+
 <para>
-It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the depths but will have a survey of those messages to get an idea of what was going on behind the scenes.
+It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the details but will have a survey of those messages to get an idea of what was going on behind the scenes.
 </para>
 
 <tip>
@@ -1625,11 +2177,23 @@ We will have look at the <guilabel>Messages</guilabel> outputs of both steps:
 <sect2 id="appwizard-behind-app">
 <title>Setting up the application</title>
 
+<indexterm zone="appwizard-behind-app">
+  <primary>Perl</primary>
+  <secondary>new project</secondary></indexterm>
+<indexterm zone="appwizard-behind-app">
+  <primary>Perl</primary>
+  <secondary>gideon.pm</secondary></indexterm>
+<indexterm zone="appwizard-behind-app">
+  <primary>gideon.pm</primary></indexterm>
+<indexterm zone="appwizard-behind-app">
+  <primary>project</primary>
+  <secondary>gideon.pm</secondary></indexterm>
+
 <para>
-If you set up <quote>YourNewApplication</quote> as in our previous example the &appwizard; should have printed the following messages (we re-arranged the output a bit for readability):
+If you set up <quote>YourNewApplication</quote> as in our previous example the &appwizard; should have printed the following messages (we re-arranged the output a bit for readability and you may click on a line to directly jump to its description):
 </para>
-<screen><computeroutput><literal>
-* perl /opt/kde3/share/apps/kdevappwizard/template-kapp/script \
+<screen><computeroutput>
+* <link linkend="appwizard-behind-app-perl">perl</link> /opt/kde3/share/apps/kdevappwizard/template-kapp/script \
   --author='Your Name' \
   --email='you@you.com' \
   --version='0.1' \
@@ -1640,19 +2204,19 @@ If you set up <quote>YourNewApplication</quote> as in our previous example the &
   --licensefile='COPYING' \
   --filetemplates='h,/tmp/kde-devel/gideoncDE5Ja.tmp,\
                    cpp,/tmp/kde-devel/gideonsRrLab.tmp'
-* Making destination directory
-* Installing file templates
-* Installing license file
-* Installing admin directory
-* Installing GNU coding standard files
-* Installing Docbook template
-* Installing project file
-* Installing application framework
-* Installing application sources
+* <link linkend="appwizard-behind-app-base">Making destination directory</link>
+* <link linkend="appwizard-behind-app-templates">Installing file templates</link>
+* <link linkend="appwizard-behind-app-license">Installing license file</link>
+* <link linkend="appwizard-behind-app-admin">Installing admin directory</link>
+* <link linkend="appwizard-behind-app-gnu">Installing GNU coding standard files</link>
+* <link linkend="appwizard-behind-app-doc">Installing Docbook template</link>
+* <link linkend="appwizard-behind-app-project">Installing project file</link>
+* <link linkend="appwizard-behind-app-framework">Installing application framework</link>
+* <link linkend="appwizard-behind-app-sources">Installing application sources</link>
 * Finished
 * *** Success ***
-</literal></computeroutput></screen>
-<formalpara>
+</computeroutput></screen>
+<formalpara id="appwizard-behind-app-perl">
 <title>A &perl; script called</title>
 <para>
 As you see from the first line, the &appwizard; did construct a &perl; program call from the settings you made in the <guilabel>Create New Project</guilabel> dialog. The called <filename>script</filename> resides in a directory which was determined from the application type template you selected in the upper part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page.
@@ -1671,14 +2235,14 @@ The exact series of initialization steps depends on which &perl; <filename>scrip
 The setup scripts make use of a set of &perl; subroutines collected in the <filename>gideon.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
 </para></note>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-base">
 <title>The application base directory</title>
 <para>
 When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination direcory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
 </para>
 </formalpara>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-templates">
 <title>The file templates</title>
 <para>
 In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs - the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
@@ -1688,7 +2252,7 @@ In the next step the file templates you set up in the <guilabel>Create New Proje
 In our example two such template files were installed, namely <filename>templates/h</filename> for C++ header and <filename>templates/cpp</filename> for C++ source files.
 </para>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-license">
 <title>The license file</title>
 <para>
 On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog you selected the license you want to put your application under. The &appwizard; initiated two actions from this. One was the license indication it put into the templates. The other action causes the according license file to be copied in your application base directory.
@@ -1698,7 +2262,7 @@ On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</gu
 The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <filename>script</filename> which license text file to copy. In our example the <filename>/home/devel/yournewapplication/COPYING</filename> file will have been installed in this step.
 </para>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-admin">
 <title>The administration directory</title>
 <para>
 &kdevelop; needs a bunch of files to administrate the project. These are put in the <filename class="directory">admin</filename> subdirectory of your application base directory.
@@ -1711,7 +2275,7 @@ The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <f
 &kdevelop; always uses the same set of standard files for its administration purposes. Hence no parameter is needed in the &perl;  <filename>script</filename> call to set up the <filename class="directory">admin</filename> subdirectory.
 </para></note>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-gnu">
 <title>The &gnu; coding standard files</title>
 <para>
 There are several standard files to be distributed with every application which conforms to the &gnu; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
@@ -1741,14 +2305,14 @@ After this step you will find the following files in your application base direc
 </itemizedlist>
 </para>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-doc">
 <title>The initial application documentation</title>
 <para>
 Every project you set up will contain an initial <emphasis>DocBook</emphasis> template from where you can start to write your application documentation. The &perl; <filename>script</filename> will in this step have set up <filename class="directory">doc</filename> and <filename class="directory">doc/en</filename> subdirectories of the application base directory with an initial <filename>doc/en/index.docbook</filename> template and some &automake; <filename>Makefile.am</filename> files from which &kdevelop; can later build help system files.
 </para>
 </formalpara>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-project">
 <title>The project file</title>
 <para>
 Up to here most of the more global stuff has been set up, things which more or less are to be found in any &kdevelop; project. With this step the more application-specific setup processes start. These may vary upon the type of application you selected. Have a look at the actual &perl; <filename>sript</filename> the &appwizard; called up for your new application if you want to lookup details. We will continue to follow the example steps listed above.
@@ -1759,12 +2323,12 @@ In the first step of these the <emphasis>&kdevelop; project managagement file</e
 </para>
 
 <note><para>
-You may want to have a look at the resulting project file, in our case the <filename>/home/devel/yournewapplication/yournewapplication.kdevelop</filename> file. It is written in XML format and easily to be displayed with <application>Kate</application> or any other text editor. But take care nothing to change as &kdevelop; relies on its contents.
+You may want to have a look at the resulting project file which in our case was saved as <filename>/home/devel/yournewapplication/yournewapplication.kdevelop</filename>. It is written in XML format and easily to be displayed with <application>Kate</application> or any other text editor. But take care nothing to change as &kdevelop; relies on its contents.
 </para></note>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-framework">
 <title>The application framework</title>
-<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically dependends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be repeated in other projects.
+<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically dependends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be found in other projects, too.
 </para>
 </formalpara>
 <para>
@@ -1780,15 +2344,15 @@ In our case the following directory structure has been created in the <filename 
     The <filename>optimized</filename> subdirectory will hold the compiled output of the <emphasis><quote>optimized</quote> build configuration</emphasis>. You should test an optimized version of your application from within here.
   </para></listitem>
   <listitem><para>
-    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files and templates which will be processed by a translation program as e.g. <application>KBabel</application>.
+    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files (<filename>.po</filename> files) and templates (<filename>.pot</filename> files) which will be processed by a translation program as e.g. <application>KBabel</application>.
   </para></listitem>
 </itemizedlist>
 </para>
 <para>
-All these directories will not kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> directory, if applicable.
+All these directories will not kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> subdirectory, if applicable. In our case you will find two of them: <filename>src/hi16-app-yournewapplication.png</filename> and <filename>src/hi32-app-yournewapplication.png</filename> which both hold standard &kde; application icons.
 </para>
 
-<formalpara>
+<formalpara id="appwizard-behind-app-sources">
 <title>Application sources installed</title>
 <para>
 This framework finally will be used to put the <emphasis>initial source files</emphasis> of your new project in the <filename class="directory">src</filename> directory. The actual files highly depend on the application type you selected in the <guilabel>Create New Project</guilabel> dialog. You will soon see yourself as this is the stuff you will actually have to work on.
@@ -2201,6 +2765,16 @@ items will be invalid. You can avoid this by saving all files beforehand.
 </sect2> <!-- grep -->
 
 </sect1> <!-- searchinggrepping -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="code-completion">
+<title>Code Completion</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect1> <!-- code-completion -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -2970,6 +3544,9 @@ breakpoints.
 <indexterm zone="cvs"><primary>CVS</primary></indexterm>
 <indexterm zone="cvs"><primary>revision control</primary></indexterm>
 
+<sect1 id="cvs-basics">
+<title>&CVS; basics</title>
+
 <para>
 &CVS; is the revision control system which many open source projects -
 including &kde; - are using. It stores all sources codes in a central place,
@@ -3015,6 +3592,13 @@ book <citetitle pubwork="book">Open Source Development With CVS</citetitle> by K
 distributed (except for the non-technical chapters). See
 <ulink url="http://cvsbook.red-bean.com/cvsbook.html"/>.
 </para>
+
+</sect1> <!-- cvs-basics -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="cvs-commands">
+<title>&CVS; commands in &kdevelop;</title>
 
 <para>
 In the file views, the following context menu items are available:
@@ -3078,6 +3662,23 @@ hosted on <filename>sourceforge.net</filename>. Workarounds for this
 problem are described on the CVS/SSH FAQ which you can find in the
 SourceForge documentation.
 </para>
+
+</sect1> <!-- cvs-basics -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="cvs-behind">
+<title>Behind the scenes</title>
+
+<sect2 id="cvs-behind-workdir">
+<title>What &CVS; records in the working directory</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- cvs-behind-workdir -->
+
+</sect1> <!-- cvs-behind -->
 
 </chapter> <!-- cvs -->
 
