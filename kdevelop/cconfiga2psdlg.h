@@ -27,6 +27,7 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <kprocess.h>
+#include <htmltoken.h>
 
 /** the KDevelop-A2psConfigdialog
   *@author Stefan Heidrich
@@ -38,18 +39,21 @@ public:
   CConfigA2psDlg(QWidget* parent=0,const char* name=0);
   ~CConfigA2psDlg();
   void init();
+  bool lookProgram(QString);
 
 public slots:
-    void slotCreateParameters();
+    QString slotCreateParameters();
  void slotDefaultClicked();
  void slotCurrentDateClicked();
  void slotHeadertextClicked();
- void slotNoHeader();
- void slotHeaderClicked();
  void selectedProgram();
  void slotOkClicked();
  void slotPreviewClicked();
  void slotCancelClicked();
+ void slotFilenameClicked();
+ void slotHeadertextButtonClicked();
+ void slotFontsizeClicked();
+ void slotLinesClicked();
 
 protected:
     QCheckBox* boltFontButton;
@@ -73,6 +77,8 @@ protected:
     QPushButton* okButton;
     QPushButton* defaultButton;
     QPushButton* cancelButton;
+    QCheckBox* fontsizeButton;
+    QCheckBox* linesButton;
     QButtonGroup* qtarch_ButtonGroup_177;
     QButtonGroup* qtarch_ButtonGroup_21;
     QButtonGroup* qtarch_ButtonGroup_60;
@@ -83,7 +89,8 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_33;
     QLabel* qtarch_label;
     QLabel* qtarch_Label_113;
+    QButtonGroup* qtarch_ButtonGroup_182;
     QString globalpara;
-    KShellProcess *process,*process2,*process3;
+    KShellProcess *process,*process2;
 };
 #endif // CCONFIGA2PSDLG

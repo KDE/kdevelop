@@ -632,7 +632,6 @@ void CPrintDlg::slotPrintingConfClicked() {
       enscriptconf->resize(610,510);
       enscriptconf->exec(); 
     }
-
 }
 
 void CPrintDlg::slotPrintToFileDlgClicked() {

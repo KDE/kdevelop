@@ -19,6 +19,7 @@
 #include <kapp.h>
 #include <iostream.h>
 #include "ctoolclass.h"
+#include <kmsgbox.h>
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -2010,8 +2011,8 @@ void CConfigEnscriptDlg::slotDefaultClicked() {
   cycleOfChange->setValue(1);
   cutLinesButton->setChecked(false);
   fontForBodyButton->setText("Times-Roman10");
-  fontForHeaderButton->setText("Times-Roman10");
-  underlayFontButton->setText("Times-Roman10");
+  fontForHeaderButton->setText("Times-Bold-Roman10");
+  underlayFontButton->setText("Times-Roman150");
   underlayPositionDefaultButton->setChecked(true);
   underlayAngleDefault->setChecked(true);
   filenameLine->setChecked(true);
@@ -2409,8 +2410,9 @@ void CConfigEnscriptDlg::slotModificationAmpmClicked(int prog) {
 }
 
 void CConfigEnscriptDlg::slotPreviewClicked() {
-  if (!CToolClass::searchProgram("ghostview")) {
-    return;
+  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+   return;
   }
   QString dir,data1,data2,param,text;
   slotCreateParameters();
@@ -2421,16 +2423,45 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
   process = new KShellProcess();
   *process << "enscript " + globalpara + param + " " + data1 + " " + data2;
   process->start(KProcess::Block,KProcess::AllOutput);
-  process2 = new KShellProcess();
-  *process2 << "ghostview";
-  *process2 << dir;
-  process2->start(KProcess::Block,KProcess::AllOutput);
-  process3 = new KShellProcess();
-  *process3 << "rm";
-  *process3 << dir;
-  process3->start(KProcess::Block,KProcess::AllOutput);
+  if (lookProgram("gv")) {
+    process2 = new KShellProcess();
+    *process2 << "gv";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
+  else if (lookProgram("ghostview")) {
+    *process2 << "ghostview";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
+  else if (lookProgram("kghostview")) {
+    *process2 << "kghostview";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
 }
 
 void CConfigEnscriptDlg::slotOkClicked() {
   slotCreateParameters();
+}
+
+bool CConfigEnscriptDlg::lookProgram(QString name) {
+  StringTokenizer tokener;
+  bool found=false;
+  QString file;
+  QString complete_path = getenv("PATH");
+  
+  tokener.tokenize(complete_path,":");
+  
+  while(tokener.hasMoreTokens()){
+    file = QString(tokener.nextToken()) + "/" + name;
+    if(QFile::exists(file)){
+      found = true;
+      break;
+    }
+  }
+  return found;
 }
