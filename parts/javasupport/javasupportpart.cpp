@@ -2,6 +2,7 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include <qlistview.h>
+#include <qvbox.h>
 
 #include <kgenericfactory.h>
 #include <kapp.h>
@@ -9,6 +10,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kstatusbar.h>
+#include <kdialogbase.h>
 
 #include <fstream>
 #include <strstream>
@@ -22,6 +24,7 @@
 #include "addclass.h"
 #include "javasupportpart.h"
 #include "problemreporter.h"
+#include "configurejavasupport.h"
 
 #include "JavaLexer.hpp"
 #include "JavaRecognizer.hpp"
@@ -58,6 +61,8 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
              this, SLOT(savedFile(const QString&)) );
 
     topLevel()->embedOutputView( d->problemReporter, i18n("Problems") );
+
+    connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 }
 
 
@@ -271,6 +276,14 @@ void JavaSupportPart::savedFile( const QString& fileName )
         maybeParse( fileName );
         emit updatedSourceInfo();
     }
+}
+
+void JavaSupportPart::configWidget( KDialogBase* dlg )
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Java Support"));
+    ConfigureJavaSupport* w = new ConfigureJavaSupport( vbox );
+    connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+    connect(dlg, SIGNAL(okClicked()), d->problemReporter, SLOT(configure()));
 }
 
 #include "javasupportpart.moc"

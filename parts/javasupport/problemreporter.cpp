@@ -28,12 +28,15 @@
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kurl.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kdebug.h>
 
 #include <qtimer.h>
 #include <qregexp.h>
 
 ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const char* name )
-    : QListView( parent, name ), m_javaSupport( part ), m_editor( 0 )
+    : QListView( parent, name ), m_javaSupport( part ), m_editor( 0 ), m_document( 0 )
 {
     addColumn( i18n("Level") );
     addColumn( i18n("Problem") );
@@ -53,6 +56,8 @@ ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const 
              this, SLOT(slotSelected(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
              this, SLOT(slotSelected(QListViewItem*)) );
+
+    configure();
 }
 
 ProblemReporter::~ProblemReporter()
@@ -65,20 +70,20 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( !part )
         return;
 
-    m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
-    if( m_editor ){
-        connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    m_document = dynamic_cast<KTextEditor::Document*>( part );
+    if( m_document ){
+        m_filename = m_document->url().path();
     }
 
-    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
-    if( doc ){
-        m_filename = doc->url().path();
-    }
+    m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
+    if( m_editor )
+        connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }
 
 void ProblemReporter::slotTextChanged()
 {
-    m_timer->changeInterval( 500 );
+    if( m_active )
+        m_timer->changeInterval( m_delay );
 }
 
 void ProblemReporter::reparse()
@@ -141,4 +146,12 @@ void ProblemReporter::reportMessage( QString message,
                        filename,
                        QString::number( line ),
                        QString::number( column ) );
+}
+
+void ProblemReporter::configure()
+{
+    kdDebug() << "ProblemReporter::configure()" << endl;
+    KConfig* config = kapp->config();
+    m_active = config->readBoolEntry( "EnableJavaBgParser", TRUE );
+    m_delay = config->readNumEntry( "JavaBgParserDelay", 1000 );
 }

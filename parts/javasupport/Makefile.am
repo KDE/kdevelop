@@ -14,7 +14,8 @@ libkdevjavasupport_la_LIBADD = 	$(top_builddir)/lib/libkdevelop.la \
 libkdevjavasupport_la_SOURCES = javasupportpart.cpp \
 				addclassdlg.ui addclass.cpp \
 				JavaLexer.cpp JavaRecognizer.cpp \
-				JavaStoreWalker.cpp problemreporter.cpp 
+				JavaStoreWalker.cpp problemreporter.cpp \
+				configurejavasupport.ui
 
 METASOURCES = AUTO
 

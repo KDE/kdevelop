@@ -88,6 +88,7 @@ typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
 						klass->setDefinedInFile( getFilename().c_str() );
 						klass->setDeclaredOnLine( #IDENT->getLine() );
 						klass->setDefinedOnLine( #IDENT->getLine() );
+						kdDebug() << "klass->path = " << klass->path() << endl;
 						}
 		bases=extendsClause 
 						{ 
@@ -107,7 +108,8 @@ typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
 						klass->setName( #IDENT->getText().c_str() );
 						klass->setDeclaredInFile( getFilename().c_str() );
 						klass->setDeclaredOnLine( #IDENT->getLine() );
-						klass->setDefinedOnLine( #IDENT->getLine() );
+						klass->setDefinedOnLine( #IDENT->getLine() )
+;						kdDebug() << "klass->path = " << klass->path() << endl;
 						}
 		bases=extendsClause
 						{ 

@@ -30,6 +30,7 @@ namespace KParts{
 
 namespace KTextEditor{
     class EditInterface;
+    class Document;
 }
 
 class ProblemReporter: public QListView{
@@ -49,6 +50,7 @@ public:
 
 public slots:
     void reparse();
+    void configure();
 
 private slots:
     void slotActivePartChanged( KParts::Part* );
@@ -58,8 +60,11 @@ private slots:
 private:
     JavaSupportPart* m_javaSupport;
     KTextEditor::EditInterface* m_editor;
+    KTextEditor::Document* m_document;
     QTimer* m_timer;
     QString m_filename;
+    int m_active;
+    int m_delay;
 };
 
 #endif
