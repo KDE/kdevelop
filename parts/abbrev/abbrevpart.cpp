@@ -18,17 +18,35 @@
 #include <klocale.h>
 #include <kparts/part.h>
 #include <kstandarddirs.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 
 #include "abbrevconfigwidget.h"
-#include "abbrevfactory.h"
 #include "abbrevpart.h"
 
+class AbbrevFactory : public KGenericFactory<AbbrevPart>
+{
+public:
+    AbbrevFactory()
+        : KGenericFactory<AbbrevPart>( "kdevabbrev" )
+    { }
 
-AbbrevPart::AbbrevPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+    virtual KInstance *createInstance()
+    {
+        KInstance *instance = KGenericFactory<AbbrevPart>::createInstance();
+        KStandardDirs *dirs = instance->dirs();
+        dirs->addResourceType( "codetemplates", 
+                               KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );
+        return instance;
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory );
+
+AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(AbbrevFactory::instance());
     setXMLFile("kdevabbrev.rc");

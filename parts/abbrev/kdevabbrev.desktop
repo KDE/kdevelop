@@ -4,7 +4,7 @@ Type=Service
 Exec=blubb
 Comment=Abbrevation expansion
 Name=KDevAbbrev
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevabbrev
 X-KDevelop-Scope=Global
 

@@ -15,7 +15,7 @@
 #define _ABBREVPART_H_
 
 #include <qasciidict.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include "ktexteditor/editinterface.h"
 #include "ktexteditor/viewcursorinterface.h"
 
@@ -29,12 +29,12 @@ struct CodeTemplate {
 };
 
 
-class AbbrevPart : public KDevPart
+class AbbrevPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    AbbrevPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    AbbrevPart( QObject *parent, const char *name, const QStringList & );
     ~AbbrevPart();
 
     void addTemplate(const QString &templ, const QString &descr,
