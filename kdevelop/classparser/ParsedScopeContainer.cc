@@ -36,10 +36,10 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedScopeContainer::CParsedScopeContainer()
-  : CParsedClassContainer(false), scopeIterator( scopes )
+  : scopeIterator( scopes )
 {
   setItemType( PIT_SCOPE );
-  scopes.setAutoDelete( true );
+  scopes.setAutoDelete( false );
 }
 
 /*------------------- CParsedScopeContainer::~CParsedScopeContainer()
@@ -72,7 +72,14 @@ CParsedScopeContainer::~CParsedScopeContainer()
  *-----------------------------------------------------------------*/
 void CParsedScopeContainer::clear()
 {
-  CParsedClassContainer::clear();
+  CParsedClassContainer::clear(!path().isEmpty());
+
+  CParsedScopeContainer *act;
+  if (path().isEmpty())
+   for( scopeIterator.toFirst();
+       (act=scopeIterator.current());
+       ++scopeIterator )
+     delete act;
 
   scopes.clear();
 }

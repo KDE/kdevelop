@@ -34,14 +34,14 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedContainer::CParsedContainer(bool autodel)
+CParsedContainer::CParsedContainer()
   : useFullPath( false ),
     methodIterator( methods ),
     attributeIterator( attributes ),
     structIterator( structs )
 {
-  attributes.setAutoDelete( autodel );
-  methods.setAutoDelete( autodel );
+  attributes.setAutoDelete( true );
+  methods.setAutoDelete( true );
 }
 
 /*----------------------------- CParsedContainer::~CParsedContainer()
@@ -439,10 +439,18 @@ void CParsedContainer::removeStruct( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedContainer::clear()
+void CParsedContainer::clear(bool bAutodel)
 {
   attributes.clear();
   methods.clear();
   methodsByNameAndArg.clear();
+
+  CParsedStruct *act;
+  if (bAutodel)
+   for( structIterator.toFirst();
+       (act=structIterator.current());
+       ++structIterator )
+     delete act;
+
   structs.clear();
 }

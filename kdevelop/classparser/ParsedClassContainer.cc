@@ -36,10 +36,10 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClassContainer::CParsedClassContainer(bool autodel)
-  : CParsedContainer(autodel), classIterator( classes )
+CParsedClassContainer::CParsedClassContainer()
+  : classIterator( classes )
 {
-  classes.setAutoDelete( autodel );
+  classes.setAutoDelete( false );
 }
 
 /*------------------- CParsedClassContainer::~CParsedClassContainer()
@@ -70,9 +70,16 @@ CParsedClassContainer::~CParsedClassContainer()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClassContainer::clear()
+void CParsedClassContainer::clear(bool bAutodel)
 {
-  CParsedContainer::clear();
+  CParsedContainer::clear(!bAutodel);
+
+  CParsedClass *act;
+  if (bAutodel)
+   for( classIterator.toFirst();
+       (act=classIterator.current());
+       ++classIterator )
+     delete act;
 
   classes.clear();
 }
