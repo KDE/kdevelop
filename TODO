@@ -16,8 +16,6 @@
 
 * Perhaps use konsole part for the application frontend
 
-* Complete STL index. Preferably convert STL documentation to docbook :-)
-
 * Implement reverse I-search
 
 * Check if a man page exists before offering the context menu

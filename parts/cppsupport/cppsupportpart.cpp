@@ -230,14 +230,14 @@ void CppSupportPart::slotSwitchHeader()
     kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
     QStringList candidates;
     if (ext == "h" || ext == "hxx") {
-        candidates << (base + ".c");
-        candidates << (base + ".cc");
-        candidates << (base + ".cpp");
-        candidates << (base + ".cxx");
-        candidates << (base + ".C");
+        candidates << (base + "c");
+        candidates << (base + "cc");
+        candidates << (base + "cpp");
+        candidates << (base + "cxx");
+        candidates << (base + "C");
     } else if (QStringList::split(',', "c,cc,cpp,cxx,C").contains(ext)) {
-        candidates << (base + ".h");
-        candidates << (base + ".hxx");
+        candidates << (base + "h");
+        candidates << (base + "hxx");
     }
     
     QStringList::ConstIterator it;

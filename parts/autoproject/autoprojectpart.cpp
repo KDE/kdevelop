@@ -52,7 +52,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
 
     KAction *action;
 
-    action = new KAction( i18n("Add translation"), 0,
+    action = new KAction( i18n("Add translation..."), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
     if (!kde)

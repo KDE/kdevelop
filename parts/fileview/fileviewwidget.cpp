@@ -128,7 +128,7 @@ void FileViewWidget::slotItemExecuted(QListViewItem *item)
         return;
 
     FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
-    m_part->core()->gotoSourceFile(fvfitem->fileName(), 0);
+    m_part->core()->gotoFile(QString("file://") + fvfitem->fileName());
 }
 
 

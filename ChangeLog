@@ -1,9 +1,14 @@
-2001-07-03  Richard Dale <duke@tipitina.demon.co.uk
+2001-07-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Make file views work for arbitrary mime types
+	* Switch header fix
+
+2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Added package visibility to the class browser for Java - denoted by a 
           green rectangle against an instance variable or method.
 
-2001-07-03  Richard Dale <duke@tipitina.demon.co.uk
+2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Added accessor methods to the Class store/parser sources, so that
           instance variables should no longer need to be accessed directly.

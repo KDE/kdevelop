@@ -555,7 +555,7 @@ void Core::raiseWidget(QWidget *w)
 
 void Core::gotoFile(const KURL &url)
 {
-    QString mimeType = KMimeType::findByURL(url)->name();
+    QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
     if (!mimeType.startsWith("text/")) {
         new KRun(url);
     } else {

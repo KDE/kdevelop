@@ -329,7 +329,7 @@ void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
     } else if (pvitem->type() == ProjectItem::File) {
         QString dirName = activeSubproject->path;
         FileItem *fitem = static_cast<FileItem*>(pvitem);
-        m_part->core()->gotoSourceFile(KURL(dirName + "/" + QString(fitem->name)));
+        m_part->core()->gotoFile(KURL(dirName + "/" + QString(fitem->name)));
     }
 }
 
