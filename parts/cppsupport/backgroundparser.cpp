@@ -50,6 +50,8 @@ public:
     {
 	//setupProject();
 	//setup();
+
+	addMacro( Macro( "__cplusplus", "1" ) );
     }
 
     void setupProject()
@@ -291,7 +293,8 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 {
     m_driver->remove( fileName );
     m_driver->parseFile( fileName );
-
+    m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
+						  // translation unit.
     TranslationUnitAST::Node translationUnit = m_driver->takeTranslationUnit( fileName );
 
     Unit* unit = new Unit;
