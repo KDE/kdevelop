@@ -157,6 +157,11 @@ public:
 // Helpers
 public:
     /**
+    * Stops the CVS job, both currently executing and queued
+    * (@todo note that queuing is not yet implemented)
+    */
+    void flushJobs();
+    /**
     * @return a reference to the process widget: many worker methods
     * display their output in it and the CvsServicePart will embed it in the
     * bottom embedded view.

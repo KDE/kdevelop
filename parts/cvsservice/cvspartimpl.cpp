@@ -585,18 +585,22 @@ void CvsServicePartImpl::unTag( const KURL::List& urlList )
 
 void CvsServicePartImpl::addToIgnoreList( const KURL::List& urlList )
 {
-    CvsServicePartImpl::addToIgnoreList( projectDirectory(), urlList );
+    addToIgnoreList( projectDirectory(), urlList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsServicePartImpl::removeFromIgnoreList( const KURL::List& urlList )
 {
-    CvsServicePartImpl::removeFromIgnoreList( projectDirectory(), urlList );
+    removeFromIgnoreList( projectDirectory(), urlList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+* @fixme: Current implementation doesn't use CvsService :-( I just ported the
+* old code which relies on buildcvs.sh script. [marios]
+*/
 void CvsServicePartImpl::createNewProject( const QString &dirName,
     const QString &cvsRsh, const QString &location,
     const QString &message, const QString &module, const QString &vendor,
@@ -668,7 +672,16 @@ void CvsServicePartImpl::releaseCvsService()
     if (m_cvsService)
         m_cvsService->quit();
     delete m_cvsService;
+    m_cvsService = 0;
     delete m_repository;
+    m_repository = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::flushJobs()
+{
+    processWidget()->cancelJob();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

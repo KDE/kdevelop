@@ -270,19 +270,27 @@ QWidget* CvsServicePart::newProjectWidget( QWidget *parent )
 
 void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
 {
-    if (context->hasType( Context::FileContext ))
+    kdDebug(9000) << "contextMenu()" << endl;
+    if (context->hasType( Context::FileContext ) ||
+        context->hasType( Context::EditorContext ))
     {
-        kdDebug(9000) << "contextMenu()" << endl;
 
-        const FileContext *fcontext = static_cast<const FileContext*>( context );
-
+        if (context->hasType( Context::FileContext ))
+        {
+            kdDebug(9000) << "Requested for a FileContext" << endl;
+            const FileContext *fcontext = static_cast<const FileContext*>( context );
+            m_urls = fcontext->urls();
+        }
+        else
+        {
+            kdDebug(9000) << "Requested for an EditorContext" << endl;
+            const EditorContext *editorContext = static_cast<const EditorContext*>( context );
+            m_urls << editorContext->url();
+        }
         // THis stuff should end up into prepareOperation()
-        m_urls = fcontext->urls();
         URLUtil::dump( m_urls );
-        // FIXME: Here we currently avoid context menu on document because there is no document
-        // selected and we'll need to connect slotAction*() instead of these.
         if (m_urls.count() <= 0)
-            return;
+                return;
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
         popup->insertSeparator();
@@ -578,7 +586,7 @@ void CvsServicePart::slotStopButtonClicked( KDevPlugin* which )
     if ( which != 0 && which != this )
         return;
 
-    m_impl->processWidget()->cancelJob();
+    m_impl->flushJobs();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -664,7 +672,7 @@ void CvsServicePart::slotProjectClosed()
     CVSDir cvsdir( project()->projectDirectory() );
     if (cvsdir.isValid())
     {
-        kdDebug(9000) << "Project has no CVS Support: too bad!! :-(" << endl;
+        kdDebug(9000) << "Project had no CVS Support: too bad!! :-(" << endl;
         return;
     }
 
