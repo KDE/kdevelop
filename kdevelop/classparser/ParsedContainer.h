@@ -85,6 +85,15 @@ public: // Metods to set attribute values
 
 public: // Public queries
 
+  /** Returns the number of global methods. */
+  int methodCount() { return methodIterator.count(); }
+    
+  /** Returns the number of global attributes. */
+  int attributeCount() { return attributeIterator.count(); }
+
+  /** Returns the number of global structures. */
+  int structCount() { return structIterator.count(); }
+
   /** Get a method by comparing with another method. 
    * @param aMethod Method to compare with.
    */
