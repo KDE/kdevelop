@@ -30,17 +30,18 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <qregexp.h>
 
 
 typedef KDevGenericFactory<PythonSupportPart> PythonSupportFactory;
-static const KAboutData data("kdevpythonsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevpythonsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( data ) )
 
 PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport("PythonSupport", "python", parent, name ? name : "PythonSupportPart")
+    : KDevLanguageSupport(&data, parent, name ? name : "PythonSupportPart")
 {
     setInstance(PythonSupportFactory::instance());
 
@@ -302,7 +303,8 @@ QString PythonSupportPart::interpreter()
 void PythonSupportPart::startApplication(const QString &program)
 {
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevpythonsupport/run/terminal");
-    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
+    if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+        appFrontend->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 

@@ -26,15 +26,15 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <kdevelop/kdevcore.h>
-#include <kdevelop/kdevpartcontroller.h>
-#include <kdevelop/kdevmainwindow.h>
-#include <kdevelop/domutil.h>
-#include <kdevelop/codemodel.h>
+#include <kdevcore.h>
+#include <kdevpartcontroller.h>
+#include <kdevmainwindow.h>
+#include <domutil.h>
+#include <codemodel.h>
 #include <kparts/part.h>
 
 
-#include <kdevelop/kdevproject.h>
+#include <kdevproject.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kapplication.h>
@@ -42,13 +42,16 @@
 #include <kjsembed/kjsembedpart.h>
 #include <kjsembed/jsconsolewidget.h>
 
+#include <kdevplugininfo.h>
+
 #include "kjssupport_part.h"
 #include "kjsproblems.h"
 #include "jscodecompletion.h"
 #include "subclassingdlg.h"
 
-typedef KGenericFactory<kjsSupportPart> kjsSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevkjssupport, kjsSupportFactory( "kdevkjssupport" ) );
+typedef KDevGenericFactory<kjsSupportPart> kjsSupportFactory;
+static const KDevPluginInfo data("kdevkjssupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevkjssupport, kjsSupportFactory( data ) );
 
 
 class typeProperty
@@ -60,7 +63,7 @@ class typeProperty
 };
 
 kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringList& )
-: KDevLanguageSupport("KDevkjsSupport", "JavaScript", parent, name ? name : "kjsSupportPart" )
+: KDevLanguageSupport(&data, parent, name ? name : "kjsSupportPart" )
 {
 	setInstance(kjsSupportFactory::instance());
 	setXMLFile("kdevkjssupport.rc");

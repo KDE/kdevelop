@@ -19,15 +19,16 @@
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
+#include "kdevplugininfo.h"
 
 #include "konsoleviewwidget.h"
 
 
-static const KAboutData data("kdevkonsoleview", I18N_NOOP("Konsole"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( &data ) )
+static const KDevPluginInfo data("kdevkonsoleview");
+K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( data ) )
 
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("Konsole", "konsole", parent, name ? name : "KonsoleViewPart")
+  : KDevPlugin(&data, parent, name ? name : "KonsoleViewPart")
 {
     m_widget = new KonsoleViewWidget(this);
 

@@ -9,5 +9,5 @@ libkdevuichooser_la_SOURCES = uichooser_part.cpp uichooser.ui uichooser_widget.c
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_uichooser.desktop
+service_DATA = kdevuichooser.desktop
 

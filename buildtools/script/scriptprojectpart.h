@@ -15,7 +15,7 @@
 #include <qdict.h>
 #include <qguardedptr.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 class QListViewItem;
 class QStringList;
@@ -23,7 +23,7 @@ class KDialogBase;
 class ScriptProjectWidget;
 
 
-class ScriptProjectPart : public KDevProject
+class ScriptProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 

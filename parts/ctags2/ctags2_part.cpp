@@ -29,6 +29,7 @@
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
+#include <kdevplugininfo.h>
 
 #include "ctags2_widget.h"
 #include "ctags2_part.h"
@@ -40,11 +41,11 @@ namespace ctags
 }
 
 typedef KDevGenericFactory<CTags2Part> CTags2Factory;
-static const KAboutData data("kdevctags2", I18N_NOOP("CTags2..."), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevctags2, CTags2Factory( &data ) )
+static const KDevPluginInfo data("kdevctags2");
+K_EXPORT_COMPONENT_FACTORY( libkdevctags2, CTags2Factory( data ) )
 
 CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("ctags2", "ctags2", parent, name ? name : "ctags2Part" )
+  : KDevPlugin(&data, parent, name ? name : "ctags2Part" )
 {
 	setInstance(CTags2Factory::instance());
 	//setXMLFile("kdevpart_ctags2.rc");

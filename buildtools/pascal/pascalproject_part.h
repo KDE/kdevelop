@@ -13,13 +13,13 @@
 
 #include <qguardedptr.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 class PascalProjectWidget;
 class KDialogBase;
 class KDevCompilerOptions;
 
-class PascalProjectPart : public KDevProject
+class PascalProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 public:

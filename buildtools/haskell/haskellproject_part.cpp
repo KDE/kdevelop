@@ -48,13 +48,16 @@
 #include "runoptionswidget.h"
 #include "haskellprojectoptionsdlg.h"
 #include "haskellproject_part.h"
+#include "kdevgenericfactory.h"
+#include <kdevplugininfo.h>
 
-typedef KGenericFactory<HaskellProjectPart> HaskellProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevhaskellproject, HaskellProjectFactory( "kdevhaskellproject" ) )
+typedef KDevGenericFactory<HaskellProjectPart> HaskellProjectFactory;
+static const KDevPluginInfo data("kdevhaskellproject");
+K_EXPORT_COMPONENT_FACTORY( libkdevhaskellproject, HaskellProjectFactory( data ) )
 
 
 HaskellProjectPart::HaskellProjectPart(QObject *parent, const char *name, const QStringList& )
-  : KDevProject("KDevPart", "kdevpart", parent, name ? name : "HaskellProjectPart" )
+  : KDevBuildTool(&data, parent, name ? name : "HaskellProjectPart" )
 {
   	setInstance(HaskellProjectFactory::instance());
   	setXMLFile("kdevhaskellproject.rc");

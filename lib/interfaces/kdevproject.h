@@ -33,12 +33,15 @@
 
 class QTimer;
 
+/**
+KDevelop project interface.
+*/
 class KDevProject : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    KDevProject( const QString& pluginName, const QString& icon,
+    KDevProject(const KDevPluginInfo *info,
         QObject *parent=0, const char *name=0 );
     virtual ~KDevProject();
 

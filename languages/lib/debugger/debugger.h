@@ -15,6 +15,8 @@
 # include "kde30x_markinterfaceextension.h"
 #endif
 
+class KDevPartController;
+
 /**
 * Describes a single breakpoint in the system
 *
@@ -64,7 +66,7 @@ public:
 
     /**
     */
-    static Debugger *getInstance();
+//     static Debugger *getInstance();
 
     /**
     * Controls the breakpoint icon being displayed in the editor through the
@@ -93,9 +95,9 @@ public:
     */
     void clearExecutionPoint();
 
-protected:
+// protected:
 
-    Debugger();
+    Debugger(KDevPartController *partController);
     ~Debugger();
 
 private slots:
@@ -127,6 +129,7 @@ private:
     };
 
     static Debugger *s_instance;
+    KDevPartController *m_partController;
     QValueList<BPItem> BPList;
 };
 

@@ -30,16 +30,17 @@
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevdifffrontend.h"
+#include "kdevplugininfo.h"
 #include "commitdlg.h"
 #include "execcommand.h"
 
-static const KAboutData data("kdevperforce", I18N_NOOP("Perforce"), "1.0");
+static const KDevPluginInfo data("kdevperforce");
 
 typedef KDevGenericFactory<PerforcePart> PerforceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( data ) )
 
 PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )
+    : KDevPlugin( &data, parent, name ? name : "PerforcePart" )
 {
     setInstance(PerforceFactory::instance());
     setupActions();
@@ -88,7 +89,7 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
-        popupfile = fcontext->fileName();
+        popupfile = fcontext->urls().first().fileName();
         QFileInfo fi( popupfile );
         popup->insertSeparator();
 
@@ -140,7 +141,8 @@ void PerforcePart::execCommand( const QString& cmd, const QString& filename )
     command += " && p4 " + cmd + " ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 void PerforcePart::edit( const QString& filename )
@@ -182,7 +184,8 @@ void PerforcePart::commit( const QString& filename )
     QString command("echo " + message);
     command += " | p4 submit -i";
 
-    makeFrontend()->queueCommand("", command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand("", command);
 }
 
 
@@ -206,7 +209,8 @@ void PerforcePart::update( const QString& filename )
     command += " && p4 sync ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 
@@ -273,8 +277,8 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     QString strippedDiff = diff;
     strippedDiff.replace( rx, QString::null );
 
-    Q_ASSERT( diffFrontend() );
-    diffFrontend()->showDiff( strippedDiff );
+    if (KDevDiffFrontend *diffFrontend = extension<KDevDiffFrontend>("KDevelop/DiffFrontend"))
+        diffFrontend->showDiff( strippedDiff );
 }
 
 QString PerforcePart::currentFile()

@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
+#include <kdevplugininfo.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -39,13 +40,13 @@
 #include "kdevpartcontroller.h"
 #include "abbrevconfigwidget.h"
 
-static const KAboutData data("kdevabbrev", I18N_NOOP("Abbreviations"), "1.0");
+static const KDevPluginInfo data("kdevabbrev");
 
 class AbbrevFactory : public KDevGenericFactory<AbbrevPart>
 {
 public:
     AbbrevFactory()
-        : KDevGenericFactory<AbbrevPart>( &data )
+        : KDevGenericFactory<AbbrevPart>( data )
     { }
 
     virtual KInstance *createInstance()
@@ -64,7 +65,7 @@ public:
 K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory )
 
 AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Abbrev", "fontsizeup", parent, name ? name : "AbbrevPart")
+    : KDevPlugin(&data, parent, name ? name : "AbbrevPart")
 {
     setInstance(AbbrevFactory::instance());
     setXMLFile("kdevabbrev.rc");
@@ -247,7 +248,7 @@ QString AbbrevPart::currentWord() const
 
 void AbbrevPart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"), i18n("Abbreviations"), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"), i18n("Abbreviations"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     AbbrevConfigWidget *w = new AbbrevConfigWidget(this, vbox, "abbrev config widget");
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }

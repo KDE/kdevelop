@@ -227,7 +227,7 @@ void SubprojectOptionsDialog::storeConfig()
 void SubprojectOptionsDialog::cflagsClicked()
 {
     QString new_cflags = AutoProjectTool::execFlagsDialog(ccompiler, cflags_edit->text(), this);
-    if (!new_cflags.isNull())
+//    if (!new_cflags.isNull())
         cflags_edit->setText(new_cflags);
 }
 
@@ -235,7 +235,7 @@ void SubprojectOptionsDialog::cflagsClicked()
 void SubprojectOptionsDialog::cxxFlagsClicked()
 {
     QString new_cxxflags = AutoProjectTool::execFlagsDialog(cxxcompiler, cxxflags_edit->text(), this);
-    if (!new_cxxflags.isNull())
+//    if (!new_cxxflags.isNull())
         cxxflags_edit->setText(new_cxxflags);
 }
 
@@ -243,7 +243,7 @@ void SubprojectOptionsDialog::cxxFlagsClicked()
 void SubprojectOptionsDialog::fflagsClicked()
 {
     QString new_fflags = AutoProjectTool::execFlagsDialog(f77compiler, fflags_edit->text(), this);
-    if (!new_fflags.isNull())
+//    if (!new_fflags.isNull())
         fflags_edit->setText(new_fflags);
 }
 

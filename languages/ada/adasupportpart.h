@@ -43,6 +43,8 @@ private:
     void saveProjectSourceInfo( );
 private:
     AdaSupportPartData* d;
+    
+friend class ProblemReporter;
 };
 
 

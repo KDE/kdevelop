@@ -12,13 +12,13 @@
 
 #include <qguardedptr.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 class AdaProjectWidget;
 class KDialogBase;
 class KDevCompilerOptions;
 
-class AdaProjectPart : public KDevProject
+class AdaProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 public:

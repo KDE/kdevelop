@@ -40,6 +40,7 @@
 #include <kdevpartcontroller.h>
 #include <codemodel.h>
 #include <domutil.h>
+#include <kdevplugininfo.h>
 
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
@@ -55,11 +56,11 @@
 
 using namespace std;
 
-static const KAboutData data("kdevphpsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevphpsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( data ) )
 
 PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport("PHPSupport", "php", parent, name ? name : "PHPSupportPart")
+    : KDevLanguageSupport(&data, parent, name ? name : "PHPSupportPart")
 {
   m_htmlView=0;
   phpExeProc=0;

@@ -133,7 +133,7 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     if ( tar.open(IO_WriteOnly) )
     {
     	QStringList files = m_part->project()->distFiles();
-	KProgressDialog *prog = new KProgressDialog( m_part->widget(), "dialog", i18n("Building Package"), "", true );
+	KProgressDialog *prog = new KProgressDialog( 0, "dialog", i18n("Building Package"), "", true );
 	prog->show();
 	for( uint idx = 0; idx < files.count(); ++idx)
 	{

@@ -11,13 +11,14 @@
 
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <kdevplugininfo.h>
 #include "javasupportfactory.h"
 
-static const KAboutData data("kdevjavasupport", I18N_NOOP("Language"), "1.0");
+static const KDevPluginInfo data("kdevjavasupport");
 K_EXPORT_COMPONENT_FACTORY( libkdevjavasupport, JavaSupportFactory )
 
 JavaSupportFactory::JavaSupportFactory()
-    : KDevGenericFactory<JavaSupportPart>( &data )
+    : KDevGenericFactory<JavaSupportPart>( data )
 {
 }
 
@@ -29,5 +30,10 @@ KInstance *JavaSupportFactory::createInstance()
     dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevjavasupport/pcs/" );
 
     return instance;
+}
+
+const KDevPluginInfo *JavaSupportFactory::info()
+{
+    return &data;
 }
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1999-2001 Bernd Gehrmann <bernd@kdevelop.org>
+   Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,12 +17,10 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#ifndef _KDEVPLUGIN_H_
-#define _KDEVPLUGIN_H_
+#ifndef KDEVPLUGIN_H
+#define KDEVPLUGIN_H
 
 #include <qobject.h>
-#include <qvaluelist.h>
 #include <kxmlguiclient.h>
 #include "kdevapi.h"
 
@@ -29,243 +28,168 @@ class KDevCore;
 class KDevProject;
 class KDevVersionControl;
 class KDevLanguageSupport;
-class KDevEditorManager;
-class KDevMakeFrontend;
-class KDevAppFrontend;
 class KDevPartController;
 class KDevMainWindow;
-class KDevDebugger;
-class KDevDiffFrontend;
-class KDevCreateFile;
-class KDevSourceFormatter;
 class KDevCodeRepository;
 class CodeModel;
-
-class DCOPClient;
-class KAboutData;
+class KDevPluginInfo;
 class QDomElement;
 
-namespace KParts
-{
-    class Part;
-}
+/**
+@file kdevplugin.h
+KDevelop plugin interface.
+*/
 
-// increase this if you want old plugins to stop working
-#define KDEVELOP_PLUGIN_VERSION 2
+/**Current KDevelop plugin interface version. Interfaces declare plugin version to make sure
+old source (or binary) incompatible plugins are not loaded. Increase this if 
+it is necessary that old plugins stop working.*/
+#define KDEVELOP_PLUGIN_VERSION 3
 
 /**
- * This is the base class for all components like doc tree view, LFV, RFV
- * and so on.
- */
-class KDevPlugin : public QObject, public KXMLGUIClient
+The base class for all KDevelop plugins.
+Plugin is a component which is loaded into KDevelop shell at startup or by request.
+Each plugin should have corresponding .desktop file with a description.
+.desktop file template looks like:
+@code
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=
+GenericName=
+Comment=
+Icon=
+X-KDevelop-Plugin-Version=
+X-KDevelop-Plugin-Homepage=
+X-KDevelop-Plugin-BugsEmailAddress=
+X-KDevelop-Plugin-Copyright=
+X-KDE-Library=
+X-KDevelop-Version=
+X-KDevelop-Scope=
+X-KDevelop-Properties=
+X-KDevelop-Args=
+@endcode
+<b>Description of parameters in .desktop file:</b>
+- <i>Name</i> is a non-translatable name of a plugin, it is used in KTrader queries
+to search for a plugin (required);
+- <i>GenericName</i> is a translatable name of a plugin, it is used to show
+plugin names in GUI (required);
+- <i>Comment</i> is a short description about the plugin (optional);
+- <i>Icon</i> is a plugin icon (preferred);
+- <i>X-KDevelop-Plugin-Version</i> is a version of a plugin (optional);
+- <i>X-KDevelop-Plugin-Homepage</i> is a home page of a plugin (optional);
+- <i>X-KDevelop-Plugin-License</i> is a license (optional). can be: GPL, LGPL, BSD, Artistic,
+QPL or Custom. If this property is not set, license is considered as unknown;
+- <i>X-KDevelop-Plugin-BugsEmailAddress</i> is an email address for bug reports (optional);
+- <i>X-KDevelop-Plugin-Copyright</i> is a copyright statement (optional);
+- <i>X-KDE-Library</i> is a name of library which contains the plugin (required);
+- <i>X-KDevelop-Version</i> is a version of KDevelop interfaces which is supported by the plugin (required);
+- <i>X-KDevelop-Scope</i> is a scope of a plugin (see below for explanation) (required);
+- <i>X-KDevelop-Args</i> is a list of additional arguments passed to plugins constructor (optional);
+- <i>X-KDevelop-Properties</i> is a list of properties which this plugin supports, see @ref KDevelopProfiles page for explanation (required to work with shells that support profiles).
+.
+Plugin scope can be either:
+- Global
+- Project
+.
+Global plugins are plugins which require only shell to be loaded and do not operate on @ref KDevProject interface
+and/or do not use project wide information.
+Project plugins require a project to be loaded and are usually loaded/unloaded among with the project.
+If your plugin use @ref KDevProject interface and/or operate on project-related information then this is the project plugin.
+
+@sa KDevGenericFactory class documentation for an information about plugin instantiation
+and writing factories for plugins.
+
+@sa KDevCore class documentation for an information about features which are available to plugins
+from shell applications.
+*/
+class KDevPlugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
 public:
-    /**
-     * Constructs a component.
-     */
-    KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name=0 );
+    /**Constructs a plugin.
+    @param info Important information about the plugin - plugin internal and generic
+    (GUI) name, description, a list of authors, etc. That information is used to show
+    plugin information in various places like "about application" dialog, plugin selector
+    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+    be equal to the lifetime of the plugin.
+    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+    interface. Otherwise the plugin will not be constructed.
+    @param name The internal name which identifies the plugin.*/
+    KDevPlugin(const KDevPluginInfo *info, QObject *parent, const char *name = 0);
 
-    /**
-     * Destructs a component.
-     */
-    ~KDevPlugin();
+    /**Destructs a plugin.*/
+    virtual ~KDevPlugin();
 
-    /**
-     * Offers access to KDevelop core.
-     **/
-    QString pluginName() const;
+    /**Provides an information about the plugin.
+    @return KAboutData object which was initialized in the constructor.*/
+    const KDevPluginInfo* info();
 
-    /**
-     * Returns the name of the icon
-     **/
-    QString icon() const;
-
-    /**
-     * Returns the short description
-     **/
-    virtual QString shortDescription() const;
-
-    /**
-     * Returns the description
-     **/
-    virtual QString description() const;
-
-    /**
-     * Create the DCOP interface for the given @p serviceType, if this
-     * plugin provides it. Return false otherwise.
-     */
-    virtual bool createDCOPInterface( const QString& /*serviceType*/ ) { return 0L; }
-
-    /**
-     * Reimplement this method and return a @ref QStringList of all config
-     * modules your application part should offer via KDevelop. Note that the
-     * part and the module will have to take care for config syncing themselves.
-     * Usually @p DCOP used for that purpose.
-     *
-     * @note Make sure you offer the modules in the form:
-     * <code>"pathrelativetosettings/mysettings.desktop"</code>
-     *
-     **/
-    virtual QStringList configModules() const { return QStringList(); };
-
-    /**
-     * Reimplement this method if you want to add your credits to the KDevelop
-     * about dialog.
-     **/
-    virtual const KAboutData* aboutData() { return 0L; };
-
-    /**
-     *  reimplement and retun the part here.You can use this method if
-     *  you need to access the current part.
-     **/
-    virtual KParts::Part* part() { return 0; }
-
-    /**
-     * Retrieve the current DCOP Client for the plugin.
-     *
-     * The clients name is taken from the name argument in the constructor.
-     * @note The DCOPClient object will only be created when this method is
-     * called for the first time. Make sure that the part has been loaded
-     * before calling this method, if it's the one that contains the DCOP
-     * interface that other parts might use.
-     */
-    DCOPClient *dcopClient() const;
-
-    /**
-     * Returns the widget of the plugin. This must be overridden.
-     */
-    virtual QWidget* widget() { return 0L; }
-
-    /**
-     * Gives a reference to the toplevel widget.
-     */
+    /**@return A reference to the toplevel widget.*/
     KDevMainWindow *mainWindow();
-    /**
-     * Indicates whether a valid main window is active.
-     */
-    bool mainWindowValid();
 
-    /**
-     * Gives a reference to the application core
-     */
+    /**@return A reference to the application core - an object which provides
+    basic functionalities for inter-parts communications / cooperation.*/
     KDevCore *core() const;
-    /**
-     * Gives a reference to the current project component
-     */
+    
+    /**@return A reference to the current project component or 0 if no project is loaded.*/
     KDevProject *project() const;
-    /**
-     * Gives a reference to the language support component
-     */
+    
+    /**@return A reference to the language support component or 0 if no support available.*/
     KDevLanguageSupport *languageSupport() const;
-    /**
-     * Gives a reference to the make frontend component
-     */
-    KDevMakeFrontend *makeFrontend() const;
-    /**
-     * Gives a reference to the diff frontend component
-     */
-    KDevDiffFrontend *diffFrontend() const;
-    /**
-     * Gives a reference to the application frontend component
-     */
-    KDevAppFrontend *appFrontend() const;
-    /**
-     * Gives a reference to the class store
-     */
+        
+    /**@return A reference to the memory symbol store.*/
     CodeModel *codeModel() const;
 
-    /**
-     * Gives a reference to the DOM tree that represents
-     * the project file.
-     */
+    /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;
 
-    /**
-     * Returns a reference to the part controller.
-     */
+    /**@return A reference to the part controller which is used to manipulate loaded KParts.*/
     KDevPartController *partController() const;
 
-    /**
-     * Returns a reference to the debugger API.
-     */
-    KDevDebugger *debugger() const;
-
-    /**
-     * Returns a reference to the Create File API.
-     */
-    KDevCreateFile *createFileSupport() const;
-
-    /**
-     * To restore any settings which differs from project to project,
-     * you can override this base class method to read in from a certain subtree
-     * of the project session file.
-     * During project loading, respectively project session (.kdevses) loading,
-     * this method will be called to give a chance to adapt the part to
-     * the newly loaded project. For instance, the debugger part might restore the
-     * set breakpoints from the previous debug session for the certain project.
-     *
-     * @note Take attention to the difference to common not-project-related session stuff.
-     *       They belong to the application rc file (kdeveloprc)
-     */
-    virtual void restorePartialProjectSession(const QDomElement* el);
-
-    /**
-     * @sa restorePartialProjectSession - This is the other way round, the same just for saving.
-     */
-    virtual void savePartialProjectSession(QDomElement* el);
-
-    /**
-     * @return a reference to the current vcs, 0 if no VCS is used
-     */
-    KDevVersionControl *versionControl() const;   // used by the FileTree
-
-    /**
-    * @return
-    */
+    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
     KDevCodeRepository* codeRepository() const;
 
-    /**
-    * Same as @ref extension(const QString & serviceType) but has one template argument.
-    * Template argument is used as a type to cast the result to. This is useful if extension
-    * is derived from a certain abstract base class.
-    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
-    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
-    */
-    
+    /**Same as @ref extension(const QString & serviceType) but has one template argument.
+    Template argument is used as a type to cast the result to. This is useful if extension
+    is derived from a certain abstract base class.
+    @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
+    @return a KDevelop extension plugin for given service type or 0 if no plugin supports it*/
     template <class Extension>
-    Extension *extension(const QString &serviceType)
+    Extension *extension(const QString &serviceType, const QString &constraint = "")
     {
-        KDevPlugin *plugin = m_api->queryForExtension(serviceType);
+        KDevPlugin *plugin = extension(serviceType, constraint);
         if (plugin)
             return static_cast<Extension*>(plugin);
         else
             return 0;
     }
 
-    /** @anchor extension
-    * Queries for the plugin which supports given service type.
-    * All already loaded plugins will be queried and the first one to support the service type
-    * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
-    * required in .desktop file for that plugin.
-    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
-    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
-    */
-    KDevPlugin *extension(const QString &serviceType);
-        
-signals:
-    /**
-     * Emitted when the part will be shown. If you really want to avoid that
-     * the part is shown at all, you will have to reimplement showPart();
-     **/
-    void aboutToShowPart();
+    /**@anchor extension
+    Queries for the plugin which supports given service type.
+    All already loaded plugins will be queried and the first one to support the service type
+    will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+    required in .desktop file for that plugin.
+    @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
+    @return a KDevelop extension plugin for given service type or 0 if no plugin supports it*/
+    KDevPlugin *extension(const QString &serviceType, const QString &constraint = "");
+    
+    /**Override this base class method to restore any settings which differs from project to project.
+    Data can be read from a certain subtree of the project session file.
+    During project loading, respectively project session (.kdevses) loading,
+    this method will be called to give a chance to adapt the plugin to
+    the newly loaded project. For instance, the debugger plugin might restore the
+    list of breakpoints from the previous debug session for the certain project.
+    @note Take attention to the difference to common not-project-related session stuff.
+          They belong to the application rc file (kdeveloprc)
+    @note Project session file is useful for settings which cannot be shared between
+          developers. If a setting should be shared, modify projectDom instead.
+    @param el The parent DOM element for plugins session settings.*/
+    virtual void restorePartialProjectSession(const QDomElement* el);
 
-protected:
-    /**
-     * This will cause the part to show up by calling  KPart::show();
-     **/
-    virtual void showPart();
+    /**Saves session settings.
+    @sa restorePartialProjectSession - this is the other way round, the same just for saving.*/
+    virtual void savePartialProjectSession(QDomElement* el);
 
 private:
     KDevApi *m_api;

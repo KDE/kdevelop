@@ -9,7 +9,7 @@ libkdevctags2_la_SOURCES = ctags2_part.cpp readtags.c ctags2_widgetbase.ui ctags
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_ctags2.desktop
+service_DATA = kdevctags2.desktop
 
 rcdir = $(kde_datadir)/kdevctags2
 

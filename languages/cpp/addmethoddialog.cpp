@@ -223,7 +223,8 @@ void AddMethodDialog::accept()
 
         QFileInfo fileInfo( implementationFile );
         if( !QFile::exists(fileInfo.absFilePath()) ){
-            m_cppSupport->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
+            if (KDevCreateFile *createFileSupp = m_cppSupport->extension<KDevCreateFile>("KDevelop/CreateFile"))
+                createFileSupp->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
         }
 
         m_cppSupport->partController()->editDocument( KURL( implementationFile ) );

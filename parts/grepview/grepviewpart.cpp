@@ -24,18 +24,15 @@
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
+#include "kdevplugininfo.h"
 #include "grepviewwidget.h"
 
-static const KAboutData data("kdevgrepview", I18N_NOOP("Grep"), "1.0");
+static const KDevPluginInfo data("kdevgrepview");
 
-//typedef KDevGenericFactory<GrepViewPart> GrepViewFactory;
-
-K_EXPORT_COMPONENT_FACTORY(libkdevgrepview, GrepViewFactory(&data))
-
-//K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) )
+K_EXPORT_COMPONENT_FACTORY(libkdevgrepview, GrepViewFactory(data))
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( "GrepView", "grep", parent, name ? name : "GrepViewPart" )
+    : KDevPlugin( &data, parent, name ? name : "GrepViewPart" )
 {
     setInstance(GrepViewFactory::instance());
 

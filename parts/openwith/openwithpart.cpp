@@ -12,13 +12,14 @@
 
 #include "kdevpartcontroller.h"
 #include "kdevcore.h"
+#include "kdevplugininfo.h"
+#include "urlutil.h"
 
-
-static const KAboutData data("kdevopenwith", I18N_NOOP("Open With"), "1.0");
-K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KDevGenericFactory<OpenWithPart>(&data))
+static const KDevPluginInfo data("kdevopenwith");
+K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KDevGenericFactory<OpenWithPart>(data))
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("OpenWith", "openwith", parent, name ? name : "OpenWithPart")
+  : KDevPlugin(&data, parent, name ? name : "OpenWithPart")
 {
   connect(core(), SIGNAL(contextMenu(QPopupMenu*,const Context *)),
 	  this, SLOT(fillContextMenu(QPopupMenu*,const Context *)));
@@ -36,11 +37,12 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     return;
 
   const FileContext *ctx = static_cast<const FileContext*>(context);
-  if (ctx->isDirectory())
+  KURL url = ctx->urls().first();
+  if (URLUtil::isDirectory(url))
       return;
 
   popup->insertSeparator();
-  m_url = KURL(ctx->fileName());
+  m_url = KURL(url.fileName());
 
   KPopupMenu *sub = new KPopupMenu(popup);
 

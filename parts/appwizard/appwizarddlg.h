@@ -35,6 +35,7 @@ class KArchiveFile;
 #include "appwizarddlgbase.h"
 //#include "vcs_form.h"
 #include "autoform.h"
+#include "kdevlicense.h"
 
 struct installFile
 {
@@ -119,6 +120,9 @@ public:
 protected:
     virtual void accept();
 
+	virtual QDict<KDevLicense> licenses();
+	void loadLicenses();
+
 protected slots:
     virtual void templatesTreeViewClicked(QListViewItem*);
     virtual void textChanged();
@@ -174,6 +178,8 @@ private: //data
     bool m_pathIsValid;
 	KPopupMenu* m_favouritesMenu;
 	KPopupMenu* m_templatesMenu;
+	
+	QDict<KDevLicense> m_licenses;
 };
 
 #endif

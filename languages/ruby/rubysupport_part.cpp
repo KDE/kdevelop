@@ -21,6 +21,7 @@
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
 #include "kdevappfrontend.h"
+#include "kdevplugininfo.h"
 
 #include "rubysupport_part.h"
 #include "rubyconfigwidget.h"
@@ -30,11 +31,11 @@
 #include "rubyimplementationwidget.h"
 
 typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
-static const KAboutData data("kdevrubysupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( &data ) )
+static const KDevPluginInfo data("kdevrubysupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( data ) )
 
 RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStringList& )
-  : KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "RubySupportPart" )
+  : KDevLanguageSupport (&data, parent, name ? name : "RubySupportPart" )
 {
   setInstance(RubySupportFactory::instance());
   setXMLFile("kdevrubysupport.rc");
@@ -485,7 +486,8 @@ QString RubySupportPart::characterCoding() {
 
 void RubySupportPart::startApplication(const QString &program) {
 	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
-    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
+    if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+        appFrontend->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 
@@ -535,9 +537,10 @@ void RubySupportPart::contextMenu( QPopupMenu * popup, const Context * context )
     if (context->hasType(Context::FileContext)){
         const FileContext *fc = static_cast<const FileContext*>(context);
         //this is a .ui file and only selection contains only one such file
-        if (fc->fileName().endsWith(".ui"))
+        KURL url = fc->urls().first();
+        if (url.fileName().endsWith(".ui"))
         {
-            m_contextFileName = fc->fileName();
+            m_contextFileName = url.fileName();
             int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
             popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
         }

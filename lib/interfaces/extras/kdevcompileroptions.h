@@ -34,7 +34,6 @@ class KDevCompilerOptions : public QObject
 
 public:
     KDevCompilerOptions( QObject *parent=0, const char *name=0 );
-    ~KDevCompilerOptions();
 
     /**
      * Opens a dialog which allows the user to configure the

@@ -45,12 +45,14 @@
 #include "pascalprojectoptionsdlg.h"
 #include "pascalglobaloptionsdlg.h"
 
+#include <kdevplugininfo.h>
+
 typedef KDevGenericFactory<PascalProjectPart> PascalProjectFactory;
-static const KAboutData data("kdevpascalproject", I18N_NOOP("Build Tool"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevpascalproject, PascalProjectFactory( &data ) )
+static const KDevPluginInfo data("kdevpascalproject");
+K_EXPORT_COMPONENT_FACTORY( libkdevpascalproject, PascalProjectFactory( data ) )
 
 PascalProjectPart::PascalProjectPart(QObject *parent, const char *name, const QStringList& )
-    :KDevProject("PascalProject", "pascalproject", parent, name ? name : "PascalProjectPart" )
+    :KDevBuildTool(&data, parent, name ? name : "PascalProjectPart" )
 {
     setInstance(PascalProjectFactory::instance());
     setXMLFile("kdevpascalproject.rc");

@@ -50,15 +50,17 @@
 #define PROJECTSETTINGSPAGE 1
 #define GLOBALSETTINGSPAGE 2
 
-static const KAboutData data("kdevfilecreate", I18N_NOOP("New File Wizard"), "1.0");
+#include "kdevplugininfo.h"
+
+static const KDevPluginInfo data("kdevfilecreate");
 
 typedef KDevGenericFactory<FileCreatePart> FileCreateFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( data ) )
 
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-    : KDevCreateFile("FileCreate", "wizard", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
+    : KDevCreateFile(&data, parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -67,8 +69,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
   
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("File Templates"), PROJECTSETTINGSPAGE, icon() );
-	_configProxy->createGlobalConfigPage( i18n("File Templates"), GLOBALSETTINGSPAGE, icon() );
+	_configProxy->createProjectConfigPage( i18n("File Templates"), PROJECTSETTINGSPAGE, info()->icon() );
+	_configProxy->createGlobalConfigPage( i18n("File Templates"), GLOBALSETTINGSPAGE, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

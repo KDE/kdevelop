@@ -5,17 +5,18 @@
 #include <klocale.h>
 #include <ktexteditor/document.h>
 
-#include "editorproxy.h"
-#include "partcontroller.h"
+// #include "editorproxy.h"
+#include <kdevpartcontroller.h>
 
 
 using namespace KTextEditor;
 
 Debugger *Debugger::s_instance = 0;
 
-Debugger::Debugger()
+Debugger::Debugger(KDevPartController *partController)
+    :m_partController(partController)
 {
-    connect( PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)),
+    connect( m_partController, SIGNAL(partAdded(KParts::Part*)),
              this, SLOT(partAdded(KParts::Part*)) );
 }
 
@@ -24,18 +25,18 @@ Debugger::~Debugger()
 {}
 
 
-Debugger *Debugger::getInstance()
-{
-    if (!s_instance)
-        s_instance = new Debugger;
-
-    return s_instance;
-}
+// Debugger *Debugger::getInstance()
+// {
+//     if (!s_instance)
+//         s_instance = new Debugger;
+// 
+//     return s_instance;
+// }
 
 
 void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
-    KParts::Part *part = PartController::getInstance()->partForURL(KURL(fileName));
+    KParts::Part *part = m_partController->partForURL(KURL(fileName));
     if( !part )
         return;
 
@@ -76,7 +77,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
 
 void Debugger::clearExecutionPoint()
 {
-    QPtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
+    QPtrListIterator<KParts::Part> it(*m_partController->parts());
     for ( ; it.current(); ++it)
     {
         MarkInterface *iface = dynamic_cast<MarkInterface*>(it.current());
@@ -99,9 +100,9 @@ void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
 {
     clearExecutionPoint();
 
-    PartController::getInstance()->editDocument(url, lineNum);
+    m_partController->editDocument(url, lineNum);
 
-    KParts::Part *part = PartController::getInstance()->partForURL(url);
+    KParts::Part *part = m_partController->partForURL(url);
     if( !part )
         return;
     MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
@@ -119,7 +120,7 @@ void Debugger::marksChanged()
 #if (KDE_VERSION > 305)
         MarkInterface* iface = KTextEditor::markInterface( doc );
 #else
-        KParts::Part *part = PartController::getInstance()->partForURL(doc->url());
+        KParts::Part *part = m_partController->partForURL(doc->url());
         if( !part )
             return;
 
@@ -128,7 +129,7 @@ void Debugger::marksChanged()
 
         if (iface)
         {
-            if( !PartController::getInstance()->partForURL( doc->url() ) )
+            if( !m_partController->partForURL( doc->url() ) )
                 return; // Probably means the document is being closed.
 
             KTextEditor::Mark *m;

@@ -9,5 +9,5 @@ libkdeveditorchooser_la_SOURCES = editorchooser_part.cpp editchooser.ui editorch
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_editorchooser.desktop
+service_DATA = kdeveditorchooser.desktop
 

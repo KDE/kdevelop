@@ -204,7 +204,8 @@ ProjectFileDom KDevProjectManagerWidget::activeFile()
 
 void KDevProjectManagerWidget::createFile()
 {
-    if (KDevCreateFile *createFileSupport = m_part->createFileSupport()) {
+    if (KDevCreateFile *createFileSupport =
+            m_part->extension<KDevCreateFile>("KDevelop/CreateFile")) {
         KDevCreateFile::CreatedFile crFile = createFileSupport->createNewFile(QString::null, activeFolder()->name());
         QString path = activeFolder()->name() + "/" + crFile.filename;
         ProjectItemDom item = part()->defaultImporter()->editor()->import(projectModel(), path);
@@ -706,8 +707,9 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
             ProjectModelItemContext context(folder.data());
             part()->core()->fillContextMenu(&menu, &context);
 
-            // FIXME: compat
-            FileContext fileContext(folder->name(), true);
+            KURL::List urls;
+            urls.append(folder->name());
+            FileContext fileContext(urls);
             part()->core()->fillContextMenu(&menu, &fileContext);
 
             menu.insertItem(i18n("Edit"), 1000);
@@ -749,8 +751,9 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
         ProjectModelItemContext context(file.data());
         part()->core()->fillContextMenu(&menu, &context);
         
-        // FIXME: compat
-        FileContext fileContext(file->name(), false);
+        KURL::List urls;
+        urls.append(file->name());
+        FileContext fileContext(urls);
         part()->core()->fillContextMenu(&menu, &fileContext);
         
         if (part()->defaultBuilder()) {

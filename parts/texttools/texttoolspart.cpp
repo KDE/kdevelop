@@ -15,6 +15,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 #include <ktexteditor/editinterface.h>
 
 #include "kdevpartcontroller.h"
@@ -24,11 +25,11 @@
 
 
 typedef KDevGenericFactory<TextToolsPart> TextToolsFactory;
-static const KAboutData data("kdevtexttools", I18N_NOOP("Text Structure"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( &data ) )
+static const KDevPluginInfo data("kdevtexttools");
+K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( data ) )
 
 TextToolsPart::TextToolsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("TextTools", "texttools", parent, name ? name : "TextToolsPart")
+    : KDevPlugin(&data, parent, name ? name : "TextToolsPart")
 {
     setInstance(TextToolsFactory::instance());
     //    setXMLFile("kdevfileview.rc");

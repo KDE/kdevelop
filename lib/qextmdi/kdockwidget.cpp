@@ -340,7 +340,7 @@ void KDockWidgetHeader::setDragPanel( KDockWidgetHeaderDrag* nd )
   if (dontShowDummy) d->dummy->hide(); else d->dummy->show();
   layout->addWidget( closeButton );
   layout->activate();
-  kdDebug()<<"KdockWidgetHeader::setDragPanel:minimum height="<<layout->minimumSize().height()<<endl;
+//  kdDebug()<<"KdockWidgetHeader::setDragPanel:minimum height="<<layout->minimumSize().height()<<endl;
 #ifdef __GNUC__
 #warning FIXME
 #endif
@@ -400,7 +400,7 @@ bool KDockWidgetHeader::dragEnabled() const
 
 void KDockWidgetHeader::showUndockButton(bool show)
 {
-  kdDebug()<<"KDockWidgetHeader::showUndockButton("<<show<<")"<<endl;
+//  kdDebug()<<"KDockWidgetHeader::showUndockButton("<<show<<")"<<endl;
   if( d->showToDesktopButton == show )
     return;
 
@@ -591,7 +591,7 @@ void KDockWidget::mousePressEvent(QMouseEvent* mme)
 #ifdef BORDERLESS_WINDOWS
 	if (!parent())
 	{
-		kdDebug()<<"KDockWidget::mousePressEvent"<<endl;
+//		kdDebug()<<"KDockWidget::mousePressEvent"<<endl;
 
 		bool bbottom;
 		bool bleft;
@@ -605,7 +605,7 @@ void KDockWidget::mousePressEvent(QMouseEvent* mme)
 		btop=mp.y()<=styleheight;
 		bleft=mp.x()<=styleheight;
 		bright=mp.x()>=width()-styleheight;
-		kdDebug()<<"mousemovevent"<<endl;
+//		kdDebug()<<"mousemovevent"<<endl;
  		d->resizing=true;
 		if (bright)
 		{
@@ -693,7 +693,7 @@ void  KDockWidget::mouseMoveEvent(QMouseEvent* mme)
 	btop=mp.y()<=styleheight;
 	bleft=mp.x()<=styleheight;
 	bright=mp.x()>=width()-styleheight;
-	kdDebug()<<"mousemovevent"<<endl;
+//	kdDebug()<<"mousemovevent"<<endl;
 	if (bright)
 	{
 		if (btop) setCursor(QCursor(SizeBDiagCursor));
@@ -754,7 +754,7 @@ void KDockWidget::setHeader( KDockWidgetAbstractHeader* h )
     header = h;
     layout->addWidget( header );
   }
-  kdDebug()<<caption()<<": KDockWidget::setHeader"<<endl;
+//  kdDebug()<<caption()<<": KDockWidget::setHeader"<<endl;
   setEnableDocking(eDocking);
 }
 
@@ -2315,12 +2315,12 @@ void KDockManager::readConfig(QDomElement &base)
 	if (childEl.tagName() == "dockContainer") {
 		
 		KDockWidget *cont=getDockWidgetFromName(stringEntry(childEl, "name"));
-		kdDebug()<<"dockContainer: "<<stringEntry(childEl,"name")<<endl;
+//		kdDebug()<<"dockContainer: "<<stringEntry(childEl,"name")<<endl;
 		if (!(cont->d->isContainer)) {
-			kdDebug()<<"restoration of dockContainer is only supported for already existing dock containers"<<endl;
+//			kdDebug()<<"restoration of dockContainer is only supported for already existing dock containers"<<endl;
 		} else {
 			KDockContainer *dc=dynamic_cast<KDockContainer*>(cont->getWidget());
-			if (!dc) kdDebug()<<"Error while trying to handle dockcontainer configuration restoration"<<endl;
+			if (!dc) ;// kdDebug()<<"Error while trying to handle dockcontainer configuration restoration"<<endl;
 				else {
 					dc->load(childEl);
 					removeFromAutoCreateList(cont);
@@ -2805,7 +2805,7 @@ void KDockManager::dumpDockWidgets() {
   KDockWidget * obj;
   while ( (obj=(KDockWidget*)it.current()) ) {
     ++it;
-    kdDebug()<<"KDockManager::dumpDockWidgets:"<<obj->name()<<endl;
+//    kdDebug()<<"KDockManager::dumpDockWidgets:"<<obj->name()<<endl;
   }
 
 }
@@ -2821,7 +2821,7 @@ KDockWidget* KDockManager::getDockWidgetFromName( const QString& dockName )
 
   KDockWidget* autoCreate = 0L;
   if ( autoCreateDock ){
-    kdDebug()<<"Autocreating dock: "<<dockName<<endl;
+//    kdDebug()<<"Autocreating dock: "<<dockName<<endl;
     autoCreate = new KDockWidget( this, dockName.latin1(), QPixmap("") );
     autoCreateDock->append( autoCreate );
   }
@@ -3109,7 +3109,7 @@ void KDockContainer::activateOverlapMode(int nonOverlapSize) {
 	m_overlapMode=true;
 	if (parentDockWidget()) {
 		if (parentDockWidget()->parent()) {
-			kdDebug()<<"KDockContainer::activateOverlapMode: recalculating sizes"<<endl;
+//			kdDebug()<<"KDockContainer::activateOverlapMode: recalculating sizes"<<endl;
 			KDockSplitter *sp= static_cast<KDockSplitter*>(parentDockWidget()->
 				parent()->qt_cast("KDockSplitter"));
 			if (sp) sp->resizeEvent(0);
@@ -3122,7 +3122,7 @@ void KDockContainer::deactivateOverlapMode() {
 	m_overlapMode=false;
 	if (parentDockWidget()) {
 		if (parentDockWidget()->parent()) {
-			kdDebug()<<"KDockContainer::deactivateOverlapMode: recalculating sizes"<<endl;
+//			kdDebug()<<"KDockContainer::deactivateOverlapMode: recalculating sizes"<<endl;
 			KDockSplitter *sp= static_cast<KDockSplitter*>(parentDockWidget()->
 				parent()->qt_cast("KDockSplitter"));
 			if (sp) sp->resizeEvent(0);
@@ -3213,14 +3213,14 @@ QWidget *KDockTabGroup::transientTo() {
 			if (!tT) tT=tmp;
 			else {
 				if (tT!=tmp) {
-					kdDebug()<<"KDockTabGroup::transientTo: widget mismatch"<<endl;
+//					kdDebug()<<"KDockTabGroup::transientTo: widget mismatch"<<endl;
 					return 0;
 				}
 			}
 		}
 	}
 
-	kdDebug()<<"KDockTabGroup::transientTo: "<<((tT!=0)?"YES":"NO")<<endl;
+//	kdDebug()<<"KDockTabGroup::transientTo: "<<((tT!=0)?"YES":"NO")<<endl;
 
 	return tT;
 }

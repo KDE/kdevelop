@@ -1,5 +1,5 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util \
-	-I$(top_srcdir)/lib/widgets $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevquickopen.la
 libkdevquickopen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -10,7 +10,7 @@ libkdevquickopen_la_SOURCES = quickopen_part.cpp quickopendialog.cpp quickopencl
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_quickopen.desktop
+service_DATA = kdevquickopen.desktop
 
 rcdir = $(kde_datadir)/kdevquickopen
 rc_DATA = kdevpart_quickopen.rc

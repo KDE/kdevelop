@@ -17,7 +17,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkdevcustomimporter, KGenericFactory<KDevCustomImporter>( "kdevcustomimporter" ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevcustompcsimporter, KGenericFactory<KDevCustomImporter>( "kdevcustompcsimporter" ) )
 
 KDevCustomImporter::KDevCustomImporter(QObject* parent, const char* name, const QStringList &args)
     : KDevPCSImporter(parent, name)

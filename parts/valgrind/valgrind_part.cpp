@@ -14,6 +14,7 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
+#include "kdevplugininfo.h"
 
 #include "valgrind_widget.h"
 #include "valgrind_part.h"
@@ -21,11 +22,11 @@
 #include "valgrinditem.h"
 
 typedef KDevGenericFactory<ValgrindPart> ValgrindFactory;
-static const KAboutData data("kdevvalgrind", "Valgrind", "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( &data ) )
+static const KDevPluginInfo data("kdevvalgrind");
+K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( data ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin( "Valgrind", "valgrind", parent, name ? name : "ValgrindPart" )
+  : KDevPlugin( &data, parent, name ? name : "ValgrindPart" )
 {
   setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );

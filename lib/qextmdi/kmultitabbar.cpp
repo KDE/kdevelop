@@ -142,7 +142,7 @@ void KMultiTabBarInternal::mousePressEvent(QMouseEvent *ev)
 }
 
 void KMultiTabBarInternal::resizeEvent(QResizeEvent *ev) {
-	kdDebug()<<"KMultiTabBarInternal::resizeEvent"<<endl;
+//	kdDebug()<<"KMultiTabBarInternal::resizeEvent"<<endl;
 	if ( (m_style==KMultiTabBar::KDEV3) ||
 		(m_style==KMultiTabBar::KDEV3ICON) ){
 		box->setGeometry(0,0,width(),height());
@@ -209,7 +209,7 @@ void KMultiTabBarInternal::resizeEvent(QResizeEvent *ev) {
 		}
 
 
-		kdDebug()<<"needed lines:"<<m_lines<<endl;
+//		kdDebug()<<"needed lines:"<<m_lines<<endl;
 	}
 	if (ev) QScrollView::resizeEvent(ev);
 }
@@ -446,7 +446,7 @@ void KMultiTabBarTab::updateState()
 		if ((m_style==KMultiTabBar::KDEV3) || (m_style==KMultiTabBar::KDEV3ICON) || (isOn())) {
 			QPushButton::setText(m_text);
 		} else {
-			kdDebug()<<"KMultiTabBarTab::updateState(): setting text to an empty QString***************"<<endl;
+//			kdDebug()<<"KMultiTabBarTab::updateState(): setting text to an empty QString***************"<<endl;
 			QPushButton::setText(QString::null);
 		}
 
@@ -633,7 +633,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 				painter.drawText(0,+width()/2+QFontMetrics(QFont()).height()/2,m_text);
 
 				paint->rotate(90);
-				kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
+//				kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
 				paint->drawPixmap(25,-tpixmap.height()+1,tpixmap);
 			}
 
@@ -687,7 +687,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
                                 painter.drawText(tpixmap.width()-QFontMetrics(QFont()).width(m_text),+width()/2+QFontMetrics(QFont()).height()/2,m_text);
 
                                 paint->rotate(-90);
-                                kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
+//                                kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
 
 				paint->drawPixmap(-24-tpixmap.width(),2,tpixmap);
 

@@ -21,6 +21,7 @@
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
 #include "codemodel.h"
+#include "kdevplugininfo.h"
 
 #include "sqlsupport_part.h"
 #include "sqlconfigwidget.h"
@@ -29,11 +30,11 @@
 #include "domutil.h"
 
 typedef KDevGenericFactory<SQLSupportPart> SQLSupportFactory;
-static const KAboutData data("kdevsqlsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevsqlsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( data ) )
 
 SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QStringList& )
-        : KDevLanguageSupport ( "KDevPart", "kdevpart", parent, name ? name : "SQLSupportPart" )
+        : KDevLanguageSupport ( &data, parent, name ? name : "SQLSupportPart" )
 {
     setInstance( SQLSupportFactory::instance() );
     setXMLFile( "kdevsqlsupport.rc" );
@@ -131,7 +132,7 @@ void SQLSupportPart::loadConfig()
 
 void SQLSupportPart::projectConfigWidget( KDialogBase *dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify Your Database Connections" ) );
+    QVBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify Your Database Connections" ), BarIcon("source", KIcon::SizeMedium) );
     SqlConfigWidget *w = new SqlConfigWidget( (QWidget*)vbox, "SQL config widget" );
     w->setProjectDom( projectDom() );
     w->loadConfig();

@@ -13,7 +13,6 @@
 #define _GREPVIEWPART_H_
 
 #include <qguardedptr.h>
-//#include <kgenericfactory.h>
 #include <kdevgenericfactory.h>
 #include "kdevplugin.h"
 
@@ -46,7 +45,6 @@ private:
     friend class GrepViewWidget;
 };
 
-//typedef KGenericFactory<GrepViewPart> GrepViewFactory;
 typedef KDevGenericFactory<GrepViewPart> GrepViewFactory;
 
 #endif

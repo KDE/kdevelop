@@ -16,10 +16,14 @@
 
 #include "appwizardpart.h"
 
+class KDevPluginInfo;
+
 class AppWizardFactory : public KDevGenericFactory<AppWizardPart>
 {
 public:
     AppWizardFactory();
+    
+    static const KDevPluginInfo *info();
 
 protected:
     virtual KInstance *createInstance();

@@ -33,6 +33,7 @@
 #include <kregexp.h>
 #include <kdevgenericfactory.h>
 #include <kaction.h>
+#include <kiconloader.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -40,15 +41,15 @@
 #include <kdevpartcontroller.h>
 #include <domutil.h>
 #include <codemodel.h>
-
+#include <kdevplugininfo.h>
 
 
 typedef KDevGenericFactory<FortranSupportPart> FortranSupportFactory;
-static const KAboutData data("kdevfortransupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevfortransupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( data ) )
 
 FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport("FortranSupport", "fortran", parent, name ? name : "FortranSupportPart")
+    : KDevLanguageSupport(&data, parent, name ? name : "FortranSupportPart")
 {
     setInstance(FortranSupportFactory::instance());
 
@@ -155,7 +156,7 @@ void FortranSupportPart::slotFtnchek()
 
 void FortranSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ftnchek"));
+    QVBox *vbox = dlg->addVBoxPage(i18n("Ftnchek"), i18n("Ftnchek"), BarIcon("kdevelop", KIcon::SizeMedium));
     FtnchekConfigWidget *w = new FtnchekConfigWidget(*projectDom(), vbox, "ftnchek config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -275,6 +276,11 @@ void FortranSupportPart::savedFile(const KURL &fileName)
 KDevLanguageSupport::Features FortranSupportPart::features()
 {
     return Features(Functions);
+}
+
+KDevMakeFrontend * FortranSupportPart::makeFrontend( )
+{
+    return extension<KDevMakeFrontend>("KDevelop/MakeFrontend");
 }
 
 #include "fortransupportpart.moc"

@@ -56,7 +56,8 @@ include admin/deps.am
 ## Doxygen stuff
 ##
 
-DOXYGEN_INPUT = src lib parts languages buildtools editors vcs doc/api
+#DOXYGEN_INPUT = src/profileengine lib buildtools/projectmanager/interfaces doc/api
+DOXYGEN_INPUT = lib/interfaces
 
 ## Exclude the application wizard templates, and some file templates
 DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates *face_skel.cpp *.ui.h lib/qextmdi vcs/cvsclient

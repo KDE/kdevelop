@@ -31,7 +31,33 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
 		kdDebug( 9020 ) << "Can't find service " << name;
 		return 0;
 	}
+	
+	
+    KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
+    if (!factory) {
+        QString errorMessage = KLibLoader::self()->lastErrorMessage();
+        kdDebug() << "There was an error loading the module " << service->name() << endl <<
+	    "The diagnostics is:" << endl << errorMessage << endl;
+        exit(1);
+    }
 
+    QStringList args;
+    QVariant prop = service->property("X-KDevelop-Args");
+    if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
+
+    QObject *obj = factory->create(parent, service->name().latin1(),
+                                   "KDevCompilerOptions", args);
+
+    if (!obj->inherits("KDevCompilerOptions")) {
+        kdDebug(9020) << "Component does not inherit KDevCompilerOptions" << endl;
+        return 0;
+    }
+    KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
+
+    return dlg;
+	
+/*
 	QStringList args;
 	QVariant prop = service->property( "X-KDevelop-Args" );
 	if ( prop.isValid() )
@@ -39,7 +65,7 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
 
 	return KParts::ComponentFactory
 	       ::createInstanceFromService<KDevCompilerOptions>( service, parent,
-	                                                         service->name().latin1(), args );
+	                                                         service->name().latin1(), args );*/
 }
 
 

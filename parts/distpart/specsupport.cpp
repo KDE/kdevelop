@@ -89,14 +89,16 @@ void SpecSupport::slotbuildAllPushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(m_part->widget(),i18n("Error"),i18n("You need to create a source archive first."));
+	    QMessageBox::critical(0 ,i18n("Error"),i18n("You need to create a source archive first."));
 	    return;
 	}
 	else
-	    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+            if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+                makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) + 
 		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
-    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
+    if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
 		 " && rpmbuild -ba " + m_part->project()->projectName() + ".spec");
 }
 
@@ -182,14 +184,16 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(m_part->widget(),i18n("Error"),i18n("You need to create a source archive first."));
+	    QMessageBox::critical(0,i18n("Error"),i18n("You need to create a source archive first."));
 	    return;
 	}
 	else
-	    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+            if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+	        makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) + 
 		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
-    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
+    if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
 		 " && rpmbuild -bs " + m_part->project()->projectName() + ".spec");
 }
 

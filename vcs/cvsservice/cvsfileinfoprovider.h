@@ -14,7 +14,7 @@
 
 #include <qmap.h>
 
-#include <kdevvcsfileinfoprovider.h>
+#include <kdevversioncontrol.h>
 #include "cvsservicedcopIface.h"
 #include "cvsdir.h"
 #include "bufferedstringreader.h"

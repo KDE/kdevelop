@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQtImporter
+Name[da]=KDevelop Qt-importør
 Name[de]=QT-PCS-Import (KDevelop)
 Name[hi]=के-डेव-क्यूटी-आयातक
 Name[pl]=KDevImportQt
@@ -27,9 +28,11 @@ Comment[sr]=KDevelop-ов Qt PCS увозник
 Comment[sr@Latn]=KDevelop-ov Qt PCS uvoznik
 Comment[sv]=KDevelop QT PCS-import
 Comment[ta]=கெடெவலப் Qt PCS இறக்குமதியாளர்
+Comment[tg]=Пурборкунии нишонаҳо аз китобхонаи Qt дар дар синфҳои анборӣ
 Comment[xx]=xxKDevelop Qt PCS Importerxx
 Comment[zh_CN]=KDevelop Qt PCS 导入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqtimporter
 X-KDevelop-PCSImporter=
+X-KDevelop-Version=3

@@ -50,13 +50,14 @@
 #include "envvartools.h"
 #include "urlutil.h"
 
+#include <kdevplugininfo.h>
 
 typedef KDevGenericFactory<CustomProjectPart> CustomProjectFactory;
-static const KAboutData data("kdevcustomproject", I18N_NOOP("Build Tool"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( &data ) )
+static const KDevPluginInfo data("kdevcustomproject");
+K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( data ) )
 
 CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QStringList &)
-    : KDevProject("CustomProject", "customproject", parent, name ? name : "CustomProjectPart")
+    : KDevBuildTool(&data, parent, name ? name : "CustomProjectPart")
 	, m_lastCompilationFailed(false)
 {
     setInstance(CustomProjectFactory::instance());
@@ -146,10 +147,10 @@ CustomProjectPart::~CustomProjectPart()
 void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject", buildDirectory(), vbox);
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-    vbox = dlg->addVBoxPage(i18n("Build Options"));
+    vbox = dlg->addVBoxPage(i18n("Build Options"), i18n("Build Options"), BarIcon( "make", KIcon::SizeMedium ));
     QTabWidget *buildtab = new QTabWidget(vbox);
 
     CustomBuildOptionsWidget *w2 = new CustomBuildOptionsWidget(*projectDom(), buildtab);
@@ -169,9 +170,10 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);
-    if (fcontext->isDirectory()) {
+    KURL url = fcontext->urls().first();
+    if (URLUtil::isDirectory(url)) {
         // remember the name of the directory
-        m_contextDirName = fcontext->fileName();
+        m_contextDirName = url.fileName();
         m_contextDirName = m_contextDirName.mid ( project()->projectDirectory().length() + 1 );
         popup->insertSeparator();
         int id = popup->insertItem( i18n("Make Active Directory"),
@@ -186,7 +188,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     if( fcontext->urls().size() == 1 )
     {
-        QString contextFileName = URLUtil::canonicalPath(fcontext->fileName());
+        QString contextFileName = URLUtil::canonicalPath(fcontext->urls().first().fileName());
         bool inProject = project()->isProjectFile(contextFileName);
         QString popupstr = QFileInfo(contextFileName).fileName();
         if (contextFileName.startsWith(projectDirectory()+ "/"))

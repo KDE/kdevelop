@@ -35,6 +35,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
+#include "kdevplugininfo.h"
 #include "kdevappfrontend.h"
 //#include "classstore.h"
 //#include "parsedclass.h"
@@ -44,11 +45,11 @@
 //#include "programmingbycontract.h"
 
 typedef KDevGenericFactory<PerlSupportPart> PerlSupportFactory;
-static const KAboutData data("kdevperlsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevperlsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( data ) )
 
 PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport("PerlSupport", "perl", parent, name ? name : "PerlSupportPart")
+    : KDevLanguageSupport(&data, parent, name ? name : "PerlSupportPart")
 {
     setInstance(PerlSupportFactory::instance());
 
@@ -192,7 +193,8 @@ QString PerlSupportPart::interpreter()
 void PerlSupportPart::startApplication(const QString &program)
 {
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevperlsupport/run/terminal");
-    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
+    if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+        appFrontend->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 

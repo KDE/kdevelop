@@ -17,40 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-/* Yet to come file abstraction layer */
-
+/**
+@file kdevfile.h
+File abstraction layer.
+*/
 #ifndef KDEVFILE_H
 #define KDEVFILE_H
 
 #include <kmimetype.h>
 
+/**
+File abstraction.
+*/
 class KDevFile
 {
 public:
-	/**
-	 * Styles of comment-formats a source file can take
-	 */
-	enum CommentingStyle
-	{
-		NoCommenting,	//!< file seems unable to contain comments
-		CPPStyle,	//!< C++ Style:		/* comment */
-		CStyle,		//!< (old) C Style:	// comment
-		AdaStyle,	//!< ADA-Style:		-- comment --
-		PascalStyle,	//!< Pascal-Style:	{  comment  }
-		BashStyle,	//!< Shell-Style:	#  comment
-		XMLStyle	//!< XML-Style:		<!-- comment -->
-	};
-	
+    /**Styles of comment-formats a source file can have.*/
+    enum CommentingStyle
+    {
+        NoCommenting,   //!< file seems to be unable to contain comments
+        CPPStyle,       //!< C Style: <pre>/* comment */</pre>
+        CStyle,         //!< C++ Style: <pre>// comment</pre>
+        AdaStyle,       //!< Ada Style: <pre>-- comment --</pre>
+        PascalStyle,    //!< Pascal Style: <pre>{  comment  }</pre>
+        BashStyle,      //!< Shell Style: <pre>#  comment</pre>
+        XMLStyle        //!< XML Style: <pre><!-- comment --></pre>
+    };
+
 public:
-	/**
-	 * return a commenting style for a given mime type.
-	 */
-	static CommentingStyle commentingStyleFromMimeType( const QString& mimeType );
-	
-	/**
-	 * return a commenting style for a given mime type.
-	 */
-	static CommentingStyle commentingStyleFromMimeType( KMimeType::Ptr mimeType );
+    /**@return A commenting style for a given mime type.
+    @param mimeType A string which defines a mime type (like "text/x-c+++src").*/
+    static CommentingStyle commentingStyleFromMimeType(const QString& mimeType);
+    
+    /**@return A commenting style for a given mime type.
+    @param mimeType The mime type.*/
+    static CommentingStyle commentingStyleFromMimeType( KMimeType::Ptr mimeType );
 };
 
 #endif

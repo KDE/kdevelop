@@ -56,18 +56,21 @@
 
 #include <iostream>
 
+#include <kdevplugininfo.h>
+#include <debugger.h>
+
 #include "debuggerpart.h"
 
 namespace GDBDebugger
 {
 
-static const KAboutData data("kdevdebugger", I18N_NOOP("Debugger"), "1.0");
+static const KDevPluginInfo data("kdevdebugger");
 
 typedef KDevGenericFactory<DebuggerPart> DebuggerFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
-    KDevPlugin( "CppDebugger", "debugger", parent, name ? name : "DebuggerPart" ),
+    KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
     controller(0)
 {
     setObjId("DebuggerInterface");
@@ -75,6 +78,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     setXMLFile("kdevdebugger.rc");
 
+    m_debugger = new Debugger( partController() );
+    
     statusBarIndicator = new QLabel(" ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
     mainWindow()->statusBar()->addWidget(statusBarIndicator, 0, true);
@@ -480,7 +485,7 @@ void DebuggerPart::contextWatch()
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
@@ -939,6 +944,16 @@ void DebuggerPart::savePartialProjectSession(QDomElement* el)
     gdbBreakpointWidget->savePartialProjectSession(el);
 }
 
+}
+
+KDevAppFrontend * GDBDebugger::DebuggerPart::appFrontend( )
+{
+    return extension<KDevAppFrontend>("KDevelop/AppFrontend");
+}
+
+KDevDebugger * GDBDebugger::DebuggerPart::debugger()
+{
+    return m_debugger;
 }
 
 #include "debuggerpart.moc"

@@ -1970,7 +1970,7 @@ void TrollProjectWidget::slotNewFile()
       }
 
     }
-    KDevCreateFile * createFileSupport = m_part->createFileSupport();
+    KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>("KDevelop/CreateFile");
     if (createFileSupport)
     {
         KDevCreateFile::CreatedFile crFile =
@@ -2283,7 +2283,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idInsNewFile)
         {
-            KDevCreateFile * createFileSupport = m_part->createFileSupport();
+            KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>("KDevelop/CreateFile");
             if (createFileSupport)
             {
                 QString fcext;
@@ -2419,7 +2419,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
     }
     if(!(gtype == GroupItem::InstallObject))
     {
-        FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
+        KURL::List urls;
+        urls.append(m_shownSubproject->path + "/" + fitem->name);
+        FileContext context(urls);
         m_part->core()->fillContextMenu(&popup, &context);
     }
 

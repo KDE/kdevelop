@@ -9,6 +9,6 @@ libkdevbookmarks_la_SOURCES = bookmarks_part.cpp bookmarks_widget.cpp bookmarks_
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_bookmarks.desktop
+service_DATA = kdevbookmarks.desktop
 
 noinst_HEADERS =  bookmarks_settings.h bookmarks_config.h

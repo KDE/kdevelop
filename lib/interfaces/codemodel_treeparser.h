@@ -16,7 +16,6 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-
 #ifndef CODEMODEL_TREEPARSER_H
 #define CODEMODEL_TREEPARSER_H
 
@@ -40,7 +39,7 @@ public:
     virtual void parseFunction( const FunctionModel* fun );
     virtual void parseFunctionDefinition( const FunctionDefinitionModel* fun );
     virtual void parseVariable( const VariableModel* var );
-    
+
 private:
     CodeModelTreeParser( const CodeModelTreeParser& source );
     void operator = ( const CodeModelTreeParser& source );

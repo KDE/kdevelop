@@ -13,24 +13,18 @@ class API : public KDevApi
 public:
 
   virtual KDevMainWindow *mainWindow() const;
-  virtual bool mainWindowValid() const;
   virtual KDevPartController *partController() const;
+  virtual KDevPluginController *pluginController() const;
   virtual KDevCore *core() const;
   virtual CodeModel *codeModel() const;
-  virtual KDevDebugger *debugger() const;
-
 
   static API *getInstance();
 
   ~API();
 
-    KDevPlugin *queryForExtension(const QString &serviceType);
-
 protected:
 
   API();
-
-    QMap<QString, KDevPlugin*> extensions;
 
 private:
 

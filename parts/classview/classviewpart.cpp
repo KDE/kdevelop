@@ -38,6 +38,7 @@
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
 #include <urlutil.h>
+#include <kdevplugininfo.h>
 
 #include <codemodel.h>
 #include <codemodel_utils.h>
@@ -57,11 +58,11 @@
 #include <ktexteditor/clipboardinterface.h>
 
 typedef KDevGenericFactory<ClassViewPart> ClassViewFactory;
-static const KAboutData data("kdevclassview", I18N_NOOP("Class browser"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( &data ) )
+static const KDevPluginInfo data("kdevclassview");
+K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( data ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ),
+    : KDevPlugin(&data, parent, name ? name : "ClassViewPart" ),
     m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0)
 {
     setInstance(ClassViewFactory::instance());

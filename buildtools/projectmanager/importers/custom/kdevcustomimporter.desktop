@@ -1,8 +1,23 @@
 [Desktop Entry]
 Type=Service
 Name=KDevCustomImporter
+Name[da]=KDevelop brugerdefineret importør
+Name[de]=PCS-Import (KDevelop)
+Name[hi]=के-डेव-कस्टम-इम्पोर्टर
+Name[pl]=KDevWłasnyImport
+Name[sv]=KDevelop egen import
+Name[ta]=கெடெவ் கஸ்டம் இறக்குமதியாளர்
+Name[xx]=xxKDevCustomImporterxx
 Comment=KDevelop Custom Importer
+Comment[da]=KDevelop brugerdefineret importør
+Comment[et]=KDevelopi kohandatud importija
+Comment[fr]=Importation personnalisée pour KDevelop
+Comment[pt_BR]=Importador Personalizado para o KDevelop
+Comment[sr]=KDevelop-ов прилагођени увозник
+Comment[sr@Latn]=KDevelop-ов прилагођени увозник
+Comment[sv]=KDevelop egen import
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevcustomimporter
 X-KDevelop-ProjectImporter=
+X-KDevelop-Version=3

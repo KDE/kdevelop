@@ -34,6 +34,7 @@
 
 #include <urlutil.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "../../../../config.h"
 
@@ -56,9 +57,9 @@ private:
     QString m_dcfFile;
 };
 
-static const KAboutData data("docqtplugin", I18N_NOOP("Qt DCF documentation plugin"), "1.0");
+static const KDevPluginInfo data("docqtplugin");
 typedef KDevGenericFactory<DocQtPlugin> DocQtPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocqtplugin, DocQtPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocqtplugin, DocQtPluginFactory(data) )
 
 DocQtPlugin::DocQtPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocQtPluginFactory::instance()->config(), parent, name)

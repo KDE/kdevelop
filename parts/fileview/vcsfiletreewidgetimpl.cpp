@@ -17,7 +17,6 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
-#include <kdevvcsfileinfoprovider.h>
 //#include <kdevproject.h>
 #include <urlutil.h>
 #include <domutil.h>

@@ -152,9 +152,10 @@ void ProjectSession::recreateDocs(QDomElement& el)
     }
   }
 
-  if (nNrOfDocs > 0) {
+  //FIXME: God, I hate KMDI. What the hell is this?
+/*  if (nNrOfDocs > 0) {
       API::getInstance()->mainWindow()->callCommand("qextmdi-UI: do hack on session loading finished");
-  }
+  }*/
 ////  if (bTaskBarWasOn) {
 ////     pMainWidget->showViewTaskBar();
 ////  }

@@ -1,12 +1,12 @@
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces \
-	-I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util \
-	-I$(top_srcdir)/lib/widgets $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+	-I$(top_srcdir)/lib/widgets $(KDEVMDI_INCLUDES) $(all_includes)
 
 bin_PROGRAMS = kdevelop kdevassistant
 
 kdevelop_SOURCES = core.cpp partcontroller.cpp projectmanager.cpp \
 	plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp \
-	statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp projectsession.cpp \
+	statusbar.cpp editorproxy.cpp documentationpart.cpp projectsession.cpp \
 	mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp \
 	newmainwindow.cpp mimewarningdialog.ui main.cpp splashscreen.cpp
 
@@ -24,11 +24,11 @@ kdevelopdata_DATA = kdeveloprc kdevpluginprofilerc
 SUBDIRS = profiles profileengine
 noinst_HEADERS = languageselectwidget.h newmainwindow.h
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp \
-		editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
-		newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
-		projectmanager.cpp projectsession.cpp settingswidget.ui statusbar.cpp toplevel.cpp \
-		generalinfowidgetbase.ui main_assistant.cpp mimewarningdialog.ui splashscreen.cpp
+kdevassistant_SOURCES = api.cpp core.cpp documentationpart.cpp editorproxy.cpp \
+	generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp newmainwindow.cpp \
+	partcontroller.cpp partselectwidget.cpp plugincontroller.cpp projectmanager.cpp \
+	projectsession.cpp settingswidget.ui statusbar.cpp toplevel.cpp generalinfowidgetbase.ui \
+	main_assistant.cpp mimewarningdialog.ui splashscreen.cpp
 kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 	$(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) -lktexteditor \
 	$(LIB_KHTML) $(LIB_KPARTS) $(LIB_KDEUI)

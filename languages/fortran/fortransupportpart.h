@@ -15,6 +15,7 @@
 class FixedFormParser;
 class KDialogBase;
 class QStringList;
+class KDevMakeFrontend;
 
 #include "kdevlanguagesupport.h"
 
@@ -44,6 +45,7 @@ private slots:
 
 private:
     void maybeParse(const QString fileName);
+    KDevMakeFrontend *makeFrontend();
 
     FixedFormParser *parser;
 };

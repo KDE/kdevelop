@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kstatusbar.h>
+#include <kdevplugininfo.h>
 
 //#include <antlr/ASTFactory.hpp>
 
@@ -35,11 +36,11 @@
 #include "haskellsupport_part.h"
 
 typedef KDevGenericFactory<HaskellSupportPart> HaskellSupportFactory;
-static const KAboutData data("kdevhaskellsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevhaskellsupport, HaskellSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevhaskellsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevhaskellsupport, HaskellSupportFactory( data ) )
 
 HaskellSupportPart::HaskellSupportPart(QObject *parent, const char *name, const QStringList& )
-  : KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "HaskellSupportPart" )
+  : KDevLanguageSupport(&data, parent, name ? name : "HaskellSupportPart" )
 {
 	setInstance(HaskellSupportFactory::instance());
 	setXMLFile("kdevpart_haskellsupport.rc");

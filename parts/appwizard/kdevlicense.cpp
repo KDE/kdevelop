@@ -16,12 +16,11 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include "kdevlicense.h"
 
 #include <qfile.h>
 #include <qdatetime.h>
 #include <qregexp.h>
-
-#include "kdevlicense.h"
 
 KDevLicense::KDevLicense( const QString& name, const QString& fileName )
 	: m_name( name )

@@ -4,6 +4,7 @@
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
    Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
+   Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,9 +21,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#include <kdebug.h>
-
 #include "KDevCoreIface.h"
 #include "kdevcore.h"
 
@@ -32,25 +30,16 @@
 // class Context
 ///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-
 Context::Context()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 Context::~Context()
 {
-    kdDebug() << "Context::~Context()" << endl;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 bool Context::hasType( int aType ) const
 {
-//    kdDebug(9000) << "Context::hasType(" << aType << "). this->type() == " << this->type() << endl;
-
     return aType == this->type();
 }
 
@@ -73,59 +62,42 @@ public:
     QString m_linestr, m_wordstr;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 EditorContext::EditorContext( const KURL &url, int line, int col,
     const QString &linestr, const QString &wordstr )
     : Context(), d( new Private(url, line, col, linestr, wordstr) )
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 EditorContext::~EditorContext()
 {
-    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int EditorContext::type() const
 {
     return Context::EditorContext;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 const KURL &EditorContext::url() const
 {
     return d->m_url;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int EditorContext::line() const
 {
     return d->m_line;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 int EditorContext::col() const
 {
     return d->m_col;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 QString EditorContext::currentLine() const
 {
     return d->m_linestr;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 QString EditorContext::currentWord() const
 {
@@ -164,51 +136,21 @@ public:
     bool m_isDirectory;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 FileContext::FileContext( const KURL::List &someURLs )
     : Context(), d( new Private(someURLs) )
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-FileContext::FileContext( const QString &fileName, bool isDirectory )
-    : Context(), d( new Private(fileName, isDirectory))
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 FileContext::~FileContext()
 {
-    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int FileContext::type() const
 {
     return Context::FileContext;
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString FileContext::fileName() const
-{
-    return d->m_fileName;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool FileContext::isDirectory() const
-{
-    return d->m_isDirectory;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 
 const KURL::List &FileContext::urls() const
 {
@@ -231,22 +173,16 @@ public:
     QString m_selection;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 DocumentationContext::DocumentationContext( const QString &url, const QString &selection )
     : Context(), d( new Private(url, selection) )
 {
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 DocumentationContext::DocumentationContext( const DocumentationContext &aContext )
     : Context(), d( 0 )
 {
     *this = aContext;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 DocumentationContext &DocumentationContext::operator=( const DocumentationContext &aContext)
 {
@@ -257,30 +193,21 @@ DocumentationContext &DocumentationContext::operator=( const DocumentationContex
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 DocumentationContext::~DocumentationContext()
 {
-    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int DocumentationContext::type() const
 {
     return Context::DocumentationContext;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 QString DocumentationContext::url() const
 {
     return d->m_url;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 QString DocumentationContext::selection() const
 {
@@ -299,30 +226,21 @@ public:
     const CodeModelItem* m_item;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 CodeModelItemContext::CodeModelItemContext( const CodeModelItem* item )
     : Context(), d( new Private(item) )
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 CodeModelItemContext::~CodeModelItemContext()
 {
-    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int CodeModelItemContext::type() const
 {
     return Context::CodeModelItemContext;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 const CodeModelItem* CodeModelItemContext::item() const
 {
@@ -341,35 +259,28 @@ public:
     const ProjectModelItem* m_item;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 ProjectModelItemContext::ProjectModelItemContext( const ProjectModelItem* item )
     : Context(), d( new Private(item) )
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 ProjectModelItemContext::~ProjectModelItemContext()
 {
-    kdDebug() << k_funcinfo << endl;
     delete d;
     d = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 int ProjectModelItemContext::type() const
 {
     return Context::ProjectModelItemContext;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 const ProjectModelItem* ProjectModelItemContext::item() const
 {
     return d->m_item;
 }
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevCore
 ///////////////////////////////////////////////////////////////////////////////
@@ -380,11 +291,8 @@ KDevCore::KDevCore( QObject *parent, const char *name )
     new KDevCoreIface(this);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 KDevCore::~KDevCore()
 {
 }
-
 
 #include "kdevcore.moc"

@@ -7,7 +7,7 @@
    Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,15 +24,16 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
 #include "kdevplugin.h"
-#include "kdevpartcontroller.h"
+
+#include "kdevapi.h"
 #include "kdevcore.h"
-#include "kdevversioncontrol.h"
+#include "kdevplugininfo.h"
+#include "kdevpartcontroller.h"
+#include "kdevplugincontroller.h"
 
 #include <kaction.h>
 
-#include <dcopclient.h>
 #include <qdom.h>
 #include <qmap.h>
 
@@ -44,209 +45,87 @@
 
 struct KDevPlugin::Private
 {
-    DCOPClient *dcopClient;
-    QCString name;
-    QString pluginName;
-    QString icon;
+    const KDevPluginInfo *info;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevPlugin
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevPlugin::KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
-    : QObject( parent, name ), d( new Private )
+KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent, const char *name)
+    :QObject(parent, name), d(new Private)
 {
-    assert( parent->inherits( "KDevApi" ) );
+    assert(parent->inherits( "KDevApi" ));
     m_api = static_cast<KDevApi *>( parent );
 
     actionCollection()->setHighlightingEnabled( true );
 
-    d->name = name;
-    d->icon = icon;
-    d->pluginName = pluginName;
-    d->dcopClient = 0L;
+    d->info = info;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 KDevPlugin::~KDevPlugin()
 {
-   delete( d->dcopClient );
    delete( d );
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString KDevPlugin::pluginName() const
-{
-    return d->pluginName;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString KDevPlugin::icon() const
-{
-    return d->icon;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString KDevPlugin::shortDescription() const
-{
-    return QString::null;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString KDevPlugin::description() const
-{
-    return QString::null;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-DCOPClient* KDevPlugin::dcopClient() const
-{
-    if (!d->dcopClient)
-    {
-        d->dcopClient = new DCOPClient();
-        d->dcopClient->registerAs(d->name, false);
-    }
-
-    return d->dcopClient;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 
 KDevMainWindow *KDevPlugin::mainWindow()
 {
     return m_api->mainWindow();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-bool KDevPlugin::mainWindowValid()
-{
-    return m_api->mainWindowValid();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 KDevCore *KDevPlugin::core() const
 {
     return m_api->core();
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 KDevProject *KDevPlugin::project() const
 {
     return m_api->project();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 CodeModel *KDevPlugin::codeModel() const
 {
     return m_api->codeModel();
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 QDomDocument *KDevPlugin::projectDom() const
 {
     return m_api->projectDom();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 KDevLanguageSupport *KDevPlugin::languageSupport() const
 {
     return m_api->languageSupport();
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevMakeFrontend *KDevPlugin::makeFrontend() const
-{
-    return m_api->makeFrontend();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevDiffFrontend *KDevPlugin::diffFrontend() const
-{
-    return m_api->diffFrontend();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevAppFrontend *KDevPlugin::appFrontend() const
-{
-    return m_api->appFrontend();
-}
-
-///////////////////////////////////////////////////////////////////////////////
 
 KDevPartController *KDevPlugin::partController() const
 {
     return m_api->partController();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-KDevDebugger *KDevPlugin::debugger() const
-{
-    return m_api->debugger();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevCreateFile *KDevPlugin::createFileSupport() const
-{
-    return m_api->createFile();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevVersionControl *KDevPlugin::versionControl() const
-{
-    return m_api->versionControl();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 {
     // there's still nothing to do in the base class
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 {
     // there's still nothing to do in the base class
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-void KDevPlugin::showPart()
-{
-    if( part() )
-        partController()->showPart( part(), d->pluginName, shortDescription() );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevCodeRepository * KDevPlugin::codeRepository( ) const
+KDevCodeRepository * KDevPlugin::codeRepository() const
 {
     return m_api->codeRepository();
 }
 
-KDevPlugin * KDevPlugin::extension( const QString & serviceType )
+KDevPlugin * KDevPlugin::extension(const QString &serviceType, const QString &constraint)
 {
-    return m_api->queryForExtension(serviceType);
+    return m_api->pluginController()->extension(serviceType, constraint);
+}
+
+const KDevPluginInfo *KDevPlugin::info()
+{
+    return d->info;
 }
 
 #include "kdevplugin.moc"

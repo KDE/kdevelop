@@ -50,13 +50,9 @@ public:
 
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
-  void lowerAllViews();
 
   void loadSettings();
 
-  void prepareToCloseViews();
-  void guiRestoringFinished();
-  
   /** Reimplemented from KMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest( KMdiChildView * );
   
@@ -64,8 +60,6 @@ public:
 
   void init();
 
-  void setUserInterfaceMode(const QString& uiMode);
-  
   //This is needed because KMdiMainFrame::tabWidgetVisibility() is protected (for
   //whatever reason) and this value is needed in EditorProxy
   KMdi::TabWidgetVisibility getTabWidgetVisibility() { return tabWidgetVisibility(); }
@@ -78,12 +72,6 @@ public slots:
 
   void createGUI(KParts::Part *part);
   void raiseEditor();
-
-  /** Store the currently active view tab of the output (bottom) view */
-  void storeOutputViewTab();
-
-  /** Restore the previously saved view tab to the output (bottom) view */
-  void restoreOutputViewTab();
 
   /** Just after the project gets opened */
   void projectOpened();

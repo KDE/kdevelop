@@ -31,12 +31,11 @@
 
 class KDevDiffFrontend : public KDevPlugin
 {
-    Q_OBJECT
 
 public:
 
-    KDevDiffFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
-    virtual ~KDevDiffFrontend();
+    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
+        :KDevPlugin(info, parent, name ? name : "KDevDiffFrontend") {}
 
     /**
      * displays the patch.

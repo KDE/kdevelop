@@ -13,16 +13,16 @@ COMPAT_SUBDIR=compat
 LIB_KDEVCOMPAT=$(top_builddir)/lib/compat/libkdevcompat.la
 endif
 
-lib_LTLIBRARIES = libkdevelop.la libkdeveloplgpl.la
+lib_LTLIBRARIES = libkdevelop.la
 libkdevelop_la_LDFLAGS = -no-undefined $(all_libraries) -version-info 1:0
-libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la $(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/project/libkdevproject.la $(top_builddir)/lib/widgets/propeditor/libkdevpropertyeditor.la $(top_builddir)/lib/external_interfaces/libkinterfacedesigner.la $(LIB_KDEVCOMPAT) -lktexteditor $(LIB_KPARTS) $(LIB_KIO)
+libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
+	$(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/widgets/propeditor/libkdevpropertyeditor.la \
+	$(top_builddir)/lib/interfaces/external/libkinterfacedesigner.la $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la \
+	$(LIB_KDEVCOMPAT) -lktexteditor $(LIB_KPARTS) $(LIB_KIO)
 libkdevelop_la_SOURCES = dummy.cpp
 
-libkdeveloplgpl_la_LDFLAGS = -no-undefined $(all_libraries) -version-info 1:0
-libkdeveloplgpl_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la $(top_builddir)/lib/util/libkdevutillgpl.la $(top_builddir)/lib/widgets/propeditor/libkdevpropertyeditor.la $(top_builddir)/lib/external_interfaces/libkinterfacedesigner.la $(LIB_KDEVCOMPAT) -lktexteditor $(LIB_KPARTS) $(LIB_KIO)
-libkdeveloplgpl_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces widgets util project $(QEXTMDI_SUBDIR) antlr catalog \
-	cppparser $(COMPAT_SUBDIR) astyle external_interfaces designer_integration
+SUBDIRS = interfaces widgets util $(QEXTMDI_SUBDIR) antlr catalog \
+	cppparser $(COMPAT_SUBDIR) astyle 
 

@@ -331,7 +331,7 @@ KDevCore *CvsServicePartImpl::core() const
 
 KDevDiffFrontend *CvsServicePartImpl::diffFrontend() const
 {
-    return m_part->diffFrontend();
+    return m_part->extension<KDevDiffFrontend>("KDevelop/DiffFrontend");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -675,7 +675,8 @@ void CvsServicePartImpl::createNewProject( const QString &dirName,
     kdDebug( 9006 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
     kdDebug( 9006 ) << "  ** on directory: " << dirName << endl;
 
-    m_part->makeFrontend()->queueCommand( dirName, cmdLine );
+    if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand( dirName, cmdLine );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

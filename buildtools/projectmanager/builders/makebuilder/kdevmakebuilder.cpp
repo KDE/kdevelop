@@ -50,7 +50,7 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name, const QStrin
     connect(project()->core(), SIGNAL(projectConfigWidget(KDialogBase*)),
         this, SLOT(projectConfigWidget(KDialogBase*)));
         
-    if (KDevMakeFrontend *make = project()->makeFrontend()) {
+    if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
             this, SLOT(commandFinished(const QString &)));
             
@@ -92,7 +92,7 @@ bool KDevMakeBuilder::configure(ProjectItemDom dom)
     
 bool KDevMakeBuilder::build(ProjectItemDom dom)
 {
-    if (KDevMakeFrontend *make = project()->makeFrontend()) {
+    if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         if (ProjectFolderDom folder = dom->toFolder()) {
             // ### compile the folder
             QString command = buildCommand(dom);

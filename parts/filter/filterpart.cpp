@@ -21,15 +21,16 @@
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
+#include "kdevplugininfo.h"
 #include "shellfilterdlg.h"
 #include "shellinsertdlg.h"
 #include "kdevfilterIface.h"
 
-static const KAboutData data("kdevfilter", I18N_NOOP("Execute shell command"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( &data ) )
+static const KDevPluginInfo data("kdevfilter");
+K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( data ) )
 
 FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Filter", "filter", parent, name ? name : "FilterPart")
+    : KDevPlugin(&data, parent, name ? name : "FilterPart")
 {
     setInstance(FilterFactory::instance());
     setXMLFile("kdevfilter.rc");

@@ -43,6 +43,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevdifffrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevplugininfo.h"
 #include "domutil.h"
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
@@ -71,16 +72,16 @@ bool g_projectWasJustCreated = false;
 // Plugin factory
 ///////////////////////////////////////////////////////////////////////////////
 
-static const KAboutData data("kdevcvsservice", I18N_NOOP("CvsService"), "1.0");
+static const KDevPluginInfo data("kdevcvsservice");
 typedef KDevGenericFactory<CvsServicePart> CvsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( data ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsServicePart
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QStringList & )
-	: KDevVersionControl( "KDevCvsServicePart", "cervisia", parent,
+	: KDevVersionControl( &data, parent,
 						  name ? name : "CvsService" ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
@@ -131,9 +132,6 @@ void CvsServicePart::init()
     m_impl->processWidget()->setCaption(i18n("CvsService Output"));
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
     
-    /// \FIXME (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
-    /// of KDevVersionControl
-    setVersionControl( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,7 +254,7 @@ void CvsServicePart::createNewProject( const QString &dirName )
 
 void CvsServicePart::projectConfigWidget( KDialogBase *dlg )
 {
-	QVBox *vbox = dlg->addVBoxPage( i18n("CvsService"), i18n("CvsService"), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox *vbox = dlg->addVBoxPage( i18n("CvsService"), i18n("CvsService"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     CvsOptionsWidget *w = new CvsOptionsWidget( (QWidget *)vbox, "cvs config widget" );
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

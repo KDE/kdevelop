@@ -18,18 +18,24 @@
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
+#include <kdevplugininfo.h>
 
 #include "fullscreen_part.h"
 
-static const KAboutData data("kdevfullscreen", I18N_NOOP("Full-screen mode"), "1.0");
+static const KDevPluginInfo data("kdevfullscreen");
 
 typedef KDevGenericFactory<FullScreenPart> FullScreenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( data ) )
 
 FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "FullScreenPart" )
+  : KDevPlugin(&data, parent, name ? name : "FullScreenPart" )
 {
   setInstance(FullScreenFactory::instance());
+//  const KAboutData &abdata1 = *(info());
+//  kdDebug() << abdata1.appName() << endl;
+  const KDevPluginInfo &_info = *info();
+  const KAboutData *abdata = _info;
+  kdDebug() << abdata->appName() << endl;
   setXMLFile("kdevpart_fullscreen.rc");
 
   m_bFullScreen = false;

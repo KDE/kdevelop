@@ -21,25 +21,25 @@
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-
+#include "kdevplugininfo.h"
 
 #include "filelist_widget.h"
 #include "filelist_part.h"
 
-static const KAboutData data("kdevfilelist", I18N_NOOP("File List"), "1.0");
+static const KDevPluginInfo data("kdevfilelist");
 
 typedef KDevGenericFactory<FileListPart> filelistFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( data ) )
 
 FileListPart::FileListPart(QObject *parent, const char *name, const QStringList& )
-        : KDevPlugin("filelist", "view_text", parent, name ? name : "FileListPart" )
+        : KDevPlugin(&data, parent, name ? name : "FileListPart" )
 {
     setInstance(filelistFactory::instance());
     //setXMLFile("kdevpart_filelist.rc");
 
     m_widget = new FileListWidget(this);
 	m_widget->setCaption(i18n("File List"));
-	m_widget->setIcon( SmallIcon( icon() ) );
+	m_widget->setIcon( SmallIcon( info()->icon() ) );
 
     QWhatsThis::add
         (m_widget, i18n("<b>File List</b><p>This is the list of opened files."));

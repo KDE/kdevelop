@@ -29,15 +29,16 @@
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
 #include <kdevappfrontend.h>
+#include <kdevplugininfo.h>
 #include <domutil.h>
 #include <codemodel.h>
 
 typedef KDevGenericFactory<BashSupportPart> BashSupportFactory;
-static const KAboutData data("kdevbashsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevbashsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( data ) )
 
 BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStringList& )
-: KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "BashSupportPart" )
+: KDevLanguageSupport (&data, parent, name ? name : "BashSupportPart" )
 {
 	setInstance(BashSupportFactory::instance());
 	setXMLFile("kdevbashsupport.rc");
@@ -182,7 +183,8 @@ void BashSupportPart::savedFile(const KURL &fileName)
 void BashSupportPart::startApplication(const QString &program)
 {
 	kdDebug() << "starting application" << program << endl;
-	appFrontend()->startAppCommand(QString::QString(), program, TRUE);
+	if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+		appFrontend->startAppCommand(QString::QString(), program, TRUE);
 }
 
 

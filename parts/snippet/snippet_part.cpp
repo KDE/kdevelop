@@ -11,7 +11,6 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
 #include <kaboutdata.h>
 #include <qvbox.h>
 #include <kdialogbase.h>
@@ -23,6 +22,8 @@
 #include "kdevcore.h"
 #include <kdevproject.h>
 #include "kdevmainwindow.h"
+#include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include <kdebug.h>
 
@@ -32,18 +33,19 @@
 #include "snippetsettings.h"
 #include "snippetconfig.h"
 
-typedef KGenericFactory<SnippetPart> snippetFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( "kdevsnippet" ) )
+static const KDevPluginInfo data("kdevsnippet");
+typedef KDevGenericFactory<SnippetPart> snippetFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( data ) )
 
 SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("CodeSnippet", "editcut", parent, name ? name : "SnippetPart" )
+  : KDevPlugin(&data, parent, name ? name : "SnippetPart" )
 {
   setInstance(snippetFactory::instance());
   //setXMLFile("kdevpart_snippet.rc");
 
   m_widget = new SnippetWidget(this);
   m_widget->setCaption(i18n("Code Snippets"));
-  m_widget->setIcon(SmallIcon( icon() ));
+  m_widget->setIcon(SmallIcon( info()->icon() ));
 
   QWhatsThis::add(m_widget, i18n("<b>Code Snippet</b><p>This is a list of available snippets."));
 
@@ -88,7 +90,7 @@ KAboutData* SnippetPart::aboutData()
  */
 void SnippetPart::slotConfigWidget( KDialogBase *dlg )
 {
-  QVBox *vbox = dlg->addVBoxPage( i18n("Code Snippets"), i18n("Code Snippets"), BarIcon( icon(), KIcon::SizeMedium ) );
+  QVBox *vbox = dlg->addVBoxPage( i18n("Code Snippets"), i18n("Code Snippets"), BarIcon( info()->icon(), KIcon::SizeMedium ) );
 
   SnippetSettings * w = new SnippetSettings( m_widget, vbox );
 

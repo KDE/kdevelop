@@ -25,16 +25,18 @@
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "kdevappfrontend.h"
+#include "kdevplugininfo.h"
+#include "urlutil.h"
 
 #include "toolsconfig.h"
 #include "toolsconfigwidget.h"
 
 
-static const KAboutData data("kdevtools", I18N_NOOP("External Tools"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( &data ) )
+static const KDevPluginInfo data("kdevtools");
+K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( data ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-	: KDevPlugin( "Tools", "configure", parent, name ? name : "ToolsPart")
+	: KDevPlugin( &data, parent, name ? name : "ToolsPart")
 {
   setInstance(ToolsFactory::instance());
 
@@ -60,12 +62,12 @@ ToolsPart::~ToolsPart()
 
 void ToolsPart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Tools Menu"), i18n("Tools Menu"), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox *vbox = dlg->addVBoxPage( i18n("Tools Menu"), i18n("Tools Menu"), BarIcon( info()->icon(), KIcon::SizeMedium) );
   ToolsConfig *w = new ToolsConfig(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
 
-  vbox = dlg->addVBoxPage(i18n("External Tools"), i18n("External Tools"), BarIcon( icon(), KIcon::SizeMedium) );
+  vbox = dlg->addVBoxPage(i18n("External Tools"), i18n("External Tools"), BarIcon( info()->icon(), KIcon::SizeMedium) );
   ToolsConfigWidget *w2 = new ToolsConfigWidget(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
@@ -169,7 +171,8 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
     cmdline.replace(QRegExp("%W"), word);
 
     if (captured)
-        appFrontend()->startAppCommand(QString::QString(), cmdline, false);
+        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+            appFrontend->startAppCommand(QString::QString(), cmdline, false);
     else {
         KShellProcess proc;
         proc << cmdline;
@@ -213,13 +216,13 @@ void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);
     m_contextPopup = popup;
-    m_contextFileName = fcontext->fileName();
+    m_contextFileName = fcontext->urls().first().fileName();
     
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
     QStringList filecontextList = config->readListEntry("File Context");
 
-    if (fcontext->isDirectory()) {
+    if (URLUtil::isDirectory(m_contextFileName)) {
         QStringList l = config->readListEntry("Dir Context");
         QStringList::ConstIterator it;
         for (it = l.begin(); it != l.end(); ++it)

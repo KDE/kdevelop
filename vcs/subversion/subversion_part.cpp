@@ -42,16 +42,17 @@
 #include <qradiobutton.h>
 #include <kdebug.h>
 #include <qwidget.h>
+#include <kdevplugininfo.h>
 
-static const KAboutData data("kdevsubversion", I18N_NOOP("Subversion"), "1.0");
+static const KDevPluginInfo data("kdevsubversion");
 
 typedef KDevGenericFactory<subversionPart> subversionFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( data ) )
 
 //bool g_projectWasJustCreated = false;
 
 subversionPart::subversionPart(QObject *parent, const char *name, const QStringList& )
-	: KDevVersionControl("KDevsubversionPart", "kdevsubversionpart", parent, name ? name : "Subversion" ) {
+	: KDevVersionControl(&data, parent, name ? name : "Subversion" ) {
 	setInstance(subversionFactory::instance());
 	m_projWidget = 0;
 

@@ -350,12 +350,11 @@ void AutoSubprojectView::slotRemoveSubproject()
         }
     }
 
-    RemoveSubprojectDialog dlg;
-    dlg.setCaption(i18n("Remove Subproject %1").arg(spitem->text(0)));
-    dlg.removeLabel->setText(i18n("Do you really want to remove subproject %1 with all targets and files?").arg(spitem->text(0)));
+    RemoveSubprojectDialog dlg(i18n("Remove Subproject %1").arg(spitem->text(0)),
+        i18n("Do you really want to remove subproject %1 with all targets and files?").arg(spitem->text(0)));
     if( dlg.exec() ){
 
-	bool removeSources = dlg.removeCheckBox->isChecked();
+	bool removeSources = dlg.removeFromDisk();
 
     if (!topsubdirs)
     {

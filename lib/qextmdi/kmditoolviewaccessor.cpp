@@ -62,7 +62,7 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 	//mdiMainFrm->m_pToolViews->insert(d->widget,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+//	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }
@@ -136,7 +136,7 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString&
 	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+//	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }

@@ -34,18 +34,18 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
-
+#include <kdevplugininfo.h>
 
 #include "copyto_part.h"
 #include "copytodialog.h"
 
-static const KAboutData data("kdevcopyto", I18N_NOOP("Copy To..."), "1.0");
+static const KDevPluginInfo data("kdevcopyto");
 
 typedef KDevGenericFactory<CopyToPart> CopyToFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcopyto, CopyToFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcopyto, CopyToFactory( data ) );
 
 CopyToPart::CopyToPart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("copyto", "copyto", parent, name ? name : "CopyToPart" )
+  : KDevPlugin(&data, parent, name ? name : "CopyToPart" )
 {
 	setInstance(CopyToFactory::instance());
 //	setXMLFile("kdevpart_copyto.rc");

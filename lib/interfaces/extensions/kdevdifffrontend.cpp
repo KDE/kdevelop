@@ -21,8 +21,8 @@
 #include "kdevdifffrontend.h"
 
 
-KDevDiffFrontend::KDevDiffFrontend(const QString& pluginName, const QString& icon, QObject *parent, const char *name)
-    : KDevPlugin(pluginName, icon, parent, name ? name : "KDevDiffFrontend")
+KDevDiffFrontend::KDevDiffFrontend(const KDevPluginInfo *info, QObject *parent, const char *name)
+    : KDevPlugin(info, parent, name ? name : "KDevDiffFrontend")
 {
 }
 

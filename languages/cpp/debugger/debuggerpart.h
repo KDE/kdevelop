@@ -27,6 +27,8 @@ class QPopupMenu;
 class KDialogBase;
 class ProcessWidget;
 class ProcessLineMaker;
+class KDevAppFrontend;
+class KDevDebugger;
 
 namespace GDBDebugger
 {
@@ -87,6 +89,9 @@ private slots:
     void slotCloseDrKonqi();
 
 private:
+    KDevAppFrontend *appFrontend();
+    KDevDebugger *debugger();
+    
     bool attachProcess(int pid);
     bool startDebugger();
     void setupController();
@@ -104,6 +109,8 @@ private:
 
     QString m_contextIdent;
     QCString m_drkonqi;
+    
+    KDevDebugger *m_debugger;
 };
 
 }

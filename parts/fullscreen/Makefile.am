@@ -9,7 +9,7 @@ libkdevfullscreen_la_SOURCES = fullscreen_part.cpp
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_fullscreen.desktop
+service_DATA = kdevfullscreen.desktop
 
 rcdir = $(kde_datadir)/kdevfullscreen
 rc_DATA = kdevpart_fullscreen.rc

@@ -9,7 +9,7 @@ libkdevcopyto_la_SOURCES = copyto_part.cpp copytodlgbase.ui copytodialog.cpp
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_copyto.desktop
+service_DATA = kdevcopyto.desktop
 
 rcdir = $(kde_datadir)/kdevcopyto
 noinst_HEADERS = copytodialog.h

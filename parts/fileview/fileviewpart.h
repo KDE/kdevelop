@@ -19,6 +19,7 @@
 
 class PartWidget;
 class KDialogBase;
+class KDevVersionControl;
 
 class FileViewPart : public KDevPlugin
 {
@@ -30,6 +31,8 @@ public:
 
     //! Colors to use for VCS visual feed-back
     static VCSColors vcsColors;
+    
+    KDevVersionControl *versionControl();
 
 private slots:
 	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );

@@ -35,6 +35,7 @@
 
 #include <urlutil.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "../../../../config.h"
 
@@ -58,9 +59,9 @@ private:
 };
 
 
-static const KAboutData data("docdoxygenplugin", I18N_NOOP("Doxygen documentation plugin"), "1.0");
+static const KDevPluginInfo data("docdoxygenplugin");
 typedef KDevGenericFactory<DocDoxygenPlugin> DocDoxygenPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocdoxygenplugin, DocDoxygenPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocdoxygenplugin, DocDoxygenPluginFactory(data) )
 
 DocDoxygenPlugin::DocDoxygenPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocDoxygenPluginFactory::instance()->config(), parent, name)

@@ -10,7 +10,7 @@ libkdevreplace_la_SOURCES = replace_part.cpp replace_widget.cpp replacedlg.ui re
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_replace.desktop
+service_DATA = kdevreplace.desktop
 
 rcdir = $(kde_datadir)/kdevreplace
 rc_DATA = kdevpart_replace.rc

@@ -3,7 +3,6 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "toplevel.h"
-#include "debugger.h"
 #include "api.h"
 
 
@@ -13,11 +12,6 @@ API *API::s_instance = 0;
 KDevMainWindow *API::mainWindow() const
 {
   return TopLevel::getInstance();
-}
-
-bool API::mainWindowValid() const
-{
-  return TopLevel::mainWindowValid();
 }
 
 KDevPartController *API::partController() const
@@ -35,12 +29,6 @@ KDevCore *API::core() const
 CodeModel *API::codeModel() const
 {
   return m_classStore;
-}
-
-
-KDevDebugger *API::debugger() const
-{
-  return Debugger::getInstance();
 }
 
 
@@ -65,11 +53,8 @@ API::~API()
   m_classStore = 0;
 }
 
-KDevPlugin * API::queryForExtension( const QString & serviceType )
+KDevPluginController * API::pluginController() const
 {
-/*    if (!m_extensions.contains(name))
-        m_extensions[name] = PluginController::getInstance()->extension(name);*/
-    
-    return PluginController::getInstance()->extension(serviceType);
+    return PluginController::getInstance();
 }
 

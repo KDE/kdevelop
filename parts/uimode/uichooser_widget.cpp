@@ -182,21 +182,6 @@ void UIChooserWidget::save()
 void UIChooserWidget::accept()
 {
   save();
-  
-  // Note: with newmainwindow.cpp, these calls will be ignored
-  
-  if (modeIDEAl->isChecked() && _lastMode != modeIDEAl ) {
-      m_part->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
-  }
-  else if (modeTab->isChecked() && _lastMode != modeTab ) {
-      m_part->mainWindow()->setUserInterfaceMode("TabPage");
-  }
-  else if (modeToplevel->isChecked() && _lastMode != modeToplevel ) {
-      m_part->mainWindow()->setUserInterfaceMode("Toplevel");
-  }
-  else if (modeMDI->isChecked() && _lastMode != modeMDI ) {
-      m_part->mainWindow()->setUserInterfaceMode("Childframe");
-  }
 }
 
 void UIChooserWidget::maybeEnableCloseOnHover( bool )

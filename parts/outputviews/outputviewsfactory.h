@@ -17,7 +17,11 @@
 #include "appoutputviewpart.h"
 #include "makeviewpart.h"
 
+class KDevPluginInfo;
+
 typedef K_TYPELIST_2( AppOutputViewPart, MakeViewPart ) OutputViews;
 typedef KDevGenericFactory< OutputViews > OutputViewsFactory;
+
+const KDevPluginInfo *outputViewsInfo();
 
 #endif

@@ -121,7 +121,8 @@ void QtDesignerCppIntegration::addFunctionToClass(KInterfaceDesigner::Function f
 
     QFileInfo fileInfo( implementationFile );
     if( !QFile::exists(fileInfo.absFilePath()) ){
-        m_part->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.fileName() );
+        if (KDevCreateFile *createFileSupp = m_part->extension<KDevCreateFile>("KDevelop/CreateFile"))
+            createFileSupp->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.fileName() );
     }
 
     m_part->partController()->editDocument( KURL( implementationFile ) );

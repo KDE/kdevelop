@@ -11,14 +11,15 @@
 
 
 #include <kstandarddirs.h>
+#include <kdevplugininfo.h>
 
 #include "appwizardfactory.h"
 
-static const KAboutData data("kdevappwizard", I18N_NOOP("Create New Project"), "1.0");
+static const KDevPluginInfo data("kdevappwizard");
 K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory )
 
 AppWizardFactory::AppWizardFactory()
-    : KDevGenericFactory<AppWizardPart>( &data )
+    : KDevGenericFactory<AppWizardPart>( data )
 {
 }
 
@@ -31,5 +32,10 @@ KInstance *AppWizardFactory::createInstance()
     dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");
 
     return instance;
+}
+
+const KDevPluginInfo *AppWizardFactory::info()
+{
+    return &data;
 }
 

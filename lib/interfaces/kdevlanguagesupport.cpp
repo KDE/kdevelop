@@ -29,8 +29,8 @@
 #include "kdevdesignerintegration.h"
 #include "kdevlanguagesupport.h"
 
-KDevLanguageSupport::KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
-    : KDevPlugin( pluginName, icon, parent, name ? name : "KDevLanguageSupport" )
+KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info, QObject *parent, const char *name)
+    : KDevPlugin(info, parent, name ? name : "KDevLanguageSupport" )
 {
 }
 

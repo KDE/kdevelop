@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000-2001 Bernd Gehrmann <bernd@kdevelop.org>
+   Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,9 +17,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#ifndef _KDEVAPI_H_
-#define _KDEVAPI_H_
+#ifndef KDEVAPI_H
+#define KDEVAPI_H
 
 #include <qobject.h>
 
@@ -26,208 +26,78 @@ class QStringList;
 class QDomDocument;
 class KDevCore;
 class KDevProject;
-class KDevVersionControl;
 class KDevLanguageSupport;
-class KDevMakeFrontend;
-class KDevAppFrontend;
 class CodeModel;
 class KDevPartController;
 class KDevMainWindow;
-class KDevDebugger;
-class KDevDiffFrontend;
-class KDevCreateFile;
 class KDevCodeRepository;
 class KDevPlugin;
-
-class KDevApiPrivate;
+class KDevPluginController;
 
 /**
-* This abstract class provides an interface to KDevelop's core components.
+@file kdevapi.h
+KDevelop API interface.
 */
-class KDevApi : public QObject
+
+/**
+The interface to KDevelop's core components.
+Needs to be implemented in a shell. Developers do not need to use this
+class because @ref KDevPlugin already provides API convenience methods.
+*/
+class KDevApi: public QObject
 {
     Q_OBJECT
 public:
-    /**
-    * Constructor
-    */
+    /**Constructor.*/
     KDevApi();
 
-    /**
-    * Destructor
-    */
+    /**Destructor.*/
     virtual ~KDevApi();
 
-    /**
-    * Returns a reference to the main window.
-    * @see KDevMainWindow
-    */
+    /**@return A reference to the toplevel widget.*/
     virtual KDevMainWindow *mainWindow() const = 0;
 
-    /**
-    * Check if the main window is valid
-    */
-    virtual bool mainWindowValid() const = 0;
-
-    /**
-    * Returns a reference to the part controller component, which permits
-    * access to the current active parts (or components).
-    * @see KDevPartController
-    */
+    /**@return A reference to the part controller which is used to manipulate loaded KParts.*/
     virtual KDevPartController *partController() const = 0;
+    
+    /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
+    virtual KDevPluginController *pluginController() const = 0;
 
-    /**
-    * Returns a reference to core object which provides basic functionalities
-    * for inter-parts communications / cooperation.
-    */
+    /**@return A reference to the application core - an object which provides
+    basic functionalities for inter-parts communications / cooperation.*/
     virtual KDevCore *core() const = 0;
 
-    /**
-    * Returns a reference to encharged class store object.
-    */
+    /**@return A reference to the memory symbol store.*/
     virtual CodeModel *codeModel() const = 0;
 
-    /**
-    * Returns a reference to the debugger component.
-    */
-    virtual KDevDebugger *debugger() const = 0;
-
-    /**
-    * Returns a reference to Document Object Model for the current project, or null
-    * if not project loaded.
-    */
+    /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;
-    /**
-    * Set the Document Object Model for the current project.
-    * @param dom
-    */
+    
+    /**Sets the Document Object Model for the current project.
+    @param dom The project DOM.*/
     void setProjectDom(QDomDocument *dom);
 
-    /**
-    * Returns a reference to current project, or null if no project is loaded.
-    * @ref KDevProject
-    */
+    /**@return A reference to the current project component or 0 if no project is loaded.*/
     KDevProject *project() const;
-    /**
-    * Set the current project.
-    * @param project
-    */
+    
+    /**Sets the current project.
+    @param project The project plugin which becames the current project.*/
     void setProject(KDevProject *project);
 
-    /**
-    * Returns a reference to current make front-end, which runs build commands
-    * and display output messages in its widget; null if none is found.
-    * @ref KDevMakeFrontend
-    */
-    KDevMakeFrontend *makeFrontend() const;
-    /**
-    * Set the make front-end to use.
-    * @param makeFrontend
-    */
-    void setMakeFrontend(KDevMakeFrontend *makeFrontend);
-
-    /**
-    * Returns a reference to current application front-end, which runs displays
-    * running application's output messages in its widget; null if none is found.
-    * @ref KDevMakeFrontend
-    */
-    KDevAppFrontend *appFrontend() const;
-    /**
-    * Set the application front-end to use.
-    * @param appFrontend
-    */
-    void setAppFrontend(KDevAppFrontend *appFrontend);
-
-    /**
-    * Returns the module encharged for supporting the language(s) used in the project.
-    */
+    /**@return A reference to the language support component or 0 if no support available.*/
     KDevLanguageSupport *languageSupport() const;
-    /**
-    * Set the object charged of providing handling for the source files.
-    * @param languageSupport
-    */
+    
+    /**Sets the object charged of providing handling for the source files written in particular
+    language (languages support component).
+    @param languageSupport The language support plugin.*/
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
-    /**
-    * Returns a reference to the version control used.
-    * @return
-    */
-    KDevVersionControl *versionControl() const;
-    /**
-    * Set the default version control.
-    * @param vcs
-    */
-    void setVersionControl( KDevVersionControl *vcs );
-
-    /**
-    * Dinamically add a new Version Control plug-in to the IDE (several may
-    * be running in the same project).
-    * @param vcs new version control object
-    */
-    void registerVersionControl( KDevVersionControl *vcs );
-    /**
-    * Dinamically deletes the version control plug-in from the list of the
-    * available ones. The plug-in will be unloaded.
-    * @param vcs version control object to delete
-    */
-    void unregisterVersionControl( KDevVersionControl *vcs );
-    /**
-    * Returns a @see QStringList containing unique (among the list) identifiers
-    * of the registered version control systems (currently their names).
-    */
-    QStringList registeredVersionControls() const;
-    /**
-    * Returns a reference to the version control identified by its id; will
-    * return null if the specified VCS is not present.
-    * @param  uid unique identifier of the VCS to unload, as returned by
-    *         @see KDevVersionControl::uid().
-    */
-    KDevVersionControl *versionControlByName( const QString &uid ) const;
-
-    /**
-    * Returns the reference to the current diff frontend, which basically
-    * provides a way for pretty-displaying the output of the "diff" or
-    * "cvs diff" commands.
-    * @see KDevDiffFrontend
-    */
-    KDevDiffFrontend *diffFrontend() const;
-    /**
-    * Set the diff front-end to use (currently only one is provided).
-    * @param diffFrontend
-    */
-    void setDiffFrontend( KDevDiffFrontend *diffFrontend );
-
-    /**
-    * The kind of objects returned by this method provides widgets and methods
-    * for creating new files based on language features and user definable
-    * templates.
-    * @see KDevCreateFile
-    */
-    KDevCreateFile *createFile() const;
-    /**
-    * Set the object encharged for creating new files from templates.
-    * @param createFile
-    */
-    void setCreateFile( KDevCreateFile *createFile );
-
-    /**
-    * Queries for the plugin which supports given service type.
-    * All already loaded plugins will be queried and the first one to support the service type
-    * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
-    * required in .desktop file for that plugin.
-    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
-    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
-    */
-    virtual KDevPlugin *queryForExtension(const QString &serviceType) = 0;
-
-    /**
-    * KDevSourceRepository objects provides connections to the interested
-    * modules so they can know about what happens to code Catalogs
-    */
+    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
     KDevCodeRepository *codeRepository() const;
     
 private:
-    KDevApiPrivate *d;
+    class Private;
+    Private *d;
 };
 
 #endif

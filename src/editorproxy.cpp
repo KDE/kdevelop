@@ -32,7 +32,6 @@
 #include "toplevel.h"
 #include "partcontroller.h"
 #include "core.h"
-#include "debugger.h"
 #include "newmainwindow.h"
 
 

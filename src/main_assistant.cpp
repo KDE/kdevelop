@@ -107,30 +107,6 @@ int main(int argc, char *argv[])
   Core::getInstance()->doEmitCoreInitialized();
 
   delete splash;
-
-/*  for( int i=0; i<args->count(); ++i ){
-      kdDebug(9000) << "------> arg " << args->arg(i) << endl;
-  }
-
-  bool openProject = false;
-  if( args->count() == 0 ){
-      ProjectManager::getInstance()->loadDefaultProject();
-      openProject = true;
-  } else if( args->count() > 0 ){
-      KURL url = args->url( 0 );
-      QString ext = QFileInfo( url.fileName() ).extension();
-      if( ext == "kdevelop" ){
-	  ProjectManager::getInstance()->loadProject( url );
-	  openProject = true;
-      }
-  }
-
-  if( !openProject ){
-      for( int a=0; a<args->count(); ++a ){
-	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
-      }
-  }*/
-  TopLevel::getInstance()->guiRestoringFinished();
   
   kapp->dcopClient()->registerAs("kdevassistant");
   

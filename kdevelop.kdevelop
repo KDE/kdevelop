@@ -16,7 +16,6 @@
     <ignoreparts>
       <part>KDevClearCase</part>
       <part>KDevPerforce</part>
-      <part>KDevVisualBoyAdvance</part>
     </ignoreparts>
     <secondaryLanguages/>
   </general>
@@ -34,6 +33,7 @@
       <group pattern="*script" name="scripts" />
       <group pattern="*" name="Others" />
       <hidenonprojectfiles>true</hidenonprojectfiles>
+      <hidenonlocation>true</hidenonlocation>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
@@ -98,7 +98,7 @@
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
-      <abortonerror>false</abortonerror>
+      <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
       <makebin/>
@@ -108,18 +108,23 @@
       <programargs/>
       <terminal>false</terminal>
       <envvars/>
-      <autocompile>true</autocompile>
+      <autocompile>false</autocompile>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
+      <runarguments>
+        <kdevassistant/>
+        <kdevelop/>
+        <kdevprofileeditor/>
+      </runarguments>
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>src/kdevelop</activetarget>
+      <activetarget>lib/interfaces/extensions/libkdevextensions.la</activetarget>
     </general>
     <configurations>
       <default>
-        <configargs>--enable-debug=full --prefix=$KDEDIR --with-kdelibsdoxy-dir=$KDEDIR/share/doc/HTML/en/kdelibs-apidocs</configargs>
-        <builddir/>
+        <configargs>--enable-debug=full --prefix=/home/gremlin/kde3 --with-kdelibsdoxy-dir=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs</configargs>
+        <builddir>build</builddir>
         <topsourcedir/>
         <cppflags/>
         <ldflags/>
@@ -132,12 +137,28 @@
         <cflags/>
         <cxxflags>-O0 -g3</cxxflags>
         <f77flags/>
+        <envvars/>
       </default>
     </configurations>
+    <subclassing>
+      <subclass uifile="/parts/documentation/docglobalconfigwidgetbase.ui" sourcefile="/parts/documentation/docglobalconfigwidget.cpp" />
+      <subclass uifile="/parts/documentation/docglobalconfigwidgetbase.ui" sourcefile="/parts/documentation/docglobalconfigwidget.h" />
+      <subclass uifile="/parts/documentation/editcatalogdlgbase.ui" sourcefile="/parts/documentation/editcatalogdlg.cpp" />
+      <subclass uifile="/parts/documentation/editcatalogdlgbase.ui" sourcefile="/parts/documentation/editcatalogdlg.h" />
+    </subclassing>
   </kdevautoproject>
   <kdevfilecreate>
-    <filetypes/>
-    <useglobaltypes/>
+    <filetypes>
+      <type icon="source_h" ext="h" create="template" name="C/C++ header" >
+        <descr>A new empty header file for C or C++.</descr>
+      </type>
+      <type icon="source_cpp" ext="cpp" create="template" name="C++ source" >
+        <descr>A new empty C++ file.</descr>
+      </type>
+    </filetypes>
+    <useglobaltypes>
+      <type ext="ui" />
+    </useglobaltypes>
   </kdevfilecreate>
   <cppsupportpart>
     <codecompletion/>
@@ -163,6 +184,51 @@
       <automaticCodeCompletion>true</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
+      <codeCompletionDelay>250</codeCompletionDelay>
+      <argumentsHintDelay>400</argumentsHintDelay>
+      <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDElibs</pcs>
+    </references>
+    <designerintegration>
+      <qtdesigner>
+        <implementation class="SelectTopic" path="/develop/kde/kdevelop/parts/documentation/selecttopicbase.ui" implementationpath="/develop/kde/kdevelop/parts/documentation/selecttopic.h" />
+        <implementation class="ProfileEditor" path="/develop/kde/kdevelop/src/profileengine/editor/profileeditorbase.ui" implementationpath="/develop/kde/kdevelop/src/profileengine/editor/profileeditor.h" />
+      </qtdesigner>
+    </designerintegration>
   </kdevcppsupport>
+  <kdevcvsservice>
+    <recursivewhenupdate>true</recursivewhenupdate>
+    <prunedirswhenupdate>true</prunedirswhenupdate>
+    <createdirswhenupdate>true</createdirswhenupdate>
+    <recursivewhencommitremove>true</recursivewhencommitremove>
+    <revertoptions>-C</revertoptions>
+  </kdevcvsservice>
+  <kdevdebugger>
+    <general>
+      <programargs/>
+      <gdbpath/>
+      <dbgshell>libtool</dbgshell>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
+      <breakonloadinglibs>true</breakonloadinglibs>
+      <separatetty>false</separatetty>
+      <floatingtoolbar>false</floatingtoolbar>
+    </general>
+    <display>
+      <staticmembers>false</staticmembers>
+      <demanglenames>true</demanglenames>
+      <outputradix>10</outputradix>
+    </display>
+  </kdevdebugger>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl>help:/kdevelop</usermanualurl>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>

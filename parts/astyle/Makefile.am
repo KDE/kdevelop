@@ -10,7 +10,7 @@ libkdevastyle_la_SOURCES = astyle_part.cpp astyleconfig.ui astyle_widget.cpp ast
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_astyle.desktop
+service_DATA = kdevastyle.desktop
 
 rc_DATA = kdevpart_astyle.rc
 rcdir = $(kde_datadir)/kdevastyle

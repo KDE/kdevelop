@@ -2,6 +2,7 @@
    Copyright (C) 2003 F@lk Brettschneider <falkbr@kdevelop.org>
    Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
    Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+   Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,54 +19,76 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef _KDEV_TOPLEVEL_H_
-#define _KDEV_TOPLEVEL_H_
+#ifndef KDEV_MAINWINDOW_H
+#define KDEV_MAINWINDOW_H
 
+#include <qstring.h>
 
+class QWidget;
 class KStatusBar;
 class KMainWindow;
 
+/**
+@file kdevmainwindow.h
+KDevelop main window interface.
+*/
+
+/**
+KDevelop main window interface.
+Provides methods to control the main window of an application.
+*/
 class KDevMainWindow
 {
 public:
+    /**Embeds a view of a part into the main window.
+    @param view The view to embed. Must be a KPart.
+    @param title The title of a view.
+    @param toolTip The tooltip of a view.*/
+    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null) = 0;
+    
+    /**Embeds a toolview at the left of the main window.
+    @param view The view to embed. Must be a KPart.
+    @param title The title of a view.
+    @param toolTip The tooltip of a view.*/
+    virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip) = 0;
+    
+    /**Embeds a toolview at the bottom of the main window.
+    @param view The view to embed. Must be a KPart.
+    @param title The title of a view.
+    @param toolTip The tooltip of a view.*/
+    virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip) = 0;
+    
+    /**Embeds a toolview at the right of the main window.
+    @param view The view to embed. Must be a KPart.
+    @param title The title of a view.
+    @param toolTip The tooltip of a view.*/
+    virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip) = 0;
+    
+    /**Removes a view from the main window.
+    @param view The view to remove.*/
+    virtual void removeView(QWidget *view) = 0;
+    
+    /**Shows or hides a view.
+    @param pView The view to show or hide.
+    @param bEnabled true if view should be shown, false it it is not.*/
+    virtual void setViewAvailable(QWidget *pView, bool bEnabled) = 0;
+    
+    /**Raises a view (shows it if it was minimized).
+    @param view The view to be raised.*/
+    virtual void raiseView(QWidget *view) = 0;
+    
+    /**Minimize a view.
+    @param view The view to be lowered.*/
+    virtual void lowerView(QWidget *view) = 0;
 
-  virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null) = 0;
-  virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip) = 0;
-  virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip) = 0;
-
-  virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip) = 0;
-
-  virtual void removeView(QWidget *view) = 0;
-  virtual void setViewAvailable(QWidget *pView, bool bEnabled) = 0;
-
-  virtual void raiseView(QWidget *view) = 0;
-  virtual void lowerView(QWidget *view) = 0;
-  virtual void lowerAllViews() = 0;
-
-  /** Store the currently active view tab/window of the output view/window */
-  virtual void storeOutputViewTab() = 0;
-
-  /** Restore the previously saved view tab/window to the output view/window */
-  virtual void restoreOutputViewTab() = 0;
-
-  virtual void loadSettings() = 0;
-
-  virtual KMainWindow *main() = 0;
-
-  KStatusBar *statusBar();
-
-  virtual void prepareToCloseViews() = 0;
-  virtual void guiRestoringFinished() = 0;
-
-  virtual void setUserInterfaceMode(const QString& /*uiMode*/) {}
-
-  /** this allows to order the mainwindow to do anything special, we use it to trigger the execution of a hack */
-  virtual void callCommand(const QString& /*command*/) {}
-
-  protected:
-  /** Stores the saved view tab/window of the output view/window */
-  QWidget *previous_output_view;
+    /**Loads main window settings.*/
+    virtual void loadSettings() = 0;
+    
+    /**@return KMainWindow object which actually represents the main window.*/
+    virtual KMainWindow *main() = 0;
+    
+    /**@return KStatusBar object which actually represents the status bar in the main window.*/
+    KStatusBar *statusBar();
 };
-
 
 #endif

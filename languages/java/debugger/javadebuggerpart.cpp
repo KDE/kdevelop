@@ -22,11 +22,14 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 
+#include "kdevplugininfo.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "kdevdebugger.h"
+#include "debugger.h"
+#include "kdevappfrontend.h"
 
 #include "variablewidget.h"
 #include "breakpointwidget.h"
@@ -40,17 +43,19 @@
 
 namespace JAVADebugger
 {
-static const KAboutData data("kdevjavadebugger", I18N_NOOP("Debugger"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( &data ) )
+static const KDevPluginInfo data("kdevjavadebugger");
+K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( data ) )
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("JavaDebugger", "debugger", parent, name ? name : "JavaDebuggerPart"),
+    : KDevPlugin(&data, parent, name ? name : "JavaDebuggerPart"),
       controller(0)
 {
     setInstance(JavaDebuggerFactory::instance());
 
     setXMLFile("kdevjavadebugger.rc");
 
+    m_debugger = new Debugger( partController() );
+    
     //
     // Setup widgets and dbgcontroller
     //
@@ -496,6 +501,16 @@ void JavaDebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
     partController()->editDocument(KURL( fileName ), lineNum);
 }
 
+}
+
+KDevDebugger * JAVADebugger::JavaDebuggerPart::debugger()
+{
+    return m_debugger;
+}
+
+KDevAppFrontend * JAVADebugger::JavaDebuggerPart::appFrontend( )
+{
+    return extension<KDevAppFrontend>("KDevelop/AppFrontend");
 }
 
 #include "javadebuggerpart.moc"

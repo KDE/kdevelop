@@ -30,7 +30,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <ktrader.h>
 #include <kaboutdata.h>
 
@@ -41,12 +41,14 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 
-typedef KGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
-static const KAboutData data("kdevprojectmanager", I18N_NOOP("KDevelop Project Manager"), "1.0");
-K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory("kdevprojectmanager"));
+#include <kdevplugininfo.h>
+
+typedef KDevGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
+static const KDevPluginInfo data("kdevprojectmanager");
+K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory(data));
 
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name, const QStringList&)
-    : KDevProject("KDevProjectManagerPart", "kdevprojectmanager", parent, name ? name : "KDevProjectManagerPart")
+    : KDevProject(&data, parent, name ? name : "KDevProjectManagerPart")
 {
     m_projectModel = new ProjectModel();
     m_dirty = false;

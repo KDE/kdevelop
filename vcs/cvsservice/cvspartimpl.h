@@ -18,7 +18,6 @@
 #include <kurl.h>
 
 #include <kdevversioncontrol.h>
-#include <kdevvcsfileinfoprovider.h>
 
 class CvsServicePart;
 class KDialogBase;

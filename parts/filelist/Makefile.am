@@ -9,7 +9,7 @@ libkdevfilelist_la_SOURCES = filelist_part.cpp filelist_widget.cpp filelist_item
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_filelist.desktop
+service_DATA = kdevfilelist.desktop
 
 rcdir = $(kde_datadir)/kdevfilelist
 

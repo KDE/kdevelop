@@ -4,4 +4,4 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libkdevcompat.la
 
-libkdevcompat_la_SOURCES = kdevwidgetaction.cpp kdeveditlistbox.cpp
+libkdevcompat_la_SOURCES = 

@@ -18,19 +18,23 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kparts/part.h>
+#include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-#include "outputviewsfactory.h"
 #include "appoutputwidget.h"
 #include "kdevpartcontroller.h"
 
+static const KDevPluginInfo data("kdevappoutputview");
+typedef KDevGenericFactory< AppOutputViewPart > AppViewFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevappview, AppViewFactory( data ) )
 
 AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevAppFrontend("ApplicationOutput", "appoutput", parent, name ? name : "AppOutputViewPart")
+    : KDevAppFrontend(&data, parent, name ? name : "AppOutputViewPart")
 {
-    setInstance(OutputViewsFactory::instance());
+    setInstance(AppViewFactory::instance());
 
     m_dcop = new KDevAppFrontendIface(this);
 

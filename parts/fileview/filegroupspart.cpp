@@ -25,6 +25,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
+#include "kdevplugininfo.h"
 
 #include "filegroupswidget.h"
 #include "filegroupsconfigwidget.h"
@@ -32,25 +33,25 @@
 #define FILEGROUPS_OPTIONS 1
 
 typedef KDevGenericFactory<FileGroupsPart> FileGroupsFactory;
-static const KAboutData data("kdevfilegroups", I18N_NOOP("File Group View"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( &data ) )
+static const KDevPluginInfo data("kdevfilegroups");
+K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( data ) )
 
 FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("FileGroups", "attach", parent, name ? name : "FileGroupsPart")
+    : KDevPlugin(&data, parent, name ? name : "FileGroupsPart")
 {
     deleteRequested = false;
     setInstance(FileGroupsFactory::instance());
 
     m_filegroups = new FileGroupsWidget(this);
     m_filegroups->setCaption(i18n("File Group View"));
-	m_filegroups->setIcon(SmallIcon( icon() ) );
+	m_filegroups->setIcon(SmallIcon( info()->icon() ) );
     QWhatsThis::add(m_filegroups, i18n("<b>File group view</b><p>"
                                        "The file group viewer shows all files of the project, "
                                        "in groups which can be configured in project settings dialog, <b>File Groups</b> tab."));
     mainWindow()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("File groups in the project directory"));
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("File Groups"), FILEGROUPS_OPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("File Groups"), FILEGROUPS_OPTIONS, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdevgenericfactory.h>
+#include <kdevcreatefile.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -32,21 +33,21 @@
 #include "kdevlanguagesupport.h"
 #include "scriptoptionswidget.h"
 #include "scriptnewfiledlg.h"
-
+#include "kdevplugininfo.h"
 
 typedef KDevGenericFactory<ScriptProjectPart> ScriptProjectFactory;
-static const KAboutData data("kdevscriptproject", I18N_NOOP("Build Tool"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( &data ) )
+static const KDevPluginInfo data("kdevscriptproject");
+K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( data ) )
 
 ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QStringList &)
-    : KDevProject("ScriptProject", "scriptproject", parent, name ? name : "ScriptProjectPart")
+    : KDevBuildTool(&data, parent, name ? name : "ScriptProjectPart")
 {
     setInstance(ScriptProjectFactory::instance());
 
     setXMLFile("kdevscriptproject.rc");
 
     // only create new file action if file creation part not available
-    if (!createFileSupport()) {
+    if (!extension<KDevCreateFile>("KDevelop/CreateFile")) {
       KAction *action;
       action = new KAction( i18n("New File..."), 0,
                             this, SLOT(slotNewFile()),
@@ -67,7 +68,7 @@ ScriptProjectPart::~ScriptProjectPart()
 void ScriptProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Script Project Options"));
+    vbox = dlg->addVBoxPage(i18n("Script Project Options"), i18n("Script Project Options"), BarIcon("kdevelop", KIcon::SizeMedium));
     ScriptOptionsWidget *w = new ScriptOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

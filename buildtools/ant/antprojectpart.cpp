@@ -19,9 +19,11 @@
 #include <keditlistbox.h>
 #include <kurlrequester.h>
 
+#include <kdevplugininfo.h>
 
 #include <kdevcore.h>
 #include <kdevmakefrontend.h>
+#include <urlutil.h>
 
 
 #include "antoptionswidget.h"
@@ -32,8 +34,8 @@
 
 
 typedef KDevGenericFactory<AntProjectPart> AntProjectFactory;
-static const KAboutData data("kdevantproject", I18N_NOOP("Build Tool"), "1.0");
-K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory( &data ))
+static const KDevPluginInfo data("kdevantproject");
+K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory( data ))
 
 
 AntOptions::AntOptions()
@@ -43,7 +45,7 @@ AntOptions::AntOptions()
 
 
 AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringList &)
-  : KDevProject("AntProject", "antproject", parent, name ? name : "AntProjectPart")
+  : KDevBuildTool(&data, parent, name ? name : "AntProjectPart")
 {
   setInstance(AntProjectFactory::instance());
 
@@ -546,10 +548,11 @@ void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     return;
 
   const FileContext *fcontext = static_cast<const FileContext*>(context);
-  if (fcontext->isDirectory())
+  KURL url = fcontext->urls().first();
+  if (URLUtil::isDirectory(url))
     return;
 
-  m_contextFileName = fcontext->fileName();
+  m_contextFileName = url.fileName();
   bool inProject = project()->allFiles().contains(m_contextFileName.mid ( project()->projectDirectory().length() + 1 ) );
   QString popupstr = QFileInfo(m_contextFileName).fileName();
   if (m_contextFileName.startsWith(projectDirectory()+ "/"))

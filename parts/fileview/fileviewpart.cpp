@@ -35,6 +35,7 @@
 #include "filetreewidget.h"
 #include "vcscolorsconfigwidget.h"
 #include "kdevversioncontrol.h"
+#include "kdevplugininfo.h"
 
 #define FILETREE_OPTIONS 1
 
@@ -49,26 +50,26 @@ VCSColors FileViewPart::vcsColors;
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef KDevGenericFactory<FileViewPart> FileViewFactory;
-static const KAboutData data("kdevfileview", I18N_NOOP("File Tree"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( &data ) )
+static const KDevPluginInfo data("kdevfileview");
+K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( data ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class FileTreeWidget
 ///////////////////////////////////////////////////////////////////////////////
 
 FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList &)
-	: KDevPlugin("FileView", "folder", parent, name ? name : "FileViewPart"),
+	: KDevPlugin(&data, parent, name ? name : "FileViewPart"),
     m_widget( 0 )
 {
     setInstance( FileViewFactory::instance() );
     //    setXMLFile("kdevfileview.rc");
 
     m_widget = new PartWidget( this );
-	m_widget->setIcon( SmallIcon( icon() ) );
+	m_widget->setIcon( SmallIcon( info()->icon() ) );
     mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
@@ -143,6 +144,11 @@ void FileViewPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page, u
 		VCSColorsConfigWidget *w = new VCSColorsConfigWidget( this, vcsColors, page, "vcscolorsconfigwidget" );
 		connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
 	}
+}
+
+KDevVersionControl *FileViewPart::versionControl()
+{
+    return extension<KDevVersionControl>("KDevelop/VersionControl");
 }
 
 #include "fileviewpart.moc"

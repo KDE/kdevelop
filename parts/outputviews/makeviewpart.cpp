@@ -17,19 +17,23 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 
-#include "outputviewsfactory.h"
 #include "makewidget.h"
 
+static const KDevPluginInfo data("kdevmakeview");
+typedef KDevGenericFactory< MakeViewPart > MakeViewFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevmakeview, MakeViewFactory( data ) )
 
 MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevMakeFrontend("MakeOutput", "makeoutput", parent, name)
+    : KDevMakeFrontend(&data, parent, name)
 {
-    setInstance(OutputViewsFactory::instance());
+    setInstance(MakeViewFactory::instance());
 
     setXMLFile("kdevmakeview.rc");
 

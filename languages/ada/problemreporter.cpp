@@ -24,6 +24,8 @@
 #include "configproblemreporter.h"
 #include "backgroundparser.h"
 
+#include <qfileinfo.h>
+
 #include <kdeversion.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
@@ -187,8 +189,11 @@ void ProblemReporter::reparse()
 	}
 
 /* Temporarily deactivated (crashes)*/
-    m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
-    m_bgParser->start();
+    if (!m_adaSupport->fileExtensions ().contains (QFileInfo (m_filename).extension ()))
+    {
+        m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
+	m_bgParser->start();
+    }
  /**/
 }
 
@@ -252,7 +257,7 @@ void ProblemReporter::configure()
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
     kdDebug() << "ProblemReporter::configWidget()" << endl;
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ada Parsing"));
+    QVBox *vbox = dlg->addVBoxPage(i18n("Ada Parsing"), i18n("Ada Parsing"),  BarIcon( "source", KIcon::SizeMedium ));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));

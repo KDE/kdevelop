@@ -24,10 +24,10 @@ Name[sr]=KDevelop-ов интерфејс пројекта
 Name[sr@Latn]=KDevelop-ov interfejs projekta
 Name[sv]=KDevelop projektgränssnitt
 Name[ta]=KDevelop திட்ட இடைஇணைப்பு
+Name[tg]=Лоиҳаи интерфейс
 Name[xx]=xxKDevelop Project Interfacexx
 Name[zh_CN]=KDevelop 项目接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
 Type=int
-

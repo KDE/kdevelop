@@ -22,42 +22,69 @@
 #include <qobject.h>
 #include <qvaluelist.h>
 
+/**
+@file kdevcoderepository.h
+Code repository - the persistant symbol store accessor.
+*/
+
 class KDevCodeRepositoryData;
 class Catalog;
 
 /**
-@author KDevelop Authors
+Code repository - the persistant symbol store accessor.
+Symbols from parsed files can be saved to the persistant symbol store.
+Persistance in this case means that symbol database is never loaded into memory
+and works like a usual database which executes queries.
+
+Code repository consists from @ref Catalog objects that represent separate symbol 
+databases. Catalogs can be created/loaded/unloaded dynamically.
+To find a symbol in the repository each catalog should be queried.
+
+Persistant symbol store is useful to keep information about code that
+never or rarely changes. System libraries are perfect examples of such code.
+Symbols from code contained in project files are better stored in memory
+symbol store like @ref CodeModel.
 */
 class KDevCodeRepository : public QObject
 {
     Q_OBJECT
 public:
+    /**Constructor.*/
     KDevCodeRepository();
+    /**Destructor.*/
     virtual ~KDevCodeRepository();
     
+    /**@return The main catalog. Each catalog can be marked is main 
+    to provide easy access to it.*/
     Catalog* mainCatalog();
+    /**Sets the main catalog.
+    @param mainCatalog The catalog to be marked as main.*/
     void setMainCatalog( Catalog* mainCatalog );
 
+    /**@return The list of registered catalogs.*/
     QValueList<Catalog*> registeredCatalogs();
 
+    /**Registers catalog in the repository.
+    @param catalog The catalog to register.*/
     void registerCatalog( Catalog* catalog );
+    /**Unregisters catalog from the repository.
+    @param catalog The catalog to unregister.*/
     void unregisterCatalog( Catalog* catalog );
+    /**Marks catalog as changed and emits @ref catalogChanged signal.
+    @param catalog The catalog to touch.*/
     void touchCatalog( Catalog* catalog );
 
 signals:
-    /**
-     * Emitted when a new catalog is registered
-     */
+    /**Emitted when a new catalog is registered.
+    @param catalog The new catalog.*/
     void catalogRegistered( Catalog* catalog );
 
-    /**
-     * Emitted when a catalog in removed
-     */
+    /**Emitted when a catalog in removed
+    @param catalog The catalog that was removed.*/
     void catalogUnregistered( Catalog* catalog );
 
-    /**
-     * Emitted when the contens of catalog is changed
-     */
+    /**Emitted when the contens of catalog is changed.
+    @param catalog Changed catalog.*/
     void catalogChanged( Catalog* catalog );
 
 private:

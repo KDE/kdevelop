@@ -7,17 +7,17 @@
 #include <kdevgenericfactory.h>
 
 #include <kdevcore.h>
-
+#include <kdevplugininfo.h>
 
 #include "editorchooser_part.h"
 #include "editorchooser_widget.h"
 
 typedef KDevGenericFactory<EditorChooserPart> EditorChooserFactory;
-static const KAboutData data("kdeveditorchooser", I18N_NOOP("Editor"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( &data ) )
+static const KDevPluginInfo data("kdeveditorchooser");
+K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( data ) )
 
 EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("EditorChooser", "editorchooser", parent, name ? name : "EditorChooserPart")
+  : KDevPlugin(&data, parent, name ? name : "EditorChooserPart")
 {
   setInstance(EditorChooserFactory::instance());
 

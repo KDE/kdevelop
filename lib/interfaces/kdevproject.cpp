@@ -29,8 +29,8 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 
-KDevProject::KDevProject( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
-    : KDevPlugin( pluginName, icon, parent, name)
+KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char *name)
+    : KDevPlugin(info, parent, name)
 {
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );

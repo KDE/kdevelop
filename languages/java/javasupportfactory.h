@@ -15,10 +15,14 @@
 #include <kdevgenericfactory.h>
 #include "javasupportpart.h"
 
+class KDevPluginInfo;
+
 class JavaSupportFactory : public KDevGenericFactory<JavaSupportPart>
 {
 public:
     JavaSupportFactory();
+    
+    static const KDevPluginInfo *info();
 
 protected:
     virtual KInstance *createInstance();

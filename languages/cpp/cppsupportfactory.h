@@ -15,10 +15,14 @@
 #include <kdevgenericfactory.h>
 #include "cppsupportpart.h"
 
+class KDevPluginInfo;
+
 class CppSupportFactory : public KDevGenericFactory<CppSupportPart>
 {
 public:
     CppSupportFactory();
+    
+    static const KDevPluginInfo *info();
 
 protected:
     virtual KInstance *createInstance();

@@ -1,6 +1,8 @@
 # Here resides the doxygen part
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/src -DDOXYWIZARD $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_srcdir)/src -DDOXYWIZARD \
+	$(all_includes)
 
 kde_module_LTLIBRARIES = libkdevdoxygen.la
 libkdevdoxygen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

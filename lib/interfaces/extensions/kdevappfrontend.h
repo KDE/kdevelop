@@ -48,8 +48,8 @@ class KDevAppFrontend : public KDevPlugin
 
 public:
 
-    KDevAppFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
-    ~KDevAppFrontend();
+    KDevAppFrontend(const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
+        :KDevPlugin(info, parent, name ? name : "KDevAppFrontend") {}
 
     /**
      * Returns whether the application is currently running.

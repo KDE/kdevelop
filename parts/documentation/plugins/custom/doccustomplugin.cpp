@@ -26,10 +26,11 @@
 #include <klistview.h>
 
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
-static const KAboutData data("doccustomplugin", I18N_NOOP("Custom documentation plugin"), "1.0");
+static const KDevPluginInfo data("doccustomplugin");
 typedef KDevGenericFactory<DocCustomPlugin> DocCustomPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocCustomPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocCustomPluginFactory(data) )
 
 DocCustomPlugin::DocCustomPlugin(QObject* parent, const char* name, const QStringList args)
     :DocumentationPlugin(DocCustomPluginFactory::instance()->config(), parent, name)

@@ -20,7 +20,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include "kdevvcsfileinfoprovider.h"
 #include "kdevversioncontrol.h"
 #include "kdevcore.h"
 #include "kdevproject.h"

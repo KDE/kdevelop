@@ -1,10 +1,12 @@
 # Here resides the cvs part
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcvsservice.la
 libkdevcvsservice_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevcvsservice_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lcvsservice
+libkdevcvsservice_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
+	$(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML) -lcvsservice
 
 libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp \
     cvsformbase.ui cvsform.cpp \

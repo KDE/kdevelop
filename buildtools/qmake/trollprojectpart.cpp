@@ -43,13 +43,14 @@
 #include "config.h"
 #include "envvartools.h"
 
+#include <kdevplugininfo.h>
 
 typedef KDevGenericFactory<TrollProjectPart> TrollProjectFactory;
-static const KAboutData data("kdevtrollproject", I18N_NOOP("QMake Manager"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( &data ) )
+static const KDevPluginInfo data("kdevtrollproject");
+K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( data ) )
 
 TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStringList& args )
-    : KDevProject("TrollProject", "trollproject", parent, name ? name : "TrollProjectPart")
+    : KDevBuildTool(&data, parent, name ? name : "TrollProjectPart")
 {
     setInstance(TrollProjectFactory::instance());
 

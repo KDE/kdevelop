@@ -2,7 +2,7 @@
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
 *                                                                         *
-*   Copyright (C) 2002 by Victor Röder                                    *
+*   Copyright (C) 2002 by Victor Rï¿½er                                    *
 *   victor_roeder@gmx.de                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,7 @@
 #include <qdir.h>
 #include <kdevgenericfactory.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 class QDomElement;
 class QStringList;
@@ -32,8 +32,7 @@ class KSelectAction;
 class TargetItem;
 class ConfigWidgetProxy;
 
-
-class AutoProjectPart : public KDevProject
+class AutoProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 
@@ -59,7 +58,7 @@ public:
     virtual void removeFiles ( const QStringList& fileList );
     virtual QString buildDirectory() const;
     virtual Options options() const;
-
+    
 	/**
 	 * Implementation of the KDevPlugin interface.
 	 */

@@ -22,7 +22,7 @@
 #include <qguardedptr.h>
 #include <kaction.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 #include "domutil.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -39,7 +39,7 @@
 class HaskellProjectWidget;
 
 
-class HaskellProjectPart : public KDevProject
+class HaskellProjectPart : public KDevBuildTool
 {
   Q_OBJECT
 

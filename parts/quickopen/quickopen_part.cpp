@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include <kmainwindow.h>
 
@@ -36,11 +37,11 @@
 #include <kdevproject.h>
 
 typedef KDevGenericFactory<QuickOpenPart> QuickOpenFactory;
-static const KAboutData data("kdevquickopen", I18N_NOOP("Quick Open..."), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( &data ) )
+static const KDevPluginInfo data("kdevquickopen");
+K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( data ) )
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "QuickOpenPart" )
+    : KDevPlugin(&data, parent, name ? name : "QuickOpenPart" )
 {
     setInstance(QuickOpenFactory::instance());
     setXMLFile("kdevpart_quickopen.rc");

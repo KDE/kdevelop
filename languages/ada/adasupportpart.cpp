@@ -35,13 +35,15 @@
 #include "AdaStoreWalker.hpp"
 #include "AdaAST.hpp"
 
+#include <kdevplugininfo.h>
+
 enum { KDEV_DB_VERSION = 3 };
 enum { KDEV_PCS_VERSION = 2 };
 
 typedef KDevGenericFactory<AdaSupportPart> AdaSupportPartFactory;
 
-static const KAboutData data("kdevadasupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory (&data))
+static const KDevPluginInfo data("kdevadasupport");
+K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory (data))
 
 
 struct AdaSupportPartData {
@@ -51,13 +53,13 @@ struct AdaSupportPartData {
 };
 
 AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport ("AdaSupport", "ada", parent, name ? name : "AdaSupportPart"), d (new AdaSupportPartData())
+    : KDevLanguageSupport (&data, parent, name ? name : "AdaSupportPart"), d (new AdaSupportPartData())
 {
     setInstance (AdaSupportPartFactory::instance ());
 
     d->problemReporter = new ProblemReporter (this);
-    connect (core (), SIGNAL (configWidget (KDialogBase*)),
-             d->problemReporter, SLOT (configWidget (KDialogBase*)));
+//    connect (core (), SIGNAL (configWidget (KDialogBase*)),
+//             d->problemReporter, SLOT (configWidget (KDialogBase*)));
     d->problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( d->problemReporter, i18n("Problems"), i18n("Problem reporter"));
     QWhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
@@ -71,7 +73,7 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
     connect (partController (), SIGNAL (savedFile (const KURL&)),
              this, SLOT (savedFile (const KURL&)));
 
-    connect (core (), SIGNAL (configWidget (KDialogBase*)), this, SLOT (configWidget (KDialogBase*)));
+//    connect (core (), SIGNAL (configWidget (KDialogBase*)), this, SLOT (configWidget (KDialogBase*)));
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              d->problemReporter, SLOT(configWidget(KDialogBase*)) );
 

@@ -9,6 +9,6 @@ libkdevsubversion_la_SOURCES = subversion_part.cpp subversion_widget.cpp subvers
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_subversion.desktop
+service_DATA = kdevsubversion.desktop
 
 rcdir = $(kde_datadir)/kdevsubversion

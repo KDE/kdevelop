@@ -111,7 +111,7 @@ protected slots:
     void windowNext();
     void windowPrev();
     
-
+    void formModified(bool b);
 private:
     MainWindow *m_widget;
     

@@ -9,7 +9,7 @@ libkdevsnippet_la_SOURCES = snippet_part.cpp snippet_widget.cpp snippetdlg.ui sn
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_snippet.desktop
+service_DATA = kdevsnippet.desktop
 
 rcdir = $(kde_datadir)/kdevsnippet
 

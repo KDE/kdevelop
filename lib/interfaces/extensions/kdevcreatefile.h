@@ -80,8 +80,8 @@ public:
 
 public:
 
-  KDevCreateFile(const QString& pluginName, const QString& icon, QObject * parent = 0, const char * name = 0);
-  virtual ~KDevCreateFile();
+  KDevCreateFile(const KDevPluginInfo *info, QObject * parent = 0, const char * name = 0)
+      :KDevPlugin(info, parent, name) {}
 
   /**
    * Call this method to create a new file, within or without the project. Supply as

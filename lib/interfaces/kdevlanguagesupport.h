@@ -41,6 +41,9 @@ class KDevDesignerIntegration;
 
 using namespace KInterfaceDesigner;
 
+/**
+KDevelop language support interface.
+*/
 class KDevLanguageSupport : public KDevPlugin
 {
     Q_OBJECT
@@ -54,7 +57,7 @@ public:
         Scripts=4096, NewScript=8192                             /* features for scripting support (perl) */
     };
 
-    KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name );
+    KDevLanguageSupport(const KDevPluginInfo *info, QObject *parent, const char *name );
     ~KDevLanguageSupport();
 
     /**

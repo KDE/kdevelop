@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="fullscreen" library="libfullscreenplugin" version="2">
+<kpartplugin name="fullscreen" library="libfullscreenplugin" version="3">
 <MenuBar>
   <Menu name="view">
     <Text>&amp;View</Text>

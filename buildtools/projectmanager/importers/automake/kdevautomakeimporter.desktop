@@ -1,8 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=KDevAutomakeImporter
+Name[da]=KDevelop Automake-importør
+Name[sv]=KDevelop Automake-import
 Comment=KDevelop Automake Importer
+Comment[da]=KDevelop Automake importør
+Comment[et]=KDevelopi Automake'i importija
+Comment[fr]=Importation d'Automake pour KDevelop
+Comment[pt_BR]=Importador Automake do KDevelop Automake
+Comment[ru]=Импорт проектов Automake
+Comment[sr]=KDevelop-ов automake увозник
+Comment[sr@Latn]=KDevelop-ов automake увозник
+Comment[sv]=KDevelop Automake-import
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevautomakeimporter
 X-KDevelop-ProjectImporter=
+X-KDevelop-Version=3

@@ -53,7 +53,7 @@
 #include <kcombobox.h>
 #include <kdeversion.h>
 
-#include "kdevkstdaction.h"
+//#include "kdevkstdaction.h"
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
     : KTextEditor::View( document, parent, name ),

@@ -98,6 +98,7 @@
 #include <kdevmakefrontend.h>
 #include <kdevcoderepository.h>
 #include <codemodel_utils.h>
+#include <kdevplugininfo.h>
 
 #include <domutil.h>
 #include <config.h>
@@ -149,7 +150,7 @@ public:
 };
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport("CppSupport", "source_cpp", parent, name ? name : "KDevCppSupport"),
+    : KDevLanguageSupport(CppSupportFactory::info(), parent, name ? name : "KDevCppSupport"),
       m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
@@ -306,14 +307,14 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
     QVBox* vbox = 0;
 
-	vbox = dlg->addVBoxPage( i18n( "C++ Specific" ), i18n( "C++ Specific" ), BarIcon( icon(), KIcon::SizeMedium) );
+	vbox = dlg->addVBoxPage( i18n( "C++ Specific" ), i18n( "C++ Specific" ), BarIcon( info()->icon(), KIcon::SizeMedium) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 }
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Class Generator"), i18n( "C++ Class Generator" ), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Class Generator"), i18n( "C++ Class Generator" ), BarIcon( info()->icon(), KIcon::SizeMedium) );
   ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
 }
@@ -677,10 +678,11 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     else if (context->hasType(Context::FileContext)){
         const FileContext *fc = static_cast<const FileContext*>(context);
         //this is a .ui file and only selection contains only one such file
-        kdDebug() << "file context with " << fc->fileName() << endl;
-        if (fc->fileName().endsWith(".ui"))
+        KURL url = fc->urls().first();
+        kdDebug() << "file context with " << url.fileName() << endl;
+        if (url.fileName().endsWith(".ui"))
         {
-            m_contextFileName = fc->fileName();
+            m_contextFileName = url.fileName();
             int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
             popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
         }

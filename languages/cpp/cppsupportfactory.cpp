@@ -11,14 +11,15 @@
 
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <kdevplugininfo.h>
 #include "cppsupportfactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory )
 
-static const KAboutData data("kdevcppsupport", I18N_NOOP("C++ Specific"), "1.0");
+static const KDevPluginInfo data("kdevcppsupport");
 
 CppSupportFactory::CppSupportFactory()
-    : KDevGenericFactory<CppSupportPart>( &data )
+    : KDevGenericFactory<CppSupportPart>( data )
 {
 }
 
@@ -30,5 +31,10 @@ KInstance *CppSupportFactory::createInstance()
     dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevcppsupport/pcs/" );
 
     return instance;
+}
+
+const KDevPluginInfo * CppSupportFactory::info()
+{
+    return &data;
 }
 

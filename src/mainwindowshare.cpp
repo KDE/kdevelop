@@ -57,6 +57,9 @@
 #include "api.h"
 #include "kdevmakefrontend.h"
 #include "toplevel.h"
+#include "kdevplugincontroller.h"
+
+#include "kdevplugininfo.h"
 
 #include "mainwindowshare.h"
 
@@ -253,14 +256,14 @@ void MainWindowShare::slotActiveProcessChanged( KDevPlugin* plugin, bool active 
 void MainWindowShare::slotStopPopupActivated( int id )
 {
   KDevPlugin* plugin = activeProcesses.at( id );
-  if ( plugin && plugin->pluginName() == m_stopProcesses->popupMenu()->text( id ) ) {
+  if ( plugin && plugin->info()->genericName() == m_stopProcesses->popupMenu()->text( id ) ) {
     Core::getInstance()->doEmitStopButtonPressed( plugin );
     return;
   } else {
     // oops... list has changed in the meantime
     QString str = m_stopProcesses->popupMenu()->text( id );
     for ( plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
-      if ( plugin->pluginName() == str ) {
+      if ( plugin->info()->genericName() == str ) {
   Core::getInstance()->doEmitStopButtonPressed( plugin );
         return;
       }
@@ -275,7 +278,7 @@ void MainWindowShare::slotStopMenuAboutToShow()
 
   int i = 0;
   for ( KDevPlugin* plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
-    popup->insertItem( plugin->pluginName(), i++ );
+    popup->insertItem( plugin->info()->genericName(), i++ );
   }
 }
 
@@ -355,8 +358,10 @@ void MainWindowShare::slotSettings()
         QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
         config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
         config->sync();
-        if( API::getInstance()->makeFrontend() )
-            API::getInstance()->makeFrontend()->updateSettingsFromConfig();
+        if( KDevPlugin *makeExt = API::getInstance()->pluginController()->extension("KDevelop/MakeFrontend"))
+        {
+            static_cast<KDevMakeFrontend*>(makeExt)->updateSettingsFromConfig();
+        }
     }
 }
 

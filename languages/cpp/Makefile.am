@@ -3,17 +3,19 @@
 SUBDIRS = templates subclassing_template newclass_templates file_templates \
 	app_templates compiler pcsimporter debugger doc
 
-INCLUDES = -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat \
-	-I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/designer_integration \
-	-I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_builddir)/lib/designer_integration \
-	-I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
+INCLUDES = -I$(top_srcdir)/languages/lib/designer_integration \
+	-I$(top_srcdir)/languages/lib/interfaces -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat \
+	-I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+	-I$(top_builddir)/languages/lib/designer_integration -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include \
+	$(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -L$(top_srcdir)/bdb/dist
 libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la \
-	$(top_builddir)/lib/designer_integration/libdesignerintegration.la $(top_builddir)/bdb/build_unix/libdb.a
+	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la $(top_builddir)/lib/designer_integration/libdesignerintegration.la \
+	$(top_builddir)/bdb/build_unix/libdb.a
 
 libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 	ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \

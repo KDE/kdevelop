@@ -10,7 +10,7 @@ METASOURCES = AUTO
 KDE_ICON = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_tipofday.desktop
+service_DATA = kdevtipofday.desktop
 
 tip_DATA = tips
 tipdir = $(kde_datadir)/kdevtipofday

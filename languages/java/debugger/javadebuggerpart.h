@@ -19,6 +19,9 @@
 
 #include <kdevgenericfactory.h>
 
+class KDevAppFrontend;
+class KDevDebugger;
+
 namespace JAVADebugger
 {
 
@@ -58,6 +61,9 @@ private slots:
 private:
     void startDebugger();
     void setupController();
+    
+    KDevAppFrontend *appFrontend();
+    KDevDebugger *debugger();
 
     QGuardedPtr<VariableWidget> variableWidget;
     QGuardedPtr<BreakpointWidget> breakpointWidget;
@@ -65,6 +71,8 @@ private:
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     DbgController *controller;
     //    QGuardedPtr<DbgToolBar> floatingToolBar;
+    
+    KDevDebugger *m_debugger;
 };
 
 typedef KDevGenericFactory<JavaDebuggerPart> JavaDebuggerFactory;

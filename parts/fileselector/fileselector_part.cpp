@@ -20,6 +20,7 @@
 #include <kdevproject.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
+#include <kdevplugininfo.h>
 
 #include <ktip.h>
 
@@ -27,11 +28,11 @@
 #include "fileselector_part.h"
 
 typedef KDevGenericFactory<FileSelectorPart> FileSelectorFactory;
-static const KAboutData data("kdevfileselector", I18N_NOOP("File Selector"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( &data ) )
+static const KDevPluginInfo data("kdevfileselector");
+K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( data ) )
 
 FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("FileSelector", "fileopen", parent, name ? name : "FileSelectorPart")
+    : KDevPlugin(&data, parent, name ? name : "FileSelectorPart")
 {
     setInstance(FileSelectorFactory::instance());
 
@@ -44,7 +45,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
     connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
 
     m_filetree->setCaption( i18n("File Selector") );
-	m_filetree->setIcon( SmallIcon( icon() ) );
+	m_filetree->setIcon( SmallIcon( info()->icon() ) );
     mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
     QWhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
@@ -76,7 +77,7 @@ void FileSelectorPart::slotProjectOpened()
 
 void FileSelectorPart::slotConfigWidget( KDialogBase * dlg )
 {
-	QVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( icon(), KIcon::SizeMedium) );
+	QVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
     connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );
     // ### implement reload

@@ -36,6 +36,7 @@
 #include <ktexteditor/editinterface.h>
 #include <partcontroller.h>
 #include <kdialogbase.h>
+#include <kdevplugininfo.h>
 
 #include <qvbox.h>
 #include <qfile.h>
@@ -46,11 +47,11 @@
 #define PROJECTOPTIONS 1
 
 typedef KDevGenericFactory<DoxygenPart> DoxygenFactory;
-static const KAboutData data("kdevdoxygen", I18N_NOOP("Doxygen"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( &data ) )
+static const KDevPluginInfo data("kdevdoxygen");
+K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( data ) )
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Doxgen", "kdevelop", parent, name ? name : "DoxygenPart"), m_activeEditor(0), m_cursor(0)
+    : KDevPlugin(&data, parent, name ? name : "DoxygenPart"), m_activeEditor(0), m_cursor(0)
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");
@@ -72,7 +73,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Doxygen"), PROJECTOPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("Doxygen"), PROJECTOPTIONS, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
@@ -267,7 +268,8 @@ void DoxygenPart::slotDoxygen()
 
     kdDebug(9026) << "Doxygen command line: " << cmdline << endl;
 
-    makeFrontend()->queueCommand(dir, cmdline);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, cmdline);
 }
 
 
@@ -334,7 +336,8 @@ void DoxygenPart::slotDoxClean()
 
     if (could_be_dirty) {
         kdDebug(9026) << "Cleaning Doxygen generated API documentation using: " << cmdline << endl;
-        makeFrontend()->queueCommand(KShellProcess::quote(project()->projectDirectory()), cmdline);
+        if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+            makeFrontend->queueCommand(KShellProcess::quote(project()->projectDirectory()), cmdline);
     }
     else
        kdDebug(9026) << "No Doxygen generated API documentation exists. There's nothing to clean!" << endl;

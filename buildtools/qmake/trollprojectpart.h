@@ -21,13 +21,13 @@
 #include <qmap.h>
 #include <qdatetime.h>
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 class KDialogBase;
 class TrollProjectWidget;
 
 
-class TrollProjectPart : public KDevProject
+class TrollProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 

@@ -17,7 +17,7 @@
 #include <qguardedptr.h>
 #include <kfiletreeview.h>
 
-#include <kdevvcsfileinfoprovider.h>
+#include <kdevversioncontrol.h>
 
 class FileViewPart;
 class FileTreeViewWidgetImpl;

@@ -30,18 +30,19 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
+#include "kdevplugininfo.h"
 
 #include "diffpart.h"
 #include "diffdlg.h"
 #include "diffwidget.h"
 
-static const KAboutData data("kdevdiff", I18N_NOOP("Difference Viewer"), "1.0");
+static const KDevPluginInfo data("kdevdiff");
 
 typedef KDevGenericFactory<DiffPart> DiffFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( data ) )
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevDiffFrontend("Diff", "diff", parent, name ? name : "DiffPart"), proc(0)
+    : KDevDiffFrontend(&data, parent, name ? name : "DiffPart"), proc(0)
 {
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
@@ -106,7 +107,7 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 	else if ( context->hasType( Context::FileContext ) )
 	{
 		const FileContext * fContext = static_cast<const FileContext*>( context );
-		popupFile.setPath( fContext->fileName() );	//@fixme - assuming absolute path. is this correct?
+		popupFile.setPath( fContext->urls().first().fileName() );	//@fixme - assuming absolute path. is this correct?
 	}
 	else
 	{

@@ -14,8 +14,8 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-//#include <kgenericfactory.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 
@@ -25,16 +25,13 @@
 #include "replace_widget.h"
 #include "replace_part.h"
 
-static const KAboutData data("kdevreplace", I18N_NOOP("Replace"), "1.0");
-
-//typedef KGenericFactory<ReplacePart> ReplaceFactory;
-//K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) )
+static const KDevPluginInfo data("kdevreplace");
 
 typedef KDevGenericFactory<ReplacePart> ReplaceFactory;
-K_EXPORT_COMPONENT_FACTORY(libkdevreplace, ReplaceFactory(&data))
+K_EXPORT_COMPONENT_FACTORY(libkdevreplace, ReplaceFactory(data))
 
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
-        : KDevPlugin( "Project Wide Replace", "", parent, name ? name : "ReplacePart" )
+        : KDevPlugin( &data, parent, name ? name : "ReplacePart" )
 {
     setInstance(ReplaceFactory::instance());
     setXMLFile("kdevpart_replace.rc");
@@ -64,8 +61,6 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                                "searched for within all files in the locations "
                                "you specify. Matches will be displayed in the <b>Replace</b> window, you "
                                "can replace them with the specified string, exclude them from replace operation or cancel the whole replace.") );
-
-    core()->insertNewAction( action );
 }
 
 

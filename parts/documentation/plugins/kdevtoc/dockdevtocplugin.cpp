@@ -35,6 +35,7 @@
 
 #include <urlutil.h>
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "../../../../config.h"
 
@@ -58,9 +59,9 @@ private:
 };
 
 
-static const KAboutData data("dockdevtocplugin", I18N_NOOP("KDevelopTOC documentation plugin"), "1.0");
+static const KDevPluginInfo data("dockdevtocplugin");
 typedef KDevGenericFactory<DocKDevTOCPlugin> DocKDevTOCPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdockdevtocplugin, DocKDevTOCPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdockdevtocplugin, DocKDevTOCPluginFactory(data) )
 
 DocKDevTOCPlugin::DocKDevTOCPlugin(QObject* parent, const char* name,
     const QStringList /*args*/)

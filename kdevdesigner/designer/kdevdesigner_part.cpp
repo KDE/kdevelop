@@ -60,6 +60,8 @@ KDevDesignerPart::KDevDesignerPart( QWidget *parentWidget, const char *widgetNam
 
     setReadWrite(true);
     setModified(false);
+    
+    connect(m_widget, SIGNAL(formModified(bool )), this, SLOT(formModified(bool)));
 }
 
 void KDevDesignerPart::setupDesignerWindow()
@@ -534,6 +536,12 @@ void KDevDesignerPart::emitEditFunction(const QString &formName, const QString &
     kdDebug() << "KDevDesignerPart::emitEditedFunction: form " << formName
         << ", function: " << functionName << endl;
     emit editFunction(designerType(), formName, functionName);
+}
+
+void KDevDesignerPart::formModified(bool b)
+{
+    kdDebug() << "KDevDesignerPart::formModified " << b << endl;
+    setModified(b);
 }
 
 #include "kdevdesigner_part.moc"

@@ -40,8 +40,8 @@ class KDevMakeFrontend : public KDevPlugin
 
 public:
 
-    KDevMakeFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
-    ~KDevMakeFrontend();
+    KDevMakeFrontend(const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
+        :KDevPlugin(info, parent, name ? name : "KDevMakeFrontend") {}
 
     virtual QWidget* widget() { return 0L; }
 

@@ -5,7 +5,7 @@ Icon=win32gui.png
 Category=C++
 Comment=Generates a shell project for crosscompiling Win32 projects.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Archive=win32gui.tar.gz
 
 [INCADMIN]

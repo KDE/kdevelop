@@ -2,10 +2,10 @@
 Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/LanguageSupport
-X-KDE-Derived=KDevelop/Part
+X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Language Support Interface
 Name[ca]=Interfície del suport de llenguatges per a KDevelop
-Name[da]=KDevelop sprogstøtte grænseflade
+Name[da]=KDevelop grænseflade for sprogunderstøttelse
 Name[de]=Schnittstelle für Sprachunterstützung (KDevelop)
 Name[es]=Interfaz del soporte de lenguajes de KDevelop
 Name[et]=KDevelopi keeletoetuse liides
@@ -24,6 +24,7 @@ Name[sr]=KDevelop-ов интерфејс за језичку подршку
 Name[sr@Latn]=KDevelop-ov interfejs za jezičku podršku
 Name[sv]=KDevelop gränssnitt för språkstöd
 Name[ta]=KDevelop  மொழி ஆதரவான இடைவிளிம்பு
+Name[tg]=Интерфейс ёрӣ расони забонӣ
 Name[xx]=xxKDevelop Language Support Interfacexx
 Name[zh_CN]=KDevelop 语言支持接口
 

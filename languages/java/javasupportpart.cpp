@@ -128,7 +128,7 @@ public:
 };
 
 JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStringList &/*args*/)
-    : KDevLanguageSupport("JavaSupport", "java", parent, name ? name : "KDevJavaSupport"),
+    : KDevLanguageSupport(JavaSupportFactory::info(), parent, name ? name : "KDevJavaSupport"),
       m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {

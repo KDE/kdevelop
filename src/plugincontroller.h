@@ -7,13 +7,15 @@
 
 #include <kservice.h>
 
+#include <kdevplugincontroller.h>
+
 class KXMLGUIClient;
 class KService;
 class KDevPlugin;
 class KDialogBase;
 class ProjectInfo;
 
-class PluginController : public QObject
+class PluginController : public QObject, public KDevPluginController
 {
   Q_OBJECT
 
@@ -36,7 +38,7 @@ public:
   
   //  KDevPlugin * getPlugin( const KService::Ptr &service );
   
-  KDevPlugin *extension(const QString &serviceType);
+  virtual KDevPlugin *extension(const QString &serviceType, const QString &constraint = "");
   
   void unloadPlugins( QStringList const & );
   
@@ -62,7 +64,6 @@ private:
 	//	static void createInstance();
 	static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
-	void loadDefaultParts();
   bool checkNewService( ProjectInfo *, const KService::Ptr &service );
 
   QDict<KDevPlugin> m_parts;

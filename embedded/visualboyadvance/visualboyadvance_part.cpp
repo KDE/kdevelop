@@ -4,7 +4,7 @@
 #include <qwhatsthis.h>
 
 #include <kaction.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -12,17 +12,19 @@
 #include "kdevproject.h"
 #include "kdevappfrontend.h"
 #include "domutil.h"
+#include "kdevplugininfo.h"
 
 #include "vbaconfigwidget.h"
 
 
 using namespace VisualBoyAdvance;
 
-typedef KGenericFactory<VisualBoyAdvancePart> VisualBoyAdvanceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( "kdevvisualboyadvance" ) )
+typedef KDevGenericFactory<VisualBoyAdvancePart> VisualBoyAdvanceFactory;
+static const KDevPluginInfo data("kdevvisualboyadvance");
+K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( data ) )
   
 VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("VisualBoyAdvance", "vbadvance", parent, name){
+  : KDevPlugin(&data, parent, name){
   setInstance(VisualBoyAdvanceFactory::instance());
 
   setXMLFile("kdevpart_visualboyadvance.rc");
@@ -60,7 +62,8 @@ void VisualBoyAdvancePart::slotExecute(){
 
   program += prj->projectDirectory() + "/" + binary;
 
-  appFrontend()->startAppCommand(QString::QString(), program, terminal);
+  if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+      appFrontend->startAppCommand(QString::QString(), program, terminal);
 }
 
 void VisualBoyAdvancePart::projectConfigWidget(KDialogBase *dlg){

@@ -13,7 +13,7 @@
 #define CVSENTRY_H
 
 #include <qstringlist.h>
-#include <kdevvcsfileinfoprovider.h>
+#include <kdevversioncontrol.h>
 
 class CVSEntry
 {

@@ -26,12 +26,13 @@
 #include <klistview.h>
 
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "../../../../config.h"
 
-static const KAboutData data("docchmplugin", I18N_NOOP("CHM documentation plugin"), "1.0");
+static const KDevPluginInfo data("docchmplugin");
 typedef KDevGenericFactory<DocCHMPlugin> DocCHMPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocchmplugin, DocCHMPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocchmplugin, DocCHMPluginFactory(data) )
 
 DocCHMPlugin::DocCHMPlugin(QObject* parent, const char* name, QStringList args)
     :DocumentationPlugin(DocCHMPluginFactory::instance()->config(), parent, name)

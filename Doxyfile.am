@@ -15,8 +15,8 @@ apidox-am-yes:
 		cp $(top_srcdir)/admin/Doxyfile.global Doxyfile; \
 		echo "PROJECT_NAME           = $(DOXYGEN_PROJECT_NAME)" >> Doxyfile; \
 		echo "PROJECT_NUMBER         = \"Version $(VERSION)\"" >> Doxyfile; \
-		echo "OUTPUT_DIRECTORY       = $(PWD)/apidocs" >> Doxyfile; \
-		echo "BRIEF_MEMBER_DESC      = YES" >> Doxyfile; \
+		echo "OUTPUT_DIRECTORY       = $(PWD)/apidocs/en" >> Doxyfile; \
+		echo "BRIEF_MEMBER_DESC      = NO" >> Doxyfile; \
 		echo "FULL_PATH_NAMES        = YES" >> Doxyfile; \
 		echo "STRIP_FROM_PATH        = $(top_srcdir)/" >> Doxyfile; \
 		echo "ALIASES               += \"feature=\xrefitem features \\\"Feature(s)\\\" \\\"Features\\\"\" " >> Doxyfile; \
@@ -26,10 +26,11 @@ apidox-am-yes:
 		echo "ALIASES               += \"faq=\xrefitem FAQ \\\"F.A.Q.\\\" \\\"F.A.Q.\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"authors=\xrefitem authors \\\"Author(s)\\\" \\\"Authors\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"FIXME=\xrefitem fixme \\\"Fixme\\\" \\\"Fixme\\\"\" " >> Doxyfile; \
-		echo "EXTRACT_ALL            = YES" >> Doxyfile; \
-		echo "EXTRACT_PRIVATE        = YES" >> Doxyfile; \
+		echo "EXTRACT_ALL            = NO" >> Doxyfile; \
+		echo "EXTRACT_PRIVATE        = NO" >> Doxyfile; \
 		echo "EXTRACT_LOCAL_CLASSES  = YES" >> Doxyfile; \
 		echo "HIDE_UNDOC_CLASSES     = NO" >> Doxyfile; \
+		echo "HIDE_UNDOC_MEMBERS     = NO" >> Doxyfile; \
 		echo "SORT_MEMBER_DOCS       = YES" >> Doxyfile; \
 		echo "GENERATE_TODOLIST      = YES" >> Doxyfile; \
 		if test -n "$(DOXYGEN_INPUT)"; then \

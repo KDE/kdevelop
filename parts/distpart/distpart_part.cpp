@@ -27,17 +27,18 @@
 #include <kdebug.h>
 
 #include "kdevcore.h"
+#include <kdevplugininfo.h>
 
 #include "distpart_widget.h"
 
 #include <kdialogbase.h>
 
 typedef KDevGenericFactory<DistpartPart> DistpartFactory;
-static const KAboutData data("kdevdistpart", I18N_NOOP("Distribution & Publishing"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( &data ) )
+static const KDevPluginInfo data("kdevdistpart");
+K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( data ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("Distribution", "dist", parent, name ? name : "DistpartPart") {
+  : KDevPlugin(&data, parent, name ? name : "DistpartPart") {
 
     kdDebug(9007) << "DistpartPart::DistpartPart()" << endl;
     setInstance(DistpartFactory::instance());
@@ -52,7 +53,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
     m_action->setWhatsThis(i18n("<b>Project distribution & publishing</b><p>Helps users package and publish their software."));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
-    m_dlg = new KDialogBase( widget() , "dist_part", false, i18n("Distribution & Publishing"), KDialogBase::Ok|KDialogBase::Cancel);
+    m_dlg = new KDialogBase( 0 , "dist_part", false, i18n("Distribution & Publishing"), KDialogBase::Ok|KDialogBase::Cancel);
 
     m_dialog = new DistpartDialog(this, m_dlg );
     m_dlg->setMainWidget(m_dialog);

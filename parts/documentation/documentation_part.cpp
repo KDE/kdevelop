@@ -33,7 +33,6 @@
 #include <dcopclient.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kaboutdata.h>
 #include <ktrader.h>
 #include <kdebug.h>
 #include <kparts/componentfactory.h>
@@ -48,6 +47,7 @@
 #include <kconfig.h>
 #include <kwin.h>
 
+#include "kdevplugininfo.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
@@ -69,21 +69,21 @@
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
 
-static const KAboutData data("kdevdocumentation", I18N_NOOP("Documentation"), "1.0");
+static const KDevPluginInfo data("kdevdocumentation");
 
 typedef KDevGenericFactory<DocumentationPart> DocumentationFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( data ) );
 
 DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QStringList& )
-    :KDevPlugin("Documentation", "khelpcenter", parent, name ? name : "DocumentationPart" ),
+    :KDevPlugin(&data, parent, name ? name : "DocumentationPart" ),
     m_projectDocumentationPlugin(0), m_userManualPlugin(0), m_hasIndex(false)
 {
     setInstance(DocumentationFactory::instance());
     setXMLFile("kdevpart_documentation.rc");
 
     m_configProxy = new ConfigWidgetProxy(core());
-	m_configProxy->createGlobalConfigPage(i18n("Documentation"), GLOBALDOC_OPTIONS, icon() );
-	m_configProxy->createProjectConfigPage(i18n("Project Documentation"), PROJECTDOC_OPTIONS, icon() );
+	m_configProxy->createGlobalConfigPage(i18n("Documentation"), GLOBALDOC_OPTIONS, info()->icon() );
+	m_configProxy->createProjectConfigPage(i18n("Project Documentation"), PROJECTDOC_OPTIONS, info()->icon() );
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
     connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
         this, SLOT(contextMenu(QPopupMenu *, const Context *)));
@@ -91,7 +91,7 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
 
     m_widget = new DocumentationWidget(this);
-	m_widget->setIcon(SmallIcon( icon() ));
+	m_widget->setIcon(SmallIcon( info()->icon() ));
     m_widget->setCaption(i18n("Documentation"));
 
     QWhatsThis::add(m_widget, i18n("<b>Documentation browser</b><p>"
@@ -122,7 +122,8 @@ DocumentationPart::~DocumentationPart()
 void DocumentationPart::loadDocumentationPlugins()
 {
     KTrader::OfferList docPluginOffers =
-        KTrader::self()->query(QString::fromLatin1("KDevelop/DocumentationPlugins"));
+        KTrader::self()->query(QString::fromLatin1("KDevelop/DocumentationPlugins"),
+            QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
 
     KTrader::OfferList::ConstIterator serviceIt = docPluginOffers.begin();
     for ( ; serviceIt != docPluginOffers.end(); ++serviceIt )

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=DocDoxygenPlugin
+Name[da]=DocDoxygen-plugin
 Name[sv]=Doxygen-dokumentationsinsticksmodul
 Name[ta]=DocDoxygen  சொருகு
 Name[xx]=xxDocDoxygenPluginxx
@@ -24,8 +25,9 @@ Comment[sr]=Документациони прикључак за Doxygen док�
 Comment[sr@Latn]=Документациони прикључак за Doxygen документацију
 Comment[sv]=Dokumentationsinsticksmodul för Doxygen-dokumentation
 Comment[ta]= Doxygen ஆவணத்திற்கான ஆவணச் சொருகு
+Comment[tg]=Модул барои наоиш намудани ҳуҷҷатҳо дар Doxygen
 Comment[xx]=xxDocumentation plugin for Doxygen documentationxx
 Comment[zh_CN]=Doxygen 文档的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=2
+X-KDevelop-Version=3
 X-KDE-Library=libdocdoxygenplugin

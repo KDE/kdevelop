@@ -20,17 +20,18 @@
 #include <kdevcore.h>
 #include <kdevapi.h>
 #include <kdevpartcontroller.h>
+#include <kdevplugininfo.h>
 
 #include "astyle_widget.h"
 #include <astyle_adaptor.h>
 
-static const KAboutData data("kdevastyle", I18N_NOOP("Reformat Source"), "1.0");
+static const KDevPluginInfo data("kdevastyle");
 
 typedef KDevGenericFactory<AStylePart> AStyleFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( data ) )
 
 AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
-  : KDevSourceFormatter("AStyle", "kdevelop", parent, name ? name : "AStylePart")
+  : KDevSourceFormatter(&data, parent, name ? name : "AStylePart")
 {
   setInstance(AStyleFactory::instance());
 
@@ -105,7 +106,7 @@ void AStylePart::beautifySource()
 
 void AStylePart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( icon(), KIcon::SizeMedium));
+	QVBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( info()->icon(), KIcon::SizeMedium));
   AStyleWidget *w = new AStyleWidget(this, vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }

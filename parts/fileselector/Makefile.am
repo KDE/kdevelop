@@ -11,7 +11,7 @@ libkdevfileselector_la_SOURCES = fileselector_part.cpp fileselector_widget.cpp k
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_fileselector.desktop
+service_DATA = kdevfileselector.desktop
 
 # not used currently
 #rcdir = $(kde_datadir)/kdevfileselector

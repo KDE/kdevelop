@@ -71,7 +71,7 @@ PluginController *PluginController::getInstance()
 
 
 PluginController::PluginController()
-  : QObject()
+  : QObject(), KDevPluginController()
 {
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
@@ -87,8 +87,6 @@ void PluginController::loadInitialPlugins()
 {
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-    if (TopLevel::mode != TopLevel::AssistantMode)
-        loadDefaultParts();
     loadCorePlugins();
     
     m_profile = QString::null;
@@ -119,45 +117,6 @@ PluginController::~PluginController()
 }
 
 
-void PluginController::loadDefaultParts()
-{
-  // Make frontend
-  emit loadingPlugin(i18n("Loading: Make frontend"));
-  KDevMakeFrontend *makeFrontend = loadDefaultPart< KDevMakeFrontend >( "KDevelop/MakeFrontend" );
-  if ( makeFrontend ) {
-    API::getInstance()->setMakeFrontend( makeFrontend );
-    integratePart( makeFrontend );
-  }
-
-  // App frontend
-  emit loadingPlugin(i18n("Loading: Application frontend"));
-  KDevAppFrontend *appFrontend = loadDefaultPart< KDevAppFrontend >( "KDevelop/AppFrontend" );
-  if ( appFrontend ) {
-    API::getInstance()->setAppFrontend( appFrontend );
-    integratePart( appFrontend );
-  }
-
-  // Diff frontend
-  emit loadingPlugin(i18n("Loading: Diff frontend"));
-  KDevDiffFrontend *diffFrontend = loadDefaultPart< KDevDiffFrontend >( "KDevelop/DiffFrontend" );
-  if ( diffFrontend ) {
-    API::getInstance()->setDiffFrontend( diffFrontend );
-    integratePart( diffFrontend );
-  } else {
-    kdDebug( 9000 ) << "could not load Diff frontend" << endl;
-  }
-  
-  // File Create
-  emit loadingPlugin( i18n("Loading: File Create") );
-  KDevCreateFile * createFile = loadDefaultPart<KDevCreateFile>( "KDevelop/CreateFile" );
-  if ( createFile ) {
-    API::getInstance()->setCreateFile( createFile );
-    integratePart( createFile );
-  } else {
-    kdDebug( 9000 ) << "Could not load CreateFile plugin" << endl;
-  }
-  
-}
 
 // a Core plugin is implicitly global, so it makes
 // sense to put them in the global plugin container
@@ -370,9 +329,9 @@ const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 	return plugins;
 }
 
-KDevPlugin *PluginController::extension(const QString &serviceType)
+KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
 {
-    KTrader::OfferList offers = KTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
+    KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
     if (offers.count() > 0)
         return m_parts[offers.first()->name()];
     else 

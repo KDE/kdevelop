@@ -27,6 +27,7 @@
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
+#include <kdevplugininfo.h>
 
 #include "pascalsupport_part.h"
 #include "problemreporter.h"
@@ -43,11 +44,11 @@ struct PascalSupportPartData{
 };
 
 typedef KDevGenericFactory<PascalSupportPart> PascalSupportFactory;
-static const KAboutData data("kdevpascalsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( &data ) )
+static const KDevPluginInfo data("kdevpascalsupport");
+K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( data ) )
 
 PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QStringList &)
-  : KDevLanguageSupport("PascalSupport", "pascal", parent, name ? name : "KDevPascalSupport" ),
+  : KDevLanguageSupport(&data, parent, name ? name : "KDevPascalSupport" ),
     d( new PascalSupportPartData() )
 {
     setInstance(PascalSupportFactory::instance());

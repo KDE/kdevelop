@@ -131,7 +131,6 @@ int main(int argc, char *argv[])
 	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
       }
   }
-  TopLevel::getInstance()->guiRestoringFinished();
   
   kapp->dcopClient()->registerAs("kdevelop");
   

@@ -14,7 +14,6 @@
 #include "partcontroller.h"
 #include "api.h"
 #include "projectmanager.h"
-#include "kdevlicense.h"
 
 #include "core.h"
 
@@ -39,12 +38,6 @@ Core::Core()
 Core::~Core()
 {
 }
-
-void Core::insertNewAction( KAction* action )
-{
-    Q_UNUSED( action );
-}
-
 
 bool Core::queryClose()
 {
@@ -81,30 +74,6 @@ void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 void Core::openProject(const QString& projectFileName)
 {
   ProjectManager::getInstance()->loadProject(KURL( projectFileName ));
-}
-
-QDict< KDevLicense > Core::licenses()
-{
-	return m_licenses;
-}
-
-void Core::loadLicenses()
-{
-	// kdDebug(9010) << "======================== Entering loadLicenses" << endl;
-	KStandardDirs* dirs = KGlobal::dirs();
-	dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
-	QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
-	
-	QStringList::Iterator it;
-	for (it = licNames.begin(); it != licNames.end(); ++it)
-	{
-		QString licPath( dirs->findResource( "licenses", *it ) );
-		// kdDebug(9000) << "Loading license file: " << licPath << endl;
-		QString licName = licPath.mid( licPath.findRev('/') + 1 );
-		KDevLicense* lic = new KDevLicense( licName, licPath );
-		m_licenses.insert( licName, lic );
-	}
-	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
 }
 
 namespace MainWindowUtils{

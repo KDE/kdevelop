@@ -23,6 +23,7 @@ Name[sr]=KDevelop-ов прикључак
 Name[sr@Latn]=KDevelop-ov dodatak
 Name[sv]=KDevelop insticksmodul
 Name[ta]=KDevelop  சொருகு
+Name[tg]=Модули KDevelop
 Name[xx]=xxKDevelop Pluginxx
 Name[zh_CN]=KDevelop 插件
 
@@ -34,6 +35,21 @@ Type=int
 Type=QString
 
 [PropertyDef::X-KDevelop-Mode]
+Type=QString
+
+[PropertyDef::X-KDevelop-Plugin-Version]
+Type=QString
+
+[PropertyDef::X-KDevelop-Plugin-Homepage]
+Type=QString
+
+[PropertyDef::X-KDevelop-Plugin-License]
+Type=QString
+
+[PropertyDef::X-KDevelop-Plugin-BugsEmailAddress]
+Type=QString
+
+[PropertyDef::X-KDevelop-Plugin-Copyright]
 Type=QString
 
 # defines a list of properties which the plugin has

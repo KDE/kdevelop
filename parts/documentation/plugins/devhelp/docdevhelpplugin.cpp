@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 
 #include <kdevgenericfactory.h>
+#include <kdevplugininfo.h>
 
 #include "../../../../config.h"
 
@@ -56,9 +57,9 @@ private:
 };
 
 
-static const KAboutData data("docdevhelpplugin", I18N_NOOP("DevHelp documentation plugin"), "1.0");
+static const KDevPluginInfo data("docdevhelpplugin");
 typedef KDevGenericFactory<DocDevHelpPlugin> DocDevHelpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocdevhelpplugin, DocDevHelpPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocdevhelpplugin, DocDevHelpPluginFactory(data) )
 
 DocDevHelpPlugin::DocDevHelpPlugin(QObject* parent, const char* name,
     const QStringList /*args*/)

@@ -142,7 +142,7 @@ void AutoDetailsView::slotAddNewFile()
 	if ( !titem )
 		return ;
 
-	KDevCreateFile * createFileSupport = m_part->createFileSupport();
+	KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>("KDevelop/CreateFile");
 	if (createFileSupport)
 	{
 		KDevCreateFile::CreatedFile crFile =
@@ -375,7 +375,9 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		KPopupMenu popup( i18n( "File: %1" ).arg( fitem->name ), this );
 
 		removeDetailAction->plug( &popup );
-		FileContext context( m_widget->selectedSubproject()->path + "/" + fitem->name, false );
+		KURL::List urls;
+		urls.append(m_widget->selectedSubproject()->path + "/" + fitem->name);
+		FileContext context(urls);
 
 		int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard...") );
         popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "

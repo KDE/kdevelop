@@ -1,6 +1,7 @@
 # Here resides the valgrind part
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevdiff.la
 libkdevdiff_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

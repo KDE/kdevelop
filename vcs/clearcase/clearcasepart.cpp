@@ -30,14 +30,15 @@
 #include "execcommand.h"
 #include "domutil.h"
 #include "kdevmainwindow.h"
+#include "kdevplugininfo.h"
 
-static const KAboutData data("kdevclearcase", I18N_NOOP("Clearcase"), "1.0");
+static const KDevPluginInfo data("kdevclearcase");
 
 typedef KDevGenericFactory<ClearcasePart> ClearcaseFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( data ) )
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
-        : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),
+        : KDevPlugin( &data, parent, name ? name : "ClearcasePart" ),
         default_checkin(""),default_checkout(""),default_uncheckout("-rm"),
         default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
 {
@@ -55,7 +56,7 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
-        popupfile = fcontext->fileName();
+        popupfile = fcontext->urls().first().fileName();
 
         // check if this file belongs to a clearcase directory
         // i.e. is the file /view/<view_name/vobs/... format?
@@ -123,7 +124,8 @@ void ClearcasePart::slotCheckin()
     command += " ";
     command += KShellProcess::quote(name);
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 
@@ -159,7 +161,8 @@ void ClearcasePart::slotCheckout()
     command += " ";
     command += KShellProcess::quote(name);
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 
@@ -184,7 +187,8 @@ void ClearcasePart::slotUncheckout()
     command += " ";
     command += KShellProcess::quote(name);
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 void ClearcasePart::slotCreate()
@@ -210,7 +214,8 @@ void ClearcasePart::slotCreate()
     command += " ";
     command += KShellProcess::quote(name);
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 
@@ -234,7 +239,8 @@ void ClearcasePart::slotRemove()
     command += " ";
     command += KShellProcess::quote(name);
 
-    makeFrontend()->queueCommand(dir, command);
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
 }
 
 
@@ -286,8 +292,8 @@ void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
         return;
     }
 
-    Q_ASSERT( diffFrontend() );
-    diffFrontend()->showDiff( diff );
+    if (KDevDiffFrontend *diffFrontend = extension<KDevDiffFrontend>("KDevelop/DiffFrontend"))
+        diffFrontend->showDiff( diff );
 }
 
 #include "clearcasepart.moc"

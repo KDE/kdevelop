@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevKDELibsImporter
+Name[da]=KDevelop KDELibs-importør
 Name[de]=KDELIBS-PCS-Import (KDevelop)
 Name[hi]=के-डेव-केडीई-लिब्स-इम्पोर्टर
 Name[pl]=KDevKDEImportBib
@@ -27,9 +28,11 @@ Comment[sr]=KDevelop-ов KDELibs PCS увозник
 Comment[sr@Latn]=KDevelop-ov KDELibs PCS uvoznik
 Comment[sv]=KDevelop KDE-bibliotek PCS-import
 Comment[ta]=கெடெவலப் கெடெலிப்ஸ் பிசிஸ் இறக்குமதியாளர்
+Comment[tg]=Пурборкунии нишонаҳо аз китобхонаи KDELibs дар синфҳои анборӣ
 Comment[xx]=xxKDevelop KDELibs PCS Importerxx
 Comment[zh_CN]=KDevelop KDELibs PCS 导入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevkdelibsimporter
 X-KDevelop-PCSImporter=
+X-KDevelop-Version=3

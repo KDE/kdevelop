@@ -2,7 +2,8 @@
 
 SUBDIRS = file-templates
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevfilecreate.la
 libkdevfilecreate_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -13,7 +14,7 @@ libkdevfilecreate_la_SOURCES = filecreate_part.cpp filecreate_listitem.cpp filec
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_filecreate.desktop
+service_DATA = kdevfilecreate.desktop
 
 rcdir = $(kde_datadir)/kdevfilecreate
 rc_DATA = kdevpart_filecreate.rc template-info.xml

@@ -158,12 +158,12 @@ void ProjectManager::slotProjectOptions()
 
   QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-  vbox = dlg.addVBoxPage(i18n("Languages"));
-  LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
+//  vbox = dlg.addVBoxPage(i18n("Languages"));
+//  LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  connect( &dlg, SIGNAL(okClicked()), lw, SLOT(accept()) );
+//  connect( &dlg, SIGNAL(okClicked()), lw, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
-  connect( lw, SIGNAL(accepted()), this, SLOT(updateActiveLangMenu()) );
+//  connect( lw, SIGNAL(accepted()), this, SLOT(updateActiveLangMenu()) );
 
   KConfig *config = kapp->config();
   config->setGroup("Project Settings Dialog");
@@ -343,8 +343,6 @@ bool ProjectManager::closeProject( bool exiting )
     return false;
 
   Core::getInstance()->doEmitProjectClosed();
-
-  TopLevel::getInstance()->prepareToCloseViews();
 
 //  PluginController::getInstance()->unloadAllLocalParts();
   PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );

@@ -14,7 +14,7 @@ class KAction;
 class KDialogBase;
 
 
-#include "kdevproject.h"
+#include "kdevbuildtool.h"
 
 
 class AntOptionsWidget;
@@ -38,7 +38,7 @@ public:
 };
 
 
-class AntProjectPart : public KDevProject
+class AntProjectPart : public KDevBuildTool
 {
   Q_OBJECT
 

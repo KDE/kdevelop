@@ -9,7 +9,7 @@ libkdevvalgrind_la_SOURCES = dialog_widget.ui valgrind_part.cpp valgrind_widget.
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_valgrind.desktop
+service_DATA = kdevvalgrind.desktop
 
 rcdir = $(kde_datadir)/kdevvalgrind
 rc_DATA = kdevpart_valgrind.rc

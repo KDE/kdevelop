@@ -8,22 +8,23 @@
 #include <klocale.h>
 #include <kdevcore.h>
 #include <configwidgetproxy.h>
+#include <kdevplugininfo.h>
 
 #include "uichooser_widget.h"
 
 #define UICHOOSERSETTINGSPAGE 1
 
 typedef KDevGenericFactory<UIChooserPart> UIChooserFactory;
-static const KAboutData data("kdevuichooser", I18N_NOOP("User Interface"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( &data ) )
+static const KDevPluginInfo data("kdevuichooser");
+K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( data ) )
 
 UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin( "UIChooser", "view_choose", parent, name ? name : "UIChooserPart")
+  : KDevPlugin( &data, parent, name ? name : "UIChooserPart")
 {
 	setInstance(UIChooserFactory::instance());
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createGlobalConfigPage( i18n("User Interface"), UICHOOSERSETTINGSPAGE, icon() );
+	_configProxy->createGlobalConfigPage( i18n("User Interface"), UICHOOSERSETTINGSPAGE, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 }

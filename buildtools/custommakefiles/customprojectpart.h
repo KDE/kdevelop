@@ -17,7 +17,7 @@
 #include <qmap.h>
 #include <qdatetime.h>
 
-#include <kdevproject.h>
+#include <kdevbuildtool.h>
 
 class QListViewItem;
 class QPopupMenu;
@@ -27,7 +27,7 @@ class CustomProjectWidget;
 class Context;
 class KSelectAction;
 
-class CustomProjectPart : public KDevProject
+class CustomProjectPart : public KDevBuildTool
 {
     Q_OBJECT
 

@@ -179,8 +179,6 @@ void NewMainWindow::init() {
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
 
 
-	Core::getInstance()->loadLicenses();
-
 	if ( tabWidget() )
 	{
 		KConfig *config = kapp->config();
@@ -675,24 +673,6 @@ void NewMainWindow::loadSettings() {
     applyMainWindowSettings(config, "Mainwindow");
 }
 
-void NewMainWindow::setUserInterfaceMode( const QString & )
-{
-/*	
-    // immediately switch the mode likely set in the uimode part
-    if (uiMode == "Childframe") {
-	switchToChildframeMode();
-    }
-    else if (uiMode == "TabPage") {
-	switchToTabPageMode();
-    }
-    else if (uiMode == "Toplevel") {
-	switchToToplevelMode();
-    }
-    else if (uiMode == "KMDI-IDEAl") {
-        switchToIDEAlMode();
-    }
-*/	
-}
 
 void NewMainWindow::saveSettings() 
 {
@@ -706,7 +686,7 @@ void NewMainWindow::saveSettings()
         appstr = KGlobal::instance()->aboutData()->appName();
 	QString uimode = QString( "%1uimode%2rc" ).arg(appstr).arg( m_mdiMode );
 	KConfig uiConfig( uimode );
-	writeDockConfig( &uiConfig );
+//	writeDockConfig( &uiConfig );
 
 	QValueList<QWidget*> widgetList = m_pToolViews->keys();
 	QValueList<QWidget*>::Iterator it = widgetList.begin();
@@ -756,30 +736,6 @@ void NewMainWindow::projectOpened()
 	loadSettings();
 }
 
-void NewMainWindow::prepareToCloseViews()
-{
-  // seems there's nothing to do here
-}
-
-void NewMainWindow::guiRestoringFinished()
-{
-  // seems there's nothing to do here
-}
-
-void NewMainWindow::storeOutputViewTab( )
-{
-  // seems there's nothing to do here
-}
-
-void NewMainWindow::restoreOutputViewTab( )
-{
-  // seems there's nothing to do here
-}
-
-void NewMainWindow::lowerAllViews( )
-{
-  // seems there's nothing to do here
-}
 
 void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 {

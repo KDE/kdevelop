@@ -64,7 +64,6 @@
 
 #include <qlayout.h>
 
-#include "profiles.h"
 #include "domutil.h"
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
@@ -83,6 +82,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
 	m_customOptions = 0L;
+	loadLicenses();
     connect( this, SIGNAL( selected( const QString & ) ), this, SLOT( pageChanged() ) );
     
 	helpButton()->hide();
@@ -287,7 +287,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     appname_edit->setValidator(appname_edit_validator);
     
     // insert the licenses into the license_combo
-    QDict< KDevLicense > lics( m_part->core()->licenses() );
+    QDict< KDevLicense > lics( licenses() );
     QDictIterator< KDevLicense > dit(lics);
     int idx=1;
     for( ; dit.current(); ++dit )
@@ -366,7 +366,7 @@ void AppWizardDialog::licenseChanged()
 			edit->setText( QString::null );
 		}
 	} else {
-		KDevLicense* lic = m_part->core()->licenses()[ license_combo->currentText() ];
+		KDevLicense* lic = licenses()[ license_combo->currentText() ];
 		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
 			QString style = (*it).style;
 			QMultiLineEdit *edit = (*it).edit;
@@ -484,7 +484,7 @@ void AppWizardDialog::accept()
     if( license_combo->currentItem() != 0 )
     {
         licenseName = license_combo->currentText();
-        KDevLicense* lic = m_part->core()->licenses()[ licenseName ];
+        KDevLicense* lic = licenses()[ licenseName ];
         if( lic )
         {
             QStringList files( lic->copyFiles() );
@@ -873,9 +873,10 @@ void AppWizardDialog::openAfterGeneration()
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
+//FIXME PROFILES!!!!!!!!
 //BEGIN Plugin Profile
 
-	QString category = m_pCurrentAppInfo->category;
+/*	QString category = m_pCurrentAppInfo->category;
 	if ( category.left( 1 ) == "/" )
 	{
 		category = category.right( category.length() -1 );
@@ -897,7 +898,7 @@ void AppWizardDialog::openAfterGeneration()
 		++itt;
 	}
 
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );
+	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );*/
 
 //END Plugin Profile
 
@@ -1103,6 +1104,30 @@ void AppWizardDialog::setPermissions(const installFile &file)
 			}
 		}
 	}
+}
+
+QDict<KDevLicense> AppWizardDialog::licenses()
+{
+	return m_licenses;
+}
+
+void AppWizardDialog::loadLicenses()
+{
+	// kdDebug(9010) << "======================== Entering loadLicenses" << endl;
+	KStandardDirs* dirs = KGlobal::dirs();
+	dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
+	QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
+	
+	QStringList::Iterator it;
+	for (it = licNames.begin(); it != licNames.end(); ++it)
+	{
+		QString licPath( dirs->findResource( "licenses", *it ) );
+		// kdDebug(9000) << "Loading license file: " << licPath << endl;
+		QString licName = licPath.mid( licPath.findRev('/') + 1 );
+		KDevLicense* lic = new KDevLicense( licName, licPath );
+		m_licenses.insert( licName, lic );
+	}
+	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
 }
 
 #include "appwizarddlg.moc"

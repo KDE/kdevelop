@@ -11,6 +11,11 @@
 
 #include "outputviewsfactory.h"
 
-static const KAboutData data("kdevoutputviews", I18N_NOOP("Messages Output"), "1.0");
+static const KDevPluginInfo data("kdevoutputviews", I18N_NOOP("Messages Output"), "1.0");
+
 K_EXPORT_COMPONENT_FACTORY( libkdevoutputviews, OutputViewsFactory( &data ) )
 
+const KDevPluginInfo *outputViewsInfo()
+{
+    return data;
+}

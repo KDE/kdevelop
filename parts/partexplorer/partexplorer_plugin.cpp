@@ -18,17 +18,18 @@
 #include <kaction.h>
 #include <kmainwindow.h>
 
+#include <kdevplugininfo.h>
 #include <kdevmainwindow.h>
 
 #include "partexplorerform.h"
 
-static const KAboutData data("kdevpartexplorer", I18N_NOOP("Part Explorer"), "1.0");
+static const KDevPluginInfo data("kdevpartexplorer");
 
 typedef KDevGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( data ) )
 
 PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( "PartExplorer", "partexplorer", parent, name ? name : "PartExplorerPlugin" )
+    : KDevPlugin( &data, parent, name ? name : "PartExplorerPlugin" )
 {
     // we need an instance
     setInstance( PartExplorerPluginFactory::instance() );

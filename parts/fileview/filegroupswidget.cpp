@@ -232,7 +232,9 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
         QString pathName = m_part->project()->projectDirectory() + QDir::separator() + fvfitem->fileName();
-        FileContext context( pathName, false);
+        KURL::List urls;
+        urls.append(pathName);
+        FileContext context(urls);
         m_part->core()->fillContextMenu(&popup, &context);
     }
     else{

@@ -51,17 +51,18 @@
 #include <envvartools.h>
 
 #include <configwidgetproxy.h>
+#include <kdevplugininfo.h>
 
 #define CONFIGURE_OPTIONS 1
 #define RUN_OPTIONS 2
 #define MAKE_OPTIONS 3
 
-static const KAboutData data("kdevautoproject", I18N_NOOP("Automake Manager"), "1.0");
+static const KDevPluginInfo data("kdevautoproject");
 
-K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( &data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( data ) )
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevProject("AutoProject", "make", parent, name ? name : "AutoProjectPart")
+    : KDevBuildTool(&data, parent, name ? name : "AutoProjectPart")
     , m_lastCompilationFailed(false)
 {
     setInstance(AutoProjectFactory::instance());
@@ -73,7 +74,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     m_needMakefileCvs = false;
 
     m_widget = new AutoProjectWidget(this, m_isKDE);
-	m_widget->setIcon(SmallIcon( icon() ));
+	m_widget->setIcon(SmallIcon( info()->icon() ));
     m_widget->setCaption(i18n("Automake Manager"));
     QWhatsThis::add(m_widget, i18n("<b>Automake manager</b><p>"
                                    "The project tree consists of two parts. The 'overview' "
@@ -222,9 +223,9 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, icon() );
-	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, icon() );
-	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, info()->icon() );
+	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, info()->icon() );
+	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
@@ -1342,7 +1343,5 @@ QStringList AutoProjectPart::distFiles() const
 	}
 	return sourceList + files;
 }
+
 #include "autoprojectpart.moc"
-
-
-
