@@ -1514,6 +1514,10 @@ bool Parser::skipConstantExpression( AST::Node& node )
 		return false;
 	    }
 	    lex->nextToken();
+	} else if( tk == Token_identifier ){
+	    lex->nextToken();
+	    if( lex->lookAhead( 0 ) == Token_identifier )
+		break;
 	} else if( tk == ',' || tk == ';' || tk == '>' ||
 		   tk == Token_assign || tk == ']' ||
 		   tk == ')' || tk == '}' || tk == ':' ){
@@ -1994,6 +1998,10 @@ bool Parser::skipAssignmentExpression( AST::Node& node )
 		return false;
 	    } else
 		lex->nextToken();
+	} else if( tk == Token_identifier ){
+	    lex->nextToken();
+	    if( lex->lookAhead(0) == Token_identifier )
+		break;
 	} else if( tk == ',' || tk == ';' ||
 		   tk == '>' || tk == ']' || tk == ')' ||
 		   tk == Token_assign ){
@@ -2395,6 +2403,12 @@ bool Parser::skipExpression( AST::Node& node )
 	case '[':
 	    skip( '[', ']' );
 	    lex->nextToken();
+	    break;
+	    
+	case Token_identifier:
+	    lex->nextToken();
+	    if( lex->lookAhead( 0 ) == Token_identifier )
+		return true;
 	    break;
 
 	case ';':

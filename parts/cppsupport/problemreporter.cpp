@@ -182,7 +182,7 @@ void ProblemReporter::reportError( QString message,
 				   QString filename,
 				   int line, int column )
 {
-    if( m_markIface && m_filename == filename ){
+    if( m_document && m_markIface && m_filename == filename ){
 	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
     }
 
