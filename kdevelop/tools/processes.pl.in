@@ -75,11 +75,11 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|kpart|kioslave|sharedlib/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|sharedlib/) {
     unpackFiles ("admin.tar");
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|^kpart$|kioslave/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
@@ -89,10 +89,10 @@ else{
   elsif ($processes{APPLICATION} =~ /qt2normal|qt2mdi|qextmdi/) {
     changeQtApp();
   }
-  elsif ($processes{APPLICATION} eq "cpp|sharedlib") {
+  elsif ($processes{APPLICATION} =~  /^cpp$|^sharedlib$/) {
     changeTerminalCPPApp();
   }
-  elsif ($processes{APPLICATION} eq "c") {
+  elsif ($processes{APPLICATION} =~ /^c$/) {
     changeTerminalCApp();
   }
   elsif ($processes{APPLICATION} =~ /gnomenormal/) {
