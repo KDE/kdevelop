@@ -98,7 +98,8 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   
   QString lineStr = e_iface->line(line);
   QString restLine = lineStr.mid(col);
-  if(!restLine.isNull()){
+  restLine.replace( QRegExp("[ \t]*"), "" );
+  if(!restLine.isEmpty()){
     cerr << endl << "no codecompletion because no empty line after cursor";
     return;
   }
@@ -109,45 +110,84 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   if(checkForClassMember(doc,lineStr,col,line)) {
     return;
   }
+  // $test = new XXX
+  if(checkForNewInstance(doc,lineStr,col,line)){
+    return;
+  }
+
 
   
 }
 
 bool PHPCodeCompletion::checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col){
   QString methodStart ="";
-  if(lineStr.length() ==3){
+  if(lineStr.length()==2){
     methodStart = lineStr;
   }
   else{
-    QString startStr =lineStr.mid(col-4,4);
+    QString startStr =lineStr.mid(col-3);
     if(startStr.isNull()){
       return false; // not enough letters
     }
     QString startChar = startStr.left(1);
     if(startChar == " " || startChar == "\t" || startChar == "+" || 
-       startChar == "-" || startChar == "=" ||startChar == "/" || startChar == "*"){
-      methodStart = startStr.right(3);
+       startChar == "-" || startChar == "=" ||startChar == "/" || startChar == "*" || startChar == ";"){
+      methodStart = startStr.right(2);
     }
   }
   if(methodStart != ""){
     // ok it is an global function
+    cerr << "Methodstart" << methodStart;
     QValueList<KEditor::CompletionEntry> list;
     QValueList<KEditor::CompletionEntry>::Iterator it;
-    
     for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ){
       if((*it).text.startsWith(methodStart)){
 	list.append((*it));
       }
     }
+
+    QList<ParsedMethod>* methodList = m_classStore->globalContainer.getSortedMethodList();
+     for ( ParsedMethod *pMethod = methodList->first(); pMethod != 0;pMethod = methodList->next() ) {
+      if(pMethod->name().startsWith(methodStart)){
+	KEditor::CompletionEntry e;
+	e.text = pMethod->name();
+	e.postfix ="()";
+	list.append(e);
+      }
+    }
+
     if(list.count() >0){
       KEditor::CodeCompletionDocumentIface* compl_iface = KEditor::CodeCompletionDocumentIface::interface(doc);
-      compl_iface->showCompletionBox(list,3);
+      compl_iface->showCompletionBox(list,2);
       return true;
     }
   }
   return false;
 }
 
+bool PHPCodeCompletion::checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line){
+  KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");
+  if(newre.match(lineStr)){
+    if(lineStr.right(2) == newre.group(1)){
+      cerr << "CLASS: " << newre.group(1);
+      QValueList<KEditor::CompletionEntry> list;
+      QList<ParsedClass>* classList = m_classStore->globalContainer.getSortedClassList();
+      for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
+	if(pclass->name().startsWith(newre.group(1))){
+	  KEditor::CompletionEntry e;
+	  e.text = pclass->name();
+	  list.append(e);
+	}
+      }
+      if(list.count() >0){
+	KEditor::CodeCompletionDocumentIface* compl_iface = KEditor::CodeCompletionDocumentIface::interface(doc);
+	compl_iface->showCompletionBox(list,2);
+	return true;
+      }
+    }
+    return false;
+  }
+}
 bool PHPCodeCompletion::checkForClassMember(KEditor::Document *doc,QString lineStr,int col,int line){
   if(lineStr.right(7) != "$this->"){
     cerr << endl << "$this-> not found";
@@ -160,26 +200,51 @@ bool PHPCodeCompletion::checkForClassMember(KEditor::Document *doc,QString lineS
     QString lineStr = e_iface->line(i);  
     if(classre.match(lineStr)) { // ok found
       QString className = classre.group(1);
-      cerr << endl << "class found" << className;
-
-      ParsedClass* pClass =  m_classStore->getClassByName(className);
-      if(pClass !=0){
-	QValueList<KEditor::CompletionEntry> list;
-	QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
-        for ( ParsedMethod *pMethod = methodList->first();
-              pMethod != 0;
-              pMethod = methodList->next() ) {
-	  KEditor::CompletionEntry e;
-
-	  e.text = pMethod->name();
-	  e.postfix ="()";
-	  list.append(e);
-	}
-	KEditor::CodeCompletionDocumentIface* compl_iface = KEditor::CodeCompletionDocumentIface::interface(doc);
-	compl_iface->showCompletionBox(list);
-	return true;
-      }
+      QValueList<KEditor::CompletionEntry> list = getClassMethodsAndVariables(className);
+      KEditor::CodeCompletionDocumentIface* compl_iface = KEditor::CodeCompletionDocumentIface::interface(doc);
+      compl_iface->showCompletionBox(list);
+      return true;
     }
   }
   return false;
+}
+
+QValueList<KEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariables(QString className){
+  QList<ParsedParent> parents;
+  QValueList<KEditor::CompletionEntry> list;
+  ParsedClass* pClass=0;
+  do {
+    pClass =  m_classStore->getClassByName(className);
+    if(pClass !=0){
+      QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
+      for ( ParsedMethod *pMethod = methodList->first();
+	    pMethod != 0;
+	    pMethod = methodList->next() ) {
+	KEditor::CompletionEntry e;
+	e.text = pMethod->name();
+	e.postfix ="()";
+	list.append(e);
+      }
+      QList<ParsedAttribute>* attList = pClass->getSortedAttributeList();
+      for ( ParsedAttribute *pAttribut = attList->first();
+	    pAttribut != 0;
+	    pAttribut = attList->next() ) {
+	KEditor::CompletionEntry e;
+	QString name = pAttribut->name();
+	e.text = name.remove(0,1); // remove the trailing $
+	e.postfix ="";
+	list.append(e);
+      }
+
+
+      if(pClass->parents.count() !=0){
+	ParsedParent* parent = pClass->parents.first();
+	className = parent->name();
+      }
+      else{
+	className ="";
+      }
+    }
+  } while (pClass != 0);
+  return list;
 }

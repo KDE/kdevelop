@@ -117,6 +117,7 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotRun(){
+  KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());  
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){
     core()->raiseWidget(m_phpErrorView);

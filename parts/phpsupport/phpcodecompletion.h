@@ -43,6 +43,8 @@ protected slots:
  protected:
   bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
   bool checkForClassMember(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line);
+  QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
   
  private:
   KEditor::Editor* m_editor;
