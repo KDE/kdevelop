@@ -25,6 +25,8 @@
 #include <qxml.h>
 #include <fstream.h>
 #include <klocale.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
 
 // Column identifiers for the listbox.
 #define LST_ID          0
@@ -121,13 +123,13 @@ BugList::BugList(QWidget *parent, const char *name, QString FileName,
     pExitBox->setMargin (0);
 
     // Create the cancel button.
-    QPushButton *Cancel = new QPushButton( i18n("Cancel"), pExitBox, "cancel" );
+    QPushButton *Cancel = new KPushButton( KStdGuiItem::cancel(), pExitBox, "cancel" );
     connect (Cancel, SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
     Cancel->setMinimumSize (100,25);
     Cancel->setMaximumSize (100,25);
 
     // Create the close button.
-    QPushButton *Close = new QPushButton( i18n("Close"), pExitBox, "close");
+    QPushButton *Close = new KPushButton( KStdGuiItem::close(), pExitBox, "close");
     connect (Close, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     Close->setMinimumSize (100,25);
     Close->setMaximumSize (100,25);

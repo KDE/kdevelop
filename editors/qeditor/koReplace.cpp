@@ -95,7 +95,7 @@ KoReplace::KoReplace(const QString &pattern, const QString &replacement, long op
         User3 | User2 | User1 | Close,
         User3,
         false,
-        i18n("&All"), i18n("&Skip"), i18n("&Yes"))
+        i18n("&All"), i18n("&Skip"), KStdGuiItem::yes())
 {
     setMainWidget( new QLabel( i18n("Replace '%1' with '%2'?").arg(pattern).arg(replacement), this ) );
     m_cancelled = false;
