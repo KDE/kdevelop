@@ -76,8 +76,8 @@ Installation Names
 ==================
 
    By default, `make install' will install the package's files in
-`/usr/local/bin', `/usr/local/man', etc.  You can specify an
-installation prefix other than `/usr/local' by giving `configure' the
+`/opt/kde/bin', `/opt/kde/man', etc.  You can specify an
+installation prefix other than `/opt/kde/' by giving `configure' the
 option `--prefix=PATH'.
 
    You can specify separate installation prefixes for
