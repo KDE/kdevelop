@@ -42,7 +42,7 @@
 #include <kapp.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include <kiconloaderdialog.h>
+#include <kicondialog.h>
 #include <kprocess.h>
 #include <kstddirs.h>
 #include <qregexp.h>
@@ -1291,8 +1291,8 @@ void CKAppWizard::slotDirectoryEntry() {
 // connection of iconload
 void CKAppWizard::slotIconButtonClicked() {
   QStringList iconlist;
-  KIconLoaderDialog iload;
-  iload.selectIcon(name1,KIcon::Desktop);
+  KIconDialog iload;
+  iload.selectIcon(/*name1,*/KIcon::Desktop);
   if (!name1.isNull() )
     iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1, KIcon::Desktop));
 }
@@ -1300,8 +1300,8 @@ void CKAppWizard::slotIconButtonClicked() {
 // connection of miniload
 void CKAppWizard::slotMiniIconButtonClicked() {
   QStringList miniiconlist;
-  KIconLoaderDialog  mload;
-  mload.selectIcon(name2,KIcon::Small);
+  KIconDialog  mload;
+  mload.selectIcon(/*name2,*/KIcon::Small);
   if (!name2.isNull() )
 //#warning FIXME mini icons?
     miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2, KIcon::Small));
