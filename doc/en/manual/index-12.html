@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: CVS Integration</TITLE>
+<TITLE>The User Manual to KDevelop: Debugging Applications</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,50 +18,167 @@
  <A HREF="index-11.html">Previous</A>
  <A HREF="index.html#toc12">Table of Contents</A>
 </P>
-<H3><A NAME="s12">12. CVS Integration</A></H3>
+<H3><A NAME="Debugging Applications"></A> <A NAME="s12">12. Debugging Applications</A></H3>
 
-<P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
-groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
-located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
-added or removed to the CVS by the developers.
-<P>Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
-at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
-receive the changes.
-<P>
-<H3><A NAME="ss12.1">12.1 Enabling CVS Support</A>
+<H3><A NAME="ss12.1">12.1 Setup</A>
 </H3>
 
-<P>As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
-KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
-the option for Version Control to "CVS".
 <P>
-<H3><A NAME="ss12.2">12.2 Using CVS Commands</A>
+<P>The default setup for KDevelop is to use the internal debugger. You can
+change this under Options select the &quot;KDevelop setup&quot; menu item,
+and then the Debugger tab.
+<P>Click on &quot;Use external debugger&quot; if you wish to use a different
+debugger and enter the name of the debugger to use. See your debuggers documentation
+on how to run it.
+<P>
+<H3><A NAME="ss12.2">12.2 Using the internal debugger</A>
 </H3>
 
-<P>Then the following commands are available in the LFV and RFV by context menus:
-<P>Over a file not included in the repository:
+<P>
+<H4>Changes made in the tree and output view window</H4>
+
+<P>If you choose the internal debugger, three tabs are added to your tree and output view windows.
+<H4>On the tree view window</H4>
+
+<P>
 <UL>
-<LI><B>Add to Repository</B>: adds the file to the repository. The file is set up to be added and will be introduced to the repository
-on the next <CODE>commit</CODE> command that includes the directory where the added file is located locally.</LI>
+<LI>VAR tab : A tree view of the local variables at the current place in
+the  program you have stopped at. You can also see local variables in the
+function  that called this funtions. The VAR tab also contains a watch window.
+This allows  you to see the value of global variables, or perhaps you may want
+to see only  one local variable rather than the variable in a large list of
+local variables.</LI>
 </UL>
-<P>Over a file included in the repository:
+<P>
+<H4>On the output view window</H4>
+
+<P>
 <UL>
-<LI><B>Update</B>: update the selected file with the CVS version</LI>
-<LI><B>Commit</B>: commit the selected file to the CVS repository</LI>
-<LI><B>Remove from Repository</B>: remove the file from the repository</LI>
+<LI>breakpoint : A list of breakpoints set and there currrent state.</LI>
+<LI>framestack : The calling stack.</LI>
+<LI>disassemble : A machine instruction view of the code showing the current instruction to be executed.</LI>
 </UL>
-<P>Over a folder:
+<P>
+<H4>Details</H4>
+
+<P>
+<P>
+<H4>Breakpoints</H4>
+
+<P>
+<P>Breakpoints can be set against source lines in a file (referred to as breakpoints)
+or on variables in the source (referred to as watchpoints). Both types of breakpoints
+can be set at anytime, however watchpoints on local variables only have meaning
+in the variables local scope. Watchpoints have more meaning when you are dealing
+with global variables.
+<P>
+<H4>Set/Unset breakpoints</H4>
+
+<P>
+<P>Simple one click set/unset. Click on the &quot;icon&quot; border to the
+left of the text in the editor at the line you want the breakpoint. Click again
+on this line to unset the breakpoint.
+<P>
+<H4>Alternative beakpoint manipulating via menus</H4>
+
+<P>
+<P>By right clicking on a breakpoint in the breakpoint list or on a breakpoint
+in the editors icon border you will get a menu of breakpoint options. This
+allows you to remove this breakpoint, clear all breakpoints, or edit the breakpoint.
+<P>
+<H4>Editing breakpoints</H4>
+
+<P>
+<P>Use the above menu to display the edit breakpoint dialog. 
+This contains the following fields :
+<OL>
+<LI>Conditional: Enter the condition that must be met before gdb will interrupt
+the program execution.</LI>
+<LI>Ignore count: How many times you want to the code to past through this
+breakpoint before gdb interrupts the program execution.</LI>
+<LI>Enable: When enabled gdb will break at this breakpoint. When disabled gdb
+will not break here.</LI>
+</OL>
+<P>
+<H4>Clear all breakpoints</H4>
+
+<P>
+<P>Removes all the breakpoints for this program.
+<P>
+<H4>Set/Unset watchpoints</H4>
+
+<P>
+<P>In the VAR view click with the Right Mouse button on a variable. A popup
+menu will be displayed allowing you to set a watchpoint on the local variable.
+This functionality is limited to the scope that the local variable is in. As
+the variable goes out of scope the program breaks and the watchpoint is deleted.
+<P>WARNING: This is known to be problematic, so use caution when setting
+watchpoints on local variables.
+<P>The watchpoint can also be set by a right mouse click on a previously entered
+watch variable, and selecting &quot;toggle watchpoint&quot;
+<P>
+<H4>Set/Unset Watch variables</H4>
+
+<P>
+<P>At the bottom of the VAR view there is the &quot;Watch&quot; field where
+you can enter the variable name you wish to see display in the watch list.
+Enter the variable name and type &quot;enter&quot; or click on the &quot;Add&quot;
+button alongside the field. Right Mouse clicking on the watch variable in the
+treeview will bring up a menu so that you can remove the variable from the
+list.
+<P>You can also enter a watch variable by right mouse clicking on a variabel
+name in the editor window. This displays a popup menu with &quot;watch: variable
+name&quot; on it.
+<H4>Changing variable values</H4>
+
+<P>
+<P>This is done via the watch variable. If you have a variable &quot;test&quot;
+then to set &quot;test&quot; to 5 type &quot;test=5&quot; in the watch
+field and add it to the list. Note that &quot;test&quot; will be set to &quot;5&quot;
+EVERY time the program stops at a breakpoint, so once you have set the variable,
+usually you should remove the item from the watch view.
+<P>
+<H4>The floating toolbar</H4>
+
+<P>
+<P>The debugger toolbar is either on top of all windows displayed, or docked
+in the panel. When docked you can run you code by clicking on the docked icon.
+The function this performs is the &quot;step over&quot; function. Right clicking
+on the docked item allows you to restore the toolbar and optionally place focus
+on kdevelop.
+<P>The functions available are:
 <UL>
-<LI><B>Add</B>: adds the folder to the repository</LI>
-<LI><B>Remove</B>: removes the folder from the repository</LI>
-<LI><B>Update</B>: update the folder recursively to be in sync with the repository</LI>
-<LI><B>Commit</B>: commit any changes recursively to the repository</LI>
+<LI>Run : Continue the program from the current point.</LI>
+<LI>Step over  : Execute one line of code stopping on the next
+line of code in the same surce file. This will run any functions encountered
+until the above condition is met.</LI>
+<LI>Step over i(nstruction) : Execute one machine instruction as above.</LI>
+<LI>Step in : Execute exactly one source line of code. This
+means you will &quot;step into&quot; the current function, if necessary</LI>
+<LI>Step in i(nstruction) : Execute one machine instruction as above.</LI>
+<LI>Step out : Run to the end of the current stack frame (function)</LI>
+<LI>View : Allows a variety of views into the data.
+Currently implemented views are:
+<OL>
+<LI> Memory address</LI>
+<LI> Disassemble code</LI>
+<LI> Current registers</LI>
+<LI> Current libraries</LI>
+</OL>
+</LI>
+<LI>Interrupt : Stop the application executing.</LI>
+<LI>Set focus on kdevelop : Set the focus on kdevelop</LI>
+<LI>Set focus on app : This sets the focus on the window that had focus
+when you pressed the &quot;set focus on kdevelop&quot; button. This is a
+compromise, it should set the focus on the application being debugged but this
+is difficult to do. If anyone has a better solution than the current functionality
+then please let us know.</LI>
 </UL>
-<P>The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
-the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
-successful or not.
-<P>As the CVS commands of KDevelop only work with the <CODE>cvs</CODE> system command and its commandline options, you should have no trouble to
-use the cvs features.
+<P>When gdb interrupts the program, probably because a breakpoint has been
+triggered, we highlight the &quot;Set focus on kdevelop&quot;. We do not
+automatically switch focus to kdevelop so that you can view the application
+window at this point. Click on the &quot;set focus&quot; button to switch
+to kdevelop or press a button on the toolbar to perform your selected function.
 <P>
 <P ALIGN="RIGHT">
 
