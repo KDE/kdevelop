@@ -1,3 +1,7 @@
+2000-11-22  Falk Brettschneider  <falk@kdevelop.org>
+        * removed part qextmdimainfrmview (class KDevelop itself takes its part)
+	* integrated the adding of widgets as docked tool views in QextMDI, class KDevelop adapted
+
 2000-11-18  Sandy Meier  <smeier@kdevelop.org>
 	* implemented "smart update" on file adding,removing (ProjectView) 
 	* on all other events the ProjectView is redrawn completely
