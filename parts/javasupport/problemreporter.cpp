@@ -180,11 +180,16 @@ void ProblemReporter::reparse()
     if( !m_javaSupport->isValid() )
 	return;
 
+    // @todo: use the project database to decide which files to parse instead of this!
+    // ugly hack: do not parse non .java ending files
+    if ( !m_fileName.endsWith(".java") )
+        return;
+
     m_timer->stop();
 
     kdDebug(9013) << "ProblemReporter::reparse()" << endl;
     m_javaSupport->backgroundParser()->addFile( m_fileName );
-    kdDebug(9013) << "---> file added" << endl;
+    kdDebug(9013) << "---> file added " << m_fileName << endl;
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
