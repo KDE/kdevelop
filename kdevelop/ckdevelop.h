@@ -68,9 +68,9 @@ class GrepDialog;
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
-//#include "./classparser/ParsedClass.h"
 
 class CParsedMethod;
+class CParsedContainer;
 class CParsedClass;
 class KDlgEdit;
 class KDlgEditWidget;
@@ -583,17 +583,20 @@ public:
    * @param declName Name of the declaration item.
    * @param type Type of declaration item
    */
-  void slotCVViewDeclaration( const char *className, 
-                              const char *declName, 
-                              THType type  );
+  void slotCVViewDeclaration( const char *parentPath, 
+                              const char *itemName, 
+                              THType parentType,
+                              THType itemType );
+
   /** The user wants to view the definition of a method/attr...
    * @param className Name of the class holding the definition. NULL for globals.
    * @param declName Name of the definition item.
    * @param type Type of definition item.
    */
-  void slotCVViewDefinition( const char *className, 
-                             const char *declName, 
-                             THType type  );
+  void slotCVViewDefinition( const char *parentPath, 
+                             const char *itemName, 
+                             THType parentType,
+                             THType itemType );
 
 protected: // Protected methods
 
@@ -607,29 +610,40 @@ protected: // Protected methods
    */
   void CVMethodSelected( const char *aName );
 
-  /** Goto the definition of the specified item.
-   * @param className Name of the class holding the definition. NULL for globals.
-   * @param declName Name of the definition item.
-   * @param type Type of definition item.
+  /** 
+   * Goto the definition of the specified item.
+   * 
+   * @param parentPath Path of the container. Empty for globals.
+   * @param itemName   Name of the selected item. Empty for containers.
+   * @param parentType Type of container. Ignored for globals.
+   * @param itemType   Type of the seleceted item. Ignored for containers.
    */
-  void CVGotoDefinition( const char *className, 
-                         const char *declName, 
-                         THType type );
+  void CVGotoDefinition( const char *parentPath, 
+                         const char *itemName, 
+                         THType parentType,
+                         THType itemType );
 
-  /** Goto the declaration of the specified item.
-   * @param className Name of the class holding the definition. NULL for globals.
-   * @param declName Name of the definition item.
-   * @param type Type of definition item.
+  /** 
+   * Goto the declaration of the specified item.
+   *
+   * @param parentPath Path of the container. Empty for globals.
+   * @param itemName   Name of the selected item. Empty for containers.
+   * @param parentType Type of container. Ignored for globals.
+   * @param itemType   Type of the seleceted item. Ignored for containers.
    */
-  void CVGotoDeclaration( const char *className, 
-                          const char *declName, 
-                          THType type );
+  void CVGotoDeclaration( const char *parentPath, 
+                         const char *itemName, 
+                         THType parentType,
+                         THType itemType );
   
-  /** Returns the class for the supplied classname. 
-   * @param className Name of the class to fetch.
-   * @return Pointer to the class or NULL if not found.
+  /** 
+   * Returns the class for the supplied classname. 
+   *
+   * @param parentPath Path of the container.
+   * @param parentType Type of container.
    */
-  CParsedClass *CVGetClass( const char *className );
+  CParsedContainer *CVGetContainer( const char *parentPath, 
+                                    THType parentType );
 
   /** Update the class combo with all classes in alpabetical order. */
   void CVRefreshClassCombo();

@@ -1728,7 +1728,7 @@ void CKDevelop::slotClassbrowserViewClass()
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  CVGotoDeclaration( classname, "", THCLASS );
+  CVGotoDeclaration( classname, "", THCLASS, THCLASS );
 }
 
 /*---------------------------- CKDevelop::slotClassbrowserViewDeclaration()
@@ -1749,7 +1749,7 @@ void CKDevelop::slotClassbrowserViewDeclaration()
   QString methodname = methodCombo->currentText();
 
   CVGotoDeclaration( classname, methodname, 
-                     ( methodname.isEmpty() ? THCLASS : THPUBLIC_METHOD ) );
+                     THCLASS, THPUBLIC_METHOD );
 }
 
 /*----------------------- CKDevelop::slotClassbrowserViewDefinition()
@@ -1770,9 +1770,9 @@ void CKDevelop::slotClassbrowserViewDefinition()
   QString methodname = methodCombo->currentText();
 
   if( methodname.isEmpty() )
-    CVGotoDeclaration( classname, "", THCLASS );
+    CVGotoDeclaration( classname, "", THCLASS, THCLASS );
   else
-    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
+    CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
 }
 
 /*------------------------------ CKDevelop::slotClassbrowserNewMethod()
