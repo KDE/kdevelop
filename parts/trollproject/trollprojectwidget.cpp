@@ -64,6 +64,7 @@
 #include "subclassesdlg.h"
 #include "addfilesdialog.h"
 #include "urlutil.h"
+#include "pathutil.h"
 
 #define VALUES_PER_ROW  1
 
@@ -305,7 +306,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     addSubdirButton->setPixmap ( SmallIcon ( "folder_new" ) );
     addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
-    QToolTip::add( addSubdirButton, i18n( "Add new subdirectory..." ) );
+    QToolTip::add( addSubdirButton, i18n( "Add subdirectory..." ) );
     // Create scope
     createScopeButton = new QToolButton ( projectTools, "Make button" );
     createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew" ) );
@@ -1022,20 +1023,28 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     spitem = m_shownSubproject;
   QString relpath = spitem->path.mid(projectDirectory().length());
 
-  bool ok = FALSE;
-  QString subdirname = KLineEditDlg::getText(
-                    i18n( "Add Subdirectory" ),
-                    i18n( "Please enter a name for the new subdirectory:" ),
-                    QString::null, &ok, this );
-  if ( ok && !subdirname.isEmpty() )
+  KURLRequesterDlg dialog(i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0);
+  dialog.urlRequester()->setMode(KFile::Directory);
+  dialog.urlRequester()->setURL(QString::null);
+
+  if ( dialog.exec() == QDialog::Accepted && !dialog.urlRequester()->url().isEmpty() )
   {
+    QString subdirname;
+    if ( !QDir::isRelativePath(dialog.urlRequester()->url()) )
+    subdirname = getRelativePath( m_shownSubproject->path, dialog.urlRequester()->url() );
+    else
+    subdirname = dialog.urlRequester()->url();
+
     QDir dir(projectDirectory()+relpath);
-    if (!dir.mkdir(subdirname))
+    if (!dir.exists(subdirname))
     {
-      KMessageBox::error(this,i18n("Failed to create subdirectory. "
-                                   "Do you have write permission "
-                                   "in the project folder?" ));
-      return;
+     if (!dir.mkdir(subdirname))
+     {
+       KMessageBox::error(this,i18n("Failed to create subdirectory. "
+                                    "Do you have write permission "
+                                    "in the project folder?" ));
+       return;
+     }
     }
     spitem->subdirs.append(subdirname);
     updateProjectFile(spitem);
