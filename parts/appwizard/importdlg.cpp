@@ -188,6 +188,8 @@ void ImportDialog::dirChanged()
         return;
     }
     
+    name_edit->setText(dir.dirName());
+    
     // QMake based?
     files = dir.entryList("*.pro");
     if (!files.isEmpty()) {
@@ -197,12 +199,9 @@ void ImportDialog::dirChanged()
 
     // C++?
     if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc")) {
-        name_edit->setText(dir.dirName());
         setProjectType("cpp");
         return;
     }
-
-    name_edit->setText(dir.dirName());
 
     // Fortran?
     if (dirHasFiles(dir, "*.f77,*.f,*.for,*.ftn")) {
