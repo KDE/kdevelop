@@ -264,7 +264,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	else
 	    klass->addMethod( method );
     } else if( !isStored )
-	m_currentContainer->addMethod( method );
+	cl->addMethod( method );
 
     TreeParser::parseFunctionDefinition( ast );
 }
@@ -705,7 +705,7 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
 {
     if( !container )
         container = m_store->globalScope();
-
+    
     QStringList path = QStringList::split( ".", name );
     QStringList::Iterator it = path.begin();
     while( it != path.end() ){
@@ -724,10 +724,21 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
         return container;
 
     QString className = path.join( "." );
-    ParsedClass* klass = container->getClassByName( className );
-    if( !klass )
-        klass = container->getStructByName( className );
-
+    
+    ParsedClass* klass = 0;
+    ParsedClassContainer* c = container;
+    while( c && path.size() ){
+	QString s = path.front();
+	path.pop_front();
+	klass = c->getClassByName( s );
+	if( !klass )
+	    klass = c->getStructByName( s );
+	if( !klass )
+	    break;
+	
+	c = klass;
+    }
+	
     if( !klass && includeImports ){
 
         QStringList imports;
@@ -745,7 +756,7 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
             ++impIt;
         }
     }
-
+            
     return klass;
 }
 
