@@ -56,7 +56,7 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
-        popupfile = fcontext->urls().first().fileName();
+        popupfile = fcontext->urls().first().path();
 
         // check if this file belongs to a clearcase directory
         // i.e. is the file /view/<view_name/vobs/... format?

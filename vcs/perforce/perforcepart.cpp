@@ -88,7 +88,7 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
-        popupfile = fcontext->urls().first().fileName();
+        popupfile = fcontext->urls().first().path();
         QFileInfo fi( popupfile );
         popup->insertSeparator();
 
