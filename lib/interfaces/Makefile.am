@@ -8,14 +8,14 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 	kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
 	codemodel.cpp codemodel_treeparser.cpp codemodel_utils.cpp \
 	kdevdesignerintegration.cpp kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
-	KDevPartControllerIface.cpp
+	KDevPartControllerIface.cpp katedocumentmanagerinterface.cpp katedocumentmanagerinterface.skel
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
 	kdevpartcontroller.h kdevplugin.h kdevproject.h kdevcore.h kdevcoderepository.h codemodel.h \
 	codemodel_utils.h codemodel_treeparser.h kdevgenericfactory.h kdevapi.h \
 	kdevdesignerintegration.h kdevplugincontroller.h kdevplugininfo.h KDevCoreIface.h \
-	KDevPartControllerIface.h
+	KDevPartControllerIface.h katedocumentmanagerinterface.h
 
 
 servicetypedir = $(kde_servicetypesdir)

@@ -18,11 +18,13 @@
 */
 #include "KDevPartControllerIface.h"
 #include "kdevpartcontroller.h"
+#include "katedocumentmanagerinterface.h"
 
 KDevPartController::KDevPartController(QWidget *parent)
   : KParts::PartManager(parent)
 {
   new KDevPartControllerIface(this);
+  new KateDocumentManagerInterface(this);
 }
 
 #include "kdevpartcontroller.moc"
