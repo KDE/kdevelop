@@ -455,7 +455,7 @@ QString ClassOrNamespaceNameAST::text() const
 
     QString str = m_name->text();
     if( m_templateArgumentList.get() )
-        str += QString("<") + m_templateArgumentList->text() + QString(">");
+        str += QString::fromLatin1("< ") + m_templateArgumentList->text() + QString::fromLatin1(" >");
 
     return str;
 }
