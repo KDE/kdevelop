@@ -152,6 +152,9 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
 {
     kdDebug(9020) << "CodeInformationRepository::getBaseClasseList()" << endl;
 
+    if( className.isEmpty() )
+        return QValueList<Tag>();
+
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
     	<< Catalog::QueryArgument( "name", className );
