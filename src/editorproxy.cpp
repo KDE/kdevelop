@@ -14,6 +14,8 @@
 #include <kxmlguifactory.h>
 #include <kmainwindow.h>
 #include <kactioncollection.h>
+#include <klocale.h>
+
 
 #include <toplevel.h>
 #include "partcontroller.h"
@@ -32,6 +34,8 @@ EditorProxy *EditorProxy::s_instance = 0;
 EditorProxy::EditorProxy()
   : QObject()
 {
+	new KAction( i18n("Show Context Menu"), CTRL+Key_Return, this, 
+		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
 }
 
 
@@ -178,6 +182,24 @@ void EditorProxy::popupAboutToShow()
   }
   if( lastWasSeparator && popup->count() > 0 )
     popup->removeItem( popup->idAt( popup->count() - 1 ) );
+}
+
+void EditorProxy::showPopup( )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+
+	if ( KParts::Part * part = PartController::getInstance()->activePart() )
+	{
+		ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );	
+		if ( iface )
+		{
+			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
+			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
+			
+			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
+		}
+	}
+  	
 }
 
 #include "editorproxy.moc"
