@@ -251,9 +251,16 @@ public:
    */
    static int frameDecorOfAttachedViews() { return m_frameDecoration; };
    /**
-   *
+   * An SDI application user interface is faked:
+   * @li an opened view is always maximized
+   * @li buttons for maximized childframe mode aren't inserted in the main menubar
+   * @li taskbar and windowmenu are not created/updated
    */
    void fakeSDIApplication();
+   /**
+   * @returns if we are fake an SDI application (@ref fakeSDIApplication)
+   */
+   bool isFakingSDIApplication() { return m_bSDIApplication; };
 
 public slots:
    /**
