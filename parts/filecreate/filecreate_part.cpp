@@ -87,14 +87,14 @@ FileCreatePart::~FileCreatePart()
 
 void FileCreatePart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("New File Wizard Options"));
+  QVBox *vbox = dlg->addVBoxPage(i18n("New File Wizard"));
   FCConfigWidget *w = new FCConfigWidget(this, true, vbox, "filecreate config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 
 void FileCreatePart::projectConfigWidget( KDialogBase* dlg )
 {
-  QVBox* vbox = dlg->addVBoxPage(i18n("New File Wizard Options"));
+  QVBox* vbox = dlg->addVBoxPage(i18n("New File Wizard"));
   FCConfigWidget* w = new FCConfigWidget( this, false, vbox, "filecreate config widget" );
   connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 }
