@@ -50,6 +50,7 @@ namespace KIO { class FileCopyJob; }
 
 class KTempFile;
 class KWriteDoc;
+class KWIconBorder;
 class Highlight;
 
 /*
@@ -128,6 +129,7 @@ class KWriteView : public QWidget {
     Q_OBJECT
     friend class KWriteDoc;
     friend class KWrite;
+    friend class KWIconBorder;
     friend class TextEditorView;
   public:
     // a drop-aware container should set HandleOwnURIDrops = false and handle all URI drops
@@ -211,6 +213,7 @@ class KWriteView : public QWidget {
     KWriteDoc *kWriteDoc;
     QScrollBar *xScroll;
     QScrollBar *yScroll;
+    KWIconBorder *leftBorder;
 
     int xPos;
     int yPos;
@@ -276,6 +279,7 @@ class KWrite : public KTextEditor::View, virtual public KWriteIface {
     Q_OBJECT
     friend class KWriteView;
     friend class KWriteDoc;
+    friend class KWIconBorder;
   public:
     /**
       The document can be used by more than one KWrite objects.
@@ -435,6 +439,9 @@ class KWrite : public KTextEditor::View, virtual public KWriteIface {
     // emitted when saving a remote URL with KIO::NetAccess. In that case we have to disable the UI.
     void enableUI( bool enable );
     void popupMenu(int line, int col);
+    void toggledBreakpoint(int line);
+    void editedBreakpoint(int line);
+    void toggledBreakpointEnabled(int line);
 
   protected:
     virtual void keyPressEvent( QKeyEvent *ev );
@@ -1018,6 +1025,25 @@ class KWrite : public KTextEditor::View, virtual public KWriteIface {
         cmSetBookmarks=10,cmGotoBookmarks=20 };
 };
 
+
+class KWIconBorder : public QWidget
+{
+public:
+    KWIconBorder(KWrite *write, KWriteView *view);
+    ~KWIconBorder();
+
+    void paintLine(int i);
+
+protected:
+    void paintEvent(QPaintEvent* e);
+    void mousePressEvent(QMouseEvent* e);
+
+private:
+    
+    KWrite *kWrite;
+    KWriteView *kWriteView;
+    bool lmbSetsBreakpoints;
+};
 
 #endif //KWVIEV_H
 

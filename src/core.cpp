@@ -239,7 +239,14 @@ EditorPart *Core::createEditorPart()
     connect( part, SIGNAL(setStatusBarText(const QString&)),
              win->statusBar(), SLOT(message(const QString&)) );
     connect( part, SIGNAL(wentToSourceFile(const QString &)),
-             this, SLOT(slotWentToSourceFile(const QString &)));
+             this, SIGNAL(wentToSourceFile(const QString &)));
+    connect( part, SIGNAL(toggledBreakpoint(const QString &, int)),
+             this, SIGNAL(toggledBreakpoint(const QString &, int)) );
+    connect( part, SIGNAL(editedBreakpoint(const QString &, int)),
+             this, SIGNAL(toggledBreakpoint(const QString &, int)) );
+    connect( part, SIGNAL(toggledBreakpointEnabled(const QString &, int)),
+             this, SIGNAL(toggledBreakpointEnabled(const QString &, int)) );
+
 
     return part;
 }
@@ -258,6 +265,7 @@ void Core::editorContextMenu(QPopupMenu *popup, const QString &linestr, int col)
     EditorContext context(linestr, col);
     emit contextMenu(popup, &context);
 }
+
 
 
 void Core::updateBufferMenu()
@@ -468,6 +476,20 @@ void Core::saveAllFiles()
             doc->saveFile();
             win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
             emit savedFile(doc->fileName());
+        }
+    }
+}
+
+
+void Core::setBreakpoint(const QString &fileName, int lineNum,
+                         int id, bool enabled, bool pending)
+{
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it) {
+        // TODO: Instead of comparing file names, use devno, inode
+        if ((*it)->fileName() == fileName) {
+            (*it)->setBreakpoint(lineNum, id, enabled, pending);
+            break;
         }
     }
 }
@@ -713,12 +735,6 @@ void Core::slotStop()
 {
     // Hmm, not much to do ;-)
     emit stopButtonClicked();
-}
-
-
-void Core::slotWentToSourceFile(const QString &fileName)
-{
-    emit wentToSourceFile(fileName);
 }
 
 #include "core.moc"

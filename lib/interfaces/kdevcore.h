@@ -112,6 +112,12 @@ public:
      */
     virtual void saveAllFiles() = 0;
     /**
+     * Sets a breakpoint in the editor document belong to fileName.
+     * If id==-1, the breakpoint is deleted.
+     */
+    virtual void setBreakpoint(const QString &fileName, int lineNum,
+                               int id, bool enabled, bool pending) = 0;
+    /**
      * Marks the component as running (or not running). As long as at least one
      * component is running, the stop button is enabled. When it is pressed,
      * all components get a stopButtonClicked().
@@ -128,7 +134,7 @@ signals:
      */
     void projectOpened();
     /**
-     * The project is about to be closed
+     * The project is about to be closed.
      */
     void projectClosed();
     /**
@@ -139,6 +145,19 @@ signals:
      * A new file has been displayed in the editor.
      */
     void wentToSourceFile(const QString &fileName);
+    /**
+     * The user has toggled a breakpoint.
+     */
+    void toggledBreakpoint(const QString &fileName, int lineNum);
+    /*
+     * The user wants to edit the properties of a breakpoint.
+     */
+    void editedBreakpoint(const QString &fileName, int lineNum);
+    /**
+     * The user wants to enable/disable a breakpoint.
+     */
+    void toggledBreakpointEnabled(const QString &fileName, int lineNum);
+    
     /**
      * The user has clicked the stop button.
      */

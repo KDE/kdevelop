@@ -95,6 +95,7 @@ class KWriteDoc : public KTextEditor::Document {
     Q_OBJECT
     friend class KWriteView;
     friend class KWrite;
+    friend class KWIconBorder;
 
   public:
     KWriteDoc(HlManager *, const QString &path = QString::null,

@@ -339,7 +339,22 @@ public:
      * Sets the debugger execution point. Used by KWIconBorder.
      */
     void setExecutionPoint(bool b);
-
+    /**
+     * Sets the line bookmarked or not bookmarked.
+     */
+    void toggleBookmark();
+    
+    int breakpointId() const
+    { return bpId; }
+    bool breakpointEnabled() const
+    { return bpEnabled; }
+    bool breakpointPending() const
+    { return bpPending; }
+    bool isExecutionPoint() const
+    { return ep; }
+    bool isBookmarked() const
+    { return bookmarked; }
+    
   protected:
     /**
       Length of the text line
@@ -375,6 +390,7 @@ public:
      * Is this the execution point?
      */
     bool ep;
+    bool bookmarked;
 };
 
 //text attribute constants

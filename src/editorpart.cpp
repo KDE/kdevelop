@@ -104,11 +104,22 @@ void EditorPart::gotoDocument(TextEditorDocument *doc, int lineNum)
         delete view;
         view = new TextEditorView(doc, widget(), "text editor view");
         view->child(0, "KWriteView")->installEventFilter(this);
-        connect( view, SIGNAL(undoAvailable(bool)), this, SLOT(updateUndoAvailable(bool)) );
-        connect( view, SIGNAL(redoAvailable(bool)), this, SLOT(updateRedoAvailable(bool)) );
-        connect( view, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()) );
-        connect( view, SIGNAL(overwriteModeChanged()), this, SLOT(updateOverwriteMode()) );
-        connect( view, SIGNAL(popupMenu(int, int)), this, SLOT(popupMenu(int, int)) );
+        connect( view, SIGNAL(undoAvailable(bool)),
+                 this, SLOT(updateUndoAvailable(bool)) );
+        connect( view, SIGNAL(redoAvailable(bool)),
+                 this, SLOT(updateRedoAvailable(bool)) );
+        connect( view, SIGNAL(cursorPositionChanged()),
+                 this, SLOT(updateCursorPosition()) );
+        connect( view, SIGNAL(overwriteModeChanged()),
+                 this, SLOT(updateOverwriteMode()) );
+        connect( view, SIGNAL(popupMenu(int, int)),
+                 this, SLOT(popupMenu(int, int)) );
+        connect( view, SIGNAL(toggledBreakpoint(int)),
+                 this, SLOT(toggleBreakpoint(int)) );
+        connect( view, SIGNAL(editedBreakpoint(int)),
+                 this, SLOT(editBreakpoint(int)) );
+        connect( view, SIGNAL(toggledBreakpointEnabled(int)),
+                 this, SLOT(toggleBreakpointEnabled(int)) );
         widget()->setFocusProxy(view);
         view->show();
         QString caption = doc->fileName();
@@ -236,6 +247,24 @@ void EditorPart::popupMenu(int line, int col)
     emit contextMenu(&popup, view->textLine(line), col);
     if (popup.count())
         popup.exec(QCursor::pos());
+}
+
+
+void EditorPart::toggleBreakpoint(int lineNum)
+{
+    emit toggledBreakpoint(editorDocument()->url().path(), lineNum);
+}
+
+
+void EditorPart::editBreakpoint(int lineNum)
+{
+    emit editedBreakpoint(editorDocument()->url().path(), lineNum);
+}
+
+
+void EditorPart::toggleBreakpointEnabled(int lineNum)
+{
+    emit toggledBreakpointEnabled(editorDocument()->url().path(), lineNum);
 }
 
 

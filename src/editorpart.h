@@ -38,6 +38,9 @@ public:
 signals:
     void contextMenu(QPopupMenu *popup, const QString &linestr, int col);
     void wentToSourceFile(const QString &fileName);
+    void toggledBreakpoint(const QString &fileName, int lineNum);
+    void editedBreakpoint(const QString &fileName, int lineNum);
+    void toggledBreakpointEnabled(const QString &fileName, int lineNum);
 
 private slots:
     void updateUndoAvailable(bool yes);
@@ -45,6 +48,9 @@ private slots:
     void updateOverwriteMode();
     void updateCursorPosition();
     void popupMenu(int line, int col);
+    void toggleBreakpoint(int lineNum);
+    void editBreakpoint(int lineNum);
+    void toggleBreakpointEnabled(int lineNum);
     
     void setWindowCaption(const QString &caption);
     void slotUndo();

@@ -17,6 +17,13 @@
 #include <qguardedptr.h>
 #include "kdevpart.h"
 
+class VariableWidget;
+class BreakpointWidget;
+class FramestackWidget;
+class DisassembleWidget;
+class Breakpoint;
+class DbgController;
+class DbgToolBar;
 
 class DebuggerPart : public KDevPart
 {
@@ -27,6 +34,8 @@ public:
     ~DebuggerPart();
 
 private slots:
+    void slotRun();
+    void slotStop();
     void slotContinue();
     void slotRunToCursor();
     void slotStepOver();
@@ -34,8 +43,21 @@ private slots:
     void slotStepIntoInstruction();
     void slotStepInto();
     void slotStepOut();
-    
+
+    void slotRefreshBPState(Breakpoint *BP);
+    void slotStatus(const QString &msg, int state);
+    void slotShowStep(const QString &, int);
+    void slotGotoSource(const QString &, int);
+
 private:
+    void setupController();
+    
+    QGuardedPtr<VariableWidget> variableWidget;
+    QGuardedPtr<BreakpointWidget> breakpointWidget;
+    QGuardedPtr<FramestackWidget> framestackWidget;
+    QGuardedPtr<DisassembleWidget> disassembleWidget;
+    DbgController *controller;
+    //    QGuardedPtr<DbgToolBar> floatingToolBar;
 };
 
 #endif

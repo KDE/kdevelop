@@ -41,13 +41,11 @@ protected:
                                 Embedding embed=Replace);
     virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0);
     virtual void saveAllFiles();
+    virtual void setBreakpoint(const QString &fileName, int lineNum,
+                               int id, bool enabled, bool pending);
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);
 
-signals:
-
-    void wentToSourceFile(const QString &fileName);
-    
 private slots:
     void docPartDestroyed();
     void docContextMenu(QPopupMenu *popup, const QString &url, const QString &selection);
@@ -56,7 +54,6 @@ private slots:
     void wantsToQuit();
     void openFileInteractionFinished(const QString &fileName);
     void saveFileInteractionFinished(const QString &fileName);
-    void slotWentToSourceFile(const QString &fileName);
 
     void slotOpenFile();
     void slotSaveFile();

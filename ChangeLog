@@ -1,3 +1,9 @@
+2001-04-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Rewritten the icon border stuff from 1.x for use
+	  with multiple views per document
+	* Ported the debugger frontend
+
 2001-04-06  Richard Dale <duke@tipitina.demon.co.uk
 
 	* Added Java and Objective-C class browsing, and Java KDE project template and

@@ -3,6 +3,9 @@
 <MenuBar>
  <Menu name="debug">
   <text>&amp;Debug</text>
+  <Action name="debug_run"/>
+  <Action name="debug_stop"/>
+  <Separator/>
   <Action name="debug_cont"/>
   <Action name="debug_runtocursor"/>
   <Action name="debug_stepover"/>

@@ -21,7 +21,9 @@
 #include "kwtextline.h"
 
 TextLine::TextLine(int attribute, int context)
-  : len(0), size(0), text(0L), attribs(0L), attr(attribute), ctx(context) {
+  : len(0), size(0), text(0L), attribs(0L), attr(attribute), ctx(context),
+    bpId(-1), bpEnabled(false), bpPending(false), ep(false), bookmarked(false)
+{
 }
 
 TextLine::~TextLine() {
@@ -341,4 +343,10 @@ void TextLine::setBreakpoint(int id, bool enabled, bool pending)
 void TextLine::setExecutionPoint(bool b)
 {
     ep = b;
+}
+
+
+void TextLine::toggleBookmark()
+{
+    bookmarked = !bookmarked;
 }
