@@ -36,7 +36,6 @@
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
-#include <kaccelmanager.h>
 #endif
 
 #include <kedittoolbar.h>
@@ -537,9 +536,6 @@ void MainWindowIDEAl::slotBufferSelected() {
 }
 
 void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
-#if (KDE_VERSION > 305)
-	KAcceleratorManager::manage(this);
-#endif
 
     if ( !part || !part->inherits("KTextEditor::Document") )
         return;
