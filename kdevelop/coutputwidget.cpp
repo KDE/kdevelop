@@ -35,11 +35,15 @@ void COutputWidget::insertAtEnd(const QString& s)
   int row = (numLines() < 1)? 0 : numLines()-1;
   // correct workaround for QMultilineEdit
   //  the string inside could be NULL, and so QMultilineEdit fails
+#if (QT_VERSION < 300)
   int col = qstrlen(textLine(row));
+#else
+  int col = 0;
+#endif
   if (s.left(1) == "\n" && row == 0 && col == 0)
-    insertAt(" "+s, row, 0/*col*/);
+    insertAt(" "+s, row, col);
   else
-    insertAt(s, row, 0/*col*/);
+    insertAt(s, row, col);
 }
 
 // ---------------------------------------------------------------------------
@@ -101,10 +105,14 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     // add to the end of the text - highlighting is done in the
     // paint routine.
     int row = (numLines() < 1)? 0 : numLines()-1;
+#if (QT_VERSION < 300)
     int col = qstrlen(textLine(row));
+#else
+    int col = 0;
+#endif
 
     bool displayAdditions=atEnd();
-    insertAt(line, row, 0/*col*/);
+    insertAt(line, row, col);
     if (displayAdditions)
       setCursorPosition(numLines()+1,0);
   }
