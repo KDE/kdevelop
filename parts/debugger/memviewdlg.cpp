@@ -47,7 +47,7 @@
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************
 
-MemoryView::MemoryView(QWidget *parent, const char *name)
+MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       start_(new KLineEdit(this)),
       end_(new KLineEdit(this)),
@@ -95,13 +95,13 @@ MemoryView::MemoryView(QWidget *parent, const char *name)
 
 // **************************************************************************
 
-MemoryView::~MemoryView()
+MemoryViewDialog::~MemoryViewDialog()
 {
 }
 
 // **************************************************************************
 
-void MemoryView::slotRawGDBMemoryView(char *buf)
+void MemoryViewDialog::slotRawGDBMemoryView(char *buf)
 {
     // just display the resultant output from GDB in the edit box
     output_->clear();
@@ -112,7 +112,7 @@ void MemoryView::slotRawGDBMemoryView(char *buf)
 // **************************************************************************
 
 // get gdb to supply the disassembled data.
-void MemoryView::slotDisassemble()
+void MemoryViewDialog::slotDisassemble()
 {
     QString start(start_->text());
     QString end(end_->text());
@@ -121,7 +121,7 @@ void MemoryView::slotDisassemble()
 
 // **************************************************************************
 
-void MemoryView::slotMemoryDump()
+void MemoryViewDialog::slotMemoryDump()
 {
     QString start(start_->text());
     QString size(end_->text());

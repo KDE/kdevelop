@@ -27,13 +27,13 @@ class QMultiLineEdit;
  * @author John Birch
  */
 
-class MemoryView : public KDialog
+class MemoryViewDialog : public KDialog
 {
     Q_OBJECT
     
 public:
-    MemoryView( QWidget *parent, const char *name );
-    ~MemoryView();
+    MemoryViewDialog( QWidget *parent=0, const char *name=0 );
+    ~MemoryViewDialog();
     
 signals:
     void disassemble(const QString &start, const QString &end);

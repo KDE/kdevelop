@@ -20,7 +20,8 @@ libkdevdebugger_la_SOURCES = debuggerfactory.cpp \
 			     framestackwidget.cpp \
 			     disassemblewidget.cpp \
 			     memviewdlg.cpp \
-			     breakpointdlg.cpp
+			     breakpointdlg.cpp \
+			     dbgpsdlg.cpp
 
 METASOURCES = AUTO
 

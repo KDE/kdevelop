@@ -11,19 +11,24 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
 #include <qwhatsthis.h>
+#include <kfiledialog.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "breakpoint.h"
+#include "dbgpsdlg.h"
+#include "memviewdlg.h"
 #include "debuggerfactory.h"
 #include "debuggerpart.h"
 
@@ -113,19 +118,50 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     
     KAction *action;
     
-    action = new KAction(i18n("&Run"), "1rightarrow", 0,
+    action = new KAction(i18n("&Start"), "1rightarrow", 0,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
+    action->setStatusText( i18n("Runs the program in the debugger") );
+    action->setWhatsThis( i18n("Start in debugger\n\n"
+                               "Starts the debugger with the project's main "
+                               "executable. You may set some breakpoints "
+                               "before this, or you can interrupt the program "
+                               "while it is running, in order to get information "
+                               "about variables, frame stack, and so on.") );
 
-    action = new KAction(i18n("&Stop"), "stop", 0,
+    action = new KAction(i18n("Examine core file"), "core", 0,
+                         this, SLOT(slotExamineCore()),
+                         actionCollection(), "debug_core");
+    action->setStatusText( i18n("Loads a core file into the debugger") );
+    action->setWhatsThis( i18n("Examine core file\n\n"
+                               "This loads a core file, which is typically created "
+                               "after the application has crashed e.g. with a "
+                               "segmentation fault. The core file contains an "
+                               "image of the program memory at the time it crashed, "
+                               "allowing you a post-mortem analysis.") );
+
+    action = new KAction(i18n("Attach to process"), "connect_creating", 0,
+                         this, SLOT(slotAttachProcess()),
+                         actionCollection(), "debug_attach");
+    action->setStatusText( i18n("Attaches the debugger to a running process") );
+
+    action = new KAction(i18n("Sto&p"), "stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
     action->setEnabled(false);
+    action->setStatusText( i18n("Kills the executable and exits the debugger") );
 
+    action = new KAction(i18n("Interrupt"), "player_pause", 0,
+                         this, SLOT(slotPause()),
+                         actionCollection(), "debug_pause");
+    action->setEnabled(false);
+    action->setStatusText( i18n("Interrupts the application") );
+    
     action = new KAction(i18n("&Continue"), "dbgrun", 0,
                          this, SLOT(slotContinue()),
                          actionCollection(), "debug_cont");
     action->setEnabled(false);
+    action->setStatusText( i18n("Continues the application execution") );
     action->setWhatsThis( i18n("Continue application execution\n\n"
                                "Continues the execution of your application in the "
                                "debugger. This only has affect when the application "
@@ -136,40 +172,47 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
     action->setEnabled(false);
-    action->setWhatsThis( i18n("Step into\n\n"
-                               "Executes exactly one line of source. If the source line "
-                               "is a call to a function then execution will stop after "
-                               "the function has been entered.") );
+    action->setStatusText( i18n("Continues execution until the cursor position is reached") );
 
-    action = new KAction(i18n("&Step over"), "dbgnext", 0,
+    action = new KAction(i18n("Step &over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setEnabled(false);
+    action->setStatusText( i18n("Steps over the next line") );
     action->setWhatsThis( i18n("Step over\n\n"
                                "Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
 
-    action = new KAction(i18n("Step &over instruction"), "dbgnextinst", 0,
+    action = new KAction(i18n("Step over ins&truction"), "dbgnextinst", 0,
                          this, SLOT(slotStepOverInstruction()),
                          actionCollection(), "debug_stepoverinst");
     action->setEnabled(false);
+    action->setStatusText( i18n("Steps over the next assembly instruction") );
 
     action = new KAction(i18n("Step &into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setEnabled(false);
+    action->setStatusText( i18n("Steps into the next statement") );
+    action->setWhatsThis( i18n("Step into\n\n"
+                               "Executes exactly one line of source. If the source line "
+                               "is a call to a function then execution will stop after "
+                               "the function has been entered.") );
+
 
     action = new KAction(i18n("Step into i&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setEnabled(false);
+    action->setStatusText( i18n("Steps into the next assembly instruction") );
 
-    action = new KAction(i18n("Step &out"), "dbgstepout", 0,
+    action = new KAction(i18n("Step o&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setEnabled(false);
+    action->setStatusText( i18n("Steps out of the current function") );
     action->setWhatsThis( i18n("Step out of\n\n"
                                "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
@@ -177,11 +220,17 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
                                "we are in the outermost frame (i.e. in main()), then "
                                "this operation has no affect.") );
 
+    action = new KAction(i18n("Viewers"), "dbgmemview", 0,
+                         this, SLOT(slotMemoryView()),
+                         actionCollection(), "debug_memview");
+    action->setEnabled(false);
+    action->setStatusText( i18n("Various views into the application") );
+    
     connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( core(), SIGNAL(editedBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotEditBreakpoint(const QString &, int)) );
-    connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
+    connect( core(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 }
 
@@ -219,6 +268,10 @@ void DebuggerPart::setupController()
     connect( breakpointWidget, SIGNAL(clearAllBreakpoints()),
              controller,       SLOT(slotClearAllBreakpoints()));
 
+    // disassembleWidget -> controller
+    connect( disassembleWidget,SIGNAL(disassemble(const QString&, const QString&)),
+             controller,       SLOT(slotDisassemble(const QString&, const QString&)));
+
     // controller -> breakpointWidget
     connect( controller,       SIGNAL(acceptPendingBPs()),
              breakpointWidget, SLOT(slotSetPendingBPs()));
@@ -230,6 +283,12 @@ void DebuggerPart::setupController()
              breakpointWidget, SLOT(slotParseGDBBreakpointSet(char*, int)));
     connect( breakpointWidget, SIGNAL(publishBPState(Breakpoint*)),
              controller,       SLOT(slotBPState(Breakpoint*)));
+
+    // controller -> disassembleWidget
+    connect( controller,       SIGNAL(showStepInSource(const QString&, int, const QString&)),
+             disassembleWidget,SLOT(slotShowStepInSource(const QString&, int, const QString&)));
+    connect( controller,       SIGNAL(rawGDBDisassemble(char*)),
+             disassembleWidget,SLOT(slotDisassemble(char*)));
 
     // controller -> this
     connect( controller,       SIGNAL(dbgStatus(const QString&, int)),
@@ -248,12 +307,13 @@ void DebuggerPart::setupController()
 }
 
 
-void DebuggerPart::slotRun()
+void DebuggerPart::startDebugger()
 {
     core()->running(this, true);
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_stop")->setEnabled(true);
+    ac->action("debug_pause")->setEnabled(true);
     ac->action("debug_cont")->setEnabled(true);
     ac->action("debug_runtocursor")->setEnabled(true);
     ac->action("debug_stepover")->setEnabled(true);
@@ -261,6 +321,7 @@ void DebuggerPart::slotRun()
     ac->action("debug_stepinto")->setEnabled(true);
     ac->action("debug_stepintoinst")->setEnabled(true);
     ac->action("debug_stepout")->setEnabled(true);
+    ac->action("debug_memview")->setEnabled(true);
 
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
@@ -273,9 +334,61 @@ void DebuggerPart::slotRun()
     //    }
 
     setupController();
-    controller->slotStart("/home/bernd/projects/test/test/test", "", "");
+    QString program;
+    if (project())
+        program = project()->projectDirectory() + "/" + project()->mainProgram();
+    controller->slotStart(program, "", "");
     breakpointWidget->slotSetPendingBPs();
+}
+
+
+void DebuggerPart::slotRun()
+{
+    if (controller)
+        slotStop();
+
+    core()->message(i18n("Debugging program"));
+    
+    startDebugger();
     controller->slotRun();
+}
+
+
+void DebuggerPart::slotExamineCore()
+{
+    if (controller)
+        slotStop();
+
+    core()->message(i18n("Choose a core file to examine..."));
+
+    QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
+    QString coreFile = KFileDialog::getOpenFileName(dirName);
+    if (coreFile.isNull())
+        return;
+
+    core()->message(i18n("Examining core file %1").arg(coreFile));
+
+    startDebugger();
+    controller->slotCoreFile(coreFile);
+}
+
+
+void DebuggerPart::slotAttachProcess()
+{
+    if (controller)
+        slotStop();
+
+    core()->message(i18n("Choose a process to attach to..."));
+
+    Dbg_PS_Dialog dlg;
+    if (!dlg.exec() || !dlg.pidSelected())
+        return;
+
+    int pid = dlg.pidSelected();
+    core()->message(i18n("Attaching to process %1").arg(pid));
+    
+    startDebugger();
+    controller->slotAttachTo(pid);
 }
 
 
@@ -285,6 +398,7 @@ void DebuggerPart::slotStop()
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_stop")->setEnabled(false);
+    ac->action("debug_pause")->setEnabled(false);
     ac->action("debug_cont")->setEnabled(false);
     ac->action("debug_runtocursor")->setEnabled(false);
     ac->action("debug_stepover")->setEnabled(false);
@@ -292,14 +406,28 @@ void DebuggerPart::slotStop()
     ac->action("debug_stepinto")->setEnabled(false);
     ac->action("debug_stepintoinst")->setEnabled(false);
     ac->action("debug_stepout")->setEnabled(false);
+    ac->action("debug_memview")->setEnabled(false);
 
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
 
+    breakpointWidget->reset();
+    framestackWidget->clear();
+    variableWidget->clear();
+    disassembleWidget->clear();
+    disassembleWidget->slotActivate(false);
+
+    core()->gotoExecutionPoint(QString::null, 0);
     //    delete floatingToolBar;
     //    floatingToolBar = 0;
 
+}
+
+
+void DebuggerPart::slotPause()
+{
+    controller->slotBreakInto();
 }
 
 
@@ -313,7 +441,7 @@ void DebuggerPart::slotRunToCursor()
 {
     QString fileName;
     int lineNum;
-    // Find out current file name and line number
+    // FIXME: Find out current file name and line number
     controller->slotRunUntil(fileName, lineNum);
 }
 
@@ -348,6 +476,34 @@ void DebuggerPart::slotStepOut()
 }
 
 
+void DebuggerPart::slotMemoryView()
+{
+    // Hmm, couldn't this be made non-modal?
+    
+    MemoryViewDialog *dlg = new MemoryViewDialog();
+    connect( dlg,        SIGNAL(disassemble(const QString&, const QString&)),
+             controller, SLOT(slotDisassemble(const QString&, const QString&)));
+    connect( dlg,        SIGNAL(memoryDump(const QString&, const QString&)),
+             controller, SLOT(slotMemoryDump(const QString&, const QString&)));
+    connect( dlg,        SIGNAL(registers()),
+             controller, SLOT(slotRegisters()));
+    connect( dlg,        SIGNAL(libraries()),
+             controller, SLOT(slotLibraries()));
+    
+    connect( controller, SIGNAL(rawGDBMemoryDump(char*)),
+             dlg,        SLOT(slotRawGDBMemoryView(char*)));
+    connect( controller, SIGNAL(rawGDBDisassemble(char*)),
+             dlg,        SLOT(slotRawGDBMemoryView(char*)));
+    connect( controller, SIGNAL(rawGDBRegisters(char*)),
+             dlg,        SLOT(slotRawGDBMemoryView(char*)));
+    connect( controller, SIGNAL(rawGDBLibraries(char*)),
+             dlg,        SLOT(slotRawGDBMemoryView(char*)));
+    
+    dlg->exec();
+    delete dlg;
+}
+
+
 void DebuggerPart::slotRefreshBPState(Breakpoint *BP)
 {
     if (BP->isActionDie())
@@ -365,7 +521,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_appBusy) {
         stateIndicator = "A";
-        // clearStepLine();
+        core()->gotoExecutionPoint(QString::null, 0);
     }
     
     if (state & (s_dbgNotStarted|s_appNotStarted))
@@ -373,7 +529,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_programExited) {
         stateIndicator = "E";
-        // clearStepLine();
+        core()->gotoExecutionPoint(QString::null, 0);
     }
     
     // And now? :-)

@@ -35,7 +35,10 @@ public:
 
 private slots:
     void slotRun();
+    void slotExamineCore();
+    void slotAttachProcess();
     void slotStop();
+    void slotPause();
     void slotContinue();
     void slotRunToCursor();
     void slotStepOver();
@@ -43,6 +46,7 @@ private slots:
     void slotStepIntoInstruction();
     void slotStepInto();
     void slotStepOut();
+    void slotMemoryView();
 
     void slotRefreshBPState(Breakpoint *BP);
     void slotStatus(const QString &msg, int state);
@@ -50,6 +54,7 @@ private slots:
     void slotGotoSource(const QString &, int);
 
 private:
+    void startDebugger();
     void setupController();
     
     QGuardedPtr<VariableWidget> variableWidget;

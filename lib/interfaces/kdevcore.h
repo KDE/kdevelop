@@ -103,6 +103,7 @@ public:
                                 Embedding embed=Replace) = 0;
     /**
      * Goes to a given location in a source file and marks the line.
+     * If fileName is null, the mark is cleared.
      * This is used by the debugger to mark the location where the
      * the debugger has stopped.
      */

@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
                          VERSION, description, KAboutData::License_GPL,
                          "(c) 1999-2001 Bernd Gehrmann & others");
     aboutData.addAuthor("Bernd Gehrmann", "Everything not credited elsewhere :-)", "bernd@kdevelop.org");
+    aboutData.addAuthor("John Birch", "Debugger frontend", "jbb@kdevelop.org");
     aboutData.addAuthor("Jonas Nordin", "C++ source parser", "jonas.nordin@syncom.se");
     aboutData.addAuthor("Sandy Meier", "Context menu stuff", "smeier@kdevelop.org");
     aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");

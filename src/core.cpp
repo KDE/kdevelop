@@ -452,12 +452,15 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 
 void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
-    gotoSourceFile(fileName, lineNum);
-
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it)
         (*it)->setExecutionPoint(-1);
+
+    if (fileName.isEmpty())
+        return;
     
+    gotoSourceFile(fileName, lineNum);
+
     QListIterator<TextEditorDocument> it2(editedDocs);
     for (; it2.current(); ++it2)
         if ((*it2)->fileName() == fileName) {

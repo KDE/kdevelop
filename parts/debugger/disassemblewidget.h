@@ -44,6 +44,9 @@ signals:
     void disassemble(const QString &start, const QString &end);
 
 private:
+    virtual void showEvent(QShowEvent*);
+    virtual void hideEvent(QHideEvent*);
+
     bool displayCurrent();
     void getNextDisplay();
     

@@ -17,6 +17,7 @@
 
 #include "disassemblewidget.h"
 
+#include <kdebug.h>
 #include <keditcl.h>
 #include <kglobalsettings.h>
 
@@ -36,7 +37,6 @@ DisassembleWidget::DisassembleWidget(QWidget *parent, const char *name)
       upper_(0),
       address_(0)
 {
-    //  setCaption("Disassemble");
     setFont(KGlobalSettings::fixedFont());
 }
 
@@ -106,6 +106,8 @@ void DisassembleWidget::slotDisassemble(char *buf)
 
 void DisassembleWidget::slotActivate(bool activate)
 {
+    kdDebug(9012) << "Disassemble widget active: " << activate << endl;
+    
     if (active_ != activate) {
         active_ = activate;
         if (active_)
@@ -116,8 +118,10 @@ void DisassembleWidget::slotActivate(bool activate)
 /***************************************************************************/
 
 void DisassembleWidget::slotShowStepInSource(const QString &, int,
-                                       const QString &currentAddress)
+                                             const QString &currentAddress)
 {
+    kdDebug(9012) << "DisasssembleWidget::slotShowStepInSource()" << endl;
+    
     currentAddress_ = currentAddress;
     const char *t = currentAddress_.latin1();
     address_ = strtol(t, 0, 0);
@@ -132,6 +136,8 @@ void DisassembleWidget::slotShowStepInSource(const QString &, int,
 
 void DisassembleWidget::getNextDisplay()
 {
+    kdDebug(9012) << "DisasssembleWidget::getNextDisplay()" << endl;
+
     if (address_) {
         ASSERT(currentAddress_);
         
@@ -142,6 +148,18 @@ void DisassembleWidget::getNextDisplay()
     }
     else
         emit disassemble("", "");
+}
+
+
+void DisassembleWidget::showEvent(QShowEvent*)
+{
+    slotActivate(true);
+}
+
+
+void DisassembleWidget::hideEvent(QHideEvent*)
+{
+    slotActivate(false);
 }
 
 /***************************************************************************/

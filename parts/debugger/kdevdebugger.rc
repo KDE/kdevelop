@@ -4,7 +4,13 @@
  <Menu name="debug">
   <text>&amp;Debug</text>
   <Action name="debug_run"/>
+  <Menu name="debug_other">
+   <text>Debug &amp;Other</text>
+   <Action name="debug_core"/>
+   <Action name="debug_attach"/>
+  </Menu>
   <Action name="debug_stop"/>
+  <Action name="debug_pause"/>
   <Separator/>
   <Action name="debug_cont"/>
   <Action name="debug_runtocursor"/>
@@ -13,6 +19,8 @@
   <Action name="debug_stepinto"/>
   <Action name="debug_stepintoinst"/>
   <Action name="debug_stepout"/>
+  <Separator/>
+  <Action name="debug_memview"/>
  </Menu>
 </MenuBar>
 </kpartgui>
