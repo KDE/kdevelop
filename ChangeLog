@@ -1,3 +1,7 @@
+2001-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Quick hack for a tmake/qmake project management
+
 2001-07-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Make file views work for arbitrary mime types
