@@ -134,6 +134,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_structureView->header()->hide();
     mainWindow()->embedSelectViewRight( m_structureView, i18n("File Structure"), i18n("Show the structure for the current source unit") );
     connect( m_structureView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
+    connect( m_structureView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
 #endif
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
@@ -852,11 +853,12 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 
 void CppSupportPart::slotNodeSelected( QListViewItem* item )
 {
-    if( !item || !m_activeSelection )
+    if( !item || !m_activeSelection || !m_activeViewCursor)
 	return;
 
     m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
 				     item->text(3).toInt(), item->text(4).toInt() );
+    m_activeViewCursor->setCursorPosition(item->text(1).toInt(), item->text(2).toInt());
 }
 
 void CppSupportPart::slotMakeMember()
