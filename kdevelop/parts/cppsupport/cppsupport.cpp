@@ -15,10 +15,10 @@
 
 #include "cppsupport.h"
 #include "cproject.h"
-#include "ParsedClass.h"
-#include "ParsedAttribute.h"
-#include "ParsedMethod.h"
-#include "ClassStore.h"
+#include "parsedclass.h"
+#include "parsedattribute.h"
+#include "parsedmethod.h"
+#include "classstore.h"
 #include "classparser.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
@@ -51,7 +51,7 @@ void CppSupport::projectClosed()
 }
 
 
-void CppSupport::classStoreOpened(CClassStore *store)
+void CppSupport::classStoreOpened(ClassStore *store)
 {
     m_store = store;
     m_parser = new CClassParser(store);
@@ -88,8 +88,7 @@ void CppSupport::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::savedFile()" << endl;
 
-    if (CProject::getType(fileName) == CPP_HEADER)
-        m_parser->parse(fileName);
+    m_parser->parse(fileName);
 
     emit updateSourceInfo();
 }
@@ -112,29 +111,29 @@ void CppSupport::addMethodRequested(const QString &className)
     if (!dlg.exec())
         return;
     
-    CParsedMethod *pm = dlg.asSystemObj();
+    ParsedMethod *pm = dlg.asSystemObj();
     pm->setDeclaredInScope(className);
 
     int atLine = -1;
-    CParsedClass *pc = m_store->getClassByName(className);
+    ParsedClass *pc = m_store->getClassByName(className);
     
     if (pm->isSignal) {
         for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
-            CParsedMethod *meth = pc->signalIterator.current();
+            ParsedMethod *meth = pc->signalIterator.current();
             if (meth->exportScope == pm->exportScope && 
                 atLine < meth->declarationEndsOnLine)
                 atLine = meth->declarationEndsOnLine;
         }
     } else if (pm->isSlot) {
         for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
-            CParsedMethod *meth = pc->slotIterator.current();
+            ParsedMethod *meth = pc->slotIterator.current();
             if (meth->exportScope == pm->exportScope && 
                 atLine < meth->declarationEndsOnLine)
                 atLine = meth->declarationEndsOnLine;
         }
     } else {
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
-            CParsedMethod *meth = pc->methodIterator.current();
+            ParsedMethod *meth = pc->methodIterator.current();
             if (meth->exportScope == pm->exportScope && 
                 atLine < meth->declarationEndsOnLine)
                 atLine = meth->declarationEndsOnLine;
@@ -182,14 +181,14 @@ void CppSupport::addAttributeRequested(const QString &className)
     if( !dlg.exec() )
       return;
 
-    CParsedAttribute *pa = dlg.asSystemObj();
+    ParsedAttribute *pa = dlg.asSystemObj();
     pa->setDeclaredInScope(className);
 
     int atLine = -1;
-    CParsedClass *pc = m_store->getClassByName(className);
+    ParsedClass *pc = m_store->getClassByName(className);
     
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
-        CParsedAttribute *attr = pc->attributeIterator.current();
+        ParsedAttribute *attr = pc->attributeIterator.current();
         if (attr->exportScope == pa->exportScope && 
             atLine < attr->declarationEndsOnLine)
             atLine = attr->declarationEndsOnLine;
@@ -221,7 +220,7 @@ void CppSupport::addAttributeRequested(const QString &className)
 }
 
 
-QString CppSupport::asHeaderCode(CParsedMethod *pm)
+QString CppSupport::asHeaderCode(ParsedMethod *pm)
 {
     QString str = "  ";
     str += pm->comment;
@@ -249,7 +248,7 @@ QString CppSupport::asHeaderCode(CParsedMethod *pm)
 }
 
 
-QString CppSupport::asCppCode(CParsedMethod *pm)
+QString CppSupport::asCppCode(ParsedMethod *pm)
 {
     if (pm->isPure || pm->isSignal)
         return QString();
@@ -274,7 +273,7 @@ QString CppSupport::asCppCode(CParsedMethod *pm)
 }
 
 
-QString CppSupport::asHeaderCode(CParsedAttribute *pa)
+QString CppSupport::asHeaderCode(ParsedAttribute *pa)
 {
     QString str = "  ";
     str += pa->comment;
@@ -286,10 +285,7 @@ QString CppSupport::asHeaderCode(CParsedAttribute *pa)
     if (pa->isStatic)
         str += "static ";
 
-    QString attrString;
-    pa->asString(attrString);
-
-    str += attrString;
+    str += pa->asString();
     str += ";\n";
 
     return str;

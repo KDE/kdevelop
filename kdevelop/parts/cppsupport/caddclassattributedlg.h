@@ -32,7 +32,7 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
-#include "ParsedAttribute.h"
+#include "parsedattribute.h"
 
 /** Dialog to create a new attibute for a class.
  * @author Jonas Nordin
@@ -47,7 +47,7 @@ public: // Constructor & Destructor
 
 public: // Public queries
 
-  CParsedAttribute *asSystemObj();
+  ParsedAttribute *asSystemObj();
 
 public: // Public widgets
 

@@ -244,11 +244,11 @@ void CAddClassMethodDlg::setCallbacks()
   connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
 }
 
-CParsedMethod *CAddClassMethodDlg::asSystemObj()
+ParsedMethod *CAddClassMethodDlg::asSystemObj()
 {
   int lpPos;
   QString decl;
-  CParsedMethod *aMethod = new CParsedMethod();
+  ParsedMethod *aMethod = new ParsedMethod();
   QString comment;
 
   aMethod->setType( typeEdit.text() );

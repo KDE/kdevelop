@@ -78,7 +78,7 @@ private:
     KDevComponent *m_makefrontend;
     KDevComponent *m_appfrontend;
     CProject *m_project;
-    CClassStore *m_classstore;
+    ClassStore *m_classstore;
     ProjectSpace* m_projectspace;
 };
 

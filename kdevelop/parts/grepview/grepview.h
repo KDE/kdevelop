@@ -12,6 +12,7 @@
 #ifndef _GREPVIEW_H_
 #define _GREPVIEW_H_
 
+#include <qguardedptr.h>
 #include "kdevcomponent.h"
 
 
@@ -33,7 +34,7 @@ protected:
     virtual void projectOpened(CProject *prj);
     
 private:
-    GrepWidget *m_widget;
+    QGuardedPtr<GrepWidget> m_widget;
     friend class GrepWidget;
 };
 

@@ -24,7 +24,7 @@
 class KDevVersionControl;
 class KDevLanguageSupport;
 class CProject;
-class CClassStore;
+class ClassStore;
 class KDialogBase;
 
 
@@ -89,7 +89,7 @@ public:
      * The language support object has been deleted.
      */
     virtual void languageSupportClosed();
-    virtual void classStoreOpened(CClassStore *store);
+    virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
     /**
      * A file has been added to the project. The filename is

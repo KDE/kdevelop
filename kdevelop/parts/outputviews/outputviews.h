@@ -12,6 +12,7 @@
 #ifndef _OUTPUTVIEWS_H_
 #define _OUTPUTVIEWS_H_
 
+#include <qguardedptr.h>
 #include "kdevcomponent.h"
 
 
@@ -33,7 +34,7 @@ protected:
     virtual void projectClosed();
     
 private:
-    MakeWidget *m_widget;
+    QGuardedPtr<MakeWidget> m_widget;
     friend class MakeWidget;
 
     CProject *m_prj;
@@ -55,7 +56,7 @@ protected:
     virtual void stopButtonClicked();
     
 private:
-    AppOutputWidget *m_widget;
+    QGuardedPtr<AppOutputWidget> m_widget;
     friend class AppOutputWidget;
 };
 #endif

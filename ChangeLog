@@ -1,3 +1,21 @@
+2000-08-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Completely new class tree:
+	  - Constructs items only on demand
+	  - has two view modes, by category and by namespace
+	  - can optionally display full identifier scopes
+	  - has full identifier scopes as tool tips
+	  - handles correctly classes with the same name in different namespaces
+	  - doesn't use static variables
+	* Moved classparser directory as to lib/sourceinfo.
+	  It doesn't contain a parser anymore :-)
+	* Changed naming conventions of sourceinfo classes appropriately
+	* Changed many char* to QString&. Because of the use of QStrList
+	  and QDict<ParsedFoo>, there are still countless Unicode
+	  conversions
+	* Delete widgets in parts themselves. This is necessary
+	  because parts may be unloaded before their widgets (which
+	  are reparented) are destroyed
+
 2000-08-12 Sandy Meier <smeier@kdevelop.org>
 	* some work on the project/projectspace framework (write/load, filehandling)
 

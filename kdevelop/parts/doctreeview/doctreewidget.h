@@ -41,7 +41,7 @@ public:
 private slots:
     void slotConfigure();
     void slotItemExecuted(QListViewItem *item);
-    void slotRightButtonPressed(QListViewItem *item, const QPoint &p, int);
+    void slotRightButtonPressed(QListViewItem *item, const QPoint &p);
 	
 private: 
     QListViewItem *contextItem;

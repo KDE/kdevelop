@@ -29,12 +29,13 @@
 #include "doctreeview.h"
 
 
-class KDevListViewItem : public QListViewItem
+class DocTreeItem : public QListViewItem
 {
 public:
     enum Type { Folder, Book, Doc };
-    KDevListViewItem(QListView *parent, Type type, const QString &text, const QString &id);
-    KDevListViewItem(KDevListViewItem *parent, Type type, const QString &text, const QString &id);
+    DocTreeItem( QListView *parent, Type type, const QString &text, const QString &id );
+    DocTreeItem( DocTreeItem *parent, Type type, const QString &text, const QString &id );
+    
     QString ident() const
         { return idnt; }
     virtual void clear();
@@ -47,21 +48,21 @@ private:
 };
 
 
-KDevListViewItem::KDevListViewItem(QListView *parent, Type type, const QString &text, const QString &id)
+DocTreeItem::DocTreeItem(QListView *parent, Type type, const QString &text, const QString &id)
     : QListViewItem(parent, text), typ(type), idnt(id)
 {
     setTypePixmap(false);
 }
 
 
-KDevListViewItem::KDevListViewItem(KDevListViewItem *parent, Type type, const QString &text, const QString &id)
+DocTreeItem::DocTreeItem(DocTreeItem *parent, Type type, const QString &text, const QString &id)
     : QListViewItem(parent, text), typ(type), idnt(id)
 {
     setTypePixmap(false);
 }
 
 
-void KDevListViewItem::clear()
+void DocTreeItem::clear()
 {
     QListViewItem *child = firstChild();
     while (child) {
@@ -72,19 +73,21 @@ void KDevListViewItem::clear()
 }
 
 
-void KDevListViewItem::setTypePixmap(bool o)
+void DocTreeItem::setTypePixmap(bool o)
 {
-    QString icon;
-    switch (typ) {
-    case Folder: icon = o? "mini-folder2" : "mini-folder1"; break;
-    case Book:   icon = o? "mini-book2" : "mini-book1"; break;
-    default:     icon = o? "mini-doc2" : "mini-doc1"; break;
-    }
-    setPixmap(0, UserIcon(icon));
+    QPixmap pixmap;
+    if (typ == Folder)
+        pixmap = SmallIcon(o? "folder-open" : "folder");
+    else if (typ == Book)
+        pixmap = UserIcon(o? "mini-book2" : "mini-book1");
+    else
+        pixmap = UserIcon("mini-doc");
+    
+    setPixmap(0, pixmap);
 }
 
 
-void KDevListViewItem::setOpen(bool o)
+void DocTreeItem::setOpen(bool o)
 {
     setTypePixmap(o);
     QListViewItem::setOpen(o);
@@ -103,10 +106,10 @@ void KDevListViewItem::setOpen(bool o)
  * locate the file according to the locale set.
  * The constructor allows an argument expandable.
  */
-class DocTreeKDevelopBook : public KDevListViewItem
+class DocTreeKDevelopBook : public DocTreeItem
 {
 public:
-    DocTreeKDevelopBook( KDevListViewItem *parent, const QString &text,
+    DocTreeKDevelopBook( DocTreeItem *parent, const QString &text,
                          const QString &filename, bool expandable=false );
     ~DocTreeKDevelopBook();
     virtual void setOpen(bool o);
@@ -115,9 +118,9 @@ private:
 };
 
 
-DocTreeKDevelopBook::DocTreeKDevelopBook(KDevListViewItem *parent, const QString &text,
+DocTreeKDevelopBook::DocTreeKDevelopBook(DocTreeItem *parent, const QString &text,
                                          const QString &filename, bool expandable)
-    : KDevListViewItem(parent, Book, text, filename)
+    : DocTreeItem(parent, Book, text, filename)
 {
     setExpandable(expandable);
 }
@@ -139,7 +142,7 @@ void DocTreeKDevelopBook::setOpen(bool o)
             setExpandable(false);
         }
     }
-    KDevListViewItem::setOpen(o);
+    DocTreeItem::setOpen(o);
 }
 
 
@@ -165,16 +168,16 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
         QString title = s.mid(pos2+2, pos3-(pos2+2));
         QFileInfo fi(ident());
         QString path = fi.dirPath() + "/" + filename;
-        new KDevListViewItem(this, Doc, title, path);
+        new DocTreeItem(this, Doc, title, path);
     }
 }
 
 
-class DocTreeKDevelopFolder : public KDevListViewItem
+class DocTreeKDevelopFolder : public DocTreeItem
 {
 public:
     DocTreeKDevelopFolder(DocTreeWidget *parent)
-        : KDevListViewItem(parent, Folder, i18n("KDevelop"), "")
+        : DocTreeItem(parent, Folder, i18n("KDevelop"), "")
         { setExpandable(true); }
     void refresh();
 };
@@ -182,7 +185,7 @@ public:
 
 void DocTreeKDevelopFolder::refresh()
 {
-    KDevListViewItem::clear();
+    DocTreeItem::clear();
 
     QString path = locate("appdata", "tools/documentation");
     KSimpleConfig docconfig(path);
@@ -215,10 +218,10 @@ void DocTreeKDevelopFolder::refresh()
  * according file. To simplify things, we treat Qt as a special
  * KDE library, namely that with an empty name (sorry trolls :-)
  */
-class DocTreeKDELibsBook : public KDevListViewItem
+class DocTreeKDELibsBook : public DocTreeItem
 {
 public:
-    DocTreeKDELibsBook( KDevListViewItem *parent, const QString &text,
+    DocTreeKDELibsBook( DocTreeItem *parent, const QString &text,
                         const QString &filename, const QString &idxfilename );
     ~DocTreeKDELibsBook();
     virtual void setOpen(bool o);
@@ -228,9 +231,9 @@ private:
 };
 
 
-DocTreeKDELibsBook::DocTreeKDELibsBook(KDevListViewItem *parent, const QString &text,
+DocTreeKDELibsBook::DocTreeKDELibsBook(DocTreeItem *parent, const QString &text,
                                        const QString &filename, const QString &idxfilename)
-    : KDevListViewItem(parent, Book, text, filename), idx_filename(idxfilename)
+    : DocTreeItem(parent, Book, text, filename), idx_filename(idxfilename)
 {
     if (!idxfilename.isNull())
         // If we have a kdoc2 index in either uncompressed
@@ -263,7 +266,7 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
                     continue;
                 QString classname = s.mid(9, pos1-9);
                 QString filename = s.mid(pos1+7, pos2-(pos1+7));
-                new KDevListViewItem(this, Doc, classname, baseurl + "/" + filename);
+                new DocTreeItem(this, Doc, classname, baseurl + "/" + filename);
         }
     }
     sortChildItems(0, true);
@@ -287,15 +290,15 @@ void DocTreeKDELibsBook::setOpen(bool o)
         else
             setExpandable(false);
     }
-    KDevListViewItem::setOpen(o);
+    DocTreeItem::setOpen(o);
 }
 
 
-class DocTreeKDELibsFolder : public KDevListViewItem
+class DocTreeKDELibsFolder : public DocTreeItem
 {
 public:
     DocTreeKDELibsFolder(DocTreeWidget *parent)
-        : KDevListViewItem(parent, Folder, i18n("Qt/KDE Libraries"), "")
+        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries"), "")
         { setExpandable(true); }
     void refresh();
 };
@@ -303,7 +306,7 @@ public:
 
 void DocTreeKDELibsFolder::refresh()
 {
-    KDevListViewItem::clear();
+    DocTreeItem::clear();
 
     KConfig *config = KGlobal::config();
     config->setGroup("Doc_Location");
@@ -340,7 +343,7 @@ void DocTreeKDELibsFolder::refresh()
 #ifdef WITH_DOCBASE
 
 
-class DocTreeDocbaseFolder : public KDevListViewItem
+class DocTreeDocbaseFolder : public DocTreeItem
 {
 public:
     DocTreeDocbaseFolder(DocTreeWidget *parent);
@@ -352,7 +355,7 @@ private:
 
 
 DocTreeDocbaseFolder::DocTreeDocbaseFolder(DocTreeWidget *parent)
-    : KDevListViewItem(parent, Folder, i18n("Documentation Base"), "")
+    : DocTreeItem(parent, Folder, i18n("Documentation Base"), "")
 {
     setExpandable(true);
 }
@@ -379,7 +382,7 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
         else if (s.left(7) == "Index: "
                  && html && !title.isEmpty()) {
             QString filename = s.mid(7, s.length()-7);
-            (void) new KDevListViewItem(this, Doc, title, filename);
+            (void) new DocTreeItem(this, Doc, title, filename);
             break;
         }
         else if (s.left(9) == "Section: "
@@ -404,7 +407,7 @@ void DocTreeDocbaseFolder::setOpen(bool o)
             }
         }
     }
-    KDevListViewItem::setOpen(o);
+    DocTreeItem::setOpen(o);
 }
 
 
@@ -415,7 +418,7 @@ void DocTreeDocbaseFolder::setOpen(bool o)
 /* Folder "Others"                  */
 /*************************************/
 
-class DocTreeOthersFolder : public KDevListViewItem
+class DocTreeOthersFolder : public DocTreeItem
 {
 public:
     DocTreeOthersFolder(DocTreeWidget *parent);
@@ -424,13 +427,13 @@ public:
 
 
 DocTreeOthersFolder::DocTreeOthersFolder(DocTreeWidget *parent)
-    : KDevListViewItem(parent, Folder, i18n("Others"), "")
+    : DocTreeItem(parent, Folder, i18n("Others"), "")
 {}
 
 
 void DocTreeOthersFolder::refresh()
 {
-    KDevListViewItem::clear();
+    DocTreeItem::clear();
 
     KConfig *config = KGlobal::config();
     config->setGroup("DocTree");
@@ -439,7 +442,7 @@ void DocTreeOthersFolder::refresh()
     QStringList::Iterator it1 = othersShownTitle.begin();
     QStringList::Iterator it2 = othersShownURL.begin();
     for (; it1 != othersShownTitle.end() && it2 != othersShownURL.end(); ++it1, ++it2)
-        (void) new KDevListViewItem(this, Book, *it1, *it2);
+        (void) new DocTreeItem(this, Book, *it1, *it2);
 }
 
 
@@ -447,7 +450,7 @@ void DocTreeOthersFolder::refresh()
 /* Folder "Current Project"          */
 /*************************************/
 
-class DocTreeProjectFolder : public KDevListViewItem
+class DocTreeProjectFolder : public DocTreeItem
 {
 public:
     DocTreeProjectFolder(DocTreeWidget *parent);
@@ -461,20 +464,20 @@ private:
 
 
 DocTreeProjectFolder::DocTreeProjectFolder(DocTreeWidget *parent)
-    : KDevListViewItem(parent, Folder, i18n("Current Project"), "")
+    : DocTreeItem(parent, Folder, i18n("Current Project"), "")
 {}
 
 
 void DocTreeProjectFolder::refresh()
 {
-    KDevListViewItem::clear();
+    DocTreeItem::clear();
 
     setExpandable(false);
     if (project && project->valid) {
         setExpandable(true);
         
-        (void) new KDevListViewItem(this, Book, i18n("API documentation"), "internal:projectAPI");
-        (void) new KDevListViewItem(this, Book, i18n("User manual"), "internal:projectManual");
+        (void) new DocTreeItem(this, Book, i18n("API documentation"), "internal:projectAPI");
+        (void) new DocTreeItem(this, Book, i18n("User manual"), "internal:projectManual");
     }
 }
 
@@ -498,7 +501,7 @@ DocTreeWidget::DocTreeWidget(DocTreeView *view)
     folder_others   = new DocTreeOthersFolder(this);
 #ifdef WITH_DOCBASE
     folder_docbase  = new DocTreeDocbaseFolder(this);
-    folder_docbase->refresh();
+    //    folder_docbase->refresh();
 #endif
     folder_kdelibs  = new DocTreeKDELibsFolder(this);
     folder_kdelibs->refresh();   
@@ -521,22 +524,22 @@ DocTreeWidget::~DocTreeWidget()
 void DocTreeWidget::slotItemExecuted(QListViewItem *item)
 {
     // We assume here that ALL (!) items in the list view
-    // are ListViewItem's
-    KDevListViewItem *kitem = static_cast<KDevListViewItem*>(item);
-    if (!kitem)
+    // are DocTreeItem's
+    DocTreeItem *dtitem = static_cast<DocTreeItem*>(item);
+    if (!dtitem)
         return;
 
-    QString ident = kitem->ident();
+    QString ident = dtitem->ident();
     if (ident == "internal:projectAPI")
         emit m_part->gotoProjectApiDoc();
     else if (ident == "internal:projectManual")
         emit m_part->gotoProjectManual();
     else if (!ident.isEmpty())
-        emit m_part->gotoDocumentationFile(kitem->ident());
+        emit m_part->gotoDocumentationFile(ident);
 }
 
 
-void DocTreeWidget::slotRightButtonPressed(QListViewItem *item, const QPoint &p, int)
+void DocTreeWidget::slotRightButtonPressed(QListViewItem *item, const QPoint &p)
 {
     contextItem = item;
     KPopupMenu pop(i18n("Documentation Tree"));

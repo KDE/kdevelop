@@ -5,9 +5,7 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib/general/ -I$(top_srcdir)/kdevelop/lib/pr
 
 lib_LTLIBRARIES = libkdevkdesdiappwizard.la
 libkdevkdesdiappwizard_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevkdesdiappwizard_la_LIBADD = $(top_builddir)/kdevelop/lib/general/libkdevelop.la \
-				$(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-				$(LIB_KFILE)
+libkdevkdesdiappwizard_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
 libkdevkdesdiappwizard_la_SOURCES = kdesdiappwizardplugin.cpp main.cpp
 

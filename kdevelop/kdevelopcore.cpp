@@ -18,7 +18,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 
-#include "ClassStore.h"
+#include "classstore.h"
 #include "cproject.h"
 #include "projectoptionsdlg.h"
 #include "kdevelop.h"
@@ -38,7 +38,7 @@ KDevelopCore::KDevelopCore(KDevelop *gui)
     m_makefrontend = 0;
     m_appfrontend = 0;
     m_project = 0;
-    m_classstore = new CClassStore();
+    m_classstore = new ClassStore();
 
     initActions();
 }
@@ -395,7 +395,7 @@ void KDevelopCore::loadProject(const QString &fileName)
     // Hack to test the class viewer
     QListIterator<KDevComponent> it5(m_components);
     for (; it5.current(); ++it5)
-        (*it5)->savedFile("parts/doctreeview/doctreewidget.h");
+        (*it5)->savedFile("parts/classview/test.cpp");
 #endif
 }
 

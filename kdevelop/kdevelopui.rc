@@ -128,8 +128,8 @@
    <Action name="debug_interrupt" />
    <Action name="debug_stop" />
   </Menu>
-  <Menu name="options" >
-   <text>&amp;Options</text>
+  <Menu name="settings" >
+   <text>&amp;Settings</text>
    <Action name="options_editor" />
    <Action name="options_editor_colors" />
    <Action name="options_editor_defaults" />

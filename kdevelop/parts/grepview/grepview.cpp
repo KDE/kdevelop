@@ -34,7 +34,9 @@ GrepView::GrepView(QObject *parent, const char *name)
 
 
 GrepView::~GrepView()
-{}
+{
+    delete m_widget;
+}
 
 
 void GrepView::setupGUI()

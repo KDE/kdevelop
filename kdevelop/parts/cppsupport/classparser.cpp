@@ -24,7 +24,7 @@
 #include <kapp.h>
 #include <kdebug.h>
 #include "classparser.h"
-#include "ProgrammingByContract.h"
+#include "programmingbycontract.h"
 
 /** Line where a comment starts. */
 extern int comment_start;
@@ -61,7 +61,7 @@ enum
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassParser::CClassParser(CClassStore *classstore)
+CClassParser::CClassParser(ClassStore *classstore)
 {
   store = classstore;
   reset();
@@ -111,7 +111,7 @@ void CClassParser::emptyStack()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-bool CClassParser::commentInRange( CParsedItem *aItem )
+bool CClassParser::commentInRange( ParsedItem *aItem )
 {
   REQUIRE1( "Valid item", aItem != NULL, false );
 
@@ -147,7 +147,7 @@ void CClassParser::skipThrowStatement()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
+void CClassParser::parseStructDeclarations( ParsedStruct *aStruct)
 {
   REQUIRE( "Valid struct", aStruct != NULL );
 
@@ -206,12 +206,12 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
+void CClassParser::fillInParsedStruct( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
   REQUIRE( "Valid lexem", lexem == '{' );
 
-  CParsedStruct *aStruct = new CParsedStruct();
+  ParsedStruct *aStruct = new ParsedStruct();
 
   // Set some info about the struct.
   aStruct->setDeclaredOnLine( declStart );
@@ -267,7 +267,7 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseStruct( CParsedContainer *aContainer )
+void CClassParser::parseStruct( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
 
@@ -308,11 +308,11 @@ void CClassParser::parseEnum()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseNamespace( CParsedScopeContainer * scope )
+void CClassParser::parseNamespace( ParsedScopeContainer *scope )
 {
   REQUIRE( "Valid scope", scope != NULL );
 
-  CParsedScopeContainer *ns = new CParsedScopeContainer();
+  ParsedScopeContainer *ns = new ParsedScopeContainer();
 
   // Set some info about the namespace
   ns->setDeclaredOnLine( declStart );
@@ -356,7 +356,7 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
   // EO start
   // reference to an already declared namespace
   // retrieve it
-  CParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
+  ParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
   if (ns2)
   {
     delete ns;
@@ -547,7 +547,7 @@ bool CClassParser::isEndOfVarDecl()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
+void CClassParser::fillInParsedVariableHead( ParsedAttribute *anAttr )
 {
   REQUIRE( "Valid attribute", anAttr != NULL );
 
@@ -686,7 +686,7 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
+void CClassParser::fillInParsedVariable( ParsedAttribute *anAttr )
 {
   REQUIRE( "Valid attribute", anAttr != NULL );
 
@@ -730,22 +730,22 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
  * Returns:
  *   QList<CParsedAttribute>  List of variables
  *-----------------------------------------------------------------*/
-void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
+void CClassParser::fillInMultipleVariable( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
 
   bool exit = false;
-  CParsedAttribute *anAttr;
+  ParsedAttribute *anAttr;
   CParsedLexem *aLexem;
   QString type;
-  QList<CParsedAttribute> list;
+  QList<ParsedAttribute> list;
 
   // Make sure no attributes gets deleted.
   list.setAutoDelete( false );
 
   while( !lexemStack.isEmpty() && !exit )
   {
-    anAttr = new CParsedAttribute();
+    anAttr = new ParsedAttribute();
 
     // Get the variable name.
     fillInParsedVariableHead( anAttr );
@@ -802,10 +802,10 @@ void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedAttribute *CClassParser::parseVariable()
+ParsedAttribute *CClassParser::parseVariable()
 {
   bool skip = false;
-  CParsedAttribute *anAttr = NULL;
+  ParsedAttribute *anAttr = NULL;
 
   while( !isEndOfVarDecl() )
   {
@@ -875,7 +875,7 @@ CParsedAttribute *CClassParser::parseVariable()
 
   if( !lexemStack.isEmpty() )
   {
-    anAttr = new CParsedAttribute();
+    anAttr = new ParsedAttribute();
     fillInParsedVariable( anAttr );
     anAttr->setDeclarationEndsOnLine( getLineno() );
   }
@@ -899,12 +899,12 @@ CParsedAttribute *CClassParser::parseVariable()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseFunctionArgs( CParsedMethod *method )
+void CClassParser::parseFunctionArgs( ParsedMethod *method )
 {
   REQUIRE( "Valid method", method != NULL );
 
-  CParsedAttribute *anAttr;
-  CParsedArgument *anArg;
+  ParsedAttribute *anAttr;
+  ParsedArgument *anArg;
   bool exit = false;
 
   while( !exit )
@@ -915,7 +915,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
     if( anAttr )
     {
       // Move the values to the argument object.
-      anArg = new CParsedArgument();
+      anArg = new ParsedArgument();
       if( !anAttr->name.isEmpty() )
         anArg->setName( anAttr->name );
 
@@ -948,7 +948,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
+void CClassParser::fillInParsedMethod(ParsedMethod *aMethod, bool isOperator)
 {
   REQUIRE( "Valid method", aMethod != NULL );
 
@@ -1040,9 +1040,9 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedMethod *CClassParser::parseMethodDeclaration()
+ParsedMethod *CClassParser::parseMethodDeclaration()
 {
-  CParsedMethod *aMethod = new CParsedMethod();
+  ParsedMethod *aMethod = new ParsedMethod();
   bool isOperator=false;
 
   // Add all lexems on the stack until we find the start of the
@@ -1076,14 +1076,14 @@ CParsedMethod *CClassParser::parseMethodDeclaration()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
+void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
 {
-  CParsedClass *aClass;
+  ParsedClass *aClass;
   CParsedLexem *aLexem;
   QString name;
   QString className;
-  CParsedMethod aMethod;
-  CParsedMethod *pm;
+  ParsedMethod aMethod;
+  ParsedMethod *pm;
   int declLine = getLineno();
 
   // The two first objects on the stack is the name and then the class.
@@ -1304,11 +1304,11 @@ int CClassParser::checkClassDecl()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseClassInheritance( CParsedClass *aClass )
+void CClassParser::parseClassInheritance( ParsedClass *aClass )
 {
   REQUIRE( "Valid class", aClass != NULL );
 
-  CParsedParent *aParent; // A parent of this class.
+  ParsedParent *aParent; // A parent of this class.
   QString cname;          // Name of inherited class.
   int exportit=-1;          // Parent import status(private/public/protected).
 
@@ -1337,12 +1337,12 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     // Add the parent.
     if( exportit != -1 )
     {
-      aParent = new CParsedParent();
+      aParent = new ParsedParent();
       aParent->setName( cname );
-      CParsedParent::ExportAttr exportattr;
-      exportattr = (exportit == CPPUBLIC)? CParsedParent::ExportPublic
-          :  (exportit == CPPROTECTED)? CParsedParent::ExportProtected
-          :  CParsedParent::ExportPrivate;
+      PIExport exportattr;
+      exportattr = (exportit == CPPUBLIC)? PIE_PUBLIC
+          :  (exportit == CPPROTECTED)? PIE_PROTECTED
+          :  PIE_PRIVATE;
       aParent->setExport( exportattr );
       
       aClass->addParent( aParent );
@@ -1361,9 +1361,9 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClass *CClassParser::parseClassHeader()
+ParsedClass *CClassParser::parseClassHeader()
 {
-  CParsedClass *aClass;
+  ParsedClass *aClass;
   QString scopeStr;
   CParsedLexem *aLexem;
   bool foundCLCL = false;
@@ -1374,7 +1374,7 @@ CParsedClass *CClassParser::parseClassHeader()
 
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
-  aClass = new CParsedClass();
+  aClass = new ParsedClass();
   aClass->setDeclaredOnLine( getLineno() );
   aClass->setDefinedInFile( currentFile );
   aClass->setDeclaredInFile( currentFile );
@@ -1393,7 +1393,7 @@ CParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-    cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+    cerr << "ERROR in classparser: ParsedClass *CClassParser::parseClassHeader()\n";
     return 0;
   }
 
@@ -1442,12 +1442,12 @@ CParsedClass *CClassParser::parseClassHeader()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-bool CClassParser::parseClassLexem( CParsedClass *aClass )
+bool CClassParser::parseClassLexem( ParsedClass *aClass )
 {
   REQUIRE1( "Valid class", aClass != NULL, false );
 
-  CParsedClass *childClass;
-  CParsedMethod *aMethod;
+  ParsedClass *childClass;
+  ParsedMethod *aMethod;
   QString childMap;
   bool exit = false;
 
@@ -1476,7 +1476,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
         childClass->setDeclaredInScope( aClass->path() );
 
         if( store->hasClass( childClass->path() ) ) {
-  	      CParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
+  	      ParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
   	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine );
   	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile );
   	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope );
@@ -1507,7 +1507,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
 
       if( aMethod != NULL )
       {
-		CParsedMethod *	pm = aClass->getMethod(*aMethod);
+		ParsedMethod *	pm = aClass->getMethod(*aMethod);
 		
 		if (pm != NULL) {
           aMethod->setDefinedInFile( pm->definedInFile );
@@ -1539,7 +1539,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
           {
           debug ("slot: %s\n", aMethod->name.data());
 
-			CParsedMethod *	pm = aClass->getMethod(*aMethod);
+			ParsedMethod *	pm = aClass->getMethod(*aMethod);
 			if (pm != NULL) {
                aMethod->setDefinedInFile( pm->definedInFile );
                aMethod->setDefinedOnLine( pm->definedOnLine );
@@ -1578,7 +1578,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClass *CClassParser::parseClass( CParsedClass * aClass)
+ParsedClass *CClassParser::parseClass( ParsedClass * aClass)
 {
   bool exit = false;
   PIExport oldScope=declaredScope;
@@ -1641,14 +1641,14 @@ bool CClassParser::isGenericLexem()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
+void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
 
-  QList<CParsedAttribute> list;
-  CParsedAttribute *anAttr;
-  CParsedMethod *aMethod;
-  CParsedMethod *oldMethod;
+  QList<ParsedAttribute> list;
+  ParsedAttribute *anAttr;
+  ParsedMethod *aMethod;
+  ParsedMethod *oldMethod;
   int declType;
   QString str;
 
@@ -1656,7 +1656,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
   switch( declType )
   {
     case CP_IS_ATTRIBUTE:
-      anAttr = new CParsedAttribute();
+      anAttr = new ParsedAttribute();
       fillInParsedVariable( anAttr );
       if( !anAttr->name.isEmpty() )
         aContainer->addAttribute( anAttr );
@@ -1673,7 +1673,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
       break;
     case CP_IS_OPERATOR:
     case CP_IS_METHOD:
-      aMethod = new CParsedMethod();
+      aMethod = new ParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
 
       if( !aMethod->name.isEmpty() )
@@ -1720,7 +1720,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
+void CClassParser::parseGenericLexem(  ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
  
@@ -1774,13 +1774,13 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
+void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 {
   REQUIRE( "Valid scope", scope != NULL );
 
-  CParsedClass *aClass;
-  CParsedClass *parentClass;
-  CParsedScopeContainer *parentScope;
+  ParsedClass *aClass;
+  ParsedClass *parentClass;
+  ParsedScopeContainer *parentScope;
   QString key;
 
   switch( lexem )
@@ -1825,7 +1825,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
         
         // Check if class is in the global store, add it if missing
         if( store->hasClass( aClass->path() ) ) {
-  	      CParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
+  	      ParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
   	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine );
   	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile );
   	      delete aClass;
@@ -1856,6 +1856,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
 
             if( parentScope != NULL )
               parentScope->addClass( aClass );
+            // ### else globalScope->addClass( aClass );
           }
           else
             parentClass->addClass( aClass );

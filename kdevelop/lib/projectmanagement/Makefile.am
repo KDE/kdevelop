@@ -1,10 +1,7 @@
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 
-lib_LTLIBRARIES = libkdevprojectmanagement.la
-libkdevprojectmanagement_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0 
-libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/general/libkdevelop.la \
-				 $(LIB_KFILE) $(LIB_KPARTS)
+noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
 METASOURCES = AUTO
 
@@ -25,6 +22,6 @@ testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-testprj_LDADD = $(top_builddir)/kdevelop/lib/general/libkdevelop.la \
-		$(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-		$(LIB_KFILE)
+testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
+		$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
+		$(LIB_KFILE) $(LIB_KPARTS)

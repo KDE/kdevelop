@@ -1,5 +1,5 @@
 /***************************************************************************
-                          ClassParser.h  -  description
+                          classparser.h  -  description
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _CLASSPARSER_H_INCLUDED
-#define _CLASSPARSER_H_INCLUDED
+#ifndef _CLASSPARSER_H_
+#define _CLASSPARSER_H_
 
 #include <qstring.h>
 #include <qlist.h>
@@ -24,7 +24,7 @@
 #include <FlexLexer.h>
 #include <fstream.h>
 #include "tokenizer.h"
-#include "ClassStore.h"
+#include "classstore.h"
 
 /** This class handles the parsing and generation of all C++ and C
  * constructions. The classparser has a store in which all elements that
@@ -38,7 +38,7 @@ class CClassParser
 {
 public: // Constructor & Destructor
 
-  CClassParser(CClassStore *classstore);
+  CClassParser(ClassStore *classstore);
   ~CClassParser();
 
 private: // Private classes
@@ -87,7 +87,7 @@ public: // Public Methods
 private: // Private attributes
 
   /** Store for the classes. */
-  CClassStore *store;
+  ClassStore *store;
 
   /** Lexer used to fetch lexical patterns */
   yyFlexLexer *lexer;
@@ -134,22 +134,22 @@ private: // Private methods
 
   /** Tells if the last parsed comment is in range to be a comment
    * for the current parsed item. */
-  bool commentInRange( CParsedItem *aItem );
+  bool commentInRange( ParsedItem *aItem );
 
   /** Parse all structure declarations.
    * @param aStruct The struct that holds the declarations.
    */
-  void parseStructDeclarations( CParsedStruct *aStruct);
+  void parseStructDeclarations( ParsedStruct *aStruct);
 
   /** Parse a structure using header declaration from stack.
    * @param aContainer Container to store the parsed struct in.
    */
-  void fillInParsedStruct( CParsedContainer *aContainer );
+  void fillInParsedStruct( ParsedContainer *aContainer );
 
   /** Parse a structure. 
    * @param aContainer Container to store the parsed struct in.
    */
-  void parseStruct( CParsedContainer *aContainer );
+  void parseStruct( ParsedContainer *aContainer );
 
   /** Parse an enumeration. */
   void parseEnum();
@@ -158,7 +158,7 @@ private: // Private methods
   void parseUnion();
 
   /** Parse a namespace. */
-  void parseNamespace( CParsedScopeContainer *scope );
+  void parseNamespace( ParsedScopeContainer *scope );
 
   /** Skip a throw() statement. */
   void skipThrowStatement();
@@ -177,29 +177,29 @@ private: // Private methods
 
   /** Initialize a attribute, except the type, using the arguments on
    *   the stack. */
-  void fillInParsedVariableHead( CParsedAttribute *anAttr );
+  void fillInParsedVariableHead( ParsedAttribute *anAttr );
 
   /** Initialize a attribute using the arguments on the stack. */
-  void fillInParsedVariable( CParsedAttribute *anAttr );
+  void fillInParsedVariable( ParsedAttribute *anAttr );
 
   /** Take what's on the stack and return as a list of variables. 
    *   Works for variable declarations like int foo, bar, baz.... */
-  void fillInMultipleVariable( CParsedContainer *aContainer );
+  void fillInMultipleVariable( ParsedContainer *aContainer );
 
   /** Parse a variable declaration. */
-  CParsedAttribute *parseVariable();
+  ParsedAttribute *parseVariable();
 
   /** Parse and add all arguments to a function. */
-  void parseFunctionArgs( CParsedMethod *method );
+  void parseFunctionArgs( ParsedMethod *method );
 
   /** Initialize a method using the arguments on the stack. */
-  void fillInParsedMethod(CParsedMethod *aMethod, bool isOperator=false);
+  void fillInParsedMethod(ParsedMethod *aMethod, bool isOperator=false);
 
   /** Parse a method declaration. */
-  CParsedMethod *parseMethodDeclaration();
+  ParsedMethod *parseMethodDeclaration();
 
   /** Parse a method implementation. */
-  void parseMethodImpl(bool isOperator,CParsedContainer *scope);
+  void parseMethodImpl(bool isOperator,ParsedContainer *scope);
 //  void parseMethodImpl(bool isOperator);
 
   /** Push lexems on the stack until we find something we know and 
@@ -207,21 +207,21 @@ private: // Private methods
   int checkClassDecl();
 
   /** Parse the inheritance clause of a class declaration. */
-  void parseClassInheritance( CParsedClass *aClass );
+  void parseClassInheritance( ParsedClass *aClass );
 
   /** Parse a class header, i.e find out classname and possible parents. */
-  CParsedClass *parseClassHeader();
+  ParsedClass *parseClassHeader();
 
   /** Handle lexem that are specific of a class. 
    * @param aClass Class to store items in.
    * @return Tells if we should stop parsing.
    */
-  bool parseClassLexem( CParsedClass *aClass );
+  bool parseClassLexem( ParsedClass *aClass );
   
   /** Parse a class declaration. 
    * @return The parsed class or NULL if it was no class.
    */
-  CParsedClass *parseClass(CParsedClass * aClass);
+  ParsedClass *parseClass(ParsedClass * aClass);
 
   /** Tells if the current lexem is generic and needs no special
    * handling depending on the current scope.
@@ -230,15 +230,15 @@ private: // Private methods
   bool isGenericLexem();
 
   /** Parse all methods and attributes and add them to the container. */
-  void parseMethodAttributes( CParsedContainer *aContainer );
+  void parseMethodAttributes( ParsedContainer *aContainer );
 
   /** Take care of generic lexem.
    * @param aContainer Container to store parsed items in.
    */
-  void parseGenericLexem( CParsedContainer *aContainer );
+  void parseGenericLexem( ParsedContainer *aContainer );
 
   /** Take care of lexem in a top-level context. */
-  void parseTopLevelLexem( CParsedScopeContainer *aContainer );
+  void parseTopLevelLexem( ParsedScopeContainer *aContainer );
 
   /** Parse toplevel statements */
   void parseToplevel();

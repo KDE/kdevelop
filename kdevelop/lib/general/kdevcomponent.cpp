@@ -51,7 +51,7 @@ void KDevComponent::languageSupportClosed()
 }
 
 
-void KDevComponent::classStoreOpened(CClassStore *store)
+void KDevComponent::classStoreOpened(ClassStore *store)
 {
 }
 

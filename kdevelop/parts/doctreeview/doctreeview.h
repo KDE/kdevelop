@@ -12,6 +12,7 @@
 #ifndef _DOCTREEVIEW_H_
 #define _DOCTREEVIEW_H_
 
+#include <qguardedptr.h>
 #include "kdevcomponent.h"
 
 
@@ -41,7 +42,7 @@ signals:
     void projectManualSelected();
 
 private:
-    DocTreeWidget *m_widget;
+    QGuardedPtr<DocTreeWidget> m_widget;
     friend class DocTreeWidget;
 };
 

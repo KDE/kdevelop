@@ -20,10 +20,10 @@
 
 #include "classview.h"
 #include "classactions.h"
+#include "classtreewidget.h"
 #include "main.h"
 #include "cproject.h"
-#include "ctreehandler.h"
-#include "ClassStore.h"
+#include "classstore.h"
 #include "kdevlanguagesupport.h"
 
 
@@ -40,22 +40,25 @@ ClassView::ClassView(QObject *parent, const char *name)
 
 
 ClassView::~ClassView()
-{}
+{
+    delete m_widget;
+}
 
 
 void ClassView::setupGUI()
 {
-    QLCDNumber *w = new QLCDNumber();
-    w->display(42);
-    //    w->setIcon()
-    w->setCaption(i18n("Class view"));
-    QWhatsThis::add(w, i18n("Class View\n\n"
-                            "The class viewer shows all classes, methods and variables "
-                            "of the current project files and allows switching to declarations "
-                            "and implementations. The right button popup menu allows more specialized "
-                            "functionality."));
+    kdDebug(9003) << "Building ClassTreeWidget" << endl;
 
-    embedWidget(w, SelectView, i18n("CV"), i18n("class tree view"));
+    m_widget = new ClassTreeWidget(this);
+    //    w->setIcon()
+    m_widget->setCaption(i18n("Class view"));
+    QWhatsThis::add(m_widget, i18n("Class View\n\n"
+                                   "The class viewer shows all classes, methods and variables "
+                                   "of the source files and allows switching to declarations "
+                                   "and implementations. The right button popup menu allows more specialized "
+                                   "functionality."));
+
+    embedWidget(m_widget, SelectView, i18n("CV"), i18n("class tree view"));
 
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
@@ -75,6 +78,7 @@ void ClassView::setupPopup()
     popup->insertItem(i18n("Goto declaration"), this, SLOT(selectedGotoDeclaration()));
     popup->insertItem(i18n("Goto implementation"), this, SLOT(selectedGotoImplementation()));
     popup->insertItem(i18n("Goto class declaration"), this, SLOT(selectedGotoClassDeclaration()));
+    popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
     if (m_langsupport) {
         bool hasAddMethod = m_langsupport->hasFeature(KDevLanguageSupport::AddMethod);
@@ -92,27 +96,11 @@ void ClassView::setupPopup()
 }
 
 
-void ClassView::projectOpened(CProject *prj)
-{
-    kdDebug(9003) << "ClassView::projectOpened()" << endl;
-    classes_action->setEnabled(true);
-    methods_action->setEnabled(true);
-    popup_action->setEnabled(true);
-}
-
-
-void ClassView::projectClosed()
-{
-    kdDebug(9003) << "ClassView::projectClosed()" << endl;
-    classes_action->setEnabled(false);
-    methods_action->setEnabled(false);
-    popup_action->setEnabled(false);
-}
-
-
 void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
 {
     m_langsupport = ls;
+    m_widget->setLangSupport(ls);
+
     setupPopup();
 
     connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
@@ -122,27 +110,35 @@ void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
 void ClassView::languageSupportClosed()
 {
     m_langsupport = 0;
+    m_widget->setLangSupport(0);
+    
     setupPopup();
 }
 
 
-void ClassView::classStoreOpened(CClassStore *store)
+void ClassView::classStoreOpened(ClassStore *store)
 {
     kdDebug(9003) << "ClassView::classStoreOpened()" << endl;
-    classes_action->setClassStore(store);
-    methods_action->setClassStore(store);
-    refresh();
     m_store = store;
+    m_widget->setClassStore(store);
+    m_widget->refresh(true);
+    classes_action->setClassStore(store);
+    classes_action->refresh();
+    methods_action->setClassStore(store);
+    methods_action->refresh(classes_action->currentText());
 }
 
 
 void ClassView::classStoreClosed()
 {
     kdDebug(9003) << "ClassView::classStoreClosed()" << endl;
-    classes_action->setClassStore(0);
-    methods_action->setClassStore(0);
-    refresh();
     m_store = 0;
+    m_widget->setClassStore(0);
+    m_widget->refresh(true);
+    classes_action->setClassStore(0);
+    classes_action->refresh();
+    methods_action->setClassStore(0);
+    methods_action->refresh(classes_action->currentText());
 }
 
 
@@ -150,6 +146,7 @@ void ClassView::refresh()
 {
     classes_action->refresh();
     methods_action->refresh(classes_action->currentText());
+    m_widget->refresh(false);
 }
 
 
@@ -180,7 +177,7 @@ void ClassView::selectedMethod()
     kdDebug(9003) << "Method selected: "
                   << className << "::" << methodName << endl;
     m_cv_decl_or_impl = true;
-    gotoImplementation(className, methodName, THPUBLIC_METHOD);
+    gotoImplementation(className, methodName, PublicMethod);
 }
 
 
@@ -195,13 +192,14 @@ void ClassView::switchedDeclImpl()
     kdDebug(9003) << "ClassView::switchedDeclImpl" << endl;
     if (m_cv_decl_or_impl) {
         m_cv_decl_or_impl = false;
-        gotoDeclaration(className, methodName, methodName.isEmpty()? THCLASS : THPUBLIC_METHOD);
+        gotoDeclaration(className, methodName,
+                        methodName.isEmpty()? Class : PublicMethod);
     } else {
         m_cv_decl_or_impl = true;
         if (methodName.isEmpty())
-            gotoDeclaration(className, "", THCLASS);
+            gotoDeclaration(className, QString::null, Class);
         else
-            gotoImplementation(className, methodName, THPUBLIC_METHOD);
+            gotoImplementation(className, methodName, PublicMethod);
     }
 }
 
@@ -214,7 +212,8 @@ void ClassView::selectedGotoDeclaration()
     QString className = classes_action->currentText();
     QString methodName = methods_action->currentText();
     
-    gotoDeclaration(className, methodName, methodName.isEmpty()? THCLASS : THPUBLIC_METHOD);
+    gotoDeclaration(className, methodName,
+                    methodName.isEmpty()? Class : PublicMethod);
 }
 
 
@@ -225,7 +224,7 @@ void ClassView::selectedGotoClassDeclaration()
 {
     QString className = classes_action->currentText();
     
-    gotoDeclaration(className, "", THCLASS);
+    gotoDeclaration(className, QString::null, Class);
 }
 
 
@@ -238,9 +237,9 @@ void ClassView::selectedGotoImplementation()
     QString methodName = methods_action->currentText();
 
     if (methodName.isEmpty())
-        gotoDeclaration(className, "", THCLASS);
+        gotoDeclaration(className, QString::null, Class);
     else
-        gotoImplementation(className, methodName, THPUBLIC_METHOD);
+        gotoImplementation(className, methodName, PublicMethod);
 }
 
 
@@ -274,14 +273,21 @@ void ClassView::selectedAddAttribute()
 }
 
 
-CParsedClass *ClassView::getClass(const QString &className)
+// Only for debugging
+void ClassView::dumpTree()
+{
+    m_store->out();
+}
+
+
+ParsedClass *ClassView::getClass(const QString &className)
 {
     if (className.isEmpty())
         return 0;
 
     kdDebug(9003) << "ClassView::getClass " << className << endl;
-    CParsedClass *pc = m_store->getClassByName(className);
-    if (pc && pc->isSubClass)
+    ParsedClass *pc = m_store->getClassByName(className);
+    if (pc && !pc->isSubClass)
         classes_action->setCurrentItem(className);
     
     return pc;
@@ -289,66 +295,72 @@ CParsedClass *ClassView::getClass(const QString &className)
 
 
 void ClassView::gotoDeclaration(const QString &className,
-                                const QString &declName,
-                                THType type)
+                                const QString &memberName,
+                                ItemType type)
 {
-    kdDebug(9003) << "ClassView::gotoDeclaration " << className << "::" << declName << endl;
+    kdDebug(9003) << "ClassView::gotoDeclaration " << className << "::" << memberName << endl;
     
     QString toFile;
     int toLine = -1;
     
-    CParsedClass *pc = getClass(className);
-    CParsedStruct *ps = 0;
-    CParsedAttribute *pa = 0;
+    ParsedClass *pc = getClass(className);
+    ParsedStruct *ps = 0;
+    ParsedAttribute *pa = 0;
     
     switch(type) {
-    case THCLASS:
-        toFile = pc->declaredInFile;
-        toLine = pc->declaredOnLine;
+    case Class:
+        if (pc) {
+            toFile = pc->declaredInFile;
+            toLine = pc->declaredOnLine;
+        }
         break;
-    case THSTRUCT:
+    case Struct:
         if (pc)
-            pc->getStructByName(declName);
+            ps = pc->getStructByName(memberName);
         else
-            ps = m_store->globalContainer.getStructByName(declName);
+            ps = m_store->globalContainer.getStructByName(memberName);
         toFile = ps->declaredInFile;
         toLine = ps->declaredOnLine;
         break;
-    case THPUBLIC_ATTR:
-    case THPROTECTED_ATTR:
-    case THPRIVATE_ATTR:
+    case PublicAttr:
+    case ProtectedAttr:
+    case PrivateAttr:
         if (pc)
-            pa = pc->getAttributeByName(declName);
+            pa = pc->getAttributeByName(memberName);
         else {
             ps = m_store->globalContainer.getStructByName(className);
             if (ps)
-                pa = ps->getAttributeByName(declName);
+                pa = ps->getAttributeByName(memberName);
         }
         break;
-    case THPUBLIC_METHOD:
-    case THPROTECTED_METHOD:
-    case THPRIVATE_METHOD:
-        pa = pc->getMethodByNameAndArg(declName);
-        // If at first we don't succeed...
-        if (!pa)
-            pa = pc->getSlotByNameAndArg(declName);      
+    case PublicMethod:
+    case ProtectedMethod:
+    case PrivateMethod:
+        if (pc) {
+            pa = pc->getMethodByNameAndArg(memberName);
+            // If at first we don't succeed...
+            if (!pa)
+                pa = pc->getSlotByNameAndArg(memberName);
+        }
         break;
-    case THPUBLIC_SLOT:
-    case THPROTECTED_SLOT:
-    case THPRIVATE_SLOT:
-        pa = pc->getSlotByNameAndArg(declName);
+    case PublicSlot:
+    case ProtectedSlot:
+    case PrivateSlot:
+        if (pc)
+            pa = pc->getSlotByNameAndArg(memberName);
       break;
-    case THSIGNAL:
-        pa = pc->getSignalByNameAndArg(declName);
+    case Signal:
+        if (pc)
+            pa = pc->getSignalByNameAndArg(memberName);
       break;
-    case THGLOBAL_FUNCTION:
-        pa = m_store->globalContainer.getMethodByNameAndArg(declName);
+    case GlobalFunction:
+        pa = m_store->globalContainer.getMethodByNameAndArg(memberName);
       break;
-    case THGLOBAL_VARIABLE:
-        pa = m_store->globalContainer.getAttributeByName(declName);
+    case GlobalVariable:
+        pa = m_store->globalContainer.getAttributeByName(memberName);
         break;
     default:
-        kdDebug(9003) << "Unknown type " << (int)type << " in CVGotoDeclaration." << endl;
+        kdDebug(9003) << "Unknown type " << (int)type << " in ClassView::gotoDeclaration." << endl;
         break;
     }
     
@@ -366,35 +378,36 @@ void ClassView::gotoDeclaration(const QString &className,
 
 
 void ClassView::gotoImplementation(const QString &className,
-                                   const QString &declName,
-                                   THType type)
+                                   const QString &memberName,
+                                   ItemType type)
 {
-    kdDebug(9003) << "ClassView::gotoImplementation " << className << "::" << declName << endl;
-    CParsedClass *pc = getClass(className);
-    CParsedMethod *pm = 0;
+    kdDebug(9003) << "ClassView::gotoImplementation " << className << "::" << memberName << endl;
+
+    ParsedClass *pc = getClass(className);
+    ParsedMethod *pm = 0;
     
     switch(type) {
-    case THPUBLIC_SLOT:
-    case THPROTECTED_SLOT:
-    case THPRIVATE_SLOT:
+    case PublicSlot:
+    case ProtectedSlot:
+    case PrivateSlot:
         if (pc)
-            pm = pc->getSlotByNameAndArg(declName);
+            pm = pc->getSlotByNameAndArg(memberName);
         break;
-    case THPUBLIC_METHOD:
-    case THPROTECTED_METHOD:
-    case THPRIVATE_METHOD:
+    case PublicMethod:
+    case ProtectedMethod:
+    case PrivateMethod:
         if (pc) {
-            pm = pc->getMethodByNameAndArg(declName);
+            pm = pc->getMethodByNameAndArg(memberName);
             // If at first we don't succeed...
             if (!pm)
-                pm = pc->getSlotByNameAndArg(declName); 
+                pm = pc->getSlotByNameAndArg(memberName); 
         }
         break;
-    case THGLOBAL_FUNCTION:
-        pm = m_store->globalContainer.getMethodByNameAndArg(declName);
+    case GlobalFunction:
+        pm = m_store->globalContainer.getMethodByNameAndArg(memberName);
         break;
     default:
-        kdDebug(9003) << "Unknown type " << (int)type << "in CVGotoDefinition." << endl;
+        kdDebug(9003) << "Unknown type " << (int)type << "in ClassView::gotoImplementation." << endl;
     }
     
     if (pm)

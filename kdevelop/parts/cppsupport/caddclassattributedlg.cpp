@@ -171,9 +171,9 @@ void CAddClassAttributeDlg::setCallbacks()
 }
 
 
-CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
+ParsedAttribute *CAddClassAttributeDlg::asSystemObj()
 {
-  CParsedAttribute *aAttr = new CParsedAttribute();
+  ParsedAttribute *aAttr = new ParsedAttribute();
   QString comment;
 
   aAttr->setType( typeEdit.text() );

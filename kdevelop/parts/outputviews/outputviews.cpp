@@ -33,7 +33,9 @@ MakeView::MakeView(QObject *parent, const char *name)
 
 
 MakeView::~MakeView()
-{}
+{
+    delete m_widget;
+}
 
 
 void MakeView::setupGUI()
@@ -92,7 +94,9 @@ AppOutputView::AppOutputView(QObject *parent, const char *name)
 
 
 AppOutputView::~AppOutputView()
-{}
+{
+    delete m_widget;
+}
 
 
 void AppOutputView::setupGUI()

@@ -15,20 +15,20 @@
 #include <qstringlist.h>
 #include <qtl.h>
 #include <ktoolbar.h>
-#include "ClassStore.h"
+#include "classstore.h"
 #include "classactions.h"
 
 
 ClassListAction::ClassListAction(const QString &text, int accel,
-                                 const QObject *receiver, const char *methodname,
+                                 const QObject *receiver, const char *slot,
                                  QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, methodname, parent, name)
+    : KSelectAction(text, accel, receiver, slot, parent, name)
 {
     m_store = 0;
 }
+ 
 
-
-void ClassListAction::setClassStore(CClassStore *store)
+void ClassListAction::setClassStore(ClassStore *store)
 {
     m_store = store;
 }
@@ -47,10 +47,10 @@ void ClassListAction::refresh()
     if (!m_store)
         return;
     
-    QList<CParsedClass> *classList = m_store->getSortedClassList();
+    QList<ParsedClass> *classList = m_store->getSortedClassList();
 
     QStringList list;
-    QListIterator<CParsedClass> it(*classList);
+    QListIterator<ParsedClass> it(*classList);
     for ( ; it.current(); ++it)
         list << it.current()->name;
 
@@ -60,19 +60,21 @@ void ClassListAction::refresh()
     setItems(list);
     if (idx != -1)
         KSelectAction::setCurrentItem(idx);
+
+    delete classList;
 }
 
 
 MethodListAction::MethodListAction(const QString &text, int accel,
-                                   const QObject *receiver, const char *methodname,
+                                   const QObject *receiver, const char *slot,
                                    QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, methodname, parent, name)
+    : KSelectAction(text, accel, receiver, slot, parent, name)
 {
     m_store = 0;
 }
 
 
-void MethodListAction::setClassStore(CClassStore *store)
+void MethodListAction::setClassStore(ClassStore *store)
 {
     m_store = store;
 }
@@ -83,18 +85,16 @@ void MethodListAction::refresh(const QString &className)
     if (!m_store)
         return;
 
-    CParsedClass *pc;
+    ParsedClass *pc;
     QStringList list;
 
     if (!className.isEmpty() && (pc = m_store->getClassByName(className)) != 0) {
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
-            QString str;
-            pc->methodIterator.current()->asString(str);
+            QString str = pc->methodIterator.current()->asString();
             list << str;
         }
         for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
-            QString str;
-            pc->slotIterator.current()->asString(str);
+            QString str = pc->slotIterator.current()->asString();
             list << str;
         }
         qHeapSort(list);
@@ -108,9 +108,9 @@ void MethodListAction::refresh(const QString &className)
 
 
 DelayedPopupAction::DelayedPopupAction(const QString& text, const QString& pix, int accel,
-                                       QObject *receiver, const char *methname,
+                                       QObject *receiver, const char *slot,
                                        QObject* parent, const char* name )
-    : KAction(text, pix, accel, receiver, methname, parent, name)
+    : KAction(text, pix, accel, receiver, slot, parent, name)
 {
     m_popup = 0;
 }

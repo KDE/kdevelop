@@ -32,7 +32,7 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
-#include "ParsedMethod.h"
+#include "parsedmethod.h"
 
 /** Dialog to create a new method for a class. 
  * @author Jonas Nordin
@@ -46,7 +46,7 @@ public: // Constructor & Destructor
 
 public: // Public queries
 
-  CParsedMethod *asSystemObj();
+  ParsedMethod *asSystemObj();
 
 protected: // Private widgets
 

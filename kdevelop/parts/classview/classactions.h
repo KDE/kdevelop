@@ -16,21 +16,21 @@
 
 #include <kaction.h>
 
-class CClassStore;
+class ClassStore;
 
 
 class ClassListAction : public KSelectAction
 {
 public:
     ClassListAction(const QString &text, int accel,
-                    const QObject *receiver, const char *methodname,
+                    const QObject *receiver, const char *slot,
                     QObject *parent, const char *name);
-    void setClassStore(CClassStore *store);
+    void setClassStore(ClassStore *store);
     void setCurrentItem(const QString &item);
     void refresh();
     
 private:
-    CClassStore *m_store;
+    ClassStore *m_store;
 };
 
 
@@ -38,13 +38,13 @@ class MethodListAction : public KSelectAction
 {
 public:
     MethodListAction(const QString &text, int accel,
-                     const QObject *receiver, const char *methodname,
+                     const QObject *receiver, const char *slot,
                      QObject *parent, const char *name);
-    void setClassStore(CClassStore *store);
+    void setClassStore(ClassStore *store);
     void refresh(const QString &className);
 
 private:
-    CClassStore *m_store;
+    ClassStore *m_store;
 };
 
 
@@ -54,7 +54,7 @@ class DelayedPopupAction : public KAction
 
 public:
     DelayedPopupAction( const QString &text, const QString &pix, int accel,
-                            QObject *receiver, const char *methname,
+                            QObject *receiver, const char *slot,
                             QObject *parent, const char* name );
     ~DelayedPopupAction();
     

@@ -32,7 +32,9 @@ DocTreeView::DocTreeView(QObject *parent, const char *name)
 
 
 DocTreeView::~DocTreeView()
-{}
+{
+    delete m_widget;
+}
 
 
 void DocTreeView::setupGUI()

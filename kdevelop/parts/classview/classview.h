@@ -14,15 +14,16 @@
 #ifndef _CLASSVIEW_H_
 #define _CLASSVIEW_H_
 
-#include <kaction.h>
-#include "ParsedClass.h"
-#include "ctreehandler.h"
+#include <qguardedptr.h>
 #include "kdevcomponent.h"
-#include "classactions.h"
 
 
-class ClassWidget;
-class CClassStore;
+class ClassTreeWidget;
+class ClassStore;
+class ClassListAction;
+class MethodListAction;
+class DelayedPopupAction;
+class ParsedClass;
 
 
 class ClassView : public KDevComponent
@@ -33,13 +34,17 @@ public:
     ClassView( QObject *parent=0, const char *name=0 );
     ~ClassView();
 
+    enum ItemType { Scope, Class, Struct,
+                    PublicAttr, ProtectedAttr, PrivateAttr,
+                    PublicMethod, ProtectedMethod, PrivateMethod,
+                    PublicSlot, ProtectedSlot, PrivateSlot,
+                    Signal, GlobalFunction, GlobalVariable };
+    
 protected:
     virtual void setupGUI();
-    virtual void projectOpened(CProject *prj);
-    virtual void projectClosed();
     virtual void languageSupportOpened(KDevLanguageSupport *ls);
     virtual void languageSupportClosed();
-    virtual void classStoreOpened(CClassStore *store);
+    virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
 
 private slots:
@@ -53,23 +58,21 @@ private slots:
     void selectedNewClass();
     void selectedAddMethod();
     void selectedAddAttribute();
+    void dumpTree();
     
 private:
-    ClassWidget *m_widget;
+    QGuardedPtr<ClassTreeWidget> m_widget;
+    friend class ClassTreeBase;
 
     void setupPopup();
-    CParsedClass *getClass(const QString &className);
-    void gotoDeclaration(const QString &classname,
-                         const QString &declName,
-                         THType type);
-    void gotoImplementation(const QString &classname,
-                            const QString &declName,
-                            THType type);
+    ParsedClass *getClass(const QString &className);
+    void gotoDeclaration(const QString &className, const QString &memberName, ItemType type);
+    void gotoImplementation(const QString &className, const QString &memberName, ItemType type);
 
     ClassListAction *classes_action;
     MethodListAction *methods_action;
     DelayedPopupAction *popup_action;
-    CClassStore *m_store;
+    ClassStore *m_store;
     KDevLanguageSupport *m_langsupport;
     bool m_cv_decl_or_impl;
 };

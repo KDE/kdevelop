@@ -17,9 +17,9 @@
 
 #include "kdevlanguagesupport.h"
 
-class CParsedMethod;
-class CParsedAttribute;
-class CClassStore;
+class ParsedMethod;
+class ParsedAttribute;
+class ClassStore;
 class CClassParser;
 
 
@@ -34,7 +34,7 @@ public:
 protected:
     virtual void projectOpened(CProject *prj);
     virtual void projectClosed();
-    virtual void classStoreOpened(CClassStore *store);
+    virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
     virtual void addedFileToProject(const QString &fileName);
     virtual void removedFileFromProject(const QString &fileName);
@@ -46,11 +46,11 @@ protected:
     virtual void addAttributeRequested(const QString &className);
 
 private:
-    QString asHeaderCode(CParsedMethod *pm);
-    QString asCppCode(CParsedMethod *pm);
-    QString asHeaderCode(CParsedAttribute *pa);
+    QString asHeaderCode(ParsedMethod *pm);
+    QString asCppCode(ParsedMethod *pm);
+    QString asHeaderCode(ParsedAttribute *pa);
 
-    CClassStore *m_store;
+    ClassStore *m_store;
     CClassParser *m_parser;
 };
 
