@@ -422,7 +422,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
-  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotFileNameChanged()));
+  connect(part, SIGNAL(fileNameChanged(const KURL &)), this, SLOT(slotFileNameChanged()));
 }
 
 
