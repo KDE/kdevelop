@@ -21,10 +21,9 @@
 #include <qobject.h>
 #include <qstringlist.h>
 
-#include "keditor/editor.h"
-#include "keditor/edit_iface.h"
-#include "keditor/cursor_iface.h"
-#include "keditor/codecompletion_iface.h"
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 #include "persistantclassstore.h"
 /*#include "parsedclass.h"
@@ -54,12 +53,12 @@ public slots:
     QString typingTypeOf( int, int );
 
 protected slots:
-    void slotDocumentActivated ( KEditor::Document* pDoc );
+    void slotActivePartChanged(KParts::Part *part);
     void slotArgHintHided();
     void slotCompletionBoxHided( /* int completionTextLine */ );
-    void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
-    void slotTextChangedRoberto( KEditor::Document *pDoc, int nLine, int nCol );
-    void slotCursorPositionChanged( KEditor::Document *pDoc, int nLine, int nCol );
+    //void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
+    void slotTextChangedRoberto(int nLine, int nCol, const QString &text );
+    void slotCursorPositionChanged();
 
 protected:
     QString evaluateExpression( const QString& expr,
@@ -74,15 +73,15 @@ protected:
     QString getNodeDelimiter ( int nNode, int nLine );
     int getNodePos ( int nLine, int nCol );
 
-    QValueList<KEditor::CompletionEntry> getEntryListForExpr( const QString& expr, const QValueList<SimpleVariable>& vars );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr, const QValueList<SimpleVariable>& vars );
 
 
     QString createTmpFileForParser (int iLine);
 
-    QValueList<KEditor::CompletionEntry> getEntryListForClass( QString strClass );
-    QValueList<KEditor::CompletionEntry> getEntryListForNamespace( const QString& strNamespace );
-    QValueList<KEditor::CompletionEntry> getEntryListForStruct( const QString& strStruct );
-    QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForClass( QString strClass );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForNamespace( const QString& strNamespace );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForStruct( const QString& strStruct );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace );
 
     /* methods which are called recursively by getEntryListForClass(...) */
     QList<ParsedMethod>* getParentMethodListForClass( ParsedClass* pClass, QList<ParsedMethod>* pList );
@@ -92,15 +91,14 @@ protected:
     void getParentMethodListForClass( ParsedClass* pClass, QString strMethod, QStringList& methodList );
 
 private:
-    KEditor::Editor* m_pEditor;
     CppSupportPart* m_pSupport;
     KDevCore* m_pCore;
     ClassStore* m_pStore;
     ClassStore* m_pCCStore;
     CppCCParser* m_pParser;
-    KEditor::CursorDocumentIface* m_pCursorIface;
-    KEditor::EditDocumentIface* m_pEditIface;
-    KEditor::CodeCompletionDocumentIface* m_pCompletionIface;
+    KTextEditor::ViewCursorInterface* m_pCursorIface;
+    KTextEditor::EditInterface* m_pEditIface;
+    KTextEditor::CodeCompletionInterface* m_pCompletionIface;
 
     KTempFile* m_pTmpFile;
     QString m_currentClassName;

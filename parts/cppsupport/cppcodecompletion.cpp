@@ -33,15 +33,17 @@
 #include <klocale.h>
 #include <qstatusbar.h>
 
+#include <kdevpartcontroller.h>
 
-static QValueList<KEditor::CompletionEntry>
-unique( const QValueList<KEditor::CompletionEntry>& entryList )
+
+static QValueList<KTextEditor::CompletionEntry>
+unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
 {
-    QValueList<KEditor::CompletionEntry> l;
+    QValueList<KTextEditor::CompletionEntry> l;
     QMap<QString, bool> map;
-    QValueList<KEditor::CompletionEntry>::ConstIterator it=entryList.begin();
+    QValueList<KTextEditor::CompletionEntry>::ConstIterator it=entryList.begin();
     while( it != entryList.end() ){
-        KEditor::CompletionEntry e = *it++;
+        KTextEditor::CompletionEntry e = *it++;
         QString key = e.type + " " +
                       e.text + " " +
                       e.prefix + " " +
@@ -110,7 +112,6 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
 {
     m_pSupport = part;
     m_pCore    = part->core( );
-    m_pEditor  = m_pCore->editor();
     m_pStore   = pStore;
     m_pCCStore = pCCStore;
 
@@ -123,9 +124,8 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
 
-    connect( m_pEditor, SIGNAL( documentActivated( KEditor::Document* ) ),
-             this, SLOT( slotDocumentActivated( KEditor::Document* ) ) );
-
+    QObject::connect( part->partController(), SIGNAL(activePartChanged(KParts::Part*)),
+	     this, SLOT(slotActivePartChanged(KParts::Part*)));
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -166,25 +166,27 @@ CppCodeCompletion::slotCompletionBoxHided( /* int completionTextLine */ )
 
 
 void
-CppCodeCompletion::slotDocumentActivated( KEditor::Document* pDoc )
+CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
-
     kdDebug( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
 
+    if (!part)
+      return;
+
     // if the interface stuff fails we should disable codecompletion automatically
-    m_pEditIface = KEditor::EditDocumentIface::interface( pDoc );
+    m_pEditIface = dynamic_cast<KTextEditor::EditInterface*>(part);
     if( !m_pEditIface ){
         kdDebug( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
         return;
     }
-
-    m_pCursorIface = KEditor::CursorDocumentIface::interface( pDoc );
+    
+    m_pCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
     if( !m_pCursorIface ){
         kdDebug( 9007 ) << "The editor doesn't support the CursorDocumentIface!" << endl;
         return;
     }
 
-    m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface( pDoc );
+    m_pCompletionIface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(part->widget());
     if( !m_pCompletionIface ){
         kdDebug( 9007 ) << "Editor doesn't support the CompletionIface" << endl;
         return;
@@ -194,29 +196,28 @@ CppCodeCompletion::slotDocumentActivated( KEditor::Document* pDoc )
     if( m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 
-        // to make sure that they aren't connected twice
-        disconnect( m_pCursorIface    , 0, this, 0 );
-        disconnect( m_pEditIface      , 0, this, 0 );
-        disconnect( m_pCompletionIface, 0, this, 0 );
+	QObject::connect(part, SIGNAL( cursorPositionChanged() ), this,
+                 SLOT( slotCursorPositionChanged() ) );
 
-        connect( m_pCursorIface, SIGNAL( cursorPositionChanged( KEditor::Document*, int, int ) ), this,
-                 SLOT( slotCursorPositionChanged( KEditor::Document*, int, int ) ) );
-
-        connect( m_pEditIface, SIGNAL( textChanged( KEditor::Document*, int, int ) ), this,
-                 SLOT( slotTextChangedRoberto( KEditor::Document*, int, int ) ) );
+	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)), 
+		this, SLOT(slotTextChangedRoberto(int,int,const QString&)));
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
                  SLOT( slotArgHintHided( ) ) );
 */
-        connect( m_pCompletionIface, SIGNAL( completionAborted( ) ), this,
+	QObject::connect(part, SIGNAL( completionAborted( ) ), this,
                  SLOT( slotCompletionBoxHided( ) ) );
     }
 }
 
 void
-CppCodeCompletion::slotCursorPositionChanged( KEditor::Document* pDoc, int nLine, int nCol )
+CppCodeCompletion::slotCursorPositionChanged()
 {
+    kdDebug() << "Cursor position changed" << endl;
+
+    uint nLine, nCol;
+    m_pCursorIface->cursorPosition(&nLine, &nCol);
     QString text = typingTypeOf( nLine, nCol );
     if( !text.isEmpty( ) )
 	m_pCore->statusBar( )->message( text, 10000 );
@@ -227,8 +228,8 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 {
     kdDebug() << "CppCodeCompletion::typingTypeOf( )" << endl;
 
-    QString strCurLine = m_pEditIface->line( nLine );
-    QValueList<KEditor::CompletionEntry> entries;
+    QString strCurLine = m_pEditIface->textLine( nLine );
+    QValueList<KTextEditor::CompletionEntry> entries;
 
     QString className;
     QString contents = getMethodBody( nLine, nCol, &className );
@@ -258,7 +259,7 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 }
 
 
-
+#if 0
 void
 CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol )
 {
@@ -370,7 +371,7 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
             type.remove( type.find( " " ), 999 );
             kdDebug( 9007 ) << "attribute type is '" << type << "'" << endl;
 
-            QValueList< KEditor::CompletionEntry > completionList;
+            QValueList< KTextEditor::CompletionEntry > completionList;
             completionList = getEntryListForClass( type );
             if( completionList.count( ) > 0 )
                 m_pCompletionIface->showCompletionBox( completionList );
@@ -384,7 +385,7 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
              pVar = m_pParser->variableList.next( ) ){
             if( pVar->sVariableName == strNodeText ){
                 kdDebug( 9007 ) << "Type of variable: '" << pVar->sVariableType << "'" << endl;
-                QValueList< KEditor::CompletionEntry > completionList;
+                QValueList< KTextEditor::CompletionEntry > completionList;
                 completionList = getEntryListForClass( pVar->sVariableType );
 
                 if( completionList.count( ) > 0 )
@@ -402,6 +403,7 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
         m_pParser->variableList.clear( );
     }
 }
+#endif 
 
 /**** TODO: replace this method with a parsing mechanism - very buggy! ****/
 // problem 1: recognizes static method calls as method implementation begin
@@ -415,7 +417,7 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
     int     iMethodBegin = 0;
 
     for( int i = iLine; i > 0; i-- ){
-        strLine = m_pEditIface->line( i );
+        strLine = m_pEditIface->textLine( i );
 
         if( regMethod.match( strLine.latin1( ) ) ){
             iMethodBegin = i;
@@ -437,7 +439,7 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
 
     QString strCopy;
     for( int i = iMethodBegin; i < iLine; i++ ){
-        strCopy += m_pEditIface->line( i ) + "\n";
+        strCopy += m_pEditIface->textLine( i ) + "\n";
     }
 
     QFile *pFile = m_pTmpFile->file( );
@@ -458,7 +460,7 @@ CppCodeCompletion::getCompletionText( int nLine, int nCol )
 {
     int nOffset = nCol;
 
-    QString strCurLine = m_pEditIface->line ( nLine );
+    QString strCurLine = m_pEditIface->textLine ( nLine );
 
     while( nOffset > 0 ){
         if ( strCurLine[ nOffset - 1] == '-'  && strCurLine[ nOffset ] == '>' ||
@@ -494,7 +496,7 @@ CppCodeCompletion::getNodePos( int nLine, int nCol )
     int nOffset  = 0;
     int nNodePos = 0;
 
-    QString strCurLine = m_pEditIface->line( nLine );
+    QString strCurLine = m_pEditIface->textLine( nLine );
 
     while( nOffset < nCol ){
         if ( strCurLine[ nOffset ] == '.' ||
@@ -520,7 +522,7 @@ CppCodeCompletion::getNodeText( int nNode, int nLine )
     int nNodePos       = 0;
     int nFrom          = 0;
     unsigned int nTo   = 0; // avoid compiler warnings
-    QString strCurLine = m_pEditIface->line( nLine );
+    QString strCurLine = m_pEditIface->textLine( nLine );
 
     while( nTo < strCurLine.length( ) ){
         if( strCurLine[ nTo ] == '.' ){
@@ -589,7 +591,7 @@ CppCodeCompletion::getNodeDelimiter( int nNode, int nLine )
     if( nNode <= 0 )
         return QString::null;
 
-    QString strCurLine = m_pEditIface->line( nLine );
+    QString strCurLine = m_pEditIface->textLine( nLine );
 
     int nNodePos     = 0;
     int nFrom        = 0;
@@ -627,10 +629,10 @@ CppCodeCompletion::getNodeDelimiter( int nNode, int nLine )
 /**** Here begin some ClassStore queries - I think they are nearly stable */
 /**** (expected that nothing else is mentioned) ****/
 
-QValueList< KEditor::CompletionEntry >
+QValueList< KTextEditor::CompletionEntry >
 CppCodeCompletion::getEntryListForClass( QString strClass )
 {
-    QValueList< KEditor::CompletionEntry > entryList;
+    QValueList< KTextEditor::CompletionEntry > entryList;
 
     // first we look into the cc-classstore and then in project-classstore
     ParsedClass* pClass = m_pCCStore->getClassByName( strClass );
@@ -671,7 +673,7 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
 
     // create the completion list
     for( pMethod = pMethodList->first( ); pMethod != 0; pMethod = pMethodList->next( ) ){
-        KEditor::CompletionEntry entry;
+        KTextEditor::CompletionEntry entry;
 
         // we should decide if return-types have to be shown and possibly truncate them
         // ToDo: should it be configurable ? maybe showing the return-type or not ?
@@ -702,11 +704,11 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
     pAttributeList = getParentAttributeListForClass( pClass, pAttributeList );
 
     // trying how it looks like - symbol needed ?
-    KEditor::CompletionEntry entry;
+    KTextEditor::CompletionEntry entry;
     entry.text = "--- attributes";
     entryList << entry;
     for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ){
-        KEditor::CompletionEntry entry;
+        KTextEditor::CompletionEntry entry;
         entry.text = pAttr->name( );
         entry.postfix = "";
 	m_CHCommentList.append( pAttr->name( ) );
@@ -716,10 +718,10 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
     return entryList;
 }
 
-QValueList< KEditor::CompletionEntry >
+QValueList< KTextEditor::CompletionEntry >
 CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace )
 {
-    QValueList< KEditor::CompletionEntry > entryList;
+    QValueList< KTextEditor::CompletionEntry > entryList;
 
     ParsedScopeContainer* pScope = m_pCCStore->getScopeByName ( strNamespace );
     if( pScope ){
@@ -749,14 +751,14 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
 
             pMethodList = getParentMethodListForClass( pClass, pMethodList );
             for( pMethod = pMethodList->first( ); pMethod != 0; pMethod = pMethodList->next( ) ) {
-                KEditor::CompletionEntry entry;
+                KTextEditor::CompletionEntry entry;
                 entry.text = pMethod->name();
 		m_CHCommentList.append( pMethod->comment( ) );
                 entry.postfix = "()";
                 entryList << entry;
             }
 
-            KEditor::CompletionEntry entry;
+            KTextEditor::CompletionEntry entry;
             entry.text = "--- Attributes";
             entryList << entry;
 
@@ -766,7 +768,7 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
 
             for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ) {
                 if( pAttr->isStatic( ) ){
-                    KEditor::CompletionEntry entry;
+                    KTextEditor::CompletionEntry entry;
                     entry.prefix = pAttr->type( );
                     entry.text = pAttr->name();
 		    m_CHCommentList.append( pAttr->comment( ) );
@@ -782,19 +784,19 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
     return entryList;
 }
 
-QValueList< KEditor::CompletionEntry >
+QValueList< KTextEditor::CompletionEntry >
 CppCodeCompletion::getEntryListForNamespace( const QString& strNamespace )
 {
     kdDebug( 9007 ) << "getEntryListForNamespace starts with '" << strNamespace << "'" << endl;
 
-    QValueList< KEditor::CompletionEntry > entryList;
+    QValueList< KTextEditor::CompletionEntry > entryList;
     ParsedScopeContainer* pScope = m_pCCStore->getScopeByName( strNamespace );
 
     if( pScope ){
 	QList< ParsedClass >* pClassList = pScope->getSortedClassList( );
 
 	for( ParsedClass* pClass = pClassList->first( ); pClass != 0; pClass = pClassList->next( ) ){
-	    KEditor::CompletionEntry entry;
+	    KTextEditor::CompletionEntry entry;
 	    entry.text = pClass->name( );
 	    m_CHCommentList.append( pClass->comment( ) );
 	    // needed ? entry.postfix = "";
@@ -805,10 +807,10 @@ CppCodeCompletion::getEntryListForNamespace( const QString& strNamespace )
     return entryList;
 }
 
-QValueList< KEditor::CompletionEntry >
+QValueList< KTextEditor::CompletionEntry >
 CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
 {
-    QValueList< KEditor::CompletionEntry > entryList;
+    QValueList< KTextEditor::CompletionEntry > entryList;
     QList< ParsedAttribute >*              pAttributeList;
     ParsedAttribute*                       pAttr;
 
@@ -820,7 +822,7 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
 
             pAttributeList = pStruct->getSortedAttributeList( );
             for( pAttr = pAttributeList->first( ); pAttr != 0; pAttr = pAttributeList->next( ) ) {
-                KEditor::CompletionEntry entry;
+                KTextEditor::CompletionEntry entry;
                 entry.text = pAttr->name( );
 		m_CHCommentList.append( pAttr->comment( ) );
                 // needed ? entry.postfix = "";
@@ -908,9 +910,9 @@ CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 
     QString text;
     for( int i=0; i<iLine; ++i ){
-        text += m_pEditIface->line( i ).simplifyWhiteSpace() + "\n";
+        text += m_pEditIface->textLine( i ).simplifyWhiteSpace() + "\n";
     }
-    text += m_pEditIface->line( iLine ).left( iCol );
+    text += m_pEditIface->textLine( iLine ).left( iCol );
 
     text = remove_comment( text );
     text = remove( text, '[', ']' );
@@ -941,21 +943,21 @@ CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
     return text;
 }
 
-QValueList<KEditor::CompletionEntry>
+QValueList<KTextEditor::CompletionEntry>
 CppCodeCompletion::getEntryListForExpr( const QString& expr,
                                         const QValueList<SimpleVariable>& vars )
 {
     QString type = evaluateExpression( expr, vars, m_pStore );
     kdDebug() << "--------> type = " << type << endl;
-    QValueList<KEditor::CompletionEntry> entries = getEntryListForClass( type );
+    QValueList<KTextEditor::CompletionEntry> entries = getEntryListForClass( type );
     return entries;
 }
 
-static QValueList<KEditor::CompletionEntry>
+static QValueList<KTextEditor::CompletionEntry>
 getAllWords( const QString& text, const QString& prefix )
 {
     QMap<QString, bool> map;
-    QValueList<KEditor::CompletionEntry> entries;
+    QValueList<KTextEditor::CompletionEntry> entries;
     QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
     int idx = 0;
     int pos = 0;
@@ -963,7 +965,7 @@ getAllWords( const QString& text, const QString& prefix )
     while( (pos = rx.match(text, idx, &len)) != -1 ){
         QString word = text.mid( pos, len );
         if( map.find(word) == map.end() ){
-            KEditor::CompletionEntry e;
+            KTextEditor::CompletionEntry e;
             e.text = word;
             entries << e;
             map[ word ] = TRUE;
@@ -979,17 +981,21 @@ CppCodeCompletion::expandText( )
     kdDebug() << "CEditWidget::expandText()" << endl;
 
     if( !m_pCursorIface || !m_pEditIface )
+    {
+	kdDebug( 9007 ) << "Editor does not support the cursor and edit interfaces" << endl;
         return;
-
+    }
+    
     if( !m_pCompletionIface ){
         kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
         return;
     }
 
 
-    int parag, index;
-    m_pCursorIface->getCursorPosition( parag, index );
-    QString textLine = m_pEditIface->line( parag );
+    uint parag, index;
+    m_pCursorIface->cursorPosition( &parag, &index );
+    QString textLine = m_pEditIface->textLine( parag );
+kdDebug() << "TEXTLINE:" << textLine << endl;
 
     int pos = index - 1;
     while( pos>0 && (textLine[pos].isLetterOrNumber() || textLine[pos] == '_') )
@@ -999,7 +1005,7 @@ CppCodeCompletion::expandText( )
 
     QString prefix = textLine.mid( pos, index - pos + 1 );
     if( !prefix.isEmpty() ){
-        QValueList<KEditor::CompletionEntry> entries;
+        QValueList<KTextEditor::CompletionEntry> entries;
         entries = getAllWords( m_pEditIface->text(), prefix );
         m_pCompletionIface->showCompletionBox( entries, prefix.length() );
     }
@@ -1222,9 +1228,9 @@ CppCodeCompletion::completeText( )
         return;
     }
 
-    int nLine, nCol;
-    m_pCursorIface->getCursorPosition( nLine, nCol );
-    QString strCurLine = m_pEditIface->line( nLine );
+    uint nLine, nCol;
+    m_pCursorIface->cursorPosition( &nLine, &nCol );
+    QString strCurLine = m_pEditIface->textLine( nLine );
 
     QString className;
     QString contents;
@@ -1272,7 +1278,7 @@ CppCodeCompletion::completeText( )
         QStringList functionList = getMethodListForClass( type, word );
         m_pCompletionIface->showArgHint( functionList, "()", "," );
     } else {
-        QValueList<KEditor::CompletionEntry> entries;
+        QValueList<KTextEditor::CompletionEntry> entries;
         entries = unique( getEntryListForExpr( expr, variableList ) );
         if( entries.count() ){
             m_pCompletionIface->showCompletionBox( entries, word.length() );
@@ -1289,11 +1295,11 @@ CppCodeCompletion::typeOf( )
         return;
     }
 
-    int nLine, nCol;
-    m_pCursorIface->getCursorPosition( nLine, nCol );
+    uint nLine, nCol;
+    m_pCursorIface->cursorPosition( &nLine, &nCol );
 
-    QString strCurLine = m_pEditIface->line( nLine );
-    QValueList<KEditor::CompletionEntry> entries;
+    QString strCurLine = m_pEditIface->textLine( nLine );
+    QValueList<KTextEditor::CompletionEntry> entries;
 
 
     QString className;
@@ -1332,9 +1338,9 @@ CppCodeCompletion::typeOf( )
 }
 
 void
-CppCodeCompletion::slotTextChangedRoberto( KEditor::Document* /*pDoc*/, int nLine, int nCol )
+CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &text)
 {
-    QString strCurLine = m_pEditIface->line( nLine );
+    QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 

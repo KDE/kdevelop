@@ -15,8 +15,6 @@
 #define _CPPSUPPORTPART_H_
 
 #include "kdevcore.h"
-#include "keditor/edit_iface.h"
-#include "keditor/cursor_iface.h"
 
 #include "kdevlanguagesupport.h"
 
@@ -34,7 +32,8 @@ class CppCodeCompletion;
 class QLabel;
 class QProgressBar;
 
-namespace KEditor { class Document; }
+namespace KTextEditor { class EditInterface; };
+
 
 class CppSupportPart : public KDevLanguageSupport
 {
@@ -73,7 +72,7 @@ protected:
     virtual void addAttribute(const QString &className);
 
 private slots:
-    void documentActivated(KEditor::Document *doc);
+    void activePartChanged(KParts::Part *part);
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
@@ -113,16 +112,15 @@ private:
     CppCodeCompletion* m_pCompletion;
     CClassParser* m_pCCParser;
     
-    KEditor::CursorDocumentIface* m_pCursorIface;
-    KEditor::EditDocumentIface* m_pEditIface;
-
     bool withcpp;
     QString popupstr;
     
     bool m_bEnableCC;
     KDevCore::Role m_CHSide;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
-    
+   
+    KTextEditor::EditInterface *m_pEditIface;
+
 public slots:
     void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
     void slotEnableCodeCompletion( bool setEnabled );

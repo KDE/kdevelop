@@ -26,10 +26,15 @@
 #include <kregexp.h>
 #include <kmessagebox.h>
 
-#include "keditor/editor.h"
+#include <ktexteditor/document.h>
+#include <ktexteditor/editinterface.h>
+
+
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "classstore.h"
+#include "kdevpartcontroller.h"
+
 
 #include "cppsupportpart.h"
 #include "cppsupportfactory.h"
@@ -41,8 +46,6 @@
 #include "addclassattributedlg.h"
 #include "cppcodecompletion.h"
 
-#include "keditor/edit_iface.h"
-
 // daniel
 #include "kdialogbase.h"
 #include "ccconfigwidget.h"
@@ -53,6 +56,7 @@
 #include <qdir.h>
 #include <qguardedptr.h>
 #include "cppsupportwidget.h"
+
 
 CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
@@ -67,8 +71,8 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
              this, SLOT(savedFile(const QString&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-    connect( core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
-             this, SLOT(documentActivated(KEditor::Document*)) );
+    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
+	     this, SLOT(activePartChanged(KParts::Part*)));
 
     KAction *action;
 
@@ -104,7 +108,6 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
     action->setWhatsThis( i18n("Type of current expression.") );
     action->setEnabled(false);
 
-    m_pCursorIface = 0;
     m_pParser      = 0;
     m_pCompletion  = 0;
     m_pEditIface   = 0;
@@ -192,9 +195,11 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 	     this, SLOT( slotEnableCodeCompletion( bool ) ) );
 }
 
-void CppSupportPart::documentActivated(KEditor::Document *doc)
+void CppSupportPart::activePartChanged(KParts::Part *part)
 {
     bool enabled = false;
+
+    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
 
     if (doc) {
         QFileInfo fi(doc->url().path());
@@ -209,13 +214,7 @@ void CppSupportPart::documentActivated(KEditor::Document *doc)
     actionCollection()->action("edit_expand_text")->setEnabled(enabled);
     actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
 
-    m_pEditIface = KEditor::EditDocumentIface::interface(doc);
-
-/*  disconnect(m_pEditIface, 0, this, 0 ); // to make sure that it is't connected twice
-    connect(m_pEditIface,SIGNAL(textChanged()),
- 	    m_pCompletion,SLOT(slotTextChanged()));
-*/
-
+    m_pEditIface = dynamic_cast<KTextEditor::EditInterface*>(doc);
 }
 
 
@@ -567,7 +566,11 @@ void CppSupportPart::savedFile(const QString &fileName)
 
 void CppSupportPart::slotSwitchHeader()
 {
-    QFileInfo fi(core()->editor()->currentDocument()->url().path());
+    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(partController()->activePart());
+    if (!doc)
+      return;
+
+    QFileInfo fi(doc->url().path());
     QString path = fi.filePath();
     QString ext = fi.extension();
     QString base = path.left(path.length()-ext.length());
@@ -682,14 +685,16 @@ void CppSupportPart::addMethod(const QString &className)
     core()->gotoSourceFile(pc->declaredInFile(), atLine);
     kdDebug() << "Adding to .h: " << atLine << " " << headerCode << endl;
 
-    m_pEditIface->insertLine(headerCode, atLine);
+    if (m_pEditIface)
+      m_pEditIface->insertLine(atLine, headerCode);
 
     QString cppCode = asCppCode(pm);
 
     core()->gotoSourceFile(pc->definedInFile(), atLine);
     kdDebug() << "Adding to .cpp: " << atLine << " " << cppCode << endl;
 
-    m_pEditIface->insertLine(cppCode, atLine);
+    if (m_pEditIface)
+      m_pEditIface->insertLine(atLine, cppCode);
     delete pm;
 }
 
@@ -736,7 +741,8 @@ void CppSupportPart::addAttribute(const QString &className)
 
     core()->gotoSourceFile(pc->declaredInFile(), atLine);
     kdDebug() << "Adding at line " << atLine << " " << headerCode << endl;
-    m_pEditIface->insertLine(headerCode, atLine);
+    if (m_pEditIface)
+      m_pEditIface->insertLine(atLine, headerCode);
 
     delete pa;
 }
