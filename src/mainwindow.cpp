@@ -764,7 +764,7 @@ void MainWindow::fillWindowMenu()
       bTabPageMode = TRUE;
 
    bool bNoViewOpened = FALSE;
-   if (m_pWinList->isEmpty()) {
+   if (m_pDocumentViews->isEmpty()) {
       bNoViewOpened = TRUE;
    }
    // construct the menu and its submenus
@@ -819,7 +819,7 @@ void MainWindow::fillWindowMenu()
    // for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
    int i=100;
    KMdiChildView* pView = 0L;
-   QPtrListIterator<KMdiChildView> it(*m_pWinList);
+   QPtrListIterator<KMdiChildView> it(*m_pDocumentViews);
    QValueList<QDateTime> timeStamps;
    for (; it.current(); ++it) {
 
