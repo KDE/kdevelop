@@ -64,7 +64,7 @@ msgid ""
 "You can choose here whether you want the member function\n"
 "be declared as public, protected or private."
 msgstr ""
-"Sie können hier wählen, ob Sie die Funktion als public,\n"
+"Sie können hier wählen, ob Sie die Methode als public,\n"
 "protected oder private deklarieren wollen."
 
 msgid "Type"
@@ -74,30 +74,32 @@ msgid ""
 "Choose the type of member object you want to create.\n"
 "The type can be signal, slot or method."
 msgstr ""
+"Wählen Sie den Typ des Member-Objekts, den Sie erstellen wollen.\n"
+"Dieser kann ein Signal, Slot oder eine Methode sein."
 
 msgid "You can set modifiers for the member function here."
-msgstr "Sie können hier die Speicherklassen für die Funktion setzen."
+msgstr "Sie können hier die Speicherklassen für die Methode setzen."
 
 msgid "Enter the type of the member function here."
-msgstr "Geben Sie hier den Typ für die Funktion ein."
+msgstr "Geben Sie hier den Typ für die Methode ein."
 
 msgid "Declaration:"
 msgstr "Deklaration:"
 
 msgid "Enter the declaration of the member function here."
-msgstr "Geben Sie hier die Deklaration der Funktion ein."
+msgstr "Geben Sie hier die Deklaration der Methode ein."
 
 msgid "You can enter a description of the member function here."
-msgstr "Sie können hier eine Beschreibung für die Funktion eingeben."
+msgstr "Sie können hier eine Beschreibung für die Methode eingeben."
 
 msgid "Method"
 msgstr "Methode"
 
 msgid "You have to specify a function type."
-msgstr "Sie müssen einen Funktionstyp eingeben."
+msgstr "Sie müssen einen Typ für die Methode eingeben."
 
 msgid "You have to specify a function name."
-msgstr "Sie müssen einen Funktionsnamen eingeben."
+msgstr "Sie müssen einen Namen für die Methode eingeben."
 
 msgid "Add existing files to project"
 msgstr "Füge vorhandene Dateien zum Projekt hinzu"
@@ -123,10 +125,12 @@ msgstr ""
 "die neuen Quelldateien kopiert werden sollen."
 
 msgid "insert header/cpp-templates to added files"
-msgstr ""
+msgstr "Füge Header/Cpp-Vorlage in hinzugefügten Dateien ein"
 
 msgid "Check this if you want to insert your template to the added files."
 msgstr ""
+"Kreuzen Sie das an, wenn Sie Ihre Vorlage zu den hinzugefügten Dateien "
+"einfügen wollen."
 
 msgid "Source File(s)..."
 msgstr "Quelldatei(en)..."
@@ -155,6 +159,90 @@ msgstr ""
 
 msgid "Bug Report"
 msgstr "Bugreport"
+
+msgid ""
+"IMPORTANT !\n"
+"\n"
+"Please read these instructions before you send in your bugreport.\n"
+"\n"
+"1. Fill in the command to run sendmail into the textfield below.\n"
+"  It will be saved in your local kdeveloprc,so you don't have to do\n"
+"  this all the time.\n"
+"  ( We hope, you don't have to write bugreports all the time.:) )\n"
+"  Make sure, that you use absolute pathnames.\n"
+"  It's possible, that sendmail isn't located in your search path.\n"
+"         Example: /usr/sbin/sendmail\n"
+"  If you can't use sendmail, just leave the field empty.\n"
+"  KDevelop will write the bugreport into a file named 'bugreport.XXX'\n"
+"  located at HOME/.kde/share/apps/kdevelop.\n"
+"  Load it into your mail program, cut out the first 3 lines\n"
+"  ( the mail header for sendmail ) and send it.\n"
+"\n"
+"2. Fill in your name and e-mail address, so we know who you are\n"
+"  and can contact you for further questions.\n"
+"\n"
+"3. Fill in the subject and the basic informations.\n"
+"\n"
+"4. Describe your system. Don' forget to fill in information\n"
+"  about programs related to your problem. ( your automake version\n"
+"  for build problems etc. )\n"
+"\n"
+"5. Describe the bug you encountered and how we can reproduce it.\n"
+"  Describe it exactly. Something like 'KDevelop crashes' is useless.\n"
+"\n"
+"6. Please write in ENGLISH if possible. If not, use a language,\n"
+"  that at least one developer understand.\n"
+"\n"
+"7. Push 'Send E-Mail'. :)\n"
+"  Currently, the mail will go to the KDE Bug tracking system.\n"
+"  It offers a web interface and will inform you,\n"
+"  when your bug is cleaned.\n"
+"  Visit <http://bugs.kde.org>."
+msgstr ""
+"WICHTIG!\n"
+"\n"
+"Lesen Sie diese Informationen, bevor Sie einen Bugreport abschicken.\n"
+"1. Geben Sie bitte das Kommando für Sendmail in das Feld unten ein.\n"
+"  Es wird in Ihrer lokalen kdeveloprc gespeichert, damit Sie diesen\n"
+"  Schritt nur einmal vornehmen müssen.\n"
+"  (Wir hoffen, daß Sie nicht zu viele Bugreports schreiben müssen :-) )\n"
+"  Bitte verwenden Sie absolute Pfadangaben.\n"
+"  Es ist möglich, daß sendmail sich nicht in Ihrem Pfad befindet.\n"
+"         Beispiel: /usr/sbin/sendmail\n"
+"  Wenn Sie sendmail nicht benutzen wollen, lassen Sie das Feld leer.\n"
+"  KDevelop schreibt dann den Bugreport in eine Datei 'bugreport.XXX'\n"
+"  nach HOME/.kde/share/apps/kdevelop.\n"
+"  Laden Sie diese in einen Editor, entfernen Sie die ersten drei Zeilen\n"
+"  (den Header für sendmail) und schicken Sie sie ab.\n"
+"\n"
+"2. Geben Sie Ihren Namen und Ihre Email-Adresse ein, damit wir Sie\n"
+"  für weitere Fragen kontaktieren können.\n"
+"\n"
+"3. Geben Sie einen Betreff und die grundlegenden Informationen ein.\n"
+"\n"
+"4. Beschreiben Sie Ihr System. Vergessen Sie nicht, Informationen\n"
+"  über Programme, die mit dem Problem zu tun haben, anzugeben (z.B.\n"
+"  Ihre automake-Version für Probleme beim Erstellen etc.)\n"
+"\n"
+"5. Beschreiben Sie den Bug, wie er bei Ihnen aufgetreten ist, und\n"
+"  wie man ihn reproduzieren kann, möglichst genau. Beschreibungen\n"
+"  wie 'KDevelop stürzt ab' sind nutzlos!\n"
+"\n"
+"6. Bitte schreiben Sie ENGLISCH! Wenn dies nicht möglich ist, dann\n"
+"  verwenden Sie eine Sprache, die mindestens von einem Entwickler\n"
+"  des KDevelop-Teams verstanden wird.\n"
+"\n"
+"7. Drücken Sie den Knopf 'Email senden'. :-)\n"
+"  Die Mail geht dann zum KDE Bug tracking system.\n"
+"  Dieses bietet eine Weboberfläche und wird Sie informieren,\n"
+"  wenn der Bug beseitigt wurde.\n"
+"  Besuchen Sie 'http://bugs.kde.org'."
+
+msgid "sendmail command :"
+msgstr "Sendmail Kommando:"
+
+msgid "Attention"
+msgstr "Achtung"
 
 msgid ""
 "Fill in all information,\n"
@@ -202,8 +290,8 @@ msgstr "Kritisch"
 msgid "Error Location :"
 msgstr "Fehlerort:"
 
-msgid "General information"
-msgstr "Allgemeine Informationen"
+msgid "General"
+msgstr "Allgemein"
 
 msgid "Environment"
 msgstr "Umgebung"
@@ -220,11 +308,14 @@ msgstr "Qt-Version:"
 msgid "OS / distribution :"
 msgstr "OS/Distribution:"
 
-msgid "Compiler"
-msgstr "Compiler"
+msgid "Compiler :"
+msgstr "Compiler:"
 
-msgid "System information"
-msgstr "Systeminformationen"
+msgid "Miscalleneous :"
+msgstr "Sonstiges:"
+
+msgid "System"
+msgstr "System"
 
 msgid ""
 "Insert as much information about your\n"
@@ -251,15 +342,25 @@ msgid "Send E-Mail"
 msgstr "Sende Email"
 
 msgid "Please fill in at least the subject and bug description!"
+msgstr "Bitte geben Sie zumindest einen Betreff und eine Fehlerbeschreibung ein!"
+
+msgid ""
+"KDevelop couldn't find sendmail at the given location.\n"
+"If you just want to generate the bugreport and send it\n"
+"by hand later, you can continue.\n"
+"Otherwise press Cancel and retype the sendmail command."
 msgstr ""
-"Bitte geben Sie zumindest einen Betreff und eine Fehlerbeschreibung ein!"
+"KDevelop konnte sendmail an dem angegebenen Ort nicht finden.\n"
+"Wenn Sie den Bugreport nur erzeugen wollen und ihn später\n"
+"manuell senden wollen, können Sie fortfahren.\n"
+"Sonst drücken Sie 'Abbrechen' und geben das Sendmail-Kommando ein."
 
 msgid ""
 "Bugreport was successfully submitted to the KDevelop Team.\n"
 "\t\tThank you!"
 msgstr ""
 "Der Bugreport wurde dem KDevelop-Team erfolgreich übermittelt.\n"
-"\t\tDanke!"
+"\t\tVielen Dank!"
 
 msgid "Class Tool"
 msgstr "Klassenwerkzeug"
@@ -288,9 +389,6 @@ msgstr "Zeige Attribute"
 msgid "Show methods"
 msgstr "Zeige Methoden"
 
-msgid "Show virtual methods"
-msgstr "Zeige virtuelle Methoden"
-
 msgid "Parents"
 msgstr "Parents"
 
@@ -316,7 +414,7 @@ msgid "Class Tool Dialog"
 msgstr "Klassenwerkzeug-Dialog"
 
 msgid " of class "
-msgstr "der Klasse"
+msgstr " der Klasse "
 
 msgid "Class"
 msgstr "Klasse"
@@ -349,13 +447,10 @@ msgid "Graphical classview.."
 msgstr "Graphische Klassenansicht..."
 
 msgid "Add member function..."
-msgstr "Funktion hinzufügen..."
+msgstr "Methode hinzufügen..."
 
 msgid "Add member variable..."
 msgstr "Variable hinzufügen..."
-
-msgid "Implement virtual function..."
-msgstr "Virtuelle Funktion implementieren..."
 
 msgid "Parent classes..."
 msgstr "Parentklassen..."
@@ -366,23 +461,11 @@ msgstr "Childklassen..."
 msgid "Classtool..."
 msgstr "Klassenwerkzeug..."
 
-msgid "Add slot for signal"
-msgstr "Slot für Signal hinzufügen"
-
-msgid "Delete class"
-msgstr "Klasse löschen"
-
-msgid "ClassWizard"
-msgstr "Klassenwizard"
-
 msgid "Struct"
-msgstr ""
+msgstr "Struktur"
 
 msgid "Delete method"
 msgstr "Methode löschen"
-
-msgid "Delete attribute"
-msgstr "Attribut löschen"
 
 msgid "Slot"
 msgstr "Slot"
@@ -401,6 +484,9 @@ msgstr "Ordner"
 
 msgid "Delete Folder..."
 msgstr "Ordner löschen..."
+
+msgid "Namespaces"
+msgstr "Namespaces"
 
 msgid "Structures"
 msgstr "Strukturen"
@@ -424,13 +510,19 @@ msgid "couldn't be found."
 msgstr "wurde nicht gefunden."
 
 msgid "The struct:"
-msgstr ""
+msgstr "Die Struktur:"
 
 msgid "Not found"
 msgstr "Nicht gefunden"
 
+msgid "Delete class"
+msgstr "Klasse löschen"
+
 msgid "Are you sure you want to delete this class?"
 msgstr "Sind Sie sicher, daß Sie diese Klasse löschen wollen?"
+
+msgid "Delete attribute"
+msgstr "Attribut löschen"
 
 msgid "Are you sure you want to delete this attribute?"
 msgstr "Sind Sie sicher, daß Sie dieses Attribut löschen wollen?"
@@ -474,7 +566,6 @@ msgstr "Hinzufügen"
 msgid "remove"
 msgstr "Entfernen"
 
-#, c-format
 msgid ""
 "builds a medium-size index (20-30% of the size\n"
 "of all files), allowing faster search."
@@ -491,7 +582,6 @@ msgstr ""
 "Erstellt einen kleinen Index (ca. 7-9% der Größe\n"
 "aller Dateien), um eine schnellere Suche zu erlauben."
 
-#, c-format
 msgid "a tiny index (2-3% of the total size of all files)"
 msgstr "Ein winziger Index (2-3% der gesamten Größe aller Dateien)"
 
@@ -685,12 +775,6 @@ msgstr "Applikationen"
 msgid "Label:"
 msgstr ""
 
-msgid "Others"
-msgstr "Andere"
-
-msgid "custom project"
-msgstr "Eigenes Projekt"
-
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -711,6 +795,12 @@ msgstr "KDE"
 
 msgid "Mini"
 msgstr "Mini"
+
+msgid "Others"
+msgstr "Andere"
+
+msgid "custom project"
+msgstr "Eigenes Projekt"
 
 msgid "Generate settings"
 msgstr "Einstellungen erzeugen"
@@ -895,8 +985,7 @@ msgstr "Release Tag"
 msgid ""
 "Here you can enter the log message for the\n"
 "version control system."
-msgstr ""
-"Hier können Sie die Logdatei für VCS eingeben."
+msgstr "Hier können Sie die Logdatei für VCS eingeben."
 
 msgid ""
 "Here you can choose the vendor tag, which your project\n"
@@ -915,8 +1004,7 @@ msgstr ""
 msgid ""
 "Here you can choose the version control system,\n"
 "which you want to use."
-msgstr ""
-"Hier können Sie das VCS wählen, das Sie benutzen wollen."
+msgstr "Hier können Sie das VCS wählen, das Sie benutzen wollen."
 
 msgid ""
 "Here you can choose where your vcsroot loction should be.\n"
@@ -1005,7 +1093,7 @@ msgid "Select your template for Cpp-file headers"
 msgstr "Wählen Sie Ihre Vorlage für Cpp-Dateien"
 
 msgid "sgml2html and ksgml2html do not exist!"
-msgstr ""
+msgstr "sgml2html und ksgml2html sind nicht vorhanden!"
 
 msgid ""
 "If you want to generate the user-documentation, you need one of these "
@@ -1021,15 +1109,10 @@ msgstr "Ok"
 msgid " already exists!"
 msgstr " bereits vorhanden!"
 
-msgid ""
-"The selected project directory already exists. If you\n"
-" click 'OK', all files and subdirectories of the currently chosen\n"
-" project directory will be deleted before a new project is going\n"
-" to be generated."
+msgid "It isn't possible to generate a new project into an existing directory."
 msgstr ""
-"Das gewählte Projektverzeichnis ist bereits vorhanden. Wenn Sie auf 'OK'\n"
-"klicken, werden alle Dateien und Unterverzeichnisse des aktuell gewählten\n"
-"Projektverzeichnisses gelöscht, bevor das neue Projekt erstellt wird."
+"Es ist nicht möglich, ein neues Projekt in einem vorhandenen Verzeichnis zu "
+"erzeugen!"
 
 msgid "Exit"
 msgstr "Beenden"
@@ -1105,6 +1188,9 @@ msgstr ""
 msgid "Contains all individual project types."
 msgstr "Enthält alle individuellen Projekttypen."
 
+msgid "Others"
+msgstr "Andere"
+
 msgid "Translations"
 msgstr "Übersetzungen"
 
@@ -1115,7 +1201,7 @@ msgid "Sources"
 msgstr "Quellen"
 
 msgid "Headers"
-msgstr ""
+msgstr "Headers"
 
 msgid "Creating new file..."
 msgstr "Erzeuge neue Datei..."
@@ -1138,8 +1224,38 @@ msgstr "Das Dokument wurde geändert, speichern?"
 msgid "Closing all files..."
 msgstr "Schließe alle Dateien..."
 
-msgid "File modified"
+msgid "Save changed files ?"
+msgstr "Geänderte Dateien speichern?"
+
+msgid ""
+"The project\n"
+"\n"
 msgstr ""
+"Das Projekt\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"enthält geänderte Dateien. Änderungen speichern\n"
+"\n"
+
+msgid "Save all"
+msgstr "Alles speichern"
+
+msgid "Untitled.h"
+msgstr "Unbenannt.h"
+
+msgid "Untitled.cpp"
+msgstr "Unbenannt.cpp"
+
+msgid "File modified"
+msgstr "Datei geändert"
 
 msgid "Saving file "
 msgstr "Speichere Datei "
@@ -1206,6 +1322,9 @@ msgstr "Mit Argumenten ausführen"
 
 msgid "Running  "
 msgstr "Führe aus..."
+
+msgid "  in KDbg"
+msgstr "  in KDbg"
 
 msgid "Running make..."
 msgstr "Führe 'Make' aus..."
@@ -1694,10 +1813,10 @@ msgid "Opens the classtool dialog"
 msgstr "Öffnet den Klassenwerkzeug-Dialog"
 
 msgid "Displays the inherited classes of the current class"
-msgstr ""
+msgstr "Zeigt die von dieser Klasse abgeleiteten Klassen"
 
 msgid "Displays the classes who inherit the current class"
-msgstr ""
+msgstr "Zeigt die von dieser Klasse geerbten Klassen"
 
 msgid "Creates a new folder"
 msgstr "Erstellt einen neuen Ordner"
@@ -1759,6 +1878,9 @@ msgstr "Zeigt den absoluten/relativen Pfad an"
 msgid "Deletes the selected file"
 msgstr "Löscht die ausgewählte Datei"
 
+msgid "Shows files, that aren't registered in the project"
+msgstr "Zeigt Dateien, die nicht im Projekt registriert sind"
+
 msgid "Ready"
 msgstr "Bereit"
 
@@ -1766,19 +1888,19 @@ msgid "Are you sure you want to delete this method?"
 msgstr "Sind Sie sicher, daß Sie diese Methode löschen wollen?"
 
 msgid "//Del by KDevelop: "
-msgstr ""
+msgstr "//Del by KDevelop:"
 
 msgid "Method missing"
-msgstr ""
+msgstr "Methode vermißt"
 
 msgid "Couldn't find the method to delete."
 msgstr "Die zu löschende Methode konnte nicht gefunden werden."
 
 msgid "Class missing"
-msgstr ""
+msgstr "Klasse vermißt"
 
 msgid "Couldn't find the class which has the method to delete."
-msgstr ""
+msgstr "Die Klasse, deren Methode gelöscht werden soll, konnte nicht gefunden werden."
 
 msgid "Welcome to KDevelop!"
 msgstr "Willkommen bei KDevelop!"
@@ -1803,12 +1925,6 @@ msgstr "RFV"
 
 msgid "DOC"
 msgstr "DOC"
-
-msgid "Untitled.h"
-msgstr "Unbenannt.h"
-
-msgid "Untitled.cpp"
-msgstr "Unbenannt.cpp"
 
 msgid "Header/Reso&urce Files"
 msgstr "Header/Reso&urce Dateien"
@@ -1969,8 +2085,14 @@ msgstr "Letztes umschalten"
 msgid "&New..."
 msgstr "&Neu..."
 
+msgid "Close All"
+msgstr "Alle schließen"
+
 msgid "Save &As..."
 msgstr "Speichern &unter..."
+
+msgid "Save A&ll"
+msgstr "&Alles speichern"
 
 msgid "U&ndo"
 msgstr "&Rückgängig"
@@ -2033,7 +2155,7 @@ msgid "&Refresh"
 msgstr "A&ktualisieren"
 
 msgid "New..."
-msgstr "Neu..."
+msgstr "&Neu..."
 
 msgid "Open &recent project..."
 msgstr "&Zuletzt geöffnete Projekte"
@@ -2065,10 +2187,10 @@ msgstr "&Benutzerhandbuch erstellen"
 msgid "&Source-tgz"
 msgstr "&Quellen-tgz"
 
-msgid "Make D&istribution"
+msgid "Make &Distribution"
 msgstr "D&istribution erstellen"
 
-msgid "&Options..."
+msgid "O&ptions..."
 msgstr "&Optionen..."
 
 msgid "&Project"
@@ -2108,13 +2230,10 @@ msgid "C&onfigure..."
 msgstr "C&onfigure..."
 
 msgid "&Build"
-msgstr "&Erstellen"
+msgstr "E&rstellen"
 
 msgid "&Tools"
 msgstr "&Werkzeuge"
-
-msgid "&A2ps..."
-msgstr "&A2ps..."
 
 msgid "&Enscript..."
 msgstr "&Enscript..."
@@ -2319,10 +2438,16 @@ msgid "Make &messages"
 msgstr "&Meldungen erstellen"
 
 msgid "Make &API-Doc"
-msgstr "&API-Dokumentation erstellen"
+msgstr "AP&I-Dokumentation erstellen"
 
 msgid "Make &User-Manual"
 msgstr "&Benutzerhandbuch erstellen"
+
+msgid "Make D&istribution"
+msgstr "D&istribution erstellen"
+
+msgid "&Options..."
+msgstr "&Optionen..."
 
 msgid "&Generate Sources..."
 msgstr "&Quellen erzeugen..."
@@ -2414,9 +2539,6 @@ msgstr ""
 msgid "Scanning project files..."
 msgstr "Projektdateien scannen..."
 
-msgid "Attention"
-msgstr "Achtung"
-
 msgid ""
 "\n"
 "\n"
@@ -2441,27 +2563,6 @@ msgstr "Schließe Projekt..."
 
 msgid "Save changed project files ?"
 msgstr "Speichere geänderte Projektdateien?"
-
-msgid ""
-"The project\n"
-"\n"
-msgstr ""
-"Das Projekt\n"
-"\n"
-
-msgid ""
-"\n"
-"\n"
-"contains changed files. Save modified file\n"
-"\n"
-msgstr ""
-"\n"
-"\n"
-"enthält geänderte Dateien. Änderungen speichern\n"
-"\n"
-
-msgid "Save all"
-msgstr "Alles speichern"
 
 msgid "Copying files..."
 msgstr "Kopiere Dateien..."
@@ -3162,7 +3263,7 @@ msgid ""
 "\n"
 "Now you can choose the Syntax-Highlighting style\n"
 "KDevelop will use. The options are to set\n"
-"the highlighting to Emacs stlye or to the default\n"
+"the highlighting to Emacs style or to the default\n"
 "settings of KWrite (k.a. 'Extended Editor')\n"
 "\n"
 "Which one do you want to use ?"
@@ -3172,7 +3273,7 @@ msgstr ""
 "den KDevelop verwenden wird. Entscheiden Sie zwischen\n"
 "dem Emacs-Stil oder den Einstellungen von KWrite.\n"
 "\n"
-"Was wollen Sie benutzen?"
+"Welchen wollen Sie benutzen?"
 
 msgid "Emacs style"
 msgstr "Emacs Stil"
@@ -3262,13 +3363,16 @@ msgstr ""
 "drücken."
 
 msgid "KDE-Library Documentation found"
-msgstr ""
+msgstr "Dokumentation der KDE-Bibliothek gefunden"
 
 msgid ""
 "\n"
 "The KDE-Library-Documentation has been found at:\n"
 "\n"
 msgstr ""
+"\n"
+"Die Dokumentation der KDE-Bibliothek wurde gefunden:\n"
+"\n"
 
 msgid ""
 "\n"
@@ -3626,9 +3730,6 @@ msgstr ""
 msgid "Directories"
 msgstr "Verzeichnisse"
 
-msgid "General"
-msgstr "Allgemein"
-
 msgid "Keys"
 msgstr "Tasten"
 
@@ -3637,11 +3738,29 @@ msgstr "Dokumentation"
 
 msgid ""
 "The chosen path does not lead to the\n"
+"Qt-library documentation. Do you really want to save\n"
+"this value?"
+msgstr ""
+"Der gewählte Pfad führt nicht zur Dokumentation\n"
+"der Qt-Bibliothek. Wollen Sie diesen Wert trotzdem\n"
+"speichern?"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Do you really want to save\n"
+"this value?"
+msgstr ""
+"Der gewählte Pfad führt nicht zur Dokumentation\n"
+"der KDE-Bibliothek. Wollen Sie diesen Wert trotzdem\n"
+"speichern?"
+
+msgid ""
+"The chosen path does not lead to the\n"
 "Qt-library documentation. Please choose the\n"
 "correct path."
 msgstr ""
 "Der gewählte Pfad führt nicht zur Dokumentation\n"
-"der Qt-Bibliothek. Bitte wählen Sie einen anderen."
+"der Qt-Bibliothek. Bitte wählen Sie den korrekten."
 
 msgid ""
 "The chosen path does not lead to the\n"
@@ -3685,7 +3804,7 @@ msgid "Remove File from Disk..."
 msgstr "Datei von der Festplatte entfernen..."
 
 msgid "Update"
-msgstr ""
+msgstr "Aktualisieren"
 
 msgid "Commit"
 msgstr "Änderungen einspielen"
@@ -3694,7 +3813,7 @@ msgid "Add to Repository"
 msgstr "Zum Archiv hinzufügen"
 
 msgid "Remove from Repository (and Disk)"
-msgstr ""
+msgstr "Vom Archiv (und Festplatte) entfernen"
 
 msgid "Group Properties..."
 msgstr "Gruppen-Eigenschaften..."
@@ -3723,10 +3842,10 @@ msgid "You must choose an existing file!"
 msgstr "Öffnet eine vorhandene Datei"
 
 msgid "Manual-File:"
-msgstr ""
+msgstr "Handbuchdatei:"
 
 msgid "Button"
-msgstr ""
+msgstr "Knopf"
 
 msgid "Class Generator"
 msgstr "Klassen-Generator"
@@ -3805,6 +3924,15 @@ msgstr ""
 msgid "Inheritence"
 msgstr "Vererbung"
 
+msgid "public"
+msgstr "public"
+
+msgid "protected"
+msgstr "protected"
+
+msgid "private"
+msgstr "private"
+
 msgid "Additional Options"
 msgstr "Zusätzl. Optionen"
 
@@ -3847,6 +3975,13 @@ msgstr "Sie müssen einen Namen für die Headerdatei eingeben!"
 
 msgid "You must enter a name for the implementation-file!"
 msgstr "Sie müssen einen Namen für die Implementierungsdatei eingeben!"
+
+msgid ""
+"Sorry, but KDevelop is not able to add classes to existing header or "
+"implementation files."
+msgstr ""
+"Leider kann KDevelop keine Klassen zu vorhandenen Headern oder "
+"Implementationen hinzufügen."
 
 msgid "lsm File - Linux Software Map"
 msgstr "lsm-Datei - Linux Software Map"
@@ -3903,7 +4038,9 @@ msgid "add to Project"
 msgstr "Zum Projekt hinzufügen"
 
 msgid "Check this if you want to add the new file to your project."
-msgstr "Kreuzen Sie dies an, wenn Sie die neue Datei zu Ihrem Projekt hinzufügen wollen."
+msgstr ""
+"Kreuzen Sie dies an, wenn Sie die neue Datei zu Ihrem Projekt hinzufügen "
+"wollen."
 
 msgid "Location:"
 msgstr "Verzeichnis:"
@@ -3912,7 +4049,9 @@ msgid "Enter the directory where the new file will be located."
 msgstr "Geben Sie das Verzeichnis ein, wo sich die neue Datei befinden soll."
 
 msgid "Here you can choose a directory where the new file will be located."
-msgstr "Hier können Sie ein Verzeichnis wählen, in dem sich die neue Datei befinden soll."
+msgstr ""
+"Hier können Sie ein Verzeichnis wählen, in dem sich die neue Datei befinden "
+"soll."
 
 msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
 msgstr "Der Dateiname muß mit .cpp,.c,.cc,.C,.cxx,.ec oder .ecpp enden!"
@@ -3966,6 +4105,9 @@ msgstr ""
 
 msgid "Set the general options of your project here."
 msgstr "Wählen Sie hier die allgemeinen Optionen für Ihr Projekt."
+
+msgid "Project name:"
+msgstr "Projektname:"
 
 msgid "Set the project name here."
 msgstr "Geben Sie hier den Namen des Projekts ein."
@@ -4476,6 +4618,9 @@ msgstr "KDE Rechtschreibprüfung"
 msgid "KDE addressbook"
 msgstr "KDE Adreßbuch"
 
+msgid "Math library"
+msgstr "Math. Bibliothek"
+
 msgid "additional libraries:"
 msgstr "Zusätzl. Bibliotheken:"
 
@@ -4633,6 +4778,21 @@ msgstr ""
 "auszuführen, allerdings wird die Änderungszeit nur\n"
 "für 'Make' geändert."
 
+msgid "registered"
+msgstr "registriert"
+
+msgid "VCS"
+msgstr "VCS"
+
+msgid "local"
+msgstr "lokal"
+
+msgid "RFV Options"
+msgstr "RFV Optionen"
+
+msgid "Show non-project Files"
+msgstr "Zeige nicht zum Projekt gehörende Dateien"
+
 msgid "File (Registered)"
 msgstr "Datei (Registriert)"
 
@@ -4696,7 +4856,9 @@ msgid "Executable:"
 msgstr "Ausführen:"
 
 msgid "Here you can browse through the disc to select an executable file."
-msgstr "Hier können Sie Ihre Festplatte durchsuchen, um eine ausführbare Datei auszuwählen."
+msgstr ""
+"Hier können Sie Ihre Festplatte durchsuchen, um eine ausführbare Datei "
+"auszuwählen."
 
 msgid "Enter the name of the executable file here."
 msgstr "Geben Sie hier den Namen der ausführbaren Datei ein."
@@ -4828,6 +4990,43 @@ msgstr ""
 "Geben Sie hier den Pfad zu den aktuellen\n"
 "KDE-Libs Quellcodes ein."
 
+msgid "Error in creating documentation!"
+msgstr "Fehler beim Erstellen der Dokumentation!"
+
+msgid ""
+"You need write permission to create\n"
+"the documentation in\n"
+msgstr ""
+"Sie benötigen Schreibrechte für\n"
+"das Erstellen der Dokumentation in\n"
+
+msgid "Old documentation deletion!"
+msgstr "Alte Dokumentation gelöscht!"
+
+msgid "The old documentation path\n"
+msgstr "Der alte Dokumentationspfad\n"
+
+msgid ""
+"\n"
+"doesn´t exist anymore."
+msgstr ""
+"\n"
+"ist nicht mehr vorhanden."
+
+msgid ""
+"\n"
+"Process will continue without deletion..."
+msgstr ""
+"\n"
+"Prozeß wird ohne Löschvorgang fortgesetzt..."
+
+msgid ""
+"You have no write permission to delete\n"
+"the old documentation in\n"
+msgstr ""
+"Sie haben keine Schreibberechtigung für\n"
+"das Löschen der alten Dokumentation in\n"
+
 msgid ""
 "The Qt-Documentation path is not set correctly.\n"
 "If you want your KDE-library documentation to\n"
@@ -4847,15 +5046,6 @@ msgstr "Neues Verzeichnis für KDE-Dokumentation..."
 
 msgid "KDE Libs Directory..."
 msgstr "KDE-Bibl.-Verzeichnis..."
-
-msgid ""
-"The chosen path does not lead to the\n"
-"KDE Libraries. Please choose the\n"
-"correct path."
-msgstr ""
-"Der gewählte Pfad führt nicht zu den\n"
-"KDE Bibliotheken. Bitte wählen Sie das\n"
-"korrekte Verzeichnis."
 
 msgid "KDevelop"
 msgstr "KDevelop"
@@ -6310,12 +6500,12 @@ msgstr ""
 
 msgid ""
 "This will insert a QWidget to the dialog.\n"
-"Such an item may have serveral children items\n"
+"Such an item may have several children items\n"
 "or even more QWidgets as children. That means\n"
 "this item lets you create complex hierarchies\n"
 "for you dialog.\n"
 "\n"
-"Another think you will need this item type for\n"
+"Another thing you will need this item type for\n"
 "are widgets like the tab view which need several\n"
 "widgets they can bring to the top."
 msgstr ""
@@ -7570,13 +7760,13 @@ msgid ""
 "You can also specify an interval like:\n"
 "5-    :print from side 5 to end\n"
 "5-10 :print from side 5 to side 10\n"
-"-5    :print from side 1 to side 10"
+"-10   :print from side 1 to side 10"
 msgstr ""
 "Hier können Sie die Seiten wählen, die Sie drucken wollen.\n"
 "Sie können auch Intervalle der folgenden Art angeben:\n"
 "5-    : Drucke von Seite 5 bis Ende\n"
 "5-10  : Drucke von Seite 5 bis 10\n"
-"-5    : Drucke von Seite 1 bis 5"
+"-10    : Drucke von Seite 1 bis 10"
 
 msgid ""
 "Here you can choose, if you wish to print 1 page per\n"
@@ -7620,19 +7810,19 @@ msgid "CVS Commit"
 msgstr "CVS Commit"
 
 msgid "Enter log message:"
-msgstr ""
+msgstr "Logmeldung eingeben:"
 
 msgid "Adding file to repository"
-msgstr "Füge vorhandene Dateien zum Projekt hinzu"
+msgstr "Füge Datei zum Archiv hinzu"
 
 msgid "Removing file from repository"
-msgstr "Entfernt Datei vom Projekt"
+msgstr "Entferne Datei vom Archiv"
 
 msgid "Updating"
 msgstr "Aktualisiere"
 
 msgid "Commiting file"
-msgstr "Datei compilieren"
+msgstr "Aktualisiere Datei in Archiv"
 
 msgid "CVS"
 msgstr "CVS"
