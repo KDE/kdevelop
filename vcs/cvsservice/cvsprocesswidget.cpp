@@ -257,21 +257,31 @@ void CvsProcessWidget::showOutput( const QStringList &msg )
     {
         // @todo here we can interpret lines as [C], [M], ...
         const QString &line = (*it);
+        
+        //If the line already contains tags we need to replace the 
+        //delimiters with the corresponding HTML code so that they are no longer 
+        //recognized as tags.
+        //This will prevent QTextEdit from crashing on trying to parse the tags.
+        //This should fix BUG:99590
+        QString lineNew(line);
+        lineNew.replace("<", "&lt;");
+        lineNew.replace(">", "&gt;");
+        lineNew.replace("&", "&amp;");
 
         if (line.startsWith( "C " ))
-            append( "<cvs_conflict>" + line + "</cvs_conflict>" );
+            append( "<cvs_conflict>" + lineNew + "</cvs_conflict>" );
         else if (line.startsWith( "M " ))
-            append( "<cvs_modified>" + line + "</cvs_modified>" );
+            append( "<cvs_modified>" + lineNew + "</cvs_modified>" );
         else if (line.startsWith( "A " ))
-            append( "<cvs_added>" + line + "</cvs_added>" );
+            append( "<cvs_added>" + lineNew + "</cvs_added>" );
         else if (line.startsWith( "R " ))
-            append( "<cvs_removed>" + line + "</cvs_removed>" );
+            append( "<cvs_removed>" + lineNew + "</cvs_removed>" );
         else if (line.startsWith( "U " ))
-            append( "<cvs_updated>" + line + "</cvs_updated>" );
+            append( "<cvs_updated>" + lineNew + "</cvs_updated>" );
         else if (line.startsWith( "? " ))
-            append( "<cvs_unknown>" + line + "</cvs_unknown>" );
+            append( "<cvs_unknown>" + lineNew + "</cvs_unknown>" );
         else // default
-            append( "<goodtag>" + (*it) + "</goodtag>" );
+            append( "<goodtag>" + lineNew + "</goodtag>" );
     }
 }
 
