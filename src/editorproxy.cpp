@@ -112,8 +112,6 @@ void EditorProxy::popupAboutToShow()
   EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
 
   QString wordstr, linestr;
-  uint line, col;
-  line = col = 0;
   if( selectIface && selectIface->hasSelection() )
   {
     wordstr = selectIface->selection();
@@ -121,7 +119,9 @@ void EditorProxy::popupAboutToShow()
   }
   if( cursorIface && editIface )
   {
-    cursorIface->cursorPosition(&line, &col);
+    uint line, col;
+    line = col = 0;
+    cursorIface->cursorPositionReal(&line, &col);
     linestr = editIface->textLine(line);
     if( wordstr.isEmpty() ) {
       int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
@@ -131,7 +131,7 @@ void EditorProxy::popupAboutToShow()
       while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
           endPos++;
       wordstr = (startPos==endPos)?
-          QString() : linestr.mid(startPos+1, endPos-startPos-1);  
+          QString() : linestr.mid(startPos+1, endPos-startPos-1);
     }
     kdDebug(9000) << "Word:" << wordstr << ":" << endl;
     EditorContext context(ro_part->url(), line, col, linestr, wordstr);
