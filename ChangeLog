@@ -1,8 +1,11 @@
+2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: 0x0 access in DocViewMan::doSwitchToFile
+    
 2001-08-12  rokrau@yahoo.com
     * bugfix: removed obsolete library check
 
 2001-08-08  rokrau@yahoo.com
-    * bugfix: fixed another one of these fucking 0x0 pointer segfaults, 
+    * bugfix: fixed another one of these fucking 0x0 pointer segfaults,
       this time too late for KDE-2.2.... shit
 
 2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
