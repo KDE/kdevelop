@@ -193,5 +193,10 @@
         </spacer>
     </grid>
 </widget>
+<includes>
+<include location="global" impldecl="in implementation">kcombobox.h</include>
+<include location="global" impldecl="in implementation">klineedit.h</include>
+<include location="global" impldecl="in implementation">kpushbutton.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

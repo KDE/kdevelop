@@ -514,5 +514,9 @@
     <tabstop>cancelButton</tabstop>
     <tabstop>helpButton</tabstop>
 </tabstops>
+<includes>
+<include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include> 
+<include location="global" impldecl="in implementation">kprogress.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -666,6 +666,7 @@
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
 </includes>
 <slots>
     <slot>browseTargetPath()</slot>

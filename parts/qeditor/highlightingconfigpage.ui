@@ -207,6 +207,8 @@
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">qmap.h</include>
+    <include location="global" impldecl="in implementation">kfontcombo.h</include> 
+    <include location="global" impldecl="in implementation">kcolorbutton.h</include>
     <include location="local" impldecl="in implementation">highlightingconfigpage.ui.h</include>
 </includes>
 <forwards>

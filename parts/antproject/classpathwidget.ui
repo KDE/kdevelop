@@ -35,5 +35,8 @@
         </widget>
     </hbox>
 </widget>
+<includes>
+    <include location="global" impldecl="in implementation">keditlistbox.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

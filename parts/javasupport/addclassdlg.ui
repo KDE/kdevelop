@@ -446,5 +446,10 @@
 <slots>
     <slot>Public_toggled( bool )</slot>
 </slots>
+<includes>
+    <include location="global" impldecl="in implementation">keditlistbox.h</include>
+    <include location="global" impldecl="in implementation">kcombobox.h</include>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

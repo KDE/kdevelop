@@ -316,5 +316,9 @@
         </vbox>
     </widget>
 </widget>
+<includes>
+<include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
+<include location="global" impldecl="in implementation">klineedit.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

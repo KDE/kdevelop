@@ -263,5 +263,8 @@
         </widget>
     </vbox>
 </widget>
+<includes>
+<include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

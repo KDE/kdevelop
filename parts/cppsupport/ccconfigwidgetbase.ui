@@ -1376,7 +1376,7 @@
     <slot access="protected">slotSetCHWindow( )</slot>
 </slots>
 <includes>
-<include location="global" impldecl="in implementation">kurlrequester.h</include>
+    <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
