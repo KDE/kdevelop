@@ -349,7 +349,7 @@ CppSupportPart::projectOpened( )
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
 
-    QTimer::singleShot( 1000, this, SLOT( initialParse( ) ) );
+    QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
 
 
