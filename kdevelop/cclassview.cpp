@@ -332,16 +332,6 @@ void CClassView::refresh( CProject *proj )
     emit setStatusbarProgress( ++currentCount );
   }
 	
-  kdDebug() << "before ui file removal: " << src.count() << endl;
-  QString cur;
-  for (cur = src.first(); cur !=NULL; cur = src.next())
-  {
-      if(cur.contains(".ui")){
-        src.remove(src.current());
-        src.prev(); // set the previous item the current so the next item will be the next after the removed ui file
-      }
-  }
-  kdDebug() <<"after ui file removal: " << src.count() << endl;
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
