@@ -75,12 +75,15 @@ apidox-am-yes:
 	##--------------------------------------------------------------------------- \
 	echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
 	echo "HTML_OUTPUT            = html" >> Doxyfile; \
+## coolo: This line is commented out because it can not find the kde logo file \
 ##	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
-##	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
-##	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
 	echo "HTML_HEADER            = " >> Doxyfile ;\
-	echo "HTML_FOOTER            = " >> Doxyfile ;\
+	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
+##	echo "HTML_FOOTER            = " >> Doxyfile ;\
 	echo "HTML_STYLESHEET        = " >> Doxyfile ;\
+##	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
+## coolo: remove this line once we start using the non emplty HTML_HEADER \
+	echo "DISABLE_INDEX          = NO" >> Doxyfile ;\
 	##--------------------------------------------------------------------------- \
 	## configuration options related to the LaTeX output                          \
 	##--------------------------------------------------------------------------- \
@@ -105,6 +108,7 @@ apidox-am-yes:
 	## Configuration::addtions related to external references                     \
 	##--------------------------------------------------------------------------- \
 	echo "TAGFILES = \\" >> Doxyfile; \
+## coolo: The path to the tags seams incorrect \
 	tags='$(DOXYGEN_REFERENCES) qt'; for tag in $$tags; do \
 		tagpath= ;\
 		path="../../$$tag" ;\
