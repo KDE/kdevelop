@@ -32,6 +32,17 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
+                        <cstring>modeIDEAl</cstring>
+                    </property>
+                    <property name="text">
+                        <string>I&amp;DEAl window mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>modeMDI</cstring>
                     </property>
                     <property name="text">
@@ -69,43 +80,7 @@ The main widget contains the menu, toolbars and statusbar, only.
 A typical example of this user interface mode is Borland Delphi 6.0.</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>modeIDEAl</cstring>
-                    </property>
-                    <property name="text">
-                        <string>I&amp;DEAl window mode (alpha state!)</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>modeIDEA</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;IDEAl mode</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
-                    </property>
-                </widget>
             </vbox>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="text">
-                <string>&lt;i&gt;Please note that a change to and from IDEAl mode requires a restart of the program.&lt;/i&gt;</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
         </widget>
         <spacer>
             <property name="name">

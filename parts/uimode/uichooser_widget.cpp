@@ -42,15 +42,8 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-
-  if (config->readEntry("MajorUIMode", "IDEAl") == "IDEAl")
-  {
-    modeIDEA->setChecked(true);
-    return;
-  }
-
   int mdi = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
-
+  
   switch (mdi)
   {
   case KMdi::ChildframeMode:
@@ -76,24 +69,16 @@ void UIChooserWidget::save()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
+  config->writeEntry("MajorUIMode", "QextMDI");
 
-  if (modeIDEA->isChecked())
-  {
-    config->writeEntry("MajorUIMode", "IDEAl");
-  }
+  if (modeTab->isChecked())
+    config->writeEntry("MDIMode", KMdi::TabPageMode);
+  else if (modeToplevel->isChecked())
+    config->writeEntry("MDIMode", KMdi::ToplevelMode);
+  else if (modeMDI->isChecked())
+    config->writeEntry("MDIMode", KMdi::ChildframeMode);
   else
-  {
-    config->writeEntry("MajorUIMode", "QextMDI");
-
-    if (modeTab->isChecked())
-      config->writeEntry("MDIMode", KMdi::TabPageMode);
-    else if (modeToplevel->isChecked())
-      config->writeEntry("MDIMode", KMdi::ToplevelMode);
-    else if (modeMDI->isChecked())
-      config->writeEntry("MDIMode", KMdi::ChildframeMode);
-    else
-      config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
-  }
+    config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
 
   config->sync();
 }
@@ -104,10 +89,7 @@ void UIChooserWidget::accept()
   save();
   Q_ASSERT(m_pMyPart);
   
-  if (modeIDEA->isChecked()) { // obsolete
-      //no intermediate swich supported  //m_pMyPart->mainWindow()->setUserInterfaceMode("IDEAl");
-  }
-  else if (modeIDEAl->isChecked()) {
+  if (modeIDEAl->isChecked()) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
   }
   else if (modeTab->isChecked()) {

@@ -22,27 +22,12 @@ KDevMainWindow *TopLevel::getInstance()
 {
   if (!s_instance)
   {
-    KConfig *config = kapp->config();
-    config->setGroup("UI");
+    MainWindow *mainWindow = new MainWindow;
+    s_instance = mainWindow;
 
-    if (config->readEntry("MajorUIMode", "IDEAl") == "QextMDI")
-    {
-      MainWindow *mainWindow = new MainWindow;
-      s_instance = mainWindow;
+    mainWindow->init();
 
-      mainWindow->init();
-
-      kapp->setMainWidget(mainWindow);
-    }
-    else
-    {
-      MainWindowIDEAl *mainWindowIDEAl = new MainWindowIDEAl;
-      s_instance = mainWindowIDEAl;
-
-      mainWindowIDEAl->init();
-
-      kapp->setMainWidget(mainWindowIDEAl);
-    }
+    kapp->setMainWidget(mainWindow);
   }
 
   return s_instance;
