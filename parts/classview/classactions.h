@@ -15,9 +15,26 @@
 #define _CLASSACTION_H_
 
 #include <kaction.h>
+#include <kdeversion.h>
 
 class KDevPlugin;
 class QComboBox;
+
+#if KDE_VERSION < 310
+// dummy class, because it doesn't exist on KDE-3.0
+class KWidgetAction : public KAction
+{
+  Q_OBJECT
+public:
+    KWidgetAction( QWidget* widget, const QString& text,
+                   const KShortcut& cut,
+                   const QObject* receiver, const char* slot,
+                   KActionCollection* parent, const char* name )
+    : KAction(text, cut, receiver, slot, parent, name) {}
+    virtual ~KWidgetAction() {};
+    void setAutoSized(bool) {};
+};
+#endif
 
 class ClassListAction : public KWidgetAction
 {
