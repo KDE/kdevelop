@@ -24,8 +24,8 @@
 class KDevSourceFormatter : public KDevPlugin
 {
 public:
-    KDevSourceFormatter(const QString& pluginName, const QString& icon, QObject* parent, const char* name)
-	:KDevPlugin(pluginName, icon, parent, name) {}
+    KDevSourceFormatter(const KDevPluginInfo *info, QObject* parent, const char* name)
+	:KDevPlugin(info, parent, name) {}
 
     virtual QString formatSource(const QString text) = 0;
 };
