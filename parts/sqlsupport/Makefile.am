@@ -1,6 +1,7 @@
 #Here resides the SQL support part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/sourceinfo 	   -I$(top_srcdir)/lib/util 	   -I$(top_srcdir)/lib/compat 	   $(all_includes)
+SUBDIRS = app_templates
 
 kde_module_LTLIBRARIES = libkdevsqlsupport.la
 libkdevsqlsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

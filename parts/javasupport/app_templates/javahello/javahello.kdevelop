@@ -1,0 +1,24 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+  <general>
+    <author>$AUTHOR$</author>
+    <email>$EMAIL$</email>
+    <version>$VERSION$</version>
+    <projectmanagement>KDevAntProject</projectmanagement>
+    <primarylanguage>Java</primarylanguage>
+    <ignoreparts>
+      <part>KDevDebugger</part>
+    </ignoreparts>
+  </general>
+  <kdevcustomproject>
+    <build>
+      <buildtool>ant</buildtool>
+    </build>
+  </kdevcustomproject>
+  <kdevfileview>
+    <tree>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+    </tree>
+  </kdevfileview>
+</kdevelop>

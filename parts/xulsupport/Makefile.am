@@ -1,6 +1,7 @@
 # KDevelop Xul support. You dig?
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
+SUBDIRS = app_templates
 
 kde_module_LTLIBRARIES = libkdevxulsupport.la
 libkdevxulsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

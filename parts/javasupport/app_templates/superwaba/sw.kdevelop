@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <version>$VERSION$</version>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <primarylanguage>Java</primarylanguage>
+    <ignoreparts>
+      <part>KDevDebugger</part>
+    </ignoreparts>
+  <keywords>
+   <keyword>Java</keyword>
+   <keyword>Code</keyword>
+  </keywords>
+ </general>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="java"/>
+  </useglobaltypes>
+ </kdevfilecreate>
+   <kdevfileview>
+    <groups>
+      <group pattern="Makefile" name="Build" />
+      <group pattern="*.java" name="Source" />
+    </groups>
+  </kdevfileview>
+<kdevcustomproject>
+    <run>
+      <mainprogram>make test</mainprogram>
+      <programargs/>
+      <terminal>true</terminal>
+      <envvars/>
+    </run>
+    <envvars/>
+    <build>
+      <buildtool>make</buildtool>
+      <builddir/>
+    </build>
+    <make>
+      <abortonerror>true</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin/>
+      <envvars/>
+    </make>
+    <makeenvvars/>
+  </kdevcustomproject>
+
+</kdevelop>

@@ -1,0 +1,1 @@
+SUBDIRS = javahello kappjava superwaba

@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$ %i %m -caption "%c"
+Icon=$APPNAMELC$
+Type=Application
+DocPath=$APPNAMELC$/$APPNAMELC$.html
+Comment=A Java KDE KPart Application
+Comment[da]=Et Java KDE KPart program
+Comment[es]=Una aplicación KPart en Java para KDE
+Comment[hu]=Java-ban írt, KPart-alapú KDE-alkalmazás
+Comment[it]=Un'applicazione Java KDE KPart
+Comment[pt]=Uma Aplicação KDE KPart em Java
+Comment[pt_BR]=Um Aplicativo KPart do KDE para Java
+Comment[sr]=Java KDE KPart апликација
+Comment[sv]=Ett Java KDE Kpart-program
+Comment[xx]=xxA Java KDE KPart Applicationxx
+Terminal=0

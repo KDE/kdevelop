@@ -1,0 +1,29 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <version>$VERSION$</version>
+  <projectmanagement>KDevScriptProject</projectmanagement>
+  <primarylanguage>Perl</primarylanguage>
+  <projectdirectory>.</projectdirectory>
+  <absoluteprojectpath>false</absoluteprojectpath>
+ </general>
+ <kdevscriptproject>
+  <run>
+   <mainprogram>./$APPNAMELC$.pl</mainprogram>
+  </run>
+  <general>
+    <includepatterns>*.pl,*.pm</includepatterns>
+    <excludepatterns>*~</excludepatterns>
+  </general>
+ </kdevscriptproject>
+ <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes>
+      <type ext="" />
+      <type ext="pl" />
+      <type ext="pm" />
+    </useglobaltypes>
+ </kdevfilecreate>
+</kdevelop>

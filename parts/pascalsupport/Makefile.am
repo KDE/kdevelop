@@ -1,7 +1,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
-SUBDIRS = file_templates
+SUBDIRS = file_templates app_templates
 
 kde_module_LTLIBRARIES = libkdevpascalsupport.la
 libkdevpascalsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)

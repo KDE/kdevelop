@@ -3,7 +3,8 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 INCLUDES = -I$(top_srcdir)/lib/antlr 		-I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util		-I$(top_srcdir)/lib/sourceinfo 		$(all_includes)
-SUBDIRS = file_templates
+SUBDIRS = app_templates file_templates
+
 
 kde_module_LTLIBRARIES = libkdevadasupport.la
 libkdevadasupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
@@ -32,4 +33,3 @@ service_DATA = kdevadasupport.desktop
 
 rcdir = $(kde_datadir)/kdevadasupport
 rc_DATA = kdevadasupport.rc
-

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <version>$VERSION$</version>
+  <projectmanagement>KDevScriptProject</projectmanagement>
+  <primarylanguage>PHP</primarylanguage>
+  <keywords>
+   <keyword>PHP</keyword>
+  </keywords>
+  <ignoreparts>
+   <part>KDevFileView</part>
+   <part>KDevDoxygen</part>
+   <part>KDevdistpart</part>
+   <part>KDevVisualBoyAdvance</part>
+  </ignoreparts>
+ </general>
+ <kdevscriptproject>
+  <general>
+   <activedir>src</activedir>
+   <includepatterns>*.php,*.phps,*.php3,*.inc</includepatterns>
+  </general>
+ </kdevscriptproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>kde</toc>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>perl</toc>
+   <toc>gnome1</toc>
+   <toc>ruby</toc>
+   <toc>stl</toc>
+   <toc>sw</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
+<kdevphpsupport>
+	<codeHelp>
+	   <codeCompletion>true</codeCompletion>
+	   <codeHinting>true</codeHinting>
+	   <realtimeParsing>false</realtimeParsing>
+	  </codeHelp>
+</kdevphpsupport>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="php"/>
+    </useglobaltypes>
+  </kdevfilecreate>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.php;*.phps;*.php3" name="PHP files" />
+      <group pattern="*.inc" name="Include files" />
+    </groups>
+  </kdevfileview>
+</kdevelop>
