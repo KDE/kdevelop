@@ -236,6 +236,7 @@ public:
   void slotFileOpen( int id_ );
   /** close the current file*/
   void slotFileClose();
+  /** closes all KWrite documents and their views but not the document browser views */
   void slotFileCloseAll();
   /** save the current file,if Untitled a dialog ask for a valid name*/
   void slotFileSave();

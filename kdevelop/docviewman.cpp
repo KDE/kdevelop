@@ -191,11 +191,10 @@ void DocViewMan::closeDoc(int docId)
         // disconnect the focus signals
         disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
                    this, SLOT(slot_gotFocus(CEditWidget*)));
-        //remove the view from MDI and delete it
-        pView->hide();
-        //XXXXX MDI-remove XXXXXX
-        //...
-        delete pView;
+        // remove the view from MDI and delete the view
+        QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+        m_pParent->removeWindowFromMdi( pMDICover);
+        delete pMDICover;
       }
       pCurDocViewNode->existingViews.clear();
       // emit an according signal if we closed the last view
@@ -209,6 +208,7 @@ void DocViewMan::closeDoc(int docId)
   //?                  this, SIGNAL(sig_updated(QObject*, int)));
       delete pDoc;
     }
+    break;
   case DocViewMan::HTML:
     {
       CDocBrowser* pDoc = (CDocBrowser*) pCurDocViewNode->pDoc;

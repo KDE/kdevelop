@@ -209,6 +209,7 @@ void CKDevelop::slotFileClose()
   slotStatusMsg(i18n("Ready."));
 }
 
+// closes all KWrite documents and their views but not the document browser views
 void CKDevelop::slotFileCloseAll()
 {
   slotStatusMsg(i18n("Closing all files..."));
@@ -272,7 +273,7 @@ void CKDevelop::slotFileCloseAll()
         }
       }
 
-      if(result==KMessageBox::No) // No - no save but close
+      else if(result==KMessageBox::No) // No - no save but close
       {
         handledNames.append(actual_info->filename);
         actual_info->modified=false;
@@ -286,13 +287,17 @@ void CKDevelop::slotFileCloseAll()
 //        break;
 //      }
 
-      if(result==KMessageBox::Cancel) // Cancel
+      else if(result==KMessageBox::Cancel) // Cancel
       {
         cont=false;
         break;
-      }  
+      }
     }  // end actual file close
-
+    if (cont) {
+      // close the document
+      int docId = m_docViewManager->findDoc( actual_info->filename);
+      m_docViewManager->closeDoc( docId); // this closes all views, automatically
+    }
     actual_info=next_info;
   } // end for-loop
 
@@ -309,26 +314,11 @@ void CKDevelop::slotFileCloseAll()
 
     if(cont)
     {
-      header_widget->clear();
-      cpp_widget->clear();
       menu_buffers->clear();
 
       //clear all edit_infos before starting a new project
       edit_infos.clear();
 
-      header_widget->setName(i18n("Untitled.h"));
-      cpp_widget->setName(i18n("Untitled.cpp"));
-      TEditInfo* edit1 = new TEditInfo;
-      TEditInfo* edit2 = new TEditInfo;
-      edit1->filename = header_widget->getName();
-      edit2->filename = cpp_widget->getName();
-
-      edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-      edit1->modified=false;
-      edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-      edit2->modified=false;
-      edit_infos.append(edit1);
-      edit_infos.append(edit2);
     }
   }
 
@@ -1895,57 +1885,137 @@ void CKDevelop::slotToolsTool(int tool){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotOptionsEditor(){
-  slotStatusMsg(i18n("Setting up the Editor..."));
-  cpp_widget->optDlg();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+  CEditWidget* pEW = m_docViewManager->currentEditView();
+  if (!pEW)
+    return;
 
+  slotStatusMsg(i18n("Setting up the Editor..."));
+  pEW->optDlg();
+  config->setGroup("KWrite Options");
+  pEW->writeConfig(config);
+  pEW->doc()->writeConfig(config);
+
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  // for all kwrite documents
+  for ( ; docIter.current(); ++docIter) {
+    int curDocId = *(docIter.current());
+    int curDocType = m_docViewManager->docType( curDocId);
+    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
+      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
+      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
+      // for all views of the current kwrite document
+      for ( ; viewIter.current(); ++viewIter) {
+        pEW = (CEditWidget*) viewIter.current();
+        pEW->copySettings(cpp_widget);
+        config->setGroup("KWrite Options");
+        pEW->readConfig(config);
+        pEW->doc()->readConfig(config);
+      }
+    }
+  }
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotOptionsEditorColors(){
-  slotStatusMsg(i18n("Setting up the Editor's colors..."));
-  cpp_widget->colDlg();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+  CEditWidget* pEW = m_docViewManager->currentEditView();
+  if (!pEW)
+    return;
 
+  slotStatusMsg(i18n("Setting up the Editor's colors..."));
+  pEW->colDlg();
+  config->setGroup("KWrite Options");
+  pEW->writeConfig(config);
+  pEW->doc()->writeConfig(config);
+
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  // for all kwrite documents
+  for ( ; docIter.current(); ++docIter) {
+    int curDocId = *(docIter.current());
+    int curDocType = m_docViewManager->docType( curDocId);
+    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
+      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
+      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
+      // for all views of the current kwrite document
+      for ( ; viewIter.current(); ++viewIter) {
+        pEW = (CEditWidget*) viewIter.current();
+        pEW->copySettings(cpp_widget);
+        config->setGroup("KWrite Options");
+        pEW->readConfig(config);
+        pEW->doc()->readConfig(config);
+      }
+    }
+  }
+  slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
+  CEditWidget* pEW = m_docViewManager->currentEditView();
+  if (!pEW)
+    return;
+
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
-  cpp_widget->hlDef();
+  pEW->hlDef();
   config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
+  pEW->writeConfig(config);
+  pEW->doc()->writeConfig(config);
+
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  // for all kwrite documents
+  for ( ; docIter.current(); ++docIter) {
+    int curDocId = *(docIter.current());
+    int curDocType = m_docViewManager->docType( curDocId);
+    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
+      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
+      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
+      // for all views of the current kwrite document
+      for ( ; viewIter.current(); ++viewIter) {
+        pEW = (CEditWidget*) viewIter.current();
+        pEW->copySettings(cpp_widget);
+        config->setGroup("KWrite Options");
+        pEW->readConfig(config);
+        pEW->doc()->readConfig(config);
+      }
+    }
+  }
   slotStatusMsg(i18n("Ready."));
 }
+
 void CKDevelop::slotOptionsSyntaxHighlighting(){
+  CEditWidget* pEW = m_docViewManager->currentEditView();
+  if (!pEW)
+    return;
+
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
-  cpp_widget->hlDlg();
+  pEW->hlDlg();
   config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
+  pEW->writeConfig(config);
+  pEW->doc()->writeConfig(config);
+
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  // for all kwrite documents
+  for ( ; docIter.current(); ++docIter) {
+    int curDocId = *(docIter.current());
+    int curDocType = m_docViewManager->docType( curDocId);
+    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
+      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
+      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
+      // for all views of the current kwrite document
+      for ( ; viewIter.current(); ++viewIter) {
+        pEW = (CEditWidget*) viewIter.current();
+        pEW->copySettings(cpp_widget);
+        config->setGroup("KWrite Options");
+        pEW->readConfig(config);
+        pEW->doc()->readConfig(config);
+      }
+    }
+  }
   slotStatusMsg(i18n("Ready."));
 }
+
 void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(i18n("Configuring Documentation Browser..."));
 
