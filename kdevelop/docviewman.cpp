@@ -90,10 +90,9 @@ void DocViewMan::doSelectURL(const QString& url)
   pBrowserView->parentWidget()->setFocus();
 }
 
-void DocViewMan::doSwitchToFile(QString filename, int line, int col,
-				bool bForceReload, bool bShowModifiedBox)
+void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForceReload, bool bShowModifiedBox)
 {
-  debug("DocViewMan::doSwitchToFile : '%s' !\n", filename.data()); 
+  debug("DocViewMan::doSwitchToFile : '%s' !\n", filename.data());
 
   debug("show modified box : %d !\n", bShowModifiedBox);
 
@@ -113,38 +112,33 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
   debug("looking if file already open !\n");
 
   // Make sure that we found the file in the editor_widget in our list
-  if(pCurEditDoc) {
-
+  if (pCurEditDoc) {
     // handle file if it was modified on disk by another editor/cvs
     QFileInfo file_info(editWidgetName);
-    if((file_info.lastModified() != pCurEditDoc->getLastFileModifDate())
-       && bShowModifiedBox)
-      {
-	debug(" KMessageBox !\n");
-	if(KMessageBox::questionYesNo(m_pParent, 
-		i18n("The file %1 was modified outside this editor.\n"
-		"Open the file from disk and delete the current Buffer?")
-		.arg(editWidgetName),
-		i18n("File modified"))==KMessageBox::Yes)
-	  {
-	    bForceReload = true;
-	    pCurEditDoc->setLastFileModifDate(file_info.lastModified());
-	  }
+    if ((file_info.lastModified() != pCurEditDoc->getLastFileModifDate()) && bShowModifiedBox) {
+      debug(" KMessageBox !\n");
+      if(KMessageBox::questionYesNo(m_pParent,
+                                    i18n("The file %1 was modified outside this editor.\n"
+                                         "Open the file from disk and delete the current Buffer?")
+                                    .arg(editWidgetName),
+                                    i18n("File modified"))==KMessageBox::Yes) {
+        bForceReload = true;
+        pCurEditDoc->setLastFileModifDate(file_info.lastModified());
       }
-    
+    }
+
     debug(" getting lastModified !\n");
 
-    if (!bShowModifiedBox){
-      pCurEditDoc->setLastFileModifDate(file_info.lastModified()); 
+    if (!bShowModifiedBox) {
+      pCurEditDoc->setLastFileModifDate(file_info.lastModified());
     }
-    
+
     debug(" before setCursorPosition !\n");
-    
-    if (!bForceReload && filename == editWidgetName){
-      
+
+    if (!bForceReload && filename == editWidgetName) {
       if (pCurEditWidget && (line != -1))
-	pCurEditWidget->setCursorPosition(line, col);
-      
+        pCurEditWidget->setCursorPosition(line, col);
+
       //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
       pCurEditWidget->setFocus();
@@ -159,22 +153,21 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
 
   debug("getting document type !\n");
 
-  // Not found or needing a reload causes the file to be read from disk 
-  if ((pDoc == 0) || bForceReload)
-  {
+  // Not found or needing a reload causes the file to be read from disk
+  if ((!pDoc) || bForceReload) {
     QFileInfo fileinfo(filename);
-    if (pDoc == 0)
-    {
+    if (!pDoc) {
       debug("Create a new doc !\n");
       pDoc = createKWriteDoc(filename);
-      if (pDoc != 0) {
-	// Set the last modif date
-	pDoc->setLastFileModifDate(fileinfo.lastModified());
+      if (pDoc) {
+        // Set the last modify date
+        pDoc->setLastFileModifDate(fileinfo.lastModified());
 
         qDebug("createView for a new created doc");
         pCurEditWidget = createEditView(pDoc);
       }
-    } else {
+    }
+    else {
       // a view for this doc exists, already;
       // use the first view we found of this doc to show the text
       pCurEditWidget = getFirstEditView(pDoc);
@@ -185,8 +178,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
     qDebug("and loadDoc");
     pCurEditWidget->parentWidget()->setFocus();
   }
-  else
-  {
+  else {
     debug(" document type found !\n");
 
     KWriteDoc* pDoc = findKWriteDoc(filename);
@@ -196,7 +188,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
 
     pCurEditWidget->parentWidget()->setFocus();
 
-    // Don't use the saved text because it is useless 
+    // Don't use the saved text because it is useless
     // and removes the bookmarks
     // pCurEditWidget->setText(info->text);
 
@@ -219,7 +211,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
 
   debug(" set focus on view !\n");
   pCurEditWidget->setFocus();
-
 }
 
 
@@ -228,10 +219,10 @@ void DocViewMan::doOptionsEditor()
   debug("DocViewMan::doOptionsEditor !\n");
 
   if(currentEditView())
-    {
-      currentEditView()->optDlg();
-      doTakeOverOfEditorOptions();
-    }
+  {
+    currentEditView()->optDlg();
+    doTakeOverOfEditorOptions();
+  }
 }
 
 void DocViewMan::doOptionsEditorColors()
@@ -239,10 +230,10 @@ void DocViewMan::doOptionsEditorColors()
   debug("DocViewMan::doOptionsEditorColors !\n");
 
   if(currentEditView())
-    {
-      currentEditView()->colDlg();
-      doTakeOverOfEditorOptions();
-    }
+  {
+    currentEditView()->colDlg();
+    doTakeOverOfEditorOptions();
+  }
 }
 
 
@@ -251,10 +242,10 @@ void DocViewMan::doOptionsSyntaxHighlightingDefaults()
   debug("DocViewMan::doOptionsSyntaxHighlightingDefaults !\n");
 
   if(currentEditView())
-    {
-      currentEditView()->hlDef();
-      doTakeOverOfEditorOptions();
-    }
+  {
+    currentEditView()->hlDef();
+    doTakeOverOfEditorOptions();
+  }
 }
 
 void DocViewMan::doOptionsSyntaxHighlighting()
@@ -262,10 +253,10 @@ void DocViewMan::doOptionsSyntaxHighlighting()
   debug("DocViewMan::doOptionsSyntaxHighlighting !\n");
 
   if(currentEditView())
-    {
-      currentEditView()->hlDlg();
-      doTakeOverOfEditorOptions();
-    }
+  {
+    currentEditView()->hlDlg();
+    doTakeOverOfEditorOptions();
+  }
 }
 
 /** shared helper function for the 4 slots 
@@ -277,24 +268,23 @@ void DocViewMan::doTakeOverOfEditorOptions()
   debug("DocViewMan::doTakeOverOfEditorOptions !\n");
 
   KConfig* config = m_pParent->getConfig();
-  if(config) 
-    {
-      config->setGroup("KWrite Options");
-      currentEditView()->writeConfig(config);
-      currentEditView()->doc()->writeConfig(config);
-      
-      QListIterator<QObject> itDoc(m_documentList);
-      for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-	KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-	if(pDoc) {
-	  CEditWidget* pCurEW = getFirstEditView(pDoc);
-	  pCurEW->copySettings(currentEditView());
-	  config->setGroup("KWrite Options");
-	  pCurEW->readConfig(config);
-	  pDoc->readConfig(config);
-	}
+  if (config) {
+    config->setGroup("KWrite Options");
+    currentEditView()->writeConfig(config);
+    currentEditView()->doc()->writeConfig(config);
+
+    QListIterator<QObject> itDoc(m_documentList);
+    for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+      if (pDoc) {
+        CEditWidget* pCurEW = getFirstEditView(pDoc);
+        pCurEW->copySettings(currentEditView());
+        config->setGroup("KWrite Options");
+        pCurEW->readConfig(config);
+        pDoc->readConfig(config);
       }
     }
+  }
 }
 
 /** */
@@ -302,13 +292,12 @@ void DocViewMan::doCopy()
 {
   debug("DocViewMan::doCopy !\n");
 
-  if (currentEditView())
-    {
-      if (curDocIsBrowser())
-	currentBrowserDoc()->slotCopyText();
-      else
-	currentEditView()->copyText();
-    }
+  if (currentEditView()) {
+    if (curDocIsBrowser())
+      currentBrowserDoc()->slotCopyText();
+    else
+      currentEditView()->copyText();
+  }
 }
 
 /** */
@@ -327,13 +316,12 @@ void DocViewMan::doRepeatSearch(QString &search_text, int back)
 {
   debug("DocViewMan::doRepeatSearch !\n");
 
-  if (currentEditView())
-    {
-      if (curDocIsBrowser())
-	currentBrowserDoc()->findTextNext(QRegExp(search_text),true);
-      else
-	currentEditView()->searchAgain(back==1);
-    }
+  if (currentEditView()) {
+    if (curDocIsBrowser())
+      currentBrowserDoc()->findTextNext(QRegExp(search_text),true);
+    else
+      currentEditView()->searchAgain(back==1);
+  }
 }
 
 /** */
@@ -341,19 +329,16 @@ void DocViewMan::doSearchText(QString &text)
 {
   debug("DocViewMan::doSearchText !\n");
 
-  if (currentEditView())
-    {
-      if (curDocIsBrowser())
-	text = currentBrowserDoc()->selectedText();
-      else
-	{
-	  text = currentEditView()->markedText();
-	  if(text == "")
-	    {
-	      text = currentEditView()->currentWord();
-	    }
-	}
+  if (currentEditView()) {
+    if (curDocIsBrowser())
+      text = currentBrowserDoc()->selectedText();
+    else {
+      text = currentEditView()->markedText();
+      if(text == "") {
+        text = currentEditView()->currentWord();
+      }
     }
+  }
 }
 
 /** */
@@ -364,7 +349,7 @@ void DocViewMan::doClearBookmarks()
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(pDoc) {
+    if (pDoc) {
       pDoc->clearBookmarks();
     }
   }
@@ -376,15 +361,13 @@ void DocViewMan::doCreateNewView()
 
   QWidget* pNewView = 0L;
 
-  if(curDocIsBrowser())
-    {
-      CDocBrowser* pBrowserDoc = createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
-      pNewView = createBrowserView(pBrowserDoc);
-    }
-  else
-    {
-      pNewView = createEditView(currentEditDoc());
-    }
+  if(curDocIsBrowser()) {
+    CDocBrowser* pBrowserDoc = createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
+    pNewView = createBrowserView(pBrowserDoc);
+  }
+  else {
+    pNewView = createEditView(currentEditDoc());
+  }
 
   // raise and activate
   if (pNewView)
@@ -396,9 +379,9 @@ bool DocViewMan::curDocIsHeaderFile()
 {
   debug("DocViewMan::curDocIsHeaderFile !\n");
 
-  return (!curDocIsBrowser() 
-	  && m_pCurEditDoc
-	  && (getKWriteDocType(m_pCurEditDoc) == CPP_HEADER));
+  return (!curDocIsBrowser()
+    && m_pCurEditDoc
+    && (getKWriteDocType(m_pCurEditDoc) == CPP_HEADER));
 }
 
 /** */
@@ -1202,13 +1185,11 @@ void DocViewMan::doFileCloseAll()
   // synchronizeDocAndInfo();
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); cont && itDoc.current() != 0; ++itDoc)
-    {
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-      if(pDoc
-	 && pDoc->isModified()
-	 && handledNames.contains(pDoc->fileName())<1) 
-	{
+  for (itDoc.toFirst(); cont && itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (pDoc
+        && pDoc->isModified()
+        && handledNames.contains(pDoc->fileName())<1) {
 
 #warning FIXME MessageBox needed with an extra button.
 //      KMessageBox *files_close=
@@ -1224,62 +1205,51 @@ void DocViewMan::doFileCloseAll()
 //      files_close->show();
 //
 //      int result=files_close->result();
-	  int result = KMessageBox::warningYesNoCancel(
-                     m_pParent,
-		     i18n("The project %1\n"
-                     "contains changed files. Save modified file\n\n%2 ?\n\n")
-                     .arg(prjName)
-		     .arg(pDoc->fileName()),
-                     i18n("Save changed files ?"));
+      int result = KMessageBox::warningYesNoCancel( m_pParent,
+                                                    i18n("The project %1\n"
+                                                    "contains changed files. Save modified file\n\n%2 ?\n\n")
+                                                    .arg(prjName)
+                                                    .arg(pDoc->fileName()),
+                                                    i18n("Save changed files ?"));
 
-	  // create the save project messagebox
+      // create the save project messagebox
 
-	  // what to do
-	  if(result==KMessageBox::Yes) // Yes- only save the current file
-	    {
-	      // save file as if Untitled and close file
-	      if(m_pParent->isUntitled(pDoc->fileName()))
-		{
-		  m_pParent->switchToFile(pDoc->fileName());
-		  handledNames.append(pDoc->fileName());
-		  cont = m_pParent->fileSaveAs();
-		  itDoc.toFirst(); // start again... 'cause we deleted an entry
-		}        
-	      else // Save file and close it
-		{
-		  m_pParent->switchToFile(pDoc->fileName());
-		  handledNames.append(pDoc->fileName());
-		  m_pParent->slotFileSave();
-		  cont = !currentEditView()->isModified(); //something went wrong
-		}
-	    }
-	  
-	  else if(result==KMessageBox::No) // No - no save but close
-	    {
-	      handledNames.append(pDoc->fileName());
-	      pDoc->setModified(false);
-	      itDoc.toFirst(); // start again... 'cause we deleted an entry
-	    }
-	
-	  //      if(result==3) // Save all
-	  //      {
-	  //        slotFileSaveAll();
-	  //        break;
-	  //      }
-	  
-	  else if(result==KMessageBox::Cancel) // Cancel
-	    {
-	      cont=false;
-	      break;
-	    }
-	}  // end actual file close
-      
-      if (cont) 
-	{
-	  // close the document and its views
-	  closeKWriteDoc(pDoc); 
-	}
-    } // end for-loop  
+      // what to do
+      if(result==KMessageBox::Yes) { // Yes- only save the current file
+        // save file as if Untitled and close file
+        if(m_pParent->isUntitled(pDoc->fileName())) {
+          m_pParent->switchToFile(pDoc->fileName());
+          handledNames.append(pDoc->fileName());
+          cont = m_pParent->fileSaveAs();
+          itDoc.toFirst(); // start again... 'cause we deleted an entry
+        }
+        else { // Save file and close it
+          m_pParent->switchToFile(pDoc->fileName());
+          handledNames.append(pDoc->fileName());
+          m_pParent->slotFileSave();
+          cont = !currentEditView()->isModified(); //something went wrong
+        }
+      }
+      else if(result==KMessageBox::No) { // No - no save but close
+        handledNames.append(pDoc->fileName());
+        pDoc->setModified(false);
+        itDoc.toFirst(); // start again... 'cause we deleted an entry
+      }
+         	
+//      if(result==3) { // Save all
+//        slotFileSaveAll();
+//        break;
+//      }
+      else if(result==KMessageBox::Cancel) { // Cancel
+        cont=false;
+        break;
+      }
+    }  // end actual file close
+
+    if (cont) { // close the document and its views
+      closeKWriteDoc(pDoc);
+    }
+  } // end for-loop
 }
 
 bool DocViewMan::doProjectClose()
@@ -1292,65 +1262,56 @@ bool DocViewMan::doProjectClose()
   // synchronizeDocAndInfo();
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); cont && itDoc.current() != 0; ++itDoc)
-    {
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-      if(pDoc
-	 && pDoc->isModified()
-	 && handledNames.contains(pDoc->fileName())<1) 
-	{
+  for (itDoc.toFirst(); cont && itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (pDoc
+        && pDoc->isModified()
+        && handledNames.contains(pDoc->fileName())<1) {
 
-	  SaveAllDialog::SaveAllResult result = m_pParent->doProjectSaveAllDialog(pDoc->fileName());
-	  
-	  // what to do
-	  if(result==SaveAllDialog::Yes)
-	    {  // Yes- only save the actual file
-				// save file as if Untitled and close file
-	      if(m_pParent->isUntitled(pDoc->fileName()))
-		{
-		  m_pParent->switchToFile(pDoc->fileName());
-		  handledNames.append(pDoc->fileName());
-		  cont = m_pParent->fileSaveAs();
-		  // start again... 'cause we deleted an entry
-		  itDoc.toFirst();
-		}
-				// Save file and close it
-	      else
-		{
-		  m_pParent->switchToFile(pDoc->fileName());
-		  handledNames.append(pDoc->fileName());
-		  m_pParent->slotFileSave();
-		  cont = ! pDoc->isModified(); //something went wrong
-		}
-	    }
-	  
-	  if(result==SaveAllDialog::No)
-	    {   // No - no save but close
-	      handledNames.append(pDoc->fileName());
-	      pDoc->setModified(false);
-	      // start again... 'cause we deleted an entry
-	      itDoc.toFirst();
-	    }
-	  
-	  if(result==SaveAllDialog::SaveAll)
-	    {  // Save all
-	      m_pParent->slotFileSaveAll();
-	      break;
-	    }
-	  
-	  if(result==SaveAllDialog::Cancel)
-	    { // Cancel
-	      cont=false;
-	      break;
-	    }
-	}  // end actual file close
-    } // end for-loop
+      SaveAllDialog::SaveAllResult result = m_pParent->doProjectSaveAllDialog(pDoc->fileName());
+         	
+        // what to do
+      if(result==SaveAllDialog::Yes) {  // Yes- only save the actual file
+        // save file as if Untitled and close file
+        if(m_pParent->isUntitled(pDoc->fileName())) {
+          m_pParent->switchToFile(pDoc->fileName());
+          handledNames.append(pDoc->fileName());
+          cont = m_pParent->fileSaveAs();
+          // start again... 'cause we deleted an entry
+          itDoc.toFirst();
+        }
+        // Save file and close it
+        else {
+          m_pParent->switchToFile(pDoc->fileName());
+          handledNames.append(pDoc->fileName());
+          m_pParent->slotFileSave();
+          cont = ! pDoc->isModified(); //something went wrong
+        }
+      }
+         	
+      if(result==SaveAllDialog::No) {   // No - no save but close
+        handledNames.append(pDoc->fileName());
+        pDoc->setModified(false);
+        // start again... 'cause we deleted an entry
+        itDoc.toFirst();
+      }
+         	
+      if(result==SaveAllDialog::SaveAll) {  // Save all
+        m_pParent->slotFileSaveAll();
+        break;
+      }
+       	
+      if (result==SaveAllDialog::Cancel) { // Cancel
+        cont=false;
+        break;
+      }
+    }  // end actual file close
+  } // end for-loop
 
   // check if something went wrong with saving
-  if (cont)
-    {
-      cont = noInfoModified();
-    }
+  if (cont) {
+    cont = noInfoModified();
+  }
 
   return cont;
 }
@@ -1361,12 +1322,11 @@ void DocViewMan::doCloseAllDocs()
   debug("DocViewMan::doCloseAllDocs !\n");
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc)
-    {
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-      if(pDoc)
-	closeKWriteDoc(pDoc);
-    }
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if(pDoc)
+      closeKWriteDoc(pDoc);
+  }
 }
 
 bool DocViewMan::saveFileFromTheCurrentEditWidget()
@@ -1382,10 +1342,8 @@ bool DocViewMan::saveFileFromTheCurrentEditWidget()
 
   // Ask if we should save it
   QFileInfo file_info(filename);
-  if(file_info.lastModified() != pCurEditDoc->getLastFileModifDate())
-  {
+  if(file_info.lastModified() != pCurEditDoc->getLastFileModifDate()) {
     if (KMessageBox::No == KMessageBox::questionYesNo(m_pParent,
-
                     i18n("The file %1 was modified outside\n this editor.Save anyway?").arg(filename),
                     i18n("File modified")))
       return false;
@@ -1416,93 +1374,84 @@ void DocViewMan::saveModifiedFiles()
 
   // check all edit_infos if they are modified outside; if yes, ask for saving
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc)
-    {
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-      if(pDoc)
-	{
-	  int i = 0;
-	  pProgressBar->setProgress(++i);
-	  
-	  kdDebug() << "checking: " << pDoc->fileName() << "\n";
-	  kdDebug() << " " << ((pDoc->isModified()) ? 
-			       "modified" : "not modified") << "\n";
-	  
-	  if (!m_pParent->isUntitled(pDoc->fileName())
-	      && pDoc->isModified()
-	      && handledNames.contains(pDoc->fileName()) < 1)
-	    {
-	      int qYesNo = KMessageBox::Yes;
-	      handledNames.append(pDoc->fileName());
-      
-	      kdDebug() << " file info" << "\n";
-	      
-	      QFileInfo file_info(pDoc->fileName());
-	      if (file_info.lastModified() != pDoc->getLastFileModifDate())
-		{
-		  qYesNo = KMessageBox::questionYesNo(
-			 m_pParent,
-			 i18n("The file %1 was modified outside\n"
-			      "this editor. Save anyway?")
-			 .arg(pDoc->fileName()),
-			 i18n("File modified"));
-		}
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (pDoc) {
+      int i = 0;
+      pProgressBar->setProgress(++i);
       	
-	      kdDebug() << " KMessageBox::Yes" << "\n";
+      kdDebug() << "checking: " << pDoc->fileName() << "\n";
+      kdDebug() << " " << ((pDoc->isModified()) ?
+      "modified" : "not modified") << "\n";
       	
-	      if (qYesNo==KMessageBox::Yes)
-		{
-		  kdDebug() << " create file_info" << "\n";
-		  QFileInfo file_info(pDoc->fileName());
-		  bool isModified;
-		  
-		  kdDebug() << " use blind widget " << "\n";		
+      if (!m_pParent->isUntitled(pDoc->fileName())
+          && pDoc->isModified()
+          && handledNames.contains(pDoc->fileName()) < 1) {
+        int qYesNo = KMessageBox::Yes;
+        handledNames.append(pDoc->fileName());
 
-		  KWriteDoc* pNewDoc = new KWriteDoc(&m_highlightManager);
-		  CEditWidget* pBlindWidget = new CEditWidget(0L, 0, pDoc);
+        kdDebug() << " file info" << "\n";
+        	
+        QFileInfo file_info(pDoc->fileName());
+        if (file_info.lastModified() != pDoc->getLastFileModifDate()) {
+          qYesNo = KMessageBox::questionYesNo(m_pParent,
+                                              i18n("The file %1 was modified outside\n"
+                                                   "this editor. Save anyway?")
+                                              .arg(pDoc->fileName()),
+                                              i18n("File modified"));
+        }
+              	
+        kdDebug() << " KMessageBox::Yes" << "\n";
+              	
+        if (qYesNo == KMessageBox::Yes) {
+          kdDebug() << " create file_info" << "\n";
+          QFileInfo file_info(pDoc->fileName());
+          bool isModified;
+          		
+          kdDebug() << " use blind widget " << "\n";		
 
-		  pBlindWidget->setName(pDoc->fileName());
-		  pBlindWidget->setText(pDoc->text());
-		  pBlindWidget->toggleModified(true);
+          KWriteDoc* pNewDoc = new KWriteDoc(&m_highlightManager);
+          CEditWidget* pBlindWidget = new CEditWidget(0L, 0, pDoc);
 
-		  kdDebug() << "doSave" << "\n";		
-		  pBlindWidget->doSave();
-		  isModified = pBlindWidget->isModified();
+          pBlindWidget->setName(pDoc->fileName());
+          pBlindWidget->setText(pDoc->text());
+          pBlindWidget->toggleModified(true);
 
-		  delete pBlindWidget;
-		  delete pNewDoc;
-        		
-		  kdDebug() << "doing save " 
-			    << ((!isModified) ? "success" : "failed") << "\n";
-        		
-		  pDoc->setModified(isModified);
-		  
-		  if (!isModified)
-		    {
+          kdDebug() << "doSave" << "\n";		
+          pBlindWidget->doSave();
+          isModified = pBlindWidget->isModified();
+
+          delete pBlindWidget;
+          delete pNewDoc;
+                  		
+          kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+                  		
+          pDoc->setModified(isModified);
+          		
+          if (!isModified) {
 #ifdef WITH_CPP_REPARSE
-		      mod = true;
+            mod = true;
 #else
-		      mod |= (pDoc->fileName().right(2)==".h" 
-			      || pDoc->fileName().right(4)==".hxx");
+            mod |= (pDoc->fileName().right(2)==".h" || pDoc->fileName().right(4)==".hxx");
 #endif
-		      iFileList.append(pDoc->fileName());
-		      pDoc->setLastFileModifDate(file_info.lastModified());
-		    }
-		}
-	    }
-	}
+            iFileList.append(pDoc->fileName());
+            pDoc->setLastFileModifDate(file_info.lastModified());
+          }
+        }
+      }
     }
+  }
 
   debug("end handledNames !\n");
   debug("end edit widget !\n");
   debug("stat prog ! \n");
-  
+
   pProgressBar->reset();
-  
+
   debug("refreshClassViewByFileList ! \n");
   if (m_pParent->hasProject() && !iFileList.isEmpty() && mod)
     m_pParent->refreshClassViewByFileList(&iFileList);
-  
+
 }
   
 void DocViewMan::reloadModifiedFiles()
@@ -1510,20 +1459,18 @@ void DocViewMan::reloadModifiedFiles()
   debug("DocViewMan::reloadModifiedFiles !\n");
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc)
-    {
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-      if(pDoc)
-	{
-	  QFileInfo file_info(pDoc->fileName());
-	  
-	  // Reload only changed files
-	  if(pDoc->getLastFileModifDate() != file_info.lastModified()){
-	    // Force reload, no modified on disc messagebox
-	    m_pParent->switchToFile(pDoc->fileName(),-1,-1,true,false); 
-	  }
-	}
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (pDoc) {
+      QFileInfo file_info(pDoc->fileName());
+    	
+      // Reload only changed files
+      if(pDoc->getLastFileModifDate() != file_info.lastModified()) {
+        // Force reload, no modified on disc messagebox
+        m_pParent->switchToFile(pDoc->fileName(),-1,-1,true,false);
+      }
     }
+  }
 }
 
 
@@ -1532,9 +1479,9 @@ QList<KWriteDoc> DocViewMan::getKWriteDocList() const
   QListIterator<QObject> itDoc(m_documentList);
   QList<KWriteDoc> resultList;
 
-  for(; itDoc.current() != 0; ++itDoc) {
+  for (; itDoc.current() != 0; ++itDoc) {
     KWriteDoc* doc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(doc) {
+    if (doc) {
       resultList.append(doc);
     }
   }
@@ -1546,10 +1493,14 @@ QString DocViewMan::docName(QObject* pDoc) const
   debug("DocViewMan::docName !\n");
 
   KWriteDoc* kwDoc = (dynamic_cast<KWriteDoc*> (pDoc));
-  if(kwDoc) { return (kwDoc->fileName()); }
+  if (kwDoc) {
+    return (kwDoc->fileName());
+  }
 
   CDocBrowser* brDoc = (dynamic_cast<CDocBrowser*> (pDoc));
-  if(brDoc) { return (QString(brDoc->name())); }
+  if (brDoc) {
+    return (QString(brDoc->name()));
+  }
 
   return QString("");
 }
@@ -1561,9 +1512,9 @@ QObject* DocViewMan::getDocFromFilename(const QString& strFileName) const
   QListIterator<QObject> itDoc(m_documentList);
   QList<KWriteDoc> resultList;
 
-  for(; itDoc.current() != 0; ++itDoc) {
+  for (; itDoc.current() != 0; ++itDoc) {
     QObject* doc = itDoc.current();
-    if(doc  && (docName(doc) == strFileName)) {
+    if (doc  && (docName(doc) == strFileName)) {
       return doc;
     }
   }
@@ -1580,4 +1531,3 @@ KWriteDoc* DocViewMan::getKWDocFromFilename(const QString& strFileName) const
 
 
 #include "docviewman.moc"
-

@@ -273,7 +273,10 @@ bool CKDevelop::fileSaveAs(){
   QString name, oldName;
   int message_result=KMessageBox::Yes; // simulate ok state... this could change by one of the following messageboxes
 
-  oldName=m_docViewManager->currentEditView()->getName();
+  if (!m_docViewManager->currentEditView())
+    return;
+
+  oldName = m_docViewManager->currentEditView()->getName();
   if (bAutosave)
     saveTimer->stop();
 
@@ -285,7 +288,7 @@ bool CKDevelop::fileSaveAs(){
       name = KFileDialog::getSaveFileName(((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
                                           QString::null,0,oldName);
 
-    if (name.isNull()){
+    if (name.isNull()) {
     // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
       if (bAutosave)
        saveTimer->start(saveTimeout);
@@ -298,8 +301,7 @@ bool CKDevelop::fileSaveAs(){
                             i18n("Do you really want to save the file\nas another type of document?"),
                             i18n("Save as new type of document?"));
 
-    if(message_result==KMessageBox::Yes && QFile::exists(name))
-    {
+    if(message_result == KMessageBox::Yes && QFile::exists(name)) {
       message_result=KMessageBox::warningYesNoCancel(this,
                         i18n("\nThe file\n\n%1\n\n"
                               "already exists.\nDo you want overwrite the old one?\n").arg(name),
@@ -309,7 +311,7 @@ bool CKDevelop::fileSaveAs(){
   } while (message_result == KMessageBox::No); // repeat it on 'no'
 
 
-  if (message_result==KMessageBox::Cancel){
+  if (message_result==KMessageBox::Cancel) {
      //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
       if (bAutosave)
        saveTimer->start(saveTimeout);
@@ -325,33 +327,29 @@ bool CKDevelop::fileSaveAs(){
   // now that all cancel possibilities are handled simulate a changed file
   // m_docViewManager->currentEditView()->toggleModified(true);
 
-  if (!m_docViewManager->currentEditView()->KWrite::writeFile(name)){
+  if (!m_docViewManager->currentEditView()->KWrite::writeFile(name)) {
   // if saving failed
       if (bAutosave)
        saveTimer->start(saveTimeout);
      return false;
   }
 
-  if (pActualDoc != 0 && pActualDoc == pOldDoc)
-  {
+  if (pActualDoc != 0 && pActualDoc == pOldDoc) {
     // here we are ... saving the file with the same name
     //   so only the modified-flags have to be changed
     pActualDoc->setModified(false);
     m_docViewManager->currentEditView()->toggleModified(false);
   }
-  else
-  {
+  else {
     // now open this file as new file in edit_infos
     //    if an widget still contains the file then update the contents in the widget from file
     switchToFile(name,-1,-1, true);
 
-    if (oldName!=name)
-    {
+    if (oldName!=name) {
       // here we are... and any Untitled-file was saved with another name
       //   and now we can remove the untitled file
-      if (isUntitled(oldName))
-      {
-	// m_docViewManager->removeFileFromEditlist(oldName);
+      if (isUntitled(oldName)) {
+// m_docViewManager->removeFileFromEditlist(oldName);
       }
     }
     
@@ -389,10 +387,8 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   bool bFound;
   char *szChangingChars= (bForGrep) ? (char*)"[]\\^$" : (char*)"$^*[]|()\\;,#<>-.~{}" ;
 
-  if (szOldText)
-  {
-    while ((ch=*szOldText++)!='\0')
-     {
+  if (szOldText) {
+    while ((ch=*szOldText++)!='\0') {
        bFound=false;
        for (i=0; !bFound && szChangingChars[i]!='\0';)
       {
