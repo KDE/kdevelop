@@ -92,9 +92,9 @@ QRect QextMdiChildView::internalGeometry()
       QRect    posInFrame = geometry();
       // map these values to the parent of the MDI child frame
       // (this usually is the MDI child area) and return
-      QPoint   ptTopLeft     = mdiParent()->mapToParent(posInFrame.topLeft());
-      QPoint   ptBottomRight = mdiParent()->mapToParent(posInFrame.bottomRight());
-      return QRect(ptTopLeft, ptBottomRight);
+      QPoint ptTopLeft = mdiParent()->mapToParent(posInFrame.topLeft());
+      QSize  sz = size();
+      return QRect(ptTopLeft, sz);
    }
    else {
       return geometry();
@@ -116,8 +116,8 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
       QRect    newGeoQt;
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
-      newGeoQt.setWidth(newGeometry.width()+frameGeo.width()-geo.width());
-      newGeoQt.setHeight(newGeometry.height()+frameGeo.height()-geo.height());
+      newGeoQt.setWidth(newGeometry.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+      newGeoQt.setHeight(newGeometry.height()+mdiParent()->captionHeight()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
 
       // set the geometry
       mdiParent()->setGeometry(newGeoQt);
