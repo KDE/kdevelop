@@ -1,8 +1,8 @@
-2000-02-05 Ralf Funken <funken.ruk@netcologne.de>
+2000-02-13 Ralf Funken <funken.ruk@netcologne.de>
 	* translated chapter Dialog Editor of german manual
 	  german manual is now complete
 
-2000-02-05 Ralf Funken <funken.ruk@netcologne.de>
+2000-02-13 Ralf Funken <funken.ruk@netcologne.de>
 	* comitted html version of de/tutorial
 	* corrected another shortcut error in ckdevelop_kdlginit.cpp
 	* updated de.po and kdevelop.pot
