@@ -46,7 +46,7 @@ void ViewManager::slotDocumentNew()
 void ViewManager::slotDocumentOpen()
 {
   QString path = QString::null;
-  KURL::List urls = KFileDialog::getOpenURLs(path, QString::null, 0L, i18n("Open File..."));
+  KURL::List urls = KFileDialog::getOpenURLs(path, QString::null, 0L, i18n("Open File"));
   if(urls.isEmpty())
       return;
   for (KURL::List::Iterator i=urls.begin(); i != urls.end(); ++i)

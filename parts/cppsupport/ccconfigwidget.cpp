@@ -345,11 +345,11 @@ void
 CCConfigWidget::slotAddPPPath( )
 {
     QString newDir = KFileDialog::getExistingDirectory( QString::null, 0,
-                                                        i18n( "Select a directory to preparse" ) );
+                                                        i18n( "Select Directory to Preparse" ) );
     if( newDir.isEmpty( ) )
 	return;
 
-    int answer = KMessageBox::questionYesNo( 0, i18n( "Include subdirectories ?" ) );
+    int answer = KMessageBox::questionYesNo( 0, i18n( "Include subdirectories?" ) );
     if( answer == KMessageBox::Yes )
         ( void ) new QListViewItem( lvPCSPaths, i18n( "Yes" ), newDir );
     else
