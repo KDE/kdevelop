@@ -42,6 +42,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+using namespace std;
 
 #define BREAKPOINT_HIT 1
 #define MARK_FOUND 2
