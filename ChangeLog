@@ -3,6 +3,7 @@
 	  - Make CreateFile interface available globally. 
 	* parts/autoproject:
 	  - Use CreateFile interface if available for creating new files
+	
 2003-01-27 F@lk Brettschneider <falk@kdevelop.org>
 	* QEditor-Plugin: Ctrl+Left, Ctrl+Right, Ctrl+Del and Ctrl+Backspace much more better now
 
