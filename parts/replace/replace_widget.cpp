@@ -136,7 +136,7 @@ void ReplaceWidget::stopButtonClicked( KDevPlugin * which )
 {
     if ( which != 0 && which != m_part )
         return;
-        
+
     _terminateOperation = true;
 }
 
@@ -149,6 +149,7 @@ bool ReplaceWidget::showReplacements()
     m_part->core()->running( m_part, true );
 
     bool completed = true;
+    _terminateOperation = false;
 
     QStringList files = workFiles();
     QStringList openfiles = openProjectFiles();
@@ -197,6 +198,7 @@ bool ReplaceWidget::makeReplacements()
     m_part->core()->running( m_part, true );
 
     bool completed = true;
+    _terminateOperation = false;
 
     QStringList openfiles = openProjectFiles();
 
