@@ -240,7 +240,7 @@ void SearchView::search()
 
     //show results
     analyseSearchResults();
-    m_part->partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
+//    m_part->partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
 }
 
 void SearchView::htsearchStdout(KProcess *, char *buffer, int len)
