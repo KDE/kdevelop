@@ -1,5 +1,5 @@
-AC_INIT(src/$APPNAMELC$.cpp)
-AM_INIT_AUTOMAKE($APPNAMELC$, $VERSION$)
+AC_INIT(src/wxhello.cpp)
+AM_INIT_AUTOMAKE(wxhello, 0.1)
 
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -19,14 +19,23 @@ AC_ARG_WITH(wx-config,
     fi
 ])
 
-AC_MSG_CHECKING([wxWindows version])
-if wxversion=`$WXCONFIG --version`; then
-    AC_MSG_RESULT([$wxversion])
-else
-    AC_MSG_RESULT([not found])
-    AC_MSG_ERROR([wxWindows is required. Try --with-wx-config.])
-fi
+wxversion=0
 
+AC_DEFUN([WXTEST],
+[
+	AC_REQUIRE([AC_PROG_AWK])
+	AC_MSG_CHECKING([wxWindows version])
+	if wxversion=`$WXCONFIG --version`; then
+		AC_MSG_RESULT([$wxversion])
+	else
+		AC_MSG_RESULT([not found])
+		AC_MSG_ERROR([wxWindows is required. Try --with-wx-config.])
+	fi])
+
+# Call WXTEST func
+WXTEST
+
+# Verify minimus requires
 vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
 if test -n "$vers" && test "$vers" -ge 2003003; then
 	WX_CPPFLAGS="`$WXCONFIG --cppflags`"
@@ -36,8 +45,10 @@ else
 	AC_MSG_ERROR([wxWindows 2.3.3 or newer is required])
 fi
 
+
 CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS"
+
 
 AC_SUBST(WX_LIBS)
 
