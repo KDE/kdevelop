@@ -160,8 +160,6 @@ void MainWindowShare::createActions()
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
   action->setStatusText( i18n("configure editors settings") );
 
-  connect( API::getInstance()->partController(), SIGNAL( activePartChanged( KParts::Part * ) ),
-    this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 }
 
 void MainWindowShare::slotReportBug()
@@ -352,13 +350,13 @@ void MainWindowShare::slotConfigureEditors()
     }
 }
 
-void MainWindowShare::slotActivePartChanged( KParts::Part * part )
+void MainWindowShare::slotGUICreated( KParts::Part * part )
 {
     kdDebug(0) << "MainWindowShare::slotActivePartChanged()" << endl;
 
     if ( ! part ) return;
 
-    // disable configuration entry if active part is not an editor
+    // disable configuration entry if created part is not an editor
     if ( ! dynamic_cast<KTextEditor::ConfigInterface *>( part ) )
     {
         m_configureEditorAction->setEnabled( false );

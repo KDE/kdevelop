@@ -35,19 +35,21 @@ public:
   void createActions();
   void init();
 
+public slots:
+  void slotGUICreated( KParts::Part * );
+
 signals:
   void gotoNextWindow();
   void gotoPreviousWindow();
   void gotoFirstWindow();
   void gotoLastWindow();
-  
+
 private slots:
   void slotReportBug();
   void slotKeyBindings();
   void slotConfigureToolbars();
   void slotConfigureNotifications();
   void slotConfigureEditors();
-  void slotActivePartChanged( KParts::Part * );
   void slotSettings();
   void slotActiveProcessChanged( KDevPlugin*, bool );
   void slotStopPopupActivated(int);

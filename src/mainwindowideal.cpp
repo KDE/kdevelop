@@ -411,6 +411,8 @@ void MainWindowIDEAl::createGUI(KParts::Part *part) {
     if ( !part )
         setCaption( QString::null );
     KParts::MainWindow::createGUI(part);
+
+    m_pMainWindowShare->slotGUICreated( part );
 }
 
 
