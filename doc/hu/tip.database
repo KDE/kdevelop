@@ -1,29 +1,32 @@
-... a KDevelop gyors magyarázatot ad, ha jobb egérgombbal rákattint bizonyos elemekre ?
-... a beállítások dialógusablakban megadhatja az automatikus mentés sûrûségét ?
-... ha további parancssori opciókat akar megadni a make program számára, ezt megteheti a beállítások dialógusablakban.
-... ha az alkalmazásához jelenleg hozzáfûzött könyvtárakon kívüli további függvényeket használ, a Projekt/Beállítások... dialógusablakban adhatja meg õket.
-... ha meg akarja változtatni az alkalmazás verziószámát, a Projekt/Beállítások... dialógusablakban megteheti, ezzel automatikusan frissítve a projektet.
-... ha új projektet akar létrehozni, válassza a "Projekt"->"Új..." menüt.
-... ha nincsen meg a KDE-könyvtár dokumentációja, létrehozhatja a KDevelop Beállítás dialógusablak Dokumentáció táblájának "Frissítés" gombjával.
-... ha változtatott az alkalmazás osztályain, frissítheti az API dokumentációt a 'Projekt/API dokumentáció generálása' menüpont segítségével.
-... idõt takaríthat meg a "Build/Fájl lefordítása" segítségével, mert így csak az aktuális forrásfájl kerül újrafordításra.
-... ha osztályokról és elemeikrõl szóló információt keres, válassza a "Súgóban keresem a..." menüpontot a "Segítség" menübõl.
-... ha a KDevelop ablakban elhelyezett elemrõl szóló információt keres, válassza az "Ez meg micsoda?" nyomógombot az ezközsorból és kattintson rá a kérdezett elemre.
-... a dokumentációban utánanézhet egy kifejezésnek, ha kijelöli és rákattint a "dokumentáció: " sorra a jobb egérgombra lenyíló menübõl.
-... a KDevelop Fejlesztõcsapat jó napot kíván !
-... ha hibát talált a KDevelop-ban, kérjük, értesítsen róla bennünket. Az értesítési címek a KDevelop Kézikönyvben találhatók.
-... ha saját dokumentációval akarja bõvíteni a dokumentációs fát, kattintson a jobb egérgombbal a "További dokumentációk" elemre a fában. Ezután addja meg az új dokumentáció címét és elérési útvonalát.
-... új osztályt hozhat létre a "Projekt/Új osztály..." menüpontban ?
-... a fájljait a KDevelop-ból az a2ps vagy az enscript programok segítségével nyomtathatja ki ?
-... a "Projekt/Megnyitás..." menü segítségével nyithat meg egy projektet?
-... ha a projekt fordítása közben hibaüzenetet kap, a hibaüzenetre kattintva a megfelelõ fájl problémás sora jelenik meg a szerkesztõablakban?
-... a kimeneti és fa-nézet ablakokat billentyûkombinációkkal is ki/bekapcsolhatja?
-... a programjait a KDevelop-on belül is nyomon követheti, a "Build/Nyomkövetés..." menüpont vagy a Nyomkövetés ikon kiválasztásával ?
-... az eszközmenüben lévõ osztály 'combo box' segítségével navigálhat osztályok között ?
-... xpm fájlokat szerkeszthet az ikonszerkesztõvel, ha kiválasztja õket a fájl-nézet ablakban (LFV, RFV) ?
-... megadhatja a fordítóprogram által adandó figyelmeztetések listáját a projekt beállítások dialógusablakban ?
-... a jobb egérgomb menüvel még a dokumentáció böngészõben is kereshet a kijelölt kifejezésre ?
-... a dokumentáció böngészõben kijelölt szöveget kimásolhatja a vágólapra a jobb egérgomb menüvel és beillesztheted a forrásprogramba ?
-... új könyvtárak telepítése után frissíteni illik a könyvtár dokumentációt ?
-... beállíthatja/módosíthatja a szövegszerkesztõ szintaxis-kiemelését ?
-... visszavonhatja vagy újra végrehajthatja a szerkesztõben tett lépéseit, és beállíthatja a visszavonható lépések számát a szerketsztõ dialógusablakban ?
+... az automatikus mentés idõköze beállítható itt: Jellemzõk->A KDevelop beállításai->Általános ?
+... a make program parancssori kapcsolói megadhatók itt: Projekt->Beállítások->A make beállításai ?
+... az alkalmazás fordításához új programkönyvtárakat lehet hozzáadni itt: Projekt->Beállítások->A linker beállításai ?
+... ha megváltoztatja a projekt verziószámát a Projekt->Beállítások->Általános lapon, akkor az egész projekt automatikusan frissítõdik?
+... új projekt létrehozását a Projekt->Új menüpontból, az alkalmazásvarázslóval kell elkezdeni?
+... ha nincs meg a KDE programkönyvtár dokumentációja, akkor létrehozhatja itt:  Jellemzõk->A KDevelop beállításai->Dokumentáció ?
+... ha megváltoztatta az alkalmazás osztályait, akkor az API-dokumentáció frissítéséhez a Projekt->Az API-dokumentáció létrehozása menüpontot kell választania?
+... ha csak az aktuális fájlt akarja lefordítani, akkor a Fordítás->Az aktuális fájl lefordítása menüpontot (vagy az eszköztár megfelelõ gombját) kell használni?
+... ha egy osztályról vagy annak részeirõl szeretne információt kapni, használhatja a Segítség->Keresés a dokumentációban menüpontot ?
+... ha többet szeretne tudni a KDevelop felület valamelyik elemérõl, akkor csak rá kell kattintania a kívánt elemre, miután megnyomta a "Mi ez?" feliratú gombot az eszköztáron?
+... ha kijelöl egy szót és a felbukkanó menüben a "kikeresés" menüpontot választja, akkor rákereshet a szóra a dokumentációban?
+... a KDevelop fejlesztõcsapatnak mekkora örömet szerez, ha Önnek tetszik a program?
+... a KDevelop fejlesztõinek üzenetet küldhet, ha hibát talált a programban? Az e-mail címeink megtalálhatók a KDevelop kézikönyvben.
+... ha saját dokumentációt szeretne a dokumentációfához adni, akkor elég, ha a jobb egérgombbal rákattint az "Egyéb" bejegyzésre, majd megadja az új dokumentáció adatait?
+... új osztály létrehozásához a Projekt->Új osztály menüpontot kell választani?
+... a projekt fájljait a KDevelop-ból is ki lehet nyomtatni az a2ps vagy az enscript programmal?
+... egy már létezõ projekt megnyitásához a Projekt->Megnyitás menüpontot kell választani?
+... ha a KDevelop szintaktikai hibát talál a programban, akkor a hibaüzenetre kattintva a hibát tartalmazó sorra áll a kurzor?
+... a kimeneti és a fastruktúra-nézetet gyorsbillentyûvel is ki- és be lehet kapcsolni?
+... az alkalmazások hibakeresését a KDevelop-on belül is elvégezheti a "Nyomkövetés" menü menüpontjaival vagy a nyomkövetési ikonnal?
+... gyorsan elugorhat egy osztály programkódjához az eszköztár osztálylistája segítségével?
+... az Ikonszerkesztõt is használhatja a projekthez hozzáadott xpm fájlok szerkesztéséhez?
+... hogy a fordítóprogram figyelmeztetéseit a beállítások párbeszédablakában is megadhatja?
+... akár a dokumentációböngészõ ablakból is rá lehet keresni egy megadott kifejezésre a teljes dokumentációban?
+... ha kijelöl egy szövegrészt a dokumentációböngészõ ablakban, akkor kimásolhatja azt a vágólapra a jobb egérgombbal és bárhová beillesztheti a forráskódban?
+... új programkönyvtár telepítése után annak dokumentációját frissíteni lehet?
+... a szerkesztõ szintaxiskiemelésének minden részletét szabályozni lehet?
+... a szerkesztési beállításoknál a visszavonási lépések maximális számát módosítani lehet?
+... ha lenyomva tartja az eszköztáron a nyomkövetési gombot, akkor további nyomkeresési menüpontok jelennek meg?
+... a Ctrl+balra és a Ctrl+jobbra billentyûparancsokkal szavanként lehet lépkedni a forráskódban?
+... a "Könyvjelzõk" menü segítségével könyvjelzõt lehet a szövegekbe helyezni?
+... a szerkesztõbõl és a dokumentációböngészõbõl fájlokban történõ keresést lehet indítani a jobb egérgombbal?
