@@ -663,6 +663,8 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 	QStringList entries = dir->entries();
 	kdDebug() << "Entries : " << entries.join(",") << endl;
 	
+	KTempDir tdir;
+	
 	QStringList::Iterator entry = entries.begin();
 	for( ; entry != entries.end(); ++entry )
 	{
@@ -682,23 +684,19 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 			}
 			else
 			{
-				KTempFile temp;
-				temp.close();	// cannot write to a still opened file
-				QString tempName = temp.name();
-				file->copyTo( tempName );	// This is plain wrong, KArchiveFile::copyTo takes a directory
+				file->copyTo(tdir.name());
 				// assume that an archive does not contain XML files
 				// ( where should we currently get that info from? )
-				if ( !copyFile( temp.name(), dest + "/" + file->name(), false, process ) )
+				if ( !copyFile( QDir::cleanDirPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
 				{
 					KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
-					temp.unlink();
 					return;
 				}
 				setPermissions(file, dest + "/" + file->name());
-				temp.unlink();
 			}
 		}
 	}
+	tdir.unlink();
 }
 
 void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
