@@ -1087,7 +1087,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 425 "config.l"
+#line 424 "config.l"
 
 
 
@@ -1174,17 +1174,17 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 427 "config.l"
+#line 426 "config.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 428 "config.l"
+#line 427 "config.l"
 { BEGIN(SkipComment); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 429 "config.l"
+#line 428 "config.l"
 { QCString cmd=yytext;
                                            cmd=cmd.left(cmd.length()-1).stripWhiteSpace(); 
 					   ConfigOption *option = config->get(cmd);
@@ -1240,7 +1240,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 481 "config.l"
+#line 480 "config.l"
 { QCString cmd=yytext;
                                           cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
 					  ConfigOption *option = config->get(cmd);
@@ -1283,18 +1283,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 520 "config.l"
+#line 519 "config.l"
 { BEGIN(GetStrList); l=&includePathList; l->clear(); elemStr=""; }
 	YY_BREAK
 /* include a config file */
 case 6:
 YY_RULE_SETUP
-#line 522 "config.l"
+#line 521 "config.l"
 { BEGIN(Include);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 523 "config.l"
+#line 522 "config.l"
 { 
   					  readIncludeFile(yytext); 
   					  BEGIN(Start);
@@ -1310,7 +1310,7 @@ case YY_STATE_EOF(GetStrList):
 case YY_STATE_EOF(GetQuotedString):
 case YY_STATE_EOF(GetEnvVar):
 case YY_STATE_EOF(Include):
-#line 527 "config.l"
+#line 526 "config.l"
 {
                                           //printf("End of include file\n");
 					  //printf("Include stack depth=%d\n",g_includeStack.count());
@@ -1335,17 +1335,17 @@ case YY_STATE_EOF(Include):
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 549 "config.l"
+#line 548 "config.l"
 { config_err("Warning: ignoring unknown tag `%s' at line %d, file %s\n",yytext,yyLineNr,yyFileName.data()); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 550 "config.l"
+#line 549 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 551 "config.l"
+#line 550 "config.l"
 { 
   					  yyLineNr++; 
 					  if (!elemStr.isEmpty())
@@ -1358,7 +1358,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 560 "config.l"
+#line 559 "config.l"
 {
   				          if (!elemStr.isEmpty())
 					  {
@@ -1370,12 +1370,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 568 "config.l"
+#line 567 "config.l"
 { (*s)+=yytext; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 569 "config.l"
+#line 568 "config.l"
 { lastState=YY_START;
   					  BEGIN(GetQuotedString); 
                                           tmpString.resize(0); 
@@ -1383,7 +1383,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 573 "config.l"
+#line 572 "config.l"
 { 
   					  //printf("Quoted String = `%s'\n",tmpString.data());
   					  if (lastState==GetString)
@@ -1400,19 +1400,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 586 "config.l"
+#line 585 "config.l"
 {
   					  tmpString+='"';
   					}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 589 "config.l"
+#line 588 "config.l"
 { tmpString+=*yytext; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 590 "config.l"
+#line 589 "config.l"
 { 
   					  QCString bs=yytext; 
   					  bs=bs.upper();
@@ -1431,39 +1431,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 605 "config.l"
+#line 604 "config.l"
 {
   					  elemStr+=yytext;
   					}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 608 "config.l"
+#line 607 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 609 "config.l"
+#line 608 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 610 "config.l"
+#line 609 "config.l"
 { yyLineNr++; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 611 "config.l"
+#line 610 "config.l"
 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 612 "config.l"
+#line 611 "config.l"
 { yyLineNr++ ; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 614 "config.l"
+#line 613 "config.l"
 ECHO;
 	YY_BREAK
 
@@ -2349,7 +2349,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 614 "config.l"
+#line 613 "config.l"
 
 
 /*@ ----------------------------------------------------------------------------
@@ -3229,7 +3229,7 @@ void Config::create()
                     "will interpret the first line (until the first dot) of a JavaDoc-style \n"
                     "comment as the brief description. If set to NO, the JavaDoc \n"
                     "comments will behave just like the Qt-style comments (thus requiring an \n"
-                    "explict @brief command for a brief description. \n",
+                    "explicit @brief command for a brief description. \n",
                     FALSE
                  );
   cb = addBool(
@@ -3253,7 +3253,7 @@ void Config::create()
                     "INHERIT_DOCS",
                     "If the INHERIT_DOCS tag is set to YES (the default) then an undocumented \n"
                     "member inherits the documentation from any documented member that it \n"
-                    "reimplements. \n",
+                    "re-implements. \n",
                     TRUE
                  );
   cb = addBool(
@@ -3719,7 +3719,9 @@ void Config::create()
                     "The HTML_STYLESHEET tag can be used to specify a user-defined cascading \n"
                     "style sheet that is used by each HTML page. It can be used to \n"
                     "fine-tune the look of the HTML output. If the tag is left blank doxygen \n"
-                    "will generate a default style sheet \n"
+                    "will generate a default style sheet. Note that doxygen will try to copy \n"
+		    "the style sheet file to the HTML output directory, so don't put your own \n"
+		    "stylesheet in the HTML output directory as well, or it will be erased! \n"
                    );
   cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
@@ -3745,7 +3747,7 @@ void Config::create()
                     "If the GENERATE_HTMLHELP tag is set to YES, the CHM_FILE tag can \n"
                     "be used to specify the file name of the resulting .chm file. You \n"
 		    "can add a path in front of the file if the result should not be \n"
-		    "written to the html output dir. \n"
+		    "written to the html output directory. \n"
                    );
   cs->addDependency("GENERATE_HTML");
   cs = addString(
@@ -3925,7 +3927,7 @@ void Config::create()
   cb = addBool(
                     "GENERATE_RTF",
                     "If the GENERATE_RTF tag is set to YES Doxygen will generate RTF output \n"
-                    "The RTF output is optimised for Word 97 and may not look very pretty with \n"
+                    "The RTF output is optimized for Word 97 and may not look very pretty with \n"
                     "other RTF readers or editors.\n",
                     FALSE
                  );
@@ -3960,7 +3962,7 @@ void Config::create()
   cs = addString(
                     "RTF_STYLESHEET_FILE",
                     "Load stylesheet definitions from file. Syntax is similar to doxygen's \n"
-                    "config file, i.e. a series of assigments. You only have to provide \n"
+                    "config file, i.e. a series of assignments. You only have to provide \n"
                     "replacements, missing definitions are set to their default value. \n"
                    );
   cs->setWidgetType(ConfigString::File);
@@ -4015,9 +4017,7 @@ void Config::create()
                     "GENERATE_XML",
                     "If the GENERATE_XML tag is set to YES Doxygen will \n"
                     "generate an XML file that captures the structure of \n"
-                    "the code including all documentation. Note that this \n"
-		    "feature is still experimental and incomplete at the \n"
-		    "moment. \n",
+                    "the code including all documentation. \n",
 		    FALSE
                  );
   cs = addString(
@@ -4238,7 +4238,7 @@ void Config::create()
                     "If the CLASS_DIAGRAMS tag is set to YES (the default) Doxygen will \n"
                     "generate a inheritance diagram (in HTML, RTF and LaTeX) for classes with base or \n"
                     "super classes. Setting the tag to NO turns the diagrams off. Note that this \n"
-		    "option is superceded by the HAVE_DOT option below. This is only a fallback. It is \n"
+		    "option is superseded by the HAVE_DOT option below. This is only a fallback. It is \n"
 		    "recommended to install and use dot, since it yields more powerful graphs. \n",
                     TRUE
                  );
@@ -4278,7 +4278,7 @@ void Config::create()
   cb = addBool(
                     "UML_LOOK",
                     "If the UML_LOOK tag is set to YES doxygen will generate inheritance and \n"
-	            "collaboration diagrams in a style similiar to the OMG's Unified Modeling \n"
+	            "collaboration diagrams in a style similar to the OMG's Unified Modeling \n"
 		    "Language. \n",
 	            FALSE
 	      );
