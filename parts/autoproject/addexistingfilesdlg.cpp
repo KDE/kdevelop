@@ -249,10 +249,10 @@ void AddExistingFilesDialog::slotOk()
 	if ( outsideList.count() > 0 )
 	{
 		if ( KMessageBox::questionYesNoList ( this, i18n (
-																		"The following file(s) are not in the Subproject directory.\n"
-																		"Press Link to add the files by creating symbolic links.\n"
-																		"Press Copy to copy the files into the directory." ),
-																		stringList, "Warning", KGuiItem ( i18n ( "Link (recommended)" ) ), KGuiItem ( i18n ( "Copy (not recommended)" ) ) ) == KMessageBox::No )
+								"The following file(s) are not in the Subproject directory.\n"
+								"Press Link to add the files by creating symbolic links.\n"
+								"Press Copy to copy the files into the directory." ),
+								stringList, i18n("Warning"), KGuiItem ( i18n ( "Link (recommended)" ) ), KGuiItem ( i18n ( "Copy (not recommended)" ) ) ) == KMessageBox::No )
 		{
 			// Copy files into the Subproject directory
 			KFileItemListIterator it ( outsideList ) ;

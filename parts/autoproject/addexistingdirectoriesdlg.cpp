@@ -18,6 +18,7 @@
 #include <qlayout.h>
 
 #include <kprogress.h>
+#include <klocale.h>
 
 #include "autolistviewitems.h"
 
@@ -51,7 +52,7 @@ AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* pa
 	sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-	importView = new KImportIconView ( "Drag one or more directories with an existing      Makefile.am from above and drop it here!", destGroupBox, "destination icon view" );
+	importView = new KImportIconView ( i18n("Drag one or more directories with an existing Makefile.am from above and drop it here!"), destGroupBox, "destination icon view" );
 	destGroupBoxLayout->addWidget ( importView );
 
 	setIcon ( SmallIcon ( "fileimport.png" ) );
