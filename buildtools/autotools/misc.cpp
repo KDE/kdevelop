@@ -127,14 +127,25 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 			QString lhs = re.cap( 1 );
 			QString rhs = re.cap( 2 );
 			QMap<QString, QString>::Iterator it = variables.find( lhs );
-			
+
 			if ( it != variables.end() )
 			{
 				// Skip continuation lines
 				while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd() )
 					s = ins.readLine();
-				if( !it.data().stripWhiteSpace().isEmpty() )
-				    s = it.key() + " = " + it.data();
+				if( !it.data().stripWhiteSpace().isEmpty() ) {
+					QStringList variableList = QStringList::split(' ', it.data());
+					s = it.key() + " = ";
+					int l = s.length();
+					for (uint i = 0; i < variableList.count(); i++) {
+						l += variableList[i].length() + 1;
+						if (l > 80)	{
+							s += "\\\n\t";
+							l = 8;
+						}
+						s += variableList[i] + " ";
+					}
+				}
 				else
 				    s = QString::null;
 				variables.remove( it );
@@ -155,8 +166,20 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 	// Write new variables out
 	QMap<QString, QString>::Iterator it2;
 	for ( it2 = variables.begin(); it2 != variables.end(); ++it2 ){
-	    if( !it2.data().stripWhiteSpace().isEmpty() )
-		outs << it2.key() + " = " + it2.data() << endl;
+	    if( !it2.data().stripWhiteSpace().isEmpty() ) {
+		QStringList variableList = QStringList::split(' ', it2.data());
+		outs << it2.key() + " = ";
+		int l = it2.key().length();
+		for (uint i = 0; i < variableList.count(); i++) {
+			l += variableList[i].length() + 1;
+			if (l > 80)	{
+				outs << "\\\n\t";
+				l = 8;
+			}
+			outs << variableList[i] << " ";
+		}
+		outs << endl;
+            }
 	}
 
 	fin.close();
@@ -186,13 +209,13 @@ void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QStr
 	{
 		bool found = false;
 		QString s = ins.readLine();
-		
+
 		if ( re.exactMatch( s ) )
 		{
 			QString lhs = re.cap( 1 );
 			QString rhs = re.cap( 2 );
 			QMap<QString, QString>::Iterator it;
-			
+
 			for ( it = variables.begin(); it != variables.end(); ++it )
 			{
 				if ( lhs == it.key() )
@@ -202,21 +225,21 @@ void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QStr
 						s = ins.readLine();
 
 					variables.remove ( it );
-					
+
 					found = true;
-					
+
 					break;
 				}
 			}
 		}
-		
+
 		if ( !found )
 			outs << s << endl;
 	}
-	
+
 	fin.close();
 	fout.close();
-	
+
 	QDir().rename ( fileName + "#", fileName );
 }
 
