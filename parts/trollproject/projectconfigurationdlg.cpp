@@ -466,12 +466,13 @@ void ProjectConfigurationDlg::updateIncludeControl()
           ((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION){
           SubprojectItem *sItem=(SubprojectItem*)item;
          //if(sItem!=myProjectItem) //needed own path for other libs
+         if (!sItem->isScope)
          {
               QString tmpInc=sItem->getIncAddPath(myProjectItem->getDownDirs());
               tmpInc=QDir::cleanDirPath(tmpInc);
               InsideCheckListItem *newItem=new InsideCheckListItem(insideinc_listview,insideinc_listview->lastItem(),sItem, this);
               QStringList::Iterator it=incList.begin();
-              
+
           for(;it!=incList.end();++it)
           {
             if((*it).find(tmpInc)>=0){
@@ -591,8 +592,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
             if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
                 || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
               SubprojectItem *sItem=(SubprojectItem*)item;
-
-              if(sItem!=myProjectItem)
+              if ((!sItem->isScope) && (sItem!=myProjectItem))
               {
                   QString tmpLib;
                   if(sItem->configuration.m_requirements & QD_SHARED)
@@ -628,7 +628,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
       if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
         || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
         SubprojectItem *sItem=(SubprojectItem*)item;
-        if(sItem!=myProjectItem)
+        if ((!sItem->isScope) && (sItem!=myProjectItem))
         {
           QString tmpLib;
           if(sItem->configuration.m_requirements & QD_SHARED)

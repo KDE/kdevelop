@@ -26,10 +26,12 @@ FileBuffer::~FileBuffer()
 
 /**
  * Find next accurance of a substring in the buffer starting at a given caret position
+ * Uses searchForVariable flag to determine if we are looking for a variable (like "TARGET")
+ * or just a sign (like "=").
  * Returns: a Caret pointing to the position where the substring is found.
  *          nvlToMax ? (rowcount+1,0) : (-1,-1) if the substring is not found.
  */
-Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, bool nvlToMax)
+Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, bool nvlToMax, bool searchForVariable)
 //===========================================================================================
 {
   // ATTENTION: This method is central for the class. Almost all other methods rely on it
@@ -44,14 +46,17 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   for (; i<=m_buffer.count(); i++)
   {
     int idxSeek = line.find(subString);
+//    qWarning("FILEBUFFER: substring %s in line %s idxSeek = %d", subString.ascii(), line.latin1(), idxSeek);
     if ((line.find(subString)!=-1)
         //adymo: do not match substrings if the next character is not a letter or number
         //this is supposed to fix handling of similar words like TARGET and TARGETDEPS
-        && ( ! line[idxSeek+subString.length()].isLetterOrNumber() ) )
+        && ( ! (searchForVariable && line[idxSeek+subString.length()].isLetterOrNumber()) ) )
     {
+
+//      qWarning("FILEBUFFER: next char is %c, index %d", line[idxSeek+subString.length()].latin1(), idxSeek+subString.length());
       if (startPos.m_row == (int) i-1)
         // first line in search so start idx should be added to result idx
-	idxSeek = idxSeek + startPos.m_idx;
+        idxSeek = idxSeek + startPos.m_idx;
       return Caret(i-1,idxSeek);
     }
     if (i<m_buffer.count())
@@ -231,7 +236,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
   bool finished = false;
   while (!finished)
   {
-    Caret variablePos(findInBuffer(variable,curPos));
+    Caret variablePos(findInBuffer(variable,curPos,false,true));
     if (variablePos==Caret(-1,-1))
     {
       finished=true;
@@ -302,7 +307,7 @@ void FileBuffer::getVariableValueSetModes(const QString &variable,QPtrList<FileB
 
   for (int i=0; !finished; ++i)
   {
-    Caret variablePos(findInBuffer(variable,curPos));
+    Caret variablePos(findInBuffer(variable,curPos,false,true));
     if (variablePos==Caret(-1,-1))
     {
       finished=true;
@@ -358,7 +363,7 @@ void FileBuffer::removeValues(const QString &variable)
   bool finished = false;
   while (!finished)
   {
-    Caret variablePos = findInBuffer(variable,curPos);
+    Caret variablePos = findInBuffer(variable,curPos,false,true);
     if (variablePos==Caret(-1,-1))
     {
       finished = true;
