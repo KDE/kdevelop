@@ -47,7 +47,7 @@ private slots:
     void selectClass(QListViewItem*);
     void selectFunction(QListViewItem*);
     void slotProjectOpened();
-    void slotProjectCloses();
+    void slotProjectClosed();
     void refresh();
     void switchedViewPopup();
     void graphicalClassView();

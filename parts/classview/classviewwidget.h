@@ -48,23 +48,23 @@ public:
 	KDevelop2ViewMode,
 	JavaLikeViewMode
     };
-    
+
 public:
     ClassViewWidget( ClassViewPart *part );
     virtual ~ClassViewWidget();
-    
+
     int viewMode() const;
     void setViewMode( int mode );
 
     void clear();
-    
+
 private slots:
     void slotNewClass();
     void slotAddMethod();
     void slotAddAttribute();
     void slotOpenDeclaration();
     void slotOpenImplementation();
-    
+
 protected:
     void contentsContextMenuEvent( QContextMenuEvent* );
 
@@ -104,14 +104,14 @@ public:
     	: KListViewItem( parent, text ) {}
     ClassViewItem( QListViewItem* parent, const QString& text=QString::null )
     	: KListViewItem( parent, text ) {}
-    
+
     virtual bool isFolder() const { return false; }
     virtual bool isFile() const { return false; }
     virtual bool isNamespace() const { return false; }
     virtual bool isClass() const { return false; }
     virtual bool isFunction() const { return false; }
     virtual bool isVariable() const { return false; }
-    
+
     virtual bool hasDeclaration() const { return false; }
     virtual bool hasImplementation() const { return false; }
 
@@ -131,7 +131,7 @@ public:
     	: ClassViewItem( parent, name ) {}
 
     virtual bool isFolder() const { return true; }
-    
+
     void setup();
     QString key( int, bool ) const;
 
@@ -158,7 +158,7 @@ public:
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     virtual bool isNamespace() const { return true; }
-    
+
     void setup();
     QString key( int, bool ) const;
 
@@ -186,10 +186,10 @@ public:
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     virtual bool isClass() const { return true; }
-    
+
     virtual bool hasDeclaration() const { return true; }
     virtual void openDeclaration();
-    
+
     void setup();
     QString key( int, bool ) const;
 
@@ -215,9 +215,9 @@ public:
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     virtual bool isFunction() const { return true; }
-    
+
     virtual bool hasDeclaration() const { return true; }
-    virtual bool hasImplementation() const { return m_dom->hasImplementation(); }
+    virtual bool hasImplementation() const;
 
     virtual void openDeclaration();
     virtual void openImplementation();
@@ -240,7 +240,7 @@ public:
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     virtual bool isVariable() const { return true; }
-    
+
     virtual bool hasDeclaration() const { return true; }
     virtual bool hasImplementation() const { return false; }
 

@@ -71,7 +71,7 @@ void ClassViewPart::slotProjectOpened( )
     connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
 }
 
-void ClassViewPart::slotProjectCloses( )
+void ClassViewPart::slotProjectClosed( )
 {
     disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
     m_namespaces->view()->clear();
@@ -161,10 +161,11 @@ void ClassViewPart::selectFunction( QListViewItem * item )
     if (!fi)
         return;
     int startLine, startColumn;
-    fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
-    if (startLine != 0)
-        partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
-    else
+    // FIXME: ROBE
+    //fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
+    //if (startLine != 0)
+    //    partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
+    //else
     {
         fi->dom()->getStartPosition( &startLine, &startColumn );
         partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
@@ -204,8 +205,9 @@ void ClassViewPart::goToFunctionDefinition( )
         if (!fi)
             return;
         int startLine, startColumn;
-        fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
-        partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
+	//FIXME: robe
+        //fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
+        //partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
     }
 }
 
