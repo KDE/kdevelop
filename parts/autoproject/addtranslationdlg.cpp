@@ -58,10 +58,10 @@ AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *paren
 
     QStringList rawlist, list;
     rawlist << "af" << "ar" << "bg" << "bo" << "br" << "bs" << "ca" << "cs" << "cy" << "da"
-            << "de" << "el" << "en_GB"   << "eo" << "es" << "et" << "eu" << "fi" << "fr"
-            << "ga" << "gl" << "gu" << "he" << "hi" << "hu" << "id" << "is" << "it" << "ja"
-            << "km" << "ko" << "lt" << "lv" << "mi" << "mk" << "mr" << "nl" << "no" << "no_NY"
-            << "oc" << "pl" << "pt" << "pt_BR" << "ro" << "ru" << "sk" << "sl" << "sr" << "sv"
+            << "de" << "el" << "en_GB"   << "eo" << "es" << "et" << "eu" << "fi" << "fr";
+    rawlist << "ga" << "gl" << "gu" << "he" << "hi" << "hu" << "id" << "is" << "it" << "ja"
+            << "km" << "ko" << "lt" << "lv" << "mi" << "mk" << "mr" << "nl" << "no" << "no_NY";
+    rawlist << "oc" << "pl" << "pt" << "pt_BR" << "ro" << "ru" << "sk" << "sl" << "sr" << "sv"
             << "ta" << "th" << "tr" << "uk" << "wa" << "zh_CN.GB2312" << "zh_TW.Big5";
 
     // Remove already added languages
