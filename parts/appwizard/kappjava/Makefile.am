@@ -5,7 +5,7 @@ templatedir = ${appwizarddatadir}/templates
 
 kappjava_DATA = app.java pref.java appview.java \
                 app_client.java appui.rc src-Makefile.am \
-                kappjava.png
+                kappjava.png app.kdevelop subdirs
 template_DATA = kappjava
 
 BUILT_SOURCES = script.local
