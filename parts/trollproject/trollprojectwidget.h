@@ -84,10 +84,15 @@ public:
     QList<GroupItem> groups;
     QList<SubprojectItem> scopes;
 
+    // Containers of included an excluded files
     QStringList subdirs;
+    QStringList subdirs_exclude;
     QStringList sources;
+    QStringList sources_exclude;
     QStringList headers;
+    QStringList headers_exclude;
     QStringList forms;
+    QStringList forms_exclude;
 
     ProjectConfiguration configuration;
 
@@ -117,9 +122,10 @@ public:
 class FileItem : public ProjectItem
 {
 public:
-    FileItem(QListView *lv, const QString &text);
+    FileItem(QListView *lv, const QString &text,bool exclude=false);
 
     QString name;
+    bool excluded;
 };
 
 
@@ -158,6 +164,7 @@ public:
     GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name, const QString &scopeName);
     FileItem *createFileItem(const QString &name);
 
+    SubprojectItem* getScope(SubprojectItem *baseItem,const QString &scopeString); // baseItem must be ansister
     void updateProjectFile(QListViewItem *item);
     void updateProjectConfiguration(SubprojectItem *item);
     void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
@@ -169,7 +176,7 @@ public:
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotDetailsSelectionChanged(QListViewItem*);    
+    void slotDetailsSelectionChanged(QListViewItem*);
     void slotDetailsExecuted(QListViewItem *item);
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotBuildProject();

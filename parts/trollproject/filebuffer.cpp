@@ -134,15 +134,17 @@ FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
 /**
  * Set values for a variable. (variable = value_1 value_2 valu_3 ... value_n)
  */
-void FileBuffer::setValues(const QString &variable,QStringList values,int valuesPerRow, bool append)
-//==================================================================================================
+void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append, int valuesPerRow)
+//======================================================================================================================
 {
   unsigned int i;
   QString line;
-  if (append)
+  if (append == VSM_APPEND)
     line = variable + " += ";
-  else
+  else if (append == VSM_RESET)
     line = variable + " = ";
+  else if (append == VSM_EXCLUDE)
+    line = variable + " -= ";
   QString spacing;
   spacing.fill(' ',line.length());
   for (i=0; i<values.count(); i++)

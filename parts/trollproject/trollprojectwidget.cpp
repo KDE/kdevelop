@@ -43,6 +43,8 @@
 #include "trollprojectpart.h"
 
 
+#define VALUES_PER_ROW  1
+
 /**
  * Class ProjectViewItem
  */
@@ -120,9 +122,12 @@ GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const Q
  * Class FileItem
  */
 
-FileItem::FileItem(QListView *lv, const QString &text)
+FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
     : ProjectItem(File, lv, text)
 {
+    // if excluded is set the file is excluded in the subproject/project.
+    // by default excluded is set to false, thus file is included
+    excluded = exclude;
     setPixmap(0, SmallIcon("document"));
 }
 
@@ -565,11 +570,11 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   QString relpath = item->path.mid(projectDirectory().length());
   Buffer->removeValues("TEMPLATE");
   if (item->configuration.m_template == QTMP_APPLICATION)
-    Buffer->setValues("TEMPLATE",QString("app"));
+    Buffer->setValues("TEMPLATE",QString("app"),FileBuffer::VSM_RESET);
   if (item->configuration.m_template == QTMP_LIBRARY)
-    Buffer->setValues("TEMPLATE",QString("lib"));
+    Buffer->setValues("TEMPLATE",QString("lib"),FileBuffer::VSM_RESET);
   if (item->configuration.m_template == QTMP_SUBDIRS)
-    Buffer->setValues("TEMPLATE",QString("subdirs"));
+    Buffer->setValues("TEMPLATE",QString("subdirs"),FileBuffer::VSM_RESET);
   Buffer->removeValues("CONFIG");
   QStringList configList;
   if (item->configuration.m_buildMode == QBM_RELEASE)
@@ -588,10 +593,45 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     configList.append("thread");
   if (item->configuration.m_requirements & QD_X11)
     configList.append("x11");
-  Buffer->setValues("CONFIG",configList,5,true);
+  Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
+SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QString &scopeString)
+//===============================================================================================
+{
+  QStringList baseScopeParts = QStringList::split(':',baseItem->scopeString);
+  QStringList subScopeParts = QStringList::split(':',scopeString);
+  kdDebug(9024) << "baseitem" << baseItem->scopeString << endl;
+  // Stop if baseItem not an ansister
+  if (baseScopeParts.count() > subScopeParts.count())
+    return NULL;
+  int i;
+  for (i=0; i<baseScopeParts.count(); i++)
+  {
+    // Stop if baseItem in wrong treepart
+    kdDebug(9024) << "baseScopeParts[i]" << "!=" << subScopeParts[i] << endl;
+    if (baseScopeParts[i] != subScopeParts[i])
+      return NULL;
+  }
+  // if all scopeparts matched and the amount of parts are equal this must be it
+  if (baseScopeParts.count() == subScopeParts.count())
+    return baseItem;
+  // process next step of recursive function
+  QString nextScopePart = subScopeParts[i];
+  QListIterator<SubprojectItem> spit(baseItem->scopes);
+  for (; spit.current(); ++spit)
+  {
+    SubprojectItem *spitem = spit;
+    kdDebug(9024) << spitem->text(0) << "==" << nextScopePart << endl;
+    if (spitem->text(0)==nextScopePart)
+    {
+      return getScope(spit,scopeString);
+      break;
+    }
+  }
+  return NULL;
+}
 
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
@@ -599,13 +639,16 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
   subBuffer->removeValues("SUBDIRS");
-  subBuffer->setValues("SUBDIRS",spitem->subdirs,4,true);
+  subBuffer->setValues("SUBDIRS",spitem->subdirs,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->removeValues("SOURCES");
-  subBuffer->setValues("SOURCES",spitem->sources,4,true);
+  subBuffer->setValues("SOURCES",spitem->sources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("SOURCES",spitem->sources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   subBuffer->removeValues("HEADERS");
-  subBuffer->setValues("HEADERS",spitem->headers,4,true);
+  subBuffer->setValues("HEADERS",spitem->headers,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("HEADERS",spitem->headers_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   subBuffer->removeValues("FORMS");
-  subBuffer->setValues("FORMS",spitem->forms,4,true);
+  subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
@@ -868,8 +911,22 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         // Fileproperties
         else if (r == idFileProperties)
         {
-          FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,fitem);
+          GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+          if (!gitem)
+            return;
+          QStringList dirtyScopes;
+          FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
+          SubprojectItem *scope;
           propdlg->exec();
+          for (int i=0; i<dirtyScopes.count();i++)
+          {
+            scope = getScope(m_shownSubproject,dirtyScopes[i]);
+            kdDebug(9024) << "Looking for scope: " << dirtyScopes[i] << " (starting in " <<  m_shownSubproject->scopeString << ")" << endl;
+            if (scope)
+               updateProjectFile(scope);
+             else
+               kdDebug(9024) << "Scope not found" << endl;
+          }
         }
 
     }
@@ -947,9 +1004,9 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 
     QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
-    subBuffer->getValues("FORMS",item->forms,minusListDummy);
-    subBuffer->getValues("SOURCES",item->sources,minusListDummy);
-    subBuffer->getValues("HEADERS",item->headers,minusListDummy);
+    subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
+    subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
+    subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
 
     // Create list view items
     GroupItem *titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
