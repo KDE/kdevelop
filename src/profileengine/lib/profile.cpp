@@ -19,6 +19,7 @@
 #include "profile.h"
 
 #include <qdir.h>
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -160,4 +161,25 @@ void Profile::detachFromParent()
 {
     if (m_parent)
         m_parent->removeChildProfile(this);
+}
+
+KURL::List Profile::resources(const QString &nameFilter)
+{
+    QStringList resources;
+    QStringList resourceDirs = KGlobal::dirs()->resourceDirs("data");
+    for (QStringList::const_iterator it = resourceDirs.begin(); it != resourceDirs.end(); ++it)
+    {
+        QString dir = *it;
+        dir = dir + "kdevelop/profiles" + dirName();
+        
+        QDir d(dir);
+        const QFileInfoList *infoList = d.entryInfoList(nameFilter, QDir::Files);
+        if (!infoList)
+            continue;
+        for (QFileInfoList::const_iterator infoIt = infoList->constBegin();
+             infoIt != infoList->constEnd(); ++ infoIt)
+            resources.append((*infoIt)->absFilePath());
+    }
+    
+    return KURL::List(resources);
 }

@@ -19,6 +19,7 @@
 #ifndef PROFILE_H
 #define PROFILE_H
 
+#include <kurl.h>
 #include <qstringlist.h>
 
 /**
@@ -64,6 +65,8 @@ public:
     void removeEntry(List type, const QString &value);
     
     bool hasInEntryList(EntryList &list, QString value);
+    
+    KURL::List resources(const QString &nameFilter);
     
     void detachFromParent();
     

@@ -35,6 +35,18 @@ public:
     QMap<QString, Profile*> profiles;
 };
 
+class ProfileListingEx {
+public:
+    ProfileListingEx(const QString &filter): m_filter(filter) {}
+    void operator() (Profile *profile)
+    {
+        resourceList += profile->resources(m_filter);
+    }
+    
+    KURL::List resourceList;
+    QString m_filter;
+};
+
 /**
 Profile engine.
 
@@ -51,6 +63,18 @@ public:
     KTrader::OfferList offers(const QString &profileName, OfferType offerType);
     /**@return The list of all plugin offers for given type.*/
     KTrader::OfferList allOffers(OfferType offerType);
+    
+    /**@return The list of URLs to the resources (files) with given @p extension.
+    @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
+    for name filters syntax.*/
+    KURL::List resources(const QString &profileName, const QString &nameFilter);
+    
+    /**@return The list of URLs to the resources (files) with given @p extension.
+    This list is obtained by a recursive search that process given profile
+    and all it's subprofiles.
+    @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
+    for name filters syntax.*/
+    KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
 
     Profile *rootProfile() const { return m_rootProfile; }
     
@@ -78,6 +102,16 @@ public:
 protected:
     void processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root);
 
+    KURL::List resources(Profile *profile, const QString &nameFilter);
+    
+    /**Gets a complete listing of available profiles and looks for a profile.
+    @param listing Profiles listing will be saved here.
+    @param profile Will be a pointer to a profile with the name @p profileName or 0
+    if no profile with that name is found.
+    @param profileName The name of a profile to find.*/
+    void getProfileWithListing(ProfileListing &listing, Profile **profile, 
+        const QString &profileName);
+    
 private:
     Profile *m_rootProfile;
 };

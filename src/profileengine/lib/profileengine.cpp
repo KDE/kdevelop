@@ -20,6 +20,7 @@
 
 #include <qdir.h>
 
+#include <kurl.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -71,14 +72,8 @@ void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap
 KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType offerType)
 {
     ProfileListing listing;
-    Profile *profile;
-    if (profileName == "KDevelop")
-        profile = m_rootProfile;
-    else
-    {
-        walkProfiles<ProfileListing>(listing, m_rootProfile);
-        profile = listing.profiles[profileName];
-    }
+    Profile *profile = 0;
+    getProfileWithListing(listing, &profile, profileName);
 
     if (!profile)
         return KTrader::OfferList();
@@ -167,4 +162,47 @@ KTrader::OfferList ProfileEngine::allOffers(OfferType offerType)
             break;
     }
     return KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+}
+
+void ProfileEngine::getProfileWithListing(ProfileListing &listing, Profile **profile,
+    const QString &profileName)
+{
+    if (profileName == "KDevelop")
+        *profile = m_rootProfile;
+    else
+    {
+        walkProfiles<ProfileListing>(listing, m_rootProfile);
+        *profile = listing.profiles[profileName];
+    }
+}
+
+KURL::List ProfileEngine::resources(const QString &profileName, const QString &nameFilter)
+{
+    ProfileListing listing;
+    Profile *profile = 0;
+    getProfileWithListing(listing, &profile, profileName);
+
+    if (!profile)
+        return KURL::List();
+    
+    return resources(profile, nameFilter);
+}
+
+KURL::List ProfileEngine::resources(Profile *profile, const QString &nameFilter)
+{
+    return profile->resources(nameFilter);
+}
+
+KURL::List ProfileEngine::resourcesRecursive(const QString &profileName, const QString &nameFilter)
+{
+    ProfileListing listing;
+    Profile *profile = 0;
+    getProfileWithListing(listing, &profile, profileName);
+    KURL::List resources = profile->resources(nameFilter);
+    
+    ProfileListingEx listingEx(nameFilter);
+    walkProfiles<ProfileListingEx>(listingEx, profile);
+    
+    resources += listingEx.resourceList;
+    return resources;
 }
