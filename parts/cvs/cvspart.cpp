@@ -57,6 +57,13 @@ using namespace UrlFileUtilities;
 const QString changeLogFileName = "ChangeLog";
 
 ///////////////////////////////////////////////////////////////////////////////
+// Global vars
+///////////////////////////////////////////////////////////////////////////////
+
+// This is an ugly hack for being able to pass CVS_RSH from CvsPart::create
+QString g_tempEnvRsh( "" );
+
+///////////////////////////////////////////////////////////////////////////////
 // Plugin factory
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +104,10 @@ CvsPart::~CvsPart()
 void CvsPart::init()
 {
 	setupActions();
+
+	// Load / store project configuration every time the project is opened/closed
+	connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+	connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
 	// Context menu
 	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -140,8 +151,8 @@ void CvsPart::setupActions()
 
 QString CvsPart::cvs_rsh() const
 {
-	QDomDocument &dom = *projectDom();
-	QString env = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", m_cvsRsh ); // default_rsh );
+	CvsOptions *options = CvsOptions::instance();
+	QString env = options->rsh();
 	if ( !env.isEmpty() )
 		return QString( "CVS_RSH=" ) + KShellProcess::quote( env );
 	return QString::null;
@@ -294,8 +305,12 @@ void CvsPart::createNewProject( const QString& dirName )
 		return;
 	QString init("");
 
-	// Store rsh setting
-	m_cvsRsh = m_cvsConfigurationForm->cvs_rsh->text();
+	// FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
+	// createNewProject() is called _before_ projectOpened() signal is emitted: the latter
+	// Is it possible to postpone it? Or have we to fall back to some kind of temporary variable/
+	// flag approach?
+	// For now, one must re-set CVS_RSH in Project->Options->Cvs
+	g_tempEnvRsh = m_cvsConfigurationForm->cvs_rsh->text();
 
 	if (m_cvsConfigurationForm->init_check->isChecked())
 	{
@@ -359,16 +374,16 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 QString CvsPart::buildCommitCmd( const QString _directoryName, const QString &_fileName, const QString _logMessage )
 {
-	QDomDocument &dom = *projectDom();
+	CvsOptions *options = CvsOptions::instance();
 
 	QString command( "cd " );
 	command += KShellProcess::quote( _directoryName );
 	command += " && ";
 	command += cvs_rsh(); // yes, it is already quoted
 	command += " cvs ";
-	command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+	command += options->cvs();
 	command += " commit ";
-	command += DomUtil::readEntry( dom, "/kdevcvs/commitoptions", default_commit );
+	command += options->commit();
 	command += " -m " + KShellProcess::quote( _logMessage );
 	command += " ";
 	command += KShellProcess::quote( _fileName );
@@ -418,14 +433,14 @@ void CvsPart::slotUpdate()
 
     kdDebug(9000) << "slotUpdate()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *projectDom();
+	CvsOptions *options = CvsOptions::instance();
 
     QString command("cd ");
     command += KShellProcess::quote( dirName );
     command += " && " + cvs_rsh() + " cvs ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+    command += options->cvs();
     command += " update ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/updateoptions", default_update );
+    command += options->update();
     command += " ";
     command += KShellProcess::quote( fileName );
 
@@ -449,14 +464,14 @@ void CvsPart::slotAdd()
 
     kdDebug(9000) << "slotAdd()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *projectDom();
+	CvsOptions *options = CvsOptions::instance();
 
     QString command("cd ");
     command += KShellProcess::quote( dirName );
     command += " && " + cvs_rsh() + " cvs ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+    command += options->cvs();
     command += " add ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/addoptions", default_add );
+    command += options->add();
     command += " ";
     command += KShellProcess::quote( fileName );
 
@@ -475,14 +490,14 @@ void CvsPart::slotRemove()
 
     kdDebug(9000) << "slotRemove()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *projectDom();
+	CvsOptions *options = CvsOptions::instance();
 
     QString command("cd ");
     command += KShellProcess::quote( dirName );
     command += " && " + cvs_rsh() + " cvs ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+    command += options->cvs();
     command += " remove ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/removeoptions", default_remove );
+    command += options->remove();
     command += " ";
     command += KShellProcess::quote( fileName );
 
@@ -501,14 +516,14 @@ void CvsPart::slotReplace()
 
     kdDebug(9000) << "slotReplace()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *projectDom();
+	CvsOptions *options = CvsOptions::instance();
 
     QString command("cd ");
     command += KShellProcess::quote( dirName );
     command += " && " + cvs_rsh() + " cvs ";
-    command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+    command += options->cvs();
     command += " update ";
-    command += default_replace;
+    command += options->replace();
     command += " ";
     command += KShellProcess::quote( fileName );
 
@@ -550,17 +565,15 @@ void CvsPart::slotDiff()
 	if (!prepareOperation())
 		return;
 
+	CvsOptions *options = CvsOptions::instance();
+
 	kdDebug(9000) << "slotDiff()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
 	QStringList args;
-	QString str;
 	proc = new KProcess();
 	stdOut = QString::null;
 	stdErr = QString::null;
-
-	QDomDocument &dom = *projectDom();
-
-	str = DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+	QString str = options->cvs();
 
 	if (str.length())
 	{
@@ -570,7 +583,7 @@ void CvsPart::slotDiff()
 		}
 	}
 	args << "diff";
-	str = DomUtil::readEntry( dom, "/kdevcvs/diffoptions", default_diff );
+	str = options->diff();
 	if (str.length())
 	{
 		QStringList list = QStringList::split(' ',str);
@@ -580,7 +593,7 @@ void CvsPart::slotDiff()
 	}
 	args << fileName;
 
-	QString crsh = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", default_rsh );
+	QString crsh = options->rsh();
 	if ( !crsh.isEmpty() )
 		proc->setEnvironment( "CVS_RSH", crsh );
 	proc->setWorkingDirectory( dirName );
@@ -683,6 +696,37 @@ void CvsPart::slotStopButtonClicked( KDevPlugin* which )
 		KMessageBox::sorry( 0, i18n("Unable to kill process, you might want to kill it by hand.") );
 		return;
 	}
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotProjectOpened()
+{
+	kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << dirName << endl;
+
+	CvsOptions *options = CvsOptions::instance();
+	options->load( *projectDom() );
+
+	// If createNewProject() has set this var then we have to get it.
+	if (!g_tempEnvRsh.isEmpty())
+	{
+		options->setRsh( g_tempEnvRsh );
+		// Reset so next since this var is plugin global and may affect other
+		// projects that could be loaded after the current one
+		g_tempEnvRsh = "";
+	}
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotProjectClosed()
+{
+	kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << dirName << endl;
+
+	CvsOptions *options = CvsOptions::instance();
+	options->save( *projectDom() );
+	delete options;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,12 @@ for your new project</string>
             <property name="name">
                 <cstring>TextLabel5</cstring>
             </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
             <property name="text">
                 <string>Release tag:</string>
             </property>
@@ -174,6 +180,7 @@ e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home
 <tabstops>
     <tabstop>root_edit</tabstop>
     <tabstop>init_check</tabstop>
+    <tabstop>cvs_rsh</tabstop>
     <tabstop>repository_edit</tabstop>
     <tabstop>vendor_edit</tabstop>
     <tabstop>message_edit</tabstop>

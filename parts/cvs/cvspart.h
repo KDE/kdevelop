@@ -77,6 +77,9 @@ private slots:
 	void slotLog();
 	void slotDiff();
 
+	void slotProjectOpened();
+	void slotProjectClosed();
+
 	// Adds a configuration widget (for properly configuring CVS command-line options)
 	// and adds it to @p dlg.
 	void projectConfigWidget( KDialogBase *dlg );
@@ -143,8 +146,6 @@ private:
 		*actionRemove,
 		*actionUpdate,
 		*actionReplace;
-
-	QString m_cvsRsh;
 };
 
 #endif

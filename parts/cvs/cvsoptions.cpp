@@ -11,18 +11,30 @@
 //
 //
 
+#include <kdebug.h>
+
 #include "domutil.h"
 
 #include "cvsoptions.h"
 
+#define default_cvs 	QString::fromLatin1("-f")
+#define default_commit	QString::fromLatin1("")
+#define default_update	QString::fromLatin1("-dP")
+#define default_add		QString::fromLatin1("")
+#define default_remove	QString::fromLatin1("-f")
+#define default_replace	QString::fromLatin1("-C -d -P")
+#define default_diff	QString::fromLatin1("-u3 -p")
+#define default_log		QString::fromLatin1("")
+#define default_rsh		QString::fromLatin1("")
+
 CvsOptions *CvsOptions::m_instance = 0;
 
 CvsOptions::CvsOptions()
-	: m_cvs(QString::fromLatin1("-f")), m_commit(QString::fromLatin1("")),
-	m_update(QString::fromLatin1("-dP")), m_add(QString::fromLatin1("")),
-	m_remove(QString::fromLatin1("-f")), m_replace(QString::fromLatin1("-C -d -P")),
-	m_diff(QString::fromLatin1("-u3 -p")), m_log(QString::fromLatin1("")),
-	m_rsh(QString::fromLatin1(""))
+	: m_cvs(default_cvs), m_commit(default_commit),
+	m_update(default_update), m_add(default_add),
+	m_remove(default_remove), m_replace(default_replace),
+	m_diff(default_diff), m_log(default_log),
+	m_rsh(default_rsh)
 {
 }
 
@@ -42,6 +54,8 @@ CvsOptions* CvsOptions::instance()
 
 void CvsOptions::save( QDomDocument &dom )
 {
+	kdDebug( 9999 ) << " **** CvsOptions::save( QDomDocument &) here" << endl;
+
 	DomUtil::writeEntry( dom, "/kdevcvs/cvsoptions", m_cvs );
 	DomUtil::writeEntry( dom, "/kdevcvs/commitoptions", m_commit );
 	DomUtil::writeEntry( dom, "/kdevcvs/addoptions", m_add );
@@ -55,6 +69,8 @@ void CvsOptions::save( QDomDocument &dom )
 
 void CvsOptions::load( const QDomDocument &dom )
 {
+	kdDebug( 9999 ) << " **** CvsOptions::load( const QDomDocument &) here" << endl;
+
 	m_cvs     = DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
 	m_commit  = DomUtil::readEntry( dom, "/kdevcvs/commitoptions", default_commit );
 	m_add     = DomUtil::readEntry( dom, "/kdevcvs/addoptions", default_add );

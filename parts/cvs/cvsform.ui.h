@@ -19,3 +19,4 @@ void CvsForm::destroy()
 {
     kdDebug( 9999 ) << " **** CvsForm destroyed" << endl;
 }
+
