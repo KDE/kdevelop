@@ -41,6 +41,7 @@
 #include "trollprojectwidget.h"
 #include "runoptionswidget.h"
 #include "config.h"
+#include "envvartools.h"
 
 
 typedef KGenericFactory<TrollProjectPart> TrollProjectFactory;
@@ -149,11 +150,14 @@ QString TrollProjectPart::makeEnvironment()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
+/*
 #if (KDE_VERSION > 305)
         environstr += KProcess::quote((*it).second);
 #else
         environstr += KShellProcess::quote((*it).second);
 #endif
+*/
+        environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
     return environstr;
@@ -459,6 +463,11 @@ bool TrollProjectPart::isDirty()
     }
 
     return false;
+}
+
+KDevProject::Options TrollProjectPart::options( )
+{
+    return UsesQMakeBuildSystem;
 }
 
 

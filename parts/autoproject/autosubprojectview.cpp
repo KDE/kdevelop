@@ -73,7 +73,7 @@ static void removeDir( const QString& dirName )
     const QFileInfoList* fileList = d.entryInfoList();
     if( !fileList )
 	return;
-    
+
     QFileInfoListIterator it( *fileList );
     while( it.current() ){
 	const QFileInfo* fileInfo = it.current();
@@ -88,7 +88,7 @@ static void removeDir( const QString& dirName )
 	kdDebug(9020) << "remove " << fileInfo->absFilePath() << endl;
 	d.remove( fileInfo->fileName(), false );
     }
-    
+
     kdDebug(9020) << "remove dir " << dirName << endl;
     d.rmdir( d.absPath(), true );
 }
@@ -143,6 +143,14 @@ void AutoSubprojectView::initActions()
 	                                    this, SLOT( slotAddApplication() ), actions, "add application" );
 	buildSubprojectAction = new KAction( i18n( "Build" ), "launch", 0,
 	                                     this, SLOT( slotBuildSubproject() ), actions, "add build subproject" );
+	forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
+	                                     this, SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
+    if (!m_part->isKDE())
+        forceReeditSubprojectAction->setEnabled(false);
+	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0,
+	                                     this, SLOT( slotInstallSubproject() ), actions, "install subproject" );
+	installSuSubprojectAction = new KAction( i18n( "Install (as root user)" ), 0, 0,
+	                                     this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
 
 	connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -171,6 +179,9 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 	removeSubprojectAction->plug( &popup );
 	popup.insertSeparator();
 	buildSubprojectAction->plug( &popup );
+    forceReeditSubprojectAction->plug( &popup );
+    installSubprojectAction->plug( &popup );
+    installSuSubprojectAction->plug( &popup );
 
 	popup.exec( p );
 }
@@ -277,17 +288,17 @@ void AutoSubprojectView::slotBuildSubproject()
 void AutoSubprojectView::slotRemoveSubproject()
 {
     kdDebug(9020) << "AutoSubprojectView::slotRemoveSubproject()" << endl;
-    
+
     SubprojectItem* spitem = static_cast<SubprojectItem*>( selectedItem() );
     if( !spitem )
 	return;
-    
+
     SubprojectItem* parent = static_cast<SubprojectItem*>( spitem->parent() );
     if( !parent || !parent->listView() || spitem->childCount() != 0 ){
 	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake Manager") );
 	return;
     }
-    
+
     // check for config.status
     if( !QFileInfo(m_part->buildDirectory(), "config.status").exists() ){
 	KMessageBox::sorry(this, i18n("There is no config.status in the project root build directory. Run 'Configure' first"));
@@ -733,5 +744,40 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 	}
 }
 
+void AutoSubprojectView::slotForceReeditSubproject( )
+{
+	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	if ( !spitem )	return;
+
+	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+
+	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "force-reedit" );
+
+	m_part->mainWindow() ->lowerView( m_widget );
+}
+
+void AutoSubprojectView::slotInstallSubproject( )
+{
+	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	if ( !spitem )	return;
+
+	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+
+	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install" );
+
+	m_part->mainWindow() ->lowerView( m_widget );
+}
+
+void AutoSubprojectView::slotInstallSuSubproject( )
+{
+	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	if ( !spitem )	return;
+
+	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+
+	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install", true );
+
+	m_part->mainWindow() ->lowerView( m_widget );
+}
 
 #include "autosubprojectview.moc"

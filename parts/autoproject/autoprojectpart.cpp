@@ -48,6 +48,7 @@
 #include <kdevpartcontroller.h>
 #include <makeoptionswidget.h>
 #include <runoptionswidget.h>
+#include <envvartools.h>
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
 
@@ -374,11 +375,14 @@ QString AutoProjectPart::makeEnvironment()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
+/*
 #if (KDE_VERSION > 305)
         environstr += KProcess::quote((*it).second);
 #else
         environstr += KShellProcess::quote((*it).second);
 #endif
+*/
+        environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
     return environstr;
@@ -911,11 +915,14 @@ void AutoProjectPart::slotExecute2()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
+/*
 #if (KDE_VERSION > 305)
         environstr += KProcess::quote((*it).second);
 #else
         environstr += KShellProcess::quote((*it).second);
 #endif
+*/
+        environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
 
@@ -1044,6 +1051,11 @@ void AutoProjectPart::needMakefileCvs( )
 bool AutoProjectPart::isKDE()
 {
     return m_isKDE;
+}
+
+KDevProject::Options AutoProjectPart::options( )
+{
+    return UsesAutotoolsBuildSystem;
 }
 
 #include "autoprojectpart.moc"

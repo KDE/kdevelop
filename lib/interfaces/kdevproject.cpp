@@ -24,4 +24,9 @@ void KDevProject::changedFiles( const QStringList & fileList )
     emit changedFilesInProject( fileList );
 }
 
+KDevProject::Options KDevProject::options( )
+{
+    return (KDevProject::Options)0;
+}
+
 #include "kdevproject.moc"

@@ -1391,6 +1391,13 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   classImpl.replace(QRegExp("\\$NAMESPACEEND\\$"), namespaceEnd);
   classImpl.replace(QRegExp("\\$FILENAME\\$"), implementation);
 
+  if ( (dlg.m_part->project()) && (childClass || qobject) && (dlg.m_part->project()->options() & KDevProject::UsesAutotoolsBuildSystem))
+  {
+    QString moc = header;
+    moc.replace(QRegExp("\\..*"), ".moc");
+    classImpl += "#include \"" + moc + "\"\n";
+  } 
+
   if (dlg.gen_config->reformat_box->isChecked())
   {
     KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();

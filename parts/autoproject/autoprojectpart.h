@@ -55,6 +55,7 @@ public:
     virtual void removeFile(const QString &fileName);
     virtual void removeFiles ( const QStringList& fileList );
     virtual QString buildDirectory();
+    virtual Options options();
 
 	/**
 	 * Implementation of the KDevPlugin interface.

@@ -14,6 +14,8 @@ public:
 	KDevProject( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
 	~KDevProject();
 
+    enum Options { UsesAutotoolsBuildSystem = 1, UsesQMakeBuildSystem };
+
 	/**
 	* This method is invoked when the project is opened
 	* (i.e. actually just after this class has been
@@ -30,6 +32,8 @@ public:
 	* to be closed.
 	*/
 	virtual void closeProject() = 0;
+
+    virtual Options options();
 
 	/**
 	* Returns the canonical toplevel directory of the project.

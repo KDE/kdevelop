@@ -661,7 +661,13 @@ QString TrollProjectWidget::getCurrentOutputFilename()
 {
   if (!m_shownSubproject)
     return "";
-  return m_shownSubproject->configuration.m_target;
+  if (m_shownSubproject->configuration.m_target.isEmpty())
+  {
+    QString exe = m_shownSubproject->pro_file;
+    return exe.replace(QRegExp("\\.pro$"), "");
+  }
+  else
+    return m_shownSubproject->configuration.m_target;
 }
 
 void TrollProjectWidget::cleanDetailView(SubprojectItem *item)

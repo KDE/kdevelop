@@ -15,6 +15,7 @@
 #include "store_walker.h"
 #include "cppsupportfactory.h"
 #include "kdevsourceformatter.h"
+#include "kdevproject.h"
 
 #include <qradiobutton.h>
 #include <qstringlist.h>
@@ -471,7 +472,13 @@ void SubclassingDlg::accept()
 
 
   if (m_creatingNewSubclass)
+  {
     loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.cpp"));
+    if ( (m_cppSupport->project()) && (m_cppSupport->project()->options() & KDevProject::UsesAutotoolsBuildSystem))
+    {
+        buffer += "\n#include \"$NEWFILENAMELC$.moc\"\n";
+    }
+  }
   else
     loadBuffer(buffer,m_filename+".cpp");
   replaceKeywords(buffer,m_canBeModal);
