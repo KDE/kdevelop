@@ -1422,6 +1422,9 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 	return false;
     }
 
+    while( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == Token_identifier )
+    	lex->nextToken();
+	
     NameAST::Node name;
     parseName( name );
 
