@@ -152,6 +152,7 @@ private:
     
 friend class MultiProperty;
 friend class PropertyBuffer;
+friend class Iterator;
 };
 
 
