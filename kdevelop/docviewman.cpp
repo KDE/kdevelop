@@ -91,25 +91,27 @@ void DocViewMan::doSelectURL(const QString& url)
     pBrowserView = createBrowserView(pDoc, true);
   }
 
-  pBrowserView->parentWidget()->setFocus();
+  if (pBrowserView->parentWidget()) {
+    pBrowserView->parentWidget()->setFocus();
+  }
 }
 
 void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForceReload, bool bShowModifiedBox)
 {
-	KWriteDoc* pEditDoc = findKWriteDoc(filename);
+  KWriteDoc* pEditDoc = findKWriteDoc(filename);
 
-	CEditWidget* pEditWidget = 0L;
+  CEditWidget* pEditWidget = 0L;
   CEditWidget* pCurrentEditWidget = currentEditView();
-	if (pCurrentEditWidget) {
-		if (pCurrentEditWidget->doc() == pEditDoc) {
-			pEditWidget = pCurrentEditWidget;
-		}
-		else {
-			if (pEditDoc) {
-				pEditWidget = getFirstEditView(pEditDoc);
-			}
-		}
-	}
+  if (pCurrentEditWidget) {
+    if (pCurrentEditWidget->doc() == pEditDoc) {
+      pEditWidget = pCurrentEditWidget;
+    }
+    else {
+      if (pEditDoc) {
+        pEditWidget = getFirstEditView(pEditDoc);
+      }
+    }
+  }
 
   // Make sure that we found the file in the editor_widget in our list
   if (pEditDoc) {
