@@ -42,17 +42,14 @@ class VCSFileTreeViewItem : public filetreeview::FileTreeViewItem
 {
 public:
     VCSFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
-        : FileTreeViewItem( parent, item, branch, pf ), m_statusColor( FileViewPart::vcsColors.unknown ) {}
+        : FileTreeViewItem( parent, item, branch, pf ), m_statusColor( &FileViewPart::vcsColors.unknown ) {}
     VCSFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-        : FileTreeViewItem( parent, item, branch ), m_statusColor( FileViewPart::vcsColors.unknown ) {}
+        : FileTreeViewItem( parent, item, branch ), m_statusColor( &FileViewPart::vcsColors.unknown ) {}
     virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
     {
         // paint cell in a different color depending on VCS state
         QColorGroup mycg( cg );
-        //    kdDebug() << "MyFileTreeViewItem::paintCell(): itemColor == " << itemColor.name() << endl;
-        mycg.setColor( QColorGroup::Background, m_statusColor );
-        //    kdDebug() << "MyFileTreeViewItem::paintCell(): mycg.background() == " << mycg.background().name() << endl;
-        //    p->setBackgroundColor( itemColor );
+        mycg.setColor( QColorGroup::Base, *m_statusColor );
         FileTreeViewItem::paintCell( p, mycg, column, width, alignment );
     }
     void setVCSInfo( const VCSFileInfo &info );
@@ -67,7 +64,7 @@ public:
     void setStatus( const VCSFileInfo::FileState status );
 
 private:
-    QColor &m_statusColor; // cached
+    QColor *m_statusColor; // cached
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -89,27 +86,27 @@ void VCSFileTreeViewItem::setStatus( const VCSFileInfo::FileState status )
     switch (status)
     {
         case VCSFileInfo::Added:
-            m_statusColor = FileViewPart::vcsColors.added;
+            m_statusColor = &FileViewPart::vcsColors.added;
             break;
         case VCSFileInfo::Uptodate:
-            m_statusColor = FileViewPart::vcsColors.updated;
+            m_statusColor = &FileViewPart::vcsColors.updated;
             break;
         case VCSFileInfo::Modified:
-            m_statusColor = FileViewPart::vcsColors.modified;
+            m_statusColor = &FileViewPart::vcsColors.modified;
             break;
         case VCSFileInfo::Conflict:
-            m_statusColor = FileViewPart::vcsColors.conflict;
+            m_statusColor = &FileViewPart::vcsColors.conflict;
             break;
         case VCSFileInfo::Sticky:
-            m_statusColor = FileViewPart::vcsColors.sticky;
+            m_statusColor = &FileViewPart::vcsColors.sticky;
             break;
         case VCSFileInfo::Unknown:
-            m_statusColor = FileViewPart::vcsColors.unknown;
+            m_statusColor = &FileViewPart::vcsColors.unknown;
             break;
         case VCSFileInfo::Directory:
         default:
             // No color change
-            m_statusColor = FileViewPart::vcsColors.defaultColor;
+            m_statusColor = &FileViewPart::vcsColors.defaultColor;
             //kdDebug() << "MyFileTreeViewItem::paintCell(): Unknown color!" << endl;
             break;
     }
@@ -179,7 +176,8 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 
 VCSFileTreeWidgetImpl::VCSFileTreeWidgetImpl( FileTreeWidget *parent, KDevVCSFileInfoProvider *infoProvider )
-    : FileTreeViewWidgetImpl( parent, "vcsfiletreewidgetimpl" ), m_vcsInfoProvider( infoProvider ),
+    : FileTreeViewWidgetImpl( parent, "vcsfiletreewidgetimpl" ),
+    m_actionToggleShowVCSFields( 0 ), m_actionSyncWithRepository( 0 ), m_vcsInfoProvider( infoProvider ),
     m_isSyncingWithRepository( false ), m_vcsStatusRequestedItem( 0 )
 {
     kdDebug(9017) << "VCSFileTreeWidgetImpl::VCSFileTreeWidgetImpl()" << endl;
@@ -191,17 +189,23 @@ VCSFileTreeWidgetImpl::VCSFileTreeWidgetImpl( FileTreeWidget *parent, KDevVCSFil
     parent->addColumn( "Filename" );
     parent->addColumn( "Status" );
     parent->addColumn( "Work" );
-    parent->addColumn( "Repo." );
+    parent->addColumn( "Repo" );
 
-    m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
-        this, SLOT(slotToggleShowVCSFields()), this, "actiontoggleshowvcsfieldstoggleaction" );
-    m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
-    connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
     connect( m_vcsInfoProvider, SIGNAL(statusReady(const VCSFileInfoMap&, void *)),
         this, SLOT(vcsDirStatusReady(const VCSFileInfoMap&, void*)) );
-
     // Harakiri itself if the infoProvider object is destroyed since we cannot work anymore :-(
     connect( m_vcsInfoProvider, SIGNAL(destroyed()), SIGNAL(implementationInvalidated()) );
+
+    m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
+        this, "actiontoggleshowvcsfieldstoggleaction" );
+    QString aboutAction = i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository.");
+    m_actionToggleShowVCSFields->setWhatsThis( aboutAction );
+    connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
+
+    m_actionSyncWithRepository = new KAction( i18n( "Sync with Repository"), KShortcut(),
+        this, SLOT(slotSyncWithRepository()), this, "actionsyncwithrepository" );
+    aboutAction = i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.");
+    m_actionSyncWithRepository->setWhatsThis( aboutAction );
 
     QDomDocument &dom = projectDom();
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
@@ -240,9 +244,7 @@ void VCSFileTreeWidgetImpl::fillPopupMenu( QPopupMenu *popupMenu, QListViewItem 
     {
         m_vcsStatusRequestedItem = fileItem;
         popupMenu->insertSeparator();
-        int id = popupMenu->insertItem( i18n( "Sync with Repository"), this, SLOT( slotSyncWithRepository() ) );
-        popupMenu->setWhatsThis( id,
-            i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.") );
+        m_actionSyncWithRepository->plug( popupMenu );
     }
 }
 
@@ -254,17 +256,19 @@ void VCSFileTreeWidgetImpl::slotToggleShowVCSFields( bool checked )
 
     if (checked)
     {
-        setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
-        setColumnWidth( 1, contentsWidth() / 3 ); // "Revision"
-        setColumnWidth( 2, contentsWidth() / 3 ); // "Timestamp"
+        setColumnWidth( 0, contentsWidth() / 2 ); // "Filename"
+        setColumnWidth( 1, contentsWidth() / 4 ); // "status"
+        setColumnWidth( 2, contentsWidth() / 5 ); // "work revision"
+        setColumnWidth( 3, contentsWidth() / 5 ); // "repository revision"
         header()->show();
     }
     else
     {
-        header()->hide();
-        setColumnWidth( 2 ,0 ); // Hide columns
+        setColumnWidth( 3 ,0 ); // Hide columns
+        setColumnWidth( 2 ,0 ); 
         setColumnWidth( 1, 0 );
-        setColumnWidth( 0, contentsWidth() ); // Make the column to occupy all the row
+        setColumnWidth( 0, contentsWidth() ); // Make the "Filename" column to occupy all the row
+        header()->hide();
     }
 
     triggerUpdate();
@@ -298,7 +302,7 @@ void VCSFileTreeWidgetImpl::vcsDirStatusReady( const VCSFileInfoMap &modifiedFil
             item->setVCSInfo( modifiedFiles[ fileName ] );
         }
         else
-            kdDebug(9017) << "Map does not contain anything useful about this file ;-(" << fileName << endl;
+            kdDebug(9017) << "Map does not contain anything useful about this file ;-( " << fileName << endl;
         item = static_cast<VCSFileTreeViewItem*>( item->nextSibling() );
     }
     triggerUpdate();

@@ -15,6 +15,7 @@
 #include "filetreeviewwidgetimpl.h"
 
 class KDevVCSFileInfoProvider;
+class KAction;
 class KToggleAction;
 
 /**
@@ -54,6 +55,7 @@ private:
     bool showVCSFields() const;
 
     KToggleAction *m_actionToggleShowVCSFields;
+    KAction *m_actionSyncWithRepository;
     KDevVCSFileInfoProvider *m_vcsInfoProvider;
     //! We use this guard to avoid enabling the "reload tree" action when performing
     // syncing with remote repositories.

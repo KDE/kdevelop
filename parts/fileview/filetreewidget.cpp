@@ -121,7 +121,6 @@ void FileTreeWidget::openDirectory( const QString& dirName )
     addProjectFiles( m_part->project()->allFiles(), true );
 
     KURL url = KURL::fromPathOrURL( dirName );
-
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
 
     // this is a bit odd, but the order of these calls seems to be important

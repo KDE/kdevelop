@@ -96,25 +96,35 @@ void FileViewPart::projectConfigWidget( KDialogBase *dlg )
 void FileViewPart::loadSettings()
 {
     KConfig *cfg = instance()->config();
-    QColor fallbackColor = white;
+    QColor added = QColor( "#CCFF99" ),
+        updated = QColor( "#FFFFCC" ),
+        modified = QColor( "#CCCCFF" ),
+        conflict = QColor( "#FF6666" ),
+        sticky = QColor( "#FFCCCC" ),
+        unknown = QColor( white ),
+        defaultColor = QColor( white );
 
+/*
     if (cfg->hasGroup( "VCS Colors" ))
     {
+*/
         KConfigGroupSaver gs( cfg, "VCS Colors" );
-        vcsColors.added = cfg->readColorEntry( "FileAddedColor", &fallbackColor );
-        vcsColors.updated = cfg->readColorEntry( "FileUpdatedColor", &fallbackColor );
-        vcsColors.sticky = cfg->readColorEntry( "FileStickyColor", &fallbackColor );
-        vcsColors.modified = cfg->readColorEntry( "FileModifiedColor", &fallbackColor );
-        vcsColors.conflict = cfg->readColorEntry( "FileConflictColor", &fallbackColor );
-        vcsColors.unknown = cfg->readColorEntry( "FileUnknownColor", &fallbackColor );
-        vcsColors.defaultColor = cfg->readColorEntry( "DefaultColor", &fallbackColor );
+        vcsColors.added = cfg->readColorEntry( "FileAddedColor", &added );
+        vcsColors.updated = cfg->readColorEntry( "FileUpdatedColor", &updated );
+        vcsColors.sticky = cfg->readColorEntry( "FileStickyColor", &sticky );
+        vcsColors.modified = cfg->readColorEntry( "FileModifiedColor", &modified );
+        vcsColors.conflict = cfg->readColorEntry( "FileConflictColor", &conflict );
+        vcsColors.unknown = cfg->readColorEntry( "FileUnknownColor", &unknown );
+        vcsColors.defaultColor = cfg->readColorEntry( "DefaultColor", &defaultColor );
+/*
     }
     else
     {
         vcsColors.added = vcsColors.updated = vcsColors.sticky = vcsColors.sticky =
             vcsColors.modified = vcsColors.conflict = vcsColors.unknown =
-            vcsColors.defaultColor = fallbackColor;
+            vcsColors.defaultColor = defaultColor;
     }
+*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
