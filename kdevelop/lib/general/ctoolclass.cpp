@@ -149,7 +149,7 @@ QString CToolClass::getRelativeFile(QString source_dir,QString destFile){
   
   //normalize
   if(source_dir.right(1) != "/"){
-    cerr << "add / to sourcedir" << endl;
+    kdDebug(9000) << "add / to sourcedir" << endl;
     source_dir = source_dir + "/";
   }
   destFile.remove(0,1); // remove beginning /
@@ -187,11 +187,11 @@ QString CToolClass::getRelativePath(QString source_dir,QString dest_dir){
 
   //normalize
   if(source_dir.right(1) != "/"){
-    cerr << "add / to sourcedir" << endl;
+    kdDebug(9000) << "add / to sourcedir" << endl;
     source_dir = source_dir + "/";
   }
   if(dest_dir.right(1) != "/"){
-    cerr << "add / to destdir" << endl;
+    kdDebug(9000) << "add / to destdir" << endl;
     dest_dir = dest_dir + "/";
   }
   

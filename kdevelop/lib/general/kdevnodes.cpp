@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 
-
+#include <kdebug.h>
 #include "kdevnodes.h"
 #include <iostream.h>
 
@@ -31,8 +31,8 @@ QString KDevNode::projectName(){
   return m_projectName;
 }
 void KDevNode::show(){
-  cerr << endl << "KDevNode: " << endl << "ProjectSpaceName:" << m_projectSpaceName;
-  cerr << endl << "ProjectName:" << m_projectName;
+  kdDebug(9000) << "KDevNode: " << endl << "ProjectSpaceName:" << m_projectSpaceName
+  << endl << "ProjectName:" << m_projectName << endl;
 }
 
 
@@ -48,7 +48,7 @@ QString KDevFileNode::absoluteFileName(){
 }
 void KDevFileNode::show(){
   KDevNode::show();
-  cerr << endl << "FileName:" << m_absFileName;
+  kdDebug(9000) << "FileName:" << m_absFileName << endl;
 }
 
 
@@ -65,7 +65,7 @@ QString KDevDirectoryNode::dir(){
 }
 void KDevDirectoryNode::show(){
   KDevNode::show();
-  cerr << endl << "Directory:" << m_dir;
+  kdDebug(9000) << "Directory:" << m_dir << endl;
 }
 
 #include "kdevnodes.moc"

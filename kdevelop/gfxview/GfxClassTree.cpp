@@ -92,10 +92,10 @@ CGfxClassBox *CGfxClassTree::GetBoxId(int boxid)
   CGfxClassBox *box;
 
   if(boxid < 1)
-    return(NULL);
+    return(0);
 
   box = m_boxlist.first();
-  while((box != NULL) && (box->m_boxid != boxid))
+  while((box != 0) && (box->m_boxid != boxid))
     box = m_boxlist.next();
   
   return(box);
@@ -123,12 +123,12 @@ QList<CGfxClassBox> *CGfxClassTree::getSubtree(CGfxClassBox *abox)
   CGfxClassBox *box = m_boxlist.first();
   QList<CGfxClassBox> *tmplist;
 
-  if((box == NULL) || (abox == NULL))
-    return(NULL);
+  if((box == 0) || (abox ==0))
+    return(0);
 
   tmplist = new QList<CGfxClassBox>();
 
-  while(box != NULL)
+  while(box != 0)
   {
     if(box->hasAncestor(abox))
     {
@@ -166,7 +166,7 @@ void CGfxClassTree::InsertBox(CGfxClassBox *abox,
   abox->SetSiblingClassBox(asiblingbox);
   abox->SetPreviousClassBox(prevnode);
 
-  abox->m_boxid = ((prevnode != NULL) ? prevnode->m_boxid : 0) + 1;
+  abox->m_boxid = ((prevnode != 0) ? prevnode->m_boxid : 0) + 1;
 
   connect(abox,SIGNAL(drawConnection(CGfxClassBox *)),
 	  this,SLOT(drawConnection(CGfxClassBox *)));
@@ -184,7 +184,7 @@ void CGfxClassTree::InsertBox(CGfxClassBox *abox,
   abox->PosRefresh(0);
   abox->show();
 
-  if(aparentbox != NULL)
+  if(aparentbox != 0)
     aparentbox->ShowFoldButton();
 }
 
@@ -237,10 +237,10 @@ CGfxClassBox *CGfxClassTree::InsertClassTree(CGfxClassBox *baseclassbox,
 void CGfxClassTree::InsertClassForest(CGfxClassBox *baseclassbox,
 				      QList<CClassTreeNode> *forest)
 {
-  CGfxClassBox *prevsibling = NULL;
+  CGfxClassBox *prevsibling = 0;
   CClassTreeNode *treenode = forest->first();
   
-  while(treenode != NULL)
+  while(treenode != 0)
   {
     prevsibling = InsertClassTree(baseclassbox,prevsibling,treenode);
     treenode = forest->next();
@@ -263,7 +263,7 @@ void CGfxClassTree::InsertClassForest(CGfxClassBox *baseclassbox,
 void CGfxClassTree::RefreshClassForest(QList<CClassTreeNode> *forest)
 {
   RemoveAll();
-  InsertClassForest(NULL,forest);
+  InsertClassForest(0,forest);
   RefreshTreeSize();
 }
 
@@ -285,13 +285,13 @@ void CGfxClassTree::RefreshTreeSize()
   CGfxClassBox *node = m_boxlist.last();
   QWidget *qwparent = (QWidget*)parent();
 
-  h = (node != NULL) ? node->GetYDepth() : 0;
+  h = (node != 0) ? node->GetYDepth() : 0;
 
   w = 0;
   ww = 0; // just to get rid of the silly warning
 
   node = m_boxlist.first();
-  while(node != NULL)
+  while(node != 0)
   {
     if((node->IsVisible()) && ((ww = node->GetXDepth()) > w))
       w = ww;
@@ -300,7 +300,7 @@ void CGfxClassTree::RefreshTreeSize()
   }
 
 
-  if(qwparent != NULL)
+  if(qwparent != 0)
   {
     if(w < qwparent->width())
       w = qwparent->width();
@@ -326,13 +326,13 @@ void CGfxClassTree::SetUnfoldAll(bool unfolded)
 {
   CGfxClassBox *node = m_boxlist.first();
 
-  while(node != NULL)
+  while(node != 0)
   {
     node->SetUnfolded(unfolded);
     node = m_boxlist.next();
   }      
 
-  if((node = m_boxlist.first()) != NULL)
+  if((node = m_boxlist.first()) != 0)
     stateChange(node);
 }
 
@@ -358,7 +358,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
   int xoffs;
 
   // If the list is empty then return
-  if(node == NULL)
+  if(node == 0)
     return;
 
   // Initial x and y-offset
@@ -368,7 +368,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
   p.begin(pr);
   p.setPen(QColor(0x00,0x00,0x00));
 
-  while(node != NULL)
+  while(node != 0)
   {
     if(node->y() + node->height() >= pdm.height() + yoffs - PRINTTREE_YOFFSET)
     {
@@ -379,7 +379,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
     if(node->isVisible())
     {
       // Draw the box
-      if(node->m_class != NULL)
+      if(node->m_class != 0)
 	p.setBrush(QBrush(PRINT_CLASSBOXCOL_INSYSTEM,SolidPattern));
       else
 	p.setBrush(QBrush(PRINT_CLASSBOXCOL_NOTINSYSTEM,SolidPattern));
@@ -395,7 +395,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 		 AlignHCenter|AlignVCenter,node->m_name);
      
       // Draw the connection
-      if(node->m_parent != NULL) 
+      if(node->m_parent != 0) 
       {     
 	p.moveTo(node->x() + CONN_CHILD_DELTA_STARTX - xoffs,
 		 node->y() + CONN_CHILD_DELTA_STARTY - yoffs);
@@ -404,7 +404,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 		 node->y() + CONN_CHILD_DELTA_STOPY - yoffs);
 	
 	// If abox has a sibling, draw up to sibling
-	if(node->m_sibling != NULL)
+	if(node->m_sibling != 0)
 	  p.lineTo(node->m_sibling->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		   node->m_sibling->y() + CONN_CHILD_DELTA_STOPY - yoffs);
 	
@@ -461,7 +461,7 @@ void CGfxClassTree::paintEvent(QPaintEvent *)
 {
   CGfxClassBox *node = m_boxlist.first();
 
-  while(node != NULL)
+  while(node != 0)
   {
     if(node->isVisible())
       drawConnection(node);
@@ -508,7 +508,7 @@ void CGfxClassTree::drawConnection(CGfxClassBox *abox)
   QPainter p;
 
   // Return if there's no connection to draw
-  if(abox->m_parent == NULL)
+  if(abox->m_parent == 0)
     return;
 
   p.begin(this);
@@ -521,7 +521,7 @@ void CGfxClassTree::drawConnection(CGfxClassBox *abox)
 	   abox->y() + CONN_CHILD_DELTA_STOPY);
 
   // If abox has a sibling, draw up to sibling
-  if(abox->m_sibling != NULL)
+  if(abox->m_sibling != 0)
     p.lineTo(abox->m_sibling->x() + CONN_CHILD_DELTA_STOPX,
 	     abox->m_sibling->y() + CONN_CHILD_DELTA_STOPY);
   

@@ -158,7 +158,7 @@ void NewProjectDlg::slotProjectSpaceSelected (QListViewItem *item){
 	if(! item) return; // not a valid item? do nothing!
 	
   if(item->depth() != 1){
-    cerr << item->depth();
+    kdDebug(9000) << item->depth() << endl;
     return; // no Projectspace selected
   }
   m_current_prjspace_name = item->text(0);
@@ -207,7 +207,7 @@ void NewProjectDlg::slotAppwizardSelected (QIconViewItem* item){
   description_textview->setText(appwizard_plg->applicationDescription());
   m_pixmap->load(appwizard_plg->previewPicture());
   preview_widget->setPixmap(*m_pixmap);
-  cerr << "Picture:" << appwizard_plg->previewPicture() << endl;
+  kdDebug(9000) << "Picture: " << appwizard_plg->previewPicture() << endl;
   ok_button->setEnabled(true);
 }
 

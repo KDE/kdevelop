@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -41,7 +41,7 @@ KDevNodeAction::KDevNodeAction(KDevNode* pNode, const QString& text,
 }
 
 void KDevNodeAction::slotActivated(){
-  cerr <<  "KDevNodeAction::slotActived: emited " << endl;
+  kdDebug(9000) <<  "KDevNodeAction::slotActived: emitted " << endl;
   //  m_pNode->show();
   emit activated(m_pNode); // fire the node
 }

@@ -204,7 +204,7 @@ void CGfxClassTreeWindow::itemSelected(int index)
 {
   CGfxClassBox *node = m_treescrollview->m_classtree->GetBoxId(index + 1);
   
-  if(node == NULL)
+  if(node == 0)
     return;
 
   // If the selected box is invisible, make all its ancestors 
