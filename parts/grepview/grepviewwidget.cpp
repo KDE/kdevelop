@@ -90,8 +90,8 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part)
     grepdlg = new GrepDialog(this, "grep widget");
     connect( grepdlg, SIGNAL(searchClicked()),
 	     this, SLOT(searchActivated()) );
-    connect( this, SIGNAL(highlighted(int)),
-             this, SLOT(lineHighlighted(int)) );
+    connect( this, SIGNAL(executed(QListBoxItem*)),
+             this, SLOT(slotExecuted(QListBoxItem*)) );
 
     m_part = part;
 }
@@ -194,9 +194,9 @@ void GrepViewWidget::childFinished(bool normal, int status)
 }
 
 
-void GrepViewWidget::lineHighlighted(int line)
+void GrepViewWidget::slotExecuted(QListBoxItem* item)
 {
-    ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
+    ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item);
     if (i->isCustomItem())
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);

@@ -35,7 +35,7 @@ public slots:
 
 private slots:
     void searchActivated();
-    void lineHighlighted(int line);
+    void slotExecuted(QListBoxItem *item);
 
 private:
     virtual void childFinished(bool normal, int status);
