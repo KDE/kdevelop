@@ -68,6 +68,7 @@ class CAddExistingFileDlg;
 #include "./kdlgedit/kdlgpropwidget.h"
 #include "./kdlgedit/kdlgwidgets.h"
 #include "./kdlgedit/kdlgdialogs.h"
+#include "./kdlgedit/kdlgitems.h"
 
 
 /** the mainclass in kdevelop
@@ -478,6 +479,7 @@ private:
   KDlgPropWidget* kdlg_prop_widget; // the properties window of kdlg
   KDlgWidgets* kdlg_widgets_view;  // the first tab of kdlg_tabctl
   KDlgDialogs* kdlg_dialogs_view;  // the second tab of kldg_tabctl
+  KDlgItems*   kdlg_items_view;    // the third tab of kldg_tabctl
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources

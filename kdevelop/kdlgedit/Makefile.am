@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = kdlgdialogs.cpp kdlgdialogs.h kdlgeditwidget.cpp kdlgeditwidget.h kdlgpropwidget.cpp kdlgpropwidget.h kdlgwidgets.cpp kdlgwidgets.h kdlgedit.cpp kdlgedit.h kdlgnewwidget.cpp kdlgnewwidget.h 
+EXTRA_DIST = kdlgdialogs.cpp kdlgdialogs.h kdlgitems.cpp kdlgitems.h kdlgeditwidget.cpp kdlgeditwidget.h kdlgpropwidget.cpp kdlgpropwidget.h kdlgwidgets.cpp kdlgwidgets.h kdlgedit.cpp kdlgedit.h kdlgnewwidget.cpp kdlgnewwidget.h 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # set the include path for X, qt and KDE
@@ -9,13 +9,13 @@ INCLUDES= $(all_includes)
 
 noinst_LIBRARIES = libkdlgedit.a
 
-# libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
-libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
+# libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgitems.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
+libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgitems.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
 
-libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgwidgets.cpp kdlgdialogs.cpp kdlgnewwidget.cpp\
-                       kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp kdlgdialogs.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp
+libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgwidgets.cpp kdlgdialogs.cpp kdlgitems.cpp kdlgnewwidget.cpp\
+                       kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp kdlgdialogs.moc.cpp kdlgitems.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp
 
-noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h kdlgnewwidget.h kdlgproplvis.h
+noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h kdlgitems.h kdlgnewwidget.h kdlgproplvis.h
 
 
 
@@ -41,4 +41,7 @@ kdlgpropwidget.moc.cpp: kdlgpropwidget.h
 
 kdlgwidgets.moc.cpp: kdlgwidgets.h
 	$(MOC) kdlgwidgets.h -o kdlgwidgets.moc.cpp
+
+kdlgitems.moc.cpp: kdlgitems.h
+	$(MOC) kdlgitems.h -o kdlgitems.moc.cpp
 

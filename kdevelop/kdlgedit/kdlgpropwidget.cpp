@@ -396,6 +396,7 @@ AdvLvi_Widget::AdvLvi_Widget(QWidget *parent, const char *name)
   : QWidget( parent, name )
 {
   setBackgroundColor( colorGroup().base() );
+//  setFocusPolicy(NoFocus);
   setEnabled(false);
 }
 

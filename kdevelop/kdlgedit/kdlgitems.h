@@ -1,8 +1,8 @@
 /***************************************************************************
-                          kdlgwidgets.cpp  -  description                              
+                         kdlgitems.h  -  description                              
                              -------------------                                         
-    begin                : Wed Mar 17 1999
-    copyright            : (C) 1999 by Pascal Krahmer
+    begin                : Wed Mar 17 1999                                           
+    copyright            : (C) 1999 by Pascal Krahmer                         
     email                : pascal@beast.de
  ***************************************************************************/
 
@@ -16,12 +16,28 @@
  ***************************************************************************/
 
 
-#include "kdlgwidgets.h"
-#include <qpushbutton.h>
+#ifndef KDLGITEMS_H
+#define KDLGITEMS_H
 
-KDlgWidgets::KDlgWidgets(QWidget *parent, const char *name ) : QWidget(parent,name) 
-{
-}
+#include <qwidget.h>
 
-KDlgWidgets::~KDlgWidgets(){
-}
+class KTreeList;
+
+/**
+  *@author Pascal Krahmer <pascal@beast.de>
+  */
+
+class KDlgItems : public QWidget  {
+  Q_OBJECT
+  public:
+    KDlgItems(QWidget *parent=0, const char *name=0);
+    ~KDlgItems();
+
+    KTreeList *getTreeList() { return treelist; }
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    KTreeList *treelist;
+};
+
+#endif
