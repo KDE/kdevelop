@@ -13,9 +13,7 @@ class BuildTarget
       @type=type
       @sources=Array.new
       @uis=Array.new
-      @ldadd=""
-      @libadd=""
-      @ldflags=""
+      @am=Array.new
    end
    
    def addSourceFiles(files)
@@ -28,8 +26,7 @@ class BuildTarget
       end
    end
    
-   attr_reader :name, :type, :sources, :uis, :ldadd, :libadd, :ldflags
-   attr_writer :ldadd, :libadd, :ldflags
+   attr_reader :name, :type, :sources, :uis
    
 end
 
@@ -43,15 +40,16 @@ class CMakeFile
       @targets=Array.new
       
       @includeDirs=""
+      @subDirs=""
       
       parseFile
    end
    
    def parseFile
-      lines=IO.readlines(@amFile)
+      @lines=IO.readlines(@amFile)
       cummLine=""
       appendNextLine=false
-      for line in lines do
+      for line in @lines do
          appendNextLine=(line[line.length-2, 1]=='\\')
          
          if appendNextLine
@@ -133,48 +131,6 @@ class CMakeFile
       buildTarget.addSourceFiles($1)
    end 
    
-   def addLdflags(line)
-      buildTarget=findTarget(line)
-      if buildTarget.type==NoTarget
-         return
-      end
-         
-      if buildTarget.type==Executable
-         line =~ /^\s*\S+_LDFLAGS\s*=\s*(\S+.*)$/
-      else
-         line =~ /^\s*lib\S+_la_LDFLAGS\s*=\s*(\S+.*)$/
-      end
-      buildTarget.ldflags=$1
-   end 
-   
-   def addLdadd(line)
-      buildTarget=findTarget(line)
-      if buildTarget.type==NoTarget
-         return
-      end
-         
-      if buildTarget.type==Executable
-         line =~ /^\s*\S+_LDADD\s*=\s*(\S+.*)$/
-      else
-         line =~ /^\s*lib\S+_la_LDADD\s*=\s*(\S+.*)$/
-      end
-      buildTarget.ldadd=$1
-   end 
-   
-   def addLibadd(line)
-      buildTarget=findTarget(line)
-      if buildTarget.type==NoTarget
-         return
-      end
-         
-      if buildTarget.type==Executable
-         line =~ /^\s*\S+_LIBADD\s*=\s*(\S+.*)$/
-      else
-         line =~ /^\s*lib\S+_la_LIBADD\s*=\s*(\S+.*)$/
-      end
-      buildTarget.libadd=$1
-   end 
-   
    def evalLine(line)
       if line =~ /^\s*METASOURCES\s*=\s*AUTO\s*$/
          @automoc=true
@@ -194,35 +150,22 @@ class CMakeFile
          @includeDirs=$1
          return
       end
-      
-      if line =~ /^\s*\S+_LDFLAGS\s*=/
-         addLdflags(line)
-         return
+
+      if line =~ /^\s*SUBDIRS\s*=\s*(\S+.*)$/
+         @subDirs=$1
       end
-      
-      if line =~ /^\s*\S+_LDADD\s*=/
-         addLdadd(line)
-         return
-      end
-      
-      if line =~ /^\s*\S+_LIBADD\s*=/
-         addLibadd(line)
-         return
-      end
-      
-      
+
    end
       
    def createListsFile
+      printf("subdirs: %s\n", @subDirs);
       @targets.each do |buildTarget|
          printf("-------------------------------\n")
          printf("%s, %d\n", buildTarget.name, buildTarget.type)
-         printf("ldadd: %s\n", buildTarget.ldadd)
-         printf("libadd: %s\n", buildTarget.libadd)
-         printf("ldflags: %s\n", buildTarget.ldflags)
          buildTarget.sources.each{ |currentFile| printf("src: %s\n", currentFile)}
          buildTarget.uis.each{ |currentFile| printf("ui: %s\n", currentFile)}
       end
+      @lines.each{ |line| printf("# %s", line)}
    end
 end
 
