@@ -33,8 +33,12 @@ public:
   void setToolTips(bool b) { bToolTip=b; };
   void setInputMethod(int i) { iInputMethod=i; };
   void setDelimiter(QString s) { strDelimiter=s; };
-  void setSingleRect(QRect r) { rSingle = (r.isValid())?r:QRect(); };
-  void setMultiRect(QRect r) { rMulti = (r.isValid())?r:QRect(); };
+  void setSingleRect(QRect r) {
+    rSingle = (r.isValid())?r:QRect();
+  }
+  void setMultiRect(QRect r) {
+    rMulti = (r.isValid())?r:QRect();
+  }
 
 protected:
     bool bToolTip;
@@ -42,6 +46,8 @@ protected:
     QString strDelimiter;
     QRect rSingle;
     QRect rMulti;
+    int iMultiBasicHeight;
+    int iMultiCount;
 };
 
 #endif

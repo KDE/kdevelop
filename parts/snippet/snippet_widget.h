@@ -60,7 +60,8 @@ protected:
 private:
     void insertIntoActivView(QString text);
     QString parseText(QString text, QString del="$");
-    bool showMultiVarDialog(QMap<QString, QString> * map, QMap<QString, QString> * mapSave, QRect & dlgSize);
+    bool showMultiVarDialog(QMap<QString, QString> * map, QMap<QString, QString> * mapSave,
+                            int & iWidth, int & iBasicHeight, int & iOneHeight);
     QString showSingleVarDialog(QString var, QMap<QString, QString> * mapSave, QRect & dlgSize);
 
     QPtrList<SnippetItem> _list;

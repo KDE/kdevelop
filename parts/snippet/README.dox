@@ -5,12 +5,8 @@ This plugin provides a tool view for CodeSnippets which can be easily inserted i
 
 \maintainer <a href="mailto:rgruber@users.sourceforge.net">Robert Gruber</a>
 
-\feature Provides a tooltree view for easy access to your codesnippets
-\feature Adds a config dialog to the global KDevelop configuration dialog
-\feature You can use variables in snippets
-\feature Shows either one dialog for entering all variables or a single dialog for each variable
-\feature Ability to save default values for variable
-\feature Saves the size of the dialogs and rezizes them on next use
+\feature Provides a tooltree view for easy access to your CodeSnippets
+\feature You can use variables in Snippets
 \feature Tooltips show the content of the snippets
 \feature Snippets are saved based on the user who created them
 

@@ -230,8 +230,8 @@ void SnippetWidget::writeConfig()
   QString strKeyText="";
   int iCount = 1;
   for ( item = _list.first(); item; item = _list.next() ) {  //write the snippet-list
-    strKeyName.sprintf("snippetName_%d", iCount);
-    strKeyText.sprintf("snippetText_%d", iCount);
+    strKeyName=QString("snippetName_%1").arg(iCount);
+    strKeyText=QString("snippetText_%1").arg(iCount);
 
     _cfg->writeEntry(strKeyName, item->getName());
     _cfg->writeEntry(strKeyText, item->getText());
@@ -244,8 +244,8 @@ void SnippetWidget::writeConfig()
   for ( it = _mapSaved.begin(); it != _mapSaved.end(); ++it ) {  //write the saved variable values
     if (it.data().length()<=0) continue;  //is the saved value has no length -> no need to save it
 
-    strKeyName.sprintf("snippetSavedName_%d", iCount);
-    strKeyText.sprintf("snippetSavedVal_%d", iCount);
+    strKeyName=QString("snippetSavedName_%1").arg(iCount);
+    strKeyText=QString("snippetSavedVal_%1").arg(iCount);
 
     _cfg->writeEntry(strKeyName, it.key());
     _cfg->writeEntry(strKeyText, it.data());
@@ -283,8 +283,8 @@ void SnippetWidget::initConfig()
   SnippetItem *item;
 
   for ( int i=1; i<=iCount; i++) {  //read the snippet-list
-    strKeyName.sprintf("snippetName_%d", i);
-    strKeyText.sprintf("snippetText_%d", i);
+    strKeyName=QString("snippetName_%1").arg(i);
+    strKeyText=QString("snippetText_%1").arg(i);
 
     QString strNameVal="";
     QString strTextVal="";
@@ -302,8 +302,8 @@ void SnippetWidget::initConfig()
   iCount = _cfg->readNumEntry("snippetSavedCount", 0);
 
   for ( int i=1; i<=iCount; i++) {  //read the snippet-list
-    strKeyName.sprintf("snippetSavedName_%d", i);
-    strKeyText.sprintf("snippetSavedVal_%d", i);
+    strKeyName=QString("snippetSavedName_%1").arg(i);
+    strKeyText=QString("snippetSavedVal_%1").arg(i);
 
     QString strNameVal="";
     QString strTextVal="";
@@ -396,7 +396,7 @@ QString SnippetWidget::parseText(QString text, QString del)
 
       if ( strName != del+del  &&  mapVar[strName].length() <= 0 ) {  //if not doubel-delimiter and not already in map
         if (iInMeth == 0) {  //check config, if input-method "single" is selected
-          strMsg.sprintf(i18n("Please enter the value for <b>%s</b>:").ascii(), strName.ascii());
+          strMsg=QString(i18n("Please enter the value for <b>%1</b>:")).arg(strName);
           strNew = showSingleVarDialog( strName, &_mapSaved, rSingle );
 	  if (strNew=="")
 	    return ""; //user clicked Cancle
@@ -416,7 +416,11 @@ QString SnippetWidget::parseText(QString text, QString del)
   } while (iFound != -1);
 
   if (iInMeth == 1) {  //check config, if input-method "multi" is selected
-    if (showMultiVarDialog( &mapVar, &_mapSaved, rMulti )) {  //generate and show the dialog
+    int w, bh, oh;
+    w = rMulti.width();
+    bh = rMulti.height();
+    oh = rMulti.top();
+    if (showMultiVarDialog( &mapVar, &_mapSaved, w, bh, oh )) {  //generate and show the dialog
       QMap<QString, QString>::Iterator it;
       for ( it = mapVar.begin(); it != mapVar.end(); ++it ) {  //walk through the map and do the replacement
         str.replace(it.key(), it.data());
@@ -424,10 +428,15 @@ QString SnippetWidget::parseText(QString text, QString del)
     } else {
       return "";
     }
+
+    rMulti.setWidth(w);   //this is a hack to save the dialog's dimensions in only one QRect
+    rMulti.setHeight(bh);
+    rMulti.setTop(oh);
+    rMulti.setLeft(0);
+     _SnippetConfig.setMultiRect(rMulti);
   }
 
   _SnippetConfig.setSingleRect(rSingle);
-  _SnippetConfig.setMultiRect(rMulti);
 
   return str;
 }
@@ -439,9 +448,19 @@ QString SnippetWidget::parseText(QString text, QString del)
     variable that is stored in the given map except the double-delimiter entry
     It return true if everything was ok and false if the user hit cancel
  */
-bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QString, QString> * mapSave, QRect & dlgSize)
+bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QString, QString> * mapSave,
+                                       int & iWidth, int & iBasicHeight, int & iOneHeight)
 {
-  QMap<QString, KTextEdit *> mapVar2Le;  //this map will help keeping track which TEXTEDIT goes with which variable
+  //if no var -> no need to show
+  if (map->count() == 0)
+    return true;
+
+  //if only var is the double-delimiter -> no need to show
+  QMap<QString, QString>::Iterator it = map->begin();
+  if ( map->count() == 1 && it.data()==_SnippetConfig.getDelimiter()+_SnippetConfig.getDelimiter() )
+    return true;
+
+  QMap<QString, KTextEdit *> mapVar2Te;  //this map will help keeping track which TEXTEDIT goes with which variable
   QMap<QString, QCheckBox *> mapVar2Cb;  //this map will help keeping track which CHECKBOX goes with which variable
 
   // --BEGIN-- building a dynamic dialog
@@ -458,13 +477,14 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
   QCheckBox * cb = NULL;
 
   labTop = new QLabel( &dlg, "label" );
-  layoutTop->addWidget(labTop, 0, 0);
+  labTop->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0,
+                         labTop->sizePolicy().hasHeightForWidth() ) );
   labTop->setText(i18n("Enter the replacement values for these variables:"));
+  layoutTop->addWidget(labTop, 0, 0);
   layout->addMultiCellLayout( layoutTop, 0, 0, 0, 1 );
 
 
-  int i = 0;
-  QMap<QString, QString>::Iterator it;                 //walk through the variable map and add
+  int i = 0;                                           //walk through the variable map and add
   for ( it = map->begin(); it != map->end(); ++it ) {  //a checkbox, a lable and a lineedit to the main layout
     if (it.key() == _SnippetConfig.getDelimiter() + _SnippetConfig.getDelimiter())
       continue;
@@ -482,7 +502,7 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
       te->setText((*mapSave)[it.key()]);
     }
 
-    mapVar2Le[it.key()] = te;
+    mapVar2Te[it.key()] = te;
     mapVar2Cb[it.key()] = cb;
 
     QToolTip::add( cb, i18n("Enable this to save the value entered to the right as default value for this variable") );
@@ -496,11 +516,15 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
 
   KPushButton * btn1 = new KPushButton( &dlg, "pushButton1" );
   btn1->setText(i18n("Cancel"));
+  btn1->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0,
+                         btn1->sizePolicy().hasHeightForWidth() ) );
   layoutBtn->addWidget( btn1, 0, 0 );
 
   KPushButton * btn2 = new KPushButton( &dlg, "pushButton2" );
   btn2->setText(i18n("Apply"));
   btn2->setDefault( TRUE );
+  btn2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0,
+                         btn2->sizePolicy().hasHeightForWidth() ) );
   layoutBtn->addWidget( btn2, 0, 1 );
 
   layout->addMultiCellLayout( layoutBtn, 2, 2, 0, 1 );
@@ -510,16 +534,21 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
   connect(btn1, SIGNAL(clicked()), &dlg, SLOT(reject()) );
   connect(btn2, SIGNAL(clicked()), &dlg, SLOT(accept()) );
 
-  //execute the dialog
+  //prepare to execute the dialog
   bool bReturn = false;
-  if (dlgSize.isValid())
-    dlg.setGeometry(dlgSize);
+  //resize the textedits
+  if (iWidth > 1) {
+    QRect r = dlg.geometry();
+    r.setHeight(iBasicHeight + iOneHeight*mapVar2Te.count());
+    r.setWidth(iWidth);
+    dlg.setGeometry(r);
+  }
   if ( dlg.exec() == QDialog::Accepted ) {
     QMap<QString, KTextEdit *>::Iterator it2;
-    for ( it2 = mapVar2Le.begin(); it2 != mapVar2Le.end(); ++it2 ) {
+    for ( it2 = mapVar2Te.begin(); it2 != mapVar2Te.end(); ++it2 ) {
       if (it2.key() == _SnippetConfig.getDelimiter() + _SnippetConfig.getDelimiter())
         continue;
-      (*map)[it2.key()] = it2.data()->text();    //copy the entered values back the the given map
+      (*map)[it2.key()] = it2.data()->text();    //copy the entered values back to the given map
 
       if (mapVar2Cb[it2.key()]->isChecked())     //if the checkbox is on; save the values for later
         (*mapSave)[it2.key()] = it2.data()->text();
@@ -528,14 +557,16 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
     }
     bReturn = true;
 
-    dlgSize = dlg.geometry();
+    iBasicHeight = dlg.geometry().height() - layoutVar->geometry().height();
+    iOneHeight = layoutVar->geometry().height() / mapVar2Te.count();
+    iWidth = dlg.geometry().width();
   }
 
   //do some cleanup
   QMap<QString, KTextEdit *>::Iterator it1;
-  for (it1 = mapVar2Le.begin(); it1 != mapVar2Le.end(); ++it1)
+  for (it1 = mapVar2Te.begin(); it1 != mapVar2Te.end(); ++it1)
     delete it1.data();
-  mapVar2Le.clear();
+  mapVar2Te.clear();
   QMap<QString, QCheckBox *>::Iterator it2;
   for (it2 = mapVar2Cb.begin(); it2 != mapVar2Cb.end(); ++it2)
     delete it2.data();

@@ -9,17 +9,17 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>405</height>
+            <height>398</height>
         </rect>
     </property>
     <property name="caption">
         <string>Snippet Settings</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -52,7 +52,7 @@
                 </property>
             </widget>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QButtonGroup" row="1" column="0">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
@@ -164,7 +164,49 @@
                 </widget>
             </grid>
         </widget>
-        <spacer>
+        <widget class="QLayoutWidget" row="3" column="0">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>kPushButton1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Apply</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>kPushButton2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer row="2" column="0">
             <property name="name">
                 <cstring>spacer2</cstring>
             </property>
@@ -177,14 +219,16 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>181</height>
+                    <height>120</height>
                 </size>
             </property>
         </spacer>
-    </vbox>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

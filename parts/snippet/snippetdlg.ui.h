@@ -1,3 +1,10 @@
+/*
+ *  File : snippetdlg.ui.h
+ *
+ *  Author: Robert Gruber <rgruber@users.sourceforge.net>
+ *
+ *  Copyright: See COPYING file that comes with this distribution
+ */
 /****************************************************************************
 ** ui.h extension file, included from the uic-generated form implementation.
 **
