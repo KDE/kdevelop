@@ -1,3 +1,6 @@
+2003-04-22 F@lk Brettschneider <falkbr@kdevelop.org>
+    * compiles and works on KDE-3.0 again
+
 2003-04-18 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented Pascal language support including
       pascalsupport part, pascalproject part, filecreate templates,
@@ -70,7 +73,8 @@
     Pelrsupportpart:
     - add support for namespaces and scripts in classviewer
     - parsing of "use ...." libraries
-    - get list of INC path in local installed perl to allow parsing of perl
+    - get l2003-03-29 F@lk Brettschneider <falkbr@kdevelop.org>
+ist of INC path in local installed perl to allow parsing of perl
     libraries outside the project directory
 
 2003-04-05 Amilcar Lucas <a.lucas@tu-bs.de>
