@@ -22,13 +22,16 @@
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
+#include <qdir.h>
 #include <klocale.h>
 #include <kaccel.h>
 #include <kkeydialog.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+
 #include "ckdevsetupdlg.h"
+#include "ckdevelop.h"
 #include "resource.h"
 
 #if HAVE_CONFIG_H
@@ -42,7 +45,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   : QTabDialog( parent, name,TRUE )
 {
   accel = accel_pa;
-  
+  wantsTreeRefresh=false;
+
   setCaption( i18n("KDevelop Setup" ));
   config=kapp->getConfig();
   
@@ -271,7 +275,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
 	
   qt_edit = new QLineEdit( w, "qt_edit" );
   qt_edit->setGeometry( 170, 40, 190, 30 );
-  qt_edit->setText( config->readEntry("doc_qt", QT_DOCDIR));
+  qt_doc_path= config->readEntry("doc_qt", QT_DOCDIR);
+  qt_edit->setText(qt_doc_path);
   qt_edit->setMaxLength( 32767 );
   
   QPushButton* qt_button;
@@ -297,7 +302,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   
   kde_edit = new QLineEdit( w, "kde_edit");
   kde_edit->setGeometry( 170, 90, 190, 30 );
-  kde_edit->setText(config->readEntry("doc_kde", KDELIBS_DOCDIR));
+  kde_doc_path=config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  kde_edit->setText(kde_doc_path);
   kde_edit->setMaxLength( 32767 );
   kde_edit->setEchoMode( QLineEdit::Normal );
   kde_edit->setFrame( TRUE );
@@ -334,7 +340,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   QPushButton* update_button;
   update_button = new QPushButton( w, "update_button" );
   update_button->setGeometry( 290, 190, 110, 30 );
-  connect( update_button, SIGNAL(clicked()),parent, SLOT(slotOptionsUpdateKDEDocumentation()) );
+  connect( update_button, SIGNAL(clicked()), SLOT(slotKDEUpdateReq()) );
   update_button->setText(i18n("Update..."));
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
@@ -411,7 +417,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   setOkButton(i18n("OK"));
   setCancelButton(i18n("Cancel"));
   connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
-  connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+  connect( this, SIGNAL(applyButtonPressed()), SLOT(slotOkClicked()) );
   connect( this, SIGNAL(applyButtonPressed()),parent, SLOT(slotOptionsMake()) );
   resize(440,420);
   
@@ -438,8 +444,50 @@ void CKDevSetupDlg::slotDefault(){
 
 }
 
-void CKDevSetupDlg::ok(){
+void CKDevSetupDlg::slotOkClicked(){
+  QString text;
+  int answer;
 
+  // check now the documentation locations
+  config->setGroup("Doc_Location");
+  wantsTreeRefresh=false;
+
+  text = qt_edit->text();
+  if(text.right(1) != "/" ){
+    text = text + "/";
+  }
+  QString qt_testfile=text+"classes.html"; // test if the path really is the qt-doc path
+  answer=KMessageBox::Yes;
+  if(!QFileInfo(qt_testfile).exists())
+  {
+    answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
+                                         "Qt-library documentation. Do you really want to save\n"
+                                         "this value?"), i18n("The selected path is not correct!"));
+  }
+
+  if (answer==KMessageBox::Yes)
+  {
+     config->writeEntry("doc_qt",text);
+     wantsTreeRefresh |= (qt_doc_path != text);
+  }
+  answer=KMessageBox::Yes;    // simulate again ok...
+  text = kde_edit->text();
+  if(text.right(1) != "/" ){
+    text = text + "/";
+  }
+  QString kde_testfile=text+"kdecore/index.html"; // test if the path really is the qt-doc path
+  if(!QFileInfo(kde_testfile).exists())
+  {
+    answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
+                                        "KDE-library documentation. Do you really want to save\n"
+                                        "this value?"), i18n("The selected path is not correct!"));
+  }
+
+  if (answer==KMessageBox::Yes)
+  {
+     config->writeEntry("doc_kde",text);
+     wantsTreeRefresh |= (kde_doc_path != text);
+  }
 
   config->setGroup("General Options");
 
@@ -473,59 +521,50 @@ void CKDevSetupDlg::ok(){
 	config->setGroup("TipOfTheDay");
   config->writeEntry("show_tod",tipDayCheck->isChecked());
 
-  QString text;
-  config->setGroup("Doc_Location");
-  text = qt_edit->text();
-  if(text.right(1) != "/") {
-    text = text + "/";
-  }
-  config->writeEntry("doc_qt",text);
-  text = kde_edit->text();
-  if(text.right(1) != "/" ){
-    text = text + "/";
-  }
-  config->writeEntry("doc_kde" , text);
-  
   accel->setKeyDict( *dict);
-	accel->writeSettings(config);
+  accel->writeSettings(config);
   config->sync();
   accept();
 }
 
 void CKDevSetupDlg::slotQtClicked(){
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
+  config->setGroup("Doc_Location");
+  dir = KDirDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
-    config->setGroup("Doc_Location");
 
     QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
-    if(QFileInfo(qt_testfile).exists())
-      config->writeEntry("doc_qt",dir);
-    else{
+    if(!QFileInfo(qt_testfile).exists())
       KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
                                           "Qt library documentation. Please choose the\n"
                                           "correct path."));
-    }
   }
 }
 
 
 void CKDevSetupDlg::slotKDEClicked(){
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
+  config->setGroup("Doc_Location");
+  dir = KDirDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
-    config->setGroup("Doc_Location");
 
     QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the qt-doc path
-    if(QFileInfo(kde_testfile).exists())
-      config->writeEntry("doc_kde",dir);
-    else{
+    if(!QFileInfo(kde_testfile).exists())
       KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
                                           "KDE library documentation. Please choose the\n"
                                           "correct path or choose 'Update' to create a new\n"
                                           "documentation"));
-    }
   }
+}
+
+void CKDevSetupDlg::slotKDEUpdateReq(){
+  QString new_path;
+  ((CKDevelop*) parent())->slotOptionsUpdateKDEDocumentation();
+  config->setGroup("Doc_Location");
+  new_path=config->readEntry("doc_kde", KDELIBS_DOCDIR);
+
+  if (kde_doc_path != new_path)
+    kde_edit->setText(new_path);
 }

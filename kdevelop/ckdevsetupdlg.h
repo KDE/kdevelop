@@ -42,12 +42,16 @@ class CKDevSetupDlg : public QTabDialog
     Q_OBJECT
   public:
     CKDevSetupDlg(QWidget *parent, KAccel *accel, KGuiCmdManager &cmdMngr, const char *name=0L);
-  
+    bool hasChangedPath() const {return wantsTreeRefresh;};
+
 private:
   QWidget *w;
   QWidget *w1;
   QWidget *w2;
   KKeyChooser* w21;
+
+  QString kde_doc_path, qt_doc_path;
+  bool wantsTreeRefresh;
 
   QDict<KKeyEntry>* dict;
   KConfig* config;
@@ -67,10 +71,11 @@ private:
 
 
  private slots:
-  void ok();
+  void slotOkClicked();
   void slotDefault();
   void slotQtClicked();
   void slotKDEClicked();
+  void slotKDEUpdateReq();
 };
 
 #endif

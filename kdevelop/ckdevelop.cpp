@@ -1307,6 +1307,9 @@ void CKDevelop::slotOptionsKDevelop(){
   CKDevSetupDlg* setup = new CKDevSetupDlg(this, accel, cmdMngr, "Setup");
   //setup->show();
   if (setup->exec()) {
+    if (setup->hasChangedPath())
+         doc_tree->refresh(prj);
+
     // kwrite keys
     cmdMngr.changeAccels();
     cmdMngr.writeConfig(kapp->getConfig());
@@ -1374,6 +1377,12 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   if(dlg.exec()){
     slotStatusMsg(i18n("Generating Documentation..."));
     setToolMenuProcess(false);
+    if (dlg.isUpdated())
+    {
+        config->writeEntry("doc_kde",dlg.getDocPath());
+        config->sync();
+        doc_tree->refresh(prj);
+    }
   }
 }
 void CKDevelop::slotOptionsCreateSearchDatabase(){
