@@ -1,6 +1,6 @@
 SUBDIRS = lib parts plugins $(GIDEON_SUBDIR) $(KDEV_SUBDIR) doc pics
 
-EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
+EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
 
 apps_DATA = gideon.desktop
 appsdir = $(kde_appsdir)/Development
