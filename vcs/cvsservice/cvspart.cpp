@@ -694,8 +694,6 @@ void CvsServicePart::slotProjectClosed()
     kdDebug(9006) << "CvsServicePart::slotProjectClosed() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
-//    CVSDir cvsdir( project()->projectDirectory() );
-//    if (!cvsdir.isValid())
     if (!isValidDirectory( project()->projectDirectory() ))
     {
         kdDebug(9006) << "Project had no CVS Support: too bad!! :-(" << endl;
