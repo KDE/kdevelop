@@ -73,7 +73,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
-  KToolBarPopupAction * newAction = new KToolBarPopupAction( "&New", "file_new", CTRL+Qt::Key_N, this, SLOT(slotNewFile()), actionCollection(), "file_new");
+  KToolBarPopupAction * newAction = new KToolBarPopupAction( i18n("&New"), "file_new", CTRL+Qt::Key_N, this, SLOT(slotNewFile()), actionCollection(), "file_new");
   newAction->setWhatsThis( i18n("<b>New file</b><p>Creates a new file. Also adds it the project if the <b>Add to project</b> checkbox is turned on.") );
   newAction->setToolTip( i18n("Create a new file") );
   m_newPopupMenu = newAction->popupMenu();
