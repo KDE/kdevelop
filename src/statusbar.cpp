@@ -94,7 +94,7 @@ void StatusBar::cursorPositionChanged()
   if (m_cursorIface)
   {
     uint line, col;
-    m_cursorIface->cursorPositionReal(&line, &col);
+    m_cursorIface->cursorPosition(&line, &col);
     setCursorPosition(line, col);
   }
 }
