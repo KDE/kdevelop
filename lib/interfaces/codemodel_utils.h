@@ -94,65 +94,9 @@ void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
 }
 
 
-void processClasses(FunctionList &list, const ClassDom dom)
-{
-    const ClassList cllist = dom->classList();
-    for (ClassList::ConstIterator it = cllist.begin(); it != cllist.end(); ++it)
-    {
-        processClasses(list, *it);
-    }
-
-    const FunctionList fnlist = dom->functionList();
-    for (FunctionList::ConstIterator it = fnlist.begin(); it != fnlist.end(); ++it)
-    {
-        list.append(*it);
-    }
-}
-
-void processNamespaces(FunctionList &list, const NamespaceDom dom)
-{
-    const NamespaceList nslist = dom->namespaceList();
-    for (NamespaceList::ConstIterator it = nslist.begin(); it != nslist.end(); ++it)
-    {
-        processNamespaces(list, *it);
-    }
-    const ClassList cllist = dom->classList();
-    for (ClassList::ConstIterator it = cllist.begin(); it != cllist.end(); ++it)
-    {
-        processClasses(list, *it);
-    }
-
-    const FunctionList fnlist = dom->functionList();
-    for (FunctionList::ConstIterator it = fnlist.begin(); it != fnlist.end(); ++it)
-    {
-        list.append(*it);
-    }
-}
-
-FunctionList allFunctions(const FileDom &dom)
-{
-    FunctionList list;
-
-    const NamespaceList nslist = dom->namespaceList();
-    for (NamespaceList::ConstIterator it = nslist.begin(); it != nslist.end(); ++it)
-    {
-        processNamespaces(list, *it);
-    }
-
-    const ClassList cllist = dom->classList();
-    for (ClassList::ConstIterator it = cllist.begin(); it != cllist.end(); ++it)
-    {
-        processClasses(list, *it);
-    }
-
-    const FunctionList fnlist = dom->functionList();
-    for (FunctionList::ConstIterator it = fnlist.begin(); it != fnlist.end(); ++it)
-    {
-        list.append(*it);
-    }
-
-    return list;
-}
+void processClasses(FunctionList &list, const ClassDom dom);
+void processNamespaces(FunctionList &list, const NamespaceDom dom);
+FunctionList allFunctions(const FileDom &dom);
 
 }
 
