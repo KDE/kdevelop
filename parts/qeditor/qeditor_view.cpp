@@ -698,7 +698,11 @@ void QEditorView::enableTextHints( int timeout )
     if( !m_textHintToolTip )
         m_textHintToolTip = new QEditorTextHint( this );
 
+#if KDE_VERSION > 305        
     m_textHintToolTip->setWakeUpDelay( timeout );
+#else
+    // TODO set delay
+#endif    
 }
 
 void QEditorView::disableTextHints()

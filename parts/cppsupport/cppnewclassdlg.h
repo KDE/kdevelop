@@ -18,6 +18,7 @@
 
 #include <qlineedit.h>
 #include <qlistview.h>
+#include <qwidgetstack.h>
 #include "cppnewclassdlgbase.h"
 
 class KDevPlugin;
