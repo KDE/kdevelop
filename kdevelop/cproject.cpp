@@ -157,7 +157,7 @@ void CProject::setVCSystem(const QString& vcsystem)
 }
 
 
-void CProject::setLFVOpenGroups(QStrList groups){
+void CProject::setLFVOpenGroups(QStringList groups){
   config->setGroup("General");
   config->writeEntry( "lfv_open_groups", groups );
 }
@@ -197,7 +197,7 @@ void CProject::setAdditCXXFLAGS(const QString& flags){
   config->setDollarExpansion(true);
 }
 
-void CProject::setFilters(const QString& group,QStrList& filters){
+void CProject::setFilters(const QString& group,QStringList& filters){
   config->setGroup("LFV Groups");
   config->writeEntry(group,filters);
 }
@@ -246,15 +246,15 @@ void CProject::writeMakefileAmInfo(const TMakefileAmInfo* info)
  *                                                                   *
  ********************************************************************/
 
-void CProject::getLFVOpenGroups(QStrList& groups){
+void CProject::getLFVOpenGroups(QStringList& groups){
   config->setGroup("General");
-  config->readListEntry("lfv_open_groups",groups);
+  groups = config->readListEntry("lfv_open_groups");
 }
 
-void CProject::getLFVGroups(QStrList& groups){
+void CProject::getLFVGroups(QStringList& groups){
   groups.clear();
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
 }
 
 QStrList CProject::getShortInfo(){
@@ -300,10 +300,10 @@ QString CProject::getAdditCXXFLAGS(){
   return str;
 }
 
-void CProject::getFilters(const QString& group,QStrList& filters){
+void CProject::getFilters(const QString& group,QStringList& filters){
   filters.clear();
   config->setGroup("LFV Groups");
-  config->readListEntry(group,filters);
+  filters = config->readListEntry(group);
 }
 
 TFileInfo CProject::getFileInfo(const QString& rel_filename){
@@ -1265,24 +1265,30 @@ void CProject::setKDevelopWriteArea(const QString& makefile){
 
 void CProject::addLFVGroup(const QString& name, const QString& ace_group)
 {
-  QStrList groups;
+  QStringList groups;
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
   if(ace_group.isEmpty()){
-    groups.insert(0,name);
+    groups.insert(groups.begin(),name);
     config->writeEntry("groups",groups);
     return;
   }
-  int pos = groups.find(ace_group);
-  groups.insert(pos+1,name);
+  QStringList::Iterator pos = groups.find(ace_group);
+  pos++;
+  if (pos == groups.end()) {
+    groups.append(name);
+  }
+  else {
+    groups.insert(pos,name);
+  }
   config->writeEntry("groups",groups);
 }
 
 void CProject::removeLFVGroup(const QString& name)
 {
-  QStrList groups;
+  QStringList groups;
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
   groups.remove(name);
   config->deleteEntry(name,false);
   config->writeEntry("groups",groups);

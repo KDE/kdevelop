@@ -2789,7 +2789,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = false;
       project->addFileToProject ("doc/en/index.docbook",fileInfo);
   }
-  QStrList group_filters;
+  QStringList group_filters;
   group_filters.append("*");
   project->addLFVGroup (i18n("Others"),"");
   project->setFilters(i18n("Others"),group_filters);

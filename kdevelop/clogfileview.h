@@ -69,7 +69,7 @@ protected: // Implementations of virtual methods.
   virtual KPopupMenu *getCurrentPopup();
 
 protected:
-  void split(QString str,QStrList& filters);
+  void split(QString str,QStringList& filters);
  protected slots:
     void slotSelectionChanged( QListViewItem *);
     void slotNewClass();
