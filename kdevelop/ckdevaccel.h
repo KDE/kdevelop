@@ -72,7 +72,7 @@ public:
   void connectItem(const QString &action,
                    const QObject *receiver, const char *member,
                    bool activate=true);
-  void connectItem(KAccel::StdAccel accel,
+  void connectItem(KStdAccel::StdAccel accel,
                    const QObject *receiver, const char *member,
                    bool activate=true);
   void disconnectItem(const QString &action,
@@ -84,7 +84,7 @@ public:
     const QObject* receiver, const char *member,
     bool activate, uint uMenuId);
 
-  void connectItem(KAccel::StdAccel accel,
+  void connectItem(KStdAccel::StdAccel accel,
     const QObject* receiver, const char *member,
     bool activate, uint uMenuId);
 
@@ -94,7 +94,7 @@ public:
   void reconnectItem(const QString &action,
     const QObject* receiver, const char *member);
 
-  void reconnectItem(KAccel::StdAccel accel,
+  void reconnectItem(KStdAccel::StdAccel accel,
     const QObject* receiver, const char *member);
 
   // like reconnect, only by resource ID
@@ -116,3 +116,4 @@ public:
 };
 
 #endif
+
