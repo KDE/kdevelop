@@ -1251,7 +1251,7 @@ void GDBController::slotStart(const QString& shell, const QString &application)
     DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it)
     {
-        environstr += (*it).first;
+        environstr = (*it).first;
         environstr += "=";
         environstr += KProcess::quote((*it).second);
         queueCmd(new GDBCommand(QCString("set environment ") + environstr.latin1(),
