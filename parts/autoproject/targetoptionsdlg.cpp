@@ -172,7 +172,7 @@ void TargetOptionsDialog::storeConfig()
     QString old_dependencies = target->dependencies;
     if (new_dependencies != old_dependencies) {
         target->dependencies = new_dependencies;
-//        if( !new_dependencies.isEmpty() )
+        if (!new_dependencies.isEmpty())
             replaceMap.insert(canonname + "_DEPENDENCIES", new_dependencies);
     }
 
