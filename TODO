@@ -11,8 +11,6 @@ High priority tasks!
 * automake part:
   - Should be able to DND files from other targets / file list / konq
     to add to targets.
-  - Doesn't always get lib path relative to $top_buildir correct.
-    (projectDirectory() != $(top_builddir) in general)
 
 * UI bugs:
   - editor options dialog missing when all views are closed
@@ -123,8 +121,6 @@ Other Issues
 
 * Update configure.in when sub projects are added and the
   project doesn't use am_edit
-
-* Implement removing sub projects.
 
 * Implement Add Plugin
 
