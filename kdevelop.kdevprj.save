@@ -36,7 +36,7 @@ install_location=
 type=DATA
 
 [General]
-AMChanged=true
+AMChanged=false
 author=kdevelop-team
 configure_args=--enable-debug
 email=kdevelop-team@kdevelop.org
@@ -2365,7 +2365,7 @@ sub_dirs=
 type=normal
 
 [kdevelop/pics/misc/Makefile.am]
-files=kdevelop/pics/misc/about_logo.png,kdevelop/pics/misc/customApp.png,kdevelop/pics/misc/gnomeApp.png,kdevelop/pics/misc/kAppWizard.png,kdevelop/pics/misc/kdemdi.png,kdevelop/pics/misc/miniApp.png,kdevelop/pics/misc/normalApp.png,kdevelop/pics/misc/qextmdi.png,kdevelop/pics/misc/qtApp.png,kdevelop/pics/misc/qtmdi.png,kdevelop/pics/misc/startlogo.png,kdevelop/pics/misc/terminalApp.png,kdevelop/pics/misc/tipday.png,kdevelop/pics/misc/kicker.png,kdevelop/pics/misc/kioslave.png,kdevelop/pics/misc/kpart.png,kdevelop/pics/misc/childfrm.png,kdevelop/pics/misc/kcontrol.png,kdevelop/pics/misc/tabpage.png,kdevelop/pics/misc/toplevel.png,kdevelop/pics/misc/ktheme.png
+files=kdevelop/pics/misc/about_logo.png,kdevelop/pics/misc/customApp.png,kdevelop/pics/misc/gnomeApp.png,kdevelop/pics/misc/kAppWizard.png,kdevelop/pics/misc/kdemdi.png,kdevelop/pics/misc/miniApp.png,kdevelop/pics/misc/normalApp.png,kdevelop/pics/misc/qextmdi.png,kdevelop/pics/misc/qtApp.png,kdevelop/pics/misc/qtmdi.png,kdevelop/pics/misc/startlogo.png,kdevelop/pics/misc/terminalApp.png,kdevelop/pics/misc/tipday.png,kdevelop/pics/misc/kicker.png,kdevelop/pics/misc/kioslave.png,kdevelop/pics/misc/kpart.png,kdevelop/pics/misc/childfrm.png,kdevelop/pics/misc/tabpage.png,kdevelop/pics/misc/toplevel.png,kdevelop/pics/misc/ktheme.png,kdevelop/pics/misc/kcmodule.png
 sub_dirs=
 type=normal
 
@@ -2399,7 +2399,7 @@ install=false
 install_location=
 type=DATA
 
-[kdevelop/pics/misc/kcontrol.png]
+[kdevelop/pics/misc/kcmodule.png]
 dist=true
 install=false
 install_location=
@@ -2856,7 +2856,7 @@ install_location=$$(kde_datadir)/kdevelop/templates/MAM_shared_template
 type=DATA
 
 [kdevelop/templates/Makefile.am]
-files=kdevelop/templates/AUTHORS_template,kdevelop/templates/COPYING_template,kdevelop/templates/ChangeLog_template,kdevelop/templates/INSTALL_template,kdevelop/templates/MAM_shared_template,kdevelop/templates/README_template,kdevelop/templates/TODO_template,kdevelop/templates/admin.tar.gz,kdevelop/templates/c.tar.gz,kdevelop/templates/cpp.tar.gz,kdevelop/templates/cpp_template,kdevelop/templates/cvsignore_template,kdevelop/templates/desktop_template,kdevelop/templates/docbook_en_template,kdevelop/templates/gnome.tar.gz,kdevelop/templates/handbook_en_template,kdevelop/templates/header_template,kdevelop/templates/icon_template,kdevelop/templates/kdelnk_template,kdevelop/templates/kdemdi.tar.gz,kdevelop/templates/lexical_template,kdevelop/templates/lsm_template,kdevelop/templates/mini2.tar.gz,kdevelop/templates/nif_template,kdevelop/templates/normal2.tar.gz,kdevelop/templates/preview1,kdevelop/templates/preview2,kdevelop/templates/qextmdi.tar.gz,kdevelop/templates/qt2.tar.gz,kdevelop/templates/qtmdi.tar.gz,kdevelop/templates/kicker.tar.gz,kdevelop/templates/lo16-app-appicon.png,kdevelop/templates/lo32-app-appicon.png,kdevelop/templates/kioslave.tar.gz,kdevelop/templates/kpart.tar.gz,kdevelop/templates/ktheme.tar.gz
+files=kdevelop/templates/AUTHORS_template,kdevelop/templates/COPYING_template,kdevelop/templates/ChangeLog_template,kdevelop/templates/INSTALL_template,kdevelop/templates/MAM_shared_template,kdevelop/templates/README_template,kdevelop/templates/TODO_template,kdevelop/templates/admin.tar.gz,kdevelop/templates/c.tar.gz,kdevelop/templates/cpp.tar.gz,kdevelop/templates/cpp_template,kdevelop/templates/cvsignore_template,kdevelop/templates/desktop_template,kdevelop/templates/docbook_en_template,kdevelop/templates/gnome.tar.gz,kdevelop/templates/handbook_en_template,kdevelop/templates/header_template,kdevelop/templates/icon_template,kdevelop/templates/kdelnk_template,kdevelop/templates/kdemdi.tar.gz,kdevelop/templates/lexical_template,kdevelop/templates/lsm_template,kdevelop/templates/mini2.tar.gz,kdevelop/templates/nif_template,kdevelop/templates/normal2.tar.gz,kdevelop/templates/preview1,kdevelop/templates/preview2,kdevelop/templates/qextmdi.tar.gz,kdevelop/templates/qt2.tar.gz,kdevelop/templates/qtmdi.tar.gz,kdevelop/templates/kicker.tar.gz,kdevelop/templates/lo16-app-appicon.png,kdevelop/templates/lo32-app-appicon.png,kdevelop/templates/kioslave.tar.gz,kdevelop/templates/kpart.tar.gz,kdevelop/templates/ktheme.tar.gz,kdevelop/templates/kcmodule.tar.gz
 sub_dirs=
 type=normal
 
@@ -2936,6 +2936,12 @@ type=DATA
 dist=true
 install=true
 install_location=$$(kde_datadir)/kdevelop/templates/icon_template
+type=DATA
+
+[kdevelop/templates/kcmodule.tar.gz]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kdevelop/templates/kcmodule.tar.gz
 type=DATA
 
 [kdevelop/templates/kdelnk_template]
