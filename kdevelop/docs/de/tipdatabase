@@ -1,8 +1,8 @@
 Version: 1.0  Date: 31.5.1999
-...das Sie über das Hilfemenü von KDevelop einen Bugreporter aufrufen und so zur Verbesserung von KDevelop beitragen können ?
-...das Sie im Dialog Editor über einen rechten Mausklick weitere Funktionen, zum Beispiel Kopieren und Einfügen, ausführen können ?
-...das KDevelop Ihnen Schnellhilfe mit einem rechten Mausklick über Dialogfeldern anbietet ?
-...das Sie das automatische abspeichern im KDevelop Setup Dialog einstellen können ?
+...daß Sie über das Hilfemenü von KDevelop einen Bugreporter aufrufen und so zur Verbesserung von KDevelop beitragen können ?
+...daß Sie im Dialog Editor über einen rechten Mausklick weitere Funktionen, zum Beispiel Kopieren und Einfügen, ausführen können ?
+...daß KDevelop Ihnen Schnellhilfe mit einem rechten Mausklick über Dialogfeldern anbietet ?
+...daß Sie das automatische abspeichern im KDevelop Setup Dialog einstellen können ?
 Wenn Sie Ihr Make-Programm mit zusätzliche Kommandozeilen Optionen aufrufen wollen, können Sie diese im Setup Dialog einstellen.
 Wenn Sie Funktionen anderer Bibliotheken benutzen wollen, können Sie diese Bibliotheken im Projekt Optionen Dialog angeben.
 Wenn Sie die Versionsnummer Ihres Projekts ändern wollen, geben Sie diese im Projekt Optionen Dialog an; Ihr Projekt wird automatisch aktualisiert.
@@ -16,18 +16,18 @@ Tip: Sie können die Dokumentation nach einem Begriff durchsuchen, indem sie das 
 Das KDevelop Team wünscht Ihnen einen schönen Tag !
 Wenn Sie einen Bug in KDevelop gefunden haben, lassen Sie es uns wissen. Kontaktadressen finden Sie im KDevelop Benutzerhandbuch.
 Wenn Sie zusätzliche Dokumentationen zum Dokumentations-Baum hinzufügen wollen, wählen Sie "Eintrag hinzufügen" im Kontextmenü über dem "Andere" Ordner im Dokumentations-Tabulator.
-...das Sie eine neue Klasse erzeugen können, indem Sie "Neue Klasse" im "Projekt"-Menü wählen ?
-...das Sie ihre Dateien mit a2ps oder enscript innerhalb von KDevelop ausdrucken können ?
+...daß Sie eine neue Klasse erzeugen können, indem Sie "Neue Klasse" im "Projekt"-Menü wählen ?
+...daß Sie ihre Dateien mit a2ps oder enscript innerhalb von KDevelop ausdrucken können ?
 Um ein Projekt zu öffnen, wählen Sie "Öffnen" im Menü "Projekt".
 Wenn Sie Ihr Projekt übersetzen und eine Fehlermeldung bekommen, klicken Sie auf diese um zur Stelle des Fehlers im Quelltext zu springen.
-...das Sie Tastatur-Schnelltasten benutzen können, um das Ausgabe- und Baum-Fenster ein- und auszuschalten ?
-...das Sie Ihr Programm innerhalb von KDevelop debuggen können, indem sie "Debuggen" im "Build"-Menü auswählen ?
-...das Sie zwischen Klassen springen können, indem Sie die gewünschte Klasse in der Klassen-Box in der Werkzeugleiste auswählen ?
-...das Sie Pixmaps mit KIconEdit direkt bearbeiten können, indem Sie das gewünschte Pixmap in den Dateibäumen auswählen ?
-...das Sie die Compiler Warnungen im Dialogfeld "Projekt Optionen" setzen können ?
-...das Sie nach einem makierten Text auch innerhalb des Dokumentations-Browsers über ein Kontextmenü suchen können ?
-...das Sie markieren Text aus dem Dokumentations-Browser mit dem Kontextmenü in ihre Quellen kopieren können ?
-...das Sie Ihre Bibliotheks-Dokumentation aktualisieren sollten, nachdem Sie neue Bibliotheken installiert haben ?
-...das Sie die Syntax-Hervorhebungen des Editors konfigurieren können ?
-...das Sie Bearbeitungsschritte Rückgängig machen und wiederherstellen können ?
-...das Sie die Reihenfolge der Dialogelemente im Dialog Editor durch einen rechten Mausklick auf das entsprechende Element ändern können ?
+...daß Sie Tastatur-Schnelltasten benutzen können, um das Ausgabe- und Baum-Fenster ein- und auszuschalten ?
+...daß Sie Ihr Programm innerhalb von KDevelop debuggen können, indem sie "Debuggen" im "Build"-Menü auswählen ?
+...daß Sie zwischen Klassen springen können, indem Sie die gewünschte Klasse in der Klassen-Box in der Werkzeugleiste auswählen ?
+...daß Sie Pixmaps mit KIconEdit direkt bearbeiten können, indem Sie das gewünschte Pixmap in den Dateibäumen auswählen ?
+...daß Sie die Compiler Warnungen im Dialogfeld "Projekt Optionen" setzen können ?
+...daß Sie nach einem makierten Text auch innerhalb des Dokumentations-Browsers über ein Kontextmenü suchen können ?
+...daß Sie markieren Text aus dem Dokumentations-Browser mit dem Kontextmenü in ihre Quellen kopieren können ?
+...daß Sie Ihre Bibliotheks-Dokumentation aktualisieren sollten, nachdem Sie neue Bibliotheken installiert haben ?
+...daß Sie die Syntax-Hervorhebungen des Editors konfigurieren können ?
+...daß Sie Bearbeitungsschritte Rückgängig machen und wiederherstellen können ?
+...daß Sie die Reihenfolge der Dialogelemente im Dialog Editor durch einen rechten Mausklick auf das entsprechende Element ändern können ?
