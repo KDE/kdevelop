@@ -11,3 +11,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_$APPNAMELC$.desktop
 
+rcdir = $(kde_datadir)/kdev$APPNAMELC$
+rc_DATA = kdevpart_$APPNAMELC$.rc

@@ -6,4 +6,5 @@ Comment=$APPNAME$
 Name=KDev$APPNAME$
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
 X-KDE-Library=libkdev$APPNAMELC$
