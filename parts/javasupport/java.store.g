@@ -2,6 +2,7 @@
 
 header "pre_include_hpp" {
 	#include "classstore.h"
+	#include "JavaAST.hpp"
 
 	#include <qstring.h>
 	#include <qstringlist.h>
@@ -38,13 +39,13 @@ class JavaStoreWalker extends TreeParser;
 options {
 	importVocab=Java;
 	defaultErrorHandler = true;     
+	ASTLabelType = "RefJavaAST";
 }
 {
 private:
 	ClassStore* m_store;
 	QString m_package;
 	ANTLR_USE_NAMESPACE(std)string m_filename;
-	ParsedClassContainer* global_ns;
 
 public:
 	void setClassStore( ClassStore* store )			{ m_store = store; }
@@ -79,12 +80,14 @@ importDefinition returns [ QString id ]
 	;
 
 typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
-	:	#(CLASS_DEF modifiers IDENT 
+	:	#(CLASS_DEF m:modifiers IDENT 
 						{
 						klass = new ParsedClass; 
 						klass->setName( #IDENT->getText().c_str() );
 						klass->setDeclaredInFile( getFilename().c_str() );
 						klass->setDefinedInFile( getFilename().c_str() );
+						klass->setDeclaredOnLine( #IDENT->getLine() );
+						klass->setDefinedOnLine( #IDENT->getLine() );
 						}
 		bases=extendsClause 
 						{ 
@@ -98,12 +101,13 @@ typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
 						}
 		implementsClause objBlock[klass] 
 		)
-	|	#(INTERFACE_DEF modifiers IDENT 
+	|	#(INTERFACE_DEF mm:modifiers IDENT 
 						{
 						klass = new ParsedClass; 
 						klass->setName( #IDENT->getText().c_str() );
 						klass->setDeclaredInFile( getFilename().c_str() );
-						klass->setDefinedInFile( getFilename().c_str() );
+						klass->setDeclaredOnLine( #IDENT->getLine() );
+						klass->setDefinedOnLine( #IDENT->getLine() );
 						}
 		bases=extendsClause
 						{ 
@@ -192,20 +196,18 @@ objBlock [ ParsedClass* klass ] { ParsedClass* kl; ParsedMethod* meth; ParsedAtt
 		)
 	;
 
-ctorDef returns [ ParsedMethod* meth ]
-							{
-							meth = new ParsedMethod;
-							meth->setIsConstructor( TRUE );
+ctorDef returns [ ParsedMethod* meth ]	{ meth = new ParsedMethod; meth->setIsConstructor( TRUE ); }
+	:	#(CTOR_DEF 
+		m:modifiers methodHead[meth] slist
+		)
+							{							
 							meth->setDeclaredInFile( getFilename().c_str() );
 							meth->setDefinedInFile( getFilename().c_str() );
 							}
-	:	#(CTOR_DEF 
-		modifiers methodHead[meth] slist
-		)
 	;
 
 methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
-	:	#(METHOD_DEF modifiers tp=typeSpec methodHead[meth])
+	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth])
 							{ 							
 							meth->setDeclaredInFile( getFilename().c_str() );
 							meth->setDefinedInFile( getFilename().c_str() );
@@ -214,7 +216,7 @@ methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod
 	;
 
 methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
-	:	#(METHOD_DEF modifiers tp=typeSpec methodHead[meth] (slist)?)
+	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth] (slist)?)
 							{
 							meth->setDeclaredInFile( getFilename().c_str() );	
 							meth->setDefinedInFile( getFilename().c_str() );
@@ -223,7 +225,7 @@ methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod;
 	;
 
 variableDef returns [ ParsedAttribute* attr ] { QString tp; attr = new ParsedAttribute; }
-	:	#(VARIABLE_DEF modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
+	:	#(VARIABLE_DEF m:modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
 							{
 							attr->setDeclaredInFile( getFilename().c_str() );
 							attr->setDefinedInFile( getFilename().c_str() );
@@ -246,6 +248,8 @@ objectinitializer
 variableDeclarator [ ParsedAttribute* attr ]
 	:	IDENT					{
 							attr->setName( #IDENT->getText().c_str() );
+							attr->setDeclaredOnLine( #IDENT->getLine() );
+							attr->setDefinedOnLine( #IDENT->getLine() );
 							}
 	|	LBRACK variableDeclarator[attr]
 	;
@@ -268,6 +272,8 @@ methodHead [ ParsedMethod* meth ] { ParsedArgument* p; }
 	:	IDENT #( PARAMETERS (p=parameterDef { meth->addArgument( p ); } )* ) (throwsClause)?
 	{
 		meth->setName( #IDENT->getText().c_str() );
+		meth->setDeclaredOnLine( #IDENT->getLine() );
+		meth->setDefinedOnLine( #IDENT->getLine() );
 	}
 	;
 

@@ -4,11 +4,18 @@
 #line 2 "java.g"
 
 	#include "problemreporter.h"
+	#include "JavaAST.hpp"
 
 	#include <qlistview.h>
 	#include <kdebug.h>
 
-#line 12 "JavaRecognizer.hpp"
+	#define SET_POSITION(ast,t)\
+	{ \
+		RefJavaAST(ast)->setLine( t->getLine() );\
+		RefJavaAST(ast)->setColumn( t->getColumn() ); \
+	}
+
+#line 19 "JavaRecognizer.hpp"
 #include "antlr/config.hpp"
 /* $ANTLR 2.7.1: "java.g" -> "JavaRecognizer.hpp"$ */
 #include "antlr/TokenStream.hpp"
@@ -81,7 +88,7 @@
  */
 class JavaRecognizer : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public JavaTokenTypes
  {
-#line 97 "java.g"
+#line 104 "java.g"
 
 private:
 	unsigned int m_numberOfErrors;
@@ -114,7 +121,7 @@ public:
 						LT(1)->getLine(),
 						LT(1)->getColumn() );
 	}
-#line 86 "JavaRecognizer.hpp"
+#line 93 "JavaRecognizer.hpp"
 protected:
 	JavaRecognizer(ANTLR_USE_NAMESPACE(antlr)TokenBuffer& tokenBuf, int k);
 public:
@@ -132,17 +139,17 @@ public:
 	public: void identifierStar();
 	public: void modifiers();
 	public: void classDefinition(
-		ANTLR_USE_NAMESPACE(antlr)RefAST modifiers
+		RefJavaAST modifiers
 	);
 	public: void interfaceDefinition(
-		ANTLR_USE_NAMESPACE(antlr)RefAST modifiers
+		RefJavaAST modifiers
 	);
 	public: void declaration();
 	public: void typeSpec(
 		bool addImagNode
 	);
 	public: void variableDefinitions(
-		ANTLR_USE_NAMESPACE(antlr)RefAST mods, ANTLR_USE_NAMESPACE(antlr)RefAST t
+		RefJavaAST mods, RefJavaAST t
 	);
 	public: void modifier();
 	public: void classTypeSpec(
@@ -162,14 +169,14 @@ public:
 	public: void compoundStatement();
 	public: void parameterDeclarationList();
 	public: void returnTypeBrackersOnEndOfMethodHead(
-		ANTLR_USE_NAMESPACE(antlr)RefAST typ
+		RefJavaAST typ
 	);
 	public: void throwsClause();
 	public: void variableDeclarator(
-		ANTLR_USE_NAMESPACE(antlr)RefAST mods, ANTLR_USE_NAMESPACE(antlr)RefAST t
+		RefJavaAST mods, RefJavaAST t
 	);
 	public: void declaratorBrackets(
-		ANTLR_USE_NAMESPACE(antlr)RefAST typ
+		RefJavaAST typ
 	);
 	public: void varInitializer();
 	public: void initializer();
@@ -178,7 +185,7 @@ public:
 	public: void parameterDeclaration();
 	public: void parameterModifier();
 	public: void parameterDeclaratorBrackets(
-		ANTLR_USE_NAMESPACE(antlr)RefAST t
+		RefJavaAST t
 	);
 	public: void statement();
 	public: void forInit();
@@ -211,10 +218,10 @@ public:
 	public: void constant();
 	public: void newArrayDeclarator();
 public:
-	ANTLR_USE_NAMESPACE(antlr)RefAST getAST();
+	RefJavaAST getAST();
 	
 protected:
-	ANTLR_USE_NAMESPACE(antlr)RefAST returnAST;
+	RefJavaAST returnAST;
 private:
 	static const char* _tokenNames[];
 	

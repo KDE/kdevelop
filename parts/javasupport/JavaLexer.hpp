@@ -4,11 +4,18 @@
 #line 2 "java.g"
 
 	#include "problemreporter.h"
+	#include "JavaAST.hpp"
 
 	#include <qlistview.h>
 	#include <kdebug.h>
 
-#line 12 "JavaLexer.hpp"
+	#define SET_POSITION(ast,t)\
+	{ \
+		RefJavaAST(ast)->setLine( t->getLine() );\
+		RefJavaAST(ast)->setColumn( t->getColumn() ); \
+	}
+
+#line 19 "JavaLexer.hpp"
 #include "antlr/config.hpp"
 /* $ANTLR 2.7.1: "java.g" -> "JavaLexer.hpp"$ */
 #include "antlr/CommonToken.hpp"
@@ -18,7 +25,7 @@
 #include "antlr/CharScanner.hpp"
 class JavaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public JavaTokenTypes
  {
-#line 982 "java.g"
+#line 989 "java.g"
 
 private:
 	ProblemReporter* m_problemReporter;
@@ -49,7 +56,7 @@ public:
 						getFilename().c_str(),
 						getLine(), getColumn() );
 	}
-#line 23 "JavaLexer.hpp"
+#line 30 "JavaLexer.hpp"
 private:
 	void initLiterals();
 public:

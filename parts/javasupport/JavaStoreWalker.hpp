@@ -4,17 +4,18 @@
 #line 3 "java.store.g"
 
 	#include "classstore.h"
+	#include "JavaAST.hpp"
 
 	#include <qstring.h>
 	#include <qstringlist.h>
 
-#line 12 "JavaStoreWalker.hpp"
+#line 13 "JavaStoreWalker.hpp"
 #include "antlr/config.hpp"
 #include "JavaStoreWalkerTokenTypes.hpp"
 /* $ANTLR 2.7.1: "java.store.g" -> "JavaStoreWalker.hpp"$ */
 #include "antlr/TreeParser.hpp"
 
-#line 10 "java.store.g"
+#line 11 "java.store.g"
 
 	#include "parsedmethod.h"
 	#include "parsedclass.h"
@@ -23,7 +24,7 @@
 
 	#include <kdebug.h>
 
-#line 27 "JavaStoreWalker.hpp"
+#line 28 "JavaStoreWalker.hpp"
 /** Java 1.2 AST Recognizer Grammar
  *
  * Author:
@@ -39,13 +40,12 @@
  */
 class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
  {
-#line 42 "java.store.g"
+#line 44 "java.store.g"
 
 private:
 	ClassStore* m_store;
 	QString m_package;
 	ANTLR_USE_NAMESPACE(std)string m_filename;
-	ParsedClassContainer* global_ns;
 
 public:
 	void setClassStore( ClassStore* store )			{ m_store = store; }
@@ -62,58 +62,64 @@ public:
 	void wipeout()						{ m_store->wipeout(); }
 	void out()						{ m_store->out(); }
 	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
-#line 44 "JavaStoreWalker.hpp"
+#line 45 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
-	public: void compilationUnit(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void packageDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QString  importDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: ParsedClass*  typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QString  identifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QString  identifierStar(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QStringList  modifiers(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QStringList  extendsClause(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QStringList  implementsClause(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
+	public: void compilationUnit(RefJavaAST _t);
+	public: void packageDefinition(RefJavaAST _t);
+	public:  QString  importDefinition(RefJavaAST _t);
+	public: ParsedClass*  typeDefinition(RefJavaAST _t);
+	public:  QString  identifier(RefJavaAST _t);
+	public:  QString  identifierStar(RefJavaAST _t);
+	public:  QStringList  modifiers(RefJavaAST _t);
+	public:  QStringList  extendsClause(RefJavaAST _t);
+	public:  QStringList  implementsClause(RefJavaAST _t);
+	public: void objBlock(RefJavaAST _t,
 		 ParsedClass* klass 
 	);
-	public: void interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
+	public: void interfaceBlock(RefJavaAST _t,
 		 ParsedClass* klass 
 	);
-	public:  QString  typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QString  typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  QString  type(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void builtInType(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  ParsedMethod*  methodDecl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  ParsedAttribute*  variableDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  ParsedMethod*  ctorDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  ParsedMethod*  methodDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void slist(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void methodHead(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
+	public:  QString  typeSpec(RefJavaAST _t);
+	public:  QString  typeSpecArray(RefJavaAST _t);
+	public:  QString  type(RefJavaAST _t);
+	public: void builtInType(RefJavaAST _t);
+	public: void modifier(RefJavaAST _t);
+	public:  ParsedMethod*  methodDecl(RefJavaAST _t);
+	public:  ParsedAttribute*  variableDef(RefJavaAST _t);
+	public:  ParsedMethod*  ctorDef(RefJavaAST _t);
+	public:  ParsedMethod*  methodDef(RefJavaAST _t);
+	public: void slist(RefJavaAST _t);
+	public: void methodHead(RefJavaAST _t,
 		 ParsedMethod* meth 
 	);
-	public: void variableDeclarator(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
+	public: void variableDeclarator(RefJavaAST _t,
 		 ParsedAttribute* attr 
 	);
-	public: void varInitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public:  ParsedArgument*  parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void objectinitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void initializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void expression(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void arrayInitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void throwsClause(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void stat(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void elist(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void caseGroup(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void tryBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void handler(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void expr(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void primaryExpression(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void arrayIndex(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void newExpression(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void constant(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void newArrayDeclarator(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void varInitializer(RefJavaAST _t);
+	public:  ParsedArgument*  parameterDef(RefJavaAST _t);
+	public: void objectinitializer(RefJavaAST _t);
+	public: void initializer(RefJavaAST _t);
+	public: void expression(RefJavaAST _t);
+	public: void arrayInitializer(RefJavaAST _t);
+	public: void throwsClause(RefJavaAST _t);
+	public: void stat(RefJavaAST _t);
+	public: void elist(RefJavaAST _t);
+	public: void caseGroup(RefJavaAST _t);
+	public: void tryBlock(RefJavaAST _t);
+	public: void handler(RefJavaAST _t);
+	public: void expr(RefJavaAST _t);
+	public: void primaryExpression(RefJavaAST _t);
+	public: void arrayIndex(RefJavaAST _t);
+	public: void newExpression(RefJavaAST _t);
+	public: void constant(RefJavaAST _t);
+	public: void newArrayDeclarator(RefJavaAST _t);
+public:
+	RefJavaAST getAST();
+	
+protected:
+	RefJavaAST returnAST;
+	RefJavaAST _retTree;
 private:
 	static const char* _tokenNames[];
 	

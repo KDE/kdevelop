@@ -1,9 +1,16 @@
 
 header "pre_include_hpp" {
 	#include "problemreporter.h"
+	#include "JavaAST.hpp"
 
 	#include <qlistview.h>
 	#include <kdebug.h>
+
+	#define SET_POSITION(ast,t)\
+	{ \
+		RefJavaAST(ast)->setLine( t->getLine() );\
+		RefJavaAST(ast)->setColumn( t->getColumn() ); \
+	}
 }
 
 options {
@@ -81,7 +88,7 @@ options {
 	codeGenBitsetTestThreshold = 3;
 	defaultErrorHandler = true;     
 	buildAST = true;
-	ASTLabelType = "ANTLR_USE_NAMESPACE(antlr)RefAST";
+	ASTLabelType = "RefJavaAST";
 }
 
 tokens {
@@ -268,7 +275,7 @@ modifier
 
 
 // Definition of a Java class
-classDefinition![ANTLR_USE_NAMESPACE(antlr)RefAST modifiers]
+classDefinition![RefJavaAST modifiers]
 	:	"class" IDENT
 		// it _might_ have a superclass...
 		sc:superClassClause
@@ -286,7 +293,7 @@ superClassClause!
 	;
 
 // Definition of a Java Interface
-interfaceDefinition![ANTLR_USE_NAMESPACE(antlr)RefAST modifiers]
+interfaceDefinition![RefJavaAST modifiers]
 	:	"interface" IDENT
 		// it might extend some other interfaces
 		ie:interfaceExtends
@@ -376,7 +383,7 @@ field!
 	;
 
 
-variableDefinitions[ANTLR_USE_NAMESPACE(antlr)RefAST mods, ANTLR_USE_NAMESPACE(antlr)RefAST t]
+variableDefinitions[RefJavaAST mods, RefJavaAST t]
 	:	variableDeclarator[mods,t]
 		(	COMMA!
 			variableDeclarator[mods,t]
@@ -387,12 +394,12 @@ variableDefinitions[ANTLR_USE_NAMESPACE(antlr)RefAST mods, ANTLR_USE_NAMESPACE(a
  *   or a local variable in a method
  * It can also include possible initialization.
  */
-variableDeclarator![ANTLR_USE_NAMESPACE(antlr)RefAST mods, ANTLR_USE_NAMESPACE(antlr)RefAST t]
+variableDeclarator![RefJavaAST mods, RefJavaAST t]
 	:	id:IDENT d:declaratorBrackets[t] v:varInitializer
 		{#variableDeclarator = #(#[VARIABLE_DEF,"VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
 	;
 
-declaratorBrackets[ANTLR_USE_NAMESPACE(antlr)RefAST typ]
+declaratorBrackets[RefJavaAST typ]
 	:	{#declaratorBrackets=typ;}
 		(lb:LBRACK^ {#lb->setType(ARRAY_DECLARATOR);} RBRACK!)*
 	;
@@ -448,7 +455,7 @@ throwsClause
 	;
 
 
-returnTypeBrackersOnEndOfMethodHead[ANTLR_USE_NAMESPACE(antlr)RefAST typ]
+returnTypeBrackersOnEndOfMethodHead[RefJavaAST typ]
 	:	{#returnTypeBrackersOnEndOfMethodHead = typ;}
 		(lb:LBRACK^ {#lb->setType(ARRAY_DECLARATOR);} RBRACK!)*
 	;
@@ -468,7 +475,7 @@ parameterDeclaration!
 									pm, #([TYPE,"TYPE"],pd), id);}
 	;
 
-parameterDeclaratorBrackets[ANTLR_USE_NAMESPACE(antlr)RefAST t]
+parameterDeclaratorBrackets[RefJavaAST t]
 	:	{#parameterDeclaratorBrackets = t;}
 		(lb:LBRACK^ {#lb->setType(ARRAY_DECLARATOR);} RBRACK!)*
 	;
@@ -500,7 +507,7 @@ statement
 	:	compoundStatement
 
 	// class definition
-	|	classDefinition[#[MODIFIERS, "MODIFIERS"]]
+	|	classDefinition[ static_cast<RefJavaAST>(#[MODIFIERS, "MODIFIERS"]) ]
 
 	// final class definition
 	|	"final"! classDefinition[#(#[MODIFIERS, "MODIFIERS"],#[FINAL,"final"])]

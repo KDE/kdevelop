@@ -26,6 +26,7 @@
 #include "JavaLexer.hpp"
 #include "JavaRecognizer.hpp"
 #include "JavaStoreWalker.hpp"
+#include "JavaAST.hpp"
 
 
 typedef KGenericFactory<JavaSupportPart> JavaSupportPartFactory;
@@ -175,12 +176,13 @@ void JavaSupportPart::parse(const QString &fileName)
     parser.setProblemReporter( d->problemReporter );
 
     try{
+        parser.setASTNodeFactory( JavaAST::factory );
         lexer.resetErrors();
         parser.resetErrors();
 
         parser.compilationUnit();
         int errors = lexer.numberOfErrors() + parser.numberOfErrors();
-        antlr::RefAST ast = parser.getAST();
+        RefJavaAST ast = parser.getAST();
 
         if( errors == 0 && ast != antlr::nullAST ){
             JavaStoreWalker walker;
