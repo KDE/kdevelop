@@ -86,7 +86,11 @@ See <code>cpp</code> and <code>java</code> for examples.
 
 In general, class stores can be filled with information without specialized
 and complex language parsers (take a look at <code>languages/python</code> that have a very simple python parser) but your language support will surely benefit
-from having such. There is a hand-written c/c++ parser (<code>lib/cppparser</code>) in KDevelop that might be used for ObjC or related C-based languages. Other (not so complex as c++) languages can be parsed by ANTLR based parsers (library is in lib/antlr). Consult www.antlr.org for a ANTLR documentation and look at <code>languages/java</code>, <code>languages/ada</code> and <code>languages/pascal</code> for an example of using such parsers. The latest version of ANTLR (2.7.2) has support for Java, C, Pascal, Ada, C++, CIM, HTML, IDL, Verilog, VRML, OCL, ASN.1, and SQL. You can write an ANTLR parser for your own language, of course.
+from having such. There is a hand-written c/c++ parser (<code>lib/cppparser</code>) in KDevelop that might be used for ObjC or related C-based languages.
+
+Other (not so complex as c++) languages can be parsed by ANTLR based parsers (library is in lib/antlr).
+Consult www.antlr.org for a ANTLR documentation and look at <code>languages/java</code>, <code>languages/ada</code> and <code>languages/pascal</code> for an example of using such parsers.
+The latest version of ANTLR (2.7.2) has support for Java, C, Pascal, Ada, C++, CIM, HTML, IDL, Verilog, VRML, OCL, ASN.1, and SQL. You can write an ANTLR parser for your own language, of course.
 
 \subsection ClStore Class store
 
@@ -149,7 +153,8 @@ Take a look at AStylePart for an example how to do it.
 
 \subsection sectionDocumentationTopics Documentation topics
 
-Add them to doc/extras for an example see doc/extras/python.toc and doc/extras/python.index
+Add them to <code>languages/YOURLANGUAGE/doc</code>. For an example see <code>languages/python/doc/python.toc</code> and <code>languages/python/doc/python.index</code>
+In the end you need to edit the <code>languages/YOURLANGUAGE/doc/Makefile.am</code> file to include the .toc and/or .index file.
 
 \subsection sectionDebugger Debugger
 
