@@ -20,9 +20,6 @@ install-data-local:
 	@echo "****************************************************"
 	@echo ""
 
-messages:
-	make -f admin/Makefile.common package-messages
-
 $(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/kdevelop.m4
 	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in kdevelop.m4 > acinclude.m4 
 
