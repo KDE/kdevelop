@@ -1,3 +1,7 @@
+2004-06-05 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Fixed several ToolView related issues. Among other things, they should now 
+      restore correctly to their last position after a restart.
+
 2004-05-31 Alexander Dymo <cloudtemple@mksat.net>
     * KDevelop has made a large step towards being the RAD tool for KDE.
       Qt Designer is ported to KParts and KXMLGUI technology and can now
