@@ -1116,13 +1116,45 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
 }
 
 /** Activates the next open view */
-void QextMdiMainFrm::gotoNextWindow()
+void QextMdiMainFrm::activateNextWin()
 {
+  QextMdiChildView* aWin = activeWindow();
+
+  QextMdiIterator<QextMdiChildView*>* it = createIterator();
+
+  for(it->first(); !it->isDone(); it->next()) {
+    if (it->currentItem() == aWin) {
+      it->next();
+      if (!it->currentItem()) {
+        it->first();
+      }
+      if (it->currentItem()) {
+        activateView(it->currentItem());
+      }
+      break;
+    }
+  }
 }
 
 /** Activates the previous open view */
-void QextMdiMainFrm::gotoPrevWindow()
+void QextMdiMainFrm::activatePrevWin()
 {
+  QextMdiChildView* aWin = activeWindow();
+
+  QextMdiIterator<QextMdiChildView*>* it = createIterator();
+
+  for(it->first(); !it->isDone(); it->next()) {
+    if (it->currentItem() == aWin) {
+      it->prev();
+      if (!it->currentItem()) {
+        it->last();
+      }
+      if (it->currentItem()) {
+        activateView(it->currentItem());
+      }
+      break;
+    }
+  }
 }
 
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */

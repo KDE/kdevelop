@@ -390,13 +390,14 @@ public slots:
    */
    virtual void setEnableMaximizedChildFrmMode(bool bEnable);
    /**
-   *
+   * Activates the next open view
    */
-   virtual void gotoNextWindow();
+   virtual void activateNextWin();
    /**
-   *
+   * Activates the previous open view
    */
-   virtual void gotoPrevWindow();
+   virtual void activatePrevWin();
+
 protected:
 //   /**
 //   * Calls the destructor by delete.
