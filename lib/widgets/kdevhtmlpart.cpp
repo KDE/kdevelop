@@ -37,7 +37,7 @@ KDevHTMLPart::KDevHTMLPart()
   stopAction = new KAction( i18n( "Stop" ), "stop", 0,
     this, SLOT( slotStop() ), actions, "doc_stop" );
   stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
-  duplicateAction = new KAction( i18n( "Duplicate Window" ), "window_new", 0,
+  duplicateAction = new KAction( i18n( "Duplicate Tab" ), "window_new", 0,
     this, SLOT( slotDuplicate() ), actions, "doc_dup" );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
   printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
@@ -80,13 +80,35 @@ KDevHTMLPart::KDevHTMLPart()
 
 void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 {
-  KPopupMenu popup( i18n( "Documentation Viewer" ), this->widget() );
-  
+//  KPopupMenu popup( i18n( "Documentation Viewer" ), this->widget() );
+  KPopupMenu popup(this->widget());
+
+  bool needSep = false;  
+  int idNewWindow = -2;
+  if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
+  {
+    idNewWindow = popup.insertItem(SmallIcon("window_new"),i18n("Open in New Tab"));
+    popup.setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
+    needSep = true;
+  }
+  if (m_options & CanDuplicate)
+  {
+      duplicateAction->plug(&popup);
+      needSep = true;
+  }
+  if (needSep)
+      popup.insertSeparator();
+    
   m_backAction->plug( &popup );
   m_forwardAction->plug( &popup );
+  reloadAction->plug(&popup);
+//  stopAction->plug(&popup);
   popup.insertSeparator();
 
   copyAction->plug( &popup );
+  popup.insertSeparator();
+  
+  printAction->plug(&popup);
   popup.insertSeparator();
     
   KAction * incFontAction = this->action("incFontSizes");
@@ -98,26 +120,6 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
     popup.insertSeparator();
   }
 
-  bool needSep = false;  
-  if (m_options & CanDuplicate)
-  {
-      duplicateAction->plug(&popup);
-      needSep = true;
-  }
-  int idNewWindow = -2;
-  if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
-  {
-    idNewWindow = popup.insertItem(SmallIcon("window_new"),i18n("Open in New Window"));
-    popup.setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
-    needSep = true;
-  }
-  if (needSep)
-      popup.insertSeparator();
-  reloadAction->plug(&popup);
-  stopAction->plug(&popup);
-  popup.insertSeparator();
-  printAction->plug(&popup);
-  popup.insertSeparator();
 
 /*  if (!url.isEmpty())
   {
@@ -141,8 +143,8 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 
   if (r == idNewWindow)
   {
-    KURL kurl (KDevHTMLPart::url().upURL());
-    kurl.addPath(url);
+    KURL kurl (KDevHTMLPart::url().upURL().url(true)+url);
+//    kurl.addPath(url);
     if (kurl.isValid())
         slotOpenInNewWindow(kurl);
 //      openURL( kurl );
