@@ -54,7 +54,17 @@ see INSTALL in this directory.
 If you want to use the htDig search engine please see the
 README.htdig file.
 
-5. Trouble shooting (please read the FAQ for more information)
+
+5. Import of autoconf/automake-based projects
+
+KDevelop 1.3 contains a script "kimport", contributed by Ulrich Eckhardt
+<doomster@knuut.de>, which writes a .kdevprj file out of the analysed
+project's makefiles. The generated .kdevprj needs some editing before
+it can be used to build a KDevelop project.
+For usage information please type 'kimport --help'.
+
+
+6. Trouble shooting (please read the FAQ for more information)
 
 If you want to compile KDevelop yourself or want to develop for X/Qt/KDE 
 please make sure that you have installed the following packages.
