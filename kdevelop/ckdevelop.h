@@ -967,6 +967,8 @@ private:
 
 
 
+  bool useGlimpse;
+  bool useHtDig;
 };
 
 #endif

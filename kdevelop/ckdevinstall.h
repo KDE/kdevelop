@@ -79,6 +79,8 @@ private:
     
     bool glimpse;
     bool glimpseindex;
+    bool htdig;
+    bool htsearch;
     bool finished_glimpse;
 
 };

@@ -1641,10 +1641,13 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   }
 }
 void CKDevelop::slotOptionsCreateSearchDatabase(){
-  if(!CToolClass::searchProgram("glimpseindex")){
+  bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
+  bool foundHtDig = CToolClass::searchInstProgram("htdig");
+  if(!foundGlimpse && !foundHtDig){
+    KMsgBox::message(0,"Program not found!","KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!",KMsgBox::EXCLAMATION);
     return;
   }
-  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config);
+  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
   if(dlg.exec()){
     slotStatusMsg(i18n("Creating Search Database..."));
   }
@@ -1836,10 +1839,42 @@ void CKDevelop::slotHelpBrowserReload(){
 	slotStatusMsg(i18n("Ready."));
 }
 
+//*****************************************************************************
+// void encodeURL(String &str)
+//   Convert a normal string to a URL 'safe' string.  This means that
+//   all characters not explicitly mentioned in the URL BNF will be
+//   escaped.  The escape character is '%' and is followed by 2 hex
+//   digits representing the octet.
+//
+QString encodeURL(const QString &str)
+{
+    QString	temp;
+    static char	*digits = "0123456789ABCDEF";
+    const char	*p;
+
+    for (p = str; p && *p; p++)
+    {
+	if (isascii(*p) && (isdigit(*p) || isalpha(*p)))
+	    temp += *p;
+	else
+	{
+	    temp += '%';
+	    temp += digits[(*p >> 4) & 0x0f];
+	    temp += digits[*p & 0x0f];
+	}
+    }
+    return temp;
+}
+
 void CKDevelop::slotHelpSearchText(QString text){
   int pos;
 
-  if(!CToolClass::searchProgram("glimpse")){
+  useGlimpse = CToolClass::searchInstProgram("glimpse");
+  useHtDig = CToolClass::searchInstProgram("htsearch");
+
+  if (!useGlimpse && !useHtDig)
+  {
+    KMsgBox::message(0,"Program not found!","KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!",KMsgBox::EXCLAMATION);
     return;
   }
 
@@ -1865,17 +1900,28 @@ void CKDevelop::slotHelpSearchText(QString text){
   doc_search_text = text.copy();
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  if(!QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
-    if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
-      slotOptionsCreateSearchDatabase();
+  if(useGlimpse && !QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
+    if (!useHtDig) {
+      if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
+        slotOptionsCreateSearchDatabase();
+      }
+      return;
     }
-    return;
+    useGlimpse = false;
   }
 	enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
-  search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
-  search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  if (useGlimpse)
+  {
+    search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
+    search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+  if (useHtDig)
+  {
+    search_process << "htsearch -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf \"format=&matchesperpage=30&words=" + encodeURL(text) + "\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " + KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
+    search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
 }
 void CKDevelop::slotHelpSearchText(){
   QString text;
@@ -2681,6 +2727,13 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   int i=0;
   int max=0;
 
+  QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
+  if (useHtDig)
+  {
+    slotURLSelected(browser_widget,"file:" + filename,1,"test");
+    return;
+  }
+
   while((nextpos = search_output.find('\n',pos)) != -1){
     str = search_output.mid(pos,nextpos-pos);
     list.append(str);
@@ -2709,7 +2762,6 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
 
   }
 
-   QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
    QFile file(filename);
    QTextStream stream(&file);
    file.open(IO_WriteOnly);

@@ -42,13 +42,13 @@ void CKDevInstall::slotProcessExited(KProcess*){
   QDir* finish_dir=new QDir();
     if (!finished_glimpse){
 	finished_glimpse=true;
-	if(!glimpse && !glimpseindex){
-	    KMsgBox::message(this,i18n("Information"), i18n("The program glimpse is not installed,\n"
+	if((!glimpse || !glimpseindex) && (!htdig || !htsearch)){
+	    KMsgBox::message(this,i18n("Information"), i18n("Neither glimpse nor htdig is installed,\n"
 							    "therefore KDevelop can not index your\n"
 							    "documentation to provide a proper help\n"
 							    "functionality. We advise to install glimpse\n"
-							    "and create the searchdatabase later by choosing\n"
-							    "KDevelop Setup in the Options menu .\n\n"
+							    "or htdig and create the searchdatabase later by\n"
+							    "choosing KDevelop Setup in the Options menu.\n\n"
 							    "As this is the last step of the Installation\n"
 							    "process, KDevelop will be started now.\n\n"
 							    "We hope you enjoy KDevelop and that it is a useful\n"
@@ -67,7 +67,7 @@ void CKDevInstall::slotProcessExited(KProcess*){
 							   "help functionality and will give you the information\n"
 							   "you need."), KMsgBox::INFORMATION);
 	    
-	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config);
+	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config, glimpse | glimpseindex, htdig);
 	    if(!dlg.exec()){
 		slotProcessExited(shell_process);
 	    }
@@ -342,6 +342,8 @@ void CKDevInstall::slotAuto() // proceed >>
   bool kdoc=false;
   glimpse=false;
   glimpseindex=false;
+  htdig=false;
+  htsearch=false;
   bool a2ps=false;
   bool enscript=false;
   bool dbg=false;
@@ -583,6 +585,12 @@ void CKDevInstall::slotAuto() // proceed >>
   if(CToolClass::searchInstProgram("glimpseindex")){
     glimpseindex=true;
   }
+  if(CToolClass::searchInstProgram("htdig")){
+    htdig=true;
+  }
+  if(CToolClass::searchInstProgram("htsearch")){
+    htsearch=true;
+  }
   if(CToolClass::searchInstProgram("a2ps")){
     a2ps=true;
   }
@@ -691,12 +699,48 @@ void CKDevInstall::slotAuto() // proceed >>
   if(glimpse)
     glimpse_str="Glimpse"+found+"\n";
   else
-    glimpse_str="Glimpse"+not_found+ i18n(" -- search functionality will not be provided\n");
+    glimpse_str="Glimpse"+not_found; //+ i18n(" -- search functionality will not be provided\n");
   QString glimpseindex_str;
   if(glimpseindex)
     glimpseindex_str="Glimpseindex"+found+"\n";
   else
-    glimpseindex_str="Glimpseindex"+not_found+ i18n(" -- search functionality will not be provided\n");
+    glimpseindex_str="Glimpseindex"+not_found; //+ i18n(" -- search functionality will not be provided\n");
+  QString htdig_str;
+  if(htdig)
+    htdig_str="htdig"+found+"\n";
+  else
+    htdig_str="htdig"+not_found; //+ i18n(" -- search functionality will not be provided\n");
+  QString htsearch_str;
+  if(htsearch)
+    htsearch_str="htsearch"+found+"\n";
+  else
+    htsearch_str="htsearch"+not_found; //+ i18n(" -- search functionality will not be provided\n");
+  if (!glimpse || !glimpseindex)
+  {
+    if (!htsearch)
+    {
+      htsearch_str += i18n(" -- search functionality will not be provided\n");
+      if (!htdig)
+	htdig_str += "\n";
+    }
+    else if (!htdig)
+    {
+      htdig_str += i18n(" -- search functionality will not be provided\n");
+      if (!htsearch)
+	htsearch_str += "\n";
+    }
+    if (!glimpse)
+      glimpse_str += "\n";
+    if (!glimpseindex)
+      glimpseindex_str += "\n";
+  }
+  else
+  {
+    if (!htdig)
+      htdig_str += "\n";
+    if (!htsearch)
+      htsearch_str += "\n";
+  }
   QString perl_str;
   if(perl)
     perl_str="Perl"+found+"\n";
@@ -711,7 +755,7 @@ void CKDevInstall::slotAuto() // proceed >>
   if (!till_doc)
   {
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
-                  +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
+                  +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str+htdig_str+htsearch_str
                   +print_str+dbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
 
 	config->setGroup("ToolsMenuEntries");
