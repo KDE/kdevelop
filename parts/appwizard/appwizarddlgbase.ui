@@ -1,15 +1,15 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AppWizardDialogBase</class>
 <widget class="QWizard">
     <property name="name">
-        <cstring>AppWizardDlgBase</cstring>
+        <cstring>AppWizardDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>563</width>
-            <height>585</height>
+            <width>616</width>
+            <height>609</height>
         </rect>
     </property>
     <property name="caption">
@@ -26,36 +26,95 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
-
-            <widget class="QListView" row="0" column="0" rowspan="2" colspan="1">
-                <column>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="clickable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="resizeable">
-                        <bool>true</bool>
-                    </property>
-                </column>
+            <widget class="QTabWidget" row="0" column="0" rowspan="2" colspan="1">
                 <property name="name">
-                    <cstring>templates_listview</cstring>
+                    <cstring>templates_tabwidget</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>1</horstretch>
-                        <verstretch>1</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="rootIsDecorated">
-                    <bool>true</bool>
-                </property>
-                <property name="resizeMode">
-                    <enum>LastColumn</enum>
-                </property>
+                <widget class="QWidget">
+                    <property name="name">
+                        <cstring>m_allProjectsPage</cstring>
+                    </property>
+                    <attribute name="title">
+                        <string>&amp;All Projects</string>
+                    </attribute>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KListView" row="0" column="0">
+                            <column>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <property name="name">
+                                <cstring>templates_listview</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>1</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="hScrollBarMode">
+                                <enum>Auto</enum>
+                            </property>
+                            <property name="selectionMode" stdset="0">
+                                <enum>Single</enum>
+                            </property>
+                            <property name="rootIsDecorated">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeMode">
+                                <enum>AllColumns</enum>
+                            </property>
+                            <property name="fullWidth">
+                                <bool>false</bool>
+                            </property>
+                            <property name="itemsMovable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QWidget">
+                    <property name="name">
+                        <cstring>m_favouritesPage</cstring>
+                    </property>
+                    <attribute name="title">
+                        <string>&amp;Favourites</string>
+                    </attribute>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KIconView" row="0" column="0">
+                            <property name="name">
+                                <cstring>favourites_iconview</cstring>
+                            </property>
+                            <property name="arrangement">
+                                <enum>LeftToRight</enum>
+                            </property>
+                            <property name="itemsMovable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="mode">
+                                <enum>Select</enum>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
             </widget>
             <widget class="QLabel" row="0" column="1">
                 <property name="name">
@@ -82,7 +141,7 @@
                     </size>
                 </property>
                 <property name="frameShape">
-                    <enum>WinPanel</enum>
+                    <enum>LineEditPanel</enum>
                 </property>
                 <property name="frameShadow">
                     <enum>Sunken</enum>
@@ -96,46 +155,6 @@
                 <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget class="QMultiLineEdit" row="1" column="1">
-                <property name="name">
-                    <cstring>desc_textview</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>250</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>250</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="focusPolicy">
-                    <enum>NoFocus</enum>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="wordWrap">
-                    <enum>WidgetWidth</enum>
-                </property>
-                <property name="readOnly">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
                 <property name="name">
                     <cstring>GroupBox1</cstring>
@@ -147,7 +166,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QLabel" row="1" column="0">
                         <property name="name">
                             <cstring>location_label</cstring>
@@ -270,73 +288,138 @@
                     </widget>
                 </grid>
             </widget>
+            <widget class="QMultiLineEdit" row="1" column="1">
+                <property name="name">
+                    <cstring>desc_textview</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>7</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+                <property name="focusPolicy">
+                    <enum>NoFocus</enum>
+                </property>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="wordWrap">
+                    <enum>WidgetWidth</enum>
+                </property>
+                <property name="readOnly">
+                    <bool>true</bool>
+                </property>
+            </widget>
         </grid>
     </widget>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>templates_listview</sender>
         <signal>selectionChanged(QListViewItem*)</signal>
-        <receiver>AppWizardDlgBase</receiver>
+        <receiver>AppWizardDialogBase</receiver>
         <slot>templatesTreeViewClicked(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>projectLocationChanged()</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>destButtonClicked(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>projectLocationChanged()</slot>
     </connection>
     <connection>
         <sender>author_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>email_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
         <slot>textChanged()</slot>
     </connection>
     <connection>
         <sender>version_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
+        <receiver>AppWizardDialogBase</receiver>
         <slot>textChanged()</slot>
-    </connection>
-    <connection>
-        <sender>dest_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>projectLocationChanged()</slot>
-    </connection>
-    <connection>
-        <sender>dest_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>textChanged()</slot>
-    </connection>
-    <connection>
-        <sender>dest_edit</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>destButtonClicked(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>license_combo</sender>
         <signal>activated(int)</signal>
-        <receiver>AppWizardDlgBase</receiver>
+        <receiver>AppWizardDialogBase</receiver>
         <slot>licenseChanged()</slot>
     </connection>
     <connection>
-        <sender>email_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>textChanged()</slot>
+        <sender>favourites_iconview</sender>
+        <signal>selectionChanged(QIconViewItem*)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>favouritesIconViewClicked(QIconViewItem*)</slot>
     </connection>
     <connection>
-        <sender>appname_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>textChanged()</slot>
+        <sender>templates_listview</sender>
+        <signal>contextMenuRequested(QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>templatesContextMenu(QListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
     <connection>
-        <sender>appname_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>projectLocationChanged()</slot>
+        <sender>favourites_iconview</sender>
+        <signal>contextMenuRequested(QIconViewItem*,const QPoint&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>favouritesContextMenu(QIconViewItem*,const QPoint&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>favourites_iconview</sender>
+        <signal>contextMenuRequested(QIconViewItem*,const QPoint&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>favouritesContextMenu(QIconViewItem*,const QPoint&amp;)</slot>
     </connection>
 </connections>
 <tabstops>
-    <tabstop>templates_listview</tabstop>
     <tabstop>appname_edit</tabstop>
     <tabstop>dest_edit</tabstop>
     <tabstop>author_edit</tabstop>
@@ -344,18 +427,26 @@
     <tabstop>version_edit</tabstop>
     <tabstop>license_combo</tabstop>
 </tabstops>
-<slots>
-    <slot access="protected">licenseChanged()</slot>
-    <slot access="protected">destButtonClicked(const QString&amp;)</slot>
-    <slot access="protected">projectLocationChanged()</slot>
-    <slot access="protected">projectNameChanged()</slot>
-    <slot access="protected">templatesTreeViewClicked( QListViewItem * )</slot>
-    <slot access="protected">textChanged()</slot>
-</slots>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
     <include location="global" impldecl="in declaration">kurlrequester.h</include>
+    <include location="local" impldecl="in implementation">appwizarddlgbase.ui.h</include>
 </includes>
+<slots>
+    <slot access="protected">licenseChanged()</slot>
+    <slot access="protected">destButtonClicked( const QString &amp; )</slot>
+    <slot access="protected">projectLocationChanged()</slot>
+    <slot access="protected">projectNameChanged()</slot>
+    <slot access="protected">textChanged()</slot>
+    <slot access="protected">templatesTreeViewClicked( QListViewItem * )</slot>
+    <slot access="protected">favouritesIconViewClicked( QIconViewItem * )</slot>
+    <slot access="protected">templatesContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
+    <slot access="protected">favouritesContextMenu( QIconViewItem *, const QPoint &amp; )</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

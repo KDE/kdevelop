@@ -20,14 +20,15 @@ class QRadioButton;
 class KTempFile;
 class QWidgetStack;
 class QVBox;
+class KPopupMenu;
 
 #include <qptrlist.h>
 #include <qdict.h>
-#include <qlistview.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qstringlist.h>
-
+#include <klistview.h>
+#include <kiconview.h>
 #include "kdevversioncontrol.h"
 #include "appwizarddlgbase.h"
 #include "vcs_form.h"
@@ -45,9 +46,12 @@ struct ApplicationInfo
 
     //! item pointer to the listview
     QListViewItem *item;
+	
+	//! pointer to favourite icon (NULL if there isn't one)
+	QIconViewItem *favourite;	
 
     ApplicationInfo()
-    : item( 0 )
+    : item( 0 ), favourite( 0 )
     {}
 };
 
@@ -77,29 +81,41 @@ public:
     QStringList getFilesToOpenAfterGeneration();
 
 protected:
+    virtual void accept();
+
+protected slots:
     virtual void templatesTreeViewClicked(QListViewItem*);
     virtual void textChanged();
     virtual void licenseChanged();
     virtual void destButtonClicked(const QString&);
     virtual void projectNameChanged();
     virtual void projectLocationChanged();
-    virtual void accept();
+    virtual void favouritesIconViewClicked( QIconViewItem * );
+	virtual void templatesContextMenu(QListViewItem*, const QPoint&, int);
+	virtual void favouritesContextMenu(QIconViewItem* item, const QPoint& point);
+	virtual void addTemplateToFavourites();
+	virtual void done(int r);
+	virtual void removeFavourite();
+	virtual void pageChanged();
+	
+private: //methods
 
-protected slots:
-    void pageChanged();
-
-private:
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
     void loadVcs();
+	void populateFavourites();
+	void addFavourite(QListViewItem* item, QString favouriteName="");
+	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);
+		
+private: //data
 
     QPtrList<ApplicationInfo> m_appsInfo;
-    QValueList<AppWizardFileTemplate> m_fileTemplates;
+	QValueList<AppWizardFileTemplate> m_fileTemplates;
     //! Store the category name and the pointer in the treeview
     QDict<QListViewItem> m_categoryMap;
     //! A list of currently available version control systems
     QDict<KDevVersionControl> m_availVcs;
-
+	
     AppWizardPart *m_part;
     QWidget *m_lastPage;
     QString m_cmdline;
@@ -108,6 +124,8 @@ private:
     bool m_projectLocationWasChanged;
     VcsForm *m_vcsForm;
     bool m_pathIsValid;
+	KPopupMenu* m_favouritesMenu;
+	KPopupMenu* m_templatesMenu;
 };
 
 #endif

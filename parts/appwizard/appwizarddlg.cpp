@@ -22,7 +22,6 @@
 #include <qfileinfo.h>
 #include <qgrid.h>
 #include <qheader.h>
-#include <qlistview.h>
 #include <qmap.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
@@ -33,6 +32,8 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
+#include <klistview.h>
+#include <kiconview.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -46,6 +47,7 @@
 #include <kfiledialog.h>
 #include <kfile.h>
 #include <kapplication.h>
+#include <kpopupmenu.h>
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
@@ -66,10 +68,17 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
     connect( this, SIGNAL( selected( const QString & ) ), this, SLOT( pageChanged() ) );
-
-    helpButton()->hide();
+    
+	helpButton()->hide();
     templates_listview->header()->hide();
-
+	templates_listview->setColumnWidthMode(0, QListView::Maximum);	//to provide horiz scrollbar.
+	
+	m_templatesMenu = new KPopupMenu(templates_listview);
+	m_templatesMenu->insertItem(i18n("&Add To Favourites"), this, SLOT(addTemplateToFavourites()));
+	
+	m_favouritesMenu = new KPopupMenu(favourites_iconview);
+	m_favouritesMenu->insertItem(i18n("&Remove Favourite"), this, SLOT(removeFavourite()));
+	
     m_pathIsValid=false;
     m_part = part;
     m_projectLocationWasChanged=false;
@@ -77,7 +86,11 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     m_tempFiles.setAutoDelete(true);
 
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
+	
+	//config->setGroup("AppWizard");
+	//templates_tabwidget->setCurrentPage(config->readNumEntry("CurrentTab", 0));
+
+	config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
@@ -89,20 +102,20 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     QStringList::Iterator it;
     for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
         kdDebug(9010) << (*it) << endl;
-        KConfig config(KGlobal::dirs()->findResource("apptemplates", *it));
-        config.setGroup("General");
+		KConfig templateConfig(KGlobal::dirs()->findResource("apptemplates", *it));
+        templateConfig.setGroup("General");
 
         ApplicationInfo *info = new ApplicationInfo;
         info->templateName = (*it);
-        info->name = config.readEntry("Name");
-        info->icon = config.readEntry("Icon");
-        info->comment = config.readEntry("Comment");
-        info->fileTemplates = config.readEntry("FileTemplates");
-        info->openFilesAfterGeneration = config.readListEntry("ShowFilesAfterGeneration");
-        QString destDir = config.readPathEntry("DefaultDestinatonDir", defaultProjectsDir);
+        info->name = templateConfig.readEntry("Name");
+        info->icon = templateConfig.readEntry("Icon");
+        info->comment = templateConfig.readEntry("Comment");
+        info->fileTemplates = templateConfig.readEntry("FileTemplates");
+        info->openFilesAfterGeneration = templateConfig.readListEntry("ShowFilesAfterGeneration");
+        QString destDir = templateConfig.readPathEntry("DefaultDestinatonDir", defaultProjectsDir);
         destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
         info->defaultDestDir = destDir;
-        QString category = config.readEntry("Category");
+        QString category = templateConfig.readEntry("Category");
         // format category to a unique status
         if (category.right(1) == "/")
             category.remove(category.length()-1, 1); // remove /
@@ -123,14 +136,20 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     for (; ait.current(); ++ait) {
         QListViewItem *item = m_categoryMap.find(ait.current()->category);
         if (item)
-            item = new QListViewItem(item, ait.current()->name);
+		{
+            item = new KListViewItem(item, ait.current()->name);
+			item->setPixmap(0, SmallIcon("kdevelop"));
+		}
         else
             kdDebug(9010) << "Error can't find category in categoryMap: "
                           << ait.current()->category << endl;
         ait.current()->item = item;
     }
-
-    QString author, email;
+	
+	//Load favourites from config
+	populateFavourites();
+	
+	QString author, email;
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
@@ -204,7 +223,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         if( dit.currentKey() == "GPL" )
             license_combo->setCurrentItem( idx - 1 );
     }
-    
+	
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -537,9 +556,9 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
         QListViewItem *item = m_categoryMap.find(category);
         if (!item) { // not found, create it
             if (!pParentItem)
-                pParentItem = new QListViewItem(templates_listview,*it);
+                pParentItem = new KListViewItem(templates_listview,*it);
             else
-                pParentItem = new QListViewItem(pParentItem,*it);
+                pParentItem = new KListViewItem(pParentItem,*it);
 
             pParentItem->setPixmap(0, SmallIcon("folder"));
             //pParentItem->setOpen(true);
@@ -577,6 +596,134 @@ void AppWizardDialog::pageChanged()
 {
 	kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
 	projectLocationChanged();
+}
+
+void AppWizardDialog::addTemplateToFavourites()
+{
+	addFavourite(templates_listview->currentItem());
+}
+
+void AppWizardDialog::addFavourite(QListViewItem* item, QString favouriteName)
+{
+	if(item->childCount())	
+		return;
+		
+	ApplicationInfo* info = templateForItem(item);
+	
+	if(!info->favourite)
+	{
+		info->favourite = new KIconViewItem(favourites_iconview, 
+											((favouriteName=="")?info->name:favouriteName), 
+											DesktopIcon("kdevelop"));
+											
+		info->favourite->setRenameEnabled(true);
+	}
+}
+
+ApplicationInfo* AppWizardDialog::findFavouriteInfo(QIconViewItem* item)
+{
+    QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+    for (; info.current(); ++info)
+        if (info.current()->favourite == item)
+            return info.current();
+
+	return 0;
+}
+
+void AppWizardDialog::favouritesIconViewClicked( QIconViewItem* item)
+{
+	ApplicationInfo* info = findFavouriteInfo(item);
+	templatesTreeViewClicked(info->item);
+}
+
+void AppWizardDialog::removeFavourite()
+{
+	QIconViewItem* curFavourite = favourites_iconview->currentItem();
+	
+	//remove reference to favourite from associated appinfo
+	QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+	for (; info.current(); ++info)
+	{
+        if(info.current()->favourite && info.current()->favourite == curFavourite)
+		{
+			info.current()->favourite = 0;
+		}
+	}
+	
+	//remove favourite from iconview
+	delete curFavourite;
+	curFavourite=0;
+	favourites_iconview->sort();	//re-arrange all items.
+}
+
+void AppWizardDialog::populateFavourites()
+{
+	KConfig* config = kapp->config();
+	config->setGroup("AppWizard");
+	
+	//favourites are stored in config as a list of templates and a seperate
+	//list of icon names.  
+	QStringList templatesList = config->readPathListEntry("FavTemplates");
+	QStringList iconNamesList = config->readListEntry("FavNames");
+    
+	QStringList::Iterator curTemplate = templatesList.begin();
+	QStringList::Iterator curIconName = iconNamesList.begin();
+	while(curTemplate != templatesList.end())
+	{
+		QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+		for (; info.current(); ++info) 
+		{
+			if(info.current()->templateName == *curTemplate)
+			{
+				addFavourite(info.current()->item, *curIconName);
+				break;
+			}
+		}
+		curTemplate++;
+		curIconName++;
+	}
+}
+
+void AppWizardDialog::done(int r)
+{
+	//need to save the template for each favourite and
+	//it's icon name.  We have a one list for the templates
+	//and one for the names.
+	
+	QStringList templatesList;
+	QStringList iconNamesList;
+	
+	//Built the stringlists for each template that has a favourite.
+	QPtrListIterator<ApplicationInfo> it(m_appsInfo);
+	for (; it.current(); ++it)
+	{
+        if(it.current()->favourite)
+		{
+			templatesList.append(it.current()->templateName);
+			iconNamesList.append(it.current()->favourite->text());
+		}
+	}
+	
+	KConfig* config = kapp->config();
+	config->setGroup("AppWizard");
+	config->writePathEntry("FavTemplates", templatesList);
+	config->writeEntry("FavNames", iconNamesList);
+	//config->writeEntry("CurrentTab", templates_tabwidget->currentPageIndex());
+	config->sync();
+
+	QDialog::done(r);
+}
+
+void AppWizardDialog::templatesContextMenu(QListViewItem* item, const QPoint& point, int)
+{
+	if(item && !item->childCount())
+		m_templatesMenu->popup(point);
+}
+
+void AppWizardDialog::favouritesContextMenu(QIconViewItem* item, const QPoint& point)
+{
+	if(item)
+		m_favouritesMenu->popup(point);
 }
 
 #include "appwizarddlg.moc"
