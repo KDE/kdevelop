@@ -191,8 +191,6 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	         this, SLOT(horizScrollingOn()) );
 	connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
 	         this, SLOT(horizScrollingOff()) );
-	connect( this, SIGNAL(clicked(int, int)),
-		 this, SLOT(contentsClicked(int, int)) );
 }
 
 MakeWidget::~MakeWidget()
@@ -361,9 +359,12 @@ void MakeWidget::prevError()
 	KNotifyClient::beep();
 }
 
-void MakeWidget::contentsClicked(int para, int /*pos*/)
+void MakeWidget::contentsMouseReleaseEvent( QMouseEvent* e )
 {
-	searchItem(para);
+	QTextEdit::contentsMouseReleaseEvent(e);
+	if ( e->button() != LeftButton )
+		return;
+	searchItem(paragraphAt(e->pos()));
 }
 
 void MakeWidget::keyPressEvent(QKeyEvent *e)
@@ -397,7 +398,7 @@ void MakeWidget::searchItem(int parag)
 	if ( item )
 	{
 		// open the file
-		kdDebug(9004) << "Opening file: " << directory(parag) << item->fileName << endl;
+		//kdDebug(9004) << "Opening file: " << directory(parag) << item->fileName << endl;
 		m_part->partController()->editDocument(directory(parag) + item->fileName, item->lineNum);
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);

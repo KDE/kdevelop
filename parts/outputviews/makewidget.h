@@ -53,6 +53,7 @@ public slots:
 
 protected:
     virtual QPopupMenu *createPopupMenu( const QPoint& pos );
+    virtual void contentsMouseReleaseEvent( QMouseEvent* e );
 
 private slots:
     void insertStdoutLine(const QString& line);
@@ -70,7 +71,6 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
-    void contentsClicked(int para, int pos);
 
 private:
     virtual void keyPressEvent(QKeyEvent *e);
