@@ -1,3 +1,6 @@
+2002-06-13  John Firebaugh  <jfirebaugh@kde.org>
+        * Debugger: be very smart about libtool.
+
 2002-06-14  Roberto Raggi  <raggi@cli.di.unipi.it>
 	* qeditor: added keyboard macro support
 	

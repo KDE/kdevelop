@@ -15,18 +15,38 @@
 
 #include <qcheckbox.h>
 #include <qlineedit.h>
+#include <qfileinfo.h>
+
+#include "kdevproject.h"
 #include "domutil.h"
+#include "debuggerpart.h"
 
-
-DebuggerConfigWidget::DebuggerConfigWidget(QDomDocument &projectDom, QWidget *parent, const char *name)
-    : DebuggerConfigWidgetBase(parent, name), dom(projectDom)
+DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, const char *name)
+    : DebuggerConfigWidgetBase(parent, name), dom(*part->projectDom())
 {
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
  
     programArgs_edit->setText(             DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
     gdbPath_edit->setText(                 DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
-    debuggingShell_edit->setText(          DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell"));
+    
+    QString shell =                        DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
+    if( shell == QString("no_value") ) {
+        QFileInfo info( part->project()->projectDirectory() + "/libtool" );
+        if( info.exists() ) {
+            shell = "libtool";
+        } else {
+            // Try one directory up.
+            info.setFile( part->project()->projectDirectory() + "/../libtool" );
+            if( info.exists() ) {
+                shell = "../libtool";
+            } else {
+                // Give up.
+                shell = QString::null;
+            }
+        }
+    }
+    debuggingShell_edit->setText( shell );
 
     displayStaticMembers_box->setChecked(  DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers", false));
     asmDemangle_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames", true));

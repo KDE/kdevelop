@@ -150,7 +150,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
       config_asmDemangle_(true),
       config_dbgTerminal_(false),
       config_gdbPath_(),
-      config_dbgShell_(),
       config_programArgs_()
 {
     config_displayStaticMembers_  = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/staticmembers", false);
@@ -159,7 +158,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
     config_forceBPSet_            = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/allowforcedbpset", false);
     config_dbgTerminal_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/separatetty", false);
     config_gdbPath_               = DomUtil::readEntry(projectDom, "/kdevdebugger/general/gdbpath");
-    config_dbgShell_              = DomUtil::readEntry(projectDom, "/kdevdebugger/general/dbgshell");
     config_programArgs_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/programargs");
     
 #if defined (GDB_MONITOR)
@@ -1065,7 +1063,7 @@ void GDBController::modifyBreakpoint( const Breakpoint& BP )
 
 // **************************************************************************
 
-void GDBController::slotStart(const QString &application)
+void GDBController::slotStart(const QString& shell, const QString &application)
 {
     badCore_ = QString();
     
@@ -1090,7 +1088,7 @@ void GDBController::slotStart(const QString &application)
         return;
     }
     
-    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+config_dbgShell_+"] path:["+config_gdbPath_+"]\n");
+    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"]\n");
     dbgProcess_ = new KProcess;
     
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1105,9 +1103,9 @@ void GDBController::slotStart(const QString &application)
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
     
-    if (!config_dbgShell_.isEmpty())
+    if (!shell.isEmpty())
         *dbgProcess_ << "/bin/sh" << "-c"
-                     << config_dbgShell_ + " " +config_gdbPath_ + "gdb " + application + " -fullname -nx -quiet";
+                     << shell + " " +config_gdbPath_ + "gdb " + application + " -fullname -nx -quiet";
     else
         *dbgProcess_ << config_gdbPath_ + "gdb" << application << "-fullname" << "-nx" << "-quiet";
     

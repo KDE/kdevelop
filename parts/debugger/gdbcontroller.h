@@ -80,7 +80,7 @@ private:
     bool stateIsOn(int state)       { return state_  &state; }
     
 public slots:
-    void slotStart(const QString &application);
+    void slotStart(const QString& shell, const QString &application);
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
     

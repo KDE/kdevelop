@@ -18,13 +18,14 @@
 
 #include <qdom.h>
 
+class DebuggerPart;
 
 class DebuggerConfigWidget : public DebuggerConfigWidgetBase
 { 
     Q_OBJECT
 
 public:
-    DebuggerConfigWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
+    DebuggerConfigWidget( DebuggerPart* part, QWidget *parent=0, const char *name=0 );
     ~DebuggerConfigWidget();
 
 public slots:

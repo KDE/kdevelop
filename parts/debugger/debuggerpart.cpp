@@ -28,6 +28,7 @@
 #include <kstatusbar.h>
 #include <kparts/part.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <kmessagebox.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -157,19 +158,16 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
-    action->setEnabled(false);
     action->setStatusText( i18n("Interrupts the application") );
     
     action = new KAction(i18n("Run to &Cursor"), "dbgrunto", 0,
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
-    action->setEnabled(false);
     action->setStatusText( i18n("Continues execution until the cursor position is reached") );
 
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
-    action->setEnabled(false);
     action->setStatusText( i18n("Steps over the next line") );
     action->setWhatsThis( i18n("Step over\n\n"
                                "Executes one line of source in the current source file. "
@@ -180,13 +178,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step over Ins&truction"), "dbgnextinst", 0,
                          this, SLOT(slotStepOverInstruction()),
                          actionCollection(), "debug_stepoverinst");
-    action->setEnabled(false);
     action->setStatusText( i18n("Steps over the next assembly instruction") );
 
     action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
-    action->setEnabled(false);
     action->setStatusText( i18n("Steps into the next statement") );
     action->setWhatsThis( i18n("Step into\n\n"
                                "Executes exactly one line of source. If the source line "
@@ -197,13 +193,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
-    action->setEnabled(false);
     action->setStatusText( i18n("Steps into the next assembly instruction") );
 
     action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
-    action->setEnabled(false);
     action->setStatusText( i18n("Steps out of the current function") );
     action->setWhatsThis( i18n("Step out of\n\n"
                                "Executes the application until the currently executing "
@@ -215,7 +209,6 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),
                          actionCollection(), "debug_memview");
-    action->setEnabled(false);
     action->setStatusText( i18n("Various views into the application") );
     
     action = new KAction(i18n("Examine Core File"), "core", 0,
@@ -233,6 +226,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          this, SLOT(slotAttachProcess()),
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
+    
+    stateChanged( QString("stopped") );
     
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -310,7 +305,7 @@ void DebuggerPart::contextWatch()
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"));
-    DebuggerConfigWidget *w = new DebuggerConfigWidget(*projectDom(), vbox, "debugger config widget");
+    DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
@@ -377,8 +372,30 @@ void DebuggerPart::setupController()
 
 void DebuggerPart::startDebugger()
 {
+    QString program;
+    if (project())
+        program = project()->projectDirectory() + "/" + project()->mainProgram();
+    
+    QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");
+    if( !shell.isEmpty() ) {
+        QFileInfo info( shell );
+        if( info.isRelative() ) {
+            shell = project()->projectDirectory() + "/" + shell;
+            info.setFile( shell );
+        }
+        if( !info.exists() ) {
+            KMessageBox::error(
+                topLevel()->main(),
+                i18n("Could not locate the debugging shell '%1'.").arg( shell ),
+                i18n("Debugging shell not found.") );
+            return;
+        }
+    }
+    
     core()->running(this, true);
 
+    stateChanged( QString("active") );
+    
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Continue") );
     ac->action("debug_run")->setIcon( "dbgrun" );
@@ -388,17 +405,7 @@ void DebuggerPart::startDebugger()
                                "debugger. This only has affect when the application "
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
-    ac->action("debug_core")->setEnabled(false);
-    ac->action("debug_attach")->setEnabled(false);
-    ac->action("debug_pause")->setEnabled(true);
-    ac->action("debug_runtocursor")->setEnabled(true);
-    ac->action("debug_stepover")->setEnabled(true);
-    ac->action("debug_stepoverinst")->setEnabled(true);
-    ac->action("debug_stepinto")->setEnabled(true);
-    ac->action("debug_stepintoinst")->setEnabled(true);
-    ac->action("debug_stepout")->setEnabled(true);
-    ac->action("debug_memview")->setEnabled(true);
-
+    
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
@@ -409,11 +416,8 @@ void DebuggerPart::startDebugger()
         floatingToolBar = new DbgToolBar(this, topLevel()->main());
         floatingToolBar->show();
     }
-
-    QString program;
-    if (project())
-        program = project()->projectDirectory() + "/" + project()->mainProgram();
-    controller->slotStart(program);
+    
+    controller->slotStart(shell, program);
     breakpointWidget->slotSetPendingBPs();
 }
 
@@ -445,16 +449,8 @@ void DebuggerPart::stopDebugger()
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
-    ac->action("debug_core")->setEnabled(true);
-    ac->action("debug_attach")->setEnabled(true);
-    ac->action("debug_pause")->setEnabled(false);
-    ac->action("debug_runtocursor")->setEnabled(false);
-    ac->action("debug_stepover")->setEnabled(false);
-    ac->action("debug_stepoverinst")->setEnabled(false);
-    ac->action("debug_stepinto")->setEnabled(false);
-    ac->action("debug_stepintoinst")->setEnabled(false);
-    ac->action("debug_stepout")->setEnabled(false);
-    ac->action("debug_memview")->setEnabled(false);
+    
+    stateChanged( QString("stopped") );
     
     core()->running(this, false);
 }
@@ -603,16 +599,20 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 
 void DebuggerPart::slotStatus(const QString &msg, int state)
 {
-    QString stateIndicator("P");    // default to "paused"
+    QString stateIndicator;
         
     if (state & s_dbgNotStarted) {
         stateIndicator = " ";
     } else if (state & s_appBusy) {
         stateIndicator = "A";
         debugger()->clearExecutionPoint();
+        stateChanged( QString("active") );
     } else if (state & s_programExited) {
         stateIndicator = "E";
         slotStop();
+    } else {
+        stateIndicator = "P";
+        stateChanged( QString("paused") );
     }
     
     // And now? :-)

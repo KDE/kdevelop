@@ -24,11 +24,7 @@ High priority tasks!
   - editor view must detect and warn about changes made outside gideon
   - messages view should hold place when scrolled but new output is
     being added
-   
-* debugger
-  - Trying to call the debugger for the Gideon project itself just
-     shows an error message (have to be smart about libtool)
-   
+      
 * misc
   - Printing files not supported
   - Trying Java projects results in mysterious error messages
