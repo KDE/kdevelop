@@ -570,7 +570,7 @@ void CKDevelop::slotProjectNewClass(){
 
 void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",prj);
-  dlg.show();
+  dlg.exec();
 }
 
 void CKDevelop::slotShowFileProperties(const QString& rel_name){
