@@ -60,6 +60,7 @@ private slots:
     void slotTextChanged();
     void slotCompletionAborted();
     void slotCompletionDone();
+    void slotFilterInsertString( KTextEditor::CompletionEntry*, QString* );
 
 private:
     void load();

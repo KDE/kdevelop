@@ -224,6 +224,16 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
+    
+    QAsciiDictIterator<CodeTemplate> it( m_templates );
+    while( it.current() ) {
+	KTextEditor::CompletionEntry e;
+	e.text = it.current()->description + " <abbrev>";
+	e.userdata = it.currentKey();
+	entries << e;
+	++it;
+    }
+    
     return entries;
 }
 
@@ -395,6 +405,9 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
     
     disconnect( view, 0, this, 0 );
     disconnect( doc, 0, this, 0 );
+    
+    connect( view, SIGNAL(filterInsertString(KTextEditor::CompletionEntry*, QString*)),
+	     this, SLOT(slotFilterInsertString(KTextEditor::CompletionEntry*, QString*)) );
 
     if( config->readBoolEntry("AutoExpand", true) ){
 	connect( view, SIGNAL(completionAborted()),
@@ -413,6 +426,25 @@ void AbbrevPart::slotTextChanged()
     QChar ch = editIface->textLine( line )[ col ];
     if( !ch.isLetterOrNumber() && !m_inCompletion && currentWord().length() >= 3 )
 	slotExpandText();
+    	
+}
+
+void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QString* text )
+{
+    kdDebug(9028) << "AbbrevPart::slotFilterInsertString()" << endl;
+    
+    if( !entry || !text || !viewCursorIface || !editIface )
+	return;
+        
+    QString expand( " <abbrev>" );
+    if( entry->userdata && entry->text.endsWith(expand) ){
+	QString macro = entry->text.left( entry->text.length() - expand.length() );
+	*text = "";	
+        uint line, col;
+        viewCursorIface->cursorPositionReal(&line, &col);
+        editIface->removeText( line, col-entry->userdata.length(), line, col );
+	insertChars( m_templates[entry->userdata]->code );
+    }
 }
 
 #include "abbrevpart.moc"
