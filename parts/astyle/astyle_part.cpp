@@ -13,8 +13,8 @@
 
 
 // FIXME: Use official interfaces instead
-#include "lib/kwrite/texteditor.h"
-#include "lib/kwrite/editorpart.h"
+#include "texteditor.h"
+#include "editorpart.h"
 
 
 #include "astyle_factory.h"

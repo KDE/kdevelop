@@ -89,7 +89,6 @@ void Splitter::addChild(QWidget *w)
         childlist.append(w);
         if (orientation() == Horizontal) {
             SplitterHandle *handle = new SplitterHandle(w, this, "handle");
-            //        handle->show();
             handlelist.append(handle);
         }
     }
@@ -110,11 +109,9 @@ void Splitter::splitChild(QWidget *old, QWidget *w)
     int offset = 0;
     for (uint i = 0; i < childlist.count(); ++i) {
         if (childlist.at(i) == old) {
-            //            connect( w, SIGNAL(destroyed()), this, SLOT(childDestroyed()) );
             childlist.insert(i+1, w);
             if (orientation() == Horizontal) {
                 SplitterHandle *handle = new SplitterHandle(w, this, "handle");
-                //                handle->show();
                 handlelist.insert(i+1, handle);
             }
             if (i+1 != childlist.count()-1) {
@@ -139,15 +136,12 @@ void Splitter::replaceChild(QWidget *old, QWidget *w)
 {
     for (uint i=0; i < childlist.count(); ++i)
         if (childlist.at(i) == old) {
-            //            disconnect( old, SIGNAL(destroyed()), this, SLOT(childDestroyed()) );
             childlist.remove(i);
             if (orientation() == Horizontal)
                 handlelist.remove(i);
-            //            connect( w, SIGNAL(destroyed()), this, SLOT(childDestroyed()) );
             childlist.insert(i, w);
             if (orientation() == Horizontal) {
                 SplitterHandle *handle = new SplitterHandle(w, this, "handle");
-                //                handle->show();
                 handlelist.insert(i, handle);
             }
             doLayout();
@@ -366,4 +360,5 @@ void SplitterHandle::paintEvent(QPaintEvent *)
     QPainter p(this);
     style().drawSplitter(&p, 0, 0, width(), height(), colorGroup(), Horizontal);
 }
+
 #include "splitter.moc"

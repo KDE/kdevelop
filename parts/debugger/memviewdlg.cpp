@@ -85,6 +85,8 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     memoryDump->setDefault(true);
     buttonbox->layout();
     topLayout->addWidget(buttonbox);
+
+    start_->setFocus();
     
     connect(memoryDump, SIGNAL(clicked()), SLOT(slotMemoryDump()));
     connect(disassemble, SIGNAL(clicked()), SLOT(slotDisassemble()));

@@ -17,5 +17,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) $(srcdir)/script.local $(kappjavadatadir)/script
+	$(INSTALL_DATA) script.local $(kappjavadatadir)/script
 

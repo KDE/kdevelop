@@ -87,7 +87,7 @@ void TopLevel::splitterCollapsed(Splitter *splitter)
 {
     if (splitter!=mainSplitter && !splitter->hasMultipleChildren()) {
         // The splitter has 'collapsed' to have only one child
-        // So we can destroy it and put let the only child be
+        // So we can destroy it and let the only child be
         // adopted by the splitter one level higher
         if (!splitter->parentWidget()->inherits("Splitter")) {
             kdDebug(9000) << "Hmm, splitter is not nested in another one?" << endl;
@@ -98,7 +98,6 @@ void TopLevel::splitterCollapsed(Splitter *splitter)
         single->reparent(umbrellaSplitter, QPoint(0, 0));
         umbrellaSplitter->replaceChild(splitter, single);
         single->show();
-        //        single->update();
         delete splitter;
         return;
     }
@@ -131,7 +130,6 @@ void TopLevel::splitDocumentWidget(QWidget *w, QWidget *old, Orientation orient)
             // old widget and the new one in it.
             Splitter *nestedSplitter = new Splitter(splitter, "splitter");
             nestedSplitter->setOrientation(orient);
-            //            nestedSplitter->installEventFilter(this);
             connect( nestedSplitter, SIGNAL(collapsed(Splitter*)),
                      this, SLOT(splitterCollapsed(Splitter*)) );
             // The order of the following instructions is important
@@ -229,4 +227,5 @@ void TopLevel::slotOptionsEditToolbars()
     if (dlg.exec())
         createGUI();
 }
+
 #include "toplevel.moc"

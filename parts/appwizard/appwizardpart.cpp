@@ -25,9 +25,22 @@ AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
 {
     setXMLFile("kdevappwizard.rc");
 
+#if 0
+    KAction *action;
+    
+    action = new KAction( i18n("&New project..."), "wizard", 0,
+                          this, SLOT(slotNewProject()),
+                          actionCollection(), "project_new" );
+    action->setStatusText( i18n("Generates a new project from a template") );
+    action->setWhatsThis( i18n("New project\n\n"
+                               "This starts KDevelop's application wizard. "
+                               "It helps you to generate a skeleton for your "
+                               "application from a set of templates.") );
+#else
     (void) new KAction( i18n("&New project..."), "window_new",0,
                         this, SLOT(slotNewProject()),
                         actionCollection(), "project_new" );
+#endif
 
     m_dialog = 0;
 }

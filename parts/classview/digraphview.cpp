@@ -97,7 +97,7 @@ void DigraphView::addRenderedNode(const QString &name,
 }
 
 
-void DigraphView::addRenderedEdge(const QString &name1, const QString &name2,
+void DigraphView::addRenderedEdge(const QString &/*name1*/, const QString &/*name2*/,
                                   QArray<double> coords)
 {
     if (coords.count() < 4)

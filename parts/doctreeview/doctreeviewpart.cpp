@@ -58,7 +58,7 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
 
     KAction *action;
 
-    action = new KAction( i18n("Lookup in &index"), 0,
+    action = new KAction( i18n("Lookup in &index..."), 0,
                           this, SLOT(slotDocumentationIndex()),
                           actionCollection(), "help_lookupindex" );
     action->setStatusText( i18n("Allows you to lookup a term in the documentation index") );
@@ -67,7 +67,7 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
                                "can enter a term to lookup in the various indices "
                                "of the installed documentation.") );
 
-    action = new KAction( i18n("Full text &search"), 0,
+    action = new KAction( i18n("Full text &search..."), 0,
                           this, SLOT(slotSearchDocumentation()),
                           actionCollection(), "help_fulltextsearch" );
     action->setStatusText( i18n("Performs a full text search in the documentation") );
