@@ -64,6 +64,7 @@ CLogFileView::CLogFileView(bool s_path, QWidget*parent,const char* name)
 }
 
 CLogFileView::~CLogFileView(){
+  delete dict;
 }
 
 
