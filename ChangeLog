@@ -1,3 +1,6 @@
+2001-05-19  F@lk Brettschneider <falk@kdevelop.org>
+    * fixed focus problems introduced with the bugfixes on 2001-05-18
+
 2001-05-18  F@lk Brettschneider <falk@kdevelop.org>
     * prevent a gotFocus() signal in QextMdiChildView's activate(). Hope that helps... ;
     * bugfix: reverted the change for setGeometry(..) called in QextMdiChildFrm::setState(), it didn't work ;
