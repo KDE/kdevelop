@@ -96,8 +96,8 @@ void CKDevelop::slotMethodChoiceCombo(int index)
 
     if( aMethod )
     {
-      toFile = ( aMethod->isInHFile ? aClass->definedInFile : aClass->declaredInFile );
-      toLine = aMethod->declaredOnLine;
+      toFile = ( aMethod->isInHFile ? aClass->declaredInFile : aClass->definedInFile );
+      toLine = aMethod->definedOnLine;
       switchToFile( toFile, toLine );
     }
   }
@@ -173,7 +173,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
        aClass->methodIterator.current() && meth == NULL;
        ++aClass->methodIterator )
   {
-    if( aClass->methodIterator.current()->export == aMethod->export )
+    if( aClass->methodIterator.current()->exportScope == aMethod->exportScope )
       meth = aClass->methodIterator.current();
   }
 
@@ -183,10 +183,10 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   aMethod->asHeaderCode( toAdd );
 
   if( meth )
-    atLine = meth->definedOnLine + 1;
+    atLine = meth->declarationEndsOnLine;
   else
   {
-    switch( aMethod->export )
+    switch( aMethod->exportScope )
     {
       case PIE_PUBLIC:
         toAdd = "public: // Public methods\n" + toAdd;
@@ -201,7 +201,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
         break;
     }
 
-    atLine = aClass->definedOnLine + 2;
+    atLine = aClass->declarationEndsOnLine;
   }
 
   // Add the declaration.
@@ -254,7 +254,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
        aClass->attributeIterator.current() && attr == NULL;
        ++aClass->attributeIterator )
   {
-    if( aClass->attributeIterator.current()->export == aAttr->export )
+    if( aClass->attributeIterator.current()->exportScope == aAttr->exportScope )
       attr = aClass->attributeIterator.current();
   }
 
@@ -265,10 +265,10 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   // the label as well.
   aAttr->asHeaderCode( toAdd );
   if( attr )
-    atLine = attr->definedOnLine + 1;
+    atLine = attr->declaredOnLine + 1;
   else
   {
-    switch( aAttr->export )
+    switch( aAttr->exportScope )
     {
       case PIE_PUBLIC:
         toAdd = "public: // Public attributes\n" + toAdd;
@@ -283,15 +283,57 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
         break;
     }
 
-    atLine = aClass->definedOnLine + 2;
+    atLine = aClass->declarationEndsOnLine;
   }
 
   // Add the code to the file.
   edit_widget->insertAtLine( toAdd, atLine );
   edit_widget->setCursorPosition( atLine, 0 );
-  edit_widget->toggleModified( true );
 }
 
+/*------------------------------------- CKDevelop::slotCVDeleteMethod()
+ * slotCVDeleteMethod()
+ *   Event when the user wants to delete a method.
+ *
+ * Parameters:
+ *   aClassName      Name of the class that holds the method. NULL
+ *                   for global functions.
+ *   aMethod         The method to delete.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodName )
+{
+  CParsedClass *aClass;
+  CParsedMethod *aMethod;
+  int line;
+
+  aClass = class_tree->store->getClassByName( aClassName );
+
+  if( aClass != NULL )
+    aMethod = aClass->getMethodByNameAndArg( aMethodName );
+
+  if( aClass != NULL && aMethod != NULL )
+  {
+    if( KMsgBox::yesNo( this, i18n("Delete method"),
+                        i18n("Are you sure you want to delete this method?"),
+                        KMsgBox::QUESTION ) == 1 )
+    {
+      // Start by deleting the declaration.
+      switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
+      edit_widget->deleteInterval( aMethod->declaredOnLine, 
+                                   aMethod->declarationEndsOnLine );
+
+      // Comment out the definition.
+      switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+      for( line = aMethod->definedOnLine; 
+           line <= aMethod->definitionEndsOnLine;
+           line++ )
+        edit_widget->insertAtLine( i18n("//Del by KDevelop: "), line );
+    }
+  }
+}
 
 /*********************************************************************
  *                                                                   *
