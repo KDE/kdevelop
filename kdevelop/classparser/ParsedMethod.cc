@@ -160,7 +160,7 @@ void CParsedMethod::out()
   char buf[10];
 
   cout << "    ";
-  switch( export )
+  switch( exportScope )
   {
     case PIE_PUBLIC:
       cout << "public ";
@@ -182,8 +182,7 @@ void CParsedMethod::out()
   if( isStatic )
     cout << "static ";
 
-  sprintf( buf, "%d", ( isInHFile ? definedOnLine : declaredOnLine ) );
-  cout << type << " " << name << "( "; 
+  cout << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( "; 
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
   {
@@ -193,8 +192,16 @@ void CParsedMethod::out()
     arg->out();
   }
   
-  cout << ( isConst ? " ) const " : " ) " ) << "@" <<
-    ( isInHFile ? "(.h)" : "(.cc)" ) << " line " << buf << "\n";
+  cout << ( isConst ? " ) const\n" : " )\n" );
+  sprintf( buf, "%d", declaredOnLine );
+  cout << "      declared @ line " << buf << " - ";
+  sprintf( buf, "%d", declarationEndsOnLine );
+  cout << buf << "\n";
+  cout << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
+  sprintf( buf, "%d", definedOnLine );
+  cout << "@ line " << buf << " - ";
+  sprintf( buf, "%d", definitionEndsOnLine );
+  cout << buf << "\n";
 }
 
 /*********************************************************************

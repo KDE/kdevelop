@@ -218,7 +218,7 @@ void CParsedAttribute::out()
 
   cout << "    ";
 
-  switch( export )
+  switch( exportScope )
   {
     case PIE_PUBLIC:
       cout << "public ";
@@ -234,8 +234,11 @@ void CParsedAttribute::out()
       break;
   }
 
-  sprintf( buf, "%d", definedOnLine );
-  cout << type << " " << name << " @ line " << buf << "\n";
+  cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+  sprintf( buf, "%d", declaredOnLine );
+  cout << " @ line " << buf << " - ";
+  sprintf( buf, "%d", declarationEndsOnLine );
+  cout << buf << "\n";
 }
 
 /*********************************************************************
@@ -287,7 +290,7 @@ const char *CParsedAttribute::asPersistantString( QString &dataStr )
   dataStr += "\n";
   dataStr += ( isConst ? "true" : "false" );
   dataStr += "\n";
-  intStr.sprintf( "%d", export );
+  intStr.sprintf( "%d", exportScope );
   dataStr += intStr + "\n";
   dataStr += comment.find( "\n", false ) + "\n";
   dataStr += comment +"\n";

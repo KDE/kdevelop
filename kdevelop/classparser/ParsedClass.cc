@@ -392,8 +392,10 @@ void CParsedClass::out()
   CParsedSignalSlot *aSS;
   char *str;
 
-  sprintf( buf, "%d", definedOnLine );
-  cout << "Class " << name << " @ line " << buf << "\n";
+  sprintf( buf, "%d", declaredOnLine );
+  cout << "Class " << name << " @ line " << buf;
+  sprintf( buf, "%d", declarationEndsOnLine );
+  cout << " - " << buf << "\n";
   cout << "  Defined in files:\n";
   cout << "    " << declaredInFile << "\n";
   cout << "    " << definedInFile << "\n";
