@@ -454,7 +454,7 @@ void CTagsDialog::slotSearch()
         QRegExp re("^" + tag_edit->text() + "$");
         QDictIterator<CTagsTagInfoList> it(*m_tags);
         for (; it.current(); ++it)
-            if (re.search(it.currentKey(), 0) != -1)
+            if (re.match(it.currentKey(), 0) != -1)
                 insertResult(it.current(), kindStringList);
     } else {
         // Do the exact search
