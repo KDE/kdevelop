@@ -232,6 +232,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 {
     setWordWrap(WidgetWidth);
     setWrapPolicy(Anywhere);
+    setReadOnly(true);
     setMimeSourceFactory(new QMimeSourceFactory);
     mimeSourceFactory()->setImage("error", QImage((const char**)error_xpm));
     mimeSourceFactory()->setImage("warning", QImage((const char**)warning_xpm));
@@ -318,7 +319,7 @@ void MakeWidget::nextError()
 {
     int parag, index;
     if (moved)
-	getCursorPosition(&parag, &index);
+        getCursorPosition(&parag, &index);
     else
         parag = 0;
 
@@ -451,7 +452,7 @@ void MakeWidget::slotProcessExited(KProcess *)
         } else {
             s = i18n("*** Success ***");
             t = Diagnostic;
-	    emit m_part->commandFinished(currentCommand);
+            emit m_part->commandFinished(currentCommand);
         }
     } else {
         s = i18n("*** Compilation aborted ***");
@@ -460,6 +461,7 @@ void MakeWidget::slotProcessExited(KProcess *)
     
     insertLine2(s, t);
 
+    m_part->topLevel()->statusBar()->message(i18n("%1: %2").arg(currentCommand).arg(s), 3000);
     m_part->core()->running(m_part, false);
 
     // Defensive programming: We emit this with a single shot timer so that we go once again
