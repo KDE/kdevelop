@@ -126,7 +126,7 @@ void Disassemble::slotActivate(bool activate)
 void Disassemble::slotShowStepInSource(const QString&, int,
                                         const QString& currentAddress)
 {
-  currentAddress_ = currentAddress;
+  currentAddress_ = currentAddress.stripWhiteSpace();
   const char* t = currentAddress_.latin1();
   address_ = strtol(t, 0, 0);
   if (!active_)

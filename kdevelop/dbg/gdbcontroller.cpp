@@ -767,9 +767,11 @@ void GDBController::parseProgramLocation(char* buf)
       ((addressPos  = regExp2.match(buf, 0)) >= 0))
   {
     actOnProgramPause(QString(" "));
+    QString address(buf+addressPos+1);
+    address.stripWhiteSpace();
     emit showStepInSource(QCString(buf, linePos+1),
                           ::atoi(buf+linePos+1),
-                          QString(buf+addressPos+1));
+                          address);
     return;
   }
 #else
