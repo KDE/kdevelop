@@ -911,11 +911,11 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop424;
+			goto _loop426;
 		}
 		
 	}
-	_loop424:;
+	_loop426:;
 	} // ( ... )*
 	match("*)");
 #line 1157 "pascal.g"
@@ -962,11 +962,11 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop428;
+			goto _loop430;
 		}
 		
 	}
-	_loop428:;
+	_loop430:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('}'));
 #line 1169 "pascal.g"
@@ -992,11 +992,11 @@ void PascalLexer::mCOMMENT_3(bool _createToken) {
 			matchNot(static_cast<unsigned char>('\n'));
 		}
 		else {
-			goto _loop431;
+			goto _loop433;
 		}
 		
 	}
-	_loop431:;
+	_loop433:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('\n'));
 #line 1174 "pascal.g"
@@ -1072,11 +1072,11 @@ void PascalLexer::mIDENT(bool _createToken) {
 		}
 		default:
 		{
-			goto _loop435;
+			goto _loop437;
 		}
 		}
 	}
-	_loop435:;
+	_loop437:;
 	} // ( ... )*
 	_ttype = testLiteralsTable(_ttype);
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1104,11 +1104,11 @@ void PascalLexer::mSTRING_LITERAL(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop439;
+			goto _loop441;
 		}
 		
 	}
-	_loop439:;
+	_loop441:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('\''));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1131,18 +1131,18 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 	int _saveIndex;
 	
 	{ // ( ... )+
-	int _cnt442=0;
+	int _cnt444=0;
 	for (;;) {
 		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
-			if ( _cnt442>=1 ) { goto _loop442; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+			if ( _cnt444>=1 ) { goto _loop444; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 		}
 		
-		_cnt442++;
+		_cnt444++;
 	}
-	_loop442:;
+	_loop444:;
 	}  // ( ... )+
 	{
 	if ((LA(1) == static_cast<unsigned char>('e'))) {
@@ -1159,18 +1159,18 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 			_ttype = NUM_REAL;
 #line 1161 "PascalLexer.cpp"
 			{ // ( ... )+
-			int _cnt446=0;
+			int _cnt448=0;
 			for (;;) {
 				if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 				}
 				else {
-					if ( _cnt446>=1 ) { goto _loop446; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+					if ( _cnt448>=1 ) { goto _loop448; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 				}
 				
-				_cnt446++;
+				_cnt448++;
 			}
-			_loop446:;
+			_loop448:;
 			}  // ( ... )+
 			{
 			if ((LA(1) == static_cast<unsigned char>('e'))) {
@@ -1236,18 +1236,18 @@ void PascalLexer::mEXPONENT(bool _createToken) {
 	}
 	}
 	{ // ( ... )+
-	int _cnt452=0;
+	int _cnt454=0;
 	for (;;) {
 		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
-			if ( _cnt452>=1 ) { goto _loop452; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+			if ( _cnt454>=1 ) { goto _loop454; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 		}
 		
-		_cnt452++;
+		_cnt454++;
 	}
-	_loop452:;
+	_loop454:;
 	}  // ( ... )+
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);

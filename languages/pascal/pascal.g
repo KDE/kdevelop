@@ -620,7 +620,7 @@ factor
     | addressFactor
     | TRUE
     | FALSE
-//    | identifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
+    | identifier LBRACK! expression ( COMMA! expression )* RBRACK!
     ;
 
 //FIXME: is this correct?
