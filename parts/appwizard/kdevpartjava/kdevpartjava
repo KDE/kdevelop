@@ -1,6 +1,0 @@
-# KDE Config File
-[General]
-Name=General plugin
-Category=Java/KDevelop/
-Comment=This generates a Java plugin for KDevelop
-FileTemplates=java,CStyle
