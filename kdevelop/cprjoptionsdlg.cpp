@@ -1270,10 +1270,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 	m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
 	
-	QString dirWhereMakeWillBeCalled = prj_info->getDirWhereMakeWillBeCalled();
-	if (dirWhereMakeWillBeCalled.isEmpty())
-	    dirWhereMakeWillBeCalled = prj_info->getProjectDir();
-	m_makestartpoint_line->setText(dirWhereMakeWillBeCalled);
+	m_makestartpoint_line->setText(
+	      prj_info->getDirWhereMakeWillBeCalled(prj_info->getProjectDir()));
 
 //************************** binary selection *************************//
   QWidget* w6 = new QWidget( this, "bin" );
@@ -1665,29 +1663,48 @@ void CPrjOptionsDlg::ok(){
 
   prj_info->setMakeOptions (text);
 
+  /******** sort out the make directory *********/
+
   QString makeDir = m_makestartpoint_line->text();
-  bool isRelativePath = false;
-  if (makeDir.length() > 0)
-    if ('/' != makeDir[0])
-      isRelativePath = true;
-  if (!isRelativePath) {
-    if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + makeDir + i18n("\n\nwhich you set as directory where make should run is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
-      makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
+  if (!makeDir.isEmpty())
+  {
+    if (makeDir == prj_info->getProjectDir())
+      makeDir = "";
+    else
+    {
+      // Make sure that the user is aware of the consequences of setting an
+      // absolute directory path here.
+      if (makeDir[0] == '/')
+      {
+        if(QMessageBox::warning(this, i18n("Path decision"),
+                    i18n("The path\n\n") + makeDir +
+                      i18n("\n\nwhich you set as directory where make should "
+                            "run is not a relative path.\nThis can cause problems, "
+                            "if you move the project.\nWhat path do you want to save "
+                            "to your project file?"),
+                    i18n("&Absolute path"), i18n("&Relative path")))
+        {
+          makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
+        }
+      }
+    }
   }
-  if (makeDir != prj_info->getProjectDir())
-    prj_info->setDirWhereMakeWillBeCalled(makeDir);
-  else
-    prj_info->setDirWhereMakeWillBeCalled("");
+
+  prj_info->setDirWhereMakeWillBeCalled(makeDir);
 
   /******** binary options *********/
   QString binaryDir = binary_edit->text();
-  isRelativePath = false;
-  if (binaryDir.length() > 0)
-    if ('/' != binaryDir[0])
-      isRelativePath = true;
-  if (!isRelativePath) {
-    if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + binaryDir + i18n("\n\nto your binary which should be run on 'Execute' is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
-      binaryDir = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryDir);
+  if (!binaryDir.isEmpty()) {
+    if (binaryDir[0] == '/') {
+      if(QMessageBox::warning(this,i18n("Path decision"),
+                i18n("The path\n\n") + binaryDir +
+                i18n("\n\nto your binary which should be run on 'Execute' "
+                      "is not a relative path.\nThis can cause problems, "
+                      "if you move the project.\nWhat path do you want to "
+                      "save to your project file?"),
+                i18n("&Absolute path"),i18n("&Relative path")))
+        binaryDir = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryDir);
+    }
   }
   prj_info->setBinPROGRAM( binaryDir);
 

@@ -268,6 +268,12 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
   return info;  
 }
 
+QString CProject::getDirWhereMakeWillBeCalled(QString defaultStr)
+{
+  QString userDefined = readGroupEntry( "General", "dir_where_make_will_be_called" );
+  return  userDefined.isEmpty() ? defaultStr : userDefined;
+}
+
 /*********************************************************************
  *                                                                   *
  *                         PUBLIC QUERIES                            *
@@ -1435,3 +1441,4 @@ bool CProject::isCustomProject(){
   if(getProjectType() == "normal_empty") return true;
   return false;
 }
+

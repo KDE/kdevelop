@@ -1637,16 +1637,8 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-  if ((prj->getDirWhereMakeWillBeCalled()).isEmpty())
-  {
-     QDir::setCurrent(makefileDir);
-     error_parser->setStartDir(makefileDir);
-  }
-  else
-  {
-     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
-  }
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(makefileDir));
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(makefileDir));
 
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
@@ -1734,16 +1726,8 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
   messages_widget->clear();
-  if ((prj->getDirWhereMakeWillBeCalled()).isEmpty())
-  {
-     QDir::setCurrent(makefileDir);
-     error_parser->setStartDir(makefileDir);
-  }
-  else
-  {
-     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
-  }
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(makefileDir));
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(makefileDir));
 
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
@@ -1786,17 +1770,8 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   slotFileSaveAll();
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
-  {
-     QDir::setCurrent(prj->getProjectDir());
-     error_parser->setStartDir(prj->getProjectDir());
-  }
-  else
-  {
-     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
-  }
-
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
     makefile="Makefile.cvs";
@@ -1836,17 +1811,8 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
-  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
-  {
-     QDir::setCurrent(prj->getProjectDir());
-     error_parser->setStartDir(prj->getProjectDir());
-  }
-  else
-  {
-     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
-  }
-
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
   process.clearArguments();
   process << make_cmd << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1866,9 +1832,7 @@ void CKDevelop::slotBuildMakeClean(){
   slotStatusMsg(i18n("Running make clean..."));
   messages_widget->clear();
 
-  QString makeCleanDir = prj->getDirWhereMakeWillBeCalled();
-  if (makeCleanDir.isEmpty())
-    makeCleanDir = prj->getProjectDir();
+  QString makeCleanDir = prj->getDirWhereMakeWillBeCalled(prj->getProjectDir());
   QDir::setCurrent(makeCleanDir);
 
   QString makefile("Makefile");
@@ -1902,16 +1866,8 @@ void CKDevelop::slotBuildAutoconf(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
   messages_widget->clear();
-  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
-  {
-     QDir::setCurrent(prj->getProjectDir());
-     error_parser->setStartDir(prj->getProjectDir());
-  }
-  else
-  {
-     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
-  }
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
 
   shell_process.clearArguments();
   QString makefile("Makefile.dist");
