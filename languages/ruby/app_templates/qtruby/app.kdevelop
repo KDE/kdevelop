@@ -4,7 +4,7 @@
 		<author>%{AUTHOR}</author>
 		<email>%{EMAIL}</email>
 		<version>%{VERSION}</version>
-		<projectmanagement>KDevAutoProject</projectmanagement>
+		<projectmanagement>KDevCustomProject</projectmanagement>
 		<primarylanguage>Ruby</primarylanguage>
 		<keywords>
 			<keyword>Ruby</keyword>
@@ -17,14 +17,14 @@
 			<part>KDevDebugger</part>
 		</ignoreparts>
 	</general>
-	<kdevautoproject>
+	<kdevcustomproject>
 		<general>
 			<activedir/>
 		</general>
 		<run>
 			<mainprogram>./%{APPNAMELC}.rb</mainprogram>
 		</run>
-	</kdevautoproject>
+	</kdevcustomproject>
 	<kdevfileview>
 		<tree>
 			<hidenonprojectfiles>false</hidenonprojectfiles>

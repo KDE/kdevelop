@@ -1,4 +1,4 @@
-dataFiles = app.rb app.kdevelop app-autogen.sh app-Makefile.am app-configure.ac
+dataFiles = app.rb app.kdevelop app-Makefile app.filelist
 templateName = qtruby
 
 ### no need to change below:

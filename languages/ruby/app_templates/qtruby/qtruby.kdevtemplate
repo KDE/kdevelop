@@ -7,14 +7,6 @@ FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
 Archive=qtruby.tar.gz
 
-[INCADMIN]
-Type=include
-File=%{kdevelop}/template-common/incadmin.kdevtemplate
-
-[GNU]
-Type=include
-File=%{kdevelop}/template-common/gnu.kdevtemplate
-
 [FILE1]
 Type=install
 EscapeXML=true
@@ -28,18 +20,13 @@ Dest=%{dest}/%{APPNAMELC}.rb
 
 [FILE3]
 Type=install
-Source=%{src}/app-Makefile.am
-Dest=%{dest}/Makefile.am
+Source=%{src}/app-Makefile
+Dest=%{dest}/Makefile
 
 [FILE4]
 Type=install
-Source=%{src}/app-autogen.sh
-Dest=%{dest}/autogen.sh
-
-[FILE5]
-Type=install
-Source=%{src}/app-configure.ac
-Dest=%{dest}/configure.ac
+Source=%{src}/app.filelist
+Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 
 [MSG]
 Type=message

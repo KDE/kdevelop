@@ -1,6 +1,0 @@
-[General]
-Name=QtRuby application
-Category=Ruby
-Comment=This generates a simple QtRuby application
-FileTemplates=rb,ShellStyle
-ShowFilesAfterGeneration=APPNAMELC.rb
