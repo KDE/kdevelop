@@ -24,6 +24,8 @@
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kpopupmenu.h>
+
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 		: AutomakeProjectSpace(parent,name){
@@ -33,18 +35,11 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 
 	KStandardDirs* std_dirs = KGlobal::dirs();
 	
-	// init, every plugin should do this
-	m_plugin_author = "KDevelop Team";
-	m_plugin_name = "KDE";
-	m_plugin_copyright = "(C) 2000 by KDevelop Team";
-	m_plugin_version = "0.1";
-	m_plugin_description = "kk";
-	m_plugin_homepage = "http://www.kdevelop.org";
-	m_plugin_icon = DesktopIcon("buttons");
-	m_plugin_libraryname = "libkde_projectspace";
+
 	// projectspace
-	m_projectspace_template = std_dirs->findResource("data","kdevelop/projectspaces/kde_projectspace.tar.gz");
+	m_projectspaceTemplate = std_dirs->findResource("data","kdevelop/projectspaces/kde_projectspace.tar.gz");
 	m_language = "C++";
+	m_pAboutData=0;
 
 
 	setXMLFile("kdevkdeprojectspaceui.rc");
@@ -54,6 +49,7 @@ KDEProjectSpace::~KDEProjectSpace(){
 }
 
 void KDEProjectSpace::setupGUI(){
+  AutomakeProjectSpace::setupGUI(); // set actions for "set active project"
   cerr << "Building KDEProjectSpace GUI" << endl;
   KAction *pAction;
   pAction = new KAction( i18n("Add new &Translation File..."), "locale", 0, 
@@ -109,4 +105,16 @@ bool KDEProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
   return true;
 }
 
+KAboutData* KDEProjectSpace::aboutPlugin(){
+  if (m_pAboutData == 0){
+    m_pAboutData= new KAboutData( "KDE", I18N_NOOP("KDE ProjectSpace"),
+				  "0.1", "kk",
+				  KAboutData::License_GPL,
+				  "(c) 1998-2000, The KDevelop Team",
+				  "text",
+				  "http://www.kdevelop.org");
 
+    m_pAboutData->addAuthor("Sandy Meier",I18N_NOOP("Developer"), "smeier@kdevelop.org");
+  }
+  return m_pAboutData;
+}

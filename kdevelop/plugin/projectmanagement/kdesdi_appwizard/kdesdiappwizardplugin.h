@@ -23,6 +23,7 @@
 #include <qlabel.h>
 #include <qlist.h>
 #include "filepropspage.h"
+#include <kaboutdata.h>
 
 /**
   *@author Sandy Meier
@@ -30,15 +31,16 @@
 
 class KDESDIAppWizardPlugin : public AppWizard  {
 Q_OBJECT
-public: 
-	KDESDIAppWizardPlugin(QObject* parent=0,const char* name=0);
-	~KDESDIAppWizardPlugin();
-	virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,
-			  QString projectname="",QString absProjectLocation="");
-	
-  /** generates default files/app, properties from configwidgets set in AppWizard*/
-  virtual void generateDefaultFiles();
-  virtual void setInfosInString(QString& text);
+  public: 
+ KDESDIAppWizardPlugin(QObject* parent=0,const char* name=0);
+ ~KDESDIAppWizardPlugin();
+ virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,
+		   QString projectname="",QString absProjectLocation="");
+ 
+ /** generates default files/app, properties from configwidgets set in AppWizard*/
+ virtual void generateDefaultFiles();
+ virtual void setInfosInString(QString& text);
+ virtual KAboutData* aboutPlugin();
 
   QLabel* m_text;
   QWidget* m_sdi_general_page;
@@ -54,6 +56,9 @@ public:
   ClassFileProp* m_app_prop;
   ClassFileProp* m_view_prop;
   ClassFileProp* m_doc_prop;
+  
+ protected:
+  KAboutData* m_pAboutData;
 };
 
 #endif

@@ -36,7 +36,7 @@ public:
   */	
   void setRelativeFile(QString rel_name);
   /* return the relative file*/
-  QString getRelativeFile();
+  QString relativeFile();
   
   void setInstallFile(QString abs_file);
   QString getInstallFile();
@@ -47,10 +47,7 @@ public:
   void setInstall(bool yes=true);
   bool shouldBeInstalled();
 
-  /** writes the configuration to the projectfile*/
-  void writeConfig(KConfig* config);
-  /** the rel_name set in the constructor will be used*/
-  void readConfig(KConfig* config);
+  
 
   void writeConfig(QDomDocument& doc, QDomElement& fileElement);
   void readConfig(QDomElement& fileElement);
@@ -60,7 +57,7 @@ public:
   QString m_file;
   bool m_dist;
   bool m_install;
-  QString m_install_file;
+  QString m_installFile;
 };
 
 #endif

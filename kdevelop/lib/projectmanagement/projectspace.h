@@ -18,20 +18,20 @@
 #ifndef PROJECTSPACE_H
 #define PROJECTSPACE_H
 
-#include "plugin.h"
 #include "project.h"
 #include "kdevcomponent.h"
 #include <qlist.h>
 #include <string.h>
 #include <ksimpleconfig.h>
 #include <qdom.h>
+class KAboutData;
 
 /**handles toplevel dir, configure.in, and all projects
     data are stored in NAME.kdevpsp and NAME_local.kdevpsp
   *@author Sandy Meier
   */
 
-class ProjectSpace : public KDevComponent, public Plugin  {
+class ProjectSpace : public KDevComponent {
   Q_OBJECT
     public: 
   ProjectSpace(QObject* parent=0,const char* name=0,QString file="");
@@ -40,6 +40,7 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
 
+  virtual void setupGUI();
   void addProject(Project* prj);
   void removeProject(QString name);
 
@@ -72,19 +73,19 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   /*_____some get methods_____*/
 	// member
   /** returns the name of the projectspace*/
-  QString getName();
+  QString name();
 
   /** Fetch the name of the version control system */
-  QString getVCSystem();
+  QString VCSystem();
 
   /** Fetch the authors name. stored in the *_local files*/
-  QString getAuthor();
+  QString author();
 
   /** Fetch the authors eMail-address,  stored in the *_local files */
-  QString getEmail();
+  QString email();
   
-  QString getCompany();
-  QString getProgrammingLanguage();
+  QString company();
+  QString programmingLanguage();
   QStringList allProjectNames();
   
   /***/
@@ -99,11 +100,11 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual bool readXMLConfig(QString abs_filename);
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
   virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
-  
-
+ 
   virtual void dump();
 
-
+  protected slots:
+    void slotProjectSetActivate( int id);
 protected:
   /** ProjectSpace name*/
   QString m_name;
@@ -116,19 +117,19 @@ protected:
   QString m_language;
   // static
   /** projectspace template, name*/
-  QString m_projectspace_template;
+  QString m_projectspaceTemplate;
   /** Version control object */
 //  VersionControl *vc;
 
   /** all projects in the ProjectSpace*/
-  QList<Project>* m_projects;
+  QList<Project>* m_pProjects;
 
   /** current active project*/
-  Project* m_current_project;
+  Project* m_pCurrentProject;
   /** absolute*/
-  QString m_user_projectspace_file;
+  QString m_userProjectspaceFile;
   /** absolute */
-  QString m_projectspace_file;
+  QString m_projectspaceFile;
   QString m_version;
 
   // current User profile
@@ -136,7 +137,8 @@ protected:
   QString m_company;
   QString m_author;
  
- 
+ private:
+  void fillActiveProjectPopupMenu();
   
 };
 

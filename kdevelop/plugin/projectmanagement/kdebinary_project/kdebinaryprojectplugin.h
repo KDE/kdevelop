@@ -19,6 +19,7 @@
 #define KDEBINARYPROJECTPLUGIN_H
 
 #include "project.h"
+#include <kaboutdata.h>
 
 /**
   *@author Sandy Meier
@@ -27,8 +28,11 @@
 class KDEBinaryProjectPlugin : public Project  {
   Q_OBJECT
 public: 
-	KDEBinaryProjectPlugin( QObject *parent=0, const char *name=0);
-	~KDEBinaryProjectPlugin();
+  KDEBinaryProjectPlugin( QObject *parent=0, const char *name=0);
+  ~KDEBinaryProjectPlugin();
+  virtual KAboutData* aboutPlugin();
+protected:
+	KAboutData* m_pAboutData;
 };
 
 #endif

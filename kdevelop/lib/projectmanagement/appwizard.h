@@ -30,7 +30,7 @@
 #include <qwhatsthis.h>
 
 #include "projectspace.h"
-
+class KAboutData;
 
 /**display some standard pages
   and the project specific widgets,
@@ -40,7 +40,7 @@
   *@author Sandy Meier
   */
 
-class AppWizard : public AppWizardBase, public Plugin  {
+class AppWizard : public AppWizardBase {
 Q_OBJECT
 
 public: 
@@ -54,9 +54,10 @@ public:
  virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,
 		   QString projectName="",QString absProjectLocation="");
  // for which workspace is this plugin
- QString  getProjectSpaceName();
+ QString  projectSpaceName();
  // the picture for the newProjectDialog, the QString contains the absolute path
- QString getPreviewPicture();
+ QString previewPicture();
+ QString applicationDescription();
  /** generates default files/app, properties from configwidgets set in AppWizard*/
  virtual void generateDefaultFiles();
 
@@ -64,27 +65,30 @@ public:
 
  /** replace |VERSION|, |AUTHOR| and so on...*/
  virtual void setInfosInString(QString& text);
+ /** returns some data about this Component, should be static?*/
+ virtual KAboutData* aboutPlugin();
  
  protected slots:
   virtual void accept();
  virtual void slotNewHeader();
  virtual void slotLoadHeader();
  protected:
-  
-  // others
-  bool m_new_projectspace;
-  ProjectSpace* m_projectspace;
-  Project* m_project;
-  QString m_projectName;
-  QString m_absProjectLocation;
-  
+ 
+ // others
+ bool m_newProjectspace;
+ ProjectSpace* m_pProjectspace;
+ Project* m_pProject;
+ QString m_projectName;
+ QString m_absProjectLocation;
+ 
   //plugin infos, static
-  QString m_project_space_name;
-  QString m_application_picture;
-  QString m_projecttype_name;
+  QString m_projectspaceName;
+  QString m_applicationPicture;
+  QString m_projecttypeName;
   
-  QString m_project_template;
+  QString m_projectTemplate;
   QString m_path;
+  QString m_applicationDescription;
 };
 
 #endif

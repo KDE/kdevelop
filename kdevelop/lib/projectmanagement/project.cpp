@@ -21,37 +21,41 @@
 #include <kdebug.h>
 #include <ctoolclass.h>
 #include <qfileinfo.h>
+#include <kaboutdata.h>
+#include <kservice.h>
+#include <ktrader.h>
+#include <klibloader.h>
 
-Project::Project(QObject * parent, const char* name) :  QObjectPlugin(parent,name){
-  m_files = new QList<RegisteredFile>();
+Project::Project(QObject * parent, const char* name) :  QObject(parent,name){
+  m_pFiles = new QList<RegisteredFile>();
 }
 Project::~Project(){
 }
 /*____some get methods_____ */
 
-QString Project::getProjectFile(){
-  return m_project_file;
+QString Project::projectFile(){
+  return m_projectFile;
 }
-QString Project::getUserProjectFile(){
-  return m_user_project_file;
+QString Project::userProjectFile(){
+  return m_userProjectFile;
 }
 /** */
-QStringList Project::getAllSources(){
+QStringList Project::allSources(){
 }
 
 /** returns all files*/
-QStringList Project::getAllFileNames(){
+QStringList Project::allFileNames(){
 }
-RegisteredFile Project::getFileProperties(QString filename){
+RegisteredFile Project::fileProperties(QString filename){
 }
-QString Project::getVersion(){
+QString Project::version(){
   return m_version;
 }
-QString Project::getName(){
+QString Project::name(){
   return m_name;
 }
-QString Project::getAbsolutePath(){
-  return m_abs_path;
+QString Project::absolutePath(){
+  return m_absPath;
 }
 QString Project::relativePath(){
   return m_relPath;
@@ -69,39 +73,39 @@ void Project::setName(QString name){
   m_name = name;
 }
 void Project::setAbsolutePath(QString path){
-  m_abs_path = path;
-  m_project_file = m_abs_path + "/" + m_name + ".kdevprj2";
-  m_user_project_file = m_abs_path + "/." + m_name + ".kdevprj2";
+  m_absPath = path;
+  m_projectFile = m_absPath + "/" + m_name + ".kdevprj2";
+  m_userProjectFile = m_absPath + "/." + m_name + ".kdevprj2";
 }
 /** generate/modifiy the Makefile*/
 void Project::updateMakefile(){
 }
-void Project::addFile(RegisteredFile* file){
-  m_files->append(file);
+void Project::addFile(RegisteredFile* pFile){
+  m_pFiles->append(pFile);
 }
 
-void Project::addFile(QString abs_filename){
-  QString rel_file = CToolClass::getRelativePath(m_abs_path,abs_filename);
-  RegisteredFile* file = new RegisteredFile(rel_file);
-  m_files->append(file);
+void Project::addFile(QString absFilename){
+  QString relFile = CToolClass::getRelativePath(m_absPath,absFilename);
+  RegisteredFile* pFile = new RegisteredFile(relFile);
+  m_pFiles->append(pFile);
 }
 
 
-void Project::removeFile(RegisteredFile* file){
+void Project::removeFile(RegisteredFile* pFile){
   //	  m_files->remove(file);
 }
 void Project::showAllFiles(){
-  RegisteredFile* file;
+  RegisteredFile* pFile;
   cerr << endl << "show all registered Files for: " << m_name;
-  for(file = m_files->first(); file != 0;file =  m_files->next() ){
-    cerr << "\nFilename:" << file->getRelativeFile();
+  for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
+    cerr << "\nFilename:" << pFile->relativeFile();
   }
 }
 
 void Project::dump(){
   cerr << endl << "Project Name: " << m_name;
   cerr << endl << "relative Path: " << m_relPath;
-  cerr << endl << "absolute Path: " << m_abs_path;
+  cerr << endl << "absolute Path: " << m_absPath;
   cerr << endl << "Version: " << m_version;
   showAllFiles();
 }
@@ -120,15 +124,25 @@ bool Project::readUserConfig(QDomDocument& doc,QDomElement& projectElement){
 
 bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
   cerr << "\nenter Project::writeGlobalConfig";
+  KAboutData* pData = aboutPlugin();
+  QString pluginName;
+  if(pData !=0){
+    pluginName = pData->appName();
+  }
+  else {
+    kdDebug(9000) << "Project::writeGlobalConfig() no aboutPlugin() found :-(";
+    return false;
+  }
+  projectElement.setAttribute("pluginName",pluginName);
   projectElement.setAttribute("name",m_name);
-  projectElement.setAttribute("pluginName",m_plugin_name);
   projectElement.setAttribute("relativePath",m_relPath);
+  
 
   // Files tag
   QDomElement filesElement = projectElement.appendChild(doc.createElement("Files")).toElement();
   QStringList fileList;
-  RegisteredFile* pFile;
-  for(pFile = m_files->first(); pFile != 0; pFile= m_files->next() ){
+  RegisteredFile* pFile=0;
+  for(pFile = m_pFiles->first(); pFile != 0; pFile= m_pFiles->next() ){
     QDomElement fileElement = filesElement.appendChild(doc.createElement("File")).toElement();
     pFile->writeConfig(doc,fileElement);
   }
@@ -157,10 +171,34 @@ bool Project::readGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
     QDomElement fileElement = fileList.item(i).toElement();
     file = new RegisteredFile();
     file->readConfig(fileElement);
-    m_files->append(file);
+    m_pFiles->append(file);
   }
   //  showAllFiles();
   return true;
+}
+KAboutData* Project::aboutPlugin(){
+  return 0;
+}
+// a Factory ?
+
+Project* Project::createNewProject(QString projecttypeName,QObject* parent){
+  kdDebug(9000) << "enter PluginLoader::getNewProject";
+  QString constraint = QString("[Name] == '%1'").arg(projecttypeName);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/Project", constraint);
+  KService *service = *offers.begin();
+  kdDebug(9000) << "Found Project Component " << service->name() << endl;
+
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+  if (!factory){
+    kdDebug(9000) << "Factory not available " << service->library()  << endl;
+  }
+  
+  Project* prj  = (Project*)factory->create(parent,service->name().latin1(),
+					    "Project");
+  if(!prj){
+    kdDebug(9000) << "couldn't create the project "<<  service->library()  << endl;
+  }
+  return prj;
 }
 
 #include "project.moc"

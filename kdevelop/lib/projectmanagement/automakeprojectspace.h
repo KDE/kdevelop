@@ -30,7 +30,7 @@ Q_OBJECT
  AutomakeProjectSpace(QObject* parent=0,const char* name=0);
  virtual ~AutomakeProjectSpace();
  
- 
+ virtual void setupGUI();
  virtual void modifyDefaultFiles();
  /** Store the additional arguments for configure,stored in the *_user files */
   void setConfigureArgs(QString args);

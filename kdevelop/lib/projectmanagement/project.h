@@ -18,13 +18,14 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "qobjectplugin.h"
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qlist.h>
 #include "registeredfile.h"
 #include <ksimpleconfig.h>
 #include <qdom.h>
+#include <qobject.h>
+class KAboutData;
 
 /**-base class for all project plugins, contains  special config widgets for
      PMC (Project Managment Console) , generate/modify Makefile.am's,
@@ -32,7 +33,7 @@
   *@author Sandy Meier
   */
 
-class Project : public QObjectPlugin  {
+class Project : public QObject {
   Q_OBJECT
     
     public: 
@@ -41,23 +42,23 @@ class Project : public QObjectPlugin  {
   /*____some get methods_____ */
   
   /** */
-  QStringList getAllSources();
+  QStringList allSources();
 
   /** returns all files*/
-  QStringList getAllFileNames();
-  RegisteredFile getFileProperties(QString filename);
+  QStringList allFileNames();
+  RegisteredFile fileProperties(QString filename);
 
-  QString getVersion();
-  QString getName();
-  QString getProjectFile();
-  QString getUserProjectFile();
+  QString version();
+  QString name();
+  QString projectFile();
+  QString userProjectFile();
 
   /** store the project version. */
   void setVersion(QString version);
   void setName(QString name);
   void setAbsolutePath(QString path);
   void setRelativePath(QString path);
-  QString getAbsolutePath();
+  QString absolutePath();
   QString relativePath();
   /** generate/modifiy the Makefile*/
   virtual void updateMakefile();
@@ -75,15 +76,21 @@ class Project : public QObjectPlugin  {
   /* */
   virtual void showAllFiles();
   virtual void dump();
+  /** returns some data about this Component, should be static?*/
+  virtual KAboutData* aboutPlugin();
+
+  /** a factory to create new projects, use KTrader*/
+  static Project* createNewProject(QString projecttypeName,QObject* parent=0);
+
   protected:
-  QList<RegisteredFile>* m_files;
+  QList<RegisteredFile>* m_pFiles;
   QString m_name;
   QString m_version;
-  QString m_abs_path;
+  QString m_absPath;
   /** absolute*/
-  QString m_user_project_file;
+  QString m_userProjectFile;
   /** absolute */
-  QString m_project_file;
+  QString m_projectFile;
   QString m_relPath;
 };
 

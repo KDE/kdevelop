@@ -34,10 +34,8 @@
 #include <qvariant.h>
 #include <qheader.h>
 #include <kmessagebox.h>
-#include "plugin.h"
 #include "newprojectdlg.h"
 #include "appwizard.h"
-#include "pluginloader.h"
 #include "ctoolclass.h"
 
 
@@ -198,10 +196,10 @@ void NewProjectDlg::slotAppwizardSelected (QIconViewItem* item){
   
   appwizard_plg = (AppWizard*) obj; 
   m_current_appwizard_plugin = appwizard_plg; // set current plugin
-  description_textview->setText(appwizard_plg->getPluginDescription());
-  m_pixmap->load(appwizard_plg->getPreviewPicture());
+  description_textview->setText(appwizard_plg->applicationDescription());
+  m_pixmap->load(appwizard_plg->previewPicture());
   preview_widget->setPixmap(*m_pixmap);
-  cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
+  cerr << "Picture:" << appwizard_plg->previewPicture() << endl;
   ok_button->setEnabled(true);
 }
 
@@ -286,7 +284,7 @@ void NewProjectDlg::initDialog(){
     slotAddToCurrentProjectSpaceClicked();
     current_radio_button->setChecked(true);
     m_prjspace_location_linedit->setText(m_pProjectSpace->absolutePath());
-    m_prjspace_name_linedit->setText(m_pProjectSpace->getName());
+    m_prjspace_name_linedit->setText(m_pProjectSpace->name());
   }
   ok_button->setEnabled(false);
 

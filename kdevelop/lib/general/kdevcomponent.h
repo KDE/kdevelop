@@ -26,6 +26,7 @@ class KDevLanguageSupport;
 class CProject;
 class ClassStore;
 class KDialogBase;
+class KAboutData;
 
 
 /**
@@ -107,6 +108,9 @@ public:
      */
     virtual void savedFile(const QString&);
 
+    /** returns some data about this Component, should be static?*/
+    virtual KAboutData* aboutPlugin();
+
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
     /**
@@ -130,7 +134,6 @@ signals:
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();
     void gotoProjectManual();
-
 private:
     // These methods are not meaningful and are therefore forbidden
     void setWidget(QWidget *w);

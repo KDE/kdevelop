@@ -18,20 +18,25 @@
 #include "kdebinaryprojectplugin.h"
 #include <iostream.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 KDEBinaryProjectPlugin::KDEBinaryProjectPlugin(QObject *parent, const char *name) 
   : Project(parent,name){
   cerr  << "enter KDEBinaryProjectPlugin::KDEBinaryProjectPlugin" << endl;
-  // init, every plugin should do this
-  // Plugin infos
-  m_plugin_author = "KDevelop Team";
-  m_plugin_name = "KDEBinaryProject";
-  m_plugin_copyright = "(C) 2000 by KDevelop Team";
-  m_plugin_version = "0.1";
-  m_plugin_description = "KDE Binary plugin";
-  m_plugin_homepage = "http://www.kdevelop.org";
-  m_plugin_icon = DesktopIcon("java_src");
- 
+  m_pAboutData=0;
 }
 KDEBinaryProjectPlugin::~KDEBinaryProjectPlugin(){
+}
+KAboutData* KDEBinaryProjectPlugin::aboutPlugin(){
+  if (m_pAboutData == 0){
+    m_pAboutData= new KAboutData( "KDEBinaryProject", I18N_NOOP("KDE Project (Binary)"),
+				  "0.1", "desc",
+				  KAboutData::License_GPL,
+				  "(c) 1998-2000, The KDevelop Team",
+				  "text",
+				  "http://www.kdevelop.org");
+
+    m_pAboutData->addAuthor("Sandy Meier",I18N_NOOP("Developer"), "smeier@kdevelop.org");
+  }
+  return m_pAboutData;
 }

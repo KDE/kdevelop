@@ -1,6 +1,7 @@
 #include "kdevcomponent.h"
 
 
+
 KDevComponent::KDevComponent(QObject *parent, const char *name)
     : KParts::Part(parent, name)
 {
@@ -79,4 +80,7 @@ void KDevComponent::setWidget(QWidget *w)
 QWidget *KDevComponent::widget()
 {
     return 0;
+}
+KAboutData* KDevComponent::aboutPlugin(){
+  return 0;
 }

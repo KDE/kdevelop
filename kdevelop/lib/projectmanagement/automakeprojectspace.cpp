@@ -25,6 +25,9 @@ AutomakeProjectSpace::AutomakeProjectSpace(QObject* parent,const char* name)
 }
 AutomakeProjectSpace::~AutomakeProjectSpace(){
 }
+void AutomakeProjectSpace::setupGUI(){
+  ProjectSpace::setupGUI();
+}
 void AutomakeProjectSpace::modifyDefaultFiles(){
   ProjectSpace::modifyDefaultFiles();
   QFile file(m_path + "/configure.in");

@@ -19,28 +19,28 @@
 #include <iostream.h>
 
 
-RegisteredFile::RegisteredFile(QString rel_name,bool dist,bool install,QString install_file){
-  m_file = rel_name;
+RegisteredFile::RegisteredFile(QString relName,bool dist,bool install,QString installFile){
+  m_file = relName;
   m_dist= dist;
   m_install = install;
-  m_install_file = install_file;
+  m_installFile = installFile;
 }
 RegisteredFile::~RegisteredFile(){
 }
 
-void RegisteredFile::setRelativeFile(QString rel_name){
-  m_file = rel_name;
+void RegisteredFile::setRelativeFile(QString relName){
+  m_file = relName;
 }
 
-QString RegisteredFile::getRelativeFile(){
+QString RegisteredFile::relativeFile(){
   return m_file;
 }
 
-void RegisteredFile::setInstallFile(QString abs_file){
-  m_install_file = abs_file;
+void RegisteredFile::setInstallFile(QString absFile){
+  m_installFile = absFile;
 }
 QString RegisteredFile::getInstallFile(){
-  return m_install_file;
+  return m_installFile;
 }
 
 void RegisteredFile::setToDist(bool yes){
@@ -57,19 +57,6 @@ bool RegisteredFile::shouldBeInstalled(){
   return m_install;
 }
 
-
-void RegisteredFile::writeConfig(KConfig* config){
-  config->setGroup(m_file);
-  config->writeEntry("dist",m_dist);
-  config->writeEntry("install",m_install);
-  config->writeEntry("install_file",m_install_file);
-}
-void RegisteredFile::readConfig(KConfig* config){
-  config->setGroup(m_file);
-  m_dist = config->readBoolEntry("dist",false);
-  m_install = config->readBoolEntry("install",false);
-  m_install_file = config->readEntry("install_file","");
-}
 void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
    cerr << "\nenter RegisteredFile::writeConfig";
    fileElement.setAttribute("file",m_file);
@@ -85,7 +72,7 @@ void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
    else{
      fileElement.setAttribute("install","false");
    }
-  fileElement.setAttribute("installFile",m_install_file);
+  fileElement.setAttribute("installFile",m_installFile);
 }
 void RegisteredFile::readConfig(QDomElement& fileElement){
   QString dist = fileElement.attribute("dist");
@@ -103,6 +90,6 @@ void RegisteredFile::readConfig(QDomElement& fileElement){
     m_install = false;
   }
   m_file = fileElement.attribute("file");
-  m_install_file = fileElement.attribute("installFile");
+  m_installFile = fileElement.attribute("installFile");
   
 }

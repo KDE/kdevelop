@@ -105,9 +105,7 @@ void KDevelopCore::initActions()
     pAction->setEnabled(false);
     pAction->setStatusText( i18n("Closes the current project") );
 
-    KActionMenu* pActionMenu = new KActionMenu(i18n("Set active Project"),m_pKDevelopGUI->actionCollection(),"project_set_active");
-    connect( pActionMenu->popupMenu(), SIGNAL( activated( int ) ),
-             this, SLOT( slotProjectSetActivate( int ) ) );
+    
 
     pAction = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
                           m_pKDevelopGUI->actionCollection(), "project_add_existing_files");
@@ -364,7 +362,7 @@ void KDevelopCore::loadProject(const QString &fileName)
   if(loadProjectSpace(projectSpace)){
     m_pProjectSpace->readXMLConfig(fileName);
     m_pProjectSpace->dump();
-    loadLanguageSupport(m_pProjectSpace->getProgrammingLanguage());
+    loadLanguageSupport(m_pProjectSpace->programmingLanguage());
     loadVersionControl(vcservice);
   }
   
@@ -390,8 +388,6 @@ void KDevelopCore::loadProject(const QString &fileName)
             (*it4)->languageSupportOpened(m_pLanguageSupport);
   }
   
-   // set active Project
-  fillActiveProjectPopupMenu();
   // some actions
   KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
   pAC->action("project_close")->setEnabled(true);
@@ -545,14 +541,7 @@ void KDevelopCore::slotStop()
         (*it)->stopButtonClicked();
 }
 
-void KDevelopCore::slotProjectSetActivate( int id){
-  kdDebug(9000) << "KDevelopCore::slotProjectSetActivate";
-  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
-  QString name = pMenu->text(id);
-  m_pProjectSpace->setCurrentProject(name);
-  fillActiveProjectPopupMenu();
-}
+
 
 
 void KDevelopCore::slotOptionsKDevelopSetup()
@@ -571,20 +560,7 @@ void KDevelopCore::slotOptionsKDevelopSetup()
 }
 
 
-void KDevelopCore::fillActiveProjectPopupMenu(){
-  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
-  QStringList projectList = m_pProjectSpace->allProjectNames();
-  QString currrentProjectName= m_pProjectSpace->currentProject()->getName();
-  pMenu->clear();
-  int id;
-  for ( QStringList::Iterator it = projectList.begin(); it != projectList.end(); ++it ) {  
-    id = pMenu->insertItem(*it);
-    if (currrentProjectName == *it){
-      pMenu->setItemChecked(id,true); // set the current Project
-    }
-  }
-}
+
 void KDevelopCore::executeMakeCommand(const QString &command)
 {
     if (!m_pMakeFrontend) {

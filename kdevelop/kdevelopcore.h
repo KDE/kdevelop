@@ -47,7 +47,7 @@ private:
     void unloadProjectSpace();
     void loadProject(const QString &fileName);
     void unloadProject();
-    void fillActiveProjectPopupMenu();
+    
 
 private slots:
     // Handling of actions
@@ -60,7 +60,6 @@ private slots:
     void slotProjectAddExistingFiles();
     void slotProjectAddNewTranslationFile();
     void slotProjectOptions();
-    void slotProjectSetActivate( int id);
     void slotStop();
     void slotOptionsKDevelopSetup();
     

@@ -16,11 +16,9 @@
  ***************************************************************************/
 
 #include "projectspace.h"
-#include "pluginloader.h"
 #include <kprocess.h>
 #include <kstddirs.h>
 #include <iostream.h>
-#include "plugin.h"
 #include <ksimpleconfig.h>
 #include <kdebug.h>
 #include <qdir.h>
@@ -30,17 +28,33 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <qtextstream.h>
+#include <kaction.h>
+#include <kpopupmenu.h>
+#include <kaboutdata.h>
 
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDevComponent(parent,name){
-  m_projects = new QList<Project>;
+  m_pProjects = new QList<Project>;
   if (file != ""){
     readXMLConfig(file);
   }
 }
 ProjectSpace::~ProjectSpace(){
 }
-
+void ProjectSpace::setupGUI(){
+  cerr << endl << "enter ProjectSpace::setupGUI";
+  KActionMenu* pActionMenu = new KActionMenu(i18n("Set active Project"),actionCollection(),"project_set_active");
+  connect( pActionMenu->popupMenu(), SIGNAL( activated( int ) ),
+	   this, SLOT( slotProjectSetActivate( int ) ) );
+}
+void ProjectSpace::slotProjectSetActivate( int id){
+  kdDebug(9000) << "KDevelopCore::slotProjectSetActivate";
+  KActionCollection *pAC = actionCollection();
+  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
+  QString name = pMenu->text(id);
+  setCurrentProject(name);
+  fillActiveProjectPopupMenu();
+}
 QString ProjectSpace::projectSpacePluginName(QString fileName){
   QFile file(fileName);
   if (!file.open(IO_ReadOnly)){
@@ -59,23 +73,23 @@ QString ProjectSpace::projectSpacePluginName(QString fileName){
 }
 void ProjectSpace::addProject(Project* prj){
   cerr << endl << "enter ProjectSpace::addProject";
-  m_projects->append (prj);
-  m_current_project = prj;
+  m_pProjects->append (prj);
+  m_pCurrentProject = prj;
 }
 void ProjectSpace::setCurrentProject(Project* prj){
-  m_current_project = prj;
+  m_pCurrentProject = prj;
 }
 
 void ProjectSpace::setCurrentProject(QString name){
   Project* pProject;
-  for(pProject=m_projects->first();pProject !=0;pProject=m_projects->next()){
-      if(pProject->getName() == name){
-	m_current_project = pProject;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+      if(pProject->name() == name){
+	m_pCurrentProject = pProject;
       }
   }  
 }
 Project* ProjectSpace::currentProject(){
-  return m_current_project;
+  return m_pCurrentProject;
 }
 
 void ProjectSpace::removeProject(QString name){
@@ -90,7 +104,7 @@ void ProjectSpace::generateDefaultFiles(){
   
   // untar/unzip the projectspace
   proc.clearArguments();
-  QString args = "xzvf " + m_projectspace_template + " -C " + m_path;
+  QString args = "xzvf " + m_projectspaceTemplate + " -C " + m_path;
   kdDebug(9000)  << "ProjectSpace::generateDefaultFiles():" << endl << args << endl;
   proc << "tar";
   proc << args;
@@ -104,25 +118,25 @@ void ProjectSpace::modifyDefaultFiles(){
 /*_____some get methods_____*/
 
 /** returns the name of the projectspace*/
-QString ProjectSpace::getName(){
+QString ProjectSpace::name(){
   return m_name;
 }
 
 /** Fetch the name of the version control system */
-QString ProjectSpace::getVCSystem(){
+QString ProjectSpace::VCSystem(){
   return "";
 }
 
 /** Fetch the authors name. stored in the *_user files*/
-QString ProjectSpace::getAuthor(){
+QString ProjectSpace::author(){
   return m_author;
 }
 
 /** Fetch the authors eMail-address,  stored in the *_user files */
-QString ProjectSpace::getEmail(){
+QString ProjectSpace::email(){
   return m_email;
 }
-QString ProjectSpace::getCompany(){
+QString ProjectSpace::company(){
   return m_company;
 }
 
@@ -175,7 +189,7 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
   kdDebug(9000) << "enter ProjectSpace::readXMLConfig" << endl;
   QFileInfo fileInfo(absFilename);
   m_path = fileInfo.dirPath();
-  m_projectspace_file = absFilename;
+  m_projectspaceFile = absFilename;
 
   QFile file(absFilename);
   if (!file.open(IO_ReadOnly)){
@@ -210,8 +224,8 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
   file.close();
 
   // the "user" one
-  m_user_projectspace_file = m_path + "/." + m_name + ".kdevpsp";
-  file.setName(m_user_projectspace_file);
+  m_userProjectspaceFile = m_path + "/." + m_name + ".kdevpsp";
+  file.setName(m_userProjectspaceFile);
   if (!file.open(IO_ReadOnly)){
     KMessageBox::sorry(0, i18n("Can't open the file %1")
 		       .arg(absFilename));
@@ -223,7 +237,7 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
   // Read in file and check for a valid XML header.
   if (!userDoc.setContent(&file)){
     KMessageBox::sorry(0,
-		       i18n("The file %1 does not contain valid XML").arg(m_user_projectspace_file));
+		       i18n("The file %1 does not contain valid XML").arg(m_userProjectspaceFile));
       return false;
   }
   // Check for proper document type.
@@ -231,11 +245,12 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
       KMessageBox::sorry(0,
 			 i18n("The file %1 does not contain a valid ProjectSpace\n"
 			      "definition, which must have a document type\n"
-			      "'KDevProjectSpace_User'").arg(m_user_projectspace_file));
+			      "'KDevProjectSpace_User'").arg(m_userProjectspaceFile));
       return false;
   }
   QDomElement userPsElement = userDoc.documentElement();
   readUserConfig(doc,userPsElement);
+  fillActiveProjectPopupMenu();
   return true;
 }
 
@@ -247,20 +262,20 @@ bool ProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement){
     cerr << "\nProjectSpace::readGlobalConfig no \"Projects\" tag found!";
     return false;
   }
-  Project* prj=0;
+  Project* pProject=0;
   QDomNodeList projectList = projectsElement.elementsByTagName("Project");
   unsigned int i;
   for (i = 0; i < projectList.count(); ++i){
     QDomElement projectElement = projectList.item(i).toElement();
     QString prjPluginName = projectElement.attribute("pluginName");
-    prj = PluginLoader::getNewProject(prjPluginName);
-    if(prj != 0){
-      prj->readGlobalConfig(doc,projectElement);
-      prj->setAbsolutePath(CToolClass::getAbsolutePath(m_path,prj->relativePath()));
-      addProject(prj);
+    pProject = Project::createNewProject(prjPluginName);
+    if(pProject != 0){
+      pProject->readGlobalConfig(doc,projectElement);
+      pProject->setAbsolutePath(CToolClass::getAbsolutePath(m_path,pProject->relativePath()));
+      addProject(pProject);
     }
     else {
-      cerr << "\nProjectSpace::readGlobalConfig: prj not created!";
+      cerr << "\nProjectSpace::readGlobalConfig:  pProjectnot created!";
     }
   }
   return true;
@@ -277,16 +292,16 @@ bool ProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
     cerr << "\nProjectSpace::readUserConfig no \"Projects\" tag found!";
     return false;
   }
-  Project* prj=0;
+  Project* pProject=0;
   QDomNodeList projectList = projectsElement.elementsByTagName("Project");
   unsigned int i;
   for (i = 0; i < projectList.count(); ++i){
     QDomElement projectElement = projectList.item(i).toElement();
     // not a good solution, the projectspace know to much from the project document structure :-(
     QString prjName = projectElement.attribute("name"); 
-    for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
-      if(prj->getName() == prjName){
-	prj->readGlobalConfig(doc,projectElement);
+    for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+      if(pProject->name() == prjName){
+	pProject->readGlobalConfig(doc,projectElement);
       }
     }
   }
@@ -305,9 +320,18 @@ bool ProjectSpace::writeXMLConfig(){
   // add Attributes
   ps.setAttribute("name",m_name);
   //  psElement.setAttribute("path",m_path);
-  ps.setAttribute("pluginName", m_plugin_name); // the projectspacetype name
+  KAboutData* pData = aboutPlugin();
+  QString pluginName;
+  if(pData !=0){
+    pluginName = pData->appName();
+  }
+  else {
+    kdDebug(9000) << "ProjectSpace::writeXMLConfig() no aboutPlugin() found :-(";
+    return false;
+  }
+  ps.setAttribute("pluginName", pluginName); // the projectspacetype name
   ps.setAttribute("version", m_version);
-  ps.setAttribute("lastActiveProject",m_current_project->getName());
+  ps.setAttribute("lastActiveProject",m_pCurrentProject->name());
 
   writeGlobalConfig(doc,ps);
 
@@ -349,10 +373,10 @@ bool ProjectSpace::writeGlobalConfig(QDomDocument& doc, QDomElement& psElement){
   // add <Projects>
   QDomElement projectsElement = psElement.appendChild(doc.createElement("Projects")).toElement();
   QStringList projectfiles;
-  Project* prj;
-  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
+  Project* pProject=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
     QDomElement prjElement = projectsElement.appendChild(doc.createElement("Project")).toElement();
-        prj->writeGlobalConfig(doc,prjElement);
+        pProject->writeGlobalConfig(doc,prjElement);
   }
   return true;
 }
@@ -364,23 +388,23 @@ bool ProjectSpace::writeUserConfig(QDomDocument& doc,QDomElement& psElement){
   // add <Projects>
   QDomElement projectsElement = psElement.appendChild(doc.createElement("Projects")).toElement();
   QStringList projectfiles;
-  Project* prj;
-  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
+  Project* pProject=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
     QDomElement prjElement = projectsElement.appendChild(doc.createElement("Project")).toElement();
-        prj->writeUserConfig(doc,prjElement);
+        pProject->writeUserConfig(doc,prjElement);
   }
   return true;
 }
 
 
-QString ProjectSpace::getProgrammingLanguage(){
+QString ProjectSpace::programmingLanguage(){
   return m_language;
 }
 QStringList ProjectSpace::allProjectNames(){
   QStringList list;
-  Project* pProject;
-  for(pProject=m_projects->first();pProject !=0;pProject=m_projects->next()){
-    list.append(pProject->getName());
+  Project* pProject=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+    list.append(pProject->name());
   }
   return list;
 }
@@ -388,9 +412,23 @@ QStringList ProjectSpace::allProjectNames(){
 void ProjectSpace::dump(){
   cerr << endl << "ProjectSpace Name: " << m_name;
   cerr << endl << "absolute Path: " << m_path;
-  Project* prj;
-  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
-    prj->dump();
+  Project* pProject=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+    pProject->dump();
+  }
+}
+
+void ProjectSpace::fillActiveProjectPopupMenu(){
+  KActionCollection *pAC = actionCollection();
+  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
+  pMenu->clear();
+  Project* pProject=0;
+  int id=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+    id = pMenu->insertItem(pProject->name());
+    if(m_pCurrentProject->name() == pProject->name()){
+      pMenu->setItemChecked(id,true); // set the current Project
+    }
   }
 }
 #include "projectspace.moc"

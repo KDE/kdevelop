@@ -4,13 +4,13 @@ INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
 libkdevprojectmanagement_la_SOURCES = appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
-		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp filepropspage.cpp \
-		registeredfile.cpp  pluginloader.cpp \
+		pmc.cpp project.cpp projectspace.cpp filepropspage.cpp \
+		registeredfile.cpp \
 		appwizardbase.ui filepropspagebase.ui
 
 noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
-				plugin.h pmc.h project.h projectspace.h qobjectplugin.h \
-				filepropspage.h registeredfile.h  pluginloader.h \
+				pmc.h project.h projectspace.h \
+				filepropspage.h registeredfile.h \
 				appwizardbase.h filepropspagebase.h
 
 METASOURCES = AUTO

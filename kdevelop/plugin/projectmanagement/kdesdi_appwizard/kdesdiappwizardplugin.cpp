@@ -26,27 +26,19 @@
 #include <qfile.h>
 #include <registeredfile.h>
 
-KDESDIAppWizardPlugin::KDESDIAppWizardPlugin(QObject* parent,const char* name){
+KDESDIAppWizardPlugin::KDESDIAppWizardPlugin(QObject*,const char*) {
 		
 	KStandardDirs* std_dirs = KGlobal::dirs();
 		
-	// init, every plugin should do this
-	// Plugin infos
-	m_plugin_author = "KDevelop Team";
-	m_plugin_name = "KDE SDI";
-	m_plugin_copyright = "(C) 2000 by KDevelop Team";
-	m_plugin_version = "0.1";
-	m_plugin_description = "KDE <b>SDI</b> Application";
-	m_plugin_homepage = "http://www.kdevelop.org";
-	m_plugin_icon = DesktopIcon("java_src");
 	
 	// AppWizardPlugin infos	
-	m_project_space_name = "KDE";
-	m_application_picture = std_dirs->findResource("data","kdevelop/appwizard_pics/normalApp.bmp");	
-	m_project_template = std_dirs->findResource("data","kdevelop/project_templates/kdesdi.tar.gz");
-	
+	m_projectspaceName = "KDE";
+	m_applicationPicture = std_dirs->findResource("data","kdevelop/appwizard_pics/normalApp.bmp");	
+	m_projectTemplate = std_dirs->findResource("data","kdevelop/project_templates/kdesdi.tar.gz");
+	m_applicationDescription = "<b>SDI</b>";	
 	// project infos
-	m_projecttype_name = "KDEBinaryProject";
+	m_projecttypeName = "KDEBinaryProject";
+	m_pAboutData=0;
 }
 KDESDIAppWizardPlugin::~KDESDIAppWizardPlugin(){	
 }
@@ -100,14 +92,14 @@ void KDESDIAppWizardPlugin::generateDefaultFiles(){
   
   // create the directories
   proc << "mkdirhier";
-  proc << m_project->getAbsolutePath();
+  proc << m_pProject->absolutePath();
   proc.start(KProcess::Block,KProcess::AllOutput);
   
   // untar/unzip the project to a tmp dir
   KStandardDirs *dirs =  KGlobal::dirs();
   QString tmp_location = dirs->saveLocation("data","kdevelop/appwizard/");
   proc.clearArguments();
-  QString args = "xzvf " + m_project_template + " -C " + tmp_location;
+  QString args = "xzvf " + m_projectTemplate + " -C " + tmp_location;
   cerr << "KDESDIAppWizardPlugin::generateDefaultFiles():" << args;
   proc << "tar";
   proc << args;
@@ -128,32 +120,32 @@ void KDESDIAppWizardPlugin::generateDefaultFiles(){
     }
   }
  
-  generateFile(tmp_location + "kbase.h",m_project->getAbsolutePath() + "/" + m_app_prop->m_headerfile);
-  generateFile(tmp_location + "kbase.cpp",m_project->getAbsolutePath() + "/" + m_app_prop->m_implfile);  
-  generateFile(tmp_location + "kbaseview.h",m_project->getAbsolutePath() + "/" + m_view_prop->m_headerfile);
-  generateFile(tmp_location + "kbaseview.cpp",m_project->getAbsolutePath() + "/" + m_view_prop->m_implfile);
-  generateFile(tmp_location + "kbasedoc.h",m_project->getAbsolutePath() + "/" + m_doc_prop->m_headerfile);
-  generateFile(tmp_location + "kbasedoc.cpp",m_project->getAbsolutePath() + "/" + m_doc_prop->m_implfile);
-  generateFile(tmp_location + "main.cpp",m_project->getAbsolutePath() 
-	       + "/" + m_project->getName().lower() + ".cpp");
-  generateFile(tmp_location + "kbaseui.rc",m_project->getAbsolutePath() 
-	       + "/" + m_project->getName().lower() + "ui.rc");	 
+  generateFile(tmp_location + "kbase.h",m_pProject->absolutePath() + "/" + m_app_prop->m_headerfile);
+  generateFile(tmp_location + "kbase.cpp",m_pProject->absolutePath() + "/" + m_app_prop->m_implfile);  
+  generateFile(tmp_location + "kbaseview.h",m_pProject->absolutePath() + "/" + m_view_prop->m_headerfile);
+  generateFile(tmp_location + "kbaseview.cpp",m_pProject->absolutePath() + "/" + m_view_prop->m_implfile);
+  generateFile(tmp_location + "kbasedoc.h",m_pProject->absolutePath() + "/" + m_doc_prop->m_headerfile);
+  generateFile(tmp_location + "kbasedoc.cpp",m_pProject->absolutePath() + "/" + m_doc_prop->m_implfile);
+  generateFile(tmp_location + "main.cpp",m_pProject->absolutePath() 
+	       + "/" + m_pProject->name().lower() + ".cpp");
+  generateFile(tmp_location + "kbaseui.rc",m_pProject->absolutePath() 
+	       + "/" + m_pProject->name().lower() + "ui.rc");	 
 
   // add the files to the project
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_app_prop->m_headerfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_app_prop->m_implfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_view_prop->m_headerfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_view_prop->m_implfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_doc_prop->m_headerfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_doc_prop->m_implfile);
-  m_project->addFile(m_project->getAbsolutePath() + "/" + m_project->getName().lower() + ".cpp");
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_app_prop->m_headerfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_app_prop->m_implfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_view_prop->m_headerfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_view_prop->m_implfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_doc_prop->m_headerfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_doc_prop->m_implfile);
+  m_pProject->addFile(m_pProject->absolutePath() + "/" + m_pProject->name().lower() + ".cpp");
   
   // the ui.rc  file
-  RegisteredFile* file = new RegisteredFile(m_project->getName().lower() + "ui.rc");
+  RegisteredFile* file = new RegisteredFile(m_pProject->name().lower() + "ui.rc");
   file->setInstall(true);
-  file->setInstallFile("$(kde_datadir)/" + m_project->getName() + "/" 
-		       + m_project->getName().lower() + "ui.rc");
-  m_project->addFile(file);
+  file->setInstallFile("$(kde_datadir)/" + m_pProject->name() + "/" 
+		       + m_pProject->name().lower() + "ui.rc");
+  m_pProject->addFile(file);
   
 }
 
@@ -178,8 +170,21 @@ void KDESDIAppWizardPlugin::setInfosInString(QString& text){
 
   text.replace(QRegExp("|APPCLASS|"),m_app_prop->m_classname);
   text.replace(QRegExp("|DOCCLASS|"),m_doc_prop->m_classname);
-  text.replace(QRegExp("|VIEWCLASS|"),m_view_prop->m_classname);
+  text.replace(QRegExp("|VIEWCLASS|"),m_view_prop->m_classname);  
+}
 
-  
-  
+KAboutData* KDESDIAppWizardPlugin::aboutPlugin(){
+  if (m_pAboutData == 0){
+    m_pAboutData= new KAboutData( "KDE SDI", I18N_NOOP("KDE SDI Appwizard"),
+				  "0.1", "desc",
+				  KAboutData::License_GPL,
+				  "(c) 1998-2000, The KDevelop Team",
+				  "text",
+				  "http://www.kdevelop.org");
+
+    m_pAboutData->addAuthor("Ralf Nolden",I18N_NOOP("Developer"), "rnolden@kdevelop.org");
+    m_pAboutData->addAuthor("Sandy Meier",I18N_NOOP("Developer"), "smeier@kdevelop.org");
+    
+  }
+  return m_pAboutData;
 }

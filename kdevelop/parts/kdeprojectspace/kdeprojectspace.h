@@ -20,6 +20,7 @@
 
 #include "automakeprojectspace.h"
 #include <klibloader.h>
+#include <kaboutdata.h>
 
 
 /** handles all po's for every binary project...
@@ -39,7 +40,10 @@ public:
 	
 	virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
 	virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
+	virtual KAboutData* aboutPlugin();
 	protected slots:
   void slotProjectAddNewTranslationFile();
+ protected:
+	KAboutData* m_pAboutData;
 };
 #endif
