@@ -75,7 +75,7 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   QListBox(parent, name),
   enterDir("[^\n]*: Entering directory `([^\n]*)'$"),
   leaveDir("[^\n]*: Leaving directory `([^\n]*)'$"),
-  errorGcc("([^: \t]+):([0-9]+):.*"),
+  errorGcc("([^: \t]+):([0-9]+)[:,].*"),
   errorJade("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:.*")
 {
   connect(this, SIGNAL(clicked(QListBoxItem*)),SLOT(slotClicked(QListBoxItem*)));
@@ -109,8 +109,8 @@ void CMakeOutputWidget::insertAtEnd(const QString& text)
 
 void CMakeOutputWidget::processLine(const QString& line)
 {
-  QString fn = QString::null;
-  int row = -1;
+  QString fileInErr = QString::null;
+  int lineInErr = -1;
   MakeOutputItem::Type type = MakeOutputItem::Normal;
 
   const int errorGccFileGroup = 1;
@@ -135,27 +135,29 @@ void CMakeOutputWidget::processLine(const QString& line)
       if (errorGcc.match(line))
       {
         type = MakeOutputItem::Error;
-        fn = errorGcc.group(errorGccFileGroup);
-        row = QString(errorGcc.group(errorGccRowGroup)).toInt()-1;
-        if (dirStack.top())
-          fn.prepend("/").prepend(*dirStack.top());
+        fileInErr = errorGcc.group(errorGccFileGroup);
+        lineInErr = QString(errorGcc.group(errorGccRowGroup)).toInt()-1;
+        if (fileInErr.left(1) != "/")
+          if (dirStack.top())
+            fileInErr.prepend("/").prepend(*dirStack.top());
       }
       else
       {
         if (errorJade.match(line))
         {
           type = MakeOutputItem::Error;
-          fn = errorGcc.group(errorJadeFileGroup);
-          row = QString(errorJade.group(errorJadeRowGroup)).toInt()-1;
-          if (dirStack.top())
-            fn.prepend("/").prepend(*dirStack.top());
+          fileInErr = errorGcc.group(errorJadeFileGroup);
+          lineInErr = QString(errorJade.group(errorJadeRowGroup)).toInt()-1;
+          if (fileInErr.left(1) != "/")
+            if (dirStack.top())
+              fileInErr.prepend("/").prepend(*dirStack.top());
         }
       }
     }
   }
 
 
-  MakeOutputItem* item = new MakeOutputItem(line, type, fn, row);
+  MakeOutputItem* item = new MakeOutputItem(line, type, fileInErr, lineInErr);
   insertItem(item);
   setBottomItem(numRows()-1);
 }
