@@ -1,3 +1,8 @@
+2000-08-17 Sandy Meier   <smeier@kdevelop.org>
+	* new application wizard incl. class/file prop page
+	* new layouted newprjdlg
+	(all dialogs use Layoutmanagment now :-), thanks to Qt-Designer!)
+
 2000-08-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Tom Leitner's patch to bring to sources in line
 	  with standard C++. Necessary for Tru64

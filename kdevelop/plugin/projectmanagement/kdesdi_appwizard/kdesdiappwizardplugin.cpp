@@ -31,7 +31,7 @@ KDESDIAppWizardPlugin::KDESDIAppWizardPlugin(QObject* parent,const char* name){
 	m_plugin_name = "KDE SDI";
 	m_plugin_copyright = "(C) 2000 by KDevelop Team";
 	m_plugin_version = "0.1";
-	m_plugin_description = "KDE SDI Application";
+	m_plugin_description = "KDE <b>SDI</b> Application";
 	m_plugin_homepage = "http://www.kdevelop.org";
 	m_plugin_icon = DesktopIcon("java_src");
 	
@@ -52,6 +52,30 @@ void KDESDIAppWizardPlugin::init(bool new_projectspace,ProjectSpace* projectspac
   AppWizard::init(new_projectspace,projectspace); // the default one
   
   //add a new page
+  m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");
+  QList<ClassFileProp>* props_temp = new QList<ClassFileProp>;
+  ClassFileProp* prop = new ClassFileProp();
+  prop->m_classname = "HelloApp";
+  prop->m_headerfile = "helloapp.h";
+  prop->m_implfile = "helloapp.cpp";
+  prop->m_baseclass = "QMainWindow";
+  prop->m_description = "foo <b>bla</b> foo bar";
+  prop->m_change_baseclass = false;
+  props_temp->append(prop);
+  
+  prop = new ClassFileProp();
+  prop->m_classname = "HelloView";
+  prop->m_headerfile = "helloview.h";
+  prop->m_implfile = "helloview.cpp";
+  prop->m_baseclass = "QButton";
+  prop->m_description = "mammy bla mimmy";
+  prop->m_change_baseclass = true;
+  props_temp->append(prop);
+
+  m_sdi_fileprops_page->setClassFileProps(*props_temp);
+  addPage(m_sdi_fileprops_page,"Class/File Properties");
+  
+  // general
   m_sdi_general_page = new QWidget(this,"plugin_general");
   m_text = new QLabel("I'm a prop widget from a plugin",m_sdi_general_page);
   m_text->resize(200,100);

@@ -28,6 +28,8 @@
 #include <projectspace.h>
 #include <qfiledialog.h>
 #include <qdir.h>
+#include <qtoolbutton.h>
+#include <qtextview.h>
 #include <ktrader.h>
 #include <qvariant.h>
 #include <qheader.h>
@@ -39,8 +41,9 @@
 
 
 
+
 NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
-  : KDialogBase(Plain,"jk",Ok|Cancel,Ok,parent,name,modal){
+  : NewProjectDlgBase(parent,name,modal){
   
   m_current_appwizard_plugin=0; // no current
   m_project_name_modified = false;
@@ -103,7 +106,7 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
     }
   }
   
-  connect(prjspace_listview,SIGNAL(executed(QListViewItem*)),
+  connect(prjspace_listview,SIGNAL(clicked(QListViewItem*)),
 	  SLOT(slotProjectSpaceSelected(QListViewItem*)));
   connect(appwizard_iconview,SIGNAL(selectionChanged (QIconViewItem*)),
 	  SLOT(slotAppwizardSelected (QIconViewItem*) ) );
@@ -189,9 +192,9 @@ void NewProjectDlg::slotAppwizardSelected (QIconViewItem* item){
   
   appwizard_plg = (AppWizard*) obj; 
   m_current_appwizard_plugin = appwizard_plg; // set current plugin
-  description_label->setText(appwizard_plg->getPluginDescription());
+  description_textview->setText(appwizard_plg->getPluginDescription());
   m_pixmap->load(appwizard_plg->getPreviewPicture());
-  preview_widget->setBackgroundPixmap(*m_pixmap);
+  preview_widget->setPixmap(*m_pixmap);
   cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
 }
 
@@ -253,92 +256,12 @@ void NewProjectDlg::slotProjectSpaceDirClicked(){
 
 
 void NewProjectDlg::initDialog(){
-  appwizard_iconview= new KIconView(this,"NoName");
-  appwizard_iconview->setGeometry(130,10,270,200);
-  appwizard_iconview->setMinimumSize(0,0);
-  
-  m_seperator= new KSeparator(this,"NoName");
-  m_seperator->setGeometry(130,210,490,30);
-  m_seperator->setMinimumSize(0,0);
-  m_seperator->setOrientation(KSeparator::HLine);
-  
-  m_prjspace_location_linedit= new QLineEdit(this,"NoName");
-  m_prjspace_location_linedit->setGeometry(290,340,290,30);
-  m_prjspace_location_linedit->setMinimumSize(0,0);
-
-  m_prjspace_dir_button= new QPushButton(this,"NoName");
-  m_prjspace_dir_button->setGeometry(590,340,40,30);
-  m_prjspace_dir_button->setMinimumSize(0,0);
-  m_prjspace_dir_button->setText(i18n("..."));
-
-  button_group= new QButtonGroup(this,"NoName");
-  button_group->setGeometry(130,240,490,50);
-  button_group->setMinimumSize(0,0);
-
-  current_radio_button= new QRadioButton(button_group,"NoName");
-  current_radio_button->setGeometry(250,10,190,30);
-  current_radio_button->setMinimumSize(0,0);
-  current_radio_button->setText(i18n("add to current Projectspace"));
-
-  new_radio_button= new QRadioButton(button_group,"NoName");
-  new_radio_button->setGeometry(10,10,190,30);
-  new_radio_button->setMinimumSize(0,0);
-  new_radio_button->setText(i18n("create new Projectspace"));
-
-  preview_widget= new QWidget(this,"NoName");
-  preview_widget->setGeometry(410,10,210,140);
-  preview_widget->setMinimumSize(0,0);
-  description_label= new QLabel(this,"NoName");
-  description_label->setGeometry(410,150,210,60);
-  description_label->setMinimumSize(0,0);
-  description_label->setText(i18n("Description"));
-  description_label->setMargin(0);
-
-  prjspace_listview= new KListView(this,"NoName");
-  prjspace_listview->setGeometry(10,10,110,460);
-  prjspace_listview->setMinimumSize(0,0);
-  prjspace_listview->addColumn("");
   prjspace_listview->header()->hide();
-  prjspace_listview->setRootIsDecorated(true);
-  m_prjspace_name_linedit= new QLineEdit(this,"NoName");
-  m_prjspace_name_linedit->setGeometry(290,300,200,30);
-  m_prjspace_name_linedit->setMinimumSize(0,0);
-
-  m_prjspace_location_label= new QLabel(this,"NoName");
-  m_prjspace_location_label->setGeometry(130,340,160,30);
-  m_prjspace_location_label->setMinimumSize(0,0);
-  m_prjspace_location_label->setText(i18n("Projectspace Location:"));
-
-  m_prjspace_name_label= new QLabel(this,"ProjecNoName");
-  m_prjspace_name_label->setGeometry(130,300,150,30);
-  m_prjspace_name_label->setMinimumSize(0,0);
-  m_prjspace_name_label->setText(i18n("Projectspace Name:"));
-
-  m_prj_name_label= new QLabel(this,"NoName");
-  m_prj_name_label->setGeometry(130,380,160,30);
-  m_prj_name_label->setMinimumSize(0,0);
-  m_prj_name_label->setText(i18n("Project Name"));
-
-  m_prjname_linedit= new QLineEdit(this,"NoName");
-  m_prjname_linedit->setGeometry(290,380,200,30);
-  m_prjname_linedit->setMinimumSize(0,0);
-
-  m_prj_location_label= new QLabel(this,"NoName");
-  m_prj_location_label->setGeometry(130,420,160,30);
-  m_prj_location_label->setMinimumSize(0,0);
-  m_prj_location_label->setText(i18n("Project Location"));
-
-  m_prjlocation_linedit= new QLineEdit(this,"NoName");
-  m_prjlocation_linedit->setGeometry(290,420,290,30);
-  m_prjlocation_linedit->setMinimumSize(0,0);
-
-  m_project_dir_button= new QPushButton(this,"NoName");
-  m_project_dir_button->setGeometry(590,420,40,30);
-  m_project_dir_button->setMinimumSize(0,0);
-  m_project_dir_button->setText(i18n("..."));
 }
 
 
 
 
 #include "newprojectdlg.moc"
+
+#include "newprojectdlgbase.moc"

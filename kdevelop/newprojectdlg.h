@@ -34,8 +34,7 @@
 
 #include "projectspace.h"
 #include "appwizard.h"
-
-
+#include "newprojectdlgbase.h"
 
 /** displays all available projecttypes/projectspaces in different categories,
     user can choise if KDevelop should generate a new ProjectSpace + Project
@@ -46,7 +45,7 @@
   @author Sandy Meier
   */
 
-class NewProjectDlg : public KDialogBase  {
+class NewProjectDlg : public NewProjectDlgBase  {
 Q_OBJECT
 public: 
 	NewProjectDlg(QWidget *parent=0, const char *name=0,bool modal=true);
@@ -65,25 +64,6 @@ public:
 	
 	protected:
 	
-	// widgets member
-	KIconView *appwizard_iconview;
-	KSeparator *m_seperator;
-	QLineEdit *m_prjspace_location_linedit;
-	QPushButton *m_prjspace_dir_button;
-	QButtonGroup *button_group;
-	QRadioButton *current_radio_button;
-	QRadioButton *new_radio_button;
-	QWidget *preview_widget;
-	QLabel *description_label;
-	KListView *prjspace_listview;
-	QLineEdit *m_prjspace_name_linedit;
-	QLabel *m_prjspace_location_label;
-	QLabel *m_prjspace_name_label;
-	QLabel *m_prj_name_label;
-	QLineEdit *m_prjname_linedit;
-	QLabel *m_prj_location_label;
-	QLineEdit *m_prjlocation_linedit;
-	QPushButton *m_project_dir_button;
 		
 	// data members
 	QList<ProjectSpace>* m_prjspace_list;

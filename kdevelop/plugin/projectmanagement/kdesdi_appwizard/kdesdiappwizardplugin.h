@@ -2,8 +2,8 @@
                           kdesdiappwizardplugin.h  -  description
                              -------------------
     begin                : Sat May 13 2000
-    copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    copyright            : (C) 2000 by Sandy Meier (KDevelop Team)
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qlist.h>
+#include "filepropspage.h"
 
 /**
   *@author Sandy Meier
@@ -39,6 +40,7 @@ public:
 
   QLabel* m_text;
   QWidget* m_sdi_general_page;
+  FilePropsPage* m_sdi_fileprops_page;
 
 };
 
