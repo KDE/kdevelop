@@ -16,7 +16,14 @@
 
 #include <qevent.h>
 #include <qvaluelist.h>
+
+#if QT_VERSION < 0x030100
+#include <kdevmutex.h>
 #include <kdevdeepcopy.h>
+#else
+#include <qmutex.h>
+#include <qdeepcopy.h>
+#endif
 
 enum
 {

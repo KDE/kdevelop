@@ -16,8 +16,13 @@
 #include "driver.h"
 #include "ast_utils.h"
 
+#if QT_VERSION < 0x030100
 #include <kdevmutex.h>
 #include <kdevdeepcopy.h>
+#else
+#include <qmutex.h>
+#include <qdeepcopy.h>
+#endif
 
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
