@@ -73,6 +73,7 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
     setState(0);
 
     setMinimumWidth(300);
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
 }
 
 
@@ -119,6 +120,7 @@ void ProgressDialog::setState(int n)
 
 void ProgressDialog::addDir(const QString &dir)
 {
+    kdDebug() << "Add dir : " << dir << endl;
     QDir d(dir, "*.html", QDir::Name|QDir::IgnoreCase, QDir::Files | QDir::Readable);
     QStringList list = d.entryList();
 
@@ -209,17 +211,18 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
 
 void ProgressDialog::scanDirectories()
 {
-    KConfig *config = KGlobal::config();
-
-    config->setGroup("Index");
-    bool indexKDevelop = config->readEntry("IndexKDevelop");
-    bool indexQt = config->readEntry("IndexQt");
-    bool indexKdelibs = config->readEntry("IndexKdelibs");
-    bool indexBooks = config->readEntry("IndexBooks");
-    bool indexBookmarks = config->readEntry("IndexBookmarks");
+    KConfig config("kdevdoctreeviewrc", true);
+    config.setGroup("Index");
+    bool indexKDevelop = config.readEntry("IndexKDevelop");
+    bool indexQt = config.readEntry("IndexQt");
+    bool indexKdelibs = config.readEntry("IndexKdelibs");
+    bool indexBooks = config.readEntry("IndexBooks");
+    bool indexBookmarks = config.readEntry("IndexBookmarks");
 
     bool indexShownLibs = true;
     bool indexHiddenLibs = true;
+
+    filesScanned = 0;
 
     QStringList itemNames, fileNames, hiddenNames;
     DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
@@ -258,17 +261,35 @@ void ProgressDialog::scanDirectories()
     }
 
     if (indexQt) {
-        config->setGroup("General");
-        QString qtdocdir = config->readEntry("qtdocdir", QT_DOCDIR);
-        if (!qtdocdir.isNull())
-            addDir(qtdocdir);
+    	QString oldqtdocdir;
+    	config.setGroup("General Qt");
+    	QMap<QString, QString> emap = config.entryMap("General Qt");
+    	QMap<QString, QString>::Iterator it;
+    	for (it = emap.begin(); it != emap.end(); ++it)
+    	{
+        	QString qtdocdir = config.readPathEntry(it.key());
+        	if (!qtdocdir.isEmpty())
+		{
+			qtdocdir = qtdocdir.left(qtdocdir.findRev("/") + 1);
+			if (qtdocdir != oldqtdocdir)
+			{
+            			addDir(qtdocdir);
+				oldqtdocdir = qtdocdir;
+			}
+		}
+    	}
     }
 
     if (indexKdelibs) {
-        config->setGroup("General");
-        QString kdelibsdocdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
-        if (!kdelibsdocdir.isNull())
-            addDir(kdelibsdocdir);
+    	config.setGroup("General Doxygen");
+    	QMap<QString, QString> xmap = config.entryMap("General Doxygen");
+    	QMap<QString, QString>::Iterator itx;
+    	for (itx = xmap.begin(); itx != xmap.end(); ++itx)
+    	{
+        	QString kdelibsdocdir =  config.readPathEntry(itx.key());
+        	if (!kdelibsdocdir.isEmpty())
+            		addDir(kdelibsdocdir);
+    	}
     }
 
     if (indexBooks) {
@@ -332,13 +353,15 @@ bool ProgressDialog::createConfig()
 
         ts << "database_dir:\t\t" << indexdir << endl;
         ts << "start_url:\t\t`" << indexdir << "/files`" << endl;
-        ts << "local_urls:\t\thttp://localhost/=/" << endl;
+//        ts << "local_urls:\t\thttp://localhost/=/" << endl;
+        ts << "local_urls:\t\tfile://=" << endl;
         ts << "local_urls_only:\ttrue" << endl;
+	ts << "limit_urls_to:\t\tfile://" << endl;
         ts << "maximum_pages:\t\t1" << endl;
-        ts << "image_url_prefix:\t\t" << images << endl;
+        ts << "image_url_prefix:\t" << images << endl;
         ts << "star_image:\t\t" << images << "star.png" << endl;
         ts << "star_blank:\t\t" << images << "star_blank.png" << endl;
-        ts << "compression_level:\t\t6" << endl;
+        ts << "compression_level:\t6" << endl;
         ts << "max_hop_count:\t\t0" << endl;
 
         ts << "search_results_wrapper:\t" << wrapper << "wrapper.html" << endl;
@@ -412,7 +435,7 @@ bool ProgressDialog::generateIndex()
                 done = true;
                 break;
             }
-            ts << "http://localhost/" + files[count] << endl;
+            ts << "file://localhost/" + files[count] << endl;
         }
         f.close();
 
@@ -421,7 +444,13 @@ bool ProgressDialog::generateIndex()
         while (htdigRunning && proc->isRunning())
             kapp->processEvents();
 
-        if (!proc->normalExit() || proc->exitStatus() != 0) {
+	if (!proc->normalExit())
+	{
+		delete proc;
+		return false;
+	}
+
+	if (proc->exitStatus() != 0) {
             KMessageBox::sorry(0, i18n("Running htdig failed"));
             delete proc;
             return false;
@@ -455,7 +484,14 @@ bool ProgressDialog::generateIndex()
     while (htmergeRunning && proc->isRunning())
         kapp->processEvents();
 
-    if (!proc->normalExit() || proc->exitStatus() != 0) {
+	if (!proc->normalExit())
+	{
+		delete proc;
+		return false;
+	}
+
+    if (proc->exitStatus() != 0) {
+        KMessageBox::sorry(0, i18n("Running htmerge failed"));
         delete proc;
         return false;
     }
@@ -501,6 +537,16 @@ void ProgressDialog::htmergeExited(KProcess *)
     htmergeRunning = false;
 }
 
+void ProgressDialog::cancelClicked()
+{
+	if ((htdigRunning || htmergeRunning) && proc && proc->isRunning())
+	{
+		kdDebug() << "Killing " << (htdigRunning ? "htdig" : "htmerge") << "daemon with Sig. 9" << endl;
+		proc->kill(9);
+		KMessageBox::error(0, i18n("The %1 process was killed!").arg(htdigRunning ? "htdig" : "htmerge"));
+		htdigRunning = htmergeRunning = false;
+	}
+}
 
 int main(int argc, char *argv[])
 {

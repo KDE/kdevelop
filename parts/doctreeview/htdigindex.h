@@ -41,6 +41,7 @@ private slots:
     void htdigStdout(KProcess *proc, char *buffer, int buflen);
     void htdigExited(KProcess *proc);
     void htmergeExited(KProcess *proc);
+    void cancelClicked();
 
 private:
     void setFilesScanned(int s);
