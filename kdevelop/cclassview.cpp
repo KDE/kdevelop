@@ -22,6 +22,9 @@
 #include <kiconloader.h>
 #include <kmsgbox.h>
 
+#include "caddclassmethoddlg.h"
+#include "caddclassattributedlg.h"
+
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
 QString CClassView::GLOBALROOTNAME = "Global";
@@ -132,14 +135,14 @@ void CClassView::refresh( CProject *proj )
   // Parse headerfiles.
   for( str = header.first(); str != NULL; str = header.next() )
   {
-    debug( "  parsing:[%s%s]", projDir.data(), str );
+    debug( "  parsing:[%s]", str );
     cp.parse( str );
   }
 
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
-    debug( "  parsing:[%s%s]", projDir.data(), str );
+    debug( "  parsing:[%s]", str );
     cp.parse( str );
   }
 
@@ -181,8 +184,6 @@ void CClassView::refresh()
     // Add the class.
     addChildItem( aPC->name, icons[ CVCLASS ], &classPath );
     classPath.push( &aPC->name );
-
-    debug( "  Added class %s", aPC->name.data() );
 
     // Add parts of the class
     addMethods( aPC->getMethods(), classPath );
@@ -372,28 +373,34 @@ void  CClassView::initPopups()
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotClassDefinition()));
-  classPopup.insertItem( i18n("Add member method..."), this, SLOT(slotMethodNew()));
-  classPopup.insertItem( i18n("Add member attribute..."), this, SLOT(slotAttributeNew()));
+  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
+  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
   classPopup.insertSeparator();
   id = classPopup.insertItem( i18n("Base classes..."), this, SLOT(slotClassBaseClasses()));
   classPopup.setItemEnabled(id, false );
-  classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
+  id = classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
+  classPopup.setItemEnabled(id, false );
   classPopup.insertSeparator();
-  classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
-  classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
+  id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
+  classPopup.setItemEnabled(id, false );
+  id = classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
+  classPopup.setItemEnabled(id, false );
 
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotMethodDefinition()));
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotMethodDeclaration()));
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
   methodPopup.insertSeparator();
-  methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
+  id = methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
+  methodPopup.setItemEnabled( id, false );
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotAttributeDefinition()));
-  attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  attributePopup.insertSeparator();
+  id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+  attributePopup.setItemEnabled( id, false );
 }
 
 /*------------------------------------------ CClassView::addMethods()
@@ -546,10 +553,21 @@ void CClassView::mousePressEvent(QMouseEvent * event)
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------- CClassView::slotSingleSelected()
+ * slotSingleSelected()
+ *   Event when a user selects someting in the tree.
+ *
+ * Parameters:
+ *   index           Index of the selected item
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassView::slotSingleSelected (int index)
 {
   KPopupMenu *popup;
 
+  // If the right button is pressed we show a popupmenu.
   if( mouseBtn == RightButton )
   {
     switch( indexType( index ) )
@@ -576,22 +594,22 @@ void CClassView::slotSingleSelected (int index)
   }
 }
 
-void CClassView::slotProjectOptions ()
+void CClassView::slotProjectOptions()
 {
-  emit selectedProjectOptions ();
+  emit selectedProjectOptions();
 }
 
-void CClassView::slotFileNew ()
+void CClassView::slotFileNew()
 {
-  emit selectedFileNew ();
+  emit selectedFileNew();
 }
 
-void CClassView::slotClassNew ()
+void CClassView::slotClassNew()
 {
-  emit selectedClassNew ();
+  emit selectedClassNew();
 }
 
-void CClassView::slotClassDelete ()
+void CClassView::slotClassDelete()
 {
   if( KMsgBox::yesNo( this, "Delete class", 
                       "Are you sure you want to delete this class?",
@@ -605,6 +623,11 @@ void CClassView::slotClassDelete ()
 
 void CClassView::slotMethodNew()
 {
+  CAddClassMethodDlg dlg(this, "methodDlg" );
+
+  if( dlg.exec() )
+  {
+  }
 }
 
 void CClassView::slotMethodDelete()
@@ -620,6 +643,28 @@ void CClassView::slotMethodDelete()
 
 void CClassView::slotAttributeNew()
 {
+  CAddClassAttributeDlg dlg(this, "attrDlg" );
+  CParsedAttribute *aAttr;
+
+  if( dlg.exec() )
+  {
+    debug( "Adding attribute." );
+    aAttr = new CParsedAttribute();
+    aAttr->setType( dlg.typeEdit.text() );
+    aAttr->setName( dlg.nameEdit.text() );
+
+    if( dlg.publicRb.isChecked() )
+      aAttr->setExport( PUBLIC );
+    else if( dlg.protectedRb.isChecked() )
+      aAttr->setExport( PROTECTED );
+    else if( dlg.privateRb.isChecked() )
+      aAttr->setExport( PRIVATE );
+
+    aAttr->setIsStatic( dlg.staticCb.isChecked() );
+    aAttr->setIsConst( dlg.constCb.isChecked() );
+
+    aAttr->out();
+  }
 }
 
 void CClassView::slotAttributeDelete()
@@ -631,4 +676,26 @@ void CClassView::slotAttributeDelete()
     KMsgBox::message( this, "Not implemented",
                       "This function isn't implemented yet." );
   }
+}
+
+void CClassView::slotFolderNew() 
+{
+}
+
+void CClassView::slotClassBaseClasses()
+{
+}
+
+void CClassView::slotClassDerivedClasses() 
+{
+}
+
+void CClassView::slotViewDefinition() 
+{
+  emit selectedViewDefinition( currentItem() );
+}
+
+void CClassView::slotViewDeclaration()
+{
+  emit selectedViewDeclaration( currentItem() );
 }
