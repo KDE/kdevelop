@@ -109,7 +109,7 @@ void CClassView::initPopups()
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),ID_CV_VIEW_DEFINITION);
+  classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),ID_CV_VIEW_DECLARATION);
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()), ID_CV_METHOD_NEW);
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
   id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
