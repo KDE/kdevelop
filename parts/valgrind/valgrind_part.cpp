@@ -207,7 +207,7 @@ void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
   _lastParams = execElem.attribute( "params", "" );
 
   QDomElement valElem = el->namedItem( "valgrind" ).toElement();
-  _lastValExec = valElem.attribute( "path", "valgrind" );
+  _lastValExec = valElem.attribute( "path", "" );
   _lastValParams = valElem.attribute( "params", "" );
 }
 

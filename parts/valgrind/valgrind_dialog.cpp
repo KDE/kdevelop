@@ -5,6 +5,8 @@
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
 
 #include "dialog_widget.h"
 #include "valgrind_dialog.h"
@@ -51,10 +53,18 @@ void ValgrindDialog::setParameters( const QString& params )
 
 void ValgrindDialog::setValExecutable( const QString& ve )
 {
-  if ( ve.isEmpty() )
+  QString vUrl = ve;
+  if ( vUrl.isEmpty() ) {
+    vUrl = KStandardDirs::findExe( "valgrind" );
+  }
+  if ( vUrl.isEmpty() ) {
+    KMessageBox::sorry( this, i18n( "Could not find valgrind in your $PATH. Please make "
+                                    "sure it is installed properly." ),
+                        i18n( "valgrind not found" ) );
     w->valExecutableEdit->setURL( "valgrind" );
-  else
-    w->valExecutableEdit->setURL( ve );
+  } else {
+    w->valExecutableEdit->setURL( vUrl );
+  }
 }
 
 static const QString leakCheckParam( "--leak-check=yes" );
