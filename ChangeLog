@@ -1,3 +1,6 @@
+2003-07-12 F@lk Brettschneider <falkbr@kdevelop.org>
+    * compiles and runs on KDE-3.0.3/Qt-3.0.5 again
+
 2003-07-07 Mario Scalas <mario.scalas@libero.it>
 	* Added tag/branching feature to legacy CVS integration. 
 

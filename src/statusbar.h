@@ -45,8 +45,12 @@ private:
     QLabel *_status;
 
 	KTextEditor::ViewCursorInterface * _cursorIface;
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 	KTextEditor::ViewStatusMsgInterface * _viewmsgIface;
-	KParts::Part *_activePart;
+# endif
+#endif
+  KParts::Part *_activePart;
 
 // still hoping for a fix for KDE-3.1
 #if defined(KDE_MAKE_VERSION)

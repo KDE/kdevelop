@@ -323,7 +323,14 @@ void MainWindowShare::slotSettings()
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-#if KDE_IS_VERSION(3,1,3)
+#if defined(KDE_IS_VERSION)
+# if KDE_IS_VERSION(3,1,3)
+#  ifndef _KDE_3_1_3_
+#   define _KDE_3_1_3_
+#  endif
+# endif
+#endif
+#if defined(_KDE_3_1_3_)
     config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
 #else
     config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
