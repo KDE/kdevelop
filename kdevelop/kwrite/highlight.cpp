@@ -2169,6 +2169,7 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
   ItemData *itemData;
   int z;
   QFont font;
+  KCharsets * charsets = KGlobal::charsets();
 
   defaultStyleList.setAutoDelete(true);
   getDefaults(defaultStyleList,defaultFont);
@@ -2192,9 +2193,11 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
+      font.setCharSet(charsets->charsetForEncoding(defaultFont.charset));
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
+      font.setCharSet(charsets->charsetForEncoding(itemData->charset));
     }
     a[z].setFont(font);
   }
