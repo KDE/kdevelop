@@ -199,6 +199,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setToolTip(i18n("Make member"));
     action->setWhatsThis(i18n("<b>Make member</b><p>Creates a class member function in implementation file "
                               "based on the member declaration at the current line."));
+    action->setEnabled(false);
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
@@ -720,10 +721,19 @@ QString CppSupportPart::unformatClassName(const QString &name)
 
 QStringList CppSupportPart::fileExtensions() const
 {
-    if (withcpp)
-        return QStringList::split(",", "c,C,cc,cpp,c++,cxx,m,mm,M,h,H,hh,hxx,hpp,inl,tlh,diff,ui.h");
-    else
-        return QStringList::split(",", "c,h");
+    QStringList patterns;
+    
+    KMimeType::List lst = const_cast<CppSupportPart*>( this )->mimeTypes();
+    for( KMimeType::List::Iterator it=lst.begin(); it!=lst.end(); ++it )
+    {
+	KMimeType::Ptr ptr = *it;
+	if( !ptr )
+	    continue;
+	
+	patterns += ptr->patterns();
+    }
+    
+    return patterns;
 }
 
 void CppSupportPart::slotNewClass()
