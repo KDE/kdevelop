@@ -21,28 +21,30 @@ FixedFormParser::FixedFormParser(CodeModel* model)
 {
     m_model = model;
 
-    functionre.compile("(integer|real|logical|complex|character|"
+    functionre.setPattern("(integer|real|logical|complex|character|"
                        "double(precision)?)function([^(]+).*");
-    subroutinere.compile("subroutine([^(]+).*");
+    subroutinere.setPattern("subroutine([^(]+).*");
+
+    functionre.setCaseSensitive( false );
+    subroutinere.setCaseSensitive( false );
 }
 
 
 void FixedFormParser::process(const QCString &line, const QString &fileName, int lineNum)
 {
-    if (line.isEmpty())
-        return;
-
     QCString simplified;
     int l = line.length();
     for (int i=0; i < l; ++i)
         if (line[i] != ' ')
             simplified += line[i];
 
-    QCString name;
-    if (functionre.match(simplified))
-        name = functionre.group(3);
-    else if (subroutinere.match(simplified))
-        name = subroutinere.group(1);
+    if ( simplified.isEmpty() ) return;
+
+    QString name;
+    if (functionre.search(simplified) != -1)
+        name = functionre.cap(3);
+    else if (subroutinere.search(simplified) != -1) 
+        name = subroutinere.cap(1);
     else
         return;
 

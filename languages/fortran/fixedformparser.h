@@ -14,7 +14,7 @@
 
 #include <qstring.h>
 #include <qtextstream.h>
-#include <kregexp.h>
+#include <qregexp.h>
 #include <codemodel.h>
 
 
@@ -29,7 +29,7 @@ private:
     void process(const QCString &line, const QString &fileName, int lineNum);
     CodeModel* m_model;
     FileDom m_file;
-    KRegExp functionre, subroutinere;
+    QRegExp functionre, subroutinere;
 };
 
 #endif
