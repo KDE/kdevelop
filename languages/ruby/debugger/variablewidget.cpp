@@ -325,6 +325,10 @@ bool VariableTree::schedule()
 			Q_ASSERT( !frame->isWaitingForData() );
 			
 			if (frame->needsVariables()) {
+				if (QApplication::overrideCursor() == 0) {
+					QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+				}
+				
 				// Tell the controller to retrieve the variable values
 				emit selectFrame(frame->frameNo(), frame->threadNo());
 				return true;
@@ -337,10 +341,11 @@ bool VariableTree::schedule()
 	frame = findFrame(1, currentThread_);
 	Q_ASSERT( frame != 0 );
 	Q_ASSERT( !frame->needsVariables() );
-	
+		
 	// All over, nothing left to fetch. 
 	// Return to frame 1, and prune the inactive items
 	// from the variable tree..
+	QApplication::restoreOverrideCursor();
 	emit selectFrame(1, currentThread_);
 	prune();
 	
