@@ -47,9 +47,11 @@ public:
     ~SnippetWidget();
     QPtrList<SnippetItem> * getList() { return (&_list); }
     void writeConfig();
-    void initConfig();
     SnippetConfig *  getSnippetConfig() { return (&_SnippetConfig); }
 
+
+private slots:
+    void initConfig();
 
 protected:
     SnippetPart * m_part;

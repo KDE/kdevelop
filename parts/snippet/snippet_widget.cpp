@@ -34,6 +34,7 @@
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <qdragobject.h>
+#include <qtimer.h>
 
 #include <kdevcore.h>
 #include "kdevcore.h"
@@ -74,7 +75,8 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
              this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
     _cfg = NULL;
-    initConfig();
+    
+    QTimer::singleShot(0, this, SLOT(initConfig()));
 }
 
 SnippetWidget::~SnippetWidget()
