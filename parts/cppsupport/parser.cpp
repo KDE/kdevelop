@@ -989,13 +989,12 @@ bool Parser::parseTemplateArgument( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgument()" << endl;
 
-#if 0
-    if( parseTypeId() ){
-	qWarning( "token = %s", lex->lookAhead(0).toString().latin1() );
+    int start = lex->index();
+    if( parseTypeId(node) ){
 	return true;
     }
-#endif
 
+    lex->setIndex( start );
     if( !skipAssignmentExpression(node) ){
         return false;
     }
