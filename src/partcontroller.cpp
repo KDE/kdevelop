@@ -542,7 +542,7 @@ void PartController::slotPopupAboutToShow()
   KTextEditor::ViewCursorInterface *cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(activePart()->widget());
   KTextEditor::EditInterface *editIface = dynamic_cast<KTextEditor::EditInterface*>(activePart());
 
-  if (!cursorIface || !editIface)
+  if (!cursorIface || !editIface || !ro_part)
   {
     Core::getInstance()->fillContextMenu(popup, 0);
   }
@@ -550,7 +550,7 @@ void PartController::slotPopupAboutToShow()
   {
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
-    EditorContext context(editIface->textLine(line), col);
+    EditorContext context(ro_part->url(), line, editIface->textLine(line), col);
     Core::getInstance()->fillContextMenu(popup, &context);
   }
 }

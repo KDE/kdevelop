@@ -1,3 +1,7 @@
+2002-04-16  Matthias Hölzer-Klüpfel <mhk@kde.org>
+
+	* added a bit more context to the EditorContext
+
 2002-04-15  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Share code between project management parts by

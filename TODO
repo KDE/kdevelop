@@ -2,7 +2,7 @@ Short-Term:
 
 mhk: move function areas of kdevcore into separate classes
 mhk: try to implement breakpoints with the MarkInterface
-
+mhk: reorganize the breakpoint handling code
 
 Mid-Term:
 

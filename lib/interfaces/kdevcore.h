@@ -8,6 +8,8 @@
 #include <qstringlist.h>
 #include <qobject.h>
 
+#include <kurl.h>
+
 class KDialogBase;
 class KDevPlugin;
 
@@ -38,10 +40,12 @@ private:
 class EditorContext : public Context
 {
 public:
-    EditorContext(const QString &linestr, int col)
-        : Context("editor"), m_linestr(linestr), m_col(col) {}
+    EditorContext(const KURL &url, int line, const QString &linestr, int col)
+        : Context("editor"), m_linestr(linestr), m_line(line), m_col(col), m_url(url) {}
     ~EditorContext() {}
 
+    const KURL &url() const { return m_url; }
+    int line() const { return m_line; }
     QString linestr() const
     { return m_linestr; }
     int col() const
@@ -49,7 +53,8 @@ public:
 
 private:
     QString m_linestr;
-    int m_col;
+    int m_line, m_col;
+    KURL m_url;
 };
 
 
