@@ -13,7 +13,7 @@
  */
 FilePropsPage::FilePropsPage( QWidget* parent,  const char* name, WFlags fl )
     : FilePropsPageBase( parent, name, fl ){
-  m_props = new QList<ClassFileProp>;
+  m_props = new QPtrList<ClassFileProp>;
   m_current_class = 9999; // no current  
 }
 
@@ -61,7 +61,7 @@ void FilePropsPage::slotSelectionChanged()
   m_current_class = item;
 }
 
-void FilePropsPage::setClassFileProps(QList<ClassFileProp> props,bool different_header_impl){
+void FilePropsPage::setClassFileProps(QPtrList<ClassFileProp> props,bool different_header_impl){
   *m_props = props;
   m_different_header_impl = different_header_impl;
   if (!m_different_header_impl){
@@ -79,7 +79,7 @@ void FilePropsPage::setClassFileProps(QList<ClassFileProp> props,bool different_
   slotSelectionChanged();
 }
 
-QList<ClassFileProp> FilePropsPage::getClassFileProps(){
+QPtrList<ClassFileProp> FilePropsPage::getClassFileProps(){
   return *m_props;
 }
 void FilePropsPage::slotClassnameChanged(const QString& text){

@@ -87,7 +87,7 @@ private:
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
     QStack<QString> dirstack;
-    QList<MakeItem> items;
+    QPtrList<MakeItem> items;
     int parags;
     bool moved;
     QString normalColor, errorColor, diagnosticColor;

@@ -1,12 +1,7 @@
 #ifndef __ASTYLE_WIDGET_H__
 #define __ASTYLE_WIDGET_H__
 
-
-#include <qlist.h>
-
-
 #include "astyleconfig.h"
-
 
 class KDevPart;
 

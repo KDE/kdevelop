@@ -38,7 +38,7 @@
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qsizegrip.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>

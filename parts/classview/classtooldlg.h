@@ -14,7 +14,6 @@
 #ifndef _CLASSTOOLDLG_H_
 #define _CLASSTOOLDLG_H_
 
-#include <qlist.h>
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>

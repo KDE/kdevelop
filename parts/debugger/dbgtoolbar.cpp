@@ -25,7 +25,7 @@
 #include <kwin.h>
 #include <kwinmodule.h>
 
-#include <qapp.h>
+#include <qapplication.h>
 #include <qcursor.h>
 #include <qframe.h>
 #include <qlayout.h>

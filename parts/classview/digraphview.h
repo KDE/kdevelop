@@ -12,7 +12,7 @@
 #ifndef _DIGRAPHVIEW_H_
 #define _DIGRAPHVIEW_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qscrollview.h>
 #include <qstringlist.h>
 
@@ -57,8 +57,8 @@ private:
     double xscale, yscale;
     int width, height;
     QStringList inputs;
-    QList<DigraphNode> nodes;
-    QList<DigraphEdge> edges;
+    QPtrList<DigraphNode> nodes;
+    QPtrList<DigraphEdge> edges;
     DigraphNode *selNode;
 };
 

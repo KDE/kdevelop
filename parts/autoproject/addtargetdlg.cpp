@@ -147,7 +147,7 @@ void AddTargetDialog::accept()
 		return;
 	}
 
-	QListIterator<TargetItem> it(m_subproject->targets);
+	QPtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
 			KMessageBox::sorry(this, i18n("A target with this name already exists!"));

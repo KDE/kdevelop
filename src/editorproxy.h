@@ -3,7 +3,7 @@
 
 
 #include <qobject.h>
-#include <qarray.h>
+#include <qmemarray.h>
 
 class QPopupMenu;
 
@@ -38,7 +38,7 @@ private:
   
   static EditorProxy *s_instance;
 
-  QArray<int> m_popupIds;
+  QMemArray<int> m_popupIds;
 
 };
 

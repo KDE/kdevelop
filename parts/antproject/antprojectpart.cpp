@@ -110,7 +110,7 @@ void AntProjectPart::populateProject()
     dir.setPath(s.pop());
     kdDebug() << "Examining: " << dir.path() << endl;
     const QFileInfoList *dirEntries = dir.entryInfoList();
-    QListIterator<QFileInfo> it(*dirEntries);
+    QPtrListIterator<QFileInfo> it(*dirEntries);
     for (; it.current(); ++it) 
     {
       QString fileName = it.current()->fileName();

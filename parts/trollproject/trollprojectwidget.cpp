@@ -344,11 +344,11 @@ QStringList TrollProjectWidget::allFiles()
 
         SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
         QString path = spitem->path;
-        QListIterator<GroupItem> tit(spitem->groups);
+        QPtrListIterator<GroupItem> tit(spitem->groups);
         for (; tit.current(); ++tit) {
             GroupItem::GroupType type = (*tit)->groupType;
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
-                QListIterator<FileItem> fit(tit.current()->files);
+                QPtrListIterator<FileItem> fit(tit.current()->files);
 		for (; fit.current(); ++fit){
 		    QString filePath = path.mid( projectDirectory().length() + 1 );
 		    if( !filePath.isEmpty() && !filePath.endsWith("/") )
@@ -474,13 +474,13 @@ void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
 //    if (item->configuration.m_template == QTMP_SUBDIRS)
 //      return;
     // Remove all GroupItems and all of their children from the view
-//    QListIterator<SubprojectItem> it(item->scopes);
+//    QPtrListIterator<SubprojectItem> it(item->scopes);
 //    for (; it.current(); ++it)
 //    {
 //      cleanDetailView(*it);
 //      details->takeItem(*it);
 //    }
-    QListIterator<GroupItem> it1(item->groups);
+    QPtrListIterator<GroupItem> it1(item->groups);
     for (; it1.current(); ++it1) {
       // After AddTargetDialog, it can happen that an
       // item is not yet in the list view, so better check...
@@ -500,17 +500,17 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   // Insert all GroupItems and all of their children into the view
   if (listviewControl)
   {
-//    QListIterator<SubprojectItem> it1(item->scopes);
+//    QPtrListIterator<SubprojectItem> it1(item->scopes);
 //    for (; it1.current(); ++it1)
 //    {
 //      listviewControl->insertItem(*it1);
 //      buildProjectDetailTree(*it1,NULL);
 //    }
-    QListIterator<GroupItem> it2(item->groups);
+    QPtrListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
         listviewControl->insertItem(*it2);
-        QListIterator<FileItem> it3((*it2)->files);
+        QPtrListIterator<FileItem> it3((*it2)->files);
         for (; it3.current(); ++it3)
             (*it2)->insertItem(*it3);
         (*it2)->setOpen(true);
@@ -518,17 +518,17 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   }
   else
   {
-//    QListIterator<SubprojectItem> it1(item->scopes);
+//    QPtrListIterator<SubprojectItem> it1(item->scopes);
 //    for (; it1.current(); ++it1)
 //    {
 //      item->insertItem(*it1);
 //      buildProjectDetailTree(*it1,NULL);
 //    }
-    QListIterator<GroupItem> it2(item->groups);
+    QPtrListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
         item->insertItem(*it2);
-        QListIterator<FileItem> it3((*it2)->files);
+        QPtrListIterator<FileItem> it3((*it2)->files);
         for (; it3.current(); ++it3)
             (*it2)->insertItem(*it3);
         (*it2)->setOpen(true);
@@ -871,7 +871,7 @@ SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QStr
     return baseItem;
   // process next step of recursive function
   QString nextScopePart = subScopeParts[i];
-  QListIterator<SubprojectItem> spit(baseItem->scopes);
+  QPtrListIterator<SubprojectItem> spit(baseItem->scopes);
   for (; spit.current(); ++spit)
   {
     SubprojectItem *spitem = spit;
@@ -962,7 +962,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
   FileItem *fitem = createFileItem(filename);
   GroupItem *gitem = 0;
 
-  QListIterator<GroupItem> it(m_shownSubproject->groups);
+  QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
   for (; it.current(); ++it)
   {
     if ((*it)->groupType == gtype)

@@ -127,7 +127,7 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public KToolBar
    Q_OBJECT
 public:
    /** 
-   * Constructor (NoFocus, minimum width = 1, an internal QList of taskbar buttons (autodelete)) 
+   * Constructor (NoFocus, minimum width = 1, an internal QPtrList of taskbar buttons (autodelete)) 
    */
    QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
    /** 

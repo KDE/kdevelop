@@ -4,7 +4,6 @@
 #include "kdevpartcontroller.h"
 
 #include <qwidget.h>
-#include <qarray.h>
 #include <qptrlist.h>
 #include <kurl.h>
 

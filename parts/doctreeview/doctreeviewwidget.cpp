@@ -1427,23 +1427,23 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 #ifdef WITH_DOCBASE
     docView->takeItem(folder_docbase);
 #endif
-    QListIterator<DocTreeDevHelpFolder> itdh(folder_devhelp);
+    QPtrListIterator<DocTreeDevHelpFolder> itdh(folder_devhelp);
     for (; itdh.current(); ++itdh)
         docView->takeItem(itdh.current());
     
-    QListIterator<DocTreeTocFolder> it1(folder_toc);
+    QPtrListIterator<DocTreeTocFolder> it1(folder_toc);
     for (; it1.current(); ++it1)
         docView->takeItem(it1.current());
 
-    QListIterator<DocTreeKDELibsFolder> itk(folder_kdoc);
+    QPtrListIterator<DocTreeKDELibsFolder> itk(folder_kdoc);
     for (; itk.current(); ++itk)
         docView->takeItem(itk.current());
 //    if(folder_doxygen) docView->takeItem(folder_doxygen);
-    QListIterator<DocTreeDoxygenFolder> itx(folder_doxygen);
+    QPtrListIterator<DocTreeDoxygenFolder> itx(folder_doxygen);
     for (; itx.current(); ++itx)
         docView->takeItem(itx.current());
     
-    QListIterator<DocTreeQtFolder> itq(folder_qt);
+    QPtrListIterator<DocTreeQtFolder> itq(folder_qt);
     for (; itq.current(); ++itq)
         docView->takeItem(itq.current());
 //    if(folder_qt) docView->takeItem(folder_qt);
@@ -1458,11 +1458,11 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 #ifdef WITH_DOCBASE
     docView->insertItem(folder_docbase);
 #endif
-    QListIterator<DocTreeDevHelpFolder> itdh2(folder_devhelp);
+    QPtrListIterator<DocTreeDevHelpFolder> itdh2(folder_devhelp);
     for (; itdh2.current(); ++itdh2)
         docView->insertItem(itdh2.current());
     
-    QListIterator<DocTreeTocFolder> it2(folder_toc);
+    QPtrListIterator<DocTreeTocFolder> it2(folder_toc);
 //    it2.toLast();
 //    for (; it2.current(); --it2) {
     for (; it2.current(); ++it2) {
@@ -1471,13 +1471,13 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     }
 
 //    docView->insertItem(folder_doxygen);
-    QListIterator<DocTreeKDELibsFolder> itk2(folder_kdoc);
+    QPtrListIterator<DocTreeKDELibsFolder> itk2(folder_kdoc);
 //    itk2.toLast();
 //    for (; itk2.current(); --itk2)
     for (; itk2.current(); ++itk2)
         docView->insertItem(itk2.current());
     
-    QListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
+    QPtrListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
 //    itx2.toLast();
 //    for (; itx2.current(); --itx2)
     for (; itx2.current(); ++itx2)
@@ -1487,7 +1487,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         if (!ignoretocs.contains("kde"))
             docView->insertItem(folder_kdelibs);
 */
-    QListIterator<DocTreeQtFolder> itq2(folder_qt);
+    QPtrListIterator<DocTreeQtFolder> itq2(folder_qt);
 //    itq2.toLast();
 //    for (; itq2.current(); --itq2)
     for (; itq2.current(); ++itq2)

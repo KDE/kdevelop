@@ -12,7 +12,6 @@
 #ifndef _PGIOPTIONSPLUGIN_H_
 #define _PGIOPTIONSPLUGIN_H_
 
-#include <qlist.h>
 #include <kdialogbase.h>
 
 #include "kdevcompileroptions.h"

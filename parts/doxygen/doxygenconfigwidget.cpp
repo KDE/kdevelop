@@ -31,12 +31,12 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
     : QTabWidget(parent, name)
 {
     m_hasChanged = false;
-    m_dependencies = new QDict< QList<IInput> >(257);
+    m_dependencies = new QDict< QPtrList<IInput> >(257);
     m_dependencies->setAutoDelete(true);
     m_inputWidgets = new QDict< IInput >;
     m_switches = new QDict< QObject >;
    
-    QListIterator<ConfigOption> options = Config::instance()->iterator();
+    QPtrListIterator<ConfigOption> options = Config::instance()->iterator();
     QScrollView *page = 0;
     QVBox *pagebox = 0;
     ConfigOption *option = 0;
@@ -180,9 +180,9 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
     IInput *child = m_inputWidgets->find(name);
     if (!switches->find(dep))
         switches->insert(dep, parent->qobject());
-    QList<IInput> *list = m_dependencies->find(dep);
+    QPtrList<IInput> *list = m_dependencies->find(dep);
     if (!list) {
-        list = new QList<IInput>;
+        list = new QPtrList<IInput>;
         m_dependencies->insert(dep, list);
     }
     list->append(child);
@@ -191,7 +191,7 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
 
 void DoxygenConfigWidget::toggle(const QString &name, bool state)
 {
-    QList<IInput> *inputs = m_dependencies->find(name);
+    QPtrList<IInput> *inputs = m_dependencies->find(name);
     IInput *input = inputs->first();
     while (input) {
         input->setEnabled(state);

@@ -25,7 +25,7 @@
 
 #include <private/qrichtext_p.h>
 #include <qintdict.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 #include <qregexp.h>
 #include <qpair.h>
@@ -223,7 +223,7 @@ public:
     void appendChild( HLItem* item ) { m_items.append( item ); }
 
     int checkHL( const QChar* buffer, int pos, int length, int* state, int* next ){
-	QListIterator<HLItem> it( m_items );
+	QPtrListIterator<HLItem> it( m_items );
 	
 	while( it.current() ){
 	    HLItem* item = it.current();
@@ -245,7 +245,7 @@ public:
     }
 
 private:
-    QList<HLItem> m_items;
+    QPtrList<HLItem> m_items;
 };
 
 class QSourceColorizer: public QTextPreProcessor{
@@ -286,7 +286,7 @@ public:
 protected:
     QEditor* m_editor;
     QMap<int, QPair<QString, QTextFormat*> > m_formats;
-    QList<HLItemCollection> m_items;
+    QPtrList<HLItemCollection> m_items;
     QString m_left;
     QString m_right;
 };

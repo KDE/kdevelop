@@ -76,7 +76,7 @@ void HierarchyDialog::refresh()
     for (it = list.begin(); it != list.end(); ++it) {
         QString formattedName = ls->formatClassName((*it)->name());
         class_combo->insertItem(formattedName);
-        QListIterator<ParsedParent> it2((*it)->parents);
+        QPtrListIterator<ParsedParent> it2((*it)->parents);
         for (; it2.current(); ++it2) {
             QString formattedParentName = ls->formatClassName(it2.current()->name());
             digraph->addEdge(formattedParentName, formattedName);

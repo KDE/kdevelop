@@ -21,7 +21,7 @@ class KTempFile;
 class QWidgetStack;
 class QVBox;
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qdict.h>
 #include <qlistview.h>
 #include <qlineedit.h>
@@ -79,14 +79,14 @@ private:
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
 
-    QList<ApplicationInfo> m_appsInfo;
+    QPtrList<ApplicationInfo> m_appsInfo;
     QValueList<AppWizardFileTemplate> m_fileTemplates;
     QDict<QListViewItem> m_categoryMap; //store the category name and the pointer in the treeview
 
     AppWizardPart *m_part;
     QWidget *m_lastPage;
     QString m_cmdline;
-    QList<KTempFile> m_tempFiles;
+    QPtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
     VcsForm *m_vcs;

@@ -71,7 +71,7 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
 
 void FilePropertyDlg::createScopeTree(SubprojectItem *spitem,ScopeItem *sitem)
 {
-  QListIterator<SubprojectItem> spit(spitem->scopes);
+  QPtrListIterator<SubprojectItem> spit(spitem->scopes);
   for (; spit.current(); ++spit)
   {
     SubprojectItem *nextSubproject = spit;

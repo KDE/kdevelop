@@ -137,7 +137,7 @@ void DigraphView::clear()
 
 void DigraphView::setSelected(const QString &name)
 {
-    QListIterator<DigraphNode> it(nodes);
+    QPtrListIterator<DigraphNode> it(nodes);
     for (; it.current(); ++it) {
         if (it.current()->name == name) {
             updateContents(selNode->x-selNode->w/2, selNode->y-selNode->h/2,
@@ -153,7 +153,7 @@ void DigraphView::setSelected(const QString &name)
 
 void DigraphView::ensureVisible(const QString &name)
 {
-    QListIterator<DigraphNode> it(nodes);
+    QPtrListIterator<DigraphNode> it(nodes);
     for (; it.current(); ++it) {
         if (it.current()->name == name) {
             QScrollView::ensureVisible((*it)->x, (*it)->y, (*it)->w, (*it)->h);
@@ -262,7 +262,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
     p->eraseRect(clipRect);
 
     p->setFont(QFont("helvetica", 12));
-    QListIterator<DigraphNode> it1(nodes);
+    QPtrListIterator<DigraphNode> it1(nodes);
     for (; it1.current(); ++it1) {
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
         if (r.intersects(clipRect)) {
@@ -274,7 +274,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
         }
     }
     p->setBrush(QBrush(black, SolidPattern));
-    QListIterator<DigraphEdge> it2(edges);
+    QPtrListIterator<DigraphEdge> it2(edges);
     for (; it2.current(); ++it2) {
         int n = (*it2)->points.count();
         for (int i=0; i+3 < n; i+=3)
@@ -305,7 +305,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
 
 void DigraphView::contentsMousePressEvent(QMouseEvent *e)
 {
-    QListIterator<DigraphNode> it1(nodes);
+    QPtrListIterator<DigraphNode> it1(nodes);
     for (; it1.current(); ++it1) {
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
         if (r.contains(e->pos())) {

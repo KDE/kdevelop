@@ -495,7 +495,7 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
 }
 
 QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariables(QString className){
-  QList<ParsedParent> parents;
+  QPtrList<ParsedParent> parents;
   QValueList<KTextEditor::CompletionEntry> list;
   ParsedClass* pClass=0;
   do {

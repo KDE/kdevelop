@@ -95,8 +95,8 @@ public:
     QString subdir;
     QString relpath;
     QString path;
-    QList<GroupItem> groups;
-    QList<SubprojectItem> scopes;
+    QPtrList<GroupItem> groups;
+    QPtrList<SubprojectItem> scopes;
 
     // Containers of included an excluded files
     QStringList subdirs;
@@ -126,7 +126,7 @@ public:
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
-    QList<FileItem> files;
+    QPtrList<FileItem> files;
     GroupType groupType;
     SubprojectItem *owner;
 };

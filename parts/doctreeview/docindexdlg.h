@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <qdialog.h>
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 class QCheckBox;
@@ -64,11 +64,11 @@ private:
     void readEntryList(const QDomElement &el, QStringList *nameList, QStringList *urlList);
 
     KComboBox *term_combo;
-    QList<QCheckBox> books_boxes;
+    QPtrList<QCheckBox> books_boxes;
     QCheckBox *concept_box;
     QCheckBox *ident_box;
     QCheckBox *file_box;
-    QList<DocIndex> indices;
+    QPtrList<DocIndex> indices;
     DocTreeViewPart *m_part;
 };
 

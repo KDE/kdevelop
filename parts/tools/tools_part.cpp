@@ -74,7 +74,7 @@ void ToolsPart::configWidget(KDialogBase *dlg)
 
 void ToolsPart::updateMenu()
 {
-  QList<KAction> actions;
+  QPtrList<KAction> actions;
 
   unplugActionList("tools_list");
 
@@ -183,7 +183,7 @@ void ToolsPart::updateToolsMenu()
     config->setGroup("External Tools");
     QStringList l = config->readListEntry("Tool Menu");
 
-    QList<KAction> actions;
+    QPtrList<KAction> actions;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         QString menutext = *it;

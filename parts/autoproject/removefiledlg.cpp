@@ -31,9 +31,9 @@
 #include "autoprojectwidget.h"
 
 
-static bool fileListContains(const QList<FileItem> &list, const QString &name)
+static bool fileListContains(const QPtrList<FileItem> &list, const QString &name)
 {
-	QListIterator<FileItem> it(list);
+	QPtrListIterator<FileItem> it(list);
 	for (; it.current(); ++it)
 		if ((*it)->text(0) == name)
 			return true;
@@ -50,7 +50,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, AutoProjectPart* p
 
 	QStringList targets;
 
-	QListIterator<TargetItem> it(spitem->targets);
+	QPtrListIterator<TargetItem> it(spitem->targets);
 	for (; it.current(); ++it)
 		if (fileListContains((*it)->sources, filename))
 			targets.append((*it)->name);
@@ -96,7 +96,7 @@ void RemoveFileDialog::accept()
 	QMap<QString,QString> replaceMap;
 
 	if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
-		QListIterator<TargetItem> it(subProject->targets);
+		QPtrListIterator<TargetItem> it(subProject->targets);
 		for (; it.current(); ++it) {
 			if ((*it) != target && fileListContains((*it)->sources, fileName)) {
 				FileItem *fitem = static_cast<FileItem*>((*it)->firstChild());

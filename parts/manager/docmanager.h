@@ -4,7 +4,7 @@
 #include <qobject.h>
 
 #include <ktexteditor.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class DocManager : public QObject
@@ -18,7 +18,7 @@ public:
   bool deleteDoc (KTextEditor::Document *doc);
 
 private:
-  QList<KTextEditor::Document> docs;
+  QPtrList<KTextEditor::Document> docs;
 };
 
 #endif

@@ -45,7 +45,7 @@ AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *sp
     subProject = spitem;
 
     // Fill the combo box with library names in the directory
-    QListIterator<TargetItem> tit(spitem->targets);
+    QPtrListIterator<TargetItem> tit(spitem->targets);
     for (; tit.current(); ++tit) {
         if ((*tit)->primary == "LTLIBRARIES")
             library_combo->insertItem(QString((*tit)->name));

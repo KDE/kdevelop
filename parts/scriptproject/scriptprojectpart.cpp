@@ -124,7 +124,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
         dir.setPath(s.pop());
         kdDebug(9015) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
-        QListIterator<QFileInfo> it(*dirEntries);
+        QPtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) {
             QString fileName = it.current()->fileName();
             if (fileName == "." || fileName == "..")

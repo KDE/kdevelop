@@ -20,7 +20,7 @@
 
 #include "dbgcontroller.h"
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qdict.h>
 #include <qstringlist.h>
 
@@ -42,7 +42,7 @@ public:
 
     QString value;
     QString name;
-    QList<JDBVarItem> siblings;
+    QPtrList<JDBVarItem> siblings;
    
 };
 
@@ -170,7 +170,7 @@ private:
     int               jdbOutputLen_;          // amount of data in the output buffer
     char*             jdbOutput_;             // buffer for the output from kprocess
     
-    QList<DbgCommand> cmdList_;
+    QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
     
     STTY*             tty_;

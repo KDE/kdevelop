@@ -12,7 +12,6 @@
 #ifndef _GCCOPTIONSPLUGIN_H_
 #define _GCCOPTIONSPLUGIN_H_
 
-#include <qlist.h>
 #include <kdialogbase.h>
 
 #include "kdevcompileroptions.h"

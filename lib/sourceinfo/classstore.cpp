@@ -228,16 +228,16 @@ void ClassStore::addScope(ParsedScopeContainer *scope)
  * Parameters:
  *   -
  * Returns:
- *   QList<ClassTreeNode> List of trees.
+ *   QPtrList<ClassTreeNode> List of trees.
  *-----------------------------------------------------------------*/
-QList<ClassTreeNode> *ClassStore::asForest()
+QPtrList<ClassTreeNode> *ClassStore::asForest()
 {
     ParsedClass *aClass;
     ParsedParent *aParent;
     ClassTreeNode *childNode;
     ClassTreeNode *parentNode;
     QDict<ClassTreeNode> ctDict;
-    QList<ClassTreeNode> *retVal = new QList<ClassTreeNode>;
+    QPtrList<ClassTreeNode> *retVal = new QPtrList<ClassTreeNode>;
 
     // Iterate over all parsed classes.
     for ( m_globalScope->classIterator.toFirst();

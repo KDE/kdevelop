@@ -298,7 +298,7 @@ void MakeWidget::nextError()
     else
         parag = 0;
 
-    QListIterator<MakeItem> it(items);
+    QPtrListIterator<MakeItem> it(items);
     for (; it.current(); ++it)
         if ((*it)->parag > parag)
         {
@@ -326,7 +326,7 @@ void MakeWidget::prevError()
     else
         parag = 0;
 
-    QListIterator<MakeItem> it(items);
+    QPtrListIterator<MakeItem> it(items);
     for (it.toLast(); it.current(); --it)
         if ((*it)->parag < parag)
         {
@@ -370,7 +370,7 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 
 void MakeWidget::searchItem(int parag)
 {
-    QListIterator<MakeItem> it(items);
+    QPtrListIterator<MakeItem> it(items);
     for (; it.current(); ++it)
     {
         if ((*it)->parag == parag)

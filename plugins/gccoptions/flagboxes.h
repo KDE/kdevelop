@@ -14,7 +14,7 @@
 
 #include <qlistview.h>
 #include <qcheckbox.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class FlagListBox;
 class FlagListToolTip;
@@ -83,7 +83,7 @@ public:
 
 private:
     void addCheckBox(FlagCheckBox *item);
-    QList<FlagCheckBox> cblist;
+    QPtrList<FlagCheckBox> cblist;
     friend class FlagCheckBox;
 };
 

@@ -344,7 +344,7 @@ QStringList AutoProjectWidget::allLibraries()
 	{
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( it.current() );
 		QString path = spitem->path;
-		QListIterator<TargetItem> tit( spitem->targets );
+		QPtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
 			QString primary = ( *tit ) ->primary;
@@ -374,10 +374,10 @@ QStringList AutoProjectWidget::allFiles()
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( item );
 		// use URLUtil so paths in root project dir are worked out correctly
 		QString relPath = URLUtil::relativePath(m_part->projectDirectory(), spitem->path, URLUtil::SLASH_SUFFIX);
-		QListIterator<TargetItem> tit( spitem->targets );
+		QPtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
-			QListIterator<FileItem> fit( tit.current() ->sources );
+			QPtrListIterator<FileItem> fit( tit.current() ->sources );
 			for ( ; fit.current(); ++fit ){
 
 				QFileInfo fileInfo( (*fit)->name );
@@ -425,7 +425,7 @@ void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 	{
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( it.current() );
 		QString path = spitem->path;
-		QListIterator<TargetItem> tit( spitem->targets );
+		QPtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
 			QString primary = ( *tit ) ->primary;
@@ -598,7 +598,7 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 		// Remove all TargetItems and all of their children from the view
 		kdDebug ( 9020 ) << "m_shownSubproject (before takeItem()): " << m_shownSubproject->subdir << endl;
 		
-		QListIterator<TargetItem> it1( m_shownSubproject->targets );
+		QPtrListIterator<TargetItem> it1( m_shownSubproject->targets );
 		for ( ; it1.current(); ++it1 )
 		{
 			// After AddTargetDialog, it can happen that an
@@ -623,12 +623,12 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 	kdDebug ( 9020 ) << "m_shownSubproject (after takeItem()):  " << selectedSubproject()->subdir << endl;
 
 	// Insert all TargetItems and all of their children into the view
-	QListIterator<TargetItem> it2( selectedSubproject()->targets );
+	QPtrListIterator<TargetItem> it2( selectedSubproject()->targets );
 	for ( ; it2.current(); ++it2 )
 	{
 		kdDebug ( 9020 ) << "insertItem in detail " << ( *it2 )->name << endl;
 		m_detailView->insertItem( *it2 );
-		QListIterator<FileItem> it3( ( *it2 ) ->sources );
+		QPtrListIterator<FileItem> it3( ( *it2 ) ->sources );
 		for ( ; it3.current(); ++it3 )
 			( *it2 ) ->insertItem( *it3 );
 		QString primary = ( *it2 ) ->primary;

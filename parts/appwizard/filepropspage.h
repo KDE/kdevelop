@@ -2,7 +2,7 @@
 #define FILEPROPSPAGE_H
 #include "filepropspagebase.h"
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 
 class ClassFileProp {
@@ -24,15 +24,15 @@ class FilePropsPage : public FilePropsPageBase
 public:
     FilePropsPage( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
     ~FilePropsPage();
-    void setClassFileProps(QList<ClassFileProp> props,bool different_header_impl=true);
-    QList<ClassFileProp> getClassFileProps();
+    void setClassFileProps(QPtrList<ClassFileProp> props,bool different_header_impl=true);
+    QPtrList<ClassFileProp> getClassFileProps();
 
 public slots:
     void slotSelectionChanged(); 
  virtual void slotClassnameChanged(const QString&);
  protected:
  
- QList<ClassFileProp>* m_props;
+ QPtrList<ClassFileProp>* m_props;
  bool m_different_header_impl;
  uint m_current_class;
  

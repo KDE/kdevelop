@@ -4,7 +4,7 @@
 #include <qtabwidget.h>
 #include <ktexteditor.h>
 #include "docmanager.h"
-#include <qlist.h>
+#include <qptrlist.h>
 
 class ViewManager : public QTabWidget
 {
@@ -17,7 +17,7 @@ public:
   void closeView (KTextEditor::View *view);
 
 private:
-  QList<KTextEditor::View> views;
+  QPtrList<KTextEditor::View> views;
   DocManager *dm;
 
 public slots:

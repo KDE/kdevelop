@@ -192,7 +192,7 @@ ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedClass> * The classes.
+ *   QPtrList<ParsedClass> * The classes.
  *-----------------------------------------------------------------*/
 QValueList<ParsedClass*> ParsedClassContainer::getSortedClassList()
 {

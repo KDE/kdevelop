@@ -103,7 +103,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         insertCategoryIntoTreeView(*it);
 
     // Insert items into list view
-    QListIterator<ApplicationInfo> ait(m_appsInfo);
+    QPtrListIterator<ApplicationInfo> ait(m_appsInfo);
     for (; ait.current(); ++ait) {
         QListViewItem *item = m_categoryMap.find(ait.current()->category);
         if (item)
@@ -123,7 +123,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";
     FilePropsPage* m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");
-    QList<ClassFileProp>* props_temp = new QList<ClassFileProp>;
+    QPtrList<ClassFileProp>* props_temp = new QPtrList<ClassFileProp>;
     ClassFileProp* prop = new ClassFileProp();
     prop->m_classname = projectname + "App";
     prop->m_headerfile = projectname.lower() + "app.h";
@@ -518,7 +518,7 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
 
 ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
 {
-    QListIterator<ApplicationInfo> it(m_appsInfo);
+    QPtrListIterator<ApplicationInfo> it(m_appsInfo);
     for (; it.current(); ++it)
         if (it.current()->item == item)
             return it.current();

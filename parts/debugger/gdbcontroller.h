@@ -21,7 +21,7 @@
 #include "dbgcontroller.h"
 #include <qdom.h>
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class Breakpoint;
 class DbgCommand;
@@ -145,7 +145,7 @@ private:
     int               gdbOutputLen_;          // amount of data in the output buffer
     char*             gdbOutput_;             // buffer for the output from kprocess
     
-    QList<DbgCommand> cmdList_;
+    QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
     
     STTY*             tty_;

@@ -69,7 +69,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QVButtonGroup *book_group = new QVButtonGroup(this);
     book_group->setExclusive(false);
 
-    QListIterator<DocIndex> iit(indices);
+    QPtrListIterator<DocIndex> iit(indices);
     for (; iit.current(); ++iit) {
         QCheckBox *box = new QCheckBox(iit.current()->title, book_group);
         box->setChecked(true);
@@ -154,8 +154,8 @@ void DocIndexDialog::readConfig()
         bookEl = bookEl.nextSibling().toElement();
     }
 
-    QListIterator<QCheckBox> cit(books_boxes);
-    QListIterator<DocIndex> iit(indices);
+    QPtrListIterator<QCheckBox> cit(books_boxes);
+    QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
         (*cit)->setChecked(indexbooks.isEmpty() || indexbooks.contains(iit.current()->indexName));
 
@@ -181,8 +181,8 @@ void DocIndexDialog::storeConfig()
     while (!indexbooksEl.firstChild().isNull())
         indexbooksEl.removeChild(indexbooksEl.firstChild());
 
-    QListIterator<QCheckBox> cit(books_boxes);
-    QListIterator<DocIndex> iit(indices);
+    QPtrListIterator<QCheckBox> cit(books_boxes);
+    QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
         if ((*cit)->isChecked()) {
             QDomElement bookEl = dom.createElement("book");
@@ -347,8 +347,8 @@ void DocIndexDialog::accept()
     if (term.isEmpty())
         return;
     
-    QListIterator<QCheckBox> cit(books_boxes);
-    QListIterator<DocIndex> iit(indices);
+    QPtrListIterator<QCheckBox> cit(books_boxes);
+    QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
         if ((*cit)->isChecked()) {
             if (concept_box->isChecked())
@@ -389,8 +389,8 @@ void DocIndexDialog::choiceChanged()
 {
     QStringList completions;
     
-    QListIterator<QCheckBox> cit(books_boxes);
-    QListIterator<DocIndex> iit(indices);
+    QPtrListIterator<QCheckBox> cit(books_boxes);
+    QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
         if ((*cit)->isChecked()) {
             if (concept_box->isChecked())

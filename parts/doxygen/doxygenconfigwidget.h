@@ -16,7 +16,7 @@
 
 #include <qtabwidget.h>
 #include <qdict.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class IInput;
 
@@ -47,7 +47,7 @@ private:
     QString m_fileName;
     bool m_hasChanged;
     QDict<IInput> *m_inputWidgets;
-    QDict< QList<IInput> > *m_dependencies;
+    QDict< QPtrList<IInput> > *m_dependencies;
     QDict<QObject> *m_switches;
 };
 

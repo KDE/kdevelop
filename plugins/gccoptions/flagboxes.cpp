@@ -127,7 +127,7 @@ void FlagCheckBoxController::addCheckBox(FlagCheckBox *item)
 
 void FlagCheckBoxController::readFlags(QStringList *list)
 {
-    QListIterator<FlagCheckBox> it(cblist);
+    QPtrListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
         QStringList::Iterator sli = list->find(fitem->flag);
@@ -146,7 +146,7 @@ void FlagCheckBoxController::readFlags(QStringList *list)
 
 void FlagCheckBoxController::writeFlags(QStringList *list)
 {
-    QListIterator<FlagCheckBox> it(cblist);
+    QPtrListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
         if (fitem->isChecked())

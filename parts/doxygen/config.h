@@ -5,7 +5,7 @@
 #include <qstrlist.h>
 #include <qfile.h>
 #include <qdict.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 
 /*! \brief Abstract base class for any configuration option.
@@ -339,9 +339,9 @@ class Config
     /*! Returns an iterator that can by used to iterate over the 
      *  configuration options.
      */
-    QListIterator<ConfigOption> iterator()
+    QPtrListIterator<ConfigOption> iterator()
     {
-      return QListIterator<ConfigOption>(*m_options);
+      return QPtrListIterator<ConfigOption>(*m_options);
     }
 
     /*! 
@@ -489,7 +489,7 @@ class Config
   protected:
     Config()
     { 
-      m_options = new QList<ConfigOption>;
+      m_options = new QPtrList<ConfigOption>;
       m_dict = new QDict<ConfigOption>(257);
       m_options->setAutoDelete(TRUE);
       m_initialized = FALSE;
@@ -503,7 +503,7 @@ class Config
     void create();
 
   private:
-    QList<ConfigOption> *m_options;
+    QPtrList<ConfigOption> *m_options;
     QDict<ConfigOption> *m_dict;
     static Config *m_instance;
     bool m_initialized;

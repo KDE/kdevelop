@@ -261,7 +261,7 @@ bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDev
     nDocs++;
 ////    docEl.setAttribute( "Type", "???");
 ////    // get the view list
-////    QList<KWpEditorPartriteView> viewList = pDoc->viewList();
+////    QPtrList<KWpEditorPartriteView> viewList = pDoc->viewList();
 ////    // write the number of views
 ////    docEl.setAttribute( "NumberOfViews", viewList.count());
     docEl.setAttribute( "NumberOfViews", 1);

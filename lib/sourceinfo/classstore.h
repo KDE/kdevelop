@@ -152,7 +152,7 @@ public:
      * Return the store as a forest(collection of trees). 
      * @return List of trees with the top parents as root-nodes.
      */
-    QList<ClassTreeNode> *asForest();
+    QPtrList<ClassTreeNode> *asForest();
     
     //
     // The following APIs are for parsers.

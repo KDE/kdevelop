@@ -45,7 +45,7 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
     subProject = spitem;
 
     // Fill the combo box with program names in the directory
-    QListIterator<TargetItem> tit(spitem->targets);
+    QPtrListIterator<TargetItem> tit(spitem->targets);
     for (; tit.current(); ++tit) {
         if ((*tit)->primary == "PROGRAMS")
             executable_combo->insertItem(QString((*tit)->name));

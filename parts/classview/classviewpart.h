@@ -76,7 +76,7 @@ private slots:
     
 private:
     QGuardedPtr<QWidget> m_classtree;
-    QList<QWidget> m_widgets;
+    QPtrList<QWidget> m_widgets;
     friend class ClassTreeBase;
     friend class HierarchyDialog;
 
