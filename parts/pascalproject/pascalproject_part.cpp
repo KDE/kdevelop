@@ -166,7 +166,7 @@ QString PascalProjectPart::mainSource()
 
 void PascalProjectPart::setMainSource(QString fullPath)
 {
-    m_mainSource = fullPath.remove(QString(projectDirectory() + QString("/")));
+    m_mainSource = fullPath.replace(QRegExp(QString(projectDirectory() + QString("/"))),"");
 }
 
 QString PascalProjectPart::projectDirectory()
@@ -182,7 +182,7 @@ QString PascalProjectPart::projectName()
 QString PascalProjectPart::activeDirectory()
 {
     QFileInfo fi(mainSource());
-    return fi.dirPath(true).remove(projectDirectory());
+    return fi.dirPath(true).replace(QRegExp(projectDirectory()),"");
 }
 
 QString PascalProjectPart::buildDirectory()
@@ -222,19 +222,19 @@ QStringList PascalProjectPart::allFiles()
     return m_sourceFiles;
 }
 
-void PascalProjectPart::addFile(const QString &fileName)
+void PascalProjectPart::addFile(const QString& /*fileName*/)
 {
 }
 
-void PascalProjectPart::addFiles(const QStringList &fileList)
+void PascalProjectPart::addFiles(const QStringList& /*fileList*/)
 {
 }
 
-void PascalProjectPart::removeFile(const QString &fileName)
+void PascalProjectPart::removeFile(const QString& /*fileName*/)
 {
 }
 
-void PascalProjectPart::removeFiles(const QStringList &fileList)
+void PascalProjectPart::removeFiles(const QStringList& /*fileList*/)
 {
 }
 

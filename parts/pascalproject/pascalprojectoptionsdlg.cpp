@@ -81,7 +81,7 @@ void PascalProjectOptionsDlg::accept()
     }
 }
 
-void PascalProjectOptionsDlg::compiler_box_activated( const QString & s )
+void PascalProjectOptionsDlg::compiler_box_activated( const QString& /*s*/ )
 {
     QString exec = ServiceComboBox::currentText(compiler_box, service_execs);
     exec_edit->setText(exec);
@@ -96,7 +96,7 @@ void PascalProjectOptionsDlg::saveConfig( QString config )
                         ServiceComboBox::currentText(compiler_box, service_names));
     DomUtil::writeEntry(dom, prefix + "compileroptions", options_edit->text());
     DomUtil::writeEntry(dom, prefix + "compilerexec", exec_edit->text());
-    DomUtil::writeEntry(dom, prefix + "mainsource", mainSourceUrl->url().remove(m_part->projectDirectory() + QString("/")));
+    DomUtil::writeEntry(dom, prefix + "mainsource", mainSourceUrl->url().replace(QRegExp(m_part->projectDirectory() + QString("/")),""));
 }
 
 void PascalProjectOptionsDlg::readConfig( QString config )
