@@ -1,3 +1,7 @@
+2000-10-30 Sandy Meier <smeier@kdevelop.org>
+	* added kdevdlg2ui (tool by Bernd Gehrmann <bernd@kdevelop.org> to convert kdevelop dialogs to qt designer dialogs)
+	* added new splashscreen for KDevelop1.3 (by Ralph Kocher)
+
 2000-10-29 Ralf Nolden <nolden@kde.org>
   * after a constructive night and a looong day the templates are ready to go with
     kde-common/admin --hooraay !
