@@ -25,6 +25,7 @@
 #include <kruler.h>
 #include "item_widget.h"
 #include "item_pushbutton.h"
+#include "item_lineedit.h"
 
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
@@ -40,13 +41,14 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   setBackgroundMode(PaletteLight);
 
-  selected_widget = main_widget = new KDlgItem_Widget( this, this, true );
+  main_widget = new KDlgItem_Widget( this, this, true );
+  selected_widget = main_widget;
 
   main_widget->getProps()->setProp_Value("X","0");
   main_widget->getProps()->setProp_Value("Y","0");
   main_widget->getProps()->setProp_Value("Width","400");
   main_widget->getProps()->setProp_Value("Height","300");
-//  main_widget->addChild( new KDlgItem_PushButton ( wid->getItem() ) );
+//  main_widget->addChild( new KDlgItem_PushButton ( this, main_widget->getItem() ) );
   main_widget->repaintItem();
 
   if ((parCKD) && parCKD->kdlg_get_items_view())
@@ -86,9 +88,35 @@ void KDlgEditWidget::choiseAndAddItem()
   addItem(0);
 }
 
+void KDlgEditWidget::deselectWidget()
+{
+  if (selected_widget)
+    {
+      selected_widget -> deselect();
+      selected_widget = 0;
+    }
+}
+
+void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
+{
+  if (i == selected_widget)
+    return;
+
+  deselectWidget();
+
+  selected_widget = i;
+
+  if (selected_widget)
+    {
+      selected_widget -> select();
+      if ((pCKDevel) && pCKDevel->kdlg_get_prop_widget())
+         pCKDevel->kdlg_get_prop_widget()->refillList(selected_widget);
+    }
+}
+
+
 bool KDlgEditWidget::addItem(int type)
 {
-
   KDlgItem_Widget *wid2 = new KDlgItem_Widget( this, main_widget->getItem(), false );
 
   wid2->getProps()->setProp_Value("X","150");
@@ -96,7 +124,7 @@ bool KDlgEditWidget::addItem(int type)
   wid2->getProps()->setProp_Value("Width","150");
   wid2->getProps()->setProp_Value("Height","100");
   wid2->addChild( new KDlgItem_PushButton ( this, wid2->getItem() ) );
-  KDlgItem_Widget* btn1 = new KDlgItem_Widget ( this, wid2->getItem() );
+  KDlgItem_LineEdit* btn1 = new KDlgItem_LineEdit ( this, wid2->getItem() );
   btn1->getProps()->setProp_Value("X","50");
   btn1->getProps()->setProp_Value("Y","50");
   btn1->repaintItem();

@@ -19,44 +19,27 @@
 #ifndef ITEM_PUSHBUTTON_H
 #define ITEM_PUSHBUTTON_H
 
-#include "item_base.h"
-#include "kdlgeditwidget.h"
 #include <qpushbutton.h>
-#include <qpainter.h>
-#include <kruler.h>
 #include "item_widget.h"
+#include "defines_item.h"
+
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
 
+
 class KDlgItem_PushButton : public KDlgItem_Base
 {
   Q_OBJECT
-  protected:
-    class MyWidget : public QPushButton
-    {
-      ITEMSTDSTUFF
-      public:
-        MyWidget(KDlgItem_PushButton* wid, QWidget* parent = 0, const char* name = 0);
 
-      protected:
-        KDlgItem_PushButton* parentObject;
-        virtual void paintEvent ( QPaintEvent * );
-        virtual void mousePressEvent ( QMouseEvent * ) { isItemActive = !isItemActive; repaint(); }
-        virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
-    };
+  MYITEMCLASS_BEGIN( QPushButton )
+    MYITEMCLASS_STDSTUFF( KDlgItem_PushButton )
+    virtual void mousePressEvent ( QMouseEvent * ) { selectMe(); }
+    virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
+  MYITEMCLASS_END
 
-    MyWidget *item;
-
-  public:
-    KDlgItem_PushButton( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
-    virtual ~KDlgItem_PushButton() {}
-
-    virtual QString itemClass() { return QString("PushButton"); }
-
-    virtual MyWidget* getItem() { return item; }
-    virtual void repaintItem(QPushButton *it = 0);
+  ITEMWRAPPER_STDSTUFF( KDlgItem_PushButton, QPushButton, "PushButton" )
 };
 
 

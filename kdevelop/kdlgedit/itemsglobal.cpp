@@ -51,7 +51,7 @@ int KDlgItemDatabase::numItems()
 
 bool KDlgItemDatabase::addItem(KDlgItem_Base *item)
 {
-  if (numItems()>=MAX_WIDGETS_PER_DIALOG-1)
+  if (numItems()>MAX_WIDGETS_PER_DIALOG)
     {
       printf("kdlgedit: Maximum item count (%d) arrived !",MAX_WIDGETS_PER_DIALOG);
       QMessageBox::warning( 0, i18n("Could not add item"),
@@ -103,7 +103,9 @@ KDlgItem_Base *KDlgItemDatabase::getNext()
 
 KDlgPropertyBase::KDlgPropertyBase(bool fillWithStdEntrys)
 {
-  for (int i = 0; i<=MAX_ENTRYS_PER_WIDGET; i++)
+  numEntrys = 0;
+
+  for (int i = 0; i<MAX_ENTRYS_PER_WIDGET; i++)
     setProp(i,"","","",0);
 
   if (fillWithStdEntrys)
@@ -142,7 +144,7 @@ int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
 {
   for (int i=0; i<=getEntryCount(); i++)
     {
-      if (getProp(i)->name.upper() == name.upper())
+      if ((getProp(i)) && (getProp(i)->name.upper() == name.upper()))
         return getIntFromProp(i,defaultval);
     }
 
@@ -152,28 +154,28 @@ int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
 void KDlgPropertyBase::setProp_Name   (QString n, QString name)
 {
   for (int i=0; i<=getEntryCount(); i++)
-    if (getProp(i)->name.upper() == n.upper())
+    if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Name(i,name);
 }
 
 void KDlgPropertyBase::setProp_Value  (QString n, QString value)
 {
   for (int i=0; i<=getEntryCount(); i++)
-    if (getProp(i)->name.upper() == n.upper())
+    if ((getProp(i)->name.upper() == n.upper()))
       setProp_Value(i,value);
 }
 
 void KDlgPropertyBase::setProp_Group  (QString n, QString group)
 {
   for (int i=0; i<=getEntryCount(); i++)
-    if (getProp(i)->name.upper() == n.upper())
+    if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Group(i,group);
 }
 
 void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
 {
   for (int i=0; i<=getEntryCount(); i++)
-    if (getProp(i)->name.upper() == n.upper())
+    if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Allowed(i,allowed);
 }
 

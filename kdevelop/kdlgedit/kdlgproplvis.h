@@ -194,9 +194,11 @@ class AdvLvi_Cursor : public AdvLvi_Base
     virtual void resizeEvent ( QResizeEvent * );
 
     QComboBox *cbBool;
+    QButton *btnMore;
 
   public slots:
     void activated( const char* );
+    void btnPressed();
 };
 
 

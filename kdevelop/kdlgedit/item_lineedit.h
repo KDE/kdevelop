@@ -1,5 +1,5 @@
 /***************************************************************************
-                          defines.h  -  description
+                          item_lineedit.h  -  description
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
@@ -16,26 +16,31 @@
  ***************************************************************************/
 
 
-#ifndef KDLG_DEFINES_H
-#define KDLG_DEFINES_H
+#ifndef ITEM_LINEEDIT_H
+#define ITEM_LINEEDIT_H
 
-#define MAX_WIDGETCOLS_PER_LINE 4
+#include <qlineedit.h>
+#include "item_widget.h"
+#include "defines_item.h"
 
-#define MAX_WIDGETS_PER_DIALOG 128
-#define MAX_ENTRYS_PER_WIDGET 64
-                      	
-#define ALLOWED_STRING      1
-#define ALLOWED_BOOL        2
-#define ALLOWED_INT         3
-#define ALLOWED_FILE        4
-#define ALLOWED_COLOR       5
-#define ALLOWED_FONT        6
-#define ALLOWED_CONNECTIONS 7
-#define ALLOWED_CURSOR      8
-#define ALLOWED_BGMODE      9
+/**
+  *@author Pascal Krahmer <pascal@beast.de>
+  */
 
-#define RULER_WIDTH  20
-#define RULER_HEIGHT  20
+class KDlgItem_LineEdit : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  MYITEMCLASS_BEGIN( QLineEdit )
+    MYITEMCLASS_STDSTUFF( KDlgItem_LineEdit )
+    virtual void mousePressEvent ( QMouseEvent * ) { selectMe(); }
+    virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
+    virtual void keyPressEvent ( QKeyEvent * ) {}
+  MYITEMCLASS_END
+
+  ITEMWRAPPER_STDSTUFF( KDlgItem_LineEdit, QLineEdit, "LineEdit" )
+};
+
 
 #endif
 

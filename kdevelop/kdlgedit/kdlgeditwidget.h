@@ -44,6 +44,9 @@ class KDlgEditWidget : public QWidget  {
     KDlgItem_Widget *mainWidget() { return main_widget; }
     KDlgItem_Base *selectedWidget() { return selected_widget; }
 
+    void selectWidget(KDlgItem_Base*);
+    void deselectWidget();
+
     CKDevelop *getCKDevel() { return pCKDevel; }
 
     KRuler *horizontalRuler() { return rulh; }

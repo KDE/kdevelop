@@ -48,6 +48,8 @@ class KDlgItem_Base : public QObject
 
     KDlgEditWidget* getEditWidget() { return editWidget; }
 
+    virtual void select() { }
+    virtual void deselect() { }
   protected:
     KDlgItemDatabase *childs;
     QWidget *item;

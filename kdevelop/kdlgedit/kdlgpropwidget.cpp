@@ -100,6 +100,17 @@ void AdvListView::updateWidgets()
   }
 }
 
+void AdvListView::hideAll()
+{
+  AdvListViewItem* i = (AdvListViewItem*)firstChild();
+
+  while (i) {
+    i->hideWidgets();
+    i = (AdvListViewItem*)i->nextSibling();
+  }
+}
+
+
 /**
  *
 */
@@ -127,6 +138,19 @@ void AdvListViewItem::init()
   clearAllColumnWidgets();
 }
 		
+void AdvListViewItem::hideWidgets()
+{
+  for (int i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
+    if (colwid[i])
+      colwid[i]->hide();
+
+  AdvListViewItem* i = (AdvListViewItem*)firstChild();
+  while (i) {
+    i->hideWidgets();
+    i = (AdvListViewItem*)i->nextSibling();
+  }
+}
+
 /**
  *
 */
@@ -161,7 +185,7 @@ void AdvListViewItem::clearColumnWidget( int col, bool deleteit )
 */
 void AdvListViewItem::clearAllColumnWidgets( bool deletethem )
 {
-  for (int i=0; i<=MAX_WIDGETCOLS_PER_LINE; i++)
+  for (int i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
     clearColumnWidget(i, deletethem);
 }
 
@@ -227,7 +251,7 @@ void AdvListViewItem::testAndResizeWidget(int column)
   // if the given column is in  valid range for widgets and
   //   we have  been given  a valid pointer  on a widget we
   //   continue the widget handling.
-  if ((column >= 0) && (column <= MAX_WIDGETCOLS_PER_LINE) && (colwid[ column ]))
+  if ((column >= 0) && (column < MAX_WIDGETCOLS_PER_LINE) && (colwid[ column ]))
     {
 
 #if defined(LVDEBUG)
@@ -283,7 +307,7 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
   //   we have  been given  a valid pointer  on a widget we
   //   continue the widget handling. Otherwise we just call
   //   the parents paintCell() method (see below).
-  if ((column >= 0) && (column <= MAX_WIDGETCOLS_PER_LINE) && (colwid[ column ]))
+  if ((column >= 0) && (column < MAX_WIDGETCOLS_PER_LINE) && (colwid[ column ]))
     {
 
 #if defined(LVDEBUG)
@@ -387,6 +411,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   if (!source)
     return;
 
+  lv->hideAll();
   lv->clear();
 
   QString grps[32];
@@ -663,6 +688,7 @@ void AdvLvi_Filename::btnPressed()
 }
 
 
+
 AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
   : AdvLvi_Base( parent, dpe, name )
 {
@@ -804,21 +830,38 @@ AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, KDlgPropertyEntry *dpe, const char
   : AdvLvi_Base( parent, dpe, name )
 {
   setGeometry(0,0,0,0);
-  cbBool = new QComboBox( FALSE, this );
+  cbBool = new QComboBox( TRUE, this );
+  cbBool->insertItem("");
   cbBool->insertItem(i18n("(not set)"));
-  cbBool->insertItem("handCursor");
-  cbBool->insertItem("arrowCursor");
-  cbBool->insertItem("upArrowCursor");
-  cbBool->insertItem("crossCursor");
-  cbBool->insertItem("waitCursor");
-  cbBool->insertItem("ibeamCursor");
-  cbBool->insertItem("sizeVerCursor");
-  cbBool->insertItem("sizeHorCursor");
-  cbBool->insertItem("sizeBDiagCursor");
-  cbBool->insertItem("sizeFDiagCursor");
-  cbBool->insertItem("sizeAllCursor");
-  cbBool->insertItem("blankCursor");
-  cbBool->setCurrentItem(0);
+  cbBool->insertItem("[handCursor]");
+  cbBool->insertItem("[arrowCursor]");
+  cbBool->insertItem("[upArrowCursor]");
+  cbBool->insertItem("[crossCursor]");
+  cbBool->insertItem("[waitCursor]");
+  cbBool->insertItem("[ibeamCursor]");
+  cbBool->insertItem("[sizeVerCursor]");
+  cbBool->insertItem("[sizeHorCursor]");
+  cbBool->insertItem("[sizeBDiagCursor]");
+  cbBool->insertItem("[sizeFDiagCursor]");
+  cbBool->insertItem("[sizeAllCursor]");
+  cbBool->insertItem("[blankCursor]");
+  cbBool->setCurrentItem(1);
+  cbBool->setAutoCompletion ( true );
+  cbBool->setInsertionPolicy ( QComboBox::NoInsertion );
+
+  btnMore = new QPushButton("...",this);
+  connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
+}
+
+void AdvLvi_Cursor::btnPressed()
+{
+  QString fname = KFileDialog::getOpenFileName();
+  if (!fname.isNull())
+    {
+      cbBool->changeItem(fname,0);
+      cbBool->setCurrentItem(0);
+      propEntry->value = fname;
+    }
 }
 
 void AdvLvi_Cursor::resizeEvent ( QResizeEvent *e )
@@ -826,13 +869,25 @@ void AdvLvi_Cursor::resizeEvent ( QResizeEvent *e )
   AdvLvi_Base::resizeEvent( e );
 
   if (cbBool)
-    cbBool->setGeometry(0,0,width(),height()+1);
+    cbBool->setGeometry(0,0,width()-15,height()+1);
+
+  if (btnMore)
+    btnMore->setGeometry(width()-15,0,15,height()+1);
 }
 
 QString AdvLvi_Cursor::getText()
 {
   if (cbBool)
-    return cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
+    {
+      if ((cbBool->currentText()[0]!='[') && (cbBool->currentText()[0]!='('))
+        {
+          cbBool->setCurrentItem(0);
+          cbBool->changeItem(cbBool->currentText(),0);
+          propEntry->value = cbBool->currentText();
+        }
+
+      return cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString();
+    }
   else
     return QString();
 }

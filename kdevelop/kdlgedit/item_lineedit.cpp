@@ -1,5 +1,5 @@
 /***************************************************************************
-                          defines.h  -  description
+                     item_lineedit.cpp  -  description
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
@@ -16,30 +16,42 @@
  ***************************************************************************/
 
 
-#ifndef KDLG_DEFINES_H
-#define KDLG_DEFINES_H
-
-#define MAX_WIDGETCOLS_PER_LINE 4
-
-#define MAX_WIDGETS_PER_DIALOG 128
-#define MAX_ENTRYS_PER_WIDGET 64
-                      	
-#define ALLOWED_STRING      1
-#define ALLOWED_BOOL        2
-#define ALLOWED_INT         3
-#define ALLOWED_FILE        4
-#define ALLOWED_COLOR       5
-#define ALLOWED_FONT        6
-#define ALLOWED_CONNECTIONS 7
-#define ALLOWED_CURSOR      8
-#define ALLOWED_BGMODE      9
-
-#define RULER_WIDTH  20
-#define RULER_HEIGHT  20
-
-#endif
+#include "item_lineedit.h"
+#include "itemsglobal.h"
 
 
+KDlgItem_LineEdit::MyWidget::MyWidget(KDlgItem_LineEdit* wid, QWidget* parent, const char* name )
+  : QLineEdit(parent,name)
+{
+  parentObject = wid;
+  isItemActive = false;
+  setCursor(arrowCursor);
+}
 
 
+void KDlgItem_LineEdit::MyWidget::paintEvent ( QPaintEvent *e )
+{
+  QLineEdit::paintEvent(e);
 
+  if (isItemActive)
+    KDlgItemsPaintRects(this,e);
+}
+
+KDlgItem_LineEdit::KDlgItem_LineEdit( KDlgEditWidget* editwid, QWidget *parent , const char* name )
+  : KDlgItem_Base(editwid, parent,false,name)
+{
+  item = new MyWidget(this, parent);
+  item->show();
+  item->setMouseTracking(true);
+  repaintItem();
+}
+
+void KDlgItem_LineEdit::repaintItem(QLineEdit *it)
+{
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  KDlgItem_Base::repaintItem(itm);
+}

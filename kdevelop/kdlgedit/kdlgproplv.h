@@ -54,6 +54,8 @@ class AdvListViewItem : public QListViewItem
     virtual void testAndResizeWidget(int column);
     virtual void testAndResizeAllWidgets();
 
+    virtual void hideWidgets();
+
     void updateWidgets();
 
   protected:
@@ -70,6 +72,7 @@ class AdvListView : public QListView
     AdvListView( QWidget * parent = 0, const char * name = 0 );
     virtual ~AdvListView() {}
 
+    virtual void hideAll();
   protected:
 
     virtual void mousePressEvent ( QMouseEvent * );

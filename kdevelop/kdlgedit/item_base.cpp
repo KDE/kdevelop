@@ -26,8 +26,9 @@ KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool i
   editWidget = editwid;
   childs = 0;
   isMainWidget = ismainwidget;
-  item = new QWidget(parent);
-  item->setMouseTracking(true);
+  item = 0;
+//  item = new QWidget(parent);
+//  item->setMouseTracking(true);
 
   props = new KDlgPropertyBase();
   repaintItem();

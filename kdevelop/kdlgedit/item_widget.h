@@ -44,12 +44,17 @@ class KDlgItem_Widget : public KDlgItem_Base
         int recPosX(int px) { int xnew = px+x(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((MyWidget*)parent())->recPosX(xnew); else return px; }
         int recPosY(int py) { int ynew = py+y(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((MyWidget*)parent())->recPosY(ynew); else return py; }
         bool isItemActive;
+
+        void deselect() { if (isItemActive) { isItemActive = false; repaint(); } }
+        void select() { if (!isItemActive) { isItemActive = true; repaint(); } }
+
+        void selectMe() { parentObject->getEditWidget()->selectWidget((KDlgItem_Base*)parentObject); }
       protected:
         void moveRulers( QMouseEvent *e ) { if (!parentObject) return; parentObject->getEditWidget()->horizontalRuler()->setValue(e->pos().x()+recPosX(0));parentObject->getEditWidget()->verticalRuler()->setValue(e->pos().y()+recPosY(0)); }
 
         KDlgItem_Widget* parentObject;
         virtual void paintEvent ( QPaintEvent * );
-        virtual void mousePressEvent ( QMouseEvent * ) { isItemActive = !isItemActive; repaint(); }
+        virtual void mousePressEvent ( QMouseEvent * ) { selectMe(); }
         virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
     };           	
 
@@ -63,6 +68,9 @@ class KDlgItem_Widget : public KDlgItem_Base
 
     virtual MyWidget* getItem() { return item; }
     virtual void repaintItem(QWidget *it = 0);
+
+    virtual void select() { if (item) item->select(); }
+    virtual void deselect() { if (item) item->deselect(); }
 };
 
 
