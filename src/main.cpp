@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
   aboutData.addCredit("Sascha Cunz" , I18N_NOOP("Cleanup and bugfixes for qEditor, AutoMake and much other stuff"), "mail@sacu.de");
+  aboutData.addCredit("Robert Gruber" , I18N_NOOP("SnippetPart, debugger and usability patches"), "rgruber@users.sourceforge.net");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );

@@ -66,6 +66,10 @@ API Documentation, Run Options, code reorganization. Fixes for project templates
 
 Replace plugin, Bookmarks plugin, FileList plugin, CTags2 plugin, Overall improvements and patches
   Jens Dagerbo  <jens.dagerbo@swipnet.se>
+
+SnippetPart, debugger and usability patches
+  Robert Gruber <rgruber@users.sourceforge.net>
+
   
 Other software included in the source package:
 
