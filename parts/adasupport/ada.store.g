@@ -40,6 +40,8 @@ private:
     QValueList<QStringList> m_imports;
     ParsedScopeContainer* m_currentContainer;
     PIAccess m_currentAccess;
+    bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
+                          only when we are in specs, not bodies.  */
 
 public:
     void setClassStore (ClassStore* store)     { m_store = store; }
@@ -55,6 +57,7 @@ public:
         m_currentContainer = m_store->globalScope ();
 	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
+	m_addToStore = false;
         m_store->removeWithReferences (m_fileName);
     }
 
@@ -135,7 +138,7 @@ use_clause
 library_item :
 	#(LIBRARY_ITEM
 		#(MODIFIERS ( PRIVATE { m_currentAccess = PIE_PROTECTED; } )? )
-		( subprog_decl_or_rename_or_inst_or_body
+		( lib_subprog_decl_or_rename_or_inst_or_body
 		| #(PACKAGE_BODY pb:def_id pkg_body_part)
 		| #(GENERIC_PACKAGE_INSTANTIATION gpi:def_id
 		     {
@@ -148,6 +151,7 @@ library_item :
 		       ParsedScopeContainer* psc = defineScope( #ps );
 		       m_currentContainer = psc;
 		       m_scopeStack.append( psc );
+		       m_addToStore = true;
 		     }
 		    pkg_spec_part
 		     {
@@ -158,6 +162,7 @@ library_item :
 		       }
 		       m_currentContainer = m_scopeStack.last();
 		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+		       m_addToStore = false;
 		     }
 		   )
 		| #(PACKAGE_RENAMING_DECLARATION prd:def_id
@@ -185,48 +190,63 @@ subprog_decl
 	| #(ABSTRACT_FUNCTION_DECLARATION   def_id[true] function_tail)
 	;
 
+
 def_id [bool is_subprogram=false]
 	: cn:compound_name
 	  {
-	    if (is_subprogram) {
-	      ParsedMethod *method = new ParsedMethod;
-	      method->setName (qtext (cn));
-	      method->setDeclaredInFile ( m_fileName );
-	      method->setDeclaredOnLine ( #cn->getLine() );
+	    if (m_addToStore) {
+	      if (is_subprogram) {
+	        ParsedMethod *method = new ParsedMethod;
+	        method->setName (qtext (cn));
+	        method->setDeclaredInFile ( m_fileName );
+	        method->setDeclaredOnLine ( #cn->getLine() );
+	        method->setDefinedInFile ( m_fileName );
+	        method->setDefinedOnLine ( #cn->getLine() );
 
-	      ParsedMethod *old = m_currentContainer->getMethod (method);
-	      if (old) {
+	        ParsedMethod *old = m_currentContainer->getMethod (method);
+	        if (old) {
 	          delete (method);
 	          method = old;
-	      } else {
+	        } else {
 	          m_currentContainer->addMethod (method);
+	        }
+	      } else {
+	        // TBC: what about other declarations?
 	      }
-	    } else {
-	      // TBC: what about other declarations?
 	    }
 	  }
 	;
 
+/*
 generic_inst : compound_name ( value_s )?
 	;
+ */
 
-
+/*
 formal_part_opt : #(FORMAL_PART_OPT ( parameter_specification )* )
 	;
+ */
 
+/*
 parameter_specification
 	: #(PARAMETER_SPECIFICATION defining_identifier_list modifiers
 		subtype_mark init_opt)
 	;
+ */
 
+/*
 defining_identifier_list : #(DEFINING_IDENTIFIER_LIST ( IDENTIFIER )+ )
 	;
+ */
 
+/*
 renames : CHARACTER_STRING  // CHARACTER_STRING should not really be there.
 	| OPERATOR_SYMBOL   // OPERATOR_SYMBOL should be used instead.
 	| name
 	;
+ */
 
+/*
 name    : IDENTIFIER
 	| #(DOT name
 		( ALL
@@ -238,29 +258,35 @@ name    : IDENTIFIER
 	| #(INDEXED_COMPONENT name value_s)
 	| #(TIC name attribute_id)
 	;
-
+ */
 
 def_designator
 	: cn:compound_name
 	  {
-	    ParsedMethod *method = new ParsedMethod;
-	    method->setName (qtext (cn));
-	    method->setDeclaredInFile ( m_fileName );
-	    method->setDeclaredOnLine ( #cn->getLine() );
+	    if (m_addToStore) {
+	      ParsedMethod *method = new ParsedMethod;
+	      method->setName (qtext (cn));
+	      method->setDeclaredInFile ( m_fileName );
+	      method->setDeclaredOnLine ( #cn->getLine() );
+	      method->setDefinedInFile ( m_fileName );
+	      method->setDefinedOnLine ( #cn->getLine() );
 
-	    ParsedMethod *old = m_currentContainer->getMethod (method);
-	    if (old) {
-	        delete method;
-	        method = old;
-	    } else {
-	        m_currentContainer->addMethod (method);
+	      ParsedMethod *old = m_currentContainer->getMethod (method);
+	      if (old) {
+		delete method;
+		method = old;
+	      } else {
+		m_currentContainer->addMethod (method);
+	      }
 	    }
 	  }
 	| definable_operator_symbol
 	;
 
+/*
 function_tail : formal_part_opt subtype_mark
 	;
+ */
 
 spec_decl_part
 	: #(GENERIC_PACKAGE_INSTANTIATION def_id generic_inst)
@@ -269,6 +295,7 @@ spec_decl_part
 	       ParsedScopeContainer* psc = defineScope( #ps );
 	       m_currentContainer = psc;
 	       m_scopeStack.append( psc );
+	       m_addToStore = true;
 	     }
 	    pkg_spec_part
 	     {
@@ -279,6 +306,7 @@ spec_decl_part
 	       }
 	       m_currentContainer = m_scopeStack.last();
 	       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+	       m_addToStore = false;
 	     }
 	   )
 	| #(PACKAGE_RENAMING_DECLARATION def_id renames)
@@ -292,25 +320,28 @@ pkg_spec_part
 	  )?
 	;
 
-
+/*
 task_type_or_single_decl
 	: #(TASK_TYPE_DECLARATION def_id discrim_part_opt task_definition_opt)
 	| #(SINGLE_TASK_DECLARATION def_id task_definition_opt)
 	;
+ */
 
-
+/*
 discriminant_specification
 	: #(DISCRIMINANT_SPECIFICATION defining_identifier_list
 		modifiers subtype_mark init_opt)
 	;
+ */
 
-
+/*
 entry_declaration
 	: #(ENTRY_DECLARATION IDENTIFIER
 		discrete_subtype_def_opt formal_part_opt)
 	;
+ */
 
-
+/*
 prot_op_decl
 	: entry_declaration
 	| #(PROCEDURE_DECLARATION def_id formal_part_opt)
@@ -318,7 +349,9 @@ prot_op_decl
 	| rep_spec
 	| pragma
 	;
+ */
 
+/*
 prot_member_decl_s
 	: #(PROT_MEMBER_DECLARATIONS ( prot_op_decl | comp_decl )* )
 	;
@@ -326,7 +359,9 @@ prot_member_decl_s
 comp_decl
 	: #(COMPONENT_DECLARATION defining_identifier_list component_subtype_def init_opt)
 	;
+ */
 
+/*
 // decl_common is shared between declarative_item and basic_decl_item.
 // decl_common only contains specifications.
 decl_common
@@ -361,26 +396,32 @@ decl_common
 	| #(OBJECT_DECLARATION defining_identifier_list modifiers
 		subtype_ind init_opt)
 	;
+ */
 
+/*
 id_and_discrim
 	: IDENTIFIER discrim_part_opt
 	;
+ */
 
-
+/*
 enumeration_literal_specification : IDENTIFIER | CHARACTER_LITERAL
 	;
+ */
 
-
+/*
 array_type_declaration
 	: #(ARRAY_TYPE_DECLARATION IDENTIFIER array_type_definition)
 	;
+ */
 
-
+/*
 access_type_declaration
 	: #(ACCESS_TO_PROCEDURE_DECLARATION IDENTIFIER modifiers formal_part_opt)
 	| #(ACCESS_TO_FUNCTION_DECLARATION IDENTIFIER modifiers function_tail)
 	| #(ACCESS_TO_OBJECT_DECLARATION IDENTIFIER modifiers subtype_ind)
 	;
+ */
 
 
 generic_decl
@@ -390,6 +431,7 @@ generic_decl
 		       ParsedScopeContainer* psc = defineScope( #gpd );
 		       m_currentContainer = psc;
 		       m_scopeStack.append( psc );
+		       m_addToStore = true;
 		     }
 		pkg_spec_part
 		     {
@@ -398,6 +440,7 @@ generic_decl
 		         m_scopeStack.append( m_store->globalScope() );
 		       m_currentContainer = m_scopeStack.last();
 		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+		       m_addToStore = false;
 		     }
 		)
 	| #(GENERIC_PROCEDURE_RENAMING generic_formal_part_opt def_id
@@ -410,12 +453,15 @@ generic_decl
 		function_tail)
 	;
 
+/*
 generic_formal_part_opt
 	: #(GENERIC_FORMAL_PART
 		( pragma | use_clause | generic_formal_parameter )*
 	   )
 	;
+ */
 
+/*
 generic_formal_parameter
 	: // FORMAL_TYPE_DECLARATIONs:
 	  #(FORMAL_DISCRETE_TYPE_DECLARATION def_id)
@@ -436,8 +482,25 @@ generic_formal_parameter
 	| #(FORMAL_PACKAGE_DECLARATION def_id compound_name formal_package_actual_part_opt)
 	| parameter_specification
 	;
+ */
+
+lib_subprog_decl_or_rename_or_inst_or_body
+	: { m_addToStore = true; }
+        ( subprog_decl
+	| procedure_body
+	| function_body
+	)
+          { m_addToStore = false; }
+	;
+
+subprog_decl_or_rename_or_inst_or_body
+	: subprog_decl
+	| procedure_body
+	| function_body
+	;
 
 
+/*
 // A declarative_item may appear in the declarative part of any body.
 declarative_item
 	: #(PACKAGE_BODY_STUB def_id)
@@ -452,16 +515,17 @@ declarative_item
 	| subprog_decl_or_rename_or_inst_or_body
 	| decl_common
 	;
+ */
 
 
 subprog_decl_or_body
 	: procedure_body
-	| #(PROCEDURE_DECLARATION def_id formal_part_opt)
+	| #(PROCEDURE_DECLARATION def_id[true] formal_part_opt)
 	| function_body
 	| #(FUNCTION_DECLARATION def_designator function_tail)
 	;
 
-
+/*
 // Temporary, to be turned into just `qualified'.
 // We get away with it because `qualified' is always mentioned
 // together with `name'.
@@ -482,7 +546,7 @@ name_or_qualified
 		)
 	   )
 	;
-
+ */
 
 package_body
 	: #(PACKAGE_BODY id:def_id
@@ -493,9 +557,13 @@ package_body
 	    pkg_body_part)
 	;
 
+/*
 task_body : #(TASK_BODY def_id body_part)
 	;
- 
+ */
+
+/*
 protected_body : #(PROTECTED_BODY def_id prot_op_bodies_opt)
 	;
+ */
 

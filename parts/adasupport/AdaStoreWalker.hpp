@@ -38,6 +38,8 @@ private:
     QValueList<QStringList> m_imports;
     ParsedScopeContainer* m_currentContainer;
     PIAccess m_currentAccess;
+    bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
+                          only when we are in specs, not bodies.  */
 
 public:
     void setClassStore (ClassStore* store)     { m_store = store; }
@@ -53,6 +55,7 @@ public:
         m_currentContainer = m_store->globalScope ();
 	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
+	m_addToStore = false;
         m_store->removeWithReferences (m_fileName);
     }
 
@@ -118,7 +121,7 @@ public:
 	public: void compound_name(RefAdaAST _t);
 	public: void use_clause(RefAdaAST _t);
 	public: void subtype_mark(RefAdaAST _t);
-	public: void subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t);
+	public: void lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t);
 	public: void def_id(RefAdaAST _t,
 		bool is_subprogram=false
 	);
@@ -131,80 +134,69 @@ public:
 	public: void formal_part_opt(RefAdaAST _t);
 	public: void def_designator(RefAdaAST _t);
 	public: void function_tail(RefAdaAST _t);
-	public: void value_s(RefAdaAST _t);
-	public: void parameter_specification(RefAdaAST _t);
-	public: void defining_identifier_list(RefAdaAST _t);
-	public: void modifiers(RefAdaAST _t);
-	public: void init_opt(RefAdaAST _t);
-	public: void name(RefAdaAST _t);
-	public: void attribute_id(RefAdaAST _t);
 	public: void definable_operator_symbol(RefAdaAST _t);
 	public: void spec_decl_part(RefAdaAST _t);
 	public: void basic_declarative_items_opt(RefAdaAST _t);
-	public: void task_type_or_single_decl(RefAdaAST _t);
-	public: void discrim_part_opt(RefAdaAST _t);
-	public: void task_definition_opt(RefAdaAST _t);
-	public: void discriminant_specification(RefAdaAST _t);
-	public: void entry_declaration(RefAdaAST _t);
-	public: void discrete_subtype_def_opt(RefAdaAST _t);
-	public: void prot_op_decl(RefAdaAST _t);
-	public: void rep_spec(RefAdaAST _t);
-	public: void prot_member_decl_s(RefAdaAST _t);
-	public: void comp_decl(RefAdaAST _t);
-	public: void component_subtype_def(RefAdaAST _t);
-	public: void decl_common(RefAdaAST _t);
-	public: void enum_id_s(RefAdaAST _t);
-	public: void range(RefAdaAST _t);
-	public: void expression(RefAdaAST _t);
-	public: void range_constraint_opt(RefAdaAST _t);
-	public: void array_type_declaration(RefAdaAST _t);
-	public: void access_type_declaration(RefAdaAST _t);
-	public: void id_and_discrim(RefAdaAST _t);
-	public: void subtype_ind(RefAdaAST _t);
-	public: void record_definition(RefAdaAST _t);
-	public: void array_type_definition(RefAdaAST _t);
-	public: void enumeration_literal_specification(RefAdaAST _t);
 	public: void generic_formal_part_opt(RefAdaAST _t);
-	public: void generic_formal_parameter(RefAdaAST _t);
-	public: void formal_array_type_declaration(RefAdaAST _t);
-	public: void formal_access_type_declaration(RefAdaAST _t);
-	public: void id_part(RefAdaAST _t);
-	public: void subprogram_default_opt(RefAdaAST _t);
-	public: void formal_package_actual_part_opt(RefAdaAST _t);
-	public: void declarative_item(RefAdaAST _t);
-	public: void body_part(RefAdaAST _t);
-	public: void prot_op_bodies_opt(RefAdaAST _t);
-	public: void prot_type_or_single_decl(RefAdaAST _t);
-	public: void subprog_decl_or_body(RefAdaAST _t);
 	public: void procedure_body(RefAdaAST _t);
 	public: void function_body(RefAdaAST _t);
-	public: void name_or_qualified(RefAdaAST _t);
-	public: void parenthesized_primary(RefAdaAST _t);
+	public: void subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t);
+	public: void subprog_decl_or_body(RefAdaAST _t);
 	public: void package_body(RefAdaAST _t);
-	public: void task_body(RefAdaAST _t);
-	public: void protected_body(RefAdaAST _t);
 	public: void pragma_arg(RefAdaAST _t);
+	public: void expression(RefAdaAST _t);
+	public: void attribute_id(RefAdaAST _t);
+	public: void modifiers(RefAdaAST _t);
+	public: void value_s(RefAdaAST _t);
 	public: void value(RefAdaAST _t);
 	public: void ranged_expr_s(RefAdaAST _t);
 	public: void ranged_expr(RefAdaAST _t);
 	public: void simple_expression(RefAdaAST _t);
+	public: void range(RefAdaAST _t);
 	public: void range_constraint(RefAdaAST _t);
 	public: void range_dots(RefAdaAST _t);
 	public: void range_attrib_ref(RefAdaAST _t);
 	public: void prefix(RefAdaAST _t);
+	public: void parameter_specification(RefAdaAST _t);
+	public: void defining_identifier_list(RefAdaAST _t);
+	public: void init_opt(RefAdaAST _t);
+	public: void name(RefAdaAST _t);
+	public: void parenthesized_primary(RefAdaAST _t);
 	public: void extension_opt(RefAdaAST _t);
 	public: void basic_decl_item(RefAdaAST _t);
+	public: void task_type_or_single_decl(RefAdaAST _t);
+	public: void prot_type_or_single_decl(RefAdaAST _t);
+	public: void decl_common(RefAdaAST _t);
+	public: void discrim_part_opt(RefAdaAST _t);
+	public: void task_definition_opt(RefAdaAST _t);
 	public: void task_items_opt(RefAdaAST _t);
 	public: void private_task_items_opt(RefAdaAST _t);
 	public: void discriminant_specifications(RefAdaAST _t);
+	public: void discriminant_specification(RefAdaAST _t);
 	public: void entrydecls_repspecs_opt(RefAdaAST _t);
+	public: void entry_declaration(RefAdaAST _t);
+	public: void rep_spec(RefAdaAST _t);
+	public: void discrete_subtype_def_opt(RefAdaAST _t);
 	public: void discrete_subtype_definition(RefAdaAST _t);
+	public: void subtype_ind(RefAdaAST _t);
 	public: void align_opt(RefAdaAST _t);
 	public: void comp_loc_s(RefAdaAST _t);
 	public: void local_enum_name(RefAdaAST _t);
 	public: void enumeration_aggregate(RefAdaAST _t);
 	public: void protected_definition(RefAdaAST _t);
 	public: void prot_op_decl_s(RefAdaAST _t);
+	public: void prot_member_decl_s(RefAdaAST _t);
+	public: void prot_op_decl(RefAdaAST _t);
+	public: void comp_decl(RefAdaAST _t);
+	public: void component_subtype_def(RefAdaAST _t);
+	public: void enum_id_s(RefAdaAST _t);
+	public: void range_constraint_opt(RefAdaAST _t);
+	public: void array_type_declaration(RefAdaAST _t);
+	public: void access_type_declaration(RefAdaAST _t);
+	public: void id_and_discrim(RefAdaAST _t);
+	public: void record_definition(RefAdaAST _t);
+	public: void array_type_definition(RefAdaAST _t);
+	public: void enumeration_literal_specification(RefAdaAST _t);
 	public: void index_or_discrete_range_s(RefAdaAST _t);
 	public: void index_or_discrete_range(RefAdaAST _t);
 	public: void constraint_opt(RefAdaAST _t);
@@ -226,8 +218,17 @@ public:
 	public: void choice(RefAdaAST _t);
 	public: void discrete_with_range(RefAdaAST _t);
 	public: void mark_with_constraint(RefAdaAST _t);
+	public: void generic_formal_parameter(RefAdaAST _t);
+	public: void formal_array_type_declaration(RefAdaAST _t);
+	public: void formal_access_type_declaration(RefAdaAST _t);
+	public: void id_part(RefAdaAST _t);
+	public: void subprogram_default_opt(RefAdaAST _t);
+	public: void formal_package_actual_part_opt(RefAdaAST _t);
+	public: void body_part(RefAdaAST _t);
 	public: void declarative_part(RefAdaAST _t);
 	public: void block_body(RefAdaAST _t);
+	public: void declarative_item(RefAdaAST _t);
+	public: void prot_op_bodies_opt(RefAdaAST _t);
 	public: void block_body_opt(RefAdaAST _t);
 	public: void handled_stmt_s(RefAdaAST _t);
 	public: void entry_body(RefAdaAST _t);
@@ -285,8 +286,11 @@ public:
 	public: void term(RefAdaAST _t);
 	public: void factor(RefAdaAST _t);
 	public: void primary(RefAdaAST _t);
+	public: void name_or_qualified(RefAdaAST _t);
 	public: void allocator(RefAdaAST _t);
 	public: void subprogram_body(RefAdaAST _t);
+	public: void task_body(RefAdaAST _t);
+	public: void protected_body(RefAdaAST _t);
 public:
 	RefAdaAST getAST();
 	
