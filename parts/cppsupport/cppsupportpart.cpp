@@ -727,8 +727,10 @@ CppSupportPart::parseProject( )
 	    if( (n%5) == 0 ){
 	        kapp->processEvents();
 
-		if( m_projectClosed )
+		if( m_projectClosed ){
+		    delete( bar );
 		    return false;
+		}
 	    }
 
 	    if( isValidSource(absFilePath) ){
