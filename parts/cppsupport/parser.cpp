@@ -317,6 +317,10 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
     }
  
     UPDATE_POS( node, start, lex->index() );
+    
+    // force (0,0) as start position
+    node->setStartPosition( 0, 0 );
+    
     return m_problems.size() == 0;
 }
 
@@ -822,11 +826,15 @@ bool Parser::parseCvQualify( AST::Node& node )
     return n != 0;
 }
 
-bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& /*node*/ )
+bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSimpleTypeSpecifier()" << endl;
     
+    int start = lex->index();
     bool isIntegral = false;
+    
+    TypeSpecifierAST::Node ast = CreateNode<TypeSpecifierAST>();
+    
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
 	
@@ -839,14 +847,27 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& /*node*/ )
 	    lex->nextToken();
 	    isIntegral = true;
 	} else if( isIntegral ){
-	    return true;
+	    NameAST::Node name = CreateNode<NameAST>();
+	    UPDATE_POS( name, start, lex->index() );
+	    name->setText( toString(start, lex->index()) );
+	    
+	    ast->setName( name );
+	    break;
 	} else
 	    break;
     }
 
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "!! token = " << lex->lookAhead(0).toString() << endl;
-    NameAST::Node name;
-    return parseName( name );
+    if( !isIntegral ){
+	NameAST::Node name;
+	if( !parseName(name) )
+	    return false;
+	ast->setName( name );
+    }
+    
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    
+    return true;
 }
 
 bool Parser::parsePtrOperator( AST::Node& /*node*/ )
@@ -1699,9 +1720,11 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
     return true;
 }
 
-bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& /*node*/ )
+bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclarator()" << endl;
+    
+    int start = lex->index();
     
     DeclaratorAST::Node decl;
     AST::Node init;
@@ -1710,6 +1733,11 @@ bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& /*node*/ )
     }
         
     parseInitializer( init );
+    
+    InitDeclaratorAST::Node ast = CreateNode<InitDeclaratorAST>();
+    ast->setDeclarator( decl );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }

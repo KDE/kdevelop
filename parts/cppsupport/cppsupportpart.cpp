@@ -1260,15 +1260,15 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
     AST* node = 0;
     if( ast && (node = findNodeAt(ast, line, column)) ){
     
-        while( node && node->nodeType() != NodeType_FunctionDefinition )
+	while( node && node->nodeType() != NodeType_FunctionDefinition )
 	    node = node->parent();
 	    
 	if( node ){
 	    int startLine, startColumn;
 	    int endLine, endColumn;
 	    node->getStartPosition( &startLine, &startColumn );
-	    node->getEndPosition( &endLine, &endColumn );
-	    kdDebug(9007) << "------------> ast = " << (ast->text() ? tr("<empty>") : ast->text()) << endl;
+	    node->getEndPosition( &endLine, &endColumn );	    
+	    
 	    if( node->text() )
 	        textHint = node->text();
 	    else

@@ -232,10 +232,15 @@ void BackgroundParser::run()
 	kapp->unlock();
 	
 	if( editIface && m_cppSupport->fileExtensions().contains(QFileInfo(fileName).extension()) ){
+	    lock();
 	    Unit* unit = parseFile( fileName, contents );
 	    QValueList<Problem> problems = unit->problems;
+#ifdef AST_DEBUG
+	    TranslationUnitAST* ast = unit->translationUnit;
+	    if( ast )
+		printDeclarations( ast );
+#endif
 	    
-	    lock();
 	    m_unitDict.remove( fileName );
 	    m_unitDict.insert( fileName, unit );
 

@@ -93,6 +93,48 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
     }
 }
 
+
+void printDeclarations( AST* node )
+{
+    if( !node )
+	return;
+    
+    switch( node->nodeType() ){
+    case NodeType_SimpleDeclaration:
+	{
+	    SimpleDeclarationAST* decl = (SimpleDeclarationAST*) node;
+	    kdDebug(9007) << "----> simple-declaration:" << endl;
+	    if( decl->typeSpec() && decl->typeSpec()->name() )
+		kdDebug(9007) << "----> type-spec = " 
+		    << (decl->typeSpec()->name()->text() ? decl->typeSpec()->name()->text() : QString::fromLatin1("<!notype!>"))
+		    << endl;
+	    if( decl->initDeclaratorList() ){
+	      kdDebug(9007) << "----> variables" << endl;
+	      QPtrList<InitDeclaratorAST> declarators( decl->initDeclaratorList()->initDeclaratorList() );
+	      QPtrListIterator<InitDeclaratorAST> it( declarators );
+	      while( it.current() ){
+		if( it.current()->declarator()->declaratorId() && it.current()->declarator()->declaratorId()->text() )
+		    kdDebug(9007) << "--------> declarator " << it.current()->declarator()->declaratorId()->text() << endl;
+		++it;
+	      }
+	    }
+	    kdDebug(9007) << endl << endl;
+	}
+	break;
+    default:
+	break;
+    }
+    QPtrList<AST> children = node->children();
+    if( !children.count() )    
+	return;
+    
+    QPtrListIterator<AST> it( children );
+    while( it.current() ){
+	printDeclarations( it.current() );
+	++it;
+    }
+}
+
 void scopeOfNode( AST* ast, QStringList& scope )
 {
     if( !ast )
