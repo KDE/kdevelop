@@ -140,6 +140,10 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
         QString ident = econtext->currentWord();
         if (!ident.isEmpty()) {
             m_popupstr = ident;
+            QString squeezed = KStringHandler::csqueeze(m_popupstr, 20);
+            popup->insertSeparator();
+            popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
+                               this, SLOT(slotContextFulltextSearch()) );
             popup->insertItem( i18n("Lookup in index: %1").arg(ident),
                                this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Goto manpage: %1").arg(ident),
@@ -152,6 +156,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
         if (!selection.isEmpty()) {
             m_popupstr = selection;
             QString squeezed = KStringHandler::csqueeze(selection, 20);
+            popup->insertSeparator();
             popup->insertItem( i18n("Lookup in index: %1").arg(squeezed),
                                this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),

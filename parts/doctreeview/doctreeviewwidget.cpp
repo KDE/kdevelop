@@ -835,17 +835,6 @@ void DocTreeViewWidget::searchForItem ( const QString& currentText )
 	QListViewItem* current = docView->currentItem();
 	if( current->firstChild() ) 
 	{  //only allow items with childs to be searched in
-		if( !current->parent() )
-		{// current is a toplevel item, so we must initialize all childs
-			QListViewItem * myChild = current->firstChild();
-        		while( myChild ) 
-			{
-				myChild->setOpen( true );
-				myChild->setOpen( false );
-				myChild = myChild->itemBelow();
-			}
-		}
-		
 		QListViewItemIterator  docViewIterator( current );
 		while( docViewIterator.current() )
 		{// now we do the search
@@ -942,6 +931,22 @@ void DocTreeViewWidget::slotSelectionChanged ( QListViewItem* item )
 {
 	docConfigButton->setEnabled ( true );
 	contextItem = item;
+
+	if( !item->parent() )
+	{// current is a toplevel item, so we initialize all childs
+		QListViewItem * myChild = item->firstChild();
+		while( myChild ) 
+		{
+			//DocTreeItem* dChild = dynamic_cast<DocTreeItem*>(myChild);
+			//if(dChild)
+				//dChild->fileName();
+			myChild->setOpen( true );
+			myChild->setOpen( false );
+            
+			myChild = myChild->itemBelow();
+		}
+	}
+
 }
 
 void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
@@ -970,8 +975,8 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     KPopupMenu popup(i18n("Documentation Tree"), this);
     popup.insertItem(i18n("Properties..."), this, SLOT(slotConfigure()));
     
-
     DocTreeItem *dItem = dynamic_cast<DocTreeItem*>( item );
+    DocumentationContext dcontext( dItem->fileName(), "" );
 
     QListViewItem* i = contextItem;
     while(i->parent()) // go to folder
@@ -981,11 +986,14 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     if ( i != folder_bookmarks && dItem && !dItem->fileName().isEmpty() )
     {
         popup.insertItem(i18n("Add to Bookmarks"), this, SLOT(slotAddBookmark()));
+        dcontext = DocumentationContext( ((DocTreeItem*)item)->fileName(), item->text(0) );    
     }
     if (  contextItem->parent() && contextItem->parent() == folder_bookmarks )
     {
         popup.insertItem(i18n("Remove"), this, SLOT(slotRemoveBookmark()));   
+        dcontext = DocumentationContext( ((DocTreeItem*)item)->fileName(), item->text(0) );    
     }
+    m_part->core()->fillContextMenu( &popup , &dcontext );
     popup.exec(p);
 }
 

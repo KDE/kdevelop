@@ -1,3 +1,7 @@
+2002-11-01 Sebastian Kratzert <skratzert@gmx.de>
+	* added "Search in documentation" to editor contextmenu
+	* index kdoc folder on selection
+
 2002-11-01 F@lk Brettschneider <falk@kdevelop.org>
   * fix in parts/doctreeview: if the Qt docu isn't available via doxygen books,
     fall back to the using of the Qt docu path set in the
