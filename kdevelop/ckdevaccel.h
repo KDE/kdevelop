@@ -29,10 +29,10 @@ struct SActionInfo
 	QString m_sAction;
 	bool	m_bEnabled;
 
-	SActionInfo::SActionInfo(const QString& sAction, bool bEnabled=true) :
+	SActionInfo(const QString& sAction, bool bEnabled=true) :
 		 m_sAction(sAction), m_bEnabled(bEnabled) {};
 
-	SActionInfo::SActionInfo(const SActionInfo &Info) :
+	SActionInfo(const SActionInfo &Info) :
 		 m_sAction(Info.m_sAction), m_bEnabled(Info.m_bEnabled) {};
 
 };
