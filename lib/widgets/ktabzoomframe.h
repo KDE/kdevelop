@@ -27,13 +27,23 @@ public slots:
 
   void selected(int index);
 
+
+signals:
+
+  void closeClicked();
+
   
 protected:
 
   void mousePressEvent(QMouseEvent *ev);
   void mouseReleaseEvent(QMouseEvent *ev);
   void mouseMoveEvent(QMouseEvent *ev);
-  
+ 
+
+private slots:
+
+  void slotCloseButtonClicked();
+
 
 private:
 

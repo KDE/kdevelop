@@ -67,14 +67,34 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   d->m_title->setAlignment(Qt::AlignCenter);
   hbox->addWidget(d->m_title, 1);
 
-  QToolButton *btn = new QToolButton(f);
-  btn->setFixedSize(10,10);
+  QToolButton::ArrowType arrow = QToolButton::LeftArrow;
+  switch (pos)
+  {
+  case KTabZoomPosition::Right:
+    arrow = QToolButton::RightArrow;
+    break;
+  case KTabZoomPosition::Bottom:
+    arrow = QToolButton::DownArrow;
+    break;
+  case KTabZoomPosition::Top:
+    arrow = QToolButton::UpArrow;
+    break;
+  default:
+    break;
+  }
+  
+  QToolButton *btn = new QToolButton(arrow, f);
+  btn->setFixedSize(12,12);
   hbox->addWidget(btn);
+
+  connect(btn, SIGNAL(clicked()), this, SLOT(slotCloseButtonClicked()));
 
   /* btn = new QToolButton(f);
   btn->setFixedSize(12,12);
   hbox->addWidget(btn);
   */
+
+  hbox->addSpacing(4);
 
   d->m_stack = new QWidgetStack(frame);
   vbox->addWidget(d->m_stack, 1);
@@ -130,6 +150,12 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
 KTabZoomFrame::~KTabZoomFrame()
 {
   delete d;
+}
+
+
+void KTabZoomFrame::slotCloseButtonClicked()
+{
+  emit closeClicked();
 }
 
 

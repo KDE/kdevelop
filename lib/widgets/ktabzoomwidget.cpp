@@ -59,6 +59,8 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
 
   d->m_popup = new KTabZoomFrame(parent, pos);
 
+  connect(d->m_popup, SIGNAL(closeClicked()), this, SLOT(unselected()));
+
   d->m_popup->hide();
 
   if (pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
@@ -196,6 +198,7 @@ void KTabZoomWidget::unselected()
   kdDebug(9000) << "Unselected" << endl;
 
   d->m_popup->hide();
+  d->m_tabBar->unsetButtons();
 }
 
 
