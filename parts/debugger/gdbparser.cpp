@@ -198,7 +198,17 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
             int pos;
             if ((pos = value.find(':', 0)) != -1) {
                 QCString rhs((value.mid(pos+2, value.length()).data()));
-                if (determineType(rhs.data()) != typeValue) {
+// -- I don't understand this code, but this seems to make sense
+                DataType dataType = determineType( rhs.data() );
+                if ( dataType == typeUnknown )
+                {
+                    item->setText(ValueCol, value.left(pos));
+                    item->setExpandable( false );
+                    break;
+                }
+                if ( dataType != typeValue) {
+// -- end clueless patch
+//                if (determineType(rhs.data()) != typeValue) {
                     item->setCache(rhs);
                     item->setText(ValueCol, value.left(pos));
                     break;

@@ -678,6 +678,10 @@ QCString VarItem::getCache()
 
 void VarItem::checkForRequests()
 {
+    // This shouldn't be needed to keep it from blowing up, but sometimes is.
+    // On the other hand, if it's empty, there is no reason to go on...
+    if ( cache_.isEmpty() ) return;
+
     // TODO - hardcoded for now - these should get read from config
 
     // Signature for a QT1.44 QString
