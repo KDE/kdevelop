@@ -606,8 +606,10 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         }
         delete dir;
 	if (m_bShowDirNavMsg) {
-	    insertLine2(line, Diagnostic);
-	    insertLine2(line, Diagnostic, &m_veryShortOutput);
+	    if (m_compilerOutputLevel != eVeryShort) {
+		insertLine2(line, Diagnostic);
+	    }
+//REMOVE?		insertLine2(line, Diagnostic, &m_veryShortOutput);	   }
 	    insertLine2(line, Diagnostic, &m_shortOutput);
 	    insertLine2(line, Diagnostic, &m_fullOutput);
 	}
