@@ -30,6 +30,11 @@
 #include <kmenubar.h>
 #include <kedittoolbar.h>
 
+#if (KDE_VERSION > 305)
+#include <knotifydialog.h>
+#endif
+
+
 #include "projectmanager.h"
 #include "core.h"
 #include "settingswidget.h"
