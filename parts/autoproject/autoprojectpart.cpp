@@ -28,7 +28,7 @@
 #include <qstringlist.h>
 #include <qwhatsthis.h>
 #include <qregexp.h>
-#include <qlabel.h>
+#include <qgroupbox.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -50,45 +50,6 @@
 #include <runoptionswidget.h>
 #include <envvartools.h>
 
-/** \class AutoProjectPart
-Autoprojectpart is a projectmanager for Automake based projects.
-
-Loads and maintains Makefile.am files.
-
-\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
-
-\maintainer <a href="mailto:victor_roeder AT gmx.de">Victor Röder</a>
-\maintainer <a href="mailto:a.lucas AT tu-bs.de">Amilcar do Carmo Lucas</a>
-
-\feature supports creating subprojects, targets, services (.desktop) and applications (.desktop).
-\feature Automake projects can be configured on subprojects, targets (except DATA and HEADER targets).
-\feature It will regenerate the projects Makefile.am files dynamically as you add or
-reconfigure subprojects**.
-\feature Unsupported automake features will be left unchanged
-(hopefully), no major testing has been run yet (at least not by myself).
-
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=autoproject&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
-\bug Lower Automake Manager view does not update it's view when adding a subproject (and targets, etc to the new subproject)
-\bug If removing the Active Target, update the .kdevelop file, too!
-
-
-\note
-If you want to change  the default implemention for running/starting the binary
-please add the following to your project file
-\verbatim
-<kdevautoproject>
-  <run>
-   <disable_default>true</disable_default>
-  </run>
-</kdevautoproject>
-\endverbatim
-with this configuration the "Automake Manager" doesn't insert the menuentry "execute program"
-and doesn't show the "Run Options" in the project configuration.<br>
-Now you can implement this features with your own special plugin.
-For an example please look at the projects generated for GBA using the VisualBoy Advance Plugin.
-This plugin starts a GBA binary with an emulator. -- <a href="mailto:smeier AT kdevelop.org">Sandy Meier</a>
-
-*/
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) )
 
@@ -273,7 +234,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
         RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
-        w3->mainprogram_label->setText(i18n("Main program (if empty automatically uses active target):"));
+        w3->programGroupBox->setTitle(i18n("Program (if emtpy automatically uses active target and active target's arguments)"));
         connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
@@ -428,7 +389,17 @@ QString AutoProjectPart::mainProgram(bool relative) const
 /** Retuns a QString with the run command line arguments */
 QString AutoProjectPart::runArguments() const
 {
-    return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
+    QDomDocument &dom = *projectDom();
+
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+    QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
+
+    if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
+    // If no "Main Program" and no "Program Arguments" were specified, return the active target's run arguments
+        if (m_widget->activeTarget())
+            return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
+    else
+        return DomProgramArguments;
 }
 
 

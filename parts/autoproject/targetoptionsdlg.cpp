@@ -26,6 +26,7 @@
 #include "autolistviewitems.h"
 
 #include "misc.h"
+#include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
 
@@ -43,6 +44,8 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
         insidelib_label->setText(i18n("Link convenience libraries inside project (LDADD)"));
         outsidelib_label->setText(i18n("Link libraries outside project (LDADD)"));
     }
+    else
+        run_arguments_edit->setEnabled(false);
 
     insidelib_listview->header()->hide();
     outsidelib_listview->header()->hide();
@@ -125,6 +128,9 @@ void TargetOptionsDialog::readConfig()
             lastItem = item;
         }
     }
+
+    if (target->primary == "PROGRAMS")
+        run_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name));
 }
 
 
@@ -191,6 +197,9 @@ void TargetOptionsDialog::storeConfig()
 
     // We can safely assume that this target is in the active sub project
     AutoProjectTool::modifyMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
+
+    if (target->primary == "PROGRAMS")
+        DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name, run_arguments_edit->text());
 }
 
 

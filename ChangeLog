@@ -1,3 +1,7 @@
+2003-09-26  <>
+	Added per target run arguments to the automake manager. 
+	These arguments are used when no Main program (Project Options...-> Run Options) is selected and the Program arguments  (Project Options...-> Run Options) are left empty. 
+
 2003-09-22 Alexander Dymo <cloudtemple@mksat.net>
     * Finished GUI for enabling and disabling documentation topics in a project configuration
       dialog. Thanks to Amilcar Lucas for original idea and implementation.

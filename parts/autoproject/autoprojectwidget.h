@@ -43,6 +43,7 @@ class AutoProjectWidget : public QVBox
 {
 	Q_OBJECT
 	friend class RemoveFileDialog;
+	friend class TargetOptionsDialog;  // to access projectDom() via m_part->projectDom()
 public:
 	AutoProjectWidget(AutoProjectPart *part, bool kde);
 	~AutoProjectWidget();
