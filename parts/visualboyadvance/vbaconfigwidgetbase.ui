@@ -226,7 +226,7 @@
                 <cstring>terminalCheckBox</cstring>
             </property>
             <property name="text">
-                <string>start in external terminal</string>
+                <string>Start in external terminal</string>
             </property>
         </widget>
         <spacer row="4" column="3">

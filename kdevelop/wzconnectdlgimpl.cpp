@@ -383,7 +383,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     kdDebug()  << "applying signal-slot connection ..." << endl;
     if ( strSignalMethod.isEmpty() || strSlotMethod.isEmpty() || !implMethod )
     {
-        kdDebug() << "Error: caugth NULL POINTER! can't be! uh ?" << endl;
+        kdDebug() << "Error: caugth NULL POINTER! can't be! uh?" << endl;
         return;
     }
 
@@ -427,7 +427,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
                    "Slot method: %5\n"
                    "Into method: %6\n"
                    "as \n%7\n"
-                   "Do you want to continue ?")
+                   "Do you want to continue?")
                       .arg(currentClass->name())
                       .arg((attrMember) ? attrMember -> name() : QString("this"))
                       .arg(classOfSig -> name())

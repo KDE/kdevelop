@@ -81,7 +81,7 @@
                             <cstring>cbEnablePCS</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable Persistant &amp;Class Store</string>
+                            <string>Enable persistant &amp;class store</string>
                         </property>
                     </widget>
                     <spacer>
@@ -152,7 +152,7 @@
                             <cstring>cbEnablePP</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable &amp;Pre-Parsing</string>
+                            <string>Enable &amp;pre-parsing</string>
                         </property>
                     </widget>
                     <spacer>
@@ -378,7 +378,7 @@
                             <cstring>cbEnableCC</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable Code &amp;Completion</string>
+                            <string>Enable code &amp;completion</string>
                         </property>
                     </widget>
                 </vbox>
@@ -419,7 +419,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Enable Code &amp;Hinting</string>
+                        <string>Enable code &amp;hinting</string>
                     </property>
                 </widget>
                 <spacer>
@@ -469,7 +469,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Show Code Hinting in:</string>
+                        <string>Show Code Hinting In:</string>
                     </property>
                     <grid>
                         <property name="name">

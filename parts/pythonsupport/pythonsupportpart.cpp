@@ -57,22 +57,22 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
 
     KAction *action;
 
-    action = new KAction( i18n("Execute program"), "exec", 0,
+    action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
     action->setStatusText( i18n("Runs the Python program") );
-    
-    action = new KAction( i18n("Execute string..."), "exec", 0,
+
+    action = new KAction( i18n("Execute String..."), "exec", 0,
                           this, SLOT(slotExecuteString()),
                           actionCollection(), "build_execstring" );
     action->setStatusText( i18n("Executes a string as Python code") );
 
-    action = new KAction( i18n("Start Python interpreter"), "exec", 0,
+    action = new KAction( i18n("Start Python Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
     action->setStatusText( i18n("Starts the Python interpreter without a program") );
 
-    action = new KAction( i18n("Python documentation..."), 0,
+    action = new KAction( i18n("Python Documentation..."), 0,
                           this, SLOT(slotPydoc()),
                           actionCollection(), "help_pydoc" );
     action->setStatusText( i18n("Show a Python documentation page") );

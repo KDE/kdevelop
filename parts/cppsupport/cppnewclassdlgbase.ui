@@ -47,7 +47,7 @@
                 <cstring>filenames_group</cstring>
             </property>
             <property name="title">
-                <string>File names</string>
+                <string>File Names</string>
             </property>
             <vbox>
                 <property name="name">

@@ -132,7 +132,7 @@ void CKDevSetupDlg::addGeneralTab()
 
   autoSaveCheck = new QCheckBox( autosaveGroup, "autoSaveCheck" );
   grid2->addWidget(autoSaveCheck,0,0);
-  autoSaveCheck->setText(i18n("enable Autosave"));
+  autoSaveCheck->setText(i18n("Enable autosave"));
   autoSaveCheck->setAutoRepeat( FALSE );
   autoSaveCheck->setAutoResize( FALSE );
   autoSaveCheck->setChecked(autoSave);
@@ -187,7 +187,7 @@ void CKDevSetupDlg::addGeneralTab()
   grid2 = new QGridLayout(autoswitchGroup,1,2,15,7);
   autoSwitchCheck = new QCheckBox( autoswitchGroup, "autoSwitchCheck" );
   grid2->addWidget(autoSwitchCheck,0,0);
-  autoSwitchCheck->setText(i18n("enable Autoswitch"));
+  autoSwitchCheck->setText(i18n("Enable autoswitch"));
   autoSwitchCheck->setAutoRepeat( FALSE );
   autoSwitchCheck->setAutoResize( FALSE );
   bool autoSwitch=config->readBoolEntry("Autoswitch",true);
@@ -195,7 +195,7 @@ void CKDevSetupDlg::addGeneralTab()
 
   defaultClassViewCheck = new QCheckBox( autoswitchGroup, "defaultClassViewCheck" );
   grid2->addWidget(defaultClassViewCheck,0,1);
-  defaultClassViewCheck->setText(i18n( "use Class View as default"));
+  defaultClassViewCheck->setText(i18n( "Use class view as default"));
   defaultClassViewCheck->setAutoRepeat( FALSE );
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
@@ -203,7 +203,7 @@ void CKDevSetupDlg::addGeneralTab()
 
   startupEditingCheck = new QCheckBox( autoswitchGroup, "autoStartupCheck" );
   grid2->addWidget(startupEditingCheck,1,0);
-  startupEditingCheck->setText(i18n("start editing \"main\"-source file"));
+  startupEditingCheck->setText(i18n("Start editing \"main\"-source file"));
   startupEditingCheck->setAutoRepeat( FALSE );
   startupEditingCheck->setAutoResize( FALSE );
   bool startupEditing=config->readBoolEntry("StartupEditing",true);
@@ -423,7 +423,7 @@ void CKDevSetupDlg::addDocTab()
   QLabel* update_label;
   update_label = new QLabel( docOptionsGroup, "update_label" );
   grid2->addWidget(update_label,0,0);
-  update_label->setText(i18n("Update KDE-Documentation :"));
+  update_label->setText(i18n("Update KDE-Documentation:"));
   update_label->setAlignment( 289 );
   update_label->setMargin( -1 );
 
@@ -451,7 +451,7 @@ void CKDevSetupDlg::addDocTab()
   QLabel* create_label;
   create_label = new QLabel( docOptionsGroup, "create_label" );
   grid2->addWidget(create_label,1,0);
-  create_label->setText(i18n("Create Search Database :") );
+  create_label->setText(i18n("Create Search Database:") );
   create_label->setAlignment( 289 );
   create_label->setMargin( -1 );
 

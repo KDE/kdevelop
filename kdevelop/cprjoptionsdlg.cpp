@@ -296,7 +296,7 @@ void CPrjOptionsDlg::addLinkerPage()
   libs_group=new QGroupBox(linkerOptions,"libs_group");
 
   QGridLayout *grid4 = new QGridLayout(libs_group,5,4,15,7,"grid-i");
-  libs_group->setTitle(i18n("libraries"));
+  libs_group->setTitle(i18n("Libraries"));
   QWhatsThis::add(libs_group, i18n("Choose your libraries here."));
 
   l_X11=new QCheckBox(libs_group,"l_X11");
@@ -739,7 +739,7 @@ void CPrjOptionsDlg::addBinPage()
 
   QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
   grid->addWidget(binary_box,0,0);
-  binary_box->setTitle(i18n("Binary details"));
+  binary_box->setTitle(i18n("Binary Details"));
 
   QGridLayout *grid1 = new QGridLayout( binary_box ,2,2,15,7,"grid-n");
   QLabel* binary = new QLabel(binary_box,"binary_label");
@@ -767,7 +767,7 @@ void CPrjOptionsDlg::addBinPage()
 
   QGroupBox* libtool_box= new QGroupBox(binaryOptions,"libtool_box");
   grid->addWidget(libtool_box,2,0);
-  libtool_box->setTitle(i18n("Libtool details"));
+  libtool_box->setTitle(i18n("Libtool Details"));
 
   QGridLayout *grid2 = new QGridLayout( libtool_box ,2,2,15,7,"grid-o");
   QLabel* libtool = new QLabel(libtool_box,"libtool_label");

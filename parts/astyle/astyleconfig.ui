@@ -522,7 +522,7 @@
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Indented &amp;entities</string>
+                            <string>Indented &amp;Entities</string>
                         </property>
                         <vbox>
                             <property stdset="1">
@@ -878,7 +878,7 @@
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>&amp;One liners</string>
+                            <string>&amp;One Liners</string>
                         </property>
                         <vbox>
                             <property stdset="1">

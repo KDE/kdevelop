@@ -71,7 +71,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 
   list_cpp = new QListBox( tab, "list_cpp" );
   list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
-  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C,*.m ...)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C,*.m, ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->insertItem(i18n("Qt Designer File (*.ui)"));
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
@@ -116,7 +116,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_use_template = new QCheckBox( this, "check_use_template" );
 	check_use_template->setFocusPolicy( QWidget::TabFocus );
 	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
-	check_use_template->setText(i18n("use Template") );
+	check_use_template->setText(i18n("Use template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
 	QWhatsThis::add(check_use_template,i18n("Check this if you want to use a template."));
@@ -146,7 +146,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_add_project = new QCheckBox( button_group, "check_add_project" );
 	check_add_project->setFocusPolicy( QWidget::TabFocus );
 	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
-	check_add_project->setText(i18n("add to Project") );
+	check_add_project->setText(i18n("Add to project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
 	QWhatsThis::add(check_add_project,i18n("Check this if you want to add the new file to your project."));

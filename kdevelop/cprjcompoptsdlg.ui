@@ -237,7 +237,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>store &amp;intermediate files</string>
+                                    <string>Store &amp;intermediate files</string>
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
@@ -252,7 +252,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>enable &amp;profiling</string>
+                                    <string>Enable &amp;profiling</string>
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
@@ -355,7 +355,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>&amp;debugging information</string>
+                                    <string>&amp;Debugging information</string>
                                 </property>
                             </widget>
                         </grid>
@@ -475,7 +475,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>op&amp;timization</string>
+                                    <string>Op&amp;timization</string>
                                 </property>
                             </widget>
                         </grid>
@@ -828,7 +828,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>remove all symbol table and relocation information from executable (-s)</string>
+                                    <string>Remove all symbol table and relocation information from executable (-s)</string>
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
@@ -843,7 +843,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>&amp;prevent using shared libraries (-static)</string>
+                                    <string>&amp;Prevent using shared libraries (-static)</string>
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
@@ -1146,7 +1146,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>e&amp;nable optimization</string>
+                                    <string>E&amp;nable optimization</string>
                                 </property>
                                 <property>
                                     <name>toolTip</name>
@@ -1165,7 +1165,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>enab&amp;le debug </string>
+                                    <string>Enab&amp;le debug </string>
                                 </property>
                                 <property>
                                     <name>toolTip</name>
@@ -1184,7 +1184,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>&amp;build size optimized</string>
+                                    <string>&amp;Build size optimized</string>
                                 </property>
                                 <property>
                                     <name>toolTip</name>
@@ -1203,7 +1203,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>compile &amp;strict</string>
+                                    <string>Compile &amp;strict</string>
                                 </property>
                                 <property>
                                     <name>toolTip</name>

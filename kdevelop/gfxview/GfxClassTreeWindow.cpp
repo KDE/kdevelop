@@ -45,8 +45,8 @@ CGfxClassTreeWindow::CGfxClassTreeWindow(QWidget *aparent)
   resize(400,400);
 
   // Instantiate buttons
-  m_foldbtn = new QPushButton(i18n("Fold all"),this);
-  m_unfoldbtn = new QPushButton(i18n("Unfold all"),this);
+  m_foldbtn = new QPushButton(i18n("Fold All"),this);
+  m_unfoldbtn = new QPushButton(i18n("Unfold All"),this);
   m_classcombo = new QComboBox(true,this,"Center class");
   m_printbtn = new QPushButton(i18n("Print"),this);
 

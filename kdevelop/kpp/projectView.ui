@@ -380,7 +380,7 @@
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Include Application Icon</string>
+                                        <string>Include application icon</string>
                                     </property>
                                 </widget>
                                 <widget>
@@ -391,7 +391,7 @@
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Include Changelog</string>
+                                        <string>Include changelog</string>
                                     </property>
                                     <property stdset="1">
                                         <name>enabled</name>

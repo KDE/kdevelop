@@ -158,7 +158,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
 
-    action = new KAction(i18n("Step &over"), "dbgnext", 0,
+    action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setEnabled(false);
@@ -169,7 +169,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
 
-    action = new KAction(i18n("Step &into"), "dbgstep", 0,
+    action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setEnabled(false);
@@ -180,13 +180,13 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "the function has been entered.") );
 
 
-    action = new KAction(i18n("Step into i&nstruction"), "dbgstepinst", 0,
+    action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setEnabled(false);
     action->setStatusText( i18n("Steps into the next assembly instruction") );
 
-    action = new KAction(i18n("Step o&ut"), "dbgstepout", 0,
+    action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setEnabled(false);

@@ -454,7 +454,7 @@ void CRealFileView::slotAddFileToProject() {
 
   QString filename=getFullFilename(currentItem());
   QString msg;
-  msg.sprintf(i18n("Do you want to add the file\n%s\nto the project ?"), filename.data());
+  msg.sprintf(i18n("Do you want to add the file\n%s\nto the project?"), filename.data());
   if (KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 

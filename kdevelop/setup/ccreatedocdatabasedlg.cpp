@@ -65,7 +65,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   //-----search engine group-----
   QButtonGroup* searcheng_ButtonGroup;
   searcheng_ButtonGroup = new QButtonGroup( this, "ButtonGroup_0" );
-  searcheng_ButtonGroup->setTitle( i18n("Index engine") );
+  searcheng_ButtonGroup->setTitle( i18n("Index Engine") );
 
   useGlimpse = new QRadioButton( i18n("Glimpse"), searcheng_ButtonGroup );
   if (foundGlimpse)
@@ -112,15 +112,15 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
 
   qt_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_3" );
-  qt_checkbox->setText( i18n("index the QT documentation") );
+  qt_checkbox->setText( i18n("Index the QT documentation") );
   qt_checkbox->setChecked( TRUE );
 
   kde_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_1" );
-  kde_checkbox->setText(i18n("index the KDE documentation") );
+  kde_checkbox->setText(i18n("Index the KDE documentation") );
   kde_checkbox->setChecked( TRUE );
 
 	if (bShowIndexingButton) {
-	  start_button  = new QPushButton(i18n("Start indexing"), wdg);
+	  start_button  = new QPushButton(i18n("Start Indexing"), wdg);
   	start_button->setDefault(true);
 	}
 
@@ -136,7 +136,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   // ------- additional dirs group --------------
   QButtonGroup* qtarch_ButtonGroup_2;
   qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
-  qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
+  qtarch_ButtonGroup_2->setTitle(i18n("Additional Directories to Index"));
 
   dir_edit = new QLineEdit( qtarch_ButtonGroup_2, "LineEdit_1" );
   dir_edit->setText( "" );

@@ -794,7 +794,7 @@ void CKDevelop::slotProjectGenerate()
   {
     if (KMessageBox::questionYesNo(this, i18n("In the path you've given\n"
                                                 "already contains a KDevelop Project file!\n"
-                                                "Overwrite ?"),
+                                                "Overwrite?"),
                                           i18n("File Exists!")) != KMessageBox::Yes)
     {
       slotStatusMsg(i18n("Ready."));
@@ -1567,7 +1567,7 @@ void CKDevelop::newSubDir(){
 SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
   KDialog(0, 0, true)
 {
-  setCaption(i18n("Save Changed Project Files ?"));
+  setCaption(i18n("Save Changed Project Files?"));
 
   QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
@@ -1600,7 +1600,7 @@ SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
   KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
   QPushButton *yes      = buttonbox->addButton(i18n("Yes"));
   QPushButton *no       = buttonbox->addButton(i18n("No"));
-  QPushButton *saveAll  = buttonbox->addButton(i18n("Save all"));
+  QPushButton *saveAll  = buttonbox->addButton(i18n("Save All"));
   QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
   buttonbox->layout();
   topLayout->addWidget(buttonbox);

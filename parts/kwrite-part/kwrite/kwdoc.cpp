@@ -169,8 +169,8 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const QString &path,
       setXMLFile( "kwrite_browser.rc" );
 
       KStdAction::selectAll( view, SLOT( selectAll() ), actionCollection(), "select_all" );
-      (void)new KAction( i18n( "Unselect all" ), 0, view, SLOT( deselectAll() ), actionCollection(), "unselect_all" );
-      //(void)new KAction( i18n( "Invert selection" ), 0, view, SLOT( invertSelection() ), actionCollection(), "invert_select" );
+      (void)new KAction( i18n( "Unselect All" ), 0, view, SLOT( deselectAll() ), actionCollection(), "unselect_all" );
+      //(void)new KAction( i18n( "Invert Selection" ), 0, view, SLOT( invertSelection() ), actionCollection(), "invert_select" );
       KStdAction::find( view, SLOT( find() ), actionCollection(), "find" );
       KStdAction::findNext( view, SLOT( findAgain() ), actionCollection(), "find_again" );
       KStdAction::gotoLine( view, SLOT( gotoLine() ), actionCollection(), "goto_line" );

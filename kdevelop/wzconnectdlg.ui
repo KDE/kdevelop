@@ -778,7 +778,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>text</name>
-                            <string>Clone a function...</string>
+                            <string>Clone a Function...</string>
                         </property>
                     </widget>
                     <spacer row="2"  column="0" >
@@ -831,7 +831,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Members list and its signals list  </string>
+                            <string>Members List and its Signals List  </string>
                         </property>
                         <grid>
                             <property stdset="1">
@@ -1289,7 +1289,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>slot members:</string>
+                            <string>Slot Members:</string>
                         </property>
                         <grid>
                             <property stdset="1">

@@ -2278,21 +2278,21 @@ void KWrite::loadURL(const KURL &url, int flags) {
   else {
     if ( flags & KWrite::lfInsert ) {
       if ( loadFile( url.path(), flags ) )
-        emit statusMsg( i18n( "Inserted : %1" ).arg( url.fileName() ) );
+        emit statusMsg( i18n( "Inserted: %1" ).arg( url.fileName() ) );
       else
         emit statusMsg( QString::null );
     } else {
       if (QFileInfo(url.path()).exists()) {
         if ( loadFile( url.path(), flags ) ) {
           kWriteDoc->setURL( url, !(flags & KWrite::lfNoAutoHl ) );
-          emit statusMsg( i18n( "Read : %1" ).arg( url.fileName() ) );
+          emit statusMsg( i18n( "Read: %1" ).arg( url.fileName() ) );
         } else
           emit statusMsg( QString::null );
       } else {           // don't start whining, just make a new document
         kWriteDoc->clear();
         kWriteDoc->setURL( url, !(flags & KWrite::lfNoAutoHl ) );
         kWriteDoc->updateViews();
-        emit statusMsg( i18n( "New File : %1" ).arg( url.fileName() ) );
+        emit statusMsg( i18n( "New File: %1" ).arg( url.fileName() ) );
         kWriteDoc->setNewDoc( true ); // File is new, check for overwrite!
       }
     }
@@ -2385,9 +2385,9 @@ void KWrite::slotJobReadResult( KIO::Job *job )
     QString msg;
 
     if ( flags & KWrite::lfInsert )
-        msg = i18n( "Inserted : %1" ).arg( url.fileName() );
+        msg = i18n( "Inserted: %1" ).arg( url.fileName() );
     else
-        msg = i18n( "Read : %1" ).arg( url.fileName() );
+        msg = i18n( "Read: %1" ).arg( url.fileName() );
 
     emit statusMsg( msg );
     // Something else todo?
@@ -2409,14 +2409,14 @@ void KWrite::loadInternal( const QByteArray &data, const KURL &url, int flags )
     QString msg;
 
     if ( flags & KWrite::lfInsert )
-        msg = i18n( "Inserted : %1" ).arg( url.fileName() );
+        msg = i18n( "Inserted: %1" ).arg( url.fileName() );
     else
     {
         kWriteDoc->setURL( url, !(flags & KWrite::lfNoAutoHl ) );
         kWriteDoc->updateLines();
         kWriteDoc->updateViews();
 
-        msg = i18n( "Read : %1" ).arg( url.fileName() );
+        msg = i18n( "Read: %1" ).arg( url.fileName() );
     }
 
     emit statusMsg( msg );

@@ -169,7 +169,7 @@ void CNewClassDlg::initDialog(const char* dir /*=0*/){
   layout->addWidget( template_check );
 
   qwidget_check = new QCheckBox( add_group, "qwidget_check" );
-  qwidget_check->setText( i18n("Generate a QWidget-Childclass") );
+  qwidget_check->setText( i18n("Generate a QWidget childclass") );
   qwidget_check->setMinimumSize( qwidget_check->sizeHint() );
   layout->addWidget( qwidget_check );
   layout->addStretch( 1 );

@@ -324,7 +324,7 @@
                             <cstring>pbNew</cstring>
                         </property>
                         <property name="text">
-                            <string>New  Item</string>
+                            <string>New Item</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string>add a new parameter</string>
@@ -338,7 +338,7 @@
                             <string>Delete</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Delete current parameter</string>
+                            <string>Delete Current Parameter</string>
                         </property>
                     </widget>
                     <spacer>
@@ -369,7 +369,7 @@
                             <string>Move Up</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Move current parameter up</string>
+                            <string>Move Current Parameter up</string>
                         </property>
                     </widget>
                     <widget class="QPushButton">
@@ -383,7 +383,7 @@
                             <string>Move Down</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Move current parameter down</string>
+                            <string>Move Current Parameter Down</string>
                         </property>
                     </widget>
                 </vbox>
@@ -544,7 +544,7 @@
                     <bool>true</bool>
                 </property>
                 <property name="text">
-                    <string>Clone a function...</string>
+                    <string>Clone a Function...</string>
                 </property>
             </widget>
             <spacer>

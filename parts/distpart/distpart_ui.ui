@@ -200,7 +200,7 @@
                         </property>
                         <property stdset="1">
                             <name>text</name>
-                            <string>Use Custom Options</string>
+                            <string>Use custom options</string>
                         </property>
                     </widget>
                     <widget row="2"  column="0" >
@@ -651,7 +651,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>Create Development Package</string>
+                                    <string>Create development package</string>
                                 </property>
                             </widget>
                             <widget>
@@ -662,7 +662,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>Create Documentation Package</string>
+                                    <string>Create documentation package</string>
                                 </property>
                             </widget>
                             <widget>
@@ -673,7 +673,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>Include Application Icon</string>
+                                    <string>Include application icon</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -884,7 +884,7 @@
                                         </property>
                                         <property stdset="1">
                                             <name>text</name>
-                                            <string>Generate HTML Information Page</string>
+                                            <string>Generate HTML information page</string>
                                         </property>
                                     </widget>
                                     <widget row="1"  column="1" >
@@ -1138,7 +1138,7 @@
                                         </property>
                                         <property stdset="1">
                                             <name>text</name>
-                                            <string>Upload to custom FTP Site</string>
+                                            <string>Upload to custom FTP site</string>
                                         </property>
                                     </widget>
                                     <widget row="0"  column="0"  rowspan="1"  colspan="2" >
@@ -1149,7 +1149,7 @@
                                         </property>
                                         <property stdset="1">
                                             <name>text</name>
-                                            <string>Upload Files to ftp.kde.org</string>
+                                            <string>Upload files to ftp.kde.org</string>
                                         </property>
                                     </widget>
                                     <spacer row="4"  column="0" >

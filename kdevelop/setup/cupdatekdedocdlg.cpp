@@ -75,7 +75,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
 
   QWidget* wdg2 = new QWidget(this);
   install_box = new QButtonGroup( wdg2, "install_box" );
-  install_box->setTitle(i18n("Choose installation mode:") );
+  install_box->setTitle(i18n("Choose Installation Mode:") );
   QHBoxLayout* hl2 = new QHBoxLayout(wdg2);
   vl1->addWidget(wdg2);
   hl2->addWidget(install_box);
@@ -287,7 +287,7 @@ void CUpdateKDEDocDlg::OK(){
                                                 "be cross-referenced to the Qt-library, you have\n"
                                                 "to set the correct path to your Qt-library\n"
                                                 "documentation first.\n"
-                                                "Do you want to set the Qt-Documentation path first ?"));
+                                                "Do you want to set the Qt-Documentation path first?"));
     if (qt_set==KMessageBox::Yes)
       return;
   }
