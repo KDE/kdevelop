@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="15" name="kdevelop" >
+<kpartgui version="16" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -157,9 +157,8 @@
 </ToolBar>
 
 <Menu name="rb_popup">
-  <Merge/>
   <Separator/>
-  <Action name="file_closewindow"/>
+  <Action name="file_close"/>
   <Action name="file_closeother"/>
 </Menu>
 

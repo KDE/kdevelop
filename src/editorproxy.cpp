@@ -54,6 +54,8 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 
 void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup)
 {
+  kdDebug( 9000 ) << "EditorProxy::installPopup called with popup = " << popup << endl;
+
   if (part->inherits("KTextEditor::Document") && part->widget())
   {
     PopupMenuInterface *iface = dynamic_cast<PopupMenuInterface*>(part->widget());
@@ -64,6 +66,12 @@ void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup)
       connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
     }
   }
+
+  // ugly hack: mark the "original" items
+  m_popupIds.resize(popup->count());
+  for (uint index=0; index < popup->count(); ++index)
+    m_popupIds[index] = popup->idAt(index);
+
 }
 
 
@@ -89,11 +97,6 @@ void EditorProxy::popupAboutToShow()
         kdDebug(9000) << "leaving id " << id << endl;
     }
   }
-
-  // ugly hack: mark the "original" items
-  m_popupIds.resize(popup->count());
-  for (uint index=0; index < popup->count(); ++index)
-    m_popupIds[index] = popup->idAt(index);
 
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
   if (!ro_part)
