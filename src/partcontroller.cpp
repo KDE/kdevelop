@@ -156,11 +156,14 @@ void PartController::setEncoding(const QString &encoding)
 
 void PartController::editDocument(const KURL &inputUrl, int lineNum)
 {
+  kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << endl;
+
   KURL url = inputUrl;
   bool localUrl = url.url().startsWith("file:/");
 
   // Make sure the URL exists
-  if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
+  // KDE 3.0 compatibility hack: use KIO::NetAccess for everything >= KDE 3.1
+  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
     // Try to find this file in the current project's list instead
     KDevProject* project = API::getInstance()->project();
 
@@ -177,17 +180,19 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
     }
 
     localUrl = url.url().startsWith("file:/");
-    if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
+    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
       // See if this url is relative to the current project's directory
       url = project->projectDirectory() + "/" + url.url();
     }
 
     localUrl = url.url().startsWith("file:/");
-    if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
+    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
       // Here perhaps we should prompt the user to find the file?
       return;
     }
   }
+
+  // We now have a url that exists ;)
 
   url.cleanPath(true);
 
@@ -389,7 +394,7 @@ QPopupMenu *PartController::contextPopupMenu()
 }
 
 
-static bool urlIsEqual(const KURL &a, const KURL &b)
+/*static bool urlIsEqual(const KURL &a, const KURL &b)
 {
   if (a.isLocalFile() && b.isLocalFile())
   {
@@ -403,7 +408,7 @@ static bool urlIsEqual(const KURL &a, const KURL &b)
   }
 
   return a == b;
-}
+}*/
 
 KParts::Part *PartController::partForURL(const KURL &url)
 {
@@ -411,7 +416,7 @@ KParts::Part *PartController::partForURL(const KURL &url)
   for ( ; it.current(); ++it)
   {
     KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-    if (ro_part && urlIsEqual(url, ro_part->url()))
+    if (ro_part && url == ro_part->url())
       return ro_part;
   }
 
