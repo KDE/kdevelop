@@ -52,7 +52,6 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 
-
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
     : KTextEditor::View( document, parent, name ),
       m_document( document ), m_textHintToolTip( 0 )
@@ -378,31 +377,37 @@ void QEditorView::proceed()
         firstParagraph = c1.paragraph();
         firstIndex = c1.index();
         QTextCursor c2 = edit->document()->selectionEndCursor( QTextDocument::Standard );
-	lastParagraph = c2.paragraph();
-	lastIndex = c2.index();
+        lastParagraph = c2.paragraph();
+        lastIndex = c2.index();
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
         lastParagraph = edit->document()->lastParagraph();
-	lastIndex = lastParagraph->length()-1;
+        lastIndex = lastParagraph->length()-1;
     }
     
     bool bProceed = true;
     if (forw) {
-	while (bProceed) { // loop until cancelled
-	    bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
-	    if (bProceed) {
-		bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
-	    }
-	}
+        while (bProceed) { // loop until cancelled
+            bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
+            if (bProceed) {
+                bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
+            }
+            if (!m_editor->selectedText()) {
+                bProceed = false; // nothing found in the whole selection or file
+            }
+        }
     }
     else { // backwards
-	while (bProceed) { // loop until cancelled
-	    bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
-	    if (bProceed) {
-		bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
-	    }
-	}
+        while (bProceed) { // loop until cancelled
+            bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
+            if (bProceed) {
+                bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
+            }
+            if (!m_editor->selectedText()) {
+                bProceed = false; // nothing found in the whole selection or file
+            }
+        }
     }
 }
 
