@@ -233,8 +233,8 @@ QListViewItem *CTreeHandler::addRoot( const char *aName,
 QListViewItem *CTreeHandler::addItem( const char *aName, 
                                       THType iconType,
                                       QListViewItem *parent,
-																			const char* label2=0, const char* label3=0,
-																			const char* label4=0, const char* label5=0 )
+                                      const char* label2 /*=0*/, const char* label3 /*=0*/,
+                                      const char* label4/*=0*/, const char* label5/*=0*/ )
 {
   assert( aName != NULL );
   assert( parent != NULL );
