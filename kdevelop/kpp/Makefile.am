@@ -11,20 +11,10 @@ libkpp_a_SOURCES = cdevproject.cpp projectView.ui prefView.ui kpp.cpp cspec.cpp
 
 EXTRA_DIST = README buildrpm.sh cspec.cpp cspec.h kpp.cpp kpp.h prefView.ui projectView.ui template.spec cdevproject.cpp cdevproject.h template-make.spec template-kde.spec 
 
-install-data-local:
-	$(mkinstalldirs) $(kde_datadir)/kdevelop/tools/
-	$(INSTALL_DATA) buildrpm.sh $(kde_datadir)/kdevelop/tools/buildrpm.sh
-	$(mkinstalldirs) $(kde_datadir)/kdevelop/
-	$(INSTALL_DATA) template.spec $(kde_datadir)/kdevelop/template.spec
-	$(mkinstalldirs) 
-	$(INSTALL_DATA) template-make.spec blah
-	$(mkinstalldirs) $(datadir)/kdevelop/
-	$(INSTALL_DATA) template-kde.spec $(datadir)/kdevelop/templates
+tools_DATA = buildrpm.sh
+toolsdir = $(kde_datadir)/kdevelop/tools/
 
-uninstall-local:
-	-rm -f $(kde_datadir)/kdevelop/tools/buildrpm.sh
-	-rm -f $(kde_datadir)/kdevelop/template.spec
-	-rm -f blah
-	-rm -f $(datadir)/kdevelop/templates
+data_DATA = template.spec template-make.spec template-kde.spec
+datadir = $(kde_datadir)/kdevelop/
 
 ####### kdevelop will overwrite this part!!! (end)############
