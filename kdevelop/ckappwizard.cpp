@@ -3,7 +3,6 @@
                     kappwizard.cpp - the kde-application-wizard
                              -------------------                                         
 
-    version              :                                   
     begin                : 9 Sept 1998                                        
     copyright            : (C) 1998 by Stefan Heidrich                         
     email                : sheidric@rz.uni-potsdam.de                                     
@@ -106,9 +105,7 @@ void CKAppWizard::initPages(){
   ta->setGeometry(30,250,150,30);
   //  QToolTip::add(ta,i18n("use for a minimal C++-Application"));
   KQuickHelp::add(ta,
-	i18n("Select this to create a C/C++-Terminal-Application.\n"
-	 	"This will only contain the main widget\n"
-		"class which inherits QWidget until now."));
+	i18n("Select this to create a C/C++-Terminal-Application."));
 
   connect(ta,SIGNAL(clicked()),SLOT(slotCPPClicked()));
   bgroup->insert( kna );

@@ -2,10 +2,10 @@
                     cprjoptionsdlg.h - the setup DLG for a project  
                              -------------------                                         
 
-    version              :                                   
     begin                : 10 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    copyright            : (C) 1998 by Sandy Meier,Stefan Bartel 
+    email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de
+ 
  ***************************************************************************/
 
 /***************************************************************************

@@ -2,7 +2,6 @@
                      ckdevelop.h - the mainclass in kdevelop   
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -230,8 +229,11 @@ public:
 
   void slotCVViewDeclaration(int index);
   void slotCVViewDefinition(int index);
-
+  
+  /**header,cpp,browser,tools*/
   void slotSTabSelected(int item);
+  /**cv,lfv,wfv,doc*/
+  void slotTTabSelected(int item);
   void slotSCurrentTab(int item);
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();

@@ -1,10 +1,15 @@
-1999-02-03    <Ralf.Nolden@post.rwth-aachen.de>
+1999-02-03  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* implemented a configurable doc-tree
+
+1999-02-03  Ralf Nolden  <Ralf.Nolden@post.rwth-aachen.de>
+
         * added project close dialog connected to new project and Kappwizard
         * fixed focus in Doc-Browser and outputview
 
-1999-02-02    <smeier@rz.uni-potsdam.de>
+1999-02-02  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-	* fixed the TAB-bug
+	* fixed the tabview-bug
 	* added the russian documentation by Ilmar Habibulin <ilmar@ints.ru>
 
 1999-02-01 Sandy Meier <smeier@rz.uni-potsdam,de>
@@ -15,7 +20,7 @@
        * fixed the focus for the edit widgets
        * changed slotFileSave to refresh trees only for header files (faster)
        * fixed ouput_view_pos to show up on start depending on config file because
-         loading the html file disables output widet
+         loading the html file disables output widget
 
 1999-01-31 Sandy Meier <smeier@rz.uni-potsdam.de>
 

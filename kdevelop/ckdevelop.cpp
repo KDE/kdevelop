@@ -2,7 +2,6 @@
                     kdevelop.cpp - the main class in CKDevelop
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -429,8 +428,8 @@ void CKDevelop::slotOptionsTBrowserToolbar(){
 void CKDevelop::slotOptionsTStatusbar(){
   
   bViewStatusbar=!bViewStatusbar;
-    view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
-    enableStatusBar();
+  view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
+  enableStatusBar();
   
 }
 void CKDevelop::slotOptionsTTreeView(){
@@ -444,12 +443,12 @@ void CKDevelop::slotOptionsTTreeView(){
     top_panner->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
-//  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//  resize (width()+1,height());
+  //  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  //  resize (width()+1,height());
   QRect rMainGeom= top_panner->geometry();
   top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-
+  
 }
 void CKDevelop::slotOptionsTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -997,6 +996,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   }
 
   s_tab_view->setCurrentTab(BROWSER);
+  browser_widget->setFocus();
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
     browser_widget->showURL(url,true); // with reload if equal
@@ -1124,7 +1124,19 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     cerr << "process exited with error(s)..." << endl;
   }
 }
-
+void CKDevelop::slotTTabSelected(int item){
+  if(item == DOC){
+    // disable the outputview
+    if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+      output_view_pos=view->separatorPos();
+      view->setSeparatorPos(100);
+      QRect rMainGeom= view->geometry();
+      view->resize(rMainGeom.width()-1,rMainGeom.height());
+      view->resize(rMainGeom.width()+1,rMainGeom.height());
+    }
+  }
+}
 void CKDevelop::slotSTabSelected(int item){
   if (item == HEADER){
     edit_widget = header_widget;
@@ -1218,8 +1230,6 @@ void CKDevelop::slotDocTreeSelected(int index){
 
   config->setGroup("Doc_Location");
   if(*str == "Tutorial"){
-
-    
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
     if( !QFileInfo( file ).exists() ){
@@ -1228,48 +1238,62 @@ void CKDevelop::slotDocTreeSelected(int index){
     }
     
     slotURLSelected(browser_widget,"file:" + file,1,"test");
+    return;
   }
   if(*str == "Manual"){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/index.html";
-
+    
     if( !QFileInfo( file ).exists() ){
       // not found: use the default
       file = strpath + "default/" + "kdevelop/index.html";
     }
     slotURLSelected(browser_widget,"file:" + file,1,"test");
+    return;
   }
   if(*str == "Qt-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
+    return;
   }
   if(*str == "KDE-Core-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdecore/index.html",1,"test");
+    return;
   }
   if(*str == "KDE-UI-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeui/index.html",1,"test");
+    return;
   }
   if(*str == "KDE-KFile-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfile/index.html",1,"test");
+    return;
   }
   if(*str == "KDE-HTMLW-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtmlw/index.html",1,"test");
+     return;
   }
   if(*str == "KDE-KFM-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfmlib/index.html",1,"test");
+     return;
   }
   if(*str == "KDE-KAB-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kab/index.html",1,"test");
+     return;
   }
   if(*str == "KDE-KSpell-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kspell/index.html",1,"test");
+     return;
   }
   if(*str == "User-Manual"){
     slotDocManual();
+     return;
   }
   if(*str == "API-Documentation"){
     slotDocAPI();
-    
+     return;
   }
+  //
+  config->setGroup("Other_Doc_Location");
+  slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
 }
 void CKDevelop::slotToolsKIconEdit(){
 
@@ -1361,7 +1385,7 @@ void CKDevelop::slotHelpHomepage(){
   //  slotURLSelected(browser_widget,"http://anakonda.alpha.org/~smeier/kdevelop/index.html",1,"test");
 }
 void CKDevelop::slotHelpAbout(){
-  KMsgBox::message(this,i18n("About..."),i18n("\tKDevelop Version "+version+" (Alpha) \n\n\t(c) 1998 KDevelop Team \n
+  KMsgBox::message(this,i18n("About..."),i18n("\tKDevelop Version "+version+" (Alpha) \n\n\t(c) 1998,1999 KDevelop Team \n
 Sandy Meier <smeier@rz.uni-potsdam.de>
 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 Stefan Bartel <bartel@rz.uni-potsdam.de>

@@ -2,7 +2,6 @@
                           resource.h  - 
                              -------------------                                         
 
-    version              :                                   
     begin                : Mon Oct  5 1998
                                            
     copyright            : (C) 1998 by Sandy Meier                     
@@ -165,6 +164,10 @@
 #define BROWSER 2
 #define TOOLS 	3
 
+#define CV 0
+#define LFV 1
+#define RFV 2
+#define DOC 3
 
 #define MESSAGES 0
 #define STDINSTDOUT 1

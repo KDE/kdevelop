@@ -157,6 +157,7 @@ void CKDevelop::init(){
 
   t_tab_view = new CTabCtl(top_panner);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
+  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
   log_file_tree->setIndentSpacing(15);
@@ -170,7 +171,7 @@ void CKDevelop::init(){
   real_file_tree->setFocusPolicy(QWidget::ClickFocus);
   real_file_tree->setIndentSpacing(15);
 
-  doc_tree = new CDocTree(t_tab_view,"DOC");
+  doc_tree = new CDocTree(t_tab_view,"DOC",config);
   doc_tree->setFocusPolicy(QWidget::ClickFocus);
   doc_tree->setIndentSpacing(15);
 

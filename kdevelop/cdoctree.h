@@ -2,7 +2,6 @@
                     cdoctree.h -
                              -------------------                                         
 
-    version              :                                   
     begin                : 3 Oct 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -24,6 +23,7 @@
 #include <kiconloader.h>
 #include <kapp.h>
 #include "cproject.h"
+#include <kpopmenu.h>
 
 
 /** the documentation tree (manual,tutorial,KDE-libs...)
@@ -34,14 +34,32 @@ class CDocTree : public KTreeList {
   Q_OBJECT 
 public: 
   /** construtor */
-  CDocTree(QWidget*parent=0,const char* name=0); 
+  CDocTree(QWidget*parent=0,const char* name=0, KConfig* config=0); 
   /** destructor */
   ~CDocTree();
   /** starts the refresh */
   void refresh(CProject* prj);
   
-private:
-KIconLoader* icon_loader;
+protected:
+  void  mousePressEvent(QMouseEvent* event);
+  
+  KIconLoader* icon_loader;
+  KPopupMenu*  others_pop;
+  KPopupMenu* doc_pop;
+  bool left_button;
+  bool right_button;
+  QPoint mouse_pos; // the position at the last mousepress-event
+  KConfig* config_kdevelop;
+  CProject* project;
+
+ protected slots:
+ void slotAddDocumentation();
+  void slotRemoveDocumentation();
+  void slotDocumentationProp();
+  void  slotSingleSelected(int index);
+
+
+  
 
 };
 #endif

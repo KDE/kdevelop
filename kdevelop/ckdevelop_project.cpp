@@ -226,6 +226,7 @@ void CKDevelop::slotProjectClose(){
   	edit_infos.append(edit2);
 	}
   project=false;
+  prj.valid = false;
   switchToFile(header_widget->getName());
 
   disableCommand(ID_FILE_NEW_FILE);
@@ -233,7 +234,8 @@ void CKDevelop::slotProjectClose(){
   disableCommand(ID_DOC_PROJECT_API_DOC);
   disableCommand(ID_DOC_USER_MANUAL);
   // build menu
-  setToolMenuProcess(false);  
+  setToolMenuProcess(false);
+  disableCommand(ID_BUILD_STOP);
   // prj menu
   disableCommand(ID_PROJECT_CLOSE);
   disableCommand(ID_PROJECT_ADD_FILE);
@@ -246,6 +248,7 @@ void CKDevelop::slotProjectClose(){
 
   disableCommand(ID_BUILD_AUTOCONF);
   slotStatusMsg(IDS_DEFAULT);
+  refreshTrees();
 }
 void CKDevelop::slotProjectCompileFile(){
 /* TODO: add a process reading the filename and compiler options->gcc -options -filename ...*/
@@ -256,7 +259,6 @@ void CKDevelop::slotProjectCompileFile(){
 
 void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
-  
 }
 
 void CKDevelop::slotProjectAddExistingFiles(){
@@ -395,7 +397,8 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_DOC_PROJECT_API_DOC);
   enableCommand(ID_DOC_USER_MANUAL);
   // build menu
-  setToolMenuProcess(true);  
+  setToolMenuProcess(true);
+
   // prj menu
   enableCommand(ID_PROJECT_CLOSE);
   enableCommand(ID_PROJECT_ADD_FILE);
