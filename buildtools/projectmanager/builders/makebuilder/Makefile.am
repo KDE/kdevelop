@@ -18,7 +18,7 @@ kde_services_DATA =  kdevmakebuilder.desktop
 
 libkdevmakebuilder_la_LIBADD = \
 	$(top_builddir)/buildtools/projectmanager/interfaces/libprojectmanager_interfaces.la $(top_builddir)/lib/libkdevelop.la \
-	$(top_builddir)/buildtools/lib/libkdevproject.la
+	$(top_builddir)/buildtools/lib/widgets/libkdevbuildtoolswidgets.la
     
 libkdevmakebuilder_la_LDFLAGS = \
     -module $(all_libraries) $(KDE_PLUGIN)
