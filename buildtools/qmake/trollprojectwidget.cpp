@@ -782,8 +782,10 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
               for (; it4.current(); ++it4)
                   (*it3)->insertItem(*it4);
               (*it3)->setOpen(true);
+              (*it3)->sortChildItems(0,true);
           }
           (*it2)->setOpen(true);
+          (*it2)->sortChildItems(0,true);
         }
         else
         {
@@ -791,6 +793,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
           for (; it3.current(); ++it3)
               (*it2)->insertItem(*it3);
           (*it2)->setOpen(true);
+          (*it2)->sortChildItems(0,true);
         }
     }
   }
@@ -810,6 +813,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
         for (; it3.current(); ++it3)
             (*it2)->insertItem(*it3);
         (*it2)->setOpen(true);
+        (*it2)->sortChildItems(0,true);
     }
   }
 }
