@@ -40,6 +40,7 @@
 #include "debug.h"
 #include "kswallow.h"
 #include "cdocbrowser.h"
+#include "cfinddoctextdlg.h"
 
 #include <X11/Xlib.h>
 
@@ -780,9 +781,15 @@ void CKDevelop::slotDocSText(QString text){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotDocSText(){
-  QString text = edit_widget->markedText();
-  if(text == ""){
-    text = edit_widget->currentWord();
+  QString text;
+  if(s_tab_view->getCurrentTab()==BROWSER){
+    browser_widget->getSelectedText(text);
+  }
+  else{
+    text = edit_widget->markedText();
+    if(text == ""){
+      text = edit_widget->currentWord();
+    }
   }
   slotDocSText(text);
   
@@ -1013,27 +1020,24 @@ void CKDevelop::slotBuildAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
   showOutputView(true);
 
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
+  config->setGroup("Doc_Location");
+  QString doc_kde=config->readEntry("doc_kde");
+
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
   shell_process.clearArguments();
   shell_process << "kdoc";
   shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
+  shell_process << "-L" + doc_kde + "kdoc-reference";
   shell_process << prj->getProjectName();
   shell_process << "*.h";
-  
+  shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
   shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 
@@ -1041,15 +1045,8 @@ void CKDevelop::slotBuildManual(){
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
   showOutputView(true);
+
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
@@ -1079,6 +1076,8 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     enableCommand(ID_DOC_BACK);
   }
 
+  setCaption("KDevelop " + version + ":  "+url);
+
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
   if (str.contains("kdevelop/search_result.html")){ 
@@ -1093,6 +1092,19 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     history_list.insert(cur+1,url);
   }
 }
+
+void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
+{
+	if ( url )
+	{
+		statusBar()->changeItem(url,ID_STATUS_MSG);
+	}
+	else
+	{
+		statusBar()->changeItem(IDS_DEFAULT, ID_STATUS_MSG);
+	}
+}
+
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 
   int x,y;
@@ -1217,13 +1229,15 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   }
 }
 void CKDevelop::slotTTabSelected(int item){
-  if(item == DOC){
+  if(item == DOC ){
     // disable the outputview
     showOutputView(false);
   }
 }
 void CKDevelop::slotSTabSelected(int item){
   if (item == HEADER){
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC)
+      t_tab_view->setCurrentTab(CV);
     disableCommand(ID_BUILD_COMPILE_FILE);
     edit_widget = header_widget;
     edit_widget->setFocus();
@@ -1233,6 +1247,8 @@ void CKDevelop::slotSTabSelected(int item){
     setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if (item == CPP){
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC)
+      t_tab_view->setCurrentTab(CV);
     if(project){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
@@ -1244,8 +1260,11 @@ void CKDevelop::slotSTabSelected(int item){
     setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if(item == BROWSER){
+    if(bAutoswitch)
+      t_tab_view->setCurrentTab(DOC);
     disableCommand(ID_BUILD_COMPILE_FILE);
     browser_widget->setFocus();
+    setCaption("KDevelop " + version + ":  "+ browser_widget->currentURL());
   }
   if(item == TOOLS){
 		disableCommand(ID_BUILD_COMPILE_FILE);
@@ -1439,7 +1458,12 @@ void CKDevelop::slotToolsKTranslator(){
 
 }
 
-
+void CKDevelop::slotHelpSearch(){
+  slotStatusMsg(i18n("Searching for Help on..."));
+  CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
+  connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotDocSText(QString)));
+  help_srch_dlg->exec();
+}
 void CKDevelop::slotHelpContent(){
   
   KLocale *kloc = KApplication::getKApplication()->getLocale();
@@ -1596,14 +1620,17 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_STOP:
     slotBuildStop();
     break;
-  case ID_DOC_SEARCH_TEXT:
+/*  case ID_DOC_SEARCH_TEXT:
     slotDocSText();
-    break;
+    break;*/
   case ID_DOC_BACK:
     slotDocBack();
     break;
   case ID_DOC_FORWARD:
     slotDocForward();
+    break;
+  case ID_HELP_SEARCH:
+    slotHelpSearch();
     break;
   }
 }
@@ -1701,11 +1728,27 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           			i18n("Switchs to the project's API-Documentation"))
   ON_STATUS_MSG(ID_DOC_USER_MANUAL,               			i18n("Switchs to the project's User-Manual"))
 
+  ON_STATUS_MSG(ID_HELP_SEARCH,                         i18n("Lets you search individually for an expression"))
   ON_STATUS_MSG(ID_HELP_CONTENT,                  			i18n("Switch to KDevelop's User Manual"))
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			i18n("Enter the KDevelop Homepage"))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

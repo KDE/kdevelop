@@ -56,9 +56,10 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(i18n("Back"),this, SLOT(slotURLBack()),0,0);
   doc_pop->insertItem(i18n("Forward"),this,SLOT(slotURLForward()),0,1);
-
-  edit_pop = new QPopupMenu();
-  edit_pop->insertItem(i18n("Copy"),this, SLOT(slotCopyText()),0,2);
+  doc_pop->insertSeparator();
+  doc_pop->insertItem(i18n("Copy"),this, SLOT(slotCopyText()),0,2);
+  doc_pop->insertSeparator();
+  doc_pop->insertItem(i18n("look up: "),this, SLOT(slotSearchText()),0,3);
 
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
@@ -122,6 +123,9 @@ void CDocBrowser::showURL(QString url,bool reload){
   old_url = url_wo_ref;
 }
 
+QString CDocBrowser::currentURL(){
+  return url;
+}
 void CDocBrowser::setDocBrowserOptions(){
 
 
@@ -200,10 +204,18 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 }
 
 void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint & pnt){
-  if(this->isTextSelected())
-    edit_pop->popup(pnt);
-  else
-    doc_pop->popup(pnt);
+  if(this->isTextSelected()){
+    QString text;
+    getSelectedText(text);
+    doc_pop->setItemEnabled(2,true);
+    doc_pop->setItemEnabled(3,true);
+    doc_pop->changeItem(i18n("look up: "+ text),3);
+  }
+  else{
+    doc_pop->setItemEnabled(2,false);
+    doc_pop->setItemEnabled(3,false);
+  }
+  doc_pop->popup(pnt);
 }
 
 void CDocBrowser::slotCopyText(){
@@ -213,6 +225,9 @@ void CDocBrowser::slotCopyText(){
   cb->setText( text );
 }
 
+void CDocBrowser::slotSearchText(){
+  emit signalSearchText();
+}
 void CDocBrowser::slotURLBack(){
   emit signalURLBack();
 }
@@ -558,6 +573,10 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
+
+
+
 
 
 

@@ -48,6 +48,7 @@ public:
   /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
   void showURL(QString url,bool reload=false);
   void setDocBrowserOptions();
+  QString currentURL();
 
 public slots:
   void slotDocFontSize(int);
@@ -59,15 +60,18 @@ public slots:
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();
+  void slotSearchText();
+
  signals:
   void signalURLBack();
   void signalURLForward();
+  void signalSearchText();
 
 protected:
   QString old_url;
 //  void  mousePressEvent(QMouseEvent* event);
   QPopupMenu* doc_pop;
-  QPopupMenu* edit_pop;
+
 
 private:
 	// html view preferences

@@ -286,6 +286,9 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   if(qt_checkbox->isChecked()){
     dirs = dirs + " " +  qt_doc_dir;
   }
+  // added for documentation search in the kdevelop html directory
+  dirs= dirs + " "+ KApplication::kde_htmldir()+"/default/kdevelop";
+
   uint count = dir_listbox->count();
   uint i;
   for(i=0;i<count;i++){

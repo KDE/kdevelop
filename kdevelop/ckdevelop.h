@@ -208,12 +208,14 @@ public:
   void slotDocManual();
   void slotDocUpdateKDEDocumentation();
 
+  void slotHelpSearch();
   void slotHelpContent();
   void slotHelpHomepage();
   void slotHelpAbout();
 
   void slotToolbarClicked(int);
   void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
+  void slotURLonURL(KHTMLView*,const char* url);
 
   void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
@@ -364,6 +366,7 @@ private:
 };
 
 #endif
+
 
 
 

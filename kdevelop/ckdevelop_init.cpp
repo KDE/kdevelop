@@ -567,18 +567,19 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
   help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(i18n("&Search Marked Text"),this,
+  help_menu->insertItem(Icon("mini/mini-question.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  help_menu->insertItem(Icon("contents.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertSeparator();
-  help_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
-  help_menu->insertItem(i18n("KDE-&Core-Library"),this,
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
 				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
-  help_menu->insertItem(i18n("KDE-&GUI-Library"),this,
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&GUI-Library"),this,
 				 SLOT(slotDocKDEGUILib()),0,ID_DOC_KDE_GUI_LIBRARY);
-  help_menu->insertItem(i18n("KDE-&KFile-Library"),this,
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&KFile-Library"),this,
 				 SLOT(slotDocKDEKFileLib()),0,ID_DOC_KDE_KFILE_LIBRARY);
-  help_menu->insertItem(i18n("KDE-&HTML-Library"),this,
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&HTML-Library"),this,
 				 SLOT(slotDocKDEHTMLLib()),0,ID_DOC_KDE_HTML_LIBRARY);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
@@ -695,9 +696,9 @@ void CKDevelop::initToolbar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_DOC_BACK, false,i18n("Back"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_DOC_FORWARD, false,i18n("Forward"));
     
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_DOC_SEARCH_TEXT, 
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_DOC_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
-  
+
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
 
   if(config->readBoolEntry("show_browser_toolbar", true)){
@@ -784,7 +785,10 @@ void CKDevelop::initConnections(){
   // connect Docbrowser rb menu
   connect(browser_widget,SIGNAL(signalURLBack()),this,SLOT(slotDocBack()));
   connect(browser_widget,SIGNAL(signalURLForward()),this,SLOT(slotDocForward()));
-	
+
+  connect(browser_widget,SIGNAL(onURL(KHTMLView *, const char *)),this,SLOT(slotURLonURL(KHTMLView *, const char *)));
+  connect(browser_widget,SIGNAL(signalSearchText()),this,SLOT(slotDocSText()));
+
 }
 void CKDevelop::initProject(){
   config->setGroup("Files");
@@ -813,6 +817,11 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
 
 
 

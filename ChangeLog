@@ -1,3 +1,9 @@
+1999-02-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * completed right-button menu of the docbrowser, connected look up with
+    slotDocSText() in CKDevelop
+  * added "Search for Help on..." dialog in the help-menu
+  * marked Text in Docbrowser can be looked up with F2 as well
+
 1999-02-24 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * changed some geometry in the setup dialog
 
