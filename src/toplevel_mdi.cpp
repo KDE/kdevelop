@@ -104,9 +104,6 @@ void TopLevelMDI::createActions()
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText(i18n("Lets you customize KDevelop") );
-
-  if (!isFakingSDIApplication()) 
-    menuBar()->insertItem(i18n("&Window"), windowMenu());
 }
 
 

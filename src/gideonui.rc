@@ -54,10 +54,9 @@
     <Action name="settings_configure"/>
   </Menu>
   <Menu name="buffers">
-    <text>&amp;Buffers</text>
+    <text>&amp;Window</text>
     <ActionList name="buffer_list"/>
   </Menu>
-  <Action name="window_menu"/>
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Merge/>
