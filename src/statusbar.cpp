@@ -45,8 +45,6 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 
 	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 		this, SLOT(activePartChanged(KParts::Part*)));
-
-	/// @todo remove parts from the map on PartRemoved() ?
 }
 
 
@@ -60,46 +58,31 @@ void StatusBar::activePartChanged(KParts::Part *part)
 
 	_activePart = part;
 	_cursorIface = 0;
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 	_viewmsgIface = 0;
-# endif
-#endif
   
 	if (part && part->widget())
 	{
-
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-	if ((_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget())))
-	{
-		connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
-			this, SLOT( setStatus( const QString & ) ) );
-
-#  if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-		_status->setText( _map[ _activePart ] );
-#  endif
-
-		_status->show();
+		if ((_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget())))
+		{
+			connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
+				this, SLOT( setStatus( const QString & ) ) );
+	
+			_status->show();
+		}
+		else if ((_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget())))
+		{
+			connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+	
+			_status->show();
+			cursorPositionChanged();
+		}
+		else
+		{
+			// we can't produce any status data, hide the status box
+			_status->hide();
+		}
 	}
-	else
-# endif
-#endif
-	if ((_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget())))
-    {
-		connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
-
-		_status->show();
-		cursorPositionChanged();
-    }
-	else
-	{
-		// we can't produce any status data, hide the status box
-		_status->hide();
-	}
-  }
 }
-
 
 void StatusBar::cursorPositionChanged()
 {
@@ -114,12 +97,6 @@ void StatusBar::cursorPositionChanged()
 void StatusBar::setStatus(const QString &str)
 {
 	_status->setText(str);
-
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-	_map[_activePart] = str;
-# endif
-#endif
 }
 
 

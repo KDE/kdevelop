@@ -17,12 +17,7 @@
 
 class QLabel;
 
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 namespace KTextEditor { class ViewStatusMsgInterface; }
-# endif
-#endif
-
 namespace KTextEditor { class ViewCursorInterface; }
 namespace KParts { class Part; }
 
@@ -45,19 +40,8 @@ private:
     QLabel *_status;
 
 	KTextEditor::ViewCursorInterface * _cursorIface;
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 	KTextEditor::ViewStatusMsgInterface * _viewmsgIface;
-# endif
-#endif
-  KParts::Part *_activePart;
-
-// still hoping for a fix for KDE-3.1
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-	QMap<KParts::Part*, QString> _map;
-# endif
-#endif
+	KParts::Part *_activePart;
 
 };
 
