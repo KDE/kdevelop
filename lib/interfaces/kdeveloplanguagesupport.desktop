@@ -4,16 +4,22 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/LanguageSupport
 X-KDE-Derived=KDevelop/Part
 Name=KDevelop Language Support Interface
+Name[ca]=Interfície del suport de llenguatges per a KDevelop
 Name[da]=KDevelop sprogstøtte grænseflade
-Name[de]=KDevelop-Sprachunterst�tzung-Schnittstelle
+Name[de]=Schnittstelle für Sprachunterstützung (KDevelop)
 Name[es]=Interfaz del soporte de lenguajes de KDevelop
+Name[et]=KDevelopi keeletoetuse liides
+Name[fr]=Interface du support de langages de KDevelop
 Name[hu]=KDevelop nyelvtámogatási felület
 Name[it]=Interfaccia KDevelop per il supporto di linguaggio
+Name[nl]=KDevelop Interface voor taalondersteuning
 Name[pt]=Interface de Suporte a Linguagens do KDevelop
 Name[pt_BR]=Interface de Suporte à Linguagem do KDevelop
+Name[ru]=Интерфейс языковой поддержки
 Name[sr]=KDevelop-ов интерфејс за језичку подршку
 Name[sv]=KDevelop gränssnitt för språkstöd
 Name[xx]=xxKDevelop Language Support Interfacexx
+Name[zh_CN]=KDevelop语言支持接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
