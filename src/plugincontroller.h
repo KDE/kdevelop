@@ -28,6 +28,9 @@ public:
 
   static QStringList argumentsFromService( const KService::Ptr &service );
 
+  QString currentProfile() const { return m_profile; }
+  QString currentProfilePath() const { return m_profilePath; }
+  
   void loadInitialPlugins();
 
   void integratePart(KXMLGUIClient *part);
@@ -49,6 +52,10 @@ private:
   void loadDefaultParts();
 
   QDict<KDevPlugin> m_globalParts;
+  QString m_profile;
+  QString m_profilePath;
+  QString m_defaultProfile;
+  QString m_defaultProfilePath;
   
   static PluginController *s_instance;
 

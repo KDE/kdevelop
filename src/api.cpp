@@ -3,8 +3,6 @@
 #include "partcontroller.h"
 #include "toplevel.h"
 #include "debugger.h"
-
-
 #include "api.h"
 
 

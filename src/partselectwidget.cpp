@@ -115,8 +115,8 @@ PartSelectWidget::~PartSelectWidget()
 void PartSelectWidget::readGlobalConfig()
 {
     KTrader::OfferList globalOffers = PluginController::pluginServices( "Global" );
-    KConfig *config = KGlobal::config();
-    config->setGroup("Plugins");
+    KConfig config( PluginController::getInstance()->currentProfilePath() );
+    config.setGroup("Plugins");
 
     for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
     {
@@ -132,21 +132,21 @@ void PartSelectWidget::readGlobalConfig()
 
 //TODO enable this instead
 //        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), (*it)->comment() );
-        item->setOn(config->readBoolEntry((*it)->name(), true));
+        item->setOn(config.readBoolEntry((*it)->name(), true));
     }
 }
 
 
 void PartSelectWidget::saveGlobalConfig()
 {
-    KConfig *config = KGlobal::config();
-    config->setGroup("Plugins");
+    KConfig config( PluginController::getInstance()->currentProfilePath() );
+    config.setGroup("Plugins");
 
     QListViewItemIterator it( _pluginList );
     while ( it.current() )
     {
         PluginItem * item = static_cast<PluginItem*>( it.current() );
-        config->writeEntry( item->name(), item->isOn() );
+        config.writeEntry( item->name(), item->isOn() );
         ++it;
     }
 }

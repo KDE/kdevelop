@@ -5,8 +5,9 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kmainwindow.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 #include <dcopclient.h>
-
 
 #include "toplevel.h"
 #include "plugincontroller.h"
@@ -17,7 +18,9 @@
 
 static KCmdLineOptions options[] =
 {
-    { "+file",          I18N_NOOP("Project to open"), 0 },
+    { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
+    { "project <url>",          I18N_NOOP("Project to load"), 0 },
+    { "+file(s)",		I18N_NOOP("Files to load"), 0 },
     { 0,0,0 }
 };
 
@@ -67,16 +70,17 @@ int main(int argc, char *argv[])
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
+  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
   KApplication app;
 
   SplashScreen *splash = new SplashScreen;
-
+  
   app.processEvents();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
 		   splash, SLOT(showMessage(const QString &)));
-
+  
   PluginController::getInstance()->loadInitialPlugins();
 
   splash->showMessage( i18n( "Loading Settings" ) );
@@ -93,6 +97,10 @@ int main(int argc, char *argv[])
   delete splash;
 
   kapp->dcopClient()->registerAs("gideon");
+
+  for( int a=0; a<args->count(); ++a ){
+     PartController::getInstance()->editDocument( KURL(args->url(a)) );
+  }
 
   return app.exec();
 }

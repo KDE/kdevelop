@@ -1,6 +1,7 @@
 #include <qfile.h>
 #include <qvbox.h>
 
+#include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <klibloader.h>
 #include <kservice.h>
@@ -13,6 +14,8 @@
 #include <assert.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kcmdlineargs.h>
+#include <kstandarddirs.h>
 
 #include <kdevapi.h>
 #include <kdevplugin.h>
@@ -69,14 +72,41 @@ PluginController::PluginController()
 {
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
+  
+  m_defaultProfile = QString::fromLatin1( "FullIDE" );
+  m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" + 
+			 KStandardDirs::kde_default( "data" ) + 
+			 QString::fromLatin1("/gideon/profiles/FullIDE");
 }
 
 
 void PluginController::loadInitialPlugins()
 {
-  loadDefaultParts();
-  loadCorePlugins();
-  loadGlobalPlugins();
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+ 
+    loadDefaultParts();
+    loadCorePlugins();
+    
+    m_profile = QString::null;
+    if( args->isSet("profile") ){
+	m_profile = QString::fromLocal8Bit( args->getOption("profile") );
+	m_profilePath = m_profile;
+	
+	if( m_profile[0] != '/' )
+	    m_profilePath = locate( "data", QString::fromLatin1("gideon/profiles/") + m_profile );
+	
+	if( m_profilePath.isEmpty() )
+	    m_profilePath = kapp->dirs()->localkdedir() +
+			    KStandardDirs::kde_default( "data" ) + 
+			    QString::fromLatin1("/gideon/profiles/") + m_profile;
+    }
+    
+    if( m_profile.isEmpty() || m_profilePath.isEmpty() ){
+	m_profile = m_defaultProfile;
+	m_profilePath = m_defaultProfilePath;
+    }
+    
+    loadGlobalPlugins();
 }
 
 
@@ -155,15 +185,15 @@ void PluginController::loadCorePlugins()
 void PluginController::loadGlobalPlugins()
 {
   KTrader::OfferList globalOffers = pluginServices( "Global" );
-  KConfig *config = KGlobal::config();
+  KConfig config( m_profilePath );
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
-    config->setGroup("Plugins");
+    config.setGroup( "Plugins" );
 
     QString name = (*it)->name();
 
-    // Unload it if it is marked as ignored and loaded
-    if (!config->readBoolEntry( name, true)) {
+    // Unload it it is marked as ignored and loaded
+    if (!config.readBoolEntry( name, true)) {
       KDevPlugin* part = m_globalParts[name];
       if( part ) {
         removePart( part );
