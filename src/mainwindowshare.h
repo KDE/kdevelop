@@ -57,6 +57,7 @@ private slots:
   void slotStopButtonPressed();
   void slotNewToolbarConfig();
   void slotShowMenuBar();
+  void slotActionStatusText( const QString &text );
 
   void slotToggleMainToolbar();
   void slotToggleBuildToolbar();

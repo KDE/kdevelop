@@ -132,6 +132,9 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
 
 
 void MainWindowIDEAl::init() {
+
+    actionCollection()->setHighlightingEnabled( true );
+
 #if (KDE_VERSION > 305)
     setStandardToolBarMenuEnabled( true );
 #endif

@@ -72,6 +72,22 @@ void MainWindowShare::init()
 {
   connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
           this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+
+  connect( m_pMainWnd->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
+        this, SLOT( slotActionStatusText( const QString & ) ) );
+}
+
+void MainWindowShare::slotActionStatusText( const QString &text )
+{
+    kdDebug(9000) << "MainWindowShare::slotActionStatusText() - " << text << endl;
+
+    if ( ! m_pMainWnd ) return;
+
+    KStatusBar * statusBar = m_pMainWnd->statusBar();
+
+    if ( ! statusBar ) return;
+
+    statusBar->message( text );
 }
 
 void MainWindowShare::createActions()
@@ -159,7 +175,6 @@ void MainWindowShare::createActions()
 
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
   action->setStatusText( i18n("configure editors settings") );
-
 }
 
 void MainWindowShare::slotReportBug()
@@ -321,7 +336,7 @@ void MainWindowShare::slotSettings()
 
 void MainWindowShare::slotConfigureEditors()
 {
-    kdDebug(0) << " *** MainWindowShare::slotConfigureEditors()" << endl;
+    kdDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
 
     KDevPartController * partController = API::getInstance()->partController();
     KParts::Part * part = partController->activePart();
@@ -329,7 +344,7 @@ void MainWindowShare::slotConfigureEditors()
     KTextEditor::ConfigInterface * conf = dynamic_cast<KTextEditor::ConfigInterface*>( part );
     if ( ! conf )
     {
-        kdDebug(0) << "*** No KTextEditor::ConfigInterface for part!" << endl;
+        kdDebug(9000) << "*** No KTextEditor::ConfigInterface for part!" << endl;
         return;
     }
 
@@ -353,7 +368,7 @@ void MainWindowShare::slotConfigureEditors()
 
 void MainWindowShare::slotGUICreated( KParts::Part * part )
 {
-    kdDebug(0) << "MainWindowShare::slotActivePartChanged()" << endl;
+    kdDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
 
     if ( ! part ) return;
 
@@ -370,7 +385,7 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
     KAction * action = part->action("set_confdlg"); // name from katepartui.rc
     if ( action )
     {
-        kdDebug(0) << " *** found \"set_confdlg\" action - unplugging" << endl;
+        kdDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
         action->unplugAll();
     }
 }
