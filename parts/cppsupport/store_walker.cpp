@@ -80,8 +80,9 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ns->setDeclarationEndsOnLine( endLine );
 
     ns->setDefinedOnLine( startLine );
+    ns->setDefinitionEndsOnLine( endLine );
     ns->setDefinedInFile( m_fileName );
-    
+
     ParsedClassContainer* old_scope = m_currentContainer;
     m_currentContainer = ns;
     m_currentScope.push_back( nsName );
@@ -116,7 +117,7 @@ void StoreWalker::parseTemplateDeclaration( TemplateDeclarationAST* ast )
 {
     if( ast->declaration() )
 	parseDeclaration( ast->declaration() );
-    
+
     TreeParser::parseTemplateDeclaration( ast );
 }
 
@@ -233,7 +234,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	method->setType( cl->name() + "*" );
     else if( cl && isDestructor )
 	method->setType( "void" );
-    else 
+    else
 #endif
     {
 	QString text = typeOfDeclaration( typeSpec, d );
@@ -242,9 +243,9 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     }
 
     ParsedClass* klass = dynamic_cast<ParsedClass*>( cl );
-    
+
     ParsedMethod* m = klass ? klass->getMethod( method ) : cl->getMethod( method );
-    
+
     bool isStored = m != 0;
     if( m != 0 ){
 	delete( method );
@@ -253,6 +254,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     method->setDefinedOnLine( startLine );
     method->setDefinedInFile( m_fileName );
+    method->setDefinitionEndsOnLine( endLine );
 
     if( !isStored && klass ){
 	if( m_inSlots )
@@ -307,9 +309,11 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 
     ParsedClass* klass = new ParsedClass();
     klass->setDeclaredOnLine( startLine );
+    klass->setDeclarationEndsOnLine( endLine );
     klass->setDeclaredInFile( m_fileName );
     klass->setDefinedOnLine( startLine );
     klass->setDefinedInFile( m_fileName );
+    klass->setDefinitionEndsOnLine( endLine );
 
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
@@ -369,10 +373,11 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 	attr->setDeclaredInFile( m_fileName );
 	attr->setDefinedInFile( m_fileName );
 	attr->setDeclarationEndsOnLine( endLine );
+        attr->setDefinitionEndsOnLine( endLine );
 
 	++it;
     }
-    
+
     TreeParser::parseEnumSpecifier( ast );
 }
 
@@ -452,6 +457,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     attr->setDeclarationEndsOnLine( endLine );
     attr->setDefinedOnLine( startLine );
     attr->setDefinedInFile( m_fileName );
+    attr->setDefinitionEndsOnLine( endLine );
     if( isStatic )
 	attr->setIsStatic( true );
 }
@@ -549,6 +555,8 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setDefinedInFile( m_fileName );
     method->setDeclaredOnLine( startLine );
     method->setDeclaredInFile( m_fileName );
+    method->setDeclarationEndsOnLine( endLine );
+    method->setDefinitionEndsOnLine( endLine );
     method->setAccess( m_currentAccess );
     method->setIsStatic( isStatic );
     method->setIsVirtual( isVirtual );
@@ -561,7 +569,7 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
-	
+
 	QString text = typeOfDeclaration( typeSpec, d );
 	if( !text.isEmpty() )
 	    method->setType( text );
@@ -604,9 +612,9 @@ void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMetho
 	    ++it;
 
 	    ParsedArgument* arg = new ParsedArgument();
-	    
+
 	    if( param->declarator() ){
-		QString text = declaratorToString(param->declarator(), QString::null, true ); 
+		QString text = declaratorToString(param->declarator(), QString::null, true );
 		if( !text.isEmpty() )
 		    arg->setName( text );
 	    }
