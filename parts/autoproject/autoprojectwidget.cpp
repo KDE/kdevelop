@@ -416,6 +416,8 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         TargetItem *titem = static_cast<TargetItem*>(fitem->parent());
         KPopupMenu pop;
         int idRemoveFile = pop.insertItem(i18n("Remove file..."));
+	FileContext context(activeSubproject->path + "/" + fitem->name);
+	m_part->core()->fillContextMenu(&pop, &context);
         int r = pop.exec(p);
         if (r == idRemoveFile) {
             RemoveFileDialog dlg(this, activeSubproject, titem, fitem->text(0), this, "remove file dialog");
