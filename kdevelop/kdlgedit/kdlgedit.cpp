@@ -1362,7 +1362,7 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 class PreviewDlg : public QDialog
 {
   public:
-    PreviewDlg::PreviewDlg(QWidget*parent=0,const char* name="Preview_Dialog")
+    PreviewDlg(QWidget*parent=0,const char* name="Preview_Dialog")
       : QDialog(parent,name, TRUE)
      {
         QWidget *wid = new QWidget(this);
