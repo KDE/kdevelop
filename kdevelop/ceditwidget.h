@@ -202,7 +202,7 @@ protected: // Protected methods
 protected slots:
  void slotLookUp();
 
-private slots:
+public slots:
 	/** user wants run to the cursor position */
 	void slotRunToCursor();
 	/** user wants add the search text to the watch variable list */
