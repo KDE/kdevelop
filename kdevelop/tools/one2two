@@ -21,6 +21,7 @@
 #
 # jbb@kdevelop.org 22-Nov-2000
 
+
 use File::Find;
 
 @ARGV = ('.')   unless @ARGV;
