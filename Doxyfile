@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = 3.0.0_CVS
+PROJECT_NUMBER         = 3.0.0_alpha6
 OUTPUT_DIRECTORY       = doc/api
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -231,7 +231,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::addtions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       = doc/api/tags
+GENERATE_TAGFILE       = 
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
