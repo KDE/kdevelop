@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
+#include <kdeversion.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -159,7 +160,7 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
 	Is there any better way to do this?
     */
     LocationID=-1;
-    
+
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
@@ -175,7 +176,10 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
-        this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
+	this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
+#if KDE_IS_VERSION(3,2,90)
+    m_actionToggleShowNonProjectFiles->setCheckedState(i18n("Hide Non Project Files"));
+#endif
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
     m_actionToggleDisplayLocation = new KToggleAction( i18n("Display Location Column"), KShortcut(),

@@ -13,6 +13,7 @@
 #include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <kdeversion.h>
 
 #include <kdevproject.h>
 
@@ -37,6 +38,9 @@ FileTreeViewWidgetImpl::FileTreeViewWidgetImpl( FileTreeWidget *parent, const ch
     // Actions
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
+#if KDE_IS_VERSION(3,2,90)
+    m_actionToggleShowNonProjectFiles->setCheckedState(i18n("Hide Non Project Files"));
+#endif
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
     // Reload good ol' settings
@@ -117,7 +121,7 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 		urlList << url;
 		++it;
 	}
-	
+
 	return urlList;
 }
 
@@ -126,14 +130,14 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 QValueList<QListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( QListViewItem * item ) const
 {
 	QValueList<QListViewItem*> list;
-	
+
 	if ( item )
 	{
 		if ( item->isSelected() )
 		{
 			list << item;
 		}
-		
+
 		QListViewItem * it = item->firstChild();
 		while( it  )
 		{
@@ -141,7 +145,7 @@ QValueList<QListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( QListViewIt
 			it = it->nextSibling();
 		}
 	}
-	
+
 	return list;
 }
 
