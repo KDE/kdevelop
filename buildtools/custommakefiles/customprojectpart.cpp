@@ -270,7 +270,15 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
         DomUtil::writeEntry(dom, "/kdevcustomproject/run/directoryradio", "executable");
     }
 
-    QFile f(dirName + "/" + projectName + ".filelist");
+    /*this entry is currently only created by the cmake kdevelop3 project generator
+     in order to support completely-out-of-source builds, where nothing, not
+     even the kdevelop project files are created in the source directory, Alex <neundorf@kde.org>
+     */
+    QString filelistDir=DomUtil::readEntry(dom, "/kdevcustomproject/filelistdirectory");
+    if (filelistDir.isEmpty())
+       filelistDir=dirName;
+
+    QFile f(filelistDir + "/" + projectName + ".filelist");
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {
