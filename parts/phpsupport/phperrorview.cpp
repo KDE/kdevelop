@@ -17,7 +17,7 @@
 
 #include "phperrorview.h"
 #include <qstringlist.h>
-#include <kregexp.h>
+#include <qregexp.h>
 #include <iostream>
 
 #include <klocale.h>
@@ -32,64 +32,62 @@ PHPErrorView::~PHPErrorView(){
 }
 
 void PHPErrorView::slotItemSelected(int index){
-  cerr << "slotItemSelected()" << endl;
   ErrorItem* errorItem = errorDict[index];
   emit fileSelected(errorItem->filename,errorItem->line -1);
 }
 
 void PHPErrorView::parse(QString& phpOutput){
   ///  KRegExp parseerror("^<b>Parse error</b>: parse error in<b>(.*)</b> on line<b>(.*)</b>*$");
-  cerr << phpOutput;
   errorDict.clear();
   clear();
   ErrorItem* errorItem;
   int currentLine=0;
 
   // todo, test and add other
-  KRegExp parseError("^<b>Parse error</b>:  parse error in <b>(.*)</b> on line <b>(.*)</b>.*$");
-  KRegExp undefFunctionError("^<b>Fatal error</b>:  Call to undefined function:  (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
-  KRegExp warning("^<b>Warning</b>.*<b>(.*)</b> on line <b>(.*)</b>.*$");
-  KRegExp generalFatalError("^<b>Fatal error</b>: (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
+  QRegExp parseError("^<b>Parse error</b>:  parse error in <b>(.*)</b> on line <b>(.*)</b>.*$");
+  QRegExp undefFunctionError("^<b>Fatal error</b>:  Call to undefined function:  (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
+  QRegExp warning("^<b>Warning</b>.*<b>(.*)</b> on line <b>(.*)</b>.*$");
+  QRegExp generalFatalError("^<b>Fatal error</b>: (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
 
 
   QStringList list = QStringList::split("\n",phpOutput);
   QStringList::Iterator it;
   for( it = list.begin(); it != list.end(); ++it ){
-    if(parseError.match(*it)){
-      insertItem(i18n("Parse Error in %1 on Line %2").arg(parseError.group(1)).arg(parseError.group(2)));
+    if(parseError.search(*it)>=0){
+      insertItem(i18n("Parse Error in %1 on Line %2").arg(parseError.cap(1)).arg(parseError.cap(2)));
       errorItem = new ErrorItem();
-      errorItem->filename = QString(parseError.group(1));
-      errorItem->line = QString(parseError.group(2)).toInt();
+      errorItem->filename = QString(parseError.cap(1));
+      errorItem->line = QString(parseError.cap(2)).toInt();
       errorDict.insert(currentLine,errorItem);
       currentLine++;
     }
-    else if(undefFunctionError.match(*it)){
+    else if(undefFunctionError.search(*it)>=0){
       insertItem(i18n("Call to Undefined Function %1 in %2 on Line %3")
-                 .arg(undefFunctionError.group(1))
-                 .arg(undefFunctionError.group(2))
-                 .arg(undefFunctionError.group(3)));
+                 .arg(undefFunctionError.cap(1))
+                 .arg(undefFunctionError.cap(2))
+                 .arg(undefFunctionError.cap(3)));
       errorItem = new ErrorItem();
-      errorItem->filename = QString(parseError.group(2));
-      errorItem->line = QString(parseError.group(3)).toInt();
+      errorItem->filename = QString(parseError.cap(2));
+      errorItem->line = QString(parseError.cap(3)).toInt();
       errorDict.insert(currentLine,errorItem);
       currentLine++;
     }
-    else if(warning.match(*it)){
-      insertItem(i18n("Warning in %1 on Line %2").arg(warning.group(1)).arg(warning.group(2)));
+    else if(warning.search(*it)>=0){
+      insertItem(i18n("Warning in %1 on Line %2").arg(warning.cap(1)).arg(warning.cap(2)));
       errorItem = new ErrorItem();
-      errorItem->filename = QString(warning.group(1));
-      errorItem->line = QString(warning.group(2)).toInt();
+      errorItem->filename = QString(warning.cap(1));
+      errorItem->line = QString(warning.cap(2)).toInt();
       errorDict.insert(currentLine,errorItem);
       currentLine++;
     }
-    else if(generalFatalError.match(*it)){
+    else if(generalFatalError.search(*it)>=0){
       insertItem(i18n("%1 in %2 on Line %3")
-                 .arg(generalFatalError.group(1))
-                 .arg(generalFatalError.group(2))
-                 .arg((generalFatalError.group(3))));
+                 .arg(generalFatalError.cap(1))
+                 .arg(generalFatalError.cap(2))
+                 .arg((generalFatalError.cap(3))));
       errorItem = new ErrorItem();
-      errorItem->filename = QString(generalFatalError.group(2));
-      errorItem->line = QString(generalFatalError.group(3)).toInt();
+      errorItem->filename = QString(generalFatalError.cap(2));
+      errorItem->line = QString(generalFatalError.cap(3)).toInt();
       errorDict.insert(currentLine,errorItem);
       currentLine++;
 

@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
+#include <kdebug.h>
 
 using namespace std;
 
@@ -90,7 +91,7 @@ void PHPNewClassDlg::accept(){
   QDir dir(templateDir);
   if(!dir.exists()){
     if(!dir.mkdir(templateDir)){
-      cerr << "Error on creating directory for the classtemplate" << templateDir;
+      kdWarning() << "Error on creating directory for the classtemplate" << templateDir << endl;
     }
   }
   QFile file(templateFile); 
