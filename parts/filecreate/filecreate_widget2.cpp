@@ -42,6 +42,7 @@ namespace FileCreate {
     setLeftMargin(0);
     setSelectionMode(SingleRow);
     setFocusStyle(FollowStyle);
+    setColumnStretchable(3, true);
 
     m_iconLoader = KGlobal::iconLoader();
 
@@ -129,6 +130,7 @@ namespace FileCreate {
     setText(row, 3, filetype->descr() );
     item(row,1)->setWordWrap(true);
     item(row,3)->setWordWrap(true);
+    setRowStretchable(row,true);
     QPixmap iconPix = m_iconLoader->loadIcon(filetype->icon(), KIcon::Desktop, KIcon::SizeMedium,
 					     KIcon::DefaultState, NULL,
 					     true);
