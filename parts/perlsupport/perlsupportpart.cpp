@@ -435,7 +435,7 @@ void PerlSupportPart::startApplication(const QString &program)
 
 void PerlSupportPart::slotExecute()
 {
-    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    QString program = project()->mainProgram();
     QString cmd = interpreter() + " " + program;
     startApplication(cmd);
 }
