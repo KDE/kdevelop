@@ -1,3 +1,7 @@
+2002-10-02  Harald Fernengel <harry@kdevelop.org>
+	* Fixed KWrite Part and reenabled it again
+	* Added the Qt Editor Part (Qt Designer's Editor)
+
 2002-02-03  Christian Couder <christian@kdevelop.org>
 	* Bugfix : crash in classviewpart.cpp because languageSupport()
 	was null.
