@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="editortest_shell" version="1">
 <MenuBar>
-  <Menu noMerge="1" name="file"><text>&amp;File</text>
+  <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_quit"/>

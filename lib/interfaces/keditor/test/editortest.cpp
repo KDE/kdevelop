@@ -97,7 +97,7 @@ void EditorTest::slotOpen()
 
   KEditor::Document *doc = m_editor->document(url);
   if (!doc)
-    doc = m_editor->createDocument(url);
+    doc = m_editor->createDocument(this, url);
   if (!doc)
     return;
 
