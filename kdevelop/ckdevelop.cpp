@@ -719,9 +719,16 @@ void CKDevelop::slotViewTOutputView()
 
 void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList)
 {
+  // find out if we have to toggle on or off (checking the toolbar button doesn't work! :( bug in kdeui?)
   bool bToggleOn = true;
-  if (view_menu->isItemChecked(type))
-    bToggleOn = false;
+  if (type == ID_VIEW_TREEVIEW) {
+    if (isToolViewVisible(class_tree))
+      bToggleOn = false;
+  }
+  else if (type == ID_VIEW_OUTPUTVIEW) {
+    if (isToolViewVisible(messages_widget))
+      bToggleOn = false;
+  }
 
   QListIterator<KDockWidget> it( *pToolViewCoverList);
   QList<KDockWidget> rootDockWidgetList;
@@ -776,9 +783,6 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
 
   // now really show/hide the chosen dockwidgets as well as toggling the view menu button
   if (bToggleOn) {
-    view_menu->setItemChecked(type, true);
-    toolBar()->setButton(type, true);
-
     // dock back whole groups of dockwidgets
     for ( it2.toFirst(); it2.current(); ++it2 ) { // for all found root dockwidgets
       KDockWidget* pCur = it2.current();
@@ -791,11 +795,11 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
         pCur->dockBack();
       }
     }
+//    view_menu->setItemChecked(type, true);
+//    toolBar()->setButton(type, true);
   }
   else{
-    view_menu->setItemChecked(type, false);
-    toolBar()->setButton(type, false);
-
+    m_bToggleToolViewsIsPending = true;
     // undock (hide) whole groups of dockwidgets
     for ( it2.toFirst(); it2.current(); ++it2 ) { // for all found root dockwidgets
       KDockWidget* pCur = it2.current();
@@ -803,6 +807,9 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
         pCur->undock();
       }
     }
+    m_bToggleToolViewsIsPending = false;
+//    view_menu->setItemChecked(type, false);
+//    toolBar()->setButton(type, false);
   }
 }
 
@@ -4031,52 +4038,81 @@ void CKDevelop::slotCreateNewViewWindow()
 
 void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
 {
+  if (m_bToggleToolViewsIsPending) return;
+
+  // check if any tree view widget is invisible now, if yes -> set tree toolbar-button off
+  if (!isToolViewVisible(class_tree)
+   || !isToolViewVisible(log_file_tree)
+   || !isToolViewVisible(real_file_tree)
+   || !isToolViewVisible(doc_tree)
+   || ((dbgController != 0L) && !isToolViewVisible(var_viewer))
+     ) {
+    if (view_menu)
+  	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, false);
+    toolBar()->setButton(ID_VIEW_TREEVIEW, false);
+  }
+
+  // check if any output view widget is invisible now, if yes -> set output toolbar-button off
+  if (!isToolViewVisible(messages_widget)
+   || !isToolViewVisible(stdin_stdout_widget)
+   || !isToolViewVisible(stderr_widget)
+   || !isToolViewVisible(konsole_widget)
+   || !isToolViewVisible(brkptManager)
+   || ((dbgController != 0L) && !isToolViewVisible(disassemble))
+   || ((dbgController != 0L) && !isToolViewVisible(frameStack))
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+   || ((dbgController != 0L) && !isToolViewVisible(dbg_widget))
+#endif
+     ) {
+    if (view_menu)
+      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, false);
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, false);
+  }
+}
+
+bool CKDevelop::isToolViewVisible(QWidget* pToolView)
+{
+  // pointer access checks
+  if (pToolView == 0L) return false;
+  if (pToolView->parentWidget() == 0L) return false;
+  QWidget* pDockCandidate = pToolView->parentWidget()->parentWidget();
+  if (pDockCandidate == 0L) return false;
+  KDockWidget* pDock = dynamic_cast<KDockWidget*>(pDockCandidate);
+  if (pDock == 0L) return false;
+
+  // actual check
+  bool bVisible = pDock->isVisible();
+  QWidget* pTabWidget = pDock->parentDockTabGroup();
+  bool bIsVisible = bVisible || (pTabWidget && pTabWidget->isVisible());
+  return bIsVisible;
 }
 
 void CKDevelop::fillToggleTreeViewsMenu()
 {
 #ifndef USE_KDE_2_1_1
-  bool bVisible;
-  QWidget* pTabWidget;
-  KDockWidget* pDock;
   toggletreeviews_popup->clear();
 
   toggletreeviews_popup->insertItem(i18n("All &Tree Tool-Views"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   toggletreeviews_popup->insertSeparator();
 
   toggletreeviews_popup->insertItem(i18n("&Classes"), this, SLOT(slotViewTClassesView()));
-  pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bClassesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bClassesChecked = isToolViewVisible(class_tree);
   toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(2), bClassesChecked);
 
   toggletreeviews_popup->insertItem(i18n("&Groups"), this, SLOT(slotViewTGroupsView()));
-  pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bGroupsChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bGroupsChecked = isToolViewVisible(log_file_tree);
   toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(3), bGroupsChecked);
 
   toggletreeviews_popup->insertItem(i18n("&Files"), this, SLOT(slotViewTFilesView()));
-  pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bFilesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bFilesChecked = isToolViewVisible(real_file_tree);
   toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(4), bFilesChecked);
 
   toggletreeviews_popup->insertItem(i18n("&Books"), this, SLOT(slotViewTBooksView()));
-  pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bBooksChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bBooksChecked = isToolViewVisible(doc_tree);
   toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(5), bBooksChecked);
 
   toggletreeviews_popup->insertItem(i18n("&Watch"), this, SLOT(slotViewTWatchView()));
-  pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bWatchChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bWatchChecked = isToolViewVisible(var_viewer);
   toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(6), bWatchChecked);
   toggletreeviews_popup->setItemEnabled(toggletreeviews_popup->idAt(6), (dbgController != 0L));
 
@@ -4151,71 +4187,44 @@ void CKDevelop::slotViewTWatchView()
 void CKDevelop::fillToggleOutputViewsMenu()
 {
 #ifndef USE_KDE_2_1_1
-  bool bVisible;
-  QWidget* pTabWidget;
-  KDockWidget* pDock;
   toggleoutputviews_popup->clear();
 
   toggleoutputviews_popup->insertItem(i18n("All &Output Tool-Views"),this,SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
   toggleoutputviews_popup->insertSeparator();
 
   toggleoutputviews_popup->insertItem(i18n("&Messages"), this, SLOT(slotViewOMessagesView()));
-  pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bMessagesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bMessagesChecked = isToolViewVisible(messages_widget);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(2), bMessagesChecked);
 
   toggleoutputviews_popup->insertItem(i18n("&StdOut"), this, SLOT(slotViewOStdOutView()));
-  pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bStdOutChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bStdOutChecked = isToolViewVisible(stdin_stdout_widget);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(3), bStdOutChecked);
 
   toggleoutputviews_popup->insertItem(i18n("S&tdErr"), this, SLOT(slotViewOStdErrView()));
-  pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bStdErrChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bStdErrChecked = isToolViewVisible(stderr_widget);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(4), bStdErrChecked);
 
   toggleoutputviews_popup->insertItem(i18n("&Konsole"), this, SLOT(slotViewOKonsoleView()));
-  pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bKonsoleChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bKonsoleChecked = isToolViewVisible(konsole_widget);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(5), bKonsoleChecked);
 
   toggleoutputviews_popup->insertItem(i18n("&Breakpoints"), this, SLOT(slotViewOBreakpointView()));
-  pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bBreakpointsChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bBreakpointsChecked = isToolViewVisible(brkptManager);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bBreakpointsChecked);
 
   toggleoutputviews_popup->insertItem(i18n("&Disassemble"), this, SLOT(slotViewODisassembleView()));
-  pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bDisassembleChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bDisassembleChecked = isToolViewVisible(disassemble);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(7), bDisassembleChecked);
   toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(7), (dbgController != 0L));
 
   toggleoutputviews_popup->insertItem(i18n("&Call Stack"), this, SLOT(slotViewOFrameStackView()));
-  pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bCallStackChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bCallStackChecked = isToolViewVisible(frameStack);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(8), bCallStackChecked);
   toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(8), (dbgController != 0L));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
   toggleoutputviews_popup->insertItem(i18n("D&ebugger"), this, SLOT(slotViewODebuggerView()));
-  pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
-  bVisible = pDock->isVisible();
-  pTabWidget = pDock->parentDockTabGroup();
-  bool bDebuggerChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  bool bDebuggerChecked = isToolViewVisible(dbg_widget);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(9), bDebuggerChecked);
   toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(9), (dbgController != 0L));
 #endif

@@ -878,6 +878,7 @@ private:
 #else
   void printImpl(QStringList& list, KPrinter* printer);
 #endif
+  bool isToolViewVisible(QWidget* pToolView);
 
 public:
   /** this attribute is true from construction until qApp->exec().
@@ -1092,6 +1093,8 @@ private:
 
   /** This list stores all finished Processes that have been started via the "Tool" Menu */
   QList<KProcess> m_FinishedToolProcesses;
+
+  bool m_bToggleToolViewsIsPending;
 
 private slots:
   void slotdoneWithKpp();

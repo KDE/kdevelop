@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -78,10 +78,19 @@
 
 CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,bStartupIsPending(true)
+  ,view_menu(0L)
   ,process("/bin/sh")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
+  ,class_tree(0L)
+  ,log_file_tree(0L)
+  ,real_file_tree(0L)
+  ,doc_tree(0L)
+  ,messages_widget(0L)
+  ,stdin_stdout_widget(0L)
+  ,stderr_widget(0L)
+  ,konsole_widget(0L)
   ,dbgController(0L)
   ,dbgToolbar(0L)
   ,var_viewer(0L)
@@ -93,6 +102,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,m_docViewManager(0L)
   ,m_pKDevSession(0L)
   ,m_CTagsCmdLine()
+  ,m_bToggleToolViewsIsPending(false)
 {
   doctool = DT_KDOC;
 
