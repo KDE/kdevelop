@@ -97,8 +97,7 @@ private:
 
   QString m_buf;
   QStack<QString> m_dirStack;
-  KRegExp m_enterDir;
-  KRegExp m_leaveDir;
+  KRegExp m_dirChange;
   KRegExp m_errorGcc;
 
   typedef QMap<int, ErrorDetails> ErrorMap;

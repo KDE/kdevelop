@@ -73,8 +73,7 @@ void COutputWidget::insertAtEnd(const QString& s)
 CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   QMultiLineEdit(parent, name),
   m_buf(),
-  m_enterDir("[^\n]*: Entering directory `(.*)'\n"),
-  m_leaveDir("[^\n]*: Leaving directory `([^\n]*)'\n"),
+  m_dirChange("[^\n]*: ([^\n]+) (`|»)(.*)('|«)([^\n]*)\n"),
   m_errorGcc("^([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
@@ -166,18 +165,93 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   const int errorGccFileGroup = 1;
   const int errorGccRowGroup = 2;
 
-  if (m_enterDir.match(line))
-  {
-    QString *dir = new QString(m_enterDir.group(1));
-    m_dirStack.push(dir);
-    return;
+  QString dbg;
+  for ( uint i = 0; i < line.length(); ++i ) {
+    dbg += "0x" + QString::number( line[i].unicode(), 16 ) + ",";
   }
+  kdDebug() << line << endl << dbg << endl;
 
-  if (m_leaveDir.match(line))
+  if (m_dirChange.match(line))
   {
-    QString *dir = m_dirStack.pop();
-    delete dir;
-    return;
+    // these are the unicode representations of the strings "gmake" is outputting
+    static const unsigned short fr_enter[] = {'E','n','t','r','e',' ','d','a','n','s',' ','l','e',' ','r',0xe9,'p','e','r','t','o','i','r','e'};
+    static const unsigned short pl_enter[] = {'W','c','h','o','d','z',0x119,' ','k','a','t','a','l','o','g'};
+    static const unsigned short ja_enter[] = {0x5165,0x308a,0x307e,0x3059,0x20,0x30c7,0x30a3,0x30ec,0x30af,0x30c8,0x30ea};
+    static const unsigned short ko_enter[] = {0xb4e4,0xc5b4,0xac10};
+    static const unsigned short ko_behind[] = {0x20,0xb514,0xb809,0xd1a0,0xb9ac};
+    static const unsigned short pt_br_enter[] = {0x45,0x6e,0x74,0x72,0x61,0x6e,0x64,0x6f,0x20,0x6e,0x6f,0x20,0x64,0x69,0x72,0x65,0x74,0xf3,0x72,0x69,0x6f};
+    static const unsigned short ru_enter[] = {0x412,0x445,0x43e,0x434,0x20,0x432,0x20,0x43a,0x430,0x442,0x430,0x43b,0x43e,0x433};
+
+    static const QString fr_e( (const QChar*)fr_enter, sizeof(fr_enter) / 2 );
+    static const QString pl_e( (const QChar*)pl_enter, sizeof(pl_enter) / 2 );
+    static const QString ja_e( (const QChar*)ja_enter, sizeof(ja_enter) / 2 );
+    static const QString ko_e( (const QChar*)ko_enter, sizeof(ko_enter) / 2 );
+    static const QString ko_b( (const QChar*)ko_behind, sizeof(ko_behind) / 2 );
+    static const QString pt_br_e( (const QChar*)pt_br_enter, sizeof(pt_br_enter) / 2 );
+    static const QString ru_e( (const QChar*)ru_enter, sizeof(ru_enter) / 2 );
+
+    QString msg = line.mid( m_dirChange.groupStart(1), m_dirChange.groupEnd(1) - m_dirChange.groupStart(1) );
+    QString msgBehind = line.mid( m_dirChange.groupStart(5), m_dirChange.groupEnd(5) - m_dirChange.groupStart(5) );
+
+/*
+ // if gmake ever changes the output strings, this stupid debug code will output the unicode representation
+
+    QString dbg;
+    for ( uint i = 0; i < msg.length(); ++i ) {
+      dbg += "0x" + QString::number( msg[i].unicode(), 16 ) + ",";
+    }
+    kdDebug() << msg << endl << dbg << endl;
+    dbg = QString();
+    for ( uint i = 0; i < msgBehind.length(); ++i ) {
+      dbg += "0x" + QString::number( msgBehind[i].unicode(), 16 ) + ",";
+    }
+    kdDebug() << "behind:" << msgBehind << endl << dbg << endl;
+*/
+
+    // these are the strings that gmake 3.79.1 outputs on entering a directory
+    if ( msg == "Entering directory" || 			// English - default
+         msg == "Wechsel in das Verzeichnis Verzeichnis" ||    // German - yes, there is a spelling error in make :)
+         msg == "Cambiando a directorio" || // Spanish
+         msg == fr_e || // French
+         msg == ja_e || // Japanese
+         ( msg == ko_e && msgBehind == ko_b ) || // Korean
+         msg == "Binnengaan van directory" || // Dutch
+         msg == pl_e || // Polish
+         msg == pt_br_e || // Brazilian Portuguese
+         msg == ru_e ) // Russian
+    {
+      QString *dir = new QString(m_dirChange.group(3));
+      m_dirStack.push(dir);
+      return;
+    }
+
+    static const unsigned short fr_leave[] = { 'Q','u','i','t','t','e',' ','l','e',' ','r',0xe9,'p','e','r','t','o','i','r','e' };
+    static const unsigned short ja_leave[] = { 0x51fa,0x307e,0x3059,0x20,0x30c7,0x30a3,0x30ec,0x30af,0x30c8,0x30ea };
+    static const unsigned short pt_br_leave[] = {'S','a','i','n','d','o',' ','d','o',' ','d','i','r','e','t',0xf3,'r','i','o'};
+    static const unsigned short ru_leave[] = {0x412,0x44b,0x445,0x43e,0x434,0x20,0x438,0x437,0x20,0x43a,0x430,0x442,0x430,0x43b,0x43e,0x433};
+    static const unsigned short ko_leave[] = {0xb098,0xac10};
+
+    static const QString fr_l( (const QChar*)fr_leave, sizeof(fr_leave) / 2 );
+    static const QString ja_l( (const QChar*)ja_leave, sizeof(ja_leave) / 2 );
+    static const QString ko_l( (const QChar*)ko_leave, sizeof(ko_leave) / 2 );
+    static const QString pt_br_l( (const QChar*)pt_br_leave, sizeof(pt_br_leave) / 2 );
+    static const QString ru_l( (const QChar*)ru_leave, sizeof(ru_leave) / 2 );
+
+    if ( msg == "Leaving directory" || // en
+         msg == "Verlassen des Verzeichnisses Verzeichnis" || // de
+         msg == "Saliendo directorio" || // es
+         msg == fr_l || // fr
+         msg == ja_l || //ja
+         ( msg == (const char*)ko_leave && msg == (const char*)ko_behind ) || //ko
+         msg == "Verdwijnen uit directory" || //nl
+         msg == "Opuszczam katalog" || //po
+         msg == pt_br_l || //pt_BR
+         msg == ru_l ) //ru
+    {
+      QString *dir = m_dirStack.pop();
+      delete dir;
+      return;
+    }
   }
 
   if (m_errorGcc.match(line))
