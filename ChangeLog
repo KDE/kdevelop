@@ -1,5 +1,6 @@
 2002-07-23  Harald Fernengel <harry@kdevelop.org>
     * bugfix: Applied Jens Zurheide's memory leak patches
+    * bugfix: Fix outputwidget for Qt 3.0.5
 2002-07-19  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: missed close button for TabPage UI mode is back, backported from HEAD
 2002-07-18  Roland Krause  <roland@ca.wai.com>
