@@ -331,9 +331,11 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     m_currentScope.push_back( className );
  
     ParsedClass* oldClass = m_currentClass;
+    ParsedClassContainer* oldContainer = m_currentScopeContainer;
     m_currentClass = klass;
     TreeParser::parseClassSpecifier( ast );
     m_currentClass = oldClass;
+    m_currentScopeContainer = oldContainer;
     
     m_currentScope.pop_back();
     
@@ -354,8 +356,8 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 	
 	int startLine, startColumn;
 	int endLine, endColumn;
-	ast->getStartPosition( &startLine, &startColumn );
-	ast->getEndPosition( &endLine, &endColumn );
+	it.current()->getStartPosition( &startLine, &startColumn );
+	it.current()->getEndPosition( &endLine, &endColumn );
     
 	attr->setDeclaredOnLine( startLine );
 	attr->setDefinedOnLine( startLine );
@@ -454,7 +456,7 @@ void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
 
 ParsedScopeContainer * StoreWalker::findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString & name )
 {
-    ParsedScopeContainer* ns = m_currentScopeContainer->getScopeByName( name );
+    ParsedScopeContainer* ns = scope->getScopeByName( name );
     if( !ns ){
 	ns = new ParsedScopeContainer();
 	ns->setName( name );
@@ -469,11 +471,7 @@ ParsedScopeContainer * StoreWalker::findOrInsertScopeContainer( ParsedScopeConta
 ParsedAttribute * StoreWalker::findOrInsertAttribute( ParsedClassContainer * scope, const QString & name )
 {
     ParsedAttribute* attr = scope->getAttributeByName( name );
-    if( !attr ){
-	kdDebug(9007) << "--------------> insert attribute " << name << endl;
-	kdDebug(9007) << "--------------> scope is " << scope->path() << endl;
-	kdDebug(9007) << "--------------> m_currentScopeContainer is " << m_currentScopeContainer->path() << endl;
-	
+    if( !attr ){	
 	attr = new ParsedAttribute();
 	attr->setName( name );
 
