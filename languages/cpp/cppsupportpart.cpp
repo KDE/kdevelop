@@ -906,7 +906,7 @@ CppSupportPart::parseProject( bool force )
 		    file->read( stream );
 		    codeModel()->addFile( file );
 		} else {
-                    kdDebug(9007) << "newly parsing..." << endl;
+                    kdDebug(9007) << "newly parsing(" << absFilePath << ")..." << endl;
 		    m_driver->parseFile( absFilePath );
 		}
 
