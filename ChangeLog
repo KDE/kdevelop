@@ -3,6 +3,9 @@
 	  declarations.
 	* fixed problems with the browse toolbar button.
 	* changed the add attribute dialog to use layout management.
+	* fixed method code generation(Bug#1679).
+	* fixed so that the modifiers in the method dialogs gets shaded when 
+	  the user creates a signal or slot.
 
 1999-08-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* In kdlgedit's QComboBox code generation, put quotes 
