@@ -81,7 +81,7 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name,t
 	next_button->setGeometry( 50, 210, 130, 30 );
 	next_button->setMinimumSize( 0, 0 );
 	next_button->setMaximumSize( 32767, 32767 );
-	connect( next_button, SIGNAL(pressed()), SLOT(slotNext()) );
+	connect( next_button, SIGNAL(clicked()), SLOT(slotNext()) );
 	next_button->setFocusPolicy( QWidget::TabFocus );
 	next_button->setBackgroundMode( QWidget::PaletteBackground );
 	next_button->setFontPropagation( QWidget::NoChildren );
@@ -94,7 +94,7 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name,t
 	ok_button->setGeometry( 250, 210, 130, 30 );
 	ok_button->setMinimumSize( 0, 0 );
 	ok_button->setMaximumSize( 32767, 32767 );
-	connect( ok_button, SIGNAL(pressed()), SLOT(slotOK()) );
+	connect( ok_button, SIGNAL(clicked()), SLOT(slotOK()) );
 	ok_button->setFocusPolicy( QWidget::TabFocus );
 	ok_button->setBackgroundMode( QWidget::PaletteBackground );
 	ok_button->setFontPropagation( QWidget::NoChildren );

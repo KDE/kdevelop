@@ -1144,9 +1144,11 @@ void CKDevelop::slotHelpAbout(){
   KMsgBox::message(this,i18n("About KDevelop..."),i18n("\t   KDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
 Sandy Meier <smeier@rz.uni-potsdam.de>
 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
-Stefan Bartel <bartel@rz.uni-potsdam.de>
 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-                             
+Jonas Nordin <jonas.nordin@cenacle.se>
+Pascal Krahmer <pascal@beast.de>
+Stefan Bartel <bartel@rz.uni-potsdam.de>
+
 KDevelop contains sourcecode from KWrite 0.98 
 (c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 "));

@@ -1,7 +1,7 @@
 # Generated automatically from Makefile.in by configure.
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.3 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -18,10 +18,10 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ../..
-prefix = /opt/kde
+prefix = /home/smeier/kde
 exec_prefix = ${prefix}
 
-bindir = /opt/kde/bin
+bindir = /home/smeier/kde/bin
 sbindir = ${exec_prefix}/sbin
 libexecdir = ${exec_prefix}/libexec
 datadir = ${prefix}/share
@@ -34,7 +34,7 @@ mandir = ${prefix}/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
 
-DESTDIR =
+DISTDIR =
 
 pkgdatadir = $(datadir)/kdevelop
 pkglibdir = $(libdir)/kdevelop
@@ -47,8 +47,8 @@ AUTOCONF = autoconf
 AUTOMAKE = automake
 AUTOHEADER = autoheader
 
-INSTALL = /usr/bin/ginstall -c
-INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL = /usr/bin/install -c
+INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL_PROGRAM}
 transform = s,x,x,
@@ -61,8 +61,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_alias = @build_alias@
 build_triplet = @build@
-host_alias = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
+host_alias = i586-pc-linux-gnu
+host_triplet = i586-pc-linux-gnu
 target_alias = @target_alias@
 target_triplet = @target@
 CC = gcc
@@ -73,8 +73,8 @@ GLLIB = @GLLIB@
 GMSGFMT = /usr/bin/msgfmt
 IDL = @IDL@
 KDE_EXTRA_RPATH = 
-KDE_INCLUDES = -I/opt/kde/include
-KDE_LDFLAGS = -L/opt/kde/lib
+KDE_INCLUDES = -I/home/smeier/kde/include
+KDE_LDFLAGS = -L/home/smeier/kde/lib
 KDE_RPATH = -rpath $(kde_libraries) -rpath $(x_libraries)
 LD = /usr/i486-linux/bin/ld
 LEX = flex
@@ -84,7 +84,7 @@ LIBDL = @LIBDL@
 LIBJPEG = -ljpeg
 LIBMICO = @LIBMICO@
 LIBOBJS = @LIBOBJS@
-LIBPNG = -lpng -lz -lm
+LIBPNG = 
 LIBPTHREAD = @LIBPTHREAD@
 LIBPYTHON = @LIBPYTHON@
 LIBQIMGIO = @LIBQIMGIO@
@@ -109,7 +109,7 @@ LN_S = ln -s
 MAKEINFO = makeinfo
 MICO_INCLUDES = @MICO_INCLUDES@
 MICO_LDFLAGS = @MICO_LDFLAGS@
-MOC = /usr/bin/moc
+MOC = /usr/lib/qt/bin/moc
 MSGFMT = /usr/bin/msgfmt
 NM = /usr/bin/nm -B
 PACKAGE = kdevelop
@@ -133,40 +133,40 @@ X_INCLUDES = -I/usr/X11R6/include
 X_LDFLAGS = -L/usr/X11R6/lib
 X_SERVER = @X_SERVER@
 ac_xdmdir = @ac_xdmdir@
-all_includes = -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include
-all_libraries = -L/opt/kde/lib  -L/usr/X11R6/lib
+all_includes = -I/home/smeier/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include
+all_libraries = -L/home/smeier/kde/lib  -L/usr/X11R6/lib
 install_root = 
-kde_appsdir = /opt/kde/share/applnk
-kde_bindir = /opt/kde/bin
-kde_cgidir = /opt/kde/cgi-bin
-kde_confdir = /opt/kde/share/config
-kde_datadir = /opt/kde/share/apps
-kde_htmldir = /opt/kde/share/doc/HTML
-kde_icondir = /opt/kde/share/icons
-kde_includes = /opt/kde/include
-kde_libraries = /opt/kde/lib
-kde_locale = /opt/kde/share/locale
-kde_mimedir = /opt/kde/share/mimelnk
-kde_minidir = /opt/kde/share/icons/mini
-kde_partsdir = /opt/kde/parts
-kde_sounddir = /opt/kde/share/sounds
-kde_toolbardir = /opt/kde/share/toolbar
-kde_wallpaperdir = /opt/kde/share/wallpapers
+kde_appsdir = /home/smeier/kde/share/applnk
+kde_bindir = /home/smeier/kde/bin
+kde_cgidir = /home/smeier/kde/cgi-bin
+kde_confdir = /home/smeier/kde/share/config
+kde_datadir = /home/smeier/kde/share/apps
+kde_htmldir = /home/smeier/kde/share/doc/HTML
+kde_icondir = /home/smeier/kde/share/icons
+kde_includes = /home/smeier/kde/include
+kde_libraries = /home/smeier/kde/lib
+kde_locale = /home/smeier/kde/share/locale
+kde_mimedir = /home/smeier/kde/share/mimelnk
+kde_minidir = /home/smeier/kde/share/icons/mini
+kde_partsdir = /home/smeier/kde/parts
+kde_sounddir = /home/smeier/kde/share/sounds
+kde_toolbardir = /home/smeier/kde/share/toolbar
+kde_wallpaperdir = /home/smeier/kde/share/wallpapers
 qt_includes = /usr/lib/qt/include
 qt_libraries = 
 x_includes = /usr/X11R6/include
 x_libraries = /usr/X11R6/lib
 xdmconfigsubdir = @xdmconfigsubdir@
 
-INCLUDES = $(all_includes)
+INCLUDES= $(all_includes)
 
 noinst_LIBRARIES = libkdlgedit.a
 
 # libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
-libkdlgedit_a_METASOURCES = kdlgdialogs.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
+libkdlgedit_a_METASOURCES =  kdlgdialogs.moc.cpp kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp 
 
-libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgwidgets.cpp kdlgdialogs.cpp kdlgnewwidget.cpp                        kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp kdlgdialogs.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp
-
+libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgwidgets.cpp kdlgdialogs.cpp kdlgnewwidget.cpp\
+                       kdlgedit.moc.cpp kdlgeditwidget.moc.cpp kdlgpropwidget.moc.cpp kdlgwidgets.moc.cpp kdlgdialogs.moc.cpp kdlgnewwidget.moc.cpp kdlgproplvis.moc.cpp
 
 noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h kdlgnewwidget.h kdlgproplvis.h
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -186,10 +186,9 @@ kdlgeditwidget.moc.o kdlgpropwidget.moc.o kdlgwidgets.moc.o \
 kdlgdialogs.moc.o kdlgnewwidget.moc.o kdlgproplvis.moc.o
 AR = ar
 CXXFLAGS = -O2 -Wall
-CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
+CXXLINK = $(LIBTOOL) --mode=link $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
 HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in
@@ -197,21 +196,23 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
-GZIP_ENV = --best
+TAR = tar
+GZIP = --best
 DEP_FILES =  .deps/kdlgdialogs.P .deps/kdlgdialogs.moc.P \
 .deps/kdlgedit.P .deps/kdlgedit.moc.P .deps/kdlgeditwidget.P \
 .deps/kdlgeditwidget.moc.P .deps/kdlgnewwidget.P \
 .deps/kdlgnewwidget.moc.P .deps/kdlgproplvis.moc.P \
 .deps/kdlgpropwidget.P .deps/kdlgpropwidget.moc.P .deps/kdlgwidgets.P \
 .deps/kdlgwidgets.moc.P
+CXXMKDEP = $(CXX) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 SOURCES = $(libkdlgedit_a_SOURCES)
 OBJECTS = $(libkdlgedit_a_OBJECTS)
 
-all: all-redirect
+all: Makefile $(LIBRARIES) $(HEADERS)
+
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .s
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu kdevelop/kdlgedit/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
@@ -272,12 +273,8 @@ libkdlgedit.a: $(libkdlgedit_a_OBJECTS) $(libkdlgedit_a_DEPENDENCIES)
 tags: TAGS
 
 ID: $(HEADERS) $(SOURCES) $(LISP)
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
-	       END { for (i in files) print i; }'`; \
 	here=`pwd` && cd $(srcdir) \
-	  && mkid -f$$here/ID $$unique $(LISP)
+	  && mkid -f$$here/ID $(SOURCES) $(HEADERS) $(LISP)
 
 TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
@@ -310,13 +307,9 @@ distdir: $(DISTFILES)
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu kdevelop/kdlgedit/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
-	  else \
-	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-	  fi; \
+	  test -f $(distdir)/$$file \
+	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $$d/$$file $(distdir)/$$file; \
 	done
 
 DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
@@ -328,108 +321,85 @@ mostlyclean-depend:
 clean-depend:
 
 distclean-depend:
-	-rm -rf .deps
 
 maintainer-clean-depend:
+	-rm -rf .deps
 
 %.o: %.c
 	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
+	$(COMPILE) -Wp,-MD,.deps/$(*F).P -c $<
 
 %.lo: %.c
 	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).p -c $<
+	@-sed -e 's/^\([^:]*\)\.o:/\1.lo \1.o:/' \
+	  < .deps/$(*F).p > .deps/$(*F).P
+	@-rm -f .deps/$(*F).p
 
 %.o: %.cpp
 	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
+	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).P -c $<
 
 %.lo: %.cpp
 	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-info-am:
-info: info-am
-dvi-am:
-dvi: dvi-am
-check-am: all-am
-check: check-am
-installcheck-am:
-installcheck: installcheck-am
-install-exec-am:
-install-exec: install-exec-am
+	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).p -c $<
+	@-sed -e 's/^\([^:]*\)\.o:/\1.lo \1.o:/' \
+	  < .deps/$(*F).p > .deps/$(*F).P
+	@-rm -f .deps/$(*F).p
+info:
+dvi:
+check: all
+	$(MAKE)
+installcheck:
+install-exec: 
+	@$(NORMAL_INSTALL)
 
-install-data-am:
-install-data: install-data-am
+install-data: 
+	@$(NORMAL_INSTALL)
 
-install-am: all-am
-	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am:
-uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(HEADERS)
-all-redirect: all-am
+install: install-exec install-data all
+	@:
+
+uninstall: 
+
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs:
 
 
 mostlyclean-generic:
+	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f Makefile $(DISTCLEANFILES)
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
 		mostlyclean-generic
 
-mostlyclean: mostlyclean-am
+clean:  clean-noinstLIBRARIES clean-compile clean-libtool clean-tags \
+		clean-depend clean-generic mostlyclean
 
-clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
-
-clean: clean-am
-
-distclean-am:  distclean-noinstLIBRARIES distclean-compile \
+distclean:  distclean-noinstLIBRARIES distclean-compile \
 		distclean-libtool distclean-tags distclean-depend \
-		distclean-generic clean-am
+		distclean-generic clean
+	-rm -f config.status
 	-rm -f libtool
 
-distclean: distclean-am
-
-maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
+maintainer-clean:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
 		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-generic distclean
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
-
-maintainer-clean: maintainer-clean-am
 
 .PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
@@ -438,12 +408,10 @@ maintainer-clean-compile mostlyclean-libtool distclean-libtool \
 clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir \
 mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-depend info dvi installcheck install-exec install-data \
+install uninstall all installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
 
 
 kdlgdialogs.moc.cpp: kdlgdialogs.h
