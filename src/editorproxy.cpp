@@ -43,6 +43,9 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum)
   if (!part || !part->inherits("KTextEditor::Document"))
     return;
 
+  if ( lineNum < 0 )
+    return;
+
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
     iface->setCursorPosition(lineNum, 0);
