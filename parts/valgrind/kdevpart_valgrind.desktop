@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=valgrind
+Name=KDevvalgrind
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevvalgrind

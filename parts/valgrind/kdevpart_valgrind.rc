@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="valgrind" library="libvalgrindplugin" version="1">
+<MenuBar>
+ <Menu name="tools"><Text>&amp;Tools</Text>
+  <Action name="tools_valgrind"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="extraToolBar">
+  <Action name="tools_valgrind"/>
+</ToolBar>
+</kpartplugin>
