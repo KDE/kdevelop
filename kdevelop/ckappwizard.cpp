@@ -1415,17 +1415,20 @@ void CKAppWizard::okPermited()
 
       if( ( kickeritem->isSelected()||kde2miniitem->isSelected()||
             kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
-            qt2normalitem->isSelected()||qt2mdiitem->isSelected()) && QFileInfo(adminsrc).exists() )
+            qt2normalitem->isSelected()||qt2mdiitem->isSelected()))
       {
-        p << "cp";
-        p << "'" + adminsrc + "'"; 			
-        p << "'" + admindes + "'";
-      }
-      else
-      {
-        KMessageBox::error (this, QString(i18n("The template file [%1] is missing.\n"
-                    "Please correct your KDevelop installation.")).arg(adminsrc));
-        return;
+        if (QFileInfo(adminsrc).exists())
+        {
+          p << "cp";
+          p << "'" + adminsrc + "'"; 			
+          p << "'" + admindes + "'";
+        }
+        else
+        {
+          KMessageBox::error (this, QString(i18n("The template file [%1] is missing.\n"
+                                  "Please correct your KDevelop installation.")).arg(adminsrc));
+          return;
+        }
       }
       p.start(KProcess::Block,KProcess::AllOutput);
     }
