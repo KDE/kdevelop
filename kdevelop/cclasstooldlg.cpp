@@ -54,7 +54,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   onlyVirtual = false;
   store = NULL;
 
-  setCaption( "Class Tool" );
+  setCaption( i18n("Class Tool") );
 
   treeH.setTree( &classTree );
 
@@ -80,7 +80,7 @@ void CClassToolDlg::setWidgetValues()
   classLbl.setBackgroundMode( QWidget::PaletteBackground );
   classLbl.setFontPropagation( QWidget::NoChildren );
   classLbl.setPalettePropagation( QWidget::NoChildren );
-  classLbl.setText( "Class:" );
+  classLbl.setText( i18n("Class:") );
   classLbl.setAlignment( 289 );
   classLbl.setMargin( -1 );
 
@@ -179,7 +179,7 @@ void CClassToolDlg::setWidgetValues()
   exportCombo.setPalettePropagation( QWidget::AllChildren );
   exportCombo.setSizeLimit( 10 );
   exportCombo.setAutoResize( FALSE );
-  exportCombo.insertItem( "All" );
+  exportCombo.insertItem( i18n("All") );
   exportCombo.insertItem( "Public" );
   exportCombo.insertItem( "Protected" );
   exportCombo.insertItem( "Private" );
@@ -411,35 +411,35 @@ void CClassToolDlg::changeCaption()
   switch( currentOperation )
   {
     case CTPARENT:
-      caption = "Parents";
+      caption = i18n("Parents");
       break;
     case CTCHILD:
-      caption = "Children";
+      caption = i18n("Children");
       break;
     case CTCLIENT:
-      caption = "Clients";
+      caption = i18n("Clients");
       break;
     case CTSUPP:
-      caption = "Suppliers";
+      caption = i18n("Suppliers");
       break;
     case CTATTR:
       caption = exportCombo.currentText();
-      caption += " attributes";
+      caption += i18n(" attributes");
       break;
     case CTMETH:
       caption = exportCombo.currentText();
-      caption += " methods";
+      caption += i18n(" methods");
       break;
     case CTVIRT:
       caption = exportCombo.currentText();
-      caption += " virtual methods";
+      caption += i18n(" virtual methods");
       break;
     default:
-      caption = "Class Tool Dialog";
+      caption = i18n("Class Tool Dialog");
       break;
   }
 
-  caption += " of class ";
+  caption += i18n(" of class ");
   caption += currentClass->name;
 
   setCaption( caption );
@@ -603,7 +603,7 @@ void CClassToolDlg::slotExportComboChoice(int idx)
   str = exportCombo.currentText();
 
   //Check exporttype
-  if( str == "All" )
+  if( str == i18n("All") )
     comboExport = CTHALL;
   else if( str == "Public" )
     comboExport = CTHPUBLIC;
@@ -665,3 +665,4 @@ void CClassToolDlg::OK()
 {
   accept();
 }
+

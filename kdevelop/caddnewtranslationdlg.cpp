@@ -31,34 +31,6 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
   
   setCaption(i18n("Add new Translation File"));
 	
-	ok_button = new QPushButton( this, "ok_button" );
-	ok_button->setGeometry( 60, 100, 100, 30 );
-	ok_button->setMinimumSize( 0, 0 );
-	ok_button->setMaximumSize( 32767, 32767 );
-	ok_button->setFocusPolicy( QWidget::TabFocus );
-	ok_button->setBackgroundMode( QWidget::PaletteBackground );
-	ok_button->setFontPropagation( QWidget::NoChildren );
-	ok_button->setPalettePropagation( QWidget::NoChildren );
-	ok_button->setText( "OK" );
-	ok_button->setAutoRepeat( FALSE );
-	ok_button->setAutoResize( FALSE );
-
-	cancel_button = new QPushButton( this, "cancel_button" );
-	cancel_button->setGeometry( 210, 100, 100, 30 );
-	cancel_button->setMinimumSize( 0, 0 );
-	cancel_button->setMaximumSize( 32767, 32767 );
-	cancel_button->setFocusPolicy( QWidget::TabFocus );
-	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-	cancel_button->setFontPropagation( QWidget::NoChildren );
-	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( "Cancel" );
-	cancel_button->setAutoRepeat( FALSE );
-	cancel_button->setAutoResize( FALSE );
-
-	lang_combo = new KLanguageCombo(this, "lang_combo" );
-	lang_combo->setGeometry( 110, 30, 240, 30 );
-
-
 	QLabel* qtarch_Label_1;
 	qtarch_Label_1 = new QLabel( this, "Label_1" );
 	qtarch_Label_1->setGeometry( 20, 30, 90, 30 );
@@ -68,11 +40,39 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_1->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_1->setText( "Language:" );
+	qtarch_Label_1->setText( i18n("Language:") );
 	qtarch_Label_1->setAlignment( 289 );
 	qtarch_Label_1->setMargin( -1 );
 
-	resize( 370,150 );
+	lang_combo = new KLanguageCombo(this, "lang_combo" );
+	lang_combo->setGeometry( 110, 30, 240, 25 );
+
+	ok_button = new QPushButton( this, "ok_button" );
+	ok_button->setGeometry( 60, 100, 100, 25 );
+	ok_button->setMinimumSize( 0, 0 );
+	ok_button->setMaximumSize( 32767, 32767 );
+	ok_button->setFocusPolicy( QWidget::TabFocus );
+	ok_button->setBackgroundMode( QWidget::PaletteBackground );
+	ok_button->setFontPropagation( QWidget::NoChildren );
+	ok_button->setPalettePropagation( QWidget::NoChildren );
+	ok_button->setText( i18n("OK") );
+	ok_button->setAutoRepeat( FALSE );
+	ok_button->setAutoResize( FALSE );
+	ok_button->setDefault(true);
+	
+	cancel_button = new QPushButton( this, "cancel_button" );
+	cancel_button->setGeometry( 210, 100, 100, 25 );
+	cancel_button->setMinimumSize( 0, 0 );
+	cancel_button->setMaximumSize( 32767, 32767 );
+	cancel_button->setFocusPolicy( QWidget::TabFocus );
+	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+	cancel_button->setFontPropagation( QWidget::NoChildren );
+	cancel_button->setPalettePropagation( QWidget::NoChildren );
+	cancel_button->setText( i18n("Cancel") );
+	cancel_button->setAutoRepeat( FALSE );
+	cancel_button->setAutoResize( FALSE );
+
+	resize( 370,145 );
 	setMinimumSize( 0, 0 );
 	setMaximumSize( 32767, 32767 );
 
@@ -235,3 +235,4 @@ void CAddNewTranslationDlg::slotOkClicked(){
 QString CAddNewTranslationDlg::getLangFile(){
   return langfile;
 }
+

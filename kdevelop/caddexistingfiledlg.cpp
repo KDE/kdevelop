@@ -29,20 +29,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 
   prj = p_prj;
   setCaption(i18n("Add existing files to project"));
-  source_edit = new QLineEdit( this, "source_edit" );
-  source_edit->setGeometry( 120, 30, 220, 30 );
-  source_edit->setMinimumSize( 0, 0 );
-  source_edit->setMaximumSize( 32767, 32767 );
-  source_edit->setFocusPolicy( QWidget::StrongFocus );
-  source_edit->setBackgroundMode( QWidget::PaletteBase );
-  source_edit->setFontPropagation( QWidget::NoChildren );
-  source_edit->setPalettePropagation( QWidget::NoChildren );
-  source_edit->setText( "" );
-  source_edit->setMaxLength( 32767 );
-  source_edit->setEchoMode( QLineEdit::Normal );
-  source_edit->setFrame( TRUE );
-  
-  
+
   source_label = new QLabel( this, "source_label" );
   source_label->setGeometry( 20, 30, 90, 30 );
   source_label->setMinimumSize( 0, 0 );
@@ -54,35 +41,20 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_label->setText(i18n("Sourcefile(s):") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
-  
-  
-  destination_edit = new QLineEdit( this, "destination_edit" );
-  destination_edit->setGeometry( 120, 80, 220, 30 );
-  destination_edit->setMinimumSize( 0, 0 );
-  destination_edit->setMaximumSize( 32767, 32767 );
-  destination_edit->setFocusPolicy( QWidget::StrongFocus );
-  destination_edit->setBackgroundMode( QWidget::PaletteBase );
-  destination_edit->setFontPropagation( QWidget::NoChildren );
-  destination_edit->setPalettePropagation( QWidget::NoChildren );
-  destination_edit->setText( "" );
-  destination_edit->setMaxLength( 32767 );
-  destination_edit->setEchoMode( QLineEdit::Normal );
-  destination_edit->setFrame( TRUE );
-  
-  
-  destination_label = new QLabel( this, "destination_label" );
-  destination_label->setGeometry( 20, 80, 90, 30 );
-  destination_label->setMinimumSize( 0, 0 );
-  destination_label->setMaximumSize( 32767, 32767 );
-  destination_label->setFocusPolicy( QWidget::NoFocus );
-  destination_label->setBackgroundMode( QWidget::PaletteBackground );
-  destination_label->setFontPropagation( QWidget::NoChildren );
-  destination_label->setPalettePropagation( QWidget::NoChildren );
-  destination_label->setText(i18n("Destinationdir:") );
-  destination_label->setAlignment( 289 );
-  destination_label->setMargin( -1 );
-  
-  
+
+  source_edit = new QLineEdit( this, "source_edit" );
+  source_edit->setGeometry( 120, 30, 230, 30 );
+  source_edit->setMinimumSize( 0, 0 );
+  source_edit->setMaximumSize( 32767, 32767 );
+  source_edit->setFocusPolicy( QWidget::StrongFocus );
+  source_edit->setBackgroundMode( QWidget::PaletteBase );
+  source_edit->setFontPropagation( QWidget::NoChildren );
+  source_edit->setPalettePropagation( QWidget::NoChildren );
+  source_edit->setText( "" );
+  source_edit->setMaxLength( 32767 );
+  source_edit->setEchoMode( QLineEdit::Normal );
+  source_edit->setFrame( TRUE );
+
   source_button = new QPushButton( this, "source_button" );
   source_button->setGeometry( 360, 30, 30, 30 );
   source_button->setMinimumSize( 0, 0 );
@@ -96,8 +68,32 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_button->setPixmap(pix);
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );
-  
-	
+
+  destination_label = new QLabel( this, "destination_label" );
+  destination_label->setGeometry( 20, 80, 90, 30 );
+  destination_label->setMinimumSize( 0, 0 );
+  destination_label->setMaximumSize( 32767, 32767 );
+  destination_label->setFocusPolicy( QWidget::NoFocus );
+  destination_label->setBackgroundMode( QWidget::PaletteBackground );
+  destination_label->setFontPropagation( QWidget::NoChildren );
+  destination_label->setPalettePropagation( QWidget::NoChildren );
+  destination_label->setText(i18n("Destinationdir:") );
+  destination_label->setAlignment( 289 );
+  destination_label->setMargin( -1 );
+
+  destination_edit = new QLineEdit( this, "destination_edit" );
+  destination_edit->setGeometry( 120, 80, 230, 30 );
+  destination_edit->setMinimumSize( 0, 0 );
+  destination_edit->setMaximumSize( 32767, 32767 );
+  destination_edit->setFocusPolicy( QWidget::StrongFocus );
+  destination_edit->setBackgroundMode( QWidget::PaletteBase );
+  destination_edit->setFontPropagation( QWidget::NoChildren );
+  destination_edit->setPalettePropagation( QWidget::NoChildren );
+  destination_edit->setText( "" );
+  destination_edit->setMaxLength( 32767 );
+  destination_edit->setEchoMode( QLineEdit::Normal );
+  destination_edit->setFrame( TRUE );
+  	
   destination_button = new QPushButton( this, "destination_button" );
   destination_button->setGeometry( 360, 80, 30, 30 );
   destination_button->setMinimumSize( 0, 0 );
@@ -113,7 +109,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 
   KQuickHelp::add(source_edit,
   KQuickHelp::add(source_label,
-  KQuickHelp::add(source_button, i18n("select the source files to be added\n"
+  KQuickHelp::add(source_button, i18n("Select the source files to be added\n"
 				"to the project here."))));
 
   KQuickHelp::add(destination_edit,
@@ -122,7 +118,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 					"source files will be copied to here."))));
 
   ok_button = new QPushButton( this, "ok_button" );
-  ok_button->setGeometry( 90, 130, 100, 30 );
+  ok_button->setGeometry( 90, 130, 100, 25 );
   ok_button->setMinimumSize( 0, 0 );
   ok_button->setMaximumSize( 32767, 32767 );
   ok_button->setFocusPolicy( QWidget::TabFocus );
@@ -135,7 +131,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 	ok_button->setDefault( TRUE );
 	
   cancel_button = new QPushButton( this, "cancel_button" );
-  cancel_button->setGeometry( 220, 130, 100, 30 );
+  cancel_button->setGeometry( 220, 130, 100, 25 );
   cancel_button->setMinimumSize( 0, 0 );
   cancel_button->setMaximumSize( 32767, 32767 );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
@@ -150,7 +146,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   connect(destination_button,SIGNAL(clicked()),SLOT(destinationButtonClicked()));
   connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
-  resize( 410,180 );
+  resize( 410,175 );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
   
@@ -204,6 +200,8 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
+
 
 
 

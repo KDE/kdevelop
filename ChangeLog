@@ -1,3 +1,8 @@
+1999-05-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added tipofday dialog and tutorial to help menu
+	* fixed some i18n() missing
+	* fixed some focus misleading in dialogs
+	
 1999-05-25  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* finished normal KDE app template
 	* updated user manual for the new dialogeditor widgets and bug report
@@ -981,6 +986,8 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
+
 
 
 

@@ -274,18 +274,18 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_62->setTitle( i18n("Fancy header") );
   qtarch_ButtonGroup_62->setAlignment( 1 );
   
-  qtarch_ButtonGroup_61 = new QButtonGroup( parent, "ButtonGroup_61" );
-  qtarch_ButtonGroup_61->setGeometry( 30, 300, 270, 110 );
-  qtarch_ButtonGroup_61->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_61->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_61->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_61->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_61->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_61->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_61->setFrameStyle( 49 );
-  qtarch_ButtonGroup_61->setTitle( i18n("Login") );
-  qtarch_ButtonGroup_61->setAlignment( 1 );
-  
+  fancyHeaderButton = new QCheckBox( parent, "fancyHeaderButton" );
+  fancyHeaderButton->setGeometry( 40, 80, 250, 30 );
+  fancyHeaderButton->setMinimumSize( 0, 0 );
+  fancyHeaderButton->setMaximumSize( 32767, 32767 );
+  fancyHeaderButton->setFocusPolicy( QWidget::TabFocus );
+  fancyHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
+  fancyHeaderButton->setFontPropagation( QWidget::NoChildren );
+  fancyHeaderButton->setPalettePropagation( QWidget::NoChildren );
+  fancyHeaderButton->setText( i18n("fancy header") );
+  fancyHeaderButton->setAutoRepeat( FALSE );
+  fancyHeaderButton->setAutoResize( FALSE );
+
   qtarch_ButtonGroup_60 = new QButtonGroup( parent, "ButtonGroup_60" );
   qtarch_ButtonGroup_60->setGeometry( 30, 130, 270, 160 );
   qtarch_ButtonGroup_60->setMinimumSize( 0, 0 );
@@ -297,6 +297,18 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_60->setFrameStyle( 49 );
   qtarch_ButtonGroup_60->setTitle( i18n("Headertext") );
   qtarch_ButtonGroup_60->setAlignment( 1 );
+
+  qtarch_ButtonGroup_61 = new QButtonGroup( parent, "ButtonGroup_61" );
+  qtarch_ButtonGroup_61->setGeometry( 30, 300, 270, 110 );
+  qtarch_ButtonGroup_61->setMinimumSize( 0, 0 );
+  qtarch_ButtonGroup_61->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_61->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_61->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_61->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_61->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_61->setFrameStyle( 49 );
+  qtarch_ButtonGroup_61->setTitle( i18n("Login") );
+  qtarch_ButtonGroup_61->setAlignment( 1 );
   
   headerButton = new QCheckBox( parent, "headerButton" );
   headerButton->setGeometry( 20, 10, 100, 30 );
@@ -413,18 +425,6 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   loginPosition->insertItem(i18n("left"));
   loginPosition->insertItem(i18n("center"));
   loginPosition->insertItem(i18n("right"));
-  
-  fancyHeaderButton = new QCheckBox( parent, "fancyHeaderButton" );
-  fancyHeaderButton->setGeometry( 40, 80, 250, 30 );
-  fancyHeaderButton->setMinimumSize( 0, 0 );
-  fancyHeaderButton->setMaximumSize( 32767, 32767 );
-  fancyHeaderButton->setFocusPolicy( QWidget::TabFocus );
-  fancyHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
-  fancyHeaderButton->setFontPropagation( QWidget::NoChildren );
-  fancyHeaderButton->setPalettePropagation( QWidget::NoChildren );
-  fancyHeaderButton->setText( i18n("fancy header") );
-  fancyHeaderButton->setAutoRepeat( FALSE );
-  fancyHeaderButton->setAutoResize( FALSE );
   
   qtarch_ButtonGroup_65 = new QButtonGroup( parent, "ButtonGroup_65" );
   qtarch_ButtonGroup_65->setGeometry( 310, 60, 260, 170 );
@@ -3023,3 +3023,4 @@ void CConfigEnscriptDlg::loadSettings() {
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
 }
+

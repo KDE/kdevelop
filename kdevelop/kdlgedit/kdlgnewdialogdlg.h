@@ -38,7 +38,7 @@ public:
    KDlgNewDialogDlg(QWidget *parent=0, const char *name=0,CProject* prj=0);
   ~KDlgNewDialogDlg();
 
-QString getClassname(){return classname_edit->text();}
+	QString getClassname(){return classname_edit->text();}
   QString getHeaderName(){return header_edit->text();}
   QString getSourceName(){return cpp_edit->text();}
   QString getDataName(){return data_edit->text();}

@@ -40,6 +40,14 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   w1 = new QWidget( this, "general" );
   
 
+  QButtonGroup* makeGroup;
+  makeGroup = new QButtonGroup( w1, "makeGroup" );
+  makeGroup->setGeometry( 10, 10, 400, 60 );
+  makeGroup->setFrameStyle( 49 );
+  makeGroup->setTitle(i18n( "Make-Command" ));
+  makeGroup->setAlignment( 1 );
+  makeGroup->lower();
+
   QLabel* makeSelectLabel;
   makeSelectLabel = new QLabel( w1, "makeSelectLabel" );
   makeSelectLabel->setGeometry( 20, 30, 210, 25 );
@@ -50,18 +58,10 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   config->setGroup("General Options");
   QString make_cmd=config->readEntry("Make","make");
 
-  makeSelectLineEdit = new QLineEdit( w1, "makeSelectCombo" );
+  makeSelectLineEdit = new QLineEdit( w1, "makeSelectLineEdit" );
   makeSelectLineEdit->setGeometry( 270, 30, 130, 25 );
   makeSelectLineEdit->setText(make_cmd);
 
-  QButtonGroup* makeGroup;
-  makeGroup = new QButtonGroup( w1, "makeGroup" );
-  makeGroup->setGeometry( 10, 10, 400, 60 );
-  makeGroup->setFrameStyle( 49 );
-  makeGroup->setTitle(i18n( "Make-Command" ));
-  makeGroup->setAlignment( 1 );
-  makeGroup->lower();
-  
   KQuickHelp::add(makeGroup,
   KQuickHelp::add(makeSelectLabel,
   KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
@@ -72,6 +72,23 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 					  "as well."))));
   
   bool autoSave=config->readBoolEntry("Autosave",true);
+
+  QButtonGroup* autosaveGroup;
+  autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
+  autosaveGroup->setGeometry( 10, 90, 400, 90 );
+  autosaveGroup->setFrameStyle( 49 );
+  autosaveGroup->setTitle( i18n("Autosave") );
+  autosaveGroup->setAlignment( 1 );
+//  autosaveGroup->insert( autoSaveCheck );
+  autosaveGroup->lower();
+
+  autoSaveCheck = new QCheckBox( w1, "autoSaveCheck" );
+  autoSaveCheck->setGeometry( 20, 110, 210, 30 );
+  autoSaveCheck->setText(i18n("enable Autosave"));
+  autoSaveCheck->setAutoRepeat( FALSE );
+  autoSaveCheck->setAutoResize( FALSE );
+  autoSaveCheck->setChecked(autoSave);
+
   QLabel* autosaveTimeLabel;
   autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
   autosaveTimeLabel->setGeometry( 20, 140, 210, 25 );
@@ -100,25 +117,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   if(configTime==30*60*1000)
     autosaveTimeCombo->setCurrentItem(3);
 
-  autoSaveCheck = new QCheckBox( w1, "autoSaveCheck" );
-  autoSaveCheck->setGeometry( 20, 110, 210, 30 );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
-  autoSaveCheck->setText(i18n("enable Autosave"));
-  autoSaveCheck->setAutoRepeat( FALSE );
-  autoSaveCheck->setAutoResize( FALSE );
-  autoSaveCheck->setChecked(autoSave);
-  
-  QButtonGroup* autosaveGroup;
-  autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
-  autosaveGroup->setGeometry( 10, 90, 400, 90 );
-  autosaveGroup->setFrameStyle( 49 );
-  autosaveGroup->setTitle( i18n("Autosave") );
-  autosaveGroup->setAlignment( 1 );
-//  autosaveGroup->insert( autoSaveCheck );
-  autosaveGroup->lower();
-  
   KQuickHelp::add(autosaveTimeLabel,	
 	KQuickHelp::add(autosaveTimeCombo,	
 	KQuickHelp::add(autoSaveCheck,	
@@ -129,6 +127,29 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	                                "Please select your timeout-value.\n"
 	                                "Available are: 3 minutes, 5 minutes,\n"
 	                                "15 minutes and 30 minutes.")))));
+  
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
+
+  QButtonGroup* autoswitchGroup;
+  autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
+  autoswitchGroup->setGeometry( 10, 190, 400, 60 );
+  autoswitchGroup->setFrameStyle( 49 );
+  autoswitchGroup->setTitle(i18n( "Autoswitch") );
+  autoswitchGroup->setAlignment( 1 );
+//  autoswitchGroup->insert( autoSwitchCheck );
+  autoswitchGroup->lower();
+
+  autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
+  autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
+  autoSwitchCheck->setText(i18n("enable Autoswitch"));
+  autoSwitchCheck->setAutoRepeat( FALSE );
+  autoSwitchCheck->setAutoResize( FALSE );
+  bool autoSwitch=config->readBoolEntry("Autoswitch",true);
+  autoSwitchCheck->setChecked( autoSwitch );
   
   defaultClassViewCheck = new QCheckBox( w1, "defaultClassViewCheck" );
   defaultClassViewCheck->setGeometry( 220, 210, 180, 30 );
@@ -146,25 +167,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 					      "use Logical File Viewer for\n"
 					      "autoswitching."));
 
-  autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
-  autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
-  autoSwitchCheck->setText(i18n("enable Autoswitch"));
-  autoSwitchCheck->setAutoRepeat( FALSE );
-  autoSwitchCheck->setAutoResize( FALSE );
-  bool autoSwitch=config->readBoolEntry("Autoswitch",true);
-  autoSwitchCheck->setChecked( autoSwitch );
-  
-  QButtonGroup* autoswitchGroup;
-  autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
-  autoswitchGroup->setGeometry( 10, 190, 400, 60 );
-  autoswitchGroup->setFrameStyle( 49 );
-  autoswitchGroup->setTitle(i18n( "Autoswitch") );
-  autoswitchGroup->setAlignment( 1 );
-//  autoswitchGroup->insert( autoSwitchCheck );
-  autoswitchGroup->lower();
-  
   KQuickHelp::add(autoSwitchCheck,
 		  KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
 						       "If autoswitch is enabled, KDevelop\n"
@@ -175,11 +177,24 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 						       "will have to switch to windows\n"
 						       "yourself, including turning on and\n"
 						       "off the outputwindow.")));	
+						       						
+	QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
+	startupGroup->setGeometry( 10, 260, 400, 70 );
+	startupGroup->setFrameStyle( 49 );
+	startupGroup->setTitle(i18n("Startup"));
+	startupGroup->setAlignment( 1 );
+//	startupGroup->insert( logoCheck );
+//	startupGroup->insert( lastProjectCheck );
+	startupGroup->lower();
+	
+	KQuickHelp::add(startupGroup, i18n("Startup\n\n"
+	                  "The Startup group offers options for\n"
+	                  "starting KDevelop"));
 
   config->setGroup("General Options");
   bool logo=config->readBoolEntry("Logo",true);
   bool lastprj=config->readBoolEntry("LastProject",true);
-						       						
+
   logoCheck = new QCheckBox( w1, "logoCheck" );
 	logoCheck->setGeometry( 20, 275, 190, 25 );
 	logoCheck->setText(i18n("Startup Logo"));
@@ -190,6 +205,18 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
+	
+	lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
+	lastProjectCheck->setGeometry( 20, 295, 190, 25 );
+	lastProjectCheck->setText(i18n("Load last project"));
+	lastProjectCheck->setAutoRepeat( FALSE );
+	lastProjectCheck->setAutoResize( FALSE );
+	lastProjectCheck->setChecked( lastprj );
+	
+	KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
+                    "If Load last project is enabled, KDevelop will load\n"
+                    "the last project used."));
+
 	
 	config->setGroup("TipOfTheDay");
   bool tip=config->readBoolEntry("show_tod",true);
@@ -207,30 +234,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	                  "Tip of the Day every time it starts."));
 	
 	
-	lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
-	lastProjectCheck->setGeometry( 20, 295, 190, 25 );
-	lastProjectCheck->setText(i18n("Load last project"));
-	lastProjectCheck->setAutoRepeat( FALSE );
-	lastProjectCheck->setAutoResize( FALSE );
-	lastProjectCheck->setChecked( lastprj );
-	
-	KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
-                    "If Load last project is enabled, KDevelop will load\n"
-                    "the last project used."));
-
-	QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
-	startupGroup->setGeometry( 10, 260, 400, 70 );
-	startupGroup->setFrameStyle( 49 );
-	startupGroup->setTitle(i18n("Startup"));
-	startupGroup->setAlignment( 1 );
-//	startupGroup->insert( logoCheck );
-//	startupGroup->insert( lastProjectCheck );
-	startupGroup->lower();
-	
-	KQuickHelp::add(startupGroup, i18n("Startup\n\n"
-	                  "The Startup group offers options for\n"
-	                  "starting KDevelop"));
-
   // ****************** the Keys Tab ***************************
 
   dict = new QDict<KKeyEntry>( accel->keyDict() );
@@ -504,6 +507,8 @@ void CKDevSetupDlg::slotKDEClicked(){
     }
   }
 }
+
+
 
 
 

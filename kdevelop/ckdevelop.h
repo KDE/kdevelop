@@ -361,6 +361,10 @@ public:
   void slotHelpManual();
   /** shows the KDevelop manual */
   void slotHelpContents();
+  /** shows the Programming handbook */
+  void slotHelpTutorial();
+  /** shows the tip of the day */
+  void slotHelpTipOfDay();
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
   /** shows the bug report dialog*/
@@ -616,6 +620,8 @@ private:
 };
 
 #endif
+
+
 
 
 

@@ -171,6 +171,8 @@
 #define ID_HELP_SEARCH              18040
 
 #define ID_HELP_CONTENTS             18050
+#define ID_HELP_TUTORIAL						 18051
+#define ID_HELP_TIP_OF_DAY						18052
 #define ID_HELP_REFERENCE           18060
 
 #define ID_HELP_QT_LIBRARY           18070
@@ -258,7 +260,6 @@
 #define ID_STATUS_EMPTY             1004
 #define ID_STATUS_EMPTY_2           1005
 #define ID_STATUS_PROGRESS          1006
-#define IDS_DEFAULT                 i18n("Ready.")
 
 ///////////////////////////////////////////////////////////////////
 // ID's for the statusbar
@@ -352,36 +353,12 @@
 
 
 ///////////////////////////////////////////////////////////////////
-// MACROS FOR GENERATING THE SWITCH CONSTRUCTION OF THE commandCallback(int) METHOD
-
-///////////////////////////////////////////////////////////////////
-// Create class member in implementation for commandCallback
-#define BEGIN_CMD(class)         void class::commandCallback(int id_){ switch (id_){
-
-///////////////////////////////////////////////////////////////////
-// Create cases for entries and connect them with their functions
-#define ON_CMD(id, cmd_class_function, message)   case id:slotStatusMsg(message);cmd_class_function ;break;
-
-///////////////////////////////////////////////////////////////////
-// End class member in implementation for commandCallback
-#define END_CMD()      }}
-
-
-
-///////////////////////////////////////////////////////////////////
 // MACROS FOR GENERATING THE SWITCH CONSTRUCTION OF THE statusCallback(int) METHOD
-
-///////////////////////////////////////////////////////////////////
-// Create class member in implementation for statusCallback
-#define BEGIN_STATUS_MSG(class) void class::statusCallback(int id_){ switch (id_){
 
 ///////////////////////////////////////////////////////////////////
 // Create cases for entries and connect them to change statusBar entry
 #define ON_STATUS_MSG(id, message)     case id:  slotStatusHelpMsg(message);break;
- 
-///////////////////////////////////////////////////////////////////
-// End class member in implementation for statusCallback
-#define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
 
 
 

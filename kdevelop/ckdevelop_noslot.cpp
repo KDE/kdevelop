@@ -52,7 +52,7 @@ void CKDevelop::refreshTrees(){
   kdlg_dialogs_view->refresh(prj);
 
   kdev_statusbar->repaint();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
  
 /*------------------------------------------ CKDevelop::refreshTrees()

@@ -277,7 +277,7 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
   }
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
   if(mod){
     refreshTrees();
   }
@@ -487,7 +487,7 @@ void CKDevelop::slotProjectOpen(){
   	else
 			slotViewRefresh();
 
-    slotStatusMsg(IDS_DEFAULT);
+    slotStatusMsg(i18n("Ready."));
   }	
   
   
@@ -514,7 +514,7 @@ void CKDevelop::slotProjectOpenCmdl(const char* prjname){
     slotViewRefresh();
     }
 
-    slotStatusMsg(IDS_DEFAULT);
+    slotStatusMsg(i18n("Ready."));
   }	
 }
 
@@ -561,7 +561,7 @@ void CKDevelop::slotProjectNewAppl(){
   }
   slotViewRefresh();
   //cerr << kappw->getProjectFile();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 
 void  CKDevelop::slotProjectWorkspaces(int id){

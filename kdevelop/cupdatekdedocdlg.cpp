@@ -36,6 +36,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     this->proc = proc;
     
     setCaption(i18n("KDE Library Documentation Update..."));
+
     install_box = new QButtonGroup( this, "install_box" );
     install_box->setGeometry( 20, 80, 490, 170 );
     install_box->setMinimumSize( 0, 0 );
@@ -48,6 +49,18 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     install_box->setTitle(i18n("Choose installation mode:") );
     install_box->setAlignment( 1 );
     
+    source_label = new QLabel( this, "source_label" );
+    source_label->setGeometry( 30, 30, 170, 30 );
+    source_label->setMinimumSize( 0, 0 );
+    source_label->setMaximumSize( 32767, 32767 );
+    source_label->setFocusPolicy( QWidget::NoFocus );
+    source_label->setBackgroundMode( QWidget::PaletteBackground );
+    source_label->setFontPropagation( QWidget::NoChildren );
+    source_label->setPalettePropagation( QWidget::NoChildren );
+    source_label->setText(i18n("new KDE Libs sources path:") );
+    source_label->setAlignment( 289 );
+    source_label->setMargin( -1 );
+
     source_edit = new QLineEdit( this, "source_edit" );
     source_edit->setGeometry( 240, 30, 230, 30 );
     source_edit->setMinimumSize( 0, 0 );
@@ -60,45 +73,6 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     source_edit->setMaxLength( 32767 );
     source_edit->setEchoMode( QLineEdit::Normal );
     source_edit->setFrame( TRUE );
-    
-    source_label = new QLabel( this, "source_label" );
-    source_label->setGeometry( 30, 30, 170, 30 );
-    source_label->setMinimumSize( 0, 0 );
-    source_label->setMaximumSize( 32767, 32767 );
-    source_label->setFocusPolicy( QWidget::NoFocus );
-    source_label->setBackgroundMode( QWidget::PaletteBackground );
-    source_label->setFontPropagation( QWidget::NoChildren );
-    source_label->setPalettePropagation( QWidget::NoChildren );
-    source_label->setText(i18n("new KDE Libs sources path:") );
-    source_label->setAlignment( 289 );
-    source_label->setMargin( -1 );
-    
-    doc_edit = new QLineEdit( this, "doc_edit" );
-    doc_edit->setGeometry( 240, 270, 230, 30 );
-    doc_edit->setMinimumSize( 0, 0 );
-    doc_edit->setMaximumSize( 32767, 32767 );
-    doc_edit->setFocusPolicy( QWidget::StrongFocus );
-    doc_edit->setBackgroundMode( QWidget::PaletteBase );
-    doc_edit->setFontPropagation( QWidget::NoChildren );
-    doc_edit->setPalettePropagation( QWidget::NoChildren );
-    doc_edit->setText(doc_path);
-    doc_edit->setMaxLength( 32767 );
-    doc_edit->setEchoMode( QLineEdit::Normal );
-    doc_edit->setFrame( TRUE );
-    doc_edit->setEnabled(false);
-    
-    doc_label = new QLabel( this, "doc_label" );
-    doc_label->setGeometry( 30, 270, 210, 30 );
-    doc_label->setMinimumSize( 0, 0 );
-    doc_label->setMaximumSize( 32767, 32767 );
-    doc_label->setFocusPolicy( QWidget::NoFocus );
-    doc_label->setBackgroundMode( QWidget::PaletteBackground );
-    doc_label->setFontPropagation( QWidget::NoChildren );
-    doc_label->setPalettePropagation( QWidget::NoChildren );
-    doc_label->setText(i18n("new KDE Libs Documentation path:") );
-    doc_label->setAlignment( 289 );
-    doc_label->setMargin( -1 );
-    doc_label->setEnabled(false);
     
     source_button = new QPushButton( this, "source_button" );
     source_button->setGeometry( 480, 30, 30, 30 );
@@ -113,20 +87,6 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     source_button->setPixmap(pix);
     source_button->setAutoRepeat( FALSE );
     source_button->setAutoResize( FALSE );
-    
-    doc_button = new QPushButton( this, "doc_button" );
-    doc_button->setGeometry( 480, 270, 30, 30 );
-    doc_button->setMinimumSize( 0, 0 );
-    doc_button->setMaximumSize( 32767, 32767 );
-    doc_button->setFocusPolicy( QWidget::TabFocus );
-    doc_button->setBackgroundMode( QWidget::PaletteBackground );
-    doc_button->setFontPropagation( QWidget::NoChildren );
-    doc_button->setPalettePropagation( QWidget::NoChildren );
-    doc_button->setPixmap(pix);
-    doc_button->setAutoRepeat( FALSE );
-    doc_button->setAutoResize( FALSE );
-    doc_button->setEnabled(false);
-    
 
     del_recent_radio_button = new QRadioButton( this, "del_recent_radio_button" );
     del_recent_radio_button->setGeometry( 40, 110, 430, 30 );
@@ -181,6 +141,46 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
 			 "your recent documentation is installed- this may mess up\n"
 			 "the documentation by mixing old and new files!"));
     
+    doc_label = new QLabel( this, "doc_label" );
+    doc_label->setGeometry( 30, 270, 210, 30 );
+    doc_label->setMinimumSize( 0, 0 );
+    doc_label->setMaximumSize( 32767, 32767 );
+    doc_label->setFocusPolicy( QWidget::NoFocus );
+    doc_label->setBackgroundMode( QWidget::PaletteBackground );
+    doc_label->setFontPropagation( QWidget::NoChildren );
+    doc_label->setPalettePropagation( QWidget::NoChildren );
+    doc_label->setText(i18n("new KDE Libs Documentation path:") );
+    doc_label->setAlignment( 289 );
+    doc_label->setMargin( -1 );
+    doc_label->setEnabled(false);
+
+    doc_edit = new QLineEdit( this, "doc_edit" );
+    doc_edit->setGeometry( 240, 270, 230, 30 );
+    doc_edit->setMinimumSize( 0, 0 );
+    doc_edit->setMaximumSize( 32767, 32767 );
+    doc_edit->setFocusPolicy( QWidget::StrongFocus );
+    doc_edit->setBackgroundMode( QWidget::PaletteBase );
+    doc_edit->setFontPropagation( QWidget::NoChildren );
+    doc_edit->setPalettePropagation( QWidget::NoChildren );
+    doc_edit->setText(doc_path);
+    doc_edit->setMaxLength( 32767 );
+    doc_edit->setEchoMode( QLineEdit::Normal );
+    doc_edit->setFrame( TRUE );
+    doc_edit->setEnabled(false);
+
+    doc_button = new QPushButton( this, "doc_button" );
+    doc_button->setGeometry( 480, 270, 30, 30 );
+    doc_button->setMinimumSize( 0, 0 );
+    doc_button->setMaximumSize( 32767, 32767 );
+    doc_button->setFocusPolicy( QWidget::TabFocus );
+    doc_button->setBackgroundMode( QWidget::PaletteBackground );
+    doc_button->setFontPropagation( QWidget::NoChildren );
+    doc_button->setPalettePropagation( QWidget::NoChildren );
+    doc_button->setPixmap(pix);
+    doc_button->setAutoRepeat( FALSE );
+    doc_button->setAutoResize( FALSE );
+    doc_button->setEnabled(false);
+
     install_box->insert( del_recent_radio_button );
     install_box->insert( del_new_radio_button );
     install_box->insert( leave_new_radio_button );
@@ -467,6 +467,7 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
+
 
 
 

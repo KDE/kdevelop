@@ -22,6 +22,7 @@
 
 #include "ccvaddfolderdlg.h"
 #include <kmsgbox.h>
+#include <kapp.h>
 
 CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -30,7 +31,7 @@ CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
     okBtn( this, "okBtn" ),
     cancelBtn( this, "cancelBtn" )
 {
-  setCaption( "Add a folder" );
+  setCaption(i18n("Add folder") );
 
   setWidgetValues();
   setCallbacks();
@@ -39,7 +40,7 @@ CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
 void CCVAddFolderDlg::setWidgetValues()
 {
   folderLbl.setGeometry( 10, 10, 80, 30 );
-  folderLbl.setText( "Folder name:" );
+  folderLbl.setText( i18n("Folder name:") );
 
   folderEdit.setGeometry( 90, 10, 160, 30 );
 
@@ -50,9 +51,10 @@ void CCVAddFolderDlg::setWidgetValues()
   okBtn.setBackgroundMode( QWidget::PaletteBackground );
   okBtn.setFontPropagation( QWidget::NoChildren );
   okBtn.setPalettePropagation( QWidget::NoChildren );
-  okBtn.setText( "OK" );
+  okBtn.setText( i18n("OK") );
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
+	okBtn.setDefault(true);
 
   cancelBtn.setGeometry( 260, 50, 100, 30 );
   cancelBtn.setMinimumSize( 0, 0 );
@@ -61,7 +63,7 @@ void CCVAddFolderDlg::setWidgetValues()
   cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
   cancelBtn.setFontPropagation( QWidget::NoChildren );
   cancelBtn.setPalettePropagation( QWidget::NoChildren );
-  cancelBtn.setText( "Cancel" );
+  cancelBtn.setText( i18n("Cancel") );
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
 
@@ -80,8 +82,10 @@ void CCVAddFolderDlg::OK()
 {
 
   if( strlen( folderEdit.text() ) == 0 )
-    KMsgBox::message( this, "No name",
-                      "You have to specify a foldername." );
+    KMsgBox::message( this, i18n("No name"),
+                      i18n("You have to specify a foldername.") );
   else
     accept();
 }
+
+

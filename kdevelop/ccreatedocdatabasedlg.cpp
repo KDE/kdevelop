@@ -31,32 +31,6 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   this->proc = proc;
   this->conf = config;
 
-  QButtonGroup* qtarch_ButtonGroup_3;
-	qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
-	qtarch_ButtonGroup_3->setGeometry( 230, 20, 240, 120 );
-	qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_3->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_3->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_3->setFrameStyle( 49 );
-	qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
-	qtarch_ButtonGroup_3->setAlignment( 1 );
-
-	QButtonGroup* qtarch_ButtonGroup_2;
-	qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
-	qtarch_ButtonGroup_2->setGeometry( 20, 160, 450, 210 );
-	qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_2->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_2->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_2->setFrameStyle( 49 );
-	qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
-	qtarch_ButtonGroup_2->setAlignment( 1 );
-
 	QButtonGroup* qtarch_ButtonGroup_1;
 	qtarch_ButtonGroup_1 = new QButtonGroup( this, "ButtonGroup_1" );
 	qtarch_ButtonGroup_1->setGeometry( 20, 20, 190, 120 );
@@ -69,32 +43,6 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_1->setFrameStyle( 49 );
 	qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
 	qtarch_ButtonGroup_1->setAlignment( 1 );
-
-	kde_checkbox = new QCheckBox( this, "CheckBox_1" );
-	kde_checkbox->setGeometry( 250, 40, 210, 30 );
-	kde_checkbox->setMinimumSize( 0, 0 );
-	kde_checkbox->setMaximumSize( 32767, 32767 );
-	kde_checkbox->setFocusPolicy( QWidget::TabFocus );
-	kde_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-	kde_checkbox->setFontPropagation( QWidget::NoChildren );
-	kde_checkbox->setPalettePropagation( QWidget::NoChildren );
-	kde_checkbox->setText(i18n("index the KDE documentation") );
-	kde_checkbox->setAutoRepeat( FALSE );
-	kde_checkbox->setAutoResize( FALSE );
-	kde_checkbox->setChecked( TRUE );
-
-	qt_checkbox = new QCheckBox( this, "CheckBox_3" );
-	qt_checkbox->setGeometry( 250, 70, 210, 30 );
-	qt_checkbox->setMinimumSize( 0, 0 );
-	qt_checkbox->setMaximumSize( 32767, 32767 );
-	qt_checkbox->setFocusPolicy( QWidget::TabFocus );
-	qt_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-	qt_checkbox->setFontPropagation( QWidget::NoChildren );
-	qt_checkbox->setPalettePropagation( QWidget::NoChildren );
-	qt_checkbox->setText( i18n("index the QT documentation") );
-	qt_checkbox->setAutoRepeat( FALSE );
-	qt_checkbox->setAutoResize( FALSE );
-	qt_checkbox->setChecked( TRUE );
 
 	tiny_radio_button = new QRadioButton( this, "RadioButton_2" );
 	tiny_radio_button->setGeometry( 40, 40, 100, 30 );
@@ -133,6 +81,70 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	medium_radio_button->setAutoRepeat( FALSE );
 	medium_radio_button->setAutoResize( FALSE );
 
+  QButtonGroup* qtarch_ButtonGroup_3;
+	qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
+	qtarch_ButtonGroup_3->setGeometry( 230, 20, 240, 120 );
+	qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
+	qtarch_ButtonGroup_3->setMaximumSize( 32767, 32767 );
+	qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
+	qtarch_ButtonGroup_3->setBackgroundMode( QWidget::PaletteBackground );
+	qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
+	qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
+	qtarch_ButtonGroup_3->setFrameStyle( 49 );
+	qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
+	qtarch_ButtonGroup_3->setAlignment( 1 );
+
+	qt_checkbox = new QCheckBox( this, "CheckBox_3" );
+	qt_checkbox->setGeometry( 250, 40, 210, 30 );
+	qt_checkbox->setMinimumSize( 0, 0 );
+	qt_checkbox->setMaximumSize( 32767, 32767 );
+	qt_checkbox->setFocusPolicy( QWidget::TabFocus );
+	qt_checkbox->setBackgroundMode( QWidget::PaletteBackground );
+	qt_checkbox->setFontPropagation( QWidget::NoChildren );
+	qt_checkbox->setPalettePropagation( QWidget::NoChildren );
+	qt_checkbox->setText( i18n("index the QT documentation") );
+	qt_checkbox->setAutoRepeat( FALSE );
+	qt_checkbox->setAutoResize( FALSE );
+	qt_checkbox->setChecked( TRUE );
+
+	kde_checkbox = new QCheckBox( this, "CheckBox_1" );
+	kde_checkbox->setGeometry( 250, 70, 210, 30 );
+	kde_checkbox->setMinimumSize( 0, 0 );
+	kde_checkbox->setMaximumSize( 32767, 32767 );
+	kde_checkbox->setFocusPolicy( QWidget::TabFocus );
+	kde_checkbox->setBackgroundMode( QWidget::PaletteBackground );
+	kde_checkbox->setFontPropagation( QWidget::NoChildren );
+	kde_checkbox->setPalettePropagation( QWidget::NoChildren );
+	kde_checkbox->setText(i18n("index the KDE documentation") );
+	kde_checkbox->setAutoRepeat( FALSE );
+	kde_checkbox->setAutoResize( FALSE );
+	kde_checkbox->setChecked( TRUE );
+
+	QButtonGroup* qtarch_ButtonGroup_2;
+	qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
+	qtarch_ButtonGroup_2->setGeometry( 20, 160, 450, 210 );
+	qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
+	qtarch_ButtonGroup_2->setMaximumSize( 32767, 32767 );
+	qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
+	qtarch_ButtonGroup_2->setBackgroundMode( QWidget::PaletteBackground );
+	qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
+	qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
+	qtarch_ButtonGroup_2->setFrameStyle( 49 );
+	qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
+	qtarch_ButtonGroup_2->setAlignment( 1 );
+
+	dir_edit = new QLineEdit( this, "LineEdit_1" );
+	dir_edit->setGeometry( 40, 190, 280, 30 );
+	dir_edit->setMinimumSize( 0, 0 );
+	dir_edit->setMaximumSize( 32767, 32767 );
+	dir_edit->setFocusPolicy( QWidget::StrongFocus );
+	dir_edit->setBackgroundMode( QWidget::PaletteBase );
+	dir_edit->setFontPropagation( QWidget::NoChildren );
+	dir_edit->setPalettePropagation( QWidget::NoChildren );
+	dir_edit->setText( "" );
+	dir_edit->setMaxLength( 32767 );
+	dir_edit->setEchoMode( QLineEdit::Normal );
+	dir_edit->setFrame( TRUE );
 
 	dir_button = new QPushButton( this, "PushButton_3" );
 	dir_button->setGeometry( 340, 190, 30, 30 );
@@ -183,19 +195,6 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	remove_button->setText(i18n("remove") );
 	remove_button->setAutoRepeat( FALSE );
 	remove_button->setAutoResize( FALSE );
-
-	dir_edit = new QLineEdit( this, "LineEdit_1" );
-	dir_edit->setGeometry( 40, 190, 280, 30 );
-	dir_edit->setMinimumSize( 0, 0 );
-	dir_edit->setMaximumSize( 32767, 32767 );
-	dir_edit->setFocusPolicy( QWidget::StrongFocus );
-	dir_edit->setBackgroundMode( QWidget::PaletteBase );
-	dir_edit->setFontPropagation( QWidget::NoChildren );
-	dir_edit->setPalettePropagation( QWidget::NoChildren );
-	dir_edit->setText( "" );
-	dir_edit->setMaxLength( 32767 );
-	dir_edit->setEchoMode( QLineEdit::Normal );
-	dir_edit->setFrame( TRUE );
 
 	qtarch_ButtonGroup_3->insert( kde_checkbox );
 	qtarch_ButtonGroup_3->insert( qt_checkbox );
@@ -334,6 +333,8 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
+
+
 
 
 

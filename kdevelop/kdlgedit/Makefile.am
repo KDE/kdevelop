@@ -1,3 +1,17 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+INCLUDES = $(all_includes)
+
+libkdlgedit_a_METASOURCES = USE_AUTOMOC
+
+noinst_LIBRARIES = libkdlgedit.a
+
+libkdlgedit_a_SOURCES = kdlgotherdlgs.cpp kdlgnewdialogdlg.cpp itemsglobal.cpp item_widget.cpp item_spinbox.cpp item_slider.cpp item_scrollbar.cpp item_radiobutton.cpp item_pushbutton.cpp item_progressbar.cpp item_multilineedit.cpp item_listbox.cpp item_lineedit.cpp item_lcdnumber.cpp item_label.cpp item_groupbox.cpp item_combobox.cpp item_checkbox.cpp item_base.cpp kdlgwidgets.cpp kdlgpropwidget.cpp kdlgnewwidget.cpp kdlgitems.cpp kdlgeditwidget.cpp kdlgedit.cpp kdlgdialogs.cpp 
+
+
+EXTRA_DIST = kdlgdialogs.cpp kdlgdialogs.h kdlgedit.cpp kdlgedit.h kdlgeditwidget.cpp kdlgeditwidget.h kdlgitems.cpp kdlgitems.h kdlgnewwidget.cpp kdlgnewwidget.h kdlgproplvis.h kdlgpropwidget.cpp kdlgpropwidget.h kdlgwidgets.cpp kdlgwidgets.h defines.h item_base.cpp item_checkbox.cpp item_combobox.cpp item_groupbox.cpp item_label.cpp item_lcdnumber.cpp item_lineedit.cpp item_listbox.cpp item_multilineedit.cpp item_progressbar.cpp item_pushbutton.cpp item_radiobutton.cpp item_scrollbar.cpp item_slider.cpp item_spinbox.cpp item_widget.cpp items.h itemsglobal.cpp itemsglobal.h kdlgnewdialogdlg.cpp kdlgnewdialogdlg.h kdlgotherdlgs.cpp kdlgotherdlgs.h kdlgproplv.h item_all.cpp.inc item_class.cpp.inc 
+
+####### kdevelop will overwrite this part!!! (end)############
 
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)

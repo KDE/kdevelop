@@ -18,7 +18,6 @@
 
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
-#include "ktipofday.h"
 #include "ckdevinstall.h"
 #include <kwmmapp.h>
 
@@ -26,7 +25,6 @@
 int main(int argc, char* argv[]) {
   
   KStartupLogo* start_logo=0L;
-  KTipofDay* tipdlg=0L;
   KWMModuleApplication a(argc,argv,"kdevelop");
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
@@ -67,24 +65,34 @@ int main(int argc, char* argv[]) {
     
     if (argc > 1){ 
       if (QString(argv[1]) != "--setup-wizard")
-	kdevelop->slotProjectOpenCmdl(argv[1]);
+				kdevelop->slotProjectOpenCmdl(argv[1]);
     }
     
     a.getConfig()->setGroup("TipOfTheDay");
     bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
     if(showTip){
-      tipdlg=new KTipofDay;
-	tipdlg->exec();
+    	kdevelop->slotHelpTipOfDay();
     }
   }
   if(bStartLogo){
     start_logo->close();
   }
   delete start_logo;
-  delete tipdlg;
   int rc = a.exec();
   return rc;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

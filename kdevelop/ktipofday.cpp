@@ -23,7 +23,7 @@
 
 
 
-KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
+KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, true) {
 	setCaption(i18n("Tip of the Day"));
 	
 	main_frame = new QFrame( this, "main_frame" );
@@ -105,7 +105,15 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name,t
 	ok_button->setDefault( TRUE );
 
 
-	resize( 430,260 );
+	KConfig *config = kapp->getConfig();
+	config->setGroup("TipOfTheDay");
+ 	bool showTip=config->readBoolEntry("show_tod",true);
+
+	if(showTip)
+	  setGeometry(QApplication::desktop()->width()/2-215, QApplication::desktop()->height()/2-130, 430,260);
+	else
+		resize(430,260);
+	
 	setMinimumSize( 0, 0 );
 	setMaximumSize( 32767, 32767 );
   slotNext();
@@ -168,6 +176,15 @@ void KTipofDay::slotNext()
 		f.close();
 	}
 }
+
+
+
+
+
+
+
+
+
 
 
 

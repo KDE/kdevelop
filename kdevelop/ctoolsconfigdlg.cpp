@@ -256,7 +256,7 @@ void CToolsConfigDlg::slotOK()
 
 void CToolsConfigDlg::slotHelp()
 {
-  kapp->invokeHTMLHelp("kdevelop/index-2.html", "ss2.3" );
+  kapp->invokeHTMLHelp("kdevelop/index-12.html", "ss12.1" );
 }
 void CToolsConfigDlg::swap(int item1,int item2){
   
@@ -282,6 +282,9 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
+
+
+
 
 
 

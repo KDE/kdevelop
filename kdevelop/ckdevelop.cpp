@@ -37,6 +37,7 @@
 
 #include "./kdlgedit/kdlgedit.h"
 #include "ctoolsconfigdlg.h"
+#include "ktipofday.h"
 
 // #include <kio_linedit_dlg.h>
 
@@ -64,7 +65,7 @@ void CKDevelop::slotFileNew(){
   
   slotStatusMsg(i18n("Creating new file..."));
   newFile(false);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -81,7 +82,7 @@ void CKDevelop::slotFileOpen(){
   if (str.isEmpty()) return; //cancel
   switchToFile(str);
   
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
   
 }
 void CKDevelop::slotFileClose(){
@@ -96,7 +97,7 @@ void CKDevelop::slotFileClose(){
       edit_widget->doSave();
     }
     if (message_result == 3){ // cancel
-      slotStatusMsg(IDS_DEFAULT);
+      slotStatusMsg(i18n("Ready."));
       return;
     }
   }
@@ -119,7 +120,7 @@ void CKDevelop::slotFileClose(){
       edit_widget->setName(actual_info->filename);
       setCaption(actual_info->filename);
       KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-      slotStatusMsg(IDS_DEFAULT);
+      slotStatusMsg(i18n("Ready."));
       return;
     }
   }
@@ -140,12 +141,12 @@ void CKDevelop::slotFileClose(){
   edit_widget->setName(actual_info->filename);
   setCaption(edit_widget->getName());
 
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(i18n("Closing all files..."));
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileSave(){
@@ -163,7 +164,7 @@ void CKDevelop::slotFileSave(){
     slotViewRefresh();
     }
   }
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
   slotStatusHelpMsg(i18n("File  "+filename+ "  saved."));
 }
 
@@ -207,7 +208,7 @@ void CKDevelop::slotFileSaveAs(){
       }
     } // end_for
   } // end_else
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileSaveAll(){
@@ -283,7 +284,7 @@ void CKDevelop::slotFileSaveAll(){
   edit_widget->repaint();
   // switch back to visible tab
   s_tab_view->setCurrentTab(visibleTab);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -315,7 +316,7 @@ void CKDevelop::slotEditRedo(){
 void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Cutting..."));
   edit_widget->cut();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditCopy(){
   slotStatusMsg(i18n("Copying..."));
@@ -324,22 +325,22 @@ void CKDevelop::slotEditCopy(){
   }
 	else
     edit_widget->copyText();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditPaste(){
   slotStatusMsg(i18n("Pasting selection..."));
   edit_widget->paste();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditInsertFile(){
   slotStatusMsg(i18n("Inserting file contents..."));
   edit_widget->insertFile();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearch(){
   slotStatusMsg(i18n("Searching..."));
   edit_widget->search();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditRepeatSearch(){
   slotStatusMsg(i18n("Repeating last search..."));
@@ -349,7 +350,7 @@ void CKDevelop::slotEditRepeatSearch(){
   else{
     edit_widget->searchAgain();
   }
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearchInFiles(){
   slotStatusMsg(i18n("Searching in Files..."));
@@ -361,7 +362,7 @@ void CKDevelop::slotEditSearchInFiles(){
 void CKDevelop::slotEditReplace(){
   slotStatusMsg(i18n("Replacing..."));
   edit_widget->replace();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditIndent(){
 	edit_widget->indent();
@@ -376,7 +377,7 @@ void CKDevelop::slotEditSpellcheck(){
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
   edit_widget->selectAll();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditInvertSelection(){
     edit_widget->invertSelection();
@@ -392,7 +393,7 @@ void CKDevelop::slotEditDeselectAll(){
 void CKDevelop::slotViewGotoLine(){
   slotStatusMsg(i18n("Switching to selected line..."));
   edit_widget->gotoLine();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(i18n("Ready."));
 }
 /** jump to the next error, based on the make output*/
 void CKDevelop::slotViewNextError(){
@@ -753,7 +754,7 @@ void CKDevelop::slotBuildStop(){
   process.kill();
   shell_process.kill();
   appl_process.kill();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -825,7 +826,7 @@ void CKDevelop::slotOptionsEditor(){
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 
 }
 void CKDevelop::slotOptionsEditorColors(){
@@ -838,7 +839,7 @@ void CKDevelop::slotOptionsEditorColors(){
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 
 }
 
@@ -853,7 +854,7 @@ void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotOptionsSyntaxHighlighting(){
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
@@ -865,7 +866,7 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(i18n("Configuring Documentation Browser..."));
@@ -884,7 +885,7 @@ void CKDevelop::slotOptionsDocBrowser(){
             		const QColor&, const QColor&, const bool, const bool)) );
 
    browserOptions.show();
-   slotStatusMsg(IDS_DEFAULT);
+   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsToolsConfigDlg(){
@@ -895,7 +896,7 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
   tools_menu->clear();
   kdlg_tools_menu->clear();
 	setToolmenuEntries();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsSpellchecker(){
@@ -929,7 +930,7 @@ void CKDevelop::slotOptionsKDevelop(){
   setup->show();
 	accel->readSettings();
 	setKeyAccel();
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 // slots needed by the KDevelop Setup
 void CKDevelop::slotOptionsMake(){
@@ -1040,7 +1041,7 @@ void CKDevelop::slotHelpBack(){
     history_list.next();
   }
   KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotHelpForward(){
@@ -1058,7 +1059,7 @@ void CKDevelop::slotHelpForward(){
   else{
     history_list.prev();
   }
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotHelpSearchText(QString text){
@@ -1155,7 +1156,7 @@ void CKDevelop::slotHelpAPI(){
   if(project){
     slotStatusMsg(i18n("Switching to project API Documentation..."));
     slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() +  "api/index.html",1,"test");
-    slotStatusMsg(IDS_DEFAULT);
+    slotStatusMsg(i18n("Ready."));
   }
 }
 void CKDevelop::slotHelpManual(){
@@ -1165,7 +1166,7 @@ void CKDevelop::slotHelpManual(){
     QString name = prj->getSGMLFile().copy();
     name.remove(index,4);
     slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() + "docs/en/" + name + "html",1,"test");
-    slotStatusMsg(IDS_DEFAULT);
+    slotStatusMsg(i18n("Ready."));
   }
 }
 
@@ -1184,6 +1185,30 @@ void CKDevelop::slotHelpContents(){
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
+
+void CKDevelop::slotHelpTutorial(){
+  KLocale *kloc = KApplication::getKApplication()->getLocale();
+
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+  // first try the locale setting
+  file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
+
+  if( !QFileInfo( file ).exists() ){
+    // not found: use the default
+    file = strpath + "default/" + "kdevelop/tutorial.html";
+  }
+  slotURLSelected(browser_widget,"file:" + file,1,"test");
+	
+}
+void CKDevelop::slotHelpTipOfDay(){
+	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
+	tipdlg->exec();
+}
+
+
+
+
 void CKDevelop::slotHelpHomepage(){
   if(vfork() > 0) {
     // drop setuid, setgid
@@ -1367,7 +1392,7 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 	}
 	else
 	{
-		statusBar()->changeItem(IDS_DEFAULT, ID_STATUS_MSG);
+		statusBar()->changeItem(i18n("Ready."), ID_STATUS_MSG);
 	}
 }
 
@@ -1593,7 +1618,7 @@ void CKDevelop::slotClickedOnMessagesWidget(){
 }
 void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
-  slotStatusMsg(IDS_DEFAULT);
+  slotStatusMsg(i18n("Ready."));
   bool ready = true;
   QString result="";
   if (proc->normalExit()) {
@@ -1951,8 +1976,8 @@ void CKDevelop::slotToolbarClicked(int item){
   }
 }
 
-
-BEGIN_STATUS_MSG(CKDevelop)
+void CKDevelop::statusCallback(int id_){
+	switch(id_){
   ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
   ON_STATUS_MSG(ID_FILE_OPEN,   							            i18n("Opens an existing file"))
   ON_STATUS_MSG(ID_FILE_CLOSE,       						          i18n("Closes the actual file"))
@@ -2050,7 +2075,11 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
-END_STATUS_MSG()
+	default: slotStatusMsg(i18n("Ready"));
+	}
+}
+
+
 
 
 
