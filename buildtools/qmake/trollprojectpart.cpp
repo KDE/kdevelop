@@ -355,6 +355,10 @@ void TrollProjectPart::addFile(const QString &fileName)
 void TrollProjectPart::addFiles ( const QStringList &fileList )
 {
     QStringList files = fileList;
+    for (QStringList::iterator it = files.begin(); it != files.end(); ++it)
+//        if (!(*it).contains(projectDirectory()))
+        *it = projectDirectory() + "/" + (*it);
+
     m_widget->addFiles(files);
 
 //	emit addedFilesToProject ( files );

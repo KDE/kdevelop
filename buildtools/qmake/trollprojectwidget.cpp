@@ -1659,7 +1659,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
     addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
     updateProjectFile(m_shownSubproject);
     slotOverviewSelectionChanged(m_shownSubproject);
-    emitAddedFile ( fileName );
+    emitAddedFile ( fileName.mid(m_part->projectDirectory().length()+1) );
   }
 
 
@@ -1852,7 +1852,7 @@ void TrollProjectWidget::slotNewFile()
             return;
             }
             newfile.close();
-            QStringList files(projectDirectory()+relpath+'/'+filename);
+            QStringList files(relpath+'/'+filename);
             addFiles(files);
         }
     }
@@ -2140,6 +2140,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
                 // and add them to the filelist
                 addFileToCurrentSubProject(titem,filename);
+
+                QString fileNameToAdd = m_shownSubproject->relpath + "/" + filename;
+                if (fileNameToAdd.startsWith("/"))
+                    fileNameToAdd = fileNameToAdd.mid(1);
+                QStringList fileList(fileNameToAdd);
+                emit m_part->addedFilesToProject(fileList);
                 }
                 break;
 
@@ -2155,12 +2161,25 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
                 // and add them to the filelist
                 addFileToCurrentSubProject(titem,filename);
+
+                QString fileNameToAdd = m_shownSubproject->relpath + "/" + filename;
+                if (fileNameToAdd.startsWith("/"))
+                    fileNameToAdd = fileNameToAdd.mid(1);
+                QStringList fileList(fileNameToAdd);
+                emit m_part->addedFilesToProject(fileList);
                 }
                 break;
 
             case AddFilesDialog::Relative:
                 // Form relative path to current subproject folder
                 addFileToCurrentSubProject(titem,URLUtil::relativePathToFile(cleanSubprojectPath , files[i]));
+
+                QString fileNameToAdd = URLUtil::canonicalPath(m_shownSubproject->path + "/" + URLUtil::relativePathToFile(cleanSubprojectPath , files[i]));
+                fileNameToAdd = fileNameToAdd.mid(m_part->projectDirectory().length() + 1);
+                if (fileNameToAdd.startsWith("/"))
+                    fileNameToAdd = fileNameToAdd.mid(1);
+                QStringList fileList(fileNameToAdd);
+                emit m_part->addedFilesToProject(fileList);
                 break;
             }
           }
@@ -2220,6 +2239,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     addFileToCurrentSubProject(titem,filename);
                     updateProjectFile(titem->owner);
                     slotOverviewSelectionChanged(m_shownSubproject);
+
+                    QStringList files(m_shownSubproject->path + "/" + filename);
+                    emit m_part->addedFilesToProject(files);
                 }
             }
         }
@@ -2427,7 +2449,12 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
     if(gitem->groupType != GroupItem::InstallObject)
-    emitRemovedFile(spitem->path + "/" + fitem->text(0));
+    {
+        QString removedFileName = spitem->relpath + "/" + fitem->text(0);
+        if (removedFileName.startsWith("/"))
+            removedFileName = removedFileName.mid(1);
+        emitRemovedFile(removedFileName);
+    }
 
 
     //remove subclassing info
