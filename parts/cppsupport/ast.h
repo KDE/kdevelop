@@ -33,21 +33,25 @@ class AST
 {
 public:
     typedef std::auto_ptr<AST> Node;
-    
+
 public:
     AST();
     virtual ~AST();
-    
+
+    AST* parent() { return m_parent; }
+    void setParent( AST* parent ) { m_parent = parent; }
+
     void setStartPosition( int line, int col );
     void getStartPosition( int* line, int* col ) const;
-    
+
     void setEndPosition( int line, int col );
     void getEndPosition( int* line, int* col ) const;
-    
+
 private:
+    AST* m_parent;
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
-    
+
 private:
     AST( const AST& source );
     void operator = ( const AST& source );
@@ -57,7 +61,7 @@ class TemplateArgumentListAST: public AST
 {
 public:
     typedef std::auto_ptr<TemplateArgumentListAST> Node;
-    
+
 public:
     TemplateArgumentListAST();
     virtual ~TemplateArgumentListAST();

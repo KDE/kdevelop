@@ -2487,10 +2487,12 @@ bool Parser::parseDeclarationStatement( StatementAST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
+bool Parser::parseDeclaration( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaration()" << endl;
 
+    int start = lex->index();
+    
     AST::Node funSpec;
     while( parseFunctionSpecifier(funSpec) )
         ;
@@ -2520,6 +2522,10 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	    case ';':
 		if( !nestedNameText ){
 		    lex->nextToken();
+		    
+		    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+		    node = ast;
+		    UPDATE_POS( node, start, lex->index() );
 		    return true;
 		}
 		break;
@@ -2528,6 +2534,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	        {
 		    AST::Node ctorInit, funBody;
 		    if( parseCtorInitializer(ctorInit) && parseFunctionBody(funBody) ){
+			DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+			node = ast;
+			UPDATE_POS( node, start, lex->index() );
 		        return true;
 		    }
 		}
@@ -2537,6 +2546,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	        {
 		    AST::Node funBody;
 		    if( parseFunctionBody(funBody) ){
+			DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+			node = ast;
+			UPDATE_POS( node, start, lex->index() );
 		        return true;
 		    }
 		}
@@ -2556,7 +2568,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	InitDeclaratorListAST::Node declarators;
 	if( parseInitDeclaratorList(declarators) ){
 	    ADVANCE( ';', ";" );
-	    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "found constant definition" << endl;
+	    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+	    node = ast;
+	    UPDATE_POS( node, start, lex->index() );
 	    return true;
 	}
 	syntaxError();
@@ -2569,6 +2583,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	if( lex->lookAhead(0) == ';' ){
 	    // type definition
 	    lex->nextToken();
+	    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+	    node = ast;
+	    UPDATE_POS( node, start, lex->index() );
 	    return true;
 	}
 	
@@ -2590,14 +2607,21 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	
 	switch( lex->lookAhead(0) ){
 	case ';':
-	    lex->nextToken();
-	    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "found function/field declaration" << endl;
+	    {
+		lex->nextToken();
+		DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+		node = ast;
+		UPDATE_POS( node, start, lex->index() );
+	    }
 	    return true;
 
 	case '=':
 	    {
 	        AST::Node init;
 	        if( parseInitializer(init) ){
+		    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+		    node = ast;
+		    UPDATE_POS( node, start, lex->index() );
 		    return true;
 		}
 	    }
@@ -2607,6 +2631,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& /*node*/ )
 	    {
 	        AST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
+		    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
+		    node = ast;
+		    UPDATE_POS( node, start, lex->index() );
 		    return true;
 	        }
 	    }

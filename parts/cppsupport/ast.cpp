@@ -13,7 +13,8 @@
 
 // ------------------------------------------------------------------------
 AST::AST()
-    : m_startLine( 0 ), m_startColumn( 0 ),
+    : m_parent( 0 ),
+      m_startLine( 0 ), m_startColumn( 0 ),
       m_endLine( 0 ), m_endColumn( 0 )
 {
 }
@@ -32,7 +33,7 @@ void AST::getStartPosition( int* line, int* col ) const
 {
     if( line )
         *line = m_startLine;
-	
+
     if( col )
         * col = m_startColumn;
 }
@@ -47,7 +48,7 @@ void AST::getEndPosition( int* line, int* col ) const
 {
     if( line )
         *line = m_endLine;
-	
+
     if( col )
         * col = m_endColumn;
 }
@@ -76,16 +77,18 @@ void NameAST::setGlobal( bool b )
 void NameAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
 {
     m_nestedName = nestedName;
+    if( m_nestedName.get() ) m_nestedName->setParent( this );
 }
 
 NestedNameSpecifierAST* NameAST::nestedName()
 {
     return m_nestedName.get();
 }
-    
+
 void NameAST::setUnqualifedName( AST::Node& unqualifiedName )
 {
     m_unqualifiedName = unqualifiedName;
+    if( m_unqualifiedName.get() ) m_unqualifiedName->setParent( this );
 }
 
 AST* NameAST::unqualifiedName()
@@ -116,7 +119,8 @@ void LinkageBodyAST::addDeclaration( DeclarationAST::Node& ast )
 {
     if( !ast.get() )
         return;
-	
+
+    ast->setParent( this );
     m_declarations.append( ast.release() );
 }
 
@@ -147,6 +151,7 @@ LinkageBodyAST* LinkageSpecificationAST::linkageBody()
 void LinkageSpecificationAST::setLinkageBody( LinkageBodyAST::Node& linkageBody )
 {
     m_linkageBody = linkageBody;
+    if( m_linkageBody.get() ) m_linkageBody->setParent( this );
 }
 
 DeclarationAST* LinkageSpecificationAST::declaration()
@@ -157,8 +162,9 @@ DeclarationAST* LinkageSpecificationAST::declaration()
 void LinkageSpecificationAST::setDeclaration( DeclarationAST::Node& decl )
 {
     m_declaration = decl;
+    if( m_declaration.get() ) m_declaration->setParent( this );
 }
-    
+
 // ------------------------------------------------------------------------
 TranslationUnitAST::TranslationUnitAST()
 {
@@ -173,7 +179,8 @@ void TranslationUnitAST::addDeclaration( DeclarationAST::Node& ast )
 {
     if( !ast.get() )
         return;
-	
+
+    ast->setParent( this );
     m_declarations.append( ast.release() );
 }
 
@@ -204,6 +211,7 @@ LinkageBodyAST* NamespaceAST::linkageBody()
 void NamespaceAST::setLinkageBody( LinkageBodyAST::Node& linkageBody )
 {
     m_linkageBody = linkageBody;
+    if( m_linkageBody.get() ) m_linkageBody->setParent( this );
 }
 
 
@@ -234,6 +242,7 @@ NameAST* NamespaceAliasAST::aliasName()
 void NamespaceAliasAST::setAliasName( NameAST::Node& name )
 {
     m_aliasName = name;
+    if( m_aliasName.get() ) m_aliasName->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -264,6 +273,7 @@ NameAST* UsingAST::name()
 void UsingAST::setName( NameAST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -283,6 +293,7 @@ NameAST* UsingDirectiveAST::name()
 void UsingDirectiveAST::setName( NameAST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 TypedefAST::TypedefAST()
@@ -301,6 +312,7 @@ TypeSpecifierAST* TypedefAST::typeSpec()
 void TypedefAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
 
 InitDeclaratorListAST* TypedefAST::initDeclaratorList()
@@ -311,6 +323,7 @@ InitDeclaratorListAST* TypedefAST::initDeclaratorList()
 void TypedefAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList )
 {
     m_initDeclaratorList = initDeclaratorList;
+    if( m_initDeclaratorList.get() ) m_initDeclaratorList->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -326,7 +339,8 @@ void TemplateArgumentListAST::addArgument( AST::Node& arg )
 {
     if( !arg.get() )
         return;
-	
+
+    arg->setParent( this );
     m_arguments.append( arg.release() );
 }
 
@@ -359,6 +373,7 @@ AST* TemplateDeclarationAST::templateParameterList()
 void TemplateDeclarationAST::setTemplateParameterList( AST::Node& templateParameterList )
 {
     m_templateParameterList = templateParameterList;
+    if( m_templateParameterList.get() ) m_templateParameterList->setParent( this );
 }
 
 DeclarationAST* TemplateDeclarationAST::declaration()
@@ -369,6 +384,7 @@ DeclarationAST* TemplateDeclarationAST::declaration()
 void TemplateDeclarationAST::setDeclaration( DeclarationAST::Node& declaration )
 {
     m_declaration = declaration;
+    if( m_declaration.get() ) m_declaration->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -388,6 +404,7 @@ AST* ClassOrNamespaceNameAST::name()
 void ClassOrNamespaceNameAST::setName( AST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 TemplateArgumentListAST* ClassOrNamespaceNameAST::templateArgumentList()
@@ -398,6 +415,7 @@ TemplateArgumentListAST* ClassOrNamespaceNameAST::templateArgumentList()
 void ClassOrNamespaceNameAST::setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList )
 {
     m_templateArgumentList = templateArgumentList;
+    if( m_templateArgumentList.get() ) m_templateArgumentList->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -414,7 +432,8 @@ void NestedNameSpecifierAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::N
 {
     if( !classOrNamespaceName.get() )
         return;
-	
+
+    classOrNamespaceName->setParent( this );
     m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
 }
 
@@ -447,6 +466,7 @@ AST* ClassSpecifierAST::classKey()
 void ClassSpecifierAST::setClassKey( AST::Node& classKey )
 {
     m_classKey = classKey;
+    if( m_classKey.get() ) m_classKey->setParent( this );
 }
 
 NameAST* ClassSpecifierAST::name()
@@ -457,13 +477,15 @@ NameAST* ClassSpecifierAST::name()
 void ClassSpecifierAST::setName( NameAST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
 {
     if( !declaration.get() )
         return;
-	
+
+    declaration->setParent( this );
     m_declarations.append( declaration.release() );
 }
 
@@ -485,13 +507,15 @@ AST* EnumSpecifierAST::name()
 void EnumSpecifierAST::setName( AST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 void EnumSpecifierAST::addEnumerator( EnumeratorAST::Node& enumerator )
 {
     if( !enumerator.get() )
         return;
-	
+
+    enumerator->setParent( this );
     m_enumerators.append( enumerator.release() );
 }
 
@@ -513,6 +537,7 @@ AST* ElaboratedTypeSpecifierAST::kind()
 void ElaboratedTypeSpecifierAST::setKind( AST::Node& kind )
 {
     m_kind = kind;
+    if( m_kind.get() ) m_kind->setParent( this );
 }
 
 NameAST* ElaboratedTypeSpecifierAST::name()
@@ -523,8 +548,9 @@ NameAST* ElaboratedTypeSpecifierAST::name()
 void ElaboratedTypeSpecifierAST::setName( NameAST::Node& name )
 {
     m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
-        
+
 // ------------------------------------------------------------------------
 StatementAST::StatementAST()
 {
@@ -551,6 +577,7 @@ AST* EnumeratorAST::id()
 void EnumeratorAST::setId( AST::Node& id )
 {
     m_id = id;
+    if( m_id.get() ) m_id->setParent( this );
 }
 
 AST* EnumeratorAST::expr()
@@ -561,6 +588,7 @@ AST* EnumeratorAST::expr()
 void EnumeratorAST::setExpr( AST::Node& expr )
 {
     m_expr = expr;
+    if( m_expr.get() ) m_expr->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -577,7 +605,8 @@ void BaseClauseAST::addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier )
 {
     if( !baseSpecifier.get() )
         return;
-	
+
+    baseSpecifier->setParent( this );
     m_baseSpecifiers.append( baseSpecifier.release() );
 }
 
@@ -607,6 +636,7 @@ TypeSpecifierAST* SimpleDeclarationAST::typeSpec()
 void SimpleDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
 
 InitDeclaratorListAST* SimpleDeclarationAST::initDeclaratorList()
@@ -617,6 +647,7 @@ InitDeclaratorListAST* SimpleDeclarationAST::initDeclaratorList()
 void SimpleDeclarationAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList )
 {
     m_initDeclaratorList = initDeclaratorList;
+    if( m_initDeclaratorList.get() ) m_initDeclaratorList->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -636,7 +667,7 @@ DeclaratorAST::DeclaratorAST()
     m_arrayDimensionList.setAutoDelete( true );
 }
 
-DeclaratorAST::~DeclaratorAST()    
+DeclaratorAST::~DeclaratorAST()
 {
 }
 
@@ -648,6 +679,7 @@ DeclaratorAST* DeclaratorAST::subDeclarator()
 void DeclaratorAST::setSubDeclarator( DeclaratorAST::Node& subDeclarator )
 {
     m_subDeclarator = subDeclarator;
+    if( m_subDeclarator.get() ) m_subDeclarator->setParent( this );
 }
 
 NameAST* DeclaratorAST::declaratorId()
@@ -658,6 +690,7 @@ NameAST* DeclaratorAST::declaratorId()
 void DeclaratorAST::setDeclaratorId( NameAST::Node& declaratorId )
 {
     m_declaratorId = declaratorId;
+    if( m_declaratorId.get() ) m_declaratorId->setParent( this );
 }
 
 AST* DeclaratorAST::bitfieldInitialization()
@@ -668,6 +701,7 @@ AST* DeclaratorAST::bitfieldInitialization()
 void DeclaratorAST::setBitfieldInitialization( AST::Node& bitfieldInitialization )
 {
     m_bitfieldInitialization = bitfieldInitialization;
+    if( m_bitfieldInitialization.get() ) m_bitfieldInitialization->setParent( this );
 }
 
 QPtrList<AST> DeclaratorAST::arrayDimensionList()
@@ -679,7 +713,8 @@ void DeclaratorAST::addArrayDimension( AST::Node& arrayDimension )
 {
     if( !arrayDimension.get() )
         return;
-	
+
+    arrayDimension->setParent( this );
     m_arrayDimensionList.append( arrayDimension.release() );
 }
 
@@ -691,6 +726,7 @@ AST* DeclaratorAST::parameterDeclarationClause()
 void DeclaratorAST::setParameterDeclarationClause( AST::Node& parameterDeclarationClause )
 {
     m_parameterDeclarationClause = parameterDeclarationClause;
+    if( m_parameterDeclarationClause.get() ) m_parameterDeclarationClause->setParent( this );
 }
 
 bool DeclaratorAST::isConstMethod()
@@ -711,6 +747,7 @@ AST* DeclaratorAST::exceptionSpecification()
 void DeclaratorAST::setExceptionSpecification( AST::Node& exceptionSpecification )
 {
     m_exceptionSpecification = exceptionSpecification;
+    if( m_exceptionSpecification.get() ) m_exceptionSpecification->setParent( this );
 }
 
 QPtrList<AST> DeclaratorAST::ptrOpList()
@@ -722,7 +759,8 @@ void DeclaratorAST::addPtrOp( AST::Node& ptrOp )
 {
     if( !ptrOp.get() )
         return;
-	
+
+    ptrOp->setParent( this );
     m_ptrOpList.append( ptrOp.release() );
 }
 
@@ -744,6 +782,7 @@ DeclaratorAST* InitDeclaratorAST::declarator()
 void InitDeclaratorAST::setDeclarator( DeclaratorAST::Node& declarator )
 {
     m_declarator = declarator;
+    if( m_declarator.get() ) m_declarator->setParent( this );
 }
 
 AST* InitDeclaratorAST::initializer()
@@ -754,4 +793,5 @@ AST* InitDeclaratorAST::initializer()
 void InitDeclaratorAST::setInitializer( AST::Node& initializer )
 {
     m_initializer = initializer;
+    if( m_initializer.get() ) m_initializer->setParent( this );
 }
