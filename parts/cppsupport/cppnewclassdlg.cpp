@@ -1018,7 +1018,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
     {
       if (curr->isOn() && (curr->parent()) && (curr->parent()->parent()))
       {
-        QString *adv_h;
+        QString *adv_h = 0;
         if (curr->item()->isPrivate())
           adv_h = curr->item()->isSlot() ? &advH_private_slots : &advH_private;
         if (curr->item()->isProtected())
@@ -1045,7 +1045,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
     {
         if ((!curr->text(2).isNull()) && (curr->parent()) && (curr->parent()->parent()) )
         {
-            QString *adv_h;
+            QString *adv_h = 0;
             if (curr->text(2) == "private") adv_h = &advH_private;
             if (curr->text(2) == "public") adv_h = &advH_public;
             if (curr->text(2) == "protected") adv_h = &advH_protected;
@@ -1060,7 +1060,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
     {
         if ((!curr_m->text(2).isNull())  && (curr_m->parent()) && (curr_m->parent()->parent()) )
         {
-            QString *adv_h;
+            QString *adv_h = 0;
             if (curr_m->text(2) == "private") adv_h = &advH_private;
             if (curr_m->text(2) == "public") adv_h = &advH_public;
             if (curr_m->text(2) == "protected") adv_h = &advH_protected;

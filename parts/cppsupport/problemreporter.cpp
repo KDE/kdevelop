@@ -165,6 +165,9 @@ void ProblemReporter::removeAllErrors( const QString& filename )
 
 void ProblemReporter::reparse()
 {
+    if( !m_cppSupport->isValid() )
+	return;
+    
     kdDebug(9007) << "ProblemReporter::reparse()" << endl;
 
     m_timer->stop();

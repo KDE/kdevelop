@@ -104,7 +104,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsuppor
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 ),
-      m_activeViewCursor( 0 ), m_projectClosed( true )
+      m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
     setInstance(CppSupportFactory::instance());
 
@@ -161,13 +161,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                          actionCollection(), "edit_complete_text");
     action->setStatusText( i18n("Complete current expression") );
     action->setWhatsThis( i18n("Complete current expression") );
-    action->setEnabled(false);
-
-    action = new KAction(i18n("Type of Expression"), CTRL+Key_T,
-                         this, SLOT(slotTypeOfExpression()),
-                         actionCollection(), "edit_type_of_expression");
-    action->setStatusText( i18n("Type of current expression") );
-    action->setWhatsThis( i18n("Type of current expression") );
     action->setEnabled(false);
 
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
@@ -276,7 +269,7 @@ CppSupportPart::slotEnableCodeCompletion( bool setEnable )
     kdDebug( 9007 ) << "slotEnableCodeCompletion" << endl;
 
     if( m_pCompletion )
-        m_pCompletion->setEnableCodeCompletion( setEnable );
+        m_pCompletion->setEnabled( setEnable );
 }
 
 void CppSupportPart::activePartChanged(KParts::Part *part)
@@ -306,7 +299,6 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
-    actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
 
     if( !part )
 	return;
@@ -342,7 +334,7 @@ CppSupportPart::projectOpened( )
     m_projectFileList = project()->allFiles();
 
     m_timestamp.clear();
-    m_pCompletion = new CppCodeCompletion( this, classStore() );
+    m_pCompletion = new CppCodeCompletion( this );
     m_projectClosed = false;
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
@@ -642,11 +634,6 @@ void CppSupportPart::slotCompleteText()
     m_pCompletion->completeText();
 }
 
-void CppSupportPart::slotTypeOfExpression()
-{
-    m_pCompletion->typeOf();
-}
-
 /**
  * parsing stuff for project persistant classstore and code completion
  */
@@ -662,6 +649,7 @@ CppSupportPart::initialParse( )
 
     parseProject( );
     emit updatedSourceInfo( );
+    m_valid = true;
     return;
 }
 

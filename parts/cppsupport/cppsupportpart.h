@@ -51,6 +51,8 @@ public:
     CppSupportPart( QObject *parent, const char *name, const QStringList &args );
     ~CppSupportPart();
 
+    bool isValid() const { return m_valid; }
+    
     void setEnableCC( bool b ){ m_bEnableCC = b;    };
     bool getEnableCC( void   ){ return m_bEnableCC; };
 
@@ -93,7 +95,6 @@ private slots:
     void slotSwitchHeader();
     void slotGotoIncludeFile();
     void slotCompleteText();
-    void slotTypeOfExpression();
     void slotMakeMember();
 
     // code completion related slots - called from config-widget
@@ -154,6 +155,7 @@ private:
 
     QStringList m_projectFileList;
     QMap<QString, QDateTime> m_timestamp;
+    bool m_valid;
 };
 
 #endif
