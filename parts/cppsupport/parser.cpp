@@ -35,6 +35,15 @@ using namespace std;
   lex->nextToken(); \
 }
 
+#define CHECK(tk, descr) \
+{ \
+  Token token = lex->lookAhead( 0 ); \
+  if( token != tk ){ \
+      return false; \
+  } \
+  lex->nextToken(); \
+}
+
 #define MATCH(tk, descr) \
 { \
   Token token = lex->lookAhead( 0 ); \
@@ -3240,12 +3249,9 @@ bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
             //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "token = " << lex->lookAhead(0).toString() << endl;
 	    AST::Node expr;
             if( !parseExpression(expr) ){
-                reportError( i18n("expression expected") );
+		return false;
             }
-            if( lex->lookAhead(0) != ')' ){
-                reportError( i18n(") expected") );
-            }
-            lex->nextToken();
+	    CHECK( ')', ")" );
             return true;
     }
 
@@ -3267,14 +3273,13 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 	    
 	    NameAST::Node name;
             if( !parseName(name) ){
-                reportError( i18n("name expected") );
-                skipUntil( '(' );
+		return false;
             }
 	    
-            ADVANCE( '(', "(" );
+            CHECK( '(', "(" );
 	    AST::Node expr;
             parseCommaExpression(expr);
-            ADVANCE( ')', ")" );
+            CHECK( ')', ")" );
 	}
 	return true;
 
@@ -3285,25 +3290,25 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 	{
             lex->nextToken();
 	    
-            ADVANCE( '<', "<" );
+            CHECK( '<', "<" );
 	    AST::Node typeId;
             parseTypeId( typeId );
-            ADVANCE( '>', ">" );
+            CHECK( '>', ">" );
 
-            ADVANCE( '(', "(" );
+            CHECK( '(', "(" );
 	    AST::Node expr;
             parseCommaExpression( expr );
-            ADVANCE( ')', ")" );
+            CHECK( ')', ")" );
 	}
         return true;
 
         case Token_typeid:
 	{
             lex->nextToken();
-            ADVANCE( '(', "(" );
+            CHECK( '(', "(" );
 	    AST::Node expr;
             parseCommaExpression( expr );
-            ADVANCE( ')', ")" );
+            CHECK( ')', ")" );
 	}
         return true;
 
@@ -3314,9 +3319,9 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
             if( parsePrimaryExpression(expr) )
                 return true;
             else if( parseSimpleTypeSpecifier(spec) ){
-                ADVANCE( '(', "(" );
+                CHECK( '(', "(" );
                 parseCommaExpression( expr );
-                ADVANCE( ')', ")" );
+                CHECK( ')', ")" );
 		return true;
             }
 	}
@@ -3329,13 +3334,13 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
             case '[':
                 lex->nextToken();
                 parseCommaExpression( expr );
-                ADVANCE( ']', "]" );
+                CHECK( ']', "]" );
                 break;
 
             case '(':
                 lex->nextToken();
                 parseCommaExpression( expr );
-                ADVANCE( ')', ")" );
+                CHECK( ')', ")" );
                 break;
 
             case '.':
@@ -3347,7 +3352,6 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 
 		NameAST::Node name;
                 if( !parseName(name) ){
-                    reportError( i18n("name expected") );
                     return false;
                 }
 	    }
@@ -3394,7 +3398,7 @@ bool Parser::parseUnaryExpression( AST::Node& node )
                 lex->nextToken();
 		AST::Node typeId;
                 parseTypeId( typeId );
-                ADVANCE( ')', ")" );
+                CHECK( ')', ")" );
 		return true;
             }
 	    AST::Node expr;
@@ -3417,20 +3421,20 @@ bool Parser::parseNewExpression( AST::Node& /*node*/ )
     if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_new )
         lex->nextToken();
 
-    ADVANCE( Token_new, "new");
+    CHECK( Token_new, "new");
 
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 	AST::Node expr;
         parseCommaExpression( expr );
-        ADVANCE( ')', ")" );
+        CHECK( ')', ")" );
     }
 
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 	AST::Node typeId;
         parseTypeId( typeId );
-        ADVANCE( ')', ")" );
+        CHECK( ')', ")" );
     } else {
 	AST::Node typeId;
         parseNewTypeId( typeId );
@@ -3486,7 +3490,7 @@ bool Parser::parseNewInitializer( AST::Node& /*node*/ )
     lex->nextToken();
     AST::Node expr;
     parseCommaExpression( expr );
-    ADVANCE( ')', ")" );
+    CHECK( ')', ")" );
 
     return true;
 }
@@ -3497,11 +3501,11 @@ bool Parser::parseDeleteExpression( AST::Node& /*node*/ )
     if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_delete )
         lex->nextToken();
 
-    ADVANCE( Token_delete, "delete" );
+    CHECK( Token_delete, "delete" );
 
     if( lex->lookAhead(0) == '[' ){
         lex->nextToken();
-        ADVANCE( ']', "]" );
+        CHECK( ']', "]" );
     }
 
     AST::Node expr;
@@ -3542,7 +3546,6 @@ bool Parser::parsePmExpression( AST::Node& /*node*/ )
     while( lex->lookAhead(0) == Token_ptrmem ){
         lex->nextToken();
         if( !parseCastExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3561,7 +3564,6 @@ bool Parser::parseMultiplicativeExpression( AST::Node& /*node*/ )
         lex->nextToken();
 
         if( !parsePmExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3581,7 +3583,6 @@ bool Parser::parseAdditiveExpression( AST::Node& /*node*/ )
         lex->nextToken();
 
         if( !parseMultiplicativeExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3600,7 +3601,6 @@ bool Parser::parseShiftExpression( AST::Node& /*node*/ )
         lex->nextToken();
 
         if( !parseAdditiveExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3608,19 +3608,18 @@ bool Parser::parseShiftExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseRelationalExpression( AST::Node& /*node*/ )
+bool Parser::parseRelationalExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseRelationalExpression()" << endl;
     AST::Node expr;
     if( !parseShiftExpression(expr) )
         return false;
 
-    while( lex->lookAhead(0) == '<' || lex->lookAhead(0) == '>' ||
+    while( lex->lookAhead(0) == '<' || (lex->lookAhead(0) == '>' && !templArgs) ||
            lex->lookAhead(0) == Token_leq || lex->lookAhead(0) == Token_geq ){
         lex->nextToken();
 
         if( !parseShiftExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3628,18 +3627,17 @@ bool Parser::parseRelationalExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseEqualityExpression( AST::Node& /*node*/ )
+bool Parser::parseEqualityExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEqualityExpression()" << endl;
     AST::Node expr;
-    if( !parseRelationalExpression(expr) )
+    if( !parseRelationalExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == Token_eq || lex->lookAhead(0) == Token_not_eq ){
         lex->nextToken();
 
-        if( !parseRelationalExpression(expr) ){
-            syntaxError();
+        if( !parseRelationalExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3647,18 +3645,17 @@ bool Parser::parseEqualityExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseAndExpression( AST::Node& /*node*/ )
+bool Parser::parseAndExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAndExpression()" << endl;
     AST::Node expr;
-    if( !parseEqualityExpression(expr) )
+    if( !parseEqualityExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == '&' ){
         lex->nextToken();
 
-        if( !parseEqualityExpression(expr) ){
-            syntaxError();
+        if( !parseEqualityExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3666,18 +3663,17 @@ bool Parser::parseAndExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseExclusiveOrExpression( AST::Node& /*node*/ )
+bool Parser::parseExclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExclusiveOrExpression()" << endl;
     AST::Node expr;
-    if( !parseAndExpression(expr) )
+    if( !parseAndExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == '^' ){
         lex->nextToken();
 
-        if( !parseAndExpression(expr) ){
-            syntaxError();
+        if( !parseAndExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3685,18 +3681,17 @@ bool Parser::parseExclusiveOrExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/ )
+bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInclusiveOrExpression()" << endl;
     AST::Node expr;
-    if( !parseExclusiveOrExpression(expr) )
+    if( !parseExclusiveOrExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == '|' ){
         lex->nextToken();
 
-        if( !parseExclusiveOrExpression(expr) ){
-            syntaxError();
+        if( !parseExclusiveOrExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3704,18 +3699,17 @@ bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseLogicalAndExpression( AST::Node& /*node*/ )
+bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalAndExpression()" << endl;
     AST::Node expr;
-    if( !parseInclusiveOrExpression(expr) )
+    if( !parseInclusiveOrExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == Token_and ){
         lex->nextToken();
 
-        if( !parseInclusiveOrExpression(expr) ){
-            syntaxError();
+        if( !parseInclusiveOrExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3723,18 +3717,17 @@ bool Parser::parseLogicalAndExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseLogicalOrExpression( AST::Node& /*node*/ )
+bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
     AST::Node expr;
-    if( !parseLogicalAndExpression(expr) )
+    if( !parseLogicalAndExpression(expr, templArgs) )
         return false;
 
     while( lex->lookAhead(0) == Token_or ){
         lex->nextToken();
 
-        if( !parseLogicalAndExpression(expr) ){
-            syntaxError();
+        if( !parseLogicalAndExpression(expr, templArgs) ){
             return false;
         }
     }
@@ -3752,7 +3745,7 @@ bool Parser::parseConditionalExpression( AST::Node& /*node*/ )
     if( lex->lookAhead(0) == '?' ){
         lex->nextToken();
         parseExpression( expr );
-        ADVANCE( ':', ":" );
+        CHECK( ':', ":" );
         parseAssignmentExpression( expr );
     }
 
@@ -3772,7 +3765,6 @@ bool Parser::parseAssignmentExpression( AST::Node& /*node*/ )
         lex->nextToken();
 
         if( !parseConditionalExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3804,7 +3796,6 @@ bool Parser::parseCommaExpression( AST::Node& /*node*/ )
         lex->nextToken();
 
         if( !parseAssignmentExpression(expr) ){
-            syntaxError();
             return false;
         }
     }
@@ -3818,7 +3809,7 @@ bool Parser::parseThrowExpression( AST::Node& /*node*/ )
     if( lex->lookAhead(0) != Token_throw )
         return false;
 
-    ADVANCE( Token_throw, "throw" );
+    CHECK( Token_throw, "throw" );
     AST::Node expr;
     parseAssignmentExpression( expr );
 
