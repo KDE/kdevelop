@@ -291,8 +291,7 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 void FilePosBreakpoint::configureDisplay()
 {
-    QFileInfo fi(fileName_);
-    display_ = i18n("breakpoint at %1:%2").arg(fi.baseName()).arg(lineNo_);
+    display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
     Breakpoint::configureDisplay();
 }
 
