@@ -461,6 +461,7 @@ bool CKDevelop::readProjectFile(QString file){
   }
 
 // TODO: Add function to read last opened files from project to restore project workspace
+
   switchToWorkspace(prj->getCurrentWorkspaceNumber());
   // set the menus enable
   // file menu
@@ -634,6 +635,11 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
+
+
+
+
 
 
 

@@ -214,6 +214,7 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
   else{
     doc_pop->setItemEnabled(2,false);
     doc_pop->setItemEnabled(3,false);
+    doc_pop->changeItem(i18n("look up: "),3);
   }
   doc_pop->popup(pnt);
 }

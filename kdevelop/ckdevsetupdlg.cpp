@@ -40,13 +40,13 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   QLabel* makeSelectLabel;
   makeSelectLabel = new QLabel( w1, "makeSelectLabel" );
-  makeSelectLabel->setGeometry( 20, 30, 210, 30 );
+  makeSelectLabel->setGeometry( 20, 30, 210, 25 );
   makeSelectLabel->setText(i18n("Select Make-Command:"));
   makeSelectLabel->setAlignment( 289 );
   makeSelectLabel->setMargin( -1 );
   
   makeSelectCombo = new QComboBox( FALSE, w1, "makeSelectCombo" );
-  makeSelectCombo->setGeometry( 270, 30, 130, 30 );
+  makeSelectCombo->setGeometry( 270, 30, 130, 25 );
   connect( makeSelectCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsMake(int)) );
   makeSelectCombo->setSizeLimit( 10 );
   makeSelectCombo->setAutoResize( FALSE );
@@ -79,14 +79,14 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   bool autoSave=config->readBoolEntry("Autosave",true);
   QLabel* autosaveTimeLabel;
   autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
-  autosaveTimeLabel->setGeometry( 20, 140, 210, 30 );
+  autosaveTimeLabel->setGeometry( 20, 140, 210, 25 );
   autosaveTimeLabel->setText(i18n("Select Autosave time-intervall:"));
   autosaveTimeLabel->setAlignment( 289 );
   autosaveTimeLabel->setMargin( -1 );
   autosaveTimeLabel->setEnabled(autoSave);
   
   autosaveTimeCombo = new QComboBox( FALSE, w1, "autosaveTimeCombo" );
-  autosaveTimeCombo->setGeometry( 270, 140, 130, 30 );
+  autosaveTimeCombo->setGeometry( 270, 140, 130, 25 );
   connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
   autosaveTimeCombo->setSizeLimit( 10 );
   autosaveTimeCombo->setAutoResize( FALSE );
@@ -154,7 +154,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   autoswitchGroup->lower();
   
   KQuickHelp::add(autoSwitchCheck,
-		  KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
+	KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
 						       "If autoswitch is enabled, KDevelop\n"
 						       "will open windows in the working\n"
 						       "view automatically according to\n"
@@ -163,13 +163,52 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 						       "will have to switch to windows\n"
 						       "yourself, including turning on and\n"
 						       "off the outputwindow.")));	
-  
+
+  config->setGroup("General Options");
+  bool logo=config->readBoolEntry("Logo",true);
+  bool lastprj=config->readBoolEntry("LastProject",true);
+						       						
+  logoCheck = new QCheckBox( w1, "logoCheck" );
+	logoCheck->setGeometry( 20, 280, 220, 25 );
+	logoCheck->setText(i18n("Startup Logo"));
+	logoCheck->setAutoRepeat( FALSE );
+	logoCheck->setAutoResize( FALSE );
+	logoCheck->setChecked( logo );
+
+	KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
+	                  "If Startup Logo is enabled, KDevelop will show the\n"
+	                  "logo picture while it is starting."));
+	
+	lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
+	lastProjectCheck->setGeometry( 20, 300, 220, 25 );
+	lastProjectCheck->setText(i18n("Load last project"));
+	lastProjectCheck->setAutoRepeat( FALSE );
+	lastProjectCheck->setAutoResize( FALSE );
+	lastProjectCheck->setChecked( lastprj );
+	
+	KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
+                    "If Load last project is enabled, KDevelop will load\n"
+                    "the last project used."));
+
+	QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
+	startupGroup->setGeometry( 10, 260, 400, 70 );
+	startupGroup->setFrameStyle( 49 );
+	startupGroup->setTitle(i18n("Startup"));
+	startupGroup->setAlignment( 1 );
+	startupGroup->insert( logoCheck );
+	startupGroup->insert( lastProjectCheck );
+	startupGroup->lower();
+	
+	KQuickHelp::add(startupGroup, i18n("Startup\n\n"
+	                  "The Startup group offers options for\n"
+	                  "starting KDevelop"));
+
   // ****************** the Keys Tab ***************************
 
   dict = new QDict<KKeyEntry>( accel->keyDict() );
 //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
   QWidget *w2 = new QWidget( this, "keys" );
-  KKeyChooser* w21 = new KKeyChooser ( dict,w2);
+  KKeyChooser* w21 = new KKeyChooser ( dict,w2,true);
   w21->setGeometry(15,10,395,320);
 
 
@@ -348,6 +387,11 @@ void CKDevSetupDlg::ok(){
   int current=makeSelectCombo->currentItem();
   config->writeEntry("Make",makeSelectCombo->text(current));
 
+  bool logo=logoCheck->isChecked();
+  config->writeEntry("Logo",logo);
+
+  bool lastprj=lastProjectCheck->isChecked();
+  config->writeEntry("LastProject",lastprj);
 
   QString text;
   config->setGroup("Doc_Location");
@@ -380,6 +424,12 @@ void CKDevSetupDlg::slotKDEClicked(){
     config->writeEntry("doc_kde",dir);
   }
 }
+
+
+
+
+
+
 
 
 

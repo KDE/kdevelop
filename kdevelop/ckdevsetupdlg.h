@@ -55,6 +55,8 @@ private:
   QComboBox* autosaveTimeCombo;
   QComboBox* makeSelectCombo;
   QCheckBox* autoSwitchCheck;
+  QCheckBox* logoCheck;
+  QCheckBox* lastProjectCheck;
 
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;

@@ -777,8 +777,6 @@ void CKDevelop::slotDocSText(QString text){
   search_process.clearArguments();
   search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput); 
-
-  slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotDocSText(){
   QString text;
@@ -1244,12 +1242,16 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    setCaption("KDevelop " + version + ": " + edit_widget->getName());
+		if(project)
+	    setCaption("KDevelop " + version + ": " +prj->getProjectName()+":  "+ edit_widget->getName());
+		else
+	    setCaption("KDevelop " + version + ": " + edit_widget->getName());
+
   }
   if (item == CPP){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC)
       t_tab_view->setCurrentTab(CV);
-    if(project){
+    if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
     edit_widget = cpp_widget;
@@ -1257,7 +1259,10 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    setCaption("KDevelop " + version + ": " + edit_widget->getName());
+		if(project)
+	    setCaption("KDevelop " + version + ": " +prj->getProjectName()+":  "+ edit_widget->getName());
+		else
+	    setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if(item == BROWSER){
     if(bAutoswitch)
@@ -1647,9 +1652,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_STOP:
     slotBuildStop();
     break;
-/*  case ID_DOC_SEARCH_TEXT:
+  case ID_DOC_SEARCH_TEXT:
     slotDocSText();
-    break;*/
+    break;
   case ID_DOC_BACK:
     slotDocBack();
     break;

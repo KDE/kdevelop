@@ -1,4 +1,4 @@
-pics_DATA = kAppWizard.bmp miniApp.bmp normalApp.bmp terminalApp.bmp
+pics_DATA = kAppWizard.bmp miniApp.bmp normalApp.bmp terminalApp.bmp startlogo.bmp
 
 picsdir = $(kde_datadir)/kdevelop/pics/
 

@@ -37,7 +37,7 @@ CKDevelop::CKDevelop(){
   init();
   initConnections();
   initProject(); 
-  
+	cerr << "initProject\n";
   config->setGroup("Files");
   filename = config->readEntry("browser_file");
   if(!filename.isEmpty()){
@@ -66,9 +66,14 @@ void CKDevelop::init(){
   KApplication *app=KApplication::getKApplication();
   config = app->getConfig();
   config->setGroup("General Options");
-  int w = config->readNumEntry("width", 800);
+  int w = config->readNumEntry("width", 0);
   int h = config->readNumEntry("height", 500);
-  resize(w,h);
+  if(w==0){
+  	w=800;
+	  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-h/2, 800, h);
+	}
+	else
+	  resize(w,h);
 
   // call bar functions to create bars
   // create the main view
@@ -264,11 +269,39 @@ void CKDevelop::init(){
 }
 void CKDevelop::initKeyAccel(){
   accel = new KAccel( this );
-  
+  //file menu
+
+  accel->connectItem( KAccel::New, this, SLOT(slotFileNew()) );
+  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpenFile()) );
+  accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()) );
+  accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
+  accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()) );
+  accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()) );
+
+
   //edit menu
+
+  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
+
+  accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
+  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
+
+  accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
+  accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
+  accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
+
+
+  accel->insertItem( i18n("Search"), "Search",IDK_EDIT_SEARCH );
+  accel->connectItem( "Search", this, SLOT(slotEditSearch() ) );
+
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
   accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
-  
+
+  accel->insertItem( i18n("Replace"), "Replace",IDK_EDIT_REPLACE );
+  accel->connectItem( "Replace", this, SLOT(slotEditReplace() ) );
+
+
+
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
   accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
@@ -295,7 +328,9 @@ void CKDevelop::initKeyAccel(){
   //doc menu
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_DOC_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotDocSText() ) );
-  
+
+  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContent()) );
+
   accel->readSettings();
 }
 void CKDevelop::initMenu(){
@@ -305,25 +340,34 @@ void CKDevelop::initMenu(){
 
   QPixmap pix;
   file_menu = new QPopupMenu;
- 
-  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"),this,SLOT(slotFileNew()),IDK_FILE_NEW,ID_FILE_NEW);
+
+  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
+  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),
-			IDK_FILE_OPEN,ID_FILE_OPEN);
-  file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), IDK_FILE_CLOSE,ID_FILE_CLOSE);
+  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),0 ,ID_FILE_OPEN);
+  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
+
+  file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
+  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
 
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
-  file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()), IDK_FILE_SAVE,ID_FILE_SAVE);
-  file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0,ID_FILE_SAVE_AS); 
+  file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
+  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
+
+  file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
   file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
 
-  file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),IDK_FILE_PRINT,ID_FILE_PRINT);
+  file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
+  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
+
   file_menu->insertSeparator();
-  file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()), IDK_FILE_QUIT,ID_FILE_QUIT);
+  file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
+  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
   menuBar()->insertItem(i18n("&File"), file_menu);
   disableCommand(ID_FILE_NEW);
@@ -331,27 +375,41 @@ void CKDevelop::initMenu(){
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-  
+
   edit_menu = new QPopupMenu;
-  edit_menu->insertItem(i18n("U&ndo"), this, SLOT(slotEditUndo()), IDK_EDIT_UNDO,ID_EDIT_UNDO);
-  edit_menu->insertItem(i18n("R&edo"), this, SLOT(slotEditRedo()), IDK_EDIT_REDO,ID_EDIT_REDO);  
+  edit_menu->insertItem(i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
+
+  edit_menu->insertItem(i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
   edit_menu->insertSeparator();
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
-  edit_menu->insertItem(pix,i18n("C&ut"), this, SLOT(slotEditCut()), IDK_EDIT_CUT,ID_EDIT_CUT);
+  edit_menu->insertItem(pix,i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
-  edit_menu->insertItem(pix,i18n("&Copy"), this, SLOT(slotEditCopy()), IDK_EDIT_COPY,ID_EDIT_COPY);
+  edit_menu->insertItem(pix,i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
-  edit_menu->insertItem(pix,i18n("&Paste"), this, SLOT(slotEditPaste()), IDK_EDIT_PASTE,ID_EDIT_PASTE);
+  edit_menu->insertItem(pix,i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Close );
+
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),IDK_EDIT_SEARCH,ID_EDIT_SEARCH);
-  edit_menu->insertItem(i18n("&Repeat Search..."), this, 
+  edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
+
+  edit_menu->insertItem(i18n("&Repeat Search..."), this,
 			SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
   
   
-  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),IDK_EDIT_REPLACE,ID_EDIT_REPLACE);
+  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
+
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
@@ -572,7 +630,9 @@ void CKDevelop::initMenu(){
 				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
+  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
+  accel->changeMenuAccel(help_menu, ID_HELP_CONTENT, KAccel::Help );
+
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
@@ -612,7 +672,6 @@ void CKDevelop::initMenu(){
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
 }
 
 void CKDevelop::initToolbar(){
@@ -792,8 +851,16 @@ void CKDevelop::initConnections(){
 
 }
 void CKDevelop::initProject(){
-  config->setGroup("Files");
-  QString filename = config->readEntry("project_file","");
+
+  config->setGroup("General Options");
+  bool bLastProject= config->readBoolEntry("LastProject",true);
+  QString filename;
+	if(bLastProject){
+	  config->setGroup("Files");
+  	filename = config->readEntry("project_file","");
+	}
+	else
+		filename="";
   QFile file(filename);
   // cerr << "INITPROJECT: " << filename << endl;
   if (file.exists()){
@@ -802,22 +869,31 @@ void CKDevelop::initProject(){
       refreshTrees();
     }
     config->setGroup("Files");
-    filename = config->readEntry("project_file","");
-    QFile file(filename);
     filename = config->readEntry("header_file",i18n("Untitled.h"));
+    QFile _file(filename);
+
     if (QFile::exists(filename)){
       switchToFile(filename);
+
     }
-    
+
     filename = config->readEntry("cpp_file", i18n("Untitled.cpp"));
     if (QFile::exists(filename)){
       switchToFile(filename);
     }
+
   }
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
   }
+
 }
+
+
+
+
+
+
 
 
 

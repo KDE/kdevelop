@@ -1,7 +1,6 @@
 # KDE Config File
 [General Options]
 show_output_view=true
-LastActiveTab=0
 show_statusbar=true
 show_browser_toolbar=true
 show_std_toolbar=true

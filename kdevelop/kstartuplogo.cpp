@@ -1,12 +1,9 @@
 /***************************************************************************
-                          cfinddoctextdlg.h  -  description                              
+                          kstartuplogo.cpp  -  description                              
                              -------------------                                         
-    begin                : Thu Feb 25 1999                                           
-    copyright            : (C) 1999 by Ralf Nolden
-    email                : Ralf.Nolden@post.rwth-aachen.de
-
-    Adapted from finddlg.h  and finddlg.cpp of khelp
-    Copyright (C) 1998 Martin Jones (mjones@kde.org)
+    begin                : Sun Feb 28 1999                                           
+    copyright            : (C) 1999 by                          
+    email                :                                      
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,36 +16,42 @@
  ***************************************************************************/
 
 
-#ifndef CFINDDOCTEXTDLG_H
-#define CFINDDOCTEXTDLG_H
+#include "kstartuplogo.h"
+#include <kapp.h>
 
-#include <kiconloader.h>
-#include <qdialog.h>
+KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : QWidget(parent,name) {
 
-/**
-  *@author 
-  */
+  QPixmap pm;
+  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
+  setBackgroundPixmap(pm);
+  setGeometry(QApplication::desktop()->width()/2-200, QApplication::desktop()->height()/2-125, 400,250);
 
-class CFindDocTextDlg : public QDialog  {
-   Q_OBJECT
-public: 
-	CFindDocTextDlg(QWidget *parent=0, const char *name=0);
-	~CFindDocTextDlg();
+}
+KStartupLogo::~KStartupLogo(){
+}
 
-public slots:
-  void slotTextChanged( const char *t );
-  void slotClose();
-  void slotFind();
 
-signals:
-  void signalFind(QString);
 
-private:
-  QString text;
-  KIconLoader* icon_loader;
-};
 
-#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

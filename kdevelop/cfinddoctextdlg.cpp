@@ -29,7 +29,7 @@
 
 #include "cfinddoctextdlg.h"
 
-CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
+CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
     // mimimise initial size of dialog
 //    resize( 0, 0 );
     icon_loader = KApplication::getKApplication()->getIconLoader();
@@ -96,6 +96,10 @@ void CFindDocTextDlg::slotFind()
 {
     emit signalFind( text );
 }
+
+
+
+
 
 
 

@@ -17,28 +17,69 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
+#include "kstartuplogo.h"
 #include <kwmmapp.h>
 
-int main(int argc, char* argv[]) {
 
-    KWMModuleApplication a(argc,argv,"kdevelop");  
+int main(int argc, char* argv[]) {
+    KStartupLogo* start_logo=0L;
+    KWMModuleApplication a(argc,argv,"kdevelop");
+    a.getConfig()->setGroup("General Options");
+    bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
+    if(bStartLogo){
+      start_logo= new KStartupLogo;
+      start_logo->show();
+    }
     a.connectToKWM();
-    
+
     if (a.isRestored()){
-	RESTORE(CKDevelop);
+    	RESTORE(CKDevelop);
     }
     else {
-	CKDevelop* kdevelop = new CKDevelop;
-	a.setMainWidget(kdevelop);
-	a.setTopWidget(kdevelop);
-	kdevelop->show();
-	a.getConfig()->setGroup("General Options");
-	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+	    CKDevelop* kdevelop = new CKDevelop;
+	    a.setMainWidget(kdevelop);
+	    a.setTopWidget(kdevelop);
+	    kdevelop->show();
+	    a.getConfig()->setGroup("General Options");
+    	    kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
     }
-    
+    if(bStartLogo){
+      start_logo->close();
+    }
+    delete start_logo;
     int rc = a.exec();
     return rc;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -86,7 +86,8 @@ void CKDevelop::switchToFile(QString filename){
   else{
     edit_widget = cpp_widget;
     s_tab_view->setCurrentTab(CPP);
-    enableCommand(ID_BUILD_COMPILE_FILE);
+    if(build_menu->isItemEnabled(ID_BUILD_MAKE))
+      enableCommand(ID_BUILD_COMPILE_FILE);
     //output_widget->append("current edit_widget = cpp_widget");
   }
   edit_widget->setFocus();
@@ -223,6 +224,10 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
+
+
+
+
 
 
 
