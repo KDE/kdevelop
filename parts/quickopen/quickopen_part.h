@@ -37,9 +37,11 @@ private slots:
     void slotProjectOpened();
     void slotProjectClosed();
     void slotQuickOpen();
+    void slotQuickOpenClass();
 
 private:
     KAction* m_actionQuickOpen;
+    KAction* m_actionQuickOpenClass;
 };
 
 

@@ -27,28 +27,35 @@
 #include "doclineedit.h"
 
 #include <klistbox.h>
+#include <klocale.h>
+#include <kdebug.h>
+
 #include <qregexp.h>
+#include <qlabel.h>
 
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
+    nameLabel->setText( i18n("Class name:") );
+    itemListLabel->setText( i18n("Class list:") );
+
     m_fileList = m_part->project()->allFiles();
 
     m_completion = new KCompletion();
     m_completion->insertItems( m_fileList );
     m_completion->setIgnoreCase( true );
 
-    fileNameEdit->setFocus();
+    nameEdit->setFocus();
 
-    projectFileList->insertStringList( m_fileList );
-    projectFileList->setCurrentItem(0);
+    itemList->insertStringList( m_fileList );
+    itemList->setCurrentItem(0);
 
-    connect(fileNameEdit, SIGNAL(upPressed()), this, SLOT(moveUpInList()));
-    connect(fileNameEdit, SIGNAL(downPressed()), this, SLOT(moveDownInList()));
-    connect(fileNameEdit, SIGNAL(pgupPressed()), this, SLOT(scrollUpInList()));
-    connect(fileNameEdit, SIGNAL(pgdownPressed()), this, SLOT(scrollDownInList()));
-    connect(fileNameEdit, SIGNAL(homePressed()), this, SLOT(goToBegin()));
-    connect(fileNameEdit, SIGNAL(endPressed()), this, SLOT(goToEnd()));
+    connect(nameEdit, SIGNAL(upPressed()), this, SLOT(moveUpInList()));
+    connect(nameEdit, SIGNAL(downPressed()), this, SLOT(moveDownInList()));
+    connect(nameEdit, SIGNAL(pgupPressed()), this, SLOT(scrollUpInList()));
+    connect(nameEdit, SIGNAL(pgdownPressed()), this, SLOT(scrollDownInList()));
+    connect(nameEdit, SIGNAL(homePressed()), this, SLOT(goToBegin()));
+    connect(nameEdit, SIGNAL(endPressed()), this, SLOT(goToEnd()));
 }
 
 QuickOpenDialog::~QuickOpenDialog()
@@ -76,67 +83,67 @@ void QuickOpenDialog::accept()
 
 void QuickOpenDialog::slotReturnPressed( )
 {
-/*    if( m_fileList.contains(fileNameEdit->text()) ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + fileNameEdit->text() );
+/*    if( m_fileList.contains(nameEdit->text()) ) {
+        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + nameEdit->text() );
         accept();
     }*/
-    if( projectFileList->currentItem() != -1 ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + projectFileList->currentText() );
+    if( itemList->currentItem() != -1 ) {
+        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + itemList->currentText() );
         accept();
     }
 }
 
 void QuickOpenDialog::slotTextChanged( const QString & text )
 {
-    projectFileList->clear();
-    projectFileList->insertStringList( m_completion->substringCompletion(text) );
-    projectFileList->setCurrentItem(0);
+    itemList->clear();
+    itemList->insertStringList( m_completion->substringCompletion(text) );
+    itemList->setCurrentItem(0);
 }
 
 void QuickOpenDialog::moveUpInList( )
 {
-    if (projectFileList->currentItem() == -1)
-        projectFileList->setCurrentItem(projectFileList->count() - 1);
+    if (itemList->currentItem() == -1)
+        itemList->setCurrentItem(itemList->count() - 1);
     else
-        projectFileList->setCurrentItem(projectFileList->currentItem() - 1);
-    projectFileList->ensureCurrentVisible();
+        itemList->setCurrentItem(itemList->currentItem() - 1);
+    itemList->ensureCurrentVisible();
 }
 
 void QuickOpenDialog::moveDownInList( )
 {
-    if (projectFileList->currentItem() == -1)
-        projectFileList->setCurrentItem(0);
+    if (itemList->currentItem() == -1)
+        itemList->setCurrentItem(0);
     else
-        projectFileList->setCurrentItem(projectFileList->currentItem() + 1);
-    projectFileList->ensureCurrentVisible();
+        itemList->setCurrentItem(itemList->currentItem() + 1);
+    itemList->ensureCurrentVisible();
 }
 
 void QuickOpenDialog::scrollUpInList( )
 {
-    if (projectFileList->currentItem() == -1)
-        projectFileList->setCurrentItem(projectFileList->count() - 1);
+    if (itemList->currentItem() == -1)
+        itemList->setCurrentItem(itemList->count() - 1);
     else
-        projectFileList->setCurrentItem(projectFileList->currentItem() - (projectFileList->numItemsVisible()-1));
-    projectFileList->ensureCurrentVisible();
+        itemList->setCurrentItem(itemList->currentItem() - (itemList->numItemsVisible()-1));
+    itemList->ensureCurrentVisible();
 }
 
 void QuickOpenDialog::scrollDownInList( )
 {
-    if (projectFileList->currentItem() == -1)
-        projectFileList->setCurrentItem(0);
+    if (itemList->currentItem() == -1)
+        itemList->setCurrentItem(0);
     else
-        projectFileList->setCurrentItem(projectFileList->currentItem() + (projectFileList->numItemsVisible()-1));
-    projectFileList->ensureCurrentVisible();
+        itemList->setCurrentItem(itemList->currentItem() + (itemList->numItemsVisible()-1));
+    itemList->ensureCurrentVisible();
 }
 
 void QuickOpenDialog::goToBegin( )
 {
-    projectFileList->setCurrentItem(0);
+    itemList->setCurrentItem(0);
 }
 
 void QuickOpenDialog::goToEnd( )
 {
-    projectFileList->setCurrentItem(projectFileList->count()-1);
+    itemList->setCurrentItem(itemList->count()-1);
 }
 
 

@@ -20,6 +20,7 @@
 
 #include "quickopen_part.h"
 #include "quickopendialog.h"
+#include "quickopenclassdialog.h"
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -44,7 +45,11 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
 
     m_actionQuickOpen = new KAction( i18n("Quick Open..."), CTRL + SHIFT + Key_O,
 				       this, SLOT(slotQuickOpen()),
-				       actionCollection(), "file_quickopen" );
+				       actionCollection(), "quick_open" );
+
+    m_actionQuickOpenClass = new KAction( i18n("Find Class..."), 0,
+				          this, SLOT(slotQuickOpenClass()),
+				          actionCollection(), "quick_open_class" );
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
@@ -66,6 +71,12 @@ void QuickOpenPart::slotProjectClosed( )
 void QuickOpenPart::slotQuickOpen( )
 {
     QuickOpenDialog dlg( this, mainWindow()->main() );
+    dlg.exec();
+}
+
+void QuickOpenPart::slotQuickOpenClass( )
+{
+    QuickOpenClassDialog dlg( this, mainWindow()->main() );
     dlg.exec();
 }
 
