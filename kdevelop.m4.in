@@ -780,6 +780,30 @@ AC_DEFUN([KDEV_CHECK_VCSCOMPAT],
 ])
 
 
+dnl  **********
+dnl  check for new valgrind version (>= 2.1.0)
+dnl  **********
+
+AC_DEFUN([KDEV_CHECK_VALGRIND],
+[
+  AC_CHECK_PROG(ac_have_valgrind, [valgrind], [yes])
+  if test "yes" == $ac_have_valgrind; then
+    AC_MSG_CHECKING(valgrind version)
+    if test "valgrind-20" == `valgrind --version | $AWK -F \. '{print @S|@1@S|@2}'`; then
+      ac_valgrind_ver=20
+      AC_MSG_RESULT(< 2.1.0)
+    elif test "valgrind-1" == `valgrind --version | $AWK -F \. '{print @S|@1}'`; then
+      ac_valgrind_ver=20
+      AC_MSG_RESULT(< 2.1.0)
+    else
+      ac_valgrind_ver=21
+      AC_MSG_RESULT(>= 2.1.0)
+    fi
+  fi
+  AC_DEFINE_UNQUOTED(VALGRIND_VERSION, $ac_valgrind_ver, [valgrind version number - 20 for older and 21 for newer])
+])
+
+
 AC_DEFUN([KDEV_CONFIGURE_BDB],
 [
 AC_PROG_LN_S

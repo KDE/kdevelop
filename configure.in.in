@@ -22,7 +22,6 @@ KDEV_PATH_KDELIBSDOXY
 KDEV_PATH_KDELIBSDOC
 
 
-
 dnl  **********
 dnl  Check which programming languages support should be compiled
 dnl  **********
