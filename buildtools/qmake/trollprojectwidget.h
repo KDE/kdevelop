@@ -309,6 +309,7 @@ private slots:
     void slotAddSubdir(SubqmakeprojectItem *spitem=0);
     void slotRemoveSubproject(SubqmakeprojectItem *spitem=0);
     void slotCreateScope(SubqmakeprojectItem *spitem=0);
+    void slotRemoveScope(SubqmakeprojectItem *spitem=0);
 
 private:
     void cleanDetailView(SubqmakeprojectItem *item);
@@ -329,6 +330,8 @@ private:
     QPtrList<SubqmakeprojectItem> findSubprojectForFile( QFileInfo fi );
     void findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath );
 //    QString makeEnvironment();
+
+    SubqmakeprojectItem *findSubprojectForScope(SubqmakeprojectItem *scope);
 
     QVBox     *overviewContainer;
     KListView *overview;

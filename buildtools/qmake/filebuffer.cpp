@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kdebug.h>
 #include <qtextstream.h>
 #include "filebuffer.h"
 #include <qmessagebox.h>
@@ -821,4 +822,30 @@ ValuesIgnore* FileBuffer::getValuesIgnore(const QString &variable)
   newVar->variable = variable;
   m_valuesIgnore.append(newVar);
   return newVar;
+}
+
+void FileBuffer::removeScope( const QString & scopeString, const QString &removeString, QStringList buffer )
+{
+  FileBuffer *subBuffer;
+  QString nextScopeName,scopeStringRest;
+  splitScopeString(scopeString,nextScopeName,scopeStringRest);
+  if (nextScopeName.isEmpty())
+    return;
+  // next scope in nested scopeString
+  int idx = findChildBuffer(nextScopeName);
+
+  if (idx == -1)
+    return;
+  else
+  {
+    buffer.append(nextScopeName);
+    subBuffer = m_subBuffers[idx];
+    if (buffer.join(":") == removeString)
+    {
+        m_subBuffers.remove(subBuffer);
+        delete subBuffer;
+    }
+    else
+        subBuffer->removeScope(scopeStringRest, removeString, buffer);
+  }
 }

@@ -1063,6 +1063,8 @@ void TrollProjectWidget::slotRemoveSubproject(SubqmakeprojectItem *spitem)
     delete m_shownSubproject;
     m_shownSubproject = spitem;
     updateProjectFile(spitem);
+    overview->setCurrentItem(m_shownSubproject);
+    overview->setSelected(m_shownSubproject, true);
     }
   }
 }
@@ -1134,6 +1136,10 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     if (r == idAddScope)
     {
       slotCreateScope(spitem);
+    }
+    else if (r == idRemoveScope)
+    {
+      slotRemoveScope(spitem);
     }
     else if (r == idBuild)
     {
@@ -2582,6 +2588,7 @@ void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeStri
       sitem->path = item->path;
       sitem->m_RootBuffer = buffer;
       sitem->subdir = item->subdir;
+      sitem->pro_file = item->pro_file;
       item->scopes.append(sitem);
       item=sitem;
     }
@@ -3254,6 +3261,34 @@ void InsideCheckListItem::stateChange( bool state )
             ++it;
         }
     }
+}
+
+void TrollProjectWidget::slotRemoveScope( SubqmakeprojectItem * spitem )
+{
+  if (spitem==0 && m_shownSubproject==0)
+    return;
+  else
+  {
+    if ( ( spitem = dynamic_cast<SubqmakeprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
+    {
+    spitem->m_RootBuffer->removeScope(m_shownSubproject->scopeString, m_shownSubproject->scopeString);
+    spitem->scopes.remove(m_shownSubproject);
+    delete m_shownSubproject;
+    m_shownSubproject = spitem;
+    updateProjectFile(spitem);
+    overview->setCurrentItem(m_shownSubproject);
+    overview->setSelected(m_shownSubproject, true);
+    }
+  }
+}
+
+SubqmakeprojectItem * TrollProjectWidget::findSubprojectForScope( SubqmakeprojectItem * scope )
+{
+    if ((scope == 0) || (scope->parent() == 0))
+        return 0;
+    if (!scope->isScope)
+        return scope;
+    return findSubprojectForScope(dynamic_cast<SubqmakeprojectItem *>(scope->parent()));
 }
 
 

@@ -57,11 +57,12 @@ public:
   QStringList       getChildScopeNames();
   bool              findNextScope(const Caret &pos, Caret& scopeStart, Caret& scopeEnd);
   Caret             findScopeEnd(Caret pos);
- 
+
   // Recursive scope methods
   bool              handleScopes();
   int               findChildBuffer(const QString &scopeName);
   void              makeScope(const QString &scopeString);
+  void              removeScope(const QString &scopeString, const QString &removeString, QStringList buffer = QStringList());
   QStringList       getBufferTextInDepth();
   FileBuffer*       getSubBuffer(QString scopeString="");
   void              splitScopeString(QString scopeString,QString &scopeName, QString &scopeRest);
