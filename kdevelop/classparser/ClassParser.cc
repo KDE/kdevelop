@@ -1024,6 +1024,9 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
 CParsedClass *CClassParser::parseClassHeader()
 {
   CParsedClass *aClass;
+  QString parentTree;
+  CParsedLexem *aLexem;
+  bool foundCLCL = false;
 
   // Skip to the identifier
   if( lexem == CPCLASS )
@@ -1037,10 +1040,40 @@ CParsedClass *CClassParser::parseClassHeader()
   aClass->setDeclaredInFile( currentFile );
   
   // Skip stuff before the real classname.
-  while( lexem != 0 && lexem == ID )
+  while( lexem != 0 && ( lexem == ID || lexem == CLCL ) )
   {
-    aClass->setName( getText() ); 
+    if( lexem == CLCL )
+      foundCLCL = true;
+      
+    PUSH_LEXEM();
     getNextLexem();
+  }
+
+  // The classname is at the top of the stack.
+  aLexem = lexemStack.pop();
+  aClass->setName( aLexem->text );
+  delete aLexem;
+
+  // Check if this a implementation of a nested class.
+  if( foundCLCL )
+  {
+    while( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL )
+    {
+      // Skip ::
+      delete lexemStack.pop();
+
+      // Append parent.
+      aLexem = lexemStack.pop();
+      
+      // Only add . if the string contains something.
+      if( !parentTree.isEmpty() )
+        parentTree = "." + parentTree;
+
+      parentTree = aLexem->text + parentTree;
+      delete aLexem;
+    }
+    
+    aClass->setDeclaredInClass( parentTree );
   }
 
   // Check for inheritance
@@ -1355,6 +1388,8 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
 void CClassParser::parseTopLevelLexem()
 {
   CParsedClass *aClass;
+  CParsedClass *parentClass;
+  QString key;
 
   switch( lexem )
   {
@@ -1362,7 +1397,24 @@ void CClassParser::parseTopLevelLexem()
       aClass = parseClass();
       if( aClass != NULL )
       {
-        if( !store.hasClass( aClass->name ) )
+        if( aClass->isSubClass() )
+        {
+          // Get the parent class;
+          parentClass = store.getClassByName( aClass->declaredInClass );
+
+          if( parentClass != NULL )
+            parentClass->addClass( aClass );
+          else
+            debug( "Didn't find parentclass: '%s'", aClass->declaredInClass.data() );
+
+          // Create the subclass hierarchy.
+          key = aClass->declaredInClass;
+          key += ".";
+          key += aClass->name;
+          
+          store.globalContainer.addSubClass( key, aClass );
+        }
+        else if( !store.hasClass( aClass->name ) )
           store.addClass( aClass );
         else
           debug( "Found new definition of class %s", aClass->name.data() );
