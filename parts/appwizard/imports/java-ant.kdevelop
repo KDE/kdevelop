@@ -17,7 +17,7 @@
  </kdevcustomproject>
   <kdevfilecreate>
     <useglobaltypes>
-      <type ext="php"/>
+      <type ext="java"/>
     </useglobaltypes>
   </kdevfilecreate>
 </kdevelop>
