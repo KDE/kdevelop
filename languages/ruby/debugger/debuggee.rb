@@ -235,9 +235,16 @@ class Context
 		"Array (%d element(s))" % obj.length
 	elsif obj.kind_of? Hash
 		"Hash (%d element(s))" % obj.length
+	elsif obj.kind_of? String
+		str = obj.inspect
+		if str.length > 255
+			"String (length %d)" % obj.length
+		else
+			str
+		end
 	else
 		obj.inspect
-	end
+ 	end
   end
   
   def var_list(ary, binding)
@@ -251,10 +258,7 @@ class Context
     ary.sort!
     for c in ary
 	  str = debug_inspect(obj.module_eval(c))
-      if str.length > 250 and str =~ /^"/
-	      # Don't show huge string literals
-     	  stdout.printf "  %s => String (length %d)\n", c, str.length
-      elsif c.to_s != str && c.to_s !~ /SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
+      if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
         c.to_s !~ /^PLATFORM$|^RELEASE_DATE$|^VERSION$|SilentClient|SilentObject/ &&
         c.to_s !~ /^Client$|^Context$|^DEBUG_LAST_CMD$|^MUTEX$|^Mutex$|^SimpleDelegater$|^Delegater$/ &&
         c.to_s !~ /IPsocket|IPserver|UDPsocket|UDPserver|TCPserver|TCPsocket|UNIXserver|UNIXsocket/
@@ -617,6 +621,20 @@ class Context
 	  elsif obj.kind_of? Hash or obj_name =~ /^ENV$/
 	    # Special case ENV to print like a hash
 	  	obj.each { |key, value| stdout.printf "[%s]=%s\n", key.inspect, debug_inspect(value) }
+	  elsif obj.kind_of?(String) && obj.inspect.length > 255
+	    # Assume long strings contain packed data and show them as a
+		# sequence of 12 byte slices in hex
+	  	i = 0
+		while i < obj.length
+			j = (i + 12 < obj.length ? i + 12 : obj.length) - 1
+            stdout.printf "[%d..%d]=0x", i, j
+			for k in i..j
+                stdout.printf "%2.2x", obj[k]
+			end
+            stdout.printf "\n"
+			
+			i += 12
+		end
 	  else
 	    PP.pp(obj, stdout)
 	  end

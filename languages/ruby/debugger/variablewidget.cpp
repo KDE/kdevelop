@@ -535,7 +535,11 @@ VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataTyp
 	// Order the VarItems so that globals are first, then
 	// constants, class variables, instance variables and 
 	// finally local variables
-	QRegExp arrayelement_re("\\[(\\d+)\\]");
+	
+	// Matches either an array element or a string slice,
+	// Order on the array index or the first number in the
+	// range specifying the slice.
+	QRegExp arrayelement_re("\\[(\\d+)(\\.\\.\\d+)?\\]");
 	key_ = varName;
 	
 	if (arrayelement_re.search(varName) != -1) {
@@ -677,6 +681,7 @@ void VarItem::setOpen(bool open)
 	Q_ASSERT(	dataType_ == REFERENCE_TYPE 
 				|| dataType_ == ARRAY_TYPE 
 				|| dataType_ == HASH_TYPE
+				|| dataType_ == STRING_TYPE
 				|| dataType_ == STRUCT_TYPE );
 					
 	update();

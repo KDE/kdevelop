@@ -253,6 +253,29 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 		}
 		return;
 	}
+			
+    case STRING_TYPE:
+	{
+		// Look for a long String which has been printed via a 'pp' command, to
+		// show it as a sequence of 12 bytes slices in hex. For example:
+		//		[0..11]=0x89504e470d0a1a0a0000000d
+		//		[12..23]=0x494844520000001600000016
+		//
+		QRegExp ppstring_re("\\s*(\\[[^\\]]+\\])=([^\\n]+)\\n");
+		pos = ppstring_re.search(buf);
+		
+		while (pos != -1) {
+			varName = ppstring_re.cap(1);
+			value = ppstring_re.cap(2).latin1();
+	        DataType dataType = determineType(value.data());
+			setItem(parent, varName, dataType, value);
+			
+			pos += ppstring_re.matchedLength();
+			pos = ppstring_re.search(buf, pos);
+		}
+		
+		return;
+	}
 		
 	default:
 		Q_ASSERT(false);
@@ -280,6 +303,7 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
     case ARRAY_TYPE:
     case REFERENCE_TYPE:
     case STRUCT_TYPE:
+    case STRING_TYPE:
         item->setText(VALUE_COLUMN, value);
 		item->setExpandable(true);
         item->update();
@@ -302,6 +326,7 @@ DataType RDBParser::determineType(char *buf)
 {
 	QRegExp array_re("(Array \\(\\d+ element\\(s\\)\\))");
 	QRegExp hash_re("(Hash \\(\\d+ element\\(s\\)\\))");
+	QRegExp string_re("(String \\(length \\d+\\))");
 	
 	if (qstrncmp(buf, "#<struct", strlen("#<struct")) == 0) {
 		return STRUCT_TYPE;
@@ -316,6 +341,8 @@ DataType RDBParser::determineType(char *buf)
 		return ARRAY_TYPE;
 	} else if (hash_re.search(buf) != -1) {
 		return HASH_TYPE;
+	} else if (string_re.search(buf) != -1) {
+		return STRING_TYPE;
 	} else if (qstrncmp(buf, "nil", strlen("nil")) == 0) {
 //		return UNKNOWN_TYPE;
 		return VALUE_TYPE;

@@ -57,7 +57,8 @@ enum DataType {
 	ARRAY_TYPE, 
 	HASH_TYPE,
 	STRUCT_TYPE,
-	COLOR_TYPE
+	COLOR_TYPE,
+	STRING_TYPE
 };		   
 
 class VariableWidget : public QWidget
