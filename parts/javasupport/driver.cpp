@@ -17,7 +17,7 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "driver.h"
+#include "JavaAST.hpp"
 #include "JavaLexer.hpp"
 #include "JavaRecognizer.hpp"
 
@@ -27,6 +27,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 
+#include <string>
 #include <strstream>
 
 class DefaultSourceProvider: public SourceProvider
@@ -60,7 +61,7 @@ private:
 
 
 Driver::Driver()
-    : depresolv( FALSE ), lexer( 0 )
+    : lexer( 0 )
 {
     m_sourceProvider = new DefaultSourceProvider();
 }
@@ -68,6 +69,7 @@ Driver::Driver()
 Driver::~Driver()
 {
     reset();
+    delete( m_sourceProvider );
 }
 
 SourceProvider* Driver::sourceProvider()
@@ -84,20 +86,18 @@ void Driver::setSourceProvider( SourceProvider* sourceProvider )
 
 void Driver::reset( )
 {
-    m_dependences.clear();
     m_problems.clear();
     m_includePaths.clear();
 
     while( m_parsedUnits.size() ){
 	RefJavaAST unit = *m_parsedUnits.begin();
 	m_parsedUnits.remove( m_parsedUnits.begin() );
-        unit = 0;
+	delete( unit );
     }
 }
 
 void Driver::remove( const QString & fileName )
 {
-    m_dependences.remove( fileName );
     m_problems.remove( fileName );
 
     QMap<QString, RefJavaAST>::Iterator it = m_parsedUnits.find( fileName );
@@ -112,62 +112,20 @@ RefJavaAST Driver::takeTranslationUnit( const QString& fileName )
 {
     QMap<QString, RefJavaAST>::Iterator it = m_parsedUnits.find( fileName );
     RefJavaAST unit( *it );
-    m_parsedUnits.remove( it );
+    //m_parsedUnits.remove( it );
+    m_parsedUnits[ fileName] = 0;
     return unit;
 }
 
 RefJavaAST Driver::translationUnit( const QString& fileName ) const
 {
     QMap<QString, RefJavaAST>::ConstIterator it = m_parsedUnits.find( fileName );
-    return it != m_parsedUnits.end() ? *it : RefJavaAST();
-}
-
-void Driver::addDependence( const QString & fileName, const Dependence & dep )
-{
-    QFileInfo fileInfo( dep.first );
-    QString fn = fileInfo.absFilePath();
-
-    findOrInsertDependenceList( fileName ).insert( fn, dep );
-
-    if ( !depresolv )
-	return;
-
-    QString file = findIncludeFile( dep );
-
-    if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
-	return;
-
-#if 0
-    if ( !QFile::exists( file ) ) {
-	Problem p( "Couldn't find include file " + dep.first,
-		   lexer ? lexer->currentLine() : -1,
-		   lexer ? lexer->currentColumn() : -1 );
-	addProblem( fileName, p );
-	return;
-    }
-#endif
-
-    QString cfn = m_currentFileName;
-    JavaLexer *l = lexer;
-    parseFile( file );
-    m_currentFileName = cfn;
-    lexer = l;
+    return it != m_parsedUnits.end() ? *it : 0;
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem )
 {
     findOrInsertProblemList( fileName ).append( problem );
-}
-
-QMap< QString, Dependence >& Driver::findOrInsertDependenceList( const QString & fileName )
-{
-    QMap<QString, QMap<QString, Dependence> >::Iterator it = m_dependences.find( fileName );
-    if( it != m_dependences.end() )
-        return it.data();
-
-    QMap<QString, Dependence> l;
-    m_dependences.insert( fileName, l );
-    return m_dependences[ fileName ];
 }
 
 QValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileName )
@@ -181,14 +139,6 @@ QValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileNam
     return m_problems[ fileName ];
 }
 
-QMap< QString, Dependence > Driver::dependences( const QString & fileName ) const
-{
-    QMap<QString, QMap<QString, Dependence> >::ConstIterator it = m_dependences.find( fileName );
-    if( it != m_dependences.end() )
-	return it.data();
-    return QMap<QString, Dependence>();
-}
-
 QValueList < Problem > Driver::problems( const QString & fileName ) const
 {
     QMap<QString, QValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
@@ -199,7 +149,8 @@ QValueList < Problem > Driver::problems( const QString & fileName ) const
 
 void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force )
 {
-    QString absFilePath = QFileInfo( fileName ).absFilePath();
+    QFileInfo fileInfo( fileName );
+    QString absFilePath = fileInfo.absFilePath();
 
     QMap<QString, RefJavaAST>::Iterator it = m_parsedUnits.find( absFilePath );
 
@@ -210,49 +161,48 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 	return;
     }
 
-    m_dependences.remove( fileName );
     m_problems.remove( fileName );
 
     m_currentFileName = fileName;
-
-    std::string fn( fileName.utf8() );
 
     std::string source( sourceProvider()->contents(fileName).utf8() );
     std::istrstream in( source.c_str() );
 
     JavaLexer lex( in );
     lex.setDriver( this );
-    setupLexer( &lex );
-    //lexer.setProblemReporter( d->problemReporter );
     lexer = &lex;
+    setupLexer( &lex );
 
-    JavaRecognizer parser( lex );
-    parser.setDriver( this );
-    setupParser( &parser );
-    //parser.setProblemReporter( d->problemReporter );
+
+    /// @todo lex.setSource( sourceProvider()->contents(fileName) );
+
+    RefJavaAST translationUnit;
+    if( !onlyPreProcess ){
+	JavaRecognizer parser( lex );
+	parser.setDriver( this );
+	setupParser( &parser );
+
 
     try{
         // make an ast factory
-        antlr::ASTFactory ast_factory;
+        ANTLR_USE_NAMESPACE(antlr)JavaASTFactory ast_factory;
         // initialize and put it in the parser...
         parser.initializeASTFactory (ast_factory);
         parser.setASTFactory (&ast_factory);
-        /* parser.setASTNodeFactory( JavaAST::factory );  (old)  */
 
         parser.compilationUnit();
 
         RefJavaAST translationUnit = parser.getAST();
         m_parsedUnits.insert( fileName, translationUnit );
 
-    } catch( antlr::ANTLRException& ex ){
-/*        kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        d->problemReporter->reportError( ex.getMessage().c_str(),
-                                         lexer.getLine(),
-                                         lexer.getColumn() );*/
+    } catch( ANTLR_USE_NAMESPACE(antlr)ANTLRException& ex ){}
+
     }
 
     m_currentFileName = QString::null;
     lexer = 0;
+
+    fileParsed( fileName );
 }
 
 void Driver::setupLexer( JavaLexer * lexer )
@@ -270,29 +220,7 @@ void Driver::addIncludePath( const QString &path )
         m_includePaths << path;
 }
 
-QString Driver::findIncludeFile( const Dependence& dep ) const
+void Driver::fileParsed( const QString & fileName )
 {
-    QString fileName = dep.first;
-
-    if( dep.second == Dep_Local ){
-        QString path = QFileInfo( currentFileName() ).dirPath( true );
-        QFileInfo fileInfo( QFileInfo(path, fileName) );
-	if ( fileInfo.exists() && fileInfo.isFile() )
-	    return fileInfo.absFilePath();
-
-    }
-
-    for ( QStringList::ConstIterator it = m_includePaths.begin(); it != m_includePaths.end(); ++it ) {
-        QFileInfo fileInfo( *it, fileName );
-	if ( fileInfo.exists() && fileInfo.isFile() )
-	    return fileInfo.absFilePath();
-    }
-
-    return QString::null;
+    Q_UNUSED( fileName );
 }
-
-void Driver::setResolveDependencesEnabled( bool enabled )
-{
-    depresolv = enabled;
-}
-

@@ -1,19 +1,17 @@
 // Gideon support by Roberto Raggi (roberto@kdevelop.org)
 
 header "pre_include_hpp" {
-	#include "classstore.h"
+	#include <codemodel.h>
 	#include "JavaAST.hpp"
 
 	#include <qstring.h>
 	#include <qstringlist.h>
+	#include <qvaluestack.h>
         #include <qfileinfo.h>
 }
 
 header "post_include_hpp" {
-	#include <parsedmethod.h>
-	#include <parsedclass.h>
-	#include <parsedattribute.h>
-	#include <parsedargument.h>
+	#include <codemodel.h>
 
 	#include <kdebug.h>
 }
@@ -44,34 +42,34 @@ options {
 }
 {
 private:
-	QString m_fileName;
 	QStringList m_currentScope;
-	ClassStore* m_store;
-	ParsedClassContainer* m_currentContainer;
-	ParsedClass* m_currentClass;
-	PIAccess m_currentAccess;
+	CodeModel* m_model;
+	FileDom m_file;
+	QValueStack<ClassDom> m_currentClass;
+	int m_currentAccess;
 	int m_anon;
+        ANTLR_USE_NAMESPACE(antlr)JavaASTFactory ast_factory;
 
 public:
-	void setClassStore( ClassStore* store )			{ m_store = store; }
-	ClassStore* classStore()				{ return m_store; }
-	const ClassStore* classStore() const			{ return m_store; }
-
-	QString fileName() const	{ return m_fileName; }
-	void setFileName( const QString& fileName ) { m_fileName = fileName; }
-
-	void init(){
-		m_currentScope.clear();
-		m_currentContainer = m_store->globalScope();
-		m_currentClass = 0;
-		m_currentAccess = PIE_PUBLIC;
-		m_anon = 0;
-		m_store->removeWithReferences( m_fileName );
+	void setCodeModel( CodeModel* model )
+	{
+		m_model = model;
 	}
 
-	void wipeout()						{ m_store->wipeout(); }
-	void out()						{ m_store->out(); }
-	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
+	void setFile( FileDom file )
+	{
+		m_file = file;
+	}
+
+	void init()
+	{
+		m_currentScope.clear();
+		m_currentAccess = CodeModelItem::Public;
+		m_anon = 0;
+
+        	initializeASTFactory (ast_factory);
+        	setASTFactory (&ast_factory);
+	}
 }
 
 compilationUnit { QString package; QString imp; QStringList imports; }
@@ -89,88 +87,68 @@ importDefinition returns [ QString id ]
 	:	#( IMPORT id=identifierStar )
 	;
 
-typeDefinition { QStringList bases; QString className; ParsedClass* klass = 0; }
-	:	#(CLASS_DEF m:modifiers IDENT
+typeDefinition { QStringList bases; QString className; ClassDom klass; QStringList m;}
+	:	#(CLASS_DEF m=modifiers IDENT
 						{
-						klass = new ParsedClass;
+						klass = m_model->create<ClassModel>();
 						QString name = QString::fromUtf8( #IDENT->getText().c_str(), #IDENT->getText().length() );
 						QStringList path = QStringList::split( ".", name );
 						className = path.back();
+
 						klass->setName( path.back() );
+						klass->setScope( m_currentScope );
+						klass->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
+						/// @todo klass->setEndPositon()
 
-						klass->setDeclaredInFile( m_fileName );
-						klass->setDefinedInFile( m_fileName );
-						klass->setDeclaredOnLine( #IDENT->getLine() );
-						klass->setDefinedOnLine( #IDENT->getLine() );
-						klass->setDeclaredInScope( m_currentScope.join(".") );
-
-						bool innerClass = !m_currentScope.isEmpty();
-						if( innerClass )
-						    m_currentContainer->addClass( klass );
+						klass->setFileName( m_file->name() );
+						if( m_currentClass.top() )
+						    m_currentClass.top()->addClass( klass );
 						else
-						    m_store->addClass( klass );
-
+						    m_file->addClass( klass );
 						}
 		bases=extendsClause
 						{
-						QStringList::Iterator it = bases.begin();
-						while( it != bases.end() ){
-							ParsedParent* parent = new ParsedParent;
-							parent->setName( *it );
-							klass->addParent( parent );
-							++it;
-						}
+						for( QStringList::Iterator it = bases.begin(); it != bases.end(); ++it )
+							klass->addBaseClass( *it );
 						}
 		implementsClause
 						{
+						m_currentClass.push( klass );
 						m_currentScope.push_back( className );
-						ParsedClass* oldClass = m_currentClass;
-						ParsedClassContainer* oldContainer = m_currentContainer;
-
-						m_currentContainer = klass;
-						m_currentClass = klass;
 						}
 		objBlock[klass]
 						{
-						m_currentContainer = oldContainer;
-						m_currentClass = oldClass;
+						m_currentClass.pop();
 						m_currentScope.pop_back();
 						}
 		)
-	|	#(INTERFACE_DEF mm:modifiers IDENT
+	|	#(INTERFACE_DEF m=modifiers IDENT
 						{
-						klass = new ParsedClass;
+						klass = m_model->create<ClassModel>();
 						QString name = QString::fromUtf8( #IDENT->getText().c_str(), #IDENT->getText().length() );
 						QStringList path = QStringList::split( ".", name );
 						className = path.back();
+
 						klass->setName( path.back() );
+						klass->setScope( m_currentScope );
+						klass->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
+						/// @todo klass->setEndPositon()
 
-						klass->setDeclaredInFile( m_fileName );
-						klass->setDefinedInFile( m_fileName );
-						klass->setDeclaredOnLine( #IDENT->getLine() );
-						klass->setDefinedOnLine( #IDENT->getLine() );
-						klass->setDeclaredInScope( m_currentScope.join(".") );
+						klass->setFileName( m_file->name() );
 
-						bool innerClass = !m_currentScope.isEmpty();
-						if( innerClass )
-						    m_currentContainer->addClass( klass );
+						if( m_currentClass.top() )
+						    m_currentClass.top()->addClass( klass );
 						else
-						    m_store->addClass( klass );
-
+						    m_file->addClass( klass );
 						}
 		bases=extendsClause
 						{
+						m_currentClass.push( klass );
 						m_currentScope.push_back( className );
-						ParsedClass* oldClass = m_currentClass;
-						ParsedClassContainer* oldContainer = m_currentContainer;
-
-						m_currentContainer = klass;
-						m_currentClass = klass;
 						}
 		interfaceBlock[klass]
 						{
-						m_currentContainer = oldContainer;
-						m_currentClass = oldClass;
+						m_currentClass.pop();
 						m_currentScope.pop_back();
 						}
 		)
@@ -229,70 +207,27 @@ implementsClause returns [ QStringList l ] { QString id; }
 	:	#(IMPLEMENTS_CLAUSE (id=identifier { l << id; } )* )
 	;
 
-
-interfaceBlock [ ParsedClass* klass ] { ParsedMethod* meth; ParsedAttribute* attr; }
+interfaceBlock [ ClassDom klass ] { FunctionDom meth; VariableDom attr; }
 	:	#(	OBJBLOCK
 			(	meth=methodDecl			{
-								ParsedMethod* m = m_currentClass->getMethod( meth );
-								bool isStored = m != 0;
-								if( isStored ){
-								    m->setDefinedInFile( m_fileName );
-								    m->setDefinedOnLine( meth->definedOnLine() );
-								    delete( meth );
-								    meth = m;
-								} else
-								    klass->addMethod( meth );
 								}
 
 			|	attr=variableDef		{
-								ParsedAttribute* a = m_currentClass->getAttributeByName( attr->name() );
-								bool isStored = a != 0;
-								if( isStored ){
-								    a->setDefinedInFile( m_fileName );
-								    a->setDefinedOnLine( attr->definedOnLine() );
-								    delete( attr );
-								    attr = a;
-								} else
-								    klass->addAttribute( attr );
 								}
 			)*
 		)
 	;
 
-objBlock [ ParsedClass* klass ] { ParsedMethod* meth; ParsedAttribute* attr; }
+objBlock [ ClassDom klass ] { FunctionDom meth; VariableDom attr; }
 	:	#(	OBJBLOCK
 			(	meth=ctorDef			{
-								ParsedMethod* m = m_currentClass->getMethod( meth );
-								bool isStored = m != 0;
-								if( isStored ){
-								    m->setDefinedInFile( m_fileName );
-								    m->setDefinedOnLine( meth->definedOnLine() );
-								    delete( meth );
-								    meth = m;
-								} else
-								    klass->addMethod( meth );
+								klass->addFunction( meth );
 								}
 			|	meth=methodDef			{
-								ParsedMethod* m = m_currentClass->getMethod( meth );
-								bool isStored = m != 0;
-								if( isStored ){
-								    m->setDefinedInFile( m_fileName );
-								    m->setDefinedOnLine( meth->definedOnLine() );
-								    delete( meth );
-								    meth = m;
-								} else
-								    klass->addMethod( meth );
+								klass->addFunction( meth );
 								}
 			|	attr=variableDef		{
-								ParsedAttribute* a = m_currentClass->getAttributeByName( attr->name() );
-								bool isStored = a != 0;
-								if( isStored ){
-								    a->setDefinedInFile( m_fileName );
-								    a->setDefinedOnLine( attr->definedOnLine() );
-								    delete( attr );
-								    attr = a;
-								} else
-								    klass->addAttribute( attr );
+								klass->addVariable( attr );
 								}
 			|	typeDefinition
 			|	#(STATIC_INIT slist)
@@ -301,61 +236,100 @@ objBlock [ ParsedClass* klass ] { ParsedMethod* meth; ParsedAttribute* attr; }
 		)
 	;
 
-ctorDef returns [ ParsedMethod* meth ]	{ meth = new ParsedMethod; meth->setIsConstructor( TRUE ); }
+ctorDef returns [ FunctionDom meth ]				{
+								QStringList m;
+								meth = m_model->create<FunctionModel>();
+								meth->setFileName( m_file->name() );
+								}
 	:	#(CTOR_DEF
-		m:modifiers methodHead[meth] slist
+		m=modifiers methodHead[meth] slist
 		)
-							{
-							meth->setDeclaredInFile( m_fileName );
-							meth->setDefinedInFile( m_fileName );
-							}
+								{
+								if( m.contains("public") )
+								    meth->setAccess( CodeModelItem::Public );
+								else if( m.contains("protected") )
+								    meth->setAccess( CodeModelItem::Protected );
+								else
+								    meth->setAccess( CodeModelItem::Private );
+								}
 	;
 
-methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
-	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth])
-							{
-							meth->setDeclaredInFile( m_fileName );
-							meth->setDefinedInFile( m_fileName );
-							meth->setType( tp );
-							}
+methodDecl returns [ FunctionDom meth ]  			{
+								QStringList m;
+								QString tp;
+								meth = m_model->create<FunctionModel>();
+								meth->setFileName( m_file->name() );
+								}
+	:	#(METHOD_DEF m=modifiers tp=typeSpec methodHead[meth])
+								{
+								meth->setResultType( tp );
+								if( m.contains("public") )
+								    meth->setAccess( CodeModelItem::Public );
+								else if( m.contains("protected") )
+								    meth->setAccess( CodeModelItem::Protected );
+								else
+								    meth->setAccess( CodeModelItem::Private );
+								}
 	;
 
-methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
-	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth] (slist)?)
-							{
-							meth->setDeclaredInFile( m_fileName );
-							meth->setDefinedInFile( m_fileName );
-							meth->setType( tp );
-							}
+methodDef returns [ FunctionDom meth ]  			{
+								QStringList m;
+								QString tp;
+								meth = m_model->create<FunctionModel>();
+								meth->setFileName( m_file->name() );
+								}
+	:	#(METHOD_DEF m=modifiers tp=typeSpec methodHead[meth] (slist)?)
+								{
+								meth->setResultType( tp );
+								if( m.contains("public") )
+								    meth->setAccess( CodeModelItem::Public );
+								else if( m.contains("protected") )
+								    meth->setAccess( CodeModelItem::Protected );
+								else
+								    meth->setAccess( CodeModelItem::Private );
+								}
 	;
 
-variableDef returns [ ParsedAttribute* attr ] { QString tp; attr = new ParsedAttribute; }
-	:	#(VARIABLE_DEF m:modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
-							{
-							attr->setDeclaredInFile( m_fileName );
-							attr->setDefinedInFile( m_fileName );
-							attr->setType( tp );
-							}
+variableDef returns [ VariableDom attr ] 			{
+								QStringList m;
+								QString tp;
+								attr = m_model->create<VariableModel>();
+								attr->setFileName( m_file->name() );
+								}
+	:	#(VARIABLE_DEF m=modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
+								{
+								attr->setType( tp );
+								if( m.contains("public") )
+								    attr->setAccess( CodeModelItem::Public );
+								else if( m.contains("protected") )
+								    attr->setAccess( CodeModelItem::Protected );
+								else
+								    attr->setAccess( CodeModelItem::Private );
+
+								attr->setStatic( m.contains("static") );
+								}
 	;
 
-parameterDef returns [ ParsedArgument* arg ] { QString tp; arg = new ParsedArgument; }
+parameterDef returns [ ArgumentDom arg ] 			{
+								QString tp;
+								arg = m_model->create<ArgumentModel>();
+								}
 	:	#(PARAMETER_DEF modifiers tp=typeSpec IDENT )
-							{
-							arg->setName( #IDENT->getText().c_str() );
-							arg->setType( tp );
-							}
+								{
+								arg->setType( tp );
+								arg->setName( #IDENT->getText() );
+								}
 	;
 
 objectinitializer
 	:	#(INSTANCE_INIT slist)
 	;
 
-variableDeclarator [ ParsedAttribute* attr ]
-	:	IDENT					{
-							attr->setName( #IDENT->getText().c_str() );
-							attr->setDeclaredOnLine( #IDENT->getLine() );
-							attr->setDefinedOnLine( #IDENT->getLine() );
-							}
+variableDeclarator [ VariableDom attr ]
+	:	IDENT						{
+								attr->setName( #IDENT->getText() );
+								attr->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
+								}
 	|	LBRACK variableDeclarator[attr]
 	;
 
@@ -373,12 +347,12 @@ arrayInitializer
 	:	#(ARRAY_INIT (initializer)*)
 	;
 
-methodHead [ ParsedMethod* meth ] { ParsedArgument* p; }
-	:	IDENT #( PARAMETERS (p=parameterDef { meth->addArgument( p ); } )* ) (throwsClause)?
+methodHead [ FunctionDom meth ] { ArgumentDom arg; }
+	:	IDENT #( PARAMETERS (arg=parameterDef { meth->addArgument(arg); } )* ) (throwsClause)?
 	{
-		meth->setName( #IDENT->getText().c_str() );
-		meth->setDeclaredOnLine( #IDENT->getLine() );
-		meth->setDefinedOnLine( #IDENT->getLine() );
+	meth->setName( #IDENT->getText() );
+	meth->setScope( m_currentScope );
+	meth->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
 	}
 	;
 
@@ -387,12 +361,18 @@ throwsClause
 	;
 
 identifier returns [ QString id ]
-	:	IDENT 					{ id = #IDENT->getText().c_str(); }
-	|	#( DOT id=identifier IDENT )		{ id += QString(".") + #IDENT->getText().c_str(); }
+	:	IDENT 						{
+								id = #IDENT->getText().c_str();
+								}
+	|	#( DOT id=identifier IDENT )			{
+								id += QString(".") + #IDENT->getText().c_str();
+								}
 	;
 
-identifierStar returns [ QString id ] 
-	:	IDENT					{ id = #IDENT->getText().c_str(); }
+identifierStar returns [ QString id ]
+	:	IDENT						{
+								id = #IDENT->getText().c_str();
+								}
 	|	#( DOT id=identifier (STAR  { id += QString(".") + #STAR->getText().c_str(); } |
 				      IDENT { id += QString(".") + #IDENT->getText().c_str(); }) )
 	;
@@ -533,7 +513,7 @@ newExpression
 			|	elist
 			)
 		)
-			
+
 	;
 
 newArrayDeclarator

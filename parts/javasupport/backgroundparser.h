@@ -23,12 +23,13 @@
 
 class JavaSupportPart;
 class TranslationUnitAST;
+class SynchronizedFileList;
 
 class Unit
 {
 public:
-    Unit(): translationUnit( 0 ) {}
-    ~Unit() { translationUnit = 0; }
+    Unit() {}
+    ~Unit() {}
 
     QString fileName;
     QValueList<Problem> problems;
@@ -54,7 +55,7 @@ public:
 
     bool filesInQueue();
 
-    void addFile( const QString& fileName );
+    void addFile( const QString& fileName, bool readFromDisk=false );
     void removeFile( const QString& fileName );
     void removeAllFiles();
 
@@ -67,16 +68,16 @@ public:
 
 protected:
     Unit* findUnit( const QString& fileName );
-    Unit* parseFile( const QString& fileName );
+    Unit* parseFile( const QString& fileName, bool readFromDisk );
 
 private:
     class KDevDriver* m_driver;
-    QStringList m_fileList;
+    QString m_currentFile;
     QWaitCondition m_canParse;
     QWaitCondition m_isEmpty;
     QWaitCondition* m_consumed;
     QMutex m_mutex;
-
+    SynchronizedFileList* m_fileList;
     JavaSupportPart* m_javaSupport;
     bool m_close;
     QMap<QString, Unit*> m_unitDict;

@@ -12,9 +12,9 @@
 #include "backgroundparser.h"
 #include "javasupportpart.h"
 #include "javasupport_events.h"
-#include "codeinformationrepository.h"
 #include "driver.h"
 #include "kdevdeepcopy.h"
+#include "kdevdriver.h"
 
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
@@ -39,60 +39,51 @@
 #include <qtextstream.h>
 #include <qprocess.h>
 
-#include <stdlib.h>
-#include <unistd.h>
-
-class KDevDriver: public Driver
-{
-public:
-    KDevDriver( JavaSupportPart* javaSupport )
-        : m_javaSupport( javaSupport )
-    {
-    }
-
-private:
-    JavaSupportPart* m_javaSupport;
-};
-
-
 class KDevSourceProvider: public SourceProvider
 {
 public:
-    KDevSourceProvider( JavaSupportPart* javaSupport ): m_javaSupport( javaSupport ) {}
+    KDevSourceProvider( JavaSupportPart* javaSupport )
+        : m_javaSupport( javaSupport ),
+          m_readFromDisk( false ) {}
+
+    void setReadFromDisk( bool b ) { m_readFromDisk = b; }
+    bool readFromDisk() const { return m_readFromDisk; }
 
     virtual QString contents( const QString& fileName )
     {
-        //kdDebug(9007) << "-------> kapp is locked = " << kapp->locked() << endl;
-        bool needToLock = kapp->locked() == false;
+	if( !m_readFromDisk ){
+	    //kdDebug(9013) << "-------> kapp is locked = " << kapp->locked() << endl;
+	    bool needToLock = kapp->locked() == false;
 
-        if( needToLock )
-	    kapp->lock();
+	    if( needToLock )
+		kapp->lock();
 
-        //kdDebug(9007) << "-------> kapp locked" << endl;
+	    //kdDebug(9013) << "-------> kapp locked" << endl;
 
-	QPtrList<KParts::Part> parts( *m_javaSupport->partController()->parts() );
-	QPtrListIterator<KParts::Part> it( parts );
-	while( it.current() ){
-	    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
-	    ++it;
+	    QPtrList<KParts::Part> parts( *m_javaSupport->partController()->parts() );
+	    QPtrListIterator<KParts::Part> it( parts );
+	    while( it.current() ){
+		KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+		++it;
 
-	    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
-	    if( !doc || !editIface || doc->url().path() != fileName )
-		continue;
+		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
+		if( !doc || !editIface || doc->url().path() != fileName )
+		    continue;
 
-	    QString contents = QString( editIface->text().ascii() ); // deep copy
+		QString contents = QString( editIface->text().ascii() ); // deep copy
 
-            if( needToLock )
-                kapp->unlock();
+		if( needToLock )
+		    kapp->unlock();
 
-            //kdDebug(9007) << "-------> kapp unlocked" << endl;
+		//kdDebug(9013) << "-------> kapp unlocked" << endl;
 
-	    return contents;
+		return contents;
+	    }
+
+	    if( needToLock )
+		kapp->unlock();
+	    //kdDebug(9013) << "-------> kapp unlocked" << endl;
 	}
-
-        if( needToLock )
-	    kapp->unlock();
-        //kdDebug(9007) << "-------> kapp unlocked" << endl;
 
 	QFile f( fileName );
 	QTextStream stream( &f );
@@ -113,16 +104,85 @@ public:
 
 private:
     JavaSupportPart*  m_javaSupport;
-
+    bool m_readFromDisk;
 private:
     KDevSourceProvider( const KDevSourceProvider& source );
     void operator = ( const KDevSourceProvider& source );
 };
 
+class SynchronizedFileList
+{
+public:
+    SynchronizedFileList() {}
+
+    bool isEmpty() const
+    {
+	QMutexLocker locker( &m_mutex );
+	return m_fileList.isEmpty();
+    }
+
+    uint count() const
+    {
+	QMutexLocker locker( &m_mutex );
+	return m_fileList.count();
+    }
+
+    QPair<QString, bool> front() const
+    {
+	QMutexLocker locker( &m_mutex );
+	return m_fileList.front();
+    }
+
+    void clear()
+    {
+	QMutexLocker locker( &m_mutex );
+	m_fileList.clear();
+    }
+
+    void push_back( const QString& fileName, bool readFromDisk=false )
+    {
+	QMutexLocker locker( &m_mutex );
+	m_fileList.append( qMakePair(fileName, readFromDisk) ); // FIXME: ROBE deepcopy?!
+    }
+
+    void pop_front()
+    {
+	QMutexLocker locker( &m_mutex );
+	m_fileList.pop_front();
+    }
+
+    bool contains( const QString& fileName ) const
+    {
+	QMutexLocker locker( &m_mutex );
+	QValueList< QPair<QString, bool> >::ConstIterator it = m_fileList.begin();
+	while( it != m_fileList.end() ){
+	    if( (*it).first == fileName )
+		return true;
+	    ++it;
+	}
+	return false;
+    }
+
+    void remove( const QString& fileName )
+    {
+	QMutexLocker locker( &m_mutex );
+	QValueList< QPair<QString, bool> >::Iterator it = m_fileList.begin();
+	while( it != m_fileList.end() ){
+	    if( (*it).first == fileName )
+		m_fileList.remove( it );
+	    ++it;
+	}
+    }
+
+private:
+    mutable QMutex m_mutex;
+    QValueList< QPair<QString, bool> > m_fileList;
+};
+
 BackgroundParser::BackgroundParser( JavaSupportPart* part, QWaitCondition* consumed )
     : m_consumed( consumed ), m_javaSupport( part ), m_close( false )
 {
-    m_consumed = 0;
+    m_fileList = new SynchronizedFileList();
     m_driver = new KDevDriver( m_javaSupport );
     m_driver->setSourceProvider( new KDevSourceProvider(m_javaSupport) );
     //disabled for now m_driver->setResolveDependencesEnabled( true );
@@ -131,17 +191,21 @@ BackgroundParser::BackgroundParser( JavaSupportPart* part, QWaitCondition* consu
 BackgroundParser::~BackgroundParser()
 {
     removeAllFiles();
+
     delete( m_driver );
     m_driver = 0;
+
+    delete m_fileList;
+    m_fileList = 0;
 }
 
-void BackgroundParser::addFile( const QString& fileName )
+void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
 {
-    QMutexLocker locker( &m_mutex );
     QString fn = deepCopy( fileName );
+
     bool added = false;
-    if( m_fileList.find(fn) == m_fileList.end() ){
-        m_fileList.push_back( fn );
+    if( !m_fileList->contains(fn) ){
+        m_fileList->push_back( fn, readFromDisk );
 	added = true;
     }
 
@@ -151,7 +215,7 @@ void BackgroundParser::addFile( const QString& fileName )
 
 void BackgroundParser::removeAllFiles()
 {
-    kdDebug(9007) << "BackgroundParser::removeAllFiles()" << endl;
+    kdDebug(9013) << "BackgroundParser::removeAllFiles()" << endl;
     QMutexLocker locker( &m_mutex );
 
     QMap<QString, Unit*>::Iterator it = m_unitDict.begin();
@@ -159,10 +223,11 @@ void BackgroundParser::removeAllFiles()
         Unit* unit = it.data();
 	++it;
 	delete( unit );
+	unit = 0;
     }
     m_unitDict.clear();
     m_driver->reset();
-    m_fileList.clear();
+    m_fileList->clear();
 
     m_isEmpty.wakeAll();
 }
@@ -178,21 +243,44 @@ void BackgroundParser::removeFile( const QString& fileName )
 	unit = 0;
     }
 
-    if( m_fileList.isEmpty() )
+    if( m_fileList->isEmpty() )
         m_isEmpty.wakeAll();
 }
 
-Unit* BackgroundParser::parseFile( const QString& fileName )
+Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
 {
+    static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( readFromDisk );
+
     m_driver->remove( fileName );
     m_driver->parseFile( fileName );
-						  // translation unit.
     RefJavaAST translationUnit = m_driver->takeTranslationUnit( fileName );
 
     Unit* unit = new Unit;
     unit->fileName = fileName;
     unit->translationUnit = translationUnit;
     unit->problems = m_driver->problems( fileName );
+
+    static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( false );
+
+    if( m_unitDict.find(fileName) != m_unitDict.end() ){
+	Unit* u = m_unitDict[ fileName ];
+	m_unitDict.remove( fileName );
+	delete( u );
+	u = 0;
+    }
+
+    m_unitDict.insert( fileName, unit );
+
+    if( m_fileList->contains(fileName) ){
+        kdDebug(9013) << "========================> FILE: " << fileName << " IN QUEUE <=============" << endl;
+    } else {
+        KApplication::postEvent( m_javaSupport, new FileParsedEvent(fileName, unit->problems) );
+    }
+
+    m_currentFile = QString::null;
+
+    if( m_fileList->isEmpty() )
+	m_isEmpty.wakeAll();
 
     return unit;
 }
@@ -205,13 +293,23 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 
 RefJavaAST BackgroundParser::translationUnit( const QString& fileName )
 {
-    Unit* u = findUnit( fileName );
-    return u ? u->translationUnit : RefJavaAST();
+    Unit* u = 0;
+    if( (u = findUnit(fileName)) == 0 ){
+	m_fileList->remove( fileName );
+	u = parseFile( fileName, false );
+    }
+
+    return u->translationUnit;
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
-    Unit* u = findUnit( fileName );
+    Unit* u = 0;
+    if( (u = findUnit(fileName)) == 0 ){
+	m_fileList->remove( fileName );
+	u = parseFile( fileName, false );
+    }
+
     return u ? u->problems : QValueList<Problem>();
 }
 
@@ -226,15 +324,17 @@ bool BackgroundParser::filesInQueue()
 {
     QMutexLocker locker( &m_mutex );
 
-    return m_fileList.count();
+    return m_fileList->count() || !m_currentFile.isEmpty();
 }
 
 void BackgroundParser::run()
 {
+    // (void) m_javaSupport->codeCompletion()->repository()->getEntriesInScope( QStringList(), false );
+
     while( !m_close ){
 
         m_mutex.lock();
-	while( !m_fileList.size() ){
+	while( m_fileList->isEmpty() ){
             m_canParse.wait( &m_mutex );
 
             if( m_close ){
@@ -247,37 +347,17 @@ void BackgroundParser::run()
             break;
         }
 
-        QString fileName = deepCopy( m_fileList.front() );
-        m_fileList.pop_front();
+	QPair<QString, bool> entry = m_fileList->front();
+        QString fileName = entry.first;
+	bool readFromDisk = entry.second;
+	m_currentFile = fileName;
+	m_fileList->pop_front();
 
+	(void) parseFile( fileName, readFromDisk );
         m_mutex.unlock();
-
-	Unit* unit = parseFile( fileName );
-        {
-            QMutexLocker locker( &m_mutex );
-
-	    if( m_unitDict.find(fileName) != m_unitDict.end() ){
-	        Unit* u = m_unitDict[ fileName ];
-		m_unitDict.remove( fileName );
-		delete( u );
-		u = 0;
-	    }
-
-	    m_unitDict.insert( fileName, unit );
-
-            KApplication::postEvent( m_javaSupport, new FileParsedEvent(fileName, unit->problems) );
-
-	    if( m_consumed )
-	        m_consumed->wait();
-
-	    if( m_fileList.isEmpty() )
-	        m_isEmpty.wakeAll();
-	}
-        m_javaSupport->emitFileParsed( fileName );
     }
 
-    kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
+    kdDebug(9013) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 
     QThread::exit();
 }
-

@@ -17,21 +17,16 @@
 #include "javasupport_events.h"
 #include "problemreporter.h"
 #include "backgroundparser.h"
-#include "JavaStoreWalker.hpp"
-#include "JavaAST.hpp"
-#include "javanewclassdlg.h"
-#include "ccconfigwidget.h"
-#include "subclassingdlg.h"
-#include "addmethoddialog.h"
-#include "addattributedialog.h"
 #include "KDevJavaSupportIface.h"
 #include "javasupportfactory.h"
-#include "classgeneratorconfig.h"
 #include "catalog.h"
-#include "java_tags.h"
+#include "kdevdriver.h"
+#include "javasupport_utils.h"
+
+#include "JavaStoreWalker.hpp"
+#include "JavaAST.hpp"
 
 #include <qheader.h>
-#include <qmessagebox.h>
 #include <qdir.h>
 #include <qdom.h>
 #include <qfileinfo.h>
@@ -45,6 +40,7 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <kmessagebox.h>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -63,6 +59,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/selectioninterface.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/clipboardinterface.h>
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
@@ -77,14 +74,10 @@
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevmainwindow.h>
-#include <classstore.h>
 #include <kdevpartcontroller.h>
 #include <kdevmakefrontend.h>
 #include <kdevcoderepository.h>
 
-#include <parsedclass.h>
-#include <parsedattribute.h>
-#include <parsedmethod.h>
 #include <domutil.h>
 #include <config.h>
 
@@ -93,27 +86,73 @@
 void showMemUsage()
 {
     struct mallinfo mi = mallinfo();
-    kdDebug(9007) << "Mem usage: " << mi.uordblks << endl;
+    kdDebug(9013) << "Mem usage: " << mi.uordblks << endl;
 }
 #else
 void showMemUsage()
 {}
 #endif
 
-enum { PCS_VERSION = 1 };
+enum { KDEV_DB_VERSION = 3 };
+enum { KDEV_PCS_VERSION = 2 };
 
-JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStringList &args)
+class JavaDriver: public KDevDriver
+{
+public:
+    JavaDriver( JavaSupportPart* javaSupport )
+	: KDevDriver( javaSupport )
+    {
+    }
+
+    void fileParsed( const QString& fileName )
+    {
+	//kdDebug(9013) << "-----> file " << fileName << " parsed!" << endl;
+	RefJavaAST ast = takeTranslationUnit( fileName );
+
+        if( javaSupport()->problemReporter() ){
+	    javaSupport()->problemReporter()->removeAllProblems( fileName );
+
+	    QValueList<Problem> pl = problems( fileName );
+	    QValueList<Problem>::ConstIterator it = pl.begin();
+	    while( it != pl.end() ){
+	        const Problem& p = *it++;
+	        javaSupport()->problemReporter()->reportProblem( fileName, p );
+	    }
+	}
+
+	if( javaSupport()->codeModel()->hasFile(fileName) ){
+	    FileDom file = javaSupport()->codeModel()->fileByName( fileName );
+	    javaSupport()->removeWithReferences( fileName );
+	}
+
+	FileDom file = javaSupport()->codeModel()->create<FileModel>();
+	file->setName( fileName );
+	JavaStoreWalker walker;
+	walker.setFile( file );
+	walker.setCodeModel( javaSupport()->codeModel() );
+	walker.compilationUnit( ast );
+	javaSupport()->codeModel()->addFile( file );
+
+	remove( fileName );
+    }
+};
+
+JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStringList &/*args*/)
     : KDevLanguageSupport("JavaSupport", "java", parent, name ? name : "KDevJavaSupport"),
-      m_activeSelection( 0 ), m_activeEditor( 0 ),
+      m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
     setInstance(JavaSupportFactory::instance());
 
-    setXMLFile("kdevjavasupport.rc");
+    m_driver = new JavaDriver( this );
+
+    setXMLFile( "kdevjavasupport.rc" );
 
     m_catalogList.setAutoDelete( true );
-    m_backgroundParser = 0;
     setupCatalog();
+
+    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
+    m_backgroundParser->start();
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
@@ -129,34 +168,12 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
-#ifdef ENABLE_FILE_STRUCTURE
-    m_structureView = new KListView();
-    QFont f = m_structureView->font();
-    f.setPointSize( 8 );
-    m_structureView->setFont( f );
-    m_structureView->setSorting( 0 );
-    m_structureView->addColumn( "" );
-    m_structureView->header()->hide();
-    mainWindow()->embedSelectViewRight( m_structureView, i18n("File Structure"), i18n("Show the structure for the current source unit") );
-    connect( m_structureView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
-    connect( m_structureView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
-#endif
-
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              this, SLOT(configWidget(KDialogBase*)) );
 
-            KAction* action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
-                         this, SLOT(slotCompleteText()),
-                         actionCollection(), "edit_complete_text");
-    action->setStatusText( i18n("Complete current expression") );
-    action->setWhatsThis( i18n("Complete current expression") );
-    action->setEnabled(false);
-
-    action = new KAction(i18n("Make Member"), "makermember", Key_F2,
-                         this, SLOT(slotMakeMember()),
-                         actionCollection(), "edit_make_member");
+    KAction *action;
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
@@ -164,23 +181,10 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     action->setStatusText( i18n("Generate a new class") );
     action->setWhatsThis( i18n("Generate a new class") );
 
-#if defined(JAVA_CODECOMPLETION)
-    m_pCompletion  = 0;
-#endif
-    withjava = false;
-    if ( args.count() == 1 && args[ 0 ] == "Java" )
-        withjava = true;
-
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
              SLOT( projectConfigWidget( KDialogBase* ) ) );
 
-    m_bEnableCC = DomUtil::readBoolEntry( *projectDom( ), "/javasupportpart/codecompletion/enablecc", true );
-
-
-    QDomElement element = projectDom( )->documentElement( )
-                          .namedItem( "javasupportpart" ).toElement( )
-                          .namedItem( "codecompletion" ).toElement( );
     new KDevJavaSupportIface( this );
     //(void) dcopClient();
 }
@@ -188,11 +192,17 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
 
 JavaSupportPart::~JavaSupportPart()
 {
-//    while( m_backgroundParser->filesInQueue() > 0 )
-//       m_backgroundParser->isEmpty().wait();
-    //m_backgroundParser->reparse();
-    m_backgroundParser->close();
-    m_backgroundParser->wait();
+    delete( m_driver );
+    m_driver = 0;
+
+    if( m_backgroundParser ){
+	m_backgroundParser->close();
+	m_backgroundParser->wait();
+	delete m_backgroundParser;
+	m_backgroundParser = 0;
+    }
+
+    codeRepository()->setMainCatalog( 0 );
 
     QPtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
@@ -201,82 +211,66 @@ JavaSupportPart::~JavaSupportPart()
     }
 
     mainWindow( )->removeView( m_problemReporter );
-#ifdef ENABLE_FILE_STRUCTURE
-    mainWindow()->removeView( m_structureView );
-#endif
 
-    delete m_backgroundParser;
-
-#if defined(JAVA_CODECOMPLETION)
-    delete m_pCompletion;
-#endif
-
-#ifdef ENABLE_FILE_STRUCTURE
-    delete m_structureView;
-#endif
     delete m_problemReporter;
+    m_problemReporter = 0;
 }
 
 void JavaSupportPart::customEvent( QCustomEvent* ev )
 {
+    //kdDebug(9013) << "JavaSupportPart::customEvent()" << endl;
+
     if( ev->type() == int(Event_FileParsed) ){
+	FileParsedEvent* event = (FileParsedEvent*) ev;
+	QString fileName = event->fileName();
 
         if( m_problemReporter ){
-	    FileParsedEvent* event = (FileParsedEvent*) ev;
-	    QString fileName = event->fileName();
+	    m_problemReporter->removeAllProblems( fileName );
 
-	    m_problemReporter->removeAllErrors( fileName );
-
+	    bool hasErrors = false;
 	    QValueList<Problem> problems = event->problems();
 	    QValueList<Problem>::ConstIterator it = problems.begin();
 	    while( it != problems.end() ){
 	        const Problem& p = *it++;
-	        m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
+		if( p.level() == Problem::Level_Error )
+		    hasErrors = true;
+
+	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
-#ifdef ENABLE_FILE_STRUCTURE
-	    if( fileName == m_activeFileName ){
-	        RefJavaAST ast = m_backgroundParser->translationUnit( fileName );
-	        if( ast ){
-	            RTClassBrowser b( fileName, m_structureView );
-		    b.parseTranslationUnit( ast );
-	        }
-	    }
-#endif
-        }
+	    m_backgroundParser->lock();
+	    if( RefJavaAST ast = m_backgroundParser->translationUnit(fileName) ){
 
-	m_eventConsumed.wakeAll();
+		if( !hasErrors ){
+		    if( codeModel()->hasFile(fileName) ){
+			FileDom file = codeModel()->fileByName( fileName );
+			removeWithReferences( fileName );
+		    }
+
+		    FileDom file = codeModel()->create<FileModel>();
+		    file->setName( fileName );
+		    JavaStoreWalker walker;
+		    walker.setFile( file );
+		    walker.setCodeModel( codeModel() );
+
+		    walker.compilationUnit( ast );
+		    codeModel()->addFile( file );
+
+		    emit addedSourceInfo( fileName );
+		}
+	    }
+	    m_backgroundParser->unlock();
+	}
+	emit fileParsed( fileName );
     }
 }
 
-// daniel
-void JavaSupportPart::projectConfigWidget( KDialogBase* dlg )
+void JavaSupportPart::projectConfigWidget( KDialogBase* /*dlg*/ )
 {
-    QVBox* vbox = dlg->addVBoxPage( i18n( "Java Specific" ) );
-    CCConfigWidget* w = new CCConfigWidget( this, vbox );
-    connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
-
-    connect( w, SIGNAL( enableCodeCompletion( bool ) ),
-             this, SLOT( slotEnableCodeCompletion( bool ) ) );
-
 }
 
-void JavaSupportPart::configWidget(KDialogBase *dlg)
+void JavaSupportPart::configWidget(KDialogBase */*dlg*/)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Java New Class Generator"));
-  ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
-  connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
-}
-
-void
-JavaSupportPart::slotEnableCodeCompletion( bool setEnable )
-{
-    kdDebug( 9007 ) << "slotEnableCodeCompletion" << endl;
-
-#if defined(JAVA_CODECOMPLETION)
-    if( m_pCompletion )
-        m_pCompletion->setEnabled( setEnable );
-#endif
 }
 
 void JavaSupportPart::activePartChanged(KParts::Part *part)
@@ -285,36 +279,30 @@ void JavaSupportPart::activePartChanged(KParts::Part *part)
 
     bool enabled = false;
 
-#ifdef ENABLE_FILE_STRUCTURE
-    m_structureView->clear();
-#endif
-
-    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
+    m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
+    m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
     m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
-    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() ) : 0;
+    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
 
     m_activeFileName = QString::null;
 
-    if (doc) {
-	m_activeFileName = doc->url().path();
-        QFileInfo fi(doc->url().path());
+    if (m_activeDocument) {
+	m_activeFileName = kdevCanonicalPath( m_activeDocument->url().path() );
+        QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
             enabled = true;
     }
 
-    actionCollection()->action("edit_complete_text")->setEnabled(enabled);
-    actionCollection()->action("edit_make_member")->setEnabled(enabled);
-
     if( !part )
 	return;
 
-    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( part->widget() );
-    if( !view )
+    if( !m_activeView )
 	return;
 
-    KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
+#if 0
+    KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
     if( !textHintIface )
 	return;
 
@@ -322,13 +310,15 @@ void JavaSupportPart::activePartChanged(KParts::Part *part)
 	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
 
     textHintIface->enableTextHints( 1000 );
+#endif
 }
 
 
-void
-JavaSupportPart::projectOpened( )
+void JavaSupportPart::projectOpened( )
 {
-    kdDebug( 9007 ) << "projectOpened( )" << endl;
+    kdDebug( 9013 ) << "projectOpened( )" << endl;
+
+    m_projectDirectory = kdevCanonicalPath( project()->projectDirectory() );
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -339,120 +329,97 @@ JavaSupportPart::projectOpened( )
     connect( project(), SIGNAL(projectCompiled()),
 	     this, SLOT(slotProjectCompiled()) );
 
-    QDir::setCurrent( project()->projectDirectory() );
+    QDir::setCurrent( m_projectDirectory );
 
     m_timestamp.clear();
-#if defined(JAVA_CODECOMPLETION)
-    m_pCompletion = new JavaCodeCompletion( this );
-#endif
-    m_projectClosed = false;
 
-    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
-    m_backgroundParser->start();
+    m_projectClosed = false;
 
     QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
 
-void
-JavaSupportPart::projectClosed( )
+void JavaSupportPart::projectClosed( )
 {
-    m_backgroundParser->removeAllFiles();
-    kdDebug( 9007 ) << "projectClosed( )" << endl;
+    kdDebug( 9013 ) << "projectClosed( )" << endl;
 
-#if defined(JAVA_CODECOMPLETION)
-    delete m_pCompletion;
-    m_pCompletion = 0;
-#endif
+    saveProjectSourceInfo();
+
+    if( m_backgroundParser )
+	m_backgroundParser->removeAllFiles();
+
     m_projectClosed = true;
 }
 
-
-static QString findHeader(const QStringList &list, const QString &header)
+void JavaSupportPart::contextMenu(QPopupMenu */*popup*/, const Context *context)
 {
-    QStringList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
-        QString s = *it;
-        int pos = s.findRev('.');
-        if (pos != -1)
-            s = s.left(pos) + ".h";
-        if (s.right(header.length()) == header)
-            return s;
+    m_activeClass = 0;
+    m_activeFunction = 0;
+    m_activeVariable = 0;
+
+    if( context->hasType(Context::EditorContext) ){
+        // nothing!
+    } else if( context->hasType(Context::CodeModelItemContext) ){
+	const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
+
+	if( mcontext->item()->isClass() ){
+	    m_activeClass = (ClassModel*) mcontext->item();
+	} else if( mcontext->item()->isFunction() ){
+	    m_activeFunction = (FunctionModel*) mcontext->item();
+	}
     }
-
-    return QString::null;
-}
-
-
-void JavaSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
-{
-    if (!context->hasType( Context::EditorContext ))
-        return;
 }
 
 void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
+    QStringList files = fileList;
 
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-	QFileInfo fileInfo( d, *it );
-	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath() << endl;
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + (*it) );
 
-	// changed - daniel
-	QString path = fileInfo.absFilePath();
 	maybeParse( path );
-
-	//partController()->editDocument ( KURL ( path ) );
+	emit addedSourceInfo( path );
     }
-
-    emit updatedSourceInfo();
 }
-
 
 void JavaSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
-
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-	QFileInfo fileInfo( d, *it );
-	kdDebug(9007) << "removedFilesFromProject(): " << fileInfo.absFilePath() << endl;
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
 
-	QString path = fileInfo.absFilePath();
-	classStore()->removeWithReferences(path);
+	removeWithReferences( path );
 	m_backgroundParser->removeFile( path );
     }
-
-    emit updatedSourceInfo();
 }
 
 void JavaSupportPart::changedFilesInProject( const QStringList & fileList )
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
+    QStringList files = fileList;
 
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-        QFileInfo fileInfo( d, *it );
-        kdDebug(9007) << "changedFilesInProject() " << fileInfo.absFilePath() << endl;
-        maybeParse( fileInfo.absFilePath() );
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
+
+	maybeParse( path );
+	emit addedSourceInfo( path );
     }
-    emit updatedSourceInfo();
 }
 
 void JavaSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
+    Q_UNUSED( fileName );
+
+#if 0  // not needed anymore
+    kdDebug(9013) << "savedFile(): " << fileName.mid ( m_projectDirectory.length() + 1 ) << endl;
 
     QStringList projectFileList = project()->allFiles();
-    if (projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-	// changed - daniel
+    if (projectFileList.contains(fileName.mid ( m_projectDirectory.length() + 1 ))) {
 	maybeParse( fileName );
-	emit updatedSourceInfo();
+	emit addedSourceInfo( fileName );
     }
+#endif
 }
 
 QString JavaSupportPart::findSourceFile()
@@ -467,7 +434,7 @@ QString JavaSupportPart::findSourceFile()
         candidates << (base + "c");
         candidates << (base + "cc");
         candidates << (base + "java");
-        candidates << (base + "Java");
+        candidates << (base + "java");
         candidates << (base + "cxx");
         candidates << (base + "C");
         candidates << (base + "m");
@@ -478,7 +445,7 @@ QString JavaSupportPart::findSourceFile()
 
     QStringList::ConstIterator it;
     for (it = candidates.begin(); it != candidates.end(); ++it) {
-        kdDebug(9007) << "Trying " << (*it) << endl;
+        kdDebug(9013) << "Trying " << (*it) << endl;
         if (QFileInfo(*it).exists()) {
             return *it;
         }
@@ -489,81 +456,42 @@ QString JavaSupportPart::findSourceFile()
 
 KDevLanguageSupport::Features JavaSupportPart::features()
 {
-    return Features(Classes | Namespaces | AddMethod | AddAttribute);
+    return Features( Classes | Functions | Variables );
 }
 
 QString JavaSupportPart::formatClassName(const QString &name)
 {
-    QString res = name;
-    res.replace(QRegExp("\\."), "::");
-    return res;
+    return name;
 }
-
 
 QString JavaSupportPart::unformatClassName(const QString &name)
 {
-    QString res = name;
-    res.replace(QRegExp("::"), ".");
-    return res;
+    return name;
 }
-
 
 QStringList JavaSupportPart::fileExtensions() const
 {
     return QStringList::split(",", "java");
 }
 
-
 void JavaSupportPart::slotNewClass()
 {
-    JavaNewClassDialog dlg(this);
-    dlg.exec();
 }
 
-
-void JavaSupportPart::addMethod(const QString &className)
+void JavaSupportPart::addMethod( ClassDom /*klass*/ )
 {
-    ParsedClass* pc = classStore()->getClassByName( className );
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
-	return;
-    }
-
-    AddMethodDialog dlg( this, pc, mainWindow()->main() );
-    dlg.exec();
 }
 
-
-void JavaSupportPart::addAttribute(const QString &className)
+void JavaSupportPart::addAttribute( ClassDom /*klass*/ )
 {
-    ParsedClass *pc = classStore()->getClassByName(className);
-
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
-	return;
-    }
-
-    AddAttributeDialog dlg( this, pc, mainWindow()->main() );
-    dlg.exec();
 }
 
-void JavaSupportPart::slotCompleteText()
-{
-#if defined(JAVA_CODECOMPLETION)
-    m_pCompletion->completeText();
-#endif
-}
-
-/**
- * parsing stuff for project persistant classstore and code completion
- */
-void
-JavaSupportPart::initialParse( )
+void JavaSupportPart::initialParse( )
 {
     // For debugging
     if( !project( ) ){
         // messagebox ?
-        kdDebug( 9007 ) << "No project" << endl;
+        kdDebug( 9013 ) << "No project" << endl;
         return;
     }
 
@@ -572,6 +500,25 @@ JavaSupportPart::initialParse( )
     m_valid = true;
     return;
 }
+
+#if QT_VERSION < 0x030100
+// Taken from qt-3.2/tools/qdatetime.java/QDateTime::toTime_t() and modified for normal function
+uint toTime_t(QDateTime t)
+{
+    tm brokenDown;
+    brokenDown.tm_sec = t.time().second();
+    brokenDown.tm_min = t.time().minute();
+    brokenDown.tm_hour = t.time().hour();
+    brokenDown.tm_mday = t.date().day();
+    brokenDown.tm_mon = t.date().month() - 1;
+    brokenDown.tm_year = t.date().year() - 1900;
+    brokenDown.tm_isdst = -1;
+    int secsSince1Jan1970UTC = (int) mktime( &brokenDown );
+    if ( secsSince1Jan1970UTC < -1 )
+    secsSince1Jan1970UTC = -1;
+    return (uint) secsSince1Jan1970UTC;
+}
+#endif
 
 bool
 JavaSupportPart::parseProject( )
@@ -594,31 +541,82 @@ JavaSupportPart::parseProject( )
     mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
 
-    int n = 0;
-    QDir d( project()->projectDirectory() );
+    QDir d( m_projectDirectory );
 
+    QDataStream stream;
+    QMap< QString, QPair<uint, Q_LONG> > pcs;
+
+    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
+    if( f.open(IO_ReadOnly) ){
+	stream.setDevice( &f );
+
+	QString sig;
+	int pcs_version = 0;
+	stream >> sig >> pcs_version;
+	if( sig == "PCS" && pcs_version == KDEV_PCS_VERSION ){
+
+	    int numFiles = 0;
+	    stream >> numFiles;
+
+	    for( int i=0; i<numFiles; ++i ){
+		QString fn;
+		uint ts;
+		Q_LONG offset;
+
+		stream >> fn >> ts >> offset;
+		pcs[ fn ] = qMakePair( ts, offset );
+	    }
+	}
+    }
+
+    int n = 0;
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
-            QString absFilePath = fileInfo.absFilePath();
-            //kdDebug(9007) << "parse file" << absFilePath << endl;
+            QString absFilePath = kdevCanonicalPath( fileInfo.absFilePath() );
+	    kdDebug(9013) << "parse file: " << absFilePath << endl;
 
-            maybeParse( absFilePath );
-
-	    if( (n%5) == 0 )
+	    if( (n%5) == 0 ){
 	        kapp->processEvents();
+
+		if( m_projectClosed ){
+		    delete( bar );
+		    return false;
+		}
+	    }
+
+	    if( isValidSource(absFilePath) ){
+		QDateTime t = fileInfo.lastModified();
+		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
+		    continue;
+
+#if QT_VERSION >= 0x030100
+		if( pcs.contains(absFilePath) && t.toTime_t() == pcs[absFilePath].first ){
+#else
+		if( pcs.contains(absFilePath) && toTime_t(t) == pcs[absFilePath].first ){
+#endif
+		    stream.device()->at( pcs[absFilePath].second );
+		    FileDom file = codeModel()->create<FileModel>();
+		    file->read( stream );
+		    codeModel()->addFile( file );
+		} else {
+		    m_driver->parseFile( absFilePath );
+		}
+
+		m_timestamp[ absFilePath ] = t;
+	    }
         }
 
 	if( m_projectClosed ){
-	    kdDebug(9007) << "ABORT" << endl;
+	    kdDebug(9013) << "ABORT" << endl;
             kapp->restoreOverrideCursor( );
 	    return false;
 	}
     }
 
-    kdDebug( 9007 ) << "updating sourceinfo" << endl;
+    kdDebug( 9013 ) << "updating sourceinfo" << endl;
     emit updatedSourceInfo();
 
     mainWindow( )->statusBar( )->removeWidget( bar );
@@ -632,83 +630,42 @@ JavaSupportPart::parseProject( )
     return true;
 }
 
-void
-JavaSupportPart::maybeParse( const QString& fileName )
+void JavaSupportPart::maybeParse( const QString& fileName )
 {
-    if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
+    if( !isValidSource(fileName) )
         return;
 
     QFileInfo fileInfo( fileName );
+    QString path = kdevCanonicalPath( fileName );
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
-	classStore()->removeWithReferences( fileName );
+	removeWithReferences( path );
 	return;
     }
 
-    QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+    QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
     if( it != m_timestamp.end() && *it == t ){
 	return;
     }
 
-    m_timestamp[ fileName ] = t;
-
-    //partController()->blockSignals( true );
-
-    m_backgroundParser->addFile( fileName );
-    while( m_backgroundParser->filesInQueue() > 0 )
-       m_backgroundParser->isEmpty().wait();
-
-    m_backgroundParser->lock();
-    RefJavaAST translationUnit = m_backgroundParser->translationUnit( fileName );
-    if( translationUnit ){
-	JavaStoreWalker walker;
-        walker.setFileName( fileName );
-        walker.setClassStore( classStore() );
-	walker.compilationUnit( translationUnit );
-    }
-    m_backgroundParser->unlock();
-
-    if( !findDocument(fileName) )
-        m_backgroundParser->removeFile( fileName );
-
-    //partController()->blockSignals( false );
+    m_timestamp[ path ] = t;
+    m_driver->parseFile( path );
 }
 
-void JavaSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
+void JavaSupportPart::slotNeedTextHint( int /*line*/, int /*column*/, QString& /*textHint*/ )
 {
-    if( 1 || !m_activeEditor )
-	return;
-
-    // sync
-    //while( m_backgroundParser->filesInQueue() > 0 )
-    //     m_backgroundParser->isEmpty().wait();
-
 }
 
-void JavaSupportPart::slotNodeSelected( QListViewItem* item )
-{
-    if( !item || !m_activeSelection || !m_activeViewCursor)
-	return;
-
-    m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
-				     item->text(3).toInt(), item->text(4).toInt() );
-    m_activeViewCursor->setCursorPositionReal(item->text(1).toInt(), item->text(2).toInt());
-}
-
-QStringList JavaSupportPart::subclassWidget(const QString& formName)
+QStringList JavaSupportPart::subclassWidget(const QString& /*formName*/)
 {
     QStringList newFileNames;
-    SubclassingDlg *dlg = new SubclassingDlg(this, formName, newFileNames);
-    dlg->exec();
     return newFileNames;
 }
 
-QStringList JavaSupportPart::updateWidget(const QString& formName, const QString& fileName)
+QStringList JavaSupportPart::updateWidget(const QString& /*formName*/, const QString& /*fileName*/)
 {
     QStringList dummy;
-    SubclassingDlg *dlg = new SubclassingDlg(this, formName, fileName, dummy);
-    dlg->exec();
     return dummy;
 }
 
@@ -716,17 +673,21 @@ void JavaSupportPart::partRemoved( KParts::Part* part )
 {
     kdDebug(9032) << "JavaSupportPart::partRemoved()" << endl;
 
-    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>( part );
-    if( doc ){
+    if( KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part ) ){
+
 	QString fileName = doc->url().path();
-	if( !fileName.isEmpty() )
-	    m_backgroundParser->removeFile( fileName );
+	if( fileName.isEmpty() )
+	    return;
+
+	QString canonicalFileName = kdevCanonicalPath( fileName );
+	m_backgroundParser->removeFile( canonicalFileName );
+	m_backgroundParser->addFile( canonicalFileName, true );
     }
 }
 
 void JavaSupportPart::slotProjectCompiled()
 {
-    kdDebug(9007) << "JavaSupportPart::slotProjectCompiled()" << endl;
+    kdDebug(9013) << "JavaSupportPart::slotProjectCompiled()" << endl;
     parseProject();
 }
 
@@ -740,13 +701,14 @@ QStringList JavaSupportPart::modifiedFileList()
 	QString fileName = *it;
 	++it;
 
-	QFileInfo fileInfo( project()->projectDirectory(), fileName );
+	QFileInfo fileInfo( m_projectDirectory, fileName );
 
 	if( !fileExtensions().contains(fileInfo.extension()) )
 	    continue;
 
 	QDateTime t = fileInfo.lastModified();
-	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( fileInfo.absFilePath() );
+	QString path = kdevCanonicalPath( fileInfo.absFilePath() );
+	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;
 
@@ -775,31 +737,44 @@ KTextEditor::Document * JavaSupportPart::findDocument( const KURL & url )
 
 void JavaSupportPart::setupCatalog( )
 {
-    kdDebug(9007) << "JavaSupportPart::setupCatalog()" << endl;
+    kdDebug(9013) << "JavaSupportPart::setupCatalog()" << endl;
+
+    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
 
     KStandardDirs *dirs = JavaSupportFactory::instance()->dirs();
     QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
+    QStringList pcsIdxList = dirs->findAllResources( "pcs", "*.idx", false, true );
 
-    if( pcsList.size() && pcsVersion() < PCS_VERSION ){
-        KMessageBox::information( 0, i18n("Persistant class store will be disabled!! You have a wrong version of pcs installed"), i18n("Java Support") );
-        return;
+    if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
+        QStringList l = pcsList + pcsIdxList;
+        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled!! You have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support") );
+        if( rtn == KMessageBox::Yes ){
+            QStringList::Iterator it = l.begin();
+            while( it != l.end() ){
+                QFile::remove( *it );
+                ++it;
+            }
+            // @todo regenerate the pcs list
+            pcsList.clear();
+        } else {
+            return;
+        }
     }
 
     QStringList::Iterator it = pcsList.begin();
     while( it != pcsList.end() ){
         Catalog* catalog = new Catalog();
         catalog->open( *it );
-        catalog->addIndex( "kind" );
-        catalog->addIndex( "name" );
-        catalog->addIndex( "scope" );
-        catalog->addIndex( "fileName" );
+        ++it;
+
+        for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
+            catalog->addIndex( (*idxIt).utf8() );
 
         m_catalogList.append( catalog );
         codeRepository()->registerCatalog( catalog );
-        ++it;
     }
 
-    setPcsVersion( PCS_VERSION );
+    setPcsVersion( KDEV_DB_VERSION );
 }
 
 KMimeType::List JavaSupportPart::mimeTypes( )
@@ -812,11 +787,6 @@ KMimeType::List JavaSupportPart::mimeTypes( )
 	list << mime;
 
     return list;
-}
-
-void JavaSupportPart::emitFileParsed( const QString & fileName )
-{
-    emit fileParsed( fileName );
 }
 
 int JavaSupportPart::pcsVersion()
@@ -834,35 +804,118 @@ void JavaSupportPart::setPcsVersion( int version )
     config->sync();
 }
 
-QString JavaSupportPart::formatTag( const Tag & inputTag )
+QString JavaSupportPart::formatTag( const Tag & /*inputTag*/ )
 {
-    Tag tag = inputTag;
+    return QString::null;
+}
 
-    switch( tag.kind() )
+void JavaSupportPart::removeWithReferences( const QString & fileName )
+{
+    kdDebug(9013) << "remove with references: " << fileName << endl;
+    m_timestamp.remove( fileName );
+    if( !codeModel()->hasFile(fileName) )
+        return;
+
+    emit aboutToRemoveSourceInfo( fileName );
+
+    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+}
+
+bool JavaSupportPart::isValidSource( const QString& fileName ) const
+{
+    QFileInfo fileInfo( fileName );
+    return fileExtensions().contains( fileInfo.extension() ) && !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
+}
+
+QString JavaSupportPart::formatModelItem( const CodeModelItem *item, bool shortDescription )
+{
+    if (item->isFunction())
     {
-        case Tag::Kind_Namespace:
-            return QString::fromLatin1("namespace ") + tag.name();
-
-        case Tag::Kind_Class:
-            return QString::fromLatin1("class ") + tag.name();
-
-        case Tag::Kind_Function:
-        case Tag::Kind_FunctionDeclaration:
+        const FunctionModel *model = static_cast<const FunctionModel*>(item);
+        QString function;
+        QString args;
+        ArgumentList argumentList = model->argumentList();
+        for (ArgumentList::const_iterator it = argumentList.begin(); it != argumentList.end(); ++it)
         {
-            JavaFunction<Tag> tagInfo( tag );
-            return tagInfo.name() + "( " + tagInfo.arguments().join(", ") + " ) : " + tagInfo.type();
+            args.isEmpty() ? args += "" : args += ", " ;
+            args += formatModelItem((*it).data());
         }
-        break;
+	if( !shortDescription )
+            function += model->resultType() + " ";
 
-        case Tag::Kind_Variable:
-        case Tag::Kind_VariableDeclaration:
-        {
-            JavaVariable<Tag> tagInfo( tag );
-            return tagInfo.name() + " : " + tagInfo.type();
-        }
-        break;
+	function += model->name() + "(" + args + ")" +
+            (model->isAbstract() ? QString(" = 0") : QString("") );
+
+        return function;
     }
-    return tag.name();
+    else if (item->isVariable())
+    {
+        const VariableModel *model = static_cast<const VariableModel*>(item);
+	if( shortDescription )
+	    return model->name();
+        return model->type() + " " + model->name();
+    }
+    else if (item->isArgument())
+    {
+        const ArgumentModel *model = static_cast<const ArgumentModel*>(item);
+	QString arg;
+	if( !shortDescription )
+	    arg += model->type() + " ";
+	arg += model->name();
+	if( !shortDescription )
+	    arg += model->defaultValue().isEmpty() ? QString("") : QString(" = ") + model->defaultValue();
+	return arg.stripWhiteSpace();
+    }
+    else
+        return KDevLanguageSupport::formatModelItem( item, shortDescription );
+}
+
+void JavaSupportPart::addClass( )
+{
+    slotNewClass();
+}
+
+void JavaSupportPart::saveProjectSourceInfo( )
+{
+    const FileList fileList = codeModel()->fileList();
+
+    if( !project() || fileList.isEmpty() )
+	return;
+
+    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
+    if( !f.open( IO_WriteOnly ) )
+	return;
+
+    QDataStream stream( &f );
+    QMap<QString, Q_ULONG> offsets;
+
+    QString pcs( "PCS" );
+    stream << pcs << KDEV_PCS_VERSION;
+
+    stream << int( fileList.size() );
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+	const FileDom dom = (*it);
+#if QT_VERSION >= 0x030100
+  stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+#else
+  stream << dom->name() << toTime_t(m_timestamp[ dom->name() ]);
+#endif
+	offsets.insert( dom->name(), stream.device()->at() );
+	stream << (Q_ULONG)0; // dummy offset
+    }
+
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+	const FileDom dom = (*it);
+	int offset = stream.device()->at();
+
+	dom->write( stream );
+
+	int end = stream.device()->at();
+
+	stream.device()->at( offsets[dom->name()] );
+	stream << offset;
+	stream.device()->at( end );
+    }
 }
 
 #include "javasupportpart.moc"

@@ -25,6 +25,7 @@
 class JavaSupportPart;
 class QTimer;
 class KDialogBase;
+class Problem;
 
 namespace KParts{
     class Part;
@@ -41,16 +42,8 @@ public:
     ProblemReporter( JavaSupportPart* part, QWidget* parent=0, const char* name=0 );
     virtual ~ProblemReporter();
 
-    virtual void removeAllErrors( const QString& filename );
-    
-    virtual void reportError( QString message, QString filename,
-                              int line, int column );
-
-    virtual void reportWarning( QString message, QString filename,
-                                int line, int column );
-
-    virtual void reportMessage( QString message, QString filename,
-                                int line, int column );
+    void removeAllProblems( const QString& filename );
+    void reportProblem( const QString& fileName, const Problem& p );
 
 public slots:
     void reparse();
@@ -65,11 +58,15 @@ private slots:
     void slotSelected( QListViewItem* );
 
 private:
+    QString levelToString( int level ) const;
+    int levelToMarkType( int level ) const;
+
+private:
     JavaSupportPart* m_javaSupport;
     QGuardedPtr<KTextEditor::Document> m_document;
     KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
-    QString m_filename;
+    QString m_fileName;
     int m_active;
     int m_delay;
 };

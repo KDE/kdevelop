@@ -53,7 +53,8 @@
 #include <kdialogbase.h>
 
 
-class ProblemItem: public KListViewItem{
+class ProblemItem: public KListViewItem
+{
 public:
     ProblemItem( QListView* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
@@ -115,24 +116,36 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( !part )
 	return;
 
-    if( m_document ){
-	reparse();
+    m_timer->stop();
+
+    if( m_document )
 	disconnect( m_document, 0, this, 0 );
-    }
 
     m_document = dynamic_cast<KTextEditor::Document*>( part );
     m_markIface = 0;
 
-    if( m_document ) {
-	m_filename = m_document->url().path();
+    if( !m_document )
+        return;
 
-	if( m_javaSupport->fileExtensions().contains(QFileInfo(m_filename).extension()) ){
+    m_fileName = m_document->url().path();
 
-	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-	    m_timer->changeInterval( m_delay );
-	}
-    }
+    if( !m_javaSupport->isValidSource(m_fileName) )
+        return;
+
+    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+
+    if( !m_javaSupport->backgroundParser() )
+        return;
+
+    m_javaSupport->backgroundParser()->lock();
+    bool needReparse = false;
+    if( !m_javaSupport->backgroundParser()->translationUnit(m_fileName) )
+        needReparse = true;
+    m_javaSupport->backgroundParser()->unlock();
+
+    if( needReparse )
+        reparse();
 }
 
 void ProblemReporter::slotTextChanged()
@@ -141,7 +154,7 @@ void ProblemReporter::slotTextChanged()
         m_timer->changeInterval( m_delay );
 }
 
-void ProblemReporter::removeAllErrors( const QString& filename )
+void ProblemReporter::removeAllProblems( const QString& filename )
 {
     QListViewItem* current = firstChild();
     while( current ){
@@ -167,12 +180,11 @@ void ProblemReporter::reparse()
     if( !m_javaSupport->isValid() )
 	return;
 
-
     m_timer->stop();
 
-    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
-    m_javaSupport->backgroundParser()->addFile( m_filename );
-    kdDebug(9007) << "---> file added" << endl;
+    kdDebug(9013) << "ProblemReporter::reparse()" << endl;
+    m_javaSupport->backgroundParser()->addFile( m_fileName );
+    kdDebug(9013) << "---> file added" << endl;
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -184,49 +196,27 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     m_javaSupport->mainWindow()->lowerView( this );
 }
 
-void ProblemReporter::reportError( QString message,
-				   QString filename,
-				   int line, int column )
+void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 {
-    if( m_document && m_markIface && m_filename == filename ){
-	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
+    int markType = levelToMarkType( p.level() );
+    if( markType != -1 && m_document && m_markIface && m_fileName == fileName ){
+	m_markIface->addMark( p.line(), markType );
     }
 
-    new ProblemItem( this,
-		     "error",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
-}
+    QString msg = p.text();
+    msg = msg.replace( QRegExp("\n"), "" );
 
-void ProblemReporter::reportWarning( QString message,
-                                     QString filename,
-                                     int line, int column )
-{
     new ProblemItem( this,
-		     "warning",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
-}
-
-void ProblemReporter::reportMessage( QString message,
-                                     QString filename,
-                                     int line, int column )
-{
-    new ProblemItem( this,
-		     "message",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
+		     levelToString( p.level() ),
+		     fileName,
+		     QString::number( p.line() + 1 ),
+		     QString::number( p.column() + 1 ),
+		     msg );
 }
 
 void ProblemReporter::configure()
 {
-    kdDebug(9007) << "ProblemReporter::configure()" << endl;
+    kdDebug(9013) << "ProblemReporter::configure()" << endl;
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
     m_active = config->readBoolEntry( "EnableJavaBgParser", TRUE );
@@ -253,10 +243,44 @@ void ProblemReporter::slotPartAdded( KParts::Part* part )
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )
 {
-    kdDebug(9007) << "ProblemReporter::slotPartRemoved()" << endl;
+    kdDebug(9013) << "ProblemReporter::slotPartRemoved()" << endl;
     if( part == m_document ){
 	m_document = 0;
 	m_timer->stop();
+    }
+}
+
+QString ProblemReporter::levelToString( int level ) const
+{
+    switch( level )
+    {
+    case Problem::Level_Error:
+	return QString::fromLatin1( "Error" );
+    case Problem::Level_Warning:
+	return QString::fromLatin1( "Warning" );
+    case Problem::Level_Todo:
+	return QString::fromLatin1( "Todo" );
+    case Problem::Level_Fixme:
+	return QString::fromLatin1( "Fixme" );
+    default:
+        return QString::null;
+    }
+}
+
+int ProblemReporter::levelToMarkType( int level ) const
+{
+    switch( level )
+    {
+    case Problem::Level_Error:
+	return KTextEditor::MarkInterface::markType10;
+    case Problem::Level_Warning:
+        return -1;
+    case Problem::Level_Todo:
+        return -1;
+    case Problem::Level_Fixme:
+        return -1;
+    default:
+        return -1;
     }
 }
 

@@ -39,7 +39,7 @@ public:
         QValueListConstIterator<Problem> it = problems.begin();
         while (it != problems.end()) {
             Problem p = *it;
-            m_problems.append(Problem(deepCopy(p.text()), p.line(), p.column()));
+            m_problems.append(Problem(deepCopy(p.text()), p.line(), p.column(), p.level()));
             ++it;
         }
     }

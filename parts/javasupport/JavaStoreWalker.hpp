@@ -3,29 +3,27 @@
 
 #line 3 "java.store.g"
 
-	#include "classstore.h"
+	#include <codemodel.h>
 	#include "JavaAST.hpp"
 
 	#include <qstring.h>
 	#include <qstringlist.h>
+	#include <qvaluestack.h>
         #include <qfileinfo.h>
 
-#line 14 "JavaStoreWalker.hpp"
+#line 15 "JavaStoreWalker.hpp"
 #include <antlr/config.hpp>
 #include "JavaStoreWalkerTokenTypes.hpp"
 /* $ANTLR 2.7.2: "java.store.g" -> "JavaStoreWalker.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
-#line 12 "java.store.g"
+#line 13 "java.store.g"
 
-	#include <parsedmethod.h>
-	#include <parsedclass.h>
-	#include <parsedattribute.h>
-	#include <parsedargument.h>
+	#include <codemodel.h>
 
 	#include <kdebug.h>
 
-#line 29 "JavaStoreWalker.hpp"
+#line 27 "JavaStoreWalker.hpp"
 /** Java 1.2 AST Recognizer Grammar
  *
  * Author:
@@ -41,38 +39,38 @@
  */
 class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
 {
-#line 45 "java.store.g"
+#line 43 "java.store.g"
 
 private:
-	QString m_fileName;
 	QStringList m_currentScope;
-	ClassStore* m_store;
-	ParsedClassContainer* m_currentContainer;
-	ParsedClass* m_currentClass;
-	PIAccess m_currentAccess;
+	CodeModel* m_model;
+	FileDom m_file;
+	QValueStack<ClassDom> m_currentClass;
+	int m_currentAccess;
 	int m_anon;
+        ANTLR_USE_NAMESPACE(antlr)JavaASTFactory ast_factory;
 
 public:
-	void setClassStore( ClassStore* store )			{ m_store = store; }
-	ClassStore* classStore()				{ return m_store; }
-	const ClassStore* classStore() const			{ return m_store; }
-
-	QString fileName() const	{ return m_fileName; }
-	void setFileName( const QString& fileName ) { m_fileName = fileName; }
-
-	void init(){
-		m_currentScope.clear();
-		m_currentContainer = m_store->globalScope();
-		m_currentClass = 0;
-		m_currentAccess = PIE_PUBLIC;
-		m_anon = 0;
-		m_store->removeWithReferences( m_fileName );
+	void setCodeModel( CodeModel* model )
+	{
+		m_model = model;
 	}
 
-	void wipeout()						{ m_store->wipeout(); }
-	void out()						{ m_store->out(); }
-	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
-#line 46 "JavaStoreWalker.hpp"
+	void setFile( FileDom file )
+	{
+		m_file = file;
+	}
+
+	void init()
+	{
+		m_currentScope.clear();
+		m_currentAccess = CodeModelItem::Public;
+		m_anon = 0;
+
+        	initializeASTFactory (ast_factory);
+        	setASTFactory (&ast_factory);
+	}
+#line 44 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
 	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
@@ -95,29 +93,29 @@ public:
 	public:  QStringList  extendsClause(RefJavaAST _t);
 	public:  QStringList  implementsClause(RefJavaAST _t);
 	public: void objBlock(RefJavaAST _t,
-		 ParsedClass* klass 
+		 ClassDom klass 
 	);
 	public: void interfaceBlock(RefJavaAST _t,
-		 ParsedClass* klass 
+		 ClassDom klass 
 	);
 	public:  QString  typeSpec(RefJavaAST _t);
 	public:  QString  typeSpecArray(RefJavaAST _t);
 	public:  QString  type(RefJavaAST _t);
 	public: void builtInType(RefJavaAST _t);
 	public: void modifier(RefJavaAST _t);
-	public:  ParsedMethod*  methodDecl(RefJavaAST _t);
-	public:  ParsedAttribute*  variableDef(RefJavaAST _t);
-	public:  ParsedMethod*  ctorDef(RefJavaAST _t);
-	public:  ParsedMethod*  methodDef(RefJavaAST _t);
+	public:  FunctionDom  methodDecl(RefJavaAST _t);
+	public:  VariableDom  variableDef(RefJavaAST _t);
+	public:  FunctionDom  ctorDef(RefJavaAST _t);
+	public:  FunctionDom  methodDef(RefJavaAST _t);
 	public: void slist(RefJavaAST _t);
 	public: void methodHead(RefJavaAST _t,
-		 ParsedMethod* meth 
+		 FunctionDom meth 
 	);
 	public: void variableDeclarator(RefJavaAST _t,
-		 ParsedAttribute* attr 
+		 VariableDom attr 
 	);
 	public: void varInitializer(RefJavaAST _t);
-	public:  ParsedArgument*  parameterDef(RefJavaAST _t);
+	public:  ArgumentDom  parameterDef(RefJavaAST _t);
 	public: void objectinitializer(RefJavaAST _t);
 	public: void initializer(RefJavaAST _t);
 	public: void expression(RefJavaAST _t);

@@ -16,9 +16,8 @@
 #ifndef _JAVASUPPORTPART_H_
 #define _JAVASUPPORTPART_H_
 
-#include "kdevcore.h"
-
-#include "kdevlanguagesupport.h"
+#include <kdevcore.h>
+#include <kdevlanguagesupport.h>
 
 #include <kdialogbase.h>
 #include <qguardedptr.h>
@@ -26,11 +25,7 @@
 #include <qwaitcondition.h>
 #include <qdatetime.h>
 
-class ParsedMethod;
-class ParsedAttribute;
-class ClassStore;
 class Context;
-class JavaCodeCompletion;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
@@ -39,9 +34,17 @@ class QProgressBar;
 class QStringList;
 class QListViewItem;
 class KListView;
+class Driver;
 
 namespace KParts { class Part; }
-namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; class Document; };
+namespace KTextEditor
+{
+    class Document;
+    class View;
+    class EditInterface;
+    class SelectionInterface;
+    class ViewCursorInterface;
+};
 
 class JavaSupportPart : public KDevLanguageSupport
 {
@@ -53,17 +56,12 @@ public:
 
     bool isValid() const { return m_valid; }
 
-    void setCodeCompletionEnabled( bool b ){ m_bEnableCC = b;    };
-    bool codeCompletionEnabled( void   ){ return m_bEnableCC; };
-
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
-#if defined(JAVA_CODECOMPLETION)
-    JavaCodeCompletion* codeCompletion() { return m_pCompletion; }
-#endif
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
 
+    bool isValidSource( const QString& fileName ) const;
     QStringList fileExtensions( ) const;
 
     virtual void customEvent( QCustomEvent* ev );
@@ -75,9 +73,9 @@ public:
 
     static KConfig *config();
 
-    void emitFileParsed( const QString& fileName );
-
     virtual QString formatTag( const Tag& tag );
+    virtual QString formatModelItem( const CodeModelItem *item, bool shortDescription=false );
+    virtual void addClass();
 
 signals:
     void fileParsed( const QString& fileName );
@@ -87,8 +85,8 @@ protected:
     virtual KMimeType::List mimeTypes();
     virtual QString formatClassName(const QString &name);
     virtual QString unformatClassName(const QString &name);
-    virtual void addMethod(const QString &className);
-    virtual void addAttribute(const QString &className);
+    virtual void addMethod( ClassDom klass );
+    virtual void addAttribute( ClassDom klass );
 
 private slots:
     void activePartChanged(KParts::Part *part);
@@ -106,11 +104,7 @@ private slots:
     void setupCatalog();
 
     void slotNewClass();
-    void slotCompleteText();
 
-    // code completion related slots - called from config-widget
-    void slotEnableCodeCompletion( bool setEnabled );
-    void slotNodeSelected( QListViewItem* item );
     void slotNeedTextHint( int, int, QString& );
 
     /**
@@ -129,29 +123,26 @@ private:
      * checks if a file has to be parsed
      */
     void maybeParse( const QString& fileName );
+    void removeWithReferences( const QString& fileName );
 
     QStringList modifiedFileList();
     QString findSourceFile();
     int pcsVersion();
     void setPcsVersion( int version );
 
-#if defined(JAVA_CODECOMPLETION)
-    JavaCodeCompletion* m_pCompletion;
-#endif
+    void saveProjectSourceInfo();
 
-    bool withjava;
     QString m_contextFileName;
 
-    bool m_bEnableCC;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 
+    KTextEditor::Document* m_activeDocument;
+    KTextEditor::View* m_activeView;
     KTextEditor::SelectionInterface* m_activeSelection;
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
     QString m_activeFileName;
-
-    KListView* m_structureView;
 
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;
@@ -160,8 +151,15 @@ private:
     bool m_valid;
 
     QPtrList<Catalog> m_catalogList;
+    Driver* m_driver;
+    QString m_projectDirectory;
+
+    ClassDom m_activeClass;
+    FunctionDom m_activeFunction;
+    VariableDom m_activeVariable;
 
     friend class KDevJavaSupportIface;
+    friend class JavaDriver;
 };
 
 #endif
