@@ -1,0 +1,27 @@
+The following illustrates the XML to configure the FileCreate part for a project. It simply consists of a list of filetypes that the user may wish to create for a particular project. At present, the "create" attribute is ignored.
+
+The file create part looks for a file template called @ext (i.e. the value of the ext attribute) in the *project's* templates directory (see the PyQT appwizard template for an example).
+
+For subtypes, it looks for a template called @ext-@ref, so in the example below the following files would need to be present in the project's templates directory:
+
+py
+ui
+ui-dialog
+ui-mainwin
+
+Example XML:
+
+  <kdevfilecreate>
+    <filetypes>
+      <type ext="py" name="Python" create="template"/>
+      <type ext="ui" name="QT Designer" create="template">
+        <subtype ref="dialog" name="Dialog"/>
+	<subtype ref="mainwin" name="Main window"/>
+      </type>
+    </filetypes>
+  </kdevfilecreate>
+
+There's no GUI to configure this XML at present. Usually, it forms part of the base .kdevelop file created by the appwizard.
+
+Julian Rockey
+linux@jrockey.com
