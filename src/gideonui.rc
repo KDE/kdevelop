@@ -73,6 +73,13 @@
   <Menu name="tools">
     <text>&amp;Tools</text>
     <DefineGroup name="tools_operations"/>
+    <Separator/>
+    <DefineGroup name="tools_file_operations"/>
+    <Separator/>
+    <DefineGroup name="tools_project_operations"/>
+    <Separator/>
+    <DefineGroup name="tools_language_operations"/>
+    <Separator/>
     <Merge/>
   </Menu>
   <Menu name="window">
