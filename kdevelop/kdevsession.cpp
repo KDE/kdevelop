@@ -188,8 +188,10 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
     if (!docName.isEmpty()) {
       // create the document
       if (docType == QString("KWriteDoc")) {
+
         KWriteDoc* pDoc = m_pDocViewMan->createKWriteDoc(docName);
         if (pDoc) {
+        // this should be a call to DocViewMan::loadKWriteDoc() (rokrau 6/11/01)
           // load contents from file
           if(QFile::exists(docName)) {
             QFile f(docName);

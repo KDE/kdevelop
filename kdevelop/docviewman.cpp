@@ -664,7 +664,8 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
   connect( pEW, SIGNAL(newStatus()),m_pParent, SLOT(slotNewStatus()));
   connect( pEW, SIGNAL(clipboardStatus(KWriteView *, bool)), m_pParent, SLOT(slotClipboardChanged(KWriteView *, bool)));
   connect( pEW, SIGNAL(newUndo()),m_pParent, SLOT(slotNewUndo()));
-  connect( pEW, SIGNAL(bufferMenu(const QPoint&)),m_pParent, SLOT(slotBufferMenu(const QPoint&)));
+  // slot doesn't exist anymore (rokrau 6/11/01)
+  //connect( pEW, SIGNAL(bufferMenu(const QPoint&)),m_pParent, SLOT(slotBufferMenu(const QPoint&)));
   connect( pEW, SIGNAL(grepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
   connect( pEW->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
   // Connect the breakpoint manager to monitor the bp setting - even when the debugging isn't running

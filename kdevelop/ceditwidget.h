@@ -65,7 +65,7 @@ public: // File related method
    * @param mode Current not used.
    * @return The line at which the file got loaded.
    */
-  int loadFile(QString filename, int mode);
+  //int loadFile(QString filename, int mode);
 
   /** Save the editbuffer to the current file. */
   void doSave()                    { KWrite::save(); }
@@ -235,7 +235,7 @@ signals:
 private:
 // KSpell *kspell;
 // KSpellConfig *ksc;
-  int spell_offset;
+// int spell_offset;
 };
 
 #endif

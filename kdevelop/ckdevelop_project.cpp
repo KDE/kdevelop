@@ -1163,7 +1163,13 @@ void CKDevelop::slotProjectLoadTags()
 {
   kdDebug() << "in slotProjectLoadTags()\n";
   slotStatusMsg(i18n("Loading tags file..."));
-  QString filename = getProject()->getProjectDir() + "/tags";
+
+  CProject* pPrj = getProject();
+  if (!pPrj) {
+    bCTags=false;
+    return;
+  }
+  QString filename = pPrj->getProjectDir() + "/tags";
   if (!QFileInfo(filename).exists()) {
     // warn user that the tag file does not exist
     if (KMessageBox::questionYesNo(this,
@@ -1182,7 +1188,7 @@ void CKDevelop::slotProjectLoadTags()
       return;
     }
   }
-  prj->ctagsDataBase().load(filename);
+  pPrj->ctagsDataBase().load(filename);
   bCTags = true;
   slotStatusMsg(i18n("Ready."));
   kdDebug() << "loading tags file completed\n";

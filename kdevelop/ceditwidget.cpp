@@ -113,10 +113,11 @@ CEditWidget::~CEditWidget() {
  *   QString      The current filename.
  *-----------------------------------------------------------------*/
 QString CEditWidget::getName(){
-  //return filename;
-  QString s(KWrite::fileName());
+  QString s(QString::null);
+  if (kWriteDoc)
+    s=kWriteDoc->fileName();
   if (s.isNull()) s = "";
-  return s;//QString(KWrite::fileName());
+  return s;
 }
 
 /*--------------------------------------------- CEditWidget::loadFile()
@@ -130,10 +131,10 @@ QString CEditWidget::getName(){
  * Returns:
  *   int          The line at which the file got loaded.
  *-----------------------------------------------------------------*/
-int CEditWidget::loadFile(QString filename, int /*mode*/) {
-  KWrite::loadFile(filename);
-  return 0;
-}
+//int CEditWidget::loadFile(QString filename, int /*mode*/) {
+//  KWrite::loadFile(filename);
+//  return 0;
+//}
 
 /*------------------------------------------- CEditWidget::setFocus()
  * setFocus()

@@ -200,8 +200,11 @@ int main(int argc, char* argv[])
     config->setGroup("General Options");
     kdevelop->slotTCurrentTab(config->readNumEntry("LastActiveTree",DOC));
     
-    if (args->count())
-      kdevelop->slotProjectOpenCmdl(args->arg(0));
+    if (args->count()) {
+      // need full path name to find project and session files (rokrau 6/11/01)
+      QFileInfo arg0(args->arg(0));
+      kdevelop->slotProjectOpenCmdl(arg0.absFilePath());
+    }
 
     kdevelop->bStartupIsPending = false;  // see queryClose()
   }
