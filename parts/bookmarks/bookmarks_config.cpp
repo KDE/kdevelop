@@ -101,7 +101,7 @@ unsigned int BookmarksConfig::context()
 
 
 /*!
-    \fn BookmarksConfig::setCodeline( unsigned int )
+    \fn BookmarksConfig::setCodeline( CodeLineType )
  */
 void BookmarksConfig::setCodeline( CodeLineType codeline )
 {
