@@ -1,6 +1,9 @@
+2002-03-13  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: duplicated combobox entries in "Add new translation"
+
 2002-03-11  Roberto Raggi <raggi@cli.di.unipi.it>
     * bugfix: code completion for global variables and functions
-	
+
 2002-03-09  August Hörandl  <august.hoerandl@gmx.at>
     * bugfix: strange effects when switching on single views and output windows
 
@@ -9,7 +12,7 @@
     * bugfix: argshint is showed when "automatic arguments hint" is activated
     * bugfix: argshint is closed when parenthesis are balanced
     * bugfix: CppCodeCompletion::getMethodBody now works with functions too
-	
+
 2002-03-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: kthml view saving/loading to/from session works again (seems it was a KHTML API change)
 
@@ -18,7 +21,7 @@
 
 2002-03-05  Walter Tasin <tasin@kdevelop.org>
     * bugfix: Accelerator-Keys in DocView
-    * bugfix: KTheme now treated as a KDE 2 project 
+    * bugfix: KTheme now treated as a KDE 2 project
     * bugfixes in creation of API-documentation
     
 2002-03-03  F@lk Brettschneider <falk@kdevelop.org>
