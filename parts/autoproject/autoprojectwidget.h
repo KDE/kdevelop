@@ -85,6 +85,8 @@ public:
 	/* list of targets */
 	QPtrList<TargetItem> targets;
 
+    QString relpath();
+
 private:
 	void init();
 };
@@ -280,6 +282,7 @@ public:
 	void emitRemovedFiles(const QStringList &fileList);
 
 	void parse(SubprojectItem *item);
+    QString getUiFileLink(const QString &path, const QString& filename);
 
 private slots:
 	void slotOverviewSelectionChanged(QListViewItem *item);
@@ -321,7 +324,6 @@ protected:
 	void initActions ();
 
 private:
-    QString getUiFileLink(const QString &path, const QString& filename);
 
 	QToolButton *subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton;
 	QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;

@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 29.11.2002
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rder
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -278,6 +278,7 @@ void ChooseTargetDialog::accept ()
 		if ( !found )
 		{
 			fitem = m_widget->createFileItem( fileName );
+            fitem->uiFileLink = m_widget->getUiFileLink(m_choosenSubproject->relpath()+"/",fileName);
 			m_choosenTarget->sources.append( fitem );
 			m_choosenTarget->insertItem( fitem );
 

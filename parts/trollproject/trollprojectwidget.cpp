@@ -910,6 +910,7 @@ QString TrollProjectWidget::getHeader()
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
 {
   FileItem *fitem = createFileItem(filename);
+  fitem->uiFileLink = getUiFileLink(titem->owner->relpath+"/",filename);
   titem->files.append(fitem);
   switch (titem->groupType)
   {
@@ -945,6 +946,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
   }
   if (!gitem)
     return;
+  fitem->uiFileLink = getUiFileLink(gitem->owner->relpath+"/",filename);
   gitem->files.append(fitem);
   switch (gtype)
   {
@@ -1250,7 +1252,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
                     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
                     newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+                    QDomDocument &dom = *(m_part->projectDom());
                 }
+                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                                                "subclass","sourcefile", "uifile");
 
                 m_part->addFiles(newFileNames);
             }

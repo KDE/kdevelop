@@ -154,6 +154,26 @@ void SubprojectItem::init()
 }
 
 
+QString SubprojectItem::relpath()
+{
+    QString relpath = subdir;
+
+    SubprojectItem *it = this;
+    qWarning("prepend: %s", subdir.latin1());
+    while ( (it= dynamic_cast<SubprojectItem*>(it->parent())) )
+    {
+        qWarning("prepend: %s", it->subdir.latin1());
+        relpath.prepend(it->subdir + "/");
+    }
+    relpath.remove(0, 2);
+
+    qWarning("_________CREATED relpath is %s", relpath.latin1());
+    return relpath;
+//    return path.remove(0,projectDirectory().length());
+//    return subdir;
+}
+
+
 /**
 * Class TargetItem
 */
@@ -712,7 +732,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
         FileItem * fitem = createFileItem( fileName );
-	fitem->uiFileLink = getUiFileLink(spitem->subdir+"/",fileName);
+    fitem->uiFileLink = getUiFileLink(spitem->relpath()+"/",fileName);
         titem->sources.append( fitem );
         titem->insertItem( fitem );
 
@@ -1275,6 +1295,8 @@ void AutoProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *item
                     DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
                     newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
                 }
+                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                                                "subclass","sourcefile", "uifile");
                 m_part->addFiles(newFileNames);
             }
         }
@@ -1465,7 +1487,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 			for ( it2 = l2.begin(); it2 != l2.end(); ++it2 )
 			{
 				FileItem *fitem = createFileItem( *it2 );
-                fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it2);
+                fitem->uiFileLink = getUiFileLink(item->relpath()+"/",*it2);
 				titem->sources.append( fitem );
 				if ( !kdeMode() || !( *it2 ).endsWith( ".cpp" ) )
 					continue;
@@ -1498,7 +1520,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 		for ( it3 = l.begin(); it3 != l.end(); ++it3 )
 		{
 			FileItem *fitem = createFileItem( *it3 );
-            fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it3);
+            fitem->uiFileLink = getUiFileLink(item->relpath()+"/",*it3);
 			titem->sources.append( fitem );
 		}
 	}
@@ -1512,7 +1534,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 		for ( it1 = l.begin(); it1 != l.end(); ++it1 )
 		{
 			FileItem *fitem = createFileItem( *it1 );
-            fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it1);
+            fitem->uiFileLink = getUiFileLink(item->relpath()+"/",*it1);
 			titem->sources.append( fitem );
 		}
 	}
@@ -1733,6 +1755,7 @@ QString AutoProjectWidget::getUiFileLink(const QString &relpath, const QString& 
   for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
   {
     if ((*it).first==QString("/")+relpath+filename)
+//    if ((*it).first==relpath+filename)
       return (*it).second;
   }
   return "";
