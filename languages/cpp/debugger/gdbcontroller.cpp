@@ -1782,9 +1782,9 @@ void GDBController::slotVarItemConstructed(VarItem *item)
 
     // jw - name and value come from "info local", for the type we
     // send a "whatis <varName>" here.
+    //rgr: remove any format modifier
     QString strName = item->fullName();
-    if ( strName.left(3) == "/x " || strName.left(3) == "/d ")
-      strName = strName.right(strName.length()-3);
+    strName.remove( QRegExp("/[xd] ", FALSE) );
     queueCmd(new GDBItemCommand(item, QCString("whatis ") + strName.latin1(),
                                 false, WHATIS));
 }
@@ -1808,8 +1808,15 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
             break;
 
         default:
-            queueCmd(new GDBItemCommand(varItem, QCString("print ") + varItem->fullName().latin1()));
-            break;
+             //rgr: we need to do this in order to move the output modifier
+             //     from the middle to the beginning
+             QString strCmd = varItem->fullName();
+             int iFound = strCmd.find( QRegExp("./[xd] ", FALSE) );
+             if (iFound != -1) {
+               strCmd.prepend( strCmd.mid(iFound+1, 3) );
+               strCmd.replace( QRegExp("./[xd] "), "." );
+             }
+             queueCmd(new GDBItemCommand(varItem, QCString("print ") + strCmd.latin1()));            break;
         }
         return;
     }
