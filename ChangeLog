@@ -1,3 +1,8 @@
+2003-01-14 Harald Fernengel <harry@kdevelop.org>
+	* added KDE simple application template (khello)
+	* the copyright year for auto-generated files is now the current
+	  year instead of the hard coded "2001".
+
 2003-01-12 Julian Rockey <linux@jrockey.com>
 	* parts/filecreate
 	  - prettier file creation widget
@@ -15,7 +20,7 @@
 	  - add some global file templates to be stored in $datadir/kdevfilecreate/file-templates
 	* lib/util/filetemplate
 	  - look in global directory for templates if not found in project directory
-	
+
 2003-01-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* revived lib/structure:
 	  - has a working Trie class now (tested with g++-3.2)
