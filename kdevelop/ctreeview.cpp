@@ -43,7 +43,7 @@
  *   -
  *-----------------------------------------------------------------*/
 CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
-  : QListView (parent, name)
+  : KListView (parent, name)
 {
   // Initialize the object.
   setRootIsDecorated( true );

@@ -18,7 +18,7 @@
 #ifndef _CTREEVIEW_INCLUDED
 #define _CTREEVIEW_INCLUDED
 
-#include <qlistview.h>
+#include <klistview.h>
 
 class CProject;
 class CTreeHandler;
@@ -26,7 +26,7 @@ class KPopupMenu;
 class QListViewItem;
 
 /** */
-class CTreeView : public QListView
+class CTreeView : public KListView
 {
   Q_OBJECT
 

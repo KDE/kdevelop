@@ -610,8 +610,13 @@ void DocTreeKDELibsFolder::refresh()
       index_path= docu_dir + "/kdoc-reference";
       QDir d;
       d.setPath(index_path);
+      if(!d.exists()){
+        index_path=QDir::homeDirPath ()+".kdoc";
+        d.setPath(index_path);
+      }
       if(!d.exists())
         return;
+
       const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
       QFileInfoListIterator it( *fileList ); // iterator
       QFileInfo *fi; // the current file info
