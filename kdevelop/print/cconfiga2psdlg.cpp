@@ -455,7 +455,7 @@ void CConfigA2psDlg::init() {
 	okButton->setBackgroundMode( QWidget::PaletteBackground );
 	okButton->setFontPropagation( QWidget::NoChildren );
 	okButton->setPalettePropagation( QWidget::NoChildren );
-	okButton->setText(i18n("Ok"));
+	okButton->setText(i18n("OK"));
 	okButton->setAutoRepeat( FALSE );
 	okButton->setAutoResize( FALSE );
 

@@ -580,7 +580,7 @@ void CPrintDlg::init(){
 	i18n("If you wish to print to file, then check this button."));
 
   okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(("Ok"));
+  okButton->setText(("OK"));
   okButton->setGeometry( 370, 440, 100, 30 );
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
   previewButton = new QPushButton( mainwidget, "previewButton" );

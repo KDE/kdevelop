@@ -503,7 +503,7 @@ void CFilePrintDlg::init() {
   currentButton->setChecked(true);
 
   okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(("Ok"));
+  okButton->setText(("OK"));
   okButton->setGeometry( 370, 440, 100, 30 );
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
   cancelButton->setText(i18n("Cancel"));

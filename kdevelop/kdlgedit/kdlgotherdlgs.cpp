@@ -65,7 +65,7 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool modal,
   cbVHSame->setGeometry(10,90,w-20,20);
   connect(cbVHSame, SIGNAL(clicked()), SLOT(slotVHSameClicked()));
 
-  pbOk = new QPushButton(i18n("&Ok"), this);
+  pbOk = new QPushButton(i18n("&OK"), this);
   pbOk->setGeometry( 10, h-40, 100, 30 );
   pbOk->setDefault( true );
   connect(pbOk, SIGNAL(clicked()), SLOT(accept()));
