@@ -54,6 +54,8 @@ public:
     ClassViewPart(QObject *parent, const char *name, const QStringList &);
     virtual ~ClassViewPart();
 
+    bool langHasFeature(KDevLanguageSupport::Features feature);
+
 private slots:
     void selectNamespace(QListViewItem*);
     void selectClass(QListViewItem*);
@@ -83,10 +85,9 @@ private slots:
 
     void syncCombos();
     void activePartChanged(KParts::Part*);
-
+    
 private:
     void setupActions();
-    bool langHasFeature(KDevLanguageSupport::Features feature);
 
     NamespaceDom syncNamespaces(const FileDom &dom);
     ClassDom syncClasses(const NamespaceDom &dom);

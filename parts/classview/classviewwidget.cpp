@@ -259,9 +259,15 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
 
     bool sep = false;
     if( item && item->isClass() ){
-        m_actionAddMethod->plug( &menu );
-	m_actionAddAttribute->plug( &menu );
-        sep = true;
+        if( m_part->langHasFeature(KDevLanguageSupport::AddMethod) ) {
+            m_actionAddMethod->plug( &menu );
+            sep = true;
+        }
+	
+        if( m_part->langHasFeature(KDevLanguageSupport::AddAttribute) ) {
+	    m_actionAddAttribute->plug( &menu );
+            sep = true;
+        }	
     }
 
     if( item && item->model() ){
