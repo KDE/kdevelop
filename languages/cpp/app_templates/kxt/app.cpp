@@ -70,7 +70,7 @@ void %{APPNAME}::setupActions()
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // custom menu and menu item - the slot is in the class %{APPNAME}View
-    KAction *custom = new KAction(i18n("Swi&tch colors"), 0,
+    KAction *custom = new KAction(i18n("Swi&tch Colors"), 0,
                                   m_view, SLOT(switchColors()),
                                   actionCollection(), "switch_action");
 

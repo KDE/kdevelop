@@ -71,7 +71,7 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
 
     m_widget = new ClassViewWidget(this);
     m_widget->setIcon( SmallIcon("view_tree") );
-    m_widget->setCaption(i18n("Class browser"));
+    m_widget->setCaption(i18n("Class Browser"));
     mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
     QWhatsThis::add(m_widget, i18n("<b>Class browser</b><p>"
             "The class browser shows all namespaces, classes and namespace and class members in a project."));

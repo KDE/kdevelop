@@ -443,7 +443,7 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
 
   // --BEGIN-- building a dynamic dialog
   QDialog dlg(this);
-  dlg.setCaption(i18n("Enter values for variables"));
+  dlg.setCaption(i18n("Enter Values for Variables"));
 
   QGridLayout * layout = new QGridLayout( &dlg, 1, 1, 11, 6, "layout");
   QGridLayout * layoutTop = new QGridLayout( 0, 1, 1, 0, 6, "layoutTop");
@@ -567,7 +567,7 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 {
   // --BEGIN-- building a dynamic dialog
   QDialog dlg(this);
-  dlg.setCaption(i18n("Enter values for variables"));
+  dlg.setCaption(i18n("Enter Values for Variables"));
 
   QGridLayout * layout = new QGridLayout( &dlg, 1, 1, 11, 6, "layout");
   QGridLayout * layoutTop = new QGridLayout( 0, 1, 1, 0, 6, "layoutTop");

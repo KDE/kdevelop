@@ -118,7 +118,7 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 	
 	if ( partController()->documentState( rw_part->url() ) != Clean )
 	{
-		int id = popup->insertItem( i18n( "Difference to disk file" ),
+		int id = popup->insertItem( i18n( "Difference to Disk File" ),
 							this, SLOT(localDiff()) );
 		popup->setWhatsThis(id, i18n("<b>Difference to disk file</b><p>Shows the difference between "
 			"the file contents in this editor and the file contents on disk."));

@@ -298,7 +298,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),       QString::null,      this);
     QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"),   QString::null,      this);
     QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),    i18n("Step Out"),   this);
-    QPushButton*  bRunTo      = new DbgButton(BarIcon("dbgrunto"),      i18n("Run to cursor"),   this);
+    QPushButton*  bRunTo      = new DbgButton(BarIcon("dbgrunto"),      i18n("Run to Cursor"),   this);
     QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),    i18n("Viewers"),    this);
     bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),      QString::null,      this);
     bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),    QString::null,      this);

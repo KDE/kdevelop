@@ -107,7 +107,7 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
 
     m_makeEnvironmentsSelector = new KSelectAction( i18n("Make &Environment"),0,
                             actionCollection(), "build_make_environment" );
-    m_makeEnvironmentsSelector->setToolTip(i18n("Make Environment"));
+    m_makeEnvironmentsSelector->setToolTip(i18n("Make environment"));
     m_makeEnvironmentsSelector->setWhatsThis(i18n("<b>Make Environment</b><p> Choose the set of environment variables to be passed on to make.<br>"
                             "Environment variables can be specified in the project "
                             "settings dialog, <b>Build Options</b> tab."));

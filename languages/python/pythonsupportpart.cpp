@@ -70,7 +70,7 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("Start Python Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
-    action->setToolTip( i18n("Start python interpreter") );
+    action->setToolTip( i18n("Start Python interpreter") );
     action->setWhatsThis(i18n("<b>Start python interpreter</b><p>Starts the Python interpreter without a program"));
 
     action = new KAction( i18n("Python Documentation..."), 0,

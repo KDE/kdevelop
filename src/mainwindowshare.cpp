@@ -164,22 +164,22 @@ void MainWindowShare::createActions()
 #if (KDE_VERSION <= 305)
   m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
   m_toggleMainToolbar->setText(i18n("Show &Main Toolbar"));
-  m_toggleMainToolbar->setToolTip( i18n("Show Main Toolbar") );
+  m_toggleMainToolbar->setToolTip( i18n("Show main toolbar") );
   m_toggleMainToolbar->setWhatsThis(i18n("<b>Show Main Toolbar</b><p>Hides or shows the main toolbar."));
 
   m_toggleBuildToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBuildToolbar()),m_pMainWnd->actionCollection(), "settings_build_toolbar");
   m_toggleBuildToolbar->setText(i18n("Show &Build Toolbar"));
-  m_toggleBuildToolbar->setToolTip( i18n("Show Build Toolbar") );
+  m_toggleBuildToolbar->setToolTip( i18n("Show build toolbar") );
   m_toggleBuildToolbar->setWhatsThis(i18n("<b>Show Build Toolbar</b><p>Hides or shows the build toolbar."));
 
   m_toggleViewToolbar = KStdAction::showToolbar(this, SLOT(slotToggleViewToolbar()),m_pMainWnd->actionCollection(), "settings_view_toolbar");
   m_toggleViewToolbar->setText(i18n("Show &View Toolbar"));
-  m_toggleViewToolbar->setToolTip( i18n("Show View Toolbar") );
+  m_toggleViewToolbar->setToolTip( i18n("Show view toolbar") );
   m_toggleViewToolbar->setWhatsThis(i18n("<b>Show View Toolbar</b><p>Hides or shows the view toolbar."));
 
   m_toggleBrowserToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBrowserToolbar()),m_pMainWnd->actionCollection(), "settings_browser_toolbar");
   m_toggleBrowserToolbar->setText(i18n("Show &Browser Toolbar"));
-  m_toggleBrowserToolbar->setToolTip( i18n("Show Browser Toolbar") );
+  m_toggleBrowserToolbar->setToolTip( i18n("Show browser toolbar") );
   m_toggleBrowserToolbar->setWhatsThis(i18n("<b>Show Browser Toolbar</b><p>Hides or shows the browser toolbar."));
 #endif
 

@@ -301,7 +301,7 @@ void SubprojectOptionsDialog::outsideMoveDownClicked()
 void SubprojectOptionsDialog::outsideAddClicked()
 {
     bool ok;
-    QString dir = KInputDialog::getText(i18n("Add include directory"), i18n("Add include directory:"), "-I", &ok, 0);
+    QString dir = KInputDialog::getText(i18n("Add Include Directory"), i18n("Add include directory:"), "-I", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         new QListViewItem(outsideinc_listview, dir);
 }
@@ -312,7 +312,7 @@ void SubprojectOptionsDialog::outsideEditClicked()
     if ( (outsideinc_listview->childCount()==0) || (outsideinc_listview->currentItem() == 0) )
         return;
     bool ok;
-    QString dir = KInputDialog::getText(i18n("Edit include directory"), i18n("Edit include directory:"),
+    QString dir = KInputDialog::getText(i18n("Edit Include Directory"), i18n("Edit include directory:"),
             outsideinc_listview->currentItem()-> text(0), &ok, 0);
     if (ok && !dir.isEmpty())
         outsideinc_listview->currentItem()-> setText(0, dir);
