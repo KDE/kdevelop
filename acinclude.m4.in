@@ -19,15 +19,11 @@ dnl    along with this library; see the file COPYING.LIB.  If not, write to
 dnl    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 dnl    Boston, MA 02111-1307, USA.
 
-dnl IMPORTANT NOTE:
-dnl Please do not modify this file unless you expect your modifications to be
-dnl carried into every other module in the repository. If you decide that you
-dnl really want to modify it, contact coolo@kde.org mentioning that you have
-dnl and that the modified file should be committed to every module.
+dnl IMPORTANT NOTE: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+dnl This is an unofficial acinclude.m4.in only for KDevelop to support NetBSD
+dnl Please do not use this version for other packages.
 dnl
-dnl Single-module modifications are best placed in configure.in for kdelibs
-dnl and kdebase or configure.in.in if present.
-
+dnl !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 dnl ------------------------------------------------------------------------
 dnl Find a file (or one of more files in a list of dirs)
@@ -163,8 +159,9 @@ AC_DEFUN(KDE_1_CHECK_PATHS,
      KDE_TEST_RPATH="$KDE_TEST_RPATH $KDE_EXTRA_RPATH"
   fi
 
+
 AC_MSG_CHECKING([for KDE libraries installed])
-ac_link='/bin/sh ./libtool --silent --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore $LIBQT $KDE_TEST_RPATH 1>&5'
+ac_link='${LIBTOOL_SHELL} --silent --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore $LIBQT $KDE_TEST_RPATH 1>&5'
 
 if AC_TRY_EVAL(ac_link) && test -s conftest; then
   AC_MSG_RESULT(yes)
