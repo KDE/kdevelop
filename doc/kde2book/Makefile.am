@@ -16,7 +16,7 @@ kde2book.toc: $(srcdir)/kde2book.toc.in
 	echo "<!DOCTYPE kdeveloptoc>" > kde2book.toc ; \
 	echo "<kdeveloptoc>" >> kde2book.toc ; \
 	echo "<title>KDE2 Development Book</title>" >> kde2book.toc ; \
-	echo "<base href=\"$(htmldir)\"/>" >> kde2book.toc ; \
+	echo "<base href=\"help:/kde2book\"/>" >> kde2book.toc ; \
 	cat $(srcdir)/kde2book.toc.in >> kde2book.toc
 	echo "</kdeveloptoc>" >> kde2book.toc ; \
 	echo "" >> kde2book.toc
@@ -25,7 +25,7 @@ kde2book.index: $(srcdir)/kde2book.index.in
 	echo "<!DOCTYPE kdevelopindex>" > kde2book.index ; \
 	echo "<kdevelopindex>" >> kde2book.index ; \
 	echo "<title>KDE2 Development Book</title>" >> kde2book.index ; \
-	echo "<base href=\"$(htmldir)\"/>" >> kde2book.index ; \
+	echo "<base href=\"help:/kde2book\"/>" >> kde2book.index ; \
 	echo "<conceptindex>" >> kde2book.index ; \
 	sort < $(srcdir)/kde2book.index.in | uniq >> kde2book.index ; \
 	echo "</conceptindex>" >> kde2book.index ; \
