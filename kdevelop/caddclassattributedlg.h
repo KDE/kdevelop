@@ -33,7 +33,7 @@
 #include <qmultilinedit.h>
 #include "./classparser/ParsedAttribute.h"
 
-/** */
+/** Dialog to create a new attibute for a class. */
 class CAddClassAttributeDlg : public QDialog
 {
   Q_OBJECT

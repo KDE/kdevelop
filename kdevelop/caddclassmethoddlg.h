@@ -33,7 +33,7 @@
 #include <qmultilinedit.h>
 #include "./classparser/ParsedMethod.h"
 
-/** */
+/** Dialog to create a new method for a class. */
 class CAddClassMethodDlg : public QDialog
 {
   Q_OBJECT
@@ -81,4 +81,5 @@ private: // Private methods
 };
 
 #endif
+
 
