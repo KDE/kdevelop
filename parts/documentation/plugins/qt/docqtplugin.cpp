@@ -61,15 +61,10 @@ typedef KDevGenericFactory<DocQtPlugin> DocQtPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libdocqtplugin, DocQtPluginFactory(&data) )
 
 DocQtPlugin::DocQtPlugin(QObject* parent, const char* name, const QStringList)
-    :DocumentationPlugin(parent, name)
-{
-    config = DocQtPluginFactory::instance()->config();
-    config->setGroup("General");
-    
-    if ( ! config->readBoolEntry("Autosetup", false) )
-        autoSetup();
-    
+    :DocumentationPlugin(DocQtPluginFactory::instance()->config(), parent, name)
+{   
     setCapabilities(Index | FullTextSearch);
+    autoSetup();
 }
 
 DocQtPlugin::~DocQtPlugin()
@@ -132,74 +127,7 @@ void DocQtPlugin::createTOC(DocumentationCatalogItem *item)
     }
 }
 
-void DocQtPlugin::init(KListView* contents)
-{
-    config->setGroup("Locations");
-    QMap<QString, QString> entryMap = config->entryMap("Locations");
-    
-    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
-        it != entryMap.end(); ++it)
-    {
-        if (catalogEnabled(it.key()))
-            new QtDocumentationCatalogItem(config->readPathEntry(it.key()), this,
-                contents, it.key());
-    }
-}
-
-void DocQtPlugin::reinit(KListView *contents, KListBox *index, QStringList restrictions)
-{
-    config->setGroup("Locations");
-    QMap<QString, QString> entryMap = config->entryMap("Locations");
-
-    //remove deleted in configuration catalogs
-    for (QStringList::const_iterator it = deletedConfigurationItems.constBegin();
-        it != deletedConfigurationItems.constEnd(); ++it)
-    {
-        if (namedCatalogs.contains(*it))
-            delete namedCatalogs[*it];
-    }
-    deletedConfigurationItems.clear();
-
-    //update configuration
-    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
-        it != entryMap.end(); ++it)
-    {
-        if (restrictions.contains(it.key()) || (!catalogEnabled(it.key())))
-        {
-            if (namedCatalogs.contains(it.key()))
-                delete namedCatalogs[it.key()];
-        }
-        else
-        {
-            kdDebug() << "updating 1" << endl;
-            if (!namedCatalogs.contains(it.key()))    //create catalog if it does not exist
-            {
-                QtDocumentationCatalogItem *item = new QtDocumentationCatalogItem(
-                    config->readPathEntry(it.key()), this, contents, it.key());
-                loadIndex(index, item);
-            }
-            else if (!indexEnabled(namedCatalogs[it.key()]))    //clear index if it is disabled in configuration
-            {
-                kdDebug() << "    updating: clearCatalogIndex" << endl;
-                clearCatalogIndex(namedCatalogs[it.key()]);
-            }
-            else if ( (indexEnabled(namedCatalogs[it.key()]))    //index is requested in configuration but does not yet exist
-                && (!indexes.contains(namedCatalogs[it.key()])) )
-            {
-                 kdDebug() << "    index requested " << endl;
-                 createIndex(index, namedCatalogs[it.key()]);
-            }
-            else if (indexEnabled(namedCatalogs[it.key()]))
-                kdDebug() << "    1" << endl;
-            else if (!indexes.contains(namedCatalogs[it.key()]))
-                kdDebug() << "    2" << endl;
-            else
-                kdDebug() << "    3" << endl;                
-        }
-    }
-}
-
-void DocQtPlugin::autoSetup()
+void DocQtPlugin::autoSetupPlugin()
 {
     QString qtDocDir(QT_DOCDIR);
     qtDocDir = URLUtil::envExpand(qtDocDir);
@@ -216,10 +144,6 @@ void DocQtPlugin::autoSetup()
         config->writePathEntry("Guide to the Qt Translation Tools", qtDocDir + QString("/linguist.dcf"));
         config->writePathEntry("qmake User Guide", qtDocDir + QString("/qmake.dcf"));
     }
-    
-    config->setGroup("General");
-    config->writeEntry("Autosetup", true);
-    config->sync();
 }
 
 void DocQtPlugin::setCatalogURL(DocumentationCatalogItem *item)
@@ -360,64 +284,6 @@ QStringList DocQtPlugin::fullTextSearchLocations()
     return locs;
 }
 
-void DocQtPlugin::loadCatalogConfiguration(KListView *configurationView)
-{
-    config->setGroup("Locations");
-    QMap<QString, QString> entryMap = config->entryMap("Locations");
-
-    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
-        it != entryMap.end(); ++it)
-    {
-        ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
-            hasCapability(Index), hasCapability(FullTextSearch));
-        config->setGroup("TOC Settings");
-        item->setContents(config->readBoolEntry(item->title(), true));
-        config->setGroup("Index Settings");
-        item->setIndex(config->readBoolEntry(item->title(), false));
-        config->setGroup("Search Settings");
-        item->setFullTextSearch(config->readBoolEntry(item->title(), false));
-    }
-}
-
-void DocQtPlugin::saveCatalogConfiguration(KListView *configurationView)
-{
-    config->setGroup("Locations");
-    
-    for (QStringList::const_iterator it = deletedConfigurationItems.constBegin();
-        it != deletedConfigurationItems.constEnd(); ++it)
-    {
-        config->deleteEntry(*it);
-    }
-    
-    QListViewItemIterator it(configurationView);
-    while (it.current())
-    {
-        config->setGroup("Locations");
-        ConfigurationItem *confItem = dynamic_cast<ConfigurationItem*>(it.current());
-        if (confItem->isChanged())
-            config->deleteEntry(confItem->origTitle());
-        config->writePathEntry(confItem->title(), confItem->url());
-        
-        config->setGroup("TOC Settings");
-        if (confItem->isChanged())
-            config->deleteEntry(confItem->origTitle());
-        config->writeEntry(confItem->title(), confItem->contents());
-        
-        config->setGroup("Index Settings");
-        if (confItem->isChanged())
-            config->deleteEntry(confItem->origTitle());
-        config->writeEntry(confItem->title(), confItem->index());
-
-        config->setGroup("Search Settings");
-        if (confItem->isChanged())
-            config->deleteEntry(confItem->origTitle());
-        config->writeEntry(confItem->title(), confItem->fullTextSearch());
-
-        ++it;
-    }
-    config->sync();
-}
-
 QPair<KFile::Mode, QString> DocQtPlugin::catalogLocatorProps()
 {
     return QPair<KFile::Mode, QString>(KFile::File, "*.xml *.dcf");
@@ -443,38 +309,9 @@ QString DocQtPlugin::catalogTitle(const QString &url)
     return docEl.attribute("title", QString::null);
 }
 
-bool DocQtPlugin::indexEnabled(DocumentationCatalogItem *item) const
+DocumentationCatalogItem *DocQtPlugin::createCatalog(KListView *contents, const QString &title, const QString &url)
 {
-    QString group = config->group();
-    config->setGroup("Index Settings");
-    bool b = config->readBoolEntry(item->text(0), false);
-    config->setGroup(group);
-    return b;
-}
-
-void DocQtPlugin::setIndexEnabled(DocumentationCatalogItem *item, bool e)
-{
-    QString group = config->group();
-    config->setGroup("Index Settings");
-    config->writeEntry(item->text(0), e);
-    config->setGroup(group);
-}
-
-bool DocQtPlugin::catalogEnabled(const QString &name) const
-{
-    QString group = config->group();
-    config->setGroup("TOC Settings");
-    bool b = config->readBoolEntry(name, true);
-    config->setGroup(group);
-    return b;
-}
-
-void DocQtPlugin::setCatalogEnabled(const QString &name, bool e)
-{
-    QString group = config->group();
-    config->setGroup("TOC Settings");
-    config->writeEntry(name, e);
-    config->setGroup(group);
+    return new QtDocumentationCatalogItem(url, this, contents, title);
 }
 
 #include "docqtplugin.moc"

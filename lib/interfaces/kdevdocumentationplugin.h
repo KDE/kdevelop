@@ -153,50 +153,38 @@ public:
     setCapabilities(Index | FullTextSearch);
     @endcode
     */
-    DocumentationPlugin(QObject *parent =0, const char *name =0);
+    DocumentationPlugin(KConfig *pluginConfig, QObject *parent =0, const char *name =0);
     
     /**Returns the i18n name of the plugin.*/
     virtual QString pluginName() const = 0;
     
+    /**Creates documentation catalog with given title and url.*/
+    virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url) = 0;
+    
     /**Initialize a list of catalogs.
     @param contents the listview to fill with catalogs
     */
-    virtual void init(KListView *contents) = 0;
+    virtual void init(KListView *contents);
     /**Reloads a list of catalogs. This method should add missing catalogs to the view,
     update index for added catalogs and also delete restricted catalogs.
     @param contents the listview to fill with catalogs
     @param index the listbox with index to update
     @param restrictions the list of catalogs names to remove
     */
-    virtual void reinit(KListView *contents, KListBox *index, QStringList restrictions) = 0;
+    virtual void reinit(KListView *contents, KListBox *index, QStringList restrictions);
     /**Initializes plugin configuration. Documentation plugins should be able to
     initialize the default configuration on startup without any user interaction.
-    Do not forget that automatic setup should be called only once.
-    
-    Call this method in plugin's constructor and check if previous setup was made,
-    for example
-    @code
-    config->setGroup("General");
-    
-    if ( ! config->readBoolEntry("Autosetup", false) )
-        autoSetup();    
-    @endcode
-    Then in the end of autoSetup() body you can use
-    @code
-    config->setGroup("General");
-    config->writeEntry("Autosetup", true);
-    config->sync();
-    @endcode
-    to disable automatic setup in the future.
-    */
-    virtual void autoSetup() = 0;
+    Call this in the constructor of your plugin.*/
+    virtual void autoSetup();
+    /**Plugin specific automatic setup code. This method is called by @ref autoSetup.*/
+    virtual void autoSetupPlugin() = 0;
 
     /**Indicates if a catalog with specified name is enabled. Documentation plugin
     should check this and do not load catalogs disabled in configuration.
     All catalogs are enabled by default.*/
-    virtual bool catalogEnabled(const QString &name) const = 0;
+    virtual bool catalogEnabled(const QString &name) const;
     /**Enables or disables documentation catalog.*/
-    virtual void setCatalogEnabled(const QString &name, bool e) = 0;
+    virtual void setCatalogEnabled(const QString &name, bool e);
     
     /**Indicates if an index of given catalog should be rebuilt. This method
     is used by index caching algorythm to make a descision to rebuild index
@@ -205,9 +193,9 @@ public:
     /**Indicates if an index is enabled for given catalog. If documentation plugin
     has Index capability, indices for it's catalogs can be enabled/disabled
     in configuration dialog.*/
-    virtual bool indexEnabled(DocumentationCatalogItem *item) const = 0;
+    virtual bool indexEnabled(DocumentationCatalogItem *item) const;
     /**Enables or disables index for documentation catalog.*/
-    virtual void setIndexEnabled(DocumentationCatalogItem *item, bool e) = 0;
+    virtual void setIndexEnabled(DocumentationCatalogItem *item, bool e);
     /**Builds index for given catalog. This method should fill index with
     IndexItem objects.
     @param index the listbox which contains index items
@@ -218,16 +206,18 @@ public:
     lazy loading of toc's to reduce startup time. This means that createTOC
     will be called on expand event of catalog item.*/
     virtual void createTOC(DocumentationCatalogItem *item) = 0;
-    /**Sets the URL to the catalog.*/
+    /**Sets the URL to the catalog. This method will be called each time user
+    clicks the documentation item. If it is too much overhead to determine the
+    documentation catalog url in @ref createCatalog method then you can set it here.*/
     virtual void setCatalogURL(DocumentationCatalogItem *item) = 0;
     virtual QStringList fullTextSearchLocations() = 0;
 
     /**Loads catalog configuration and fills configurationView with ConfigurationItem objects.*/
-    virtual void loadCatalogConfiguration(KListView *configurationView) = 0;
+    virtual void loadCatalogConfiguration(KListView *configurationView);
     /**Saves catalog configuration basing on configurationView and 
     deletedConfigurationItems contents. If you use KConfig to store configuration,
     it is important that you call KConfig::sync() method after saving.*/
-    virtual void saveCatalogConfiguration(KListView *configurationView) = 0;
+    virtual void saveCatalogConfiguration(KListView *configurationView);
     /**Adds new catalog to a configuration.*/
     virtual void addCatalogConfiguration(KListView *configurationView, 
         const QString &title, const QString &url);
@@ -276,7 +266,7 @@ protected:
     QMap<QString, DocumentationCatalogItem*> namedCatalogs;
     /**A map of indices of loaded documentation catalogs.*/
     QMap<DocumentationCatalogItem*, QValueList<IndexItem*> > indexes;
-    
+
     /**Sets capabilities of documentation plugin.*/
     void setCapabilities(int caps) { m_capabilities = caps; }
     /**Clears index of given catalog.*/
@@ -287,7 +277,10 @@ protected:
     /**Stores items deleted from configuration. @ref saveCatalogConfiguration
     uses this to remove entries from configuration file.*/
     QStringList deletedConfigurationItems;
-    
+
+    /**Configuration object used by a plugin.*/
+    KConfig *config;
+        
 private:
     /**Adds catalog item to catalogs, namedCatalogs and indexes lists and maps.*/
     virtual void addCatalog(DocumentationCatalogItem *item);
@@ -297,6 +290,7 @@ private:
     int m_capabilities;
     bool m_indexCreated;
     
+
 friend class IndexItem;
 friend class DocumentationCatalogItem;
 };

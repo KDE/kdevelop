@@ -17,37 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef DOCQTPLUGIN_H
-#define DOCQTPLUGIN_H
+#ifndef DOCDOXYGENPLUGIN_H
+#define DOCDOXYGENPLUGIN_H
 
 #include <kdevdocumentationplugin.h>
 
 class KConfig;
 
-class DocQtPlugin : public DocumentationPlugin
+class DocDoxygenPlugin: public DocumentationPlugin
 {
     Q_OBJECT
 public:
-    DocQtPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
-    ~DocQtPlugin();
+    DocDoxygenPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
+    ~DocDoxygenPlugin();
 
     virtual QString pluginName() const;
-    
+
     virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url);
     
-    virtual void createTOC(DocumentationCatalogItem *item);
-    virtual void setCatalogURL(DocumentationCatalogItem *item);    
-       
-    virtual bool needRefreshIndex(DocumentationCatalogItem *item);
-    virtual void createIndex(KListBox *index, DocumentationCatalogItem *item);
-   
+    virtual void createTOC(DocumentationCatalogItem* item);
+    virtual void setCatalogURL(DocumentationCatalogItem* item);
+
+    virtual bool needRefreshIndex(DocumentationCatalogItem* item);
+    virtual void createIndex(KListBox* index, DocumentationCatalogItem* item);
+
     virtual QStringList fullTextSearchLocations();
-
+                    
     virtual QPair<KFile::Mode, QString> catalogLocatorProps();
-    virtual QString catalogTitle(const QString &url);
-        
+    virtual QString catalogTitle(const QString& url);
+    
     virtual void autoSetupPlugin();
-
+    
+protected:
+    void createBookTOC(DocumentationItem* item);
+    void createBookIndex(const QString &tagfile, KListBox* index, DocumentationCatalogItem* item);
 };
 
 #endif

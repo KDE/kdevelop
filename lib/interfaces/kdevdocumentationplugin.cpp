@@ -26,6 +26,7 @@
 
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 //class DocumentationItem
@@ -213,9 +214,21 @@ int ConfigurationItem::width(const QFontMetrics &fm, const QListView *lv, int c)
 
 //class DocumentationPlugin
 
-DocumentationPlugin::DocumentationPlugin(QObject *parent, const char *name)
-    :QObject(parent, name), m_indexCreated(false)
+DocumentationPlugin::DocumentationPlugin(KConfig *pluginConfig, QObject *parent, const char *name)
+    :QObject(parent, name), config(pluginConfig), m_indexCreated(false)
 {
+}
+
+void DocumentationPlugin::autoSetup()
+{
+    config->setGroup("General");    
+    if ( ! config->readBoolEntry("Autosetup", false) )
+    {
+        autoSetupPlugin();
+        config->setGroup("General");
+        config->writeEntry("Autosetup", true);
+        config->sync();
+    }
 }
 
 void DocumentationPlugin::reload()
@@ -364,6 +377,163 @@ void DocumentationPlugin::loadIndex(KListBox *index, DocumentationCatalogItem *i
         return;
     createIndex(index, item);
     cacheIndex(item);
+}
+
+void DocumentationPlugin::init(KListView *contents)
+{
+    config->setGroup("Locations");
+    QMap<QString, QString> entryMap = config->entryMap("Locations");
+    
+    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
+        it != entryMap.end(); ++it)
+    {
+        if (catalogEnabled(it.key()))
+            createCatalog(contents, it.key(), config->readPathEntry(it.key()));
+    }
+}
+
+void DocumentationPlugin::reinit(KListView *contents, KListBox *index, QStringList restrictions)
+{
+    config->setGroup("Locations");
+    QMap<QString, QString> entryMap = config->entryMap("Locations");
+
+    //remove deleted in configuration catalogs
+    for (QStringList::const_iterator it = deletedConfigurationItems.constBegin();
+        it != deletedConfigurationItems.constEnd(); ++it)
+    {
+        if (namedCatalogs.contains(*it))
+            delete namedCatalogs[*it];
+    }
+    deletedConfigurationItems.clear();
+
+    //update configuration
+    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
+        it != entryMap.end(); ++it)
+    {
+        if (restrictions.contains(it.key()) || (!catalogEnabled(it.key())))
+        {
+            if (namedCatalogs.contains(it.key()))
+                delete namedCatalogs[it.key()];
+        }
+        else
+        {
+            kdDebug() << "updating 1" << endl;
+            if (!namedCatalogs.contains(it.key()))    //create catalog if it does not exist
+            {
+                DocumentationCatalogItem * item = createCatalog(contents, it.key(), config->readPathEntry(it.key()));
+                loadIndex(index, item);
+            }
+            else if (!indexEnabled(namedCatalogs[it.key()]))    //clear index if it is disabled in configuration
+            {
+                kdDebug() << "    updating: clearCatalogIndex" << endl;
+                clearCatalogIndex(namedCatalogs[it.key()]);
+            }
+            else if ( (indexEnabled(namedCatalogs[it.key()]))    //index is requested in configuration but does not yet exist
+                && (!indexes.contains(namedCatalogs[it.key()])) )
+            {
+                 kdDebug() << "    index requested " << endl;
+                 createIndex(index, namedCatalogs[it.key()]);
+            }
+            else if (indexEnabled(namedCatalogs[it.key()]))
+                kdDebug() << "    1" << endl;
+            else if (!indexes.contains(namedCatalogs[it.key()]))
+                kdDebug() << "    2" << endl;
+            else
+                kdDebug() << "    3" << endl;                
+        }
+    }
+}
+
+void DocumentationPlugin::loadCatalogConfiguration(KListView *configurationView)
+{
+    config->setGroup("Locations");
+    QMap<QString, QString> entryMap = config->entryMap("Locations");
+
+    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
+        it != entryMap.end(); ++it)
+    {
+        ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
+            hasCapability(Index), hasCapability(FullTextSearch));
+        config->setGroup("TOC Settings");
+        item->setContents(config->readBoolEntry(item->title(), true));
+        config->setGroup("Index Settings");
+        item->setIndex(config->readBoolEntry(item->title(), false));
+        config->setGroup("Search Settings");
+        item->setFullTextSearch(config->readBoolEntry(item->title(), false));
+    }
+}
+
+void DocumentationPlugin::saveCatalogConfiguration(KListView *configurationView)
+{
+    config->setGroup("Locations");
+    
+    for (QStringList::const_iterator it = deletedConfigurationItems.constBegin();
+        it != deletedConfigurationItems.constEnd(); ++it)
+    {
+        config->deleteEntry(*it);
+    }
+    
+    QListViewItemIterator it(configurationView);
+    while (it.current())
+    {
+        config->setGroup("Locations");
+        ConfigurationItem *confItem = dynamic_cast<ConfigurationItem*>(it.current());
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writePathEntry(confItem->title(), confItem->url());
+        
+        config->setGroup("TOC Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->contents());
+        
+        config->setGroup("Index Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->index());
+
+        config->setGroup("Search Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->fullTextSearch());
+
+        ++it;
+    }
+    config->sync();
+}
+
+void DocumentationPlugin::setIndexEnabled( DocumentationCatalogItem * item, bool e )
+{
+    QString group = config->group();
+    config->setGroup("Index Settings");
+    config->writeEntry(item->text(0), e);
+    config->setGroup(group);
+}
+
+bool DocumentationPlugin::indexEnabled( DocumentationCatalogItem * item ) const
+{
+    QString group = config->group();
+    config->setGroup("Index Settings");
+    bool b = config->readBoolEntry(item->text(0), false);
+    config->setGroup(group);
+    return b;
+}
+
+bool DocumentationPlugin::catalogEnabled(const QString &name) const
+{
+    QString group = config->group();
+    config->setGroup("TOC Settings");
+    bool b = config->readBoolEntry(name, true);
+    config->setGroup(group);
+    return b;
+}
+
+void DocumentationPlugin::setCatalogEnabled(const QString &name, bool e)
+{
+    QString group = config->group();
+    config->setGroup("TOC Settings");
+    config->writeEntry(name, e);
+    config->setGroup(group);
 }
 
 #include "kdevdocumentationplugin.moc"

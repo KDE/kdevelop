@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=DocDoxygenPlugin
+Exec=blubb
+Comment=Documentation plugin for Doxygen documentation
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdocdoxygenplugin
