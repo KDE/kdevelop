@@ -136,11 +136,11 @@ void CKAppWizard::initPages(){
   apphelp->setAlignment( 1313 );
   apphelp->setMargin( -1 );
   
-  othersentry = new QListViewItem (applications, "Others");
+  othersentry = new QListViewItem (applications, i18n("Others"));
   othersentry->setExpandable (true);
   othersentry->setOpen (TRUE);
   othersentry->sortChildItems (0,FALSE);
-  customprojitem = new QListViewItem (othersentry,"custom project");
+  customprojitem = new QListViewItem (othersentry,i18n("custom project"));
   
   /*	gtkentry = new QListViewItem (applications, "GTK");
 	gtkentry->setExpandable (true);
