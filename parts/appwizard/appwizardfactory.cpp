@@ -10,57 +10,25 @@
  ***************************************************************************/
 
 
-#include <kdebug.h>
-#include <kinstance.h>
 #include <kstandarddirs.h>
 
 #include "appwizardfactory.h"
-#include "appwizardpart.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory );
 
-extern "C" {
-
-    void *init_libkdevappwizard()
-    {
-        return new AppWizardFactory;
-    }
-    
-};
-
-
-AppWizardFactory::AppWizardFactory(QObject *parent, const char *name)
-    : KDevFactory(parent, name)
+AppWizardFactory::AppWizardFactory()
+    : KGenericFactory<AppWizardPart>( "kdevappwizard" )
 {
 }
 
-
-AppWizardFactory::~AppWizardFactory()
+KInstance *AppWizardFactory::createInstance()
 {
-    delete s_instance;
-    s_instance = 0;
+    KInstance *instance = KGenericFactory<AppWizardPart>::createInstance();
+    KStandardDirs *dirs = instance->dirs();
+    dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
+    dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");
+    dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");
+
+    return instance;
 }
 
-
-KDevPart *AppWizardFactory::createPartObject(KDevApi *api, QObject *parent,
-                                             const QStringList &/*args*/)
-{
-    kdDebug(9010) << "Building AppWizardPart" << endl;
-    return new AppWizardPart(api, parent, "app wizard part");
-}
-
-
-KInstance *AppWizardFactory::s_instance = 0;
-KInstance *AppWizardFactory::instance()
-{
-    if (!s_instance) {
-        s_instance = new KInstance("kdevappwizard");
-        KStandardDirs *dirs = s_instance->dirs();
-        dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
-        dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");
-        dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");
-    }
-
-    return s_instance;
-}
-
-#include "appwizardfactory.moc"

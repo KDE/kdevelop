@@ -16,17 +16,19 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kdevcore.h>
+#include <kgenericfactory.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
 
 #include "importdlg.h"
 #include "appwizarddlg.h"
-#include "appwizardfactory.h"
 #include "appwizardpart.h"
+#include "appwizardfactory.h"
 #include <kdevmakefrontend.h>
 #include <kdevpartcontroller.h>
 
-
-AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(AppWizardFactory::instance());
     setXMLFile("kdevappwizard.rc");

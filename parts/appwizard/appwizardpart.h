@@ -13,18 +13,18 @@
 #define _APPWIZARDPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include <qstring.h>
 
 class AppWizardDialog;
 
 
-class AppWizardPart : public KDevPart
+class AppWizardPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    AppWizardPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    AppWizardPart( QObject *parent, const char *name, const QStringList & );
     ~AppWizardPart();
 
 private slots:

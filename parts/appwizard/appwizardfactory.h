@@ -12,22 +12,17 @@
 #ifndef _APPWIZARDFACTORY_H_
 #define _APPWIZARDFACTORY_H_
 
-#include "kdevfactory.h"
+#include <kgenericfactory.h>
 
+#include "appwizardpart.h"
 
-class AppWizardFactory : public KDevFactory
+class AppWizardFactory : public KGenericFactory<AppWizardPart>
 {
-    Q_OBJECT
-
 public:
-    AppWizardFactory( QObject *parent=0, const char *name=0 );
-    ~AppWizardFactory();
+    AppWizardFactory();
 
-    virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
-    static KInstance *instance();
-
-private:
-    static KInstance *s_instance;
+protected:
+    virtual KInstance *createInstance();
 };
 
 #endif
