@@ -208,6 +208,11 @@ int main( int argc, char* argv[] )
     bool parseAllFiles = false;
 
     QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
+    if (! KStandardDirs::makeDir(datadir + "/kdevcppsupport/pcs/")){
+        std::cerr << "*error* " << "could not create " << datadir + "/kdevcppsupport/pcs/" << std::endl << std::endl;
+        return -1;
+    }
+
 
     if( !QFile::exists(datadir + "/kdevcppsupport/pcs/") ){
         std::cerr << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << std::endl << std::endl;
