@@ -841,13 +841,6 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
     this, SLOT(slot_viewActivated(QextMdiChildView*)));
 
-  // remove the view from MDI and delete the view
-  m_pParent->removeWindowFromMdi( pMDICover);
-  m_MDICoverList.remove( pMDICover);
-
-  if (pDoc->viewCount() == 0) {
-    closeKWriteDoc(pDoc);
-  }
   /* if there are no more views, the pointer have to be "reset" here,
    * because slot_viewActivated() can not be called any longer
    */
@@ -855,6 +848,14 @@ void DocViewMan::closeEditView(CEditWidget* pView)
     m_pCurEditView = 0L;
     m_pCurBrowserView = 0L;
 //  }
+
+  // remove the view from MDI and delete the view
+  m_pParent->removeWindowFromMdi( pMDICover);
+  m_MDICoverList.remove( pMDICover);
+
+  if (pDoc->viewCount() == 0) {
+    closeKWriteDoc(pDoc);
+  }
 }
 
 //-----------------------------------------------------------------------------
