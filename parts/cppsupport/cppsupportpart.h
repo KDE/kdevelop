@@ -56,7 +56,7 @@ public:
      * returns pointer to Code Hinting Widget
      */
     CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
-    
+
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     /*
@@ -80,10 +80,14 @@ public:
     QStringList fileExtensions( ) const;
 
     virtual void customEvent( QCustomEvent* ev );
-    
+
+    virtual QStringList subclassWidget(QString formName);
+    virtual QStringList updateWidget(QString formName, QString fileName);
+
+
 signals:
     void fileParsed( const QString& fileName );
-    
+
 protected:
     virtual KDevLanguageSupport::Features features();
     virtual QStringList fileFilters();

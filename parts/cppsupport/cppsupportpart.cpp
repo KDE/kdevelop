@@ -83,6 +83,7 @@
 #include "ccconfigwidget.h"
 #include "config.h"
 #include "domutil.h"
+#include "subclassingdlg.h"
 
 #if defined(__GLIBC__)
 #include <malloc.h>
@@ -1404,5 +1405,22 @@ void CppSupportPart::slotMakeMember()
     }
     m_backgroundParser->unlock();
 }
+
+QStringList CppSupportPart::subclassWidget(QString formName)
+{
+    QStringList newFileNames;
+    SubclassingDlg *dlg = new SubclassingDlg(formName, newFileNames);
+    dlg->exec();
+    return newFileNames;
+}
+		    
+QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
+{
+    QStringList dummy;
+    SubclassingDlg *dlg = new SubclassingDlg(formName, fileName, dummy);
+    dlg->exec();
+    return dummy;
+}
+					
 
 #include "cppsupportpart.moc"
