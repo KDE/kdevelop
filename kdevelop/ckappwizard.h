@@ -121,7 +121,7 @@ private:
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
   QMultiLineEdit *errOutput,*output;
-  KProcess *p;
+  KProcess *p,*q;
   CProject *project;
   QStrList sub_dir_list;
 };

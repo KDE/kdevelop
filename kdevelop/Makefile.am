@@ -30,7 +30,9 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 		   clogfileview.cpp cdocbrowser.cpp cproject.cpp \
 		   kswallow.cpp cgeneratenewfile.cpp \
-		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp ctoolclass.cpp cdoctreepropdlg.cpp
+		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
+		   cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
+		   ctoolclass.cpp cdoctreepropdlg.cpp cprintdlg.cpp
 
 
 kdevelop_METASOURCES = USE_AUTOMOC
@@ -45,7 +47,10 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 		clogfileview.h structdef.h cdocbrowser.h cproject.h \
 		cclassview.h kswallow.h cgeneratenewfile.h \
-		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h
+		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
+		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
+		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
+		cprintdlg.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc
 

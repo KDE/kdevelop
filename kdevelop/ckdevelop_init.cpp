@@ -2,7 +2,6 @@
       init.cpp - the init specific part of CKDevelop (construtor ...)
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -29,8 +28,6 @@ CKDevelop::CKDevelop(){
   initConnections();
   initProject(); 
   
-  //  config->setGroup("General Options");
-  
   config->setGroup("Files");
   filename = config->readEntry("browser_file");
   if(!filename.isEmpty()){
@@ -41,7 +38,6 @@ CKDevelop::CKDevelop(){
 		    "/en/kdevelop/index.html",1,"test");
     
   }
-  
   // if first start, the onlinehelp is shown, so outputview is false
   // else show output view according to value in config file  -Ralf
 
@@ -699,7 +695,6 @@ void CKDevelop::initProject(){
   	if (QFile::exists(filename)){
     	switchToFile(filename);
 		}
-
   }
   else{
     refreshTrees(); // this refresh only the documentation tab,tree

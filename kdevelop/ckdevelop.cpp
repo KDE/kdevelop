@@ -34,7 +34,7 @@
 #include "./kwrite/kwdoc.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
-
+#include "cprintdlg.h"
 
 void CKDevelop::slotFileNewAppl(){
   
@@ -152,16 +152,16 @@ void CKDevelop::slotFileSaveAll(){
     cerr << "check:" << actual_info->filename << endl;
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
-				switchToFile(actual_info->filename);
-				slotFileSaveAs();
-				cerr << actual_info->filename << "UNTITLED";
-				mod = true;
+	switchToFile(actual_info->filename);
+	slotFileSaveAs();
+	cerr << actual_info->filename << "UNTITLED";
+	mod = true;
       }
       else{
-				switchToFile(actual_info->filename);
-				edit_widget->doSave();
-				cerr << actual_info->filename;
-				mod = true;
+	switchToFile(actual_info->filename);
+	edit_widget->doSave();
+	cerr << actual_info->filename;
+	mod = true;
       }
     }
   }
@@ -176,40 +176,40 @@ void CKDevelop::slotFileSaveAs(){
   TEditInfo* actual_info;
   name = KFileDialog::getSaveFileName(prj.getProjectDir(),0,this,edit_widget->getName());
   if (name.isNull()){
-     cerr << "CANCEL\n";
-     return;
-   }
-   else {
-     edit_widget->toggleModified(true);
-     edit_widget->doSave(name); // try the save
-     //     if (err == KEdit::KEDIT_OS_ERROR){
-     //  cerr << "error";
-     //  return; // no action
-     // }
-  // and now the modifications for the new file
-  //search the actual edit_info
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    if (actual_info->filename == edit_widget->getName()){ // found
+    cerr << "CANCEL\n";
+    return;
+  }
+  else {
+    edit_widget->toggleModified(true);
+    edit_widget->doSave(name); // try the save
+    //     if (err == KEdit::KEDIT_OS_ERROR){
+    //  cerr << "error";
+    //  return; // no action
+    // }
+    // and now the modifications for the new file
+    //search the actual edit_info
+    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+      if (actual_info->filename == edit_widget->getName()){ // found
 	
  	//update the info-struct in the list
-      actual_info->filename = name;
-      actual_info->modified = false;
-      //update the widget
-      edit_widget->setName(name);
-      edit_widget->toggleModified(false);
-      //update the menu
-      QFileInfo fileinfo(name);
-      menu_buffers->changeItem(fileinfo.fileName(),actual_info->id);
-      //update kdevelop
-      setCaption(name);
-    }
-  } // end_for
-} // end_else
+	actual_info->filename = name;
+	actual_info->modified = false;
+	//update the widget
+	edit_widget->setName(name);
+	edit_widget->toggleModified(false);
+	//update the menu
+	QFileInfo fileinfo(name);
+	menu_buffers->changeItem(fileinfo.fileName(),actual_info->id);
+	//update kdevelop
+	setCaption(name);
+      }
+    } // end_for
+  } // end_else
   slotStatusMsg(IDS_DEFAULT); 
 }
 
 void CKDevelop::slotFileClose(){
-
+  
   slotStatusMsg(i18n("Closing file..."));
   TEditInfo* actual_info;
   int message_result;
@@ -229,60 +229,69 @@ void CKDevelop::slotFileClose(){
   //search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName()){ // found
-       cerr << "remove edit_info begin\n";
-       menu_buffers->removeItem(actual_info->id);
-	     if(edit_infos.removeRef(actual_info)){
-			 	cerr << "remove edit_info end\n";
-       }
+      cerr << "remove edit_info begin\n";
+      menu_buffers->removeItem(actual_info->id);
+      if(edit_infos.removeRef(actual_info)){
+	cerr << "remove edit_info end\n";
+      }
     }
   }
   // add the next edit to the location
-   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-     if ( getTabLocation(actual_info->filename) == getTabLocation(edit_widget->getName())){ // found
-       edit_widget->setText(actual_info->text);
-       edit_widget->toggleModified(actual_info->modified);
-       edit_widget->setName(actual_info->filename);
-       setCaption(actual_info->filename);
-       cerr << "FOUND A NEXT" << actual_info->filename;
-       slotStatusMsg(IDS_DEFAULT); 
-       return;
-     }
-   }
-   // if not found a successor create an new file
-   actual_info = new TEditInfo;
-   actual_info->modified=false;
-   if (getTabLocation(edit_widget->getName()) == 0) {// header
-     actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
-     actual_info->filename = "Untitled.h";
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+    if ( getTabLocation(actual_info->filename) == getTabLocation(edit_widget->getName())){ // found
+      edit_widget->setText(actual_info->text);
+      edit_widget->toggleModified(actual_info->modified);
+      edit_widget->setName(actual_info->filename);
+      setCaption(actual_info->filename);
+      cerr << "FOUND A NEXT" << actual_info->filename;
+      slotStatusMsg(IDS_DEFAULT); 
+      return;
+    }
   }
-   else{
-     actual_info->id = menu_buffers->insertItem("Untitled.cpp",-2,0);
-     actual_info->filename = "Untitled.cpp";
-   }
-   edit_infos.append(actual_info);
-   edit_widget->setName(actual_info->filename);
-   edit_widget->clear();
-   setCaption(actual_info->filename);
-
-   slotStatusMsg(IDS_DEFAULT); 
+  // if not found a successor create an new file
+  actual_info = new TEditInfo;
+  actual_info->modified=false;
+  if (getTabLocation(edit_widget->getName()) == 0) {// header
+    actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
+    actual_info->filename = "Untitled.h";
+  }
+  else{
+    actual_info->id = menu_buffers->insertItem("Untitled.cpp",-2,0);
+    actual_info->filename = "Untitled.cpp";
+  }
+  edit_infos.append(actual_info);
+  edit_widget->setName(actual_info->filename);
+  edit_widget->clear();
+  setCaption(actual_info->filename);
+  
+  slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(i18n("Closing all files..."));
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
-   
+  CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
+  printerdlg->show(); 
 }
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){
-  if(project)
-		slotProjectClose();
+  
+  config->setGroup("Files");
+  if(project){
+    config->writeEntry("project_file",prj.getProjectFile());
+    prj.writeProject();
+    if(!slotProjectClose()){ // if not ok,pressed cancel
+      e->ignore();
+      return; //not close!
+    }
+  }
   e->accept();
   cerr << "QUIT5";
-  //swallow_widget->sWClose(false);
+  swallow_widget->sWClose(false);
 
   config->setGroup("General Options");
   config->writeEntry("width",width());
@@ -303,32 +312,19 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
 
 
+  
   config->setGroup("Files");
-  if(project){
-    config->writeEntry("project_file",prj.getProjectFile());
-  }
   config->writeEntry("cpp_file",cpp_widget->getName());
   config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
-  cerr << "QUIT4";
-
   cerr << "QUIT3";
-  //config->writeEntry("x",x());
-  //config->writeEntry("y",y());
   config->sync();
   cerr << "QUIT2";
-  if(project){
-    prj.writeProject();
-  }
-  cerr << "QUIT1";
   KTMainWindow::closeEvent(e);
 }
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
-  if(project=true){   // if project loaded - close it first to save changes
-			slotProjectClose();
-  }
   close(); 
 }
 void CKDevelop::slotEditUndo(){
@@ -428,8 +424,6 @@ void CKDevelop::slotOptionsTTreeView(){
     top_panner->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
-  //  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  //  resize (width()+1,height());
   QRect rMainGeom= top_panner->geometry();
   top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -445,8 +439,6 @@ void CKDevelop::slotOptionsTOutputView(){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
- //  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//  resize (width()+1,height());
   QRect rMainGeom= view->geometry();
   view->resize(rMainGeom.width()-1,rMainGeom.height());
   view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -656,7 +648,6 @@ void CKDevelop::slotDocSText(QString text){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotDocSText(){
-  
   QString text = edit_widget->markedText();
   if(text == ""){
     text = edit_widget->currentWord();
@@ -754,8 +745,6 @@ void CKDevelop::slotBuildDebug(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
-    //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -777,8 +766,6 @@ void CKDevelop::slotBuildMake(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -806,9 +793,6 @@ void CKDevelop::slotBuildRebuildAll(){
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -833,8 +817,6 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -859,8 +841,6 @@ void CKDevelop::slotBuildDistClean(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -884,13 +864,11 @@ void CKDevelop::slotBuildAutoconf(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-
+  
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
@@ -900,7 +878,6 @@ void CKDevelop::slotBuildAutoconf(){
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   process << "sh" << path + "autoconfsuite";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-
 }
 
 
@@ -909,8 +886,6 @@ void CKDevelop::slotBuildConfigure(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -938,8 +913,6 @@ void CKDevelop::slotBuildAPI(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -965,8 +938,6 @@ void CKDevelop::slotBuildManual(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -995,14 +966,11 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
 
   }
-
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;

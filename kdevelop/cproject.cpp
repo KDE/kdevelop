@@ -2,7 +2,6 @@
                  cproject.cpp - the projectproperties
                              -------------------                                         
 
-    version              :                                   
     begin                : 28 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -269,69 +268,60 @@ void CProject::addFileToProject(QString rel_name){
   QStrList list_files;
   QString makefile_name;
 
+  // find the correspond. Makefile.am, store it into makefile_name
   int slash_pos = rel_name.findRev('/');
   if(slash_pos == -1) { // not found
     makefile_name = "Makefile.am";
   }
-  else{
+  else {
     makefile_name = rel_name.copy();
     makefile_name.truncate(slash_pos+1);
     makefile_name += "Makefile.am";
   }
 
+  //add the file into the filesentry in the Makefileam group
   config->setGroup(makefile_name);
   config->readListEntry("files",list_files);
   list_files.append(rel_name);
   config->writeEntry("files",list_files);
   
-  
-  //add Makefile.am and the toplevels makefile.ams to the project if needed (begin)
+  //++++++++++++++add Makefile.am and the toplevels makefile.ams to the project if needed (begin)
   QStrList makefile_list;
   QStrList check_makefile_list;
   // find the makefiles to check
   int slash2_pos;
-
   check_makefile_list.append(makefile_name);
 
-  cerr << endl << makefile_name;
+  cerr << endl << "*check:*" << makefile_name;
   
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
     slash2_pos = makefile_name.findRev('/',slash_pos-1);
     if(slash2_pos != -1){
       makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
       check_makefile_list.append(makefile_name);
-      cerr << endl << makefile_name;
+      cerr << endl << "*check:*" << makefile_name;
     } 
-else{
-	makefile_name = "";
-}
+    else{
+      makefile_name = "";
+    }
   }
 
-  
-  
+  config->setGroup("General");
+  config->readListEntry("makefiles",makefile_list);
 
   for(makefile_name=check_makefile_list.first();makefile_name!=0;makefile_name=check_makefile_list.next()){ 
-    // check if current makefile exists and all makefile above
-    
-    bool exists = false;
-    QString makefile_str;
-    config->setGroup("General");
-    config->readListEntry("makefiles",makefile_list);
-    for(makefile_str=makefile_list.first();makefile_str!=0;makefile_str=makefile_list.next()){
-      if(makefile_str == makefile_name){
-	exists = true;
-      }
-    }
-    if(!exists){
+    // check if current makefile exists and all makefile above,if not add it
+    if(makefile_list.find(makefile_name) == -1){
       addMakefileAmToProject(makefile_name);
     }
   }
-  //add Makefile to the project if needed (end)
+  //++++++++++++++++add Makefile to the project if needed (end)
   
+  // and at last: modify the subdir entry in every Makefile.am if needed
   
-  
+    
   setSourcesHeaders();
-  createMakefilesAm();
+  createMakefilesAm(); // do some magic
 }
 void CProject::removeFileFromProject(QString rel_name){
   QStrList list_files;

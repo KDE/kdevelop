@@ -155,7 +155,8 @@ public:
   void slotProjectNew();
   /** open a projectfile and close the old one*/
   void slotFileOpenPrj();
-  void slotProjectClose();
+  /** close the current project,return false if  canceled*/
+  bool slotProjectClose();
   void slotProjectAddNewFile();
   void slotProjectAddExistingFiles();
   void slotProjectRemoveFile();

@@ -210,6 +210,10 @@ if ($processes{APPLICATION} eq "standard") {
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = $nameLittle . "view.cpp";
   replaceOldFile($word,$replace,$oldfile);
+  $word = "VERSION";
+  $replace = $processes{VERSION};	
+  $oldfile = "resource.h";
+  replaceOldFile($word,$replace,$oldfile);
 }
 
 chdir ($underDirectory . "/docs/en");

@@ -1,15 +1,24 @@
+1999-02-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* clean up some sourcecodes (ckdevelop.cpp,ckdevelop_project.cpp)
+	* slotProjectClose() returns now a bool value,was needed for some bugfixes
+	* new kdeveloprc (new default colors(xemacs),no persistent selection...)
+	 please delete your $HOME/.kde/share/config/kdeveloprc	
+	* added some sourcecode for the printdlg(Stefan), not complete!
+	* some internal changes in the CProject class, not completed 
+	* added the qtarchitect dlgs to kdevelop/dlgs/
+
 1999-02-04 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  			* implemented Build->CompileFile functionality to
-	  			compile the actual cpp_widget file
-				* added slotProjectClose to closeEvent
-  			* changed all keys to the resource.h file and replaced them with IDK_ macros-
-	  			please add any other keys this way to keep overview over used keys.
-				* found bug in slotProcessExited- if next_job is "run" and a configuration dialog is
-	 	 			shown in kdevelop, KDE freezes completely...anyone has the same occurence ?
+ 	* implemented Build->CompileFile functionality to compile the actual cpp_widget file
+	* added slotProjectClose to closeEvent
+  	* changed all keys to the resource.h file and replaced them with IDK_ macros-
+	please add any other keys this way to keep overview over used keys.
+	* found bug in slotProcessExited- if next_job is "run" and a configuration dialog is
+	 shown in kdevelop, KDE	freezes completely...anyone has the same occurence ?
 			
 1999-02-03  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-				* implemented a configurable doc-tree
+	* implemented a configurable doc-tree
 
 1999-02-03  Ralf Nolden  <Ralf.Nolden@post.rwth-aachen.de>
 
@@ -47,7 +56,7 @@
 
 1999-01-30  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 
-	* added a new application (terminal application) in the KApplicationwizard
+	* added a new application (terminal application) to the KApplicationwizard
 	* bugfixed some replacements in the base applications
 	* changed the working directory in KApplicationwizard to $home/.kde/share/apps/kdevelop
 
@@ -90,7 +99,7 @@
 
 1999-01-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-	* kdevelop/ckdevelop.cpp: added messageboxes, if a program cound't found
+	* kdevelop/ckdevelop.cpp: added messageboxes, if a program coudn't found
 	* kdevelop/cclassview.cpp : commit patches by Jost Schenck,many bug fixes
 
 1999-01-19  Sandy Meier  <smeier@rz.uni-potsdam.de>

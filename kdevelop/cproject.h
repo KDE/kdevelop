@@ -2,7 +2,6 @@
                     cproject.h - the projectproperties
                              -------------------                                         
 
-    version              :                                   
     begin                : 28 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -53,7 +52,33 @@ struct TFileInfo {
 };
 
 /** this class includes the properties of a project and some methods to read
-  * and write these props
+  * and write these props,all Makefiles.am are registered in the [General] Group,every Makefile.am
+  * has it own group and every file in the project too
+  * 
+  ** format of the general group:**
+  * [General]
+  * makefiles: all makefiles in the project
+  * project_type: at the moment "normal_cpp","mini_kde","normal_kde"
+  * author: name of the author
+  * sub_dir: name of main subdir, not "po"
+  * project_name: it's clear
+  * version: version number (String)
+  * email: emailaddress of the author
+  * kdevprj_version: internal versions-numbering, not associated with the kdevelop version
+  *
+  ** format of the Makefile.am groups:**
+  * [xxx/Makefile.am]
+  * type: at the moment "normal" or "prog_main"
+  * files: all files in the current dir
+  * sub_dirs: the subdirs
+  *
+  ** format of the file groups:**
+  * [xxx/xxx]
+  * install_location: install location for "make install"
+  * dist: include the file into the distribution at "make dist"
+  * install: install it at "make install" ?
+  * type: at the moment "DATA","HEADER","SCRIPT","SOURCE"
+  *
   *@author Sandy Meier
   */
 class CProject  {
@@ -68,10 +93,13 @@ public:
   /** at the moment there exists 3 types: normal_cpp,normal_kde,mini_kde*/
   void setProjectType(QString type);
   void setProjectName(QString name);
+  /** the mainsubdir, not "po"*/
   void setSubDir(QString dirname);
   void setAuthor(QString name);
   void setEmail(QString email);
+  /** the project version*/
   void setVersion(QString version);
+  /** at the moment only an english sgmlfile in docs/en/ */
   void setSGMLFile(QString version);  
   void setShortInfo(QStrList short_info);
   void setBinPROGRAM(QString name);
@@ -82,14 +110,13 @@ public:
   void setAdditCXXFLAGS(QString flags);
 
   /**options for make( f.e. "-k" for "make -k"*/
-
   void setMakeOptions(QString options);
   QString getMakeOptions();
   
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
   void getLFVGroups(QStrList& groups);
-  /** if ace_group == empty insert prepend at the gouplist*/
+  /** if ace_group == empty insert prepend at the grouplist*/
   void addLFVGroup(QString name,QString ace_group);
   void removeLFVGroup(QString name);
   void getFilters(QString group,QStrList& filters);

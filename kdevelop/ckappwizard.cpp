@@ -471,27 +471,21 @@ void CKAppWizard::slotOkClicked() {
   if (kma->isChecked()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
     *p << "cp";
-    cout << copysrc << endl;
     *p << copysrc;
-    cout << copydes << endl;
     *p << copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (kna->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
     *p << "cp";
-    cout << copysrc << endl;
     *p << copysrc;
-    cout << copydes << endl;
     *p << copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   }
   else {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
     *p << "cp";
-    cout << copysrc << endl;
     *p << copysrc;
-    cout << copydes << endl;
     *p << copydes;
     p->start(KProcess::Block,KProcess::AllOutput);
   }
@@ -541,6 +535,49 @@ void CKAppWizard::slotOkClicked() {
 
 // connection of this (cancelButton)
 void CKAppWizard::slotAppEnd() {
+  nametext = nameline->text();
+  if ((!(okButton->isEnabled())) && (nametext.length() >= 1)) {
+    delete (p);
+    delete (q);
+    delete (project);
+  }
+  delete (errOutput);
+  delete (output);
+  delete (cppedit);
+  delete (cppnew);
+  delete (cppload);
+  delete (cppheader);
+  delete (hedit);
+  delete (hnew);
+  delete (hload);
+  delete (hheader);
+  delete (miniload);
+  delete (iconload);
+  delete (datalink);
+  delete (miniicon);
+  delete (progicon);
+  delete (separator1);
+  delete (gnufiles);
+  delete (lsmfile);
+  delete (userdoc);
+  delete (apidoc);
+  delete (emailline);
+  delete (authorline);
+  delete (versionline);
+  delete (directoryload);
+  delete (email);
+  delete (authorname);
+  delete (separator2);
+  delete (versionnumber);
+  delete (directory);
+  delete (name);
+  delete (ta);
+  delete (kma);
+  delete (kna);
+  delete (bgroup);
+  delete (separator0);
+  delete (widget1b);
+  delete (widget1a);
   reject();
 }
 
@@ -562,22 +599,42 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 void CKAppWizard::slotAppClicked() {
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
+  apidoc->setEnabled(true);
+  apidoc->setChecked(true);
+  datalink->setEnabled(true);
+  datalink->setChecked(true);
+  progicon->setEnabled(true);
+  progicon->setChecked(true);
+  miniicon->setEnabled(true);
+  miniicon->setChecked(true);
 }
 
 // connection of kma
 void CKAppWizard::slotMiniClicked() {
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
   widget1b->setBackgroundPixmap(pm);
+  apidoc->setEnabled(true);
+  apidoc->setChecked(true);
+  datalink->setEnabled(true);
+  datalink->setChecked(true);
+  progicon->setEnabled(true);
+  progicon->setChecked(true);
+  miniicon->setEnabled(true);
+  miniicon->setChecked(true);
 }
 
 // connection of ta
 void CKAppWizard::slotCPPClicked() {
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
-  userdoc->setEnabled(false);
-  userdoc->setChecked(false);
   apidoc->setEnabled(false);
   apidoc->setChecked(false);
+  datalink->setEnabled(false);
+  datalink->setChecked(false);
+  progicon->setEnabled(false);
+  progicon->setChecked(false);
+  miniicon->setEnabled(false);
+  miniicon->setChecked(false);
 }
 
 // connection of this
@@ -723,9 +780,7 @@ void CKAppWizard::slotProcessExited() {
   project->setSGMLFile ("index.sgml");
   }
   project->setBinPROGRAM (namelow);
-  if (!(ta->isChecked())) {
   project->setLDFLAGS (" -s ");
-  }
   project->setCXXFLAGS ("-O2 -Wall");
 
   if (kna->isChecked()) {
@@ -934,51 +989,65 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
+   }
     project->writeFileInfo (fileInfo);
 
     project->addFileToProject (namelow + "/docs/en/index-2.html");
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
+   }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-3.html");
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
+   }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-4.html");
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
+   }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-5.html");
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-    fileInfo.install = true;
+   if (!(ta->isChecked())) { 
+   fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
+   }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-6.html");
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
+   }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index.html");
     fileInfo.rel_name = namelow + "/docs/en/index.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
+   if (!(ta->isChecked())) {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
+   }
     project->writeFileInfo (fileInfo);
   }
   
@@ -1020,17 +1089,18 @@ void CKAppWizard::slotProcessExited() {
   project->writeProject ();
   project->createMakefilesAm ();
 
-  p = new KProcess();
-  connect(p,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
-  connect(p,SIGNAL(receivedStdout(KProcess *, char *, int)),
+  q = new KProcess();
+  connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
+  connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
           this,SLOT(slotPerlOut(KProcess *, char *, int)));
-  connect(p,SIGNAL(receivedStderr(KProcess *, char *, int)),
+  connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
           this,SLOT(slotPerlErr(KProcess *, char *, int)));
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
-  *p << "perl" << path1 + "processesend.pl";
-  p->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+  *q << "perl" << path1 + "processesend.pl";
+  q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
 }
 
+// enable cancelbutton if everything is done
 void CKAppWizard::slotMakeEnd() {
   cancelButton->setEnabled(true);
   gen_prj = true;
@@ -1047,9 +1117,21 @@ QString CKAppWizard::getProjectFile() {
   else{
     directorytext = directorytext + "/" + nametext + "/" + nametext + ".kdevprj";
   }
+  delete (directoryline);
+  delete (nameline);
+  delete (defaultButton);
+  delete (okButton);
+  delete (cancelButton);
+  delete (widget0);
+  delete (widget1);
+  delete (widget2);
+  delete (widget3);
+  delete (widget4);
+  delete (widget5);
   return directorytext;
 }
 
+// return TRUE if a poject is generated
 bool CKAppWizard::generatedProject(){
   return gen_prj;
 }

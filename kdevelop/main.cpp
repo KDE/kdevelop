@@ -2,8 +2,6 @@
                      main.cpp - the main-function
                              -------------------                                         
 
-
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     

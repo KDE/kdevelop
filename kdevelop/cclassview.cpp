@@ -40,8 +40,9 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
   class_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
   class_pop->insertSeparator();
   class_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
-  class_pop->insertItem(i18n("Remove Class "),this,SLOT(slotClassRemove()));
-  class_pop->insertItem(i18n("Delete Class..."),this,SLOT(slotClassDelete()));
+  //  class_pop->insertItem(i18n("Remove Class "),this,SLOT(slotClassRemove())); I think it is not
+  // usefull, or? -Sandy
+  // class_pop->insertItem(i18n("Delete Class..."),this,SLOT(slotClassDelete()));
   class_pop->insertSeparator();
   class_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
   class_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
