@@ -121,6 +121,7 @@ struct TWorkspace {
   * classview_tree: a treestructure of all classes.
   * makefiles: all makefiles in the project
   * project_type: at the moment "normal_cpp","mini_kde","normal_kde","normal_qt"
+  * 										"normalogl_kde" added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   * author: name of the author
   * sub_dir: name of main subdir, not "po"
   * project_name: it's clear
@@ -157,6 +158,7 @@ public: // Methods to store project options
   void setKDevPrjVersion(const char* version) { writeGroupEntry( "General", "kdevprj_version", version ); }
 
   /** Store the project type: {normal_cpp,normal_kde,mini_kde,normal_empty,normal_qt} */
+  /** 								{normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support} */
   void setProjectType(const char *type)       { writeGroupEntry( "General", "project_type", type ); }
 
   /** Store the projectname. */
@@ -223,6 +225,7 @@ public: // Methods to fetch project options
   QString getKDevPrjVersion() { return readGroupEntry( "General", "kdevprj_version" ); }
 
   /** Fetch the type: {normal_cpp,normal_kde,mini_kde} */
+  /** 		(normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support */
   QString getProjectType()    { return readGroupEntry( "General", "project_type" ); }
 
   /** Fetch the name of the project. */

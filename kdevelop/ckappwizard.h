@@ -165,6 +165,7 @@ private:
   QListViewItem *kdeentry;
   //QListViewItem *corbaitem;
   //QListViewItem *komitem;
+  QListViewItem *kdenormaloglitem; // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   QListViewItem *kdenormalitem;
   QListViewItem *kdeminiitem;
   QListViewItem *kde2normalitem;
@@ -197,6 +198,3 @@ private:
 };
 
 #endif
-
-
-
