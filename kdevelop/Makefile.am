@@ -23,7 +23,7 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
+kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
@@ -69,7 +69,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ctreeview.h cexecuteargdlg.h mdiframe.h customizedlg.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
-	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \
+	cmakemanualdlg.h component.h processview.h grepview.h \
 	makeview.h grepdlg.h outputview.h ckdevaccel.h editorview.h docbrowserview.h fileclosealldlg.h
 
 EXTRA_DIST = kdeveloprc \

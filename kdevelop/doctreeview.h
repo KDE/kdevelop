@@ -50,7 +50,7 @@ protected:
 
 protected slots:
     void slotConfigure();
-    void slotLeftButtonPressed(QListViewItem *item);
+    void slotItemExecuted(QListViewItem *item);
     void slotRightButtonPressed(QListViewItem *item, const QPoint &p, int);
 	
 signals:

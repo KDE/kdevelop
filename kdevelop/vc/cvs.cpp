@@ -1,5 +1,6 @@
-#include <qfileinfo.h>
 #include <klocale.h>
+#include <qfileinfo.h>
+#include <qregexp.h>
 #include <stdio.h>
 #include "cvsdialog.h"
 #include "commitdialog.h"
@@ -87,12 +88,16 @@ void CVS::commit(const char *filename)
     CommitDialog *d = new CommitDialog();
     if (d->exec() == QDialog::Rejected)
         return;
-        
+
+    QString message=d->logMessage();
+    if (!message.isEmpty())
+     message.replace(QRegExp("'"), "'\"'\"'");
+
     QString command("cd ");
     command += dirpath;
-    command += " && cvs commit -m \"";
-    command += d->logMessage();
-    command += "\" ";
+    command += " && cvs commit -m \'";
+    command += message;
+    command += "\' ";
     command += name;
     command += " 2>&1";
 
