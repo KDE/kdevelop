@@ -1,3 +1,8 @@
+2001-03-10  falk <falk@kdevelop.org>
+    * DocViewMan improved (set/get current doc and view, delete views)
+    * replaced all edit_widget in CKDevelop by m_docViewManager->currentEditView()
+    * other MDI stuff
+
 2001-03-07  jbb <jbb@kdevelop.org>
     * add sharedlib_rootname and sharedlib_LDFLAGS to project file. These can
       be set against each sharedlib, which allows us to use kdevelop to
