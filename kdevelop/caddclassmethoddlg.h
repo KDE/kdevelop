@@ -31,9 +31,12 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qmultilinedit.h>
+#include <qlayout.h> 
 #include "./classparser/ParsedMethod.h"
 
-/** Dialog to create a new method for a class. */
+/** Dialog to create a new method for a class. 
+ * @author Jonas Nordin
+ */
 class CAddClassMethodDlg : public QDialog
 {
   Q_OBJECT
@@ -47,7 +50,34 @@ public: // Public queries
 
 protected: // Private widgets
 
+  ///////////////////////////////
+  // Layouts
+  ///////////////////////////////
+
+  /** Main layout for the dialog. */
+  QVBoxLayout topLayout;
+  
+  /** Layout for function definition. */
+  QGridLayout functionLayout;
+
+  /** Layout for choosing access. */
+  QGridLayout accessLayout;
+
+  /** Layout for choosing type. */
+  QGridLayout typeLayout;
+
+  /** Layout for choosing modifier. */
+  QGridLayout modifierLayout;
+
+  /** Layout for the ok/cancel buttons. */
+  QHBoxLayout buttonLayout;
+
+  ///////////////////////////////
+  // Button groups
+  //////////////////////////////
+
   QButtonGroup modifierGrp;
+  QButtonGroup typeGrp;
   QButtonGroup functionGrp;
   QButtonGroup accessGrp;
 
@@ -58,9 +88,19 @@ protected: // Private widgets
   QLabel docLbl;
   QMultiLineEdit docEdit;
 
+  /** Public method. */
   QRadioButton publicRb;
+  /** Protected method rb. */
   QRadioButton protectedRb;
+  /** Private method rb. */
   QRadioButton privateRb;
+
+  /** This is a method rb. */
+  QRadioButton methodRb;
+  /** This is a signal rb. */
+  QRadioButton signalRb;
+  /** This is a slot rb. */
+  QRadioButton slotRb;
 
   QCheckBox virtualCb;
   QCheckBox staticCb;
@@ -68,6 +108,7 @@ protected: // Private widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
+  QLabel btnFill;
 
  protected slots:
 

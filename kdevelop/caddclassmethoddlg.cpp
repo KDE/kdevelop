@@ -27,7 +27,14 @@
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
+    topLayout( this, 5 ),
+    functionLayout( 9, 3, 1, "functionLayout" ),
+    accessLayout( 3, 5, 1, "accessLayout" ),
+    typeLayout( 3, 5, 1, "typeLayout" ),
+    modifierLayout( 3, 5, 1, "modifierLayout" ),
+    buttonLayout( 5, "buttonLayout" ),
     modifierGrp( this, "modifierGrp" ),
+    typeGrp( this, "typeGrp" ),
     functionGrp( this, "functionGrp" ),
     accessGrp( this, "accessGrp" ),
     typeLbl( this, "typeLbl" ),
@@ -39,13 +46,17 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     publicRb( this, "publicRb" ),
     protectedRb( this, "protectedRb" ),
     privateRb( this, "privateRb" ),
+    methodRb( this, "methodRb" ),
+    signalRb( this, "signalRb" ),
+    slotRb( this, "slotRb" ),
     virtualCb( this, "virtualCb" ),
     staticCb( this, "staticCb" ),
     constCb( this, "constCb" ),
     okBtn( this, "okBtn" ),
-    cancelBtn( this, "cancelBtn" )
+    cancelBtn( this, "cancelBtn" ),
+    btnFill( this, "btnFill" )
 {
-  setCaption( i18n("Add member function") );
+  setCaption( i18n("Add class member") );
 
   setWidgetValues();
   setCallbacks();
@@ -53,213 +64,169 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
 
 void CAddClassMethodDlg::setWidgetValues()
 {
-  modifierGrp.setGeometry( 10, 310, 260, 50 );
-  modifierGrp.setMinimumSize( 0, 0 );
-  modifierGrp.setMaximumSize( 32767, 32767 );
-  modifierGrp.setFocusPolicy( QWidget::NoFocus );
-  modifierGrp.setBackgroundMode( QWidget::PaletteBackground );
-  modifierGrp.setFontPropagation( QWidget::NoChildren );
-  modifierGrp.setPalettePropagation( QWidget::NoChildren );
+  // Top layout
+  topLayout.addLayout( &functionLayout );
+  topLayout.addLayout( &accessLayout );
+  topLayout.addLayout( &typeLayout );
+  topLayout.addLayout( &modifierLayout );
+  topLayout.addLayout( &buttonLayout );
+
+  // Function grp
+  functionGrp.setFrameStyle( 49 );
+  functionGrp.setTitle( i18n("Function") );
+
+  // Accessgrp
+  accessGrp.setFrameStyle( 49 );
+  accessGrp.setTitle( i18n("Access") );
+  KQuickHelp::add( &accessGrp,
+                   i18n(
+                     "You can choose here whether you want the member function\n"
+                     "be declared as public, protected or private."));
+
+  typeGrp.setFrameStyle( 49 );
+  typeGrp.setTitle( i18n( "Type" ) );
+  KQuickHelp::add( &typeGrp,
+                   i18n( "Choose the type of member object you want to create.\nThe type can be signal, slot or method." ) );
+
+  // Modifier grp
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
-  KQuickHelp::add(&modifierGrp,i18n("You can set modifiers for the member function here."));
+  KQuickHelp::add( &modifierGrp,
+                   i18n("You can set modifiers for the member function here."));
   
-  functionGrp.setGeometry( 10, 10, 260, 230 );
-  functionGrp.setMinimumSize( 0, 0 );
-  functionGrp.setMaximumSize( 32767, 32767 );
-  functionGrp.setFocusPolicy( QWidget::NoFocus );
-  functionGrp.setBackgroundMode( QWidget::PaletteBackground );
-  functionGrp.setFontPropagation( QWidget::NoChildren );
-  functionGrp.setPalettePropagation( QWidget::NoChildren );
-  functionGrp.setFrameStyle( 49 );
-  functionGrp.setTitle( i18n("Function") );
-  functionGrp.setAlignment( 1 );
-
-  accessGrp.setGeometry( 10, 250, 260, 50 );
-  accessGrp.setMinimumSize( 0, 0 );
-  accessGrp.setMaximumSize( 32767, 32767 );
-  accessGrp.setFocusPolicy( QWidget::NoFocus );
-  accessGrp.setBackgroundMode( QWidget::PaletteBackground );
-  accessGrp.setFontPropagation( QWidget::NoChildren );
-  accessGrp.setPalettePropagation( QWidget::NoChildren );
-  accessGrp.setFrameStyle( 49 );
-  accessGrp.setTitle( i18n("Access") );
-  accessGrp.setAlignment( 1 );
-  KQuickHelp::add(&accessGrp,i18n(
-  "You can choose here whether you want the member function\n"
-  "be declared as public, protected or private."));
-  
-  typeLbl.setGeometry( 20, 30, 40, 20 );
-  typeLbl.setMinimumSize( 0, 0 );
-  typeLbl.setMaximumSize( 32767, 32767 );
-  typeLbl.setFocusPolicy( QWidget::NoFocus );
-  typeLbl.setBackgroundMode( QWidget::PaletteBackground );
-  typeLbl.setFontPropagation( QWidget::NoChildren );
-  typeLbl.setPalettePropagation( QWidget::NoChildren );
+  typeLbl.setMinimumSize( 40, 20 );
+  typeLbl.setFixedHeight( 20 );
   typeLbl.setText( i18n("Type:") );
-  typeLbl.setAlignment( 289 );
-  typeLbl.setMargin( -1 );
 
-  typeEdit.setGeometry( 20, 50, 240, 30 );
-  typeEdit.setMinimumSize( 0, 0 );
-  typeEdit.setMaximumSize( 32767, 32767 );
-  typeEdit.setFocusPolicy( QWidget::StrongFocus );
-  typeEdit.setBackgroundMode( QWidget::PaletteBase );
-  typeEdit.setFontPropagation( QWidget::NoChildren );
-  typeEdit.setPalettePropagation( QWidget::NoChildren );
-  typeEdit.setText( "" );
-  typeEdit.setMaxLength( 32767 );
-  typeEdit.setEchoMode( QLineEdit::Normal );
+  typeEdit.setMinimumSize( 240, 30 );
+  typeEdit.setFixedHeight( 30 );
   typeEdit.setFrame( TRUE );
   KQuickHelp::add(&typeLbl,KQuickHelp::add(&typeEdit,i18n("Enter the type of the member function here.")));
 
-  declLbl.setGeometry( 20, 80, 70, 20 );
-  declLbl.setMinimumSize( 0, 0 );
-  declLbl.setMaximumSize( 32767, 32767 );
-  declLbl.setFocusPolicy( QWidget::NoFocus );
-  declLbl.setBackgroundMode( QWidget::PaletteBackground );
-  declLbl.setFontPropagation( QWidget::NoChildren );
-  declLbl.setPalettePropagation( QWidget::NoChildren );
+  declLbl.setMinimumSize( 70, 20 );
+  declLbl.setFixedHeight( 20 );
   declLbl.setText( i18n("Declaration:") );
-  declLbl.setAlignment( 289 );
-  declLbl.setMargin( -1 );
   
-  declEdit.setGeometry( 20, 100, 240, 30 );
-  declEdit.setMinimumSize( 0, 0 );
-  declEdit.setMaximumSize( 32767, 32767 );
-  declEdit.setFocusPolicy( QWidget::StrongFocus );
-  declEdit.setBackgroundMode( QWidget::PaletteBase );
-  declEdit.setFontPropagation( QWidget::NoChildren );
-  declEdit.setPalettePropagation( QWidget::NoChildren );
-  declEdit.setText( "" );
-  declEdit.setMaxLength( 32767 );
-  declEdit.setEchoMode( QLineEdit::Normal );
+  declEdit.setMinimumSize( 240, 30 );
+  declEdit.setFixedHeight( 30 );
   declEdit.setFrame( TRUE );
   KQuickHelp::add(&declLbl,KQuickHelp::add(&declEdit,i18n("Enter the declaration of the member function here.")));
 
-  docLbl.setGeometry( 20, 130, 100, 20 );
-  docLbl.setMinimumSize( 0, 0 );
-  docLbl.setMaximumSize( 32767, 32767 );
-  docLbl.setFocusPolicy( QWidget::NoFocus );
-  docLbl.setBackgroundMode( QWidget::PaletteBackground );
-  docLbl.setFontPropagation( QWidget::NoChildren );
-  docLbl.setPalettePropagation( QWidget::NoChildren );
+  docLbl.setMinimumSize( 100, 20 );
+  docLbl.setFixedHeight( 20 );
   docLbl.setText( i18n("Documentation:") );
-  docLbl.setAlignment( 289 );
-  docLbl.setMargin( -1 );
 
-  docEdit.setGeometry( 20, 150, 240, 80 );
-  docEdit.setMinimumSize( 0, 0 );
-  docEdit.setMaximumSize( 32767, 32767 );
-  docEdit.setFocusPolicy( QWidget::StrongFocus );
-  docEdit.setBackgroundMode( QWidget::PaletteBase );
-  docEdit.setFontPropagation( QWidget::SameFont );
-  docEdit.setPalettePropagation( QWidget::SameFont );
-  docEdit.insertLine( "" );
-  docEdit.setReadOnly( FALSE );
-  docEdit.setOverwriteMode( FALSE );
+  docEdit.setMinimumSize( 240, 80 );
   KQuickHelp::add(&docLbl,KQuickHelp::add(&docEdit,i18n("You can enter a description of the member function here.")));
 
-  publicRb.setGeometry( 20, 270, 70, 20 );
-  publicRb.setMinimumSize( 0, 0 );
-  publicRb.setMaximumSize( 32767, 32767 );
-  publicRb.setFocusPolicy( QWidget::TabFocus );
-  publicRb.setBackgroundMode( QWidget::PaletteBackground );
-  publicRb.setFontPropagation( QWidget::NoChildren );
-  publicRb.setPalettePropagation( QWidget::NoChildren );
+  publicRb.setMinimumSize( 70, 20 );
+  publicRb.setFixedHeight( 20 );
   publicRb.setText( "Public" );
-  publicRb.setAutoRepeat( FALSE );
-  publicRb.setAutoResize( FALSE );
+  publicRb.setChecked( true );
 
-  protectedRb.setGeometry( 110, 270, 80, 20 );
-  protectedRb.setMinimumSize( 0, 0 );
-  protectedRb.setMaximumSize( 32767, 32767 );
-  protectedRb.setFocusPolicy( QWidget::TabFocus );
-  protectedRb.setBackgroundMode( QWidget::PaletteBackground );
-  protectedRb.setFontPropagation( QWidget::NoChildren );
-  protectedRb.setPalettePropagation( QWidget::NoChildren );
+  protectedRb.setMinimumSize( 80, 20 );
+  protectedRb.setFixedHeight( 20 );
   protectedRb.setText( "Protected" );
-  protectedRb.setAutoRepeat( FALSE );
-  protectedRb.setAutoResize( FALSE );
 
-  privateRb.setGeometry( 200, 270, 60, 20 );
-  privateRb.setMinimumSize( 0, 0 );
-  privateRb.setMaximumSize( 32767, 32767 );
-  privateRb.setFocusPolicy( QWidget::TabFocus );
-  privateRb.setBackgroundMode( QWidget::PaletteBackground );
-  privateRb.setFontPropagation( QWidget::NoChildren );
-  privateRb.setPalettePropagation( QWidget::NoChildren );
+  privateRb.setMinimumSize( 60, 20 );
+  privateRb.setFixedHeight( 20 );
   privateRb.setText( "Private" );
-  privateRb.setAutoRepeat( FALSE );
-  privateRb.setAutoResize( FALSE );
- 
-  virtualCb.setGeometry( 20, 330, 60, 20 );
-  virtualCb.setMinimumSize( 0, 0 );
-  virtualCb.setMaximumSize( 32767, 32767 );
-  virtualCb.setFocusPolicy( QWidget::TabFocus );
-  virtualCb.setBackgroundMode( QWidget::PaletteBackground );
-  virtualCb.setFontPropagation( QWidget::NoChildren );
-  virtualCb.setPalettePropagation( QWidget::NoChildren );
-  virtualCb.setText( "Virtual" );
-  virtualCb.setAutoRepeat( FALSE );
-  virtualCb.setAutoResize( FALSE );
 
-  staticCb.setGeometry( 110, 330, 60, 20 );
-  staticCb.setMinimumSize( 0, 0 );
-  staticCb.setMaximumSize( 32767, 32767 );
-  staticCb.setFocusPolicy( QWidget::TabFocus );
-  staticCb.setBackgroundMode( QWidget::PaletteBackground );
-  staticCb.setFontPropagation( QWidget::NoChildren );
-  staticCb.setPalettePropagation( QWidget::NoChildren );
-  staticCb.setText( "Static" );
-  staticCb.setAutoRepeat( FALSE );
-  staticCb.setAutoResize( FALSE );
+  methodRb.setMinimumSize( 60, 20 );
+  methodRb.setFixedHeight( 20 );
+  methodRb.setText( i18n( "Method" ) );
+  methodRb.setChecked( true );
+
+  signalRb.setMinimumSize( 60, 20 );
+  signalRb.setFixedHeight( 20 );
+  signalRb.setText( "Signal" );
+
+  slotRb.setMinimumSize( 60, 20 );
+  slotRb.setFixedHeight( 20 );
+  slotRb.setText( "Slot" );
  
-  constCb.setGeometry( 200, 330, 60, 20 );
-  constCb.setMinimumSize( 0, 0 );
-  constCb.setMaximumSize( 32767, 32767 );
-  constCb.setFocusPolicy( QWidget::TabFocus );
-  constCb.setBackgroundMode( QWidget::PaletteBackground );
-  constCb.setFontPropagation( QWidget::NoChildren );
-  constCb.setPalettePropagation( QWidget::NoChildren );
+  virtualCb.setMinimumSize( 60, 20 );
+  virtualCb.setFixedHeight( 20 );
+  virtualCb.setText( "Virtual" );
+
+  staticCb.setMinimumSize( 60, 20 );
+  staticCb.setFixedHeight( 20 );
+  staticCb.setText( "Static" );
+ 
+  constCb.setMinimumSize( 60, 20 );
+  constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
-  constCb.setAutoRepeat( FALSE );
-  constCb.setAutoResize( FALSE );
 
   okBtn.setGeometry( 10, 370, 100, 30 );
-  okBtn.setMinimumSize( 0, 0 );
-  okBtn.setMaximumSize( 32767, 32767 );
-  okBtn.setFocusPolicy( QWidget::TabFocus );
-  okBtn.setBackgroundMode( QWidget::PaletteBackground );
-  okBtn.setFontPropagation( QWidget::NoChildren );
-  okBtn.setPalettePropagation( QWidget::NoChildren );
+  okBtn.setFixedSize( 100, 30 );
   okBtn.setText( i18n("OK") );
-  okBtn.setAutoRepeat( FALSE );
-  okBtn.setAutoResize( FALSE );
-	okBtn.setDefault( TRUE );
+  okBtn.setDefault( TRUE );
 
   cancelBtn.setGeometry( 170, 370, 100, 30 );
-  cancelBtn.setMinimumSize( 0, 0 );
-  cancelBtn.setMaximumSize( 32767, 32767 );
-  cancelBtn.setFocusPolicy( QWidget::TabFocus );
-  cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
-  cancelBtn.setFontPropagation( QWidget::NoChildren );
-  cancelBtn.setPalettePropagation( QWidget::NoChildren );
+  cancelBtn.setFixedSize( 100, 30 );
   cancelBtn.setText( i18n("Cancel") );
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
 
-  typeEdit.setFocus();
-  publicRb.setChecked( true );
 
+  // Access group
+  accessGrp.insert( &publicRb );
+  accessGrp.insert( &protectedRb );
+  accessGrp.insert( &privateRb );
+
+  // Type group
+  typeGrp.insert( &methodRb );
+  typeGrp.insert( &signalRb );
+  typeGrp.insert( &slotRb );
+
+  // Modifier group
   modifierGrp.insert( &virtualCb );
   modifierGrp.insert( &staticCb );
   modifierGrp.insert( &constCb );
 
-  accessGrp.insert( &publicRb );
-  accessGrp.insert( &protectedRb );
-  accessGrp.insert( &privateRb );
+  // Function layout.
+  functionLayout.addMultiCellWidget( &functionGrp, 0, 8, 0, 2 );
+  functionLayout.addRowSpacing( 0, 20 );
+  functionLayout.addWidget( &typeLbl, 2, 1 );
+  functionLayout.addWidget( &typeEdit, 3, 1 );
+  functionLayout.addWidget( &declLbl, 4, 1 );
+  functionLayout.addWidget( &declEdit, 5, 1 );
+  functionLayout.addWidget( &docLbl, 6, 1 );
+  functionLayout.addWidget( &docEdit, 7, 1 );
+  functionLayout.addRowSpacing( 8, 10 );
+
+  // Access layout
+  accessLayout.addMultiCellWidget( &accessGrp, 0, 2, 0, 4 );
+  accessLayout.addRowSpacing( 0, 20 );
+  accessLayout.addWidget( &publicRb, 1, 1 );
+  accessLayout.addWidget( &protectedRb, 1, 2 );
+  accessLayout.addWidget( &privateRb, 1, 3 );
+  accessLayout.addRowSpacing( 2, 10 );
+
+  // Type layout
+  typeLayout.addMultiCellWidget( &typeGrp, 0, 2, 0, 4 );
+  typeLayout.addRowSpacing( 0, 20 );
+  typeLayout.addWidget( &methodRb, 1, 1 );
+  typeLayout.addWidget( &slotRb, 1, 2 );
+  typeLayout.addWidget( &signalRb, 1, 3 );
+  typeLayout.addRowSpacing( 2, 10 );
+
+  // Modifier layout
+  modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 4 );
+  modifierLayout.addRowSpacing( 0, 20 );
+  modifierLayout.addWidget( &virtualCb, 1, 1 );
+  modifierLayout.addWidget( &staticCb, 1, 2 );
+  modifierLayout.addWidget( &constCb, 1, 3 );
+  modifierLayout.addRowSpacing( 2, 10 );
+
+  // Button layout
+  buttonLayout.addWidget( &okBtn );
+  buttonLayout.addWidget( &btnFill );
+  buttonLayout.addWidget( &cancelBtn );
+
+  // Set the default focus.
+  typeEdit.setFocus();
 }
 
 void CAddClassMethodDlg::setCallbacks()
@@ -288,7 +255,13 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
     aMethod->setName( decl + "()" );
   else // Else just set the whole thing as the name
     aMethod->setName( decl );
-  
+
+  // Set the type
+  if( slotRb.isChecked() )
+    aMethod->setIsSlot( true );
+  else if( signalRb.isChecked() )
+    aMethod->setIsSignal( true );
+
   // Set the export 
   if( publicRb.isChecked() )
     aMethod->setExport( PIE_PUBLIC );
