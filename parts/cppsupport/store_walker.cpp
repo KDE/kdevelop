@@ -192,6 +192,8 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     QStringList scope = m_currentScope;
     if( nestedName ){
+        if( d->declaratorId()->isGlobal() )
+	    scope.clear();
 	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
 	while( it.current() ){
@@ -414,6 +416,8 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 
     QStringList scope = m_currentScope;
     if( d->declaratorId() && d->declaratorId()->nestedName() ){
+        if( d->declaratorId()->isGlobal() )
+	    scope.clear();
         NestedNameSpecifierAST* nestedName = d->declaratorId()->nestedName();
 	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
