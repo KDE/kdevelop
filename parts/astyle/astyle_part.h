@@ -12,9 +12,6 @@ class KDialogBase;
 #include <kdevpart.h>
 
 
-#include "keditor/editor.h"
-
-
 class AStylePart : public KDevPart
 {
   Q_OBJECT
