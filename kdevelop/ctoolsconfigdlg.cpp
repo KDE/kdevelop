@@ -40,6 +40,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	add_button->setText(i18n( "&Add" ));
 	add_button->setAutoRepeat( FALSE );
 	add_button->setAutoResize( FALSE );
+      
 
 	delete_button = new QPushButton( this, "delete_button" );
 	delete_button->setGeometry( 270, 60, 100, 30 );
@@ -47,6 +48,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	delete_button->setText(i18n( "De&lete" ));
 	delete_button->setAutoRepeat( FALSE );
 	delete_button->setAutoResize( FALSE );
+	delete_button->setEnabled( FALSE );
 
 	move_up_button = new QPushButton( this, "move_up_button" );
 	move_up_button->setGeometry( 270, 110, 100, 30 );
@@ -54,6 +56,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_up_button->setText(i18n( "Move &Up" ));
 	move_up_button->setAutoRepeat( FALSE );
 	move_up_button->setAutoResize( FALSE );
+	move_up_button->setEnabled( FALSE );
 
 	move_down_button = new QPushButton( this, "move_down_button" );
 	move_down_button->setGeometry( 270, 150, 100, 30 );
@@ -61,6 +64,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_down_button->setText(i18n( "Move &Down" ));
 	move_down_button->setAutoRepeat( FALSE );
 	move_down_button->setAutoResize( FALSE );
+	move_down_button->setEnabled( FALSE );
 
 
 	executable_label = new QLabel( this, "command_label" );
@@ -80,7 +84,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	executable_button->setGeometry( 410, 240, 30, 30 );
 	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
 	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
 	executable_button->setPixmap(pix);
 	executable_button->setAutoRepeat( FALSE );
 	executable_button->setAutoResize( FALSE );
@@ -135,10 +139,12 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 
 	resize( 510, 380 );
 
+
 }
 
 CToolsConfigDlg::~CToolsConfigDlg(){
 }
+
 
 
 void CToolsConfigDlg::slotToolAdd()
@@ -151,18 +157,17 @@ void CToolsConfigDlg::slotToolAdd()
 		KMsgBox::message(this,i18n("Executable not set!"), i18n("You have to set an executable to add to the Tools-Menu first."));
 		return;
 	}
-	if(!QFileInfo(executable).isExecutable()){
-		KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
-		return;
-  }
-	// if(!CToolClass::searchInstProgram(exe_file) ){
-// 		KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
-// 																									"to execute the selected program as a tool."));
-// 		return;
-// 	}
+	if(!QFileInfo(CToolClass::findProgram(executable)).isExecutable()){
+	  KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+	  return;
+	}
+	if(!CToolClass::searchInstProgram(exe_file) ){
+	  KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"																							"to execute the selected program as a tool."));
+	  return;
+ 	}
 	if(menutext.isEmpty()){
-		KMsgBox::message(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
-		return;
+	  KMsgBox::message(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
+	  return;
 	}
 	
 	tools_listbox->insertItem(menutext);
@@ -191,17 +196,23 @@ void CToolsConfigDlg::slotToolMoveUp()
   swap(current-1,current);
   tools_listbox->clear();
   tools_listbox->insertStrList(&tools_entry);
-   tools_listbox->setCurrentItem(current-1);
+  tools_listbox->setCurrentItem(current-1);
+  if(current-1 ==0) move_up_button->setEnabled(false);
+  move_down_button->setEnabled(true);
 }
-
+#include <iostream.h>
 void CToolsConfigDlg::slotToolMoveDown()
 {
   int current = tools_listbox->currentItem();
-  if (current == (int)tools_listbox->count()-1 || current == -1) return;
+  // if (current == (int)tools_listbox->count()-1 || current == -1) return;
   swap(current,current+1);
   tools_listbox->clear();
   tools_listbox->insertStrList(&tools_entry);	
   tools_listbox->setCurrentItem(current+1);
+  if(current+1 == tools_listbox->count()-1) {
+    move_down_button->setEnabled(false);
+  }
+  move_up_button->setEnabled(true);
 }
 
 
@@ -221,15 +232,31 @@ void CToolsConfigDlg::slotToolsExeSelect()
       return;
     }
     else{
-      executable_edit->setText(exe_file_name);
+      executable_edit->setText(exe_file);
     }
   }
 }
 
 void CToolsConfigDlg::slotShowToolProp(int index){
+  
   executable_edit->setText(tools_exe.at(index));
   menu_text_edit->setText(tools_entry.at(index));
   arguments_edit->setText(tools_argument.at(index));
+
+  delete_button->setEnabled( TRUE );
+
+  if(index != 0){
+    move_up_button->setEnabled( TRUE);
+  }
+  else{
+    move_up_button->setEnabled( FALSE);
+  }
+  if(index+1 != tools_listbox->count()){
+    move_down_button->setEnabled( TRUE );
+  }
+  else{
+    move_down_button->setEnabled( FALSE);
+  }
 }
 
 void CToolsConfigDlg::readConfig(){

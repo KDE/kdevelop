@@ -1,3 +1,10 @@
+1999-05-27  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* implemented new mode for LFV, 
+	it's now possible to view the file without the path
+	TODO: make the two modes configurable
+	* finished the implementation of the tools-config-dialog
+	* commit patch from Walter Tasin
+
 1999-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Bugfixes and improved substitution routine 
 	in processes.pl.in by W. Tasin 
@@ -28,7 +35,7 @@
 
 1999-05-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* some bugfixes in the sourcecode generation (dialog editor)
-	* fixed bug: [18:22,23.05.99]
+	* fixed bug: [18:22,23.05.99] - link problem with -lkhtmlw in prj->options
 	* added "--setup" commandline parameter to KDevelop
 
 1999-05-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>

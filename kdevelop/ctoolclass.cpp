@@ -1,9 +1,7 @@
 /***************************************************************************
                  ctoolclass.cpp - some methods,that would be normal global,but I
 		              hate global function :-)
-                             -------------------    
 
-    version              :                                   
     begin                : 20 Jan 1999                        
     copyright            : (C) 1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                         
@@ -63,3 +61,18 @@ bool CToolClass::searchInstProgram(QString name){
   return found;
 }
 
+QString CToolClass::findProgram(QString name){
+  StringTokenizer tokener;
+  QString file;
+  QString complete_path = getenv("PATH");
+
+  tokener.tokenize(complete_path,":");
+
+  while(tokener.hasMoreTokens()){
+    file = QString(tokener.nextToken()) + "/" + name;
+    if(QFile::exists(file)){
+      return file;
+    }
+  }
+  return "";
+}

@@ -51,6 +51,7 @@ void slotToolAdd();
   void slotOK();
   void slotHelp();
   
+  
 protected:
   void readConfig();
   void writeConfig();

@@ -208,12 +208,14 @@ bool CKDevelop::slotProjectClose(){
       //      switchToKDevelop();
     }
     //    disableCommand(ID_TOOLS_KDLGEDIT);
-    header_widget->clear();
-    cpp_widget->clear();
+    
     class_tree->clear();
     log_file_tree->clear();
     real_file_tree->clear();
     menu_buffers->clear();
+
+    header_widget->clear();
+    cpp_widget->clear();
     messages_widget->clear();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
@@ -225,7 +227,9 @@ bool CKDevelop::slotProjectClose(){
     kdlg_tabctl->setTabEnabled("dialogs_view",false);
     kdlg_tabctl->setTabEnabled("items_view",false);
     kdlg_tabctl->setCurrentTab(1); // dialogs
-    
+
+    //clear all edit_infos before starting a new project
+    edit_infos.clear();
     
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);

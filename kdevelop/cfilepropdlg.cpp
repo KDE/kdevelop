@@ -312,7 +312,7 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   }
   // prepare the new 
   // find the tfileinfo
-  str = item->text(0);
+  str = log_tree->getFileName(item);
   for(info = file_list->first();info!=0;info = file_list->next()){
     if (info->rel_name == str){
       break;

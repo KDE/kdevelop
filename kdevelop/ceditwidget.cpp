@@ -65,7 +65,7 @@ QString CEditWidget::text(){
   return KWrite::text();
 }
 void CEditWidget::setText(QString &text){
-  KWrite::setText(text);
+  KWrite::setText((text.isNull()) ? "" : (const char *) text);
 }
 QString CEditWidget::markedText(){
   return KWrite::markedText();

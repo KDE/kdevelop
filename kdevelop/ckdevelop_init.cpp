@@ -170,7 +170,7 @@ void CKDevelop::init(){
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
-  connect(log_file_tree, SIGNAL(selectedFileRemove()), SLOT(slotProjectRemoveFile()));
+  connect(log_file_tree, SIGNAL(selectedFileRemove(QString)), SLOT(delFileFromProject(QString)));
   connect(log_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
 
   connect(real_file_tree, SIGNAL(fileSelected(QString)), SLOT(slotRealFileTreeSelected(QString)));
@@ -439,7 +439,7 @@ void CKDevelop::initMenu(){
   QPixmap pix;
   file_menu = new QPopupMenu;
 
-  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
+  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);

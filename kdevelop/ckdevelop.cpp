@@ -87,6 +87,7 @@ void CKDevelop::slotFileOpen(){
 }
 void CKDevelop::slotFileClose(){
   slotStatusMsg(i18n("Closing file..."));
+   QString filename=edit_widget->getName();
   TEditInfo* actual_info;
   int message_result;
 
@@ -94,15 +95,22 @@ void CKDevelop::slotFileClose(){
     message_result = KMsgBox::yesNoCancel(this,i18n("Save?"),
 					  i18n("The document was modified,save?"),KMsgBox::QUESTION);
     if (message_result == 1){ // yes
-      edit_widget->doSave();
+
+      if (filename=="Untitled.cpp" || filename=="Untitled.h")
+      {
+ 	slotFileSaveAs();
+        slotViewRefresh();
+      }
+      else
+        edit_widget->doSave();
+
     }
     if (message_result == 3){ // cancel
-      slotStatusMsg(i18n("Ready."));
+       slotStatusMsg(i18n("Ready."));
       return;
     }
   }
-
-  //search the actual edit_info and remove it
+//search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName()){ // found
       KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
@@ -114,7 +122,9 @@ void CKDevelop::slotFileClose(){
   }
   // add the next edit to the location
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    if ( CProject::getType( actual_info->filename ) == CProject::getType(edit_widget->getName())){ // found
+    // subject of change if another widget will be implemented for CORBA or COM or YACC ecc.
+    if ( CProject::getType( actual_info->filename ) == CPP_SOURCE && edit_widget==cpp_widget ||
+       CProject::getType( actual_info->filename ) != CPP_SOURCE && edit_widget==header_widget ){ // found
       edit_widget->setText(actual_info->text);
       edit_widget->toggleModified(actual_info->modified);
       edit_widget->setName(actual_info->filename);
@@ -127,7 +137,7 @@ void CKDevelop::slotFileClose(){
   // if not found a successor create an new file
   actual_info = new TEditInfo;
   actual_info->modified=false;
-  if (CProject::getType(edit_widget->getName()) == CPP_HEADER) {// header
+  if (edit_widget==header_widget ) { // header
     actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
     actual_info->filename = "Untitled.h";
   }
@@ -140,6 +150,7 @@ void CKDevelop::slotFileClose(){
   edit_widget->clear();
   edit_widget->setName(actual_info->filename);
   setCaption(edit_widget->getName());
+  
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -1644,7 +1655,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
       ready=false;
     }
-    if (next_job == "run"  || next_job == "run_with_args" && process.exitStatus() == 0){ 
+    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0){ 
       // rest from the buildRun
       appl_process.clearArguments();
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());

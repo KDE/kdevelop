@@ -3,7 +3,6 @@
 		              hate global function :-)
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jan 1999                        
     copyright            : (C) 1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -34,6 +33,9 @@ public:
   static bool searchProgram(QString name);
   /** same as above but without warning message*/
   static bool searchInstProgram(QString name);
+  /** return the absolute filename if found, otherwise ""*/
+  static QString findProgram(QString name);
+  
 };
 
 #endif

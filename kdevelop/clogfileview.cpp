@@ -24,6 +24,9 @@
 #include "cgrouppropertiesdlg.h"
 #include "debug.h"
 #include <assert.h>
+#include <qfileinfo.h>
+
+
 
 /*********************************************************************
  *                                                                   *
@@ -44,6 +47,8 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name)
   preselectitem = ""; // no preselect
   firstitemselect = false;
   allgroups_opened= false;
+  dict = new QPtrDict <char>;
+  dict->setAutoDelete(true);
 }
 
 CLogFileView::~CLogFileView(){
@@ -107,7 +112,8 @@ void CLogFileView::refresh(CProject* prj)
   QStrList groups;
   QStrList filters;
   QStrList temp_files;
-  
+
+ 
   // get all opengroups
   QStrList opengroups;
   prj->getLFVOpenGroups(opengroups);
@@ -117,11 +123,12 @@ void CLogFileView::refresh(CProject* prj)
   char *filter_str;
   char *temp_str;
   QString filename;
+  QString* p_filename;
   bool item_already_selected = false;
 
   // Remove all entries.
   treeH->clear();
-
+  dict->clear();
   // Not a valid project.
   if (!prj->valid)
   {
@@ -158,7 +165,10 @@ void CLogFileView::refresh(CProject* prj)
         // If found
         if( filename.find( filter_exp ) != -1)
         {
-          current_item = treeH->addItem( filename, THC_FILE, lastGrp );
+          current_item = treeH->addItem( QFileInfo("/"+filename).fileName(), THC_FILE, lastGrp );
+	  p_filename = new QString;
+	  dict->insert(current_item,*p_filename = filename);
+	  //	  cerr << ":" << current_item << ":" << filename << endl;
 	  if(firstitemselect == true && item_already_selected == false){
 	    setSelected(current_item,true);
 	    item_already_selected = true;
@@ -192,6 +202,8 @@ void CLogFileView::refresh(CProject* prj)
 
   preselectitem =""; // no preselect on the next refresh
   popupmenu_disable = false;
+  
+
 }
 /** set the filename that will be selected after a refresh*/
 
@@ -241,8 +253,13 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 
 void CLogFileView::slotSelectionChanged( QListViewItem* item)
 {
-  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE )
-    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
+  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ){
+    //    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
+    // cerr << item << endl;
+//     cerr << QString(dict->find(item));
+//     cerr << dict->count();
+    emit logFileTreeSelected(project->getProjectDir() + dict->find(item));
+  }
 }
 
 void CLogFileView::slotNewClass(){
@@ -252,7 +269,8 @@ void CLogFileView::slotNewFile(){
   emit selectedNewFile();
 }
 void CLogFileView::slotFileProp(){
-  emit showFileProperties(currentItem()->text(0));
+  //  emit showFileProperties(currentItem()->text(0));
+  emit showFileProperties(dict->find(currentItem()));
 }
 void CLogFileView::slotGroupProp(){
   QStrList filters;
@@ -297,14 +315,14 @@ void CLogFileView::slotFileRemove(){
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-  emit selectedFileRemove();
+  emit selectedFileRemove(dict->find(currentItem()));
 }
 void CLogFileView::slotFileDelete(){
 
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-  QString name = currentItem()->text(0);
+  QString name = dict->find(currentItem());
   name = project->getProjectDir() + name;
   KShellProcess* proc = new KShellProcess;
   QFileInfo info(name);
@@ -313,8 +331,11 @@ void CLogFileView::slotFileDelete(){
   *proc << command;
   proc->start();
   
-  emit selectedFileRemove();
+  emit selectedFileRemove(dict->find(currentItem()));
   
+}
+QString CLogFileView::getFileName(QListViewItem* item){
+  return  dict->find(item);
 }
 void CLogFileView::slotGroupRemove(){
   QString name = currentItem()->text(0);

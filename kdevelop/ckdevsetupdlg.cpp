@@ -39,7 +39,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   // ****************** the General Tab ********************
   w1 = new QWidget( this, "general" );
   
-
+  
   QButtonGroup* makeGroup;
   makeGroup = new QButtonGroup( w1, "makeGroup" );
   makeGroup->setGeometry( 10, 10, 400, 60 );
@@ -63,32 +63,32 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   makeSelectLineEdit->setText(make_cmd);
 
   KQuickHelp::add(makeGroup,
-  KQuickHelp::add(makeSelectLabel,
-  KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
-					  "Select your system's make-command.\n"
-					  "Usually, this is make, FreeBSD users\n"
-					  "may use gmake. Mind that you can also\n"
-					  "add option parameters to your make-binary\n"
+		  KQuickHelp::add(makeSelectLabel,
+				  KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
+									  "Select your system's make-command.\n"
+									  "Usually, this is make, FreeBSD users\n"
+									  "may use gmake. Mind that you can also\n"
+									  "add option parameters to your make-binary\n"
 					  "as well."))));
   
   bool autoSave=config->readBoolEntry("Autosave",true);
-
+  
   QButtonGroup* autosaveGroup;
   autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
   autosaveGroup->setGeometry( 10, 90, 400, 90 );
   autosaveGroup->setFrameStyle( 49 );
   autosaveGroup->setTitle( i18n("Autosave") );
   autosaveGroup->setAlignment( 1 );
-//  autosaveGroup->insert( autoSaveCheck );
+  //  autosaveGroup->insert( autoSaveCheck );
   autosaveGroup->lower();
-
+  
   autoSaveCheck = new QCheckBox( w1, "autoSaveCheck" );
   autoSaveCheck->setGeometry( 20, 110, 210, 30 );
   autoSaveCheck->setText(i18n("enable Autosave"));
   autoSaveCheck->setAutoRepeat( FALSE );
   autoSaveCheck->setAutoResize( FALSE );
   autoSaveCheck->setChecked(autoSave);
-
+  
   QLabel* autosaveTimeLabel;
   autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
   autosaveTimeLabel->setGeometry( 20, 140, 210, 25 );
@@ -118,33 +118,33 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
     autosaveTimeCombo->setCurrentItem(3);
 
   KQuickHelp::add(autosaveTimeLabel,	
-	KQuickHelp::add(autosaveTimeCombo,	
-	KQuickHelp::add(autoSaveCheck,	
-	KQuickHelp::add(autosaveGroup,i18n("Autosave\n\n"
-	                                "If autosave is enabled, your currently\n"
-	                                "changed files will be saved after the\n"
-	                                "time-interval selected times out.\n\n"
-	                                "Please select your timeout-value.\n"
-	                                "Available are: 3 minutes, 5 minutes,\n"
-	                                "15 minutes and 30 minutes.")))));
+		  KQuickHelp::add(autosaveTimeCombo,	
+				  KQuickHelp::add(autoSaveCheck,	
+						  KQuickHelp::add(autosaveGroup,i18n("Autosave\n\n"
+										     "If autosave is enabled, your currently\n"
+										     "changed files will be saved after the\n"
+										     "time-interval selected times out.\n\n"
+										     "Please select your timeout-value.\n"
+										     "Available are: 3 minutes, 5 minutes,\n"
+										     "15 minutes and 30 minutes.")))));
   
   connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
-
+  
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
   autoswitchGroup->setGeometry( 10, 190, 400, 60 );
   autoswitchGroup->setFrameStyle( 49 );
   autoswitchGroup->setTitle(i18n( "Autoswitch") );
   autoswitchGroup->setAlignment( 1 );
-//  autoswitchGroup->insert( autoSwitchCheck );
+  //  autoswitchGroup->insert( autoSwitchCheck );
   autoswitchGroup->lower();
-
+  
   autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
   autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
+  
   autoSwitchCheck->setText(i18n("enable Autoswitch"));
   autoSwitchCheck->setAutoRepeat( FALSE );
   autoSwitchCheck->setAutoResize( FALSE );
@@ -177,83 +177,85 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 						       "will have to switch to windows\n"
 						       "yourself, including turning on and\n"
 						       "off the outputwindow.")));	
-						       						
-	QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
-	startupGroup->setGeometry( 10, 260, 400, 70 );
-	startupGroup->setFrameStyle( 49 );
-	startupGroup->setTitle(i18n("Startup"));
-	startupGroup->setAlignment( 1 );
-//	startupGroup->insert( logoCheck );
-//	startupGroup->insert( lastProjectCheck );
-	startupGroup->lower();
-	
-	KQuickHelp::add(startupGroup, i18n("Startup\n\n"
-	                  "The Startup group offers options for\n"
-	                  "starting KDevelop"));
 
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
+  
+  QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
+  startupGroup->setGeometry( 10, 260, 400, 70 );
+  startupGroup->setFrameStyle( 49 );
+  startupGroup->setTitle(i18n("Startup"));
+  startupGroup->setAlignment( 1 );
+  //	startupGroup->insert( logoCheck );
+  //	startupGroup->insert( lastProjectCheck );
+  startupGroup->lower();
+  
+  KQuickHelp::add(startupGroup, i18n("Startup\n\n"
+	                  "The Startup group offers options for\n"
+				     "starting KDevelop"));
+  
   config->setGroup("General Options");
   bool logo=config->readBoolEntry("Logo",true);
   bool lastprj=config->readBoolEntry("LastProject",true);
-
+  
   logoCheck = new QCheckBox( w1, "logoCheck" );
-	logoCheck->setGeometry( 20, 275, 190, 25 );
-	logoCheck->setText(i18n("Startup Logo"));
-	logoCheck->setAutoRepeat( FALSE );
-	logoCheck->setAutoResize( FALSE );
-	logoCheck->setChecked( logo );
-
-	KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
+  logoCheck->setGeometry( 20, 275, 190, 25 );
+  logoCheck->setText(i18n("Startup Logo"));
+  logoCheck->setAutoRepeat( FALSE );
+  logoCheck->setAutoResize( FALSE );
+  logoCheck->setChecked( logo );
+  
+  KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
-	
-	lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
-	lastProjectCheck->setGeometry( 20, 295, 190, 25 );
-	lastProjectCheck->setText(i18n("Load last project"));
-	lastProjectCheck->setAutoRepeat( FALSE );
-	lastProjectCheck->setAutoResize( FALSE );
-	lastProjectCheck->setChecked( lastprj );
-	
-	KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
+  
+  lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
+  lastProjectCheck->setGeometry( 20, 295, 190, 25 );
+  lastProjectCheck->setText(i18n("Load last project"));
+  lastProjectCheck->setAutoRepeat( FALSE );
+  lastProjectCheck->setAutoResize( FALSE );
+  lastProjectCheck->setChecked( lastprj );
+  
+  KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
                     "If Load last project is enabled, KDevelop will load\n"
                     "the last project used."));
 
 	
-	config->setGroup("TipOfTheDay");
+  config->setGroup("TipOfTheDay");
   bool tip=config->readBoolEntry("show_tod",true);
-
+  
+  
+  tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
+  tipDayCheck->setGeometry( 220, 275, 150, 25 );
+  tipDayCheck->setText(i18n("Tip of the Day"));
+  tipDayCheck->setAutoRepeat( FALSE );
+  tipDayCheck->setAutoResize( FALSE );
+  tipDayCheck->setChecked( tip );
+  
+  KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
+					  "If Tip of the Day is enabled, KDevelop will show the\n"
+					  "Tip of the Day every time it starts."));
 	
-	tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
-	tipDayCheck->setGeometry( 220, 275, 150, 25 );
-	tipDayCheck->setText(i18n("Tip of the Day"));
-	tipDayCheck->setAutoRepeat( FALSE );
-	tipDayCheck->setAutoResize( FALSE );
-	tipDayCheck->setChecked( tip );
-
-	KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
-	                  "If Tip of the Day is enabled, KDevelop will show the\n"
-	                  "Tip of the Day every time it starts."));
-	
-	
+  
   // ****************** the Keys Tab ***************************
-
+  
   dict = new QDict<KKeyEntry>( accel->keyDict() );
-//  KKeyChooser* w2 = new KKeyChooser ( dict,this);
+  //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
   w2 = new QWidget( this, "keys" );
   w21 = new KKeyChooser ( dict,w2,true);
   w21->setGeometry(15,10,395,320);
-
-
+  
+  
   // ****************** the Documentation Tab ********************
   w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
   
-  
+	
   KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
-		                      "Documentation for the Documentation Browser.\n"
-                          "QT usually comes with complete Documentation\n"
-			                    "whereas for KDE you can create the Documentation\n"
-			                    "easiely by pressing the Update button below."));
-  
+				"Documentation for the Documentation Browser.\n"
+				"QT usually comes with complete Documentation\n"
+				"whereas for KDE you can create the Documentation\n"
+				"easiely by pressing the Update button below."));
+	
   qt_edit = new QLineEdit( w, "qt_edit" );
   qt_edit->setGeometry( 170, 40, 190, 30 );
   qt_edit->setText( config->readEntry("doc_qt"));
@@ -262,9 +264,9 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* qt_button;
   qt_button = new QPushButton( w, "qt_button" );
   qt_button->setGeometry( 370, 40, 30, 30 );
-	QPixmap pix;
+  QPixmap pix;
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-	qt_button->setPixmap(pix);
+  qt_button->setPixmap(pix);
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
   
   QLabel* qt_label;
@@ -276,11 +278,11 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   KQuickHelp::add(qt_edit,
   KQuickHelp::add(qt_button,
   KQuickHelp::add(qt_label, i18n("Enter the path to your QT-Documentation\n"
-				       "here. To access the path easier please\n"
-				       "press the pushbutton on the right to change\n"
-				       "directories.\n\n"
-				       "Usually the QT-Documentation is\n"
-				       "located in <i><blue>$QTDIR/html</i>"))));	
+				 "here. To access the path easier please\n"
+				 "press the pushbutton on the right to change\n"
+				 "directories.\n\n"
+				 "Usually the QT-Documentation is\n"
+				 "located in <i><blue>$QTDIR/html</i>"))));	
   
   kde_edit = new QLineEdit( w, "kde_edit");
   kde_edit->setGeometry( 170, 90, 190, 30 );
@@ -292,7 +294,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* kde_button;
   kde_button = new QPushButton( w, "kde_button" );
   kde_button->setGeometry( 370, 90, 30, 30 );
-	kde_button->setPixmap(pix);
+  kde_button->setPixmap(pix);
   connect(kde_button,SIGNAL(clicked()),SLOT(slotKDEClicked()));
   
   QLabel* kde_label;
@@ -303,13 +305,13 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   KQuickHelp::add(kde_edit,
   KQuickHelp::add(kde_button,
   KQuickHelp::add(kde_label,i18n("Enter the path to your KDE-Documentation\n"
-		                              "here. To access the path easier please\n"
-		                              "press the pushbutton on the right to change\n"
-		                              "directories.\n\n"
-		                              "If you have no kdelibs Documentation installed,\n"
-		                              "you can create it by selecting the Update button\n"
-		                              "below."))));
-
+				 "here. To access the path easier please\n"
+				 "press the pushbutton on the right to change\n"
+				 "directories.\n\n"
+				 "If you have no kdelibs Documentation installed,\n"
+				 "you can create it by selecting the Update button\n"
+				 "below."))));
+  
   QLabel* update_label;
   update_label = new QLabel( w, "update_label" );
   update_label->setGeometry( 20, 190, 260, 30 );
@@ -327,15 +329,15 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   KQuickHelp::add(update_label,
   KQuickHelp::add(update_button,i18n("Update KDE-Documentation\n\n"
-						     "This lets you create or update the\n"
-						     "HTML-documentation of the KDE-libs.\n"
-						     "Mind that you have kdoc installed to\n"
-						     "use this function. Also, the kdelibs\n"
-						     "sources have to be available to create\n"
-						     "the documentation, as well as the \n"
-						     "Qt-Documentation path has to be set to\n"
-						     "cross-reference the KDE-Documentation\n"
-						     "with the Qt-classes.")));
+				     "This lets you create or update the\n"
+				     "HTML-documentation of the KDE-libs.\n"
+				     "Mind that you have kdoc installed to\n"
+				     "use this function. Also, the kdelibs\n"
+				     "sources have to be available to create\n"
+				     "the documentation, as well as the \n"
+				     "Qt-Documentation path has to be set to\n"
+				     "cross-reference the KDE-Documentation\n"
+				     "with the Qt-classes.")));
   
   QLabel* create_label;
   create_label = new QLabel( w, "create_label" );
@@ -351,16 +353,16 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
-
+  
   KQuickHelp::add(create_label,
-  KQuickHelp::add(create_button,i18n("Create Search Database\n\n"
-                                    "This will create a search database for glimpse\n"
-                                    "which will be used to look up marked text in\n"
-                                    "the documentation. We recommend updating the\n"
-                                    "database each time you've changed the documentation\n"
-                                    "e.g. after a kdelibs-update or installing a new\n"
-                                    "Qt-library version.")));
-
+		  KQuickHelp::add(create_button,i18n("Create Search Database\n\n"
+						     "This will create a search database for glimpse\n"
+						     "which will be used to look up marked text in\n"
+						     "the documentation. We recommend updating the\n"
+						     "database each time you've changed the documentation\n"
+						     "e.g. after a kdelibs-update or installing a new\n"
+						     "Qt-library version.")));
+  
   QButtonGroup* docOptionsGroup;
   docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
   docOptionsGroup->setGeometry( 10, 160, 400, 110 );

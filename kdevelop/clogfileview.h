@@ -25,6 +25,7 @@
 #include "cproject.h"
 #include <kpopmenu.h>
 #include "ctreeview.h"
+#include <qptrdict.h>
 
 /** the logical-file-view,draw the contents of 
   * a cprojectinfo into a tree
@@ -55,6 +56,8 @@ public:
   void setPopupMenusDisabled();
   /** all groups are opened after a refresh*/
   void setAllGroupsOpened(){allgroups_opened=true;}
+  /** returns the relative filename*/
+  QString getFileName(QListViewItem* item);
 
 protected: // Implementations of virtual methods.
 
@@ -81,7 +84,7 @@ protected:
     void selectedNewClass();
     void selectedNewFile();
     void showFileProperties(QString);
-    void selectedFileRemove();
+    void selectedFileRemove(QString);
     void selectedGroupProp();
     void logFileTreeSelected(QString);
 
@@ -95,5 +98,8 @@ protected:
 
   CProject* project;
   QString preselectitem;
+  /** store the long relative filename for every item*/
+  QPtrDict <char>* dict;
+  
 };
 #endif

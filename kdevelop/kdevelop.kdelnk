@@ -9,5 +9,5 @@ DocPath=kdevelop/index.html
 Comment=an IDE for C++/Qt/KDE
 Comment[de]=Eine Entwicklungsumgebung für KDE
 Terminal=0
-Name=KDevelop 0.3
-Name[de]=KDevelop 0.3
+Name=KDevelop 0.4
+Name[de]=KDevelop 0.4

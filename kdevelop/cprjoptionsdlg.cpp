@@ -1171,9 +1171,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   setCancelButton(i18n("Cancel"));
   connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
 
-  // **************set the button*********************
-  
+  // **************set tabs enlabe/disable*********************
 
+  if(prj->isCustomProject()){
+    setTabEnabled("Compiler options",false);
+    setTabEnabled("Warnings",false);
+    setTabEnabled("Linker",false);
+  }
+ 
 }
 
 
