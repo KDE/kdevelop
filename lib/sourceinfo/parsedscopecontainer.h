@@ -95,6 +95,12 @@ public:
     
     /** Outputs this object to stdout. */
     void out();
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg);
 
 #endif

@@ -23,7 +23,6 @@
 
 class ParsedClass;
 
-
 /**
  * This class is a container that also can hold classes.
  * It has a range of functions to work with the classes it holds.
@@ -95,6 +94,12 @@ public:
 
     /** Clears the internal state. */
     void clear(bool bAutodel=true);
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg);
 
 #endif

@@ -243,3 +243,35 @@ void ParsedScopeContainer::out()
           ++attributeIterator )
         attributeIterator.current()->out();
 }
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg)
+{
+    operator<<(s, (const ParsedClassContainer&)arg);
+
+    // Add scopes
+    s << arg.scopes.count();
+    QDictIterator<ParsedScopeContainer> scopeIt(arg.scopes);
+    for (; scopeIt.current(); ++scopeIt)
+        s << *scopeIt.current();
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg)
+{
+    operator>>(s, (ParsedClassContainer&)arg);
+
+    int n;
+    
+    // Fetch scopes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedScopeContainer *scope = new ParsedScopeContainer;
+        s >> (*scope);
+        arg.addScope(scope);
+    }
+
+    return s;
+}

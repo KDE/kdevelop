@@ -272,30 +272,22 @@ bool ParsedAttribute::isEqual( ParsedAttribute *attr )
 
 QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
 {
-    s << arg.name() << arg.declaredInScope() << (int)arg.access()
-      << arg.definedInFile() << arg.definedOnLine() << arg.comment()
-      << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
+    operator<<(s, (const ParsedItem&)arg);
 
+    s << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
+    
     return s;
 }
 
 
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg)
 {
-    QString name, declaredInScope, definedInFile, comment, type;
-    int access;
-    int definedOnLine, posName;
-    int isInHFile, isStatic, isConst;
+    operator>>(s, (ParsedItem&)arg);
+
+    QString type; int isInHFile, isStatic, isConst, posName;
     
-    s >> name >> declaredInScope >> access >> definedInFile >> definedOnLine >> comment
-      >> type >> isInHFile >> isStatic >> isConst >> posName;
+    s  >> type >> isInHFile >> isStatic >> isConst >> posName;
     
-    arg.setName(name);
-    arg.setDeclaredInScope(declaredInScope);
-    arg.setAccess((PIAccess)access);
-    arg.setDefinedInFile(definedInFile);
-    arg.setDefinedOnLine(definedOnLine);
-    arg.setComment(comment);
     arg.setType(type);
     arg.setIsInHFile(isInHFile);
     arg.setIsStatic(isStatic);

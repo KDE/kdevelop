@@ -363,7 +363,6 @@ bool ClassStore::hasScope( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedScopeContainer *ClassStore::getScopeByName( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, NULL );
     REQUIRE1( "Valid scope name length", aName.length() > 0, NULL );
     
     return globalContainer.getScopeByName( aName );
@@ -381,7 +380,6 @@ ParsedScopeContainer *ClassStore::getScopeByName( const QString &aName )
  *-----------------------------------------------------------------*/
 bool ClassStore::hasClass( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, false );
     REQUIRE1( "Valid classname length", aName.length() > 0, false );
     
     return globalContainer.hasClass( aName ) || 
@@ -392,7 +390,7 @@ bool ClassStore::hasClass( const QString &aName )
 
 /*-------------------------------------- ClassStore::getClassByName()
  * getClassByName()
- *   Get a class from the list by using its' name.
+ *   Get a class from the list by using its name.
  *
  * Parameters:
  *   aName          Name of the class to fetch.
@@ -501,7 +499,6 @@ QList<ParsedClass> *ClassStore::getClassClients( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassSuppliers( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
     REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     REQUIRE1( "Class exists", hasClass( aName ), new QList<ParsedClass>() );
     
@@ -602,7 +599,6 @@ void ClassStore::getVirtualMethodsForClass( const QString &aName,
                                             QList<ParsedMethod> *implList,
                                             QList<ParsedMethod> *availList )
 {
-    REQUIRE( "Valid classname", aName != NULL );
     REQUIRE( "Valid classname length", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     

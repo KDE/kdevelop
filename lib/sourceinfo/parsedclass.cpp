@@ -534,7 +534,7 @@ void ParsedClass::out()
 
 QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 {
-    s << arg.name() << arg.definedOnLine();
+    operator<<(s, (const ParsedClassContainer&)arg);
 
     // Add parents.
     s << arg.parents.count();
@@ -547,18 +547,6 @@ QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
     QStringList::ConstIterator friendsIt;
     for (friendsIt = arg._friends.begin(); friendsIt != arg._friends.end(); ++friendsIt)
         s << (*friendsIt);
-    
-    // Add methods.
-    s << arg.methods.count();
-    QListIterator<ParsedMethod> methodIt(arg.methods);
-    for (; methodIt.current(); ++methodIt)
-        s << *methodIt.current();
-    
-    // Add attributes.
-    s << arg.attributes.count();
-    QDictIterator<ParsedAttribute> attrIt(arg.attributes);
-    for (; attrIt.current(); ++attrIt)
-        s << *attrIt.current();
     
     // Add signals.
     s << arg.signalList.count();
@@ -578,13 +566,10 @@ QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 
 QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
 {
-    QString name;
-    int definedOnLine, n;
-    
-    s >> name >> definedOnLine;
-    arg.setName(name);
-    arg.setDefinedOnLine(definedOnLine);
+    operator>>(s, (ParsedClassContainer&)arg);
 
+    int n;
+    
     // Fetch parents
     s >> n;
     for (int i = 0; i < n; ++i) {
@@ -601,22 +586,6 @@ QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
         arg.addFriend(friendname);
     }
     
-    // Fetch methods
-    s >> n;
-    for (int i = 0; i < n; ++i) {
-        ParsedMethod *method = new ParsedMethod;
-        s >> (*method);
-        arg.addMethod(method);
-    }
-
-    // Fetch attributes
-    s >> n;
-    for (int i = 0; i < n; ++i) {
-        ParsedAttribute *attr = new ParsedAttribute;
-        s >> (*attr);
-        arg.addAttribute(attr);
-    }
-
     // Fetch signals
     s >> n;
     for (int i = 0; i < n; ++i) {

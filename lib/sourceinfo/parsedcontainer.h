@@ -255,7 +255,7 @@ public:
     /** Outputs this object to stdout */
     virtual void out() {}
 
-    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+    friend QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
 
 private:
     /**
@@ -264,6 +264,10 @@ private:
      */
     bool _useFullPath;
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedContainer &arg);
 
 #include "parsedstruct.h"
 

@@ -18,6 +18,7 @@
 #ifndef _PARSEDITEM_H_
 #define _PARSEDITEM_H_
 
+#include <qdatastream.h>
 #include <qstring.h>
 
 
@@ -255,5 +256,9 @@ private:
     /** Comment in the vicinity(above/after) of this item. */
     QString _comment;
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
+QDataStream &operator>>(QDataStream &s, ParsedItem &arg);
 
 #endif 

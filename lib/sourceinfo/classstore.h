@@ -73,7 +73,7 @@ public:
     { return globalContainer.hasStruct(aName); }
     
     /**
-     * Fetches a scope from the store using its' name.
+     * Fetches a scope from the store using its name.
      * 
      * @param aName Name of the scope to fetch.
      *

@@ -88,3 +88,38 @@ QString ParsedItem::path()
   else
     return _declaredInScope + "." + _name;
 }
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedItem &arg)
+{
+    s << (int)arg.itemType() << arg.name() << arg.declaredInScope() << (int)arg.access()
+      << arg.definedInFile() << arg.definedOnLine() << arg.definitionEndsOnLine()
+      << arg.declaredInFile() << arg.declaredOnLine() << arg.declarationEndsOnLine()
+      << arg.comment();
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedItem &arg)
+{
+    int itemType; QString name, declaredInScope; int access;
+    QString definedInFile; int definedOnLine, definitionEndsOnLine;
+    QString declaredInFile; int declaredOnLine, declarationEndsOnLine;
+    QString comment;
+    
+    s >> itemType >> name >> declaredInScope >> access
+      >> definedInFile >> definedOnLine >> definitionEndsOnLine
+      >> declaredInFile >> declaredOnLine >> declarationEndsOnLine
+      >> comment;
+
+    arg.setItemType((PIType)itemType);
+    arg.setName(name);
+    arg.setDeclaredInScope(declaredInScope);
+    arg.setAccess((PIAccess)access);
+    arg.setDefinedInFile(definedInFile);
+    arg.setDefinedOnLine(definedOnLine);
+    arg.setDefinitionEndsOnLine(definitionEndsOnLine);
+    arg.setDeclaredInFile(declaredInFile);
+    arg.setDeclaredOnLine(declaredOnLine);
+    arg.setDeclarationEndsOnLine(declarationEndsOnLine);
+    arg.setComment(comment);
+}

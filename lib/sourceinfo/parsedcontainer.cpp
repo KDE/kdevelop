@@ -435,3 +435,49 @@ void ParsedContainer::clear()
     methodsByNameAndArg.clear();
     structs.clear();
 }
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg)
+{
+    operator<<(s, (const ParsedItem&)arg);
+
+    // Add methods.
+    s << arg.methods.count();
+    QListIterator<ParsedMethod> methodIt(arg.methods);
+    for (; methodIt.current(); ++methodIt)
+        s << *methodIt.current();
+    
+    // Add attributes.
+    s << arg.attributes.count();
+    QDictIterator<ParsedAttribute> attrIt(arg.attributes);
+    for (; attrIt.current(); ++attrIt)
+        s << *attrIt.current();
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedContainer &arg)
+{
+    operator>>(s, (ParsedItem&)arg);
+
+    int n;
+    
+    // Fetch methods
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedMethod *method = new ParsedMethod;
+        s >> (*method);
+        arg.addMethod(method);
+    }
+
+    // Fetch attributes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedAttribute *attr = new ParsedAttribute;
+        s >> (*attr);
+        arg.addAttribute(attr);
+    }
+
+    return s;
+}

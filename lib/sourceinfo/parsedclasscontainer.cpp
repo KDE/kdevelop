@@ -237,3 +237,36 @@ QStringList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
 
     return ret_val;
 }
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg)
+{
+    operator<<(s, (const ParsedContainer&)arg);
+
+    // Add clases
+    s << arg.classes.count();
+    QDictIterator<ParsedClass> classIt(arg.classes);
+    for (; classIt.current(); ++classIt)
+        s << *classIt.current();
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg)
+{
+    operator>>(s, (ParsedContainer&)arg);
+
+    int n;
+    
+    // Fetch classes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedClass *klass = new ParsedClass;
+        s >> (*klass);
+        arg.addClass(klass);
+    }
+
+    return s;
+}
+
