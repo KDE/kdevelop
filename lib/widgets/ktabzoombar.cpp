@@ -61,9 +61,9 @@ KTabZoomBar::~KTabZoomBar()
 }
 
 
-int KTabZoomBar::addTab(QTab *tab)
+int KTabZoomBar::addTab(const QTab &tab)
 {
-  KTabZoomButton *btn = new KTabZoomButton(tab->text(), this, d->m_tabPosition);
+  KTabZoomButton *btn = new KTabZoomButton(tab.text(), this, d->m_tabPosition);
   d->m_layout->add(btn);
   btn->show();
 
