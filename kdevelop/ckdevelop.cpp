@@ -4261,6 +4261,7 @@ void CKDevelop::fillToggleOutputViewsMenu()
   toggleoutputviews_popup->insertItem(i18n("&Breakpoints"), this, SLOT(slotViewOBreakpointView()));
   bool bBreakpointsChecked = isToolViewVisible(brkptManager);
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bBreakpointsChecked);
+  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(6), dbgInternal);
 
   toggleoutputviews_popup->insertItem(i18n("&Disassemble"), this, SLOT(slotViewODisassembleView()));
   bool bDisassembleChecked = isToolViewVisible(disassemble);
@@ -4430,8 +4431,11 @@ void CKDevelop::slotActivateOView_Konsole()
 
 void CKDevelop::slotActivateOView_BrkptManager()
 {
-  dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
-  brkptManager->setFocus();
+  if (brkptManager && dbgInternal)
+  {
+    dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
+    brkptManager->setFocus();
+  }
 }
 
 void CKDevelop::slotActivateOView_FrameStack()
