@@ -334,7 +334,7 @@ void QEditorCodeCompletion::updateBox( bool newCoordinate )
         int h = cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
         y += cursor->paragraph()->rect().y();
 
-        m_completionPopup->resize( m_completionListBox->sizeHint()+ QSize(2,2))
+        m_completionPopup->resize( m_completionListBox->sizeHint()+ QSize(2,2));
 
         QPoint pt = curEditor->contentsToViewport( QPoint(x, y) );
         int yy = curEditor->mapToGlobal( pt ).y() + h + m_completionListBox->height();
