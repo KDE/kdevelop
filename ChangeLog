@@ -1,3 +1,6 @@
+2003-02-20 Roberto Raggi <roberto@kdevelop.org>
+	* Added Make-member feature to c++ support.
+
 2003-02-19 F@lk Brettschneider <falkbr@kdevelop.org>
 	* QEditor find dialog improved:
 	- don't stop at end of file but loop to begin (makes much sense when starting from cursor)
