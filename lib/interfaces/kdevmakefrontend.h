@@ -19,7 +19,7 @@ public:
     ~KDevMakeFrontend();
 
     virtual QWidget* widget() { return 0L; }
-    
+
     /**
      * The component shall start to execute a make-like command.
      * Commands are always asynchronous. You can submit several jobs
@@ -46,6 +46,10 @@ signals:
      * Only emitted if the command was succesfully finished.
      */
     void commandFinished(const QString &command);
+    /**
+     * Emitted if a command failed.
+     */
+    void commandFailed(const QString &command);
 };
 
 #endif
