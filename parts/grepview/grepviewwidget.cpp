@@ -35,34 +35,23 @@ class GrepListBoxItem : public ProcessListBoxItem
 public:
     GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename);
     QString filename()
-        { return str1; }
+        { return fileName; }
     int linenumber()
-        { return str2.right(str2.length()-1).toInt()-1; }
+        { return lineNumber.toInt(); }
     virtual bool isCustomItem();
 
 private:
     virtual void paint(QPainter *p);
-    QString str1, str2, str3;
+    QString fileName, lineNumber, text;
     bool show;
 };
 
 
-GrepListBoxItem::GrepListBoxItem(const QString &fileName,
-                                 const QString &lineNumber,
-                                 const QString &text,
-                                 bool showFilename)
-    : ProcessListBoxItem(fileName + lineNumber + text, Normal)
-{
-    static QRegExp re( "\t" );
-
-    str1 = fileName;
-    str2 = lineNumber;
-    str3 = text;
-    // replace tab -> 8 spaces
-    str3 = str3.replace( re, "        " );
-
-    show = showFilename;
-}
+GrepListBoxItem::GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename)
+    : ProcessListBoxItem( QString::null, Normal), 
+	fileName(fileName), lineNumber(lineNumber), text(text.stripWhiteSpace()),
+	show(showFilename)
+{}
 
 
 bool GrepListBoxItem::isCustomItem()
@@ -74,14 +63,14 @@ bool GrepListBoxItem::isCustomItem()
 void GrepListBoxItem::paint(QPainter *p)
 {
     QFontMetrics fm = p->fontMetrics();
-    QString stx = str2.right(str2.length()-1);
+    QString stx = lineNumber + ":  ";
     int y = fm.ascent()+fm.leading()/2;
     int x = 3;
 	if (show)
 	{
 		p->setPen(Qt::darkGreen);
-		p->drawText(x, y, str1);
-		x += fm.width(str1);
+		p->drawText(x, y, fileName);
+		x += fm.width(fileName);
     }
     else {
     p->setPen(Qt::black);
@@ -94,7 +83,7 @@ void GrepListBoxItem::paint(QPainter *p)
     x += fm.width(stx);
 
     p->setPen(Qt::blue);
-    p->drawText(x, y, str3);
+    p->drawText(x, y, text);
 	}
 }
 
@@ -138,7 +127,7 @@ void GrepViewWidget::showDialog()
     grepdlg->show();
 }
 
-
+// @todo - put this somewhere common - or just use Qt if possible
 static QString escape(const QString &str)
 {
     QString escaped("[]{}()\\^$?.+-*");
@@ -174,6 +163,7 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 void GrepViewWidget::searchActivated()
 {
     m_matchCount = 0;
+    _lastfilename = "";
 
     QString files;
     // waba: code below breaks on filenames containing a ',' !!!
@@ -234,6 +224,7 @@ void GrepViewWidget::childFinished(bool normal, int status)
         status = 0;
 
     insertItem(new ProcessListBoxItem(i18n("*** %n match found. ***", "*** %n matches found. ***", m_matchCount), ProcessListBoxItem::Diagnostic));
+    maybeScrollToBottom();
 
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
@@ -247,7 +238,7 @@ void GrepViewWidget::slotExecuted(QListBoxItem* item)
         return;
 
     GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-    m_part->partController()->editDocument(gi->filename(), gi->linenumber());
+    m_part->partController()->editDocument( gi->filename(), gi->linenumber()-1 );
     m_part->mainWindow()->lowerView(this);
 }
 
@@ -261,22 +252,25 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
     if ( (pos = str.find(':')) != -1)
         {
             filename = str.left(pos);
-            str.remove(0, pos);
-            if ( (pos = str.find(':', 1)) != -1)
+            str.remove( 0, pos+1 );
+            if ( ( pos = str.find(':') ) != -1)
                 {
                     linenumber = str.left(pos);
-                    str.remove(0, pos);
+                    str.remove( 0, pos+1 );
                     // filename will be displayed only once
                     // selecting filename will display line 1 of file,
                     // otherwise, line of requested search
-                    if (findItem(filename,BeginsWith|ExactMatch) == 0)
-							{
-							 insertItem(new GrepListBoxItem(filename, "1", str, true));
-							 insertItem(new GrepListBoxItem(filename, linenumber, str, false));
-
-							}
-						else insertItem(new GrepListBoxItem(filename, linenumber, str, false));
-
+                    if ( _lastfilename != filename )
+                    {
+                        _lastfilename = filename;
+                        insertItem(new GrepListBoxItem(filename, "0", str, true));
+                        insertItem(new GrepListBoxItem(filename, linenumber, str, false));
+                    }
+                    else 
+                    {
+                        insertItem(new GrepListBoxItem(filename, linenumber, str, false));
+                    }
+                    maybeScrollToBottom();
                 }
             m_matchCount++;
         }
