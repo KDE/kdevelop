@@ -73,6 +73,7 @@ private:
     PIAccess m_currentAccess;
     bool m_inSlots;
     bool m_inSignals;
+    int m_anon;
 
 private:
     StoreWalker( const StoreWalker& source );

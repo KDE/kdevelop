@@ -16,7 +16,7 @@
 #include <qfileinfo.h>
 
 StoreWalker::StoreWalker( const QString& fileName, ClassStore* store )
-    : m_fileName( fileName ), m_store( store ), m_currentScopeContainer( 0 ), m_currentClass( 0 )
+    : m_fileName( fileName ), m_store( store ), m_currentScopeContainer( 0 ), m_currentClass( 0 ), m_anon( 0 )
 {
 }
 
@@ -32,6 +32,7 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
     m_currentAccess = PIE_PUBLIC;
     m_inSlots = false;
     m_inSignals = false;
+    m_anon = 0;
 
     m_store->removeWithReferences( m_fileName );
     TreeParser::parseTranslationUnit( ast );
@@ -211,8 +212,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     bool isConstructor = cl && typeSpec == 0 && id == cl->name();
     method->setIsConstructor( isConstructor );
 
-    if( cl && (isConstructor || isDestructor) )
+    if( cl && isConstructor )
 	method->setType( cl->name() + "*" );
+    else if( cl && isDestructor )
+	method->setType( "void" );
     else
 	method->setType( typeOfDeclaration(typeSpec, d) );
 
@@ -253,8 +256,6 @@ void StoreWalker::parseTypeSpecifier( TypeSpecifierAST* ast )
 
 void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 {
-    static int anon = 0;
-    
     int startLine, startColumn;
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
@@ -278,7 +279,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
 	
-	className = QString::fromLatin1("(") + shortFileName + QString::number(anon++) + QString::fromLatin1(")");
+	className = QString::fromLatin1("(") + shortFileName + QString::number(m_anon++) + QString::fromLatin1(")");
     } else {
 	className = ast->name()->text();
     }
@@ -513,16 +514,19 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setType( typeOfDeclaration(typeSpec, d) );
     parseFunctionArguments( d, method );
     
-    if( m_currentClass ){
-	
+    if( m_currentClass ){	
 	bool isDestructor = id.startsWith("~");
 	method->setIsDestructor( isDestructor );
 	
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
 
-	if( m_currentClass && (isConstructor || isDestructor) )
+	if( m_currentClass && isConstructor )
 	    method->setType( m_currentClass->name() + "*" );
+	else if( m_currentClass && isDestructor )
+	    method->setType( "void" );
+	else
+	    method->setType( typeOfDeclaration(typeSpec, d) );
     }
     method->setIsConst( d->constant() != 0 );
 
