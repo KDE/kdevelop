@@ -41,7 +41,7 @@ public /*rules*/ :
 
     bool parseTranslationUnit( TranslationUnitAST::Node& node );
 
-    bool parseDefinition( DeclarationAST::Node& node );
+    bool parseDeclaration( DeclarationAST::Node& node );
     bool parseBlockDeclaration( DeclarationAST::Node& node );
     bool parseLinkageSpecification( DeclarationAST::Node& node );
     bool parseLinkageBody( LinkageBodyAST::Node& node );
@@ -52,7 +52,7 @@ public /*rules*/ :
     bool parseTypedef( DeclarationAST::Node& node );
     bool parseAsmDefinition( DeclarationAST::Node& node );
     bool parseTemplateDeclaration( DeclarationAST::Node& node );
-    bool parseDeclaration( DeclarationAST::Node& node );
+    bool parseDeclarationInternal( DeclarationAST::Node& node );
     
     bool parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node );
     bool parseUnqualifiedName( AST::Node& node );
