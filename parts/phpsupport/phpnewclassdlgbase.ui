@@ -1,0 +1,190 @@
+<!DOCTYPE UI><UI>
+<class>PHPNewClassDlgBase</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>NewClass</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>454</width>
+            <height>292</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="4"  column="5" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_cancelButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget row="0"  column="1" >
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_classNameEdit</cstring>
+            </property>
+        </widget>
+        <widget row="4"  column="3"  rowspan="1"  colspan="2" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_okButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>OK</string>
+            </property>
+        </widget>
+        <widget row="1"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Filename:</string>
+            </property>
+        </widget>
+        <spacer row="4"  column="0"  rowspan="1"  colspan="3" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer1</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget row="0"  column="2"  rowspan="1"  colspan="2" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Baseclass:</string>
+            </property>
+        </widget>
+        <widget row="3"  column="0"  rowspan="1"  colspan="6" >
+            <class>QMultiLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_docEdit</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>/*
+* @autor dkldf
+*/</string>
+            </property>
+        </widget>
+        <widget row="0"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Classname:</string>
+            </property>
+        </widget>
+        <widget row="1"  column="1" >
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_fileNameEdit</cstring>
+            </property>
+        </widget>
+        <widget row="1"  column="2"  rowspan="1"  colspan="3" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_classTemplateCheckbox</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>use class template</string>
+            </property>
+        </widget>
+        <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Documentation</string>
+            </property>
+        </widget>
+        <widget row="1"  column="5" >
+            <class>QToolButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_changeButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>change</string>
+            </property>
+        </widget>
+        <widget row="0"  column="4"  rowspan="1"  colspan="2" >
+            <class>KLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>m_baseClassEdit</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_okButton</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>NewClass</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>m_cancelButton</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>NewClass</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+</UI>

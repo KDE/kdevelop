@@ -5,6 +5,9 @@
     <Action name="build_run" />
     <Action name="phpbook_config" />
   </Menu>
+  <Menu name="project" >
+    <Action name="project_new_class" />
+  </Menu>
 </MenuBar>
 </kpartgui>
 

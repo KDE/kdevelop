@@ -44,6 +44,7 @@ private slots:
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
     void slotRun();
+    void slotNewClass();
     void projectConfigWidget(KDialogBase *dlg);
     void slotReceivedPHPExeStderr (KProcess* proc, char* buffer, int buflen);
     void slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen);

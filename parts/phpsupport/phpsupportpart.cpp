@@ -38,6 +38,7 @@
 #include "phpbookconfig.h"
 #include "phpcodecompletion.h"
 #include "phpparser.h"
+#include "phpnewclassdlg.h"
 
 
 #include "phphtmlview.h"
@@ -68,6 +69,9 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   action = new KAction( i18n("&Run"), Key_F9,
 			this, SLOT(slotRun()),
 			actionCollection(), "build_run" );
+  action = new KAction( i18n("&New Class..."),0,
+			this, SLOT(slotNewClass()),
+			actionCollection(), "project_new_class" );
 
   action = new KAction( i18n("&PhpBook"), 0,
 			this, SLOT(slotPhpBook(KDialogBase*)),
@@ -151,6 +155,16 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
+void PHPSupportPart::slotNewClass(){
+  /*QStringList classNames = QStringList::fromStrList(*(classStore()->globalContainer.getSortedClassNameList));
+   QList<ParsedClass>* classList = m_classStore->globalContainer.getSortedClassList();
+  for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
+    if(pclass->name().startsWith(classStart)){
+    }
+  */
+  //PHPNewClassDlg dlg;
+  //dlg.show();
+ }
 void PHPSupportPart::slotRun(){
   KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());  
   configData = new PHPConfigData(projectDom());

@@ -10,7 +10,8 @@ libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
 				phpsupportpart.cpp phpconfigwidgetbase.ui \
 				phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp \
 				phperrorview.cpp phpconfigdata.cpp phpbookconfigwidget.ui \
-				phpbookconfig.cpp phpcodecompletion.cpp phpparser.cpp
+				phpbookconfig.cpp phpcodecompletion.cpp phpparser.cpp \
+				phpnewclassdlgbase.ui phpnewclassdlg.cpp
 
 METASOURCES = AUTO
 
