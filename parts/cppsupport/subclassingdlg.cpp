@@ -331,6 +331,7 @@ bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
 {
   replace(buffer,"$NEWFILENAMEUC$",m_edFileName->text().upper());
   replace(buffer,"$BASEFILENAMELC$",m_formName.lower());
+  replace(buffer,"$BASEFILENAME$",m_formName);
   replace(buffer,"$NEWCLASS$",m_edClassName->text());
   replace(buffer,"$BASECLASS$",m_baseClassName);
   replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());

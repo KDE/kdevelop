@@ -2,7 +2,7 @@
 #ifndef $NEWFILENAMEUC$_H
 #define $NEWFILENAMEUC$_H
 
-#include "$BASEFILENAMELC$.h"
+#include "$BASEFILENAME$.h"
 
 class $NEWCLASS$ : public $BASECLASS$
 {
