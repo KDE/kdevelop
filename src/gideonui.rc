@@ -16,7 +16,7 @@
     <Separator/>
     <DefineGroup name="print_merge"/>
     <Merge/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <Action name="file_close"/>
     <DefineGroup name="close_merge"/>
     <Action name="file_close_all"/>
@@ -26,22 +26,22 @@
   </Menu>
   <Menu name="edit"><text>&amp;Edit</text>
     <DefineGroup name="edit_undo_merge"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="edit_paste_merge"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="edit_select_merge"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="edit_find_merge"/>
     <DefineGroup name="kdev_edit_find_merge"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="edit_astyle"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <Merge/>
   </Menu>
   <Menu name="view">
     <text>&amp;View</text>
     <DefineGroup name="history_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
     <Action name="view_first_window"/>
@@ -56,9 +56,9 @@
     <Action name="raise_editor"/>
     <Separator/>
     <DefineGroup name="error_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <Merge/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="view_operations"/>
   </Menu>
   <Menu name="project">
@@ -83,13 +83,13 @@
   <Menu name="tools">
     <text>&amp;Tools</text>
     <DefineGroup name="tools_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="tools_file_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="tools_language_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <DefineGroup name="tools_project_operations"/>
-    <Action name="dummy_separator"/>
+    <Separator/>
     <Merge/>
   </Menu>
   <Menu name="window">
