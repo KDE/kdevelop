@@ -25,7 +25,9 @@ class MakeActionFilter : public QObject, public OutputFilter
 Q_OBJECT
 
 public:
+#ifdef DEBUG
 	static void test();
+#endif
 
 	MakeActionFilter( OutputFilter& );
 

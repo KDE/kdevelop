@@ -98,6 +98,8 @@ struct TestItem
 	QString file;
 };
 
+#ifdef DEBUG
+
 void MakeActionFilter::test()
 {
 	static QValueList<TestItem> testItems = QValueList<TestItem>()
@@ -174,3 +176,5 @@ void MakeActionFilter::test()
 	}
 
 }
+
+#endif
