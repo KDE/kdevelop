@@ -28,7 +28,9 @@ subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const 
 {
 	m_part = part;
 	setReadOnly( true );
+#if QT_VERSION >= 0x030100
 	setTextFormat( Qt::LogText );
+#endif
 }
 
 subversionWidget::~subversionWidget()
