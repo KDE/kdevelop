@@ -1,15 +1,15 @@
 # KDevelop polish translation file.
 # Main translation work:
-# 	Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
+#       Jacek Wojde³ <wojdel@kbs.twi.tudelft.nl>
 # Corrections:
-# 	Waldemar Kochaniec
-# 	Jacek Stolarczyk
-#	Anna Wojde³ <ania@kbs.twi.tudelft.nl>
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojde³ <ania@kbs.twi.tudelft.nl>
 #
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1999-07-29 19:11+0200\n"
-"PO-Revision-Date: 1999-07-29 19:49+0200\n"
+"POT-Creation-Date: 1999-11-24 20:06+0100\n"
+"PO-Revision-Date: 1999-11-24 21:48+0100\n"
 "Last-Translator: Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
@@ -7649,3 +7649,728 @@ msgstr "twój komputer"
 
 msgid "yyyyyyyyyyyyyy"
 msgstr ""
+
+msgid "You can set modifiers for the member variable here."
+msgstr "Tu ustaw modyfikatory zmiennej sk³adowej."
+
+msgid ""
+"You can choose here whether you want the member variable\n"
+"be declared as public, protected or private."
+msgstr ""
+"Tu mo¿esz wybraæ, czy chcesz by zmienna sk³adowa by³a\n"
+"zadeklarowana jako 'public', 'protected' czy 'private'."
+
+msgid "Type:"
+msgstr "Typ:"
+
+msgid "Enter the type of the member variable here."
+msgstr "Tu podaj typ zmiennej sk³adowej."
+
+msgid "Name:"
+msgstr "Nazwa:"
+
+msgid "Enter the name of the member variable here."
+msgstr "Tu podaj nazwê zmiennej sk³adowej."
+
+msgid "You can enter a description of the member variable here."
+msgstr "Tu mo¿esz podaæ opis zmiennej sk³adowej."
+
+msgid "Add class member"
+msgstr "Dodaj sk³adow± klasy"
+
+msgid ""
+"You can choose here whether you want the member function\n"
+"be declared as public, protected or private."
+msgstr ""
+"Tu mo¿esz wybraæ, czy chcesz by funkcja sk³adowa by³a\n"
+"zadeklarowana jako 'public', 'protected' czy 'private'."
+
+
+msgid "Type"
+msgstr "Typ"
+
+msgid ""
+"Choose the type of member object you want to create.\n"
+"The type can be signal, slot or method."
+msgstr ""
+"Wybierz typ obiektu sk³adowego jaki chcesz utworzyæ.\n"
+"Mo¿e to byæ sygna³, slot lub metoda."
+
+msgid "You can set modifiers for the member function here."
+msgstr "Tu mo¿esz ustawiæ modyfikatory funkcji sk³adowej."
+
+msgid "Enter the type of the member function here."
+msgstr "Tu podaj typ funkcji sk³adowej."
+
+msgid "Enter the declaration of the member function here."
+msgstr "Tu podaj deklaracjê funkcji sk³adowej."
+
+msgid "You can enter a description of the member function here."
+msgstr "Tu mo¿esz podaæ opis funkcji sk³adowej."
+
+msgid ""
+"Select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"Wybierz katalog do którego maj± byæ\n"
+"skopiowane pliki ¼ród³owe."
+
+msgid "insert header/cpp-templates to added files"
+msgstr "wstaw szablony do dodawanych plików"
+
+msgid "Check this if you want to insert your template to the added files."
+msgstr "Zaznacz to je¶li chcesz wstawiæ twój szablon do dodawanych plików."
+
+msgid "You must choose a destination, that is in your project-dir!"
+msgstr ""
+"Musisz wybraæ katalog docelowy znajduj±cy siê wewn±trz katalogu projektu!"
+
+msgid ""
+"IMPORTANT !\n"
+"\n"
+"Please read these instructions before you send in your bugreport.\n"
+"\n"
+"1. Fill in the command to run sendmail into the textfield below.\n"
+"  It will be saved in your local kdeveloprc,so you don't have to do\n"
+"  this all the time.\n"
+"  ( We hope, you don't have to write bugreports all the time.:) )\n"
+"  Make sure, that you use absolute pathnames.\n"
+"  It's possible, that sendmail isn't located in your search path.\n"
+"         Example: /usr/sbin/sendmail\n"
+"  If you can't use sendmail, just leave the field empty.\n"
+"  KDevelop will write the bugreport into a file named 'bugreport.XXX'\n"
+"  located at HOME/.kde/share/apps/kdevelop.\n"
+"  Load it into your mail program, cut out the first 3 lines\n"
+"  ( the mail header for sendmail ) and send it.\n"
+"\n"
+"2. Fill in your name and e-mail address, so we know who you are\n"
+"  and can contact you for further questions.\n"
+"\n"
+"3. Fill in the subject and the basic informations.\n"
+"\n"
+"4. Describe your system. Don' forget to fill in information\n"
+"  about programs related to your problem. ( your automake version\n"
+"  for build problems etc. )\n"
+"\n"
+"5. Describe the bug you encountered and how we can reproduce it.\n"
+"  Describe it exactly. Something like 'KDevelop crashes' is useless.\n"
+"\n"
+"6. Please write in ENGLISH if possible. If not, use a language,\n"
+"  that at least one developer understand.\n"
+"\n"
+"7. Push 'Send E-Mail'. :)\n"
+"  Currently, the mail will go to the KDE Bug tracking system.\n"
+"  It offers a web interface and will inform you,\n"
+"  when your bug is cleaned.\n"
+"  Visit <http://bugs.kde.org>."
+msgstr ""
+"WA¯NE !\n"
+"\n"
+"Przeczytaj uwa¿nie poni¿sz± instrukcjê przed wys³aniem zg³oszenia b³êdu.\n"
+"\n"
+"1. Wpisz w poni¿sze pole tekstowe polecenie uruchamiaj±ce sendmail.\n"
+"  Zostanie to wpisane w lokalnym kdeveloprc, wiêc nie bêdziesz musia³\n"
+"  wype³niaæ tego pola za ka¿dym razem.\n"
+"  (Miejmy nadziejê, ¿e nie bêdziesz musia³ wysy³aæ zg³oszeñ zbyt czêsto :)\n"
+"  Upewnij siê, ¿e podajesz bezwzglêdn± ¶cie¿kê dostêpu.\n"
+"  Mo¿e siê zda¿yæ, ¿e sendmail nie znajduje siê w domy¶lnej ¶cie¿ce.\n"
+"         Na przyk³ad: /usr/sbin/sendmail\n"
+"  Je¶li nie mo¿esz u¿yæ sendmail, po prostu pozostaw to pole puste.\n"
+"  KDevelop zapisze wtedy zg³oszenie do pliku 'bugreport.XXX'\n"
+"  w katalogu HOME/.kde/share/apps/kdevelop.\n"
+"  Wczytaj go do twojego programu pocztowego, wytnij 3 pierwsze linie\n"
+"  (jest to nag³owek dla sendmail) i wy¶lij.\n"
+"\n"
+"2. Wype³nij imiê i adres e-mail, aby¶my mogli skontaktowaæ siê z\n"
+"  tob± je¶li bêd± jakie¶ pytania.\n"
+"\n"
+"3. Wype³nij temat i podstawowe informacje.\n"
+"\n"
+"4. Opisz swój system. Nie zapomnij wype³niæ informacji na temat\n"
+"  innych programów zwi±zanych z twoim problemem. ( wersja automake\n"
+"  w przypadku problemów z kompilacj± itp. )\n"
+"\n"
+"5. Opisz b³±d jaki napotka³e¶ i jak mo¿na go odtworzyæ. Opisz go\n"
+"  dok³adnie. Opis typu 'KDevelop siê wyk³ada' jest bezu¿yteczny.\n"
+"\n"
+"6. Prosimy pisz po ANGIELSKU je¶li to mo¿liwe. Je¶li nie, u¿yj jêzyka\n"
+"  znanego przynajmniej jednemu z naszych programistów.\n"
+"\n"
+"7. Wci¶nij 'Wy¶lij E-Mail'. :)\n"
+"  Aktualnie zg³oszenie zostanie wys³ane do systemu ¶ledzenia b³êdów\n"
+"  dla KDE. System ten oferuje interfejs WWW i informuje gdy b³±d\n"
+"  zostanie usuniêty.\n"
+"  Skocz na <http://bugs.kde.org>."
+
+msgid "sendmail command :"
+msgstr "polecenie sendmail :"
+
+msgid "normal"
+msgstr "normalny"
+
+msgid "Compiler :"
+msgstr "Kompilator:"
+
+msgid "Miscalleneous :"
+msgstr "Ró¿ne :"
+
+msgid "System"
+msgstr "System"
+
+msgid ""
+"KDevelop couldn't find sendmail at the given location.\n"
+"If you just want to generate the bugreport and send it\n"
+"by hand later, you can continue.\n"
+"Otherwise press Cancel and retype the sendmail command."
+msgstr ""
+"KDeveleo nie móg³ znale¼æ programu sendmail w podanym\n"
+"miejscu. Je¶li chcesz po prostu wygenerowaæ zg³oszenie\n"
+"b³êdu i wys³aæ je samodzielnie pó¼niej, mo¿esz kontynuowaæ.\n"
+"Je¶li nie, wci¶nij 'Anuluj' i podaj polecenie sendmail."
+
+msgid "Struct"
+msgstr "Struktura"
+
+msgid "Signal"
+msgstr "Sygna³"
+
+msgid "Delete signal"
+msgstr "Usuñ sygna³"
+
+msgid "No item selected."
+msgstr "Nic nie wybrane"
+
+msgid "The class:"
+msgstr "Klasa:"
+
+msgid "couldn't be found."
+msgstr "nie znaleziona."
+
+msgid "The struct:"
+msgstr "Struktura:"
+
+msgid "Forward"
+msgstr "Dalej"
+
+msgid "Enter the name of the entry here."
+msgstr "Tu podaj nazwê pozycji."
+
+msgid "Enter the file of the entry here."
+msgstr "Tu podaj plik odpowiadaj±cy pozycji."
+
+msgid "Here you can browse through the disc to select a file for the entry."
+msgstr "Za pomoc± tego mo¿esz przegl±daæ dysk, by wybraæ plik."
+
+msgid "Size:"
+msgstr "Rozmiar:"
+
+msgid "Label:"
+msgstr "Opis:"
+
+msgid "Normal"
+msgstr "Normalny"
+
+msgid "Enter the toplevel-directory of your project.\n"
+msgstr "Podaj katalog g³ówny projektu.\n"
+
+msgid "Version Control System Support"
+msgstr "System Kontroli Wersji (VCS)"
+
+msgid "vcs support"
+msgstr "wspomaganie VCS"
+
+msgid "vcs location"
+msgstr "lokalizacja VCS"
+
+msgid "repository in vcs"
+msgstr "repozytorium VCS"
+
+msgid "vendor tag"
+msgstr "etykieta dystrybutora"
+
+msgid "log message"
+msgstr "komunikat"
+
+msgid "release tag"
+msgstr "etykieta wersji"
+
+msgid ""
+"Here you can enter the log message for the\n"
+"version control system."
+msgstr ""
+"Tu mo¿esz podaæ komunikat (log message) dla\n"
+"systemu kontroli wersji."
+
+msgid ""
+"Here you can choose the vendor tag, which your project\n"
+"has in the version control system."
+msgstr ""
+"Tu mo¿esz wybraæ etykietê dystrybutora (vendor tag) jak±\n"
+"twój projekt ma w systemie kontroli wersji."
+
+msgid ""
+"Here you can choose a special pointer for the first\n"
+"entry in the version control system."
+msgstr ""
+"Tu mo¿esz podaæ wskazanie do pierwszej pozycji w\n"
+"systemie kontroli wersji."
+
+msgid ""
+"Here you can choose the version control system,\n"
+"which you want to use."
+msgstr ""
+"Tu mo¿esz wybraæ system kontroli wersji, którego\n"
+"chcesz u¿ywaæ."
+
+msgid ""
+"Here you can choose where your vcsroot loction should be.\n"
+"At the moment we only support local vs. And be sure, you\n"
+"have read and write access in the location."
+msgstr ""
+"Tu mo¿esz wybraæ gdzie bêdzie siê znajdowaæ katalog g³owny\n"
+"systemu kontroli wersji. Aktualnie dopuszczone s± jedynie\n"
+"katalogi lokalne. Pamiêtaj te¿, ¿e musisz mieæ w tym\n"
+"katalogu prawo pisania i czytania."
+
+msgid ""
+"Here you can see the repository of your project in the\n"
+"version control system. The repository is dependend on\n"
+"the directory of your project. You can not change the\n"
+"repository direct."
+msgstr ""
+"Tu widzisz repozytorium twojego projektu w systemie\n"
+"kontroli wersji. Repozytorium zale¿y od katalogu projektu\n"
+"i nie mo¿esz go bezpo¶rednio zmieniæ."
+
+msgid "New"
+msgstr "Nowy"
+
+msgid "sgml2html and ksgml2html do not exist!"
+msgstr "brak sgml2html i ksgml2html!"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid " already exists!"
+msgstr " ju¿ istnieje!"
+
+msgid "It isn't possible to generate a new project into an existing directory."
+msgstr "Nie mo¿na utworzyæ nowego projektu w ju¿istniej±cym katalogu."
+
+msgid "Translations"
+msgstr "T³umaczenia"
+
+msgid "Sources"
+msgstr "¬ród³a"
+
+msgid "Headers"
+msgstr "Nag³ówki"
+
+msgid "Save changed files ?"
+msgstr "Zapisaæ zmienione pliki ?"
+
+msgid "File modified"
+msgstr "Plik zmodyfikowany"
+
+msgid "  in KDbg"
+msgstr "   w KDbg"
+
+msgid "Make with :"
+msgstr "Buduj x :"
+
+msgid "Title"
+msgstr "Tytu³"
+
+msgid "Shows files, that aren't registered in the project"
+msgstr "Poka¿ pliki nie zarejestrowane w projekcie"
+
+msgid "Method missing"
+msgstr "Brak metody"
+
+msgid "Couldn't find the method to delete."
+msgstr "Nie mog³em znale¼æ metody do usuniêcia."
+
+msgid "Class missing"
+msgstr "Brak klasy"
+
+msgid "Couldn't find the class which has the method to delete."
+msgstr "Nie mog³em znale¼æ klasy do usuniêcia."
+
+msgid "Goto Line"
+msgstr "Id¼ do linii"
+
+msgid "Make with"
+msgstr "Buduj z"
+
+msgid "Close All"
+msgstr "Zamknij wszystkie"
+
+msgid "Save A&ll"
+msgstr "Zapisz wszystkie"
+
+msgid "Workspace 1"
+msgstr "Obszar 1"
+
+msgid "Workspace 2"
+msgstr "Obszar 2"
+
+msgid "Workspace 3"
+msgstr "Obszar 3"
+
+msgid "Workspaces"
+msgstr "Obszary robocze"
+
+msgid "Make &with"
+msgstr "Buduj &z"
+
+msgid "Tools"
+msgstr "Narzêdzia"
+
+msgid ""
+"\n"
+"Now you can choose the Syntax-Highlighting style\n"
+"KDevelop will use. The options are to set\n"
+"the highlighting to Emacs style or to the default\n"
+"settings of KWrite (k.a. 'Extended Editor')\n"
+"\n"
+"Which one do you want to use ?"
+msgstr ""
+"\n"
+"Teraz mo¿esz wybraæ styl pod¶wietlania sk³adni,\n"
+"którego bêdzie u¿ywa³ KDevelop. Masz wybór pomiêdzy\n"
+"pod¶wietlaniem w stylu Emacsa lub w domy¶lnym stylu\n"
+"KWrite (Zaawansowanego edytora)\n"
+"\n"
+"Którego chcesz u¿yæ ?"
+
+msgid ""
+"\n"
+"\n"
+"The correct path has been set.\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"Poprawna ¶cie¿ka zosta³a ustawiona.\n"
+" "
+
+msgid "KDE-Library Documentation found"
+msgstr "Znaleziona dokumentacja bibliotek KDE"
+
+msgid ""
+"\n"
+"The KDE-Library-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"Dokumentacja bibliotek KDE zosta³a znaleziona w:\n"
+"\n"
+
+msgid "Keys"
+msgstr "Klawisze"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Do you really want to save\n"
+"this value?"
+msgstr ""
+"Wybrana ¶cie¿ka nie prowadzi do dokumentacji\n"
+"biblioteki Qt. Na prawdê chcesz wykorzystaæ t±\n"
+"warto¶æ?"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Do you really want to save\n"
+"this value?"
+msgstr ""
+"Wybrana ¶cie¿ka nie prowadzi do dokumentacji\n"
+"bibliotek KDE. Na prawdê chcesz wykorzystaæ t±\n"
+"warto¶æ?"
+
+
+msgid "Virtual functions"
+msgstr "Funkcje wirtualne"
+
+msgid "Group"
+msgstr "Grupa"
+
+msgid "Remove from Repository (and Disk)"
+msgstr "Usuñ z repozytorium (i dysku)"
+
+msgid "Manual-File:"
+msgstr "Plik instrukcji:"
+
+msgid "Button"
+msgstr "Przycisk"
+
+msgid "public"
+msgstr "public"
+
+msgid "protected"
+msgstr "protected"
+
+msgid "private"
+msgstr "private"
+
+msgid ""
+"Sorry, but KDevelop is not able to add classes to existing header or "
+"implementation files."
+msgstr ""
+"Niestety KDevelo nie mo¿e dodawaæ klas do ju¿ istniej±cych nag³ówków "
+"lub plików ¼ród³owych."
+
+msgid "Choose the type of the new file here."
+msgstr "Tu wybierz typ nowego pliku."
+
+msgid "Enter a name for your new file here."
+msgstr "Tu podaj nazwê nowego pliku."
+
+msgid "Check this if you want to use a template."
+msgstr "Zaznacz to je¶li chcesz u¿ywaæ szablonu."
+
+msgid "Check this if you want to add the new file to your project."
+msgstr "Zaznacz to je¶li chcesz dodaæ nowy plik do projektu."
+
+msgid "Enter the directory where the new file will be located."
+msgstr "Podaj katalog w którym plik zostanie utworzony."
+
+msgid "Here you can choose a directory where the new file will be located."
+msgstr "Tu mo¿esz wybraæ katalog dla nowego pliku."
+
+msgid "Project name:"
+msgstr "Nazwa projektu:"
+
+msgid ""
+"KDE HTML widget :\n"
+"this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+msgstr ""
+"Kontrolka KDE HTML :\n"
+"powoduje do³±czenie  -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+
+msgid "Math library"
+msgstr "Biblioteka matematyczna"
+
+msgid "registered"
+msgstr "zarejestrowany"
+
+msgid "VCS"
+msgstr "VCS"
+
+msgid "local"
+msgstr "lokalny"
+
+msgid "RFV Options"
+msgstr "Opcje RFV"
+
+msgid "Show non-project Files"
+msgstr "Poka¿ pliki spoza projektu"
+
+msgid "Remove from Repository (and disk)"
+msgstr "Usuñ z repozytorium (i dysku)"
+
+msgid "Click here to add a tool specified below."
+msgstr "Kliknij by dodaæ poni¿ej wypisane narzêdzie."
+
+msgid "Click here to delete an entry from the list."
+msgstr "Kliknij by usun±æ pozycjê z listy."
+
+msgid "Click here to move up the selected entry."
+msgstr "Kliknij by przesun±æ pozycjê do góry."
+
+msgid "Click here to move down the selected entry."
+msgstr "Kliknij by przesun±æ pozycjê w dó³"
+
+msgid "Here you can browse through the disc to select an executable file."
+msgstr "Tu mo¿esz przegl±daæ dysk w poszukiwaniu pliku wykonywalnego."
+
+msgid "Enter the name of the executable file here."
+msgstr "Tu podaj nazwê pliku wykonywalnego."
+
+msgid "Enter a menu text for the executable here."
+msgstr "Tu podaj tekst menu dla programu."
+
+msgid "Enter arguments for the executable here."
+msgstr "Tu podaj argumenty dla programu."
+
+msgid "Error in creating documentation!"
+msgstr "B³±d podczas tworzenia dokumentacji!"
+
+msgid ""
+"You need write permission to create\n"
+"the documentation in\n"
+msgstr ""
+"Potrzebujesz mieæ prawa zapisu by\n"
+"utworzyæ dokumentacjê w\n"
+
+msgid "Old documentation deletion!"
+msgstr "Kasowanie starej dokumentacji!"
+
+msgid "The old documentation path\n"
+msgstr "¦cie¿ka do starej dokumentacji\n"
+
+msgid ""
+"\n"
+"doesn´t exist anymore."
+msgstr ""
+"\n"
+"ju¿ nie istnieje."
+
+msgid ""
+"\n"
+"Process will continue without deletion..."
+msgstr ""
+"\n"
+"Kontynuujê bez kasowania..."
+
+msgid ""
+"You have no write permission to delete\n"
+"the old documentation in\n"
+msgstr ""
+"Nie masz prawa zapisu by móc usun±æ star±\n"
+"dokumentacjê w\n"
+
+msgid "Welcome !"
+msgstr "Witamy !"
+
+msgid "Done"
+msgstr "Gotowe"
+
+msgid "&Ignore"
+msgstr "&Ignoruj"
+
+msgid "true"
+msgstr ""
+
+msgid ""
+"PLEASE READ THIS FIRST !\n"
+"\n"
+"This dialog editor is intended for creating dialogs\n"
+"for your applications. It creates .kdevdlg files for\n"
+"saving theses dialogs (see KDevelop help).\n"
+"\n"
+"There are two possible methods for including dialogs\n"
+"in you applications :\n"
+"\n"
+"- Let KDevelop create the dialogs' sources.\n"
+"- Using the KDlgLoader for loading dialogs at run time.\n"
+"\n"
+"This is a WYSINWYG (What you see is\n"
+"NEARLY what you get) editor. That means it\n"
+"displays most of the widgets properties possible but\n"
+"not all. User \"View|Preview dialog\" if you want a\n"
+"real preview (however this is like the loader class will\n"
+"show it).\n"
+"\n"
+"We surely were not able to implement ALL possible\n"
+"widget properties but it is hopefully enough for\n"
+"designing dialogs more comfortable.\n"
+"\n"
+"By the way, you can get help on every widget and\n"
+"property by a right click. This also works in the\n"
+"editor window.\n"
+"\n"
+msgstr ""
+"PROSZÊ TO NAJPIERW PRZECZYTAÆ !\n"
+"\n"
+"Ten edytor dialogów jest przeznaczony do tworzenia\n"
+"okien dialogowych dla twojej aplikacji. Tworzy on\n"
+"pliki .kdevdlg do zapisywania tych okien (patrz pomoc\n"
+"do KDevelop).\n"
+"\n"
+"Dostêpne s± dwa sposoby do³±czania okien\n"
+"dialogowych do aplikacji :\n"
+"\n"
+"- pozwoliæ by KDevelop wygenerowa³ ¼ród³a do nich\n"
+"- u¿ywaæ KDlgLoader do ³adowania okien przy\n"
+"  uruchomieniu\n"
+"\n"
+"Polecam u¿ywanie tej drugiej metody gdy¿ wystêpuj±\n"
+"aktualnie pewne problemy podczas generowania ¼róde³.\n"
+"£adowanie okien przy uruchomieniu ma równie¿ inne\n"
+"zalety jak zosta³o to opisane w pomocy.\n"
+"\n"
+"Ten edytor jest WYSINWYG (widzisz prawie to co\n"
+"dostaniesz). To oznacza, ¿e wy¶wietla on wiêkszo¶æ\n"
+"w³a¶ciwo¶ci kontrolek, ale nie wszystkie. U¿yj 'Widok'\n"
+"'Podgl±d dialogu' je¶li chcesz zobaczyæ go w\n"
+"rzeczywisto¶ci (tak bêdzie on widoczny po\n"
+"za³adowaniu).\n"
+"\n"
+"Z ca³± pewno¶ci± nie uda³o nam siê obj±æ\n"
+"WSZYSTKICH mo¿liwych w³a¶ciwo¶ci kontrolek, ale\n"
+"mamy nadziejê, ¿e jest ich wystarczaj±co du¿o by\n"
+"uczyniæ projektowanie okien dialogowych ³atwiejszym.\n"
+"\n"
+"Przy okazji, mo¿esz uzyskaæ pomoc na temat ka¿dego\n"
+"typu kontrolki i jej w³a¶ciwo¶ci za pomoc± klikniêcia\n"
+"prawym przyciskiem myszki. Dzia³a to równie¿ w oknie\n"
+"edytora.\n"
+"\n"
+
+msgid ""
+"This will insert a QWidget to the dialog.\n"
+"Such an item may have several children items\n"
+"or even more QWidgets as children. That means\n"
+"this item lets you create complex hierarchies\n"
+"for you dialog.\n"
+"\n"
+"Another thing you will need this item type for\n"
+"are widgets like the tab view which need several\n"
+"widgets they can bring to the top."
+msgstr ""
+"To wstawi QWidget do dialogu.\n"
+"Taki sk³adnik mo¿e mieæ kilka sk³adników potomnych\n"
+"czy nawet kolejnych sk³adników QWidget. Pozwala ci to\n"
+"tworzyæ skomplikowane hierarchie kontrolek\n"
+"w twoim dialogu.\n"
+"\n"
+"Mo¿esz te¿ potrzebowaæ tej kontrolki dla takich\n"
+"rzeczy jak widok z zak³adkami, który musi podnosiæ\n"
+"kilka kontrolek na szczyt."
+
+msgid "A round led widget."
+msgstr "Okr±g³a dioda LED"
+
+msgid "Color:"
+msgstr "Kolor:"
+
+msgid "Bold"
+msgstr "Pogrubiony"
+
+msgid "Family:"
+msgstr "Rodzina:"
+
+msgid "The specified File does not exist"
+msgstr "Podany plik nie istnieje"
+
+msgid "An Error occured while trying to open this Document"
+msgstr "B³±d przy otwieraniu tego dokumentu"
+
+#, c-format
+msgid "Finished '%s'"
+msgstr "Skoñczone '%s'"
+
+msgid ""
+"The current Document has been modified.\n"
+"Would you like to save it?"
+msgstr ""
+"Aktualny dokument zosta³ zmodyfikowany.\n"
+"Czy chcesz go zapisaæ?"
+
+msgid ""
+"Could not save the document.\n"
+"Open a new document anyways?"
+msgstr ""
+"Nie uda³o siê zapisaæ dokumentu.\n"
+"Otworzyæ nowy pomimo to?"
+
+msgid "Find"
+msgstr "Znajd¼"
+
+msgid "file"
+msgstr "plik"
+
+msgid "Enter log message:"
+msgstr "Podaj komunikat:"
