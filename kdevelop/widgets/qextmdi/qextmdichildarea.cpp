@@ -169,7 +169,8 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 			if(!lpC->hasFocus())lpC->setFocus();
 		}
 		fillWindowMenu();
-		emit topChildChanged( lpC->m_pClient);
+		///emit topChildChanged( lpC->m_pClient);
+		lpC->m_pClient->setFocus();
 	}
 }
 
@@ -339,7 +340,8 @@ void QextMdiChildArea::focusTopChild()
 	}
 	lpC->raise();
 	if(!lpC->hasFocus())lpC->setFocus();
-	emit topChildChanged(lpC->m_pClient);
+	///emit topChildChanged(lpC->m_pClient);
+	lpC->m_pClient->setFocus();
 }
 
 //============= cascadeWindows ===============//
