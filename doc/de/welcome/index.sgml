@@ -11,13 +11,12 @@ Werkzeug zur Verfügung zu stellen, um sowohl freie Anwendungen als auch Applikat
 zu entwickeln.
 
 Zur Zeit besteht die KDevelop Dokumentation aus über vier Handbüchern, vollgepackt mit informativen und verständlichen Texten, die Ihnen
-zu einem reibungslosen Einstieg in die Programmierung verhelfen sollen. Zusätzlich stellen wir ein Handbuch über das bald erscheinende
-KDE 2 bereit.
+zu einem reibungslosen Einstieg in die Programmierung verhelfen sollen.
 
 <descrip>
 <tag/<subtitle/<htmlurl url="../index.html" name="Benutzerhandbuch zu KDevelop">//
 <p>
-Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.2.
+Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.3.
 <p>
 <em>
 Das Benutzerhandbuch zu KDevelop enthält eine vollständige Beschreibung der verfügbaren Funktionalität der IDE. Zusätzlich gibt es Ihnen wertvolle
@@ -55,13 +54,5 @@ verfügbare GUI-Elemente und die Benutzung der Standard Dialoge. Zusätzlich sind 
 und KDE 2 zu finden.
 </em>
 
-<tag/<subtitle/<htmlurl url="../addendum/index.html" name="Programmieren mit KDE 2">//
-<p>
-Eine Sammlung von bereits vorhandener Dokumentation für die Benutzung der KDE 2 API einschließlich KOM/OpenParts
-<p>
-<em>
-Dieses Handbuch ist eine Sammlung von bereits vorhandenen Artikeln verschiedener Autoren zur Programmierung unter KDE 2. Es enthält
-sowohl eine Beschreibung der neuen Fähigkeiten und Technologien, die KDE 2 bieten wird, als auch Fragen zu deren Umsetzung.
-</em>
 </descrip>
 </slides>

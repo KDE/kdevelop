@@ -316,14 +316,12 @@ void DocTreeKDevelopFolder::refresh()
   QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));    
   QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));    
   QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));    
-  QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));    
-    
+
   (void) new DocTreeKDevelopBook(this, welcome,                 "welcome/index.html",     false);
   (void) new DocTreeKDevelopBook(this, manual,                  "index.html",             true);
   (void) new DocTreeKDevelopBook(this, programming,             "programming/index.html", true);
   (void) new DocTreeKDevelopBook(this, tutorial,                "tutorial/index.html",    true);
   (void) new DocTreeKDevelopBook(this, kdelibref,               "kde_libref/index.html",  true);
-  (void) new DocTreeKDevelopBook(this, addendum,                "addendum/index.html",    true);
   (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"), "reference/C/cref.html");
 
     //horrible hack to counter the QListView bug DO NOT CHANGE without thinking about it

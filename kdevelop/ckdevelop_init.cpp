@@ -958,7 +958,6 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(SmallIconSet("contents2"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
   help_menu->insertItem(SmallIconSet("contents2"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
   help_menu->insertItem(SmallIconSet("contents2"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
-  help_menu->insertItem(SmallIconSet("contents2"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
   help_menu->insertItem(SmallIconSet("contents2"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertSeparator();	
 	help_menu->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);

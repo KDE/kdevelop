@@ -11,12 +11,12 @@ environment you need and like to use for creating your application that contribu
 community as well as for any commercial purpose.
 
 Currently, the KDevelop Documentation spans over four handbooks full of well-written, informative and understandable text that will
-enable you to start developing your applications, including an extra handbook for the upcoming KDE 2 development framework:
+enable you to start developing your applications:
 
 <descrip>
 <tag/<subtitle/<htmlurl url="../index.html" name="The User Manual to KDevelop">//
 <p>
-The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.2.
+The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.3.
 <p>
 <em>The User Manual to KDevelop contains a full description of the available functionality the IDE provides. Additionally, it gives you
 an informative description about projects in general and the way they are set up using GNU standard development tools.
@@ -54,15 +54,6 @@ provided GUI-elements and the usage of standard dialogs for required user input.
 known Qt 2.0 / KDE 2 issues regarding the standard KDE application framework.
 </em>
 
-<tag/<subtitle/<htmlurl url="../addendum/index.html" name="The KDE 2 Developer´s Guide">//
-<p>
-A collection of already existing documentation for the KDE 2 API usage including KOM/OpenParts issues by various KDE authors
-<p>
-<em>
-This handbook is a collection of already existing articles targeting towards KDE 2 development that have been written by various KDE
-authors. It generally covers the new facilities and technologies that KDE 2 will offer developers as well as discussing implementation
-issues.
-</em>
 </descrip>
 
 </slides>

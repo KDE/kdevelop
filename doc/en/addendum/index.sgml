@@ -15,8 +15,7 @@ author mentioned at the beginnig of the chapters and in section <ref id="Copyrig
 
 This handbook has been assembled to provide KDE developers the information they will need when porting their applications to KDE 2,
 currently under development. KDE 2 is based on the Qt 2.x and KDE 1.1.x libraries, whereby the KDE libraries are ported to work with
-the current Qt library. Further, the KDE libraries will introduce a component technology based on the MICO CORBA implementation which
-is developed and tested with the KOffice suite.
+the current Qt library.
 
 As KDE application developers not involved in implementing for the KDE core team will probably want to port their applications, they
 will not only have to watch out for the changes in Qt, but also for KDE's improvements and additions. As KDE 1.x applications will not
@@ -24,15 +23,6 @@ only be binary incompatible but also sourcecode incompatible, we want to provide
 are using the currently stable KDE 1.x implementation for applications that are suitable for production use, so transitioning will be
 made less complicated and further implementations in current projects can be reviewed for possible problems that will arise when
 porting.
-
-Also the usual KDE developer does not have too much information about CORBA, not to speak of KOM. Therefore, this handbook tries to
-give an insight where to get information and how the current implementation works in general. This will enable you to find out where
-your applications can probably take advantage of distributed component technology where needed. In conjunction with the latest
-development, this version of the KDE 2 Developer's Guide also contains a short HOWTO for the new DCOP (Desktop COmmunications
-Protocol), which was created due to performance problems of local desktop applications using CORBA. Therefore, a few things mentioned
-and explained in the documents relying on CORBA technology can be out of date and reading yourself into the dcop library reference and
-reviewing current KDE CVS sourcecode will give you probably more up-to-date information on IPC (Inter-Process-Communication) between
-local desktop applications using DCOP.
 
 
 I want to thank all authors that were willing to contribute their current documentation to this handbook and hope this collection will
