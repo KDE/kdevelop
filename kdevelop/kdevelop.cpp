@@ -24,6 +24,8 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <kdockwidget.h>
+#include <kmenubar.h>
 #include <klibloader.h>
 #include <ktrader.h>
 
@@ -37,15 +39,14 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
-
-  m_mainwidget = createDockWidget(QString("main"), BarIcon("filenew"));
-  m_mainwidget->setWidget(new QWidget(this, "mainwidget"));
-  setView(m_mainwidget);
-  setMainDockWidget(m_mainwidget);
+  setXMLFile( "/home/falk/Projekte/kde2src/kdevelop/kdevelop/kdevelopui.rc" );//!!!
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
   createGUI( 0L );
+
+  // build up the inner tool views and information views
+  initCoveringDockViews();
   initComponents();
 }
 
@@ -751,7 +752,6 @@ void KDevelop::initHelp(){
 
 }
 
-
 static CClassStore *classstore = 0;
 void KDevelop::initComponents()
 {
@@ -762,7 +762,7 @@ void KDevelop::initComponents()
     kdDebug(9000) << "Parsing doctreewidget.cpp" << endl;
     classparser->parse("parts/doctreeview/doctreewidget.cpp");
     classstore = &classparser->store;
-    
+
     loadComponents("SelectView", KDockWidget::DockLeft);
     loadComponents("OutputView", KDockWidget::DockBottom);
 }
@@ -789,18 +789,17 @@ void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos
             KDevComponent *comp = (KDevComponent*) obj;
             guiFactory()->addClient(comp);
 
-            KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon()),
-                                                0, (*it)->comment(), "");
-            wid->setWidget(comp->widget());
-            wid->setToolTipString((*it)->comment());
-            wid->manualDock(m_mainwidget, pos);
+            //!!!! HACK !!!!
+            //!!!!------!!!!
+            //!!!! embedToolViewInGUI(..) should be called from the initialization !!!!
+            //!!!! code part of every certain component, not here !!!!
+            embedToolViewInGUI(comp->widget());
 
             // Hack
             comp->classStoreOpened(classstore);
         }
     }
 }
-
 
 void KDevelop::slotFilePrint()
 {
@@ -819,6 +818,88 @@ void KDevelop::slotFilePrint()
     QDialog *dlg = (QDialog *)obj;
     dlg->exec();
     delete dlg;
+}
+
+/** creates and inits all tool (selection and output) views */
+void KDevelop::initCoveringDockViews(){
+  // output views
+  KIconLoader *il = KGlobal::iconLoader();
+
+  m_dockbaseMessagesView = createDockWidget(i18n("messages"), BarIcon(""), 0L, i18n("Messages"));
+  m_dockbaseGrepView     = createDockWidget(i18n("search"), QPixmap( il->loadIcon( "find.png", KIcon::Small )), 0L, i18n("Search"), "" );
+	m_dockbaseOutputView   = createDockWidget(i18n("output"), BarIcon(""), 0L, i18n("Output"));
+
+  // tree views
+  m_dockbaseClassTree = createDockWidget(i18n("CV"), QPixmap(locate("appdata", "pics/mini/CVclass.png")), 0L, i18n("Class view"), "" );
+  m_dockbaseClassTree->setToolTipString(i18n("class tree view"));
+
+  m_dockbaseLogFileTree = createDockWidget(i18n("LFV"), QPixmap( il->loadIcon( "kdevelop.png", KIcon::Small )), 0L, i18n("Logical file view"), "" );
+  m_dockbaseLogFileTree->setToolTipString(i18n("logical file tree view"));
+
+  m_dockbaseRealFileTree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )), 0L, i18n("Real file view"), "" );
+  m_dockbaseRealFileTree->setToolTipString(i18n("real file tree view"));
+
+  m_dockbaseDocTree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"), 0L, i18n("Documentation"), "");
+  m_dockbaseDocTree->setToolTipString(i18n("documentation tree view"));
+
+  m_dockbaseWidPropSplitView = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"), 0L, i18n("Dialog editor"), "");
+  m_dockbaseWidPropSplitView->setToolTipString(i18n("dialog editor view"));
+
+  // MDI view mainframe widget
+  m_dockbaseMDIMainFrm = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
+  setView(m_dockbaseMDIMainFrm);
+  setMainDockWidget( m_dockbaseMDIMainFrm );
+
+  //
+  // dock the widgets
+  //
+  // ...the output views
+  m_dockbaseMessagesView->manualDock(m_dockbaseMDIMainFrm, KDockWidget::DockBottom, 70/*size relation in %*/);
+  m_dockbaseGrepView->manualDock(m_dockbaseMessagesView, KDockWidget::DockCenter);
+  m_dockbaseOutputView->manualDock(m_dockbaseMessagesView, KDockWidget::DockCenter);
+	// ...the tree views
+  m_dockbaseClassTree->manualDock(m_dockbaseMDIMainFrm, KDockWidget::DockLeft, 35/*size relation in %*/);
+  m_dockbaseLogFileTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
+  m_dockbaseRealFileTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
+  m_dockbaseDocTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
+  m_dockbaseWidPropSplitView->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
+
+	m_dockbaseMDIMainFrm->setEnableDocking( KDockWidget::DockNone);
+	m_dockbaseMDIMainFrm->setDockSite( KDockWidget::DockCorner);
+}
+
+/** Embed the widgets of components in the dockwidget-based GUI.
+    Which dockwidget gets which widget depends on the object name.
+    This method should be called in the initialization part of every certain component */
+void KDevelop::embedToolViewInGUI(QWidget* w)
+{
+  if( w->name() == "messages") {
+    m_dockbaseMessagesView->setWidget(w);
+  }
+  else if( w->name() == "search") {
+    m_dockbaseGrepView->setWidget(w);
+  }
+  else if( w->name() == "output") {
+    m_dockbaseOutputView->setWidget(w);
+  }
+  else if( w->name() == "CV") {
+    m_dockbaseClassTree->setWidget(w);
+  }
+  else if( w->name() == "LFV") {
+    m_dockbaseLogFileTree->setWidget(w);
+  }
+  else if( w->name() == "RFV") {
+    m_dockbaseRealFileTree->setWidget(w);
+  }
+  else if( w->name() == "DOC") {
+    m_dockbaseDocTree->setWidget(w);
+  }
+  else if( w->name() == "DLG") {
+    m_dockbaseWidPropSplitView->setWidget(w);
+  }
+  else if( w->name() == "MDI Mainframe") {
+    m_dockbaseMDIMainFrm->setWidget(w);
+  }
 }
 
 #include "kdevelop.moc"
