@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=EditorTestPart
+Comment=Simple Editor Part
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
 X-KDE-Library=libeditortestpart
 Type=Service
