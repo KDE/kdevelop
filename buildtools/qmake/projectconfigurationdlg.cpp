@@ -48,7 +48,7 @@ KGuiItem browse()
 	returnItem.setText(i18n("Browse"));
 	returnItem.setIconName("browse");
 	returnItem.setToolTip(i18n("Open browser"));
-	returnItem.setWhatsThis(i18n("Opens a file browser for seletion of files or directories"));
+	returnItem.setWhatsThis(i18n("Opens a file browser for selection of files or directories"));
 	return returnItem;
 }
 
