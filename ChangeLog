@@ -1,3 +1,9 @@
+1999-09-17 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* several bugfixes
+	  treehandler and pixmaps
+	  segfaults on classviewer
+	  segfaults on main edit windows
+
 1999-09-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Added resource types kdev_pic and kdev_template.
 	  and changed app wizard to use them. 
