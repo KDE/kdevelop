@@ -83,7 +83,7 @@ void scriptingPart::setupActions()
     searchDirs += "kate/scripts";
     
     KConfig *cfg = kapp->config();
-    searchDirs = cfg->readListEntry("SearchDirs", searchDirs);
+    searchDirs += cfg->readListEntry("SearchDirs");
     
     unplugActionList(QString::fromLatin1( "script_actions" ));
     plugActionList( QString::fromLatin1( "script_actions" ), m_scripts->scripts(core(),searchDirs));
