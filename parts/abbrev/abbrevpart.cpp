@@ -16,6 +16,7 @@
 #include "abbrevpart.h"
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qregexp.h>
 #include <qvbox.h>
 #include <kdebug.h>
@@ -54,7 +55,7 @@ public:
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );
         dirs->addResourceType( "sources",
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/sources" );
-			       
+
         return instance;
     }
 };
@@ -151,14 +152,14 @@ void AbbrevPart::load()
     KStandardDirs *dirs = AbbrevFactory::instance()->dirs();
     QString localTemplatesFile = locateLocal("codetemplates", "templates", AbbrevFactory::instance());
     QStringList files;
-    if (KIO::NetAccess::exists(localTemplatesFile))
+    if (QFileInfo(localTemplatesFile).exists())
         files << localTemplatesFile;
     else
         files = dirs->findAllResources("codetemplates", QString::null, false, true);
-	
+
     QString localSourcesFile = locateLocal("sources", "sources", AbbrevFactory::instance());
     QStringList sourceFiles;
-    if (KIO::NetAccess::exists(localSourcesFile))
+    if (QFileInfo(localSourcesFile).exists())
         sourceFiles << localSourcesFile;
     else
         sourceFiles = dirs->findAllResources("sources", QString::null, false, true);
@@ -310,7 +311,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
-    
+
     idx = 0;
     pos = 0;
     len = 0;
@@ -325,7 +326,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
-    
+
 
     QMap<QString, CodeTemplate*> m = m_templates[suffix];
     for (QMap<QString, CodeTemplate*>::const_iterator it = m.begin(); it != m.end() ; ++it) {
