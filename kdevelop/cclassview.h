@@ -36,7 +36,10 @@ class CClassView : public CTreeView
 
 public: // Constructor & Destructor
 
+  /** The constructor. Us this exactly as you would with QListView. */
   CClassView( QWidget* parent = 0,const char* name = 0 );
+
+  /** Destructor. */
   ~CClassView();
 
 public: // Public constants
@@ -56,6 +59,11 @@ public: // Public refreshmethods
   
   /** Refresh the whole view using the project. */
   void refresh( CProject *proj );
+
+  /** Refresh the view regarding a certain file.
+   * @param aFile The file to reparse.
+   */
+  void refresh( const char *aFile );
 
   /** Refresh the whole view. */
   void refresh();
@@ -110,15 +118,32 @@ protected: // Protected signals and slots
     void selectedProjectOptions();
     void selectedViewDeclaration(const char *, const char *,THType);
     void selectedViewDefinition(const char *, const char *,THType);
+
+    /** Emitted when a user wants to add an attribute.
+     * @param aClass Class to add an attribute to.
+     */
     void signalAddMethod( const char * );
+
+    /** Emitted when a user wants to add an attribute.
+     * @param aClass Class to add an attribute to.
+     */
     void signalAddAttribute( const char * );
-		void popupHighlighted(int);
+
+    /** Emitted when the user wants to delete a method
+     * @param aClass Name of the class that has the method.
+     * @param aMethodName A string holding the name and parameters of the method.
+     */
+    void signalMethodDelete( const char *, const char * );
+    void popupHighlighted(int);
+
 protected: // Implementations of virtual methods.
 
   /** Initialize popupmenus. */
   void initPopups();
 
-  /** Get the current popupmenu. */
+  /** Get the current popupmenu. 
+   * @return Pointer to the current popupmenu or NULL if none applicable.
+   */
   KPopupMenu *getCurrentPopup();
 
 private: // Popupmenus
@@ -163,11 +188,30 @@ private: // Private attributes
 
 private: // Private methods
 
+  /** Fetch one node from a tree string.
+   * @param str        String containing the tree.
+   * @param pos        Current position.
+   * @param buf        Resulting string.
+   * @return The new position.
+   */
   int getTreeStrItem( const char *str, int pos, char *buf );
+
+  /** Make the classtree from a treestring.
+   * @param str The string representing the classtree.
+   */
   void buildTree( const char *treeStr );
+
+  /** Build the classtree without using a treestring. */
   void buildInitalClassTree();
 
-  /** Make a string of the tree. */
+  /** Make a string of the tree. The string is represented as
+   * you would expect a lisp-person to write it. An example
+   * would be <code>('foo' 1 ('bar' 0))</code> which would result
+   * in the folder foo(opened) containing the class bar which is
+   * closed.
+   * @param item Root item
+   * @param str Resulting treestring.
+   */
   void buildTreeStr( QListViewItem *item, QString &str );
 
   /** Fetches the currently selected class from the store. */

@@ -132,8 +132,7 @@ void CClassView::initPopups()
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()), 0, ID_CV_VIEW_DECLARATION);
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ),0,ID_CV_VIEW_DEFINITION);
 	methodPopup.insertSeparator();
-  id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
-  methodPopup.setItemEnabled( id, false );
+  methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
@@ -232,6 +231,19 @@ void CClassView::refresh( CProject *proj )
   projectPopup.setItemEnabled(ID_CV_FOLDER_NEW, popupClassItemsEnable);
   projectPopup.setItemEnabled(ID_CV_GRAPHICAL_VIEW, popupClassItemsEnable);
 
+}
+
+/*---------------------------------------------- CClassView::refresh()
+ * refresh()
+ *   Reparse the file and redraw the view.
+ *
+ * Parameters:
+ *   aFile        The file to reparse.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::refresh( const char *aFile)
+{
 }
 
 /*---------------------------------------------- CClassView::refresh()
@@ -475,6 +487,18 @@ KPopupMenu *CClassView::getCurrentPopup()
   return popup;
 }
 
+/*--------------------------------- CClassView::getTreeStrItem()
+ * getTreeStrItem()
+ *   Fetch one node from a tree string.
+ *
+ * Parameters:
+ *   str        String containing the tree.
+ *   pos        Current position.
+ *   buf        Resulting string.
+ *
+ * Returns:
+ *   int        The new position.
+ *-----------------------------------------------------------------*/
 int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
 {
   int idx = 0;
@@ -497,6 +521,16 @@ int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
   return pos;
 }
 
+/*------------------------------------------- CClassView::buildTree()
+ * buildTree()
+ *   Make the classtree from a treestring.
+ *
+ * Parameters:
+ *   str            The string holding the classtree.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassView::buildTree( const char *str )
 {
   uint pos=0;
@@ -574,6 +608,7 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
         str += "('";
         str += item->text( 0 );
         str += "'";
+        str += ( item->isOpen() ? "1" : "0" );
         
         buildTreeStr( item->firstChild(), str );
         str += ")";
@@ -583,6 +618,7 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
         str += "'";
         str += item->text( 0 );
         str += "'";
+        str += ( item->isOpen() ? "1" : "0" );
       }
 
       // Ignore globals folder.
@@ -612,6 +648,15 @@ const char *CClassView::asTreeStr()
   return str;
 }
 
+/*-------------------------------- CClassView::buildInitalClassTree()
+ * buildInitalClassTree()
+ *   Build the classtree without using a treestring.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassView::buildInitalClassTree()
 {
   QString str;
@@ -737,9 +782,9 @@ void CClassView::slotClassViewSelected()
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
         type == THPRIVATE_ATTR || type == THPUBLIC_SIGNAL ||
         type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL )
-      slotViewDefinition();
-    else
       slotViewDeclaration();
+    else
+      slotViewDefinition();
   }
   else if( mouseBtn == MidButton && type != THFOLDER )
   {
@@ -747,9 +792,9 @@ void CClassView::slotClassViewSelected()
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
         type == THPRIVATE_ATTR  || type == THPUBLIC_SIGNAL ||
         type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL)
-      slotViewDeclaration();
-    else
       slotViewDefinition();
+    else
+      slotViewDeclaration();
   }
 
   // Set it back, so next time only if user clicks again we react.
@@ -763,13 +808,14 @@ void CClassView::slotMethodNew()
 
 void CClassView::slotMethodDelete()
 {
-  if( KMsgBox::yesNo( this, i18n("Delete method"),
-                      i18n("Are you sure you want to delete this method?"),
-                      KMsgBox::QUESTION ) == 1 )
-  {
-    KMsgBox::message( this, "Not implemented",
-                      "This function isn't implemented yet." );
-  }
+  const char *className;
+  const char *otherName;
+  THType idxType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+
+  emit signalMethodDelete( className, otherName );
 }
 
 void CClassView::slotAttributeNew()
@@ -825,37 +871,37 @@ void CClassView::slotFolderDelete()
 
 void CClassView::slotClassBaseClasses()
 {
-  CClassToolDlg ctDlg( this, "classToolDlg" );
+  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
 
-  ctDlg.setStore( store );
-  ctDlg.setViewDefinitionCmd( &definitionCmd );
-  ctDlg.setViewDeclarationCmd( &declarationCmd );  
-  ctDlg.setClass( getCurrentClass() );
-  ctDlg.viewParents();
-  ctDlg.show();
+  ctDlg->setStore( store );
+  ctDlg->setViewDefinitionCmd( &definitionCmd );
+  ctDlg->setViewDeclarationCmd( &declarationCmd );  
+  ctDlg->setClass( getCurrentClass() );
+  ctDlg->viewParents();
+  ctDlg->show();
 }
 
 void CClassView::slotClassDerivedClasses() 
 {
-  CClassToolDlg ctDlg( this, "classToolDlg" );
+  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
 
-  ctDlg.setStore( store );
-  ctDlg.setClass( getCurrentClass() );
-  ctDlg.setViewDefinitionCmd( &definitionCmd );
-  ctDlg.setViewDeclarationCmd( &declarationCmd );  
-  ctDlg.viewChildren();
-  ctDlg.show();
+  ctDlg->setStore( store );
+  ctDlg->setClass( getCurrentClass() );
+  ctDlg->setViewDefinitionCmd( &definitionCmd );
+  ctDlg->setViewDeclarationCmd( &declarationCmd );  
+  ctDlg->viewChildren();
+  ctDlg->show();
 }
 
 void CClassView::slotClassTool()
 {
-  CClassToolDlg ctDlg( this, "classToolDlg" );
+  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
 
-  ctDlg.setStore( store );
-  ctDlg.setClass( getCurrentClass() );
-  ctDlg.setViewDefinitionCmd( &definitionCmd );
-  ctDlg.setViewDeclarationCmd( &declarationCmd );  
-  ctDlg.show();
+  ctDlg->setStore( store );
+  ctDlg->setClass( getCurrentClass() );
+  ctDlg->setViewDefinitionCmd( &definitionCmd );
+  ctDlg->setViewDeclarationCmd( &declarationCmd );  
+  ctDlg->show();
 }
 
 void CClassView::slotViewDefinition() 
