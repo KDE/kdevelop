@@ -138,7 +138,7 @@ about_cb(GtkWidget* widget, gpointer data)
   else
     {        
       const gchar *authors[] = {
-        "|AUTHOR| <|EMAIL|>",
+        "$AUTHOR$ <$EMAIL$>",
         NULL
       };
 

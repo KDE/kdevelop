@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Comment=|APPNAME| - a kcontol module
-Exec=kcmshell |APPNAMELC|
-Keywords=|APPNAME|,|APPNAMELC|
-Name=The |APPNAME| applet
+Comment=$APPNAME$ - a kcontol module
+Exec=kcmshell $APPNAMELC$
+Keywords=$APPNAME$,$APPNAMELC$
+Name=The $APPNAME$ applet
 Terminal=false
 Type=Application
-X-KDE-FactoryName=|APPNAMELC|
-X-KDE-Library=|APPNAMELC|
+X-KDE-FactoryName=$APPNAMELC$
+X-KDE-Library=$APPNAMELC$
 X-KDE-ModuleType=Library
