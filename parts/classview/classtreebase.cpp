@@ -151,6 +151,8 @@ void ClassTreeScopeItem::init()
 
 QString ClassTreeScopeItem::text( int col ) const
 {
+    if (!m_item)
+        return QString::null;
     if (m_item->name().isEmpty())
         return i18n("Global");
     return ClassTreeItem::text( col );
@@ -159,6 +161,9 @@ QString ClassTreeScopeItem::text( int col ) const
 
 void ClassTreeScopeItem::setOpen(bool o)
 {
+    if ( !m_item)
+        return;
+
     kdDebug(9003) << (o? "Open scope item" : "Close scope item") << endl;
     if (o && childCount() == 0) {
 
@@ -221,6 +226,8 @@ void ClassTreeClassItem::init()
 
 void ClassTreeClassItem::setOpen(bool o)
 {
+    if ( !m_item )
+        return;
     kdDebug(9003) << (o? "Open class item" : "Close class item") << endl;
     if (o && childCount() == 0) {
 
@@ -271,10 +278,8 @@ void ClassTreeClassItem::setOpen(bool o)
 
 ClassTreeStructItem::ClassTreeStructItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                          ParsedStruct *parsedStruct)
-    : ClassTreeItem(parent, lastSibling, 0)
+    : ClassTreeItem(parent, lastSibling, parsedStruct)
 {
-    if ( parsedStruct )
-      m_item = new ParsedStruct( *parsedStruct );
     setExpandable(true);
     setPixmap(0, UserIcon("CVstruct", KIcon::DefaultState, ClassViewFactory::instance()));
 }
@@ -282,6 +287,8 @@ ClassTreeStructItem::ClassTreeStructItem(ClassTreeItem *parent, ClassTreeItem *l
 
 void ClassTreeStructItem::setOpen(bool o)
 {
+    if ( !m_item )
+        return;
     kdDebug(9003) << (o? "Open struct item" : "Close struct item") << endl;
     if (o && childCount() == 0) {
 
@@ -311,13 +318,12 @@ void ClassTreeStructItem::setOpen(bool o)
 
 ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                          ParsedMethod *parsedMethod)
-    : ClassTreeItem(parent, lastSibling, 0)
+    : ClassTreeItem(parent, lastSibling, parsedMethod)
 {
     QString icon;
     
     if ( !parsedMethod )
       return;
-    m_item = new ParsedMethod( *parsedMethod );
 
     if (parsedMethod->isSignal())
         icon = "CVpublic_signal";
@@ -346,6 +352,9 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
 QString ClassTreeMethodItem::text( int ) const
 {
     QString str;
+
+    if ( !m_item )
+        return QString::null;
  
     ParsedMethod* method = static_cast<ParsedMethod*>(m_item);
 
@@ -373,13 +382,12 @@ QString ClassTreeMethodItem::text( int ) const
 
 ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                      ParsedAttribute *parsedAttr)
-    : ClassTreeItem(parent, lastSibling, 0)
+    : ClassTreeItem(parent, lastSibling, parsedAttr)
 {
     QString icon;
     
     if ( !parsedAttr )
       return;
-    m_item = new ParsedAttribute( *parsedAttr );
 
     if (parsedAttr->isPublic())
         icon = "CVpublic_var";
@@ -398,6 +406,8 @@ ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastS
 
 QString ClassTreeAttrItem::text( int ) const
 {
+    if ( !m_item )
+        return QString::null;
     return m_item->name();
 }
 
