@@ -29,7 +29,7 @@
 
 static const KAboutData data("docpdfplugin", I18N_NOOP("PDF documentation plugin"), "1.0");
 typedef KDevGenericFactory<DocPDFPlugin> DocPDFPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocPDFPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocpdfplugin, DocPDFPluginFactory(&data) )
 
 DocPDFPlugin::DocPDFPlugin(QObject* parent, const char* name, const QStringList args)
     :DocumentationPlugin(DocPDFPluginFactory::instance()->config(), parent, name)
