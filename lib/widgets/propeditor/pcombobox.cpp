@@ -59,7 +59,11 @@ QVariant PComboBox::value() const
 
 void PComboBox::setValue(const QVariant value, bool emitChange)
 {
+#if QT_VERSION >= 0x030100
     if (!value.isNull())
+#else
+    if (value.canCast(QVariant::String))
+#endif
     {
         setCurrentText(r_corresp[value.toString()]);
         if (emitChange)

@@ -457,7 +457,11 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	           if( !text.isEmpty() )
 		       text += "::";
 	           text += formatModelItem( *it, true );
-		   text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+#if QT_VERSION >= 0x030100
+       text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+#else
+		   text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
+#endif
                    int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
 	           int line, column;
 	           (*it)->getStartPosition( &line, &column );
@@ -489,7 +493,11 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    if( !text.isEmpty() )
 			text += "::";
 		    text += formatModelItem( *it, true );
-		    text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+#if QT_VERSION >= 0x030100
+        text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+#else
+        text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
+#endif
 		    int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
 		    int line, column;
 		    (*it)->getStartPosition( &line, &column );

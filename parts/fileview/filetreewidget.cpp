@@ -42,6 +42,21 @@
 // class MyFileTreeViewItem
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef KDE_IS_VERSION
+// that is for KDE<3.1
+KURL KURL_fromPathOrURL(const QString& text )
+{
+  if ( text.isEmpty() )
+    return KURL();
+    KURL url;
+    if ( text[0] == '/' )
+      url.setPath( text );
+    else
+      url = text;
+  return url;
+}
+#endif
+
 class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
@@ -183,7 +198,7 @@ public:
         : KFileTreeBranch( view, url, name, pix, false,
             new MyFileTreeViewItem( view, new KFileItem( url, "inode/directory", S_IFDIR ), this ) )
     {
-        kdDebug( 9017 ) << "MyFileTreeBranch::MyFileTreeBranch(): " << url << endl;
+        kdDebug( 9017 ) << "MyFileTreeBranch::MyFileTreeBranch(): " << url.path() << endl;
     }
 
     virtual ~MyFileTreeBranch()
@@ -314,7 +329,12 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 
     addProjectFiles( m_part->project()->allFiles(), true );
 
+#if defined(KDE_IS_VERSION)
     KURL url = KURL::fromPathOrURL( dirName );
+#else
+// for KDE < 3.1
+    KURL url = KURL_fromPathOrURL( dirName );
+#endif
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
 
     // this is a bit odd, but the order of these calls seems to be important

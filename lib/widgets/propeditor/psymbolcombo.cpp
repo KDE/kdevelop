@@ -61,7 +61,12 @@ QVariant PSymbolCombo::value() const
 
 void PSymbolCombo::setValue(const QVariant value, bool emitChange)
 {
+#if QT_VERSION >= 0x030100
     if (!(value.isNull()))
+#else
+    if (value.canCast(QVariant::Int))
+
+#endif
     {
         edit->setText(QChar(value.toInt()));
         if (emitChange)

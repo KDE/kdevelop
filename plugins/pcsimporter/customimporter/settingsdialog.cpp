@@ -9,7 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "settingsdialog.h"
 
 #include <klistbox.h>
 #include <kcombobox.h>
@@ -20,10 +19,14 @@
 // only for KDE < 3.1
 #if KDE_VERSION <= 305
 #include "../compat/kdeveditlistbox.h"
-using namespace KDevCompat;
+//using namespace KDevCompat;
+#define KEditListBox KDevCompat::KEditListBox
 #else
 #include <keditlistbox.h>
 #endif
+
+// should be included after possible KEditListBox redefinition
+#include "settingsdialog.h"
 
 #include <qfile.h>
 #include <qdir.h>
