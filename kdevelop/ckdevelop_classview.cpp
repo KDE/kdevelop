@@ -144,6 +144,8 @@ void CKDevelop::slotCVViewDefinition(  const char *className,
  *-----------------------------------------------------------------*/
 void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
+  assert( aClassName != NULL );
+
   CParsedMethod *aMethod;
   CAddClassMethodDlg dlg(this, "methodDlg" );
   
@@ -172,8 +174,12 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
  *-----------------------------------------------------------------*/
 void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod )
 {
+  assert( aClassName != NULL );
+  assert( aMethod != NULL );
+
   CParsedClass *aClass;
   QString toAdd;
+  QString headerCode;
   int atLine = -1;
   CParsedMethod *meth = NULL;
 
@@ -221,43 +227,62 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClass->name, NULL, THCLASS );  
+  CVGotoDeclaration( aClassName, aClassName, THCLASS );  
 
-  aMethod->asHeaderCode( toAdd );
+  aMethod->asHeaderCode( headerCode );
 
   if( atLine == -1 )
   {
-    switch( aMethod->exportScope )
+    if( aMethod->isSignal )
+      toAdd = "signals: // Signals\n" + headerCode;
+    else // Methods and slots
     {
-      case PIE_PUBLIC:
-        toAdd = "public: // Public methods\n" + toAdd;
-        break;
-      case PIE_PROTECTED:
-        toAdd = "protected: // Protected methods\n" + toAdd;
-        break;
-      case PIE_PRIVATE:
-        toAdd = "private: // Private methods\n" + toAdd;
-        break;
-      default:
-        break;
+      switch( aMethod->exportScope )
+      {
+        case PIE_PUBLIC:
+          toAdd.sprintf( "public%s: // Public %s\n%s", 
+                         aMethod->isSlot ? " slots" : "",
+                         aMethod->isSlot ? "slots" : "methods", 
+                         headerCode.data() );
+          break;
+        case PIE_PROTECTED:
+          toAdd.sprintf( "protected%s: // Protected %s\n%s", 
+                         aMethod->isSlot ? " slots" : "",
+                         aMethod->isSlot ? "slots" : "methods", 
+                         headerCode.data() );
+          break;
+        case PIE_PRIVATE:
+          toAdd.sprintf( "private%s: // Private %s\n%s", 
+                         aMethod->isSlot ? " slots" : "",
+                         aMethod->isSlot ? "slots" : "methods", 
+                         headerCode.data() );
+          break;
+        default:
+          break;
+      }
     }
 
     atLine = aClass->declarationEndsOnLine;
   }
+  else
+    toAdd = headerCode;
 
   // Add the declaration.
   edit_widget->insertAtLine( toAdd, atLine );
   edit_widget->setCursorPosition( atLine, 0 );
   edit_widget->toggleModified( true );
 
-  // Switch to the .cpp file.
-  switchToFile( aClass->definedInFile );
+  // Switch to the .cpp file and add the code if it isn't a signal.
+  if( !aMethod->isSignal )
+  {
+    switchToFile( aClass->definedInFile );
 
-  // Add the code to the file.
-  aMethod->asCppCode( toAdd );
-  edit_widget->append( toAdd );
-  edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
-  edit_widget->toggleModified( true );
+    // Add the code to the file.
+    aMethod->asCppCode( toAdd );
+    edit_widget->append( toAdd );
+    edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
+    edit_widget->toggleModified( true );
+  }
 }
 
 /*------------------------------------- CKDevelop::slotCVAddAttribute()
@@ -525,6 +550,10 @@ void CKDevelop::CVGotoDeclaration( const char *className,
 
     if( aClass != NULL )
       CVClassSelected( className );
+
+    // Check if this is a subclass, if so fetch it.
+    if( type == THCLASS && strcmp( className, declName ) != 0 )
+      aClass = aClass->getClassByName( declName );
   }
 
   switch( type )
