@@ -693,6 +693,15 @@ void DebuggerPart::slotRun()
     }
     else
     {
+        KActionCollection *ac = actionCollection();
+        ac->action("debug_run")->setText( i18n("&Continue") );
+        ac->action("debug_run")->setStatusText( i18n("Continues the application execution") );
+        ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
+            "Continues the execution of your application in the "
+            "debugger. This only takes effect when the application "
+            "has been halted by the debugger (i.e. a breakpoint has "
+            "been activated or the interrupt was pressed).") );
+
         mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
     }
     controller->slotRun();
