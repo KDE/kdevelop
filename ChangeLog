@@ -1,3 +1,8 @@
+1999-12-07  Falk Brettschneider  <gigafalk@yahoo.com>
+	* 2 new "Window" menuitems for switching between all kdevelop
+	  sub-windows toplevel or child windows of the mainframe
+	  (currently only the views are enabled to be switched)
+
 1999-11-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* DCOP interface for Cervisia (and other
 	  tools)
