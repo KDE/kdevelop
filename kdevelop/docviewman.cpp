@@ -1322,16 +1322,28 @@ bool DocViewMan::doProjectClose()
   return cont;
 }
 
-/** This closes all the edit documents */
+/** This closes all the edit and browser documents */
 void DocViewMan::doCloseAllDocs()
 {
   debug("DocViewMan::doCloseAllDocs !\n");
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(pDoc)
-      closeKWriteDoc(pDoc);
+  while (itDoc.current() != 0L) {
+    KWriteDoc* pEditDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (pEditDoc) {
+      closeKWriteDoc(pEditDoc);
+    }
+    else {
+      CDocBrowser* pBrDoc = dynamic_cast<CDocBrowser*> (itDoc.current());
+      if (pBrDoc) {
+        closeCDocBrowser( pBrDoc);
+      }
+    }
+
+    // go to the begin of the list
+    // we cannot go through the list because closing the document changes the list itself
+    // and the iterator doesn't work any more
+    itDoc.toFirst();
   }
 }
 
