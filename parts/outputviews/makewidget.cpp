@@ -264,7 +264,13 @@ void MakeWidget::nextError()
 	else
 		parag = 0;
 
-	for ( int it = parag; it < m_items.count(); ++it )
+	for ( int it = parag;
+#if QT_VERSION >= 0x030100 
+	      it < m_items.count();
+#else
+	      it < m_items.size();
+#endif
+	      ++it )
 	{
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_items[it] );
 		if ( !item )
@@ -359,9 +365,17 @@ void MakeWidget::insertStderrLine( const QString& line )
 
 bool MakeWidget::appendToLastLine( const QString& text )
 {
+#if QT_VERSION >= 0x030100 
 	if ( m_items.count() == 0 )
+#else
+	if ( m_items.size() == 0 )
+#endif
 		return false;
+#if QT_VERSION >= 0x030100 
 	MakeItem* item = m_items[m_items.count() - 1];
+#else
+	MakeItem* item = m_items[m_items.size() - 1];
+#endif	
 	if ( !item->append( text ) )
 		return false;
 	removeParagraph( paragraphs() - 1 );
