@@ -1,8 +1,8 @@
 /***************************************************************************
-                     item_groupbox.cpp  -  description
+                     item_buttongroup.cpp  -  description
                              -------------------                                         
     begin                :  Tue May 20 1999                                           
-    copyright            : (C) 1999 by Sandy Meier
+    copyright            : (C) 1999 by Sandy Meier (Dag Andersen)
     email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
@@ -17,13 +17,13 @@
 
 
 #define DONTINC_ALL
-#define INC_GROUPBOX
+#define INC_BUTTONGROUP
 #include "items.h"
 #include "itemsglobal.h"
 
-#define CALLER_ITEMCLASS_NAME KDlgItem_GroupBox
-#define ITEMCLASS_NAME KDlgItem_GroupBox
-#define ITEMCLASS_TYPE QGroupBox
+#define CALLER_ITEMCLASS_NAME KDlgItem_ButtonGroup
+#define ITEMCLASS_NAME KDlgItem_ButtonGroup
+#define ITEMCLASS_TYPE QButtonGroup
 
 #include "item_all.cpp.inc"
 

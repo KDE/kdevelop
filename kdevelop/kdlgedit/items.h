@@ -1,5 +1,5 @@
 /***************************************************************************
-                           item.h  -  description
+                           items.h  -  description
                              -------------------
     begin                : Thu Apr 08 1999
     copyright            : (C) 1999 by Pascal Krahmer
@@ -44,8 +44,10 @@
   #define INC_SLIDER
   #define INC_SCROLLBAR
   #define INC_GROUPBOX
+  #define INC_BUTTONGROUP     // da
   #define INC_LISTVIEW
   #define INC_KCOLORBUTTON
+//  #define INC_KCOMBO
   #define INC_KDATEPICKER
   #define INC_KDATETABLE
 
@@ -54,6 +56,7 @@
   #define INC_KPROGRESS
   #define INC_KKEYBUTTON
   #define INC_KRESTRICTEDLINE
+  #define INC_KTREELIST
   #define INC_KSEPARATOR
 #endif
 
@@ -279,6 +282,20 @@ class KDlgItem_GroupBox : public KDlgItem_Base
 };
 #endif
 
+#ifdef INC_BUTTONGROUP	// da
+#include <qbuttongroup.h>
+class KDlgItem_ButtonGroup : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_ButtonGroup
+  #define widgettype QButtonGroup
+  #define classdesc "QButtonGroup"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
 #ifdef INC_LISTVIEW
 #include <qlistbox.h>
 class KDlgItem_ListView : public KDlgItem_Base
@@ -418,6 +435,20 @@ class KDlgItem_KRestrictedLine : public KDlgItem_Base
   #define classname KDlgItem_KRestrictedLine
   #define widgettype KRestrictedLine
   #define classdesc "KRestrictedLine"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KTREELIST
+#include <ktreelist.h>
+class KDlgItem_KTreeList : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KTreeList
+  #define widgettype KTreeList
+  #define classdesc "KTreeList"
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };

@@ -97,6 +97,7 @@ void slotFileNew();
   void generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQButtonGroup(KDlgItem_Widget *wid, QTextStream *stream,QString parent);	// da
   void generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);

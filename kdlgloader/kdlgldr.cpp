@@ -16,11 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <qmessagebox.h>
-#include <qfile.h>
-#include <klocale.h>
 #include "kdlgldr.h"
+#include <qmessagebox.h>
 
 extern "C" {
 
@@ -402,7 +399,8 @@ long KDlgLoader::readGrp_Item( QWidget* par, QTextStream *t, QString ctype, KDlg
       {
         if (s.left(s.find(' ')).upper() == "ITEM")
           {
-            if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME"))
+            if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME")
+		|| (ctype.upper() == "QBUTTONGROUP") || (ctype.upper() == "QGROUPBOX")) // da
               {
 #ifdef dlgldr_wth
                 WatchMsg("Child widget");

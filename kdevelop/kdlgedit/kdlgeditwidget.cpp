@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "items.h"
+
 #include "kdlgeditwidget.h"
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
@@ -25,17 +25,16 @@
 #include <qdatetime.h>
 #include <kruler.h>
 #include <stdio.h>
-
+#include "items.h"
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
-
+#include <kquickhelp.h>
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
-#warning FIXME
-    //  qhw = new KQuickHelpWindow();
+  qhw = new KQuickHelpWindow();
   dlgfilelinecnt = 0;
   pCKDevel = parCKD;
 
@@ -223,7 +222,6 @@ void KDlgEditWidget::slot_copySelected()
   if (!selected_widget)
     return;
 
-#warning Using non-unique names for temporaries is evil!
   QFile f("/tmp/kdevdlgedt_copyitem.tmp");
   if ( f.open(IO_WriteOnly) )
     {
@@ -243,7 +241,9 @@ void KDlgEditWidget::slot_pasteSelected()
   KDlgItem_Widget *parent_widget = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+	|| (selectedWidget()->itemClass().upper()=="QBUTTONGROUP")
+	|| (selectedWidget()->itemClass().upper()=="QGROUPBOX") )
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -254,7 +254,10 @@ void KDlgEditWidget::slot_pasteSelected()
 
         if (res == 1)
           {
-            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+	    QString ps = selectedWidget()->itemClass().upper();              // da --->
+            if ( ((ps=="QWIDGET") && (selectedWidget() != main_widget))
+		|| (ps== "QBUTTONGROUP")
+	   	|| (ps== "QGROUPBOX") )                                      // <<--- da
                 parent_widget = (KDlgItem_Widget*)selectedWidget();
             else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
                 parent_widget = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
@@ -329,8 +332,7 @@ void KDlgEditWidget::slot_helpSelected()
 
   helptext = KDlgLimitLines(helptext,60);
 
-#warning FIXME
-  //  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
+  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
 }
 
 
@@ -432,7 +434,8 @@ bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString
       {
         if (s.left(s.find(' ')).upper() == "ITEM")
           {
-            if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME"))
+            if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME")
+		|| (ctype.upper() == "QBUTTONGROUP") || (ctype.upper() == "QGROUPBOX"))
               {
                 if (!readGrp_Item( thatsme, t, s.right(s.length()-s.find(' ')-1) ))
                   return false;
@@ -530,7 +533,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
                 res = 1;
               if (res == 1)
                 {
-                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file").ascii(), (const char*)fname);
+                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file"), (const char*)fname);
                   QMessageBox::information( this, fname,
                            i18n("Reading aborted !\n\nThe dialog has not been loaded completely."
                                 "\nOpen another dialog or create a new one\nif you don't like the result."));
@@ -641,8 +644,10 @@ void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep)
       if (wid->getProps()->getProp(i)->value.length() > 0)
         *t << sDeep << "   " << wid->getProps()->getProp(i)->name << "=\"" << wid->getProps()->getProp(i)->value << "\"\n";
     }
-
-  if (wid->itemClass().upper() == "QWIDGET")
+  QString s= wid->itemClass().upper();    // da --->
+  if (  (s == "QWIDGET")
+     || (s == "QBUTTONGROUP")
+     || (s == "QGROUPBOX") )             // da <---
     {
       KDlgItemDatabase *cdb = wid->getChildDb();
       if (cdb)
@@ -736,7 +741,9 @@ bool KDlgEditWidget::addItem(QString Name)
   KDlgItem_Base *par = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+	|| (selectedWidget()->itemClass().upper()=="QBUTTONGROUP")
+	|| (selectedWidget()->itemClass().upper()=="QGROUPBOX") )
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -747,7 +754,10 @@ bool KDlgEditWidget::addItem(QString Name)
 
         if (res == 1)
           {
-            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+	    QString ps = selectedWidget()->itemClass().upper();              // da --->
+            if ( ((ps=="QWIDGET") && (selectedWidget() != main_widget))
+		|| (ps== "QBUTTONGROUP")
+	   	|| (ps== "QGROUPBOX") )                                      // <<--- da
                 par = selectedWidget();
             else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
                 par = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
@@ -792,6 +802,7 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("QSlider", KDlgItem_Slider )
     macro_CreateIfRightOne("QScrollBar", KDlgItem_ScrollBar )
     macro_CreateIfRightOne("QGroupBox", KDlgItem_GroupBox )
+    macro_CreateIfRightOne("QButtonGroup", KDlgItem_ButtonGroup )	// da
     macro_CreateIfRightOne("QListView", KDlgItem_ListView )
 #if 0
     macro_CreateIfRightOne("KCombo", KDlgItem_KCombo )
@@ -804,6 +815,7 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
     macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
     macro_CreateIfRightOne("KRestrictedLine", KDlgItem_KRestrictedLine )
+    macro_CreateIfRightOne("KTreeList", KDlgItem_KTreeList )
     macro_CreateIfRightOne("KSeparator", KDlgItem_KSeparator )
 
 #undef macro_CreateIfRightOne

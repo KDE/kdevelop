@@ -42,6 +42,7 @@ class KRestrictedLine;
 class KColorButton;
 class CKDevelop;
 class QGroupBox;
+class QButtonGroup;
 class QMultiLineEdit;
 class QToolButton;
 
@@ -292,6 +293,7 @@ class dlgMultiLineEdit : public QDialog
   protected:
       void initDialog();
       QGroupBox *gbGroupBox;
+      QButtonGroup *gbButtonGroup;
       QMultiLineEdit *mleStrings;
       QLabel *lRowCnt;
       QPushButton *btnCancel;

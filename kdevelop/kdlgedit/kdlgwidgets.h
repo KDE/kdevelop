@@ -80,6 +80,7 @@ class KDlgWidgets : public QWidget  {
   void clicked_QSlider();
   void clicked_QScrollBar();
   void clicked_QGroupBox();
+  void clicked_QButtonGroup();
   void clicked_QListView();
 #if 0	
 //  void clicked_KCombo();

@@ -53,6 +53,7 @@
 #include <kprogress.h>
 #include <kkeydialog.h>
 #include <krestrictedline.h>
+#include <ktreelist.h>
 #include <kseparator.h>
 #endif
 
@@ -1458,6 +1459,8 @@ QWidget* KDlgLoader::createItem(QWidget*par, QString ctype)
     return (QWidget*)new QScrollBar(QScrollBar::Horizontal, par);
   else if (ctype == "qgroupbox")
     return (QWidget*)new QGroupBox(par);
+  else if (ctype == "qbuttongroup")                   	// da --->
+    return (QWidget*)new QButtonGroup(par);         	// da <---
   else if (ctype == "qlistview")
     return (QWidget*)new QListView(par);
 #ifdef ENABLE_KDEWIDGETS
@@ -1479,6 +1482,8 @@ QWidget* KDlgLoader::createItem(QWidget*par, QString ctype)
     return (QWidget*)new KKeyButton("keybutton",par);
   else if (ctype == "krestrictedline")
     return (QWidget*)new KRestrictedLine(par);
+  else if (ctype == "ktreelist")
+    return (QWidget*)new KTreeList(par);
   else if (ctype == "kseparator")
     return (QWidget*)new KSeparator(par);
 #endif
