@@ -7,6 +7,9 @@
 #include "editorproxy.h"
 #include "partcontroller.h"
 
+using namespace KTextEditor;
+
+
 Debugger *Debugger::s_instance = 0;
 
 Debugger::Debugger()
@@ -90,9 +93,9 @@ void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
 }
 
 
-#if (KDE_VERSION > 304)
-void Debugger::markChanged( KTextEditor::Mark mark, MarkInterfaceExtension::MarkChangeAction action )
+void Debugger::markChanged( KTextEditor::Mark mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction action )
 {
+#if (KDE_VERSION > 304)
   if( !sender()->inherits("KTextEditor::Document") )
     return;
   KTextEditor::Document* doc = (KTextEditor::Document*) sender();
@@ -109,8 +112,8 @@ void Debugger::markChanged( KTextEditor::Mark mark, MarkInterfaceExtension::Mark
       break;
     }
   }
-}
 #endif
+}
 
 
 void Debugger::partAdded( KParts::Part* part )

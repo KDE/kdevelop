@@ -10,7 +10,14 @@
 #include <ktexteditor/markinterface.h>
 #if (KDE_VERSION > 304)
 #include <ktexteditor/markinterfaceextension.h>
-using namespace KTextEditor;
+#else
+namespace KTextEditor {
+  class Mark;
+  class MarkInterfaceExtension {
+  public:
+    typedef int MarkChangeAction;
+  };
+}
 #endif
 
 class Debugger : public KDevDebugger
@@ -35,10 +42,7 @@ protected:
 private slots:
 
   void partAdded( KParts::Part* part );
-
-#if (KDE_VERSION > 304)
-  void markChanged( KTextEditor::Mark, MarkInterfaceExtension::MarkChangeAction );
-#endif
+  void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
 
 private:
   enum MarkType {

@@ -9,7 +9,9 @@ class QPopupMenu;
 
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
+#if (KDE_VERSION > 304)
 #include <ktexteditor/markinterfaceextension.h>
+#endif
 
 class EditorProxy : public QObject
 {
