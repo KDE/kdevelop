@@ -733,7 +733,8 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
     str += pm->type();
     str += " ";
     str += pm->name();
-    
+
+    /*   
     if( pm->arguments.count() > 0 ) {
 	str += "( ";
         for ( ParsedArgument* arg = pm->arguments.first(); arg != NULL; arg = pm->arguments.next() ) {
@@ -746,6 +747,7 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
     } else {
         str += "()";
     }
+    */
 
     if (pm->isConst())
         str += " const";
@@ -777,6 +779,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     }
     str += pm->name();
 
+    /*
     if( pm->arguments.count() > 0 ) {
 	str += "( ";
         for ( ParsedArgument* arg = pm->arguments.first(); arg != NULL; arg = pm->arguments.next() ) {
@@ -789,6 +792,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     } else {
         str += "()";
     }
+    */
     
     if (pm->isConst())
         str += " const";
