@@ -1,7 +1,0 @@
-[Desktop Entry]
-Comment=Qt Designer File
-Icon=designer
-DefaultApp=designer -client
-Type=MimeType
-MimeType=application/x-designer
-Patterns=*.ui;
