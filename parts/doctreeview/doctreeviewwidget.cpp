@@ -764,7 +764,7 @@ void DocTreeDocbaseFolder::setOpen(bool o)
         for (it = fileList.begin(); it != fileList.end(); ++it)
         {
             FILE *f;
-            if ( (f = fopen(d.filePath(*it), "r")) != 0)
+            if ( (f = fopen( QFile::encodedName(d.filePath(*it)), "r")) != 0)
             {
                 readDocbaseFile(f);
                 fclose(f);
