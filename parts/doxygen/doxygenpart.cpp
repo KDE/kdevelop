@@ -235,24 +235,72 @@ void DoxygenPart::slotDoxygen()
 
 void DoxygenPart::slotDoxClean()
 {
+    bool could_be_dirty = false;
 
     QString outputDirectory = Config_getString("OUTPUT_DIRECTORY");
     if ( outputDirectory.isEmpty() )
         outputDirectory = project()->projectDirectory();
     if ( outputDirectory.right(1) != "/" )
         outputDirectory += "/";
+    QString cmdline = "cd " + KShellProcess::quote( outputDirectory );
 
-    QString htmlDirectory   = Config_getString("HTML_OUTPUT");
-    if ( htmlDirectory.isEmpty() )
-        htmlDirectory = "html";
-    if ( htmlDirectory.right(1) != "/" )
-        htmlDirectory += "/";
+    if ( Config_getBool("GENERATE_HTML") ) {
+        QString htmlDirectory   = Config_getString("HTML_OUTPUT");
+        if ( htmlDirectory.isEmpty() )
+            htmlDirectory = "html";
+        if ( htmlDirectory.right(1) != "/" )
+            htmlDirectory += "/";
+        cmdline += " && rm -f " + KShellProcess::quote( htmlDirectory ) + "*";
+        could_be_dirty= true;
+    }
 
-    QString cmdline = "rm -f " + KShellProcess::quote( outputDirectory + htmlDirectory + "*");
-    
-    kdDebug(9026) << "Cleaning Doxygen html generated API documentation using: " << cmdline << endl;
+    if ( Config_getBool("GENERATE_LATEX") ) {
+        QString latexDirectory   = Config_getString("LATEX_OUTPUT");
+        if ( latexDirectory.isEmpty() )
+            latexDirectory = "latex";
+        if ( latexDirectory.right(1) != "/" )
+            latexDirectory += "/";
+        cmdline += " && rm -f " + KShellProcess::quote( latexDirectory ) + "*";
+        could_be_dirty= true;
+    }
 
-    makeFrontend()->queueCommand(KShellProcess::quote(project()->projectDirectory()), cmdline);
+    if ( Config_getBool("GENERATE_RTF") ) {
+        QString rtfDirectory   = Config_getString("RTF_OUTPUT");
+        if ( rtfDirectory.isEmpty() )
+            rtfDirectory = "rtf";
+        if ( rtfDirectory.right(1) != "/" )
+            rtfDirectory += "/";
+        cmdline += " && rm -f " + KShellProcess::quote( rtfDirectory ) + "*";
+        could_be_dirty= true;
+    }
+
+    if ( Config_getBool("GENERATE_MAN") ) {
+        QString manDirectory   = Config_getString("MAN_OUTPUT");
+        if ( manDirectory.isEmpty() )
+            manDirectory = "man";
+        if ( manDirectory.right(1) != "/" )
+            manDirectory += "/";
+        cmdline += " && rm -f " + KShellProcess::quote( manDirectory ) + "*";
+        could_be_dirty= true;
+    }
+
+    if ( Config_getBool("GENERATE_XML") ) {
+        QString xmlDirectory   = Config_getString("XML_OUTPUT");
+        if ( xmlDirectory.isEmpty() )
+            xmlDirectory = "xml";
+        if ( xmlDirectory.right(1) != "/" )
+            xmlDirectory += "/";
+        cmdline += " && rm -f " + KShellProcess::quote( xmlDirectory ) + "*";
+        could_be_dirty= true;
+    }
+
+    if (could_be_dirty) {
+        kdDebug(9026) << "Cleaning Doxygen generated API documentation using: " << cmdline << endl;
+        makeFrontend()->queueCommand(KShellProcess::quote(project()->projectDirectory()), cmdline);
+    }
+    else
+       kdDebug(9026) << "No Doxygen generated API documentation exists. There's nothing to clean!" << endl;
+
 }
 
 
