@@ -79,6 +79,8 @@ private:
     QString m_projectName;
     QString m_projectPath;
     KSelectAction *buildConfigAction;
+    QString makeEnvironment();
+    void setWantautotools();
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;

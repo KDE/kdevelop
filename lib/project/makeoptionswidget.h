@@ -30,6 +30,9 @@ public slots:
     void accept();
 
 private:
+    virtual void addVarClicked();
+    virtual void removeVarClicked();
+
     QDomDocument &m_dom;
     QString m_configGroup;
 };

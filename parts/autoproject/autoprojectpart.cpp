@@ -125,6 +125,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+
+    setWantautotools();
 }
 
 
@@ -208,6 +210,36 @@ QString AutoProjectPart::activeDirectory()
 QStringList AutoProjectPart::allFiles()
 {
     return m_widget->allFiles();
+}
+
+
+void AutoProjectPart::setWantautotools()
+{
+    QDomDocument &dom = *projectDom();
+    QDomElement el  = DomUtil::elementByPath(dom, "/kdevautoproject");
+    if ( el.namedItem("makeenvvars").isNull() ) {
+        DomUtil::PairList list;
+        list << DomUtil::Pair("WANT_AUTOCONF_2_5", "1");
+        list << DomUtil::Pair("WANT_AUTOMAKE_1_6", "1");
+        DomUtil::writePairListEntry(dom, "/kdevautoproject/makeenvvars", "envvar", "name", "value", list);
+    }
+}
+
+
+QString AutoProjectPart::makeEnvironment()
+{
+    DomUtil::PairList envvars = 
+        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/makeenvvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+        environstr += (*it).second;
+        environstr += " ";
+    }
+    return environstr;
 }
 
 
@@ -328,7 +360,8 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
     cmdline += " ";
     cmdline += target;
-    
+    cmdline.prepend(makeEnvironment());
+
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
@@ -430,6 +463,8 @@ void AutoProjectPart::slotMakefilecvs()
                                           "autogen.sh script in the project directory."));
         return;
     }
+
+    cmdline.prepend(makeEnvironment());
 
     QString dircmd = "cd ";
     dircmd += projectDirectory();
