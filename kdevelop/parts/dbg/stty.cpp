@@ -28,6 +28,11 @@
 #include <config.h>
 #endif
 
+#ifdef __osf__
+#define _XOPEN_SOURCE_EXTENDED
+#define O_NDELAY O_NONBLOCK
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -66,10 +71,6 @@ extern "C" {
 
 #ifdef __sgi__
 #define SVR4
-#endif
-
-#ifdef __osf__
-#define _XOPEN_SOURCE_EXTENDED
 #endif
 
 #include <qintdict.h>
