@@ -528,7 +528,7 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVa
       for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
 	KTextEditor::CompletionEntry e;
 	QString name = (*attrIt)->name();
-	e.text = name.remove(0,1); // remove the trailing $
+	e.text = name;
 	e.postfix ="";
 	list.append(e);
       }
