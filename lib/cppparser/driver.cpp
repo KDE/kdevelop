@@ -282,7 +282,8 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_END_NAMESPACE" );
     lexer->addSkipWord( "ANTLR_C_USING", SkipWordAndArguments );
-
+    lexer->addSkipWord( "ANTLR_API" );
+    
     // gnu
     lexer->addSkipWord( "__extension__" );
     lexer->addSkipWord( "__attribute__", SkipWordAndArguments );
