@@ -31,11 +31,8 @@ public:
   CEditWidget(KApplication* a=0,QWidget* parent=0,char* name=0);
   ~CEditWidget();
   void setName(QString filename);
-  QString getName();
-  QString text();
-  void setText(QString text);
+  void setText(QString &text);
   void setFocus();
-  QString markedText();
   int loadFile(QString filename, int mode);
   void doSave();
   void doSave(QString filename);
@@ -48,6 +45,22 @@ public:
   void gotoLine();
   void indent();
   void unIndent();
+
+public: // Public queries
+  QString markedText();
+  QString getName();
+  QString text();
+
+  /** Returns the number of lines in the text. */
+  uint lines();
+
+public: // Method to manipulate the buffer
+  /** Insert the string at the supplied line. */
+  void insertAtLine( const char *toInsert, uint atLine );
+  
+  /** Append a text at the end of the file. */
+  void append( const char *toAdd );
+
 protected:
 //  QString filename;
   QPopupMenu* pop;

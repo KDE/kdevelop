@@ -22,6 +22,7 @@
 #include "./kwrite/highlight.h"
 #include <qpopupmenu.h>
 #include <qclipboard.h>
+#include <assert.h>
 
 HlManager hlManager; //highlight manager
 
@@ -36,9 +37,9 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
   pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
   pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
-	pop->setItemEnabled(1,false);
-	pop->setItemEnabled(2,false);
-	pop->setItemEnabled(3,false);
+  pop->setItemEnabled(1,false);
+  pop->setItemEnabled(2,false);
+  pop->setItemEnabled(3,false);
   pop->insertSeparator();
   pop->insertItem("",this,SLOT(slotLookUp()),0,0);
   bookmarks.setAutoDelete(true);
@@ -52,7 +53,7 @@ CEditWidget::~CEditWidget() {
 
 void CEditWidget::setName(QString filename){
   // this->filename = filename;
-    KWrite::setFileName(filename);
+  KWrite::setFileName(filename);
 }
 QString CEditWidget::getName(){
   //return filename;
@@ -63,7 +64,7 @@ QString CEditWidget::getName(){
 QString CEditWidget::text(){
   return KWrite::text();
 }
-void CEditWidget::setText(QString text){
+void CEditWidget::setText(QString &text){
   KWrite::setText(text);
 }
 QString CEditWidget::markedText(){
@@ -74,10 +75,10 @@ int CEditWidget::loadFile(QString filename, int mode) {
   return 0;
 }
 void CEditWidget::doSave() {
-   KWrite::save();
+  KWrite::save();
 }
 void CEditWidget::doSave(QString filename){
-   KWrite::writeFile(filename);
+  KWrite::writeFile(filename);
 }
 void CEditWidget::copyText() {
   KWrite::copy();
@@ -91,11 +92,10 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   //  cerr << endl << "POS: " << pos;
   // calculate the line
   QString last_textpart = text_str.right(text_str.size()-pos); // the second part of the next,after the pos
-   int line = text_str.contains("\n") - last_textpart.contains("\n");
+  int line = text_str.contains("\n") - last_textpart.contains("\n");
    //  cerr << endl << "LINE:" << line;
-   setCursorPosition(line,0);
-   setFocus();
-
+  setCursorPosition(line,0);
+  setFocus();
 }
 void CEditWidget::toggleModified(bool mod){
   KWrite::setModified(mod);
@@ -113,11 +113,51 @@ void CEditWidget::gotoLine(){
   KWrite::gotoLine();
 }
 void CEditWidget::indent(){
-	KWrite::indent();
+  KWrite::indent();
 }
 void CEditWidget::unIndent(){
   KWrite::unIndent();
 }
+
+/** Insert the string at the supplied line. */
+void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
+{
+  assert( toInsert != NULL );
+  assert( atLine >= 0 );
+
+  uint line=0;
+  int pos=0;
+  QString txt;
+
+  txt = text();
+  while( line < atLine )
+  {
+    pos++;
+    if( txt[ pos ] == '\n' )
+      line++;
+  }
+
+  // Insert the text after the last return.
+  txt.insert( pos + 1, toInsert );
+  setText( txt );
+}
+  
+/** Append a text at the end of the file. */
+void CEditWidget::append( const char *toAdd )
+{
+  QString txt;
+
+  txt = text();
+  txt.append( toAdd );
+  setText( txt );
+}
+
+/** Returns the number of lines in the text. */
+uint CEditWidget::lines()
+{
+  return (uint)(text().contains('\n', false));
+}
+
 
 void CEditWidget::enterEvent ( QEvent * e){
   setFocus();
@@ -178,25 +218,3 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
