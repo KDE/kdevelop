@@ -14,14 +14,12 @@
 #include <kconfig.h>
 
 #include <kdevmainwindow.h>
-//#include <partcontroller.h>
-//#include "toplevel.h"
 
 
 #include "kdevhtmlpart.h"
 
 KDevHTMLPart::KDevHTMLPart()
-  : KHTMLPart(0L, 0L, 0L, "KDevHTMLPart", BrowserViewGUI )
+  : KHTMLPart(0L, 0L, 0L, "KDevHTMLPart", DefaultGUI )
 {
   setXMLFile(locate("data", "kdevelop/kdevhtml_partui.rc"), true);
   
@@ -86,8 +84,6 @@ KDevHTMLPart::KDevHTMLPart()
   setFixedFont(appConfig->readEntry("FixedFont",
       settings()->fixedFontName()));
   setZoomFactor(appConfig->readEntry("Zoom", "100").toInt());
-  
-  setPluginsEnabled(false);
 }
 
 void KDevHTMLPart::popup( const QString & url, const QPoint & p )
@@ -132,21 +128,6 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
     popup.insertSeparator();
   }
 
-
-/*  if (!url.isEmpty())
-  {
-    KAction *ac = action("savelinkas");
-    if (ac)
-    {
-        qWarning("savelinkas found");
-        ac->plug(m_popup);
-    }
-    KAction *ac2 = action("copylinklocation");
-    if (ac2)
-        ac2->plug(m_popup);
-    m_popup->insertSeparator();
-  }*/
-
   KAction *ac = action("setEncoding");
   if (ac)
     ac->plug(&popup);
@@ -169,10 +150,9 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
     }
     else
         kurl = KURL(url);
-//    kurl.addPath(url);
+
     if (kurl.isValid())
         slotOpenInNewWindow(kurl);
-//      openURL( kurl );
   }
 }
 
