@@ -1,3 +1,6 @@
+2000-09-04 John Birch <jbb@kdevelop.org>
+	* A little bit of experimental code for the editor handling.
+
 2000-08-17 Sandy Meier   <smeier@kdevelop.org>
 	* new application wizard incl. class/file prop page
 	* new layouted newprjdlg
@@ -189,13 +192,13 @@
   * fixed misbehaviour of window captions when in toplevel mode using new dockwidget features
     (needs kdelibs/kdeui update (of today))
 
-2000-06-06 John Birch <jbb@ihug.co.nz>
+2000-06-06 John Birch <jbb@kdevelop.org>
   * fixed change in kdeui lib (KKeyButton in kdlgloader)
 
 2000-06-05 Ralf Nolden <rnolden@kdevelop.de>
   * fixed API change for HTML widget search next
 
-2000-06-03 John Birch <jbb@ihug.co.nz>
+2000-06-03 John Birch <jbb@kdevelop.org>
   * fixed change in kdeui lib
 
 2000-06-01 Falk Brettschneider <gigafalk@yahoo.com>
@@ -229,7 +232,7 @@
 	  (you will need to upgrade to kdelibs (08/May/2000))
 	* bugfix: of a crash in QextMDI when exiting kdevelop (since the menubar has already been destroyed)
 
-2000-05-06 John Birch <jbb@ihug.co.nz>
+2000-05-06 John Birch <jbb@kdevelop.org>
         * synchronized the 1_0 and HEAD version of the class tree
 	* did additional things for porting that class tree to KDE2
 
@@ -250,7 +253,7 @@
         * some adaptions to kdockwidgets done
 	* several new view widgets for debugger stuff added (debugging still not works here)
 
-2000-04-24 John Birch <jbb@ihug.co.nz>
+2000-04-24 John Birch <jbb@kdevelop.org>
         * compilable port to kde2 but not working code
 
 2000-04-12 Falk Brettschneider <gigafalk@yahoo.com>
