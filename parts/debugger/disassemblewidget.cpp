@@ -16,7 +16,10 @@
 #include "disassemblewidget.h"
 
 #include <kdebug.h>
-#include <ktextedit.h>
+#include <kdeversion.h>
+#if KDE_VERSION > 305
+# include <ktextedit.h>
+#endif
 #include <kglobalsettings.h>
 
 #include <qdict.h>

@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
+#include <kdeversion.h>
 
 #include <domutil.h>
 #include <kdevcore.h>
@@ -462,7 +463,15 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
     QString dependency = *l2it;
     if (dependency.startsWith("$(top_builddir)/")) {
       // These are the internal libraries
+#if KDE_VERSION > 305	
       dependency.remove("$(top_builddir)/");
+#else
+      QString topBuildDirStr("$(top_builddir)/");
+      int i = dependency.find(topBuildDirStr);
+      if (i != -1) {
+	  dependency.remove(i, i + topBuildDirStr.length() - 1);
+      }
+#endif
       tdir = buildDirectory();
       if (!tdir.endsWith("/") && !tdir.isEmpty())
         tdir += "/";
