@@ -324,8 +324,6 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
     if (extend < 125)
       extend = 125;
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
-    qDebug("geom %d %d %d %d", x(), d->m_initialPos - extend, width(),
-	extend);
     break;
   }
 
