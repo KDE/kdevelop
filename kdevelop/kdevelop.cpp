@@ -59,6 +59,15 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     // load all kpart components and let them create their partial GUI
     m_pCore->loadInitialComponents();
 
+    // Default is: switch to editor mode in Childframe mode
+    KConfig* pConfig = kapp->config();
+    pConfig->setGroup( "MDI settings" );
+    QString yes_no = pConfig->readEntry( "toplevel mode", "0" );
+    if (yes_no == "1")
+        restoreDockAndMdiSzenario( EditorEnv | TopLevelMode);
+    else
+        restoreDockAndMdiSzenario( EditorEnv | ChildframeMode);
+
     // insert the Window menu provided by QextMDI, we don't need KParts here.
     menuBar()->removeItemAt( 6);
     menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, 6);
@@ -66,8 +75,6 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     // TODO: read from KConfig
     moveToolBar( m_pTaskBar, QMainWindow::Bottom);
     m_pTaskBar->show();
-
-    resize(800,600); // temp
 }
 
 
@@ -91,15 +98,13 @@ void KDevelop::slotOptionsEditToolbars(){
 }
 
 void KDevelop::saveProperties(KConfig* pConfig){
-  kdDebug(9000) << "KDevelop::saveProperties" << endl;  
-  m_pCore->saveProperties(pConfig); 
-  
+    kdDebug(9000) << "KDevelop::saveProperties" << endl;
+    m_pCore->saveProperties(pConfig);
 }
 
 void KDevelop::readProperties(KConfig* pConfig){
-  kdDebug(9000) << "KDevelop::loadProperties" << endl;  
-  m_pCore->readProperties(pConfig); 
-  
+    kdDebug(9000) << "KDevelop::loadProperties" << endl;
+    m_pCore->readProperties(pConfig);
 }
 
 
@@ -111,6 +116,9 @@ bool KDevelop::queryClose(){
 bool KDevelop::queryExit(){
     kdDebug(9000) << "KDevelop::queryExit" << endl;
 
+    saveCurrentDockAndMdiSzenario();
+
+    // we must delete all embedded views, otherwise we get double deletion
     QListIterator<QextMdiChildView> it(m_MDICoverList);
     for ( ; it.current(); ++it ) {
         QextMdiChildView* pMdiCover = it.current();
@@ -553,95 +561,61 @@ void KDevelop::resizeEvent( QResizeEvent *pRSE)
 
 void KDevelop::switchToToplevelMode()
 {
-    // since we set some windows to toplevel, we must consider the window manager's window frame
-    const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
-    const int windowTitleHeight = 10; // TODO:    -"-
-    setUndockPositioningOffset( QPoint( 0, m_pTaskBar->height() + frameBorderWidth));
-
-    // 1.) select the dockwidgets to be undocked and store their geometry
-    QObjectList* pObjList = queryList( "KDockWidget");
-    QObjectListIt it( *pObjList);
-    QObject* pObj;
-    QValueList<QRect> positionList;
-    QList<KDockWidget> rootDockWidgetList;
-    // for all dockwidgets (which are children of this mainwindow)
-    while ((pObj = it.current()) != 0L) {
-        ++it;
-        KDockWidget* pDockW = (KDockWidget*) pObj;
-        KDockWidget* pRootDockW = 0L;
-        KDockWidget* pUndockCandidate = 0L;
-        QWidget* pW = pDockW;
-        // find the oldest ancestor of the current dockwidget that can be undocked
-        while (!pW->isTopLevel()) {
-            if (pW->inherits("KDockWidget")) {
-                pUndockCandidate = (KDockWidget*) pW;
-                if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
-                    pRootDockW = pUndockCandidate;
-            }
-            pW = pW->parentWidget();
-        }
-        if (pRootDockW) {
-            // if that oldest ancestor is not already in the list, append it
-            bool found = false;
-            QListIterator<KDockWidget> it2( rootDockWidgetList);
-            if (!rootDockWidgetList.isEmpty()) {
-                for ( ; it2.current() && !found; ++it2 ) {
-                    KDockWidget* pDockW = it2.current();
-                    if (pDockW == pRootDockW)
-                        found = true;
-                }
-                if (!found) {
-                    rootDockWidgetList.append( pDockW);
-                    QPoint p = pDockW->mapToGlobal( pDockW->pos())-pDockW->pos();
-                    QRect r( p.x(),
-                             p.y()+m_undockPositioningOffset.y(),
-                             pDockW->width()  - windowTitleHeight - frameBorderWidth*2,
-                             pDockW->height() - windowTitleHeight - frameBorderWidth*2);
-                    positionList.append( r);
-                }
-            }
-            else {
-                rootDockWidgetList.append( pRootDockW);
-                QPoint p = pRootDockW->mapToGlobal( pRootDockW->pos())-pRootDockW->pos();
-                QRect r( p.x(),
-                         p.y()+m_undockPositioningOffset.y(),
-                         pRootDockW->width()  - windowTitleHeight - frameBorderWidth*2,
-                         pRootDockW->height() - windowTitleHeight - frameBorderWidth*2);
-                positionList.append( r);
-            }
-        }
-    }
-
-    // 2.) undock the MDI views of QextMDI
-    QextMdiIterator<QextMdiChildView*>* pItMdi = createIterator();
-    for (pItMdi->first(); !pItMdi->isDone(); pItMdi->next()) {
-        pItMdi->currentItem()->detach();
-    }
-    delete pItMdi;
-
-    // 3.) undock all these found oldest ancestors (being KDockWidgets)
-    QListIterator<KDockWidget> it3( rootDockWidgetList);
-    for (; it3.current(); ++it3 ) {
-        KDockWidget* pDockW = it3.current();
-        pDockW->undock();
-    }
-
-    // 4.) hide the MDI-view area
-    QApplication::sendPostedEvents();
+    if (isInTopLevelMode())
+        return;
+    saveCurrentDockAndMdiSzenario();
     QextMdiMainFrm::switchToToplevelMode();
-
-    // 5.) reset all memorized positions of the undocked ones and show them again
-    QValueList<QRect>::Iterator it4;
-    for (it3.toFirst(), it4 = positionList.begin() ; it3.current(), it4 != positionList.end(); ++it3, ++it4 ) {
-        KDockWidget* pDockW = it3.current();
-        pDockW->setGeometry( (*it4));
-        pDockW->show();
-    }
+    if (m_dockSzenario & EditorEnv)
+        m_dockSzenario = EditorEnv | TopLevelMode;
 }
 
 void KDevelop::switchToChildframeMode()
 {
+    if (!isInTopLevelMode())
+        return;
+    saveCurrentDockAndMdiSzenario();
     QextMdiMainFrm::switchToChildframeMode();
+    if (m_dockSzenario & EditorEnv)
+        restoreDockAndMdiSzenario( EditorEnv | ChildframeMode);
+}
+
+void KDevelop::restoreDockAndMdiSzenario( int dockSzenario)
+{
+    m_dockSzenario = dockSzenario;
+    KConfig* pConfig = kapp->config();
+
+    // restore the embedded dockwidget positions
+    // and switch to the desired MDI mode
+    switch (dockSzenario) {
+        case EditorEnv | TopLevelMode:
+            readDockConfig( pConfig, "editormode toplevel dock-scenario");
+            switchToToplevelMode();
+            break;
+        case EditorEnv | ChildframeMode:
+            readDockConfig( pConfig, "editormode childframe dock-scenario");
+            switchToChildframeMode();
+            break;
+    }
+}
+
+void KDevelop::saveCurrentDockAndMdiSzenario()
+{
+    KConfig* pConfig = kapp->config();
+
+    // save the embedded dockwidget positions
+    // and also the current MDI mode
+    switch (m_dockSzenario) {
+        case EditorEnv | TopLevelMode:
+            qDebug( "writing editormode toplevel dock-scenario...");
+            writeDockConfig( pConfig, "editormode toplevel dock-scenario");
+            break;
+        case EditorEnv | ChildframeMode:
+            qDebug( "writing editormode childframe dock-scenario...");
+            writeDockConfig( pConfig, "editormode childframe dock-scenario");
+            break;
+    }
+    pConfig->setGroup( "MDI settings" );
+    pConfig->writeEntry( "toplevel mode", isInTopLevelMode() ? "1" : "0");
 }
 
 #include "kdevelop.moc"

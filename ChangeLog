@@ -1,3 +1,6 @@
+2000-10-28 Falk Brettschneider <falk@kdevelop.org>
+	* loads/saves the QextMDI session for the editor mode of KDevelop
+
 2000-10-22 Falk Brettschneider <falk@kdevelop.org>
 	* now QextMDI has got an additional KDE2 decoration
         * decoration of docked MDI-views can be switched (Win95,KDE1,KDE2)

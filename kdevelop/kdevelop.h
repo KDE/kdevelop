@@ -31,6 +31,16 @@ class KDevelopCore;
 class KDevelop : public QextMdiMainFrm //KParts::DockMainWindow
 {
     Q_OBJECT
+
+// types
+public:
+    typedef enum {
+        EditorEnv       = 1
+        ,DebugEnv       = 2
+        ,TopLevelMode   = 16
+        ,ChildframeMode = 32
+    } DockSzenario;
+
 public:
     /** construtor */
     KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
@@ -68,17 +78,21 @@ private:
     /** initializes the help messages (whats this and
         statusbar help) on the KActions
         !!! isn't used anymore, exists for saving the help texts :-)) !!!
-    */
+     */
     void initHelp();
     /**
-    */
+     */
     void initQextMDI();
+    /**
+     */
+    void restoreDockAndMdiSzenario( int dockSzenario);
+    /**
+     */
+    void saveCurrentDockAndMdiSzenario();
 
-  
-    //
-    // the covering dockwidgets for all views
-    //
-    /** The initial dock cover for document views */
+    /**
+     * The initial dock cover for document views
+     */
     KDockWidget*              m_dockbaseAreaOfDocumentViews;
 
     // TODO: Workaround for bug in dock window stuff when using protected members
@@ -89,6 +103,8 @@ private:
     KDevelopCore*             m_pCore;
 
     QList<QextMdiChildView>   m_MDICoverList;
+
+    int                       m_dockSzenario;
 
 private slots:
     void slotOptionsEditToolbars();
