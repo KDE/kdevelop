@@ -628,6 +628,18 @@ void MainWindowIDEAl::raiseBottomTabbar() {
 
 void MainWindowIDEAl::raiseEditor() {
     if(m_tabWidget->currentPage()) m_tabWidget->currentPage()->setFocus();
+
+    const QPtrList<KParts::Part>* l=PartController::getInstance()->parts();
+    if( l ){
+        QPtrListIterator<KParts::Part> it( *l );
+        while( it.current() ){
+            if( it.current()->widget() == m_tabWidget->currentPage() )
+                return;
+            ++it;
+        }
+    }
+
+    PartController::getInstance()->setActivePart( 0 );
 }
 
 // Yes, this looks like a bit of voodoo, but should be fairly safe/correct.
