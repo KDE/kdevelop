@@ -3315,21 +3315,17 @@ mailing list during experiences with the current versions of KDevelop as well as
 <p>
 Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
 the KDevelop development team a bug report either by your email-client or by the bug-report dialog. All bug-reports are collected on
-the KDevelop web site and can be reviewed on <url url="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html" >. You
-can also receive all bug-reports via subscription to the bug-report mailing list by sending an empty email to <htmlurl
-url="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de" name="kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"> with
-"subscribe <em/your_email_address/" as the body contents.
+the KDevelop web site and can be reviewed on <htmlurl url="http://bugs.kde.org//db/pa/lkdevelop.html" name="http://bugs.kde.org//db/pa/lkdevelop.html">. 
 
-To send bug reports, please use this email address by your mail program. If you want to use KDevelop for direct bug-reporting, choose
+To send bug reports, please use the email address <htmlurl url="mailto:submit@bugs.kde.org" name="submit@bugs.kde.org">. If you want to use KDevelop for direct bug-reporting, choose
 "Bug Report" from the <idx/Help-menu/. You are presented the report dialog that lets you enter all necessary information about the
-bug you found. After pressing "OK", the dialog's contents is sent to the mailing list automatically.
+bug you found. After pressing "OK", the dialog's contents is sent there automatically.
 
 <sect>Where to get Information
 <p>
 <bf>Q:</bf> I have a question which is not addressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
 
-<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailing list at <htmlurl
-url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name = "kdevelop-request@barney.cs.uni-potsdam.de">. Send a mail with an empty header and
+<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailing list at <htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name = "kdevelop-request@barney.cs.uni-potsdam.de">. Send a mail with an empty header and
 "subscribe youremailaddres" as contents; then you can participate on the discussions. All questions should go there and will be addressed there as well.
 If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
 the FAQ up to date.

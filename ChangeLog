@@ -1,3 +1,7 @@
+2000-01-30 Ralf Funken <funken.ruk@netcologne.de>
+	* Translated chapter Questions and Answers (15)
+	* Corrected the links in this chapter in en and de manuals
+
 2000-01-30 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed program errors finally in the KDE 2 MDI template, Qt MDI not yet fixed.
 
