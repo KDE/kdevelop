@@ -55,26 +55,25 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(true)
 {
-  debug("create docviewman !\n");
-
   m_MDICoverList.setAutoDelete(true);
 
   m_docBookmarksList.setAutoDelete(TRUE);
   m_docBookmarksTitleList.setAutoDelete(TRUE);
     
-  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), m_pParent, SLOT(slotViewSelected(QWidget*)) );
+  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), 
+					 m_pParent, SLOT(slotViewSelected(QWidget*)) );
+
+	connect( this, SIGNAL(sig_newStatus(const QString&)), 
+					 m_pParent, SLOT(slotStatusMsg(const QString&)) );
 }
 
 //------------------------------------------------------------------------------
 DocViewMan::~DocViewMan()
 {
-  debug("delete docviewman !\n");
 }
 
 void DocViewMan::doSelectURL(const QString& url)
 {
-  debug("DocViewMan::doSelectURL !\n");
-
   // use latest focused browser document or create new browser document and view
   CDocBrowser* pCurBrowserDoc = currentBrowserDoc();
   KHTMLView* pBrowserView = currentBrowserView();
@@ -97,31 +96,19 @@ void DocViewMan::doSelectURL(const QString& url)
 
 void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForceReload, bool bShowModifiedBox)
 {
-  debug("DocViewMan::doSwitchToFile : '%s' !\n", filename.data());
-
-  debug("show modified box : %d !\n", bShowModifiedBox);
-
   CEditWidget* pCurEditWidget = currentEditView();
   KWriteDoc* pCurEditDoc = currentEditDoc();
 
   QString editWidgetName;
   if (pCurEditWidget) {
-    debug("getting edit widget name !");
     editWidgetName = pCurEditWidget->getName();
-    debug("editWidgetName : '%s' !", editWidgetName.data());
   }
-  else {
-    debug("editWidgetName : '' !");
-  }
-
-  debug("looking if file already open !\n");
 
   // Make sure that we found the file in the editor_widget in our list
   if (pCurEditDoc) {
     // handle file if it was modified on disk by another editor/cvs
     QFileInfo file_info(editWidgetName);
     if ((file_info.lastModified() != pCurEditDoc->getLastFileModifDate()) && bShowModifiedBox) {
-      debug(" KMessageBox !\n");
       if(KMessageBox::questionYesNo(m_pParent,
                                     i18n("The file %1 was modified outside this editor.\n"
                                          "Open the file from disk and delete the current Buffer?")
@@ -132,13 +119,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
       }
     }
 
-    debug(" getting lastModified !\n");
-
     if (!bShowModifiedBox) {
       pCurEditDoc->setLastFileModifDate(file_info.lastModified());
     }
-
-    debug(" before setCursorPosition !\n");
 
     if (!bForceReload && filename == editWidgetName) {
       if (pCurEditWidget && (line != -1))
@@ -157,19 +140,15 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
   // bool found = (pDoc != 0);
 
-  debug("getting document type !\n");
-
   // Not found or needing a reload causes the file to be read from disk
   if ((!pDoc) || bForceReload) {
     QFileInfo fileinfo(filename);
     if (!pDoc) {
-      debug("Create a new doc !\n");
       pDoc = createKWriteDoc(filename);
       if (pDoc) {
         // Set the last modify date
         pDoc->setLastFileModifDate(fileinfo.lastModified());
 
-        qDebug("createView for a new created doc");
         pCurEditWidget = createEditView(pDoc, true);
       }
     }
@@ -177,25 +156,12 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
       // a view for this doc exists, already;
       // use the first view we found of this doc to show the text
       pCurEditWidget = getFirstEditView(pDoc);
-      qDebug("found view in list of doc");
     }
     loadKWriteDoc(pDoc , filename, 1);
-
-    qDebug("and loadDoc");
   }
   else {
-    debug(" document type found !\n");
-
     KWriteDoc* pDoc = findKWriteDoc(filename);
     pCurEditWidget = getFirstEditView(pDoc);
-
-    debug(" focus view !\n");
-
-    // Don't use the saved text because it is useless
-    // and removes the bookmarks
-    // pCurEditWidget->setText(info->text);
-
-    qDebug("doc (and at least 1 view) did exist, raise it");
   }
 
   if (!pCurEditWidget)
@@ -215,7 +181,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
   pCurEditWidget->setName(filename);
   // info->text = pCurEditWidget->text();
 
-  debug(" set focus on view (this will raise and activate the MDI view!\n");
   QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
   pMDICover->activate();
 }
@@ -223,8 +188,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
 void DocViewMan::doOptionsEditor()
 {
-  debug("DocViewMan::doOptionsEditor !\n");
-
   if(currentEditView())
   {
     currentEditView()->optDlg();
@@ -234,8 +197,6 @@ void DocViewMan::doOptionsEditor()
 
 void DocViewMan::doOptionsEditorColors()
 {
-  debug("DocViewMan::doOptionsEditorColors !\n");
-
   if(currentEditView())
   {
     currentEditView()->colDlg();
@@ -246,8 +207,6 @@ void DocViewMan::doOptionsEditorColors()
 
 void DocViewMan::doOptionsSyntaxHighlightingDefaults()
 {
-  debug("DocViewMan::doOptionsSyntaxHighlightingDefaults !\n");
-
   if(currentEditView())
   {
     currentEditView()->hlDef();
@@ -257,8 +216,6 @@ void DocViewMan::doOptionsSyntaxHighlightingDefaults()
 
 void DocViewMan::doOptionsSyntaxHighlighting()
 {
-  debug("DocViewMan::doOptionsSyntaxHighlighting !\n");
-
   if(currentEditView())
   {
     currentEditView()->hlDlg();
@@ -272,8 +229,6 @@ void DocViewMan::doOptionsSyntaxHighlighting()
   */
 void DocViewMan::doTakeOverOfEditorOptions()
 {
-  debug("DocViewMan::doTakeOverOfEditorOptions !\n");
-
   KConfig* config = m_pParent->getConfig();
   if (config) {
     config->setGroup("KWrite Options");
@@ -297,8 +252,6 @@ void DocViewMan::doTakeOverOfEditorOptions()
 /** */
 void DocViewMan::doCopy()
 {
-  debug("DocViewMan::doCopy !\n");
-
   if (currentEditView()) {
     if (curDocIsBrowser())
       currentBrowserDoc()->slotCopyText();
@@ -310,8 +263,6 @@ void DocViewMan::doCopy()
 /** */
 void DocViewMan::doSearch()
 {
-  debug("DocViewMan::doSearch !\n");
-
   if (curDocIsBrowser()) {
     if (currentBrowserDoc()) {
       currentBrowserDoc()->doSearchDialog();
@@ -327,8 +278,6 @@ void DocViewMan::doSearch()
 /** */
 void DocViewMan::doRepeatSearch(QString &search_text, int back)
 {
-  debug("DocViewMan::doRepeatSearch !\n");
-
   if (currentEditView()) {
     if (curDocIsBrowser())
       currentBrowserDoc()->findTextNext(QRegExp(search_text),true);
@@ -340,8 +289,6 @@ void DocViewMan::doRepeatSearch(QString &search_text, int back)
 /** */
 void DocViewMan::doSearchText(QString &text)
 {
-  debug("DocViewMan::doSearchText !\n");
-
   if (currentEditView()) {
     if (curDocIsBrowser())
       text = currentBrowserDoc()->selectedText();
@@ -357,8 +304,6 @@ void DocViewMan::doSearchText(QString &text)
 /** */
 void DocViewMan::doClearBookmarks()
 {
-  debug("DocViewMan::doClearBookmarks !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -370,8 +315,6 @@ void DocViewMan::doClearBookmarks()
 
 void DocViewMan::doCreateNewView()
 {
-  debug("DocViewMan::doCreateNewView !\n");
-
   QWidget* pNewView = 0L;
 
   if(curDocIsBrowser()) {
@@ -390,8 +333,6 @@ void DocViewMan::doCreateNewView()
 /** */
 bool DocViewMan::curDocIsHeaderFile()
 {
-  debug("DocViewMan::curDocIsHeaderFile !\n");
-
   return (!curDocIsBrowser()
     && m_pCurEditDoc
     && (getKWriteDocType(m_pCurEditDoc) == CPP_HEADER));
@@ -400,8 +341,6 @@ bool DocViewMan::curDocIsHeaderFile()
 /** */
 bool DocViewMan::curDocIsCppFile()
 {
-  debug("DocViewMan::curDocIsCppFile !\n");
-
   return (!curDocIsBrowser() 
       && m_pCurEditDoc
       && ((getKWriteDocType(m_pCurEditDoc)==CPP_SOURCE)||
@@ -411,15 +350,11 @@ bool DocViewMan::curDocIsCppFile()
 
 ProjectFileType DocViewMan::getKWriteDocType(KWriteDoc* pDoc)
 {
-  debug("DocViewMan::getKWriteDocType !\n");
-
   return CProject::getType(pDoc->fileName());
 }
 
 KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
 {
-  debug("creating KWriteDoc ");
-
   KWriteDoc* pDoc = new KWriteDoc(&m_highlightManager, strFileName);
   if (!pDoc)
     return 0L;
@@ -447,8 +382,6 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
 
 CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
 {
-  debug("DocViewMan::createCDocBrowser !\n");
-
   CDocBrowser* pDocBr = new CDocBrowser(0L, "browser");
 
   if(pDocBr) {
@@ -474,8 +407,6 @@ CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
     m_documentList.append(pDocBr);
   }
 
-  debug("End DocViewMan::createCDocBrowser !\n");
-
   // Return the new document
   return pDocBr; 
 }
@@ -487,8 +418,6 @@ void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
                                const QString& strFileName, 
                                int /*mode*/)
 {
-  debug("DocViewMan::loadKWriteDoc !\n");
-
   if(QFile::exists(strFileName)) {
     QFile f(strFileName);
     if (f.open(IO_ReadOnly)) {
@@ -503,8 +432,6 @@ void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
 //-----------------------------------------------------------------------------
 bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 {
-  debug("DocViewMan::saveKWriteDoc !\n");
-
   QFileInfo info(strFileName);
   if(info.exists() && !info.isWritable()) {
     KMessageBox::sorry(0L, i18n("You do not have write permission to this file:\n" + strFileName));
@@ -527,8 +454,6 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 //-----------------------------------------------------------------------------
 KWriteDoc* DocViewMan::findKWriteDoc()
 {
-  debug("DocViewMan::findKWriteDoc !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -553,7 +478,6 @@ void DocViewMan::slotRemoveFileFromEditlist(const QString &absFilename)
 //-----------------------------------------------------------------------------
 void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 {
-  debug("DocViewMan::closeKWriteDoc !\n");
   if (!pDoc) return;
 
   QList<KWriteView> views = pDoc->viewList();
@@ -597,8 +521,6 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 //-----------------------------------------------------------------------------
 CDocBrowser* DocViewMan::findCDocBrowser()
 {
-  debug("DocViewMan::findCDocBrowser !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     CDocBrowser* pDoc = dynamic_cast<CDocBrowser*> (itDoc.current());
@@ -614,42 +536,31 @@ CDocBrowser* DocViewMan::findCDocBrowser()
 //-----------------------------------------------------------------------------
 void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
 {
-  debug("DocViewMan::closeCDocBrowser : %d !\n", (int)pDoc);
-
   if(pDoc) {
-    debug("getting pView !\n");
     KHTMLView* pView = pDoc->view();
-    debug("pView : %d !\n", (int)pView);
     if(pView) {
-      debug("getting pMDICover !\n");
       QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
       if(pMDICover) {
-        debug("pMDICover : %d !\n", (int)pMDICover);
-        debug("hiding pMDICover !\n");
         pMDICover->hide();
-        debug("reparent pView !\n");
         pView->reparent(0L, 0, QPoint(0,0));
         QApplication::sendPostedEvents();
         m_pParent->removeWindowFromMdi( pMDICover);
         m_MDICoverList.remove( pMDICover);
       }
     }
-    debug("deleting pDoc !\n");
     // Remove the document from the list
     m_documentList.removeRef(pDoc);
     // now finally, delete the document (which inclusively deletes the view)
     delete pDoc;
   }
 
-  debug("finding new doc !\n");
   CDocBrowser* pNewDoc = findCDocBrowser();
   if (pNewDoc == 0) {
     m_pCurBrowserDoc = 0L;
     m_pCurBrowserView = 0L;
   }
   
-  //   emit an according signal if we closed the last doc
-  debug("counting documents !\n");
+  // emit an according signal if we closed the last doc
   if (m_documentList.count() == 0) {
     emit sig_lastViewClosed();
     emit sig_lastDocClosed();
@@ -689,8 +600,6 @@ KWriteDoc* DocViewMan::kwDocPointer(int docId) const
 //-----------------------------------------------------------------------------
 void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
 {
-  debug("DocViewMan::addQExtMDIFrame !\n");
-
   if (!pNewView) return;  // failed, could not create view
 
   // cover it by a QextMDI childview and add that MDI system
@@ -736,8 +645,6 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
 //-----------------------------------------------------------------------------
 CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 {
-  debug("DocViewMan::createEditView !\n");
-
   // create the view and add to MDI
   CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc);
   if(!pEW) return 0L;
@@ -799,8 +706,6 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 //-----------------------------------------------------------------------------
 KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 {
-  debug("DocViewMan::createBrowserView !\n");
-
   KHTMLView* pNewView = pDoc->view();
   pNewView->setCaption( pDoc->currentTitle());
   // add "what's this" entry
@@ -822,8 +727,6 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 //-----------------------------------------------------------------------------
 bool DocViewMan::closeView(QWidget* pWnd)
 {
-  debug("DocViewMan::closeView !\n");
-
   // get the embedded view
   QObjectList* pL = (QObjectList*) (pWnd->children());
   if (!pL) return true; // I ran into this case once, no idea why this happened (rokrau 06/02/01)
@@ -859,7 +762,6 @@ bool DocViewMan::closeView(QWidget* pWnd)
 //-----------------------------------------------------------------------------
 void DocViewMan::closeEditView(CEditWidget* pView)
 {
-  debug("DocViewMan::closeEditView !\n");
   if (!pView) return;
 
   // Get the document
@@ -885,8 +787,6 @@ void DocViewMan::closeEditView(CEditWidget* pView)
 //-----------------------------------------------------------------------------
 void DocViewMan::closeBrowserView(KHTMLView* pView)
 {
-  debug("DocViewMan::closeBrowserView !\n");
-
   CDocBrowser* pDoc = (CDocBrowser*) pView->part();
 
   QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
@@ -912,8 +812,6 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
 //-----------------------------------------------------------------------------
 CEditWidget* DocViewMan::getFirstEditView(KWriteDoc* pDoc) const
 {
-  debug("DocViewMan::getFirstEditView !\n");
-
   return (dynamic_cast<CEditWidget*> (pDoc->getKWrite()));
 }
 
@@ -924,8 +822,6 @@ CEditWidget* DocViewMan::getFirstEditView(KWriteDoc* pDoc) const
 //-----------------------------------------------------------------------------
 void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 {
-  debug("DocViewMan::slot_gotFocus !\n");
-
   // set current view, distinguish between edit widget and browser widget
   QObjectList* pL = (QObjectList*) pMDICover->children();
   QWidget* pView = 0L;
@@ -991,13 +887,9 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
     m_curIsBrowser = true;
   }
 
-  debug("pView : %d !", (int)pView);
-  
   // emit the got focus signal 
   // (connected to CKDevelop but could also be caught by other ones)
   emit sig_viewGotFocus(pView);
-
-  debug("emit the got focus signal !\n");
 }
 
 //-----------------------------------------------------------------------------
@@ -1005,8 +897,6 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 //-----------------------------------------------------------------------------
 int DocViewMan::docCount() const
 {
-  debug("DocViewMan::docCount !\n");
-
   return m_documentList.count();
 }
 
@@ -1015,8 +905,6 @@ int DocViewMan::docCount() const
 //-----------------------------------------------------------------------------
 KWriteDoc* DocViewMan::findKWriteDoc(const QString& strFileName) const
 {
-  debug("DocViewMan::findKWriteDoc !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -1032,8 +920,6 @@ KWriteDoc* DocViewMan::findKWriteDoc(const QString& strFileName) const
 //-----------------------------------------------------------------------------
 QObject* DocViewMan::findDocFromFilename(const QString& strFileName) const
 {
-  debug("DocViewMan::findDocFromFilename !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
 
   for (; itDoc.current() != 0; ++itDoc) {
@@ -1051,8 +937,6 @@ QObject* DocViewMan::findDocFromFilename(const QString& strFileName) const
 //-----------------------------------------------------------------------------
 bool DocViewMan::noDocModified()
 {
-  debug("DocViewMan::noDocModified !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -1093,8 +977,6 @@ bool DocViewMan::doFileClose()
 // but not the document browser views
 void DocViewMan::doFileCloseAll()
 {
-  debug("DocViewMan::doFileCloseAll !\n");
-
   QStrList handledNames;
   bool cont=true;
 
@@ -1168,8 +1050,6 @@ void DocViewMan::doFileCloseAll()
 
 bool DocViewMan::doProjectClose()
 {
-  debug("DocViewMan::doProjectClose !\n");
-
   QStrList handledNames;
   bool cont = true;
 
@@ -1233,8 +1113,6 @@ bool DocViewMan::doProjectClose()
 /** This closes all the edit and browser documents */
 void DocViewMan::doCloseAllDocs()
 {
-  debug("DocViewMan::doCloseAllDocs !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   while (itDoc.current() != 0L) {
     KWriteDoc* pEditDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -1257,8 +1135,6 @@ void DocViewMan::doCloseAllDocs()
 
 int DocViewMan::checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck)
 {
-  debug("DocViewMan::saveFileFromTheCurrentEditWidget !\n");
-
   // Get the current file name
   QString filename = currentEditView()->getName();
   KWriteDoc* pCurEditDoc = currentEditDoc();
@@ -1398,13 +1274,8 @@ void DocViewMan::saveModifiedFiles()
     }
   }
 
-  debug("end handledNames !\n");
-  debug("end edit widget !\n");
-  debug("stat prog ! \n");
-
   pProgressBar->reset();
 
-  debug("refreshClassViewByFileList ! \n");
   if (m_pParent->hasProject() && !iFileList.isEmpty() && mod)
     m_pParent->refreshClassViewByFileList(&iFileList);
 
@@ -1412,8 +1283,6 @@ void DocViewMan::saveModifiedFiles()
   
 void DocViewMan::reloadModifiedFiles()
 {
-  debug("DocViewMan::reloadModifiedFiles !\n");
-
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
@@ -1460,8 +1329,6 @@ QList<CDocBrowser> DocViewMan::getDocBrowserList() const
 
 QString DocViewMan::docName(QObject* pDoc) const
 {
-  debug("DocViewMan::docName !\n");
-
   KWriteDoc* kwDoc = (dynamic_cast<KWriteDoc*> (pDoc));
   if (kwDoc) {
     return (kwDoc->fileName());
@@ -1510,8 +1377,6 @@ void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
 //-----------------------------------------------------------------------------
 void DocViewMan::updateCodeBMPopup()
 {
-  debug("DocViewMan::updateCodeBMPopup !\n");
-
   QPopupMenu* popup = (QPopupMenu *) sender();
 
   // Remove all menu items
@@ -1535,8 +1400,6 @@ void DocViewMan::updateCodeBMPopup()
 // (eventually, switches to file and activates it)
 //-----------------------------------------------------------------------------
 void DocViewMan::gotoCodeBookmark(int n) {
-
-  debug("DocViewMan::gotoCodeBookmark : %d !\n", n);
 
   QPopupMenu* popup = (QPopupMenu *) sender();
 
@@ -1562,9 +1425,7 @@ void DocViewMan::gotoCodeBookmark(int n) {
 //-----------------------------------------------------------------------------
 void DocViewMan::gotoDocBookmark(int id_)
 {
-  debug("DocViewMan::gotoDocBookmark : id : %d !\n", id_);
-
-    int id_index = m_pDocBookmarksMenu->indexOf(id_);
+	int id_index = m_pDocBookmarksMenu->indexOf(id_);
 
   m_pParent->openBrowserBookmark(m_docBookmarksList.at(id_index));
 }
@@ -1574,8 +1435,6 @@ void DocViewMan::gotoDocBookmark(int id_)
 //-----------------------------------------------------------------------------
 void DocViewMan::doBookmarksToggle()
 {
-  debug("DocViewMan::doBookmarksToggle !\n");
-
   if (curDocIsBrowser())
   {
     m_pDocBookmarksMenu->clear();
@@ -1750,14 +1609,14 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( KStdAccel::Quit, m_pParent, SLOT(slotFileQuit()), true, ID_FILE_QUIT );
 
   //edit menu
-  accel->connectItem( KStdAccel::Undo , m_pParent, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
+  accel->connectItem( KStdAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
 
   accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
-  accel->connectItem( "Redo" , m_pParent, SLOT(slotEditRedo()), true, ID_EDIT_REDO  );
+  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO  );
 
-  accel->connectItem( KStdAccel::Cut , m_pParent, SLOT(slotEditCut()), true, ID_EDIT_CUT );
-  accel->connectItem( KStdAccel::Copy , m_pParent, SLOT(slotEditCopy()), true, ID_EDIT_COPY );
-  accel->connectItem( KStdAccel::Paste , m_pParent, SLOT(slotEditPaste()), true, ID_EDIT_PASTE );
+  accel->connectItem( KStdAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT );
+  accel->connectItem( KStdAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY );
+  accel->connectItem( KStdAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE );
 
   accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
   accel->connectItem( "Indent", m_pParent, SLOT(slotEditIndent() ), true, ID_EDIT_INDENT );
@@ -1772,15 +1631,15 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "Uncomment", m_pParent, SLOT(slotEditUncomment() ), true, ID_EDIT_UNCOMMENT );
 
   accel->insertItem( i18n("Insert File"), "InsertFile", (unsigned int) 0);
-  accel->connectItem( "InsertFile", m_pParent, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
+  accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
 
-  accel->connectItem( KStdAccel::Find, m_pParent, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
+  accel->connectItem( KStdAccel::Find, this, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
-  accel->connectItem( "RepeatSearch", m_pParent, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
+  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search Back"), "RepeatSearchBack",IDK_EDIT_REPEAT_SEARCH_BACK );
-  accel->connectItem( "RepeatSearchBack", m_pParent, SLOT(slotEditRepeatSearchBack() ), true, ID_EDIT_REPEAT_SEARCH_BACK );
+  accel->connectItem( "RepeatSearchBack", this, SLOT(slotEditRepeatSearchBack() ), true, ID_EDIT_REPEAT_SEARCH_BACK );
   accel->connectItem( KStdAccel::Replace, m_pParent, SLOT(slotEditReplace() ), true, ID_EDIT_REPLACE );
 
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
@@ -1796,13 +1655,13 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "CTagsSwitch", m_pParent, SLOT(slotTagSwitchTo() ), true, ID_EDIT_TAGS_SWITCH );
 
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
-  accel->connectItem("SelectAll", m_pParent, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );
+  accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );
 
   accel->insertItem(i18n("Deselect All"), "DeselectAll", (unsigned int) 0);
-  accel->connectItem("DeselectAll", m_pParent, SLOT(slotEditDeselectAll()), true, ID_EDIT_DESELECT_ALL);
+  accel->connectItem("DeselectAll", this, SLOT(slotEditDeselectAll()), true, ID_EDIT_DESELECT_ALL);
 
   accel->insertItem(i18n("Invert Selection"), "Invert Selection", (unsigned int) 0);
-  accel->connectItem("Invert Selection", m_pParent, SLOT(slotEditInvertSelection()), true, ID_EDIT_INVERT_SELECTION);
+  accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()), true, ID_EDIT_INVERT_SELECTION);
 
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
@@ -2014,5 +1873,112 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
 
   accel->readSettings(0, false);
 }
+
+void DocViewMan::slotToolbarClicked(int item)
+{
+  switch (item) {
+  case ID_EDIT_UNDO:
+    slotEditUndo();
+    break;
+  case ID_EDIT_REDO:
+    slotEditRedo();
+    break;
+  case ID_EDIT_COPY:
+    slotEditCopy();
+    break;
+  case ID_EDIT_PASTE:
+    slotEditPaste();
+    break;
+  case ID_EDIT_CUT:
+    slotEditCut();
+    break;
+	}
+}
+
+void DocViewMan::slotEditUndo()
+{
+  if (currentEditView())
+    currentEditView()->undo();
+}
+
+void DocViewMan::slotEditRedo()
+{
+  if (currentEditView())
+    currentEditView()->redo();
+}
+
+void DocViewMan::slotEditCut()
+{
+  if (currentEditView()) {
+		emit sig_newStatus(i18n("Cutting..."));
+		currentEditView()->cut();
+		emit sig_newStatus(i18n("Ready."));
+	}
+}
+
+void DocViewMan::slotEditCopy()
+{
+	emit sig_newStatus(i18n("Copying..."));
+  doCopy();
+	emit sig_newStatus(i18n("Ready."));
+}
+
+void DocViewMan::slotEditPaste()
+{
+  if (currentEditView()) {
+		emit sig_newStatus(i18n("Pasting selection..."));
+		currentEditView()->paste();
+		emit sig_newStatus(i18n("Ready."));
+	}
+}
+
+void DocViewMan::slotEditInsertFile()
+{
+  if (currentEditView()) {
+		emit sig_newStatus(i18n("Inserting file contents..."));
+		currentEditView()->insertFile();
+		emit sig_newStatus(i18n("Ready."));
+	}
+}
+
+void DocViewMan::slotEditSearch(){
+  emit sig_newStatus(i18n("Searching..."));
+  doSearch();
+  emit sig_newStatus(i18n("Ready."));
+}
+
+void DocViewMan::slotEditRepeatSearch(int back)
+{
+  emit sig_newStatus(i18n("Repeating last search..."));
+  doRepeatSearch(m_pParent->getDocSearchText(), back);
+  emit sig_newStatus(i18n("Ready."));
+}
+
+void DocViewMan::slotEditRepeatSearchBack()
+{
+  slotEditRepeatSearch(1);        // flag backward search
+}
+
+void DocViewMan::slotEditSelectAll()
+{
+  if (currentEditView()) {
+		emit sig_newStatus(i18n("Selecting all..."));
+		currentEditView()->selectAll();
+		emit sig_newStatus(i18n("Ready."));
+	}
+}
+
+void DocViewMan::slotEditInvertSelection()
+{
+  if (currentEditView())
+    currentEditView()->invertSelection();
+}
+void DocViewMan::slotEditDeselectAll()
+{
+  if (currentEditView())
+    currentEditView()->deselectAll();
+}
+
+
 
 #include "docviewman.moc"

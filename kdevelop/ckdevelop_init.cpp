@@ -328,25 +328,43 @@ void CKDevelop::initMenuBar(){
 // Edit-menu entries
 
   edit_menu = new QPopupMenu;
-  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"), 
+												m_docViewManager, SLOT(slotEditUndo()),
+												0 ,ID_EDIT_UNDO);
+  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"), 
+												m_docViewManager, SLOT(slotEditRedo()),
+												0 ,ID_EDIT_REDO);
   edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("editcut"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-  edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-  edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+  edit_menu->insertItem(SmallIconSet("editcut"),i18n("C&ut"), 
+												m_docViewManager, SLOT(slotEditCut()),
+												0 ,ID_EDIT_CUT);
+  edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"), 
+												m_docViewManager, SLOT(slotEditCopy()),
+												0 ,ID_EDIT_COPY);
+  edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"), 
+												m_docViewManager, SLOT(slotEditPaste()),
+												0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"), 
+												this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"), 
+												this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
 	edit_menu->insertItem(i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
 	edit_menu->insertItem(i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
+  edit_menu->insertItem(i18n("&Insert File..."),
+												m_docViewManager, SLOT(slotEditInsertFile()),
+												0,ID_EDIT_INSERT_FILE);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), this, SLOT(slotEditRepeatSearch(int)),0,ID_EDIT_REPEAT_SEARCH);
+  edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."), 
+												m_docViewManager, SLOT(slotEditSearch()),
+												0,ID_EDIT_SEARCH);
+  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), 
+												m_docViewManager, SLOT(slotEditRepeatSearch(int)),
+												0,ID_EDIT_REPEAT_SEARCH);
 
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
@@ -361,9 +379,15 @@ void CKDevelop::initMenuBar(){
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
-  edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
-  edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
+  edit_menu->insertItem(i18n("Select &All"), 
+												m_docViewManager, SLOT(slotEditSelectAll()),
+												0,ID_EDIT_SELECT_ALL);
+  edit_menu->insertItem(i18n("Deselect All"), 
+												m_docViewManager, SLOT(slotEditDeselectAll()),
+												0,ID_EDIT_DESELECT_ALL);
+  edit_menu->insertItem(i18n("Invert Selection"), 
+												m_docViewManager, SLOT(slotEditInvertSelection()),
+												0,ID_EDIT_INVERT_SELECTION);
 
   menuBar()->insertItem(i18n("&Edit"), edit_menu);
 

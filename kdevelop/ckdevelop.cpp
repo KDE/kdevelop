@@ -221,10 +221,6 @@ void CKDevelop::slotFileSaveAs(){
 
 void CKDevelop::slotFileSaveAll()
 {
-  debug("slotFileSaveAll !\n");
-
-  debug("get currenttab ! \n");
-
   // ok,its a dirty implementation  :-)
   if(!bAutosave || !saveTimer->isActive())
     slotStatusMsg(i18n("Saving all changed files..."));
@@ -237,24 +233,19 @@ void CKDevelop::slotFileSaveAll()
 
   if (!m_docViewManager->curDocIsBrowser()) {
       setMainCaption();
-      debug("currentEditView is Header or Source or 0L! \n");
       QWidget* pWdg = m_docViewManager->currentEditView();
       if (pWdg)
         pWdg->setFocus();
   }
   else {
       setMainCaption(BROWSER);
-      debug("currentDocType is HTML ! \n");
       QWidget* pWdg = m_docViewManager->currentBrowserView();
       if (pWdg)
         pWdg->setFocus();
   }
 
-  debug("slotStatusMsg ! \n");
   //  mainSplitter->setUpdatesEnabled(true);
   slotStatusMsg(i18n("Ready."));
-
-  debug("end slotFileSaveAll ! \n");
 }
 
 
@@ -397,67 +388,6 @@ void CKDevelop::slotFileQuit(){
 // EDIT-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
 
-void CKDevelop::slotEditUndo()
-{
-  if (m_docViewManager->currentEditView())
-    m_docViewManager->currentEditView()->undo();
-}
-
-void CKDevelop::slotEditRedo()
-{
-  if (m_docViewManager->currentEditView())
-    m_docViewManager->currentEditView()->redo();
-}
-
-void CKDevelop::slotEditCut()
-{
-  if (!m_docViewManager->currentEditView()) return;
-  slotStatusMsg(i18n("Cutting..."));
-  m_docViewManager->currentEditView()->cut();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditCopy()
-{
-  slotStatusMsg(i18n("Copying..."));
-  m_docViewManager->doCopy();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditPaste()
-{
-  if (!m_docViewManager->currentEditView()) return;
-  slotStatusMsg(i18n("Pasting selection..."));
-  m_docViewManager->currentEditView()->paste();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditInsertFile()
-{
-  if (!m_docViewManager->currentEditView()) return;
-  slotStatusMsg(i18n("Inserting file contents..."));
-  m_docViewManager->currentEditView()->insertFile();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditSearch(){
-  slotStatusMsg(i18n("Searching..."));
-  m_docViewManager->doSearch();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditRepeatSearch(int back)
-{
-  slotStatusMsg(i18n("Repeating last search..."));
-  m_docViewManager->doRepeatSearch(doc_search_text, back);
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditRepeatSearchBack()
-{
-  slotEditRepeatSearch(1);        // flag backward search
-}
-
 void CKDevelop::slotEditSearchInFiles()
 {
   slotStatusMsg(i18n("Searching in Files..."));
@@ -537,25 +467,6 @@ void CKDevelop::slotEditSpellcheck()
     m_docViewManager->currentEditView()->spellcheck();
 }
 */
-
-void CKDevelop::slotEditSelectAll()
-{
-  if (!m_docViewManager->currentEditView()) return;
-  slotStatusMsg(i18n("Selecting all..."));
-  m_docViewManager->currentEditView()->selectAll();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotEditInvertSelection()
-{
-  if (m_docViewManager->currentEditView())
-    m_docViewManager->currentEditView()->invertSelection();
-}
-void CKDevelop::slotEditDeselectAll()
-{
-  if (m_docViewManager->currentEditView())
-    m_docViewManager->currentEditView()->deselectAll();
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // VIEW-Menu slots
@@ -2256,6 +2167,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
                         i18n("Program not found!"));
     return;
   }
+
 //TEMPORARILY_DISABLED  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
 //TEMPORARILY_DISABLED  if(dlg.exec()){
 //TEMPORARILY_DISABLED    slotStatusMsg(i18n("Creating Search Database..."));
@@ -3529,8 +3441,6 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
 void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
 {
-  debug("CKDevelop::slotViewSelected !\n");
-
   if (!(m_docViewManager->curDocIsBrowser()))
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
@@ -3659,8 +3569,6 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
 
     setMainCaption(BROWSER);
   }
-
-  debug("End CKDevelop::slotViewSelected !\n");
 }
 
 void CKDevelop::slotOTabSelected(int item)
@@ -3789,19 +3697,11 @@ void CKDevelop::slotToolbarClicked(int item){
     slotFilePrint();
     break;
   case ID_EDIT_UNDO:
-    slotEditUndo();
-    break;
   case ID_EDIT_REDO:
-    slotEditRedo();
-    break;
   case ID_EDIT_COPY:
-    slotEditCopy();
-    break;
   case ID_EDIT_PASTE:
-    slotEditPaste();
-    break;
   case ID_EDIT_CUT:
-    slotEditCut();
+		m_docViewManager->slotToolbarClicked(item);
     break;
   case ID_VIEW_REFRESH:
     slotViewRefresh();

@@ -1,3 +1,7 @@
+2001-06-06  Christian Couder <christian@kdevelop.org>
+    * Moved some slots from the CKDevelop class to DocViewMan.
+    * New signal in DocViewMan to change the status message. 
+
 2001-06-05  F@lk Brettschneider <falk@kdevelop.org>
     * initially added new setup wizard (as shared library),
       it is a quite redesigned setup app based on Ralf's old sources but now based on QWizard,

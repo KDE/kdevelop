@@ -27,7 +27,6 @@
 //-----------------------------------------------------------------------------
 #include "qextmdichildview.h"
 #include "highlight.h"
-#include "structdef.h"      // needed for TEditInfo
 #include "cproject.h"
 
 class KWriteDoc;
@@ -256,6 +255,40 @@ public slots:
    * (eventually, switches to file and activates it) */
   void gotoDocBookmark(int n);
 
+
+  // ***************************
+	// Edit slots
+  // ***************************
+
+  /** swich construction for the toolbar icons, selecting the right slots */
+  void slotToolbarClicked(int);
+
+  /** Undo last editing step */
+  void slotEditUndo();
+  /** Redo last editing step */
+  void slotEditRedo();
+  /** cuts a selection to the clipboard */
+  void slotEditCut();
+  /** copies a selection to the clipboard */
+  void slotEditCopy();
+  /** inserts the clipboard contents to the cursor position */
+  void slotEditPaste();
+  /** inserts a file at the cursor position */
+  void slotEditInsertFile();
+  /** opens the search dialog for the editing widget */
+  void slotEditSearch();
+  /** repeat last search */
+  void slotEditRepeatSearch(int back=0);
+  /** repeat last search backwards*/
+  void slotEditRepeatSearchBack();
+  /** selects the whole editing widget text */
+  void slotEditSelectAll();
+  /** inverts the selection */
+  void slotEditInvertSelection();
+  /** remove all text selections */
+  void slotEditDeselectAll();
+
+
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
   void sig_viewGotFocus(QWidget* pView);
@@ -268,6 +301,9 @@ signals:
   /** Is emitted when the last document managed by this instance 
       has been closed */
   void sig_lastDocClosed();
+
+	/** Is emitted when the status message should be changed */
+	void sig_newStatus(const QString& text);
 
 // attributes
 private:

@@ -285,24 +285,6 @@ public:
   ////////////////////////
   // EDIT-Menu entries
   ///////////////////////
-  /** Undo last editing step */
-  void slotEditUndo();
-  /** Redo last editing step */
-  void slotEditRedo();
-  /** cuts a selection to the clipboard */
-  void slotEditCut();
-  /** copies a selection to the clipboard */
-  void slotEditCopy();
-  /** inserts the clipboard contents to the cursor position */
-  void slotEditPaste();
-  /** inserts a file at the cursor position */
-  void slotEditInsertFile();
-  /** opens the search dialog for the editing widget */
-  void slotEditSearch();
-  /** repeat last search */
-  void slotEditRepeatSearch(int back=0);
-  /** repeat last search backwards*/
-  void slotEditRepeatSearchBack();
   /** acts on grep to search the selected word by keyboard shortcut */
   void slotEditSearchText();
   /** search in files, use grep and find*/
@@ -317,12 +299,6 @@ public:
   void slotEditUnindent();
   void slotEditComment();
   void slotEditUncomment();
-  /** selects the whole editing widget text */
-  void slotEditSelectAll();
-  /** inverts the selection */
-  void slotEditInvertSelection();
-  /** remove all text selections */
-  void slotEditDeselectAll();
   
   ////////////////////////
   // VIEW-Menu entries
@@ -858,6 +834,9 @@ public: // Public methods
 
   /** Get the progress bar */
   QProgressBar* getProgressBar() { return statProg; };
+
+	/** Get the last search text */
+	QString & getDocSearchText() { return doc_search_text; };
 	
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();

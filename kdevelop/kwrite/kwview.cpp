@@ -991,8 +991,6 @@ void KWriteView::keyPressEvent(QKeyEvent *e) {
   VConfig c;
   bool t;
 
-  debug("KWriteView::keyPressEvent !\n");
-
   if (e->state() & AltButton) {
     e->ignore();
     return;
