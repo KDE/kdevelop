@@ -1,3 +1,6 @@
+2004-08-27 Amilcar Lucas <amilcar@kdevelop.org>
+    * Updated support for Doxygen 1.3.8
+
 2004-06-21 Robert Gruber <rgruber@users.sourceforge.net>
     * Added drag and drop support to SnippetPart
     * Added filter support to AppOutputView
@@ -135,7 +138,7 @@
 2004-02-18 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added function lookup to QuickOpen plugin. Patch by Ahn, Duk J.
 
-2004-02-15 Amilcar Lucas <a.lucas@tu-bs.de>
+2004-02-15 Amilcar Lucas <amilcar@kdevelop.org>
     * Updated support for Doxygen 1.3.6
 
 2004-02-07 jbb <jbb@kdevelop.org>
@@ -172,7 +175,7 @@
 2004-01-09 Amilcar Lucas <a.lucas@tu-bs.de>
    * Easy access to bug reports of every supported language in the documentation browser (except SQL)
 
-2004-01-07 Amilcar Lucas <a.lucas@tu-bs.de>
+2004-01-07 Amilcar Lucas <amilcar@kdevelop.org>
    * Updated support for Doxygen 1.3.5 cvs HEAD
 
 2003-11-28 F@lk Brettschneider <falkbr@kdevelop.org>
@@ -189,7 +192,7 @@
     * Version control color feedback for the file view (currently implemented 
       by vcs/cvsservice plugin only).
 
-2003-11-13 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-11-13 Amilcar Lucas <amilcar@kdevelop.org>
     * Readded a even cleaner kdevelop.kdevelop file.
     PLEASE do _not_ commit changes to this file.
     We have until mid January 2004 to make the necessary code changes that create a more "cvs friendly" file by moving some of the options to the .kdevses file.
@@ -226,7 +229,7 @@
     * new in New-Project-Dialog: Getting the Project location with "..." asks
     if it should set tht directory to the DefaultProjectsDir.
 
-2003-10-13 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-10-13 Amilcar Lucas <amilcar@kdevelop.org>
     * Moved the language specific documentation to the languages/xxx/doc directories
 
 2003-10-12 Mickael Marchand <marchand@kde.org>
@@ -246,10 +249,10 @@
     * Reenabled Ada language support (ported it to code model and reenabled
       background parsing).
 
-2003-10-04 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-10-04 Amilcar Lucas <amilcar@kdevelop.org>
     * On-line, automaticaly updated every 24H, KDevelop API Documentation can be viewed with the doctreeview.
 
-2003-10-02 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-10-02 Amilcar Lucas <amilcar@kdevelop.org>
     * Renamed KDevelop executable from gideon to kdevelop.
     * This makes KDevelop3 OVERWRITE KDevelop 2.x instalations.
     * Restructured the directories acording to the API documentation
@@ -258,7 +261,7 @@
        editors -> editors support
        vcs -> Version control systems (clearcase, cvs, perforce, svn, cvsservice and cervisia)
 
-2003-09-26 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-09-26 Amilcar Lucas <amilcar@kdevelop.org>
     * Added per target run arguments to the automake manager.
       These arguments are used when no Main program (Project Options...-> Run Options) is selected and the Program arguments  (Project Options...-> Run Options) are left empty.
 
@@ -322,7 +325,7 @@
     * Results list will now use tooltips to show available services' properties.
     * Several bugfixes in GUI code
 
-2003-07-28 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-07-28 Amilcar Lucas <amilcar@kdevelop.org>
     * Full support for Doxygen 1.3.3
 
 2003-07-25 Gael de Chalendar <Gael . de . Chalendat AT cea . fr>
@@ -348,7 +351,7 @@
     * resolve links before opening a local file
     * add "-follow" as a switch for "find" to successfully grep even in symlinked directories
 
-2003-07-14 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-07-14 Amilcar Lucas <amilcar@kdevelop.org>
     * If no Main Program was selected in Project Options...-> Run Options, then use the
       currently selected active target. This is valid for execution and for debugging.
       So no more need to goto the menu every time you want to debug a new target! Just
@@ -369,7 +372,7 @@
 2003-07-06 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented Delphi compiler plugin
 
-2003-07-04 Am�car do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+2003-07-04 Amilcar do Carmo Lucas <amilcar@kdevelop.org>
   Added debug and optimized build configurations to all C and C++ autoproject based templates
 
 2003-07-04 Andras Mantia <amantia@freemail.hu>
@@ -381,7 +384,7 @@
     * Make classbrowser use comboviews (QComboView) in namespace, class and method
       selectors on the toolbar.
 
-2003-06-23 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-06-23 Amilcar Lucas <amilcar@kdevelop.org>
    * Replaced all TODO occurencies with @todo so that they show up in the
      Doxygen generated documentation under "Related Pages > Todo List"
    * Make Doxygen generate XML files for the codecompletion tooltips
@@ -538,7 +541,7 @@
     * Added "Core" scope plugins alternative
     * Updated the plugin selection to be more userfriendly
 
-2003-04-29 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-04-29 Amilcar Lucas <amilcar@kdevelop.org>
     * Made the Working Directory of the debugged executable configurable
     (Finally you can run your application on it's directory, instead of $HOME)
 
@@ -604,7 +607,7 @@
     * Diff part is now able to use any kpart that can display 'text/x-diff'
     * Diff part can display raw output on the fly (if the kpart is too silly to parse the diff)
 
-2003-04-14 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-04-14 Amilcar Lucas <amilcar@kdevelop.org>
     * Updated integrated Doxywizard (Doxygen Configuration GUI) to 1.3 version.
       This maintains full backward compatibility with previous Doxygen versions.
 
@@ -639,7 +642,7 @@
     - get list of INC path in local installed perl to allow parsing of perl
     libraries outside the project directory
 
-2003-04-05 Amilcar Lucas <a.lucas@tu-bs.de>
+2003-04-05 Amilcar Lucas <amilcar@kdevelop.org>
     - Simplified the "Inteligent messages auto-hide" code a lot
     - Now it also works for AutoMake&friends and configure
 
@@ -663,7 +666,7 @@
           that highly improves the class tool-view for Perl projects
           (classes, global functions and variables support)
 
-2003-03-29  Amilcar Lucas  <a.lucas@tu-bs.de>
+2003-03-29  Amilcar Lucas  <amilcar@kdevelop.org>
   * Implemented intelegent bottom view autohide.
 
 2003-03-26  Roland Krause  <roland@ca.wai.com>

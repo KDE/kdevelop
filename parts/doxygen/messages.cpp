@@ -109,6 +109,7 @@ QString message(const QCString &key)
     addMessage("IMAGE_PATH", i18n("Path to images"));
     addMessage("INPUT_FILTER", i18n("Input filter"));
     addMessage("FILTER_SOURCE_FILES", i18n("Filter input files"));
+    addMessage("FILTER_PATTERNS", i18n("Apply filters on file patterns"));
 
     //---------------------------------------------------------------------------
     // configuration options related to source browsing

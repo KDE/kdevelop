@@ -3583,7 +3583,7 @@ void Config::create()
                     "If WARN_IF_DOC_ERROR is set to YES, doxygen will generate warnings for \n"
                     "potential errors in the documentation, such as not documenting some \n"
 		    "parameters in a documented function, or documenting parameters that \n"
-		    "do not exist or using markup commands wrongly. \n",
+		    "don't exist or using markup commands wrongly. \n",
                     TRUE
                  );
   cs = addString(
@@ -3682,7 +3682,17 @@ void Config::create()
                     "by executing (via popen()) the command <filter> <input-file>, where <filter> \n"
                     "is the value of the INPUT_FILTER tag, and <input-file> is the name of an \n"
                     "input file. Doxygen will then use the output that the filter program writes \n"
-                    "to standard output. \n"
+                    "to standard output.  If FILTER_PATTERNS is specified, this tag will be \n"
+                    "ignored. \n"
+                   );
+  cl = addList(
+                    "FILTER_PATTERNS",
+                    "The FILTER_PATTERNS tag can be used to specify filters on a per file pattern \n"
+                    "basis.  Doxygen will compare the file name with each pattern and apply the \n"
+                    "filter if there is a match.  The filters are a list of the form: \n"
+                    "pattern=filter (like *.cpp=my_cpp_filter). See INPUT_FILTER for further \n"
+                    "info on how filters are used. If FILTER_PATTERNS is empty, INPUT_FILTER \n"
+                    "is applied to all files. \n"
                    );
   cl->setWidgetType(ConfigList::File);
   cb = addBool(
@@ -3810,7 +3820,7 @@ void Config::create()
                     "style sheet that is used by each HTML page. It can be used to \n"
                     "fine-tune the look of the HTML output. If the tag is left blank doxygen \n"
                     "will generate a default style sheet. Note that doxygen will try to copy \n"
-		    "the style sheet file to the HTML output directory, so do not put your own \n"
+		    "the style sheet file to the HTML output directory, so don't put your own \n"
 		    "stylesheet in the HTML output directory as well, or it will be erased! \n"
                    );
   cs->setWidgetType(ConfigString::File);
@@ -4190,7 +4200,7 @@ void Config::create()
                     "The names of the make variables in the generated doxyrules.make file \n"
                     "are prefixed with the string contained in PERLMOD_MAKEVAR_PREFIX. \n"
 		    "This is useful so different doxyrules.make files included by the same \n"
-		    "Makefile do not overwrite each other's variables."
+		    "Makefile don't overwrite each other's variables."
                  );
   cs->addDependency("GENERATE_PERLMOD");
 
@@ -4250,7 +4260,9 @@ void Config::create()
                     "are defined before the preprocessor is started (similar to the -D option of \n"
                     "gcc). The argument of the tag is a list of macros of the form: name \n"
                     "or name=definition (no spaces). If the definition and the = are \n"
-                    "omitted =1 is assumed. \n"
+                    "omitted =1 is assumed. To prevent a macro definition from being \n"
+		    "undefined via #undef or recursively expanded use the := operator \n"
+		    "instead of the = operator.\n"
                  );
   cl->addDependency("ENABLE_PREPROCESSING");
   cl = addList(
