@@ -16,64 +16,66 @@
 
 class ClassGeneratorConfig : public ClassGeneratorConfigBase
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-    enum NameCase { LowerCase, UpperCase, SameAsClassCase, SameAsFileCase };
-    
-    ClassGeneratorConfig(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-    
-    ClassGeneratorConfig(QString v_cppHeaderText, QString v_cppSourceText, 
-        QString v_objcHeaderText, QString v_objcSourceText,
-        QString v_gtkHeaderText, QString v_gtkSourceText,
-        NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
-        bool v_showAuthor, bool v_genDoc, bool v_reformat,
-        QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	enum NameCase { LowerCase, UpperCase, SameAsClassCase, SameAsFileCase };
 
-    ~ClassGeneratorConfig();
-    /*$PUBLIC_FUNCTIONS$*/
+	ClassGeneratorConfig( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
 
-    void readConfig();
-    
-    QString cppHeader();
-    QString cppSource();
-    QString objcHeader();
-    QString objcSource();
-    QString gtkHeader();
-    QString gtkSource();
+	ClassGeneratorConfig( QString v_cppHeaderText, QString v_cppSourceText,
+	                      QString v_objcHeaderText, QString v_objcSourceText,
+	                      QString v_gtkHeaderText, QString v_gtkSourceText,
+	                      NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
+	                      bool v_showAuthor, bool v_genDoc, bool v_reformat,
+	                      QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
 
-    NameCase fileCase();
-    NameCase defCase();
-    NameCase superCase();
+	~ClassGeneratorConfig();
+	/*$PUBLIC_FUNCTIONS$*/
 
-    bool showAuthor();
-    bool genDoc();
+	void readConfig();
+
+	QString cppHeader();
+	QString cppSource();
+	QString objcHeader();
+	QString objcSource();
+	QString gtkHeader();
+	QString gtkSource();
+
+	NameCase fileCase();
+	NameCase defCase();
+	NameCase superCase();
+
+	bool showAuthor();
+	bool genDoc();
 
 public slots:
-  /*$PUBLIC_SLOTS$*/
-    void storeConfig();
+	/*$PUBLIC_SLOTS$*/
+	void storeConfig();
 
 protected:
-  /*$PROTECTED_FUNCTIONS$*/
+	/*$PROTECTED_FUNCTIONS$*/
 
 protected slots:
-  /*$PROTECTED_SLOTS$*/
-    virtual void templateTypeChanged(int type);
-    
-private:
-    QString *identifyTemplate(int value);
-    QString templateText(QString path);
-    void saveTemplateText(QString path, QString content);
+	/*$PROTECTED_SLOTS$*/
+	virtual void templateTypeChanged( int type );
 
-    QString cppHeaderText;
-    QString cppSourceText;
-    QString objcHeaderText;
-    QString objcSourceText;
-    QString gtkHeaderText;
-    QString gtkSourceText;
-    
-    QString *currTemplate;
+private:
+	QString *identifyTemplate( int value );
+	QString templateText( QString path );
+	void saveTemplateText( QString path, QString content );
+
+	QString cppHeaderText;
+	QString cppSourceText;
+	QString objcHeaderText;
+	QString objcSourceText;
+	QString gtkHeaderText;
+	QString gtkSourceText;
+
+	QString *currTemplate;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
+
 

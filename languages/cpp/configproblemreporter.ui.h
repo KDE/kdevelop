@@ -20,72 +20,74 @@
 
 void ConfigureProblemReporter::init()
 {
-    m_part = 0;
-    KConfig* config = kapp->config();
-    config->setGroup( "General Options" );
-    bgParserCheckbox->setChecked( config->readBoolEntry("EnableCppBgParser", true) );
-    delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("CppBgParserDelay", 500) );
-    setDelayLabel( delaySlider->value() );
+	m_part = 0;
+	KConfig* config = kapp->config();
+	config->setGroup( "General Options" );
+	bgParserCheckbox->setChecked( config->readBoolEntry( "EnableCppBgParser", true ) );
+	delaySlider->setEnabled( bgParserCheckbox->isChecked() );
+	delaySlider->setValue( config->readNumEntry( "CppBgParserDelay", 500 ) );
+	setDelayLabel( delaySlider->value() );
 }
 
 void ConfigureProblemReporter::destroy()
-{
-}
+{}
 
 void ConfigureProblemReporter::setPart( CppSupportPart* part )
 {
-    m_part = part;
-    if( !m_part )
-	    return;
-    
-    QString conf_file_name = m_part->specialHeaderName();
-    if( QFile::exists(conf_file_name) )
-    {
-	    QFile f( conf_file_name );
-	    if( f.open(IO_ReadOnly) )
-	    {
-		    QTextStream stream( &f );
-		    specialHeader->setText( stream.read() );
-		    f.close();
-	    }
-    }
+	m_part = part;
+	if ( !m_part )
+		return ;
+
+	QString conf_file_name = m_part->specialHeaderName();
+	if ( QFile::exists( conf_file_name ) )
+	{
+		QFile f( conf_file_name );
+		if ( f.open( IO_ReadOnly ) )
+		{
+			QTextStream stream( &f );
+			specialHeader->setText( stream.read() );
+			f.close();
+		}
+	}
 }
 
 void ConfigureProblemReporter::accept()
 {
-    KConfig* config = kapp->config();
-    config->setGroup( "General Options" );
-    config->writeEntry( "EnableCppBgParser", bgParserCheckbox->isChecked() );
-    if( bgParserCheckbox->isChecked() )
-	config->writeEntry( "CppBgParserDelay", delaySlider->value() );
-    config->sync();
-    
-    if( m_part && specialHeader->isModified() ) {
-	QString conf_file_name = m_part->specialHeaderName( true );
-	QFile f( conf_file_name );
-	if( f.open(IO_WriteOnly) ){
-	    QTextStream stream( &f );
-	    stream << specialHeader->text();
-	    f.close();
-	    
-	    m_part->updateParserConfiguration();
+	KConfig * config = kapp->config();
+	config->setGroup( "General Options" );
+	config->writeEntry( "EnableCppBgParser", bgParserCheckbox->isChecked() );
+	if ( bgParserCheckbox->isChecked() )
+		config->writeEntry( "CppBgParserDelay", delaySlider->value() );
+	config->sync();
+
+	if ( m_part && specialHeader->isModified() )
+	{
+		QString conf_file_name = m_part->specialHeaderName( true );
+		QFile f( conf_file_name );
+		if ( f.open( IO_WriteOnly ) )
+		{
+			QTextStream stream( &f );
+			stream << specialHeader->text();
+			f.close();
+
+			m_part->updateParserConfiguration();
+		}
 	}
-    }
 }
 
 void ConfigureProblemReporter::bgParserCheckbox_toggled( bool b )
 {
-    delaySlider->setEnabled( b );
-    if ( b == TRUE )
-	delayLabel->show();
-    else
-	delayLabel->hide();
+	delaySlider->setEnabled( b );
+	if ( b == TRUE )
+		delayLabel->show();
+	else
+		delayLabel->hide();
 }
 
 
 void ConfigureProblemReporter::setDelayLabel( int delay )
 {
-    delayLabel->setText( i18n( "delay: %1 msec" ).arg( delay ) );
+	delayLabel->setText( i18n( "delay: %1 msec" ).arg( delay ) );
 }
+// kate: indent-mode csands; tab-width 4;
 

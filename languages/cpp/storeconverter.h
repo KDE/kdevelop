@@ -21,25 +21,28 @@
 
 class CppSupportPart;
 
-class StoreConverter{
+class StoreConverter
+{
 public:
-    StoreConverter(CppSupportPart *part, CodeModel *model);
-    
-    void PCSClassToCodeModel(const QString &className, const QStringList &classScope);
-    
+	StoreConverter( CppSupportPart *part, CodeModel *model );
+
+	void PCSClassToCodeModel( const QString &className, const QStringList &classScope );
+
 protected:
-    /**Parses class from PCS and adds it into a file dom.*/
-    void parseClass(Tag &classTag, FileDom file);
-    /**Parses function declaration from PCS and adds it into a class dom.*/
-    void parseFunctionDeclaration(Tag &fun, ClassDom klass);
-    /**Parses variable from PCS and adds it into a class dom.*/
-    void parseVariable(Tag &var, ClassDom klass);
-    /**Parses function arguments from @p cppFun and adds them into a function dom.*/
-    void parseArguments(FunctionDom function, CppFunction<Tag> &cppFun);
+	/**Parses class from PCS and adds it into a file dom.*/
+	void parseClass( Tag &classTag, FileDom file );
+	/**Parses function declaration from PCS and adds it into a class dom.*/
+	void parseFunctionDeclaration( Tag &fun, ClassDom klass );
+	/**Parses variable from PCS and adds it into a class dom.*/
+	void parseVariable( Tag &var, ClassDom klass );
+	/**Parses function arguments from @p cppFun and adds them into a function dom.*/
+	void parseArguments( FunctionDom function, CppFunction<Tag> &cppFun );
 
 private:
-    CppSupportPart *m_part;
-    CodeModel *m_model;
+	CppSupportPart *m_part;
+	CodeModel *m_model;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
+

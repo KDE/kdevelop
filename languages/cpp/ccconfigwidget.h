@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Daniel Engelschalt                              *
- *   daniel.engelschalt@gmx.net                                            *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*   Copyright (C) 2001 by Daniel Engelschalt                              *
+*   daniel.engelschalt@gmx.net                                            *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #ifndef _CCCONFIGWIDGET_H_
 #define _CCCONFIGWIDGET_H_
@@ -21,37 +21,39 @@ class QCheckListItem;
 
 class CCConfigWidget : public CCConfigWidgetBase
 {
-    Q_OBJECT
-    
+	Q_OBJECT
+
 public:
-    CCConfigWidget( CppSupportPart* part, QWidget* parent = 0, const char* name = 0 );
-    virtual ~CCConfigWidget( );
+	CCConfigWidget( CppSupportPart* part, QWidget* parent = 0, const char* name = 0 );
+	virtual ~CCConfigWidget( );
 
 public slots:
-    void accept( );
-    void slotNewPCS();
-    
+	void accept( );
+	void slotNewPCS();
+
 protected slots:
 	void slotGetterSetterValuesChanged();
-    virtual void slotRemovePCS();
+	virtual void slotRemovePCS();
 
 private slots:
-    void catalogRegistered( Catalog* c );
-    void catalogUnregistered( Catalog* c );
+	void catalogRegistered( Catalog* c );
+	void catalogUnregistered( Catalog* c );
 
 private:
-    void initGeneralTab();
-    void saveFileTemplatesTab();
-    
-    void initCodeCompletionTab();
-    void saveCodeCompletionTab();
+	void initGeneralTab();
+	void saveFileTemplatesTab();
+
+	void initCodeCompletionTab();
+	void saveCodeCompletionTab();
 
 	void initGetterSetterTab();
 	void saveGetterSetterTab();
 
 private:
-    CppSupportPart* m_pPart;
-    QMap<QCheckListItem*, Catalog*> m_catalogs;
+	CppSupportPart* m_pPart;
+	QMap<QCheckListItem*, Catalog*> m_catalogs;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
+

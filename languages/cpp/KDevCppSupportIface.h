@@ -9,18 +9,19 @@ class CppSupportPart;
 
 class KDevCppSupportIface : public QObject, public DCOPObject
 {
-    Q_OBJECT
-    K_DCOP
+	Q_OBJECT
+	K_DCOP
 public:
-    KDevCppSupportIface( CppSupportPart* cppSupport );
-    ~KDevCppSupportIface();
-    
+	KDevCppSupportIface( CppSupportPart* cppSupport );
+	~KDevCppSupportIface();
+
 k_dcop:
-    void addClass();
-    void parseProject();
-    
+	void addClass();
+	void parseProject();
+
 private:
-    CppSupportPart* m_cppSupport;
+	CppSupportPart* m_cppSupport;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

@@ -23,105 +23,106 @@ class QDomDocument;
 */
 class CppCodeCompletionConfig : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    CppCodeCompletionConfig( CppSupportPart* part, QDomDocument* dom );
-    virtual ~CppCodeCompletionConfig();
+	CppCodeCompletionConfig( CppSupportPart* part, QDomDocument* dom );
+	virtual ~CppCodeCompletionConfig();
 
-    bool includeGlobalFunctions() const
-    {
-	return m_includeGlobalFunctions;
-    }
+	bool includeGlobalFunctions() const
+	{
+		return m_includeGlobalFunctions;
+	}
 
-    void setIncludeGlobalFunctions( bool b );
+	void setIncludeGlobalFunctions( bool b );
 
-    bool includeTypes() const
-    {
-	return m_includeTypes;
-    }
+	bool includeTypes() const
+	{
+		return m_includeTypes;
+	}
 
-    void setIncludeTypes( bool b );
+	void setIncludeTypes( bool b );
 
-    bool includeEnums() const
-    {
-	return m_includeEnums;
-    }
+	bool includeEnums() const
+	{
+		return m_includeEnums;
+	}
 
-    void setIncludeEnums( bool b );
+	void setIncludeEnums( bool b );
 
-    bool includeTypedefs() const
-    {
-	return m_includeTypedefs;
-    }
+	bool includeTypedefs() const
+	{
+		return m_includeTypedefs;
+	}
 
-    void setIncludeTypedefs( bool b );
+	void setIncludeTypedefs( bool b );
 
-    bool automaticCodeCompletion() const
-    {
-	return m_automaticCodeCompletion;
-    }
+	bool automaticCodeCompletion() const
+	{
+		return m_automaticCodeCompletion;
+	}
 
-    void setAutomaticCodeCompletion( bool b );
+	void setAutomaticCodeCompletion( bool b );
 
-    bool automaticArgumentsHint() const
-    {
-	return m_automaticArgumentsHint;
-    }
+	bool automaticArgumentsHint() const
+	{
+		return m_automaticArgumentsHint;
+	}
 
-    void setAutomaticArgumentsHint( bool b );
+	void setAutomaticArgumentsHint( bool b );
 
-    bool automaticHeaderCompletion() const
-    {
-	return m_automaticHeaderCompletion;
-    }
+	bool automaticHeaderCompletion() const
+	{
+		return m_automaticHeaderCompletion;
+	}
 
-    void setAutomaticHeaderCompletion( bool b );
+	void setAutomaticHeaderCompletion( bool b );
 
-    int codeCompletionDelay() const
-    {
-	return m_codeCompletionDelay;
-    }
+	int codeCompletionDelay() const
+	{
+		return m_codeCompletionDelay;
+	}
 
-    void setCodeCompletionDelay( int delay );
+	void setCodeCompletionDelay( int delay );
 
-    int argumentsHintDelay() const
-    {
-	return m_argumentsHintDelay;
-    }
+	int argumentsHintDelay() const
+	{
+		return m_argumentsHintDelay;
+	}
 
-    void setArgumentsHintDelay( int delay );
+	void setArgumentsHintDelay( int delay );
 
-    int headerCompletionDelay() const
-    {
-	return m_headerCompletionDelay;
-    }
+	int headerCompletionDelay() const
+	{
+		return m_headerCompletionDelay;
+	}
 
-    void setHeaderCompletionDelay( int delay );
+	void setHeaderCompletionDelay( int delay );
 
 public slots:
-    void store();
+	void store();
 
 signals:
-    void stored();
+	void stored();
 
 private:
-    void init();
+	void init();
 
 private:
-    CppSupportPart* m_part;
-    QDomDocument* m_dom;
-    bool m_includeGlobalFunctions;
-    bool m_includeTypes;
-    bool m_includeEnums;
-    bool m_includeTypedefs;
-    bool m_automaticCodeCompletion;
-    bool m_automaticArgumentsHint;
-    bool m_automaticHeaderCompletion;
-    int m_codeCompletionDelay;
-    int m_argumentsHintDelay;
-    int m_headerCompletionDelay;
+	CppSupportPart* m_part;
+	QDomDocument* m_dom;
+	bool m_includeGlobalFunctions;
+	bool m_includeTypes;
+	bool m_includeEnums;
+	bool m_includeTypedefs;
+	bool m_automaticCodeCompletion;
+	bool m_automaticArgumentsHint;
+	bool m_automaticHeaderCompletion;
+	int m_codeCompletionDelay;
+	int m_argumentsHintDelay;
+	int m_headerCompletionDelay;
 
-    static QString defaultPath;
+	static QString defaultPath;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

@@ -1,11 +1,11 @@
 /***************************************************************************
-                         cppcodecompletion.h  -  description
-                            -------------------
-   begin                : Sat Jul 21 2001
-   copyright            : (C) 2001 by Victor R�er
-   email                : victor_roeder@gmx.de
-   copyright            : (C) 2002,2003 by Roberto Raggi
-   email                : roberto@kdevelop.org
+                        cppcodecompletion.h  -  description
+                           -------------------
+  begin                : Sat Jul 21 2001
+  copyright            : (C) 2001 by Victor R�er
+  email                : victor_roeder@gmx.de
+  copyright            : (C) 2002,2003 by Roberto Raggi
+  email                : roberto@kdevelop.org
 ***************************************************************************/
 
 /***************************************************************************
@@ -152,4 +152,5 @@ private:
 	QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

@@ -5,8 +5,10 @@
 
 inline QString deepCopy( const QString& s )
 {
-   QCString str = s.utf8();
-   return QString::fromUtf8( str, str.length() );
+	QCString str = s.utf8();
+	return QString::fromUtf8( str, str.length() );
 }
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
+
