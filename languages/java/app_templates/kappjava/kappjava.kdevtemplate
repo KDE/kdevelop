@@ -78,7 +78,7 @@ Dest=%{dest}/po/Makefile.am
 
 [FILE13]
 Type=install
-Source=%{src}/template-kapp/subdirs
+Source=%{src}/subdirs
 Dest=%{dest}/subdirs
 
 [FILE14]

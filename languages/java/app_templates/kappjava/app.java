@@ -39,6 +39,12 @@ public class %{APPNAME} extends KMainWindow
     // and a status bar
     statusBar().show();
 
+    // Apply the create the main window and ask the mainwindow to
+    // automatically save settings if changed: window size, toolbar
+    // position, icon size, etc.  Also to add actions for the statusbar
+    // toolbar, and keybindings if necessary.
+    setupGUI();
+	
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL("signalChangeStatusbar(String)"),
             this,   SLOT("changeStatusbar(String)"));
@@ -49,13 +55,13 @@ public class %{APPNAME} extends KMainWindow
 
 public void load(KURL url)
 {
-    String target = null;
+    StringBuffer target = new StringBuffer();
     // the below code is what you should normally do.  in this
     // example case, we want the url to our own.  you probably
     // want to use this code instead for your app
 
     // download the contents
-    if (NetAccess.download(url, target))
+    if (NetAccess.download(url, target, null))
     {
         // set our caption
         setCaption(url.fileName());
@@ -64,7 +70,7 @@ public void load(KURL url)
 //        loadFile(target);
 
         // and remove the temp file
-        NetAccess.removeTempFile(target);
+        NetAccess.removeTempFile(target.toString());
     }
 
     setCaption(url.url());
@@ -81,16 +87,15 @@ public void setupActions()
     KStdAction.print(this, SLOT("filePrint()"), actionCollection());
     KStdAction.quit(kapp, SLOT("quit()"), actionCollection());
 
-    m_toolbarAction = KStdAction.showToolbar(this, SLOT("optionsShowToolbar()"), actionCollection());
-    m_statusbarAction = KStdAction.showStatusbar(this, SLOT("optionsShowStatusbar()"), actionCollection());
+//    m_toolbarAction = KStdAction.showToolbar(this, SLOT("optionsShowToolbar()"), actionCollection());
+//   m_statusbarAction = KStdAction.showStatusbar(this, SLOT("optionsShowStatusbar()"), actionCollection());
 
-    KStdAction.keyBindings(this, SLOT("optionsConfigureKeys()"), actionCollection());
-    KStdAction.configureToolbars(this, SLOT("optionsConfigureToolbars()"), actionCollection());
+//    KStdAction.configureToolbars(this, SLOT("optionsConfigureToolbars()"), actionCollection());
     KStdAction.preferences(this, SLOT("optionsPreferences()"), actionCollection());
 
     // this doesn't do anything useful.  it's just here to illustrate
     // how to insert a custom menu and menu item
-    KAction custom = new KAction(tr("Cus&tom Menuitem"), 0,
+    KAction custom = new KAction(tr("Cus&tom Menuitem"), new KShortcut(),
                                   this, SLOT("optionsPreferences()"),
                                   actionCollection(), "custom_action");
     createGUI();
@@ -177,7 +182,7 @@ private void fileSaveAs()
 {
     // this slot is called whenever the File.Save As menu is selected,
     KURL file_url = KFileDialog.getSaveURL();
-    if (!file_url.isEmpty() && !file_url.isMalformed())
+    if (!file_url.isEmpty() && file_url.isValid())
     {
         // save your info, here
     }
@@ -203,42 +208,6 @@ private void filePrint()
 
         // and send the result to the printer
         p.end();
-    }
-}
-
-private void optionsShowToolbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // toolbar
-    if (m_toolbarAction.isChecked())
-        toolBar().show();
-    else
-        toolBar().hide();
-}
-
-private void optionsShowStatusbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // statusbar
-    if (m_statusbarAction.isChecked())
-        statusBar().show();
-    else
-        statusBar().hide();
-}
-
-private void optionsConfigureKeys()
-{
-    KKeyDialog.configureKeys(actionCollection(), "%{APPNAMELC}ui.rc");
-}
-
-private void optionsConfigureToolbars()
-{
-    // use the standard toolbar editor
-    KEditToolbar dlg = new KEditToolbar(actionCollection());
-    if (dlg.exec() != 0)
-    {
-        // recreate our GUI
-        createGUI();
     }
 }
 
@@ -277,7 +246,7 @@ static String[][] options =
 static void main(String[] cmdLineArgs)
 {
     KAboutData about = new KAboutData("%{APPNAMELC}", "%{APPNAME}", version, description,
-                     KAboutData.License_$LICENSE$, "(C) %{YEAR} %{AUTHOR}", null, null, "%{EMAIL}");
+                     KAboutData.License_%{LICENSE}, "(C) %{YEAR} %{AUTHOR}", null, null, "%{EMAIL}");
     about.addAuthor( "%{AUTHOR}", null, "%{EMAIL}" );
     KCmdLineArgs.init(cmdLineArgs, about);
     KCmdLineArgs.addCmdLineOptions(options);
@@ -312,21 +281,9 @@ static void main(String[] cmdLineArgs)
     return;
 }
 	
-	static {
-		System.loadLibrary("qtjava");
-		try {
-			Class c = Class.forName("org.kde.qt.qtjava");
-		} catch (Exception e) {
-			System.out.println("Can't load qtjava class");
-		}
-		
-		System.loadLibrary("kdejava");
-		try {
-			Class c = Class.forName("org.kde.koala.kdejava");
-		} catch (Exception e) {
-			System.out.println("Can't load kdejava class");
-		}
-	}
-
+    static {
+        qtjava.initialize();
+        kdejava.initialize();         
+    }
 }
 

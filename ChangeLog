@@ -1,3 +1,6 @@
+2005-02-02  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Fixed Java KDE app framework template so it compiles
+
 2005-02-01 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Implemented a fix for BR 91757 which also removes the silly runtime dependency we had on kdebase
 
