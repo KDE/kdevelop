@@ -692,4 +692,14 @@ void ProjectDocumentationPlugin::deinit()
     m_catalog = 0;
 }
 
+QString ProjectDocumentationPlugin::pluginName() const
+{
+    return m_docPlugin->pluginName();
+}
+
+QString ProjectDocumentationPlugin::catalogURL() const
+{
+    return m_url;
+}
+
 #include "kdevdocumentationplugin.moc"

@@ -19,12 +19,15 @@
  ***************************************************************************/
 #include "docprojectconfigwidget.h"
 
+#include <qdir.h>
 #include <qcombobox.h>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
 
 #include "domutil.h"
+#include "urlutil.h"
+#include "kdevproject.h"
 #include "kdevdocumentationplugin.h"
 
 #include "documentation_part.h"
@@ -73,7 +76,12 @@ void DocProjectConfigWidget::changeDocSystem(const QString &text)
     
     catalogURL->setMode(plugin->catalogLocatorProps().first);
     catalogURL->setFilter(plugin->catalogLocatorProps().second);
-    catalogURL->setURL(DomUtil::readEntry(*(m_part->projectDom()), "/kdevdocumentation/projectdoc/docurl"));
+    
+    QString projectDocURL = DomUtil::readEntry(*(m_part->projectDom()), "/kdevdocumentation/projectdoc/docurl");
+    if (!projectDocURL.isEmpty())
+        projectDocURL = QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + projectDocURL);
+
+    catalogURL->setURL(projectDocURL);
     catalogURL->setEnabled(true);
 }
 
@@ -88,9 +96,9 @@ void DocProjectConfigWidget::accept()
             delete m_part->m_projectDocumentationPlugin;
             m_part->m_projectDocumentationPlugin = 0;
         }
+        m_part->saveProjectDocumentationInfo();
         return;
     }
-
     
     DocumentationPlugin *plugin = m_plugins[docSystemCombo->currentText()];
     if (!plugin)
@@ -103,6 +111,7 @@ void DocProjectConfigWidget::accept()
     }
     m_part->m_projectDocumentationPlugin = plugin->projectDocumentationPlugin();
     m_part->m_projectDocumentationPlugin->init(m_part->m_widget->contents(), m_part->m_widget->index(), catalogURL->url());
+    m_part->saveProjectDocumentationInfo();
 }
 
 #include "docprojectconfigwidget.moc"

@@ -80,6 +80,7 @@ protected:
     void loadDocumentationPlugins();
     KConfig *config();
     void setupActions();
+    void saveProjectDocumentationInfo();
     
 protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);

@@ -366,6 +366,9 @@ public:
     virtual void init(KListView *contents, IndexBox *index, const QString &url);
     /**Deinitializes project documentation plugin - removes documentation catalog.*/
     virtual void deinit();
+    
+    QString pluginName() const;
+    QString catalogURL() const;
 
 public slots:
     /**Performs reinitialization if project documentation has changed (after building api documentation).*/

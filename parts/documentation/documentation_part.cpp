@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "documentation_part.h"
 
+#include <qdir.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qpopupmenu.h>
@@ -42,12 +43,14 @@
 #include <kconfig.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
 #include "kdevmainwindow.h"
 #include "kdevgenericfactory.h"
 #include "kdevdocumentationplugin.h"
 #include "configwidgetproxy.h"
 #include "kdevpartcontroller.h"
 #include "domutil.h"
+#include "urlutil.h"
 
 #include "documentation_widget.h"
 #include "docglobalconfigwidget.h"
@@ -419,6 +422,8 @@ void DocumentationPart::projectOpened()
 {
     QString projectDocSystem = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docsystem");
     QString projectDocURL = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl");
+    if (!projectDocURL.isEmpty())
+        projectDocURL = QDir::cleanDirPath(project()->projectDirectory() + "/" + projectDocURL);
     
     for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin();
         it != m_plugins.constEnd(); ++it)
@@ -432,9 +437,29 @@ void DocumentationPart::projectOpened()
 }
 
 void DocumentationPart::projectClosed()
-{
+{   
+//    saveProjectDocumentationInfo();
+        
     delete m_projectDocumentationPlugin;
     m_projectDocumentationPlugin = 0;
+}
+
+void DocumentationPart::saveProjectDocumentationInfo()
+{
+    if (m_projectDocumentationPlugin)
+    {
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docsystem", m_projectDocumentationPlugin->pluginName());
+
+        QString relPath = URLUtil::extractPathNameRelative(project()->projectDirectory(),
+            m_projectDocumentationPlugin->catalogURL());
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl", relPath);
+    }
+    else
+    {
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docsystem", "");
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl", "");
+    }
+        
 }
 
 #include "documentation_part.moc"
