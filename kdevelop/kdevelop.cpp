@@ -55,6 +55,9 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     createGUI(0);
     initQextMDI();
 
+    // Read our configuration settings from the global config file.
+//    readProperties (KGlobal::config());
+
     // load all kpart components and let them create their partial GUI
     m_pCore->loadGlobalComponents();
 
@@ -76,6 +79,9 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
 
 KDevelop::~KDevelop()
 {
+    // Write out any changes to our global configuration.
+//    saveProperties (KGlobal::config());
+
     kdDebug(9000) << "~KDevelop" << endl;
 }
 
@@ -95,12 +101,16 @@ void KDevelop::slotOptionsEditToolbars(){
   }
 }
 
-void KDevelop::saveProperties(KConfig* pConfig){
+
+void KDevelop::saveProperties(KConfig* pConfig)
+{
     kdDebug(9000) << "KDevelop::saveProperties" << endl;
     m_pCore->saveProperties(pConfig);
 }
 
-void KDevelop::readProperties(KConfig* pConfig){
+
+void KDevelop::readProperties(KConfig* pConfig)
+{
     kdDebug(9000) << "KDevelop::loadProperties" << endl;
     m_pCore->readProperties(pConfig);
 }

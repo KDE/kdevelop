@@ -64,3 +64,5 @@ for(pAction=pList->first();pAction!=0;pAction= pList->next()){
 }
 +++
 
+--- CREATING A KDEVCOMPONENT ---
+

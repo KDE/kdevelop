@@ -291,7 +291,6 @@ void BugList::ParseFile ()
             if (elmSubBug.nodeName () == "FixScheduled")
                 pBug->FixScheduled.setYMD (elmSubBug.text ().right (4).toInt (),elmSubBug.text ().mid (elmSubBug.text ().find ('/') + 1,elmSubBug.text ().findRev ('/') - elmSubBug.text ().find ('/') - 1).toInt (),elmSubBug.text ().left (elmSubBug.text ().find ('/')).toInt ());
 
-     kdDebug(9040) << "BugList::Node-" << elmSubBug.nodeName () << "-" << elmSubBug.text () << endl;
             //pBug->BugClass = elmBug.attribute("BugClass");
             nodeChild = nodeChild.nextSibling ();
         }
@@ -390,6 +389,13 @@ void BugList::WriteXMLFile ()
         {
             QDomElement elmBugClass = elmBug.appendChild (xmlDocument.createElement("BugClass")).toElement();
             elmBugClass.appendChild (xmlDocument.createTextNode(pBug->BugClass)).toElement();
+        }
+
+        // Location
+        if (pBug->Location)
+        {
+            QDomElement elmLocation = elmBug.appendChild (xmlDocument.createElement("Location")).toElement();
+            elmLocation.appendChild (xmlDocument.createTextNode(pBug->Location)).toElement();
         }
 
         // AssignedTo
