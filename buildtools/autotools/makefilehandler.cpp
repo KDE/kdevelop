@@ -72,7 +72,6 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
     }
 
     kdDebug(9020) << k_funcinfo << filePath << " was parsed correctly. Adding information" << endl;
-    kdDebug(9020) << k_funcinfo << "pointer to AST is " << ast << endl;
     Q_ASSERT( ast != 0 );
     d->projects[filePath] = ast;
     d->folderToFileMap[folder] = filePath;
@@ -96,8 +95,11 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
                     QStringList::iterator vit = subdirList.begin();
                     for ( ; vit != subdirList.end(); ++vit )
 		    {
-                        kdDebug(9020) << k_funcinfo << "Beginning parsing of " << ( *vit ) << endl;
-                        parse( folder + '/' + ( *vit ), recursive );
+                        if ( ( *vit ) != "." && ( *vit ) != ".." )
+                        {
+                            kdDebug(9020) << k_funcinfo << "Beginning parsing of " << ( *vit ) << endl;
+                            parse( folder + '/' + ( *vit ), recursive );
+                        }
 		    }
 		}
 	    }
