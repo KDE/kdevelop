@@ -153,14 +153,25 @@ void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer
 {
   unsigned int i;
   QString line;
+  ValuesIgnore* valIgnore = getValuesIgnore(variable);
   if (append == VSM_APPEND)
+  {
     line = variable + " += ";
+    values += valIgnore->values;
+  }
   else if (append == VSM_RESET)
+  {
     line = variable + " = ";
+    values += valIgnore->values;
+  }
   else if (append == VSM_EXCLUDE)
+  {
     line = variable + " -= ";
+    values += valIgnore->values_exclude;
+  }
   QString spacing;
   spacing.fill(' ',line.length());
+  
   for (i=0; i<values.count(); i++)
   {
     line = line + values[i] + " ";
@@ -172,6 +183,7 @@ void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer
       line = spacing;
     }
   }
+  
   if (i % valuesPerRow)
     m_buffer.append(line);
 }
@@ -235,6 +247,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
   QStringList plusValues;
   QStringList minusValues;
   QStringList curValues;
+  QStringList curValuesIgnore;
   bool finished = false;
   while (!finished)
   {
@@ -254,7 +267,9 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     QChar effectOperator = line[eqSign.m_idx-1];
     long lineNum=eqSign.m_row;
     curValues.clear();
+    curValuesIgnore.clear();
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
+    filterOutIgnoreValues(variable,line,curValuesIgnore);
     while (!line.isEmpty())
     {
       if (line[line.length()-1]=='\\')
@@ -263,6 +278,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
         curValues += QStringList::split(" ",line);
         lineNum++;
         line = m_buffer[lineNum];
+        filterOutIgnoreValues(variable,line,curValuesIgnore);
         continue;
       }
       curValues += QStringList::split(" ",line);
@@ -271,6 +287,9 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     if (QString("+-*~").find(effectOperator)==-1)
     {
       // operator = resets the variable values
+      
+      getValuesIgnore(variable)->values.clear();
+      getValuesIgnore(variable)->values_exclude.clear();
       plusValues.clear();
       minusValues.clear();
     }
@@ -279,7 +298,11 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
       // remove from plus list if in curvalues
       for (uint i=0; i<curValues.count(); i++)
         plusValues.remove(curValues[i]);
+      // remove from plus list if in curvaluesignore
+      for (uint i=0; i<curValuesIgnore.count(); i++)
+        getValuesIgnore(variable)->values.remove(curValuesIgnore[i]);
       // add curvalues to minuslist
+      getValuesIgnore(variable)->values_exclude += curValuesIgnore;
       minusValues += curValues;
     }
     else
@@ -287,7 +310,11 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
       // remove from minus list if in curvalues
       for (uint i=0; i<curValues.count(); i++)
         minusValues.remove(curValues[i]);
+      // remove from minus list if in curvaluesignore
+      for (uint i=0; i<curValuesIgnore.count(); i++)
+        getValuesIgnore(variable)->values_exclude.remove(curValuesIgnore[i]);
       // add curvalues to pluslist
+      getValuesIgnore(variable)->values += curValuesIgnore;
       plusValues += curValues;
     }
     curPos = Caret(lineNum+1,0);
@@ -728,8 +755,8 @@ bool FileBuffer::getAllExcludeValues(const QString &variable,QStringList &minusV
 }
 
 
-void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QStringList& ignoreList)
-//===================================================================================================
+void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QStringList& valuesignore)
+//=====================================================================================================
 {
   QStringList qmakeFunctions = 
     QStringList::split(',',"join(,member(,find(,contains(,count(,error(,exists(,"
@@ -763,7 +790,7 @@ void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QSt
       len++;
     }
     
-    getValuesIgnore(variable)->values.append(line.mid(startpos,len));
+    valuesignore.append(line.mid(startpos,len));
     line = line.left(startpos)+line.right(line.length()-startpos-len);
     
     closestMatch=-1;

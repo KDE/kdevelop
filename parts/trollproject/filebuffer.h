@@ -23,6 +23,7 @@ class ValuesIgnore
 public:
   QString           variable;
   QStringList       values;
+  QStringList       values_exclude;
 };
 
 typedef QValueList<ValuesIgnore*> ValuesIgnoreList;
@@ -75,7 +76,7 @@ public:
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
   void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
-  void              filterOutIgnoreValues(const QString &variable,QString& line,QStringList& ignoreList);
+  void              filterOutIgnoreValues(const QString &variable,QString& line,QStringList& valuesignore);
   ValuesIgnore*     getValuesIgnore(const QString &variable);
 
 private:
