@@ -177,7 +177,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("&Generate Sources..."),kdlgedit,
 			      SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);  	
   
-  kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("&Generate Complete Sources..."),kdlgedit,
+  kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("Ge&nerate Complete Sources..."),kdlgedit,
 			      SLOT(slotBuildCompleteGenerate()),0,ID_KDLG_BUILD_COMPLETE_GENERATE);  
   kdlg_build_menu->insertSeparator(); 
   
