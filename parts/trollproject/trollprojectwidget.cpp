@@ -533,7 +533,7 @@ void TrollProjectWidget::slotBuildProject()
   QFileInfo fi(dir + "/Makefile");
   QFileInfo fi2(dir + "/makefile");
   if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run configure first?"));
+      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
           return;
       m_part->startQMakeCommand(dir);
@@ -557,7 +557,7 @@ void TrollProjectWidget::slotRebuildProject()
   QFileInfo fi(dir + "/Makefile");
   QFileInfo fi2(dir + "/makefile");
   if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run configure first?"));
+      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
           return;
       m_part->startQMakeCommand(dir);
