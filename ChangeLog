@@ -1,3 +1,6 @@
+2003-05-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added BookmarksPart
+
 2003-05-12 Roberto Raggi <roberto@kdevelop.org>
     * replaces KDevLanguageSupport::fileFilters() with
       KDevLanguageSupport::mimeTypes()
