@@ -69,6 +69,7 @@
 #include <kmessagebox.h>
 #include <kprinter.h>
 #include <krun.h>
+#include <kstatusbar.h>
 #include <kstddirs.h>
 #include <ktabctl.h>
 #include <knotifyclient.h>
@@ -2998,7 +2999,11 @@ void CKDevelop::slotDocumentDone()
 
   if(prev_was_search_result){
     pCurBrowserDoc->findTextBegin();
+#if (QT_VERSION < 300)
     pCurBrowserDoc->findTextNext(QRegExp(doc_search_text),true);
+#else
+    pCurBrowserDoc->findTextNext(doc_search_text,true,false,true);
+#endif
   }
 
   if (m_docViewManager->curDocIsBrowser())

@@ -24,6 +24,7 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
 #include <ktabctl.h>

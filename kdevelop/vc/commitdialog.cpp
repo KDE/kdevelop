@@ -1,11 +1,12 @@
-#include <qlayout.h>
-#include <qlabel.h>
+#include "commitdialog.h"
+
 #include <kapp.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
 
-#include "commitdialog.h"
-
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
 
 CommitDialog::CommitDialog()
     : QDialog(0, "", true)

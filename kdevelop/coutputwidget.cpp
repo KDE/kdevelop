@@ -531,7 +531,7 @@ void CMakeOutputWidget::paintCell(QPainter* painter, int row, int /*col*/)
   p.end();
   painter->drawPixmap( updateR.left(), updateR.top(), *buffer,
      0, 0, updateR.width(), updateR.height() );
-#endif // QT_VERSION < 300     
+#endif // QT_VERSION < 300
 }
 
 #include "coutputwidget.moc"

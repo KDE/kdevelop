@@ -24,6 +24,7 @@
 #include "vc/versioncontrol.h"
 
 #include <kapp.h>
+#include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>

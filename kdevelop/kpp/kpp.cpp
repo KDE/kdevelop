@@ -32,6 +32,7 @@
 #include <kprocess.h>
 #include "kpp.h"
 #include <kmessagebox.h>
+#include <qpushbutton.h>
 
 Kpp::Kpp(QWidget*parent,const char* name, bool modal):projectview(parent,name,modal){
 

@@ -20,6 +20,7 @@
 
 #include <kfiledialog.h>
 #include <qwhatsthis.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstddirs.h>
 

@@ -29,6 +29,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kicondialog.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>

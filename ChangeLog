@@ -1,3 +1,6 @@
+2001-10-15  jbb <jbb@kdevelop.org>
+    * kde3 compiling fixes.
+    
 2001-10-13  Ralf Nolden <nolden@kde.org>
     * fixed admin.tar.gz to HEAD with changing search path for KDE from /opt/kde3 to /opt/kde2 and
       the minimum Qt version to 2, minor version 2
