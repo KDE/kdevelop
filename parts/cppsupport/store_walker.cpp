@@ -205,13 +205,16 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     if( m_inSlots )
         method->setSlot( true );
 
-    if( m_currentClass.top() ){
+    if( m_currentClass.top() || (method->name() == "main" && scope.isEmpty()) ){
 	method->setConstant( d->constant() != 0 );
 	method->setAccess( m_currentAccess );
 	method->setStatic( isStatic );
 	method->setVirtual( isVirtual );
 
-	m_currentClass.top()->addFunction( model_cast<FunctionDom>(method) );
+	if( m_currentClass.top() )
+	    m_currentClass.top()->addFunction( model_cast<FunctionDom>(method) );
+	else 
+	    m_file->addFunction( model_cast<FunctionDom>(method) );
     }
 
     if( m_currentClass.top() )
@@ -431,8 +434,6 @@ void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
 
 NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QString & name )
 {
-    kdDebug(9007) << "-----------------> findOrInsert" << name << " found!!" << endl;
-
     if( m_currentNamespace.top() && m_currentNamespace.top()->hasNamespace(name) )
 	return m_currentNamespace.top()->namespaceByName( name );
 
