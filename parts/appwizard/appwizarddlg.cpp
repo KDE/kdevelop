@@ -179,7 +179,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     m_vcs->stack->raiseWidget(0);
     addPage(m_vcs,i18n("Version Control System"));
 
-    nextButton()->setEnabled(!appname_edit->text().isEmpty());
+//    nextButton()->setEnabled(!appname_edit->text().isEmpty());
+    nextButton()->setEnabled(false);
 }
 
 

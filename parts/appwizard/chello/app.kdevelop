@@ -19,4 +19,10 @@
    <terminal>true</terminal>
   </run>
  </kdevautoproject>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="c"/>
+   <type ext="h"/>
+  </useglobaltypes>
+ </kdevfilecreate>
 </kdevelop>
