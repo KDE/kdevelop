@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Simple SQL Project
+Category=Database
+Comment=Generates a simple SQL project.
+FileTemplates=xul,ShellStyle
