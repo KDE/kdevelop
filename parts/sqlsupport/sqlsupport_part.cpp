@@ -187,7 +187,7 @@ static QString dbCaption(const QSqlDatabase* db)
 
 void SQLSupportPart::parse()
 {
-    // TODO
+    // @todo
 }
 
 void SQLSupportPart::updateCatalog()

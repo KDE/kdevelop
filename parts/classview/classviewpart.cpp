@@ -139,7 +139,7 @@ void ClassViewPart::setupActions( )
                                      "graphical class viewer."));
     m_popupAction->setDelayed(false);
     KPopupMenu *popup = m_popupAction->popupMenu();
-    //TODO: check if language support has namespaces, classes, etc.
+    //@todo check if language support has namespaces, classes, etc.
 //    KDevLanguageSupport::Features features = languageSupport()->features();
     int id = popup->insertItem(i18n("Go to Function Declaration"), this, SLOT(goToFunctionDeclaration()));
     popup->setWhatsThis(id, i18n("<b>Go to function declaration</b><p>Opens a file where the function is declared and jumps to the declaration line."));
@@ -148,7 +148,7 @@ void ClassViewPart::setupActions( )
     id = popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(goToClassDeclaration()));
     popup->setWhatsThis(id, i18n("<b>Go to class declaration</b><p>Opens a file where the class is declared and jumps to the declaration line."));
 
-    //TODO: not applicable to c++ but can be useful for ada and pascal where namespace is contained
+    //@todo not applicable to c++ but can be useful for ada and pascal where namespace is contained
     //in a single compilation unit
     //FIXME: commented out till the time when it be needed
 //    popup->insertItem(i18n("Go to Namespace Declaration"), this, SLOT(goToNamespaceDeclaration()));

@@ -180,7 +180,7 @@ void ProblemReporter::reparse()
     if( !m_javaSupport->isValid() )
 	return;
 
-    // @todo: use the project database to decide which files to parse instead of this!
+    // @todo use the project database to decide which files to parse instead of this!
     // ugly hack: do not parse non .java ending files
     if ( !m_fileName.endsWith(".java") )
         return;

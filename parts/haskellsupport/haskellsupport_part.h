@@ -23,7 +23,7 @@
 
 #include "kdevlanguagesupport.h"
 
-class HaskellSupportWidget; // TODO remove
+class HaskellSupportWidget; // @todo remove this
 class KDialogBase;
 class QPopupMenu;
 class Context;

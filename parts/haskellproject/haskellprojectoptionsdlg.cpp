@@ -220,7 +220,7 @@ void HaskellProjectOptionsDlg::setDirty( )
 
 void HaskellProjectOptionsDlg::setDefaultOptions( )
 {
-	// TODO Fixme!
+	// @todo FIXME!
     if (!compiler_box->currentText().isEmpty()) {
         options_edit->setText( _part->defaultOptions( compiler_box->currentText() ) );
     }

@@ -221,7 +221,7 @@ public:
     /**this provides a simple propery editor for the given build item
        if the build system don't want to provide its own configuration
        widget (there is no need to reimplement this)*/
-    //TODO: adymo: implement
+    //@todo adymo: implement
     virtual void addDefaultBuildWidget(KDialogBase *dlg, QWidget *parent, BuildBaseItem*);
 
 protected:

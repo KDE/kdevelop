@@ -275,13 +275,13 @@ void HaskellProjectPart::listOfFiles(QStringList &result, QString path)
 
 QString HaskellProjectPart::createPackageString()
 {
-	// @todo: create "-package network -package concurrent" etc.
+	// @todo create "-package network -package concurrent" etc.
 	return "";
 }
 
 QString HaskellProjectPart::createCmdLine( QString srcFile)
 {
-	// TODO: test which haskell comp/interpreter is used and build cmdLine accordingly
+	// @todo test which haskell comp/interpreter is used and build cmdLine accordingly
 	// at the moment only ghc is supported
   	QString cmdLine = _compilerExec + " " + createPackageString() + " " + srcFile + " "
    									+ _compilerOpts + " -o " + mainProgram();
@@ -405,7 +405,7 @@ void HaskellProjectPart::loadProjectConfig()
 
 void HaskellProjectPart::configWidget( KDialogBase * dlg )
 {
-	// TODO create config page for KDevelop Settings
+	// @todo create config page for KDevelop Settings
     /*QVBox *vbox;
     vbox = dlg->addVBoxPage( i18n( "Haskell Options" ) );
     HaskellGlobalOptionsDlg *w = new HaskellGlobalOptionsDlg( this, vbox );

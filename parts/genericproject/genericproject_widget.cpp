@@ -742,7 +742,7 @@ void GenericProjectWidget::slotCleanTarget( )
 
 void GenericProjectWidget::takeGroup( GenericGroupListViewItem * it )
 {
-    //TODO: adymo: allow to remove nested subdirs
+    //@todo adymo: allow to remove nested subdirs
     BuildGroupItem *group = it->groupItem();
     if (group->groups().count() == 0)
     {

@@ -89,7 +89,7 @@ XulSupportPart::initConnections()
 void
 XulSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
-	//TODO: Maybe some options would be nice?
+	//@todo Maybe some options would be nice?
 	Q_UNUSED( dlg );
 }
 

@@ -521,7 +521,7 @@ void FileTreeWidget::slotToggleShowVCSFields()
     kdDebug(9017) << "FileTreeWidget::slotToggleShowVCSFields()" << endl;
     kdDebug(9017) << "Yet to be implemented!!" << endl;
 
-    // TODO
+    // @todo implement show VCS Fields
     if (showVCSFields())
     {
 //        setColumnText( 0, "Filename" ); // First column already added

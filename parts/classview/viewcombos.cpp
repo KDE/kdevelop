@@ -210,7 +210,7 @@ void processClass( ClassViewPart *part, KComboView *view, ClassItem * item )
 
 void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item )
 {
-    //TODO: allow nested functions (adymo: Pascal has nested procedures and functions)
+    //@todo allow nested functions (adymo: Pascal has nested procedures and functions)
 /*    FunctionList functions = item->dom()->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {

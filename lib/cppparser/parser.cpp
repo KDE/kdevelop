@@ -77,7 +77,7 @@ using namespace std;
     UPDATE_POS( node, (tk), (tk)+1 );
 
 
-// remove me
+//@todo remove me
 enum
 {
     OBJC_CLASS,

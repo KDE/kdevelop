@@ -173,7 +173,7 @@ void KMdiChildArea::setTopChild(KMdiChildFrm *lpC,bool /* bSetFocus */)
       if ( (pMaximizedChild != 0L) && (lpC->m_pClient != 0L) ) {
          nChildAreaMinW = lpC->m_pClient->minimumWidth();
          nChildAreaMinH = lpC->m_pClient->minimumHeight();
-         /// @todo: setting the maximum size doesn't work properly - fix this later
+         /// @todo setting the maximum size doesn't work properly - fix this later
          // nChildAreaMaxW = lpC->m_pClient->maximumWidth();
          // nChildAreaMaxH = lpC->m_pClient->maximumHeight();
       }

@@ -1111,8 +1111,8 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KMdiDockWidget>* pRootDockWidgetL
    if (!pPositionList) return;
 
    // since we set some windows to toplevel, we must consider the window manager's window frame
-   const int frameBorderWidth  = 7;  // @todo: Can we / do we need to ask the window manager?
-   const int windowTitleHeight = 10; // @todo:    -"-
+   const int frameBorderWidth  = 7;  // @todo Can we / do we need to ask the window manager?
+   const int windowTitleHeight = 10; // @todo    -"-
 
    QObjectList* pObjList = queryList( "KDockWidget");
    if (pObjList->isEmpty()) {
@@ -1182,7 +1182,7 @@ void KMdiMainFrm::switchToToplevelMode()
 
    KMdi::MdiMode oldMdiMode = m_mdiMode;
 
-   const int frameBorderWidth  = 7;  // @todo: Can we / do we need to ask the window manager?
+   const int frameBorderWidth  = 7;  // @todo Can we / do we need to ask the window manager?
    setUndockPositioningOffset( QPoint( 0, (m_pTaskBar ? m_pTaskBar->height() : 0) + frameBorderWidth));
 
 

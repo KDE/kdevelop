@@ -107,7 +107,7 @@ void Property::setDescription(QString description)
 
 QWidget *Property::editorOfType(PropertyEditor *editor)
 {
-//TODO: enable property plugin system
+//@todo enable property plugin system
 //    QWidget *w=0;
 //    editor->createPluggedInEditor(w, editor,this,cb);
 //    if (w) return w;

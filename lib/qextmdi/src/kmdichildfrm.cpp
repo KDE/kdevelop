@@ -580,7 +580,7 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    }
    if ( (pTopChild != 0L) && pTopChild->isMaximized() ) {
       m_pManager->setMinimumSize(pTopChild->minimumWidth(), pTopChild->minimumHeight());
-      /// @todo: setting the maximum size doesn't work properly - fix this later
+      /// @todo setting the maximum size doesn't work properly - fix this later
       /// m_pManager->setMaximumSize(pTopChild->maximumWidth(), pTopChild->maximumHeight());
    }
    else {

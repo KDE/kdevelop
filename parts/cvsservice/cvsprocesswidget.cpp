@@ -272,7 +272,7 @@ void CvsProcessWidget::showOutput( const QStringList &msg )
 {
     for (QStringList::const_iterator it = msg.begin(); it != msg.end(); ++it)
     {
-        // TODO: here we can interpret lines as [C], [M], ...
+        // @todo here we can interpret lines as [C], [M], ...
         const QString &line = (*it);
 
         if (line.startsWith( "C " ))

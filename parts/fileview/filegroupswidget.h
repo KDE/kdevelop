@@ -44,7 +44,6 @@ private:
     FileGroupsPart *m_part;
 
     class KToggleAction *m_actionToggleShowNonProjectFiles;
-    bool showNonProjectFiles;
 };
 
 #endif
