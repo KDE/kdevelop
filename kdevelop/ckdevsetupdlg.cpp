@@ -21,6 +21,7 @@
 #include "ckdevelop.h"
 #include "resource.h"
 #include "ccompletionopts.h"
+#include "ccodetemplateopts.h"
 
 #include <kmessagebox.h>
 #include <kkeydialog.h>
@@ -39,6 +40,7 @@
 #include <qvbox.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
+#include <qtabwidget.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -61,7 +63,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
 
   addGeneralTab();
   addKeysTab();
-  addCodeCompletionTab();
+  addEnhancedCodingTab();
   addDocTab();
   addCompilerTab();
   addDebuggerTab();
@@ -970,6 +972,8 @@ void CKDevSetupDlg::slotOkClicked(){
 
   // code completion
   completionOptsDlg->slotSettingsChanged();
+  // code template
+  codeTemplateOptsDlg->slotSettingsChanged();
 
 #if QT_VERSION < 300
   m_accel->setKeyDict(keyMap);
@@ -1094,16 +1098,20 @@ void CKDevSetupDlg::slotPPathClicked(){
 }
 // ---
 
-void CKDevSetupDlg::addCodeCompletionTab()
+void CKDevSetupDlg::addEnhancedCodingTab()
 {
-    QFrame* additionalPage = addPage(i18n("Code Completion"),
-                                     i18n("Code Completion Configuration"),
+    QFrame* additionalPage = addPage(i18n("Enhanced Coding"),
+                                     i18n("Enhanced Coding Configuration"),
                                      KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
-    QGridLayout *grid = new QGridLayout(additionalPage);
-    QWhatsThis::add(additionalPage, i18n("Set some code completion options here."));
+
+    QGridLayout *grid = new QGridLayout( additionalPage );
+    QTabWidget* tab = new QTabWidget( additionalPage );
     CKDevelop* pDevelop = (CKDevelop*) parent();
-    completionOptsDlg = new CCompletionOpts(pDevelop, additionalPage);
-    grid->addWidget(completionOptsDlg,0,0);
+    completionOptsDlg = new CCompletionOpts( pDevelop, additionalPage );
+    codeTemplateOptsDlg = new CCodeTemplateOpts( additionalPage );
+    tab->addTab( completionOptsDlg, i18n("Code Completion") );
+    tab->addTab( codeTemplateOptsDlg, i18n("Code Template") );
+    grid->addWidget( tab, 0, 0 );
 
 }
 

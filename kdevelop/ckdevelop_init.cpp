@@ -368,7 +368,7 @@ void CKDevelop::initMenuBar() {
   pAction->setStatusText(
     i18n("Exits the program") );
 
-  
+
 
   ///////////////////////////////////////////////////////////////////
   // Edit
@@ -476,6 +476,21 @@ void CKDevelop::initMenuBar() {
     i18n("Invert Selection"), 0,
     m_docViewManager, SLOT(slotEditInvertSelection()),
     actionCollection(), "edit_invert_selection" );
+
+  pAction = new KAction(
+    i18n("Expand Text"), 0,
+    m_docViewManager, SLOT(slotEditExpandText()),
+    actionCollection(), "edit_expand_text" );
+
+  pAction = new KAction(
+    i18n("Complete Text"), 0,
+    m_docViewManager, SLOT(slotEditCompleteText()),
+    actionCollection(), "edit_complete_text" );
+
+  pAction = new KAction(
+    i18n("Expand Template"), 0,
+    m_docViewManager, SLOT(slotEditExpandTemplate()),
+    actionCollection(), "edit_expand_template" );
 
 
 
@@ -593,7 +608,7 @@ void CKDevelop::initMenuBar() {
                   actionCollection(), "project_open" );
         pAction->setWhatsThis( i18n("Open project\n\n"
              "Shows the open project dialog to select a project to be opened"));
-        
+
         // we store a pointer to the recent projects action
         pRecentProjects =
         KStdAction::openRecent(this,SLOT(slotProjectOpenRecent(const KURL&)),
@@ -692,7 +707,7 @@ void CKDevelop::initMenuBar() {
     "clean-option to remove all object files. "
     "Then, configure creates new Makefiles and "
     "the make-command will rebuild the project."));
-        
+
   pAction = new KAction(
     i18n("&Stop Build"), "stop", Key_F10,
     this, SLOT(slotBuildStop()),
@@ -970,7 +985,7 @@ void CKDevelop::initMenuBar() {
   QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
   QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
   QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
-  
+
   pAction = new KAction(
     i18n("&Back"), "back", 0,
     this, SLOT(slotHelpBack()),
@@ -1018,7 +1033,7 @@ void CKDevelop::initMenuBar() {
     kdelibref, "contents", 0,
     this, SLOT(slotHelpKDELibRef()),
     actionCollection(), "help_kdelibref" );
-        
+
   pAction = new KAction(
     i18n("C/C++-Reference"), "contents", 0,
     this, SLOT(slotHelpReference()),
@@ -1038,7 +1053,7 @@ void CKDevelop::initMenuBar() {
     i18n("Tip of the Day"), "idea", 0,
     this, SLOT(slotHelpTipOfDay()),
     actionCollection(), "help_tip" );
-        
+
   pAction = new KAction(
     i18n("KDevelop Homepage"), "www", 0,
     this, SLOT(slotHelpHomepage()),
@@ -1410,7 +1425,7 @@ CProject* CKDevelop::initProject( bool loadLastProject )
 {
   if( !loadLastProject || !lastShutdownOK )
     return 0;
-  
+
   config->setGroup("General Options");
   if( !config->readBoolEntry("LastProject",true) )
     return 0;
@@ -1443,7 +1458,7 @@ void CKDevelop::setToolmenuEntries(){
                                   SLOT(slotToolsTool(int)),actionCollection(),(*it).getExeName()));
         }
         plugActionList("tool_list",actionList);
-        
+
 //        connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }
 

@@ -85,6 +85,7 @@
 
 #define ID_EDIT_EXPAND_TEXT         11300
 #define ID_EDIT_COMPLETE_TEXT       11310
+#define ID_EDIT_EXPAND_TEMPLATE     11320
 
 ///////////////////////////////////////////////////////////////////
 // View-menu entries

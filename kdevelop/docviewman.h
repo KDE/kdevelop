@@ -38,6 +38,9 @@ class CDocBrowser;
 class CKDevAccel;
 class CClassStore;
 class KDevCodeCompletion;
+class KDevCodeTemplate;
+class KPopupMenu;
+class KConfig;
 
 //=============================================================================
 // class DocViewMan
@@ -301,6 +304,8 @@ public slots:
     void slotEditExpandText();
     /** code completetion */
     void slotEditCompleteText();
+    /** expand template */
+    void slotEditExpandTemplate();
 
   // view activation by accel
   void activateView1();
@@ -359,6 +364,7 @@ private:
 
   KParts::Factory*          m_pKateFactory;
   KDevCodeCompletion*       m_pCodeCompletion;
+  KDevCodeTemplate*         m_pCodeTemplate;
 };
 
 #endif //DOCVIEWMAN_H

@@ -48,6 +48,7 @@
 #include "./classparser/ClassStore.h"
 #include "ckdevaccel.h"
 #include "kdevcodecompletion.h"
+#include "kdevcodetemplate.h"
 
 DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
 : QObject( parent)
@@ -83,10 +84,21 @@ DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
            this, SLOT(slotResetMainFrmCaption()) );
 
   m_pCodeCompletion = new KDevCodeCompletion( this );
+  m_pCodeTemplate = KDevCodeTemplate::self();
+  m_pCodeTemplate->load();
+
+  /* TEST
+  m_pCodeTemplate->addTemplate( "ifb", "if with block", "if( | ){\n}" );
+  m_pCodeTemplate->addTemplate( "cl", "class", "class " );
+  m_pCodeTemplate->addTemplate( "pu", "public", "public " );
+  m_pCodeTemplate->addTemplate( "pr", "private", "private " );
+  m_pCodeTemplate->addTemplate( "pro", "protected", "protected " );
+  */
 }
 
 DocViewMan::~DocViewMan()
 {
+    m_pCodeTemplate->save();
 }
 
 void DocViewMan::doSelectURL(const QString& url)
@@ -1855,6 +1867,8 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("Complete Text"), "Complete Text", CTRL + Key_Space);
   accel->connectItem("Complete Text", this, SLOT(slotEditCompleteText()), true, ID_EDIT_COMPLETE_TEXT);
 
+  accel->insertItem(i18n("Expand Template"), "Expand Template", SHIFT + Key_Space);
+  accel->connectItem("Expand Template", this, SLOT(slotEditExpandTemplate()), true, ID_EDIT_EXPAND_TEMPLATE);
 
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
@@ -2267,6 +2281,12 @@ void DocViewMan::slotEditCompleteText()
 {
     if (currentEditView())
         m_pCodeCompletion->completeText();
+}
+
+void DocViewMan::slotEditExpandTemplate()
+{
+    //if( currentEditView() )
+    m_pCodeTemplate->expandTemplate( currentEditView() );
 }
 
 void DocViewMan::setStore( CClassStore* pStore )

@@ -38,7 +38,7 @@ install_location=
 type=DATA
 
 [General]
-AMChanged=false
+AMChanged=true
 author=kdevelop-team
 configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux --prefix=/usr/local/kde-3 --enable-debug --with-qt-includes=/usr/local/qt-copy/include --with-qt-libraries=/usr/local/qt-copy/lib
 email=kdevelop-team@kdevelop.org
@@ -812,9 +812,15 @@ install_location=
 type=DATA
 
 [kdevelop/Makefile.am]
-files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/wzconnectdlgimpl.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/cclonefunctiondlg.cpp,kdevelop/cclonefunctiondlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/wzconnectdlgimpl.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckdevaccel.h,kdevelop/ckdevaccel.cpp,kdevelop/cclasstreehandler.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/dbgpsdlg.cpp,kdevelop/dbgpsdlg.h,kdevelop/dbgtoolbar.cpp,kdevelop/dbgtoolbar.h,kdevelop/debug.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/extractrc,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.desktop,kdevelop/kdevelop.desktop,kdevelop/kdeveloprc,kdevelop/kdevelopui.rc,kdevelop/kdevlistview.cpp,kdevelop/kdevlistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/main.cpp,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_init.cpp,kdevelop/wzconnectdlg.ui,kdevelop/x-kdevelop-project.desktop,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop.cpp,kdevelop/hi16-app-kdevelop.png,kdevelop/hi32-app-kdevelop.png,kdevelop/hi48-app-kdevelop.png,kdevelop/docviewman.cpp,kdevelop/docviewman.h,kdevelop/ckonsolewidget.cpp,kdevelop/ckonsolewidget.h,kdevelop/clibpropdlg.ui,kdevelop/clibpropdlgimpl.cpp,kdevelop/clibpropdlgimpl.h,kdevelop/kdevsession.cpp,kdevelop/kdevsession.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ccompconfdlg.ui,kdevelop/ccompconf.h,kdevelop/ccompconf.cpp,kdevelop/kdevcodecompletion.cpp,kdevelop/kdevcodecompletion.h,kdevelop/cprjaddopts.cpp,kdevelop/cprjaddopts.h,kdevelop/cprjaddoptsdlg.ui,kdevelop/cprjcompopts.cpp,kdevelop/cprjcompopts.h,kdevelop/cprjcompoptsdlg.ui,kdevelop/cprjconfchange.cpp,kdevelop/cprjconfchange.h,kdevelop/kdevregexp.cpp,kdevelop/kdevregexp.h,kdevelop/simpleparser.cpp,kdevelop/simpleparser.h,kdevelop/ccompletionoptsdlg.ui,kdevelop/ccompletionopts.cpp,kdevelop/ccompletionopts.h,kdevelop/tips
+files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/wzconnectdlgimpl.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/cclonefunctiondlg.cpp,kdevelop/cclonefunctiondlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/wzconnectdlgimpl.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckdevaccel.h,kdevelop/ckdevaccel.cpp,kdevelop/cclasstreehandler.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/dbgpsdlg.cpp,kdevelop/dbgpsdlg.h,kdevelop/dbgtoolbar.cpp,kdevelop/dbgtoolbar.h,kdevelop/debug.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/extractrc,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.desktop,kdevelop/kdevelop.desktop,kdevelop/kdeveloprc,kdevelop/kdevelopui.rc,kdevelop/kdevlistview.cpp,kdevelop/kdevlistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/main.cpp,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_init.cpp,kdevelop/wzconnectdlg.ui,kdevelop/x-kdevelop-project.desktop,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop.cpp,kdevelop/hi16-app-kdevelop.png,kdevelop/hi32-app-kdevelop.png,kdevelop/hi48-app-kdevelop.png,kdevelop/docviewman.cpp,kdevelop/docviewman.h,kdevelop/ckonsolewidget.cpp,kdevelop/ckonsolewidget.h,kdevelop/clibpropdlg.ui,kdevelop/clibpropdlgimpl.cpp,kdevelop/clibpropdlgimpl.h,kdevelop/kdevsession.cpp,kdevelop/kdevsession.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ccompconfdlg.ui,kdevelop/ccompconf.h,kdevelop/ccompconf.cpp,kdevelop/kdevcodecompletion.cpp,kdevelop/kdevcodecompletion.h,kdevelop/cprjaddopts.cpp,kdevelop/cprjaddopts.h,kdevelop/cprjaddoptsdlg.ui,kdevelop/cprjcompopts.cpp,kdevelop/cprjcompopts.h,kdevelop/cprjcompoptsdlg.ui,kdevelop/cprjconfchange.cpp,kdevelop/cprjconfchange.h,kdevelop/kdevregexp.cpp,kdevelop/kdevregexp.h,kdevelop/simpleparser.cpp,kdevelop/simpleparser.h,kdevelop/ccompletionoptsdlg.ui,kdevelop/ccompletionopts.cpp,kdevelop/ccompletionopts.h,kdevelop/tips,kdevelop/addtemplatedialog.ui,kdevelop/caddtemplatedialog.cpp,kdevelop/caddtemplatedialog.h,kdevelop/ccodetemplateopts.cpp,kdevelop/ccodetemplateopts.h,kdevelop/codetemplateoptsdlg.ui,kdevelop/kdevcodetemplate.cpp
 sub_dirs=classparser,kpp,classwizard,dbg,examples,gfxview,pics,templates,tools,vc,widgets,ctags,setup
 type=prog_main
+
+[kdevelop/addtemplatedialog.ui]
+dist=true
+install=false
+install_location=
+type=SOURCE
 
 [kdevelop/caddclassattributedlg.cpp]
 dist=true
@@ -859,6 +865,18 @@ install_location=
 type=SOURCE
 
 [kdevelop/caddnewtranslationdlg.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kdevelop/caddtemplatedialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kdevelop/caddtemplatedialog.h]
 dist=true
 install=false
 install_location=
@@ -919,6 +937,18 @@ install_location=
 type=SOURCE
 
 [kdevelop/cclonefunctiondlg.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kdevelop/ccodetemplateopts.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kdevelop/ccodetemplateopts.h]
 dist=true
 install=false
 install_location=
@@ -1470,6 +1500,12 @@ install=false
 install_location=
 type=HEADER
 
+[kdevelop/codetemplateoptsdlg.ui]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [kdevelop/coutputwidget.cpp]
 dist=true
 install=false
@@ -1477,18 +1513,6 @@ install_location=
 type=SOURCE
 
 [kdevelop/coutputwidget.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[kdevelop/kdevcodecompletion.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[kdevelop/kdevcodecompletion.h]
 dist=true
 install=false
 install_location=
@@ -1999,6 +2023,24 @@ dist=true
 install=false
 install_location=
 type=DATA
+
+[kdevelop/kdevcodecompletion.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kdevelop/kdevcodecompletion.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kdevelop/kdevcodetemplate.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
 
 [kdevelop/kdevelop-setup.desktop]
 dist=true

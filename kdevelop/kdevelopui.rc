@@ -42,6 +42,10 @@
     <Action name="edit_select_all" />
     <Action name="edit_deselect_all" />
     <Action name="edit_invert_selection" />
+    <Separator/>
+    <Action name="edit_expand_text" />
+    <Action name="edit_complete_text" />
+    <Action name="edit_expand_template" />
   </Menu>
   <Menu name="view">
     <text>&amp;View</text>

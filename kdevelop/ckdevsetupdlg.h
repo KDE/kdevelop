@@ -31,6 +31,7 @@ class QLabel;
 class QFrame;
 class QButtonGroup;
 class CCompletionOpts;
+class CCodeTemplateOpts;
 
 #include <kdialogbase.h>
 #include <kaccel.h>
@@ -55,7 +56,7 @@ private:
   void addGeneralTab();
   void addKeysTab();
   void addDocTab();
-  void addCodeCompletionTab();
+  void addEnhancedCodingTab();
   /** adds the compiler page for setting up the compile environment */
   void addCompilerTab();
   void addDebuggerTab();
@@ -133,6 +134,8 @@ private:
 
   // code completion page
   CCompletionOpts* completionOptsDlg;
+  // code template page
+  CCodeTemplateOpts* codeTemplateOptsDlg;
 };
 
 #endif
