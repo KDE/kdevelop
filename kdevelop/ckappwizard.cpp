@@ -2269,6 +2269,7 @@ void CKAppWizard::slotProcessExited() {
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
+  project->setMakeOptions ("-j1");
   project->setCXXFLAGS ("-O0 -g3 -Wall");   // default value is to use debugging
 
   if ( kickeritem->isSelected()) {
