@@ -187,6 +187,8 @@ void GrepViewWidget::childFinished(bool normal, int status)
     if (status == 123 && numRows() > 1)
         status = 0;
 
+    insertItem(new ProcessListBoxItem(i18n("*** %1 match found. ***", "*** %1 matches found. ***", numRows() - 1).arg(numRows() - 1), ProcessListBoxItem::Diagnostic));
+
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
 }
@@ -208,7 +210,7 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
 {
     int pos;
     QString filename, linenumber, rest;
-    
+
     QString str = line;
     if ( (pos = str.find(':')) != -1)
         {
