@@ -66,7 +66,7 @@ static void guessAuthorAndEmail(QString *author, QString *email)
 
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : AppWizardDialogBase(parent, name), m_pCurrentAppInfo(0)
+    : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0)
 {
   templates_listview->header()->hide();
   m_projectLocationWasChanged=false;
