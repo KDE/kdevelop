@@ -1,9 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
 kdevelop_SOURCES = cctviewdeclarationcmd.cpp cclasstooltreeview.cpp klangcombo.cpp grepdialog.cpp ctreeview.cpp ctreehandler.cpp cerrormessageparser.cpp ccvaddfolderdlg.cpp cclasstreehandler.cpp cbugreportdlg.cpp caddnewtranslationdlg.cpp ctoolsconfigdlg.cpp cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdoctree.cpp cdocbrowser.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
-kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
-SUBDIRS = docs classparser kdlgedit kwrite pics vc print templates toolbar tools 
+SUBDIRS = docs classparser kdlgedit kwrite pics vc print templates toolbar tools gfxview
 
 EXTRA_DIST = caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddlg.cpp caddclassmethoddlg.h caddexistingfiledlg.cpp caddexistingfiledlg.h cclasstooldlg.cpp cclasstooldlg.h cclassview.cpp cclassview.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h cdocbrowser.cpp cdocbrowser.h cdoctree.cpp cdoctree.h cdoctreepropdlg.cpp cdoctreepropdlg.h ceditwidget.cpp ceditwidget.h cfilepropdlg.cpp cfilepropdlg.h cfinddoctextdlg.cpp cfinddoctextdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevelop.cpp ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_kdlginit.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevelop_whatsthis.cpp ckdevinstall.cpp ckdevinstall.h ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h coutputwidget.cpp coutputwidget.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h debug.h kdevelop-project.xpm kdevelop.kdelnk kdevelop.xpm kdeveloprc kstartuplogo.cpp kstartuplogo.h kswallow.cpp kswallow.h ktipofday.cpp ktipofday.h main.cpp mini-kdevelop.xpm resource.h structdef.h x-kdevelop-project.kdelnk cexecuteargdlg.cpp cexecuteargdlg.h ctoolsconfigdlg.cpp ctoolsconfigdlg.h caddnewtranslationdlg.cpp caddnewtranslationdlg.h cbugreportdlg.cpp cbugreportdlg.h cclasstreehandler.cpp cclasstreehandler.h ccvaddfolderdlg.cpp ccvaddfolderdlg.h cerrormessageparser.cpp cerrormessageparser.h ctreehandler.cpp ctreehandler.h ctreeview.cpp ctreeview.h grepdialog.cpp grepdialog.h kdevelop-setup.kdelnk klangcombo.cpp klangcombo.h cctviewdeclarationcmd.h cclasstooltreeview.h cclasstooltreeview.cpp ccommand.h cctviewdeclarationcmd.cpp 
 
@@ -27,7 +27,7 @@ APPSDIR = $(kde_appsdir)/Applications
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser print vc
+SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser print vc gfxview
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -58,7 +58,7 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./vc/libvc.a ./print/libprint.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a -lkfile -lkfm -lkspell $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -lgdbm -ldl
+kdevelop_LDADD   = ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a -lkfile -lkfm -lkspell $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -lgdbm -ldl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
