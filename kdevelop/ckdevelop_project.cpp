@@ -281,8 +281,10 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-		file_open_popup->clear();
-		file_open_list.clear();
+
+    disableCommand(ID_CLASSBROWSER_WIZARD);
+    file_open_popup->clear();
+    file_open_list.clear();
   }
   slotStatusMsg(i18n("Ready."));
   if(mod){
@@ -806,12 +808,17 @@ void CKDevelop::newFile(bool add_to_project){
   if(!dlg.exec()) return; // cancel
   
   complete_filename = dlg.location() + dlg.fileName();
-  
+
+  // Get the filetype.
+  type = CProject::getType( complete_filename );
+  if(type == KDEV_DIALOG){
+      kdlgedit->slotFileCloseForceSave();
+      kdlg_edit_widget->newDialog();
+  }
   // load into the widget
   switchToFile(complete_filename);
   
-  // Get the filetype.
-  type = CProject::getType( complete_filename );
+  
   
   // add the file to the project if necessary
   if (dlg.addToProject() == true){
@@ -960,7 +967,9 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-	
+
+  enableCommand(ID_CLASSBROWSER_WIZARD);
+
   addRecentProject(file);
   project=true;
   return true;

@@ -109,24 +109,37 @@ void KDlgEdit::slotFileNew(){
 
 
 void KDlgEdit::slotOpenDialog(QString file){
-  if(file != dialog_file){
-    if(slotFileClose()){
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->show();
-      ((CKDevelop*)parent())->kdlg_get_prop_widget()->show();
-      ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",true);
-      ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",true);
-      ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_GENERATE);
-      ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_CLOSE);
-      ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE);
-      ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE_AS);
-      
-      dialog_file = file;
-      
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile(file);
-      ((CKDevelop*)parent())->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
+    if(file != dialog_file){
+	if(slotFileCloseForceSave()){
+	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->show();
+	    ((CKDevelop*)parent())->kdlg_get_prop_widget()->show();
+	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",true);
+	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",true);
+	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_GENERATE);
+	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_CLOSE);
+	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE);
+	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE_AS);
+	    
+	    dialog_file = file;
+	    
+	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile(file);
+	    ((CKDevelop*)parent())->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
+	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
+	}
     }
-  }
+}
+bool KDlgEdit::slotFileCloseForceSave(){
+    slotFileSave();
+    ((CKDevelop*)parent())->kdlg_get_edit_widget()->hide();
+    ((CKDevelop*)parent())->kdlg_get_prop_widget()->hide();
+    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
+    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
+    ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
+    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
+    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);
+    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE_AS);
+    dialog_file = "";
+    return true;
 }
 
 bool KDlgEdit::slotFileClose(){
@@ -1114,13 +1127,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
   if(props->getPropValue("isAutoRepeat") == "true"){
     *stream << varname_p + "setAutoRepeat(true);\n";
   }
-  //Pixmap
-  if(props->getPropValue("Pixmap") != ""){
-    if(local_includes.contains("#include <qpixmap.h>") == 0){
-      local_includes.append("#include <qpixmap.h>");
-    }
-    *stream << varname_p + "setPixmap(QPixmap(\""+props->getPropValue("Pixmap")+"\"));\n";
-  }
+  
   if(props->getPropValue("DisplayedColor") != ""){
     QColor col = Str2Color(props->getPropValue("DisplayedColor"));
     *stream << varname_p + "setColor(QColor("+QString().setNum(col.red()) + "," 
@@ -1365,8 +1372,8 @@ void KDlgEdit::slotDeleteDialog(QString file){
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-  if(!slotFileClose()) return;
-
+  slotFileCloseForceSave();
+  
   ((CKDevelop*)parent())->delFileFromProject(file); // relative filename
 
   CProject* prj = ((CKDevelop*)parent())->getProject(); 

@@ -314,6 +314,8 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_COMPILE_FILE);
  
   disableCommand(ID_KDLG_BUILD_GENERATE);
+
+  disableCommand(ID_CLASSBROWSER_WIZARD);
   
 
   disableCommand(ID_HELP_BACK);

@@ -40,6 +40,7 @@ public slots:
 /** New Dialog - this is not for an extra dialog but is called if the kdevelop file new selects it for creating a new dialog */
 void slotFileNew();
   
+ bool  slotFileCloseForceSave(); 
   /** closes the current dialog and dialogfile- including created sourcefiles */
   bool slotFileClose();
   /** save the dialog file -- request if files should be generated and saved */
