@@ -636,7 +636,7 @@ bool DebuggerPart::startDebugger()
     gdbOutputWidget->clear();
     gdbOutputWidget->setEnabled(true);
 
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", true))
+    if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
     {
         floatingToolBar = new DbgToolBar(this, mainWindow()->main());
         floatingToolBar->show();
