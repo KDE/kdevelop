@@ -147,12 +147,13 @@ private:
 class QPainter;
 class QColorGroup;
 class QFontMetrics;
+class DocumentationPlugin;
 
 /**Documentation configuration item.*/
 class ConfigurationItem: public QCheckListItem
 {
 public:
-    ConfigurationItem(QListView *parent, const QString &title, const QString &url,
+    ConfigurationItem(QListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
         bool indexPossible, bool fullTextSearchPossible);
 
     virtual QString title() const { return m_title; }
@@ -176,6 +177,8 @@ public:
     bool indexPossible() const { return m_indexPossible; }
     bool fullTextSearchPossible() const { return m_fullTextSearchPossible; }
 
+    DocumentationPlugin * docPlugin() { return m_docPlugin; }
+
 private:
     QString m_title;
     QString m_url;
@@ -187,6 +190,8 @@ private:
 
     bool m_indexPossible;
     bool m_fullTextSearchPossible;
+
+    DocumentationPlugin * m_docPlugin;
 };
 
 

@@ -181,11 +181,12 @@ IndexItem::List IndexItem::urls() const
 
 //class ConfigurationItem
 
-ConfigurationItem::ConfigurationItem(QListView *parent, const QString &title, const QString &url,
+ConfigurationItem::ConfigurationItem(QListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
     bool indexPossible, bool fullTextSearchPossible)
     :QCheckListItem(parent, "", QCheckListItem::CheckBox), m_title(title), m_url(url),
     m_origTitle(title), m_contents(true), m_index(false), m_fullTextSearch(false),
-    m_indexPossible(indexPossible), m_fullTextSearchPossible(fullTextSearchPossible)
+    m_indexPossible(indexPossible), m_fullTextSearchPossible(fullTextSearchPossible),
+    m_docPlugin( plugin )
 {
     setText(3, m_title);
     setText(4, m_url);
@@ -399,7 +400,7 @@ void DocumentationPlugin::addCatalog(DocumentationCatalogItem *item)
 void DocumentationPlugin::addCatalogConfiguration(KListView *configurationView,
     const QString &title, const QString &url)
 {
-    new ConfigurationItem(configurationView, title, url, 
+    new ConfigurationItem(configurationView, this, title, url, 
         hasCapability(Index), hasCapability(FullTextSearch));
 }
 
@@ -512,7 +513,7 @@ void DocumentationPlugin::loadCatalogConfiguration(KListView *configurationView)
             && namedCatalogs[it.key()]->isProjectDocumentationItem())
             continue;
         
-        ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
+        ConfigurationItem *item = new ConfigurationItem(configurationView, this, it.key(), it.data(),
             hasCapability(Index), hasCapability(FullTextSearch));
         config->setGroup("TOC Settings");
         item->setContents(config->readBoolEntry(item->title(), true));
@@ -536,8 +537,14 @@ void DocumentationPlugin::saveCatalogConfiguration(KListView *configurationView)
     QListViewItemIterator it(configurationView);
     while (it.current())
     {
-        config->setGroup("Locations");
         ConfigurationItem *confItem = dynamic_cast<ConfigurationItem*>(it.current());
+        if ( confItem->docPlugin() != this ) 
+        {
+            ++it;
+            continue;
+        }
+
+        config->setGroup("Locations");
         if (confItem->isChanged())
             config->deleteEntry(confItem->origTitle());
         config->writePathEntry(confItem->title(), confItem->url());
