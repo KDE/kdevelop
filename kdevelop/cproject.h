@@ -24,7 +24,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qfileinfo.h>
-
+#include "ctags/cctags.h"
 
 class VersionControl;
 class KSimpleConfig;
@@ -503,6 +503,11 @@ public: // Public methods
   /** check if the Project is empty. */
   bool isEmpty() ;
 
+  /** access to ctags database */
+  CTagsDataBase& ctagsDataBase() {return m_ctagsDataBase;}
+
+  /** access to ctags command */
+  CtagsCommand& ctags_cmd() {return m_ctags_cmd;}
 protected:
 
   /** Write an entry to the project file.
@@ -552,5 +557,11 @@ private: // Protected attributes
   QString topMakefile;
   /** makefile that calls autoconf automake to create a configure script */
   QString cvsMakefile;
+
+  /** ctags database object */
+  CTagsDataBase m_ctagsDataBase;
+
+  /** ctags command, and command line options */
+  CtagsCommand m_ctags_cmd;
 };
 #endif

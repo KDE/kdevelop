@@ -1151,6 +1151,8 @@ void CKDevelop::slotProjectLoadTags()
   //
   debug("in slotProjectLoadTags()\n");
   slotStatusMsg(i18n("Loading tags file..."));
+  QTime dt;
+  dt.start();
   QString filename = "tags";
   if (!QFileInfo(filename).exists()) {
     // warn user that the tag file does not exist
@@ -1213,61 +1215,13 @@ void CKDevelop::slotProjectLoadTags()
   }
   tagsfile.close();
   tags.statistics();
+  kdDebug() << "loading tags file completed, time: " << dt.elapsed()/1000.0 << " [s]\n";
 }
-
-
 
 void CKDevelop::slotProjectMakeTags()
 {
-  QProgressBar* pProgressBar = getProgressBar();
-  ASSERT(pProgressBar);
   slotStatusMsg(i18n("Creating tags file..."));
-
-  // set up command line options for exuberant ctags
-  //cerr << "in CKDevelop::slotProjectMakeTags \n";
-  QString ctags_cmd = "ctags";
-  QString ctags_opt_tot = "--totals=yes" ;
-  QString ctags_opt_excmd = "--excmd=pattern" ;
-  QString ctags_opt_scope = "--file-scope=no" ;
-  QString ctags_opt_file = "--file-tags=yes" ;
-  QString ctags_opt_ctypes = "--c-types=+C+p" ;
-  QString prj_dir = prj->getProjectDir();
-  QString tag_file = prj_dir + "/tags";
-  //cerr << "project directory: " << prj_dir << "\n";
-
-  // collect all files belonging to the project
-  QString files;
-  QStrListIterator isrc(prj->getSources());
-  int nfiles=0;
-  while (!isrc.atLast())
-  {
-      files = files + *isrc + " ";
-      ++isrc;
-      ++nfiles;
-  }
-  QStrListIterator ihdr(prj->getHeaders());
-  while (!ihdr.atLast())
-  {
-      files = files + *ihdr + " ";
-      ++ihdr;
-      ++nfiles;
-  }
-  pProgressBar->setTotalSteps(nfiles);
-  pProgressBar->show();
-  // use a shell_process that was already set up
-  shell_process.clearArguments();
-  shell_process << ctags_cmd ;
-  shell_process << ctags_opt_tot ;
-  shell_process << ctags_opt_excmd ;
-  shell_process << ctags_opt_scope ;
-  shell_process << ctags_opt_file ;
-  shell_process << ctags_opt_ctypes ;
-  shell_process << "-f" ;
-  shell_process << tag_file ;
-  shell_process << files ;
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  // this is lame i know
-  pProgressBar->setProgress(nfiles);
+  prj->ctagsDataBase().create_tags(shell_process,*prj);
 }
 
 void CKDevelop::slotAddSpec(QString path)

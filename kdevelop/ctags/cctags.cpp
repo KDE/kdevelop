@@ -15,17 +15,52 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kdebug.h>
+#include <kprocess.h>
+#include "../cproject.h"
 #include "cctags.h"
 
-CCtags::CCtags(){
-    debug("in ctags constructor\n");
+
+CTagsDataBase::CTagsDataBase() : m_init(false)
+{
+    kdDebug() << "in ctags constructor\n";
 }
-CCtags::~CCtags(){
+CTagsDataBase::~CTagsDataBase(){
 }
-/** Create a tags file for the current project. The file is stored in the project parent 
-directory. Later this should be configurable.  */
-void CCtags::make_tags(){
-}
-/** Open, read and parse the tags file. */
-void CCtags::load_tags(){
+
+/** create a tags file for a CProject */
+void CTagsDataBase::create_tags(KShellProcess& process, CProject& project)
+{
+  kdDebug() << "creating tags file\n";
+  // collect all files belonging to the project
+  QString files;
+  QStrListIterator isrc(project.getSources());
+  while (!isrc.atLast())
+  {
+      files = files + *isrc + " ";
+      ++isrc;
+  }
+  QStrListIterator ihdr(project.getHeaders());
+  while (!ihdr.atLast())
+  {
+      files = files + *ihdr + " ";
+      ++ihdr;
+  }
+  // get the ctags command
+  CtagsCommand& cmd = project.ctags_cmd();
+  // set the name of the output file
+  m_file = project.getProjectDir() + "/tags";
+
+  // use a shell_process that was already set up
+  process.clearArguments();
+  process << cmd.m_command;
+  process << cmd.m_totals;
+  process << cmd.m_excmd_pattern;
+  process << cmd.m_file_scope;
+  process << cmd.m_file_tags;
+  process << cmd.m_ctypes;
+  process << "-f" ;
+  process << m_file ;
+  process << files ;
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
