@@ -213,7 +213,7 @@ void BashSupportPart::parse(const QString &fileName)
 		//KRegExp methodre("\\b([\\d\\w]+[\\s]*)\\([\\s]*\\)");
 		QRegExp methodre("^\\s*(\\w+)\\s*\\(\\s*\\)");
 		QRegExp varre( "^\\s*(\\w+)[=]" );
-		QRegExp forvarre("^\\sfor\\s+\\w+\\s+in\\s+");
+		QRegExp forvarre("\\bfor[\\s]+([\\d\\w]+)[\\s]+in[\\s]+");
 
 		QTextStream stream(&f);
 		while (!stream.atEnd())
@@ -245,9 +245,14 @@ void BashSupportPart::parse(const QString &fileName)
 		}
 		f.close();
 
+		kdDebug() << "Trying to add list..." << endl;
+		codeModel()->addFile( m_file );
 		VariableList attrList = codeModel()->globalNamespace()->variableList();
 		for (VariableList::Iterator it = attrList.begin(); it != attrList.end(); ++it)
+		{
+			kdDebug() << "Adding " << (*it)->name() << endl;
 			m_vars.append((*it)->name());
+		}
 		m_cc->setVars(m_vars);
 
 		codeModel()->addFile( m_file );
@@ -334,17 +339,19 @@ void BashCodeCompletion::setVars(QStringList lst)
 
 QValueList<KTextEditor::CompletionEntry> BashCodeCompletion::getVars(const QString &startText)
 {
-	kdDebug() << "getVars" << endl;
+	kdDebug() << "getVars for " << startText << endl;
 	QValueList<KTextEditor::CompletionEntry> varList;
 	QValueList<QString>::ConstIterator it;
 	for (it = m_vars.begin(); it != m_vars.end(); ++it) {
 		QString var = "$" + (*it);
+		kdDebug() << "Compair " << var << endl;
 		if( var.startsWith( startText ))
 		{
 		  KTextEditor::CompletionEntry e;
 		  e.text = var;
 		  //e.postfix ="";
 		  //e.prefix ="";
+		  kdDebug() << "getVar: " << var << endl;
 		  varList.append(e);
 		}
 	}
@@ -380,11 +387,8 @@ void BashCodeCompletion::cursorPositionChanged()
 		{
 
 			// We are in completion mode
-
 		      QString startMatch = prevReg.group(0);
-
 		      kdDebug() << "Matching: " << startMatch << endl;
-
 		      m_completionBoxShow=true;
 		      m_codeInterface->showCompletionBox(getVars(startMatch),2);
 		}
