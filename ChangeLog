@@ -1,3 +1,8 @@
+1999-11-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Bugfix for writing of initial tool configuration 
+	  by Marcus Gruendler <runner@pool.informatik.rwth-aachen.de>
+	* Trying to enable srcdir != builddir
+
 1999-11-17  Sandy Meier  <smeier@rz.uni-potsdam.de>	
 	* commited patch by Alex Kern, Alexander.Kern@saarsoft.de
 	  new class dialog can now generate classes in subdirs

@@ -655,6 +655,7 @@ void CKDevInstall::slotAuto() // proceed >>
     kdbg_str="kdbg"+found+"\n";
 		tools_exe.append("kdbg");
 		tools_entry.append("K&Debugger");
+		tools_argument.append(" ");
 	}
   else
     kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
@@ -663,6 +664,7 @@ void CKDevInstall::slotAuto() // proceed >>
     kiconedit_str="KIconedit"+found+"\n";
 		tools_exe.append("kiconedit");
 		tools_entry.append("K&IconEdit");
+		tools_argument.append(" ");
 	}
   else
     kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible\n";
@@ -671,6 +673,7 @@ void CKDevInstall::slotAuto() // proceed >>
     kpaint_str="KPaint"+found+"\n";
 		tools_exe.append("kpaint");
 		tools_entry.append("K&Paint");
+		tools_argument.append(" ");
 	}
   else
     kpaint_str=i18n("KPaint")+not_found+"\n";
@@ -680,6 +683,7 @@ void CKDevInstall::slotAuto() // proceed >>
     ktranslator_str="KTranslator"+found+"\n";
 		tools_exe.append("ktranslator");
 		tools_entry.append("K&Translator");
+		tools_argument.append(" ");
 	}
   else
     ktranslator_str="KTranslator"+not_found+"\n";
