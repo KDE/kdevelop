@@ -68,12 +68,17 @@ class CParsedContainer;
 class CParsedClass;
 class CParsedAttribute;
 class KStatusBar;
-class CEditWidget;
+// does not exist anymore (rokrau 6/28/01)
+//class CEditWidget;
 class COutputWidget;
 class CMakeOutputWidget;
 class CKDevAccel;
 class KProcess;
-class KWriteView;
+namespace Kate {
+class Document;
+class View;
+}
+
 class CKonsoleWidget;
 class QStringList;
 class KPrinter;
@@ -170,10 +175,10 @@ public:
 
   void setKeyAccel();
   void setToolmenuEntries();
-	
+    
   /** sets the Main window caption for KDevelop */
   void setMainCaption(int item=-1);
-  			
+              
   void newFile(bool add_to_project,const char* dir=0);
 
   /** prepare readProjectFile(..), creates and inits the project object */
@@ -480,9 +485,10 @@ public:
   // OPTIONS-Menu entries
   ///////////////////////
   void slotOptionsEditor();
-  void slotOptionsEditorColors();
-  void slotOptionsSyntaxHighlightingDefaults();
-  void slotOptionsSyntaxHighlighting();
+// replaced by kate's integrated setup dialog
+//  void slotOptionsEditorColors();
+//  void slotOptionsSyntaxHighlightingDefaults();
+//  void slotOptionsSyntaxHighlighting();
   /** shows the Browser configuration dialog */
   void slotOptionsDocBrowser();
   /** shows the Tools-menu configuration dialog */
@@ -521,12 +527,12 @@ public:
   void slotBookmarksNext();
   /** goto the previous bookmark in the current document */
   void slotBookmarksPrevious();
-	/**
-	 * Open an URL in the Documentation Browser.
-	 *
-	 * @param file The URL to open.
-	 */
-	void openBrowserBookmark(const QString& file);
+    /**
+     * Open an URL in the Documentation Browser.
+     *
+     * @param file The URL to open.
+     */
+    void openBrowserBookmark(const QString& file);
 
   ////////////////////////
   // HELP-Menu entries
@@ -606,7 +612,7 @@ public:
 
   /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);
-	
+    
   ///////////// -- the methods for the treeview selection
   /** click action on LFV */
   void slotLogFileTreeSelected(QString file);
@@ -639,12 +645,12 @@ public:
   /** change Statusbar status of INS and OVR */
   void slotNewStatus();
   /** change copy & cut status */
-  void slotCPPMarkStatus(KWriteView *, bool);
-  void slotHEADERMarkStatus(KWriteView *, bool);
-  void slotMarkStatus(KWriteView *, bool);
+  void slotCPPMarkStatus(Kate::View *, bool);
+  void slotHEADERMarkStatus(Kate::View *, bool);
+  void slotMarkStatus(Kate::View *, bool);
   void slotBROWSERMarkStatus(KHTMLPart *, bool);
   /** recognize change of Clipboard data */
-  void slotClipboardChanged(KWriteView *, bool);
+  void slotClipboardChanged(Kate::View *, bool);
   /** change Statusbar status of Line and Column */
   void slotNewLineColumn();
   void slotNewUndo();
@@ -836,9 +842,9 @@ public: // Public methods
   /** Get the progress bar */
   QProgressBar* getProgressBar() { return statProg; };
 
-	/** Get the last search text */
-	QString & getDocSearchText() { return doc_search_text; };
-	
+    /** Get the last search text */
+    QString & getDocSearchText() { return doc_search_text; };
+    
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 
@@ -868,7 +874,7 @@ private:
   /** */
   bool isToolViewVisible(QWidget* pToolView);
   /** */
-	void adjustTTreesToolButtonState();
+    void adjustTTreesToolButtonState();
   /** */
   void adjustTOutputToolButtonState();
 
@@ -880,7 +886,7 @@ public:
 private:
   KFileOpenWithHandler fowh;
   //the menus for kdevelop main
-  QPopupMenu* file_menu;				
+  QPopupMenu* file_menu;                
   QPopupMenu* recent_projects_menu;
   //MB
   QPopupMenu* doctool_menu;
@@ -891,7 +897,7 @@ private:
   QPopupMenu* view_menu;
   QPopupMenu* view_tab_menu;
   QPopupMenu* bookmarks_menu;
-	//  QPopupMenu* doc_bookmarks;
+    //  QPopupMenu* doc_bookmarks;
 
   KStatusBarLabel *m_statusLabel;
 
@@ -903,7 +909,7 @@ private:
   QPopupMenu* options_menu;
   KHelpMenu* help_menu;
   QWhatsThis* whats_this;
-	
+    
   QPopupMenu* history_prev;
   QPopupMenu* history_next;
   QPopupMenu* file_open_popup;
@@ -918,13 +924,13 @@ private:
    * the declaration or the definition of the selected item. */
   bool cv_decl_or_impl;
 
-  QStrList file_open_list;	
+  QStrList file_open_list;    
 
   /** QValueList containing the Tool Apps */
   ToolAppList toolList;
 
   KCompletion* class_comp;
-  KCompletion* method_comp;	
+  KCompletion* method_comp;    
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 
@@ -958,9 +964,9 @@ private:
   // for the browser
   QStrList history_list;
   QStrList history_title_list;
-	//  QStrList doc_bookmarks_list;
+    //  QStrList doc_bookmarks_list;
   //  QStrList doc_bookmarks_title_list;
-	
+    
   ///////////////////////////////
   //some widgets for the mainview
   ///////////////////////////////

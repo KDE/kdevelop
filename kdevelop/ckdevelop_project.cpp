@@ -22,7 +22,8 @@
 #include "caddexistingfiledlg.h"
 #include "caddnewtranslationdlg.h"
 #include "cclassview.h"
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
+
 #include "cfilepropdlg.h"
 #include "cgeneratenewfile.h"
 #include "ckappwizard.h"
@@ -38,7 +39,11 @@
 #include "debug.h"
 #include "kpp.h"
 #include "docviewman.h"
-#include "kwdoc.h"
+//#include "kwdoc.h"
+#include <../../kate-cvs/interfaces/document.h>
+#include <../../kate-cvs/interfaces/view.h>
+
+
 #include "kdevsession.h"
 #include <kdebug.h>
 #include <kcursor.h>
@@ -1408,16 +1413,16 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 CProject* CKDevelop::prepareToReadProjectFile(QString file)
 {
   CProject* lNewProject = new CProject(file);
-	if (!(lNewProject->prepareToReadProject())) {
+    if (!(lNewProject->prepareToReadProject())) {
     delete lNewProject;
     return 0L;
-	}
-	return lNewProject;
+    }
+    return lNewProject;
 }
 
 void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
 {
-	// everything seems to be OK
+    // everything seems to be OK
   lNewProject->readProject();
 
   QString str;
@@ -1641,17 +1646,17 @@ void SaveAllDialog::cancel()
  */
 void CKDevelop::slotTagSwitchTo()
 {
-  CEditWidget* pEditView = m_docViewManager->currentEditView();
+  Kate::View* pEditView = m_docViewManager->currentEditView();
   if (!pEditView) return;
   slotStatusMsg(i18n("Switch between Source and Header Files..."));
   bool useCTags = (bCTags && hasProject())?true:false ;
-  QFileInfo curFileInfo = QFileInfo(pEditView->getName());
+  QFileInfo curFileInfo = QFileInfo(pEditView->getDoc()->docName());
   QString curFileName = curFileInfo.fileName();
   QString curFileDir = curFileInfo.dirPath();
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
   // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
-  bool bToHeader = true;
+  bool bToHeader=false;
   if (m_docViewManager->curDocIsHeaderFile()) {
     if (useCTags) {
       int ntags;

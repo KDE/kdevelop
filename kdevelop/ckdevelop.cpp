@@ -22,7 +22,8 @@
 #include "cclassview.h"
 #include "setup/ccreatedocdatabasedlg.h"
 #include "cdocbrowser.h"
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
+//#include "cerrormessageparser.h"
 #include "cexecuteargdlg.h"
 #include "cfinddoctextdlg.h"
 #include "ckdevaccel.h"
@@ -51,7 +52,11 @@
 #include "./dbg/framestack.h"
 #include "./dbg/memview.h"
 #include "./dbg/disassemble.h"
-#include "./kwrite/kwdoc.h"
+
+//#include "./kwrite/kwdoc.h"
+#include <../../kate-cvs/interfaces/document.h>
+#include <../../kate-cvs/interfaces/view.h>
+
 #include "wzconnectdlgimpl.h"
 #include "docviewman.h"
 #include "kdevsession.h"
@@ -186,7 +191,7 @@ void CKDevelop::slotFileClose()
 void CKDevelop::slotFileSave()
 {
   if (!m_docViewManager->currentEditView()) return;
-  QString filename = m_docViewManager->currentEditView()->getName();
+  QString filename = m_docViewManager->currentEditView()->getDoc()->docName();
   QString sShownFilename = QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
   
@@ -263,7 +268,7 @@ void CKDevelop::slotFilePrint()
   // then call printImpl(filesToPrint, printer);
   // if you're using qt or printer->
 
-  QString file = m_docViewManager->currentEditView()->getName();
+  QString file = m_docViewManager->currentEditView()->getDoc()->docName();
   if (file.isEmpty())
     return;
 
@@ -449,7 +454,7 @@ void CKDevelop::slotEditComment()
 void CKDevelop::slotEditUncomment()
 {
   if (m_docViewManager->currentEditView())
-    m_docViewManager->currentEditView()->unComment();
+    m_docViewManager->currentEditView()->uncomment();
 }
 
 /*
@@ -610,9 +615,9 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       bToggleOn = false;
   }
 
-	//----------------------
-	// Step 1: checks the state of the tool-views and their positions
-	//----------------------
+    //----------------------
+    // Step 1: checks the state of the tool-views and their positions
+    //----------------------
   QListIterator<KDockWidget> it( *pToolViewCoverList);
   QList<KDockWidget> rootDockWidgetList;
   QListIterator<KDockWidget> it2( rootDockWidgetList);
@@ -670,9 +675,9 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
     }
   }
 
-	//----------------------
-	// Step 2: toggle the tool-view group from the users point of view
-	//----------------------
+    //----------------------
+    // Step 2: toggle the tool-view group from the users point of view
+    //----------------------
 
   // now really show/hide the chosen dockwidgets as well as toggling the view menu button
   if (bToggleOn) {
@@ -687,11 +692,11 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       else {
         bool bDockBackIsPossible = pCur->isDockBackPossible();
         if (bDockBackIsPossible) {
-					QWidget* oldParentWdg = pCur->parentWidget();
+                    QWidget* oldParentWdg = pCur->parentWidget();
           pCur->dockBack();
-					if (pCur->parentWidget() == oldParentWdg) {
-					  bDockBackIsPossible = false;
-					}
+                    if (pCur->parentWidget() == oldParentWdg) {
+                      bDockBackIsPossible = false;
+                    }
         }
         if (!bDockBackIsPossible) {
           // oops...somehow dockBack() failed :-(
@@ -882,7 +887,7 @@ void CKDevelop::slotViewTabTextIcons(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotBuildCompileFile(){
-  KWriteDoc* pCurrentDoc = m_docViewManager->currentEditDoc();
+  Kate::Document* pCurrentDoc = m_docViewManager->currentEditDoc();
   if (!pCurrentDoc)
     return;
 
@@ -895,13 +900,13 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  slotStatusMsg(i18n("Compiling %1").arg(pCurrentDoc->fileName()));
+  slotStatusMsg(i18n("Compiling %1").arg(pCurrentDoc->docName()));
   messages_widget->start();
   process.clearArguments();
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  kdDebug() << "ObjectFile= " << fileinfo.baseName()+".o";
-  QFileInfo fileinfo(pCurrentDoc->fileName());
+  QFileInfo fileinfo(pCurrentDoc->docName());
   QString actualDir=fileinfo.dirPath();
   QDir::setCurrent(actualDir);
 //  error_parser->setStartDir(actualDir);
@@ -1116,7 +1121,8 @@ void CKDevelop::slotDebugActivator(int id)
     case ID_DEBUG_RUN_CURSOR:
       ASSERT(dbgInternal);
       if (m_docViewManager->currentEditView())
-        m_docViewManager->currentEditView()->slotRunToCursor();
+        kdDebug() << "m_docViewManager->currentEditView()->slotRunToCursor() not available\n";
+        //m_docViewManager->currentEditView()->slotRunToCursor();
       break;
     case ID_DEBUG_STEP:
       ASSERT(dbgInternal && dbgController);
@@ -1160,7 +1166,8 @@ void CKDevelop::slotDebugRunToCursor()
 
   if (!m_docViewManager->currentEditView())
     return;
-  m_docViewManager->currentEditView()->slotRunToCursor();
+  kdDebug() << "m_docViewManager->currentEditView()->slotRunToCursor() not available\n";
+  //m_docViewManager->currentEditView()->slotRunToCursor();
 }
 
 void CKDevelop::slotDebugStepInto()
@@ -1222,7 +1229,8 @@ void CKDevelop::slotDebugToggleBreakpoint()
     return;
 
   if (!m_docViewManager->currentEditView()) return;
-  m_docViewManager->currentEditView()->slotToggleBreakpoint();
+//  m_docViewManager->currentEditView()->slotToggleBreakpoint();
+  kdDebug() << "m_docViewManager->currentEditView()->slotToggleBreakpoint() not available\n";
 }
 
 
@@ -1257,8 +1265,9 @@ void CKDevelop::slotDebugStop()
 #endif
   if (m_docViewManager->currentEditView())
   {
-    m_docViewManager->currentEditView()->clearStepLine();
-    brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
+//    m_docViewManager->currentEditView()->clearStepLine();
+    kdDebug() << "m_docViewManager->currentEditView()->clearStepLine() not available\n";
+    brkptManager->refreshBP(m_docViewManager->currentEditView()->getDoc()->docName());
   }
 
   if (dbgInternal && dbgController) {
@@ -1287,15 +1296,24 @@ void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber
 {
   if (filename.isEmpty())
   {
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->clearStepLine();
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//    if (m_docViewManager->currentEditView())
+//      m_docViewManager->currentEditView()->clearStepLine();
+    kdDebug() << "m_docViewManager->currentEditView()->clearStepLine() not available\n";
   }
   else
   {
     // The editor starts at line 0 but GDB starts at line 1. Fix that now!
     switchToFile(filename);
-    m_docViewManager->currentEditView()->clearStepLine();
-    m_docViewManager->currentEditView()->setStepLine(linenumber-1);
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//    m_docViewManager->currentEditView()->clearStepLine();
+//    m_docViewManager->currentEditView()->setStepLine(linenumber-1);
+    kdDebug() << "m_docViewManager->currentEditView()->clearStepLine() not available\n";
+    kdDebug() << "m_docViewManager->currentEditView()->setStepLine() not available\n";
 //    machine_widget(address);
   }
 }
@@ -1308,16 +1326,25 @@ void CKDevelop::slotDebugGoToSourcePosition(const QString& filename,int linenumb
 void CKDevelop::slotDebugRefreshBPState(const Breakpoint* BP)
 {
   if (!m_docViewManager->currentEditView()) return;
-  if (BP->hasSourcePosition() && (m_docViewManager->currentEditView()->getName() == BP->filename()))
+  if (BP->hasSourcePosition() &&
+      (m_docViewManager->currentEditView()->getDoc()->docName() == BP->filename()))
   {
     if (BP->isActionDie())
     {
-      m_docViewManager->currentEditView()->delBreakpoint(BP->lineNo()-1);
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//      m_docViewManager->currentEditView()->delBreakpoint(BP->lineNo()-1);
+      kdDebug() << "m_docViewManager->currentEditView()->delBreakpoint() not available\n";
       return;
     }
 
     // The editor starts at line 0 but GDB starts at line 1. Fix that now!
-    m_docViewManager->currentEditView()->setBreakpoint(BP->lineNo()-1, -1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//    m_docViewManager->currentEditView()->setBreakpoint(BP->lineNo()-1, -1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
+    kdDebug() << "m_docViewManager->currentEditView()->setBreakpoint() not available\n";
   }
 }
 
@@ -1363,8 +1390,12 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
   if (state & s_appBusy)
   {
     stateIndicator = "A";
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->clearStepLine();
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//    if (m_docViewManager->currentEditView())
+//      m_docViewManager->currentEditView()->clearStepLine();
+    kdDebug() << "m_docViewManager->currentEditView()->clearStepLine() not available\n";
   }
 
   if (state & (s_dbgNotStarted|s_appNotStarted))
@@ -1373,8 +1404,12 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
   if (state & s_programExited)
   {
     stateIndicator = "E";
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->clearStepLine();
+//  i have no other way than disabling this for now, the debugger will not be
+//  functional yet, we have to see how to solve this with kate's interface
+//  it should be possible though. (rokrau 6/28/01)
+//    if (m_docViewManager->currentEditView())
+//      m_docViewManager->currentEditView()->clearStepLine();
+    kdDebug() << "m_docViewManager->currentEditView()->clearStepLine() not available\n";
   }
 
   statusBar()->changeItem(stateIndicator, ID_STATUS_DBG);
@@ -1845,7 +1880,7 @@ void CKDevelop::slotBuildRebuildAll()
 {
   slotStatusMsg(i18n("Running make clean and make all..."));
   RunMake(CMakefile::toplevel,"clean");
-	next_job = "all";
+    next_job = "all";
 }
 void CKDevelop::slotBuildDistClean()
 {
@@ -1952,9 +1987,9 @@ void CKDevelop::slotToolsTool(int tool)
      
   // This allows us to replace the macro %H with the header file name, %S with the source file name
   // and %D with the project directory name.  Any others we should have?
-  KWriteDoc* ced = m_docViewManager->currentEditDoc() ;
+  Kate::Document* ced = m_docViewManager->currentEditDoc() ;
   if (ced) {
-    QString fName = ced->fileName();
+    QString fName = ced->docName();
     argument.replace( QRegExp("%H"), fName );
     argument.replace( QRegExp("%S"), fName );
   }
@@ -2022,23 +2057,25 @@ void CKDevelop::slotOptionsEditor(){
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotOptionsEditorColors(){
-  slotStatusMsg(i18n("Setting up the Editor's colors..."));
-  m_docViewManager->doOptionsEditorColors();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
-  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
-  m_docViewManager->doOptionsSyntaxHighlightingDefaults();
-  slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotOptionsSyntaxHighlighting(){
-  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
-  m_docViewManager->doOptionsSyntaxHighlighting();
-  slotStatusMsg(i18n("Ready."));
-}
+// we use kate's new integrated setup dialog for this
+// (rokrau 6/28/01)
+//void CKDevelop::slotOptionsEditorColors(){
+//  slotStatusMsg(i18n("Setting up the Editor's colors..."));
+//  m_docViewManager->doOptionsEditorColors();
+//  slotStatusMsg(i18n("Ready."));
+//}
+//
+//void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
+//  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
+//  m_docViewManager->doOptionsSyntaxHighlightingDefaults();
+//  slotStatusMsg(i18n("Ready."));
+//}
+//
+//void CKDevelop::slotOptionsSyntaxHighlighting(){
+//  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
+//  m_docViewManager->doOptionsSyntaxHighlighting();
+//  slotStatusMsg(i18n("Ready."));
+//}
 
 void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(i18n("Configuring Documentation Browser..."));
@@ -2062,14 +2099,14 @@ void CKDevelop::slotOptionsDocBrowser(){
 }
 
 void CKDevelop::slotOptionsToolsConfigDlg(){
-	slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
+    slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
 //  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
-	CToolsConfigDlg configdlg(this,"configdlg");
-	configdlg.show();
+    CToolsConfigDlg configdlg(this,"configdlg");
+    configdlg.show();
 
-	tools_menu->clear();
-	setToolmenuEntries();
-	slotStatusMsg(i18n("Ready."));
+    tools_menu->clear();
+    setToolmenuEntries();
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsSpellchecker(){
@@ -2099,7 +2136,7 @@ void CKDevelop::slotOptionsSpellchecker(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
-	int curMdiMode = mdiMode();	// ask QextMDI what the current mode is
+    int curMdiMode = mdiMode();    // ask QextMDI what the current mode is
   CKDevSetupDlg* setup= new CKDevSetupDlg( accel, this, "Setup", curMdiMode);
   // setup->show();
   if (setup->exec())
@@ -2109,7 +2146,7 @@ void CKDevelop::slotOptionsKDevelop(){
      doc_tree->changePathes();
      doc_tree->refresh(prj);
     }
-		curMdiMode = setup->mdiMode();	// use new set mode
+        curMdiMode = setup->mdiMode();    // use new set mode
   }
 
   delete setup;
@@ -2193,15 +2230,15 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
   QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
 
-	QDialog parentDlg(this, "update_kde_doc_parentdlg", true);
+    QDialog parentDlg(this, "update_kde_doc_parentdlg", true);
   parentDlg.setCaption(i18n("KDE Library Documentation Update..."));
   CUpdateKDEDocDlg embeddedDlg(&shell_process, kdeDocu, qtDocu, &parentDlg, true, "update_kde_doc_dlg");
-	QObject::connect(	embeddedDlg.cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()) );
+    QObject::connect(    embeddedDlg.cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()) );
 
-	QVBoxLayout* vbl = new QVBoxLayout(&parentDlg);
-	vbl->addWidget(&embeddedDlg);
+    QVBoxLayout* vbl = new QVBoxLayout(&parentDlg);
+    vbl->addWidget(&embeddedDlg);
 
-	if (parentDlg.exec()){
+    if (parentDlg.exec()){
     slotStatusMsg(i18n("Generating Documentation..."));
     setToolMenuProcess(false);
     if (embeddedDlg.isUpdated())
@@ -2210,7 +2247,7 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
         config->sync();
         // doc_tree->refresh(prj);
         // doing this by next_job ... if the documentation generation has finished
-  			next_job="doc_refresh";
+              next_job="doc_refresh";
     }
   }
 }
@@ -2227,21 +2264,21 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
   QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
 
-	QDialog parentDlg(this, "create_doc_database_parentdlg", true);
+    QDialog parentDlg(this, "create_doc_database_parentdlg", true);
   parentDlg.setCaption(i18n("Create Search Database..."));
   CCreateDocDatabaseDlg embeddedDlg(&parentDlg,"create_doc_database_dlg",&shell_process,kdeDocu,qtDocu,foundGlimpse, foundHtDig, false);
 
   KButtonBox bb( &parentDlg);
   bb.addStretch();
   QPushButton* ok_button  = bb.addButton( i18n("OK") );
-  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );	
+  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );    
   ok_button->setDefault(true);
   connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
   connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
 
-	QVBoxLayout* vbl = new QVBoxLayout(&parentDlg, 15, 6);
-	vbl->addWidget(&embeddedDlg);
-	vbl->addWidget(&bb);
+    QVBoxLayout* vbl = new QVBoxLayout(&parentDlg, 15, 6);
+    vbl->addWidget(&embeddedDlg);
+    vbl->addWidget(&bb);
 
   if (parentDlg.exec()){
     slotStatusMsg(i18n("Creating Search Database..."));
@@ -2259,28 +2296,28 @@ void CKDevelop::slotBookmarksToggle()
 {
   debug("CKDevelop::slotBookmarksToggle !\n");
 
-	m_docViewManager->doBookmarksToggle();
+    m_docViewManager->doBookmarksToggle();
 }
 
 void CKDevelop::slotBookmarksClear(){
 
   debug("CKDevelop::slotBookmarksClear !\n");
 
-	m_docViewManager->doBookmarksClear();
+    m_docViewManager->doBookmarksClear();
 }
 
 void CKDevelop::slotBookmarksNext()
 {
   debug("CKDevelop::slotBookmarksNext !\n");
 
-	m_docViewManager->doBookmarksNext();
+    m_docViewManager->doBookmarksNext();
 }
 
 void CKDevelop::slotBookmarksPrevious()
 {
   debug("CKDevelop::slotBookmarksPrevious !\n");
 
-	m_docViewManager->doBookmarksPrevious();
+    m_docViewManager->doBookmarksPrevious();
 }
 
 void CKDevelop::openBrowserBookmark(const QString& file)
@@ -2324,7 +2361,7 @@ void CKDevelop::slotHelpHistoryBack(int id)
 {
   slotStatusMsg(i18n("Opening history page..."));
 
-	int index = history_prev->indexOf(id);
+    int index = history_prev->indexOf(id);
   QString str = history_list.at(index);
   if (str != 0) {
     CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
@@ -2340,7 +2377,7 @@ void CKDevelop::slotHelpHistoryForward( int id)
 {
   slotStatusMsg(i18n("Opening history page..."));
 
-	int index = history_next->indexOf(id);
+    int index = history_next->indexOf(id);
   int cur=history_list.at()+1;
   QString str = history_list.at(cur+index);
   if (str != 0) {
@@ -2821,19 +2858,21 @@ void CKDevelop::slotNewStatus()
 //  kdDebug() << "*** slotNewStatus()" << endl;
   int config = 0;
   if (m_docViewManager->currentEditView()) {
-    config = m_docViewManager->currentEditView()->config();
+//    this cant be done without another API change in Kate,
+//    maybe we can get around this (rokrau 08/08/01)
+//    config = m_docViewManager->currentEditView()->config();
     if (m_docViewManager->currentEditView()->isModified()) {
       enableCommand(ID_FILE_SAVE);
     } else {
       disableCommand(ID_FILE_SAVE);
     }
   }
-  statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
+//  statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
 //?????  setMainCaption();
 }
 
-void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
+void CKDevelop::slotCPPMarkStatus(Kate::View *,bool bMarked)
 {
   if (m_docViewManager->curDocIsCppFile())
   {
@@ -2848,7 +2887,7 @@ void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
   }    
 }
 
-void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
+void CKDevelop::slotHEADERMarkStatus(Kate::View *, bool bMarked)
 {
   if (m_docViewManager->curDocIsHeaderFile())
   {
@@ -2863,7 +2902,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
   }
 }
 
-void CKDevelop::slotMarkStatus(KWriteView *, bool bMarked)
+void CKDevelop::slotMarkStatus(Kate::View *, bool bMarked)
 {
   if(bMarked){
     enableCommand(ID_EDIT_CUT);
@@ -2889,7 +2928,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
   }
 }
 
-void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
+void CKDevelop::slotClipboardChanged(Kate::View *, bool bContents)
 {
   QString text=QApplication::clipboard()->text();
   if(!bContents || m_docViewManager->curDocIsBrowser())
@@ -3421,7 +3460,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
           if (pProj != 0L) {
             readProjectFile(old_project, pProj);
             slotViewRefresh();
-					}
+                    }
         }
         else {
           QDir dir(QDir::current());
@@ -3443,18 +3482,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
     }
     else if (next_job == "all") {
-		  RunMake(CMakefile::toplevel,"all");
+          RunMake(CMakefile::toplevel,"all");
       next_job = "";
     }
-	  else if (next_job == "autoconf+configure+make") {
-			slotBuildAutoconf();
+      else if (next_job == "autoconf+configure+make") {
+            slotBuildAutoconf();
       next_job = "configure+make";
-		}
-	  else if (next_job == "configure+make") {
-			slotBuildConfigure();
+        }
+      else if (next_job == "configure+make") {
+            slotBuildConfigure();
       next_job = "all";
-		}
-		else {
+        }
+        else {
       next_job = "";
     }
   }
@@ -3743,7 +3782,7 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_EDIT_COPY:
   case ID_EDIT_PASTE:
   case ID_EDIT_CUT:
-		m_docViewManager->slotToolbarClicked(item);
+        m_docViewManager->slotToolbarClicked(item);
     break;
   case ID_VIEW_REFRESH:
     slotViewRefresh();
@@ -3850,14 +3889,14 @@ void CKDevelop::fillWindowMenu()
 {
   QextMdiMainFrm::fillWindowMenu();
   windowMenu()->insertItem(i18n("New &Window"), this, SLOT(slotCreateNewViewWindow()), 0, -1, 0);
-	if (mdiMode() != QextMdi::TabPageMode) {
-	  windowMenu()->removeItemAt(6);
-  	windowMenu()->removeItemAt(5);
-	}
-	else {
-	  windowMenu()->removeItemAt(5);
-	  windowMenu()->removeItemAt(4);
-	}
+    if (mdiMode() != QextMdi::TabPageMode) {
+      windowMenu()->removeItemAt(6);
+      windowMenu()->removeItemAt(5);
+    }
+    else {
+      windowMenu()->removeItemAt(5);
+      windowMenu()->removeItemAt(4);
+    }
 }
 
 /**
@@ -3890,7 +3929,7 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
    || ((dbgController != 0L) && !isToolViewVisible(var_viewer))
      ) {
     if (view_menu)
-  	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, false);
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW, false);
     toolBar()->setButton(ID_VIEW_TREEVIEW, false);
   }
 
@@ -3976,7 +4015,7 @@ void CKDevelop::slotViewTClassesView()
     pDock->undock();
   else
     pDock->dockBack();
-	adjustTTreesToolButtonState();
+    adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTGroupsView()
@@ -3986,7 +4025,7 @@ void CKDevelop::slotViewTGroupsView()
     pDock->undock();
   else
     pDock->dockBack();
-	adjustTTreesToolButtonState();
+    adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTFilesView()
@@ -3996,7 +4035,7 @@ void CKDevelop::slotViewTFilesView()
     pDock->undock();
   else
     pDock->dockBack();
-	adjustTTreesToolButtonState();
+    adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTBooksView()
@@ -4006,7 +4045,7 @@ void CKDevelop::slotViewTBooksView()
     pDock->undock();
   else
     pDock->dockBack();
-	adjustTTreesToolButtonState();
+    adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTWatchView()
@@ -4016,7 +4055,7 @@ void CKDevelop::slotViewTWatchView()
     pDock->undock();
   else
     pDock->dockBack();
-	adjustTTreesToolButtonState();
+    adjustTTreesToolButtonState();
 }
 
 void CKDevelop::fillToggleOutputViewsMenu()
