@@ -4,5 +4,6 @@ HEADERS += $APPNAMELC$.h
 TEMPLATE = app
 CONFIG += release \
           warn_on \
-	  thread
+	  thread \
+          qt
 TARGET = ../bin/$APPNAMELC$
