@@ -38,7 +38,8 @@ const char *cppKeywords[] = {
   //  ISO/IEC 14882:1998 . Sec. 2.11.2
   "and", "and_eq", "bitand", "bitor", "compl", "not", "not_eq", "or", "or_eq", "xor",
   "xor_eq",
-  0L};
+  // ADDED FOR TESTING
+  "Q_EXPORT","Q_OBJECT","K_DCOP","SLOT","SIGNAL","slots","signals",0L};
 
 const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
