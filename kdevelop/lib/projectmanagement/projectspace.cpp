@@ -40,6 +40,7 @@
 #include <kio/job.h>
 #include <kfiledialog.h>
 #include "kdevnodes.h"
+#include "KDevComponentManager.h"
 
 void FileGroup::setName(QString name) {
   m_name = name;
@@ -67,6 +68,9 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name)
 ProjectSpace::~ProjectSpace(){
 }
 
+void ProjectSpace::setupComponent(){
+	connect(this, SIGNAL(sigProjectChanged()), componentManager(), SLOT(slotProjectChanged()));
+}
 
 void ProjectSpace::setupGUI()
 {
@@ -99,8 +103,9 @@ void ProjectSpace::slotProjectAddExistingFiles()
 {
    kdDebug(9030) << "ProjectSpace::slotProjectAddExistingFiles" << endl;
    QStringList fileFilters;
-   if(languageSupport() != 0){
-     fileFilters = languageSupport()->fileFilters();
+	 KDevLanguageSupport* langsup = static_cast<KDevLanguageSupport*>(componentManager()->component("LanguageSupport"));
+   if( langsup!= 0){
+     fileFilters = langsup->fileFilters();
    }
    else {
      fileFilters << "*"; // default
@@ -155,9 +160,8 @@ void ProjectSpace::setCurrentProject(Project* prj){
     // Change to the new project.
     m_pCurrentProject = prj;
 
-    // Notify all components that we are switching current project.
-    // FIX ME: BUG! TheCore is not known here => crash!
-//    TheCore()->changeProjectSpace ();
+    // Notify the ComponentManager that we are switching the current project.
+    emit sigProjectChanged();
 
     // Update the popup menu.
     fillActiveProjectPopupMenu();

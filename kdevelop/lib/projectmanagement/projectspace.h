@@ -52,11 +52,12 @@ class FileGroup {
 
 class ProjectSpace : public KDevComponent {
   Q_OBJECT
-    public: 
+public:
   ProjectSpace(QObject* parent=0,const char* name=0);
   ~ProjectSpace();
   //++++++ from the KDevComponent interface +++++++
   virtual QList<KAction> kdevNodeActions(KDevNode* pNode);
+  virtual void setupComponent();
   virtual void setupGUI();
 
   /** nesessary to bootstrap a ProjectSpace*/
@@ -137,13 +138,14 @@ class ProjectSpace : public KDevComponent {
 
   virtual void dump();
 
- signals:
+signals:
   void sigAddedFileToProject(KDevFileNode* pNode);
   void sigRemovedFileFromProject(KDevFileNode* pNode);
   void sigAddedProject(KDevNode* pNode);
+	void sigProjectChanged();
 
-  protected slots:
-    virtual void slotProjectSetActivate( int id);
+protected slots:
+  virtual void slotProjectSetActivate( int id);
   virtual void slotProjectAddExistingFiles();
   virtual void slotRenameFile(KDevNode* pNode);
   virtual void slotDeleteFile(KDevNode* pNode);
