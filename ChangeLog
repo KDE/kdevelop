@@ -1,5 +1,7 @@
 2001-07-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: memory leaks were detected in QextMDI by Purify
+    * bugfix: completed Harald's bugfix concerning the view state problem
+       (some problems happened in Toplevel MDI mode)
 
 2001-07-24  Harald Fernengel  <harry@bnro.de>
     * fix: Save-Button is now enabled when current document gets changed

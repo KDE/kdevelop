@@ -951,14 +951,14 @@ void KWriteView::placeCursor(int x, int y, int flags) {
 }
 
 void KWriteView::focusInEvent(QFocusEvent *e) {
-   // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
-   if (e && ((e->reason())==QFocusEvent::Popup)) {
-      return;
-   }
-	 if (m_hasFocus)
-		  return;
-	 else
-		  m_hasFocus = true;
+  // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
+  if (e && ((e->reason())==QFocusEvent::Popup)) {
+    return;
+  }
+  if (m_hasFocus)
+    return;
+  else
+    m_hasFocus = true;
 
 //  printf("got focus %d\n",cursorTimer);
 
@@ -966,7 +966,6 @@ void KWriteView::focusInEvent(QFocusEvent *e) {
   //dbg - start
   kWrite->newCurPos();
   kWrite->newStatus();
-  kWrite->newCaption();
   kWrite->newUndo();
   // dbg - end
   if (!cursorTimer) {
@@ -1205,12 +1204,19 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
     if (!scrollTimer) scrollTimer = startTimer(50);
     kWriteDoc->updateViews();
   }
-  if (e->button() == MidButton) {
+  else if (e->button() == MidButton) {
     placeCursor(e->x(),e->y(),0);
     kWrite->paste();
   }
-	// Call CEditWidget::mousePressEvent to handle the RightButton case
-	QMouseEvent ee(QEvent::MouseButtonPress, mapToParent(e->pos()), e->button(), e->state());
+
+  if (m_hasFocus && (e->button() != RightButton)) {
+    kWrite->newCurPos();
+    kWrite->newStatus();
+    kWrite->newUndo();
+  }
+
+  // Call CEditWidget::mousePressEvent to handle the RightButton case
+  QMouseEvent ee(QEvent::MouseButtonPress, mapToParent(e->pos()), e->button(), e->state());
   kWrite->mousePressEvent(&ee);
 }
 
