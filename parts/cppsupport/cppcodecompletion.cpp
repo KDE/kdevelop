@@ -270,7 +270,7 @@ void
 CppCodeCompletion::slotTextChanged()
 {
     m_ccTimer->stop();
-
+    
     if( !m_activeCursor )
         return;
 
@@ -281,7 +281,7 @@ CppCodeCompletion::slotTextChanged()
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
-    if ( ch == "." || ch2 == "->" || ch2 == "::" ){
+    if ( ch == "(" || ch == "." || ch2 == "->" || ch2 == "::" ){
     	m_ccTimer->start( 500, true );
     }
 }
@@ -553,7 +553,17 @@ CppCodeCompletion::completeText( )
 
     bool showArguments = FALSE;
 
-    if( strCurLine[ nCol-1 ] == '(' ){
+    QString ch = strCurLine.mid( nCol-1, 1 );
+    QString ch2 = strCurLine.mid( nCol-2, 2 );
+    
+    if( ch2 == "->" || ch == "." || ch == "(" ){
+	int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
+	QChar c = strCurLine[ pos ];
+	if( !(c.isLetterOrNumber() || c == '_') )
+	    return;
+    }
+ 
+    if( ch == "(" ){
         --nCol;
         showArguments = TRUE;
     }
@@ -962,7 +972,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 		return meth->type();
 	}
     }
-
+    
     // methods
     {
 	QValueList<ParsedMethod*> l = container->getSortedMethodList();
@@ -1047,6 +1057,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    }
 	}
     }
+    
 
     return QString::null;
 }
