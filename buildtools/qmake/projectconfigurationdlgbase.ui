@@ -21,12 +21,6 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="maximumSize">
-        <size>
-            <width>600</width>
-            <height>500</height>
-        </size>
-    </property>
     <property name="caption">
         <string>QMake Subproject Configuration</string>
     </property>
