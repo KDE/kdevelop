@@ -131,7 +131,7 @@ return;
 
 	bool ok;
 	QString text = QInputDialog::getText(
-	                   i18n("Edit substitution"), i18n("Substitution:"), QLineEdit::Normal,
+	                   i18n("Edit Substitution"), i18n("Substitution:"), QLineEdit::Normal,
 	                   name, &ok );
 	if ( ok && !text.isEmpty() )
 	{
