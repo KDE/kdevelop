@@ -9,15 +9,19 @@
  *                                                                         *
  ***************************************************************************/
 
+// c++ support
 #include "parser.h"
 #include "driver.h"
 #include "lexer.h"
 #include "errors.h"
 #include "problemreporter.h"
 
+// qt
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qasciidict.h>
 
+// kde
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -44,6 +48,74 @@ using namespace std;
         return false; \
     } \
 }
+
+class Symbol{
+public:
+public:
+	Symbol( const QString& name )
+		: m_name( name ), m_sourceStart( 0 ), m_sourceEnd( 0 )
+		{}
+		
+	~Symbol()
+		{}
+		
+	QString name() const { return m_name; }	
+	
+	int sourceStart() const { return m_sourceStart; }
+	void setSourceStart( int start ) { m_sourceStart = start; }
+	
+	int sourceEnd() const { return m_sourceEnd; }
+	void setSourceEnd( int end ) { m_sourceEnd = end; }
+		
+private:
+	QString m_name;
+	int m_sourceStart;
+	int m_sourceEnd;
+};
+
+class SymbolTable{
+public:
+	SymbolTable( const QString& name, SymbolTable* parent=0 )
+		: m_name( name ), m_parent( parent )
+		{ 
+			m_children.setAutoDelete( true ); 
+			if( m_parent ){
+				m_parent->addSymbolTable( this );
+			}
+		}
+		
+	~SymbolTable() 
+		{}
+	
+	QString name() const { return m_name; }
+	
+	QString fullName() const {
+		QStringList l;
+		const SymbolTable* tab = this;
+		while( tab ){
+			l.push_front( tab->name() );
+			tab = tab->parent();
+		}
+		return l.join( "::" );
+	}
+	
+	SymbolTable* parent() { return m_parent; }
+	const SymbolTable* parent() const { return m_parent; }
+
+	void addSymbolTable( SymbolTable* s ){
+		m_children.append( s );
+	}	
+			
+private:
+	QString m_name;
+	SymbolTable* m_parent;
+	QPtrList<SymbolTable> m_children;
+		
+private:
+	SymbolTable( const SymbolTable& );
+	void operator = ( const SymbolTable& );
+};
+
 
 Parser::Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer )
     : m_problemReporter( pr ),
@@ -212,18 +284,24 @@ bool Parser::parseName()
 bool Parser::parseTranslationUnit()
 {
     //kdDebug(9007) << "Parser::parseTranslationUnit()" << endl;
+	TranslationUnitAST* ast = new TranslationUnitAST();
+	SymbolTable* globalSymbolTable = new SymbolTable( "" );
+	
     while( !lex->lookAhead(0).isNull() ){
-        if( !parseDefinition() ){
+        if( !parseDefinition(globalSymbolTable) ){
             // error recovery
             lex->nextToken();
             skipUntilDeclaration();
         }
     }
+	
+	delete( globalSymbolTable );
+	delete( ast );
 
     return m_errors == 0;
 }
 
-bool Parser::parseDefinition()
+bool Parser::parseDefinition( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseDefinition()" << endl;
     switch( lex->lookAhead(0) ){
@@ -233,32 +311,37 @@ bool Parser::parseDefinition()
         return true;
 
     case Token_extern:
-        return parseLinkageSpecification();
+        return parseLinkageSpecification( symtab );
 
     case Token_namespace:
-        return parseNamespace();
+        return parseNamespace( symtab );
 
     case Token_using:
-        return parseUsing();
+        return parseUsing( symtab );
 
     case Token_typedef:
-        return parseTypedef();
+        return parseTypedef( symtab );
 
     case Token_asm:
-        return parseAsmDefinition();
+        return parseAsmDefinition( symtab );
 
     case Token_template:
     case Token_export:
-        return parseTemplateDeclaration();
+        return parseTemplateDeclaration( symtab );
 
     default:
-        return parseDeclaration();
+		if( parseEnumSpecifier(symtab) || parseClassSpecifier(symtab) ){
+			parseInitDeclaratorList();
+			ADVANCE( ';', ";" );
+			return true;
+		}
+        return parseDeclaration( symtab );
 
-    } // end switch
+    } // end switch	
 }
 
 
-bool Parser::parseLinkageSpecification()
+bool Parser::parseLinkageSpecification( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseLinkageSpecification()" << endl;
 
@@ -270,10 +353,9 @@ bool Parser::parseLinkageSpecification()
     parseStringLiteral();
 
     if( lex->lookAhead(0) == '{' ){
-        if( parseLinkageBody() ){
-        }
+        parseLinkageBody( symtab );
     } else {
-        if( !parseDefinition() ){
+        if( !parseDefinition(symtab) ){
             reportError( i18n("Declaration syntax error") );
             return true;
         }
@@ -282,7 +364,7 @@ bool Parser::parseLinkageSpecification()
     return true;
 }
 
-bool Parser::parseLinkageBody()
+bool Parser::parseLinkageBody( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseLinkageBody()" << endl;
     if( lex->lookAhead(0) != '{' ){
@@ -296,7 +378,7 @@ bool Parser::parseLinkageBody()
         if( tk == '}' )
             break;
 
-        if( !parseDefinition() ){
+        if( !parseDefinition(symtab) ){
             // error recovery
             syntaxError();
             lex->nextToken();
@@ -312,7 +394,7 @@ bool Parser::parseLinkageBody()
     return true;
 }
 
-bool Parser::parseNamespace()
+bool Parser::parseNamespace( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseNamespace()" << endl;
     if( lex->lookAhead(0) != Token_namespace ){
@@ -321,7 +403,9 @@ bool Parser::parseNamespace()
     lex->nextToken();
 
 
+	QString namespaceName;
     if( lex->lookAhead(0) == Token_identifier ){
+		namespaceName = lex->tokenAt( 0 ).toString();
         lex->nextToken();
     }
 
@@ -347,12 +431,15 @@ bool Parser::parseNamespace()
         return false;
     }
 
-    parseLinkageBody();
+	if( namespaceName.isEmpty() )
+		namespaceName = "$anon$";
+		
+    parseLinkageBody( new SymbolTable(namespaceName, symtab) );
 
     return true;
 }
 
-bool Parser::parseUsing()
+bool Parser::parseUsing( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseUsing()" << endl;
 
@@ -362,7 +449,7 @@ bool Parser::parseUsing()
     lex->nextToken();
 
     if( lex->lookAhead(0) == Token_namespace ){
-        return parseUsingDirective();
+        return parseUsingDirective( symtab );
     }
 
     if( lex->lookAhead(0) == Token_typename )
@@ -376,7 +463,7 @@ bool Parser::parseUsing()
     return true;
 }
 
-bool Parser::parseUsingDirective()
+bool Parser::parseUsingDirective( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseUsingDirective()" << endl;
 
@@ -447,7 +534,7 @@ bool Parser::parseTemplateArgumentList()
     return true;
 }
 
-bool Parser::parseTypedef()
+bool Parser::parseTypedef( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseTypedef()" << endl;
 
@@ -474,7 +561,7 @@ bool Parser::parseTypedef()
     return true;
 }
 
-bool Parser::parseAsmDefinition()
+bool Parser::parseAsmDefinition( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseAsmDefinition()" << endl;
 
@@ -489,7 +576,7 @@ bool Parser::parseAsmDefinition()
     return true;
 }
 
-bool Parser::parseTemplateDeclaration()
+bool Parser::parseTemplateDeclaration( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseTemplateDeclaration()" << endl;
 
@@ -521,7 +608,7 @@ bool Parser::parseTemplateDeclaration()
             lex->nextToken();
     }
 
-    if( !parseDefinition( ) ){
+    if( !parseDefinition(symtab) ){
         reportError( i18n("expected a declaration") );
     }
 
@@ -677,9 +764,7 @@ bool Parser::parseTypeSpecifier()
     QStringList cv;
     parseCvQualify(cv);
 
-    if( parseClassSpecifier() || parseEnumSpecifier() ||
-        parseElaboratedTypeSpecifier() || parseSimpleTypeSpecifier() ){
-
+    if( parseElaboratedTypeSpecifier() || parseSimpleTypeSpecifier() ){
         parseCvQualify( cv );
     } else
         return false;
@@ -755,7 +840,7 @@ bool Parser::parseDeclarator()
     return true;
 }
 
-bool Parser::parseEnumSpecifier()
+bool Parser::parseEnumSpecifier( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseEnumSpecifier()" << endl;
 
@@ -1062,17 +1147,6 @@ bool Parser::parseInitDeclaratorList()
     return true;
 }
 
-bool Parser::parseFunctionBody()
-{
-    //kdDebug(9007) << "Parser::parseFunctionBody()" << endl;
-
-    if( lex->lookAhead(0) != '{' ){
-        return false;
-    }
-
-    return parseCompoundStatement();
-}
-
 bool Parser::parseParameterDeclarationClause()
 {
     //kdDebug(9007) << "Parser::parseParameterDeclarationClause()" << endl;
@@ -1149,7 +1223,7 @@ bool Parser::parseParameterDeclaration()
     return true;
 }
 
-bool Parser::parseClassSpecifier()
+bool Parser::parseClassSpecifier( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseClassSpecifier()" << endl;
 
@@ -1176,7 +1250,7 @@ bool Parser::parseClassSpecifier()
     ADVANCE( '{', '{' );
 
     if( lex->lookAhead(0) != '}' ){
-        parseMemberSpecificationList();
+        parseMemberSpecificationList( symtab );
     }
 
     if( lex->lookAhead(0) != '}' ){
@@ -1202,11 +1276,13 @@ bool Parser::parseAccessSpecifier()
     return false;
 }
 
-bool Parser::parseMemberSpecificationList()
+bool Parser::parseMemberSpecificationList( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseMemberSpecificationList()" << endl;
+	
+	SymbolTable* my = new SymbolTable( "$classbody", symtab );
 
-    if( !parseMemberSpecification() ){
+    if( !parseMemberSpecification(my) ){
         return false;
     }
 
@@ -1214,7 +1290,7 @@ bool Parser::parseMemberSpecificationList()
         if( lex->lookAhead(0) == '}' )
             break;
 
-        if( !parseMemberSpecification() ){
+        if( !parseMemberSpecification(my) ){
             Token tk = lex->lookAhead( 0 );
             skipUntilDeclaration();
             if( lex->lookAhead(0) == tk ){
@@ -1226,7 +1302,7 @@ bool Parser::parseMemberSpecificationList()
     return true;
 }
 
-bool Parser::parseMemberSpecification()
+bool Parser::parseMemberSpecification( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseMemberSpecification()" << endl;
 
@@ -1243,11 +1319,11 @@ bool Parser::parseMemberSpecification()
         } else
             lex->nextToken();
         return true;
-    } else if( parseTypedef() ){
+    } else if( parseTypedef(symtab) ){
         return true;
-    } else if( parseUsing() ){
+    } else if( parseUsing(symtab) ){
         return true;
-    } else if( parseTemplateDeclaration() ){
+    } else if( parseTemplateDeclaration(symtab) ){
         return true;
     } else if( parseAccessSpecifier() ){
         if( lex->lookAhead(0) == Token_slots ){
@@ -1261,7 +1337,12 @@ bool Parser::parseMemberSpecification()
         return true;
     }
 
-    return parseDeclaration();
+	if( parseEnumSpecifier(symtab) || parseClassSpecifier(symtab) ){
+		parseInitDeclaratorList();
+		ADVANCE( ';', ";" );
+		return true;
+	}	
+    return parseDeclaration( symtab );
 }
 
 bool Parser::parseCtorInitializer()
@@ -1658,7 +1739,7 @@ bool Parser::parseNestedNameSpecifier()
 
         } else if( lex->lookAhead(1) == Token_scope ){
             lex->nextToken(); // skip name
-            lex->nextToken(); // skip scope
+            lex->nextToken(); // skip SymbolTable
             ok = true;
         } else
             break;
@@ -1683,7 +1764,7 @@ bool Parser::parsePtrToMember()
         lex->nextToken();
 
         if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == '*' ){
-            lex->nextToken(); // skip scope
+            lex->nextToken(); // skip SymbolTable
             lex->nextToken(); // skip *
             return true;
         } else
@@ -1783,7 +1864,7 @@ bool Parser::parseExpression()
 }
 
 
-bool Parser::parseExpressionStatement()
+bool Parser::parseExpressionStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseExpressionStatement()" << endl;
     parseCommaExpression();
@@ -1796,29 +1877,29 @@ bool Parser::parseExpressionStatement()
     return true;
 }
 
-bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
+bool Parser::parseStatement( SymbolTable* symtab ) // thanks to fiore@8080.it ;-)
 {
     //kdDebug(9007) << "Parser::parseStatement()" << endl;
     switch( lex->lookAhead(0) ){
 
     case Token_while:
-        return parseWhileStatement();
+        return parseWhileStatement( symtab );
 
     case Token_do:
-        return parseDoStatement();
+        return parseDoStatement( symtab );
 
     case Token_for:
-        return parseForStatement();
+        return parseForStatement( symtab );
 
     case Token_if:
-        return parseIfStatement();
+        return parseIfStatement( symtab );
 
     case Token_switch:
-        return parseSwitchStatement();
+        return parseSwitchStatement( symtab );
 
     case Token_case:
     case Token_default:
-        return parseLabeledStatement();
+        return parseLabeledStatement( symtab );
 
     case Token_break:
     case Token_continue:
@@ -1839,21 +1920,21 @@ bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
         return true;
 
     case '{':
-        return parseCompoundStatement();
+        return parseCompoundStatement( symtab );
 
     case Token_identifier:
-        if( parseLabeledStatement() )
+        if( parseLabeledStatement(symtab) )
             return true;
         break;
     }
 
-    if ( parseDeclarationStatement() )
+    if ( parseDeclarationStatement(symtab) )
         return true;
 
-    return parseExpressionStatement();
+    return parseExpressionStatement( symtab );
 }
 
-bool Parser::parseCondition()
+bool Parser::parseCondition( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseCondition()" << endl;
 
@@ -1873,17 +1954,17 @@ bool Parser::parseCondition()
 }
 
 
-bool Parser::parseWhileStatement()
+bool Parser::parseWhileStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseWhileStatement()" << endl;
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
-    if( !parseCondition() ){
+    if( !parseCondition(symtab) ){
         reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
-    if( !parseStatement() ){
+    if( !parseStatement(symtab) ){
         reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
@@ -1891,11 +1972,11 @@ bool Parser::parseWhileStatement()
     return true;
 }
 
-bool Parser::parseDoStatement()
+bool Parser::parseDoStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseDoStatement()" << endl;
     ADVANCE( Token_do, "do" );
-    if( !parseStatement() ){
+    if( !parseStatement(symtab) ){
         reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
@@ -1910,48 +1991,50 @@ bool Parser::parseDoStatement()
     return true;
 }
 
-bool Parser::parseForStatement()
+bool Parser::parseForStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseForStatement()" << endl;
     ADVANCE( Token_for, "for" );
     ADVANCE( '(', "(" );
 
     //kdDebug(9007) << "1 token = " << lex->lookAhead(0).toString() << endl;
-    if( !parseForInitStatement() ){
+    if( !parseForInitStatement(symtab) ){
         reportError( i18n("for initialization expected") );
     }
     //kdDebug(9007) << "2 token = " << lex->lookAhead(0).toString() << endl;
 
-    parseCondition();
+    parseCondition( symtab );
     ADVANCE( ';', ";" );
     parseCommaExpression();
     ADVANCE( ')', ")" );
 
-    return parseStatement();
+    return parseStatement( symtab );
 }
 
-bool Parser::parseForInitStatement()
+bool Parser::parseForInitStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseForInitStatement()" << endl;
 
-    if ( parseDeclarationStatement() )
+    if ( parseDeclarationStatement(symtab) )
         return true;
-    return parseExpressionStatement();
+    return parseExpressionStatement( symtab );
 }
 
-bool Parser::parseCompoundStatement()
+bool Parser::parseCompoundStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseCompoundStatement()" << endl;
     if( lex->lookAhead(0) != '{' ){
         return false;
     }
     lex->nextToken();
+	
+	SymbolTable* my = new SymbolTable( "$anon$", symtab );
 
     while( !lex->lookAhead(0).isNull() ){
         if( lex->lookAhead(0) == '}' )
             break;
 
-        if( !parseStatement() )
+        if( !parseStatement(my) )
             break;
     }
 
@@ -1963,26 +2046,26 @@ bool Parser::parseCompoundStatement()
     return true;
 }
 
-bool Parser::parseIfStatement()
+bool Parser::parseIfStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseIfStatement()" << endl;
 
     ADVANCE( Token_if, "if" );
 
     ADVANCE( '(' , "(" );
-    if( !parseCondition() ){
+    if( !parseCondition(symtab) ){
         reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
-    if( !parseStatement() ){
+    if( !parseStatement(symtab) ){
         reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
 
     while( lex->lookAhead(0) == Token_else ){
         lex->nextToken();
-        if( !parseStatement() ) {
+        if( !parseStatement(symtab) ) {
             reportError( i18n("statement expected") );
             return false;
         }
@@ -1991,21 +2074,21 @@ bool Parser::parseIfStatement()
     return true;
 }
 
-bool Parser::parseSwitchStatement()
+bool Parser::parseSwitchStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseSwitchStatement()" << endl;
     ADVANCE( Token_switch, "switch" );
 
     ADVANCE( '(' , "(" );
-    if( !parseCondition() ){
+    if( !parseCondition(symtab) ){
         reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
-    return parseStatement();
+    return parseStatement( symtab );
 }
 
-bool Parser::parseLabeledStatement()
+bool Parser::parseLabeledStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseLabeledStatement()" << endl;
     switch( lex->lookAhead(0) ){
@@ -2014,7 +2097,7 @@ bool Parser::parseLabeledStatement()
         if( lex->lookAhead(1) == ':' ){
             lex->nextToken();
             lex->nextToken();
-            return parseStatement();
+            return parseStatement( symtab );
         }
         break;
 
@@ -2024,21 +2107,21 @@ bool Parser::parseLabeledStatement()
             reportError( i18n("expression expected") );
         }
         ADVANCE( ':', ":" );
-        return parseStatement();
+        return parseStatement( symtab );
     }
     return false;
 }
 
-bool Parser::parseBlockDeclaration()
+bool Parser::parseBlockDeclaration( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseBlockDeclaration()" << endl;
     switch( lex->lookAhead(0) ) {
     case Token_using:
-        return parseUsing();
+        return parseUsing( symtab );
     case Token_asm:
-        return parseAsmDefinition();
+        return parseAsmDefinition( symtab );
     case Token_namespace:
-        return parseNamespaceAliasDefinition();
+        return parseNamespaceAliasDefinition( symtab );
     }
 
     int index = lex->index();
@@ -2060,7 +2143,7 @@ bool Parser::parseBlockDeclaration()
     return true;
 }
 
-bool Parser::parseNamespaceAliasDefinition()
+bool Parser::parseNamespaceAliasDefinition( SymbolTable* symtab )
 {
     if ( lex->lookAhead(0) != Token_namespace ) {
         return false;
@@ -2071,13 +2154,13 @@ bool Parser::parseNamespaceAliasDefinition()
     return parseName();
 }
 
-bool Parser::parseDeclarationStatement()
+bool Parser::parseDeclarationStatement( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseDeclarationStatement()" << endl;
 
     int index = lex->index();
 
-    if ( !parseBlockDeclaration() )
+    if ( !parseBlockDeclaration(symtab) )
         return false;
 
     if ( lex->lookAhead(0) != ';' ) {
@@ -2089,30 +2172,34 @@ bool Parser::parseDeclarationStatement()
     return true;
 }
 
-bool Parser::parseDeclaration()
+bool Parser::parseDeclaration( SymbolTable* symtab )
 {
     parseFunctionSpecifier();
     parseStorageClassSpecifier();
 
     int index = lex->index();
-
+	
     if( parseName() && lex->lookAhead(0) == '(' ){
         // no type specifier, maybe a constructor or a cast operator!?!?!
         lex->setIndex( index );
 
-        parseNestedNameSpecifier();
+        bool nestedName = parseNestedNameSpecifier();
         if( parseDeclarator() ){
             switch( lex->lookAhead(0) ){
             case ';':
-                lex->nextToken();
-                return true;
+				if( !nestedName ){
+                	lex->nextToken();
+                	return true;
+				}
+				syntaxError();
+				return false;
             case ':':
-                if( parseCtorInitializer() && parseCompoundStatement() )
+                if( parseCtorInitializer() && parseFunctionBody(symtab) )
                     return true;
                 syntaxError();
                 return false;
             case '{':
-                if( !parseCompoundStatement() ){
+                if( !parseFunctionBody(symtab) ){
                     syntaxError();
                     return false;
                 }
@@ -2166,7 +2253,7 @@ bool Parser::parseDeclaration()
             return true;
 
         case '{':
-            if ( parseCompoundStatement() ) {
+            if ( parseFunctionBody(symtab) ) {
                 //kdDebug(9007) << "found function definition" << endl;
                 return true;
             }
@@ -2180,4 +2267,31 @@ bool Parser::parseDeclaration()
 
     syntaxError();
     return false;
+}
+
+bool Parser::parseFunctionBody( SymbolTable* symtab )
+{
+    //kdDebug(9007) << "Parser::parseFunctionBody()" << endl;
+		
+    if( lex->lookAhead(0) != '{' ){
+        return false;
+    }
+    lex->nextToken();
+
+	SymbolTable* my = new SymbolTable( "$funbody$", symtab );
+	
+    while( !lex->lookAhead(0).isNull() ){
+        if( lex->lookAhead(0) == '}' )
+            break;
+
+        if( !parseStatement(my) )
+            break;
+    }
+
+    if( lex->lookAhead(0) != '}' ){
+        reportError( i18n("} expected") );
+    } else
+        lex->nextToken();
+
+    return true;
 }

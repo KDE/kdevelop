@@ -12,6 +12,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "ast.h"
+
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdom.h>
@@ -22,6 +24,7 @@ class Driver;
 class Lexer;
 class Token;
 class Error;
+class SymbolTable;
 
 class Parser{
 public:
@@ -45,18 +48,18 @@ public:
 public /*rules*/ :
 
     bool parseTranslationUnit();
-    bool parseDefinition();
-    bool parseBlockDeclaration();
-    bool parseLinkageSpecification();
-    bool parseLinkageBody();
-    bool parseNamespace();
-    bool parseNamespaceAliasDefinition();
-    bool parseUsing();
-    bool parseUsingDirective();
-    bool parseTypedef();
-    bool parseAsmDefinition();
-    bool parseTemplateDeclaration();
-    bool parseDeclaration();
+    bool parseDefinition( SymbolTable* symtab );
+    bool parseBlockDeclaration( SymbolTable* symtab );
+    bool parseLinkageSpecification( SymbolTable* symtab );
+    bool parseLinkageBody( SymbolTable* symtab );
+    bool parseNamespace( SymbolTable* symtab );
+    bool parseNamespaceAliasDefinition( SymbolTable* symtab );
+    bool parseUsing( SymbolTable* symtab );
+    bool parseUsingDirective( SymbolTable* symtab );
+    bool parseTypedef( SymbolTable* symtab );
+    bool parseAsmDefinition( SymbolTable* symtab );
+    bool parseTemplateDeclaration( SymbolTable* symtab );
+    bool parseDeclaration( SymbolTable* symtab );
 
 
     bool parseNestedNameSpecifier();
@@ -79,12 +82,11 @@ public /*rules*/ :
     bool parseConstantExpression();
     bool parseInitDeclaratorList();
     bool parseInitDeclarator();
-    bool parseFunctionBody();
     bool parseParameterDeclarationClause();
     bool parseCtorInitializer();
     bool parsePtrToMember();
-    bool parseEnumSpecifier();
-    bool parseClassSpecifier();
+    bool parseEnumSpecifier( SymbolTable* symtab );
+    bool parseClassSpecifier( SymbolTable* symtab );
     bool parseElaboratedTypeSpecifier();
     bool parseDeclaratorId();
     bool parseExceptionSpecification();
@@ -97,8 +99,8 @@ public /*rules*/ :
     bool parseAbstractDeclarator();
     bool parseParameterDeclarationList();
     bool parseAssignmentExpression();
-    bool parseMemberSpecificationList();
-    bool parseMemberSpecification();
+    bool parseMemberSpecificationList( SymbolTable* symtab );
+    bool parseMemberSpecification( SymbolTable* symtab );
     bool parseAccessSpecifier();
     bool parseBaseClause();
     bool parseTypeIdList();
@@ -109,23 +111,24 @@ public /*rules*/ :
     bool parseBaseSpecifier();
     bool parseInitializerClause();
     bool parseMemInitializerId();
+    bool parseFunctionBody( SymbolTable* symtab );
 
     // expression
     bool parseExpression();
 
     // statement
-    bool parseCondition();
-    bool parseStatement();
-    bool parseExpressionStatement();
-    bool parseWhileStatement();
-    bool parseDoStatement();
-    bool parseForStatement();
-    bool parseCompoundStatement();
-    bool parseForInitStatement();
-    bool parseIfStatement();
-    bool parseSwitchStatement();
-    bool parseLabeledStatement();
-    bool parseDeclarationStatement();
+    bool parseCondition( SymbolTable* symtab );
+    bool parseStatement( SymbolTable* symtab );
+    bool parseExpressionStatement( SymbolTable* symtab );
+    bool parseWhileStatement( SymbolTable* symtab );
+    bool parseDoStatement( SymbolTable* symtab );
+    bool parseForStatement( SymbolTable* symtab );
+    bool parseCompoundStatement( SymbolTable* symtab );
+    bool parseForInitStatement( SymbolTable* symtab );
+    bool parseIfStatement( SymbolTable* symtab );
+    bool parseSwitchStatement( SymbolTable* symtab );
+    bool parseLabeledStatement( SymbolTable* symtab );
+    bool parseDeclarationStatement( SymbolTable* symtab );
 
     bool skipUntil( int token );
     bool skipUntilDeclaration();
