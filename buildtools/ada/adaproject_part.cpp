@@ -160,6 +160,8 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
             }
         }
     } while (!s.isEmpty());
+    
+    KDevProject::openProject( dirName, projectName );
 }
 
 void AdaProjectPart::closeProject()

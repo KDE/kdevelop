@@ -214,6 +214,8 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
         if (r == KMessageBox::Yes)
             populateProject();
     }
+    
+    KDevProject::openProject( dirName, projectName );    
 }
 
 

@@ -29,6 +29,7 @@
 #include <kpopupmenu.h>
 #include <kconfig.h>
 
+#include <urlutil.h>
 #include <kdevcore.h>
 #include <kdevlanguagesupport.h>
 #include <kdevproject.h>
@@ -138,7 +139,7 @@ void ClassViewWidget::slotProjectOpened( )
     m_projectItem = new FolderBrowserItem( this, m_part->project()->projectName() );
     m_projectItem->setOpen( true );
 
-    m_projectDirectory = QDir(m_part->project()->projectDirectory()).canonicalPath();
+    m_projectDirectory = URLUtil::canonicalPath( m_part->project()->projectDirectory() );
     if( m_projectDirectory.isEmpty() )
 	m_projectDirectory = m_part->project()->projectDirectory();
 
@@ -158,18 +159,16 @@ void ClassViewWidget::slotProjectClosed( )
 
 void ClassViewWidget::insertFile( const QString& fileName )
 {
-    QString fn = QDir( fileName ).canonicalPath();
-    if( fn.isEmpty() )
-	fn = fileName;
+    QString fn = URLUtil::canonicalPath( fileName );
+    if( !m_part->project()->isProjectFile(fn) )
+	return;
     //kdDebug() << "======================== insertFile(" << fn << ")" << endl;
 
     FileDom dom = m_part->codeModel()->fileByName( fn );
     if( !dom )
 	return;
 
-    if( fn.startsWith(m_projectDirectory) )
-	fn = fn.mid( m_projectDirectoryLength );
-
+    fn = m_part->project()->relativeProjectFile( fn );
     QStringList path;
 
     switch( viewMode() )
@@ -203,18 +202,16 @@ void ClassViewWidget::insertFile( const QString& fileName )
 
 void ClassViewWidget::removeFile( const QString& fileName )
 {
-    QString fn = QDir( fileName ).canonicalPath();
-    if( fn.isEmpty() )
-	fn = fileName;
+    QString fn = URLUtil::canonicalPath( fileName );
+    if( !m_part->project()->isProjectFile(fn) )
+	return;
     //kdDebug() << "======================== removeFile(" << fn << ")" << endl;
 
-    FileDom dom = m_part->codeModel()->fileByName( fn);
+    FileDom dom = m_part->codeModel()->fileByName( fn );
     if( !dom )
 	return;
 
-    if( fn.startsWith(m_projectDirectory) )
-	fn = fn.mid( m_projectDirectoryLength );
-
+    fn = m_part->project()->relativeProjectFile( fn );
     QStringList path;
 
     switch( viewMode() )

@@ -1,10 +1,11 @@
 #ifndef _KDEVPROJECT_H_
 #define _KDEVPROJECT_H_
 
-#include <qstringlist.h>
 #include "kdevplugin.h"
 #include "domutil.h"
 
+#include <qstringlist.h>
+#include <qmap.h>
 
 class KDevProject : public KDevPlugin
 {
@@ -26,7 +27,7 @@ public:
     * is the project name, which is equivalent with the
     * project file name without the .kdevelop suffix.
     */
-    virtual void openProject(const QString &dirName, const QString &projectName) = 0;
+    virtual void openProject(const QString &dirName, const QString &projectName);
     /**
     * This method is invoked when the project is about
     * to be closed.
@@ -108,6 +109,18 @@ public:
     * must be relative to the project directory.
     */
     virtual void changedFile( const QString & fileName );
+    /**
+    * Returns true if the file absFileName is part of the project
+    */
+    virtual bool isProjectFile( const QString & absFileName );
+    /**
+    * Returns the path (relative to the project directory)
+    * of the file absFileName.
+    */
+    virtual QString relativeProjectFile( const QString & absFileName );
+    
+private slots:
+    void slotBuildFileMap();
 
 signals:
     /**
@@ -141,6 +154,9 @@ signals:
     * Used to reparse the files after a sucessful compilation
     */
     void projectCompiled();
+    
+private:
+    QMap<QString, QString> m_absToRel;
 };
 
 #endif

@@ -224,6 +224,8 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
     if (DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio") == "" ) {
         DomUtil::writeEntry(dom, "/kdevtrollproject/run/directoryradio", "executable");
     }
+    
+    KDevProject::openProject( dirName, projectName );    
 }
 
 

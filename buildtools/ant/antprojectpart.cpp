@@ -106,6 +106,8 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
   } 
   else 
     populateProject();
+  
+  KDevProject::openProject( dirName, projectName );  
 }
 
 

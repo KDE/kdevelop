@@ -1273,7 +1273,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
 {
     QFileInfo fileInfo( fileName );
     return fileExtensions().contains( fileInfo.extension() )
-	&& m_projectFileList.contains( URLUtil::canonicalPath( fileInfo.absFilePath() ).mid( m_projectDirectory.length() + 1 ) )
+	&& project()->isProjectFile( URLUtil::canonicalPath( fileInfo.absFilePath() ) )
 	&& !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }
 

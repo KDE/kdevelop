@@ -17,6 +17,5 @@
 class CodeModel;
 
 QStringList typeNameList( const CodeModel* model );
-QString kdevCanonicalPath( const QString& path );
 
 #endif // __cppsupport_utils_h

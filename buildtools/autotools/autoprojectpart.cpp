@@ -273,6 +273,8 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default") && DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio") == "" ) {
         DomUtil::writeEntry(dom, "/kdevautoproject/run/directoryradio", "executable");
     }
+    
+    KDevProject::openProject( dirName, projectName );
 }
 
 

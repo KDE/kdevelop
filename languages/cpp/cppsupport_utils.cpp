@@ -50,12 +50,3 @@ static void typeNameList( QStringList & path, QStringList & lst, ClassDom klass 
        typeNameList( path, lst, *it );
     path.pop_back();
 }
-
-QString kdevCanonicalPath( const QString& path )
-{
-    QString cPath = QDir( path ).canonicalPath();
-    if( !cPath.isEmpty() )
-	return cPath;
-    
-    return path;
-}

@@ -137,6 +137,7 @@ void GenericProjectPart::openProject( const QString & dirName, const QString & p
 */
     loadProjectConfig(DomUtil::readEntry(dom, "/kdevgenericproject/project"));
 
+    KDevProject::openProject( dirName, projectName );    
 }
 
 void GenericProjectPart::closeProject( )

@@ -156,6 +156,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
         }
     } while (!s.isEmpty());
 
+    KDevProject::openProject( dirName, projectName );
 }
 
 
