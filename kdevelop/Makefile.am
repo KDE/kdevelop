@@ -1,4 +1,4 @@
-SUBDIRS = widgets lib plugin parts tools templates kwrite_part
+SUBDIRS = widgets lib plugin parts templates kwrite_part
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \

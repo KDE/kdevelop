@@ -24,6 +24,7 @@
 #include <qlist.h>
 #include <string.h>
 #include <ksimpleconfig.h>
+#include <qdom.h>
 
 /**handles toplevel dir, configure.in, and all projects
     data are stored in NAME.kdevpsp and NAME_local.kdevpsp
@@ -85,18 +86,27 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual void generateDefaultFiles();
   virtual void modifyDefaultFiles();
 	
-  /** writes a NAME.kdevpsp and .NAME.kdevpsp
-      NAME.kdevpsp contains options for all users, like cvs system
-      .NAME.kdevpsp contains options from the local user:
-  */
+  
 
   virtual bool readConfig(QString abs_filename);
   virtual bool readGeneralConfig(KSimpleConfig* config);
   virtual bool readUserConfig(KSimpleConfig* config);
+
+  virtual bool readXMLConfig(QString abs_filename);
+  virtual bool readGeneralConfig(QDomElement& dom);
+  virtual bool readUserConfig(QDomElement& dom);
   
+  /** writes a NAME.kdevpsp and .NAME.kdevpsp
+      NAME.kdevpsp contains options for all users, like cvs system
+      .NAME.kdevpsp contains options from the local user:
+  */
   virtual bool writeConfig();	
   virtual bool writeGeneralConfig(KSimpleConfig* config);
   virtual bool writeUserConfig(KSimpleConfig* config);
+
+  virtual bool writeXMLConfig();
+  virtual QDomElement writeGeneralConfig(QDomDocument& dom);
+  virtual QDomElement writeUserConfig(QDomDocument& dom);
 
   
 

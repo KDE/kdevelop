@@ -27,6 +27,9 @@
 #include <ctoolclass.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <qtextstream.h>
 
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDevComponent(parent,name){
@@ -137,7 +140,58 @@ void ProjectSpace::setInfosInString(QString& text){
   	      
 }
 
-/** writes a NAME.kdevpsp and .NAME.kdevpsp
+bool ProjectSpace::readXMLConfig(QString abs_filename){
+  QFile file(abs_filename);
+  if (!file.open(IO_ReadOnly)){
+    KMessageBox::sorry(0, i18n("Can't open the file %1")
+		       .arg(abs_filename));
+    return false;
+  }
+  
+  // Parse the XML file.
+  QDomDocument doc;
+  // Read in file and check for a valid XML header.
+  if (!doc.setContent(&file)){
+    KMessageBox::sorry(0,
+		       i18n("The file %1 does not contain valid XML").arg(abs_filename));
+      return false;
+  }
+  // Check for proper document type.
+  if (doc.doctype().name() != "KDevProjectSpace (General)"){
+      KMessageBox::sorry(0,
+			 i18n("The file %1 does not contain a valid work sheet\n"
+			      "definition, which must have a document type\n"
+			      "'KDevProjectSpace (General)'").arg(abs_filename));
+      return false;
+    }
+  return true;
+}
+bool ProjectSpace::writeXMLConfig(){
+  kdDebug(9000) << "enter ProjectSpace::writeXMLConfig" << endl;
+
+   // the "global" one
+  QDomDocument doc("KDevProjectSpace (General)");
+  doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  // save work projectspace information
+  QDomElement ps = doc.createElement("ProjectSpace");
+  doc.appendChild(ps);
+  QDomElement e = writeGeneralConfig(doc);
+  doc.appendChild( e );
+ 
+  QString filename = m_path + "/" + m_name + ".kdevpsp";
+  kdDebug(9000)  << "filename:" << filename << endl;
+  QFile file(filename);
+  if (!file.open(IO_WriteOnly)){
+    KMessageBox::sorry(0, i18n("Can't save file %1")
+		       .arg(filename));
+    return false;
+  }
+
+  QTextStream s(&file);
+  s << doc;
+  file.close();
+}
+/** read a NAME.kdevpsp and .NAME.kdevpsp
     NAME.kdevpsp contains options for all users, like cvs system
     .NAME.kdevpsp contains options from the local user:
 */
@@ -161,6 +215,8 @@ bool ProjectSpace::readConfig(QString abs_filename){
   config->sync();
   delete config;
   return true;
+ 
+  
 }
 
 bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
@@ -197,6 +253,12 @@ bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
   return true;
 }
 
+bool ProjectSpace::readGeneralConfig(QDomElement& dom){
+  
+}
+bool ProjectSpace::readUserConfig(QDomElement& dom){
+  
+}
 bool ProjectSpace::readUserConfig(KSimpleConfig* config){
   config->setGroup("General");
   m_email = config->readEntry("email");
@@ -258,6 +320,29 @@ bool ProjectSpace::writeUserConfig(KSimpleConfig* config){
   config->writeEntry("author_name", m_author);
   return true;
 }
+
+QDomElement ProjectSpace::writeGeneralConfig(QDomDocument& doc){
+  
+  QDomElement general = doc.createElement("General");
+  general.setAttribute("name",m_name);
+  general.setAttribute("path",m_path);
+  general.setAttribute("plugin_name", m_plugin_name); // the projectspacetype name
+  general.setAttribute("version", m_version);
+  general.setAttribute("programming_language",m_language);
+  QStringList projectfiles;
+  Project* prj;
+  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
+    // add the relative path
+    QString file = prj->getProjectFile();
+    projectfiles.append(CToolClass::getRelativePath(m_path,file));
+  }
+  //  general.setAttribut("projectfiles",projectfiles);
+  return general;
+
+}
+QDomElement ProjectSpace::writeUserConfig(QDomDocument& dom){
+}
+
 
 QString ProjectSpace::getProgrammingLanguage(){
   return m_language;

@@ -75,7 +75,7 @@ void AppWizard::accept(){
   }
   m_projectspace->addProject(m_project);
   generateDefaultFiles();
-  m_projectspace->writeConfig();
+  m_projectspace->writeXMLConfig();
   QWizard::accept();
 }
 
