@@ -1,5 +1,5 @@
 2002-11-28  Victor Röder  <victor_roeder@gmx.de>
-	* Added "Remove target"
+	* Added "Remove target" to Automake Manager
 	* Minor fixes
 
 2002-11-28 F@lk Brettschneider <falk@kdevelop.org>
