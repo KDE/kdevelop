@@ -76,6 +76,7 @@
 #include "misc.h"
 #include "dataform.h"
 #include "profilesupport.h"
+#include "filetemplate.h"
 
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
@@ -304,6 +305,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             license_combo->setCurrentItem( idx - 1 );
     }
 
+	connect( license_combo, SIGNAL(activated(int)), this, SLOT(licenseChanged()) );
+	
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
 	
@@ -385,7 +388,7 @@ void AppWizardDialog::updateNextButtons()
 
 void AppWizardDialog::textChanged()
 {
-    licenseChanged();
+//    licenseChanged();
 
 	updateNextButtons();
 }
@@ -476,9 +479,23 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert("AUTHOR", author_edit->text() );
 	m_pCurrentAppInfo->subMap.insert("EMAIL", email_edit->text() );
 	m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
-	m_pCurrentAppInfo->subMap.insert("LICENSE", license_combo->currentText() );
 	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
 	m_pCurrentAppInfo->subMap.insert("YEAR", QString::number( QDate::currentDate().year() ) );
+	
+	// This isn't too pretty, but we have several templates that use KAboutData::License_${LICENSE}
+	// and unsurprisingly, KAboutData doesn't cover every imaginable case.
+	// These are the licenses known to KDE-3.2 KAboutData, KDevelop doesn't have all of these as prepared options today
+	QString license = license_combo->currentText();
+	if ( license == "GPL" || license == "GPL_V2" || license == "LGPL" || license == "LGPL_V2"||
+		license == "BSD" || license == "Artistic" || license == "QPL" || license == "QPL_V1_0" )
+	{
+		m_pCurrentAppInfo->subMap.insert("LICENSE", license );
+	}
+	else
+	{
+		m_pCurrentAppInfo->subMap.insert("LICENSE", "Custom" );
+	}
+
 
 	QStringList cleanUpSubstMap;
 	cleanUpSubstMap << "src" << "I18N" << "kdevelop";
@@ -492,12 +509,18 @@ void AppWizardDialog::accept()
 	baseDir.dir = "%{dest}";
 	m_pCurrentAppInfo->dirList.prepend( baseDir );
 
+	// This is too silly for words, but it's either this or reimplementing FileTemplate
+	QString tempProjectDomSource = "<!DOCTYPE kdevelop><kdevelop><general><author>%1</author><email>%2</email><version>%3</version></general></kdevelop>";
+	tempProjectDomSource = tempProjectDomSource.arg( author_edit->text() ).arg( email_edit->text() ).arg( version_edit->text() );
+	QDomDocument tempProjectDom;
+	tempProjectDom.setContent( tempProjectDomSource ); 
+	
     QValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         KTempFile *tempFile = new KTempFile();
         m_tempFiles.append(tempFile);
 
-		QString templateText( (*it).edit->text() );
+		QString templateText( FileTemplate::makeSubstitutions( tempProjectDom, (*it).edit->text() ) );
 		QFile f;
 		f.open(IO_WriteOnly, tempFile->handle());
 		QTextStream temps(&f);
@@ -806,7 +829,8 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate.suffix));
             m_fileTemplates.append(fileTemplate);
         }
-        textChanged(); // calls licenseChanged() && update Next button state
+        licenseChanged();	// to populate the template views
+        textChanged(); // update Next button state
     } else {
 	m_customOptions=0;
         m_pCurrentAppInfo=0;
@@ -1193,7 +1217,7 @@ void AppWizardDialog::loadLicenses()
 	for (it = licNames.begin(); it != licNames.end(); ++it)
 	{
 		QString licPath( dirs->findResource( "licenses", *it ) );
-		// kdDebug(9000) << "Loading license file: " << licPath << endl;
+		kdDebug(9010) << "Loading license file: " << licPath << endl;
 		QString licName = licPath.mid( licPath.findRev('/') + 1 );
 		KDevLicense* lic = new KDevLicense( licName, licPath );
 		m_licenses.insert( licName, lic );

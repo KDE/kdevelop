@@ -66,11 +66,11 @@ QString KDevLicense::assemble( KDevFile::CommentingStyle commentingStyle, const 
 	
 	QString str = 
 		strFill + "/***************************************************************************\n" +
-		strFill + " *   Copyright (C) %1 by %2   *\n" +
-		strFill + " *   %3   *\n" +
+		strFill + " *   Copyright (C) $YEAR$ by $AUTHOR$   *\n" +
+		strFill + " *   $EMAIL$   *\n" +
 		strFill + " *                                                                         *\n";
 	
-	str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
+//	str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
 	
 	QStringList::Iterator it;
 	for( it = m_rawLines.begin(); it != m_rawLines.end(); ++it )
