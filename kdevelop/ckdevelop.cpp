@@ -77,6 +77,7 @@
 #include <krun.h>
 #include <kstddirs.h>
 #include <ktabctl.h>
+#include <knotifyclient.h>
 
 #include <qclipbrd.h>
 #include <qdir.h>
@@ -3544,7 +3545,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 //      disableCommand(ID_VIEW_NEXT_ERROR);
 //    }
 //  }
+
+  if (ready && proc->normalExit()) {
+
+    if (proc->exitStatus()) {
+      KNotifyClient::event(QString::fromLatin1("BuildError"), i18n("The build process has finished with errors"));
+    } else {
+      KNotifyClient::event(QString::fromLatin1("BuildSuccess"), i18n("The build process has finished successfully"));
+    }
+  }
+
   if(beep && ready){
+
       XBell(kapp->getDisplay(),100); //beep :-)
       beep = false;
   }
