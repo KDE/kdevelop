@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = "Version 3.0.90-CVS"
+PROJECT_NUMBER         = "Version 3.1.0"
 OUTPUT_DIRECTORY       = ./apidocs
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
