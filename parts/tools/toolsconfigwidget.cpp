@@ -94,18 +94,7 @@ void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfig
         ToolsConfigEntry *entry = it.current();
         list << entry->menutext;
         config->setGroup(group + " " + entry->menutext);
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
-#if defined(_KDE_3_1_3_)
         config->writePathEntry("CommandLine", entry->cmdline);
-#else
-        config->writeEntry("CommandLine", entry->cmdline);
-#endif
         config->writeEntry("DesktopFile", entry->isdesktopfile);
         config->writeEntry("Captured", entry->captured);
     }
