@@ -631,12 +631,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
 }
 
-// Helper method because activateView is protected in QextMdiMainFrm
-void CKDevelop::doActivateView(QextMdiChildView *pWnd)
-{
-  activateView(pWnd);
-}
-
 //void CKDevelop::switchToFile(QString filename, int lineNo){
 //  lasttab = s_tab_view->getCurrentTab();
 //  switchToFile( filename, false, lineNo, 0);

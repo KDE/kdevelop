@@ -87,7 +87,7 @@ void DocViewMan::doSelectURL(const QString& url)
     pBrowserView = createBrowserView(pDoc);
   }
 
-  m_pParent->doActivateView( (QextMdiChildView*) pBrowserView->parentWidget());  // raise
+  pBrowserView->parentWidget()->setFocus();
 }
 
 void DocViewMan::doSwitchToFile(QString filename, int line, int col,
@@ -193,7 +193,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
     loadKWriteDoc(pDoc , filename, 1);
 
     qDebug("and loadDoc");
-    m_pParent->doActivateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
+    pCurEditWidget->parentWidget()->setFocus();
   }
   else
   {
@@ -202,9 +202,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
     KWriteDoc* pDoc = findKWriteDoc(filename);
     pCurEditWidget = getFirstEditView(pDoc);
 
-    debug(" activate view !\n");
+    debug(" focus view !\n");
 
-    m_pParent->doActivateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
+    pCurEditWidget->parentWidget()->setFocus();
 
     // Don't use the saved text because it is useless 
     // and removes the bookmarks
@@ -398,7 +398,7 @@ void DocViewMan::doCreateNewView()
 
   // raise and activate
   if (pNewView)
-    m_pParent->doActivateView((QextMdiChildView*)pNewView->parentWidget());
+    pNewView->parentWidget()->setFocus();
 }
 
 /** */

@@ -202,9 +202,6 @@ public:
   void switchToFile(QString filename, int line = -1, int col = 0,
                     bool bForceReload=false,bool bShowModifiedBox=true);
 
-  /** Helper method because activateView is protected in QextMdiMainFrm */
-  void doActivateView(QextMdiChildView *pWnd);
-
   /** Helper function to get the config */
   KConfig* getConfig() { return config; };
 
