@@ -40,6 +40,10 @@ CVSFileInfoProvider::CVSFileInfoProvider( CvsServicePart *parent, CvsService_stu
 
 CVSFileInfoProvider::~CVSFileInfoProvider()
 {
+   if (m_requestStatusJob && m_requestStatusJob->isRunning())
+      m_requestStatusJob->cancel();
+   delete m_requestStatusJob;
+   delete m_cachedDirEntries;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
