@@ -2231,7 +2231,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 {
                 // Copy selected files to current subproject folder
                 QString filename = KURL(files[i]).fileName();
-                KIO::NetAccess::file_copy(files[i], cleanSubprojectPath + "/" + filename, -1, true, false, this);
+                KIO::NetAccess::file_copy(files[i], cleanSubprojectPath + "/" + filename, -1, false, false, this);
                 // and add them to the filelist
                 addFileToCurrentSubProject(titem, filename);
 
