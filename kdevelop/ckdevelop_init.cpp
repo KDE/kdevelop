@@ -105,6 +105,8 @@ CKDevelop::CKDevelop(bool witharg)
   initProject(witharg);
 	
   initDebugger();
+
+  setDebugMenuProcess(false);
   setToolmenuEntries();
 
   error_parser = new CErrorMessageParser;
@@ -258,9 +260,6 @@ void CKDevelop::initView(){
   
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
-
-  // Setup the debug menu correctly.
-  setDebugMenuProcess(false);
 }
 
 /*--------------------------------------- CKDevelop::initKeyAccel()

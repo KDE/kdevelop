@@ -1158,31 +1158,33 @@ void CKDevelop::slotBuildDebug()
 
 void CKDevelop::setDebugMenuProcess(bool enable)
 {
+  setToolMenuProcess(!enable);
+
   // When starting we turn off the original toolbar start button
-  toolBar()->setItemEnabled(ID_DEBUG_START,           !enable && project);
-  toolBar()->setItemEnabled(ID_BUILD_RUN,             !enable && project);
-  toolBar()->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,   !enable && project);
-  toolBar()->setItemEnabled(ID_BUILD_STOP,            enable);
+//  toolBar()->setItemEnabled(ID_DEBUG_START,           !enable && project);
+//  toolBar()->setItemEnabled(ID_BUILD_RUN,             !enable && project);
+//  toolBar()->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,   !enable && project);
+//  toolBar()->setItemEnabled(ID_BUILD_STOP,            enable);
 
   toolBar()->setItemEnabled(ID_DEBUG_RUN,             dbgInternal && enable);
   toolBar()->setItemEnabled(ID_DEBUG_STEP,            dbgInternal && enable);
   toolBar()->setItemEnabled(ID_DEBUG_NEXT,            dbgInternal && enable);
   toolBar()->setItemEnabled(ID_DEBUG_FINISH,          dbgInternal && enable);
 
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_START,          !enable && project);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN,            !enable && project);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_STOP,           enable);
+//  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_START,          !enable && project);
+//  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN,            !enable && project);
+//  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
+//  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_STOP,           enable);
 
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,    dbgInternal && enable);
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,   dbgInternal && enable);
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,   dbgInternal && enable);
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_FINISH, dbgInternal && enable);
 
-  debug_menu->setItemEnabled(ID_DEBUG_START,          !enable && project);
-  debug_menu->setItemEnabled(ID_DEBUG_START_OTHER,    dbgInternal && !enable && project);
-  debug_menu->setItemEnabled(ID_BUILD_RUN,            !enable && project);
-  debug_menu->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
+//  debug_menu->setItemEnabled(ID_DEBUG_START,          !enable && project);
+//  debug_menu->setItemEnabled(ID_DEBUG_START_OTHER,    dbgInternal && !enable && project);
+//  debug_menu->setItemEnabled(ID_BUILD_RUN,            !enable && project);
+//  debug_menu->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
 
   debug_menu->setItemEnabled(ID_DEBUG_RUN,            dbgInternal && enable);
   debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,     dbgInternal && enable);

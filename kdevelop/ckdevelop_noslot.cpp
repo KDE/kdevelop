@@ -890,7 +890,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     }
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
-//    enableCommand(ID_DEBUG_START);
+    enableCommand(ID_DEBUG_START);
+    enableCommand(ID_DEBUG_START_OTHER);
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
     enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
@@ -908,14 +909,15 @@ void CKDevelop::setToolMenuProcess(bool enable){
 		enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
   }
-
-  if (!enable)
+  else
+//  if (!enable)
   {
     // set the popupmenus enable or disable
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);
-//    disableCommand(ID_DEBUG_START);
+    disableCommand(ID_DEBUG_START);
+    disableCommand(ID_DEBUG_START_OTHER);
     disableCommand(ID_BUILD_MAKE);
     disableCommand(ID_BUILD_REBUILD_ALL);
     disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
@@ -935,8 +937,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
     else
       saveTimer->stop();  // stop the autosaving if make or something is running
   }
-
-  setDebugMenuProcess(false);
 }
 
 void CKDevelop::switchToWorkspace(int id){

@@ -192,7 +192,7 @@ public:
     * @param enable if true than enable,otherwise disable
     */
   void setToolMenuProcess(bool enable);
-//  void setDebugMenuProcess(bool enable);
+  void setDebugMenuProcess(bool enable);
 
   KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
   KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
@@ -930,56 +930,40 @@ private:
   QString lastfile;
   QString lastOpenDir;
 
-  /** debugger additions for the internal debugger */
-
-  void setDebugMenuProcess(bool enable);
-
+  /*********************Debugger additions *******************/
   /** The controller for the debugging program (eg gdb) */
   DbgController* dbgController;
-  
   /** The floating toolbar - always on top */
   DbgToolbar* dbgToolbar;
-
   /** The debugger's tree of local variables - on tree view tab */
   VarViewer* var_viewer;
-
   /** Manages a list of breakpoints - Always active - on output tab */
   BreakpointManager* brkptManager;
-
   /** Manages a frame stack list - on output tab */
   FrameStack* frameStack;
-
   /** show disassembled code being run - on output tab */
    Disassemble* disassemble;
  
   /** debug aid. Switch on using compile switch GDB_MONITOR
       or DBG_MONITOR  - on output tab */
-
   COutputWidget* dbg_widget;
-
   /** */
   bool dbgInternal;
-  
   /** The external debugger command to run */
   QString dbgExternalCmd;
-
   /** Initiates a variety of debugging sessions. */
   QPopupMenu* debugPopup;
-
   /** Protect the gdbcontroller deletion. */
   bool dbgShuttingDown;
-
   /** Have both float and normal toolbar */
   bool dbgEnableFloatingToolbar;
+  /************* END Debugger additions ********************/
 
   /** memory effect on open file dialog box*/
   QString _LastOpenDir;
-
-
 
   bool useGlimpse;
   bool useHtDig;
 };
 
 #endif
-
