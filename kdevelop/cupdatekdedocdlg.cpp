@@ -277,8 +277,6 @@ void CUpdateKDEDocDlg::OK(){
 						+ new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;
 						cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
 						+ new_doc_path +"kdoc-reference khtmlw *.h -lqt -lkdecore -lkdeui -ljscript;
-						cd ../khtml;kdoc -d "+ new_doc_path + "/khtml -ufile:" + new_doc_path + "khtml/ -L"
-						+ new_doc_path +"kdoc-reference khtml *.h -lqt -lkdecore -lkdeui -ljscript;
 						cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
 						+ new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;
 						cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
@@ -287,6 +285,10 @@ void CUpdateKDEDocDlg::OK(){
 						+ new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;
 						cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
 						+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
+
+// this is for the new khtml widget of the kdelibs -- causes difficulties when using khtml or khtmlw...
+//						cd ../khtml;kdoc -d "+ new_doc_path + "/khtml -ufile:" + new_doc_path + "khtml/ -L"
+//						+ new_doc_path +"kdoc-reference khtml *.h -lqt -lkdecore -lkdeui -ljscript;
 
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   accept();
