@@ -1,11 +1,11 @@
 
 
-toolbar_DATA = make.xpm stop_proc.xpm run.xpm copy.xpm paste.xpm \
-	       open.xpm cut.xpm save.xpm save_all.xpm undo.xpm redo.xpm \
-	       openprj.xpm compfile.xpm rebuild.xpm print.xpm debugger.xpm \
-	       lookup.xpm newwidget.xpm generate.xpm output_win.xpm tree_win.xpm \
-				 reload_page.xpm start_page.xpm file_properties.xpm indent.xpm unindent.xpm \
-				 grep.xpm classwiz.xpm graphview.xpm mini-book1.xpm mini-book2.xpm mini-doc.xpm
+toolbar_DATA = make.png stop_proc.png run.png copy.png paste.png \
+	       open.png cut.png save.png save_all.png undo.png redo.png \
+	       openprj.png compfile.png rebuild.png print.png debugger.png \
+	       lookup.png newwidget.png generate.png output_win.png tree_win.png \
+	       reload_page.png start_page.png file_properties.png indent.png unindent.png \
+	       grep.png classwiz.png graphview.png mini-book1.png mini-book2.png mini-doc.png
 
 toolbardir = $(kde_datadir)/kdevelop/toolbar
 

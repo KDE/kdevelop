@@ -44,8 +44,8 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
 
   KIconLoader *icon_loader = KGlobal::iconLoader();
 
-  folder_pix = icon_loader->loadIcon("folder.xpm");
-  entry_pix = icon_loader->loadIcon("mini-default.xpm");
+  folder_pix = icon_loader->loadIcon("folder.png");
+  entry_pix = icon_loader->loadIcon("mini-default.png");
 
 }
 
@@ -89,7 +89,7 @@ void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
     }
   phelp.insertItem( BarIcon("paste"), i18n("&Paste"), edwid, SLOT(slot_pasteSelected()) );
   phelp.insertSeparator();
-  phelp.insertItem( BarIcon("help.xpm"), i18n("&Help"),  edwid, SLOT(slot_helpSelected()) );
+  phelp.insertItem( BarIcon("help.png"), i18n("&Help"),  edwid, SLOT(slot_helpSelected()) );
   phelp.exec(QCursor::pos());
 }
 

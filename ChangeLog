@@ -1,3 +1,6 @@
+1999-10-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* converted all xpm's to png format, added developmentpackage icon
+
 1999-10-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* New class ProcessView, which is an output window
 	  (like COutputWindow) plus KProcess. This allows

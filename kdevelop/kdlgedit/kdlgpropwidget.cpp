@@ -749,7 +749,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
 
   KIconLoader *icon_loader = KGlobal::iconLoader();
 
-  QPixmap folder_pix = icon_loader->loadIcon("folder.xpm");
+  QPixmap folder_pix = icon_loader->loadIcon("folder.png");
 
   KDlgPropertyEntry *prop;
   int i,n;

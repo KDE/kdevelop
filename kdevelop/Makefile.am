@@ -49,14 +49,15 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkio -lkspell -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -ldb -ldl -lkhtml
+kdevelop_LDADD   = ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a  $(LIB_KHTML) -lkfile -lkio -lkspell -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldb -ldl $(LIBSOCKET) 
+
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
 	cclassview.h kswallow.h cgeneratenewfile.h \
 	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
-	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
+	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h \
 	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
 	cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
@@ -66,7 +67,9 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h component.h processview.h
 
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk
+EXTRA_DIST = kdeveloprc \
+	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
+	development-package.png kdevelop.png mini-kdevelop.png kdevelop-project.png  	
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
@@ -84,23 +87,24 @@ messages:
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
 	$(mkinstalldirs) $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/Development
+	$(INSTALL_DATA) kdevelop.desktop $(APPSDIR)/Development
+	$(INSTALL_DATA) kdevelop-setup.desktop $(APPSDIR)/Development
 	$(INSTALL_DATA) .directory $(APPSDIR)/Development
-	$(mkinstalldirs) $(kde_icondir)
-	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
-	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
-	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
+	$(mkinstalldirs) $(kde_icondir)/locolor
+	$(INSTALL_DATA) kdevelop.png $(kde_icondir)/locolor
+	$(INSTALL_DATA) kdevelop-project.png $(kde_icondir)/locolor	
+#	$(mkinstalldirs) $(kde_minidir)
+	$(INSTALL_DATA) mini-kdevelop.png $(kde_icondir)/mini/kdevelop.png
+	$(INSTALL_DATA) development-package.png $(kde_icondir)/mini/development-package.png
 	$(mkinstalldirs) $(kde_confdir)
 	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
 	$(mkinstalldirs) $(kde_mimedir)/application	
-	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
+	$(INSTALL_DATA) x-kdevelop-project.desktop $(kde_mimedir)/application/
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
-	-rm -f $(APPSDIR)/Development/kdevelop.kdelnk
-	-rm -f $(APPSDIR)/Development/kdevelop-setup.kdelnk
-	-rm -f $(kde_icondir)/kdevelop.xpm
-	-rm -f $(kde_minidir)/kdevelop.xpm
+	-rm -f $(APPSDIR)/Development/kdevelop.desktop
+	-rm -f $(APPSDIR)/Development/kdevelop-setup.desktop
+	-rm -f $(kde_icondir)/kdevelop.png
+	-rm -f $(kde_minidir)/kdevelop.png
 

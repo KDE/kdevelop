@@ -560,7 +560,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
-  project_menu->insertItem(loader->loadApplicationMiniIcon("locale.xpm"),i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(loader->loadApplicationMiniIcon("locale.png"),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
@@ -603,7 +603,7 @@ void CKDevelop::initMenuBar(){
   build_menu->insertItem(BarIcon("make"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
 
-//   build_menu->insertItem(Icon("make.xpm"),i18n("Make &with"),this,
+//   build_menu->insertItem(Icon("make.png"),i18n("Make &with"),this,
 // 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
 //   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
 
@@ -710,8 +710,8 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(BarIcon("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   
   help_menu->insertSeparator();
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help_menu->insertItem(BarIcon("mini-book1.png"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help_menu->insertItem(BarIcon("mini-book1.png"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
 	help_menu->insertItem(BarIcon("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertItem(BarIcon("filemail"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
@@ -787,7 +787,7 @@ void CKDevelop::initMenuBar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
    
-//  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
+//  toolBar()->insertButton(Icon("filenew.png"),ID_FILE_NEW, false,i18n("New"));
 
   toolBar()->insertButton(BarIcon("openprj"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
@@ -797,7 +797,7 @@ void CKDevelop::initToolBar(){
   toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
 
   toolBar()->insertButton(BarIcon("save"),ID_FILE_SAVE,true,i18n("Save File"));
-//  toolBar()->insertButton(Icon("save_all.xpm"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
+//  toolBar()->insertButton(Icon("save_all.png"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
 
   toolBar()->insertButton(BarIcon("print"),ID_FILE_PRINT,false,i18n("Print"));
 

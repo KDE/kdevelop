@@ -1,0 +1,9 @@
+[KDE Desktop Entry]
+Comment=KDevelop Project File
+Comment[fr]=Fichier de Projet KDevelop
+DefaultApp=kdevelop
+Icon=kdevelop-project.png
+MiniIcon=kdevelop-project.png
+Type=MimeType
+MimeType=application/x-kdevelop-project
+Patterns=*.kdevprj;
