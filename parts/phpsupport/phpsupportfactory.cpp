@@ -13,7 +13,7 @@
 #include <kinstance.h>
 
 #include "phpsupportfactory.h"
-//#include "phpsupportpart.h"
+#include "phpsupportpart.h"
 
 
 extern "C" {
@@ -43,7 +43,7 @@ KDevPart *PHPSupportFactory::createPartObject(KDevApi *api, QObject *parent,
                                                const QStringList &/*args*/)
 {
     kdDebug(9016) << "Building PHPSupport" << endl;
-    //    return new PHPSupportPart(api, parent, "php support part");
+    return new PHPSupportPart(api, parent, "php support part");
 }
 
 
