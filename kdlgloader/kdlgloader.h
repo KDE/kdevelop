@@ -19,6 +19,9 @@
 #ifndef KDLGLOADER_H
 #define KDLGLOADER_H
 
+#include <qwidget.h>
+#include <qstring.h>
+
 #if hpux
 #include <dl.h>
 inline const char *dlerror()
@@ -193,3 +196,5 @@ class KDlgLoader {
 };
 
 #endif
+
+

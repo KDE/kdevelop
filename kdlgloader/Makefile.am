@@ -17,7 +17,8 @@
 #    Boston, MA 02111-1307, USA.
 
 
-INCLUDES= $(QT_INCLUDES) $(X_INCLUDES) $(KDE_INCLUDES)
+INCLUDES= $(all_includes)
+
 
 lib_LTLIBRARIES  = libkdlgloader.la
 
@@ -32,6 +33,5 @@ libkdlgloader_la_SOURCES = kdlgldr.cpp kdlgldr_itemstuff.cpp kdlgptrdb.cpp
 
 EXTRA_DIST = README
 
-LDFLAGS = $(QT_LDFLAGS) $(X_LDFLAGS) $(USER_LDFLAGS)
-libkdlgloader_la_LDFLAGS = -version-info $(SOMAJOR):$(SOMINOR) $(LDFLAGS)
-libkdlgloader_la_LIBADD =  -lXext  $(LIB_QT)
+libkdlgloader_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOMINOR) $(LDFLAGS)
+libkdlgloader_la_LIBADD =  $(LIB_KDEUI) -lXext  $(LIB_QT)
