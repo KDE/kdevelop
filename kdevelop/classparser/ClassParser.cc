@@ -97,6 +97,57 @@ void CClassParser::emptyStack()
     delete lexemStack.pop();
 }
 
+/*--------------------------- CClassParser::parseStructDeclarations()
+ * parseStructDeclarations()
+ *   Parse all declarations inside a structure.
+ *
+ * Parameters:
+ *   aStruct        The struct that holds the declarations.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
+{
+  CParsedAttribute *anAttr;
+  QList<CParsedAttribute> list;
+
+  while( lexem != '}' && lexem != 0 )
+  {
+    if( lexem != '}' )
+    {
+      switch( checkClassDecl() )
+      {
+        case CP_IS_ATTRIBUTE:
+          anAttr = new CParsedAttribute();
+          fillInParsedVariable( anAttr );
+          if( !anAttr->name.isEmpty() )
+            aStruct->addMember( anAttr );
+          else
+            delete anAttr;
+          break;
+          
+        case CP_IS_MULTI_ATTRIBUTE:
+          fillInMultipleVariable( list );
+          
+          // Add the attributes to the class.
+          for( anAttr = list.first();
+               anAttr != NULL;
+               anAttr = list.next() )
+          {
+            aStruct->addMember( anAttr );
+          }
+          break;
+        default: // Ignore all other cases for now
+          emptyStack();
+      }
+
+      getNextLexem();
+    }
+  }
+}
+
+
 /*---------------------------------------- CClassParser::parseStruct()
  * parseStruct()
  *   Parse a structure.
@@ -108,66 +159,41 @@ void CClassParser::emptyStack()
  *-----------------------------------------------------------------*/
 CParsedStruct *CClassParser::parseStruct()
 {
-  CParsedStruct *aStruct = NULL;
-  //  CParsedAttribute *aAttr;
+  CParsedStruct *aStruct = new CParsedStruct();
 
-  // Save the STRUCT keyword on the stack.
-  PUSH_LEXEM();
+  // Set some info about the struct.
+  aStruct->setDefinedOnLine( getLineno() );
+  aStruct->setDefinedInFile( currentFile );
 
-  // Set the name
   getNextLexem();
 
-  PUSH_LEXEM();
-
+  // Check if this struct has a name
   if( lexem == ID )
   {
-    aStruct = new CParsedStruct();
     aStruct->setName( getText() );
-    aStruct->setDefinedOnLine( getLineno() );
-    aStruct->setDefinedInFile( currentFile );
-
-    // Skip the '{'
     getNextLexem();
-
-    if( lexem == '{' )
-    {
-      // This is really a struct so we don't need the stuff on the stack.
-      emptyStack();
-
-      skipBlock();
-
-      // Skip to the ';'
-      while( lexem != ';' )
-        getNextLexem();
-    }
-    else if( lexem == ';' ) // Forward declaration
-    {
-      emptyStack();
-
-      delete aStruct;
-      aStruct = NULL;
-    }
-    else // Part of variable declaration. 
-    {
-      delete aStruct;
-      aStruct = NULL;
-    }
   }
-  else if( lexem == '{' ) // Anonymous struct
-    skipBlock();
 
-  /*  getNextLexem();
-      
-
-  while( aAttr != NULL )
+  switch( lexem )
   {
-    aAttr = parseVariable();
-    if( aAttr != NULL )
-    {
-      aStruct->addMember( aAttr );
+    case '{': // A struct definition.
+      // Jump to first declaration or to '}'.
       getNextLexem();
-    }
-    }*/
+
+      parseStructDeclarations( aStruct );
+
+      // Skip '}'
+      getNextLexem();
+
+      // If we find a name here we use the typedef name as the struct name.
+      if( lexem == ID )
+        aStruct->setName( getText() );
+      break;
+    case ';': // Forward declaration.
+      delete aStruct;
+      aStruct = NULL;
+      break;
+  }
   
   return aStruct;
 }
@@ -256,8 +282,8 @@ void CClassParser::skipBlock()
       exit = ( depth == 0 );
     }
 
-    if( lexem == 0 )
-      exit = true;
+    // Always exit if lexem == 0 -> EOF.
+    exit = exit || ( lexem == 0 );
   }
 }
 
@@ -1026,6 +1052,69 @@ CParsedClass *CClassParser::parseClass()
  *                                                                   *
  ********************************************************************/
 
+/*------------------------- CClassParser::parseGlobalMethodVariable()
+ * parseGlobalMethodVariable()
+ *   Parse and add global method and variable declarations.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseGlobalMethodVariable()
+{
+  QList<CParsedAttribute> list;
+  CParsedAttribute *anAttr;
+  CParsedMethod *aMethod;
+  int declType;
+
+  declType = checkClassDecl();
+  switch( declType )
+  {
+    case CP_IS_ATTR_IMPL:
+      // Empty the stack
+      emptyStack();
+      break;
+    case CP_IS_OPERATOR_IMPL:
+    case CP_IS_METHOD_IMPL:
+      parseMethodImpl( declType == CP_IS_OPERATOR_IMPL );
+      break;
+    case CP_IS_ATTRIBUTE:
+      anAttr = new CParsedAttribute();
+      fillInParsedVariable( anAttr );
+      if( !anAttr->name.isEmpty() )
+        store.addGlobalVar(  anAttr );
+      else
+        delete anAttr;
+      break;
+    case CP_IS_METHOD:
+      aMethod = new CParsedMethod();
+      fillInParsedMethod( aMethod );
+      if( !aMethod->name.isEmpty() )
+        store.addGlobalFunction( aMethod );
+      else
+        delete aMethod;
+      break;
+    case CP_IS_MULTI_ATTR_IMPL:
+      debug( "Found multi attr implementation." );
+      break;
+    case CP_IS_MULTI_ATTRIBUTE:
+      fillInMultipleVariable( list );
+      
+      // Add the attributes to the class.
+      for( anAttr = list.first();
+           anAttr != NULL;
+           anAttr = list.next() )
+      {
+        store.addGlobalVar( anAttr );
+      }
+      break;
+    case CP_IS_OPERATOR:
+      debug( "Found operator declaration." );
+      break;
+  }
+}
+
 /*------------------------------------- CClassParser::parseToplevel()
  * parseToplevel()
  *   Parse and add all toplevel definitions i.e classes, global
@@ -1040,9 +1129,6 @@ void CClassParser::parseToplevel()
 {
   CParsedClass *aClass;
   CParsedStruct *aStruct;
-  CParsedAttribute *anAttr;
-  CParsedMethod *aMethod;
-  int declType;
 
   // Ok... Here we go.
   lexem = -1;
@@ -1108,50 +1194,13 @@ void CClassParser::parseToplevel()
           break;
       case CONST:
       case ID:
-        declType = checkClassDecl();
-        switch( declType )
-        {
-          case CP_IS_ATTR_IMPL:
-            // Empty the stack
-            emptyStack();
-            break;
-          case CP_IS_OPERATOR_IMPL:
-          case CP_IS_METHOD_IMPL:
-            parseMethodImpl( declType == CP_IS_OPERATOR_IMPL );
-            break;
-          case CP_IS_ATTRIBUTE:
-            anAttr = new CParsedAttribute();
-            fillInParsedVariable( anAttr );
-            if( !anAttr->name.isEmpty() )
-              store.addGlobalVar(  anAttr );
-            else
-              delete anAttr;
-            break;
-          case CP_IS_METHOD:
-            aMethod = new CParsedMethod();
-            fillInParsedMethod( aMethod );
-            if( !aMethod->name.isEmpty() )
-              store.addGlobalFunction( aMethod );
-            else
-              delete aMethod;
-            break;
-          case CP_IS_MULTI_ATTR_IMPL:
-            debug( "Found multi attr implementation." );
-            break;
-          case CP_IS_MULTI_ATTRIBUTE:
-            debug( "Found multi value attribute declaration" );
-            break;
-          case CP_IS_OPERATOR:
-            debug( "Found operator declaration." );
-            break;
-        }
+        parseGlobalMethodVariable();
         break;
       default:
         break;
     }
   }
 }
-
 
 /*--------------------------------------------- CClassParser::reset()
  * reset()

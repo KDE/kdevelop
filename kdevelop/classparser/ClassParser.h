@@ -126,6 +126,9 @@ private: // Private methods
   /** Remove all elements from the stack. */
   void emptyStack();
 
+  /** Parse all structure declarations. */
+  void parseStructDeclarations( CParsedStruct *aStruct);
+
   /** Parse a structure. */
   CParsedStruct * parseStruct();
 
@@ -188,6 +191,9 @@ private: // Private methods
   
   /** Parse a class declaration. */
   CParsedClass *parseClass();
+
+  /** Parse all toplevel method and variables. */
+  void parseGlobalMethodVariable();
 
   /** Parse toplevel statements */
   void parseToplevel();
