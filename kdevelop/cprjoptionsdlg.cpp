@@ -745,7 +745,9 @@ void CPrjOptionsDlg::addLinkerPage()
 
   int pos;
 
-  QFrame* linkerOptions = addPage(i18n("Linker Options"));
+  QFrame* linkerOptions = addPage(i18n("Linker Options"),i18n("Linker Options"),
+		KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ));
+
   QGridLayout *grid2 = new QGridLayout(linkerOptions,2,1,15,7);
   QWhatsThis::add(linkerOptions, i18n("Set the Linker options and choose the "
       "libraries to add to your project."));

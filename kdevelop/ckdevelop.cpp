@@ -79,6 +79,7 @@
 #include <qtextstream.h>
 #include <qtoolbar.h>
 #include <qmessagebox.h>
+#include <qwhatsthis.h>
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -4126,6 +4127,10 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_HELP_SEARCH:
     slotHelpSearch();
     break;
+  case ID_HELP_WHATS_THIS:
+    QWhatsThis::enterWhatsThisMode();
+    break;
+
   case ID_CV_WIZARD:
     // Make the button toggle between declaration and definition.
     if(cv_decl_or_impl){

@@ -642,8 +642,8 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
   edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(SmallIconSet("indent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(SmallIconSet("unindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
 	edit_menu->insertItem(i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
 	edit_menu->insertItem(i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
@@ -750,11 +750,11 @@ void CKDevelop::initMenuBar(){
   // submenu for making dists
 
   QPopupMenu*  p2 = new QPopupMenu;
-  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
+  p2->insertItem(SmallIconSet("tgz"),i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   project_menu->insertSeparator();
 
-  project_menu->insertItem(i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
+  project_menu->insertItem(SmallIconSet("configure"),i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  project_menu->insertSeparator();		
 
 //  workspaces_submenu = new QPopupMenu;
@@ -803,15 +803,17 @@ void CKDevelop::initMenuBar(){
   // Debug-menu entries
 
   debugPopup = new QPopupMenu();
-  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
+  debugPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugPopup->insertItem(SmallIconSet("exec"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugPopup->insertItem(SmallIconSet("connect_creating"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugPopup->insertItem(SmallIconSet("exec"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
   debug_menu = new QPopupMenu;
-  debug_menu->insertItem(SmallIconSet("debugger"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
-  debug_menu->insertItem(SmallIconSet("debugger"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
+  debug_menu->insertItem(SmallIconSet("1rightarrow"),    i18n("&Start"),           ID_DEBUG_START);
+  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+
+  debug_menu->insertItem(SmallIconSet("1rightarrow"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
   debug_menu->insertSeparator();
 
   debug_menu->insertItem(SmallIconSet("dbgrun"),      i18n("Run"),              ID_DEBUG_RUN);
@@ -846,7 +848,7 @@ void CKDevelop::initMenuBar(){
 		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
 
   options_menu = new QPopupMenu;
-  options_menu->insertItem(i18n("&Editor..."),this,
+  options_menu->insertItem(SmallIconSet("edit"),i18n("&Editor..."),this,
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
   options_menu->insertItem(i18n("Editor &Colors..."),this,
 			   SLOT(slotOptionsEditorColors()),0,ID_OPTIONS_EDITOR_COLORS);
@@ -856,11 +858,11 @@ void CKDevelop::initMenuBar(){
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
-  options_menu->insertItem(i18n("Documentation &Browser..."),this,
+  options_menu->insertItem(SmallIconSet("www"),i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
 
-  options_menu->insertItem(i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
-	options_menu->insertItem(i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
+  options_menu->insertItem(SmallIconSet("fileprint"),i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
+	options_menu->insertItem(SmallIconSet("run"),i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
 //  options_menu->insertItem(i18n("&Spellchecker..."),this,SLOT(slotOptionsSpellchecker()),0,ID_OPTIONS_SPELLCHECKER);
   options_menu->insertSeparator();
   options_menu->insertItem(SmallIconSet("configure"),i18n("&KDevelop Setup..."),this,
@@ -1022,10 +1024,10 @@ void CKDevelop::initToolBar(){
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("debugger"),ID_DEBUG_START, false, i18n("Debug"));
   QPopupMenu* debugToolPopup = new QPopupMenu();
-  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
+  debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugToolPopup->insertItem(SmallIconSet("connect_creating"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
@@ -1100,7 +1102,7 @@ void CKDevelop::initToolBar(){
                                             i18n("Declaration/Definition"));
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CV_WIZARD,
                                                classbrowser_popup);
-
+  disableCommand(ID_CV_WIZARD);
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("back"),ID_HELP_BACK, false,i18n("Back"));
@@ -1128,11 +1130,14 @@ void CKDevelop::initToolBar(){
 //  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
   toolBar()->insertSeparator();
 
-  whats_this = new QWhatsThis(this);
-  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar(ID_BROWSER_TOOLBAR));
-  QToolTip::add(btnwhat, i18n("What's this...?"));
-  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
-  btnwhat->setFocusPolicy(QWidget::NoFocus);
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("contexthelp"),ID_HELP_WHATS_THIS,
+              true,i18n("What's this...?"));
+
+//  whats_this = new QWhatsThis(this);
+//  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar(ID_BROWSER_TOOLBAR));
+//  QToolTip::add(btnwhat, i18n("What's this...?"));
+//  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+//  btnwhat->setFocusPolicy(QWidget::NoFocus);
 
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
