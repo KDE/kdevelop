@@ -180,7 +180,8 @@ void CClassView::initPopups()
   classPopup.insertItem(SmallIconSet("CVpublic_var"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
   //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
   //  classPopup.setItemEnabled( id, false );
-
+  classPopup.insertSeparator();
+  classPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
@@ -196,17 +197,23 @@ void CClassView::initPopups()
   // Struct popup
   structPopup.insertTitle(SmallIcon("CVstruct"), i18n( "Struct" ) );
   structPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
+  structPopup.insertSeparator();
+  structPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
 
   // Method popup
   methodPopup.insertTitle(SmallIcon("CVpublic_meth"), i18n( "Method" ),1 );
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DEFINITION);
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DECLARATION);
   methodPopup.insertSeparator();
+  methodPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
+  methodPopup.insertSeparator();
   methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
   attributePopup.insertTitle(SmallIcon("CVpublic_var"), i18n( "Attribute" ), 1);
   attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
+  attributePopup.insertSeparator();
+  attributePopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   //  attributePopup.insertSeparator();
   //  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
   //  attributePopup.setItemEnabled( id, false );
@@ -216,11 +223,15 @@ void CClassView::initPopups()
   slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
   slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
   slotPopup.insertSeparator();
+  slotPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
+  slotPopup.insertSeparator();
   slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Signal popup
   signalPopup.insertTitle(SmallIcon("CVpublic_signal"), i18n( "Signal" ) );
   signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION );
+  signalPopup.insertSeparator();
+  signalPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   signalPopup.insertSeparator();
   signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
@@ -626,6 +637,12 @@ CParsedClass *CClassView::getCurrentClass()
 KPopupMenu *CClassView::getCurrentPopup()
 {
   KPopupMenu *popup = NULL;
+  QString text= currentItem()->text(0);
+
+  if(text.length() > 20 ){
+    text = text.left(20) + "...";
+  }
+  cerr << text << endl;
 
   switch( treeH->itemType() )
   {
@@ -636,56 +653,70 @@ KPopupMenu *CClassView::getCurrentPopup()
         popup = &folderPopup;
       break;
     case THCLASS:
+      classPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &classPopup;
       break;
     case THSTRUCT:
+      structPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &structPopup;
       break;
     case THPUBLIC_METHOD:
       methodPopup.changeTitle(1,SmallIcon("CVpublic_meth"), i18n("Public Method"));
+      methodPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &methodPopup;
       break;
     case THPROTECTED_METHOD:
       methodPopup.changeTitle(1,SmallIcon("CVprotected_meth"), i18n("Protected Method"));
+      methodPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &methodPopup;
       break;
     case THPRIVATE_METHOD:
       methodPopup.changeTitle(1,SmallIcon("CVprivate_meth"), i18n("Private Method"));
+      methodPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &methodPopup;
       break;
     case THGLOBAL_FUNCTION:
       methodPopup.changeTitle(1,SmallIcon("CVglobal_meth"), i18n("Global Method"));
+      methodPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &methodPopup;
       break;
     case THPUBLIC_ATTR:
       attributePopup.changeTitle(1,SmallIcon("CVpublic_var"), i18n("Public Variable"));
+      attributePopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &attributePopup;
       break;
     case THPROTECTED_ATTR:
       attributePopup.changeTitle(1,SmallIcon("CVprotected_var"), i18n("Protected Variable"));
+      attributePopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &attributePopup;
       break;
     case THPRIVATE_ATTR:
       attributePopup.changeTitle(1,SmallIcon("CVprivate_var"), i18n("Private Variable"));
+      attributePopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &attributePopup;
       break;
     case THGLOBAL_VARIABLE:
       attributePopup.changeTitle(1,SmallIcon("CVglobal_var"), i18n("Global Variable"));
+      attributePopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &attributePopup;
       break;
     case THPUBLIC_SLOT:
       slotPopup.changeTitle(1,SmallIcon("CVpublic_slot"), i18n("Public Slot"));
+      slotPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &slotPopup;
       break;
     case THPROTECTED_SLOT:
       slotPopup.changeTitle(1,SmallIcon("CVprotected_slot"), i18n("Protected Slot"));
+      slotPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &slotPopup;
       break;
     case THPRIVATE_SLOT:
       slotPopup.changeTitle(1,SmallIcon("CVprivate_slot"), i18n("Private Slot"));
+      slotPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &slotPopup;
       break;
     case THSIGNAL:
+      signalPopup.changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
       popup = &signalPopup;
       break;
     default:
@@ -1319,3 +1350,8 @@ void CClassView::slotClassWizard()
 }
 
 
+/**  */
+void CClassView::slotGrepText(){
+  QString text= currentItem()->text(0);
+  emit signalGrepText(text);
+}

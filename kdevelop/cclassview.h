@@ -143,6 +143,7 @@ protected slots:
   void slotViewDeclaration( const char *parentPath, const char *itemName,
                            THType parentType, THType itemType );
   void slotClassWizard();
+  void slotGrepText();
 
 signals:
   void selectedFileNew();
@@ -153,7 +154,7 @@ signals:
   void selectedViewDeclaration(const char *, const char *,THType,THType);
   void selectedViewDefinition(const char *, const char *,THType,THType);
   void selectFile(const QString &, int );
-
+  void signalGrepText(QString text);
   /** Emitted when a user wants to add an attribute.
    * @param aClass Class to add an attribute to.
    */

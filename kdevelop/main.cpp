@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
     if( QString(argv[1]) == "-setup") bInstall = true; // start the setupwizard
   }
 
+
   if (a.isRestored()){
     RESTORE(CKDevelop);
   }

@@ -98,7 +98,7 @@ CKDevelop::CKDevelop() :
 
   config->setGroup("General Options");
   start_logo=0L;
-  if (config->readBoolEntry("Logo",true))
+  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
   {
     start_logo= new KStartupLogo(this);
     start_logo->show();
@@ -999,10 +999,11 @@ void CKDevelop::initToolBar(){
 
   toolBar()->insertButton(BarIcon("fileprint"),ID_FILE_PRINT,false,i18n("Print"));
 
-  QFrame *sepUndo= new QFrame(toolBar());
-  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,sepUndo);
-	
+//  QFrame *sepUndo= new QFrame(toolBar());
+//  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+//  toolBar()->insertWidget(0,20,sepUndo);
+  toolBar()->insertSeparator();
+
   toolBar()->insertButton(BarIcon("undo"),ID_EDIT_UNDO,false,i18n("Undo"));
   toolBar()->insertButton(BarIcon("redo"),ID_EDIT_REDO,false,i18n("Redo"));
   toolBar()->insertSeparator();
@@ -1010,9 +1011,10 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(BarIcon("editcopy"),ID_EDIT_COPY, true,i18n("Copy"));
   toolBar()->insertButton(BarIcon("editpaste"),ID_EDIT_PASTE, true,i18n("Paste"));
 	
-  QFrame *sepCompile= new QFrame(toolBar());
-  sepCompile->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,sepCompile);
+//  QFrame *sepCompile= new QFrame(toolBar());
+//  sepCompile->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+//  toolBar()->insertWidget(0,20,sepCompile);
+  toolBar()->insertSeparator();
 
   toolBar()->insertButton(BarIcon("compfile"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   toolBar()->insertButton(BarIcon("make_kdevelop"),ID_BUILD_MAKE, false,i18n("Make"));
@@ -1031,9 +1033,10 @@ void CKDevelop::initToolBar(){
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("stop"),ID_BUILD_STOP, false,i18n("Stop"));
 
-  QFrame *sepDlgEd= new QFrame(toolBar());
-  sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,sepDlgEd);
+//  QFrame *sepDlgEd= new QFrame(toolBar());
+//  sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+//  toolBar()->insertWidget(0,20,sepDlgEd);
+  toolBar()->insertSeparator();
 
   toolBar()->insertButton(BarIcon("newwidget"),ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
@@ -1041,9 +1044,10 @@ void CKDevelop::initToolBar(){
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
-  QFrame *sepDbgRun = new QFrame(toolBar());
-  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,sepDbgRun);
+//  QFrame *sepDbgRun = new QFrame(toolBar());
+//  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+//  toolBar()->insertWidget(0,20,sepDbgRun);
+  toolBar()->insertSeparator();
 
   toolBar()->insertButton(BarIcon("dbgrun"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
   toolBar()->insertButton(BarIcon("dbgnext"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
@@ -1119,9 +1123,10 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("filefind"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
-  QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-  sepWhatsThis->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
+//  QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
+//  sepWhatsThis->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+//  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
+  toolBar()->insertSeparator();
 
   whats_this = new QWhatsThis(this);
   QToolButton *btnwhat = whats_this->whatsThisButton(toolBar(ID_BROWSER_TOOLBAR));
@@ -1214,6 +1219,7 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(signalMethodDelete(const char *,const char *)), SLOT(slotCVDeleteMethod(const char *,const char *)));
   connect(class_tree, SIGNAL(popupHighlighted(int)), SLOT(statusCallback(int)));
   connect(class_tree, SIGNAL(selectFile(const QString &, int)), SLOT(slotSwitchToFile(const QString &, int)));
+  connect(class_tree, SIGNAL(signalGrepText(QString)), SLOT(slotEditSearchInFiles(QString)));
 
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
@@ -1344,7 +1350,7 @@ void CKDevelop::completeStartup(bool witharg)
     delete start_logo;
 
   config->setGroup("TipOfTheDay");
-  if(config->readBoolEntry("show_tod",true))
+  if(config->readBoolEntry("show_tod",true) && !kapp->isRestored())
     slotHelpTipOfDay();
 }
 

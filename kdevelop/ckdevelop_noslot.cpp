@@ -1480,9 +1480,11 @@ bool CKDevelop::queryClose(){
 }
 
 void CKDevelop::readProperties(KConfig* sess_config){
+  readOptions();
   QString filename;
-  filename = sess_config->readEntry("project_file","");
-  
+//  filename = sess_config->readEntry("project_file","");
+  filename = kapp->sessionConfig()->readEntry("project_file","");
+
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
@@ -1510,9 +1512,9 @@ void CKDevelop::readProperties(KConfig* sess_config){
 void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
-    sess_config->writeEntry("project_file",prj->getProjectFile());
-    sess_config->writeEntry("cpp_file",cpp_widget->getName());
-    sess_config->writeEntry("header_file",header_widget->getName());
+    kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
+    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
+    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1528,6 +1530,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
       }
     }
   }
+  saveOptions();
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
