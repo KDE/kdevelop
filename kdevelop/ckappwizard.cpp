@@ -104,29 +104,10 @@ void CKAppWizard::initPages(){
   // create a widget and paint a picture on it
   widget1a = new QWidget( widget0, "widget1a" );
   widget1a->setGeometry( 0, 0, 500, 160 );
-  widget1a->setMinimumSize( 0, 0 );
-  widget1a->setMaximumSize( 32767, 32767 );
-  widget1a->setFocusPolicy( QWidget::NoFocus );
-  widget1a->setBackgroundMode( QWidget::PaletteBackground );
-  widget1a->setFontPropagation( QWidget::NoChildren );
-  widget1a->setPalettePropagation( QWidget::NoChildren );
   widget1a->setBackgroundPixmap (pm);
   
   applications = new QListView( widget0, "applications" );
   applications->setGeometry( 20, 170, 170, 250 );
-  applications->setMinimumSize( 0, 0 );
-  applications->setMaximumSize( 32767, 32767 );
-  applications->setFocusPolicy( QWidget::TabFocus );
-  applications->setBackgroundMode( QWidget::PaletteBackground );
-  applications->setFontPropagation( QWidget::NoChildren );
-  applications->setPalettePropagation( QWidget::NoChildren );
-  applications->setResizePolicy( QScrollView::Manual );
-  applications->setVScrollBarMode( QScrollView::Auto );
-  applications->setHScrollBarMode( QScrollView::Auto );
-  applications->setTreeStepSize( 20 );
-  applications->setMultiSelection( FALSE );
-  applications->setAllColumnsShowFocus( FALSE );
-  applications->setItemMargin( 1 );
   applications->setRootIsDecorated( TRUE );
   applications->addColumn( i18n("Applications"), -1 );
   applications->setColumnWidthMode( 0, QListView::Maximum );
@@ -137,21 +118,9 @@ void CKAppWizard::initPages(){
   // create another widget for a picture
   widget1b = new QWidget( widget0, "widget1b" );
   widget1b->setGeometry( 255, 180, 190, 140 );
-  widget1b->setMinimumSize( 0, 0 );
-  widget1b->setMaximumSize( 32767, 32767 );
-  widget1b->setFocusPolicy( QWidget::NoFocus );
-  widget1b->setBackgroundMode( QWidget::PaletteBackground );
-  widget1b->setFontPropagation( QWidget::NoChildren );
-  widget1b->setPalettePropagation( QWidget::NoChildren );
   
   apphelp = new QLabel( widget0, "apphelp" );
   apphelp->setGeometry( 230, 330, 240, 90 );
-  apphelp->setMinimumSize( 0, 0 );
-  apphelp->setMaximumSize( 32767, 32767 );
-  apphelp->setFocusPolicy( QWidget::NoFocus );
-  apphelp->setBackgroundMode( QWidget::PaletteBackground );
-  apphelp->setFontPropagation( QWidget::NoChildren );
-  apphelp->setPalettePropagation( QWidget::NoChildren );
   apphelp->setText( i18n("Label:") );
   apphelp->setAlignment( 1313 );
   apphelp->setMargin( -1 );
@@ -162,13 +131,6 @@ void CKAppWizard::initPages(){
   othersentry->sortChildItems (0,FALSE);
   customprojitem = new QListViewItem (othersentry,i18n("custom project"));
   
-  /*	gtkentry = new QListViewItem (applications, "GTK");
-	gtkentry->setExpandable (true);
-	gtkentry->setOpen (TRUE);
-	gtkentry->sortChildItems (0,FALSE);	
-	gtkminiitem = new QListViewItem (gtkentry,"Mini");
-	gtknormalitem = new QListViewItem (gtkentry,"Normal");
-  */
   ccppentry = new QListViewItem (applications, i18n("Terminal"));
   ccppentry->setExpandable (true);
   ccppentry->setOpen (TRUE);
@@ -206,262 +168,77 @@ void CKAppWizard::initPages(){
   widget1 = new QWidget(this);
   addPage(widget1, i18n("Generate settings"));
   
-  name = new QLabel( widget1, "name" );
+  name = new QLabel( i18n("Project name:"), widget1, "name" );
   name->setGeometry( 30, 10, 100, 30 );
-  name->setMinimumSize( 0, 0 );
-  name->setMaximumSize( 32767, 32767 );
-  name->setFocusPolicy( QWidget::NoFocus );
-  name->setBackgroundMode( QWidget::PaletteBackground );
-  name->setFontPropagation( QWidget::NoChildren );
-  name->setPalettePropagation( QWidget::NoChildren );
-  name->setText( i18n("Projectname:") );
   name->setAlignment( 289 );
-  name->setMargin( -1 );
 
   nameline = new QLineEdit( widget1, "nameline" );
   nameline->setGeometry( 140, 10, 290, 30 );
-  nameline->setMinimumSize( 0, 0 );
-  nameline->setMaximumSize( 32767, 32767 );
-  nameline->setFocusPolicy( QWidget::StrongFocus );
-  nameline->setBackgroundMode( QWidget::PaletteBase );
-  nameline->setFontPropagation( QWidget::NoChildren );
-  nameline->setPalettePropagation( QWidget::NoChildren );
-  nameline->setText( "" );
-  nameline->setMaxLength( 32767 );
-  nameline->setEchoMode( QLineEdit::Normal );
-  nameline->setFrame( TRUE );
 
-  directory = new QLabel( widget1, "directory" );
+  directory = new QLabel( i18n("Project directory:"), widget1, "directory" );
   directory->setGeometry( 30, 50, 100, 30 );
-  directory->setMinimumSize( 0, 0 );
-  directory->setMaximumSize( 32767, 32767 );
-  directory->setFocusPolicy( QWidget::NoFocus );
-  directory->setBackgroundMode( QWidget::PaletteBackground );
-  directory->setFontPropagation( QWidget::NoChildren );
-  directory->setPalettePropagation( QWidget::NoChildren );
-  directory->setText( i18n("Projectdirectory:") );
   directory->setAlignment( 289 );
-  directory->setMargin( -1 );
 
   directoryline = new QLineEdit( widget1, "directoryline" );
   directoryline->setGeometry( 140, 50, 290, 30 );
-  directoryline->setMinimumSize( 0, 0 );
-  directoryline->setMaximumSize( 32767, 32767 );
-  directoryline->setFocusPolicy( QWidget::StrongFocus );
-  directoryline->setBackgroundMode( QWidget::PaletteBase );
-  directoryline->setFontPropagation( QWidget::NoChildren );
-  directoryline->setPalettePropagation( QWidget::NoChildren );
-  directoryline->setText( "" );
-  directoryline->setMaxLength( 32767 );
-  directoryline->setEchoMode( QLineEdit::Normal );
-  directoryline->setFrame( TRUE );
 
   directoryload = new QPushButton( widget1, "directoryload" );
-  directoryload->setGeometry( 440, 50, 30, 30 );
-  directoryload->setMinimumSize( 0, 0 );
-  directoryload->setMaximumSize( 32767, 32767 );
-  directoryload->setFocusPolicy( QWidget::TabFocus );
-  directoryload->setBackgroundMode( QWidget::PaletteBackground );
-  directoryload->setFontPropagation( QWidget::NoChildren );
-  directoryload->setPalettePropagation( QWidget::NoChildren );
   directoryload->setPixmap(BarIcon("open"));
-  directoryload->setAutoRepeat( FALSE );
-  directoryload->setAutoResize( FALSE );
+  directoryload->setGeometry( 440, 50, 30, 30 );
   
-  versionnumber = new QLabel( widget1, "versionnumber" );
+  versionnumber = new QLabel( i18n("Version number:"), widget1, "versionnumber" );
   versionnumber->setGeometry( 30, 90, 100, 30 );
-  versionnumber->setMinimumSize( 0, 0 );
-  versionnumber->setMaximumSize( 32767, 32767 );
-  versionnumber->setFocusPolicy( QWidget::NoFocus );
-  versionnumber->setBackgroundMode( QWidget::PaletteBackground );
-  versionnumber->setFontPropagation( QWidget::NoChildren );
-  versionnumber->setPalettePropagation( QWidget::NoChildren );
-  versionnumber->setText( i18n("Versionnumber:") );
   versionnumber->setAlignment( 289 );
-  versionnumber->setMargin( -1 );
 
   versionline = new QLineEdit( widget1, "versionline" );
   versionline->setGeometry( 140, 90, 290, 30 );
-  versionline->setMinimumSize( 0, 0 );
-  versionline->setMaximumSize( 32767, 32767 );
-  versionline->setFocusPolicy( QWidget::StrongFocus );
-  versionline->setBackgroundMode( QWidget::PaletteBase );
-  versionline->setFontPropagation( QWidget::NoChildren );
-  versionline->setPalettePropagation( QWidget::NoChildren );
-  versionline->setText( "" );
-  versionline->setMaxLength( 32767 );
-  versionline->setEchoMode( QLineEdit::Normal );
-  versionline->setFrame( TRUE );
 
-  authorname = new QLabel( widget1, "authorname" );
+  authorname = new QLabel( i18n("Author:"), widget1, "authorname" );
   authorname->setGeometry( 30, 130, 100, 30 );
-  authorname->setMinimumSize( 0, 0 );
-  authorname->setMaximumSize( 32767, 32767 );
-  authorname->setFocusPolicy( QWidget::NoFocus );
-  authorname->setBackgroundMode( QWidget::PaletteBackground );
-  authorname->setFontPropagation( QWidget::NoChildren );
-  authorname->setPalettePropagation( QWidget::NoChildren );
-  authorname->setText( i18n("Author:") );
   authorname->setAlignment( 289 );
-  authorname->setMargin( -1 );
 
   authorline = new QLineEdit( widget1, "authorline" );
   authorline->setGeometry( 140, 130, 290, 30 );
-  authorline->setMinimumSize( 0, 0 );
-  authorline->setMaximumSize( 32767, 32767 );
-  authorline->setFocusPolicy( QWidget::StrongFocus );
-  authorline->setBackgroundMode( QWidget::PaletteBase );
-  authorline->setFontPropagation( QWidget::NoChildren );
-  authorline->setPalettePropagation( QWidget::NoChildren );
-  authorline->setText( "" );
-  authorline->setMaxLength( 32767 );
-  authorline->setEchoMode( QLineEdit::Normal );
-  authorline->setFrame( TRUE );
   
-  email = new QLabel( widget1, "email" );
+  email = new QLabel( i18n("Email"), widget1, "email" );
   email->setGeometry( 30, 170, 100, 30 );
-  email->setMinimumSize( 0, 0 );
-  email->setMaximumSize( 32767, 32767 );
-  email->setFocusPolicy( QWidget::NoFocus );
-  email->setBackgroundMode( QWidget::PaletteBackground );
-  email->setFontPropagation( QWidget::NoChildren );
-  email->setPalettePropagation( QWidget::NoChildren );
-  email->setText( i18n("Email:") );
   email->setAlignment( 289 );
-  email->setMargin( -1 );
 
   emailline = new QLineEdit( widget1, "emailline" );
   emailline->setGeometry( 140, 170, 290, 30 );
-  emailline->setMinimumSize( 0, 0 );
-  emailline->setMaximumSize( 32767, 32767 );
-  emailline->setFocusPolicy( QWidget::StrongFocus );
-  emailline->setBackgroundMode( QWidget::PaletteBase );
-  emailline->setFontPropagation( QWidget::NoChildren );
-  emailline->setPalettePropagation( QWidget::NoChildren );
-  emailline->setText( "" );
-  emailline->setMaxLength( 32767 );
-  emailline->setEchoMode( QLineEdit::Normal );
-  emailline->setFrame( TRUE );
 
-  generatesource = new QCheckBox( widget1, "generatesource" );
+  generatesource = new QCheckBox( i18n("generate sources and headers"), 
+                                  widget1, "generatesource" );
   generatesource->setGeometry( 30, 220, 440, 30 );
-  generatesource->setMinimumSize( 0, 0 );
-  generatesource->setMaximumSize( 32767, 32767 );
-  generatesource->setFocusPolicy( QWidget::TabFocus );
-  generatesource->setBackgroundMode( QWidget::PaletteBackground );
-  generatesource->setFontPropagation( QWidget::NoChildren );
-  generatesource->setPalettePropagation( QWidget::NoChildren );
-  generatesource->setText( i18n("generate sources and headers") );
-  generatesource->setAutoRepeat( FALSE );
-  generatesource->setAutoResize( FALSE );
 
-  gnufiles = new QCheckBox( widget1, "gnufiles" );
+  gnufiles = new QCheckBox( i18n("GNU-Standard-Files (INSTALL,README,COPYING...)" ), 
+                            widget1, "gnufiles" );
   gnufiles->setGeometry( 30, 270, 440, 30 );
-  gnufiles->setMinimumSize( 0, 0 );
-  gnufiles->setMaximumSize( 32767, 32767 );
-  gnufiles->setFocusPolicy( QWidget::TabFocus );
-  gnufiles->setBackgroundMode( QWidget::PaletteBackground );
-  gnufiles->setFontPropagation( QWidget::NoChildren );
-  gnufiles->setPalettePropagation( QWidget::NoChildren );
-  gnufiles->setText( i18n("GNU-Standard-Files (INSTALL,README,COPYING...)" ));
-  gnufiles->setAutoRepeat( FALSE );
-  gnufiles->setAutoResize( FALSE );
 
-  userdoc = new QCheckBox( widget1, "userdoc" );
+  userdoc = new QCheckBox( i18n("User documentation"), widget1, "userdoc" );
   userdoc->setGeometry( 30, 300, 330, 30 );
-  userdoc->setMinimumSize( 0, 0 );
-  userdoc->setMaximumSize( 32767, 32767 );
-  userdoc->setFocusPolicy( QWidget::TabFocus );
-  userdoc->setBackgroundMode( QWidget::PaletteBackground );
-  userdoc->setFontPropagation( QWidget::NoChildren );
-  userdoc->setPalettePropagation( QWidget::NoChildren );
-  userdoc->setText( i18n("User-Documentation") );
-  userdoc->setAutoRepeat( FALSE );
-  userdoc->setAutoResize( FALSE );
 
-  apidoc = new QCheckBox( widget1, "apidoc" );
+  apidoc = new QCheckBox( i18n("API documentation"), widget1, "apidoc" );
   apidoc->setGeometry( 30, 330, 200, 30 );
-  apidoc->setMinimumSize( 0, 0 );
-  apidoc->setMaximumSize( 32767, 32767 );
-  apidoc->setFocusPolicy( QWidget::TabFocus );
-  apidoc->setBackgroundMode( QWidget::PaletteBackground );
-  apidoc->setFontPropagation( QWidget::NoChildren );
-  apidoc->setPalettePropagation( QWidget::NoChildren );
-  apidoc->setText( i18n("API-Documentation") );
-  apidoc->setAutoRepeat( FALSE );
-  apidoc->setAutoResize( FALSE );
 
-  lsmfile = new QCheckBox( widget1, "lsmfile" );
+  lsmfile = new QCheckBox( i18n("lsm-File - Linux Software Map"),
+                           widget1, "lsmfile" );
   lsmfile->setGeometry( 30, 360, 340, 30 );
-  lsmfile->setMinimumSize( 0, 0 );
-  lsmfile->setMaximumSize( 32767, 32767 );
-  lsmfile->setFocusPolicy( QWidget::TabFocus );
-  lsmfile->setBackgroundMode( QWidget::PaletteBackground );
-  lsmfile->setFontPropagation( QWidget::NoChildren );
-  lsmfile->setPalettePropagation( QWidget::NoChildren );
-  lsmfile->setText( i18n("lsm-File - Linux Software Map") );
-  lsmfile->setAutoRepeat( FALSE );
-  lsmfile->setAutoResize( FALSE );
 
-  datalink = new QCheckBox( widget1, "datalink" );
+  datalink = new QCheckBox( i18n(".kdelnk file"), widget1, "datalink" );
   datalink->setGeometry( 30, 390, 200, 30 );
-  datalink->setMinimumSize( 0, 0 );
-  datalink->setMaximumSize( 32767, 32767 );
-  datalink->setFocusPolicy( QWidget::TabFocus );
-  datalink->setBackgroundMode( QWidget::PaletteBackground );
-  datalink->setFontPropagation( QWidget::NoChildren );
-  datalink->setPalettePropagation( QWidget::NoChildren );
-  datalink->setText( i18n(".kdelnk-File") );
-  datalink->setAutoRepeat( FALSE );
-  datalink->setAutoResize( FALSE );
   
-  progicon = new QCheckBox( widget1, "progicon" );
+  progicon = new QCheckBox( i18n("Program Icon"), widget1, "progicon" );
   progicon->setGeometry( 290, 330, 110, 30 );
-  progicon->setMinimumSize( 0, 0 );
-  progicon->setMaximumSize( 32767, 32767 );
-  progicon->setFocusPolicy( QWidget::TabFocus );
-  progicon->setBackgroundMode( QWidget::PaletteBackground );
-  progicon->setFontPropagation( QWidget::NoChildren );
-  progicon->setPalettePropagation( QWidget::NoChildren );
-  progicon->setText( i18n("Program-Icon") );
-  progicon->setAutoRepeat( FALSE );
-  progicon->setAutoResize( FALSE );
 
-  iconload = new QPushButton( widget1, "iconload" );
+  iconload = new QPushButton(i18n("Icon"), widget1, "iconload" );
   iconload->setGeometry( 410, 310, 60, 60 );
-  iconload->setMinimumSize( 0, 0 );
-  iconload->setMaximumSize( 32767, 32767 );
-  iconload->setFocusPolicy( QWidget::TabFocus );
-  iconload->setBackgroundMode( QWidget::PaletteBackground );
-  iconload->setFontPropagation( QWidget::NoChildren );
-  iconload->setPalettePropagation( QWidget::NoChildren );
-  iconload->setText( "" );
-  iconload->setAutoRepeat( FALSE );
-  iconload->setAutoResize( FALSE );
 
-  miniicon = new QCheckBox( widget1, "miniicon" );
+  miniicon = new QCheckBox(i18n("Mini Icon"), widget1, "miniicon" );
   miniicon->setGeometry( 290, 390, 110, 30 );
-  miniicon->setMinimumSize( 0, 0 );
-  miniicon->setMaximumSize( 32767, 32767 );
-  miniicon->setFocusPolicy( QWidget::TabFocus );
-  miniicon->setBackgroundMode( QWidget::PaletteBackground );
-  miniicon->setFontPropagation( QWidget::NoChildren );
-  miniicon->setPalettePropagation( QWidget::NoChildren );
-  miniicon->setText( i18n("Mini-Icon") );
-  miniicon->setAutoRepeat( FALSE );
-  miniicon->setAutoResize( FALSE );
   
   miniload = new QPushButton( widget1, "miniload" );
   miniload->setGeometry( 440, 390, 30, 30 );
-  miniload->setMinimumSize( 0, 0 );
-  miniload->setMaximumSize( 32767, 32767 );
-  miniload->setFocusPolicy( QWidget::TabFocus );
-  miniload->setBackgroundMode( QWidget::PaletteBackground );
-  miniload->setFontPropagation( QWidget::NoChildren );
-  miniload->setPalettePropagation( QWidget::NoChildren );
-  miniload->setText( "" );
-  miniload->setAutoRepeat( FALSE );
-  miniload->setAutoResize( FALSE );
   
   separator1 = new KSeparator (widget1);
   separator1->setGeometry(0,210,515,5);
@@ -561,176 +338,55 @@ void CKAppWizard::initPages(){
 
 	qtarch_ButtonGroup_1 = new QButtonGroup( widget1c, "ButtonGroup_1" );
 	qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
-	qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_1->setFrameStyle( 49 );
 	qtarch_ButtonGroup_1->setAlignment( 1 );
 
-	vsSupport = new QLabel( widget1c, "vsSupport" );
+	vsSupport = new QLabel( i18n( "vcs support" ), widget1c, "vsSupport" );
 	vsSupport->setGeometry( 30, 10, 150, 30 );
-	vsSupport->setMinimumSize( 0, 0 );
-	vsSupport->setMaximumSize( 32767, 32767 );
-	vsSupport->setFocusPolicy( QWidget::NoFocus );
-	vsSupport->setBackgroundMode( QWidget::PaletteBackground );
-	vsSupport->setFontPropagation( QWidget::NoChildren );
-	vsSupport->setPalettePropagation( QWidget::NoChildren );
-	vsSupport->setText(i18n( "vcs support" ));
 	vsSupport->setAlignment( 289 );
-	vsSupport->setMargin( -1 );	
 	
 	vsBox = new QComboBox( FALSE, widget1c, "vsBox" );
 	vsBox->setGeometry( 180, 10, 100, 30 );
-	vsBox->setMinimumSize( 0, 0 );
-	vsBox->setMaximumSize( 32767, 32767 );
-	vsBox->setFocusPolicy( QWidget::StrongFocus );
-	vsBox->setBackgroundMode( QWidget::PaletteBackground );
-	vsBox->setFontPropagation( QWidget::AllChildren );
-	vsBox->setPalettePropagation( QWidget::AllChildren );
-	vsBox->setSizeLimit( 10 );
-	vsBox->setAutoResize( FALSE );
 	vsBox->insertItem( "NONE" );
 	vsBox->insertItem( "CVS" );	
 
-	vsInstall = new QLabel( widget1c, "vsInstall" );
+	vsInstall = new QLabel( i18n( "vcs location"), widget1c, "vsInstall" );
 	vsInstall->setGeometry( 40, 80, 140, 30 );
-	vsInstall->setMinimumSize( 0, 0 );
-	vsInstall->setMaximumSize( 32767, 32767 );
-	vsInstall->setFocusPolicy( QWidget::NoFocus );
-	vsInstall->setBackgroundMode( QWidget::PaletteBackground );
-	vsInstall->setFontPropagation( QWidget::NoChildren );
-	vsInstall->setPalettePropagation( QWidget::NoChildren );
-	vsInstall->setText(i18n( "vcs location") );
 	vsInstall->setAlignment( 289 );
-	vsInstall->setMargin( -1 );
 	
 	vsLocation = new QLineEdit( widget1c, "vsLocation" );
 	vsLocation->setGeometry( 180, 80, 240, 30 );
-	vsLocation->setMinimumSize( 0, 0 );
-	vsLocation->setMaximumSize( 32767, 32767 );
-	vsLocation->setFocusPolicy( QWidget::StrongFocus );
-	vsLocation->setBackgroundMode( QWidget::PaletteBase );
-	vsLocation->setFontPropagation( QWidget::NoChildren );
-	vsLocation->setPalettePropagation( QWidget::NoChildren );
-	vsLocation->setText( "" );
-	vsLocation->setMaxLength( 32767 );
-	vsLocation->setEchoMode( QLineEdit::Normal );
-	vsLocation->setFrame( TRUE );
 
-	locationbutton = new QPushButton( widget1c, "locationbutton" );
+	locationbutton = new QPushButton( "...", widget1c, "locationbutton" );
 	locationbutton->setGeometry( 430, 80, 30, 30 );
-	locationbutton->setMinimumSize( 0, 0 );
-	locationbutton->setMaximumSize( 32767, 32767 );
-	locationbutton->setFocusPolicy( QWidget::TabFocus );
-	locationbutton->setBackgroundMode( QWidget::PaletteBackground );
-	locationbutton->setFontPropagation( QWidget::NoChildren );
-	locationbutton->setPalettePropagation( QWidget::NoChildren );
-	locationbutton->setText( "..." );
-	locationbutton->setAutoRepeat( FALSE );
-	locationbutton->setAutoResize( FALSE );	
 
-	projectVSLocation = new QLabel( widget1c, "projectVSLocation" );
+	projectVSLocation = new QLabel( i18n("repository in vcs"), widget1c, "projectVSLocation" );
 	projectVSLocation->setGeometry( 40, 150, 140, 30 );
-	projectVSLocation->setMinimumSize( 0, 0 );
-	projectVSLocation->setMaximumSize( 32767, 32767 );
-	projectVSLocation->setFocusPolicy( QWidget::NoFocus );
-	projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
-	projectVSLocation->setFontPropagation( QWidget::NoChildren );
-	projectVSLocation->setPalettePropagation( QWidget::NoChildren );
-	projectVSLocation->setText(i18n( "repository in vcs") );
 	projectVSLocation->setAlignment( 289 );
-	projectVSLocation->setMargin( -1 );	
 	
 	projectlocationline = new QLineEdit( widget1c, "projectlocationline" );
 	projectlocationline->setGeometry( 180, 150, 280, 30 );
-	projectlocationline->setMinimumSize( 0, 0 );
-	projectlocationline->setMaximumSize( 32767, 32767 );
-	projectlocationline->setFocusPolicy( QWidget::StrongFocus );
-	projectlocationline->setBackgroundMode( QWidget::PaletteBase );
-	projectlocationline->setFontPropagation( QWidget::NoChildren );
-	projectlocationline->setPalettePropagation( QWidget::NoChildren );
-	projectlocationline->setText( "" );
-	projectlocationline->setMaxLength( 32767 );
-	projectlocationline->setEchoMode( QLineEdit::Normal );
-	projectlocationline->setFrame( TRUE );
 
-	vendorTag = new QLabel( widget1c, "vendorTag" );
+	vendorTag = new QLabel( i18n("vendor tag"), widget1c, "vendorTag" );
 	vendorTag->setGeometry( 40, 220, 140, 30 );
-	vendorTag->setMinimumSize( 0, 0 );
-	vendorTag->setMaximumSize( 32767, 32767 );
-	vendorTag->setFocusPolicy( QWidget::NoFocus );
-	vendorTag->setBackgroundMode( QWidget::PaletteBackground );
-	vendorTag->setFontPropagation( QWidget::NoChildren );
-	vendorTag->setPalettePropagation( QWidget::NoChildren );
-	vendorTag->setText(i18n( "vendor tag") );
 	vendorTag->setAlignment( 289 );
-	vendorTag->setMargin( -1 );
 
 	vendorline = new QLineEdit( widget1c, "vendorline" );
 	vendorline->setGeometry( 180, 220, 280, 30 );
-	vendorline->setMinimumSize( 0, 0 );
-	vendorline->setMaximumSize( 32767, 32767 );
-	vendorline->setFocusPolicy( QWidget::StrongFocus );
-	vendorline->setBackgroundMode( QWidget::PaletteBase );
-	vendorline->setFontPropagation( QWidget::NoChildren );
-	vendorline->setPalettePropagation( QWidget::NoChildren );
-	vendorline->setText( "" );
-	vendorline->setMaxLength( 32767 );
-	vendorline->setEchoMode( QLineEdit::Normal );
-	vendorline->setFrame( TRUE );
 							
-	logMessage = new QLabel( widget1c, "logMessage" );
+	logMessage = new QLabel( i18n("log message"), widget1c, "logMessage" );
 	logMessage->setGeometry( 40, 290, 140, 30 );
-	logMessage->setMinimumSize( 0, 0 );
-	logMessage->setMaximumSize( 32767, 32767 );
-	logMessage->setFocusPolicy( QWidget::NoFocus );
-	logMessage->setBackgroundMode( QWidget::PaletteBackground );
-	logMessage->setFontPropagation( QWidget::NoChildren );
-	logMessage->setPalettePropagation( QWidget::NoChildren );
-	logMessage->setText(i18n( "log message") );
 	logMessage->setAlignment( 289 );
-	logMessage->setMargin( -1 );
 	
 	messageline = new QLineEdit( widget1c, "messageline" );
 	messageline->setGeometry( 180, 290, 280, 30 );
-	messageline->setMinimumSize( 0, 0 );
-	messageline->setMaximumSize( 32767, 32767 );
-	messageline->setFocusPolicy( QWidget::StrongFocus );
-	messageline->setBackgroundMode( QWidget::PaletteBase );
-	messageline->setFontPropagation( QWidget::NoChildren );
-	messageline->setPalettePropagation( QWidget::NoChildren );
-	messageline->setText( "" );
-	messageline->setMaxLength( 32767 );
-	messageline->setEchoMode( QLineEdit::Normal );
-	messageline->setFrame( TRUE );
 	
-	releaseTag = new QLabel( widget1c, "releaseTag" );
+	releaseTag = new QLabel( i18n("release tag"), widget1c, "releaseTag" );
 	releaseTag->setGeometry( 40, 360, 140, 30 );
-	releaseTag->setMinimumSize( 0, 0 );
-	releaseTag->setMaximumSize( 32767, 32767 );
-	releaseTag->setFocusPolicy( QWidget::NoFocus );
-	releaseTag->setBackgroundMode( QWidget::PaletteBackground );
-	releaseTag->setFontPropagation( QWidget::NoChildren );
-	releaseTag->setPalettePropagation( QWidget::NoChildren );
-	releaseTag->setText(i18n( "release tag") );
 	releaseTag->setAlignment( 289 );
-	releaseTag->setMargin( -1 );
 
 	releaseline = new QLineEdit( widget1c, "releaseline" );
 	releaseline->setGeometry( 180, 360, 280, 30 );
-	releaseline->setMinimumSize( 0, 0 );
-	releaseline->setMaximumSize( 32767, 32767 );
-	releaseline->setFocusPolicy( QWidget::StrongFocus );
-	releaseline->setBackgroundMode( QWidget::PaletteBase );
-	releaseline->setFontPropagation( QWidget::NoChildren );
-	releaseline->setPalettePropagation( QWidget::NoChildren );
-	releaseline->setText( "" );
-	releaseline->setMaxLength( 32767 );
-	releaseline->setEchoMode( QLineEdit::Normal );
-	releaseline->setFrame( TRUE );			
 		
 	qtarch_ButtonGroup_1->insert( locationbutton );
   					
@@ -781,55 +437,19 @@ void CKAppWizard::initPages(){
   widget2 = new QWidget(this);
   addPage(widget2, i18n("Headertemplate for .h-files"));
   
-  hheader = new QCheckBox( widget2, "hheader" );
+  hheader = new QCheckBox(  i18n("headertemplate for .h-files"), widget2, "hheader" );
   hheader->setGeometry( 20, 20, 230, 30 );
-  hheader->setMinimumSize( 0, 0 );
-  hheader->setMaximumSize( 32767, 32767 );
-  hheader->setFocusPolicy( QWidget::TabFocus );
-  hheader->setBackgroundMode( QWidget::PaletteBackground );
-  hheader->setFontPropagation( QWidget::NoChildren );
-  hheader->setPalettePropagation( QWidget::NoChildren );
-  hheader->setText( i18n("headertemplate for .h-files") );
-  hheader->setAutoRepeat( FALSE );
-  hheader->setAutoResize( FALSE );
 
-  hload = new QPushButton( widget2, "hload" );
+  hload = new QPushButton( i18n("Load..."), widget2, "hload" );
   hload->setGeometry( 260, 20, 100, 30 );
-  hload->setMinimumSize( 0, 0 );
-  hload->setMaximumSize( 32767, 32767 );
-  hload->setFocusPolicy( QWidget::TabFocus );
-  hload->setBackgroundMode( QWidget::PaletteBackground );
-  hload->setFontPropagation( QWidget::NoChildren );
-  hload->setPalettePropagation( QWidget::NoChildren );
-  hload->setText(i18n( "Load..." ));
-  hload->setAutoRepeat( FALSE );
-  hload->setAutoResize( FALSE );
   
-  hnew = new QPushButton( widget2, "hnew" );
+  hnew = new QPushButton( i18n("New"), widget2, "hnew" );
   hnew->setGeometry( 380, 20, 100, 30 );
-  hnew->setMinimumSize( 0, 0 );
-  hnew->setMaximumSize( 32767, 32767 );
-  hnew->setFocusPolicy( QWidget::TabFocus );
-  hnew->setBackgroundMode( QWidget::PaletteBackground );
-  hnew->setFontPropagation( QWidget::NoChildren );
-  hnew->setPalettePropagation( QWidget::NoChildren );
-  hnew->setText( i18n("New" ));
-  hnew->setAutoRepeat( FALSE );
-  hnew->setAutoResize( FALSE );
   
   hedit = new KEdit( kapp,widget2 );
   QFont f("fixed",10);
   hedit->setFont(f);
   hedit->setGeometry( 20, 70, 460, 350 );
-  hedit->setMinimumSize( 0, 0 );
-  hedit->setMaximumSize( 32767, 32767 );
-  hedit->setFocusPolicy( QWidget::StrongFocus );
-  hedit->setBackgroundMode( QWidget::PaletteBase );
-  hedit->setFontPropagation( QWidget::SameFont );
-  hedit->setPalettePropagation( QWidget::SameFont );
-  hedit->insertLine( "" );
-  hedit->setReadOnly( FALSE );
-  hedit->setOverwriteMode( FALSE );
   
   QToolTip::add(hload,i18n("Press this button to select an\n"
   													"existing header template file"));
@@ -850,54 +470,19 @@ void CKAppWizard::initPages(){
   widget3 = new QWidget(this);
   addPage(widget3, i18n("Headertemplate for .cpp/.c-files"));
   
-  cppheader = new QCheckBox( widget3, "cppheader" );
+  cppheader = new QCheckBox(  i18n("headertemplate for .cpp-files"),
+                              widget3, "cppheader" );
   cppheader->setGeometry( 20, 20, 230, 30 );
-  cppheader->setMinimumSize( 0, 0 );
-  cppheader->setMaximumSize( 32767, 32767 );
-  cppheader->setFocusPolicy( QWidget::TabFocus );
-  cppheader->setBackgroundMode( QWidget::PaletteBackground );
-  cppheader->setFontPropagation( QWidget::NoChildren );
-  cppheader->setPalettePropagation( QWidget::NoChildren );
-  cppheader->setText( i18n("headertemplate for .cpp-files") );
-  cppheader->setAutoRepeat( FALSE );
-  cppheader->setAutoResize( FALSE );
 
-  cppload = new QPushButton( widget3, "cppload" );
+  cppload = new QPushButton( i18n("Load..."), widget3, "cppload" );
   cppload->setGeometry( 260, 20, 100, 30 );
-  cppload->setMinimumSize( 0, 0 );
-  cppload->setMaximumSize( 32767, 32767 );
-  cppload->setFocusPolicy( QWidget::TabFocus );
-  cppload->setBackgroundMode( QWidget::PaletteBackground );
-  cppload->setFontPropagation( QWidget::NoChildren );
-  cppload->setPalettePropagation( QWidget::NoChildren );
-  cppload->setText( i18n("Load...") );
-  cppload->setAutoRepeat( FALSE );
-  cppload->setAutoResize( FALSE );
   
-  cppnew = new QPushButton( widget3, "cppnew" );
+  cppnew = new QPushButton( i18n("New"), widget3, "cppnew" );
   cppnew->setGeometry( 380, 20, 100, 30 );
-  cppnew->setMinimumSize( 0, 0 );
-  cppnew->setMaximumSize( 32767, 32767 );
-  cppnew->setFocusPolicy( QWidget::TabFocus );
-  cppnew->setBackgroundMode( QWidget::PaletteBackground );
-  cppnew->setFontPropagation( QWidget::NoChildren );
-  cppnew->setPalettePropagation( QWidget::NoChildren );
-  cppnew->setText( i18n("New") );
-  cppnew->setAutoRepeat( FALSE );
-  cppnew->setAutoResize( FALSE );
 
   cppedit = new KEdit(kapp,widget3);
   cppedit->setFont(f);
   cppedit->setGeometry( 20, 70, 460, 350 );
-  cppedit->setMinimumSize( 0, 0 );
-  cppedit->setMaximumSize( 32767, 32767 );
-  cppedit->setFocusPolicy( QWidget::StrongFocus );
-  cppedit->setBackgroundMode( QWidget::PaletteBase );
-  cppedit->setFontPropagation( QWidget::SameFont );
-  cppedit->setPalettePropagation( QWidget::SameFont );
-  cppedit->insertLine( "" );
-  cppedit->setReadOnly( FALSE );
-  cppedit->setOverwriteMode( FALSE );
   
   QToolTip::add(cppload,i18n("Press this button to select an\n"
   													"existing header template file"));
@@ -921,31 +506,16 @@ void CKAppWizard::initPages(){
   // create a MultiLineEdit for the processes of kAppWizard
   output = new QMultiLineEdit( widget4, "output" );
   output->setGeometry( 10, 10, 480, 330 );
-  output->setMinimumSize( 0, 0 );
-  output->setMaximumSize( 32767, 32767 );
-  output->setFocusPolicy( QWidget::StrongFocus );
-  output->setBackgroundMode( QWidget::PaletteBase );
-  output->setFontPropagation( QWidget::SameFont );
-  output->setPalettePropagation( QWidget::SameFont );
-  output->insertLine( "" );
-  output->setReadOnly( FALSE );
-  output->setOverwriteMode( FALSE );
+  output->setReadOnly( TRUE );
   
   errOutput = new QMultiLineEdit( widget4, "errOutput" );
   errOutput->setGeometry( 10, 340, 480, 80 );
-  errOutput->setMinimumSize( 0, 0 );
-  errOutput->setMaximumSize( 32767, 32767 );
-  errOutput->setFocusPolicy( QWidget::StrongFocus );
-  errOutput->setBackgroundMode( QWidget::PaletteBase );
-  errOutput->setFontPropagation( QWidget::SameFont );
-  errOutput->setPalettePropagation( QWidget::SameFont );
-  errOutput->insertLine( "" );
-  errOutput->setReadOnly( FALSE );
-  errOutput->setOverwriteMode( FALSE );
+  errOutput->setReadOnly( TRUE );
   QFont font("helvetica",10);
   output->setFont(font);
-  QToolTip::add(output,i18n("Displays the normal output of the project generator"));
   errOutput->setFont(font);
+
+  QToolTip::add(output,i18n("Displays the normal output of the project generator"));
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
 #warning Substitution would be senseless??

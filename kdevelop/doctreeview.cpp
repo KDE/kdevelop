@@ -15,6 +15,7 @@
  ***************************************************************************/
 
 
+#include <qlayout.h>
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qdir.h>
@@ -575,8 +576,10 @@ void DocTreeView::docPathChanged()
 void DocTreeView::createConfigWidget(CustomizeDialog *parent)
 {
     QFrame *frame = parent->addPage(i18n("Documentation Tree"));
+    QBoxLayout *vbox = new QVBoxLayout(frame);
     DocTreeViewConfigWidget *w =
         new DocTreeViewConfigWidget(this, frame, "doctreeview config widget");
+    vbox->addWidget(w);
     connect(parent, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 

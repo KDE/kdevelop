@@ -14,6 +14,8 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include <qlayout.h>
 #include <qregexp.h>
 #include <kdialogbase.h>
 #include <klocale.h>
@@ -192,7 +194,10 @@ void GrepView::insertStdoutLine(const QString &line)
 void GrepView::createConfigWidget(CustomizeDialog *parent)
 {
     QFrame *frame = parent->addPage(i18n("Grep View"));
-    (void) new GrepViewConfigWidget(frame, "grepview config widget");
+    QBoxLayout *vbox = new QVBoxLayout(frame);
+    GrepViewConfigWidget *w =
+        new GrepViewConfigWidget(frame, "grepview config widget");
+    vbox->addWidget(w);
 }
 
 
