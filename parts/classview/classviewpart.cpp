@@ -101,28 +101,28 @@ void ClassViewPart::setupActions( )
     m_followCode->setToolTip(i18n("Synchronize selectors"));
     m_followCode->setWhatsThis(i18n("<b>Synchronize</b>\nSynchronize namespaces, classes and functions selectors with code."));
 
-    m_namespaces = new KListViewAction( new KComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
+    m_namespaces = new KListViewAction( new KComboView(true, 150, 0, "m_namespaces_combo"), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo", true );
     connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
     m_namespaces->setToolTip(i18n("Namespaces"));
     m_namespaces->setWhatsThis(i18n("<b>Namespace Selector</b>\nSelect a namespace to view classes and functions contained in it."));
 
-    m_classes = new KListViewAction( new KComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
+    m_classes = new KListViewAction( new KComboView(true, 150, 0, "m_classes_combo"), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo", true );
     connect( m_classes->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(QListViewItem*)) );
     connect( m_classes->view(), SIGNAL(focusGranted()), this, SLOT(focusClasses()) );
     connect( m_classes->view(), SIGNAL(focusLost()), this, SLOT(unfocusClasses()) );
     m_classes->setToolTip(i18n("Classes"));
     m_classes->setWhatsThis(i18n("<b>Class Selector</b>\nSelect a class to view it's members."));
 
-    m_functions = new KListViewAction( new KComboView(true), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo" );
+    m_functions = new KListViewAction( new KComboView(true, 300, 0, "m_functions_combo"), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo", true );
     connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );
     connect( m_functions->view(), SIGNAL(focusGranted()), this, SLOT(focusFunctions()) );
     connect( m_functions->view(), SIGNAL(focusLost()), this, SLOT(unfocusFunctions()) );
     m_functions->setToolTip(i18n("Functions"));
     m_functions->setWhatsThis(i18n("<b>Function Selector</b>\nSelect a function to jump to it's definition or declaration."));
 
-    m_namespaces->view()->setMinimumWidth(150);
-    m_classes->view()->setMinimumWidth(150);
-    m_functions->view()->setMinimumWidth(300);
+//    m_namespaces->view()->setMinimumWidth(150);
+//    m_classes->view()->setMinimumWidth(150);
+//    m_functions->view()->setMinimumWidth(300);
 
     m_popupAction  = new KToolBarPopupAction(i18n("Class Browser Actions"), "classwiz", 0,
                                            this, SLOT(switchedViewPopup()),

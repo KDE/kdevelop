@@ -28,6 +28,7 @@ class KListViewAction
 {
 public:
     KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);
+    KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name, const bool);
 
     ~KListViewAction();
 
@@ -36,6 +37,8 @@ public:
     void setWhatsThis(const QString &str);
 
 private:
+    void loadComboWidth();
+
     KComboView *m_view;
 };
 

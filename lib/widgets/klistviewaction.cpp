@@ -16,12 +16,21 @@
 #endif
 #include "klistviewaction.h"
 #include "kcomboview.h"
+#include "resizablecombo.h"
 
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
+#include <kconfig.h>
+#include <kglobal.h>
+
 KListViewAction::~KListViewAction()
 {
+    KConfig *config = KGlobal::config();
+    if (config && m_view->name())
+    {
+        config->writeEntry(m_view->name(), m_view->width());
+    }
     delete m_view;
 }
 
@@ -31,6 +40,18 @@ KListViewAction::KListViewAction(KComboView *view, const QString & text, const K
 {
     m_view->setDuplicatesEnabled(false);
     m_view->setInsertionPolicy(KComboView::NoInsertion);
+
+    loadComboWidth();
+}
+
+KListViewAction::KListViewAction( KComboView * view, const QString & text, const KShortcut & cut,
+    const QObject * receiver, const char * slot, KActionCollection * parent, const char * name, const bool /*dummy*/ ):
+    KWidgetAction(new ResizableCombo(view), text, cut, receiver, slot, parent, name), m_view(view)
+{
+    m_view->setDuplicatesEnabled(false);
+    m_view->setInsertionPolicy(KComboView::NoInsertion);
+
+    loadComboWidth();
 }
 
 KComboView * KListViewAction::view( ) const
@@ -48,4 +69,12 @@ void KListViewAction::setWhatsThis( const QString & str )
     QWhatsThis::add(m_view, str);
 }
 
+void KListViewAction::loadComboWidth( )
+{
+    KConfig *config = KGlobal::config();
+    if (config && m_view->name())
+    {
+        m_view->setMinimumWidth(config->readNumEntry(m_view->name(), m_view->defaultWidth()));
+    }
+}
 

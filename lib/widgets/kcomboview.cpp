@@ -4,8 +4,8 @@
 
 #include "kcomboview.h"
 
-KComboView::KComboView( bool rw, QWidget* parent, const char* name )
-    :QComboView(rw, parent, name)
+KComboView::KComboView( bool rw, int defaultWidth, QWidget* parent, const char* name )
+    :QComboView(rw, parent, name), m_defaultWidth(defaultWidth)
 {
     if (rw)
     {
@@ -15,6 +15,7 @@ KComboView::KComboView( bool rw, QWidget* parent, const char* name )
         ed->completionBox()->setHScrollBarMode(QListBox::Auto);
         setLineEdit(ed);
     }
+    setMinimumWidth(defaultWidth);
 }
 
 void KComboView::addItem(QListViewItem *it)
@@ -39,4 +40,9 @@ void KComboView::clear( )
 {
     m_comp.clear();
     QComboView::clear();
+}
+
+int KComboView::defaultWidth( )
+{
+    return m_defaultWidth;
 }
