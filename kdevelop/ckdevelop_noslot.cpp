@@ -19,6 +19,7 @@
 #include <iostream.h>
 
 #include <qprogressdialog.h>
+#include <qstring.h>
 
 #include <kmsgbox.h>
 #include <kcursor.h>
@@ -68,10 +69,12 @@ TEditInfo *CKDevelop::getInfoFromFilename(const QString &filename)
 {
   TEditInfo *pRetVal=0l;
   bool bSearch=true;
+  QDir dir=QFileInfo(filename).dir(true);
+  QString fullname=dir.canonicalPath()+"/"+QFileInfo(filename).fileName();
   // search the current file which would be changed
   for(pRetVal=edit_infos.first(); bSearch && pRetVal != 0l;)
   {
-    if (pRetVal->filename == filename )
+    if (pRetVal->filename == fullname )
       bSearch=false;
     else
       pRetVal=edit_infos.next();

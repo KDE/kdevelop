@@ -45,6 +45,9 @@
 #include "ckdevsetupdlg.h"
 #include "cupdatekdedocdlg.h"
 #include "ccreatedocdatabasedlg.h"
+#include "crealfileview.h"
+#include "clogfileview.h"
+
 #include "cclassview.h"
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
@@ -3339,6 +3342,11 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if (next_job == "refresh")
     { // rest from the add projectfile
       refreshTrees();
+    }
+    if (next_job == "fv_refresh")
+    { // update fileview trees...
+      log_file_tree->refresh(prj);
+      real_file_tree->refresh(prj);
     }
     next_job = "";
   }

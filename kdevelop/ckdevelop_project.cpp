@@ -752,10 +752,11 @@ void CKDevelop::slotProjectMessages(){
   slotStatusMsg(i18n("Creating pot-file in /po..."));
   messages_widget->clear();
   error_parser->toogleOff();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
   shell_process.clearArguments();
   //shellprocess << make_cmd;
+  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
   shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
+  next_job="fv_refresh";
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
   beep = true;
 }
@@ -797,8 +798,9 @@ void CKDevelop::slotProjectAPI(){
       ++it; // increase the iterator
     }
   }
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  int dirlength = QDir::currentDirPath().length()+1;
+
+  QDir d(prj->getProjectDir() + prj->getSubDir());
+  int dirlength = d.absPath().length()+1;
 
   QString sources;
   QStrList headerlist(prj->getHeaders());
@@ -812,8 +814,9 @@ void CKDevelop::slotProjectAPI(){
       }
 
   shell_process.clearArguments();
+  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
   shell_process << "kdoc";
-  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  shell_process << "-p -d '" + prj->getProjectDir() + prj->getSubDir() +  "api'";
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);
@@ -844,8 +847,10 @@ void CKDevelop::slotProjectAPI(){
   if (!sources.isEmpty())
       shell_process << sources;
 
-
+  next_job="fv_refresh";
   shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  beep=true;
+
 }
 
 void CKDevelop::slotProjectManual(){
@@ -874,8 +879,8 @@ void CKDevelop::slotProjectManual(){
 		generator.genNifFile(nif_file);
 	    }
 	}
-	QDir::setCurrent(info.dirPath());
         shell_process.clearArguments();
+        shell_process << "cd '"+info.dirPath()+"' && ";
 	if(ksgml){
 	    shell_process << "ksgml2html";
 	    shell_process << info.fileName();
@@ -885,7 +890,9 @@ void CKDevelop::slotProjectManual(){
 	    shell_process << "sgml2html";
 	    shell_process << info.fileName();
 	}
+        next_job="fv_refresh";
         shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+        beep=true;
     }
 }
 
@@ -908,6 +915,7 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
   shell_process << make_cmd << " dist";
+  next_job="fv_refresh";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }
