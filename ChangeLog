@@ -1,8 +1,15 @@
+1999-10-08 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* sync following modified patches from KDEVELOP_1_0 to HEAD
+	  - Untitled.h problem on closing project
+	  - implementation of disabling key-accelerator,
+	    if bound function is disabled in menu
+	  - RFV opens project directory
+
 1999-10-06  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* found the am_edit "bug": use AUTO instead of USE_AUTOMOC in
 	  METASOURCES of Makefile.am's...;-) also changed the templates
 
- 1999-10-03  Bernd Gehrmann <bernd@physik.hu-berlin.de>
+1999-10-03  Bernd Gehrmann <bernd@physik.hu-berlin.de>
          * Changed parent of kwrite dialogs to topLevelWidget()
 
 1999-10-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
