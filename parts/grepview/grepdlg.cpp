@@ -152,7 +152,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(ignore_scm_box);
 
-    case_sens_box = new QCheckBox(i18n("Case &sensitive"), this);
+    case_sens_box = new QCheckBox(i18n("C&ase sensitive"), this);
     case_sens_box->setChecked(true);
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(case_sens_box);
