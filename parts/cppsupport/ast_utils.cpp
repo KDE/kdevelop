@@ -69,7 +69,8 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
 	nodeDescription = ast->nodeType() == NodeType_TranslationUnit ? QString::fromLatin1("") : editIface->textLine( startLine ).simplifyWhiteSpace();
     }
 	
-    nodeDescription += i18n(" [%1]").arg( nodeTypeToString(ast->nodeType()) );
+    if( nodeDescription.isEmpty() )
+	nodeDescription += i18n( " [%1]" ).arg( nodeTypeToString(ast->nodeType()) );
     
     QListViewItem* item = new QListViewItem( parent, nodeDescription,
 					     QString::number(startLine), QString::number(startColumn),
