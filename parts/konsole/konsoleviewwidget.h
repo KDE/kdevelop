@@ -15,9 +15,6 @@ namespace KParts {
 class QVBoxLayout;
 
 
-#include "keditor/editor.h"
-
-
 class KonsoleViewWidget : public QWidget
 {
   Q_OBJECT
@@ -35,7 +32,7 @@ public slots:
 
 private slots:
 
-  void documentActivated(KEditor::Document *doc);
+  void activePartChanged(KParts::Part *part);
   void partDestroyed();
 
  

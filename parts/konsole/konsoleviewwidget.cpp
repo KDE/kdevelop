@@ -12,15 +12,16 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "konsoleviewpart.h"
+#include "kdevpartcontroller.h"
+
+
 #include "konsoleviewwidget.h"
 
 
 KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
  : QWidget(0, "konsole widget"), part(0)
 {
-  connect(part->core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
-		  this, SLOT(documentActivated(KEditor::Document*)));
-  
+  connect(part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
   vbox = new QVBoxLayout(this);
 }
 
@@ -61,12 +62,13 @@ void KonsoleViewWidget::activate()
 }
 
 
-void KonsoleViewWidget::documentActivated(KEditor::Document *doc)
+void KonsoleViewWidget::activePartChanged(KParts::Part *part)
 {
-  if (!doc || !doc->url().isLocalFile())
-	return;
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
+  if (!ro_part || !ro_part->url().isLocalFile())
+    return;
 
-  QString dir = doc->url().path();
+  QString dir = ro_part->url().path();
 
   // strip filename
   int pos = dir.findRev('/');
