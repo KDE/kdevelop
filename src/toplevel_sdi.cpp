@@ -14,6 +14,7 @@
 #include <kdialogbase.h>
 #include <kkeydialog.h>
 
+
 #include "widgets/ktabzoomwidget.h"
 #include "kdevplugin.h"
 
@@ -33,6 +34,17 @@
 TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
   : KParts::MainWindow(parent, name), m_closing(false)
 {
+  KAction * action;
+
+  action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, 
+                        this, SLOT(gotoNextWindow()),
+                        actionCollection(), "view_next_window");
+  action->setStatusText( i18n("Switches to the next window") );
+
+  action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
+                        this, SLOT(gotoPreviousWindow()),
+                        actionCollection(), "view_previous_window");
+  action->setStatusText( i18n("Switches to the previous window") );
 }
 
 
@@ -198,6 +210,26 @@ void TopLevelSDI::lowerAllViews()
   m_bottomBar->lowerAllWidgets();
 }
 
+void TopLevelSDI::moveRelativeTab(unsigned int n)
+{
+  kdDebug() << "moveRelativeTab: " << n << endl;
+  if(m_tabWidget->count()) {
+    int index = m_tabWidget->currentPageIndex();
+		
+    QWidget * view = (m_tabWidget->page((index+n)%m_tabWidget->count()));
+    m_tabWidget->showPage(view);
+  }
+}
+
+void TopLevelSDI::gotoNextWindow()
+{
+  moveRelativeTab(1);
+}
+
+void TopLevelSDI::gotoPreviousWindow()
+{
+  moveRelativeTab(m_tabWidget->count()-1);
+}
 
 void TopLevelSDI::createGUI(KParts::Part *part)
 {

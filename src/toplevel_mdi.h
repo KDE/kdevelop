@@ -53,6 +53,8 @@ signals:
 public slots:
 
   void createGUI(KParts::Part *part);
+  void gotoNextWindow();
+  void gotoPreviousWindow();
 
 
 protected:
@@ -66,7 +68,7 @@ private slots:
   void slotKeyBindings();
   void slotSettings();
   void slotActiveProcessCountChanged( uint active );
-
+  
 private:
   
   virtual bool queryClose();

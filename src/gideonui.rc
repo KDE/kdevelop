@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui >
-<kpartgui version="2" name="gideon" >
+<kpartgui version="3" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -36,6 +36,8 @@
   </Menu>
   <Menu name="view">
     <text>&amp;View</text>
+    <Action name="view_next_window"/>
+    <Action name="view_previous_window"/>
     <Action name="view_selectviews"/>
     <Action name="view_outputviews"/>
     <Separator/>

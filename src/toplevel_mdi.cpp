@@ -30,6 +30,14 @@
 TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
   : QextMdiMainFrm(parent, name), m_closing(false)
 {
+	KAction * action;
+
+	action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
+  action->setStatusText( i18n("Switches to the next window") );
+
+	action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
+  action->setStatusText( i18n("Switches to the previous window") );
+
 }
 
 
@@ -378,6 +386,16 @@ void TopLevelMDI::resizeEvent(QResizeEvent *ev)
 void TopLevelMDI::childWindowCloseRequest(QextMdiChildView *pWnd)
 {
   PartController::getInstance()->closePartForWidget( m_childViewMap[pWnd] );
+}
+
+void TopLevelMDI::gotoNextWindow()
+{
+  activateNextWin();
+}
+
+void TopLevelMDI::gotoPreviousWindow()
+{
+  activatePrevWin();
 }
 
 #include "toplevel_mdi.moc"

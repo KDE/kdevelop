@@ -52,6 +52,8 @@ signals:
 public slots:
 
   void createGUI(KParts::Part *part);
+  void gotoNextWindow();
+  void gotoPreviousWindow();
 
 
 private slots:
@@ -60,7 +62,6 @@ private slots:
   void slotKeyBindings();
   void slotSettings();
   void slotActiveProcessCountChanged( uint active );
-
 
 private:
 
@@ -71,6 +72,8 @@ private:
   void createActions();
 
   void saveSettings();
+
+  void moveRelativeTab(unsigned int);
 
   KAction* m_stopProcesses;
 
