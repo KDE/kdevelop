@@ -29,14 +29,14 @@ CKDevAccel::~CKDevAccel()
   m_Assoc.clear();
 }
 
-QString CKDevAccel::getActionString(uint uMenuId) const
-{
-   QString action;
-   if ( m_Assoc.find(uMenuId) )
-       action=m_Assoc[uMenuId]->m_sAction;
-
-   return action;
-}
+//QString CKDevAccel::getActionString(uint uMenuId) const
+//{
+//   QString action;
+//   if ( m_Assoc.find(uMenuId) )
+//       action=m_Assoc[uMenuId]->m_sAction;
+//
+//   return action;
+//}
 
 uint CKDevAccel::getMenuID(const QString &action) const
 {
@@ -69,37 +69,39 @@ void CKDevAccel::setEnableByMenuItems(const QMenuData *menu)
 
 }
 
-void CKDevAccel::connectItem(const char *action,
+void CKDevAccel::connectItem(const QString& action,
                              const QObject *receiver, const char *member,
                              bool activate)
 {
-  if (!action)
-    return;
-
-  KKeyEntry *pEntry = &(keyDict()[action]);
-
-	if ( !pEntry ) {
-		QString str;
-		str.sprintf( "KAccel : Cannot connect action %s ", action );
-		str.append( "which is not in the object dictionary" );
-		warning(str);
-		return;
-	}
-	
-	pEntry->receiver = receiver;
-	pEntry->member = member;
-	pEntry->aAccelId = aAvailableId;
-	aAvailableId++;
-
-  if (pEntry->aCurrentKeyCode)
-  {
-#warning FIXME What is this whole f*cking class trying to do :(
-//       insertItem( pEntry->aCurrentKeyCode, pEntry->aAccelId );
-//       connectItem( pEntry->aAccelId, receiver, member );
-  }
-
-  if ( !activate )
-	setItemEnabled( action, FALSE );
+//  if (!action)
+//    return;
+//
+//  KKeyEntryMap keyMap = keyDict();
+//  KKeyEntry *pEntry = &(keyMap[action]);
+//
+//	if ( !pEntry ) {
+//		QString str;
+//		str.sprintf( "KAccel : Cannot connect action %s which is not in the object dictionary",
+//		                    action.latin1() );
+//		warning(str);
+//		return;
+//	}
+//	
+//	pEntry->receiver = receiver;
+//	pEntry->member = member;
+//	pEntry->aAccelId = aAvailableId;
+//	aAvailableId++;
+//
+//  if (pEntry->aCurrentKeyCode)
+//  {
+//    insertItem( pEntry->aCurrentKeyCode, pEntry->aAccelId );
+//    connectItem( pEntry->aAccelId, receiver, member );
+//  }
+//
+//  if ( !activate )
+//	  setItemEnabled( action, FALSE );
+    KAccel::connectItem(action, receiver, member);
+	  setItemEnabled( action, activate );
 }
 
 
@@ -107,15 +109,15 @@ void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
                              const QObject* receiver, const char* member,
                              bool activate)
 {
-#warning FIXME What?
-//    if (stdAction(accel) && !aKeyDict[ stdAction(accel) ]){
-//        insertStdItem(accel);
-//    }
-//    connectItem(stdAction(accel), receiver, member, activate);
+#warning FIXME
+    if (KStdAccel::action(accel)) // && !aKeyDict[ KStdAccel::action(accel) ]){
+        insertStdItem(accel);
+
+    connectItem(KStdAccel::action(accel), receiver, member, activate);
 }
 
 
-void CKDevAccel::connectItem(const char *action,
+void CKDevAccel::connectItem(const QString& action,
 	const QObject* receiver, const char *member, bool activate, uint uMenuId)
 {
 
@@ -136,14 +138,13 @@ void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
   {
    if ( m_Assoc.find(uMenuId) )
        m_Assoc.remove( uMenuId );
-#warning FIXME Hmmm?
-//   m_Assoc.insert( uMenuId, new SActionInfo(stdAction(accel), activate) );
+   m_Assoc.insert( uMenuId, new SActionInfo(KStdAccel::action(accel), activate) );
   }
 
   connectItem(accel, receiver, member, activate);
 }
 
-void CKDevAccel::disconnectItem(const char *action,
+void CKDevAccel::disconnectItem(const QString& action,
                   const QObject* receiver, const char *member)
 {
   int uMenuId=getMenuID(action);
@@ -153,45 +154,44 @@ void CKDevAccel::disconnectItem(const char *action,
   KAccel::disconnectItem(action, receiver, member);
 }
 
-void CKDevAccel::reconnectItem(const char *action,
-                  const QObject* receiver, const char *member)
-{
-  uint uMenuId=getMenuID(action);
-  bool activate=true;
-
-  if (uMenuId!=0)
-    activate=m_Assoc[uMenuId]->m_bEnabled;
-
-  connectItem(action, receiver, member, activate);
-}
-
-void CKDevAccel::reconnectItem(KStdAccel::StdAccel accel,
-	                const QObject* receiver, const char *member)
-{
-#warning FIXME Hmmmm?
-//  uint uMenuId=getMenuID(stdAction(accel));
+//void CKDevAccel::reconnectItem(const QString& action,
+//                  const QObject* receiver, const char *member)
+//{
+//  uint uMenuId=getMenuID(action);
+//  bool activate=true;
+//
+//  if (uMenuId!=0)
+//    activate=m_Assoc[uMenuId]->m_bEnabled;
+//
+//  connectItem(action, receiver, member, activate);
+//}
+//
+//void CKDevAccel::reconnectItem(KStdAccel::StdAccel accel,
+//	                const QObject* receiver, const char *member)
+//{
+//  uint uMenuId=getMenuID(KStdAccel::action(accel));
 //  bool activate=true;
 //
 //  if (uMenuId!=0)
 //    activate=m_Assoc[uMenuId]->m_bEnabled;
 //
 //  connectItem(accel, receiver, member, activate);
-}
-
-bool CKDevAccel::reconnectItemByID(uint uMenuId,
-                    const QObject* receiver, const char *member)
-{
-  bool bFound=false;
-  if ( m_Assoc.find(uMenuId) )
-  {
-       bool activated=m_Assoc[uMenuId]->m_bEnabled;
-       QString action=m_Assoc[uMenuId]->m_sAction;
-
-       connectItem(action, receiver, member, activated);
-       bFound=true;
-  }
-  return bFound;
-}
+//}
+//
+//bool CKDevAccel::reconnectItemByID(uint uMenuId,
+//                    const QObject* receiver, const char *member)
+//{
+//  bool bFound=false;
+//  if ( m_Assoc.find(uMenuId) )
+//  {
+//       bool activated=m_Assoc[uMenuId]->m_bEnabled;
+//       QString action=m_Assoc[uMenuId]->m_sAction;
+//
+//       connectItem(action, receiver, member, activated);
+//       bFound=true;
+//  }
+//  return bFound;
+//}
 
 void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
 {
@@ -230,7 +230,7 @@ bool CKDevAccel::setItemEnabled( uint uMenuId, bool activate )
   return bRetVal;
 }
 
-void CKDevAccel::setItemEnabled( const char *action, bool activate )
+void CKDevAccel::setItemEnabled( const QString& action, bool activate )
 {
     uint uMenuId=getMenuID(action);
     if (uMenuId != 0)

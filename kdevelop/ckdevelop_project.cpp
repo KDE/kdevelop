@@ -1178,9 +1178,9 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
 #warning FIXME    mainSplitter->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom = mainSplitter->geometry();
-    mainSplitter->resize(rMainGeom.width()-1,rMainGeom.height());
-    mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+//    QRect rMainGeom = mainSplitter->geometry();
+//    mainSplitter->resize(rMainGeom.width()-1,rMainGeom.height());
+//    mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   slotDebugStop();

@@ -261,6 +261,7 @@ void CKDevelop::initView()
   ////////////////////////
 	
   o_tab_view = new CTabCtl(mainSplitter, "output_tabview","output_widget");
+  mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
 
   messages_widget = new COutputWidget(o_tab_view);
   messages_widget->setFocusPolicy(QWidget::NoFocus);
@@ -362,7 +363,7 @@ void CKDevelop::initKeyAccel()
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );
-  accel->connectItem( "GrepSearch", this, SLOT(slotEditSearchText() ) );
+  accel->connectItem( i18n("GrepSearch"), this, SLOT(slotEditSearchText() ) );
 
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
   accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );

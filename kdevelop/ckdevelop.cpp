@@ -762,9 +762,9 @@ void CKDevelop::slotViewTOutputView(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
-  QRect rMainGeom= mainSplitter->geometry();
-  mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
-  mainSplitter->resize(rMainGeom.width(),rMainGeom.height());
+//  QRect rMainGeom= mainSplitter->geometry();
+//  mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+//  mainSplitter->resize(rMainGeom.width(),rMainGeom.height());
 }
 
 
@@ -1740,33 +1740,39 @@ void CKDevelop::slotBuildMake(){
   process.clearArguments();
   if (prj->getProjectType()!="normal_empty")
   {
-   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-   process << flaglabel;
-   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-   {
-            if (!prj->getCXXFLAGS().isEmpty())
-                  process << prj->getCXXFLAGS() << " ";
-            if (!prj->getAdditCXXFLAGS().isEmpty())
-                  process << prj->getAdditCXXFLAGS();
-   }
-   process  << "\" " << "LDFLAGS=\" " ;
-   if (!prj->getLDFLAGS().isEmpty())
-                process << prj->getLDFLAGS();
-   process  << "\" ";
+    QString flaglabel=
+          ((prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"") +
+          prj->getCXXFLAGS() + prj->getAdditCXXFLAGS() + "\"";
+
+    process << flaglabel;
+
+//    if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+//    {
+//      if (!prj->getCXXFLAGS().isEmpty())
+//        process << prj->getCXXFLAGS();
+//      if (!prj->getAdditCXXFLAGS().isEmpty())
+//        process << prj->getAdditCXXFLAGS();
+//    }
+
+    process  << "LDFLAGS=\""+prj->getLDFLAGS()+"\"";
+
+//   if (!prj->getLDFLAGS().isEmpty())
+//                process << prj->getLDFLAGS();
+//   process  << "\"";
   }
 
   // feed the shell process with a make command and possibly with some arguments
-  if(!prj->getMakeOptions().isEmpty()){
+//  if(!prj->getMakeOptions().isEmpty())
     process << make_cmd << prj->getMakeOptions();
-  }
-  else{
-    process << make_cmd;
-  }
+//  else
+//    process << make_cmd;
+
   beep = true;
 
   // start make
   if (next_job.isEmpty())
     next_job="make_end";
+
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 

@@ -55,7 +55,7 @@ protected:
 public:
   // get the action string according to a resource ID
   //   if there's no entry, return an empty string
-  QString getActionString(uint uMenuId) const;
+//  QString getActionString(uint uMenuId) const;
   // get the resource ID according to the action
   //   if there is no entry, return 0
   uint getMenuID(const QString &action) const;
@@ -68,38 +68,40 @@ public:
   void setEnableByMenuItems(const QMenuData *menu);
 
   // reimplementation of KAccel methods
-  void connectItem(const char *action,
-                   const QObject *receiver, const char *member,
-                   bool activate=true);
+  void connectItem(const QString& action,
+            const QObject *receiver, const char *member,
+            bool activate=true);
+
   void connectItem(KStdAccel::StdAccel accel,
-                   const QObject *receiver, const char *member,
-                   bool activate=true);
-  void disconnectItem(const char *action,
-    const QObject* receiver, const char *member);
+            const QObject *receiver, const char *member,
+            bool activate=true);
+
+  void disconnectItem(const QString& action,
+            const QObject* receiver, const char *member);
       
     //  these methods allow you to bind an accelerator with
   //  a resource ID
-  void connectItem(const char *action,
-    const QObject* receiver, const char *member,
-    bool activate, uint uMenuId);
+  void connectItem(const QString& action,
+            const QObject* receiver, const char *member,
+            bool activate, uint uMenuId);
 
   void connectItem(KStdAccel::StdAccel accel,
-    const QObject* receiver, const char *member,
-    bool activate, uint uMenuId);
+            const QObject* receiver, const char *member,
+            bool activate, uint uMenuId);
 
   // reconnect does the same as connect
   //   only the enable state of the accelerator will
   //   be untouched.
-  void reconnectItem(const char *action,
-    const QObject* receiver, const char *member);
+//  void reconnectItem(const QString& action,
+//            const QObject* receiver, const char *member);
 
-  void reconnectItem(KStdAccel::StdAccel accel,
-    const QObject* receiver, const char *member);
+//  void reconnectItem(KStdAccel::StdAccel accel,
+//            const QObject* receiver, const char *member);
 
   // like reconnect, only by resource ID
   //   instead of action string or StdAccel number
-  bool reconnectItemByID(uint uMenuId,
-    const QObject* receiver, const char *member);
+//  bool reconnectItemByID(uint uMenuId,
+//            const QObject* receiver, const char *member);
 
   // replacement for KAccel::readSettings
   // the additional parameter sets the enable structure of
@@ -107,7 +109,7 @@ public:
   void readSettings (KConfig* config = 0, bool setEnableStruct=true);
 
   // reimplementation of KAccel::setItemEnabled
-  void setItemEnabled( const char *action, bool activate );
+  void setItemEnabled( const QString& action, bool activate );
   //   enables or disables a certain accelerator key
   //   by using either the resource ID or the action string
   bool setItemEnabled( uint uMenuId, bool activate );

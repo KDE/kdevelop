@@ -2026,8 +2026,16 @@ void KWrite::search() {
 
   searchDialog = new SearchDialog(&searchForList, 0L,
     searchFlags & ~sfReplace,topLevelWidget());
-  if ( kWriteDoc->hasMarkedText() ) {
-    QString str = markedText();
+
+  // If the user has marked some text we use that otherwise
+  // use the word under the cursor.
+  QString str;
+  if (kWriteDoc->hasMarkedText())
+    str = markedText();
+  if (str.isEmpty())
+    str = currentWord();
+
+  if (!str.isEmpty()) {
     str.replace(QRegExp("^\n"), "");
     int pos=str.find("\n");
     if (pos>-1)
