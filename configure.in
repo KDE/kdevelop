@@ -104,5 +104,7 @@ doc/ru/Makefile \
 doc/ru/cref/Makefile \
 doc/ru/welcome/Makefile \
 doc/ru/tutorial/Makefile \
-doc/ru/manual/Makefile
+doc/ru/manual/Makefile \
+doc/nl/Makefile \
+doc/nl/cref/Makefile
 ) 
