@@ -43,6 +43,12 @@ public:
         ForceRefresh
     };
     
+    enum BuildPolicy
+    {
+        Build,
+        BuildWithSU
+    };
+    
 public:
     KDevProjectManagerPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KDevProjectManagerPart();
@@ -76,14 +82,15 @@ public:
     virtual void addFile(const QString &fileName);
     virtual void removeFiles (const QStringList &fileList);
     virtual void removeFile(const QString &fileName);
-
-    void import(RefreshPolicy policy = Refresh);
     
+    void import(RefreshPolicy policy = Refresh);
+    void build(const QString &directory, const QString &target, BuildPolicy buildPolicy = Build);
+
 signals:    
     void refresh();
     void addedProjectItem(ProjectItemDom dom);
     void aboutToRemoveProjectItem(ProjectItemDom dom);
-    
+        
 private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);

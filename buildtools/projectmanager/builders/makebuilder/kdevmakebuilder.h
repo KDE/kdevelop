@@ -20,6 +20,8 @@
 #define KDEVMAKEBUILDER_H
 
 #include <kdevprojectbuilder.h>
+#include <qvaluelist.h>
+#include <qpair.h>
 
 class KDialogBase;
 
@@ -40,16 +42,27 @@ public:
     virtual ProjectItemDom defaultExecutable() const;
     virtual void setDefaultExecutable(ProjectItemDom dom);
     
+    virtual bool configure(ProjectItemDom dom = ProjectItemDom());
     virtual bool build(ProjectItemDom dom = ProjectItemDom());
     virtual bool clean(ProjectItemDom dom = ProjectItemDom());
     virtual bool execute(ProjectItemDom dom = ProjectItemDom());
-    
+
 private slots:
     void projectConfigWidget(KDialogBase *dialog);
+    void commandFinished(const QString &command);
+    void commandFailed(const QString &command);
     
 private:
     KDevProject *m_project;
     ProjectItemDom m_defaultExecutable;
+    QValueList< QPair<QString, ProjectItemDom> > m_commands;
+    
+    static const QString &builder;
+    static const QString &makeTool;
+    static const QString &priority;
+    static const QString &abortOnError;
+    static const QString &numberOfJobs;
+    static const QString &dontAct; 
 };
 
 #endif // KDEVMAKEBUILDER_H

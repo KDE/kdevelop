@@ -357,4 +357,10 @@ bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, cons
     return m_dirty;
 }
 
+void KDevProjectManagerPart::build(const QString &directory,
+        const QString &target, BuildPolicy buildPolicy)
+{
+    // ### implement me
+}
+
 #include "kdevprojectmanager_part.moc"

@@ -42,9 +42,14 @@ public:
     virtual ProjectItemDom defaultExecutable() const = 0;
     virtual void setDefaultExecutable(ProjectItemDom dom) = 0;
     
+    virtual bool configure(ProjectItemDom dom = ProjectItemDom()) = 0;
     virtual bool build(ProjectItemDom dom = ProjectItemDom()) = 0;
     virtual bool clean(ProjectItemDom dom = ProjectItemDom()) = 0;
     virtual bool execute(ProjectItemDom dom = ProjectItemDom()) = 0;
+    
+signals:
+    void builded(ProjectItemDom dom);
+    void failed(ProjectItemDom dom);
 };
 
 #endif

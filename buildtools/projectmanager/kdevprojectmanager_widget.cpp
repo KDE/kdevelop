@@ -511,8 +511,9 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
     if (ProjectFolderDom folder = projectItem->dom()->toFolder()) { 
         QString makefile = part()->defaultImporter()->findMakefile(folder);
         if (!makefile.isEmpty()) {
-            KPopupMenu menu(i18n("Folder: %1").arg(folder->shortDescription()), this);
-            menu.insertItem(i18n("Open Makefile"), 1000);
+            KPopupMenu menu(this);
+            menu.insertTitle(i18n("Folder: %1").arg(folder->shortDescription()));
+            menu.insertItem(i18n("Edit"), 1000);
             if (menu.exec(pt) == 1000)
                 part()->partController()->editDocument(KURL(makefile));
         }
@@ -529,7 +530,8 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
     ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
         
     if (ProjectFileDom file = projectItem->dom()->toFile()) {
-        KPopupMenu menu(i18n("File: %1").arg(file->shortDescription()), this);
+        KPopupMenu menu(this);
+        menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
         
         FileContext context(file->name(), false);
         part()->core()->fillContextMenu(&menu, &context);
