@@ -1,7 +1,21 @@
-/**
- * The interface to the build system
- */
+/* This file is part of the KDE project
+   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 #ifndef _KDEVBUILDSYSTEM_H_
 #define _KDEVBUILDSYSTEM_H_
 
@@ -16,6 +30,8 @@
 #include <qdom.h>
 
 #include "kdevproject.h"
+
+#include "property.h"
 
 class BuildFileItem;
 class BuildGroupItem;
@@ -42,11 +58,12 @@ public:
     BuildBaseItem* parent() { return m_parent; }
     const BuildBaseItem* parent() const { return m_parent; }
 
-    const QMap<QString, QVariant>& attributes() const { return m_attributes; }
+    const QMap<QString, PropPtr>& attributes() const { return m_attributes; }
+    QMap<QString, PropPtr> *pAttributes() const { return &m_attributes; } 
 
     bool hasAttribute( const QString& name ) const { return m_attributes.contains( name ); }
-    QVariant attribute( const QString& name ) const { return m_attributes[ name ]; }
-    void setAttribute( const QString& name, const QVariant& value ) { m_attributes[ name ] = value; }
+    QVariant attribute( const QString& name ) const { return m_attributes[ name ]->value(); }
+    void setAttribute( const QString& name, const QVariant& value ) { m_attributes[ name ]->setValue(value); }
 
     virtual QString path();
 
@@ -56,7 +73,7 @@ protected:
 private:
     int m_type;
     BuildBaseItem* m_parent;
-    QMap<QString, QVariant> m_attributes;
+    QMap<QString, PropPtr> m_attributes;
 
 private:
     BuildBaseItem( const BuildBaseItem& source );
@@ -200,6 +217,9 @@ public:
        widget (there is no need to reimplement this)*/
     //TODO: adymo: implement
     virtual void addDefaultBuildWidget(KDialogBase *dlg, QWidget *parent, BuildBaseItem*);
+
+protected:
+    virtual void updateDefaultBuildWidget();
 
 private:
     KDevProject *m_project;

@@ -45,6 +45,7 @@ void ShellScriptBuildSystem::configureBuildItem(KDialogBase *dia, BuildBaseItem*
     kdDebug() << "ShellScriptBuildSystem::configureBuildItem" << endl;
     if (!dia)
         return;
+    kdDebug() << "ShellScriptBuildSystem::configureBuildItem : dia exists" << endl;
     KDevBuildSystem::configureBuildItem(dia, it);
     dia->exec();
 }

@@ -1,9 +1,32 @@
+/* This file is part of the KDE project
+   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include <qvbox.h>
+#include <qtable.h>
+#include <qdockwindow.h>
 
 #include <kdialogbase.h>
 #include <klocale.h>
 
 #include "kdevbuildsystem.h"
+
+#include "propertyeditor.h"
 
 BuildBaseItem::BuildBaseItem( int type, BuildBaseItem * parent )
     : m_type( type ), m_parent( parent )
@@ -103,7 +126,7 @@ BuildTargetItem::~ BuildTargetItem( )
 	delete m_files.front();
 	m_files.pop_front();
     }
-    
+
     if( m_parentGroup )
 	m_parentGroup->takeTarget( this );
 }
@@ -161,8 +184,10 @@ KDevBuildSystem::KDevBuildSystem( QObject *parent, const char * name )
 
 void KDevBuildSystem::configureBuildItem( KDialogBase * dlg, BuildBaseItem * it)
 {
+    qWarning("KDevBuildSystem::configureBuildItem");
     if (!dlg)
         return;
+    qWarning("KDevBuildSystem::configureBuildItem: dlg exists");
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Properties"));
     addDefaultBuildWidget(dlg, vbox, it);
@@ -178,15 +203,27 @@ KDevProject * KDevBuildSystem::project( )
     return m_project;
 }
 
+void KDevBuildSystem::updateDefaultBuildWidget( )
+{
+}
+
+
+
+
 // ------------------------------------------------------
 BuildItemConfigWidget::BuildItemConfigWidget( BuildBaseItem *it, QWidget * parent, const char * name )
     :QWidget(parent, name)
 {
+    PropertyEditor *ed = new PropertyEditor(QDockWindow::InDock, this, "item_propeditor");
+    ed->populateProperties(it->pAttributes());
 }
 
 void BuildItemConfigWidget::accept( )
 {
 }
+
+
+
 
 // ------------------------------------------------------
 ProjectConfigTab::ProjectConfigTab( QWidget * parent, const char * name )

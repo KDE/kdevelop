@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/util
+INCLUDES = -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets/propeditor $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
@@ -17,3 +17,4 @@ EXTRA_DIST = newlanguage.dox.h
 
 METASOURCES = AUTO
 
+libkdevinterfaces_la_LIBADD = $(top_builddir)/lib/widgets/propeditor/libpropertyeditor.la

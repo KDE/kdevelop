@@ -86,9 +86,11 @@ private slots:
     void slotDeleteGroup();
     void slotDeleteTarget();
     void slotDeleteFile();
+    void slotDeleteTargetOrFile();
     void slotConfigureGroup();
     void slotConfigureTarget();
     void slotConfigureFile();
+    void slotConfigureTargetOrFile();
     void slotClean();
     void slotCleanGroup();
     void slotCleanTarget();

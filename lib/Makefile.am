@@ -19,5 +19,5 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la $(to
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces util project widgets $(QEXTMDI_SUBDIR) antlr catalog cppparser $(COMPAT_SUBDIR) astyle
+SUBDIRS = widgets interfaces util project $(QEXTMDI_SUBDIR) antlr catalog cppparser $(COMPAT_SUBDIR) astyle
 

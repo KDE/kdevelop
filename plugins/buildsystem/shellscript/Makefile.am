@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets/propeditor $(all_includes)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkdevbuildscript.la

@@ -105,13 +105,13 @@ void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
     m_overviewListView->addColumn( QString::null );
 
     connect( m_overviewListView, SIGNAL(clicked(QListViewItem*)),
-	     this, SLOT(slotItemSelected(QListViewItem*)) );
+            this, SLOT(slotItemSelected(QListViewItem*)) );
 
     connect( this, SIGNAL(groupSelected(BuildGroupItem*)),
-	     this, SLOT(showDetails(BuildGroupItem*)) );
+            this, SLOT(showDetails(BuildGroupItem*)) );
 
     connect(m_overviewListView, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-        this, SLOT(showGroupContextMenu(KListView *, QListViewItem *, const QPoint &)));
+            this, SLOT(showGroupContextMenu(KListView *, QListViewItem *, const QPoint &)));
 }
 
 void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
@@ -136,14 +136,14 @@ void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("editdelete") );
-    QToolTip::add( btn, i18n("Remove target") );
-    connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteTarget()));
+    QToolTip::add( btn, i18n("Remove target or file") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteTargetOrFile()));
 
-    btn = new QToolButton( buttonBox );
+/*    btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("editdelete") );
     QToolTip::add( btn, i18n("Remove file") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteFile()));
-
+*/
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("launch") );
     QToolTip::add( btn, i18n("Build target") );
@@ -155,8 +155,8 @@ void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("configure") );
-    QToolTip::add( btn, i18n("Configure target") );
-    connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureTarget()));
+    QToolTip::add( btn, i18n("Configure target or file") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureTargetOrFile()));
 
     buttonBox->setMaximumHeight( btn->height() );
 
@@ -193,7 +193,7 @@ void GenericProjectWidget::slotMainGroupChanged( BuildGroupItem * mainGroup )
     m_fileToItem.clear();
 
     if( !mainGroup )
-	return;
+        return;
 
     GenericGroupListViewItem* mainItem = new GenericGroupListViewItem( m_overviewListView, mainGroup );
     mainItem->setOpen( true );
@@ -208,11 +208,11 @@ void GenericProjectWidget::fillGroupItem( BuildGroupItem * group, GenericGroupLi
     QValueList<BuildGroupItem*> groups = group->groups();
     QValueListIterator<BuildGroupItem*> it = groups.begin();
     while( it != groups.end() ){
-	GenericGroupListViewItem* createdItem = new GenericGroupListViewItem( item, *it );
-	createdItem->setOpen( (*it)->groups().size() > 0 );
-	fillGroupItem( *it, createdItem );
-	
-	++it;	
+        GenericGroupListViewItem* createdItem = new GenericGroupListViewItem( item, *it );
+        createdItem->setOpen( (*it)->groups().size() > 0 );
+        fillGroupItem( *it, createdItem );
+
+        ++it;
     }
 }
 
@@ -252,12 +252,12 @@ void GenericProjectWidget::showDetails( BuildGroupItem * groupItem )
     QValueList<BuildTargetItem*> targets = groupItem->targets();
     QValueListIterator<BuildTargetItem*> it = targets.begin();
     while( it != targets.end() ){
-	GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, *it );
-	m_targetToItem.insert( *it, createdItem );
-	m_itemToTarget.insert( createdItem, *it );
-	fillTarget( *it, createdItem );
-	createdItem->setOpen( true );
-	++it;
+        GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, *it );
+        m_targetToItem.insert( *it, createdItem );
+        m_itemToTarget.insert( createdItem, *it );
+        fillTarget( *it, createdItem );
+        createdItem->setOpen( true );
+        ++it;
     }
 }
 
@@ -675,8 +675,8 @@ void GenericProjectWidget::slotConfigureGroup( )
         return;
     kdDebug() << "GenericProjectWidget::slotConfigureGroup 3" << endl;
 
-    KDialogBase *dia = new KDialogBase(0, "configure_group_dia", true, i18n("Group Options"),
-        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+    KDialogBase *dia = new KDialogBase(KDialogBase::Tabbed, i18n("Group Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this);
     kdDebug() << "GenericProjectWidget::slotConfigureGroup 4" << endl;
 
     m_part->buildSystem()->configureBuildItem(dia, git->buildItem());
@@ -691,8 +691,8 @@ void GenericProjectWidget::slotConfigureTarget( )
     if (!tit)
         return;
 
-    KDialogBase *dia = new KDialogBase(0, "configure_target_dia", true, i18n("Target Options"),
-        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+    KDialogBase *dia = new KDialogBase(KDialogBase::Tabbed, i18n("Target Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this);
 
     m_part->buildSystem()->configureBuildItem(dia, tit->buildItem());
 }
@@ -705,8 +705,8 @@ void GenericProjectWidget::slotConfigureFile( )
     if (!fit)
         return;
 
-    KDialogBase *dia = new KDialogBase(0, "configure_file_dia", true, i18n("File Options"),
-        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+    KDialogBase *dia = new KDialogBase(KDialogBase::Tabbed, i18n("File Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this);
 
     m_part->buildSystem()->configureBuildItem(dia, fit->buildItem());
 }
@@ -786,6 +786,32 @@ void GenericProjectWidget::slotItemExecuted( QListViewItem * item )
         kdDebug() << "emit fileExecuted()" << endl;
         emit fileExecuted( m_itemToFile[fileItem] );
     }
+}
+
+void GenericProjectWidget::slotDeleteTargetOrFile( )
+{
+    QListViewItem * item = m_detailsListView->currentItem();
+    if (!item)
+        return;
+    GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
+    GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
+    if (targetItem)
+        slotDeleteTarget();
+    else if (fileItem)
+        slotDeleteFile();
+}
+
+void GenericProjectWidget::slotConfigureTargetOrFile( )
+{
+    QListViewItem * item = m_detailsListView->currentItem();
+    if (!item)
+        return;
+    GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
+    GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
+    if (targetItem)
+        slotConfigureTarget();
+    else if (fileItem)
+        slotConfigureFile();
 }
 
 #include "genericproject_widget.moc"
