@@ -50,7 +50,8 @@ public:
   void showURL(QString url,bool reload=false);
   void setDocBrowserOptions();
   QString currentURL();
-
+	QString currentTitle();
+	
 public slots:
   void slotDocFontSize(int);
   void slotDocStandardFont(const char *);
@@ -62,7 +63,8 @@ public slots:
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
-
+	void slotSetFileTitle(const char* title);
+	
  signals:
   void signalURLBack();
   void signalURLForward();
@@ -70,6 +72,7 @@ public slots:
 
 protected:
   QString old_url;
+  QString m_title;
 //  void  mousePressEvent(QMouseEvent* event);
   QPopupMenu* doc_pop;
 
@@ -184,6 +187,8 @@ public:
 };
 
 #endif
+
+
 
 
 

@@ -99,7 +99,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   autosaveTimeCombo = new QComboBox( FALSE, w1, "autosaveTimeCombo" );
   autosaveTimeCombo->setGeometry( 270, 140, 130, 25 );
-  connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
   autosaveTimeCombo->setSizeLimit( 10 );
   autosaveTimeCombo->setAutoResize( FALSE );
   autosaveTimeCombo->insertItem(i18n("3 min"),0 );
@@ -128,10 +127,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 										     "Available are: 3 minutes, 5 minutes,\n"
 										     "15 minutes and 30 minutes.")))));
   
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
-  
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
   autoswitchGroup->setGeometry( 10, 190, 400, 60 );
@@ -143,17 +138,15 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
   autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
-  
+
   autoSwitchCheck->setText(i18n("enable Autoswitch"));
   autoSwitchCheck->setAutoRepeat( FALSE );
   autoSwitchCheck->setAutoResize( FALSE );
   bool autoSwitch=config->readBoolEntry("Autoswitch",true);
   autoSwitchCheck->setChecked( autoSwitch );
-  
+
   defaultClassViewCheck = new QCheckBox( w1, "defaultClassViewCheck" );
   defaultClassViewCheck->setGeometry( 220, 210, 180, 30 );
-  connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
   defaultClassViewCheck->setText(i18n( "use Class View as default"));
   defaultClassViewCheck->setAutoRepeat( FALSE );
   defaultClassViewCheck->setAutoResize( FALSE );
@@ -222,20 +215,27 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	
   config->setGroup("TipOfTheDay");
   bool tip=config->readBoolEntry("show_tod",true);
-  
-  
-  tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
-  tipDayCheck->setGeometry( 220, 275, 150, 25 );
-  tipDayCheck->setText(i18n("Tip of the Day"));
-  tipDayCheck->setAutoRepeat( FALSE );
-  tipDayCheck->setAutoResize( FALSE );
-  tipDayCheck->setChecked( tip );
-  
-  KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
-					  "If Tip of the Day is enabled, KDevelop will show the\n"
-					  "Tip of the Day every time it starts."));
+
 	
-  
+	tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
+	tipDayCheck->setGeometry( 220, 275, 150, 25 );
+	tipDayCheck->setText(i18n("Tip of the Day"));
+	tipDayCheck->setAutoRepeat( FALSE );
+	tipDayCheck->setAutoResize( FALSE );
+	tipDayCheck->setChecked( tip );
+
+	KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
+	                  "If Tip of the Day is enabled, KDevelop will show the\n"
+	                  "Tip of the Day every time it starts."));
+	
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
+  connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
+  connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
+
   // ****************** the Keys Tab ***************************
   
   dict = new QDict<KKeyEntry>( accel->keyDict() );
@@ -249,7 +249,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
   
-	
   KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
 				"Documentation for the Documentation Browser.\n"
 				"QT usually comes with complete Documentation\n"

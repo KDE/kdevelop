@@ -52,6 +52,22 @@ void CKDevelop::refreshTrees(){
   kdlg_dialogs_view->refresh(prj);
 
   kdev_statusbar->repaint();
+	
+  // update the file_open_menu
+  file_open_list=prj->getHeaders();
+  QStrList sources=prj->getSources();
+	uint j;
+	for( j=0; j< sources.count(); j++){
+		file_open_list.append(sources.at(j));
+	}
+	// create the file_open_popup for the toolbar
+	file_open_popup->clear();
+	uint i;
+ 	for ( i =0 ; i < file_open_list.count(); i++){
+ 		QFileInfo fileInfo (file_open_list.at(i));
+  	file_open_popup->insertItem(fileInfo.fileName());
+  }
+
   slotStatusMsg(i18n("Ready."));
 }
  
@@ -84,6 +100,20 @@ void CKDevelop::refreshTrees(TFileInfo *info)
     // Update RFV.
     real_file_tree->refresh(prj);
   }
+  // refresh the file_open_list
+  file_open_list=prj->getHeaders();
+  QStrList sources=prj->getSources();
+	uint j;
+	for( j=0; j< sources.count(); j++){
+		file_open_list.append(sources.at(j));
+	}
+	// create the file_open_popup for the toolbar
+	file_open_popup->clear();
+	uint i;
+ 	for ( i =0 ; i < file_open_list.count(); i++){
+ 		QFileInfo fileInfo (file_open_list.at(i));
+  	file_open_popup->insertItem(fileInfo.fileName());
+  }
 }
 
 void CKDevelop::switchToFile(QString filename){
@@ -113,15 +143,29 @@ void CKDevelop::switchToFile(QString filename){
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(3) == ".po"){
-    if(CToolClass::searchInstProgram("ktranslator")){
-      showOutputView(false);
-      s_tab_view->setCurrentTab(TOOLS);
-      swallow_widget->sWClose(false);
-      swallow_widget->setExeString("ktranslator "+ filename);
-      swallow_widget->sWExecute();
-      swallow_widget->init();
-      return;
-    }
+    if(!CToolClass::searchInstProgram("ktranslator")){
+			return;
+		}
+    showOutputView(false);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    swallow_widget->setExeString("ktranslator "+ filename);
+    swallow_widget->sWExecute();
+    swallow_widget->init();
+    return;
+  }
+  //load ktranslator if clicked/loaded an po file
+  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp"){
+    if(!CToolClass::searchInstProgram("kpaint")){
+			return;
+		}
+    showOutputView(false);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    swallow_widget->setExeString("kpaint "+ filename);
+    swallow_widget->sWExecute();
+    swallow_widget->init();
+    return;
   }
 
   if(filename.right(8) == ".kdevdlg"){
@@ -512,7 +556,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("cpp_file",cpp_widget->getName());
   config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
-  
+	config->writeEntry("doc_bookmarks", doc_bookmarks_list);
+	config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
   //save the dialog;
   //  kdlgedit->slotFileSave();
   
@@ -545,6 +590,10 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
+
+
 
 
 

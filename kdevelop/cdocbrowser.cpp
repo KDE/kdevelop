@@ -63,6 +63,7 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
     this, SLOT( slotPopupMenu( KHTMLView *, const char *, const QPoint & ) ) );
+	connect(this, SIGNAL( setTitle ( const char *) ), this, SLOT( slotSetFileTitle( const char*) ) );
 
 }
 
@@ -113,11 +114,11 @@ void CDocBrowser::showURL(QString url,bool reload){
       file.open(IO_ReadOnly);
       begin( url);
       do
-	{
-	  buffer[0] = '\0';
-	  val = file.readLine( buffer, 256 );
-	  write(buffer);
-	}
+			{
+	  		buffer[0] = '\0';
+	  		val = file.readLine( buffer, 256 );
+	  		write(buffer);
+			}
       while ( !file.atEnd() );
       
       end();
@@ -259,7 +260,13 @@ void CDocBrowser::slotURLForward(){
   emit signalURLForward();
 }
 
+void CDocBrowser::slotSetFileTitle( const char* title ){
+	m_title= title;
+}
 
+QString CDocBrowser::currentTitle(){
+	return m_title;	
+}
 //
 // KDE Help Options
 //
@@ -596,6 +603,10 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
+
+
+
 
 
 

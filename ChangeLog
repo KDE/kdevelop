@@ -1,3 +1,9 @@
+1999-05-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added bookmarks menu for the browser window
+	* added delayed popups for browser history on toolbar back and forward buttons
+	* added title support for HTML file titles on KDevelop caption, bookmarks and history popups
+	* added delayed popup for project headers and sources on the Open File toolbar button
+	
 1999-05-27  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* implemented new mode for LFV, 
 	it's now possible to view the file without the path
@@ -1001,6 +1007,10 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
+
+
+
 
 
 

@@ -159,6 +159,8 @@ public:
  void slotFileNew();
   /**open a file*/
   void slotFileOpen();
+  /** opens a file from the file_open_popup that is a delayed popup menu installed in the open file button of the toolbar */
+  void slotFileOpen( int id_ );
   /** close the cuurent file*/
   void slotFileClose();
   void slotFileCloseAll();
@@ -329,7 +331,7 @@ public:
   void slotBookmarksSet();
   void slotBookmarksAdd();
   void slotBookmarksClear();
-
+	void slotBoomarksBrowserSelected(int);
   ////////////////////////
   // HELP-Menu entries
   ///////////////////////
@@ -337,6 +339,10 @@ public:
   void slotHelpBack();
   /** goes one page forward in the documentatio browser */
   void slotHelpForward();
+  /** goes to the page in the history list by delayed popup menu on the back-button on the browser toolbar */
+	void slotHelpHistoryBack( int id_);
+  /** goes to the page in the history list by delayed popup menu on the forward-button on the browser toolbar */
+	void slotHelpHistoryForward(int id_);
   /** search marked text */
   void slotHelpSearchText();
   /** search marked text with a text string */
@@ -500,7 +506,9 @@ private:
   QPopupMenu* file_menu;				
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
-  QPopupMenu* bookmarks_menu;
+	QPopupMenu* bookmarks_menu;
+	QPopupMenu* doc_bookmarks;
+
   QPopupMenu* project_menu;
   QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
@@ -509,7 +517,11 @@ private:
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
   QWhatsThis* whats_this;
-
+	
+	QPopupMenu* history_prev;
+	QPopupMenu* history_next;
+	QPopupMenu* file_open_popup;
+	QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
   QPopupMenu* kdlg_file_menu;
   QPopupMenu* kdlg_edit_menu;
@@ -558,7 +570,10 @@ private:
 
   // for the browser
   QStrList history_list;
-  
+	QStrList history_title_list;
+	QStrList doc_bookmarks_list;
+	QStrList doc_bookmarks_title_list;
+	
   QList<TEditInfo> edit_infos;
 
   //some widgets for the mainview
@@ -638,6 +653,8 @@ private:
 };
 
 #endif
+
+
 
 
 

@@ -67,11 +67,11 @@ bool CKDevelop::slotProjectClose(){
     // yes- save headerwidget
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.h"){
-	slotFileSaveAs();    
+				slotFileSaveAs();
         slotFileClose();
       }
       else{
-	slotFileSave();
+				slotFileSave();
         slotFileClose();
       }
       edit_widget->toggleModified(false);      
@@ -279,7 +279,8 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-
+		file_open_popup->clear();
+		file_open_list.clear();
   }
   slotStatusMsg(i18n("Ready."));
   if(mod){
@@ -928,7 +929,7 @@ bool CKDevelop::readProjectFile(QString file){
     kdlg_tabctl->setCurrentTab(1); // dialogs
   
   }
-  
+
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_NEW_CLASS);
   enableCommand(ID_PROJECT_WORKSPACES);
@@ -977,6 +978,15 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
+
+
+
+
+
 
 
 

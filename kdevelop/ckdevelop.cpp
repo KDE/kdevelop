@@ -85,6 +85,18 @@ void CKDevelop::slotFileOpen(){
   slotStatusMsg(i18n("Ready."));
   
 }
+
+void CKDevelop::slotFileOpen( int id_ ){
+  slotStatusMsg(i18n("Opening file..."));
+
+  QString str=file_open_list.at(id_);
+	
+  switchToFile(str);
+
+  slotStatusMsg(i18n("Ready."));
+
+}
+
 void CKDevelop::slotFileClose(){
   slotStatusMsg(i18n("Closing file..."));
    QString filename=edit_widget->getName();
@@ -1011,13 +1023,26 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 }
 	
 void CKDevelop::slotBookmarksSet(){
-	if(edit_widget==header_widget)
-		header_widget->setBookmark();
-	if(edit_widget==cpp_widget)
-		cpp_widget->setBookmark();
-
+	if(s_tab_view->getCurrentTab()==BROWSER)
+		slotBookmarksAdd();
+	else{
+		if(edit_widget==header_widget)
+			header_widget->setBookmark();
+		if(edit_widget==cpp_widget)
+			cpp_widget->setBookmark();
+	}
 }
 void CKDevelop::slotBookmarksAdd(){
+	if(s_tab_view->getCurrentTab()==BROWSER){
+		doc_bookmarks->clear();
+		doc_bookmarks_list.append(browser_widget->currentURL());
+		doc_bookmarks_title_list.append(browser_widget->currentTitle());
+		
+		uint i;
+    for ( i =0 ; i < doc_bookmarks_list.count(); i++){
+      doc_bookmarks->insertItem(doc_bookmarks_title_list.at(i));
+    }
+	}
 	if(edit_widget==header_widget)
 		header_widget->addBookmark();
 	if(edit_widget==cpp_widget)
@@ -1025,13 +1050,26 @@ void CKDevelop::slotBookmarksAdd(){
 
 }
 void CKDevelop::slotBookmarksClear(){
-	if(edit_widget==header_widget)
-		header_widget->clearBookmarks();
-	if(edit_widget==cpp_widget)
-		cpp_widget->clearBookmarks();
+	if(s_tab_view->getCurrentTab()==BROWSER){
+		doc_bookmarks_list.clear();
+		doc_bookmarks_title_list.clear();
+		doc_bookmarks->clear();
+	}		
+	else{
+		if(edit_widget==header_widget)
+			header_widget->clearBookmarks();
+		if(edit_widget==cpp_widget)
+			cpp_widget->clearBookmarks();
+	}	
 }
 
+void CKDevelop::slotBoomarksBrowserSelected(int id_){
+	slotStatusMsg(i18n("Opening bookmark..."));
+	QString file= doc_bookmarks_list.at(id_);
+	slotURLSelected( browser_widget, file,1,"test");	
 
+  slotStatusMsg(i18n("Ready."));
+}	
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // HELP-Menu slots
@@ -1040,8 +1078,8 @@ void CKDevelop::slotHelpBack(){
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+  	s_tab_view->setCurrentTab(BROWSER);
+		browser_widget->showURL(str);
     enableCommand(ID_HELP_FORWARD);
   }
   if (history_list.prev() == 0){ // no more backs
@@ -1051,6 +1089,7 @@ void CKDevelop::slotHelpBack(){
   else{
     history_list.next();
   }
+		
   KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(i18n("Ready."));
 }
@@ -1059,12 +1098,52 @@ void CKDevelop::slotHelpForward(){
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
   if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+  	s_tab_view->setCurrentTab(BROWSER);
+		browser_widget->showURL(str);
     enableCommand(ID_HELP_BACK);
   }
   if (history_list.next() == 0){ // no more forwards
    disableCommand(ID_HELP_FORWARD);
+    history_list.last(); // set it at last
+  }
+  else{
+    history_list.prev();
+  }
+  slotStatusMsg(i18n("Ready."));
+}
+
+void CKDevelop::slotHelpHistoryBack( int id_){
+	slotStatusMsg(i18n("Opening history page..."));
+	
+  QString str = history_list.at(id_);
+  if (str != 0){
+  	s_tab_view->setCurrentTab(BROWSER);
+		browser_widget->showURL(str);
+    enableCommand(ID_HELP_FORWARD);
+  }
+  if (history_list.prev() == 0){ // no more backs
+    disableCommand(ID_HELP_BACK);
+    history_list.first(); // set it at first
+  }
+  else{
+    history_list.next();
+  }
+
+  slotStatusMsg(i18n("Ready."));
+
+}
+
+void CKDevelop::slotHelpHistoryForward( int id_){
+	slotStatusMsg(i18n("Opening history page..."));
+	
+  QString str = history_list.at(id_);
+  if (str != 0){
+  	s_tab_view->setCurrentTab(BROWSER);
+		browser_widget->showURL(str);
+    enableCommand(ID_HELP_BACK);
+  }
+  if (history_list.next() == 0){ // no more forwards
+  	disableCommand(ID_HELP_FORWARD);
     history_list.last(); // set it at last
   }
   else{
@@ -1376,24 +1455,25 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     enableCommand(ID_HELP_BACK);
   }
 
-  setCaption("KDevelop " + version + ":  "+url);
-
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
   if (str.contains("kdevelop/search_result.html")){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
-  // insert into the history-list
+/*  // insert into the history-list
   if(QString(url).left(7) != "http://"){ // http aren't added to the history list
 
     int cur =  history_list.at(); // get the current index
     if(cur == -1){
       history_list.append(url);
+			history_title_list.append(browser_widget->currentTitle());
     }
     else{
       history_list.insert(cur+1,url);
+      history_title_list.insert(cur+1, browser_widget->currentTitle());
     }
   }
+*/	
 }
 
 void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
@@ -1414,7 +1494,33 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
   prev_was_search_result=false;
+  setCaption("KDevelop " + version + ":  "+browser_widget->currentTitle());
+	
+    // insert into the history-list
+  if(browser_widget->currentURL().left(7) != "http://"){ // http aren't added to the history list
 
+    int cur =  history_list.at(); // get the current index
+    if(cur == -1){
+      history_list.append(browser_widget->currentURL());
+			history_title_list.append(browser_widget->currentTitle());
+    }
+    else{
+      history_list.insert(cur+1,browser_widget->currentURL());
+      history_title_list.insert(cur+1, browser_widget->currentTitle());
+    }
+  }
+
+	history_next->clear();
+	history_prev->clear();
+		
+	int i;
+  for ( i =0 ; i < history_list.at(); i++){
+    history_prev->insertItem(history_title_list.at(i));
+  }
+  uint j;
+  for ( j = history_list.at()+1 ; j < history_list.count(); j++){
+    history_next->insertItem(history_title_list.at(j));
+  }
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
@@ -1784,7 +1890,7 @@ void CKDevelop::slotSTabSelected(int item){
       t_tab_view->setCurrentTab(DOC);
     disableCommand(ID_BUILD_COMPILE_FILE);
     browser_widget->setFocus();
-    setCaption("KDevelop " + version + ":  "+ browser_widget->currentURL());
+    setCaption("KDevelop " + version + ":  "+ browser_widget->currentTitle());
   }
   if(item == TOOLS){
 		disableCommand(ID_BUILD_COMPILE_FILE);
@@ -1827,7 +1933,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
       if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?",KMsgBox::INFORMATION) == 1) {
-	slotOptionsKDevelop();
+				slotOptionsKDevelop();
       }
       return;
     }
@@ -1836,7 +1942,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
        text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
        text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
       if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?",KMsgBox::INFORMATION) == 1) {
-	slotOptionsUpdateKDEDocumentation();
+				slotOptionsUpdateKDEDocumentation();
       }
       return;
     }
@@ -2090,6 +2196,27 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

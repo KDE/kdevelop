@@ -350,7 +350,8 @@ void CKDevInstall::slotAuto() // proceed >>
   bool kdbg=false;
   bool kiconedit=false;
   bool ktranslator=false;
-
+	bool kpaint=false;
+	
   int highl_style=KMsgBox::yesNo(this,i18n("Syntax-Highlighting"),i18n("\nNow you can choose the Syntax-Highlighting style\n"
                                                                       "KDevelop will use. The options are to set\n"
                                                                       "the highlighting to Emacs stlye or to the default\n"
@@ -574,6 +575,9 @@ void CKDevInstall::slotAuto() // proceed >>
   if(CToolClass::searchInstProgram("ktranslator")){
     ktranslator=true;
   }
+  if(CToolClass::searchInstProgram("kpaint")){
+    kpaint=true;
+  }
 
 	QStrList tools_exe;
 	QStrList tools_entry;
@@ -639,6 +643,15 @@ void CKDevInstall::slotAuto() // proceed >>
 	}
   else
     kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible\n";
+	QString kpaint_str;
+	if(kpaint){
+    kpaint_str="KPaint"+found+"\n";
+		tools_exe.append("kpaint");
+		tools_entry.append("K&Paint");
+	}
+  else
+    kpaint_str="KPaint"+not_found+"\n";
+
   QString ktranslator_str;
   if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
@@ -671,7 +684,7 @@ void CKDevInstall::slotAuto() // proceed >>
 
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
-                  +print_str+kdbg_str+kiconedit_str+ktranslator_str, KMsgBox::INFORMATION);
+                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
 
 	config->setGroup("ToolsMenuEntries");
 	config->writeEntry("Tools_exe",tools_exe);
@@ -792,6 +805,7 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
 
 
 

@@ -136,7 +136,10 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     dir_edit->setMinimumSize(dir_edit->sizeHint());
     dir_layout->addWidget(dir_edit, 10);
 
-    QPushButton *dir_button = new QPushButton("...", this);
+    QPushButton *dir_button = new QPushButton(this, "dirButton");
+		QPixmap pix;
+  	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+		dir_button->setPixmap(pix);
     dir_button->setFixedHeight(dir_edit->sizeHint().height());
     dir_button->setFixedWidth(30);
     dir_layout->addWidget(dir_button);
@@ -410,3 +413,5 @@ void GrepDialog::slotClear()
 void  GrepDialog::setDirName(QString dir){
   dir_edit->setText(dir);
 }
+
+

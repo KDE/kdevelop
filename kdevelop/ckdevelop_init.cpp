@@ -41,6 +41,7 @@ CKDevelop::CKDevelop(){
   version = VERSION;
   project=false;// no project
   beep=false; // no beep
+  file_open_list.setAutoDelete(TRUE);
 
   init();
   initConnections();
@@ -691,32 +692,43 @@ void CKDevelop::initMenu(){
   
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries
-/*	bookmarks_menu=new QPopupMenu;
-	bookmarks_menu->insertItem(i18n("&Set Bookmark..."),edit_widget,SLOT(setBookmark()),0,ID_BOOKMARKS_SET);
-	bookmarks_menu->insertItem(i18n("&Add Bookmark..."),edit_widget,SLOT(addBookmark()),0,ID_BOOKMARKS_ADD);
-	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),edit_widget,SLOT(clearBookmarks()),0,ID_BOOKMARKS_CLEAR);
-	edit_widget->installBMPopup(bookmarks_menu);
-*/
 	bookmarks_menu=new QPopupMenu;
 	bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
 	bookmarks_menu->insertItem(i18n("&Add Bookmark..."),this,SLOT(slotBookmarksAdd()),0,ID_BOOKMARKS_ADD);
 	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
 	bookmarks_menu->insertSeparator();
+
   QPopupMenu* header_bookmarks = new QPopupMenu();
   header_widget->installBMPopup(header_bookmarks);
   QPopupMenu* cpp_bookmarks = new QPopupMenu();
   cpp_widget->installBMPopup(cpp_bookmarks);
 	
-	bookmarks_menu->insertItem(i18n("Header Window"),header_bookmarks,31000);
-	bookmarks_menu->insertItem(i18n("C/C++ Window"),cpp_bookmarks,31010);
+	doc_bookmarks = new QPopupMenu();
+	connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
+  config->setGroup("Files");
+	doc_bookmarks_list.setAutoDelete(TRUE);
+	doc_bookmarks_title_list.setAutoDelete(TRUE);
+	
+	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
+	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+		
+	uint i;
+	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
+    doc_bookmarks->insertItem(doc_bookmarks_title_list.at(i));
+  }
+	
+	bookmarks_menu->insertItem(i18n("&Header Window"),header_bookmarks,31000);
+	bookmarks_menu->insertItem(i18n("C/C++ &Window"),cpp_bookmarks,31010);
+	bookmarks_menu->insertItem(i18n("&Browser Window"), doc_bookmarks,31020);
+	
 	kdev_menubar->insertItem(i18n("Book&marks"),bookmarks_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
   help_menu = new QPopupMenu();
-  help_menu->insertItem(i18n("Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
-  help_menu->insertItem(i18n("Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
+  help_menu->insertItem(i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
+  help_menu->insertItem(i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
@@ -774,8 +786,13 @@ void CKDevelop::initToolbar(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/openprj.xpm");
   toolBar()->insertButton(pix,ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   toolBar()->insertButton(pix,ID_FILE_OPEN, true,i18n("Open File"));
+	file_open_popup= new QPopupMenu();
+	connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
+	toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
+
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE,true,i18n("Save File"));
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
@@ -863,8 +880,17 @@ void CKDevelop::initToolbar(){
   KCombo* choice_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
+
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_HELP_BACK, false,i18n("Back"));
+  history_prev = new QPopupMenu();
+	connect(history_prev, SIGNAL(activated(int)), SLOT(slotHelpHistoryBack(int)));
+	toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_BACK, history_prev);
+	
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_HELP_FORWARD, false,i18n("Forward"));
+	history_next = new QPopupMenu();
+	connect(history_next, SIGNAL(activated(int)), SLOT(slotHelpHistoryForward(int)));
+	toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
+
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("lookup.xpm"), ID_HELP_SEARCH_TEXT,
@@ -1151,6 +1177,23 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
