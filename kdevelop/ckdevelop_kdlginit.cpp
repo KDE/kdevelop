@@ -52,6 +52,7 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
   kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
 
+  kdlg_prop_widget = 0;
   kdlg_edit_widget = new KDlgEditWidget(this, kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
   kdlg_prop_widget = new KDlgPropWidget(this, kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
 
