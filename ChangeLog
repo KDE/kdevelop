@@ -1,3 +1,8 @@
+2003-02-19 F@lk Brettschneider <falkbr@kdevelop.org>
+	* QEditor find dialog improved:
+	- don't stop at end of file but loop to begin (makes much sense when starting from cursor)
+	- use text selection as search string
+
 2003-02-17 Hamish Rodda <meddie@yoyo.its.monash.edu.au>
 	* parts/outputviews
 		- added detection of k_lineinfo output to application output view
