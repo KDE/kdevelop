@@ -35,7 +35,8 @@ class perlparser {
   void initialParse();
   void parse(const QString &fileName);
   void parseLines(QStringList* lines,const QString& fileName);
-  void parseUseFiles();
+  const QStringList UseFiles();
+  QString findLib( const QString& lib);
 
   private:
   //global functions to add to ClassStore
@@ -52,7 +53,6 @@ class perlparser {
   void addScript(const QString& fileName ,int lineNr , const QString& name);
   void addUseLib(const QString& lib);
   void getPerlINC();
-  QString findLib( const QString& lib);
 
   bool    m_inpackage;
   bool    m_inscript;

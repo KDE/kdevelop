@@ -34,6 +34,11 @@ perlparser::perlparser(KDevCore* core,CodeModel* model, QString interpreter) {
 perlparser::~perlparser(){
 }
 
+const QStringList perlparser::UseFiles()
+{
+  return m_usefiles;
+}
+
 void perlparser::initialParse() {
   m_usefiles.clear();
 }
@@ -485,21 +490,3 @@ QString perlparser::findLib( const QString& lib)
   return result;
 }
 
-void perlparser::parseUseFiles() {
- return;
- QString filename;
- kdDebug(9016) << "parse addional libs" << endl;
-
- //parse addional use files
- for (QStringList::Iterator it = m_usefiles.begin(); it != m_usefiles.end() ;++it) {
-        filename = findLib(*it);
-        //if something found , parse it
-        if (!filename.isEmpty()) {
-           kdDebug(9016) << "found " << filename << endl;
-           if (m_model->hasFile(filename)) {
-              m_model->removeFile(m_model->fileByName(filename));
-           }
-           parse(filename);
-         }
- }
-}
