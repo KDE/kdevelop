@@ -467,6 +467,8 @@ bool Parser::parseName( NameAST::Node& node )
 	if( lex->lookAhead(0) == Token_scope ){
 	    lex->nextToken();
 	    ast->addClassOrNamespaceName( n );
+	    if( lex->lookAhead(0) == Token_template )
+	        lex->nextToken(); // skip optional template     #### TODO CHECK
 	} else {
 	    ast->setUnqualifedName( n );
 	    break;
@@ -1486,81 +1488,62 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
     switch( lex->lookAhead(0) ){
 
     case Token_class:
+    case Token_typename:
 	{
 
 	    lex->nextToken(); // skip class
 
 	    // parse optional name
-	    QString name;
-	    if( lex->lookAhead(0) == Token_identifier ){
-		name = lex->lookAhead( 0 ).toString();
-		lex->nextToken();
-	    }
-	    if( name )
-
+	    NameAST::Node name;
+	    if( parseName(name) ){
 		if( lex->lookAhead(0) == '=' ){
 		    lex->nextToken();
 
 		    AST::Node typeId;
 		    if( !parseTypeId(typeId) ){
 			syntaxError();
+			return false;
 		    }
 		}
-	}
-	return true;
-
-    case Token_typename:
-	{
-
-	    lex->nextToken(); // skip typename
-
-	    // parse optional name
-	    QString name;
-	    if( lex->lookAhead(0) == Token_identifier ){
-		name = lex->lookAhead( 0 ).toString();
-		lex->nextToken();
 	    }
-	    if( name )
-
-		if( lex->lookAhead(0) == '=' ){
-		    lex->nextToken();
-
-		    AST::Node typeId;
-		    if( !parseTypeId(typeId) ){
-			syntaxError();
-		    }
-		}
 	}
 	return true;
-	
+
     case Token_template:
 	{
-	    
+
 	    lex->nextToken(); // skip template
 	    ADVANCE( '<', '<' );
-	    
+
 	    AST::Node params;
 	    if( !parseTemplateParameterList(params) ){
 		return false;
 	    }
-	    
+
 	    ADVANCE( '>', ">" );
-	    
+
 	    if( lex->lookAhead(0) == Token_class )
 		lex->nextToken();
-	    
+
 	    // parse optional name
-	    QString name;
-	    if( lex->lookAhead(0) == Token_identifier ){
-		name = lex->lookAhead( 0 ).toString();
-		lex->nextToken();
+	    NameAST::Node name;
+	    if( parseName(name) ){
+		if( lex->lookAhead(0) == '=' ){
+		    lex->nextToken();
+
+		    AST::Node typeId;
+		    if( !parseTypeId(typeId) ){
+			syntaxError();
+			return false;
+		    }
+		}
 	    }
-	    
+
 	    if( lex->lookAhead(0) == '=' ){
 		lex->nextToken();
-		
-		QString templ_name = lex->lookAhead( 0 ).toString();
-		ADVANCE( Token_identifier, "template name" );
+
+		NameAST::Node templ_name;
+		parseName( templ_name );
 	    }
 	}
 	return true;

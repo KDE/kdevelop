@@ -167,7 +167,7 @@ void Lexer::tokenize()
 		    ide.startsWith("QM_TEMPLATE")){
 
 		    end = skip( readWhiteSpaces(end, false), '(', ')' );
-		} else if( ide.startsWith("K_TYPELIST_") ){
+		} else if( ide.startsWith("K_TYPELIST_") || ide.startsWith("TYPELIST_") ){
 		    Token tk = Token( Token_identifier, ptr, end - ptr );
 		    tk.setStartPosition( startLine, startColumn );
 		    tk.setEndPosition( m_currentLine, m_currentColumn );
