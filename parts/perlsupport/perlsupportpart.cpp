@@ -245,7 +245,10 @@ void PerlSupportPart::savedFile(const QString &fileName)
     kdDebug(9016) << "savedFile()" << endl;
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
+        m_usefiles.clear();
         maybeParse(fileName);
+        if (m_usefiles.size() > 0)
+            parseUseFiles();
         emit updatedSourceInfo();
     }
 }
@@ -349,7 +352,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     if (globalre.match(line)) {
         //splitup multible ours
         QString varlist=globalre.group(1);
-        kdDebug(9016) << "varre match [" << varlist <<"]" << endl;
+        kdDebug(9016) << "globalre match [" << varlist <<"]" << endl;
         QStringList vars=QStringList::split(",",varlist);
         for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
             if (namere.match(*it)) {
@@ -400,8 +403,8 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
          QString parent = isare.group(1);
          //create child & parent classes
          kdDebug(9016) << "isare match [" << parent << "]" << endl;
-//         addClass(fileName,lineNo,m_lastpackage);
-//         addParentClass(parent,m_lastpackage);
+         addClass(fileName,lineNo,m_lastpackage);
+         addParentClass(parent,m_lastpackage);
          continue;
     } //isa
       
@@ -435,7 +438,7 @@ void PerlSupportPart::startApplication(const QString &program)
 
 void PerlSupportPart::slotExecute()
 {
-    QString program = project()->mainProgram();
+    QString program =  project()->mainProgram();
     QString cmd = interpreter() + " " + program;
     startApplication(cmd);
 }
@@ -495,6 +498,7 @@ void PerlSupportPart::addPackage(const QString& fileName ,int lineNr , const QSt
      p = new ParsedScopeContainer;
      p->setName(name);
      p->setDefinedInFile(fileName);
+     p->setDeclaredInFile(fileName);
      p->setDefinedOnLine(lineNr);
      classStore()->globalScope()->addScope(p);
 
@@ -528,6 +532,7 @@ void PerlSupportPart::addScript(const QString& fileName ,int lineNr ,const QStri
      p = new ParsedScript;
      p->setName(name);
      p->setDefinedInFile(fileName);
+     p->setDeclaredInFile(fileName);
      p->setDefinedOnLine(lineNr);
      classStore()->addScript(p);
  }
@@ -559,6 +564,7 @@ void PerlSupportPart::addAttributetoPackage(const QString& fileName ,int lineNr 
       attr = new ParsedAttribute;
       attr->setName(name);
       attr->setDefinedInFile(fileName);
+      attr->setDeclaredInFile(fileName);
       attr->setDefinedOnLine(lineNr);
       p->addAttribute(attr);
      }
@@ -583,6 +589,7 @@ void PerlSupportPart::addAttributetoScript(const QString& fileName ,int lineNr ,
        attr = new ParsedAttribute;
        attr->setName(name);
        attr->setDefinedInFile(fileName);
+       attr->setDeclaredInFile(fileName);
        attr->setDefinedOnLine(lineNr);
        p->addAttribute(attr);
        m_lastattr=name;
@@ -671,7 +678,7 @@ void PerlSupportPart::addGlobalSub(const QString& fileName ,int lineNr ,const QS
      ParsedMethod *method = new ParsedMethod;
      method->setName(m_lastpackage + "::" + name);
      method->setDefinedInFile(fileName);
-     method->setDefinedInFile(fileName);
+     method->setDeclaredInFile(fileName);
      method->setDefinedOnLine(lineNr);
      if (privatesub) { method->setAccess(PIE_PRIVATE);}
      classStore()->globalScope()->addMethod(method);
@@ -699,7 +706,7 @@ void PerlSupportPart::addScriptSub(const QString& fileName ,int lineNr ,const QS
        ParsedMethod *method = new ParsedMethod;
        method->setName(name);
        method->setDefinedInFile(fileName);
-       method->setDefinedInFile(fileName);
+       method->setDeclaredInFile(fileName);
        method->setDefinedOnLine(lineNr);
        if (privatesub) { method->setAccess(PIE_PRIVATE);}
        s->addMethod(method);
@@ -725,7 +732,7 @@ void PerlSupportPart::addClassMethod(const QString& fileName ,int lineNr ,const 
        ParsedMethod *method = new ParsedMethod;
        method->setName(name);
        method->setDefinedInFile(fileName);
-       method->setDefinedInFile(fileName);
+       method->setDeclaredInFile(fileName);
        method->setDefinedOnLine(lineNr);
        if (privatesub) { method->setAccess(PIE_PRIVATE);}
        c->addMethod(method);
@@ -753,7 +760,7 @@ void PerlSupportPart::addPackageSub(const QString& fileName ,int lineNr ,const Q
        ParsedMethod *method = new ParsedMethod;
        method->setName(m_lastpackage + "::" + name);
        method->setDefinedInFile(fileName);
-       method->setDefinedInFile(fileName);
+       method->setDeclaredInFile(fileName);
        method->setDefinedOnLine(lineNr);
        if (privatesub) { method->setAccess(PIE_PRIVATE);}
        s->addMethod(method);
