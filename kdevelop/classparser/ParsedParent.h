@@ -49,13 +49,13 @@ public: // Constructor & Destructor
   CParsedParent();
   ~CParsedParent();
 
-private: // Private attributes
-  /** Export type of the inheritance */
-  int export;
-
 public: // Public attributes
+
   /** Name of parent class */
   QString name;
+
+  /** Export type of the inheritance */
+  int export;
 
 public: // Public methods to set attribute values
 
