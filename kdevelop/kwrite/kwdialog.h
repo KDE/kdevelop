@@ -4,9 +4,9 @@
 #define _KWDIALOG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
+#include <qlined.h>
+#include <qchkbox.h>
+#include <qradiobt.h>
 #include <qlistbox.h>
 
 #include <kcolorbtn.h>
@@ -81,6 +81,7 @@ class SettingsDialog : public QDialog {
     QCheckBox *opt10;
     QCheckBox *opt11;
     QCheckBox *opt12;
+    QCheckBox *opt13;
     QLineEdit *e1;
     QLineEdit *e2;
     QLineEdit *e3;
@@ -101,3 +102,4 @@ class ColorDialog : public QDialog {
 
 
 #endif //_KWDIALOG_H_
+

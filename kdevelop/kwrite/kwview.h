@@ -51,6 +51,8 @@ const int cfXorSelect       = 2048;
 const int cfOvr             = 4096;
 const int cfMark            = 8192;
 
+const int cfAutoCopy        = 16384;
+
 //update flags
 const int ufDocGeometry     = 1;
 const int ufUpdateOnScroll  = 2;
