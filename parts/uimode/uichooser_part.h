@@ -8,25 +8,24 @@
 
 
 class KDialogBase;
-
+class ConfigWidgetProxy;
 
 #include <kdevplugin.h>
-
 
 class UIChooserPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
-   
   UIChooserPart(QObject *parent, const char *name, const QStringList &);
   ~UIChooserPart();
-
   
 private slots:
-
-  void configWidget(KDialogBase *dlg);
+  void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
   
+private:
+  ConfigWidgetProxy * _configProxy;
+
 };
 
 

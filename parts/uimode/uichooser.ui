@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>UIChooser</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>467</width>
-            <height>448</height>
+            <width>386</width>
+            <height>438</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,7 +21,7 @@
         </property>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>ButtonGroup1</cstring>
+                <cstring>UIModeGroup</cstring>
             </property>
             <property name="title">
                 <string>Major &amp;User-Interface Mode</string>
@@ -36,6 +36,12 @@
                     </property>
                     <property name="text">
                         <string>I&amp;DEAl window mode</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
@@ -82,28 +88,255 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </vbox>
         </widget>
-        <spacer>
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Spacer2</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>TabModeGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Use Tabs</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>AlwaysShowTabs</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Always</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>ShowWhenMoreThanOneTab</cstring>
+                            </property>
+                            <property name="text">
+                                <string>When more than one</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>NeverShowTabs</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Never</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>HoverCloseGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Use Close On Hover</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>DoNotCloseOnHover</cstring>
+                            </property>
+                            <property name="text">
+                                <string>No</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>DoCloseOnHover</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Yes</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>DoDelayedCloseOnHover</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Yes, Delayed</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>IDEAlButtonGroup</cstring>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
+            <property name="title">
+                <string>IDEAl Mode Button Layout</string>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>0</width>
-                    <height>20</height>
-                </size>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>IconsOnly</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Icons only</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>TextOnly</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Text only</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>TextOnActive</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Text on active button</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>TextAndIcons</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Text and Icons on all</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
             </property>
-        </spacer>
+            <property name="text">
+                <string>Note: Changes will take effect after KDevelop is restarted</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignCenter</set>
+            </property>
+        </widget>
     </vbox>
 </widget>
+<connections>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeMDI</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeToplevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>AlwaysShowTabs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>HoverCloseGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>ShowWhenMoreThanOneTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>HoverCloseGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>NeverShowTabs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>HoverCloseGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>UIChooser</receiver>
+        <slot>maybeEnableCloseOnHover(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeMDI</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>UIChooser</receiver>
+        <slot>maybeEnableCloseOnHover(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>UIChooser</receiver>
+        <slot>maybeEnableCloseOnHover(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeToplevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>UIChooser</receiver>
+        <slot>maybeEnableCloseOnHover(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>IDEAlButtonGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeMDI</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>IDEAlButtonGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>IDEAlButtonGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeToplevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>IDEAlButtonGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot access="protected">maybeEnableCloseOnHover(bool)</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

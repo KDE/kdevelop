@@ -6,11 +6,12 @@
 #include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
-
-#include "kdevcore.h"
+#include <kdevcore.h>
+#include <configwidgetproxy.h>
 
 #include "uichooser_widget.h"
 
+#define UICHOOSERSETTINGSPAGE 1
 
 typedef KDevGenericFactory<UIChooserPart> UIChooserFactory;
 static const KAboutData data("kdevuichooser", I18N_NOOP("User Interface"), "1.0");
@@ -19,9 +20,12 @@ K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( &data ) )
 UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin( "UIChooser", "uichooser", parent, name ? name : "UIChooserPart")
 {
-  setInstance(UIChooserFactory::instance());
+	setInstance(UIChooserFactory::instance());
 
-  connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createGlobalConfigPage( i18n("User Interface"), UICHOOSERSETTINGSPAGE );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 }
 
 
@@ -29,14 +33,17 @@ UIChooserPart::~UIChooserPart()
 {
 }
 
-
-void UIChooserPart::configWidget(KDialogBase *dlg)
+void UIChooserPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("User Interface"));
-  UIChooserWidget *w = new UIChooserWidget(vbox);
-  w->setPart(this);
-  connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+	kdDebug() << k_funcinfo << endl;
+
+	if ( pagenumber == UICHOOSERSETTINGSPAGE )
+	{
+		UIChooserWidget * w = new UIChooserWidget( this, page, "UIChooser widget" );
+		connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+	}
 }
+
 
 
 

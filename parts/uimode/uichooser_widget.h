@@ -14,19 +14,21 @@ class UIChooserWidget : public UIChooser
   Q_OBJECT
 
 public:
+  UIChooserWidget( UIChooserPart * part, QWidget *parent=0, const char *name=0 );
 
-  UIChooserWidget(QWidget *parent=0, const char *name=0);
-  void setPart(UIChooserPart* pPart);
+public slots:
+  void accept();
+  
+protected slots:
+  void maybeEnableCloseOnHover( bool );
 
 private slots:
 
   void load();
   void save();
 
-  void accept();
-
 private:
-  UIChooserPart* m_pMyPart;
+  UIChooserPart* m_part;
   QWidget * _lastMode;
 };
 

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <kmdidefines.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -25,16 +26,11 @@
 #include "kdevmainwindow.h"
 #include "uichooser_widget.h"
 
-UIChooserWidget::UIChooserWidget(QWidget *parent, const char *name)
+UIChooserWidget::UIChooserWidget( UIChooserPart * part, QWidget *parent, const char *name)
   : UIChooser(parent, name)
-  ,m_pMyPart(0L), _lastMode(0L)
+  ,m_part(part), _lastMode(0L)
 {
   load();
-}
-
-void UIChooserWidget::setPart(UIChooserPart* pMyPart)
-{
-  m_pMyPart = pMyPart;
 }
 
 void UIChooserWidget::load()
@@ -65,6 +61,53 @@ void UIChooserWidget::load()
   default:
     break;
   }
+  
+	int mdistyle = config->readNumEntry( "MDIStyle", 1 );
+	switch( mdistyle )
+	{
+		case 0:
+			IconsOnly->setChecked( true );
+			break;
+		case 1:
+			TextOnly->setChecked( true );
+			break;
+		case 2:
+			TextOnActive->setChecked( true );
+			break;
+		case 3:
+			TextAndIcons->setChecked( true );
+			break;
+	}
+	
+	int tabVisibility = config->readNumEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
+	switch( tabVisibility )
+	{
+		case KMdi::AlwaysShowTabs:
+			AlwaysShowTabs->setChecked( true );
+			break;
+		case KMdi::ShowWhenMoreThanOneTab:
+			ShowWhenMoreThanOneTab->setChecked( true );
+			break;
+		case KMdi::NeverShowTabs:
+			NeverShowTabs->setChecked( true );
+			break;
+	}
+	
+	bool CloseOnHover = config->readBoolEntry( "CloseOnHover", false );
+	bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
+	
+	if ( CloseOnHover && CloseOnHoverDelay )
+	{
+		DoDelayedCloseOnHover->setChecked( true );
+	}
+	else if ( CloseOnHover && !CloseOnHoverDelay )
+	{
+		DoCloseOnHover->setChecked( true );
+	}
+	else 
+	{
+		DoNotCloseOnHover->setChecked( true );
+	}
 }
 
 
@@ -82,6 +125,53 @@ void UIChooserWidget::save()
   else
     config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
 
+	if ( AlwaysShowTabs->isChecked() )
+	{
+		config->writeEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
+	}
+	else if ( ShowWhenMoreThanOneTab->isChecked() )
+	{
+		config->writeEntry( "TabWidgetVisibility", KMdi::ShowWhenMoreThanOneTab );
+	}
+	else if ( NeverShowTabs->isChecked() )
+	{
+		config->writeEntry( "TabWidgetVisibility", KMdi::NeverShowTabs );
+	}
+	
+	if ( DoNotCloseOnHover->isChecked() )
+	{
+		config->writeEntry( "CloseOnHover", false );
+		config->writeEntry( "CloseOnHoverDelay", false );
+	}
+	else if ( DoCloseOnHover->isChecked() )
+	{
+		config->writeEntry( "CloseOnHover", true );
+		config->writeEntry( "CloseOnHoverDelay", false );
+	}
+	else if ( DoDelayedCloseOnHover->isChecked() )
+	{
+		config->writeEntry( "CloseOnHover", true );
+		config->writeEntry( "CloseOnHoverDelay", true );
+	}
+	
+	// using magic numbers for now.. where are these values defined??
+	if ( IconsOnly->isChecked() )
+	{
+		config->writeEntry( "MDIStyle", 0 );
+	}
+	else if ( TextOnly->isChecked() )
+	{
+		config->writeEntry( "MDIStyle", 1 );
+	}
+	else if ( TextOnActive->isChecked() )
+	{
+		config->writeEntry( "MDIStyle", 2 );
+	}
+	else if ( TextAndIcons->isChecked() )
+	{
+		config->writeEntry( "MDIStyle", 3 );
+	}
+  
   config->sync();
 }
 
@@ -89,20 +179,33 @@ void UIChooserWidget::save()
 void UIChooserWidget::accept()
 {
   save();
-  Q_ASSERT(m_pMyPart);
+  
+  // Note: with newmainwindow.cpp, these calls will be ignored
   
   if (modeIDEAl->isChecked() && _lastMode != modeIDEAl ) {
-      m_pMyPart->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
+      m_part->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
   }
   else if (modeTab->isChecked() && _lastMode != modeTab ) {
-      m_pMyPart->mainWindow()->setUserInterfaceMode("TabPage");
+      m_part->mainWindow()->setUserInterfaceMode("TabPage");
   }
   else if (modeToplevel->isChecked() && _lastMode != modeToplevel ) {
-      m_pMyPart->mainWindow()->setUserInterfaceMode("Toplevel");
+      m_part->mainWindow()->setUserInterfaceMode("Toplevel");
   }
   else if (modeMDI->isChecked() && _lastMode != modeMDI ) {
-      m_pMyPart->mainWindow()->setUserInterfaceMode("Childframe");
+      m_part->mainWindow()->setUserInterfaceMode("Childframe");
   }
+}
+
+void UIChooserWidget::maybeEnableCloseOnHover( bool )
+{
+	if ( sender() == modeMDI || sender() == modeToplevel )
+	{
+		HoverCloseGroup->setEnabled( false );
+	}
+	else if ( !NeverShowTabs->isChecked() )
+	{
+		HoverCloseGroup->setEnabled( true );
+	}
 }
 
 
