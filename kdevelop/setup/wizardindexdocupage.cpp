@@ -34,21 +34,17 @@ WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, cons
 
   QLabel* label;
   m_vbox = new QVBox(this);
-  QWidget* wdg = new QWidget(m_vbox);
-  QVBoxLayout* vl = new QVBoxLayout(wdg);
 
   if (!m_pInstallState->finished_glimpse)
   {
     m_pInstallState->finished_glimpse=true;
     if((!m_pInstallState->glimpse || !m_pInstallState->glimpseindex) && (!m_pInstallState->htdig || !m_pInstallState->htsearch))
     {
+		  label = new QLabel("", m_vbox);
       label = new QLabel(i18n("Neither glimpse nor htdig is installed, therefore KDevelop can not index your documentation to provide a proper help functionality.\n\n"
-                              "We advise to install glimpse or htdig and create the searchdatabase later by choosing KDevelop Setup in the Options menu.\n\n"
-                              "As this is the last step of the Installation process, KDevelop will be started now.\n\n"
-                              "We hope you enjoy KDevelop and that it is a useful help to create new software.\n\n"
-                              "The KDevelop Team"), wdg);
+                              "We advise to install glimpse or htdig and create the searchdatabase later by choosing KDevelop Setup in the Options menu.\n\n"), m_vbox);
       label->setAlignment(WordBreak);
-      vl->addWidget(label);
+		  label = new QLabel("", m_vbox);
 
       m_pInstallState->install = false;
       if (m_pInstallState->finish_dir)
@@ -56,6 +52,10 @@ WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, cons
     }
     else
     {
+		  setValid(false);	// disable the Next button, will be enabled again when indexing has finished
+		
+		  QWidget* wdg = new QWidget(m_vbox);
+  		QVBoxLayout* vl = new QVBoxLayout(wdg);
       label = new QLabel(i18n("Now KDevelop will perform the last step of the installation process with indexing your documentation."
                               "This will provide an extended help functionality and will give you the information you need."), wdg);
       label->setAlignment(WordBreak);

@@ -121,9 +121,6 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
   addPage(pWizIndexDocuPage, "Step 8 of 9");
   addPage(pWizLastPage, "Step 9 of 9");
 
-  setBackEnabled(pWizWelcomePage, false);
-  setNextEnabled(pWizCreateKDEDocPage, false);
-  setNextEnabled(pWizIndexDocuPage, false);
   setFinishEnabled(pWizLastPage, true);
 
   connect( pWizKDEDocPage, SIGNAL(enableCreateKDEDocPage(bool)), SLOT(slotEnableCreateKDEDocPage(bool)) );
@@ -394,7 +391,7 @@ void CKDevInstall::slotFinished()
 
 void CKDevInstall::slotEnableCreateKDEDocPage(bool bEnabled)
 {
-  setAppropriate( page(7), bEnabled);
+  setAppropriate( page(6), bEnabled);
 }
 
 #include "ckdevinstall.moc"

@@ -41,15 +41,16 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
   if (!kdoc && !perl) {
     label = new QLabel(wdg);
     label = new QLabel(i18n("The Program KDoc was not found on your system, a library documentation update can not be performed.\n\n"
-                            "KDoc is part of the kdesdk package that can be obtained from www.kde.org."), wdg);
+                            "KDoc is part of the kdesdk package that can be obtained from http://www.kde.org."), wdg);
     label->setAlignment(WordBreak);
     label = new QLabel(wdg);
   }
   else{
+    setValid(false);	// disable the next button, will be enabled again when the creation of the KDE docu has finished
     label = new QLabel(i18n("Now KDevelop will create a new KDE-library documentation.\n\n"
                             "For that, you need the kdelibs package as the source package. "
                             "In most cases it is included in your distribution. "
-                            "If you don't have the kdelibs as sources, we advise to obtain them from www.kde.org.\n\n"
+                            "If you don't have the kdelibs as sources, we advise to obtain them from http://www.kde.org.\n\n"
                             "Mind that the sources should match your installed kdelibs version."), wdg);
     label->setAlignment(WordBreak);
     vl->addWidget(label);
