@@ -146,9 +146,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(3) == ".po"){
-    if(!CToolClass::searchInstProgram("ktranslator")){
-			return;
-		}
+    if(CToolClass::searchInstProgram("ktranslator")){
     showOutputView(false);
     s_tab_view->setCurrentTab(TOOLS);
     swallow_widget->sWClose(false);
@@ -156,6 +154,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
     swallow_widget->sWExecute();
     swallow_widget->init();
     return;
+		}
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp"){
@@ -680,7 +679,7 @@ void CKDevelop::readOptions(){
 		
 	uint i;
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(Icon("mini/htlm.xpm"),doc_bookmarks_title_list.at(i));
+    doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
   }
 	
   QString filename;

@@ -756,8 +756,11 @@ void CKAppWizard::slotOkClicked() {
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     if(KMsgBox::yesNo(0,i18n("Directory exists!"),
-    	i18n("The selected project directory already exists. If you click 'OK', all files and subdirectories of the currently chosen
-project directory will be deleted before a new project is going to be generated"),     	
+    	i18n("The selected project directory already exists. If you "
+    	"click 'OK', all files and subdirectories of the currently chosen "
+			"project directory will be deleted before a new project is going "
+			"to be generated"),     	
+			
 KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {        return;
     }
     else {

@@ -77,7 +77,7 @@ void CKDevelop::initView(){
   // Outputwindow
   ////////////////////////
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
-
+	
   messages_widget = new COutputWidget(kapp,o_tab_view);
   messages_widget->setFocusPolicy(QWidget::NoFocus);
   messages_widget->setReadOnly(TRUE);

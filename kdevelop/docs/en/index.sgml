@@ -3123,19 +3123,23 @@ Martin Piskernig    					<htmlurl url="mailto:martin.piskernig@stuwo.at" name = 
 
 <bf>Program and Documentation Translations:</bf>
 
-Martin Piskernig    					<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">		-german
+Steen Rabol    								<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">											-Danish
 
-Steen Rabol    								<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">											-danish
+Martin Piskernig    					<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">		-German
 
-Salvador Gimeno 							<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">	  						    -spanish
+Salvador Gimeno 							<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">	  						    -Spanish
 
-Duarte Loreto 								<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">	      			-portuguese
+Herve Lefebvre 								<htmlurl url="hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">											-French
 
-Ilmar Habibulin    						<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">														-russian
+Pahan Szabolcs 								<htmlurl url="szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">												-Hungarian
 
-Jacek Wojdel 									<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -polnish
+Duarte Loreto 								<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">	      			-Portuguese
 
-Jan Prokop 										<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">														-slovak
+Ilmar Habibulin    						<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">														-Russian
+
+Jacek Wojdel 									<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
+
+Jan Prokop 										<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">														-Slovak
 
 
 <bf>Additions, patches and bugfixes:</bf>
@@ -3207,6 +3211,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
+
+
 
 
 

@@ -1,9 +1,4 @@
 # KDE Config File
-[kdevelop/cnewprojectdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/kdlgedit/items.h]
 install_location=
 dist=true
@@ -90,12 +85,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/ktipofday.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckappwizard.cpp,/home/rnolden/Development/kdevelop/ChangeLog,
+openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/ctabctl.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/ChangeLog
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckappwizard.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/index.html
+header_file=Untitled.h
+cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp
+browser_file=file:/usr/lib/qt/doc/html/qtabbar.html
 [kdevelop/kdlgedit/item_slider.cpp]
 install_location=
 dist=true
@@ -230,11 +225,6 @@ addcxxflags=
 ldadd=-lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11
 cxxflags=-O2 -Wall
 bin_program=kdevelop
-[kdevelop/cconfiga2psdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/kwrite/kwdoc.h]
 install_location=
 dist=true
@@ -266,7 +256,7 @@ dist=true
 install=false
 type=HEADER
 [po/Makefile.am]
-files=po/de.po,po/da.po,po/es.po,po/pl.po,po/pt.po,po/ru.po,po/sk.po,po/fr.po,
+files=po/de.po,po/da.po,po/es.po,po/pl.po,po/pt.po,po/ru.po,po/sk.po,po/fr.po,po/hu.po,
 sub_dirs=
 type=normal
 [kdevelop/docs/en/Makefile.am]
@@ -318,7 +308,7 @@ dist=true
 install=true
 type=DATA
 [kdevelop/Makefile.am]
-files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/cconfiga2psdlg.h,kdevelop/cconfigenscriptdlg.h,kdevelop/ccreatedocdatabasedlg.cpp,kdevelop/ccreatedocdatabasedlg.h,kdevelop/cdatepikerdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctree.cpp,kdevelop/cdoctree.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/cfileprintdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/ckdevelop.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop_init.cpp,kdevelop/ckdevelop_kdlginit.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevinstall.cpp,kdevelop/ckdevinstall.h,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/cnewprojectdlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprintdlg.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctabctl.cpp,kdevelop/ctabctl.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/cupdatekdedocdlg.cpp,kdevelop/cupdatekdedocdlg.h,kdevelop/debug.h,kdevelop/kdevelop-project.xpm,kdevelop/kdevelop.kdelnk,kdevelop/kdevelop.xpm,kdevelop/kdeveloprc,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/kswallow.cpp,kdevelop/kswallow.h,kdevelop/ktipofday.cpp,kdevelop/ktipofday.h,kdevelop/main.cpp,kdevelop/mini-kdevelop.xpm,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/x-kdevelop-project.kdelnk,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cbugreportdlg.cpp,kdevelop/cbugreportdlg.h,kdevelop/cclasstreehandler.cpp,kdevelop/cclasstreehandler.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cerrormessageparser.cpp,kdevelop/cerrormessageparser.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.kdelnk,kdevelop/klangcombo.cpp,kdevelop/klangcombo.h,kdevelop/cctviewdeclarationcmd.h,kdevelop/cclasstooltreeview.h,kdevelop/cclasstooltreeview.cpp,kdevelop/ccommand.h,kdevelop/cctviewdeclarationcmd.cpp,
+files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/ccreatedocdatabasedlg.cpp,kdevelop/ccreatedocdatabasedlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctree.cpp,kdevelop/cdoctree.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/ckdevelop.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop_init.cpp,kdevelop/ckdevelop_kdlginit.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevinstall.cpp,kdevelop/ckdevinstall.h,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctabctl.cpp,kdevelop/ctabctl.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/cupdatekdedocdlg.cpp,kdevelop/cupdatekdedocdlg.h,kdevelop/debug.h,kdevelop/kdevelop-project.xpm,kdevelop/kdevelop.kdelnk,kdevelop/kdevelop.xpm,kdevelop/kdeveloprc,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/kswallow.cpp,kdevelop/kswallow.h,kdevelop/ktipofday.cpp,kdevelop/ktipofday.h,kdevelop/main.cpp,kdevelop/mini-kdevelop.xpm,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/x-kdevelop-project.kdelnk,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cbugreportdlg.cpp,kdevelop/cbugreportdlg.h,kdevelop/cclasstreehandler.cpp,kdevelop/cclasstreehandler.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cerrormessageparser.cpp,kdevelop/cerrormessageparser.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.kdelnk,kdevelop/klangcombo.cpp,kdevelop/klangcombo.h,kdevelop/cctviewdeclarationcmd.h,kdevelop/cclasstooltreeview.h,kdevelop/cclasstooltreeview.cpp,kdevelop/ccommand.h,kdevelop/cctviewdeclarationcmd.cpp,
 sub_dirs=docs,classparser,kdlgedit,kwrite,pics,vc,print,templates,toolbar,tools,
 type=prog_main
 [kdevelop/cclasstooldlg.cpp]
@@ -326,11 +316,6 @@ install_location=
 dist=true
 install=false
 type=SOURCE
-[kdevelop/cfileprintdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/ckdevelop_noslot.cpp]
 install_location=
 dist=true
@@ -431,6 +416,11 @@ install_location=
 dist=true
 install=false
 type=DATA
+[kdevelop/kdlgedit/item_kcombo.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/pics/mini/kdlg_KColorButton.xpm]
 install_location=
 dist=true
@@ -480,6 +470,16 @@ install_location=
 dist=true
 install=false
 type=HEADER
+[kdevelop/kdlgedit/item_krestrictedline.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
+[kdevelop/kdlgedit/item_kseparator.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/docs/en/tutorial.html]
 install_location=$$(kde_htmldir)/en/kdevelop/tutorial.html
 dist=true
@@ -500,6 +500,11 @@ install_location=
 dist=true
 install=false
 type=SOURCE
+[kdevelop/kdlgedit/item_kledlamp.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/cexecuteargdlg.h]
 install_location=
 dist=true
@@ -512,11 +517,6 @@ Others=*,
 groups=Documentation,Header,Sources,GNU,Others,
 Sources=*.cpp,*.c,*.cc,*.C,
 Documentation=*.html,
-[kdevelop/cdatepikerdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/coutputwidget.h]
 install_location=
 dist=true
@@ -576,6 +576,11 @@ install_location=
 dist=true
 install=false
 type=DATA
+[kdevelop/kdlgedit/item_ktreelist.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/cctviewdeclarationcmd.cpp]
 install_location=
 dist=true
@@ -676,6 +681,11 @@ install_location=
 dist=true
 install=false
 type=HEADER
+[kdevelop/kdlgedit/item_listview.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/toolbar/stop_proc.xpm]
 install_location=
 dist=true
@@ -780,11 +790,6 @@ install_location=
 dist=true
 install=false
 type=SOURCE
-[kdevelop/cconfigenscriptdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/ckdevelop.h]
 install_location=
 dist=true
@@ -821,6 +826,11 @@ dist=true
 install=false
 type=DATA
 [kdevelop/ctreeview.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
+[kdevelop/kdlgedit/item_kled.cpp]
 install_location=
 dist=true
 install=false
@@ -979,6 +989,16 @@ install_location=
 dist=true
 install=false
 type=DATA
+[kdevelop/kdlgedit/item_kdatepicker.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
+[kdevelop/kdlgedit/item_kprogress.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/docs/en/tutorial-12.html]
 install_location=$$(kde_htmldir)/en/kdevelop/tutorial-12.html
 dist=true
@@ -1073,11 +1093,6 @@ install_location=
 dist=false
 install=false
 type=PO
-[kdevelop/cprintdlg.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [kdevelop/cproject.h]
 install_location=
 dist=true
@@ -1353,11 +1368,11 @@ makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/do
 author=The KDevelop Team
 project_type=normal_kde
 sub_dir=kdevelop/
-lfv_open_groups=Others,
+lfv_open_groups=Header,Others,
 workspace=1
 version=0.4
 project_name=KDevelop
-sgml_file=tutorial.sgml
+sgml_file=index.sgml
 short_info=KDevelop is an interactive Integrated ,Development environment for Unix Sytems ,to build C++ applications.,
 email=
 kdevprj_version=0.3
@@ -1451,6 +1466,11 @@ install_location=
 dist=true
 install=false
 type=HEADER
+[kdevelop/kdlgedit/item_kkeybutton.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
 [kdevelop/docs/en/tutorial-10.html]
 install_location=$$(kde_htmldir)/en/kdevelop/tutorial-10.html
 dist=true
@@ -1547,7 +1567,7 @@ dist=true
 install=false
 type=SOURCE
 [kdevelop/kdlgedit/Makefile.am]
-files=kdevelop/kdlgedit/kdlgdialogs.cpp,kdevelop/kdlgedit/kdlgdialogs.h,kdevelop/kdlgedit/kdlgedit.cpp,kdevelop/kdlgedit/kdlgedit.h,kdevelop/kdlgedit/kdlgeditwidget.cpp,kdevelop/kdlgedit/kdlgeditwidget.h,kdevelop/kdlgedit/kdlgitems.cpp,kdevelop/kdlgedit/kdlgitems.h,kdevelop/kdlgedit/kdlgnewwidget.cpp,kdevelop/kdlgedit/kdlgnewwidget.h,kdevelop/kdlgedit/kdlgproplvis.h,kdevelop/kdlgedit/kdlgpropwidget.cpp,kdevelop/kdlgedit/kdlgpropwidget.h,kdevelop/kdlgedit/kdlgwidgets.cpp,kdevelop/kdlgedit/kdlgwidgets.h,kdevelop/kdlgedit/defines.h,kdevelop/kdlgedit/item_base.cpp,kdevelop/kdlgedit/item_checkbox.cpp,kdevelop/kdlgedit/item_combobox.cpp,kdevelop/kdlgedit/item_groupbox.cpp,kdevelop/kdlgedit/item_label.cpp,kdevelop/kdlgedit/item_lcdnumber.cpp,kdevelop/kdlgedit/item_lineedit.cpp,kdevelop/kdlgedit/item_listbox.cpp,kdevelop/kdlgedit/item_multilineedit.cpp,kdevelop/kdlgedit/item_progressbar.cpp,kdevelop/kdlgedit/item_pushbutton.cpp,kdevelop/kdlgedit/item_radiobutton.cpp,kdevelop/kdlgedit/item_scrollbar.cpp,kdevelop/kdlgedit/item_slider.cpp,kdevelop/kdlgedit/item_spinbox.cpp,kdevelop/kdlgedit/item_widget.cpp,kdevelop/kdlgedit/items.h,kdevelop/kdlgedit/itemsglobal.cpp,kdevelop/kdlgedit/itemsglobal.h,kdevelop/kdlgedit/kdlgnewdialogdlg.cpp,kdevelop/kdlgedit/kdlgnewdialogdlg.h,kdevelop/kdlgedit/kdlgotherdlgs.cpp,kdevelop/kdlgedit/kdlgotherdlgs.h,kdevelop/kdlgedit/kdlgproplv.h,kdevelop/kdlgedit/item_all.cpp.inc,kdevelop/kdlgedit/item_class.cpp.inc,kdevelop/kdlgedit/kdlgreadmedlg.cpp,kdevelop/kdlgedit/kdlgreadmedlg.h,
+files=kdevelop/kdlgedit/kdlgdialogs.cpp,kdevelop/kdlgedit/kdlgdialogs.h,kdevelop/kdlgedit/kdlgedit.cpp,kdevelop/kdlgedit/kdlgedit.h,kdevelop/kdlgedit/kdlgeditwidget.cpp,kdevelop/kdlgedit/kdlgeditwidget.h,kdevelop/kdlgedit/kdlgitems.cpp,kdevelop/kdlgedit/kdlgitems.h,kdevelop/kdlgedit/kdlgnewwidget.cpp,kdevelop/kdlgedit/kdlgnewwidget.h,kdevelop/kdlgedit/kdlgproplvis.h,kdevelop/kdlgedit/kdlgpropwidget.cpp,kdevelop/kdlgedit/kdlgpropwidget.h,kdevelop/kdlgedit/kdlgwidgets.cpp,kdevelop/kdlgedit/kdlgwidgets.h,kdevelop/kdlgedit/defines.h,kdevelop/kdlgedit/item_base.cpp,kdevelop/kdlgedit/item_checkbox.cpp,kdevelop/kdlgedit/item_combobox.cpp,kdevelop/kdlgedit/item_groupbox.cpp,kdevelop/kdlgedit/item_label.cpp,kdevelop/kdlgedit/item_lcdnumber.cpp,kdevelop/kdlgedit/item_lineedit.cpp,kdevelop/kdlgedit/item_listbox.cpp,kdevelop/kdlgedit/item_multilineedit.cpp,kdevelop/kdlgedit/item_progressbar.cpp,kdevelop/kdlgedit/item_pushbutton.cpp,kdevelop/kdlgedit/item_radiobutton.cpp,kdevelop/kdlgedit/item_scrollbar.cpp,kdevelop/kdlgedit/item_slider.cpp,kdevelop/kdlgedit/item_spinbox.cpp,kdevelop/kdlgedit/item_widget.cpp,kdevelop/kdlgedit/items.h,kdevelop/kdlgedit/itemsglobal.cpp,kdevelop/kdlgedit/itemsglobal.h,kdevelop/kdlgedit/kdlgnewdialogdlg.cpp,kdevelop/kdlgedit/kdlgnewdialogdlg.h,kdevelop/kdlgedit/kdlgotherdlgs.cpp,kdevelop/kdlgedit/kdlgotherdlgs.h,kdevelop/kdlgedit/kdlgproplv.h,kdevelop/kdlgedit/item_all.cpp.inc,kdevelop/kdlgedit/item_class.cpp.inc,kdevelop/kdlgedit/kdlgreadmedlg.cpp,kdevelop/kdlgedit/kdlgreadmedlg.h,kdevelop/kdlgedit/item_kcolorbutton.cpp,kdevelop/kdlgedit/item_kcombo.cpp,kdevelop/kdlgedit/item_kdatepicker.cpp,kdevelop/kdlgedit/item_kdatetable.cpp,kdevelop/kdlgedit/item_kkeybutton.cpp,kdevelop/kdlgedit/item_kled.cpp,kdevelop/kdlgedit/item_kledlamp.cpp,kdevelop/kdlgedit/item_kprogress.cpp,kdevelop/kdlgedit/item_krestrictedline.cpp,kdevelop/kdlgedit/item_kseparator.cpp,kdevelop/kdlgedit/item_ktreelist.cpp,kdevelop/kdlgedit/item_listview.cpp,
 type=static_library
 sub_dirs=
 [kdevelop/kwrite/kmimemagic.cpp]
@@ -1788,6 +1808,11 @@ install_location=
 dist=true
 install=false
 type=DATA
+[po/hu.po]
+install_location=
+dist=false
+install=false
+type=PO
 [kdevelop/docs/en/tutorial-5.html]
 install_location=$$(kde_htmldir)/en/kdevelop/tutorial-5.html
 dist=true
@@ -1851,3 +1876,13 @@ install_location=
 dist=true
 install=false
 type=DATA
+[kdevelop/kdlgedit/item_kcolorbutton.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
+[kdevelop/kdlgedit/item_kdatetable.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE

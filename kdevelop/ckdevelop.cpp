@@ -2255,7 +2255,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables / disables the statusbar"))
 
   ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
-
+	ON_STATUS_MSG(ID_VIEW_IN_KFM,														i18n("Opens the current document in the KFM browser"))
 
   ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with Application Wizard"))
   ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
@@ -2310,7 +2310,11 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switchs to last browser page"))
   ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switchs to next browser page"))
 
-  ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				  i18n("Searchs the selected text in the documentation"))
+  ON_STATUS_MSG(ID_HELP_BROWSER_RELOAD,                   i18n("Reloads the current browser page"))
+  ON_STATUS_MSG(ID_HELP_BROWSER_STOP,                   	i18n("Cancels the document request"))
+
+
+  ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				i18n("Searchs the selected text in the documentation"))
   ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
 
   ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switchs to KDevelop's User Manual"))
@@ -2321,13 +2325,13 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_QT_LIBRARY,                			  i18n("Switchs to the QT-Documentation"))
   ON_STATUS_MSG(ID_HELP_KDE_CORE_LIBRARY,          			  i18n("Switchs to the KDE-Core-Documentation"))
   ON_STATUS_MSG(ID_HELP_KDE_GUI_LIBRARY,           			  i18n("Switchs to the KDE-GUI-Documentation"))
-  ON_STATUS_MSG(ID_HELP_KDE_KFILE_LIBRARY,          			  i18n("Switchs to the KDE-File-Documentation"))
+  ON_STATUS_MSG(ID_HELP_KDE_KFILE_LIBRARY,          			i18n("Switchs to the KDE-File-Documentation"))
   ON_STATUS_MSG(ID_HELP_KDE_HTML_LIBRARY,          			  i18n("Switchs to the KDE-Html-Documentation"))
   ON_STATUS_MSG(ID_HELP_PROJECT_API,		           			  i18n("Switchs to the project's API-Documentation"))
   ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switchs to the project's User-Manual"))
 
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
-  config->setGroup("General Options");
+  ON_STATUS_MSG(ID_HELP_BUG_REPORT,			                 	i18n("Sends a bug-report email to the KDevelop Team"))
 
   ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
@@ -2348,6 +2352,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 
