@@ -348,7 +348,7 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
 
   // restore appearence
   QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
-  if (mdiMode != QextMdi::TabPageMode) {
+  if ((mdiMode != QextMdi::TabPageMode) && (mdiMode != QextMdi::ToplevelMode)) {
     if ((!pMDICover->isAttached()) && (bAttached) ) {
       pMDICover->attach();
     }

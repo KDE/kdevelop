@@ -412,7 +412,8 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
-      m_mdiMode = QextMdi::ChildframeMode;
+      switchToChildframeMode();
+//      m_mdiMode = QextMdi::ChildframeMode;
       //qDebug("TopLevelMode off");
       emit leftTopLevelMode();
    }
@@ -443,22 +444,22 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 //============= detachWindow ==============//
 void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 {
-   if (!pWnd->isAttached()) return;
-
-   pWnd->removeEventFilter(this);
-   pWnd->youAreDetached();
-   // this is only if it was attached and you want to detach it
-   if(pWnd->parent() != NULL ) {
-      QextMdiChildFrm *lpC=pWnd->mdiParent();
-      if (lpC) {
-         QPixmap pixm(*(lpC->icon()));
-         QString capt(lpC->caption());
-         if (!bShow)
-            lpC->hide();
-         lpC->unsetClient( m_undockPositioningOffset);
-         m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
-         pWnd->setIcon(pixm);
-         pWnd->setCaption(capt);
+   if (pWnd->isAttached()) {
+      pWnd->removeEventFilter(this);
+      pWnd->youAreDetached();
+      // this is only if it was attached and you want to detach it
+      if (pWnd->parent()) {
+         QextMdiChildFrm *lpC=pWnd->mdiParent();
+         if (lpC) {
+            QPixmap pixm(*(lpC->icon()));
+            QString capt(lpC->caption());
+            if (!bShow)
+               lpC->hide();
+            lpC->unsetClient( m_undockPositioningOffset);
+            m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
+            pWnd->setIcon(pixm);
+            pWnd->setCaption(capt);
+         }
       }
    }
    else {
@@ -470,6 +471,7 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
             pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
          }
       }
+      return;
    }
 
    // this will show it...
@@ -947,7 +949,7 @@ void QextMdiMainFrm::switchToToplevelMode()
        pDockW->show();
    }
 
-//   m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
+   m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
    m_mdiMode = QextMdi::ToplevelMode;
    //qDebug("ToplevelMode on");
 }
@@ -1580,8 +1582,14 @@ void QextMdiMainFrm::windowMenuItemActivated(int id)
    QextMdiChildView *pView = m_pWinList->at( id);
    if (!pView) return;
    if (pView->isMinimized()) pView->minimize();
-   if (m_mdiMode != QextMdi::TabPageMode)
-      if ((pView == m_pMdi->topChild()->m_pClient) && pView->isAttached()) return;
+   if (m_mdiMode != QextMdi::TabPageMode) {
+      QextMdiChildFrm* pTopChild = m_pMdi->topChild();
+      if (pTopChild) {
+         if ((pView == pTopChild->m_pClient) && pView->isAttached()) {
+            return;
+         }
+      }
+   }
    activateView( pView);
 }
 

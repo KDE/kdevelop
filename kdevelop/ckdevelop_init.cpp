@@ -152,7 +152,14 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   resize(kapp->desktop()->width() - 100, kapp->desktop()->height() - 100);
   // read the previous dock szenario from kdeveloprc
   // (this has to be after all creation of dockwidget-covered tool-views
-  readDockConfig(config);
+  if (m_mdiMode == QextMdi::ToplevelMode) {
+    m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+    readDockConfig(config);
+    m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
+  }
+  else {
+    readDockConfig(config);
+  }
 
   show();
 
