@@ -167,7 +167,7 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont( font );
 
         // @todo paint cell in a different color
-        switch (status)
+        switch (m_status)
         {
             case VCSFileInfo::Added: break;
             case VCSFileInfo::Uptodate: break;
@@ -247,7 +247,7 @@ public:
                 newItem->setVCSInfo( vcsFiles[ fileName ] );
                 //kdDebug(9017) << "Found vcs info: " << vcsFileInfo.toString() << endl;
                 if (URLUtil::isDirectory(fileURL))
-                    newItem->setStatus( "directory" );
+                    newItem->setStatus( VCSFileInfo::Directory );
             }
             else
                 kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
@@ -262,7 +262,7 @@ public:
 
 FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
     : KFileTreeView(parent, name), m_part( part ), m_rootBranch( 0 ),
-    m_isReloadingTree( false ), m_isSyncingWithRepository( false )
+    m_isReloadingTree( false ), m_isSyncingWithRepository( false ),
     m_actionToggleShowVCSFields( 0 ), m_actionToggleShowNonProjectFiles( 0 )
 {
     //setResizeMode( QListView::LastColumn );
