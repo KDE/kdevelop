@@ -147,8 +147,9 @@ void FCConfigWidget::loadProjectTemplates(QListView *view)
 
 void FCConfigWidget::saveGlobalConfig()
 {
-    QDomDocument globalDom("kdevelop");
-    QDomElement  element = globalDom.documentElement( );
+    QDomDocument globalDom;
+    QDomElement  element = globalDom.createElement("kdevelop" );
+    globalDom.appendChild(element);
     QDomElement  apPart  = globalDom.createElement("kdevfilecreate");
     element.appendChild(apPart);
     QDomElement fileTypes = globalDom.createElement( "filetypes" );
@@ -159,6 +160,7 @@ void FCConfigWidget::saveGlobalConfig()
     QFile config( KGlobal::dirs()->saveLocation("data", "kdevfilecreate/", true) + "template-info.xml" );
     config.open(IO_WriteOnly | IO_Truncate);
     QTextStream stream(&config);
+    stream << "<?xml version = '1.0'?>";
     stream << globalDom.toString(2);
     config.close();
 }
@@ -223,7 +225,6 @@ void FCConfigWidget::saveProjectConfig()
             }
         }
     }
-    qWarning("DOM: %s", dom.toString(4).latin1());
 
 
     // project template files
@@ -335,13 +336,8 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
 
 void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString destName)
 {
-    qWarning("templateUrl is %s", templateUrl.latin1());
-    qWarning("dest is %s", dest.latin1());
-    qWarning("destName is %s", destName.latin1());
-
     if (templateUrl == "")
     {
-        qWarning("attempt to create template dir");
         QDir d(dest);
         if (!d.exists())
             d.mkdir(dest);

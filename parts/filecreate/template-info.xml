@@ -42,6 +42,12 @@
       <type ext="h" name="C/C++ header" create="template" icon="source_h">
         <descr>A new empty header file for C or C++.</descr>
       </type>
+      <type ext="php" name="PHP" create="template" icon="php">
+        <descr>A new empty PHP source file.</descr>
+      </type>
+      <type ext="java" name="Java source" create="template" icon="source_java">
+        <descr>A new empty Java source file.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
