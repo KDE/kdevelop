@@ -118,7 +118,7 @@ void BookmarksPart::marksChanged()
 
 			if ( EditorData * data = storeBookmarksForURL( ro_part ) )
 			{
-				updateContextStringForURL( data );
+				updateContextStringForURL( ro_part );
 				_widget->updateURL( data );
 			}
 			else
@@ -253,12 +253,16 @@ void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
 	}
 }
 
-void BookmarksPart::updateContextStringForURL( EditorData * data )
+void BookmarksPart::updateContextStringForURL( KParts::ReadOnlyPart * ro_part )
 {
-	KTextEditor::EditInterface * ed =
-		dynamic_cast<KTextEditor::EditInterface *>( partForURL( data->url ) );
+	if ( ! ro_part ) return;
 
-	if ( ! ( data && ed ) )	return;
+	KTextEditor::EditInterface * ed =
+		dynamic_cast<KTextEditor::EditInterface *>( ro_part );
+
+	EditorData * data = _editorMap.find( ro_part->url().path() );
+
+	if ( ! ( data && ed ) ) return;
 
 	QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 	while ( it != data->marks.end() )
@@ -284,6 +288,11 @@ void BookmarksPart::updateContextStringForURL( EditorData * data )
 	}
 }
 
+void BookmarksPart::updateContextStringForURL( KURL const & url )
+{
+	updateContextStringForURL( partForURL( url ) );
+}
+
 void BookmarksPart::updateContextStringForAll()
 {
 	QDictIterator<EditorData> it( _editorMap );
@@ -291,7 +300,7 @@ void BookmarksPart::updateContextStringForAll()
 	{
 		if ( ! it.current()->marks.isEmpty() )
 		{
-			updateContextStringForURL( it.current() );
+			updateContextStringForURL( it.current()->url );
 		}
 		++it;
 	}
@@ -301,9 +310,9 @@ bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
 	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>(ro_part) )
 	{
-		_settingMarks = true;
+		clearBookmarksForURL( ro_part );
 
-		mi->clearMarks();
+		_settingMarks = true;
 
 		if ( EditorData * data = _editorMap.find( ro_part->url().path() ) )
 		{
@@ -317,6 +326,34 @@ bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 				++it;
 			}
 		}
+		_settingMarks = false;
+
+		// true == this is a MarkInterface
+		return true;
+	}
+	return false;
+}
+
+// Note: This method is only a convenience method to clear the bookmark marks,
+// the way a hypothetical KTextEditor::MarkInterface::clearMarks( uint markType )
+// would work.
+bool BookmarksPart::clearBookmarksForURL( KParts::ReadOnlyPart * ro_part )
+{
+	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>(ro_part) )
+	{
+		_settingMarks = true;
+
+		QPtrList<KTextEditor::Mark> marks = mi->marks();
+		QPtrListIterator<KTextEditor::Mark> it( marks );
+		while ( it.current() )
+		{
+			if ( it.current()->type & KTextEditor::MarkInterface::markType01 )
+			{
+				mi->removeMark( it.current()->line, KTextEditor::MarkInterface::markType01 );
+			}
+			++it;
+		}
+
 		_settingMarks = false;
 
 		// true == this is a MarkInterface
@@ -342,7 +379,7 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 		QPtrListIterator<KTextEditor::Mark> it( marks );
 		while ( it.current() )
 		{
-			if ( it.current()->type == KTextEditor::MarkInterface::markType01 )
+			if ( it.current()->type & KTextEditor::MarkInterface::markType01 )
 			{
 			    int line = it.current()->line;
 				kdDebug(0) << "Found bookmark. Line: " << line << endl;
@@ -415,6 +452,5 @@ KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 	}
 	return 0;
 }
-
 
 #include "bookmarks_part.moc"

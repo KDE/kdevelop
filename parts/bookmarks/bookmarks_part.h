@@ -62,12 +62,14 @@ private slots:
 
 private:
 	bool setBookmarksForURL( KParts::ReadOnlyPart * );
+	bool clearBookmarksForURL( KParts::ReadOnlyPart * );
 	void setBookmarksForAllURLs();
 
 	EditorData * storeBookmarksForURL( KParts::ReadOnlyPart * );
 	void storeBookmarksForAllURLs();
 
-	void updateContextStringForURL( EditorData * );
+	void updateContextStringForURL( KParts::ReadOnlyPart * );
+	void updateContextStringForURL( KURL const & url );
 	void updateContextStringForAll();
 
 	KParts::ReadOnlyPart * partForURL( KURL const & url );

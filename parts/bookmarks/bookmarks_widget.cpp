@@ -119,7 +119,7 @@ BookmarksWidget::~BookmarksWidget()
 
 void BookmarksWidget::maybeTip(const QPoint &p)
 {
-	kdDebug(0) << "ToolTip::maybeTip()" << endl;
+//	kdDebug(0) << "ToolTip::maybeTip()" << endl;
 
 	BookmarkItem * item = dynamic_cast<BookmarkItem*>( itemAt( p ) );
 	QRect r = itemRect( item );
@@ -132,7 +132,7 @@ void BookmarksWidget::maybeTip(const QPoint &p)
 
 void BookmarksWidget::update( QDict<EditorData> const & map )
 {
-	kdDebug(0) << "BookmarksWidget::update()" << endl;
+//	kdDebug(0) << "BookmarksWidget::update()" << endl;
 
 	QListView::clear();
 
@@ -149,7 +149,7 @@ void BookmarksWidget::update( QDict<EditorData> const & map )
 
 void BookmarksWidget::updateURL( EditorData * data )
 {
-	kdDebug(0) << "BookmarksWidget::updateURL()" << endl;
+//	kdDebug(0) << "BookmarksWidget::updateURL()" << endl;
 
 	// remove the node that contains 'data'
 	removeURL( data->url );
@@ -160,9 +160,8 @@ void BookmarksWidget::updateURL( EditorData * data )
 
 void BookmarksWidget::createURL( EditorData * data )
 {
-	kdDebug(0) << "BookmarksWidget::createURL()" << endl;
+//	kdDebug(0) << "BookmarksWidget::createURL()" << endl;
 
-//	if ( data && !data->marks.isEmpty() )
 	if ( data )
 	{
 		QListViewItem * file = new BookmarkItem( this, data->url );
@@ -181,7 +180,7 @@ void BookmarksWidget::createURL( EditorData * data )
 
 bool BookmarksWidget::removeURL( KURL const & url )
 {
-	kdDebug(0) << "BookmarksWidget::removeURL()" << endl;
+//	kdDebug(0) << "BookmarksWidget::removeURL()" << endl;
 
 	QListViewItem * item = firstChild();
 	while ( item )
@@ -189,7 +188,7 @@ bool BookmarksWidget::removeURL( KURL const & url )
 		BookmarkItem * bm = static_cast<BookmarkItem*>(item);
 		if ( bm->url() == url )
 		{
-			kdDebug(0) << "node found. deleting!" << endl;
+//			kdDebug(0) << "node found. deleting!" << endl;
 
 			delete item;
 			return true;
@@ -201,8 +200,8 @@ bool BookmarksWidget::removeURL( KURL const & url )
 
 void BookmarksWidget::doEmitRemoveBookMark()
 {
-	kdDebug(0) << "BookmarksWidget::doEmitRemoveBookMark()" << endl;
-	
+//	kdDebug(0) << "BookmarksWidget::doEmitRemoveBookMark()" << endl;
+
 	if ( _selectedItem->isBookmark() )
 	{
 		emit removeBookmarkForURL( _selectedItem->url(), _selectedItem->line() );
@@ -215,7 +214,7 @@ void BookmarksWidget::doEmitRemoveBookMark()
 
 void BookmarksWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 {
-	kdDebug(0) << "BookmarksWidget::contextMenuRequested()" << endl;
+//	kdDebug(0) << "BookmarksWidget::contextMenuRequested()" << endl;
 
 	if ( item )
 	{
@@ -242,7 +241,7 @@ void BookmarksWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 
 void BookmarksWidget::itemClicked( QListViewItem * clickedItem )
 {
-	kdDebug(0) << "BookmarksWidget::itemClicked()" << endl;
+//	kdDebug(0) << "BookmarksWidget::itemClicked()" << endl;
 
 	if ( ! clickedItem )
 		return;
