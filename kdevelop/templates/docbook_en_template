@@ -1,9 +1,15 @@
 <!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
- <!ENTITY |NAMELITTLE|  "<application>|NAMELITTLE|</application>">
- <!ENTITY % addindex "IGNORE">
- <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+  <!ENTITY kappname "&|NAMELITTLE|;" -- replace |NAMELITTLE| here -->
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" -- change language only here -->
+  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V2.0//EN">
+  %ents;
+  <!-- Do not define any other entities; instead, use the entities
+       from kde-genent.entities and $LANG/user.entities. -->
 ]>
-<!-- kdoctemplate v0.8 October 1 1999 -->
+<!-- kdoctemplate v0.8 October 1 1999 
+     Minor update to "Credits and Licenses" section on August 24, 2000
+     Removed "Revision history" section on 22 January 2001   -->
 
 <!--
 This template was designed by: David Rugge davidrugge@mindspring.com
@@ -23,26 +29,58 @@ Please don't forget to remove all these comments in your final documentation,
 thanks ;-).
 -->
 
-<!-- ---------------------------------------------------------------- -->
+<!-- ................................................................ -->
 
-<!-- The language must be changed in the <book> tag for translations. -->
+<!-- The language must NOT be changed here. -->
 
-<book id="|NAMELITTLE|" lang="en">
+<book lang="&language;">
 
 <!-- This header contains all of the meta-information for the document such
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-
-<title>The |PRJNAME| Handbook</title>
+<title>The |NAME| Handbook</title>
 
 <authorgroup>
 <author>
-<firstname></firstname>
-<othername></othername>
-<surname>|AUTHOR|</surname>
+<firstname>George</firstname>
+<othername>N.</othername>
+<surname>Ugnacious</surname>
+<affiliation>
+<address><email>gnu@kde.org</email></address>
+</affiliation>
 </author>
 </authorgroup>
+
+
+<copyright>
+<year>1999</year>
+<year>2000</year>
+<holder>George N. Ugnacious</holder>
+</copyright>
+<!-- Translators: put here the copyright notice of the translation -->
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
+     and in the FDL itself on how to use it. -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>03/04/1999</date>
+<releaseinfo>1.01.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&|NAMELITTLE|; is an application specially designed to do nothing you would
+ever want.
+</para>
+</abstract>
 
 <!-- This is a set of Keywords for indexing by search engines.
 Please at least include KDE, the KDE package it is in, the name
@@ -50,56 +88,15 @@ Please at least include KDE, the KDE package it is in, the name
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>|PRJNAME|</keyword>
+<keyword>kdeutils</keyword>
+<keyword>|NAME|</keyword>
+<keyword>nothing</keyword>
+<keyword>nothing else</keyword>
 </keywordset>
-
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
-
-<date>|DATE|</date>
-<releaseinfo>|VERSION|</releaseinfo>
-
-<!-- Brief revision history.
-Unlike the preceeding information, this is not mandatory.
-Try to keep this section brief.
-This is the history of the *documentation* (the history of the *application*
-goes to the introduction), but nothing prevents you from using the same
-release numbers for both the application the documentation. 
--->
-
-<revhistory>
-<revision>
-<revnumber></revnumber>
-<date></date>
-<authorinitials></authorinitials>
-<revremark>Cleaned up a few typos.
-</revremark>
-</revision>
-<revision>
-<revnumber>|VERSION|
-</revnumber>
-<date>|DATE|</date>
-<authorinitials></authorinitials>
-<revremark>Initial release.
-</revremark>
-</revision>
-</revhistory>
-
-<!-- Abstract about this handbook -->
-
-<abstract>
-<para>
-This Handbook describes <application>|PRJNAME|</application> Version |VERSION|
-<application>|PRJNAME|</application>
-</para>
-</abstract>
 
 </bookinfo>
 
-<!-- The contents of the documentation beginS here.  Label
+<!-- The contents of the documentation begin here.  Label
 each chapter so with the id attribute. This is necessary for two reasons: it
 allows you to easily reference the chapter from other chapters of your
 document, and if there is no ID, the name of the generated HTML files will vary
@@ -111,102 +108,19 @@ consistent documentation style across all KDE apps. -->
 <chapter id="introduction">
 <title>Introduction</title>
 
-<!-- The introduction chapter contains a brief introduction for the application
-that explains what it does, where to get new versions of the app, where to
-report problems, and a brief revision history of the app. Basically a long
-version of the abstract. -->
+<!-- The introduction chapter contains a brief introduction for the
+application that explains what it does and where to report
+problems. Basically a long version of the abstract.  Don't include a
+revision history. (see installation appendix comment) -->
 
 <para>
-The complete user manual to <application>|PRJNAME|</application>, version |VERSION|
+&|NAMELITTLE|; is a program that lets you do absolutely nothing. Please report
+any problems or feature requests to the KDE mailing lists.
 </para>
-
-<!-- Note that the revhistory tags apply to the documentation version and not to
-the app version. That is why we use an ItemizedList here. -->
-
-<sect1 id="|NAMELITTLE|-revhistory">
-<title>|PRJNAME| Revision History</title>
-<para>
-<itemizedlist>
-<listitem><para>
-|VERSION| - first public release
-</para></listitem>
-</itemizedlist>
-</para>
-</sect1>
 </chapter>
 
-<chapter id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-|NAMELITTLE|">
-<title>How to obtain |PRJNAME|</title>
-
-<para>
-<application>|PRJNAME|</application> is part of the KDE project
-<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-<application>|PRJNAME|</application> can be found on
-<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
-main ftp site of the KDE project. </para>
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<!--
-List any special requirements for your application here. This should include:
-.Libraries or other software that is not included in kdesupport,
-kdelibs, or kdebase.
-.Hardware requirements like amount of RAM, disk space, graphics card
-capabilities, screen resolution, special expansion cards, etc.
-.Operating systems the app will run on. If your app is designed only for a
-specific OS, (you wrote a graphical LILO configurator for example) put this
-information here.
--->
-
-<para>
-In order to successfully use <application>|PRJNAME|</application>, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced <application>|PRJNAME|</application> features. <application>|PRJNAME|</application> uses about 5 megs of
-memory to run, but this may vary depending on your platform and
-configuration.
-</para>
-
-<para>
-All required libraries as well as <application>|PRJNAME|</application> itself can be found
-on <ulink url="ftp://ftp.kapp.org"> The <application>|PRJNAME|</application> home page</ulink>.
-</para>
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and installation</title>
-
-<para>
-In order to compile and install |PRJNAME| on your system, type the following in the base
-directory of the |PRJNAME| distribution:
-<screen width="40">
-<prompt>%</prompt> <userinput>./configure</userinput>
-<prompt>%</prompt> <userinput>make</userinput>
-<prompt>%</prompt> <userinput>make install</userinput>
-</screen>
-</para>
-
-<para>Since |PRJNAME| uses autoconf and automake you should have not trouble compiling it.
-Should you run into problems please report them to the author at <ulink url="mailto:|EMAIL|"> |AUTHOR|</ulink>.</para>
-
-</sect1>
-
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or |PRJNAME| won't work !</para>
-
-</sect1>
-
-</chapter>
-
-<chapter id="using-kapp">
-<title>Using |PRJNAME|</title>
+<chapter id="using-|NAMELITTLE|">
+<title>Using |NAME|</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -218,19 +132,39 @@ your application. -->
 patent issues. -->
 
 <screenshot>
-<screeninfo>Here's a screenshot of <application>|PRJNAME|</application></screeninfo>
-<graphic fileref="screenshot.png" format="png"></graphic>
+<screeninfo>Here's a screenshot of &|NAMELITTLE|;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="screenshot.png" format="PNG">
+	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="screenshot.eps" format="EPS">
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	</mediaobject>
 </screenshot>
 </para>
 
 
-<sect1 id="kapp-features">
-<title>More |PRJNAME| features</title>
+<sect1 id="|NAMELITTLE|-features">
+<title>More |NAME| features</title>
 
 <para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
-The Squiggle Tool <guiicon><inlinegraphic fileref="squiggle.png" format="png"></inlinegraphic></guiicon> is used to draw squiggly lines all
-over the <application>|PRJNAME|</application> main window. It's not a bug, it's a feature!
+The Squiggle Tool <guiicon><inlinemediaobject>
+	  <imageobject>
+	    <imagedata fileref="squiggle.png" format="PNG">
+	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="squiggle.eps" format="EPS">
+	  </imageobject>
+	  <textobject>
+	    <phrase>Squiggle</phrase>
+	  </textobject>
+</inlinemediaobject></guiicon> is used to draw squiggly lines all over
+the &|NAMELITTLE|; main window. It's not a bug, it's a feature!
 </para>
 
 </sect1>
@@ -245,10 +179,8 @@ Also include any keys that have a special function but have no equivalent in the
 menus or toolbars. This may not be necessary for small apps or apps with no tool
 or menu bars. -->
 
-<para></para>
-
-<sect1 id="kapp-mainwindow">
-<title>The main |PRJNAME| window</title>
+<sect1 id="|NAMELITTLE|-mainwindow">
+<title>The main |NAME| window</title>
 <para></para>
 
 <sect2>
@@ -283,24 +215,25 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits <application>|PRJNAME|</application></action></para></listitem>
+<listitem><para><action>Quits</action> &|NAMELITTLE|;</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
 
 </sect2>
+
 </sect1>
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to |PRJNAME|</title>
+<title>Developer's Guide to |NAME|</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming <application>|PRJNAME|</application> plugins is a joy to behold. Just read through the next
+Programming &|NAMELITTLE|; plugins is a joy to behold. Just read through the next
 66 pages of API's to learn how!
 </para>
 
@@ -447,12 +380,13 @@ This is also a great place to provide pointers to other FAQ's if your users
 must do some complicated configuration on other programs in order for your
 application work. -->
 
-<para></para>
+&reporting.bugs;
+&updating.documentation;
 
-<qandaset>
+<qandaset id="faqlist">
 <qandaentry>
 <question>
-<para>My Mouse doesn't work. How do I quit <application>|PRJNAME|</application>?</para>
+<para>My Mouse doesn't work. How do I quit &|NAMELITTLE|;?</para>
 </question>
 <answer>
 <para>You silly goose! Check out the <link linkend="commands">Commands
@@ -481,7 +415,7 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-<application>|PRJNAME|</application>
+&|NAMELITTLE|;
 </para>
 <para>
 Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
@@ -508,17 +442,103 @@ Translations done by:
 </itemizedlist>
 </para>
 
-<!-- For URL links to common stuff like the one below,
-always use paths like "common/gpl-licence".
-In this path, "common" will be a symbolic link built at "make install" time.
-This link will normally point to $KDEDIR/share/doc/HTML/en/common,
-where "en" should be replaced with the current language. -->
+&underFDL;               <!-- FDL: do not remove -->
 
-<para>
-This program is licensed under the terms of the
-<ulink url="common/gpl-license.html">GNU GPL</ulink>.
-</para>
+<!-- Determine which license your application is licensed under, 
+     and delete all the remaining licenses below:
+
+     (NOTE:  All documentation are licensed under the FDL, 
+     regardless of what license the application uses) -->
+
+&underGPL;        	 <!-- GPL License -->
+&underBSDLicense;        <!-- BSD License -->
+&underArtisticLicense;   <!-- BSD Artistic License -->
+&underX11License;        <!-- X11 License  -->
+
 </chapter>
 
-<![ %addindex; [ &kdedocindex; ]]>
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-|NAMELITTLE|">
+<title>How to obtain |NAME|</title>
+
+<para>
+&|NAMELITTLE|; is part of the KDE project
+<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
+&|NAMELITTLE|; can be found in the kdeutils package on
+<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
+main ftp site of the KDE project. </para>
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<!--
+List any special requirements for your application here. This should include:
+.Libraries or other software that is not included in kdesupport,
+kdelibs, or kdebase.
+.Hardware requirements like amount of RAM, disk space, graphics card
+capabilities, screen resolution, special expansion cards, etc.
+.Operating systems the app will run on. If your app is designed only for a
+specific OS, (you wrote a graphical LILO configurator for example) put this
+information here.
+-->
+
+<para>
+In order to successfully use &|NAMELITTLE|;, you need KDE 1.1. Foobar.lib is required
+in order to support the advanced &|NAMELITTLE|; features. &|NAMELITTLE|; uses about 5 megs of
+memory to run, but this may vary depending on your platform and
+configuration.
+</para>
+
+<para>
+All required libraries as well as &|NAMELITTLE|; itself can be found
+on <ulink url="ftp://ftp.|NAMELITTLE|.org">The &|NAMELITTLE|; home page</ulink>.
+</para>
+
+<!-- For a list of updates, you may refer to the application web site
+or the ChangeLog file, or ... -->
+<para>
+You can find a list of changes at <ulink
+url="http://apps.kde.org/|NAMELITTLE|">http://apps.kde.org/|NAMELITTLE|</ulink>.
+</para>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and installation</title>
+
+<para>
+In order to compile and install KApp on your system, type the following in the base
+directory of the Icon Editor distribution:
+<screen width="40">
+<prompt>%</prompt> <userinput>./configure</userinput>
+<prompt>%</prompt> <userinput>make</userinput>
+<prompt>%</prompt> <userinput>make install</userinput>
+</screen>
+</para>
+
+<para>Since KApp uses autoconf and automake you should have not trouble compiling it.
+Should you run into problems please report them to the KDE mailing lists.</para>
+
+</sect1>
+
+<sect1 id="configuration">
+<title>Configuration</title>
+
+<para>Don't forget to tell your system to start the <filename>dtd</filename>
+dicer-toaster daemon first, or KApp won't work !</para>
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
 </book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes: nil
+sgml-general-insert-case: lower
+End:
+-->
