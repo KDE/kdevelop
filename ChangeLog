@@ -1,3 +1,8 @@
+1999-08-06  Jonas Nordin  <jonas.nordin@cenacle.se>
+	* fixed so that nested classes are handled correctly, both of the
+	  parser and in the CV.
+	* added popupmenu for structs in the CV.
+
 1999-08-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Workaround for the bug that KApplication does not
 	  override argc()
@@ -21,7 +26,7 @@
 1999-08-04 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* fixed problem with quoting string in qcombobox(kdlgedit) (Bug#1667,#1668,#1661)
 	* fixed problem on loading last file with kdevelop.kdelnk (Bug#1663)
-	* fixed problem with quoting string in qlistbox(kdlgedit) (Buf#1641)
+	* fixed problem with quoting string in qlistbox(kdlgedit) (Bug#1641)
 	
 1999-08-04 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* added patch from Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
