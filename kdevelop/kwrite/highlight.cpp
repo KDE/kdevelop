@@ -1,28 +1,27 @@
-//#include <string.h>
+#include "highlight.h"
 
-//#include <qcombo.h>
-#include <qgrpbox.h>
-#include <qtstream.h>
-#include <qregexp.h>
-#include <qlabel.h>
-#include <qstringlist.h>
+#include "kwdoc.h"
 
-#include <kapp.h>
+//#include <kapp.h>
 #include <kcharsets.h>
 #include <kfontdialog.h>
-#include <kglobalsettings.h>
-
-
-#include "highlight.h"
-#include "kwdoc.h"
-#include <kmimemagic.h>
 #include <kglobal.h>
-#include <qfile.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kmimemagic.h>
+
+#include <qfile.h>
 #include <qgrid.h>
 #include <qlayout.h>
 #include <qvgroupbox.h>
+#include <qlist.h>
+#include <qgrpbox.h>
+#include <qtstream.h>
+//#include <qregexp.h>
+#include <qlabel.h>
+#include <qstringlist.h>
+#include <qfileinfo.h>
 
 
 //#include <X11/Xlib.h> //used in getXFontList()
@@ -911,56 +910,68 @@ ItemStyle::ItemStyle(const QColor &col, const QColor &selCol,
   : col(col), selCol(selCol), bold(bold), italic(italic) {
 }
 
-ItemFont::ItemFont() : family("courier"), size(12), charset("") {
+ItemFont::ItemFont() :
+  family("courier"),
+  size(12),
+  charset("")
+{
 }
 
-ItemData::ItemData(const char *name, int defStyleNum)
-  : name(name), defStyleNum(defStyleNum), defStyle(true), defFont(true) {
+ItemData::ItemData(const QString& name, int defStyleNum) :
+  name(name),
+  defStyleNum(defStyleNum),
+  defStyle(true),
+  defFont(true)
+{
 }
 
-ItemData::ItemData(const char *name, int defStyleNum,
-  const QColor &col, const QColor &selCol, bool bold, bool italic)
-  : ItemStyle(col,selCol,bold,italic), name(name), defStyleNum(defStyleNum),
-  defStyle(false), defFont(true) {
+ItemData::ItemData(const QString& name, int defStyleNum,
+                    const QColor &col, const QColor &selCol,
+                    bool bold, bool italic) :
+  ItemStyle(col,selCol,bold,italic),
+  name(name),
+  defStyleNum(defStyleNum),
+  defStyle(false),
+  defFont(true) {
 }
 
-HlData::HlData(const char *wildcards, const char *mimetypes)
-  : wildcards(wildcards), mimetypes(mimetypes) {
-
+HlData::HlData(const QString& wildcards, const QString& mimetypes) :
+  wildcards(wildcards),
+  mimetypes(mimetypes)
+{
   itemDataList.setAutoDelete(true);
 }
 
-Highlight::Highlight(const char *name) : iName(name), refCount(0) {
+Highlight::Highlight(const QString& name) :
+	iName(name),
+	refCount(0)
+{
 }
 
 Highlight::~Highlight() {
 }
 
 KConfig *Highlight::getKConfig() {
-  KConfig *config;
-
-  config = KGlobal::config();
+  KConfig *config = KGlobal::config();
   config->setGroup((QString) iName + " Highlight");
   return config;
 }
 
-void Highlight::getWildcards(QString &w) {
-  KConfig *config;
-
-  config = getKConfig();
-
-//  iWildcards
-  w = config->readEntry("Wildcards",dw);
-//  iMimetypes = config->readEntry("Mimetypes");
+QString Highlight::getWildcards()
+{
+  KConfig *config = getKConfig();
+	if (config)
+  	return config->readEntry("Wildcards", dw);
+	return dw;
 }
 
 
-void Highlight::getMimetypes(QString &w) {
-  KConfig *config;
-
-  config = getKConfig();
-
-  w = config->readEntry("Mimetypes",dm);
+QString Highlight::getMimetypes()
+{
+  KConfig *config = getKConfig();
+	if (config)
+	  return config->readEntry("Mimetypes", dm);
+	return dm;
 }
 
 
@@ -1037,7 +1048,7 @@ void Highlight::setItemDataList(ItemDataList &list, KConfig *config) {
   }
 }
 
-const char *Highlight::name() {
+QString Highlight::name() {
   return iName;
 }
 
@@ -1077,6 +1088,25 @@ void Highlight::init() {
 void Highlight::done() {
 }
 
+bool Highlight::containsFiletype(const QString& ext)
+{
+  QString w = getWildcards();
+  if (w.isEmpty())
+    return false;
+
+  w = ";" + w + ";";
+  return w.find(";"+ext+ ";") != -1;
+}
+
+bool Highlight::containsMimetype(const QString& mimetype)
+{
+  QString w = getMimetypes();
+  if (w.isEmpty())
+    return false;
+
+  w = ";" + w + ";";
+  return w.find(";"+mimetype+ ";") != -1;
+}
 
 HlContext::HlContext(int attribute, int lineEndContext)
   : attr(attribute), ctx(lineEndContext) {
@@ -1143,7 +1173,9 @@ void GenHighlight::done() {
 }
 
 
-CHighlight::CHighlight(const char *name) : GenHighlight(name) {
+CHighlight::CHighlight(const QString& name) :
+  GenHighlight(name)
+{
   dw = "*.c";
   dm = "text/x-c-src";
 }
@@ -1222,8 +1254,8 @@ void CHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 
-CppHighlight::CppHighlight(const char *name) : CHighlight(name) {
-  dw = "*.cpp;*.h;*.C";
+CppHighlight::CppHighlight(const QString& name) : CHighlight(name) {
+  dw = "*.cpp;*.h;*.C;*.cc";
   dm = "text/x-c++-src;text/x-c++-hdr;text/x-c-hdr";
 }
 
@@ -1238,7 +1270,7 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(cppTypes);
 }
 
-PascalHighlight::PascalHighlight(const char *name) : GenHighlight(name) {
+PascalHighlight::PascalHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.pp;*.pas;*.inc";
   dm = "text/x-pascal-src";
 }
@@ -1297,7 +1329,7 @@ void PascalHighlight::makeContextList() {
   dataType->addList(pascalTypes);
 }
 
-IdlHighlight::IdlHighlight(const char *name) : CHighlight(name) {
+IdlHighlight::IdlHighlight(const QString& name) : CHighlight(name) {
   dw = "*.idl";
   dm = "text/x-idl-src";
 }
@@ -1311,7 +1343,7 @@ void IdlHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 
-JavaHighlight::JavaHighlight(const char *name) : CHighlight(name) {
+JavaHighlight::JavaHighlight(const QString& name) : CHighlight(name) {
   dw = "*.java";
   dm = "text/x-java-src";
 }
@@ -1326,7 +1358,7 @@ void JavaHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 
-HtmlHighlight::HtmlHighlight(const char *name) : GenHighlight(name) {
+HtmlHighlight::HtmlHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.html;*.htm";
   dm = "text/html";
 }
@@ -1363,7 +1395,7 @@ void HtmlHighlight::makeContextList() {
 }
 
 
-BashHighlight::BashHighlight(const char *name) : GenHighlight(name) {
+BashHighlight::BashHighlight(const QString& name) : GenHighlight(name) {
   dm = "text/x-shellscript";
 }
 
@@ -1401,7 +1433,7 @@ void BashHighlight::makeContextList() {
 }
 
 
-ModulaHighlight::ModulaHighlight(const char *name) : GenHighlight(name) {
+ModulaHighlight::ModulaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.md;*.mi";
   dm = "text/x-modula-2-src";
 }
@@ -1440,7 +1472,7 @@ void ModulaHighlight::makeContextList() {
 }
 
 
-AdaHighlight::AdaHighlight(const char *name) : GenHighlight(name) {
+AdaHighlight::AdaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.a";
   dm = "text/x-ada-src";
 }
@@ -1480,7 +1512,7 @@ void AdaHighlight::makeContextList() {
 }
 
 
-PythonHighlight::PythonHighlight(const char *name) : GenHighlight(name) {
+PythonHighlight::PythonHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.py";
   dm = "text/x-python-src";
 }
@@ -1538,7 +1570,7 @@ void PythonHighlight::makeContextList() {
   keyword->addList(pythonKeywords);
 }
 
-PerlHighlight::PerlHighlight(const char *name) : Highlight(name) {
+PerlHighlight::PerlHighlight(const QString& name) : Highlight(name) {
   dm = "application/x-perl";
 }
 
@@ -1771,7 +1803,7 @@ void PerlHighlight::done() {
   delete keyword;
 }
 
-SatherHighlight::SatherHighlight(const char *name) : GenHighlight(name) {
+SatherHighlight::SatherHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.sa";
   dm = "text/x-sather-src";
 }
@@ -1820,7 +1852,7 @@ void SatherHighlight::makeContextList() {
   spec_feat->addList(satherSpecFeatureNames);
 }
 
-LatexHighlight::LatexHighlight(const char *name) : GenHighlight(name) {
+LatexHighlight::LatexHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.tex;*.sty";
   dm = "text/x-tex";
 }
@@ -1890,7 +1922,7 @@ int HlManager::defaultHl() {
 }
 
 
-int HlManager::nameFind(const char *name) {
+int HlManager::nameFind(const QString& name) {
   int z;
 
   for (z = hlList.count() - 1; z > 0; z--) {
@@ -1899,77 +1931,95 @@ int HlManager::nameFind(const char *name) {
   return z;
 }
 
-int HlManager::wildcardFind(const char *fileName) {
-  Highlight *highlight;
-  int p1, p2;
-  QString w;
-  for (highlight = hlList.first(); highlight != 0L; highlight = hlList.next()) {
-    p1 = 0;
-    highlight->getWildcards(w);
-    while (p1 < (int) w.length()) {
-      p2 = w.find(';',p1);
-      if (p2 == -1) p2 = w.length();
-      if (p1 < p2) {
-        QRegExp regExp(w.mid(p1,p2 - p1),true,true);
-        if (regExp.match(fileName) == 0) return hlList.at();
-      }
-      p1 = p2 + 1;
-    }
-  }
-  return -1;
-}
-
-int HlManager::mimeFind(const char *contents, int len, const char *fname)
+int HlManager::findByFile(const QString& filename)
 {
-  // Magic file detection init (from kfm/kbind.cpp)
-  QString mimefile = locate ("mime", "magic");
-  KMimeMagic magic(mimefile);
-  magic.setFollowLinks(true);      
-/*
-  // fill the detection buffer with the contents of the text
-  const int HOWMANY = 1024;
-  char buffer[HOWMANY];
-  int number=0, len;
-
-  for (int index=0; index<doc->lastLine(); index++)
+  if (!filename.isEmpty())
   {
-    len = doc->textLength(index);
+    QFileInfo fileInfo(filename);
+    QString ext = fileInfo.extension(false);
 
-    if (number+len > HOWMANY)
-      break;
-
-    memcpy(&buffer[number], doc->textLine(index)->getText(), len);
-    number += len;
-  }
-*/
-  // detect the mime type
-  KMimeMagicResult *result;
-  QByteArray contentsByteArray;
-  contentsByteArray.assign(contents, len);
-  result = magic.findBufferFileType(contentsByteArray, fname);
-
-  Highlight *highlight;
-  int p1, p2;
-  QString w;
-
-  for (highlight = hlList.first(); highlight != 0L; highlight = hlList.next()) 
-  {
-    highlight->getMimetypes(w);
-
-    p1 = 0;
-    while (p1 < (int) w.length()) {
-      p2 = w.find(';',p1);
-      if (p2 == -1) p2 = w.length();
-      if (p1 < p2) {
-        QRegExp regExp(w.mid(p1,p2 - p1),true,true);
-        if (regExp.match(result->mimeType()) == 0) return hlList.at();
+    if (!ext.isEmpty())
+    {
+      ext = "*."+ext;
+      for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
+      {
+        if (highlight->containsFiletype(ext))
+          return hlList.at();
       }
-      p1 = p2 + 1;
     }
   }
-
   return -1;
 }
+
+int HlManager::findByMimetype(const QString& filename)
+{
+  if (!filename.isEmpty())
+  {
+    KMimeMagic* magic = KMimeMagic::self();
+    magic->setFollowLinks(true);
+    KMimeMagicResult *result = magic->findFileType(filename);
+
+    // Get the highlight class for this mime type
+    for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
+    {
+      if (result->mimeType() && highlight->containsMimetype(result->mimeType()))
+        return hlList.at();
+    }
+  }
+  return -1;
+}
+
+
+int HlManager::getHighlight(const QString& filename)
+{
+  int hl;
+  if ((hl = findByFile(filename)) != -1)
+    return hl;
+
+  if ((hl = findByMimetype(filename)) != -1)
+    return hl;
+
+  return defaultHl();
+
+//  KMimeMagic* magic = KMimeMagic::self();
+//  magic->setFollowLinks(true);
+//  KMimeMagicResult *result = magic->findFileType(filename);
+//
+//  // Get the highlight class for this mime type
+//  for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
+//  {
+//    if (highlight->containsMimetype(result->mimeType()))
+//      return hlList.at();
+//  }
+
+  //highlight detection
+//  if (fName.isEmpty()) return;
+//  pos = fName.findRev('/') +1;
+//  hl = hlManager->wildcardFind(&test[pos]);
+//  if (hl == -1) {
+//    // fill the detection buffer with the contents of the text
+//    const int HOWMANY = 1024;
+//    char buf[HOWMANY];
+//    int bufpos = 0, len;
+//    TextLine *textLine;
+//
+//    for (textLine = contents.first(); textLine != 0L; textLine = contents.next()) {
+//      len = textLine->length();
+//      if (bufpos + len > HOWMANY) len = HOWMANY - bufpos;
+//      memcpy(&buf[bufpos], textLine->getText(), len);
+//      bufpos += len;
+//      if (bufpos >= HOWMANY) break;
+//    }
+//    hl = hlManager->mimeFind(buf, bufpos, &test[pos]);
+//  }
+//  setHighlight(hl);
+//
+//	// Read bookmarks, breakpoints, ...
+//	readFileConfig();
+//
+//  updateViews();
+}
+
 
 void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
   ItemStyleList defaultStyleList;

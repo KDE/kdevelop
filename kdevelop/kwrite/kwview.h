@@ -420,7 +420,7 @@ class KWrite : public QWidget {
     const char *fileName();
     /** Set the file name. This starts the automatic highlight selection.
     */
-    void setFileName(const char *);
+    void setFileName(const QString&);
     /** Mainly for internal use. Returns true if the current document can be
         discarded. If the document is modified, the user is asked if he wants
         to save it. On "cancel" the function returns false.

@@ -2413,41 +2413,20 @@ QString KWriteDoc::fileName() {
 }
 
 void KWriteDoc::setFileName(const QString& s) {
-  int pos, hl;
+  int hl;
   KWriteView *view;
 
   fName = s;
-  QCString test=s.latin1();
+//  QCString test=s.latin1();
 
-  for (view = views.first(); view != 0L; view = views.next()) {
+  for (view = views.first(); view != 0L; view = views.next())
     emit view->kWrite->newCaption();
-  }
 
-  //highlight detection
-  if (fName.isEmpty()) return;
-  pos = fName.findRev('/') +1;
-  hl = hlManager->wildcardFind(&test[pos]);
-  if (hl == -1) {
-    // fill the detection buffer with the contents of the text
-    const int HOWMANY = 1024;
-    char buf[HOWMANY];
-    int bufpos = 0, len;
-    TextLine *textLine;
-
-    for (textLine = contents.first(); textLine != 0L; textLine = contents.next()) {
-      len = textLine->length();
-      if (bufpos + len > HOWMANY) len = HOWMANY - bufpos;
-      memcpy(&buf[bufpos], textLine->getText(), len);
-      bufpos += len;
-      if (bufpos >= HOWMANY) break;
-    }
-    hl = hlManager->mimeFind(buf, bufpos, &test[pos]);
-  }
+  hl = hlManager->getHighlight(fName);
   setHighlight(hl);
 
 	// Read bookmarks, breakpoints, ...
 	readFileConfig();
-
   updateViews();
 }
 

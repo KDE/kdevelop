@@ -264,7 +264,7 @@ void CKDevelop::initView()
   mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
 
   messages_widget = new COutputWidget(o_tab_view);
-  messages_widget->setFocusPolicy(QWidget::NoFocus);
+  messages_widget->setFocusPolicy(QWidget::ClickFocus);
   messages_widget->setReadOnly(TRUE);
 
   stdin_stdout_widget = new COutputWidget(o_tab_view);

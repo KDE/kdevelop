@@ -311,8 +311,8 @@ class ItemFont {
 //Item Properties: name, Item Style, Item Font
 class ItemData : public ItemStyle, public ItemFont {
   public:
-    ItemData(const char *name, int defStyleNum);
-    ItemData(const char *name, int defStyleNum,
+    ItemData(const QString& name, int defStyleNum);
+    ItemData(const QString& name, int defStyleNum,
       const QColor&, const QColor&, bool bold, bool italic);
 
     QString name;
@@ -325,7 +325,7 @@ typedef QList<ItemData> ItemDataList;
 
 class HlData {
   public:
-    HlData(const char *wildcards, const char *mimetypes);
+    HlData(const QString& wildcards, const QString& mimetypes);
     ItemDataList itemDataList;
     QString wildcards;
     QString mimetypes;
@@ -339,23 +339,28 @@ class KConfig;
 class Highlight {
     friend HlManager;
   public:
-    Highlight(const char *name);
+    Highlight(const QString& name);
     virtual ~Highlight();
     KConfig *getKConfig();
-    void getWildcards(QString &);
-    void getMimetypes(QString &);
+    QString getWildcards();
+    QString getMimetypes();
     HlData *getData();
     void setData(HlData *);
     void getItemDataList(ItemDataList &);
     virtual void getItemDataList(ItemDataList &, KConfig *);
     virtual void setItemDataList(ItemDataList &, KConfig *);
-    const char *name();
+    QString name();
+
 //    const char *extensions();
 //    const char *mimetypes();
     void use();
     void release();
     virtual bool isInWord(char c) {return !testWw(c);}
     virtual int doHighlight(int ctxNum, TextLine *textLine);
+
+    bool containsFiletype(const QString& ext);
+    bool containsMimetype(const QString& mimetype);
+
   protected:
     virtual void createItemData(ItemDataList &);
     virtual void init();
@@ -397,7 +402,7 @@ class GenHighlight : public Highlight {
 
 class CHighlight : public GenHighlight {
   public:
-    CHighlight(const char *name);
+    CHighlight(const QString& name);
     virtual ~CHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -407,7 +412,7 @@ class CHighlight : public GenHighlight {
 
 class CppHighlight : public CHighlight {
   public:
-    CppHighlight(const char *name);
+    CppHighlight(const QString& name);
     virtual ~CppHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -415,7 +420,7 @@ class CppHighlight : public CHighlight {
 
 class IdlHighlight : public CHighlight {
   public:
-    IdlHighlight(const char *name);
+    IdlHighlight(const QString& name);
     virtual ~IdlHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -423,7 +428,7 @@ class IdlHighlight : public CHighlight {
 
 class JavaHighlight : public CHighlight {
   public:
-    JavaHighlight(const char *name);
+    JavaHighlight(const QString& name);
     virtual ~JavaHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -431,7 +436,7 @@ class JavaHighlight : public CHighlight {
 
 class HtmlHighlight : public GenHighlight {
   public:
-    HtmlHighlight(const char *name);
+    HtmlHighlight(const QString& name);
     virtual ~HtmlHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -440,7 +445,7 @@ class HtmlHighlight : public GenHighlight {
 
 class BashHighlight : public GenHighlight {
   public:
-    BashHighlight(const char *name);
+    BashHighlight(const QString& name);
     virtual ~BashHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -449,7 +454,7 @@ class BashHighlight : public GenHighlight {
 
 class ModulaHighlight : public GenHighlight {
   public:
-    ModulaHighlight(const char *name);
+    ModulaHighlight(const QString& name);
     virtual ~ModulaHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -458,7 +463,7 @@ class ModulaHighlight : public GenHighlight {
 
 class PascalHighlight : public GenHighlight {
   public:
-    PascalHighlight(const char *name);
+    PascalHighlight(const QString& name);
     virtual ~PascalHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -467,7 +472,7 @@ class PascalHighlight : public GenHighlight {
 
 class AdaHighlight : public GenHighlight {
   public:
-    AdaHighlight(const char *name);
+    AdaHighlight(const QString& name);
     virtual ~AdaHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -476,7 +481,7 @@ class AdaHighlight : public GenHighlight {
 
 class PythonHighlight : public GenHighlight {
   public:
-    PythonHighlight(const char *name);
+    PythonHighlight(const QString& name);
     virtual ~PythonHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -485,7 +490,7 @@ class PythonHighlight : public GenHighlight {
 
 class PerlHighlight : public Highlight {
   public:
-    PerlHighlight(const char *name);
+    PerlHighlight(const QString& name);
 
     virtual int doHighlight(int ctxNum, TextLine *);
   protected:
@@ -497,7 +502,7 @@ class PerlHighlight : public Highlight {
 
 class SatherHighlight : public GenHighlight {
   public:
-    SatherHighlight(const char *name);
+    SatherHighlight(const QString& name);
     virtual ~SatherHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -506,7 +511,7 @@ class SatherHighlight : public GenHighlight {
 
 class LatexHighlight : public GenHighlight {
   public:
-    LatexHighlight(const char *name);
+    LatexHighlight(const QString& name);
     virtual ~LatexHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -523,12 +528,13 @@ class HlManager : public QObject {
 
     Highlight *getHl(int n);
     int defaultHl();
-    int nameFind(const char *name);
+    int nameFind(const QString& name);
     
-    int wildcardFind(const char *fileName);
-    int mimeFind(const char *contents, int len, const char *fname);
-    int findHl(Highlight *h) {return hlList.find(h);}
-    
+    int findHl(Highlight *h) { return hlList.find(h); }
+    int findByFile(const QString& fileName);
+    int findByMimetype(const QString& filename);
+    int getHighlight(const QString& filename);
+
     void makeAttribs(Highlight *, Attribute *, int n);
 
     int defaultStyles();

@@ -20,13 +20,14 @@
 #define COUTPUTWIDGET_H
 
 
-#include "keditcl.h"
-#include <qwidget.h>
+//#include "keditcl.h"
+#include <qmultilineedit.h>
+//#include <qwidget.h>
 
 /** the view for the compiler and tools-output
   *@author Sandy Meier
   */
-class COutputWidget : public KEdit
+class COutputWidget : public QMultiLineEdit
 {
   Q_OBJECT
 public:

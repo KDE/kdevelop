@@ -3730,9 +3730,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
   if (!result.isEmpty())
   {
-     int x,y;
-     messages_widget->cursorPosition(&x,&y);
-     messages_widget->insertAt(result, x, y);
+//     int x,y;
+//     messages_widget->cursorPosition(&x,&y);
+//     messages_widget->insertAt(result, x, y);
+    messages_widget->insertAtEnd(result);
   }
   if (ready)
   { // start the error-message parser

@@ -1835,7 +1835,7 @@ const char *KWrite::fileName() {
   return kWriteDoc->fileName();
 }
 
-void KWrite::setFileName(const char *s) {
+void KWrite::setFileName(const QString& s) {
   kWriteDoc->setFileName(s);
 }
 

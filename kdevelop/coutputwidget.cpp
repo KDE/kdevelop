@@ -18,7 +18,8 @@
 #include "coutputwidget.h"
 
 COutputWidget::COutputWidget(QWidget* parent, const char* name) :
-  KEdit(parent,name)
+//  KEdit(parent,name)
+  QMultiLineEdit(parent, name)
 {
 }
 
@@ -36,6 +37,7 @@ void COutputWidget::mouseReleaseEvent(QMouseEvent*){
   emit clicked();
 }
 void COutputWidget::keyPressEvent ( QKeyEvent* event){
-  KEdit::keyPressEvent(event);
+//  KEdit::keyPressEvent(event);
+  QMultiLineEdit::keyPressEvent(event);
   emit keyPressed(event->ascii());
 }
