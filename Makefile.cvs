@@ -2,7 +2,7 @@ default: all
 
 dist:
 	@echo "This file is to make it easier for you to create all you need"
-	aclocal
+	aclocal -I .
 	autoheader
 # use --include-deps, if you want to release the stuff. Don't use it for
 # yourself

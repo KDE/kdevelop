@@ -16,9 +16,10 @@
  ***************************************************************************/
 
 
-#include "caddnewtranslationdlg.h"
 #include <kapp.h>
 #include <kmsgbox.h>
+#include "caddnewtranslationdlg.h"
+#include "cproject.h"
 
 /*********************************************************************
  *                                                                   *

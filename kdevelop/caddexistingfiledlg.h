@@ -28,7 +28,9 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
-#include "cproject.h"
+
+//#include "cproject.h"
+class CProject;
 
 /** Dlg for adding file(s) to a existing project
   *@author Sandy Meier

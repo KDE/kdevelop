@@ -17,8 +17,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cgeneratenewfile.h"
 #include <iostream.h>
+#include <qfileinfo.h>
+#include "cgeneratenewfile.h"
+#include "cproject.h"
 
 CGenerateNewFile::CGenerateNewFile(){
 }

@@ -37,3 +37,5 @@
 
 #undef QT_DOCDIR
 #undef KDELIBS_DOCDIR
+#undef KDOC_INDEXDIR
+#undef WITH_DOCBASE

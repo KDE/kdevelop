@@ -22,8 +22,10 @@
 #define _CCLASSTOOLTREEVIEW_H_INCLUDED
 
 #include "ctreeview.h"
-#include "cproject.h"
 #include "ccommand.h"
+
+//#include "cproject.h"
+class  CProject; 
 
 class CClassToolTreeView : public CTreeView
 {

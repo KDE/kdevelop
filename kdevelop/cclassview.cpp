@@ -26,6 +26,7 @@
 
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
+#include "cproject.h"
 #include "./gfxview/GfxClassTreeWindow.h"
 #include "resource.h"
 #include "./classwizard/cclasswizarddlg.h"

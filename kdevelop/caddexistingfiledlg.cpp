@@ -16,14 +16,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream.h>
 #include <qdir.h>
-#include "caddexistingfiledlg.h"
+#include <qfileinfo.h>
+#include <qfiledialog.h>
 #include <kfiledialog.h>
 #include <kmsgbox.h>
 #include <kapp.h>
-#include <qfileinfo.h>
-#include <iostream.h>
-#include <qfiledialog.h>
+#include "caddexistingfiledlg.h"
+#include "cproject.h"
+
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 

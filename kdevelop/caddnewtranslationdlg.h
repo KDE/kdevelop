@@ -22,10 +22,12 @@
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
+#include <qstrlist.h>
 #include <klangcombo.h>
 #include <qlabel.h>
 
-#include "cproject.h"
+//#include "cproject.h"
+class CProject;
 
 /**
  *@author Sandy Meier
