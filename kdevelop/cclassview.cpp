@@ -84,8 +84,6 @@ void CClassView::CCVToolTip::maybeTip( const QPoint &p )
 
   if( !str.isEmpty() && r.isValid() )
     tip( r, str );
-    
-  debug( "Maybetip @ %d,%d(%s)", p.x(), p.y(), ( str.isEmpty() ? "" : str.data() ) );
 }
 
 /*********************************************************************
@@ -324,6 +322,7 @@ void CClassView::refresh()
   QString str;
   QListViewItem *item;
   QString treeStr;
+  QList<CParsedScopeContainer> *scopeList;
   QList<CParsedMethod> *methodList;
   QList<CParsedAttribute> *attributeList;
   QList<CParsedStruct> *structList;
@@ -343,18 +342,30 @@ void CClassView::refresh()
   str = i18n( GLOBALROOTNAME );
   globalsItem = treeH->addRoot( str, THFOLDER );
 
-  // Add all global items.
+  // ----------------
+  // Add global items
+  // ----------------
+
+  // Add global namespaces
+  item = treeH->addItem( i18n( "Namespaces" ), THFOLDER, globalsItem );
+  scopeList = store->globalContainer.getSortedScopeList();
+  ((CClassTreeHandler *)treeH)->addScopes( scopeList, item );
+  delete scopeList;
+
+  // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
   structList = store->globalContainer.getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
   delete structList;
 
+  // Add global functions
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
   methodList = store->globalContainer.getSortedMethodList();
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
   delete methodList;
 
+  // Add global variables
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
   attributeList = store->globalContainer.getSortedAttributeList();
@@ -941,7 +952,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR || type == THSIGNAL )
+        type == THPRIVATE_ATTR || type == THSIGNAL || type == THNAMESPACE )
       slotViewDeclaration();
     else
       slotViewDefinition();
@@ -950,7 +961,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR  || type == THSIGNAL )
+        type == THPRIVATE_ATTR  || type == THSIGNAL || type == THNAMESPACE )
       slotViewDefinition();
     else
       slotViewDeclaration();
