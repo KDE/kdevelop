@@ -8,6 +8,7 @@
   </Menu>
 </MenuBar>
 <ToolBar position="Top" iconText="IconOnly" noMerge="1" name="toolsToolBar" fullWidth="false" hidden="true" >
+  <text>Tools Toolbar</text>
   <ActionList name="tools_list"/>
 </ToolBar>
 </kpartplugin>

@@ -8,7 +8,7 @@
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
-  <Action name="history_back"/>
-  <Action name="history_forward"/>
+  <Action name="history_back" group="file_operations"/>
+  <Action name="history_forward" group="file_operations"/>
 </ToolBar>
 </kpartgui>

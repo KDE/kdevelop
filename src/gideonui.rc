@@ -114,8 +114,21 @@
 <ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="false" >
   <text>Main Toolbar</text>
   <Action name="project_open" />
+  <DefineGroup name="project_operations"/>
+  <Separator/>
+  <DefineGroup name="file_operations"/>
+  <Separator/>
+  <DefineGroup name="edit_operations"/>
+  <Separator/>
+  <DefineGroup name="find_operations"/>
+  <Separator/>
+  <Action name="tree_view"/>
+  <Action name="output_view"/>
+  <Separator/>
+  <DefineGroup name="view_operations"/>
   <Separator/>
   <Merge/>
+  <Separator/>
   <Action name="help_whats_this"/>
 </ToolBar>
 
@@ -123,13 +136,6 @@
   <text>Build Toolbar</text>
   <Merge/>
   <Action name="stop_processes"/>
-</ToolBar>
-
-<ToolBar name="viewToolBar" position="Top" iconText="IconOnly" >
-  <text>View Toolbar</text>
-  <Merge/>
-  <Action name="tree_view"/>
-  <Action name="output_view"/>
 </ToolBar>
 
 <ToolBar name="docBrowserToolBar" position="Top" iconText="IconOnly" newline="true">
