@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2001 by Bernd Gehrmann and the KDevelop Team       *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -12,9 +12,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qhbox.h>
@@ -25,8 +22,11 @@
 #include <kapp.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include "grepdlg.h"
+#include <kconfig.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
+#include "grepdlg.h"
 
 const char *template_desc[] = {
     "verbatim",
@@ -40,7 +40,7 @@ const char *template_desc[] = {
 
 const char *template_str[] = {
     "%s",
-    "\\<%s\\>[\t ]*=[^=]",
+    "\\<%s\\>[\\t ]*=[^=]",
     "\\->[\\t ]*\\<%s\\>[\\t ]*(",
     "[a-z0-9_$]\\+[\\t ]*::[\\t ]*\\<%s\\>[\\t ]*(",
     "\\<%s\\>[\\t ]*\\->[\\t ]*[a-z0-9_$]\\+[\\t ]*(",
@@ -62,7 +62,10 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, false)
 {
     setCaption(i18n("Search in Files"));
-    
+
+    config = kapp->config();
+    config->setGroup("GrepDialog");
+
     QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);
     layout->addRowSpacing(4, 10);
     layout->setRowStretch(4, 0);
@@ -72,10 +75,14 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     layout->addWidget(pattern_label, 0, 0, AlignRight | AlignVCenter);
 
-    pattern_edit = new QLineEdit(this);
-    pattern_label->setBuddy(pattern_edit);
-    pattern_edit->setFocus();
-    layout->addWidget(pattern_edit, 0, 1);
+    pattern_combo = new QComboBox(true, this);
+    pattern_label->setBuddy(pattern_combo);
+    pattern_combo->setFocus();
+    pattern_combo->insertStringList(config->readListEntry("LastSearchItems"));
+    pattern_combo->setInsertionPolicy(QComboBox::NoInsertion);
+    pattern_combo->setMaxCount(15);
+    pattern_combo->setDuplicatesEnabled(false);
+    layout->addWidget(pattern_combo, 0, 1);
     
     QLabel *template_label = new QLabel(i18n("&Template:"), this);
     layout->addWidget(template_label, 1, 0, AlignRight | AlignVCenter);
@@ -106,11 +113,16 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     QBoxLayout *dir_layout = new QHBoxLayout(4);
     layout->addLayout(dir_layout, 3, 1);
     
-    dir_edit = new QLineEdit(this);
-    dir_edit->setText(QDir::homeDirPath());
-    dir_label->setBuddy(dir_edit);
-    dir_edit->setMinimumWidth(dir_edit->fontMetrics().maxWidth()*25);
-    dir_layout->addWidget(dir_edit, 10);
+    dir_combo = new QComboBox(true, this);
+    dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
+    dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
+    dir_combo->setMaxCount(15);
+    dir_combo->setEditText(QDir::homeDirPath());
+    dir_combo->setDuplicatesEnabled(false);
+
+    dir_label->setBuddy(dir_combo);
+    dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
+    dir_layout->addWidget(dir_combo, 10);
 
     QPushButton *dir_button = new QPushButton("...", this, "dirButton");
     dir_button->setFixedSize(30, 25);
@@ -131,7 +143,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 
     resize(sizeHint());
 
-    QWhatsThis::add(pattern_edit,
+    QWhatsThis::add(pattern_combo,
 		    i18n("<qt>Enter the regular expression you want to search for here.<p>"
 			 "Possible meta characters are:"
                          "<ul>"
@@ -174,14 +186,30 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 	     SLOT(hide()) );
 }
 
+// Returns the contents of a QComboBox as a QStringList
+static QStringList qCombo2StringList( QComboBox* combo )
+{
+    QStringList list;
+    if (!combo)
+	return list;
+    for (int i = 0; i < combo->count(); ++i ) {
+	list << combo->text(i);
+    }
+    return list;
+}
+
 
 GrepDialog::~GrepDialog()
-{}
+{
+    // memorize the last patterns and paths
+    config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
+    config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
+}
 
 
 void GrepDialog::dirButtonClicked()
 {
-    dir_edit->setText(QFileDialog::getExistingDirectory(dir_edit->text()));
+    dir_combo->setEditText(QFileDialog::getExistingDirectory(dir_combo->currentText()));
 }
 
 
@@ -190,9 +218,40 @@ void GrepDialog::templateActivated(int index)
     template_edit->setText(template_str[index]);
 }
 
+// Find out whether the string s is already contained in combo
+static bool qComboContains( const QString& s, QComboBox* combo )
+{
+    if (!combo)
+	return false;
+    for (int i = 0; i < combo->count(); ++i ) {
+	if (combo->text(i) == s) {
+	    return true;
+	}
+    }
+    return false;
+}
 
 void GrepDialog::slotSearchClicked()
 {
+    if (pattern_combo->currentText().isEmpty()) {
+	KMessageBox::sorry(this, i18n("Please enter a search pattern"));
+	pattern_combo->setFocus();
+	return;
+    }
+    // add the last patterns and paths to the combo
+    if (!qComboContains(pattern_combo->currentText(), pattern_combo)) {
+	pattern_combo->insertItem(pattern_combo->currentText(), 0);
+    }
+    if (pattern_combo->count() > 15) {
+	pattern_combo->removeItem(15);
+    }
+    if (!qComboContains(dir_combo->currentText(), dir_combo)) {
+	dir_combo->insertItem(dir_combo->currentText(), 0);
+    }
+    if (dir_combo->count() > 15) {
+	dir_combo->removeItem(15);
+    }
+
     emit searchClicked();
     hide();
 }

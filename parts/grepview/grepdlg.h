@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2001 by Bernd Gehrmann and the KDevelop Team       *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,6 +17,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 
+class KConfig;
 
 class GrepDialog : public QDialog
 {
@@ -27,18 +28,18 @@ public:
     ~GrepDialog();
     
     void setPattern(const QString &pattern)
-	{ pattern_edit->setText(pattern); }
+	{ pattern_combo->setEditText(pattern); }
     void setDirectory(const QString &dir)
-	{ dir_edit->setText(dir); }
+	{ dir_combo->setEditText(dir); }
 
     QString patternString() const
-	{ return pattern_edit->text(); }
+	{ return pattern_combo->currentText(); }
     QString templateString() const
 	{ return template_edit->text(); }
     QString filesString() const
 	{ return files_combo->currentText(); }
     QString directoryString() const
-	{ return dir_edit->text(); }
+	{ return dir_combo->currentText(); }
     bool recursiveFlag() const
 	{ return recursive_box->isChecked(); }
 
@@ -51,9 +52,10 @@ private slots:
     void slotSearchClicked();
 
 private:
-    QLineEdit *pattern_edit, *template_edit, *dir_edit;
-    QComboBox *files_combo;
+    QLineEdit *template_edit;
+    QComboBox *dir_combo, *pattern_combo, *files_combo;
     QCheckBox *recursive_box;
+    KConfig* config;
 };
 
 
