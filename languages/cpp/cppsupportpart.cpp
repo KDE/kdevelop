@@ -97,7 +97,7 @@
 #include <config.h>
 
 enum { KDEV_DB_VERSION = 5 };
-enum { KDEV_PCS_VERSION = 4 };
+enum { KDEV_PCS_VERSION = 5 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -317,8 +317,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     
     if( m_activeView )
     {
-	disconnect( m_activeView, SIGNAL(cursorPositionChanged(unsigned int, unsigned int)),
-		    this, SLOT(slotCursorPositionChanged(unsigned int, unsigned int )) );
+	disconnect( m_activeView, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()) );
     }
     
     m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
@@ -1177,7 +1176,7 @@ void CppSupportPart::setupCatalog( )
         enabledPCSs = DomUtil::readListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs" );
     }
 
-    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
+    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName" << "prefix";
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;

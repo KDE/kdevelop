@@ -151,8 +151,10 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
         return QValueList<Tag>();
 
     QValueList<Catalog::QueryArgument> args;
-    args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
-    	<< Catalog::QueryArgument( "name", className );
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class );
+/*    if( className.length() >= 2 )
+        args << Catalog::QueryArgument( "prefix", className.left(2) );*/
+    args << Catalog::QueryArgument( "name", className );
     return query( args );
 }
 
@@ -181,8 +183,10 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
     QValueList<Catalog::QueryArgument> args;
 
     args.clear();
-    args << Catalog::QueryArgument( "scope", scope )
-	<< Catalog::QueryArgument( "name", name );
+    args << Catalog::QueryArgument( "scope", scope );
+/*    if( name.length() >= 2 )
+        args << Catalog::QueryArgument( "prefix", name.left(2) );    */
+    args << Catalog::QueryArgument( "name", name );
 
     tags += query( args );
 

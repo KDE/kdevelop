@@ -111,6 +111,7 @@ void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 
 void StoreWalker::parseTypedef( TypedefAST* ast )
 {
+#if 0
     DeclaratorAST* oldDeclarator = m_currentDeclarator;
     
     if( ast && ast->initDeclaratorList() && ast->initDeclaratorList()->initDeclaratorList().count() > 0 ) {
@@ -119,9 +120,82 @@ void StoreWalker::parseTypedef( TypedefAST* ast )
     }
     
     m_inTypedef = true;    
+    
     TreeParser::parseTypedef( ast );
+    
     m_inTypedef = false;
     m_currentDeclarator = oldDeclarator;
+#else 
+    TypeSpecifierAST* typeSpec = ast->typeSpec();
+    InitDeclaratorListAST* declarators = ast->initDeclaratorList();
+
+    if( typeSpec && declarators ){
+        QString typeId;
+
+        if( typeSpec->name() )
+            typeId = typeSpec->name()->text();
+
+        QPtrList<InitDeclaratorAST> l( declarators->initDeclaratorList() );
+        QPtrListIterator<InitDeclaratorAST> it( l );
+
+	InitDeclaratorAST* initDecl = 0;
+	while( 0 != (initDecl = it.current()) ){
+
+	    QString type, id;
+	    if( initDecl->declarator() ){
+	       type = typeOfDeclaration( typeSpec, initDecl->declarator() );
+
+	       DeclaratorAST* d = initDecl->declarator();
+	       while( d->subDeclarator() ){
+	           d = d->subDeclarator();
+	       }
+
+	       if( d->declaratorId() )
+	          id = d->declaratorId()->text();
+	    }
+
+	    TypeAliasDom typeAlias = m_store->create<TypeAliasModel>();
+	    typeAlias->setFileName( m_fileName );
+	    typeAlias->setName( id );
+	    typeAlias->setType( type );
+	    
+	    int line, col;
+	    initDecl->getStartPosition( &line, &col );
+	    typeAlias->setStartPosition( line, col );
+	    
+	    initDecl->getEndPosition( &line, &col );
+	    typeAlias->setEndPosition( line, col );
+	    
+	    if( m_currentClass.top() )
+                m_currentClass.top()->addTypeAlias( typeAlias );
+            else if( m_currentNamespace.top() )
+                m_currentNamespace.top()->addTypeAlias( typeAlias );
+            else
+                m_file->addTypeAlias( typeAlias );
+
+#if 0
+	    Tag tag;
+	    tag.setKind( Tag::Kind_Typedef );
+	    tag.setFileName( m_fileName );
+	    tag.setName( id );
+	    tag.setScope( m_currentScope );
+            tag.setAttribute( "t", type );
+	    int line, col;
+	    initDecl->getStartPosition( &line, &col );
+
+	    tag.setStartPosition( line, col );
+
+	    initDecl->getEndPosition( &line, &col );
+	    tag.setEndPosition( line, col );
+
+	    m_catalog->addItem( tag );
+#endif
+
+	    ++it;
+	}
+
+    }
+#endif
 }
 
 void StoreWalker::parseTemplateDeclaration( TemplateDeclarationAST* ast )

@@ -543,7 +543,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
     d->classNameList = typeNameList( m_pSupport->codeModel() );
-
+    
     bool global = false;
     if( expr.startsWith("::") ){
 	expr = expr.mid( 2 );
@@ -555,6 +555,45 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 
     m_pSupport->mainWindow()->statusBar()->message( i18n("Type of %1 is %2").arg(expr).arg(type.join("::")), 1000 );
 
+    QMap<QString, bool> visited;
+    bool isTypedef = true;
+    
+    while( isTypedef && !type.isEmpty() ) {
+	// check if the evaluateded type is a typedef
+	QValueList<Catalog::QueryArgument> args;
+	args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef );
+	args << Catalog::QueryArgument( "name", type.last() );
+	QValueList<Tag> tags = m_repository->query( args );
+	isTypedef = !tags.isEmpty() && !visited.contains( type.last() );
+		
+	if( isTypedef ) {
+		visited[ type.last() ] = true;
+
+		bool found = false;
+		for( QValueList<Tag>::Iterator it=tags.begin(); it!=tags.end(); ++it ) {
+			Tag& tag = *it;
+			
+			QStringList tp = type;
+			tp.pop_back();
+			
+			QString typeScope = tp.join( "::" );
+			QString tagScope = tag.scope().join( "::" );
+			
+			//kdDebug(9007) << "=========> typeScope: " << typeScope << endl;
+			//kdDebug(9007) << "=========> tagScope: " << tagScope << endl;
+			
+			if( typeScope.endsWith(tagScope) ) {
+			    type = typeName( tag.attribute("t").toString() );
+			    found = true;
+			    break;
+			}
+		}
+		
+		if( !found )
+			type = typeName( tags[0].attribute("t").toString() );
+	}
+    } 
+    
     return type;
 }
 
@@ -676,7 +715,7 @@ CppCodeCompletion::completeText( )
 	QString textLine = m_activeEditor->textLine( recoveryPoint->startLine );
 	kdDebug(9007) << "startLine = " << textLine << endl;
 	kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
-
+	
 	if( recoveryPoint->kind == NodeType_FunctionDefinition ){
 
 	    QString textToReparse = getText( recoveryPoint->startLine, recoveryPoint->startColumn,
@@ -958,6 +997,8 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 
     t.start();
     args << Catalog::QueryArgument( "scope", scope );
+/*    if( name.length() >=2 )
+        args << Catalog::QueryArgument( "prefix", name.left(2) );*/
     args << Catalog::QueryArgument( "name", name );
     QValueList<Tag> tags( m_repository->query(args) );
     kdDebug(9007) << "type of " << name << " in " << scope.join("::") << " takes " << t.elapsed() << endl;
@@ -1061,7 +1102,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementAST* stmt,
 {
     if( !stmt )
         return;
-
+	
     switch( stmt->nodeType() )
     {
     case NodeType_IfStatement:
@@ -1409,7 +1450,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
     ClassDom klass = findContainer( key );
     if( klass ){
 	computeCompletionEntryList( entryList, klass, isInstance );
-    } else {
+    } /*else*/ {
 	QValueList<Catalog::QueryArgument> args;
 	QValueList<Tag> tags;
 
@@ -1442,8 +1483,11 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 
 	args.clear();
-	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
-	    << Catalog::QueryArgument( "name", type.join("::") );
+	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class );
+	QString fullname = type.join( "::" );
+/*    	if( fullname.length() >=2 )
+            args << Catalog::QueryArgument( "prefix", fullname.left(2) );*/
+	args << Catalog::QueryArgument( "name", fullname );
 
 	QValueList<Tag> parents = m_repository->query( args );
 	QValueList<Tag>::Iterator it = parents.begin();
@@ -1454,7 +1498,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    computeCompletionEntryList( entryList, typeName(info.baseClass()), isInstance );
 	}
     }
-}
+ }
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
 {
@@ -1645,16 +1689,22 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
     }
 
     QValueList<Catalog::QueryArgument> args;
-    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-	<< Catalog::QueryArgument( "scope", scope )
-	<< Catalog::QueryArgument( "name", name );
+    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration );
+    args << Catalog::QueryArgument( "scope", scope );
+/*    if( name.length() >=2 )
+        args << Catalog::QueryArgument( "prefix", name.left(2) );    */
+    args << Catalog::QueryArgument( "name", name );
 
     QValueList<Tag> tags = m_repository->query( args );
     computeSignatureList( signatureList, name, tags );
 
     args.clear();
-    args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
-	<< Catalog::QueryArgument( "name", scope.join("::") );
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class );
+    QString fullname = scope.join( "::" );
+/*    if( fullname.length() >=2 )
+        args << Catalog::QueryArgument( "prefix", fullname.left(2) );*/
+    
+    args << Catalog::QueryArgument( "name", fullname );
 
     QValueList<Tag> parents = m_repository->query( args );
     QValueList<Tag>::Iterator it = parents.begin();
