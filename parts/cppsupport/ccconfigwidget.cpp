@@ -82,7 +82,8 @@ CCConfigWidget::initCSTab( )
             lastItem = newItem;
         }
         else
-            cerr << "CCConfigWidget::CCConfigWidget unknown tag: '" << dir.tagName( ) << "'" << endl;
+            kdDebug( 9007 ) << "CCConfigWidget::CCConfigWidget unknown tag: '"
+	                    << dir.tagName( ) << "'" << endl;
 
         dir = dir.nextSibling( ).toElement( );
     }

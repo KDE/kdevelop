@@ -232,14 +232,14 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
     // enable it
     else {
         if( m_pCHWidget )
-            topLevel()->removeView( m_pCHWidget );
+            topLevel( )->removeView( m_pCHWidget );
         else
             m_pCHWidget = new CppSupportWidget( this );
 
         if( setOutputView )
-            topLevel()->embedOutputView( m_pCHWidget, i18n("Code Hinting"));
+            topLevel( )->embedOutputView( m_pCHWidget, i18n( "Code Hinting" ) );
         else
-            topLevel()->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );	    
+            topLevel( )->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );
     }
 }
 
@@ -263,27 +263,24 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 }
 
 
-void CppSupportPart::projectOpened()
+void
+CppSupportPart::projectOpened( )
 {
-    kdDebug( 9007 ) << "projectOpened()" << endl;
+    kdDebug( 9007 ) << "projectOpened( )" << endl;
 
     connect( project( ), SIGNAL( addedFileToProject( const QString & ) ),
              this, SLOT( addedFileToProject( const QString & ) ) );
     connect( project( ), SIGNAL( removedFileFromProject( const QString &) ),
              this, SLOT( removedFileFromProject( const QString & ) ) );
 
-    // We want to parse only after all components have been
-    // properly initialized
-
-    // normal classstore - displayed in classview-widget
+    // standard project classstore - displayed in classview - widget
     m_pParser     = new CClassParser( classStore( ) );
-    // cc classstore - just for preparsing - stuff
-    m_pCCParser   = new CClassParser( ccClassStore( ) );
-    m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
 
-    // ???
-    //    connect( m_pCompletion, SIGNAL( setCodeHintingText( const QString& ) ),
-    //	     this, SLOT( slotCodeHintingText( const QString& ) ) );
+    // code completion classstore - just for preparsing - stuff
+    m_pCCParser   = new CClassParser( ccClassStore( ) );
+
+    // code completion working class
+    m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
 
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
@@ -292,25 +289,26 @@ void CppSupportPart::projectOpened()
 void
 CppSupportPart::projectClosed( )
 {
-    // daniel
+    kdDebug( 9007 ) << "projectClosed( )" << endl;
     bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
 
     if( enablePCS == true ){
-        QString projectFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
-        QString pcsFile = projectFile + pcsFileExt( );
-        if ( !classStore()->storeAll(pcsFile) )
-            kdDebug(9007) << "EE: can't write file '" << pcsFile << "'" << endl;
+	QString pcsFile = project( )->projectDirectory( ) + "/" +
+	                  project( )->projectName( ) +
+	                  pcsFileExt( );	
+
+	// saving project classstore - code completion cs is automatically saved on creation time	
+        if( !classStore( )->storeAll( pcsFile ) )
+            kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
-    // todo: save -pp file from new slot
-
     delete m_pParser;
+    delete m_pCCParser;    
     delete m_pCompletion;
-    delete m_pCCParser;
 
-    m_pCompletion = 0;
-    m_pCCParser   = 0;
     m_pParser     = 0;
+    m_pCCParser   = 0;
+    m_pCompletion = 0;        
 }
 
 
@@ -355,16 +353,6 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 }
 
 
-void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClassParser *parser)
-{
-    if (!fileExtensions().contains(QFileInfo(fileName).extension()))
-        return;
-
-    store->removeWithReferences(fileName);
-    parser->parse(fileName);
-}
-
-
 // Makes sure that header files come first
 static QStringList reorder(const QStringList &list)
 {
@@ -383,187 +371,6 @@ static QStringList reorder(const QStringList &list)
 }
 
 
-void CppSupportPart::initialParse()
-{
-    // For debugging
-    showMemUsage();
-
-    if( !project( ) ){
-        // messagebox ?
-        kdDebug( 9007 ) << "No project" << endl;
-        return;
-    }
-
-    bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
-    bool createProjectPCS = true;
-    bool createPreParseCS = true;
-    QString pcsFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
-
-    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
-    label->setMinimumWidth( 600 );
-    topLevel( )->statusBar( )->addWidget( label );
-    label->show( );    
-
-    if( enablePCS == true ){
-
-        label->setText( i18n("Wait please - loading classstore-file: %1")
-                        .arg(pcsFile + pcsFileExt()) );
-        kapp->processEvents();
-        kapp->setOverrideCursor(waitCursor);
-
-        if ( classStore()->restoreAll(pcsFile + pcsFileExt()) ) {
-            kdDebug(9007) << "loaded pcs-file '"
-                          << pcsFile << pcsFileExt( ) << "'" << endl;
-            createProjectPCS = false;
-            emit updatedSourceInfo( );
-        } else {
-            kdDebug(9007) << "pcs-file: '" << pcsFile << pcsFileExt( ) << "' couldn't be opened" << endl;
-        }
-
-        label->setText( i18n("Wait please - loading preparsed file: %1")
-                        .arg(pcsFile + ppFileExt()) );
-        kapp->processEvents();
-
-        if ( ccClassStore()->restoreAll(pcsFile + ppFileExt()) ) {
-            kdDebug(9007) << "loaded persistant preparsed classstore: '"
-                          << pcsFile << ppFileExt( ) << "'" << endl;
-            createPreParseCS = false;
-        } else {
-            kdDebug(9007) << "persistant preparse file: '" << pcsFile << ppFileExt( )
-                          << "' couldn't be opened" << endl;
-        }
-
-        label->setText( i18n("Done") );
-        kapp->restoreOverrideCursor();
-
-    }
-
-    if( createProjectPCS ){
-        // pcsFiles don't exist or couldn't be opened - normal procedure
-        kdDebug(9007) << "no persistant classstore - starting to parse" << endl;
-        kapp->setOverrideCursor(waitCursor);
-
-        QStringList files = reorder( project()->allFiles() );
-
-        QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
-        bar->setMinimumWidth( 120 );
-        bar->setCenterIndicator( true );
-        topLevel( )->statusBar( )->addWidget( bar );
-        bar->show( );
-
-        int n = 0;
-        for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ){
-            bar->setProgress( n++ );
-            kapp->processEvents( );
-            maybeParse( *it, classStore( ), m_pParser );
-        }
-
-        topLevel( )->statusBar( )->removeWidget( bar );
-        delete bar;
-
-        emit updatedSourceInfo( );
-
-        kapp->restoreOverrideCursor( );
-    }
-
-    // For debugging
-    showMemUsage();
-
-    if( createPreParseCS ){
-        if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false ) {
-            delete label;
-            return;
-        }
-
-        // ok, from here we're pre-parsing directories
-        kapp->setOverrideCursor( waitCursor );
-
-        QDomElement ppDirs = projectDom( )->documentElement( )
-                             .namedItem( "cppsupportpart" ).toElement( )
-                             .namedItem( "classstore" ).toElement( )
-                             .namedItem( "preparsing" ).toElement( )
-                             .firstChild( ).toElement( );	
-
-        label->setText( i18n( "Preparsing" ) );
-
-        QProgressBar* bar = new QProgressBar( 0, topLevel( )->statusBar( ) );
-        bar->setMinimumWidth( 120 );
-        bar->setCenterIndicator( true );
-        topLevel( )->statusBar( )->addWidget( bar );
-        bar->show( );
-
-        QDir    dirObject;
-        QString startDir = dirObject.absPath( ); // should be the project dir ?
-
-        // going through the dirs stored in the projectDOM
-        while( !ppDirs.isNull( ) ){
-            if( ppDirs.tagName( ) == "directory" )
-                parseDirectory( ppDirs.attribute( "dir" ), ppDirs.attribute( "parsesubdir" ) == "Yes",
-                                bar, label );
-            else
-                cerr << "ClassStoreOptionsWidget::ClassStoreOptionsWidget unknown tag: '"
-                     << ppDirs.tagName( ) << "'" << endl;
-
-            ppDirs = ppDirs.nextSibling( ).toElement( );
-        }
-        dirObject.cd( startDir );
-
-        label->setText( i18n( "Saving ccClassStore: " ) + pcsFile + ppFileExt( ) );
-        if ( !ccClassStore()->storeAll(pcsFile + ppFileExt()) )
-            kdDebug(9007) << "EE: saving ccclassstore not successful!" << endl;
-
-        topLevel( )->statusBar( )->removeWidget( bar );
-        delete bar;
-
-        kapp->restoreOverrideCursor( );
-    }
-
-    topLevel( )->statusBar( )->removeWidget( label );
-    delete label;
-
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
-}
-
-
-// better idea needed for not always calling with QProgressBar & QLabel
-void CppSupportPart::parseDirectory(const QString &startDir, bool withSubDir,
-                                    QProgressBar *bar, QLabel *label )
-{
-    QFileInfo* fi = 0;
-    QDir       dirObject;
-
-    dirObject.cd( startDir );
-
-    if( withSubDir == true ){
-        dirObject.setFilter( QDir::Dirs );
-        const QFileInfoList* list = dirObject.entryInfoList( );
-        QFileInfoListIterator it( *list );
-
-        // if we find a directory we call recursively parseDirectory( )
-        while( ( fi = it.current( ) ) ){
-            // skipping ".", ".." and so all "dot-directories"
-            if( fi->fileName( ).at( 0 ) != '.' )
-                parseDirectory( fi->dirPath( true ) + "/" + fi->fileName( ), withSubDir, bar, label );
-            ++it;
-        }
-
-    }
-
-    dirObject.cd( startDir );
-    dirObject.setFilter( QDir::Files );
-    const QFileInfoList* list = dirObject.entryInfoList( );
-    QFileInfoListIterator it( *list );
-
-    bar->setTotalSteps( it.count( ) );
-    int n = 0;
-
-    while( ( fi = it.current( ) ) ){
-        bar->setProgress( n++ );
-        label->setText( i18n( "Currently parsing: '" ) + fi->filePath( ) );
-        maybeParse( fi->filePath( ), ccClassStore ( ), m_pCCParser );
-        ++it;
-    }
-}
 
 
 void CppSupportPart::addedFileToProject(const QString &fileName)
@@ -902,5 +709,245 @@ void CppSupportPart::slotTypeOfExpression()
     m_pCompletion->typeOf();
 }
 
+/**
+ * parsing stuff for project persistant classstore and code completion
+ */
+void
+CppSupportPart::initialParse( )
+{
+    // For debugging
+    showMemUsage( );
+
+    if( !project( ) ){
+        // messagebox ?
+        kdDebug( 9007 ) << "No project" << endl;
+        return;
+    }
+
+    bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
+    bool enablePP  = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" );
+    bool bCreateProjectPCS  = false;
+    bool bCreatePreParsePCS = false;
+
+    QString pcsFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
+
+    if( enablePCS == true )
+	bCreateProjectPCS  = !restorePreParsedClassStore( classStore( )  , pcsFile + pcsFileExt( ) );
+
+    if( enablePP == true  )
+	bCreatePreParsePCS = !restorePreParsedClassStore( ccClassStore( ), pcsFile + ppFileExt( ) );
+    
+    if( bCreateProjectPCS == true  )
+	createProjectPCS( pcsFile + pcsFileExt( ) );
+
+    if( bCreatePreParsePCS == true )
+        createPreParsePCS( pcsFile + ppFileExt( ) );
+	
+    showMemUsage( );
+}
+
+
+bool
+CppSupportPart::restorePreParsedClassStore( ClassStore* cs, const QString fileToLoad )
+{
+    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    label->setMinimumWidth( 600 );
+    topLevel( )->statusBar( )->addWidget( label );
+    label->show( );
+    label->setText( i18n( "Wait please - loading classstore file: %1" )
+                        .arg( fileToLoad ) );
+
+    kapp->processEvents( );
+    kapp->setOverrideCursor( waitCursor );
+
+    bool success = cs->restoreAll( fileToLoad );
+    if( success ) {
+        kdDebug( 9007 ) << "succeeded loading file '" << fileToLoad << "'" << endl;
+	kdDebug( 9007 ) << "updating sourceinfo" << endl;
+        emit updatedSourceInfo( );
+    }
+    else
+        kdDebug( 9007 ) << "failed loading file '" << fileToLoad << "'" << endl;
+
+    topLevel( )->statusBar( )->removeWidget( label );
+    delete label;
+    
+    kapp->restoreOverrideCursor( );
+    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    
+    return success;
+}
+
+
+bool
+CppSupportPart::createProjectPCS( const QString fileToSave )
+{
+    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    label->setMinimumWidth( 600 );
+    topLevel( )->statusBar( )->addWidget( label );
+    label->show( );
+
+    kapp->processEvents( );
+    kapp->setOverrideCursor( waitCursor );
+
+    QStringList files = reorder( project( )->allFiles( ) );
+
+    QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
+    bar->setMinimumWidth( 120 );
+    bar->setCenterIndicator( true );
+    topLevel( )->statusBar( )->addWidget( bar );
+    bar->show( );
+
+    int n = 0;
+    for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
+        bar->setProgress( n++ );
+        kapp->processEvents( );
+	label->setText( i18n( "Currently parsing: '%1'" )
+	                .arg( *it ) );
+        maybeParse( *it, classStore( ), m_pParser );
+    }
+
+    kdDebug( 9007 ) << "updating sourceinfo" << endl;
+    emit updatedSourceInfo( );
+    
+    label->setText( i18n( "Saving Project File: %1" )
+                    .arg( fileToSave ) );    
+    if( !classStore( )->storeAll( fileToSave ) ){
+	// KMessageBox for user ?
+        kdDebug( 9007 ) << "failed saving file '" << fileToSave << "'" << endl;
+    }
+
+    topLevel( )->statusBar( )->removeWidget( bar );
+    delete bar;
+    topLevel( )->statusBar( )->removeWidget( label );
+    delete label;
+
+    kapp->restoreOverrideCursor( );
+    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    
+    return true;
+}
+
+
+void
+CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassParser *parser )
+{
+    if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
+        return;
+
+    store->removeWithReferences( fileName );
+    parser->parse( fileName );
+}
+
+
+bool
+CppSupportPart::createPreParsePCS( const QString fileToSave )
+{
+    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    label->setMinimumWidth( 600 );
+    topLevel( )->statusBar( )->addWidget( label );
+    label->show( );
+
+    kapp->processEvents( );
+    kapp->setOverrideCursor( waitCursor );
+
+    QDomElement ppDirs = projectDom( )->documentElement( )
+                         .namedItem( "cppsupportpart" ).toElement( )
+                         .namedItem( "classstore" ).toElement( )
+                         .namedItem( "preparsing" ).toElement( )
+                         .firstChild( ).toElement( );	
+
+    label->setText( i18n( "Preparsing" ) );
+
+    QProgressBar* bar = new QProgressBar( 0, topLevel( )->statusBar( ) );
+    bar->setMinimumWidth( 120 );
+    bar->setCenterIndicator( true );
+    topLevel( )->statusBar( )->addWidget( bar );
+    bar->show( );
+
+    QDir    dirObject;
+    // should be the project dir ?
+    QString startDir = dirObject.absPath( );
+
+    // going through the dirs stored in the projectDOM
+    while( !ppDirs.isNull( ) ){
+	kapp->processEvents( );
+        if( ppDirs.tagName( ) == "directory" )
+            parseDirectory( ppDirs.attribute( "dir" ), ppDirs.attribute( "parsesubdir" ) == "Yes",
+                            bar, label );
+        else
+            kdDebug( 9007 ) << "CppSupportPart::createPreParsePCS unknown tag: '"
+                            << ppDirs.tagName( ) << "'" << endl;
+
+        ppDirs = ppDirs.nextSibling( ).toElement( );
+    }
+
+    // going back to where we started
+    dirObject.cd( startDir );
+
+    label->setText( i18n( "Saving File for CodeCompletion: %1" )
+                    .arg( fileToSave ) );
+		    
+    if( !ccClassStore( )->storeAll( fileToSave ) ) {
+	// KMessageBox for user ?
+        kdDebug( 9007 ) << "failed saving file " << fileToSave << endl;
+    }
+
+    topLevel( )->statusBar( )->removeWidget( bar );
+    delete bar;
+    topLevel( )->statusBar( )->removeWidget( label );
+    delete label;
+
+    kapp->restoreOverrideCursor( );
+    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    
+    // could be overridden later if file operations fail    
+    return true;
+}
+
+
+// better idea needed for not always calling with QProgressBar & QLabel
+void
+CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
+                                      QProgressBar *bar, QLabel *label   )
+{
+    QFileInfo* fi = 0;
+    QDir       dirObject;
+
+    dirObject.cd( startDir );
+
+    if( withSubDir == true ){
+        dirObject.setFilter( QDir::Dirs );
+        const QFileInfoList* list = dirObject.entryInfoList( );
+        QFileInfoListIterator it( *list );
+
+        // if we find a directory we call recursively parseDirectory( )
+        while( ( fi = it.current( ) ) ){
+            // skipping "." - named files and directories
+            if( fi->fileName( ).at( 0 ) != '.' )
+                parseDirectory( fi->dirPath( true ) + "/" + fi->fileName( ), withSubDir, bar, label );
+            ++it;
+        }
+    }
+
+    dirObject.cd( startDir );
+    dirObject.setFilter( QDir::Files );
+    const QFileInfoList* list = dirObject.entryInfoList( );
+    QFileInfoListIterator it( *list );
+
+    bar->setTotalSteps( it.count( ) );
+    int n = 0;
+
+    while( ( fi = it.current( ) ) ){
+	kapp->processEvents( );
+        bar->setProgress( n++ );
+        label->setText( i18n( "Currently parsing: '%1'" )
+	                .arg( fi->filePath( ) ) );
+        maybeParse( fi->filePath( ), ccClassStore ( ), m_pCCParser );
+        ++it;
+    }
+
+    label->setText( "" );
+}
 
 #include "cppsupportpart.moc"

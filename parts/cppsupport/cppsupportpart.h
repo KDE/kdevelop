@@ -48,20 +48,25 @@ public:
     bool getEnableCC( void   ){ return m_bEnableCC; };
     
     /**
+     * return pointer to Code Hinting Widget
      */
     CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
     
+
+    /*
+     * void slotCompleteText();
+     * void slotTypeOfExpression();
+     */
+     
     /**
-     * return persistant classstore File Extension
-    void slotCompleteText();
-    void slotTypeOfExpression();
+     * returns persistant classstore File Extension    
      * meant for the project's own classes
      */
     static QString pcsFileExt()
     { return ".pcs"; };
     
     /**
-     * return pre-parsing File Extension
+     * returns pre-parsing File Extension
      * meant for extern includes
      */
     static QString ppFileExt()
@@ -98,8 +103,25 @@ private slots:
     void slotEnableCodeCompletion( bool setEnabled );
     void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
 
-    // Internal
+    /**
+     * loads, parses and creates both classstores needed
+     */
     void initialParse( );
+
+    /**
+     * loads a file into given classstore
+     */
+    bool restorePreParsedClassStore( ClassStore* cs, const QString fileToLoad );
+    
+    /**
+     * parses the current project and saves classstore into given file
+     */
+    bool createProjectPCS( const QString fileToSave );
+    
+    /**
+     * parses directories selected in project options into given file
+     */
+    bool createPreParsePCS( const QString fileToSave );
     
 private:
     QStringList fileExtensions( );

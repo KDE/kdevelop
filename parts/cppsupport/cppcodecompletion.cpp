@@ -398,15 +398,14 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
     // looks weird but maintaining is much easier :)
     QString reg  = "([\\s\t]*[\\w\\d_]+[\\*|\\&]?"; 	// return value
             reg += "[\\s\t]*([\\w\\d_]+)::[\\w\\d_]+";	// method class and -name
-	    reg += "\\([\\w\\d\\&\\*\\s\t\\,]*\\))"; 	// parameters
+	    reg += "\\([\\w\\d\\&\\*\\s\t,_]*\\)"; 	// parameters
 //	    reg += "[\\s\t]*[:([\\s\t\\w\\d_])+]?[\\{]?)" ; // base class - not finished yet :)
-//	    reg += "[\\s\t]*^[\\;])";			// avoid static method calls
+	    reg += "[\\s\t]*[^;])";		// avoid static method calls
     
     QRegExp regMethod( reg );
     QString strLine;
     int     iMethodBegin = 0;
 
-    kdDebug( 9007 ) << "using this string as regexp: '" << reg << "'" << endl;
     for( int i = iLine; i > 0; i-- ){
         strLine = m_pEditIface->textLine( i );
 	kdDebug( 9007 ) << "checking line: " << strLine << endl;
