@@ -660,7 +660,8 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
 {
   kdDebug(9035) << "Format: " << event->format() << endl;
   
-  if (QString(event->format()).startsWith("text/plain") && event->source() != this)
+  if (QString(event->format()).startsWith("text/plain") &&
+      static_cast<SnippetWidget *>(event->source()) != this)
     return true;
   else
     return false;
