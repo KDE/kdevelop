@@ -102,6 +102,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "%"          {return '%';}
 "|"          {return '|';}
 "^"          {return '^';}
+"!"          {return '!';}
 
     /*==============> End of Phrase <==============*/
 ";"          {return ';';}
