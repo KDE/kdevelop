@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DiffDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -29,33 +29,11 @@
             <property name="title">
                 <string>Build Difference Between</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>diffLocalHeadRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Local copy and &amp;HEAD</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>diffLocalBaseRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Local copy and BASE</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="2" column="0">
                     <property name="name">
                         <cstring>layout3</cstring>
                     </property>
@@ -81,7 +59,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QRadioButton" row="3" column="0">
                     <property name="name">
                         <cstring>diffArbitraryRevRadio</cstring>
                     </property>
@@ -89,7 +67,7 @@
                         <string>&amp;Two arbitrary revisions/tags:</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="4" column="0">
                     <property name="name">
                         <cstring>layout3</cstring>
                     </property>
@@ -156,7 +134,32 @@
                         </widget>
                     </grid>
                 </widget>
-            </vbox>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>diffLocalHeadRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Local cop&amp;y and HEAD</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+Y</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>diffLocalBaseRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Local copy a&amp;nd BASE</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="Line">
             <property name="name">
