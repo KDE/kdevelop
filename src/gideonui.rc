@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui >
-<kpartgui version="7" name="gideon" >
+<kpartgui version="8" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
