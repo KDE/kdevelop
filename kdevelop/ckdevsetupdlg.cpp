@@ -467,7 +467,7 @@ void CKDevSetupDlg::addDebuggerTab()
   QString dbg_cmd           = config->readEntry("External debugger program","kdbg");
   bool displayMangledNames  = config->readBoolEntry("Display mangled names", false);
   bool displayStaticMembers = config->readBoolEntry("Display static members", false);
-  bool setBPsOnLibLoad      = config->readBoolEntry("Break on loading libs", false);
+  bool setBPsOnLibLoad      = config->readBoolEntry("Break on loading libs", true);
   bool dbgFloatingToolbar   = config->readBoolEntry("Enable floating toolbar", false);
   bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
@@ -704,7 +704,7 @@ void CKDevSetupDlg::slotDefault(){
     // Dbg internal options
     dbgMembersCheck->setChecked(false);
     dbgAsmCheck->setChecked(false);
-    dbgLibCheck->setChecked(false);
+    dbgLibCheck->setChecked(true);
     dbgFloatCheck->setChecked(false);
     dbgTerminalCheck->setChecked(false);
   }
