@@ -40,16 +40,15 @@
 #ifndef _TOKENIZER_H_INCLUDED
 #define _TOKENIZER_H_INCLUDED
 
-#define CLASS          258
+#define CPCLASS        258
 #define PUBLIC         259
 #define PROTECTED      260
 #define PRIVATE        261
 #define ID             262
 #define CLCL           263
 #define CONST          264
-#define SIGNALSLOT_MAP 265
 #define RA             266
-#define SIGNALTEXT_MAP 267
+#define CPUNION        267
 #define STRING         268
 #define STATIC         269
 #define CPVIRTUAL      270
@@ -60,8 +59,6 @@
 #define CPTYPEDEF      275
 #define CPFRIEND       276
 #define CPSTRUCT       277
-#define CPBEGINSTATUSMSG 278
-#define CPENDSTATUSMSG 279
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;

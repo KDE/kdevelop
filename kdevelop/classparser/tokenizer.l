@@ -41,7 +41,8 @@ OCTAL_ESCAPE  [0-7]{1,3}
 HEX_ESCAPE "x"[0-9a-fA-F]+
 
 ESCAPE_SEQUENCE [\\]({SIMPLE_ESCAPE}|{OCTAL_ESCAPE}|{HEX_ESCAPE})
-SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
+CCHAR [^'\\\n]|{ESCAPE_SEQUENCE}
+SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %option yylineno
 %x comment
@@ -50,7 +51,7 @@ SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
 {WS}         {}
 
     /*==============> Special keyword <==============*/
-"class"         {return CLASS;}
+"class"         {return CPCLASS;}
 "public"        {return PUBLIC;}
 "protected"     {return PROTECTED;}
 "private"       {return PRIVATE;}
@@ -63,16 +64,15 @@ SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
 "typedef"       {return CPTYPEDEF;}
 "friend"        {return CPFRIEND;}
 "struct"        {return CPSTRUCT;}
-"ON_CMD"        {return SIGNALSLOT_MAP;}
-"ON_STATUS_MSG" {return SIGNALTEXT_MAP;}
-"BEGIN_STATUS_MSG" {return CPBEGINSTATUSMSG;}
-"END_STATUS_MSG" {return CPENDSTATUSMSG;}
-
-
+"union"         {return CPUNION;}
 
     /*==============> Ignore Q_EXPORT:s <==============*/
 "Q_EXPORT"       {}
 "Q_EXPORTH"      {}
+
+    /*==============> String <==============*/
+"L"?["]{SCHAR}*["]     {return STRING;}
+"L"?[']{CCHAR}+[']    {return STRING;}
 
     /*==============> Normal operators <==============*/
 "*"          {return '*';}
@@ -105,10 +105,7 @@ SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
 {ID}         {return ID;}
 
     /*==============> Numbers <==============*/
-{NUM}        {return ID;}
-
-    /*==============> String <==============*/
-"L"?["]{SCHAR}*["]     {return STRING;}
+{NUM}        {return STRING;}
  
     /*==============> Inrease the line counter at CR <==============*/
 "\n"         {line_num++;}
