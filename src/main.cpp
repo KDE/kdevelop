@@ -27,10 +27,10 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-  static const char description[] = I18N_NOOP("KDevelop");
+  static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment.");
   KAboutData aboutData("kdevelop", I18N_NOOP("KDevelop"),
                        VERSION, description, KAboutData::License_GPL,
-                       I18N_NOOP("(c) 1999,2000,2001,2002,2003 Various Authors"));
+                       I18N_NOOP("(c) 1999-2003, The KDevelop developers"), "", "http://www.kdevelop.org");
   aboutData.addAuthor("Caleb Tennis", I18N_NOOP("Current Maintainer and release coordinator, KTabBar, bugfixes"), "caleb@aei-tech.com");
   aboutData.addAuthor("Bernd Gehrmann", I18N_NOOP("Initial idea, basic architecture, much initial source code"), "bernd@kdevelop.org");
   aboutData.addAuthor("Richard Dale", I18N_NOOP("Java & Objective C support"), "Richard_Dale@tipitina.demon.co.uk");
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Jakob Simon-Gaarde", I18N_NOOP("QMake projectmanager"), "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", I18N_NOOP("Patches"), "Yann.Hodique@lifl.fr");
   aboutData.addAuthor("F@lk Brettschneider", I18N_NOOP("MDI modes, QEditor, bugfixes"), "falkbr@kdevelop.org");
-  aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Pascal support, help with C++ support, Filecreate and Doctreeview"), "cloudtemple@mksat.net");
+  aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Overall improvements, pascal support, c++ support, New File and Documentation parts"), "cloudtemple@mksat.net");
   aboutData.addAuthor("Mario Scalas", I18N_NOOP("PartExplorer, redesign of CvsPart, patches, bugs(fixes)"), "mario.scalas@libero.it");
 
   aboutData.addCredit("The KWrite authors", I18N_NOOP("Kate editor component"), "kwrite-devel@kde.org");
@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
   aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "Oliver.Kellogg@t-online.de");
-  aboutData.addCredit( "Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
+  aboutData.addCredit("Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake project manager patches"), "tobi.web@gmx.de");
+  aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
