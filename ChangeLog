@@ -1,3 +1,6 @@
+2005-01-03 Robert Gruber <rgruber@users.sourceforge.net>
+ * Added support for CVS commands edit, unedit and editors
+
 2004-12-19 Alexander Dymo <adymo@kdevelop.org>
  * Made it possible to add custom build commands (like make install-exec)
    for the subproject context menu in automake manager.
