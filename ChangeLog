@@ -1,3 +1,9 @@
+2002-05-01  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Limit size of class and method combo boxes
+	* Offer to rerun configure only if configuration
+	  has changed
+
 2002-04-30  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Implemented fileFilters() for cppsupport

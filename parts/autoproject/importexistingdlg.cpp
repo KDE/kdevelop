@@ -29,8 +29,6 @@
 ImportExistingDialog::ImportExistingDialog( AutoProjectPart* part, SubprojectItem* spitem, TargetItem* titem, QWidget* parent, const char* name, bool modal, WFlags fl )
     : ImportExistingDlgBase ( parent, name, modal, fl )
 {
-    setCaption ( name );
-
     KFile::Mode mode = KFile::Files;;
 
     if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )

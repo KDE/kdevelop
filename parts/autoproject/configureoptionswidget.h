@@ -35,6 +35,7 @@ public slots:
 
 private:
     virtual void builddirClicked();
+    virtual void setDirty();
     virtual void configChanged(const QString &config);
     virtual void configComboTextChanged(const QString &config);
     virtual void configAdded();
@@ -57,6 +58,7 @@ private:
     QStringList f77service_names, f77service_execs;
     QStringList allConfigs;
     QString currentConfig;
+    bool dirty;
     
     AutoProjectPart *m_part;
 };

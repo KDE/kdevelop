@@ -693,6 +693,54 @@
         <receiver>configure_options_widget</receiver>
         <slot>builddirClicked()</slot>
     </connection>
+    <connection>
+        <sender>configargs_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>builddir_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>cbinary_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>cflags_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>cxxbinary_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>cxxflags_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>f77binary_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>f77flags_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>cservice_combo</tabstop>
@@ -709,6 +757,7 @@
     <tabstop>f77flags_button</tabstop>
 </tabstops>
 <slots>
+    <slot access="protected">builddirClicked()</slot>
     <slot access="protected">cflagsClicked()</slot>
     <slot access="protected">configAdded()</slot>
     <slot access="protected">configChanged(const QString&amp;)</slot>
@@ -719,7 +768,7 @@
     <slot access="protected">cxxserviceChanged()</slot>
     <slot access="protected">f77flagsClicked()</slot>
     <slot access="protected">f77serviceChanged()</slot>
-    <slot access="protected">builddirClicked()</slot>
+    <slot access="protected">setDirty()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -89,6 +89,7 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
     allConfigs = part->allBuildConfigs();
     config_combo->insertStringList(allConfigs);
 
+    dirty = false;
     currentConfig = QString::null;
     configChanged(part->currentBuildConfig());
 
@@ -221,6 +222,13 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
 }
 
 
+void ConfigureOptionsWidget::setDirty()
+{
+    kdDebug(9020) << "config dirty" << endl;
+    dirty = true;
+}
+
+
 void ConfigureOptionsWidget::builddirClicked()
 {
     QString dir = builddir_edit->text();
@@ -244,14 +252,16 @@ void ConfigureOptionsWidget::configChanged(const QString &config)
     if (config == currentConfig || !allConfigs.contains(config))
         return;
     
-    if (!currentConfig.isNull())
+    if (!currentConfig.isNull() && dirty)
         saveSettings(currentConfig);
 
     currentConfig = config;
     readSettings(config);
+    dirty = false;
 
+    config_combo->blockSignals(true);
     config_combo->setEditText(config);
-    //    configComboTextChanged(config);
+    config_combo->blockSignals(false);
 }
 
 
@@ -288,7 +298,7 @@ void ConfigureOptionsWidget::cserviceChanged()
 {
     QString exec = ServiceComboBox::currentText(cservice_combo, cservice_execs);
     cbinary_edit->setText(exec);
-    kdDebug() << "exec: " << exec << endl;
+    kdDebug(9020) << "exec: " << exec << endl;
 }
 
 
@@ -303,7 +313,7 @@ void ConfigureOptionsWidget::f77serviceChanged()
 {
     QString exec = ServiceComboBox::currentText(f77service_combo, f77service_execs);
     f77binary_edit->setText(exec);
-    kdDebug() << "exec: " << exec << endl;
+    kdDebug(9020) << "exec: " << exec << endl;
 }
 
 
@@ -353,7 +363,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
 {
     KService::Ptr service = KService::serviceByName(name);
     if (!service) {
-        kdDebug(9000) << "Can't find service " << name;
+        kdDebug(9020) << "Can't find service " << name;
         return 0;
     }
     
@@ -374,7 +384,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
                                    "KDevCompilerOptions", args);
 
     if (!obj->inherits("KDevCompilerOptions")) {
-        kdDebug(9000) << "Component does not inherit KDevCompilerOptions" << endl;
+        kdDebug(9020) << "Component does not inherit KDevCompilerOptions" << endl;
         return 0;
     }
     KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
@@ -385,7 +395,8 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
 
 void ConfigureOptionsWidget::accept()
 {
-    saveSettings(currentConfig);
+    if (dirty)
+        saveSettings(currentConfig);
 }
 
 #include "configureoptionswidget.moc"

@@ -608,7 +608,8 @@ void AutoProjectWidget::slotAddSubproject()
 void AutoProjectWidget::slotAddExistingSubproject()
 {
     ImportExistingDialog dlg(m_part, m_shownSubproject,
-                             this, "add existing subprojects to this subproject");
+                             this, "add existing subprojects");
+    dlg.setCaption(i18n("Add existing subprojects to this subproject"));
     dlg.exec();
 }
 
@@ -686,7 +687,8 @@ void AutoProjectWidget::slotAddExistingFile()
         return;
 
     ImportExistingDialog dlg(m_part, m_shownSubproject, titem,
-                             this, "add existing files to this target");
+                             this, "add existing files");
+    dlg.setCaption(i18n("Add existing files to this target"));
     dlg.exec();
 }
 
