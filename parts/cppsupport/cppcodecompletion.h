@@ -31,6 +31,7 @@
 
 #include "cppsupportpart.h"
 #include "simpleparser.h"
+#include "ast.h"
 
 class ParsedClass;
 class ParsedClassContainer;
@@ -62,8 +63,7 @@ public:
     QString typeOf( const QString& name, ParsedClassContainer* container = 0 );
     ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container = 0, 
 					 const QStringList& imports = QStringList() );
-    
-    
+        
 public slots:
     void completeText();
 
@@ -78,6 +78,19 @@ private slots:
 private:
     void setupCodeInformationRepository();
     QString typeName( const QString& s );
+    FunctionDefinitionAST* functionDefinition( AST* node );
+    
+    SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, StatementListAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, IfStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, ForStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, DoStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, WhileStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col );
+    
+    QString getText( int startLine, int startColumn, int endLine, int endColumn );
 
 private:
     QGuardedPtr<CppSupportPart> m_pSupport;

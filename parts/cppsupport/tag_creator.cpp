@@ -49,6 +49,7 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
 	nsName = ast->namespaceName()->text();
     }
 
+#if 0
     Tag tag;
     tag.setKind( Tag::Kind_Namespace );
     tag.setFileName( m_fileName );
@@ -63,6 +64,7 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
     tag.setEndPosition( line, col );
 
     m_catalog->addItem( tag );
+#endif
 
     m_currentScope.push_back( nsName );
     TreeParser::parseNamespace( ast );

@@ -34,6 +34,8 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
 {
     kdDebug(9020) << "CodeInformationRepository::query()" << endl;
 
+    QValueList<Tag> tags;
+	
     QMap<QString, Catalog*>::Iterator it = m_catalogs.begin();
     while( it != m_catalogs.end() ){
         kdDebug(9020) << "try with the catalog " << it.key() << endl;
@@ -41,14 +43,11 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
         Catalog* catalog = it.data();
         ++it;
 
-        QValueList<Tag> tags = catalog->query( args );
+        tags += catalog->query( args );
         kdDebug(9020) << "found " << tags.size() << " tags" << endl;
-
-        if( tags.size() )
-            return tags;
     }
 
-    return QValueList<Tag>();
+    return tags;
 }
 
 QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileName )
@@ -143,45 +142,7 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 {
     kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
     
-    QValueList<KTextEditor::CompletionEntry> entryList;
-    QValueList<Tag> tags = getTagsInScope( scope, isInstance );
-    
-    QValueList<Tag>::Iterator it = tags.begin();
-    while( it != tags.end() ){
-        const Tag& tag = *it;
-        ++it;
-
-        KTextEditor::CompletionEntry entry;
-        entry.text = tag.name();
-
-        if( tag.hasAttribute("arguments") ){
-            entry.text += "(";
-	    
-	    QStringList arguments = tag.attribute( "arguments" ).toStringList();
-	    QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
-	    	 
-	    QString signature;
-	    for( uint i=0; i<arguments.size(); ++i ){
-		signature += arguments[ i ];
-		QString argName = argumentNames[ i ];
-		if( !argName.isEmpty() )
-		    signature += QString::fromLatin1( " " ) + argName;
-		
-		if( i != (arguments.size()-1) ){
-		    signature += ", ";
-		}
-	    }
-	    
-	    if( signature.isEmpty() )
-		entry.text += ")";
-	    else
-		entry.postfix = signature + ")";
-        }
-
-        entryList << entry;
-    }
-
-    return entryList;
+    return toEntryList( getTagsInScope(scope, isInstance) );
 }
 
 QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
@@ -266,5 +227,71 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
     tags += query( args );
     
     return tags;
+}
+
+QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags )
+{
+    QValueList<KTextEditor :: CompletionEntry> entryList;
+    
+    QValueList<Tag>::ConstIterator it = tags.begin();
+    while( it != tags.end() ){
+	const Tag& tag = *it;
+	++it;
+	
+	KTextEditor::CompletionEntry entry;
+	switch( tag.kind() ){
+	    case Tag::Kind_Class:
+		entry.prefix = "class";
+		entry.text = tag.name();
+		break;
+		
+	    case Tag::Kind_Namespace:
+		entry.prefix = "namespace";
+		entry.text = tag.name();
+		break;
+		
+	    case Tag::Kind_FunctionDeclaration:
+	    case Tag::Kind_Function:
+	    {
+		entry.text = tag.name();
+		
+		entry.text += "(";
+		
+		QStringList arguments = tag.attribute( "arguments" ).toStringList();
+		QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
+		
+		QString signature;
+		for( uint i=0; i<arguments.size(); ++i ){
+		    signature += arguments[ i ];
+		    QString argName = argumentNames[ i ];
+		    if( !argName.isEmpty() )
+			signature += QString::fromLatin1( " " ) + argName;
+		    
+		    if( i != (arguments.size()-1) ){
+			signature += ", ";
+		    }
+		}
+		
+		if( signature.isEmpty() )
+		    entry.text += ")";
+		else
+		    entry.postfix = signature + ")";		
+	    }
+	    break;
+	    
+	    case Tag::Kind_Enumerator:
+	    case Tag::Kind_Variable:
+	    case Tag::Kind_VariableDeclaration:
+	        entry.text = tag.name();
+	        break;
+	    
+	    default:
+		;
+	}
+	
+	entryList << entry;
+    }
+    
+    return entryList;
 }
 

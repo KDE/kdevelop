@@ -28,8 +28,9 @@ public:
     virtual void addCatalog( const QString& id, Catalog* catalog );
     virtual void removeCatalog( const QString& id );
 
-
+    QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags );
     QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance );
+    
     QStringList getSignatureList( const QStringList& scope, const QString& functionName, bool isInstance );
 
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );

@@ -50,8 +50,6 @@ public:
 private:
     QString scopeOfDeclarator( DeclaratorAST* d );
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
-    int accessToInt( const QString& access ) const;
-    int intToAccess( const QString& access ) const;
 
 private:
     Catalog* m_catalog;

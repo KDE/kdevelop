@@ -81,14 +81,20 @@ void scopeOfNode( AST* ast, QStringList& scope )
     break;
 
     case NodeType_FunctionDefinition:
- #if 0
-        if( ((FunctionDefinitionAST*)ast)->nestedName() ){
-	    s = ((FunctionDefinitionAST*)ast)->nestedName()->text();
-	    if( s )
-	       scope.push_back( s );
+    {
+	FunctionDefinitionAST* funDef = static_cast<FunctionDefinitionAST*>( ast );
+	DeclaratorAST* d = funDef->initDeclarator()->declarator();
+	
+	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+	while( nameIt.current() ){
+	    AST* name = nameIt.current()->name();
+	    scope.push_back( name->text() );
+	    
+	    ++nameIt;
 	}
-#endif
-	break;
+    }
+    break;
 
     default:
 	break;

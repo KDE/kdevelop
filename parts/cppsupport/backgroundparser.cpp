@@ -43,8 +43,8 @@ public:
     KDevDriver( CppSupportPart* cppSupport )
         : m_cppSupport( cppSupport )
     {
-	setupProject();
-	setup();
+	//setupProject();
+	//setup();
     }
 
     void setupProject()
