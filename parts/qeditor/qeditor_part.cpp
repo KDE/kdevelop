@@ -38,6 +38,7 @@
 
 #include "qeditor_part.h"
 #include "qeditor_view.h"
+#include "qeditor_browserextension.h"
 #include "qeditor.h"
 #include "paragdata.h"
 #include "qsourcecolorizer.h"
@@ -107,7 +108,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
-    
+
     QEditorPartFactory::registerDocument( this );
 
     m_views.setAutoDelete( FALSE );
@@ -115,7 +116,8 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     m_marks.setAutoDelete( TRUE );
 
     (void) createView( parentWidget, widgetName );
-    
+    m_extension = new QEditorBrowserExtension( this );
+
     setupHighlighting();
 
     // we are read-write by default
@@ -148,7 +150,7 @@ void QEditorPart::setReadWrite(bool rw)
 
 void QEditorPart::setModified(bool modified)
 {
-    m_currentView->editor()->setModified( modified );    
+    m_currentView->editor()->setModified( modified );
 
     // in any event, we want our parent to do it's thing
     ReadWritePart::setModified(modified);
@@ -197,7 +199,7 @@ bool QEditorPart::saveFile()
     // if we aren't read-write, return immediately
     if (isReadWrite() == false)
         return false;
-    
+
     if( m_file.isEmpty() ){
 	fileSaveAs();
 	return true;
@@ -326,7 +328,7 @@ bool QEditorPart::removeLine( unsigned int line )
 KTextEditor::View* QEditorPart::createView( QWidget* parentWidget, const char* widgetName )
 {
     kdDebug(9032) << "QEditorPart::createView()" << endl;
-    
+
     if( !m_currentView ){
 	m_currentView = new QEditorView( this, parentWidget, widgetName );
 	m_views.append( m_currentView );
@@ -335,8 +337,8 @@ KTextEditor::View* QEditorPart::createView( QWidget* parentWidget, const char* w
     }
     else
 	m_currentView->reparent( parentWidget, QPoint(0,0) );
-	    
-    return m_currentView;    
+
+    return m_currentView;
 }
 
 QPtrList<KTextEditor::View> QEditorPart::views() const
@@ -499,18 +501,18 @@ void QEditorPart::setupHighlighting()
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.pro" << "*Makefile" << "*Makefile.am" << "*Makefile.in";
     m_modes.append( mode );
-    
+
     mode = new HLMode;
     mode->name = "jsp";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.jsp";
-    m_modes.append( mode );    
-    
+    m_modes.append( mode );
+
     mode = new HLMode;
     mode->name = "ocaml";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.ml" << "*.mli";
-    m_modes.append( mode );    
+    m_modes.append( mode );
 }
 
 unsigned int QEditorPart::hlMode()
@@ -575,7 +577,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
     Q_UNUSED( matchLen );
     Q_UNUSED( casesensitive );
     Q_UNUSED( backwards );
-    
+
 #warning "TODO: QEditorPart::searchText()"
     kdDebug(9032) << "TODO: QEditorPart::searchText()" << endl;
     return false;
@@ -673,7 +675,7 @@ void QEditorPart::removeMark (uint line, uint markType)
 QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
     m_marks.clear();
-    
+
     QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParagraph* p = textDoc->firstParagraph();
     while( p ){

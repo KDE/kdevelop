@@ -46,6 +46,7 @@ class QPainter;
 class KURL;
 class QEditorView;
 class QEditorIndenter;
+class QEditorBrowserExtension;
 class KAboutData;
 class HLMode;
 class KConfig;
@@ -354,6 +355,7 @@ private:
     QPtrList<KTextEditor::View> m_views;
     QPtrList<KTextEditor::Cursor> m_cursors;
     QPtrList<KTextEditor::Mark> m_marks;
+    QEditorBrowserExtension* m_extension;
 };
 
 #endif // QEDITORPART_H
