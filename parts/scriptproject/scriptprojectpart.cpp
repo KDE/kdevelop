@@ -123,13 +123,15 @@ QStringList ScriptProjectPart::allSourceFiles()
 
 void ScriptProjectPart::addFile(const QString &fileName)
 {
-    // FIXME
+    m_sourceFiles.append(fileName);
+    emit addedFileToProject(fileName);
 }
 
 
 void ScriptProjectPart::removeFile(const QString &fileName)
 {
-    // FIXME
+    m_sourceFiles.remove(fileName);
+    emit removedFileFromProject(fileName);
 }
 
 

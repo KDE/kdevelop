@@ -266,6 +266,11 @@ void CppNewClassDialog::accept()
     hstream << hstr;
     hfile.close();
 
+    kdDebug(9007) << "Adding to project " << endl;
+    project->addFile(project->activeDirectory() + "/" + header);
+    project->addFile(project->activeDirectory() + "/" + implementation);
+    kdDebug(9007) << "Added to project " << endl;
+
     QDialog::accept();
 }
 

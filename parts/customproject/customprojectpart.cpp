@@ -220,13 +220,17 @@ QStringList CustomProjectPart::allSourceFiles()
 
 void CustomProjectPart::addFile(const QString &fileName)
 {
-    // FIXME
+    m_sourceFiles.append(fileName);
+    kdDebug(9025) << "Emitting addFileToProject" << endl;
+    emit addedFileToProject(fileName);
 }
 
 
 void CustomProjectPart::removeFile(const QString &fileName)
 {
-    // FIXME
+    m_sourceFiles.remove(fileName);
+    kdDebug(9025) << "Emitting removeFileFromProject" << endl;
+    emit removedFileFromProject(fileName);
 }
 
 
