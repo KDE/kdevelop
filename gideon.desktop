@@ -1,7 +1,7 @@
 [KDE Desktop Entry]
 BinaryPattern=kdevelop;
 Type=Application
-Exec=kdevelop -caption "%c" %i %m %u
+Exec=gideon -caption "%c" %i %m %u
 MimeType=application/x-kdevelop-project;
 Icon=kdevelop
 DocPath=kdevelop/index.html
