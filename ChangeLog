@@ -1,3 +1,6 @@
+2003-05-27 F@lk Brettschneider <falkbr@kdevelop.org>
+    * compiles and runs on KDE-3.0 again
+
 2003-05-26 Roberto Raggi <roberto@kdevelop.org>
     * New Java support
 
