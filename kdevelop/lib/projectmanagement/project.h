@@ -26,6 +26,7 @@
 #include <qdom.h>
 #include <qobject.h>
 #include <qtextstream.h>
+#include "KDevCompiler.h"
 
 class KAboutData;
 
@@ -38,7 +39,7 @@ class KAboutData;
 class Project : public QObject {
   Q_OBJECT
     
-    public: 
+public:
   Project(QObject* parent=0,const char* name=0);
   virtual ~Project();
   /*____some get methods_____ */
@@ -64,6 +65,16 @@ class Project : public QObject {
   QString absolutePath();
   QString relativePath();
   QString getType(QString absFileName);
+
+  // the compilers that project uses
+  QList<KDevCompiler>* compilers();
+
+  // returns the name compiler named 'name' used by this project
+  KDevCompiler* compilerByName(const QString &name);
+
+  // register a compiler for this project
+  void addCompiler(KDevCompiler*);
+
   /** generate/modify the Makefile
    * if target == QString::null write the custom targets, 
    * otherwise write line for the requested target
@@ -95,16 +106,22 @@ class Project : public QObject {
   /** a factory to create new projects, use KTrader*/
   static Project* createNewProject(QString projecttypeName,QObject* parent=0);
 
-  protected:
+protected:
   QList<RegisteredFile>* m_pFiles;
   QString m_name;
   QString m_version;
   QString m_absPath;
+
   /** absolute*/
   QString m_userProjectFile;
+
   /** absolute */
   QString m_projectFile;
   QString m_relPath;
+
+  // the compilers that ps uses
+  QList<KDevCompiler>* m_compilers;
+
 };
 
 #endif
