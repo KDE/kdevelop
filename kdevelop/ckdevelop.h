@@ -361,6 +361,7 @@ public:
   void slotProjectManual();
   void slotProjectMakeDistSourceTgz();
   void slotProjectMakeDistRPM();
+  void slotConfigMakeDistRPM();
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////

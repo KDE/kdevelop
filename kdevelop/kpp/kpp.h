@@ -57,7 +57,6 @@ private: // Private methods
   /** The spec file of the current project */
   cSpec currentSpec;
   /** The current progress of the RPM build */
- // buildView *bldView;
   /** The base for the rpm build directories. */
   QString qsRPMBaseDir;
   /** The RPM command */

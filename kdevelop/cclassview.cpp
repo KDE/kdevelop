@@ -920,8 +920,7 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
  *-----------------------------------------------------------------*/
 void CClassView::asTreeStr(QString &str)
 {
-  str="";
-
+	str="";
   buildTreeStr( classesItem, str );
 }
 

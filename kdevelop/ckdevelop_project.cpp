@@ -1139,6 +1139,30 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 
 void CKDevelop::slotProjectMakeDistRPM(){
  cerr << "Lets build and RPM!!!" << endl;
+
+
+ rpmbuilder = new Kpp(0,"KPP",true);
+ rpmbuilder->setProjectRoot(prj->getProjectDir());
+ connect(rpmbuilder, SIGNAL(finished()), this, SLOT(slotdoneWithKpp()));
+ connect(rpmbuilder, SIGNAL(building()), this, SLOT(slotrpmBuildProcess()));
+ connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
+ connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
+ connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
+ rpmbuilder->setProjectData(    prj->getProjectName(),
+                                prj->getVersion(),
+                                prj->getAuthor(),
+                                prj->getEmail(),
+                                prj->getConfigureArgs(),
+                                "blah blah blah who in the heck made this a strlist and not a stringlist?");
+//(prj->getShortInfo()).join(',')
+// rpmbuilder->show();
+	rpmbuilder->startBuild();
+}
+
+void CKDevelop::slotConfigMakeDistRPM()
+{
+  slotStatusMsg(i18n("Configuring RPMS..."));
+
  rpmbuilder = new Kpp(0,"KPP",true);
  rpmbuilder->setProjectRoot(prj->getProjectDir());
  connect(rpmbuilder, SIGNAL(finished()), this, SLOT(slotdoneWithKpp()));
@@ -1155,22 +1179,37 @@ void CKDevelop::slotProjectMakeDistRPM(){
  //(prj->getShortInfo()).join(',')
  rpmbuilder->show();
 }
+
 void CKDevelop::slotAddSpec(QString path)
 {
         cerr << "I need to add " << path << " to the project..." << endl;
 }
 void CKDevelop::slotGetRPMBuildSTDOUT(QString stdout){
         cerr << stdout << endl;
+				messages_widget->insertAtEnd(stdout);
 }
 void CKDevelop::slotGetRPMBuildSTDERR(QString stderr){
         cerr << stderr << endl;
+				stderr_widget->insertAtEnd(stderr);
 }
 void CKDevelop::slotdoneWithKpp(){
  rpmbuilder->hide();
+
+  setToolMenuProcess(true);
+  slotStatusMsg(i18n("RPMS Finished"));
+  beep = true;
  delete rpmbuilder;
 }
 
 void CKDevelop::slotrpmBuildProcess(){
+  slotDebugStop();
+  showOutputView(true);
+  error_parser->toogleOff();
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Building RPMS..."));
+  messages_widget->clear();
+  beep = true;
       rpmbuilder->hide();
 }
 

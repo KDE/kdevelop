@@ -231,9 +231,10 @@ bool Kpp::startBuild(){
         else
         {
                 // 2) make sure the spec entries are all filled out...
-                QString tmpSpec =qsRPMBaseDir + "/" + (QLineEdit_1->text().lower()) + "-spec";
+                QString tmpSpec =qsRPMBaseDir + "/" + (QLineEdit_1->text().lower()) + ".spec";
                 // we may already have a spec there, if so dont bother redoing it unless they want to...
-               if(QFile::exists(currentSpecPath) || QFile::exists(tmpSpec))
+								cerr << "Looking for " << tmpSpec << endl;
+              if(QFile::exists(tmpSpec))
                {
                         cerr << "spec file is there" << endl;
                         // The build env looks good so we will start

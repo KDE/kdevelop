@@ -159,6 +159,56 @@ public:
 
 public: // Methods to store project options
 
+  /** These are not kdevelop spacific, but they are needed for KPP to operate on a
+			project by project basis **/
+
+	/** store the RPM revision number **/
+	void setKPPRPMVersion(const char* version) { writeGroupEntry("KPP", "kpp_version", version);}
+
+	/** store the License type **/
+	void setKPPLicenceType( const char*license) { writeGroupEntry("KPP", "kpp_license", license);}
+
+	/** store the URL **/
+	void setKPPURL(const char* url) { writeGroupEntry("KPP", "kpp_url", url);}
+
+	/** store the application group **/
+	void setKPPAppGroup(const char* appgrp) { writeGroupEntry("KPP", "kpp_appgrp", appgrp);}
+
+	/** store the build root **/
+	void setKPPBuildRoot(const char* buildroot) { writeGroupEntry("KPP", "kpp_bldroot", buildroot);}
+
+	/** store the one line summary **/
+	void setKPPSummary(const char* summary) { writeGroupEntry("KPP", "kpp_summary", summary);}
+
+	/** store the icon information **/
+	void setKPPIcon(const char* icon) {writeGroupEntry("KPP", "kpp_icon", icon);}
+
+
+	/** get the RPM revision number **/
+	QString getKPPRPMVersion() { return readGroupEntry( "KPP", "kpp_version" ); }
+
+	/** get the License type **/
+	QString getKPPLicenceType() { return readGroupEntry("KPP", "kpp_license");}
+
+	/** get the URL **/
+	QString getKPPURL() { return readGroupEntry("KPP", "kpp_url");}
+
+	/** get the application group **/
+	QString getKPPAppGroup() { return readGroupEntry("KPP", "kpp_appgrp");}
+
+	/** get the build root **/
+	QString getKPPBuildRoot() { return readGroupEntry("KPP", "kpp_bldroot");}
+
+	/** get the one line summary **/
+	QString getKPPSummary() { return readGroupEntry("KPP", "kpp_summary");}
+
+	/** get the icon information **/
+	QString getKPPIcon() {return readGroupEntry("KPP", "kpp_icon");}
+
+	
+
+
+
   /** Store the version of the kdevprj file format*/
   void setKDevPrjVersion(const char* version) { writeGroupEntry( "General", "kdevprj_version", version ); }
 
