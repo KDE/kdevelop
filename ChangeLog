@@ -1,3 +1,8 @@
+2001-06-08  rokrau@yahoo.com
+   * disabled tip.h and related code if USE_KDE_2_1_1 is set, allow cut and 
+     paste for Fortran sources and added an assert for a suspected SIGSEV 
+     crash
+
 2001-06-06  Ralf Nolden <nolden@kde.org>
    * restored the spashlogo as it was before. Now it shows all of the time
       the last project is loaded which can take a while ad which is why it worked
