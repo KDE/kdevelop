@@ -314,13 +314,21 @@ bool STTY::findExternalTTY(const QString &termApp)
         const char* scriptStr = script.latin1();
         const char* end       = 0;
 
-        ::execlp( prog,       prog,
-                  //              "-name",    "debugio",
-                  //              "-title",   "kdevelop: Program output",
+        if ( termApp == "konsole" )
+        {
+            ::execlp( prog,       prog,
                   "-caption", i18n("kdevelop: Debug application console").local8Bit().data(),
                   "-e",       "sh",
                   "-c",       scriptStr,
                   end);
+        }
+        else
+        {        
+            ::execlp( prog,       prog,
+                  "-e",       "sh",
+                  "-c",       scriptStr,
+                  end);
+        }
 
         // Should not get here, as above should always work
         ::exit(1);

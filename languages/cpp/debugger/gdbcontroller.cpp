@@ -23,6 +23,7 @@
 #include "stty.h"
 #include "variablewidget.h"
 #include "domutil.h"
+#include "settings.h"
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -1212,7 +1213,8 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
 
     Q_ASSERT (!dbgProcess_ && !tty_);
 
-    tty_ = new STTY(config_dbgTerminal_, "konsole");
+//    tty_ = new STTY(config_dbgTerminal_, "konsole");
+    tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
     if (!config_dbgTerminal_)
     {
         connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );

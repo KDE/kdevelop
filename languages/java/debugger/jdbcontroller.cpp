@@ -23,6 +23,7 @@
 #include "variablewidget.h"
 #include "jdbcommand.h"
 #include "stty.h"
+#include "settings.h"
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -1085,7 +1086,8 @@ void JDBController::slotStart(const QString &/*application*/, const QString &arg
     // Remove .class suffix and leading path information from appname
     // (should not be there anyway)
 
-    tty_ = new STTY(config_dbgTerminal_, "konsole");
+//    tty_ = new STTY(config_dbgTerminal_, "konsole");
+    tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
     if (!config_dbgTerminal_) {
         connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
         connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );

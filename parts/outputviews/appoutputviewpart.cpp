@@ -20,12 +20,14 @@
 #include <kparts/part.h>
 #include <kdevgenericfactory.h>
 #include <kdevplugininfo.h>
+#include <kapplication.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "appoutputwidget.h"
 #include "kdevpartcontroller.h"
+#include "settings.h"
 
 static const KDevPluginInfo data("kdevappoutputview");
 typedef KDevGenericFactory< AppOutputViewPart > AppViewFactory;
@@ -94,8 +96,8 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
     QString cmd;
 
     if (inTerminal) {
-        cmd = "konsole";
-        if ( !directory.isNull() ) {
+        cmd = Settings::terminalEmulatorName( *kapp->config() );
+        if ( cmd == "konsole" && !directory.isNull() ) {  // isn't setting the working directory below enough?
           // If a directory was specified, use it
           cmd += " --workdir " + directory;
         }
