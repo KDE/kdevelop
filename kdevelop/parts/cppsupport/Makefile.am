@@ -18,7 +18,7 @@ noinst_HEADERS = main.h cppsupport.h classparser.h tokenizer.h \
 		 caddclassmethoddlg.h caddclassattributedlg.h
 
 EXTRA_DIST = tokenizer.l
-tokenizer.cc: tokenizer.l
+tokenizer.cpp: tokenizer.l
 	$(LEX) -+ -otokenizer.cpp $(srcdir)/tokenizer.l
 
 METASOURCES = AUTO
