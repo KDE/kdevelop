@@ -1771,8 +1771,9 @@ void CKDevelop::slotTagSwitchTo()
   QStringList srcExtensions, headerExtensions, *extensionList=0l;;
   QString newExtension;
 
-  srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".c";
-  headerExtensions << ".h" << ".hpp" << ".hxx";
+  srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".ecpp" << ".c" << ".ec"
+                << ".inl";
+  headerExtensions << ".h" << ".hpp" << ".hxx" << ".H" << ".hh" << ".tlh";
 
   kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;
   kdDebug() << "current filename: " << curFileDir << "/" << curFileName << " (" << switchToName<< ")" << endl;
