@@ -1,3 +1,12 @@
+kdevelop (1:0.4-19990613) unstable; urgency=low
+
+  * New upstream CVS version
+  * New kderules script
+  * Migrated from man-pages format to undocumented format
+  * Changed changelog versioning to fit the rest of the KDE package versioning
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sun, 13 Jun 1999 09:49:48 +0200
+
 kdevelop (990531-1) experimental; urgency=low
 
   * Use DESTDIR mechanism instead of --with-install-root

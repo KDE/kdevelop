@@ -14,11 +14,12 @@ build:
 
 clean:
 	dh_testdir
-	dh_clean -k
+	rm -f build-stamp install-stamp
+	dh_clean 
 	-make distclean
 	-rm -f `find . -name "*~"`
 	-rm -rf debian/tmp debian/files* core debian/substvars \
-		debian/menu debian/*shlibs*
+		debian/menu debian/*shlibs* 
 	-rm -rf config.log libtool config.status config.cache
 	
 binary-indep:	build
@@ -36,17 +37,19 @@ binary-arch:	build
 	chmod a+x debian/kderules
 	debian/kderules
 	dh_movefiles
-	dh_undocumented `cat debian/man-pages`
+	dh_undocumented 
 	dh_installdocs
 	dh_installchangelogs
 	dh_strip
 	dh_compress
 	dh_fixperms
 	dh_suidregister
+	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
+	perl debian/kderules update
 	dh_builddeb    
 
 # Below here is fairly generic really
