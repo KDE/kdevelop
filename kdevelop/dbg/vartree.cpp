@@ -418,13 +418,13 @@ QString TrimmableItem::getCache()
 
 // **************************************************************************
 
-void TrimmableItem::updateValue(const QString& value)
+void TrimmableItem::updateValue(const QString&)
 {
 }
 
 // **************************************************************************
 
-const char * TrimmableItem::key ( int column, bool ascending ) const
+const char * TrimmableItem::key (int, bool) const
 {
   return "";
 }

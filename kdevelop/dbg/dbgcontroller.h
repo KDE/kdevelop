@@ -47,7 +47,7 @@ enum DBGStateFlags
   s_attached          = 512,
   s_core              = 1024,
   s_waitTimer         = 2048,
-  s_shuttingDown      = 4096,
+  s_shuttingDown      = 4096
 };
 /***************************************************************************/
 /***************************************************************************/
@@ -95,7 +95,7 @@ public slots:
   
 protected slots:
   virtual void slotDbgStdout(KProcess* proc, char* buf, int buflen)       = 0;
-  virtual void slotDbgStderr(KProcess* proc, char* buf, int buflen) {} ;
+  virtual void slotDbgStderr(KProcess*, char*, int) {} ;
   virtual void slotDbgWroteStdin(KProcess *proc)                          = 0;
   virtual void slotDbgProcessExited(KProcess* proc)                       = 0;
 

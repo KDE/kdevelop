@@ -478,7 +478,7 @@ enum lineStarts
   START_Sing  = 1735289171,
   START_No_s  = 1931505486,
   START_Core  = 1701998403,
-  START_Temp  = 1886217556,
+  START_Temp  = 1886217556
 };
 
 // Any data that isn't "wrapped", arrives here. Rather than do multiple
@@ -1556,7 +1556,7 @@ void GDBController::slotSetLocalViewState(bool onOff)
 // **************************************************************************
 
 // Data from gdb gets processed here.
-void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
+void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
 #ifdef GDB_MONITOR
   QString msg(buf, buflen+1);
@@ -1634,7 +1634,7 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 
 // **************************************************************************
 
-void GDBController::slotDbgWroteStdin(KProcess *proc)
+void GDBController::slotDbgWroteStdin(KProcess *)
 {
   setStateOff(s_waitForWrite);
 //  if (!stateIsOn(s_silent))
@@ -1644,7 +1644,7 @@ void GDBController::slotDbgWroteStdin(KProcess *proc)
 
 // **************************************************************************
 
-void GDBController::slotDbgProcessExited(KProcess* proc)
+void GDBController::slotDbgProcessExited(KProcess*)
 {
   destroyCmds();
   state_ = s_appNotStarted|s_programExited|(state_&s_viewLocals);

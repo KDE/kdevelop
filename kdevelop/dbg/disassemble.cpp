@@ -70,7 +70,7 @@ bool Disassemble::displayCurrent()
 
 /***************************************************************************/
 
-void Disassemble::slotBPState(const Breakpoint* BP)
+void Disassemble::slotBPState(const Breakpoint*)
 {
   if (!active_)
     return;
@@ -123,7 +123,7 @@ void Disassemble::slotActivate(bool activate)
 
 /***************************************************************************/
 
-void Disassemble::slotShowStepInSource(const QString& filename, int lineno,
+void Disassemble::slotShowStepInSource(const QString&, int,
                                         const QString& currentAddress)
 {
   currentAddress_ = currentAddress;

@@ -164,7 +164,7 @@ TrimmableItem* GDBParser::getItem(TrimmableItem* parent, DataType dataType,
 
 void GDBParser::setItem(TrimmableItem* parent, const QString& varName,
                             DataType dataType, const QString& value,
-                            bool requested, bool params)
+                            bool requested, bool)
 {
   TrimmableItem* item = getItem(parent, dataType, varName, requested);
   if (!item)

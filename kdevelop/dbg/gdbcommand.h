@@ -57,7 +57,7 @@ enum GDBCmd
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',
 
-  DETACH          = 'z',
+  DETACH          = 'z'
 };
 
 #define RUNCMD      (true)
