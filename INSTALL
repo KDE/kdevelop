@@ -1,3 +1,11 @@
+To compile your own KDevelop you should follow the instructions at:
+
+http://www.kdevelop.org/index.html?filename=branches_compiling.html (latest stable version)
+http://www.kdevelop.org/index.html?filename=HEAD/branches_compiling.html (latest development version)
+
+For more generic and not so detailed information, continue to read this file.
+
+
 Basic Installation
 ==================
 
