@@ -83,7 +83,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     KAction *action;
 
-    action = new KAction(i18n("Switch header/implementation"), Key_F12,
+    action = new KAction(i18n("Switch Header/Implementation"), Key_F12,
                          this, SLOT(slotSwitchHeader()),
                          actionCollection(), "edit_switchheader");
     action->setStatusText( i18n("Switch between header and implementation files") );
@@ -108,14 +108,14 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setWhatsThis( i18n("Expand current word.") );
     action->setEnabled(false);
 
-    action = new KAction(i18n("Type Of Expression"), CTRL+Key_T,
+    action = new KAction(i18n("Type of Expression"), CTRL+Key_T,
                          this, SLOT(slotTypeOfExpression()),
                          actionCollection(), "edit_type_of_expression");
     action->setStatusText( i18n("Type of current expression") );
     action->setWhatsThis( i18n("Type of current expression.") );
     action->setEnabled(false);
 
-    action = new KAction(i18n("New class..."), "classnew", 0,
+    action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
     action->setStatusText( i18n("Generate a new class") );

@@ -262,7 +262,7 @@ bool PartController::closeDocuments(const QStringList &documents)
         {
             int res = KMessageBox::warningYesNoCancel(CKDevelop::getInstance()->main(),
                                                       i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-                                                      i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+                                                      i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
             if (res == KMessageBox::Cancel)
                 return false;
             if (res == KMessageBox::Ok)

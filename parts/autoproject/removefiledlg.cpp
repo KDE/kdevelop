@@ -53,7 +53,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
                                                    "Remove it from all of them?").arg(filename).arg(joinedtargets), this);
     }
 
-    removefromdisk_box = new QCheckBox(i18n("Remove from disk"), this);
+    removefromdisk_box = new QCheckBox(i18n("Remove From disk"), this);
         
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);

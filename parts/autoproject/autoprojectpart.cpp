@@ -58,17 +58,17 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     KAction *action;
 
-    action = new KAction( i18n("Add translation..."), 0,
+    action = new KAction( i18n("Add Translation..."), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
     if (!kde)
         action->setEnabled(false);
-    
-    action = new KAction( i18n("&Build project"), "make_kdevelop", Key_F8,
+
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     
-    action = new KAction( i18n("Run configure"), 0,
+    action = new KAction( i18n("Run Configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "build_configure" );
 
@@ -80,7 +80,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotInstall()),
                           actionCollection(), "build_install" );
     
-    action = new KAction( i18n("&Clean project"), 0,
+    action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
     
@@ -88,7 +88,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotDistClean()),
                           actionCollection(), "build_distclean" );
 
-    action = new KAction( i18n("Make messages && merge"), 0,
+    action = new KAction( i18n("Make Messages && Merge"), 0,
                           this, SLOT(slotMakeMessages()),
                           actionCollection(), "build_messages" );
     if (!kde)
@@ -97,7 +97,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     QDomDocument &dom = *projectDom();
     if (DomUtil::readBoolEntry(dom, "/kdevautoproject/run/default_implementation")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute program"), "exec", 0,
+        action = new KAction( i18n("Execute Program"), "exec", 0,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
     }

@@ -73,7 +73,7 @@ AddDocItemDialog::~AddDocItemDialog()
 void AddDocItemDialog::fileButtonClicked()
 {
     QString fileName = KFileDialog::getOpenFileName(QString::null, "*.html", this,
-                                                    i18n("Choose a file name"));
+                                                    i18n("Choose a File Name"));
     if (!fileName.isEmpty())
         url_edit->setText(fileName);
 }

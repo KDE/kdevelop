@@ -270,7 +270,7 @@ bool CKDevelop::fileSaveAs(){
       message_result=KMessageBox::warningYesNoCancel(this,
                         i18n("\nThe file\n\n%1\n\n"
                               "already exists.\nDo you want overwrite the old one?\n").arg(name),
-                        i18n("File exists!"));
+                        i18n("File Exists!"));
     }
     
   } while (message_result == KMessageBox::No); // repeat it on 'no'

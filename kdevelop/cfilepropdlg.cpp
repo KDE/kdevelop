@@ -68,7 +68,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   incdist_check = new QCheckBox( distribution_group, "incdist_check" );
   incdist_check->setFocusPolicy( QWidget::TabFocus );
   incdist_check->setBackgroundMode( QWidget::PaletteBackground );
-  incdist_check->setText(i18n("include in distribution") );
+  incdist_check->setText(i18n("Include in distribution") );
   incdist_check->setAutoRepeat( FALSE );
   incdist_check->setAutoResize( FALSE );
   lay1->addWidget(incdist_check);
@@ -114,7 +114,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   install_check = new QCheckBox( installion_group, "install_check" );
   install_check->setFocusPolicy( QWidget::TabFocus );
   install_check->setBackgroundMode( QWidget::PaletteBackground );
-  install_check->setText(i18n("install") );
+  install_check->setText(i18n("Install") );
   install_check->setAutoRepeat( FALSE );
   install_check->setAutoResize( FALSE );
   lay1->addWidget(install_check);

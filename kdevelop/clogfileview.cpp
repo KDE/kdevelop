@@ -255,9 +255,9 @@ KPopupMenu *CLogFileView::getCurrentPopup()
       popup = new KPopupMenu(i18n("File"));
       popup->insertItem( SmallIconSet("filenew"), i18n("New File..."),
                          this,SLOT(slotNewFile()), 0, ID_FILE_NEW );
-      popup->insertItem( i18n("Remove File from Project..."),
+      popup->insertItem( i18n("Remove File From Project..."),
                          this,SLOT(slotFileRemove()), 0, ID_PROJECT_REMOVE_FILE );
-      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
+      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File From Disk..."),
                          this, SLOT(slotFileDelete()), 0, ID_FILE_DELETE );
       popup->insertSeparator();
       popup->insertItem( i18n("Properties..."),
@@ -278,7 +278,7 @@ KPopupMenu *CLogFileView::getCurrentPopup()
               id = popup->insertItem( i18n("Add to Repository"),
                                       this, SLOT(slotAddToRepository()) );
               popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
-              id = popup->insertItem( i18n("Remove from Repository (and Disk)"),
+              id = popup->insertItem( i18n("Remove From Repository (and Disk)"),
                                       this, SLOT(slotRemoveFromRepository()) );
               popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
           }

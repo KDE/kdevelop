@@ -869,7 +869,7 @@ void CKDevSetupDlg::slotOkClicked(){
     answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
                                                 "Qt-library documentation. Do you really want to save\n"
                                                 "this value?"),
-                                            i18n("The selected path is not correct!"));
+                                            i18n("The Selected Path is not Correct!"));
   }
 
   if (answer==KMessageBox::Yes)
@@ -888,7 +888,7 @@ void CKDevSetupDlg::slotOkClicked(){
     answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
                                                 "KDE-library documentation. Do you really want to save\n"
                                                 "this value?"),
-                                            i18n("The selected path is not correct!"));
+                                            i18n("The Selected Path is not Correct!"));
   }
 
   if (answer==KMessageBox::Yes)
@@ -1003,7 +1003,7 @@ void CKDevSetupDlg::slotQtClicked(){
       KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                    "Qt-library documentation. Please choose the\n"
                                    "correct path."),
-                                i18n("The selected path is not correct!"));
+                                i18n("The Selected Path is not Correct!"));
   }
 }
 
@@ -1025,7 +1025,7 @@ void CKDevSetupDlg::slotKDEClicked(){
                                    "KDE-library documentation. Please choose the\n"
                                    "correct path or choose 'Update' to create a new\n"
                                    "documentation"),
-                                i18n("The selected path is not correct!"));
+                                i18n("The Selected Path is not Correct!"));
   }
 }
 
@@ -1070,7 +1070,7 @@ void CKDevSetupDlg::slotQt2Clicked(){
           KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                  "Qt-2.x root directory. Please choose the\n"
                                  "correct path."),
-                             i18n("The selected path is not correct!"));
+                             i18n("The Selected Path is not Correct!"));
 
 }
 void CKDevSetupDlg::slotKDE2Clicked(){
@@ -1086,7 +1086,7 @@ void CKDevSetupDlg::slotKDE2Clicked(){
           KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                  "KDE-2.x root directory. Please choose the\n"
                                  "correct path."),
-                             i18n("The selected path is not correct!"));
+                             i18n("The Selected Path is not Correct!"));
 
 }
 

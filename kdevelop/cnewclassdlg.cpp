@@ -163,13 +163,13 @@ void CNewClassDlg::initDialog(const char* dir /*=0*/){
   layout = new QVBoxLayout( add_group, LAYOUT_BORDER );
   layout->addSpacing( LAYOUT_BORDER );
   template_check = new QCheckBox( add_group, "template_check" );
-  template_check->setText( i18n("use header/cpp-templates") );
+  template_check->setText( i18n("Use header/cpp-templates") );
   template_check->setChecked(true);
   template_check->setMinimumSize( template_check->sizeHint() );
   layout->addWidget( template_check );
 
   qwidget_check = new QCheckBox( add_group, "qwidget_check" );
-  qwidget_check->setText( i18n("generate a QWidget-Childclass") );
+  qwidget_check->setText( i18n("Generate a QWidget-Childclass") );
   qwidget_check->setMinimumSize( qwidget_check->sizeHint() );
   layout->addWidget( qwidget_check );
   layout->addStretch( 1 );

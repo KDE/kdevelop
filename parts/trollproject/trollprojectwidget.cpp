@@ -269,7 +269,7 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
         SubprojectItem *spitem = static_cast<SubprojectItem*>(pvitem);
         KPopupMenu pop(i18n("Subproject"));
         int idOptions = pop.insertItem(i18n("Options..."));
-        int idAddSubproject = pop.insertItem(i18n("Add subproject..."));
+        int idAddSubproject = pop.insertItem(i18n("Add Subproject..."));
         int idBuild = pop.insertItem(i18n("Build"));
         int r = pop.exec(p);
         if (r == idOptions) {
@@ -285,7 +285,7 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
     } else if (pvitem->type() == ProjectItem::Group) {
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         KPopupMenu pop;
-        int idAddFile = pop.insertItem(i18n("Add file..."));
+        int idAddFile = pop.insertItem(i18n("Add File..."));
         int r = pop.exec(p);
         if (r == idAddFile) {
             ;
@@ -295,7 +295,7 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
         FileItem *fitem = static_cast<FileItem*>(pvitem);
         GroupItem *titem = static_cast<GroupItem*>(fitem->parent());
         KPopupMenu pop;
-        int idRemoveFile = pop.insertItem(i18n("Remove file..."));
+        int idRemoveFile = pop.insertItem(i18n("Remove File..."));
         int r = pop.exec(p);
         if (r == idRemoveFile) {
             ;

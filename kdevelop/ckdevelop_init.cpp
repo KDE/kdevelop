@@ -195,7 +195,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
           this, SLOT(createGUI(KParts::Part*)));
 
-  KDevProjectImpl* prj = new KDevProjectImpl( API::getInstance() );
+#warning commented to get it compile: KDevProjectImpl* prj = new KDevProjectImpl( API::getInstance() );
   //API::getInstance()->setProject( prj ); // DISABLED robe 7/4/2002
   API::getInstance()->setProject( 0 );
   (void) ProjectManager::getInstance();
@@ -602,10 +602,10 @@ void CKDevelop::initMenuBar() {
                         SLOT(slotViewODebuggerView()),actionCollection(),"view_out_dbg");
         pToggleAction->setChecked(true);
         KRadioAction*
-        pRadioAction = new KRadioAction(i18n("&Text only"),0,this,
+        pRadioAction = new KRadioAction(i18n("&Text Only"),0,this,
                        SLOT(slotViewTabText()),actionCollection(),"view_tab_text");
         pRadioAction->setExclusiveGroup("view_tabtext");
-        pRadioAction = new KRadioAction(i18n("&Icons only"),0,this,
+        pRadioAction = new KRadioAction(i18n("&Icons Only"),0,this,
                        SLOT(slotViewTabIcons()),actionCollection(),"view_tab_icons");
         pRadioAction->setExclusiveGroup("view_tabtext");
         pRadioAction = new KRadioAction(i18n("&Text and Icons"),0,this,
@@ -639,16 +639,16 @@ void CKDevelop::initMenuBar() {
           actionCollection(), "project_close");
         pAction = new KAction(i18n("&New Class..."),"classnew",0,this,
                   SLOT(slotProjectNewClass()),actionCollection(),"project_new_class");
-        pAction = new KAction(i18n("&Add existing File(s)..."),0,this,
+        pAction = new KAction(i18n("&Add Existing File(s)..."),0,this,
                   SLOT(slotProjectAddExistingFiles()),actionCollection(),"project_add_file");
         pAction = new KAction(i18n("Add new &Translation File..."),"locale",0,this,
                   SLOT(slotProjectAddNewTranslationFile()),actionCollection(),"project_nwe_trans");
 // we really should reimplement this
-//  pAction = new KAction(i18n("&Remove File from Project"),0,this,
+//  pAction = new KAction(i18n("&Remove File From Project"),0,this,
 //                               SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
         pAction = new KAction(i18n("&File Properties..."),"file_properties",SHIFT+Key_F7,this,
                   SLOT(slotProjectFileProperties()),actionCollection(),"project_file_prop");
-        pAction = new KAction(i18n("Make &messages and merge"),0,this,
+        pAction = new KAction(i18n("Make &Messages and Merge"),0,this,
                   SLOT(slotProjectMessages()),actionCollection(),"project_make_msg");
         pRadioAction = new KRadioAction(i18n("kdoc"),0,this,
                   SLOT(slotSwitchDocTool()),actionCollection(),"project_api_kdoc");
@@ -656,7 +656,7 @@ void CKDevelop::initMenuBar() {
         pRadioAction = new KRadioAction(i18n("doxygen"),0,this,
                   SLOT(slotSwitchDocTool()),actionCollection(),"project_api_doxygen");
         pRadioAction->setExclusiveGroup("project_api");
-        pAction = new KAction(i18n("Configure doxygen"),"configure",0,this,
+        pAction = new KAction(i18n("Configure Doxygen"),"configure",0,this,
                   SLOT(slotConfigureDoxygen()),actionCollection(),"project_api_doxyconf");
         pAction->setEnabled(false);
         pAction = new KAction(i18n("Make AP&I-Doc"),0,this,
@@ -669,7 +669,7 @@ void CKDevelop::initMenuBar() {
                   SLOT(slotProjectMakeDistRPM()),actionCollection(),"project_build_rpm");
         pAction = new KAction(i18n("&Configure RPM Package"),"rpm",0,this,
                   SLOT(slotConfigMakeDistRPM()),actionCollection(),"project_conf_rpm");
-        pAction = new KAction(i18n("Load &tags file"),0,this,
+        pAction = new KAction(i18n("Load &Tags File"),0,this,
                   SLOT(slotProjectLoadTags()),actionCollection(),"project_load_tags");
         pAction = new KAction(i18n("O&ptions..."),"configure",Key_F7,this,
                   SLOT(slotProjectOptions()),actionCollection(),"project_options");
@@ -763,7 +763,7 @@ void CKDevelop::initMenuBar() {
     actionCollection(), "build_distclean" );
 
   pAction = new KAction(
-    i18n("&Autoconf and automake"), 0,
+    i18n("&Autoconf and Automake"), 0,
     this, SLOT(slotBuildAutoconf()),
     actionCollection(), "build_autoconf" );
 
@@ -803,25 +803,25 @@ void CKDevelop::initMenuBar() {
   toolbarDebug->setDelayed(true);
 
   pAction = new KAction(i18n(
-    "Examine core file"), "core", 0,
+    "Examine Core File"), "core", 0,
     this, SLOT(slotDebugExamineCore()),
     actionCollection(), "debug_examine_core" );
   toolbarDebug->insert( pAction );
 
   pAction = new KAction(
-    i18n("Debug another executable"), "exec", 0,
+    i18n("Debug Another Executable"), "exec", 0,
     this, SLOT(slotDebugNamedFile()),
     actionCollection(), "debug_other_exec" );
   toolbarDebug->insert( pAction );
 
   pAction = new KAction(
-    i18n("Attach to process"), "connect_creating", 0,
+    i18n("Attach to Process"), "connect_creating", 0,
     this, SLOT(slotDebugAttach()),
     actionCollection(), "debug_attach_process" );
   toolbarDebug->insert( pAction );
 
   pAction = new KAction(
-    i18n("Debug with arguments"), "exec", 0,
+    i18n("Debug with Arguments"), "exec", 0,
     this, SLOT(slotDebugRunWithArgs()),
     actionCollection(), "debug_with_args" );
   toolbarDebug->insert( pAction );
@@ -837,12 +837,12 @@ void CKDevelop::initMenuBar() {
     "activated or the interrupt was pressed)."));
 
   pAction = new KAction(
-    i18n("Run to cursor"), "dbgrunto", 0,
+    i18n("Run to Cursor"), "dbgrunto", 0,
     this, SLOT(slotDebugRunToCursor()),
     actionCollection(), "debug_run_cursor" );
 
   pAction = new KAction(
-    i18n("Step over"), "dbgnext", 0,
+    i18n("Step Over"), "dbgnext", 0,
     this, SLOT(slotDebugStepOver()),
     actionCollection(), "debug_step_over" );
   pAction->setWhatsThis( i18n("Step over\n\n"
@@ -856,12 +856,12 @@ void CKDevelop::initMenuBar() {
 //   toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
 
   pAction = new KAction(
-    i18n("Step over instruction"), "dbgnextinst", 0,
+    i18n("Step over Instruction"), "dbgnextinst", 0,
     this, SLOT(slotDebugStepOverIns()),
     actionCollection(), "debug_stepi_over" );
 
   pAction = new KAction(
-    i18n("Step into"), "dbgstep", 0,
+    i18n("Step Into"), "dbgstep", 0,
     this, SLOT(slotDebugStepInto()),
     actionCollection(), "debug_step_into" );
   pAction->setWhatsThis( i18n("Step into\n\n"
@@ -874,12 +874,12 @@ void CKDevelop::initMenuBar() {
 //  toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
 
   pAction = new KAction(
-    i18n("Step into instruction"), "dbgstepinst", 0,
+    i18n("Step into Instruction"), "dbgstepinst", 0,
     this, SLOT(slotDebugStepIntoIns()),
     actionCollection(), "debug_stepi_into" );
 
   pAction = new KAction(
-    i18n("Step out"), "dbgstepout", 0,
+    i18n("Step Out"), "dbgstepout", 0,
     this, SLOT(slotDebugStepOutOff()),
     actionCollection(), "debug_step_out" );
   pAction->setWhatsThis( i18n("Step out of\n\n"
@@ -1022,12 +1022,12 @@ void CKDevelop::initMenuBar() {
     actionCollection(), "help_search_marked" );
 
   pAction = new KAction(
-    i18n("Search for Help on..."), "filefind", 0,
+    i18n("Search for Help On..."), "filefind", 0,
     this, SLOT(slotHelpSearch()),
     actionCollection(), "help_search" );
 
   pAction = new KAction(
-    i18n("Show Manpage on..."), "help", 0,
+    i18n("Show Manpage On..."), "help", 0,
     this, SLOT(slotManpage()),
     actionCollection(), "help_manpage" );
 
@@ -1098,28 +1098,28 @@ void CKDevelop::initMenuBar() {
   ////////////////////////////////////////////////
 
   classbrowser_popup = new QPopupMenu();
-  classbrowser_popup->insertItem( i18n("Goto declaration"), this,
+  classbrowser_popup->insertItem( i18n("Goto Declaration"), this,
                                   SLOT(slotClassbrowserViewDeclaration()),0, ID_CV_VIEW_DECLARATION );
-  classbrowser_popup->insertItem( i18n("Goto definition"), this,
+  classbrowser_popup->insertItem( i18n("Goto Definition"), this,
                                   SLOT(slotClassbrowserViewDefinition()), 0, ID_CV_VIEW_DEFINITION );
   classbrowser_popup->insertSeparator();
-  classbrowser_popup->insertItem( i18n("Goto class declaration"), this,
+  classbrowser_popup->insertItem( i18n("Goto Class Declaration"), this,
                                   SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
-  classbrowser_popup->insertItem( SmallIconSet("classnew"),i18n("New class..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("classnew"),i18n("New Class..."), this,
                                   SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
 
   classbrowser_popup->insertSeparator();
-  classbrowser_popup->insertItem( SmallIconSet("methodnew"),i18n("Add member function..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("methodnew"),i18n("Add Member Function..."), this,
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
-  classbrowser_popup->insertItem( SmallIconSet("variablenew"),i18n("Add member variable..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("variablenew"),i18n("Add Member Variable..."), this,
                                   SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
-  classbrowser_popup->insertItem( SmallIconSet("CVpublic_signal"),i18n("Add signal..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_signal"),i18n("Add Signal..."), this,
                                   SLOT(slotClassbrowserNewSignal()), 0, ID_CV_SIGNAL_NEW );
-  classbrowser_popup->insertItem( SmallIconSet("CVpublic_slot"),i18n("Add slot..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_slot"),i18n("Add Slot..."), this,
                                   SLOT(slotClassbrowserNewSlot()), 0, ID_CV_SLOT_NEW );
 
   classbrowser_popup->insertSeparator();
-  classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
+  classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show Graphical Classview"), this,
                                   SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
 
 

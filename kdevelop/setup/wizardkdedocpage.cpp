@@ -115,7 +115,7 @@ void WizardKDEDocPage::slotKDEpressed()
                                    "KDE-library documentation. Please choose 'Proceed'\n"
                                    "in any case. If you don't have a documentation,\n"
                                    "it will be generated automatically in one of the\n"
-                                   "next steps"),i18n("The selected path is not correct!"));
+                                   "next steps"),i18n("The Selected Path is not Correct!"));
     }
   }
 }

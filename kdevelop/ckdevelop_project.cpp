@@ -240,7 +240,7 @@ void CKDevelop::slotAddExistingFiles(){
                                   i18n("\nThe file\n\n%1\n\n"
                                         "already exists.\nDo you want overwrite the old one?\n")
                                         .arg(source_name),
-                                  i18n("File exists!"));
+                                  i18n("File Exists!"));
       if(result==KMessageBox::Yes)
         copy = true;
       if(result==KMessageBox::No)
@@ -778,7 +778,7 @@ void CKDevelop::slotProjectGenerate()
                                  "directory containing a Makefile.am\n"
                                  "to create a Project file from.\n"
                                  "Are you sure this is the correct path?\n"),
-                            i18n("The selected path may not correct!")) != KMessageBox::Yes)
+                            i18n("The selected Path May Not Correct!")) != KMessageBox::Yes)
     {
       slotStatusMsg(i18n("Ready."));
       return;

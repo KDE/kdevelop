@@ -475,7 +475,7 @@ void PartController::slotCurrentChanged(QWidget *w)
 
 void PartController::slotOpenFile()
 {
-  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.*", TopLevel::getInstance()->main(), i18n("Open file"));
+  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.*", TopLevel::getInstance()->main(), i18n("Open File"));
   if (fileName.isNull())
     return;
 

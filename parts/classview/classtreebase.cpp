@@ -54,9 +54,9 @@ KPopupMenu *ClassTreeItem::createPopup()
 
     KPopupMenu *popup = new KPopupMenu();
     if (features & KDevLanguageSupport::Declarations)
-        popup->insertItem( i18n("Go to declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
+        popup->insertItem( i18n("Go to Declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
     if (m_item->itemType() == PIT_METHOD)
-        popup->insertItem( i18n("Go to definition..."), classTree(), SLOT(slotGotoImplementation()) );
+        popup->insertItem( i18n("Go to Definition..."), classTree(), SLOT(slotGotoImplementation()) );
 
     QString title;
     switch(m_item->itemType()) {
@@ -67,13 +67,13 @@ KPopupMenu *ClassTreeItem::createPopup()
             bool hasAddMethod = features & KDevLanguageSupport::AddMethod;
             bool hasAddAttribute = features & KDevLanguageSupport::AddAttribute;
             if (hasAddMethod)
-                popup->insertItem( i18n("Add method..."), classTree(), SLOT(slotAddMethod()));
+                popup->insertItem( i18n("Add Method..."), classTree(), SLOT(slotAddMethod()));
             if (hasAddAttribute)
-                popup->insertItem( i18n("Add attribute..."), classTree(), SLOT(slotAddAttribute()));
+                popup->insertItem( i18n("Add Attribute..."), classTree(), SLOT(slotAddAttribute()));
             popup->insertSeparator();
-            popup->insertItem( i18n("Parent classes..."), classTree(), SLOT(slotClassBaseClasses()));
-            popup->insertItem( i18n("Child classes..."), classTree(), SLOT(slotClassDerivedClasses()));
-            popup->insertItem( i18n("Class tool..."), classTree(), SLOT(slotClassTool()));
+            popup->insertItem( i18n("Parent Classes..."), classTree(), SLOT(slotClassBaseClasses()));
+            popup->insertItem( i18n("Child Classes..."), classTree(), SLOT(slotClassDerivedClasses()));
+            popup->insertItem( i18n("Class Tool..."), classTree(), SLOT(slotClassTool()));
             }
         break;
     case PIT_STRUCT:

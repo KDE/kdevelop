@@ -158,7 +158,7 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     indexedtocs_view->addColumn("");
     indexedtocs_view->header()->hide();
     
-    QPushButton *update_button = new QPushButton(i18n("&Update index now"), w);
+    QPushButton *update_button = new QPushButton(i18n("&Update Index Now"), w);
     connect( update_button, SIGNAL(clicked()), this, SLOT(updateIndexClicked()) );
     
     QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());

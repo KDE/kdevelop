@@ -94,12 +94,12 @@ void ClassViewPart::setupPopup()
     popup->clear();
 
     if (langHasFeature(KDevLanguageSupport::Declarations))
-        popup->insertItem(i18n("Go to declaration"), this, SLOT(selectedGotoDeclaration()));
+        popup->insertItem(i18n("Go to Declaration"), this, SLOT(selectedGotoDeclaration()));
 
-    popup->insertItem(i18n("Go to implementation"), this, SLOT(selectedGotoImplementation()));
-    popup->insertItem(i18n("Go to class declaration"), this, SLOT(selectedGotoClassDeclaration()));
-    popup->insertItem(i18n("View class hierarchy"), this, SLOT(selectedViewHierarchy()));
-    popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
+    popup->insertItem(i18n("Go to Implementation"), this, SLOT(selectedGotoImplementation()));
+    popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(selectedGotoClassDeclaration()));
+    popup->insertItem(i18n("View Class Hierarchy"), this, SLOT(selectedViewHierarchy()));
+    popup->insertItem("Dump Class Tree on Console", this, SLOT(dumpTree()));
 
     bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
     bool hasAddAttribute = langHasFeature(KDevLanguageSupport::AddAttribute);
@@ -107,11 +107,11 @@ void ClassViewPart::setupPopup()
     if (hasAddMethod || hasAddAttribute || hasNewClass) 
         popup->insertSeparator();
     if (hasNewClass)
-        popup->insertItem(SmallIcon("classnew"), i18n("Add class..."), this, SLOT(selectedAddClass()));
+        popup->insertItem(SmallIcon("classnew"), i18n("Add Class..."), this, SLOT(selectedAddClass()));
     if (hasAddMethod)
-        popup->insertItem(SmallIcon("methodnew"), i18n("Add method..."), this, SLOT(selectedAddMethod()));
+        popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
     if (hasAddAttribute)
-        popup->insertItem(SmallIcon("variablenew"), i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
+        popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
 }
 
 

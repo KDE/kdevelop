@@ -97,7 +97,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("&Frame stack"));
+    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"));
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -142,7 +142,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
 
-    action = new KAction(i18n("Examine core file"), "core", 0,
+    action = new KAction(i18n("Examine Core File"), "core", 0,
                          this, SLOT(slotExamineCore()),
                          actionCollection(), "debug_core");
     action->setStatusText( i18n("Loads a core file into the debugger") );
@@ -153,7 +153,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "image of the program memory at the time it crashed, "
                                "allowing you a post-mortem analysis.") );
 
-    action = new KAction(i18n("Attach to process"), "connect_creating", 0,
+    action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
                          this, SLOT(slotAttachProcess()),
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
@@ -181,13 +181,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
 
-    action = new KAction(i18n("Run to &cursor"), "dbgrunto", 0,
+    action = new KAction(i18n("Run to &Cursor"), "dbgrunto", 0,
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
     action->setEnabled(false);
     action->setStatusText( i18n("Continues execution until the cursor position is reached") );
 
-    action = new KAction(i18n("Step &over"), "dbgnext", 0,
+    action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setEnabled(false);
@@ -198,13 +198,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
 
-    action = new KAction(i18n("Step over ins&truction"), "dbgnextinst", 0,
+    action = new KAction(i18n("Step over Ins&truction"), "dbgnextinst", 0,
                          this, SLOT(slotStepOverInstruction()),
                          actionCollection(), "debug_stepoverinst");
     action->setEnabled(false);
     action->setStatusText( i18n("Steps over the next assembly instruction") );
 
-    action = new KAction(i18n("Step &into"), "dbgstep", 0,
+    action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setEnabled(false);
@@ -215,13 +215,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "the function has been entered.") );
 
 
-    action = new KAction(i18n("Step into i&nstruction"), "dbgstepinst", 0,
+    action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setEnabled(false);
     action->setStatusText( i18n("Steps into the next assembly instruction") );
 
-    action = new KAction(i18n("Step o&ut"), "dbgstepout", 0,
+    action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setEnabled(false);

@@ -94,7 +94,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   template_checkbox = new QCheckBox( this, "addTemplate_checkbox");
   template_checkbox->setFocusPolicy( QWidget::TabFocus );
   template_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-  template_checkbox->setText( i18n("insert header/cpp-templates to added files" ));
+  template_checkbox->setText( i18n("Insert header/cpp-templates to added files" ));
   template_checkbox->setAutoRepeat( FALSE );
   template_checkbox->setAutoResize( FALSE );
   template_checkbox->setChecked( TRUE );

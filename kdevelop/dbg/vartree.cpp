@@ -169,10 +169,10 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
     KPopupMenu popup(selectedItem->text(VarNameCol));
     if (dynamic_cast<WatchRoot*>(item))
     {
-      popup.insertItem( i18n("Delete watch variable"), this, SLOT(slotRemoveWatchVariable()) );
+      popup.insertItem( i18n("Delete Watch Variable"), this, SLOT(slotRemoveWatchVariable()) );
     }
 
-    popup.insertItem( i18n("Toggle watchpoint"), this, SLOT(slotToggleWatchpoint()) );
+    popup.insertItem( i18n("Toggle Watchpoint"), this, SLOT(slotToggleWatchpoint()) );
     popup.exec(QCursor::pos());
   }
 }

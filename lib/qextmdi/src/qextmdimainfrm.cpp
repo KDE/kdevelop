@@ -1647,9 +1647,9 @@ void QextMdiMainFrm::fillWindowMenu()
    m_pWindowMenu->insertSeparator();
    m_pWindowMenu->insertItem(tr("&MDI Mode..."), m_pMdiModeMenu);
    m_pMdiModeMenu->clear();
-   m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
-   m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-   m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+   m_pMdiModeMenu->insertItem(tr("&Toplevel Mode"), this, SLOT(switchToToplevelMode()));
+   m_pMdiModeMenu->insertItem(tr("C&hildframe Mode"), this, SLOT(switchToChildframeMode()));
+   m_pMdiModeMenu->insertItem(tr("Ta&b Page Mode"), this, SLOT(switchToTabPageMode()));
    switch (m_mdiMode) {
    case QextMdi::ToplevelMode:
       m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
@@ -1667,13 +1667,13 @@ void QextMdiMainFrm::fillWindowMenu()
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
       m_pPlacingMenu->clear();
-      m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
-      m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-      m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
-      m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
-      m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
-      m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
-      m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      m_pPlacingMenu->insertItem(tr("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(tr("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(tr("Expand &Vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(tr("Expand &Horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(tr("Tile &Non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(tr("Tile Overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(tr("Tile V&ertically"), m_pMdi,SLOT(tileVertically()));
       if (m_mdiMode == QextMdi::ToplevelMode) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
       }

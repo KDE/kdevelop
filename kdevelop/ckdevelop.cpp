@@ -1043,7 +1043,7 @@ void CKDevelop::slotBuildRun()
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project Sources Have Been Modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -1071,7 +1071,7 @@ void CKDevelop::slotBuildRunWithArgs()
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project Sources Have Been Modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -1633,7 +1633,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project Sources Have Been Modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -1973,7 +1973,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
     makefile=prj->getCvsMakefile();
     if (makefile.isNull()) {
       QMessageBox::warning( this,
-        i18n("Makefile not found"),
+        i18n("Makefile Not Found"),
         i18n("The build-Makefile to create the configure-script "
             "wasn't found. Please make sure your toplevel "
             "source directory contains a build-Makefile with the "
@@ -2002,7 +2002,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   // if we still dont have a makefile something is really wrong
   if (makefile.isNull()) {
     QMessageBox::warning( this,
-      i18n("Makefile not found"),
+      i18n("Makefile Not Found"),
       i18n("You want to build your project by running 'make', "
            "but there is no Makefile in this directory.\n\n"
            "Hints:\n"
@@ -2530,7 +2530,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   if(!foundGlimpse && !foundHtDig){
     KMessageBox::error( 0,
                         i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),
-                        i18n("Program not found!"));
+                        i18n("Program Not Found!"));
     return;
   }
 
@@ -2717,7 +2717,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   {
     KMessageBox::error(0,
                         i18n("KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!"),
-                        i18n("Program not found!"));
+                        i18n("Program Not Found!"));
     return;
   }
 
@@ -3473,7 +3473,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
     if (list.isEmpty()){
 
        KMessageBox::information(0,i18n("\"%1\" not found in documentation!").arg(doc_search_display_text),
-                                  i18n("Not found!"));
+                                  i18n("Not Found!"));
       return;
     }
 
@@ -3984,7 +3984,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     if( text == i18n("Qt-Library")){
       if(KMessageBox::questionYesNo(0,
                                     i18n("KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?"),
-                                    i18n("File not found!")) == KMessageBox::Yes) {
+                                    i18n("File Not Found!")) == KMessageBox::Yes) {
         slotOptionsKDevelop();
       }
       return;
@@ -3995,7 +3995,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
        text == i18n("KDE-KAB-Library")      || text == i18n("KDE-KSpell-Library")){
       if(KMessageBox::questionYesNo(0,
                             i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),
-                            i18n("File not found!")) == KMessageBox::Yes) {
+                            i18n("File Not Found!")) == KMessageBox::Yes) {
         slotOptionsUpdateKDEDocumentation();
       }
       return;

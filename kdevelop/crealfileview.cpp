@@ -293,7 +293,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
   {
   case THPROJECT :
     popup = new KPopupMenu(i18n("RFV Options"));
-    popup->insertItem( i18n("Show non-project Files"),this,
+    popup->insertItem( i18n("Show Non-project Files"),this,
         SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
     popup->setCheckable(true);
     if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
@@ -310,16 +310,16 @@ KPopupMenu *CRealFileView::getCurrentPopup()
     	popup->insertItem( i18n("Commit"), this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
     	popup->insertItem( i18n("Add to Repository"),this,
     	    SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD );
-    	popup->insertItem( i18n("Remove from Repository (and Disk)"), this,
+    	popup->insertItem( i18n("Remove From Repository (and Disk)"), this,
     	    SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE );
      }
     break;
 
   case THINSTALLED_FILE:
     popup = new KPopupMenu(i18n("File (Registered)"));
-    popup->insertItem( i18n("Remove File from Project..."), this,
+    popup->insertItem( i18n("Remove File From Project..."), this,
           SLOT(slotRemoveFileFromProject()),0,ID_PROJECT_REMOVE_FILE);
-    popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,
+    popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File From Disk..."),this,
           SLOT(slotDeleteFilePhys()),0,ID_FILE_DELETE);
     popup->insertSeparator();
     popup->insertItem( i18n("Properties..."),this,
@@ -336,8 +336,8 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 
   case THFOLDER:
     popup = new KPopupMenu(i18n("Folder"));
-    popup->insertItem( SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-    popup->insertItem( SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+    popup->insertItem( SmallIconSet("filenew"),i18n("New File..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+    popup->insertItem( SmallIconSet("classnew"),i18n("New Class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
     popup->insertSeparator();
     popup->insertItem( SmallIconSet("folder_new"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
 //    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
@@ -357,7 +357,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
       popup->insertItem( i18n("Commit"),this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
       popup->insertItem( i18n("Add to Repository"),this,
           SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD);
-      popup->insertItem( i18n("Remove from Repository (and Disk)"),this,
+      popup->insertItem( i18n("Remove From Repository (and Disk)"),this,
           SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE );
 
      }
@@ -397,7 +397,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
     popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
     id = popup->insertItem( i18n("Add to Repository"),this, SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD );
     popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
-    id = popup->insertItem( i18n("Remove from Repository (and disk)"),this, SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE);
+    id = popup->insertItem( i18n("Remove From Repository (and disk)"),this, SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE);
     popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
   }
 

@@ -170,31 +170,31 @@ void CClassView::initPopups()
   int id;
   // Project popup
   projectPopup.insertTitle(i18n ("Project"));
-  projectPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-  projectPopup.insertItem(SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  projectPopup.insertItem(SmallIconSet("filenew"),i18n("New File..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  projectPopup.insertItem(SmallIconSet("classnew"),i18n("New Class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   projectPopup.insertSeparator();
   projectPopup.insertItem(SmallIconSet("configure"),i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
-  projectPopup.insertItem(SmallIconSet("graphview"),i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
+  projectPopup.insertItem(SmallIconSet("graphview"),i18n("Graphical Classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
 
 
 
   // Class popup
   classPopup.insertTitle(SmallIcon("CVclass"), i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_CLASS_DEFINITION);
-  classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
+  classPopup.insertItem( i18n("Go to Definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_CLASS_DEFINITION);
+  classPopup.insertItem( i18n("Go to Declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
 //  classPopup.insertItem(SmallIcon("CVclass"), i18n("Class Properties & tool"),this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
   classPopup.insertSeparator();
-  classPopup.insertItem(SmallIconSet("methodnew"), i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
-  classPopup.insertItem(SmallIconSet("variablenew"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0,ID_CV_ATTRIBUTE_NEW);
-  classPopup.insertItem(SmallIconSet("CVpublic_signal"), i18n("Add signal..."), this, SLOT(slotSignalNew()),0, ID_CV_SIGNAL_NEW);
-  classPopup.insertItem(SmallIconSet("CVpublic_slot"), i18n("Add slot..."), this, SLOT(slotSlotNew()),0,ID_CV_SLOT_NEW);
+  classPopup.insertItem(SmallIconSet("methodnew"), i18n("Add Member Function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
+  classPopup.insertItem(SmallIconSet("variablenew"), i18n("Add Member Variable..."), this, SLOT(slotAttributeNew()),0,ID_CV_ATTRIBUTE_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_signal"), i18n("Add Signal..."), this, SLOT(slotSignalNew()),0, ID_CV_SIGNAL_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_slot"), i18n("Add Slot..."), this, SLOT(slotSlotNew()),0,ID_CV_SLOT_NEW);
 //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0,ID_CV_IMPLEMENT_VIRTUAL);
 //  classPopup.setItemEnabled( id, false );
   classPopup.insertSeparator();
   classPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   classPopup.insertSeparator();
-  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
-  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
+  classPopup.insertItem( i18n("Parent Classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
+  classPopup.insertItem( i18n("Child Classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
   classPopup.insertItem(SmallIconSet("CVclass"), i18n("Properties"), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
   //  classPopup.insertSeparator();
   //  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
@@ -206,18 +206,18 @@ void CClassView::initPopups()
 
   // Struct popup
   structPopup.insertTitle(SmallIcon("CVstruct"), i18n( "Struct" ) );
-  structPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
+  structPopup.insertItem( i18n("Go to Declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
   structPopup.insertSeparator();
   structPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
 
   // Method popup
   methodPopup.insertTitle(SmallIcon("CVpublic_meth"), i18n( "Method" ),1 );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DEFINITION);
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DECLARATION);
+  methodPopup.insertItem( i18n("Go to Definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DEFINITION);
+  methodPopup.insertItem( i18n("Go to Declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DECLARATION);
   methodPopup.insertSeparator();
   methodPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   methodPopup.insertSeparator();
-  methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
+  methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete Method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
   attributePopup.insertTitle(SmallIcon("CVpublic_var"), i18n( "Attribute" ), 1);
@@ -230,25 +230,25 @@ void CClassView::initPopups()
 
   // Slot popup
   slotPopup.insertTitle(SmallIcon("CVpublic_slot"), i18n( "Slot" ),1 );
-  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
-  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
+  slotPopup.insertItem( i18n("Go to Definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
+  slotPopup.insertItem( i18n("Go to Declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
   slotPopup.insertSeparator();
   slotPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   slotPopup.insertSeparator();
-  slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
+  slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete Slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Signal popup
   signalPopup.insertTitle(SmallIcon("CVpublic_signal"), i18n( "Signal" ) );
-  signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION );
+  signalPopup.insertItem( i18n( "Go to Declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION );
   signalPopup.insertSeparator();
   signalPopup.insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   signalPopup.insertSeparator();
-  signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
+  signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete Signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Folder popup
   folderPopup.insertTitle(SmallIcon("folder"), i18n( "Folder" ) );
-  folderPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-  folderPopup.insertItem(SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  folderPopup.insertItem(SmallIconSet("filenew"),i18n("New File..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  folderPopup.insertItem(SmallIconSet("classnew"),i18n("New Class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   folderPopup.insertSeparator();
   id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
 
@@ -1231,11 +1231,11 @@ void CClassView::slotClassDelete()
 {
   if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this class?"),
-                      i18n("Delete class")) == KMessageBox::Yes )
+                      i18n("Delete Class")) == KMessageBox::Yes )
   {
     KMessageBox::error( this,
                       i18n("This function isn't implemented yet."),
-                      i18n("Not implemented") );
+                      i18n("Not Implemented") );
   }
 
 }
@@ -1335,11 +1335,11 @@ void CClassView::slotAttributeDelete()
 {
   if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this attribute?"),
-                      i18n("Delete attribute")) == KMessageBox::Yes )
+                      i18n("Delete Attribute")) == KMessageBox::Yes )
   {
     KMessageBox::error( this,
                       i18n("This function isn't implemented yet."),
-                      i18n("Not implemented") );
+                      i18n("Not Implemented") );
   }
 }
 
@@ -1368,11 +1368,11 @@ void CClassView::slotSignalDelete()
 {
   if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this signal?"),
-                      i18n("Delete signal")) == KMessageBox::Yes )
+                      i18n("Delete Signal")) == KMessageBox::Yes )
   {
     KMessageBox::error( this,
                       i18n("This function isn't implemented yet."),
-                      i18n("Not implemented") );
+                      i18n("Not Implemented") );
   }
 }
 
@@ -1401,11 +1401,11 @@ void CClassView::slotSlotDelete()
 {
   if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this slot?"),
-                      i18n("Delete slot")) == KMessageBox::Yes )
+                      i18n("Delete Slot")) == KMessageBox::Yes )
   {
     KMessageBox::error( this,
                       i18n("This function isn't implemented yet."),
-                      i18n("Not implemented") );
+                      i18n("Not Implemented") );
   }
 }
 
@@ -1419,7 +1419,7 @@ void CClassView::slotFolderDelete()
 
   if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this folder?"),
-                      i18n("Delete folder")) == KMessageBox::Yes )
+                      i18n("Delete Folder")) == KMessageBox::Yes )
   {
     parent = currentItem()->parent();
     parent->removeItem( currentItem() );

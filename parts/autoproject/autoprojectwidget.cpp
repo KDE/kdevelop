@@ -349,10 +349,10 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         SubprojectItem *spitem = static_cast<SubprojectItem*>(pvitem);
         KPopupMenu pop(i18n("Subproject"));
         int idOptions = pop.insertItem(i18n("Options..."));
-        int idAddSubproject = pop.insertItem(i18n("Add subproject..."));
-        int idAddTarget = pop.insertItem(i18n("Add target..."));
-        int idAddService = pop.insertItem(i18n("Add service desktop file..."));
-        int idAddApplication = pop.insertItem(i18n("Add application desktop file..."));
+        int idAddSubproject = pop.insertItem(i18n("Add Subproject..."));
+        int idAddTarget = pop.insertItem(i18n("Add Target..."));
+        int idAddService = pop.insertItem(i18n("Add Service Desktop File..."));
+        int idAddApplication = pop.insertItem(i18n("Add Application Desktop File..."));
         int idBuild = pop.insertItem(i18n("Build"));
         int r = pop.exec(p);
         if (r == idOptions) {
@@ -392,7 +392,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
             || titem->primary == "LTLIBRARIES") {
             idOptions = pop.insertItem(i18n("Options..."));
         }
-        int idAddFile = pop.insertItem(i18n("Add file..."));
+        int idAddFile = pop.insertItem(i18n("Add File..."));
         int idBuild = pop.insertItem(i18n("Build"));
         int r = pop.exec(p);
         if (r == idOptions) {
@@ -415,7 +415,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         FileItem *fitem = static_cast<FileItem*>(pvitem);
         TargetItem *titem = static_cast<TargetItem*>(fitem->parent());
         KPopupMenu pop;
-        int idRemoveFile = pop.insertItem(i18n("Remove file..."));
+        int idRemoveFile = pop.insertItem(i18n("Remove File..."));
         FileContext context(activeSubproject->path + "/" + fitem->name);
         m_part->core()->fillContextMenu(&pop, &context);
         int r = pop.exec(p);

@@ -88,7 +88,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("&Frame stack"));
+    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"));
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);

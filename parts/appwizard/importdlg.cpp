@@ -125,7 +125,7 @@ void ImportDialog::accept()
 void ImportDialog::dirButtonClicked()
 {
     QString dir = KFileDialog::getExistingDirectory(QString::null, this,
-                                                    i18n("Choose a directory to import"));
+                                                    i18n("Choose a Directory to Import"));
     dir_edit->setText(dir);
 }
 

@@ -187,7 +187,7 @@ void CUpdateKDEDocDlg::OK(){
     KMessageBox::error(this,i18n("The chosen path for the KDE-Libs does not lead to the KDE Libraries.\n\n"
                    "Please choose the correct path!\n\n"
                    "This is where you have unpacked e.g. a kdelibs snapshot a la /snapshot/kdelibs."),
-                   i18n("The selected path is not correct!"));
+                   i18n("The Selected Path is not Correct!"));
     return;
   }
 
@@ -209,7 +209,7 @@ void CUpdateKDEDocDlg::OK(){
     KMessageBox::error(this,
                         i18n("You need write permission to create\n"
                           "the documentation in\n%1").arg(new_doc_path),
-                  i18n("Error in creating documentation!"));
+                  i18n("Error in Creating Documentation!"));
     return;
   }
 

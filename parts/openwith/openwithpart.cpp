@@ -57,13 +57,13 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     }
     sub->insertSeparator();
     
-    popup->insertItem(i18n("Open with"), sub);
+    popup->insertItem(i18n("Open With"), sub);
 
     // make sure the generic "Open with ..." entry get's appended to the submenu
     popup = sub;
   }
 
-  popup->insertItem("Open with ...", this, SLOT(openWithDialog()));
+  popup->insertItem(i18n("Open With..."), this, SLOT(openWithDialog()));
 }
 
 

@@ -273,7 +273,7 @@ void ProjectManager::initializeProjectSupport()
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
   //API::getInstance()->project()->openProject(fi.absFilePath());
-  API::getInstance()->project()->setProjectName(projectName);
+#warning commented to get it compile:  API::getInstance()->project()->setProjectName(projectName);
 
   Core::getInstance()->doEmitProjectOpened();
 }

@@ -50,9 +50,9 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context)
                            this, SLOT(slotCommit()) );
         popup->insertItem( i18n("Update: %1").arg(name),
                            this, SLOT(slotUpdate()) );
-        popup->insertItem( i18n("Add to repository: %1").arg(name),
+        popup->insertItem( i18n("Add to Repository: %1").arg(name),
                            this, SLOT(slotAdd()) );
-        popup->insertItem( i18n("Remove from repository: %1").arg(name),
+        popup->insertItem( i18n("Remove From Repository: %1").arg(name),
                            this, SLOT(slotRemove()) );
     }
 }

@@ -1771,16 +1771,16 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
 
   // view activation via alt+numberkey for tabpage mode
   // (Note: the program will call the index ( = viewnumber - 1))
-  accel->insertItem( i18n("Activate view 1"), "ActivateView1", IDK_GOTO_EDITORVIEW1);
-  accel->insertItem( i18n("Activate view 2"), "ActivateView2", IDK_GOTO_EDITORVIEW2);
-  accel->insertItem( i18n("Activate view 3"), "ActivateView3", IDK_GOTO_EDITORVIEW3);
-  accel->insertItem( i18n("Activate view 4"), "ActivateView4", IDK_GOTO_EDITORVIEW4);
-  accel->insertItem( i18n("Activate view 5"), "ActivateView5", IDK_GOTO_EDITORVIEW5);
-  accel->insertItem( i18n("Activate view 6"), "ActivateView6", IDK_GOTO_EDITORVIEW6);
-  accel->insertItem( i18n("Activate view 7"), "ActivateView7", IDK_GOTO_EDITORVIEW7);
-  accel->insertItem( i18n("Activate view 8"), "ActivateView8", IDK_GOTO_EDITORVIEW8);
-  accel->insertItem( i18n("Activate view 9"), "ActivateView9", IDK_GOTO_EDITORVIEW9);
-  accel->insertItem( i18n("Activate view 10"), "ActivateView10", IDK_GOTO_EDITORVIEW10);
+  accel->insertItem( i18n("Activate View 1"), "ActivateView1", IDK_GOTO_EDITORVIEW1);
+  accel->insertItem( i18n("Activate View 2"), "ActivateView2", IDK_GOTO_EDITORVIEW2);
+  accel->insertItem( i18n("Activate View 3"), "ActivateView3", IDK_GOTO_EDITORVIEW3);
+  accel->insertItem( i18n("Activate View 4"), "ActivateView4", IDK_GOTO_EDITORVIEW4);
+  accel->insertItem( i18n("Activate View 5"), "ActivateView5", IDK_GOTO_EDITORVIEW5);
+  accel->insertItem( i18n("Activate View 6"), "ActivateView6", IDK_GOTO_EDITORVIEW6);
+  accel->insertItem( i18n("Activate View 7"), "ActivateView7", IDK_GOTO_EDITORVIEW7);
+  accel->insertItem( i18n("Activate View 8"), "ActivateView8", IDK_GOTO_EDITORVIEW8);
+  accel->insertItem( i18n("Activate View 9"), "ActivateView9", IDK_GOTO_EDITORVIEW9);
+  accel->insertItem( i18n("Activate View 10"), "ActivateView10", IDK_GOTO_EDITORVIEW10);
   accel->connectItem("ActivateView1", this, SLOT(activateView1()), true, 0);
   accel->connectItem("ActivateView2", this, SLOT(activateView2()), true, 0);
   accel->connectItem("ActivateView3", this, SLOT(activateView3()), true, 0);
@@ -1845,13 +1845,13 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "Grep", m_pParent, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
-  accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
+  accel->insertItem( i18n("Search Selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
   accel->connectItem( "GrepSearch", m_pParent, SLOT(slotEditSearchText() ) );
 
   accel->insertItem( i18n("Search CTags Database"), "CTagsSearch", IDK_EDIT_TAGS_SEARCH );
   accel->connectItem( "CTagsSearch", m_pParent, SLOT(slotTagSearch() ), true, ID_EDIT_TAGS_SEARCH );
 
-  accel->insertItem( i18n("Switch To Header/Source"), "CTagsSwitch", IDK_EDIT_TAGS_SWITCH );
+  accel->insertItem( i18n("Switch to Header/Source"), "CTagsSwitch", IDK_EDIT_TAGS_SWITCH );
   accel->connectItem( "CTagsSwitch", m_pParent, SLOT(slotTagSwitchTo() ), true, ID_EDIT_TAGS_SWITCH );
 
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
@@ -1935,7 +1935,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("New Class"), "NewClass", 0);
   accel->connectItem("NewClass", m_pParent, SLOT(slotProjectNewClass()), true, ID_PROJECT_NEW_CLASS );
 
-  accel->insertItem(i18n("Add existing File(s)"), "AddExistingFiles", 0);
+  accel->insertItem(i18n("Add Existing File(s)"), "AddExistingFiles", 0);
   accel->connectItem("AddExistingFiles",m_pParent, SLOT(slotProjectAddExistingFiles()), true, ID_PROJECT_ADD_FILE_EXIST );
 
   accel->insertItem(i18n("Add new Translation File"),"Add new Translation File", 0);
@@ -1944,7 +1944,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
   accel->connectItem("FileProperties", m_pParent, SLOT(slotProjectFileProperties() ), true, ID_PROJECT_FILE_PROPERTIES );
 
-  accel->insertItem(i18n("Make messages and merge"), "MakeMessages", 0);
+  accel->insertItem(i18n("Make Messages and Merge"), "MakeMessages", 0);
   accel->connectItem("MakeMessages", m_pParent, SLOT(slotProjectMessages()), true, ID_PROJECT_MESSAGES  );
 
   accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", 0);
@@ -1959,10 +1959,10 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
   accel->connectItem("ProjectOptions", m_pParent, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
 
-  accel->insertItem(i18n("Make tags file"), "MakeTagsfile", 0);
+  accel->insertItem(i18n("Make Tags File"), "MakeTagsfile", 0);
   accel->connectItem("MakeTagsfile", m_pParent, SLOT(slotProjectMakeTags() ), true, ID_PROJECT_MAKE_TAGS );
 
-  accel->insertItem(i18n("Load tags file"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);
+  accel->insertItem(i18n("Load Tags File"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);
   accel->connectItem("LoadTagsfile", m_pParent, SLOT(slotProjectLoadTags() ), true, ID_PROJECT_LOAD_TAGS );
 
   //build menu
@@ -1978,13 +1978,13 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Clean/Rebuild all"), "CleanRebuildAll", 0);
   accel->connectItem( "CleanRebuildAll", m_pParent, SLOT(slotBuildCleanRebuildAll()), true, ID_BUILD_CLEAN_REBUILD_ALL );
 
-  accel->insertItem( i18n("Stop process"), "Stop_proc", IDK_BUILD_STOP);
+  accel->insertItem( i18n("Stop Process"), "Stop_proc", IDK_BUILD_STOP);
   accel->connectItem( "Stop_proc", m_pParent, SLOT(slotBuildStop() ), true, ID_BUILD_STOP );
 
   accel->insertItem( i18n("Execute"), "Run", IDK_BUILD_RUN);
   accel->connectItem( "Run", m_pParent, SLOT(slotBuildRun() ), true, ID_BUILD_RUN );
 
-  accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
+  accel->insertItem( i18n("Execute with Arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
   accel->connectItem( "Run_with_args", m_pParent, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
 
   accel->insertItem( i18n("DistClean"), "BuildDistClean", 0);
@@ -1993,7 +1993,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Make Clean"), "BuildMakeClean", 0);
   accel->connectItem("BuildMakeClean",m_pParent, SLOT(slotBuildMakeClean()), true, ID_BUILD_MAKECLEAN );
 
-  accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", 0);
+  accel->insertItem( i18n("Autoconf and Automake"), "BuildAutoconf", 0);
   accel->connectItem("BuildAutoconf", m_pParent,SLOT(slotBuildAutoconf()), true, ID_BUILD_AUTOCONF );
 
   accel->insertItem( i18n("Configure..."), "BuildConfigure", 0);
@@ -2028,85 +2028,85 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "HelpProjectManual", m_pParent, SLOT(slotHelpManual()), true, ID_HELP_USER_MANUAL);   // Tab-Switch
 
   // Debugger startups
-  accel->insertItem( i18n("Debug start"), "DebugStart", 0);
+  accel->insertItem( i18n("Debug Start"), "DebugStart", 0);
   accel->connectItem( "DebugStart", m_pParent, SLOT(slotBuildDebugStart()), true, ID_DEBUG_START);
 
-  accel->insertItem( i18n("Debug start other"), "DebugStartOther", 0);
+  accel->insertItem( i18n("Debug Start Other"), "DebugStartOther", 0);
   accel->connectItem( "DebugStartOther", m_pParent, SLOT(slotDebugNamedFile()), true, ID_DEBUG_START_OTHER);
 
-  accel->insertItem( i18n("Debug start with args"), "DebugRunWithArgs", 0);
+  accel->insertItem( i18n("Debug Start with Args"), "DebugRunWithArgs", 0);
   accel->connectItem( "DebugRunWithArgs", m_pParent, SLOT(slotDebugRunWithArgs()), true, ID_DEBUG_SET_ARGS);
 
-  accel->insertItem( i18n("Debug examine core"), "DebugExamineCore", 0);
+  accel->insertItem( i18n("Debug Examine Core"), "DebugExamineCore", 0);
   accel->connectItem( "DebugExamineCore", m_pParent, SLOT(slotDebugExamineCore()), true, ID_DEBUG_CORE);
 
-  accel->insertItem( i18n("Debug other executable"), "DebugOtherExec", 0);
+  accel->insertItem( i18n("Debug Other Executable"), "DebugOtherExec", 0);
   accel->connectItem( "DebugOtherExec", m_pParent, SLOT(slotDebugNamedFile()), true, ID_DEBUG_NAMED_FILE);
 
-  accel->insertItem( i18n("Debug attach"), "DebugAttach", 0);
+  accel->insertItem( i18n("Debug Attach"), "DebugAttach", 0);
   accel->connectItem( "DebugAttach", m_pParent, SLOT(slotDebugAttach()), true, ID_DEBUG_ATTACH);
 
   // Debugger actions
-  accel->insertItem( i18n("Debug run"), "DebugRun", 0);
+  accel->insertItem( i18n("Debug Run"), "DebugRun", 0);
   accel->connectItem( "DebugRun", m_pParent, SLOT(slotDebugRun()), true, ID_DEBUG_RUN );
 
-  accel->insertItem( i18n("Debug run to cursor"), "DebugRunCursor", 0);
+  accel->insertItem( i18n("Debug Run to Cursor"), "DebugRunCursor", 0);
   accel->connectItem( "DebugRunCursor", m_pParent, SLOT(slotDebugRunToCursor()), true, ID_DEBUG_RUN_CURSOR );
 
-  accel->insertItem( i18n("Debug stop"), "DebugStop", 0);
+  accel->insertItem( i18n("Debug Stop"), "DebugStop", 0);
   accel->connectItem( "DebugStop", m_pParent, SLOT(slotDebugStop()        ), true, ID_DEBUG_STOP);
 
-  accel->insertItem( i18n("Debug step into"), "DebugStepInto", 0);
+  accel->insertItem( i18n("Debug Step Into"), "DebugStepInto", 0);
   accel->connectItem( "DebugStepInto", m_pParent, SLOT(slotDebugStepInto()), true, ID_DEBUG_STEP);
 
-  accel->insertItem( i18n("Debug step into instr"), "DebugStepIntoInstr", 0);
+  accel->insertItem( i18n("Debug Step Into Instr"), "DebugStepIntoInstr", 0);
   accel->connectItem( "DebugStepIntoInstr", m_pParent, SLOT(slotDebugStepIntoIns()), true, ID_DEBUG_STEP_INST);
 
-  accel->insertItem( i18n("Debug step over"), "DebugStepOver", 0);
+  accel->insertItem( i18n("Debug Step Over"), "DebugStepOver", 0);
   accel->connectItem( "DebugStepOver", m_pParent, SLOT(slotDebugStepOver()), true, ID_DEBUG_NEXT);
 
-  accel->insertItem( i18n("Debug step over instr"), "DebugStepOverInstr", 0);
+  accel->insertItem( i18n("Debug Step Over Instr"), "DebugStepOverInstr", 0);
   accel->connectItem( "DebugStepOverInstr", m_pParent, SLOT(slotDebugStepOverIns()), true, ID_DEBUG_NEXT_INST);
 
-  accel->insertItem( i18n("Debug step out"), "DebugStepOut", 0);
+  accel->insertItem( i18n("Debug Step Out"), "DebugStepOut", 0);
   accel->connectItem( "DebugStepOut", m_pParent, SLOT(slotDebugStepOutOff()), true, ID_DEBUG_FINISH);
 
-  accel->insertItem( i18n("Debug viewers"), "DebugViewer", 0);
+  accel->insertItem( i18n("Debug Viewers"), "DebugViewer", 0);
   accel->connectItem( "DebugViewer", m_pParent, SLOT(slotDebugMemoryView()), true, ID_DEBUG_MEMVIEW);
 
-  accel->insertItem( i18n("Debug interrupt"), "DebugInterrupt", 0);
+  accel->insertItem( i18n("Debug Interrupt"), "DebugInterrupt", 0);
   accel->connectItem( "DebugInterrupt", m_pParent, SLOT(slotDebugInterrupt()), true, ID_DEBUG_BREAK_INTO);
 
-  accel->insertItem( i18n("Debug toggle breakpoint"), "DebugToggleBreakpoint", 0);
+  accel->insertItem( i18n("Debug Toggle Breakpoint"), "DebugToggleBreakpoint", 0);
   accel->connectItem( "DebugToggleBreakpoint", m_pParent, SLOT(slotDebugToggleBreakpoint()), true, ID_DEBUG_TOGGLE_BP);
 
   // activation of certain tool-views
-  accel->insertItem( i18n("class tree"), "ActivateTreeView_Class", ID_ACTIVATETREEVIEW_CLASS);
+  accel->insertItem( i18n("Class Tree"), "ActivateTreeView_Class", ID_ACTIVATETREEVIEW_CLASS);
   accel->connectItem( "ActivateTreeView_Class", m_pParent, SLOT(slotActivateTView_Class()), true, 0);
-  accel->insertItem( i18n("files of project"), "ActivateTreeView_LFV", ID_ACTIVATETREEVIEW_LFV);
+  accel->insertItem( i18n("Files of Project"), "ActivateTreeView_LFV", ID_ACTIVATETREEVIEW_LFV);
   accel->connectItem( "ActivateTreeView_LFV", m_pParent, SLOT(slotActivateTView_LFV()), true, 0);
-  accel->insertItem( i18n("view on project directory"), "ActivateTreeView_RFV", ID_ACTIVATETREEVIEW_RFV);
+  accel->insertItem( i18n("View on Project Directory"), "ActivateTreeView_RFV", ID_ACTIVATETREEVIEW_RFV);
   accel->connectItem( "ActivateTreeView_RFV", m_pParent, SLOT(slotActivateTView_RFV()), true, 0);
-  accel->insertItem( i18n("documentation"), "ActivateTreeView_Doc", ID_ACTIVATETREEVIEW_DOC);
+  accel->insertItem( i18n("Documentation"), "ActivateTreeView_Doc", ID_ACTIVATETREEVIEW_DOC);
   accel->connectItem( "ActivateTreeView_Doc", m_pParent, SLOT(slotActivateTView_Doc()), true, 0);
-  accel->insertItem( i18n("debugger variable watch view"), "ActivateTreeView_VAR", ID_ACTIVATETREEVIEW_VAR);
+  accel->insertItem( i18n("Debugger Variable Watch View"), "ActivateTreeView_VAR", ID_ACTIVATETREEVIEW_VAR);
   accel->connectItem( "ActivateTreeView_VAR", m_pParent, SLOT(slotActivateTView_VAR()), true, 0);
 
-  accel->insertItem( i18n("output of KDevelop"), "ActivateOutputView_Messages", ID_ACTIVATEOUTPUTVIEW_MESSAGES);
+  accel->insertItem( i18n("Output of KDevelop"), "ActivateOutputView_Messages", ID_ACTIVATEOUTPUTVIEW_MESSAGES);
   accel->connectItem( "ActivateOutputView_Messages", m_pParent, SLOT(slotActivateOView_Messages()), true, 0);
-  accel->insertItem( i18n("messages of started program"), "ActivateOutputView_StdInStdOut", ID_ACTIVATEOUTPUTVIEW_STDINSTDOUT);
+  accel->insertItem( i18n("Messages of Started Program"), "ActivateOutputView_StdInStdOut", ID_ACTIVATEOUTPUTVIEW_STDINSTDOUT);
   accel->connectItem( "ActivateOutputView_StdInStdOut", m_pParent, SLOT(slotActivateOView_StdInStdOut()), true, 0);
-  accel->insertItem( i18n("error messages of started program"), "ActivateOutputView_StdErr", ID_ACTIVATEOUTPUTVIEW_STDERR);
+  accel->insertItem( i18n("Error Messages of Started Program"), "ActivateOutputView_StdErr", ID_ACTIVATEOUTPUTVIEW_STDERR);
   accel->connectItem( "ActivateOutputView_StdErr", m_pParent, SLOT(slotActivateOView_StdErr()), true, 0);
-  accel->insertItem( i18n("embedded konsole window"), "ActivateOutputView_Konsole", ID_ACTIVATEOUTPUTVIEW_KONSOLE);
+  accel->insertItem( i18n("Embedded Konsole Window"), "ActivateOutputView_Konsole", ID_ACTIVATEOUTPUTVIEW_KONSOLE);
   accel->connectItem( "ActivateOutputView_Konsole", m_pParent, SLOT(slotActivateOView_Konsole()), true, 0);
-  accel->insertItem( i18n("debugger breakpoints"), "ActivateOutputView_BrkptManager", ID_ACTIVATEOUTPUTVIEW_BRKPTMANAGER);
+  accel->insertItem( i18n("Debugger Breakpoints"), "ActivateOutputView_BrkptManager", ID_ACTIVATEOUTPUTVIEW_BRKPTMANAGER);
   accel->connectItem( "ActivateOutputView_BrkptManager", m_pParent, SLOT(slotActivateOView_BrkptManager()), true, 0);
-  accel->insertItem( i18n("debugger function call stack"), "ActivateOutputView_FrameStack", ID_ACTIVATEOUTPUTVIEW_FRAMESTACK);
+  accel->insertItem( i18n("Debugger Function Call Stack"), "ActivateOutputView_FrameStack", ID_ACTIVATEOUTPUTVIEW_FRAMESTACK);
   accel->connectItem( "ActivateOutputView_FrameStack", m_pParent, SLOT(slotActivateOView_FrameStack()), true, 0);
-  accel->insertItem( i18n("debugger disassemble view"), "ActivateOutputView_Disassemble", ID_ACTIVATEOUTPUTVIEW_DISASSEMBLE);
+  accel->insertItem( i18n("Debugger Disassemble View"), "ActivateOutputView_Disassemble", ID_ACTIVATEOUTPUTVIEW_DISASSEMBLE);
   accel->connectItem( "ActivateOutputView_Disassemble", m_pParent, SLOT(slotActivateOView_Disassemble()), true, 0);
-  accel->insertItem( i18n("debugger control view"), "ActivateOutputView_Dbg", ID_ACTIVATEOUTPUTVIEW_DBG);
+  accel->insertItem( i18n("Debugger Control View"), "ActivateOutputView_Dbg", ID_ACTIVATEOUTPUTVIEW_DBG);
   accel->connectItem( "ActivateOutputView_Dbg", m_pParent, SLOT(slotActivateOView_Dbg()), true, 0);
 
   accel->readSettings(0, false);

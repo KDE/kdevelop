@@ -43,12 +43,12 @@ KPopupMenu *ClassViewWidget::createPopup()
     KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
     if (!popup) {
         popup = new KPopupMenu();
-        popup->insertTitle(i18n("Class view"), -1, 0);
+        popup->insertTitle(i18n("Class View"), -1, 0);
     }
 
     popup->setCheckable(true);
-    int id1 = popup->insertItem( i18n("List by namespaces"), this, SLOT(slotTreeModeChanged()) );
-    int id2 = popup->insertItem( i18n("Full identifier scopes"), this, SLOT(slotScopeModeChanged()) );
+    int id1 = popup->insertItem( i18n("List by Namespaces"), this, SLOT(slotTreeModeChanged()) );
+    int id2 = popup->insertItem( i18n("Full Identifier Scopes"), this, SLOT(slotScopeModeChanged()) );
     KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     bool byNamespace = config->readBoolEntry("ListByNamespace", false);

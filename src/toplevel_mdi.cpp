@@ -348,7 +348,7 @@ void TopLevelMDI::saveMDISettings()
 
 void TopLevelMDI::slotOpenProject()
 {
-  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", this, i18n("Open project"));
+  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", this, i18n("Open Project"));
   if (fileName.isNull())
     return;
 
