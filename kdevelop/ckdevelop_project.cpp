@@ -593,7 +593,7 @@ void CKDevelop::slotProjectNewAppl(){
 		    config->readEntry("author_email",""));
   
   
-  kappw.setCaption("ApplicationWizard");
+  kappw.setCaption(i18n("ApplicationWizard"));
   kappw.exec();
   QString file = kappw.getProjectFile();
   

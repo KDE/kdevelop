@@ -33,8 +33,8 @@
 #include "./classwizard/cclasswizarddlg.h"
 
 // Initialize static members
-QString CClassView::CLASSROOTNAME = "Classes";
-QString CClassView::GLOBALROOTNAME = "Globals";
+QString CClassView::CLASSROOTNAME = i18n("Classes");
+QString CClassView::GLOBALROOTNAME = i18n("Globals");
 
 /*********************************************************************
  *                                                                   *

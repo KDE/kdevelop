@@ -114,9 +114,9 @@ void CClassToolDlg::setWidgetValues()
   exportCombo.setFixedHeight( 30 );
   exportCombo.setSizeLimit( 10 );
   exportCombo.insertItem( i18n("All") );
-  exportCombo.insertItem( "Public" );
-  exportCombo.insertItem( "Protected" );
-  exportCombo.insertItem( "Private" );
+  exportCombo.insertItem(i18n("Public"));
+  exportCombo.insertItem(i18n("Protected"));
+  exportCombo.insertItem(i18n("Private"));
 
   classTree.setMinimumSize( 500, 400 );
   classTree.setRootIsDecorated( true );
