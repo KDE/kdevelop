@@ -1,3 +1,7 @@
+2002-04-06  Harald Fernengel <harry@kdevelop.org>
+        * ported editor-chooser to KTextEditor and re-enabled it
+        * PartController now loads user's favourite editor
+
 2002-04-06  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* moved all part handling functions from KDevCore to
 	  KDevPartController
