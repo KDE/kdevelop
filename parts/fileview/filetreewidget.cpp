@@ -565,7 +565,7 @@ void FileTreeWidget::slotToggleShowVCSFields()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
+/*
 void FileTreeWidget::vcsFileStateChanged( const VCSFileInfoList &modifiedFiles )
 {
     kdDebug(9017) << "FileTreeWidget::vcsFileStateChanged(const VCSFileInfoList &)" << endl;
@@ -582,6 +582,6 @@ void FileTreeWidget::vcsFileStateChanged( const VCSFileInfoList &modifiedFiles )
     //    - update its content
 }
 
-
+*/
 
 #include "filetreewidget.moc"

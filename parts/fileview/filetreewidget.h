@@ -50,7 +50,7 @@ public slots:
     void hideOrShow();
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
-    void vcsFileStateChanged( const VCSFileInfoList &modifiedFiles );
+//    void vcsFileStateChanged( const VCSFileInfoList &modifiedFiles );
 
 private slots:
     void slotItemExecuted(QListViewItem *item);
