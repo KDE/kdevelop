@@ -36,8 +36,8 @@
 #include <kparts/event.h>
 #include <kedittoolbar.h>
 
-KDevelop::KDevelop(const char *name) :
-  KParts::DockMainWindow( name )
+KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
+  KParts::DockMainWindow( pParent, name, f)
    ,m_dockbaseAreaOfDocumentViews(0L)
    ,m_dockOnLeft(0L)
    ,m_dockOnBottom(0L)

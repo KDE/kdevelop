@@ -32,7 +32,7 @@ class KDevelop : public KParts::DockMainWindow
  Q_OBJECT
 public:
   /** construtor */
-  KDevelop(const char *name=0);
+  KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
   /** destructor */
   ~KDevelop();
 
