@@ -109,6 +109,7 @@ private:
 	KDevSession* sess;
 	QString currentcfg;
   QString old_version;
+  QString old_name;
   QString old_ldflags;
   QString old_ldadd;
   QString old_addit_flags;

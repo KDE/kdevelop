@@ -95,7 +95,8 @@ void CPrjOptionsDlg::addGeneralPage()
 
   prjname_edit = new QLineEdit( generalPage, "prjname_edit" );
   grid->addMultiCellWidget(prjname_edit,1,1,0,1);
-  prjname_edit->setText( prj_info->getProjectName() );
+  old_name=prj_info->getProjectName();
+  prjname_edit->setText( old_name );
   QWhatsThis::add(prjname_label, i18n("Set the project name here."));
   QWhatsThis::add(prjname_edit, i18n("Set the project name here."));
 
@@ -107,7 +108,9 @@ void CPrjOptionsDlg::addGeneralPage()
 
   version_edit = new QLineEdit( generalPage, "version_edit" );
   grid->addWidget(version_edit,1,2);
-  version_edit->setText( prj_info->getVersion() );
+  
+  old_version = prj_info->getVersion();
+  version_edit->setText( old_version );
   QWhatsThis::add(version_label, i18n("Set your project version number here."));
   QWhatsThis::add(version_edit, i18n("Set your project version number here."));
 
@@ -213,7 +216,6 @@ void CPrjOptionsDlg::addLinkerPage()
 //  QString ldflags=prj_info->getLDFLAGS();
   QString ldadd=prj_info->getLDADD();
 
-  old_version = prj_info->getVersion();
 //  old_ldflags =  ldflags.stripWhiteSpace();
   old_ldadd = ldadd.stripWhiteSpace();
 //  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
@@ -1019,7 +1021,7 @@ void CPrjOptionsDlg::ok()
 
   // write it to the disk
   prj_info->writeProject();
-  if (version_edit->text() != old_version)
+  if (version_edit->text() != old_version || prjname_edit->text() != old_name)
     need_configure_in_update = true;
 }
 
