@@ -50,6 +50,7 @@ private slots:
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);
+    void startQMakeCommand(const QString &dir, const QString &fileName);
     
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_projectName;

@@ -47,7 +47,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     QWhatsThis::add(m_widget, i18n("Project Tree\n\n"
                                    "The project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
-                                   "Makefile.am. The 'details' view in the lower half shows the "
+                                   ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
     
     topLevel()->embedSelectView(m_widget, i18n("Project"));
@@ -62,10 +62,6 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
     
-    action = new KAction( i18n("Run qmake"), 0,
-                          this, SLOT(slotQMake()),
-                          actionCollection(), "build_qmake" );
-
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
@@ -183,21 +179,22 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 }
 
 
-void TrollProjectPart::slotBuild()
-{
-    startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1(""));
-}
-
-
-void TrollProjectPart::slotQMake()
+void TrollProjectPart::startQMakeCommand(const QString &dir, const QString &fileName)
 {
     QString cmdline = "qmake ";
+    cmdline += fileName;
     
     QString dircmd = "cd ";
     dircmd += projectDirectory();
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
+    makeFrontend()->queueCommand(dir, dircmd + cmdline);
+}
+
+
+void TrollProjectPart::slotBuild()
+{
+    startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1(""));
 }
 
 

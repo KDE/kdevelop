@@ -1,18 +1,17 @@
 2002-04-30  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Implemented fileFilters() for cppsupport
-	* Methods and classes can now be added 
-	  when no file is loaded
-	* Don't parse headers twice, now that they
-	  are included in AutoProjectPart::allFiles()
-	* Allow adding and removing files from
-	  custom project
-	* Bug fix in trollproject by
-	  Ludovic LANGE <ludovic.lange@free.fr>
+	* Methods and classes can now be added when no file is loaded
+	* Don't parse headers twice, now that they are included in 
+	  AutoProjectPart::allFiles()
+	* Allow adding and removing files from custom project
+	* Do nothing if an organizer item in the class view is clicked on
+	* Bug fix in trollproject by Ludovic LANGE <ludovic.lange@free.fr>
 	  to handle continuation lines in .pro files
-	* Some polishing in trollproject
-	* Do nothing if an organizer item in the
-	  class view is clicked on
+	* In trollproject, distinguish executed() and selectionChanged() 
+	  signals properly, improved context menus, started Remove File 
+	  implementation; made it possible to run qmake on any project
+	  file; polishing
 
 2002-04-29  Bernd Gehrmann  <bernd@mail.berlios.de>
 
@@ -29,9 +28,8 @@
 
 2002-04-28  Bernd Gehrmann  <bernd@mail.berlios.de>
 
-	* Renamed KDevProject::allSourceFiles() to allFiles(),
-	  as it isn't restricted to sources. It doesn't contain
-	  duplicates anymore
+	* Renamed KDevProject::allSourceFiles() to allFiles(), as it isn't
+	  restricted to sources. It doesn't contain duplicates anymore.
 	* Handle AUTODIRS
 	* Handle foo_ICON
 	* Handle KDE_DOCS
@@ -54,8 +52,7 @@
 	  in overview widget, so that the shown targets are
 	  always those in the selected subproject
 	* Disable toolbuttons when subproject empty
-	* Data groups cannot be 'built' and they have
-	  no target options
+	* Data groups cannot be 'built' and they have no target options
 	* Replaced all usages of QCString in auto project
 	  by QString and saved 35783 latin1 conversions ;-)
 	* Create popup menus with parent widget
@@ -89,18 +86,15 @@
 
 2002-04-23  Bernd Gehrmann  <bernd@mail.berlios.de>
 
-	* Removed redundant loadparts property from
-	  project file
-	* Added isDirectory() to FileContext, so one
-	  can distinguish between regular files and
-	  directories.
+	* Removed redundant loadparts property from project file
+	* Added isDirectory() to FileContext, so one can distinguish 
+	  between regular files and directories.
 	* Added "Insert quoted" button to regexp part
 
 2002-04-22  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Only program and library targets can be made active
-	* Sane resizeMode and allColumnsShowFocus settings
-	  for more list views
+	* Sane resizeMode and allColumnsShowFocus settings for more list views
 
 2002-04-21  Bernd Gehrmann  <bernd@mail.berlios.de>
 

@@ -116,12 +116,15 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     details->header()->hide();
     details->addColumn(QString::null);
 
-    connect( overview, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
     connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    
+    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
     connect( details, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
+             this, SLOT(slotDetailsExecuted(QListViewItem*)) );
     connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
@@ -141,8 +144,7 @@ void TrollProjectWidget::openProject(const QString &dirName)
     item->path = dirName;
     parse(item);
     item->setOpen(true);
-    
-    slotItemExecuted(item);
+    overview->setSelected(item, true);
 }
 
 
@@ -215,7 +217,39 @@ QString TrollProjectWidget::subprojectDirectory()
 }
 
 
-void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
+void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
+{
+    if (!item)
+        return;
+
+    if (m_shownSubproject) {
+        // Remove all GroupItems and all of their children from the view
+        QListIterator<GroupItem> it1(m_shownSubproject->groups);
+        for (; it1.current(); ++it1) {
+            // After AddTargetDialog, it can happen that an
+            // item is not yet in the list view, so better check...
+            if (it1.current()->parent())
+                while ((*it1)->firstChild())
+                    (*it1)->takeItem((*it1)->firstChild());
+            details->takeItem(*it1);
+        }
+    }
+    
+    m_shownSubproject = static_cast<SubprojectItem*>(item);
+    
+    // Insert all GroupItems and all of their children into the view
+    QListIterator<GroupItem> it2(m_shownSubproject->groups);
+    for (; it2.current(); ++it2) {
+        details->insertItem(*it2);
+        QListIterator<FileItem> it3((*it2)->files);
+        for (; it3.current(); ++it3)
+            (*it2)->insertItem(*it3);
+        (*it2)->setOpen(true);
+    }
+}
+
+
+void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 {
     if (!item)
         return;
@@ -223,67 +257,52 @@ void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
     // We assume here that ALL items in both list views
     // are ProjectItem's
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
+    if (pvitem->type() != ProjectItem::File)
+        return;
+    
+    QString dirName = m_shownSubproject->path;
+    FileItem *fitem = static_cast<FileItem*>(pvitem);
+    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    m_part->topLevel()->lowerView(this);
+}
 
-    if (pvitem->type() == ProjectItem::Subproject) {
-        if (m_shownSubproject) {
-            // Remove all GroupItems and all of their children from the view
-            QListIterator<GroupItem> it1(m_shownSubproject->groups);
-            for (; it1.current(); ++it1) {
-                // After AddTargetDialog, it can happen that an
-                // item is not yet in the list view, so better check...
-                if (it1.current()->parent())
-                    while ((*it1)->firstChild())
-                        (*it1)->takeItem((*it1)->firstChild());
-                details->takeItem(*it1);
-            }
-        }
-            
-        m_shownSubproject = static_cast<SubprojectItem*>(item);
 
-        // Insert all GroupItems and all of their children into the view
-        QListIterator<GroupItem> it2(m_shownSubproject->groups);
-        for (; it2.current(); ++it2) {
-            details->insertItem(*it2);
-            QListIterator<FileItem> it3((*it2)->files);
-            for (; it3.current(); ++it3)
-                (*it2)->insertItem(*it3);
-            (*it2)->setOpen(true);
-        }
-    } else if (pvitem->type() == ProjectItem::File) {
-        QString dirName = m_shownSubproject->path;
-        FileItem *fitem = static_cast<FileItem*>(pvitem);
-        m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+{
+    if (!item)
+        return;
+    
+    SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
+        
+    KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
+    int idAddSubproject = popup.insertItem(i18n("Add Subproject..."));
+    int idBuild = popup.insertItem(i18n("Build"));
+    int idQmake = popup.insertItem(i18n("Run qmake"));
+    int r = popup.exec(p);
+
+    if (r == idAddSubproject) {
+        ;
+    } else if (r == idBuild) {
+        QString relpath = spitem->path.mid(projectDirectory().length());
+        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+        m_part->topLevel()->lowerView(this);
+    } else if (r == idQmake) {
+        QString relpath = spitem->path.mid(projectDirectory().length());
+        QString fileName = QFileInfo(spitem->path).baseName() + ".pro";
+        m_part->startQMakeCommand(projectDirectory() + relpath, fileName);
         m_part->topLevel()->lowerView(this);
     }
 }
 
 
-void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
         return;
-    
-    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
 
-    if (pvitem->type() == ProjectItem::Subproject) {
-        SubprojectItem *spitem = static_cast<SubprojectItem*>(pvitem);
-        KPopupMenu pop(i18n("Subproject"));
-        int idOptions = pop.insertItem(i18n("Options..."));
-        int idAddSubproject = pop.insertItem(i18n("Add Subproject..."));
-        int idBuild = pop.insertItem(i18n("Build"));
-        int r = pop.exec(p);
-        if (r == idOptions) {
-            ;
-        }
-        else if (r == idAddSubproject) {
-            ;
-        }
-        else if (r == idBuild) {
-            QString relpath = spitem->path.mid(projectDirectory().length());
-            m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
-            m_part->topLevel()->lowerView(this);
-        }
-    } else if (pvitem->type() == ProjectItem::Group) {
+    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
+    
+    if (pvitem->type() == ProjectItem::Group) {
         
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         QString title;
@@ -319,11 +338,19 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
         m_part->core()->fillContextMenu(&popup, &context);
         
         int r = popup.exec(p);
-        if (r == idRemoveFile) {
-            ;
-        }
+        if (r == idRemoveFile)
+            removeFile(m_shownSubproject, fitem);
         
     }
+}
+
+
+void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
+{
+    GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+
+    emitRemovedFile(spitem->path + "/" + fitem->text(0));
+    gitem->files.remove(fitem);
 }
 
 
@@ -348,15 +375,15 @@ FileItem *TrollProjectWidget::createFileItem(const QString &name)
 }
 
 
-void TrollProjectWidget::emitAddedFile(const QString &name)
+void TrollProjectWidget::emitAddedFile(const QString &fileName)
 {
-    emit m_part->addedFileToProject(name);
+    emit m_part->addedFileToProject(fileName);
 }
 
 
-void TrollProjectWidget::emitRemovedFile(const QString &name)
+void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 {
-    emit m_part->removedFileFromProject(name);
+    emit m_part->removedFileFromProject(fileName);
 }
 
 

@@ -130,10 +130,14 @@ public:
     void emitRemovedFile(const QString &name);
     
 private slots:
-    void slotItemExecuted(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotOverviewSelectionChanged(QListViewItem *item);
+    void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotDetailsSelectionChanged(QListViewItem *item);
+    void slotDetailsExecuted(QListViewItem *item);
+    void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
 private:
+    void removeFile(SubprojectItem *spitem, FileItem *fitem);
     void parse(SubprojectItem *item);
 
     KListView *overview;
