@@ -1,6 +1,6 @@
 # KDE Config File
 [General]
-Name=Application framework
+Name=GNOME 1 Application framework
 Name[fr]=Un squelette d'application
 Icon=gnomeapp.png
 Category=C/GNOME
