@@ -118,7 +118,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     layout->addLayout(dir_layout, 3, 1);
 
     dir_combo = new KComboBox( true, this );
-#if KDE_IS_VERSION(3,1,3)
+#if KDE_VERSION >= 0x030103
     dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
 #else
     dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
@@ -139,12 +139,12 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
 
-    #ifdef IGNORE_SCM_DIRS
+# ifdef IGNORE_SCM_DIRS
     ignore_scm_box = new QCheckBox(i18n("&Skip SCM dirs"), this);
     ignore_scm_box->setChecked(true);
     dir_layout->addSpacing(10);
     dir_layout->addWidget(ignore_scm_box);
-    #endif
+# endif
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
@@ -215,7 +215,7 @@ GrepDialog::~GrepDialog()
     config->setGroup("GrepDialog");
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
-#if KDE_IS_VERSION(3,1,3)
+#if KDE_VERSION >= 0x030103
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
 #else
     config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
