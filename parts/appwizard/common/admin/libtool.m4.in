@@ -3730,10 +3730,10 @@ _LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1)=
 if test "$GCC" = yes; then
   _LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1)=' -fno-builtin'
 
-  AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -fno-rtti],
+  AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -fno-rtti -fno-exceptions],
     lt_cv_prog_compiler_rtti_exceptions,
-    [-fno-rtti -c conftest.$ac_ext], [],
-    [_LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1)="$_LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1) -fno-rtti"])
+    [-fno-rtti -fno-exceptions -c conftest.$ac_ext], [],
+    [_LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1)="$_LT_AC_TAGVAR(lt_prog_compiler_no_builtin_flag, $1) -fno-rtti -fno-exceptions"])
 fi
 ])# AC_LIBTOOL_PROG_COMPILER_NO_RTTI
 
