@@ -567,6 +567,16 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
       pDockW->setWidget(0L);
+      if (pDockW == m_pDockbaseOfTabPage) {
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
+         QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->count();
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->pageCount();
+#endif
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+      }
       delete pDockW;
    }
    else if (pWnd->isAttached()) {
@@ -624,6 +634,16 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
       pDockW->setWidget(0L);
+      if (pDockW == m_pDockbaseOfTabPage) {
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
+         QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->count();
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->pageCount();
+#endif
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+      }
       delete pDockW;
    }
    else if (pWnd->isAttached()) {
