@@ -2841,7 +2841,7 @@ void MainWindow::checkTempFiles()
     d.setNameFilter( "*.ui" );
     QStringList lst = d.entryList();
     QApplication::restoreOverrideCursor();
-    bool load = QMessageBox::information( this, i18n( "Restoring the Last Session" ),
+    bool load = QMessageBox::information( this, i18n( "Restoring Last Session" ),
 					  i18n( "Qt Designer found some temporary saved files, which were\n"
 					      "written when Qt Designer crashed last time. Do you want to\n"
 					      "load these files?" ), i18n( "&Yes" ), i18n( "&No" ) ) == 0;

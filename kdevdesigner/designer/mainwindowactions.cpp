@@ -299,7 +299,7 @@ void MainWindow::setupSearchActions()
     actionSearchFind->addTo( tb );*/
     incrementalSearch = new QLineEdit( 0 );
     incrementalSearch->hide();
-    QToolTip::add( incrementalSearch, i18n( "Incremetal Search (Alt+I)" ) );
+    QToolTip::add( incrementalSearch, i18n( "Incremental Search (Alt+I)" ) );
     connect( incrementalSearch, SIGNAL( textChanged( const QString & ) ),
 	     this, SLOT( searchIncremetalFind() ) );
     connect( incrementalSearch, SIGNAL( returnPressed() ),
@@ -1341,7 +1341,7 @@ FormWindow *MainWindow::openFormWindow( const QString &filename, bool validFileN
 	statusMessage( i18n( "Loaded file '%1'").arg( filename )/*, 3000 */);
     } else {
 	statusMessage( i18n( "Failed to load file '%1'").arg( filename )/*, 5000 */);
-	QMessageBox::information( this, i18n("Load File"), i18n("Couldn't load file '%1'").arg( filename ) );
+	QMessageBox::information( this, i18n("Load File"), i18n("Couldn't load file '%1'.").arg( filename ) );
 	delete ff;
     }
     return (FormWindow*)resource.widget();
@@ -1448,7 +1448,7 @@ void MainWindow::createNewTemplate()
     QString fn = dia->editName->text();
     QString cn = dia->listClass->currentText();
     if ( fn.isEmpty() || cn.isEmpty() ) {
-	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template" ) );
+	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template." ) );
 	return;
     }
 
@@ -1469,7 +1469,7 @@ void MainWindow::createNewTemplate()
 	}
     }
     if ( !f.isOpen() ) {
-	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template" ) );
+	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template." ) );
 	return;
     }
     QTextStream ts( &f );
@@ -1565,7 +1565,7 @@ void MainWindow::editPaste()
 	hierarchyView->widgetInserted( 0 );
 	formWindow()->commandHistory()->setModified( TRUE );
     } else {
-	QMessageBox::information( this, i18n( "Paste error" ),
+	QMessageBox::information( this, i18n( "Paste Error" ),
 				  i18n( "Can't paste widgets. Designer couldn't find a container\n"
 				      "to paste into which does not contain a layout. Break the layout\n"
 				      "of the container you want to paste into and select this container\n"

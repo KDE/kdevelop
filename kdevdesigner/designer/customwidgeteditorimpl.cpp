@@ -219,7 +219,7 @@ void CustomWidgetEditor::addWidgetClicked()
     MetaDataBase::CustomWidget *w = new MetaDataBase::CustomWidget;
     QString s = w->className;
     if ( !MetaDataBase::addCustomWidget( w ) ) {
-	QMessageBox::information( this, i18n( "Adding a Custom Widget" ),
+	QMessageBox::information( this, i18n( "Adding Custom Widget" ),
 				  i18n( "Custom widget names must be unique.\n"
 				      "A custom widget called '%1' already exists, so it is not possible "
 				      "to add another widget with this name." ).arg( s ) );
@@ -394,7 +394,7 @@ void CustomWidgetEditor::checkWidgetName()
     if ( MetaDataBase::isWidgetNameUsed( w ) ) {
 	QString s = w->className;
 	w->className = oldName;
-	QMessageBox::information( this, i18n( "Renaming a Custom Widget" ),
+	QMessageBox::information( this, i18n( "Renaming Custom Widget" ),
 				  i18n( "Custom widget names must be unique.\n"
 				      "A custom widget called '%1' already exists, so it is not possible "
 				      "to rename this widget with this name." ).arg( s ) );

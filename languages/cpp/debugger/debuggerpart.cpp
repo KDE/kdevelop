@@ -693,7 +693,7 @@ void DebuggerPart::errRunningDebugger(int errorCode)
   if (errorCode == 127)
   {
     KMessageBox::error(mainWindow()->main(), i18n("GDB could not be found. Please make sure it is installed"
-                                     " and in the path and try again"), i18n("Debugger not found"));
+                                     " and in the path and try again"), i18n("Debugger Not Found"));
   }
   slotStopDebugger();
 }

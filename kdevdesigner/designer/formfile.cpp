@@ -263,7 +263,7 @@ bool FormFile::saveAs( bool ignoreModified )
 	fn = KFileDialog::getSaveFileName( f,
 					   i18n( "*.ui|Qt User-Interface Files" ) + "\n" +
 					   i18n( "*|All Files" ), MainWindow::self, /*0,*/
-					   i18n( "Save Form '%1' As ...").arg( formName() )/*,
+					   i18n( "Save Form '%1' As").arg( formName() )/*,
 					   MainWindow::self ? &MainWindow::self->lastSaveFilter : 0*/ );
 	if ( fn.isEmpty() )
 	    return FALSE;
@@ -437,10 +437,10 @@ bool FormFile::setupUihFile( bool askForUih )
     }
     if ( codeFileStat != FormFile::Ok && !ed ) {
 	if ( hasFormCode() ) {
-	    int i = QMessageBox::information( MainWindow::self, i18n( "Using ui.h file" ),
+	    int i = QMessageBox::information( MainWindow::self, i18n( "Using ui.h File" ),
 	                                      i18n( "An \"ui.h\" file for this form already exists.\n"
 					      "Do you want to use it or create a new one?" ),
-	                                      i18n( "Use existing" ), i18n( "Create new" ),
+	                                      i18n( "Use Existing" ), i18n( "Create New" ),
 					      i18n( "Cancel" ), 2, 2 );
 	    if ( i == 2 )
 		return FALSE;
@@ -861,7 +861,7 @@ bool FormFile::checkFileName( bool allowBreak )
 	    fn = KFileDialog::getSaveFileName( pro->makeAbsolute( fileName() ),
 					       i18n( "*.ui|Qt User-Interface Files" ) + "\n" +
 					       i18n( "*|All Files" ), MainWindow::self,/* 0,*/
-					       i18n( "Save Form '%1' As ...").
+					       i18n( "Save Form '%1' As").
 					       arg( formWindow()->name() )/*,
 					       MainWindow::self ? &MainWindow::self->lastSaveFilter : 0 */);
 	    if ( allowBreak && fn.isEmpty() )

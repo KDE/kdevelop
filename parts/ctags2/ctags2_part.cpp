@@ -83,11 +83,11 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
-	new KAction( i18n("Lookup current text"), 0, 0, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
-	new KAction( i18n("Lookup current text as declaration"), 0, 0, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
-	new KAction( i18n("Lookup current text as definition"), 0, 0, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
-	new KAction( i18n("Jump to next match"), 0, 0, this, SLOT(slotGoToNext()), actionCollection(), "ctags_jump_to_next");
-	new KAction( i18n("Open lookup dialog"), 0, 0, this, SLOT(slotOpenLookup()), actionCollection(), "ctags_input_shortcut");
+	new KAction( i18n("Lookup Current Text"), 0, 0, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
+	new KAction( i18n("Lookup Current Text as Declaration"), 0, 0, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
+	new KAction( i18n("Lookup Current Text as Definition"), 0, 0, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
+	new KAction( i18n("Jump to Next Match"), 0, 0, this, SLOT(slotGoToNext()), actionCollection(), "ctags_jump_to_next");
+	new KAction( i18n("Open Lookup Dialog"), 0, 0, this, SLOT(slotOpenLookup()), actionCollection(), "ctags_input_shortcut");
 }
 
 
@@ -174,10 +174,10 @@ void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 		popup->insertSeparator();
 		
 		if ( showDeclaration )
-			popup->insertItem( i18n("CTags - Go To Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
+			popup->insertItem( i18n("CTags - Go to Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
 			
 		if ( showDefinition )
-			popup->insertItem( i18n("CTags - Go To Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
+			popup->insertItem( i18n("CTags - Go to Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
 			
 		if ( showLookup )
 			popup->insertItem( i18n("CTags - Lookup: %1").arg(squeezed), this, SLOT(slotGotoTag()) );

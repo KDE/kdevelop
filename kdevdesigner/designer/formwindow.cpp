@@ -957,7 +957,7 @@ void FormWindow::handleMouseRelease( QMouseEvent *e, QWidget *w )
 
 		// break layout if necessary
 		if ( WidgetFactory::layoutType( wa ) != WidgetFactory::NoLayout ) {
-		    if ( QMessageBox::information( mainWindow(), i18n( "Inserting a Widget" ),
+		    if ( QMessageBox::information( mainWindow(), i18n( "Inserting Widget" ),
 						   i18n( "You tried to insert a widget into the "
 						       "layout Container Widget '%1'.\n"
 						       "This is not possible. "
@@ -1062,7 +1062,7 @@ void FormWindow::handleMouseRelease( QMouseEvent *e, QWidget *w )
 	if ( insertParent ) { // we should insert the new widget now
 	    endRectDraw();
 	    if ( WidgetFactory::layoutType( insertParent ) != WidgetFactory::NoLayout ) {
-		if ( QMessageBox::information( mainWindow(), i18n( "Inserting a Widget" ),
+		if ( QMessageBox::information( mainWindow(), i18n( "Inserting Widget" ),
 					       i18n( "You tried to insert a widget into the "
 						   "layout Container Widget '%1'.\n"
 						   "This is not possible. "

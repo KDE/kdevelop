@@ -163,17 +163,17 @@ void CvsServicePart::setupActions()
     actionAdd->setToolTip( i18n("Add file to repository") );
     actionAdd->setWhatsThis( i18n("<b>Add to repository</b><p>Adds file to repository.") );
 
-    actionEdit = new KAction( i18n("&Edit files"), 0, this, SLOT(slotActionEdit()),
+    actionEdit = new KAction( i18n("&Edit Files"), 0, this, SLOT(slotActionEdit()),
         actionCollection(), "cvsservice_edit" );
     actionEdit->setToolTip( i18n("Mark as beeing edited") );
     actionEdit->setWhatsThis( i18n("<b>Mark as beeing edited</b><p>Mark the files as beeing edited.") );
 
-    actionUnEdit = new KAction( i18n("&Unedit files"), 0, this, SLOT(slotActionUnEdit()),
+    actionUnEdit = new KAction( i18n("&Unedit Files"), 0, this, SLOT(slotActionUnEdit()),
         actionCollection(), "cvsservice_unedit" );
     actionUnEdit->setToolTip( i18n("Remove editing mark from files") );
     actionUnEdit->setWhatsThis( i18n("<b>Remove editing mark</b><p>Remove the editing mark from the files.") );
 
-    actionEditors = new KAction( i18n("&Show editors"), 0, this, SLOT(slotActionEditors()),
+    actionEditors = new KAction( i18n("&Show Editors"), 0, this, SLOT(slotActionEditors()),
         actionCollection(), "cvsservice_editors" );
     actionEditors->setToolTip( i18n("Show editors") );
     actionEditors->setWhatsThis( i18n("<b>Show editors</b><p>Shows the list of users who are editing files.") );
