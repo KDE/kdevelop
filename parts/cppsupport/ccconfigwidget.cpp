@@ -101,7 +101,7 @@ CCConfigWidget::initCCTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
 
-    cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
+//    cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
 
     QDomElement chPart = dom.documentElement( )
                             .namedItem( "cppsupportpart" ).toElement( )
@@ -189,8 +189,8 @@ CCConfigWidget::accept( )
 	emit enablePreParsing( false );
     }
 
-    if( m_bChangedCC )
-	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
+//    if( m_bChangedCC )
+//	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
 
     kdDebug( 9007 ) << m_bChangedCH << m_bChangedCHWindow << endl;	
     if( m_bChangedCH || m_bChangedCHWindow )
@@ -259,7 +259,7 @@ CCConfigWidget::saveCCTab( )
 	apPart.appendChild( codecompletion );
     }
 
-    DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
+//    DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
 
     QDomElement codehinting = codecompletion.namedItem( "codehinting" ).toElement( );
     if( codehinting.isNull( ) ){

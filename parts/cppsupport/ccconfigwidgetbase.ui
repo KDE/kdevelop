@@ -87,6 +87,12 @@
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QLabel">
                                 <property name="name">
@@ -161,6 +167,12 @@
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QLabel">
                                 <property name="name">
@@ -227,6 +239,12 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
                                     </spacer>
                                     <widget class="QPushButton">
                                         <property name="name">
@@ -246,6 +264,12 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
                                     </spacer>
                                     <widget class="QPushButton">
                                         <property name="name">
@@ -264,6 +288,12 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>0</height>
+                                            </size>
                                         </property>
                                     </spacer>
                                 </hbox>
@@ -289,41 +319,6 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>GroupBox6</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Code Completion</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>cbEnableCC</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable code &amp;completion</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
                     <spacer>
                         <property name="name">
                             <cstring>Spacer72_2</cstring>
@@ -333,6 +328,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Minimum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <widget class="QGroupBox">
@@ -459,6 +460,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -1327,12 +1334,6 @@
         <slot>slotEnablePP()</slot>
     </connection>
     <connection>
-        <sender>cbEnableCC</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnableCC()</slot>
-    </connection>
-    <connection>
         <sender>cbEnableCH</sender>
         <signal>clicked()</signal>
         <receiver>CCConfigWidgetBase</receiver>
@@ -1347,7 +1348,6 @@
     <tabstop>lvPCSPaths</tabstop>
     <tabstop>btAddPath</tabstop>
     <tabstop>btRemovePath</tabstop>
-    <tabstop>cbEnableCC</tabstop>
     <tabstop>cbEnableCH</tabstop>
     <tabstop>rbOutputView</tabstop>
     <tabstop>rbSelectView</tabstop>
@@ -1362,6 +1362,9 @@
     <tabstop>implementation_url</tabstop>
     <tabstop>implementation_file</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kurlrequester.h</include>
+</includes>
 <slots>
     <slot access="protected">implementationFile()</slot>
     <slot access="protected">interfaceFile()</slot>
@@ -1375,8 +1378,5 @@
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
     <slot access="protected">slotSetCHWindow( )</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kurlrequester.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
