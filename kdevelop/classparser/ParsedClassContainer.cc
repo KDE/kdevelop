@@ -253,3 +253,31 @@ QStrList *CParsedClassContainer::getSortedClassNameList()
 
   return retVal;
 }
+
+/*----------------- CParsedClassContainer::getClassesReferencingFile()
+ * getClassesReferencingFile()
+ *   Get all classes referencing(==declared in) a certain file. 
+ *
+ * Parameters:
+ *   aFile                 File to look for.
+ * Returns:
+ *   QList<CParsedClass> * The classes.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CParsedClassContainer::getClassesReferencingFile( const char *aFile )
+{
+  QList<CParsedClass> *retVal = new QList<CParsedClass>;
+
+  retVal->setAutoDelete( false );
+
+  // Iterate over all classes in the store.
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    if( classIterator.current()->isSubClass() &&
+        classIterator.current()->declaredInFile == aFile )
+      retVal->append( classIterator.current() );
+  }
+
+  return retVal;
+}
