@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Xul Support
+Name=KDevXulSupport
+GenericName=Xul Support
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevxulsupport
+X-KDevelop-Language=Xul
+X-KDevelop-Args=Xul
