@@ -30,7 +30,7 @@
 #include <qregexp.h>
 
 #if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
-#include "../../compat/netaccess/netaccess.h"
+#include "../compat/netaccess/netaccess.h"
 #else
 #include <kio/netaccess.h>
 #endif
