@@ -47,7 +47,7 @@ void Core::setBreakpoint(const QString &fileName, int lineNum, int id, bool enab
 }
 
 
-void Core::running(KDevPart *which, bool runs)
+void Core::running(KDevPlugin *which, bool runs)
 {
   kdDebug() << "Core::running " << endl;
 }

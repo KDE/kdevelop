@@ -16,6 +16,7 @@
 #include <kparts/partmanager.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
+#include <kaction.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
