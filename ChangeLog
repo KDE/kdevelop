@@ -1,3 +1,8 @@
+2001-05-05  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+	
+	* prepared the Tip-of-the-Day plugin to make use of the
+          KTipDialog class that will soon appear in kdelibs.
+
 2001-05-01  Richard Dale <duke@tipitina.demon.co.uk
 
         * Removed hard coded java classpaths, and classnames. They are derived
