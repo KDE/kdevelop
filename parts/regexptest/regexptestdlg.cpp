@@ -20,6 +20,8 @@
 #include <qlistview.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
+#include <kregexp.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -60,9 +62,55 @@ void RegexpTestDialog::somethingChanged()
     success_label->clear();
     subgroups_listview->clear();
     
+    if ( qregexp_button->isChecked() || qregexp_min_button->isChecked() )
+        checkQRegExp();
+    else if ( kregexp_button->isChecked() )
+	checkKRegExp();
+    else
+        checkPOSIX();
+}
+
+void RegexpTestDialog::checkQRegExp()
+{
+    QRegExp rx( pattern_edit->text() );
+    rx.setMinimal( qregexp_min_button->isChecked() );
+    if ( !rx.isValid() ) {
+	success_label->setText( rx.errorString() );
+	return;
+    }
+    if ( rx.search( teststring_edit->text() ) < 0 ) {
+	success_label->setText( i18n( "No match" ) );
+	return;
+    }
+    success_label->setText( i18n("Successfully matched") );
+    for ( int i = 0; i < rx.numCaptures(); ++i ) {
+	new QListViewItem( subgroups_listview, QString::number( i ), rx.cap( i ) );
+    }
+}
+
+void RegexpTestDialog::checkKRegExp()
+{
+    KRegExp rx;
+    if ( !rx.compile( pattern_edit->text() ) ) {
+	success_label->setText( i18n( "Compile error, your regexp is invalid" ) );
+	return;
+    }
+    if ( !rx.match( teststring_edit->text() ) ) {
+        success_label->setText( i18n( "No match" ) );
+        return;
+    }
+    success_label->setText( i18n("Successfully matched") );
+    for ( int i = 0; i <= 9; ++i ) {
+	const char* grp = rx.group( i );
+	if ( grp )
+	    new QListViewItem( subgroups_listview, QString::number( i ), QString( grp ) );
+    }
+}
+
+void RegexpTestDialog::checkPOSIX()
+{
     regex_t compiledPattern;
     regmatch_t matches[20];
-
     int cflags = extendedposix_button->isChecked()? REG_EXTENDED : 0;
     QCString regexp = pattern_edit->text().latin1();
     int res = regcomp(&compiledPattern, regexp, cflags);

@@ -75,6 +75,30 @@
                         <string>&amp;Extended POSIX syntax (used by egrep)</string>
                     </property>
                 </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>qregexp_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;QRegExp syntax</string>
+                    </property>
+                </widget>
+		<widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>qregexp_min_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;QRegExp syntax (minimal)</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>kregexp_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;KRegExp syntax</string>
+                    </property>
+                </widget>
             </vbox>
         </widget>
         <widget class="QLabel" row="5" column="0">

@@ -30,6 +30,9 @@ protected:
     
 private:
     virtual void somethingChanged();
+    virtual void checkPOSIX();
+    virtual void checkQRegExp();
+    virtual void checkKRegExp();
     virtual void insertQuoted();
 
     KDevPlugin *m_part;
