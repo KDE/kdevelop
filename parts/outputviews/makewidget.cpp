@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "makewidget.h"
-
+#include <qmessagebox.h>
 #include <qapplication.h>
 #include <qdir.h>
 #include <qimage.h>
@@ -19,6 +19,7 @@
 #include <qtimer.h>
 #include <qfileinfo.h>
 #include <qclipboard.h>
+#include <qpopupmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -122,8 +123,13 @@ MakeWidget::MakeWidget(MakeViewPart *part)
         : QTextEdit(0, "make widget")
  ,m_vertScrolling(false)
  ,m_horizScrolling(false)
+ ,m_bLineWrapping(true)
+ ,m_bShortCompilerOutput(false)
+ ,m_bShowDirNavMsg(true)
 {
-    setWordWrap(WidgetWidth);
+    if (m_bLineWrapping) {
+	setWordWrap(WidgetWidth);
+    }
     setWrapPolicy(Anywhere);
     setReadOnly(true);
     setMimeSourceFactory(new QMimeSourceFactory);
@@ -534,9 +540,12 @@ bool MakeWidget::matchLeaveDir( const QString& line, QString& dir )
 void MakeWidget::insertLine1(const QString &line, Type type)
 {
     // KRegExp has ERE syntax
-    KRegExp errorGccRx("([^: \t]+):([0-9]+):(.*)");
-    KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)");
-    KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
+    static KRegExp errorGccRx("([^: \t]+):([0-9]+):(.*)");
+    static KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)");
+    static KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
+    static KRegExp compileFile1("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].*`.*`(.+)");
+    static KRegExp compileFile2("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-c ([^ ]+).*");
+    static KRegExp linkFile("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-o ([^ ]+).*");
     const int errorGccFileGroup = 1;
     const int errorGccRowGroup = 2;
     const int errorGccTextGroup = 3;
@@ -546,6 +555,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     const int errorJadeFileGroup = 1;
     const int errorJadeRowGroup = 2;
     const int errorJadeTextGroup = 3;
+    const int fileNameGroup = 1;
 
     QString eDir;
     if (matchEnterDir(line, eDir))
@@ -553,7 +563,9 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         QString *dir = new QString(eDir);
         dirstack.push(dir);
         kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
-        insertLine2(line, Diagnostic);
+	if (m_bShowDirNavMsg) {
+	    insertLine2(line, Diagnostic);
+	}
         return;
     }
     else if (matchLeaveDir(line, eDir))
@@ -569,7 +581,9 @@ void MakeWidget::insertLine1(const QString &line, Type type)
             kdWarning(9004) << "Expected directory: \"" << *dir << "\" but got \"" << eDir << "\"" << endl;
         }
         delete dir;
-        insertLine2(line, Diagnostic);
+	if (m_bShowDirNavMsg) {
+	    insertLine2(line, Diagnostic);
+	}
         return;
     }
 
@@ -619,11 +633,31 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         fn = info.absFilePath();
         kdDebug(9004) << "Path: " << fn << endl;
         items.append(new MakeItem(parags, fn, row, text));
-        insertLine2(line, Error);
+	insertLine2(line, Error);
     }
-    else
-    {
-        insertLine2(line, type);
+    else if (m_bShortCompilerOutput && compileFile1.match(line)) {
+	QString explain(i18n("compiling ")); 
+	QString tool;
+	if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	insertLine2(explain + "<b>" + compileFile1.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	return;
+    }
+    else if (m_bShortCompilerOutput && compileFile2.match(line)) {
+	QString explain(i18n("compiling ")); 
+	QString tool;
+	if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	insertLine2(explain + "<b>" + compileFile2.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	return;
+    }
+    else if (m_bShortCompilerOutput && linkFile.match(line)) {
+	QString explain(i18n("linking ")); 
+	QString tool;
+	if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	insertLine2(explain + "<b>" + linkFile.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	return;
+    }
+    else {
+	insertLine2(line, type);
     }
 }
 
@@ -651,6 +685,7 @@ QString MakeWidget::getOutputColor( Type type )
     case Error:
         return errorColor;
     case Diagnostic:
+    case StyledDiagnostic:
         return diagnosticColor;
     default:
         return normalColor;
@@ -674,7 +709,7 @@ void MakeWidget::insertLine2(const QString &line, Type type)
     QString icon;
     if (type == Error)
         icon = "<img src=\"error\"></img><nobr> </nobr>";
-    else if (type == Diagnostic)
+    else if (type == Diagnostic || type == StyledDiagnostic)
         icon = "<img src=\"warning\"></img><nobr> </nobr>";
     else
         icon = "<img src=\"message\"></img><nobr> </nobr>";
@@ -687,14 +722,58 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 #else
     static const QString br;
 #endif
-    append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(eLine).arg(br));
+    append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(type == StyledDiagnostic ? line : eLine).arg(br));
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
 
     if (atEnd && !m_vertScrolling && !m_horizScrolling)
     {
         moveCursor(MoveEnd, false);
+        moveCursor(MoveLineStart, false);//if linewrap is off we must avoid the jumping of the vertical scrollbar
     }
 
+}
+
+QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
+{
+    QPopupMenu* pMenu = QTextEdit::createPopupMenu(pos);
+    pMenu->setCheckable(true);
+    
+    pMenu->insertSeparator();
+    int id = pMenu->insertItem(i18n("Line wrapping"), this, SLOT(toggleLineWrapping()) );
+    pMenu->setItemChecked(id, m_bLineWrapping);
+    
+    pMenu->insertSeparator();
+    id = pMenu->insertItem(i18n("Short compiler output"), this, SLOT(toggleCompilerOutput()) );
+    pMenu->setItemChecked(id, m_bShortCompilerOutput);
+    id = pMenu->insertItem(i18n("Full compiler output"), this, SLOT(toggleCompilerOutput()) );
+    pMenu->setItemChecked(id, !(m_bShortCompilerOutput));
+    
+    pMenu->insertSeparator();
+    id = pMenu->insertItem(i18n("Show directory navigation messages"), this, SLOT(toggleShowDirNavigMessages()));
+    pMenu->setItemChecked(id, m_bShowDirNavMsg);
+    
+    return pMenu;
+}
+
+void MakeWidget::toggleLineWrapping()
+{
+    m_bLineWrapping = !m_bLineWrapping;
+    if (m_bLineWrapping) {
+	setWordWrap(WidgetWidth);	
+    }
+    else {
+	setWordWrap(NoWrap);
+    }
+}
+
+void MakeWidget::toggleCompilerOutput()
+{
+    m_bShortCompilerOutput = !m_bShortCompilerOutput;
+}
+
+void MakeWidget::toggleShowDirNavigMessages()
+{
+    m_bShowDirNavMsg = !m_bShowDirNavMsg;    
 }
 
 #include "makewidget.moc"

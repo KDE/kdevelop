@@ -44,6 +44,7 @@ public slots:
 
 protected:
     void paletteChange(const QPalette& oldPalette);
+    virtual QPopupMenu *createPopupMenu( const QPoint& pos );
 
 private slots:
     void insertStdoutLine(const QString& line);
@@ -53,13 +54,16 @@ private slots:
     void verticScrollingOff() { m_vertScrolling = false; }
     void horizScrollingOn() { m_horizScrolling = true; }
     void horizScrollingOff() { m_horizScrolling = false; }
+    void toggleLineWrapping();
+    void toggleCompilerOutput();
+    void toggleShowDirNavigMessages();
 
 private:
     virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
 
-    enum Type { Normal, Error, Diagnostic };
+    enum Type { Normal, Error, Diagnostic, StyledDiagnostic };
     void insertLine1(const QString &line, Type type);
     void insertLine2(const QString &line, Type type);
     bool matchEnterDir( const QString& line, QString& dir );
@@ -79,6 +83,10 @@ private:
     QString normalColor, errorColor, diagnosticColor;
     bool m_vertScrolling, m_horizScrolling;
 
+    bool m_bLineWrapping;
+    bool m_bShortCompilerOutput;
+    bool m_bShowDirNavMsg;
+    
     MakeViewPart *m_part;
 };
 
