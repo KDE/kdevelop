@@ -55,7 +55,8 @@ public:
     inline bool isPublic()    { return ( _access == PIE_PUBLIC ); }
     inline bool isProtected() { return ( _access == PIE_PROTECTED ); }
     inline bool isPrivate()   { return ( _access == PIE_PRIVATE ); }
-    
+    inline bool isPackage()   { return ( _access == PIE_PACKAGE ); }
+
     /** Outputs the class as text on stdout */
     void out();
 };

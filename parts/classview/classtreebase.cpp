@@ -343,6 +343,8 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
         icon = "CVprotected_meth";
     else if (parsedMethod->isPrivate())
         icon = "CVprivate_meth";
+    else if (parsedMethod->isPackage())
+        icon = "CVpackage_meth";
     else
         icon = "CVglobal_meth";
 
@@ -372,6 +374,8 @@ ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastS
         icon = "CVprotected_var";
     else if (parsedAttr->isPrivate())
         icon = "CVprivate_var";
+    else if (parsedAttr->isPackage())
+        icon = "CVpackage_var";
     else
         icon = "CVglobal_var";
 

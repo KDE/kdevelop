@@ -741,7 +741,7 @@ void JavaClassParser::parseClassInheritance( ParsedClass *aClass )
       PIAccess exportattr;
       exportattr = (exportit == JAVAPUBLIC)? PIE_PUBLIC
           :  (exportit == JAVAPROTECTED)? PIE_PROTECTED
-          :  PIE_PUBLIC;
+          :  PIE_PACKAGE;
       aParent->setAccess( exportattr );
 
       aClass->addParent( aParent );
@@ -836,8 +836,11 @@ bool JavaClassParser::parseClassLexem( ParsedClass *aClass )
     case JAVAPRIVATE:
       declaredAccess = PIE_PRIVATE;
       break;
-    case JAVACLASS:
     case JAVAINTERFACE:
+	  if (declaredAccess == PIE_PACKAGE) {
+        declaredAccess = PIE_PUBLIC;
+      }
+    case JAVACLASS:
       childClass = parseClassHeader();
       if( childClass != NULL )
       {
@@ -913,7 +916,7 @@ ParsedClass *JavaClassParser::parseClass( ParsedClass * aClass)
     if( commentInRange( aClass ) )
       aClass->setComment( comment );
 
-    declaredAccess = PIE_PUBLIC;
+    declaredAccess = PIE_PACKAGE;
 
     // Iterate until we find the end of the class.
     while( !exit )
@@ -1005,7 +1008,7 @@ void JavaClassParser::parseMethodAttributes( ParsedContainer *aContainer )
       break;
   }
 
-  declaredAccess = PIE_PUBLIC;
+  declaredAccess = PIE_PACKAGE;
   return;
 }
 
@@ -1077,8 +1080,11 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
     case JAVAPRIVATE:
       declaredAccess = PIE_PRIVATE;
       break;
-    case JAVACLASS:
     case JAVAINTERFACE:
+	  if (declaredAccess == PIE_PACKAGE) {
+        declaredAccess = PIE_PUBLIC;
+      }
+    case JAVACLASS:
       aClass = parseClassHeader();
 
       if( aClass != NULL )

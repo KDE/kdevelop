@@ -338,6 +338,7 @@ void ClassViewPart::gotoDeclaration(const QString &className,
     case PublicAttr:
     case ProtectedAttr:
     case PrivateAttr:
+    case PackageAttr:
         if (pc)
             pa = pc->getAttributeByName(memberName);
         else {

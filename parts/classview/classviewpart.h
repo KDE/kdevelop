@@ -37,8 +37,8 @@ public:
     ~ClassViewPart();
 
     enum ItemType { Scope, Class, Struct,
-                    PublicAttr, ProtectedAttr, PrivateAttr,
-                    PublicMethod, ProtectedMethod, PrivateMethod,
+                    PublicAttr, ProtectedAttr, PrivateAttr, PackageAttr,
+                    PublicMethod, ProtectedMethod, PrivateMethod, PackageMethod,
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
 

@@ -32,7 +32,8 @@ enum PIType {
 /** Access of a ParsedItem. */
 enum PIAccess { 
     PIE_GLOBAL, PIE_PUBLIC, 
-    PIE_PROTECTED, PIE_PRIVATE 
+    PIE_PROTECTED, PIE_PRIVATE,
+    PIE_PACKAGE
 };
 
 
@@ -100,12 +101,19 @@ public:
     { return ( _access == PIE_PROTECTED ); }
 
     /**
-     * Is this a public item? 
+     * Is this a private item?
      * @return If this a private item or not.
      */
     inline bool isPrivate()
     { return ( _access == PIE_PRIVATE ); }
-    
+
+    /**
+     * Is this a package item?
+     * @return If this a package item or not.
+     */
+    inline bool isPackage()
+    { return ( _access == PIE_PACKAGE ); }
+
     /**
      * Is this a global variable?
      * @return If this a global item or not.

@@ -81,7 +81,8 @@ ClassToolDialog::ClassToolDialog( ClassViewPart *part )
     access_combo->insertItem("Public");
     access_combo->insertItem("Protected");
     access_combo->insertItem("Private");
-    
+    access_combo->insertItem("Package");
+
     class_tree = new ClassToolWidget(part, this);
     //    classTree->setMinimumSize( 500, 400 );
     
@@ -224,6 +225,8 @@ void ClassToolDialog::slotAccessComboChoice(const QString &str)
         comboAccess = PIE_PROTECTED;
     else if( str == "Private" )
         comboAccess = PIE_PRIVATE;
+    else if( str == "Package" )
+        comboAccess = PIE_PACKAGE;
 
     // Update the view if the choice affected the data.
     if (currentOperation == ViewMethods || currentOperation == ViewAttributes)
