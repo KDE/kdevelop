@@ -118,7 +118,6 @@ void CKDevelop::slotFileNew(const char* dir){
 }
 
 void CKDevelop::slotFileOpen(){
-
   slotStatusMsg(i18n("Opening file..."));
 
   QStringList strList;

@@ -96,91 +96,86 @@ void DocViewMan::doSelectURL(const QString& url)
 
 void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForceReload, bool bShowModifiedBox)
 {
-  CEditWidget* pCurEditWidget = currentEditView();
-  KWriteDoc* pCurEditDoc = currentEditDoc();
+	KWriteDoc* pEditDoc = findKWriteDoc(filename);
 
-  QString editWidgetName;
-  if (pCurEditWidget) {
-    editWidgetName = pCurEditWidget->getName();
-  }
+	CEditWidget* pEditWidget = 0L;
+  CEditWidget* pCurrentEditWidget = currentEditView();
+	if (pCurrentEditWidget) {
+		if (pCurrentEditWidget->doc() == pEditDoc) {
+			pEditWidget = pCurrentEditWidget;
+		}
+		else {
+			if (pEditDoc) {
+				pEditWidget = getFirstEditView(pEditDoc);
+			}
+		}
+	}
 
   // Make sure that we found the file in the editor_widget in our list
-  if (pCurEditDoc) {
+  if (pEditDoc) {
     // handle file if it was modified on disk by another editor/cvs
-    QFileInfo file_info(editWidgetName);
-    if ((file_info.lastModified() != pCurEditDoc->getLastFileModifDate()) && bShowModifiedBox) {
+    QFileInfo file_info(filename);
+    if ((file_info.lastModified() != pEditDoc->getLastFileModifDate()) && bShowModifiedBox) {
       if(KMessageBox::questionYesNo(m_pParent,
                                     i18n("The file %1 was modified outside this editor.\n"
                                          "Open the file from disk and delete the current Buffer?")
-                                    .arg(editWidgetName),
+                                    .arg(filename),
                                     i18n("File modified"))==KMessageBox::Yes) {
         bForceReload = true;
-        pCurEditDoc->setLastFileModifDate(file_info.lastModified());
+        pEditDoc->setLastFileModifDate(file_info.lastModified());
       }
     }
 
     if (!bShowModifiedBox) {
-      pCurEditDoc->setLastFileModifDate(file_info.lastModified());
+      pEditDoc->setLastFileModifDate(file_info.lastModified());
     }
 
-    if (!bForceReload && filename == editWidgetName) {
-      if (pCurEditWidget && (line != -1))
-        pCurEditWidget->setCursorPosition(line, col);
+    if (!bForceReload) {
+      if (pEditWidget && (line != -1))
+        pEditWidget->setCursorPosition(line, col);
 
       //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
-      QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
+      QextMdiChildView* pMDICover = (QextMdiChildView*) pEditWidget->parentWidget();
       pMDICover->activate();
-      pCurEditWidget->setFocus();
       return;
     }
   }
 
-  // See if we already have the file wanted.
-  KWriteDoc* pDoc = findKWriteDoc(filename);
-
-  // bool found = (pDoc != 0);
-
   // Not found or needing a reload causes the file to be read from disk
-  if ((!pDoc) || bForceReload) {
+  if ((!pEditDoc) || bForceReload) {
     QFileInfo fileinfo(filename);
-    if (!pDoc) {
-      pDoc = createKWriteDoc(filename);
-      if (pDoc) {
+    if (!pEditDoc) {
+      pEditDoc = createKWriteDoc(filename);
+      if (pEditDoc) {
         // Set the last modify date
-        pDoc->setLastFileModifDate(fileinfo.lastModified());
+        pEditDoc->setLastFileModifDate(fileinfo.lastModified());
 
-        pCurEditWidget = createEditView(pDoc, true);
+        pEditWidget = createEditView(pEditDoc, true);
       }
     }
     else {
       // a view for this doc exists, already;
       // use the first view we found of this doc to show the text
-      pCurEditWidget = getFirstEditView(pDoc);
+      pEditWidget = getFirstEditView(pEditDoc);
     }
-    loadKWriteDoc(pDoc , filename, 1);
-  }
-  else {
-    KWriteDoc* pDoc = findKWriteDoc(filename);
-    pCurEditWidget = getFirstEditView(pDoc);
+    loadKWriteDoc(pEditDoc , filename, 1);
   }
 
-  if (!pCurEditWidget)
+  if (!pEditWidget) {
     return;
+	}
 
   // If the caller wanted to be positioned at a particular place in the file
   // then they have supplied the line and col. Otherwise we use the
   // current info values (0 if new) for the placement.
   if (line != -1)
-    pCurEditWidget->setCursorPosition(line, col);
+    pEditWidget->setCursorPosition(line, col);
 
-  pCurEditWidget->setName(filename);
+  pEditWidget->setName(filename);
 
-  QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
+  QextMdiChildView* pMDICover = (QextMdiChildView*) pEditWidget->parentWidget();
   pMDICover->activate();
-  pCurEditWidget->setFocus();
-
-	qDebug("DocViewMan::doSwitchToFile: cursor-pos(line: %d col: %d)", line, col);
 }
 
 

@@ -556,7 +556,6 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 void CKDevelop::switchToFile( QString filename, int line, int col,
                               bool bForceReload, bool bShowModifiedBox)
 {
-
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
     // not links in files or hardlinks. The _real_ solution
