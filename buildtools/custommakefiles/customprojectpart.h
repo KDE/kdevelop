@@ -89,13 +89,14 @@ private:
     QPopupMenu *m_targetMenu;
     KSelectAction *m_makeEnvironmentsSelector;
     QStringList m_targets;
-    QString m_contextFileName;
+    QStringList m_contextAddFiles;
+    QStringList m_contextRemoveFiles;
     QString m_contextDirName;
 
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
     QString m_buildCommand;
-	bool m_lastCompilationFailed;
+    bool m_lastCompilationFailed;
 };
 
 #endif

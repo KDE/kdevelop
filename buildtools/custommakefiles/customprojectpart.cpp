@@ -48,6 +48,7 @@
 #include "custommakeconfigwidget.h"
 #include "config.h"
 #include "envvartools.h"
+#include "urlutil.h"
 
 
 typedef KDevGenericFactory<CustomProjectPart> CustomProjectFactory;
@@ -173,40 +174,81 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         "like the <i>New Class</i> wizard."));
         return;
     }
+    m_contextAddFiles.clear();
+    m_contextRemoveFiles.clear();
 
-    m_contextFileName = fcontext->fileName();
-    bool inProject = project()->allFiles().contains(m_contextFileName.mid ( project()->projectDirectory().length() + 1 ));
-    QString popupstr = QFileInfo(m_contextFileName).fileName();
-    if (m_contextFileName.startsWith(projectDirectory()+ "/"))
-        m_contextFileName.remove(0, projectDirectory().length()+1);
-
-    popup->insertSeparator();
-    if (inProject)
+    if( fcontext->urls().size() == 1 )
     {
-        int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
-                           this, SLOT(slotRemoveFromProject()) );
-        popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
-            "Note that the file should be manually excluded from corresponding makefile or build.xml."));
+        QString contextFileName = URLUtil::canonicalPath(fcontext->fileName());
+        bool inProject = project()->isProjectFile(contextFileName);
+        QString popupstr = QFileInfo(contextFileName).fileName();
+        if (contextFileName.startsWith(projectDirectory()+ "/"))
+            contextFileName.remove(0, projectDirectory().length()+1);
+
+        popup->insertSeparator();
+        if (inProject)
+        {
+	    m_contextRemoveFiles << contextFileName;
+            int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
+                               this, SLOT(slotRemoveFromProject()) );
+            popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
+                "Note that the file should be manually excluded from corresponding makefile or build.xml."));
+        }
+        else
+        {
+	    m_contextAddFiles << contextFileName;
+            int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
+                               this, SLOT(slotAddToProject()) );
+            popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
+                "Note that the file should be manually added to corresponding makefile or build.xml."));
+        }
     }
-    else
+    else   // more than one file
     {
-        int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
-                           this, SLOT(slotAddToProject()) );
-        popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
-            "Note that the file should be manually added to corresponding makefile or build.xml."));
+        const KURL::List urls = fcontext->urls();
+	for (KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it)
+	{
+	    if ((*it).isLocalFile())
+	    {
+	    	QString path(URLUtil::canonicalPath((*it).path()));
+		QString relPath( path );
+                if (relPath.startsWith(projectDirectory()+ "/"))
+                    relPath.remove(0, projectDirectory().length()+1);
+		if (project()->isProjectFile(path))
+		    m_contextRemoveFiles << relPath;
+		else
+		    m_contextAddFiles << relPath;
+	    }
+	}
+
+        if (m_contextAddFiles.size() > 0)
+	{
+            int id = popup->insertItem( i18n("Add Selected Files to Project"),
+                               this, SLOT(slotAddToProject()) );
+            popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds selected files to the list of files in project. "
+                "Note that the files should be manually added to corresponding makefile or build.xml."));
+	}
+
+	if (m_contextRemoveFiles.size() > 0)
+	{
+            int id = popup->insertItem( i18n("Remove Selected Files From Project"),
+                               this, SLOT(slotRemoveFromProject()) );
+            popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes selected files from the list of files in project. "
+                "Note that the files should be manually excluded from corresponding makefile or build.xml."));
+	}
     }
 }
 
 
 void CustomProjectPart::slotAddToProject()
 {
-    addFile(m_contextFileName);
+    addFiles(m_contextAddFiles);
 }
 
 
 void CustomProjectPart::slotRemoveFromProject()
 {
-    removeFile(m_contextFileName);
+    removeFiles(m_contextRemoveFiles);
 }
 
 
