@@ -32,7 +32,7 @@ kdevelop/parts/kdeprojectspace/res/Makefile \
 kdevelop/lib/Makefile \
 kdevelop/lib/general/Makefile \
 kdevelop/lib/projectmanagement/Makefile \
-kdevelop/classparser/Makefile \
+kdevelop/lib/sourceinfo/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
 pics/Makefile \
