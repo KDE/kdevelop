@@ -466,6 +466,50 @@ AC_DEFUN(KDEV_CHECK_BDB,
   AC_DEFINE_UNQUOTED(BDB_OPEN_HACK, $bdb_open_hack, [account for Berkeley DB API different from v4.1 onwards])
 ])
 
+dnl  **********
+dnl  check whether we need the compat lib
+dnl  **********
+
+AC_DEFUN(KDEV_CHECK_COMPAT,
+[
+  AC_MSG_CHECKING(whether to build the compat lib)
+
+  AC_CACHE_VAL(ac_cv_qt31_setup,
+  [
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+
+    save_CXXFLAGS="$CXXFLAGS"
+
+    CXXFLAGS="$CXXFLAGS $QT_INCLUDES $KDE_INCLUDES $X_CFLAGS"
+
+    AC_TRY_LINK([
+      #include <qglobal.h>
+      #include <kdeversion.h>
+    ],
+    [
+      #if QT_VERSION < 0x030100
+         choke me
+      #endif
+      #if KDE_VERSION < 0x030100
+         KDE_choke me
+      #endif
+    ],
+      ac_cv_qt31_setup=yes,
+      ac_cv_qt31_setup=no
+    )
+    CXXFLAGS="$save_CXXFLAGS"
+    AC_LANG_RESTORE
+   ])
+
+  if test "$ac_cv_qt31_setup" == "yes"; then
+    AC_MSG_RESULT(no)
+  else
+    AC_MSG_RESULT(yes)
+    COMPAT_SUBDIR=compat
+  fi
+AC_SUBST(COMPAT_SUBDIR)
+])
 
 dnl  **********
 dnl  Very ugly hack to see whether QT_VERSION > 3.0.4. Remove it when
