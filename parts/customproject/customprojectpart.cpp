@@ -60,15 +60,15 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
-    
+
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
                           actionCollection(), "build_compilefile" );
-    
+
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    
+
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
@@ -100,7 +100,7 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
     vbox = dlg->addVBoxPage(i18n("Build Options"));
     QTabWidget *buildtab = new QTabWidget(vbox);
-    
+
     CustomBuildOptionsWidget *w2 = new CustomBuildOptionsWidget(*projectDom(), buildtab);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
     buildtab->addTab(w2, i18n("Build"));
@@ -127,7 +127,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     QString popupstr = QFileInfo(m_contextFileName).fileName();
     if (m_contextFileName.startsWith(projectDirectory()+ "/"))
         m_contextFileName.remove(0, projectDirectory().length()+1);
-    
+
     popup->insertSeparator();
     if (inProject)
         popup->insertItem( i18n("Remove from Project: %1").arg(popupstr),
@@ -177,11 +177,11 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
 void CustomProjectPart::populateProject()
 {
     QApplication::setOverrideCursor(Qt::waitCursor);
-    
+
     QValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
-    
+
     QDir dir;
     do {
         dir.setPath(s.pop());
@@ -255,7 +255,7 @@ QString CustomProjectPart::activeDirectory()
 QStringList CustomProjectPart::allFiles()
 {
 //     QStringList res;
-// 
+//
 //     QStringList::ConstIterator it;
 //     for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) {
 //         QString fileName = *it;
@@ -265,7 +265,7 @@ QStringList CustomProjectPart::allFiles()
 //         }
 //         res += fileName;
 //     }
-//     
+//
 //     return res;
 
 	// return all files relative to the project directory!
@@ -277,19 +277,19 @@ void CustomProjectPart::addFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
 void CustomProjectPart::addFiles ( const QStringList& fileList )
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.append ( *it );
 	}
-	
+
 	kdDebug(9025) << "Emitting addedFilesToProject" << endl;
 	emit addedFilesToProject ( fileList );
 }
@@ -298,19 +298,19 @@ void CustomProjectPart::removeFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
 void CustomProjectPart::removeFiles ( const QStringList& fileList )
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.remove ( *it );
 	}
-	
+
 	kdDebug(9025) << "Emitting removedFilesFromProject" << endl;
 	emit removedFilesFromProject ( fileList );
 }
@@ -359,7 +359,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
     cmdline += " ";
     cmdline += target;
-    
+
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
@@ -388,14 +388,14 @@ void CustomProjectPart::slotCompileFile()
     kdDebug(9020) << "Compiling " << fileName
                   << "in dir " << sourceDir
                   << " with baseName " << baseName << endl;
-    
+
     // What would be nice: In case of non-recursive build system, climb up from
     // the source dir until a Makefile is found
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
     kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
-    
+
     startMakeCommand(buildDir, target);
 }
 
@@ -409,6 +409,7 @@ void CustomProjectPart::slotClean()
 void CustomProjectPart::slotExecute()
 {
     QString program = projectDirectory() + "/" + project()->mainProgram();
+
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 
     DomUtil::PairList envvars =
@@ -458,6 +459,7 @@ void CustomProjectPart::updateTargetMenu()
             node = node.nextSibling();
         }
     } else {
+    	kdDebug(9025) << "Trying to load a makefile... " << endl;
         QFile f(buildDirectory() + "/Makefile");
 	if (!f.exists())
 	    f.setName( buildDirectory() + "/makefile" );
@@ -466,16 +468,22 @@ void CustomProjectPart::updateTargetMenu()
             return;
         }
         QTextStream stream(&f);
-        QRegExp re(".PHONY\\s*:(.*)");
+        //QRegExp re(".PHONY\\s*:(.*)");
+	QRegExp re("^[^($%.#].*[^)\s][:].*$");
+	QString str = "";
         while (!stream.atEnd()) {
             QString str = stream.readLine();
             // Read all continuation lines
-            while (str.right(1) == "\\" && !stream.atEnd()) {
-                str.remove(str.length()-1, 1);
-                str += stream.readLine();
+	    // kdDebug(9025) << "Trying: " << str.simplifyWhiteSpace() << endl;
+            //while (str.right(1) == "\\" && !stream.atEnd()) {
+            //    str.remove(str.length()-1, 1);
+            //    str += stream.readLine();
+            //}
+            if (str.contains(re) == 1)
+            {
+	        kdDebug(9025) << "Adding target: " << str.simplifyWhiteSpace() << endl;
+	        m_targets += QStringList::split(" ", str.simplifyWhiteSpace())[0].replace(':', "");
             }
-            if (re.search(str) == 0)
-                m_targets += QStringList::split(" ", re.cap(1).simplifyWhiteSpace());
         }
         f.close();
     }
