@@ -153,7 +153,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     addSubdirButton->setPixmap ( SmallIcon ( "folder_new",22 ) );
     addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
-    QToolTip::add( addSubdirButton, i18n( "Add new subdir..." ) );
+    QToolTip::add( addSubdirButton, i18n( "Add new subdirectory..." ) );
     // Create scope
     createScopeButton = new QToolButton ( projectTools, "Make button" );
     createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew.png",22 ) );
@@ -605,8 +605,8 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
                 
   bool ok = FALSE;
   QString subdirname = QInputDialog::getText(
-                    i18n( "Add Subdir" ),
-                    i18n( "Please enter a name for the new subdir." ),
+                    i18n( "Add Subdirectory" ),
+                    i18n( "Please enter a name for the new subdirectory." ),
                     QLineEdit::Normal, QString::null, &ok, this );
   if ( ok && !subdirname.isEmpty() )
   {
