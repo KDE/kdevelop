@@ -1,5 +1,9 @@
+2001-10-05  F@lk Brettschneider <falk@kdevelop.org>
+    * version number is 2.0.2 (now with KDE-2.2.2 insight)
+    
 2001-09-29  F@lk Brettschneider <falk@kdevelop.org>
-    * worked around a Qt 0x0 crash bug that will be fixed in the next Qt version
+    * more porting to KDE3
+     (worked around a Qt-3 0x0 crash bug that will be fixed in the next Qt version)
 
 2001-09-26  F@lk Brettschneider <falk@kdevelop.org>
     * ported to Qt3 except kdevelop's output view
