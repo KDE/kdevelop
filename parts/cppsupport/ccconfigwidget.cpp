@@ -176,7 +176,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
     CppCodeCompletionConfig* c = m_pPart->codeCompletionConfig();
     
     c->setCodeCompletionDelay( sliderCodeCompletion->value() );
-    c->setAutomaticArgumentsHint( sliderArgumentsHint->value() );
+    c->setArgumentsHintDelay( sliderArgumentsHint->value() );
     
     c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
     c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
