@@ -94,7 +94,13 @@ void AddSubprojectDialog::accept()
     QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
     QDir dir(m_subProject->path);
-    if (!dir.mkdir(name)) {
+    if (dir.exists()) {
+        if( KMessageBox::warningContinueCancel(this,
+               i18n("A subdirectory %1 already exists. "
+                    "Do you wish to add it as a subproject?").arg(name)) 
+            == KMessageBox::Cancel )
+        return;
+    } else if (!dir.mkdir(name)) {
         KMessageBox::sorry(this, i18n("Could not create subdirectory %1").arg(name));
         return;
     }
@@ -122,14 +128,18 @@ void AddSubprojectDialog::accept()
     // Create the new subdirectory and create a Makefile in it
     
     QFile f(m_widget->projectDirectory() + "/" + relmakefile + ".am");
-    if (!f.open(IO_WriteOnly)) {
-        KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1").arg(name));
-        return;
+    if (f.exists()) {
+        m_widget->parse( newitem );
+    } else {
+        if (!f.open(IO_WriteOnly)) {
+            KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1").arg(name));
+            return;
+        }
+        QTextStream stream(&f);
+        stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl;
+        f.close();
     }
-    QTextStream stream(&f);
-    stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl;
-    f.close();
-
+    
     QString cmdline = "cd ";
     cmdline += m_widget->projectDirectory();
     cmdline += " && automake ";

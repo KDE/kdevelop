@@ -218,6 +218,8 @@ public:
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
     
+    void parse(SubprojectItem *item);
+
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
@@ -251,7 +253,6 @@ private:
                      const QString &lhs, const QString &rhs);
     void parseSUBDIRS(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
-    void parse(SubprojectItem *item);
 
     QToolButton *subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton;
     QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;
