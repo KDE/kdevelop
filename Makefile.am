@@ -13,7 +13,7 @@ install-data-local:
 	@echo ""
 	@echo "******************* Important *********************"
 	@echo ""
-	@echo "KDevelop 3.0 alpha2 has been installed."
+	@echo "KDevelop 3.0 alpha3 has been installed."
 	@echo ""
 	@echo "Note: The binary name for the alpha releases is"
 	@echo "      'gideon'.  This will revert to 'kdevelop'"
