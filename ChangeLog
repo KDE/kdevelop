@@ -1,3 +1,8 @@
+2003-02-11  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+        * lib/structure:
+          - implemented take(), I wonder why I left it like that
+          - fix: size() returns number of components
+
 2003-02-11 Mickael Marchand <marchand@kde.org>
 	* parts/svn:
     - added an output window for subversion (just like CVS)

@@ -87,16 +87,15 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
   //virtual void clear ();
 
   type* take ( const QString & key ) {
-    // TODO: provided for compatibility with QDict
-    depreceated("take");
-    return find(key);
+    type* elt = find(key);
+    remove(key);
   }
   void resize ( uint newsize ) {
     // Do nothing, this implementation has a dynamic size
     depreceated("resize");
   }
   uint size () const {
-    depreceated("size");
+    return num_components();
   }
   std::ostream& print(std::ostream& out) const { return Impl::print(out);  }
 
