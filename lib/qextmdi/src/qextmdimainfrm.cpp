@@ -34,6 +34,7 @@
 #include <kmenubar.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <qtabwidget.h>
 #endif
 #include <qtoolbutton.h>
@@ -220,9 +221,11 @@ void QextMdiMainFrm::createMdiManager()
    QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(QextMdiChildFrm*,QextMdiChildFrm*)), this, SLOT(updateSysButtonConnections(QextMdiChildFrm*,QextMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(popupWindowMenu(QPoint)), this, SLOT(popupWindowMenu(QPoint)) );
    QObject::connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SIGNAL(lastChildFrmClosed()) );
-#if !(KDE_VERSION > 310)
+#ifndef NO_KDE   
+#if !(KDE_VERSION > 305)
    m_pMdi->installEventFilter( this );
-#endif   
+#endif
+#endif
 }
 
 //============ createTaskBar ==============//
@@ -296,8 +299,10 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
       return;
    }
 
-#if !(KDE_VERSION > 310)
+#ifndef NO_KDE
+#if !(KDE_VERSION > 305)
    pWnd->installEventFilter( this );
+#endif
 #endif
 
    // common connections used when under MDI control

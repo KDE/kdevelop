@@ -35,8 +35,13 @@ SplashScreen::SplashScreen()
 
   showMessage(i18n("Starting core application"));
 
+#if defined(KDE_IS_VERSION)
 #if (KDE_IS_VERSION(3,1,90))
   QRect rect = KGlobalSettings::splashScreenDesktopGeometry();
+#else
+  QRect rect = QApplication::desktop()->screenGeometry(
+    QApplication::desktop()->screenNumber(QPoint(0,0)));
+#endif
 #else
   QRect rect = QApplication::desktop()->screenGeometry(
     QApplication::desktop()->screenNumber(QPoint(0,0)));

@@ -31,6 +31,10 @@
 #include <qdatetime.h>
 #include <qobjectlist.h>
 
+#ifndef NO_KDE
+#include <kdeversion.h>
+#endif
+
 #include "qextmdichildview.h"
 #include "qextmdimainfrm.h"
 #include "qextmdichildfrm.h"
@@ -514,7 +518,8 @@ void QextMdiChildView::slot_childDestroyed()
 //============= eventFilter ===============//
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
-#if !(KDE_VERSION > 310)
+#ifndef NO_KDE
+#if !(KDE_VERSION > 305)
    if ( obj != this && e->type() == QEvent::KeyRelease )
      //  somethings eats the KeyRelease events and the main frame does not receive
      //  the event. So manually forward the event the the eventFilter() functions
@@ -523,7 +528,8 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
      //  However this does not work for toplevel windows, but they don't distribute 
      //  any events anyway (like Alt+F,... )
      qApp->sendEvent( this, e ); 
-#endif     
+#endif
+#endif
    if(e->type() == QEvent::KeyPress && isAttached()) {
       QKeyEvent* ke = (QKeyEvent*) e;
       if(ke->key() == Qt::Key_Tab) {

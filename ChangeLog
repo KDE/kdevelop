@@ -1,3 +1,7 @@
+2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
+	* KDE-3.0 compile fixes
+	* some (runtime) warning output removed
+    
 2003-02-24 Roberto Raggi <roberto@kdevelop.org>
 	* improved the background parser
 	* better syncronization between background parser and cppsupport part
