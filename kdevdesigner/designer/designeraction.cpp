@@ -25,7 +25,7 @@ DesignerAction::~DesignerAction()
 
 void DesignerAction::setDisabled( bool d )
 {
-    QAction::setDisabled(d);
+    QAction::setEnabled(!d);
     emit actionEnabled(!d);
 }
 
