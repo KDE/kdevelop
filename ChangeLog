@@ -1,4 +1,4 @@
-2002-10-28 F@lk Brettschneider <falk@kdevelop.org>
+2002-11-01 F@lk Brettschneider <falk@kdevelop.org>
   * fix in parts/doctreeview: if the Qt docu isn't available via doxygen books,
     fall back to the using of the Qt docu path set in the
     Gideon options "Documentation tree I"
