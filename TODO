@@ -1,10 +1,11 @@
 High priority tasks!
 ====================
 
+
 1. Fixing major/annoying bugs
 -----------------------------
 
-* crashes
+* crashes:
   - crashes when quit with 'close window' button
 
 * konsole part:
@@ -12,7 +13,7 @@ High priority tasks!
     desired: a menu option to "cd" to that directory
   - CTRL-C doesn't work, typing ../ does weird things
 
-* UI bugs
+* UI bugs:
   - GUI redraw blocked on Gideon startup for the time of project loading 
   - debugger toolview are visible when the debugger isn't active
   - in Tabbed Document Interface, sometimes new views will be opened in
@@ -32,17 +33,18 @@ High priority tasks!
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
       
-* misc
+* misc:
   - Printing files not supported
   - Trying Java projects results in mysterious error messages
 
+  
 2. KDevelop 2 compatibility
 ---------------------------
 
 These are things that must be accomplished before we can say that
 gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
-* general UI issues
+* general UI issues:
   - new file: a File menu to create a new file 
   - no possibility of bringing back closed toolviews
   - no possibility of switching toolviews on and off
@@ -66,48 +68,65 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 * build/configuration:
   - cross-compiling feature missing
     
-* interoperability
+* interoperability:
   - import/export 2.1-projects<-->Gideon-projects
   - version control: integration with Cervisia??
 
+  
 3. Missing UIs (other than 2)
 -----------------------------
 
 UIs that intuitively ought to be there
 
-automakemanager:
- * install, etc. targets besides "build" for subproject menus & toolbar
-
-4. Small Annoyances
--------------------
-
+* automakemanager:
+  - install, etc. targets besides "build" for subproject menus & toolbar
   
-New features
+
+Other Issues
 ============
+
+
+4. New features
+---------------
   
-Short-Term:
+* short-term:
 
-mhk: move function areas of kdevcore into separate classes
-mhk: improve documentation browsing
-mhk: find a nicer way to remove dynamic menu entries from context menus
+  - improve documentation browsing
 
-Mid-Term:
+* mid-term:
 
-mhk: make all functions using filenames use KURLs instead
-mhk: implement multiple-views per document
-mhk: make the KDevPart template work standalone
-mhk: add doc comments to the lib files I changed ;)
-mhk: load plugins dynamically
-mhk: valgrind!
-mhk: make sure all lib interfaces are available via DCOP
-mhk: use mimetype to determine code files, not extension
+  - valgrind!
+  - use mimetype to determine code files, not extension
 
-Long-Term:
+* long-term:
 
-all: write a lot more plugins ;)
+  - write a lot more plugins ;) ideas here for which ones
+  - sourcenav database and navigation tools
+
+  
+5. Code refactoring/improvements
+--------------------------------
+
+* architecture:
+  - implement multiple-views per document
+  - load plugins dynamically
+
+* modularity:
+  - move function areas of kdevcore into separate classes
+  - make the KDevPart template work standalone
+  - make sure all lib interfaces are available via DCOP
+
+* improvement:
+  - find a nicer way to remove dynamic menu entries from context menus
+  - make all functions using filenames use KURLs instead
+
+* optimization:  
 
 
-Unsorted:
+6. Misc.
+--------
+
+* mhk: add doc comments to the lib files I changed ;)
 
 * Update configure.in when sub projects are added and the
   project doesn't use am_edit
