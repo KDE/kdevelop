@@ -1089,7 +1089,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
 	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
 	
 	QString program = environString();
-	if(titem->name.startsWith("/"))
+	if(!titem->name.startsWith("/"))
 	  program += "./";
 	program += titem->name;	
 	
