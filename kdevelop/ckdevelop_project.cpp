@@ -1558,9 +1558,16 @@ SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
   QLabel *label1 = new QLabel(this);
   label1->setPixmap(QMessageBox::standardIcon(QMessageBox::Warning, kapp->style().guiStyle()));
   lay->add( label1 );
+  QString title;
+  if (prj) {
+     title = prj->getProjectName();
+  }
+  else {
+     title = "";
+  }
   lay->add(  new QLabel(  i18n( "The project\n\n%1\n\n"
                                 "contains changed files. Save modified file\n\n%2"
-                                " ?\n\n").arg(prj->getProjectName()).arg(filename),
+                                " ?\n\n").arg(title).arg(filename),
                           this) );
 
 
