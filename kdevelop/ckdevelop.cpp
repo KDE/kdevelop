@@ -1364,6 +1364,17 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
+  if(*str == i18n("C/C++ Reference") ){
+    // first try the locale setting
+    file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+
+    if( !QFileInfo( file ).exists() ){
+      // not found: use the default
+      file = strpath + "default/" + "kdevelop/reference/C/cref.html";
+    }
+    slotURLSelected(browser_widget,"file:" + file,1,"test");
+    return;
+  }
   if(*str == i18n("Qt-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
     return;
@@ -1464,6 +1475,22 @@ void CKDevelop::slotHelpSearch(){
   connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotDocSText(QString)));
   help_srch_dlg->exec();
 }
+
+void CKDevelop::slotHelpReference(){
+  KLocale *kloc = KApplication::getKApplication()->getLocale();
+
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+  // first try the locale setting
+  file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+
+  if( !QFileInfo( file ).exists() ){
+    // not found: use the default
+    file = strpath + "default/" + "kdevelop/reference/C/cref.html";
+  }
+  slotURLSelected(browser_widget,"file:" + file,1,"test");
+}
+
 void CKDevelop::slotHelpContent(){
   
   KLocale *kloc = KApplication::getKApplication()->getLocale();
@@ -1734,6 +1761,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
 
 
 

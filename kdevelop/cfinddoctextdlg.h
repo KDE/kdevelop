@@ -23,6 +23,7 @@
 #define CFINDDOCTEXTDLG_H
 
 #include <qdialog.h>
+#include <kiconloader.h>
 
 /**
   *@author 
@@ -44,9 +45,11 @@ signals:
 
 private:
   QString text;
+  KIconLoader* icon_loader;
 };
 
 #endif
+
 
 
 

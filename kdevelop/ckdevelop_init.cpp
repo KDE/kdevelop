@@ -572,6 +572,9 @@ void CKDevelop::initMenu(){
 				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertSeparator();
+  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
 				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
@@ -588,8 +591,6 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Project &User-Manual"),this,
 				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
   //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertSeparator();
-  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   menuBar()->insertItem(i18n("&Help"), help_menu);
@@ -817,6 +818,7 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
 
 
 

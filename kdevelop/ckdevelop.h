@@ -209,6 +209,7 @@ public:
   void slotDocUpdateKDEDocumentation();
 
   void slotHelpSearch();
+  void slotHelpReference();
   void slotHelpContent();
   void slotHelpHomepage();
   void slotHelpAbout();
@@ -366,6 +367,7 @@ private:
 };
 
 #endif
+
 
 
 

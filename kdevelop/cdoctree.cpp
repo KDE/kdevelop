@@ -83,7 +83,7 @@ void CDocTree::refresh(CProject* prj){
   path.push(&str_path);
   addChildItem(i18n("Manual"),&book_pix,&path);
   addChildItem(i18n("Tutorial"),&book_pix,&path);
- 
+  addChildItem(i18n("C/C++ Reference"),&book_pix,&path);
   
   //  add the Libraries
   str_path = i18n("Qt/KDE Libraries");
@@ -194,3 +194,4 @@ void CDocTree::slotDocumentationProp(){
     config_kdevelop->sync();
   }
 }
+
