@@ -13,10 +13,11 @@
 #define _DIFFWIDGET_H_
 
 #include <qwidget.h>
+#include <qtextedit.h>
+#include <qstringlist.h>
 
 #include <kurl.h>
 
-class QTextEdit;
 class KTempFile;
 
 namespace KIO {
@@ -26,6 +27,29 @@ namespace KIO {
 namespace KParts {
   class ReadOnlyPart;
 }
+
+// Helper class that displays a modified RMB popup menu
+class KDiffTextEdit: public QTextEdit
+{
+  Q_OBJECT
+public:
+  KDiffTextEdit( QWidget* parent = 0, const char* name = 0 );
+  virtual ~KDiffTextEdit();
+
+signals:
+  void externalPartRequested( const QString& partName );
+
+protected:
+  virtual QPopupMenu* createPopupMenu( const QPoint& );
+  virtual QPopupMenu* createPopupMenu();
+
+private slots:
+  void popupActivated( int );
+
+private:
+  static void searchExtParts();
+  static QStringList extParts;
+};
 
 class DiffWidget : public QWidget
 {
@@ -42,8 +66,6 @@ public slots:
     void setDiff( const QString& diff );
     /** clears the difference viewer */
     void slotClear();
-    /** shows a status message */
-    void showMessage( const QString& message );
 
 private slots:
     /** appends a piece of "diff" */
@@ -54,16 +76,21 @@ private slots:
      *  Don't call slotAppend afterwards!
      */
     void slotFinished();
+    void showExtPart();
+    void showTextEdit();
+    void loadExtPart( const QString& partName );
+
+protected:
+    void contextMenuEvent( QContextMenuEvent* e );
 
 private:
-    /** sets komparePart to 0 if kompare part is not installed */
-    void loadKomparePart( QWidget* parent );
-    void setKompareVisible( bool visible );
+    void setExtPartVisible( bool visible );
+    void populateExtPart();
 
 private:
-    QTextEdit* te;
+    KDiffTextEdit* te;
     KIO::Job* job;
-    KParts::ReadOnlyPart* komparePart;
+    KParts::ReadOnlyPart* extPart;
     KTempFile* tempFile;
 };
 

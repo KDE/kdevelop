@@ -32,7 +32,6 @@ public:
 
     void openURL( const KURL& url );
     void showDiff( const QString& diff );
-    void showMessage( const QString& message );
     void showDiff( const KURL &, const KURL & ) { /* TODO */ }
 
 public slots:

@@ -11,10 +11,13 @@
 
 #include <qlayout.h>
 #include <qtextedit.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kservice.h>
 #include <ktempfile.h>
+#include <kpopupmenu.h>
  
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
@@ -24,67 +27,136 @@
 
 #include "diffwidget.h"
 
+// yup, magic value for the popupmenu-id
+static const int POPUP_BASE = 130977;
+
+QStringList KDiffTextEdit::extParts;
+
+KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): QTextEdit( parent, name )
+{
+  searchExtParts();
+}
+
+KDiffTextEdit::~KDiffTextEdit()
+{
+}
+
+QPopupMenu* KDiffTextEdit::createPopupMenu()
+{ 
+  return createPopupMenu( QPoint() ); 
+}
+
+QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
+{
+  QPopupMenu* popup = QTextEdit::createPopupMenu( p );
+  if ( extParts.isEmpty() )
+    return popup;
+  if ( !popup )
+    popup = new QPopupMenu( this );
+
+  int i = 0;
+  for ( QStringList::Iterator it = extParts.begin(); it != extParts.end(); ++it ) {
+    popup->insertItem( i18n( "Show in %1" ).arg( *it ), i + POPUP_BASE, i );
+    ++i;
+  }
+  popup->insertSeparator( i );
+  connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
+
+  return popup;
+}
+
+void KDiffTextEdit::searchExtParts()
+{
+  // only execute once
+  static bool init = false;
+  if ( init )
+    return;
+  init = true;
+  
+  // search all parts that can handle text/x-diff
+  KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "'KParts/ReadOnlyPart' in ServiceTypes");
+  KTrader::OfferList::const_iterator it;
+  for ( it = offers.begin(); it != offers.end(); ++it ) {
+    KService::Ptr ptr = (*it);
+    extParts << ptr->name();
+  }
+  return;
+}
+
+void KDiffTextEdit::popupActivated( int id )
+{
+  id -= POPUP_BASE;
+  if ( id < 0 || id > (int)extParts.count() )
+    return;
+
+  emit externalPartRequested( extParts[ id ] ); 
+}
+
 DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
     QWidget( parent, name, f ), tempFile( 0 )
 {
   job = 0;
-  komparePart = 0;
+  extPart = 0;
 
-  loadKomparePart( this );
-
-  te = new QTextEdit( this, "Main Text Edit" );
+  te = new KDiffTextEdit( this, "Main Diff Viewer" );
   te->setReadOnly( true );
+  te->setTextFormat( QTextEdit::PlainText );
   te->setMinimumSize( 300, 200 );
+  connect( te, SIGNAL(externalPartRequested(const QString&)), this, SLOT(loadExtPart(const QString&)) );
 
   QVBoxLayout* layout = new QVBoxLayout( this );
   layout->addWidget( te );
-
-  if ( komparePart ) {
-    // if compare is installed, we take it instead of the QTextEdit
-    te->hide();
-    layout->addWidget( komparePart->widget() );
-  }
 }
 
 DiffWidget::~DiffWidget()
 {
+    delete tempFile;
 }
 
-void DiffWidget::setKompareVisible( bool visible )
+void DiffWidget::setExtPartVisible( bool visible )
 {
-  if ( !komparePart || !komparePart->widget() ) {
+  if ( !extPart || !extPart->widget() ) {
     te->show();
     return;
   }
   if ( visible ) {
     te->hide();
-    komparePart->widget()->show();
+    extPart->widget()->show();
   } else {
     te->show();
-    komparePart->widget()->hide();
+    extPart->widget()->hide();
   }
 }
 
-void DiffWidget::loadKomparePart( QWidget* parent )
+void DiffWidget::loadExtPart( const QString& partName )
 {
-  if ( komparePart )
+  if ( extPart ) {
+    setExtPartVisible( false );
+    delete extPart;
+    extPart = 0;
+  }
+
+  KService::Ptr extService = KService::serviceByName( partName );
+  if ( !extService )
     return;
 
-  // ### might be easier to use:
-  // createPartInstanceFromQuery( "text/x-diff", QString::null, parent, 0, this, 0 ); (Simon)
-
-  KService::Ptr kompareService = KService::serviceByDesktopName( "komparepart" );
-  if ( !kompareService )
+  extPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>( extService, this, 0, this, 0 );
+  if ( !extPart || !extPart->widget() )
     return;
 
-  komparePart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>( kompareService, parent, 0, this, 0 );
+  layout()->add( extPart->widget() );
+
+  setExtPartVisible( true );
+
+  if ( te->paragraphs() > 0 )
+    populateExtPart();
 }
 
 void DiffWidget::slotClear()
 {
   te->clear();
-  if ( komparePart )
-    komparePart->closeURL();
+  if ( extPart )
+    extPart->closeURL();
 }
 
 // internally for the TextEdit only!
@@ -99,15 +171,39 @@ void DiffWidget::slotAppend( KIO::Job*, const QByteArray& ba )
   slotAppend( QString( ba ) );
 }
 
+void DiffWidget::populateExtPart()
+{
+  if ( !extPart )
+    return;
+
+  bool ok = false;
+  int paragCount = te->paragraphs();
+  if ( extPart->openStream( "text/plain", KURL() ) ) {
+    for ( int i = 0; i < paragCount; ++i )
+      extPart->writeStream( te->text( i ).local8Bit() );
+    ok = extPart->closeStream();
+  } else {
+      // workaround for parts that cannot handle streams
+      delete tempFile;
+      tempFile = new KTempFile();
+      tempFile->setAutoDelete( true );
+      for ( int i = 0; i < paragCount; ++i )
+        *(tempFile->textStream()) << te->text( i ) << endl;
+      tempFile->close();
+      ok = extPart->openURL( tempFile->name() );
+  }
+  if ( !ok )
+    setExtPartVisible( false );
+}
+
 // internally for the TextEdit only!
 void DiffWidget::slotFinished()
 {
   // the diff has been loaded so we apply a simple highlighting
-
   static QColor cAdded( 190, 190, 237);
   static QColor cRemoved( 190, 237, 190 );
-  int paragCount = te->paragraphs();
 
+  int paragCount = te->paragraphs();
   for ( int i = 0; i < paragCount; ++i ) {
     QString txt = te->text( i );
     if ( txt.length() > 0 ) {
@@ -118,55 +214,18 @@ void DiffWidget::slotFinished()
       }
     }
   }
+  populateExtPart();
 }
 
 void DiffWidget::setDiff( const QString& diff )
 {
-  if ( komparePart ) {
-    bool ok = false;
-    if ( komparePart->openStream( "text/plain", KURL() ) ) {
-      komparePart->writeStream( diff.local8Bit() );
-      ok = komparePart->closeStream();
-    } else {
-      // workaround for old kompare versions < KDE 3.2
-      delete tempFile;
-      tempFile = new KTempFile();
-      tempFile->setAutoDelete( true );
-      *(tempFile->textStream()) << diff;
-      tempFile->close();
-      ok = komparePart->openURL( tempFile->name() );
-    }
-    if ( ok ) {
-      setKompareVisible( true );
-      return;
-    } else {
-      setKompareVisible( false );
-      te->setText( i18n("*** Error viewing diff with the diff KPart, falling back to plainText ***") );
-    }
-  }
-
+  slotClear();
   slotAppend( diff );
   slotFinished();
 }
 
-void DiffWidget::showMessage( const QString& message )
-{
-  setKompareVisible( false );
-  te->setText( message );
-}
-
 void DiffWidget::openURL( const KURL& url )
 {
-  if ( komparePart ) {
-    if ( komparePart->openURL( url ) ) {
-      setKompareVisible( true );
-    } else {
-      setKompareVisible( false );
-      te->setText( i18n("<b>Error viewing diff with the diff KPart</b>") );
-    }
-    return;
-  }
-
   if ( job )
     job->kill();
 
@@ -178,6 +237,27 @@ void DiffWidget::openURL( const KURL& url )
            this, SLOT(slotAppend( KIO::Job*, const QByteArray& )) );
   connect( job, SIGNAL(result( KIO::Job * )),
            this, SLOT(slotFinished()) );  
+}
+
+void DiffWidget::contextMenuEvent( QContextMenuEvent* /* e */ )
+{
+  QPopupMenu* popup = new QPopupMenu( this );
+  
+  if ( !te->isVisible() )
+    popup->insertItem( i18n("Display &raw output"), this, SLOT(showTextEdit()) );
+ 
+  popup->exec( QCursor::pos() );
+  delete popup;
+}
+
+void DiffWidget::showExtPart()
+{
+  setExtPartVisible( true );
+}
+
+void DiffWidget::showTextEdit()
+{
+  setExtPartVisible( false );
 }
 
 #include "diffwidget.moc"

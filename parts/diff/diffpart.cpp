@@ -22,6 +22,7 @@
 #include <kio/job.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "kdevcore.h"
@@ -139,7 +140,7 @@ void DiffPart::localDiff()
            this, SLOT(wroteStdin( KProcess* )) );
 
   if ( !proc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
-    showMessage( i18n( "Could not invoke the \"diff\" command." ) );
+    KMessageBox::error( 0, i18n( "Could not invoke the \"diff\" command." ) );
     delete proc;
     proc = 0;
     return;
@@ -152,11 +153,11 @@ void DiffPart::processExited( KProcess* p )
   // diff has exit status 0 and 1 for success
   if ( p->normalExit() && ( p->exitStatus() == 0 || p->exitStatus() == 1 ) ) {
     if ( resultBuffer.isEmpty() )
-      showMessage( i18n("No differences found.") );
+      KMessageBox::information( 0, i18n("DiffPart: No differences found.") );
     else
       showDiff( resultBuffer );
   } else {
-    showMessage( i18n("Diff command failed (%1):\n").arg( p->exitStatus() ) + resultErr );
+    KMessageBox::error( 0, i18n("Diff command failed (%1):\n").arg( p->exitStatus() ) + resultErr );
   }
   resultBuffer = resultErr = QString::null;
   delete proc;
@@ -192,12 +193,6 @@ void DiffPart::openURL( const KURL& url )
   diffDlg->exec();
   delete diffDlg;
 */
-}
-
-void DiffPart::showMessage( const QString& message )
-{
-  diffWidget->showMessage( message );
-  mainWindow()->raiseView( diffWidget );
 }
 
 void DiffPart::showDiff( const QString& diff )
