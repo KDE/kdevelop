@@ -15,13 +15,13 @@ EXTRA_DIST = README buildrpm.sh cspec.cpp cspec.h kpp.cpp kpp.h prefView.ui proj
 
 install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/kdevelop/tools/
-	$(INSTALL_DATA) buildrpm.sh $(kde_datadir)/kdevelop/tools/buildrpm.sh
+	$(INSTALL_DATA) $(srcdir)/buildrpm.sh $(kde_datadir)/kdevelop/tools/buildrpm.sh
 	$(mkinstalldirs) $(kde_datadir)/kdevelop/
-	$(INSTALL_DATA) template.spec $(kde_datadir)/kdevelop/template.spec
+	$(INSTALL_DATA) $(srcdir)/template.spec $(kde_datadir)/kdevelop/template.spec
 	$(mkinstalldirs) 
-	$(INSTALL_DATA) template-make.spec blah
+	$(INSTALL_DATA) $(srcdir)/template-make.spec blah
 	$(mkinstalldirs) $(datadir)/kdevelop/
-	$(INSTALL_DATA) template-kde.spec $(datadir)/kdevelop/templates
+	$(INSTALL_DATA) $(srcdir)/template-kde.spec $(datadir)/kdevelop/templates
 
 uninstall-local:
 	-rm -f $(kde_datadir)/kdevelop/tools/buildrpm.sh
