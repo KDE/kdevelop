@@ -182,18 +182,20 @@ bool ProjectManager::loadProject(const KURL &url)
 
   getGeneralInfo();
 
+  loadCreateFileSupport();
+
   if( !loadLanguageSupport() ) {
+    unloadCreateFileSupport();
     delete m_info; m_info = 0;
     return false;
   }
 
   if( !loadProjectPart() ) {
+    unloadCreateFileSupport();
     unloadLanguageSupport();
     delete m_info; m_info = 0;
     return false;
   }
-
-  loadCreateFileSupport();
 
   loadLocalParts();
 

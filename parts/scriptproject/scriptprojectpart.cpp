@@ -44,11 +44,15 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
 
     setXMLFile("kdevscriptproject.rc");
 
-    KAction *action;
-    action = new KAction( i18n("New File..."), 0,
-                          this, SLOT(slotNewFile()),
-                          actionCollection(), "file_newfile" );
-    
+    // only create new file action if file creation part not available
+    if (!createFileSupport()) {
+      KAction *action;
+      action = new KAction( i18n("New File..."), 0,
+                            this, SLOT(slotNewFile()),
+                            actionCollection(), "file_newfile" );
+
+    }
+
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
@@ -114,7 +118,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
     QValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
-    
+
     QDir dir;
     do {
         dir.setPath(s.pop());
@@ -187,7 +191,7 @@ QStringList ScriptProjectPart::allFiles()
         res += (m_projectDirectory + "/" + (*it));
 
     return res;*/
-	
+
 	// return all files relative to the project directory!
 	return m_sourceFiles;
 }
@@ -195,22 +199,22 @@ QStringList ScriptProjectPart::allFiles()
 void ScriptProjectPart::addFile(const QString &fileName)
 {
     kdDebug(9015) << "AddFile2" << fileName << endl;
-	
+
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
 void ScriptProjectPart::addFiles ( const QStringList& fileList )
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.append ( ( *it ) );
 	}
-	
+
 	emit addedFilesToProject ( fileList );
 }
 
@@ -218,19 +222,19 @@ void ScriptProjectPart::removeFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
 void ScriptProjectPart::removeFiles ( const QStringList& fileList )
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.remove ( ( *it ) );
 	}
-	
+
 	emit removedFilesFromProject ( fileList );
 }
 
