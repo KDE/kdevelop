@@ -31,6 +31,12 @@
    <dbgshell/>
   </general>
  </kdevdebugger>
+ <kdevtrollproject>
+   <run>
+    <mainprogram>./bin/$APPNAMELC$</mainprogram>
+    <programargs/>
+   </run>
+  </kdevtrollproject>
   <kdevfilecreate>
     <useglobaltypes>
       <type ext="ui" />
