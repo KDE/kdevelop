@@ -94,7 +94,8 @@ doc/en/manual/Makefile \
 doc/en/programming/Makefile \
 doc/en/tutorial/Makefile \
 doc/en/welcome/Makefile \
-doc/es/Makefile
+doc/es/Makefile \
+doc/es/welcome/Makefile \
 doc/fr/Makefile \
 doc/fr/tutorial/Makefile \
 doc/fr/welcome/Makefile \
