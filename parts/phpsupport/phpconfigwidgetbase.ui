@@ -124,8 +124,7 @@ You need a correctly installed php cgi version.</string>
                                 </property>
                                 <property name="text">
                                     <string>Uses an existing webserver. The pages are previewed in 
-the internal webbrowser. Please make sure that the webserver
-was compiled with PHP support.</string>
+the internal web browser. Please make sure that the webserver was compiled with PHP support.</string>
                                 </property>
                                 <property name="alignment">
                                     <set>AlignVCenter|AlignLeft</set>

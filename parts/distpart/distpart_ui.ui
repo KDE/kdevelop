@@ -230,8 +230,8 @@
                                                 </property>
                                                 <property name="text">
                                                     <string>&lt;b&gt;Archive name format: &lt;/b&gt;&lt;br&gt;
-%n - File name &lt;BR&gt;
-%v - File version &lt;BR&gt;
+%n - File name &lt;br&gt;
+%v - File version &lt;br&gt;
 %d - Date of archive</string>
                                                 </property>
                                             </widget>
