@@ -20,7 +20,14 @@
 #ifndef PDUMMYWIDGET_H
 #define PDUMMYWIDGET_H
 
-#include <propertywidget.h>
+#include "propertywidget.h"
+#include "multiproperty.h"
+
+class QWidget;
+class QVariant;
+class QPainter;
+class QColorGroup;
+class QRect;
 
 /**
 @short %Property editor with empty widget.

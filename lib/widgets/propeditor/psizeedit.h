@@ -20,9 +20,11 @@
 #ifndef PSIZEEDIT_H
 #define PSIZEEDIT_H
 
-#include <propertywidget.h>
+#include "propertywidget.h"
+#include "multiproperty.h"
 
 class QLineEdit;
+class QPainter;
 
 /**
 @short %Property editor for QSize values.
