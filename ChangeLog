@@ -1,3 +1,6 @@
+1999-12-08  Falk Brettschneider  <gigafalk@yahoo.com>
+        * system menu for childframes added
+
 1999-12-07  Falk Brettschneider  <gigafalk@yahoo.com>
 	* 2 new "Window" menuitems for switching all kdevelop sub-windows between toplevel and children
 	  (currently only the views are enabled to be switched)
