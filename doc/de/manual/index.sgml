@@ -2,7 +2,7 @@
 <book>
 <titlepag>
 <title>Benutzerhandbuch zu KDevelop
-<subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.0
+<subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.1
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
 <date>Version 2.0 , Apr 11,1999
@@ -3592,7 +3592,7 @@ Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<marti
 <item>Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
 <item>Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
 <item>Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
-<item>Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
+<item>Ralf Funken    <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">	-German  ( Debugger work )
 <item>Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
 <item>Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
 <item>Taiki Komoda        <htmlurl url="mailto:kom@kde.gr.jp" name="<kom@kde.gr.jp>">  - Japanese
