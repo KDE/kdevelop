@@ -7,7 +7,7 @@ dist:
 # use --include-deps, if you want to release the stuff. Don't use it for
 # yourself
 	automake --include-deps
-	perl automoc
+	perl am_edit
 	autoconf
 	touch stamp-h.in
 	LIST=`find ./po -name "*.po"`; \
@@ -21,6 +21,6 @@ all:
 	aclocal -I .
 	autoheader
 	automake
-	perl automoc
+	perl am_edit
 	autoconf
 

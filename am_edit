@@ -1,0 +1,746 @@
+#!/usr/bin/perl
+
+# Expands the specilised KDE tags in Makefile.in to (hopefully) valid
+# make syntax.
+# When called without file parameters, we work recursively on all Makefile.in
+# in and below the current subdirectory. When called with file parameters,
+# only those Makefile.in are changed.
+# The currently supported tags are
+#
+# {program}_METASOURCES
+# where you have a choice of two styles
+#   {program}_METASOURCES = name1.moc name2.moc ... [\]
+#   {program}_METASOURCES = USE_AUTOMOC [{suffix(default=cpp)}]
+#       The second style requires other tags as well.
+#
+# and more new tags TBD!
+#
+# Is the following comment valid still? (990201 jbb)
+# Be careful not to use a suffix that isn't used by at least one
+# of the main source files in {program}_SOURCES.
+#
+# The concept (and base code) for this peogram came from automoc,
+# supplied by the following
+#
+# Kalle Dalheimer <kalle\@kde.org>      (The originator?)
+# Harri Porten  <porten@tu-harburg.de>
+# Alex Zepeda  <garbanzo@hooked.net>
+# David Faure <faure@kde.org>
+# Stephan Kulow <coolo@kde.org>
+#
+# I've puddled around with automoc and produced something different
+# 1999-02-01 John Birch <jbb@writeme.com>
+#       * Rewritten automoc to cater for more than just moc file expansion
+#         Version 0.01 does the same as automoc at this stage.
+# 1999-02-18 jb
+#       * We must always write a Makefile.in file out even if we fail
+#         because we need the "perl autokmake" in the AUTOMAKE so that a
+#         "make" will regenerate the Makefile.in correctly.
+#         Reworked moc file checking so that missing includes in cpp
+#         will work and includes in cpp when using use_automoc will also
+#         work.
+# 1999-02-23 jb
+#       * Added POFILE processing and changed the USE_AUTOMOC tag to
+#         AUTO instead.
+
+use Cwd;
+use File::Find;
+use File::Basename;
+require "ctime.pl";
+
+# Prototype the functions
+sub initialise ();
+sub processMakefile ($);
+sub updateMakefile ();
+sub restoreMakefile ();
+
+sub removeLine ($$);
+sub appendLines ($);
+sub substituteLine ($$);
+
+sub findMocCandidates ();
+sub pruneMocCandidates ($);
+sub checkMocCandidates ();
+sub addMocRules ();
+sub addNewObjects ();
+
+sub tag_AUTOMAKE ();
+sub tag_META_INCLUDES ();
+sub tag_METASOURCES ();
+sub tag_POFILES ();
+
+# Some global globals...
+$verbose    = 0;        # a debug flag
+$thisProg   = "$0";     # This programs name
+$topdir     = cwd();    # The current directory
+@makefiles  = ();       # Contains all the files we'll process
+$start      = (times)[0]; # some stats for testing - comment out for release
+$version    = "v0.2";
+$errorflag  = 0;
+$cppExt     = "*.cpp *.cc *.cxx *.C";           # used by grep
+$hExt       = "*.h *.H *.hh *.hxx";             # used by grep
+$progId     = "KDE tags expanded automatically by " . basename($thisProg);
+$automkCall = "\n";
+$kdelang    = "";
+
+while (defined ($ARGV[0]))
+{
+    $_ = shift;
+    if (/^--version$/)
+    {
+        print STDOUT "\n";
+        print STDOUT basename($thisProg), " $version\n",
+                "This is really free software, unencumbered by the GPL.\n",
+                "You can do anything you like with it except sueing me.\n",
+                "Copyright 1998 Kalle Dalheimer <kalle\@kde.org>\n",
+                "Concept, design and unnecessary questions about perl\n",
+                "       by Matthias Ettrich <ettrich\@kde.org>\n\n",
+                "Making it useful by Stephan Kulow <coolo\@kde.org> and\n",
+                "Harri Porten <porten\@kde.org>\n",
+                "Updated (Feb-1999), John Birch <jbb\@writeme.com>\n\n";
+        exit 0;
+    } 
+    elsif (/^--verbose$|^-v$/)
+    {
+        $verbose = 1;       # Oh is there a problem...?
+    }
+    elsif (/^-p(.+)$|^--path=(.+)$/)
+    {
+        $thisProg = "$1/".basename($thisProg);
+        warn ("$thisProg doesn't exist\n")      if (!(-f $thisProg)); 
+    }
+    elsif (/^--help$|^-h$/)
+    {
+        print STDOUT "Usage $thisProg [OPTION] ... [fullpath/Makefile.in]...\n",
+                "\n",
+                "Patches Makefile.in generated from automake\n",
+                "\n",
+                "  -v, --verbose      verbosely list files processed\n",
+                "  -h, --help         print this help, then exit\n",
+                "  --version          print version number, then exit\n",
+                "  -p, --path=        use the path to automoc if the path\n",
+                "                     called from is not the one to be used\n";
+        exit 0;
+    }
+    else 
+    {
+        # user selects what input files to check
+        push (@makefiles, $_);
+    }
+}
+
+# Only scan for files when the user hasn't entered data
+if (!@makefiles)
+{
+    print STDOUT "Scanning for Makefile.in\n"       if ($verbose);
+    find (\&add_makefile, cwd());
+    #chdir('$topdir');
+} else {
+    print STDOUT "Using user enter input files\n"   if ($verbose);
+}
+  
+foreach $makefile (@makefiles)
+{
+    processMakefile ($makefile);
+    last            if ($errorflag);
+}
+
+# Just some debug statistics - comment out for release as it uses printf.
+printf STDOUT "Time %.2f CPU sec\n", (times)[0] - $start     if ($verbose);
+
+exit $errorflag;        # causes make to fail if erroflag is set
+
+#-----------------------------------------------------------------------------
+
+# In conjunction with the "find" call, this builds the list of input files
+sub add_makefile ()
+{
+    push (@makefiles, $File::Find::name)  if (/Makefile.in$/);
+}
+
+#-----------------------------------------------------------------------------
+
+# Processes a single make file
+# The parameter contains the full path name of the Makefile.in to use
+sub processMakefile ($)
+{
+    # some useful globals for the subroutines called here
+    local ($makefile)       = @_;
+    local $printname        = $makefile;
+    local @headerdirs       = ('.');
+    local $haveAutomocTag   = 0;
+    local $MakefileData     = "";
+
+    $makefileDir = dirname($makefile);
+    chdir ($makefileDir);
+    $printname =~ s/^$topdir\///; 
+    $makefile = basename($makefile);
+   
+    print STDOUT "Processing makefile $printname\n"   if ($verbose);
+
+    # Setup and see if we need to do this.
+    return      if (!initialise());
+
+    tag_AUTOMAKE ();            # Allows a "make" to redo the Makefile.in
+    tag_META_INCLUDES ();       # Supplies directories for src locations
+    tag_METASOURCES ();         # Sorts out the moc rules
+    tag_POFILES ();             # language rules for po directory
+
+    my $tmp = "force-reedit:\n";
+    $tmp   .= "\t$automkCall\n\tcd \$(top_srcdir) && perl $thisProg $printname\n\n";
+    appendLines($tmp);
+
+    # Always update the Makefile.in
+    updateMakefile ();
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+# Check to see whether we should process this make file.
+# This is where we look for tags that we need to process.
+# A small amount of initialising on the tags is also done here.
+# And of course we open and/or create the needed make files.
+sub initialise ()
+{
+    # Checking for files to process...
+    open (FILEIN, $makefile)
+                        || die "Could not open $makefile: $!\n";
+    # Read the file
+    while ( <FILEIN> )
+    {
+        $MakefileData .= $_;
+    }
+    close FILEIN;
+
+    # Remove the line continuations, but keep them marked
+    # Note: we lose the trailing spaces but that's ok.
+    $MakefileData =~ s/\\\s*\n/\034/g;
+
+    # If we've processed the file before...
+    restoreMakefile ()      if ($MakefileData =~ /$progId/);
+
+    # Look for the tags than mean we should process this file.
+    my $metasourceTag = 0;
+    $metasourceTag++    while ($MakefileData =~ /\n[^=#]*METASOURCES\s*=/g);
+    if ($metasourceTag > 1)
+    {
+        print STDERR "Error: Only one METASOURCE tag allowed\n";
+        $errorflag = 1;
+    }
+
+    my $pofileTag = 0;
+    $pofileTag++    while ($MakefileData =~ /\nPOFILES\s*=/g);
+    if ($pofileTag > 1)
+    {
+        print STDERR "Error: Only one POFILES tag allowed\n";
+        $errorflag = 1;
+    }
+						    
+    if ($pofileTag > 0) {
+      if ($MakefileData =~ /\nKDE_LANG\s*=(\S*)\n/) {
+	$kdelang = '$(KDE_LANG)'
+      } else {
+	$kdelang = '';
+      }
+    }
+
+    return (($pofileTag == 1 || $metasourceTag == 1) && !$errorflag);
+}
+
+#-----------------------------------------------------------------------------
+
+# Gets the list of user defined directories - relative to $srcdir - where
+# header files could be located.
+sub tag_META_INCLUDES ()
+{
+    my $lookup = '[^=\n]*META_INCLUDES\s*=\s*(.*)';
+    return 1    if ($MakefileData !~ /($lookup)\n/);
+    print STDOUT "META_INCLUDE processing <$1>\n"       if ($verbose);
+    
+    my $headerStr = $2;
+    removeLine ($lookup, $1);
+    
+    $headerStr =~ tr/\034/ /;
+    my @headerlist = split(' ', $headerStr);
+    
+    foreach $dir (@headerlist)
+    {
+        $dir =~ s#\$\(srcdir\)#.#;
+        if (! -d $dir)
+        {
+            print STDERR "Warning: $dir can't be found. ",
+                            "Must be a relative path to \$(srcdir)\n";
+        }
+        else
+        {
+            #print STDOUT "adding $dir\n"        if ($verbose);
+            push (@headerdirs, $dir);
+        }
+    }
+    
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+# Organises the list of headers that we'll use to produce moc files
+# from.
+sub tag_METASOURCES ()
+{
+    local $program_OBJECTS  = "";
+    local @newObs           = ();
+    local $mocExt           = ".moc";
+    local %mocFiles         = ();
+
+    my $line = "";
+    my $postEqual = "";
+    
+    my $lookup = '([^#=\n]*)METASOURCES\s*=\s*(.*)';
+    return 1    if ($MakefileData !~ /\n($lookup)\n/);
+    print STDOUT "METASOURCE processing <$1>)\n"      if ($verbose);
+
+    $program_OBJECTS = $2 . "OBJECTS"        if ($2);
+    $postEqual = $3;
+    
+    removeLine ($lookup, $1);
+    
+    # Always find the header files that could be used to "moc"
+    return 1    if (findMocCandidates ());
+    
+    if ($postEqual =~ /AUTO\s*(\S*)|USE_AUTOMOC\s*(\S*)/)
+    {
+        # AUTO can also contain the extension
+        $mocExt = ($+) ? ".moc.$+" : ".moc.cpp";
+        $haveAutomocTag = 1;
+    }
+    else
+    {
+        # Not automoc so read the list of files supplied which
+        # should be .moc files.
+
+        $postEqual =~ tr/\034/ /;
+        local @mocList = split(' ', $postEqual);
+
+        # prune out extra headers - This also checks to make sure that
+        # the list is valid.
+        pruneMocCandidates (@mocList);
+    }
+    
+    checkMocCandidates ();
+    addNewObjects ();
+    addMocRules ();
+}
+
+#-----------------------------------------------------------------------------
+
+# Returns 0 if the line was processed - 1 otherwise.
+# Errors are logged in the global $errorflags
+sub tag_AUTOMAKE ()
+{
+    my $lookup = '.*cd \$\(top_srcdir\)\s+&&\s+\$\(AUTOMAKE\)(.*)';
+    return 1    if ($MakefileData !~ /($lookup)/);
+    print STDOUT "AUTOMAKE processing <$1>\n"        if ($verbose);
+    
+    my $newLine = $1."\n\tcd \$(top_srcdir) && perl $thisProg $printname";
+    substituteLine ($lookup, $newLine);
+    $automkCall = $1;
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+# Returns 0 if the line was processed - 1 otherwise.
+# Errors are logged in the global $errorflags
+sub tag_POFILES ()
+{
+    my $lookup = 'POFILES\s*=([^\n]*)';
+    return 1    if ($MakefileData !~ /\n$lookup/);
+    print STDOUT "POFILES processing <$1>\n"   if ($verbose);
+
+    my $tmp = $1;
+
+    # make sure these are all gone.
+    if ($MakefileData =~ /\n\.po\.gmo:\n/)
+    {
+        print STDERR "Warning: Found old .po.gmo rules. New po rules not added\n";
+        return 1;
+    }
+   
+    # Either find the pofiles in the directory (AUTO) or use
+    # only the specified po files.
+    my @pofiles = ();
+    if ($tmp =~ /^\s*AUTO\s*$/)
+    {
+        opendir (THISDIR, ".");
+        @pofiles =  grep(/\.po$/, readdir(THISDIR)); 
+        closedir (THISDIR);
+        print STDOUT "pofiles found = @pofiles\n"   if ($verbose);
+    }
+    else
+    {
+        $tmp =~ s/\034/ /g;
+        @pofiles = split (" ", $tmp);
+    }
+    return 1    if (@pofiles == 0);        # Nothing to do
+    
+    # Build rules for creating the gmo files
+    $tmp = "";
+    my $allgmofiles     = "";
+    my $pofileLine   = "POFILES =";
+    foreach $pofile (@pofiles)
+    {
+        $pofile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
+        $tmp .= "$1.gmo: $pofile\n\trm -f $1.gmo \&\& \@GMSGFMT\@ -o $1.gmo \$(srcdir)/$pofile\n\n";
+        $allgmofiles .= " $1.gmo";
+        $pofileLine  .= " $1.po";
+    }
+    appendLines ($tmp);
+    substituteLine ($lookup, "$pofileLine\nGMOFILES =$allgmofiles");
+
+    if ($allgmofiles) {
+      
+      # Add the "clean" rule so that the maintainer-clean does something
+      appendLines ("gmofile-clean:\n\t-rm -f $allgmofiles\n");
+
+      $lookup = 'maintainer-clean:\s*(.*)';
+      if ($MakefileData =~ /\n$lookup/) {
+	$tmp = "maintainer-clean: gmofile-clean " . $1;
+	substituteLine ($lookup, $tmp);
+      }
+    }
+
+    $lookup = 'install-data-am:([^\n]*)';
+    if ($MakefileData !~ /\n$lookup/) {
+        print STDERR "Can't find 'install-data-am:' line for GMOFILES\n";
+    } else {
+
+      substituteLine($lookup, "install-data-am: install-kde $1");
+
+      $tmp = "install-kde: install-\@USE_NLS\@\n";
+      $tmp .= "install-no:\n";
+      $tmp .= "install-yes:\n";
+      if ($kdelang) {
+	$tmp  .= "\t\$(mkinstalldirs) \$(kde_locale)/$kdelang/LC_MESSAGES\n";
+      }
+      foreach $pofile (@pofiles)
+	{
+	  $pofile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
+	  if ($kdelang) {
+	    $tmp .= "\t\$(INSTALL_DATA) $1.gmo \$(kde_locale)/$kdelang/LC_MESSAGES/$1.mo\n";
+	  } else {
+	    $tmp .= "\t\$(mkinstalldirs) \$(kde_locale)/$1/LC_MESSAGES\n";
+	    $tmp .= "\t\$(INSTALL_DATA) $1.gmo \$(kde_locale)/$1/LC_MESSAGES/\$(PACKAGE).mo\n";
+	  }
+	}
+      appendLines ($tmp);
+    }
+    
+    # Build rules for un-installing the gmo files.
+    $lookup = 'uninstall:([^\n]*)';
+    if ($MakefileData !~ /\n$lookup/) {
+      print STDERR "Can't find 'uninstall:' line for GMOFILES\n";
+
+    } else {
+      substituteLine($lookup, "uninstall: uninstall-kde $1");
+
+      $tmp = "uninstall-kde:\n";
+      foreach $pofile (@pofiles)
+        {
+	  $pofile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
+	  if ($kdelang) {
+	    $tmp .= "\trm -f \$(kde_locale)/$kdelang/LC_MESSAGES/$1.mo\n";
+	  } else {
+	    $tmp .= "\trm -f \$(kde_locale)/$1/LC_MESSAGES/\$(PACKAGE).mo\n";
+	  }
+        }
+      appendLines($tmp);
+    }
+
+    $lookup = 'all:([^\n]*)';
+    if ($MakefileData !~ /\n$lookup/) {
+      print STDERR "Can't find 'all:' line for GMOFILES\n";
+      
+    } else {
+      substituteLine($lookup, "all: all-kde $1");
+
+      $tmp = "all-kde: all-\@USE_NLS\@\nall-no:\nall-yes: \$(GMOFILES)\n";
+      appendLines($tmp);
+    }
+
+    $lookup = '\ndistdir:\s*(.*)';
+    if ($MakefileData =~ /($lookup)/) {
+
+      $tmp = "distdir-am: $1";
+      substituteLine($lookup, $tmp);
+      $tmp = "distdir: distdir-am dist-gmofiles\n";
+      $tmp .= "dist-gmofiles:\$(GMOFILES)\n";
+      $tmp .= "\tcp \$(GMOFILES) \$(distdir)\n";
+      appendLines ($tmp);
+    }
+
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+# Find headers in any of the source directories specified previously, that
+# are candidates for "moc-ing".
+sub findMocCandidates ()
+{
+    my @list = ();
+    foreach $dir (@headerdirs)
+    {
+        chdir ($dir);
+        @list = `grep -l '^.*Q_OBJECT' $hExt 2> /dev/null`;
+        chdir ($makefileDir);
+
+        # The assoc array of root of headerfile and header filename
+        foreach $hFile (@list)
+        {
+            chomp ($hFile);
+            $hFile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
+            if ($mocFiles{$1})
+            {
+                print STDERR "Warning: Multiple header files found for $1\n";
+                next;                           # Use the first one
+            }
+            $mocFiles{$1} = "$dir\035$hFile";   # Add relative dir
+        }
+    }
+
+    if (!%mocFiles)
+    {
+        print STDERR "Warning: No moc-able header's found\n";
+        $errorflag = 0;
+        return 1;
+    }
+
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+# The programmer has specified a moc list. Prune out the moc candidates
+# list that we found based on looking at the header files. This generates
+# a warning if the programmer gets the list wrong, but this doesn't have
+# to be fatal here.
+sub pruneMocCandidates ($)
+{
+    #my (@list) = @_;
+    my %prunedMoc = ();
+
+    foreach $mocname (@mocList)
+    {
+        $mocname =~ s/\.moc$//;
+        if ($mocFiles{$mocname})
+        {
+            $prunedMoc{$mocname} = $mocFiles{$mocname};
+        }
+        else
+        {
+            # They specified a moc file but we can't find a header that
+            # will generate this moc file. That's possible fatal!
+            print STDERR "Warning: No moc-able header file for $mocname\n";
+        }
+    }
+
+    undef %mocFiles;
+    %mocFiles = %prunedMoc;
+}
+
+#-----------------------------------------------------------------------------
+
+# Finds the cpp files (If they exist).
+# The cpp files get appended to the header file separated by \035
+sub checkMocCandidates ()
+{
+    my @cppFiles = ();
+    
+    foreach $mocFile (keys (%mocFiles))
+    {
+        # Find corresponding c++ files that includes the moc file
+        @cppFiles =
+            `grep -l "^#include[ ]*.$mocFile\.moc." $cppExt 2> /dev/null`;
+
+        if (@cppFiles == 1)
+        {
+            chomp $cppFiles[0];
+            $mocFiles{$mocFile} .= "\035" . $cppFiles[0];
+            next;
+        }
+
+        if (@cppFiles == 0)
+        {
+            push (@newObs, $mocFile);           # Produce new object file
+            next    if ($haveAutomocTag);       # This is expected...
+            # But this is an error we can deal with - let them know
+            print STDERR
+                "Warning: No c++ file that includes $mocFile.moc\n";
+            next;
+        }
+        else
+        {
+            # We can't decide which file to use, so it's fatal. Although as a
+            # guess we could use the mocFile.cpp file if it's in the list???
+            print STDERR
+                "Error: Multiple c++ files that include $mocFile.moc\n";
+            print STDERR "\t",join ("\t", @cppFiles),"\n";
+            $errorflag = 1;
+            delete $mocFiles{$mocFile};
+            # Let's continue and see what happens - They have been told!
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+ 
+# Given a list of new object files to produce add them to the OBJECTS
+# line.
+sub addNewObjects () 
+{
+    if (@newObs)
+    {
+        my $lookup = $program_OBJECTS.'\s*=\s*(.*)';
+        if ($program_OBJECTS && $MakefileData =~ /\n($lookup)\n/)
+        {
+            print STDOUT "OBJECTS processing <$1>\n"    if ($verbose);
+            my $new = $1;
+            $ext =  ($new =~ /_la_OBJECTS/) ? ".moc.lo " : ".moc.o ";
+            $new .= " \034" . join ($ext, @newObs) . $ext . "\n";
+            substituteLine ($lookup, $new);
+        }
+        else
+        {
+            print STDERR "Error: Cannot find OBJECT tag to add @newObs\n";
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+# Add the rules for generating moc source from header files
+# For Automoc output *.moc.cpp but normally we'll output *.moc
+# (We must compile *.moc.cpp separately. *.moc files are included
+# in the appropriate *.cpp file by the programmer)
+sub addMocRules ()
+{
+    my $cppFile;
+    my $hFile;
+    my $cleanMoc = "";
+    
+    foreach $mocFile (keys (%mocFiles))
+    {
+        undef $cppFile;
+        ($dir, $hFile, $cppFile) =  split ("\035", $mocFiles{$mocFile}, 3);
+        $dir =~ s#^\.#\$(srcdir)#;
+        if (defined ($cppFile))
+        {
+            appendLines ("\$(srcdir)/$cppFile: $mocFile.moc\n$mocFile.moc: $dir/$hFile\n\t\$(MOC) $dir/$hFile -o $mocFile.moc\n");
+            $cleanMoc .= " $mocFile.moc";
+        }
+        else
+        {
+            appendLines ("$mocFile$mocExt: $dir/$hFile\n\t\$(MOC) $dir/$hFile -o $mocFile$mocExt\n");
+            $cleanMoc .= " $mocFile$mocExt";
+        }
+    }
+
+    if ($cleanMoc) {
+      $lookup = 'distclean:\s*(.*)';
+      if ($MakefileData =~ /\n($lookup)\n/) {
+	print STDOUT "distclean processing <$1>\n"   if ($verbose);
+	my $newline = "distclean: distclean-metasources " . $2;
+	substituteLine ($lookup, $newline);
+      }
+      # Always add dist clean tag
+      # Add extra *.moc.cpp files created for USE_AUTOMOC because they arn't
+      # included in the normal *.moc clean rules.
+      appendLines ("distclean-metasources:\n\t-rm -f $cleanMoc\n");
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+sub updateMakefile ()
+{
+    open (FILEOUT, "> $makefile")
+                        || die "Could not create $makefile: $!\n";
+
+    print FILEOUT "# $progId on ", &ctime(time);
+    $MakefileData =~ s/\034/\\\n/g;    # Restore continuation lines
+    print FILEOUT $MakefileData;
+    close FILEOUT;
+}
+
+#-----------------------------------------------------------------------------
+
+# The given line needs to be removed from the makefile
+# Do this by adding the special "removed line" comment at the line start.
+sub removeLine ($$)
+{
+    my ($lookup, $old) = @_;
+    
+    $old =~ s/\034/\\\n#>- /g;          # Fix continuation lines
+    $MakefileData =~ s/$lookup/#>\- $old/;
+}
+
+#-----------------------------------------------------------------------------
+
+# Replaces the old line with the new line
+# old line(s) are retained but tagged as removed. The new line(s) have the
+# "added" tag placed before it.
+sub substituteLine ($$)
+{
+    my ($lookup, $new) = @_;
+   
+    $MakefileData =~ /($lookup)/;
+    $old = $1;
+    $old =~ s/\034/\\\n#>\- /g;         # Fix continuation lines
+    $new =~ s/\034/\\\n/g;
+    my $newCount = 1;
+    $newCount++  while ($new =~ /\n/g);
+
+
+    #print STDOUT "lookup <$lookup> $newCount\nold <$old>\nnew <$new>\n";
+    # Debug line
+    #print STDOUT "Program error: Can't find old lookup<$lookup>\n"       if $MakefileData !~ /$lookup/;
+    
+    $MakefileData =~ s/$lookup/#>- $old\n#>\+ $newCount\n$new/;
+}
+
+#-----------------------------------------------------------------------------
+
+# Slap new lines on the back of the file.
+sub appendLines ($)
+{
+    my ($new) = @_;
+    
+    $new =~ s/\034/\\\n/g;        # Fix continuation lines
+    my $newCount = 1;
+    $newCount++  while ($new =~ /\n/g);
+
+    $MakefileData .= "\n#>\+ $newCount\n$new";
+}
+
+#-----------------------------------------------------------------------------
+
+# Restore the Makefile.in to the state it was before we fiddled with it
+sub restoreMakefile ()
+{
+    $MakefileData =~ s/# $progId[^\n\034]*[\n\034]*//g;
+    # Restore removed lines
+    $MakefileData =~ s/([\n\034])#>\- /$1/g;
+    # Remove added lines
+    while ($MakefileData =~ /[\n\034]#>\+ ([^\n\034]*)/)
+    {
+       my $newCount = $1;
+       my $removeLines = "";
+       while ($newCount--) {
+	 $removeLines .= "[^\n\034]*([\n\034]|)";
+       }
+       $MakefileData =~ s/[\n\034]#>\+.*[\n\034]$removeLines/\n/;
+    }
+}
+
+#-----------------------------------------------------------------------------

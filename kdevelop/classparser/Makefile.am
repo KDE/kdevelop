@@ -2,7 +2,7 @@
 
 INCLUDES = $(all_includes)
 
-libclassparser_a_METASOURCES = USE_AUTOMOC
+#libclassparser_a_METASOURCES = USE_AUTOMOC
 
 noinst_LIBRARIES = libclassparser.a
 

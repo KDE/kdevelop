@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 dist-hook:
-	-perl automoc
+	-perl am_edit
 
 SUBDIRS = kdevelop po 
 

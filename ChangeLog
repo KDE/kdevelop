@@ -1,4 +1,7 @@
 1999-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Switch to (a slightly modified) am_edit
+
+1999-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New documentation tree
         * Decreased dependencies on config.h and cproject.h 
 
