@@ -72,24 +72,24 @@ void AutoDetailsView::initActions()
 
 	targetOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
 	                                   this, SLOT( slotTargetOptions() ), actions, "target options" );
-    targetOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Target options dialog that provides settings for LDFLAGS, LIBADD and DEPENDENCIES."));
+    targetOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Target options dialog that provides settings for linker flags and lists of dependencies and external libraries."));
 	addNewFileAction = new KAction( i18n( "Create New File..." ), "filenew", 0,
 	                                this, SLOT( slotAddNewFile() ), actions, "add new file" );
-    addNewFileAction->setWhatsThis(i18n("<b>Create new file</b><p>New file will be created using <b>FileCreate</b> part if it is available."));
+    addNewFileAction->setWhatsThis(i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected target."));
 	addExistingFileAction = new KAction( i18n( "Add Existing Files..." ), "fileimport", 0,
 	                                     this, SLOT( slotAddExistingFile() ), actions, "add existing file" );
-    addExistingFileAction->setWhatsThis(i18n("<b>Add existing files</b><p>Header files will not be included in SOURCES list of a target. "
+    addExistingFileAction->setWhatsThis(i18n("<b>Add existing files</b><p>Adds existing file to a currently selected target. Header files will not be included in SOURCES list of a target. "
                                              "They will be added to noinst_HEADERS instead."));
 	addIconAction = new KAction( i18n( "Add Icon..." ), "iconadd_kdevelop", 0,
 	                             this, SLOT( slotAddIcon() ), actions, "add icon" );
-    addIconAction->setWhatsThis(i18n("<b>Add icon</b><p>Modifies KDEICON target."));
+    addIconAction->setWhatsThis(i18n("<b>Add icon</b><p>Adds an icon to a KDEICON target."));
 	buildTargetAction = new KAction( i18n( "Build Target..." ), "launch", 0,
 	                                 this, SLOT( slotBuildTarget() ), actions, "build target" );
     buildTargetAction->setWhatsThis(i18n("<b>Build target</b><p>Constructs a series of make commands to build the selected target. "
                                          "Also builds dependent targets."));
 	setActiveTargetAction = new KAction( i18n( "Make Target Active" ), "", 0,
 	                                     this, SLOT( slotSetActiveTarget() ), actions, "set active target" );
-    setActiveTargetAction->setWhatsThis(i18n("<b>Make target active</b><p>New files and classes by default go to an active target. "
+    setActiveTargetAction->setWhatsThis(i18n("<b>Make target active</b><p>Marks the currently selected target as 'active'. New files and classes by default go to an active target. "
                                              "<b>Build Active Target</b> menu command builds it."));
 	removeDetailAction = new KAction( i18n( "Remove" ), "editdelete", 0,
 	                                  this, SLOT( slotRemoveDetail() ), actions, "remove detail" );

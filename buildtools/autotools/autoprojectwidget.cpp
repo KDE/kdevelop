@@ -105,7 +105,7 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addSubprojectButton->setPixmap( SmallIcon( "folder_new" ) );
 	QToolTip::add
 		( addSubprojectButton, i18n( "Add subproject" ) );
-    QWhatsThis::add(addSubprojectButton, i18n("<b>Add subproject</b><p>New subproject in currently selected subproject."));
+    QWhatsThis::add(addSubprojectButton, i18n("<b>Add subproject</b><p>Creates a new subproject in currently selected subproject."));
 
 	/*    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
 		addExistingSubprojectButton->setPixmap(SmallIcon("fileimport"));
@@ -115,13 +115,13 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addTargetButton->setPixmap( SmallIcon( "targetnew_kdevelop" ) );
 	QToolTip::add
 		( addTargetButton, i18n( "Add target" ) );
-    QWhatsThis::add(addTargetButton, i18n("<b>Add target</b><p>Target can be a binary program, library, script, also a collection of data or header files."));
+    QWhatsThis::add(addTargetButton, i18n("<b>Add target</b><p>Adds a new target to the currently selected subproject. Target can be a binary program, library, script, also a collection of data or header files."));
 
 	addServiceButton = new QToolButton( overviewButtonBox );
 	addServiceButton->setPixmap( SmallIcon( "servicenew_kdevelop" ) );
 	QToolTip::add
 		( addServiceButton, i18n( "Add service" ) );
-    QWhatsThis::add(addServiceButton, i18n("<b>Add service</b><p>Creates a service .desktop file."));
+    QWhatsThis::add(addServiceButton, i18n("<b>Add service</b><p>Creates a .desktop file describing the service."));
 
 	addApplicationButton = new QToolButton( overviewButtonBox );
 	addApplicationButton->setPixmap( SmallIcon( "window_new" ) );
@@ -144,7 +144,7 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	subProjectOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
 		( subProjectOptionsButton, i18n( "Options" ) );
-    QWhatsThis::add(subProjectOptionsButton, i18n("<b>Options</b><p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
+    QWhatsThis::add(subProjectOptionsButton, i18n("<b>Options</b><p>Shows subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
 
 	overviewButtonBox->setMaximumHeight( subProjectOptionsButton->height() );
 
@@ -168,13 +168,13 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addNewFileButton->setPixmap( SmallIcon( "filenew" ) );
 	QToolTip::add
 		( addNewFileButton, i18n( "Create new file" ) );
-    QWhatsThis::add(addNewFileButton, i18n("<b>Create new file</b><p>New file will be created using <b>FileCreate</b> part if it is available."));
+    QWhatsThis::add(addNewFileButton, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected target."));
 
 	addExistingFileButton = new QToolButton( targetButtonBox );
 	addExistingFileButton->setPixmap( SmallIcon( "fileimport" ) );
 	QToolTip::add
 		( addExistingFileButton, i18n( "Add existing files" ) );
-    QWhatsThis::add(addExistingFileButton, i18n("<b>Add existing files</b><p>Header files will not be included in SOURCES list of a target. "
+    QWhatsThis::add(addExistingFileButton, i18n("<b>Add existing files</b><p>Adds existing file to a currently selected target. Header files will not be included in SOURCES list of a target. "
                                                 "They will be added to noinst_HEADERS instead."));
 
 	removeButton = new QToolButton( targetButtonBox );
@@ -197,7 +197,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	targetOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
 		( targetOptionsButton, i18n( "Show options" ) );
-    QWhatsThis::add(targetOptionsButton, i18n("<b>Options</b><p>Target options dialog that provides settings for LDFLAGS, LIBADD and DEPENDENCIES."));
+    QWhatsThis::add(targetOptionsButton, i18n("<b>Options</b><p>Target options dialog that provides settings for linker flags and lists of dependencies and external libraries."));
 
 	targetButtonBox->setMaximumHeight( addNewFileButton->height() );
 

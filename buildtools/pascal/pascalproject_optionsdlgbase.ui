@@ -30,7 +30,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>config_label</cstring>
@@ -44,7 +43,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Configuration:</string>
+                        <string>Con&amp;figuration:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>config_combo</cstring>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -85,7 +87,7 @@
                         <cstring>addconfig_button</cstring>
                     </property>
                     <property name="text">
-                        <string>Add</string>
+                        <string>&amp;Add</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -93,7 +95,7 @@
                         <cstring>removeconfig_button</cstring>
                     </property>
                     <property name="text">
-                        <string>Remove</string>
+                        <string>&amp;Remove</string>
                     </property>
                 </widget>
                 <spacer>
@@ -150,7 +152,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Compiler &amp;options:</string>
+                <string>Compiler op&amp;tions:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -169,7 +171,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Pascal &amp;compiler:</string>
+                <string>&amp;Pascal compiler:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -296,7 +298,7 @@
                 <cstring>defaultopts_button</cstring>
             </property>
             <property name="text">
-                <string>Load Default Compiler Options</string>
+                <string>Load &amp;Default Compiler Options</string>
             </property>
         </widget>
         <widget class="KURLRequester" row="9" column="1" rowspan="1" colspan="4">
@@ -448,6 +450,9 @@
     <tabstop>addconfig_button</tabstop>
     <tabstop>removeconfig_button</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">compiler_box_activated(const QString&amp;)</slot>
     <slot access="protected">addconfig_button_clicked()</slot>
@@ -459,13 +464,9 @@
     <slot access="protected">setDirty()</slot>
     <slot access="protected">setDefaultOptions()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>qwidget.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

@@ -129,22 +129,22 @@ void AutoSubprojectView::initActions()
 
 	subProjectOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
 	                                       this, SLOT( slotSubprojectOptions() ), actions, "subproject options" );
-    subProjectOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
+    subProjectOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Shows subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
 	addSubprojectAction = new KAction( i18n( "Add Subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
-    addSubprojectAction->setWhatsThis(i18n("<b>Add subproject</b><p>New subproject in currently selected subproject."));
-	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "folder_remove", 0,
+    addSubprojectAction->setWhatsThis(i18n("<b>Add subproject</b><p>Creates a new subproject in currently selected subproject."));
+	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "remove_subdir", 0,
 	                                   this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
-    removeSubprojectAction->setWhatsThis(i18n("<b>Remove subproject</b><p>Asks if the target should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
+    removeSubprojectAction->setWhatsThis(i18n("<b>Remove subproject</b><p>Removes the subproject. Asks if the subproject should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
     addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
 	                                           this, SLOT( slotAddExistingSubproject() ), actions, "add existing subproject" );
-    addExistingSubprojectAction->setWhatsThis(i18n("<b>Add existing subprojects</b><p>Imports subprojects containing Makefile.am."));
+    addExistingSubprojectAction->setWhatsThis(i18n("<b>Add existing subprojects</b><p>Imports existing subprojects containing Makefile.am."));
     addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
 	                               this, SLOT( slotAddTarget() ), actions, "add target" );
-    addTargetAction->setWhatsThis(i18n("<b>Add target</b><p>Target can be a binary program, library, script, also a collection of data or header files."));
+    addTargetAction->setWhatsThis(i18n("<b>Add target</b><p>Adds a new target to the currently selected subproject. Target can be a binary program, library, script, also a collection of data or header files."));
     addServiceAction = new KAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0,
 	                                this, SLOT( slotAddService() ), actions, "add service" );
-    addServiceAction->setWhatsThis(i18n("<b>Add service</b><p>Creates a service .desktop file."));
+    addServiceAction->setWhatsThis(i18n("<b>Add service</b><p>Creates a .desktop file describing the service."));
     addApplicationAction = new KAction( i18n( "Add Application..." ), "window_new", 0,
 	                                    this, SLOT( slotAddApplication() ), actions, "add application" );
     addApplicationAction->setWhatsThis(i18n("<b>Add application</b><p>Creates an application .desktop file."));

@@ -43,7 +43,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>&amp;Configuration:</string>
+                        <string>Con&amp;figuration:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>config_combo</cstring>
@@ -461,7 +461,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cflags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Compiler &amp;flags (CFLAGS):</string>
+                            <string>Compiler f&amp;lags (CFLAGS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>cflags_edit</cstring>
@@ -628,7 +628,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cxxflags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Compiler &amp;flags (CXXFLAGS):</string>
+                            <string>Compiler f&amp;lags (CXXFLAGS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>cxxflags_edit</cstring>
@@ -762,7 +762,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>f77flags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Compiler &amp;flags (FFLAGS):</string>
+                            <string>Compiler f&amp;lags (FFLAGS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>f77flags_edit</cstring>
