@@ -123,7 +123,7 @@ public:
       firstAttr and secondAttr of elements named tag. For example,
       \verbatim
         <code>
-          DomUtil::StringPairList l;
+          DomUtil::PairList l;
           l << DomUtil::StringPair("one", "1");
           l << DomUtil::StringPair("two", "2");
           writeEntry(doc, "/general/special", "el", "first", "second", l);
