@@ -1,6 +1,4 @@
-README for
-
-KDevelop 1.0 Beta 4.1 
+KDevelop 1.0
 
 -------------------------------------
 
@@ -27,7 +25,7 @@ perl 5.004
 autoconf 2.12
 automake 1.4
 Qt 1.44 NOT Qt 2.0
-KDE 1.1 or KDE 1.1.2
+KDE 1.1.x 
 flex
 
 optional:
@@ -52,8 +50,20 @@ to generate documentation. If you have kdoc 2 installed on your system
 
 see INSTALL in this directory
 
+5. Trouble shooting (please read the FAQ for more information)
+
+If you want to compile KDevelop yourself or want to develop for X/Qt/KDE 
+please make sure that you have installed the following packages.
+
+xdevel.rpm (or similar)
+qtdevel.rpm (or similar)
+qtcompat.rpm (SuSE)
+qtext.rpm (SuSE)
+
+Please set the KDEDIR to the correct KDE path (SuSE /opt/kde, RedHat 6.x /usr/, Slackware /opt/kde)
+On Red Hat 6.1 please set the QTDIR variable to the Qt 1.44 dir, NOT to QT 2.0
+
 Have fun!
 							 
-The KDevelop-Team
-
-
+The KDevelop-Team 
+<kdevelop-team@barney.cs.uni-potsdam.de>
