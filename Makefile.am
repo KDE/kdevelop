@@ -2,7 +2,7 @@ SUBDIRS = lib parts plugins src pics doc mimetypes
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 
-apps_DATA = gideon.desktop
+apps_DATA = kdevelop.desktop
 appsdir = $(kde_appsdir)/Development
 
 mime_DATA = x-kdevelop.desktop
