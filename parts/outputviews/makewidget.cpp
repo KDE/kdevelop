@@ -563,7 +563,10 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 {
     ++parags;
 
-    bool move = textCursor()->parag() == document()->lastParag() && textCursor()->atParagEnd();
+    int para, index;
+    getCursorPosition( &para, &index );
+
+    bool move = para == paragraphs() - 1 && index == paragraphLength( para );
 
     int paraFrom, indexFrom, paraTo, indexTo;
     getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
