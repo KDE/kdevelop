@@ -1231,6 +1231,22 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("rtti");
   if (item->configuration.m_requirements & QD_ORDERED)
     configList.append("ordered");
+  
+  if (item->configuration.m_requirements & QD_DLL )
+    configList.append("dll");
+  if (item->configuration.m_requirements & QD_LIBTOOL )
+  {
+    configList.append("create_libtool");
+    configList.append("create_prl");
+  }
+  if (item->configuration.m_requirements & QD_PKGCONF )
+  {
+    configList.append("create_pkgconf");
+    configList.append("create_prl");
+  }
+  if (item->configuration.m_requirements & QD_CONSOLE )
+    configList.append("console");
+  
   if (item->configuration.m_inheritconfig == true)
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   else
@@ -2896,6 +2912,14 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         item->configuration.m_requirements += QD_RTTI;
       if (lst.find("ordered")!=lst.end())
         item->configuration.m_requirements += QD_ORDERED;
+      if (lst.find("console")!=lst.end())
+        item->configuration.m_requirements += QD_CONSOLE;
+      if (lst.find("dll")!=lst.end())
+        item->configuration.m_requirements += QD_DLL;
+      if (lst.find("create_libtool")!=lst.end())
+        item->configuration.m_requirements += QD_LIBTOOL;
+      if (lst.find("create_pkgconf")!=lst.end())
+        item->configuration.m_requirements += QD_PKGCONF;
     }
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())

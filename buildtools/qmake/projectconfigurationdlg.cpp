@@ -133,6 +133,22 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->configuration.m_requirements += QD_X11;
   if (checkOrdered->isChecked())
     myProjectItem->configuration.m_requirements += QD_ORDERED;
+  if (checkLibtool->isChecked())
+  {
+    myProjectItem->configuration.m_requirements += QD_LIBTOOL;
+  }
+  if( checkPkgconf->isChecked())
+  {
+    myProjectItem->configuration.m_requirements += QD_PKGCONF;
+  }
+  if (checkDll->isChecked() )
+  {
+    myProjectItem->configuration.m_requirements += QD_DLL;
+  }
+  if (checkConsole->isChecked() )
+  {
+    myProjectItem->configuration.m_requirements += QD_CONSOLE;
+  }
 
   // Warnings
   myProjectItem->configuration.m_warnings = QWARN_OFF;
@@ -317,6 +333,8 @@ void ProjectConfigurationDlg::UpdateControls()
   {
     case QTMP_APPLICATION:
       activateRadiobutton = radioApplication;
+      if (myProjectItem->configuration.m_requirements & QD_CONSOLE )
+         checkConsole->setChecked(true);
       break;
     case QTMP_LIBRARY:
       libGroup->setEnabled(true);
@@ -333,6 +351,12 @@ void ProjectConfigurationDlg::UpdateControls()
 
       if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
         pluginRadio->setChecked(true);
+      if (myProjectItem->configuration.m_requirements & QD_DLL )
+        checkDll->setChecked(true);
+      if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
+        checkLibtool->setChecked(true);
+      if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
+        checkPkgconf->setChecked(true);
       break;
     case QTMP_SUBDIRS:
       activateRadiobutton = radioSubdirs;

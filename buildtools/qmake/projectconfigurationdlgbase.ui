@@ -316,6 +316,9 @@
                                 <property name="text">
                                     <string>St&amp;atic library</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -501,7 +504,7 @@
                             </widget>
                             <widget class="QCheckBox" row="2" column="2">
                                 <property name="name">
-                                    <cstring>exceptionPkgconf</cstring>
+                                    <cstring>checkPkgconf</cstring>
                                 </property>
                                 <property name="text">
                                     <string>Create pkgconf file</string>
@@ -512,7 +515,7 @@
                             </widget>
                             <widget class="QCheckBox" row="3" column="2">
                                 <property name="name">
-                                    <cstring>rttiDll</cstring>
+                                    <cstring>checkDll</cstring>
                                 </property>
                                 <property name="text">
                                     <string>Build as DLL</string>
@@ -2131,4 +2134,29 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>
