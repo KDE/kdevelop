@@ -1,3 +1,6 @@
+2000-09-07  Ralf Funken <RFunken@kdevelop.de>
+	* Updated de.po and kdevelop.pot 
+
 2000-09-05 Ralf Nolden <nolden@kde.org>
         * updated KDE2normal project template to use KAction stuff+XML rc file
           testproject crashes for me when using uncommented fileClose KAction-please test!
