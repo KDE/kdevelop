@@ -130,6 +130,10 @@ signals:
      */
     void savedFile(const QString &fileName);
     /**
+     * A new file has been displayed in the editor.
+     */
+    void wentToSourceFile(const QString &fileName);
+    /**
      * The user has clicked the stop button.
      */
     void stopButtonClicked();
