@@ -236,6 +236,7 @@ void DocTreeKDevelopFolder::refresh()
                                    "addendum/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
                                    "reference/C/cref.html");
+//    setOpen(false);
 }
 
 
@@ -416,6 +417,7 @@ void DocTreeKDELibsFolder::refresh()
     list.append(new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell"));
+    setOpen(false);
 }
 
 
@@ -532,6 +534,7 @@ void DocTreeOthersFolder::refresh()
             QString filename = config->readEntry(s);
             (void) new ListViewBookItem(this, s, filename);
         }
+    //setOpen(false);
 }
 
 
@@ -572,7 +575,9 @@ public:
         {}
     virtual void refresh();
     void setProject(CProject *prj)
-        { project = prj; }
+        {
+        	project = prj;
+        }
     
 private:
     CProject *project;
@@ -592,6 +597,7 @@ void DocTreeProjectFolder::refresh()
                                         /* strange!? */ "API-Documentation");
             (void) new ListViewBookItem(this, i18n("User manual"),
                                         /* strange!? */ "User-Manual");
+//                setOpen(false);
         }
 }
 
@@ -602,7 +608,7 @@ void DocTreeProjectFolder::refresh()
 
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
-    : KListView(parent, name)
+    : KListView(parent, name), _initialized(false)
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -619,8 +625,8 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
     folder_others   = new DocTreeOthersFolder(this);
     folder_project  = new DocTreeProjectFolder(this);
 
-    folder_kdevelop->setOpen(true);
-    folder_kdelibs->setOpen(true);
+ //   folder_kdevelop->setOpen(true);
+ //   folder_kdelibs->setOpen(true);
     
     connect( this,
              SIGNAL(rightButtonPressed(QListViewItem*,const QPoint&,int)),
@@ -651,6 +657,7 @@ void DocTreeView::refresh(CProject *prj)
     folder_kdelibs->refresh();
     folder_others->refresh();
     folder_project->refresh();
+
 }
 
 void DocTreeView::changePathes()

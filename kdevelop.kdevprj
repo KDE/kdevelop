@@ -330,19 +330,27 @@ ldflags=
 addcxxflags=
 ldadd=
 cxxflags=-O0 -g3 -Wall
-bin_program=.libs/kdevelop
+bin_program=kdevelop
 [kdevelop/dbg/Makefile.am]
 files=kdevelop/dbg/disassemble.h,kdevelop/dbg/memview.h,kdevelop/dbg/breakpointdialog.h,kdevelop/dbg/stty.h,kdevelop/dbg/breakpoint.h,kdevelop/dbg/brkptmanager.h,kdevelop/dbg/dbgcommand.h,kdevelop/dbg/dbgcontroller.h,kdevelop/dbg/framestack.h,kdevelop/dbg/gdbparser.h,kdevelop/dbg/gdbcommand.h,kdevelop/dbg/gdbcontroller.h,kdevelop/dbg/vartree.h,kdevelop/dbg/breakpointdialog.cpp,kdevelop/dbg/disassemble.cpp,kdevelop/dbg/memview.cpp,kdevelop/dbg/stty.cpp,kdevelop/dbg/breakpoint.cpp,kdevelop/dbg/brkptmanager.cpp,kdevelop/dbg/dbgcommand.cpp,kdevelop/dbg/dbgcontroller.cpp,kdevelop/dbg/framestack.cpp,kdevelop/dbg/gdbparser.cpp,kdevelop/dbg/gdbcommand.cpp,kdevelop/dbg/gdbcontroller.cpp,kdevelop/dbg/vartree.cpp,
+files=kdevelop/dbg/disassemble.h,kdevelop/dbg/memview.h,kdevelop/dbg/breakpointdialog.h,kdevelop/dbg/stty.h,kdevelop/dbg/breakpoint.h,kdevelop/dbg/brkptmanager.h,kdevelop/dbg/dbgcommand.h,kdevelop/dbg/dbgcontroller.h,kdevelop/dbg/framestack.h,kdevelop/dbg/gdbparser.h,kdevelop/dbg/gdbcommand.h,kdevelop/dbg/gdbcontroller.h,kdevelop/dbg/vartree.h,kdevelop/dbg/breakpointdialog.cpp,kdevelop/dbg/disassemble.cpp,kdevelop/dbg/memview.cpp,kdevelop/dbg/stty.cpp,kdevelop/dbg/breakpoint.cpp,kdevelop/dbg/brkptmanager.cpp,kdevelop/dbg/dbgcommand.cpp,kdevelop/dbg/dbgcontroller.cpp,kdevelop/dbg/framestack.cpp,kdevelop/dbg/gdbparser.cpp,kdevelop/dbg/gdbcommand.cpp,kdevelop/dbg/gdbcontroller.cpp,kdevelop/dbg/vartree.cpp,
+type=static_library
+sub_dirs=
 type=static_library
 sub_dirs=
 [po/Makefile.am]
 files=po/cs.po,po/da.po,po/de.po,po/es.po,po/fi.po,po/fr.po,po/hu.po,po/pl.po,po/pt.po,po/ru.po,po/sk.po,po/sv.po,po/it.po,
+files=po/cs.po,po/da.po,po/de.po,po/es.po,po/fi.po,po/fr.po,po/hu.po,po/pl.po,po/pt.po,po/ru.po,po/sk.po,po/sv.po,po/it.po,
+type=po
+sub_dirs=
 type=po
 sub_dirs=
 [kdevelop/toolbar/save.xpm]
+=======
 install_location=
 dist=true
 install=false
+bin_program=.libs/kdevelop
 type=DATA
 [kdevelop/toolbar/output_win.xpm]
 install_location=
@@ -1890,7 +1898,7 @@ sgml_file=/home/rnolden/Development/kdevelop/doc/en/welcome/index.sgml
 short_info=,
 email=
 kdevprj_version=0.3
-configure_args=--enable-debug --disable-shared
+configure_args=--disable-shared --enable-debug --with-qt-dir=/usr/local/qt-1.44-debug
 modifyMakefiles=false
 [kdevelop/classparser/ParsedClassContainer.cc]
 install_location=

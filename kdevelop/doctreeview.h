@@ -59,12 +59,13 @@ signals:
     void fileSelected(QString url_file);
 
 private: 
-    CProject* project;
+//    CProject* project;
     DocTreeKDevelopFolder *folder_kdevelop;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeOthersFolder *folder_others;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
+    bool _initialized;
 };
 #endif
 
