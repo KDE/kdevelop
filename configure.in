@@ -19,6 +19,7 @@ AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
 dnl the first KDE macro to check for the Compilers needed. The
 dnl default autoconf macro had not the best support for C++ compilers.
 AC_CHECK_COMPILERS
+CXXFLAGS="$CXXFLAGS $USE_RTTI"
 KDE_PROG_LIBTOOL
 
 dnl Check for a lexer.
