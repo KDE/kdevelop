@@ -48,14 +48,11 @@ public:
     bool openProjectSpace(const QString &fileName);
     void closeProjectSpace();
 
-    /** They have changed the subproject they are using, we should notify
-        all the components, to give them a chance to react. */
-    void changeProjectSpace ();
+    // Session management.
+    virtual void writeProperties (KConfig *pConfig);
+    virtual void readProperties (KConfig *pConfig);
 
     KDevViewHandler* viewHandler();
-    // Session management
-    virtual void saveProperties(KConfig*);
-    virtual void readProperties(KConfig*);
 
 private:
     void initActions();

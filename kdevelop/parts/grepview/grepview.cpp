@@ -97,6 +97,11 @@ void GrepView::projectSpaceOpened()
     QDomElement grepElement = grepList.item(0).toElement();
     kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
 #endif
+}
+
+
+void GrepView::projectSpaceClosed()
+{
 #if 0
     kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
     QDomDocument doc = pProjectSpace->readUserDocument();

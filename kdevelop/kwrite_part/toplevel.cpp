@@ -549,7 +549,7 @@ void TopLevel::readProperties(KConfig *config)
 }
 
 
-void TopLevel::saveProperties(KConfig *config)
+void TopLevel::writeProperties(KConfig *config)
 {
   writeConfig(config);
   config->writeEntry("DocumentNumber",docList.find(kWrite->doc()) + 1);

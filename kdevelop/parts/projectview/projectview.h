@@ -36,6 +36,7 @@ public:
 protected:
     virtual void setupGUI();
     virtual void projectSpaceOpened();
+    virtual void projectSpaceClosed();
 
 private slots:
     void addedFileToProject(KDevFileNode* pNode);

@@ -114,12 +114,12 @@ public:
      * available in the DOM document projectSpace->readUserDocument().
      * User dependent data (it is important for multiuser projects
      * to distinguish them) are available under projectSpace->readGlobalDocument().
-     *
-     * If #projectSpace() is 0, the project space component is about to be closed.
-     * This occasion may e.g. be used to write ProjectSpace related
-     * configuration to the DOM document, see #projectSpaceClosed()
      */
     virtual void projectSpaceOpened();
+
+    /** The current ProjectSpace is in the process of closing.
+    */
+    virtual void projectSpaceClosed();
 
     /** When the user switches to a different sub project in their projectspace
         we will call this routine for each component.

@@ -49,23 +49,24 @@ void ProjectView::projectSpaceOpened()
     kdDebug(9009) << "projectSpaceOpened" << endl;
     ProjectSpace *ps = projectSpace();
 
-    if (ps) {
-        m_pProjectTree->setProjectSpace(ps);
-        m_pProjectTree->readProjectSpaceGlobalConfig();
-        
-        connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
-                 this, SLOT(addedFileToProject(KDevFileNode*)) );
-        connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
-                 this, SLOT(removedFileFromProject(KDevFileNode*)) );
-        connect( ps, SIGNAL(sigAddedProject(KDevNode*)),
-                 this, SLOT(addedProject(KDevNode*)) );
-    } else {
-        m_pProjectTree->writeProjectSpaceGlobalConfig();
-        m_pProjectTree->clear();
-    }
+    m_pProjectTree->setProjectSpace(ps);
+    m_pProjectTree->readProjectSpaceGlobalConfig();
+
+    connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
+             this, SLOT(addedFileToProject(KDevFileNode*)) );
+    connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
+             this, SLOT(removedFileFromProject(KDevFileNode*)) );
+    connect( ps, SIGNAL(sigAddedProject(KDevNode*)),
+             this, SLOT(addedProject(KDevNode*)) );
 }
 
-  
+void ProjectView::projectSpaceClosed()
+{
+    m_pProjectTree->writeProjectSpaceGlobalConfig();
+    m_pProjectTree->clear();
+}
+
+
 QList<KAction>* ProjectView::assembleKDevNodeActions(KDevNode* pNode){
   kdDebug(9009) << "ProjectView::assembleFileActions" << endl;
   // and now the trick :-)

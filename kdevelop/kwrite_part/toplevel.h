@@ -103,7 +103,7 @@ class TopLevel : public KParts::MainWindow {
     void restore(KConfig *,int);
   protected:
     virtual void readProperties(KConfig *);
-    virtual void saveProperties(KConfig *);
+    virtual void writeProperties(KConfig *);
     virtual void saveGlobalProperties(KConfig *);
 
 };

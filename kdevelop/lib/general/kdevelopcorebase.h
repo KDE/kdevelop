@@ -19,8 +19,10 @@
 #define _KDEVELOPCOREBASE_H_
 
 
+#include <kconfig.h>
 #include <qobject.h>
 #include <qlist.h>
+
 
 // Need to forward declare this baby to prevent recursive inclusion.
 class KDevComponent;
@@ -35,9 +37,13 @@ public:
     KDevelopCoreBase (QObject * parent=0, const char * name=0);
     ~KDevelopCoreBase ();
 
+    // Make sure they define some form of session management.
+    virtual void writeProperties (KConfig *pConfig) = 0;
+    virtual void readProperties (KConfig *pConfig) = 0;
+
     /** They have changed the subproject they are using, we should notify
         all the components, to give them a chance to react. */
-    void changeProjectSpace ();
+    virtual void changeProjectSpace ();
 
 protected:
     /** A list of all components. */

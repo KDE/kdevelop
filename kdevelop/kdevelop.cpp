@@ -80,7 +80,7 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
 KDevelop::~KDevelop()
 {
     // Write out any changes to our global configuration.
-//    saveProperties (KGlobal::config());
+//    writeProperties (KGlobal::config());
 
     kdDebug(9000) << "~KDevelop" << endl;
 }
@@ -102,10 +102,10 @@ void KDevelop::slotOptionsEditToolbars(){
 }
 
 
-void KDevelop::saveProperties(KConfig* pConfig)
+void KDevelop::writeProperties(KConfig* pConfig)
 {
-    kdDebug(9000) << "KDevelop::saveProperties" << endl;
-    m_pCore->saveProperties(pConfig);
+    kdDebug(9000) << "KDevelop::writeProperties" << endl;
+    m_pCore->writeProperties(pConfig);
 }
 
 

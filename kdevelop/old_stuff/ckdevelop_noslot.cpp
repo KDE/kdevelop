@@ -876,7 +876,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
   }
 }
 
-void CKDevelop::saveProperties(KConfig* sess_config){
+void CKDevelop::writeProperties(KConfig* sess_config){
 	
   if(m_project){
     sess_config->writeEntry("project_file",m_prj->getProjectFile());

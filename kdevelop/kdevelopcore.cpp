@@ -122,20 +122,6 @@ void KDevelopCore::initActions()
     pAction->setEnabled(false);
 }
 
-void KDevelopCore::saveProperties(KConfig* pConfig)
-{
-    kdDebug(9000) << "Core::saveProperties" << endl;
-    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-    ((KRecentFilesAction*)pAC->action("project_open_recent"))->saveEntries(pConfig);
-}
-
-void KDevelopCore::readProperties(KConfig* pConfig)
-{
-    kdDebug(9000) << "Core::readProperties" << endl;
-    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-    ((KRecentFilesAction*)pAC->action("project_open_recent"))->loadEntries(pConfig);
-}
-
 
 void KDevelopCore::loadGlobalComponents()
 {
@@ -248,7 +234,7 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                            i18n("No valid application frontend component found"));
     }
 
-    // Notification
+    // Notification to the components of the project space opening.
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
         (*it1)->projectSpaceOpened();
@@ -302,10 +288,15 @@ void KDevelopCore::closeProjectSpace()
     m_api->classStore->wipeout();
 
     // Project space component
-    QListIterator<KDevComponent> it4(m_components);
+/*    QListIterator<KDevComponent> it4(m_components);
     for (; it4.current(); ++it4)
-        (*it4)->projectSpaceOpened();
+        (*it4)->projectSpaceOpened();*/
     
+    // Let all the components respond to the closure of the project space.
+    QListIterator<KDevComponent> it5(m_components);
+    for (; it5.current(); ++it5)
+        (*it5)->projectSpaceClosed();
+
     m_api->projectSpace->saveConfig();
     m_components.remove(m_api->projectSpace);
     delete m_api->projectSpace;
@@ -322,6 +313,22 @@ void KDevelopCore::newFile()
   QWidget* pEV = new QWidget(0L);
   m_pKDevelopGUI->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
   pEV->show();
+}
+
+
+void KDevelopCore::writeProperties (KConfig* pConfig)
+{
+    kdDebug(9000) << "Core::writeProperties" << endl;
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->saveEntries(pConfig);
+}
+
+
+void KDevelopCore::readProperties (KConfig* pConfig)
+{
+    kdDebug(9000) << "Core::readProperties" << endl;
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->loadEntries(pConfig);
 }
 
 
@@ -379,7 +386,11 @@ void KDevelopCore::slotProjectOpen()
     if (fileName.isNull())
       return;
 
-    closeProjectSpace();
+    // Close the project space if there is a current project space.
+    if (TRUE)
+        closeProjectSpace();
+
+    // Open the new project space.
     openProjectSpace(fileName);
 }
 

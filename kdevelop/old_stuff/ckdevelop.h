@@ -641,9 +641,10 @@ protected:
   virtual bool queryClose();
   /** saves all options by calling saveOptions() */
   virtual bool queryExit();
-  /** saves the currently opened project by the session manager and write 
+
+  /** saves the currently opened project by the session manager and write
    * the project file to the session config*/
-  virtual void saveProperties(KConfig* );
+  virtual void writeProperties(KConfig* );
   /** initializes the session windows and opens the projects of the last
    * session */
   virtual void readProperties(KConfig* );

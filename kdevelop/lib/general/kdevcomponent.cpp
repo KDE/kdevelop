@@ -75,6 +75,10 @@ void KDevComponent::projectSpaceOpened()
 {
 }
 
+void KDevComponent::projectSpaceClosed()
+{
+}
+
 void KDevComponent::setWidget(QWidget*)
 {
 }

@@ -88,82 +88,66 @@ void BugListComponent::projectSpaceOpened()
 
     kdDebug(9040) << "BugList::projectSpaceOpened()" << endl;
 
-    // Take a note of the project space in use.
-    if (projectSpace ())
+    // Bug tracking is only valid with a project.
+    m_pMenuAction->setEnabled (TRUE);
+
+    // Grab the user details from the projectspace.
+    m_pProjectSpace = projectSpace();
+    m_Initials = m_pProjectSpace->initials ();
+    m_UserName = m_pProjectSpace->author ();
+    m_UserEMail = m_pProjectSpace->email ();
+
+    // Get the Projectspace
+    QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
+    QDomElement psElement = doc.documentElement();
+
+    // Get the list of projects.
+    QDomNodeList projNodes = doc.elementsByTagName("Project");
+    if (projNodes.count () > 1)
     {
-        // Bug tracking is only valid with a project.
-        m_pMenuAction->setEnabled (TRUE);
-
-        // Grab the user details from the projectspace.
-        m_pProjectSpace = projectSpace();
-        m_Initials = m_pProjectSpace->initials ();
-        m_UserName = m_pProjectSpace->author ();
-        m_UserEMail = m_pProjectSpace->email ();
-
-        // Get the Projectspace
-        QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
-        QDomElement psElement = doc.documentElement();
-
-        // Get the list of projects.
-        QDomNodeList projNodes = doc.elementsByTagName("Project");
-        if (projNodes.count () > 1)
+        // Several projects - get details for last used project.
+        LastProject = psElement.attribute("lastActiveProject");
+        for (Count = 0;Count < projNodes.count ();Count++)
         {
-            // Several projects - get details for last used project.
-            LastProject = psElement.attribute("lastActiveProject");
-            for (Count = 0;Count < projNodes.count ();Count++)
+            QDomElement projElement = projNodes.item(Count).toElement();
+            if (LastProject == projElement.attribute("name"))
             {
-                QDomElement projElement = projNodes.item(Count).toElement();
-                if (LastProject == projElement.attribute("name"))
-                {
-                    // Found the right project - grab what we need from it.
-                    m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
-                }
+                // Found the right project - grab what we need from it.
+                m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
             }
-        }
-        else
-        {
-            // Just one project, use the bug file from that one.
-            QDomElement projElement = projNodes.item(0).toElement();
-            m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
-        }
-
-        kdDebug(9040) << "BugList::AbsPath = " << m_pProjectSpace->absolutePath () << endl;
-        kdDebug(9040) << "BugList::BugFile = " << m_FileName << endl;
-        kdDebug(9040) << "BugList::m_Initials = " << m_Initials << endl;
-        kdDebug(9040) << "BugList::m_UserName = " << m_UserName << endl;
-        kdDebug(9040) << "BugList::m_UserEMail = " << m_UserEMail << endl;
-
-        // HACK: ProjectSpace not providing this stuff yet!!!
-        m_Initials = "ILH";
-        m_UserName = "Ivan Hawkes";
-        m_UserEMail = "linuxgroupie@ivanhawkes.com";
-
-        // Update the attributes if the component is currently running.
-        if (m_pBugList)
-        {
-            m_pBugList->m_FileName = m_FileName;
-            m_pBugList->m_Initials = m_Initials;
-            m_pBugList->m_UserName = m_UserName;
-            m_pBugList->m_UserEMail = m_UserEMail;
         }
     }
     else
     {
-        kdDebug(9040) << "BugList::Project Space Write" << endl;
+        // Just one project, use the bug file from that one.
+        QDomElement projElement = projNodes.item(0).toElement();
+        m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
+    }
 
-//        QDomDocument *doc = m_pProjectSpace->readUserDocument();
-//        QDomElement rootElement = doc->documentElement();
-//        QDomElement elem = doc->createElement("BugList");
-//        elem.setAttribute ("test", "value");
-//        rootElement.appendChild (elem);
+    kdDebug(9040) << "BugList::AbsPath = " << m_pProjectSpace->absolutePath () << endl;
+    kdDebug(9040) << "BugList::BugFile = " << m_FileName << endl;
+    kdDebug(9040) << "BugList::m_Initials = " << m_Initials << endl;
+    kdDebug(9040) << "BugList::m_UserName = " << m_UserName << endl;
+    kdDebug(9040) << "BugList::m_UserEMail = " << m_UserEMail << endl;
+
+    // HACK: ProjectSpace not providing this stuff yet!!!
+    m_Initials = "ILH";
+    m_UserName = "Ivan Hawkes";
+    m_UserEMail = "linuxgroupie@ivanhawkes.com";
+
+    // Update the attributes if the component is currently running.
+    if (m_pBugList)
+    {
+        m_pBugList->m_FileName = m_FileName;
+        m_pBugList->m_Initials = m_Initials;
+        m_pBugList->m_UserName = m_UserName;
+        m_pBugList->m_UserEMail = m_UserEMail;
     }
 }
 
 
 /*
     Notification that the project space has now closed.
-
-    NOTE: Doesn't seem to work yet.
 */
 
 void BugListComponent::projectSpaceClosed()
@@ -174,7 +158,7 @@ void BugListComponent::projectSpaceClosed()
     m_pMenuAction->setEnabled (FALSE);
 
     // Close down the tracking - warn of change lose.
-    if (!m_pBugList)
+    if (m_pBugList)
     {
         m_pBugList->slotCloseClicked ();
         m_pBugList = NULL;
@@ -190,6 +174,10 @@ void BugListComponent::projectSpaceClosed()
 void BugListComponent::projectChanged()
 {
     kdDebug(9040) << "BugList::projectChanged" << endl;
+
+    // Parse the project space for the details we need on the new
+    // subproject that we changed to.
+    projectSpaceOpened ();
 }
 
 
