@@ -1,6 +1,8 @@
 2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: save MDI mode to config only when leaving the program
       (fixes problems with several opened KDevelops opened/closed in parallel)
+    * applied patch of Lars Beikirch <Lars.Beikirch@gmx.net> for QextMDI concerning some
+      internal mechanisms, e.g. reduces view-switch flickering
 
 2001-07-26  rokrau@yahoo.com
     * bugfix: F12 without having Project loaded, 2nd attempt

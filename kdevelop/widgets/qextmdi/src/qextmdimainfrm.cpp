@@ -426,18 +426,12 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 
    m_pMdi->manageChild(lpC,FALSE,bCascade);
    if (m_pMdi->topChild() && m_pMdi->topChild()->isMaximized()) {
-//   if (m_bMaximizedChildFrmMode) {
       QRect r = lpC->geometry();
-      lpC->setState(QextMdiChildFrm::Maximized, true);
       lpC->setGeometry(-lpC->m_pClient->x(), -lpC->m_pClient->y(),
-                       m_pMdi->width() + lpC->width() - lpC->m_pClient->width(),
-                       m_pMdi->height() + lpC->height() - lpC->m_pClient->height());
+                       m_pMdi->width()  + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+                       m_pMdi->height() + lpC->captionHeight() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
       lpC->setRestoreGeometry(r);
    }      
-
-   if (m_bMaximizedChildFrmMode && (m_pMdi->m_pZ->count() > 1)) {
-//     updateSysButtonConnections( m_pMdi->topChild(), lpC);
-   }
 
    if (bShow) {
       lpC->show();

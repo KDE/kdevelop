@@ -175,22 +175,23 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       }
       m_pZ->setAutoDelete(TRUE);
       m_pZ->append(lpC);
-      lpC->raise();
       if (pMaximizedChild) {
          const bool bDontAnimate = FALSE;
          // first maximize the new view
          lpC->setState(QextMdiChildFrm::Maximized, bDontAnimate);
-         lpC->m_pClient->resize(size());
          qApp->sendPostedEvents();
          // then restore the old maximized view in background
          pMaximizedChild->setState(QextMdiChildFrm::Normal, bDontAnimate);
          qApp->processOneEvent();
          emit sysButtonConnectionsMustChange( pMaximizedChild, lpC);
       }
+      else {
+         lpC->raise();
+      }
       if (bSetFocus) {
          if(!lpC->hasFocus())lpC->setFocus();
       }
-      lpC->m_pClient->setFocus();
+      lpC->m_pClient->activate();//setFocus();
    }
 }
 
