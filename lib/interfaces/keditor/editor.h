@@ -53,6 +53,18 @@ public:
   DocumentInterface *queryInterface(const QString &ifname);
 
 
+  /**
+   * \brief Has file been modified on disc?
+   *
+   * Tells if the file has been modified on the disc while
+   * being edited.
+   *
+   * \return true, if the file has been modified,
+   *         false, else
+   */
+  bool modifiedOnDisc();
+  
+  
 protected:  
   
   Document(Editor *parent);
@@ -71,6 +83,7 @@ protected slots:
 
   void slotSaveAs();
   void slotSave();
+  void slotRevert();
 
 
 private:

@@ -23,6 +23,7 @@ Document::Document(Editor *parent)
 {
   KStdAction::saveAs(this, SLOT(slotSaveAs()), actionCollection(), "file_save_as");
   KStdAction::save(this, SLOT(slotSave()), actionCollection(), "file_save");
+  KStdAction::revert(this, SLOT(slotRevert()), actionCollection(), "file_revert");
 }
 
 
@@ -56,6 +57,16 @@ void Document::slotSave()
 }
 
 
+void Document::slotRevert()
+{
+  if (!url().isEmpty())
+  {
+    setModified(false); // Needed to avoid confirmation dialog
+    openURL(url());
+  }
+}
+
+
 void Document::resetModifiedTime()
 {
   if (!url().isLocalFile())
@@ -67,23 +78,31 @@ void Document::resetModifiedTime()
 }
 
 
-bool Document::shouldBeSaved()
+bool Document::modifiedOnDisc()
 {
-  // Note: I don't test if the file has been modified in
-  // the editor. This is a matter of opinion, but I think
-  // if the users says "Save!", the file should be saved.     
-        
-  // we don't know about remote files, so better save
+  // we don't know about remote files
   if (!url().isLocalFile())
-    return true;
+    return false;
 
-  // if the file has not been modified on disk, save as well
   struct stat buf;
   ::stat(url().path(), &buf);
   if (buf.st_mtime == _mtime)
-    return true;
+    return false;
 
-  // it the file has been modified on disk, ask the user
+  return true;
+}
+
+
+bool Document::shouldBeSaved()
+{
+  if (!modifiedOnDisc())
+    return true;
+  
+  // Note: I don't test if the file has been modified in
+  // the editor. This is a matter of opinion, but I think
+  // if the users says "Save!", the file should be saved.
+       
+  // if the file has been modified on disk, ask the user
   return KMessageBox::Yes == KMessageBox::warningYesNo(0, 
         i18n("The file %1 was modified on disk.\n"
              "Save the file anyway?").arg(url().path()));
