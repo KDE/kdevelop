@@ -302,7 +302,7 @@ void CTreeHandler::readIcons()
   icons[ THPRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
   icons[ THGLOBAL_FUNCTION ] = new QPixmap( pixDir + "CVglobal_meth.xpm");
   icons[ THC_FILE ] = new QPixmap( il->loadMiniIcon( "c_src.xpm" ) );
-  icons[ THINSTALLED_FILE ] = new QPixmap( il->loadMiniIcon( "c_src.xpm" ) );
+  icons[ THINSTALLED_FILE ] = new QPixmap( il->loadMiniIcon( "inst_file.xpm" ) );
   icons[ THDELETE ] = new QPixmap( il->loadMiniIcon( "delete.xpm" ) );
 
   CTreeHandler::iconsRead = true;
