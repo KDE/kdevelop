@@ -501,7 +501,7 @@ bool RubyDebuggerPart::startDebugger()
     rdbOutputWidget->clear();
     rdbOutputWidget->setEnabled(true);
 
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevrbdebugger/general/floatingtoolbar", true))
+    if (DomUtil::readBoolEntry(*projectDom(), "/kdevrbdebugger/general/floatingtoolbar", false))
     {
         floatingToolBar = new DbgToolBar(this, mainWindow()->main());
         floatingToolBar->show();
