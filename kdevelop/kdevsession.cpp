@@ -68,9 +68,10 @@ void KDevSession::createEntry(QDomElement parent, const QString& name, const QSt
 		parent.appendChild(ar);
 		ar.appendChild(domdoc.createTextNode(value));
 	}	
+	else if(ar.firstChild().isNull())
+		ar.appendChild(domdoc.createTextNode(value));	
 	else
-		ar.firstChild().setNodeValue(value);
-
+		ar.firstChild().toText().setNodeValue(value);
 }
 
 //----------- helper functions ------------------//
@@ -184,8 +185,10 @@ void KDevSession::setLastCompile(const QString& comp){
 		el.appendChild(configs);	// append on the documentElement(inside root tree)
 		configs.appendChild(domdoc.createTextNode(comp));
 	}
+	else if(configs.firstChild().isNull())
+		configs.appendChild(domdoc.createTextNode(comp));	
 	else
-		configs.firstChild().setNodeValue(comp);
+		configs.firstChild().toText().setNodeValue(comp);
 }
 /** sets the architecture (processor type) for the configuration configname */
 void KDevSession::setArchitecture(const QString& configname, const QString& arch){

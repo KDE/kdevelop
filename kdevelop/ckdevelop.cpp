@@ -920,31 +920,57 @@ void CKDevelop::slotBuildCompileFile(){
 //  kdDebug() << "ObjectFile= " << fileinfo.baseName()+".o";
   QFileInfo fileinfo(pCurrentDoc->fileName());
   QString actualDir=fileinfo.dirPath();
-  QDir::setCurrent(actualDir);
 //  error_parser->setStartDir(actualDir);
+
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+ 	QString conf=compile_combo->currentText();
+  QString flags, makefile;
 
   if (prj->getProjectType()!="normal_empty")
   {
-   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-   process << flaglabel;
-   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-   {
-     if (!prj->getCXXFLAGS().isEmpty())
-     {
-       process << prj->getCXXFLAGS() << " ";
-     }
-     if (!prj->getAdditCXXFLAGS().isEmpty())
-     {
-       process << prj->getAdditCXXFLAGS();
-     }
-   }
-   process  << "\" " << "LDFLAGS=\" " ;
-   if (!prj->getLDFLAGS().isEmpty())
-   {
-     process << prj->getLDFLAGS();
-   }
-   process  << "\" ";
-   process << make_cmd << fileinfo.baseName()+".o";
+   	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
+    if(conf==i18n("(Default)")){
+		  QDir::setCurrent(actualDir);
+   		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+   		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+   		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+   		config->setGroup("Compiler");
+   		QString arch=config->readEntry("Architecture","i386");
+   		QString platf=config->readEntry("Platform","linux");
+   		group="Compilearch "+arch+"-"+platf;
+		}
+    else{
+    	QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+  		QDir dir(vpath);
+  		// change to VPATH subdir, create it if not existant
+  		if(!dir.exists())
+  			dir.mkdir(vpath);
+  		actualDir=actualDir.right(actualDir.length()-prj->getProjectDir().length());
+  		QDir::setCurrent(vpath+"/"+actualDir);
+   		group="Compilearch "+
+   											m_pKDevSession->getArchitecture(conf)+"-"+
+   											m_pKDevSession->getPlatform(conf);
+   		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
+   		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
+   		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
+   		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+   		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
+   	}
+   	config->setGroup(group);
+   	flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
+   	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
+   	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+  	flags += "CPPFLAGS=\"" + cppflags + "\" ";
+    flags += "CFLAGS=\"" + cflags + "\" ";			
+   	if(prj->getProjectType()=="normal_c"){
+   		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+   	}
+   	else{
+       flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+   	}
+    flags += "LDFLAGS=\"" + ldflags+ "\" " ;
+    cerr << QDir::currentDirPath() << endl;
+	  process << flags << make_cmd << fileinfo.baseName()+".o";
   }
   else
   {

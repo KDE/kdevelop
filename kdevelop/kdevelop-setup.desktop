@@ -1,0 +1,13 @@
+[KDE Desktop Entry]
+BinaryPattern=kdevelop;
+Type=Application
+Exec=kdevelop --setup
+MimeType=
+Icon=configure
+DocPath=kdevelop/index.html
+Comment=KDevelop Setup
+Comment[fr]=Configuration de KDevelop
+Terminal=0
+Name=KDevelop 2.1 Setup
+Name[de]=KDevelop 2.1 Setup
+Name[fr]=KDevelop 2.1 Configuration

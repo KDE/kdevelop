@@ -211,7 +211,7 @@ void CPrjCompOpts::loadSettings(){
 }
 /** No descriptions */
 void CPrjCompOpts::slotConfigChanged(const QString& conf){
-	QString cxxflags, configureargs;
+	QString cxxflags, configureargs, ldflags;
 	// prevent configuration changes by connections of GUI items to
 	// slotSettingsChanged()
 	disconnectGUI();
@@ -231,9 +231,9 @@ void CPrjCompOpts::slotConfigChanged(const QString& conf){
   	cppflags_le->setText(prj_info->getCPPFLAGS());
   	cflags_le->setText(prj_info->getCFLAGS());
   	cxxflags_le->setText(prj_info->getAdditCXXFLAGS());
-  	ldflags_le->setText(prj_info->getLDFLAGS());
 		// strings to be processed below
    	cxxflags=prj_info->getCXXFLAGS();
+  	ldflags=prj_info->getLDFLAGS();
   	configureargs=prj_info->getConfigureArgs();
 	}
 	else{
@@ -246,14 +246,13 @@ void CPrjCompOpts::slotConfigChanged(const QString& conf){
 		target_arch_cb->setCurrentItem(idx);
 		idx=compileplatforms.findIndex( sess->getPlatform(conf) );
 		target_platform_cb->setCurrentItem(idx);
-		
 		// lineedits
   	cppflags_le->setText(sess->getCPPFLAGS(conf));
   	cflags_le->setText(sess->getCFLAGS(conf));
   	cxxflags_le->setText(sess->getAdditCXXFLAGS(conf));
-  	ldflags_le->setText(sess->getLDFLAGS(conf));
 		// strings to be processed below  	
 		cxxflags=sess->getCXXFLAGS(conf);				
+		ldflags=sess->getLDFLAGS(conf);
 		configureargs=sess->getConfigureArgs(conf);		
 	}
 	cxxflags=cxxflags.simplifyWhiteSpace();
@@ -312,6 +311,12 @@ void CPrjCompOpts::slotConfigChanged(const QString& conf){
   w_synth->setOn(cxxflags.find("-Wsynth") != -1);
   w_error->setOn(cxxflags.find("-Werror") != -1);
 
+
+ 	remove_symb_cb->setChecked(ldflags.find("-s ") != -1);
+  ldflags = ldflags.replace( QRegExp("-s "), "" );
+ 	link_static_cb->setChecked(ldflags.find("-static") != -1);		
+  ldflags = ldflags.replace( QRegExp("-static "), "" ); 	
+ 	ldflags_le->setText(ldflags);
 	
 	///////////////////////////////////////////////////////////////////////
 	// configure arguments parsing
@@ -365,6 +370,12 @@ QString CPrjCompOpts::findConfigureOption( QString option ){
 /** called by all items who change their state to notify saving of settings to the according
      configuration section */
 void CPrjCompOpts::slotSettingsChanged(){
+	QString ldflags;
+	if(remove_symb_cb->isChecked())
+		ldflags=" -s";
+	if(link_static_cb->isChecked())
+		ldflags+=" -static";
+	ldflags+=" "+ldflags_le->text();
 	QString conf=conf_cb->currentText();
 	if(conf == i18n("(Default)")){
 		// just the lineedits here
@@ -373,6 +384,7 @@ void CPrjCompOpts::slotSettingsChanged(){
   	prj_info->setAdditCXXFLAGS(cxxflags_le->text());
   	// complex calculation needed
   	prj_info->setCXXFLAGS(calculateCXXFLAGS());
+		prj_info->setLDFLAGS(ldflags);
 		prj_info->setConfigureArgs(calculateConfigureArgs());	
 	}
 	else{
@@ -384,9 +396,8 @@ void CPrjCompOpts::slotSettingsChanged(){
 		sess->setCPPFLAGS(conf,cppflags_le->text() );			
 		sess->setCXXFLAGS(conf,calculateCXXFLAGS() );
 		sess->setAdditCXXFLAGS(conf, cxxflags_le->text() );
-		sess->setLDFLAGS(conf, ldflags_le->text() );
-		sess->setConfigureArgs(conf,calculateConfigureArgs() );				
-		
+		sess->setLDFLAGS(conf, ldflags );
+		sess->setConfigureArgs(conf,calculateConfigureArgs() );						
 	}
 }
 
@@ -499,6 +510,8 @@ void CPrjCompOpts::disconnectGUI(){
     disconnect( cppflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     disconnect( cflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     disconnect( cxxflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
+    disconnect( remove_symb_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
+    disconnect( link_static_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
     disconnect( ldflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     disconnect( disable_debug_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
     disconnect( enable_debug_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
@@ -527,6 +540,8 @@ void CPrjCompOpts::connectGUI(){
     connect( cppflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     connect( cflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     connect( cxxflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
+    connect( remove_symb_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
+    connect( link_static_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
     connect( ldflags_le, SIGNAL( textChanged(const QString&) ), this, SLOT( slotSettingsChanged() ) );
     connect( disable_debug_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );
     connect( enable_debug_cb, SIGNAL( toggled(bool) ), this, SLOT( slotSettingsChanged() ) );

@@ -12,7 +12,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>517</width>
+            <width>509</width>
             <height>359</height>
         </rect>
     </property>
@@ -626,42 +626,6 @@
                         <name>spacing</name>
                         <number>6</number>
                     </property>
-                    <widget row="3"  column="1" >
-                        <class>QGroupBox</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>GroupBox10_2</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>title</name>
-                            <string>&amp;Linker Flags (LDFLAGS)</string>
-                        </property>
-                        <vbox>
-                            <property stdset="1">
-                                <name>margin</name>
-                                <number>11</number>
-                            </property>
-                            <property stdset="1">
-                                <name>spacing</name>
-                                <number>6</number>
-                            </property>
-                            <widget>
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>ldflags_le</cstring>
-                                </property>
-                                <property>
-                                    <name>toolTip</name>
-                                    <string>export LDFLAGS=</string>
-                                </property>
-                                <property>
-                                    <name>whatsThis</name>
-                                    <string>Insert your LDFLAGS for this configuration here. Mind that this only refers to the temporary LDFLAGS, not for the project itself. Please refer to the Linker Options section in the Project Options to set the appropriate linker options (LDADD) to add linking to libraries.</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
                     <widget row="0"  column="1" >
                         <class>QGroupBox</class>
                         <property stdset="1">
@@ -770,6 +734,27 @@
                             </widget>
                         </vbox>
                     </widget>
+                    <spacer row="3"  column="1" >
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer12</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Vertical</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget row="0"  column="0"  rowspan="4"  colspan="1" >
                         <class>QListView</class>
                         <column>
@@ -795,10 +780,108 @@
                             <string></string>
                         </property>
                     </widget>
-                    <spacer row="4"  column="1" >
+                </grid>
+            </widget>
+            <widget>
+                <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>tab</cstring>
+                </property>
+                <attribute>
+                    <name>title</name>
+                    <string>&amp;Linker Flags</string>
+                </attribute>
+                <vbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ldgb</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Linker Flags (LDFLAGS)</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>remove_symb_cb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>remove all symbol table and relocation information from executable (-s)</string>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>If you want to use a debugger, you should keep those informations in the object files. It's useless to let the compiler generate debug informations and to remove it with this option.</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>link_static_cb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;prevent using shared libraries (-static)</string>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>On systems that support dynamic linking, checking this option prevents linking with shared libraries. On other systems, this option has no effect.  You can also use the configure option --enable-static.</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel1_4</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Additional flags:</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>ldflags_le</cstring>
+                                </property>
+                                <property>
+                                    <name>toolTip</name>
+                                    <string>export LDFLAGS=</string>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>Insert your LDFLAGS for this configuration here. Mind that this only refers to the temporary LDFLAGS, not for the project itself. Please refer to the Linker Options section in the Project Options to set the appropriate linker options (LDADD) to add linking to libraries.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
                         <property>
                             <name>name</name>
-                            <cstring>Spacer12</cstring>
+                            <cstring>Spacer12_2</cstring>
                         </property>
                         <property stdset="1">
                             <name>orientation</name>
@@ -816,7 +899,7 @@
                             </size>
                         </property>
                     </spacer>
-                </grid>
+                </vbox>
             </widget>
             <widget>
                 <class>QWidget</class>
@@ -826,7 +909,7 @@
                 </property>
                 <attribute>
                     <name>title</name>
-                    <string>Configure &amp;Options</string>
+                    <string>C&amp;onfigure</string>
                 </attribute>
                 <grid>
                     <property stdset="1">
@@ -837,6 +920,205 @@
                         <name>spacing</name>
                         <number>6</number>
                     </property>
+                    <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+                        <class>QLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>add_configure_opts</cstring>
+                        </property>
+                        <property>
+                            <name>whatsThis</name>
+                            <string>Pass any additional options to the configure script for this configuration here. A possible value that is not covered by the values above could be --enable-embedded to link against the libqte library and remove any X dependency instea of linking to libqt. Other options could be --with-qt-includes and --with-qt-libraries in case these cannot be detected on your system.</string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="0" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel1_3</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>A&amp;dditional Options:</string>
+                        </property>
+                        <property>
+                            <name>buddy</name>
+                            <cstring>add_configure_opts</cstring>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox24</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Directories</string>
+                        </property>
+                        <grid>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget row="0"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel2_2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>--prefix=</string>
+                                </property>
+                                <property>
+                                    <name>buddy</name>
+                                    <cstring>prefix_le</cstring>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel3_2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>--with-qt-dir=</string>
+                                </property>
+                                <property>
+                                    <name>buddy</name>
+                                    <cstring>qtdir_le</cstring>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel4_2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>--x-includes=</string>
+                                </property>
+                                <property>
+                                    <name>buddy</name>
+                                    <cstring>xincludes_le</cstring>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel5_2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>--x-libraries=</string>
+                                </property>
+                                <property>
+                                    <name>buddy</name>
+                                    <cstring>xlibraries_le</cstring>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>prefix_le</cstring>
+                                </property>
+                                <property>
+                                    <name>toolTip</name>
+                                    <string></string>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>Path to the installation directory. In case of a KDE application, this would be the directory of the KDE installation. Passed over to configure as the --prefix= argument.  For other application types, this is usually /usr/local; the default behavior of the installation path can be set with this argument.</string>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>qtdir_le</cstring>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>Specify the $QTDIR directory here if it isn't set or cannot be detected by the configure script. In case you're using --enable-embedded as an additional option below, pass over the directory to your Qt-Embedded installation.</string>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>xincludes_le</cstring>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>Specify the directory holding your X includes here. This may be needed either for cross-compilation or if the directory that holds the X include files cannot be detected by the configure script.</string>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>xlibraries_le</cstring>
+                                </property>
+                                <property>
+                                    <name>whatsThis</name>
+                                    <string>Pass over the directory containing the X libraries here. This may be needed specifically when crosscompiling to another platform and the X libraries to link your application against are not the system's libraries that are in use but the crosscompiled libraries of the target machine.</string>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="2" >
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>prefix_pb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>PushButton9</string>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="2" >
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>qtdir_pb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>PushButton10</string>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="2" >
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>xincludes_pb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>PushButton11</string>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="2" >
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>xlibraries_pb</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>PushButton12</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
                     <widget row="0"  column="0" >
                         <class>QGroupBox</class>
                         <property stdset="1">
@@ -934,205 +1216,6 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget row="0"  column="1" >
-                        <class>QGroupBox</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>GroupBox24</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>title</name>
-                            <string>Directories</string>
-                        </property>
-                        <grid>
-                            <property stdset="1">
-                                <name>margin</name>
-                                <number>11</number>
-                            </property>
-                            <property stdset="1">
-                                <name>spacing</name>
-                                <number>6</number>
-                            </property>
-                            <widget row="0"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>TextLabel2_2</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>--prefix=</string>
-                                </property>
-                                <property>
-                                    <name>buddy</name>
-                                    <cstring>prefix_le</cstring>
-                                </property>
-                            </widget>
-                            <widget row="0"  column="2" >
-                                <class>QPushButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>prefix_pb</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>PushButton9</string>
-                                </property>
-                            </widget>
-                            <widget row="1"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>TextLabel3_2</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>--with-qt-dir=</string>
-                                </property>
-                                <property>
-                                    <name>buddy</name>
-                                    <cstring>qtdir_le</cstring>
-                                </property>
-                            </widget>
-                            <widget row="1"  column="2" >
-                                <class>QPushButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>qtdir_pb</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>PushButton10</string>
-                                </property>
-                            </widget>
-                            <widget row="2"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>TextLabel4_2</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>--x-includes=</string>
-                                </property>
-                                <property>
-                                    <name>buddy</name>
-                                    <cstring>xincludes_le</cstring>
-                                </property>
-                            </widget>
-                            <widget row="3"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>TextLabel5_2</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>--x-libraries=</string>
-                                </property>
-                                <property>
-                                    <name>buddy</name>
-                                    <cstring>xlibraries_le</cstring>
-                                </property>
-                            </widget>
-                            <widget row="2"  column="2" >
-                                <class>QPushButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>xincludes_pb</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>PushButton11</string>
-                                </property>
-                            </widget>
-                            <widget row="3"  column="2" >
-                                <class>QPushButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>xlibraries_pb</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>text</name>
-                                    <string>PushButton12</string>
-                                </property>
-                            </widget>
-                            <widget row="1"  column="1" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>qtdir_le</cstring>
-                                </property>
-                                <property>
-                                    <name>whatsThis</name>
-                                    <string>Specify the $QTDIR directory here if it isn't set or cannot be detected by the configure script. In case you're using --enable-embedded as an additional option below, pass over the directory to your Qt-Embedded installation.</string>
-                                </property>
-                            </widget>
-                            <widget row="2"  column="1" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>xincludes_le</cstring>
-                                </property>
-                                <property>
-                                    <name>whatsThis</name>
-                                    <string>Specify the directory holding your X includes here. This may be needed either for cross-compilation or if the directory that holds the X include files cannot be detected by the configure script.</string>
-                                </property>
-                            </widget>
-                            <widget row="0"  column="1" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>prefix_le</cstring>
-                                </property>
-                                <property>
-                                    <name>toolTip</name>
-                                    <string></string>
-                                </property>
-                                <property>
-                                    <name>whatsThis</name>
-                                    <string>Path to the installation directory. In case of a KDE application, this would be the directory of the KDE installation. Passed over to configure as the --prefix= argument.  For other application types, this is usually /usr/local; the default behavior of the installation path can be set with this argument.</string>
-                                </property>
-                            </widget>
-                            <widget row="3"  column="1" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>xlibraries_le</cstring>
-                                </property>
-                                <property>
-                                    <name>whatsThis</name>
-                                    <string>Pass over the directory containing the X libraries here. This may be needed specifically when crosscompiling to another platform and the X libraries to link your application against are not the system's libraries that are in use but the crosscompiled libraries of the target machine.</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget row="1"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>TextLabel1_3</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>A&amp;dditional Options:</string>
-                        </property>
-                        <property>
-                            <name>buddy</name>
-                            <cstring>add_configure_opts</cstring>
-                        </property>
-                    </widget>
-                    <widget row="2"  column="0"  rowspan="1"  colspan="2" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>add_configure_opts</cstring>
-                        </property>
-                        <property>
-                            <name>whatsThis</name>
-                            <string>Pass any additional options to the configure script for this configuration here. A possible value that is not covered by the values above could be --enable-embedded to link against the libqte library and remove any X dependency instea of linking to libqt. Other options could be --with-qt-includes and --with-qt-libraries in case these cannot be detected on your system.</string>
-                        </property>
-                    </widget>
                     <spacer row="3"  column="0" >
                         <property>
                             <name>name</name>
@@ -1211,18 +1294,5 @@
     <tabstop>cppflags_le</tabstop>
     <tabstop>cflags_le</tabstop>
     <tabstop>cxxflags_le</tabstop>
-    <tabstop>disable_debug_cb</tabstop>
-    <tabstop>enable_debug_cb</tabstop>
-    <tabstop>enable_final_cb</tabstop>
-    <tabstop>enable_strict_cb</tabstop>
-    <tabstop>prefix_le</tabstop>
-    <tabstop>prefix_pb</tabstop>
-    <tabstop>qtdir_le</tabstop>
-    <tabstop>qtdir_pb</tabstop>
-    <tabstop>xincludes_le</tabstop>
-    <tabstop>xincludes_pb</tabstop>
-    <tabstop>xlibraries_le</tabstop>
-    <tabstop>xlibraries_pb</tabstop>
-    <tabstop>add_configure_opts</tabstop>
 </tabstops>
 </UI>

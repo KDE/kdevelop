@@ -345,6 +345,8 @@ void CClassView::refresh( CProject *proj )
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
+		if (src.contains(".ui"))
+			continue;
     kdDebug() << "  parsing:[" << str << "]" << endl;
     cp->parse( str );
     emit setStatusbarProgress( ++currentCount );

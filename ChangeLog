@@ -1,3 +1,14 @@
+2001-12-03  Ralf Nolden <nolden@kde.org>
+	* fixed compile file function
+	* fixed bug with session file for saving settings when 
+	the QDomElement was there but didn't have a childnode
+	* moved the LDFLAGS plus the commented out checkboxes to a
+	seperate tab on the configuration
+	* the Demo for the Sharp device turned out nice, not even
+	a "presentation effect" showed up :) - he, I stayed up until
+	5:30am fix this stuff...
+	* fixed the version number in the .desktop files ;) I hope we're complete now...
+
 2001-12-03  F@lk Brettschneider <falk@kdevelop.org>
     * QextMDI 2.0.0 and a KParts namespace fix additionally
     * fixed displaying the version number in the About box
@@ -22,6 +33,7 @@
       * added new crosscompiling chapter to the manual
       * updated to version number 2.1
 
+>>>>>>> 1.352.2.278.2.175.2.41
 2001-11-21  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of August Hörandl <august.hoerandl@gmx.at>
        it adds completion to the typename in the classproperties dialog (attributes and members)
