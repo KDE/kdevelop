@@ -20,64 +20,74 @@ KDEV_PATH_KDELIBSDOXY
 KDEV_PATH_KDELIBSDOC
 
 
-AC_ARG_ENABLE(ada, 		[  --enable-ada, 		enable ada language ], with_ada=$enableval, with_ada=yes)
-AM_CONDITIONAL(include_ada, test -n "$with_ada")
 
-AC_ARG_ENABLE(python, 		[  --enable-python, 		enable python language ], with_python=$enableval, with_python=yes)
-AM_CONDITIONAL(include_python, test -n "$with_python")
+dnl  **********
+dnl  Check which programming languages support should be compiled
+dnl  **********
 
-AC_ARG_ENABLE(cpp, 		[  --enable-cpp, 		enable c++ language  ], with_cpp=$enableval, with_cpp=yes)
-AM_CONDITIONAL(include_cpp, test -n "$with_cpp")
+AC_ARG_ENABLE(ada, AC_HELP_STRING([--disable-ada], [disable Ada programming language support (default=enabled)]), [ada=${enableval}], [ada=yes])
+AM_CONDITIONAL(include_ada, test "$ada" = "yes")
 
-AC_ARG_ENABLE(perl, 		[  --enable-perl, 		enable perl language ], with_perl=$enableval, with_perl=yes)
-AM_CONDITIONAL(include_perl, test -n "$with_perl")
+AC_ARG_ENABLE(bash, AC_HELP_STRING([--disable-bash], [disable bash programming language support (default=enabled)]), [bash=${enableval}], [bash=yes])
+AM_CONDITIONAL(include_bash, test "$bash" = "yes")
 
-AC_ARG_ENABLE(php, 		[  --enable-php, 		enable php language ], with_php=$enableval, with_php=yes)
-AM_CONDITIONAL(include_php, test -n "$with_php")
+AC_ARG_ENABLE(cpp, AC_HELP_STRING([--disable-cpp], [disable C and C++ programming language support (default=enabled)]), [cpp=${enableval}], [cpp=yes])
+AM_CONDITIONAL(include_cpp, test "$cpp" = "yes")
 
-AC_ARG_ENABLE(fortran, 		[  --enable-fortran, 		enable fortran language ], with_fortran=$enableval, with_fortran=yes)
-AM_CONDITIONAL(include_fortran, test -n "$with_fortran")
+AC_ARG_ENABLE(fortran, AC_HELP_STRING([--disable-fortran], [disable Fortran programming language support (default=enabled)]), [fortran=${enableval}], [fortran=yes])
+AM_CONDITIONAL(include_fortran, test "$fortran" = "yes")
 
-AC_ARG_ENABLE(sql, 		[  --enable-sql, 		enable sql language ], with_sql=$enableval, with_sql=yes)
-AM_CONDITIONAL(include_sql, test -n "$with_sql")
+AC_ARG_ENABLE(haskell, AC_HELP_STRING([--disable-haskell], [disable haskell programming language support (default=enabled)]), [haskell=${enableval}], [haskell=yes])
+AM_CONDITIONAL(include_haskell, test "$haskell" = "yes")
 
-AC_ARG_ENABLE(java, 		[  --enable-java, 		enable java language ], with_java=$enableval, with_java=yes)
-AM_CONDITIONAL(include_java, test -n "$with_java")
+AC_ARG_ENABLE(java, AC_HELP_STRING([--disable-java], [disable Java programming language support (default=enabled)]), [java=${enableval}], [java=yes])
+AM_CONDITIONAL(include_java, test "$java" = "yes")
 
-AC_ARG_ENABLE(ruby, 		[  --enable-ruby, 		enable ruby language ], with_ruby=$enableval, with_ruby=yes)
-AM_CONDITIONAL(include_ruby, test -n "$with_ruby")
+AC_ARG_ENABLE(pascal, AC_HELP_STRING([--disable-pascal], [disable Pascal programming language support (default=enabled)]), [pascal=${enableval}], [pascal=yes])
+AM_CONDITIONAL(include_pascal, test "$pascal" = "yes")
 
-AC_ARG_ENABLE(bash, 		[  --enable-bash, 		enable bash language ], with_bash=$enableval, with_bash=yes)
-AM_CONDITIONAL(include_bash, test -n "$with_bash")
+AC_ARG_ENABLE(perl, AC_HELP_STRING([--disable-perl], [disable perl programming language support (default=enabled)]), [perl=${enableval}], [perl=no])
+AM_CONDITIONAL(include_perl, test "$perl" = "yes")
 
-AC_ARG_ENABLE(pascal, 		[  --enable-pascal, 		enable pascal language ], with_pascal=$enableval, with_pascal=yes)
-AM_CONDITIONAL(include_pascal, test -n "$with_pascal")
+AC_ARG_ENABLE(php, AC_HELP_STRING([--disable-php], [disable PHP programming language support (default=enabled)]), [php=${enableval}], [php=yes])
+AM_CONDITIONAL(include_php, test "$php" = "yes")
 
-AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake project manager ], with_autoproject=$enableval, with_autoproject=yes)
-AM_CONDITIONAL(include_autoproject, test -n "$with_autoproject")
+AC_ARG_ENABLE(python, AC_HELP_STRING([--disable-python], [disable Python programming language support (default=enabled)]), [python=${enableval}], [python=yes])
+AM_CONDITIONAL(include_python, test "$python" = "yes")
 
-AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script project manager ], with_scriptproject=$enableval, with_scriptproject=yes)
-AM_CONDITIONAL(include_scriptproject, test -n "$with_scriptproject")
+AC_ARG_ENABLE(ruby, AC_HELP_STRING([--disable-ruby], [disable ruby programming language support (default=enabled)]), [ruby=${enableval}], [ruby=yes])
+AM_CONDITIONAL(include_ruby, test "$ruby" = "yes")
 
-AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll project manager ], with_trollproject=$enableval, with_trollproject=yes)
-AM_CONDITIONAL(include_trollproject, test -n "$with_trollproject")
+AC_ARG_ENABLE(sql, AC_HELP_STRING([--disable-sql], [disable SQL programming language support (default=enabled)]), [sql=${enableval}], [sql=yes])
+AM_CONDITIONAL(include_sql, test "$sql" = "yes")
 
-AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], with_customproject=$enableval, with_customproject=yes)
-AM_CONDITIONAL(include_customproject, test -n "$with_customproject")
+
+
+AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake project manager ], autoproject=${enableval}, autoproject=yes)
+AM_CONDITIONAL(include_autoproject, test -n "$autoproject")
+
+AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script project manager ], scriptproject=${enableval}, scriptproject=yes)
+AM_CONDITIONAL(include_scriptproject, test -n "$scriptproject")
+
+AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll project manager ], trollproject=${enableval}, trollproject=yes)
+AM_CONDITIONAL(include_trollproject, test -n "$trollproject")
+
+AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], customproject=${enableval}, customproject=yes)
+AM_CONDITIONAL(include_customproject, test -n "$customproject")
 
 KDE_CHECK_HEADER(cvsservice_stub.h, [cvsservice_stub_h="found"], [cvsservice_stub_h="none"])
 AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
 
-AC_ARG_ENABLE(cvs, 		[  --enable-cvs, 		enable cvs support ], with_cvs=$enableval, with_cvs=yes)
+AC_ARG_ENABLE(cvs, 		[  --enable-cvs, 		enable cvs support ], with_cvs=${enableval}, with_cvs=yes)
 AM_CONDITIONAL(include_cvs, test -n "$with_cvs")
 
-AC_ARG_ENABLE(perforce, 	[  --enable-perforce, 		enable perforce support ], with_perforce=$enableval, with_perforce=yes)
+AC_ARG_ENABLE(perforce, 	[  --enable-perforce, 		enable perforce support ], with_perforce=${enableval}, with_perforce=yes)
 AM_CONDITIONAL(include_perforce, test -n "$with_perforce")
 
-AC_ARG_ENABLE(clearcase, 	[  --enable-clearcase, 		enable clearcase support ], with_clearcase=$enableval, with_clearcase=yes)
+AC_ARG_ENABLE(clearcase, 	[  --enable-clearcase, 		enable clearcase support ], with_clearcase=${enableval}, with_clearcase=yes)
 AM_CONDITIONAL(include_clearcase, test -n "$with_clearcase")
 
-AC_ARG_ENABLE(vba, 		[  --enable-vba, 		enable visualboy advance support ], with_vba=$enableval, with_vba=yes)
+AC_ARG_ENABLE(vba, 		[  --enable-vba, 		enable visualboy advance support ], with_vba=${enableval}, with_vba=yes)
 AM_CONDITIONAL(include_vba, test -n "$with_vba")
 
 
