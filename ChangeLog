@@ -3,6 +3,7 @@
 	* Added TOCs for STL and Gtk libraries
 	* Removed General section in doc tree view,
 	  as all its contents are covered elsewhere
+	* Added PHP index
 
 2001-06-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

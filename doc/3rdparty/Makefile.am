@@ -8,10 +8,10 @@ tocdir = ${kde_datadir}/kdevdoctreeview/tocs
 toc_DATA = python.toc perl.toc php.toc gnustep.toc $(GTKTOC)
 
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
-index_DATA = python.index
+index_DATA = python.index php.index
 
 EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustep.toc.in glib.toc.in \
-	     gdk.toc.in gdk-pixbuf.toc.in gtk.toc.in gnome.toc.in gnomeui.toc.in python.index.in
+	     gdk.toc.in gdk-pixbuf.toc.in gtk.toc.in gnome.toc.in gnomeui.toc.in python.index.in php.index.in
 DISTCLEANFILES = python.toc perl.toc php.toc gnustep.toc gtk.toc python.index
 
 perl.toc: $(srcdir)/perl.toc.in
@@ -83,6 +83,15 @@ python.index: $(srcdir)/python.index.in
 	echo "</gideonindex>" >> python.index ; \
 	echo "" >> python.index
 
+php.index: $(srcdir)/php.index.in
+	echo "<!DOCTYPE gideonindex>" > php.index ; \
+	echo "<gideonindex>" >> php.index
+	echo "<title>PHP</title>" >> php.index ; \
+	echo "<base href=\"$(PHPDOCDIR)\"/>" >> php.index ; \
+	cat $(srcdir)/php.index.in >> php.index ; \
+	echo "</gideonindex>" >> php.index ; \
+	echo "" >> php.index
+
 python-toc:
 	perl ../tools/toc-python \
 	  --prefix=tut \
@@ -147,3 +156,12 @@ python-index:
 	perl ../tools/index-python \
 	  --prefix=ref \
 	  /usr/share/doc/packages/python/html/ref/genindex.html > python.index.in
+
+php-index:
+	here=`pwd` ; cd /usr/share/doc/packages/phpdoc/manual ; \
+	echo "<identindex>" > $$here/php.index.in ; \
+	for i in function.* ; do \
+	  func=`echo $$i|sed -e 's/-/_/g' -e 's/^function\.//g' -e 's/\.html$$//g'` ; \
+	  echo "<entry name=\""$$func"\" url=\""$$i"\"/>" >> $$here/php.index.in ; \
+	done ; \
+	echo "</identindex>" >> $$here/php.index.in
