@@ -16,6 +16,7 @@
 
 class QCheckBox;
 class QListView;
+class QListViewItem;
 class DocTreeViewWidget;
 
 
@@ -34,6 +35,10 @@ public slots:
     void accept();
 
 private slots:
+    void updateLibrary();
+    void editLibrary();
+    void addLibrary();
+    void removeLibrary();
     void addBookmarkClicked();
     void removeBookmarkClicked();
     void updateIndexClicked();

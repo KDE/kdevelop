@@ -30,6 +30,7 @@
 #include <ksimpleconfig.h>
 #include <kprocess.h>
 
+#include "librarydocdlgbase.h"
 #include "adddocitemdlg.h"
 #include "misc.h"
 #include "doctreeviewfactory.h"
@@ -95,7 +96,6 @@ QWidget *DocTreeConfigWidget::createKDevelopTab()
 #endif
 }
 
-
 QWidget *DocTreeConfigWidget::createLibrariesTab()
 {
     QWidget *w = new QWidget(this, "libraries tab");
@@ -104,15 +104,86 @@ QWidget *DocTreeConfigWidget::createLibrariesTab()
                                               "of the documentation tree:"), w);
     
     libraries_view = new QListView(w);
-    libraries_view->setResizeMode(QListView::LastColumn);
-    libraries_view->addColumn(QString::null);
-    libraries_view->header()->hide();
+    QFontMetrics fm(libraries_view->fontMetrics());
+    libraries_view->setMinimumWidth(fm.width('X')*35);
+    libraries_view->setAllColumnsShowFocus(true);
+    libraries_view->setResizeMode(QListView::AllColumns);
+    libraries_view->setColumnWidth(0, 60);
+    libraries_view->setColumnWidth(1, 100);
+    libraries_view->addColumn(i18n("Library"));
+    libraries_view->addColumn(i18n("Doc Path"));
+    libraries_view->addColumn(i18n("Source Path"));
 
-    QBoxLayout *layout = new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
-    layout->addWidget(libraries_label);
-    layout->addWidget(libraries_view);
+    QVBox *buttonbox = new QVBox(w);
+    buttonbox->setMargin(KDialog::spacingHint());
+    connect( new QPushButton(i18n("&Update"), buttonbox), SIGNAL(clicked()),
+             this, SLOT(updateLibrary()) );
+    connect( new QPushButton(i18n("&Edit"), buttonbox), SIGNAL(clicked()),
+             this, SLOT(editLibrary()) );
+    connect( new QPushButton(i18n("&Add"), buttonbox), SIGNAL(clicked()),
+             this, SLOT(addLibrary()) );
+    connect( new QPushButton(i18n("&Remove"), buttonbox), SIGNAL(clicked()),
+             this, SLOT(removeLibrary()) );
+    
+    QGridLayout *layout = new QGridLayout(w, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    layout->addMultiCellWidget(libraries_label, 0, 0, 0, 1);
+    layout->addWidget(libraries_view, 1, 0);
+    layout->addWidget(buttonbox, 1, 1);
     
     return w;
+}
+
+void DocTreeConfigWidget::updateLibrary()
+{
+    kdDebug() << "update libraries"<< endl;
+}
+
+#include <klineedit.h>
+#include <kurlrequester.h>
+#include <kfiledialog.h>
+
+
+class LibraryDocDlg : public LibraryDocDlgBase
+{
+public:
+    LibraryDocDlg(QString name = QString::null,
+                  QString doc = QString::null,
+                  QString source = QString::null) 
+   : LibraryDocDlgBase(0, "library doc", true) {
+      libName->setText(name);
+      docURL->setURL(doc);
+      sourceURL->setURL(source);
+      docURL->fileDialog()->setMode(KFile::Directory);
+      sourceURL->fileDialog()->setMode(KFile::Directory);
+    }
+    QString getLibName() { return libName->text(); }
+    QString getDocPath() { return docURL->url(); }
+    QString getSourcePath() { return sourceURL->url(); }
+};
+
+void DocTreeConfigWidget::editLibrary()
+{
+    QListViewItem* item = libraries_view->currentItem();
+    if (item) {
+        LibraryDocDlg dlg(item->text(0),item->text(1),item->text(2));
+        if (dlg.exec()) {
+            item->setText(0, dlg.getLibName());
+            item->setText(1, dlg.getDocPath());
+            item->setText(2, dlg.getSourcePath());
+        }        
+    }
+}
+
+void DocTreeConfigWidget::addLibrary()
+{
+    LibraryDocDlg dlg;
+    if (dlg.exec()) {
+        new QListViewItem(libraries_view, dlg.getLibName(), dlg.getDocPath(), dlg.getSourcePath());
+    }            
+}
+
+void DocTreeConfigWidget::removeLibrary()
+{
 }
 
 

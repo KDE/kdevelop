@@ -13,7 +13,8 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp \
 				adddocitemdlg.cpp \
 				docindexdlg.cpp \
 				docsearchdlg.cpp \
-				misc.cpp
+				misc.cpp \
+				librarydocdlgbase.ui
 
 bin_PROGRAMS = gideon-index
 gideon_index_SOURCES = htdigindex.cpp
