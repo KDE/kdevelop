@@ -113,7 +113,7 @@ dnl ------------------------------------------------------------------------
 dnl
 AC_DEFUN(AC_PATH_QT_MOC,
 [
-   KDE_FIND_PATH(moc, MOC, [$ac_qt_bindir $QTDIR/bin \
+   KDE_FIND_PATH(moc, MOC, [$ac_qt_bindir $QTDIR/bin $QTDIR/src/moc \
 	    /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
 	    /usr/local/qt/bin], [KDE_MOC_ERROR_MESSAGE])
  
@@ -435,52 +435,47 @@ AC_LANG_SAVE
 AC_LANG_C
 AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
-if test "{$x_includes+set}" = set || test "$x_includes" = NONE; then
+if test "{$x_includes+set}" = set; then
    ac_x_includes=NO
-else
-   ac_x_includes=$x_includes
 fi
-if test "{$x_libraries+set}" = set || test "$x_libraries" = NONE; then
+if test "{$x_libraries+set}" = set; then
    ac_x_libraries=NO
-else
-   ac_x_libraries=$x_libraries
 fi
 AC_PATH_X_DIRECT
 AC_PATH_X_XMKMF
-if test "$ac_x_includes" = NO || test -z "$ac_x_includes"; then
+if test "$ac_x_includes" = NO || test "$ac_x_libraries" = NO; then
   AC_MSG_ERROR([Can't find X includes. Please check your installation and add the correct paths!])
-fi
-
-if test "$ac_x_libraries" = NO || test -z "$ac_x_libraries"; then
-  AC_MSG_ERROR([Can't find X libraries. Please check your installation and add the correct paths!])
-fi
-
-# Record where we found X for the cache.
-ac_cv_have_x="have_x=yes \
-         ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
-])dnl
+else
+  # Record where we found X for the cache.
+  ac_cv_have_x="have_x=yes \
+                ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
+fi])dnl
 eval "$ac_cv_have_x"
  
 if test "$have_x" != yes; then
   AC_MSG_RESULT($have_x)
   no_x=yes
 else
-  AC_MSG_RESULT([libraries $ac_x_libraries, headers $ac_x_includes])
+  # If each of the values was on the command line, it overrides each guess.
+  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
+  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
+  # Update the cache value to reflect the command line values.
+  ac_cv_have_x="have_x=yes \
+                ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
 
-if test -z "$ac_x_includes" || test "x$ac_x_includes" = xNONE; then
+if test -z "$x_includes" || test "x$x_includes" = xNONE; then
   X_INCLUDES=""
   x_includes="."; dnl better than nothing :-
  else
-  x_includes=$ac_x_includes
   X_INCLUDES="-I$x_includes"
 fi
 
-if test -z "$ac_x_libraries" || test "x$ac_x_libraries" = xNONE; then
+if test -z "$x_libraries" || test "x$x_libraries" = xNONE; then
   X_LDFLAGS=""
   x_libraries="/usr/lib"; dnl better than nothing :-
  else
-  x_libraries=$ac_x_libraries
   X_LDFLAGS="-L$x_libraries"
 fi
 all_includes="$all_includes $X_INCLUDES"  
@@ -499,14 +494,18 @@ AC_LANG_RESTORE
 
 AC_DEFUN(KDE_PRINT_QT_PROGRAM,
 [
+AC_REQUIRE([KDE_USE_QT])
+
+
 AC_LANG_CPLUSPLUS
 cat > conftest.$ac_ext <<EOF
 #include "confdefs.h"
 #include <qglobal.h>
 #include <qapplication.h>
 #include <qobjcoll.h>
-
-#if ! (QT_VERSION >= 142)
+EOF
+echo "#if ! ($kde_qt_verstring)" >> conftest.$ac_ext
+cat >> conftest.$ac_ext <<EOF
 #error 1
 #endif
 
@@ -516,8 +515,38 @@ int main() {
 EOF
 ])
 
+AC_DEFUN(KDE_USE_QT,
+[
+if test -z "$1"; then
+  kde_qtver=2
+else
+  kde_qtver=$1
+fi
+
+if test -z "$2"; then
+  if test $kde_qtver = 2; then
+    kde_qt_minversion=">= 2.0"
+   else
+    kde_qt_minversion=">= 1.42 and < 2.0"
+  fi
+else
+   kde_qt_minversion=$2
+fi
+
+if test -z "$3"; then
+    if test $kde_qtver = 2; then
+    kde_qt_verstring="QT_VERSION >= 200"
+   else
+    kde_qt_verstring="QT_VERSION >= 142 && QT_VERSION < 200"
+  fi
+else
+   kde_qt_verstring=$3
+fi
+])
+
 AC_DEFUN(KDE_CHECK_QT_DIRECT,
 [
+AC_REQUIRE([KDE_USE_QT])
 AC_MSG_CHECKING([if Qt compiles without flags])
 AC_CACHE_VAL(kde_cv_qt_direct,
 [
@@ -573,9 +602,16 @@ dnl
 AC_DEFUN(AC_PATH_QT_1_3,
 [
 AC_REQUIRE([K_PATH_X])
-
+AC_REQUIRE([KDE_USE_QT])
+LIBQT="-lqt"
+if test $kde_qtver = 2; then
+  
+  AC_REQUIRE([AC_FIND_PNG])
+  LIBQT="$LIBQT $LIBPNG"
+fi
 AC_MSG_CHECKING([for Qt])
-LIBQT="-lqt -lXext -lX11 $LIBSOCKET"
+
+LIBQT="$LIBQT -lXext -lX11 $LIBSOCKET"
 ac_qt_includes=NO ac_qt_libraries=NO ac_qt_bindir=NO
 qt_libraries=""
 qt_includes=""
@@ -603,17 +639,17 @@ AC_ARG_WITH(qt-libraries,
 AC_CACHE_VAL(ac_cv_have_qt,
 [#try to guess Qt locations
 
-qt_incdirs="$ac_qt_includes /usr/lib/qt/include /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt $x_includes $QTINC"
+qt_incdirs="/usr/lib/qt/include /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt $x_includes $QTINC"
 test -n "$QTDIR" && qt_incdirs="$QTDIR/include $QTDIR $qt_incdirs"
+qt_incdirs="$ac_qt_includes $qt_incdirs"
 AC_FIND_FILE(qmovie.h, $qt_incdirs, qt_incdir)
 ac_qt_includes="$qt_incdir"
 
-if test ! "$ac_qt_libraries" = "NO"; then
-  qt_libdirs="$ac_qt_libraries"
-fi
-
-qt_libdirs="$qt_libdirs /usr/lib/qt/lib /usr/X11R6/lib /usr/lib /usr/local/qt/lib /usr/lib/qt $x_libraries $QTLIB"
+qt_libdirs="/usr/lib/qt/lib /usr/X11R6/lib /usr/lib /usr/local/qt/lib /usr/lib/qt $x_libraries $QTLIB"
 test -n "$QTDIR" && qt_libdirs="$QTDIR/lib $QTDIR $qt_libdirs"
+if test ! "$ac_qt_libraries" = "NO"; then
+  qt_libdirs="$ac_qt_libraries $qt_libdirs"
+fi
 
 test=NONE
 qt_libdir=NONE
@@ -622,7 +658,6 @@ for dir in $qt_libdirs; do
   if test=`eval $try 2> /dev/null`; then qt_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 
-dnl AC_FIND_FILE(libqt.so libqt.so.1.40 libqt.so.1.41 libqt.so.1.42 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
 ac_qt_libraries="$qt_libdir"
 
 ac_cxxflags_safe="$CXXFLAGS"
@@ -660,7 +695,7 @@ if test "$ac_qt_includes" = NO || test "$ac_qt_libraries" = NO; then
     ac_qt_notfound="(libraries)";
   fi
 
-  AC_MSG_ERROR([Qt >= 1.42 $ac_qt_notfound not found. Please check your installation! ]);
+  AC_MSG_ERROR([Qt ($kde_qt_minversion) $ac_qt_notfound not found. Please check your installation! ]);
 else
   have_qt="yes"
 fi
@@ -704,7 +739,7 @@ AC_SUBST(QT_INCLUDES)
 AC_SUBST(QT_LDFLAGS)
 AC_PATH_QT_MOC
 
-LIB_QT='-lqt $(LIB_X11)'
+LIB_QT='-lqt $(LIBPNG) $(LIB_X11)'
 AC_SUBST(LIB_QT)
 
 ])
@@ -766,6 +801,7 @@ kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/
 test -n "$KDEDIR" && kde_libdirs="$KDEDIR/lib $KDEDIR $kde_libdirs"
 kde_libdirs="$ac_kde_libraries $kde_libdirs"
 AC_FIND_FILE(libkdecore.la, $kde_libdirs, kde_libdir)
+ac_kde_libraries="$kde_libdir"
 
 if test -n "$ac_kde_libraries" && test ! -r "$ac_kde_libraries/libkdecore.la"; then
 AC_MSG_ERROR([
@@ -864,6 +900,7 @@ if test -n "$kde_use_extra_includes" && \
 else
    kde_use_extra_includes="no"
 fi
+AC_SUBST(USER_INCLUDES)
 
 AC_MSG_RESULT($kde_use_extra_includes)
 
@@ -887,6 +924,8 @@ if test -n "$kde_use_extra_libs" && \
 else
    kde_use_extra_libs="no"
 fi
+
+AC_SUBST(USER_LDFLAGS)
 
 AC_MSG_RESULT($kde_use_extra_libs)
 
@@ -1154,13 +1193,13 @@ else
 fi
 ])
 
-AC_DEFUN(AC_FIND_JPEG,
-   [AC_MSG_CHECKING([for jpeglib])
-AC_CACHE_VAL(ac_cv_lib_jpeg,
+AC_DEFUN(KDE_FIND_JPEG_HELPER,
 [
-AC_LANG_C
+AC_MSG_CHECKING([for libjpeg$2])
+AC_CACHE_VAL(ac_cv_lib_jpeg_$1,
+[
 ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -ljpeg -lm"
+LIBS="$all_libraries -ljpeg$2 -lm"
 AC_TRY_LINK(
 [/* Override any gcc2 internal prototype to avoid an error.  */
 struct jpeg_decompress_struct;
@@ -1178,12 +1217,27 @@ extern "C" {
     builtin and then its argument prototype would still apply.  */
 ],
             [jpeg_CreateDecompress(0L, 0, 0);],
-            eval "ac_cv_lib_jpeg=-ljpeg",
-            eval "ac_cv_lib_jpeg=no")
+            eval "ac_cv_lib_jpeg_$1=-ljpeg$2",
+            eval "ac_cv_lib_jpeg_$1=no")
 LIBS="$ac_save_LIBS"
+])
 
+if eval "test ! \"`echo $ac_cv_lib_jpeg_$1`\" = no"; then
+  LIBJPEG="$ac_cv_lib_jpeg_$1"
+  AC_MSG_RESULT($ac_cv_lib_jpeg_$1)
+else
+  AC_MSG_RESULT(no)
+  $3
+fi
+
+])
+
+AC_DEFUN(AC_FIND_JPEG,
+[
+KDE_FIND_JPEG_HELPER(6b, 6b,
+   KDE_FIND_JPEG_HELPER(normal, [],
+    [
 dnl what to do, if the normal way fails:
-if eval "test \"`echo $ac_cv_lib_jpeg`\" = no"; then
 	if test -f "$kde_libraries/libjpeg.so"; then
 	   test -f ./libjpegkde.so || $LN_S $kde_libraries/libjpeg.so ./libjpegkde.so
 	   ac_cv_lib_jpeg="-L\${topdir} -ljpegkde"
@@ -1195,22 +1249,21 @@ if eval "test \"`echo $ac_cv_lib_jpeg`\" = no"; then
 	   ac_cv_lib_jpeg="-L\${topdir} -ljpegkde"
         else
 	  AC_MSG_ERROR([
-You need jpeglib6a. Please install the kdesupport package.
-If you have already installed kdesupport, you may have an
+You need jpeglib6b. Please install the kdesupport package.
+If you have already installed kdesupport you may have an
 old libjpeg somewhere. 
 In this case copy $KDEDIR/lib/libjpeg* to /usr/lib.
 ])
 	fi
       fi
    fi
-fi
-])dnl
-if eval "test ! \"`echo $ac_cv_lib_jpeg`\" = no"; then
-  LIBJPEG="$ac_cv_lib_jpeg"
-  AC_SUBST(LIBJPEG)
-  AC_MSG_RESULT($ac_cv_lib_jpeg)
-  AC_DEFINE_UNQUOTED(HAVE_LIBJPEG)
-fi
+
+   LIBJPEG=$ac_cv_lib_jpeg
+]))
+
+AC_SUBST(LIBJPEG)
+AC_DEFINE_UNQUOTED(HAVE_LIBJPEG)
+
 ])
 
 AC_DEFUN(AC_FIND_ZLIB,
@@ -1594,15 +1647,15 @@ on www.kde.org])
 dnl just a wrapper to clean up configure.in
 AC_DEFUN(KDE_PROG_LIBTOOL,
 [
-AC_REQUIRE([AM_ENABLE_SHARED])
-AC_REQUIRE([AM_ENABLE_STATIC])
+AC_REQUIRE([AC_ENABLE_SHARED])
+AC_REQUIRE([AC_ENABLE_STATIC])
 dnl libtool is only for C, so I must force him
 dnl to find the correct flags for C++
 kde_save_cc=$CC
 kde_save_cflags="$CFLAGS"
 CC=$CXX
 CFLAGS="$CXXFLAGS"
-AM_SET_LIBTOOL_VARIABLE([--silent])
+AC_SET_LIBTOOL_VARIABLE([--silent])
 AM_PROG_LIBTOOL dnl for libraries
 CC=$kde_save_cc
 CFLAGS="$kde_save_cflags"
@@ -1922,9 +1975,9 @@ AC_DEFUN(AC_HAVE_XPM,
   else
     AC_DEFINE(HAVE_XPM)
     if test "$XPM_LDFLAGS" = ""; then
-       XPMLIB='-lXpm $(LIB_X11)'
+       XPMLIB="-lXpm"
     else
-       XPMLIB="-L$XPM_LDFLAGS -lXpm "'$(LIB_X11)'
+       XPMLIB="-L$XPM_LDFLAGS -lXpm"
     fi
     if test "$XPM_INCLUDE" = ""; then
        XPMINC=""
@@ -1974,9 +2027,9 @@ AC_DEFUN(AC_HAVE_GL,
   else
     AC_DEFINE(HAVE_GL)
     if test "$GL_LDFLAGS" = ""; then
-       GLLIB='-lMesaGL -lMesaGLU $(LIB_X11)'
+       GLLIB="-lMesaGL -lMesaGLU"
     else
-       GLLIB="$GL_LDFLAGS -lMesaGL -lMesaGLU "'$(LIB_X11)'
+       GLLIB="$GL_LDFLAGS -lMesaGL -lMesaGLU"
     fi
     if test "$GL_INCLUDE" = ""; then
        GLINC=""
@@ -2327,8 +2380,17 @@ LIBMICO="-lmico$kde_cv_mico_version $LIBCRYPT $LIBDL"
 AC_SUBST(LIBMICO)
 IDL=$kde_micodir/bin/idl
 AC_SUBST(IDL)
-])
 
+KDE_CHECK_MINI_STL
+ 
+if test "$kde_cv_have_mini_stl" = "yes"; then
+  AC_MSG_ERROR([compile mico with --disable-mini-stl])
+fi
+
+idldir="\$(includedir)/idl"
+AC_SUBST(idldir)
+
+])
 
 AC_DEFUN(KDE_CHECK_MINI_STL,
 [
@@ -2771,7 +2833,7 @@ AC_CACHE_VAL(ac_cv_have_s_issock,
 [
 AC_LANG_SAVE
 AC_LANG_C
-AC_TRY_LINK(
+AC_TRY_COMPILE(
 [
 #include <sys/stat.h>
 ],
@@ -2781,50 +2843,13 @@ int b = S_ISSOCK( buff.st_mode );
 ],
 ac_cv_have_s_issock=yes,
 ac_cv_have_s_issock=no)
-AC_LANG_RESTORE
 ])
 AC_MSG_RESULT($ac_cv_have_s_issock)
 if test "$ac_cv_have_s_issock" = "yes"; then
   AC_DEFINE_UNQUOTED(HAVE_S_ISSOCK)
 fi
+AC_LANG_RESTORE 
 ])
-
-dnl ------------------------------------------------------------------------
-dnl Check for MAXPATHLEN macro, defines KDEMAXPATHLEN. faure@kde.org
-dnl ------------------------------------------------------------------------
-dnl
-AC_DEFUN(AC_CHECK_KDEMAXPATHLEN,
-[
-AC_MSG_CHECKING(for MAXPATHLEN)
-AC_CACHE_VAL(ac_cv_maxpathlen,
-[
-AC_LANG_C
-cat > conftest.$ac_ext <<EOF
-#include <stdio.h>
-#include <sys/param.h>
-#ifndef MAXPATHLEN
-#define MAXPATHLEN 1024
-#endif
-
-KDE_HELLO MAXPATHLEN
-
-EOF
-
-ac_try="$ac_cpp conftest.$ac_ext 2>/dev/null | grep '^KDE_HELLO' >conftest.out"
-
-if AC_TRY_EVAL(ac_try) && test -s conftest.out; then 
-    ac_cv_maxpathlen=`sed 's#KDE_HELLO \([0-9]*\).*#\1#' conftest.out`
-else
-    ac_cv_maxpathlen=1024
-fi
-
-rm conftest.*
-
-])
-AC_MSG_RESULT($ac_cv_maxpathlen)
-AC_DEFINE_UNQUOTED(KDEMAXPATHLEN,$ac_cv_maxpathlen)
-])
-
 dnl this is for kdm:
 
 AC_DEFUN(AC_CHECK_KDM,
@@ -2948,7 +2973,7 @@ fi
 ])
 
 ## libtool.m4 - Configure libtool for the target system. -*-Shell-script-*-
-## Copyright (C) 1996-1998 Free Software Foundation, Inc.
+## Copyright (C) 1996-1999 Free Software Foundation, Inc.
 ## Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -2970,25 +2995,29 @@ fi
 ## configuration script generated by Autoconf, you may include it under
 ## the same distribution terms that you use for the rest of that program.
 
-# serial 29 AM_PROG_LIBTOOL
-AC_DEFUN(AM_PROG_LIBTOOL,
-[AC_REQUIRE([AM_ENABLE_SHARED])dnl
-AC_REQUIRE([AM_ENABLE_STATIC])dnl
+# serial 32 AC_PROG_LIBTOOL
+AC_DEFUN(AC_PROG_LIBTOOL,
+[AC_PREREQ(2.12.2)dnl
+AC_REQUIRE([AC_ENABLE_SHARED])dnl
+AC_REQUIRE([AC_ENABLE_STATIC])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_REQUIRE([AC_PROG_RANLIB])dnl
 AC_REQUIRE([AC_PROG_CC])dnl
-AC_REQUIRE([AM_PROG_LD])dnl
-AC_REQUIRE([AM_PROG_NM])dnl
-AC_REQUIRE([AM_SYS_NM_PARSE])dnl
+AC_REQUIRE([AC_PROG_LD])dnl
+AC_REQUIRE([AC_PROG_NM])dnl
+AC_REQUIRE([AC_SYS_NM_PARSE])dnl
+AC_REQUIRE([AC_SYS_SYMBOL_UNDERSCORE])dnl
 AC_REQUIRE([AC_PROG_LN_S])dnl
-AC_REQUIRE([AM_SET_LIBTOOL_VARIABLE])dnl
+AC_REQUIRE([AC_SET_LIBTOOL_VARIABLE])dnl
 dnl
 
 # Check for any special flags to pass to ltconfig.
 libtool_flags=
 test "$enable_shared" = no && libtool_flags="$libtool_flags --disable-shared"
 test "$enable_static" = no && libtool_flags="$libtool_flags --disable-static"
+test "x$lt_cv_dlopen" != xno && libtool_flags="$libtool_flags --enable-dlopen"
+test "x$lt_cv_dlopen_self" = xyes && libtool_flags="$libtool_flags --enable-dlopen-self"
 test "$silent" = yes && libtool_flags="$libtool_flags --silent"
 test "$ac_cv_prog_gcc" = yes && libtool_flags="$libtool_flags --with-gcc"
 test "$ac_cv_prog_gnu_ld" = yes && libtool_flags="$libtool_flags --with-gnu-ld"
@@ -3027,8 +3056,8 @@ case "$host" in
   fi
   ;;
 
-*-*-cygwin32*)
-  AM_SYS_LIBTOOL_CYGWIN32
+*-*-cygwin*)
+  AC_SYS_LIBTOOL_CYGWIN
   ;;
 
 esac
@@ -3053,20 +3082,59 @@ ${CONFIG_SHELL-/bin/sh} $ac_aux_dir/ltconfig --no-reexec \
 $libtool_flags --no-verify $ac_aux_dir/ltmain.sh $host \
 || AC_MSG_ERROR([libtool configure failed])
 
+# This can be used to rebuild libtool when needed
+LIBTOOL_DEPS="$ac_aux_dir/ltconfig $ac_aux_dir/ltmain.sh"
+
 # Redirect the config.log output again, so that the ltconfig log is not
 # clobbered by the next message.
 exec 5>>./config.log
 ])
 
-# AM_ENABLE_SHARED - implement the --enable-shared flag
-# Usage: AM_ENABLE_SHARED[(DEFAULT)]
+# AC_LIBTOOL_DLOPEN - check for dlopen support
+AC_DEFUN(AC_LIBTOOL_DLOPEN,
+[AC_CACHE_VAL(lt_cv_dlopen,
+[lt_cv_dlopen=no lt_cv_dlopen_libs=
+AC_CHECK_FUNC(dlopen, [lt_cv_dlopen="dlopen"],
+  [AC_CHECK_LIB(dl, dlopen, [lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-ldl"],
+    [AC_CHECK_LIB(dld, dld_link, [lt_cv_dlopen="dld_link" lt_cv_dlopen_libs="-ldld"],
+      [AC_CHECK_FUNC(shl_load, [lt_cv_dlopen="shl_load"],
+        [AC_CHECK_FUNC(LoadLibrary, [lt_cv_dlopen="LoadLibrary"])]
+      )]
+    )]
+  )]
+)])
+
+case "$lt_cv_dlopen" in
+dlopen)
+  AC_CACHE_CHECK([whether a program can dlopen itself], lt_cv_dlopen_self,
+    [LT_SAVE_LIBS="$LIBS"; LIBS="$lt_cv_dlopen_libs $LIBS"
+    AC_TRY_RUN([
+#include <dlfcn.h>
+#include <stdio.h>
+fnord() { int i=42;}
+main() { void *self, *ptr1, *ptr2; self=dlopen(0,RTLD_LAZY);
+    if(self) { ptr1=dlsym(self,"fnord"); ptr2=dlsym(self,"_fnord");
+    if(ptr1 || ptr2) exit(0); } exit(1); } 
+], lt_cv_dlopen_self=no, lt_cv_dlopen_self=yes, lt_cv_dlopen_self=cross)
+    LIBS="$LT_SAVE_LIBS"])
+  ;;
+# We should probably test other for NULL support in other dlopening
+# mechanisms too.
+*)
+  lt_cv_dlopen_self=no
+  ;;
+esac
+])
+
+# AC_ENABLE_SHARED - implement the --enable-shared flag
+# Usage: AC_ENABLE_SHARED[(DEFAULT)]
 #   Where DEFAULT is either `yes' or `no'.  If omitted, it defaults to
 #   `yes'.
-AC_DEFUN(AM_ENABLE_SHARED,
-[define([AM_ENABLE_SHARED_DEFAULT], ifelse($1, no, no, yes))dnl
+AC_DEFUN(AC_ENABLE_SHARED,
+[define([AC_ENABLE_SHARED_DEFAULT], ifelse($1, no, no, yes))dnl
 AC_ARG_ENABLE(shared,
 changequote(<<, >>)dnl
-<<  --enable-shared[=PKGS]  build shared libraries [default=>>AM_ENABLE_SHARED_DEFAULT],
+<<  --enable-shared[=PKGS]  build shared libraries [default=>>AC_ENABLE_SHARED_DEFAULT],
 changequote([, ])dnl
 [p=${PACKAGE-default}
 case "$enableval" in
@@ -3084,26 +3152,26 @@ no) enable_shared=no ;;
   IFS="$ac_save_ifs"
   ;;
 esac],
-enable_shared=AM_ENABLE_SHARED_DEFAULT)dnl
+enable_shared=AC_ENABLE_SHARED_DEFAULT)dnl
 ])
 
-# AM_DISABLE_SHARED - set the default shared flag to --disable-shared
-AC_DEFUN(AM_DISABLE_SHARED,
-[AM_ENABLE_SHARED(no)])
+# AC_DISABLE_SHARED - set the default shared flag to --disable-shared
+AC_DEFUN(AC_DISABLE_SHARED,
+[AC_ENABLE_SHARED(no)])
 
-# AM_DISABLE_STATIC - set the default static flag to --disable-static
-AC_DEFUN(AM_DISABLE_STATIC,
-[AM_ENABLE_STATIC(no)])
+# AC_DISABLE_STATIC - set the default static flag to --disable-static
+AC_DEFUN(AC_DISABLE_STATIC,
+[AC_ENABLE_STATIC(no)])
 
-# AM_ENABLE_STATIC - implement the --enable-static flag
-# Usage: AM_ENABLE_STATIC[(DEFAULT)]
+# AC_ENABLE_STATIC - implement the --enable-static flag
+# Usage: AC_ENABLE_STATIC[(DEFAULT)]
 #   Where DEFAULT is either `yes' or `no'.  If omitted, it defaults to
 #   `yes'.
-AC_DEFUN(AM_ENABLE_STATIC,
-[define([AM_ENABLE_STATIC_DEFAULT], ifelse($1, no, no, yes))dnl
+AC_DEFUN(AC_ENABLE_STATIC,
+[define([AC_ENABLE_STATIC_DEFAULT], ifelse($1, no, no, yes))dnl
 AC_ARG_ENABLE(static,
 changequote(<<, >>)dnl
-<<  --enable-static[=PKGS]  build static libraries [default=>>AM_ENABLE_STATIC_DEFAULT],
+<<  --enable-static[=PKGS]  build static libraries [default=>>AC_ENABLE_STATIC_DEFAULT],
 changequote([, ])dnl
 [p=${PACKAGE-default}
 case "$enableval" in
@@ -3121,12 +3189,12 @@ no) enable_static=no ;;
   IFS="$ac_save_ifs"
   ;;
 esac],
-enable_static=AM_ENABLE_STATIC_DEFAULT)dnl
+enable_static=AC_ENABLE_STATIC_DEFAULT)dnl
 ])
 
 
-# AM_PROG_LD - find the path to the GNU or non-GNU linker
-AC_DEFUN(AM_PROG_LD,
+# AC_PROG_LD - find the path to the GNU or non-GNU linker
+AC_DEFUN(AC_PROG_LD,
 [AC_ARG_WITH(gnu-ld,
 [  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]],
 test "$withval" = no || with_gnu_ld=yes, with_gnu_ld=no)
@@ -3141,47 +3209,15 @@ if test "$ac_cv_prog_gcc" = yes; then
   case "$ac_prog" in
     # Accept absolute paths.
 changequote(,)dnl
-    /* | [A-Za-z]:/*)
-      # Canonicalize the path of ld
+    /* | [A-Za-z]:[\\/]*)
       re_direlt='/[^/][^/]*/\.\./'
-      sub_uncdrive='s%^\([A-Za-z]\):/%//\1/%'
 changequote([,])dnl
-      while echo $ac_prog | grep "$re_direlt" > /dev/null 2>&1; do
-        ac_prog=`echo $ac_prog| sed "s%$re_direlt%/%"`
-      done
-      case "$host_os" in
-      cygwin*)
-        # Convert to a UNC path for cygwin
-        test -z "$LD" && LD=`echo X$ac_prog | $Xsed -e "$sub_uncdrive"`
-	;;
-      *)
-        test -z "$LD" && LD="$ac_prog"
-	;;
-      esac
-      ;;
-    ##
-    ## FIXME:  The code fails later on if we try to use an $LD with
-    ##         '\\' path separators.
-    ##
-changequote(,)dnl
-    [A-Za-z]:[\\]*)
       # Canonicalize the path of ld
-      re_direlt='\\[^\\][^\\]*\\\.\.\(\\\)'
-      sub_uncdrive='s%^\([A-Za-z]\):\\%//\1/%'
-changequote([,])dnl
-      sub_uncdir='s%\\%/%g'
+      ac_prog=`echo $ac_prog| sed 's%\\\\%/%g'`
       while echo $ac_prog | grep "$re_direlt" > /dev/null 2>&1; do
-        ac_prog=`echo $ac_prog| sed "s%$re_direlt%\1%"`
+	ac_prog=`echo $ac_prog| sed "s%$re_direlt%/%"`
       done
-      case "$host_os" in
-      cygwin*)
-        # Convert to a UNC path for cygwin
-        test -z "$LD" && LD=`echo X$ac_prog | sed -e 's%^X%%' -e "$sub_uncdrive" -e "$sub_uncdir"`
-	;;
-      *)
-        test -z "$LD" && LD="$ac_prog"
-	;;
-      esac
+      test -z "$LD" && LD="$ac_prog"
       ;;
   "")
     # If it fails, then pretend we aren't using GCC.
@@ -3210,7 +3246,7 @@ AC_CACHE_VAL(ac_cv_path_LD,
       if "$ac_cv_path_LD" -v 2>&1 < /dev/null | egrep '(GNU|with BFD)' > /dev/null; then
 	test "$with_gnu_ld" != no && break
       else
-        test "$with_gnu_ld" != yes && break
+	test "$with_gnu_ld" != yes && break
       fi
     fi
   done
@@ -3226,10 +3262,10 @@ else
 fi
 test -z "$LD" && AC_MSG_ERROR([no acceptable ld found in \$PATH])
 AC_SUBST(LD)
-AM_PROG_LD_GNU
+AC_PROG_LD_GNU
 ])
 
-AC_DEFUN(AM_PROG_LD_GNU,
+AC_DEFUN(AC_PROG_LD_GNU,
 [AC_CACHE_CHECK([if the linker ($LD) is GNU ld], ac_cv_prog_gnu_ld,
 [# I'd rather use --version here, but apparently some GNU ld's only accept -v.
 if $LD -v 2>&1 </dev/null | egrep '(GNU|with BFD)' 1>&5; then
@@ -3239,8 +3275,8 @@ else
 fi])
 ])
 
-# AM_PROG_NM - find the path to a BSD-compatible name lister
-AC_DEFUN(AM_PROG_NM,
+# AC_PROG_NM - find the path to a BSD-compatible name lister
+AC_DEFUN(AC_PROG_NM,
 [AC_MSG_CHECKING([for BSD-compatible nm])
 AC_CACHE_VAL(ac_cv_path_NM,
 [if test -n "$NM"; then
@@ -3248,20 +3284,22 @@ AC_CACHE_VAL(ac_cv_path_NM,
   ac_cv_path_NM="$NM"
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in /usr/ucb /usr/ccs/bin $PATH /bin; do
+  for ac_dir in $PATH /usr/ccs/bin /usr/ucb /bin; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/nm; then
       # Check to see if the nm accepts a BSD-compat flag.
       # Adding the `sed 1q' prevents false positives on HP-UX, which says:
       #   nm: unknown option "B" ignored
       if ($ac_dir/nm -B /dev/null 2>&1 | sed '1q'; exit 0) | egrep /dev/null >/dev/null; then
-        ac_cv_path_NM="$ac_dir/nm -B"
+	ac_cv_path_NM="$ac_dir/nm -B"
+	break
       elif ($ac_dir/nm -p /dev/null 2>&1 | sed '1q'; exit 0) | egrep /dev/null >/dev/null; then
-        ac_cv_path_NM="$ac_dir/nm -p"
+	ac_cv_path_NM="$ac_dir/nm -p"
+	break
       else
-        ac_cv_path_NM="$ac_dir/nm"
+	ac_cv_path_NM=${ac_cv_path_NM="$ac_dir/nm"} # keep the first match, but
+	continue # so that we can try to find one that supports BSD flags
       fi
-      break
     fi
   done
   IFS="$ac_save_ifs"
@@ -3272,11 +3310,11 @@ AC_MSG_RESULT([$NM])
 AC_SUBST(NM)
 ])
 
-# AM_SYS_NM_PARSE - Check for command ro grab the raw symbol name followed
+# AC_SYS_NM_PARSE - Check for command ro grab the raw symbol name followed
 # by C symbol name from nm.
-AC_DEFUN(AM_SYS_NM_PARSE,
+AC_DEFUN(AC_SYS_NM_PARSE,
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl
-AC_REQUIRE([AM_PROG_NM])dnl
+AC_REQUIRE([AC_PROG_NM])dnl
 # Check for command to grab the raw symbol name followed by C symbol from nm.
 AC_MSG_CHECKING([command to parse $NM output])
 AC_CACHE_VAL(ac_cv_sys_global_symbol_pipe,
@@ -3285,7 +3323,7 @@ AC_CACHE_VAL(ac_cv_sys_global_symbol_pipe,
 
 changequote(,)dnl
 # Character class describing NM global symbol codes.
-ac_symcode='[BCDEGRSTU]'
+ac_symcode='[BCDEGRST]'
 
 # Regexp to match symbols that can be accessed directly from C.
 ac_sympat='\([_A-Za-z][_A-Za-z0-9]*\)'
@@ -3296,41 +3334,37 @@ ac_symxfrm='\1 \1'
 # Define system-specific variables.
 case "$host_os" in
 aix*)
-  ac_symcode='[BCDTU]'
+  ac_symcode='[BCDT]'
   ;;
-sunos* | cygwin32* | mingw32*)
-  ac_sympat='_\([_A-Za-z][_A-Za-z0-9]*\)'
-  ac_symxfrm='_\1 \1'
+cygwin* | mingw*)
+  ac_symcode='[ABCDGISTW]'
   ;;
 irix*)
-  # Cannot use undefined symbols on IRIX because inlined functions mess us up.
   ac_symcode='[BCDEGRST]'
   ;;
 solaris*)
-  ac_symcode='[BDTU]'
+  ac_symcode='[BDT]'
   ;;
 esac
 
 # If we're using GNU nm, then use its standard symbol codes.
 if $NM -V 2>&1 | egrep '(GNU|with BFD)' > /dev/null; then
-  ac_symcode='[ABCDGISTUW]'
-fi
-
-case "$host_os" in
-cygwin32* | mingw32*)
-  # We do not want undefined symbols on cygwin32.  The user must
-  # arrange to define them via -l arguments.
   ac_symcode='[ABCDGISTW]'
-  ;;
-esac
+fi
 changequote([,])dnl
 
-# Write the raw and C identifiers.
-ac_cv_sys_global_symbol_pipe="sed -n -e 's/^.* $ac_symcode $ac_sympat$/$ac_symxfrm/p'"
+# Try without a prefix undercore, then with it.
+for ac_symprfx in "" "_"; do
 
-# Check to see that the pipe works correctly.
-ac_pipe_works=no
-cat > conftest.$ac_ext <<EOF
+  # Write the raw and C identifiers.
+  # Unlike in ltconfig.in, we need $ac_symprfx before $ac_symxfrm here,
+  # otherwise AC_SYS_SYMBOL_UNDERSCORE will always be false
+  ac_cv_sys_global_symbol_pipe="sed -n -e 's/^.*[ 	]$ac_symcode[ 	][ 	]*$ac_symprfx$ac_sympat$/$ac_symprfx$ac_symxfrm/p'"
+
+  # Check to see that the pipe works correctly.
+  ac_pipe_works=no
+  rm -f conftest.$ac_ext
+  cat > conftest.$ac_ext <<EOF
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -3341,96 +3375,100 @@ void nm_test_func(){}
 #endif
 int main(){nm_test_var='a';nm_test_func;return 0;}
 EOF
-if AC_TRY_EVAL(ac_compile); then
-  # Now try to grab the symbols.
-  ac_nlist=conftest.nm
-  if AC_TRY_EVAL(NM conftest.$ac_objext \| $ac_cv_sys_global_symbol_pipe \> $ac_nlist) && test -s "$ac_nlist"; then
 
-    # Try sorting and uniquifying the output.
-    if sort "$ac_nlist" | uniq > "$ac_nlist"T; then
-      mv -f "$ac_nlist"T "$ac_nlist"
-      ac_wcout=`wc "$ac_nlist" 2>/dev/null`
-changequote(,)dnl
-      ac_count=`echo "X$ac_wcout" | sed -e 's,^X,,' -e 's/^[ 	]*\([0-9][0-9]*\).*$/\1/'`
-changequote([,])dnl
-      (test "$ac_count" -ge 0) 2>/dev/null || ac_count=-1
-    else
-      rm -f "$ac_nlist"T
-      ac_count=-1
-    fi
+  if AC_TRY_EVAL(ac_compile); then
+    # Now try to grab the symbols.
+    ac_nlist=conftest.nm
+  
+    if AC_TRY_EVAL(NM conftest.$ac_objext \| $ac_cv_sys_global_symbol_pipe \> $ac_nlist) && test -s "$ac_nlist"; then
 
-    # Make sure that we snagged all the symbols we need.
-    if egrep ' nm_test_var$' "$ac_nlist" >/dev/null; then
-      if egrep ' nm_test_func$' "$ac_nlist" >/dev/null; then
-	cat <<EOF > conftest.c
+      # Try sorting and uniquifying the output.
+      if sort "$ac_nlist" | uniq > "$ac_nlist"T; then
+	mv -f "$ac_nlist"T "$ac_nlist"
+      else
+	rm -f "$ac_nlist"T
+      fi
+
+      # Make sure that we snagged all the symbols we need.
+      if egrep ' nm_test_var$' "$ac_nlist" >/dev/null; then
+	if egrep ' nm_test_func$' "$ac_nlist" >/dev/null; then
+	  cat <<EOF > conftest.c
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 EOF
-        # Now generate the symbol file.
-        sed 's/^.* \(.*\)$/extern char \1;/' < "$ac_nlist" >> conftest.c
+	  # Now generate the symbol file.
+	  sed 's/^.* \(.*\)$/extern char \1;/' < "$ac_nlist" >> conftest.c
 
-	cat <<EOF >> conftest.c
+	  cat <<EOF >> conftest.c
 #if defined (__STDC__) && __STDC__
-# define __ptr_t void *
+# define lt_ptr_t void *
 #else
-# define __ptr_t char *
+# define lt_ptr_t char *
+# define const
 #endif
 
-/* The number of symbols in dld_preloaded_symbols, -1 if unsorted. */
-int dld_preloaded_symbol_count = $ac_count;
-
 /* The mapping between symbol names and symbols. */
-struct {
-  char *name;
-  __ptr_t address;
+const struct {
+  const char *name;
+  lt_ptr_t address;
 }
 changequote(,)dnl
-dld_preloaded_symbols[] =
+lt_preloaded_symbols[] =
 changequote([,])dnl
 {
 EOF
-        sed 's/^\(.*\) \(.*\)$/  {"\1", (__ptr_t) \&\2},/' < "$ac_nlist" >> conftest.c
-        cat <<\EOF >> conftest.c
-  {0, (__ptr_t) 0}
+	sed 's/^\(.*\) \(.*\)$/  {"\1", (lt_ptr_t) \&\2},/' < "$ac_nlist" >> conftest.c
+	cat <<\EOF >> conftest.c
+  {0, (lt_ptr_t) 0}
 };
 
 #ifdef __cplusplus
 }
 #endif
 EOF
-        # Now try linking the two files.
-        mv conftest.$ac_objext conftestm.$ac_objext
-	ac_save_LIBS="$LIBS"
-	ac_save_CFLAGS="$CFLAGS"
-        LIBS="conftestm.$ac_objext"
-	CFLAGS="$CFLAGS$no_builtin_flag"
-        if AC_TRY_EVAL(ac_link) && test -s conftest; then
-          ac_pipe_works=yes
-        else
-          echo "configure: failed program was:" >&AC_FD_CC
-          cat conftest.c >&AC_FD_CC
-        fi
-        LIBS="$ac_save_LIBS"
-	CFLAGS="$ac_save_CFLAGS"
+	  # Now try linking the two files.
+	  mv conftest.$ac_objext conftestm.$ac_objext
+	  ac_save_LIBS="$LIBS"
+	  ac_save_CFLAGS="$CFLAGS"
+	  LIBS="conftestm.$ac_objext"
+	  CFLAGS="$CFLAGS$no_builtin_flag"
+	  if AC_TRY_EVAL(ac_link) && test -s conftest; then
+	    ac_pipe_works=yes
+	  else
+	    echo "configure: failed program was:" >&AC_FD_CC
+	    cat conftest.c >&AC_FD_CC
+	  fi
+	  LIBS="$ac_save_LIBS"
+	  CFLAGS="$ac_save_CFLAGS"
+	else
+	  echo "cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
+	fi
       else
-        echo "cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
+	echo "cannot find nm_test_var in $ac_nlist" >&AC_FD_CC
       fi
     else
-      echo "cannot find nm_test_var in $ac_nlist" >&AC_FD_CC
+      echo "cannot run $ac_cv_sys_global_symbol_pipe" >&AC_FD_CC
     fi
   else
-    echo "cannot run $ac_cv_sys_global_symbol_pipe" >&AC_FD_CC
+    echo "$progname: failed program was:" >&AC_FD_CC
+    cat conftest.c >&AC_FD_CC
   fi
-else
-  echo "$progname: failed program was:" >&AC_FD_CC
-  cat conftest.c >&AC_FD_CC
-fi
-rm -rf conftest*
+  rm -rf conftest*
 
-# Do not use the global_symbol_pipe unless it works.
-test "$ac_pipe_works" = yes || ac_cv_sys_global_symbol_pipe=
+  # Do not use the global_symbol_pipe unless it works.
+  if test "$ac_pipe_works" = yes; then
+    if test x"$ac_symprfx" = x"_"; then
+      ac_cv_sys_symbol_underscore=yes
+    else
+      ac_cv_sys_symbol_underscore=no
+    fi
+    break
+  else
+    ac_cv_sys_global_symbol_pipe=
+  fi
+done
 ])
 
 ac_result=yes
@@ -3440,23 +3478,23 @@ fi
 AC_MSG_RESULT($ac_result)
 ])
 
-# AM_SYS_LIBTOOL_CYGWIN32 - find tools needed on cygwin32
-AC_DEFUN(AM_SYS_LIBTOOL_CYGWIN32,
+# AC_SYS_LIBTOOL_CYGWIN - find tools needed on cygwin
+AC_DEFUN(AC_SYS_LIBTOOL_CYGWIN,
 [AC_CHECK_TOOL(DLLTOOL, dlltool, false)
 AC_CHECK_TOOL(AS, as, false)
 ])
 
-AC_DEFUN(AM_SET_LIBTOOL_VARIABLE,
+AC_DEFUN(AC_SET_LIBTOOL_VARIABLE,
 [# Always use our own libtool.
 LIBTOOL='$(SHELL) $(top_builddir)/libtool $1'
 AC_SUBST(LIBTOOL)dnl
 ])
 
-# AM_SYS_SYMBOL_UNDERSCORE - does the compiler prefix global symbols
+# AC_SYS_SYMBOL_UNDERSCORE - does the compiler prefix global symbols
 #                            with an underscore?
-AC_DEFUN(AM_SYS_SYMBOL_UNDERSCORE,
-[AC_REQUIRE([AM_PROG_NM])dnl
-AC_REQUIRE([AM_SYS_NM_PARSE])dnl
+AC_DEFUN(AC_SYS_SYMBOL_UNDERSCORE,
+[AC_REQUIRE([AC_PROG_NM])dnl
+AC_REQUIRE([AC_SYS_NM_PARSE])dnl
 AC_MSG_CHECKING([for _ prefix in compiled symbols])
 AC_CACHE_VAL(ac_cv_sys_symbol_underscore,
 [ac_cv_sys_symbol_underscore=no
@@ -3473,9 +3511,9 @@ if AC_TRY_EVAL(ac_compile); then
       ac_cv_sys_symbol_underscore=yes
     else
       if egrep '^nm_test_func ' "$ac_nlist" >/dev/null; then
-        :
+	:
       else
-        echo "configure: cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
+	echo "configure: cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
       fi
     fi
   else
@@ -3488,8 +3526,24 @@ fi
 rm -rf conftest*
 ])
 AC_MSG_RESULT($ac_cv_sys_symbol_underscore)
-if test x$ac_cv_sys_symbol_underscore = xyes; then
-  AC_DEFINE(WITH_SYMBOL_UNDERSCORE,1,
-  [define if compiled symbols have a leading underscore])
-fi
+USE_SYMBOL_UNDERSCORE=${ac_cv_sys_symbol_underscore=no}
+AC_SUBST(USE_SYMBOL_UNDERSCORE)dnl
 ])
+
+# AC_CHECK_LIBM - check for math library
+AC_DEFUN(AC_CHECK_LIBM, [
+AC_CHECK_LIB(mw, _mwvalidcheckl)
+AC_CHECK_LIB(m, cos)
+])
+
+dnl old names
+AC_DEFUN(AM_PROG_LIBTOOL, [indir([AC_PROG_LIBTOOL])])dnl
+AC_DEFUN(AM_ENABLE_SHARED, [indir([AC_ENABLE_SHARED], $@)])dnl
+AC_DEFUN(AM_ENABLE_STATIC, [indir([AC_ENABLE_STATIC], $@)])dnl
+AC_DEFUN(AM_DISABLE_SHARED, [indir([AC_DISABLE_SHARED], $@)])dnl
+AC_DEFUN(AM_DISABLE_STATIC, [indir([AC_DISABLE_STATIC], $@)])dnl
+AC_DEFUN(AM_PROG_LD, [indir([AC_PROG_LD])])dnl
+AC_DEFUN(AM_PROG_NM, [indir([AC_PROG_NM])])dnl
+AC_DEFUN(AM_SYS_NM_PARSE, [indir([AC_SYS_NM_PARSE])])dnl
+AC_DEFUN(AM_SYS_SYMBOL_UNDERSCORE, [indir([AC_SYS_SYMBOL_UNDERSCORE])])dnl
+AC_DEFUN(AM_SYS_LIBTOOL_CYGWIN, [indir([AC_SYS_LIBTOOL_CYGWIN])])dnl

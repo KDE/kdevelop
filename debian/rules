@@ -6,8 +6,7 @@ build:
 	dh_testdir
 	( CFLAGS="-g -O2 -pipe -Wall" \
 	  CXXFLAGS="$$CFLAGS" \
-	  ./configure --with-install-root=`pwd`/debian/tmp \
-	  --enable-debug --disable-rpath )
+	  ./configure --enable-debug --disable-rpath )
  
 	make 
 
@@ -33,7 +32,7 @@ binary-arch:	build
 	dh_testroot
 	dh_testdir
 	-rm -rf debian/tmp
-	make install 
+	make install DESTDIR=`pwd`/debian/tmp
 	chmod a+x debian/kderules
 	debian/kderules
 	dh_movefiles
