@@ -41,15 +41,17 @@
  * \author rokrau@yahoo.com
  **/
 class CTag {
+  enum pointTo {tFile,tDefinition,tDeclaration};
 public:
   /** default constructor */
   CTag() :
     m_file(QString::null), m_excmd(QString::null),
-    m_ext(QString::null), m_type(' ')
+    m_ext(QString::null), m_type(' '), m_pointTo(tDeclaration)
     {}
   /** constructor, requires filename, ex command and extension as arguments */
   CTag(QString _file, QString _excmd, QString _ext) :
-    m_file(_file), m_excmd(_excmd), m_ext(_ext), m_type(' ')
+    m_file(_file), m_excmd(_excmd), m_ext(_ext), m_type(' '),
+    m_pointTo(tDeclaration)
     {
       parse_ext();
     }
@@ -58,7 +60,13 @@ public:
   /** return the tag type */
   char type() const {return m_type;}
   /** return a string characterizing the tag type */
-  QString kind() const ;
+  QString typeName() const ;
+  /** return true if the tag points to a file */
+  bool isFile() const ;
+  /** return true if the tag points to definition */
+  bool isDefinition() const ;
+  /** return true if the tag points to declaration */
+  bool isDeclaration() const ;
   /** return the file name */
   QString file() const {return m_file;}
   /** return stripped search pattern for kwrite based editor */
@@ -70,10 +78,11 @@ public:
 protected:
   void parse_ext(); // parse exuberant extension
 private:
-  QString m_file;   // file name
-  QString m_excmd;  // vi (ex) search command
-  QString m_ext;    // exuberant ctags extension
-  char    m_type;   // tag type from ctags extension
+  QString m_file;     // file name
+  QString m_excmd;    // vi (ex) search command
+  QString m_ext;      // exuberant ctags extension
+  char    m_type;     // tag type from ctags extension
+  pointTo m_pointTo;  // strictly internal, what the tag points to
 };
 /**
  * \class CTagList
@@ -103,16 +112,16 @@ public:
   QString tag() const {return m_tag;}
   /** return number of file tags */
   int nFileTags() const {return m_nfiles;}
-  /** return all file tags */
-  CTagList getFileTags() const ;
+//  /** return all file tags */
+//  CTagList getFileTags() const ;
   /** return number of definition tags */
   int nDefinitionTags() const {return m_ndefinitions;}
-  /** return all definition tags */
-  CTagList getDefinitionTags() const ;
+//  /** return all definition tags */
+//  CTagList getDefinitionTags() const ;
   /** return number of Declaration tags */
   int nDeclarationTags() const {return m_ndeclarations;}
-  /** return all declaration tags */
-  CTagList getDeclarationTags() const ;
+//  /** return all declaration tags */
+//  CTagList getDeclarationTags() const ;
 private:
   QString m_tag;       // tag name
   int m_nfiles;        // number of file tags

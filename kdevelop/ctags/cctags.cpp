@@ -50,6 +50,31 @@ void CTag::parse_ext()
     if (key=="kind")
     {
       m_type = value[0].latin1();
+      switch (m_type) {
+        case 'F': // filename
+          m_pointTo = tFile;
+        break;
+        case 'd': // macro definitions (and #undef names)
+        case 'f': // function definitions
+        case 'S': // subroutines (fortran)
+        case 't': // typedefs
+        case 'v': // variable definitions
+          m_pointTo = tDefinition;
+        break;
+        case 'c': // classes
+        case 'e': // enumerators
+        case 'g': // enumeration names
+        case 'L': // fortran locals
+        case 'm': // class, struct, or union members
+        case 'n': // namespaces
+        case 'p': // function prototypes and declarations
+        case 's': // structure names
+        case 'u': // union names
+        case 'x': // extern and forward variable declarations
+        default:
+          m_pointTo = tDeclaration;
+        break;
+      }
     }
     // Indicates the visibility of this class member
     else if (key=="acces") {}
@@ -75,7 +100,7 @@ int CTag::line() const
   return ok?l:1;
 }
 /** return a string characterizing the tag type */
-QString CTag::kind() const
+QString CTag::typeName() const
 {
   QString s;
   switch (m_type) {
@@ -133,106 +158,101 @@ QString CTag::kind() const
   }
   return s;
 }
+/** return true if the tag points to a file */
+bool CTag::isFile() const
+{
+  return (m_pointTo==tFile?true:false);
+}
+/** return true if the tag points to definition */
+bool CTag::isDefinition() const
+{
+  return (m_pointTo==tDefinition?true:false);
+}
+/** return true if the tag points to declaration */
+bool CTag::isDeclaration() const
+{
+  return (m_pointTo==tDeclaration?true:false);
+}
 /** append a CTag to the list and count it */
 CTagList::Iterator CTagList::append(const CTag& ctag)
 {
-  char t = ctag.type();
-  switch (t) {
-    case 'F': // filename
-      m_nfiles++;
-    break;
-    case 'd': // macro definitions (and #undef names)
-    case 'f': // function definitions
-    case 'S': // subroutines (fortran)
-    case 't': // typedefs
-    case 'v': // variable definitions
-      m_ndefinitions++;
-    break;
-    case 'c': // classes
-    case 'e': // enumerators
-    case 'g': // enumeration names
-    case 'L': // fortran locals
-    case 'm': // class, struct, or union members
-    case 'n': // namespaces
-    case 'p': // function prototypes and declarations
-    case 's': // structure names
-    case 'u': // union names
-    case 'x': // extern and forward variable declarations
-    default:
-      m_ndeclarations++;
-    break;
-  }
-    return QValueList<CTag>::append(ctag);
+  if (ctag.isDeclaration())
+    m_ndeclarations++;
+  else if (ctag.isDefinition())
+    m_ndefinitions++;
+  else if (ctag.isFile())
+    m_nfiles++;
+  return QValueList<CTag>::append(ctag);
 }
 
-/** return all file tags */
-CTagList CTagList::getFileTags() const {
-  CTagList fileTags(m_tag);
-  int ntags = count();
-  for (int it=0; it<ntags; ++it)
-  {
-    const CTag& ctag = (*this)[it];
-    char t = ctag.type();
-    if (t=='F'){
-      fileTags.QValueList<CTag>::append(ctag);
-      fileTags.m_nfiles++;
-    }
-  }
-  return fileTags;
-}
-
-/** return all definition tags */
-CTagList CTagList::getDefinitionTags() const {
-  CTagList fileTags(m_tag);
-  int ntags = count();
-  for (int it=0; it<ntags; ++it)
-  {
-    const CTag& ctag = (*this)[it];
-    char t = ctag.type();
-    switch (t) {
-      case 'd': // macro definitions (and #undef names)
-      case 'f': // function definitions
-      case 'S': // subroutines (fortran)
-      case 't': // typedefs
-      case 'v': // variable definitions
-        fileTags.QValueList<CTag>::append(ctag);
-        fileTags.m_ndefinitions++;
-      break;
-      default:
-      break;
-    }
-  }
-  return fileTags;
-}
-
-/** return all declaration tags */
-CTagList CTagList::getDeclarationTags() const {
-  CTagList fileTags(m_tag);
-  int ntags = count();
-  for (int it=0; it<ntags; ++it)
-  {
-    const CTag& ctag = (*this)[it];
-    char t = ctag.type();
-    switch (t) {
-      case 'c': // classes
-      case 'e': // enumerators
-      case 'g': // enumeration names
-      case 'L': // fortran locals
-      case 'm': // class, struct, or union members
-      case 'n': // namespaces
-      case 'p': // function prototypes and declarations
-      case 's': // structure names
-      case 'u': // union names
-      case 'x': // extern and forward variable declarations
-        fileTags.QValueList<CTag>::append(ctag);
-        fileTags.m_ndeclarations++;
-      break;
-      default:
-      break;
-    }
-  }
-  return fileTags;
-}
+///** return all file tags */
+//CTagList CTagList::getFileTags() const {
+//  CTagList fileTags(m_tag);
+//  int ntags = count();
+//  for (int it=0; it<ntags; ++it)
+//  {
+//    const CTag& ctag = (*this)[it];
+//    char t = ctag.type();
+//    if (t=='F'){
+//      fileTags.QValueList<CTag>::append(ctag);
+//      fileTags.m_nfiles++;
+//    }
+//  }
+//  return fileTags;
+//}
+//
+///** return all definition tags */
+//CTagList CTagList::getDefinitionTags() const {
+//  CTagList fileTags(m_tag);
+//  int ntags = count();
+//  for (int it=0; it<ntags; ++it)
+//  {
+//    const CTag& ctag = (*this)[it];
+//    char t = ctag.type();
+//    switch (t) {
+//      case 'd': // macro definitions (and #undef names)
+//      case 'f': // function definitions
+//      case 'S': // subroutines (fortran)
+//      case 't': // typedefs
+//      case 'v': // variable definitions
+//        fileTags.QValueList<CTag>::append(ctag);
+//        fileTags.m_ndefinitions++;
+//      break;
+//      default:
+//      break;
+//    }
+//  }
+//  return fileTags;
+//}
+//
+///** return all declaration tags */
+//CTagList CTagList::getDeclarationTags() const {
+//  CTagList fileTags(m_tag);
+//  int ntags = count();
+//  for (int it=0; it<ntags; ++it)
+//  {
+//    const CTag& ctag = (*this)[it];
+//    char t = ctag.type();
+//    switch (t) {
+//      case 'c': // classes
+//      case 'e': // enumerators
+//      case 'g': // enumeration names
+//      case 'L': // fortran locals
+//      case 'm': // class, struct, or union members
+//      case 'n': // namespaces
+//      case 'p': // function prototypes and declarations
+//      case 's': // structure names
+//      case 'u': // union names
+//      case 'x': // extern and forward variable declarations
+//        fileTags.QValueList<CTag>::append(ctag);
+//        fileTags.m_ndeclarations++;
+//      break;
+//      default:
+//      break;
+//    }
+//  }
+//  return fileTags;
+//}
 
 CTagsDataBase::CTagsDataBase()
   : m_init(false), m_taglistdict(17,true), m_filelist()

@@ -39,7 +39,7 @@ searchTagsDialogImpl::searchTagsDialogImpl( QWidget* parent,  const char* name, 
   tagtypeComboBox->insertItem(QString("declarations"));
 }
 
-/*  
+/*
  *  Destroys the object and frees any allocated resources
  */
 searchTagsDialogImpl::~searchTagsDialogImpl()
@@ -47,7 +47,14 @@ searchTagsDialogImpl::~searchTagsDialogImpl()
     // no need to delete child widgets, Qt does it all for us
 }
 
-/* 
+/*
+ *  Set the current Tag type in the dialog combo box
+ */
+void searchTagsDialogImpl::setTagType(tagType type)
+{
+  tagtypeComboBox->setCurrentItem(type);
+}
+/*
  * public slot slotLBItemSelected(int i)
  * The slot gets called upon double click on an item in the
  * QListBox, it emits a signal that is connected to a method
@@ -65,6 +72,7 @@ void searchTagsDialogImpl::slotLBItemSelected(int i)
  */
 void searchTagsDialogImpl::slotClear()
 {
+  m_currentTagList.clear();
   tagsListBox->clear();
 }
 /*
@@ -85,15 +93,6 @@ void searchTagsDialogImpl::slotSearchTag()
       int ntags = taglist->count();
       kdDebug() << "found: " << ntags << " entries for: "
                 << searchtext << "\n";
-      if (taglist->nFileTags()) {
-        kdDebug() << "number of FileTags: " << taglist->nFileTags() << "\n";
-      }
-      if (taglist->nDefinitionTags()) {
-        kdDebug() << "number of DefinitionTags: " << taglist->nDefinitionTags() << "\n";
-      }
-      if (taglist->nDeclarationTags()) {
-        kdDebug() << "number of DeclarationTags: " << taglist->nDeclarationTags() << "\n";
-      }
       setSearchResult(*taglist);
     }
   }
@@ -101,16 +100,36 @@ void searchTagsDialogImpl::slotSearchTag()
 
 void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
 {
+  tagType currentTagType = (tagType)tagtypeComboBox->currentItem();
   searchTagLineEdit->setText(taglist.tag());
   int ntags = taglist.count();
+  bool append = false;
   for (int it=0; it<ntags; ++it)
   {
-    const CTag& tag = taglist[it];
-    QString line = tag.kind() + ", in ";
-    line = line + tag.file();
-    line = line + ", line: ";
-    line = line + QString::number(tag.line());
-    tagsListBox->insertItem(line);
+    const CTag& ctag = taglist[it];
+    switch (currentTagType) {
+      case file:
+        if (ctag.isFile()) append = true;
+      break;
+      case definition:
+        if (ctag.isDefinition()) append = true;
+      break;
+      case declaration:
+        if (ctag.isDeclaration()) append = true;
+      break;
+      case all:
+        append = true;
+      default:
+      break;
+    }
+    if (append) {
+      m_currentTagList.QValueList<CTag>::append(ctag);
+      QString line = ctag.typeName() + ", in ";
+      line = line + ctag.file();
+      line = line + ", line: ";
+      line = line + QString::number(ctag.line());
+      tagsListBox->insertItem(line);
+    }
+    append = false;
   }
-  m_currentTagList = taglist;
 }

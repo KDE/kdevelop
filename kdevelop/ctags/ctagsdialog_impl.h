@@ -24,8 +24,15 @@ class searchTagsDialogImpl : public searchTagsDialog
     Q_OBJECT
 
 public:
+    enum tagType {
+      all,
+      file,
+      definition,
+      declaration
+    };
     searchTagsDialogImpl( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~searchTagsDialogImpl();
+    void setTagType(tagType type);
     void setSearchResult(const CTagList& taglist);
 
 public slots:

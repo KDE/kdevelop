@@ -69,6 +69,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->setItemEnabled(ID_EDIT_PASTE,false);
 
   pop->insertSeparator();
+  pop->insertItem(/*SmallIconSet("grep"),*/i18n("Switch Header/Source"),this,SLOT(slotEmitTagSwitchTo()),0,ID_EDIT_TAGS_SWITCH);
   pop->insertItem(/*SmallIconSet("grep"),*/i18n("Open File"),this,SLOT(slotEmitTagOpenFile()),0,ID_EDIT_TAGS_OPEN);
   pop->insertItem(/*SmallIconSet("grep"),*/i18n("Goto Definition"),this,SLOT(slotEmitTagDefinition()),0,ID_EDIT_TAGS_DEFINITION);
   pop->insertItem(/*SmallIconSet("grep"),*/i18n("Goto Declaration"),this,SLOT(slotEmitTagDeclaration()),0,ID_EDIT_TAGS_DECLARATION);
@@ -349,7 +350,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
 
-    // these are disabled by default
+    pop->setItemEnabled(ID_EDIT_TAGS_SWITCH,true);
     pop->setItemEnabled(ID_EDIT_TAGS_OPEN,false);
     pop->setItemEnabled(ID_EDIT_TAGS_DEFINITION,false);
     pop->setItemEnabled(ID_EDIT_TAGS_DECLARATION,false);
@@ -399,6 +400,23 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
  *                                                                   *
  ********************************************************************/
 
+void CEditWidget::slotEmitTagSwitchTo(){
+  // switch to header/source file (proof of concept, i.e. quick hack)
+  QFileInfo curFileInfo = QFileInfo(getName());
+  QString curFileName = curFileInfo.fileName();
+  QString curFileExt = curFileInfo.extension(FALSE);
+  QString switchToName = curFileInfo.baseName();
+  if ((curFileExt[0]=='h')||(curFileExt[0]=='H')) {
+    switchToName = switchToName + ".cpp";
+  }
+  else if ((curFileExt[0]=='c')||(curFileExt[0]=='C')) {
+    switchToName = switchToName + ".h";
+  }
+  kdDebug() << "in CEditWidget::slotEmitTagSwitchTo():\n";
+  kdDebug() << "current filename: " << curFileName << "\n";
+  kdDebug() << "switch to filename: " << switchToName << "\n";
+  emit tagOpenFile(switchToName);
+}
 void CEditWidget::slotEmitTagOpenFile(){
   emit tagOpenFile(searchtext);
 }

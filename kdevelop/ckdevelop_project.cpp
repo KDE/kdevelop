@@ -1628,18 +1628,24 @@ void CKDevelop::slotTagDefinition(QString text)
     if (const CTagList* taglist = tagsDB.ctaglist(text))
     {
       int nDefTags = taglist->nDefinitionTags();
-      CTagList defTagList = taglist->getDefinitionTags();
+      //CTagList defTagList = taglist->getDefinitionTags();
       kdDebug() << "found: " << nDefTags << " definition entries for: "
                 << text << "\n";
       /* if we find only one instance of the tag we can directly
        * goto the line in the file */
       if (nDefTags == 1) {
-        slotTagGotoFile(&defTagList[0]);
+        int nTags = taglist->count();
+        for (int i=0;i<nTags;++i){
+          if ((*taglist)[i].isDefinition())
+            slotTagGotoFile(&(*taglist)[i]);
+        }
       }
       /* in the case of multiple instances we show a dialog
        * and let the user pick where he wants to go */
       else {
-        ctags_dlg->setSearchResult(defTagList);
+        ctags_dlg->slotClear();
+        ctags_dlg->setTagType(searchTagsDialogImpl::definition);
+        ctags_dlg->setSearchResult(*taglist);
         ctags_dlg->show();
         ctags_dlg->raise();
       }
@@ -1658,18 +1664,24 @@ void CKDevelop::slotTagDeclaration(QString text)
     if (const CTagList* taglist = tagsDB.ctaglist(text))
     {
       int nDecTags = taglist->nDeclarationTags();
-      CTagList decTagList = taglist->getDeclarationTags();
+      //CTagList decTagList = taglist->getDeclarationTags();
       kdDebug() << "found: " << nDecTags << " declaration entries for: "
                 << text << "\n";
       /* if we find only one instance of the tag we can directly
        * goto the line in the file */
       if (nDecTags == 1) {
-        slotTagGotoFile(&decTagList[0]);
+        int nTags = taglist->count();
+        for (int i=0;i<nTags;++i){
+          if ((*taglist)[i].isDeclaration())
+            slotTagGotoFile(&(*taglist)[i]);
+        }
       }
       /* in the case of multiple instances we show a dialog
        * and let the user pick where he wants to go */
       else {
-        ctags_dlg->setSearchResult(decTagList);
+        ctags_dlg->slotClear();
+        ctags_dlg->setTagType(searchTagsDialogImpl::declaration);
+        ctags_dlg->setSearchResult(*taglist);
         ctags_dlg->show();
         ctags_dlg->raise();
       }

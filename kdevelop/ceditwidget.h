@@ -207,6 +207,7 @@ protected: // Protected methods
 protected slots:
   void slotLookUp();
   void slotManpage();
+  void slotEmitTagSwitchTo();
   void slotEmitTagOpenFile();
   void slotEmitTagDefinition();
   void slotEmitTagDeclaration();
