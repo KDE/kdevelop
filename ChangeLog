@@ -1,5 +1,6 @@
 2002-11-16  Harald Fernengel <harry@kdevelop.org>
     * Added ability to raise the left/right/bottom toolviews in IDEAl mode
+    * Added tooltips for IDEAl buttons
     * appwizard now handles special characters better
 
 2002-11-09  August Hörandl  <august.hoerandl@gmx.at>
