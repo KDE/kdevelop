@@ -46,6 +46,7 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include <qvbox.h>
+#include <qfileinfo.h>
 #include <kdialogbase.h>
 
 
@@ -119,23 +120,31 @@ ProblemReporter::~ProblemReporter()
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
     if( !part )
-        return;
+	return;
     
-    if( m_editor )
+    if( m_editor ){
 	reparse();
-		
-    m_document = dynamic_cast<KTextEditor::Document*>( part );
-    if( m_document ){
-        m_filename = m_document->url().path();
+	disconnect( m_document, 0, this, 0 );
     }
-
-    m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
-    if( m_editor )
-        connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-
-	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
     
-	m_timer->changeInterval( m_delay );
+    m_document = dynamic_cast<KTextEditor::Document*>( part );
+    
+    if( m_document ) {
+	m_filename = m_document->url().path();
+		
+	if( m_cppSupport->fileExtensions().contains(QFileInfo(m_filename).extension()) ){
+	    
+	    m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
+	    if( !m_editor )
+		return;
+	    
+	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+	    
+	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+	    
+	    m_timer->changeInterval( m_delay );
+	}
+    }
 }
 
 void ProblemReporter::slotTextChanged()

@@ -71,6 +71,9 @@ public:
      */
     static QString ppFileExt( ){ return "-pp.pcs"; };
 
+
+    QStringList fileExtensions( ) const;
+
 protected:
     virtual KDevLanguageSupport::Features features();
     virtual QStringList fileFilters();
@@ -152,8 +155,6 @@ private:
     CClassParser *m_pParser;
     CppCodeCompletion* m_pCompletion;
     CClassParser* m_pCCParser;
-
-    QStringList fileExtensions( );
 
     bool withcpp;
     QString m_contextFileName;

@@ -554,7 +554,7 @@ QString CppSupportPart::unformatClassName(const QString &name)
 }
 
 
-QStringList CppSupportPart::fileExtensions()
+QStringList CppSupportPart::fileExtensions() const
 {
     if (withcpp)
         return QStringList::split(",", "c,C,cc,cpp,c++,cxx,m,mm,M,h,H,hh,hxx,hpp,inl,tlh,diff");
