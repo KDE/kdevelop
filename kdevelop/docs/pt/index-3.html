@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Programas</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Página seguinte</A>
+ <A HREF="index-2.html">Página anterior</A>
+ <A HREF="index.html#toc3">Índice geral</A>
+</P>
+<H3><A NAME="Programs"></A> <A NAME="s3">3. Programas</A></H3>
+
+<P>Agora que o KDevelop foi instalado com sucesso e as opções mais utilizadas estão configuradas, você está provavelmente a perguntar-se se o programa
+cumprirá as expectativas. Este capítulo dá-lhe as linhas mestras sobre como os programas são criados utilizando as ferramentas GNU em geral e especificamente
+que papel o KDevelop tem neste jogo.
+<H3><A NAME="O Compilador"></A> <A NAME="ss3.1">3.1 The Compiler</A>
+</H3>
+
+<P>O compilador é na realidade o programa no seu sistema que tem de estar instalado como um mínimo para criar programas executáveis; é ele que
+compila o código fonte em ficheiros objecto e cria o programa.
+<P>Normalmente, você iniciaria assim:
+Abra um editor da sua preferência - não utilize um processador de texto. Escreva algo similar a isto para criar o código fonte do seu primeiro
+programa:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;iostream.h>
+
+int main(){
+
+cout &lt;&lt; "Olá Mundo!" &lt;&lt; endl;
+
+}
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Bem, na realidade tudo o que o programa fará é imprimir a frase "Olá Mundo!" no seu output standard. Mas isto é apenas o
+código fonte para o programa ser construido, não o programa em si. Por isso, necessitamos de um compilador, neste caso um compilador C++ como o
+g++. Depois podemos gravar este ficheiro com o código fonte, como, por exemplo, meuprograma.cpp e invocar o compilador com o nome de ficheiro
+(na consola):
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+g++ -o meuprograma meuprograma.cpp
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Depois podemos iniciar o nosso programa- basta escrever <CODE>meuprograma</CODE> na consola, e o programa imprime a frase; depois termina.
+<P>
+<H3><A NAME="Make"></A> <A NAME="ss3.2">3.2 Make e Makefiles</A>
+</H3>
+
+<P>Tenho tudo o que necessito: um editor, um compilador e posso executar o meu próprio programa C++. Mas não é assim tão fácil. Que acontece se
+tiver mais de um ficheiro de código? E, tem de compilar todos os ficheiros de código vezes e vezes sem conta se apenas tiver alterado um ficheiro?
+Compilar tornar-se-á mais e mais complicado e moroso, porque tem de escrever todos os comandos e opções
+você próprio. Por isso, poderia escrever o que se chama uma "Makefile". Também lhe pode chamar qualquer outro nome excepto no nome do programa
+a construir. Depois, deverá ter a ferramenta <CODE>make</CODE> ou <CODE>gmake</CODE> instalada, ou qualquer outra ferramenta que seja capaz de manter registo da
+compilação de um projecto. Insira todos os comandos de compilação numa certa sintaxe nessa Makefile e grave-a; depois apenas
+terá de escrever <CODE>make</CODE> ou <CODE>gmake</CODE> na consola no directório onde a Makefile se encontra, e o make tomará conta da situação,
+levando o compilador a criar a sua aplicação. O utilitário make tem muitas outras vantagens e pode ser utilizado para bastantes fins.
+Para obter uma visão geral e total, abra uma consola e escreva:
+<P><CODE>man make</CODE>
+<P>ou procure "GNU Make" no KDEHelp, "Sistema GNU Info conteúdos".
+Pelo menos, tem uma ideia, porque um programador necessita do utilitário make para tornar mais fácil compilar a sua aplicação.
+Agora, escrever Makefiles não é apenas trabalho manual até agora, também tem de pesquisar por si toda a sintaxe e opções. Mas aqui
+estão as boas notícias sobre o KDevelop e qualquer utilitário Make: Apenas tem de definir o comando Make no diálogo de 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A> e está tudo pronto. Todos os projectos gerados com o KDevelop irão utilizar aquele comando Make para construir a
+aplicação alvo, e nada de escrever mais. Apenas prima o botão na barra de ferramentas do KDevelop, a começar com o primeiro após a segunda linha separadora, ou escolha a função desejada para o Make no menu "Construir".
+<P>A barra de ferramentas e o menu construir então oferecem as funções mais comuns de que necessita para deixar o make fazer o trabalho sujo:
+<P>
+<UL>
+<LI> Compilar Ficheiro: apenas está activo se você estiver a trabalhar num ficheiro de código. Invoca o make com o comando correcto para compilar apenas
+o ficheiro de código actual.</LI>
+<LI> Make: apenas chama o make e cria o seu alvo.</LI>
+<LI> Reconstruir tudo: reconstroi todo o projecto</LI>
+<LI> Limpar/Reconstruir tudo: limpa primeiro o directório do projecto e depois corre novamente o make.</LI>
+<LI> Parar Construção: cancela o processo actual- isto é principalmente utilizado se vir o make a trabalhar e a emperrar no seu código fonte. Então-
+ahh- Eu esqueci-me desta linha...e você tem de corrigir o seu código. Basta premir Parar, corrigir o erro que descobriu por si só e correr
+o Make de novo.</LI>
+</UL>
+<P>Mas esta não é a única forma como o KDevelop funciona em conjunto com o make- para aplicações KDE, existem algumas coisas que são especiais,
+tal como criar ficheiros de mensagens para internacionalização. Estas funções estão também incluidas, pelo que não tem de se preocupar mais
+com estas coisas.
+<P>Até agora, você sabe sobre código fonte, o compilador e porque o make é necessário. Na próxima secção, iremos discutir como é que
+projectos criados com o KDevelop automaticamanre podem ser compilados em quase todas as outras plataformas Unix utilizando o script (ficheiro de código) <CODE>configure</CODE>.
+<P>
+<H3><A NAME="Configure"></A> <A NAME="ss3.3">3.3 Configure</A>
+</H3>
+
+<P>O título desta secção deixa-lhe provavelmente a questão: Configurar ? O que tem de ser configurado? Ou quem?
+Bem, assuma que escreveu um programa incluindo um Makefile. Depois deseja distribui-lo, mas o binário compilado apenas
+corre no seu sistema ou em sistemas que são compatíveis com o seu. Para suportar outras plataformas como diferentes sistemas Unix ou
+máquinas como Alpha's ou RISC's, tem de recompilar o programa. A forma mais simples seria copiar o pacote com o código fonte para a
+máquina alvo e executar <CODE>make</CODE> de novo. Mas e se a máquina alvo utiliza outro comando de compilador ou tem de outra forma um
+problema em construir o seu binário? Já para não mencionar assuntos mais difíceis tais como caminhos de instalação para o seu programa e documentação-
+por ex. o KDE pode estar instalado em <CODE></CODE>opt/kde/ numa máquina, enquanto esta instalado em <CODE></CODE>usr/local/kde/ noutra. Neste
+caso, você teria de re-escrever o Makefile cada vez para assegurar uma correcta compilação e instalação do seu produto.
+<P>Felizmente, as ferramentas GNU têm ainda mais a oferecer que aquele poderoso <CODE>make</CODE>- os muito utilizados pacotes automake e
+autoconf. Soa bem ouvir algo com "auto"- parece que algo sobre o desenvolvimento de aplicações pode ser feito fácil e rapidamente,
+o que completamente correcto.
+<P>O objectivo do Automake é basicamente criar um chamado <CODE>Makefile.in</CODE> a partir de um ficheiro <CODE>Makefile.am</CODE> que tem de escrever para o
+seu projecto. Este Makefile.am consiste em macros que podem ser interpretadas e reduzem a complexidade que o make apresenta, pelo que
+um Makefile.am é escrito mais segura e rapidamente que o Makefile final.
+<P>Tendo dito isto, quem é que afinal está a criar o meu Makefile ? Agora, aqui entra o autoconf. O Autoconf necessita de vários ficheiros de macro
+para o projecto. Esses ficheiros são o Makefile.in gerado pelo automake e um ficheiro chamado <CODE>configure.in</CODE>, também contendo macros.
+Assim o Makefile.am e .in contêm macros que são responsáveis pela forma como a sua aplicação é construida em termos de
+que código fonte é compilado, que ficheiros pertencem ao pacote e que nome o binário final ou biblioteca terá após a
+construção. O Configure.in por outro lado contém macros sobre o que o script de consola configure irá verificar no sistema em que o
+configure é executado. Poderão ser por ex. o comando de compilador, bibliotecas necessárias com as quais o binário final será ligado (linked),
+ficheiros include que o projecto necessita e a sua localização.
+<P>Por exemplo você deseja escrever uma aplicação KDE. Após escrever o seu código,
+deseja distribuir o seu programa à comunidade, e cada utilizador tem de compilar o binário por si. Então você escreveria um
+ficheiro configure.in que conteria as macros para uma aplicação compatível com o KDE. Essa macro irá expandir-se para verificar o
+sistema sobre se a biblioteca Qt está instalada, verificar onde estão os ficheiros header do Qt, as bibliotecas KDE e headers etc.
+<P><B>Resumo:</B>  Para criar uma aplicação compatível GNU que seja portável para diferentes sistemas operativos Unix e máquinas que não a sua,
+terá de fazer o seguinte:
+<P>
+<OL>
+<LI> escreva o código do seu projecto</LI>
+<LI> escreva um Makefile.am para cada subdirectório, incluindo o directório principal do seu projecto</LI>
+<LI> escreva um ficheiro configure.in gravado no directório principal do seu projecto contendo as macros com os requerimentos de sistema</LI>
+<LI> execute o automake</LI>
+<LI> execute o autoconf</LI>
+</OL>
+<P>Então o trabalho principal está feito. O Automake cria os Makefile.in, o autoconf processa o configure.in e Makefile.in's e
+gera um script de consola executável chamado <CODE>configure</CODE>. Tudo o que então tem a fazer é executá-lo com ./<CODE>configure</CODE> e o
+script fará as verificações da sua escolha. Finalmente os Makefiles serão gerados e permitirão uma execução final do make (ou gmake)
+que irá processar todos os Makefiles e tudo estará feito.
+<P>Isto parece ser um monte de coisas para escrever uma pequena aplicação e muito a aprender especialmente como escrever macros correctamente. Mas mesmo
+o facto de que possibilitará a compilação em quase todos os sistemas Unix valerá a pena mais cedo ou mais tarde. Finalmente, você apenas tem
+de fazer este trabalho uma vez para o seu projecto e no caso de os ficheiros do seu projecto aumentarem apenas terá de acrescentar os seus nomes às macros.
+<P>
+<P>Agora, quão longe o KDevelop suporta este tipo de desenvolvimento aplicacional e quão complicado se torna para o programador?
+As boas noticias são, que você nem precisa de saber nada sobre macros e scripts. Todos os detalhes são escondidos atrás de um interface gráfico
+fácil de utilizar e que faz o trabalho por si. Uma aplicação é assim criada com as ferramentas GNU de uma forma muito amiga do utilizador:
+<P>Basta gerar a sua aplicação com o KAppWizard, pela escolha das necessidades da sua aplicação- seja ela uma aplicação pura de terminal em C++
+ou um programa com uma espécie de interface gráfico utilizando as bibliotecas Qt ou Qt/KDE. Todo o trabalho é feito automaticamente e o seu projecto
+já conterá os Makefiles que são criados pela execução automática das ferramentas GNU e do script de configuração.
+<P>É tudo- está preparado para expandir o código do seu projecto, seja adicionando classes, diálogos, traduções ou
+documentação, o que é também completamente automatizado. Concentre-se apenas no verdadeiro trabalho do programador, que é criar
+funcionalidades para a aplicação final que deseja criar. Na maior parte dos casos, provavelmente não chegará a entrar em contacto com Makefiles de
+todo enquanto a utilizar o KDevelop.
+<P>
+<H3><A NAME="Debugging"></A> <A NAME="ss3.4">3.4 Depuração</A>
+</H3>
+
+<P>A secção seguinte cobre um termo que é muito utilizado pelos programadores: Depuração (Debugging). Significa que, apesar do compilador produzir
+a aplicação final, a sua aplicação pode não correr ou bloquear durante a execução devido a um chamado "bug" (erro de código) no código. Um erro de
+programa descrito pelo nome deste insecto tem origem na história dos computadores; um dos primeiros erros que causou o "crash" de uma
+máquina não foi obviamente uma avaria- havia insectos dentro do computador que eram responsaveis pelo problema. Assim, um erro não
+detectado à primeira vista é chamado um "bug", pelo que "debugging" (depuração) significa retirar os "bugs" de onde eles não deveriam estar. Mas não precisa
+de os caçar a sério; assumindo que os computadores actuais são desenhados para os manter fora através de uma qualquer protecção exterior.
+Eles têm de ser encontrados dentro do código, quase sempre terminando a execução de um programa com a mensagem "Segmentation fault". GNU
+oferece outra ferramenta chamada <CODE>gdb</CODE>, o depurador GNU. Este programa de consola permite observar valores internos da
+aplicação e a execução passo a passo pela definição de "breakpoints" (pontos de paragem) no código. O Gdb pára a execução sempre que o programa
+atingir um ponto de paragem enquanto a correr. Mas tal como a maioria das ferramentas, o depurador é gerido por outro programa disponibilizando um interface,
+permitindo facilmente observar valores e a definição de pontos de paragem no código.
+<P>Para este porpósito, a aplicação do seu projecto é criada por defeito com uma opção de compilador para depuração, guardando assim
+informação adicional no executável para permitir a localização de valores e linhas no código. Sendo um interface de terceiros para o gdb,
+o KDevelop utiliza o KDbg, o KDebugger. Para depurar o seu programa, apenas tem de seleccionar "Depurar" no menu Construir ou premir o
+correspondente botão da barra de ferramentas apresentado por uma roda com uma lupa sobre ela, sinalizando que você deseja observar a execução.
+<P>O KDevelop abre então a janela de ferramentas e inicia a sua aplicação com o KDbg. O interface do KDbg surge dentro da janela de ferramentas e
+permite a sua utilização tal como se o tivesse iniciado de fora.
+<P>Em geral, os passos acima estão claramente a indicar a necessidade de algumas medidas que um programador tem de tomar quando inicia a codificação
+da sua aplicação, e cobre aspectos que são comuns a todos os projectos. Também, explicamos que parte do trabalho o KDevelop faz pelo programador e
+como suporta a ideia de oferecer uma maneira simples de programar em Unix. Para obter mais informações sobre o papel e propósito das
+ferramentas GNU, deverá ler a documentação disponibilizada com elas, facilmente acessível através do comando <CODE>man</CODE> ou pela secção "Sistema GNU
+Info conteúdos" no KDEHelp.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Página seguinte</A>
+ <A HREF="index-2.html">Página anterior</A>
+ <A HREF="index.html#toc3">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Perguntas e Respostas</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Página seguinte</A>
+ <A HREF="index-12.html">Página anterior</A>
+ <A HREF="index.html#toc13">Índice geral</A>
+</P>
+<H3><A NAME="Questions and Answers"></A> <A NAME="s13">13. Perguntas e Respostas</A></H3>
+
+<P>Esta secção debruça-se sobre questões colocadas pelos utilizadores e que foram respondidas pela Equipa do KDevelop ou pelos seus apoiantes na lista de correio
+electrónico do KDevelop durante experiências com as versões actuais do KDevelop bem como reportes de erros em geral.
+<P>
+<H3><A NAME="Bug Reporting"></A> <A NAME="ss13.1">13.1 Reporte de Erros</A>
+</H3>
+
+<P>Outro melhoramento do KDevelop é o sistema integrado de reporte de erros através de correio electrónico. Se encontrar um erro de código (bug), tem a opção de enviar
+à equipa de desenvolvimento do KDevelop um reporte quer seja através do seu cliente de e-mail quer através do diálogo de reporte de erros. Todos os reportes de erros são compilados
+na página de internet do KDevelop e podem ser revistos em 
+<A HREF="http://www.kdevelop.org/bugarchive/maillist.html">www.kdevelop.org/bugarchive/maillist.html</A>. Pode também receber todos os reportes de erros através da inscrição na
+lista de correio electrónico de reporte de erros enviando um e-mail vazio para 
+<A HREF="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de">kdevelop-bug-report-request@fara3.cs.uni-potsdam.de</A> com "subscribe <EM>seu_endereço_email</EM>" como conteudo do corpo da mensagem.
+<P>Para enviar reporte de erros, por favor utilize este endereço de e-mail através do seu programa de e-mail. Se desejar utilizar o KDevelop para reporte de erros directo, escolha
+"Reporte de Erros" do menu "Ajuda". É-lhe apresentado um diálogo de reporte que lhe permite inserir toda a informação necessária sobre o erro que você
+descobriu. Após premir "OK", o conteudo do diálogo é enviado para a lista de e-mail automaticamente.
+<P>
+<H3><A NAME="ss13.2">13.2 Onde Obter Informação</A>
+</H3>
+
+<P><B>P:</B> Tenho uma pergunta que não está colocada no ficheiro de Perguntas Mais Frequentes, nem nos manuais do KDevelop. Onde me devo dirigir?
+<P><B>R:</B>  Em qualquer caso envie todos os pedidos que respeitem ao KDevelop subscrevendo a lista de e-mail do KDevelop em 
+<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A>. Envie um e-mail com o cabeça-lho vazio e
+"subscribe" como conteudo da mensagem; pode então participar nas discussões. Todas as questões devem ser lá colocadas e serão também respondidas.
+Se se ficar por aí, obterá a maior parte da ajuda dos programadores e todos os utilizadores que tenham o mesmo problema, bem como ajudará a manter
+a lista de Perguntas Mais Frequentes actualizada.
+<P>A página de Internet do KDevelop em 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> também contém um arquivo da lista de e-mail que lhe permite ler os e-mails já enviados pelos inscritos, pelo que deverá procurar lá primeiro pois muitos dos problemas podem já ter sido discutidos pelos programadores ou outros utilizadores.
+<P>
+<P>
+<H3><A NAME="ss13.3">13.3 Problemas de Sistema e Bibliotecas</A>
+</H3>
+
+<P>
+<P><B>P:</B> Erro "Wrong JPEG library version: library is 61, caller expects 62"
+<P><B>R:</B>  Existem duas formas.
+<OL>
+<LI> Quando as kdelibs são instaladas elas instalam ficheiros header para as
+bibliotecas jpeg, que são da versão 61, no entanto, a maior parte das distribuições
+(Redhat) utiliza as bibliotecas da versão 62. Para corrigir basta remover jpeglib.h
+de /opt/kde/include (ou /usr/local/kde/include). O ficheiro da include para a versão
+62 deverá ser então utilizado. No entanto olhando para a mensagem de erro acima
+poderá existir outra forma de contornar, de qualquer forma assegure-se de que apenas
+tem uma versão do ficheiro header, a biblioteca e que são consistentes.
+
+É útil utilizar o comando locate para verificar que possui
+a versão correcta das bibliotecas e ficheiro header por ex.
+updatedb
+locate libjpeg
+locate jpeglib
+</LI>
+<LI> Tem de recompilar o kdesupport se a biblioteca jpeg
+(./configure --with-libjpeg --with-libgif).</LI>
+</OL>
+<P>
+<P><B>P:</B>
+<BLOCKQUOTE><CODE>
+<PRE>
+make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
+aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+make[2]: *** [Makefile.in] Error 1
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>R:</B>  Forma de contornar para utilizadores do automake-1.4/automake-2.13: Basta
+correr o "aclocal" manualmente, depois já compilará.
+<P>
+<P><B>P:</B>  O que preciso de fazer, se o configure disse que eu necessitava da giflib23.
+<P><B>R:</B>  Tente uma snap mais recente do kdesupport, ou talvez tenha outra giflib instalada?
+<P>
+<P><B>P:</B> Como posso converter um projecto do KDevelop 0.2 para o 0.3?
+<P><B>R:</B> Por favor altere o AC_OUTPUT no configure.in para uma versão de uma linha
+<P>por exemplo:
+versão antiga:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile \
+kdevelop/kwrite/Makefile \
+kdevelop/templates/Makefile
+)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+nova versão:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P><B>P:</B>  Obtenho os seguintes erros de linkagem quando a utilizar o SuSE Linux com o KDE 1.1, que tenho de fazer para conseguir linkar o KDevelop?
+<BLOCKQUOTE><CODE>
+<PRE>
+/usr/lib/libqt.so:
+warning: multiple common of `QArrayT&lt;char&gt; type_info node'
+ckdevelop.o: warning: previous common is here
+ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
+ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
+ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
+ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
+short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
+exit status  make[2]: ***
+[kdevelop] Error 1  make[2]: Leaving directory
+'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
+make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
+`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
+make: *** [all-recursive-am] Error 2
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>R:</B> Se possuir os rpm's da SuSE do KDE-1.1, tem de recompilar as kdelibs sem a correcção inserida pela SuSE e reinstala-las
+ou obter um rpm actualizado das kdelibs de 
+<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P>
+<H3><A NAME="ss13.4">13.4 Questões de Utilização</A>
+</H3>
+
+<P><B>P:</B> Vejo que o KDevelop não permite a utilização da tecla delete (ou apagar com o backspace quando o texto está marcado).
+<P><B>R:</B>  vá a "Opções"->"Editor" e certifique-se que "Apagar na Introdução" está activado, então o backspace e o delete funcionarão.
+<P>
+<P><B>P:</B> Se adiciono ficheiros ao meu projecto, eles serão automaticamente incluidos e compilados?
+<P><B>R:</B> Sim, eles são logo incluidos nos Makefile.am's se fizer um "Reconstruir Tudo" (./configure actualiza os Makefiles), os seus
+ficheiros novos adicionados serão também incluidos.
+<P><B>P:</B> Se eu apagar um ficheiro, recebo umas mensagens estranhas do linkador. O que está errado com o meu projecto?
+<P><B>R:</B> Se o ficheiro removido é um ficheiro header, que é automaticamente processado pelo automoc (executando o Qt-Meta-Object-Compiler
+automaticamente em todos os headers), o seu header removido ainda está presente como um ficheiro *.moc.cpp gerado e compilado. Remova o
+correspondente ficheiro *.moc.cpp e reconstrua o projecto.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Página seguinte</A>
+ <A HREF="index-12.html">Página anterior</A>
+ <A HREF="index.html#toc13">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,380 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Desenvolvimento com o KDevelop</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Página seguinte</A>
+ <A HREF="index-3.html">Página anterior</A>
+ <A HREF="index.html#toc4">Índice geral</A>
+</P>
+<H3><A NAME="Development with KDevelop"></A> <A NAME="s4">4. Desenvolvimento com o KDevelop</A></H3>
+
+<P>Neste capítulo obterá uma visão genérica sobre como pode utilizar o KDevelop e o Editor de Diálogos interno para criar as suas aplicações.
+Assim, todas as ferramentas são descritas pela sua utilização durante o processo de desenvolvimento. Se é um iniciado no desenvolvimento C++/Interface Grafico Utilizador (IGU)
+e programação, deverá ler <EM>"O Manual de Programação KDevelop"</EM>, que descreve alguma informação básica para desenho de programas e mostra
+uma utilização mais detalhada do KDevelop através de projectos exemplo que pode seguir passo a passo para se habituar com a forma como as aplicações são
+criadas utilizando o KDevelop. Deverá também ter lido o capítulo 
+<A HREF="index-3.html#Programs">Programas</A> para possuir um entendimento genérico
+porque aplicações Unix devem fazer uso das ferramentas de desenvlvimento disponibilizadas; isto fará as coisas mais fáceis quando atingir referências sobre o que
+são Makefiles etc.
+<P>
+<H3><A NAME="ss4.1">4.1 O que são Projectos de Aplicações KDevelop?</A>
+</H3>
+
+<P>Projectos criados com o KDevelop tornam mais fácil para os programadores a utilização das ferramentas standard de desenvolvimento GNU. Os Makefiles
+gerados automaticamente, que têm de ser escritos de qualquer forma devido à complexidade do projecto, oferecem não apenas uma melhor forma
+de gerar Makefile mas também um meio bom e seguro de oferecer uma rápida adaptação em direcção a diferentes sistemas através de scripts 
+de <CODE>configure</CODE> gerados pelo autoconf.
+<P>A distribuição das suas aplicações não requer que o utilizador final tenha nada de mais instalado além do compilador C++ e
+das bibliotecas de desenvolvimento, o que é o caso quase sempre; mas pode também distribuir pacotes de binários das suas aplicações. De
+qualquer forma, o utilizador final do seu produto não necessita de ter o KDevelop instalado. Para distribuir o seu código fonte, aconselhamo-lo a
+incluir também o ficheiro de projecto do KDevelop, já que isto torna mais fácil a outros programadores trabalharem com o seu código fonte se
+também utilizarem o KDevelop. Para projectos em que vários programadores, talvez trabalhando em diferentes locais, estão envolvidos, este deve ser também o caso
+para assegurar consistência nos Makefiles para que não depare com problemas. Especialmente em aplicações multi-idiomas, os tradutores
+não irão realmente trabalhar com o código fonte, excepto nos casos em que requeiram correcções para permitir suporte para traduções. De qualquer forma, eles
+ficarão agradecidos pois o KDevelop simplifica-lhes o trabalho a um mínimo adicionando o seu idioma e reduzindo o trabalho para que se concentrem
+na tradução.
+<P>Com a utilização do KDevelop para os seus projectos, poderia iniciar a criação de uma nova aplicação com o KAppWizard. Aí, poderia também
+definir o tipo de projecto de acordo com os objectivos do seu programa. Depois, iniciaria o desenvolvimento do interface do utilizador adicionando
+widgets que já se encontram construidos nas bibliotecas e apenas têm de ser chamados pela sua aplicação, ou por auto-construções
+que podem ser feitas com o editor de diálogos. Depois vem a extensão do interface do utilizador pela alteração e extensão daquelas partes que
+já foram feitas pelo KDevelop tal como a barra de estados, barra de menu e barra de ferramentas. Como os resources são coleccionados num ficheiro resource, isto pode ser
+expandido apenas adicionando novos valores aos já existentes; os resources existentes podem também ser utilizados como linhas de orientação para adicionar
+os seus específicos. Após implementar a funcionalidade a métodos que são ou gerados vazios pelo editor de diálogo ou já
+contêm código para acções standard do utilizador, deverá aumentar o Manual do Utilizador simplesmente editando o ficheiro de índice em sgml que é fornecido
+no sentido de descrever as capacidades da sua aplicação. O último passo seria gerar os ficheiros de tradução e distribuir o seu
+projecto aos tradutores para fazerem o restante no sentido de potenciar a internacionalização.
+<P>Mas mesmo para programadores de aplicações não-gráficas o ambiente gráfico de desenvolvimento oferece uma forma fácil de criar novos projectos; o editor e o Navegador de Classes em
+conjunto com a poderosa gestão de projectos do KDevelop irá reduzir o tempo de desenvolvimento a um mínimo que é requerido para
+a implementação das funcionalidades.
+<P>
+<H3><A NAME="ss4.2">4.2 Breve Descrição das Ferramentas do KDevelop</A>
+</H3>
+
+<P>Com KDevelop você escolheu um pacote, que, em conjunto com a utilização de outras ferramentas, lhe disponibilizará um ambiente perfeito e flexível
+para desenvolvimento orientado por objectos de aplicações em Sistemas Unix. Geralmente, o KDevelop consiste do ambiente de programação
+e do editor de diálogos; para além disso todos os programas necessários que possam ser úteis para a programação de aplicações estão imbutidos
+de uma forma ou de outra.
+<P>
+<H4>Ambiente de Desenvolvimento e Editor de Diálogos</H4>
+
+<P>
+<P>
+<H4>O Ambiente de Desenvolvimento</H4>
+
+<P>O Ambiente de Desenvolvimento é o interface do utilizador que o KDevelop disponibiliza para a criação e manutenção de projectos, utilizando implicitamente
+muitas outras ferramentas simplificando a sua utilização. O Editor e Navegador de Ajuda incorporados bem como o Navegador de Classes reduzem a quantidade de
+trabalho que o processo de desenvolvimento normalmente coloca sobre o programador. A facilidade de utilização tornam a programação de aplicações para Unix um prazer por
+si só e irá provavelmente resultar em ciclos de lançamento de novas versões mais curtos e mais melhorias nas características. A partir daqui, está a gerir
+o seu projecto através de todos os seus detalhes, mantém uma visão geral das suas classes e não tem de utilizar consolas adicionais para o seu
+trabalho, bem como a integração de todos os interfaces de utilizador resulta em que você apenas tem de trabalhar com uma janela dentro do X e
+em vez de ter de controlar várias espalhadas pelo seu ambiente de trabalho.
+<P>
+<H4>O Editor de Diálogos</H4>
+
+<P>O editor de diálogos incorporado no KDevelop oferece uma forma simples de desenhar interfaces de utilizador com as bibliotecas Qt e KDE. A sua
+forma simples de fazer quase tudo com o rato permite uma construção rápida de diálogos e ecrãs principais para aplicações e a sua
+transformação directa em código C++, que é directamente adicionado ao projecto. Como o editor de diálogos está incorporado no resto do
+interface do utilizador KDevelop, tem disponíveis os mesmos comandos que teria estando a trabalhar em modo Programação. Isto permite por ex. construir um
+diálogo, geração de código de output e o seu teste directo dentro do programa pela disponibilidade dos comandos make e pode ainda
+controlar o output do compilador sem ter de voltar para a vista de programação. Para uma descrição detalhada, veja 
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>
+.
+<P>
+<H4>KAppWizard e as Ferramentas de Classes</H4>
+
+<P>O KAppWizard e as Ferramentas de Classes oferecidas para geração de projectos e extenção automática de código têm como intuito tornar a
+criação de aplicações fácil e segura e oferece uma boa forma de iniciados na programação Qt/KDE iniciarem-se e
+realmente trabalharem nos detalhes de desenho do Interface Gráfico do Utilizador da aplicação, já que os resultados conseguem ser atingidos muito rapidamente.
+<P>
+<H4>KAppWizard</H4>
+
+<P>O KAppWizard tem como objectivo criar projectos de aplicações completamente funcionais que estão prontos a correr utilizando ferramentas standard GNU e, para
+programas gráficos, ganhar proveito das bibliotecas KDE e Qt. Especificando apenas a informação que é requerida como um
+mínimo, os utilizadores podem começar a trabalhar num novo projecto em segundos. Chamar o KAppWizard deveria ser o primeiro passo a ser realizado para
+criar novas aplicações com o KDevelop.
+<P>O KAppWizard oferece-lhe um chamado esqueleto (ou moldura) de aplicação com todos os ficheiros de código C++ necessários para uma aplicação executável. Depois de
+você especificar um nome de projecto e defenir as preferências necessárias, o seu novo projecto será gerado e terá uma aplicação completa que
+já conterá imensas funcionalidades (para projectos KDE e Qt), sem mesmo ter de escrever uma linha de código C++ sozinho. Caso
+especifique o conjunto total de opções que o gerador de programas disponibiliza, a sua aplicação já conterá:
+<UL>
+<LI>um interface SDI (para trabalhar com um documento por janela de aplicação), baseado no modelo de controlo de vista de documento</LI>
+<LI>Menus e diálogos para abrir e gravar ficheiros bem como diálogos de impressão</LI>
+<LI>uma barra de ferramentas e de estados já dispondo de total funcionalidade</LI>
+<LI>um sistema de ajuda, contendo um manual do utilizador baseado em sgml e uma ajuda de barra de estados</LI>
+<LI>uma documentação API (interface de programação da aplicação) completa baseada em HTML para o estado actual do projecto</LI>
+<LI>uma rotina de instalação através do make</LI>
+</UL>
+<P>O KAppWizard está disponível no menu Projecto, opção "Novo...".
+<P>
+<H4>Ferramentas de Classe</H4>
+
+<P>O termo "Ferramentas de Classe" descreve uma variedade de funções que estão disponíveis para o programador num projecto não só através
+de uma linguagem orientada por objectos mas utilizando o código fonte de uma forma orientada por objectos. Trabalhando com classes em vez de ter de
+olhar para ficheiros oferece uma forma muito flexível de extender o seu projecto e permite ao programador concentrar-se nos objectos que o projecto contém.
+As ferramentas que o KDevelop oferece são um Gerador de Classes e um Navegador de Classes, em que cada um disponibiliza bastantes funcionalidades
+automatizadas.
+<P>
+<H4>Criar uma nova classe com o Gerador de Classes</H4>
+
+<P>Após gerar um projecto com o KAppWizard o seu trabalho como programador seria adicionar um conjunto de classes que coincidiriam com o
+desenho da aplicação. O processo típico sem utilizar o KDevelop seria criar um novo header e ficheiro de código fonte, adiciona-los manualmente ao
+correspondente Makefile.am e começar a escrever as declarações e implementações de classe. Para simplificar todo o processo, o
+Gerador de Classes permite-lhe fazer isto apenas especificando a nova classe pelo seu nome, classe de onde herda, atributos herdados e mais
+informação tal como documentação da classe segundo os seus objectivos para o projecto. Adicionalmente, pode também mudar os nomes dos ficheiros que são
+pré-definidos pelo gerador e se a classe teria por defeito Qt-sinal/espaço (signal/slot).
+<P>O resto do trabalho é feito automaticamente- não tem de se preocupar com os Makefile.am, ficheiros e a classe em sí. Uma nova invocação
+do "make" é o suficiente para incluir a nova classe no processo de compilação. Como o Navegador de Classes se actualiza após a adição de
+uma classe, a declaração e implementação está disponível desde logo e pode começar a trabalhar na extensão da classe. O
+Gerador de Classes é invocado pelo menu Projecto, opção "Nova Classe".
+<P>
+<H4>O Navegador de Classes</H4>
+
+<P>O Navegador de Classes apresenta todos os tipos de objectos e funções do seu projecto numa árvore à esquerda das janelas de edição. Um analisador de classes
+percorre todos os ficheiros procurando métodos e classes e torna-os acessíveis através de símbolos gráficos. Sobre eles, menus de contexto oferecem uma
+funcionalidade especializada para trabalhar com o código fonte focando-se nas classes e funções.
+<P>Seleccionar uma classe resultará na abertura do ficheiro que contém a declaração; em métodos e funções isto irá
+mostrar-lhe a implementação. Para uma descrição completa, veja 
+<A HREF="index-10.html#The Class Browser">O Navegador de Classes</A><P>
+<H3><A NAME="ss4.3">4.3 O Processo de Desenvolvimento</A>
+</H3>
+
+<P>O desenvolvimento de uma nova aplicação com o KDevelop pode ser geralmente dividida em dois passos principais: primeiro, tem de gerar um
+esqueleto de programa com o KAppWizard, depois o "resto" do desenvolvimento tem de ser feito utilizando as características do KDevelop, que apenas
+necessitam das suas capacidades como programador. Para descrever o processo de desenvolvimento, nós assumimos que deseja criar uma aplicação Qt/KDE,
+que implica utilizar a maior parte das características do KDevelop para trabalhar com estes tipos de projectos, para que tenha um "Como-Fazer" geral.
+<P>
+<H4>Criar um Esqueleto de Programa</H4>
+
+<P>Para começar a criar a sua aplicação, normalmente invoca o KAppWizard, introduz o nome do projecto e gera o programa. Através
+disto, o assistente cria automaticamente um ficheiro de projecto para a aplicação e insere as áreas do KDevelop nos Makefile.am's
+que serão utilizados mais tarde quando expandir a aplicação. O ficheiro de projecto é o ficheiro que tem de executar para abrir o projecto em
+sessões posteriores.
+<P>Você chama o KAppWizard pelo menu "Projecto", opção "Novo...". Quando o assistente surge, tem de especificar o tipo de
+projecto na primeira página. Seleccionando "Seguinte >>" leva-o à página seguinte onde tem de inserir o nome, versão e directório
+do projecto e a sua informação pessoal. A página 3 oferece opções mais detalhadas, as páginas 4 e 5 permitem a edição dos cabeçalhos para os ficheiros
+header e de implementação que são inseridos automaticamente de acordo com a sua selecção. Se já possui cabeçalhos de ficheiro que deseja
+utilizar, pode seleccionar esses ficheiros também. A última página contém uma janela de output e uma janela de mensagem de erro. Quando seleccionar
+"Criar", a sua aplicação será gerada e as acções que forem executadas podem ser observadas na janela de output. Se surgir PRONTO (READY)
+na janela de output, o KAppWizard termina e pode seleccionar "Sair" para regressar ao ambiente de programação. Para construir o
+binário, escolha "Make" do menu Construir ou escolha o botão correspondente na barra de ferramentas. Pode também testas as funções já
+existente escolhendo "Executar" a partir do menu Construir.
+<P>
+<H4>Desenvolver uma Aplicação</H4>
+
+<P>Esta secção descreve a fase de desenvolvimento de aplicações com o KDevelop e o Editor de Diálogos - e todo o trabalho pode ser feito
+dentro do Ambiente Gráfico.
+<P>Os passos de desenvolvimento são geralmente editar os ficheiros de código fonte, a compilação do código do projecto seguido do processo
+de ligação unindo todos os ficheiros objecto ao binário final. Então os erros tem de ser encontrados quer sejam dos que impedem a compilação ou
+linkagem ou são erros de semântica que podem ser encontrados através de uma sessão de depuração. Finalmente, a documentação tem de ser acrescentada e
+traduções têm de ser adicionadas. Mas como todos esses passos se podem misturar, não é assim tão fácil descrever uma forma genérica de como
+desenvolver a sua própria aplicação. Geralmente, o procedimento habitual seria primeiro criar todas as partes visíveis do projecto tal como o
+ecrã principal e os diálogos para configurar quaisquer opções, depois gerar o código fonte e implementar todas as conecções necessárias que ainda
+tenham de ser feitas tal como modificar as barras de menu e de ferramentas, adicionar ajuda na barra de estados para entradas de menu e preencher as novas funções
+membro com objectos que são apresentados nos seus diálogos. Depois compilaria a sua aplicação e testaria as suas capacidades, corrigiria
+erros e testaria de novo. A secção seguinte descreve como isto poderia ser realizado; para a sua aplicação particular
+poderá seleccionar outra forma- o KDevelop deixa-lhe flexibilidade suficiente para decidir o que fazer e quando o fazer.
+<P>
+<H4>Interfaces do Utilizador</H4>
+
+<P>O Interface do Utilizador de uma aplicação é na realidade o que o utilizador vê e através do que interage com o programa. Assim um
+programa geralmente tem uma barra de menu, barras de ferramentas e de estados bem como uma janela principal que seria por ex. uma janela de inserção de texto para um
+editor. As aplicações geradas pelo KAppWizard já possuem uma complexa funcionalidade no interface gráfico- a estrutura base
+toma conta de elementos standard tais como barras e botões. Quando a desenvolver a sua aplicação, tem de expandir a estrutura dada
+para oferecer ao programa a capacidade de interacção com o utilizador que deseja prestar. Uma parte do trabalho é o desenho dos diálogos por ex. para
+alterar valores tais como a grossura do pincel numa aplicação de desenho. Isto pode ser facilmente realizado com o Editor de Diálogos dentro do KDevelop. Agora,
+como criar esses diálogos com tão bom aspecto? Como a biblioteca Qt é um conjunto de ferramentas de Interface Gráfico, disponibiliza um conjunto base dos chamados "widgets"
+tal como etiquetas apresentando texto, linhas de edição para entrada de texto e botões para navegação e selecção de comandos. Para além destas
+partes de "baixo-nível" do interface de utilização, diálogos standard são fornecidos e estão prontos a usar tais como o diálogo de impressão. As
+bibliotecas KDE são por sua vez baseadas na biblioteca Qt e contêm substitutos para alguns diálogos bem como widgets adicionais que
+podem ser utilizados na sua aplicação. Assim, quando iniciar o desenho do comportamento da sua aplicação em relação ao utilizador, deverá fazer por estar
+á-vontade com os widgets disponibilizados com a Qt e KDE. A documentação electrónica da Qt disponibilizam capturas de ecrã da maior parte deles,
+pelo que deverá vê-los lá primeiro. Depois aconselhamo-lo a verificar com mais atenção a biblioteca KDE-UI, que disponibiliza outros widgets. Bibliotecas
+como a biblioteca KHTML contêm widgets extremamente especializados de que imensos programas utilizam. Isto simplifica o desenho de aplicações tais como
+os diálogos pré-definidos oferecidos com o Qt. Para os seus próprios diálogos, aqueles widgets de baixo-nível são o que necessita. Um diálogo consiste
+meramente na colecção de diferentes widgets combinados em conunto para construir o interface e é tecnicamente programado em código C++ 
+numa classe que é derivada da QWidget ou uma classe de diálogo mais especializada que herda a QWidget. O programa que utiliza um widget
+necessita assim de um objecto da classe do widget- isto é praticamente tudo o que tem de compreender sobre como os diálogos ou vistas são utilizados.
+<P>O Editor de Diálogos do KDevelop dispõe agora de uma forma simples de construir diálogos e interfaces de utilizador visualmente em vez de ter de
+combinar diálogos com puro código C++- esta é a forma difícil de criar interfaces. Alterne para o Editor de Diálogos
+escolhendo a entrada correspondente no menu "Ferramentas" (ou pelo botão da barra de ferramentas). Verá que o aspecto do KDevelop mudou mas
+por ex. a barra de menu e de ferramentas são bastante similares. Isto torna muito fácil saltar de trás para a frente entre os dois modos de trabalho
+e você sentir-se-á confortável em ambos passado pouco tempo. Aí poderá construir as suas vistas e diálogos como desejar e definir todas as
+preferências disponíveis para os items que a vista conterá. Quando terminar, seleccione "Gerar Código" a partir do menu Construir;
+o Editor de Diálogos e a gestão do projecto tomarão conta do resto. Pode testar se tudo funcionou correctamente seleccionando Make ou
+Executar, o que irá construir a sua aplicação incluindo o novo código. Mas não espere que os diálogos já estejam a funcionar- isto é uma
+questão de implementação que é a forma habitual como um programador trabalha. Não se preocupe- isto também não é muito difícil. Para mais informação
+sobre criar diálogos, veja 
+<A HREF="index-11.html#The Dialog Editor">O Editor de Diálogos</A>, exemplos e linhas de orientação podem também ser encontradas em
+<EM>O Manual de Programação KDevelop</EM>.
+<P>
+<H4>Ligar Novos Elementos</H4>
+
+<P>Após ter criado o seu interface de utilizador e gerado o código, está pronto a fazer a sua aplicação utiliza-los por objectos.
+Como descrito acima, um programa baseado num interface gráfico normal contém barras e a janela principal; adicionalmente a janela principal funciona com as barras,
+que são parte da classe principal da aplicação, e do objecto documento a que está conectado. Em termos de desenho orientado por
+objectos, descreveria a arquitectura dada como o modelo "Controlador de Vista de Documento". Este modelo descreve as funções básicas
+para objectos numa aplicação no que respeita ao seu papel dentro do programa. O Controlador representa aquele que coordena a
+aplicação principal e permite a interacção do utilizador através da barra de menu e barras de ferramentas e status adicionais. A classe Documento
+toma a tarefa de representar um documento com que o utilizador trabalha. Assim, uma classe documento deveria realizar todas as acções tal como ler
+ficheiros e grava-los novamente. A vista é agora o centro da janela da aplicação, mostrando ao utilizador uma parte do documento
+visualmente e disponibilizando todas as funções para manipular os dados. Como as barras de menu e ferramentas já estão presentes, o seu trabalho
+seria criar a vista principal e diálogos adicionais através dos quais o utilizador pudesse modificar quaisquer definições ou ter acesso a funções
+adicionais.
+<P>Para construir a sua vista principal, o código fonte gerado para a sua aplicação já contém uma classe sob a forma de
+&lt;YourApplication&gt;View (Vista_de_Sua_Aplicação) que herda da classe QWidget (esta é a classe mínima que gere interfaces visuais em Qt e
+assim também em KDE). Em geral, existem três maneiras diferentes de extender a dada classe:
+<UL>
+<LI>remover a estrutura de vista de documento e utilizar um dos "grandes" widgets pré-definidos que já contêm imensas funcionalidades-
+basta remover a View-class (classe-Vista) e substituir o objecto-vista por outro.</LI>
+<LI>alterar a herança da classe-Vista. Alterar a herança para por ex. QMultiLineEdit e a sua aplicação seria um
+editor.</LI>
+<LI>Se a sua vista principal consistirá de várias partes separadas, criar os widgets e as suas classes de que necessita com o
+editor de diálogos e criar objectos destas classes no construtor de vista de classes que em combinação irá construir a vista principal.</LI>
+</UL>
+<P>Para diálogos, as coisas são ligeiramente diferentes. A forma normal seria chamar um diálogo através de uma entrada na barra de menu e adicionalmente por um
+icon da barra de ferramentas. Após ter construido o seu diálogo e gerado o código, a classe está disponível para criar um objecto que irá
+ser o diálogo. Então primeiro terá de procurar um lugar funcional na barra de menu para adicionar a entrada que irá chamar o diálogo quando
+seleccionada pelo utilizador. Se os menus já existentes não coincidirem com as suas necessidades, crie um menu tal como os outros e insira
+a sua entrada e o espaço que quer chamar quando o item de menu for seleccionado. Depois implemente o espaço criando uma instância da
+classe de diálogo e chame o diálogo com as funções membras dadas pela classe base. Tem também de especificar um ID para a entrada
+de menu. As aplicações base têm todas IDs já atribuídos coleccionados num ficheiro resource.h, pelo que apenas tem de adicionar o ID e
+dar-lhe um novo número. E está feito- adicionalmente poderia construir um icon de barra de ferramentas novo e adicionar uma mensagem de ajuda para a barra de estados. A sua
+aplicação agora oferece uma nova funcionalidade que é visível ao utilizador. Agora tem de adicionar a implementação dos métodos com que o
+seu diálogo irá operar para manipular quaisquer valores. Finalmente, chamar a sua ferramenta make ou "Executar" e os ficheiros modificados serão
+recompilados; o resultado das suas alterações pode ser testado imediatamente.
+<P>
+<H4>O Processod de Desenvolvimento Completo</H4>
+
+<P>Acima, discutimos a maneira normal de como começar a trabalhar numa aplicação nova utilizando o KDevelop e como expandir o interface do utilizador.
+Agora, estes são os passos standard em que o ambiente gráfico o irá ajudar, mas o KDevelop faz mais do que disponibilizar ferramentas para criar aplicações
+e as suas componentes visuais. De seguida iremos ver uma breve descrição das principais funcionalidades que são oferecidas para melhorar
+o desenvolvimento de aplicações.
+<P>
+<H4>Gestão de Código Fonte</H4>
+
+<P>O ambiente gráfico do KDevelop disponibiliza imensos métodos para o programador atingir os seus objectivos no menor espaço de tempo. Como descrito acima,
+o KAppWizard e o Editor de Diálogos diminuem o tempo que normalmente necessitaria para obter o mesmo resultado manualmente. Mas isto
+não cobriu o trabalho que um programador normalmente tem de realizar: trabalhar na implementação da sua aplicação para proporcionar uma execução
+correcta pelo utilizador final. Agora, porque é o KDevelop o ambiente gráfico que desejaria utilizar como ambiente de desenvolvimento, incluindo a sua
+utilização para criar aplicações não-gráficas?
+<P>Implicitamente, o ambiente gráfico controla o seu projecto em geral; isso significa que, não tem de se preocupar em gravar as alterações, a
+geração de Makefile e por aí fora- isto é disponibilizar completa gestão de projecto, e o KDevelop mostra todo o seu poder aqui no desenvolvimento de
+qualquer tipo de aplicação C++. É fácil entender que, após tirar a gestão ao programador, ele está mais concentrado
+em trabalhar no código fonte. Por um lado, o código encontra-se normalmente espalhado por vários ficheiros ao longo do
+projecto, pelo que pode separar algumas partes. Mas isri ainda significa trabalhar da maneira difícil- sendo o programador, você ainda
+teria de lutar com a criação desses ficheiros e escrever conteudo standard tal como cabeçalhos de ficheiros contendo a data e o
+nome do autor bem como por ex. termos de licença para o código. Adicionalmente, isto requer que tenha que se lembrar onde as suas
+funções, declarações de classes e implementações estão no projecto. Assim, o KDevelop contém a Ferramenta de Classes- uma variedade de
+acções, que permitem um trbalho mais rápido e mover a atenção do programador de ficheiros para objectos- classes, estruturas e métodos. O
+gerador de classes permite-lhe criar facilmente uma nova classe incluindo a herança, atributos e documentação. Para trabalho orientado por objectos,
+o Navegador de Classes leva-o para a localização dos seus objectos; já não importa onde o código está na realidade. O
+Navegador procura todos os ficheiros de código automaticamente e reconstroi-se após adições para se actualizar com o seu trabalho e permitir-lhe acesso
+ao novo código directamente. Através de menus de contexto, o navegador oferece ainda mais funcionalidades, tais como leva-lo para a implementação ou para a
+declaração de funções membras. Depois, a adição de membros é feita graficamente por diálogos- não há a procura do ficheiro e do
+local em que teria de adicionar as suas entradas. Finalmente, pode obter uma vista ainda mais especializada das classes do seu projecto através do
+diálogo de Ferramenta de Classes, apresentando-lhe árvores que mostram a utilização, conteudo e herança das classes e seus objectos. Para informação
+mais detalhada, veja 
+<A HREF="index-10.html#The Class Browser">O Navegador de Classes</A>.
+<P>
+<H4>Construir e Executar as Suas Aplicações</H4>
+
+<P>O ambiente do KDevelop está especialmente desenhado para lhe retirar os passos que tem de fazer periodicamente tal como construir e executar
+o seu programa bem como localizar erros no código fonte.
+<P>Você inicia o processo de construção com:
+<UL>
+<LI>carregando com o rato no símbolo "Construir" ou "Construir Tudo" na barra de ferramentas</LI>
+<LI>ou seleccionando "Construir"/"Construir Tudo" a partir do menu Construir.</LI>
+</UL>
+<P>Para executar a sua aplicação, escolha
+<UL>
+<LI>o símbolo "Executar" ou "Depurar" (inicia o KDbg com o seu programa) a partir da barra de ferramentas</LI>
+<LI>através das respectivas entradas de menu no menu Construir.</LI>
+<LI>ou através de "Executar com Argumentos" para iniciar a aplicação com argumentos adicionais</LI>
+</UL>
+
+Para mais informações sobre o processo de construção, veja 
+<A HREF="index-8.html#Projects">Projectos</A>.
+<P>
+<H4>Procurar Erros de Programação</H4>
+
+<P>Naturalmente erros ocorrem ou durante o processo de construção (que são detectados pelo compilador e são chamados erros de sintaxe
+porque resultavam de uma sintaxe errada no código) ou durante a execução da aplicação, os quais têm de ser encontrados e
+removidos pelo programador. Para localizar erros, o programador necessita da informação de onde precisamente se dá o problema. Tal como
+mencionado, o compilador é capaz de detectar erros de sintaxe sozinho, resultando em que o executável não pode ser construido (isto pode também
+acontecer quando o linker detecta "unresolved symbols"-veja 
+<A HREF="index-9.html#Linker Options">Opções de Linkagem</A>). Como ele dá uma descrição
+do erro o mais detalhada possível, o erro pode ser encontrado e removido. Durante o processo de construção, verá a janela de output
+surgir mostrando-lhe o que a sua ferramenta make e o compilador têm a dizer. Em caso de erros ou avisos, basta premir o botão do rato
+sobre a linha de erro e o editor irá abrir o ficheiro afectado e colocar o cursor na linha do erro. Isto também pode ser feito através
+das entradas no menu "Ver", "Próximo Erro" e "Erro Anterior" ou através dos correspondentes atalhos de teclado. Irá descobrir que isto é extremamente
+funcional e poupa imenso tempo a chegar ao erro, apesar de que para o remover os seus conhecimentos como programador são vitais.
+<P>Erros de Execução (Runtime Errors), que ocorrem durante a execução e irão resultar numa "segmentation fault", são por vezes difícies de detectar.
+Assim, pode requesitar ao compilador que adicione informação dentro do binário para observar a execução através do código fonte. Um depurador
+é então outro programa que lhe permite fazer isto iniciando a aplicação e permitindo-lhe definir pontos de paragem (breakpoints) no código onde a
+execução pára, para que possa controlar implementações críticas e assim detectar pelo menos a linha que causa o erro. Descobrir
+a verdadeira causa é outra tarefa; depende do programador localiza-la. O <B>gdb</B> é um depurador que é disponibilizado com o
+compilador GNU e programas como o <EM>ddd</EM> ou <EM>KDbg</EM> são interfaces gráficos que permitem uma utilização mais fácil. O KDevelop utiliza assim o KDbg e permite-lhe
+invocar o processo de depuração através dos comandos "Depurar" no menu Construir ou através do símbolo "Depurar" na barra de ferramentas. Para mais
+informações sobre depuração de aplicações, veja 
+<A HREF="index-8.html#Projects">Projectos</A> e <EM>O Manual de Programação do KDevelop</EM>.
+<P>
+<H3><A NAME="ss4.4">4.4 Informação Adicional</A>
+</H3>
+
+<P>Os tópicos abordados dentro deste capítulo são descritos em mais detalhe dentro da documentação disponibilizada com o ambiente de desenvolvimento KDevelop IDE 
+e outra documentação:
+<P>
+<UL>
+<LI><EM>O Manual de Programação do KDevelop</EM>, cobre uma introdução completa no desenho de aplicações de interface gráfico e programação com as
+bibliotecas Qt e KDE,</LI>
+<LI>este manual, secções 
+<A HREF="index-5.html#Overview">Descrição Geral</A> a 
+<A HREF="index-8.html#Projects">Projectos</A>, descrevendo todas as funções
+disponíveis dentro do KDevelop, </LI>
+<LI>este manual, secção 
+<A HREF="index-11.html#The Dialog Editor">O Editorde Diálogos</A>, respeitante à utilização do
+editor de diálogos para criar os seus widgets, </LI>
+<LI>A <EM>Documentação Electrónica de Referência</EM> para a biblioteca Qt, que cobre exemplos da
+utilização do conjunto de ferramentas de interface gráfico Qt bem como uma classe de referência e imagens dos widgets prontos a utilizar mais importantes incluidos,</LI>
+<LI>A <EM>Referência de Classes da Biblioteca KDE</EM>, gerada automaticamente pelo KDevelop a partir do código fonte das bibliotecas KDE, contendo
+descrições de todas as classes e widgets incluindo exemplos para a sua utilização,</LI>
+<LI>na Internet, veja:
+<UL>
+<LI>
+<A HREF="http://www.troll.no">http://www.troll.no</A> para informações sobre a Qt e widgets adicionais de terceiros,</LI>
+<LI>
+<A HREF="http://www.kde.org">http://www.kde.org</A> para informações sobre o projecto KDE e linhas mestras de desenvolvimento,</LI>
+<LI>
+<A HREF="http://developer.kde.org">http://developer.kde.org</A> para referências adicionais para o desenvolvimento de aplicações KDE.</LI>
+<LI>na página do KDevelop 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> </LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Página seguinte</A>
+ <A HREF="index-3.html">Página anterior</A>
+ <A HREF="index.html#toc4">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

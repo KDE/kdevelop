@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Instalação</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Página seguinte</A>
+ <A HREF="index-1.html">Página anterior</A>
+ <A HREF="index.html#toc2">Índice geral</A>
+</P>
+<H3><A NAME="Installation"></A> <A NAME="s2">2. Instalação</A></H3>
+
+<P>
+<H3><A NAME="ss2.1">2.1 Como obter o KDevelop</A>
+</H3>
+
+<P>O KDevelop pode ser encontrado quer na página de Aplicações KDE (
+<A HREF="http://www.kde.org/current.html">http://www.kde.org/current.html</A>) ou na página principal do KDevelop (
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>).
+O KDevelop também está disponível em distribuições de Linux, tais como a SuSE 6.1.
+<P>Estamos a disponibilizar snapshots semanais do repositório CVS do KDevelop na nossa página de internet para aqueles que se querem manter actualizados com o
+KDevelop. Normalmente, as snapshots não são supostamente para utilização de produção mas sim para teste de novas funcionalidades e para dar uma prespectiva
+do progresso de desenvolvimento da equipa do KDevelop. Também disponibilizamos várias aplicações de terceiros que o KDevelop necessita directamente tal como
+o KDoc e o KDbg.
+<P>Se estiver a sentir problemas com a compilação ou utilização do KDevelop, por favor leia a 
+secção 
+<A HREF="index-13.html#Questions and Answers">Perguntas e Respostas</A> deste manual ou o ficheiro "FAQ - Perguntas Colocadas Frequentemente" incluida com o pacote KDevelop. Se o seu problema não se encontrar mencionado, por favor
+subscreva a lista de discussão do KDevelop em 
+<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A> enviando um e-mail com o "Assunto" vazio e com o corpo da mensagem a dizer apenas "subscribe". Pedidos e reporte de problemas
+devem apenas debruçar-se sobre a utilização do ambiente KDevelop e não dirigir-se a questões que tenha sobre problemas de implementação
+enquanto programa uma aplicação. De qualque forma, todos os e-mails enviados para a lista de discussão devem ser escritos em inglês, para que todos os participantes possam
+tomar parte na discussão e serem capazes de prestar melhor ajuda. A lista de discussão também se dirige aqueles que estejam dispostos a contribuir
+e que tenham encontrado soluções para quaisquer problemas encontrados, para que nós possamos corrigir erros e incluir esse conhecimento para prestar aos novatos uma ajuda
+ainda melhor e mais qualificada.
+Uma boa forma de reportar problemas é enviando o output que obtém iniciando o KDevelop da consola ou copiando e colando o
+conteúdo da Janela de Mensagens interna do KDevelop.
+<P>
+<H3><A NAME="ss2.2">2.2 Requerimentos</A>
+</H3>
+
+<P>Por forma a compilar e utilizar com sucesso o KDevelop, necessita dos seguintes programas e bibliotecas que estão disponíveis para a maior parte das plataformas
+como pacotes de distribuição e podem, assim, ser facilmente instalados.
+<P><B>Requeridos:</B>
+<UL>
+<LI>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (ou compatível), disponível em 
+<A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
+<LI>GNU make (ou compatível), disponível em 
+<A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
+<LI>perl 5.004, disponível em 
+<A HREF="http://www.perl.com">http://www.perl.com</A></LI>
+<LI>autoconf 2.12, disponível em 
+<A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
+<LI>automake 1.2, disponível em 
+<A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
+<LI>Qt 1.42, disponível em 
+<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
+<LI>KDE 1.1.x, disponível em 
+<A HREF="http://www.kde.org">http://www.kde.org</A></LI>
+</UL>
+<P><B>Opcional:</B>
+<UL>
+<LI>a2ps ou enscript para suporte de impressão</LI>
+<LI>ghostview ou kghostview para visualização prévia de impressão</LI>
+<LI>glimpse 4.0 para o índice de busca, disponível em 
+<A HREF="http://glimpse.cs.arizona.edu">http://glimpse.cs.arizona.edu</A></LI>
+<LI>sgmltools 1.0, disponível em 
+<A HREF="http://www.sgmltools.org">http://www.sgmltools.org</A></LI>
+<LI>KDE-SDK (<B>KDE S</B>oftware <B>D</B>evelopment <B>K</B>it) com KDoc, KSgml2Html, KTranslator (disponível em 
+<A HREF="http://developer.kde.org">http://developer.kde.org</A>)</LI>
+<LI>KDbg, KIconEdit (disponível em 
+<A HREF="http://www.kde.org">http://www.kde.org</A>)</LI>
+</UL>
+<P>O KDevelop foi testado com SuSE Linux 5.2 num AMD K6 200, 64MB RAM e FreeBSD 3.0-Release bem como um SuSE Linux 6.0 num Intel
+200 MMX, 128MB RAM.
+<P>Tanto quanto os autores sabem, SuSE Linux e FreeBSD contêm todos os pacotes necessários, incluindo a2ps e enscript como pacotes ou
+rpm's, pelo que não deve ter qualquer problema a instalar as aplicações de terceiros requeridas.
+<P><B>Documentação:</B> 
+<P>Para criar a documentação da biblioteca KDE, necessita do pacote das kdelibs em código fonte disponível no seu
+sistema como providenciado pelo projecto KDE ou incluido com os pacotes de código-fonte da sua distribuição e do <B>KDoc</B> (incluido no
+KDE-SDK).
+<P>Estamos também a oferecer uma Referência C/C++ na nossa página principal em 
+<A HREF="http://www.kdevelop.com">http://www.kdevelop.com</A> que é integrada no navegador de documentação após a sua
+instalação. Descarregue o pacote e copie o ficheiro como <CODE>root</CODE> para o seu directório KDE  e descomprima-o <CODE>tar zxvf
+c_c++_reference.tar.gz</CODE>, após o que a referência estará disponível na árvore de documentação; caso contrário seleccionar o livro de referência no
+navegador mostrará uma página de erro com o endereço URL da página do KDevelop oferecendo o ficheiro e descrevendo o processo de instalação.
+<H3><A NAME="ss2.3">2.3 Compilação e Instalação</A>
+</H3>
+
+<P>Por forma a compilar e instalar o KDevelop no seu sistema, escreva o seguinte no directório base da sua distribuição do KDevelop:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+        % ./configure
+        % make
+
+        (como root)
+        
+        % make install
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>
+<P>Visto que o KDevelop utiliza o <CODE>autoconf</CODE> não deverá ter problema a compila-lo.
+<P>Por forma a compilar a snapshot do CVS do KDevelop, escreva o seguinte:
+<BLOCKQUOTE><CODE>
+<PRE>
+        % make -f Makefile.cvs
+        % ./configure
+        % make
+
+        mude para `root` e escreva:
+        
+        % make install
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Se o comando make do seu sistema for <CODE>gmake</CODE>, escreva <CODE>gmake</CODE> em vez de <CODE>make</CODE>.
+<P>
+<H3><A NAME="ss2.4">2.4 Iniciar o KDevelop</A>
+</H3>
+
+<P>Se utiliza o KDE como gestor de janelas, o KDevelop pode ser iniciado escolhendo
+"K"-&gt;"Aplicações"-&gt;"KDevelop"-&gt;"KDevelop 0.4". Como o KDevelop suporta KDE-Mime-types, também o pode iniciar seleccionando um
+ficheiro de projecto KDevelop ("*.kdevprj", apresentado com o icon de projecto do KDevelop) no Gestor de Ficheiros do KDE o que iniciará o KDevelop
+e carregará o projecto.
+Utilizando outros gestores de janelas, abra uma consola e escreva:
+<BLOCKQUOTE><CODE>
+<PRE>
+% kdevelop
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Para iniciar o Kdevelop com um projecto existente, mude para o directório do projecto e escreva:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+        
+% kdevelop  &lt;seuProjecto&gt;.kdevprj
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Dentro de cada conta de utilizador o KDevelop irá invocar o processo de 
+<@@ref>The Installation Programinstalação automatica</A> no primeiro arranque,
+permitindo uma configuração rápida das opções mais necessárias. Se a sua instalação estiver estragada, pode reconfigurar o KDevelop
+a qualquer momento quer escrevendo
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+        
+% kdevelop  --setup
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>ou, quando a utilizar o KDE, escolhendo "K"-&gt;"Aplicações"-&gt;"KDevelop"-&gt;"Setup".
+<P>
+<H3><A NAME="O Programa de Instalação"></A> <A NAME="ss2.5">2.5 The Installation Program</A>
+</H3>
+
+<P>O KDevelop inclui um módulo de instalação automatica que é invocado sempre que o Kdevelop é iniciado e o ficheiro de configuração
+kdeveloprc não existe. Sugerimos que siga os passos de instalação escolhendo "Prosseguir" para automaticamente verificar o seu sistema e
+configurar o ambiente do KDevelop.
+<P>Os botões de diálogo da instalação executam as seguintes acções:
+<P><B>Ajuda:</B>  Abrirá o programa KDEHelp.
+<P><B>Prosseguir:</B> Isto inicia o processo de instalação e executa as seguintes acções:
+<P>
+<OL>
+<LI> Verificar a existência do make/gmake, autoconf, autoheader, automake e perl para a criação e compilação de novas aplicações
+geradas pelo KDevelop. Se o gmake estiver instalado, o comando make será definido automaticamente para utilizar o gmake.  Outras opções de linha de comando
+para o seu programa make podem ser definidas no diálogo de configuração acessível pelo menu de opções, mais tarde. Uma introdução ao desenvolvimento em Unix é
+explicado na secção 
+<A HREF="index-3.html#Programs">Programas</A>.
+</LI>
+<LI> Verificar a existência do KDoc e Glimpse. Estas permitirão criar automaticamente uma nova documentação de bibliotecas KDE e um indice de busca
+num passo seguinte da configuração, se encontradas.
+</LI>
+<LI> Verificar a existência do a2ps e enscript para assegurar que é possível imprimir. Um destes dois programas tem de estar instalado
+para permitir imprimir correctamente. Se nenhum deles estiver instalado, pode faze-lo a qualquer momento mais tarde sem ter de correr a
+configuração de novo.
+</LI>
+<LI> Verificar a existência do KDbg, KIconedit e KTranslator. Encorajamo-lo a instalar esses programas pois são bons
+ajudantes para criar aplicações KDE completas. Note que o KDbg é utilizado directamente para depurar o seu projecto actual dentro do
+KDevelop; o KIconedit é utilizado para apresentar e editar pixmaps seleccionados nas árvores de vista de ficheiros. Os programas KDbg, KIconedit e KTranslator
+serão então configurados para estarem disponíveis no menu "Ferramentas" da barra de menu do KDevelop se encontrados. Outras ferramentas podem ser adicionadas ao
+menu Ferramentas seleccionado "Ferramentas..." no menu de Opções mais tarde.
+</LI>
+<LI> Resumo de programas detectados: a instalação lista os programas que encontrou e os que não encontrou. Dicas adicionais são dadas, see um
+um programa necessário for recomendado.
+</LI>
+<LI>Detecção do caminho para a sua documentação electrónica Qt: verifica vários caminhos standard no seu sistema procurando a documentação e
+define o caminho automaticamente. Se a sua documentação Qt não tiver sido encontrada quer porque não está instalado ou o seu sistema a tem numa
+localização diferente, uma mensagem aparecerá pedindo-lhe para definir o caminho manualmente ou continuar. Escolhendo o botão para definir
+o caminho leva-lo-á de volta à janela principal de instalação e mostrará um campo de edição com um botão à direita para escolher o caminho.
+Normalmente isto é no directório qt/html. Após faze-lo, a instalação pode continuar com a selecção de "Prosseguir" novamente.
+</LI>
+<LI> Se o KDoc foi detectado, ser-lhe-á pedido para criar/actualizar a documentação da sua biblioteca KDE. Para isso, precisa de ter as
+bibliotecas KDE em código fonte. Para utilizadore Linux que tiverem instalado o KDE de uma distribuição, sugerimos que copiem e extraiam
+o código fonte do pacote kdelibs para o seu sistema; utilizadores do Free BSD que tenham instalado as kdelibs como pacote deverão procurar o correspondente pacote
+de distribuição na colecção de portes. Se nenhum destes casos for o seu, deverá ir buscar o código fonte a 
+<A HREF="http://www.kde.org">http://www.kde.org</A> e descomprimir as fontes no seu sistema. Se deseja utilizar o pacote de documentação
+disponibilizado por 
+<A HREF="http://developer.kde.org">http://developer.kde.org</A>, cancele a criação e continue criando
+o índice de busca. Depois do programa de instalação terminar e o KDevelop ter iniciado, defina o caminho para o pacote de documentação descomprimido
+no diálogo de Configuração do KDevelop e corra a configuração do índice de novo, que pode ser encontrado na mesma página do diálogo de configuração.
+
+O diálogo "Actualizar a documentação das bibliotecas KDE" é definido para utilizar um caminho por defeito para a localização da documentação em 
+$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation. A única coisa que tem a fazer é escolher o caminho para o código fonte das bibliotecas que
+descompactou no seu sistema com o botão de selecção no topo do diálogo e escolher OK. Como exemplo, se tiver o pacote kdelibs.tar.gz
+de 
+<A HREF="http://www.kde.org">http://www.kde.org</A> e o tiver puxado para o seu directório principal, terá de abrir uma
+consola ou terminal e escrever "tar zxvf kdelibs.tar.gz". Isto irá descomprimir o código fonte para o directório $HOME/kdelibs, que então
+conterá o código fonte para cada biblioteca num subdirectório, por ex. para a kdecore, seria em /home/rnolden/kdelibs/kdecore. Agora, o
+caminho que tem de inserir no diálogo de documentação das bibliotecas KDEdeverá ser o caminho para todas as bibliotecas, no exemplo
+/home/rnolden/kdelibs.
+
+Se o caminho tiver sido definido correctamente, ser-lhe-á perguntado se a documentação deve ser criada utilizando a biblioteca khtml ou a khtmlw. Ambas
+disponibilizam um widget HTML que é utilizado para criar janelas que podem mostrar ficheiros HTML e é utilizado pelo KDEHelp e KFM. Como as classes são
+as mesmas em ambas as bibliotecas, decidimos apenas incluir uma biblioteca para documentação para evitar confusão devido ao facto de os ficheiros
+header que contêm as classes diferirem nos seus nomes. Após premir o botão OK, uma mensagem na janela de instalação mostra que ela
+está em progresso e que deve aguardar pela próxima mensagem.
+<P>
+<P><B>NOTA:</B> Num sistema multi-utilizador ou sistemas com quotas de espaço em disco para contas de utilizadores, a instalação de uma documentação completa em HTML
+para cada utilizador seria um desperdício de espaço em disco. Neste caso, peça ao seu administrador de sistema para correr o KDevelop com a conta root para
+permitir acesso de escrita à raiz do sistema. Depois instalar a documentação dentro do directório KDE, debaixo de
+$KDEDIR/share/apps/kdevelop/KDE-Documentation. O caminho correcto pode depois ser definido mais tarde no diálogo de configuração do KDevelop, disponível no
+menu "Opções".
+<P>
+</LI>
+<LI> Se a verificação do sistema encontrou o programa Glimpse, é-lhe oferecida a possibilidade de criar uma base de dados de busca. A
+base de dados de busca pode ser criada com as opções de incluir a documentação KDE e a documentação Qt (defeito). Adicionalmente
+a documentação do KDevelop é incluida e será indexada. Se possuir outra documentação que deseje indexada pode
+seleccionar os directórios e adiciona-los também ao processo de indexação.
+</LI>
+<LI> Durante a criação do index de busca, a janela de instalação apresentará uma mensagem indicando que está em progresso.
+</LI>
+<LI> Se todos os passos de instalação tiverem sido realizados correctamente, uma mensagem final dirá que o KDevelop será iniciado
+após se premir OK. Lembre-se que pode definir opções adicionais tais como gravação automática no diálogo de 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A> que é acessível a partir do menu de opções.</LI>
+</OL>
+<P><B>Cancelar:</B>  Mostrará uma mensagem de aviso de que o processo de instalação será cancelado.  Esta mensagem de aviso permite-lhe
+regressar à instalação ("Regressar") ou iniciar o KDevelop com os valores por defeito ("Continuar"). Lembre-se que neste caso terá
+de definir todas as opções sozinho com os diálogos de configuração disponibilizados no menu de opções.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Página seguinte</A>
+ <A HREF="index-1.html">Página anterior</A>
+ <A HREF="index.html#toc2">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
