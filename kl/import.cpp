@@ -23,6 +23,7 @@
 #include <iostream.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <qglobal.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qtextstream.h>
@@ -30,7 +31,7 @@
 #include <qregexp.h>
 #include <qstrlist.h>
 
-#if _QT_VERSION < 2
+#if QT_VERSION < 200
 #define QCString         QString
 #endif
 
@@ -51,11 +52,22 @@ QString getValues(QFile &file, const QString &sKeyword)
           bFound=true;
           // take the part w/o the keyword
           sResult=sLine.mid(sKeyword.length(),sLine.length());
-          // check the escape char
-          if (sResult.right(1)==QCString("\\"))
+          // kill now the follwing =
+          sResult=sResult.stripWhiteSpace(); // but first maybe there's a whitespace
+          if (sResult.left(1)=="=")
           {
-                bContinues=true;
-                sResult=sResult.left(sResult.length()-1);
+              sResult=sResult.mid(1, sResult.length());
+              // check the escape char
+              if (sResult.right(1)=="\\")
+              {
+                    bContinues=true;
+                    sResult=sResult.left(sResult.length()-1);
+              }
+          }
+          else
+          {
+              bFound=false;    // there's no = so continue search
+              sResult="";
           }
       }
   }
@@ -69,7 +81,7 @@ QString getValues(QFile &file, const QString &sKeyword)
       sResult+=sLine;
 
       // check the escape char
-      if (sResult.right(1)==QCString("\\"))
+      if (sResult.right(1)=="\\")
       {
             sResult=sResult.left(sResult.length()-1);
       }
@@ -115,51 +127,46 @@ QStrList makeStringList(const QString &str)
 
 void outputInfo(QFile &srcfile, const QString &sName, QFile &destfile)
 {
-  QString sKeyword,sEntry;
-  QStrList sEntryList;
+  QString sEntry;
+  QStrList slEntryList;
 
 
   cout << "---" << endl;
   cout << "Name of project: " << sName << endl;
 
-  sKeyword=QCString("_SOURCES = ");
-  sEntry=getValues(srcfile, sName+sKeyword);
-  sEntryList=makeStringList(sEntry);
+  sEntry=getValues(srcfile, sName+"_SOURCES");
+  slEntryList=makeStringList(sEntry);
 
   // here we are having the info either as string or stringlist
   if (!sEntry.isEmpty())
     cout << "  sources: " << sEntry <<endl;
 
   /////////////
-  sKeyword=QCString("_METASOURCES = ");
-  sEntry=getValues(srcfile, sName+sKeyword);
-  sEntryList=makeStringList(sEntry);
+  sEntry=getValues(srcfile, sName+"_METASOURCES");
+  slEntryList=makeStringList(sEntry);
 
   // here we are having the info either as string or stringlist
   if (!sEntry.isEmpty())
     cout << "  metasources: " << sEntry <<endl;
 
   /////////////
-  sKeyword=QCString("_LDADD = ");
-  sEntry=getValues(srcfile, sName+sKeyword);
-  sEntryList=makeStringList(sEntry);
+  sEntry=getValues(srcfile, sName+"_LDADD");
+  slEntryList=makeStringList(sEntry);
 
   // here we are having the info either as string or stringlist
   if (!sEntry.isEmpty())
     cout << "  ldadd: " << sEntry <<endl;
 
   /////////////
-  sKeyword=QCString("_INCLUDES = ");
-  sEntry=getValues(srcfile, sName+sKeyword);
-  sEntryList=makeStringList(sEntry);
+  sEntry=getValues(srcfile, sName+"_INCLUDES");
+  slEntryList=makeStringList(sEntry);
 
   // here we are having the info either as string or stringlist
   if (!sEntry.isEmpty())
     cout << "  includes: " << sEntry <<endl;
 
-  sKeyword=QCString("APPSDIR = ");
-  sEntry=getValues(srcfile, sKeyword);
-  sEntryList=makeStringList(sEntry);
+  sEntry=getValues(srcfile, "APPSDIR");
+  slEntryList=makeStringList(sEntry);
 
   // here we are having the info either as string or stringlist
   if (!sEntry.isEmpty())
@@ -178,8 +185,7 @@ int analyze(QFile &file, const QString &dirstr)
 
  // Construct the Makefile.am string
 
- sMakefilename =  QCString("/Makefile.am");
- sMakefilename = dirstr + sMakefilename;
+ sMakefilename = dirstr + "/Makefile.am";
 
  QFile makefile(sMakefilename);
 
@@ -203,11 +209,11 @@ int analyze(QFile &file, const QString &dirstr)
 
  cout << "Entering directory '" << dirstr << "'" << endl;
 
- sSubDirs=getValues(makefile, QCString("SUBDIRS = "));
+ sSubDirs=getValues(makefile, "SUBDIRS");
  slSubDirList=makeStringList(sSubDirs);
  // Get subdirs
 
- sProgs=getValues(makefile, QCString("bin_PROGRAMS = "));
+ sProgs=getValues(makefile, "bin_PROGRAMS");
  slProgList=makeStringList(sProgs);
 
 
@@ -231,7 +237,7 @@ int analyze(QFile &file, const QString &dirstr)
  {
     if (!sEntry.isEmpty())
     {
-        analyze(file, dirstr+QCString("/")+sEntry);
+        analyze(file, dirstr+"/"+sEntry);
     }
     sEntry=slSubDirList.next();
  }
@@ -300,3 +306,5 @@ int main(int argc, char** argv)
 
  return EXIT_SUCCESS;
 }
+
+
