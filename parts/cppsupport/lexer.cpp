@@ -532,7 +532,8 @@ void Lexer::processUndef()
 
 int Lexer::macroPrimary()
 {
-    int result = 0;
+    readWhiteSpaces( false );    
+    int result = 0;    
     switch( currentChar().latin1() ) {
     case '(':
 	nextChar();
@@ -568,7 +569,7 @@ int Lexer::macroPrimary()
 		    return macroPrimary();
 		}
 		// TODO: implement
-		return m_driver->macros(m_driver->currentFileName()).contains(  toString(tk) );
+		return m_driver->macros(m_driver->currentFileName()).contains( toString(tk) );
 	    case Token_number_literal:
 		return toString(tk).toInt();
 	    case Token_char_literal:
@@ -589,6 +590,7 @@ int Lexer::macroMultiplyDivide()
     int result = macroPrimary();
     int iresult, op;
     for (;;)    {
+	readWhiteSpaces( false );
         if( currentChar() == '*' )
             op = 0;
         else if( currentChar() == '/' )
@@ -610,6 +612,7 @@ int Lexer::macroAddSubtract()
 {
     int result = macroMultiplyDivide();
     int iresult, ad;
+    readWhiteSpaces( false );
     while( currentChar() == '+' || currentChar() == '-')    {
         ad = currentChar() == '+';
 	nextChar();
@@ -623,6 +626,7 @@ int Lexer::macroRelational()
 {
     int result = macroAddSubtract();
     int iresult;
+    readWhiteSpaces( false );
     while( currentChar() == '<' || currentChar() == '>')    {
 	int lt = currentChar() == '<';
 	nextChar();
@@ -645,6 +649,7 @@ int Lexer::macroEquality()
 {
     int result = macroRelational();
     int iresult, eq;
+    readWhiteSpaces( false );
     while ((currentChar() == '=' || currentChar() == '!') && peekChar() == '=')  {
 	eq = currentChar() == '=';
 	nextChar( 2 );
@@ -657,8 +662,9 @@ int Lexer::macroEquality()
 int Lexer::macroBoolAnd()
 {
     int result = macroEquality();
+    readWhiteSpaces( false );
     while( currentChar() == '&' && peekChar() != '&')    {
-	nextChar( 2 );
+	nextChar();
 	result &= macroEquality();
     }
     return result;
@@ -667,6 +673,7 @@ int Lexer::macroBoolAnd()
 int Lexer::macroBoolXor()
 {
     int result = macroBoolAnd();
+    readWhiteSpaces( false );
     while( currentChar() == '^')    {
 	nextChar();
 	result ^= macroBoolAnd();
@@ -677,8 +684,9 @@ int Lexer::macroBoolXor()
 int Lexer::macroBoolOr()
 {
     int result = macroBoolXor();
+    readWhiteSpaces( false );
     while( currentChar() == '|' && peekChar() != '|')    {
-	nextChar( 2 );
+	nextChar();
 	result |= macroBoolXor();
     }
     return result;
@@ -687,9 +695,12 @@ int Lexer::macroBoolOr()
 int Lexer::macroLogicalAnd()
 {
     int result = macroBoolOr();
+    readWhiteSpaces( false );
     while( currentChar() == '&' && peekChar() == '&')    {
 	nextChar( 2 );
+	int start = currentPosition();
         result = macroBoolOr() && result;
+	QString s = m_source.mid( start, currentPosition() - start );
     }
     return result;    
 }
@@ -697,6 +708,7 @@ int Lexer::macroLogicalAnd()
 int Lexer::macroLogicalOr()
 {
     int result = macroLogicalAnd();
+    readWhiteSpaces( false );
     while( currentChar() == '|' && peekChar() == '|')    {
 	nextChar( 2 );
         result = macroLogicalAnd() || result;
