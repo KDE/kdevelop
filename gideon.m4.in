@@ -85,21 +85,3 @@ if test "$enable_docbase" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_DOCBASE, 1, [If Debian docbase should be supported])
 fi
 ])
-
-
-dnl
-dnl Check for guile
-dnl
-AC_DEFUN(KDEV_CHECK_GUILE,
-[
-AC_PATH_PROG(GUILE, guile-config)
-if test -n "$GUILE"; then
-  AC_MSG_CHECKING(for guile flags)
-  GUILE_CFLAGS="`guile-config compile`"
-  GUILE_LDFLAGS="`guile-config link`"
-  AC_SUBST(GUILE_CFLAGS)
-  AC_SUBST(GUILE_LDFLAGS)
-  AC_MSG_RESULT($have_guile)
-  AC_DEFINE(HAVE_GUILE, 1, [Define if you have guile])
-fi
-])
