@@ -1,0 +1,11 @@
+/**
+@mainpage The KInterfaceDesigner Library
+
+This library contains all KInterfaceDesigner classes and interfaces which form the core of 
+GUI Designer integration framework.
+
+<b>Link with</b>: -lkinterfacedesigner
+
+<b>Include path</b>: -I\$(kde_includes)/kinterfacedesigner
+*/
+

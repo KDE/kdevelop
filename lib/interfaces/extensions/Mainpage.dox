@@ -1,0 +1,10 @@
+/**
+@mainpage The KDevelop Extension Interfaces Library
+
+This library contains extension interfaces used by KDevelop plugin architecture.
+
+<b>Link with</b>: -lkdevelop
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/interfaces/extensions
+*/
+

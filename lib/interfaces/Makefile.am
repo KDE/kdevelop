@@ -26,3 +26,8 @@ servicetype_DATA = kdevelopproject.desktop kdeveloplanguagesupport.desktop \
 METASOURCES = AUTO
 
 SUBDIRS = extensions external extras
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil designer_integration
+DOXYGEN_PROJECTNAME = KDevelop Interfaces Library
+DOXYGEN_DOCDIRPREFIX = kdev
+include ../../Doxyfile.am

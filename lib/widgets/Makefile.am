@@ -20,3 +20,8 @@ libkdevwidgets_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 rcdir = $(kde_datadir)/kdevelop
 
 rc_DATA =  kdevhtml_partui.rc
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces
+DOXYGEN_PROJECTNAME = KDevelop Widgets Library
+DOXYGEN_DOCDIRPREFIX = kdev
+include ../../Doxyfile.am

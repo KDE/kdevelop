@@ -1,0 +1,11 @@
+/**
+@mainpage The KDevelop Extra Interfaces Library
+
+This library contains extra interfaces that are not the part of KDevelop plugin architecture
+but that can be implemented by extra plugins or "plugins for plugins".
+
+<b>Link with</b>: -lkdevextras
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/interfaces/extras
+*/
+

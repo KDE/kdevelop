@@ -186,9 +186,9 @@ public:
             break;
     }
     return des;
+    @endcode
     @ref ImplementationWidget and @ref QtDesignerIntegration classes are available
     from designerintegration support library.
-    @endcode
     @param type The type of the designer to integrate.
     @return The pointer to designer integration of given type or 0.*/
     virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);

@@ -64,7 +64,7 @@ public:
     /**Cleans rurl by removing extra slashes.*/
     static QString cleanName(const QString &rurl);
     /**Corrects rurl according to the given type and returns corrected url.
-    Also cleans url (see @cleanRURL).*/
+    Also cleans url (see @ref cleanRURL).*/
     static QString correctName(const QString &rurl, const Type type = Auto);
 
     bool operator == (const Name &rname);
@@ -73,7 +73,7 @@ public:
 protected:
     /**Corrects m_rurl and m_type according to the relative name storing policy,
     i.e. removes leading slash, removes trailing slash for files, changes type
-    to be either File or Directory, but not Auto. Also cleans url (see @cleanRURL).*/
+    to be either File or Directory, but not Auto. Also cleans url (see @ref cleanRURL).*/
     void correct();
 
 private:

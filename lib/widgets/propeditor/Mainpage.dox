@@ -1,0 +1,110 @@
+/**
+@mainpage The KDevelop Property Editing Library
+
+<b>Link with</b>: -lkdevelop
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/propeditor
+
+
+\section whatis What is Property Editor?
+
+%Property editor is a collection of facilities to store and edit the
+properties of an object. For example, look at %Qt Designer. Each widget
+has a list of properties that can be edited in a nice table form.
+Same ideology is used to edit properties in Kugar Report Designer
+(from KOffice distribution). In KDevelop project manager can also display
+the properties of currently selected build item in property editor.
+
+\section over Library Overview
+
+This PropertyEditor library is a redesign of Kugar property editing library 
+with the goal to be more generic and extensible.
+
+Library provides a @ref PropertyLib::Property class which stores property name, value and some
+more important information like description or the list of possible values.
+Using @ref PropertyLib::Property class adds more overhead over Q_PROPERTY but provides more
+flexibility. You can subclass @ref PropertyLib::Property and create your custom properties.
+Custom properties can have either predefined type (see @ref PropertyLib::PropertyType) or
+custom type. Custom type should be used if a custom property editor widget is
+necessary.
+
+Properties are organized into lists. @ref PropertyLib::PropertyList is designed
+to store such lists in most efficient manner. It also allows to group
+properties (for example think about "geometrical" properties like "x", "y", etc.).
+
+Property lists can be displayed in @ref PropertyLib::PropertyEditor widget which will
+display them in a table form. Note that @ref PropertyLib::PropertyEditor takes not
+a @ref PropertyLib::PropertyList object, but @ref PropertyLib::PropertyAccessor instead.
+
+@ref PropertyLib::PropertyAccessor is designed to provide a method to access an intersection
+of property lists. For example, let's consider object A with property list a_list
+abd object B with list b_list. Now let's imagine we want to display common properties
+from a_list and b_list in one @ref PropertyLib::PropertyEditor widget. Obviously, we need to
+"intersect" a_list with b_list and display the result of intersection.
+This is why @ref PropertyLib::PropertyAccessor is used for editing. If we change
+the value of a property in the editor, @ref PropertyLib::PropertyAccessor will update
+both properties from underlying a_list and b_list.
+
+@ref PropertyLib::PropertyEditor at the same time shows only one editor for selected
+property in the list. Each @ref PropertyLib::PropertyType has corresponding @ref PropertyLib::PropertyWidget
+which displays property editor or draws a property in the list if it is not edited.
+More exactly, if @ref PropertyLib::PropertyEditor needs to display editor widget, it displays
+@ref PropertyLib::PropertyWidget, else it calls @ref PropertyLib::PropertyWidget::drawViewer function.
+Custom property widgets should be subclasses of @ref PropertyLib::PropertyWidget.
+
+To create property widgets at runtime, a factory is used. Factory class is
+called @ref PropertyLib::PropertyMachineFactory. Static function @ref PropertyLib::PropertyMachineFactory::getInstance
+can be used to obtain the reference to the factory instance. Factory creates and returns
+so-called @ref Machine for each registered property type (either predefined or user defined).
+
+@ref Machine contains @ref PropertyLib::PropertyWidget and a list of "detailed" machines.
+Usually only property widget is necessary for a property but there are 
+complex properties like "Font" for example. We would like to see separate editors
+for font family, size, etc. and a button to choose all of these in the dialog.
+For that "Font" property, a PropertyWidget with a "choose font" button 
+and also number of detailed widgets like "font family" combo, etc. can be created.
+
+\section Examples
+A simple example on how to create a property editor and use it with one property list:
+\code
+    PropertyEditor *m_editor = new PropertyEditor(this);
+    
+    PropertyList *list = new PropertyList;
+    list->addProperty("My Group", new Property(Integer, "First Property",
+        "This is my first property", -5));
+    list->addProperty("My Group", new Property(String, "Second Property",
+        "This is my second property", "Hello"));
+    list->addProperty(new Property(Color, "Third Property",
+        "This is my third property", QColor("green")));
+        
+    m_editor->populateProperties(*list);
+\endcode
+
+More advanced example with property accessors and list intersection:
+\code
+    PropertyEditor *m_editor = new PropertyEditor(this);
+    
+    PropertyList *list = new PropertyList;
+    list->addProperty("My Group", new Property(Integer, "First Property",
+        "This is my first property", -5));
+    list->addProperty("My Group", new Property(String, "Second Property",
+        "This is my second property", "Hello"));
+    list->addProperty(new Property(Color, "Third Property",
+        "This is my third property", QColor("green")));
+
+    PropertyList *list2 = new PropertyList;
+    list2->addProperty("My Group", new Property(Integer, "First Property",
+        "This is my first property", -7));
+    list2->addProperty("My Group", new Property(String, "Second Property",
+        "This is my second property", "Hello"));
+    list2->addProperty(new Property(String, "Third Property",
+        "This is my third property", "green"));
+
+    PropertyAccessor *ac = list->intersect(*list2);
+    
+    m_editor->populateProperties(ac);
+\endcode
+In this example only properties named "First Property" and "Second Property" will be shown in editor.
+"Third Property" has different types in list and list2 and will not be included in intersection. 
+
+*/

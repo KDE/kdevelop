@@ -35,7 +35,7 @@ struct DomPathElement
 typedef QValueList<DomPathElement> DomPath;
 
 /**
- * Utility class for conveniently accessing data in a DOM tree.
+ * Utility class for conveniently accessing data in a %DOM tree.
  */
 class DomUtil
 {
@@ -92,7 +92,7 @@ public:
         <code>
           writeEntry(doc, "/general/special", "foo");
         </code>
-      \endverbatim creates the DOM fragment: \verbatim
+      \endverbatim creates the %DOM fragment: \verbatim
         <code>
           <general><special>foo</special></general>
         </code>
@@ -114,7 +114,7 @@ public:
           QStringList l; l << "one" << "two";
           writeListEntry(doc, "/general/special", "el", l);
         </code>
-      \endverbatim creates the DOM fragment: \verbatim
+      \endverbatim creates the %DOM fragment: \verbatim
         <code>
           <general><special><el>one</el><el>two</el></special></general>
         </code>
@@ -132,7 +132,7 @@ public:
           l << DomUtil::StringPair("two", "2");
           writePairListEntry(doc, "/general/special", "el", "first", "second", l);
         </code>
-      \endverbatim creates the DOM fragment: \verbatim
+      \endverbatim creates the %DOM fragment: \verbatim
         <code>
           <general><special>
             <el first="one" second="1"/>

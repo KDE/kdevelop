@@ -11,3 +11,7 @@ pcolorcombo.cpp    pdoublenuminput.cpp  ppixmapedit.cpp   propertylist.cpp    ps
 
 kdevpropeditorincludedir = $(includedir)/kdevelop/propeditor
 kdevpropeditorinclude_HEADERS = childproperty.h pcombobox.h pdummywidget.h ppointedit.h propertymachinefactory.h pcursoredit.h pfontbutton.h prectedit.h propertywidget.h pdateedit.h pfontcombo.h property.h psizeedit.h pdatetimeedit.h plineedit.h propertyeditor.h psizepolicyedit.h pdoublenuminput.h ppixmapedit.h propertylist.h pspinbox.h propertywidgetproxy.h multiproperty.h pyesnobutton.h purledit.h psymbolcombo.h pstringlistedit.h pcolorcombo.h pcolorbutton.h pcheckbox.h plinestyleedit.h
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils
+DOXYGEN_PROJECTNAME = KDevelop Property Editing Library
+include ../../../Doxyfile.am

@@ -10,3 +10,9 @@ METASOURCES = AUTO
 kdevelopincludedir = $(includedir)/kdevelop/util
 kdevelopinclude_HEADERS = domutil.h execcommand.h filetemplate.h urlutil.h \
 	configwidgetproxy.h rurl.h
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevextensions kdevinterfaces
+DOXYGEN_PROJECTNAME = KDevelop Utility Library
+DOXYGEN_DOCDIRPREFIX = kdev
+include ../../Doxyfile.am
+
