@@ -18,6 +18,7 @@
 #include <qfile.h>
 #include <qlayout.h>
 #include <qtextstream.h>
+#include <qtimer.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -74,16 +75,29 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
 
     setMinimumWidth(300);
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
+    QTimer::singleShot(0, this, SLOT(slotDelayedStart()));
 }
 
 
 ProgressDialog::~ProgressDialog()
 {}
 
+void ProgressDialog::slotDelayedStart()
+{
+    procdone = false;
+    scanDirectories();
+    if (!createConfig())
+    {
+      done(1);
+      return;
+    }
+    generateIndex();
+}
+
 
 void ProgressDialog::done(int r)
 {
-    if (!r)
+    if (!r && proc)
         proc->kill();
     KDialogBase::done(r);
 }
@@ -137,6 +151,10 @@ void ProgressDialog::addDir(const QString &dir)
         if (*it != "." && *it != "..") {
             addDir(dir + "/" + *it);
             kapp->processEvents();
+        }
+        if (procdone)
+        {
+          return;
         }
     }
     kapp->processEvents();
@@ -261,35 +279,35 @@ void ProgressDialog::scanDirectories()
     }
 
     if (indexQt) {
-    	QString oldqtdocdir;
-    	config.setGroup("General Qt");
-    	QMap<QString, QString> emap = config.entryMap("General Qt");
-    	QMap<QString, QString>::Iterator it;
-    	for (it = emap.begin(); it != emap.end(); ++it)
-    	{
-        	QString qtdocdir = config.readPathEntry(it.key());
-        	if (!qtdocdir.isEmpty())
-		{
-			qtdocdir = qtdocdir.left(qtdocdir.findRev("/") + 1);
-			if (qtdocdir != oldqtdocdir)
-			{
-            			addDir(qtdocdir);
-				oldqtdocdir = qtdocdir;
-			}
-		}
-    	}
+      QString oldqtdocdir;
+      config.setGroup("General Qt");
+      QMap<QString, QString> emap = config.entryMap("General Qt");
+      QMap<QString, QString>::Iterator it;
+      for (it = emap.begin(); it != emap.end(); ++it)
+      {
+          QString qtdocdir = config.readPathEntry(it.key());
+          if (!qtdocdir.isEmpty())
+    {
+      qtdocdir = qtdocdir.left(qtdocdir.findRev("/") + 1);
+      if (qtdocdir != oldqtdocdir)
+      {
+                  addDir(qtdocdir);
+        oldqtdocdir = qtdocdir;
+      }
+    }
+      }
     }
 
     if (indexKdelibs) {
-    	config.setGroup("General Doxygen");
-    	QMap<QString, QString> xmap = config.entryMap("General Doxygen");
-    	QMap<QString, QString>::Iterator itx;
-    	for (itx = xmap.begin(); itx != xmap.end(); ++itx)
-    	{
-        	QString kdelibsdocdir =  config.readPathEntry(itx.key());
-        	if (!kdelibsdocdir.isEmpty())
-            		addDir(kdelibsdocdir);
-    	}
+      config.setGroup("General Doxygen");
+      QMap<QString, QString> xmap = config.entryMap("General Doxygen");
+      QMap<QString, QString>::Iterator itx;
+      for (itx = xmap.begin(); itx != xmap.end(); ++itx)
+      {
+          QString kdelibsdocdir =  config.readPathEntry(itx.key());
+          if (!kdelibsdocdir.isEmpty())
+                addDir(kdelibsdocdir);
+      }
     }
 
     if (indexBooks) {
@@ -356,7 +374,7 @@ bool ProgressDialog::createConfig()
         ts << "local_urls:\t\thttp://localhost/=/" << endl;
 //        ts << "local_urls:\t\tfile://=" << endl;
         ts << "local_urls_only:\ttrue" << endl;
-	ts << "limit_urls_to:\t\tfile://" << endl;
+  ts << "limit_urls_to:\t\tfile://" << endl;
         ts << "maximum_pages:\t\t1" << endl;
         ts << "image_url_prefix:\t" << images << endl;
         ts << "star_image:\t\t" << images << "star.png" << endl;
@@ -379,129 +397,63 @@ bool ProgressDialog::createConfig()
 
 #define CHUNK_SIZE 100
 
+void ProgressDialog::startHtdigProcess(bool initial)
+{
+  kdDebug(9002) << "htdig started" << endl;
+  delete proc;
+  proc = new KProcess();
+  *proc << exe << "-c" << (indexdir + "/htdig.conf");
+  if (initial) {
+      *proc << "-i";
+  }
+  connect(proc, SIGNAL(processExited(KProcess *)),
+          this, SLOT(htdigExited(KProcess *)));
+
+  htdigRunning = true;
+
+  // write out file
+  QFile f(indexdir+"/files");
+  if (!f.open(IO_WriteOnly)) {
+      kdDebug(9002) << "Could not open `files` for writing" << endl;
+      done(1);
+      return;
+  }
+  QTextStream ts(&f);
+  for (int i=0; i<CHUNK_SIZE; ++i, ++count) {
+      if (count >= filesToDig) {
+          procdone = true;
+          break;
+      }
+//    ts << "file://localhost/" + files[count] << endl;
+      ts << "http://localhost/" + files[count] << endl;
+  }
+  f.close();
+
+  // execute htdig
+  proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
+
+}
 
 bool ProgressDialog::generateIndex()
 {
     setState(1);
-
+    procdone = false;
     // run htdig
     KConfig config("kdevdoctreeviewrc", true);
     config.setGroup("htdig");
-    QString exe = config.readPathEntry("htdig", kapp->dirs()->findExe("htdig"));
+    exe = config.readPathEntry("htdig", kapp->dirs()->findExe("htdig"));
     if (exe.isEmpty())
-        return false;
-
-    bool initial = true;
-    bool done = false;
-    int  count = 0;
-
+    {
+        done(1);
+        return true;
+    }
     filesToDig = files.count();
+    count = 0;
     setFilesToDig(filesToDig);
     filesDigged = 0;
 
     //    QDir d; d.mkdir(indexdir);
-
-    while (!done) {
-        // kill old process
-        delete proc;
-
-        // prepare new process
-        proc = new KProcess();
-        *proc << exe << "-c" << (indexdir + "/htdig.conf");
-        if (initial) {
-            *proc << "-i";
-            initial = false;
-        }
-
-        kdDebug(9002) << "Running htdig" << endl;
-
-        //      connect(_proc, SIGNAL(receivedStdout(KProcess *,char*,int)),
-        //	      this, SLOT(htdigStdout(KProcess *,char*,int)));
-        connect(proc, SIGNAL(processExited(KProcess *)),
-                this, SLOT(htdigExited(KProcess *)));
-
-        htdigRunning = true;
-
-        // write out file
-        QFile f(indexdir+"/files");
-        if (!f.open(IO_WriteOnly)) {
-            kdDebug(9002) << "Could not open `files` for writing" << endl;
-            return false;
-	}
-
-        QTextStream ts(&f);
-        for (int i=0; i<CHUNK_SIZE; ++i, ++count) {
-            if (count >= filesToDig) {
-                done = true;
-                break;
-            }
-//            ts << "file://localhost/" + files[count] << endl;
-            ts << "http://localhost/" + files[count] << endl;
-        }
-        f.close();
-
-        // execute htdig
-        proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
-        while (htdigRunning && proc->isRunning())
-            kapp->processEvents();
-
-	if (!proc->normalExit())
-	{
-		delete proc;
-		return false;
-	}
-
-	if (proc->exitStatus() != 0) {
-            KMessageBox::sorry(0, i18n("Running htdig failed"));
-            delete proc;
-            return false;
-        }
-
-        filesDigged += CHUNK_SIZE;
-        setFilesDigged(filesDigged);
-        kapp->processEvents();
-    }
-
-    setState(2);
-
-    // run htmerge -----------------------------------------------------
-    exe = config.readPathEntry("htmerge", kapp->dirs()->findExe("htmerge"));
-    if (exe.isEmpty())
-        return false;
-
-    delete proc;
-    proc = new KProcess();
-    *proc << exe << "-c" << (indexdir + "/htdig.conf");
-
-    kdDebug(9002) << "Running htmerge" << endl;
-
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(htmergeExited(KProcess *)));
-
-    htmergeRunning = true;
-
-    proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
-
-    while (htmergeRunning && proc->isRunning())
-        kapp->processEvents();
-
-	if (!proc->normalExit())
-	{
-		delete proc;
-		return false;
-	}
-
-    if (proc->exitStatus() != 0) {
-        KMessageBox::sorry(0, i18n("Running htmerge failed"));
-        delete proc;
-        return false;
-    }
-
-    delete proc;
-
-    setState(3);
-    kapp->processEvents();
-
+    startHtdigProcess(true);
     return true;
 }
 
@@ -525,28 +477,98 @@ void ProgressDialog::htdigStdout(KProcess *, char *buffer, int len)
 }
 
 
-void ProgressDialog::htdigExited(KProcess *)
+void ProgressDialog::htdigExited(KProcess *proc)
 {
     kdDebug(9002) << "htdig terminated" << endl;
+    if (!proc->normalExit())
+    {
+      delete proc;
+      proc = 0L;
+      done(1);
+      return;
+    }
+    if (proc && proc->exitStatus() != 0) {
+                KMessageBox::sorry(0, i18n("Running htdig failed"));
+                delete proc;
+                proc = 0L;
+                done(1);
+                return;
+            }
     htdigRunning = false;
+    filesDigged += CHUNK_SIZE;
+    setFilesDigged(filesDigged);
+    if (!procdone)
+    {
+        startHtdigProcess(false);
+    } else
+    {
+      setFilesDigged(filesToDig);
+      setState(2);
+
+      KConfig config("kdevdoctreeviewrc", true);
+      config.setGroup("htdig");
+      // run htmerge -----------------------------------------------------
+      exe = config.readPathEntry("htmerge", kapp->dirs()->findExe("htmerge"));
+      if (exe.isEmpty())
+      {
+          done(1);
+          return;
+      }
+      startHtmergeProcess();
+    }
 }
 
+void ProgressDialog::startHtmergeProcess()
+{
+    kdDebug(9002) << "htmerge started" << endl;
+    delete proc;
+    proc = new KProcess();
+    *proc << exe << "-c" << (indexdir + "/htdig.conf");
 
-void ProgressDialog::htmergeExited(KProcess *)
+    kdDebug(9002) << "Running htmerge" << endl;
+
+    connect(proc, SIGNAL(processExited(KProcess *)),
+            this, SLOT(htmergeExited(KProcess *)));
+
+    htmergeRunning = true;
+
+    proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
+}
+
+void ProgressDialog::htmergeExited(KProcess *proc)
 {
     kdDebug(9002) << "htmerge terminated" << endl;
     htmergeRunning = false;
+    if (!proc->normalExit())
+    {
+      delete proc;
+      proc = 0L;
+      done(1);
+      return;
+    }
+    if (proc && proc->exitStatus() != 0) {
+        KMessageBox::sorry(0, i18n("Running htmerge failed"));
+        delete proc;
+        proc = 0L;
+        done(1);
+        return;
+    }
+    setState(3);
+    done(0);
 }
 
 void ProgressDialog::cancelClicked()
 {
-	if ((htdigRunning || htmergeRunning) && proc && proc->isRunning())
-	{
-		kdDebug(9002) << "Killing " << (htdigRunning ? "htdig" : "htmerge") << "daemon with Sig. 9" << endl;
-		proc->kill(9);
-		KMessageBox::error(0, i18n("The %1 process was killed!").arg(htdigRunning ? "htdig" : "htmerge"));
-		htdigRunning = htmergeRunning = false;
-	}
+  if ((htdigRunning || htmergeRunning) && proc && proc->isRunning())
+  {
+    kdDebug(9002) << "Killing " << (htdigRunning ? "htdig" : "htmerge") << "daemon with Sig. 9" << endl;
+    proc->kill(9);
+    htdigRunning = htmergeRunning = false;
+  } else
+  {
+    procdone = true;
+    done(2);
+  }
 }
 
 int main(int argc, char *argv[])
@@ -570,23 +592,9 @@ int main(int argc, char *argv[])
     KGlobal::locale()->setMainCatalogue("kdevelop");
 
     ProgressDialog *search = new ProgressDialog(0, "progress dialog");
+    app.setMainWidget(search);
     search->show();
-    kapp->processEvents();
-    QApplication::syncX();
-
-    //    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    // Assemble directory list
-    //    for (int i=0; i < args->count(); ++i)
-    //        search->scanDir(args->arg(i));
-    search->scanDirectories();
-
-    // Write htdig.conf file
-    if (!search->createConfig())
-        return 1;
-
-    // Do it :-)
-    search->generateIndex();
+    app.exec();
 
     return 0;
 }

@@ -22,6 +22,9 @@
 #include <kprogress.h>
 
 
+class QTimer;
+
+
 class ProgressDialog : public KDialogBase
 {
     Q_OBJECT
@@ -42,6 +45,7 @@ private slots:
     void htdigExited(KProcess *proc);
     void htmergeExited(KProcess *proc);
     void cancelClicked();
+    void slotDelayedStart();
 
 private:
     void setFilesScanned(int s);
@@ -49,11 +53,16 @@ private:
     void setFilesDigged(int d);
     void setState(int n);
     void done(int r);
+    void startHtdigProcess(bool initial);
+    void startHtmergeProcess();
 
     QLabel *filesLabel, *check1, *check2, *check3;
     KProgress *bar;
 
+    int count;
+    bool procdone;
     QString indexdir;
+    QString exe;
     QStringList files;
     KProcess *proc;
     volatile int filesToDig, filesDigged, filesScanned;
