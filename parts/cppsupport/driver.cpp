@@ -135,7 +135,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "K_SYCOCATYPE", SkipWordAndArguments );
     lexer->addSkipWord( "EXPORT_DOCKCLASS" );
     lexer->addSkipWord( "K_EXPORT_COMPONENT_FACTORY", SkipWordAndArguments );
-    
+
     // qt
     lexer->addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
     lexer->addSkipWord( "Q_ENUMS", SkipWordAndArguments );
@@ -153,9 +153,12 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "Q_EXPLICIT" );
     lexer->addSkipWord( "QMAC_PASCAL" );
     lexer->addSkipWord( "QT_STATIC_CONST" );
+    lexer->addSkipWord( "QT_STATIC_CONST_IMPL" );
     lexer->addSkipWord( "QT_WIN_PAINTER_MEMBERS" );
     lexer->addSkipWord( "QT_NC_MSGBOX" );
-
+    lexer->addSkipWord( "Q_VARIANT_AS", SkipWordAndArguments );
+    lexer->addSkipWord( "CALLBACK_CALL_TYPE" );
+    
     // flex
     lexer->addSkipWord( "yyconst" );
     lexer->addSkipWord( "YY_RULE_SETUP" );
@@ -175,8 +178,9 @@ void Driver::setupLexer( Lexer * lexer )
 
     // windows
     lexer->addSkipWord( "WINAPI" );
-
+    lexer->addSkipWord( "__stdcall" );
     lexer->addSkipWord( "__cdecl" );
+    lexer->addSkipWord( "_cdecl" );
 }
 
 void Driver::setupParser( Parser * parser )
