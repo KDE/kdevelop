@@ -874,10 +874,10 @@ protected:
   bool queryExit();
   /** saves the currently opened project by the session manager and write 
    * the project file to the session config*/
-  void saveProperties(KConfig*);
+  //void saveProperties(KConfig*);
   /** initializes the session windows and opens the projects of the last
    * session */
-  void readProperties(KConfig* );
+  //void readProperties(KConfig* );
 
   /** overridden from it's base class method, additionally moves the MDI system buttons (in maximized mode)
    */

@@ -420,6 +420,7 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
               case CPP_HEADER:
                   lHeaderList.append(lCurFile);
                   break;
+              case FTN_SOURCE:
               case CPP_SOURCE:
                   lSourceList.append(lCurFile);
                   break;
@@ -1033,66 +1034,72 @@ bool CKDevelop::queryClose(){
   return true;
 }
 
-void CKDevelop::readProperties(KConfig* sess_config){
-  readOptions();
-  QString filename;
-//  filename = sess_config->readEntry("project_file","");
-  filename = kapp->sessionConfig()->readEntry("project_file","");
+/*... (rokrau 05/17/01)
+  I have a feeling that this function isn't called anymore
+  ...*/
+// void CKDevelop::readProperties(KConfig* sess_config){
+//   readOptions();
+//   QString filename;
+// //  filename = sess_config->readEntry("project_file","");
+//   filename = kapp->sessionConfig()->readEntry("project_file","");
+//
+//   QFile file(filename);
+//   if (file.exists())
+//   {
+//     if(!(readProjectFile(filename)))
+//     {
+//       KMessageBox::error(0,
+//                         i18n("Unable to read the project file. Perhaps its\n"
+//                               "an old unsupported project file, or you do not\n"
+//                               "have read/write permissions for this project"),
+//                               filename);
+//       return;
+//     }
+//     else
+//     {  // projectfile successfully read
+//       filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
+//       QFile _file(filename);
+//
+//       if (QFile::exists(filename)){
+//         switchToFile(filename);
+//
+//       }
+//
+//       filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
+//       if (QFile::exists(filename)){
+//         switchToFile(filename);
+//       }
+//     }
+//   }
+//   refreshTrees();  // always used
+// }
 
-  QFile file(filename);
-  if (file.exists())
-  {
-    if(!(readProjectFile(filename)))
-    {
-      KMessageBox::error(0,
-                        i18n("Unable to read the project file. Perhaps its\n"
-                              "an old unsupported project file, or you do not\n"
-                              "have read/write permissions for this project"),
-                              filename);
-      return;
-    }
-    else
-    {  // projectfile successfully read
-      filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
-      QFile _file(filename);
-
-      if (QFile::exists(filename)){
-        switchToFile(filename);
-
-      }
-
-      filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
-      if (QFile::exists(filename)){
-        switchToFile(filename);
-      }
-    }
-  }
-  refreshTrees();  // always used
-}
-
-void CKDevelop::saveProperties(KConfig* /*sess_config*/){
-    
-  if(project){
-    kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
-//FB    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
-//FB    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
-    prj->setCurrentWorkspaceNumber(workspace);
-    saveCurrentWorkspaceIntoProject();
-    prj->writeProject();
-  }    
-  if(bAutosave)
-    slotFileSaveAll();
-  else{
-    // TEditInfo* info;
-    // for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-    //   if(info->modified){
-    //     #warning FIXME missing method    setUnsavedData ( true );
-    //     break;
-    //   }
-    // }
-  }
-  saveOptions();
-}
+/*... (rokrau 05/17/01)
+  I have a feeling that this function isn't called anymore
+  ...*/
+// void CKDevelop::saveProperties(KConfig* /*sess_config*/){
+//
+//   if(project){
+//     kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
+// //FB    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
+// //FB    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
+//     prj->setCurrentWorkspaceNumber(workspace);
+//     saveCurrentWorkspaceIntoProject();
+//     prj->writeProject();
+//   }
+//   if(bAutosave)
+//     slotFileSaveAll();
+//   else{
+//     // TEditInfo* info;
+//     // for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+//     //   if(info->modified){
+//     //     #warning FIXME missing method    setUnsavedData ( true );
+//     //     break;
+//     //   }
+//     // }
+//   }
+//   saveOptions();
+// }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
   return (m_docViewManager->findKWriteDoc(abs_filename) != 0);

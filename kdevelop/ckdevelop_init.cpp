@@ -165,7 +165,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   // read the previous dock szenario from kdeveloprc
   // (this has to be after all creation of dockwidget-covered tool-views
-  readDockConfig(config);
+  //readDockConfig(config);
 
   show();
 
@@ -243,13 +243,13 @@ void CKDevelop::initView()
       doc_tree->setIcon(SmallIcon("contents"));
   }
   class_tree->setCaption(class_tree_title);
-  addToolWindow(class_tree, KDockWidget::DockLeft, m_pMdi, 35, i18n("class tree"), class_tree_title);
+  addToolWindow(class_tree, KDockWidget::DockLeft, m_pMdi, 25, i18n("class tree"), class_tree_title);
   log_file_tree->setCaption(log_file_tree_title);
-  addToolWindow(log_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("files of project"), log_file_tree_title);
+  addToolWindow(log_file_tree, KDockWidget::DockCenter, class_tree, 25, i18n("files of project"), log_file_tree_title);
   real_file_tree->setCaption(real_file_tree_title);
-  addToolWindow(real_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("view on project directory"), real_file_tree_title);
+  addToolWindow(real_file_tree, KDockWidget::DockCenter, class_tree, 25, i18n("view on project directory"), real_file_tree_title);
   doc_tree->setCaption(doc_tree_title);
-  addToolWindow(doc_tree, KDockWidget::DockCenter, class_tree, 35, i18n("documentation"), doc_tree_title);
+  addToolWindow(doc_tree, KDockWidget::DockCenter, class_tree, 25, i18n("documentation"), doc_tree_title);
 
   prev_was_search_result= false;
   //init

@@ -41,6 +41,7 @@ typedef enum _Project_enum
   CORBA_SOURCE,
   CPP_SOURCE,
   CPP_HEADER,
+  FTN_SOURCE,
   SCRIPT,
   DATA,
   PO,
@@ -96,7 +97,7 @@ struct TDialogFileInfo {
 struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG, LEXICAL, QT_TS, QT_IF (qt translation(ts), qt interface (ui)*/
+  /** CPP_SOURCE,CPP_HEADER,FTN_SOURCE,SCRIPT,DATA,PO,KDEV_DIALOG, LEXICAL, QT_TS, QT_IF (qt translation(ts), qt interface (ui)*/
   ProjectFileType type;
   /** include in distribution?*/
   bool dist;
@@ -535,7 +536,7 @@ private: // Protected attributes
   /** Version control object */
   VersionControl *vc;
     
-  /** A list of all cpp-files in the project*/
+  /** A list of all source-files in the project*/
   QStrList cpp_files;
 
   /** A list of all header-files in the project*/

@@ -1828,7 +1828,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   }
   // if we still dont have a makefile something is really wrong
   if (makefile.isNull()) {
-    QMessageBox::warning(0,i18n("Makefile not found"),
+    QMessageBox::warning(0L,i18n("Makefile not found"),
     i18n("contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
      "You want to build your project by running 'make'"
      "but there is no Makefile in this directory.\n\n"

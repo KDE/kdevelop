@@ -51,6 +51,7 @@ CProject::CProject(const QString& file) :
   ptStringMap[ CORBA_SOURCE ] = "CORBA_SOURCE";
   ptStringMap[ CPP_SOURCE ] = "SOURCE";
   ptStringMap[ CPP_HEADER ] = "HEADER";
+  ptStringMap[ FTN_SOURCE ] = "SOURCE";
   ptStringMap[ SCRIPT ] = "SCRIPT";
   ptStringMap[ DATA ] = "DATA";
   ptStringMap[ QT_TS ] = "QT_TS";
@@ -357,34 +358,41 @@ ProjectFileType CProject::getType( const QString& aFile )
   QString ext(aFile);
   int pos = ext.findRev('.');
 
-  if (pos == -1 ){ return retVal;} // not found, so DATA
+  if (pos == -1 )
+    return retVal; // not found, so DATA
+
   ext = ext.right(ext.length()-pos);
 
   //ext = rindex( aFile, '.' );
-  if( !ext.isEmpty() )
-    {
-      // Convert to lowercase.
-      ext = ext.lower();
+  if( !ext.isEmpty() ) {
+    // Convert to lowercase.
+    ext = ext.lower();
 
-      // Check for a known extension.
-      if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
-    ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" || ext == ".ui" )
-  retVal = CPP_SOURCE;
-  // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
-      else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" || ext == ".H" || ext == ".hh" )
-  retVal = CPP_HEADER;
-      else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
-  retVal = LEXICAL;
-      else if( ext == ".idl" )
-  retVal = CORBA_SOURCE;
-      else if( ext == ".kdevdlg" )
-  retVal = KDEV_DIALOG;
-      else if( ext == ".po" )
-  retVal = PO;
-      else if( ext == ".ts" )
-  retVal = QT_TS;
-    }
-
+    // Check for a known extension.
+    if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
+        ext == ".ec" || ext == ".ecpp" || ext == ".C" ||
+        ext == ".cxx" || ext == ".ui" )
+      retVal = CPP_SOURCE;
+    // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
+    else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" ||
+             ext == ".H" || ext == ".hh" )
+      retVal = CPP_HEADER;
+    // Fortran support (rokrau 05/22/01)
+    else if ( (ext==".F") || (ext==".f") ||
+              (ext==".F77") || (ext==".f77") ||
+              (ext==".FTN") || (ext==".ftn") )
+      retVal = FTN_SOURCE;
+    else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
+      retVal = LEXICAL;
+    else if( ext == ".idl" )
+      retVal = CORBA_SOURCE;
+    else if( ext == ".kdevdlg" )
+      retVal = KDEV_DIALOG;
+    else if( ext == ".po" )
+      retVal = PO;
+    else if( ext == ".ts" )
+      retVal = QT_TS;
+  }
   return retVal;
 }
 
@@ -475,7 +483,7 @@ bool CProject::addDialogFileToProject(const QString& /*rel_name*/,TDialogFileInf
   config->writeEntry("widget_files",info.widget_files);
   config->writeEntry("is_toplevel_dialog",info.is_toplevel_dialog);
   config->writeEntry("header_file",info.header_file);
-  config->writeEntry("cpp_file",info.header_file);
+  config->writeEntry("cpp_file",info.header_file); // should this not be source_file?
   config->writeEntry("data_file",info.data_file);
   config->writeEntry("classname",info.classname);
 
@@ -1126,7 +1134,7 @@ void CProject::getSources(const QString& rel_name_makefileam,QStrList& sources)
 
   for(file = files.first();file != 0;file = files.next()){
     info = getFileInfo(file);
-    if(info.type == CPP_SOURCE ){
+    if((info.type==CPP_SOURCE)||(info.type==FTN_SOURCE)){
       sources.append(getName(file));
     }
   }
@@ -1187,7 +1195,7 @@ void CProject::setSourcesHeaders(){
 
   for(file = files.first();file != 0;file = files.next()){
     info = getFileInfo(file);
-    if(info.type == CPP_SOURCE){
+    if((info.type==CPP_SOURCE)||(info.type==FTN_SOURCE)){
       cpp_files.append(getProjectDir()+file);
     }
     if(info.type == CPP_HEADER){

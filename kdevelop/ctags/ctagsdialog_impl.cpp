@@ -186,7 +186,9 @@ void searchTagsDialogImpl::slotGotoTagType(tagType type, QString text)
   setTagType(type);
   searchTagLineEdit->setText(text);
   slotSearchTag();
-  if (m_currentTagList.count()==1) {
+  int tagCount=m_currentTagList.count();
+  if (!tagCount) return;
+  if (tagCount==1) {
     gotoTag(&m_currentTagList[0]);
   }
   else {

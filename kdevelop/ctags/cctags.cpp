@@ -185,75 +185,6 @@ CTagList::Iterator CTagList::append(const CTag& ctag)
   return QValueList<CTag>::append(ctag);
 }
 
-///** return all file tags */
-//CTagList CTagList::getFileTags() const {
-//  CTagList fileTags(m_tag);
-//  int ntags = count();
-//  for (int it=0; it<ntags; ++it)
-//  {
-//    const CTag& ctag = (*this)[it];
-//    char t = ctag.type();
-//    if (t=='F'){
-//      fileTags.QValueList<CTag>::append(ctag);
-//      fileTags.m_nfiles++;
-//    }
-//  }
-//  return fileTags;
-//}
-//
-///** return all definition tags */
-//CTagList CTagList::getDefinitionTags() const {
-//  CTagList fileTags(m_tag);
-//  int ntags = count();
-//  for (int it=0; it<ntags; ++it)
-//  {
-//    const CTag& ctag = (*this)[it];
-//    char t = ctag.type();
-//    switch (t) {
-//      case 'd': // macro definitions (and #undef names)
-//      case 'f': // function definitions
-//      case 'S': // subroutines (fortran)
-//      case 't': // typedefs
-//      case 'v': // variable definitions
-//        fileTags.QValueList<CTag>::append(ctag);
-//        fileTags.m_ndefinitions++;
-//      break;
-//      default:
-//      break;
-//    }
-//  }
-//  return fileTags;
-//}
-//
-///** return all declaration tags */
-//CTagList CTagList::getDeclarationTags() const {
-//  CTagList fileTags(m_tag);
-//  int ntags = count();
-//  for (int it=0; it<ntags; ++it)
-//  {
-//    const CTag& ctag = (*this)[it];
-//    char t = ctag.type();
-//    switch (t) {
-//      case 'c': // classes
-//      case 'e': // enumerators
-//      case 'g': // enumeration names
-//      case 'L': // fortran locals
-//      case 'm': // class, struct, or union members
-//      case 'n': // namespaces
-//      case 'p': // function prototypes and declarations
-//      case 's': // structure names
-//      case 'u': // union names
-//      case 'x': // extern and forward variable declarations
-//        fileTags.QValueList<CTag>::append(ctag);
-//        fileTags.m_ndeclarations++;
-//      break;
-//      default:
-//      break;
-//    }
-//  }
-//  return fileTags;
-//}
-
 CTagsDataBase::CTagsDataBase()
   : m_init(false), m_taglistdict(17,true), m_filelist()
 {
@@ -263,8 +194,6 @@ CTagsDataBase::CTagsDataBase()
 CTagsDataBase::~CTagsDataBase()
 {
 }
-
-
 /** load a tags file and create the search database */
 void CTagsDataBase::load(const QString& file)
 {

@@ -112,16 +112,10 @@ public:
   QString tag() const {return m_tag;}
   /** return number of file tags */
   int nFileTags() const {return m_nfiles;}
-//  /** return all file tags */
-//  CTagList getFileTags() const ;
   /** return number of definition tags */
   int nDefinitionTags() const {return m_ndefinitions;}
-//  /** return all definition tags */
-//  CTagList getDefinitionTags() const ;
   /** return number of Declaration tags */
   int nDeclarationTags() const {return m_ndeclarations;}
-//  /** return all declaration tags */
-//  CTagList getDeclarationTags() const ;
 private:
   QString m_tag;       // tag name
   int m_nfiles;        // number of file tags
