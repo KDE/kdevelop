@@ -25,12 +25,14 @@ incadmin.tar.gz:
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-commondata_DATA = kdevelop.pm admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwidgets.tar.gz \
-						kde-app.lsm kde-Makefile.am kde-Makefile.cvs kde-configure.in.in \
-						kde-index.docbook kde-po-Makefile.am kde-doc-Makefile.am kde-doc-en-Makefile.am \
-						hi16-app-app.png hi32-app-app.png kde-app.desktop kde-part.desktop \
-						gnome-app.lsm gnome-Makefile.am gnome-Makefile.cvs \
-						gnome-pixmaps-Makefile.am gnome-app.png \
-						wx-configure.in wx-Makefile.am wx-Makefile.cvs \
-						COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic
+commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwidgets.tar.gz \
+	kde-app.lsm kde-Makefile.am kde-Makefile.cvs kde-configure.in.in \
+	kde-index.docbook kde-po-Makefile.am kde-doc-Makefile.am kde-doc-en-Makefile.am \
+	hi16-app-app.png hi32-app-app.png kde-app.desktop kde-part.desktop \
+	gnome-app.lsm gnome-Makefile.am gnome-Makefile.cvs \
+	gnome-pixmaps-Makefile.am gnome-app.png \
+	wx-configure.in wx-Makefile.am wx-Makefile.cvs \
+	COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic \
+	admin.kdevtemplate gnu.kdevtemplate dockbook.kdevtemplate\
+	incadmin.kdevtemplate
 
