@@ -12,6 +12,10 @@
  ***************************************************************************/
 #include <qstringlist.h>
 
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <kdebug.h>
+
 #include "urlutil.h"
 
 QString URLUtil::filename(const QString & name) {
@@ -71,6 +75,74 @@ QString URLUtil::getExtension(const QString & path) {
   return path.mid(dotPos+1);
 }
 
+QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url )
+{
+    QString absBase = extractPathNameAbsolute( baseDirUrl ),
+        absRef = extractPathNameAbsolute( url );
+    int i = absRef.find( absBase, 0, true );
+
+    if (i == -1)
+        return QString();
+
+    return absRef.replace( 0, absBase.length(), QString() );
+}
+
+QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
+{
+    KURL baseDirUrl;
+    baseDirUrl.setPath( basePath );
+    return extractPathNameRelative( baseDirUrl, url );
+}
+
+QString URLUtil::extractPathNameAbsolute( const KURL &url )
+{
+    if (isDirectory( url ))
+        return url.path( +1 ); // with trailing "/" if none is present
+    else
+    {
+		// Ok, this is an over-tight pre-condition on "url" since I hope nobody will never
+		// stress this function with absurd cases ... but who knows?
+		QString path = url.path();
+		QFileInfo fi( path );  // Argh: QFileInfo is back ;))
+		return ( fi.exists()? path : QString() );
+	}
+}
+
+bool URLUtil::isDirectory( const KURL &url )
+{
+    return QDir( url.path() ).exists();
+}
+
+void URLUtil::dump( const KURL::List &urls )
+{
+    kdDebug(9000) << "dump( const QValueList<KURL> & ) here!" << endl;
+    kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
+/*
+	QValueList<KURL>::const_iterator it = urls.begin();
+	for ( ; it != urls.end(); ++it );
+	{
+		const KURL &url = (*it);
+		kdDebug(9000) << " * Element = "  << url.path() << endl;
+	}
+*/
+   for (size_t i = 0; i<urls.count(); ++i)
+   {
+	    KURL url = urls[ i ];
+	    kdDebug(9000) << " * Element = "  << url.path() << endl;
+   }
+}
+
+QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &urls)
+{
+    QStringList paths;
+
+    for (size_t i=0; i<urls.count(); ++i)
+	{
+	    paths << extractPathNameRelative( baseDir, urls[i] );
+	}
+
+    return paths;
+}
 
 QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fileUrl )
 {

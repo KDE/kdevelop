@@ -13,6 +13,7 @@
 #define _URLUTIL_H_
 
 #include <qstring.h>
+#include <qvaluelist.h>
 #include <kurl.h>
 
 class URLUtil {
@@ -62,6 +63,45 @@ public:
    * Returns the file extension for a filename or path
    */
   static QString getExtension(const QString & path);
+
+  /**
+  * Given a base directory url in @p baseDirUrl and the url referring to a date sub-directory or file,
+  * it will return the path relative to @p baseDirUrl.
+  * <code>
+  * KURL baseUrl, dirUrl;
+  * baseUrl.setPath( "/home/mario/src/kdevelop/" );
+  * dirUrl.setPath( "/home/mario/src/kdevelop/parts/cvs/" );
+  * QString relPathName = extractDirPathRelative( baseUrl, url ); // == "parts/cvs/"
+  * QString absPathName = extractDirPathAbsolute( url ); // == "/home/mario/src/kdevelop/parts/cvs/"
+  * </code>
+  * Note that if you pass a file name in @p url (instead of a directory) or the @p baseUrl is not contained
+  * in @p url then the function will return "" (void string).
+  */
+  static QString extractPathNameRelative(const KURL &baseDirUrl, const KURL &url );
+  static QString extractPathNameRelative(const QString &basePath, const KURL &url );
+
+  /**
+  * Will return the absolute path name referred in @p url.
+  * Look at above as an example.
+  */
+  static QString extractPathNameAbsolute( const KURL &url );
+
+  /**
+  * Returns a QStringList of relative (to @p baseDir) paths from a list of KURLs in @p urls
+  */
+  static QStringList toRelativePaths( const QString &baseDir, const KURL::List &urls);
+
+  /**
+  * If @p url is a directory will return true, false otherwise.
+  */
+  static bool isDirectory( const KURL &url );
+
+  /**
+  *
+  */
+  static void dump( const KURL::List &urls );
+
+
 };
 
 #endif
