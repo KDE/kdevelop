@@ -45,7 +45,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     setXMLFile("kdevautoproject.rc");
 
-    bool kde = ( args[ 0 ] == "kde" );
+    bool kde = (args[0] == "kde");
 
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));

@@ -951,13 +951,17 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
             QStringList l2 = QStringList::split(QRegExp("[ \t\n]"), sources);
             QStringList::Iterator it2;
             for (it2 = l2.begin(); it2 != l2.end(); ++it2) {
+                kdDebug(9020) << "Looking at " << (*it2) << endl;
                 FileItem *fitem = createFileItem(*it2);
                 titem->sources.append(fitem);
                 if (!kdeMode() || !(*it2).endsWith(".cpp"))
                     continue;
+                kdDebug(9020) << "iscpp and kdemode" << endl;
                 QString header = (*it2).left((*it2).length()-4) + ".h";
+                kdDebug(9020) << "header" << header << endl;
                 if (sources.contains(header))
                     continue;
+                kdDebug(9020) << "header not in sources" << header << endl;
                 fitem = createFileItem(header);
                 titem->sources.append(fitem);
             }
@@ -1043,15 +1047,12 @@ void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
     QString regexp;
     
     if (rhs == "AUTO") {
-        kdDebug(9020) << "icon auto" << endl;
         regexp = ".*\\.(png|mng|xpm)";
     } else {
-        kdDebug(9020) << "icon apps" << endl;
         QStringList appNames = QStringList::split(QRegExp("[ \t\n]"), rhs);
         regexp = ".*(-" + appNames.join("|-") + ")\\.(png|mng|xpm)";
     }
     
-    kdDebug(9020) << "Filtering with regexp " << regexp << endl;
     QRegExp re(regexp);
     
     QStringList::ConstIterator it;
