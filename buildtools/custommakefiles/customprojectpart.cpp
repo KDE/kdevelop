@@ -21,6 +21,7 @@
 #include <qvaluestack.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+#include <qdom.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -44,6 +45,7 @@
 #include "runoptionswidget.h"
 #include "makeoptionswidget.h"
 #include "custombuildoptionswidget.h"
+#include "custommakeconfigwidget.h"
 #include "config.h"
 #include "envvartools.h"
 
@@ -101,10 +103,21 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
                             "Environment variables and make arguments can be specified "
                             "in the project settings dialog, <b>Build Options</b> tab."));
 
+    m_makeEnvironmentsSelector = new KSelectAction( i18n("Make &Environment"),0,
+                            actionCollection(), "build_make_environment" );
+    m_makeEnvironmentsSelector->setToolTip(i18n("Make Environment"));
+    m_makeEnvironmentsSelector->setWhatsThis(i18n("<b>Make Environment</b><p> Choose the set of environment variables to be passed on to make.<br>"
+                            "Environment variables can be specified in the project "
+                            "settings dialog, <b>Build Options</b> tab."));
+
     connect( m_targetMenu, SIGNAL(aboutToShow()),
              this, SLOT(updateTargetMenu()) );
     connect( m_targetMenu, SIGNAL(activated(int)),
              this, SLOT(targetMenuActivated(int)) );
+    connect( m_makeEnvironmentsSelector->popupMenu(), SIGNAL(aboutToShow()),
+             this, SLOT(updateMakeEnvironmentsMenu()) );
+    connect( m_makeEnvironmentsSelector->popupMenu(), SIGNAL(activated(int)),
+             this, SLOT(makeEnvironmentsMenuActivated(int)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -134,11 +147,10 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
     buildtab->addTab(w2, i18n("&Build"));
 
-    MakeOptionsWidget *w3 = new MakeOptionsWidget(*projectDom(), "/kdevcustomproject", buildtab);
-    connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+    CustomMakeConfigWidget *w3 = new CustomMakeConfigWidget(this, "/kdevcustomproject", buildtab);
     buildtab->addTab(w3, i18n("Ma&ke"));
-
     w2->setMakeOptionsWidget(buildtab, w3);
+    connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
 }
 
 
@@ -148,8 +160,18 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);
-    if (fcontext->isDirectory())
+    if (fcontext->isDirectory()) {
+        // remember the name of the directory
+        m_contextDirName = fcontext->fileName();
+        m_contextDirName = m_contextDirName.mid ( project()->projectDirectory().length() + 1 );
+        popup->insertSeparator();
+        int id = popup->insertItem( i18n("Make active directory"),
+                           this, SLOT(slotChooseActiveDirectory()) );
+        popup->setWhatsThis(id, i18n("<b>Make active directory</b><p>"
+        "Chooses this directory as the destination for new files created using wizards "
+        "like the <i>New Class</i> wizard."));
         return;
+    }
 
     m_contextFileName = fcontext->fileName();
     bool inProject = project()->allFiles().contains(m_contextFileName.mid ( project()->projectDirectory().length() + 1 ));
@@ -187,6 +209,13 @@ void CustomProjectPart::slotRemoveFromProject()
 }
 
 
+void CustomProjectPart::slotChooseActiveDirectory()
+{
+    QDomDocument &dom = *projectDom();
+    DomUtil::writeEntry(dom, "/kdevcustomproject/general/activedir", m_contextDirName);
+}
+
+
 void CustomProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_projectDirectory = dirName;
@@ -214,8 +243,18 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
         if (r == KMessageBox::Yes)
             populateProject();
     }
-    
-    KDevProject::openProject( dirName, projectName );    
+
+    // check if there is an old envvars entry (from old project file with single make environment)
+    QDomElement el =
+        DomUtil::elementByPath( dom , "/kdevcustomproject/make/envvars");
+    if (!el.isNull()) {
+        QDomElement envs = DomUtil::createElementByPath( dom , "/kdevcustomproject/make/environments");
+        DomUtil::makeEmpty(envs);
+        el.setTagName("default");
+        envs.appendChild(el);
+    }
+
+    KDevProject::openProject( dirName, projectName );
 }
 
 
@@ -351,18 +390,15 @@ QString CustomProjectPart::mainProgram(bool relative) const
         return DomMainProgram;
 }
 
-
 /** Retuns a QString with the run command line arguments */
 QString CustomProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 }
 
-
 QString CustomProjectPart::activeDirectory() const
 {
     QDomDocument &dom = *projectDom();
-
     return DomUtil::readEntry(dom, "/kdevcustomproject/general/activedir");
 }
 
@@ -444,20 +480,13 @@ QString CustomProjectPart::makeEnvironment() const
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
     DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/make/envvars", "envvar", "name", "value");
+        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/make/environments/" + currentMakeEnvironment(), "envvar", "name", "value");
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-/*
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-*/
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
@@ -674,6 +703,38 @@ void CustomProjectPart::targetMenuActivated(int id)
     startMakeCommand(buildDirectory(), target);
 }
 
+void CustomProjectPart::updateMakeEnvironmentsMenu()
+{
+    QDomDocument &dom = *projectDom();
+    bool makeUsed = (DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "make");
+    if (makeUsed) {
+        QStringList l = allMakeEnvironments();
+        m_makeEnvironmentsSelector->setItems(l);
+        m_makeEnvironmentsSelector->setCurrentItem(l.findIndex(currentMakeEnvironment()));
+    }
+    else {
+        m_makeEnvironmentsSelector->clear();
+    }
+    /*
+    m_makeEnvironmentsMenu->clear();
+    QDomDocument &dom = *projectDom();
+
+        QStringList environments = allMakeEnvironments();
+        QStringList::ConstIterator it;
+        int id = 0;
+        for (it = environments.begin(); it != environments.end(); ++it)
+            m_makeEnvironmentsMenu->insertItem(*it, id++);
+    }
+    */
+}
+
+void CustomProjectPart::makeEnvironmentsMenuActivated(int id)
+{
+    QDomDocument &dom = *projectDom();
+    QString environment = allMakeEnvironments()[id];
+    DomUtil::writeEntry(dom, "/kdevcustomproject/make/selectedenvironment", environment);
+}
+
 void CustomProjectPart::slotCommandFinished( const QString& command )
 {
     kdDebug(9020) << "CustomProjectPart::slotProcessFinished()" << endl;
@@ -727,5 +788,39 @@ bool CustomProjectPart::isDirty()
 
     return false;
 }
+
+
+QStringList CustomProjectPart::allMakeEnvironments() const
+{
+    QDomDocument &dom = *projectDom();
+
+    QStringList allConfigs;
+
+    QDomNode node =
+        DomUtil::elementByPath( dom , "/kdevcustomproject/make/environments");
+    // extract the names of the different make environments
+    QDomElement childEl = node.firstChild().toElement();
+    while (!childEl.isNull()) {
+        QString config = childEl.tagName();
+        allConfigs.append(config);
+        childEl = childEl.nextSibling().toElement();
+    }
+    if (allConfigs.isEmpty())
+        allConfigs.append("default");
+
+    return allConfigs;
+}
+
+
+QString CustomProjectPart::currentMakeEnvironment() const
+{
+    QStringList allEnvs = allMakeEnvironments();
+    QDomDocument &dom = *projectDom();
+    QString environment = DomUtil::readEntry(dom, "/kdevcustomproject/make/selectedenvironment");
+    if (environment.isEmpty() || !allEnvs.contains(environment ))
+        environment  = allEnvs[0];
+    return environment;
+}
+
 
 #include "customprojectpart.moc"

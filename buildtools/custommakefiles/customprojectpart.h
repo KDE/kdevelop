@@ -25,7 +25,7 @@ class QStringList;
 class KDialogBase;
 class CustomProjectWidget;
 class Context;
-
+class KSelectAction;
 
 class CustomProjectPart : public KDevProject
 {
@@ -34,6 +34,9 @@ class CustomProjectPart : public KDevProject
 public:
     CustomProjectPart( QObject *parent, const char *name, const QStringList & );
     ~CustomProjectPart();
+
+    QStringList allMakeEnvironments() const;
+    QString currentMakeEnvironment() const;
 
     bool isDirty();
 
@@ -55,17 +58,21 @@ protected:
     virtual QString runArguments() const;
     virtual DomUtil::PairList runEnvironmentVars() const;
 
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void slotAddToProject();
     void slotRemoveFromProject();
+    void slotChooseActiveDirectory();
     void slotBuild();
     void slotCompileFile();
     void slotClean();
     void slotExecute();
     void updateTargetMenu();
     void targetMenuActivated(int id);
+    void updateMakeEnvironmentsMenu();
+    void makeEnvironmentsMenuActivated(int id);
     void slotCommandFinished( const QString& command );
     void slotCommandFailed( const QString& command );
 
@@ -78,8 +85,10 @@ private:
     QString m_projectName;
     QStringList m_sourceFiles;
     QPopupMenu *m_targetMenu;
+    KSelectAction *m_makeEnvironmentsSelector;
     QStringList m_targets;
     QString m_contextFileName;
+    QString m_contextDirName;
 
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;

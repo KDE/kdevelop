@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libkdevcustomproject.la
 libkdevcustomproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcustomproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevcustomproject_la_SOURCES = customprojectpart.cpp custombuildoptionswidgetbase.ui custombuildoptionswidget.cpp
+libkdevcustomproject_la_SOURCES = customprojectpart.cpp custombuildoptionswidgetbase.ui custombuildoptionswidget.cpp custommakeconfigwidgetbase.ui custommakeconfigwidget.cpp
 
 METASOURCES = AUTO
 
