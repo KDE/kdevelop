@@ -628,6 +628,7 @@ void CProject::updateMakefileAm(QString makefile){
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
 
+  /* update of MakefileAm, only if the filename contains Makefile.am at the end of the string */
   if (makefile.right(11)!="Makefile.am")
     return;
 
@@ -991,6 +992,11 @@ void CProject::setKDevelopWriteArea(QString makefile){
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
   QStrList list;
+
+  /* addition KDevelop write-area, only if the filename contains Makefile.am
+     at the end of the string */
+  if (makefile.right(11)!="Makefile.am")
+    return;
 
   bool found = false, customfile=false;
   QTextStream stream(&file);
