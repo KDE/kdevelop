@@ -135,8 +135,9 @@ void ChmProtocol::get( const KURL& url )
         //KMimeMagicResult * result = KMimeMagic::self()->findBufferFileType( output, path );
         //kdDebug() << "Emitting mimetype " << result->mimeType() << endl;
         //mimeType( result->mimeType() );
-        data(output.local8Bit());
-        processedSize(output.length());
+	QCString output1 = (QCString)(output.latin1()); 
+	data(output1); 
+	processedSize(output1.length());
     } else {
         int offset = m_dirMap[path].offset;
         int length = m_dirMap[path].length;
