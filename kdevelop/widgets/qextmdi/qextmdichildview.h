@@ -145,6 +145,15 @@ public:     // Methods
    void removeEventFilterForAllChildren();
    /** sets an ID  */
    void setWindowMenuID( int id);
+   /** sets the minimum size of the widget to w by h pixels.
+     * It extends it base clase method in a way that the minimum size of
+     * its childframe (if there is one) will be set, additionally. */
+   virtual void setMinimumSize ( int minw, int minh );
+   /** sets the maximum size of the widget to w by h pixels.
+     * It extends it base clase method in a way that the maximum size of
+     * its childframe (if there is one) will be set, additionally. */
+   virtual void setMaximumSize ( int minw, int minh );
+
 public slots:
 	/**
 	 * Attaches this window to the Mdi manager.<br>

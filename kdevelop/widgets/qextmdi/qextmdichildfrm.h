@@ -177,6 +177,8 @@ public:
 	void updateRects(){ resizeEvent(0); };
    /** Returns the system menu. */
    QPopupMenu* systemMenu();
+   /** Returns the caption bar height */
+   inline int captionHeight() { return m_pCaption->height(); };
 
 public slots: // Public slots
    void slot_resizeViaSystemMenu();

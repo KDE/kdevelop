@@ -359,3 +359,27 @@ void QextMdiChildView::slot_clickedInDockMenu()
 {
    emit clickedInDockMenu( m_windowMenuID);
 }
+
+//============= setMinimumSize ===============//
+
+void QextMdiChildView::setMinimumSize( int minw, int minh)
+{
+   QWidget::setMinimumSize( minw, minh);
+   if( mdiParent() != 0L)
+      mdiParent()->setMinimumSize( minw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+                                   minh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
+                                        + QEXTMDI_MDI_CHILDFRM_SEPARATOR
+                                        + mdiParent()->captionHeight());
+}
+
+//============= setMaximumSize ===============//
+
+void QextMdiChildView::setMaximumSize( int maxw, int maxh)
+{
+   QWidget::setMaximumSize( maxw, maxh);
+   if( mdiParent() != 0L)
+      mdiParent()->setMaximumSize( maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+                                   maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
+                                        + QEXTMDI_MDI_CHILDFRM_SEPARATOR
+                                        + mdiParent()->captionHeight());
+}

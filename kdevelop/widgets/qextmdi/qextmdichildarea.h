@@ -40,19 +40,16 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildArea : public QFrame
 {
 	friend class QextMdiChildFrmCaption;
 	friend class QextMdiChildFrm;
+
 	Q_OBJECT
-public:		// Consruction & Destruction
-	QextMdiChildArea(QWidget *parent);
-	/**
-	* Destructor : THERE should be no child windows anymore...
-	* Howewer it simply deletes all the child widgets :)
-	*/
-	~QextMdiChildArea();
-public:		// Fields
+
+// attributes
+public:
 	/**
 	* Z Order stack (top=last)
 	*/
 	QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
+
 private:
 	QFont m_captionFont;
 	QColor m_captionActiveBackColor;
@@ -60,7 +57,17 @@ private:
 	QColor m_captionInactiveBackColor;
 	QColor m_captionInactiveForeColor;
 	int m_captionFontLineSpacing;
-public:		// Methods
+
+// methods
+public:
+	/** Consruction */
+	QextMdiChildArea(QWidget *parent);
+	/**
+	* Destructor : THERE should be no child windows anymore...
+	* Howewer it simply deletes all the child widgets :)
+	*/
+	~QextMdiChildArea();
+
 	/**
 	* Appends a new QextMdiChildFrm to this manager.
 	* The child is shown,raised and gets focus if this window has it.
@@ -90,13 +97,14 @@ public:		// Methods
 	/**
 	* Returns the number of visible children
 	*/
-	int getVisibleChildCount();
 
+	int getVisibleChildCount();
 	void setMdiCaptionFont(const QFont &fnt);
 	void setMdiCaptionActiveForeColor(const QColor &clr);
 	void setMdiCaptionActiveBackColor(const QColor &clr);
 	void setMdiCaptionInactiveForeColor(const QColor &clr);
 	void setMdiCaptionInactiveBackColor(const QColor &clr);
+
 public slots:
 	/**
 	* Cascades the windows resizing it to the minimum size.

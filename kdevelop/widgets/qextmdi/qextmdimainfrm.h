@@ -43,6 +43,17 @@
 #include "qextmdilistiterator.h"
 #include "qextmdinulliterator.h"
 
+namespace QextMdi {
+
+typedef enum {
+         StandardAdd = 0,
+         Maximize    = 1,
+         Hide        = 2,
+         Detach      = 4
+      } AddWindowFlags;
+
+}; //namespace
+
 /**
  * @short Internal class
  * This special event is needed because the view has to inform the main frame that it`s being closed.
@@ -132,7 +143,14 @@ public slots:
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
     */
-	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = TRUE);
+//	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = TRUE);
+   /**
+    * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
+    * You can specify here whether the view should be attached or detached.
+    */
+   virtual void addWindow( QextMdiChildView* pView, QRect rectNormal, QextMdi::AddWindowFlags flags = QextMdi::StandardAdd);
+   virtual void addWindow( QextMdiChildView* pView, QPoint pos, QextMdi::AddWindowFlags flags = QextMdi::StandardAdd);
+   virtual void addWindow( QextMdiChildView* pView, QextMdi::AddWindowFlags flags = QextMdi::StandardAdd);
    /**
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
@@ -183,7 +201,7 @@ public slots:
    /**
    * Forces the update of the window menu.
    */
-   void fillWindowMenu();
+   void fillWindowMenu(const QString& s = 0);
 
 protected:
 	virtual void closeEvent(QCloseEvent *e);

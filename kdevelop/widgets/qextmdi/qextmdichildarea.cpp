@@ -52,21 +52,6 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
 	setFocusPolicy(ClickFocus);
 }
 
-void QextMdiChildArea::setMdiCaptionFont(const QFont &fnt)
-{
-	m_captionFont = fnt;
-	QFontMetrics fm(m_captionFont);
-	m_captionFontLineSpacing = fm.lineSpacing();
-}
-void QextMdiChildArea::setMdiCaptionActiveForeColor(const QColor &clr)
-{ m_captionActiveForeColor = clr; }
-void QextMdiChildArea::setMdiCaptionActiveBackColor(const QColor &clr)
-{ m_captionActiveBackColor = clr; }
-void QextMdiChildArea::setMdiCaptionInactiveForeColor(const QColor &clr)
-{ m_captionInactiveForeColor = clr; }
-void QextMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
-{ m_captionInactiveBackColor = clr; }
-
 //============ ~QextMdiChildArea ============//
 
 QextMdiChildArea::~QextMdiChildArea()
@@ -539,4 +524,32 @@ void QextMdiChildArea::layoutMinimizedChildren()
 	      posX = child->geometry().right();
 	   }
    }
+}
+
+
+void QextMdiChildArea::setMdiCaptionFont(const QFont &fnt)
+{
+	m_captionFont = fnt;
+	QFontMetrics fm(m_captionFont);
+	m_captionFontLineSpacing = fm.lineSpacing();
+}
+
+void QextMdiChildArea::setMdiCaptionActiveForeColor(const QColor &clr)
+{
+   m_captionActiveForeColor = clr;
+}
+
+void QextMdiChildArea::setMdiCaptionActiveBackColor(const QColor &clr)
+{
+   m_captionActiveBackColor = clr;
+}
+
+void QextMdiChildArea::setMdiCaptionInactiveForeColor(const QColor &clr)
+{
+   m_captionInactiveForeColor = clr;
+}
+
+void QextMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
+{
+   m_captionInactiveBackColor = clr;
 }

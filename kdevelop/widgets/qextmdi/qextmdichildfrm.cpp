@@ -247,7 +247,9 @@ void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 {
    // give its child view the chance to notify a childframe move
    QextMdiChildFrmMovedEvent cfme( me);
-   QApplication::sendEvent( this, &cfme);
+   if( m_pClient != 0L) {
+      QApplication::sendEvent( m_pClient, &cfme);
+   }
 }
 
 //=============== leaveEvent ===============//
@@ -846,6 +848,7 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),FALSE);
    }
    else if( state() == Minimized) {
+      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),FALSE);
    }
 #else
