@@ -117,8 +117,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     VariableTree *variableTree = variableWidget->varTree();
 
     // variableTree -> framestackWidget
-    connect( variableTree,     SIGNAL(selectFrame(int)),
-             framestackWidget, SLOT(slotSelectFrame(int)));
+    connect( variableTree,     SIGNAL(selectFrame(int, int)),
+             framestackWidget, SLOT(slotSelectFrame(int, int)));
     
     // breakpointWidget -> this
     connect( breakpointWidget, SIGNAL(refreshBPState(Breakpoint*)),
