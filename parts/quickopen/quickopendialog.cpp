@@ -93,7 +93,5 @@ void QuickOpenDialog::goToEnd()
 	itemList->setCurrentItem(itemList->count()-1);
 }
 
-
-
 #include "quickopendialog.moc"
 

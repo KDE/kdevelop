@@ -1,0 +1,181 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>QuickOpenFunctionChooseFormBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>QuickOpenFunctionChooseFormBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>619</width>
+            <height>304</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>QuickOpenFunctionChooseFormBase</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>250</x>
+                <y>10</y>
+                <width>170</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Function Arguments List</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>100</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>File Name</string>
+        </property>
+    </widget>
+    <widget class="KListBox">
+        <property name="name">
+            <cstring>fileBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>30</y>
+                <width>220</width>
+                <height>219</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>okBtn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>290</x>
+                <y>260</y>
+                <width>170</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancelBtn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>480</x>
+                <y>260</y>
+                <width>116</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+    </widget>
+    <widget class="KListBox">
+        <property name="name">
+            <cstring>argBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>250</x>
+                <y>30</y>
+                <width>350</width>
+                <height>219</height>
+            </rect>
+        </property>
+        <property name="currentItem">
+            <number>-1</number>
+        </property>
+    </widget>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>okBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>argBox</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>slotFileChange(int)</slot>
+    </connection>
+    <connection>
+        <sender>fileBox</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>slotArgsChange(int)</slot>
+    </connection>
+    <connection>
+        <sender>argBox</sender>
+        <signal>returnPressed(QListBoxItem*)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>argBox</sender>
+        <signal>clicked(QListBoxItem*)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>fileBox</sender>
+        <signal>returnPressed(QListBoxItem*)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>fileBox</sender>
+        <signal>clicked(QListBoxItem*)</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>QuickOpenFunctionChooseFormBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>argBox</tabstop>
+    <tabstop>okBtn</tabstop>
+    <tabstop>fileBox</tabstop>
+</tabstops>
+<slots>
+    <slot specifier="pure virtual">slotFileChange( int id )</slot>
+    <slot specifier="pure virtual">slotArgsChange( int id )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistbox.h</includehint>
+    <includehint>klistbox.h</includehint>
+</includehints>
+</UI>
