@@ -1,3 +1,12 @@
+2003-02-01 Alexander Dymo <cloudtemple@mksat.net>
+	* parts/cppsupport:
+	  - Advanced Inheritance feature in "New Class" dialog:
+	    automated constructor creation, method overriding
+	    and access modifiers upgrading using base class
+	    descriptions from the project class store
+	  - Class is O_OBJECT option in "New Class dialog"
+	  - Generate GTK class option in "New Class dialog"
+
 2003-01-30 Julian Rockey <linux@jrockey.com>
 	* lib/interfaces, src:
 	  - Make CreateFile interface available globally. 
