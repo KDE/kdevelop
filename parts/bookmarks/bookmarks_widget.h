@@ -24,6 +24,7 @@
 
 class BookmarksPart;
 class BookmarkItem;
+class BookmarksConfig;
 
 class BookmarksWidget : public KListView, public QToolTip
 {
@@ -36,6 +37,9 @@ public:
 	void update( QDict<EditorData> const & );
 	void updateURL( EditorData * );
 	bool removeURL( KURL const & );
+	
+	BookmarksConfig * config();
+	QStringList getContext( KURL const &, unsigned int );
 
 signals:
 	void removeAllBookmarksForURL( const KURL & );
@@ -55,8 +59,12 @@ private:
 	BookmarksPart * _part;
 	BookmarkItem * _selectedItem;
 	
+//	static CodeLineType _s_codeline;
+	
 	friend class BookmarkItem;
 };
 
 
 #endif
+
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;

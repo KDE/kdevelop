@@ -27,11 +27,12 @@
 class QTimer;
 class KDialogBase;
 class BookmarksConfig;
+class ConfigWidgetProxy;
 
 struct EditorData
 {
 	KURL url;
-	QValueList< QPair<int,QStringList> > marks;
+	QValueList< QPair<int,QString> > marks;
 };
 
 class BookmarksWidget;
@@ -50,11 +51,10 @@ public:
 	void restorePartialProjectSession( const QDomElement * el );
 	void savePartialProjectSession( QDomElement * el );
 	
-	BookmarksConfig * config()
-	{
-		return _config;
-	}
+	BookmarksConfig * config();
 
+	QStringList getContext( KURL const & url, unsigned int line, unsigned int context );
+	
 private slots:
 	// connected to partcontroller
 	void partAdded( KParts::Part * part );
@@ -72,8 +72,7 @@ private slots:
 	void removeAllBookmarksForURL( const KURL & );
 	void removeBookmarkForURL( const KURL &, int );
 
-	// connected to Core
-	void projectConfigWidget( KDialogBase * );
+	void insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int );
 	
 private:
 	bool setBookmarksForURL( KParts::ReadOnlyPart * );
@@ -87,6 +86,8 @@ private:
 	void updateContextStringForURL( KURL const & url );
 	void updateContextStringForAll();
 
+	QStringList getContextFromStream( QTextStream & istream, unsigned int line, unsigned int context );
+	
 	KParts::ReadOnlyPart * partForURL( KURL const & url );
 	bool partIsSane( KParts::ReadOnlyPart * );
 
@@ -96,9 +97,13 @@ private:
 	
 	BookmarksConfig * _config;
 	
+	ConfigWidgetProxy * _configProxy;
+	
 	QTimer * _marksChangeTimer;
 	QValueList<KParts::ReadOnlyPart*> _dirtyParts;
 };
 
 
 #endif
+
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;

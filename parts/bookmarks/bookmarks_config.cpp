@@ -1,14 +1,13 @@
-//
-// C++ Implementation: bookmarks_config
-//
-// Description: 
-//
-//
-// Author: KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2003
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************************************
+ *   Copyright (C) 2003 by Jens Dagerbo                                    *
+ *   jens.dagerbo@swipnet.se                                               *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <kconfig.h>
 #include <kapplication.h>
@@ -17,9 +16,8 @@
 
 BookmarksConfig::BookmarksConfig()
 {
-	// @todo make the codeline values more intuitive
-	_context = 3;
-	_codeline = 1; // 0 - Never, 1 - Only if Comment, 2 - Always
+	_context = 5;
+	_codeline = Never; // 0 - Never, 1 - Only if Comment, 2 - Always
 	_tooltip = true;
 }
 
@@ -40,6 +38,7 @@ void BookmarksConfig::writeConfig()
 	config->writeEntry("Context", _context );
 	config->writeEntry("Codeline", _codeline );
 	config->writeEntry("ToolTip", _tooltip );
+	config->writeEntry("Token", _token );
 
 	config->sync();
 }
@@ -50,14 +49,27 @@ void BookmarksConfig::writeConfig()
  */
 void BookmarksConfig::readConfig()
 {
-	// @todo implement lunacy safeguards
-	
 	KConfig *config = kapp->config();
 	config->setGroup("Bookmarks");
 	
-	_context = config->readPropertyEntry( "Context", 3 ).toInt();
-	_codeline = config->readPropertyEntry( "Codeline", 1 ).toInt();
+	_context = config->readPropertyEntry( "Context", 5 ).toInt();
 	_tooltip = config->readBoolEntry( "ToolTip", true );
+	_token = config->readEntry( "Token", "//" );
+	unsigned int cl = config->readPropertyEntry( "Codeline", 0 ).toInt();
+	
+	switch( cl )
+	{
+		case 1:
+			_codeline = Token;
+		break;
+		case 2: 
+			_codeline = Always;
+		break;
+		default:
+			_codeline = Never;
+	}
+	
+	if ( _context > 15 ) _context = 15;
 }
 
 
@@ -73,7 +85,7 @@ bool BookmarksConfig::toolTip()
 /*!
     \fn BookmarksConfig::codeline
  */
-unsigned int BookmarksConfig::codeline()
+BookmarksConfig::CodeLineType BookmarksConfig::codeline()
 {
     return _codeline;
 }
@@ -91,7 +103,7 @@ unsigned int BookmarksConfig::context()
 /*!
     \fn BookmarksConfig::setCodeline( unsigned int )
  */
-void BookmarksConfig::setCodeline( unsigned int codeline )
+void BookmarksConfig::setCodeline( CodeLineType codeline )
 {
 	_codeline = codeline;
 }
@@ -113,3 +125,14 @@ void BookmarksConfig::setToolTip( bool tooltip )
 	_tooltip = tooltip;
 }
 
+QString BookmarksConfig::token( )
+{
+	return _token;
+}
+
+void BookmarksConfig::setToken( QString const & token )
+{
+	_token = token;
+}
+
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;
