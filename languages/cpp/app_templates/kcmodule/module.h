@@ -9,7 +9,7 @@ class $APPNAME$: public KCModule
     Q_OBJECT
 
 public:
-    $APPNAME$( QWidget *parent=0, const char *name=0 );
+    $APPNAME$( QWidget *parent=0, const char *name=0, const QStringList& = QStringList() );
     ~$APPNAME$();
 
     virtual void load();
@@ -17,7 +17,7 @@ public:
     virtual void defaults();
     virtual int buttons();
     virtual QString quickHelp() const;
-    virtual const KAboutData *aboutData()
+    virtual const KAboutData *aboutData()const
     { return myAboutData; };
 
 public slots:

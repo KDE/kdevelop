@@ -2,11 +2,15 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kparts/genericfactory.h>
 
 #include "$APPNAMELC$.h"
 
-$APPNAME$::$APPNAME$(QWidget *parent, const char *name)
-    : KCModule(parent, name)
+typedef KGenericFactory<$APPNAME$, QWidget> $APPNAME$Factory;
+K_EXPORT_COMPONENT_FACTORY( kcm_$APPNAME$, $APPNAME$Factory("kcm$APPNAMELC$"))
+
+$APPNAME$::$APPNAME$(QWidget *parent, const char *name, const QStringList&)
+    : KCModule(parent, name), myAboutData(0)
 {
     // place widgets here
     load();
@@ -56,15 +60,5 @@ QString $APPNAME$::quickHelp() const
     return i18n("Helpful information about the $APPNAMELC$ module.");
 }
 
-
-extern "C"
-{
-
-    KCModule *create_$APPNAME$(QWidget *parent, const char *name)
-    {
-        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-        return new $APPNAME$(parent, "$APPNAME$");
-    }
-}
 
 #include "$APPNAMELC$.moc"
