@@ -21,8 +21,8 @@
 
 #include <klined.h>
 #include <kintegerline.h>
+#include <kwizard.h>
 
-#include <qdialog.h>
 #include <qcheckbox.h>
 
 class Breakpoint;
@@ -31,7 +31,7 @@ class Breakpoint;
   *@author John Birch
   */
 
-class BPDialog : public QDialog  {
+class BPDialog : public KDialog  {
    Q_OBJECT
 
 public:

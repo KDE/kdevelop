@@ -22,6 +22,7 @@
 #include <kbuttonbox.h>
 #include <klined.h>
 #include <kintegerline.h>
+#include <kwizard.h>
 
 #include <qcheckbox.h>
 #include <qlabel.h>
@@ -32,7 +33,7 @@
 /***************************************************************************/
 
 BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
-  QDialog(parent, name, true),  // modal
+  KDialog(parent, name, true),  // modal
   conditional_(0),
   ignoreCount_(0)
 {
