@@ -35,6 +35,7 @@
 #include "cpp_tags.h"
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
+#include "tag_creator.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -132,7 +133,7 @@ public:
 	    }
 	}
 	
-	cppSupport()->classStore()->removeWithReferences( fileName );
+	cppSupport()->removeWithReferences( fileName );
 	StoreWalker walker( fileName, cppSupport()->classStore() );
 	walker.parseTranslationUnit( ast.get() );
 	remove( fileName );
@@ -250,6 +251,9 @@ CppSupportPart::~CppSupportPart()
 	m_backgroundParser = 0;
     }
 
+    codeRepository()->setMainCatalog( 0 );
+    delete( m_projectCatalog );
+    
     QPtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
         ++it;
@@ -291,17 +295,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 #if 0
 	    m_backgroundParser->lock();
 	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
-		classStore()->removeWithReferences( fileName );
-		StoreWalker walker( fileName, classStore() );
+		removeWithReferences( fileName );
+		StoreWalker walker( fileName, cppSupport()->classStore() );
 		walker.parseTranslationUnit( ast );
-		
-#ifdef ENABLE_FILE_STRUCTURE
-		if( fileName == m_activeFileName ){
-		    RTClassBrowser b( fileName, m_structureView );
-		    b.parseTranslationUnit( ast );
-		}
-#endif
-		
 	    }
 	    m_backgroundParser->unlock();	    
 #endif
@@ -376,6 +372,17 @@ void
 CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
+    
+    m_projectCatalog = new Catalog();
+#if 0
+    m_projectCatalog->open( project()->projectDirectory() + "/project.db" );
+    
+    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
+    for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
+	m_projectCatalog->addIndex( (*idxIt).utf8() );
+    
+    codeRepository()->setMainCatalog( m_projectCatalog );
+#endif
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -509,7 +516,7 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 	kdDebug(9007) << "removedFilesFromProject(): " << fileInfo.absFilePath() << endl;
 
 	QString path = fileInfo.absFilePath();
-	classStore()->removeWithReferences(path);
+	removeWithReferences(path);
 	m_backgroundParser->removeFile( path );
     }
 
@@ -783,7 +790,7 @@ CppSupportPart::maybeParse( const QString& fileName )
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
-	classStore()->removeWithReferences( fileName );
+	removeWithReferences( fileName );
 	return;
     }
 
@@ -1130,6 +1137,16 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 void CppSupportPart::codeCompletionConfigStored( )
 {
     partController()->setActivePart( partController()->activePart() );
+}
+
+void CppSupportPart::removeWithReferences( const QString & fileName )
+{
+    classStore()->removeWithReferences( fileName );
+#if 0
+    QValueList<Catalog::QueryArgument> args;
+    args << Catalog::QueryArgument( "fileName", fileName );
+    m_projectCatalog->removeItems( args );
+#endif
 }
 
 #include "cppsupportpart.moc"

@@ -54,10 +54,10 @@
 #include <parsedscopecontainer.h>
 
 
-class SimpleVariable{
+class SimpleVariable
+{
 public:
-    SimpleVariable()
-        : name( QString::null ), type( QString::null ){}
+    SimpleVariable() {}
     SimpleVariable( const SimpleVariable& source )
         : name( source.name ), type( source.type ) {}
     ~SimpleVariable(){}
@@ -69,7 +69,7 @@ public:
     }
 
     QString name;
-    QString type;
+    QStringList type;
 };
 
 class SimpleContext{
@@ -78,45 +78,45 @@ public:
         : m_prev( prev ) {}
 
     virtual ~SimpleContext()
-        {
-            if( m_prev ){
-                delete( m_prev );
-                m_prev = 0;
-            }
-        }
-
+    {
+	if( m_prev ){
+	    delete( m_prev );
+	    m_prev = 0;
+	}
+    }
+    
     SimpleContext* prev() const
-        { return m_prev; }
-
+    { return m_prev; }
+    
     void attach( SimpleContext* ctx )
-        { m_prev = ctx; }
-
+    { m_prev = ctx; }
+    
     void detach()
-        { m_prev = 0; }
-
+    { m_prev = 0; }
+    
     const QValueList<SimpleVariable>& vars() const
-        { return m_vars; }
-
+    { return m_vars; }
+    
     void add( const SimpleVariable& v )
-        { m_vars.append( v ); }
-
+    { m_vars.append( v ); }
+    
     void add( const QValueList<SimpleVariable>& vars )
-        { m_vars += vars; }
-
+    { m_vars += vars; }
+    
     SimpleVariable findVariable( const QString& varname )
-        {
-            SimpleContext* ctx = this;
-            while( ctx ){
-                const QValueList<SimpleVariable>& vars = ctx->vars();
-                for( int i=vars.count() - 1; i>=0; --i ){
-                    SimpleVariable v = vars[ i ];
-                    if( v.name == varname )
-                        return v;
-                }
-                ctx = ctx->prev();
-            }
-            return SimpleVariable();
-        }
+    {
+	SimpleContext* ctx = this;
+	while( ctx ){
+	    const QValueList<SimpleVariable>& vars = ctx->vars();
+	    for( int i=vars.count() - 1; i>=0; --i ){
+		SimpleVariable v = vars[ i ];
+		if( v.name == varname )
+		    return v;
+	    }
+	    ctx = ctx->prev();
+	}
+	return SimpleVariable();
+    }
 
 private:
     QValueList<SimpleVariable> m_vars;
@@ -181,7 +181,6 @@ static QString toSimpleName( NameAST* name )
         return QString::null;
 
     QString s;
-
     QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
     QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
     while( nameIt.current() ){
@@ -197,29 +196,9 @@ static QString toSimpleName( NameAST* name )
     return s;
 }
 
-
-enum
-{
-    KIND_NAMESPACE = 0,
-    KIND_CONSTRUCTOR,
-    KIND_DESTRUCTOR,
-    KIND_SLOT,
-    KIND_SIGNAL,
-    KIND_METHOD,
-    KIND_ATTRIBUTE,
-    KIND_CLASS,
-    KIND_STRUCT
-};
-
 bool operator < ( const KTextEditor::CompletionEntry& e1, const KTextEditor::CompletionEntry& e2 )
 {
-    return
-	e1.type < e2.type ||
-	( !(e1.type < e2.type) && e1.text < e2.text ) ||
-	( !(e1.text < e2.text) && e1.prefix < e2.prefix ) ||
-	( !(e1.prefix < e2.prefix) && e1.postfix < e2.postfix ) ||
-	( !(e1.postfix < e2.postfix) && e1.comment < e2.comment ) ||
-	( !(e1.comment < e2.comment) && e1.userdata < e2.userdata );
+    return e1.text < e2.text;
 }
 
 static QValueList<KTextEditor::CompletionEntry>
@@ -264,6 +243,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     : d( new CppCodeCompletionData )
 {
     m_pSupport = part;
+    
     m_activeCursor = 0;
     m_activeEditor   = 0;
     m_activeCompletion = 0;
@@ -312,34 +292,19 @@ void CppCodeCompletion::slotTimeout()
     completeText();
 }
 
-void
-CppCodeCompletion::slotArgHintHided( )
+void CppCodeCompletion::slotArgHintHided( )
 {
     //kdDebug(9007) << "CppCodeCompletion::slotArgHintHided()" << endl;
     m_bArgHintShow = false;
 }
 
-void
-CppCodeCompletion::setEnabled( bool setEnable )
-{
-    m_bCodeCompletion = setEnable;
-}
-
-void
-CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
+void CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 {
     Q_UNUSED( entry );
     m_bCompletionBoxShow = false;
-
-    unsigned int line, column;
-    m_activeCursor->cursorPositionReal( &line, &column );
-    QString textLine = m_activeEditor->textLine( line );
-    QString ch = textLine.mid( column-1, 1 );
 }
 
-
-void
-CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
+void CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
     kdDebug( 9007 ) << "CppCodeCompletion::slotActivePartChanged()" << endl;
 
@@ -351,7 +316,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
     if( !doc )
 	return;
-
+    
     m_activeFileName = doc->url().path();
 
     // if the interface stuff fails we should disable codecompletion automatically
@@ -386,8 +351,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
 }
 
-void
-CppCodeCompletion::slotTextChanged()
+void CppCodeCompletion::slotTextChanged()
 {
     m_ccTimer->stop();
 
@@ -414,8 +378,7 @@ CppCodeCompletion::slotTextChanged()
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN };
 
-int
-CppCodeCompletion::expressionAt( const QString& text, int index )
+int CppCodeCompletion::expressionAt( const QString& text, int index )
 {
     kdDebug(9007) << "CppCodeCompletion::expressionAt()" << endl;
 
@@ -483,8 +446,7 @@ CppCodeCompletion::expressionAt( const QString& text, int index )
     return index;
 }
 
-QStringList
-CppCodeCompletion::splitExpression( const QString& text )
+QStringList CppCodeCompletion::splitExpression( const QString& text )
 {
 #define ADD_CURRENT()\
  if( current.length() ) { l << current; /*kdDebug(9007) << "add word " << current << endl;*/ current = ""; }
@@ -539,11 +501,8 @@ CppCodeCompletion::splitExpression( const QString& text )
     return l;
 }
 
-QString
-CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
+QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
-    QString expr = e;
-
     bool global = false;
     if( expr.startsWith("::") ){
 	expr = expr.mid( 2 );
@@ -551,51 +510,60 @@ CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
     }
 
     QStringList exprList = splitExpression( expr );
-    SimpleVariable v_this = ctx->findVariable( "this" );
-
-    QString type = v_this.type;
-    ParsedClassContainer* container = findContainer( v_this.type );
-
-    QStringList::Iterator it = exprList.begin();
-    while( it != exprList.end() ){
-	QString e = *it;
-
-	e = e.stripWhiteSpace();
-	int leftParen = e.find( "(" );
-
-	if( leftParen != -1 )
-	    e = e.left( leftParen );
-
-	//e = e.replace( QRegExp("::"), "." );
-	if( e.endsWith("::") )
-	    e = e.left( e.length() - 2 );
-
-	type = QString::null;
-	if( it == exprList.begin() ){
-	    SimpleVariable v = ctx->findVariable( e );
-	    type = v.type;
-	}
-
-	if( type.isEmpty() )
-	    type = typeName( typeOf(e, container) );
-
-	if( type.isEmpty() && it == exprList.begin() )
-	    type = typeName( typeOf(e) );
-
-	if( type.isEmpty() || !(container = findContainer(type)) )
-	    break;
-
-	++it;
-    }
-
+    QStringList type = evaluateExpressionInternal( exprList, QStringList(), ctx );
+    
+    m_pSupport->mainWindow()->statusBar()->message( i18n("Type of %1 is %2").arg(expr).arg(type.join("::")), 1000 );
+    
     return type;
 }
+
+QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprList, const QStringList & scope, SimpleContext * ctx )
+{
+    kdDebug(9007) << "evaluateExpression " << exprList << " in " << scope << endl;
+    
+    if( exprList.isEmpty() )
+	return scope;
+    
+    QString currentExpr = exprList.front().stripWhiteSpace();
+    exprList.pop_front();
+    
+    int leftParen = currentExpr.find( "(" );
+    
+    if( leftParen != -1 )
+	currentExpr = currentExpr.left( leftParen ).stripWhiteSpace();
+
+    if( currentExpr.endsWith("::") )
+	currentExpr = currentExpr.left( currentExpr.length() - 2 ).stripWhiteSpace();
+        
+    if( ctx ){
+	// find the variable type in the current context
+	QStringList type = ctx->findVariable( currentExpr ).type;
+	if( !type.isEmpty() )
+	    return evaluateExpressionInternal( exprList, type );
+	
+	QStringList t_this = ctx->findVariable( "this" ).type;
+	if( !t_this.isEmpty() ){
+	    QStringList type = typeOf( currentExpr, t_this );
+	    if( !type.isEmpty() )
+		return evaluateExpressionInternal( exprList, type );
+	    
+	    return QStringList();
+	}
+    }
+    
+    QStringList type = typeOf( currentExpr, scope );
+    if( !type.isEmpty() )
+	return evaluateExpressionInternal( exprList, type );
+    
+    return QStringList();
+}
+
 
 void
 CppCodeCompletion::completeText( )
 {
     kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
-
+    
     if( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
         return;
 
@@ -629,704 +597,286 @@ CppCodeCompletion::completeText( )
         showArguments = TRUE;
     }
 
-    QString type;
+    QStringList type, this_type;
     QString expr, word;
 
-    // sync
-    //while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
-    //     m_pSupport->backgroundParser()->isEmpty().wait();
-
-    m_pSupport->backgroundParser()->lock();
-    AST* ast = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
     DeclarationAST::Node recoveredDecl;
 
-    if( !ast ){
-        kdDebug(9007) << "------------------- NO AST FOUND --------------------" << endl;
-
-        if( RecoveryPoint* recoveryPoint = d->findRecoveryPoint(line, column) ){
-            kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
-            kdDebug(9007) << "isFunDef = " << (recoveryPoint->kind == NodeType_FunctionDefinition) << endl;
-
-            QString textLine = m_activeEditor->textLine( recoveryPoint->startLine );
-            kdDebug(9007) << "startLine = " << textLine << endl;
-            kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
-
-
-            if( recoveryPoint->kind == NodeType_FunctionDefinition ){
-
-                QString textToReparse = getText( recoveryPoint->startLine, recoveryPoint->startColumn,
-                                                 line, showArguments ? column-1 : column );
-                //kdDebug(9007) << "-------------> please reparse only text" << endl << textToReparse << endl
-                //              << "--------------------------------------------" << endl;
-
-                Driver d;
-                Lexer lexer( &d );
-                /// @todo setup the lexer(i.e. adds macro, special words, ...
-
-                lexer.setSource( textToReparse );
-                Parser parser( &d, &lexer );
-
-                parser.parseDeclaration( recoveredDecl );
-                if( recoveredDecl.get() ){
-
-                    bool isFunDef = recoveredDecl->nodeType() == NodeType_FunctionDefinition;
-                    kdDebug(9007) << "is function definition = " << isFunDef << endl;
-
-	            int endLine, endColumn;
-	            recoveredDecl->getEndPosition( &endLine, &endColumn );
-                    kdDebug(9007) << "endLine = " << endLine << ", endColumn " << endColumn << endl;
-
-                    /// @todo check end position
-
-                    if( isFunDef ) {
-                        FunctionDefinitionAST* def = static_cast<FunctionDefinitionAST*>( recoveredDecl.get() );
-
-                        /// @todo remove code duplication
-
-                        QString contents = textToReparse;
-                        int start_expr = expressionAt( contents, contents.length() - 1 );
-                        // kdDebug(9007) << "start_expr = " << start_expr << endl;
-                        if( start_expr != int(contents.length()) - 1 ){
-                                expr = contents.mid( start_expr, contents.length() - start_expr );
-                                expr = expr.stripWhiteSpace();
-                        }
-
-                        int idx = expr.length() - 1;
-                        while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
-                                --idx;
-                        }
-                        if( idx != int(expr.length()) - 1 ){
-                                ++idx;
-                                word = expr.mid( idx ).stripWhiteSpace();
-                                expr = expr.left( idx ).stripWhiteSpace();
-                        }
-
-                        if( !expr.isNull() ){
-                                kdDebug(9007) << "expr = " << expr << endl;
-                        } else {
-                                kdDebug(9007) << "no expr found!!" << endl;
-                        }
-
-
-                        SimpleContext* ctx = computeContext( def, endLine, endColumn );
-                        DeclaratorAST* d = def->initDeclarator()->declarator();
-                        NameAST* name = d->declaratorId();
-                        QString scope = recoveryPoint->scope.join( "::" );
-
-                        QStringList nested;
-                        QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
-                        QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
-                        while( nameIt.current() ){
-                            if( nameIt.current()->name() ){
-                                nested << nameIt.current()->name()->text();
-                            }
-                            ++nameIt;
-                        }
-
-                        QString s = nested.join( "::" );
-
-                        if( !scope.isNull() ){
-                            scope += QString::fromLatin1( "::" ) + s;
-                        } else {
-                            scope += s;
-                        }
-
-                        if( scope.endsWith("::") ){
-                           scope = scope.left( scope.length() - 2 );
-                        }
-
-                        if( scope.startsWith("::") ){
-                           scope = scope.mid( 2 );
-                        }
-
-                        if( !scope.isNull() ){
-	                    SimpleVariable var;
-	                    var.type = scope;
-	                    var.name = "this";
-	                    ctx->add( var );
-                            kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
-                        }
-
-                        type = ctx ? typeName( evaluateExpression(expr, ctx) ) : QString::null;
-                        delete( ctx );
-                        ctx = 0;
-
-                    }
-                } else {
-                   kdDebug(9007) << "no valid declaration to recover!!!" << endl;
-                }
-            }
-        }
-
-    } else if( AST* node = findNodeAt(ast, line, column) ){
-
-        kdDebug(9007) << "------------------- AST FOUND --------------------" << endl;
-
-        if( FunctionDefinitionAST* def = functionDefinition(node) ){
-
-            kdDebug(9007) << "------> found a function definition" << endl;
-
-	    int startLine, startColumn;
-	    def->getStartPosition( &startLine, &startColumn );
-
-	    QString contents = getText( startLine, startColumn, line, showArguments ? column-1 : column );
-
-            kdDebug(9007) << "------> computed context" << endl;
-
-	    // kdDebug(9007) << "contents = |" << contents << "|" << endl;
-
-	    int start_expr = expressionAt( contents, contents.length() - 1 );
-
-            kdDebug(9007) << "------> found expression at " << start_expr << endl;
-	    // kdDebug(9007) << "start_expr = " << start_expr << endl;
-	    if( start_expr != int(contents.length()) - 1 ){
-		expr = contents.mid( start_expr, contents.length() - start_expr );
-		expr = expr.stripWhiteSpace();
+    SimpleContext* ctx = 0;
+    
+    m_pSupport->backgroundParser()->lock();
+    
+    if( RecoveryPoint* recoveryPoint = d->findRecoveryPoint(line, column) ){
+	kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
+	kdDebug(9007) << "isFunDef = " << (recoveryPoint->kind == NodeType_FunctionDefinition) << endl;
+	
+	QString textLine = m_activeEditor->textLine( recoveryPoint->startLine );
+	kdDebug(9007) << "startLine = " << textLine << endl;
+	kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
+	
+	if( recoveryPoint->kind == NodeType_FunctionDefinition ){
+	    
+	    QString textToReparse = getText( recoveryPoint->startLine, recoveryPoint->startColumn,
+					     line, showArguments ? column-1 : column );
+	    //kdDebug(9007) << "-------------> please reparse only text" << endl << textToReparse << endl
+	    //              << "--------------------------------------------" << endl;
+	    
+	    Driver d;
+	    Lexer lexer( &d );
+	    /// @todo setup the lexer(i.e. adds macro, special words, ...
+	    
+	    lexer.setSource( textToReparse );
+	    Parser parser( &d, &lexer );
+	    
+	    parser.parseDeclaration( recoveredDecl );
+	    if( recoveredDecl.get() ){
+		
+		bool isFunDef = recoveredDecl->nodeType() == NodeType_FunctionDefinition;
+		kdDebug(9007) << "is function definition = " << isFunDef << endl;
+		
+		int endLine, endColumn;
+		recoveredDecl->getEndPosition( &endLine, &endColumn );
+		kdDebug(9007) << "endLine = " << endLine << ", endColumn " << endColumn << endl;
+		
+		/// @todo check end position
+		
+		if( isFunDef ) {
+		    FunctionDefinitionAST* def = static_cast<FunctionDefinitionAST*>( recoveredDecl.get() );
+		    
+		    /// @todo remove code duplication
+		    
+		    QString contents = textToReparse;
+		    int start_expr = expressionAt( contents, contents.length() - 1 );
+		    // kdDebug(9007) << "start_expr = " << start_expr << endl;
+		    if( start_expr != int(contents.length()) - 1 ){
+			expr = contents.mid( start_expr, contents.length() - start_expr );
+			expr = expr.stripWhiteSpace();
+		    }
+		    
+		    int idx = expr.length() - 1;
+		    while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
+			--idx;
+		    }
+		    if( idx != int(expr.length()) - 1 ){
+			++idx;
+			word = expr.mid( idx ).stripWhiteSpace();
+			expr = expr.left( idx ).stripWhiteSpace();
+		    }
+		    
+		    if( !expr.isNull() ){
+			kdDebug(9007) << "expr = " << expr << endl;
+		    } else {
+			kdDebug(9007) << "no expr found!!" << endl;
+		    }
+		    
+		    ctx = computeContext( def, endLine, endColumn );
+		    DeclaratorAST* d = def->initDeclarator()->declarator();
+		    NameAST* name = d->declaratorId();
+		    QString scope = recoveryPoint->scope.join( "::" );
+		    
+		    QStringList nested;
+		    QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
+		    QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+		    while( nameIt.current() ){
+			if( nameIt.current()->name() ){
+			    nested << nameIt.current()->name()->text();
+			}
+			++nameIt;
+		    }
+		    
+		    QString s = nested.join( "::" );
+		    
+		    if( !scope.isNull() ){
+			scope += QString::fromLatin1( "::" ) + s;
+		    } else {
+			scope += s;
+		    }
+		    
+		    if( scope.endsWith("::") ){
+			scope = scope.left( scope.length() - 2 );
+		    }
+		    
+		    if( scope.startsWith("::") ){
+			scope = scope.mid( 2 );
+		    }
+		    
+		    if( !scope.isNull() ){
+			SimpleVariable var;
+			this_type = typeName( scope );
+			var.type = this_type;
+			var.name = "this";
+			ctx->add( var );
+		    }
+		    
+		    type = evaluateExpression( expr, ctx );			
+		}
+	    } else {
+		kdDebug(9007) << "no valid declaration to recover!!!" << endl;
 	    }
-
-            if( !expr.isNull() ){
-                kdDebug(9007) << "expr = " << expr << endl;
-            } else {
-                kdDebug(9007) << "no expr found!!" << endl;
-            }
-
-            int idx = expr.length() - 1;
-	    while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
-		--idx;
-	    }
-	    if( idx != int(expr.length()) - 1 ){
-		++idx;
-		word = expr.mid( idx ).stripWhiteSpace();
-		expr = expr.left( idx ).stripWhiteSpace();
-	    }
-
-	    SimpleContext* ctx = computeContext( def, line, column );
-
-            QStringList scope;
-            scopeOfNode( def, scope );
-
-            if( scope.size() ){
-                    SimpleVariable var;
-                    var.type = scope.join( "::" );
-                    var.name = "this";
-                    ctx->add( var );
-                    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
-            }
-
-            type = typeName( evaluateExpression(expr, ctx) );
-            delete( ctx );
-            ctx = 0;
-       }
-
+	}
     }
-
+ 
+    if( !recoveredDecl.get() ){
+	TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
+	if( AST* node = findNodeAt(ast, line, column) ){
+	    
+	    kdDebug(9007) << "------------------- AST FOUND --------------------" << endl;
+	    
+	    if( FunctionDefinitionAST* def = functionDefinition(node) ){
+		
+		kdDebug(9007) << "------> found a function definition" << endl;
+		
+		int startLine, startColumn;
+		def->getStartPosition( &startLine, &startColumn );
+		
+		QString contents = getText( startLine, startColumn, line, showArguments ? column-1 : column );
+		
+		int start_expr = expressionAt( contents, contents.length() - 1 );
+		
+		kdDebug(9007) << "------> found expression at " << start_expr << endl;
+		// kdDebug(9007) << "start_expr = " << start_expr << endl;
+		if( start_expr != int(contents.length()) - 1 ){
+		    expr = contents.mid( start_expr, contents.length() - start_expr );
+		    expr = expr.stripWhiteSpace();
+		}
+		
+		if( !expr.isNull() ){
+		    kdDebug(9007) << "expr = " << expr << endl;
+		} else {
+		    kdDebug(9007) << "no expr found!!" << endl;
+		}
+		
+		int idx = expr.length() - 1;
+		while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
+		    --idx;
+		}
+		if( idx != int(expr.length()) - 1 ){
+		    ++idx;
+		    word = expr.mid( idx ).stripWhiteSpace();
+		    expr = expr.left( idx ).stripWhiteSpace();
+		}
+		
+		ctx = computeContext( def, line, column );
+		
+		QStringList scope;
+		scopeOfNode( def, scope );
+		this_type = scope;
+		
+		if( scope.size() ){
+		    SimpleVariable var;
+		    var.type = scope;
+		    var.name = "this";
+		    ctx->add( var );
+		    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
+		}
+		
+		type = evaluateExpression( expr, ctx );
+	    }
+	    
+	}	
+    }
     m_pSupport->backgroundParser()->unlock();
-
-    if( !type.isEmpty() ){
-        kdDebug(9007) << "type = " << type << endl;
-	QStringList scope = QStringList::split( "::", type ); /// @todo check :: or . ??!?
-	bool isInstance = !expr.endsWith( "::" );
-
-	if( showArguments ){
-	    QStringList functionList = getSignatureListForClass( type, word, isInstance );
-
-	    if( expr.isEmpty() /*|| functionList.count() == 0 */){
-		functionList += getGlobalSignatureList( word );
-	    }
-
-	    if( functionList.count() ){
-		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
-	    }
-	} else {
-	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type, true, isInstance );
-
-	    if( m_pSupport->codeCompletionConfig()->includeTypes() && expr.isEmpty() ){
-		kdDebug(9007) << "include types" << endl;
-		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
-	    }
-
-	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && expr.isEmpty() ){
-		kdDebug(9007) << "include global function declarations" << endl;
- 		QValueList<Catalog::QueryArgument> args;
-		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-		    << Catalog::QueryArgument( "scope", QStringList() );
-		entryList += CodeInformationRepository::toEntryList( m_repository->query(args) );
-	    }
-
-	    if( entryList.size() )
-		m_activeCompletion->showCompletionBox( entryList, word.length() );
+    
+    if( !showArguments ){
+	QValueList<KTextEditor::CompletionEntry> entryList;
+		
+	if( type.isEmpty() && expr.isEmpty() ){	    
+	    computeCompletionEntryList( entryList, ctx );
+	    computeCompletionEntryList( entryList, m_pSupport->classStore()->globalScope() );
+	    
+	    if( this_type.size() )
+		computeCompletionEntryList( entryList, this_type );
+	    
+	} else if( !type.isEmpty() ){
+	    computeCompletionEntryList( entryList, type );
+	}
+	
+	if( entryList.size() ){
+	    unique( entryList );
+	    qHeapSort( entryList );
+	    m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     } else {
-	if( word.isEmpty() )
-	    word = expr;
-
-	if( showArguments && word.length() ){
-
-	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
-
-	    if( functionList.count() == 0 ){
-		functionList = getGlobalSignatureList( word );
-	    }
-
-	    if( functionList.count() ){
-		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
-	    }
-
-	} else if( !showArguments && word.length() ) {
-	    QValueList<KTextEditor::CompletionEntry> entryList;
-
-	    if( m_pSupport->codeCompletionConfig()->includeTypes() && expr.isEmpty() ){
-		kdDebug(9007) << "include types" << endl;
-		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
-	    }
-
-	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() ){
-		kdDebug(9007) << "include global function declarations" << endl;
-		QValueList<Catalog::QueryArgument> args;
-		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-		    << Catalog::QueryArgument( "scope", QStringList() );
-		entryList += CodeInformationRepository::toEntryList( m_repository->query(args) );
-	    }
-
-	    if( entryList.size() )
-		m_activeCompletion->showCompletionBox( entryList, word.length() );
+	QStringList signatureList;
+	
+	if( type.isEmpty() && expr.isEmpty() ){
+	    computeSignatureList( signatureList, word, m_pSupport->classStore()->globalScope()->getSortedMethodList() );
+	} else if( !type.isEmpty() ){
+	    computeSignatureList( signatureList, word, type );
+	}
+	
+	if( this_type.size() )
+	    computeSignatureList( signatureList, word, this_type );
+	    
+	if( signatureList.size() ){
+	    unique( signatureList );
+	    qHeapSort( signatureList );
+	    m_activeCompletion->showArgHint( signatureList, "()", "," );
 	}
     }
-}
-
-QStringList CppCodeCompletion::getGlobalSignatureList( const QString& functionName )
-{
-    QStringList list = m_pSupport->classStore()->globalScope()->getSortedMethodSignatureList( functionName );
-    list += m_repository->getSignatureList( QStringList(), functionName, true );
-    list += m_repository->getSignatureList( QStringList() << functionName, functionName, true );
-    return list;
-}
-
-QStringList CppCodeCompletion::getSignatureListForClass( const QString& className, const QString& functionName, bool isInstance )
-{
-    QStringList retVal;
-
-    ParsedClass* pClass = dynamic_cast<ParsedClass*>( findContainer(className) );
-    if ( !pClass ){
-	// check the pcs
-	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName, isInstance );
-
-	QValueList<Tag> parents = m_repository->getBaseClassList( className );
-	kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
-	QValueList<Tag>::Iterator it = parents.begin();
-	while( it != parents.end() ){
-	    Tag& tag = *it;
-	    ++it;
-
-	    CppBaseClass<Tag> tagInfo( tag );
-
-	    kdDebug(9007) << "found base class " << tagInfo.baseClass() << endl;
-	    retVal += getSignatureListForClass( tagInfo.baseClass(), functionName, isInstance );
-	}
-    } else {
-	retVal = pClass->getSortedMethodSignatureList( functionName );
-	retVal += pClass->getSortedSlotSignatureList( functionName );
-	retVal += pClass->getSortedSignalSignatureList( functionName );
-
-	QPtrList<ParsedParent> parentList = pClass->parents;
-	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
-	{
-	    // ParsedClass* baseClass = dynamic_cast<ParsedClass*>( findContainer(pParentClass->name()) );
-	    retVal += getSignatureListForClass( pParentClass->name(), functionName, isInstance );
-	}
-
-    }
-
-    return retVal;
+    
+    delete( ctx );
+    ctx = 0;
 }
 
 void CppCodeCompletion::slotFileParsed( const QString& fileName )
 {
     if( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
 	return;
-
-#if 0
-    unsigned int line, column;
-    m_activeCursor->cursorPositionReal( &line, &column );
-
-    QString strCurLine = m_activeEditor->textLine( line );
-
-    QString ch = strCurLine.mid( column-1, 1 );
-    QString ch2 = strCurLine.mid( column-2, 2 );
-#endif
-
-    //if( ch2 == "->" || ch == "." || ch == "(" )
-    {
-        // sync
-        //while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
-        //    m_pSupport->backgroundParser()->isEmpty().wait();
-
-        m_pSupport->backgroundParser()->lock();
-        computeRecoveryPoints();
-        m_pSupport->backgroundParser()->unlock();
-    }
+    
+    m_pSupport->backgroundParser()->lock();
+    computeRecoveryPoints();
+    m_pSupport->backgroundParser()->unlock();
 }
 
-ParsedClassContainer* CppCodeCompletion::findContainer( const QString& n, ParsedScopeContainer* container, const QStringList& imports )
+QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& scope )
 {
-    if( !container )
-        container = m_pSupport->classStore()->globalScope();
-
-    QString name = n;
-    name = name.replace( QRegExp("::"), "." );
-
-    QStringList path = QStringList::split( ".", name );
-    QStringList::Iterator it = path.begin();
-    while( it != path.end() ){
-        QString s = *it;
-        ++it;
-
-        ParsedScopeContainer* scope = container->getScopeByName( s );
-        if( !scope )
-            break;
-
-        path.remove( s );
-        container = scope;
-    }
-
-    if( path.size() == 0 )
-        return container;
-
-    QString className = path.join( "." );
-    ParsedClass* klass = container->getClassByName( className );
-    if( !klass )
-        klass = container->getStructByName( className );
-
-    if( !klass && imports.size() ){
-
-        QStringList::ConstIterator impIt = imports.begin();
-        while( impIt != imports.end() ){
-            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container );
-            if( kl )
-                return kl;
-            ++impIt;
-        }
-    }
-
-    return klass;
-}
-
-QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( const QString& type, bool includePrivate, bool isInstance )
-{
-    QValueList<KTextEditor::CompletionEntry> entryList;
-
-    if( ParsedClassContainer* container = findContainer(type) ){
-
-	ParsedClass* klass = dynamic_cast<ParsedClass*>( container );
-	ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( container );
-
-	if( klass )
-	{
-	    QPtrList<ParsedParent> l = klass->parents;
-	    QPtrListIterator<ParsedParent> it( l );
-	    while( it.current() ){
-		ParsedParent* p = it.current();
-		++it;
-
-		entryList += findAllEntries( p->name(), false, isInstance );
-	    }
-	}
-
-	if( klass )
-	{
-	    QValueList<ParsedMethod*> l = klass->getSortedSlotList();
-	    QValueList<ParsedMethod*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedMethod* meth = *it;
-		++it;
-
-		if( !includePrivate && meth->access() == PIE_PRIVATE )
-		    continue;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_SLOT );
-		//entry.prefix = meth->type();
-
-		entry.text = meth->name() + "(";
-
-		QString text;
-		for( ParsedArgument *pArg = meth->arguments.first();
-		pArg != 0;
-		pArg = meth->arguments.next() ){
-		    if( pArg != meth->arguments.getFirst() )
-			text += ", ";
-		    text += pArg->toString();
-		}
-
-		if( text.isEmpty() ){
-		    entry.text += ")";
-		} else {
-		    text += ")";
-		    entry.postfix = text;
-		}
-		entryList << entry;
-	    }
-	}
-
-	if( klass )
-	{
-	    QValueList<ParsedMethod*> l = klass->getSortedSignalList();
-	    QValueList<ParsedMethod*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedMethod* meth = *it;
-		++it;
-
-		if( !includePrivate && meth->access() == PIE_PRIVATE )
-		    continue;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_SIGNAL );
-		//entry.prefix = meth->type();
-		entry.text = meth->name() + "(";
-
-		QString text;
-		for( ParsedArgument *pArg = meth->arguments.first();
-		pArg != 0;
-		pArg = meth->arguments.next() ){
-		    if( pArg != meth->arguments.getFirst() )
-			text += ", ";
-		    text += pArg->toString();
-		}
-		if( text.isEmpty() ){
-		    entry.text += ")";
-		} else {
-		    text += ")";
-		    entry.postfix = text;
-		}
-		entryList << entry;
-	    }
-	}
-
-	// methods
-	{
-	    QValueList<ParsedMethod*> l = container->getSortedMethodList();
-	    QValueList<ParsedMethod*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedMethod* meth = *it;
-		++it;
-
-		if( !includePrivate && meth->access() == PIE_PRIVATE )
-		    continue;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_METHOD );
-		//entry.prefix = meth->type();
-		entry.text = meth->name() + "(";
-
-		QString text;
-		for( ParsedArgument *pArg = meth->arguments.first();
-		pArg != 0;
-		pArg = meth->arguments.next() ){
-		    if( pArg != meth->arguments.getFirst() )
-			text += ", ";
-		    text += pArg->toString();
-		}
-		if( text.isEmpty() ){
-		    entry.text += ")";
-		} else {
-		    text += ")";
-		    entry.postfix = text;
-		}
-		entryList << entry;
-	    }
-	}
-
-	// attributes
-	{
-	    QValueList<ParsedAttribute*> l = container->getSortedAttributeList();
-	    QValueList<ParsedAttribute*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedAttribute* attr = *it;
-		++it;
-
-		if( !includePrivate && attr->access() == PIE_PRIVATE )
-		    continue;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_ATTRIBUTE );
-		//entry.prefix = attr->type();
-		entry.text = attr->name();
-		entryList << entry;
-	    }
-	}
-
-	// namespaces
-	if( scope )
-	{
-	    QValueList<ParsedScopeContainer*> l = scope->getSortedScopeList();
-	    QValueList<ParsedScopeContainer*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedScopeContainer* sc = *it;
-		++it;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_NAMESPACE );
-		entry.text = sc->name();
-		entryList << entry;
-	    }
-	}
-
-	// inner classes
-	{
-	    QValueList<ParsedClass*> l = container->getSortedClassList();
-	    QValueList<ParsedClass*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedClass* cl = *it;
-		++it;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_CLASS );
-		entry.text = cl->name();
-		entryList << entry;
-	    }
-	}
-
-	// inner structs
-	{
-	    QValueList<ParsedClass*> l = container->getSortedStructList();
-	    QValueList<ParsedClass*>::Iterator it = l.begin();
-	    while( it != l.end() ){
-		ParsedClass* cl = *it;
-		++it;
-
-		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_STRUCT );
-		entry.text = cl->name();
-		entryList << entry;
-	    }
-	}
+    QStringList type;
+    
+    if( name.isEmpty() )
+	return type;
+ 
+    QString key = scope.join( "." );
+    if( m_pSupport->classStore()->hasClass(key) ){
+	return typeOf( name, m_pSupport->classStore()->getClassByName(key) );
+    } else if( m_pSupport->classStore()->hasStruct(key) ){
+	return typeOf( name, m_pSupport->classStore()->getStructByName(key) );
     } else {
-	QStringList scope = QStringList::split( "::", type );
-	entryList = m_repository->getEntriesInScope( scope, isInstance );
-	QValueList<Tag> parents = m_repository->getBaseClassList( type ); // type or scope?
-	kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
+	type = typeOf( name, m_pSupport->classStore()->globalScope() );
+	if( !type.isEmpty() )
+	    return type;
+    }
+    
+    QValueList<Catalog::QueryArgument> args;
+    QTime t;
+    
+    t.start();
+    args << Catalog::QueryArgument( "scope", scope );
+    args << Catalog::QueryArgument( "name", name );
+    QValueList<Tag> tags( m_repository->query(args) );
+    kdDebug(9007) << "type of " << name << " in " << scope.join("::") << " takes " << t.elapsed() << endl;
+    type = typeOf( tags );
+    
+    if( type.isEmpty() ){
+	// try with parents
+	t.restart();
+	QValueList<Tag> parents( m_repository->getBaseClassList( scope.join("::") ) );
+	kdDebug(9007) << "get parents of " << scope.join("::") << " takes " << t.elapsed() << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
 	    Tag& tag = *it;
 	    ++it;
-
-	    CppBaseClass<Tag> tagInfo( tag );
-	    kdDebug(9007) << "found base class " << tagInfo.baseClass() << endl;
-	    entryList += findAllEntries( tagInfo.baseClass(), false, isInstance );
+	    
+	    CppBaseClass<Tag> info( tag );
+	    
+	    QStringList newScope = typeName( info.baseClass() );
+	    type = typeOf( name, newScope );
+	    if( !type.isEmpty() )
+		break;
 	}
     }
-
-    entryList = unique( entryList );
-    // qHeapSort( entryList );
-    return entryList;
-}
-
-QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* container )
-{
-    if( !container )
-	container = m_pSupport->classStore()->globalScope();
-
-    QString type;
-
-    ParsedClass* klass = dynamic_cast<ParsedClass*>( container );
-    ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( container );
-
-    if( klass )
-    {
-	QValueList<ParsedMethod*> l = klass->getSortedSlotList();
-	QValueList<ParsedMethod*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedMethod* meth = *it;
-	    ++it;
-
-	    if( meth->name() == name )
-		return meth->type();
-	}
-    } else {
-	QStringList path = QStringList::split( ".", scope->path() );
-	QValueList<Tag> tags = m_repository->getTagsInScope( name, path );
-        kdDebug(9007) << "------> #" << tags.size() << " tags in scope " << scope->path() << endl;
-
-	QValueList<Tag>::Iterator tit = tags.begin();
-	while( tit != tags.end() ){
-	    const Tag& tag = *tit;
-	    ++tit;
-	    if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
-		return tag.name();
-	    else if( tag.hasAttribute( "t" ) )
-		return tag.attribute( "t" ).toString();
-	}
-
-        QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
-        kdDebug(9007) << "------> found " << parents.size() << " base classes" << endl;
-        QValueList<Tag>::Iterator it = parents.begin();
-        while( it != parents.end() ){
-            Tag& tag = *it;
-            ++it;
-
-	    CppBaseClass<Tag> tagInfo( tag );
-	    type = typeOf( tagInfo.baseClass(), container );
-	    if( !type.isNull() )
-		return type;
-        }
-    }
-
-    if( klass )
-    {
-	QValueList<ParsedMethod*> l = klass->getMethodByName( name );
-        if( l.size() )
-            return l.front()->type();
-    }
-
-    // attributes
-    {
-	ParsedAttribute* attr = container->getAttributeByName( name );
-	if( attr )
-	    return attr->type();
-    }
-
-    // namespaces
-    if( scope )
-    {
-	ParsedScopeContainer* sc = scope->getScopeByName( name );
-	if( sc )
-	    return sc->name();
-    }
-
-    // inner classes
-    {
-	ParsedClass* cl = container->getClassByName( name );
-	if( cl )
-	    return cl->name();
-    }
-
-    // inner structs
-    {
-	ParsedClass* cl = container->getStructByName( name );
-	if( cl )
-	    return cl->name();
-    }
-
-
-    // parents
-    if( klass )
-    {
-	QPtrList<ParsedParent> l = klass->parents;
-	QPtrListIterator<ParsedParent> it( l );
-	while( it.current() ){
-	    ParsedParent* p = it.current();
-	    ++it;
-
-	    ParsedClassContainer* c = findContainer( p->name() );
-	    if( c != 0 ){
-		type = typeOf( name, c );
-		if( !type.isNull() )
-		    return type;
-	    }
-	}
-    }
-
-    return QString::null;
+    
+    return type;
 }
 
 void CppCodeCompletion::setupCodeInformationRepository( )
@@ -1347,10 +897,10 @@ void CppCodeCompletion::setupCodeInformationRepository( )
     }
 }
 
-QString CppCodeCompletion::typeName( const QString& str )
+QStringList CppCodeCompletion::typeName( const QString& str )
 {
     if( str.isEmpty() )
-	return QString::null;
+	return QStringList();
 
     Driver d;
     Lexer lex( &d );
@@ -1376,10 +926,10 @@ QString CppCodeCompletion::typeName( const QString& str )
             type += name->unqualifiedName()->name()->text();
         }
 
-        return type;
+        return QStringList::split( "::", type );
     }
 
-    return QString::null;
+    return QStringList();
 }
 
 SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, int line, int col )
@@ -1513,7 +1063,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 
     SimpleDeclarationAST* simpleDecl = static_cast<SimpleDeclarationAST*>( ast->declaration() );
     TypeSpecifierAST* typeSpec = simpleDecl->typeSpec();
-    QString type = typeName( typeSpec->text() );
+    QStringList type = typeName( typeSpec->text() );
 
     InitDeclaratorListAST* initDeclListAST = simpleDecl->initDeclaratorList();
     if( !initDeclListAST )
@@ -1548,12 +1098,11 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
     if( line < startLine || (line == startLine && col <= startColumn) )
 	return;
 
-    QString type = typeName( ast->typeSpec()->text() );
+    QStringList type = typeName( ast->typeSpec()->text() );
     SimpleVariable var;
     var.type = type;
     var.name = toSimpleName( ast->declarator()->declaratorId() );
     ctx->add( var );
-    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
@@ -1588,73 +1137,72 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
     return contents.join( "\n" );
 }
 
-
 // namespace?
-    class ComputeRecoveryPoints: public TreeParser
+class ComputeRecoveryPoints: public TreeParser
+{
+public:
+    ComputeRecoveryPoints( QPtrList<RecoveryPoint>& points )
+	: recoveryPoints( points )
+	{
+    }
+    
+    virtual void parseTranslationUnit( TranslationUnitAST* ast )
     {
-    public:
-        ComputeRecoveryPoints( QPtrList<RecoveryPoint>& points )
-            : recoveryPoints( points )
-        {
-        }
-
-        virtual void parseTranslationUnit( TranslationUnitAST* ast )
-        {
-            TreeParser::parseTranslationUnit( ast );
-            kdDebug(9007) << "found " << recoveryPoints.count() << " recovery points" << endl;
-        }
-
-        virtual void parseNamespace( NamespaceAST* ast )
-        {
-            //insertRecoveryPoint( ast );
-            m_currentScope.push_back( ast->namespaceName()->text() );
-            TreeParser::parseNamespace( ast );
-            m_currentScope.pop_back();
-        }
-
-        virtual void parseSimpleDeclaration( SimpleDeclarationAST* ast )
-        {
-            TypeSpecifierAST* typeSpec = ast->typeSpec();
-            //InitDeclaratorListAST* declarators = ast->initDeclaratorList();
-
-            if( typeSpec )
-                parseTypeSpecifier( typeSpec );
-
-            //insertRecoveryPoint( ast );
-            TreeParser::parseSimpleDeclaration( ast );
-        }
-
-        virtual void parseFunctionDefinition( FunctionDefinitionAST* ast )
-        {
-            insertRecoveryPoint( ast );
-        }
-
-        virtual void parseClassSpecifier( ClassSpecifierAST* ast )
-        {
-            //insertRecoveryPoint( ast );
-            m_currentScope.push_back( toSimpleName(ast->name()) );
-            TreeParser::parseClassSpecifier( ast );
-            m_currentScope.pop_back();
-        }
-
-        void insertRecoveryPoint( AST* ast )
-        {
-            if( !ast )
-                return;
-
-            RecoveryPoint* pt = new RecoveryPoint();
-            pt->kind = ast->nodeType();
-            pt->scope = m_currentScope;
-            ast->getStartPosition( &pt->startLine, &pt->startColumn );
-            ast->getEndPosition( &pt->endLine, &pt->endColumn );
-
-            recoveryPoints.append( pt );
-        }
-
-    private:
-        QPtrList<RecoveryPoint>& recoveryPoints;
-        QStringList m_currentScope;
-    };
+	TreeParser::parseTranslationUnit( ast );
+	kdDebug(9007) << "found " << recoveryPoints.count() << " recovery points" << endl;
+    }
+    
+    virtual void parseNamespace( NamespaceAST* ast )
+    {
+	//insertRecoveryPoint( ast );
+	m_currentScope.push_back( ast->namespaceName()->text() );
+	TreeParser::parseNamespace( ast );
+	m_currentScope.pop_back();
+    }
+    
+    virtual void parseSimpleDeclaration( SimpleDeclarationAST* ast )
+    {
+	TypeSpecifierAST* typeSpec = ast->typeSpec();
+	//InitDeclaratorListAST* declarators = ast->initDeclaratorList();
+	
+	if( typeSpec )
+	    parseTypeSpecifier( typeSpec );
+	
+	//insertRecoveryPoint( ast );
+	TreeParser::parseSimpleDeclaration( ast );
+    }
+    
+    virtual void parseFunctionDefinition( FunctionDefinitionAST* ast )
+    {
+	insertRecoveryPoint( ast );
+    }
+    
+    virtual void parseClassSpecifier( ClassSpecifierAST* ast )
+    {
+	//insertRecoveryPoint( ast );
+	m_currentScope.push_back( toSimpleName(ast->name()) );
+	TreeParser::parseClassSpecifier( ast );
+	m_currentScope.pop_back();
+    }
+    
+    void insertRecoveryPoint( AST* ast )
+    {
+	if( !ast )
+	    return;
+	
+	RecoveryPoint* pt = new RecoveryPoint();
+	pt->kind = ast->nodeType();
+	pt->scope = m_currentScope;
+	ast->getStartPosition( &pt->startLine, &pt->startColumn );
+	ast->getEndPosition( &pt->endLine, &pt->endColumn );
+	
+	recoveryPoints.append( pt );
+    }
+    
+private:
+    QPtrList<RecoveryPoint>& recoveryPoints;
+    QStringList m_currentScope;
+};
 
 
 void CppCodeCompletion::computeRecoveryPoints( )
@@ -1668,6 +1216,311 @@ void CppCodeCompletion::computeRecoveryPoints( )
 
     ComputeRecoveryPoints walker( d->recoveryPoints );
     walker.parseTranslationUnit( unit );
+}
+
+QStringList CppCodeCompletion::typeOf( const QValueList< Tag > & tags )
+{
+    QValueList<Tag>::ConstIterator it = tags.begin();
+    while( it != tags.end() ){
+	const Tag& tag = *it;
+	++it;
+	
+	if( tag.hasAttribute("t") )
+	    return typeName( tag.attribute("t").toString() );
+	else if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace ){
+	    QStringList l = tag.scope();
+	    l += typeName( tag.name() );
+	    return l;
+	}
+    }
+    
+    return QStringList();
+}
+
+QStringList CppCodeCompletion::typeOf( const QString & name, ParsedClass * klass )
+{
+    if( klass->hasAttribute(name) )
+	return typeName( klass->getAttributeByName(name)->type() );
+    
+    QStringList type;
+    
+    type = typeOf( name, klass->getSortedMethodList() );
+    if( !type.isEmpty() )
+	return type;
+    
+    type = typeOf( name, klass->getSortedSlotList() );
+    if( !type.isEmpty() )
+	return type;
+    
+    type = typeOf( name, klass->getSortedSignalList() );
+    if( !type.isEmpty() )
+	return type;
+    
+    QPtrList<ParsedParent> parents = klass->parents;
+    QPtrListIterator<ParsedParent> it( parents );
+    while( ParsedParent* parent = it.current() ){
+	type = typeOf( name, typeName(parent->name()) );
+	if( !type.isEmpty() )
+	    return type;
+	
+	++it;
+    }
+    
+    return QStringList();
+}
+
+QStringList CppCodeCompletion::typeOf( const QString & name, ParsedScopeContainer * scope )
+{
+    if( scope->hasAttribute(name) )
+	return typeName( scope->getAttributeByName(name)->type() );
+    
+    QStringList type;
+    
+    type = typeOf( name, scope->getSortedMethodList() );
+    if( !type.isEmpty() )
+	return type;
+        
+    return QStringList();
+}
+
+QStringList CppCodeCompletion::typeOf( const QString & name, const QValueList< ParsedMethod * > & methods )
+{
+    QValueList<ParsedMethod*>::ConstIterator it = methods.begin();
+    while( it != methods.end() ){
+	ParsedMethod* meth = *it;
+	++it;
+	if( meth->name() == name )
+	    return typeName( meth->type() );
+    }
+    
+    return QStringList();
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type )
+{
+    QString key = type.join( "." );
+    if( m_pSupport->classStore()->hasClass(key) ){
+	computeCompletionEntryList( entryList, m_pSupport->classStore()->getClassByName(key) );
+    } else if( m_pSupport->classStore()->hasStruct(key) ){
+	computeCompletionEntryList( entryList, m_pSupport->classStore()->getStructByName(key) );
+    } else {
+	QValueList<Catalog::QueryArgument> args;
+	QValueList<Tag> tags;
+	
+	args.clear();
+	args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
+	    << Catalog::QueryArgument( "scope", type );
+	tags = m_repository->query( args );
+	computeCompletionEntryList( entryList, tags );
+	
+	args.clear();
+	args << Catalog::QueryArgument( "kind", Tag::Kind_VariableDeclaration )
+	    << Catalog::QueryArgument( "scope", type );
+	tags = m_repository->query( args );
+	computeCompletionEntryList( entryList, tags );
+	
+	args.clear();
+	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
+	    << Catalog::QueryArgument( "name", type.join("::") );
+	
+	QValueList<Tag> parents = m_repository->query( args );
+	QValueList<Tag>::Iterator it = parents.begin();
+	while( it != parents.end() ){
+	    CppBaseClass<Tag> info( *it );
+	    ++it;
+	    
+	    computeCompletionEntryList( entryList, typeName(info.baseClass()) );
+	}
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, QValueList< Tag > & tags )
+{
+    QValueList<Tag>::Iterator it = tags.begin();
+    while( it != tags.end() ){
+	Tag& tag = *it;
+	++it;
+	
+	if( !tag.name().isEmpty() )
+	    entryList << CodeInformationRepository::toEntry( tag );
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ParsedClass * klass )
+{
+    computeCompletionEntryList( entryList, klass->getSortedMethodList() );
+    computeCompletionEntryList( entryList, klass->getSortedSlotList() );
+    computeCompletionEntryList( entryList, klass->getSortedSignalList() );
+    computeCompletionEntryList( entryList, klass->getSortedAttributeList() );
+    
+    QPtrList<ParsedParent> parents = klass->parents;
+    QPtrListIterator<ParsedParent> it( parents );
+    while( ParsedParent* parent = it.current() ){
+	computeCompletionEntryList( entryList, typeName(parent->name()) );
+	++it;
+    }    
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ParsedScopeContainer * scope )
+{
+    computeCompletionEntryList( entryList, scope->getSortedMethodList() );
+    computeCompletionEntryList( entryList, scope->getSortedAttributeList() );
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QValueList< ParsedMethod * > & methods )
+{
+    QValueList<ParsedMethod*>::ConstIterator it = methods.begin();    
+    while( it != methods.end() ){
+	ParsedMethod* meth = *it;
+	++it;
+	
+	KTextEditor::CompletionEntry entry;
+	//entry.prefix = meth->type();
+	
+	entry.text = meth->name() + "(";
+	
+	QString text;
+	for( ParsedArgument *pArg = meth->arguments.first();
+	pArg != 0;
+	pArg = meth->arguments.next() ){
+	    if( pArg != meth->arguments.getFirst() )
+		text += ", ";
+	    text += pArg->toString();
+	}
+	
+	if( text.isEmpty() ){
+	    entry.text += ")";
+	} else {
+	    text += ")";
+	    entry.postfix = text;
+	}
+	
+	entryList << entry;
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QValueList< ParsedAttribute * > & attributes )
+{
+    QValueList<ParsedAttribute*>::ConstIterator it = attributes.begin();    
+    while( it != attributes.end() ){
+	ParsedAttribute* attr = *it;
+	++it;
+	
+	KTextEditor::CompletionEntry entry;
+	entry.text = attr->name();
+	entryList << entry;
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, SimpleContext * ctx )
+{
+    while( ctx ){
+	QValueList<SimpleVariable> vars = ctx->vars();
+	QValueList<SimpleVariable>::ConstIterator it = vars.begin();
+	while( it != vars.end() ){
+	    const SimpleVariable& var = *it;
+	    ++it;
+	
+	    KTextEditor::CompletionEntry entry;
+	    entry.text = var.name;
+	    entryList << entry;
+	}
+	ctx = ctx->prev();
+    }
+}
+
+void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, const QStringList & scope )
+{
+    QString key = scope.join( "." );
+    if( m_pSupport->classStore()->hasClass(key) ){
+	computeSignatureList( signatureList, name, m_pSupport->classStore()->getClassByName(key) );
+	return;
+    } else if( m_pSupport->classStore()->hasStruct(key) ){
+	computeSignatureList( signatureList, name, m_pSupport->classStore()->getStructByName(key) );
+	return;
+    }
+
+    
+    QValueList<Catalog::QueryArgument> args;
+    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
+	<< Catalog::QueryArgument( "scope", scope )
+	<< Catalog::QueryArgument( "name", name );
+    
+    QValueList<Tag> tags = m_repository->query( args );
+    computeSignatureList( signatureList, name, tags );
+    
+    args.clear();
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
+	<< Catalog::QueryArgument( "name", scope.join("::") );
+    
+    QValueList<Tag> parents = m_repository->query( args );
+    QValueList<Tag>::Iterator it = parents.begin();
+    while( it != parents.end() ){
+	CppBaseClass<Tag> info( *it );
+	++it;
+	
+	computeSignatureList( signatureList, name, typeName(info.baseClass()) );
+    }
+}
+
+void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, ParsedClass * klass )
+{
+    computeSignatureList( signatureList, name, klass->getSortedMethodList() );
+    computeSignatureList( signatureList, name, klass->getSortedSlotList() );
+    computeSignatureList( signatureList, name, klass->getSortedSignalList() );
+    
+    QPtrList<ParsedParent> parents = klass->parents;
+    QPtrListIterator<ParsedParent> it( parents );
+    while( ParsedParent* parent = it.current() ){
+	computeSignatureList( signatureList, name, typeName(parent->name()) );
+	++it;
+    }        
+}
+
+void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, const QValueList< ParsedMethod * > & methods )
+{
+    QValueList<ParsedMethod*>::ConstIterator it = methods.begin();
+    while( it != methods.end() ){
+	ParsedMethod* meth = *it;
+	++it;
+	
+	if( meth->name() != name )
+	    continue;
+	
+	QString signature = meth->name() + "(";
+	QPtrList<ParsedArgument> arguments = meth->arguments;
+	QPtrListIterator<ParsedArgument> ait( arguments );
+	while( ParsedArgument* arg = ait.current() ){
+	    signature += arg->type();
+	    ++ait;
+	    
+	    if( ait.current() )
+		signature += ", ";
+	}
+	signature += ")";
+	if( meth->isConst() )
+	    signature += " const";
+	
+	signatureList << signature;
+    }
+}
+
+void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, QValueList< Tag > & tags )
+{
+    QValueList<Tag>::Iterator it = tags.begin();
+    while( it != tags.end() ){
+	Tag& tag = *it;
+	++it;
+	
+	CppFunction<Tag> info( tag );
+	if( info.name() != name )
+	    continue;
+	
+	QString signature = info.name() + "(" + info.arguments().join(", ") + ")";
+	if( info.isConst() )
+	    signature += " const";
+	signatureList << signature;
+    }
 }
 
 #include "cppcodecompletion.moc"

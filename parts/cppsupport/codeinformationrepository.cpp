@@ -167,7 +167,7 @@ QStringList CodeInformationRepository::getSignatureList( const QStringList & sco
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
     	<< Catalog::QueryArgument( "scope", scope )
     	<< Catalog::QueryArgument( "name", functionName );
-
+    
     QValueList<Tag> tags = query( args );
 
     QStringList list;
@@ -234,6 +234,76 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
     return tags;
 }
 
+KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
+{
+    KTextEditor::CompletionEntry entry;
+    
+    if( tag.name().isEmpty() )
+	return entry;
+    
+    switch( tag.kind() ){
+	case Tag::Kind_Class:
+	    entry.prefix = "class";
+	    entry.text = tag.name();
+	break;
+	
+	case Tag::Kind_Namespace:
+	    entry.prefix = "namespace";
+	    entry.text = tag.name();
+	break;
+	
+	case Tag::Kind_FunctionDeclaration:
+	    //case Tag::Kind_Function:
+	{
+	    entry.text = tag.name();
+	    entry.text += "(";
+	    
+	    CppFunction<Tag> tagInfo( tag );
+	    QStringList arguments = tagInfo.arguments();
+	    QStringList argumentNames = tagInfo.argumentNames();
+	    
+	    QString signature;
+	    for( uint i=0; i<arguments.size(); ++i ){
+		signature += arguments[ i ];
+		QString argName = argumentNames[ i ];
+		if( !argName.isEmpty() )
+		    signature += QString::fromLatin1( " " ) + argName;
+		
+		if( i != (arguments.size()-1) ){
+		    signature += ", ";
+		}
+	    }
+	    
+	    if( signature.isEmpty() )
+		entry.text += ")";
+	    else
+		entry.postfix = signature + ")";
+	    
+	    if( tagInfo.isConst() )
+		entry.postfix += " const";
+	    
+	    QString comment = tag.attribute("description").toString();
+	    if (!comment.isNull())
+		entry.comment = comment;
+	    //else
+	    //entry.comment = "no documentation available!";
+	}
+	
+	break;
+	
+	case Tag::Kind_Enumerator:
+	    //case Tag::Kind_Variable:
+	    case Tag::Kind_VariableDeclaration:
+	    entry.text = tag.name();
+	break;
+	
+	default:
+	;
+    }
+    
+    return entry;
+}
+
 QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags )
 {
     QValueList<KTextEditor :: CompletionEntry> entryList;
@@ -243,71 +313,13 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
     while( it != tags.end() ){
 	Tag tag = *it;
 	++it;
-
-	KTextEditor::CompletionEntry entry;
-	switch( tag.kind() ){
-	    case Tag::Kind_Class:
-		entry.prefix = "class";
-	        entry.text = tag.name();
-	        break;
-
-	    case Tag::Kind_Namespace:
-		if( !ns.contains(tag.name()) ){
-		    ns.insert( tag.name(), true );
-		    entry.prefix = "namespace";
-		    entry.text = tag.name();
-		}
-		break;
-
-	    case Tag::Kind_FunctionDeclaration:
-	    case Tag::Kind_Function:
-	    {
-		entry.text = tag.name();
-		entry.text += "(";
-
-		CppFunction<Tag> tagInfo( tag );
-		QStringList arguments = tagInfo.arguments();
-		QStringList argumentNames = tagInfo.argumentNames();
-
-		QString signature;
-		for( uint i=0; i<arguments.size(); ++i ){
-		    signature += arguments[ i ];
-		    QString argName = argumentNames[ i ];
-		    if( !argName.isEmpty() )
-			signature += QString::fromLatin1( " " ) + argName;
-
-		    if( i != (arguments.size()-1) ){
-			signature += ", ";
-		    }
-		}
-
-		QString comment = tag.attribute("description").toString();
-		if (!comment.isNull())
-			entry.comment = comment;
-		else
-			entry.comment = "no documentation available!";
-
-		if( signature.isEmpty() )
-		    entry.text += ")";
-		else
-		    entry.postfix = signature + ")";
-	    }
-
-	    break;
-
-	    case Tag::Kind_Enumerator:
-	    case Tag::Kind_Variable:
-	    case Tag::Kind_VariableDeclaration:
-	        entry.text = tag.name();
-	        break;
-
-	    default:
-		;
-	}
-
-	entryList << entry;
+	
+	KTextEditor::CompletionEntry entry = toEntry( tag );
+	if( !entry.text.isEmpty() )
+	    entryList << entry;
     }
-
+    
     return entryList;
 }
+
 

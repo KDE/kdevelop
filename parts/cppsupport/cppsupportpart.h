@@ -131,6 +131,7 @@ private:
      * checks if a file has to be parsed
      */
     void maybeParse( const QString& fileName );
+    void removeWithReferences( const QString& fileName );
 
     QStringList modifiedFileList();
     QString findSourceFile();
@@ -164,6 +165,7 @@ private:
     Driver* m_driver;
 
     friend class KDevCppSupportIface;
+    friend class CppDriver;
 };
 
 #endif

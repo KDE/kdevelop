@@ -29,6 +29,7 @@ public:
     virtual void removeCatalog( const QString& id );
 
     static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags );
+    static KTextEditor::CompletionEntry toEntry( Tag& tag );
     QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute=false );
     
     QStringList getSignatureList( const QStringList& scope, const QString& functionName, bool isInstance );
