@@ -62,7 +62,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setStatusText( i18n("Creates a new file") );
   newAction->setText( i18n("Create a new file", "New...") );
   newAction->setWhatsThis( i18n("Use this to create a new file within your project.") );
-  newAction->setToolTip( i18n("Use this to create a new file within your project.") );
+  newAction->setToolTip( i18n("New file") );
   m_filetypes.setAutoDelete(true);
 
   m_availableWidgets[0] = new TreeWidget(this);
