@@ -136,6 +136,9 @@ void AddExistingFilesDialog::init()
 
 void AddExistingFilesDialog::importItems()
 {
+    if( !importView->items() )
+	return;
+    
 	// items added via button or drag 'n drop
 	KFileItemListIterator itemList ( m_importList );
 	
