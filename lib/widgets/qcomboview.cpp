@@ -580,6 +580,8 @@ void QComboView::focusInEvent( QFocusEvent * e )
     QWidget::focusInEvent( e );
     d->completeNow = FALSE;
     d->completeAt = 0;
+
+    emit focusGranted();
 }
 
 /*!\reimp
@@ -590,6 +592,8 @@ void QComboView::focusOutEvent( QFocusEvent * e )
     QWidget::focusOutEvent( e );
     d->completeNow = FALSE;
     d->completeAt = 0;
+
+    emit focusLost();
 }
 
 /*!\reimp

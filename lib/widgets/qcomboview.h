@@ -115,6 +115,8 @@ signals:
     void	activated( const QString &);
     void	highlighted( const QString &);
     void	textChanged( const QString &);
+    void    focusGranted();
+    void    focusLost();
 
 private slots:
     void	internalActivate( QListViewItem * );

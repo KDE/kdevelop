@@ -23,6 +23,9 @@
 class ClassViewPart;
 class KComboView;
 
+const QString EmptyClasses = i18n("(Classes)");
+const QString EmptyFunctions = i18n("(Functions)");
+
 class NamespaceItem: public QListViewItem{
 public:
     NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom);

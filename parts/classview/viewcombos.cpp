@@ -122,7 +122,7 @@ void refreshClasses(ClassViewPart *part, KComboView *view, const NamespaceDom &d
 {
     view->clear();
 
-    view->setCurrentText(i18n("(Classes)"));
+    view->setCurrentText(EmptyClasses);
     ClassList classes = dom->classList();
     for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
     {
@@ -137,7 +137,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & do
 {
     view->clear();
 
-    view->setCurrentText(i18n("(Functions)"));
+    view->setCurrentText(EmptyFunctions);
     FunctionList functions = dom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
@@ -152,7 +152,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const NamespaceDom 
 {
     view->clear();
 
-    view->setCurrentText(i18n("(Functions)"));
+    view->setCurrentText(EmptyFunctions);
     FunctionList functions = dom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {

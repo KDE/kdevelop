@@ -92,11 +92,15 @@ void ClassViewPart::setupActions( )
 
     m_classes = new KListViewAction( new KComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
     connect( m_classes->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(QListViewItem*)) );
+    connect( m_classes->view(), SIGNAL(focusGranted()), this, SLOT(focusClasses()) );
+    connect( m_classes->view(), SIGNAL(focusLost()), this, SLOT(unfocusClasses()) );
     m_classes->setToolTip(i18n("Classes"));
     m_classes->setWhatsThis(i18n("<b>Class Selector</b>\nSelect a class to view it's members."));
 
     m_functions = new KListViewAction( new KComboView(true), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo" );
     connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );
+    connect( m_functions->view(), SIGNAL(focusGranted()), this, SLOT(focusFunctions()) );
+    connect( m_functions->view(), SIGNAL(focusLost()), this, SLOT(unfocusFunctions()) );
     m_functions->setToolTip(i18n("Functions"));
     m_functions->setWhatsThis(i18n("<b>Function Selector</b>\nSelect a function to jump to it's definition or declaration."));
 
@@ -285,6 +289,30 @@ void ClassViewPart::graphicalClassView( )
 {
     HierarchyDialog dia(this);
     dia.exec();
+}
+
+void ClassViewPart::focusClasses( )
+{
+    if (m_classes->view()->currentText() == EmptyClasses)
+        m_classes->view()->setCurrentText("");
+}
+
+void ClassViewPart::focusFunctions( )
+{
+    if (m_functions->view()->currentText() == EmptyFunctions)
+        m_functions->view()->setCurrentText("");
+}
+
+void ClassViewPart::unfocusClasses( )
+{
+    if (m_classes->view()->currentText().isEmpty())
+        m_classes->view()->setCurrentText(EmptyClasses);
+}
+
+void ClassViewPart::unfocusFunctions( )
+{
+    if (m_functions->view()->currentText().isEmpty())
+        m_functions->view()->setCurrentText(EmptyFunctions);
 }
 
 #include "classviewpart.moc"

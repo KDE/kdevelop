@@ -60,6 +60,11 @@ private slots:
     void selectedAddMethod();
     void selectedAddAttribute();
 
+    void focusClasses();
+    void focusFunctions();
+    void unfocusClasses();
+    void unfocusFunctions();
+
 private:
     void setupActions();
     bool langHasFeature(KDevLanguageSupport::Features feature);
