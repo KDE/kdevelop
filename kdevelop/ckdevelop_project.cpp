@@ -1140,8 +1140,12 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 void CKDevelop::slotProjectMakeDistRPM(){
  cerr << "Lets build and RPM!!!" << endl;
  rpmbuilder = new Kpp(0,"KPP",true);
+ rpmbuilder->setProjectRoot(prj->getProjectDir());
  connect(rpmbuilder, SIGNAL(finished()), this, SLOT(slotdoneWithKpp()));
- connect(rpmbuilder, SIGNAL(building()), this, SLOT(slotrpmbuildProcess()));
+ connect(rpmbuilder, SIGNAL(building()), this, SLOT(slotrpmBuildProcess()));
+ connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
+ connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
+ connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
@@ -1151,13 +1155,23 @@ void CKDevelop::slotProjectMakeDistRPM(){
  //(prj->getShortInfo()).join(',')
  rpmbuilder->show();
 }
-
+void CKDevelop::slotAddSpec(QString path)
+{
+        cerr << "I need to add " << path << " to the project..." << endl;
+}
+void CKDevelop::slotGetRPMBuildSTDOUT(QString stdout){
+        cerr << stdout << endl;
+}
+void CKDevelop::slotGetRPMBuildSTDERR(QString stderr){
+        cerr << stderr << endl;
+}
 void CKDevelop::slotdoneWithKpp(){
+ rpmbuilder->hide();
  delete rpmbuilder;
 }
 
 void CKDevelop::slotrpmBuildProcess(){
-
+      rpmbuilder->hide();
 }
 
 /*********************************************************************

@@ -969,6 +969,9 @@ private:
 private slots:
     void slotdoneWithKpp();
     void slotrpmBuildProcess();
+    void slotGetRPMBuildSTDOUT(QString stdout);
+    void slotGetRPMBuildSTDERR(QString stderr);
+    void slotAddSpec(QString path);
 };
 
 class SaveAllDialog : public KDialog

@@ -43,6 +43,8 @@ public:
   bool startBuild();
   /** allow kdevelop to set up the kpp dialog **/
   void setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc);
+  /** set the project root so we can find things **/
+  void setProjectRoot(QString path);
 
 private: // Private methods
   /** Update the spec object to the current data in the dialog */
@@ -75,7 +77,7 @@ private: // Private methods
   KShellProcess *rpmBuild;
   /** The project from the current working directory */
   ckdevelProject *currentProject;
-
+  QString currentSpecPath;
 public slots: // Public slots
 
   /** This will allow the user to save the variables for the current project. */
@@ -102,6 +104,10 @@ signals:
         // building, so hide the dialog but keep the build process
         // going
         void building();
+
+        void stdOUT(QString);
+        void stdERR(QString);
+        void newSpec(QString);
 
 private slots: // Private slots
   /** done building... */

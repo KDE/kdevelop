@@ -47,22 +47,25 @@ loadPrefs();
 
 }
 Kpp::~Kpp(){
+        cerr << "Kpp is cleaning up..." << endl;
 }
 
 /** This will allow the user to save the variables for the current project. */
 void Kpp::saveFile(){
-cout << "Save File" << endl;
+        cout << "Save File" << endl;
 
-QString open_filename;
-open_filename=KFileDialog::getSaveFileName("", "*.spec");
 
-if(!open_filename.isEmpty())
-{
-// read the file
-cout << "Saveing File" << endl;
-}
-     updateSpec();
-	generateSpec(open_filename);
+        currentSpecPath=KFileDialog::getSaveFileName(qsRPMBaseDir, "*.spec");
+
+        if(!currentSpecPath.isEmpty())
+        {
+                // read the file
+                cout << "Saveing File" << endl;
+
+                updateSpec();
+                generateSpec(currentSpecPath);
+                emit newSpec(currentSpecPath);
+        }
 }
 
 /** Opens a KPP project file. */
@@ -70,7 +73,7 @@ void Kpp::openFile(){
   cout << "Open File" << endl;
 
   QString open_filename;
-  open_filename=KFileDialog::getOpenFileName("", "*.kdevprj");
+  open_filename=KFileDialog::getOpenFileName(qsRPMBaseDir, "*.kdevprj");
 
     if(!open_filename.isEmpty())
     {
@@ -107,8 +110,7 @@ kapp->invokeHTMLHelp("/kpp/index-3.html", "");
 void Kpp::exitApp(){
 savePrefs();
 cout << "Exit App" << endl;
-hide();
-emit( "finished()" );
+emit finished();
 }
 
 
@@ -137,33 +139,33 @@ void Kpp::updateSpec(){
 
 /** Generates a spec file from a template. */
 bool Kpp::generateSpec(QString fileName){
-qsCurrentSpec = fileName;
-// Load SPEC Template
-bool isGood = true;
-QString newLine;
-//QFile specTemplate( "spec.template" );
-QFile specTemplate( qsSpecTemplate );
+        qsCurrentSpec = fileName;
+        // Load SPEC Template
+        bool isGood = true;
+        QString newLine;
+        //QFile specTemplate( "spec.template" );
+        QFile specTemplate( qsSpecTemplate );
 
-QFile specFile( fileName );
-QTextStream specOut( &specFile );        // use a text stream
+        QFile specFile( fileName );
+        QTextStream specOut( &specFile );        // use a text stream
 
-if (specTemplate.open( IO_ReadOnly ) && specFile.open (IO_WriteOnly))
-{
-    QTextStream t( &specTemplate);
-    QString newLine;
-    while(!t.eof())
-    {
-         newLine = t.readLine();
-         //bldView->addLine(currentSpec.generateSpec(newLine));
-         specOut << currentSpec.generateSpec(newLine) << endl;
-         cout << newLine << endl << currentSpec.generateSpec(newLine) << endl;
-    }
-}
-else
-  isGood = false;
+        if (specTemplate.open( IO_ReadOnly ) && specFile.open (IO_WriteOnly))
+        {
+        QTextStream t( &specTemplate);
+        QString newLine;
+        while(!t.eof())
+        {
+                newLine = t.readLine();
+                //bldView->addLine(currentSpec.generateSpec(newLine));
+                specOut << currentSpec.generateSpec(newLine) << endl;
+                cout << newLine << endl << currentSpec.generateSpec(newLine) << endl;
+        }
+        }
+        else
+        isGood = false;
 
-specTemplate.close();
-return isGood;
+        specTemplate.close();
+        return isGood;
 }
 
 /** This is a default dialog for things not yet implemented. */
@@ -184,7 +186,7 @@ bool Kpp::loadPrefs(){
 // Here we want to load the default template for the application
 // The default packager
 // The default URL
-QString tempqsSpecTemplate = locate("data","spec.template_autoconf");
+QString tempqsSpecTemplate = locate("data","template.spec");
 qsSpecTemplate = kcConfig->readEntry( "specTemplate", tempqsSpecTemplate);
 QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
 QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));
@@ -215,25 +217,59 @@ void Kpp::setConfig( KConfig *theConfig){
 /** start the rpm build process */
 bool Kpp::startBuild(){
 	cerr << "Starting build" << endl;
-	rpmBuild = new KShellProcess();
-	QString buildProc = "sh ";
+        // do some sanity checks here...
+        // 1) make sure source-version.tar.gz is there...
+        QString tgzFile = qsRPMBaseDir + "/" + (QLineEdit_1->text().lower()) + "-" + (QLineEdit_2->text()) + ".tar.gz";
+        if(!QFile::exists(tgzFile))
+        {
+         // the source is not there, display a dialog and exit this dialog.
+         cerr << "need source file" << endl;
+         exitApp();
+        }
+        else
+        {
+                // 2) make sure the spec entries are all filled out...
+                QString tmpSpec =qsRPMBaseDir + "/" + (QLineEdit_1->text().lower()) + "-spec";
+                // we may already have a spec there, if so dont bother redoing it unless they want to...
+               if(QFile::exists(currentSpecPath) || QFile::exists(tmpSpec))
+               {
+                        cerr << "spec file is there" << endl;
+                        // The build env looks good so we will start
+                        rpmBuild = new KShellProcess();
+                        QString buildProc = "sh ";
+                        // the build script take a few args
+                        // 1) base directory  - qaRPMBaseDir
+                        // 2) project name    - qlineEdit_1->text()
+                        // 3) the applications version  qlineEdit_->text()
+                        // 4) the path to the source file qsRPMBaseDir + name + version + tar.gz
+                        // 5) the path to the spec file  currentSpecPath
 
-	*rpmBuild << "env";
-	rpmBuild->start(KShellProcess::NotifyOnExit,KShellProcess::All);
-	connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdOut(KProcess*, char *, int)));
-	connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdErr(KProcess*, char *, int)));
-	connect(rpmBuild, SIGNAL(processExited(KProcess *)), SLOT(buildDone(KProcess*)));
-
+                        *rpmBuild << "env";
+                        rpmBuild->start(KShellProcess::NotifyOnExit,KShellProcess::All);
+                        connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdOut(KProcess*, char *, int)));
+                        connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdErr(KProcess*, char *, int)));
+                        connect(rpmBuild, SIGNAL(processExited(KProcess *)), SLOT(buildDone(KProcess*)));
+                       emit building();
+                       return true;
+               }
+               else
+               {
+                        // the spec is not filled out correctly do no clobber the dialog
+                        // but do not start the build.
+                        cerr << "spec form not filled out completely" << endl;
+                        return false;
+               }
+        }
 }
 /** read the standard out */
 void Kpp::readStdOut(KProcess *proc, char *buffer, int buflen){
   QString temp = QString::fromLatin1(buffer, buflen);
-	cerr << "COUT: " << temp << endl;
+  emit stdERR(temp);
 }
 /** read teh standard error */
 void Kpp::readStdErr(KProcess *proc, char *buffer, int buflen){
   QString temp = QString::fromLatin1(buffer, buflen);
-	cerr << "CERR: " << temp << endl;
+  emit stdOUT(temp);
 }
 /** done building... */
 void Kpp::buildDone(KProcess *proc){
@@ -242,6 +278,7 @@ void Kpp::buildDone(KProcess *proc){
 	else
 		cerr << "there was an error" << endl;
 	delete proc;
+        emit finished();
 }
 /**  */
 void Kpp::rpmBuildSlot(){
@@ -262,4 +299,10 @@ void Kpp::setProjectData(QString appName, QString appVer, QString appAuth, QStri
         QLineEdit_2->setText(currentProject->getVersion());
         QLineEdit_5->setText(currentProject->getConfig());
         updateSpec();
+}
+
+void Kpp::setProjectRoot(QString path)
+{
+        qsRPMBaseDir = path;
+        cerr << "we are going to try " << path << endl;
 }
