@@ -99,7 +99,7 @@ namespace FileCreate {
 
   KURL NewFileChooser::url() const {
 
-    KURL result = m_urlreq->url();
+    KURL result ( m_urlreq->url() );
     result.cd( m_filename->text() );
     return result;
   }

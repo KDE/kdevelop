@@ -162,7 +162,7 @@ void CTagsPart::gotoFinalTag( const QString & contextStr )
         return;
     }
 
-    partController()->editDocument(fileName, lineNum-1);
+    partController()->editDocument(KURL::fromPathOrURL( fileName ), lineNum-1);
 }
 
 

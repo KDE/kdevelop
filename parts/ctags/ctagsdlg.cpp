@@ -232,7 +232,7 @@ void CTagsDialog::slotResultClicked(QListBoxItem *item)
         return;
     }
 
-    m_part->partController()->editDocument(fileName, lineNum-1);
+    m_part->partController()->editDocument(KURL::fromPathOrURL( fileName ), lineNum-1);
 }
 
 #include "ctagsdlg.moc"

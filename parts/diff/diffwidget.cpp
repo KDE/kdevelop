@@ -272,7 +272,7 @@ void DiffWidget::populateExtPart()
       for ( int i = 0; i < paragCount; ++i )
         *(tempFile->textStream()) << te->text( i ) << endl;
       tempFile->close();
-      ok = extPart->openURL( tempFile->name() );
+      ok = extPart->openURL( KURL::fromPathOrURL( tempFile->name() ) );
   }
   if ( !ok )
     setExtPartVisible( false );

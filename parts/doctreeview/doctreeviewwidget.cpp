@@ -1797,7 +1797,7 @@ void DocTreeViewWidget::slotIndexItemExecuted(QListViewItem *item)
     }
     else if(resultList->count() == 1)
     {
-        m_part->partController()->showDocument(resultList->first()->fileName(), ident);
+        m_part->partController()->showDocument(KURL::fromPathOrURL( resultList->first()->fileName() ), ident);
         m_part->mainWindow()->lowerView(this);
     }
     else
