@@ -321,7 +321,7 @@ void NewMainWindow::openURL( int id )
 			KURL url( (*it).second );
 			if ( !url.isEmpty() )
 			{
-				PartController::getInstance()->activatePart( PartController::getInstance()->partForURL( url ) );
+				PartController::getInstance()->editDocument( url );
 				return;
 			}
 		}
