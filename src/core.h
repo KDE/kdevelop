@@ -21,6 +21,7 @@ class KDevCoreIface;
 class KDevApi;
 class KDevFactory;
 class DocumentationPart;
+class KAction; 
 
 #include "keditor/editor.h"
 
@@ -54,6 +55,8 @@ protected:
         
 private slots:
     void activePartChanged(KParts::Part *part);
+    void partCountChanged();
+
     void docPartDestroyed();
     void docContextMenu(QPopupMenu *popup, const QString &url, const QString &selection);
     void editorContextMenu(QPopupMenu *popup, const QString &linestr, int col);
@@ -61,7 +64,9 @@ private slots:
     void openFileInteractionFinished(const QString &fileName);
 
     void message(KEditor::Document *doc, const QString &str);
-        
+    
+    void slotSaveAll();
+    void slotRevertAll();    
     void slotOpenFile();
     void slotCloseWindow();
     void slotSplitVertically();
@@ -117,6 +122,9 @@ private:
 
     KURL::List viewedURLs;
     QString projectFile;
+
+    KAction *_saveAll, *_revertAll;
+
 };
 
 #endif

@@ -78,7 +78,11 @@ Core::Core()
     manager = new KParts::PartManager(win);
     connect( manager, SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)) );
-
+    connect( manager, SIGNAL(partAdded(KParts::Part*)), 
+             this, SLOT(partCountChanged())),
+    connect( manager, SIGNAL(partRemoved(KParts::Part*)), 
+             this, SLOT(partCountChanged()));
+      
     initActions();
     win->createGUI(0);
 
@@ -136,6 +140,15 @@ void Core::initActions()
                           this, SLOT(slotSplitHorizontally()),
                           actionCollection(), "file_splithorizontally" );
 #endif
+    _saveAll = new KAction( i18n("Save &all"), 0,
+                          this, SLOT(slotSaveAll()),
+                          actionCollection(), "file_save_all");
+    _saveAll->setEnabled(false);
+    
+    _revertAll = new KAction( i18n("&Revert all"), 0,
+                          this, SLOT(slotRevertAll()),
+                          actionCollection(), "file_revert_all");
+    _revertAll->setEnabled(false);
 
     action = new KAction( i18n("&Close window"), Key_F4,
                           this, SLOT(slotCloseWindow()),
@@ -268,19 +281,36 @@ void Core::activePartChanged(KParts::Part *part)
 
     slotUpdateStatusBar();
 
-#if 0
-    // TODO: Move into the editor part or part interface
-
-    if (activePart && activePart->inherits("EditorPart")) {
-        EditorPart *part = static_cast<EditorPart*>(activePart);
-        TextEditorDocument *doc = part->editorDocument();
-        if (doc->modifiedOnDisk() && KMessageBox::warningYesNo
-            (win, i18n("The file %1 was modified on disk.\n"
-                       "Revert to the version on disk now?").arg(doc->url().url()))) {
-            doc->openURL(doc->url());
+    // Test if the file has been modified on the disc
+    // in the meanwhile, and revert if needed.
+    if (activePart && activePart->inherits("KEditor::Document"))
+    {
+        KEditor::Document *doc = static_cast<KEditor::Document*>(activePart);
+        if (doc->modifiedOnDisc())
+        {
+            int res = KMessageBox::warningYesNo (win, i18n("The file %1 was modified on disk.\nRevert to the version on disk now?").arg(doc->url().url()));
+            if (res == KMessageBox::Yes)
+              doc->openURL(doc->url());
         }
     }
-#endif
+}
+
+
+void Core::partCountChanged()
+{
+  // enable/disable actions according to the part status
+  
+  bool rw_parts = false;
+
+  QListIterator<KParts::Part> it(*partManager()->parts());
+  for ( ; it.current(); ++it)
+  {
+      if (it.current()->inherits("KParts::ReadWritePart"))
+          rw_parts = true;
+  }
+
+  _saveAll->setEnabled(rw_parts);
+  _revertAll->setEnabled(rw_parts);               
 }
 
 
@@ -324,7 +354,7 @@ KEditor::Editor *Core::editor()
 
   // make the editor aware of part activations
   connect(partManager(), SIGNAL(activePartChanged(KParts::Part*)), _editor, SLOT(activePartChanged(KParts::Part*)));
-
+  
   return _editor;
 }
 
@@ -650,7 +680,16 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 
 void Core::revertAllFiles()
 {
-    // TODO: Implement!
+    QListIterator<KParts::Part> it(*partManager()->parts());
+    for ( ; it.current(); ++it)
+    {
+        if (it.current()->inherits("KParts::ReadWritePart"))
+        {
+            KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
+
+            rw_part->openURL(rw_part->url());
+        }
+    }
 }
 
 
@@ -898,6 +937,18 @@ void Core::slotQuit()
     removeGlobalParts();
 
     win->closeReal();
+}
+
+
+void Core::slotSaveAll()
+{
+    saveAllFiles();
+}
+
+
+void Core::slotRevertAll()
+{
+    revertAllFiles();
 }
 
 

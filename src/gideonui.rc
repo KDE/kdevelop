@@ -5,6 +5,9 @@
     <text>&amp;File</text>
     <Merge/>
     <Separator/>
+    <Action name="file_save_all"/>
+    <Action name="file_revert_all"/>
+    <Separator/>
     <Action name="file_splitvertically"/>
     <Action name="file_splithorizontally"/>
     <Action name="file_closewindow"/>
