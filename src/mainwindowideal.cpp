@@ -19,6 +19,7 @@
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <qvaluelist.h>
+#include <qobjectlist.h>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -66,6 +67,32 @@
 #undef KeyRelease
 #endif
 
+class IDEAlEventFilter: public QObject
+{
+public:
+    IDEAlEventFilter( MainWindowIDEAl* m, const char* name=0 )
+	: QObject( m, name ), mw( m ) {}
+
+    bool eventFilter( QObject * obj, QEvent *e )
+    {
+	if( e->type() == QEvent::FocusIn )
+	{
+	    if( mw->m_tabWidget->currentPage()->children()->contains(obj) ){
+	      if( mw->m_leftBar->current() )
+		  mw->m_leftBar->lowerWidget( mw->m_leftBar->current() );
+	      if( mw->m_rightBar->current() )
+		  mw->m_rightBar->lowerWidget( mw->m_rightBar->current() );
+	      if( mw->m_bottomBar->current() )
+		 mw->m_bottomBar->lowerWidget( mw->m_bottomBar->current() );
+	    }
+	}
+	return FALSE;  // standard event processing
+    }
+
+private:
+    MainWindowIDEAl* mw;
+};
+
 
 MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
  : KParts::MainWindow(parent, name)
@@ -111,9 +138,9 @@ void MainWindowIDEAl::init() {
     createStatusBar();
 
     createGUI(0);
-    
+
     m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
-    
+
     if( !m_pWindowMenu ){
 	// Add window menu to the menu bar
 	m_pWindowMenu = new QPopupMenu( main(), "window");
@@ -122,8 +149,8 @@ void MainWindowIDEAl::init() {
     }
 
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
-    
-    
+
+
     slotFillWindowMenu();  // Just in case there is no file open. The menu would then be empty.
 
     if ( PluginController::pluginServices().isEmpty() ) {
@@ -133,6 +160,8 @@ void MainWindowIDEAl::init() {
                                        "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
                             i18n("Couldn't find plugins") );
     }
+    kdDebug(9000) << "-> kapp = " << kapp << endl;
+    kapp->installEventFilter( new IDEAlEventFilter(this) );
 }
 
 
@@ -641,7 +670,7 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
         else
           kdDebug(9000) <<  "KAction( \"view_next_window\") __not__ found.in MainWindowIDEAl\n" << endl;;
       }    
-  } 
+  }
   return FALSE;  // standard event processing
 }
 

@@ -29,7 +29,6 @@
 
 class KTabZoomWidget;
 class MainWindowShare;
-
 #include "kdevmainwindow.h"
 
 
@@ -129,6 +128,8 @@ private:
   
   QMap<QWidget*, QDateTime> m_timeStamps;
   bool m_bSwitching;
+
+  friend class IDEAlEventFilter;
 };
 
 
