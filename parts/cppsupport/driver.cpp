@@ -268,8 +268,9 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
     lexer->addSkipWord( "__STL_DEFAULT_ALLOCATOR",  SkipWordAndArguments, "T" );
     lexer->addSkipWord( "__STL_MUTEX_INITIALIZER" );
+    lexer->addSkipWord( "__STL_NULL_TMPL_ARGS" );
 
-	// antlr
+    // antlr
     lexer->addSkipWord( "ANTLR_BEGIN_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
