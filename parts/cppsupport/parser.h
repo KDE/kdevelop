@@ -75,8 +75,8 @@ public /*rules*/ :
     bool parseTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node );
     bool parseDeclarator( DeclaratorAST::Node& node );
-    bool parseTemplateParameterList( AST::Node& node );
-    bool parseTemplateParameter( AST::Node& node );
+    bool parseTemplateParameterList( TemplateParameterListAST::Node& node );
+    bool parseTemplateParameter( TemplateParameterAST::Node& node );
     bool parseStorageClassSpecifier( GroupAST::Node& node );
     bool parseFunctionSpecifier( GroupAST::Node& node );
     bool parseInitDeclaratorList( InitDeclaratorListAST::Node& node );
@@ -90,7 +90,7 @@ public /*rules*/ :
     bool parseDeclaratorId( NameAST::Node& node );
     bool parseExceptionSpecification( AST::Node& node );
     bool parseEnumerator( EnumeratorAST::Node& node );
-    bool parseTypeParameter( AST::Node& node );
+    bool parseTypeParameter( TypeParameterAST::Node& node );
     bool parseParameterDeclaration( ParameterDeclarationAST::Node& node );
     bool parseTypeId( AST::Node& node );
     bool parseAbstractDeclarator( DeclaratorAST::Node& node );

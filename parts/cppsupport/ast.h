@@ -81,6 +81,8 @@ enum NodeType
     NodeType_Group,
     NodeType_AccessDeclaration,
     NodeType_TypeParameter,
+    NodeType_TemplateParameter,
+    NodeType_TemplateParameterList,
 
     NodeType_Custom = 2000
 };
@@ -234,12 +236,20 @@ public:
     AST* kind() { return m_kind.get(); }
     void setKind( AST::Node& kind );
 
+    class TemplateParameterListAST* templateParameterList() { return m_templateParameterList.get(); }
+    void setTemplateParameterList( std::auto_ptr<class TemplateParameterListAST>& templateParameterList );
+
     NameAST* name() { return m_name.get(); }
     void setName( NameAST::Node& name );
 
+    AST* typeId() { return m_typeId.get(); }
+    void setTypeId( AST::Node& typeId );
+
 private:
     AST::Node m_kind;
+    std::auto_ptr<class TemplateParameterListAST> m_templateParameterList;
     NameAST::Node m_name;
+    AST::Node m_typeId;
 
 private:
     TypeParameterAST( const TypeParameterAST& source );
@@ -341,7 +351,7 @@ class BaseClauseAST: public AST
 public:
     typedef std::auto_ptr<BaseClauseAST> Node;
     enum { Type = NodeType_BaseClause };
-    
+
 public:
     BaseClauseAST();
 
@@ -402,7 +412,7 @@ public:
 private:
     AST::Node m_id;
     AST::Node m_expr;
-        
+
 private:
     EnumeratorAST( const EnumeratorAST& source );
     void operator = ( const EnumeratorAST& source );
@@ -778,6 +788,50 @@ private:
     void operator = ( const TypedefAST& source );
 };
 
+class TemplateParameterAST: public AST
+{
+public:
+    typedef std::auto_ptr<TemplateParameterAST> Node;
+    enum { Type = NodeType_TemplateParameter };
+
+public:
+    TemplateParameterAST();
+
+    TypeParameterAST* typeParameter() { return m_typeParameter.get(); }
+    void setTypeParameter( TypeParameterAST::Node& typeParameter );
+
+    ParameterDeclarationAST* typeValueParameter() { return m_typeValueParameter.get(); }
+    void setTypeValueParameter( ParameterDeclarationAST::Node& typeValueParameter );
+
+private:
+    TypeParameterAST::Node m_typeParameter;
+    ParameterDeclarationAST::Node m_typeValueParameter;
+
+private:
+    TemplateParameterAST( const TemplateParameterAST& source );
+    void operator = ( const TemplateParameterAST& source );
+};
+
+class TemplateParameterListAST: public AST
+{
+public:
+    typedef std::auto_ptr<TemplateParameterListAST> Node;
+    enum { Type = NodeType_TemplateParameterList };
+
+public:
+    TemplateParameterListAST();
+
+    QPtrList<TemplateParameterAST> templateParameterList() { return m_templateParameterList; }
+    void addTemplateParameter( TemplateParameterAST::Node& templateParameter );
+
+private:
+    QPtrList<TemplateParameterAST> m_templateParameterList;
+
+private:
+    TemplateParameterListAST( const TemplateParameterListAST& source );
+    void operator = ( const TemplateParameterListAST& source );
+};
+
 class TemplateDeclarationAST: public DeclarationAST
 {
 public:
@@ -790,15 +844,15 @@ public:
     AST* exported() { return m_exported.get(); }
     void setExported( AST::Node& exported );
 
-    AST* templateParameterList() { return m_templateParameterList.get(); }
-    void setTemplateParameterList( AST::Node& templateParameterList );
+    TemplateParameterListAST* templateParameterList() { return m_templateParameterList.get(); }
+    void setTemplateParameterList( TemplateParameterListAST::Node& templateParameterList );
 
     DeclarationAST* declaration() { return m_declaration.get(); }
     void setDeclaration( DeclarationAST::Node& declaration );
 
 private:
     AST::Node m_exported;
-    AST::Node m_templateParameterList;
+    TemplateParameterListAST::Node m_templateParameterList;
     DeclarationAST::Node m_declaration;
 
 private:
@@ -1019,7 +1073,7 @@ public:
 
 private:
     QPtrList<StatementAST> m_statementList;
-    
+
 private:
     StatementListAST( const StatementListAST& source );
     void operator = ( const StatementListAST& source );
@@ -1053,22 +1107,22 @@ public:
 
 public:
     FunctionDefinitionAST();
-    
+
     GroupAST* functionSpecifier() { return m_functionSpecifier.get(); }
     void setFunctionSpecifier( GroupAST::Node& functionSpecifier );
 
     GroupAST* storageSpecifier() { return m_storageSpecifier.get(); }
     void setStorageSpecifier( GroupAST::Node& storageSpecifier );
-    
+
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
-    
+
     InitDeclaratorAST* initDeclarator() { return m_initDeclarator.get(); }
     void setInitDeclarator( InitDeclaratorAST::Node& initDeclarator );
 
     StatementListAST* functionBody() { return m_functionBody.get(); }
     void setFunctionBody( StatementListAST::Node& functionBody );
-    
+
 private:
     GroupAST::Node m_functionSpecifier;
     GroupAST::Node m_storageSpecifier;

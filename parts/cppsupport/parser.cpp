@@ -942,7 +942,7 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
     }
     lex->nextToken();
 
-    AST::Node params;
+    TemplateParameterListAST::Node params;
     if( lex->lookAhead(0) == '<' ){
 	lex->nextToken();
 	parseTemplateParameterList( params );
@@ -1450,14 +1450,19 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
     return true;
 }
 
-bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
+bool Parser::parseTemplateParameterList( TemplateParameterListAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTemplateParameterList()" << endl;
 
-    AST::Node param;
+    int start = lex->index();
+
+    TemplateParameterListAST::Node ast = CreateNode<TemplateParameterListAST>();
+
+    TemplateParameterAST::Node param;
     if( !parseTemplateParameter(param) ){
 	return false;
     }
+    ast->addTemplateParameter( param );
 
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
@@ -1465,45 +1470,66 @@ bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
 	if( !parseTemplateParameter(param) ){
 	    syntaxError();
 	    break;
+	} else {
+	    ast->addTemplateParameter( param );
 	}
     }
 
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
     return true;
 }
 
-bool Parser::parseTemplateParameter( AST::Node& /*node*/ )
+bool Parser::parseTemplateParameter( TemplateParameterAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTemplateParameter()" << endl;
 
-    AST::Node typeParam;
-    int tk = lex->lookAhead( 0 );
-    if( tk == Token_class ||
-	tk == Token_typename ||
-	tk == Token_template )
-	return parseTypeParameter( typeParam );
+    int start = lex->index();
+    TemplateParameterAST::Node ast = CreateNode<TemplateParameterAST>();
 
+    TypeParameterAST::Node typeParameter;
     ParameterDeclarationAST::Node param;
+
+    int tk = lex->lookAhead( 0 );
+
+    if( (tk == Token_class || tk == Token_typename || tk == Token_template) && parseTypeParameter(typeParameter) ){
+	ast->setTypeParameter( typeParameter );
+	goto ok;
+    }
+
     if( !parseParameterDeclaration(param) )
         return false;
+    ast->setTypeValueParameter( param );
+
+ok:
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
 
     return true;
 }
 
-bool Parser::parseTypeParameter( AST::Node& /*node*/ )
+bool Parser::parseTypeParameter( TypeParameterAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeParameter()" << endl;
+
+    int start = lex->index();
+    TypeParameterAST::Node ast = CreateNode<TypeParameterAST>();
+
+    AST_FROM_TOKEN( kind, lex->index() );
+    ast->setKind( kind );
 
     switch( lex->lookAhead(0) ){
 
     case Token_class:
     case Token_typename:
 	{
-
 	    lex->nextToken(); // skip class
 
 	    // parse optional name
 	    NameAST::Node name;
 	    if( parseName(name) ){
+		ast->setName( name );
 		if( lex->lookAhead(0) == '=' ){
 		    lex->nextToken();
 
@@ -1512,21 +1538,22 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 			syntaxError();
 			return false;
 		    }
+		    ast->setTypeId( typeId );
 		}
 	    }
 	}
-	return true;
+	break;
 
     case Token_template:
 	{
-
 	    lex->nextToken(); // skip template
 	    ADVANCE( '<', '<' );
 
-	    AST::Node params;
+	    TemplateParameterListAST::Node params;
 	    if( !parseTemplateParameterList(params) ){
 		return false;
 	    }
+	    ast->setTemplateParameterList( params );
 
 	    ADVANCE( '>', ">" );
 
@@ -1536,6 +1563,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 	    // parse optional name
 	    NameAST::Node name;
 	    if( parseName(name) ){
+		ast->setName( name );
 		if( lex->lookAhead(0) == '=' ){
 		    lex->nextToken();
 
@@ -1544,6 +1572,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 			syntaxError();
 			return false;
 		    }
+		    ast->setTypeId( typeId );
 		}
 	    }
 
@@ -1554,12 +1583,17 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 		parseName( templ_name );
 	    }
 	}
-	return true;
+	break;
+
+    default:
+	return false;
 
     } // end switch
 
 
-    return false;
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    return true;
 }
 
 bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )

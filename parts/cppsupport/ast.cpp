@@ -105,7 +105,11 @@ QString nodeTypeToString( NodeType type )
     case NodeType_AccessDeclaration:
 	return "AccessDeclaration";
     case NodeType_TypeParameter:
-	return "TypeParameterAST";
+	return "TypeParameter";
+    case NodeType_TemplateParameter:
+	return "TemplateParameter";
+    case NodeType_TemplateParameterList:
+	return "TemplateParameterList";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -377,7 +381,7 @@ void TemplateDeclarationAST::setExported( AST::Node& exported )
     if( m_exported.get() ) m_exported->setParent( this );
 }
 
-void TemplateDeclarationAST::setTemplateParameterList( AST::Node& templateParameterList )
+void TemplateDeclarationAST::setTemplateParameterList( TemplateParameterListAST::Node& templateParameterList )
 {
     m_templateParameterList = templateParameterList;
     if( m_templateParameterList.get() ) m_templateParameterList->setParent( this );
@@ -682,7 +686,7 @@ void FunctionDefinitionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
     m_typeSpec = typeSpec;
     if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
-    
+
 void FunctionDefinitionAST::setInitDeclarator( InitDeclaratorAST::Node& initDeclarator )
 {
     m_initDeclarator = initDeclarator;
@@ -934,9 +938,53 @@ void TypeParameterAST::setKind( AST::Node& kind )
     if( m_kind.get() ) m_kind->setParent( this );
 }
 
+void TypeParameterAST::setTemplateParameterList( TemplateParameterListAST::Node& templateParameterList )
+{
+    m_templateParameterList = templateParameterList;
+    if( m_templateParameterList.get() ) m_templateParameterList->setParent( this );
+}
+
 void TypeParameterAST::setName( NameAST::Node& name )
 {
     m_name = name;
     if( m_name.get() ) m_name->setParent( this );
+}
+
+void TypeParameterAST::setTypeId( AST::Node& typeId )
+{
+    m_typeId = typeId;
+    if( m_typeId.get() ) m_typeId->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+TemplateParameterAST::TemplateParameterAST()
+{
+}
+
+void TemplateParameterAST::setTypeParameter( TypeParameterAST::Node& typeParameter )
+{
+    m_typeParameter = typeParameter;
+    if( m_typeParameter.get() ) m_typeParameter->setParent( this );
+}
+
+void TemplateParameterAST::setTypeValueParameter( ParameterDeclarationAST::Node& typeValueParameter )
+{
+    m_typeValueParameter = typeValueParameter;
+    if( m_typeValueParameter.get() ) m_typeValueParameter->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+TemplateParameterListAST::TemplateParameterListAST()
+{
+    m_templateParameterList.setAutoDelete( true );
+}
+
+void TemplateParameterListAST::addTemplateParameter( TemplateParameterAST::Node& templateParameter )
+{
+    if( !templateParameter.get() )
+        return;
+
+    templateParameter->setParent( this );
+    m_templateParameterList.append( templateParameter.release() );
 }
 
