@@ -2842,7 +2842,16 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.H");
   project->addLFVGroup (i18n("Headers"),"");
   project->setFilters(i18n("Headers"),group_filters);
-  
+
+  if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
+  	qt2normalitem->isSelected()|| qt2mdiitem->isSelected())
+	{
+		group_filters.clear();
+    group_filters.append("*.ui");
+    project->addLFVGroup (i18n("User Interface"),"");
+    project->setFilters(i18n("User Interface"),group_filters);
+  }
+
   project->writeProject ();
   project->updateMakefilesAm ();
 
