@@ -79,8 +79,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( &data ) )
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QStringList & )
-    : KDevVersionControl( "KDevCvsServicePart", "kdevcvsservicepart", parent,
-        name ? name : "CvsService" ),
+	: KDevVersionControl( "KDevCvsServicePart", "cervisia", parent,
+						  name ? name : "CvsService" ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
     actionRemoveSticky( 0 ),
@@ -254,7 +254,7 @@ void CvsServicePart::createNewProject( const QString &dirName )
 
 void CvsServicePart::projectConfigWidget( KDialogBase *dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage( i18n("CvsService") );
+	QVBox *vbox = dlg->addVBoxPage( i18n("CvsService"), i18n("CvsService"), BarIcon( icon(), KIcon::SizeMedium) );
     CvsOptionsWidget *w = new CvsOptionsWidget( (QWidget *)vbox, "cvs config widget" );
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

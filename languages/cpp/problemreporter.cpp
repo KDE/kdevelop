@@ -429,7 +429,7 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"));
+	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"), BarIcon( "source_cpp", KIcon::SizeMedium) );
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     w->setPart( m_cppSupport );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));

@@ -148,7 +148,7 @@ public:
 };
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"),
+    : KDevLanguageSupport("CppSupport", "source_cpp", parent, name ? name : "KDevCppSupport"),
       m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
@@ -305,14 +305,14 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
     QVBox* vbox = 0;
 
-    vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
+	vbox = dlg->addVBoxPage( i18n( "C++ Specific" ), i18n( "C++ Specific" ), BarIcon( icon(), KIcon::SizeMedium) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 }
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("C++ New Class Generator"));
+	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Class Generator"), i18n( "C++ Class Generator" ), BarIcon( icon(), KIcon::SizeMedium) );
   ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
 }
@@ -548,9 +548,8 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 			if (curLine >= line && curLine <= endLine)//@todo currently column isn't checked, should be sufficient this way
 				currentFunction = *it;
                 }
-		if(m2->count() == 0)
-		  popup->removeItem(id);
-		
+			if(m2->count() == 0)
+				popup->removeItem(id);
 //                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
            }
 
@@ -604,9 +603,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 				}
 			}
 		   
-               }
-       	       if(m->count() == 0)
-		popup->removeItem(id);
+				}
+				if(m->count() == 0)
+					popup->removeItem(id);
+			   
            }
 		if (fileExists && currentFunction == 0 && currentFunctionDefintion != 0)//cursor is above a functiondefintion, find matching  declaration
 		{
