@@ -11,7 +11,7 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 			$(top_builddir)/lib/sourceinfo/libkdevsourceinfo.la \
 			$(top_builddir)/lib/util/libkdevutil.la \
 			$(top_builddir)/lib/project/libkdevproject.la \
-			$(LIB_KPARTS) $(LIB_KIO)
+			-lktexteditor $(LIB_KPARTS) $(LIB_KIO)
 libkdevelop_la_SOURCES = dummy.cpp
 
 

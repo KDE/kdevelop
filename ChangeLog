@@ -3,6 +3,11 @@
 	* Fixed history part crashing
 	* StatusBar cleanup
 	* Fixed ever-growing popup menu in editor
+	* Tool menu and the file and directory context
+	  menus can now be populated with any shell
+	  command. Output can be sent to the app output
+	  art. %S, %D, %T and %W magic works like
+	  in old KDevelop (I hope :-)
 
 2002-05-03  Bernd Gehrmann  <bernd@mail.berlios.de>
 

@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
-libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lktexteditor
+libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevcppsupport_la_SOURCES = cppsupportpart.cpp \
 			       cppsupportwidget.cpp \
