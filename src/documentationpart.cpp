@@ -29,6 +29,9 @@ DocumentationPart::DocumentationPart()
   stopAction = new KAction( i18n( "Stop" ), "stop", 0,
     this, SLOT( slotStop() ), actions, "doc_stop" );
   stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
+  duplicateAction = new KAction( i18n( "Duplicate Window" ), "window_new", 0,
+    this, SLOT( slotDuplicate() ), actions, "doc_dup" );
+  duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
 }
@@ -37,13 +40,14 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
 {
   KPopupMenu *m_popup = new KPopupMenu( i18n( "Documentation Viewer" ), this->widget() );
 
+  duplicateAction->plug(m_popup);
   int idNewWindow = -2;
   if (!url.isEmpty())
   {
     idNewWindow = m_popup->insertItem(SmallIcon("window_new"),i18n("Open in New Window"));
     m_popup->setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
-    m_popup->insertSeparator();
   }
+  m_popup->insertSeparator();
   reloadAction->plug(m_popup);
   stopAction->plug(m_popup);
   m_popup->insertSeparator();
@@ -274,6 +278,11 @@ void DocumentationPart::slotCompleted( )
 void DocumentationPart::slotCancelled( const QString & /*errMsg*/ )
 {
     stopAction->setEnabled(false);
+}
+
+void DocumentationPart::slotDuplicate( )
+{
+    PartController::getInstance()->showDocument(url(), m_context + "dup");
 }
 
 #include "documentationpart.moc"

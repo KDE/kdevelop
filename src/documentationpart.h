@@ -33,12 +33,14 @@ private slots:
 
   void slotReload();
   void slotStop();
+  void slotDuplicate();
 
 private:
 
   QString m_context;
   KAction *stopAction;
   KAction *reloadAction;
+  KAction *duplicateAction;
 };
 
 
