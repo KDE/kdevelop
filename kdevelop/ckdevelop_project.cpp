@@ -406,9 +406,9 @@ void CKDevelop::slotProjectOptions(){
       		if(!dir.exists())
       			dir.mkdir(vpath);
       		if(it==configs.begin()) // first loop, leave out &&
-  	    		shellcommand+=" echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+  	    		shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
       		else
-	      		shellcommand+=" && echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+	      		shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
       		shellcommand+="\" ";
       		shellcommand +=" && cd "+vpath+" && ";
       		config->setGroup("Compilearch "+
@@ -1589,9 +1589,9 @@ void CKDevelop::newSubDir(){
       		if(!dir.exists())
       			dir.mkdir(vpath);
       		if(it==configs.begin()) // first loop, leave out &&
-  	    		shellcommand+=" echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+  	    		shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
       		else
-	      		shellcommand+=" && echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+	      		shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
       		shellcommand+="\" ";
       		shellcommand +=" && cd "+vpath+" && ";
       		config->setGroup("Compilearch "+
