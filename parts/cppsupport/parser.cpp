@@ -362,6 +362,12 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 	    InitDeclaratorListAST::Node declarators;
 	    AST::Node declarator;
 
+	    GroupAST::Node storageSpec;
+	    parseStorageClassSpecifier( storageSpec );
+
+	    GroupAST::Node cv;
+	    parseCvQualify( cv );
+
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
 	        parseInitDeclaratorList(declarators);
 	        ADVANCE( ';', ";" );
@@ -829,6 +835,10 @@ bool Parser::parseCvQualify( GroupAST::Node& node )
     if( n == 0 )
         return false;
 
+
+    //kdDebug(9007) << "-----------------> token = " << lex->lookAhead(0).toString() << endl;
+    UPDATE_POS( ast, start, lex->index() );
+
     node = ast;
     return true;
 }
@@ -1159,12 +1169,6 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
     
     int start = lex->index();
     
-    GroupAST::Node storageSpec;
-    parseStorageClassSpecifier( storageSpec );
-
-    GroupAST::Node cv;
-    parseCvQualify( cv );
-
     if( lex->lookAhead(0) != Token_enum ){
 	return false;
     }
@@ -1348,7 +1352,8 @@ bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )
 
     while( !lex->lookAhead(0).isNull() ){
         int tk = lex->lookAhead( 0 );
-        if( tk == Token_friend || Token_auto || Token_register || Token_static || Token_extern || Token_mutable ){
+        if( tk == Token_friend || tk == Token_auto || tk == Token_register || tk == Token_static ||
+		tk == Token_extern || tk == Token_mutable ){
 	    int startNode = lex->index();
 	    lex->nextToken();
 
@@ -1373,7 +1378,7 @@ bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 
     while( !lex->lookAhead(0).isNull() ){
         int tk = lex->lookAhead( 0 );
-        if( tk == Token_inline || Token_virtual || Token_explicit ){
+        if( tk == Token_inline || tk == Token_virtual || tk == Token_explicit ){
 	    int startNode = lex->index();
 	    lex->nextToken();
 
@@ -1585,15 +1590,9 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 
     int start = lex->index();
 
-    GroupAST::Node storageSpec;
-    parseStorageClassSpecifier( storageSpec );
-
-    GroupAST::Node cv;
-    parseCvQualify( cv );
-
     AST::Node classKey;
     int classKeyStart = lex->index();
-    
+
     int kind = lex->lookAhead( 0 );
     if( kind == Token_class || kind == Token_struct || kind == Token_union ){
 	AST::Node asn = CreateNode<AST>();
@@ -1676,8 +1675,10 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemberSpecification()" << endl;
 
+    int start = lex->index();
+
     AST::Node access;
-        
+
     if( lex->lookAhead(0) == ';' ){
 	lex->nextToken();
 	return true;
@@ -1702,23 +1703,29 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 	return true;
     }
 
-    int start = lex->index();
-    
+    lex->setIndex( start );
+
+    GroupAST::Node storageSpec;
+    parseStorageClassSpecifier( storageSpec );
+
+    GroupAST::Node cv;
+    parseCvQualify( cv );
+
     TypeSpecifierAST::Node spec;
     if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
     	InitDeclaratorListAST::Node declarators;
 	parseInitDeclaratorList( declarators );
 	ADVANCE( ';', ";" );
-	
+
 	SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
 	ast->setTypeSpec( spec );
 	ast->setInitDeclaratorList( declarators );
 	UPDATE_POS( ast, start, lex->index() );
 	node = ast;
-	
+
 	return true;
     }
-    
+
     return parseDeclaration( node );
 }
 
@@ -2688,6 +2695,9 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
+    GroupAST::Node cv;
+    parseCvQualify( cv );
+
     TypeSpecifierAST::Node spec;
     if ( !parseTypeSpecifierOrClassSpec(spec) ) { // replace with simpleTypeSpecifier?!?!
 	lex->setIndex( start );
@@ -2811,7 +2821,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    return true;
 		}
 		break;
-		
+
 	    case ':':
 	        {
 		    AST::Node ctorInit;
@@ -2895,7 +2905,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    syntaxError();
 	    return false;
 	}
-	
+
 	int endSignature = lex->index();
 	switch( lex->lookAhead(0) ){
 	case ';':
@@ -2941,10 +2951,10 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	        }
 	    }
 	    break;
-	    
+
 	}
     }
-    
+
     syntaxError();
     return false;
 }
@@ -2952,9 +2962,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 bool Parser::parseFunctionBody( StatementListAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionBody()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != '{' ){
 	return false;
     }
