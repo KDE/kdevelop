@@ -1,2 +1,2 @@
-SUBDIRS = kdevelop std extras
+SUBDIRS = kdevelop std extras kde_app_devel
 
