@@ -352,3 +352,10 @@ void QextMdiChildView::slot_clickedInWindowMenu()
 	emit clickedInWindowMenu( m_windowMenuID);
 }
 
+//============= slot_clickedInDockMenu ===============//
+
+/** called if someone click on the "Dock/Undock..." menu item for this child frame window */
+void QextMdiChildView::slot_clickedInDockMenu()
+{
+   emit clickedInDockMenu( m_windowMenuID);
+}
