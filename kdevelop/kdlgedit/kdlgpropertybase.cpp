@@ -102,8 +102,13 @@ void KDlgPropertyBase::dumpStringPropCall(QTextStream *stream, QString methname,
     QString contents = getPropValue(name);
     if (withi18n)
 	{
+	  if(contents != ""){
 	    contents.prepend("i18n(\"");
 	    contents.append("\")");
+	  }
+	  else{
+	    return; // no dump
+	  }
 	}
     else{
 	contents.prepend("\"");
