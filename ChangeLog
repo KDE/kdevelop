@@ -1,3 +1,6 @@
+1999-06-15 Jörgen Olsson <jorgen@cenacle.net>
+	* added basic printing functionality in graphical classview
+	
 1999-06-11  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added goto class declaration to the class button, disabled combos for no project loaded (caused segfaults)
 	* added statusbar help to the classviewer popups
