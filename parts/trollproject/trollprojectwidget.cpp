@@ -44,6 +44,7 @@
 #include "kdevmainwindow.h"
 #include "trollprojectpart.h"
 #include "kdevlanguagesupport.h"
+#include "kdevcreatefile.h"
 
 #define VALUES_PER_ROW  1
 
@@ -1023,25 +1024,32 @@ void TrollProjectWidget::slotAddFiles()
 
 void TrollProjectWidget::slotNewFile()
 {
-  bool ok = FALSE;
-  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  QString filename = QInputDialog::getText(
-                     i18n( "Insert New File"),
-                     i18n( "Please enter a name for the new file:" ),
-                     QLineEdit::Normal, QString::null, &ok, this );
-  if ( ok && !filename.isEmpty() )
-  {
-    QFile newfile(projectDirectory()+relpath+'/'+filename);
-    if (!newfile.open(IO_WriteOnly))
+    KDevCreateFile * createFileSupport = m_part->createFileSupport();
+    if (createFileSupport) 
     {
-      KMessageBox::error(this,i18n("Failed to create new file. "
-                                   "Do you have write permission "
-                                   "in the project folder?" ));
-      return;
+        KDevCreateFile::CreatedFile crFile =
+            createFileSupport->createNewFile(QString::null,  m_shownSubproject->path.mid(projectDirectory().length()));
+    } else {
+        bool ok = FALSE;
+        QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+        QString filename = QInputDialog::getText(
+                            i18n( "Insert New File"),
+                            i18n( "Please enter a name for the new file:" ),
+                            QLineEdit::Normal, QString::null, &ok, this );
+        if ( ok && !filename.isEmpty() )
+        {
+            QFile newfile(projectDirectory()+relpath+'/'+filename);
+            if (!newfile.open(IO_WriteOnly))
+            {
+            KMessageBox::error(this,i18n("Failed to create new file. "
+                                        "Do you have write permission "
+                                        "in the project folder?" ));
+            return;
+            }
+            newfile.close();
+            addFile(projectDirectory()+relpath+'/'+filename);
+        }
     }
-    newfile.close();
-    addFile(projectDirectory()+relpath+'/'+filename);
-  }
 }
 
 void TrollProjectWidget::slotRemoveFile()
@@ -1163,26 +1171,47 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         if (r == idInsNewFile)
         {
-          bool ok = FALSE;
-          QString filename = QInputDialog::getText(
-                            i18n( "Insert New File"),
-                            i18n( "Please enter a name for the new file:" ),
-                            QLineEdit::Normal, QString::null, &ok, this );
-          if ( ok && !filename.isEmpty() )
-          {
-            QFile newfile(projectDirectory()+relpath+'/'+filename);
-            if (!newfile.open(IO_WriteOnly))
+            KDevCreateFile * createFileSupport = m_part->createFileSupport();
+            if (createFileSupport) 
             {
-              KMessageBox::error(this,i18n("Failed to create new file. "
-                                           "Do you have write permission "
-                                           "in the project folder?" ));
-              return;
+                QString fcext;
+                switch (titem->groupType) {
+                case GroupItem::Sources:
+                    fcext = "cpp";
+                    break;
+                case GroupItem::Headers:
+                    fcext = "h";
+                    break;
+                case GroupItem::Forms:
+                    fcext = "ui";
+                    break;
+                default: 
+                    fcext = QString::null;
+                } 
+                KDevCreateFile::CreatedFile crFile = 
+                    createFileSupport->createNewFile(fcext,  m_shownSubproject->path.mid(projectDirectory().length()));
+            } else {
+                bool ok = FALSE;
+                QString filename = QInputDialog::getText(
+                                    i18n( "Insert New File"),
+                                    i18n( "Please enter a name for the new file:" ),
+                                    QLineEdit::Normal, QString::null, &ok, this );
+                if ( ok && !filename.isEmpty() )
+                {
+                    QFile newfile(projectDirectory()+relpath+'/'+filename);
+                    if (!newfile.open(IO_WriteOnly))
+                    {
+                    KMessageBox::error(this,i18n("Failed to create new file. "
+                                                "Do you have write permission "
+                                                "in the project folder?" ));
+                    return;
+                    }
+                    newfile.close();
+                    addFileToCurrentSubProject(titem,filename);
+                    updateProjectFile(titem->owner);
+                    slotOverviewSelectionChanged(m_shownSubproject);
+                }
             }
-            newfile.close();
-            addFileToCurrentSubProject(titem,filename);
-            updateProjectFile(titem->owner);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
         }
 
     } else if (pvitem->type() == ProjectItem::File) {
