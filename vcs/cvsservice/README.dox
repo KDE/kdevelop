@@ -46,10 +46,11 @@ Implementation of this component is done by:
     additional info).
 
 \todo
-    - Fix minor bugs in parsing 'cvs status' output (see CVSEntry and CVSFileInfoProvider classes)
     - Fix the "cvs update" function which behave strangely for sub-directories of the main
       project dir.
     - (> 3.0) Replace the menu entries text with shorter ones
+    - (> 3.0) Add a new state & color enntry for 'Needs Patch' CVS state :-/
+    - Fix bugs on bugs.kde.org ;-)
 
 
 \authors <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>

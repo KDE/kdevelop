@@ -63,20 +63,26 @@ const VCSFileInfoMap *CVSFileInfoProvider::status( const QString &dirPath ) cons
 bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerData )
 {
     m_savedCallerData = callerData;
-    // @todo
     if (m_requestStatusJob)
     {
         delete m_requestStatusJob;
         m_requestStatusJob = 0;
+    }
+    // Flush old cache
+    if (m_cachedDirEntries)
+    {
+        delete m_cachedDirEntries;
+        m_cachedDirEntries = 0;
+        m_previousDirPath = dirPath;
     }
 
     // path, recursive, tagInfo: hmmm ... we may use tagInfo for collecting file tags ...
     DCOPRef job = m_cvsService->status( dirPath, true, false );
     m_requestStatusJob = new CvsJob_stub( job.app(), job.obj() );
 
-    kdDebug() << "Running command : " << m_requestStatusJob->cvsCommand() << endl;
+    kdDebug(9006) << "Running command : " << m_requestStatusJob->cvsCommand() << endl;
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
-//    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
+    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     return m_requestStatusJob->execute();
 }
 
@@ -87,15 +93,25 @@ void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
     kdDebug(9006) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
     if (!normalExit)
         return;
-
-    emit statusReady( parse( m_requestStatusJob->output() ), m_savedCallerData );
+    
+//    m_cachedDirEntries = parse( m_requestStatusJob->output() );
+    m_cachedDirEntries = parse( m_statusLines );
+    // Remove me when not debugging
+    printOutFileInfoMap( *m_cachedDirEntries );
+    
+    emit statusReady( *m_cachedDirEntries, m_savedCallerData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSFileInfoProvider::slotReceivedOutput( QString /*someOutput*/ )
+void CVSFileInfoProvider::slotReceivedOutput( QString someOutput )
 {
-    /* Nothing to do: we get the job output in the above method */
+    m_stringBuffer += someOutput;
+    QStringList strings = processBuffer( m_stringBuffer );
+    if (strings.count() > 0)
+    {
+        m_statusLines += strings;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,7 +130,7 @@ QString CVSFileInfoProvider::projectDirectory() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
+VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
 {
     QRegExp rx_recordStart( "^=+$" );
     QRegExp rx_fileName( "^\\b(File: (\\.|-|\\w)+)\\b" );
@@ -133,7 +149,7 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
         stickyDate,
         stickyOptions;
 
-    VCSFileInfoMap vcsStates;
+    VCSFileInfoMap *vcsStates = new VCSFileInfoMap;
 
     int state = 0,
         lastAcceptableState = 4;
@@ -142,7 +158,9 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
     for (QStringList::const_iterator it=stringStream.begin(); it != stringStream.end(); ++it)
     {
         const QString &s = (*it);
-        //qDebug( s );
+        
+
+        kdDebug(9006) << ">> Parsing: " << s << endl;
 
         if (state == 0 && rx_recordStart.exactMatch( s ))
             ++state;
@@ -151,6 +169,7 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
             fileName = rx_fileName.cap().replace( "File:", "" ).stripWhiteSpace();
             fileStatus = rx_fileStatus.cap().replace( "Status:", "" ).stripWhiteSpace();
             ++state; // Next state
+            kdDebug(9006) << ">> " << fileName << ", " << fileStatus << endl;
         }
         else if (state == 2 && rx_fileWorkRev.search( s ) >= 0)
         {
@@ -174,7 +193,8 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
             // Package stuff, put into map and get ready for a new record
             VCSFileInfo vcsInfo( fileName, workingRevision, repositoryRevision,
                 String2EnumState( fileStatus ) );
-            vcsStates.insert( fileName, vcsInfo );
+            kdDebug(9006) << "== Inserting: " << vcsInfo.toString() << endl;
+            vcsStates->insert( fileName, vcsInfo );
             state = 0;
         }
     }
@@ -187,16 +207,51 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
 {
     // @todo add more status as "Conflict" and "Sticky" (but I dunno how CVS writes it so I'm going
     // to await until I have a conflict or somebody else fix it ;-)
+    // @todo use QRegExp for better matching since it seems strings have changed between CVS releases :-(
+    // @todo a new state for 'Needs patch'
     if (stateAsString == "Up-to-date")
         return VCSFileInfo::Uptodate;
-    if (stateAsString == "Locally Modified")
+    else if (stateAsString == "Locally Modified")
         return VCSFileInfo::Modified;
-    if (stateAsString == "Locally Added")
+    else if (stateAsString == "Locally Added")
         return VCSFileInfo::Added;
-    if (stateAsString == "Unresolved Conflict")
+    else if (stateAsString == "Unresolved Conflict")
         return VCSFileInfo::Conflict;
-    else
+    else if (stateAsString == "Needs Patch" || stateAsString == "Needs Checkout")
+        return VCSFileInfo::Unknown;
+    else 
         return VCSFileInfo::Unknown; // @fixme: exhaust all the previous cases first ;-)
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CVSFileInfoProvider::printOutFileInfoMap( const VCSFileInfoMap &map )
+{
+    kdDebug(9006) << "Files parsed:" << endl; 
+    for (VCSFileInfoMap::const_iterator it = map.begin(); it != map.end(); ++it)
+    {
+        const VCSFileInfo &vcsInfo = *it;
+        kdDebug(9006) << vcsInfo.toString() << endl;
+    }   
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QStringList CVSFileInfoProvider::processBuffer( QString &buffer )
+{
+    QStringList strings;
+    int pos;
+    while ( (pos = buffer.find('\n')) != -1)
+    {
+        QString line = buffer.left( pos );
+        if (!line.isEmpty())
+        {
+            strings.append( line );
+        }
+        buffer = buffer.right( buffer.length() - pos - 1 );
+    }
+    return strings;
+}
+
 
 #include "cvsfileinfoprovider.moc"

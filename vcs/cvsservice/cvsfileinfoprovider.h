@@ -48,10 +48,17 @@ private:
 
     QString projectDirectory() const;
 
-    static VCSFileInfoMap parse( QStringList stringStream );
+    static VCSFileInfoMap *parse( QStringList stringStream );
 
     static VCSFileInfo::FileState String2EnumState( QString stateAsString );
 
+    static void printOutFileInfoMap( const VCSFileInfoMap &map );
+    // Parse output from CVS job: it is not perfectly line by line so we need
+    // to adjust it here 
+    static QStringList processBuffer( QString &buffer );
+    QString m_stringBuffer;
+    QStringList m_statusLines;
+    
     mutable void *m_savedCallerData;
     mutable CvsJob_stub *m_requestStatusJob;
     CvsService_stub *m_cvsService;
