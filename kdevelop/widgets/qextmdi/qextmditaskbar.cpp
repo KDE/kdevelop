@@ -157,10 +157,10 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
 
 	QextMdiTaskBarButton *b=new QextMdiTaskBarButton( this, win_ptr);
 	
-   connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );	
-   connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
-   connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonLeftClicked(QextMdiChildView*)) );
-   connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );	
+   QObject::connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonLeftClicked(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
 	
 	m_pButtonList->append(b);
 	b->setToggleButton( true);
