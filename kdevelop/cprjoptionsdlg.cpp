@@ -42,7 +42,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   need_makefile_generation = false;
 
   
-  setFixedSize(560,355);
+  setFixedSize(630,355);
   QStrList short_info;
   int pos;
 
