@@ -1,4 +1,8 @@
 2002-08-31 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+     * Connected the last toolbar buttons
+     * I hereby declare trollprojectpart ready for alpha release :)
+
+2002-08-31 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
      * trollproject - added compiler/linker flags, includepath
 
 2002-08-30 John Firebaugh <jfirebaugh@kde.org>
