@@ -972,8 +972,8 @@ private:
 private slots:
     void slotdoneWithKpp();
     void slotrpmBuildProcess();
-    void slotGetRPMBuildSTDOUT(QString stdout);
-    void slotGetRPMBuildSTDERR(QString stderr);
+    void slotGetRPMBuildSTDOUT(QString sstdout);
+    void slotGetRPMBuildSTDERR(QString sstderr);
     void slotAddSpec(QString path);
 };
 

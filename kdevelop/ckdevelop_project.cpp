@@ -1184,13 +1184,13 @@ void CKDevelop::slotAddSpec(QString path)
 {
         cerr << "I need to add " << path << " to the project..." << endl;
 }
-void CKDevelop::slotGetRPMBuildSTDOUT(QString stdout){
-        cerr << stdout << endl;
-				messages_widget->insertAtEnd(stdout);
+void CKDevelop::slotGetRPMBuildSTDOUT(QString sstdout){
+        cerr << sstdout << endl;
+				messages_widget->insertAtEnd(sstdout);
 }
-void CKDevelop::slotGetRPMBuildSTDERR(QString stderr){
-        cerr << stderr << endl;
-				stderr_widget->insertAtEnd(stderr);
+void CKDevelop::slotGetRPMBuildSTDERR(QString sstderr){
+        cerr << sstderr << endl;
+				stderr_widget->insertAtEnd(sstderr);
 }
 void CKDevelop::slotdoneWithKpp(){
  rpmbuilder->hide();
