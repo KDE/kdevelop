@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <qlabel.h>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
@@ -117,7 +118,11 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     layout->addLayout(dir_layout, 3, 1);
 
     dir_combo = new KComboBox( true, this );
+#if KDE_IS_VERSION(3,1,3)
+    dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
+#else
     dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
+#endif
     dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
     dir_combo->setEditText(QDir::homeDirPath());
 
@@ -210,7 +215,11 @@ GrepDialog::~GrepDialog()
     config->setGroup("GrepDialog");
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
+#else
     config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
+#endif
 }
 
 
