@@ -525,6 +525,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          if(list->find(obj) != -1) {
             m_focusedChildWidget = (QWidget*)obj;
          }
+         delete list;   // delete the list, not the objects
       }
       if (!isAttached()) {   // is toplevel, for attached views activation is done by frame event filter
          static bool m_bActivationIsPending = FALSE;
