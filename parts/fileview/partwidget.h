@@ -28,6 +28,8 @@ public:
     class KHistoryCombo *m_filter;
     class QToolButton *m_btnFilter;
 
+    void showProjectFiles();
+
 private slots:
     void slotFilterChange( const QString & nf );
     void slotBtnFilterClick();

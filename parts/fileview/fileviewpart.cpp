@@ -57,7 +57,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     connect( project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
              m_widget->m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
 
-    m_widget->m_filetree->openDirectory(project()->projectDirectory());
+    m_widget->showProjectFiles();
 }
 
 FileViewPart::~FileViewPart()

@@ -56,21 +56,21 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     connect( m_filter, SIGNAL( returnPressed(const QString&) ),
              m_filter, SLOT( addToHistory(const QString&) ) );
 
-    QDomDocument &dom = *m_part->projectDom();
-    QString patterns = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns" );
-    if (patterns.isEmpty())
-        patterns = "*.o,*.lo,CVS";
-    m_filter->insertItem( patterns );
-    // m_hidePatterns = QStringList::split(",", patterns);
-//    slotFilterChange( patterns );
+    m_filter->insertItem( m_filetree->hidePatterns() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 PartWidget::~PartWidget()
 {
-    QDomDocument &dom = *m_part->projectDom();
-    DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", m_filetree->filters().join(",") );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void PartWidget::showProjectFiles()
+{
+    m_filetree->openDirectory( m_part->project()->projectDirectory() );
+    m_filetree->applyHidePatterns( m_filetree->hidePatterns() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ void PartWidget::slotFilterChange( const QString & nf )
     // this will be never true after the m_filter has been used;)
     m_btnFilter->setEnabled( !( empty && m_lastFilter.isEmpty() ) );
 
-    m_filetree->applyFilters( QStringList::split( ",", f ) );
+    m_filetree->applyHidePatterns( f );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -38,8 +38,8 @@ public:
 
     KURL::List selectedPathUrls();
 
-    void applyFilters( const QStringList &filtersList );
-    const QStringList &filters() const;
+    void applyHidePatterns( const QString &hidePatterns );
+    QString hidePatterns() const;
 
 public slots:
     void hideOrShow();

@@ -30,7 +30,15 @@
 #include "domutil.h"
 #include "urlutil.h"
 
+// VCS Support
+#include <kdevversioncontrol.h>
+#include <kdevvcsfileinfoprovider.h>
+
 #include "fileviewpart.h"
+
+#define FILENAME_COLUMN  0
+//#define REVISION_COLUMN  1
+//#define TIMESTAMP_COLUMN 2
 
 ///////////////////////////////////////////////////////////////////////////////
 // class MyFileTreeViewItem
@@ -40,38 +48,32 @@ class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
     MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
-       : KFileTreeViewItem( parent, item, branch ), _isProjectFile( pf )
+       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf )
     {
         hideOrShow();
     }
     MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-       : KFileTreeViewItem( parent, item, branch ), _isProjectFile( false )
+       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false )
     {
         hideOrShow();
     }
 
-    virtual void paintCell(QPainter *p, const QColorGroup &cg,
-                           int column, int width, int alignment);
+    virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
     void hideOrShow();
-
-    FileTreeWidget* listView()
-    {
-        return static_cast<FileTreeWidget*>(QListViewItem::listView());
-    }
-
-    bool isProjectFile()
-    {
-        return _isProjectFile;
-    }
-
     bool setProjectFile( QString const & path, bool pf );
+
+    FileTreeWidget* listView() const { return static_cast<FileTreeWidget*>( QListViewItem::listView() ); }
+    bool isProjectFile() const { return m_isProjectFile; }
+
+    QString fileName() const { return text( FILENAME_COLUMN ); }
+//    QString revision() const { return text( REVISION_COLUMN ); }
+//    QString timestamp() const { return text( TIMESTAMP_COLUMN ); }
 
 protected:
     virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
 private:
-
-    bool _isProjectFile;
+    bool m_isProjectFile;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,7 +95,7 @@ bool MyFileTreeViewItem::setProjectFile( QString const & path, bool pf )
 {
     if ( this->path() == path )
     {
-        _isProjectFile = pf;
+        m_isProjectFile = pf;
         setVisible( listView()->shouldBeShown( this ) );
         repaint();
         return true;
@@ -121,9 +123,9 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
 {
     if ( listView()->showNonProjectFiles() && isProjectFile() )
     {
-        QFont font(p->font());
-        font.setBold(true);
-        p->setFont(font);
+        QFont font( p->font() );
+        font.setBold( true );
+        p->setFont( font );
     }
 
     QListViewItem::paintCell(p, cg, column, width, alignment);
@@ -155,12 +157,11 @@ class MyFileTreeBranch : public KFileTreeBranch
 public:
     MyFileTreeBranch( KFileTreeView* view, const KURL& url, const QString& name, const QPixmap& pix )
         : KFileTreeBranch( view, url, name, pix, false,
-            new MyFileTreeViewItem(
-                view, new KFileItem( url, "inode/directory", S_IFDIR  ), this ) )
+            new MyFileTreeViewItem( view, new KFileItem( url, "inode/directory", S_IFDIR ), this ) )
     {
     }
 
-    ~MyFileTreeBranch()
+    virtual ~MyFileTreeBranch()
     {
         if( root() )
             delete( root()->fileItem() );
@@ -187,7 +188,6 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 {
     setResizeMode(QListView::LastColumn);
     setSorting(0);
-    header()->hide();
     addColumn(QString::null);
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
@@ -208,7 +208,12 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
-    m_actionToggleShowVCSFields->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
+    m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
+    // Hide pattern for files
+    QString defaultHidePattern = "*.o,*.lo,CVS";
+    QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
+    m_hidePatterns = QStringList::split( ",", hidePattern );
+    slotToggleShowVCSFields();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,6 +223,7 @@ FileTreeWidget::~FileTreeWidget()
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/hidenonprojectfiles", !showNonProjectFiles() );
     DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
+    DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", hidePatterns() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -225,7 +231,7 @@ FileTreeWidget::~FileTreeWidget()
 void FileTreeWidget::openDirectory( const QString& dirName )
 {
     // if we're reloading
-    if ( m_rootBranch )
+    if (m_rootBranch)
     {
         removeBranch( m_rootBranch );
         m_projectFiles.clear();
@@ -233,12 +239,11 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 
     addProjectFiles( m_part->project()->allFiles(), true );
 
-    KURL url;
-    url.setPath( dirName );
+    KURL url = KURL::fromPathOrURL( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
 
     // this is a bit odd, but the order of these calls seems to be important
-    MyFileTreeBranch * b = new MyFileTreeBranch( this, url, url.prettyURL(), pix );
+    MyFileTreeBranch *b = new MyFileTreeBranch( this, url, url.prettyURL(), pix );
     b->setChildRecurse( false );
     m_rootBranch = addBranch( b );
     m_rootBranch->setOpen( true );
@@ -249,8 +254,8 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
     MyFileTreeViewItem * i = static_cast<MyFileTreeViewItem *>( item );
-    return( (showNonProjectFiles() || item->isDir() || i->isProjectFile() )
-             && !matchesHidePattern( item->text(0) ) );
+    return( (showNonProjectFiles() || i->isDir() || i->isProjectFile() )
+             && !matchesHidePattern( i->fileName() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -305,32 +310,23 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 {
     KPopupMenu popup(i18n("File Tree"), this);
 
-    if ( item == this->firstChild() ) // rootnode
+    if (item == this->firstChild()) // rootnode
     {
         popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
     }
 
     // Submenu for visualization options
-/*
-    KPopupMenu *subMenu = new KPopupMenu( &popup );
-    m_actionToggleShowVCSFields->plug( subMenu );
-    m_actionToggleShowNonProjectFiles->plug( subMenu );
-    popup.insertItem( i18n("View options"), subMenu );
-*/
     m_actionToggleShowVCSFields->plug( &popup );
     m_actionToggleShowNonProjectFiles->plug( &popup );
 
-    if( item != 0 )
+    if (item != 0)
     {
-//      KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
-//      FileContext context( ftitem->path(), ftitem->isDir() );
+        FileContext context( selectedPathUrls() );
 
-      FileContext context( selectedPathUrls() );
-
-      m_part->core()->fillContextMenu(&popup, &context);
+        m_part->core()->fillContextMenu( &popup, &context );
     }
 
-    popup.exec(p);
+    popup.exec( p );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -345,8 +341,8 @@ void FileTreeWidget::slotToggleShowNonProjectFiles()
 void FileTreeWidget::slotReloadTree()
 {
 //    m_isReloadingTree = true;
-    openDirectory( projectDirectory() );
     m_selectedItems.clear();
+    openDirectory( projectDirectory() );
 //    m_isReloadingTree = false;
 }
 
@@ -374,13 +370,13 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
         QString file = m_part->project()->projectDirectory() + "/" + ( *it );
-        if ( ! m_projectFiles.contains( file ) )
+        if ( !m_projectFiles.contains( file ) )
         {
             m_projectFiles.append( file );
 //            kdDebug(9017) << "file added: " << file << endl;
         }
 
-        if ( ! constructing )
+        if ( !constructing )
         {
             MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
             if( item )
@@ -429,8 +425,8 @@ void FileTreeWidget::slotSelectionChanged()
     {
         if (m_selectedItems.find( item ) != -1)
         {
-        kdDebug(9017) << "Warning: Item " << item->path() << " is already present. Skipping." << endl;
-        return;
+            kdDebug(9017) << "Warning: Item " << item->path() << " is already present. Skipping." << endl;
+            return;
         }
         m_selectedItems.append( item );
 
@@ -503,15 +499,15 @@ bool FileTreeWidget::showNonProjectFiles() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::applyFilters( const QStringList &filtersList )
+void FileTreeWidget::applyHidePatterns( const QString &hidePatterns )
 {
-    m_hidePatterns = filtersList;
-    slotReloadTree();
+    m_hidePatterns = QStringList::split( ",", hidePatterns );
+    hideOrShow();
 }
 
-const QStringList &FileTreeWidget::filters() const
+QString FileTreeWidget::hidePatterns() const
 {
-    return m_hidePatterns;
+    return m_hidePatterns.join( "," );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -524,9 +520,21 @@ void FileTreeWidget::slotToggleShowVCSFields()
     // TODO
     if (showVCSFields())
     {
+        setColumnText( 0, "Filename" ); // First column already added
+        addColumn( "Revision" );  // 1
+        addColumn( "Timestamp" );  // 2
+
+        header()->show();
+        triggerUpdate();
     }
     else
     {
+        header()->hide();
+        setColumnText(0, QString::null ); // First column already added
+        removeColumn( 2 );  // Timestamp (yeah, it seems that column to to be removed in a stack-like manner :-/)
+        removeColumn( 1 );  // Revision
+
+        triggerUpdate();
     }
 }
 
