@@ -39,7 +39,7 @@ public:
   void showDocument(const KURL &url, const QString &context = QString::null);
   KParts::Part* findOpenDocument(const KURL& url);
 
-  bool closeDocuments(const QStringList &list);
+  bool closeAllWindows();
   virtual bool closePartForWidget( const QWidget* widget );
 
   static void createInstance(QWidget *parent);
@@ -67,6 +67,9 @@ public slots:
   void slotCloseAllButPartForWidget(QWidget *widget);
   void slotActivePartChanged( KParts::Part* part );
   void slotCloseAllWindows();
+
+signals:
+	void partURLChanged( KParts::ReadOnlyPart * );
 
 protected:
 
@@ -111,6 +114,8 @@ private:
 
   void setupActions();
 
+  bool closeWindows( KURL::List const & ignoreList );
+  
   void closeActivePart();
   bool closePart(KParts::Part *part);
 
@@ -125,7 +130,10 @@ private:
   void editText(const KURL &url, int num);
 
   // returns a list of modified documents
-  QStringList getModifiedDocuments( KParts::Part* excludeMe = 0 );
+  KURL::List modifiedDocuments();
+  void clearModified( KURL::List const & filelist );
+  void saveFiles( KURL::List const & filelist );
+  
   void revertFile(KParts::Part *part);
   void saveFile(KParts::Part *part);
 

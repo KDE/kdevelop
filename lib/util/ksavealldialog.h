@@ -14,6 +14,31 @@
 
 #include <qstringlist.h>
 #include <kdialogbase.h>
+#include <kurl.h>
+
+class KListView;
+
+class KSaveSelectDialog : public KDialogBase
+{
+	Q_OBJECT
+	
+public:
+	KSaveSelectDialog( KURL::List const & filelist, KURL::List const & ignorelist, QWidget * parent );
+	virtual ~KSaveSelectDialog();
+	
+	KURL::List filesToSave();
+	KURL::List filesNotToSave();
+	
+private slots:
+	void saveNone();
+	void save();
+	void cancel();
+	
+private:
+	KListView * _listview;
+
+};
+
 
 class KSaveAllDialog : public KDialogBase
 {

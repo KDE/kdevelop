@@ -323,10 +323,9 @@ bool ProjectManager::closeProject()
     }
     m_pProjectSession->saveToFile(m_info->sessionFile(), allParts);
   }
-  
-  if( !closeProjectSources() )
+  if ( !PartController::getInstance()->closeAllWindows() )
     return false;
-
+  
   Core::getInstance()->doEmitProjectClosed();
 
   TopLevel::getInstance()->prepareToCloseViews();
@@ -675,20 +674,6 @@ bool ProjectManager::checkNewService(const KService::Ptr &service)
 
   m_info->m_loadParts << service->name();
   return true;
-}
-
-bool ProjectManager::closeProjectSources()
-{
-	QStringList sources = API::getInstance()->project()->allFiles();
-	QStringList::iterator it;
-
-	for ( it = sources.begin(); it != sources.end(); ++it )
-	{
-		( *it ).prepend ( "/" );
-		( *it ).prepend ( API::getInstance()->project()->projectDirectory() );
-	}
-
-	return PartController::getInstance()->closeDocuments(sources);
 }
 
 KURL ProjectManager::projectFile() const

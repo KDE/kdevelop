@@ -11,13 +11,125 @@
 
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <klistbox.h>
+#include <klistview.h>
 #include <kstdguiitem.h>
 
 #include "ksavealldialog.h"
+
+namespace
+{
+
+class CheckURL : public QCheckListItem
+{
+public:
+	CheckURL( QListView * lv, KURL const & url )
+		: QCheckListItem( lv, url.path(), QCheckListItem::CheckBox),
+		_url( url )
+	{}
+
+	KURL const & url() const { return _url; }
+
+private:
+    KURL _url;
+};
+
+}
+
+
+KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List const & ignorelist, QWidget * parent ) :
+  KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
+	       Ok | User1 | Close )
+{
+  QVBox *top = makeVBoxMainWidget();
+
+  (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
+
+	_listview = new KListView( top );
+	_listview->addColumn( "" );
+	_listview->header()->hide();
+	_listview->setResizeMode( QListView::LastColumn );
+
+	setButtonOKText( i18n("Save &All"), i18n("Saves all modified files") );
+	setButtonText( User1, i18n("Save &None") );
+	setButtonText( Close, KStdGuiItem::cancel().text() );
+	setButtonTip( User1, i18n("Lose all modifications") );
+	setButtonTip( Close, i18n("Cancels the action") );
+	
+	KURL::List::ConstIterator it = filelist.begin();
+	while ( it != filelist.end() )
+	{
+		if ( !ignorelist.contains( *it ) )
+		{
+			QCheckListItem * x = new CheckURL( _listview, *it );
+			x->setOn( true );
+		}
+		++it;
+	}
+
+	connect( this, SIGNAL(closeClicked()), this, SLOT(cancel()) );
+	connect( this, SIGNAL(okClicked()), this, SLOT(save()) );
+	connect( this, SIGNAL(user1Clicked()), this, SLOT(saveNone()) );
+}
+
+KSaveSelectDialog::~KSaveSelectDialog() {}
+
+void KSaveSelectDialog::saveNone( )
+{
+	// deselect all
+	CheckURL * item = static_cast<CheckURL*>( _listview->firstChild() );
+	while ( item )
+	{
+		item->setOn( false );
+		item = static_cast<CheckURL*>( item->nextSibling() );
+	}
+
+	QDialog::accept();
+}
+
+void KSaveSelectDialog::save( )
+{
+	QDialog::accept();
+}
+
+void KSaveSelectDialog::cancel( )
+{
+	QDialog::reject();
+}
+
+KURL::List KSaveSelectDialog::filesToSave( )
+{
+	KURL::List filelist;
+	CheckURL const * item = static_cast<CheckURL*>( _listview->firstChild() );
+	while ( item )
+	{
+		if ( item->isOn() )
+		{
+			filelist << item->url();
+		}
+		item = static_cast<CheckURL*>( item->nextSibling() );
+	}
+	return filelist;
+}
+
+KURL::List KSaveSelectDialog::filesNotToSave( )
+{
+	KURL::List filelist;
+	CheckURL const * item = static_cast<CheckURL*>( _listview->firstChild() );
+	while ( item )
+	{
+		if ( ! item->isOn() )
+		{
+			filelist << item->url();
+		}
+		item = static_cast<CheckURL*>( item->nextSibling() );
+	}
+	return filelist;
+}
 
 
 KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) :

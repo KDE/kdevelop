@@ -60,7 +60,6 @@ private:
 
   void setupActions();
   void getGeneralInfo();
-  bool closeProjectSources();
   bool checkNewService(const KService::Ptr &service);
 
   bool loadProjectFile();

@@ -246,8 +246,12 @@ bool DocumentationPart::openURL(const KURL &url)
 {
   QString path = resolveEnvVarsInURL(url.url());
   KURL newUrl(path);
-  emit fileNameChanged(newUrl);
-  return KHTMLPart::openURL(newUrl);
+  
+  bool retval = KHTMLPart::openURL(newUrl);
+  if ( retval )
+    emit fileNameChanged();
+
+  return retval;
 }
 
 void DocumentationPart::openURLRequest(const KURL &url)

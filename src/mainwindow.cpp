@@ -288,6 +288,9 @@ void MainWindow::init()
           this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
 
   connect(this,SIGNAL(viewActivated(KMdiChildView*)),this,SLOT(slotViewActivated(KMdiChildView*)));
+  
+  connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), 
+    this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )) );
 
   if (!isFakingSDIApplication()) {
     QPopupMenu *menu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
@@ -416,6 +419,19 @@ KMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
 
   return pMDICover;
 }
+
+
+void MainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
+{
+	if ( !ro_part || !ro_part->widget() ) return;
+	
+	KMdiChildView * child = m_widgetMap[ ro_part->widget() ];
+	if ( child )
+	{
+		child->setMDICaption( ro_part->url().fileName() );
+	}
+}
+
 
 void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QString& fullName)
 {
