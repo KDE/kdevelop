@@ -4,4 +4,4 @@ debian/tmp/usr/lib/libkdevelop.so.*
 debian/tmp/usr/lib/libkdevelopqextmdi.so.*
 debian/tmp/usr/lib/libkdevcatalog.so.*
 debian/tmp/usr/lib/libkdevcppparser.so.*
-debian/tmp/usr/lib/gideon
+debian/tmp/usr/share/gideon

@@ -69,7 +69,9 @@ configure-stamp:
 
 	# make build directory
 
-	./configure $(configkdevelop) $(JAVA_FLAGS) --disable-final
+	./configure $(configkdevelop) --prefix=$(kde_prefix) \
+		--sysconfdir=$(kde_confdir) \
+		$(JAVA_FLAGS) --disable-final
 
 	touch configure-stamp
 
@@ -124,8 +126,8 @@ install: build
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
-	-install -d $(CURDIR)/debian/tmp/usr/lib/gideon
-	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/lib/gideon
+	-install -d $(CURDIR)/debian/tmp/usr/share/gideon
+	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/share/gideon
 
 	dh_install --list-missing
 

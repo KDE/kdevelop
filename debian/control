@@ -22,7 +22,7 @@ Description: An IDE for Unix/X11 - development version
 Package: gideon-doc
 Section: doc
 Architecture: all
-Suggests: qt-doc, python2.2-doc, glib-reference, gtk-reference, gnome-dev-doc
+Suggests: qt-doc, python2.2-doc, glib-reference, gtk-reference, gnome-dev-doc, stl-manual
 Description: An IDE for Unix/X11 - documentation
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 

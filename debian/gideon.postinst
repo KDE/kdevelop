@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 
-test -f "/usr/lib/gideon/update_doc_index.sh" && "/usr/lib/gideon/update_doc_index.sh" > /dev/null 2>&1 &
+test -f "/usr/share/gideon/update_doc_index.sh" && "/usr/share/gideon/update_doc_index.sh" > /dev/null 2>&1 &
 

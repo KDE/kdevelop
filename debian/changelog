@@ -1,3 +1,28 @@
+gideon (1:2.999-0cvs20030514) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the prefix to debian/rules and debian/buld-gideon
+  * Added stl-manual to the suggests field for gideon-doc
+  * Fixed up the path to the kdevelop manual
+
+ -- Norman Jordan <njordan@debian.org>  Wed, 14 May 2003 02:47:32 -0700
+
+gideon (1:2.999-0cvs20030511) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the documentation files to the gideon-doc package
+  * Added the antlr header files to the gideon-dev package
+
+ -- Norman Jordan <njordan@debian.org>  Sun, 11 May 2003 17:43:27 -0700
+
+gideon (1:2.999-0cvs20030507) unstable; urgency=low
+
+  * Updated CVS sources
+  * Fixed up the configure options for the file "debian/build-gideon"
+  * Moved the script update_doc_index.sh to /usr/share/gideon
+
+ -- Norman Jordan <njordan@debian.org>  Wed,  7 May 2003 11:42:59 -0700
+
 gideon (1:2.999-0cvs20030502) unstable; urgency=low
 
   * Updated CVS sources
