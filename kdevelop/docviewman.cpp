@@ -674,6 +674,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView)
 
   // cover it by a QextMDI childview and add that MDI system
   QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
+  pMDICover->setIcon(kapp->miniIcon());
   m_MDICoverList.append( pMDICover);
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   pNewView->reparent( pMDICover, QPoint(0,0));
