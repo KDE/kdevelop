@@ -42,9 +42,17 @@ public:
   /** start the rpm build process */
   bool startBuild();
   /** allow kdevelop to set up the kpp dialog **/
-  void setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc);
+  void setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc, QString rev, QString license, QString URL, QString appGroup, QString bldPfx, QString info, QString icon);
   /** set the project root so we can find things **/
   void setProjectRoot(QString path);
+
+	QString getAppGroup();
+	QString getBuildRoot();
+	QString getIcon();
+	QString getLicense();
+	QString getVersion();
+	QString getSummary();
+	QString getURL();
 
 private: // Private methods
   /** Update the spec object to the current data in the dialog */

@@ -294,7 +294,7 @@ void Kpp::rpmBuildSlot(){
 	startBuild();
 }
 
-void Kpp::setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc){
+void Kpp::setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc, QString rev, QString license, QString url, QString appGroup, QString bldPfx, QString info, QString icon){
  currentProject->importProject(appName, appVer, appAuth, appEmail, configOpts,appDesc);
         cout << "Project Name: " << currentProject->getProjectName() << endl;
         cout << "Author: " << currentProject->getAuthor() << endl;
@@ -307,6 +307,12 @@ void Kpp::setProjectData(QString appName, QString appVer, QString appAuth, QStri
         QLineEdit_9->setText(currentProject->getAuthor());
         QLineEdit_2->setText(currentProject->getVersion());
         QLineEdit_5->setText(currentProject->getConfig());
+				QLineEdit_3->setText(rev);
+				QLineEdit_8->setText(url);
+				QLineEdit_6->setText(appGroup);
+				QLineEdit_11->setText(bldPfx);
+				QLineEdit_10->setText(info);
+				QComboBox_1->setCurrentItem(license.toInt());
         updateSpec();
 }
 
@@ -314,4 +320,26 @@ void Kpp::setProjectRoot(QString path)
 {
         qsRPMBaseDir = path;
         cerr << "we are going to try " << path << endl;
+}
+
+QString Kpp::getAppGroup(){
+	return  QLineEdit_6->text();
+}
+QString Kpp::getBuildRoot(){
+  return  QLineEdit_11->text();
+}
+QString Kpp::getIcon(){
+  return "0";
+}
+QString Kpp::getLicense(){
+  return QString::number(QComboBox_1->currentItem());
+}
+QString Kpp::getVersion(){
+	return QLineEdit_2->text();
+}
+QString Kpp::getSummary(){
+  return  QLineEdit_10->text();
+}
+QString Kpp::getURL(){
+  return QLineEdit_8->text();
 }

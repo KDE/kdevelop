@@ -1153,7 +1153,14 @@ void CKDevelop::slotProjectMakeDistRPM(){
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
-                                "blah blah blah who in the heck made this a strlist and not a stringlist?");
+                                "blah blah blah who in the heck made this a strlist and not a stringlist?",
+																prj->getKPPRPMVersion(),
+																prj->getKPPLicenceType(),
+																prj->getKPPURL(),
+																prj->getKPPAppGroup(),
+																prj->getKPPBuildRoot(),
+																prj->getKPPSummary(),
+																prj->getKPPIcon());
 //(prj->getShortInfo()).join(',')
 // rpmbuilder->show();
 	rpmbuilder->startBuild();
@@ -1175,14 +1182,36 @@ void CKDevelop::slotConfigMakeDistRPM()
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
-                                "blah blah blah who in the heck made this a strlist and not a stringlist?");
+                                "blah blah blah who in the heck made this a strlist and not a stringlist?",
+																prj->getKPPRPMVersion(),
+																prj->getKPPLicenceType(),
+																prj->getKPPURL(),
+																prj->getKPPAppGroup(),
+																prj->getKPPBuildRoot(),
+																prj->getKPPSummary(),
+																prj->getKPPIcon());
+																	
  //(prj->getShortInfo()).join(',')
  rpmbuilder->show();
 }
 
 void CKDevelop::slotAddSpec(QString path)
 {
-        cerr << "I need to add " << path << " to the project..." << endl;
+
+		QString namelow = (prj->getProjectName()).lower();
+		QStrList myList;
+		prj->getAllFiles(myList);
+		if(myList.contains(namelow+".spec"))
+		{
+				cerr << "I need to add " << path << " to the project..." << endl;
+        TFileInfo fileInfo;
+        fileInfo.rel_name = namelow + ".spec";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = false;
+        fileInfo.install_location = "";
+        prj->addFileToProject (namelow + ".spec",fileInfo);
+		}
 }
 void CKDevelop::slotGetRPMBuildSTDOUT(QString sstdout){
         cerr << sstdout << endl;
@@ -1198,6 +1227,15 @@ void CKDevelop::slotdoneWithKpp(){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("RPMS Finished"));
   beep = true;
+	//save prefs here
+	prj->setKPPAppGroup(rpmbuilder->getAppGroup());
+	prj->setKPPBuildRoot(rpmbuilder->getBuildRoot());
+	prj->setKPPIcon(rpmbuilder->getIcon());
+	prj->setKPPLicenceType(rpmbuilder->getLicense());
+	prj->setKPPRPMVersion(rpmbuilder->getVersion());
+	prj->setKPPSummary(rpmbuilder->getSummary());
+	prj->setKPPURL(rpmbuilder->getURL());
+
  delete rpmbuilder;
 }
 
