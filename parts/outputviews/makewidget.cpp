@@ -20,6 +20,7 @@
 #include <knotifyclient.h>
 #include <kprocess.h>
 #include <kregexp.h>
+#include <kstatusbar.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
@@ -31,12 +32,13 @@
 class MakeItem
 {
 public:
-    MakeItem(int pg, const QString fn, int ln)
-        : parag(pg), fileName(fn), lineNum(ln)
+    MakeItem(int pg, const QString fn, int ln, const QString tx)
+        : parag(pg), fileName(fn), lineNum(ln), text(tx)
     {}
     int parag;
     QString fileName;
     int lineNum;
+    QString text;
 };
 
 
@@ -140,6 +142,8 @@ void MakeWidget::nextError()
             setCursorPosition(parag, 0);
             ensureCursorVisible();
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
+            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
+            m_part->topLevel()->lowerView(this);
             return;
         }
     
@@ -165,6 +169,8 @@ void MakeWidget::prevError()
             setCursorPosition(parag, 0);
             ensureCursorVisible();
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
+            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
+            m_part->topLevel()->lowerView(this);
             return;
         }
             
@@ -196,8 +202,11 @@ void MakeWidget::searchItem(int parag)
 {
     QListIterator<MakeItem> it(items);
     for (; it.current(); ++it) {
-        if ((*it)->parag == parag)
+        if ((*it)->parag == parag) {
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
+            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
+            m_part->topLevel()->lowerView(this);
+        }
         if ((*it)->parag >= parag)
             return;
     }
@@ -372,15 +381,18 @@ bool MakeWidget::matchLeaveDir( const QString& line, QString& dir )
 void MakeWidget::insertLine1(const QString &line, Type type)
 {
     // KRegExp has ERE syntax
-    KRegExp errorGccRx("([^: \t]+):([0-9]+):.*");
-    KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):.*");
-    KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:.*");
+    KRegExp errorGccRx("([^: \t]+):([0-9]+):(.*)");
+    KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)");
+    KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
     const int errorGccFileGroup = 1;
     const int errorGccRowGroup = 2;
+    const int errorGccTextGroup = 3;
     const int errorFtnchekFileGroup = 1;
     const int errorFtnchekRowGroup = 2;
+    const int errorFrnchekTextGroup = 3;
     const int errorJadeFileGroup = 1;
     const int errorJadeRowGroup = 2;
+    const int errorJadeTextGroup = 3;
 
     QString eDir;
     if (matchEnterDir(line, eDir)) {
@@ -404,29 +416,33 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     
     QString fn;
     int row = -1;
+    QString text;
     
     bool hasmatch = false;
     if (errorGccRx.match(line)) {
         hasmatch = true;
         fn = errorGccRx.group(errorGccFileGroup);
         row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
+        text = QString(errorGccRx.group(errorGccTextGroup));
     } else if (errorFtnchekRx.match(line)) {
         kdDebug() << "Matching " << line << endl;
         hasmatch = true;
         fn = errorFtnchekRx.group(errorFtnchekFileGroup);
         row = QString(errorFtnchekRx.group(errorFtnchekRowGroup)).toInt()-1;
+        text = QString(errorFtnchekRx.group(errorFrnchekTextGroup));
     } else if (errorJadeRx.match(line)) {
         hasmatch = true;
         fn = errorGccRx.group(errorJadeFileGroup);
         row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
+        text = QString(errorJadeRx.group(errorJadeTextGroup));
     }
     
     if (hasmatch) {
-        kdDebug(9004) << "Error in " << fn << " " << row << endl;
+        kdDebug(9004) << "Error in " << fn << " " << row << ": " << text << endl;
         if (dirstack.top())
             fn.prepend("/").prepend(*dirstack.top());
         kdDebug(9004) << "Path: " << fn << endl;
-        items.append(new MakeItem(parags, fn, row));
+        items.append(new MakeItem(parags, fn, row, text));
         insertLine2(line, Error);
     } else {
         insertLine2(line, type);
