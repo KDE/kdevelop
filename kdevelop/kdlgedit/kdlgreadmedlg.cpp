@@ -29,7 +29,7 @@
 KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
  : QDialog(parent, "readmedlg", TRUE)
 {
-  setBackgroundPixmap(QPixmap(KApplication::kde_datadir() + "/kdevelop/pics/dlg_firstrun.gif"));
+  setBackgroundPixmap(QPixmap(KApplication::kde_datadir() + "/kdevelop/pics/dlg_firstrun.bmp"));
 
   setFixedSize(460,360);
 

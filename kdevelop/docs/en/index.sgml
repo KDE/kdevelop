@@ -1,11 +1,13 @@
 <!doctype linuxdoc system>
 <article>
 <title>The User Manual to KDevelop
-<author>Ralf Nolden &lt;<tt/Ralf.Nolden@post.rwth-aachen.de/&gt;, The KDevelop Team
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
 
 <date>Version 2.0 , Apr 11,1999
 <abstract>
-The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0
+The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0. This handbook itself is part of
+the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
+id="Copyright" name="Copyright"> for more information.
 </abstract>
 <toc>
 
@@ -3183,7 +3185,7 @@ and idealism of many, the KDevelop IDE would never have been realized in such a 
 users already have reported good experience and brought KDevelop to it's destiny: helping free software programmers to build a
 better world where users have the freedom of choice.
 
-<sect>Copyright
+<sect>Copyright <label id="Copyright">
 <p>
 <tscreen><verb>
 
@@ -3205,6 +3207,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
+
+
 
 
 

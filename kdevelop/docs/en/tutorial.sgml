@@ -1,11 +1,15 @@
 <!doctype linuxdoc system>
 <article>
 <title>The KDevelop Programming Handbook
-<author>Ralf Nolden &lt;<tt/Ralf.Nolden@post.rwth-aachen.de/&gt;, The KDevelop Team
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
+
 <date>Version 2.0 , Mon May 3 17:02:49 CEST 1999
 
 <abstract>
-The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0.
+The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0. This handbook itself is part of the
+KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
+id="Copyright" name="Copyright"> for more information.
+
 </abstract>
 
 <toc>
@@ -1871,27 +1875,100 @@ mouse release.
 
 <sect2>KColorButton<label id="KColorButton">
 <p>
+
+Inherits <ref id="QPushButton" name="QPushButton">
+
+<itemize>
+<item>General
+	<itemize>
+	<item>DisplayedColor (setColor()) the displayed color on the button
+	</itemize>
+</itemize>
+
 <sect2>KKeyButton<label id="KKeyButton">
 <p>
+
 <sect2>KCombo<label id="KCombo">
 <p>
+
+Inherits: <ref id="QComboBox" name="QComboBox">
+
+
+<itemize>
+<item>General
+	<itemize>
+	<item>Entries
+	<item>Text
+	<item>isAutoResize
+	</itemize>
+</itemize>
+
 <sect2>KDatePicker<label id="KDatePicker">
 <p>
+
+<itemize>
+<item>Appearance
+	<itemize>
+	<item>FontSize
+	</itemize>
+</itemize>
+	
 <sect2>KLedLamp<label id="KLedLamp">
 <p>
+
 <sect2>KProgress<label id="KProgress">
 <p>
+
 <sect2>KSeparator<label id="KSeparator">
 <p>
+<itemize>
+<item>General
+	<itemize>
+	<item>Orientation
+	</itemize>
+</itemize>
+
 <sect2>KDateTable<label id="KDateTable">
 <p>
+
 <sect2>KTreeList<label id="KTreeList">
 <p>
+
+<itemize>
+<item>Appearance
+	<itemize>
+	<item>TreeListBgColor
+	<item>TreeListPalette
+	<item>isBottomScrollbar
+	<item>isScrollBar
+	<item>isShowItemText
+	<item>isSmoothScrolling
+	<item>isTreeDrawing
+	</itemize>
+<item>General
+	<itemize>
+	<item>Entries
+	<item>isAutoUpdate
+	</itemize>
+</itemize>
+
+
+
 <sect2>KRestrictedLine<label id="KRestrictedLine">
 <p>
 <sect2>KLed<label id="KLed">
 <p>
 
+Inherits <ref id="QWidget" name="QWidget">
+
+<itemize>
+<item>Appearance
+	<itemize>
+	<item>LedColor: (setColor()) sets the displayed LED color
+	</itemize>
+</itemize>
+	
+	
 <sect1>Constructing a new Dialog
 <p>
 <sect1>Setting Widget Properties
@@ -1914,6 +1991,7 @@ mouse release.
 
 <sect1>Adding Quickhelp
 <p>
+
 <sect1>The "What's This ? Button"
 <p>
 
@@ -1952,168 +2030,6 @@ mouse release.
 <sect1>Translations with KTranslator
 <p>
 
-<sect>KDE Standards
-<p>
-<sect1>File System Standard
-<p>
-During the development of the K Desktop Environment, a major question was where to install KDE and it's files. Aware of the fact, that
-KDE offers a good way to design more and more user-friendly applications, this had to be solved and thereby the KDE File System
-Standard was created. It relies on the thought that KDE and all KDE compliang applications should use this standard to enable a
-consistant directory structure on the end-user machine, therfore certain files have specific destinations to integrate with the KDE and
-can be found by the KDE API, which offers methods to access the KDE file system.
-
-As for now, the following describes version 0.0.4 of this standard. Actual documentation can be found on <htmlurl
-url="http://www.kde.org" name="http://www.kde.org">.
-
-KDE is usually installed in '/opt/kde', therefore all application files that are going to be installed are placed in one of the
-subdirectories. The application itself can access this directory by <tt/kapp->kdedir()/, certain subdirectories can acessed as well by
-according methods documented in the <tt/KApplication/ class.
-
-<itemize>
-<item>kdedir()/
-	<itemize>
-	<item>bin/  Application binaries directory
-	<item>lib/ standard kde libraries (libkdecore etc.)
-		<itemize>
-		<item>&lt;appname&gt;/ Application specific data that is platform dependent
-		</itemize>
-	<item>include/ standard kde header files
-	<item>parts/
-	<item>cgi-bin/ CGI programs for kdehelp
-	<item>share/
-		<itemize>
-		<item>doc/
-			<itemize>
-			<item>HTML/ HTML documentation directory
-				<itemize>
-				<item>default --> Link to kdedir()/share/doc/HTML/en
-				<item>&lt;lang&gt;/ language of the documentation set, e.g en for english, de for german
-					<itemize>
-					<item>&lt;appname&gt;/
-						<itemize>
-						<item>index.html  - the start page loaded by KDEHelp, usually the table of contents page
-						<item>other application help files, e.g. index-1.html, index-2.html (generated from the index.sgml file)
-						</itemize>	
-					</itemize>
-				</itemize>
-			</itemize>	
-		<item>config/
-		<item>applnk/
-			<itemize>
-			<item>System/
-			<item>Utilities/
-			<item>Applications/
-			<item>Games/
-			<item>kfind.kdelnk
-			<item>khelp.kdelnk
-			<item>khome.kdelnk
-			<item>krefresh.kdelnk
-			</itemize>
-		<item>mimelnk/
-			<itemize>
-			<item>magic
-			<item>text/
-			<item>audio/
-			</itemize>
-		<item>partlnk/
-			<itemize>	
-			<item>&lt;partname&gt;.kdelnk
-			</itemize>
-		<item>icons/ Icons used in kdelnk files
-			<itemize>
-			<item>&lt;appname&gt;.xpm
-			<item>mini/ Mini Icons for kpanel
-			</itemize>
-		<item>toolbar/ Standard toolbar pixmaps (eg. fileopen.xpm)
-		<item>wallpapers/ Wallpapers used by kdisplay
-		<item>apps/	
-			<itemize>
-			<item>&lt;appname&gt;/
-				<itemize>
-				<item>toolbar/ Toolbar pixmaps
-				<item>pics/ Other application pixmaps
-				<item>application specific data (must be platform independent)
-				</itemize>
-			<item>&lt;libname&gt;/
-				<itemize>
-				<item>pics/
-				<item>locale/
-					<itemize>
-					<item>&lt;lang&gt;/
-						<itemize>
-						<item>LC_MESSAGES/
-							<itemize>
-							<item>&lt;appname&gt;.mo
-							</itemize>
-						</itemize>
-					</itemize>
-				</itemize>			
-			</itemize>	
-		</itemize>
-	</itemize>
-</itemize>
-							
-
-<sect1>Keybinding Standards
-<p>
-<sect1>Icon Standards
-<p>
-<sect1>Configuration Standards
-<p>
-<sect1>Session Management
-<p>
-<sect1>Installing KDE Applications
-<p>
-During the last sections, we reviewed the KDE Standards as for version 1.1.x. When developing a KDE-compliant application, you also
-have to take care where your files will go on the end-user's machine. KDevelop makes it very easy to define the destination by setting
-file properties for each project file. To access the file properties, choose "Project"->"File-Properties", which shows all files
-included in the current project. Select the file you want to install and check "Install". This will enable you to enter the destination
-directory in the edit line below the checkbox. Now, as we don't want to hard-code any paths in our project because we cannot assure
-that KDE is installed in /opt/kde, we have to use Makefile macros for destination directories. On checking "Install", the edit line
-already contains the filename. Then you have to insert the destination directory by one of the following macros plus an eventual
-subdirectory. The <tt/configure/ script will expand the macros on the end-user's machine to the full path, therefore we only have to
-watch the correct macros. Mind that you are responsible to set these !
-
-The supported macros are:
-<itemize>
-<item>&dollar;(kde_bindir)  expands to: <bf>kdedir()/bin/</bf> Application binary file (required)
-<item>&dollar;(kde_appsdir)	expands to: <bf>kdedir()/share/applnk/</bf> Application kdelnk file (required)
-<item>&dollar;(kde_icondir) expands to: <bf>kdedir()/share/icons/&lt;appname&gt;.xpm</bf>Application icon (required)
-<item>&dollar;(kde_htmldir) expands to: <bf>kdedir()/share/doc/default/HTML/</bf> HTML documentation directory. You have
-to append <bf>/en/&lt;yourfile&gt;.html</bf>
-<item>&dollar;(kde_minidir) expands to: <bf>kdedir()/share/icons/mini/ </bf> Application mini icon.
-<item>&dollar;(kde_datadir) expands to: <bf>kdedir()/share/apps/</bf>     Application data. (Use a subdirectory)
-<item>&dollar;(kde_locale   expands to: <bf>kdedir()/share/locale/</bf>    Application translation files should go to.(contains lang
-subdirs for the languages)
-<item>&dollar;(kde_cgidir)        Where cgi-bin executables should go to.
-<item>&dollar;(kde_confdir)       Where config files should go to.
-<item>&dollar;(kde_mimedir)       Where mimetypes should go to.
-<item>&dollar;(kde_toolbardir)    Where general toolbar icons should go to.
-<item>&dollar;(kde_wallpaperdir)  Where general wallpapers should go to.
-<item>&dollar;(kde_partsdir)
-<item>&dollar;(kde_sounddir)
-</itemize>
-
-What does this
-mean to application developers? A standard KDE application will install files into several places in the above structure. The only
-required items are the application binary, the application kdelnk file, the application icon and the application help files - all
-others are optional. The most common things that are installed are:
-
-<code>
-Type of file                                    Location
-
-Application binary (required)                   kdedir()/bin/
-
-Application platform specific data              kdedir()/lib/&lt;appname&gt;/
-
-Application toolbar pixmaps                     kdedir()/share/apps/&lt;appname&gt;/toolbar/
-
-Application platform independent data           kdedir()/share/apps/&lt;appname&gt;
-
-Toolbar icons for library widgets.              kdedir()/share/apps/&lt;libname&gt;/toolbar/
-
-Any other bitmaps for library widgets.          kdedir()/share/apps/&lt;libname&gt;/pics/
-</code>
 
 <sect>Finding Errors
 <p>
@@ -2122,7 +2038,7 @@ Any other bitmaps for library widgets.          kdedir()/share/apps/&lt;libname&
 <sect1>KDE Macros
 <p>
 
-<sect>Copyright
+<sect>Copyright<label id="Copyright">
 <p>
 <tscreen><verb>
 
@@ -2144,6 +2060,16 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
+
+
+
+
+
+
+
 
 
 
