@@ -38,33 +38,14 @@ void CodeModel::wipeout()
     m_globalNamespace = ns;
 }
 
-#if QT_VERSION < 0x030005
-template<class Key, class T>
-QValueList<T> QMap_values (QMap<Key, T> tcQMap) {
-    QValueList<T> values;
-    QMap<Key, T>::Iterator it;
-    for (it=tcQMap.begin(); it!=tcQMap.end(); ++it)
-      { values.append(*it); }
-    return values;
-}
-#endif
-
 FileList CodeModel::fileList( )
 {
-#if QT_VERSION >= 0x030005
     return m_files.values();
-#else
-    return QMap_values<QString, FileDom>(m_files);
-#endif
 }
 
 const FileList CodeModel::fileList( ) const
 {
-#if QT_VERSION >= 0x030005
     return m_files.values();
-#else
-    return QMap_values<QString, FileDom>(m_files);
-#endif
 }
 
 bool CodeModel::hasFile( const QString & name ) const
@@ -302,20 +283,12 @@ NamespaceModel::NamespaceModel( CodeModel* model )
 
 NamespaceList NamespaceModel::namespaceList( )
 {
-#if QT_VERSION >= 0x030005
     return m_namespaces.values();
-#else
-    return QMap_values<QString, NamespaceDom> (m_namespaces);
-#endif
 }
 
 const NamespaceList NamespaceModel::namespaceList( ) const
 {
-#if QT_VERSION >= 0x030005
     return m_namespaces.values();
-#else
-    return QMap_values<QString, NamespaceDom> (m_namespaces);
-#endif
 }
 
 NamespaceDom NamespaceModel::namespaceByName( const QString & name )
@@ -545,20 +518,12 @@ void ClassModel::removeFunctionDefinition( FunctionDefinitionDom fun )
 
 VariableList ClassModel::variableList( )
 {
-#if QT_VERSION >= 0x030005
     return m_variables.values();
-#else
-    return QMap_values<QString, VariableDom> (m_variables);
-#endif
 }
 
 const VariableList ClassModel::variableList( ) const
 {
-#if QT_VERSION >= 0x030005
     return m_variables.values();
-#else
-    return QMap_values<QString, VariableDom> (m_variables);
-#endif
 }
 
 VariableDom ClassModel::variableByName( const QString & name )
@@ -592,20 +557,12 @@ void ClassModel::removeVariable( VariableDom var )
 
 EnumList ClassModel::enumList( )
 {
-#if QT_VERSION >= 0x030005
     return m_enumerators.values();
-#else
-    return QMap_values<QString, EnumDom> (m_enumerators);
-#endif
 }
 
 const EnumList ClassModel::enumList( ) const
 {
-#if QT_VERSION >= 0x030005
     return m_enumerators.values();
-#else
-    return QMap_values<QString, EnumDom> (m_enumerators);
-#endif
 }
 
 EnumDom ClassModel::enumByName( const QString & name )
@@ -1151,20 +1108,12 @@ void EnumModel::setAccess( int access )
 
 EnumeratorList EnumModel::enumeratorList( )
 {
-#if QT_VERSION >= 0x030005
     return m_enumerators.values();
-#else
-    return QMap_values<QString, EnumeratorDom> (m_enumerators);
-#endif
 }
 
 const EnumeratorList EnumModel::enumeratorList( ) const
 {
-#if QT_VERSION >= 0x030005
     return m_enumerators.values();
-#else
-    return QMap_values<QString, EnumeratorDom> (m_enumerators);
-#endif
 }
 
 void EnumModel::addEnumerator( EnumeratorDom enumerator )
