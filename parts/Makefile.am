@@ -12,7 +12,7 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cvs perforce antproject diff valgrind \
 	  debugger distpart konsole astyle tools ctags regexptest doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
-	  uimode editor-chooser openwith history \
+	  uimode editor-chooser openwith history filecreate \
           texttools buglist javasupport javadebugger valgrind \
           $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
 
