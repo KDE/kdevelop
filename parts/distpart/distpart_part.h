@@ -15,7 +15,6 @@
 
 class DistpartDialog;
 
-
 class DistpartPart : public KDevPlugin {
     Q_OBJECT
 
@@ -24,6 +23,8 @@ public:
     DistpartPart(QObject *parent, const char *name, const QStringList &);
     ~DistpartPart();
 
+    DistpartDialog * getDlg();
+    
 public slots:
     void show();
     void hide();

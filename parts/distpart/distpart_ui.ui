@@ -134,7 +134,7 @@
         </widget>
         <widget class="QTabWidget">
             <property name="name">
-                <cstring>OptionsWidget</cstring>
+                <cstring>actions_box</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -331,38 +331,6 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QPushButton" row="9" column="2">
-                        <property name="name">
-                            <cstring>srcPackagePushButton</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Build Source Package</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="10" column="2">
-                        <property name="name">
-                            <cstring>buildAllPushButton</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Build Source &amp;&amp; Binary Package</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="12" column="2">
-                        <property name="name">
-                            <cstring>importSPECPushButton</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Import RPM SPEC File</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="11" column="2">
-                        <property name="name">
-                            <cstring>exportSPECPushButton</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Generate RPM SPEC File</string>
-                        </property>
-                    </widget>
                     <widget class="QLineEdit" row="5" column="1">
                         <property name="name">
                             <cstring>summaryLineEdit</cstring>
@@ -635,12 +603,12 @@
                             <string>ChangeLog:</string>
                         </property>
                     </widget>
-                    <widget class="QMultiLineEdit" row="9" column="0" rowspan="4" colspan="1">
+                    <widget class="QMultiLineEdit" row="9" column="0">
                         <property name="name">
                             <cstring>projectDescriptionMultilineEdit</cstring>
                         </property>
                     </widget>
-                    <widget class="QMultiLineEdit" row="9" column="1" rowspan="4" colspan="1">
+                    <widget class="QMultiLineEdit" row="9" column="1">
                         <property name="name">
                             <cstring>projectChangelogMultilineEdit</cstring>
                         </property>

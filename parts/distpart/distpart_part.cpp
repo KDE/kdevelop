@@ -9,7 +9,7 @@
 #include "kdevcore.h"
 
 #include "distpart_widget.h"
-
+#include "specsupport.h"
 
 typedef KGenericFactory<DistpartPart> DistpartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );
@@ -30,24 +30,25 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
                                 "bork bork bork....."));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
-    m_dialog = 0;
-
+    m_dialog = new DistpartDialog(this);
+    
     // set up package
     //KURL projectURL;  // we need to get this from the base project
-    //thePackage = new packageBase();
+    thePackage = new SpecSupport(this);
     //thePackage->loadFile(projectURL);
 }
 
 
 DistpartPart::~DistpartPart() {
     delete m_dialog;
+    delete thePackage;
 }
 
+DistpartDialog* DistpartPart::getDlg() {
+    return m_dialog;
+}
 
 void DistpartPart::show() {
-    if (!m_dialog)
-        m_dialog = new DistpartDialog(this);
-
     m_dialog->show();
 }
 

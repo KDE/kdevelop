@@ -1,96 +1,85 @@
 #include "packagebase.h"
-packageBase::packageBase()
-{
-   m_AppName = "";
-   m_AppVersion = "";
-   m_AppRevision = "";
-   m_AppURL = "";
-   m_AppVendor = "";
-   m_AppLicense = "";
-   m_AppDescription = "";
-   m_AppFileList = "";
-}
-packageBase::~packageBase()
-{
-}
-bool packageBase::generatePackage(QString &/*error*/)
-{
-    return false;
-}
-bool packageBase::saveFile(KURL /*theFile*/)
-{
-}
-bool packageBase::loadFile(KURL /*theFile*/)
-{
-}
-void packageBase::setAppName(QString /*text*/)
-{
-}
-void packageBase::setAppVersion(QString /*text*/)
-{
-}
-void packageBase::setAppRevision(QString /*text*/)
-{
-}
-void packageBase::setAppGroup(QString /*text*/)
-{
-}
-void packageBase::setAppURL(QString /*text*/)
-{
-}
-void packageBase::setAppSummary(QString /*text*/)
-{
-}
-void packageBase::setAppVendor(QString /*text*/)
-{
-}
-void packageBase::setAppLicense(QString /*text*/)
-{
-}
-void packageBase::setAppDescription(QString /*text*/)
-{
-}
-void packageBase::setAppFileList(QStringList /*list*/)
-{
+#include "distpart_part.h"
+#include "distpart_widget.h"
+#include <qtabwidget.h>
+#include "kdevproject.h"
+
+packageBase::packageBase(DistpartPart * part, QString name) {
+    m_part = part;
+    dir = m_part->project()->projectDirectory();
+    m_dlg = m_part->getDlg();
+    box = new QVBox(m_dlg->plug_box);
+    m_dlg->plug_box->insertTab(box,name);
 }
 
-QString packageBase::getAppName()
-{
-    return QString::null;
+packageBase::~packageBase() {}
+
+QVBox * packageBase::area() {
+    return box;
 }
-QString packageBase::getAppVersion()
-{
-    return QString::null;
+
+bool packageBase::generatePackage(QString &error) {
+    return false;
 }
-QString packageBase::getAppRevision()
-{
-    return QString::null;
+
+bool packageBase::saveFile(KURL /*theFile*/) {}
+
+bool packageBase::loadFile(KURL /*theFile*/) {}
+
+
+QString packageBase::getAppName() {
+    return m_dlg->getappNameFormatLineEditText();
 }
-QString packageBase::getAppGroup()
-{
-    return QString::null;
+
+QString packageBase::getAppVersion() {
+    return m_dlg->getversionLineEditText();
 }
-QString packageBase::getAppURL()
-{
-    return QString::null;
+
+QString packageBase::getAppRevision() {
+    return m_dlg->getreleaseLineEditText();
 }
-QString packageBase::getAppSummary()
-{
-    return QString::null;
+
+QString packageBase::getAppGroup() {
+    return m_dlg->getgroupLineEditText();
 }
-QString packageBase::getAppVendor()
-{
-    return QString::null;
+
+QString packageBase::getAppPackager() {
+    return m_dlg->getpackagerLineEditText();
 }
-QString packageBase::getAppLicense()
-{
-    return QString::null;
+
+QString packageBase::getAppURL() {
+    return "";
 }
-QString packageBase::getAppDescription()
-{
-    return QString::null;
+
+QString packageBase::getAppSummary() {
+    return m_dlg->getsummaryLineEditText();
 }
-QStringList packageBase::getAppFileList()
-{
+
+QString packageBase::getAppVendor() {
+    return m_dlg->getvendorLineEditText();
+}
+
+QString packageBase::getAppLicense() {
+    return m_dlg->getlicenseLineEditText();
+}
+
+QString packageBase::getAppArch() {
+    return m_dlg->getarchComboBoxText();
+}
+
+QString packageBase::getAppDescription() {
+    return m_dlg->getprojectDescriptionMultilineEditText();
+}
+
+QString packageBase::getAppChangelog() {
+    return m_dlg->getprojectChangelogMultilineEditText();
+}
+
+QString packageBase::getAppSource() {
+    return (m_dlg->getappNameFormatLineEditText() + "-" + m_dlg->getversionLineEditText() +
+	    ((m_dlg->getcustomProjectCheckBoxState() && m_dlg->getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz"));
+}
+
+QStringList packageBase::getAppFileList() {
     return QStringList();
 }

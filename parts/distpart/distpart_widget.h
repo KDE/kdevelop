@@ -17,6 +17,7 @@ class KDevProject;
 class DistpartPart;
 class QUrlOperator;
 class KProcess;
+class QTabWidget;
 
 namespace KParts {
 class ReadOnlyPart;
@@ -31,6 +32,8 @@ public:
     DistpartDialog(DistpartPart *part);
     ~DistpartDialog();
 
+    QTabWidget * plug_box;
+    
 signals:
     void okay();
     void cancel();
@@ -53,6 +56,7 @@ signals:
 public slots:
     //    QPushButton* okayPushButton;
 
+
     void slotokayPushButtonPressed();
     //    QPushButton* cancelPushButton;
     void slotcancelPushButtonPressed();
@@ -62,14 +66,7 @@ public slots:
     void slotcreateSrcArchPushButtonPressed();
     //    QPushButton* resetSrcPushButton;
     void slotresetSrcPushButtonPressed();
-    //    QPushButton* buildAllPushButton;
-    void slotbuildAllPushButtonPressed();
-    //    QPushButton* exportSPECPushButton;
-    void slotexportSPECPushButtonPressed();
-    //    QPushButton* importSPECPushButton;
-    void slotimportPushButtonPressed();
-    //    QPushButton* srcPackagePushButton;
-    void slotsrcPackagePushButtonPressed();
+
     //    QPushButton* genHTMLPushButton;
     void slotgenHTMLPushButtonPressed();
     //    QPushButton* resetHTMLPushButton;
@@ -170,21 +167,14 @@ public:
 
     QString getprojectChangelogMultilineEditText();
     void setprojectChangelogMultilineEditText(QString text);
-    
+
 
 private:
     void loadSettings();
     void storeSettings();
-    
-    void parseDotRpmmacros();
-    bool createRpmDirectoryFromMacro(const QString &);
-    
-    
+
     DistpartPart * m_part;
-    QUrlOperator * op;
     QString dir;
-    KProcess *tar_proc;
-    QMap<QString,QString> map;
 };
 
 
