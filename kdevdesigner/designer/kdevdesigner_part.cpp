@@ -38,6 +38,7 @@
 
 #include "mainwindow.h"
 #include "designeraction.h"
+#include "formwindow.h"
 
 KDevDesignerPart::KDevDesignerPart( QWidget *parentWidget, const char *widgetName,
                                   QObject *parent, const char *name, const QStringList &args )
@@ -523,6 +524,8 @@ void KDevDesignerPart::emitEditedFunction( const QString & form, KInterfaceDesig
     kdDebug() << "KDevDesignerPart::emitEditedFunction: form " << form 
         << ", old function: " << oldFunc.function
         << ", function: " << func.function << endl;
+    
+//    m_widget->formWindow()->clearSelection(false);    
     emit editedFunction(designerType(), form, oldFunc, func);
 }
 

@@ -152,6 +152,8 @@ FormWindow::FormWindow( FormFile *f, QWidget *parent, const char *name )
 
 void FormWindow::init()
 {
+    setWFlags(getWFlags() & Qt::WStyle_Maximize);
+    
     fake = qstrcmp( name(), "qt_fakewindow" ) == 0;
     MetaDataBase::addEntry( this );
     ff->setFormWindow( this );
@@ -175,6 +177,7 @@ void FormWindow::init()
     connect( updatePropertiesTimer, SIGNAL( timeout() ),
 	     this, SLOT( updatePropertiesTimerDone() ) );
     showPropertiesTimer = new QTimer( this );
+    //!!!!
     connect( showPropertiesTimer, SIGNAL( timeout() ),
 	     this, SLOT( showPropertiesTimerDone() ) );
     selectionChangedTimer = new QTimer( this );
@@ -1639,7 +1642,8 @@ void FormWindow::emitShowProperties( QObject *w )
 	    repaintSelection( (QWidget*)opw );
     }
     showPropertiesTimer->stop();
-    showPropertiesTimer->start( 0, TRUE );
+//    showPropertiesTimer->start( 0, TRUE );
+    showPropertiesTimerDone();
 }
 
 void FormWindow::emitUpdateProperties( QObject *w )
@@ -2751,4 +2755,15 @@ void FormWindow::setFormFile( FormFile *f )
 bool FormWindow::canBeBuddy( const QWidget *w ) const
 {
     return w->focusPolicy() != QWidget::NoFocus;
+}
+
+bool FormWindow::event( QEvent *e )
+{
+    if (e->type() == QEvent::ShowMaximized)
+    {
+        if ( isMaximized() )
+            setWindowState( windowState() & ~WindowMaximized | WindowActive);
+        return true;
+    }
+    return QWidget::event(e);
 }

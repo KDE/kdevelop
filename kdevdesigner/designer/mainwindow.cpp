@@ -285,7 +285,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
     if ( autoSaveEnabled )
 	autoSaveTimer->start( autoSaveInterval * 1000 );
     
-    setFocusPolicy( ClickFocus );
+    setFocusPolicy( StrongFocus );
 }
 
 MainWindow::~MainWindow()

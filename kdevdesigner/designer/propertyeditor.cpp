@@ -3934,27 +3934,16 @@ QString clean_arguments( const QString &s )
 
 void EventList::setup()
 {
-    kdDebug() << "==========================" << endl;
-    kdDebug() << "==========================" << endl;
-    kdDebug() << "==========================" << endl;
-    kdDebug() << "========  SETUP  =========" << endl;
-    kdDebug() << "==========================" << endl;
-    kdDebug() << "==========================" << endl;
-    kdDebug() << "==========================" << endl;
-    
     clear();
 
     if ( !formWindow )
 	return;
-    kdDebug() << "query for language: " << formWindow->project()->language() << endl;
     LanguageInterface *iface = MetaDataBase::languageInterface( formWindow->project()->language() );
     QStrList sigs;
     if ( iface )
     {
-        kdDebug() << "Interface is present" << endl;
 	sigs = iface->signalNames( editor->widget() );
     }
-    kdDebug() << "Signals: " << QStringList::fromStrList(sigs) << endl;
     QStrListIterator it( sigs );
     while ( it.current() ) {
 	HierarchyItem *eventItem = new HierarchyItem( HierarchyItem::Event, this, (HierarchyItem*)0,
@@ -4006,6 +3995,7 @@ void EventList::objectClicked( QListViewItem *i )
 {
     if ( !i || !i->parent() )
 	return;
+//    formWindow->clearSelection(false);
     formWindow->mainWindow()->part()->emitEditFunction(formWindow->fileName(), i->text( 0 ));
 //    formWindow->mainWindow()->editFunction( i->text( 0 ) );
 }

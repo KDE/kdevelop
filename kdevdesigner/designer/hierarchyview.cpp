@@ -900,7 +900,10 @@ void FormDefinitionView::objectClicked( QListViewItem *i )
     if ( !i )
 	return;
     if ( (i->rtti() == HierarchyItem::Slot) || (i->rtti() == HierarchyItem::Function) )
+    {
+        formWindow->clearSelection(false);
         formWindow->mainWindow()->part()->emitEditFunction(formWindow->fileName(), i->text( 0 ));
+    }
 //	formWindow->mainWindow()->editFunction( i->text( 0 ) );
 }
 
@@ -1158,6 +1161,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
     } else if ( res == GOIMPL ) {
 	if ( i->rtti() == HierarchyItem::Slot ||
 	     i->rtti() == HierarchyItem::Function ) {
+	     formWindow->clearSelection(false);
 	     formWindow->mainWindow()->part()->emitEditFunction(formWindow->fileName(), i->text( 0 ));
 //	    formWindow->mainWindow()->editFunction( i->text( 0 ) );
 	}

@@ -1181,6 +1181,7 @@ void AddFunctionCommand::execute()
     f.specifier = specifier;
     f.access = access;
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
+    formWindow()->clearSelection(false);
     formWindow()->mainWindow()->part()->emitAddedFunction(formWindow()->fileName(), f);
     
     if ( formWindow()->formFile() )
@@ -1332,6 +1333,7 @@ void RemoveFunctionCommand::unexecute()
     f.specifier = specifier;
     f.access = access;
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
+    formWindow()->clearSelection(false);
     formWindow()->mainWindow()->part()->emitAddedFunction(formWindow()->fileName(), f);
             
     if ( formWindow()->formFile() )
