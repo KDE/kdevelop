@@ -25,6 +25,7 @@
 #include <kapp.h>
 #include <qtooltip.h>
 #include <assert.h>
+#include <qlistbox.h>
 
 /*********************************************************************
  *                                                                   *
@@ -34,7 +35,8 @@
 
 CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
-    classTree( this, "classTree" ),
+    classLbl( this, "classLbl" ),
+    classCombo( false, this, "classCombo" ),
     parentsBtn( this, "parentsBtn" ),
     childrenBtn( this, "childrenBtn" ),
     clientsBtn( this, "clientsBtn" ),
@@ -42,15 +44,17 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
     attributesBtn( this, "attributesBtn" ),
     methodsBtn( this, "methodsBtn" ),
     virtualsBtn( this, "virtualsBtn" ),
-    exportCombo( false, this, "exportCombo" )
+    exportCombo( false, this, "exportCombo" ),
+    classTree( this, "classTree" )
 {
+  currentOperation = CTNONE;
   export = 0;
   onlyVirtual = false;
   store = NULL;
   setCaption( "Class Tool" );
 
   setWidgetValues();
-  setIcons();
+  readIcons();
   setCallbacks();
   setTooltips();
 }
@@ -64,11 +68,28 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
 
 void CClassToolDlg::setWidgetValues()
 {
-  classTree.setGeometry( 10, 50, 400, 230 );
-  classTree.setIndentSpacing(15);
-  classTree.setFocusPolicy(QWidget::NoFocus);
+  classLbl.setGeometry( 10, 10, 40, 30 );
+  classLbl.setMinimumSize( 0, 0 );
+  classLbl.setMaximumSize( 32767, 32767 );
+  classLbl.setFocusPolicy( QWidget::NoFocus );
+  classLbl.setBackgroundMode( QWidget::PaletteBackground );
+  classLbl.setFontPropagation( QWidget::NoChildren );
+  classLbl.setPalettePropagation( QWidget::NoChildren );
+  classLbl.setText( "Class:" );
+  classLbl.setAlignment( 289 );
+  classLbl.setMargin( -1 );
 
-  parentsBtn.setGeometry( 10, 10, 30, 30 );
+  classCombo.setGeometry( 50, 10, 260, 30 );
+  classCombo.setMinimumSize( 0, 0 );
+  classCombo.setMaximumSize( 32767, 32767 );
+  classCombo.setFocusPolicy( QWidget::StrongFocus );
+  classCombo.setBackgroundMode( QWidget::PaletteBackground );
+  classCombo.setFontPropagation( QWidget::AllChildren );
+  classCombo.setPalettePropagation( QWidget::AllChildren );
+  classCombo.setSizeLimit( 10 );
+  classCombo.setAutoResize( FALSE );
+
+  parentsBtn.setGeometry( 10, 50, 30, 30 );
   parentsBtn.setMinimumSize( 0, 0 );
   parentsBtn.setMaximumSize( 32767, 32767 );
   parentsBtn.setFocusPolicy( QWidget::TabFocus );
@@ -78,7 +99,7 @@ void CClassToolDlg::setWidgetValues()
   parentsBtn.setAutoRepeat( FALSE );
   parentsBtn.setAutoResize( FALSE );
 
-  childrenBtn.setGeometry( 50, 10, 30, 30 );
+  childrenBtn.setGeometry( 50, 50, 30, 30 );
   childrenBtn.setMinimumSize( 0, 0 );
   childrenBtn.setMaximumSize( 32767, 32767 );
   childrenBtn.setFocusPolicy( QWidget::TabFocus );
@@ -89,7 +110,7 @@ void CClassToolDlg::setWidgetValues()
   childrenBtn.setAutoRepeat( FALSE );
   childrenBtn.setAutoResize( FALSE );
 
-  clientsBtn.setGeometry( 90, 10, 30, 30 );
+  clientsBtn.setGeometry( 90, 50, 30, 30 );
   clientsBtn.setMinimumSize( 0, 0 );
   clientsBtn.setMaximumSize( 32767, 32767 );
   clientsBtn.setFocusPolicy( QWidget::TabFocus );
@@ -100,7 +121,7 @@ void CClassToolDlg::setWidgetValues()
   clientsBtn.setAutoRepeat( FALSE );
   clientsBtn.setAutoResize( FALSE );
 
-  suppliersBtn.setGeometry( 130, 10, 30, 30 );
+  suppliersBtn.setGeometry( 130, 50, 30, 30 );
   suppliersBtn.setMinimumSize( 0, 0 );
   suppliersBtn.setMaximumSize( 32767, 32767 );
   suppliersBtn.setFocusPolicy( QWidget::TabFocus );
@@ -111,7 +132,7 @@ void CClassToolDlg::setWidgetValues()
   suppliersBtn.setAutoRepeat( FALSE );
   suppliersBtn.setAutoResize( FALSE );
 
-  attributesBtn.setGeometry( 190, 10, 30, 30 );
+  attributesBtn.setGeometry( 190, 50, 30, 30 );
   attributesBtn.setMinimumSize( 0, 0 );
   attributesBtn.setMaximumSize( 32767, 32767 );
   attributesBtn.setFocusPolicy( QWidget::TabFocus );
@@ -122,7 +143,7 @@ void CClassToolDlg::setWidgetValues()
   attributesBtn.setAutoRepeat( FALSE );
   attributesBtn.setAutoResize( FALSE );
 
-  methodsBtn.setGeometry( 230, 10, 30, 30 );
+  methodsBtn.setGeometry( 230, 50, 30, 30 );
   methodsBtn.setMinimumSize( 0, 0 );
   methodsBtn.setMaximumSize( 32767, 32767 );
   methodsBtn.setFocusPolicy( QWidget::TabFocus );
@@ -133,7 +154,7 @@ void CClassToolDlg::setWidgetValues()
   methodsBtn.setAutoRepeat( FALSE );
   methodsBtn.setAutoResize( FALSE );
 
-  virtualsBtn.setGeometry( 270, 10, 30, 30 );
+  virtualsBtn.setGeometry( 270, 50, 30, 30 );
   virtualsBtn.setMinimumSize( 0, 0 );
   virtualsBtn.setMaximumSize( 32767, 32767 );
   virtualsBtn.setFocusPolicy( QWidget::TabFocus );
@@ -144,7 +165,7 @@ void CClassToolDlg::setWidgetValues()
   virtualsBtn.setAutoRepeat( FALSE );
   virtualsBtn.setAutoResize( FALSE );
 
-  exportCombo.setGeometry( 310, 10, 100, 30 );
+  exportCombo.setGeometry( 310, 50, 100, 30 );
   exportCombo.setMinimumSize( 0, 0 );
   exportCombo.setMaximumSize( 32767, 32767 );
   exportCombo.setFocusPolicy( QWidget::StrongFocus );
@@ -157,9 +178,13 @@ void CClassToolDlg::setWidgetValues()
   exportCombo.insertItem( "Public" );
   exportCombo.insertItem( "Protected" );
   exportCombo.insertItem( "Private" );
+
+  classTree.setGeometry( 10, 90, 500, 400 );
+  classTree.setIndentSpacing(15);
+  classTree.setFocusPolicy(QWidget::NoFocus);
 }
 
-void CClassToolDlg::setIcons()
+void CClassToolDlg::readIcons()
 {
   QString PIXPREFIX = "/kdevelop/pics/mini/";
   QString pixDir = KApplication::kde_datadir() + PIXPREFIX;
@@ -183,6 +208,9 @@ void CClassToolDlg::setIcons()
   pm.load( pixDir + "CVpublic_meth.xpm" );
   methodsBtn.setPixmap( pm );
 
+  pm.load( pixDir + "CTvirtuals.xpm" );
+  virtualsBtn.setPixmap( pm );
+
   classPm = new QPixmap( pixDir + "CVclass.xpm" );
 }
 
@@ -199,6 +227,8 @@ void CClassToolDlg::setTooltips()
 
 void CClassToolDlg::setCallbacks()
 {
+  connect( &classCombo, SIGNAL(activated(int)), SLOT(slotClassComboChoice(int)));
+  connect( &exportCombo, SIGNAL(activated(int)), SLOT(slotExportComboChoice(int)));
   connect( &parentsBtn, SIGNAL(clicked()), SLOT(slotParents()));
   connect( &childrenBtn, SIGNAL(clicked()), SLOT(slotChildren()));
   connect( &clientsBtn, SIGNAL(clicked()), SLOT(slotClients()));
@@ -206,6 +236,19 @@ void CClassToolDlg::setCallbacks()
   connect( &methodsBtn, SIGNAL(clicked()), SLOT(slotMethods()));
   connect( &attributesBtn, SIGNAL(clicked()), SLOT(slotAttributes()));
   connect( &virtualsBtn, SIGNAL(clicked()), SLOT(slotVirtuals()));
+}
+
+void CClassToolDlg::setActiveClass( const char *aName )
+{
+  QListBox *lb;
+  uint i;
+
+  lb = classCombo.listBox();
+
+  for( i=0; i < lb->count() && strcmp( lb->text( i ), aName ) != 0; i++ )
+    ;
+
+  classCombo.setCurrentItem( i );
 }
 
 /*********************************************************************
@@ -219,6 +262,12 @@ void CClassToolDlg::setStore( CClassStore *aStore )
   assert( aStore != NULL );
 
   store = aStore;
+
+  // Add all classnames.
+  for( store->classIterator.toFirst();
+       store->classIterator.current();
+       ++(store->classIterator) )
+    classCombo.insertItem( store->classIterator.current()->name );
 }
 
 void CClassToolDlg::setClass( const char *aName )
@@ -226,6 +275,7 @@ void CClassToolDlg::setClass( const char *aName )
   assert( aName != NULL && strlen( aName ) > 0 );
   assert( store != NULL );
 
+  setActiveClass( aName );
   currentClass = store->getClassByName( aName );
 }
 
@@ -233,6 +283,7 @@ void CClassToolDlg::setClass( CParsedClass *aClass )
 {
   assert( aClass != NULL );
 
+  setActiveClass( aClass->name );
   currentClass = aClass;
 }
 
@@ -280,62 +331,14 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
   }
 }
 
-/*********************************************************************
- *                                                                   *
- *                          PUBLIC METHODS                           *
- *                                                                   *
- ********************************************************************/
-
-/** View the parents of the current class. */
-void CClassToolDlg::viewParents()
-{
-  CParsedParent *aParent;
-  QString root = currentClass->name;
-  KPath classPath;
-  
-  setCaption( "Parents" );
-  classTree.clear();
-  
-  // Insert root item(the current class);
-  classTree.insertItem( root, classPm );
-  classPath.push( &root );
-
-  for( aParent = currentClass->parents.first();
-       aParent != NULL;
-       aParent = currentClass->parents.next() )
-  {
-    if( export == 0 || aParent->export == export )
-      classTree.addChildItem( aParent->name, classPm, &classPath );
-  }
-
-  classTree.setExpandLevel( 1 );
-}
-
-/** View the children of the current class. */
-void CClassToolDlg::viewChildren()
-{
-  QString root = currentClass->name;
-  KPath classPath;
-  
-  setCaption( "Children" );
-  classTree.clear();
-  
-  // Insert root item(the current class);
-  classTree.insertItem( root, classPm );
-  classPath.push( &root );
-
-  classTree.setExpandLevel( 1 );
-}
-
-/** View methods in this class and parents. */
-void CClassToolDlg::viewMethods()
+void CClassToolDlg::addAllClassMethods()
 {
   CParsedParent *aParent;
   CParsedClass *aClass;
 
-  setCaption( "Methods" );
+  // Clear all previous items in the tree.
   classTree.clear();
-  
+
   // First treat all parents.
   for( aParent = currentClass->parents.first();
        aParent != NULL;
@@ -349,16 +352,173 @@ void CClassToolDlg::viewMethods()
   // Add the current class
   addClassAndMethods( currentClass );
 
+  // View one level deep.
   classTree.setExpandLevel( 1 );
+}
+
+void CClassToolDlg::addRoot( KPath &classPath )
+{
+  QString root = currentClass->name;
+
+  classTree.clear();
+  
+  // Insert root item(the current class);
+  classTree.insertItem( root, classPm );
+  classPath.push( &root );
+}
+
+/** Change the caption depending on the current operation. */
+void CClassToolDlg::changeCaption()
+{
+  QString caption;
+
+  switch( currentOperation )
+  {
+    case CTPARENT:
+      caption = "Parents";
+      break;
+    case CTCHILD:
+      caption = "Children";
+      break;
+    case CTCLIENT:
+      caption = "Clients";
+      break;
+    case CTSUPP:
+      caption = "Suppliers";
+      break;
+    case CTATTR:
+      caption = exportCombo.currentText();
+      caption += " attributes";
+      break;
+    case CTMETH:
+      caption = exportCombo.currentText();
+      caption += " methods";
+      break;
+    case CTVIRT:
+      caption = exportCombo.currentText();
+      caption += " virtual methods";
+      break;
+  }
+
+  caption += " of class ";
+  caption += currentClass->name;
+
+  setCaption( caption );
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/
+
+/** View the parents of the current class. */
+void CClassToolDlg::viewParents()
+{
+  CParsedParent *aParent;
+  KPath classPath;
+  
+  currentOperation = CTPARENT;
+
+  changeCaption();
+  addRoot( classPath );
+
+  for( aParent = currentClass->parents.first();
+       aParent != NULL;
+       aParent = currentClass->parents.next() )
+  {
+    classTree.addChildItem( aParent->name, classPm, &classPath );
+  }
+
+  classTree.setExpandLevel( 1 );
+}
+
+/** View the children of the current class. */
+void CClassToolDlg::viewChildren()
+{
+  assert( currentClass != NULL );
+
+  QList<CParsedClass> *list;
+  CParsedClass *aClass;
+  KPath classPath;
+  
+  currentOperation = CTCHILD;
+
+  changeCaption();
+  addRoot( classPath );
+
+  list = store->getClassesByParent( currentClass->name );
+
+  for( aClass = list->first();
+       aClass != NULL;
+       aClass = list->next() )
+    classTree.addChildItem( aClass->name, classPm, &classPath );
+
+  delete list;
+
+  classTree.setExpandLevel( 1 );
+}
+
+/** View all classes that has this class as an attribute. */
+void CClassToolDlg::viewClients()
+{
+  assert( currentClass != NULL );
+
+  QList<CParsedClass> *list;
+  CParsedClass *aClass;
+  KPath classPath;
+  
+  currentOperation = CTCLIENT;
+
+  changeCaption();
+  addRoot( classPath );
+
+  list = store->getClassClients( currentClass->name );
+
+  for( aClass = list->first();
+       aClass != NULL;
+       aClass = list->next() )
+    classTree.addChildItem( aClass->name, classPm, &classPath );
+
+  delete list;
+
+  classTree.setExpandLevel( 1 );
+}
+
+/** View all classes that this class has as attributes. */
+void CClassToolDlg::viewSuppliers()
+{
+  KPath classPath;
+
+  currentOperation = CTSUPP;
+
+  changeCaption();
+  addRoot( classPath );
+}
+
+/** View methods in this class and parents. */
+void CClassToolDlg::viewMethods()
+{
+  assert( currentClass != NULL );
+
+  currentOperation = CTMETH;
+
+  changeCaption();  
+  addAllClassMethods();
 }
 
 /** View attributes in this class and parents. */
 void CClassToolDlg::viewAttributes()
 {
+  assert( currentClass != NULL );
+
   CParsedParent *aParent;
   CParsedClass *aClass;
+  QString caption;
 
-  setCaption( "Attributes" );
+  currentOperation = CTATTR;
+
+  changeCaption();
   classTree.clear();
   
   // First treat all parents.
@@ -375,13 +535,20 @@ void CClassToolDlg::viewAttributes()
   addClassAndAttributes( currentClass );
 
   classTree.setExpandLevel( 1 );
-
 }
 
 void CClassToolDlg::viewVirtuals()
 {
+  assert( currentClass != NULL );
+
+  QString caption;
+
+  currentOperation = CTVIRT;
+
+  changeCaption();
+
   onlyVirtual = true;
-  viewMethods();
+  addAllClassMethods();
   onlyVirtual = false;
 }
 
@@ -399,23 +566,91 @@ void CClassToolDlg::slotChildren()
 {
   viewChildren();
 }
+
 void CClassToolDlg::slotClients()
 {
+  viewClients();
 }
+
 void CClassToolDlg::slotSuppliers()
 {
+  viewSuppliers();
 }
+
 void CClassToolDlg::slotAttributes()
 {
   viewAttributes();
 }
+
 void CClassToolDlg::slotMethods()
 {
   viewMethods();
 }
+
 void CClassToolDlg::slotVirtuals()
 {
   viewVirtuals();
+}
+
+void CClassToolDlg::slotExportComboChoice(int idx)
+{
+  QString str;
+
+  str = exportCombo.currentText();
+
+  //Check exporttype
+  if( str == "All" )
+    export = 0;
+  else if( str == "Public" )
+    export = PUBLIC;
+  else if( str == "Protected" )
+    export = PROTECTED;
+  else if( str == "Private" )
+    export = PRIVATE;
+
+  // Update the view if the choice affected the data.
+  switch( currentOperation )
+  {
+    case CTATTR:
+      viewAttributes();
+      break;
+    case CTMETH:
+      viewMethods();
+      break;
+    case CTVIRT:
+      viewVirtuals();
+      break;
+  }
+}
+
+void CClassToolDlg::slotClassComboChoice(int idx)
+{
+  setClass( classCombo.currentText() );
+  // Update the view if the choice affected the data.
+  switch( currentOperation )
+  {
+    case CTPARENT:
+      viewParents();
+      break;
+    case CTCHILD:
+      viewChildren();
+      break;
+    case CTCLIENT:
+      viewClients();
+      break;
+    case CTSUPP:
+      viewSuppliers();
+      break;
+    case CTATTR:
+      viewAttributes();
+      break;
+    case CTMETH:
+      viewMethods();
+      break;
+    case CTVIRT:
+      viewVirtuals();
+      break;
+  }
 }
 
 void CClassToolDlg::OK()

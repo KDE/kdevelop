@@ -29,6 +29,8 @@
 #include <qlabel.h>
 #include "ClassStore.h"
 
+enum{ CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE };
+
 class CClassToolDlg : public QDialog
 {
   Q_OBJECT
@@ -51,6 +53,12 @@ public: // Public methods to set attribute values
   /** View the children of the current class. */
   void viewChildren();
 
+  /** View all classes that has this class as an attribute. */
+  void viewClients();
+
+  /** View all classes that this class has as attributes. */
+  void viewSuppliers();
+
   /** View methods in this class and parents. */
   void viewMethods();
 
@@ -62,7 +70,8 @@ public: // Public methods to set attribute values
 
 protected: // Private widgets
 
- KTreeList classTree;
+ QLabel classLbl;
+ QComboBox classCombo;
 
  QPushButton parentsBtn;
  QPushButton childrenBtn;
@@ -73,6 +82,7 @@ protected: // Private widgets
  QPushButton methodsBtn;
  QPushButton virtualsBtn;
  QComboBox exportCombo;
+ KTreeList classTree;
 
  QPixmap *classPm;
 
@@ -85,6 +95,8 @@ protected: // Private widgets
   void slotAttributes();
   void slotMethods();
   void slotVirtuals();
+  void slotExportComboChoice(int idx);
+  void slotClassComboChoice(int idx);
   void OK();
 
 private: // Private attribues
@@ -101,15 +113,24 @@ private: // Private attribues
  /** Tells if we only should view virtual methods. */
  bool onlyVirtual;
 
+ /** Stores what operation the user selected last. */
+ int currentOperation;
+
 private: // Private methods
 
   void setWidgetValues();
   void setCallbacks();
-  void setIcons();
+  void readIcons();
   void setTooltips();
+  void setActiveClass( const char *aName );
 
   void addClassAndAttributes( CParsedClass *aClass );
   void addClassAndMethods( CParsedClass *aClass );
+  void addAllClassMethods();
+  void addRoot( KPath &classPath );
+
+  /** Change the caption depending on the current operation. */
+  void changeCaption();
 };
 
 #endif
