@@ -380,9 +380,13 @@ void AppWizardDialog::accept()
 
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
     
-    if (m_vcs->stack->id(m_vcs->stack->visibleWidget()))
-    	KDevGlobalVersionControl::getVcsMap()[m_vcs->combo->currentText()]->createNewProject(dest_edit->text());
-
+    if (m_vcs->stack->id(m_vcs->stack->visibleWidget())) {
+        KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::getVcsMap()[m_vcs->combo->currentText()];
+        if (pVC) {
+            pVC->createNewProject(dest_edit->text());
+        }
+    }
+    
     QWizard::accept();
 }
 
