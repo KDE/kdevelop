@@ -53,31 +53,31 @@ AM_CONDITIONAL(include_bash, test -n "$with_bash")
 AC_ARG_ENABLE(pascal, 		[  --enable-pascal, 		enable pascal language ], with_pascal=$enableval, with_pascal=yes)
 AM_CONDITIONAL(include_pascal, test -n "$with_pascal")
 
-AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake project manager ], with_autoproject, with_autoproject=yes)
+AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake project manager ], with_autoproject=$enableval, with_autoproject=yes)
 AM_CONDITIONAL(include_autoproject, test -n "$with_autoproject")
 
-AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script project manager ], with_scriptproject, with_scriptproject=yes)
+AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script project manager ], with_scriptproject=$enableval, with_scriptproject=yes)
 AM_CONDITIONAL(include_scriptproject, test -n "$with_scriptproject")
 
-AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll project manager ], with_trollproject, with_trollproject=yes)
+AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll project manager ], with_trollproject=$enableval, with_trollproject=yes)
 AM_CONDITIONAL(include_trollproject, test -n "$with_trollproject")
 
-AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], with_customproject, with_customproject=yes)
+AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], with_customproject=$enableval, with_customproject=yes)
 AM_CONDITIONAL(include_customproject, test -n "$with_customproject")
 
 KDE_CHECK_HEADER(cvsservice_stub.h, [cvsservice_stub_h="found"], [cvsservice_stub_h="none"])
 AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
 
-AC_ARG_ENABLE(cvs, 		[  --enable-cvs, 		enable cvs support ], with_cvs, with_cvs=yes)
+AC_ARG_ENABLE(cvs, 		[  --enable-cvs, 		enable cvs support ], with_cvs=$enableval, with_cvs=yes)
 AM_CONDITIONAL(include_cvs, test -n "$with_cvs")
 
-AC_ARG_ENABLE(perforce, 	[  --enable-perforce, 		enable perforce support ], with_perforce, with_perforce=yes)
+AC_ARG_ENABLE(perforce, 	[  --enable-perforce, 		enable perforce support ], with_perforce=$enableval, with_perforce=yes)
 AM_CONDITIONAL(include_perforce, test -n "$with_perforce")
 
-AC_ARG_ENABLE(clearcase, 	[  --enable-clearcase, 		enable clearcase support ], with_clearcase, with_clearcase=yes)
+AC_ARG_ENABLE(clearcase, 	[  --enable-clearcase, 		enable clearcase support ], with_clearcase=$enableval, with_clearcase=yes)
 AM_CONDITIONAL(include_clearcase, test -n "$with_clearcase")
 
-AC_ARG_ENABLE(vba, 		[  --enable-vba, 		enable visualboy advance support ], with_vba, with_vba=yes)
+AC_ARG_ENABLE(vba, 		[  --enable-vba, 		enable visualboy advance support ], with_vba=$enableval, with_vba=yes)
 AM_CONDITIONAL(include_vba, test -n "$with_vba")
 
 
