@@ -21,8 +21,8 @@
 
 #include <qdialog.h>
 #include <qlabel.h>
-#include <qchkbox.h>
-#include <qpushbt.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
 #include <qframe.h>
 
 /**"Tip of the Day" dialog" for KDE/Qt applications
@@ -49,6 +49,9 @@ protected:
   QLabel* tip_label;
   QPushButton* ok_button;
   QPushButton* next_button;
+
+
+
 };
 
 #endif
