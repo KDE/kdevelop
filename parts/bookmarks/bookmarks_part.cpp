@@ -67,8 +67,8 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("Bookmarks"), BOOKMARKSETTINGSPAGE );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const QObject*, QWidget*, unsigned int )), 
-		this, SLOT(insertConfigWidget(const QObject*, QWidget*, unsigned int )) );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 	
 	connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
 		this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
@@ -482,7 +482,7 @@ bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
 			!ro_part->url().path().isEmpty();
 }
 
-void BookmarksPart::insertConfigWidget( QObject const * dlg, QWidget * page, unsigned int pagenumber )
+void BookmarksPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
 	kdDebug() << k_funcinfo << endl;
 	

@@ -58,7 +58,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     _configProxy = new ConfigWidgetProxy( core() );
     _configProxy->createGlobalConfigPage( i18n("Documentation Tree"), GLOBALDOC_OPTIONS );
     _configProxy->createProjectConfigPage( i18n("Project Documentation"), PROJECTDOC_OPTIONS );
-    connect( _configProxy, SIGNAL(insertConfigWidget(const QObject*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const QObject*, QWidget*, unsigned int )) );
+    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
     
     m_widget = new DocTreeViewWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
@@ -216,7 +216,7 @@ void DocTreeViewPart::slotContextFulltextSearch()
     }
 }
 
-void DocTreeViewPart::insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int pagenumber )
+void DocTreeViewPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
 	switch ( pagenumber )
 	{

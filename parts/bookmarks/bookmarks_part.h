@@ -72,7 +72,7 @@ private slots:
 	void removeAllBookmarksForURL( const KURL & );
 	void removeBookmarkForURL( const KURL &, int );
 
-	void insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int );
+	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
 	
 private:
 	bool setBookmarksForURL( KParts::ReadOnlyPart * );
