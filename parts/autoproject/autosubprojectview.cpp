@@ -173,7 +173,7 @@ void AutoSubprojectView::initActions()
                                              "in the project settings dialog, <b>Make Options</b> tab."));
 	installSuSubprojectAction = new KAction( i18n( "Install (as root user)" ), 0, 0,
 	                                     this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
-    installSuSubprojectAction->setWhatsThis(i18n("<b>Install as root user</b><p>Runs <b>make install</b> command from the directory of the selected subproject with root priviledges.<br>"
+    installSuSubprojectAction->setWhatsThis(i18n("<b>Install as root user</b><p>Runs <b>make install</b> command from the directory of the selected subproject with root privileges.<br>"
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));

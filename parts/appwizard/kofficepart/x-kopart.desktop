@@ -2,7 +2,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 MimeType=application/x-$APPNAMELC$
-Comment= A realy awesome KOffice application
+Comment= A really awesome KOffice application
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...
 Patterns=*.xmpl;

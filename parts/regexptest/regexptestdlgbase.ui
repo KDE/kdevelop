@@ -197,7 +197,7 @@
                 <cstring>pattern_edit</cstring>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>enter a regulare expression, for example &lt;tt&gt;KD.*&lt;/tt&gt;, which matches all strings beginning with "KD"</string>
+                <string>enter a regular expression, for example &lt;tt&gt;KD.*&lt;/tt&gt;, which matches all strings beginning with "KD"</string>
             </property>
         </widget>
         <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">

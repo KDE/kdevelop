@@ -216,7 +216,7 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
     new FlagCheckBox(lang_group, controller,
                      "-Sh", i18n("Use ansistrings by default for strings"));
     new FlagCheckBox(lang_group, controller,
-                     "-Ss", i18n("Require the name of constuctors to be init\n and the name of destructors to be done"));
+                     "-Ss", i18n("Require the name of constructors to be init\n and the name of destructors to be done"));
     new FlagCheckBox(lang_group, controller,
                      "-St", i18n("Allow the static keyword in objects"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);

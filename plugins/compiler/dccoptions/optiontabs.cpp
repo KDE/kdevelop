@@ -226,11 +226,11 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
     new FlagRadioButton(align_group, radioController,
                      "-$A1", i18n("Never align"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A2", i18n("On word boudaries"));
+                     "-$A2", i18n("On word boundaries"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A4", i18n("On double word boudaries"));
+                     "-$A4", i18n("On double word boundaries"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A8", i18n("On quad word boudaries"));
+                     "-$A8", i18n("On quad word boundaries"));
     new FlagCheckBox(align_group, controller,
                      "'-$W+'", i18n("Generate stack frames"), "'-$W-'");
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);

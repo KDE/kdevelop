@@ -108,14 +108,14 @@ void SqlOutputWidget::showSuccess( int rowsAffected )
 void SqlOutputWidget::showError( const QString& message )
 {
     m_textEdit->clear();
-    m_textEdit->setText( "<p><b>" + i18n("An error occured:") + "</b></p>\n" + message );
+    m_textEdit->setText( "<p><b>" + i18n("An error occurred:") + "</b></p>\n" + message );
     m_stack->raiseWidget( m_textEdit );
 }
 
 void SqlOutputWidget::showError( const QSqlError& message )
 {
     m_textEdit->clear();
-    m_textEdit->setText( "<p><b>" + i18n("An error occured:") + 
+    m_textEdit->setText( "<p><b>" + i18n("An error occurred:") + 
                          "</b></p>\n<p><i>" + i18n("Driver") + "</i>: " + 
                          QStyleSheet::escape( message.driverText() ) + 
                          "<br><i>" + i18n("Database") + ":</i>: " +

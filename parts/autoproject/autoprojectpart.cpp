@@ -182,7 +182,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotInstallWithKdesu()),
                           actionCollection(), "build_install_kdesu" );
     action->setToolTip(i18n("Install as root user"));
-    action->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> command from the project directory with root priviledges.<br>"
+    action->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> command from the project directory with root privileges.<br>"
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
@@ -273,7 +273,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
         RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
-        w3->mainprogram_label->setText(i18n("Main program (if empty automaticaly uses active target):"));
+        w3->mainprogram_label->setText(i18n("Main program (if empty automatically uses active target):"));
         connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
