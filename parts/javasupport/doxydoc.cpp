@@ -64,7 +64,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 			QDomNodeList nodes = m_list.item( i ).childNodes();
 			QString nodetype = nodes.item( 0 ).toElement().text();
 			formatType( nodetype );
-			if ( nodetype )
+			if ( !nodetype.isNull() )
 				formatType( nodetype );
 			else
 				nodetype = "";
