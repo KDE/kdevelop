@@ -20,7 +20,7 @@
 class KTZWidgetInfo
 {
 public:
-  KTZWidgetInfo( QWidget* w = 0 ): m_widget(w), m_index(0), m_barIndex(0) {} 
+  KTZWidgetInfo( QWidget* w = 0 ): m_widget(w), m_index(0), m_barIndex(0) {}
 
   QWidget *m_widget;
   int     m_index, m_barIndex;
@@ -101,6 +101,20 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString
 }
 
 
+void KTabZoomWidget::removeTab(QWidget *w) {
+
+    for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+    if (i->m_widget == w)
+    {
+      d->m_tabBar->removeTab(i->m_barIndex);
+      d->m_popup->removeTab(i->m_index);
+      d->m_info.remove(i);
+      emit tabsChanged();
+      return;
+    }
+
+}
+
 void KTabZoomWidget::widgetDeleted()
 {
   const QWidget *w = static_cast<const QWidget*>(sender());
@@ -159,7 +173,7 @@ void KTabZoomWidget::selected(int index)
     d->m_strut->show();
     adjustStrut();
   }
-  
+
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_barIndex == index)
     {
@@ -206,7 +220,7 @@ int KTabZoomWidget::indexOf(QWidget *widget) const
 for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == widget)
         return i->m_index;
-        
+
         return -1;
 }
 
@@ -215,7 +229,7 @@ QWidget *KTabZoomWidget::at(int index) const
 for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_index == index)
         return i->m_widget;
-        
+
         return 0;
 }
 

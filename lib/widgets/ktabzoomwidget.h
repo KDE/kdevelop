@@ -26,6 +26,7 @@ public:
   ~KTabZoomWidget();
 
   void addTab(QWidget *widget, const QString &tab, const QString &toolTip = QString::null);
+  void removeTab(QWidget *widget);
 
   void addContent(QWidget *widget);
 
@@ -36,18 +37,18 @@ public:
 
   void saveSettings(KConfig *config);
   void loadSettings(KConfig *config);
- 
+
   bool isRaised() const;
   bool isDocked() const;
   bool hasFocus() const;
   bool isEmpty() const; //indicates whether widget has tabs
-  
+
   uint count() const;
   int indexOf(QWidget *widget) const;
-  
+
   QWidget *at(int i) const;
   QWidget *current() const;
-  
+
 signals:
   // emitted when a tab gets added / deleted
   void tabsChanged();

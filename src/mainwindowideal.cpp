@@ -279,12 +279,14 @@ void MainWindowIDEAl::embedOutputView(QWidget *view, const QString &name, const 
     m_bottomBar->addTab(view, name, toolTip);
 }
 
-
-void MainWindowIDEAl::removeView(QWidget *view) 
+void MainWindowIDEAl::removeView(QWidget *view)
 {
     QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
     if ( it != m_timeStamps.end() )
       m_timeStamps.erase( it );
+    m_leftBar->removeTab(view);
+    m_rightBar->removeTab(view);
+    m_bottomBar->removeTab(view);
 }
 
 void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
@@ -317,21 +319,21 @@ void MainWindowIDEAl::moveRelativeTab(int n) {
     if (m_leftBar->hasFocus()) bar = m_leftBar;
     if (m_rightBar->hasFocus()) bar = m_rightBar;
     if (m_bottomBar->hasFocus()) bar = m_bottomBar;
-    
+
     if (bar) {
 	if(bar->count()) {
 	    int index = bar->indexOf(bar->current());
-	    
+
 	    QWidget * view = (bar->at((bar->count()+index+n)%bar->count()));
 	    bar->raiseWidget(view);
 	}
 	return;
     }
-    
+
     //Default : editor
     if(m_tabWidget->count()) {
 	int index = m_tabWidget->currentPageIndex();
-	
+
 	QWidget * view = (m_tabWidget->page((m_tabWidget->count()+index+n)%m_tabWidget->count()));
 	m_tabWidget->showPage(view);
 	m_tabWidget->currentPage()->setFocus();
@@ -346,7 +348,7 @@ void MainWindowIDEAl::gotoFirstWindow() {
     if (m_tabWidget->count() == 0) {
         return;
     }
-    
+
     //Activates the view we accessed the most time ago
     QWidget * view = m_tabWidget->currentPage();
     QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
@@ -380,7 +382,7 @@ void MainWindowIDEAl::gotoLastWindow() {
     if (m_tabWidget->count() == 0) {
         return;
     }
-    
+
     //Activates the previously accessed view before this one was activated
     QWidget * view = m_tabWidget->currentPage();
     QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
@@ -422,7 +424,7 @@ void MainWindowIDEAl::loadSettings() {
 
     config->setGroup("RightBar");
     m_rightBar->loadSettings(config);
-    
+
     config->setGroup("BottomBar");
     m_bottomBar->loadSettings(config);
 }
@@ -438,7 +440,7 @@ void MainWindowIDEAl::saveSettings() {
 
     config->setGroup("RightBar");
     m_leftBar->saveSettings(config);
-    
+
     config->setGroup("BottomBar");
     m_bottomBar->saveSettings(config);
 }
@@ -456,7 +458,7 @@ void MainWindowIDEAl::slotFillWindowMenu() {
     m_pWindowMenu->insertSeparator();
 
     int entryCount = m_pWindowMenu->count();
-    
+
     QValueList<QDateTime> timeStamps;
     // Loop over all parts and add them to the window menu
     QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
@@ -641,22 +643,22 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
       if ( switching() )
       {
         KAction *a = actionCollection()->action( "view_next_window" ) ;
-        if ( a ) 
+        if ( a )
         {
             const KShortcut cut( a->shortcut() );
             const KKeySequence& seq = cut.seq( 0 );
             const KKey& key = seq.key(0);
             int modFlags = key.modFlags();
             int state = ((QKeyEvent *)e)->state();
-            KKey key2( (QKeyEvent *)e ); 
+            KKey key2( (QKeyEvent *)e );
 
             /** these are quite some assumptions:
             *   The key combination uses exactly one modifier key
             *   The WIN button in KDE is the meta button in Qt
             **/
-            if ( state != ((QKeyEvent *)e)->stateAfter()                             && 
+            if ( state != ((QKeyEvent *)e)->stateAfter()                             &&
                 ((modFlags & KKey::CTRL) > 0) == ((state & Qt::ControlButton) > 0 ) &&
-                ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltButton) > 0)      && 
+                ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltButton) > 0)      &&
                 ((modFlags & KKey::WIN) > 0)  == ((state & Qt::MetaButton) > 0) )
             {
               if ( m_tabWidget->count() ) {
@@ -672,7 +674,7 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
         }
         else
           kdDebug(9000) <<  "KAction( \"view_next_window\") __not__ found.in MainWindowIDEAl\n" << endl;;
-      }    
+      }
   }
   return FALSE;  // standard event processing
 }
