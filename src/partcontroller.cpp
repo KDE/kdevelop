@@ -177,12 +177,12 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
           break;
         }
       }
-    }
 
-    localUrl = url.url().startsWith("file:/");
-    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
-      // See if this url is relative to the current project's directory
-      url = project->projectDirectory() + "/" + url.url();
+      localUrl = url.url().startsWith("file:/");
+      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+        // See if this url is relative to the current project's directory
+        url = project->projectDirectory() + "/" + url.url();
+      }
     }
 
     localUrl = url.url().startsWith("file:/");
