@@ -19,8 +19,9 @@ class SnippetWidget;
 class KAboutData;
 
 
-/**
+/*
 This is the KDevPlugin for the CodeSnippet feature
+For more info read the README.dox file
 @author Robert Gruber
 */
 class SnippetPart : public KDevPlugin
