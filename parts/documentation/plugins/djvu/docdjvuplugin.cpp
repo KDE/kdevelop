@@ -29,12 +29,12 @@
 
 static const KAboutData data("docdjvuplugin", I18N_NOOP("Djvu documentation plugin"), "1.0");
 typedef KDevGenericFactory<DocDjvuPlugin> DocDjvuPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocDjvuPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocdjvuplugin, DocDjvuPluginFactory(&data) )
 
 DocDjvuPlugin::DocDjvuPlugin(QObject* parent, const char* name, const QStringList args)
     :DocumentationPlugin(DocDjvuPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(DjvuDocumentationTitles | ProjectUserManual);
+    setCapabilities(CustomDocumentationTitles | ProjectUserManual);
     autoSetup();
 }
 
