@@ -133,7 +133,6 @@ void CKDevelop::init(){
 
 
   class_tree = new CClassView(t_tab_view,"cv");
-  class_tree->setIndentSpacing(15);
   class_tree->setFocusPolicy(QWidget::NoFocus);
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
@@ -152,12 +151,12 @@ void CKDevelop::init(){
   t_tab_view->addTab(real_file_tree,"RFV");
   t_tab_view->addTab(doc_tree,"DOC");
 
-  connect(class_tree, SIGNAL(singleSelected(int)), SLOT(slotClassTreeSelected(int)));
+  connect(class_tree, SIGNAL(selectionChanged()), SLOT(slotClassTreeSelected()));
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
-  connect(class_tree, SIGNAL(selectedViewDeclaration(int)), SLOT(slotCVViewDeclaration(int)));
-  connect(class_tree, SIGNAL(selectedViewDefinition(int)), SLOT(slotCVViewDefinition(int)));
+  connect(class_tree, SIGNAL(selectedViewDeclaration()), SLOT(slotCVViewDeclaration()));
+  connect(class_tree, SIGNAL(selectedViewDefinition()), SLOT(slotCVViewDefinition()));
 
   connect(log_file_tree, SIGNAL(singleSelected(int)), SLOT(slotLogFileTreeSelected(int)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));

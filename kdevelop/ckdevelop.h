@@ -347,7 +347,7 @@ public:
 	
   ///////////// -- the methods for the treeview selection
   /** click action on classviewer CV */
-  void slotClassTreeSelected(int);
+  void slotClassTreeSelected();
   /** click action on LFV */
   void slotLogFileTreeSelected(int index);
   /** click action on RFV */
@@ -399,11 +399,11 @@ public:
   void slotSearchProcessExited(KProcess*);
   
   // return the position of the classdeclaration begin
-  void CVGotoDefinition(int index);
-  void CVGotoDeclaration(int index);
+  void CVGotoDefinition(QListViewItem *item);
+  void CVGotoDeclaration(QListViewItem *item);
 
-  void slotCVViewDeclaration(int index);
-  void slotCVViewDefinition(int index);
+  void slotCVViewDeclaration();
+  void slotCVViewDefinition();
 
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
