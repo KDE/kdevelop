@@ -409,7 +409,7 @@ typedef u_int32_t tsl_t;
 #define	MUTEX_SET(tsl) ({						\
 	register tsl_t *__l = (tsl);					\
 	int __r;							\
-	asm volatile("ldcws 0(%1),%0" : "=r" (__r) : "r" (__l));	\
+	__asm volatile("ldcws 0(%1),%0" : "=r" (__r) : "r" (__l));	\
 	__r & 1;							\
 })
 
