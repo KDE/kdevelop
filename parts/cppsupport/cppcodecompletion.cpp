@@ -214,7 +214,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 void
 CppCodeCompletion::slotCursorPositionChanged()
 {
-    kdDebug() << "Cursor position changed" << endl;
+    kdDebug(9007) << "Cursor position changed" << endl;
 
     uint nLine, nCol;
     m_pCursorIface->cursorPosition(&nLine, &nCol);
@@ -480,8 +480,8 @@ CppCodeCompletion::getNodePos( int nLine, int nCol )
     int nNodePos = 0;
 
     QString strCurLine = m_pEditIface->textLine( nLine );
-    kdDebug( ) << "getNodePos( int nLine = " << nLine << ", int nCol = " << nCol << " )" << endl;
-    kdDebug( ) << "currentLine '" << endl << strCurLine << endl << "'" << endl;
+    kdDebug( 9007 ) << "getNodePos( int nLine = " << nLine << ", int nCol = " << nCol << " )" << endl;
+    kdDebug( 9007 ) << "currentLine '" << endl << strCurLine << endl << "'" << endl;
 
     // changed from < to <= ; new KTextEditor that starts with col 0
     while( nOffset <= nCol ){
@@ -707,7 +707,7 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
                     entry.postfix = "()";
                     entryList << entry;
                 } else
-                    kdDebug() << "rejecting: '" << (*methodIt)->name( ) << "'" << endl;
+                    kdDebug( 9007 ) << "rejecting: '" << (*methodIt)->name( ) << "'" << endl;
             }
 
             KTextEditor::CompletionEntry entry;
@@ -729,7 +729,7 @@ CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QStr
                     entryList << entry;
                 }
                 else
-                    kdDebug() << "rejecting: '" << (*attrIt)->name( ) << "'" << endl;
+                    kdDebug( 9007 ) << "rejecting: '" << (*attrIt)->name( ) << "'" << endl;
             }
         }
     }
@@ -820,13 +820,13 @@ CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 
     QValueList<KDevRegExpCap> methods = regMethod.findAll( text );
     if( methods.count() == 0 ){
-        kdDebug() << "no method found!!!" << endl;
+        kdDebug( 9007 ) << "no method found!!!" << endl;
         return QString::null;
     }
 
     KDevRegExpCap m = methods.last();
 
-    kdDebug() << "------------------------> m.start = " << m.start() << endl;
+    kdDebug( 9007 ) << "------------------------> m.start = " << m.start() << endl;
     text = text.mid( m.start() );
     regMethod.search( m.text() );
     text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
@@ -842,7 +842,7 @@ CppCodeCompletion::getEntryListForExpr( const QString& expr,
                                         const QValueList<SimpleVariable>& vars )
 {
     QString type = evaluateExpression( expr, vars, m_pStore );
-    kdDebug() << "--------> type = " << type << endl;
+    kdDebug( 9007 ) << "--------> type = " << type << endl;
     QValueList<KTextEditor::CompletionEntry> entries = getEntryListForClass( type );
     return entries;
 }
