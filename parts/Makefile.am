@@ -3,7 +3,7 @@
 # from KPart. 
 
 # Make optional
-PYTHON_SUBDIR = python
+#PYTHON_SUBDIR = python
 #PYTHON_SUBDIR = 
 
 SUBDIRS = autoproject cppsupport doctreeview classview appwizard \
