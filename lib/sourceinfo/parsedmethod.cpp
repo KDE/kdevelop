@@ -46,6 +46,7 @@ ParsedMethod::ParsedMethod()
     isSignal = false;
     isConstructor = false;
     isDestructor = false;
+    isObjectiveC = false;
 }
 
 
@@ -107,6 +108,10 @@ QString ParsedMethod::asString()
     ParsedArgument *arg;
     
     QString str = name;
+
+   if ( isObjectiveC )
+     return str;
+
     str += "(";
     
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
@@ -143,7 +148,7 @@ void ParsedMethod::out()
     switch( access )
         {
         case PIE_PUBLIC:
-            cout << "public ";
+            cout << isObjectiveC ? "" : "public ";
             break;
         case PIE_PROTECTED:
             cout << "protected ";
@@ -182,7 +187,7 @@ void ParsedMethod::out()
     cout << "      declared @ line " << buf << " - ";
     sprintf( buf, "%d", declarationEndsOnLine );
     cout << buf << "\n";
-    cout << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
+    cout << "      defined(in " << ( isInHFile ? ".h" : ( isObjectiveC ? ".m" : ".cc" ) ) << ")";
     sprintf( buf, "%d", definedOnLine );
     cout << "@ line " << buf << " - ";
     sprintf( buf, "%d", definitionEndsOnLine );
@@ -218,7 +223,9 @@ void ParsedMethod::copy( ParsedMethod *aMethod )
     setIsVirtual( aMethod->isVirtual );
     setIsSlot( aMethod->isSlot );
     setIsSignal( aMethod->isSignal );
-    
+    setIsObjectiveC( aMethod->isObjectiveC );
+
+
     for ( anArg = aMethod->arguments.first();
           anArg != NULL;
           anArg = aMethod->arguments.next() ) {
