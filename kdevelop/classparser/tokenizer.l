@@ -1,20 +1,20 @@
-/********************************************************************
-* Name    : Lexical analysis                                        *
-* ------------------------------------------------------------------*
-* File    : tokenizer.l                                             *
-* Author  : Jonas Nordin                                            *
-* Date    : Mon Mar 15 15:13:45 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose : Defining a tokenizer/lexical analyser                   *
-*           with errorhandler.                                      *
-*           Removes all comments and handles includes.              *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          tokenizer.l  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 %Start COMMENT PREPARSER PPCOMMENT
 
 %{
@@ -23,6 +23,8 @@
   #include "tokenizer.h"
   #include "FlexLexer.h"
 
+  /** This class is a stupid trick to make it possible 
+   * to access the gettext method. */
   class MyLexer : public yyFlexLexer
   {
     public:
@@ -67,12 +69,12 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
     /*==============> Special keyword <==============*/
 <INITIAL>"class"         {return CPCLASS;}
-<INITIAL>"public"        {return PUBLIC;}
-<INITIAL>"protected"     {return PROTECTED;}
-<INITIAL>"private"       {return PRIVATE;}
-<INITIAL>"const"         {return CONST;}
-<INITIAL>"volatile"      {return VOLATILE;}
-<INITIAL>"static"        {return STATIC;}
+<INITIAL>"public"        {return CPPUBLIC;}
+<INITIAL>"protected"     {return CPPROTECTED;}
+<INITIAL>"private"       {return CPPRIVATE;}
+<INITIAL>"const"         {return CPCONST;}
+<INITIAL>"volatile"      {return CPVOLATILE;}
+<INITIAL>"static"        {return CPSTATIC;}
 <INITIAL>"virtual"       {return CPVIRTUAL;}
 <INITIAL>"signals"       {return QTSIGNAL;}
 <INITIAL>"slots"         {return QTSLOT;}
@@ -84,15 +86,15 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"operator"      {return CPOPERATOR;}
 <INITIAL>"template"      {return CPTEMPLATE;}
 <INITIAL>"throw"         {return CPTHROW;}
-<INITIAL>"namespace"     {return NAMESPACE;}
+<INITIAL>"namespace"     {return CPNAMESPACE;}
 
     /*==============> Ignored stuff <==============*/
 <INITIAL>"Q_EXPORT"       {}
 <INITIAL>"Q_EXPORTH"      {}
+<INITIAL>"Q_OBJECT"       {}
 <INITIAL>"__BEGIN_DECLS"  {}
 <INITIAL>"__END_DECLS"    {}
 <INITIAL>"inline"         {}
-<INITIAL>"volatile"       {}
 <INITIAL>"afx_msg"        {}
 
     /*==============> String <==============*/
