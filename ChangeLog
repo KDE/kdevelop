@@ -1,3 +1,6 @@
+2004-03-17 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Extended diffpart to also handle FileContext and dirty files.
+
 2004-03-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * NewMainWindow is now enabled by default
     * Added settings in "User Interface" for TabWidget visibility and IDEAl mode button layout
