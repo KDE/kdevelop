@@ -23,7 +23,7 @@
 #include "settingswidget.h"
 #include "statusbar.h"
 
-
+#include "toplevel.h"
 #include "toplevel_mdi.h"
 
 
@@ -55,6 +55,7 @@ void TopLevelMDI::init()
 
 TopLevelMDI::~TopLevelMDI()
 {
+  TopLevel::invalidateInstance( this );
 }
 
 
@@ -239,6 +240,15 @@ void TopLevelMDI::removeView(QWidget *view)
 
     m_widgetMap.remove(view);
     m_childViewMap.remove(wrapper);
+
+    // Find the KDockWidget which covers the QextMdiChildView to remove.
+    // Undock the KDockWidget if there is one.
+    // This will remove the corresponding tab from the output and tree views.
+    KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
+    if (pDock)
+    {
+      pDock->undock();
+    }
 
     // Note: this reparenting is necessary. Otherwise, the view gets
     // deleted twice: once when the wrapper is deleted, and the second

@@ -27,7 +27,7 @@
 #include "settingswidget.h"
 #include "statusbar.h"
 
-
+#include "toplevel.h"
 #include "toplevel_sdi.h"
 
 
@@ -62,6 +62,7 @@ void TopLevelSDI::init()
 
 TopLevelSDI::~TopLevelSDI()
 {
+  TopLevel::invalidateInstance( this );
 }
 
 
