@@ -99,7 +99,7 @@ void CKDevelop::initWhatsThis() {
   
   whats_this->add(real_file_tree, i18n("Real File Viewer\n\n"
         "The real file viewer shows the project directory in "
-        "it's real structure and gives access to all files."));
+        "its real structure and gives access to all files."));
   
   whats_this->add(doc_tree, i18n("Documentation Tree\n\n"
         "The documentation tree gives access to library "

@@ -241,7 +241,7 @@
                         <string>./configure --prefix=</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Enter the path to the cross-compiling environment of the selected architecture here. Example: arm-linux-gcc crosscompiler has it's environment in /opt/cross/arm-linux-gcc on a SuSE Linux system where the crosscompilers are located.</string>
+                        <string>Enter the path to the cross-compiling environment of the selected architecture here. Example: arm-linux-gcc crosscompiler has its environment in /opt/cross/arm-linux-gcc on a SuSE Linux system where the crosscompilers are located.</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
