@@ -30,6 +30,7 @@
 #include <kdevelop/kdevmainwindow.h>
 #include <kdevelop/domutil.h>
 #include <kdevelop/codemodel.h>
+#include <kparts/part.h>
 
 
 #include <kdevelop/kdevproject.h>
@@ -50,7 +51,7 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 : KDevLanguageSupport("KDevkjsSupport", "JavaScript", parent, name ? name : "kjsSupportPart" )
 {
 	setInstance(kjsSupportFactory::instance());
-	setXMLFile("kdevlang_kjssupport.rc");
+	setXMLFile("kdevkjssupport.rc");
 
 
 	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
@@ -102,9 +103,17 @@ KMimeType::List kjsSupportPart::mimeTypes()
 void kjsSupportPart::slotRun()
 {
 	// Execute the application here.
-
+/*
 	kdDebug() << "app " << project()->mainProgram(true ) << endl;
 	m_js->runFile( project()->mainProgram(true ));
+*/	
+
+	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
+	if ( ro_part ) 
+	{
+		m_js->runFile( ro_part->url().path() );
+	}
+	
 }
 
 void kjsSupportPart::projectConfigWidget(KDialogBase *dlg)
