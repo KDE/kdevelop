@@ -332,7 +332,7 @@ sub condCopyKdelnkFile {
   	chdir ($templatedir);
 
     if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini"||
-    			$processes{APPLICATION} eq "kde2mdi") {
+        $processes{APPLICATION} eq "kicker" ||$processes{APPLICATION} eq "kde2mdi") {
     	copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
     	chdir ($underDirectory);
       replaceValuesInFile(\%changings, "$nameLittle.desktop");
@@ -467,7 +467,7 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, "configure.in");
   }
-  if($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mdi")
+  if($processes{APPLICATION} eq "kicker"|$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mdi")
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
