@@ -1,3 +1,7 @@
+2002-04-28  Harald Fernengel <harry@kdevelop.org>
+        * SourceNavPart now uses KToolBarPopupAction to display nifty
+          Konqueror-like drop down menus for source code navigation
+
 2002-04-27  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Context menu actions in auto project act on context
