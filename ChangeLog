@@ -1,6 +1,11 @@
+2000-03-10 Ralf Nolden <rnolden@kdevelop.de>
+        * added special kdoc2 features to the doctree ;-)
+          now you can access all members in the html docu directly including the header list,
+          globals, hierarchy and annotated list.
+
 2000-03-09 Ralf Nolden <rnolden@kdevelop.de>
 	* fixed manual and programming handbook error in description for
-construction of new dialogs
+            construction of new dialogs
 
 2000-03-09 Walter Tasin  <tasin@kdevelop.de>
 	* fixing bug that creates problems with cvs-project generation

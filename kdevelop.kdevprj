@@ -1864,11 +1864,11 @@ workspace=1
 project_name=KDevelop
 version='1.0 Beta 1'
 AMChanged=false
-sgml_file=/home/rnolden/Projects/kdevelop/doc/en/manual/index.sgml
+sgml_file=/home/rnolden/cref/index.sgml
 short_info=,
 email=
 kdevprj_version=0.3
-configure_args=--disable-shared --enable-debug --with-qt-dir=/usr/local/qt-1.44-debug
+configure_args=--enable-kdoc2
 modifyMakefiles=false
 [kdevelop/ccvaddfolderdlg.cpp]
 install_location=

@@ -46,6 +46,8 @@ class ListViewDocItem : public KListViewItem
 public:
     ListViewDocItem( KListViewItem *parent,
                      const char *text, const char *filename );
+
+    virtual void setOpen(bool o);
 };
 
 
@@ -53,8 +55,16 @@ ListViewDocItem::ListViewDocItem(KListViewItem *parent,
                                  const char *text, const char *filename)
     : KListViewItem(parent, text, filename)
 {
-    setPixmap(0, Icon("mini/mini-doc.xpm"));
+    setOpen(false);
+//    setPixmap(0, Icon("mini/mini-doc.xpm"));
 }
+
+void ListViewDocItem::setOpen(bool o)
+{
+    setPixmap(0, o? Icon("mini/mini-doc2.xpm") : Icon("mini/mini-doc.xpm"));
+    KListViewItem::setOpen(o);
+}
+
 //
 //
 ///**
@@ -451,31 +461,82 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
     char buf[512];
     int count=0;
     QString baseurl;
+    QString classname;
+    ListViewDocItem* class_doc=0L;
     while (fgets(buf, sizeof buf, f))
-        {
-            QString s = buf;
-            if (s.left(11) == "<BASE URL=\"")
-                {
-                    int pos2 = s.find("\">", 11);
-                    if (pos2 != -1)
-                        baseurl = s.mid(11, pos2-11);
-                }
-            else if (s.left(9) == "<C NAME=\"")
-                {
-                    int pos1 = s.find("\" REF=\"", 9);
-                    if (pos1 == -1)
-                        continue;
-                    int pos2 = s.find("\">", pos1+7);
-                    if (pos2 == -1)
-                        continue;
-                    QString classname = s.mid(9, pos1-9);
-                    QString filename = s.mid(pos1+7, pos2-(pos1+7));
-                    new ListViewDocItem(this, classname,
-                                        baseurl + "/" + filename);
-  		    count++;
-                }
-        }
+    {
+      QString s = buf;
+      if (s.left(11) == "<BASE URL=\"")
+      {
+          int pos2 = s.find("\">", 11);
+          if (pos2 != -1)
+              baseurl = s.mid(11, pos2-11);
+          {
+          QString other=baseurl+"/hier.html";
+          if(QFileInfo(other).exists())
+           new ListViewDocItem(this,i18n("Hierarchy"),
+                              other);
+          other=baseurl+"/header-list.html";
+          if(QFileInfo(other).exists())
+           new ListViewDocItem(this,i18n("Header Files"),
+                              other);
+          other=baseurl+"/all-globals.html";
+          if(QFileInfo(other).exists())
+           new ListViewDocItem(this,i18n("Globals"),
+                              other);
+          other=baseurl+"/index-long.html";
+          if(QFileInfo(other).exists())
+           new ListViewDocItem(this,i18n("Annotated List"),
+                              other);                    
+          }
+      }
+      else if (s.left(9) == "<C NAME=\"")
+      {
+        int pos1 = s.find("\" REF=\"", 9);
+        if (pos1 == -1)
+            continue;
+        int pos2 = s.find("\">", pos1+7);
+        if (pos2 == -1)
+            continue;
+        classname = s.mid(9, pos1-9);
+        QString filename = s.mid(pos1+7, pos2-(pos1+7));
+        class_doc= new ListViewDocItem(this, classname,
+                            baseurl + "/" + filename);
+        count++;
+      }  
+      //////////////////////////////////////////
+      else if (s.left(10) == "<ME NAME=\"")
+      {
+        int pos1 = s.find("\" REF=\"", 10);
+        if (pos1 == -1)
+            continue;
+        int pos2 = s.find("\">", pos1+7);
+        if (pos2 == -1)
+            continue;
+        QString membername = s.mid(10, pos1-10);
+        membername=classname+"::"+membername;
+        QString memberfilename = s.mid(pos1+7, pos2-(pos1+7));
+        if(class_doc && classname)
+          new ListViewDocItem(class_doc, membername,
+                            baseurl + "/" + memberfilename);
+      }
+      else if (s.left(9) == "<M NAME=\"")
+      {
+        int pos1 = s.find("\" REF=\"", 9);
+        if (pos1 == -1)
+            continue;
+        int pos2 = s.find("\">", pos1+7);
+        if (pos2 == -1)
+            continue;
+        QString membername = s.mid(9, pos1-9);
+        QString memberfilename = s.mid(pos1+7, pos2-(pos1+7));
+        if(class_doc && classname)
+          new ListViewDocItem(class_doc, membername,
+                            baseurl + "/" + memberfilename);
+      }
+    }
     sortChildItems(0, true);
+    
     return count;
 }
 

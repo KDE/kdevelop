@@ -14,7 +14,7 @@ mini_pics_DATA = CTchildren.xpm CTclients.xpm CTparents.xpm CTsuppliers.xpm CTvi
 	kdlg_QListView.xpm \
 	kdlg_KCombo.xpm kdlg_KKeyButton.xpm kdlg_KColorButton.xpm \
 	kdlg_KRestrictedLine.xpm kdlg_KTreeList.xpm kdlg_KLedLamp.xpm kdlg_KLed.xpm \
-	kdlg_KProgress.xpm kdlg_KSeparator.xpm kdlg_KDatePicker.xpm kdlg_KDateTable.xpm
+	kdlg_KProgress.xpm kdlg_KSeparator.xpm kdlg_KDatePicker.xpm kdlg_KDateTable.xpm mini-doc2.xpm
 
 
 mini_picsdir = $(kde_datadir)/kdevelop/pics/mini/
