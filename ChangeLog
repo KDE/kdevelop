@@ -1,3 +1,13 @@
+2003-04-05 Alexander Dymo <cloudtemple@mksat.net>
+    Applied patch from Luc Willems <Willems.luc@pandora.be>:
+    Classview:
+    - add support for scripts folder in classviewer
+    Pelrsupportpart:
+    - add support for namespaces and scripts in classviewer
+    - parsing of "use ...." libraries
+    - get list of INC path in local installed perl to allow parsing of perl
+    libraries outside the project directory
+
 2003-04-05 Amilcar Lucas <a.lucas@tu-bs.de>
     - Simplified the "Inteligent messages auto-hide" code a lot
     - Now it also works for AutoMake&friends and configure
