@@ -894,7 +894,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
 
   m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
-  m_print_debug_info->setGeometry( 10, 20, 190, 30 );
+  m_print_debug_info->setGeometry( 10, 20, 190, 25 );
   m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
   m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
   m_print_debug_info->setFontPropagation( QWidget::NoChildren );
@@ -904,7 +904,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_debug_info->setAutoResize( FALSE );
 
   m_cont_after_error = new QCheckBox( w5, "m_cont_after_error" );
-  m_cont_after_error->setGeometry( 200, 20, 170, 30 );
+  m_cont_after_error->setGeometry( 200, 20, 170, 25 );
   m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
   m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
   m_cont_after_error->setFontPropagation( QWidget::NoChildren );
@@ -914,7 +914,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_cont_after_error->setAutoResize( FALSE );
 
   m_print_data_base = new QCheckBox( w5, "m_print_data_base" );
-  m_print_data_base->setGeometry( 375, 20, 170, 30 );
+  m_print_data_base->setGeometry( 375, 20, 170, 25 );
   m_print_data_base->setFocusPolicy( QWidget::TabFocus );
   m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
   m_print_data_base->setFontPropagation( QWidget::NoChildren );
@@ -924,7 +924,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_data_base->setAutoResize( FALSE );
 
   m_env_variables = new QCheckBox( w5, "m_env_variables" );
-  m_env_variables->setGeometry( 10, 60, 190, 30 );
+  m_env_variables->setGeometry( 10, 50, 190, 25 );
   m_env_variables->setFocusPolicy( QWidget::TabFocus );
   m_env_variables->setBackgroundMode( QWidget::PaletteBackground );
   m_env_variables->setFontPropagation( QWidget::NoChildren );
@@ -934,7 +934,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_env_variables->setAutoResize( FALSE );
 
   m_no_rules = new QCheckBox( w5, "m_no_rules" );
-  m_no_rules->setGeometry( 200, 60, 170, 30 );
+  m_no_rules->setGeometry( 200, 50, 170, 25 );
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
   m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
   m_no_rules->setFontPropagation( QWidget::NoChildren );
@@ -944,7 +944,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_no_rules->setAutoResize( FALSE );
 
   m_touch_files = new QCheckBox( w5, "m_touch_files" );
-  m_touch_files->setGeometry( 375, 60, 170, 30 );
+  m_touch_files->setGeometry( 375, 50, 170, 25 );
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
   m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
   m_touch_files->setFontPropagation( QWidget::NoChildren );
@@ -954,7 +954,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_touch_files->setAutoResize( FALSE );
 
   m_ignor_errors = new QCheckBox( w5, "m_ignor_errors" );
-  m_ignor_errors->setGeometry( 10, 100, 190, 30 );
+  m_ignor_errors->setGeometry( 10, 80, 190, 25 );
   m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
   m_ignor_errors->setBackgroundMode( QWidget::PaletteBackground );
   m_ignor_errors->setFontPropagation( QWidget::NoChildren );
@@ -964,7 +964,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_ignor_errors->setAutoResize( FALSE );
 
   m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
-  m_silent_operation->setGeometry( 200, 100, 170, 30 );
+  m_silent_operation->setGeometry( 200, 80, 170, 25 );
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
   m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
   m_silent_operation->setFontPropagation( QWidget::NoChildren );
@@ -974,7 +974,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_silent_operation->setAutoResize( FALSE );
 
   m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
-  m_print_work_dir->setGeometry( 375, 100, 170, 30 );
+  m_print_work_dir->setGeometry( 375, 80, 170, 25 );
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
   m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_print_work_dir->setFontPropagation( QWidget::NoChildren );
@@ -984,7 +984,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_work_dir->setAutoResize( FALSE );
 
   m_job_number_label = new QLabel( w5, "m_job_number_label" );
-  m_job_number_label->setGeometry( 10, 140, 100, 30 );
+  m_job_number_label->setGeometry( 10, 110, 100, 25 );
   m_job_number_label->setFocusPolicy( QWidget::NoFocus );
   m_job_number_label->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number_label->setFontPropagation( QWidget::NoChildren );
@@ -994,7 +994,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_job_number_label->setMargin( -1 );
 
   m_job_number = new QSpinBox( w5, "m_job_number" );
-  m_job_number->setGeometry( 120, 140, 60, 30 );
+  m_job_number->setGeometry( 120, 110, 60, 25 );
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number->setFontPropagation( QWidget::NoChildren );
@@ -1009,7 +1009,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_job_number->setWrapping( FALSE );
 
   m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
-  m_set_modify_label->setGeometry( 10, 190, 100, 30 );
+  m_set_modify_label->setGeometry( 10, 150, 100, 25 );
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
   m_set_modify_label->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_label->setFontPropagation( QWidget::NoChildren );
@@ -1019,7 +1019,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_label->setMargin( -1 );
 
   m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
-  m_set_modify_line->setGeometry( 120, 190, 330, 30 );
+  m_set_modify_line->setGeometry( 120, 150, 330, 25 );
   m_set_modify_line->setMinimumSize( 0, 0 );
   m_set_modify_line->setMaximumSize( 32767, 32767 );
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
@@ -1032,7 +1032,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_line->setFrame( TRUE );
 
   m_set_modify_dir = new QPushButton( w5, "m_set_modify_dir" );
-  m_set_modify_dir->setGeometry( 460, 190, 30, 30 );
+  m_set_modify_dir->setGeometry( 460, 150, 30, 25 );
   m_set_modify_dir->setMinimumSize( 0, 0 );
   m_set_modify_dir->setMaximumSize( 32767, 32767 );
   m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
@@ -1046,7 +1046,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_dir->setAutoResize( FALSE );
   
   m_optional_label = new QLabel( w5, "m_optional_label" );
-  m_optional_label->setGeometry( 10, 240, 100, 30 );
+  m_optional_label->setGeometry( 10, 190, 100, 25 );
   m_optional_label->setFocusPolicy( QWidget::NoFocus );
   m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
   m_optional_label->setFontPropagation( QWidget::NoChildren );
@@ -1056,7 +1056,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_optional_label->setMargin( -1 );
 
   m_optional_line = new QLineEdit( w5, "m_optional_line" );
-  m_optional_line->setGeometry( 120, 240, 370, 30 );
+  m_optional_line->setGeometry( 120, 190, 370, 25 );
   m_optional_line->setMinimumSize( 0, 0 );
   m_optional_line->setMaximumSize( 32767, 32767 );
   m_optional_line->setFocusPolicy( QWidget::StrongFocus );
@@ -1067,12 +1067,32 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_optional_line->setMaxLength( 32767 );
   m_optional_line->setEchoMode( QLineEdit::Normal );
   m_optional_line->setFrame( TRUE );
-  
+
+  m_rebuild_label = new QLabel( w5, "m_rebuild_label" );
+  m_rebuild_label->setGeometry( 10, 235, 250, 25 );
+  m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
+  m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_rebuild_label->setFontPropagation( QWidget::NoChildren );
+  m_rebuild_label->setPalettePropagation( QWidget::NoChildren );
+  m_rebuild_label->setText(i18n("Rebuild behaviour on run/debug:"));
+  m_rebuild_label->setAlignment( 289 );
+  m_rebuild_label->setMargin( -1 );
+
+  m_rebuild_combo = new QComboBox( w5, "m_rebuild_label" );
+  m_rebuild_combo->setGeometry( 270, 235, 220, 25 );
+  m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
+  m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
+  m_rebuild_combo->setFontPropagation( QWidget::NoChildren );
+  m_rebuild_combo->setPalettePropagation( QWidget::NoChildren );
+  m_rebuild_combo->insertItem(i18n("warning on modification"));
+  m_rebuild_combo->insertItem(i18n("only on modification"));
+  m_rebuild_combo->insertItem(i18n("always rebuild"));
+
   addTab(w5,i18n("Make Options"));
 
   KQuickHelp::add(m_set_modify_dir, i18n("Pressing the folder button lets you choose\n"
-  																			"a file which will be set modified. This will\n"
-  																			"recompile the file on the next build run."));
+  					 "a file which will be set modified. This will\n"
+  					 "recompile the file on the next build run."));
 
   KQuickHelp::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
 					   "processing. The debugging information tells you which\n"
@@ -1084,8 +1104,12 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   KQuickHelp::add(m_optional_label,
   KQuickHelp::add(m_optional_line, i18n("Set any other additional options for your\n"
-  																			"make-program here.")));
+  					"make-program here.")));
 
+  KQuickHelp::add(m_rebuild_label,
+  KQuickHelp::add(m_rebuild_combo, i18n("Set the rebuild type on pressing run/debug here. This allows you to select if you either\n"
+  					"want to rebuild always on run/debug or rebuild only on modifications or\n"
+					"give you first a warning on modification of your sources.")));
 
   KQuickHelp::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
 					  "results from reading the makefiles; then  execute  as\n"
@@ -1184,6 +1208,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 	m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
 	m_optional_line->setText(settings->readEntry("OptionalLine"));
 	m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
+
+	m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
 
   // **************set the button*********************
   setOkButton(i18n("OK"));
@@ -1475,6 +1501,7 @@ void CPrjOptionsDlg::ok(){
 	}
 	else settings->writeEntry("IgnorErrors", FALSE);
 	
+	settings->writeEntry("RebuildType", m_rebuild_combo->currentItem());
 	settings->writeEntry("SetModifyLine", m_set_modify_line->text());
 	settings->writeEntry("OptionalLine", m_optional_line->text());
 	settings->writeEntry("JobNumber", m_job_number->text());	

@@ -649,11 +649,6 @@ void CKDevelop::slotProjectNewAppl(){
 
     readProjectFile(file);
     QString type=prj->getProjectType();
-    // to be on the save side...
-    //   custom projects have to be rebuilded without regarding
-    //   the date of the sources...
-    if (type=="normal_empty")
-	prj->setRebuildType(CProject::REBUILD_ALWAYS);
 
     if (type == "normal_kde" || type == "mini_kde" || type == "normalogl_kde" ||
         type =="normal_kde2" || type=="mini_kde2" || type == "mdi_kde2")

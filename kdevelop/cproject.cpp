@@ -79,12 +79,6 @@ void CProject::writeProject(){
  *                                                                   *
  ********************************************************************/
 
-void CProject::setRebuildType(RebuildType type)
-{
-  config.setGroup("General");
-  config.writeEntry("RebuildType", (int) type);
-}
-
 void CProject::clearMakefileAmChanged()
 {
     config.setGroup("General");
@@ -270,14 +264,6 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
   config.readListEntry("sub_dirs",info.sub_dirs);
 
   return info;  
-}
-
-CProject::RebuildType CProject::getRebuildType()
-{
-  config.setGroup("General");
-  // read the rebuild type...
-  //  if none found, it would build only if sources have modified without warning
-  return (CProject::RebuildType) config.readNumEntry("RebuildType", REBUILD_ON_MODIFIED);
 }
 
 /*********************************************************************

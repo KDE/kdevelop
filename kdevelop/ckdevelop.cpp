@@ -825,21 +825,23 @@ void CKDevelop::slotBuildCompileFile(){
 
 void CKDevelop::slotBuildRun()
 {
+  KConfig *config=kapp->getConfig();
   bool isDirty=isProjectDirty();
-  int qYesNoCancel=QMessageBox::Yes;
+  int qYesNoCancel=0;
+  int rebuildType;
 
-  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
+  config->setGroup("MakeOptionsSettings");
+  rebuildType=config->readNumEntry("RebuildType", 0);
+  if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
-                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
-                    QMessageBox::Cancel);
+                    i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
-  if (qYesNoCancel!=QMessageBox::Cancel)
+  if (qYesNoCancel!=2)
   {
     beep=false;
     prj->writeProject();
-    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS ||
-         (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (rebuildType==2 || (isDirty && qYesNoCancel==0))
     {
       next_job = "run";
       slotBuildMake();
@@ -851,20 +853,23 @@ void CKDevelop::slotBuildRun()
 
 void CKDevelop::slotBuildRunWithArgs()
 {
+  KConfig *config=kapp->getConfig();
   bool isDirty=isProjectDirty();
-  int qYesNoCancel=QMessageBox::Yes;
+  int qYesNoCancel=0;
+  int rebuildType;
 
-  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
+  config->setGroup("MakeOptionsSettings");
+  rebuildType=config->readNumEntry("RebuildType", 0);
+  if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
-                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
-                    QMessageBox::Cancel);
+                    i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
-  if (qYesNoCancel!=QMessageBox::Cancel)
+  if (qYesNoCancel!=2)
   {
     beep=false;
     prj->writeProject();
-    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS || (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (rebuildType==2 || (isDirty && qYesNoCancel==0))
     {
       next_job = "run_with_args";
       slotBuildMake();
@@ -1294,23 +1299,26 @@ void CKDevelop::slotDebugNamedFile()
 
 void CKDevelop::slotBuildDebug(bool bWithArgs)
 {
+  KConfig *config=kapp->getConfig();
   bool isDirty=isProjectDirty();
-  int qYesNoCancel=QMessageBox::Yes;
+  int qYesNoCancel=0;
+  int rebuildType;
 
-  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
+  config->setGroup("MakeOptionsSettings");
+  rebuildType=config->readNumEntry("RebuildType", 0);
+  if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
-                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
-                    QMessageBox::Cancel);
+                    i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
-  if (qYesNoCancel!=QMessageBox::Cancel)
+  if (qYesNoCancel!=2)
   {
     if(!bKDevelop)
       switchToKDevelop();
 
     beep=false;
     prj->writeProject();
-    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS || (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (rebuildType==2 || (isDirty && qYesNoCancel==0))
     {
       if (bWithArgs)
         next_job="debug_with_args";

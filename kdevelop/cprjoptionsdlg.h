@@ -128,8 +128,11 @@ protected:
   QCheckBox* m_print_work_dir;
   QCheckBox* m_silent_operation;
   QCheckBox* m_ignor_errors;
+  QComboBox* m_rebuild_combo;
+
   QLabel* m_job_number_label;
   QLabel* m_optional_label;
+  QLabel* m_rebuild_label;
   QLabel* m_set_modify_label;
 
 private:
