@@ -195,6 +195,10 @@ void GrepViewWidget::searchActivated()
         command += "| grep -v \"SCCS/\" ";
         command += "| grep -v \"CVS/\" ";
     }
+
+    // quote spaces in filenames going to xargs 
+    command += "| sed \"s/ /\\\\\\ /g\" "; 
+
     command += "| xargs " ;
 
 #ifndef USE_SOLARIS
@@ -238,8 +242,8 @@ void GrepViewWidget::slotExecuted(QListBoxItem* item)
         return;
 
     GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-    m_part->partController()->editDocument( gi->filename(), gi->linenumber()-1 );
-    m_part->mainWindow()->lowerView(this);
+    m_part->partController()->editDocument( KURL( gi->filename() ), gi->linenumber()-1 );
+//    m_part->mainWindow()->lowerView(this);
 }
 
 
