@@ -13,14 +13,22 @@
 #include <qradiobutton.h>
 
 #include "diffdialog.h"
+#include <klocale.h>
+#include <qbuttongroup.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // class DiffDialog
 ///////////////////////////////////////////////////////////////////////////////
 
-DiffDialog::DiffDialog( QWidget *parent, const char *name, WFlags f )
+DiffDialog::DiffDialog( const CVSEntry &entry, QWidget *parent, const char *name, WFlags f )
     : DiffDialogBase( parent, name, true, f)
 {
+    m_entry = entry;
+    QString currentRevision = entry.revision();
+    revaEdit->setText(currentRevision);
+    revbEdit->setText(currentRevision);
+    revOtherEdit->setText(currentRevision);
+    languageChange();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,6 +73,15 @@ QString DiffDialog::revB() const
         return this->revbEdit->text();
     else
         return QString::null;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void DiffDialog::languageChange() {
+    DiffDialogBase::languageChange();
+    //buttonGroup1->setTitle( tr2i18n( "Build Difference Between" ) );
+    if(!m_entry.revision().isNull())
+      diffLocalHeadRadio->setText( tr2i18n( "Local copy and &HEAD (%1)" ).arg( m_entry.revision()) );
 }
 
 #include "diffdialog.moc"

@@ -13,6 +13,7 @@
 #define __DIFFDIALOG_H
 
 #include "diffdialogbase.h"
+#include "cvsentry.h"
 
 /**
 * Implementation for a dialog which collects data for diff operation
@@ -23,7 +24,7 @@ class DiffDialog : public DiffDialogBase
 {
     Q_OBJECT
 public:
-    DiffDialog( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    DiffDialog(const CVSEntry &entry, QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
     virtual ~DiffDialog();
 
     QString revA() const;
@@ -33,6 +34,9 @@ private:
     enum  DiffType { diffLocalBASE, diffLocalHEAD, diffLocalOther, diffArbitrary };
 
     DiffType requestedDiff() const;
+    CVSEntry m_entry;
+protected slots:
+    virtual void languageChange();
 };
 
 #endif // __DIFFDIALOG_H

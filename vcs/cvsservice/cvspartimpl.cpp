@@ -592,8 +592,11 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
 
     if (!prepareOperation( urlList, opDiff ))
         return;
+    
+    CVSDir cvsdir = CVSDir( urlList[0].directory() );
+    CVSEntry entry = cvsdir.fileStatus( urlList[0].fileName() );
 
-    DiffDialog dlg;
+    DiffDialog dlg(entry);
     if (dlg.exec() != QDialog::Accepted)
         return;
 
