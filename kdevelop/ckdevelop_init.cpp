@@ -548,9 +548,9 @@ void CKDevelop::initMenu(){
   make_submenu->insertItem("&Dmake",ID_OPTIONS_MAKE_DMAKE);
   options_menu->insertItem(i18n("Make-&Command..."),make_submenu,ID_OPTIONS_MAKE);
   connect(make_submenu, SIGNAL(activated(int)), SLOT(slotOptionsMake(int)));
-  
-  options_menu->insertItem(i18n("&Autosave"),this,SLOT(slotOptionsAutosave()),0,ID_OPTIONS_AUTOSAVE);
   options_menu->insertSeparator();
+  options_menu->insertItem(i18n("&Autosave"),this,SLOT(slotOptionsAutosave()),0,ID_OPTIONS_AUTOSAVE);
+  
   config->setGroup("General Options");
   bAutosave=config->readBoolEntry("Autosave",true);
   saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
@@ -560,8 +560,9 @@ void CKDevelop::initMenu(){
     options_menu->setItemChecked(ID_OPTIONS_AUTOSAVE, true);
     saveTimer->start(saveTimeout);
   }
-  else
+  else{
     saveTimer->stop();
+  }
   
   make_cmd=config->readEntry("Make","make");
   if(make_cmd=="make")

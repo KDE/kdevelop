@@ -1,7 +1,13 @@
+1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* remove the sh-scripts "autoconfsuite","cleanrebuildall","rebuildmakefiles" and
+	replaced it with a C++ solution
+	* fixed a bug in cpp.tar.gz
+	
+
 1999-02-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* replaced all #include <q*.h> with the longer version
 	* added a ring bell after a make
-	* added some class foward-declarartions and moved some includes to the *.cpp file,
+	* added some class foward-declarartions and moved some includes to the *.cpp files,
 	it reduce the dependencies and  the compiletime
 	* added first version of workspaces (only a test)
 	

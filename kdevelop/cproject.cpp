@@ -695,11 +695,7 @@ void CProject::updateConfigureIn(){
     }
   }
   
- //  KProcess process;
-//   QDir::setCurrent(getProjectDir()); 
-//   process.clearArguments();
-//   process << "automake";
-//   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+ 
 }
 void  CProject::writeWorkspace(TWorkspace ws){
   switch(ws.id){
@@ -754,7 +750,7 @@ TWorkspace CProject::getWorkspace(int id){
   ws.header_file = config->readEntry("header_file");
   ws.cpp_file = config->readEntry("cpp_file");
   ws.browser_file = config->readEntry("browser_file");
-  ws.show_treeview = config->readBoolEntry("show_treeview");
-  ws.show_output_view =config->readBoolEntry("show_outputview");
+  ws.show_treeview = config->readBoolEntry("show_treeview",true);
+  ws.show_output_view =config->readBoolEntry("show_outputview",true);
   return ws;
 }

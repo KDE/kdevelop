@@ -329,13 +329,12 @@ void CKDevelop::slotProjectAddExistingFiles(){
   if(new_subdir){
     KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
     setToolMenuProcess(false);
-  slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-  messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
-  process.clearArguments();
-  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
-  process << "sh" << path + "rebuildmakefiles";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+    messages_widget->clear();
+    QDir::setCurrent(prj->getProjectDir());
+    shell_process.clearArguments();
+    shell_process << make_cmd << " -f Makefile.dist && ./configure";
+    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   }
 }
 
@@ -379,15 +378,14 @@ void CKDevelop::newFile(bool add_to_project){
     new_subdir = addFileToProject(complete_filename,type);
   }
   if(new_subdir){
-    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe must now regenerate all Makefiles."),KMsgBox::INFORMATION);
+    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
     setToolMenuProcess(false);
     slotStatusMsg(i18n("Running automake/autoconf and configure..."));
     messages_widget->clear();
     QDir::setCurrent(prj->getProjectDir());
-    process.clearArguments();
-    QString path = kapp->kde_datadir()+"/kdevelop/tools/";
-    process << "sh" << path + "rebuildmakefiles";
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    shell_process.clearArguments();
+    shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   }
   
 }

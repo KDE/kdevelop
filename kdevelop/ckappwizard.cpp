@@ -196,7 +196,7 @@ void CKAppWizard::initPages(){
   KQuickHelp::add(apidoc, i18n("Check this if you wish to have your API\n"
 				"Documentation generated automatically"));
 
-  userdoc = new QCheckBox (i18n("User-Dokumentation"), widget2);
+  userdoc = new QCheckBox (i18n("User-Documentation"), widget2);
   userdoc->setGeometry(20,45,140,30);
 //  QToolTip::add(userdoc,i18n("activate, if you wish the User-Documentationfiles"));
   KQuickHelp::add(userdoc, i18n("Check this if you wish a general User\n"

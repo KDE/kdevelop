@@ -61,8 +61,7 @@ void CKDevelop::slotFileOpenFile(){
   }
   else{
     str = KFileDialog::getOpenFileName(0,"*",this);
-  }
-  
+  }  
   if (str.isEmpty()) return; //cancel
   switchToFile(str);
   
@@ -93,13 +92,14 @@ void CKDevelop::slotFileSaveAll(){
   if(!bAutosave || saveTimer->isActive()){
     slotStatusMsg(i18n("Saving all changed files..."));
   }
-  else
+  else{
     slotStatusMsg(i18n("Autosaving..."));
+  }
   TEditInfo* actual_info;
   bool mod = false;
   // save current filename to switch back after saving
-	QString visibleFile = edit_widget->getName();
-	// ooops...autosave switches tabs...
+  QString visibleFile = edit_widget->getName();
+  // ooops...autosave switches tabs...
   int visibleTab=s_tab_view->getCurrentTab();
   // first the 2 current edits
   if(header_widget->isModified()){
@@ -120,7 +120,7 @@ void CKDevelop::slotFileSaveAll(){
     else{
       cpp_widget->doSave();
     }
-//    mod=true;
+    //    mod=true;
   }
   
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
@@ -908,11 +908,11 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
   QDir::setCurrent(prj->getProjectDir()); 
-  process.clearArguments();
-  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
-  process << "sh" << path + "cleanrebuildall";
+  shell_process.clearArguments();
+  shell_process << make_cmd << "distclean && " << make_cmd 
+		<< " -f Makefile.dist && ./configure &&" << make_cmd;
   beep = true;
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 void CKDevelop::slotBuildDistClean(){
@@ -949,10 +949,9 @@ void CKDevelop::slotBuildAutoconf(){
   slotStatusMsg(i18n("Running autoconf suite..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
-  process.clearArguments();
-  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
-  process << "sh" << path + "autoconfsuite";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shell_process.clearArguments();
+  shell_process << make_cmd << " -f Makefile.dist";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }
 

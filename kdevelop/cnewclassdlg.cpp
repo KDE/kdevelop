@@ -149,18 +149,21 @@ void CNewClassDlg::ok(){
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
-  text = baseclass_edit->text(); 
-  if (text.isEmpty() && qwidget_check->isChecked()){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the baseclass!")
-		     ,KMsgBox::EXCLAMATION);
-    return;
-  }
+  // text = baseclass_edit->text(); 
+//   if (text.isEmpty() && qwidget_check->isChecked()){
+//     KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the baseclass!")
+// 		     ,KMsgBox::EXCLAMATION);
+//     return;
+//   }
 
  
   QString classname = classname_edit->text();
   QString headername = header_edit->text();
   QString implname = impl_edit->text();
   QString basename = baseclass_edit->text();
+  if(basename.isEmpty() && qwidget_check->isChecked()){
+    basename = "QWidget";
+  }
   QString doc = doc_edit->text();
   
 
@@ -202,7 +205,7 @@ void CNewClassDlg::ok(){
     }
     stream << "\n#ifndef " + classname.upper() + "_H\n";
     stream << "#define "+ classname.upper() + "_H\n\n";
-    if (qwidget_check->isChecked()){
+    if (qwidget_check->isChecked() && basename != "QWidget"){
       stream << "#include <qwidget.h>\n";
     }
     if(!basename.isEmpty()){
