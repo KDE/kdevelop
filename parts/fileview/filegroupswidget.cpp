@@ -166,6 +166,8 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
     addColumn(i18n("Name"));
+	setAllColumnsShowFocus( true );
+
 //    addColumn(i18n("Location"));
 
     connect( this, SIGNAL(executed(QListViewItem*)),

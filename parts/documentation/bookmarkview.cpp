@@ -119,6 +119,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     m_view->setSorting(-1);
     m_view->header()->hide();
     m_view->setResizeMode(QListView::AllColumns);
+    m_view->setAllColumnsShowFocus( true );
     l->addWidget(m_view);
     QHBoxLayout *l2 = new QHBoxLayout(l, KDialog::spacingHint());
     m_addButton = new KPushButton(i18n("Add"), this);

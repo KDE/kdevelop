@@ -53,6 +53,7 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     header()->hide();
     setSorting( 0 );
     setRootIsDecorated( true );
+	setAllColumnsShowFocus( true );
 
     m_projectItem = 0;
 

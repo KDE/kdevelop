@@ -52,7 +52,7 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
     m_index = new IndexBox(this);
     l->addWidget(m_index);
        
-    connect(m_index, SIGNAL(doubleClicked(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
+    connect(m_index, SIGNAL(executed(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
     connect(m_index, SIGNAL(mouseButtonPressed(int, QListBoxItem*, const QPoint& )),
         this, SLOT(itemMouseButtonPressed(int, QListBoxItem*, const QPoint& )));
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(searchInIndex()));

@@ -45,6 +45,7 @@ ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
     m_view->setResizeMode(QListView::AllColumns);
     m_view->setRootIsDecorated(true);
     m_view->setSorting(-1);
+    m_view->setAllColumnsShowFocus( true );
 
     connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
         this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));

@@ -100,6 +100,7 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     m_view->setColumnWidthMode(0, QListView::Maximum);
     m_view->setColumnWidthMode(1, QListView::Maximum);
     m_view->setAllColumnsShowFocus(true);
+    m_view->setResizeMode( QListView::LastColumn );
 
     connect(m_configButton, SIGNAL(clicked()), this, SLOT(updateConfig()));
     connect(m_indexButton, SIGNAL(clicked()), this, SLOT(updateIndex()));
