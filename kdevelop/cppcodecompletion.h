@@ -43,6 +43,11 @@ public:
     virtual void showCompletionBox(QValueList<CompletionEntry> complList,int offset=0);
     bool eventFilter( QObject *o, QEvent *e );
 
+    // QT 2.x wrapper methods
+    //    please check if KDevelop will be compiled only for KDE 3
+    bool check_end(const QString &str, const QString &suffix);
+    void popFrontStringList(QStringList &slist);
+
 public slots:
     void completeText();
 

@@ -122,7 +122,10 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
         if( line.startsWith("(") ){
             // pass
-        } else if( decl_rx.exactMatch(simplifyLine) ){
+        } 
+#warning fixme codecompletion
+#if QT_VERSION >=300
+        else if( decl_rx.exactMatch(simplifyLine) ){
             // parse a declaration
             QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
             QString rest = simplifyLine.mid( decl_rx.pos(2) + 1 )
@@ -141,6 +144,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 //                    type.latin1(),
 //                    vlist.join(", ").latin1() );
         }
+#endif
     }
     return vars;
 }

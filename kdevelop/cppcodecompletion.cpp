@@ -391,11 +391,11 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     }
 
     QString e1 = exprs.first().stripWhiteSpace();
-    exprs.pop_front();
+    popFrontStringList(exprs);
 
     if( e1.isEmpty() ){
         type = v_this.type;
-    } else if( e1.endsWith("::") ){
+    } else if( check_end(e1, "::") ){
         type = e1.left( e1.length() - 2 ).stripWhiteSpace();
     } else {
         int first_paren_index = 0;
@@ -417,7 +417,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     while( pClass && exprs.count() ){
 
         QString e = exprs.first().stripWhiteSpace();
-        exprs.pop_front();
+        popFrontStringList(exprs);
         type = "";  // no type
 
         // kdDebug() << "----------> evaluate " << e << endl;
@@ -755,13 +755,16 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
             continue;
         }
 
+#warning fixme codecompletion
+#if QT_VERSION >=300
         if( regMethod.match(text) != -1 ){
             iMethodBegin = i;
             if( classname ){
                 *classname = regMethod.cap( 1 );
             }
-             break;
+            break;
         }
+#endif
     }
 
     if( iMethodBegin == 0 ){
@@ -770,11 +773,15 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     }
 
     QString strCopy;
+#warning fixme codecompletion
+#if QT_VERSION >=300
     strCopy += regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n";
-    for( int i = iMethodBegin; i < iLine; i++ ){
+    for( int i = iMethodBegin; i < iLine; i++ )
+    {
         strCopy += m_edit->textLine( i ) + "\n";
     }
     strCopy += m_edit->textLine( iLine ).left( iCol );
+#endif
 
     return strCopy;
 }
@@ -812,15 +819,19 @@ void CppCodeCompletion::completeText()
         expr = expr.simplifyWhiteSpace();
     }
 
-    QRegExp rx( "^.*([_\\w]+)\\s*$" );
-    if( rx.exactMatch(expr) ){
+#warning fixme codecompletion
+#if QT_VERSION >=300
+   QRegExp rx( "^.*([_\\w]+)\\s*$" );
+    if( rx.exactMatch(expr) )
+    {
         word = rx.cap( 1 );
         expr = expr.left( rx.pos(1) );
     }
 
     kdDebug() << "prefix = |" << word << "|" << endl;
     kdDebug() << "expr = |" << expr << "|" << endl;
-
+#endif
+    
     if( showArguments ){
         QString type = evaluateExpression( expr, variableList, m_pStore );
         QStringList functionList = getMethodListForClass( type, word );
@@ -832,6 +843,27 @@ void CppCodeCompletion::completeText()
             showCompletionBox( entries, word.length() );
         }
     }
+
+}
+
+bool CppCodeCompletion::check_end(const QString &str, const QString &suffix)
+{
+#if QT_VERSION >=300
+   return str.ends_with(suffix);
+#else
+   return (str.right(suffix.length()) == suffix);
+#endif
+}
+
+void CppCodeCompletion::popFrontStringList(QStringList &slist)
+{
+#if QT_VERSION >=300
+  slist.pop_front();
+#else
+  QStringList::Iterator it;
+  if ((it=slist.begin())!=slist.end())
+    slist.remove(it);
+#endif
 
 }
 
