@@ -87,7 +87,7 @@ void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
     if (!normalExit)
         return;
 
-    kdDebug(9006) << m_requestStatusJob->output() << endl;
+    //kdDebug(9006) << m_requestStatusJob->output() << endl;
 
     emit statusReady( parse( m_requestStatusJob->output() ), m_savedCallerData );
 }
