@@ -12,6 +12,7 @@
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
+#include <kkeydialog.h>
 
 
 #include "projectmanager.h"
@@ -107,6 +108,11 @@ void TopLevelMDI::createActions()
   
   connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
            this, SLOT(slotActiveProcessCountChanged(uint)) );
+  
+  action = KStdAction::keyBindings(
+      this, SLOT(slotKeyBindings()),
+      actionCollection(), "settings_configure_shortcuts" );
+  action->setStatusText(i18n("Lets you configure shortcut keys"));
            
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
@@ -319,6 +325,19 @@ void TopLevelMDI::saveMDISettings()
 
   config->writeEntry("MDI mode", mdiMode());
 }
+
+
+void TopLevelMDI::slotKeyBindings()
+{
+  KKeyDialog dlg( false, this );
+  QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
+  for( QPtrListIterator<KXMLGUIClient> it( clients );
+       it.current(); ++it ) {
+    dlg.insert( (*it)->actionCollection() );
+  }
+  dlg.configure();
+}
+
 
 void TopLevelMDI::slotSettings()
 {

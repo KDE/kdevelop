@@ -55,6 +55,7 @@ public slots:
 private slots:
 
   void slotQuit();
+  void slotKeyBindings();
   void slotSettings();
   void slotActiveProcessCountChanged( uint active );
 

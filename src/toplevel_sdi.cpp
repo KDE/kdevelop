@@ -12,6 +12,7 @@
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
+#include <kkeydialog.h>
 
 #include "widgets/ktabzoomwidget.h"
 
@@ -122,6 +123,11 @@ void TopLevelSDI::createActions()
   connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
            this, SLOT(slotActiveProcessCountChanged(uint)) );
     
+  action = KStdAction::keyBindings(
+      this, SLOT(slotKeyBindings()),
+      actionCollection(), "settings_configure_shortcuts" );
+  action->setStatusText(i18n("Lets you configure shortcut keys"));
+  
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText( i18n("Lets you customize KDevelop") );
@@ -201,6 +207,18 @@ void TopLevelSDI::saveSettings()
 {
   ProjectManager::getInstance()->saveSettings();
   saveMainWindowSettings(kapp->config(), "Mainwindow");
+}
+
+
+void TopLevelSDI::slotKeyBindings()
+{
+  KKeyDialog dlg( false, this );
+  QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
+  for( QPtrListIterator<KXMLGUIClient> it( clients );
+       it.current(); ++it ) {
+    dlg.insert( (*it)->actionCollection() );
+  }
+  dlg.configure();
 }
 
 

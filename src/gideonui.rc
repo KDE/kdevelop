@@ -69,6 +69,7 @@
     <Action name="toolbars_showhide"/>
     <DefineGroup name="show_toolbar_merge"/>
     <Separator/>
+    <Action name="settings_configure_shortcuts"/>
     <Action name="settings_configure_toolbars"/>
     <Action name="settings_configure"/>
     <DefineGroup name="configure_merge"/>
