@@ -330,7 +330,6 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
     }
 }
 
-
 int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 {
     char buf[512];
@@ -778,6 +777,13 @@ void DocTreeView::slotSelectionChanged(QListViewItem *item)
     // are KListViewItem's
     KListViewItem *kitem = static_cast<KListViewItem*>(item);
     if (kitem && !kitem->ident().isEmpty())
-        emit fileSelected(kitem->ident());
+    {
+      QString item=kitem->ident();
+      // strip file: if present....
+      //  e.g. qt2kdoc inserts it
+      if (item.left(5)=="file:")
+	item=item.mid(5, item.length());
+      emit fileSelected(item);
+    }
 }
 
