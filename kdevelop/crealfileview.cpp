@@ -178,18 +178,18 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
     {
         f=d;
         f.append("/");
-        f.append((*it).latin1());
+        f.append((*it));
         f.remove(0,1);
         if( isInstalledFile(f) )
         {
-            item = treeH->addItem( (*it).latin1(), THINSTALLED_FILE, parent);
+            item = treeH->addItem( QFile::encodeName(*it), THINSTALLED_FILE, parent);
             if (showNonPrjFiles)
             {
                 item->setText(1,i18n("registered"));
                 vc=project->getVersionControl();
                 if (vc!=0)
                 {
-                    reg=vc->registeredState(directory+'/'+(*it).latin1());
+                    reg=vc->registeredState(QFile::encodeName(directory+'/'+(*it)));
                     if (reg & VersionControl::canBeCommited)
                         item->setText(2,i18n("VCS"));
                     else
@@ -201,11 +201,11 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
         {
             if (showNonPrjFiles)
             {
-                item = treeH->addItem( (*it).latin1(), THC_FILE, parent,"");
+                item = treeH->addItem( QFile::encodeName(*it), THC_FILE, parent,"");
                 vc=project->getVersionControl();
                 if (vc!=0)
                 {
-                    reg=vc->registeredState(directory+'/'+(*it).latin1());
+                    reg=vc->registeredState(QFile::encodeName(directory+'/'+(*it)));
                     if (reg & VersionControl::canBeCommited)
                         item->setText(2,i18n("VCS"));
                     else
@@ -231,7 +231,7 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
   dirList = dir.entryList();
-  
+
   // Remove '.' and  '..'
   QStringList::Iterator it = dirList.begin();
   it = dirList.remove(it);
@@ -253,11 +253,11 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
       bLastLoopStep = true;
     }
 
-    lastFolder = treeH->addItem( (*it).latin1(), THFOLDER, parent );
+    lastFolder = treeH->addItem( QFile::encodeName(*it), THFOLDER, parent );
     lastFolder->setOpen( false );
-    
+
     // Recursive call to fetch subdirectories
-    currentPath = directory+"/"+(*it).latin1();
+    currentPath = directory+"/"+(*it);
     scanDir( currentPath, lastFolder );
     
     // Add the files in the recursed directory.

@@ -31,6 +31,7 @@
 #include <kstddirs.h>
 
 #include <qdir.h>
+#include <qfile.h>
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qlist.h>
@@ -55,14 +56,14 @@ class ListViewDocItem : public KDevListViewItem
 {
 public:
     ListViewDocItem( KDevListViewItem *parent,
-                     const char *text, const char *filename );
+                     const QString &text, const QString &filename );
 
     virtual void setOpen(bool o);
 };
 
 
 ListViewDocItem::ListViewDocItem(KDevListViewItem *parent,
-                                 const char *text, const char *filename)
+                                 const QString &text, const QString &filename)
     : KDevListViewItem(parent, text, filename)
 {
     setOpen(false);
@@ -86,13 +87,13 @@ void ListViewDocItem::setOpen(bool o)
 //{
 //public:
 //    ListViewBookItem( KDevListViewItem *parent,
-//                      const char *text, const char *filename );
+//                      const QString &text, const char *filename );
 //    virtual void setOpen(bool o);
 //};
 
 
 ListViewBookItem::ListViewBookItem(KDevListViewItem *parent,
-                                   const char *text, const char *filename)
+                                   const QString &text, const char *filename)
     : KDevListViewItem(parent, text, filename)
 {
     setOpen(false);
@@ -115,13 +116,13 @@ void ListViewBookItem::setOpen(bool o)
 class ListViewFolderItem : public KDevListViewItem
 {
 public:
-    ListViewFolderItem( KDevListView *parent, const char *text );
+    ListViewFolderItem( KDevListView *parent, const QString &text );
     virtual void setOpen(bool o);
     virtual void refresh();
 };
 
 
-ListViewFolderItem::ListViewFolderItem(KDevListView *parent, const char *text)
+ListViewFolderItem::ListViewFolderItem(KDevListView *parent, const QString &text)
     : KDevListViewItem(parent, text, "")
 {
     setOpen(false);
@@ -209,7 +210,7 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
   {
     // HTML files produced by sgml2html have toc's like the following:
     // <H2><A NAME="toc1">1.</A> <A HREF="index-1.html">Introduction</A></H2>
-    QString s = buf;
+    QString s = QString::fromLocal8Bit(buf);
     if (s.left(4) == "<H2>")
     {
       if (s.find("<H2>") == -1)
@@ -254,17 +255,17 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
   }
 }
 
-QString DocTreeKDevelopBook::readIndexTitle(const char* book)
+QString DocTreeKDevelopBook::readIndexTitle(const QString &book)
 {
   FILE *f;
   QString title="";
-  if ( (f = fopen(book, "r")) != 0)
+  if ( (f = fopen(QFile::encodeName(book).data(), "r")) != 0)
   {
     char buf[512];
     while (fgets(buf, sizeof buf, f))
     {
       // search for the TITLE start and end tag, store title between the two positions minus the tag length
-      QString s(buf);
+      QString s = QString::fromLocal8Bit(buf);
       int pos1 = s.find("<TITLE>");
       if (pos1 == -1)
           continue;
@@ -352,8 +353,8 @@ void DocTreeKDevelopFolder::refresh()
 class DocTreeKDELibsBook : public ListViewBookItem
 {
 public:
-    DocTreeKDELibsBook( KDevListViewItem *parent, const char *text,
-                        const char *libname);
+    DocTreeKDELibsBook( KDevListViewItem *parent, const QString &text,
+                        const QString &libname);
     void relocatehtml();
     virtual void setOpen(bool o);
 private:
@@ -363,8 +364,8 @@ private:
     QString idx_filename;
 };
 
-DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const char *text,
-                                        const char *libname )
+DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const QString & text,
+                                        const QString &libname )
     : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
 {
     KConfig *config = KGlobal::config();
@@ -430,7 +431,7 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
       QString baseurl;
       while (fgets(buf, sizeof buf, f))
       {
-        QString s = buf;
+        QString s = QString::fromLocal8Bit(buf);
         if (s.left(11) == "<BASE URL=\"")
         {
             int pos2 = s.find("\">", 11);
@@ -449,7 +450,7 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
       QString baseurl;
       while (fgets(buf, sizeof buf, f))
       {
-        QString s = buf;
+        QString s = QString::fromLocal8Bit(buf);
         if (s.left(11) == "<BASE URL=\"")
         {
             int pos2 = s.find("\">", 11);
@@ -472,7 +473,7 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
     ListViewDocItem* class_doc=0L;
     while (fgets(buf, sizeof buf, f))
     {
-      QString s = buf;
+      QString s = QString::fromLocal8Bit(buf);
       if (s.left(11) == "<BASE URL=\"")
       {
           int pos2 = s.find("\">", 11);

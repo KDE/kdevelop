@@ -73,17 +73,32 @@ public: // Public methods
    * @param aName The name to show in the view.
    * @param iconType What kind of icon should be shown.
    */
-  QListViewItem *addRoot( const char *aName, THType iconType );
+  QListViewItem *addRoot( const QString &aName, THType iconType );
+  QListViewItem *addRoot( const char *aName, THType iconType ) {
+    return addRoot( QString::fromLocal8Bit(aName), iconType );
+  };
+  QListViewItem *addRoot( const QCString &aName, THType iconType ) {
+    return addRoot( QString::fromLocal8Bit(aName.data()), iconType );
+  };
 
   /** Add an item with the selected icon. 
    * @param aName The name to show in the view.
    * @param iconType What kind of icon should be shown.
    * @param parent Which parent should this item be added to.
    */
+  QListViewItem *addItem( const QString &aName, THType iconType,
+                           QListViewItem *parent,
+			  const QString & = QString::null, const QString & = QString::null,
+			  const QString & = QString::null, const QString & = QString::null );
+
   QListViewItem *addItem( const char *aName, THType iconType,
-                          QListViewItem *parent,
-													const char* =0, const char* =0,
-													const char* =0, const char* =0 );
+                          QListViewItem *parent) {
+    return addItem( QString::fromLocal8Bit(aName), iconType, parent );
+  };
+  QListViewItem *addItem( const QCString &aName, THType iconType,
+                          QListViewItem *parent) {
+    return addItem( QString::fromLocal8Bit(aName.data()), iconType, parent );
+  };
 
    /**
     * scan the currently tree and collect the pathes of all items which are open in a string list

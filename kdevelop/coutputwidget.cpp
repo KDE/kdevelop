@@ -102,7 +102,6 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     // paint routine.
     int row = (numLines() < 1)? 0 : numLines()-1;
     int col = qstrlen(textLine(row));
-
     bool displayAdditions=atEnd();
     insertAt(line, row, col);
     if (displayAdditions)

@@ -59,8 +59,8 @@ public:
 class KDevListViewItem : public QListViewItem
 {
 public: 
-    KDevListViewItem( KDevListView *parent, const char *text, const char *id );
-    KDevListViewItem( KDevListViewItem *parent, const char *text, const char *id );
+    KDevListViewItem( KDevListView *parent, const QString &text, const QString &id );
+    KDevListViewItem( KDevListViewItem *parent, const QString &text, const QString &id );
     virtual ~KDevListViewItem();
     virtual void insertItem(QListViewItem *item);
     QListViewItem *lastChild() const;

@@ -3300,19 +3300,19 @@ void CKDevelop::slotDocumentDone()
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 {
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1));
+  messages_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
 
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1), CMakeOutputWidget::Diagnostic);
+  messages_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen), CMakeOutputWidget::Diagnostic);
 }
 
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  stdin_stdout_widget->insertAtEnd(QCString(buffer,buflen+1));
+  stdin_stdout_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
 
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  stderr_widget->insertAtEnd(QCString(buffer,buflen+1));
+  stderr_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
 
 void CKDevelop::slotApplReceivedStdout(const char* buffer)
@@ -3336,8 +3336,7 @@ void CKDevelop::slotDebugReceivedStdout(const QString& )
 #endif
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
-  QCString str(buffer,buflen+1);
-  search_output = search_output + QString(str);
+  search_output = search_output + QString::fromLocal8Bit(buffer,buflen);
 }
 void CKDevelop::slotSearchProcessExited(KProcess*)
 {

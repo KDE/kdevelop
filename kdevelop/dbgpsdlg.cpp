@@ -116,7 +116,7 @@ int Dbg_PS_Dialog::pidSelected()
 
 void Dbg_PS_Dialog::slotReceivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-  pidLines_ += QCString(buffer, buflen+1);
+  pidLines_ += QString::fromLocal8Bit(buffer, buflen);
 }
 
 /***************************************************************************/

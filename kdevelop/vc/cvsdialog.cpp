@@ -104,7 +104,7 @@ void CvsDialog::childExited()
 
 void CvsDialog::receivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-    buf += QCString(buffer, buflen+1);
+    buf += QString::fromLocal8Bit(buffer, buflen);
     processOutput();
 }
 

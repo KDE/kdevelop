@@ -2653,8 +2653,9 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
     ch = textLine->getChar(z);
     if (ch == '\t') {
       if (bufp > 0) {
-        paint.drawText(x, y, buf, bufp);
-        x += a->fm.width(buf,bufp);
+        QString str = QString::fromLocal8Bit(buf, bufp);
+        paint.drawText(x, y, str);
+        x += a->fm.width(str);
         bufp = 0;
       }
       x += tabWidth - (x % tabWidth);
@@ -2662,8 +2663,9 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
       nextAttr = textLine->getAttr(z);
       if (nextAttr != attr || bufp >= 256) {
         if (bufp > 0) {
-          paint.drawText(x, y, buf, bufp);
-          x += a->fm.width(buf,bufp);
+	  QString str = QString::fromLocal8Bit(buf, bufp);
+	  paint.drawText(x, y, str);
+	  x += a->fm.width(str);
           bufp = 0;
         }
         attr = nextAttr;
@@ -2675,7 +2677,10 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
     }
     z++;
   }
-  if (bufp > 0) paint.drawText(x, y, buf, bufp);
+  if (bufp > 0) {
+    QString str = QString::fromLocal8Bit(buf, bufp);
+    paint.drawText(x, y, str);
+  }
 }
 
 void KWriteDoc::setModified(bool m) {

@@ -495,8 +495,8 @@ void GDBController::parseLine(char* buf)
     if ((::strncmp(buf, "Program exited", 14) == 0) ||
         (::strncmp(buf, "Program terminated", 18) == 0))
     {
-      DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
-      programNoApp(QString(buf), false);
+      DBG_DISPLAY("Parsed (exit) <" + QString::fromLocal8Bit(buf) + ">");
+      programNoApp(QString::fromLocal8Bit(buf), false);
       programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
       return;
     }
@@ -506,15 +506,15 @@ void GDBController::parseLine(char* buf)
     {
       // The apps has died - remove the pending commands.
       // Note we're not quite dead yet...
-      DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
+      DBG_DISPLAY("Parsed (SIGSEGV) <" + QString::fromLocal8Bit(buf) + ">");
       destroyCmds();
       programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
       // Really tell the user what's happened
-      KMessageBox::error(0, i18n("gdb message:\n")+QString(buf));
+      KMessageBox::error(0, i18n("gdb message:\n")+QString::fromLocal8Bit(buf));
     }
 
     // All "Program" strings cause a refresh of the program state
-    actOnProgramPause(QString(buf));
+    actOnProgramPause(QString::fromLocal8Bit(buf));
     return;
   }
 
@@ -541,36 +541,36 @@ void GDBController::parseLine(char* buf)
           queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
           queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
         }
-        DBG_DISPLAY("Parsed (START_cann)<" + QString(buf) + ">");
+        DBG_DISPLAY("Parsed (START_cann)<" + QString::fromLocal8Bit(buf) + ">");
         return;
       }
 
-      DBG_DISPLAY("Ignore (START_cann)<" + QString(buf) + ">");
+      DBG_DISPLAY("Ignore (START_cann)<" + QString::fromLocal8Bit(buf) + ">");
 //        actOnProgramPause(QString());
       return;
     }
 
-    DBG_DISPLAY("Unparsed (START_cann)<" + QString(buf) + ">");
-    actOnProgramPause(QString(buf));
+    DBG_DISPLAY("Unparsed (START_cann)<" + QString::fromLocal8Bit(buf) + ">");
+    actOnProgramPause(QString::fromLocal8Bit(buf));
     return;
   }
 
   if ( ::strncmp(buf, "[New Thread", 11)==0)
   {
-    DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString::fromLocal8Bit(buf) + ">");
     setStateOn(s_viewThreads);
     return;
   }
 
   if ( ::strncmp(buf, "[Switching to Thread", 20)==0)
   {
-    DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
   if ( ::strncmp(buf, "Current language:", 17)==0)
   {
-    DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -590,11 +590,11 @@ void GDBController::parseLine(char* buf)
       else
         ASSERT(false);
 
-      actOnProgramPause(QString(buf));
+      actOnProgramPause(QString::fromLocal8Bit(buf));
       return;
     }
-    actOnProgramPause(QString(buf));
-    DBG_DISPLAY("Unparsed (START_Watc)<" + QString(buf) + ">");
+    actOnProgramPause(QString::fromLocal8Bit(buf));
+    DBG_DISPLAY("Unparsed (START_Watc)<" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -602,12 +602,12 @@ void GDBController::parseLine(char* buf)
   {
     if (::strncmp(buf, "Temporarily disabling shared library breakpoints:", 49) == 0)
     {
-      DBG_DISPLAY("Parsed (START_Temp)<" + QString(buf) + ">");
+      DBG_DISPLAY("Parsed (START_Temp)<" + QString::fromLocal8Bit(buf) + ">");
       return;
     }
 
-    actOnProgramPause(QString(buf));
-    DBG_DISPLAY("Unparsed (START_Temp)<" + QString(buf) + ">");
+    actOnProgramPause(QString::fromLocal8Bit(buf));
+    DBG_DISPLAY("Unparsed (START_Temp)<" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -621,7 +621,7 @@ void GDBController::parseLine(char* buf)
       // "continue" otherwise the program will just keep going
       // on a "step" type command, in this situation and that's
       // REALLY wrong.
-//        DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
+//        DBG_DISPLAY("Parsed (sh.lib) <" + QString::fromLocal8Bit(buf) + ">");
       if (currentCmd_ && (currentCmd_->rawDbgCommand() == "run" ||
                           currentCmd_->rawDbgCommand() == "continue"))
       {
@@ -631,15 +631,15 @@ void GDBController::parseLine(char* buf)
         queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
       }
       else
-        actOnProgramPause(QString(buf));
+        actOnProgramPause(QString::fromLocal8Bit(buf));
 
       return;
     }
 
     // A stop line means we've stopped. We're not really expecting one
     // of these unless it's a library event so just call actOnPause
-    actOnProgramPause(QString(buf));
-    DBG_DISPLAY("Unparsed (START_Stop)<" + QString(buf) + ">");
+    actOnProgramPause(QString::fromLocal8Bit(buf));
+    DBG_DISPLAY("Unparsed (START_Stop)<" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -650,7 +650,7 @@ void GDBController::parseLine(char* buf)
     // Much later: I forget why I did it like this :-o
     queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 
-    DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (BP) <" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -660,7 +660,7 @@ void GDBController::parseLine(char* buf)
     // We don't change state, because this falls out when a run command starts
     // rather than when a run command stops.
     // We do let the user know what is happening though.
-    emit dbgStatus (QString(buf), state_);
+    emit dbgStatus (QString::fromLocal8Bit(buf), state_);
     return;
   }
 
@@ -669,7 +669,7 @@ void GDBController::parseLine(char* buf)
     if (::strncmp(buf, "warning: core file may not match", 32) == 0 ||
         ::strncmp(buf, "warning: exec file is newer", 27) == 0)
     {
-      badCore_ = QString(buf);
+      badCore_ = QString::fromLocal8Bit(buf);
     }
     actOnProgramPause(QString());
     return;
@@ -677,11 +677,11 @@ void GDBController::parseLine(char* buf)
 
   if (::strncmp(buf, "Core", 4) == 0)
   {
-    DBG_DISPLAY("Parsed (Core)<" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (Core)<" + QString::fromLocal8Bit(buf) + ">");
     actOnProgramPause(buf);
     if (!badCore_.isEmpty() && ::strncmp(buf, "Core was generated by", 21) == 0)
       KMessageBox::error( 0,
-                        i18n("gdb message:\n")+badCore_ + "\n" + QString(buf)+"\n\n"+
+                        i18n("gdb message:\n")+badCore_ + "\n" + QString::fromLocal8Bit(buf)+"\n\n"+
                               i18n("Any symbols gdb resolves are suspect"),
                         i18n("Mismatched core file"));
 
@@ -698,9 +698,9 @@ void GDBController::parseLine(char* buf)
   // message will arrive immediately after this and overwrite it.
   if (isdigit(*buf))
   {
-    DBG_DISPLAY("Parsed (digit)<" + QString(buf) + ">");
+    DBG_DISPLAY("Parsed (digit)<" + QString::fromLocal8Bit(buf) + ">");
     parseProgramLocation(buf);
-//    actOnProgramPause(QString(buf));
+//    actOnProgramPause(QString::fromLocal8Bit(buf));
     return;
   }
 
@@ -713,8 +713,8 @@ void GDBController::parseLine(char* buf)
       ::strncmp(buf, "ptrace: No such process.", 24)==0         ||
       ::strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
   {
-    programNoApp(QString(buf), true);
-    DBG_DISPLAY("Bad file <" + QString(buf) + ">");
+    programNoApp(QString::fromLocal8Bit(buf), true);
+    DBG_DISPLAY("Bad file <" + QString::fromLocal8Bit(buf) + ">");
     return;
   }
 
@@ -724,18 +724,18 @@ void GDBController::parseLine(char* buf)
   {
     if ((::strncmp(buf, "No ", 3)==0) && ::strstr(buf, "not meaningful"))
     {
-      DBG_DISPLAY("Parsed (not meaningful)<" + QString(buf) + ">");
-      actOnProgramPause(QString(buf));
+      DBG_DISPLAY("Parsed (not meaningful)<" + QString::fromLocal8Bit(buf) + ">");
+      actOnProgramPause(QString::fromLocal8Bit(buf));
       return;
     }
 
-    DBG_DISPLAY("Unparsed (default - busy)<" + QString(buf) + ">");
+    DBG_DISPLAY("Unparsed (default - busy)<" + QString::fromLocal8Bit(buf) + ">");
     actOnProgramPause(QString(" "));
     return;
   }
 
   // All other lines are ignored
-  DBG_DISPLAY("Unparsed (default - not busy)<" + QString(buf) + ">");
+  DBG_DISPLAY("Unparsed (default - not busy)<" + QString::fromLocal8Bit(buf) + ">");
   return;
 }
 
@@ -751,7 +751,7 @@ void GDBController::parseProgramLocation(char* buf)
     // It's a silent stop. This means that the queue will have a "continue"
     // in it somewhere. The only action needed is to reset the state so that
     // queue'd items can be sent to gdb
-    DBG_DISPLAY("Program location (but silent) <" + QString(buf) + ">");
+    DBG_DISPLAY("Program location (but silent) <" + QString::fromLocal8Bit(buf) + ">");
     setStateOff(s_appBusy);
     return;
   }
@@ -787,9 +787,9 @@ void GDBController::parseProgramLocation(char* buf)
 #endif
 
   if (stateIsOn(s_appBusy))
-    actOnProgramPause(i18n("No source: %1").arg(QString(buf)));
+    actOnProgramPause(i18n("No source: %1").arg(QString::fromLocal8Bit(buf)));
   else
-    emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
+    emit dbgStatus (i18n("No source: %1").arg(QString::fromLocal8Bit(buf)), state_);
 
   QRegExp regExp3("^0x[abcdef0-9]+ ");
   int start;
@@ -885,8 +885,8 @@ void GDBController::parseRequestedData(char* buf)
 //  if (::strstr(buf, "not in executable format:") ||
 //      ::strstr(buf, "No such file or directory."))
 //  {
-//    programNoApp(QString(buf), true);
-//    DBG_DISPLAY("Bad file start <" + QString(buf) + ">");
+//    programNoApp(QString::fromLocal8Bit(buf), true);
+//    DBG_DISPLAY("Bad file start <" + QString::fromLocal8Bit(buf) + ">");
 //  }
 //}
 
@@ -925,7 +925,7 @@ void GDBController::parseFrameSelected(char* buf)
 //    if (char* end = ::strchr(buf, '\n'))    // 21/11/2000 this has already been removed
 //      *end = 0;      // clobber the new line
     emit showStepInSource("", -1, "");
-    emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
+    emit dbgStatus (i18n("No source: %1").arg(QString::fromLocal8Bit(buf)), state_);
   }
 }
 
@@ -1636,7 +1636,7 @@ void GDBController::slotSetLocalViewState(bool onOff)
 void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
 #ifdef GDB_MONITOR
-  QCString msg(buf, buflen+1);
+  QString msg = QString::fromLocal8Bit(buf, buflen);
   msg.replace(QRegExp("\032."),"\n(gdb) ");
   GDB_DISPLAY(msg);
 #endif
@@ -1676,7 +1676,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
   // At the moment, just drop a message out and redirect
-  DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf, buflen+1));
+  DBG_DISPLAY(QString("\nSTDERR: ")+QString::fromLocal8Bit(buf, buflen));
   slotDbgStdout(proc, buf, buflen);
 
 //  QString bufData(buf, buflen+1);

@@ -677,7 +677,7 @@ void CKDevelop::initMenuBar(){
   help->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help->insertItem( i18n( "&Report Bug..." ),help_menu, SLOT(reportBug()),0,ID_HELP_BUG_REPORT);
   help->insertSeparator();	
-  QString appName = (aboutData)? aboutData->programName() : QString::fromLatin1(kapp->name());
+  QString appName = (aboutData)? aboutData->programName() : QString::fromLocal8Bit(kapp->name());
   help->insertItem( kapp->miniIcon(), i18n( "&About %1" ).arg(appName), help_menu, SLOT( aboutApplication() ));
   help->insertItem( SmallIcon("go"), i18n( "About &KDE" ),help_menu, SLOT( aboutKDE() ) );
 

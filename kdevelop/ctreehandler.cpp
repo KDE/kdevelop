@@ -15,8 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ctreehandler.h"
-
 #include <kiconloader.h>
 #include <kstddirs.h>
 #include <kdebug.h>
@@ -26,6 +24,8 @@
 #include <qpixmap.h>
 
 #include <assert.h>
+
+#include "ctreehandler.h"
 
 QPixmap* CTreeHandler::icons[THEND_POS]; // = new QPixmap *[ THEND_POS ];
 bool CTreeHandler::iconsRead = false;
@@ -206,10 +206,10 @@ void CTreeHandler::clear()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-QListViewItem *CTreeHandler::addRoot( const char *aName, 
+QListViewItem *CTreeHandler::addRoot( const QString &aName, 
                                       THType iconType )
 {
-  assert( aName != NULL );
+  assert( !aName.isEmpty() );
 
   QListViewItem *item;
 
@@ -243,13 +243,13 @@ QListViewItem *CTreeHandler::addRoot( const char *aName,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-QListViewItem *CTreeHandler::addItem( const char *aName, 
+QListViewItem *CTreeHandler::addItem( const QString & aName, 
                                       THType iconType,
                                       QListViewItem *parent,
-                                      const char* label2 /*=0*/, const char* label3 /*=0*/,
-                                      const char* label4/*=0*/, const char* label5/*=0*/ )
+                                      const QString & label2 /*=QString::null*/, const QString & label3 /*=QString::null*/,
+                                      const QString & label4/*=QString::null*/, const QString & label5/*=QString::null*/ )
 {
-  assert( aName != NULL );
+  assert( !aName.isEmpty() );
   assert( parent != NULL );
 
   QListViewItem* item = 0L;
