@@ -113,7 +113,9 @@ void ProjectManager::createActions( KActionCollection* ac )
 
 void ProjectManager::slotOpenProject()
 {
-  KURL url = KFileDialog::getOpenURL(QString::null, "*.kdevelop", TopLevel::getInstance()->main(), i18n("Open Project"));
+  QString defaultProjectsDir = kapp->config()->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+
+  KURL url = KFileDialog::getOpenURL(defaultProjectsDir, "*.kdevelop", TopLevel::getInstance()->main(), i18n("Open Project"));
   loadProject(url);
 }
 
