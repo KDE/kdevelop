@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY(kfile_%{APPNAME}, %{APPNAME}Factory( "kfile_%{APPNAME
     setUnit(item, KFileMimeTypeInfo::KiloBytes);
 
     // strings are possible, too:
-    //addItemInfo(group, "Text", i18n("Document type"), QVariant::String);
+    //addItemInfo(group, "Text", i18n("Document Type"), QVariant::String);
 }
 
 bool %{APPNAME}Plugin::readInfo( KFileMetaInfo& info, uint /*what*/)

@@ -27,7 +27,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-  static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment.");
+  static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment");
   KAboutData aboutData("kdevelop", I18N_NOOP("KDevelop"),
                        VERSION, description, KAboutData::License_GPL,
                        I18N_NOOP("(c) 1999-2004, The KDevelop developers"), "", "http://www.kdevelop.org");

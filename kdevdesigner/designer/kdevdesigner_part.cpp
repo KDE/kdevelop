@@ -145,7 +145,7 @@ void KDevDesignerPart::setupActions( )
     stateSync(action, m_widget->actionEditHLayout);
     action = new KAction(i18n("Lay Out &Vertically"), createPartIconSet("designer_editvlayout.png"), CTRL + Key_V, this, SLOT(layoutVLayout()), actionCollection(), "layout_v");
     stateSync(action, m_widget->actionEditVLayout);
-    action = new KAction(i18n("Lay Out in a &Grid"), createPartIconSet("designer_editgrid.png"), CTRL + Key_G, this, SLOT(layoutGridLayout()), actionCollection(), "layout_grid");
+    action = new KAction(i18n("Lay Out in &Grid"), createPartIconSet("designer_editgrid.png"), CTRL + Key_G, this, SLOT(layoutGridLayout()), actionCollection(), "layout_grid");
     stateSync(action, m_widget->actionEditGridLayout);
     action = new KAction(i18n("Lay Out Horizontally (in S&plitter)"), createPartIconSet("designer_editvlayoutsplit.png"), 0, this, SLOT(layoutSplitHLayout()), actionCollection(), "layout_splith");
     stateSync(action, m_widget->actionEditSplitHorizontal);

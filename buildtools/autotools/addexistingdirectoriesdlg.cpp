@@ -229,7 +229,7 @@ void AddExistingDirectoriesDialog::slotOk()
             m_widget->getSubprojectView()->parse( newitem );
         } else {
             if (!f.open(IO_WriteOnly)) {
-//                KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1").arg(name));
+//                KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1.").arg(name));
                 continue;
             }
             QTextStream stream(&f);

@@ -84,7 +84,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )));
     m_actionPreview = new KAction(i18n("Preview Doxygen Output"), 0, CTRL+ALT+Key_P, this, SLOT(slotRunPreview()), actionCollection(), "show_preview_doxygen_output");
-    m_actionPreview->setToolTip( i18n("Show a preview of the doxygen output of this file") );
+    m_actionPreview->setToolTip( i18n("Show a preview of the Doxygen output of this file") );
     m_actionPreview->setWhatsThis( i18n("<b>Preview Doxygen output</b><p>Runs Doxygen over the current file and shows the created index.html.") );
 
     //read Doxygen configuration, if none exists yet, create it with some defaults

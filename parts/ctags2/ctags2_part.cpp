@@ -99,7 +99,7 @@ void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 		m_contextString = ident;
 	    QString squeezed = KStringHandler::csqueeze(ident, 30);
 		
-		int id = popup->insertItem( i18n("CTAGS lookup: %1").arg(squeezed),
+		int id = popup->insertItem( i18n("CTAGS Lookup: %1").arg(squeezed),
 						this, SLOT(slotGotoTag()) );
 		popup->setWhatsThis(id, i18n("<b>Go to ctags declaration</b><p>Searches in the tags database for a symbol "
 			"under the cursor and opens a file that contains the symbol declaration."));

@@ -323,7 +323,7 @@ void PythonSupportPart::slotStartInterpreter()
 void PythonSupportPart::slotExecuteString()
 {
     bool ok;
-    QString cmd = KInputDialog::getText(i18n("String to execute"), i18n("String to execute:"), QString::null, &ok, 0);
+    QString cmd = KInputDialog::getText(i18n("String to Execute"), i18n("String to execute:"), QString::null, &ok, 0);
     if (ok) {
         cmd.prepend("'");
         cmd.append("'");

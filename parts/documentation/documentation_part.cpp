@@ -255,7 +255,7 @@ void DocumentationPart::contextSearchInDocumentation()
 void DocumentationPart::manPage()
 {
     bool ok;
-    QString manpage = KInputDialog::getText("", i18n("Show manpage on:"), "", &ok, 0);
+    QString manpage = KInputDialog::getText(i18n("Show Manual Page"), i18n("Show manpage on:"), "", &ok, 0);
     if (ok && !manpage.isEmpty())
         manPage(manpage);
 }
@@ -263,7 +263,7 @@ void DocumentationPart::manPage()
 void DocumentationPart::infoPage()
 {
     bool ok;
-    QString infopage = KInputDialog::getText("", i18n("Show infopage on:"), "", &ok, 0);
+    QString infopage = KInputDialog::getText(i18n("Show Info Page"), i18n("Show infopage on:"), "", &ok, 0);
     if (ok && !infopage.isEmpty())
         infoPage(infopage);
 }

@@ -132,7 +132,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
         if (KMessageBox::warningYesNo( 0,
             i18n("Another CVS operation is executing: do you want to cancel it \n"
                 "and start this new one?"),
-            i18n("CVS: Operation already pending ")) == KMessageBox::Yes)
+            i18n("CVS: Operation Already Pending ")) == KMessageBox::Yes)
         {
             m_widget->cancelJob();
         }

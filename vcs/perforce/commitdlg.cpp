@@ -152,7 +152,7 @@ void CommitDialog::accept()
         userEdit->setFocus();
     } else if ( filesBox->count() == 0 ) {
         setDetails( true );
-        KMessageBox::error( this, i18n("The changelist does not contain any files") );
+        KMessageBox::error( this, i18n("The changelist does not contain any files.") );
     } else {
         KDialogBase::accept();
     }

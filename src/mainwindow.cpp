@@ -311,7 +311,7 @@ void MainWindow::init()
         "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
         "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
         "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
-        i18n("Could not Find Plugins") );
+        i18n("Could Not Find Plugins") );
   }
 }
 
