@@ -2,375 +2,381 @@
 <!doctype linuxdoc system>
 <article>
 <title>The User Manual to KDevelop
-<author>Ralf Nolden, The KDevelop Team </author>
-<date>Version 0.4 , Sun Apr 11 14:01:56 CEST 1999</date>
+<author>Ralf Nolden &lt;<tt/Ralf.Nolden@post.rwth-aachen.de/&gt;, The KDevelop Team
+<date>Version 1.0 , Apr 11,1999
 
 <abstract>
-This Handbook describes KDevelop Version 0.4
+This Handbook describes KDevelop Version 1.0
 </abstract>
 
 <toc>
 <sect>Introduction<p>
-As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for commercial
-purpose. The most popular software project among thousands is Linux, and it's existance is a proof for the quality that non-cost products
-can achieve. But inspite of the quality, end users still suffer under the cryptic use of almost any Unix-like systems; even the most
-enthusiastic users seem to only accept such an Operating System besides their commercial products. A major attempt to make free software
-even more competitive and to get commercial producers to port their applications to e.g. Linux, is in the first place to make usability
-as easy as possible. The KDE project then tries to close this gap and besides the programs, the used libraries offer a perfect way to
-extend the variety of available GUI-based software. Anyway- those programs are still waiting for authors to write them, and we think
-that coding should be made as easy as possible. Programming Unix applications isn't easy by itself, and besides the compiler an author
-needs a lot more; especially as free software is often made in the author's free time, it is also a question of how much I like not only
-seeing the end-product work but how much I like my development environment. So, KDevelop wants to take another major step- making the
-programmer's life easier and save time; on the other hand the products created with KDevelop can reach a higher level of reliablity and
-functionality in the same development period.
-
-To fullfill this goal, the KDevelop Integrated Development Environment wraps a lot of functionality under one hood. From within the user
+As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for
+commercial purpose. The most popular software project among thousands is Linux, and it's existance is a proof for the quality that
+non-cost products can achieve. But inspite of the quality, end users still suffer under the cryptic use of almost any Unix-like
+systems; even the most enthusiastic users seem to only accept such an Operating System besides their commercial products. A major
+attempt to make free software even more competitive and to get commercial producers to port their applications to e.g. Linux, is
+in the first place to make usability as easy as possible. The KDE project tries to close this gap and besides the programs
+provided with it, the libraries offer a perfect way to extend the variety of available GUI-based software. But especially as free
+software is often made in the author's free time, the question for authors is how much they like their development environment.
+KDevelop wants to take another major step- making the programmer's life easier and save time; on the other hand the products
+created with KDevelop can reach a higher level of reliablity and functionality in the same development period.
+To fullfill this goal, the KDevelop Integrated Development Environment wraps a lot of functionality. From within the user
 interface, you're managing:
+<itemize>
+<item> all development tools needed for C++ programming like compiler, linker, automake and autoconf,
+<item> the KAppWizard, who generates complete applications that are ready-to-run,
+<item> the Classgenerator, creating new classes and integrating them into the current project,
+<item> file properties for sources, headers, documentation etc. to be included in the project and their installation destination
+for the end-user,
+<item> the creation of User-Handbooks written with SGML and automatic generation of HTML-output with the KDE-look'n feel,
+<item> automatic HTML-based API-documentation for your project's classes with cross-reference to the used libraries,
+<item> internationalization support for your application, allowing translators to easiely add their target language,
+<item> WYSIWYG (What you see is what you get) -creation of user interfaces with the build-in dialogeditor,
+<item> the debugging of your application using KDbg,
+<item> the editing of project-specific pixmaps with KIconedit,
+<item> any other program you need for development by adding it to the "Tools"-menu.
+</itemize>
+KDevelop makes it a joy to work with all programs in one place and helps saving time by automating standard development processes
+as well as giving you direct, transparent access to all information you need. The integrated browsing mechanisms are designed to
+support all type of requests that developers have in conjuction with their project. The classviewer brings you anywhere in the
+project code by a mouseclick without needing to search for files or lines; file trees give direct access to the project files and
+the integrated helpsystem offers the best availability to online-documentations anywhere within the IDE.
 
-- all development tools to C++ programming like compiler, linker, automake and autoconf,
-- the KAppWizard and the Class Generator, who are creating complete applications already containing basic GUI components and
-help extending the generated project,
-- the generation of online- and API-documentation for your project
-- internationalization support for your application
-- the graphical development of user interfaces with the build-in dialogeditor
-- the debugging of your application by using KDebugger
-- the starting of any other program you need by adding it to the "Tools"-menu.
+<sect1>Changes
+<p>
+This version of the KDevelop IDE is yet another huge step towards providing an easy to understand environment that fullfills it's
+promise towards usability and functionality. Since the last release, we sat down to extend the design, set the goals and decided
+about the technical realization. Then, the main work was done in three different areas: the classviewer, the dialogeditor and the
+"look-n'-feel" in general, including new editing functions and the creation of KDE-applications. In order to do that,
+we were proud to welcome the newest two team members, Jonas Nordin, who designed a full-featured classparser and -viewer, and
+Pascal Krahmer, who joined the team to implement an up-to-date dialogeditor running inside KDevelop and interacting with the
+project management. Other work was done in various parts of the IDE, such as a new <tt/grep/-dialog allowing expression search
+through all project files or even the whole system KDevelop runs on; extended configuration utilities; this reviewed and extended
+documentation as well as a new project generator.
 
-KDevelop makes it a joy to work with all programs in one place and helps you develop your project by offering many other features like
-the integrated Help-system and file/classbrowsers.
 
-<sect1>Changes<p>
-This version 0.4 of the KDevelop IDE is yet another huge step towards the final 1.0 version. Since the release of 0.3, we sat down to extend the design, set the goals and
-decided about the technical realization. Then, the main work was done in three different areas: the classviewer, the dialogeditor and the "look-n'-feel" in general,
-including new functionality for the editor and the creation of KDE-applications. In order to do that, we were proud to welcome the newest two team members, Jonas Nordin,
-who created the new classparser and -viewer, and Pascal Krahmer, who's previous project KDlgEdit, a stand-alone dialogeditor, brought him to cooperate with us and join the
-team to implement a dialogeditor which is running inside KDevelop and is fully integrated into the project management.
-Other work was done in various parts, like the project management itself, the configuration utilities and the documentation.
+<sect1>About this Handboook
+<p>
 
-If you had a previous version of KDevelop installed, we recommend deleting your user's kdeveloprc file as well as the system kdeveloprc file to enable the new
-geometry management. For users who experimented with version 0.1, we have the bad news that the project files are incompatible with this new version and
-you have to convert your existing projects. We don't plan to change the project file system more than necessary and avoid incompatibility in the future, so creating
-a new application will be woth the work. Also this documentation has been reviewed from that of version 0.3 and has been extended to the actual state of KDevelop.
-</sect1>
+This user manual to the KDevelop IDE gives the user a complete overview of the provided functionality and describes the basic
+development process in short, which can be seen as an introduction into C++ application design with KDevelop in general. For more
+information about specific programming issues, we advise to read the KDevelop Programming Handbook, covering themes like
+understanding generated application frameworks and how to create full-featured KDE applications by example projects. The design of
+this handbook is therefore separated into the following parts:
 
-<sect1>The Future of KDevelop<p>
-By the time of this release, KDevelop makes it's way towards a stable, long awaited release version 1.0. Many users and participants on our mailinglist have contributed bug
-reports, suggestions and improvements and pushed the core team even more forward than ever. To some developers, KDevelop seems to be one of the fastest	growing projects
-in KDE-application design, and all developers participating are giving their best in knowledge and effort to fullfill the expectations and to return the credits and thanks
-we already got from a fast growing user community. Technically, our future will without a doubt lead us to Qt 2.x and KDE 2.x, and we're working on full CORBA and KOM support,
-which will extend KDevelop's capabilities to the use of the newest technology in KDE-Development. That will give us a chance to support developers staying at the bleeding edge
-of object-orientated project design and will hopefully save them as much time as we're giving beginners an even better start contributing to the KDE-community by starting their
-own projects.
+<itemize>
+<item>Chapter 1, <ref id="Installation" name="Installation">, covers the sytem requirements, installation and setting up of the
+KDevelop IDE.
+<item>Chapter 2, <ref id="Programs" name="Programs">, tells you how programs are created with standard GNU development tools and
+how they are build.
+<item>Chapter 3, <ref id="Overview" name="Overview">, explains the menus and dialogs as well as keyboard shortcuts.
 
-</sect1>
-<sect1>About this Handboook<p>
-This user manual to the KDevelop IDE tries to give a complete overview of the functionality and describes the basic development process
-in short.
+<item>Chapter 4, <ref id="Projects" name="Projects">, describes the creation and maintaining of software projects.
 
-Chapter 1, Installation, covers the sytem requirements, installation and setting up of the KDevelop IDE.
+<item>Chapter 5, <ref id="Developing with KDevelop" name="Developing with KDevelop">, takes you on a short trip describing the
+main fuctionality of the environment.
+<item>Chapter 6, <ref id="The Helpsystem" name="The Helpsystem">, shows how to use the build-in documenation browser and
+additional help functions.
+<item>Chapter 7, <ref id="The Editor" name="The Editor">, tells you the features of file management and editing functionality of
+KDevelop.
+<item>Chapter 8, <ref id="The Dialogeditor" name="The Dialogeditor">, features the integrated visual GUI constructor and how it
+generates C++ output.
+<item>Chapter 9, <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of
+KDevelop under different Unices and problem solutions in general. </itemize>
 
-Chapter 2, Programs, tells you how programs are created with standard GNU development tools and how they are build.
+For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
+work with the IDE; for sure this will save you a lot of time searching for functions that you might miss at the first look and the
+understanding of the usage seems to be the best start towards effective development of new applications.
 
-Chapter 3, Developing with KDevelop, takes you on a short trip describing the main fuctionality of the environment.
+>
 
-Chapter 4, Overview, explains the menus and dialogs as well as keyboard shortcuts.
-
-Chapter 5, Projects, describes the creation and maintaining of software projects.
-
-Chapter 6, The Helpsystem, shows how to use the build-in documenation browser and additional help functions.
-
-Chapter 7, The Editor, tells you the features of file management and editing functionality of KDevelop.
-
-Chapter 8, The Dialogeditor, features the integrated visual GUI constructor and how it generates C++ output.
-
-Chapter 9, Questions and Answers, covers questions that regard the usage of KDevelop under different Unices and problems in general.
-</sect1>
-</sect>
-<sect>Installation<p>
-<sect1>How to obtain KDevelop<p>
-
+<sect>Installation<label id="Installation">
+<p>
+<sect1>How to obtain KDevelop
+<p>
 KDevelop can be found either on the <htmlurl url="http://www.kde.org/current.html" name="KDE Applications page">
 or on the <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="KDevelop homepage">.
 
-There, we offer weekly snapshots of the KDevelop CVS repository for those who want to stay up to date with KDevelop.
-Also we offer a mailinglist for users having problems, found bugs or have new ideas.
+There, we offer weekly snapshots of the KDevelop CVS repository for those who want to stay up to date with KDevelop. Usually, the
+snapshots are not intended to be used for production but as a test for new features and to give an insight into development
+progress of the KDevelop team.
 
-If you're experiencing problems with compiling or using KDevelop, please read the "Questions and Answers" section of this manual or the FAQ-file included with
-the KDevelop package. If your problem is not covered, please subscribe to the KDevelop mailinglist who's adress can be found on the KDevelop Homepage and send
-a complete description of your actual problem. That also counts for those users willing to contribute their experiences and who found solutions for any problems they
-experienced, so we can include that knowledge and give beginners an even more qualified first-hand help.
+If you're experiencing problems with compiling or using KDevelop, please read the <ref
+id="Questions and Answers" name="Questions and Answers"> section of this manual or the FAQ-file included with the KDevelop
+package. If your problem is not addressed, please subscribe to the <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
+"KDevelop mailinglist"> by sending a mail with an empty header and "subscribe" as contents.
 
-Thank you for your attention and understanding,
+Requests and problem report should only target the usage of the KDevelop IDE and not towards any questions that regard any
+implementation problem you may have while coding your own application. Anyway, all mails send to the mailinglist should be
+written in english, so that all participants can take part on discussions and are able to provide better help.
 
-The KDevelop Team.
+The mailinglist is also intended for those users willing to contribute and who found solutions for any problems they experienced,
+so we can fix errors and include that knowledge to give beginners an even more qualified first-hand help.
 
+An good way to report problems is to send the output you get by starting kdevelop from the console or to copy and paste the
+contents of KDevelop's internal Messages-window.
 
-<sect1>Requirements<p>
+<sect1>Requirements
+<p>
 In order to successfully compile and use KDevelop, you need the following programs and libraries.
-<p>gcc/g++ 2.7.2.1 (or compatible)
-<p>perl 5.004
-<p>autoconf 2.12
-<p>automake 1.2
-<p>Qt 1.42
-<p>KDE 1.1
 <p>
-<p>KDevelop was tested under SuSE Linux 5.2 on an AMD K6 200, 64MB
-RAM and under FreeBSD 3.0-Release on an Intel 200 MMX, 128MB RAM.
-
-<p>Optional:
-<p>glimpse 4.0 for the search index
-<p>sgmltools 1.0
-<p>KDE-SDK with KDoc, KSgml2Html, KTranslator
-<p>KDbg, KIconEdit (available at <htmlurl url="http://www.kde.org" name="www.kde.org">
+<bf>Required:</bf>
+<itemize>
+<item>gcc/g++ 2.7.2.1 (or compatible)
+<item>perl 5.004
+<item>autoconf 2.12
+<item>automake 1.2
+<item>Qt 1.42
+<item>KDE 1.1
+</itemize>
 <p>
-For creating the KDE library documentation, you need the kdelibs package in source available on your system as provided by the KDE project and KDoc (included in the KDE-SDK).
+<bf>Optional:</bf>
+<itemize>
+<item>glimpse 4.0 for the search index
+<item>sgmltools 1.0
+<item>KDE-SDK with KDoc, KSgml2Html, KTranslator (available at <htmlurl url="http://developer.kde.org" name="developer.kde.org">)
+<item>KDbg, KIconEdit (available at <htmlurl url="http://www.kde.org" name="www.kde.org">)
+</itemize>
 
-To use a C/C++ Reference, you should download the reference offered on the KDevelop homepage. Copy the package as root into your
-KDE directory and untar it, then the reference is available in the documenation tree, otherwise choosing the reference will show an error page.
-</sect1>
+KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
+200 MMX, 128MB RAM.
 
-<sect1>Compilation and Installation<p>
+For creating the KDE library documentation, you need the kdelibs package in source available on your system as provided by the KDE
+project or included with the source packages of your distribution and KDoc (included in the KDE-SDK).
+We offer a C/C++ Reference on our <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="homepage"> that
+can be integrated into the documentation browser. Download the package and copy the source file as <tt/root/ into your KDE
+directory and untar it with <tt/tar zxvf c_c++_reference.tar.gz/, then the reference is available in the documenation tree;
+otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
+download and describes the installation process.
 
-In order to compile and install KDevelop on your system, type the following in
-the base directory of the KDevelop distribution:
+
+<sect1>Compilation and Installation
+<p>
+In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
 
 <tscreen><verb>
-	% ./configure
-	% make
+	&percnt ./configure
+	&percnt make
 
 	(as root)
 	
-	% make install
+	&percnt make install
 </verb></tscreen>
 
-<p>Since KDevelop uses <verb>autoconf</verb> you should have not trouble compiling it.
+
+<p>Since KDevelop uses <tt>autoconf</tt> you should have not trouble compiling it.
 
 In order to compile the KDevelop CVS snapshot, type the following :
 <tscreen><verb>
-	% make -f Makefile.cvs
-	% ./configure
-	% make
+	&percnt make -f Makefile.cvs
+	&percnt ./configure
+	&percnt make
 
 	change as `root` and type:
 	
-	% make install
+	&percnt make install
 </verb></tscreen>
 
-If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"->"Applications"->"KDevelop".
-
-Selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) will start KDevelop and load the project. This can also be done
-by commandline, adding the project filename.
-
-If you have any prior version of KDevelop installed, please delete your local kdeveloprc file which is located in your home directory under
-.kde/share/config/kdeveloprc.
-
-The first start of KDevelop will invoke the automatic installation process, which is only executed once.  If your installation is messed up, please delete
-your kdeveloprc file as well and restart KDevelop, the automatic installation will be called again to set up KDevelop according to your system.
-</sect1>
-
-<sect1>The Installation Program<p>
-
-Since version 0.3, KDevelop includes an automatic installation program module, which is invoked when KDevelop is started the first time under the current user
-account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing "Proceed" to automatically check
-your system and to set up your KDevelop environment.
-
-The KDevelop Installation dialog offers the following options:
-
-Help:  Will open  the KDEHelp program and open this page.
-
-Cancel:  Will show a warning message that the installation process is going to be cancelled.  This warning message allows to return to the installation
-("Back") or continue without installing KDevelop correctly ("Continue").   If you choose "Continue", the installation process will be exited and KDevelop
-will start.  In this case, you will have to set up your enviroment manually by choosing "KDevelop Setup" in the Options menu.
-
-Proceed:  This will actually start the installation process and execute actions in the following order:
+If your system's make-command is <tt/gmake/, type <tt/gmake/ instead of <tt/make/.
 
 
-<p>1. Checking for    make, gmake, autoconf, autoheader, automake and perl for the creation and compilation of new applications generated by KDevelop.
-If gmake is installed, the make-command will be set automatically to use gmake.  Other comandline options to your make program can be set in the setup
-dialog accessed by the options menu later.
-<p>2. Checking for KDoc and Glimpse.  Those will allow to create a new KDE-library documentation and a search index automatically in a later setup step.
-<p>3. Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to allow correct printing.
-<p>4. Checking for KDbg, KIconedit and KTranslator.  We advise to install those programs as they are good helpers to create complete KDE-applications. Note that
-KDbg is used directly for debugging your current project within KDevelop; KIconedit is used to display and edit pixmaps selected in the file-viewer trees.
-The programs KDbg, KIconedit and KTranslator are then configured to be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools
-can be added to the Tools-menu by selecting "Tools..." in the Options menu later.
-<p>5. Showing the summary dialog.  All tested programs are listed with found or not found, additional hints are given, if a needed program is recommended.
-<p>6. Then follows the detection of your Qt-online documentation path.  This checks for several standard path in your system for the documentation and sets
-the path automatically.  If your Qt-Documentation could not be found, a message will appear that allows you to set the correct path or continue without setting
-the path.  Choosing to set the path will return to the main installation window and shows a path editing filed with a button on the right of it.  Choosing this
-button will open a directory selection dialog, where you can switch to the directory the documentation is located. Usually this is in the qt/html directory.
-After doing so, the installation can continue with the selection of "Proceed" again.
-<p>7. If KDoc was detected, you are asked to create/update your KDE-library documentation.  For that, you need to have the kde-libraries in source form.
-For Linux-Users who have installed KDE from a distribution, we advise to copy and extract the source of the kdelibs-package to your system; FreeBSD users who
-installed the kdelibs as a package should look for their according distfile package of the ports-collection.   If none of these cases can be fullfilled, you should
-download the sources from www.kde.org and untar the sources on your system to create a documentation.  If you wish to use the documentation package provided by
-developer.kde.org, you can cancel the creation and continue with creating the search index. Mind that the path to your kde-library documentation has to be set
-manually in the setup dialog accessed by the options menu then.
+<sect1>Starting KDevelop<p>
+If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"->"Applications"->"KDevelop". As KDevelop
+supports KDE-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project
+icon) in the KDE File Manager which will start KDevelop and load the project.
 
-<p>8. The "Update KDE-Library documentation" dialog is set up to use a default path for the location of the documentation to create in
-$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library sources with the selection button on top
-of the dialog and press OK.   If the path was set correctly, you are asked if your documentation should be created using the khtml  or th khtmlw library.  We advise
-to use khtml as khtmlw is older and exists for compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion while programming, we
-decided to only include one of those for documentation.  If you are working on applications that use khtmlw, you should create a different documentation with the
-KDevelop Setup in the options menu and use khtmlw then.    During the creation of the documentation, a message in the installation window shows that it is in progress
-and you should wait for the next message.
+Under other windowmanagers, open a console and type:
+<tscreen><verb>
+	&percnt kdevelop
+</verb></tscreen>
 
-<p>9. If the system check found the Glimpse program on your system, you are offered to create a searchdatabase.  The searchdatabase can be created with the options of
-including the KDE-documentation and the Qt-documentation.  Additionally the online documentation of KDevelop is included and will be indexed.  If you have other
-documentation that should be indexed you can select the directories and add them to the indexing process as well.  If you wish to have direct access to these
-documentations, you have to add them to the documentation tree later in KDevelop by a right-button click on the "Others" folder, offering the addition of other
-documentations.
-<p>10. During the creation of the search index, the installation window will show a message that this is in progress.
-<p>11. If all installation steps were done correctly,  a final message shows that KDevelop will be started after pressing OK and you are ready to start.
+Starting KDevelop with a certain project would be to change into the project-directory and to type:
+<tscreen><verb> 	
+&percnt kdevelop  &lt;yourProject&gt;.kdevprj
+</verb></tscreen>
 
-Mind that you can set up additional options like autosaving in the "KDevelop Setup" dialog that can be accessed by the options menu.
+Under each user account KDevelop will invoke the <ref id="The Installation Program" name="automatic installation"> process on the
+first start, allowing a quick configuration of the most needed options. If your installation is messed up, please delete your
+kdeveloprc file and restart KDevelop, the automatic installation will be called again to set up KDevelop according to your system.
 
-</sect1>
-<sect1>Bug Report<p>
 
-Should you run into problems please report them to the authors of the KDevelop Team or to the KDevelop mailinglist:
-
-for concept, codeframework, maintainer:
-<p>Sandy Meier 			<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz.uni-potsdam.de>">
-
-for the Application Wizard:
-<p>Stefan Heidrich 	<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
-
-for the Real File View:
-<p>Stefan Bartel 		<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
-
-for documentation, base application code:
-<p>Ralf Nolden 			<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+<sect1>The Installation Program<label id="The Installation Program" name="The Installation Program">
 <p>
-After installation, you should first update your KDE-library documentation and get used with this manual, especially those sections that describe the usage of the
-IDE. If you experience and bugs or errors, please send a detailed desciption of your problem to the author that is in charge of the affected program part or to the
-Mailinglist, if the error occurs in cases that relate to your current project. An easy way to get detailed information is to start KDevelop from a terminal or to cut and
-paste the contents of the outputwindows into your report.
 
-</sect1>
+KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current user
+account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
+"Proceed" to automatically check your system and to set up your KDevelop environment.
 
-<sect>Programs<p>
-For programming beginners Unix systems seems like a threat as you have to get comfortable with the standard Unix-development
-tools like the compilers, makefiles, automake and autoconf. Additionally, a GUI- what a mass of information to learn and
-understand. Getting used to the programming languages C and C++ alone is work enough for a lot of computer enthusiasts to loose
-interest in computing software. So most of those who are still willing to develop a useful application have to endure the lack
-of an easy-to-use development environment, thus wasting a lot of time creating single files with editors, writing simple Makefiles
-and quarreling with browsers to get access to library documentation, searching header files for functions and classes they want to
-use- if you get that far.
-	The K Desktop Environment makes things a lot easier for users as well as for programmers, but doesn't solve all problems. You
-can create a KDE-libs documentation with kdoc, but this is it. Some example programs provided with the kdesdk , giving you a short
-overview about how you may start developing a KDE application, some frame-application generators do the basic work. But what is
-beyond that ? You're still confronted with the problems mentioned above.
+The Installation dialog's buttons execute the following actions:
+<p>
+<bf>Help:</bf>  Will open  the KDEHelp program and open this page.
+<p>
+<bf>Proceed:</bf>  This will actually start the installation process and execute actions in the following order:
 
-<sect>Developing with KDevelop<p>
-<sect1> Creating a new class with the Classgenerator<p>
+<enum>
+<item> Checking for    make, gmake, autoconf, autoheader, automake and perl for the creation and compilation of new applications
+generated by KDevelop. If gmake is installed, the make-command will be set automatically to use gmake.  Other comandline options
+to your make program can be set in the setup dialog accessed by the options menu later.
 
-New classes can be added to your project by selecting "New Class" from the project menu.  The following dialog lets you enter all
-information needed to construct a new class.  First, you should enter the classname which will also preset the filenames for the header
-and implementation files.  The Baseclass is the class the new class will inherit.  For Qt or KDE classes requiring QWidget as a baseclass,
-you can also check the QWidget option.  Further the inheritance from the baseclass can be selected by public, protected and private.
-The "Documentation" field offers a place for a short description for your class; this will be inserted into the header file for documentation
-purposes and is placed there for KDoc to read. The affected Makefile.am will be updated with the new files created and you can rebuild your
-project now containing your new class.
-</sect1>
+<item> Checking for KDoc and Glimpse.  Those will allow to create a new KDE-library documentation and a search index automatically
+in a later setup step.
 
-<sect1> Adding new or existing files<p>
+<item> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
+allow correct printing.
 
-Adding a new file is often used when you think that you should separate your class implementation file into several ones.
-Then you need to create an new file which will get the part of the class implementation you want to move.  You can specify which
-type the new file will be, including a template for pixmap files often needed to create new toolbar icons.   The new file will be
-added to the project and all affected project files like Makefile.am etc will be updated.
-</sect1>
+<item> Checking for KDbg, KIconedit and KTranslator.  We advise to install those programs as they are good helpers to create
+complete KDE-applications. Note that KDbg is used directly for debugging your current project within KDevelop; KIconedit is used
+to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are then configured to
+be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools can be added to the Tools-menu by
+selecting "Tools..." in the Options menu later.
 
-<sect1> File Properties<p>
-The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project files
-in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is included in the
-project as well as the installation path if the file is going to be installed by the end-user's make install command.  It is important
-for documentation files as well as pixmaps to specify the location where the files should go when the project is build and installed by
-end users, so you have to set up those locations.   For standard KDE location macros you should look in your Makefile.am where the
-location macros are specified.
-</sect1>
+<item> Showing the summary dialog.  All tested programs are listed with found or not found, additional hints are given, if a
+needed program is recommended.
 
-<sect1> Acsessable Tools<p>
+<item> Then follows the detection of your Qt-online documentation path.  This checks for several standard path in your system for
+the documentation and sets the path automatically.  If your Qt-Documentation could not be found, a message will appear that allows
+you to set the correct path or continue without setting the path.  Choosing to set the path will return to the main installation
+window and shows a path editing filed with a button on the right of it.  Choosing this button will open a directory selection
+dialog, where you can switch to the directory the documentation is located. Usually this is in the qt/html directory. After doing
+so, the installation can continue with the selection of "Proceed" again.
 
-The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool is started, it will be
-working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting KDbg is that you choose
-"Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.  If the binary does not exist,
-you have to create it first with invoking make or rebuild all.
+<item> If KDoc was detected, you are asked to
+create/update your KDE-library documentation.  For that, you need to have the kde-libraries in source form. For Linux-Users who
+have installed KDE from a distribution, we advise to copy and extract the source of the kdelibs-package to your system; FreeBSD
+users who installed the kdelibs as a package should look for their according distfile package of the ports-collection.   If none
+of these cases can be fullfilled, you should download the sources from www.kde.org and untar the sources on your system to create
+a documentation.  If you wish to use the documentation package provided by developer.kde.org, you can cancel the creation and
+continue with creating the search index. Mind that the path to your kde-library documentation has to be set manually in the setup
+dialog accessed by the options menu then.
 
-KIconedit can also be started by a click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
-</sect1>
-</sect>
+<item> The "Update KDE-Library documentation" dialog is set up to use a default path for
+the location of the documentation to create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do
+is choosing the path to your library sources with the selection button on top of the dialog and press OK.   If the path was set
+correctly, you are asked if your documentation should be created using the khtml  or th khtmlw library.  We advise to use khtml as
+khtmlw is older and exists for compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion
+while programming, we decided to only include one of those for documentation.  If you are working on applications that use khtmlw,
+you should create a different documentation with the KDevelop Setup in the options menu and use khtmlw then.    During the
+creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the next
+message.
 
-<sect>Overview<p>
-The KDevelop main working interface is separated in three main windows: the main working field on the upper right, the treeviews on the upper left
-and the outputview on the bottom of the main window. Around that are the menubar, toolbars and the statusbar.Except the menubar, each item can be
-turned on and off to give you a flexible environment.
+<item> If the system check found the Glimpse program on your system, you are offered to create a searchdatabase.  The
+searchdatabase can be created with the options of including the KDE-documentation and the Qt-documentation.  Additionally the
+online documentation of KDevelop is included and will be indexed.  If you have other documentation that should be indexed you can
+select the directories and add them to the indexing process as well.  If you wish to have direct access to these documentations,
+you have to add them to the documentation tree later in KDevelop by a right-button click on the "Others" folder, offering the
+addition of other documentations.
 
+<item> During the creation of the search index, the installation window will show a message that
+this is in progress.
+
+<item> If all installation steps were done correctly,  a final message shows that KDevelop will be started
+after pressing OK and you are ready to start. Mind that you can set up additional options like autosaving in the "KDevelop Setup"
+dialog that can be accessed by the options menu.
+</enum>
+<bf>Cancel:</bf>  Will show a warning message that the installation process is going to be cancelled.  This warning message allows to
+return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you have to
+set all options yourself with the configuration dialogs provided in the options-menu.
+
+
+
+<sect>Programs<label id="Programs">
+<p>
+For programming beginners Unix systems seems like a threat as you have to get comfortable with the standard Unix-development tools
+like the compilers, makefiles, automake and autoconf. Additionally, a GUI- what a mass of information to learn and understand.
+Getting used to the programming languages C and C++ alone is work enough for a lot of computer enthusiasts to loose interest in
+computing software. So most of those who are still willing to develop a useful application have to endure the lack of an
+easy-to-use development environment, thus wasting a lot of time creating single files with editors, writing simple Makefiles and
+quarreling with browsers to get access to library documentation, searching header files for functions and classes they want to
+use- if you get that far. 	The K Desktop Environment makes things a lot easier for users as well as for programmers, but doesn't
+solve all problems. You can create a KDE-libs documentation with kdoc, but this is it. Some example programs provided with the
+kdesdk , giving you a short overview about how you may start developing a KDE application, some frame-application generators do
+the basic work. But what is beyond that ? You're still confronted with the problems mentioned above.
+<sect1>The Compiler<label id="The Compiler">
+<p>
+<sect1>Make and Makefiles<label id="Make">
+<p>
+<sect1>Configure<label id="Configure">
+<p>
+
+<sect>Overview<label id="Overview">
+<p>
+The KDevelop main working interface is separated in three main windows: the main working field on the upper right, the treeviews
+on the upper left and the outputview on the bottom of the main window. Around that are the menubar, toolbars and the
+statusbar.Except the menubar, each item can be turned on and off to give you a flexible environment.
 <sect1>Main View<p>
 
-The main window consists of four tabs for which the first two are for editing purpose. First comes the Header-/Resource window
-for headerfiles and any other files, then the C/C++ window for sourcecodes. These are followed by the Documentation window displaying all documentation
-in HTML-format. At last is the Tools window for the Tools integrated. The Tools are external programs like KIconedit and KDbg and will be displayed
-there. Functionality for joining these Tools with the filenames to be edited will be integrated in time.
-
-Since we changed the editor from KEdit to KWrite, a lot of functionality was added to KDevelop, such as configurable syntax-highlighting,
-font sizes and colored display. We hope all those who preferred other editors for writing their code are now willing to change to KDevelop completely.
-</sect1>
+The main window consists of four tabs for which the first two are for editing purpose. First comes the Header-/Resource window for
+headerfiles and any other files, then the C/C++ window for sourcecodes. These are followed by the Documentation window displaying
+all documentation in HTML-format. At last is the Tools window for the Tools integrated. The Tools are external programs like
+KIconedit and KDbg and will be displayed there. Functionality for joining these Tools with the filenames to be edited will be
+integrated in time. Since we changed the editor from KEdit to KWrite, a lot of functionality was added to KDevelop, such as
+configurable syntax-highlighting, font sizes and colored display. We hope all those who preferred other editors for writing their
+code are now willing to change to KDevelop completely.
 
 <sect1> The Classviewer and Fileviewers<p>
-The classviewer shows the classes of your project under the project item as well as structs.  Opening the tree will show all member
-functions and members with symbols for private, protected and public, so you can see the accessiblility of the member visually without
-switching to the header file.  Selecting the class name will open the according headerfile containing the class and set the cursor to
-the class declaration beginning. Selecting member functions will open the implementation file and place the cursor at the function header.	
-For elements, KDevelop will look for the header file and place the cursor at the line the element is declarated.	Mind that inline-functions
-are not supported by the classviewer.
-
+The classviewer shows the classes of your project under the project item as well as structs.  Opening the tree will show all
+member functions and members with symbols for private, protected and public, so you can see the accessiblility of the member
+visually without switching to the header file.  Selecting the class name will open the according headerfile containing the class
+and set the cursor to the class declaration beginning. Selecting member functions will open the implementation file and place the
+cursor at the function header.	For elements, KDevelop will look for the header file and place the cursor at the line the element
+is declarated.	Mind that inline-functions are not supported by the classviewer.
 The Logical File Viewer (LFV) allows specifying filegroups to which files can be filtered, e.g.  a folder "pixmaps" or "headers".
-Individual groups can be added by the properties entry of the project menu or by a right click on the tree items.  Selecting a file
-will open it in the editing window, which is important e.g. to access the main() function as it isn't a class and so not displayed
-in the classviewer.   Pixmaps will be opened automatically in the Tools-view by KIconedit if it is installed.    The right button menu
-of the LFV allows configuring the file tree as well as adding, deleting or removing files from the project.  The project file and the
-Makefile.am's are updated automatically in that case.
-</sect1>
+Individual groups can be added by the properties entry of the project menu or by a right click on the tree items.  Selecting a
+file will open it in the editing window, which is important e.g. to access the main() function as it isn't a class and so not
+displayed in the classviewer.   Pixmaps will be opened automatically in the Tools-view by KIconedit if it is installed.    The
+right button menu of the LFV allows configuring the file tree as well as adding, deleting or removing files from the project.  The
+project file and the Makefile.am's are updated automatically in that case.
 
 <sect1>Output window<p>
 
 The Output window is separated as well into a messages window, a stdin/stdout window and a stderr window for the following necessities:
 
-- messages window:	displays all output of the compiler. Clicking on error messages will change the edit widget to set the cursor to the line the compiler found an error.
-- stdin/stdout window: display for terminal based applications you're developing. Running such an application will open the window and allow you interaction like
-starting it in kvt or other consoles.
-- stderr window: displays all the error messages your program produces. This is useful for testing purposes.
-
-The Output window is programmed to show up each time an external process is called, such as make or a terminal application.
-</sect1>
-
+<itemize>
+<item> messages window:	displays all output of the compiler. Clicking on error messages will change the edit widget to set the
+cursor to the line the compiler found an error.
+<item> stdout window: display for terminal based applications that send messages to the standard output of the computer. Note that
+Terminal applications are now started in an external console window.
+<item> stderr window: displays all the error messages your program
+produces. This is useful for testing purposes. The Output window is programmed to show up each time an external process is called,
+such as make or a terminal application.
+</itemize>
 
 <sect1> Editor<p>
 The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
 The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
 
-Edit Options:
+<bf>Edit Options:</bf>
 
- Auto Indent:                       this sets the edior to place the cursor below the first literal when a new line is entered.
- Backspace Indent:             this option sets the cursor below the first literal of the line above when backspace is pressed.
- Word Wrap:                        words are taken into the next line after the column set in "Wrap Words At:"
- Replace Tabs                     tabulators in the current text are replaced with tabulators of the "Tab Width:" value
- Remove Trailing Spaces:   removes trailing spaces
- Wrap Cursor:                      sets the cursor to the end of the last line when backspace enters the beginning of a line
- Auto Brackets:                   creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+Auto Indent:									this sets the edior to place the cursor below the first literal when a new line is entered.
 
-Select Options:
+Backspace Indent:							this option sets the cursor below the first literal of the line above when backspace is pressed.
 
- Persistent Selections:        selections made stay marked after setting the cursor to a different place
- Multiple Selections:           allows multiple independent selections within the text
- Vertical Selections:            when selecting multiple lines, the selection is also made horizontal and doesn't cover the whole line
- Delete On Input:                 deletes a selection when writing in the selection.
- Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
+Word Wrap:										words are taken into the next line after the column set in "Wrap Words At:"
+
+Replace Tabs:									tabulators in the current text are replaced with tabulators of the "Tab Width:" value
+
+Remove Trailing Spaces:				removes trailing spaces
+
+Wrap Cursor:									sets the cursor to the end of the last line when backspace enters the beginning of a line
+
+Auto Brackets:								creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+
+<bf>Select Options:</bf>
+
+Persistent Selections:        selections made stay marked after setting the cursor to a different place
+
+Multiple Selections:          allows multiple independent selections within the text
+
+Vertical Selections:            when selecting multiple lines, the selection is also made horizontal and doesn't cover the whole line
+
+Delete On Input:                 deletes a selection when writing in the selection.
+
+Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
 
 Wrap Words At:                      sets the maximum
-</sect1>
+
+
 <sect1> Editor Colors<p>
 The editor allows to configure the general view of the editing field by choosing colors for:
 - background:                the editor's background
@@ -378,249 +384,298 @@ The editor allows to configure the general view of the editing field by choosing
 - selected:                     the color of selected text to display the selection
 - found:                          the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
 - selected + found:        the color of text selected to search for and found
-</sect1>
+
 
 <sect1> Editor Defaults<p>
-The Editor Defaults dialog lets you configure the default values for language items such as keywords etc.
-and the default font style.  When setting up the syntax highlighting (see below), those default values can be used
-to configure standard values configured here.
-</sect1>
+The Editor Defaults dialog lets you configure the default values for language items such as keywords etc. and the default font
+style.  When setting up the syntax highlighting (see below), those default values can be used to configure standard values
+configured here.
 
 <sect1> Syntax-Highlighting<p>
     The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
 To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
-</sect1>
 
 <sect1> Documentation Browser<p>
     The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
 Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
-</sect1>
+
 
 <sect1> Printer Setup<p>
 The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
 installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
 using the corresponding configuration dialogs.
-</sect1>
+
+
 <sect1> KDevelop Setup<p>
-<sect2> General<p>
-Make-command:
+<sect2> General
+<p>
+<bf>Make-command:</bf>
 The General Options dialog lets you configure KDevelop's general settings.
 First, you should set the make-command available on your system. If the selected program does not exist,
 KDevelop will warn you the next time your're invoking a make command.
 
-Autosave:
+<bf>Autosave:</bf>
 
 If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
 
 
-Autoswitch:
+<bf>Autoswitch:</bf>
 
-If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to
-a documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output window turned off.
-
-
+If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
+documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
+window turned off.
 Startup:
 
 For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
 Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-</sect2>
 
-<sect2> Keys<p>
-	The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
+
+<sect2> Keys
+<p>
+The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
 KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
 configuration can be changed by checking values like the Alt / Ctrl key etc.
-</sect2>
+
 
 <sect2> Documentation<p>
 <sect3> Directories<p>
 
- For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
+For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
 is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
 as well as the path to the KDE-library documentation.
 
 Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the documentation,
-assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the according buttons,
-displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should first enter the next
-configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice, also setting the KDE Library
-Doc path automatically.
-</sect3>
+you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
+documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
+according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
+first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
+also setting the KDE Library Doc path automatically.
 
 <sect3> Options<p>
-<sect4> Update KDE-Documentation<p>
+<sect4> Update KDE-Documentation
+<p>
+For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
+installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
+function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
+up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
+/home/rnolden/kdelibs-1.1/.
 
- For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files installed
-on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations.
+Then, you can choose three different installation modes, as:
 
-This function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package.
-First of, you have to set up the path to your recent kdelibs sources, which is not the include-path for KDE !
-Just enter the path to the sources, like:  /home/rnolden/kdelibs-1.1/ .     Then, you can choose three different installation modes, as:
+<itemize>
+<item> - Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
+installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
+newly generated documentation into the recent path.
+<item> - Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
+well as above, but gives you the choice to set up a new documentation place.
+<item> - Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
+the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
+kdelibs version.
+</itemize>
 
-- Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation installed
-and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the newly generated
-documentation into the recent path.
-
-- Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as well as above,
-but gives you the choice to set up a new documentation place.
-
-- Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of the kdelibs
-documentation for users who didn't have one before and for those who want to keep the last documentation for an older kdelibs version.
-
-The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for users
-who generate a new documentation from scratch.
+The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
+users who generate a new documentation from scratch.
 
 After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the documentation to
-be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure that it can be found by
-qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to give browsing the most functionality.
-</sect4>
+reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
+documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
+that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
+give browsing the most functionality.
 
-<sect4>Create Search Database<p>
-	The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a keyword
-interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.  Preset are the
-options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the documentation files were
-set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include directories the user can set up himself
-by the "additional directories to index"-field.  After setting a path to an addional directory, the "Add" - button must be pushed to set
-the path.  A path once set can be removed from the index by selecting the path in the path field and pushing "Remove". Furthermore, the
-user is offered three different modes for the index size: tiny, small and medium.  The higher the index size, the more the index files
-will grow. On the other hand, a search in a bigger searchdatabase will be faster and more successful, so we suggest choosing a "medium" size.
-For using the search function, see section  4.8   Using the Documentation Browser
-</sect4>
+<sect4>Create Search Database
+<p>
+The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
+keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
+Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
+documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
+directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
+directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
+in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
+medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
+will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
+Using the Documentation Browser
 
-<sect>Projects<p>
+
+<sect>Projects<label id="Projects">
+<p>
 Projectmanagement:
 
-KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to delete it.
-It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all information for your files
-like the file properties, install path, distribution status and compiler options (CXXFLAGS). Setting file properties allows you to keep track
-of where the files should go.
+KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to
+delete it. It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all
+information for your files like the file properties, install path, distribution status and compiler options (CXXFLAGS). Setting
+file properties allows you to keep track of where the files should go.
 
-With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard generates three
-kinds of fram applications, as:
+With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard
+generates three kinds of fram applications, as:
+<itemize>
+<item>a single document interface (SDI) KDE-application including a menubar, a toolbar and a statusbar. It contains basic control
+resource management to allow extending the frame application into a unique KDE 1.1 application. The application frame also
+contains statusbar help messages as known from commercial products just like KDevelop itself. From the programmer's point of view,
+it is based on three application-specific classes leaning on the MVC-concept (Model-View-Controller). Technically, the base
+classes may not be viewed that way, but it's construction is at least created most logical to create applications with a GUI.
 
--a single document interface (SDI) KDE-application including a menubar, a toolbar and a statusbar. It contains basic control resource management
-to allow extending the frame application into a unique KDE 1.1 application. The application frame also contains statusbar help messages as
-known from commercial products just like KDevelop itself. From the programmer's point of view, it is based on three application-specific
-classes leaning on the MVC-concept (Model-View-Controller). Technically, the base classes may not be viewed that way, but it's construction
-is at least created most logical to create applications with a GUI.
+<item>a KDE-based application frame window. This application type offers most flexibility to those wanting to develop their
+program from scratch, but can also be used as a basis for developing wizard applications or modules.
 
--a KDE-based application frame window. This application type offers most flexibility to those wanting to develop their program from scratch,
-but can also be used as a basis for developing wizard applications or modules.
+<item>a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we
+tried to offer you a smart framework to support your application development. As Qt programming is fully supported, you should
+have no problems to create a full-functional application by using Qt only.
 
--a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we tried to offer you
-a smart framework to support your application development. As Qt programming is fully supported, you should have no problems to create a
-full-functional application by using Qt only.
-
--a C++ program framework. This application type is intended for those wanting
-to write a terminal based C++ program. Just remove the "Hello World" line in main() and construct your classes the same way with KDevelop as
-for KDE applications.
-
-For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select
-"New". The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
-type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your existing project
-and choose "Project"->"Add file(s)"->"Add existing file(s)" to copy the sources into your new project directory. Note that your Makefile.am's
-will be changed by KDevelop and you probably will have to change or delete some entries to provide clean compilation. You should not edit the
-KDevelop write area, instead you should read the entries made by KDevelop and delete matching titles created yourself. Also note that only
-one project is supported to work on at the moment, so your source files should be in the project's subdirectory which has the same name as
-the main project directory. In the Logical File Viewer the groups have to be set by yourself if you chose to use that importing possibility.
-
-Another way could be to create a frame application and delete the created source and header files. Then you can add existing files as above.
-
+<item>a C++ program framework. This application type is intended for those wanting to write a terminal based C++ program. Just
+remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for KDE applications.
+</itemize>
+For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select "New".
+The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
+type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your
+existing project and choose "Project"->"Add file(s)"->"Add existing file(s)" to copy the sources into your new project directory.
+Note that your Makefile.am's will be changed by KDevelop and you probably will have to change or delete some entries to provide
+clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
+matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
+should be in the project's subdirectory which has the same name as the main project directory. In the Logical File Viewer the
+groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
+application and delete the created source and header files. Then you can add existing files as above.
 
 Creating Libraries:
 
-This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of KDevelop.
+This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
+KDevelop.
 
 <sect1> New Projects with KAppWizard<p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each.
-	All projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
+The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
+projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
 
-For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base classes
-for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
-KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for the creation of small
-desktop tools or other simple applications without too much change on the existing code provided by the framework.
+For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base
+classes for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow
+inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for
+the creation of small desktop tools or other simple applications without too much change on the existing code provided by the
+framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for
+end-users. (NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).	
 
-A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for end-users.
-(NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).	
-The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar and statusbar.
+The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
+and statusbar.
 
 The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
 "Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
 first or for those working on commandline programs written in C++ or C.
 
-The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name
-and Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the *.lsm file.
-</sect1>
+The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
+Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
+*.lsm file.
+
 
 <sect1> Porting existing projects<p>
 
 Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
 empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
-will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing before
-the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be compiled and
-installed after the conversion to ensure the project's consistancy.
-</sect1>
+will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
+before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
+compiled and installed after the conversion to ensure the project's consistancy.
 
 <sect1> Compiler and Linker Options<p>
 
 The Project Options dialog , accessed by the project menu, lets you specify all needed parameters for your project. Those will be
 updated in the makefile.am's and the configure.in script (e.g. version number change or compiler warnings ).  After changing the
 project options, you should invoke "make clean" or "rebuild all" to compile your project with the new options.  Please mind that
-debugging is only available if the project options are set to create debugging information, the amount can be set with the debug level (0-3).
-If you add functions that belong to a library that is not included in the linker flags, your program will not link correctly if those are not
-updated, so keep track of your library linking.
-</sect1>
+debugging is only available if the project options are set to create debugging information, the amount can be set with the debug
+level (0-3). If you add functions that belong to a library that is not included in the linker flags, your program will not link
+correctly if those are not updated, so keep track of your library linking.
 
-</sect>
-<sect>The Helpsystem<p>
+
+<sect>Developing with KDevelop<label id="Developing with KDevelop">
+<p>
+<sect1> Creating a new class with the Classgenerator<p>
+
+New classes can be added to your project by selecting "New Class" from the project menu.  The following dialog lets you enter all
+information needed to construct a new class.  First, you should enter the classname which will also preset the filenames for the
+header and implementation files.  The Baseclass is the class the new class will inherit.  For Qt or KDE classes requiring QWidget
+as a baseclass, you can also check the QWidget option.  Further the inheritance from the baseclass can be selected by public,
+protected and private. The "Documentation" field offers a place for a short description for your class; this will be inserted into
+the header file for documentation purposes and is placed there for KDoc to read. The affected Makefile.am will be updated with the
+new files created and you can rebuild your project now containing your new class.
+
+<sect1> Adding new or existing files<p>
+
+Adding a new file is often used when you think that you should separate your class implementation file into several ones.
+Then you need to create an new file which will get the part of the class implementation you want to move.  You can specify which
+type the new file will be, including a template for pixmap files often needed to create new toolbar icons.   The new file will be
+added to the project and all affected project files like Makefile.am etc will be updated.
+
+
+<sect1> File Properties<p>
+The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
+files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
+included in the project as well as the installation path if the file is going to be installed by the end-user's make install
+command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
+project is build and installed by end users, so you have to set up those locations.   For standard KDE location macros you should
+look in your Makefile.am where the location macros are specified.
+
+<sect1> Accessable Tools<p>
+
+The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool is started, it will
+be working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting KDbg is that you
+choose "Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.  If the binary
+does not exist, you have to create it first with invoking make or rebuild all.
+KIconedit can also be started by a click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
+
+
+
+
+<sect>The Helpsystem<label id="The Helpsystem">
+<p>
 Quickhelp, Status messages, "What's this ?"
 
-For Version 0.3 of KDevelop, we integrated an extending statusbar message system, displaying statushelp for menubar entries and process status for
-each selected function. The statusbar always shows you what KDevelop is doing. Furthermore, the statusbar shows the mode of the insert / overwrite
-key as well as displaying line and comlumn position of the cursor in the editwindow. Dialog fields offer quickhelp by right mouse button click
-so you don't have to worry about searching functions in the documentation. Also, the "What's this ?" button on the far right of the toolbar offers help
-window for the main working view. Just push the "What's this ?" button and click on the item you want to have a descriptive help for.
-<sect1> Using the Documentation Browser<p>
+For Version 0.3 of KDevelop, we integrated an extending statusbar message system, displaying statushelp for menubar entries and
+process status for each selected function. The statusbar always shows you what KDevelop is doing. Furthermore, the statusbar shows
+the mode of the insert / overwrite key as well as displaying line and comlumn position of the cursor in the editwindow. Dialog
+fields offer quickhelp by right mouse button click so you don't have to worry about searching functions in the documentation.
+Also, the "What's this ?" button on the far right of the toolbar offers help window for the main working view. Just push the
+"What's this ?" button and click on the item you want to have a descriptive help for.
 
+<sect1> Using the Documentation Browser
+<p>
 The documentation browser allows quick and easy access to all manuals and documentations, including a search utility that is also
 present in the editors.
 
 Accessing Help functionality:
+<itemize>
+<item>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for.  Then
+press the right mouse button and select look up: "expression" .This can also be done by selectin "Search Marked Text" from the
+help menu, the shorcut key F3 or by selecting the Search icon from the toolbar.
 
--in the editor, select the text you want to have help on or place the cursor in the word that you want to look for.  Then press the right
-mouse button and select look up: "expression" .This can also be done by selectin "Search Marked Text" from the help menu, the shorcut key
-F3 or by selecting the Search icon from the toolbar.
+<item>in the Documentation browser select the text you want to look up and press the right mouse button, select look
+up:"expression" or select "Search Marked Text" or the search icon as above.
 
--in the Documentation browser select the text you want to look up and press the right mouse button, select look up:"expression" or select
-"Search Marked Text" or the search icon as above.
-
--if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help on..."
-icon from the toolbar, opening a search dialog where you can enter the expression you search for.
-
+<item>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
+on..." icon from the toolbar, opening a search dialog where you can enter the expression you search for.
+</itemize>
 Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu entries.
-</sect1>
-
-</sect>
-
-<sect>The Editor<p>
-</sect>
-
-<sect>The Dialogeditor<p>
-</sect>
-
-<sect>Questions and Answers<p>
-Q : I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
-A:  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the KDevelop homepage.
-All questions should go there and will be adressed there as well.  If you stick to that, you will get the most help by the developers and all users
-having the same problems, as well as helping to keep the FAQ up to date.
 
 
-Q: Wrong JPEG library version: library is 61, caller expects 62
-A:  There are 2 ways.
 
- 1. : When the kdelibs are installed it installs header files for the
+
+<sect>The Editor<label id="The Editor">
+<p>
+
+
+<sect>The Dialogeditor<label id="The Dialogeditor">
+<p>
+
+
+<sect>Questions and Answers<label id="Questions and Answers">
+<p>
+<bf>Q:</bf> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
+
+<bf>A:</bf>  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the
+KDevelop homepage. All questions should go there and will be adressed there as well.  If you stick to that, you will get the most
+help by the developers and all users having the same problems, as well as helping to keep the FAQ up to date.
+
+<bf>Q:</bf> Wrong JPEG library version: library is 61, caller expects 62
+
+<bf>A:</bf>  There are 2 ways.
+<enum>
+<item> When the kdelibs are installed it installs header files for the
  jpeg libraries, these are version 61,  however most distributions
  (Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
  from /opt/kde/include. The pukka include  file for version 62 should
@@ -634,25 +689,28 @@ A:  There are 2 ways.
  locate libjpeg
  locate jpeglib
 
- 2: You must recompiled kdesupport without jpeg
+<item> You must recompiled kdesupport without jpeg
  library (configure --with-libjpeg --with-libgif).
+</enum>
 
 
-
-Q:  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+<bf>Q:</bf>  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
  cd .. && automake --gnu --include-deps po/Makefile
  aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
  make[2]: *** [Makefile.in] Error 1
-A:  Workaround for automake-1.4/automake-2.13 users: Just run
+
+<bf>A:</bf>  Workaround for automake-1.4/automake-2.13 users: Just run
  "aclocal" manually, then it will compile.
 
 
-Q:  What must i do, if configure said ,that i need giflib23.
-A:  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+<bf>Q:</bf>  What must i do, if configure said ,that i need giflib23.
+
+<bf>A:</bf>  Try a newer snap of kdesupport, or maybe you have another giflib installed?
 
 
-Q: How can I convert a KDevelop 0.2 project to a 0.3 one?
-A: Please change the AC_OUTPUT in the configure.in to a oneline version
+<bf>Q:</bf> How can I convert a KDevelop 0.2 project to a 0.3 one?
+
+<bf>A:</bf> Please change the AC_OUTPUT in the configure.in to a oneline version
 
  for example:
  old version AC_OUTPUT(Makefile \
@@ -663,9 +721,9 @@ A: Please change the AC_OUTPUT in the configure.in to a oneline version
 
 
 
-Q:  I  get the following linker errors, what do I have to do to get KDevelop linked ?
+<bf>Q:</bf>  I  get the following linker errors, what do I have to do to get KDevelop linked ?
  /usr/lib/libqt.so:
- warning: multiple common of `QArrayT<char> type_info node'
+ warning: multiple common of `QArrayT&lt;char&gt; type_info node'
 ckdevelop.o: warning: previous common is here
 ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
 ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
@@ -689,25 +747,28 @@ make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
 `/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
 make: *** [all-recursive-am] Error 2
 
-A: If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall them.  .:-(
+<bf>A:</bf> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall them.  .:-(
  It's a bug in the SuSE rpm's.
 
 
-Q: I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
-A:  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
+<bf>Q:</bf> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
+
+<bf>A:</bf>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
 
 
-Q: If I add files to my project, will they be automatically included and compiled ?
-A: Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new added files will be included as well.
+<bf>Q:</bf> If I add files to my project, will they be automatically included and compiled ?
 
+<bf>A:</bf> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
+added files will be included as well.
 
-Q: If I removed a file, I get some weird linker messages. What is wrong with my project ?
-A: If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler automatically on all headers),
-your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the according *.moc.cpp file and rebuild the project.
-</sect>
+<bf>Q:</bf> If I removed a file, I get some weird linker messages. What is wrong with my project ?
+
+<bf>A:</bf> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
+automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
+according *.moc.cpp file and rebuild the project. >
 
 <sect>Authors<p>
-Main Developers (Version 0.3):
+<bf>Main Developers:</bf>
 
 Sandy Meier 					<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz.uni-potsdam.de>">
 
@@ -719,13 +780,13 @@ Ralf Nolden 					<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<
 
 
 
-Translation coordination
+<bf>Translation coordination:</bf>
 
 Martin Piskering    					<htmlurl url="mailto:martin.piskering@stuwo.at" name = "<martin.piskering@stuwo.at>">
 
 
 
-Translations
+<bf>Translations:</bf>
 
 Ilmar Habibulin    						<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">														-russian
 
@@ -733,7 +794,7 @@ Steen Rabol    								<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get
 
 Martin Piskering    					<htmlurl url="mailto:martin.piskering@stuwo.at" name = "<martin.piskering@stuwo.at>">		-german
 
-Additions, patches and bugfixes
+<bf>Additions, patches and bugfixes:</bf>
 
 Jost Schenk    								<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
 
@@ -748,22 +809,25 @@ Matthias Hoelzer-Kluepfel    	<htmlurl url="mailto:mh@caldera.de" name = "<mh@ca
 Steen Rabol    								<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
 
 
-KDevelop contains sourcecode from KWrite 0.98
-(c)  by Jochen Wilhelmy    	<htmlurl url="mailto:didisnapµ@cs.tu-berlin.de" name = "<didisnapµ@cs.tu-berlin.de>">
+<bf>KDevelop contains sourcecode from the following applications:</bf>
+
+KWrite 0.98
+&copy		by Jochen Wilhelmy		<htmlurl url="mailto:didisnapµ@cs.tu-berlin.de" name = "<didisnapµ@cs.tu-berlin.de>">
 
 and KDE Help
-(c)    by Martin R. Jones 	<htmlurl url="mailto:mjones@kde.org" name = "<mjones@kde.org>">
-</sect>
+&copy		by Martin R. Jones 		<htmlurl url="mailto:mjones@kde.org" name = "<mjones@kde.org>">
+>
 
 
 <sect>Thanks<p>
 
-We like to express special thanks to all of our family members and friends who supported us in several ways to let us construct and improve KDevelop.
+We like to express special thanks to all of our family members and friends who supported us in several ways to let us construct
+and improve KDevelop.
 
 Further, we thank  Jochen Wilhelmy  for offering his program kwrite and his help on integrating it into KDevelop.
 
-Thanks also to the KDE team and Stephan Kulow, who gave us the possibility to work on KDevelop via CVS (and had to suffer some trouble for that...).
-</sect>
+Thanks also to the KDE team and Stephan Kulow, who gave us the possibility to work on KDevelop via CVS (and had to suffer some
+trouble for that...). >
 
 <sect>Copyright<p>
 
@@ -785,7 +849,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 <p>
-</sect>
 </article>
 
 
