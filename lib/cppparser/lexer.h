@@ -27,7 +27,6 @@
 #include <qvaluestack.h>
 #include <qpair.h>
 #include <qptrvector.h>
-#include <qintdict.h>
 
 enum Type {
     Token_eof = 0,
@@ -145,91 +144,6 @@ enum SkipType {
 
 struct LexerData;
 
-/** 
- *	Class for storing a doxygen comment found in a translation unit
- *	@author Jonas Jacobi <j.jacobi@gmx.de>
- */
-class Comment{
-public:
-	Comment(const QString& comment, int linebeg, int lineend, int colbeg, int colend){
-        m_data = new CommentData(comment, linebeg, lineend, colbeg, colend);
-	}
-    
-    ~Comment(){
-        if( m_data->deref() )
-            delete( m_data );
-    }
-    
-    Comment(const Comment& com){
-        m_data = com.m_data;
-        m_data->ref();
-    }
-    
-    Comment& operator=(const Comment& com){
-        com.m_data->ref();
-        if ( m_data->deref() )
-            delete m_data;
-             
-        m_data = com.m_data;
-        return( *this );
-    }
-    /**
-     * Get the text of the comment "as is"(as written in the translation unit)
-     * @return the text of the comment.
-     */
-	QString text() const{
-		return m_data->text;
-	};
-	
-    /**
-     * get the starting position of the comment in the translation unit.
-     * @param line if != 0 the starting linenumber gets assigned to it
-     * @param col if != 0 the starting column gets assigned to it
-     */
-	void startPosition(int* line, int* col){
-		if (line) *line = m_data->lineBegin;
-		if (col) *col = m_data->colBegin;
-	}
- 
-    /**
-     * get the ending position of the comment in the translation unit.
-     * @param line if != 0 the ending linenumber gets assigned to it
-     * @param col if != 0 the ending column gets assigned to it
-     */
-	void endPosition(int* line, int* col){
-		if (line) *line = m_data->lineEnd;
-		if (col) *col = m_data->colEnd;
-	}
-	
-private:
-    /**
-     * needed for shared data stuff
-     */
-    void detach(){
-        if( m_data->count != 1 )
-            *this = copy();
-    }
-    /**
-     * needed for shared data stuff
-     */
-    Comment copy(){
-        return Comment(m_data->text, m_data->lineBegin, m_data->lineEnd, m_data->colBegin, m_data->colEnd);
-    }
-    /**
-     * Struct containing all the data describing a comment.
-     * @see QShared
-     */
-    struct CommentData : public QShared{
-        CommentData(const QString& comment, int linebeg, int lineend, int colbeg, int colend) : text(comment), lineBegin(linebeg), lineEnd(lineend), colBegin(colbeg), colEnd(colend){
-        };
-        QString text;
-        int lineBegin;
-        int lineEnd;
-        int colBegin;
-        int colEnd;
-    }* m_data;
-};
-
 class Token
 {
 public:
@@ -321,15 +235,6 @@ public:
 
     int currentLine() const { return m_currentLine; }
     int currentColumn() const { return m_currentColumn; }
-    
-    /**
-     * Get a comment belonging at token position index
-     * @param index position of the token
-     * @return reference to a Comment, return NULL, when no documentation exists on that position.
-     */
-    Comment* comment(int index) const{
-        return m_commentTable[index];
-    };
 
 private:
     QChar currentChar() const;
@@ -344,8 +249,7 @@ private:
     void readIdentifier();
     void readWhiteSpaces( bool skipNewLine=true );
     void readLineComment();
-    /** stores the read out comment in comment */
-    void readMultiLineComment(QString& comment);
+    void readMultiLineComment();
     void readCharLiteral();
     void readStringLiteral();
     void readNumberLiteral();
@@ -381,7 +285,7 @@ private:
     void processIfndef();
     void processInclude();
     void processUndef();
-    
+
 private:
     LexerData* d;
     Driver* m_driver;
@@ -395,7 +299,7 @@ private:
     bool m_recordWhiteSpaces;
     bool m_startLine;
     QMap< QString, QPair<SkipType, QString> > m_words;
-    
+
     int m_currentLine;
     int m_currentColumn;
     bool m_skipWordsEnabled;
@@ -409,8 +313,6 @@ private:
 
     bool m_reportWarnings;
     bool m_reportMessages;
-    
-    QIntDict<Comment> m_commentTable;
 
 private:
     Lexer( const Lexer& source );
@@ -684,57 +586,47 @@ inline void Lexer::readLineComment()
             nextChar();
     }
 }
-//@todo can be tweaked 
-inline void Lexer::readMultiLineComment(QString& comment)
+
+inline void Lexer::readMultiLineComment()
 {
-    comment = "/*";
-    QChar curc = currentChar();
-    while( !curc.isNull() ){
-        if( curc == '*' && peekChar() == '/' ){
+    while( !currentChar().isNull() ){
+        if( currentChar() == '*' && peekChar() == '/' ){
             nextChar( 2 );
             return;
 	} else if( m_reportMessages && currentChar() == '@' && m_source.mid(currentPosition()+1, 4).lower() == "todo" ){
 	    nextChar( 5 );
-	    comment += "@todo";
 	    QString msg;
 	    int line = m_currentLine;
 	    int col = m_currentColumn;
 
-	    while( curc ){
-		if( curc == '*' && peekChar() == '/' )
+	    while( currentChar() ){
+		if( currentChar() == '*' && peekChar() == '/' )
 		    break;
-		else if( curc == '\n' )
+		else if( currentChar() == '\n' )
 		    break;
-		msg += curc;
-		comment += curc;
+		msg += currentChar();
 		nextChar();
-		curc = currentChar();
 	    }
 	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
 	} else
         if( m_reportMessages && m_source.mid(currentPosition(), 5).lower() == "fixme" ){
             nextChar( 5 );
-	    comment += "@fixme";
             QString msg;
             int line = m_currentLine;
             int col = m_currentColumn;
 
-            while( curc ){
-            if( curc == '*' && peekChar() == '/' )
+            while( currentChar() ){
+            if( currentChar() == '*' && peekChar() == '/' )
                 break;
-            else if( curc == '\n' )
+            else if( currentChar() == '\n' )
                 break;
 
-            msg += curc;
-	    comment += curc;
+            msg += currentChar();
             nextChar();
-	    curc = currentChar();
             }
             m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Fixme) );
         } else
-		comment += curc;
-	    nextChar();
-	    curc = currentChar();
+            nextChar();
     }
 }
 
