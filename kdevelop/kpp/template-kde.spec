@@ -40,9 +40,22 @@ find . -type f | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list
 find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.%%name%%
 
 %clean
-rm -rf $RPM_BUILD_ROOT/*
+rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_DIR/%%name%%
 rm -rf ../file.list.%%name%%
 
 
 %files -f ../file.list.%%name%%
+
+%post
+echo %%name%% has been added to your system
+
+%postun
+echo %%name%% has been removed from your system.
+
+
+%changelog
+*Sun Jan 21 20001 Ian Reinhart Geiser <geiseri@linuxppc.com>
+- created inital template.
+- all changes should go here after this date.
+

@@ -48,6 +48,7 @@ loadPrefs();
 
 }
 Kpp::~Kpp(){
+				savePrefs();
         cerr << "Kpp is cleaning up..." << endl;
 }
 
@@ -188,11 +189,13 @@ bool Kpp::loadPrefs(){
 // The default packager
 // The default URL
 QString tempqsSpecTemplate = locate("appdata","template.spec");
+cerr << "I got spec template from " << tempqsSpecTemplate << endl;
 qsSpecTemplate = kcConfig->readEntry( "specTemplate", tempqsSpecTemplate);
-QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
-QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));
-QComboBox_1->setCurrentItem(kcConfig->readNumEntry("license", 0));
-QLineEdit_11->setText(kcConfig->readEntry("baseDir", "none"));
+cerr << "I got spec template from " << qsSpecTemplate << endl;
+//QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
+//QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));
+//QComboBox_1->setCurrentItem(kcConfig->readNumEntry("license", 0));
+//QLineEdit_11->setText(kcConfig->readEntry("baseDir", "none"));
 }
 /** Save the current enviroment information for the application. */
 bool Kpp::saveClass(){
@@ -203,10 +206,10 @@ bool Kpp::saveClass(){
 void Kpp::savePrefs(){
      cout << "Saving Prefs..." << endl;
      cout << kcConfig->writeEntry( "specTemplate", qsSpecTemplate) << endl;
-     cout << kcConfig->writeEntry( "url", QLineEdit_8->text()) << endl;
-     cout << kcConfig->writeEntry( "vendor", QLineEdit_9->text()) << endl;
-     cout << kcConfig->writeEntry( "license", QComboBox_1->currentItem()) << endl;
-     cout << kcConfig->writeEntry( "baseDir", QLineEdit_11->text()) << endl;
+//     cout << kcConfig->writeEntry( "url", QLineEdit_8->text()) << endl;
+//     cout << kcConfig->writeEntry( "vendor", QLineEdit_9->text()) << endl;
+//     cout << kcConfig->writeEntry( "license", QComboBox_1->currentItem()) << endl;
+//     cout << kcConfig->writeEntry( "baseDir", QLineEdit_11->text()) << endl;
      cout << "Done Saving Prefs...." << endl;
      kcConfig->sync();
 }

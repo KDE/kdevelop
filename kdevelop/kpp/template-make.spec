@@ -19,10 +19,11 @@ BuildRoot: %%buildroot%%
 
 %prep
 %setup
-CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
-                %%config%% \
-                $LOCALFLAGS
+
 %build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS"
+
 # Setup for parallel builds
 numprocs=`egrep -c ^cpu[0-9]+ /proc/stat || :`
 if [ "$numprocs" = "0" ]; then
@@ -40,9 +41,21 @@ find . -type f | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list
 find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.%%name%%
 
 %clean
-rm -rf $RPM_BUILD_ROOT/*
+rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_DIR/%%name%%
 rm -rf ../file.list.%%name%%
 
 
 %files -f ../file.list.%%name%%
+
+%post
+echo %%name%% has been added to your system
+
+%postun
+echo %%name%% has been removed from your system.
+
+
+%changelog
+*Sun Jan 21 20001 Ian Reinhart Geiser <geiseri@linuxppc.com>
+- created inital template.
+- all changes should go here after this date.
