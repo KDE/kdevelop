@@ -633,7 +633,8 @@ void ProjectManager::loadLocalParts()
       PluginController::getInstance()->integratePart( part );
       m_info->m_localParts.insert( name, part );
     }
-    kapp->processEvents();
+// do NOT do processEvents() here, it will delete the unloading plugins before they're ready!
+//    kapp->processEvents();
   }
 }
 
