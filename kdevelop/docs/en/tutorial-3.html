@@ -47,8 +47,8 @@ steps are usually the same, just you may not have certain options available.
 <P>
 <H4>Starting KAppWizard and the First Page</H4>
 
-<P>To start with your first KDE application, open KDevelop. Then select "New" from the "Project"-menu. The KAppWizard starts, and you see
-a tree on the first page, containing the project types. When a type is selected, you see a preview how it will look like after the
+<P>To start with your first KDE application, open KDevelop. Then select "New..." from the "Project"-menu. The KAppWizard starts, and you
+see a tree on the first page, containing the project types. When a type is selected, you see a preview how it will look like after the
 initial build process. Choose the KDE subtree, Normal type. Then press the "Next" button on the bottom of the first wizard page. This
 will switch to the next page, where you have to set the general project options.
 <P>
@@ -107,14 +107,349 @@ If the button is not available, you haven't set all options correctly. To correc
 is finished, the "Cancel" button changes to an "Exit" button to leave the wizard.
 <P>After this last step, you're finished with creating a new project. KDevelop then loads it and the treeviews let you browse through the
 project's files and classes.
+<P>
 <P>In the next section, we'll discuss how to build and run your first version of <EM>KScribble</EM> and how the sourcecode is organized, so
 you have an idea where we are and where we're going to extend the features of <EM>KScribble</EM> in the following chapters.
 <P>
-<H3><A NAME="ss3.2">3.2 The Application Skeletton</A>
+<H3><A NAME="ss3.2">3.2 The First Build</A>
+</H3>
+
+<P>After our project is generated, we'll first make a trip through the sourcode to get a general understanding how the application frame
+works. This won't only help to get started but we'll know where to change what in later steps.
+<P>When opening the LFV (Logical File Viewer) page on the tree-view, you see some folders that already sort the project files relevant to
+the developer. The first two folders are "Header" and "Sources". The Header-folder therefore logically contains all header files of the
+project, the Sources-folder all sourcecodes. All other folders are of no interest right now, so we'll turn back here later to see what
+they contain.
+<P>The two folders then contain the following files:
+<P><B>Headers:</B>
+<UL>
+<LI><B>kscribble.h :</B> contains the class declaration for the class <B>KScribbleApp</B>.</LI>
+<LI><B>kscribbledoc.h :</B> contains the class declaration for the class <B>KScribbleDoc</B>.</LI>
+<LI><B>kscribbleview.h :</B> contains the class declaration for the class <B>KScribbleView</B>.</LI>
+<LI><B>resource.h :</B> contains a macro collection for the menu-ID's</LI>
+</UL>
+<P><B>Sources:</B>
+<UL>
+<LI><B>kscribble.cpp :</B> contains the implementation of the class <B>KScribbleApp</B>.</LI>
+<LI><B>kscrbbledoc.cpp :</B> contains the implementation of the class <B>KScribbleDoc</B>.</LI>
+<LI><B>kscrbbleview.cpp :</B> contains the implementation of the class <B>KScribbleView</B>.</LI>
+<LI><B>main.cpp :</B> contains the <B>main()</B> function implementation.</LI>
+</UL>
+<P>Before diving into the sources, we'll let KDevelop build and run our new application. To do this, select "Make" from the "Build"-menu
+or hit the according button on the toolbar. The output window opens from the bottom of KDevelop and lets you see what <CODE>make</CODE> does by
+the messages it gives us:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1   Making all in docs
+2   make[1]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+3   Making all in en
+4   make[2]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs/en'
+5   make[2]: Nothing to be done for `all'.
+6   make[2]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs/en'
+7   make[2]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+8   make[2]: Nothing to be done for `all-am'.
+9   make[2]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+10  make[1]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+11  make[1]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble'
+12  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbleview.cpp
+13  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbledoc.cpp
+14  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c                 
+    kscribble.cpp
+15  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    main.cpp
+16  /usr/bin/moc ./kscribble.h -o kscribble.moc.cpp
+17  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribble.moc.cpp           
+18  /usr/bin/moc ./kscribbledoc.h -o kscribbledoc.moc.cpp
+19  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbledoc.moc.cpp
+20  /usr/bin/moc ./kscribbleview.h -o kscribbleview.moc.cpp
+21  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbleview.moc.cpp
+
+22  /bin/sh ../libtool --silent --mode=link g++  -O0 -g -Wall   -o kscribble -L/opt/kde/lib  -L/usr/X11R6/lib -rpath /opt/kde/lib
+    -rpath /usr/X11R6/lib kscribbleview.o kscribbledoc.o kscribble.o main.o kscribble.moc.o kscribbledoc.moc.o kscribbleview.moc.o
+    -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11
+
+23  make[1]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble'
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>As you see, we've put linenumbers in front of each line, which won't appear in your output; it just makes it easier to describe what
+happened during the build now. First of all, <CODE>make</CODE> works recursively. That means, it starts from the directory it is invoked in and
+then goes into the subdirectories first, returns and processes the next directory. Finally, the directory it was started is processed
+and <CODE>make</CODE> finishes. Therefore, <CODE>make</CODE> starts with the main project directory containing the sources first. In line 1 and 2, you
+see how the <CODE>make</CODE> process goes into the <CODE>docs</CODE> directory, then into the <CODE>en</CODE> subdirectory. As there isn't anything to do, it
+leaves these directories until it returns to the sourcedirectory <CODE>kscribble</CODE> in line 11. Then, the real work starts: <CODE>make</CODE>
+invokes the compiler, here <CODE>g++</CODE> to compile the sourcefile <CODE>kscribbleview.cpp</CODE>. The macro <CODE>-DHAVE_CONFIG_H</CODE> says that the file
+<CODE>config.h</CODE> should be used. This is a file containing macros for the specific platform and application and is located in the main
+project directory. The following <CODE>-I</CODE> commands add the include path where <CODE>g++</CODE> can find the includes it needs. These are the
+current directory, the main project directory (by <CODE>-I..</CODE>) and the include path for the KDE, Qt and X11 library header files. The
+directories for these include files were determined by the <CODE>configure</CODE> script and set in the Makefiles, therefore, the compiler
+knows where these are located. Finally, <CODE>-O0</CODE> sets the optimization to zero (no optimization), <CODE>-g</CODE> enables debugging, <CODE>-Wall</CODE>
+sets the compiler warnings to <CODE>all</CODE> and <CODE>-c</CODE> tells the compiler to produce an object file, so only compile the file.
+<P>This is done for the other sourcefiles of our project as well in lines 13-15. Obviously, our sources are compiled, but instead of
+linking the object files of the sources to the final binary, we see some other commands. In line 16, you see that the program "moc" is
+called to process the headerfile  <CODE>kscribble.h</CODE>, with it's output in <CODE>kscribble.moc.cpp</CODE>. Then, in line 17, this source file is
+compiled as well. The same happens with the other project header files until line 21. Now, as the Qt toolkit contains the signal/slot
+mechanism, but still stays a C++ implementation, you're using certain keywords that are not originally C++ language, such as the
+<CODE>signals:</CODE> and <CODE>slots:</CODE> declaration in your classes. This gives you the ability to easy allow object communication for all class
+objects that inherit the class <CODE>QObject</CODE>, so you can avoid the usual callback pointer functions. Therefore, the application needs
+the sources that implement this functionality, and that is why <CODE>moc</CODE> is called. <CODE>Moc</CODE> is the Meta Object Compiler of the Qt
+toolkit and expands the macro <CODE>Q_OBJECT</CODE> of your class declaration and builds the implementation for signals and slots mechanisms by
+parsing the header file and producing a source output that has to be included in the binary. As KDevelop projects use <CODE>automoc</CODE> to
+determine, which header file needs to be processed, you don't have to take care for any call on <CODE>moc</CODE> and the C++ compiler on the
+moc output files. Just remember the rules that make a class use the signals and slots- inheritance from <CODE>QObject</CODE> or any class that
+inherits <CODE>QObject</CODE> itself, inclusion of the <CODE>Q_OBJECT</CODE> macro and the declarations for signals and slots.
+<P>Finally, your binary is build by the compiler. The Output binary is called <CODE>kscribble</CODE>, the linker includes the path for the KDE and
+X11 libraries and links the sources against the libraries <CODE>kfile, kfm, kdeui, kdecore, qt, Xext</CODE> and <CODE>X11</CODE>. Then you're done and
+make exits.
+<P>
+<H3><A NAME="ss3.3">3.3 The Source Skeletton</A>
 </H3>
 
 <P>
-<H3><A NAME="ss3.3">3.3 Additional Contents of KDevelop Projects</A>
+<P>To gain a concept of how a KDE application works, we'll first have a very close look at the source skeletton already provided by the
+Application Wizard. As we already saw, we're having a set of source and header files that build the initial code for the application
+and make it ready-to-run. Therefore, the easiest way to explain the code is to follow the implementation line by line as it is
+processed during executing the program until it enters the main event loop and is ready to accept user input. Then, we'll have a look
+at the fuctionality that enables user interaction and how certain things work. This is probably the best way to explain the framework
+and, as it is similar to almost all KDE applications, will enable you to read source codes from other projects as well; additionally,
+you will know where to change what part of the code to make your applications behave the way they are designed for.
+<P>As the application begins its execution with entering the <CODE>main()</CODE> function, this will be the start for our code exmination. The
+<CODE>main()</CODE> function of <EM>KScribble</EM> is implemented in the file <CODE>main.cpp</CODE> and can also be found using the Class Browser by
+selecting the "Globals" folder, subfolder "Functions":
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1  #include "kscribble.h"
+2
+3  int main(int argc, char* argv[]) {
+4    KApplication app(argc,argv,"KScribble");
+5
+6    if (app.isRestored())
+7    {
+8       RESTORE(KScribbleApp);
+9    }
+10   else
+11   {
+12      KScribbleApp* kscribble = new KScribbleApp;
+13      kscribble->show();
+14      if(argc > 1){
+15        kscribble->openFile(argv[1]);
+16      }
+17    }
+18    return app.exec();
+19  }
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Now, what happens first is the usual creation of a <CODE>KApplication</CODE> object, which gets our application name <EM>KScribble</EM> as a third
+parameter. When creating a new <CODE>KApplication</CODE>, a new <CODE>KConfig</CODE> instance is created as well which is connected to a configuration
+file in $HOME/.kde/share/config/appname + rc which stores all information we want to use when starting application windows. The name we
+passed the constructor of <CODE>app</CODE> will be used as the window title later.
+<P>Despite of the example code for turning the first Qt application into a KDE one, the following code is somewhat different. After the
+<CODE>KApplication</CODE> object is present, we're testing if the application is started by the session management of <CODE>kdm</CODE> or manuall by
+the user. This can be found out when calling <CODE>isRestored()</CODE> on the <CODE>app</CODE> object, which returns <CODE>true</CODE> for session management
+and <CODE>false</CODE> for a normal start.
+<P>As session management is a main feature of KDE applications and widely used by the framework but a lot more to explain, we'll follow
+the <CODE>else{}</CODE> section first; then we'll come back and explain the session functionality in a later step.
+<P>
+<H4>User Application Start</H4>
+
+<P>The <CODE>else{}</CODE> section now creates an instance of the class <CODE>KScribbleApp</CODE> in line 12. This object is called to show itself in line
+13 as usual; line 14 determines if a commandline argument has been passed and, as this is usually the name of a file, calls the
+<CODE>kscribble</CODE> object to open it with <CODE>openFile()</CODE>.
+<P>Note that we didn't call the method <CODE>setTopWidget(kscribble)</CODE> for our application- this is already done by the class that <CODE>KScribbleApp</CODE>
+inherits. Now we'll have a look at our <CODE>KScribbleApp</CODE> object- what is it and what does it provide already ?  The only thing we know
+until now is that it has to be a Widget to represent the user interface in the main window. Let's turn to the class implementation of
+<CODE>KScribbleApp</CODE>, which can be found in the file <CODE>kscribble.cpp</CODE> or by a click on the class icon in the Class Browser. As the
+instance is created by the constructor.
+First of all, we see that it inherits the class <CODE>KTMainWindow</CODE>, which is a part of the <CODE>kdeui</CODE> library. This class itself
+inherits <CODE>QWidget</CODE>, so, as usual, we have a normal widget as the top-level window. <CODE>KTMainWindow</CODE> contains a lot of functionality
+that the class <CODE>KScribbleApp</CODE> makes use of. It provides a menubar, toolbar, statusbar and session management support. The only thing
+we have to do when subclassing <CODE>KTMainWindow</CODE> is to create all the objects we need and create another widget that is managed by our
+<CODE>KTMainWindow</CODE> instance as the main view in the center of the window; usually this is the place where the user works like a
+text-editing view.
+<P>
+<H4>The Constructor</H4>
+
+<P>Let's have a look at the code for the constructor and see how the instance is created:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+KScribbleApp::KScribbleApp()
+{
+  windowList.append(this);
+  config=kapp->getConfig();
+        
+
+  ///////////////////////////////////////////////////////////////////
+  // call inits to invoke all other construction parts
+  initMenuBar();
+  initToolBar();
+  initKeyAccel();
+  initStatusBar();
+  initDocument();
+  initView();
+
+  readOptions();
+
+  ///////////////////////////////////////////////////////////////////
+  // disable menu and toolbar items at startup
+  disableCommand(ID_FILE_SAVE);
+  disableCommand(ID_FILE_SAVE_AS);
+  disableCommand(ID_FILE_PRINT);
+        
+  disableCommand(ID_EDIT_CUT);
+  disableCommand(ID_EDIT_COPY);
+  disableCommand(ID_EDIT_PASTE);
+}
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>You see that first, the current instance is appended to a list of KScribbleApps called <CODE>windowList</CODE>. This is used to count the
+number of copies that are currently opened of our application windows and which is needed for closing all of them at once when the user
+leaves the application. Then we see that our instance of <CODE>KConfig</CODE> now points to the applications configuration, so we can operate
+with the configuration file entries later.
+<P>Then, all parts of the application that are needed are created by their according member functions that are specific to our main
+window:
+<P>
+<UL>
+<LI><B>initMenuBar():</B>  constructs the menubar,</LI>
+<LI><B>initToolBar():</B>  constructs the toolbar,</LI>
+<LI><B>initStatusBar():</B> creates the statusbar,</LI>
+<LI><B>initKeyAccel():</B>  sets all keyboard accelerators for our application by the global and application specific keyboard
+configuration</LI>
+<LI><B>initDocument():</B> creates the document object for the application window</LI>
+<LI><B>initView():</B>      creates the main widget for our view within the main window</LI>
+<LI><B>readOptions():</B>  reads all application specific settings from the configuration file and initializes the rest of the
+application such as the recent file list, the bar positions and the window size.</LI>
+</UL>
+<P>Finally, we disable some commands that the user can do, because they should not be available in the current application state.
+As we now have a general overview how the application window is created, we will look into the details of how the user elements are
+constructed by following the above methods.
+<P>
+<H4>The Menubar</H4>
+
+<P>As shown above, the menubar of <EM>KScribble</EM> is created by the method <CODE>initMenuBar()</CODE>. There, we create a set of
+<CODE>QPopupMenu</CODE>s that pop up if the user selected a menuentry. Then, we insert them into the menubar and connect to the entries.
+<P>First, we create our <CODE>recent_file_menu</CODE>, which will contain the names of the last 5 opened files. We have to do this first, because
+this menu is inserted into the <CODE>file_menu</CODE>. Then we add the connection directly- we just retrieve the signal that is emitted by the
+menuentry with its entry number and call the <CODE>slotFileOpenRecent( int )</CODE>, which then calls the right file from the recent file list
+to be opened.
+<P>Then we create our "File"-menu. This will be the menu that will be visible in the menubar. The standard actions are then inserted into
+the popupmenu one by one- first the commands for creating a new file, open a file, close a file etc., finally "E&amp;xit" to close the
+application. All menuentries have to be created in the order as they appear later, so we have to keep an eye on which we want to have
+at what place. As an example, we look at the following entries:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+file_menu->insertItem(Icon("fileopen.xpm"), i18n(""), ID_FILE_OPEN );
+file_menu->insertItem(i18n("Open "), recent_files_menu, ID_FILE_OPEN_RECENT );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>The first one inserts the "Open..." entry. As we want to have it with an icon, we use the <CODE>insertItem()</CODE> method with the icon's
+name. To understand the icon loading process, we need to know what or where <CODE>Icon()</CODE> is declared- in fact, it is a macro provided by
+the class <CODE>KApplication</CODE>:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#define Icon(x) kapp->getIconLoader()->loadIcon(x)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Additionally, it uses the following macro internally to get access to the application object:
+<BLOCKQUOTE><CODE>
+<PRE>
+#define kapp KApplication::getKApplication()
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This means that the <CODE>KApplication</CODE> object already contains an Icon loader instance- we only have to get access to it; then it will
+load the according icon. As our icons are all from the KDE libraries, we don't have to take care for anything else- they are installed
+on the sytem automatically, therefore we also don't have to include them into our application package to use them.
+<P>After the icon parameter (which is optional), we insert the menuentry name by <CODE>i18n("")</CODE>.  There, we have to watch two
+things: first, the entry is inserted with the <CODE>i18n()</CODE> method. Like the <CODE>Icon()</CODE> entry, it is a macro defined in <CODE>kapp.h</CODE> as
+well and calls the <CODE>KLocale</CODE> object of <CODE>KApplication</CODE> to translate the entry to the currently used language:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#define i18n(X) KApplication::getKApplication()->getLocale()->translate(X)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Hereby, it should be mentioned that one could think "I don't want to use macros"- you can do that in most cases. But here it is
+immanent to use <CODE>i18n()</CODE> because for internationalization the according language files have to be build. As this build process
+depends on the <CODE>i18n</CODE> string, you have to use the macro.
+<P>As you might have already guessed, the ampersand within menuentries is later interpreted as a line under the following letter in the
+menuentry. This allows fast access to the menu command via the keyboard when the user presses the <CODE>Alt</CODE>-key in conjuction with the
+underlined letter.
+<P>Finally, we're giving the menuentry an ID, which is an integer value by which we can find the entry later. To keep
+an overview over the used values, these are defined by macros and are collected in the file <CODE>resource.h</CODE> within your project. For
+consistancy, these macros are all uppercase and begin with ID_, then the menu name followed by the entry. This makes it very easy to
+remember the sense of each entry anywhere within the code, so you don't have to turn to the menubar implementation again to look up the
+entries.
+<P>The second example entry shows another variant of the <CODE>insertItem()</CODE> method. Here, we add  the recent_files_menu popupmenu as a
+menuitem. This means, that the entry shows itself with the given string "Open recent", followed by a right arrow. On selection, the
+recent file popupmenu appears and the user can choose the last file.
+<P>Last but not least there are a lot of other ways to insert menuitems- the framework keeps this as simple as possible. More information
+can be obtained in the Qt documentation about the <CODE>QMenuData</CODE> class.
+<P>Now, after we created the popupmenus <CODE>file_menu, edit_menu</CODE> and <CODE>view_menu</CODE>, we have to include a "Help"-menu as well. We could
+do this like the others as well, but the <CODE>KApplication</CODE> class offers a nice and quick method to cover this:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+help_menu = kapp->getHelpMenu(true, i18n("KScribble\n" VERSION ));
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This is all we have to do to get a help menu that contains an entry for the help contents with the F1 keyboard shortcut, an aboutbox
+for the application and an aboutbox for the KDE (which can be disalbed by calling <CODE>getHelpMenu(false,...);</CODE>).  The contents for our
+applications aboutbox is set with the <CODE>i18n()</CODE> string again- VERSION takes the macro that is defined for the project version number
+in the file <CODE>config.h</CODE>, so we don't have to change this every time manually when we want to give out a new release. Feel free to add
+any information about your application here, e.g. your name, email adress, copyright and the like.
+<P>Now we only have to insert the popups into the menubar. As <CODE>KTMainWindow</CODE> already constructs a menubar for us, we just insert them
+by calling <CODE>menuBar()->insertItem();</CODE>.
+<P>What is left to do is to connect the menuentries with the methods they will execute. Therefore, we connect each popup menu by its
+signal <CODE>activated( int )</CODE> to a method <CODE>commandCallback( int )</CODE>, which contains a <CODE>switch</CODE> statement that calls the according
+methods for the menu entries. Additionally, we connect the popups by their signal <CODE>highlighted( int )</CODE> to provide statusbar help on
+each entry. Whenever the user moves his mouse or keyboard focus to an entry, the statusbar then shows the according help message.
+<P>After we finished with the menubar, we can continue with the toolbar in the following section. Mind that an instance of a
+<CODE>KTMainWindow</CODE> can only have one menubar visible at a time; therefore if you want to construct several menubars, you have to create
+them seperately with instances of <CODE>KMenuBar</CODE> and set one of them by the according methods of <CODE>KTMainWindow</CODE> as the current
+menubar.
+<P>
+<H4>The Toolbar</H4>
+
+<P>The creation of toolbars now is even simpler than that of menubars. As <CODE>KTMainWindow</CODE> already provides toolbars, which are created
+by the first insertion, you are free to create several ones. Just add the buttons for the functions you want to provide:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+toolBar()->insertButton(Icon("filenew.xpm"), ID_FILE_NEW, true, i18n("New File") );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This adds a left-aligned button with the icon "filenew.xpm" with the according ID to the toolbar. The third parameter decides if the
+button should be enabled or not; by default we set this to <CODE>true</CODE>, because our <CODE>disableCommand()</CODE> menthods at the end of the
+constructor do this for us automatically for both menu and toolbar entries. Finally, the last parameter is uses as a so-called
+"QuickTip"- when the user moves the mouse pointer over the button so that it gets highlighted, a small window appears that contains a
+short help message, whose contents can be set here.
+<P>Finally, all toolbar buttons are connected to our <CODE>commandCallback()</CODE> method again by their signal <CODE>clicked()</CODE>. On the signal
+<CODE>pressed()</CODE>, we let the user receive the according help message in the statusbar.
+<P>
+<H4>The Statusbar</H4>
+
+<P>The statusbar is, as well as the other bars, already provided by the <CODE>KTMainWindow</CODE> instance, so we just have to insert our items as
+we want to. By default, the framework contains only one entry that displays statusbar help. For a lot of applications this may not
+last; then you would add the entries you need for displaying e.g. coordinates and the like.
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.4">3.4 Additional Contents of KDevelop Projects</A>
 </H3>
 
 <P>

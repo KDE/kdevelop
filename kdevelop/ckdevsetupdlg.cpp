@@ -34,14 +34,12 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   accel = accel_pa;
   
   setCaption( i18n("KDevelop Setup" ));
-  KApplication *app=KApplication::getKApplication();
-  config=app->getConfig();
+  config=kapp->getConfig();
   
   // ****************** the General Tab ********************
   w1 = new QWidget( this, "general" );
   
-  config->setGroup("General Options");
-  
+
   QLabel* makeSelectLabel;
   makeSelectLabel = new QLabel( w1, "makeSelectLabel" );
   makeSelectLabel->setGeometry( 20, 30, 210, 25 );
@@ -49,7 +47,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   makeSelectLabel->setAlignment( 289 );
   makeSelectLabel->setMargin( -1 );
 
-
+  config->setGroup("General Options");
   QString make_cmd=config->readEntry("Make","make");
 
   makeSelectLineEdit = new QLineEdit( w1, "makeSelectCombo" );
@@ -118,7 +116,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   autosaveGroup->setFrameStyle( 49 );
   autosaveGroup->setTitle( i18n("Autosave") );
   autosaveGroup->setAlignment( 1 );
-  autosaveGroup->insert( autoSaveCheck );
+//  autosaveGroup->insert( autoSaveCheck );
   autosaveGroup->lower();
   
   KQuickHelp::add(autosaveTimeLabel,	
@@ -164,7 +162,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   autoswitchGroup->setFrameStyle( 49 );
   autoswitchGroup->setTitle(i18n( "Autoswitch") );
   autoswitchGroup->setAlignment( 1 );
-  autoswitchGroup->insert( autoSwitchCheck );
+//  autoswitchGroup->insert( autoSwitchCheck );
   autoswitchGroup->lower();
   
   KQuickHelp::add(autoSwitchCheck,
@@ -225,8 +223,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	startupGroup->setFrameStyle( 49 );
 	startupGroup->setTitle(i18n("Startup"));
 	startupGroup->setAlignment( 1 );
-	startupGroup->insert( logoCheck );
-	startupGroup->insert( lastProjectCheck );
+//	startupGroup->insert( logoCheck );
+//	startupGroup->insert( lastProjectCheck );
 	startupGroup->lower();
 	
 	KQuickHelp::add(startupGroup, i18n("Startup\n\n"
@@ -418,7 +416,7 @@ void CKDevSetupDlg::slotDefault(){
 void CKDevSetupDlg::ok(){
 
 
-  config->setGroup(i18n("General Options"));
+  config->setGroup("General Options");
 
   bool autosave=autoSaveCheck->isChecked();
   config->writeEntry("Autosave",autosave);
@@ -504,6 +502,12 @@ void CKDevSetupDlg::slotKDEClicked(){
     }
   }
 }
+
+
+
+
+
+
 
 
 

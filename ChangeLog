@@ -1,3 +1,8 @@
+1999-05-19  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed bug in the kdevelop setup dialog that prevented settings saving
+	* reviewed and extended the source framework for normal KDE application
+	* wrote more documentation for the programming handbook
+	
 1999-05-17  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added some dialogs with help, if Qt/KDE documentation or glimpse_index wasn't found
 	* some bugfixes in the kdevelop/kdlgedit interaction

@@ -923,7 +923,7 @@ void CKDevelop::slotOptionsConfigureA2ps(){
 }
 
 void CKDevelop::slotOptionsKDevelop(){
-  slotStatusMsg(i18n("Setting up Documentation paths..."));
+  slotStatusMsg(i18n("Setting up KDevelop..."));
 
   CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
   setup->show();
@@ -2051,6 +2051,11 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
 
 
 

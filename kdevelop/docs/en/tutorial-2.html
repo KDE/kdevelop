@@ -24,39 +24,46 @@
 <A HREF="http://www.troll.no">http://www.troll.no</A>) provides a so-called GUI-toolkit,
 named Qt. Thereby, GUI means "<B>G</B>raphical <B>U</B>ser <B>I</B>nterface", and therefore, Qt-based applications represent themselves with
 buttons, windows etc, allowing user input by visualizing the functions an application provides. Such a toolkit is needed for developing
-graphical applications that run on the X-Window interface on Unix Systems; although other toolkits can be used, Qt offers some
-technical advantages that make application design very easy. Plus- it offers portablity to Windows Systems, which can be a criteria for
-developers who want to provide their applications on both systems.
+graphical applications that run on the X-Window interface on Unix Systems, because X does not contain a pre-defined user interface
+itself. Although other toolkits are also available to create User Interfaces, Qt offers some technical advantages that make application
+design very easy. Additionally, the Qt toolkit is also available for Microsoft Windows systems, which allows developers to povide their
+applications for both platforms.
 <P>The KDE Team (
 <A HREF="http://www.kde.org">http://www.kde.org</A>) joined together with the goal to make using Unix
-Systems more friendly, and decided to use the Qt toolkit as a base for their development for a window manager system on X-Window, plus
-a variety of tools included with the KDE packages. After KDE was out, a lot of developers turned their eyes towards the new environment
-and what it has to offer them. The KDE libraries are providing essential methods and classes that make all applications designed with
-them look similar and consistent, so the user has the great advantage that he only has to get accustomed with an application's specific
-usage, not with handling dialogs or buttons. Also, KDE programs include themselves into the desktop and are able to interact with the
-window manager via drag'n drop, session management etc.
-<P>The next sections describe, what the C++ libraries of Qt and KDE have to offer in regards of application design and creation,
-specifically on X-Window, as well as giving an introduction into the Qt library technics by examples that are explained in detail.
+Systems more friendly, and decided to use the Qt toolkit for the development of a window manager on X-Window, plus a variety of tools
+included with the KDE packages. The K Desktop Environment therefore contains the window manager <EM>kdm</EM>, the file manager <EM>kfm</EM> and
+the launch panel <EM>kpanel</EM> as the main components plus a variety of first-class utilities and applications. After KDE was out, a lot
+of developers turned their eyes towards the new environment and what it has to offer them. The KDE libraries are providing essential
+methods and classes that make all applications designed with them look similar and consistent, so the user has the great advantage that
+he only has to get accustomed with an application's specific usage, not with handling dialogs or buttons. Also, KDE programs integrate
+themselves into the desktop and are able to interact with the window manager via drag'n drop, offer session management and many more,
+if all features offered by the KDE libraries are used.
+<P>Both, the Qt toolkit and the KDE libraries, are implemented in the C++ programming language; therefore applications that make use of
+these libraries are also mostly written in C++. In the following chapter, we'll make a short trip through the libraries to see what
+already is provided and how Qt and KDE applications are created in general.
 <P>
 <H3><A NAME="ss2.1">2.1 The Qt GUI Toolkit</A>
 </H3>
 
-<P>Application design with the Qt toolkit offers the following advantages to the developer:
+<P>As said, the Qt library is a toolkit that offers graphical elements that are used for creating GUI applications and are needed for
+X-Window programming. Additionally, the tookit offers:
 <P>
 <UL>
-<LI>A complete set of classes and methods ready to use,</LI>
+<LI>A complete set of classes and methods ready to use even for non-graphical programming issues,</LI>
 <LI>A good solution towards user interaction by virtual methods and the signal/slot mechanism,</LI>
 <LI>A set of predefined GUI-elements, called "widgets", that can be used easily for creating the visible elements</LI>
-<LI>Additional completely pre-defined dialogs that only have to be called for standard functions</LI>
+<LI>Additional completely pre-defined dialogs that are often used in applications such as progress and file dialogs.</LI>
 </UL>
-<P>Therefore knowing the Qt classes is very essential, even if you only want to program KDE-applications. Mind that almost all KDE-classes
-and widgets are based on the Qt library, so we suggest having a look at how a Qt-based application looks like first; then we'll switch
-to the difference for creating a KDE applications.
+<P>Therefore knowing the Qt classes is very essential, even if you only want to program KDE-applications. To have an impression on the
+basic concept how GUI-applications are constructed and compiled, we'll first have a look at a sample Qt-only program; then we'll extend
+it to a KDE program.
 <P>
 <H4>The first Qt Application</H4>
 
-<P>As usual, programs in C++ contain the <CODE>main()</CODE> function. With this, your application starts executing. Now, how does a program
-make itself visible ? For an example, we'll have a look at the first tutorial included with the Qt Online Reference Documentation:
+<P>As usual, programs in C++ have to contain a <CODE>main()</CODE> function, which is the starting point for application execution. As we want
+them to be graphically visible in windows and offering user interaction, we first have to know, how it can show itself to the user. For
+an example, we'll have a look at the first tutorial included with the Qt Online Reference Documentation and explain the basic
+execution steps; also why and how the application widow appears:
 <P>
 <BLOCKQUOTE><CODE>
 <HR>
@@ -79,14 +86,10 @@ return a.exec();
 <HR>
 </CODE></BLOCKQUOTE>
 <P>This application merely paints a window containing a button with "Hello world" as its text. As for all Qt-Applications, you first have
-to create an instance of the class <CODE>QApplication</CODE>, which is the element <CODE>a</CODE> here. You also see that the parameters that can be
-passed to the program by commandline are given to the QApplication object. During the execution process, the application can check for
-the commandline options and provide methods to interpret them as well as executing the resulting actions, such as loading a file or
-whatever.
-<P>Next, the program creates an instance of the class <CODE>QPushButton</CODE> called <CODE>hello</CODE>. This represents the button later. The
-constructor of <CODE>hello</CODE> gets a string as a parameter, which is the contents of the widget which is visible as the button's
-text.
-<P>Then the program calls the <CODE>resize()</CODE> method on the <CODE>hello</CODE> button. This changes the default size a widget (which is in this
+to create an instance of the class <CODE>QApplication</CODE>, represented by <CODE>a</CODE>.
+<P>Next, the program creates an instance of the class <CODE>QPushButton</CODE> called <CODE>hello</CODE>,  this will be the button. The constructor of
+<CODE>hello</CODE> gets a string as a parameter, which is the contents of the widget visible as the button's text.
+<P>Then the <CODE>resize()</CODE> method is called on the <CODE>hello</CODE> button. This changes the default size a widget (which is in this
 case the QPushButton) has when created to the length of 100 pixels and the heigth of 30 pixels. Finally, the <CODE>setMainWidget()</CODE>
 method is called for <CODE>a</CODE> and the <CODE>show()</CODE> method for <CODE>hello</CODE>. The <CODE>QApplication</CODE> is finally executed by <CODE>a.exec()</CODE>,
 enters the main event loop and waits until it has to return an integer value to the overlaying Operating System signaling that the
@@ -97,8 +100,8 @@ application is exited.
 <P>Now, let's have a quick look at the reference documentation of the Qt library. To do this, start KDevelop and select "Qt-library" from
 the "Help"-menu in the menubar. The documentation browser opens and shows you the start page of the Qt reference. This will be your
 first place to get information about Qt, it's classes and the available functions they provide. Also, the above program is the first
-that is included in the tutorials section. To get to the classes we want to have a look, <CODE>QApplication</CODE> and <CODE>QPushButton</CODE>, select
-"Alphabetical Class List" and search for the classes. Follow either of them to have a look at.
+that is included in the tutorials section. To get to the classes we want to have a look at, <CODE>QApplication</CODE> and <CODE>QPushButton</CODE>,
+select "Alphabetical Class List" and search for the according names. Follow either of them to have a look at the class documentation.
 <P>For <CODE>QApplication</CODE>, you will see the constructor and all other methods that this class provides. If you follow a link, you will get
 more information about the usage and meaning of the methods, which is very useful when you sometimes can't detect the correct use or
 want to have an example. This also counts for the KDE library documentation, which uses a similar documentation type; therefore this is
@@ -113,11 +116,12 @@ almost all you have to know about using the class-references with the documentat
 <LI>the <CODE>setMainWidget()</CODE> method and</LI>
 <LI>the <CODE>exec()</CODE> method.</LI>
 </UL>
-<P>The interpretation of these methods is very simple:
+<P>The interpretation why we use these methods is very simple:
 <P>
 <OL>
-<LI>first create an instance of the class <CODE>QApplication</CODE> with the constructor,</LI>
-<LI>create a widget,</LI>
+<LI>first create an instance of the class <CODE>QApplication</CODE> with the constructor, so we can make use of the GUI elements provided by
+Qt,</LI>
+<LI>create a widget which will be the contents of our program window,</LI>
 <LI>set the widget as the main widget for <CODE>a</CODE>,</LI>
 <LI>execute the <CODE>a</CODE> instance of <CODE>QApplication</CODE>.</LI>
 </OL>
@@ -128,7 +132,7 @@ larger to make the string completely visible.
 <P>But what about the <CODE>show()</CODE> method ?  Now, you see that like most other widgets, <CODE>QPushButton</CODE> is based on a single-inheritance-
 here, the documentation says, <EM>Inherits</EM> <CODE>QButton</CODE>.  Follow the link to the <CODE>QButton</CODE> class. This shows you a lot of other
 functions that are inherited by QPushButton, which we'll use later to explain the signal/slot mechanism. Anyway, the <CODE>show()</CODE> method
-is not listed, therfore, it must be a method that is provided by inheritance as well. The class that <CODE>QButton</CODE> inherits, is
+is not listed, therefore, it must be a method that is provided by inheritance as well. The class that <CODE>QButton</CODE> inherits, is
 <CODE>QWidget</CODE>. Just follow the link again, and you will see a whole bunch of methods that the <CODE>QWidget</CODE> class provides; including the
 <CODE>show()</CODE> method. Now we understand what was done in the sample with the button:
 <P>
@@ -136,11 +140,8 @@ is not listed, therfore, it must be a method that is provided by inheritance as 
 <LI>create an instance of <CODE>QPushButton</CODE>, use the second constructor to set the button's text,</LI>
 <LI>resize the widget to it's contents,</LI>
 <LI>set the widget as the main widget of the <CODE>QApplication</CODE> instance <CODE>a</CODE>,</LI>
-<LI>show the widget on the screen by calling <CODE>show()</CODE>, an inherited method from <CODE>QWidget</CODE>.</LI>
+<LI>tell the widget to display itself on the screen by calling <CODE>show()</CODE>, an inherited method from <CODE>QWidget</CODE>.</LI>
 </OL>
-<P>Mind that the button is shown even before the <CODE>main()</CODE> function reaches the <CODE>exec()</CODE> method call; this behavoir can be used to
-create "splash-screens" for applications that may take some time to load and thereby signal the user that the program he started is
-loading.
 <P>After calling the <CODE>exec()</CODE> method, the application is visible to the user, showing a window with the button showing "Hello world!".
 Now, GUI programs behave somewhat differently than procedural applications. The main thing here is that the application enters a
 so-called "main event loop". This means that the program has to wait for user actions and then react to it, also that for a Qt
@@ -148,7 +149,11 @@ application, the program has to be in the main event loop to start the event han
 means to the programmer and what Qt offers to process user events.
 <P>(For already advanced users: The button has no parent declared in the constructor, therefore it is a top-level widget alone and runs in
 a local event loop which doesn't need to wait for the main event loop, see the<CODE>QWidget</CODE> class documentation)
-<P>
+<P><B>Summary:</B>
+<P>A Qt application always has to have one instance of the class <CODE>QApplication</CODE>. This provides that we can create windows that are the
+graphical representation of programs to the user and allow interaction. The window contents itself is called a "Main Widget", meaning
+that all graphical elements are based on the class <CODE>QWidget</CODE> and can be any type of widget that fits the needs of the application to
+communicate with the user. Therefore, all user elements somehow have to inherit <CODE>QWidget</CODE> to be visible.
 <P>
 <H4>User Interaction</H4>
 
@@ -161,13 +166,11 @@ a local event loop which doesn't need to wait for the main event loop, see the<C
 <P>Now we'll turn to give the application "life" by processing user events. Generally, the user has two ways to interact with a program:
 the mouse and the keyboard. For both ways, a graphical user interface has to provide methods that detect actions and methods that do
 something as a reaction to these actions.
-<P>Basically, the user can only interact with objects that are visible. Therefore, the base class that provides user interaction is
-<CODE>QWidget</CODE>. Now, all events that are produced by the user are created as a <CODE>QEvent</CODE> and then processed by the virtual member
-function
-<P><CODE>QWidget::event(QEvent*)</CODE>,
-<P>which then decides which event has been executed and how to react (the main event handler). Therefore, the <CODE>event()</CODE> function passes
-the event to so-called event filters, that determine what happened and do something with the event. If no filter signs responsible for
-the event, the specialized event handlers are called. Thereby we can decide between:
+<P>The Window system therefore sends all interaction events to the according application. The QApplication then sends them to the active
+window as a <CODE>QEvent</CODE> and the widgets themselves have to decide what to do with them. A widget receives the event and processes
+<CODE>QWidget::event(QEvent*)</CODE>, which then decides which event has been executed and how to react; event() is therefore the main event
+handler. Then, the <CODE>event()</CODE> function passes the event to so-called event filters, that determine what happened and what to do with
+the event. If no filter signs responsible for the event, the specialized event handlers are called. Thereby we can decide between:
 <P><B>a) Keyboard events --TAB and Shift-TAB keys:</B>
 <P>changes the keyboard input focus from the current widget to the next widget in the focus order. The focus can be set to widgets by
 calling <CODE>setFocusPolicy()</CODE> and process the following event handlers:
@@ -199,10 +202,10 @@ calling <CODE>setFocusPolicy()</CODE> and process the following event handlers:
 <LI><CODE>virtual void resizeEvent ( QResizeEvent * )</CODE></LI>
 <LI><CODE>virtual void closeEvent ( QCloseEvent * )</CODE></LI>
 </UL>
-<P>Note that all event functions are virtual and protected, therfore, you can reimplement them in your own widget classes for receiving a
-certain behavoir. <CODE>QWidget</CODE> also contains some other virtual methods that can be useful in your programs; anyway, it is sufficent to
-know about <CODE>QWidget</CODE> very well generally.
 <P>
+<P>Note that all event functions are virtual and protected; therefore you can reimplement the events that you need in your own
+widgets and specify how your widget has to react. <CODE>QWidget</CODE> also contains some other virtual methods that can be useful in your
+programs; anyway, it is sufficent to know about <CODE>QWidget</CODE> very well generally.
 <P>
 <H4>Object Interaction by Signals and Slots</H4>
 
@@ -264,10 +267,8 @@ return a.exec();
 of <CODE>QObject</CODE> says about the <CODE>connect()</CODE> method:
 <P><CODE>bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )</CODE>
 <P>This means, you have to specify a QObject instance pointer that is the sender of the signal, meaning that it can emit this signal as
-first parameter; then you have to specify the signal that will be connected. The last two parameters are the receiver object that
-provides a slot, followed by the member function which actually <EM>is</EM> the slot that will be executed on signal emission. What is
-important to know is that your signal and your slot have to have the same parameters, independent from the usage of the actual
-parameters.
+first parameter; then you have to specify the signal that you want to connect to. The last two parameters are the receiver object that
+provides a slot, followed by the member function which actually <EM>is</EM> the slot that will be executed on signal emission.
 <P>By using signals and slots, your program's objects can interact with each other easily without explicitely depending on the existance
 of the receiver object. You will learn more about using this mechanism for productive usage later in this handbook while working with
 the tutorial application <EM>KScribble</EM>.
@@ -277,7 +278,7 @@ the tutorial application <EM>KScribble</EM>.
 </H3>
 
 <P>
-<H4>The KDE 1.1 libraries</H4>
+<H4>The KDE 1.1.x libraries</H4>
 
 <P>For the time of this writing and due to the fact that KDevelop uses KDE 1.1, I'm refering to the state of the KDE libraries at that
 release. The main KDE libraries you'll be using for creating your own KDE applications are:
@@ -291,11 +292,12 @@ release. The main KDE libraries you'll be using for creating your own KDE applic
 <P>
 <UL>
 <LI>the KHTMLW library, offering a complete HTML-interpreting widget that is used by various programs like KDEHelp, KFM, KDevelop,</LI>
+<LI>the KFM library, allowing to use the KDE file manager from within your application.</LI>
 <LI>the KAb library, the KAddressBook. Provides Adressbook access for e.g. email applications</LI>
 <LI>the KSpell library, offering widgets and functionality to integrate the use of ISpell, the common spellchecker, in applications
 like editors; used for the KEdit application.</LI>
 </UL>
-<P>Our view should now turn to what changes are required to make a KDE application out of a Qt application.
+<P>Next, we'll have a look at what is needed to turn our first Qt application into a KDE one.
 <P>
 <H4>Example KDE Application</H4>
 
