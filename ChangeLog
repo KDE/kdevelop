@@ -1,3 +1,6 @@
+1999-03-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added commandline options to run a project program
+
 1999-03-29 Pascal Krahmer <pascal@beast.de>
         * fixed items behaviour. They don´t hide any more when moving the mouse pointer over it.
         * added cursor changing capability. If the mouse pointer is moved over the rectangles
