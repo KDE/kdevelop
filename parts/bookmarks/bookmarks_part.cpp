@@ -136,7 +136,7 @@ void BookmarksPart::marksEvent()
 		if ( partIsSane( ro_part ) && !_dirtyParts.contains( ro_part ) )
 		{
 			_dirtyParts.push_back( ro_part );
-			_marksChangeTimer->start( 100, true );
+			_marksChangeTimer->start( 1000, true );
 		}
 	}
 }
