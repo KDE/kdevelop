@@ -1,13 +1,16 @@
 [Desktop Entry]
 BinaryPattern=designer;
 Comment=Qt Interface Designer
-Comment[C]=Qt Interface Designer
-Exec=designer 
+Exec=designer
 Icon=designer
 InitialPreference=5
 MapNotify=true
 MimeType=application/x-designer
 Name=Qt Desinger
-Name[C]=Qt Designer
+SwallowExec=designer
+SwallowTitle=Qt Designer by Trolltech
 Terminal=false
+TerminalOptions=
 Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
