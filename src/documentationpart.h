@@ -3,13 +3,13 @@
 
 #include <kdevhtmlpart.h>
 
-class DocumentationPart : public KDevHTMLPart
+class HTMLDocumentationPart : public KDevHTMLPart
 {
   Q_OBJECT
 
 public:
 
-    DocumentationPart();
+    HTMLDocumentationPart();
 
 protected slots:
 

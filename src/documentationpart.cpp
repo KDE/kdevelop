@@ -2,18 +2,18 @@
 
 #include "documentationpart.h"
 
-DocumentationPart::DocumentationPart()
+HTMLDocumentationPart::HTMLDocumentationPart()
   : KDevHTMLPart()
 {
     setOptions(CanDuplicate | CanOpenInNewWindow);
 }
 
-void DocumentationPart::slotDuplicate( )
+void HTMLDocumentationPart::slotDuplicate( )
 {
     PartController::getInstance()->showDocument(url(), true);
 }
 
-void DocumentationPart::slotOpenInNewWindow( const KURL & url )
+void HTMLDocumentationPart::slotOpenInNewWindow( const KURL & url )
 {
     PartController::getInstance()->showDocument(url, true);
 }
