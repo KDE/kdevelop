@@ -194,7 +194,7 @@ void annotationPart::projectClosed()
 void annotationPart::doSomething()
 {
 // do something useful here instead of showing the message box
-    KMessageBox::information(m_widget, i18n("This action does nothing!"), i18n("annotation Plugin"));
+    KMessageBox::information(m_widget, i18n("This action does nothing."), i18n("annotation Plugin"));
 }
 
 #include "annotationpart.moc"

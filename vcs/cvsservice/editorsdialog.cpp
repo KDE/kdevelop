@@ -87,7 +87,7 @@ void EditorsDialog::slotJobExited( bool normalExit, int exitStatus )
     }
 
     if (!found)
-        m_textBrowser->append(i18n("No files from your query are marked as beeing edited!"));
+        m_textBrowser->append(i18n("No files from your query are marked as being edited."));
 
     m_textBrowser->source();
 

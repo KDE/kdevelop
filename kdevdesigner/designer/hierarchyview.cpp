@@ -1199,7 +1199,7 @@ void FormDefinitionView::save( QListViewItem *p, QListViewItem *i )
 	    varName += ";";
 	if ( MetaDataBase::hasVariable( formWindow, varName ) ) {
 	    QMessageBox::information( this, i18n( "Edit Variables" ),
-				      i18n( "This variable has already been declared!" ) );
+				      i18n( "This variable has already been declared." ) );
 	} else {
 	    if ( p->rtti() == HierarchyItem::VarPublic )
 		addVariable( varName, "public" );

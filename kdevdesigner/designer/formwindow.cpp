@@ -1931,8 +1931,8 @@ void FormWindow::checkAccels()
 	if ( (*it).count() > 1 ) {
 	    ok = FALSE;
 	    switch ( QMessageBox::information( mainWindow(), i18n( "Check Accelerators" ),
-					       i18n( "Accelerator '%1' is used %2 times."
-						   ).arg( it.key().upper() ).arg( (*it).count() ),
+					       i18n( "Accelerator '%1' is used once.", "Accelerator '%1' is used %n times.", (*it).count()
+						   ).arg( it.key().upper() ),
 					       i18n( "&Select" ),
 					       i18n( "&Cancel" ), QString::null, 2 ) ) {
 	    case 0: // select

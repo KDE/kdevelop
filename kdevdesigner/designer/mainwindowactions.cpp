@@ -1341,7 +1341,7 @@ FormWindow *MainWindow::openFormWindow( const QString &filename, bool validFileN
 	statusMessage( i18n( "Loaded file '%1'").arg( filename )/*, 3000 */);
     } else {
 	statusMessage( i18n( "Failed to load file '%1'").arg( filename )/*, 5000 */);
-	QMessageBox::information( this, i18n("Load File"), i18n("Couldn't load file '%1'.").arg( filename ) );
+	QMessageBox::information( this, i18n("Load File"), i18n("Could not load file '%1'.").arg( filename ) );
 	delete ff;
     }
     return (FormWindow*)resource.widget();
@@ -1448,7 +1448,7 @@ void MainWindow::createNewTemplate()
     QString fn = dia->editName->text();
     QString cn = dia->listClass->currentText();
     if ( fn.isEmpty() || cn.isEmpty() ) {
-	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template." ) );
+	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Could not create the template." ) );
 	return;
     }
 
@@ -1469,7 +1469,7 @@ void MainWindow::createNewTemplate()
 	}
     }
     if ( !f.isOpen() ) {
-	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Couldn't create the template." ) );
+	QMessageBox::information( this, i18n( "Create Template" ), i18n( "Could not create the template." ) );
 	return;
     }
     QTextStream ts( &f );
@@ -1566,7 +1566,7 @@ void MainWindow::editPaste()
 	formWindow()->commandHistory()->setModified( TRUE );
     } else {
 	QMessageBox::information( this, i18n( "Paste Error" ),
-				  i18n( "Can't paste widgets. Designer couldn't find a container\n"
+				  i18n( "Cannot paste widgets. Designer could not find a container\n"
 				      "to paste into which does not contain a layout. Break the layout\n"
 				      "of the container you want to paste into and select this container\n"
 				      "and then paste again." ) );
@@ -1760,7 +1760,7 @@ SourceEditor *MainWindow::openSourceEditor()
     QString lang = currentProject->language();
     if ( !MetaDataBase::hasEditor( lang ) ) {
 	QMessageBox::information( this, i18n( "Edit Source" ),
-				  i18n( "There is no plugin for editing %1 code installed!\n"
+				  i18n( "There is no plugin for editing %1 code installed.\n"
 				      "Note: Plugins are not available in static Qt configurations." ).arg( lang ) );
 	return 0;
     }
@@ -1783,7 +1783,7 @@ SourceEditor *MainWindow::editSource( SourceFile *f )
     QString lang = currentProject->language();
     if ( !MetaDataBase::hasEditor( lang ) ) {
 	QMessageBox::information( this, i18n( "Edit Source" ),
-				  i18n( "There is no plugin for editing %1 code installed!\n"
+				  i18n( "There is no plugin for editing %1 code installed.\n"
 				      "Note: Plugins are not available in static Qt configurations." ).arg( lang ) );
 	return 0;
     }

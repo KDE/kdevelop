@@ -167,7 +167,7 @@ void SearchView::search()
 
         if (!QFile::exists(indexdir + "/htdig.conf"))
         {
-            KMessageBox::error(this, i18n("Can not find the htdig configuration file."));
+            KMessageBox::error(this, i18n("Cannot find the htdig configuration file."));
             kdDebug() << "Cannot find the htdig configuration file" << endl;
             return;
         }

@@ -552,7 +552,7 @@
                             <cstring>checkDontInheritConfig</cstring>
                         </property>
                         <property name="text">
-                            <string>Don't inherit the configuration options of top level projects</string>
+                            <string>Do not inherit the configuration options of top level projects</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string></string>

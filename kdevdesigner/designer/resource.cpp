@@ -1789,7 +1789,7 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 	if ( !obj ) {
 	    QMessageBox::critical( MainWindow::self, i18n( "Loading File" ),
 				   i18n( "Error loading %1.\n"
-						   "The widget %2 couldn't be created" ).
+						   "The widget %2 could not be created." ).
 				   arg( currFileName ).arg( className ) );
 	    return 0;
 	}

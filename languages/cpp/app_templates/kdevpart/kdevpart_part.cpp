@@ -176,7 +176,7 @@ void %{APPNAME}Part::projectClosed()
 void %{APPNAME}Part::doSomething()
 {
 // do something useful here instead of showing the message box
-    KMessageBox::information(m_widget, i18n("This action does nothing!"), i18n("%{APPNAME} Plugin"));
+    KMessageBox::information(m_widget, i18n("This action does nothing."), i18n("%{APPNAME} Plugin"));
 }
 
 #include "%{APPNAMELC}part.moc"

@@ -737,7 +737,7 @@ void JavaSupportPart::setupCatalog( )
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
-        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled!! You have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support") );
+        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support") );
         if( rtn == KMessageBox::Yes ){
             QStringList::Iterator it = l.begin();
             while( it != l.end() ){

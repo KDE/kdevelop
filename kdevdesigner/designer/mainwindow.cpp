@@ -2966,7 +2966,7 @@ void MainWindow::editFunction( const QString &func, bool rereadSource )
     QString lang = currentProject->language();
     if ( !MetaDataBase::hasEditor( lang ) ) {
 	QMessageBox::information( this, i18n( "Edit Source" ),
-				  i18n( "There is no plugin for editing %1 code installed!\n"
+				  i18n( "There is no plugin for editing %1 code installed.\n"
 				      "Note: Plugins are not available in static Qt configurations." ).arg( lang ) );
 	return;
     }

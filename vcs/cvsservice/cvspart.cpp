@@ -165,8 +165,8 @@ void CvsServicePart::setupActions()
 
     actionEdit = new KAction( i18n("&Edit Files"), 0, this, SLOT(slotActionEdit()),
         actionCollection(), "cvsservice_edit" );
-    actionEdit->setToolTip( i18n("Mark as beeing edited") );
-    actionEdit->setWhatsThis( i18n("<b>Mark as beeing edited</b><p>Mark the files as beeing edited.") );
+    actionEdit->setToolTip( i18n("Mark as being edited") );
+    actionEdit->setWhatsThis( i18n("<b>Mark as being edited</b><p>Mark the files as being edited.") );
 
     actionUnEdit = new KAction( i18n("&Unedit Files"), 0, this, SLOT(slotActionUnEdit()),
         actionCollection(), "cvsservice_unedit" );

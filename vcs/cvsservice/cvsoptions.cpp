@@ -283,6 +283,6 @@ QString CvsOptions::guessLocation( const QString &projectDir ) const
     else
     {
         kdDebug(9000) << "===> Error: could not open CVS/Entries!! " << endl;
-        return i18n( "Error while guessing repository location!" );
+        return i18n( "Error while guessing repository location." );
     }
 }

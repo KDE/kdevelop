@@ -454,7 +454,7 @@ Warnings2Tab::Warnings2Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wrestBox,
                      "-Wunreachable-code",    i18n("<qt>Warn if the compiler detects that code will never be executed</qt>"));
     new FlagListItem(wrestBox,
-                     "-Winline",              i18n("<qt>Warn if an <i>inline</i> function can not be inlined</qt>"));
+                     "-Winline",              i18n("<qt>Warn if an <i>inline</i> function cannot be inlined</qt>"));
     new FlagListItem(wrestBox,
                      "-Wlong-long",           i18n("<qt>Warn if the <i>long long</i> type is used</qt>"));
     new FlagListItem(wrestBox,

@@ -50,7 +50,7 @@
                 <string>create an inline get method</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If this is checked the get method will be created inline, otherwise it won't.</string>
+                <string>If this is checked the get method will be created inline; otherwise, it will not.</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="0" column="0">
@@ -123,7 +123,7 @@
                 <string>create an inline set method</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If this is checked the set method will be created inline, otherwise it won't.</string>
+                <string>If this is checked the set method will be created inline; otherwise, it will not.</string>
             </property>
         </widget>
         <spacer row="2" column="2">

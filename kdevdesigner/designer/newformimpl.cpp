@@ -158,7 +158,7 @@ void CustomFormItem::insert( Project *pro )
 	FormFile *ff = new FormFile( filename, TRUE, pro );
 	if ( !resource.load( ff ) ) {
 	    QMessageBox::information( MainWindow::self, i18n("Load Template"),
-				      i18n("Couldn't load form description from template '%1'" ).arg( filename ) );
+				      i18n("Could not load form description from template '%1'" ).arg( filename ) );
 	    delete ff;
 	    return;
 	}

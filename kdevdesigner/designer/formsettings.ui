@@ -130,7 +130,7 @@
                         <string>Use the given function for pixmaps</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Use a given function for pixmaps&lt;/b&gt;&lt;p&gt;If you choose this option you must define a function in the line edit at the right which will be used in the generated code for loading pixmaps. When choosing a pixmap in &lt;i&gt;Qt Designer&lt;/i&gt; you will be asked to specify the arguments which will be passed to the function in the generated code.&lt;p&gt; This approach makes it possible to use your own icon-loader function for loading pixmaps.  &lt;i&gt;Qt Designer&lt;/i&gt; can't preview the correct image if you use your own function.</string>
+                        <string>&lt;b&gt;Use a given function for pixmaps&lt;/b&gt;&lt;p&gt;If you choose this option you must define a function in the line edit at the right which will be used in the generated code for loading pixmaps. When choosing a pixmap in &lt;i&gt;Qt Designer&lt;/i&gt; you will be asked to specify the arguments which will be passed to the function in the generated code.&lt;p&gt; This approach makes it possible to use your own icon-loader function for loading pixmaps.  &lt;i&gt;Qt Designer&lt;/i&gt; cannot preview the correct image if you use your own function.</string>
                     </property>
                 </widget>
             </grid>
@@ -292,7 +292,7 @@
                         <string>Use functions to get the margin and spacing</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Use a given function for margin and/or spacing&lt;/b&gt;&lt;p&gt;If you choose this option you must define functions in the line edit below which will be used in the generated code for getting the margin and spacing value. &lt;i&gt;Qt Designer&lt;/i&gt; can't preview the correct margin or spacing if you use your own function. Instead, the default values will be used for preview.</string>
+                        <string>&lt;b&gt;Use a given function for margin and/or spacing&lt;/b&gt;&lt;p&gt;If you choose this option you must define functions in the line edit below which will be used in the generated code for getting the margin and spacing value. &lt;i&gt;Qt Designer&lt;/i&gt; cannot preview the correct margin or spacing if you use your own function. Instead, the default values will be used for preview.</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox" row="1" column="2">

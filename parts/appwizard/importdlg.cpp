@@ -129,13 +129,13 @@ void ImportDialog::accept()
     QFile src(importdir.filePath("importfiles/" + finfo.fileName() + ".kdevelop"));
     kdDebug(9010) << "Import template " << src.name() << endl;
     if (!src.open(IO_ReadOnly)) {
-        KMessageBox::sorry(this, i18n("Can not open project template."));
+        KMessageBox::sorry(this, i18n("Cannot open project template."));
         return;
     }
 
     QFile dest(dir.filePath(projectName + ".kdevelop"));
     if (!dest.open(IO_WriteOnly)) {
-        KMessageBox::sorry(this, i18n("Can not write the project file."));
+        KMessageBox::sorry(this, i18n("Cannot write the project file."));
         return;
     }
 

@@ -150,7 +150,7 @@ check this option.</string>
                 <string>Try settings &amp;breakpoints on library loading</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If GDB hasn't seen a library that will be loaded via
+                <string>If GDB has not seen a library that will be loaded via
 "dlopen" then it will refuse to set a breakpoint in that code.
 We can get GDB to stop on a library load and hence
 try to set the pending breakpoints. See the documentation

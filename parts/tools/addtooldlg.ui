@@ -38,7 +38,7 @@
                 <string>C&amp;apture output</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If this is checked, the output of the application will be shown in the application output view, otherwise all output will be ignored.</string>
+                <string>If this is checked, the output of the application will be shown in the application output view; otherwise, all output will be ignored.</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -89,8 +89,8 @@
 &lt;b&gt;%T&lt;/b&gt; - The current selection&lt;br&gt;
 &lt;b&gt;%W&lt;/b&gt; - The current word under the cursor&lt;br&gt;
 &lt;/p&gt;
-&lt;p&gt;If any of the used placeholders can't be evaluated (for example
-if you use %T but there is no current selection), the tool won't be
+&lt;p&gt;If any of the used placeholders cannot be evaluated (for example
+if you use %T but there is no current selection), the tool will not be
 executed.&lt;/p&gt;</string>
             </property>
         </widget>
