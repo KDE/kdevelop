@@ -154,6 +154,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
+#if 0
 // find the canonical absolute path of a given path
 // get rid of (absolute at least!) symlinks
 // getting rid of relative symlinks is a little trickier
@@ -171,12 +172,12 @@ QString realPath(QString path)
         return realPath(rem) + last;
     }
 }
+#endif
+
 
 void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
-    QString dir = realPath(dirName);
-    kdDebug() << "autproject project directory: " << dir << endl;
-    m_widget->openProject(dir);
+    m_widget->openProject(dirName);
     m_projectName = projectName;
 
     QDomDocument &dom = *projectDom();

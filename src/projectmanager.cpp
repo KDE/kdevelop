@@ -370,7 +370,7 @@ void ProjectManager::initializeProjectSupport()
     return;
 
   QFileInfo fi(m_info->m_fileName);
-  QString projectDir = fi.dirPath();
+  QString projectDir = fi.dir().canonicalPath();
   QString projectName = fi.baseName();
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
