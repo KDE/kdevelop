@@ -687,7 +687,10 @@ void QEditorPart::removeMark (uint line, uint markType)
 
 QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
-    m_marks.clear();
+    //m_marks.clear();
+
+    QPtrList<KTextEditor::Mark> marks;
+    marks.setAutoDelete( true );
 
     QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParagraph* p = textDoc->firstParagraph();
@@ -697,11 +700,12 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
             KTextEditor::Mark* mark = new KTextEditor::Mark;
             mark->type = data->mark();
             mark->line = p->paragId();
-            m_marks.append( mark );
+
+            marks.append( mark );
         }
         p = p->next();
     }
-    return m_marks;
+    return marks;
 }
 
 void QEditorPart::clearMarks ()
@@ -801,7 +805,7 @@ void QEditorPart::configDialog()
             it.current()->configChanged();
             ++it;
         }
-*/        
+*/
     }
 }
 
