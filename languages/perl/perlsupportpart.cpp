@@ -176,7 +176,7 @@ void PerlSupportPart::savedFile(const KURL &fileName)
 
 KDevLanguageSupport::Features PerlSupportPart::features()
 {
-    return KDevLanguageSupport::Features(Classes | Functions | Variables | Namespaces | Scripts | NewClass | AddMethod | AddAttribute | NewScript);
+    return KDevLanguageSupport::Features(Classes | Functions | Variables | Namespaces | /*Scripts | */NewClass | AddMethod | AddAttribute /*| NewScript*/);
 //    return Functions;
 }
 
