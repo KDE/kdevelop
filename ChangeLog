@@ -1,3 +1,7 @@
+1999-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Bugfixes and improved substitution routine 
+	in processes.pl.in by W. Tasin 
+
 1999-05-27  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed tipofday dialog to enable translation of "Did you know...?"
 	* fixed the API-Doc generation bugs for khtmlw and added subdirectory API generation
