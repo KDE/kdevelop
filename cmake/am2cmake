@@ -43,7 +43,7 @@ class CMakeFile
       @targets=Array.new
 
       @includeDirs=Array.new
-      @subDirs=""
+      @subDirs=Array.new
 
       parseFile
    end
@@ -163,7 +163,7 @@ class CMakeFile
       end
 
       if line =~ /^\s*SUBDIRS\s*=\s*(\S+.*)$/
-         @subDirs=$1
+         ($1).split.each{|dir| @subDirs.push(dir) if dir!="."}
       end
 
    end
@@ -177,7 +177,9 @@ class CMakeFile
 
       file=File.new(@listsFile, "w+");
       if not @subDirs.empty?
-         file.printf("SUBDIRS( %s )\n\n", @subDirs)
+         file.printf("SUBDIRS( ")
+         @subDirs.each{ |dir| file.printf("%s ", dir) }
+         file.printf(")\n\n")
       end
       if not @includeDirs.empty?
          file.printf("INCLUDE_DIRECTORIES( ")
