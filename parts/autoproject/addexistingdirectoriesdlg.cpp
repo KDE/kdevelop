@@ -26,7 +26,7 @@
 
 #include "misc.h"
 
-AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 )
+AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
   : AddExistingDlgBase ( parent, name, modal, fl )
 {
 	setIcon ( SmallIcon ( "fileimport.png" ) );
@@ -79,7 +79,7 @@ void AddExistingDirectoriesDialog::init()
     connect ( importView, SIGNAL ( dropped( QDropEvent* ) ), this, SLOT ( slotDropped ( QDropEvent* ) ) );
 
     importView->setSelectionMode ( KFile::Multi );
-	
+
 	sourceSelector->setDir ( m_spitem->path );
 }
 
@@ -90,7 +90,7 @@ void AddExistingDirectoriesDialog::importItems()
 void AddExistingDirectoriesDialog::slotOk()
 {
 	if ( importView->items()->count() == 0 ) QDialog::reject();
-    
+
 }
 
 void AddExistingDirectoriesDialog::slotAddSelected()
@@ -114,3 +114,4 @@ void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
 }
 
 #include "addexistingdirectoriesdlg.h"
+#include "addexistingdirectoriesdlg.moc"

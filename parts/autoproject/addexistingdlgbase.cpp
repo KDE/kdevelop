@@ -2,8 +2,8 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file './addexistingdlgbase.ui'
 **
-** Created: Sam Dez 21 17:57:15 2002
-**      by: The User Interface Compiler ($Id$)
+** Created: Tue Jan 7 08:51:40 2003
+**      by: The User Interface Compiler ()
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/

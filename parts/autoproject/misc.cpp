@@ -284,3 +284,4 @@ void KImportIconView::somethingDropped ( bool dropped )
 {
     m_bDropped = dropped;
 }
+#include "misc.moc"
