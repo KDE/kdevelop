@@ -63,59 +63,96 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     m_widget = new TrollProjectWidget(this);
     m_widget->setIcon(SmallIcon("make"));
-    m_widget->setCaption(i18n("Project"));
-    QWhatsThis::add(m_widget, i18n("Project Tree\n\n"
-                                   "The project tree consists of two parts. The 'overview' "
+    m_widget->setCaption(i18n("QMake Manager"));
+    QWhatsThis::add(m_widget, i18n("<b>QMake manager</b><p>"
+                                   "The QMake manager project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    ".pro file. The 'details' view in the lower half shows the "
-                                   "targets for the active subproject selected in the overview."));
+                                   "list of files for the active subproject selected in the overview."));
 
-    mainWindow()->embedSelectViewRight(m_widget, i18n("QMake Manager"), i18n("project manager"));
+    mainWindow()->embedSelectViewRight(m_widget, i18n("QMake Manager"), i18n("QMake manager"));
 
     KAction *action;
 
     const QIconSet icon(SmallIcon("compfile"));
-    action = new KAction( i18n("Compile &File"), icon, 0,
+    action = new KAction( i18n("Compile &File"), "compfile", 0,
                           m_widget, SLOT(slotBuildFile()),
                           actionCollection(),"build_compilefile"  );
+    action->setToolTip(i18n("Compile file"));
+    action->setWhatsThis(i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
 
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           m_widget, SLOT(slotBuildProject()),
                           actionCollection(), "build_build_project" );
+    action->setToolTip(i18n("Build project"));
+    action->setWhatsThis(i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("&Rebuild Project"),SmallIcon ( "rebuild" ) , 0,
+    action = new KAction( i18n("&Rebuild Project"),"rebuild" , 0,
                           m_widget, SLOT(slotRebuildProject()),
                           actionCollection(),"build_rebuild_project"  );
-    
+    action->setToolTip(i18n("Rebuild project"));
+    action->setWhatsThis(i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
     action = new KAction( i18n("&Clean Project"), 0,
                           m_widget, SLOT(slotCleanProject()),
                           actionCollection(), "build_clean_project" );
+    action->setToolTip(i18n("Clean project"));
+    action->setWhatsThis(i18n("<b>Clean project</b><p>Runs <b>make clean</b> command from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
     action = new KAction( i18n("Execute Main Program"), "exec", 0,
                           m_widget, SLOT(slotExecuteProject()),
                           actionCollection(), "build_execute_project" );
+    action->setToolTip(i18n("Execute main program"));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
 
 
 
 
 
-    action = new KAction( i18n("&Build Target Project"), "make_kdevelop", 0,
+    action = new KAction( i18n("&Build Subproject"), "make_kdevelop", 0,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
+    action->setToolTip(i18n("Build subproject"));
+    action->setWhatsThis(i18n("<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("&Rebuild Target Project"),SmallIcon ( "rebuild" ) , 0,
+    action = new KAction( i18n("&Rebuild Subproject"), "rebuild", 0,
                           m_widget, SLOT(slotRebuildTarget()),
                           actionCollection(),"build_rebuild_target"  );
+    action->setToolTip(i18n("Rebuild subproject"));
+    action->setWhatsThis(i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("&Clean Target Project"), 0,
+    action = new KAction( i18n("&Clean Subproject"), 0,
                           m_widget, SLOT(slotCleanTarget()),
                           actionCollection(), "build_clean_target" );
+    action->setToolTip(i18n("Clean subproject"));
+    action->setWhatsThis(i18n("<b>Clean subproject</b><p>Runs <b>make clean</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("Execute Target Program"), "exec", 0,
+    action = new KAction( i18n("Execute Subproject"), "exec", 0,
                           m_widget, SLOT(slotExecuteTarget()),
                           actionCollection(), "build_execute_target" );
-                          
+    action->setToolTip(i18n("Execute subproject"));
+    action->setWhatsThis(i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
+        "This action is allowed only if a type of the subproject is 'application'. The type of the subproject can be "
+        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
+
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 

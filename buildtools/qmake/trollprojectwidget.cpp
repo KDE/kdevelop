@@ -35,6 +35,7 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <qinputdialog.h>
+#include <qwhatsthis.h>
 #include <kfiledialog.h>
 #include <qtooltip.h>
 #include <kdebug.h>
@@ -320,41 +321,55 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setMargin ( 2 );
     projectTools->setSpacing ( 2 );
     // Add subdir
-    addSubdirButton = new QToolButton ( projectTools, "Make button" );
+    addSubdirButton = new QToolButton ( projectTools, "Add subproject button" );
     addSubdirButton->setPixmap ( SmallIcon ( "folder_new" ) );
     addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
-    QToolTip::add( addSubdirButton, i18n( "Add subdirectory..." ) );
+    QToolTip::add( addSubdirButton, i18n( "Add subproject" ) );
+    QWhatsThis::add(addSubdirButton, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
+        "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
+        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
     // Create scope
-    createScopeButton = new QToolButton ( projectTools, "Make button" );
+    createScopeButton = new QToolButton ( projectTools, "Create scope button" );
     createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew" ) );
     createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
     createScopeButton->setEnabled ( true );
-    QToolTip::add( createScopeButton, i18n( "Create scope..." ) );
+    QToolTip::add( createScopeButton, i18n( "Create scope" ) );
+    QWhatsThis::add(createScopeButton, i18n("<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected."));
     // build selected file
     buildFileButton = new QToolButton ( projectTools, "Make file button" );
     buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
     buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
     buildFileButton->setEnabled ( true );
-    QToolTip::add( buildFileButton, i18n( "Build file" ) );
+    QToolTip::add( buildFileButton, i18n( "Compile file" ) );
+    QWhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
     // build
     buildProjectButton = new QToolButton ( projectTools, "Make button" );
     buildProjectButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
     buildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildProjectButton->sizePolicy().hasHeightForWidth() ) );
     buildProjectButton->setEnabled ( true );
-    QToolTip::add( buildProjectButton, i18n( "Build" ) );
+    QToolTip::add( buildProjectButton, i18n( "Build project" ) );
+    QWhatsThis::add(buildProjectButton, i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
     // rebuild
     rebuildProjectButton = new QToolButton ( projectTools, "Rebuild button" );
     rebuildProjectButton->setPixmap ( SmallIcon ( "rebuild" ) );
     rebuildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildProjectButton->sizePolicy().hasHeightForWidth() ) );
     rebuildProjectButton->setEnabled ( true );
-    QToolTip::add( rebuildProjectButton, i18n( "Rebuild" ) );
+    QToolTip::add( rebuildProjectButton, i18n( "Rebuild project" ) );
+    QWhatsThis::add(rebuildProjectButton, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
     // run
     executeProjectButton = new QToolButton ( projectTools, "Run button" );
     executeProjectButton->setPixmap ( SmallIcon ( "exec" ) );
     executeProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeProjectButton->sizePolicy().hasHeightForWidth() ) );
     executeProjectButton->setEnabled ( true );
-    QToolTip::add( executeProjectButton, i18n( "Run" ) );
+    QToolTip::add( executeProjectButton, i18n( "Execute main program" ) );
+    QWhatsThis::add(executeProjectButton, i18n("<b>Execute main program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
     // spacer
     QWidget *spacer = new QWidget(projectTools);
     projectTools->setStretchFactor(spacer, 1);
@@ -363,7 +378,10 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectconfButton->setPixmap ( SmallIcon ( "configure" ) );
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
-    QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
+    QToolTip::add( projectconfButton, i18n( "Subproject settings" ) );
+    QWhatsThis::add(projectconfButton, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog for the currently selected subproject. "
+        "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
+        "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options."));
 
     // Project button connections
     connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
@@ -406,19 +424,23 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     fileTools->setMargin ( 2 );
     fileTools->setSpacing ( 2 );
 
+    // Add new file button
+    newfileButton = new QToolButton ( fileTools, "Create new file" );
+    newfileButton->setPixmap ( SmallIcon ( "filenew" ) );
+    newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
+    newfileButton->setEnabled ( true );
+    QToolTip::add( newfileButton, i18n( "Create new file" ) );
+    QWhatsThis::add(newfileButton, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
+
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
     addfilesButton->setPixmap ( SmallIcon ( "fileimport" ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
     QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
-
-    // Add new file button
-    newfileButton = new QToolButton ( fileTools, "Add new file" );
-    newfileButton->setPixmap ( SmallIcon ( "filenew" ) );
-    newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
-    newfileButton->setEnabled ( true );
-    QToolTip::add( newfileButton, i18n( "Add new files" ) );
+    QWhatsThis::add(addfilesButton, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
+            "possible to copy files to a current subproject directory, create symbolic links or "
+            "add them with the relative path."));
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "Remove file" );
@@ -426,25 +448,37 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
+    QWhatsThis::add(removefileButton, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
 
     // build
-    buildTargetButton = new QToolButton ( fileTools, "Make button" );
+    buildTargetButton = new QToolButton ( fileTools, "Make sp button" );
     buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
     buildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildTargetButton->sizePolicy().hasHeightForWidth() ) );
     buildTargetButton->setEnabled ( true );
-    QToolTip::add( buildTargetButton, i18n( "Build" ) );
+    QToolTip::add( buildTargetButton, i18n( "Build subproject" ) );
+    QWhatsThis::add(buildTargetButton, i18n("<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
     // rebuild
-    rebuildTargetButton = new QToolButton ( fileTools, "Rebuild button" );
+    rebuildTargetButton = new QToolButton ( fileTools, "Rebuild sp button" );
     rebuildTargetButton->setPixmap ( SmallIcon ( "rebuild" ) );
     rebuildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildTargetButton->sizePolicy().hasHeightForWidth() ) );
     rebuildTargetButton->setEnabled ( true );
-    QToolTip::add( rebuildTargetButton, i18n( "Rebuild" ) );
+    QToolTip::add( rebuildTargetButton, i18n( "Rebuild subproject" ) );
+    QWhatsThis::add(rebuildTargetButton, i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
     // run
-    executeTargetButton = new QToolButton ( fileTools, "Run button" );
+    executeTargetButton = new QToolButton ( fileTools, "Run sp button" );
     executeTargetButton->setPixmap ( SmallIcon ( "exec" ) );
     executeTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeTargetButton->sizePolicy().hasHeightForWidth() ) );
     executeTargetButton->setEnabled ( true );
-    QToolTip::add( executeTargetButton, i18n( "Run" ) );
+    QToolTip::add( executeTargetButton, i18n( "Execute subproject" ) );
+    QWhatsThis::add(executeTargetButton, i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
+        "This action is allowed only if a type of the subproject is 'application'. The type of the subproject can be "
+        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
 
 
     // spacer
@@ -457,6 +491,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
     QToolTip::add( configurefileButton, i18n( "Configure file" ) );
+    QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes."));
 
     // detail tree
     details = new KListView(detailContainer, "details widget");
@@ -634,10 +669,12 @@ void TrollProjectWidget::setupContext()
 
 
     projectconfButton->setEnabled(projectconfigurable);
-    configurefileButton->setEnabled(fileconfigurable);
-    newfileButton->setEnabled(hasSourceFiles);
-    removefileButton->setEnabled(hasSourceFiles);
-    addfilesButton->setEnabled(hasSourceFiles);
+
+    configurefileButton->setEnabled(false);
+    newfileButton->setEnabled(false);
+    removefileButton->setEnabled(false);
+    addfilesButton->setEnabled(false);
+
     details->setEnabled(hasSourceFiles);
 }
 
@@ -1045,22 +1082,36 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     if (!spitem->isScope)
     {
       idBuild = popup.insertItem(SmallIcon("make_kdevelop"),i18n("Build"));
+      popup.setWhatsThis(idBuild, i18n("<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
       idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
+      popup.setWhatsThis(idQmake, i18n("<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. This creates or regenerates Makefile."));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
+      popup.setWhatsThis(idAddSubproject, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
+        "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
+        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
       if (spitem->configuration.m_template != QTMP_SUBDIRS)
         popup.setItemEnabled(idAddSubproject, false);
       idRemoveSubproject = popup.insertItem(SmallIcon("remove_subdir"),i18n("Remove Subproject..."));
+      popup.setWhatsThis(idRemoveSubproject, i18n("<b>Remove subproject</b><p>Removes currently selected subproject. Does not delete any file from disk. Deleted subproject can be later added by calling 'Add Subproject' action."));
       if (spitem->parent() == NULL)
         popup.setItemEnabled(idRemoveSubproject, false);
       idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
+      popup.setWhatsThis(idAddScope, i18n("<b>Create scope</b><p>Creates QMake scope in the project file of the currently selected subproject."));
       popup.insertSeparator();
       idProjectConfiguration = popup.insertItem(SmallIcon("configure"),i18n("Subproject Settings"));
+      popup.setWhatsThis(idProjectConfiguration, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog. "
+        "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
+        "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options."));
     }
     else
     {
       idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
-      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove"),i18n("Remove Scope"));
+      popup.setWhatsThis(idAddScope, i18n("<b>Create Scope</b><p>Creates QMake scope in the currently selected scope."));
+      idRemoveScope = popup.insertItem(SmallIcon("editdelete"),i18n("Remove Scope"));
+      popup.setWhatsThis(idRemoveScope, i18n("<b>Remove Scope</b><p>Removes currently selected scope."));
     }
 
     int r = popup.exec(p);
@@ -1804,14 +1855,20 @@ void TrollProjectWidget::slotConfigureFile()
 void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 {
     if (!item)
+    {
+        addfilesButton->setEnabled(false);
+        newfileButton->setEnabled(false);
+        removefileButton->setEnabled(false);
+        configurefileButton->setEnabled(false);
         return;
+    }
     addfilesButton->setEnabled(false);
     newfileButton->setEnabled(false);
     removefileButton->setEnabled(false);
     configurefileButton->setEnabled(false);
-    buildTargetButton->setEnabled(false);
+/*    buildTargetButton->setEnabled(false);
     rebuildTargetButton->setEnabled(false);
-    executeTargetButton->setEnabled(false);
+    executeTargetButton->setEnabled(false);*/
 
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
     if (pvitem->type() == ProjectItem::Group)
@@ -1838,9 +1895,9 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
     {
         removefileButton->setEnabled(true);
         configurefileButton->setEnabled(true);
-        buildTargetButton->setEnabled(true);
+/*        buildTargetButton->setEnabled(true);
         rebuildTargetButton->setEnabled(true);
-        executeTargetButton->setEnabled(true);
+        executeTargetButton->setEnabled(true);*/
     }
 }
 
@@ -1913,31 +1970,49 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         if (titem->groupType == GroupItem::InstallRoot)
         {
-	  idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Install Object..."));
+	  idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Install Object..."));
+            popup.setWhatsThis(idInsInstallObject, i18n("<b>Add install object</b><p>Creates QMake install object. "
+                "It is possible to define a list of files to install and installation locations for each object. Warning! "
+                "Install objects without path specified will not be saved to a project file."));
         }
         else if (titem->groupType == GroupItem::InstallObject)
         {
-	  idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Installpattern Item..."));
-	  idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose Install Path..."));
+	  idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Install Path..."));
+            popup.setWhatsThis(idSetInstObjPath, i18n("<b>Install path</b><p>Allows to choose the installation path for the current install object."));
+	  idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Pattern of Files to Install..."));
+            popup.setWhatsThis(idInsNewFilepatternItem, i18n("<b>Add pattern of files to install</b><p>Defines the pattern to match files which will be installed. "
+                "It is possible to use wildcards and relative paths like <i>docs/*</i>."));
         }
         else if(titem->groupType == GroupItem::Translations)
         {
-	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
-	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
+	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
+            popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new translation file and adds it to a currently selected TRANSLATIONS group."));
+	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
+            popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing translation (*.ts) files to a currently selected TRANSLATIONS group. It is "
+            "possible to copy files to a current subproject directory, create symbolic links or "
+            "add them with the relative path."));
 	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update Translation Files"));
+            popup.setWhatsThis(idLUpdate, i18n("<b>Update Translation Files</b><p>Runs <b>lupdate</b> command from the current subproject directory. It collects translatable "
+                "messages and saves them into translation files."));
 	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release Binary Translations"));
+            popup.setWhatsThis(idLRelease, i18n("<b>Release Binary Translations</b><p>Runs <b>lrelease</b> command from the current subproject directory. It creates binary "
+                "translation files that are ready to be loaded at program execution."));
         }
         else // File group containing files
         {
-	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
- 	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
+ 	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
+            popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
+	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
+            popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
+            "possible to copy files to a current subproject directory, create symbolic links or "
+            "add them with the relative path."));
         }
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
 
         if (r == idSetInstObjPath)
         {
-          KURLRequesterDlg dialog(i18n( "Choose Install Path" ), i18n( "Please enter a path "
+          KURLRequesterDlg dialog(i18n( "Choose Install Path" ), i18n( "Enter a path "
                                     "(example /usr/local/share/... ):" ), this, 0);
           dialog.urlRequester()->setMode(KFile::Directory);
           dialog.urlRequester()->setURL(titem->install_path);
@@ -1952,8 +2027,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString filepattern = KLineEditDlg::getText(
-                              i18n( "Insert New Filepattern" ),
-                              i18n( "Please enter a filepattern relative the current "
+                              i18n( "Add Pattern of Files to Install" ),
+                              i18n( "Enter a pattern relative to the current "
                                     "subproject (example docs/*.html):" ),
                               QString::null, &ok, this );
           if ( ok && !filepattern.isEmpty() )
@@ -1969,13 +2044,13 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
-                                                "Insert existing",
+                                                "Add existing files",
                                                 true, new QComboBox(false));
 #else
           AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
-                                                "Insert existing",
+                                                "Add existing files",
                                                 true);
 #endif
           dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
@@ -2061,8 +2136,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             } else {
                 bool ok = FALSE;
                 QString filename = KLineEditDlg::getText(
-                                    i18n( "Insert New File"),
-                                    i18n( "Please enter a name for the new file:" ),
+                                    i18n( "Create New File"),
+                                    i18n( "Enter a name for the new file:" ),
                                     QString::null, &ok, this );
                 if ( ok && !filename.isEmpty() )
                 {
@@ -2086,8 +2161,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 //          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString install_obj = KLineEditDlg::getText(
-                              i18n( "Insert New Install Object" ),
-                              i18n( "Please enter a name for the new object:" ),
+                              i18n( "Add Install Object" ),
+                              i18n( "Enter a name for the new object:" ),
                               QString::null, &ok, this );
           if ( ok && !install_obj.isEmpty() )
           {
@@ -2133,22 +2208,34 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         if (!fitem->uiFileLink.isEmpty())
         {
           idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
+          popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
+                           "and prompts to implement missing in childclass slots and functions."));
         }
         if(fitem->name.contains(".ui"))
         {
-	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
-	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
 	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget..."));
+          popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
+                           "It allows to create a subclass from the class defined in .ui file. "
+                           "There is also possibility to implement slots and functions defined in the base class."));
+	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+          popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file assotiated with the selected .ui."));
+	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
+          popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
+                           "There is possibility to add or remove subclasses from the list."));
         }
 	if(!(gtype == GroupItem::InstallObject))
 	{
-	  idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
+	  idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove File"));
+            popup.setWhatsThis(idRemoveFile, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
 	  idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
+            popup.setWhatsThis(idFileProperties, i18n("<b>Properties</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes."));
 	}
 	else
 	{
-	  idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove Pattern"));
 	  idEditInstallPattern = popup.insertItem(SmallIconSet("configure_file"),i18n("Edit Pattern"));
+            popup.setWhatsThis(idEditInstallPattern, i18n("<b>Edit pattern</b><p>Allows to edit install files pattern."));
+	  idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove Pattern"));
+            popup.setWhatsThis(idRemoveFile, i18n("<b>Remove pattern</b><p>Removes install files pattern from the current install object."));
 	}
 	if(!(gtype == GroupItem::InstallObject))
 	{
@@ -2253,8 +2340,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
           bool ok = FALSE;
           QString filepattern = KLineEditDlg::getText(
-                              i18n( "Edit Filepattern" ),
-                              i18n( "Please enter a filepattern relative the current "
+                              i18n( "Edit Pattern" ),
+                              i18n( "Enter a pattern relative to the current "
                                     "subproject (example docs/*.html):" ),
                               fitem->name , &ok, this );
           if ( ok && !filepattern.isEmpty() )

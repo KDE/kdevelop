@@ -1,8 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevTrollProject" version="1">
+<kpartgui name="KDevTrollProject" version="2">
 <MenuBar>
   <Menu name="build" >
-    <Action name="build_compilefile" />
     <Action name="build_build_project" />
     <Action name="build_rebuild_project" />
     <Action name="build_execute_project" />
@@ -12,17 +11,19 @@
     <Action name="build_rebuild_target" />
     <Action name="build_execute_target" />
     <Action name="build_clean_target" />
+    <Separator/>
+    <Action name="build_compilefile" />
   </Menu>
 </MenuBar>
 <ToolBar name="buildToolBar">
-    <Action name="build_compilefile" group="build_operations" />
+    <Action name="build_build_project" group="build_operations" />
+    <Action name="build_rebuild_project" group="build_operations" />
+    <Action name="build_execute_project" group="build_operations" />
+    <Separator/>
     <Action name="build_build_target" group="build_operations" />
     <Action name="build_rebuild_target" group="build_operations" />
     <Action name="build_execute_target" group="build_operations" />
     <Separator/>
-    <Action name="build_build_project" group="build_operations" />
-    <Action name="build_rebuild_project" group="build_operations" />
-    <Action name="build_execute_project" group="build_operations" />
-    <Action name="build_clean_project" group="build_operations" />
+    <Action name="build_compilefile" group="build_operations" />
 </ToolBar>
 </kpartgui>

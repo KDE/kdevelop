@@ -73,7 +73,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>B&amp;asics</string>
+                    <string>Basics</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -141,7 +141,10 @@
                                     <cstring>TextLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Path:</string>
+                                    <string>&amp;Path:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_targetPath</cstring>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -149,7 +152,10 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Output file:</string>
+                                    <string>Output &amp;file:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_targetOutputFile</cstring>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -221,7 +227,7 @@
                                     <cstring>checkInstallTarget</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Install</string>
+                                    <string>I&amp;nstall</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="1">
@@ -229,7 +235,10 @@
                                     <cstring>textLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Installation path:</string>
+                                    <string>&amp;Installation path:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_InstallTargetPath</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -239,7 +248,7 @@
                             <cstring>groupBox6</cstring>
                         </property>
                         <property name="title">
-                            <string>Makefile</string>
+                            <string>&amp;Makefile</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -287,7 +296,7 @@
                                     <cstring>staticRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Static library</string>
+                                    <string>St&amp;atic library</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -298,7 +307,7 @@
                                     <cstring>pluginRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Plugin</string>
+                                    <string>&amp;Plugin</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="3" column="0">
@@ -306,7 +315,10 @@
                                     <cstring>textLabel1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Library version:</string>
+                                    <string>Library &amp;version:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_targetLibraryVersion</cstring>
                                 </property>
                             </widget>
                             <widget class="QLineEdit" row="3" column="1">
@@ -319,7 +331,7 @@
                                     <cstring>sharedRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Shared library</string>
+                                    <string>S&amp;hared library</string>
                                 </property>
                             </widget>
                         </grid>
@@ -362,7 +374,7 @@
                                     <cstring>stlCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>stl</string>
+                                    <string>&amp;STL</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="3" column="1">
@@ -370,7 +382,7 @@
                                     <cstring>rttiCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>rtti</string>
+                                    <string>RTT&amp;I</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="0" column="0">
@@ -389,7 +401,7 @@
                                     <cstring>checkX11</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;X11</string>
+                                    <string>X&amp;11</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Support required for X11 application or library</string>
@@ -400,7 +412,7 @@
                                     <cstring>checkOrdered</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Ordered</string>
+                                    <string>Ord&amp;ered</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Support required for X11 application or library</string>
@@ -411,7 +423,7 @@
                                     <cstring>exceptionCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>exceptions </string>
+                                    <string>E&amp;xceptions </string>
                                 </property>
                             </widget>
                         </grid>
@@ -970,7 +982,7 @@
                             <cstring>TextLabel2_2_4_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Lib directories outside project:</string>
+                            <string>Lib directories ou&amp;tside project:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>outsideinc_listview</cstring>
@@ -1160,7 +1172,10 @@
                             <cstring>textLabel1_3</cstring>
                         </property>
                         <property name="text">
-                            <string>Targets in project:</string>
+                            <string>Targets &amp;in project:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>intDeps_view</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="2" column="0">
@@ -1168,7 +1183,10 @@
                             <cstring>textLabel1_3_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Miscellaneous targets:</string>
+                            <string>&amp;Miscellaneous targets:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>extDeps_view</cstring>
                         </property>
                     </widget>
                     <widget class="QListView" row="3" column="0">
@@ -1281,7 +1299,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Compiler</string>
+                    <string>Compiler</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1292,7 +1310,7 @@
                             <cstring>GroupBox3</cstring>
                         </property>
                         <property name="title">
-                            <string>Precompiler (-D option)</string>
+                            <string>&amp;Precompiler (-D option)</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -1329,7 +1347,10 @@
                                     <cstring>TextLabel2_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Release flags:</string>
+                                    <string>&amp;Release flags:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_releaseFlags</cstring>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -1337,7 +1358,10 @@
                                     <cstring>TextLabel2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Debug flags:</string>
+                                    <string>&amp;Debug flags:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_debugFlags</cstring>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -1454,7 +1478,10 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Order in which sub projects are built:</string>
+                            <string>O&amp;rder in which sub projects are built:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>buildorder_listview</cstring>
                         </property>
                     </widget>
                     <widget class="QListView" row="1" column="0">
@@ -1494,7 +1521,10 @@
                             <cstring>mocdir_label</cstring>
                         </property>
                         <property name="text">
-                            <string>MOC files:</string>
+                            <string>&amp;MOC files:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>mocdir_url</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="0">
@@ -1502,7 +1532,10 @@
                             <cstring>uidir_label</cstring>
                         </property>
                         <property name="text">
-                            <string>UI files:</string>
+                            <string>&amp;UI files:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>uidir_url</cstring>
                         </property>
                     </widget>
                     <widget class="KURLRequester" row="0" column="1">
@@ -1520,7 +1553,10 @@
                             <cstring>objdir_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Object files:</string>
+                            <string>Ob&amp;ject files:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>objdir_url</cstring>
                         </property>
                     </widget>
                     <widget class="KURLRequester" row="2" column="1">
@@ -1594,7 +1630,10 @@
                                     <cstring>TextLabel2_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Compiler options:</string>
+                                    <string>Compiler o&amp;ptions:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>idlCmdOptionsEdit</cstring>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="1" column="1">
@@ -1612,7 +1651,10 @@
                                     <cstring>TextLabel1_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>IDL compiler:</string>
+                                    <string>&amp;IDL compiler:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>idlCmdEdit</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -1845,36 +1887,33 @@
     <tabstop>m_InstallTargetPath</tabstop>
     <tabstop>makefile_url</tabstop>
     <tabstop>TabBuild</tabstop>
+    <tabstop>checkDontInheritConfig</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
     <tabstop>checkQt</tabstop>
     <tabstop>checkOpenGL</tabstop>
+    <tabstop>checkOrdered</tabstop>
+    <tabstop>stlCheck</tabstop>
     <tabstop>checkThread</tabstop>
     <tabstop>checkX11</tabstop>
-    <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonOk</tabstop>
-    <tabstop>staticRadio</tabstop>
-    <tabstop>pluginRadio</tabstop>
-    <tabstop>m_targetLibraryVersion</tabstop>
-    <tabstop>sharedRadio</tabstop>
     <tabstop>exceptionCheck</tabstop>
-    <tabstop>stlCheck</tabstop>
     <tabstop>rttiCheck</tabstop>
-    <tabstop>checkDontInheritConfig</tabstop>
+    <tabstop>staticRadio</tabstop>
+    <tabstop>m_targetLibraryVersion</tabstop>
+    <tabstop>insideinc_listview</tabstop>
     <tabstop>insideIncMoveUpBtn</tabstop>
     <tabstop>insideIncMoveDownBtn</tabstop>
     <tabstop>outsideinc_listview</tabstop>
-    <tabstop>insideinc_listview</tabstop>
     <tabstop>outsideIncAddBtn</tabstop>
     <tabstop>outsideIncRemoveBtn</tabstop>
     <tabstop>outsideIncEditBtn</tabstop>
     <tabstop>outsideIncMoveUpBtn</tabstop>
     <tabstop>outsideIncMoveDownBtn</tabstop>
-    <tabstop>outsidelib_listview</tabstop>
+    <tabstop>insidelib_listview</tabstop>
     <tabstop>insideLibMoveUpBtn</tabstop>
     <tabstop>insideLibMoveDownBtn</tabstop>
-    <tabstop>insidelib_listview</tabstop>
+    <tabstop>outsidelib_listview</tabstop>
     <tabstop>outsideLibAddBtn</tabstop>
     <tabstop>outsideLibRemoveBtn</tabstop>
     <tabstop>outsideLibEditBtn</tabstop>
@@ -1886,16 +1925,30 @@
     <tabstop>outsideLibDirEditBtn</tabstop>
     <tabstop>outsideLibDirMoveUpBtn</tabstop>
     <tabstop>outsideLibDirMoveDownBtn</tabstop>
+    <tabstop>intDeps_view</tabstop>
+    <tabstop>intMoveUp_button</tabstop>
+    <tabstop>intMoveDown_button</tabstop>
+    <tabstop>extDeps_view</tabstop>
+    <tabstop>extAdd_button</tabstop>
+    <tabstop>extRemove_button</tabstop>
+    <tabstop>extEdit_button</tabstop>
+    <tabstop>extMoveUp_button</tabstop>
+    <tabstop>extMoveDown_button</tabstop>
     <tabstop>m_defines</tabstop>
     <tabstop>m_debugFlags</tabstop>
     <tabstop>m_releaseFlags</tabstop>
+    <tabstop>buildorder_listview</tabstop>
     <tabstop>buildmoveup_button</tabstop>
     <tabstop>buildmovedown_button</tabstop>
-    <tabstop>buildorder_listview</tabstop>
     <tabstop>mocdir_url</tabstop>
     <tabstop>uidir_url</tabstop>
     <tabstop>objdir_url</tabstop>
+    <tabstop>idlCmdEdit</tabstop>
     <tabstop>idlCmdOptionsEdit</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>pluginRadio</tabstop>
+    <tabstop>sharedRadio</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
