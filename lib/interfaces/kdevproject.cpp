@@ -10,4 +10,18 @@ KDevProject::~KDevProject()
 {
 }
 
+void KDevProject::changedFile( const QString & fileName )
+{
+    QStringList fileList;
+    fileList.append ( fileName );
+
+    emit changedFilesInProject( fileList );
+
+}
+
+void KDevProject::changedFiles( const QStringList & fileList )
+{
+    emit changedFilesInProject( fileList );
+}
+
 #include "kdevproject.moc"

@@ -81,6 +81,18 @@ public:
 	* must be relative to the project directory.
 	*/
 	virtual void removeFile(const QString &fileName) = 0;
+	/**
+	 * Notifies the project of changes to the files. Provided for convenience when changing many files.
+	 * The given file names must be relative to the project directory.
+	 */
+    virtual void changedFiles( const QStringList & fileList );
+	/**
+	* Notifies the project of a change to one of the files. The given file name
+	* must be relative to the project directory.
+	*/
+    virtual void changedFile( const QString & fileName );
+
+
 
 signals:
 	/**
@@ -103,11 +115,16 @@ signals:
 	 * Provided for convenience when many files were removed. The file names are relative to the project directory.
 	 */
 	void removedFilesFromProject(const QStringList& fileList );
-	
+    /**
+	 * Emitted when a list of files has changed in the project.
+	 * The file names are relative to the project directory.
+	 */
+	void changedFilesInProject(const QStringList& fileList );
+
 	/**
 	 * Emitted when one compile related command (make, make install, make ...) ends sucessfuly.
 	 * Used to reparse the files after a sucessful compilation
-	 */  
+	 */
 	void projectCompiled();
 };
 
