@@ -37,9 +37,9 @@ void COutputWidget::insertAtEnd(const QString& s)
   //  the string inside could be NULL, and so QMultilineEdit fails
   int col = qstrlen(textLine(row));
   if (s.left(1) == "\n" && row == 0 && col == 0)
-    insertAt(" "+s, row, col);
+    insertAt(" "+s, row, 0/*col*/);
   else
-    insertAt(s, row, col);
+    insertAt(s, row, 0/*col*/);
 }
 
 // ---------------------------------------------------------------------------
