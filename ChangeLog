@@ -1,4 +1,7 @@
-2K-01-27 Falk Brettschneider <gigafalk@yahoo.com>
+2000-01-26 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed missing make messages call after project generation for kde2 apps
+	
+2000-01-27 Falk Brettschneider <gigafalk@yahoo.com>
 	* added QextMDI frameapp to appwizard (uses libqextmdi.so)
 
 2000-01-26 Ralf Funken <funken.ruk@netcologne.de>

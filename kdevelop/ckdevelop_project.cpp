@@ -647,9 +647,9 @@ void CKDevelop::slotProjectNewAppl(){
   	}
 
     readProjectFile(file);
-    // Modified by Robert Wheat, 01-22-2000, OpenGL(tm) support
-    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde" ||
-    																prj->getProjectType() == "normalogl_kde") 
+		QString type=prj->getProjectType();
+    if (type == "normal_kde" || type == "mini_kde" || type == "normalogl_kde" ||
+    		type =="normal_kde2" || type=="mini_kde2" || type == "mdi_kde2")
 	 {
       slotProjectMessages();
     }
