@@ -23,11 +23,24 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+GDBParser* GDBParser::GDBParser_ = 0;
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
-GDBParser::GDBParser()
+GDBParser* GDBParser::getGDBParser()
+{
+  if (!GDBParser_)
+    GDBParser_ = new GDBParser();
+
+  return GDBParser_;
+}
+
+// **************************************************************************
+
+GDBParser::GDBParser() :
+  qt2Version_(true)
 {
 }
 
@@ -35,6 +48,7 @@ GDBParser::GDBParser()
 
 GDBParser::~GDBParser()
 {
+  GDBParser_ = 0;
 }
 
 // **************************************************************************

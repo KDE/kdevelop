@@ -46,6 +46,8 @@ enum GDBCmd
 
   MEMDUMP         = 'M',
 
+  GET_QT_VERSION  = 'Q',
+
   RUN             = 'R',
   REGISTERS       = 'r',
 
@@ -138,5 +140,14 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
+
+class GDBGetQTVersionCommand : public GDBCommand
+{
+public:
+  GDBGetQTVersionCommand();
+  virtual ~GDBGetQTVersionCommand();
+};
+
+
 
 #endif

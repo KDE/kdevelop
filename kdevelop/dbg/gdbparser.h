@@ -18,7 +18,7 @@
 #ifndef GDBPARSER_H
 #define GDBPARSER_H
 
-#include "vartree.h"
+#include "vartree.h"      // Needed for enum DataType :(
 
 /**
   *@author John Birch
@@ -27,16 +27,25 @@
 class GDBParser
 {
 public:
-  GDBParser();
-  ~GDBParser();
 
-  void parseData(TrimmableItem* parent, char* buf,
-                      bool requested, bool params);
+  void parseData(TrimmableItem* parent,
+                  char* buf,
+                  bool requested,
+                  bool params);
   DataType  determineType(char* buf) const;
 
   char* skipString(char* buf) const;
   char* skipQuotes(char* buf, char quote) const;
   char* skipDelim(char* buf, char open, char close) const;
+  bool isQT2Version() const { return qt2Version_; }
+  void setQT2Version(bool qt2Version) { qt2Version_ = qt2Version; }
+
+  static GDBParser* getGDBParser();
+
+protected:
+  GDBParser();
+  ~GDBParser();
+
 
 private:
   TrimmableItem* getItem(TrimmableItem* parent, DataType itemType,
@@ -52,6 +61,10 @@ private:
   QCString getValue(char** buf, bool requested);
   void setItem(TrimmableItem* parent, const QString& varName, DataType dataType,
                 const QCString& value, bool requested, bool params);
+
+  bool qt2Version_;
+
+  static GDBParser* GDBParser_;
 };
 
 #endif

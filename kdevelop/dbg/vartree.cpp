@@ -18,7 +18,7 @@
 #include "vartree.h"
 #include "gdbparser.h"
 
-#include <kapp.h>     // here for i18n only! yuck!
+//#include <kapp.h>     // here for i18n only! yuck!
 #include <kpopupmenu.h>
 #include <klineedit.h>
 
@@ -39,15 +39,15 @@
 // **************************************************************************
 
 //TODO - change to a base class parser and setup a factory
-static GDBParser* parser = 0;
+//static GDBParser* parser = 0;
 
-static GDBParser* getParser()
-{
-  if (!parser)
-    parser = new GDBParser;
+//static GDBParser* getParser()
+//{
+//  if (!parser)
+//    parser = new GDBParser;
 
-  return parser;
-}
+//  return parser;
+//}
 
 // **************************************************************************
 // **************************************************************************
@@ -550,7 +550,7 @@ void VarItem::updateValue(char* buf)
 
   if (dataType_ == typeUnknown)
   {
-    dataType_ = getParser()->determineType(buf);
+    dataType_ = GDBParser::getGDBParser()->determineType(buf);
     if (dataType_ == typeArray)
       buf++;
 
@@ -561,7 +561,7 @@ void VarItem::updateValue(char* buf)
       dataType_ = typeValue;
   }
 
-  getParser()->parseData(this, buf, true, false);
+  GDBParser::getGDBParser()->parseData(this, buf, true, false);
   setActive();
 }
 
@@ -587,7 +587,7 @@ void VarItem::setOpen(bool open)
     {
       QCString value = cache_;
       cache_ = QCString();
-      getParser()->parseData(this, value.data(), false, false);
+      GDBParser::getGDBParser()->parseData(this, value.data(), false, false);
       trim();
     }
     else
@@ -632,20 +632,19 @@ void VarItem::checkForRequests()
                                           fullName().latin1()+QCString(".dPath.shd.data"));
   }
 
-  // Signature for a QT2.0.x QT2.1 QString
+  // Signature for a QT2.x and QT3.x  QString
   // TODO - This handling is not that good - but it works sufficiently well
   // at the moment to leave it here, and it won't cause bad things to happen.
-
-  // Updated to handle Qt3 Strings as well by harryF
   if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
   {
     waitingForData();
-    ((VarTree*)listView())->emitExpandUserItem(this,
-           // use the latin1() method. Shouldn't have any side-effects, but is dog-slow
-           // we have to do it because the internal spec of QString has changed in Qt3
-//           QCString().sprintf("%s.latin1()",
-//           This was the old way
+    if (GDBParser::getGDBParser()->isQT2Version())
+      ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           fullName().latin1()));
+    else
+      ((VarTree*)listView())->emitExpandUserItem(this,
+           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 
@@ -656,12 +655,18 @@ void VarItem::checkForRequests()
     ((VarTree*)listView())->emitExpandUserItem(this,
                                           fullName().latin1()+QCString(".shd.data"));
   }
+
   // Signature for a QT2.0.x QT2.1 QDir
   if (strncmp(cache_, "dPath = {d = 0x", 15) == 0)
   {
     waitingForData();
-    ((VarTree*)listView())->emitExpandUserItem(this,
+    if (GDBParser::getGDBParser()->isQT2Version())
+      ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           fullName().latin1()));
+      else
+      ((VarTree*)listView())->emitExpandUserItem(this,
+           QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 }
@@ -765,8 +770,8 @@ void FrameRoot::setOpen(bool open)
   if (!open)
     return;
 
-  getParser()->parseData(this, params_.data(), false, true);
-  getParser()->parseData(this, locals_.data(), false, false);
+  GDBParser::getGDBParser()->parseData(this, params_.data(), false, true);
+  GDBParser::getGDBParser()->parseData(this, locals_.data(), false, false);
 
   locals_ = QCString();
   params_ = QCString();

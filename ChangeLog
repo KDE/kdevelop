@@ -1,3 +1,6 @@
+2001-07-07  jbb <jbb@kdevelop.org>
+    * Added qt3 string support
+    
 2001-07-04  F@lk Brettschneider <falk@kdevelop.org>
     * step 2 to enable the restoring of the GUI also in TabPage MDI mode:
         I splitted the loading of project in 2 parts because it must call readDockConfig()

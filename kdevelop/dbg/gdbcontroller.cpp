@@ -20,6 +20,7 @@
 #include "breakpoint.h"
 #include "framestack.h"
 #include "gdbcommand.h"
+#include "gdbparser.h"
 #include "stty.h"
 #include "vartree.h"
 
@@ -872,6 +873,19 @@ void GDBController::parseRequestedData(char* buf)
 
 // Select a different frame to view. We need to get and (maybe) display
 // where we are in the program source.
+void GDBController::parseQTVersion(char* buf)
+{
+  if (dynamic_cast<GDBGetQTVersionCommand*>(currentCmd_))
+  {
+    bool qt2 = (strncmp(buf, "There is no member or method named ucs.", 39) == 0);
+    GDBParser::getGDBParser()->setQT2Version(qt2);
+  }
+}
+
+// **************************************************************************
+
+// Select a different frame to view. We need to get and (maybe) display
+// where we are in the program source.
 void GDBController::parseFrameSelected(char* buf)
 {
   char lookup[3] = {BLOCK_START, SRC_POSITION, 0};
@@ -977,20 +991,20 @@ char* GDBController::parseCmdBlock(char* buf)
     buf +=2;
     switch (cmdType)
     {
-      case FRAME:           parseFrameSelected        (buf);      break;
-      case SET_BREAKPT:     parseBreakpointSet        (buf);      break;
-      case SRC_POSITION:    parseProgramLocation      (buf);      break;
-      case LOCALS:          parseLocals               (buf);      break;
-      case DATAREQUEST:     parseRequestedData        (buf);      break;
-      case BPLIST:          emit rawGDBBreakpointList (buf);      break;
-      case BACKTRACE:       parseBacktraceList        (buf);      break;
-      case DISASSEMBLE:     emit rawGDBDisassemble    (buf);      break;
-      case MEMDUMP:         emit rawGDBMemoryDump     (buf);      break;
-      case REGISTERS:       emit rawGDBRegisters      (buf);      break;
-      case LIBRARIES:       emit rawGDBLibraries      (buf);      break;
-      case DETACH:          setStateOff(s_attached);              break;
-//      case FILE_START:      parseFileStart            (buf);      break;
-      default:                                                    break;
+      case GET_QT_VERSION:  parseQTVersion            (buf);        break;
+      case FRAME:           parseFrameSelected        (buf);        break;
+      case SET_BREAKPT:     parseBreakpointSet        (buf);        break;
+      case SRC_POSITION:    parseProgramLocation      (buf);        break;
+      case LOCALS:          parseLocals               (buf);        break;
+      case DATAREQUEST:     parseRequestedData        (buf);        break;
+      case BPLIST:          emit rawGDBBreakpointList (buf);        break;
+      case BACKTRACE:       parseBacktraceList        (buf);        break;
+      case DISASSEMBLE:     emit rawGDBDisassemble    (buf);        break;
+      case MEMDUMP:         emit rawGDBMemoryDump     (buf);        break;
+      case REGISTERS:       emit rawGDBRegisters      (buf);        break;
+      case LIBRARIES:       emit rawGDBLibraries      (buf);        break;
+      case DETACH:          setStateOff               (s_attached); break;
+      default:                                                      break;
     }
 
     // Once we've dealt with the data, we can remove the current command if
@@ -1223,6 +1237,9 @@ void GDBController::slotStart(const QString& application, const QString& args, c
     queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
   else
     queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
+
+  // Find out what version of qt is being used.
+  queueCmd(new GDBGetQTVersionCommand());
 
   // Load the file into gdb
   /*if (sDbgShell.isEmpty())

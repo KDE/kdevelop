@@ -104,8 +104,8 @@ QCString FrameStack::getFrameParams(int frame)
     {
       if (char* paramStart = strchr(frameData, '('))
       {
-        GDBParser parser;
-        if (char* paramEnd = parser.skipDelim(paramStart, '(', ')'))
+        GDBParser* parser = GDBParser::getGDBParser();
+        if (char* paramEnd = parser->skipDelim(paramStart, '(', ')'))
         {
           // allow for operator()(params)
           if (paramEnd == paramStart+2)
@@ -113,7 +113,7 @@ QCString FrameStack::getFrameParams(int frame)
             if (*(paramEnd+1) == '(')
             {
               paramStart = paramEnd+1;
-              paramEnd = parser.skipDelim(paramStart, '(', ')');
+              paramEnd = parser->skipDelim(paramStart, '(', ')');
               if (!paramEnd)
                 return QCString();
             }

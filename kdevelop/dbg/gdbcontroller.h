@@ -57,7 +57,7 @@ private:
   void parseRequestedData   (char* buf);
   void parseLine            (char* buf);
   void parseFrameSelected   (char* buf);
-//  void parseFileStart       (char* buf);
+  void parseQTVersion       (char* buf);
 
   char* parse               (char* buf);
   char* parseOther          (char* buf);
