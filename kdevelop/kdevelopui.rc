@@ -143,9 +143,6 @@
    <Separator/>
    <Action name="options_kdevelop_setup" />
   </Menu>
-  <Menu name="window" >
-   <text>&amp;Window</text>
-  </Menu>
   <Menu name="bookmarks" >
    <text>Book&amp;marks</text>
    <Action name="bookmarks_toggle" />
