@@ -349,8 +349,12 @@ QStringList TrollProjectWidget::allFiles()
             GroupItem::GroupType type = (*tit)->groupType;
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
                 QListIterator<FileItem> fit(tit.current()->files);
-                for (; fit.current(); ++fit)
-                    res.append(path.mid ( projectDirectory().length() + 1 ) + "/" + (*fit)->name);
+		for (; fit.current(); ++fit){
+		    QString filePath = path.mid( projectDirectory().length() + 1 );
+		    if( !filePath.isEmpty() && !filePath.endsWith("/") )
+			filePath += "/";
+                    res.append( filePath + (*fit)->name);
+		}
             }
         }
     }
