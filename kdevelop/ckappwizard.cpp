@@ -348,18 +348,6 @@ void CKAppWizard::initPages()
   generatesource->setAutoRepeat( FALSE );
   generatesource->setAutoResize( FALSE );
 
-	kde_qtver=0l;
-/*  kde_qtver = new QCheckBox( page1, "kde_qtver" );
-  kde_qtver->setGeometry( 290, 220, 180, 30 );
-  kde_qtver->setMinimumSize( 0, 0 );
-  kde_qtver->setMaximumSize( 32767, 32767 );
-  kde_qtver->setFocusPolicy( QWidget::TabFocus );
-  kde_qtver->setBackgroundMode( QWidget::PaletteBackground );
-  kde_qtver->setText( i18n("KDE/QT version 3 required") );
-  kde_qtver->setAutoRepeat( FALSE );
-  kde_qtver->setAutoResize( FALSE );
-*/
-
   gnufiles = new QCheckBox( page1, "gnufiles" );
   gnufiles->setGeometry( 30, 270, 440, 30 );
   gnufiles->setMinimumSize( 0, 0 );
@@ -1160,7 +1148,6 @@ void CKAppWizard::generateEntries(const QString &filename) {
     else entries << "no\n";
     
     entries << "KDE_QTVER\n";
-//    entries << ((kde_qtver->isChecked()) ? "3\n" : "2\n");
     entries << ((KDE_QTVER==3) ? "3\n" : "2\n");
     
     entries << "KDOC_CALL\n";
@@ -1440,7 +1427,6 @@ void CKAppWizard::okPermited()
   page4->setEnabled(false);
 
   apidoc->setEnabled(false);
-//  kde_qtver->setEnabled(false);
   lsmfile->setEnabled(false);
   cppheader->setEnabled(false);
   hheader->setEnabled(false);
@@ -1566,7 +1552,6 @@ void CKAppWizard::slotApplicationClicked() {
   cppheader->setText( i18n("headertemplate for .cpp-files") );
 
   apidoc->setEnabled(!citem->isSelected() && !customprojitem->isSelected());
-//  kde_qtver->setEnabled(true);
   userdoc->setEnabled(!customprojitem->isSelected());
 
   if (kde2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
@@ -1574,7 +1559,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/normalApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
@@ -1600,7 +1584,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/miniApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
@@ -1624,7 +1607,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/kdemdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
@@ -1650,8 +1632,6 @@ void CKAppWizard::slotApplicationClicked() {
 //    pm.load(locate("appdata", "pics/sharelib.png"));
 //    widget1b->setBackgroundPixmap(pm);
 //    apidoc->setChecked(true);
-//    kde_qtver->setChecked(false);
-//    kde_qtver->setEnabled(false);
 //    datalink->setEnabled(false);
 //    datalink->setChecked(false);
 //    progicon->setEnabled(false);
@@ -1675,7 +1655,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/kioslave.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1700,7 +1679,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/kpart.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1724,7 +1702,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/kicker.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
@@ -1748,7 +1725,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/kcmodule.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1774,7 +1750,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/ktheme.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1801,7 +1776,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/qtApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(true);
@@ -1827,7 +1801,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/qtmdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(true);
@@ -1853,7 +1826,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/qextmdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
-//    kde_qtver->setChecked(KDE_QTVER==3);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(true);
@@ -1892,8 +1864,6 @@ void CKAppWizard::slotApplicationClicked() {
       cppheader->setText( i18n("headertemplate for .c-files") );
     }
     apidoc->setChecked(false);
-//    kde_qtver->setChecked(false);
-//    kde_qtver->setEnabled(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1923,8 +1893,6 @@ void CKAppWizard::slotApplicationClicked() {
     pm.load(locate("appdata", "pics/customApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
-//    kde_qtver->setChecked(false);
-//    kde_qtver->setEnabled(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
     progicon->setEnabled(false);
@@ -1951,8 +1919,6 @@ void CKAppWizard::slotApplicationClicked() {
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     apidoc->setEnabled(false);
-//    kde_qtver->setChecked(false);
-//    kde_qtver->setEnabled(false);
 
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -2012,8 +1978,6 @@ void CKAppWizard::slotDefaultClicked() {
 
   widget1b->setBackgroundPixmap(pm);
   applications->setSelected(kde2normalitem,true);
-//  kde_qtver->setEnabled(true);
-//  kde_qtver->setChecked(KDE_QTVER==3);
   apidoc->setEnabled(true);
   apidoc->setChecked(true);
   lsmfile->setChecked(true);
@@ -2324,6 +2288,7 @@ void CKAppWizard::slotProcessExited() {
   project->setAuthor (authorline->text());
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
+  
   if (userdoc->isChecked()) {
     if(project->isKDE2Project())
       project->setSGMLFile (directory + "/doc/en/index.docbook");

@@ -126,7 +126,6 @@ private:
   QLabel* versionnumber;
   QLabel* directory;
   QCheckBox* datalink;
-  QCheckBox* kde_qtver;
   QCheckBox* miniicon;
   QCheckBox* progicon;
   QCheckBox* gnufiles;
