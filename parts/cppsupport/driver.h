@@ -169,7 +169,7 @@ protected:
 private:
     QMap<QString, Dependence>& findOrInsertDependenceList( const QString& fileName );
     QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
-    QString findIncludeFile( const QString &fileName ) const;
+    QString findIncludeFile( const Dependence& dep ) const;
 
 private:
     QString m_currentFileName;
