@@ -84,6 +84,7 @@ void QComboViewData::updateLinedGeometry()
     QRect r = QStyle::visualRect( combo->style().querySubControlMetrics(QStyle::CC_ComboBox, combo,
                                         QStyle::SC_ComboBoxEditField), combo );
 
+//    qWarning("updateLinedGeometry(): currentItem is %d", combo->currentItem() == 0 ? 0 : 1);
     const QPixmap *pix = combo->currentItem() ? combo->currentItem()->pixmap(0) : 0;
     if ( pix && pix->width() < r.width() )
         r.setLeft( r.left() + pix->width() + 4 );
@@ -224,6 +225,7 @@ void QComboView::setCurrentItem( QListViewItem *item )
     d->completeAt = 0;
     if ( d->ed ) {
         d->ed->setText( item->text(0) );
+//        qWarning("setCurrentItem( %s )", item->text(0).latin1());
         d->updateLinedGeometry();
     }
     if ( d->listView() ) {
@@ -296,16 +298,18 @@ void QComboView::internalActivate( QListViewItem * item )
     popDownListView();
     d->poppedUp = FALSE;
 
+    d->current = item;
+
     QString t( item->text(0) );
     if ( d->ed ) {
         d->ed->setText( t );
+//        qWarning("internalActivate( %s )", item->text(0).latin1());
         d->updateLinedGeometry();
     }
     emit activated( item );
     emit activated( t );
 
 //    item->setOpen(true);
-    d->current = item;
 }
 
 /*!
@@ -655,7 +659,6 @@ static int listHeight( QListView *l, int sl )
     if (l->firstChild())
     {
         prefH = ch * l->firstChild()->height();
-        qWarning("!!!!!!!!!!!!!!firstChild height %d", l->firstChild()->height());
     }
     else
         prefH = l->sizeHint().height();
@@ -664,7 +667,6 @@ static int listHeight( QListView *l, int sl )
         prefH += l->header()->sizeHint().height();
 
 //    return prefH < l->sizeHint().height() ? prefH : l->sizeHint().height();
-    qWarning("!!!!!!!!!!!!!!pref size %d for %d items", prefH, ch);
 
     return prefH;
 }
@@ -893,7 +895,10 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
                 if ( mouseW == d->listView()->viewport() ) {
                     QListViewItem *sel = d->listView()->itemAt(e->pos());
                     if (sel)
+                    {
                         d->listView()->setCurrentItem(sel);
+                        d->listView()->setSelected(sel, true);
+                    }
                     return TRUE;
                 }
             }
@@ -1446,10 +1451,13 @@ void QComboView::setCurrentActiveItem( QListViewItem * item )
     d->completeAt = 0;
     if ( d->ed ) {
         d->ed->setText( item->text(0) );
+//        qWarning("setCurrentActiveItem( %s )", item->text(0).latin1());
         d->updateLinedGeometry();
     }
     if ( d->listView() ) {
         d->listView()->setCurrentItem( item );
+        emit activated( item );
+        emit activated( item->text(0) );
     } else {
         internalHighlight( item );
         internalActivate( item );
