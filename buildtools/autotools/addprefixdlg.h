@@ -14,13 +14,13 @@
 
 #include <qdialog.h>
 #include <qlineedit.h>
-
+class QPushButton;
 
 class AddPrefixDialog : public QDialog
 {
     Q_OBJECT
 
-public: 
+public:
     AddPrefixDialog( const QString& nameEdit = "", const QString& pathEdit = "",
             QWidget *parent=0, const char *name=0 );
     ~AddPrefixDialog();
@@ -29,10 +29,13 @@ public:
         { return name_edit->text(); }
     QString path() const
         { return path_edit->text(); }
-    
+private slots:
+    void slotPrefixChanged();
+
 private:
     QLineEdit *name_edit;
     QLineEdit *path_edit;
+    QPushButton *m_pOk;
 };
 
 #endif

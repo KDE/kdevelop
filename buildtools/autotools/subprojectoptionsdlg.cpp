@@ -76,6 +76,8 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     prefix_listview->setSorting(-1);
     buildorder_listview->setSorting(-1);
 
+    connect( prefix_listview, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( editPrefixClicked() ) );
+
     // Insert all subdirectories as possible include directories
     QStringList l = widget->allSubprojects();
     QCheckListItem *lastItem = 0;

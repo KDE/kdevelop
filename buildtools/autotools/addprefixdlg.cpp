@@ -24,20 +24,22 @@ AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEd
     : QDialog(parent, name, true)
 {
     setCaption(i18n("Add Prefix"));
-    
+
     QLabel *name_label = new QLabel(i18n("&Name:"), this);
     name_edit = new QLineEdit(nameEdit, this);
     name_edit->setFocus();
     name_label->setBuddy(name_edit);
+    connect( name_edit, SIGNAL( textChanged ( const QString & ) ), SLOT( slotPrefixChanged() ) );
 
     QLabel *path_label = new QLabel(i18n("&Path:"), this);
     path_edit = new QLineEdit(pathEdit, this);
     path_label->setBuddy(path_edit);
     QFontMetrics fm(path_edit->fontMetrics());
     path_edit->setMinimumWidth(fm.width('X')*35);
-    
+    connect( path_edit, SIGNAL( textChanged ( const QString & ) ), SLOT( slotPrefixChanged() ) );
+
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
-    
+
     QGridLayout *grid = new QGridLayout(2, 2);
     layout->addLayout(grid);
     grid->addWidget(name_label, 0, 0);
@@ -51,17 +53,23 @@ AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEd
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
+    m_pOk = buttonbox->addButton(i18n("&OK"));
     QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    ok->setDefault(true);
-    connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
+    m_pOk->setDefault(true);
+    connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
+    slotPrefixChanged();
 }
 
 
 AddPrefixDialog::~AddPrefixDialog()
 {}
+
+void AddPrefixDialog::slotPrefixChanged()
+{
+    m_pOk->setEnabled( !name_edit->text().isEmpty() && !path_edit->text().isEmpty() );
+}
 
 #include "addprefixdlg.moc"
