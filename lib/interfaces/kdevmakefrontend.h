@@ -36,10 +36,11 @@ public:
      */
     virtual bool isRunning() = 0;
 
-    /** only emited if the command was succesfully finished
+    /**
+     * Only emitted if the command was succesfully finished.
      */
-    signals:
-      void commandFinished(QString command);
+signals:
+    void commandFinished(const QString &command);
 };
 
 #endif
