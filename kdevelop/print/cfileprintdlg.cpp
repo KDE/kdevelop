@@ -295,7 +295,7 @@ void CFilePrintDlg::init() {
   qtarch_Label_89->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_89->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_89->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_89->setText(i18n("o´clock"));
+  qtarch_Label_89->setText(i18n("o'clock"));
   qtarch_Label_89->setAlignment( 289 );
   qtarch_Label_89->setMargin( -1 );
   grid3->addWidget(qtarch_Label_89,1,4);
@@ -391,7 +391,7 @@ void CFilePrintDlg::init() {
   qtarch_Label_90->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_90->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_90->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_90->setText(i18n("o´clock"));
+  qtarch_Label_90->setText(i18n("o'clock"));
   qtarch_Label_90->setAlignment( 289 );
   qtarch_Label_90->setMargin( -1 );
   grid3->addWidget( qtarch_Label_90,1,4);

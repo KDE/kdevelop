@@ -4237,7 +4237,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_HELP_PROGRAMMING,                      i18n("Switches to the KDevelop Programming Handbook"))
     ON_STATUS_MSG(ID_HELP_TUTORIAL,                         i18n("Switches to the KDE Tutorials Handbook"))
     ON_STATUS_MSG(ID_HELP_KDELIBREF,                        i18n("Switches to the KDE Library Reference Guide Handbook"))
-    ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,                    i18n("Switches to the KDE 2 Developer´s Guide Handbook"))
+    ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,                    i18n("Switches to the KDE 2 Developer's Guide Handbook"))
     ON_STATUS_MSG(ID_HELP_REFERENCE,                        i18n("Switches to the C/C++-Reference"))
 
     ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,                       i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
