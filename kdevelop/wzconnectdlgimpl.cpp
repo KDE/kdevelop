@@ -30,7 +30,7 @@
 #include "cclasstooldlg.h"
 #include <kmessagebox.h>
 #include "cclonefunctiondlg.h"
-
+#include <kiconloader.h>
 /* 
  *  Constructs a CClassPropertiesDlgImpl which is a child of 'CClassPropertiesDlg', with the
  *  name 'name' and widget flags set to 'f'
@@ -114,7 +114,7 @@ void CClassPropertiesDlgImpl::applyAddAttribute()
 
   aAttr->setType( leVarType_2 -> text() );
   aAttr->setName( leVarName_2 -> text() );
-
+  aAttr->setDeclaredInScope( currentClass -> path() );
   // Set export
   if( rbVarPublic_2 -> isChecked() )
     aAttr->setExport( PIE_PUBLIC );
@@ -196,6 +196,7 @@ void CClassPropertiesDlgImpl::applyAddMethod()
             break;
     }
     aMethod->setType( eType ? eType -> text() : QString("void") );
+    aMethod->setDeclaredInScope( currentClass -> path() );
     decl = eName -> text();
     lpPos = decl.find( "(" );
     // If no arguments we add ().
@@ -298,9 +299,9 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     if ( attrMember ) strAttrMember = attrMember -> name;
     else strAttrMember = "this";
 
-    toAdd = "connect( " + strAttrMember + ",";
+    toAdd = "connect( " + strAttrMember + ", ";
     toAdd = toAdd + "SIGNAL( " + strSigMethod + " ), ";
-    toAdd = toAdd + "SLOT( " + strSlotMethod + ") );";
+    toAdd = toAdd + "SLOT( " + strSlotMethod + " ) );";
 
     cerr << " toAdd = " << toAdd.data() << endl;
 
@@ -701,6 +702,15 @@ void CClassPropertiesDlgImpl::init()
     WidgetTable [3] = tpgSignals;
     WidgetTable [4] = tpgSlots;
     WidgetTable [5] = tpgImpl;
+
+    tabWidget -> changeTab (tpgClassView, SmallIcon("CVclass"), "Class Viewer");
+    tabWidget -> changeTab (tpgVars, SmallIcon("CVglobal_var"), "Attributes");
+    tabWidget -> changeTab (tpgMeth, SmallIcon("CVpublic_meth"), "Methods");
+    tabWidget -> changeTab (tpgSignals, SmallIcon("CVpublic_signal"), "Signals");
+    tabWidget -> changeTab (tpgSlots, SmallIcon("CVpublic_slot"), "Slots");
+    tabWidget -> changeTab (tpgImpl, SmallIcon("CVstruct"), "Connection Implementation");
+
+
     // -------------------
 
     for ( x = 0; x < 6; x++ )

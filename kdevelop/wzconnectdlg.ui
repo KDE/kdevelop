@@ -17,7 +17,7 @@ All in one dialog.</comment>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>533</width>
+            <width>529</width>
             <height>499</height>
         </rect>
     </property>
@@ -187,7 +187,7 @@ All in one dialog.</comment>
             </property>
             <property stdset="1">
                 <name>tabShape</name>
-                <enum>Triangular</enum>
+                <enum>Rounded</enum>
             </property>
             <property stdset="1">
                 <name>tabPosition</name>

@@ -228,6 +228,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
+  REQUIRE( "Valid class", aClass != NULL );
 
   if( aMethod->isSignal )     // Signals
   {
@@ -325,9 +326,13 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   if( !toAdd.isEmpty() )
   {
     switchToFile( aClass->definedInFile );
-
+	 aMethod->asCppCode( toAdd );	
+	 //int pos = toAdd.find( aMethod -> name );
+    //cerr << aMethod -> name.data() << " 's pos=" << pos << endl;
+	 //if(pos > -1 ) toAdd.insert(pos, QString(QString(aClassName)+"::"));
+	 //cerr << "fixed cpp code : " << toAdd.data() << endl;	
     // Add the code to the file.
-    aMethod->asCppCode( toAdd );
+
     edit_widget->append( toAdd );
     edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
     edit_widget->toggleModified( true );
@@ -369,7 +374,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
-  
+  REQUIRE( "Valid class", aClass != NULL );
+
   for( aClass->attributeIterator.toFirst();
        aClass->attributeIterator.current();
        ++aClass->attributeIterator )
@@ -448,6 +454,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
+  REQUIRE( "Valid class", aClass != NULL );
 
   for( aClass->attributeIterator.toFirst();
        aClass->attributeIterator.current();
@@ -534,6 +541,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
   int line;
 
   aClass = class_tree->store->getClassByName( aClassName );
+  REQUIRE( "Valid class", aClass != NULL );
 
   if( aClass != NULL )
   {
