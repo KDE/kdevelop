@@ -939,8 +939,6 @@ bool FunctionDomBrowserItem::hasImplementation() const
 
 void ClassViewWidget::maybeTip( QPoint const & p )
 {
-	kdDebug(0) << "ClassViewWidget::maybeTip()" << endl;
-
 	ClassViewItem * item = dynamic_cast<ClassViewItem*>( itemAt( p ) );
 	if ( !item ) return;
 	
