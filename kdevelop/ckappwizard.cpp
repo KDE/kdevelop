@@ -113,8 +113,8 @@ void CKAppWizard::initPages()
   QPixmap iconpm;
   QPixmap minipm;
   QPixmap pm;
-  pm.load(locate("appdata", "pics/kAppWizard.bmp"));
-  QPixmap pix = BarIcon("open");
+  pm.load(locate("appdata", "pics/kAppWizard.png"));
+  QPixmap pix = SmallIcon("fileopen");
 
   // create a widget and paint a picture on it
   widget1a = new QWidget( page0, "widget1a" );
@@ -1567,7 +1567,7 @@ void CKAppWizard::slotApplicationClicked() {
 
   if (kde2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/normalApp.bmp"));
+    pm.load(locate("appdata", "pics/normalApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
@@ -1592,7 +1592,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (kde2miniitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/miniApp.bmp"));
+    pm.load(locate("appdata", "pics/miniApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
@@ -1615,7 +1615,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (kde2mdiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/kdemdi.bmp"));
+    pm.load(locate("appdata", "pics/kdemdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
@@ -1640,7 +1640,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (qt2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/qtApp.bmp"));
+    pm.load(locate("appdata", "pics/qtApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1665,7 +1665,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (qt2mdiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/qtmdi.bmp"));
+    pm.load(locate("appdata", "pics/qtmdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1690,7 +1690,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (qextmdiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/qextmdi.bmp"));
+    pm.load(locate("appdata", "pics/qextmdi.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1723,7 +1723,7 @@ void CKAppWizard::slotApplicationClicked() {
   else if ((citem->isSelected() || cppitem->isSelected())
             && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/terminalApp.bmp"));
+    pm.load(locate("appdata", "pics/terminalApp.png"));
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
@@ -1757,7 +1757,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (customprojitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/customApp.bmp"));
+    pm.load(locate("appdata", "pics/customApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1782,7 +1782,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if (gnomenormalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
-    pm.load(locate("appdata", "pics/gnomeApp.bmp"));
+    pm.load(locate("appdata", "pics/gnomeApp.png"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setChecked(false);
     apidoc->setEnabled(false);
@@ -1837,7 +1837,7 @@ void CKAppWizard::slotApplicationClicked() {
 // connection of this
 void CKAppWizard::slotDefaultClicked() {
 
-  pm.load(locate("appdata", "pics/normalApp.bmp"));
+  pm.load(locate("appdata", "pics/normalApp.png"));
 
   setTitle(page4, i18n("Headertemplate for .cpp-files"));
 #warning FIXME ????

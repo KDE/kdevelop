@@ -115,7 +115,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_button->setBackgroundMode( QWidget::PaletteBackground );
   file_button->setFontPropagation( QWidget::NoChildren );
   file_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix = BarIcon("open");
+	QPixmap pix = SmallIcon("fileopen");
   file_button->setPixmap(pix);
   file_button->setAutoRepeat( FALSE );
   file_button->setAutoResize( FALSE );

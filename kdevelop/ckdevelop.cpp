@@ -2870,7 +2870,7 @@ void CKDevelop::slotHelpAbout(){
                         "option) any later version.\n\n"));
 
   QPixmap pm;
-  pm.load(locate("data", "kdevelop/pics/about_logo.bmp"));
+  pm.load(locate("data", "kdevelop/pics/about_logo.png"));
   aboutmsg.setIconPixmap(pm);
   aboutmsg.show();
 }

@@ -130,7 +130,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     dir_layout->addWidget(dir_edit, 10);
 
     QPushButton *dir_button = new QPushButton(this, "dirButton");
-		QPixmap pix = BarIcon("open");
+		QPixmap pix = SmallIcon("fileopen");
     dir_button->setPixmap(pix);
     dir_button->setFixedHeight(dir_edit->sizeHint().height());
     dir_button->setFixedWidth(30);

@@ -189,7 +189,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
 	loc_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix = BarIcon("open");
+	QPixmap pix = SmallIcon("fileopen");
 	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );

@@ -198,7 +198,7 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) :
 
 	qt_button = new QPushButton( this, "PushButton_4" );
 	qt_button->setGeometry( 440, 100, 40, 30 );
-	QPixmap pix = BarIcon("open");
+	QPixmap pix = SmallIcon("fileopen");
 	qt_button->setPixmap(pix);
 	qt_button->setAutoRepeat( FALSE );
 	qt_button->setAutoResize( FALSE );

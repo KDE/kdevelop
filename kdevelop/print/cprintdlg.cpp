@@ -193,7 +193,7 @@ void CPrintDlg::init(){
   printToFileDlg->setBackgroundMode( QWidget::PaletteBackground );
   printToFileDlg->setFontPropagation( QWidget::NoChildren );
   printToFileDlg->setPalettePropagation( QWidget::NoChildren );
-  QPixmap pix(BarIcon("open"));
+  QPixmap pix(SmallIcon("fileopen"));
   printToFileDlg->setPixmap(pix);
   printToFileDlg->setAutoRepeat( FALSE );
   printToFileDlg->setAutoResize( FALSE );

@@ -191,7 +191,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   dir_button->setBackgroundMode( QWidget::PaletteBackground );
   dir_button->setFontPropagation( QWidget::NoChildren );
   dir_button->setPalettePropagation( QWidget::NoChildren );
-  QPixmap pix = BarIcon("open");
+  QPixmap pix = SmallIcon("fileopen");
   dir_button->setPixmap(pix);
   dir_button->setAutoRepeat( FALSE );
   dir_button->setAutoResize( FALSE );

@@ -1166,7 +1166,7 @@ void CPrjOptionsDlg::addMakePage()
   m_set_modify_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_dir->setFontPropagation( QWidget::NoChildren );
   m_set_modify_dir->setPalettePropagation( QWidget::NoChildren );
-  m_set_modify_dir->setPixmap(BarIcon("open"));
+  m_set_modify_dir->setPixmap(SmallIcon("fileopen"));
   m_set_modify_dir->setAutoRepeat( FALSE );
 //  m_set_modify_dir->setAutoResize( FALSE );
 
@@ -1224,7 +1224,7 @@ void CPrjOptionsDlg::addMakePage()
   m_makestartpoint_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_makestartpoint_dir->setFontPropagation( QWidget::NoChildren );
   m_makestartpoint_dir->setPalettePropagation( QWidget::NoChildren );
-  m_makestartpoint_dir->setPixmap(BarIcon("open"));
+  m_makestartpoint_dir->setPixmap(SmallIcon("fileopen"));
   m_makestartpoint_dir->setAutoRepeat( FALSE );
 //  m_makestartpoint_dir->setAutoResize( FALSE );
 
@@ -1406,7 +1406,7 @@ void CPrjOptionsDlg::addBinPage()
   QPushButton* binary_button= new QPushButton(binaryOptions,"binary_button");
   binary_button->setGeometry(510,70,30,30);
 //  binary_button->setMinimumSize(0,0);
-  binary_button->setPixmap(BarIcon("open"));
+  binary_button->setPixmap(SmallIcon("fileopen"));
 
   QString binaryMsg = i18n("Set the path and filename of the binary that will be started on Run or Debug. "
             "Hint: Use a relative path starting from your project base directory to be location independent.");

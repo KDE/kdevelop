@@ -47,7 +47,7 @@ KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name,
 
 	{
 		QPixmap pixmap;
-		pixmap.load(locate("appdata", "pics/tipday.bmp"));
+		pixmap.load(locate("appdata", "pics/tipday.png"));
 		bmp_frame->setBackgroundPixmap( pixmap );
 	}
 	bmp_frame->setFocusPolicy( QWidget::NoFocus );

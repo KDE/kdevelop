@@ -155,7 +155,7 @@ void CFilePrintDlg::init() {
   selfChoosenFilesPushButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesPushButton->setFontPropagation( QWidget::NoChildren );
   selfChoosenFilesPushButton->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix(BarIcon("open"));
+	QPixmap pix(SmallIcon("fileopen"));
   selfChoosenFilesPushButton->setPixmap(pix);
   selfChoosenFilesPushButton->setAutoRepeat( FALSE );
   selfChoosenFilesPushButton->setAutoResize( FALSE );

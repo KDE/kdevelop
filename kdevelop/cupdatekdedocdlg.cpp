@@ -89,7 +89,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   source_button->setBackgroundMode( QWidget::PaletteBackground );
   source_button->setFontPropagation( QWidget::NoChildren );
   source_button->setPalettePropagation( QWidget::NoChildren );
-  QPixmap pix = BarIcon("open");
+  QPixmap pix = SmallIcon("fileopen");
   source_button->setPixmap(pix);
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );

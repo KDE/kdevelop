@@ -299,7 +299,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QPushButton* qt_button;
   qt_button = new QPushButton( docGroup, "qt_button" );
   grid2->addWidget(qt_button,0,2);
-  QPixmap pix = BarIcon("open");
+  QPixmap pix = SmallIcon("fileopen");
   qt_button->setPixmap(pix);
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
 

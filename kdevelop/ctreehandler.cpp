@@ -304,7 +304,7 @@ void CTreeHandler::readIcons()
   icons[ THGLOBAL_FUNCTION ]  = new QPixmap( SmallIcon( "CVglobal_meth"));
   icons[ THC_FILE ]           = new QPixmap( SmallIcon( "source"));
   icons[ THINSTALLED_FILE ]   = new QPixmap( SmallIcon( "inst_file"));
-  icons[ THDELETE ]           = new QPixmap( SmallIcon( "delete"));
+  icons[ THDELETE ]           = new QPixmap( SmallIcon( "editdelete"));
 
   iconsRead = true;
 }

@@ -36,7 +36,7 @@ CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual
 	program_group->insert(ksgml2html_radiobutton);
 	program_group->lower();
 
-	QPixmap pix(BarIcon("open"));
+	QPixmap pix(SmallIcon("fileopen"));
 	file_button->setPixmap(pix);
 	file_edit->setText(manual_file);
 

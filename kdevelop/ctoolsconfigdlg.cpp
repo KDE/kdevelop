@@ -93,7 +93,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
  executable_button = new QPushButton( this, "executable_button" );
  QWhatsThis::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
  connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
- QPixmap pix = BarIcon("open");
+ QPixmap pix = SmallIcon("fileopen");
  executable_button->setPixmap(pix);
  executable_button->setAutoRepeat( FALSE );
  executable_button->setAutoResize( FALSE );
