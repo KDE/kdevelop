@@ -253,6 +253,8 @@ void MainWindow::init()
   createGUI(0);
 
   if (!isFakingSDIApplication()) {
+    QPopupMenu* pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
+    menuBar()->removeItem( menuBar()->idAt(menuBar()->count()-4));
     menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, menuBar()->count()-1);
   }
 
