@@ -1,0 +1,31 @@
+Mozilla XUL support patch by : Zack Rusin (zack in kde dot org)
+
+yesterday George asked me to do a kaxul (in kdenonbeta) presentation
+with him today. I figured that having the Mozilla XUL rendered with
+native KDE/Qt widget is not impressive enough, so yesterday I checked
+out the KDevelop for the first time ever (I'm a huge Emacs fan  ).
+And spent some time with it. The outcome: first C++ and XUL IDE ever
+created. I'm attaching the tarball of the stuff needed to get a working
+XUL dev. environment. The code completion is currently wrong, I'll fix
+it later today, but it should show the top level tags as classes,
+single tags as variable and soon the commands as methods. It depends on
+KaXul with which you get thumbnail preview for the files you are
+working on, the general (big) preview of the XUL interface you are
+working on. I just wanted to know what's the opinion on that and
+whether I should put it somewhere. I mean it might be way too big
+advantage for the Mozilla project to get an actual modern IDE that can
+be used for the whole Mozilla
+It is very freaky stuff and I acknowledge that. The bottom line is and I
+think George and I proved it again this time, there's nothing that
+impossible in KDE
+
+Mozilla native XUL example:
+http://www.xulplanet.com/tutorials/xultu/examples/allelem/
+
+Rendered in Konqueror as a KPart:
+http://www.automatix.de/~zack/kaxulpart.png
+
+Presentation:
+http://www.automatix.de/~zack/kaxul.kpr
+
+Zack
