@@ -423,8 +423,12 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
 
   // Skip default values
   if( lexem == '=' )
-    while( lexem != ';' )
+    while( lexem != ';' && lexem != 0 )
       getNextLexem();
+
+  // If we reach end of file, this is not a valid attribute.
+  if( lexem == 0 )
+    anAttr->setName( "" );
 }
 
 /*----------------------------- CClassParser::fillInMultipleVariable()
@@ -645,7 +649,7 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
 
   // Other initializers
   if( lexem == ':' )
-    while( lexem != '{' )
+    while( lexem != 0 && lexem != '{' )
       getNextLexem();
 
   // Skip implementation.
