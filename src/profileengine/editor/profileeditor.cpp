@@ -250,8 +250,8 @@ void ProfileEditor::addProfile()
 
 void ProfileEditor::removeProfile()
 {
-    if (KMessageBox::questionYesNo(this, i18n("Remove selected profile and all its subprofiles?"),
-        i18n("Remove Profile")) == KMessageBox::Yes)
+    if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
+        i18n("Remove Profile"),KStdGuiItem::del()) == KMessageBox::Continue)
     {
         Profile *profile = currentProfile();
         if (profile->remove())

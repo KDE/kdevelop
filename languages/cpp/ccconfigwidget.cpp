@@ -176,7 +176,7 @@ void CCConfigWidget::slotRemovePCS()
 	KStandardDirs *dirs =  m_pPart->instance()->dirs();
 	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + db + ".db";
 	
-	if ( KMessageBox::Yes == KMessageBox::questionYesNo( 0, question, i18n("Remove Database") ) )
+        if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n("Remove Database"), KStdGuiItem::del() ) )
 	{
 		m_pPart->removeCatalog( dbName );
 	}

@@ -160,8 +160,8 @@ void SnippetWidget::slotRemove()
 
   if (group) {
     if (group->childCount() > 0 &&
-        KMessageBox::questionYesNo(this, i18n("Do you really want to remove this group and all its snippets?"))
-        == KMessageBox::No)
+        KMessageBox::warningContinueCancel(this, i18n("Do you really want to remove this group and all its snippets?"),QString::null,KStdGuiItem::del())
+        == KMessageBox::Cancel)
       return;
 
     for (SnippetItem *it=_list.first(); it; it=_list.next()) {
