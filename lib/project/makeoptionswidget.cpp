@@ -36,9 +36,9 @@ MakeOptionsWidget::~MakeOptionsWidget()
 void MakeOptionsWidget::accept()
 {
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/abortonerror", abort_box->isChecked());
-    DomUtil::writeIntEntry(m_dom, "/make/numberofjobs", jobs_box->value());
-    DomUtil::writeBoolEntry(m_dom, "/make/dontact", dontact_box->isChecked());
-    DomUtil::writeEntry(m_dom, "/make/makebin", makebin_edit->text());
+    DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
 }
 
 #include "makeoptionswidget.moc"
