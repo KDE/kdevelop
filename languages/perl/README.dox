@@ -9,7 +9,9 @@ and images.
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 \authors <a href="mailto:willems.luc AT pandora.be">Luc Willems</a>
 
-\feature perl language support
+\maintainers <a href="mailto:willems.luc AT pandora.be">Luc Willems</a>
+
+\feature perl programming language support
 \feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
