@@ -39,7 +39,7 @@ class KDevComponent : public KParts::Part
     Q_OBJECT
     
 public:
-    enum Role { SelectView, OutputView };
+    enum Role { SelectView, OutputView, DocumentView };
     
     KDevComponent( QObject *parent=0, const char *name=0 );
     ~KDevComponent();
@@ -90,7 +90,7 @@ public:
     virtual void savedFile(const QString&);
 
 signals:
-    void embedWidget(QWidget *, KDevComponent::Role, const QString &);
+    void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
     void gotoSourceFile(const QString &, int);
     void gotoDocumentationFile(const QString &);
     void gotoProjectApiDoc();
