@@ -515,7 +515,7 @@ QDomDocument* ProjectSpace::writeGlobalDocument(){
   }
   else {
     kdDebug(9000) << "ProjectSpace::writeXMLConfig() no aboutPlugin() found :-(";
-    return false;
+    return 0L;
   }
   ps.setAttribute("pluginName", pluginName); // the projectspacetype name
   ps.setAttribute("version", m_version);
