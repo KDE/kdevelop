@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Tip of the day
 Name=KDevTipOfDay
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtipofday
 X-KDevelop-Scope=Global

@@ -7,16 +7,16 @@
 #define __KDEVPART_TIPOFDAY_H__
 
 
-#include <kdevpart.h>
+#include <kdevplugin.h>
 
 
-class TipOfDayPart : public KDevPart
+class TipOfDayPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
    
-  TipOfDayPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  TipOfDayPart(QObject *parent, const char *name, const QStringList &);
 
 
 public slots:

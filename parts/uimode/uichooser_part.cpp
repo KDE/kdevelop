@@ -4,18 +4,20 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <kgenericfactory.h>
 
 
 #include <kdevcore.h>
 
 
-#include "uichooser_factory.h"
 #include "uichooser_part.h"
 #include "uichooser_widget.h"
 
+typedef KGenericFactory<UIChooserPart> UIChooserFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( "kdevuichooser" ) );
 
-UIChooserPart::UIChooserPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   setInstance(UIChooserFactory::instance());
 

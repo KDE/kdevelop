@@ -9,6 +9,8 @@
 #include <kstandarddirs.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 
 #include <kdevapi.h>
@@ -16,12 +18,13 @@
 #include <ktip.h>
 
 
-#include "tipofday_factory.h"
 #include "tipofday_part.h"
 
+typedef KGenericFactory<TipOfDayPart> TipOfDayFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) );
 
-TipOfDayPart::TipOfDayPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   setInstance(TipOfDayFactory::instance());
 
@@ -36,7 +39,7 @@ TipOfDayPart::TipOfDayPart(KDevApi *api, QObject *parent, const char *name)
                             "Will display another good tip \n"
                             "contributed by KDevelop users."));
 
-  connect(api->core(), SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
+  connect(core(), SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
 }
 
 

@@ -5,6 +5,6 @@ Exec=blubb
 Comment=User-Interface Selection
 Name=KDevUIChooser
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevuichooser
 X-KDevelop-Scope=Global

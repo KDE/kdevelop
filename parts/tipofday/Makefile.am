@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevtipofday.la
 libkdevtipofday_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevtipofday_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevtipofday_la_SOURCES = tipofday_factory.cpp tipofday_part.cpp
+libkdevtipofday_la_SOURCES = tipofday_part.cpp
 
 METASOURCES = AUTO
 KDE_ICON = AUTO
