@@ -50,6 +50,12 @@
 #include <runoptionswidget.h>
 #include <envvartools.h>
 
+#include <configwidgetproxy.h>
+
+#define CONFIGURE_OPTIONS 1
+#define RUN_OPTIONS 2
+#define MAKE_OPTIONS 3
+
 static const KAboutData data("kdevautoproject", I18N_NOOP("Automake Manager"), "1.0");
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( &data ) )
@@ -213,8 +219,14 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     connect( buildConfigAction->popupMenu(), SIGNAL(aboutToShow()),
              this, SLOT(slotBuildConfigAboutToShow()) );
 
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-             this, SLOT(projectConfigWidget(KDialogBase*)) );
+//    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
+
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS );
+	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS );
+	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
@@ -230,13 +242,14 @@ AutoProjectPart::~AutoProjectPart()
     if (m_widget)
         mainWindow()->removeView(m_widget);
     delete m_widget;
+	delete _configProxy;
 }
 
 /*void AutoProjectPart::slotImportExisting()
 {
 	ImportExistingDlg( this, m_widget, "import_existing", true ).exec();
 }*/
-
+/*
 void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
@@ -255,7 +268,39 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 }
+*/
 
+void AutoProjectPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int pagenumber )
+{
+	switch ( pagenumber )
+	{
+		case CONFIGURE_OPTIONS:
+		{
+	    	ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, page );
+			connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
+		}
+		break;
+		
+		case RUN_OPTIONS:
+		{
+			QDomDocument &dom = *projectDom();
+			if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
+				//ok we handle the execute in this kpart
+				RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), page );
+				w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
+				connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+			}
+		}
+		break;
+		
+		case MAKE_OPTIONS:
+		{
+			MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", page );
+			connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
+		}
+		break;
+	}
+}
 
 void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
