@@ -62,7 +62,8 @@ BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStrin
 
 BashSupportPart::~BashSupportPart()
 {
-
+    delete( m_cc );
+    m_cc = 0;
 }
 
 
