@@ -3127,13 +3127,16 @@ Stefan Heidrich 			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<she
 <quote/Main development of: KAppWizard, printing functionality/
 
 Ralf Nolden 					<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
-<quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help/
+<quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help and handbooks/
 
 Jonas Nordin 					<htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
 <quote/Main development of: Classviewer and -parser/
 
 Pascal Krahmer 				<htmlurl url="mailto:pascal@beast.de" name="<pascal@beast.de>">
 <quote/Main development of: Dialog Editor/
+
+Bernd Gehrmann 				<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
+<quote/Main development of: Grep Dialog, CVS integration/
 
 Stefan Bartel 				<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/

@@ -231,7 +231,6 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
 
   accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ) );
-  accel->connectItem( KAccel::Insert, this, SLOT(slotEditInsertFile() ) );
 
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ) );
@@ -409,7 +408,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(Icon("openprj.xpm"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
 	recent_projects_menu = new QPopupMenu();
   connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
-	project_menu->insertItem(i18n("Open &recent project"), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
+	project_menu->insertItem(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
 
 
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
@@ -943,7 +942,6 @@ if(bKDevelop){
     accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
     accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
     accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
-		accel->changeMenuAccel(edit_menu, ID_EDIT_INSERT_FILE, KAccel::Insert );
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KAccel::Find );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KAccel::Replace );

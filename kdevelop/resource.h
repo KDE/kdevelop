@@ -300,10 +300,10 @@
 #define IDK_BUILD_STOP								Key_F10
 
 #define IDK_VIEW_PREVIEW							CTRL+Key_Space
-#define IDK_EDIT_INSERT_FILE					CTRL+Key_Insert      // standard key
 
 #define IDK_EDIT_SELECT_ALL						CTRL+Key_A
 #define IDK_BOOKMARKS_ADD							CTRL+ALT+Key_A
+#define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_B
 #define IDK_EDIT_COPY	       					CTRL+Key_C						// standard key
 #define IDK_BOOKMARKS_CLEAR						CTRL+ALT+Key_C
 #define IDK_TOOLS_KDEVKDLG            CTRL+Key_D
@@ -317,12 +317,11 @@
 
 #define IDK_FILE_NEW	       					CTRL+Key_N						// standard key
 #define IDK_FILE_OPEN	       					CTRL+Key_O						// standard key
-#define IDK_VIEW_OUTPUTVIEW	    			SHIFT+Key_O
 #define IDK_FILE_PRINT         				CTRL+Key_P						// standard key
 #define IDK_FILE_QUIT	       					CTRL+Key_Q						// standard key
 #define IDK_EDIT_REPLACE							CTRL+Key_R						// standard key
 #define IDK_FILE_SAVE	       					CTRL+Key_S						// standard key
-#define IDK_VIEW_TREEVIEW	    				SHIFT+Key_T
+#define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
 #define IDK_EDIT_UNINDENT							CTRL+Key_U
 #define IDK_EDIT_PASTE								CTRL+Key_V						// standard key
 #define IDK_FILE_CLOSE	       				CTRL+Key_W						// standard key

@@ -419,6 +419,7 @@ void CKDevelop::slotEditSearchInFiles(){
     grep_dlg->setDirName(prj->getProjectDir());
   }
   grep_dlg->show();
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotEditSearchInFiles(QString search){
@@ -428,7 +429,8 @@ void CKDevelop::slotEditSearchInFiles(QString search){
   }
   grep_dlg->show();
 	grep_dlg->slotSearchFor(search);
-}
+  slotStatusMsg(i18n("Ready."));
+	}
 
 void CKDevelop::slotEditSearchText(){
   QString text;
@@ -442,6 +444,7 @@ void CKDevelop::slotEditSearchText(){
     }
   }
   slotEditSearchInFiles(text);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotEditReplace(){
