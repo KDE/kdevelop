@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
   KAboutData aboutData("gideon", I18N_NOOP("Gideon"),
                        VERSION, description, KAboutData::License_GPL,
-                       "(c) 1999-2001 Bernd Gehrmann & others");
+                       "(c) 1999-2002 Various Authors");
   aboutData.addAuthor("Bernd Gehrmann", "Everything not credited elsewhere :-)", "bernd@kdevelop.org");
   aboutData.addAuthor("Richard Dale", "Java & Objective C support", "Richard_Dale@tipitina.demon.co.uk");
   aboutData.addAuthor("Jonas Nordin", "C++ source parser", "jonas.nordin@syncom.se");
@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Harald Fernengel", "Qt 3 port, patches", "harry@kdevelop.org");
   aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "raggi@cli.di.unipi.it");
   aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
+  aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");
+  aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
   KCmdLineArgs::init(argc, argv, &aboutData);
 
   KApplication app;

@@ -153,7 +153,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
-        FileContext context(fvfitem->fileName());
+        FileContext context(fvfitem->fileName(), false);
         m_part->core()->fillContextMenu(&popup, &context);
     }
     

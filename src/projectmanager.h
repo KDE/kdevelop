@@ -43,7 +43,6 @@ private:
   void loadProjectPart();
   void loadLanguageSupport();
   void loadLocalParts();
-  void storePartInfo();
   void unloadLocalParts();
   void unloadLanguageSupport();
   void saveProjectFile();

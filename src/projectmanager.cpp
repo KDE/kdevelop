@@ -165,7 +165,6 @@ void ProjectManager::getGeneralInfo()
   m_info->m_language = getAttribute(generalEl, "primarylanguage");
 
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
-  getAttributeList(generalEl, "loadparts", "part", m_info->m_loadParts);
   getAttributeList(generalEl, "keywords", "keyword", m_info->m_keywords);
 }
 
@@ -310,8 +309,6 @@ void ProjectManager::closeProject()
   if (!m_info)
     return;
 
-  storePartInfo();
-
   if (API::getInstance()->project())
   {
     if (!closeProjectSources())
@@ -341,55 +338,6 @@ bool ProjectManager::closeProjectSources()
 {
   QStringList sources = API::getInstance()->project()->allSourceFiles();
   return PartController::getInstance()->closeDocuments(sources);
-}
-
-
-void ProjectManager::storePartInfo()
-{
-  QDomElement docEl = m_info->m_document.documentElement();
-  QDomElement generalEl = docEl.namedItem("general").toElement();
-  QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
-  QDomElement loadpartsEl = generalEl.namedItem("loadparts").toElement();
-
-  // store the ignore parts to the projectfile
-  if (ignorepartsEl.isNull())
-  {
-    ignorepartsEl = API::getInstance()->projectDom()->createElement("ignoreparts");
-    generalEl.appendChild(ignorepartsEl);
-  }
-
-  // Clear old entries
-  while (!ignorepartsEl.firstChild().isNull())
-    ignorepartsEl.removeChild(ignorepartsEl.firstChild());
-
-  QStringList::Iterator ignoreIterator = m_info->m_ignoreParts.begin();
-  while (ignoreIterator != m_info->m_ignoreParts.end())
-  {
-    QDomElement partEl = API::getInstance()->projectDom()->createElement("part");
-    partEl.appendChild(API::getInstance()->projectDom()->createTextNode(*ignoreIterator));
-    ignorepartsEl.appendChild(partEl);
-    ignoreIterator++;
-   }
-
-  // store the loaded parts
-  if (loadpartsEl.isNull())
-  {
-    loadpartsEl = API::getInstance()->projectDom()->createElement("loadparts");
-    generalEl.appendChild(loadpartsEl);
-  }
-
-  // Clear old entries
-  while (!loadpartsEl.firstChild().isNull())
-    loadpartsEl.removeChild(loadpartsEl.firstChild());
-
-  QStringList::Iterator loadIterator = m_info->m_loadParts.begin();
-  while (loadIterator != m_info->m_loadParts.end())
-  {
-    QDomElement partEl = API::getInstance()->projectDom()->createElement("part");
-    partEl.appendChild(API::getInstance()->projectDom()->createTextNode(*loadIterator));
-    loadpartsEl.appendChild(partEl);
-    loadIterator++;
-  }
 }
 
 

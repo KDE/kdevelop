@@ -89,21 +89,25 @@ private:
 class FileContext : public Context
 {
 public:
-    FileContext(const QString &fileName)
+    FileContext(const QString &fileName, bool isDirectory=false)
         : Context("file"), m_fileName(fileName) {}
     ~FileContext() {}
 
     QString fileName() const
     { return m_fileName; }
+    bool isDirectory() const
+    { return m_isDirectory; }
 
 private:
     QString m_fileName;
+    bool m_isDirectory;
 };
 
 /**
  * A context for the popup menu in class views. In this case,
  * className() returns the name of the class, including its
  * scope (i.e. namespace).
+ * (currently not used)
  */
 class ClassContext : public Context
 {

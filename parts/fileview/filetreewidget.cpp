@@ -271,14 +271,10 @@ void FileTreeWidget::slotContextMenu(KListView *, QListViewItem *item, const QPo
     }
         
     FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
-    // Not for group items
-    if (ftitem->type() == FileTreeItem::File) {
-        KPopupMenu popup(i18n("File Tree"), this);
-        FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
-        FileContext context(ftitem->path());
-        m_part->core()->fillContextMenu(&popup, &context);
-        popup.exec(p);
-    }
+    KPopupMenu popup(i18n("File Tree"), this);
+    FileContext context(ftitem->path(), ftitem->type() == FileTreeItem::Dir);
+    m_part->core()->fillContextMenu(&popup, &context);
+    popup.exec(p);
 }
 
 

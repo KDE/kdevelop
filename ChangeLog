@@ -1,3 +1,11 @@
+2002-04-23  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Removed redundant loadparts property from
+	  project file
+	* Added isDirectory() to FileContext, so one
+	  can distinguish between regular files and
+	  directories.
+
 2002-04-22  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Only program and library targets can be made active
