@@ -8,7 +8,7 @@
 # first do
 # $ debian/build-gideon config
 # and then
-# $ debian/build-gideon
+# $ make
 # you can then use run or debug targets
 
 default: install
@@ -21,20 +21,13 @@ instdir=$(debdir)/tmp
 #  --with-qt-includes=/usr/include/qt --mandir=$(mandir) \
 #  --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html
 
-configkdevelop= --prefix=/usr/local/kde \
- --enable-debug --enable-docbase \
- --disable-rpath --with-qt-includes=/usr/include/qt \
- --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
- --enable-gideon-qt2 --enable-docbase \
- --enable-javasupport \
- --with-phpdocdir=/usr/share/doc/php4 \
- --with-glibdocdir=/usr/share/doc/glib-reference/html \
- --with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
- --with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
- --with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
 
+
+#--prefix=/usr/local/kde \
 #--libdir=$(kde_libdir) --includedir=$(kde_includedir) --mandir=$(mandir) \
 # --enable-scripting --with-pythondocdir=/usr/share/python2.2-doc \
+# --enable-javasupport \
+
 
 run:
 	LD_LIBRARY_PATH=/usr/local/kde/lib /usr/local/kde/bin/gideon
@@ -42,11 +35,40 @@ run:
 debug:
 	LD_LIBRARY_PATH=/usr/local/kde/lib kdbg /usr/local/kde/bin/gideon
 
-config:
+config2:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
-	./configure $(configkdevelop)
+	./configure $(configkdevelop) \
+	--enable-debug \
+	--disable-rpath --with-qt-includes=/usr/include/qt \
+	--with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
+	--enable-gideon-qt2 \
+	--enable-docbase \
+	--with-phpdocdir=/usr/share/doc/php4 \
+	--with-glibdocdir=/usr/share/doc/glib-reference/html \
+	--with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
+	--with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
+	--with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
+
+	touch configure-stamp
+
+config3:
+	if test ! -f configure; then \
+	  $(MAKE) -f admin/Makefile.common ;\
+	fi
+	./configure $(configkdevelop) \
+	--prefix=/usr/local/kde3 \
+	--with-qt-dir=/usr/local/qt \
+	--enable-debug \
+	--disable-rpath --with-qt-includes=/usr/include/qt \
+	--with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
+	--enable-docbase \
+	--with-phpdocdir=/usr/share/doc/php4 \
+	--with-glibdocdir=/usr/share/doc/glib-reference/html \
+	--with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
+	--with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
+	--with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
 
 	touch configure-stamp
 
