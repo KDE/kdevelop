@@ -4,6 +4,7 @@
     * applied patch of John Firebaugh <jfirebaugh@kde.org>. Thanks a lot!
     * bugfix: repaired Project->Rebuild, Project->DistClean/RebuildAll and
       optimized CKDevelop::slotProcessExited, needs to be tested a while
+    * QextMDI: replaced a focus-problem mega-hack (inherits('QDialog') etc.) by a neat solution  
 
 2001-07-25  rokrau@yahoo.com
     * bugfix: F12 now works without a project loaded. I've implemented this

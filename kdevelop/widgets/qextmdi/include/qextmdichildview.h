@@ -356,6 +356,9 @@ protected:
    */
    virtual void resizeEvent(QResizeEvent *e);
 
+protected slots:
+   void slot_childDestroyed();
+
 signals:
    /** 
    * Internally used by @ref QextMdiChildView::attach to send it as command to the mainframe.

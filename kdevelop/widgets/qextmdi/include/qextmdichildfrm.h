@@ -35,6 +35,7 @@
 #include <qlabel.h>
 #include <qdict.h>
 #include <qdatetime.h>
+#include <qlayout.h>
 
 #include "qextmdichildfrmcaption.h"
 
@@ -179,6 +180,7 @@ protected:
    QPopupMenu*             m_pSystemMenu;
    QSize                   m_oldClientMinSize;
    QSize                   m_oldClientMaxSize;
+   QLayout::ResizeMode     m_oldLayoutResizeMode;
    QTime                   m_timeMeasure;
 
 // methods

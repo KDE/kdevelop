@@ -115,6 +115,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    ,m_pSystemMenu(0L)
    ,m_oldClientMinSize()
    ,m_oldClientMaxSize()
+   ,m_oldLayoutResizeMode(QLayout::Minimum)
 {
    m_pCaption  = new QextMdiChildFrmCaption(this);
 
@@ -285,60 +286,65 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
    // Calculate the minimum width & height
    int minWidth=0;
    int minHeight=0;
+   int maxWidth=QWIDGETSIZE_MAX;
+   int maxHeight=QWIDGETSIZE_MAX;
    // it could be the client forces the childframe to enlarge its minimum size
    if(m_pClient){
       minWidth  = m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
       minHeight = m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
-               m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
+                    m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
+      maxWidth  = m_pClient->maximumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+      maxHeight = m_pClient->maximumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
+                    m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
    }
    if(minWidth<minimumWidth())minWidth=minimumWidth();
    if(minHeight<minimumHeight())minHeight=minimumHeight();
+   if(maxWidth>maximumWidth())maxWidth=maximumWidth();
+   if(maxHeight>maximumHeight())maxHeight=maximumHeight();
 
    QPoint mousePos( xPos, yPos);
    
+   // manipulate width
    switch (resizeCorner){
-   case QEXTMDI_RESIZE_LEFT:
-      resizeRect.setLeft(mousePos.x());
-      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
-      break;
-   case QEXTMDI_RESIZE_RIGHT:
-      resizeRect.setRight(mousePos.x());
-      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-      break;
-   case QEXTMDI_RESIZE_TOP:
-      resizeRect.setTop(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
-      break;
-   case QEXTMDI_RESIZE_BOTTOM:
-      resizeRect.setBottom(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-      break;
-   case QEXTMDI_RESIZE_BOTTOMRIGHT:
-      resizeRect.setBottom(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-      resizeRect.setRight(mousePos.x());
-      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-      break;
-   case QEXTMDI_RESIZE_TOPRIGHT:
-      resizeRect.setTop(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
-      resizeRect.setRight(mousePos.x());
-      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-      break;
+   case QEXTMDI_RESIZE_TOPLEFT:     // no break
+   case QEXTMDI_RESIZE_LEFT:        // no break
    case QEXTMDI_RESIZE_BOTTOMLEFT:
-      resizeRect.setBottom(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-      resizeRect.setLeft(mousePos.x());         
-      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
-      break;
-   case QEXTMDI_RESIZE_TOPLEFT:
-      resizeRect.setTop(mousePos.y());
-      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
       resizeRect.setLeft(mousePos.x());
-      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
+      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth + 1);
+      if(resizeRect.width() > maxWidth)resizeRect.setLeft(resizeRect.right() - maxWidth + 1);
+      break;
+   case QEXTMDI_RESIZE_TOPRIGHT:    // no break
+   case QEXTMDI_RESIZE_RIGHT:       // no break
+   case QEXTMDI_RESIZE_BOTTOMRIGHT:
+      resizeRect.setRight(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth - 1);
+      if(resizeRect.width() > maxWidth)resizeRect.setRight(resizeRect.left() + maxWidth - 1);
+      break;
+   default:
+      // nothing to do
       break;
    }
-
+   // manipulate height
+   switch (resizeCorner){
+   case QEXTMDI_RESIZE_TOPLEFT:  // no break
+   case QEXTMDI_RESIZE_TOP:      // no break
+   case QEXTMDI_RESIZE_TOPRIGHT:
+      resizeRect.setTop(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight + 1);
+      if(resizeRect.height() > maxHeight)resizeRect.setTop(resizeRect.bottom() - maxHeight + 1);
+      break;
+   case QEXTMDI_RESIZE_BOTTOMLEFT:  // no break
+   case QEXTMDI_RESIZE_BOTTOM:      // no break
+   case QEXTMDI_RESIZE_BOTTOMRIGHT:
+      resizeRect.setBottom(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight - 1);
+      if(resizeRect.height() > maxHeight)resizeRect.setBottom(resizeRect.top() + maxHeight - 1);
+      break;
+   default:
+      // nothing to do
+      break;
+   }
+   // actually resize
    setGeometry( resizeRect);
 
    if(m_state==Maximized){
@@ -430,31 +436,28 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    if(m_state==Normal){ //save the current rect
       m_restoredRect=QRect(x(),y(),width(),height());
    }
-   //QRect begin(x(),y(),width(),height());
-   //QRect end=begin;
    switch(state){
    case Normal:
       switch(m_state){
       case Maximized:
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
-         //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
-         m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
-         m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-         setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
+         // client min / max size / layout behaviour don't change
+         // set frame max size indirectly by setting the clients max size to 
+         // it's current value (calls setMaxSize() of frame)
+         m_pClient->setMaximumSize(m_pClient->maximumSize().width(), m_pClient->maximumSize().height());
          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
          setGeometry(m_restoredRect);
          break;
       case Minimized:
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
-         //begin=QRect(x()+width()/2,y()+height()/2,1,1);
-         //if(bAnimate)m_pManager->animate(begin,end);
-         m_pClient->show();
+         // restore client min / max size / layout behaviour
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-         setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
-         // reset to normal-captionbar
+         if (m_pClient->layout() != 0L) {
+            m_pClient->layout()->setResizeMode(m_oldLayoutResizeMode);
+         }
          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
@@ -466,21 +469,22 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
       }
       break;
    case Maximized:
-      //end=QRect(0,0,m_pManager->width(),m_pManager->height());
       switch(m_state){
       case Minimized: {
             m_pClient->m_stateChanged = TRUE;
-            //begin=QRect(x()+width()/2,y()+height()/2,1,1);
-            //if(bAnimate)m_pManager->animate(begin,end);
+            m_state=state;
+            // restore client min / max size / layout behaviour
             m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
             m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+            if (m_pClient->layout() != 0L) {
+               m_pClient->layout()->setResizeMode(m_oldLayoutResizeMode);
+            }
             setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
             // reset to maximize-captionbar
             m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
             m_pMinimize->setPixmap( *m_pMinButtonPixmap);
             QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
             QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-            m_state=state;
             int nFrameWidth = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
             int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + 
                                m_pCaption->heightHint();
@@ -493,11 +497,8 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
       case Normal: {
             m_pClient->m_stateChanged = TRUE;
             m_state=state;
-            m_oldClientMinSize = m_pClient->minimumSize();
-            m_oldClientMaxSize = m_pClient->maximumSize();
-            m_pClient->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+            // client min / max size / layout behaviour don't change
             setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
-            //if(bAnimate)m_pManager->animate(begin,end);
             m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
             int nFrameWidth = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
             int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + 
@@ -516,23 +517,40 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
       }
    break;
    case Minimized:
-      //end=QRect(x()+width()/2,y()+height()/2,1,1);
       switch(m_state){
       case Maximized:
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
+         // save client min / max size / layout behaviour
+         m_oldClientMinSize = m_pClient->minimumSize();
+         m_oldClientMaxSize = m_pClient->maximumSize();
+         if (m_pClient->layout() != 0L) {
+            m_oldLayoutResizeMode = m_pClient->layout()->resizeMode();
+         }
+         m_pClient->setMinimumSize(0, 0);
+         m_pClient->setMaximumSize(0, 0);
+         if (m_pClient->layout() != 0L) {
+            m_pClient->layout()->setResizeMode(QLayout::FreeResize);
+         }
          switchToMinimizeLayout();
-         //if(bAnimate)m_pManager->animate(begin,end);
          m_pManager->childMinimized(this,TRUE);
          break;
       case Normal:
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
+         // save client min / max size / layout behaviour
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
+         if (m_pClient->layout() != 0L) {
+            m_oldLayoutResizeMode = m_pClient->layout()->resizeMode();
+         }
          m_restoredRect = geometry();
+         m_pClient->setMinimumSize(0, 0);
+         m_pClient->setMaximumSize(0, 0);
+         if (m_pClient->layout() != 0L) {
+            m_pClient->layout()->setResizeMode(QLayout::FreeResize);
+         }
          switchToMinimizeLayout();
-         //if(bAnimate)m_pManager->animate(begin,end);
          m_pManager->childMinimized(this,FALSE);
          break;
       case Minimized:
@@ -770,7 +788,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    m_pMaximize->installEventFilter(this);
    m_pClose->installEventFilter(this);
    m_pClient->installEventFilter(this);
-   m_pClient->installEventFilterForAllChildren();
+//   m_pClient->installEventFilterForAllChildren();
 }
 
 //============== unlinkChildren =============//
@@ -910,7 +928,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       break;
    case QEvent::Resize: 
       {
-         if ( (QWidget*)obj == m_pClient ) {
+         if ( ( (QWidget*)obj == m_pClient ) && (m_state == Normal) ) {
             QResizeEvent* re = (QResizeEvent*)e;
             int captionHeight = m_pCaption->heightHint();
             QSize newChildFrmSize( re->size().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
@@ -1043,7 +1061,7 @@ void QextMdiChildFrm::showSystemMenu()
 void QextMdiChildFrm::switchToMinimizeLayout()
 {
    setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
-   setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+QEXTMDI_MDI_CHILDFRM_SEPARATOR);
+   setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
 
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
 

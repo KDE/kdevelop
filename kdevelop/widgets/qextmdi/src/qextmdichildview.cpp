@@ -451,6 +451,41 @@ void QextMdiChildView::resizeEvent(QResizeEvent* e)
    }
 }
 
+void QextMdiChildView::slot_childDestroyed()
+{
+   // do what we do if a child is removed
+
+   // if we lost a child we uninstall ourself as event filter for the lost 
+   // child and its children
+   const QObject* pLostChild = QObject::sender();
+   if (pLostChild != 0L) {
+      QObjectList *list = ((QObject*)(pLostChild))->queryList();
+      list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
+      QObjectListIt it( *list );          // iterate over all lost child widgets
+      QObject * obj;
+      while ( (obj=it.current()) != 0 ) { // for each found object...
+         QWidget* widg = (QWidget*)obj;
+         ++it;
+         widg->removeEventFilter(this);
+         if((widg->focusPolicy() == QWidget::StrongFocus) || 
+            (widg->focusPolicy() == QWidget::TabFocus   ) ||
+            (widg->focusPolicy() == QWidget::WheelFocus ))
+         {
+            if(m_firstFocusableChildWidget == widg) {
+               m_firstFocusableChildWidget = 0L;   // reset first widget
+            }
+            if(m_lastFocusableChildWidget == widg) {
+               m_lastFocusableChildWidget = 0L;    // reset last widget
+            }
+            if(m_focusedChildWidget == widg) {
+               m_focusedChildWidget = 0L;          // reset focused widget
+            }
+         }
+      }
+      delete list;                        // delete the list, not the objects
+   }
+}
+
 //============= eventFilter ===============//
 
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
@@ -497,7 +532,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       // if we lost a child we uninstall ourself as event filter for the lost 
       // child and its children
       QObject* pLostChild = ((QChildEvent*)e)->child();
-      if((pLostChild != 0L) /*&& (pLostChild->inherits("QWidget"))*/) {
+      if (pLostChild != 0L) {
          QObjectList *list = pLostChild->queryList();
          list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
          QObjectListIt it( *list );          // iterate over all lost child widgets
@@ -526,26 +561,20 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       // install ourself as event filter for the new child and its children
       // (as we did when we were added to the MDI system).
       QObject* pNewChild = ((QChildEvent*)e)->child();
-      if((pNewChild != 0L) && (pNewChild->isWidgetType()) &&
-         !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("QFileDialog")) &&
-         !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("KDialogBase")) && 
-         !(pNewChild->inherits("QPopupMenu")) )
+      if ((pNewChild != 0L) && (pNewChild->isWidgetType()))
       {
          QWidget* pNewWidget = (QWidget*)pNewChild;
          if (pNewWidget->testWFlags(WType_Modal))
-            return FALSE;
+             return FALSE;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code
          QObjectListIt it( *list );          // iterate over all new child widgets
          QObject * obj;
          while ( (obj=it.current()) != 0 ) { // for each found object...
-            if (!obj->isWidgetType()) {
-              ++it;
-              continue;
-            }
             QWidget* widg = (QWidget*)obj;
             ++it;
             widg->installEventFilter(this);
+            connect(widg, SIGNAL(destroyed()), this, SLOT(slot_childDestroyed()));
             if((widg->focusPolicy() == QWidget::StrongFocus) ||
                (widg->focusPolicy() == QWidget::TabFocus   ) ||
                (widg->focusPolicy() == QWidget::WheelFocus ))
@@ -573,24 +602,18 @@ void QextMdiChildView::installEventFilterForAllChildren()
    QObjectListIt it( *list );          // iterate over all child widgets
    QObject * obj;
    while ( (obj=it.current()) != 0 ) { // for each found object...
-      if (!obj->isWidgetType()) {
-         ++it;
-         continue;
-      }
       QWidget* widg = (QWidget*)obj;
       ++it;
-      if (!(widg->inherits("QPopupMenu"))) {
-         widg->installEventFilter(this);
-         if((widg->focusPolicy() == QWidget::StrongFocus) ||
-            (widg->focusPolicy() == QWidget::TabFocus   ) ||
-            (widg->focusPolicy() == QWidget::WheelFocus ))
-         {
-            if(m_firstFocusableChildWidget == 0) {
-               m_firstFocusableChildWidget = widg;  // first widget
-            }
-            m_lastFocusableChildWidget = widg; // last widget
-            //qDebug("*** %s (%s)",widg->name(),widg->className());
+      widg->installEventFilter(this);
+      if((widg->focusPolicy() == QWidget::StrongFocus) ||
+         (widg->focusPolicy() == QWidget::TabFocus   ) ||
+         (widg->focusPolicy() == QWidget::WheelFocus ))
+      {
+         if(m_firstFocusableChildWidget == 0) {
+            m_firstFocusableChildWidget = widg;  // first widget
          }
+         m_lastFocusableChildWidget = widg; // last widget
+         //qDebug("*** %s (%s)",widg->name(),widg->className());
       }
    }
    //qDebug("### |%s|", m_lastFocusableChildWidget->name());
@@ -678,7 +701,7 @@ void QextMdiChildView::slot_clickedInDockMenu()
 void QextMdiChildView::setMinimumSize( int minw, int minh)
 {
    QWidget::setMinimumSize( minw, minh);
-   if(mdiParent() != 0L) {
+   if ( (mdiParent() != 0L) && (mdiParent()->state() == QextMdiChildFrm::Normal) ) {
       mdiParent()->setMinimumSize( minw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
                                    minh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
                                         + QEXTMDI_MDI_CHILDFRM_SEPARATOR
@@ -690,7 +713,7 @@ void QextMdiChildView::setMinimumSize( int minw, int minh)
 
 void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 {
-   if(mdiParent() != 0L) {
+   if ( (mdiParent() != 0L) && (mdiParent()->state() == QextMdiChildFrm::Normal) ) {
       int w = maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
       if(w > QWIDGETSIZE_MAX) { w = QWIDGETSIZE_MAX; }
       int h = maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + mdiParent()->captionHeight();
