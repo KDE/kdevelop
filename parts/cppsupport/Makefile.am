@@ -27,6 +27,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       kdevregexp.cpp
 
 EXTRA_DIST = tokenizer.l tokenizer-cc.l
+DISTCLEANFILES = tokenizer.cpp
+
 tokenizer.cpp: tokenizer.l
 	flex -+ -otokenizer.cpp $(srcdir)/tokenizer.l && cat tokenizer.cpp | \
 	sed -e "s,class istream;,#include <iostream\.h>," > tokenizer.cpp.tmp && \
