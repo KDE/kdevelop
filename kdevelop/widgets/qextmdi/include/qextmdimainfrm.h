@@ -262,6 +262,7 @@ public:
    * @returns if we are fake an SDI application (@ref fakeSDIApplication)
    */
    bool isFakingSDIApplication() { return m_bSDIApplication; };
+   virtual bool eventFilter(QObject *obj, QEvent *e );
 
 public slots:
    /**

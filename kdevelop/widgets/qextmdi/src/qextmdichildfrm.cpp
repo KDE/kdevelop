@@ -495,7 +495,6 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          m_pClient->m_stateChanged = TRUE;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
-//???         m_pClient->show();
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
          setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
@@ -516,7 +515,6 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
-//???         show();
          m_pClient->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          //if(bAnimate)m_pManager->animate(begin,end);
@@ -663,7 +661,6 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
    linkChildren( pFocPolDict);
 
-//FALK?   QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
@@ -681,7 +678,6 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 {
   if(!m_pClient)return;
    
-//FALK?  QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
   QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
   //reparent to desktop widget , no flags , point , show it

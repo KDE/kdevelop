@@ -101,23 +101,25 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
    // destroy the old one
    QObject::disconnect(lpC);
    lpC->blockSignals(TRUE);
+   m_pZ->setAutoDelete(false);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
-   QextMdiChildFrm* c=topChild();
+   QextMdiChildFrm* newTopChild = topChild();
    if (bWasMaximized){
-      if (c) {
-         c->setState(QextMdiChildFrm::Maximized,FALSE);
-         emit sysButtonConnectionsMustChange(lpC,c);
+      if (newTopChild) {
+         newTopChild->setState(QextMdiChildFrm::Maximized,FALSE);
+         emit sysButtonConnectionsMustChange(lpC, newTopChild);
       }
       else {
-         emit noMaximizedChildFrmLeft(0L); // last childframe removed
+         emit noMaximizedChildFrmLeft(lpC); // last childframe removed
       }
    }
+   delete lpC;
+   m_pZ->setAutoDelete(true);
+
    if (bFocusTopChild)
       focusTopChild();
-//   if (bWasMaximized && topChild() )
-//      emit nowMaximized(TRUE);
 }
 
 //============ destroyChildButNotItsView ============//
@@ -148,8 +150,6 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 
    if (bFocusTopChild)
       focusTopChild();
-//   if (bWasMaximized && topChild() )
-//      emit nowMaximized(TRUE);
 }
 
 //============= setTopChlid ============//

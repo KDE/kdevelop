@@ -274,6 +274,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
       } else {
          attachWindow( pWnd, !(flags & QextMdi::Hide));
       }
+      pWnd->installEventFilter(this);
 
       if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
          if (!pWnd->isMaximized())
@@ -559,21 +560,9 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
    }
    else {
       if (pWnd->isAttached()){
-         if (!(pWnd->hasFocus()) ) {
-            // this should go out of here
-            // (mmorin)
-            if( m_pMdi->topChild()->state() == QextMdiChildFrm::Maximized) {
-//               QextMdiChildFrm* pTC = m_pMdi->topChild();
-//               if ( pTC != pWnd->mdiParent()) {
-//                 updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
-//               }
-               pWnd->mdiParent()->raiseAndActivate();
-            }
-         }
+         pWnd->mdiParent()->raiseAndActivate();
       }
       else {
-         // this was the one not too cool
-         // see here you are not doing anything if it is maximize...
          if (!pWnd->hasFocus() || !pWnd->isActiveWindow()) {
             pWnd->show();
             pWnd->setActiveWindow();
@@ -612,7 +601,18 @@ bool QextMdiMainFrm::event( QEvent* e)
          closeWindow( pWnd);
       return TRUE;
    }
+
    return DockMainWindow::event( e);
+}
+
+bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
+{
+   if( e->type() == QEvent::FocusIn) {
+      QextMdiChildView* pWnd = (QextMdiChildView*)obj;
+      if( pWnd != 0L)
+         qDebug("xxx");
+   }
+   return FALSE;
 }
 
 /**
