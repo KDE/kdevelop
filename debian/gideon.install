@@ -2,4 +2,6 @@ debian/tmp/etc/kde3/*
 debian/tmp/usr/bin/*
 debian/tmp/usr/lib/libkdevelop.so.*
 debian/tmp/usr/lib/libkdevelopqextmdi.so.*
-debian/tmp/usr/lib/kde3/*
+debian/tmp/usr/lib/libkdevcatalog.so.*
+debian/tmp/usr/lib/libkdevcppparser.so.*
+debian/tmp/usr/lib/gideon

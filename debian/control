@@ -1,13 +1,13 @@
 Source: gideon
-Section: devel
+Section: kde
 Priority: optional
-Maintainer: Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-Build-Depends: debhelper (>> 4.0.0), kdelibs4-dev, gettext, autoconf, automake | automake1.6, kdelibs4-doc | kdelibs-doc, qt-doc | qt3-doc, flex
+Maintainer: Norman Jordan <njordan@debian.org>
+Build-Depends: debhelper (>> 4.0.0), kdelibs4-dev, gettext, autoconf, automake1.6, kdelibs4-doc | kdelibs-doc, qt-doc | qt3-doc, flex, libdb4.1-dev | libdb4.0-dev | libdb3-dev
 Standards-Version: 3.5.6.0
 
 Package: gideon
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake | automake1.6, kdebase-bin, gideon-data
+Depends: ${shlibs:Depends}, autoconf, automake | automake1.6, kdebase-bin, gideon-data, gideon-plugins
 Recommends: make, gideon-doc
 Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs-dev, kdebase, kdelibs4-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt3-tools, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual
 Description: An IDE for Unix/X11 - development version
@@ -20,6 +20,7 @@ Description: An IDE for Unix/X11 - development version
  for terminal programs and GUI programs using Qt, KDE or GNOME.
 
 Package: gideon-doc
+Section: doc
 Architecture: all
 Suggests: qt-doc, python2.2-doc, glib-reference, gtk-reference, gnome-dev-doc
 Description: An IDE for Unix/X11 - documentation
@@ -62,3 +63,17 @@ Description: An IDE for Unix/X11 - development files
  for terminal programs and GUI programs using Qt, KDE or GNOME.
  .
  This package contains development files for KDevelop.
+
+Package: gideon-plugins
+Architecture: any
+Depends: ${shlibs:Depends}, gideon (= ${Source-Version})
+Description: An IDE for Unix/X11 - development files
+ KDevelop is an easy to use Integrated Development Environment
+ for developing C/C++ applications under X11. It features 
+ project management, an advanced editor, a class browser
+ and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains the plugins for KDevelop.

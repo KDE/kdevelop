@@ -23,6 +23,12 @@ endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
+ifneq (,$(findstring withjava,$(DEB_BUILD_OPTIONS)))
+	JAVA_FLAGS=--enable-javasupport
+endif
+ifneq (,$(JAVA_HOME))
+	JAVA_FLAGS+= --with-java=$(JAVA_HOME)
+endif
 
 ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
   export CFLAGS +=-O0 -mieee
@@ -63,7 +69,7 @@ configure-stamp:
 
 	# make build directory
 
-	./configure $(configkdevelop) --disable-final
+	./configure $(configkdevelop) $(JAVA_FLAGS) --disable-final
 
 	touch configure-stamp
 
@@ -99,13 +105,13 @@ clean:
 	# Remove build tree
 
 	# if Makefile exists run distclean
-	#if test -f Makefile; then \
-	#	$(MAKE) distclean; \
-	#fi
-
-	if test -d CVS; then \
-		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+	if test -f Makefile; then \
+		$(MAKE) distclean; \
 	fi
+
+#	if test -d CVS; then \
+#		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+#	fi
 
 	dh_clean
 
@@ -117,6 +123,9 @@ install: build
 	dh_installdirs
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+
+	-install -d $(CURDIR)/debian/tmp/usr/lib/gideon
+	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/lib/gideon
 
 	dh_install --list-missing
 
@@ -137,9 +146,9 @@ binary-common:
 #	dh_installpam
 	dh_installmime
 	dh_installinit
-#	dh_installcron
+	dh_installcron
 #	dh_installinfo
-	dh_undocumented
+#	dh_undocumented
 	dh_installman
 	dh_strip
 	dh_link

@@ -28,5 +28,5 @@ export MCOPIDL=/usr/bin/mcopidl
 export ARTSCCONFIG=/usr/bin/artsc-config
 export INSTALL_DATA=install -p -c -m 644
 configkde=--disable-debug --enable-final --disable-rpath --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --sysconfdir=$(sysconfdir) --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir)
-configkdevelop=--disable-debug --enable-final --disable-rpath --enable-docbase --enable-kdoc2 --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs
+configkdevelop=--disable-debug --enable-final --disable-rpath --enable-docbase --enable-kdoc2 --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --with-kdelibsdoxy-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs
 configkdepim=--disable-debug --enable-final --disable-rpath --with-extra-includes=/usr/include/libpisock --enable-shared --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir)

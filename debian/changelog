@@ -1,3 +1,16 @@
+gideon (1:2.999-0cvs20030429) unstable; urgency=low
+
+  * Created a new package gideon-plugins
+  * Fixed up the build dependencies
+  * Corrected path to htsearch
+  * Corrected configure options in admin/debianrules
+  * Now creates a global documentation index on installation
+  * Added a weekly cron job to update the global documentation index
+  * Modified to support a global documentation index if there is one
+  * Added support for building with java support (off by default)
+
+ -- Norman Jordan <njordan@debian.org>  Tue, 29 Apr 2003 17:42:39 -0700
+
 gideon (1:2.999+cvs20030301-0woody1) unstable; urgency=low
 
   * Woody rebuild on KDE_3_1_BRANCH
