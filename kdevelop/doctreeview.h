@@ -33,7 +33,7 @@ class CProject;
 
 /**
  * The documentation tree (manual, tutorial, KDE-libs...)
- * @author Sandy Meier
+ * @author Sandy Meier & Bernd Gehrmann (rewrite)
  */
 
 class DocTreeView : public KListView

@@ -1,3 +1,7 @@
+1999-07-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Create popup menus in DocTreeView only on demand
+	* Different pixmaps for open folders
+
 1999-07-13  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* commit patch (mostly bugfixes) by Walter Tasin 
 
