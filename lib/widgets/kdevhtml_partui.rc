@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="DocumentationPart" >
+<kpartgui version="3" name="KDevHTMLPart" >
 
 <MenuBar>
   <Menu name="file" noMerge="0"><text>&amp;File</text>
