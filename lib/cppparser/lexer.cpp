@@ -28,8 +28,13 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-using namespace std;
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QString::fromLatin1("") : m_source.mid((start), (len)) )
+#define ADD_TOKEN(tk) \
+{ \
+    m_tokens[ m_size++ ] = (tk); \
+}
 
+using namespace std;
 
 struct LexerData
 {
@@ -118,7 +123,8 @@ void Lexer::reset()
 {
     m_index = 0;
     m_size = 0;
-    m_tokens.resize( 15000 );
+    m_tokens.truncate( 500 );
+    m_tokens.fill( Token() );
     m_source = QString::null;
     m_ptr = 0;
     m_endPtr = 0;
@@ -160,7 +166,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	int start = currentPosition();
 	readLineComment();
 	if( recordComments() ){
-	    tk = Token( Token_comment, start, currentPosition() - start );
+	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
@@ -168,7 +174,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	int start = currentPosition();
 	readMultiLineComment();
 	if( recordComments() ){
-	    tk = Token( Token_comment, start, currentPosition() - start );
+	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
@@ -188,7 +194,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
         m_startLine = false;
         int d = m_preprocessorEnabled;
         disablePreprocessor();
-	while( !currentChar().isNull() && currentChar() != '\n' ){
+	while( currentChar() && currentChar() != '\n' ){
             Token tok;
             nextToken( tok, true );
         }
@@ -198,13 +204,13 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     } else if( ch == '\'' ){
 	int start = currentPosition();
 	readCharLiteral();
-	tk = Token( Token_char_literal, start, currentPosition() - start );
+	tk = CREATE_TOKEN( Token_char_literal, start, currentPosition() - start );
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else if( ch == '"' ){
 	int start = currentPosition();
 	readStringLiteral();
-	tk = Token( Token_string_literal, start, currentPosition() - start );
+	tk = CREATE_TOKEN( Token_string_literal, start, currentPosition() - start );
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else if( ch.isLetter() || ch == '_' ){
@@ -212,8 +218,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	readIdentifier();
 	QString ide = m_source.mid( start, currentPosition() - start );
 	int k = Lookup::find( &keyword, ide );
-	if( m_preprocessorEnabled && m_driver->macros().contains(ide) &&
-	    (k == -1 || !m_driver->macros()[ide].body().isEmpty()) ){
+	if( m_preprocessorEnabled && m_driver->hasMacro(ide) &&
+	    (k == -1 || !m_driver->macro(ide).body().isEmpty()) ){
 
 
             bool preproc = m_preprocessorEnabled;
@@ -224,7 +230,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    int svLine = currentLine();
 	    int svColumn = currentColumn();
 
-	    Macro m = m_driver->macros()[ ide ];
+	    Macro& m = m_driver->macro( ide );
 	    //m_driver->removeMacro( m.name() );
 
             QString ellipsisArg;
@@ -237,7 +243,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    nextChar();
 		    int argIdx = 0;
 		    int argCount = m.argumentList().size();
-		    while( !currentChar().isNull() && argIdx<argCount ){
+		    while( currentChar() && argIdx<argCount ){
 			readWhiteSpaces();
 
                         QString argName = m.argumentList()[ argIdx ];
@@ -267,7 +273,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                         nextChar();
                     }
 		} else {
-		    tk = Token( Token_identifier, start, endIde - start );
+		    tk = CREATE_TOKEN( Token_identifier, start, endIde - start );
 		    tk.setStartPosition( svLine, svColumn );
 		    tk.setEndPosition( svLine, svColumn + (endIde - start) );
 
@@ -289,7 +295,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
             QString textToInsert;
 
             m_endPtr = currentPosition() + m.body().length();
-            while( !currentChar().isNull() ){
+            while( currentChar() ){
 
                 readWhiteSpaces();
 
@@ -335,7 +341,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    m_currentColumn = argsEndAtColumn;
 	    m_endPtr = m_source.length();
 	} else if( k != -1 ){
-	    tk = Token( k, start, currentPosition() - start );
+	    tk = CREATE_TOKEN( k, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_skipWordsEnabled ){
@@ -360,40 +366,40 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		if( currentChar() == '(' )
 		    skip( '(', ')' );
 	    } else if( ide.startsWith("K_TYPELIST_") || ide.startsWith("TYPELIST_") ){
-		tk = Token( Token_identifier, start, currentPosition() - start );
+		tk = CREATE_TOKEN( Token_identifier, start, currentPosition() - start );
 		tk.setStartPosition( startLine, startColumn );
 		tk.setEndPosition( m_currentLine, m_currentColumn );
 		readWhiteSpaces();
 		if( currentChar() == '(' )
 		    skip( '(', ')' );
 	    } else{
-		tk = Token( Token_identifier, start, currentPosition() - start );
+		tk = CREATE_TOKEN( Token_identifier, start, currentPosition() - start );
 		tk.setStartPosition( startLine, startColumn );
 		tk.setEndPosition( m_currentLine, m_currentColumn );
 	    }
 	} else {
-	    tk = Token( Token_identifier, start, currentPosition() - start );
+	    tk = CREATE_TOKEN( Token_identifier, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
     } else if( ch.isNumber() ){
 	int start = currentPosition();
 	readNumberLiteral();
-	tk = Token( Token_number_literal, start, currentPosition() - start );
+	tk = CREATE_TOKEN( Token_number_literal, start, currentPosition() - start );
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else if( -1 != (op = findOperator3()) ){
-	tk = Token( op, currentPosition(), 3 );
+	tk = CREATE_TOKEN( op, currentPosition(), 3 );
 	nextChar( 3 );
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else if( -1 != (op = findOperator2()) ){
-	tk = Token( op, currentPosition(), 2 );
+	tk = CREATE_TOKEN( op, currentPosition(), 2 );
 	nextChar( 2 );
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else {
-	tk = Token( ch, currentPosition(), 1 );
+	tk = CREATE_TOKEN( ch, currentPosition(), 1 );
 	nextChar();
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
@@ -413,16 +419,16 @@ void Lexer::tokenize()
 	nextToken( tk );
 
         if( tk.type() != -1 )
-	    addToken( tk );
+	    ADD_TOKEN( tk );
 
 	if( currentChar().isNull() )
 	    break;
     }
 
-    Token tk = Token( Token_eof, currentPosition(), 0 );
+    Token tk = CREATE_TOKEN( Token_eof, currentPosition(), 0 );
     tk.setStartPosition( m_currentLine, m_currentColumn );
     tk.setEndPosition( m_currentLine, m_currentColumn );
-    addToken( tk );
+    ADD_TOKEN( tk );
 }
 
 void Lexer::resetSkipWords()
@@ -461,16 +467,12 @@ void Lexer::skip( int l, int r )
 
 QString Lexer::readArgument()
 {
-    QMemArray<Token> tokens = m_tokens;
-    int size = m_size;
-
-    m_tokens = QMemArray<Token>( 100 );
-    m_size = 0;
-
     int count = 0;
 
+    QString arg;
+
     readWhiteSpaces();
-    while( !currentChar().isNull() ){
+    while( currentChar() ){
 
 	readWhiteSpaces();
 	QChar ch = currentChar();
@@ -488,16 +490,8 @@ QString Lexer::readArgument()
 	}
 
 	if( tk != -1 )
-	  addToken( tk );
+            arg += tk.toString() + " ";
     }
-
-    QString arg;
-    for( int i=0; i<m_size; ++i ){
-      arg += toString( m_tokens[ i ] ) + " ";
-    }
-
-    m_tokens = tokens;
-    m_size = size;
 
     return arg.stripWhiteSpace();
 }
@@ -540,7 +534,7 @@ void Lexer::handleDirective( const QString& directive )
     }
 
     // skip line
-    while( !currentChar().isNull() && currentChar() != '\n' ){
+    while( currentChar() && currentChar() != '\n' ){
         Token tk;
         nextToken( tk, true );
     }
@@ -564,7 +558,7 @@ int Lexer::macroDefined()
     int startWord = currentPosition();
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
-    bool r = m_driver->macros().contains( word );
+    bool r = m_driver->hasMacro( word );
 
     return r;
 }
@@ -586,7 +580,7 @@ void Lexer::processDefine( Macro& m )
 
         readWhiteSpaces( false );
 
-	while( !currentChar().isNull() && currentChar() != ')' ){
+	while( currentChar() && currentChar() != ')' ){
 	    readWhiteSpaces( false );
 
 	    int startArg = currentPosition();
@@ -614,7 +608,7 @@ void Lexer::processDefine( Macro& m )
     enablePreprocessor();
 
     QString body;
-    while( !currentChar().isNull() && currentChar() != '\n' ){
+    while( currentChar() && currentChar() != '\n' ){
 
         if( currentChar().isSpace() ){
 	    readWhiteSpaces( false );
@@ -716,16 +710,16 @@ void Lexer::processInclude()
 	return;
 
     readWhiteSpaces( false );
-    if( !currentChar().isNull() ){
+    if( currentChar() ){
 	QChar ch = currentChar();
 	if( ch == '"' || ch == '<' ){
 	    nextChar();
 	    QChar ch2 = ch == QChar('"') ? QChar('"') : QChar('>');
 
 	    int startWord = currentPosition();
-	    while( !currentChar().isNull() && currentChar() != ch2 )
+	    while( currentChar() && currentChar() != ch2 )
 		nextChar();
-	    if( !currentChar().isNull() ){
+	    if( currentChar() ){
 		QString word = m_source.mid( startWord, int(currentPosition()-startWord) );
 		m_driver->addDependence( m_driver->currentFileName(),
 					 Dependence(word, ch == '"' ? Dep_Local : Dep_Global) );
@@ -783,7 +777,7 @@ int Lexer::macroPrimary()
 		    return macroPrimary();
 		}
 		// TODO: implement
-		return m_driver->macros().contains( toString(tk) );
+		return m_driver->hasMacro( toString(tk) );
 	    case Token_number_literal:
 		return toString(tk).toInt();
 	    case Token_char_literal:
@@ -934,6 +928,19 @@ int Lexer::macroExpression()
 {
     readWhiteSpaces( false );
     return macroLogicalOr();
+}
+
+void Token::setText( const char * text )
+{
+    if( m_text )
+        delete [] (char*) m_text;
+    m_text = text ? qstrdup( text ) : 0;
+}
+
+Token::~ Token( )
+{
+    if( m_text )
+        delete [] m_text;
 }
 
 // *IMPORTANT*

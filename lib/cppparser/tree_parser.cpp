@@ -46,7 +46,7 @@ void TreeParser::parseDeclaration( DeclarationAST* declaration )
 
     if( !declaration )
         return;
-	
+
     switch( declaration->nodeType() )
     {
     case NodeType_LinkageSpecification:
@@ -109,13 +109,13 @@ void TreeParser::parseNamespace( NamespaceAST* decl )
 
 void TreeParser::parseNamespaceAlias( NamespaceAliasAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseNamespaceAlias()" << endl;    
+    //kdDebug(9007) << "TreeParser::parseNamespaceAlias()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseUsing( UsingAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseUsing()" << endl;    
+    //kdDebug(9007) << "TreeParser::parseUsing()" << endl;
     Q_UNUSED( decl );
 }
 
@@ -127,7 +127,7 @@ void TreeParser::parseUsingDirective( UsingDirectiveAST* decl )
 
 void TreeParser::parseTypedef( TypedefAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseTypedef()" << endl;    
+    //kdDebug(9007) << "TreeParser::parseTypedef()" << endl;
     if( decl->typeSpec() )
 	parseTypeSpecifier( decl->typeSpec() );
 }
@@ -141,6 +141,7 @@ void TreeParser::parseTemplateDeclaration( TemplateDeclarationAST* decl )
 void TreeParser::parseSimpleDeclaration( SimpleDeclarationAST* decl )
 {
     //kdDebug(9007) << "TreeParser::parseSimpleDeclaration()" << endl;
+    Q_UNUSED( decl );
 }
 
 void TreeParser::parseFunctionDefinition( FunctionDefinitionAST* def )

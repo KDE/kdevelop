@@ -174,6 +174,10 @@ public:
     QMap<QString, Macro> macros() const;
     QValueList<Problem> problems( const QString& fileName ) const;
 
+    bool hasMacro( const QString& name ) const { return m_macros.contains( name ); }
+    const Macro& macro( const QString& name ) const { return m_macros[ name ]; }
+    Macro& macro( const QString& name ) { return m_macros[ name ]; }
+
     virtual void removeMacro( const QString& macroName );
     virtual void removeAllMacrosInFile( const QString& fileName );
 
