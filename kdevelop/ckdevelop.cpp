@@ -1541,10 +1541,8 @@ void CKDevelop::slotClassbrowserViewDeclaration()
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
-  if( methodname.isEmpty() )
-    CVGotoDefinition( classname, "", THCLASS );
-  else
-    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
+  CVGotoDeclaration( classname, methodname, 
+                     ( methodname.isEmpty() ? THCLASS : THPUBLIC_METHOD ) );
 }
 
 void CKDevelop::slotClassbrowserViewDefinition()
@@ -1555,9 +1553,9 @@ void CKDevelop::slotClassbrowserViewDefinition()
   QString methodname = methodCombo->currentText();
 
   if( methodname.isEmpty() )
-    CVGotoDefinition( classname, "", THCLASS );
+    CVGotoDeclaration( classname, "", THCLASS );
   else
-    CVGotoDeclaration( classname, methodname, THPUBLIC_METHOD );
+    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
 }
 
 void CKDevelop::slotClassbrowserNewMethod()
