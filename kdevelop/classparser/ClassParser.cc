@@ -1301,10 +1301,7 @@ int CClassParser::checkClassDecl()
         PUSH_LEXEM();
         break;
       case CLCL:
-// If isImpl is set to true, many attributes with leading namespace prefix aint shown anymore
-// I commented this line below out, checked it also with nested classes and it works fine with
-// hundreds of files I've got. Well, I haven't found an example that proves the opposite. (Falk)
-        // isImpl = true;
+        isImpl = true;
         PUSH_LEXEM();
         break;
       default:
