@@ -33,7 +33,7 @@ typedef KGenericFactory<DoxygenPart> DoxygenFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( "kdevdoxygen" ) );
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "DoxygenPart")
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");

@@ -25,7 +25,7 @@
 
 
 AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevAppFrontend(parent, name)
+    : KDevAppFrontend(parent, name ? name : "AppOutputViewPart")
 {
     setInstance(OutputViewsFactory::instance());
 

@@ -28,7 +28,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( parent, name )
+    : KDevPlugin( parent, name ? name : "GrepViewPart" )
 {
     setInstance(GrepViewFactory::instance());
     

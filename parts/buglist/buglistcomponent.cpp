@@ -30,7 +30,7 @@
 
 
 BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &)
-:KDevPlugin (parent, name)
+:KDevPlugin (parent, name ? name : "BugListComponent")
 {
 //    setInstance(BugListFactory::instance());
 //    setXMLFile("kdevbuglist.rc");

@@ -28,7 +28,7 @@ typedef KGenericFactory<HistoryPart> HistoryPartFactory;
 K_EXPORT_COMPONENT_FACTORY(libkdevhistory, HistoryPartFactory("kdevhistory"));
 
 HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name), m_restoring(false)
+  : KDevPlugin(parent, name ? name : "HistoryPart"), m_restoring(false)
 {
   setInstance(HistoryPartFactory::instance());
 

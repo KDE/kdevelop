@@ -31,7 +31,7 @@ typedef KGenericFactory<FileViewPart> FileViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) );
 
 FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "FileViewPart")
 {
     setInstance(FileViewFactory::instance());
     //    setXMLFile("kdevfileview.rc");

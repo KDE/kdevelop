@@ -28,7 +28,7 @@ typedef KGenericFactory<DiffPart> DiffFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) );
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevDiffFrontend(parent, name)
+    : KDevDiffFrontend(parent, name ? name : "DiffPart")
 {
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");

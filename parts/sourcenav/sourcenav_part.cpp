@@ -42,7 +42,7 @@ typedef KGenericFactory<SourceNavPart> SourceNavFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsourcenav, SourceNavFactory( "kdevsourcenav" ) );
 
 SourceNavPart::SourceNavPart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin(parent, name)
+  : KDevPlugin(parent, name ? name : "SourceNavPart")
 {
   setInstance(SourceNavFactory::instance());
   setXMLFile("kdevpart_sourcenav.rc");

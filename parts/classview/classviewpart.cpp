@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
 
 ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "ClassViewPart")
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");

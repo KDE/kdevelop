@@ -82,7 +82,7 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport(parent, name)
+    : KDevLanguageSupport(parent, name ? name : "CppSupportPart")
 {
     setInstance(CppSupportFactory::instance());
 

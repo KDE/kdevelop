@@ -15,7 +15,7 @@
 K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KGenericFactory<OpenWithPart>("kdevopenwith"));
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name)
+  : KDevPlugin(parent, name ? name : "OpenWithPart")
 {
   connect(core(), SIGNAL(contextMenu(QPopupMenu*,const Context *)),
 	  this, SLOT(fillContextMenu(QPopupMenu*,const Context *)));

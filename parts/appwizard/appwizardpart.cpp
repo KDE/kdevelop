@@ -28,7 +28,7 @@
 #include <kdevpartcontroller.h>
 
 AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "AppWizardPart")
 {
     setInstance(AppWizardFactory::instance());
     setXMLFile("kdevappwizard.rc");

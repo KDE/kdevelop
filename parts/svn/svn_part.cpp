@@ -56,7 +56,7 @@ typedef KGenericFactory<SvnPart> svnFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsvn, svnFactory( "kdevsvn" ) );
 
 	SvnPart::SvnPart(QObject *parent, const char *name, const QStringList& )
-: KDevPlugin(parent, name)
+: KDevPlugin(parent, name ? name : "SvnPart")
 {
 	me = this;
 	setInstance(svnFactory::instance());

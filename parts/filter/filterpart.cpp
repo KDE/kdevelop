@@ -28,7 +28,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( "kdevfilter" ) );
 
 FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "FilterPart")
 {
     setInstance(FilterFactory::instance());
     setXMLFile("kdevfilter.rc");

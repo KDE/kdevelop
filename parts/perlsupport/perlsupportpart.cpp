@@ -38,7 +38,7 @@ typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( "kdevperlsupport" ) );
 
 PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(parent, name)
+    : KDevLanguageSupport(parent, name ? name : "PerlSupportPart")
 {
     setInstance(PerlSupportFactory::instance());
 

@@ -16,7 +16,7 @@ typedef KGenericFactory<EditorChooserPart> EditorChooserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( "kdeveditorchooser" ) );
 
 EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name)
+  : KDevPlugin(parent, name ? name : "EditorChooserPart")
 {
   setInstance(EditorChooserFactory::instance());
 

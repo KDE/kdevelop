@@ -41,7 +41,7 @@ AntOptions::AntOptions()
 
 
 AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringList &)
-  : KDevProject(parent, name)
+  : KDevProject(parent, name ? name : "AntProjectPart")
 {
   setInstance(AntProjectFactory::instance());
 

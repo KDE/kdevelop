@@ -33,7 +33,7 @@ typedef KGenericFactory<ScriptingPart> ScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( "kdevscripting" ) );
 
 ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "ScriptingPart")
 {
     setInstance(ScriptingFactory::instance());
     

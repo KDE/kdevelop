@@ -57,7 +57,7 @@ typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( parent, name ),
+    : KDevPlugin( parent, name ? name : "DebuggerPart" ),
       controller(0)
 {
     setInstance(DebuggerFactory::instance());

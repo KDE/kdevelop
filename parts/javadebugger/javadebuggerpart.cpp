@@ -42,7 +42,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name),
+    : KDevPlugin(parent, name ? name : "JavaDebuggerPart"),
       controller(0)
 {
     setInstance(JavaDebuggerFactory::instance());

@@ -49,7 +49,7 @@ public:
 K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory );
 
 AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "AbbrevPart")
 {
     setInstance(AbbrevFactory::instance());
     setXMLFile("kdevabbrev.rc");

@@ -33,7 +33,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "ToolsPart")
 {
   setInstance(ToolsFactory::instance());
 

@@ -17,7 +17,7 @@ typedef KGenericFactory<DistpartPart> DistpartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
-        : KDevPlugin(parent, name) {
+        : KDevPlugin(parent, name ? name : "DistpartPart") {
 
     kdDebug(9007) << "DistpartPart::DistpartPart()" << endl;
     setInstance(DistpartFactory::instance());

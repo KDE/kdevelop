@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevProject(parent, name)
+    : KDevProject(parent, name ? name : "AutoProjectPart")
 {
     setInstance(AutoProjectFactory::instance());
 

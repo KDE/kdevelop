@@ -39,7 +39,7 @@
 
 
 DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "DocTreeViewPart")
 {
     setInstance(DocTreeViewFactory::instance());
 
