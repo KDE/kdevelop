@@ -626,6 +626,13 @@ void CppSupportPart::addMethod(const QString &className)
     ParsedMethod *pm = dlg.asSystemObj();
     pm->setDeclaredInScope(className);
 
+#if 1
+    // stupid fix - try to guess the implementation file
+    QString defFile = pc->definedInFile();
+    if ( defFile == pc->declaredInFile() )
+      defFile = QString::null;
+#endif
+
     int atLine = -1;
 
     if (pm->isSignal()) {
@@ -648,6 +655,12 @@ void CppSupportPart::addMethod(const QString &className)
             if (meth->access() == pm->access() &&
                 atLine < (int)meth->declarationEndsOnLine())
                 atLine = (int)meth->declarationEndsOnLine();
+#if 1
+            // stupid fix part two - guess impl file
+            if ( defFile.isNull() && meth->definedInFile() != pc->declaredInFile() )
+                defFile = meth->definedInFile();
+#endif
+
         }
     }
 
@@ -671,7 +684,7 @@ void CppSupportPart::addMethod(const QString &className)
         atLine++;
 
     partController()->editDocument(pc->declaredInFile(), atLine);
-    kdDebug(9007) << "Adding to .h: " << atLine << " " << headerCode << endl;
+    kdDebug(9007) << "Adding to : '" << pc->declaredInFile() << "' " << atLine << ": " << headerCode << endl;
 
     KTextEditor::EditInterface *editiface;
 
@@ -683,8 +696,13 @@ void CppSupportPart::addMethod(const QString &className)
 
     QString cppCode = asCppCode(pm);
 
-    partController()->editDocument(pc->definedInFile(), atLine);
-    kdDebug(9007) << "Adding to .cpp: " << atLine << " " << cppCode << endl;
+#if 1
+    // stupid fix part three...
+    if ( defFile.isNull() )
+        defFile = pc->definedInFile();
+#endif
+    partController()->editDocument(defFile, atLine);
+    kdDebug(9007) << "Adding to : '" << defFile << "' " << atLine << ": " << cppCode << endl;
 
     editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
