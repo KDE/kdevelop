@@ -1,62 +1,160 @@
-// Here resides the C/C++ code completion parser
-
-/***************************************************************************
-                          cppcodecompletionparser.h  -  description
-                             -------------------
-	begin		: Fri Aug 3 21:10:00 CEST 2001
-	copyright	: (C) 2001 by Victor Röder, Daniel Haberkorn
-	email		: Victor_Roeder@GMX.de, DHaberkorn@GMX.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-
-#ifndef __CPPCODECOMPLETIONPARSER_H__
-#define __CPPCODECOMPLETIONPARSER_H__
-
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <qlist.h>
+#include <qstack.h>
+#include <FlexLexer.h>
+#include <fstream.h>
+#include "tokenizer.h"
 
-#include "keditor/edit_iface.h"
-#include "keditor/codecompletion_iface.h"
-#include "classstore.h"
-#include "parsedclass.h"
-#include "parsedmethod.h"
+#include "ParsedVariable.h"
 
-class CppCodeCompletionParser
-{
-	public:
-		CppCodeCompletionParser ( KEditor::EditDocumentIface* pEditIface, ClassStore* pStore );
-		virtual ~CppCodeCompletionParser();
+/***
+ * CppCCParser : class that parses a .cpp file and stores
+ *             all found variables in a QList
+ */
+class CppCCParser {
+public:
+    // public methods
+    /**
+    * empty constructor
+    */
+    CppCCParser( );
 
-	public:
-		QString getCompletionText ( int nCol );
-		int getNodePos ( int nCol );
-		QString getNodeText ( int nNode );
-		QString getNodeDelimiter ( int nNode );
-		QString getTypeOfObject ( const QString& strObject, int nLine );
-		QString getCurrentClassname ( int nLine );
-		QString getReturnTypeOfMethod ( int nLine, int nCol );
-		bool isMethod ( const QString& strNodeText );
-		bool isObject ( const QString& strNodeText );
-		bool isClass ( const QString& strNodeText );
-		bool isStruct ( const QString& strNodeText );
-		bool isNamespace ( const QString& strNodeText );
+    /**
+    * empty copy constructor
+    */
+    CppCCParser( CppCCParser& cp ){ cerr << "EE: CppCCParser copy constructor called!" << endl;};
 
-		void setLineToBeParsed ( const QString& strLine ) { m_strCurLine = strLine; };
+    /**
+    * empty destructor
+    */
+    ~CppCCParser( );
 
-	private:
-		KEditor::EditDocumentIface* m_pEditIface;
-		ClassStore* m_pStore;
-		QString m_strCurLine;
+    /**
+    * parse: the file we'll have to parse
+    * @param file file to parse
+    */
+    bool parse( const char* file = NULL, int _iCCLine = 999999 );
+
+public:
+    // public variables
+    /** the place where we store what we found */
+    QList<CParsedVariable> varList;
+
+private:
+    // private class
+    /**
+    * this is our read lexem object
+    */
+    class CParsedLexem {
+    public:
+        /**
+        * constructor
+        * @param aType : type of lexem
+        * @param aText : text of lexem
+        */
+        CParsedLexem( int aType, const char* aText ){ type = aType; text = aText; };
+
+	/**
+        * standard destructor
+        */
+        ~CParsedLexem( ){ };
+
+	/**
+        * copy constructor
+        * @param cp : CParsedLexem
+        */
+        CParsedLexem( CParsedLexem& cp ){ text = cp.text; type = cp.type; };
+    public:
+        QString text;
+        int type;
+    };
+
+private:
+    // private attributes
+    /** pointer to lexer object */
+    yyFlexLexer* lexer;
+
+    /** the lexem (id ) */
+    int lexem;
+
+    /** the current file to parse */
+    QString currentFile;
+
+    /** a stack for lexem data */
+    QStack<CParsedLexem> lexemStack;
+
+    /** LineNo until we parse */
+    int iCCLine;
+
+private:
+    // private methods
+    /**
+    * wrapper method called from public parse
+    */
+    void parseFile( ifstream& file );
+
+    /**
+    * top level parsing
+    */
+    void parseTopLevel( );
+
+    /**
+    * function head parsing
+    */
+    void parseFunctionHead( );
+
+    /**
+    * function body parsing
+    */
+    void parseFuntionBody( );
+
+    /**
+    * function body parsing
+    */
+    void parseFunctionBody( );
+
+    /**
+    * print out what we found
+    */
+    void debugPrint( );
+
+    /**
+    * skip a whole block
+    */
+    void skipBlock( );
+
+    /**
+    * skip a whole command
+    */
+    void skipCommand( );
+
+    /**
+    * skip until a semicolon
+    */
+    void skipToSemicolon( );
+
+    /**
+    * skip to this lexem
+    */
+    void skipToLexem( const char c );
+
+
+    /** standard lexem functions */
+    /**
+    * get next lexem
+    */
+    void getNextLexem( ){ lexem = lexer->yylex( ); };
+
+    /**
+    * get text of lexem
+    * @return returns a const char*
+    */
+    const char* getText( ){ return lexer->YYText( ); };
+
+    /**
+    * get linenumber of lexem
+    * @return returns an int
+    */
+    int getLineNo( ){ return lexer->lineno( ) - 1; };
 
 };
-
-#endif

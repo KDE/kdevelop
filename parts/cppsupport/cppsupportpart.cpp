@@ -56,8 +56,6 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
     connect( core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
              this, SLOT(documentActivated(KEditor::Document*)) );
 
-    m_pCompletion = new CppCodeCompletion ( core(), classStore() );
-    
     KAction *action;
 
     action = new KAction(i18n("Switch header/implementation"), Key_F12,
@@ -78,8 +76,8 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 
 CppSupportPart::~CppSupportPart()
 {
-    delete m_parser;
-    delete m_pCompletion;
+    if ( !m_parser ) delete m_parser;
+    if ( !m_pCompletion ) delete m_pCompletion;
 }
 
 
@@ -111,6 +109,8 @@ void CppSupportPart::projectOpened()
     // We want to parse only after all components have been
     // properly initialized
     m_parser = new CClassParser(classStore());
+    m_pCompletion = new CppCodeCompletion ( core(), classStore() );
+
     QTimer::singleShot(0, this, SLOT(initialParse()));
 }
 
@@ -118,7 +118,9 @@ void CppSupportPart::projectOpened()
 void CppSupportPart::projectClosed()
 {
     delete m_parser;
-    m_parser = 0;
+    delete m_pCompletion;
+    m_parser = NULL;
+    m_pCompletion = NULL;
 }
 
 
