@@ -15,7 +15,7 @@
 #define _DEBUGGERPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class KDialogBase;
 class VariableWidget;
@@ -27,12 +27,12 @@ class DbgController;
 class DbgToolBar;
 
 
-class DebuggerPart : public KDevPart
+class DebuggerPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    DebuggerPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    DebuggerPart( QObject *parent, const char *name, const QStringList & );
     ~DebuggerPart();
 
 private slots:

@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -37,13 +38,14 @@
 #include "dbgpsdlg.h"
 #include "dbgtoolbar.h"
 #include "memviewdlg.h"
-#include "debuggerfactory.h"
 #include "debuggerconfigwidget.h"
 #include "debuggerpart.h"
 
+typedef KGenericFactory<DebuggerPart> DebuggerFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
 
-DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name),
+DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin( parent, name ),
       controller(0)
 {
     setInstance(DebuggerFactory::instance());
