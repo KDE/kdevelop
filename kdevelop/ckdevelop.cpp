@@ -33,6 +33,7 @@
 #include <kkeydialog.h>
 #include <kmsgbox.h>
 #include <ktabctl.h>
+#include <stdlib.h>
 
 #include "./kdlgedit/kdlgedit.h"
 #include "ctoolsconfigdlg.h"
@@ -58,6 +59,7 @@
 #include "../config.h"
 #include "structdef.h"
 #include "vc/versioncontrol.h"
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -844,8 +846,15 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  QString shell = getenv("SHELL");
+  QString flaglabel;
+  if(shell == "/bin/bash"){
+      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  }
+  else{
+      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+  }
+  
 
   error_parser->reset();
   error_parser->toogleOn();
@@ -862,13 +871,13 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
        if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS() << " ";
+          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
        if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS();
+          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
   }
   shell_process  << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS();
+         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
   shell_process  << "\" "<< "./configure && " << make_cmd;
 
   beep = true;
@@ -917,6 +926,7 @@ void CKDevelop::slotBuildAutoconf(){
 
 
 void CKDevelop::slotBuildConfigure(){
+    QString shell = getenv("SHELL");
 
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
@@ -929,7 +939,13 @@ void CKDevelop::slotBuildConfigure(){
     }
 
   slotStatusMsg(i18n("Running ./configure..."));
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  QString flaglabel;
+  if(shell == "/bin/bash"){
+      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  }
+  else{
+      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+  }
 
   showOutputView(true);
   setToolMenuProcess(false);
@@ -943,13 +959,13 @@ void CKDevelop::slotBuildConfigure(){
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS() << " ";
+          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS();
+          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
   }
   shell_process  << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS();
+         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
   shell_process  << "\" "<< "./configure " << argdlg.getArguments();
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
@@ -989,14 +1005,7 @@ void CKDevelop::slotBuildStop(){
 // }
 
 void CKDevelop::slotToolsTool(int tool){
-/*    switch(tool){
-    case ID_TOOLS_KDLGEDIT:
-	return;
-	break;
-    case ID_KDLG_TOOLS_KDEVELOP:
-	return;
-	break;
-    }*/
+
     if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
 	return;
     }
@@ -1007,18 +1016,20 @@ void CKDevelop::slotToolsTool(int tool){
 
     QString argument=tools_argument.at(tool);
  		
-		// This allows us to replace the macro %H with the header file name, %S with the source file name
-		// and %D with the project directory name.  Any others we should have?
+    // This allows us to replace the macro %H with the header file name, %S with the source file name
+    // and %D with the project directory name.  Any others we should have?
     argument.replace( QRegExp("%H"), header_widget->getName() );
-		argument.replace( QRegExp("%S"), cpp_widget->getName() );
-    argument.replace( QRegExp("%D"), prj->getProjectDir() );
-		s_tab_view->setCurrentTab(TOOLS);
+    argument.replace( QRegExp("%S"), cpp_widget->getName() );
+    if(project){
+      argument.replace( QRegExp("%D"), prj->getProjectDir() );
+    }
+    s_tab_view->setCurrentTab(TOOLS);
     swallow_widget->sWClose(false);
     if(argument.isEmpty()){
-  	swallow_widget->setExeString(tools_exe.at(tool));
+      swallow_widget->setExeString(tools_exe.at(tool));
     }
     else{
-  	swallow_widget->setExeString(tools_exe.at(tool)+argument);
+      swallow_widget->setExeString(tools_exe.at(tool)+argument);
     }
     swallow_widget->sWExecute();
     swallow_widget->init();

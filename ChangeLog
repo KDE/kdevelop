@@ -1,3 +1,10 @@
+1999-08-30   Sandy Meier <smeier@rz.uni-potsdam.de>
+	* hopefully fixed all problems with CXXFLAGS (#Bug1777,#Bug1770)
+	* fixed missing bracket in example (#Bug1793)
+	* fixed small problem with sourcecode generation ( QToolTip)
+	* KAppWizard doesn't delete files anymore if there is already a directory with the projectname
+	* fixed KDevelop crash when choosing a tool from the Tool-menu and _not_ having a project open (#Bug1840,#Bug1843)
+
 1999-08-27 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commited many small patches from various people
  

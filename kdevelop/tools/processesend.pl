@@ -3,15 +3,16 @@ require ("flush.pl");
 use File::Copy;
 
 $homedirectory = $ENV{HOME};
+$shell = $ENV{SHELL};
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
 open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "kann Datei nicht öffnen: $!";
 while ( defined ($name = <PROCESSLIST> )) {
-    chomp ($name);
-    $process = <PROCESSLIST>;
-    chomp ($process);
-    $processes{$name} = $process;
+  chomp ($name);
+  $process = <PROCESSLIST>;
+  chomp ($process);
+  $processes{$name} = $process;
 }
 close (PROCESSLIST);
 
@@ -34,7 +35,12 @@ else {
   #start configure
   printflush (STDOUT,"make configure...\n");
   chdir ($overDirectory);
-  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
+  if( $shell eq "/bin/bash"){
+    system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
+  }
+  else{
+    system("env LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" /.configure");
+  }
 }
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
@@ -43,10 +49,10 @@ if ($processes{USER} eq "yes") {
   printflush (STDOUT,"configure files...\n");
   chdir ($underDirectory . "/docs/en");
   if (-e "index.nif") {
-  	system ("ksgml2html index.sgml en");
+    system ("ksgml2html index.sgml en");
   }
   else {
-  	system ("sgml2html index.sgml");
+    system ("sgml2html index.sgml");
   }
 }
 

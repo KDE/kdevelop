@@ -1251,13 +1251,22 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 		",i18n(\"" +props->getPropValue("Quickhelp")+ "\"));\n";
 	}
     
-    if(props->getPropValue("ToolTip") != "")
+    if(props->getPropValue("ToolTip") != ""){
+      if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+	if(local_includes.contains("#include <qtooltip.h>") == 0)
+	  local_includes.append("#include <qtooltip.h>");
+	*stream << "  QToolTip::add("+ props->getPropValue("VarName") +
+	  ",i18n(\"" +props->getPropValue("ToolTip")+ "\"));\n";
+      }
+      else
 	{
-	    if(local_includes.contains("#include <qtooltip.h>") == 0)
-		local_includes.append("#include <qtooltip.h>");
-	    *stream << "  QToolTip::add("+ props->getPropValue("VarName") +
-		",\"" +props->getPropValue("ToolTip")+ "\");\n";
+	  if(local_includes.contains("#include <qtooltip.h>") == 0)
+	    local_includes.append("#include <qtooltip.h>");
+	  *stream << "  QToolTip::add("+ props->getPropValue("VarName") +
+	    ",\"" +props->getPropValue("ToolTip")+ "\");\n";
 	}
+    }
+
 
 	if(props->getPropValue("IsHidden") != "") {
 		if(props->getPropValue("IsHidden") == "true") {

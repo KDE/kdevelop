@@ -1020,21 +1020,9 @@ void CKAppWizard::slotOkClicked() {
 
   dir.setPath(directoryline->text());
   if (dir.exists()) {
-    if(KMsgBox::yesNo(0,(directoryline->text() + (QString) i18n(" already exists!")),
-    	i18n("The selected project directory already exists. If you\n "
-    	"click 'OK', all files and subdirectories of the currently chosen\n "
-			"project directory will be deleted before a new project is going\n "
-			"to be generated."),KMsgBox::EXCLAMATION,i18n("OK"),i18n("Cancel"))==2) {
-		
-		   return;
-    }
-    else {
-      p.clearArguments();
-      QString copydes = (QString) "rm -r -f " + directoryline->text() + QString ("/");
-      p << copydes;
-      p.start(KProcess::Block,KProcess::AllOutput);
-      okPermited();
-    }
+    QMessageBox::information ( this, directoryline->text() + (QString) i18n(" already exists!"), i18n("It isn't possible to generate a new project into an existing directory."), QMessageBox::Ok);
+      return;
+    
   }
   else {
     okPermited();

@@ -158,7 +158,7 @@ as distribution packages and thereby can be installed easily.
 <item>sgmltools 1.0, available at <url url="http://www.sgmltools.org">
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it), which includes <idx/KDoc/, <idx/KSgml2Html/, <idx/KTranslator/
 (available at <url url="http://developer.kde.org">)
-<item><idx/KDbg/, available at <url url="http://members.telecom.at/~johsixt/KDbg.html">
+<item><idx/KDbg/, available at <url url="http://members.telecom.at/~johsixt/kdbg.html">
 <item><idx/KIconEdit/ (available at <url url="http://www.kde.org">)
 </itemize>
 

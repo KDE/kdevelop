@@ -351,7 +351,7 @@ hello.resize( 100, 30 );
 
 a.setMainWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();
