@@ -1,16 +1,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCppSupport" version="1">
+<kpartgui name="KDevCppSupport" version="2">
 <MenuBar>
  <Menu name="edit">
-  <Action name="edit_switchheader"/>
-  <Separator />
   <Action name="edit_complete_text"/>
-  <Action name="edit_type_of_expression"/>
  </Menu>
+
+ <Menu name="view">
+  <Action name="edit_switchheader"/>
+ </Menu>
+
  <Menu name="project">
   <Action name="project_newclass"/>
  </Menu>
 </MenuBar>
+
 <ToolBar name="browserToolBar" position="Top" iconText="IconOnly" >
   <text>Browser Toolbar</text>
   <Action name="project_newclass"/>
