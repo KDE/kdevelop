@@ -3,7 +3,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
 lib_LTLIBRARIES = libkdevclassview.la
-libkdevclassview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevclassview_la_SOURCES = classviewfactory.cpp \

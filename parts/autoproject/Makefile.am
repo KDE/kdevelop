@@ -2,8 +2,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
-lib_LTLIBRARIES = libkdevautoproject.la
-libkdevautoproject_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+kde_module_LTLIBRARIES = libkdevautoproject.la
+libkdevautoproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevautoproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \

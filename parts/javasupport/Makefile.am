@@ -2,8 +2,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
-lib_LTLIBRARIES = libkdevjavasupport.la
-libkdevjavasupport_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+kde_module_LTLIBRARIES = libkdevjavasupport.la
+libkdevjavasupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevjavasupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevjavasupport_la_SOURCES = javasupportfactory.cpp \

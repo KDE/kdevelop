@@ -9,7 +9,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   $(all_includes) \
 	   $(PYTHONINC)
 
-lib_LTLIBRARIES = libkdevpython.la
+kde_module_LTLIBRARIES = libkdevpython.la
 libkdevpython_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevpython_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(PYTHONLIB) $(LIBPYTHON)
 

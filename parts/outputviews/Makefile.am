@@ -3,7 +3,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 lib_LTLIBRARIES = libkdevoutputviews.la
-libkdevoutputviews_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+libkdevoutputviews_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevoutputviews_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevoutputviews_la_SOURCES = outputviewsfactory.cpp \

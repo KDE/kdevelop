@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/kwrite $(all_includes)
 
-lib_LTLIBRARIES = libkdevastyle.la
-libkdevastyle_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+kde_module_LTLIBRARIES = libkdevastyle.la
+libkdevastyle_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevastyle_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevastyle_la_SOURCES = astyle_factory.cpp astyle_part.cpp ASBeautifier.cpp ASFormatter.cpp ASResource.cpp astyleconfig.ui astyle_widget.cpp astyle_adaptor.cpp

@@ -7,8 +7,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
-lib_LTLIBRARIES = libkdevscriptproject.la
-libkdevscriptproject_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+kde_module_LTLIBRARIES = libkdevscriptproject.la
+libkdevscriptproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevscriptproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevscriptproject_la_SOURCES = scriptprojectfactory.cpp \
