@@ -605,7 +605,7 @@ int Lexer::macroMultiplyDivide()
         iresult = macroPrimary();
         result = op == 0 ? (result * iresult) :
                  op == 1 ? (iresult == 0 ? 0 : (result / iresult)) :
-                           (result % iresult);
+                           (iresult == 0 ? 0 : (result % iresult)) ;
     }
     return result;
 }
