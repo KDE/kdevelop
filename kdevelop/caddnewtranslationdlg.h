@@ -28,20 +28,24 @@
 #include "cproject.h"
 
 /**
-  *@author Sandy Meier
-  */
+ *@author Sandy Meier
+ */
 
 class CAddNewTranslationDlg : public QDialog  {
   Q_OBJECT
 public: 
   CAddNewTranslationDlg(QWidget *parent=0, const char *name=0,CProject* p_prj=0);
   ~CAddNewTranslationDlg();
+  QString getLangFile();
 protected:
   QPushButton* ok_button;
   QPushButton* cancel_button;
   KLanguageCombo* lang_combo;
+  QStrList lang_list;
+  QString langfile;
+  
 protected slots:
-void OK();
+void slotOkClicked();
 };
 
 #endif

@@ -114,7 +114,6 @@ public:
    * return true if a new subdir was added to the project
    */
   bool addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
-  void delFileFromProject(QString rel_filename);
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
   /** Switch to a certain line in a certain file. */
@@ -304,9 +303,9 @@ public:
   ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
-	void slotBookmarksSet();
-	void slotBookmarksAdd();
-	void slotBookmarksClear();
+  void slotBookmarksSet();
+  void slotBookmarksAdd();
+  void slotBookmarksClear();
 
   ////////////////////////
   // HELP-Menu entries
@@ -378,6 +377,9 @@ public:
   void slotClassChoiceCombo(int index);
   /** selection of methods in the browser toolbar */
   void slotMethodChoiceCombo(int index);
+  /** add a file to the project */
+  void slotAddFileToProject(QString abs_filename);
+  void delFileFromProject(QString rel_filename);
 
   //////////////// -- the methods for the statusbar items
   /** change the status message to text */
@@ -447,6 +449,8 @@ public:
 protected:
   virtual void closeEvent(QCloseEvent* e);
   //  void mousePressEvent(QMouseEvent* event);
+  /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
+  void newSubDir();
 
 private:
   //the menus for kdevelop main

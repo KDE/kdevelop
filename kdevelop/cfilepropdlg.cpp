@@ -23,6 +23,11 @@
 #include <qfileinfo.h>
 #include "debug.h"
 
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/ 
 CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QString preselecteditem ) : QDialog(parent,name,true) {
   this->prj = prj; // save the pointer
   setCaption(i18n("File Properties"));
@@ -100,6 +105,8 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   type_combo->insertItem( "SOURCE" );
   type_combo->insertItem( "SCRIPT" );
   type_combo->insertItem( "DATA" );
+  type_combo->insertItem( "PO" );
+  
   
   install_loc_edit = new QLineEdit( this, "install_loc_edit" );
   install_loc_edit->setGeometry( 350, 300, 290, 30 );
@@ -275,70 +282,93 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
 }
 CFilePropDlg::~CFilePropDlg(){
 }
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/ 
 void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
-    QString str;
-    TFileInfo* info;
-    if (item->childCount() != 0) return; // no action
-    
-    // save the old-one
-    if(saved_info !=0 ){ //ok,there is a old one,it !=0
-	saved_info->type = type_combo->currentText();
-	saved_info->dist = incdist_check->isChecked();
-	saved_info->install = install_check->isChecked();
-	saved_info->install_location = install_loc_edit->text();
-	KDEBUG(KDEBUG_INFO,DIALOG,"fileinfo  saved");
+
+
+  QString str;
+  TFileInfo* info;
+  if (item->childCount() != 0) return; // no action
+  
+  // save the old-one
+  if(saved_info !=0 ){ //ok,there is a old one,it !=0
+    saved_info->type = type_combo->currentText();
+    saved_info->dist = incdist_check->isChecked();
+    saved_info->install = install_check->isChecked();
+    saved_info->install_location = install_loc_edit->text();
+    KDEBUG(KDEBUG_INFO,DIALOG,"fileinfo  saved");
+  }
+  // prepare the new 
+  // find the tfileinfo
+  str = item->text(0);
+  for(info = file_list->first();info!=0;info = file_list->next()){
+    if (info->rel_name == str){
+      break;
     }
-    // prepare the new 
-    // find the tfileinfo
-    str = item->text(0);
-    for(info = file_list->first();info!=0;info = file_list->next()){
-	if (info->rel_name == str){
-	    break;
-	}
-    }
-    if (info==0){ // not found
-	return;
-    }
-    
-    QString filename = prj->getProjectDir() + str;
-    QFileInfo file_info(filename);
-    QString text;
-    name_e_label->setText(file_info.fileName());
-    text.setNum(file_info.size());
-    size_e_label->setText(text);
-    
-    if (info->type == "HEADER"){
-	type_combo->setCurrentItem(0);
-    }
-    if (info->type == "SOURCE"){
-	type_combo->setCurrentItem(1);
-    }
-    if (info->type == "SCRIPT"){
-	type_combo->setCurrentItem(2);
-    }
-    if (info->type == "DATA"){
-	type_combo->setCurrentItem(3);
-    }
-    
-    if(info->dist){
-	incdist_check->setChecked(true);
-    }
-    else{
-    incdist_check->setChecked(false);
-    }
-    
-    if(info->install){
-	install_check->setChecked(true);
-	install_loc_edit->setEnabled(true);
-    }
+  }
+  if (info==0){ // not found
+    return;
+  }
+  
+  QString filename = prj->getProjectDir() + str;
+  QFileInfo file_info(filename);
+  QString text;
+  name_e_label->setText(file_info.fileName());
+  text.setNum(file_info.size());
+  size_e_label->setText(text);
+
+  if(info->type != "PO"){
+    incdist_check->setEnabled(true);
+    install_loc_edit->setEnabled(true);
+    install_check->setEnabled(true);
+    install_loc_label->setEnabled(true);
+  }
+  if (info->type == "HEADER"){
+    type_combo->setCurrentItem(0);
+  }
+  if (info->type == "SOURCE"){
+    type_combo->setCurrentItem(1);
+  }
+  if (info->type == "SCRIPT"){
+    type_combo->setCurrentItem(2);
+  }
+  if (info->type == "DATA"){
+    type_combo->setCurrentItem(3);
+  }
+  if (info->type == "PO"){
+    type_combo->setCurrentItem(4);
+  }
+
+  if(info->dist){
+    incdist_check->setChecked(true);
+  }
   else{
-      install_check->setChecked(false);
+    incdist_check->setChecked(false);
+  }
+  
+  if(info->install){
+    install_check->setChecked(true);
+    install_loc_edit->setEnabled(true);
+  }
+  else{
+    install_check->setChecked(false);
     install_loc_edit->setEnabled(false);
   }
-    install_loc_edit->setText(info->install_location);
-    // save the current
-    cerr << "SAVE=INFO";
-    saved_info = info;
+  install_loc_edit->setText(info->install_location);
+  // save the current
+  cerr << "SAVE=INFO";
+  saved_info = info;
+  
+  if (info->type == "PO"){
+    incdist_check->setEnabled(false);
+    install_loc_edit->setEnabled(false);
+    install_check->setEnabled(false);
+    install_loc_label->setEnabled(false);
+  }
 }
 void CFilePropDlg::slotInstallCheckToogled(bool on){
     install_loc_edit->setEnabled(on);

@@ -117,6 +117,8 @@ public: // Methods to store project options
   void setVersion(QString version);
   /** Store the classview tree. */
   void setClassViewTree( QString &tree );
+  /** Store all open groups in the LFV*/
+  void setLFVOpenGroups(QStrList groups);
   /** at the moment only an english sgmlfile in docs/en/ */
   void setSGMLFile(QString version);  
   void setShortInfo(QStrList short_info);
@@ -137,6 +139,8 @@ public: // Methods to fetch project options
 
   /** Fetch the classview tree. */
   QString getClassViewTree();
+  /** get all open groups in the LFV*/
+  void getLFVOpenGroups(QStrList& groups);
   /** Fetch the commandline execution arguments for the project binary. */
   QString getExecuteArgs();
   /** Fetch the options for make( i.e "-k" for "make -k". */

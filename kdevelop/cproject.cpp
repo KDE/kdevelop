@@ -74,6 +74,16 @@ QString CProject::getKDevPrjVersion(){
   return config->readEntry("kdevprj_version");
 }
 
+void CProject::setLFVOpenGroups(QStrList groups){
+  config->setGroup("General");
+  config->writeEntry("lfv_open_groups", groups );
+}
+
+void CProject::getLFVOpenGroups(QStrList& groups){
+  config->setGroup("General");
+  config->readListEntry("lfv_open_groups",groups);  
+}
+
 QString CProject::getClassViewTree(){
   config->setGroup("General");
   return config->readEntry("classview_tree");
@@ -308,6 +318,11 @@ void CProject::getFilters(QString group,QStrList& filters){
 }
 
 bool CProject::addFileToProject(QString rel_name,TFileInfo info){
+  
+  // normalize it a little bit
+  rel_name.replace(QRegExp("///"),"/"); // remove ///
+  rel_name.replace(QRegExp("//"),"/"); // remove //
+  
   
   QStrList all_files;
   getAllFiles(all_files);

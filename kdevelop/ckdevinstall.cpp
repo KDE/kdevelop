@@ -375,7 +375,7 @@ void CKDevInstall::slotAuto() // proceed >>
     config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
     config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
     config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX");
+    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
     config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
     config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
     config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
@@ -437,7 +437,7 @@ void CKDevInstall::slotAuto() // proceed >>
     config->writeEntry("Mimetypes","text/x-c-src");
     config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
     config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Wildcards","*.c;*.C");
+    config->writeEntry("Wildcards","*.c;*.C;*.ec");
     config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
     config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
     config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
@@ -505,6 +505,11 @@ void CKDevInstall::slotAuto() // proceed >>
     config->writeEntry("Color3","0,0,0");
     config->writeEntry("TabWidth","2");
     config->writeEntry("Color4","255,255,255");
+
+    config->setGroup("C Highlight");
+    config->writeEntry("Wildcards","*.c;*.C;*.ec");
+    config->setGroup("C++ Highlight");
+    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
   }
   config->sync();
   QProgressDialog progress( i18n("Checking needed programs..."), i18n("Cancel"), numProgs, this );

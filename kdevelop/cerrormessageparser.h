@@ -53,9 +53,17 @@ public:
   TErrorMessageInfo getPrev();
   /** print out the parsed informations*/
   void out();
+
+  /**toogle the parser on*/
+  void toogleOn();
+  /**toogle the parser off, in this state the parse command, return without doing anything*/
+  void toogleOff();
+  /** returns the state*/
+  bool isOn();
 protected:
   int current; // used to store infos for getNext() ...
   QList<TErrorMessageInfo> m_info_list;
+  bool state;
 };
 
 

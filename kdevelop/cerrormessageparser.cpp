@@ -25,10 +25,13 @@
 CErrorMessageParser::CErrorMessageParser(){
   m_info_list.setAutoDelete(true);
   current = -1;
+  state = false;
 }
 CErrorMessageParser::~CErrorMessageParser(){
 }
 void CErrorMessageParser::parse(QString makeoutput,QString startdir){
+
+  if(!isOn()) return;
   QStack<QString> stack;
   QStrList outputlist;
   QString str;
@@ -191,4 +194,16 @@ void CErrorMessageParser::out(){
 void CErrorMessageParser::reset(){
   current = -1;
   m_info_list.clear();
+}
+/**toogle the parser on*/
+void CErrorMessageParser::toogleOn(){
+  state = true;
+}
+/**toogle the parser off, in this state the parse command, return without doing anything*/
+void CErrorMessageParser::toogleOff(){
+  state = false;
+}
+/** returns the state*/
+bool CErrorMessageParser::isOn(){
+  return state;
 }

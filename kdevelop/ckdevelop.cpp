@@ -505,6 +505,7 @@ void CKDevelop::slotBuildCompileFile(){
     return;
   }
   error_parser->reset();
+  error_parser->toogleOn();
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
@@ -562,6 +563,7 @@ void CKDevelop::slotBuildMake(){
     return;
   }
   error_parser->reset();
+  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -613,6 +615,7 @@ void CKDevelop::slotBuildRebuildAll(){
     return;
   }
   error_parser->reset();
+  error_parser->toogleOn();
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     QRect rMainGeom= view->geometry();
@@ -638,6 +641,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
     return;
   }
   error_parser->reset();
+  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -656,6 +660,7 @@ void CKDevelop::slotBuildDistClean(){
     return;
   }
   error_parser->reset();
+  error_parser->toogleOn();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -679,7 +684,7 @@ void CKDevelop::slotBuildAutoconf(){
   }
 
   showOutputView(true);
-
+  error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
@@ -696,6 +701,7 @@ void CKDevelop::slotBuildConfigure(){
   slotStatusMsg(i18n("Running ./configure..."));
   showOutputView(true);
   setToolMenuProcess(false);
+  error_parser->toogleOff();
   slotFileSave();
   messages_widget->clear();
   slotFileSaveAll();
@@ -723,18 +729,19 @@ void CKDevelop::slotBuildMessages(){
   if(!CToolClass::searchProgram("xgettext")){
     return;
   }
+  error_parser->toogleOff();
   showOutputView(true);
-
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating pot-file in /po..."));
   messages_widget->clear();
+  error_parser->toogleOff();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  process.clearArguments();
-  process << make_cmd;
-  process << "messages";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-	beep = true;
+  shell_process.clearArguments();
+  //shellprocess << make_cmd;
+  shell_process << make_cmd + " messages &&  cd ../po && make merge";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  beep = true;
 }
 
 void CKDevelop::slotBuildAPI(){
@@ -742,8 +749,10 @@ void CKDevelop::slotBuildAPI(){
     return;
   }
   showOutputView(true);
+  error_parser->toogleOff();
 
   setToolMenuProcess(false);
+  error_parser->toogleOff();
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
@@ -754,7 +763,7 @@ void CKDevelop::slotBuildAPI(){
   if(doc_kde.isEmpty() || !QFileInfo(ref_file).exists()){
     KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
                                                 "Please update your documentation with the options\n"
-                                                "given in theKDevelop Setup dialog, Documentation tab.\n\n"
+                                                "given in the KDevelop Setup dialog, Documentation tab.\n\n"
                                                 "Your API-documentation will be created without\n"
                                                 "cross-references to the KDE and Qt libraries."),KMsgBox::EXCLAMATION);
 
@@ -785,7 +794,7 @@ void CKDevelop::slotBuildManual(){
     return;
   }
   showOutputView(true);
-
+  error_parser->toogleOff();
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
@@ -1117,7 +1126,7 @@ void CKDevelop::slotHelpSearchText(){
 void CKDevelop::slotHelpSearch(){
   slotStatusMsg(i18n("Searching for Help on..."));
   CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
-  connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotDocSText(QString)));
+  connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotHelpSearchText(QString)));
   help_srch_dlg->exec();
 }
 
@@ -1387,7 +1396,9 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+
   error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+
   //enable/disable the menus/toolbars
   if(error_parser->hasNext()){
     enableCommand(ID_VIEW_NEXT_ERROR);
@@ -1409,7 +1420,9 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+
   error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+
   //enable/disable the menus/toolbars
   if(error_parser->hasNext()){
     enableCommand(ID_VIEW_NEXT_ERROR);

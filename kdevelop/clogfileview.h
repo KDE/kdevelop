@@ -43,6 +43,8 @@ public:
     
   /** starts the refresh */
   void refresh(CProject* prj);
+  /** store the internal state to the projectfile*/
+  void storeState(CProject* prj);
   
   /** set the filename that will be selected after a refresh*/
   void setPreSelectedItem(QString rel_filename);

@@ -107,6 +107,11 @@ void CLogFileView::refresh(CProject* prj)
   QStrList groups;
   QStrList filters;
   QStrList temp_files;
+  
+  // get all opengroups
+  QStrList opengroups;
+  prj->getLFVOpenGroups(opengroups);
+  
   QRegExp filter_exp("",true,true);// set Wildcard
   char *group_str;
   char *filter_str;
@@ -175,7 +180,9 @@ void CLogFileView::refresh(CProject* prj)
     }
 
     treeH->setLastItem( lastGrp );
-    setOpen( lastGrp, true );
+    if(opengroups.contains(lastGrp->text(0)) > 0){
+      setOpen( lastGrp, true );
+    }
   }
 
   setOpen(top_item, true);
@@ -344,4 +351,24 @@ void CLogFileView::split(QString str,QStrList& filters){
   //     }
   //   }
   return ;
+}
+void CLogFileView::storeState(CProject* prj){
+  assert( prj != NULL );
+
+  if(childCount() == 0) return; // save no empty tree
+  QStrList opengroups;
+  
+  QListViewItem* ch_grp_item = firstChild();
+  if(ch_grp_item != 0){
+    ch_grp_item = ch_grp_item->firstChild();
+    if(ch_grp_item != 0){
+      while(ch_grp_item){
+	if(isOpen(ch_grp_item)){
+	  opengroups.append(ch_grp_item->text(0));
+	}
+	ch_grp_item = ch_grp_item->nextSibling();
+      }
+    }
+  }
+  prj->setLFVOpenGroups(opengroups);
 }

@@ -1,8 +1,7 @@
 /***************************************************************************
-                    kprojectdirtreelist.cpp - 
+                    crealfileview.cpp - 
                              -------------------                                         
-
-    version              :                                   
+                            
     begin                : 9 Sept 1998                                        
     copyright            : (C) 1998 by Stefan Bartel                         
     email                : bartel@rz.uni-potsdam.de                                     
@@ -22,7 +21,7 @@
 #include "qstrlist.h"
 #include "crealfileview.h"
 #include <kmsgbox.h>
-#include <kprocess.h>
+#include <qfile.h>
 #include <qfileinfo.h>
 #include <iostream.h>
 #include <assert.h>
@@ -32,6 +31,7 @@
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
+
 
 CRealFileView::CRealFileView(QWidget*parent,const char* name)
   : CTreeView(parent,name)
@@ -236,14 +236,14 @@ void CRealFileView::slotSelectionChanged(QListViewItem* selection)
 
 void CRealFileView::slotAddFileToProject() {
 
-  QString filename=getRelFilename(currentItem());
+  QString filename=getFullFilename(currentItem());
   if(KMsgBox::yesNo(0,i18n("Question"),
                     i18n("Do you want to add the file:\n"+filename+"\n to the project ?"),
                     KMsgBox::QUESTION) == 2){
     return;
   }
+ 
   emit addFileToProject(filename);
-  refresh(project);
 }
 
 void CRealFileView::slotRemoveFileFromProject() {
@@ -255,7 +255,6 @@ void CRealFileView::slotRemoveFileFromProject() {
     return;
   }
   emit removeFileFromProject(filename);
-  refresh(project);
 }
 
 void CRealFileView::slotDeleteFilePhys() {
@@ -270,12 +269,7 @@ void CRealFileView::slotDeleteFilePhys() {
     emit removeFileFromProject(filename);
   }
   filename = getFullFilename(currentItem());
-  KShellProcess* proc = new KShellProcess;
-  QFileInfo info(filename);
-  QString command = "rm -f " + filename;
-  //  cerr << "\n\n" << command << "\n\n";
-  *proc << command;
-  proc->start();
+  QFile::remove(filename);
   refresh(project);
 }
 

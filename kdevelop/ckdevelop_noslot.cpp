@@ -32,6 +32,7 @@ void CKDevelop::refreshTrees(){
   }
   class_tree->refresh(prj);
   refreshClassCombo();
+  log_file_tree->storeState(prj);
   log_file_tree->refresh(prj);
   real_file_tree->refresh(prj);
  
@@ -74,6 +75,18 @@ void CKDevelop::switchToFile(QString filename){
     swallow_widget->sWExecute();
     swallow_widget->init();
     return;
+  }
+  //load ktranslator if clicked/loaded an po file
+  if((filename).right(3) == ".po"){
+    if(CToolClass::searchProgram("ktranslator")){
+      showOutputView(false);
+      s_tab_view->setCurrentTab(TOOLS);
+      swallow_widget->sWClose(false);
+      swallow_widget->setExeString("ktranslator "+ filename);
+      swallow_widget->sWExecute();
+      swallow_widget->init();
+      return;
+    }
   }
 
 

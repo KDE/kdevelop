@@ -1,3 +1,10 @@
+1999-04-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* implemented remove,delete and add file for the RFV
+	* completed the support for "po" files, 
+          only tested and verified with new generated projects
+	* the LFV remember it's state on refresh and exit/closeproject
+	* some speedups for the "error-message-parser"
+
 1999-04-10 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed parsing of multiple line #define:s. 
 	* fixed parsing of unions and inheritance with templates.
@@ -20,7 +27,6 @@
         * save and load now work with files (fixed to /tmp/dialog.kdevdlg for now)
 
 1999-04-09  Sandy Meier  <smeier@rz.uni-potsdam.de>
-
 	* first steps to support "po" files in KDevelop
 	* "add new translation file" and "make messages" is only available in KDE projects
 
@@ -93,7 +99,7 @@
 	
 	* implemented preselected items in the fileproperties dialog (from mainmenu and context menu)
 	* commited first version of the error-message-"parser"
-	* implemented a nice autocompletion in the new file dialog :-)
+	* implemented a nice autocompletion in the "new file" dialog :-)
 
 1999-03-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added commandline options to run a project program

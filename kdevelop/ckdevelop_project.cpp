@@ -30,6 +30,11 @@
 #include "cnewclassdlg.h"
 #include "cnewprojectdlg.h"
 #include "caddnewtranslationdlg.h"
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/ 
 
 void CKDevelop::slotProjectNew(){
   QString old_project="";
@@ -82,6 +87,7 @@ bool CKDevelop::slotProjectClose(){
   bool headerCancel=false;
   bool cppCancel=false;
   
+  log_file_tree->storeState(prj);
   
   // check if header widget contains modified file
   if(header_widget->isModified()){
@@ -266,6 +272,7 @@ bool CKDevelop::slotProjectClose(){
     edit_infos.append(edit2);
     
     // set project to false and disable all ID_s related to project=true	
+    prj->writeProject();
     project=false;
     prj->valid = false;
     delete prj;
@@ -288,6 +295,7 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_ADD_FILE);
     disableCommand(ID_PROJECT_ADD_FILE_NEW);
     disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
     disableCommand(ID_PROJECT_REMOVE_FILE);
     disableCommand(ID_PROJECT_NEW_CLASS);
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
@@ -383,14 +391,7 @@ void CKDevelop::slotAddExistingFiles(){
     refreshTrees();
     
     if(new_subdir){
-      KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
-      setToolMenuProcess(false);
-      slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-      messages_widget->clear();
-      QDir::setCurrent(prj->getProjectDir());
-      shell_process.clearArguments();
-      shell_process << make_cmd << " -f Makefile.dist && ./configure";
-    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      newSubDir();
     }
 
     delete add_dlg;
@@ -428,137 +429,6 @@ void CKDevelop::slotProjectOptions(){
     shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   }
 }
-
-void CKDevelop::newFile(bool add_to_project){
-  CNewFileDlg dlg(this,"test",true,0,prj);
-  dlg.setUseTemplate();
-  if (add_to_project){
-    dlg.setAddToProject();
-  }
-  if(!dlg.exec()) return; // cancel
-  
-  QString filename = dlg.fileName();
-  QString complete_filename;
-  complete_filename = dlg.location() + filename;
-  
-  // load into the widget
-  switchToFile(complete_filename);
-  
-  QString type = "DATA";
-  QString filetype = dlg.fileType();
-  if(filetype == "HEADER"){
-    type = "HEADER";
-  }
-  if(filetype == "CPP"){
-    type = "SOURCE";
-  }
-  bool new_subdir=false;
-  
-  // add the file to the project if necessary
-  if (dlg.addToProject() == true){
-    new_subdir = addFileToProject(complete_filename,type);
-  }
-  if(new_subdir){
-    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
-    setToolMenuProcess(false);
-    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-    messages_widget->clear();
-    showOutputView(true);
-    QDir::setCurrent(prj->getProjectDir());
-    shell_process.clearArguments();
-    shell_process << make_cmd << " -f Makefile.dist  && ./configure";
-    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
-  
-}
-bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
-  bool new_subdir = false;
-  QString rel_name = complete_filename;
-  rel_name.replace(QRegExp(prj->getProjectDir()),"");
-  
-  TFileInfo info;
-  info.rel_name = rel_name;
-  info.type = type;
-  info.dist = true;
-  info.install=false;
-  info.install_location = "";
-  new_subdir = prj->addFileToProject(rel_name,info);
-  
-  prj->writeProject();
-  prj->updateMakefilesAm();
-  if(refresh){
-    refreshTrees();
-  }
-  return new_subdir;
-}
-void CKDevelop::delFileFromProject(QString rel_filename){
-
-  prj->removeFileFromProject(rel_filename);
-  prj->writeProject();
-  refreshTrees();
-}
-bool CKDevelop::readProjectFile(QString file){
-  QString str;
-  prj = new CProject(file);
-  if(!(prj->readProject())){
-    return false;
-  }
-
-  // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
-  //   if(QFile::exists(str)){
-  //     switchToFile(str);
-  //   }
-  str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
-  str = prj->getProjectDir() + prj->getSubDir() + "main.cpp";
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
-
-// TODO: Add function to read last opened files from project to restore project workspace
-
-  switchToWorkspace(prj->getCurrentWorkspaceNumber());
-  // set the menus enable
-  // file menu
-  
-  enableCommand(ID_FILE_NEW);
-  enableCommand(ID_FILE_PRINT);
-  // doc menu
-  enableCommand(ID_HELP_PROJECT_API);
-  enableCommand(ID_HELP_USER_MANUAL);
-  // build menu
-  setToolMenuProcess(true);
-
-  // prj menu
-  enableCommand(ID_PROJECT_CLOSE);
-  enableCommand(ID_PROJECT_ADD_FILE);
-  enableCommand(ID_PROJECT_ADD_FILE_NEW);
-  enableCommand(ID_PROJECT_ADD_FILE_EXIST);
-
-  if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
-    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-  }
-  else{
-    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-  }
-  
-
-  enableCommand(ID_PROJECT_REMOVE_FILE);
-  enableCommand(ID_PROJECT_NEW_CLASS);
-  enableCommand(ID_PROJECT_FILE_PROPERTIES);
-  enableCommand(ID_PROJECT_OPTIONS);
-  enableCommand(ID_PROJECT_WORKSPACES);
-
-  enableCommand(ID_BUILD_AUTOCONF);
-	
-  project=true;
-  slotViewRefresh();
-  return true;
-}
-
-
 void CKDevelop::slotProjectNewClass(){
   CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
   if(dlg->exec()){
@@ -710,6 +580,169 @@ void  CKDevelop::slotProjectWorkspaces(int id){
    
 }
 
+void CKDevelop::slotProjectAddNewTranslationFile(){
+  CAddNewTranslationDlg dlg(this,0,prj);
+  QString file;
+  if (dlg.exec()){
+    file = dlg.getLangFile();
+    file = prj->getProjectDir() + "po/" + file;
+    QFile nfile(file); // create a empty file
+    nfile.open(IO_WriteOnly);
+    nfile.close();
+    addFileToProject(file,"PO"); 
+    slotBuildMessages();
+  }
+  
+}
+void CKDevelop::slotAddFileToProject(QString abs_filename){
+  QString  type = "DATA";
+  if (abs_filename.right(2) == ".h" || abs_filename.right(4) == ".hxx"){
+    type = "HEADER";
+  }
+  if (getTabLocation(abs_filename) == CPP){
+    type = "SOURCE";
+  }
+  addFileToProject(abs_filename,type,true);
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/ 
+
+void CKDevelop::newFile(bool add_to_project){
+  CNewFileDlg dlg(this,"test",true,0,prj);
+  dlg.setUseTemplate();
+  if (add_to_project){
+    dlg.setAddToProject();
+  }
+  if(!dlg.exec()) return; // cancel
+  
+  QString filename = dlg.fileName();
+  QString complete_filename;
+  complete_filename = dlg.location() + filename;
+  
+  // load into the widget
+  switchToFile(complete_filename);
+  
+  QString type = "DATA";
+  QString filetype = dlg.fileType();
+  if(filetype == "HEADER"){
+    type = "HEADER";
+  }
+  if(filetype == "CPP"){
+    type = "SOURCE";
+  }
+  bool new_subdir=false;
+  
+  // add the file to the project if necessary
+  if (dlg.addToProject() == true){
+    new_subdir = addFileToProject(complete_filename,type);
+  }
+  if(new_subdir){
+    newSubDir();
+  }
+  
+}
+bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
+  bool new_subdir = false;
+  QString rel_name = complete_filename;
+  
+  // normalize it a little bit
+  rel_name.replace(QRegExp("///"),"/"); // remove ///
+  rel_name.replace(QRegExp("//"),"/"); // remove //
+		   
+  rel_name.replace(QRegExp(prj->getProjectDir()),"");
+  
+  TFileInfo info;
+  info.rel_name = rel_name;
+  info.type = type;
+  info.dist = true;
+  if(type == "PO"){
+    info.dist = false;
+  }
+  info.install=false;
+  info.install_location = "";
+  new_subdir = prj->addFileToProject(rel_name,info);
+  
+  prj->writeProject();
+  prj->updateMakefilesAm();
+  if(refresh){
+    refreshTrees();
+  }
+  return new_subdir;
+}
+void CKDevelop::delFileFromProject(QString rel_filename){
+
+  prj->removeFileFromProject(rel_filename);
+  prj->writeProject();
+  refreshTrees();
+}
+bool CKDevelop::readProjectFile(QString file){
+  QString str;
+  prj = new CProject(file);
+  if(!(prj->readProject())){
+    return false;
+  }
+
+  // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
+  //   if(QFile::exists(str)){
+  //     switchToFile(str);
+  //   }
+  str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
+  if(QFile::exists(str)){
+    switchToFile(str);
+  }
+  str = prj->getProjectDir() + prj->getSubDir() + "main.cpp";
+  if(QFile::exists(str)){
+    switchToFile(str);
+  }
+
+// TODO: Add function to read last opened files from project to restore project workspace
+
+  switchToWorkspace(prj->getCurrentWorkspaceNumber());
+  // set the menus enable
+  // file menu
+  
+  enableCommand(ID_FILE_NEW);
+  enableCommand(ID_FILE_PRINT);
+  // doc menu
+  enableCommand(ID_HELP_PROJECT_API);
+  enableCommand(ID_HELP_USER_MANUAL);
+  // build menu
+  setToolMenuProcess(true);
+
+  // prj menu
+  enableCommand(ID_PROJECT_CLOSE);
+  enableCommand(ID_PROJECT_ADD_FILE);
+  enableCommand(ID_PROJECT_ADD_FILE_NEW);
+  enableCommand(ID_PROJECT_ADD_FILE_EXIST);
+
+  if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  }
+  else{
+    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  }
+  
+
+  enableCommand(ID_PROJECT_REMOVE_FILE);
+  enableCommand(ID_PROJECT_NEW_CLASS);
+  enableCommand(ID_PROJECT_FILE_PROPERTIES);
+  enableCommand(ID_PROJECT_OPTIONS);
+  enableCommand(ID_PROJECT_WORKSPACES);
+
+  enableCommand(ID_BUILD_AUTOCONF);
+	
+  project=true;
+  slotViewRefresh();
+  return true;
+}
+
+
+
+
 void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   TWorkspace current;
   TEditInfo* actual_info;
@@ -731,32 +764,17 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   prj->writeWorkspace(current);
 }
 
-void CKDevelop::slotProjectAddNewTranslationFile(){
-  CAddNewTranslationDlg dlg(this,0,prj);
-  if (dlg.exec()){
-    
-  }
-  
+void CKDevelop::newSubDir(){
+  KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+  setToolMenuProcess(false);
+  slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+  messages_widget->clear();
+  showOutputView(true);
+  QDir::setCurrent(prj->getProjectDir());
+  shell_process.clearArguments();
+  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

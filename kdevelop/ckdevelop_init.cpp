@@ -167,6 +167,9 @@ void CKDevelop::init(){
 
   connect(real_file_tree, SIGNAL(fileSelected(QString)), SLOT(slotRealFileTreeSelected(QString)));
   connect(real_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
+  connect(real_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
+  connect(real_file_tree, SIGNAL(addFileToProject(QString)),SLOT(slotAddFileToProject(QString)));
+  connect(real_file_tree, SIGNAL(removeFileFromProject(QString)),SLOT(delFileFromProject(QString)));
 
   connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
 
@@ -607,7 +610,7 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   build_menu->insertSeparator();
 	build_menu->insertItem(i18n("Execution &arguments"),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
-	build_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
+	build_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
   build_menu->insertItem(i18n("Make &API-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
   build_menu->insertItem(i18n("Make &User-Manual"), this, 

@@ -1157,20 +1157,27 @@ void CKAppWizard::slotProcessExited() {
   project->addLFVGroup ("Others","");
   project->setFilters("Others",group_filters);
 
+  if (!(ta->isChecked() || qta->isChecked())) {
+    group_filters.clear();
+    group_filters.append("*.po");
+    project->addLFVGroup ("Translations","");
+    project->setFilters("Translations",group_filters);
+  }
   
   if (gnufiles->isChecked()) {
-  group_filters.clear();
-  group_filters.append("AUTHORS");
-  group_filters.append("COPYING");
-  group_filters.append("ChangeLog");
-  group_filters.append("INSTALL");
-  group_filters.append("README");
-  group_filters.append("TODO");
-  group_filters.append("NEWS");
-  project->addLFVGroup ("GNU","");
-  project->setFilters("GNU",group_filters);
+    group_filters.clear();
+    group_filters.append("AUTHORS");
+    group_filters.append("COPYING");
+    group_filters.append("ChangeLog");
+    group_filters.append("INSTALL");
+    group_filters.append("README");
+    group_filters.append("TODO");
+    group_filters.append("NEWS");
+    project->addLFVGroup ("GNU","");
+    project->setFilters("GNU",group_filters);
   }
-
+  
+  
   group_filters.clear();
   group_filters.append("*.cpp");
   group_filters.append("*.c");
