@@ -177,7 +177,7 @@ private:
   //QListViewItem *gtknormalitem;
   // QListViewItem *gtkminiitem;
   QListViewItem *qtnormalitem;
-  //  QListViewItem *qtminiitem;
+  QListViewItem *qt_2normalitem;
   QLineEdit* messageline;
   QLabel* logMessage;
   QLineEdit* vendorline;
