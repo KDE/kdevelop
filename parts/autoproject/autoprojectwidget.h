@@ -2,7 +2,7 @@
 *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
 *   bernd@kdevelop.org                                                    *
 *                                                                         *
-*   Copyright (C) 2002 by Victor Röder                                    *
+*   Copyright (C) 2002 by Victor Rder                                    *
 *   victor_roeder@gmx.de                                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -25,6 +25,8 @@
 #include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <klocale.h>
+
+#include "domutil.h"
 
 class AutoProjectPart;
 class KListView;
@@ -136,6 +138,7 @@ public:
 	FileItem(QListView *lv, const QString &text);
 
 	QString name;
+    QString uiFileLink;
 };
 
 
@@ -318,6 +321,7 @@ protected:
 	void initActions ();
 
 private:
+    QString getUiFileLink(const QString &path, const QString& filename);
 
 	QToolButton *subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton;
 	QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;
@@ -351,6 +355,8 @@ private:
 	TargetItem *m_activeTarget;
 	TargetItem *m_choosenTarget;
 	SubprojectItem *m_shownSubproject;
+
+    DomUtil::PairList m_subclasslist;
 };
 
 #endif

@@ -2,7 +2,7 @@
 *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
 *   bernd@kdevelop.org                                                    *
 *                                                                         *
-*   Copyright (C) 2002 by Victor Röder                                    *
+*   Copyright (C) 2002 by Victor Rder                                    *
 *   victor_roeder@gmx.de                                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -59,6 +59,7 @@
 #include "autoprojectpart.h"
 #include "urlutil.h"
 #include "kdevcreatefile.h"
+#include "kdevlanguagesupport.h"
 
 static QString nicePrimary( const QString &primary )
 {
@@ -380,6 +381,9 @@ void AutoProjectWidget::initActions()
 void AutoProjectWidget::openProject( const QString &dirName )
 {
 	SubprojectItem * item = new SubprojectItem( overview, "/" );
+    QDomDocument &dom = *(m_part->projectDom());
+    m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                                    "subclass","sourcefile", "uifile");
 	item->setPixmap ( 0, SmallIcon ( "kdevelop" ) );
 	item->subdir = "/";
 	item->path = dirName;
@@ -708,6 +712,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
         FileItem * fitem = createFileItem( fileName );
+	fitem->uiFileLink = getUiFileLink(spitem->subdir+"/",fileName);
         titem->sources.append( fitem );
         titem->insertItem( fitem );
 
@@ -1228,10 +1233,65 @@ void AutoProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *item
 
 		removeDetailAction->plug( &popup );
 		FileContext context( m_shownSubproject->path + "/" + fitem->name, false );
-		m_part->core() ->fillContextMenu( &popup, &context );
 
-		popup.exec( p );
+        int idSubclassWidget = idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget...") );
+        int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
+        int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
 
+        if (!fitem->name.contains(QRegExp("ui$")))
+        {
+          popup.removeItem(idViewUIH);
+          popup.removeItem(idSubclassWidget);
+        }
+        if (fitem->uiFileLink.isEmpty())
+        {
+          popup.removeItem(idUpdateWidgetclass);
+        }
+
+        m_part->core()->fillContextMenu( &popup, &context );
+
+		int r = popup.exec( p );
+
+        if(r == idViewUIH) {
+          m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +
+             QString(fitem->name + ".h")));
+
+        }
+        else if (r == idSubclassWidget)
+        {
+            QStringList newFileNames;
+            newFileNames = m_part->languageSupport()->subclassWidget(m_shownSubproject->path + "/" + fitem->name);
+            if (!newFileNames.empty())
+            {
+                QDomDocument &dom = *(m_part->projectDom());
+                for (uint i=0; i<newFileNames.count(); i++)
+                {
+                    QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
+                    QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
+                    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                                            "subclass","sourcefile", "uifile");
+
+                    list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
+                    DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
+                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+                }
+                m_part->addFiles(newFileNames);
+            }
+        }
+        else if (r == idUpdateWidgetclass)
+        {
+          QString noext = m_shownSubproject->path + "/" + fitem->name;
+          if (noext.findRev('.')>-1)
+            noext = noext.left(noext.findRev('.'));
+          QStringList dummy;
+          QString uifile = fitem->uiFileLink;
+          if (uifile.findRev('/')>-1)
+          {
+            QStringList uisplit = QStringList::split('/',uifile);
+            uifile=uisplit[uisplit.count()-1];
+          }
+          m_part->languageSupport()->updateWidget(m_shownSubproject->path + "/" + uifile, noext);
+        }
 	}
 }
 
@@ -1405,6 +1465,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 			for ( it2 = l2.begin(); it2 != l2.end(); ++it2 )
 			{
 				FileItem *fitem = createFileItem( *it2 );
+                fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it2);
 				titem->sources.append( fitem );
 				if ( !kdeMode() || !( *it2 ).endsWith( ".cpp" ) )
 					continue;
@@ -1437,6 +1498,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 		for ( it3 = l.begin(); it3 != l.end(); ++it3 )
 		{
 			FileItem *fitem = createFileItem( *it3 );
+            fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it3);
 			titem->sources.append( fitem );
 		}
 	}
@@ -1450,6 +1512,7 @@ void AutoProjectWidget::parsePrimary( SubprojectItem *item,
 		for ( it1 = l.begin(); it1 != l.end(); ++it1 )
 		{
 			FileItem *fitem = createFileItem( *it1 );
+            fitem->uiFileLink = getUiFileLink(item->subdir+"/",*it1);
 			titem->sources.append( fitem );
 		}
 	}
@@ -1662,5 +1725,18 @@ void AutoProjectWidget::parse( SubprojectItem *item )
 			parseSUBDIRS( item, lhs, rhs );
 	}
 }
+
+QString AutoProjectWidget::getUiFileLink(const QString &relpath, const QString& filename)
+{
+	qWarning("relpath: %s fname: %s", relpath.latin1(), filename.latin1()  );
+  DomUtil::PairList::iterator it;
+  for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
+  {
+    if ((*it).first==QString("/")+relpath+filename)
+      return (*it).second;
+  }
+  return "";
+}
+
 
 #include "autoprojectwidget.moc"
