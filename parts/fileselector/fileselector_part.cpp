@@ -34,7 +34,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 {
     setInstance(FileSelectorFactory::instance());
 
-    m_filetree = new KDevFileSelector( this, mainWindow(), partController() );
+    m_filetree = new KDevFileSelector( this, mainWindow(), partController(), 0, "fileselectorwidget" );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
