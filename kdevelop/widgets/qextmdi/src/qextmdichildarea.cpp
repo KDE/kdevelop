@@ -387,7 +387,8 @@ int QextMdiChildArea::getVisibleChildCount()
 {
    int cnt=0;
    for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
-      if(lpC->m_state != QextMdiChildFrm::Minimized)cnt++;
+      if ((lpC->m_state != QextMdiChildFrm::Minimized) &&
+          (lpC->isVisible())) cnt++;
    }
    return cnt;
 }

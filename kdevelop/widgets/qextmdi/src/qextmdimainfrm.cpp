@@ -340,7 +340,6 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       m_pWinList->append(pToolView);
       pToolView->m_bToolView = TRUE;
       pToolView->setGeometry(r);
-      pToolView->show();
    }
    else {   // add (and dock) the toolview as DockWidget view
       KDockWidget* pCover = createDockWidget( pToolView->name(),
@@ -514,6 +513,17 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       pWnd->mdiParent()->hide();
       m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
    }
+   else {
+      // is not attached
+      if (m_pMdi->getVisibleChildCount() > 0) {
+         setActiveWindow();
+         m_pMdi->focusTopChild();
+      }
+      else if (m_pWinList->count() > 0) {
+         m_pWinList->last()->activate();
+         m_pWinList->last()->setFocus();
+      }
+   }
 
    if (pWnd->isToolView())
       pWnd->m_bToolView = FALSE;
@@ -669,11 +679,11 @@ void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
    QApplication::postEvent( this, ce);
 }
 
-void QextMdiMainFrm::focusInEvent(QFocusEvent *)
-{
+//void QextMdiMainFrm::focusInEvent(QFocusEvent *)
+//{
 //   qDebug("QextMdiMainFrm::focusInEvent");
 //???   m_pMdi->setFocus();
-}
+//}
 
 bool QextMdiMainFrm::event( QEvent* e)
 {

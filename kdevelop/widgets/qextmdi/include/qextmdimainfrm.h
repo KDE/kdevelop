@@ -413,7 +413,7 @@ protected:
    /** 
    * Redirect the focus to the MDI area widget ( @ref QextMdiChildArea ).
    */
-   virtual void focusInEvent(QFocusEvent *);
+//   virtual void focusInEvent(QFocusEvent *);
    /**
    *
    */
