@@ -438,7 +438,7 @@ void KDlgNewDialogDlg::slotOKClicked(){
 
 
 void KDlgNewDialogDlg::slotLocButtonClicked(){
-  QString str=  KDirDialog::getDirectory(loc_edit->text(),this,"test");
+  QString str=  KFileDialog::getExistingDirectory(loc_edit->text(),this,"test");
   if(!str.isEmpty()){
     loc_edit->setText(str);
   }
