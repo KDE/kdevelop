@@ -1,7 +1,8 @@
+#include <qpopupmenu.h>
+
 #include <klocale.h>
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <qpopupmenu.h>
 #include <kdebug.h>
 #include "ktabwidget.h"
 
@@ -20,8 +21,13 @@ KTabWidget::~KTabWidget()
 KTabBar::KTabBar(QWidget *parent, const char *name) : QTabBar(parent,name)
 {
   m_pPopupMenu = new QPopupMenu(this);
-  m_pPopupMenu->insertItem(SmallIcon("tab_remove"), i18n("&Close"), this, SLOT(closeWindowSlot()));
-  m_pPopupMenu->insertItem(SmallIcon("tab_remove"), i18n("Close &Others"), this, SLOT(closeOthersSlot()));
+
+  QPixmap closePixmap = KGlobal::instance()->iconLoader()->loadIcon( "tab_remove", KIcon::Small, 0, KIcon::DefaultState, 0, true ); 
+  if (closePixmap.isNull())
+    closePixmap = SmallIcon("fileclose");
+
+  m_pPopupMenu->insertItem(closePixmap, i18n("&Close"), this, SLOT(closeWindowSlot()));
+  m_pPopupMenu->insertItem(i18n("Close &Others"), this, SLOT(closeOthersSlot()));
 }
 
 void KTabBar::closeWindowSlot()
