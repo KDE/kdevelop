@@ -24,7 +24,7 @@
 
 
 StatusBar::StatusBar(QWidget *parent, const char *name)
-    : QStatusBar(parent, name)
+    : KStatusBar(parent, name)
 {
     setSizeGripEnabled(false);
     

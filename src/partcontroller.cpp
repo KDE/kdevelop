@@ -328,10 +328,8 @@ void PartController::slotPartRemoved(KParts::Part *part)
 }
 
 
-void PartController::slotPartAdded(KParts::Part *)
+void PartController::slotPartAdded(KParts::Part *part)
 {
-  kdDebug() << "PART ADDED!!!!" << endl;
-
   updateBufferMenu();
   updateMenuItems();
 }

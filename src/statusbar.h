@@ -12,7 +12,7 @@
 #ifndef _STATUSBAR_H_
 #define _STATUSBAR_H_
 
-#include <qstatusbar.h>
+#include <kstatusbar.h>
 
 class QLabel;
 
@@ -31,7 +31,7 @@ class QLabel;
  *
  * Embedded widgets are responsible for deleting themselves.
  */
-class StatusBar : public QStatusBar
+class StatusBar : public KStatusBar
 {
     Q_OBJECT
     

@@ -23,6 +23,7 @@
 #include "api.h"
 #include "core.h"
 #include "settingswidget.h"
+#include "statusbar.h"
 
 
 #include "toplevel_sdi.h"
@@ -59,7 +60,7 @@ KMainWindow *TopLevelSDI::main()
 
 void TopLevelSDI::createStatusBar()
 {
-  (void) new KStatusBar(this);
+  (void) new StatusBar(this);
 }
 
 

@@ -20,6 +20,7 @@
 #include "api.h"
 #include "core.h"
 #include "settingswidget.h"
+#include "statusbar.h"
 
 
 #include "toplevel_mdi.h"
@@ -56,7 +57,7 @@ KMainWindow *TopLevelMDI::main()
 
 void TopLevelMDI::createStatusBar()
 {
-  (void) new KStatusBar(this);
+  (void) new StatusBar(this);
 }
 
 
@@ -133,7 +134,6 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
   pMDICover->setCaption(name);
  
   m_widgetMap.insert(view, pMDICover);
-  // TODO: remove these entries when widgets get deleted!
 
   return pMDICover;
 }
@@ -146,43 +146,65 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
   
   addWindow(child, QPoint(0,0), mdiFlags);
+
+  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
 }
 
 
 void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 {
-  static QextMdiChildView *first = 0;
+  QextMdiChildView *first = m_selectViews.first();
 
   QextMdiChildView *child = wrapper(view, name);
 
   if (!first)
-  {
     addToolWindow(child, KDockWidget::DockLeft, this, 25, name, name);
-    first = child;
-  }
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
+
+  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
+
+  m_selectViews.append(child);
 }
 
 
 void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 {
-  static QextMdiChildView *first = 0;
+  QextMdiChildView *first = m_outputViews.first();
 
   QextMdiChildView *child = wrapper(view, name);
 
   if (!first)
-  {
     addToolWindow(child, KDockWidget::DockBottom, this, 70, name, name);
-    first = child;
-  }
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 70, name, name);
+
+  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
+
+  m_outputViews.append(child);
 }
 
 
-void TopLevelMDI::removeView(QWidget *)
+void TopLevelMDI::slotWidgetDeleted()
 {
+  QWidget *w = (QWidget*)sender();
+
+  removeView(w);
+}
+
+
+void TopLevelMDI::removeView(QWidget *view)
+{
+  QextMdiChildView *wrapper = m_widgetMap[view];
+  if (wrapper)
+  {
+    closeWindow(wrapper);
+
+    m_selectViews.remove(wrapper);
+    m_outputViews.remove(wrapper);
+
+    m_widgetMap.remove(view);
+  }
 }
 
 
@@ -190,7 +212,10 @@ void TopLevelMDI::raiseView(QWidget *view)
 {
   QextMdiChildView *wrapper = m_widgetMap[view];
   if (wrapper)
+  {
     wrapper->activate();
+    activateView(wrapper);
+  }
 }
 
 

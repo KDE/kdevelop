@@ -3,6 +3,7 @@
 
 
 #include <qmap.h>
+#include <qptrlist.h>
 
 
 #include <qextmdimainfrm.h>
@@ -56,6 +57,8 @@ private slots:
   void slotProjectOptions();
   void slotSettings();
 
+  void slotWidgetDeleted();
+
 
 private:
 
@@ -73,6 +76,8 @@ private:
   KRecentFilesAction *m_openRecentProjectAction;
 
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
+
+  QPtrList<QextMdiChildView> m_outputViews, m_selectViews;
 
 };
 

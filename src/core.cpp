@@ -99,7 +99,7 @@ void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 
 void Core::message(const QString &str)
 {
-  TopLevel::getInstance()->main()->statusBar()->message(str);
+  TopLevel::getInstance()->statusBar()->message(str);
 }
 
 
