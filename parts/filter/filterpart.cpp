@@ -23,7 +23,7 @@
 #include "kdevpartcontroller.h"
 #include "shellfilterdlg.h"
 #include "shellinsertdlg.h"
-#include "kdevfilteriface.h"
+#include "kdevfilterIface.h"
 
 K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( "kdevfilter" ) )
 

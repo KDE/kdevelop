@@ -10,7 +10,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "kdevfilteriface.h"
+#include "kdevfilterIface.h"
 #include "filterpart.h"
 
 KDevFilterIface::KDevFilterIface( FilterPart* part )
@@ -32,4 +32,4 @@ void KDevFilterIface::shellFilter()
     m_part->slotShellFilter();
 }
 
-#include "kdevfilteriface.moc"
+#include "kdevfilterIface.moc"
