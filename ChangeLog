@@ -1,18 +1,22 @@
+2002-03-23  Walter Tasin <tasin@kdevelop.org>
+    * applied patch of John Birch
+      crash fixing: using external debugger and calling "debug app with arguments"
+
 2002-03-21  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Roberto Raggi
-      now there's delay of code completion by default. 
+      now there's delay of code completion by default.
       You can change that in the Codecompletion settings.
       --> This fixes the usuability of KDevelop on slow machines (less than 800MHz)
 
 2002-03-20  Roberto Raggi <ragi@cli.di.unipi.i>
     * bugfix: Bug#39541: crash when entering pointer (code completion)
-	
+
 2002-03-19  August Hörandl  <august.hoerandl@gmx.at>
-    * bugfix: show open bracket after char insert 
+    * bugfix: show open bracket after char insert
 
 2002-03-19  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: reenabled error selection in make output view to make jump-to-error work again
-    
+
 2002-03-13  Walter Tasin <tasin@kdevelop.org>
     * bugfix: duplicated combobox entries in "Add new translation"
 
