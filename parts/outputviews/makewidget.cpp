@@ -213,6 +213,9 @@ void MakeWidget::startNextJob()
     commandList.remove(it);
     
     int i = currentCommand.findRev(" gmake");
+    if (i == -1) {
+	i = currentCommand.findRev(" make");
+    }
     if (i == -1) { m_bCompiling = false; }
     else {
 	QString s = currentCommand.right(currentCommand.length() - i);
