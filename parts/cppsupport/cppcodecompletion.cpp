@@ -30,7 +30,6 @@
 #include <kparts/part.h>
 #include <kregexp.h>
 #include <kstatusbar.h>
-#include <ktempfile.h>
 #include <ktexteditor/document.h>
 
 #include <qdatastream.h>
@@ -154,10 +153,6 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_pStore   = pStore;
     m_pCCStore = pCCStore;
 
-    m_pTmpFile     = 0;
-#ifdef DANIEL_CC
-    m_pParser      = 0;
-#endif
     m_pCursorIface = 0;
     m_pEditIface   = 0;
     m_pCompletionIface = 0;
@@ -175,10 +170,6 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
 
 CppCodeCompletion::~CppCodeCompletion( )
 {
-#ifdef DANIEL_CC
-    delete m_pParser;
-#endif
-    delete m_pTmpFile;
 }
 
 void
@@ -245,11 +236,11 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     if( m_pSupport && m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 /*
-	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
-                 SLOT( slotCursorPositionChanged() ) );
+	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged(int,int) ), this,
+                 SLOT( slotCursorPositionChanged(int,int) ) );
 */
-	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
-		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
+	QObject::connect(part, SIGNAL(textChanged(int,int)),
+		this, SLOT(slotTextChanged(int, int)) );
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
@@ -263,18 +254,17 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 }
 
 void
-CppCodeCompletion::slotCursorPositionChanged()
+CppCodeCompletion::slotCursorPositionChanged( int nLine, int nCol )
 {
     kdDebug(9007) << "Cursor position changed" << endl;
-    
+#if 0    
     if( !m_pSupport )
 	return;
 
-    uint nLine, nCol;
-    m_pCursorIface->cursorPosition(&nLine, &nCol);
     QString text = typingTypeOf( nLine, nCol );
     if( !text.isEmpty( ) )
 	m_pSupport->mainWindow()->statusBar()->message( text, 1000 );
+#endif
 }
 
 QString
@@ -317,200 +307,20 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 
 
 void
-CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/ )
+CppCodeCompletion::slotTextChanged( int nLine, int nCol )
 {
-#ifdef DANIEL_CC
-    QString strCurLine = m_pEditIface->textLine( nLine );
-
-    // should be done once and destroyed by destructor, shouldn't it ?
-    if( !m_pParser ) m_pParser = new CppCCParser( );
-    
-
-    // we use more than once
-    int nNodePos = getNodePos( nLine, nCol );
-    // daniel - avoid additional scope in if's
-    if( !nNodePos ){
-	kdDebug(9007) << "nNodePos = 0" << endl;
-        return;
-    }
-
-    // CC for "Namespace::" or "Class::" for example
-    // each case could be an extra method so the source is more readable
-    if( strCurLine.right( 2 ) == "::" ){
-        QString strNodeText = getNodeText( nNodePos, nLine );
-        QValueList< KTextEditor::CompletionEntry > completionList;
-
-        completionList = getEntryListForNamespace( strNodeText );
-        if( completionList.count( ) > 0 ){
-            kdDebug( 9007 ) << "found namespace '" << strNodeText << "' in classstore" << endl;
-            m_pCompletionIface->showCompletionBox( completionList );
-            return;
-        }
-
-        // no entry in namespace was found so we are looking for static things
-        completionList = getEntryListForClass( strNodeText );
-        if ( completionList.count( ) > 0 ){
-            kdDebug( 9007 ) << "found class '" << strNodeText << "' in classstore" << endl;
-            m_pCompletionIface->showCompletionBox( completionList );
-            // seems here is missing something ?
-            // QStringList functionList;
-            return;
-        }
-
-        // maybe the class is within a namespace
-        completionList = getEntryListForClassOfNamespace( strNodeText, getNodeText( ( getNodePos( nLine, nCol ) - 1 ), nLine ) );
-        if( completionList.count( ) > 0 ){
-            kdDebug( 9007 ) << "found class '" << strNodeText << "' in namespace" << endl;
-            m_pCompletionIface->showCompletionBox( completionList );
-            // seems here is missing something
-            // QStringList functionList; ?
-            return;
-        }
-    }
-
-    /* daniel - arghint section deleted */
-
-    // CC for "normal" objects
-    // couldn't we use it for "->" as well ?
-    if( strCurLine.right( 1 ) == "." ){
-        QString strNodeText = getNodeText ( nNodePos, nLine );
-
-        // should always be 0 !
-        if( m_pTmpFile )
-            delete m_pTmpFile;
-        m_pTmpFile = new KTempFile( );
-
-        // no warning to user / log ?
-        if( m_pTmpFile->status( ) != 0 )
-            return;
-
-        QString strFileName = createTmpFileForParser( nLine );
-
-        // new method that only searches for variables with name strNodeText
-        if( m_pParser )
-            m_pParser->parse ( strFileName, strNodeText );
-        else
-            return;
-
-        // for debugging: keep file - m_pTmpFile->unlink( );
-        if( m_pTmpFile->status( ) != 0 )
-            return;
-
-        // local var declaration not found - trying member completion
-        if( !m_pParser->variableList.count( ) ){
-            ParsedClass* pClass = m_pStore->getClassByName( m_currentClassName );
-
-            // found absolutely nothing
-            if( !pClass ){
-                kdDebug( 9007 ) << "didn't find class '" << m_currentClassName << "' in store" << endl;
-                return;
-            }
-
-            ParsedAttribute* pAttr = pClass->getAttributeByName( strNodeText );
-	    if( !pAttr )
-		return;
-            QString type = pAttr->type( );
-            // classstore does it that way: type = "QPrinter *"
-            // is there always a space between class and type ?
-            type.remove( type.find( " " ), 999 );
-            kdDebug( 9007 ) << "attribute type is '" << type << "'" << endl;
-
-            QValueList< KTextEditor::CompletionEntry > completionList;
-            completionList = getEntryListForClass( type );
-            if( completionList.count( ) > 0 )
-                m_pCompletionIface->showCompletionBox( completionList );
-            else
-                kdDebug( 9007 ) << "completionList.count( ) = 0 )" << endl;
-            return;
-        }
-
-        // original code
-        for( CParsedVariable* pVar = m_pParser->variableList.first( ); pVar != 0;
-             pVar = m_pParser->variableList.next( ) ){
-            if( pVar->sVariableName == strNodeText ){
-                kdDebug( 9007 ) << "Type of variable: '" << pVar->sVariableType << "'" << endl;
-                QValueList< KTextEditor::CompletionEntry > completionList;
-                completionList = getEntryListForClass( pVar->sVariableType );
-
-                if( completionList.count( ) > 0 )
-                    m_pCompletionIface->showCompletionBox( completionList );
-                else
-                    kdDebug( 9007 ) << "completionList.count( ) = 0 )" << endl;
-
-                // break for because we (didn't) found what we looked for
-                break;
-            }
-
-        }
-
-        // remove the parsed variables from CppCCParser!
-        m_pParser->variableList.clear( );
-    }
-#else
     m_ccTimer->stop();
     
     QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol, 1 );
     QString ch2 = strCurLine.mid( nCol-1, 2 );
     
-    //kdDebug(9007) << "ch = " << ch << " -- ch2 = " << ch2 << endl;
+    kdDebug(9007) << "ch = " << ch << " -- ch2 = " << ch2 << endl;
 
     if ( ch == "." || ch2 == "->" ){
     	m_ccTimer->start( 500, true );
-    }    
-#endif
+    }
 }
-
-/**** TODO: replace this method with a parsing mechanism - very buggy! ****/
-QString
-CppCodeCompletion::createTmpFileForParser( int iLine )
-{
-    // regular expression for matching a method implementation
-    // looks weird but maintaining is much easier :)
-    QString reg  = "([\\s\t]*[\\w\\d_]+[\\*|\\&]?"; 	// return value
-            reg += "[\\s\t]*([\\w\\d_]+)::[\\w\\d_]+";	// method class and -name
-	    reg += "\\([\\w\\d\\&\\*\\s\t,_]*\\)"; 	// parameters
-//	    reg += "[\\s\t]*[:([\\s\t\\w\\d_])+]?[\\{]?)" ; // base class - not finished yet :)
-//	    reg += "[\\s\t]*[^;])";			// avoid static method calls
-
-    QRegExp regMethod( reg );
-    QString strLine;
-    int     iMethodBegin = 0;
-
-    for( int i = iLine; i > 0; i-- ){
-        strLine = m_pEditIface->textLine( i );
-	kdDebug( 9007 ) << "checking line: " << strLine << endl;
-
-        if( regMethod.search( strLine ) > -1 ){
-            iMethodBegin = i;
-
-            kdDebug( 9007 ) << "method begins @ line '" << iMethodBegin << "'" << endl;
-            // test to figure out the current classname
-            m_currentClassName = regMethod.cap( 2 );
-            kdDebug( 9007 ) << "method's classname is '" << m_currentClassName << "'" << endl;
-            break;
-        }
-    }
-
-    if( iMethodBegin == 0 ){
-        kdDebug( 9007 ) << "no method declaration found" << endl;
-        return QString::null;
-    }
-
-    QString strCopy;
-    for( int i = iMethodBegin; i < iLine; i++ ){
-        strCopy += m_pEditIface->textLine( i ) + "\n";
-    }
-
-    QFile *pFile = m_pTmpFile->file( );
-    pFile->writeBlock( strCopy.latin1( ), strCopy.length( ) );
-    pFile->flush( );
-
-    kdDebug( 9007 ) << "name of tempfile '" << m_pTmpFile->name( ) << "'" << endl;
-
-    return m_pTmpFile->name( );
-}
-
 
 /**** Here begins some "parsing" stuff - to be replaced by a real parser ****/
 
@@ -1350,10 +1160,11 @@ CppCodeCompletion::typeOf( )
 #endif
 }
 
+#if 0
 void
-CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &/*text*/)
+CppCodeCompletion::slotTextChanged( int nLine, int nCol )
 {
-    kdDebug(9007) << "CompletionEntry::slotTextChangedRoberto()" << endl;
+    kdDebug(9007) << "CompletionEntry::slotTextChanged()" << endl;
     QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
@@ -1362,6 +1173,7 @@ CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &/
         completeText();
     }
 }
+#endif
 
 QString
 CppCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const QString& name )
@@ -1552,6 +1364,8 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
     
     unsigned int line, column;
     m_pCursorIface->cursorPositionReal( &line, &column );    
+    
+    kdDebug(9007) << "CppCodeCompletion::slotFileParsed()" << endl;
 
 #if 0
     m_pSupport->backgroundParser()->lock();

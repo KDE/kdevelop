@@ -59,10 +59,8 @@ protected slots:
     void slotActivePartChanged(KParts::Part *part);
     void slotArgHintHided();
     void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
-    //void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
-    void slotTextChanged( int nLine, int nCol, const QString& text );
-    void slotTextChangedRoberto(int nLine, int nCol, const QString &text );
-    void slotCursorPositionChanged();
+    void slotTextChanged( int nLine, int nCol );
+    void slotCursorPositionChanged( int iLine, int ncol );
     void slotFileParsed( const QString& fileName );
 
 protected:
@@ -79,9 +77,6 @@ protected:
     int getNodePos ( int nLine, int nCol );
 
     QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr, SimpleContext* ctx );
-
-
-    QString createTmpFileForParser (int iLine);
 
     QValueList<KTextEditor::CompletionEntry> getEntryListForClass( QString strClass );
     QValueList<KTextEditor::CompletionEntry> getEntryListForNamespace( const QString& strNamespace );
@@ -107,16 +102,12 @@ private:
     KDevCore* m_pCore;
     ClassStore* m_pStore;
     ClassStore* m_pCCStore;
-#ifdef DANIEL_CC
-    CppCCParser* m_pParser;
-#endif
     QTimer* m_ccTimer;
     QString m_currentFileName;
     KTextEditor::ViewCursorInterface* m_pCursorIface;
     KTextEditor::EditInterface* m_pEditIface;
     KTextEditor::CodeCompletionInterface* m_pCompletionIface;
-
-    KTempFile* m_pTmpFile;
+    
     QString m_currentClassName;
     bool m_bArgHintShow;
     bool m_bCompletionBoxShow;
