@@ -8,8 +8,26 @@
       <type ext="ui" name="QT Designer" create="no" icon="widget_doc">
         <descr>
         </descr>
-        <subtype ref="dialog" name="Dialog" icon="widget_doc" icon="widget_doc">
+	<subtype ref="widget" name="Widget" icon="widget_doc">
+	  <descr>A new widget.</descr>
+	</subtype>
+        <subtype ref="dialog" name="Dialog" icon="widget_doc">
           <descr>A new empty Dialog box.</descr>
+        </subtype>
+        <subtype ref="tabdialog" name="Tab Dialog" icon="widget_doc">
+          <descr>A new empty Tab Dialog box.</descr>
+        </subtype>
+        <subtype ref="dialogr" name="Dialog with buttons (right)" icon="widget_doc">
+          <descr>A new Dialog box with buttons on the right.</descr>
+        </subtype>
+        <subtype ref="dialogb" name="Dialog with buttons (bottom)" icon="widget_doc">
+          <descr>A new Dialog box with buttons on the bottom.</descr>
+        </subtype>
+        <subtype ref="confdialog" name="Configuration Dialog" icon="widget_doc">
+          <descr>A new Configuration Dialog box.</descr>
+        </subtype>
+        <subtype ref="wizard" name="Wizard" icon="widget_doc">
+          <descr>A new empty Wizard dialog.</descr>
         </subtype>
         <subtype ref="mainwin" name="Main window" icon="widget_doc">
           <descr>A new empty main window.</descr>

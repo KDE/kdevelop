@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>Form1</class>
-<widget class="QWidget">
+<widget class="QWizard">
     <property name="name">
         <cstring>Form1</cstring>
     </property>
@@ -15,6 +15,14 @@
     <property name="caption">
         <string>Form1</string>
     </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
+            <string>Page</string>
+        </attribute>
+    </widget>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
