@@ -102,6 +102,11 @@ void PartController::showDocument(const KURL &url, int lineNum)
     kdDebug() << "PartController::showDocument() -- NOT IMPLEMENTED YET!!" << endl;
 }
 
+void PartController::showDocument(const KURL &url, const QString& /*context*/)
+{
+  // not implemented yet
+  showDocument( url );
+}
 
 void PartController::setLineNumber(int lineNum)
 {

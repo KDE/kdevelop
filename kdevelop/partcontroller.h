@@ -39,6 +39,7 @@ public:
 
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, int lineNum=-1);
+  void showDocument(const KURL &url, const QString& context);
 
   static void createInstance(QWidget *parent);
   static PartController *getInstance();

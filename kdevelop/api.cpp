@@ -60,3 +60,7 @@ API::~API()
 {
 }
 
+KDevDebugger *API::debugger()
+{
+  return 0; // VERY BIG TODO
+}
