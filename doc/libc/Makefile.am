@@ -10,21 +10,21 @@ EXTRA_DIST = libc.toc.in libc.index.in
 DISTCLEANFILES = libc.toc libc.index
 
 libc.toc: $(srcdir)/libc.toc.in
-	echo "<!DOCTYPE gideontoc>" > libc.toc ; \
-	echo "<gideontoc>" >> libc.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > libc.toc ; \
+	echo "<kdeveloptoc>" >> libc.toc ; \
 	echo "<title>libc</title>" >> libc.toc ; \
 	echo "<base href=\"$(htmldir)\"/>" >> libc.toc ; \
 	cat $(srcdir)/libc.toc.in >> libc.toc
-	echo "</gideontoc>" >> libc.toc ; \
+	echo "</kdeveloptoc>" >> libc.toc ; \
 	echo "" >> libc.toc
 
 libc.index: $(srcdir)/libc.index.in
-	echo "<!DOCTYPE gideonindex>" > libc.index ; \
-	echo "<gideonindex>" >> libc.index
+	echo "<!DOCTYPE kdevelopindex>" > libc.index ; \
+	echo "<kdevelopindex>" >> libc.index
 	echo "<title>libc</title>" >> libc.index ; \
 	echo "<base href=\"$(htmldir)\"/>" >> libc.index ; \
 	cat $(srcdir)/libc.index.in >> libc.index ; \
-	echo "</gideonindex>" >> libc.index ; \
+	echo "</kdevelopindex>" >> libc.index ; \
 	echo "" >> libc.index
 
 install-data-local:

@@ -76,26 +76,27 @@ void ClassViewPart::setupPopup()
 {
     QPopupMenu *popup = popup_action->popupMenu();
 
+    KDevLanguageSupport::Features features = languageSupport()->features();
+    
     popup->clear();
-    popup->insertItem(i18n("Goto declaration"), this, SLOT(selectedGotoDeclaration()));
-    popup->insertItem(i18n("Goto implementation"), this, SLOT(selectedGotoImplementation()));
-    popup->insertItem(i18n("Goto class declaration"), this, SLOT(selectedGotoClassDeclaration()));
+    if (features & KDevLanguageSupport::Declarations)
+        popup->insertItem(i18n("Go to declaration"), this, SLOT(selectedGotoDeclaration()));
+    popup->insertItem(i18n("Go to implementation"), this, SLOT(selectedGotoImplementation()));
+    popup->insertItem(i18n("Go to class declaration"), this, SLOT(selectedGotoClassDeclaration()));
     popup->insertItem(i18n("View class hierarchy"), this, SLOT(selectedViewHierarchy()));
     popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
-    if (languageSupport()) {
-        bool hasAddMethod = languageSupport()->features() & KDevLanguageSupport::AddMethod;
-        bool hasAddAttribute = languageSupport()->features() & KDevLanguageSupport::AddAttribute;
-        bool hasNewClass =  languageSupport()->features() & KDevLanguageSupport::NewClass;
-        if (hasAddMethod || hasAddAttribute || hasNewClass) 
-            popup->insertSeparator();
-        if (hasNewClass)
-            popup->insertItem(SmallIcon("classnew"), i18n("Add class..."), this, SLOT(selectedAddClass()));
-        if (hasAddMethod)
-            popup->insertItem(SmallIcon("methodnew"), i18n("Add method..."), this, SLOT(selectedAddMethod()));
-        if (hasAddAttribute)
-            popup->insertItem(SmallIcon("variablenew"), i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
-    }
+    bool hasAddMethod = features & KDevLanguageSupport::AddMethod;
+    bool hasAddAttribute = features & KDevLanguageSupport::AddAttribute;
+    bool hasNewClass =  features & KDevLanguageSupport::NewClass;
+    if (hasAddMethod || hasAddAttribute || hasNewClass) 
+        popup->insertSeparator();
+    if (hasNewClass)
+        popup->insertItem(SmallIcon("classnew"), i18n("Add class..."), this, SLOT(selectedAddClass()));
+    if (hasAddMethod)
+        popup->insertItem(SmallIcon("methodnew"), i18n("Add method..."), this, SLOT(selectedAddMethod()));
+    if (hasAddAttribute)
+        popup->insertItem(SmallIcon("variablenew"), i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
 }
 
 

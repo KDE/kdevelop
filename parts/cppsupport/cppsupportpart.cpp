@@ -263,10 +263,10 @@ void CppSupportPart::slotGotoIncludeFile()
 KDevLanguageSupport::Features CppSupportPart::features()
 {
     if (withcpp)
-        return Features(Classes | Structs | Functions | Variables | Namespaces
+        return Features(Classes | Structs | Functions | Variables | Namespaces | Declarations
                         | Signals | Slots | AddMethod | AddAttribute);
     else
-        return Features (Structs | Functions | Variables);
+        return Features (Structs | Functions | Variables | Declarations);
 }
 
 

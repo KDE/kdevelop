@@ -24,6 +24,7 @@ class DocTreeViewPart;
 class DocIndex
 {
 public:
+    QString indexName;
     QString title;
     QString base;
     QStringList conceptNames;
@@ -43,6 +44,8 @@ public:
     DocIndexDialog( DocTreeViewPart *part, QWidget *parent=0, const char *name=0 );
     ~DocIndexDialog();
 
+    void projectChanged();
+    
 protected:
     virtual void accept();
 
@@ -50,6 +53,8 @@ private slots:
     void choiceChanged();
     
 private:
+    void readConfig();
+    void storeConfig();
     void readIndexFromFile(const QString &fileName);
     void readEntryList(const QDomElement &el, QStringList *nameList, QStringList *urlList);
 

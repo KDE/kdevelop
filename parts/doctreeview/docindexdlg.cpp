@@ -11,6 +11,7 @@
 
 #include <qcheckbox.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -26,6 +27,7 @@
 #include <kstddirs.h>
 
 #include "kdevcore.h"
+#include "domutil.h"
 
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
@@ -58,8 +60,6 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     for (; iit.current(); ++iit) {
         QCheckBox *box = new QCheckBox(iit.current()->title, book_group);
         books_boxes.append(box);
-
-        box->setChecked(true);
         connect( box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
     }
 
@@ -67,7 +67,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     category_group->setExclusive(false);
 
     concept_box = new QCheckBox(i18n("&Concept index"), category_group);
-    concept_box->setChecked(true);
+    //    concept_box->setChecked(true);
     ident_box = new QCheckBox(i18n("&Identifier index"), category_group);
     file_box = new QCheckBox(i18n("&File index"), category_group);
     
@@ -100,15 +100,86 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     indices.setAutoDelete(true);
     m_part = part;
     choiceChanged();
+    
+    if (m_part->project())
+        readConfig();
 }
 
 
 DocIndexDialog::~DocIndexDialog()
 {}
 
+
+void DocIndexDialog::projectChanged()
+{
+    if (m_part->project())
+        readConfig();
+}
+
+
+void DocIndexDialog::readConfig()
+{
+    QDomDocument &dom = *m_part->projectDom();
+    QDomElement docEl = dom.documentElement();
+    QDomElement doctreeviewEl = docEl.namedItem("kdevdoctreeview").toElement();
+
+    QStringList indexbooks;
+    QDomElement indexbooksEl = doctreeviewEl.namedItem("indexbooks").toElement();
+    QDomElement bookEl = indexbooksEl.firstChild().toElement();
+    while (!bookEl.isNull()) {
+        if (bookEl.tagName() == "book")
+            indexbooks << bookEl.firstChild().toText().data();
+        bookEl = bookEl.nextSibling().toElement();
+    }
+
+    QListIterator<QCheckBox> cit(books_boxes);
+    QListIterator<DocIndex> iit(indices);
+    for (; cit.current() && iit.current(); ++cit,++iit)
+        (*cit)->setChecked(indexbooks.isEmpty() || indexbooks.contains(iit.current()->indexName));
+
+    concept_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdoctreeview/categories/concept"));
+    ident_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdoctreeview/categories/identifier"));
+    file_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdoctreeview/categories/file"));
+}
+
+
+void DocIndexDialog::storeConfig()
+{
+    QDomDocument &dom = *m_part->projectDom();
+    QDomElement docEl = dom.documentElement();
+    QDomElement doctreeviewEl = docEl.namedItem("kdevdoctreeview").toElement();
+    
+    QDomElement indexbooksEl = doctreeviewEl.namedItem("indexbooks").toElement();
+    if (indexbooksEl.isNull()) {
+        indexbooksEl = dom.createElement("indexbooks");
+        doctreeviewEl.appendChild(indexbooksEl);
+    }
+
+    // Clear old entries
+    while (!indexbooksEl.firstChild().isNull())
+        indexbooksEl.removeChild(indexbooksEl.firstChild());
+
+    QListIterator<QCheckBox> cit(books_boxes);
+    QListIterator<DocIndex> iit(indices);
+    for (; cit.current() && iit.current(); ++cit,++iit)
+        if ((*cit)->isChecked()) {
+            QDomElement bookEl = dom.createElement("book");
+            bookEl.appendChild(dom.createTextNode((*iit)->indexName));
+            indexbooksEl.appendChild(bookEl);
+            kdDebug() << "Appending " << ((*iit)->indexName) << endl;
+        }
+
+    DomUtil::writeBoolEntry(dom, "/kdevdoctreeview/categories/concept", concept_box->isChecked());
+    DomUtil::writeBoolEntry(dom, "/kdevdoctreeview/categories/identifier", ident_box->isChecked());
+    DomUtil::writeBoolEntry(dom, "/kdevdoctreeview/categories/file", file_box->isChecked());
+}
+
     
 void DocIndexDialog::readIndexFromFile(const QString &fileName)
 {
+    QFileInfo fi(fileName);
+    QString name = fi.baseName();
+    
     QFile f(fileName);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read doc index: " << fileName << endl;
@@ -116,8 +187,8 @@ void DocIndexDialog::readIndexFromFile(const QString &fileName)
     }
 
     QDomDocument doc;
-    if (!doc.setContent(&f) || doc.doctype().name() != "gideonindex") {
-        kdDebug() << "Not a valid gideonindex file: " << fileName << endl;
+    if (!doc.setContent(&f) || doc.doctype().name() != "kdevelopindex") {
+        kdDebug() << "Not a valid kdevelopindex file: " << fileName << endl;
         return;
     }
     
@@ -134,6 +205,7 @@ void DocIndexDialog::readIndexFromFile(const QString &fileName)
     QDomElement conceptEl = docEl.namedItem("conceptindex").toElement();
     QDomElement identEl = docEl.namedItem("identindex").toElement();
     QDomElement fileEl = docEl.namedItem("fileindex").toElement();
+    index->indexName = name;
     index->title = titleEl.firstChild().toText().data();
     index->base = baseEl.attribute("href");
     if (!index->base.isEmpty())
@@ -198,6 +270,9 @@ void DocIndexDialog::accept()
     }
     
     m_part->core()->gotoDocumentationFile(KURL(url));
+
+    if (m_part->project())
+        storeConfig();
     
     QDialog::accept();
 }

@@ -22,6 +22,7 @@
 #include "kdevlanguagesupport.h"
 #include "classstore.h"
 #include "parsedclass.h"
+#include "classviewfactory.h"
 #include "classtooldlg.h"
 
 
@@ -38,37 +39,37 @@ ClassToolDialog::ClassToolDialog( ClassViewPart *part )
     QPushButton *close_button = new QPushButton(i18n("&Close"), this);
     
     parents_button = new QToolButton(this);
-    parents_button->setPixmap( BarIcon("CTparents") );
+    parents_button->setPixmap( UserIcon("CTparents", KIcon::DefaultState, ClassViewFactory::instance()) );
     parents_button->setToggleButton(true);
     parents_button->setFixedSize(parents_button->sizeHint());
     QToolTip::add(parents_button, i18n("Show parents"));
     
     children_button = new QToolButton(this);
-    children_button->setPixmap( BarIcon("CTchildren") );
+    children_button->setPixmap( UserIcon("CTchildren", KIcon::DefaultState, ClassViewFactory::instance()) );
     children_button->setToggleButton(true);
     children_button->setFixedSize(children_button->sizeHint());
     QToolTip::add(children_button, i18n("Show children"));
     
     clients_button = new QToolButton(this);
-    clients_button->setPixmap( BarIcon("CTclients"));
+    clients_button->setPixmap( UserIcon("CTclients", KIcon::DefaultState, ClassViewFactory::instance()) );
     clients_button->setToggleButton(true);
     clients_button->setFixedSize(clients_button->sizeHint());
     QToolTip::add(clients_button, i18n("Show clients"));
     
     suppliers_button = new QToolButton(this);
-    suppliers_button->setPixmap( BarIcon("CTsuppliers") );
+    suppliers_button->setPixmap( UserIcon("CTsuppliers", KIcon::DefaultState, ClassViewFactory::instance()) );
     suppliers_button->setToggleButton(true);
     suppliers_button->setFixedSize(suppliers_button->sizeHint());
     QToolTip::add(suppliers_button, i18n("Show suppliers"));
     
     methods_button = new QToolButton(this);
-    methods_button->setPixmap( BarIcon("CVpublic_meth"));
+    methods_button->setPixmap( UserIcon("CTpublic_meth", KIcon::DefaultState, ClassViewFactory::instance()) );
     methods_button->setToggleButton(true);
     methods_button->setFixedSize(methods_button->sizeHint());
     QToolTip::add(methods_button, i18n("Show methods"));
     
     attributes_button = new QToolButton(this);
-    attributes_button->setPixmap( BarIcon("CVpublic_var") );
+    attributes_button->setPixmap( UserIcon("CTpublic_var", KIcon::DefaultState, ClassViewFactory::instance()) );
     attributes_button->setToggleButton(true);
     attributes_button->setFixedSize(attributes_button->sizeHint());
     QToolTip::add(attributes_button, i18n("Show attributes"));

@@ -4,54 +4,63 @@ else
 GTKTOC =
 endif
 
+if GNUSTEPDOCS
+GNUSTEPTOC = gnustep.toc
+else
+GNUSTEPTOC =
+endif
+
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs
 toc_DATA = python.toc perl.toc php.toc gnustep.toc $(GTKTOC)
 
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = python.index php.index
 
-EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustep.toc.in glib.toc.in \
-	     gdk.toc.in gdk-pixbuf.toc.in gtk.toc.in gnome.toc.in gnomeui.toc.in python.index.in php.index.in
+EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustepbase.toc.in gnustepgui.toc.in \
+             glib.toc.in gdk.toc.in gdk-pixbuf.toc.in gtk.toc.in gnome.toc.in gnomeui.toc.in \
+             python.index.in php.index.in
 DISTCLEANFILES = python.toc perl.toc php.toc gnustep.toc gtk.toc python.index
 
 perl.toc: $(srcdir)/perl.toc.in
-	echo "<!DOCTYPE gideontoc>" > perl.toc ; \
-	echo "<gideontoc>" >> perl.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > perl.toc ; \
+	echo "<kdeveloptoc>" >> perl.toc ; \
 	echo "<title>Perl</title>" >> perl.toc ; \
 	cat $(srcdir)/perl.toc.in >> perl.toc
-	echo "</gideontoc>" >> perl.toc ; \
+	echo "</kdeveloptoc>" >> perl.toc ; \
 	echo "" >> perl.toc
 
 python.toc: $(srcdir)/python.toc.in
-	echo "<!DOCTYPE gideontoc>" > python.toc ; \
-	echo "<gideontoc>" >> python.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > python.toc ; \
+	echo "<kdeveloptoc>" >> python.toc ; \
 	echo "<title>Python</title>" >> python.toc ; \
 	echo "<base href=\"$(PYTHONDOCDIR)\"/>" >> python.toc ; \
 	cat $(srcdir)/python.toc.in >> python.toc ; \
-	echo "</gideontoc>" >> python.toc ; \
+	echo "</kdeveloptoc>" >> python.toc ; \
 	echo "" >> python.toc
 
 php.toc: $(srcdir)/php.toc.in
-	echo "<!DOCTYPE gideontoc>" > php.toc ; \
-	echo "<gideontoc>" >> php.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > php.toc ; \
+	echo "<kdeveloptoc>" >> php.toc ; \
 	echo "<title>PHP</title>" >> php.toc ; \
 	echo "<base href=\"$(PHPDOCDIR)\"/>" >> php.toc ; \
 	cat $(srcdir)/php.toc.in >> php.toc ; \
-	echo "</gideontoc>" >> php.toc ; \
+	echo "</kdeveloptoc>" >> php.toc ; \
 	echo "" >> php.toc
 
 gnustep.toc: $(srcdir)/gnustep.toc.in
-	echo "<!DOCTYPE gideontoc>" > gnustep.toc ; \
-	echo "<gideontoc>" >> gnustep.toc ; \
-	echo "<title>GNUStep</title>" >> gnustep.toc ; \
-	echo "<base href=\"$(GNUSTEP_SYSTEM_ROOT)\"/>" >> gnustep.toc ; \
-	cat $(srcdir)/gnustep.toc.in >> gnustep.toc ; \
-	echo "</gideontoc>" >> gnustep.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > gnustep.toc ; \
+	echo "<kdeveloptoc>" >> gnustep.toc ; \
+	echo "<title>GNUstep</title>" >> gnustep.toc ; \
+	echo "<base href=\"$(GNUSTEPDOCDIR)/Base/Reference\"/>" >> gnustep.toc ; \
+	cat $(srcdir)/gnustepbase.toc.in >> gnustep.toc ; \
+	echo "<base href=\"$(GNUSTEPDOCDIR)/Gui/Reference\"/>" >> gnustep.toc ; \
+	cat $(srcdir)/gnustepgui.toc.in >> gnustep.toc ; \
+	echo "</kdeveloptoc>" >> gnustep.toc ; \
 	echo "" >> gnustep.toc
 
 gtk.toc: $(srcdir)/glib.toc.in $(srcdir)/gdk.toc.in $(srcdir)/gdk-pixbuf.toc.in $(srcdir)/gtk.toc.in $(srcdir)/gnome.toc.in $(srcdir)/gnomeui.toc.in 
-	echo "<!DOCTYPE gideontoc>" > gtk.toc ; \
-	echo "<gideontoc>" >> gtk.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > gtk.toc ; \
+	echo "<kdeveloptoc>" >> gtk.toc ; \
 	echo "<title>Gtk</title>" >> gtk.toc ; \
 	echo "<base href=\"$(GLIBDOCDIR)\"/>" >> gtk.toc ; \
 	echo "<tocsect1 name=\"GLib\" url=\"index.html\">" >> gtk.toc ; \
@@ -71,25 +80,25 @@ gtk.toc: $(srcdir)/glib.toc.in $(srcdir)/gdk.toc.in $(srcdir)/gdk-pixbuf.toc.in 
 	cat $(srcdir)/gnome.toc.in >> gtk.toc ; \
 	echo "<base href=\"$(GNOMEUIDOCDIR)\"/>" >> gtk.toc ; \
 	cat $(srcdir)/gnomeui.toc.in >> gtk.toc ; \
-	echo "</gideontoc>" >> gtk.toc ; \
+	echo "</kdeveloptoc>" >> gtk.toc ; \
 	echo "" >> gtk.toc
 
 python.index: $(srcdir)/python.index.in
-	echo "<!DOCTYPE gideonindex>" > python.index ; \
-	echo "<gideonindex>" >> python.index
+	echo "<!DOCTYPE kdevelopindex>" > python.index ; \
+	echo "<kdevelopindex>" >> python.index
 	echo "<title>Python</title>" >> python.index ; \
 	echo "<base href=\"$(PYTHONDOCDIR)\"/>" >> python.index ; \
 	cat $(srcdir)/python.index.in >> python.index ; \
-	echo "</gideonindex>" >> python.index ; \
+	echo "</kdevelopindex>" >> python.index ; \
 	echo "" >> python.index
 
 php.index: $(srcdir)/php.index.in
-	echo "<!DOCTYPE gideonindex>" > php.index ; \
-	echo "<gideonindex>" >> php.index
+	echo "<!DOCTYPE kdevelopindex>" > php.index ; \
+	echo "<kdevelopindex>" >> php.index
 	echo "<title>PHP</title>" >> php.index ; \
 	echo "<base href=\"$(PHPDOCDIR)\"/>" >> php.index ; \
 	cat $(srcdir)/php.index.in >> php.index ; \
-	echo "</gideonindex>" >> php.index ; \
+	echo "</kdevelopindex>" >> php.index ; \
 	echo "" >> php.index
 
 python-toc:
@@ -125,15 +134,13 @@ php-toc:
 
 gnustep-toc:
 	perl ../tools/toc-gsdoc \
-	  --prefix=Documentation/Base/Reference \
 	  --title=Base \
 	  --main=base \
-	  Base.gsdoc > gnustep.toc.in ; \
+	  Base.gsdoc > gnustepbase.toc.in ; \
 	perl ../tools/toc-gsdoc \
-	  --prefix=Documentation/Gui/Reference \
 	  --title=Gui \
 	  --main=gui \
-	  Gui.gsdoc >> gnustep.toc.in
+	  Gui.gsdoc >> gnustepgui.toc.in
 
 gtk-toc:
 	perl ../tools/toc-docbook \

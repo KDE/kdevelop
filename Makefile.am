@@ -14,8 +14,8 @@ $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 $(top_srcdir)/subdirs:
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
 
-$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/gideon.m4.in
-	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in gideon.m4.in > acinclude.m4
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/kdevelop.m4.in
+	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in kdevelop.m4.in > acinclude.m4
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
 

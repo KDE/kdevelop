@@ -7,21 +7,21 @@ indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = stl.index
 
 stl.toc: $(srcdir)/stl.toc.in
-	echo "<!DOCTYPE gideontoc>" > stl.toc ; \
-	echo "<gideontoc>" >> stl.toc ; \
+	echo "<!DOCTYPE kdeveloptoc>" > stl.toc ; \
+	echo "<kdeveloptoc>" >> stl.toc ; \
 	echo "<title>STL</title>" >> stl.toc ; \
 	echo "<base href=\"$(htmldir)\"/>" >> stl.toc ; \
 	cat $(srcdir)/stl.toc.in >> stl.toc
-	echo "</gideontoc>" >> stl.toc ; \
+	echo "</kdeveloptoc>" >> stl.toc ; \
 	echo "" >> stl.toc
 
 stl.index: $(srcdir)/stl.index.in
-	echo "<!DOCTYPE gideonindex>" > stl.index ; \
-	echo "<gideonindex>" >> stl.index ; \
+	echo "<!DOCTYPE kdevelopindex>" > stl.index ; \
+	echo "<kdevelopindex>" >> stl.index ; \
 	echo "<title>STL</title>" >> stl.index ; \
 	echo "<base href=\"$(htmldir)\"/>" >> stl.index ; \
 	cat $(srcdir)/stl.index.in >> stl.index ; \
-	echo "</gideonindex>" >> stl.index
+	echo "</kdevelopindex>" >> stl.index
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ;

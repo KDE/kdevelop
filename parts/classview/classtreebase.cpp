@@ -47,8 +47,11 @@ KPopupMenu *ClassTreeItem::createPopup()
     if (!m_item || m_item->itemType == PIT_SCOPE)
         return 0;
 
+    KDevLanguageSupport::Features features = classTree()->m_part->languageSupport()->features();
+
     KPopupMenu *popup = new KPopupMenu();
-    popup->insertItem( i18n("Go to declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
+    if (features & KDevLanguageSupport::Declarations)
+        popup->insertItem( i18n("Go to declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
     if (m_item->itemType == PIT_METHOD)
         popup->insertItem( i18n("Go to definition..."), classTree(), SLOT(slotGotoImplementation()) );
 
@@ -58,8 +61,8 @@ KPopupMenu *ClassTreeItem::createPopup()
         {
             title = i18n("Class");
             KDevLanguageSupport *ls = classTree()->m_part->languageSupport();
-            bool hasAddMethod = ls->features() & KDevLanguageSupport::AddMethod;
-            bool hasAddAttribute = ls->features() & KDevLanguageSupport::AddAttribute;
+            bool hasAddMethod = features & KDevLanguageSupport::AddMethod;
+            bool hasAddAttribute = features & KDevLanguageSupport::AddAttribute;
             if (hasAddMethod)
                 popup->insertItem( i18n("Add method..."), classTree(), SLOT(slotAddMethod()));
             if (hasAddAttribute)

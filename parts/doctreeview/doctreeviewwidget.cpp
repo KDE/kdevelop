@@ -281,8 +281,8 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
     }
 
     QDomDocument doc;
-    if (!doc.setContent(&f) || doc.doctype().name() != "gideontoc") {
-        kdDebug() << "Not a valid gideontoc file: " << fileName << endl;
+    if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+        kdDebug() << "Not a valid kdeveloptoc file: " << fileName << endl;
         return;
     }
     

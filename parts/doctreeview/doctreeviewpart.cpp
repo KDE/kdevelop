@@ -100,6 +100,8 @@ DocTreeViewPart::~DocTreeViewPart()
 void DocTreeViewPart::projectOpened()
 {
     m_widget->projectChanged(project());
+    if (m_indexDialog)
+        m_indexDialog->projectChanged();
 }
 
 

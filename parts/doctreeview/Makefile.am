@@ -1,6 +1,6 @@
 # Here resides the doc tree view part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 lib_LTLIBRARIES = libkdevdoctreeview.la
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

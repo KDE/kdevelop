@@ -18,8 +18,8 @@ public:
 
     enum Features {
         Classes=1, Structs=2, Functions=4, Variables=8,
-        Namespaces=16, Signals=32, Slots=64,           /* features of the language itself       */
-        NewClass=128, AddMethod=256, AddAttribute=512  /* features of the language support part */
+        Namespaces=16, Signals=32, Slots=64, Declarations=128,   /* features of the language itself       */
+        NewClass=512, AddMethod=1024, AddAttribute=2048          /* features of the language support part */
     };
     
     KDevLanguageSupport( KDevApi *api, QObject *parent=0, const char *name=0 );

@@ -131,7 +131,6 @@ void PartSelectWidget::saveProjectConfig()
     QDomElement docEl = m_projectDom.documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     
-    QStringList ignoreparts;
     QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
     if (ignorepartsEl.isNull()) {
         ignorepartsEl = m_projectDom.createElement("ignoreparts");
