@@ -14,8 +14,8 @@
  /**
   * @todo This piece of code is quite bulky: it should be refactored,
   * putting in a separate class hierarchy the knowledge about vcs file info
-  * provider objects and provide ad-hoc factory class. (This is a memo for
-  * mysqlf (mario) or for whoever has some nice ideas about fixing this
+  * provider objects and provide ad-hoc factory classes. (This is a memo for
+  * myself (mario) or for whoever has some nice ideas about fixing this
   * rather hacked code ;-)
  */
 
@@ -71,7 +71,7 @@ public:
     }
     MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
        : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false ),
-       m_statusColor( FileViewPart::vcsColors.defaultColor ) // @todo color for directory?
+       m_statusColor( FileViewPart::vcsColors.defaultColor )
     {
         hideOrShow();
     }
@@ -204,6 +204,7 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
     // paint cell in a different color
     QColorGroup mycg( cg );
 //    kdDebug() << "MyFileTreeViewItem::paintCell(): itemColor == " << itemColor.name() << endl;
+    // strage: setting QColorGroup::Text works instead ... :-/
     mycg.setColor( QColorGroup::Background, m_statusColor );
 //    kdDebug() << "MyFileTreeViewItem::paintCell(): mycg.background() == " << mycg.background().name() << endl;
 //    p->setBackgroundColor( itemColor );
@@ -293,7 +294,13 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     setAllColumnsShowFocus( true );
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
+    // Update the #define order on top if you change this order!
+    addColumn( "Filename" );
+    addColumn( "Status" );
+    addColumn( "Work" );
+    addColumn( "Repo." );
 
+    // Slot connections
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
@@ -314,11 +321,6 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
         connect( vcsFileInfoProvider(), SIGNAL(statusReady(const VCSFileInfoMap&, void *)),
             this, SLOT(vcsDirStatusReady(const VCSFileInfoMap&, void*)) );
     }
-    // Update the #define order on top if you change this order!
-    addColumn( "Filename" );
-    addColumn( "Status" );
-    addColumn( "Work" );
-    addColumn( "Repo." );
 
     // Actions
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
@@ -334,8 +336,7 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
-    slotToggleShowVCSFields( showVCSFields() );
-
+    slotToggleShowVCSFields( showVCSFields() ); // show or hide fields depending on read settings
     // Hide pattern for files
     QString defaultHidePattern = "*.o,*.lo,CVS";
     QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
@@ -459,7 +460,7 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
     m_actionToggleShowNonProjectFiles->plug( &popup );
 
     // Give a change for syncing status with remote repository: a file info provider must
-    // be available and the item must be a directory (so we can safely use isExpandable()?)
+    // be available and the item must be a directory
     const MyFileTreeViewItem *myFileItem = static_cast<MyFileTreeViewItem *>( item );
     if (vcsFileInfoProvider() && myFileItem->isDir())
     {
@@ -653,8 +654,6 @@ void FileTreeWidget::slotToggleShowVCSFields( bool checked )
     kdDebug(9017) << "FileTreeWidget::slotToggleShowVCSFields()" << endl;
     kdDebug(9017) << "Yet to be implemented!!" << endl;
 
-    // @fixme: even if I hide the columns they are taken in account when resizing
-    // the list view :-/
     if (checked)
     {
         setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
@@ -698,7 +697,7 @@ void FileTreeWidget::vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, voi
             kdDebug(9017) << "Map does not contain anything useful about this file ;-(" << fileName << endl;
         item = static_cast<MyFileTreeViewItem*>( item->nextSibling() );
     }
-    triggerUpdate(); // @fixme Paint only the updated widget's region ?
+    triggerUpdate();
 
     m_isSyncingWithRepository = false;
 }
