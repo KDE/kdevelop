@@ -11,9 +11,13 @@ Category:  the category, will we displayed hierarchic in a
            treeview (current implementation)
 Comment:   a small comment for the template, longer comments should go
            into a README.devel and shown on startup
-ShowFileAfterGeneration:
-           this file will be opened after the generation, for instance
-           a readme, path is relative to the project dir
+ShowFilesAfterGeneration:
+           this comma separated list of files will be opened after the project
+           generation, for instance a readme, path is relative to the project dir,
+           APPNAMELC will be replaced with the project name in uppercase,
+           APPNAMEUP will be replaced with the project name in lowercase,
+           APPNAME will be replaced with the project name.
+           (example: ShowFilesAfterGeneration=README.devel,APPNAMELC_plugin.cpp)
 DefaultDestinatonDir:
            changes the default destination dir for the project (~)
            to your value, HOMEDIR is a keyword
@@ -33,7 +37,7 @@ Name=Simple PHP script
 Category=PHP
 Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php.net)
 Icon= php.png
-ShowFileAfterGeneration=README.devel
+ShowFilesAfterGeneration=README.devel
 DefaultDestinatonDir=HOMEDIR/public_html
 FileTemplates=php,ShellStyle
 
