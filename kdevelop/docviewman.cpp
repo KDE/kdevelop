@@ -84,7 +84,7 @@ void DocViewMan::doSelectURL(const QString& url)
   else {
     CDocBrowser* pDoc = createCDocBrowser(url);
     if (pDoc == 0) return; // failed
-    pBrowserView = createBrowserView(pDoc);
+    pBrowserView = createBrowserView(pDoc, true);
   }
 
   pBrowserView->parentWidget()->setFocus();
@@ -165,7 +165,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
         pDoc->setLastFileModifDate(fileinfo.lastModified());
 
         qDebug("createView for a new created doc");
-        pCurEditWidget = createEditView(pDoc);
+        pCurEditWidget = createEditView(pDoc, true);
       }
     }
     else {
@@ -365,10 +365,10 @@ void DocViewMan::doCreateNewView()
 
   if(curDocIsBrowser()) {
     CDocBrowser* pBrowserDoc = createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
-    pNewView = createBrowserView(pBrowserDoc);
+    pNewView = createBrowserView(pBrowserDoc, true);
   }
   else {
-    pNewView = createEditView(currentEditDoc());
+    pNewView = createEditView(currentEditDoc(), true);
   }
 
   // raise and activate
@@ -666,7 +666,7 @@ KWriteDoc* DocViewMan::kwDocPointer(int docId) const
 //-----------------------------------------------------------------------------
 // cover a newly created view with a QextMDI childview 
 //-----------------------------------------------------------------------------
-void DocViewMan::addQExtMDIFrame(QWidget* pNewView)
+void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow)
 {
   debug("DocViewMan::addQExtMDIFrame !\n");
 
@@ -678,7 +678,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView)
   m_MDICoverList.append( pMDICover);
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   pNewView->reparent( pMDICover, QPoint(0,0));
-  QApplication::sendPostedEvents();
+//  QApplication::sendPostedEvents();
   pLayout->addWidget( pNewView);
   pMDICover->setName( pNewView->name());
   // captions
@@ -693,19 +693,23 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView)
   slot_gotFocus( pMDICover);
 
   // take it under MDI mainframe control (note: this triggers also a setFocus())
-  m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
+  int flags;
+  if (bShow) {
+  	flags = QextMdi::StandardAdd;
+  }
+  else {
+    flags = QextMdi::Hide;
+  }
+  m_pParent->addWindow( pMDICover, flags);
   // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
   pMDICover->setFirstFocusableChildWidget(0L);
   pMDICover->setLastFocusableChildWidget(0L);
-  // show
-  pMDICover->show();
-
 }
 
 //-----------------------------------------------------------------------------
 // create a new view for an edit document
 //-----------------------------------------------------------------------------
-CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
+CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 {
   debug("DocViewMan::createEditView !\n");
 
@@ -748,7 +752,7 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
   //   pDocViewNode->existingViews.append(pNewView);
 
   // Cover it by a QextMDI childview and add that MDI system
-  addQExtMDIFrame(pEW);
+  addQExtMDIFrame(pEW, bShow);
 
   // some additional settings
   pEW->setFocusPolicy(QWidget::StrongFocus);
@@ -765,7 +769,7 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
 //-----------------------------------------------------------------------------
 // create a new view for a browser document
 //-----------------------------------------------------------------------------
-KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc)
+KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 {
   debug("DocViewMan::createBrowserView !\n");
 
@@ -780,7 +784,7 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc)
   pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
 
   // Cover it by a QextMDI childview and add that MDI system
-  addQExtMDIFrame(pNewView);
+  addQExtMDIFrame(pNewView, bShow);
   
   return pNewView;
 }

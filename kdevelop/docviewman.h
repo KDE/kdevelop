@@ -176,14 +176,14 @@ public:
   KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
 
   /** Add a MDI frame around a newly created view */
-  void addQExtMDIFrame(QWidget* pNewView);
+  void addQExtMDIFrame(QWidget* pNewView, bool bShow);
 
   /** */
   void doCreateNewView();
   /** */
-  CEditWidget* createEditView(KWriteDoc* pDoc);
+  CEditWidget* createEditView(KWriteDoc* pDoc, bool bShow);
   /** */
-  KHTMLView* createBrowserView(CDocBrowser* pDoc);
+  KHTMLView* createBrowserView(CDocBrowser* pDoc, bool bShow);
   /** get the first edit view for an edit document */
   CEditWidget* getFirstEditView(KWriteDoc* pDoc) const;
 

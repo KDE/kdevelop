@@ -208,6 +208,11 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
     }
   }
 
+  QextMdiIterator<QextMdiChildView*>* winListIter = ((QextMdiMainFrm*)m_pDocViewMan->parent())->createIterator();
+  for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
+    winListIter->currentItem()->show();
+  }
+
   return true;
 }
 
@@ -220,14 +225,15 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
   int   nView;
   QDomElement viewEl;
   QWidget* pFocusedView = 0L;
+  const bool HIDE = false;
   for (viewEl = docEl.firstChild().toElement(), nView = 0; nView < nNrOfViews; nView++, viewEl = viewEl.nextSibling().toElement()) {
     // create the view
     QWidget* pView = 0L;
     QString viewType = viewEl.attribute( "Type", "Unknown");
     if (viewType == QString("KWriteView"))
-      pView = m_pDocViewMan->createEditView( (KWriteDoc*) pDoc);
+      pView = m_pDocViewMan->createEditView( (KWriteDoc*) pDoc, HIDE);
     else if (viewType == QString("KHTMLView"))
-      pView = m_pDocViewMan->createBrowserView( (CDocBrowser*) pDoc);
+      pView = m_pDocViewMan->createBrowserView( (CDocBrowser*) pDoc, HIDE);
     if (pView != 0L) {
       // is it the focused view? (XXX well, this only refers to the module instance)
       if (viewEl.attribute( "Focus", "0").toInt()) {
@@ -238,10 +244,12 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
       loadViewGeometry( pView, viewEl);
     }
   }
+
   // restore focus
   if (pFocusedView != 0L) {
     pFocusedView->setFocus();
   }
+
 }
 
 void KDevSession::saveViewGeometry( QWidget* pView, QDomElement viewEl)
@@ -300,7 +308,7 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
   if ( (pMDICover->isAttached()) && (!bAttached) ) {
     pMDICover->detach();
   }
-  QApplication::sendPostedEvents();
+//  QApplication::sendPostedEvents();
   if (nMinMaxMode == 0) {
     pMDICover->setInternalGeometry(QRect(nLeft, nTop, nWidth, nHeight));
   }
@@ -309,8 +317,8 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
       pMDICover->minimize();
     }
     if (nMinMaxMode == 2) {
-      pMDICover->maximize();
-      QApplication::sendPostedEvents();
+//      pMDICover->maximize();
+//      QApplication::sendPostedEvents();
     }
     pMDICover->setRestoreGeometry(QRect(nLeft, nTop, nWidth, nHeight));
   }

@@ -1,3 +1,6 @@
+2001-05-04  F@lk Brettschneider <falk@kdevelop.org>
+    * prevent project session loading from flicker
+
 2001-05-03  rokrau@yahoo.com
     * Applied Harald Fernengel <harry@bnro.de> second set of patches for the
       grepdialog.
