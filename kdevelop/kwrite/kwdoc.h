@@ -68,7 +68,7 @@ class TextLine {
 
     void markFound(int pos, int l);
     void unmarkFound();
-    	
+
     bool isVisible() { return visible; };
     void setVisible(bool status);
 
@@ -78,13 +78,12 @@ class TextLine {
     bool isBPEnabled()	{ return bpEnabled; }
     bool isBPPending()	{ return bpPending; }
 
-    void setBPId( int id, bool enabled, bool pending)
-												{ bpID = id; bpEnabled = enabled; bpPending = pending; }
-    void delBPId()			{ bpID = 0; }
+    void setBPId( int id, bool enabled, bool pending) { bpID = id; bpEnabled = enabled; bpPending = pending; }
+    void delBPId() { bpID = 0; }
 
-		bool isBookmarked() { return bookmarked; }
-		void toggleBookmark() { bookmarked = !bookmarked; }
-		
+    bool isBookmarked() { return bookmarked; }
+    void toggleBookmark() { bookmarked = !bookmarked; }
+
   protected:
     void resize(int);
 
@@ -187,6 +186,8 @@ class KWriteDoc : public QObject {
     QList<KWriteView> viewList() { return views; };
     int viewCount();
     void setUpdatesEnabled( bool bEnabled ){ bUpdateEnabled = bEnabled; }
+
+    void newBracketMark(PointStruc &, BracketMark &);
 
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);

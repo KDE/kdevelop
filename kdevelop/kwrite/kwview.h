@@ -5,7 +5,7 @@
 
 #include <qscrbar.h>
 #include <qiodev.h>
-#include <kpopupmenu.h>
+#include <kpopupmenu.h>                  	
 #include <kconfig.h>
 
 #include "kwdialog.h"
@@ -80,6 +80,12 @@ struct PointStruc {
   int y;
 };
 
+struct BracketMark {
+  PointStruc cursor;
+  int sXPos;
+  int eXPos;
+};
+
 struct VConfig {
   PointStruc cursor;
   int flags;
@@ -103,29 +109,29 @@ class KIconBorder : public QWidget {
     KIconBorder(KWrite *, KWriteDoc *, KWriteView *);
     ~KIconBorder();
 
-  	/** Paints line */
-		void paintLine(int line);
-		/** Clear line*/
-		void clearLine(int line);
-		/** Clear the icon border */
-		void clearAll();
-		/** Paint a bookmark on the line if needed */
-		void paintBookmark(int line);
-		/** Paint a breakpoint on the line if needed */
-		void paintBreakpoint(int line);
+    /** Paints line */
+    void paintLine(int line);
+    /** Clear line*/
+    void clearLine(int line);
+    /** Clear the icon border */
+    void clearAll();
+    /** Paint a bookmark on the line if needed */
+    void paintBookmark(int line);
+    /** Paint a breakpoint on the line if needed */
+    void paintBreakpoint(int line);
     /** Painst an icon where the debugger has stopped */
     void paintDbgPosition(int line);
 
-  	/**  */
-  	virtual void mousePressEvent(QMouseEvent* e);
-  	/**  */
+    /**  */
+    virtual void mousePressEvent(QMouseEvent* e);
+    /**  */
     virtual void paintEvent(QPaintEvent* e);
 
 protected:
-		/** Clear some pixel lines */
-		void clearPixelLines(int startPixelLine, int numberPixelLine);
-  	/** Paint an icon to y */
-		void showIcon(const QPixmap& icon, int y);
+    /** Clear some pixel lines */
+    void clearPixelLines(int startPixelLine, int numberPixelLine);
+    /** Paint an icon to y */
+    void showIcon(const QPixmap& icon, int y);
 
   protected slots:
     /**  */
@@ -190,6 +196,8 @@ protected slots:
   protected:
     virtual bool event ( QEvent * );
 
+    void paintBracketMark();
+
     void getVConfig(VConfig &);
     void update(VConfig &);
 //    void updateCursor(PointStruc &start, PointStruc &end, bool insert);
@@ -237,6 +245,8 @@ protected slots:
     int scrollY;
     int scrollTimer;
 
+    BracketMark bm;
+
     PointStruc cursor;
     bool cursorOn;
     int cursorTimer;
@@ -273,7 +283,7 @@ class KWrite : public QWidget {
     Q_OBJECT
     friend KWriteView;
     friend KWriteDoc;
-		friend KIconBorder;
+    friend KIconBorder;
   public:
     /** The document can be used by more than one KWrite objects
     */

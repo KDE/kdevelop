@@ -871,7 +871,7 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char *str, int len) {
 
   recordStart(c.cursor);
 
-  const char *s = textLine->getText();;
+  const char *s = textLine->getText();
   if (s && iseucchar(s[c.cursor.x])) {
       l2 = 2;
   } else {
@@ -3311,6 +3311,7 @@ void KWriteDoc::updateBMPopup(QPopupMenu* popup)
     }
 }
 
+
 void KWriteDoc::gotoBookmark(QString &text) {
 
   debug("text : '%s' !\n", text.data());
@@ -3348,5 +3349,87 @@ int KWriteDoc::viewCount()
 {
   return views.count();
 }
+
+void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm)
+{
+  TextLine *textLine;
+  int x, line, count, attr;
+  QChar bracket, opposite, ch;
+  Attribute *a;
+
+  bm.eXPos = -1; //mark bracked mark as invalid
+
+//  debug("KWriteDoc::newBracketMark\n");
+
+  x = cursor.x -1; // -1 to look at left side of cursor
+  if (x < 0) return;
+  line = cursor.y; //current line
+  count = 0; //bracket counter for nested brackets
+  textLine = contents.at(cursor.y);
+  bracket = textLine->getChar(x);
+  attr = textLine->getAttr(x);
+  if (bracket == '(' || bracket == '[' || bracket == '{') {
+    //get opposite bracket
+    opposite = ')';
+    if (bracket == '[') opposite = ']';
+    if (bracket == '{') opposite = '}';
+    //get attribute of bracket (opposite bracket must have the same attribute)
+    x++;
+    while (line - cursor.y < 40) {
+      //go to next line on end of line
+      while (x >= textLine->length()) {
+        line++;
+        if (line > lastLine()) return;
+        textLine = contents.at(line);
+        x = 0;
+      }
+      if (textLine->getAttr(x) == attr) {
+        //try to find opposite bracked
+        ch = textLine->getChar(x);
+        if (ch == bracket) count++; //same bracket : increase counter
+        if (ch == opposite) {
+          count--;
+          if (count < 0) goto found;
+        }
+      }
+      x++;
+    }
+  } else if (bracket == ')' || bracket == ']' || bracket == '}') {
+    opposite = '(';
+    if (bracket == ']') opposite = '[';
+    if (bracket == '}') opposite = '{';
+    x--;
+    while (cursor.y - line < 20) {
+
+      while (x < 0) {
+        line--;
+        if (line < 0) return;
+        textLine = contents.at(line);
+        x = textLine->length() -1;
+      }
+      if (textLine->getAttr(x) == attr) {
+        ch = textLine->getChar(x);
+        if (ch == bracket) count++;
+        if (ch == opposite) {
+          count--;
+          if (count < 0) goto found;
+        }
+      }
+      x--;
+    }
+  }
+  return;
+found:
+  //cursor position of opposite bracket
+  bm.cursor.x = x;
+  bm.cursor.y = line;
+
+  //x position (start and end) of related bracket
+  bm.sXPos = textWidth(textLine, x);
+  a = &attribs[attr];
+  bm.eXPos = bm.sXPos + a->fm.width(bracket);//a->width(bracket);
+}
+
+
 
 #include "kwdoc.moc"

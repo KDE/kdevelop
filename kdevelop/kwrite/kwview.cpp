@@ -612,7 +612,7 @@ void KWriteView::update(VConfig &c) {
   kWriteDoc->unmarkFound();
   
   if (cursorOn) {
-    tagLines(c.cursor.y,c.cursor.y);
+    tagLines(c.cursor.y, c.cursor.y);
     cursorOn = false;
   }
 #ifdef QT_I18N
@@ -624,6 +624,12 @@ void KWriteView::update(VConfig &c) {
   setInputMethodSpotLocation(x, y);
 #endif
 #endif
+
+  if (bm.sXPos < bm.eXPos) {
+    tagLines(bm.cursor.y, bm.cursor.y);
+  }
+  // make new bracket mark
+  kWriteDoc->newBracketMark(cursor, bm);
 
   if (c.flags & cfMark) {
     kWriteDoc->selectTo(c.cursor,cursor,c.flags);
@@ -679,6 +685,11 @@ void KWriteView::updateCursor(PointStruc &newCursor) {
     tagLines(cursor.y,cursor.y);
     cursorOn = false;
   }
+  if (bm.sXPos < bm.eXPos) {
+    tagLines(bm.cursor.y, bm.cursor.y);
+  }
+  kWriteDoc->newBracketMark(newCursor, bm);
+
   cursor = newCursor;
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
 }
@@ -808,6 +819,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       if (dx || dy) {
         scroll(dx,dy);
       } else if (cursorOn) paintCursor();
+      if (bm.eXPos > bm.sXPos) paintBracketMark();
     }
   }
 
@@ -896,6 +908,19 @@ void KWriteView::paintCursor() {
       paint.end();
     }
   }
+}
+
+void KWriteView::paintBracketMark() {
+  int y;
+
+  y = kWriteDoc->fontHeight*(bm.cursor.y +1) - yPos -1;
+
+  QPainter paint;
+  paint.begin(this);
+  paint.setPen(kWriteDoc->cursorCol(bm.cursor.x, bm.cursor.y));
+
+  paint.drawLine(bm.sXPos - (xPos-2), y, bm.eXPos - (xPos-2) -1, y);
+  paint.end();
 }
 
 void KWriteView::placeCursor(int x, int y, int flags) {
@@ -1279,8 +1304,10 @@ void KWriteView::paintEvent(QPaintEvent *e) {
     if (!h)
       break;  // otherwise there's an infinite loop ;(
   }
+
   paint.end();
   if (cursorOn) paintCursor();
+  if (bm.eXPos > bm.sXPos) paintBracketMark();
   bIsPainting = false;		// toggle scrolling on
 }
 
