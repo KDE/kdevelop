@@ -238,6 +238,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_pShowTreeViews(0L)
   ,m_toggleViewbar(0L)
   ,m_bUiModeSwitchPending(false)
+  ,m_bRemoveViewPending(false)
 {
   setStandardMDIMenuEnabled();
   setManagedDockPositionModeEnabled(true);
@@ -560,7 +561,8 @@ void MainWindow::removeView(QWidget *view)
   if (!view) {
     return;
   }
-
+  m_bRemoveViewPending = true;
+  
   QGuardedPtr<KMdiChildView> wrapper = m_widgetMap[view];
 
   if (wrapper) {
@@ -599,6 +601,8 @@ void MainWindow::removeView(QWidget *view)
     m_selectViews.remove(view);
     m_outputViews.remove(view);
   }
+  
+  m_bRemoveViewPending = false;
 }
 
 
@@ -994,7 +998,7 @@ void MainWindow::fillToolViewsMenu(
 /** Updates the toggle state of the actions to show or hide the tool windows */
 void MainWindow::updateActionState()
 {
-    if (!m_bUiModeSwitchPending) {
+    if (!m_bUiModeSwitchPending && !m_bRemoveViewPending) {
         ToolDockBaseState outputToolState(&m_outputViews);
         ToolDockBaseState treeToolState (&m_selectViews);
 
@@ -1166,6 +1170,7 @@ KParts::ReadOnlyPart * MainWindow::getPartFromWidget(const QWidget * pWidget) co
 
 void MainWindow::switchToToplevelMode()
 {
+  if (m_mdiMode == KMdi::ToplevelMode) return;
   m_bUiModeSwitchPending = true;
   
   saveMDISettings();
@@ -1181,6 +1186,7 @@ void MainWindow::switchToToplevelMode()
 
 void MainWindow::switchToChildframeMode()
 {
+  if (m_mdiMode == KMdi::ChildframeMode) return;
   m_bUiModeSwitchPending = true;
   
   saveMDISettings();
@@ -1196,6 +1202,7 @@ void MainWindow::switchToChildframeMode()
 
 void MainWindow::switchToTabPageMode()
 {
+  if (m_mdiMode == KMdi::TabPageMode) return;
   m_bUiModeSwitchPending = true;
   
   saveMDISettings();
@@ -1211,6 +1218,7 @@ void MainWindow::switchToTabPageMode()
 
 void MainWindow::switchToIDEAlMode()
 {
+  if (m_mdiMode == KMdi::IDEAlMode) return;
   m_bUiModeSwitchPending = true;
   
   saveMDISettings();

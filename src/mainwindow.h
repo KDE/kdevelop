@@ -205,6 +205,7 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
   QValueList<int>  m_windowMenus;
   
   bool             m_bUiModeSwitchPending;
+  bool             m_bRemoveViewPending;
 };
 
 //=========================
