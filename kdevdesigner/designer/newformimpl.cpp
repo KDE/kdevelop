@@ -252,7 +252,7 @@ void NewForm::insertTemplates( QIconView *tView,
 	    ProjectItem *pi = new ProjectItem( tView, i18n("%1 Project" ).arg( *it ) );
 	    allItems.append( pi );
 	    pi->setLanguage( *it );
-	    pi->setPixmap( SmallIcon( "designer_project.png" , KDevDesignerPartFactory::instance()) );
+	    pi->setPixmap( BarIcon( "designer_project.png" , KDevDesignerPartFactory::instance()) );
 	    pi->setDragEnabled( FALSE );
 	}
     }
@@ -260,24 +260,24 @@ void NewForm::insertTemplates( QIconView *tView,
     FormItem *fi = new FormItem( tView,i18n( "Dialog" ) );
     allItems.append( fi );
     fi->setFormType( FormItem::Dialog );
-    fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
+    fi->setPixmap( BarIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
     fi->setDragEnabled( FALSE );
     cur = fi;
     if ( !MainWindow::self->singleProjectMode() ) {
 	fi = new FormItem( tView,i18n( "Wizard" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::Wizard );
-	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
+	fi->setPixmap( BarIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
 	fi->setDragEnabled( FALSE );
 	fi = new FormItem( tView, i18n( "Widget" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::Widget );
-	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
+	fi->setPixmap( BarIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
 	fi->setDragEnabled( FALSE );
 	fi = new FormItem( tView, i18n( "Main Window" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::MainWindow );
-	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
+	fi->setPixmap( BarIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
 	fi->setDragEnabled( FALSE );
 
 	QString templPath = templatePath;
