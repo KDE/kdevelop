@@ -1284,7 +1284,9 @@ void QextMdiMainFrm::finishTabPageMode()
          QSize maxs = pView->maximumSize();
          QSize sz = pView->size();
          QWidget* pParent = pView->parentWidget();
-         pView->reparent(0,0,pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
+         QPoint p(pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
+         pView->reparent(0,0,p);
+         pView->reparent(0,0,p);
          pView->resize(sz);
          pView->setMinimumSize(mins.width(),mins.height());
          pView->setMaximumSize(maxs.width(),maxs.height());
