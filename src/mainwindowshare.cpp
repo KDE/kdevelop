@@ -255,7 +255,7 @@ void MainWindowShare::slotStopPopupActivated( int id )
     QString str = m_stopProcesses->popupMenu()->text( id );
     for ( plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
       if ( plugin->pluginName() == str ) {
-	Core::getInstance()->doEmitStopButtonPressed( plugin );
+  Core::getInstance()->doEmitStopButtonPressed( plugin );
         return;
       }
     }
@@ -362,6 +362,7 @@ void MainWindowShare::slotConfigureEditors()
 
     // show the modal config dialog for this part if it has a ConfigInterface
     conf->configDialog();
+    conf->writeConfig();
 
     // iterate over other instances of this part type and apply configuration
     if( const QPtrList<KParts::Part> * partlist = partController->parts() )

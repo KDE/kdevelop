@@ -82,11 +82,15 @@ bool DirectoryStatusMessageFilter::matchEnterDir( const QString& line, QString& 
     // 0x00AB is LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
     // 0X00BB is RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
     static QRegExp dirChange(QString::fromLatin1(".*: (.+) (`|") + QChar(0x00BB) + QString::fromLatin1(")(.*)('|") + QChar(0x00AB) + QString::fromLatin1(")(.*)"));
+    kdDebug(9004) << "Directory filter line " << line << endl;
 
     if (dirChange.search(line) > -1 )
     {
         QString msg = dirChange.cap(1);
         QString msgBehind = dirChange.cap(5);
+
+        kdDebug(9004) << "msg " << msg << endl;
+	kdDebug(9004) << "masgBehind" << msgBehind << endl;
 
         if ( msg == "Entering directory" ||   // English - default
                 msg == "Wechsel in das Verzeichnis Verzeichnis" ||    // German - yes, this is badly translated

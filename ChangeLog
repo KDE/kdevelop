@@ -1,6 +1,10 @@
+2003-07-19 Andras Mantia <amantia@freemail.hu>
+    * apply the editor settings to the opened files
+
 2003-07-15 Andras Mantia <amantia@freemail.hu>
     * resolve links before opening a local file
     * add "-follow" as a switch for "find" to successfully grep even in symlinked directories
+
 2003-07-14 Amilcar Lucas <a.lucas@tu-bs.de>
     * If no Main Program was selected in Project Options...-> Run Options, then use the
     * currently selected active target. This is valid for execution and for debugging.
@@ -17,13 +21,13 @@
     * compiles and runs on KDE-3.0.3/Qt-3.0.5 again
 
 2003-07-07 Mario Scalas <mario.scalas@libero.it>
-	* Added tag/branching feature to legacy CVS integration. 
+  * Added tag/branching feature to legacy CVS integration.
 
 2003-07-06 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented Delphi compiler plugin
 
 2003-07-04 Amílcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
-	Added debug and optimized build configurations to all C and C++ autoproject based templates
+  Added debug and optimized build configurations to all C and C++ autoproject based templates
 
 2003-07-04 Andras Mantia <amantia@freemail.hu>
     * Restore search in documentation functionality
