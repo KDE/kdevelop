@@ -1,3 +1,9 @@
+2003-03-13 Alexander Dymo <cloudtemple@mksat.net>
+    * DevHelp documentation support for KDevelop.
+      All documentation collection for GNU/GNOME developers from 
+      http://lidn.sourceforge.net/ are supported. Existing DevHelp
+      installation can also be scanned for documentation.
+    
 2003-03-13 Julian Rockey <linux@jrockey.com>
 	* CTRL-/ does buffer switching, emacs-style
 	
