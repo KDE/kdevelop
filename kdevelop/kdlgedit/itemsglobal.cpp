@@ -160,6 +160,18 @@ int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
   return defaultval;
 }
 
+QString KDlgPropertyBase::getHelp(QString name)
+{
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
+    {
+      if ((getProp(i)) && (getProp(i)->name.upper() == name.upper()))
+        return helps[i];
+    }
+
+  return QString(i18n("Sorry, there is no help available for this property"));
+}
+
 void KDlgPropertyBase::setProp_Name   (QString n, QString name)
 {
   int i;

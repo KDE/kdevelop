@@ -22,6 +22,7 @@
 #include <qlistview.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
+#include <qpopupmenu.h>
 #include <kfiledialog.h>
 #include <krestrictedline.h>
 #include <kspinbox.h>
@@ -43,9 +44,10 @@ bool isValueTrue(QString val)
 }
 
 
-AdvListView::AdvListView( QWidget * parent , const char * name )
+AdvListView::AdvListView( CKDevelop* parCKD, QWidget * parent , const char * name )
   : QListView( parent, name )
 {
+  pCKDevel = parCKD;
   int i;
   for (i=0; i<MAX_MAIN_ENTRYS; i++)
     openStats[i] = "";
@@ -66,8 +68,44 @@ void AdvListView::paintEvent ( QPaintEvent *e )
 void AdvListView::mousePressEvent ( QMouseEvent *e )
 {
   QListView::mousePressEvent( e );
-  updateWidgets();
+
+  if (e->button() == RightButton)
+    {
+      QPopupMenu *phelp = new QPopupMenu;
+      phelp->insertItem( i18n("&Help"), this, SLOT(help()) );
+      QPoint p(mapFromGlobal (QCursor::pos()));
+      p.setY(p.y()-header()->height());
+      p.setX(0);
+      if (itemAt(p))
+        phelp->exec(QCursor::pos());
+    }
+  else
+    {
+      updateWidgets();
+    }
 }
+
+void AdvListView::help()
+{
+  QPoint p(mapFromGlobal (QCursor::pos()));
+  p.setY(p.y()-header()->height());
+  p.setX(0);
+  AdvListViewItem *it = (AdvListViewItem*)itemAt(p);
+  if (it)
+    {
+      KDlgItem_Base *bi = pCKDevel->kdlg_get_edit_widget()->selectedWidget();
+      QString helptext = i18n("Sorry, there is no help available for this property.");
+      if (bi)
+        {
+          QString str(bi->getProps()->getHelp( it->text(0) ));
+          if (str.length()!=0)
+            helptext = str;
+        }
+
+      QMessageBox::information( this, it->text(0), helptext);
+    }
+}
+
 
 void AdvListView::mouseMoveEvent ( QMouseEvent *e )
 {
@@ -426,7 +464,7 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
 KDlgPropWidget::KDlgPropWidget(CKDevelop* parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
   pCKDevel = parCKD;
-  lv = new AdvListView(this);
+  lv = new AdvListView(parCKD, this);
   lv->addColumn(i18n("Property"));
   lv->addColumn(i18n("Value"));
   lv->show();

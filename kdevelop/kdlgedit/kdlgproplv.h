@@ -32,6 +32,7 @@
 class AdvLvi_Base;
 class QPushButton;
 class KDlgItem_Base;
+class CKDevelop;
 
 /**
  * @short Advanced QListViewItem class (allows widgets in cells)
@@ -71,7 +72,7 @@ class AdvListView : public QListView
 {
   Q_OBJECT
   public:
-    AdvListView( QWidget * parent = 0, const char * name = 0 );
+    AdvListView( CKDevelop* parCKD, QWidget * parent = 0, const char * name = 0 );
     virtual ~AdvListView() {}
 
     virtual void hideAll();
@@ -90,6 +91,10 @@ class AdvListView : public QListView
     void updateWidgets();
 
     QString openStats[MAX_MAIN_ENTRYS];
+
+    CKDevelop *pCKDevel;
+  public slots:
+    void help();
 };
 
 

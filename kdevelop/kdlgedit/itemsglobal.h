@@ -93,11 +93,12 @@ class KDlgPropertyBase
 
 
     void addProp(QString name, QString value, QString group, int allowed, QString help = QString())
-       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed); }
+       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed,help); }
 
     int getIntFromProp(int nr, int defaultval=0);
     int getIntFromProp(QString name, int defaultval=0);
 
+    QString getHelp(QString name);
   protected:
     KDlgPropertyEntry props[MAX_ENTRYS_PER_WIDGET];
     QString helps[MAX_ENTRYS_PER_WIDGET];
