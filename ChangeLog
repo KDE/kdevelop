@@ -1,6 +1,7 @@
 2005-01-22 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Global scope plugins are once again optional.
  * Fixed source navigation history (by reducing the ambition to something that can work).
+ * Added the Version Control Manager plugin. Now we can decide which VCS system to use again. :)
 
 2005-01-20 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Further cleanup of plugin handling in PluginController/ProjectManager.
