@@ -28,8 +28,6 @@
 #include "filecreate_filetype.h"
 #include "filecreate_listitem.h"
 
-#include <iostream>
-
 namespace FileCreate {
 
   FriendlyWidget::FriendlyWidget(FileCreatePart *part)
@@ -69,6 +67,8 @@ namespace FileCreate {
       else kdDebug(9034) << "No match!" << endl;
     }
 
+    // If an exact match is not found (e.g. current points to a 'parent' type) then
+    // look instead for an extension match
     if (changeToRow==-1) {
       for(it = typeForRow.begin(); it!= typeForRow.end() && changeToRow==-1; ++it) {
 	if (it.data()->ext() == current->ext() )
@@ -80,6 +80,7 @@ namespace FileCreate {
       m_current = current;
       kdDebug(9034) << "Found row, setting current to row " << changeToRow << endl;
       slotCellSelected(changeToRow,0);
+      clearSelection();
       selectRow(changeToRow);
     }
 
@@ -199,6 +200,17 @@ namespace FileCreate {
     }
     setColumnWidth(col,maxWidth+2); // bit of extra room
   }
+
+#if QT_VERSION<310
+  void FriendlyWidget::selectRow(int row) {
+    if (numCols()>0 && row<numRows()) {
+      QTableSelection sel;
+      sel.init(row,0);
+      sel.expandTo(row,numCols());
+      addSelection(sel);
+    }
+  }
+#endif
 
 }
 

@@ -31,9 +31,9 @@ namespace FileCreate {
   class FriendlyWidget : public QTable, public TypeChooser
     {
       Q_OBJECT
-    
+
       public:
-		  
+
         FriendlyWidget(FileCreatePart *part);
         virtual ~FriendlyWidget();
 
@@ -46,6 +46,10 @@ namespace FileCreate {
 	 */
 	virtual void setCurrent(const FileType * current);
 
+#if QT_VERSION<310
+        void selectRow(int row);
+#endif
+
       protected:
 	/**
 	 * Sets row <i>row</i> to filetype <i>filetype</i>.
@@ -55,7 +59,7 @@ namespace FileCreate {
 	 * Clears the table.
 	 */
 	virtual void empty();
-	/** 
+	/**
 	 * Sets some default column widths.
 	 */
 	virtual void setDefaultColumnWidths();
@@ -101,7 +105,7 @@ namespace FileCreate {
 	 */
 	virtual void slotDoSelection();
 
-  
+
     };
 
 }
