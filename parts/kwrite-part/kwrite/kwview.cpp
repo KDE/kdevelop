@@ -3967,15 +3967,15 @@ void KWIconBorder::mousePressEvent(QMouseEvent* e)
             KPopupMenu popup;
             popup.setCheckable(true);
             popup.insertTitle(i18n("Breakpoints/Bookmarks"));
-            int idToggleBookmark =     popup.insertItem(i18n("Toggle bookmark"));
+            int idToggleBookmark =     popup.insertItem(i18n("Toggle Bookmark"));
             popup.insertSeparator();
-            int idToggleBreakpoint =   popup.insertItem(i18n("Toggle breakpoint"));
-            int idEditBreakpoint   =   popup.insertItem(i18n("Edit breakpoint"));
-            int idEnableBreakpoint =   popup.insertItem(i18n("Disable breakpoint"));
+            int idToggleBreakpoint =   popup.insertItem(i18n("Toggle Breakpoint"));
+            int idEditBreakpoint   =   popup.insertItem(i18n("Edit Breakpoint"));
+            int idEnableBreakpoint =   popup.insertItem(i18n("Disable Breakpoint"));
             popup.insertSeparator();
             popup.insertSeparator();
-            int idLmbSetsBreakpoints = popup.insertItem(i18n("LMB sets breakpoints"));
-            int idLmbSetsBookmarks   = popup.insertItem(i18n("LMB sets bookmarks"));
+            int idLmbSetsBreakpoints = popup.insertItem(i18n("LMB sets Breakpoints"));
+            int idLmbSetsBookmarks   = popup.insertItem(i18n("LMB sets Bookmarks"));
 
             popup.setItemChecked(idLmbSetsBreakpoints, lmbSetsBreakpoints);
             popup.setItemChecked(idLmbSetsBookmarks, !lmbSetsBreakpoints);
@@ -3983,7 +3983,7 @@ void KWIconBorder::mousePressEvent(QMouseEvent* e)
             if (line->breakpointId() == -1) {
                 popup.setItemEnabled(idEditBreakpoint, false);
                 popup.setItemEnabled(idEnableBreakpoint, false);
-                popup.changeItem(idEnableBreakpoint, i18n("Enable breakpoint"));
+                popup.changeItem(idEnableBreakpoint, i18n("Enable Breakpoint"));
             }
             int res = popup.exec(mapToGlobal(e->pos()));
             if (res == idToggleBookmark) {

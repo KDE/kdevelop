@@ -209,15 +209,15 @@ void BreakpointWidget::slotContextMenu(QListBoxItem *item)
 
     Breakpoint *BP = (Breakpoint*)item;
     KPopupMenu popup(i18n("Breakpoints"));
-    int idRemoveBP        = popup.insertItem( i18n("Remove breakpoint") );
-    int idEditBP          = popup.insertItem( i18n("Edit breakpoint") );
+    int idRemoveBP        = popup.insertItem( i18n("Remove Breakpoint") );
+    int idEditBP          = popup.insertItem( i18n("Edit Breakpoint") );
     int idToggleBPEnabled = popup.insertItem( BP->isEnabled()?
-                                              i18n("Disable breakpoint") :
-                                              i18n("Enable breakpoint") );
-    int idGotoSource      = popup.insertItem( i18n("Display source code") );
+                                              i18n("Disable Breakpoint") :
+                                              i18n("Enable Breakpoint") );
+    int idGotoSource      = popup.insertItem( i18n("Display Source Code") );
     popup.setItemEnabled(idGotoSource, BP->hasSourcePosition());
     popup.insertSeparator();
-    int idClearAll        = popup.insertItem( i18n("Clear all breakpoints") );
+    int idClearAll        = popup.insertItem( i18n("Clear All Breakpoints") );
 
     int res = popup.exec(QCursor::pos());
 

@@ -401,9 +401,9 @@ void CGfxClassBox::mousePressEvent ( QMouseEvent *mouseevent )
   if(mouseevent->button() != RightButton)
     return;
 
-  mnu.insertItem(i18n("Go to definition"),this,SLOT(slotGotoDefinition()),0,0);
+  mnu.insertItem(i18n("Go to Definition"),this,SLOT(slotGotoDefinition()),0,0);
   mnu.setItemEnabled(0,(m_class != NULL));
-  mnu.insertItem(i18n("Print subtree"),this,SLOT(slotPrintSubTree()),0,1);
+  mnu.insertItem(i18n("Print Subtree"),this,SLOT(slotPrintSubTree()),0,1);
   mnu.exec(QCursor::pos());
 
 }

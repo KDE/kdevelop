@@ -199,17 +199,17 @@ void BreakpointManager::slotClicked(QListBoxItem *item)
 
 void BreakpointManager::breakpointPopup(Breakpoint* BP)
 {
-  KPopupMenu popup(i18n("Breakpoint menu"));
-  popup.insertItem( i18n("Remove breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
-  popup.insertItem( i18n("Edit breakpoint"),              this, SLOT(slotEditBreakpoint()) );
+  KPopupMenu popup(i18n("Breakpoint Menu"));
+  popup.insertItem( i18n("Remove Breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
+  popup.insertItem( i18n("Edit Breakpoint"),              this, SLOT(slotEditBreakpoint()) );
   if (BP->isEnabled())
-    popup.insertItem( i18n("Disable breakpoint"),         this, SLOT(slotToggleBPEnabled()) );
+    popup.insertItem( i18n("Disable Breakpoint"),         this, SLOT(slotToggleBPEnabled()) );
   else
-    popup.insertItem( i18n("Enable breakpoint"),          this, SLOT(slotToggleBPEnabled()) );
+    popup.insertItem( i18n("Enable Breakpoint"),          this, SLOT(slotToggleBPEnabled()) );
 
-  int id = popup.insertItem( i18n("Display source code"), this, SLOT(slotGotoBreakpointSource()) );
+  int id = popup.insertItem( i18n("Display Source Code"), this, SLOT(slotGotoBreakpointSource()) );
   popup.insertSeparator();
-  popup.insertItem( i18n("Clear all breakpoints"),        this, SLOT(slotClearAllBreakpoints()) );
+  popup.insertItem( i18n("Clear All Breakpoints"),        this, SLOT(slotClearAllBreakpoints()) );
 
   popup.setItemEnabled(id, BP->hasSourcePosition());
   popup.exec(QCursor::pos());

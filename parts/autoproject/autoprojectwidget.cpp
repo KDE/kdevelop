@@ -482,7 +482,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         if (titem->primary == "PROGRAMS" || titem->primary == "LIBRARIES"
             || titem->primary == "LTLIBRARIES") {
             idOptions = pop.insertItem(i18n("Options..."));
-            idMakeActive = pop.insertItem(i18n("Make target active"));
+            idMakeActive = pop.insertItem(i18n("Make Target Active"));
         }
         int r = pop.exec(p);
         if (r == idOptions) {

@@ -549,9 +549,9 @@ void CPrjOptionsDlg::addMakePage()
   grid2->addWidget(m_rebuild_combo,0,3);
   m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
-  m_rebuild_combo->insertItem(i18n("warning on modification"));
-  m_rebuild_combo->insertItem(i18n("only on modification"));
-  m_rebuild_combo->insertItem(i18n("always rebuild"));
+  m_rebuild_combo->insertItem(i18n("Warning on Modification"));
+  m_rebuild_combo->insertItem(i18n("Only on Modification"));
+  m_rebuild_combo->insertItem(i18n("Always Rebuild"));
 
   grid2 = new QGridLayout(0,3,3,15,7,"grid-l");
   grid1->addMultiCellLayout(grid2,4,6,0,2);

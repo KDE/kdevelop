@@ -43,7 +43,7 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
   m_search->setMinimumWidth( m_search->sizeHint().width() );
   m_search->lineEdit()->selectAll();
   QLabel *label = new QLabel( m_search, i18n( "&Text To Find:" ), page );
-  m_optRegExp = new QCheckBox( i18n( "Regular Expression" ), page );
+  m_optRegExp = new QCheckBox( i18n( "Regular expression" ), page );
   topLayout->addWidget( label );
   topLayout->addWidget( m_search );
   topLayout->addWidget( m_optRegExp );
@@ -56,7 +56,7 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
     m_replace->insertStringList( replaceWith );
     m_replace->setMinimumWidth( m_search->sizeHint().width() );
     label = new QLabel( m_replace, i18n( "&Replace With:" ), page );
-    //m_optPlaceholders = new QCheckBox( i18n( "&Use Placeholders" ), page );
+    //m_optPlaceholders = new QCheckBox( i18n( "&Use placeholders" ), page );
     topLayout->addWidget( label );
     topLayout->addWidget( m_replace );
     //topLayout->addWidget( m_optPlaceholders );
@@ -69,19 +69,19 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
   gbox->addRowSpacing( 0, fontMetrics().lineSpacing() );
   gbox->setRowStretch( 4, 10 );
 
-  m_opt1 = new QCheckBox( i18n( "C&ase Sensitive" ), group );
+  m_opt1 = new QCheckBox( i18n( "C&ase sensitive" ), group );
   gbox->addWidget( m_opt1, 1, 0 );
 
-  m_opt2 = new QCheckBox(i18n("&Whole Words Only" ), group );
+  m_opt2 = new QCheckBox(i18n("&Whole words only" ), group );
   gbox->addWidget( m_opt2, 2, 0 );
 
-  m_opt3 = new QCheckBox(i18n("&From Cursor" ), group );
+  m_opt3 = new QCheckBox(i18n("&From cursor" ), group );
   gbox->addWidget( m_opt3, 3, 0 );
 
-  m_opt4 = new QCheckBox(i18n("Find &Backwards" ), group );
+  m_opt4 = new QCheckBox(i18n("Find &backwards" ), group );
   gbox->addWidget( m_opt4, 1, 1 );
 
-  m_opt5 = new QCheckBox(i18n("&Selected Text" ), group );
+  m_opt5 = new QCheckBox(i18n("&Selected text" ), group );
   gbox->addWidget( m_opt5, 2, 1 );
 
   m_opt1->setChecked( flags & KWrite::sfCaseSensitive );
@@ -93,7 +93,7 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
 
   if( m_replace )
   {
-    m_opt6 = new QCheckBox( i18n( "&Prompt On Replace" ), group );
+    m_opt6 = new QCheckBox( i18n( "&Prompt on replace" ), group );
     m_opt6->setChecked( flags & KWrite::sfPrompt );
     gbox->addWidget( m_opt6, 3, 1 );
   }
@@ -219,27 +219,27 @@ IndentConfigTab::IndentConfigTab(QWidget *parent, KWrite *kWrite)
   QVBoxLayout *layout = new QVBoxLayout(this, 0, KDialog::spacingHint() );
   int configFlags = kWrite->config();
 
-  opt[0] = new QCheckBox(i18n("&Auto Indent"), this);
+  opt[0] = new QCheckBox(i18n("&Auto indent"), this);
   layout->addWidget(opt[0], 0, AlignLeft);
   opt[0]->setChecked(configFlags & flags[0]);
 
-  opt[1] = new QCheckBox(i18n("Indent With &Spaces"), this);
+  opt[1] = new QCheckBox(i18n("Indent with &spaces"), this);
   layout->addWidget(opt[1], 0, AlignLeft);
   opt[1]->setChecked(configFlags & flags[1]);
 
-  opt[2] = new QCheckBox(i18n("&Backspace Key Indents"), this);
+  opt[2] = new QCheckBox(i18n("&Backspace key indents"), this);
   layout->addWidget(opt[2], 0, AlignLeft);
   opt[2]->setChecked(configFlags & flags[2]);
 
-  opt[3] = new QCheckBox(i18n("&Tab Key Indents"), this);
+  opt[3] = new QCheckBox(i18n("&Tab key indents"), this);
   layout->addWidget(opt[3], 0, AlignLeft);
   opt[3]->setChecked(configFlags & flags[3]);
 
-  opt[4] = new QCheckBox(i18n("Keep Indent &Profile"), this);
+  opt[4] = new QCheckBox(i18n("Keep indent &profile"), this);
   layout->addWidget(opt[4], 0, AlignLeft);
   opt[4]->setChecked(configFlags & flags[4]);
 
-  opt[5] = new QCheckBox(i18n("&Keep Extra Spaces"), this);
+  opt[5] = new QCheckBox(i18n("&Keep extra spaces"), this);
   layout->addWidget(opt[5], 0, AlignLeft);
   opt[5]->setChecked(configFlags & flags[5]);
 
@@ -274,27 +274,27 @@ SelectConfigTab::SelectConfigTab(QWidget *parent, KWrite *kWrite)
   QVBoxLayout *layout = new QVBoxLayout(this, 0, KDialog::spacingHint() );
   int configFlags = kWrite->config();
 
-  opt[0] = new QCheckBox(i18n("&Persistent Selections"), this);
+  opt[0] = new QCheckBox(i18n("&Persistent selections"), this);
   layout->addWidget(opt[0], 0, AlignLeft);
   opt[0]->setChecked(configFlags & flags[0]);
 
-  opt[1] = new QCheckBox(i18n("&Overwrite Selections"), this);
+  opt[1] = new QCheckBox(i18n("&Overwrite selections"), this);
   layout->addWidget(opt[1], 0, AlignLeft);
   opt[1]->setChecked(configFlags & flags[1]);
 
-  opt[2] = new QCheckBox(i18n("Mouse &Autocopy"), this);
+  opt[2] = new QCheckBox(i18n("Mouse &autocopy"), this);
   layout->addWidget(opt[2], 0, AlignLeft);
   opt[2]->setChecked(configFlags & flags[2]);
 
-  opt[3] = new QCheckBox(i18n("&X11-like Single Selection"), this);
+  opt[3] = new QCheckBox(i18n("&X11-like single selection"), this);
   layout->addWidget(opt[3], 0, AlignLeft);
   opt[3]->setChecked(configFlags & flags[3]);
 
-  opt[4] = new QCheckBox(i18n("&Vertical Selections"), this);
+  opt[4] = new QCheckBox(i18n("&Vertical selections"), this);
   layout->addWidget(opt[4], 0, AlignLeft);
   opt[4]->setChecked(configFlags & flags[4]);
 
-  opt[5] = new QCheckBox(i18n("&Toggle Old"), this);
+  opt[5] = new QCheckBox(i18n("&Toggle old"), this);
   layout->addWidget(opt[5], 0, AlignLeft);
   opt[5]->setChecked(configFlags & flags[5]);
 
@@ -438,21 +438,21 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   QPushButton *button1, *button2;
 
   QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
-  opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
+  opt1 = new QCheckBox(i18n("Auto &indent"),g1);
 //  opt1->setFixedSize(opt1->sizeHint());
-  opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
+  opt2 = new QCheckBox(i18n("&Backspace indent"),g1);
 //  opt2->setFixedSize(opt2->sizeHint());
-  opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
+  opt3 = new QCheckBox(i18n("&Word wrap"),g1);
 //  opt3->setFixedSize(opt3->sizeHint());
   opt4 = new QCheckBox(i18n("Replace &Tabs"),g1);
 //  opt4->setFixedSize(opt4->sizeHint());
-  opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
+  opt5 = new QCheckBox(i18n("Remove trailing &spaces"),g1);
 //  opt5->setFixedSize(opt5->sizeHint());
-  opt6 = new QCheckBox(i18n("Wrap &Cursor"),g1);
+  opt6 = new QCheckBox(i18n("Wrap &cursor"),g1);
 //  opt6->setFixedSize(opt6->sizeHint());
-  opt7 = new QCheckBox(i18n("&Auto Brackets"),g1);
+  opt7 = new QCheckBox(i18n("&Auto brackets"),g1);
 //  opt7->setFixedSize(opt7->sizeHint());
-  opt13 = new QCheckBox(i18n("Group &Undos"),g1);
+  opt13 = new QCheckBox(i18n("Group &undos"),g1);
 //  opt13->setFixedSize(opt13->sizeHint());
 
   g1->setMinimumHeight(8+8+8+7*4+8*(opt1->sizeHint().height()));
@@ -467,15 +467,15 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt13->setChecked(flags & cfGroupUndo);
 
   QGroupBox *g2 = new QGroupBox(i18n("Select Options"),this);
-  opt8 = new QCheckBox(i18n("&Persistent Selections"),g2);
+  opt8 = new QCheckBox(i18n("&Persistent selections"),g2);
   opt8->setFixedSize( opt8->sizeHint() );
-  opt9 = new QCheckBox(i18n("&Multiple Selections"),g2);
+  opt9 = new QCheckBox(i18n("&Multiple selections"),g2);
   opt9->setFixedSize( opt9->sizeHint() );
-  opt10 = new QCheckBox(i18n("&Vertical Selections"),g2);
+  opt10 = new QCheckBox(i18n("&Vertical selections"),g2);
   opt10->setFixedSize( opt10->sizeHint() );
-  opt11 = new QCheckBox(i18n("&Delete On Input"),g2);
+  opt11 = new QCheckBox(i18n("&Delete on input"),g2);
   opt11->setFixedSize( opt11->sizeHint() );
-  opt12 = new QCheckBox(i18n("&Toggle Old"),g2);
+  opt12 = new QCheckBox(i18n("&Toggle old"),g2);
   opt12->setFixedSize( opt12->sizeHint() );
 
   g2->setMinimumHeight(8+8+8+4*4+5*(opt8->sizeHint().height()));
