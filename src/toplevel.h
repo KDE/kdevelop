@@ -13,7 +13,13 @@
 #define _TOPLEVEL_H_
 
 #include <qglobal.h>
+#if (QT_VERSION >= 300)
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 #include <kparts/mainwindow.h>
 #include "statusbar.h"
 #include "kdevcore.h"
@@ -22,7 +28,7 @@ class Splitter;
 class QSplitter;
 class QTabWidget;
 
-
+// 2002-02-08 added removeToolWidget( ) - daniel
 class TopLevel : public KParts::MainWindow
 {
     Q_OBJECT
@@ -46,6 +52,8 @@ public slots:
     void embedDocumentWidget(QWidget *w, QWidget *old);
     void embedToolWidget(QWidget *w, KDevCore::Role role, const QString &shortCaption);
     void raiseWidget(QWidget *w);
+    // daniel
+    void removeToolWidget( QWidget* w, KDevCore::Role role );
 
 private slots:
 void splitterCollapsed(Splitter *splitter);

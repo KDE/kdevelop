@@ -65,7 +65,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
     (void) new StatusBar(this);
 
     config->setGroup("General Options");
-    setGeometry(config->readRectEntry("Geometry"));
+    setGeometry(config->readRectEntry("Geomentry"));
     vertSplitter->setSizes(config->readIntListEntry("Vertical Splitter"));
     horzSplitter->setSizes(config->readIntListEntry("Horizontal Splitter"));
     closing = false;
@@ -213,6 +213,25 @@ void TopLevel::raiseWidget(QWidget *w)
         lowerTabGroup->showPage(w);
 }
 
+void
+TopLevel::removeToolWidget( QWidget* w, KDevCore::Role role )
+{
+    switch( role ){
+	case KDevCore::OutputView:
+	    lowerTabGroup->removePage( w );
+	    lowerWidgets.remove( w );
+	    break;
+	    
+	case KDevCore::SelectView:
+	    leftTabGroup->removePage( w );
+	    leftWidgets.remove( w );
+	    break;
+	    
+	default:
+	    kdDebug( 9000 ) << "removeToolWidget - unknown role '" << role << "'" << endl;
+	    break;
+    }
+}
 
 void TopLevel::slotToggleSelectViews()
 {

@@ -13,7 +13,13 @@
 #define _CORE_H_
 
 #include <qglobal.h>
+#if (QT_VERSION >= 300)
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 
 #include "toplevel.h"
 #include "kdevcore.h"
@@ -28,7 +34,7 @@ class KRecentFilesAction;
 
 #include "keditor/editor.h"
 
-
+// 2002-02-08 added removeWidget( ) - daniel
 class Core : public KDevCore
 {
     Q_OBJECT
@@ -38,8 +44,14 @@ public:
     ~Core();
 
 public:
-    virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
+    virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);    
     virtual void raiseWidget(QWidget *w);
+    /**
+      * added by daniel
+      */
+    virtual void removeWidget( QWidget* w, Role role );    
+    
+    
     virtual void gotoFile(const KURL &url);
     virtual void gotoDocumentationFile(const KURL& url,
                                        Embedding embed=Replace);

@@ -61,6 +61,10 @@ Core::Core()
 	api = new KDevApi();
     api->core = this;
     api->classStore = new ClassStore();
+    
+    // added by daniel
+    api->ccClassStore = new ClassStore( );
+    
     api->projectDom = 0;
     api->project = 0;
 
@@ -384,10 +388,7 @@ KEditor::Editor *Core::editor()
   // is found at all!
   if (!_editor){
     KMessageBox::sorry(win, i18n("Can't find a Editor plugin :-(."));
-    // if you cant load the preferred editor, one could still choose
-    // a different editor, so ending here is not such a great idea after
-    // all (rokrau 12/19/01)
-    //exit(0);
+    exit(0);
   }
 
   // merge the GUI with ours
@@ -470,6 +471,8 @@ void Core::closeProject()
     }
 
 	api->classStore->wipeout();
+	// added by daniel
+	api->ccClassStore->wipeout( );
 
     projectFile = QString::null;
     win->setCaption(QString::fromLatin1(""));
@@ -679,6 +682,11 @@ void Core::raiseWidget(QWidget *w)
     win->raiseWidget(w);
 }
 
+void
+Core::removeWidget( QWidget* w, KDevCore::Role role )
+{
+    win->removeToolWidget( w, role );
+}
 
 void Core::gotoFile(const KURL &url)
 {
