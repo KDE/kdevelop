@@ -311,9 +311,11 @@ void KTabZoomWidget::unsetButtons()
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
-  kdDebug() << "========> raiseWidget(" << widget->name() << ")" << endl;
-  if ( !widget )
+  if (!widget)
     widget = d->m_lastActiveWidget;
+  if (widget)
+      kdDebug() << "========> raiseWidget(" << widget->name() << ")" << endl;
+
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == widget || !widget)
     {
