@@ -182,4 +182,3 @@ class KDlgLoader {
     KDlgLdr *ldr;
     bool libLoaded;
 };
-
