@@ -161,6 +161,15 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 {
 	updateSettingsFromConfig();
 
+	if ( m_compilerOutputLevel == eFull )
+	{
+		setTextFormat( Qt::LogText );
+	}
+	else
+	{
+		setTextFormat( Qt::RichText );
+	}
+	
 	if ( m_bLineWrapping )
 		setWordWrap(WidgetWidth);
 	setWrapPolicy(Anywhere);
@@ -728,9 +737,9 @@ void MakeWidget::refill()
 
 }
 
-void MakeWidget::slotVeryShortCompilerOutput() { setCompilerOutputLevel(eVeryShort); }
-void MakeWidget::slotShortCompilerOutput() { setCompilerOutputLevel(eShort); }
-void MakeWidget::slotFullCompilerOutput() { setCompilerOutputLevel(eFull); }
+void MakeWidget::slotVeryShortCompilerOutput() { setTextFormat( Qt::RichText ); setCompilerOutputLevel(eVeryShort); }
+void MakeWidget::slotShortCompilerOutput() { setTextFormat( Qt::RichText ); setCompilerOutputLevel(eShort); }
+void MakeWidget::slotFullCompilerOutput() { setTextFormat( Qt::LogText ); setCompilerOutputLevel(eFull);  }
 
 void MakeWidget::setCompilerOutputLevel(EOutputLevel level)
 {

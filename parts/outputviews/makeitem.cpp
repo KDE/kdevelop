@@ -66,8 +66,14 @@ QString MakeItem::text( EOutputLevel )
 
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 {
-    return QString("<code>").append( icon() ).append("<font color=\"").append( color( bright_bg) ).append(
-		"\">").append( text(level) ).append("</font></code>").append( br() );
+	if ( level == eFull )
+	{
+		return text( level );
+	}
+	else
+	{
+		return QString("<code>").append( icon() ).append("<font color=\"").append( color( bright_bg) ).append("\">").append( text(level) ).append("</font></code>").append( br() );
+	}
 }
 
 QString MakeItem::br()
