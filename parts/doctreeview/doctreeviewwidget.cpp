@@ -243,10 +243,12 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 class DocTreeKDELibsFolder : public DocTreeItem
 {
 public:
-    DocTreeKDELibsFolder(KListView *parent, const QString &context)
-        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (kdoc)"), context)
+    DocTreeKDELibsFolder(QString location, QString name, KListView *parent, const QString &context)
+        : DocTreeItem(parent, Folder, name, context), m_location(location)
         { setExpandable(true); }
     void refresh();
+private:
+    QString m_location;
 };
 
 
@@ -254,10 +256,31 @@ void DocTreeKDELibsFolder::refresh()
 {
     DocTreeItem::clear();
 
+/*    QDir d(m_location);
+    QStringList fileList = d.entryList("*", QDir::Dirs);
+
+    QStringList::ConstIterator it;
+    for (it = fileList.begin(); it != fileList.end(); ++it) {
+        QString dirName = (*it);
+        if (dirName == "." || dirName == ".." || dirName == "common")
+            continue;
+        qWarning("loading dir %s", dirName.latin1());*/
+        QStringList itemNames, fileNames, hiddenNames;
+        DocTreeViewTool::readLibraryDocs(m_location,&itemNames, &fileNames);
+        QStringList::Iterator it1, it2;
+        for (it1 = itemNames.begin(), it2 = fileNames.begin();
+             it1 != itemNames.end() && it2 != fileNames.end();
+            ++it1, ++it2) {
+            new DocTreeKDELibsBook(this, *it1, *it2, context());
+        }
+    //}
+
+    sortChildItems(0, true);
+    
     //TODO: merge in default libraries and hidden options
 
     // Read in possible items for the Libraries tree
-    QStringList libNames, docDirs, sourceDirs;
+/*    QStringList libNames, docDirs, sourceDirs;
     DocTreeViewTool::getLibraries(&libNames, &docDirs, &sourceDirs);
     QStringList::Iterator libName, docDir, sourceDir;
     for (libName = libNames.begin(),
@@ -274,7 +297,7 @@ void DocTreeKDELibsFolder::refresh()
             new DocTreeKDELibsBook(this, *it1, *it2, context());
         }
 
-    }
+    }*/
 }
 
 
@@ -377,22 +400,24 @@ void DocTreeDoxygenBook::readTagFile()
 class DocTreeDoxygenFolder : public DocTreeItem
 {
 public:
-    DocTreeDoxygenFolder(KListView *parent, const QString &context)
-        : DocTreeItem(parent, Folder, i18n("KDE Libraries (Doxygen)"), context)
+    DocTreeDoxygenFolder(QString location, QString name, KListView *parent, const QString &context)
+        : DocTreeItem(parent, Folder, name, context), m_location(location)
         { setExpandable(true); }
     void refresh();
+private:
+    QString m_location;
 };
 
 void DocTreeDoxygenFolder::refresh()
 {
     DocTreeItem::clear();
 
-    KConfig *config = DocTreeViewFactory::instance()->config();
+/*    KConfig *config = DocTreeViewFactory::instance()->config();
     config->setGroup("General");
     QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
 
-    //kdDebug(9002) << "docdir: " << docdir << endl;
-    QDir d(docdir);
+    //kdDebug(9002) << "docdir: " << docdir << endl;*/
+    QDir d(m_location);
     QStringList fileList = d.entryList("*", QDir::Dirs);
 
     QStringList::ConstIterator it;
@@ -784,7 +809,7 @@ void DocTreeQtFolder::refresh()
 
 bool DocTreeViewWidget::initKDocKDELibs()
 {
-    KConfig *config = DocTreeViewFactory::instance()->config();
+/*    KConfig *config = DocTreeViewFactory::instance()->config();
     config->setGroup( "General" );
     kdelibskdoc = config->readBoolEntry("displayKDELibsKDoc", false);
 
@@ -798,14 +823,15 @@ bool DocTreeViewWidget::initKDocKDELibs()
             delete folder_kdelibs;
         folder_kdelibs = 0L;
         return false;
-    }
+    }*/
+    return true;
 }
 /**************************************/
 /* The DocTreeViewWidget itself       */
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
+    : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
     searchToolbar = new QHBox ( this, "search toolbar" );
@@ -856,18 +882,60 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
         folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
 
-    initKDocKDELibs();
+//    initKDocKDELibs();
 
-    folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
-    folder_doxygen->refresh();
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    if (config)
+    {
+        config->setGroup("General KDoc");
+        QMap<QString, QString> dmap = config->entryMap("General KDoc");
+        QString kdocdir(KDELIBS_DOCDIR);
+        if (dmap.empty() && (!kdocdir.isEmpty()))
+        {
+            config->writePathEntry("KDE Libraries (KDoc)", QString(KDELIBS_DOCDIR));
+            dmap["KDE Libraries (KDoc)"] = QString(KDELIBS_DOCDIR);
+        }
+
+        QMap<QString, QString>::Iterator it;
+        for (it = dmap.begin(); it != dmap.end(); ++it)
+        {
+            DocTreeKDELibsFolder *kdf = new DocTreeKDELibsFolder(it.data(), it.key(), docView, "ctx_kdelibs");
+            kdf->refresh();
+            folder_kdoc.append(kdf);
+        }
+    }
+    
+    if (config)
+    {
+        config->setGroup("General Doxygen");
+        QMap<QString, QString> xmap = config->entryMap("General Doxygen");
+        QString doxydir(KDELIBS_DOXYDIR);
+        if (xmap.empty() && (!doxydir.isEmpty()))
+        {
+            config->writePathEntry("KDE Libraries (Doxygen)", QString(KDELIBS_DOXYDIR));
+            xmap["KDE Libraries (Doxygen)"] = QString(KDELIBS_DOXYDIR);
+        }
+
+        QMap<QString, QString>::Iterator it;
+        for (it = xmap.begin(); it != xmap.end(); ++it)
+        {
+            DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(it.data(), it.key(), docView, "ctx_doxygen");
+            dxf->refresh();
+            folder_doxygen.append(dxf);
+        }
+    }
+
+        
+//    folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
+    
+//    folder_doxygen->refresh();
 
     // eventually, Qt docu extra
-    QListViewItem* pChild = folder_doxygen->firstChild();
+/*    QListViewItem* pChild = folder_doxygen->firstChild();
     while (pChild && pChild->text(0) != "qt") {
         pChild = pChild->nextSibling();
     }
-
-    KConfig *config = DocTreeViewFactory::instance()->config();
+*/
     if (config)
     {
         config->setGroup("General Qt");
@@ -1127,11 +1195,12 @@ void DocTreeViewWidget::configurationChanged()
 void DocTreeViewWidget::refresh()
 {
     kdDebug(9002) << "DocTreeViewWidget::refresh()" << endl;
-    folder_doxygen->refresh();
+//    folder_doxygen->refresh();
     folder_bookmarks->refresh();
     folder_project->refresh();
-    if( folder_kdelibs )
-        folder_kdelibs->refresh();
+    
+/*    if( folder_kdelibs )
+        folder_kdelibs->refresh();*/
 
    
     DocTreeTocFolder *item;
@@ -1150,11 +1219,46 @@ void DocTreeViewWidget::refresh()
             folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
     }
 
+    folder_kdoc.setAutoDelete(true);
+    folder_kdoc.clear();
+    folder_kdoc.setAutoDelete(false);
+    
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    if (config)
+    {
+        config->setGroup("General KDoc");
+        QMap<QString, QString> emap = config->entryMap("General KDoc");
+        QMap<QString, QString>::Iterator it;
+        for (it = emap.begin(); it != emap.end(); ++it)
+        {
+            DocTreeKDELibsFolder *kdf = new DocTreeKDELibsFolder(it.data(), it.key(), docView, "ctx_kdelibs");
+            kdf->refresh();
+            folder_kdoc.append(kdf);
+        }
+    }
+   
+    folder_doxygen.setAutoDelete(true);
+    folder_doxygen.clear();
+    folder_doxygen.setAutoDelete(false);
+    
+    if (config)
+    {
+        config->setGroup("General Doxygen");
+        QMap<QString, QString> emap = config->entryMap("General Doxygen");
+        QMap<QString, QString>::Iterator it;
+        for (it = emap.begin(); it != emap.end(); ++it)
+        {
+            DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(it.data(), it.key(), docView, "ctx_doxygen");
+            dxf->refresh();
+            folder_doxygen.append(dxf);
+        }
+    }
+
+        
     folder_qt.setAutoDelete(true);
     folder_qt.clear();
     folder_qt.setAutoDelete(false);
     
-    KConfig *config = DocTreeViewFactory::instance()->config();
     if (config)
     {
         config->setGroup("General Qt");
@@ -1165,7 +1269,7 @@ void DocTreeViewWidget::refresh()
             DocTreeQtFolder *qtf = new DocTreeQtFolder(it.data(), it.key(), docView, "ctx_qt");
             qtf->refresh();
             folder_qt.append(qtf);
-        } 
+        }
     }
 }
 
@@ -1190,13 +1294,19 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     for (; it1.current(); ++it1)
         docView->takeItem(it1.current());
 
-    if(folder_doxygen) docView->takeItem(folder_doxygen);
+    QListIterator<DocTreeKDELibsFolder> itk(folder_kdoc);
+    for (; itk.current(); ++itk)
+        docView->takeItem(itk.current());
+//    if(folder_doxygen) docView->takeItem(folder_doxygen);
+    QListIterator<DocTreeDoxygenFolder> itx(folder_doxygen);
+    for (; itx.current(); ++itx)
+        docView->takeItem(itx.current());
     
     QListIterator<DocTreeQtFolder> itq(folder_qt);
     for (; itq.current(); ++itq)
         docView->takeItem(itq.current());
 //    if(folder_qt) docView->takeItem(folder_qt);
-    if(folder_kdelibs) docView->takeItem(folder_kdelibs);
+//    if(folder_kdelibs) docView->takeItem(folder_kdelibs);
 //    docView->takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
@@ -1208,18 +1318,30 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     docView->insertItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it2(folder_toc);
-    for (; it2.current(); ++it2) {
+    it2.toLast();
+    for (; it2.current(); --it2) {
         if (!ignoretocs.contains(it2.current()->tocName()))
             docView->insertItem(it2.current());
     }
 
-    docView->insertItem(folder_doxygen);
-    if(folder_kdelibs && kdelibskdoc )
+//    docView->insertItem(folder_doxygen);
+    QListIterator<DocTreeKDELibsFolder> itk2(folder_kdoc);
+    itk2.toLast();
+    for (; itk2.current(); --itk2)
+        docView->insertItem(itk2.current());
+    
+    QListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
+    itx2.toLast();
+    for (; itx2.current(); --itx2)
+        docView->insertItem(itx2.current());
+    
+/*    if(folder_kdelibs && kdelibskdoc )
         if (!ignoretocs.contains("kde"))
             docView->insertItem(folder_kdelibs);
-
+*/
     QListIterator<DocTreeQtFolder> itq2(folder_qt);
-    for (; itq2.current(); ++itq2)
+    itq2.toLast();
+    for (; itq2.current(); --itq2)
         docView->insertItem(itq2.current());
 //    if(folder_qt) docView->insertItem(folder_qt);
 

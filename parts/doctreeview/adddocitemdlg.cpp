@@ -17,18 +17,24 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qdom.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 
 
-AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, QWidget *parent, const char *name)
+AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, bool checkQtDocTitle, QString title, QString url, QWidget *parent, const char *name)
     : QDialog(parent, name, true), m_mode(mode), m_filter(filter)
 {
     setCaption(i18n("Add Documentation Entry"));
 
+    title_check = 0;
+    if (checkQtDocTitle)
+        title_check = new QCheckBox(i18n("Custom title"), this);
+    
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
     title_edit = new QLineEdit(this);
+    title_edit->setText(title);
     title_edit->setFocus();
     title_label->setBuddy(title_edit);
 
@@ -36,6 +42,7 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, QWidget *pa
     url_edit = new KURLRequester(this);
     url_label->setBuddy(url_edit);
     QFontMetrics fm(url_edit->fontMetrics());
+    url_edit->setURL(url);
     url_edit->setMinimumWidth(fm.width('X')*35);
     url_edit->setFilter(m_filter);
     url_edit->setMode((int) m_mode);
@@ -57,6 +64,10 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, QWidget *pa
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
 
     QGridLayout *grid = new QGridLayout(2, 3);
+    if (checkQtDocTitle)
+    {
+        layout->addWidget(title_check);
+    }
     layout->addLayout(grid);
     grid->addWidget(title_label, 0, 0);
     grid->addMultiCellWidget(title_edit, 0, 0, 1, 2);
@@ -77,10 +88,45 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, QWidget *pa
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
+
+    if (checkQtDocTitle)
+    {
+        title_edit->setEnabled(false);
+        connect(title_check, SIGNAL(toggled(bool)), title_edit, SLOT(setEnabled(bool)));
+        connect(url_edit, SIGNAL(textChanged(const QString&)), this, SLOT(setTitle(const QString&)));
+    }
 }
 
 
 AddDocItemDialog::~AddDocItemDialog()
 {}
+
+void AddDocItemDialog::setTitle(const QString &str)
+{
+    if (title_check == 0)
+        return;
+    else if (title_check->isChecked())
+        return;
+
+    title_edit->setText("");
+    QFileInfo fi(str);
+    if (!fi.exists())
+        return;
+    
+    QFile f(str);
+    if (!f.open(IO_ReadOnly)) {
+        return;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f) || doc.doctype().name() != "DCF") {
+        return;
+    }
+    f.close();
+
+    QDomElement docEl = doc.documentElement();
+    
+    title_edit->setText(docEl.attribute("title", QString::null));
+    
+}
 
 #include "adddocitemdlg.moc"

@@ -16,6 +16,7 @@
 
 #include <qdialog.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 #include <kurlrequester.h>
 #include <kfile.h>
 
@@ -25,19 +26,24 @@ class AddDocItemDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddDocItemDialog( KFile::Mode mode = KFile::File, QString filter = "text/html",  QWidget *parent=0, const char *name=0 );
+    AddDocItemDialog( KFile::Mode mode = KFile::File, QString filter = "text/html",
+        bool checkQtDocTitle = false, QString title = "", QString url = "", QWidget *parent=0, const char *name=0 );
     ~AddDocItemDialog();
 
     QString title() const
         { return title_edit->text(); }
     QString url() const
         { return url_edit->url(); }
-    
+
+private slots:
+    void setTitle(const QString &str);
+
 private:
     QLineEdit *title_edit;
     KURLRequester *url_edit;
     KFile::Mode m_mode;
     QString m_filter;
+    QCheckBox *title_check;
 };
 
 #endif

@@ -74,8 +74,9 @@ private:
     QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
-    DocTreeDoxygenFolder *folder_doxygen;
-    DocTreeKDELibsFolder *folder_kdelibs;
+    QPtrList<DocTreeDoxygenFolder> folder_doxygen;
+//    DocTreeKDELibsFolder *folder_kdelibs;
+    QPtrList<DocTreeKDELibsFolder> folder_kdoc;
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;

@@ -55,7 +55,11 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     doxygen_view->addColumn(i18n("Title"));
     doxygen_view->addColumn(i18n("URL"));
     doxygen_view->setAllColumnsShowFocus(true);
-    
+
+    kdoc_view->addColumn(i18n("Title"));
+    kdoc_view->addColumn(i18n("URL"));
+    kdoc_view->setAllColumnsShowFocus(true);
+        
     bListView->addColumn(i18n("Title"));
     bListView->addColumn(i18n("URL"));
     bListView->setAllColumnsShowFocus(true);
@@ -100,19 +104,32 @@ void DocTreeGlobalConfigWidget::readConfig()
     {
         KListViewItem *qtitem = new KListViewItem(doxygen_view, itx.key(), config->readPathEntry(itx.key()));
     }
-    if (xmap.empty())
+    if (xmap.empty() && (!QString(KDELIBS_DOXYDIR).isEmpty()))
     {
         KListViewItem *qtitem = new KListViewItem(doxygen_view, "KDE Libraries (Doxygen)", KDELIBS_DOXYDIR);
     }
+
     
+    config->setGroup("General KDoc");
+    QMap<QString, QString> dmap = config->entryMap("General KDoc");
+    QMap<QString, QString>::Iterator itd;
+    for (itd = dmap.begin(); itd != dmap.end(); ++itd)
+    {
+        KListViewItem *qtitem = new KListViewItem(kdoc_view, itd.key(), config->readPathEntry(itd.key()));
+    }
+    if (dmap.empty() && (!QString(KDELIBS_DOCDIR).isEmpty()))
+    {
+        KListViewItem *qtitem = new KListViewItem(kdoc_view, "KDE Libraries (KDoc)", KDELIBS_DOCDIR);
+    }
+        
 /*    qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));
     qtdocdirEdit->fileDialog()->setMode( KFile::Directory );
     kdelibsdoxydirEdit->setURL(config->readPathEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
     kdelibsdoxydirEdit->fileDialog()->setMode( KFile::Directory );
 */
-    config->setGroup("General");
+/*    config->setGroup("General");
     kdocCheck->setChecked( config->readBoolEntry("displayKDELibsKDoc", false) );
-    
+  */  
     config->setGroup("Index");
     indexKDevelopBox->setChecked(config->readEntry("IndexKDevelop"));
     indexQtBox->setChecked(config->readEntry("IndexQt"));
@@ -177,10 +194,20 @@ void DocTreeGlobalConfigWidget::storeConfig()
         config->writePathEntry(itx.current()->text(0), itx.current()->text(1));
         ++itx;
     }
-  
-    config->setGroup("General");
+
+    config->deleteGroup("General KDoc");
+    config->setGroup("General KDoc");   
+    QListViewItemIterator itd( kdoc_view );
+    while ( itd.current() ) 
+    {
+        config->writePathEntry(itd.current()->text(0), itd.current()->text(1));
+        ++itd;
+    }
+    
+      
+/*    config->setGroup("General");
     config->writeEntry("displayKDELibsKDoc", kdocCheck->isChecked() );
- 
+ */
     config->setGroup("Index");
     config->writeEntry("IndexKDevelop", indexKDevelopBox->isChecked());
     config->writeEntry("IndexQt", indexQtBox->isChecked());
@@ -302,6 +329,23 @@ void DocTreeGlobalConfigWidget::doxygenadd_button_clicked( )
     delete dialog;
 }
 
+void DocTreeGlobalConfigWidget::doxygenedit_button_clicked( )
+{
+    if (doxygen_view->currentItem())
+    {
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", false, 
+            doxygen_view->currentItem()->text(0), doxygen_view->currentItem()->text(1));
+        if (dialog->exec())
+        {
+            QString url = dialog->url();
+            if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
+            doxygen_view->currentItem()->setText(0, dialog->title());
+            doxygen_view->currentItem()->setText(1, url);
+        }
+        delete dialog;
+    }
+}
+
 void DocTreeGlobalConfigWidget::doxygenremove_button_clicked( )
 {
     if (doxygen_view->currentItem())
@@ -310,16 +354,66 @@ void DocTreeGlobalConfigWidget::doxygenremove_button_clicked( )
 
 void DocTreeGlobalConfigWidget::qtdocsadd_button_clicked( )
 {
-    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml");
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", true);
     if (dialog->exec())
         new KListViewItem(qtdocs_view, dialog->title(), dialog->url());
     delete dialog;
+}
+
+void DocTreeGlobalConfigWidget::qtdocsedit_button_clicked( )
+{
+    if (qtdocs_view->currentItem())
+    {
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", true,
+            qtdocs_view->currentItem()->text(0), qtdocs_view->currentItem()->text(1));
+        if (dialog->exec())
+        {
+            qtdocs_view->currentItem()->setText(0, dialog->title());
+            qtdocs_view->currentItem()->setText(1, dialog->url());
+        }
+        delete dialog;
+    }
 }
 
 void DocTreeGlobalConfigWidget::qtdocsremove_button_clicked( )
 {
     if (qtdocs_view->currentItem())
         delete qtdocs_view->currentItem();
+}
+
+void DocTreeGlobalConfigWidget::kdocadd_button_clicked( )
+{
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "");
+    if (dialog->exec())
+    {
+        QString url = dialog->url();
+        if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
+        new KListViewItem(kdoc_view, dialog->title(), url);
+    }
+    delete dialog;
+}
+
+void DocTreeGlobalConfigWidget::kdocedit_button_clicked( )
+{
+    if (kdoc_view->currentItem())
+    {
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", false,
+            kdoc_view->currentItem()->text(0), kdoc_view->currentItem()->text(1));
+        if (dialog->exec())
+        {
+            QString url = dialog->url();
+            if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
+            kdoc_view->currentItem()->setText(0, dialog->title());
+            kdoc_view->currentItem()->setText(1, url);
+        }
+        delete dialog;
+    }
+}
+
+void DocTreeGlobalConfigWidget::kdocremove_button_clicked( )
+{
+    if (kdoc_view->currentItem())
+        delete kdoc_view->currentItem();
 }
 
 #include "doctreeglobalconfigwidget.moc"
