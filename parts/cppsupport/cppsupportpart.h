@@ -30,7 +30,7 @@ class Context;
 class CClassParser;
 class CppCodeCompletion;
 class ProblemReporter;
-class FileRepository;
+class BackgroundParser;
 class QLabel;
 class QProgressBar;
 class QStringList;
@@ -56,8 +56,7 @@ public:
     CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
     
     ProblemReporter* problemReporter() { return m_problemReporter; }
-    FileRepository* fileRepository() { return m_fileRepository; }
-
+    BackgroundParser* backgroundParser() { return m_backgroundParser; }
     /*
      * void slotCompleteText();
      * void slotTypeOfExpression();
@@ -78,6 +77,8 @@ public:
 
     QStringList fileExtensions( ) const;
 
+    virtual void customEvent( QCustomEvent* ev );
+    
 protected:
     virtual KDevLanguageSupport::Features features();
     virtual QStringList fileFilters();
@@ -166,7 +167,7 @@ private:
     bool m_bEnableCC;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
     QGuardedPtr< ProblemReporter > m_problemReporter;
-    QGuardedPtr< FileRepository> m_fileRepository;
+    BackgroundParser* m_backgroundParser;
 };
 
 #endif

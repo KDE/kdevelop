@@ -54,33 +54,32 @@
 
 class ProblemItem: public KListViewItem{
 public:
-	ProblemItem( QListView* parent, const QString& level, const QString& problem,
-				 const QString& file, const QString& line, const QString& column  )
-		: KListViewItem( parent, level, problem, file, line, column ) {}
-
-	ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
-				 const QString& file, const QString& line, const QString& column  )
-		: KListViewItem( parent, level, problem, file, line, column ) {}
-
-	int compare( QListViewItem* item, int column, bool ascending ) const {
-		if( column == 2 || column == 3 ){
-			int a = text( column ).toInt();
-			int b = item->text( column ).toInt();
-			if( a == b )
-				return 0;
-			return( a > b ? 1 : -1 );
-		}
-		return KListViewItem::compare( item, column, ascending );
+    ProblemItem( QListView* parent, const QString& level, const QString& problem,
+		 const QString& file, const QString& line, const QString& column  )
+	: KListViewItem( parent, level, problem, file, line, column ) {}
+    
+    ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
+		 const QString& file, const QString& line, const QString& column  )
+	: KListViewItem( parent, level, problem, file, line, column ) {}
+    
+    int compare( QListViewItem* item, int column, bool ascending ) const {
+	if( column == 2 || column == 3 ){
+	    int a = text( column ).toInt();
+	    int b = item->text( column ).toInt();
+	    if( a == b )
+		return 0;
+	    return( a > b ? 1 : -1 );
 	}
-
+	return KListViewItem::compare( item, column, ascending );
+    }
+    
 };
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
     : KListView( parent, name ),
       m_cppSupport( part ),
       m_document( 0 ),
-      m_markIface( 0 ),
-      m_bgParser( 0 )
+      m_markIface( 0 )
 {
     addColumn( i18n("Level") );
     addColumn( i18n("File") );
@@ -108,12 +107,6 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
 
 ProblemReporter::~ProblemReporter()
 {
-    if( m_bgParser ) {
-        m_bgParser->wait();
-    }
-
-    delete( m_bgParser );
-    m_bgParser = 0;
 }
 
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
@@ -146,22 +139,8 @@ void ProblemReporter::slotTextChanged()
         m_timer->changeInterval( m_delay );
 }
 
-void ProblemReporter::reparse()
+void ProblemReporter::removeAllErrors( const QString& filename )
 {
-    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
-    
-    m_timer->stop();
-    
-    if( m_bgParser ) {
-	if( m_bgParser->running() ) {
-	    m_timer->changeInterval( m_delay );
-	    return;
-	}
-	
-	delete( m_bgParser );
-	m_bgParser = 0;
-    }
-    
     QListViewItem* current = firstChild();
     while( current ){
 	QListViewItem* i = current;
@@ -179,10 +158,14 @@ void ProblemReporter::reparse()
 	    ++it;
 	}
     }
-    
-    m_bgParser = new BackgroundParser( m_cppSupport, m_filename );
-    m_bgParser->start();
-    
+}
+
+void ProblemReporter::reparse()
+{
+    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
+ 
+    m_timer->stop();
+    m_cppSupport->backgroundParser()->reparse();        
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -197,7 +180,7 @@ void ProblemReporter::reportError( QString message,
 				   QString filename,
 				   int line, int column )
 {
-    if( m_markIface ){
+    if( m_markIface && m_filename == filename ){
 	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
     }	
     
@@ -252,12 +235,12 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
-	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
-	
-	if( !iface )
-		return;
-		
-	iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
+    KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
+    
+    if( !iface )
+	return;
+    
+    iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )

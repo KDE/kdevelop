@@ -15,7 +15,7 @@ void ConfigureProblemReporter::init()
     config->setGroup( "General Options" );
     bgParserCheckbox->setChecked( config->readBoolEntry("EnableCppBgParser", true) );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("CppBgParserDelay", 1000) );
+    delaySlider->setValue( config->readNumEntry("CppBgParserDelay", 250) );
 }
 
 void ConfigureProblemReporter::destroy()

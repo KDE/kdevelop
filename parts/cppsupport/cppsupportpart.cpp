@@ -12,9 +12,10 @@
  ***************************************************************************/
 
 #include "cppsupportpart.h"
+#include "cppsupport_events.h"
 #include "problemreporter.h"
-#include "filerepository.h"
 #include "implementmethodsdialog.h"
+#include "backgroundparser.h"
 
 #include <qmessagebox.h>
 #include <qdir.h>
@@ -98,11 +99,11 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_problemReporter = new ProblemReporter( this );
     topLevel( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
-    m_fileRepository = new FileRepository( this );
-
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
 
+    m_backgroundParser = new BackgroundParser( this );
+    m_backgroundParser->start();
 
     KAction *action;
 
@@ -173,12 +174,33 @@ CppSupportPart::~CppSupportPart()
     topLevel( )->removeView( m_pCHWidget );
     topLevel( )->removeView( m_problemReporter );
 
+    m_backgroundParser->terminate();
+    m_backgroundParser->wait();
+    
+    delete m_backgroundParser;
     delete m_pParser;
     delete m_pCompletion;
 
     delete m_pCCParser;
     delete m_pCHWidget;
     delete m_problemReporter;
+}
+
+void CppSupportPart::customEvent( QCustomEvent* ev )
+{
+    if( ev->type() == Event_FoundProblems && m_problemReporter ){
+	FoundProblemsEvent* event = (FoundProblemsEvent*) ev;
+	QString fileName = event->fileName();
+	
+	m_problemReporter->removeAllErrors( fileName );
+	
+	QValueList<Problem> problems = event->problems();
+	QValueList<Problem>::ConstIterator it = problems.begin();
+	while( it != problems.end() ){
+	    const Problem& p = *it++;
+	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
+	}
+    }
 }
 
 // daniel
@@ -1023,21 +1045,8 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassPar
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
 
-#if 1
     store->removeWithReferences( fileName );
     parser->parse( fileName );
-#else
-
-    QFile f( fileName );
-    if( !f.open(IO_ReadOnly) )
-      return;
-    QTextStream s( &f );
-    QString source = s.read();
-    f.close();
-
-    TranslationUnitAST* translationUnit = m_fileRepository->translationUnit( fileName, source );
-    Q_UNUSED( translationUnit );
-#endif
 }
 
 

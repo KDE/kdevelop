@@ -24,7 +24,6 @@
 class CppSupportPart;
 class QTimer;
 class KDialogBase;
-class BackgroundParser;
 
 namespace KParts{
     class Part;
@@ -41,6 +40,8 @@ public:
     ProblemReporter( CppSupportPart* part, QWidget* parent=0, const char* name=0 );
     virtual ~ProblemReporter();
 
+    virtual void removeAllErrors( const QString& filename );
+    
     virtual void reportError( QString message, QString filename,
                               int line, int column );
 
@@ -70,7 +71,6 @@ private:
     QString m_filename;
     int m_active;
     int m_delay;
-    BackgroundParser* m_bgParser;
 };
 
 #endif
