@@ -1,3 +1,9 @@
+kdevelop (1:1.2-20000504-1) stable; urgency=low
+
+  * New upstream release
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Thu,  4 May 2000 22:13:51 +0200
+
 kdevelop (1:1.1final-20000228-1) stable; urgency=low
 
   * New upstream release
