@@ -56,6 +56,9 @@ private slots:
     void slotOpenFile();
     void slotClicked(QListViewItem* pItem);
 
+    /** Changes the active project to the project the user has just selected. */
+    void slotSetAsActiveProject ();
+
 private:
     void createDefaultFileGroups();
     QPopupMenu* createPopup(ProjectTreeItem* item);

@@ -154,7 +154,7 @@ void ProjectSpace::setCurrentProject(Project* prj){
     m_pCurrentProject = prj;
 
     // Notify all components that we are switching current project.
-    // xxx->changeProjectSpace ();
+//    TheCore()->changeProjectSpace ();
 
     // Update the popup menu.
     fillActiveProjectPopupMenu();

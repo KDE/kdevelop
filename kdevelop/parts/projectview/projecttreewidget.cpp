@@ -54,6 +54,16 @@ void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoi
 }
 
 
+/*
+    Responds to a user request to set the project they right clicked
+    upon as the active project. This is activated from a context menu.
+*/
+void ProjectTreeWidget::slotSetAsActiveProject ()
+{
+  kdDebug(9009) << "ProjectTreeWidget::Context menu project change" << endl;
+}
+
+
 void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
   kdDebug(9009) << "ProjectTreeWidget::slotClicked" << endl;
   if(pItem == 0) return;

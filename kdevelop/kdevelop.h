@@ -48,7 +48,7 @@ public:
     KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
     /** destructor */
     ~KDevelop();
-    /** Session management - reads the configuration */
+    /** Session management - writes the configuration */
     virtual void saveProperties(KConfig*);
     /** Session management - reads the configuration */
     virtual void readProperties(KConfig*);

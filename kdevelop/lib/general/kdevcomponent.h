@@ -37,7 +37,7 @@ class KAboutData;
 class KDevNode;
 class KDevFileNode;
 class KDevApi;
-
+class KDevelopCore;
 
 
 /**
@@ -59,6 +59,12 @@ public:
     KDevComponent( QObject *parent=0, const char *name=0 );
     ~KDevComponent();
 
+    /**
+     * Returns a pointer to the KDevelop Core. This will enable components
+       to traverse the component list and raise events which can cascade to
+       all other components.
+     */
+    KDevelopCore *TheCore();
     /**
      * Gives a reference to the current project space component
      */
@@ -146,10 +152,12 @@ private:
     // These methods are not meaningful and are therefore forbidden
     void setWidget(QWidget *w);
     QWidget *widget();
+
     // Internal
     friend class KDevelopCore;
-    void setupInternal(KDevApi *api);
-    KDevApi *m_api;
+    void setupInternal(KDevelopCore * pCore, KDevApi *api);
+    KDevApi         *m_api;
+    KDevelopCore    *m_pCore;       // Points to the KDevelop core.
 };
 
 #endif

@@ -22,7 +22,6 @@
 #include <klibloader.h>
 #include <kaboutdata.h>
 
-
 /** handles all po's for every binary project...
   *@author Sandy Meier
   */

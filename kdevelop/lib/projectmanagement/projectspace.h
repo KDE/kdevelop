@@ -25,8 +25,12 @@
 #include <ksimpleconfig.h>
 #include <qdom.h>
 #include "kaction.h"
+
+
+// Forward declarations;
 class KAboutData;
 class KDevFileNode;
+
 
 class FileGroup {
  public:

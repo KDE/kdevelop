@@ -69,7 +69,7 @@ void KDevelopCore::initComponent(KDevComponent *pComponent)
     connect( pComponent, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
              m_pKDevelopGUI, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
 
-    pComponent->setupInternal(m_api);
+    pComponent->setupInternal(this, m_api);
     pComponent->setupGUI();
     m_components.append(pComponent);
     m_pKDevelopGUI->guiFactory()->addClient(pComponent);
@@ -275,6 +275,8 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     all the components, to give them a chance to react. */
 void KDevelopCore::changeProjectSpace ()
 {
+    kdDebug(9000) << "KDevelopCore::changeProjectSpace" << endl;
+
     // Notification
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)

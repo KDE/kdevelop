@@ -189,6 +189,7 @@ void BugListComponent::projectSpaceClosed()
 
 void BugListComponent::projectChanged()
 {
+    kdDebug(9040) << "BugList::projectChanged" << endl;
 }
 
 

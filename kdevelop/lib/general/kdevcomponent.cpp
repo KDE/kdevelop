@@ -11,6 +11,11 @@ KDevComponent::~KDevComponent()
 {
 }
 
+KDevelopCore *KDevComponent::TheCore()
+{
+    return m_pCore;
+}
+
 ProjectSpace *KDevComponent::projectSpace()
 {
     return m_api->projectSpace;
@@ -46,8 +51,11 @@ KDevAppFrontend *KDevComponent::appFrontend()
     return m_api->appFrontend;
 }
 
-void KDevComponent::setupInternal(KDevApi *api)
+void KDevComponent::setupInternal(KDevelopCore * pCore, KDevApi *api)
 {
+    // Give them direct access to the KDevelop core.
+    m_pCore = pCore;
+
     m_api = api;
 }
 
