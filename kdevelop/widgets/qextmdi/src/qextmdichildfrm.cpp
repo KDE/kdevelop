@@ -227,6 +227,7 @@ void QextMdiChildFrm::setResizeCursor(int resizeCorner)
 void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 {
    if(m_state != Normal) return;
+   if(!m_pClient) return;
    if(m_pClient->minimumSize() == m_pClient->maximumSize()) return;
 
    if(m_resizeMode) {
@@ -357,16 +358,13 @@ void QextMdiChildFrm::maximizePressed()
 {
    switch(m_state){
       case Maximized:
-         emit m_pManager->noLongerMaximized(this);
+         emit m_pManager->nowMaximized(FALSE);
          setState(Normal);
          break;
       case Normal:
-         setState(Maximized);
-         emit m_pManager->nowMaximized();
-         break;
       case Minimized:
          setState(Maximized);
-         emit m_pManager->nowMaximized();
+         emit m_pManager->nowMaximized(TRUE);
          break;
    }
 }
@@ -376,7 +374,7 @@ void QextMdiChildFrm::restorePressed()
    if( m_state == Normal)
       return;
    if( m_state == Maximized)
-      emit m_pManager->noLongerMaximized(this);
+      emit m_pManager->nowMaximized(FALSE);
    setState(Normal);
 }
 
@@ -388,7 +386,7 @@ void QextMdiChildFrm::minimizePressed()
       case Minimized: setState(Normal);    break;
       case Normal:    setState(Minimized); break;
       case Maximized:
-         emit m_pManager->noLongerMaximized(this);
+         emit m_pManager->nowMaximized(FALSE);
          setState(Normal);
          setState(Minimized);
          break;
@@ -627,8 +625,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
    linkChildren( pFocPolDict);
 
    QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
-   QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
-   QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
+   QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
       setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
@@ -646,9 +643,8 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
   if(!m_pClient)return;
    
   QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
-  QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
-  QObject::disconnect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
-   
+  QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
+
   //reparent to desktop widget , no flags , point , show it
   QDict<FocusPolicy>* pFocPolDict;
   pFocPolDict = unlinkChildren();

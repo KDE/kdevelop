@@ -173,8 +173,8 @@ void QextMdiMainFrm::createMdiManager()
 {
    m_pMdi=new QextMdiChildArea(this);
    setCentralWidget(m_pMdi);
-   QObject::connect( m_pMdi, SIGNAL(nowMaximized()), this, SLOT(setMaximizeModeOn()) );
-   QObject::connect( m_pMdi, SIGNAL(noLongerMaximized(QextMdiChildFrm*)), this, SLOT(setMaximizeModeOff(QextMdiChildFrm*)) );
+   QObject::connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(setEnableMaximizedChildFrmMode(bool)) );
+   QObject::connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(QextMdiChildFrm*)), this, SLOT(switchOffMaximizeModeForMenu(QextMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(QextMdiChildFrm*,QextMdiChildFrm*)), this, SLOT(updateSysButtonConnections(QextMdiChildFrm*,QextMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(popupWindowMenu(QPoint)), this, SLOT(popupWindowMenu(QPoint)) );
    QObject::connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SIGNAL(lastChildFrmClosed()) );
@@ -274,7 +274,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          attachWindow( pWnd, FALSE /*bShow*/);
       }
 
-      if ( (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
+      if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
          pWnd->maximize();
       }
       if (!m_bSDIApplication || (flags & QextMdi::Detach)) {
@@ -397,6 +397,11 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    }
 
    m_pMdi->manageChild(lpC,FALSE,bCascade);
+
+   if (m_bMaximizedChildFrmMode && (m_pMdi->m_pZ->count() > 1)) {
+     updateSysButtonConnections( m_pMdi->topChild(), lpC);
+   }
+
    if (bShow) {
       lpC->show();
    }
@@ -555,7 +560,10 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
             // this should go out of here
             // (mmorin)
             if( m_pMdi->topChild()->state() == QextMdiChildFrm::Maximized) {
-               updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+               QextMdiChildFrm* pTC = m_pMdi->topChild();
+               if ( pTC != pWnd->mdiParent()) {
+                 updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+               }
             }
          }
       }
@@ -628,10 +636,8 @@ void QextMdiMainFrm::iconifyAllViews()
  */
 void QextMdiMainFrm::closeActiveView()
 {
-   if( m_pCurrentWindow != 0L)
-   {
+   if( m_pCurrentWindow != 0L) {
       m_pCurrentWindow->close();
-      m_pCurrentWindow = 0L;
    }
 }
 
@@ -1071,44 +1077,56 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
 }
 
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
-void QextMdiMainFrm::setMaximizeModeOn()
+void QextMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
 {
-   QextMdiChildFrm* pCurrentChild = m_pMdi->topChild();
-   if( !pCurrentChild)
-      return;
+   if (bEnable) {
+      m_bMaximizedChildFrmMode = TRUE;
+      qDebug("MaximizeMode on");
 
-   m_bMaximizedChildFrmMode = TRUE;
-   qDebug("MaximizeMode on");
+      QextMdiChildFrm* pCurrentChild = m_pMdi->topChild();
+      if( !pCurrentChild)
+         return;
 
-   // if there is no menubar given, those system buttons aren't possible
-   if( m_pMainMenuBar == 0L)
-      return;
-      
-   QObject::connect( m_pUndock, SIGNAL(clicked()), pCurrentChild, SLOT(undockPressed()) );
-   m_pUndock->show();
-   QObject::connect( m_pMinimize, SIGNAL(clicked()), pCurrentChild, SLOT(minimizePressed()) );
-   m_pMinimize->show();
-   QObject::connect( m_pRestore, SIGNAL(clicked()), pCurrentChild, SLOT(maximizePressed()) );
-   m_pRestore->show();
+      // if there is no menubar given, those system buttons aren't possible
+      if( m_pMainMenuBar == 0L)
+         return;
 
-   if (frameDecorOfAttachedViews() == QextMdi::KDE2LaptopLook) {
-      m_pMainMenuBar->insertItem( QPixmap(kde2laptop_closebutton_menu), m_pMdi->topChild(), SLOT(closePressed()), 0, -1, 0);
+      QObject::connect( m_pUndock, SIGNAL(clicked()), pCurrentChild, SLOT(undockPressed()) );
+      m_pUndock->show();
+      QObject::connect( m_pMinimize, SIGNAL(clicked()), pCurrentChild, SLOT(minimizePressed()) );
+      m_pMinimize->show();
+      QObject::connect( m_pRestore, SIGNAL(clicked()), pCurrentChild, SLOT(maximizePressed()) );
+      m_pRestore->show();
+
+      if (frameDecorOfAttachedViews() == QextMdi::KDE2LaptopLook) {
+         m_pMainMenuBar->insertItem( QPixmap(kde2laptop_closebutton_menu), m_pMdi->topChild(), SLOT(closePressed()), 0, -1, 0);
+      }
+      else {
+         m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
+         QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
+         m_pClose->show();
+      }
    }
    else {
-      m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
-      QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
-      m_pClose->show();
+      if (!m_bMaximizedChildFrmMode) return;  // already set, nothing to do
+
+      m_bMaximizedChildFrmMode = FALSE;
+      qDebug("MaximizeMode off");
+
+      QextMdiChildFrm* pFrmChild = m_pMdi->topChild();
+      if (!pFrmChild) return;
+
+      if (pFrmChild->m_pClient && pFrmChild->state() == QextMdiChildFrm::Maximized) {
+         pFrmChild->m_pClient->restore();
+         switchOffMaximizeModeForMenu( pFrmChild);
+      }
    }
 }
 
 /** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */
-void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
+void QextMdiMainFrm::switchOffMaximizeModeForMenu(QextMdiChildFrm* oldChild)
 {
-   if( !oldChild)
-      return;
-
-   m_bMaximizedChildFrmMode = TRUE;
-   qDebug("MaximizeMode off");
+   //qDebug("switching off maximize mode for menu");
 
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
@@ -1116,32 +1134,38 @@ void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
       
    m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
 
-   QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+   if( oldChild) {
+      QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+      QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
+      QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
+      QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
+   }
    m_pUndock->hide();
-   QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
    m_pMinimize->hide();
-   QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
    m_pRestore->hide();
-   QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
    m_pClose->hide();
 }
 
 /** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
 void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild)
 {
+   //qDebug("updateSysButtonConnections");
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
       return;
       
-   QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
-   QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
-   QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
-   QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
-
-   QObject::connect( m_pUndock, SIGNAL(clicked()), newChild, SLOT(undockPressed()) );
-   QObject::connect( m_pMinimize, SIGNAL(clicked()), newChild, SLOT(minimizePressed()) );
-   QObject::connect( m_pRestore, SIGNAL(clicked()), newChild, SLOT(maximizePressed()) );
-   QObject::connect( m_pClose, SIGNAL(clicked()), newChild, SLOT(closePressed()) );
+   if (oldChild) {
+      QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+      QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
+      QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
+      QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
+   }
+   if (newChild) {
+      QObject::connect( m_pUndock, SIGNAL(clicked()), newChild, SLOT(undockPressed()) );
+      QObject::connect( m_pMinimize, SIGNAL(clicked()), newChild, SLOT(minimizePressed()) );
+      QObject::connect( m_pRestore, SIGNAL(clicked()), newChild, SLOT(maximizePressed()) );
+      QObject::connect( m_pClose, SIGNAL(clicked()), newChild, SLOT(closePressed()) );
+   }
 }
 
 /** Shows the view taskbar. This should be connected with your "View" menu. */
@@ -1342,7 +1366,7 @@ void QextMdiMainFrm::setFrameDecorOfAttachedViews( int frameDecor)
 
 void QextMdiMainFrm::fakeSDIApplication()
 {
-   m_bSDIApplication = true;
+   m_bSDIApplication = TRUE;
    if (m_pTaskBar)
       m_pTaskBar->close();
    m_pTaskBar = 0L;

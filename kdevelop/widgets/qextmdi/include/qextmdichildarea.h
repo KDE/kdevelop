@@ -225,13 +225,13 @@ protected:
 
 signals:
    /** 
-   * Signalizes that the child frames are no longer maximized 
+   * Signalizes that there aren't maximized child frames any more
    */
-   void noLongerMaximized(QextMdiChildFrm*);
-   /** 
+   void noMaximizedChildFrmLeft(QextMdiChildFrm*);
+   /**
    * Signalizes that the child frames are maximized now
    */
-   void nowMaximized();
+   void nowMaximized(bool);
    /**
    * Internally used.
    * Signalizes from QextMdiChildArea to QextMdiMainFrm

@@ -385,13 +385,8 @@ signals:
    * Internally used to send information to the mainframe that this MDI view is maximized now.
    * Usually, the mainframe switches system buttons.
    */
-   void mdiParentNowMaximized();
-   /** 
-   * Internally used to send information to the mainframe that this MDI view is no longer maximized now.
-   * Usually, the mainframe switches system buttons.
-   */
-   void mdiParentNoLongerMaximized(QextMdiChildFrm*);
-   /** 
+   void mdiParentNowMaximized(bool);
+   /**
    * Is automatically emitted when slot_clickedInWindowMenu is called 
    */
    void clickedInWindowMenu(int);

@@ -423,6 +423,10 @@ public slots:
    * Sets the decoration of the window frame of docked (attached) MDI views
    */
    virtual void setFrameDecorOfAttachedViews( int frameDecor);
+   /**
+   * If in Childframe mode, we can switch between maximized or restored shown MDI views
+   */
+   virtual void setEnableMaximizedChildFrmMode(bool bEnable);
 protected:
 //   /**
 //   * Calls the destructor by delete.
@@ -460,15 +464,11 @@ protected slots: // Protected slots
    * Activates the MDI view (see @ref QextMdiMainFrm::activateView ) and popups the taskBar popup menu (see @ref QextMdiMainFrm::taskBarPopup ).
    */
    virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
-   /** 
-   * Turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame 
-   */
-   void setMaximizeModeOn();
-   /** 
+   /**
    * Turns the system buttons for maximize mode (SDI mode) off, and disconnects them 
    */
-   void setMaximizeModeOff( QextMdiChildFrm* oldChild);
-   /** 
+   void switchOffMaximizeModeForMenu(QextMdiChildFrm* oldChild);
+   /**
    * Reconnects the system buttons form maximize mode (SDI mode) with the new child frame 
    */
    void updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild);

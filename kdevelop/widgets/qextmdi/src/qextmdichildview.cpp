@@ -191,7 +191,7 @@ void QextMdiChildView::maximize(bool bAnimate)
    if(mdiParent()){
       if(!isMaximized()){
          mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
-         emit mdiParentNowMaximized();
+         emit mdiParentNowMaximized(TRUE);
       }
    } else showMaximized();
 }
@@ -266,7 +266,7 @@ void QextMdiChildView::restore()
 {
    if(mdiParent()){
       if(isMaximized())
-         emit mdiParentNoLongerMaximized(mdiParent());
+         emit mdiParentNowMaximized(FALSE);
       if(isMinimized()||isMaximized())mdiParent()->setState(QextMdiChildFrm::Normal);
    } else showNormal();
 }

@@ -64,12 +64,12 @@ QextMdiChildArea::~QextMdiChildArea()
 
 void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade)
 {
-   // (mmorin)
-   // carefull here I suggest to take out the code for cascading and maximizing
-   // this is left to the at/detach win
    QextMdiChildFrm * top=topChild();
-   if(bShow)m_pZ->append(lpC); //visible -> first in the Z order
-   else m_pZ->insert(0,lpC); //hidden -> last in the Z order
+   if (bShow)
+      m_pZ->append(lpC); //visible -> first in the Z order
+   else
+      m_pZ->insert(0,lpC); //hidden -> last in the Z order
+
    if(bCascade)lpC->move(getCascadePoint(m_pZ->count()-1));
    if(bShow){
       if(top){ //Maximize if needed
@@ -80,8 +80,8 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
          }
       }
       lpC->show();
+      focusTopChild();
    }
-   focusTopChild();
 }
 
 //============= focusInEvent ===============//
@@ -97,20 +97,27 @@ void QextMdiChildArea::focusInEvent(QFocusEvent *)
 void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
    bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
-   if(bWasMaximized){
-      emit noLongerMaximized(lpC);
-   }
+
+   // destroy the old one
    QObject::disconnect(lpC);
    lpC->blockSignals(TRUE);
    m_pZ->removeRef(lpC);
-   if(bWasMaximized){
-      QextMdiChildFrm * c=topChild();
-      if(c)c->setState(QextMdiChildFrm::Maximized,FALSE);
+
+   // focus the next new childframe
+   QextMdiChildFrm* c=topChild();
+   if (bWasMaximized){
+      if (c) {
+         c->setState(QextMdiChildFrm::Maximized,FALSE);
+         emit sysButtonConnectionsMustChange(0L,c);
+      }
+      else {
+         emit noMaximizedChildFrmLeft(0L); // last childframe removed
+      }
    }
-   if(bFocusTopChild)
+   if (bFocusTopChild)
       focusTopChild();
-   if( bWasMaximized && topChild() )
-      emit nowMaximized();
+//   if (bWasMaximized && topChild() )
+//      emit nowMaximized(TRUE);
 }
 
 //============ destroyChildButNotItsView ============//
@@ -118,24 +125,27 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
    bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
-   if(bWasMaximized){
-      emit noLongerMaximized(lpC);
-   }
-   
+
+   // destroy the old one
    QObject::disconnect(lpC);
-
    lpC->unsetClient();
-
-   lpC->blockSignals(TRUE);
    m_pZ->removeRef(lpC);
-   if(bWasMaximized){
-      QextMdiChildFrm * c=topChild();
-      if(c)c->setState(QextMdiChildFrm::Maximized,FALSE);
+
+   // focus the next new childframe
+   QextMdiChildFrm* c=topChild();
+   if (bWasMaximized){
+      if (c) {
+         c->setState(QextMdiChildFrm::Maximized,FALSE);
+         emit sysButtonConnectionsMustChange(0L,c);
+      }
+      else {
+         emit noMaximizedChildFrmLeft(0L); // last childframe removed
+      }
    }
-   if(bFocusTopChild)
+   if (bFocusTopChild)
       focusTopChild();
-   if( bWasMaximized && topChild() )
-      emit nowMaximized(); 
+//   if (bWasMaximized && topChild() )
+//      emit nowMaximized(TRUE);
 }
 
 //============= setTopChlid ============//
