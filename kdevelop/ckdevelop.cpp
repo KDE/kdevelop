@@ -957,15 +957,15 @@ void CKDevelop::slotBuildCompileFile(){
    		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
    	}
    	config->setGroup(group);
-   	flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
-   	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
-   	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+   	flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
+   	flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+   	flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
   	flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";
    	if(prj->getProjectType()=="normal_c"){
    		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
    	}
    	else{
+       flags += "CFLAGS=\"" + cflags + "\" ";
        flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
    	}
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
@@ -1880,15 +1880,15 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
    		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
    	}
    	config->setGroup(group);
-   	flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
-   	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
-   	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+   	flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
+   	flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+   	flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
   	flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";
    	if(prj->getProjectType()=="normal_c"){
    		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
    	}
    	else{
+       flags += "CFLAGS=\"" + cflags + "\" ";
        flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
    	}
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
@@ -1958,10 +1958,12 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 
   // set the make arguments
   process.clearArguments();
-  process << flags;
+  if (!flags.isEmpty())
+    process << flags;
   process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
-  process << target;
-	debug("run: %s %s %s -f %s %s", flags.data(), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
+  if (!target.isEmpty())
+   process << target;
+	debug("run: %s %s %s -f %s %s", (!flags.isEmpty() ? flags.data() : ""), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
 
   // why is this beeping business necessary? shouldn't there be a switch?
   // beep = true;
@@ -2018,16 +2020,19 @@ void CKDevelop::slotBuildCleanRebuildAll()
   next_job = "autoconf+configure+make";
 }
 
-void CKDevelop::RunConfigure(const QString& conf, bool ask){
+void CKDevelop::RunConfigure(const QString &conf, bool ask){
 	QString args, shellcommand;
-
+  QString vpath;
+  
 	if(conf==i18n("(Default)")){ // blddir=srcdir
 		args=prj->getConfigureArgs();
 	}
-	else{
+	else
+  {
 		args=m_pKDevSession->getConfigureArgs(conf);
 	}
-	if(ask){  // 	only open dialog when asked
+	
+  if(ask){  // 	only open dialog when asked
 	  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
   	if(argdlg.exec()){
 			args=argdlg.getArguments();
@@ -2052,18 +2057,24 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
   messages_widget->start();
   slotFileSaveAll();
   if(conf==i18n("(Default)"))
-	  QDir::setCurrent(prj->getProjectDir());
-	else{
-		QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+  {
+    vpath=prj->getProjectDir();
+  }
+  else
+  {
+		vpath=m_pKDevSession->getVPATHSubdir(conf);
 		QDir dir(vpath);
 		// change to VPATH subdir, create it if not existant
 		if(!dir.exists())
 			dir.mkdir(vpath);
-		QDir::setCurrent(vpath);
  	}
+  
+  QDir::setCurrent(vpath);
+  
 	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
 	// get all other strings
-  if(conf==i18n("(Default)")){
+  if(conf==i18n("(Default)"))
+  {
 		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
 		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
 		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
@@ -2073,7 +2084,8 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 		QString platf=config->readEntry("Platform","linux");
 		group="Compilearch "+arch+"-"+platf;
   }
-	else{
+	else
+  {
 		group="Compilearch "+
 											m_pKDevSession->getArchitecture(conf)+"-"+
 											m_pKDevSession->getPlatform(conf);
@@ -2083,21 +2095,28 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
 		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
 	}
- 	config->setGroup(group);
+ 	
+  config->setGroup(group);
  	shellcommand += "CPP=\"" + config->readEntry("CPP","cpp") + "\" ";
  	shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
  	shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
 	shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
-  shellcommand += "CFLAGS=\"" + cflags + "\" ";
- 	if(prj->getProjectType()=="normal_c"){
+ 	if(prj->getProjectType()=="normal_c")
+  {
  		 shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
  	}
- 	else{
+ 	else
+  {
+     shellcommand += "CFLAGS=\"" + cflags + "\" ";
      shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
  	}
-  shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
-	// the configure script is always in the project directory, no matter where we are
-  shellcommand += prj->getProjectDir() + "/configure " + args;
+  shellcommand += "LDFLAGS=\" " + ldflags+ "\" " ;
+  // this check is only to handle a strange bug
+  //   if vpath==project dir the rule for .ui files won't be accepted (Walter)
+  if (vpath!=prj->getProjectDir())
+     shellcommand += prj->getProjectDir() +"/configure "+ args;
+  else
+     shellcommand += "./configure "+ args;
 
 	shell_process.clearArguments();
 	shell_process << shellcommand;

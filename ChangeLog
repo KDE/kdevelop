@@ -1,3 +1,9 @@
+2002-02-24  Walter Tasin <tasin@kdevelop.org>
+    * bugfix/workaround:
+      if builddir==srcdir and inside the created Makefiles contains the srcdir as
+      absolute path, rules for .ui files and .moc files won't apply.
+      This occurs if "configure" will be a called with FQPN.
+      
 2002-02-22  Walter Tasin <tasin@kdevelop.org>
     * implementing a little usability feature:
       after project creation KDevelop loads automatically main.cpp or

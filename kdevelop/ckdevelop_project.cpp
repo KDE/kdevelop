@@ -356,13 +356,119 @@ void CKDevelop::slotProjectRemoveFile(){
     delFileFromProject(name);
 }
 
+QString CKDevelop::prepareConfigureCommand()
+{
+	QStringList configs;
+  QString shellcommand;
+  QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
+  
+  configs=m_pKDevSession->getCompileConfigs();
+  if(!configs.isEmpty())
+  { // only default used - run only in srcdir
+    for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it)
+    {
+      QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
+      QDir dir(vpath);
+      // change to VPATH subdir, create it if not existant
+      if(!dir.exists())
+        dir.mkdir(vpath);
+    
+      if(it==configs.begin()) // first loop, leave out &&
+        shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
+      else
+        shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
+      shellcommand+="\" ";
+
+      shellcommand +=" && cd "+vpath+" && ";
+      config->setGroup("Compilearch "+ 
+          m_pKDevSession->getArchitecture(*it)+"-"+m_pKDevSession->getPlatform(*it) );
+      shellcommand += "CPP=\""+ config->readEntry("CPP","cpp") + "\" ";
+      shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
+      shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
+    
+      cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
+      cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
+      cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
+      addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
+      ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
+
+      // this has to get over and over again per configuration
+      shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
+      // if the project type is normal_c, the cflags were stored in the cxxflags
+      // of the old project type. Therefore, when the project is normal_c, continue
+      // to export the CXXFLAGS as CFLAGS.
+      if(prj->getProjectType()=="normal_c")
+      {
+        shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+      }
+      else
+      {
+        shellcommand += "CFLAGS=\"" + cflags + "\" ";
+        shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+      }
+    
+      shellcommand += "LDFLAGS=\" " + ldflags+ "\" " ;
+      // the configure script is always in the project directory, no matter where we are
+    
+      args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
+      // this check is only to handle a strange bug
+      //   if vpath==project dir the rule for .ui files won't be accepted (Walter)
+      if (vpath!=prj->getProjectDir())
+        shellcommand += prj->getProjectDir() +"/configure "+ args;
+      else
+        shellcommand += "./configure "+ args;
+      
+    }
+  }
+  else
+  {
+     cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+     addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+     ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+
+     
+     shellcommand+=" echo \""+i18n("Running configure in source directory")+"\" ";
+     shellcommand+=" && cd "+prj->getProjectDir()+" && ";
+     // export CC, CXX, CPP
+     config->setGroup("Compiler");
+     QString arch=config->readEntry("Architecture","i386");
+     QString platf=config->readEntry("Platform","linux");
+     
+     config->setGroup("Compilearch "+arch+"-"+platf);
+     shellcommand += " CPP=\"" + config->readEntry("CPP","cpp")+ "\" ";
+     shellcommand += " CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+     shellcommand += " CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
+     shellcommand += " CPPFLAGS=\"" + cppflags + "\" ";
+     
+     // if the project type is normal_c, the cflags were stored in the cxxflags
+     // of the old project type. Therefore, when the project is normal_c, continue
+     // to export the CXXFLAGS as CFLAGS.
+     if(prj->getProjectType()=="normal_c")
+     {
+        shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+     }
+     else
+     {
+        shellcommand += "CFLAGS=\"" + cflags + "\" ";
+        shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+     }
+    
+     shellcommand  += " LDFLAGS=\" " + ldflags + "\" ";
+     // the configure script is always in the project directory, no matter where we are
+     args=prj->getConfigureArgs();
+     shellcommand += "./configure " + args;
+  }
+  
+  return shellcommand;
+}
+  
 void CKDevelop::slotProjectOptions(){
 	QStringList configs;
 	QString shellcommand="";
 	// get the current config to set it as the config in the project options dialog
  	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
  	QString curr=compile_combo->currentText();
-  CPrjOptionsDlg prjdlg(prj,m_pKDevSession,curr, this,"optdialog");
+  CPrjOptionsDlg prjdlg(prj,m_pKDevSession, curr, this,"optdialog");
   if(prjdlg.exec()){
  		// refill the compile configs combobox
  		curr=compile_combo->currentText();
@@ -376,8 +482,9 @@ void CKDevelop::slotProjectOptions(){
 
 		//////////////////////////////////////
 		bool cfgure=false; // run configure for all configurations ?
-    if (prjdlg.needConfigureInUpdate()){
-			cfgure=true;
+    if (prjdlg.needConfigureInUpdate())
+    {
+      cfgure=true;
       prj->updateConfigureIn();
       KMessageBox::information(0,i18n("You have modified certain project information.\nWe will regenerate configure now."));
       setToolMenuProcess(false);
@@ -390,93 +497,27 @@ void CKDevelop::slotProjectOptions(){
         makefile="Makefile.cvs";
       shellcommand += make_cmd + " -f "+makefile+" && ";
     }
-    if(prjdlg.needMakefileUpdate()){
-    	cfgure=true;
+    if(prjdlg.needMakefileUpdate())
+    {
+      cfgure=true;
       prj->updateMakefilesAm();
-		}
-		if(cfgure){ // yes, run configure for either only the default config (builddir=srcdir)
-							// or for all other configurations to update makefiles.
-			QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
-			configs=m_pKDevSession->getCompileConfigs();
-			if(!configs.isEmpty()){ // only default used - run only in srcdir
-			  for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it){
-      		QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
-      		QDir dir(vpath);
-      		// change to VPATH subdir, create it if not existant
-      		if(!dir.exists())
-      			dir.mkdir(vpath);
-      		if(it==configs.begin()) // first loop, leave out &&
-  	    		shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
-      		else
-	      		shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
-      		shellcommand+="\" ";
-      		shellcommand +=" && cd "+vpath+" && ";
-      		config->setGroup("Compilearch "+
-      											m_pKDevSession->getArchitecture(*it)+"-"+
-      											m_pKDevSession->getPlatform(*it) );
-      		shellcommand += "CPP="+ config->readEntry("CPP","cpp") + " ";
-      		shellcommand += "CC=" + config->readEntry("CC","gcc") + " ";
-      		shellcommand += "CXX=" + config->readEntry("CXX","g++") + " ";
-      		cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
-      		cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
-      		cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
-      		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
-      		ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
-        	// this has to get over and over again per configuration
-       		shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
-       		shellcommand += "CFLAGS=\"" + cflags + "\" ";
-        		// if the project type is normal_c, the cflags were stored in the cxxflags
-        		// of the old project type. Therefore, when the project is normal_c, continue
-        		// to export the CXXFLAGS as CFLAGS.
-        	if(prj->getProjectType()=="normal_c"){
-        		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-        	}
-        	else{
-            shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-        	}
-		      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
-        	// the configure script is always in the project directory, no matter where we are
-					args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
-          shellcommand += prj->getProjectDir() +"/configure "+ args;
-				}
-			}
-			else{
-				args=prj->getConfigureArgs();
-			  QDir::setCurrent(prj->getProjectDir());
-     		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
-     		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
-     		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
-     		// export CC, CXX, CPP
-     		config->setGroup("Compiler");
-     		QString arch=config->readEntry("Architecture","i386");
-     		QString platf=config->readEntry("Platform","linux");
-     		config->setGroup("Compilearch "+arch+"-"+platf);
-     		shellcommand += " CPP=" + config->readEntry("CPP","cpp")+ " ";
-     		shellcommand += " CC=" + config->readEntry("CC","gcc")+ " ";
-     		shellcommand += " CXX=" + config->readEntry("CXX","g++")+ " ";
-     		shellcommand += " CPPFLAGS=\"" + cppflags + "\" ";
-        shellcommand += " CFLAGS=\"" + cflags + "\" ";
-    		// if the project type is normal_c, the cflags were stored in the cxxflags
-    		// of the old project type. Therefore, when the project is normal_c, continue
-    		// to export the CXXFLAGS as CFLAGS.
-       	if(prj->getProjectType()=="normal_c"){
-       		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-       	}
-       	else{
-           shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-       	}
-        shellcommand  += " LDFLAGS=\" " + ldflags + "\" ";
- 				// the configure script is always in the project directory, no matter where we are
- 			  shellcommand += prj->getProjectDir() + "/configure " + args;
- 			}
+    }
+
+    if(cfgure)
+    { // yes, run configure for either only the default config (builddir=srcdir)
+      // or for all other configurations to update makefiles.
+      QDir::setCurrent(prj->getProjectDir());
+    
+      shellcommand=prepareConfigureCommand();
+      
       setToolMenuProcess(false);
       messages_widget->start();
       showOutputView(true);		
       shell_process.clearArguments();
-  		shell_process << shellcommand;
-			debug("run: %s\n", shellcommand.data());
-  	  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-		}		
+      shell_process << shellcommand;
+      debug("run: %s\n", shellcommand.data());
+      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    }
   }
 }
 
@@ -1596,86 +1637,8 @@ void CKDevelop::newSubDir(){
         makefile="Makefile.cvs";
     shellcommand += make_cmd + " -f "+makefile+" && ";
     
-		QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
-		configs=m_pKDevSession->getCompileConfigs();
-		if(!configs.isEmpty())
-		{ // only default used - run only in srcdir
-		  for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it)
-			{
-      		QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
-      		QDir dir(vpath);
-      		// change to VPATH subdir, create it if not existant
-      		if(!dir.exists())
-      			dir.mkdir(vpath);
-      		if(it==configs.begin()) // first loop, leave out &&
-  	    		shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
-      		else
-	      		shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
-      		shellcommand+="\" ";
-      		shellcommand +=" && cd "+vpath+" && ";
-      		config->setGroup("Compilearch "+
-      											m_pKDevSession->getArchitecture(*it)+"-"+
-      											m_pKDevSession->getPlatform(*it) );
-      		shellcommand += "CPP="+ config->readEntry("CPP","cpp") + " ";
-      		shellcommand += "CC=" + config->readEntry("CC","gcc") + " ";
-      		shellcommand += "CXX=" + config->readEntry("CXX","g++") + " ";
-      		cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
-      		cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
-      		cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
-      		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
-      		ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
-        	// this has to get over and over again per configuration
-       		shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
-       		shellcommand += "CFLAGS=\"" + cflags + "\" ";
-        		// if the project type is normal_c, the cflags were stored in the cxxflags
-        		// of the old project type. Therefore, when the project is normal_c, continue
-        		// to export the CXXFLAGS as CFLAGS.
-        	if(prj->getProjectType()=="normal_c")
-					{
-        		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-        	}
-        	else
-					{
-            shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-        	}
-		      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
-        	// the configure script is always in the project directory, no matter where we are
-					args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
-          shellcommand += prj->getProjectDir() +"/configure "+ args;
-			}
-		}
-		else
-		{
-				args=prj->getConfigureArgs();
-			  QDir::setCurrent(prj->getProjectDir());
-     		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
-     		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
-     		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
-     		// export CC, CXX, CPP
-     		config->setGroup("Compiler");
-     		QString arch=config->readEntry("Architecture","i386");
-     		QString platf=config->readEntry("Platform","linux");
-     		config->setGroup("Compilearch "+arch+"-"+platf);
-     		shellcommand += " CPP=" + config->readEntry("CPP","cpp")+ " ";
-     		shellcommand += " CC=" + config->readEntry("CC","gcc")+ " ";
-     		shellcommand += " CXX=" + config->readEntry("CXX","g++")+ " ";
-     		shellcommand += " CPPFLAGS=\"" + cppflags + "\" ";
-        shellcommand += " CFLAGS=\"" + cflags + "\" ";
-    		// if the project type is normal_c, the cflags were stored in the cxxflags
-    		// of the old project type. Therefore, when the project is normal_c, continue
-    		// to export the CXXFLAGS as CFLAGS.
-       	if(prj->getProjectType()=="normal_c")
-				{
-       		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-       	}
-       	else
-				{
-           shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-       	}
-        shellcommand  += " LDFLAGS=\" " + ldflags + "\" ";
- 				// the configure script is always in the project directory, no matter where we are
- 			  shellcommand += prj->getProjectDir() + "/configure " + args;
- 		}
+    shellcommand += prepareConfigureCommand();
+    
     setToolMenuProcess(false);
     messages_widget->start();
     showOutputView(true);		

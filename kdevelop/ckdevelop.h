@@ -899,6 +899,9 @@ private:
   /** shows the tip of the day */
   void showHelpTipOfDay(bool force=true);
 
+  /* this is only to prepare the configure command inside a string */
+  QString prepareConfigureCommand();
+
 public:
   /** this attribute is true from construction until qApp->exec().
     * In this way we can prevent some actions in queryClose() and queryExit() */
