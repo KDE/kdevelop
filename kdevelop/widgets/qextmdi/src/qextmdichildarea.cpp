@@ -569,4 +569,6 @@ void QextMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
    m_captionInactiveBackColor = clr;
 }
 
-#include "moc_qextmdichildarea.cpp"
+#ifndef NO_KDE2
+#  include "qextmdichildarea.moc"
+#endif

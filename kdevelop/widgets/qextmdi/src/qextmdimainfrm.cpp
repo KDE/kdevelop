@@ -887,4 +887,6 @@ void QextMdiMainFrm::popupWindowMenu(QPoint p)
    m_pWindowMenu->popup( p);
 }
 
-#include "moc_kextmdimainfrm.cpp"
+#ifndef NO_KDE2
+#  include "kextmdimainfrm.moc"
+#endif
