@@ -18,12 +18,12 @@
 
 #line 12 "java.store.g"
 
-	#include "parsedmethod.h"
-	#include "parsedclass.h"
-	#include "parsedattribute.h"
-	#include "parsedargument.h"
+	#include <parsedmethod.h>
+	#include <parsedclass.h>
+	#include <parsedattribute.h>
+	#include <parsedargument.h>
 
-	#include <kdebug.h>    
+	#include <kdebug.h>
 
 #line 29 "JavaStoreWalker.hpp"
 /** Java 1.2 AST Recognizer Grammar
@@ -44,20 +44,29 @@ class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public Java
 #line 45 "java.store.g"
 
 private:
+	QString m_fileName;
+	QStringList m_currentScope;
 	ClassStore* m_store;
-	QString m_package;
-	ANTLR_USE_NAMESPACE(std)string m_filename;
+	ParsedClassContainer* m_currentContainer;
+	ParsedClass* m_currentClass;
+	PIAccess m_currentAccess;
+	int m_anon;
 
 public:
 	void setClassStore( ClassStore* store )			{ m_store = store; }
 	ClassStore* classStore()				{ return m_store; }
 	const ClassStore* classStore() const			{ return m_store; }
 
-	ANTLR_USE_NAMESPACE(std)string getFilename() const	{ return m_filename; }
-	void setFilename( const ANTLR_USE_NAMESPACE(std)string& filename ) { m_filename = filename; }
+	QString fileName() const	{ return m_fileName; }
+	void setFileName( const QString& fileName ) { m_fileName = fileName; }
 
 	void init(){
-		m_package = QString::null;
+		m_currentScope.clear();
+		m_currentContainer = m_store->globalScope();
+		m_currentClass = 0;
+		m_currentAccess = PIE_PUBLIC;
+		m_anon = 0;
+		m_store->removeWithReferences( m_fileName );
 	}
 
 	void wipeout()						{ m_store->wipeout(); }
@@ -67,9 +76,9 @@ public:
 public:
 	JavaStoreWalker();
 	public: void compilationUnit(RefJavaAST _t);
-	public: void packageDefinition(RefJavaAST _t);
+	public:  QString  packageDefinition(RefJavaAST _t);
 	public:  QString  importDefinition(RefJavaAST _t);
-	public: ParsedClass*  typeDefinition(RefJavaAST _t);
+	public: void typeDefinition(RefJavaAST _t);
 	public:  QString  identifier(RefJavaAST _t);
 	public:  QString  identifierStar(RefJavaAST _t);
 	public:  QStringList  modifiers(RefJavaAST _t);

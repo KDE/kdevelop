@@ -15,7 +15,6 @@
 #include "problemreporter.h"
 #include "JavaLexer.hpp"
 #include "JavaRecognizer.hpp"
-#include "JavaStoreWalker.hpp"
 #include "JavaAST.hpp"
 #include <kdebug.h>
 #include <qfile.h>

@@ -10,12 +10,12 @@ header "pre_include_hpp" {
 }
 
 header "post_include_hpp" {
-	#include "parsedmethod.h"
-	#include "parsedclass.h"
-	#include "parsedattribute.h"
-	#include "parsedargument.h"
+	#include <parsedmethod.h>
+	#include <parsedclass.h>
+	#include <parsedattribute.h>
+	#include <parsedargument.h>
 
-	#include <kdebug.h>    
+	#include <kdebug.h>
 }
 
 options {
@@ -39,25 +39,34 @@ class JavaStoreWalker extends TreeParser;
 
 options {
 	importVocab=Java;
-	defaultErrorHandler = true;     
+	defaultErrorHandler = true;
 	ASTLabelType = "RefJavaAST";
 }
 {
 private:
+	QString m_fileName;
+	QStringList m_currentScope;
 	ClassStore* m_store;
-	QString m_package;
-	ANTLR_USE_NAMESPACE(std)string m_filename;
+	ParsedClassContainer* m_currentContainer;
+	ParsedClass* m_currentClass;
+	PIAccess m_currentAccess;
+	int m_anon;
 
 public:
 	void setClassStore( ClassStore* store )			{ m_store = store; }
 	ClassStore* classStore()				{ return m_store; }
 	const ClassStore* classStore() const			{ return m_store; }
 
-	ANTLR_USE_NAMESPACE(std)string getFilename() const	{ return m_filename; }
-	void setFilename( const ANTLR_USE_NAMESPACE(std)string& filename ) { m_filename = filename; }
+	QString fileName() const	{ return m_fileName; }
+	void setFileName( const QString& fileName ) { m_fileName = fileName; }
 
 	void init(){
-		m_package = QString::null;
+		m_currentScope.clear();
+		m_currentContainer = m_store->globalScope();
+		m_currentClass = 0;
+		m_currentAccess = PIE_PUBLIC;
+		m_anon = 0;
+		m_store->removeWithReferences( m_fileName );
 	}
 
 	void wipeout()						{ m_store->wipeout(); }
@@ -65,55 +74,45 @@ public:
 	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
 }
 
-compilationUnit { ParsedClass* kl; }
+compilationUnit { QString package; QString imp; QStringList imports; }
 	: { init(); }
-		(packageDefinition)?
-		(importDefinition)*
-		(kl=typeDefinition  { m_store->globalScope()->addClass( kl ); m_store->addClass( kl ); } )*
+		(package=packageDefinition)?
+		(imp=importDefinition { imports << imp; } )*
+		(typeDefinition)*
 	;
 
-packageDefinition { QString id; }
-	:	#( PACKAGE_DEF id=identifier )	{ m_package = id; }
+packageDefinition returns [ QString id ]
+	:	#( PACKAGE_DEF id=identifier )
 	;
 
 importDefinition returns [ QString id ]
 	:	#( IMPORT id=identifierStar )
 	;
 
-typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
-	:	#(CLASS_DEF m:modifiers IDENT 
+typeDefinition { QStringList bases; QString className; ParsedClass* klass = 0; }
+	:	#(CLASS_DEF m:modifiers IDENT
 						{
-						klass = new ParsedClass; 
-						klass->setName( #IDENT->getText().c_str() );
-						klass->setDeclaredInFile( getFilename().c_str() );
-						klass->setDefinedInFile( getFilename().c_str() );
+						klass = new ParsedClass;
+						QString name = QString::fromUtf8( #IDENT->getText().c_str(), #IDENT->getText().length() );
+						QStringList path = QStringList::split( ".", name );
+						className = path.back();
+						klass->setName( path.back() );
+
+						klass->setDeclaredInFile( m_fileName );
+						klass->setDefinedInFile( m_fileName );
 						klass->setDeclaredOnLine( #IDENT->getLine() );
 						klass->setDefinedOnLine( #IDENT->getLine() );
-						kdDebug() << "klass->path = " << klass->path() << endl;
-						}
-		bases=extendsClause 
-						{ 
-						QStringList::Iterator it = bases.begin();
-						while( it != bases.end() ){
-							ParsedParent* parent = new ParsedParent;
-							parent->setName( *it );
-							klass->addParent( parent );
-							++it;
-						}
-						}
-		implementsClause objBlock[klass] 
-		)
-	|	#(INTERFACE_DEF mm:modifiers IDENT 
-						{
-						klass = new ParsedClass; 
-						klass->setName( #IDENT->getText().c_str() );
-						klass->setDeclaredInFile( getFilename().c_str() );
-						klass->setDeclaredOnLine( #IDENT->getLine() );
-						klass->setDefinedOnLine( #IDENT->getLine() )
-;						kdDebug() << "klass->path = " << klass->path() << endl;
+						klass->setDeclaredInScope( m_currentScope.join(".") );
+
+						bool innerClass = !m_currentScope.isEmpty();
+						if( innerClass )
+						    m_currentContainer->addClass( klass );
+						else
+						    m_store->addClass( klass );
+
 						}
 		bases=extendsClause
-						{ 
+						{
 						QStringList::Iterator it = bases.begin();
 						while( it != bases.end() ){
 							ParsedParent* parent = new ParsedParent;
@@ -122,6 +121,24 @@ typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
 							++it;
 						}
 						}
+		implementsClause
+						{
+						m_currentScope.push_back( className );
+						ParsedClass* oldClass = m_currentClass;
+						ParsedClassContainer* oldContainer = m_currentContainer;
+
+						m_currentContainer = klass;
+						m_currentClass = klass;
+						}
+		objBlock[klass]
+						{
+						m_currentContainer = oldContainer;
+						m_currentClass = oldClass;
+						m_currentScope.pop_back();
+						}
+		)
+	|	#(INTERFACE_DEF mm:modifiers IDENT
+		bases=extendsClause
 		interfaceBlock[klass] )
 	;
 
@@ -181,18 +198,69 @@ implementsClause returns [ QStringList l ] { QString id; }
 
 interfaceBlock [ ParsedClass* klass ] { ParsedMethod* meth; ParsedAttribute* attr; }
 	:	#(	OBJBLOCK
-			(	meth=methodDecl			{ klass->addMethod( meth ); }
-			|	attr=variableDef		{ klass->addAttribute( attr ); }
+			(	meth=methodDecl			{
+								ParsedMethod* m = m_currentClass->getMethod( meth );
+								bool isStored = m != 0;
+								if( isStored ){
+								    m->setDefinedInFile( m_fileName );
+								    m->setDefinedOnLine( meth->definedOnLine() );
+								    delete( meth );
+								    meth = m;
+								} else
+								    klass->addMethod( meth );
+								}
+
+			|	attr=variableDef		{
+								ParsedAttribute* a = m_currentClass->getAttributeByName( attr->name() );
+								bool isStored = a != 0;
+								if( isStored ){
+								    a->setDefinedInFile( m_fileName );
+								    a->setDefinedOnLine( attr->definedOnLine() );
+								    delete( attr );
+								    attr = a;
+								} else
+								    klass->addAttribute( attr );
+								}
 			)*
 		)
 	;
 
-objBlock [ ParsedClass* klass ] { ParsedClass* kl; ParsedMethod* meth; ParsedAttribute* attr; }
+objBlock [ ParsedClass* klass ] { ParsedMethod* meth; ParsedAttribute* attr; }
 	:	#(	OBJBLOCK
-			(	meth=ctorDef			{ klass->addMethod( meth ); }
-			|	meth=methodDef			{ klass->addMethod( meth ); }
-			|	attr=variableDef		{ klass->addAttribute( attr ); }
-			|	kl=typeDefinition		{ m_store->globalScope()->addClass( kl ); klass->addClass( kl ); }
+			(	meth=ctorDef			{
+								ParsedMethod* m = m_currentClass->getMethod( meth );
+								bool isStored = m != 0;
+								if( isStored ){
+								    m->setDefinedInFile( m_fileName );
+								    m->setDefinedOnLine( meth->definedOnLine() );
+								    delete( meth );
+								    meth = m;
+								} else
+								    klass->addMethod( meth );
+								}
+			|	meth=methodDef			{
+								ParsedMethod* m = m_currentClass->getMethod( meth );
+								bool isStored = m != 0;
+								if( isStored ){
+								    m->setDefinedInFile( m_fileName );
+								    m->setDefinedOnLine( meth->definedOnLine() );
+								    delete( meth );
+								    meth = m;
+								} else
+								    klass->addMethod( meth );
+								}
+			|	attr=variableDef		{
+								ParsedAttribute* a = m_currentClass->getAttributeByName( attr->name() );
+								bool isStored = a != 0;
+								if( isStored ){
+								    a->setDefinedInFile( m_fileName );
+								    a->setDefinedOnLine( attr->definedOnLine() );
+								    delete( attr );
+								    attr = a;
+								} else
+								    klass->addAttribute( attr );
+								}
+			|	typeDefinition
 			|	#(STATIC_INIT slist)
 			|	#(INSTANCE_INIT slist)
 			)*
@@ -200,20 +268,20 @@ objBlock [ ParsedClass* klass ] { ParsedClass* kl; ParsedMethod* meth; ParsedAtt
 	;
 
 ctorDef returns [ ParsedMethod* meth ]	{ meth = new ParsedMethod; meth->setIsConstructor( TRUE ); }
-	:	#(CTOR_DEF 
+	:	#(CTOR_DEF
 		m:modifiers methodHead[meth] slist
 		)
-							{							
-							meth->setDeclaredInFile( getFilename().c_str() );
-							meth->setDefinedInFile( getFilename().c_str() );
+							{
+							meth->setDeclaredInFile( m_fileName );
+							meth->setDefinedInFile( m_fileName );
 							}
 	;
 
 methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
 	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth])
-							{ 							
-							meth->setDeclaredInFile( getFilename().c_str() );
-							meth->setDefinedInFile( getFilename().c_str() );
+							{
+							meth->setDeclaredInFile( m_fileName );
+							meth->setDefinedInFile( m_fileName );
 							meth->setType( tp );
 							}
 	;
@@ -221,8 +289,8 @@ methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod
 methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
 	:	#(METHOD_DEF m:modifiers tp=typeSpec methodHead[meth] (slist)?)
 							{
-							meth->setDeclaredInFile( getFilename().c_str() );	
-							meth->setDefinedInFile( getFilename().c_str() );
+							meth->setDeclaredInFile( m_fileName );
+							meth->setDefinedInFile( m_fileName );
 							meth->setType( tp );
 							}
 	;
@@ -230,15 +298,15 @@ methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod;
 variableDef returns [ ParsedAttribute* attr ] { QString tp; attr = new ParsedAttribute; }
 	:	#(VARIABLE_DEF m:modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
 							{
-							attr->setDeclaredInFile( getFilename().c_str() );
-							attr->setDefinedInFile( getFilename().c_str() );
+							attr->setDeclaredInFile( m_fileName );
+							attr->setDefinedInFile( m_fileName );
 							attr->setType( tp );
 							}
 	;
 
 parameterDef returns [ ParsedArgument* arg ] { QString tp; arg = new ParsedArgument; }
 	:	#(PARAMETER_DEF modifiers tp=typeSpec IDENT )
-							{							
+							{
 							arg->setName( #IDENT->getText().c_str() );
 							arg->setType( tp );
 							}
@@ -292,7 +360,7 @@ identifier returns [ QString id ]
 identifierStar returns [ QString id ] 
 	:	IDENT					{ id = #IDENT->getText().c_str(); }
 	|	#( DOT id=identifier (STAR  { id += QString(".") + #STAR->getText().c_str(); } |
-				      IDENT { id += QString(".") + #IDENT->getText().c_str(); }) ) 
+				      IDENT { id += QString(".") + #IDENT->getText().c_str(); }) )
 	;
 
 slist

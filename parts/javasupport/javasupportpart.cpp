@@ -69,9 +69,9 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     // a small hack (robe)
-    classStore()->globalScope()->setName( "(default packages)" );
-    classStore()->addScope( classStore()->globalScope() );
-    classStore()->globalScope()->setName( QString::null );
+    //classStore()->globalScope()->setName( "(default packages)" );
+    //classStore()->addScope( classStore()->globalScope() );
+    //classStore()->globalScope()->setName( QString::null );
 }
 
 
@@ -117,7 +117,7 @@ void JavaSupportPart::projectClosed()
 
 void JavaSupportPart::initialParse()
 {
-    kdDebug() << "initialParse()" << endl;
+    kdDebug(9013) << "------------------------------------------> initialParse()" << endl;
 
     if (project())
     {
@@ -127,7 +127,8 @@ void JavaSupportPart::initialParse()
 
         QStringList files = project()->allFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it){
-            maybeParse(*it);
+	    QString fn = project()->projectDirectory() + "/" + *it;
+            maybeParse( fn );
             kapp->processEvents( 500 );
         }
 
@@ -145,13 +146,12 @@ QStringList JavaSupportPart::fileExtensions()
 
 void JavaSupportPart::maybeParse(const QString &fileName)
 {
-    kdDebug() << "Maybe parse: " << fileName << endl;
+    kdDebug(9013) << "Maybe parse: " << fileName << endl;
 
     if( !fileExtensions().contains( QFileInfo( fileName ).extension() ) )
         return;
 
     mainWindow()->statusBar()->message( i18n("Parsing file: %1").arg(fileName) );
-    classStore()->removeWithReferences( fileName );
     parse( fileName );
 }
 
@@ -187,8 +187,7 @@ void JavaSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 void JavaSupportPart::parse(const QString &fileName)
 {
-    kdDebug() << "JavaSupportPart::parse() -- " << fileName << endl;
-
+    kdDebug(9013) << "JavaSupportPart::parse() -- " << fileName << endl;
 
     std::ifstream stream( fileName );
     QCString _fn = fileName.utf8();
@@ -212,8 +211,9 @@ void JavaSupportPart::parse(const QString &fileName)
         RefJavaAST ast = parser.getAST();
 
         if( errors == 0 && ast != antlr::nullAST ){
+	    kdDebug(9013) << "-------------------> start StoreWalker" << endl;
             JavaStoreWalker walker;
-            walker.setFilename( fn );
+            walker.setFileName( fileName );
             walker.setClassStore( classStore() );
             walker.compilationUnit( ast );
         }
