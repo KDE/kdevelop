@@ -1020,26 +1020,28 @@ void CProject::updateConfigureIn(){
  
 }
 void  CProject::writeWorkspace(TWorkspace ws){
-  switch(ws.id){
-  case 1:
-    config.setGroup("Workspace_1");
-    break;
-  case 2:
-    config.setGroup("Workspace_2");
-    break;
-  case 3:
-    config.setGroup("Workspace_3");
-    break;
-  default:
-    config.setGroup("Workspace_1");
+  if(getVersionControl() == 0){ // I love hacks :-), this is for better multiusersupport -Sandy
+    switch(ws.id){
+    case 1:
+      config.setGroup("Workspace_1");
+      break;
+    case 2:
+      config.setGroup("Workspace_2");
+      break;
+    case 3:
+      config.setGroup("Workspace_3");
+      break;
+    default:
+      config.setGroup("Workspace_1");
+    }
+    config.writeEntry("openfiles",ws.openfiles);
+    config.writeEntry("header_file",ws.header_file);
+    config.writeEntry("cpp_file",ws.cpp_file);
+    config.writeEntry("browser_file",ws.browser_file);
+    config.writeEntry("show_treeview",ws.show_treeview);
+    config.writeEntry("show_outputview",ws.show_output_view);
+    config.sync();
   }
-  config.writeEntry("openfiles",ws.openfiles);
-  config.writeEntry("header_file",ws.header_file);
-  config.writeEntry("cpp_file",ws.cpp_file);
-  config.writeEntry("browser_file",ws.browser_file);
-  config.writeEntry("show_treeview",ws.show_treeview);
-  config.writeEntry("show_outputview",ws.show_output_view);
-  config.sync();
 }
 void CProject::setCurrentWorkspaceNumber(int id){
    config.setGroup("General");

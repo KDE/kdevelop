@@ -1,3 +1,7 @@
+1999-11-13 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* if cvs is enabled the workspace isn't saved anymore, this reduced merging conflict in *.kdevprj
+	* commited patch by Ralf Palsa <rpalsa@eso.org> (fixed kdevelop --setup segfault, if logo is disabled
+
 1999-11-10 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commited patch by Martin Spirk <spirk@kla.pvt.cz>, renabled CVS options in root folder (RFV)
 
