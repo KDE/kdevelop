@@ -292,7 +292,7 @@ QString CustomProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString CustomProjectPart::mainProgram(bool relative = false)
+QString CustomProjectPart::mainProgram(bool relative)
 {
     QDomDocument &dom = *projectDom();
 
