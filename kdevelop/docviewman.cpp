@@ -686,7 +686,7 @@ KWriteDoc* DocViewMan::kwDocPointer(int docId) const
 //-----------------------------------------------------------------------------
 // cover a newly created view with a QextMDI childview 
 //-----------------------------------------------------------------------------
-void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow)
+void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
 {
   debug("DocViewMan::addQExtMDIFrame !\n");
 
@@ -694,7 +694,8 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow)
 
   // cover it by a QextMDI childview and add that MDI system
   QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
-  pMDICover->setIcon(kapp->miniIcon());
+  pMDICover->setIcon(icon);
+//  pMDICover->setIcon(kapp->miniIcon());
   m_MDICoverList.append( pMDICover);
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   pNewView->reparent( pMDICover, QPoint(0,0));
@@ -770,16 +771,16 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 
   if (getKWriteDocType(pDoc) == CPP_SOURCE) {
     connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
+    QIconSet iconSet(SmallIcon("source_cpp"));
+    // Cover it by a QextMDI childview and add that MDI system
+    addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
   } else {
     connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
+    QIconSet iconSet(SmallIcon("source_h"));
+    // Cover it by a QextMDI childview and add that MDI system
+    addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
   }
   
-  // add view to view list of doc
-  //   pDocViewNode->existingViews.append(pNewView);
-
-  // Cover it by a QextMDI childview and add that MDI system
-  addQExtMDIFrame(pEW, bShow);
-
   // some additional settings
   pEW->setFocusPolicy(QWidget::StrongFocus);
   pEW->setFont(KGlobalSettings::fixedFont());
@@ -810,8 +811,8 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
   pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
 
   // Cover it by a QextMDI childview and add that MDI system
-  addQExtMDIFrame(pNewView, bShow);
-  
+  addQExtMDIFrame(pNewView, bShow, SmallIcon("contents"));
+
   return pNewView;
 }
 

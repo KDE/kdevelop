@@ -203,7 +203,7 @@ public:
   KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
 
   /** Add a MDI frame around a newly created view */
-  void addQExtMDIFrame(QWidget* pNewView, bool bShow);
+  void addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon);
 
   /** */
   void doCreateNewView();

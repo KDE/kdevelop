@@ -435,6 +435,8 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
    if(pWnd->parent() != NULL ) {
       QextMdiChildFrm *lpC=pWnd->mdiParent();
       if (lpC) {
+        if (!bShow)
+           lpC->hide();
         lpC->unsetClient( m_undockPositioningOffset);
         m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
       }
@@ -487,6 +489,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
          if (m_pDockbaseAreaOfDocumentViews == 0L) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+            setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
          }
          m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockCenter);
@@ -525,6 +528,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
          if (m_pDockbaseAreaOfDocumentViews == 0L) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+            setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
          }
          m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockCenter);
@@ -604,7 +608,7 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
 
 void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 {
-   pWnd->mainframesActivateViewIsPending = TRUE;
+   pWnd->m_bMainframesActivateViewIsPending = TRUE;
 
    if (m_pCurrentWindow != pWnd) {
       m_pCurrentWindow = pWnd;
@@ -635,7 +639,7 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
          pWnd->setFocus();
       }
    }
-   pWnd->mainframesActivateViewIsPending = FALSE;
+   pWnd->m_bMainframesActivateViewIsPending = FALSE;
 }
 
 void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
@@ -803,6 +807,12 @@ void QextMdiMainFrm::switchToToplevelMode()
    else if (oldMdiMode == QextMdi::TabPageMode) { // if tabified, release all views from their docking covers
       finishTabPageMode();
    }
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+   for( it.toFirst(); it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+      if( !pView->isToolView())
+         pView->show();
+   }
 
    // 3.) undock all these found oldest ancestors (being KDockWidgets)
    QListIterator<KDockWidget> it3( rootDockWidgetList);
@@ -882,6 +892,8 @@ void QextMdiMainFrm::switchToChildframeMode()
       m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
       m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
       m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+   }
+   if (m_pDockbaseAreaOfDocumentViews->isTopLevel()) {
       // set this dock to main view
       setView(m_pDockbaseAreaOfDocumentViews);
       setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -901,6 +913,9 @@ void QextMdiMainFrm::switchToChildframeMode()
      readDockConfig( oldDockState);
    }
 
+   QextMdi::MdiMode oldMdiMode = m_mdiMode;
+   m_mdiMode = QextMdi::ChildframeMode;
+
    QListIterator<QextMdiChildView> it( *m_pWinList);
    for( ; it.current(); ++it) {
       QextMdiChildView* pView = it.current();
@@ -908,7 +923,12 @@ void QextMdiMainFrm::switchToChildframeMode()
          if( !pView->isAttached())
             attachWindow( pView, TRUE);
    }
-   if( (m_mdiMode == QextMdi::ToplevelMode) && !parentWidget()) {
+   for( it.toFirst(); it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+      if( !pView->isToolView())
+         pView->show();
+   }
+   if( (oldMdiMode == QextMdi::ToplevelMode) && !parentWidget()) {
       setMinimumHeight( m_oldMainFrmMinHeight);
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
@@ -916,9 +936,6 @@ void QextMdiMainFrm::switchToChildframeMode()
       //qDebug("TopLevelMode off");
       emit leftTopLevelMode();
    }
-
-   // the new MDI mode is set at last
-   m_mdiMode = QextMdi::ChildframeMode;
 }
 
 void QextMdiMainFrm::finishChildframeMode()
@@ -931,15 +948,15 @@ void QextMdiMainFrm::finishChildframeMode()
    writeDockConfig( curDockState);
 
    // detach all non-tool-views to toplevel
-   QListIterator<QextMdiChildView> it4( *m_pWinList);
-   for( ; it4.current(); ++it4) {
-      QextMdiChildView* pView = it4.current();
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+   for( ; it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
       if( pView->isToolView())
          continue;
       if( pView->isAttached()) {
          if( pView->isMaximized())
             pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
-         detachWindow( pView, TRUE);
+         detachWindow( pView, FALSE);
       }
    }
 }
@@ -1029,16 +1046,16 @@ void QextMdiMainFrm::finishTabPageMode()
 {
    // if tabified, release all views from their docking covers
    if (m_mdiMode == QextMdi::TabPageMode) {
-      QListIterator<QextMdiChildView> it4( *m_pWinList);
-      for( ; it4.current(); ++it4) {
-         QextMdiChildView* pView = it4.current();
+      QListIterator<QextMdiChildView> it( *m_pWinList);
+      for( ; it.current(); ++it) {
+         QextMdiChildView* pView = it.current();
          if( pView->isToolView())
             continue;
          QSize mins = pView->minimumSize();
          QSize maxs = pView->maximumSize();
          QSize sz = pView->size();
          QWidget* pParent = pView->parentWidget();
-         pView->reparent(0,0,pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset,TRUE);
+         pView->reparent(0,0,pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
          pView->resize(sz);
          pView->setMinimumSize(mins.width(),mins.height());
          pView->setMaximumSize(maxs.width(),maxs.height());

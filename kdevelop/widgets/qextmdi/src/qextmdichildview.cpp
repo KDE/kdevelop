@@ -46,7 +46,8 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
   ,m_bInterruptActivation(FALSE)
-  ,mainframesActivateViewIsPending(FALSE)
+  ,m_bMainframesActivateViewIsPending(FALSE)
+  ,m_bFocusInEventIsPending(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption)
@@ -339,19 +340,21 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
       return;
    }
    // XXX TODO: call QWidget::focusInEvent() ???
+   m_bFocusInEventIsPending = TRUE;
    activate();
+   m_bFocusInEventIsPending = FALSE;
 }
 
 //============= activate ===============//
 
 void QextMdiChildView::activate()
 {
-   // this isn't called from focusInEvent, but we try to set the focus anyway
-   // if this _is_ called from focusInEvent, it doesn't matter to call it again, looping wont happen
-   setFocus();
+   if (!m_bFocusInEventIsPending) {
+      setFocus();
+   }
 
    // raise the view and push the taskbar button
-   if (!mainframesActivateViewIsPending) {
+   if (!m_bMainframesActivateViewIsPending) {
      emit focusInEventOccurs( this);
    }
 

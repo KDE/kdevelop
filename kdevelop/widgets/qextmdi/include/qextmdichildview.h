@@ -100,9 +100,13 @@ private:
    */
    bool m_bInterruptActivation;
    /**
-mainframesActivateViewIsPending   * Internally used to prevent cycles between QextMdiMainFrm::activateView() and QextMdiChildView::activate().
+   * Internally used to prevent cycles between QextMdiMainFrm::activateView() and QextMdiChildView::activate().
    */
-   bool mainframesActivateViewIsPending;
+   bool m_bMainframesActivateViewIsPending;
+   /**
+   * Internally used to prevent cycles between focusInEvent() and activate().
+   */
+   bool m_bFocusInEventIsPending;
 
 // methods
 public:
