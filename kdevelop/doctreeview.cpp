@@ -23,6 +23,8 @@
 #include <qdir.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 #include <kiconloader.h>
 #include <kpopmenu.h>
 #include <kglobal.h>
@@ -151,16 +153,15 @@ public:
     virtual void setOpen(bool o);
 private:
     void readSgmlIndex(FILE *f);
-    static QString locatehtml(const char *filename);
+    static QString locatehtml(const QString &filename);
 };
 
 
-QString DocTreeKDevelopBook::locatehtml(const char *filename)
+QString DocTreeKDevelopBook::locatehtml(const QString &filename)
 {
-
-    QString path = locate("html",KGlobal::locale()->language()+"/kdevelop/"+filename);
-    if (!QFileInfo(path).exists())
-        path = locate("html",QString("default/kdevelop/")+filename);
+    QString path = locate("html", KGlobal::locale()->language()+"/kdevelop/"+filename);
+    if (path.isNull())
+        path = locate("html", "default/kdevelop"+filename);
     return path;
 }
 
