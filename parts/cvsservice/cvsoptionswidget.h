@@ -1,3 +1,15 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by KDevelop Authors                                *
+ *   kdevelop-devel@kde.org                                                *
+ *   Copyright (C) 2003 by Mario Scalas                                    *
+ *   mario.scalas@libero.it                                                *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef _CVSOPTIONSWIDGET_H_
 #define _CVSOPTIONSWIDGET_H_
@@ -10,8 +22,6 @@
  * KDevelop Authors
  **/
 
-class CvsPart;
-class ServerConfigurationWidget;
 class QLabel;
 class QLineEdit;
 class QVBoxLayout;
@@ -21,16 +31,28 @@ class CvsOptionsWidget : public CvsOptionsWidgetBase
     Q_OBJECT
 public:
     CvsOptionsWidget( QWidget *parent, const char *name=0 );
-    ~CvsOptionsWidget();
+    virtual ~CvsOptionsWidget();
 
-    QString cvs() const;
-    QString commit() const;
-    QString update() const;
-    QString add() const;
-    QString remove() const;
-    QString diff() const;
-    QString log() const;
-    QString rsh() const;
+    bool pruneEmptyDirWhenUpdating() const;
+    void setPruneEmptyDirWhenUpdating( bool b );
+
+    bool createNewDirWhenUpdating() const;
+    void setCreateNewDirWhenUpdating( bool b );
+
+    bool recursiveWhenUpdating() const;
+    void setRecursiveWhenUpdating( bool b );
+
+    bool recursiveWhenCommittingRemoving() const;
+    void setRecursiveWhenCommittingRemoving( bool b );
+
+    unsigned int contextLines() const;
+    void setContextLines( unsigned int p );
+
+    QString diffOptions() const;
+    void setDiffOptions( const QString &p );
+
+    QString cvsRshEnvVar() const;
+    void setCvsRshEnvVar( const QString &p );
 
 public slots:
     void accept();
@@ -38,8 +60,6 @@ public slots:
 private:
     void readConfig();
     void storeConfig();
-
-    ServerConfigurationWidget *m_cfgWidget;
 };
 
 #endif

@@ -32,8 +32,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 LogForm::LogForm( CvsService_stub *cvsService,
-    QWidget *parent, const char *name, int flags )
-    : KDialogBase( parent, "logformdialog", true, i18n("CVS Log ..."),
+    QWidget *parent, const char *name, int )
+    : KDialogBase( parent, name? name : "logformdialog", true, i18n("CVS Log ..."),
         Ok, Ok, true ),
     m_cvsService( cvsService ), m_cvsLogJob( 0 ), m_cvsDiffJob( 0 )
 {
@@ -65,16 +65,12 @@ void LogForm::start( const QString &workDir, const QString &pathName )
 
     setCursor( KCursor::waitCursor() );
 
-    CvsOptions *options = CvsOptions::instance();
+//    CvsOptions *options = CvsOptions::instance();
     // "cvs log" needs to be done on relative-path basis
     m_pathName = pathName;
 
     DCOPRef job = m_cvsService->log( pathName );
     m_cvsLogJob = new CvsJob_stub( job.app(), job.obj() );
-    if (!options->rsh().isEmpty())
-    {
-        job.call( "setRSH", options->rsh() );
-    }
 
     // establish connections to the signals of the cvs m_job
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
@@ -132,7 +128,7 @@ void LogForm::slotLinkClicked( const QString & link )
     /// @todo use the diff frontend
     CvsOptions *options = CvsOptions::instance();
 
-    DCOPRef job = m_cvsService->diff( m_pathName, v1, v2, options->diff(), options->contextLines() );
+    DCOPRef job = m_cvsService->diff( m_pathName, v1, v2, options->diffOptions(), options->contextLines() );
     if (job.isNull())
     {
         kdDebug() << "Null job???" << endl;
@@ -232,7 +228,7 @@ void LogForm::slotReceivedErrors( QString someErrors )
     kdDebug() << "ERRORS: " << someErrors << endl;
 }
 
-void LogForm::slotDiffFinished( bool normalExit, int exitStatus )
+void LogForm::slotDiffFinished( bool normalExit, int /*exitStatus*/ )
 {
     kdDebug() << "LogForm::slotDiffFinished(bool, int)" << endl;
 

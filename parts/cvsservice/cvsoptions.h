@@ -22,42 +22,37 @@ class KConfig;
 class CvsOptions
 {
 public:
-    virtual ~CvsOptions();
-
     static CvsOptions *instance();
+
+    virtual ~CvsOptions();
 
     void save( QDomDocument &dom );
     void load( const QDomDocument &dom );
 
-    void setCvs( const QString &p );
-    QString cvs();
+    void setRecursiveWhenCommitRemove( bool b );
+    bool recursiveWhenCommitRemove() const;
 
-    void setCommit( const QString &p );
-    QString commit();
+    void setPruneEmptyDirsWhenUpdate( bool b );
+    bool pruneEmptyDirsWhenUpdate() const;
 
-    void setUpdate( const QString &p );
-    QString update();
+    void setRecursiveWhenUpdate( bool b );
+    bool recursiveWhenUpdate() const;
 
-    void setAdd( const QString &p );
-    QString add();
+    void setCreateDirsWhenUpdate( bool b );
+    bool createDirsWhenUpdate() const;
 
-    void setRemove( const QString &p );
-    QString remove();
+    void setDiffOptions( const QString &p );
+    QString diffOptions();
 
-    void setRevert( const QString &p );
-    QString revert();
+    void setRevertOptions( const QString &p );
+    QString revertOptions();
 
-    void setDiff( const QString &p );
-    QString diff();
-
-    void setLog( const QString &p );
-    QString log();
-
-    void setRsh( const QString &p );
-    QString rsh();
+    void setCvsRshEnvVar( const QString &p );
+    QString cvsRshEnvVar();
 
     /**
-    * Set server path string
+    * Set server path string (this should be called by the part when a new project
+    * is created or imported)
     * @param p (i.e. :pserver:marios@cvs.kde.org:/home/kde)
     */
     void setLocation( const QString &p );
@@ -74,15 +69,13 @@ public:
 
 private:
     // Cache
-    QString m_cvs;
-    QString m_commit;
-    QString m_update;
-    QString m_add;
-    QString m_remove;
-    QString m_revert;
-    QString m_diff;
-    QString m_log;
-    QString m_rsh;
+    bool m_recursiveWhenCommitRemove;
+    bool m_pruneEmptyDirsWhenUpdate;
+    bool m_recursiveWhenUpdate;
+    bool m_createDirsWhenUpdate;
+    QString m_revertOptions;
+    QString m_diffOptions;
+    QString m_cvsRshEnvVar;
     QString m_location;
     unsigned int m_compressionLevel;
     unsigned int m_contextLines;

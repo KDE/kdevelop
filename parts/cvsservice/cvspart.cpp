@@ -220,12 +220,12 @@ void CvsPart::createNewProject( const QString& dirName )
     g_projectWasJustCreated = true;
 
     CvsOptions *options = CvsOptions::instance();
-    options->setRsh( m_cvsConfigurationForm->cvsRsh() );
+    options->setCvsRshEnvVar( m_cvsConfigurationForm->cvsRsh() );
     options->setLocation( m_cvsConfigurationForm->location() );
 
     QString rsh_preamble;
-    if ( !options->rsh().isEmpty() )
-        rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->rsh() );
+    if ( !options->cvsRshEnvVar().isEmpty() )
+        rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->cvsRshEnvVar() );
 
     QString init;
     if (m_cvsConfigurationForm->mustInitRoot())

@@ -32,6 +32,7 @@
 #include "checkoutdialog.h"
 #include "commitdlg.h"
 #include "tagdialog.h"
+#include "diffdialog.h"
 #include "logform.h"
 
 #include "changelog.h"
@@ -66,7 +67,7 @@ CvsServiceImpl::~CvsServiceImpl()
 
 void CvsServiceImpl::login()
 {
-    DCOPRef job = m_cvsService->login();
+    DCOPRef job = m_cvsService->login( this->projectDirectory() );
 
     processWidget()->startJob( job );
 }
@@ -75,7 +76,7 @@ void CvsServiceImpl::login()
 
 void CvsServiceImpl::logout()
 {
-    DCOPRef job = m_cvsService->logout();
+    DCOPRef job = m_cvsService->logout( this->projectDirectory() );
 
     processWidget()->startJob( job );
 }
@@ -121,7 +122,7 @@ void CvsServiceImpl::commit( const KURL::List& urlList )
     if (dlg.exec() == QDialog::Rejected)
         return;
 
-    CvsOptions *options = CvsOptions::instance();
+//    CvsOptions *options = CvsOptions::instance();
     QString logString = dlg.logMessage().join( "\n" );
 
     DCOPRef cvsJob = m_cvsService->commit( m_fileList, logString, false );
@@ -131,10 +132,6 @@ void CvsServiceImpl::commit( const KURL::List& urlList )
         return;
     }
 
-    if (!options->rsh().isEmpty())
-    {
-        cvsJob.call( "setRSH", options->rsh() );
-    }
     processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
@@ -162,8 +159,8 @@ void CvsServiceImpl::update( const KURL::List& urlList )
     if (!prepareOperation( urlList, opCommit ))
         return;
 
-    CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, options->update() );
+//    CvsOptions *options = CvsOptions::instance();
+    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, QString::null );
 
     processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
@@ -216,7 +213,7 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
         return;
 
     CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, options->revert() );
+    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, options->revertOptions() );
 
     processWidget()->startJob();
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
@@ -251,9 +248,13 @@ void CvsServiceImpl::diff( const KURL::List& urlList )
     if (!prepareOperation( urlList, opDiff ))
         return;
 
+    DiffDialog dlg;
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
     CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->diff( m_fileList[0], QString::null /* revA */,
-                QString::null /* revB */, options->diff(), options->contextLines() );
+    DCOPRef cvsJob = m_cvsService->diff( m_fileList[0], dlg.revA(),
+                dlg.revB(), options->diffOptions(), options->contextLines() );
     if (!m_cvsService->ok())
     {
         KMessageBox::sorry( 0, i18n("Sorry, cannot diff!"),
@@ -438,7 +439,7 @@ void CvsServiceImpl::slotCheckoutFinished( bool exitStatus, int )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServiceImpl::slotJobFinished( bool exitStatus, int exitCode )
+void CvsServiceImpl::slotJobFinished( bool /*exitStatus*/, int exitCode )
 {
     // Return a null string if the operation was not succesfull
     kdDebug() << "CvsServiceImpl::slotJobFinished(): job ended with code == "

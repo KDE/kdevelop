@@ -1,102 +1,174 @@
-#include "domutil.h"
-#include "cvsoptionswidget.h"
-#include <qlineedit.h>
-#include <qlabel.h>
-//#include <qvbox.h>
-#include <qlayout.h>
+/***************************************************************************
+ *   Copyright (C) 2003 by KDevelop Authors                                *
+ *   kdevelop-devel@kde.org                                                *
+ *   Copyright (C) 2003 by Mario Scalas                                    *
+ *   mario.scalas@libero.it                                                *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <knuminput.h>
 #include <kdialog.h>
 
-#include "serverconfigurationwidget.h"
-
+#include "domutil.h"
 #include "cvsoptions.h"
+#include "cvsoptionswidget.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// class DiffDialog
+///////////////////////////////////////////////////////////////////////////////
 
 CvsOptionsWidget::CvsOptionsWidget( QWidget *parent, const char *name )
     : CvsOptionsWidgetBase( parent, name )
-//    : QVBox( parent, name )
 {
-/*
-    m_cfgWidget = new ServerConfigurationWidget( this, "serverconfigurationwidget" );
-    cvsOptionsWidgetLayout->addWidget( m_cfgWidget );
-
-    resize( QSize(448, 408).expandedTo(minimumSizeHint()) );
-*/
     readConfig();
 }
 
-CvsOptionsWidget::~CvsOptionsWidget() {}
+///////////////////////////////////////////////////////////////////////////////
 
-
-void CvsOptionsWidget::readConfig() {
-    CvsOptions *options = CvsOptions::instance();
-
-    m_cvsEdit->setText( options->cvs() );
-    m_commitEdit->setText( options->commit() );
-    m_updateEdit->setText( options->update() );
-    m_addEdit->setText( options->add() );
-    m_removeEdit->setText( options->remove() );
-    m_diffEdit->setText( options->diff() );
-    m_logEdit->setText( options->log() );
-    m_rshEdit->setText( options->rsh() );
+CvsOptionsWidget::~CvsOptionsWidget()
+{
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
-void CvsOptionsWidget::storeConfig() {
+void CvsOptionsWidget::readConfig()
+{
     CvsOptions *options = CvsOptions::instance();
 
-    options->setCvs( cvs() );
-    options->setCommit( commit() );
-    options->setUpdate( update() );
-    options->setAdd( add() );
-    options->setRemove( remove() );
-    options->setDiff( diff() );
-    options->setLog( log() );
-    options->setRsh( rsh() );
+    this->setCvsRshEnvVar( options->cvsRshEnvVar() );
+    this->setPruneEmptyDirWhenUpdating( options->pruneEmptyDirsWhenUpdate() );
+    this->setCreateNewDirWhenUpdating( options->createDirsWhenUpdate() );
+    this->setRecursiveWhenUpdating( options->recursiveWhenUpdate() );
+    this->setRecursiveWhenCommittingRemoving( options->recursiveWhenCommitRemove() );
+    this->setDiffOptions( options->diffOptions() );
+    this->setContextLines( options->contextLines() );
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::storeConfig()
+{
+    CvsOptions *options = CvsOptions::instance();
+
+    options->setCvsRshEnvVar( this->cvsRshEnvVar() );
+    options->setPruneEmptyDirsWhenUpdate( this->pruneEmptyDirWhenUpdating() );
+    options->setCreateDirsWhenUpdate( this->createNewDirWhenUpdating() );
+    options->setRecursiveWhenUpdate( this->recursiveWhenUpdating() );
+    options->setRecursiveWhenCommitRemove( this->recursiveWhenCommittingRemoving() );
+    options->setDiffOptions( this->diffOptions() );
+    options->setContextLines( this->contextLines() );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 void CvsOptionsWidget::accept() {
     storeConfig();
 //    emit configChange();
 }
 
-QString CvsOptionsWidget::cvs() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setPruneEmptyDirWhenUpdating( bool b )
 {
-    return m_cvsEdit->text();
+    this->pruneEmptyDirWhenUpdateCheck->setChecked( b );
 }
 
-QString CvsOptionsWidget::commit() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setCreateNewDirWhenUpdating( bool b )
 {
-    return m_commitEdit->text();
+    this->createNewDirWhenUpdateCheck->setChecked( b );
 }
 
-QString CvsOptionsWidget::update() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setRecursiveWhenUpdating( bool b )
 {
-    return m_updateEdit->text();
+    this->recursiveWhenUpdateCheck->setChecked( b );
 }
 
-QString CvsOptionsWidget::add() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setRecursiveWhenCommittingRemoving( bool b )
 {
-    return m_addEdit->text();
+    this->recursiveWhenCommitRemoveCheck->setChecked( b );
 }
 
-QString CvsOptionsWidget::remove() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setContextLines( unsigned int p )
 {
-    return m_removeEdit->text();
+    this->contextLinesInput->setValue( p );
 }
 
-QString CvsOptionsWidget::diff() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setDiffOptions( const QString &p )
 {
-    return m_diffEdit->text();
+    this->diffOptionsEdit->setText( p );
 }
 
-QString CvsOptionsWidget::log() const
+///////////////////////////////////////////////////////////////////////////////
+
+QString CvsOptionsWidget::diffOptions() const
 {
-    return m_logEdit->text();
+    return this->diffOptionsEdit->text();
 }
 
-QString CvsOptionsWidget::rsh() const
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsOptionsWidget::setCvsRshEnvVar( const QString &p )
 {
-    return m_rshEdit->text();
+    this->cvsRshEnvVarEdit->setText( p );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsOptionsWidget::pruneEmptyDirWhenUpdating() const
+{
+    return pruneEmptyDirWhenUpdateCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsOptionsWidget::createNewDirWhenUpdating() const
+{
+    return createNewDirWhenUpdateCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsOptionsWidget::recursiveWhenUpdating() const
+{
+    return recursiveWhenUpdateCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsOptionsWidget::recursiveWhenCommittingRemoving() const
+{
+    return recursiveWhenCommitRemoveCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+unsigned int CvsOptionsWidget::contextLines() const
+{
+    return contextLinesInput->value();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CvsOptionsWidget::cvsRshEnvVar() const
+{
+    return cvsRshEnvVarEdit->text();
 }
 
 #include "cvsoptionswidget.moc"
