@@ -810,7 +810,11 @@ CppCodeCompletion::completeText( )
 	
 	if( entryList.size() ){
 	    unique( entryList );
-	    qHeapSort( entryList );
+#if KDE_VERSION > 305
+      qHeapSort( entryList );
+#else
+// @todo      
+#endif      
 	    m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     } else {

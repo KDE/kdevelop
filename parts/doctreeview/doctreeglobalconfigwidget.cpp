@@ -245,7 +245,15 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->writeEntry("IndexBookmarks", indexBookmarksBox->isChecked());
 
     config->setGroup("htdig");
-#if KDE_IS_VERSION(3,1,3)
+#if defined(KDE_IS_VERSION)
+# if KDE_IS_VERSION(3,1,3)
+#  ifndef _KDE_3_1_3_
+#   define _KDE_3_1_3_
+#  endif
+# endif
+#endif
+
+#if defined(_KDE_3_1_3_)
     config->writePathEntry("htdigbin", htdigbinEdit->url());
     config->writePathEntry("htmergebin", htmergebinEdit->url());
     config->writePathEntry("htsearchbin", htsearchbinEdit->url());
@@ -266,7 +274,7 @@ void DocTreeGlobalConfigWidget::storeConfig()
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
 
     config->setGroup("DevHelp");
-#if KDE_IS_VERSION(3,1,3)
+#if defined(_KDE_3_1_3_)
     config->writePathEntry("DevHelpDir", dhURL->url());
 #else
     config->writeEntry("DevHelpDir", dhURL->url());

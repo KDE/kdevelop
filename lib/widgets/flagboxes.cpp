@@ -34,6 +34,22 @@ using namespace KDevCompat;
 
 #include "flagboxes.h"
 
+// partial copy of Qt-3.1 for back-compatibility to KDE-3.0
+QString QRegExp_escape( const QString& str )
+{
+    static const char meta[] = "$()*+.?[\\]^{|}";
+    QString quoted = str;
+    int i = 0;
+
+    while ( i < (int) quoted.length() ) {
+	if ( strchr(meta, quoted[i].latin1()) != 0 )
+	    quoted.insert( i++, "\\" );
+	i++;
+    }
+    return quoted;
+}
+
+
 class FlagListToolTip : public QToolTip
 {
 public:
@@ -253,7 +269,7 @@ void FlagPathEditController::readFlags( QStringList * list )
             if ((*sli).startsWith(peitem->flag))
             {
 //                kdDebug() << "Processing.." << endl;
-                peitem->setText((*sli).replace(QRegExp(QRegExp::escape(peitem->flag)),""));
+                peitem->setText((*sli).replace(QRegExp(QRegExp_escape(peitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }
@@ -462,7 +478,7 @@ void FlagEditController::readFlags( QStringList * list )
         {
             if ((*sli).startsWith(peitem->flag))
             {
-                peitem->appendText((*sli).replace(QRegExp(QRegExp::escape(peitem->flag)),""));
+                peitem->appendText((*sli).replace(QRegExp(QRegExp_escape(peitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }
@@ -480,7 +496,7 @@ void FlagEditController::readFlags( QStringList * list )
         {
             if ((*sli).startsWith(sitem->flag))
             {
-                sitem->setText((*sli).replace(QRegExp(QRegExp::escape(sitem->flag)),""));
+                sitem->setText((*sli).replace(QRegExp(QRegExp_escape(sitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }

@@ -315,7 +315,14 @@ void KDevFileSelector::writeConfig(KConfig *config, const QString & name)
         l.append( cmbPath->text( i ) );
     }
     config->writeEntry("dir history", l );
-#if KDE_IS_VERSION(3,1,3)
+#if defined(KDE_IS_VERSION)
+# if KDE_IS_VERSION(3,1,3)
+#  ifndef _KDE_3_1_3_
+#   define _KDE_3_1_3_
+#  endif
+# endif
+#endif
+#if defined(_KDE_3_1_3_)
     config->writePathEntry( "location", cmbPath->currentText() );
 #else
     config->writeEntry( "location", cmbPath->currentText() );

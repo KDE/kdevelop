@@ -21,6 +21,7 @@
 #include <kmainwindow.h>
 #include <kaction.h>
 #include <kurl.h>
+#include <kdeversion.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -53,6 +54,24 @@
 #include "cvsform.h"
 #include "cvsoptionswidget.h"
 #include "checkoutdialog.h"
+
+KURL KURL_fromPathOrURL( const QString& text )
+{
+#if KDE_VERSION > 305
+    return KURL::fromPathOrURL(text);
+#else
+    if ( text.isEmpty() )
+        return KURL();
+
+    KURL url;
+    if ( text[0] == '/' )
+        url.setPath( text );
+    else
+        url = text;
+
+    return url;
+#endif
+}
 
 QStringList quoted( const QStringList &args )
 {
@@ -307,7 +326,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
                 kdDebug(9000) << "fcontext->fileName() returned an empty string. I'm sorry but I give up!" << endl;
                 return;
             }
-            urls << KURL::fromPathOrURL( singleFileName );
+            urls << KURL_fromPathOrURL( singleFileName );
         }
         URLUtil::dump( urls );
 

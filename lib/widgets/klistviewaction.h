@@ -10,11 +10,21 @@
 #ifndef KLISTVIEWACTION_H
 #define KLISTVIEWACTION_H
 
-#include <kaction.h>
+#include <kdeversion.h>
+#if KDE_VERSION > 305
+# include <kaction.h>
+#else
+# include <kdevwidgetaction.h>
+#endif
 
 class QComboView;
 
-class KListViewAction : public KWidgetAction
+class KListViewAction
+#if KDE_VERSION > 305
+: public KWidgetAction
+#else
+: public KDevCompat::KWidgetAction
+#endif
 {
 public:
     KListViewAction(QComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);

@@ -663,7 +663,11 @@ void QComboView::popup()
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
     int h = listHeight( lb, d->sizeLimit ) + 2;
+#if KDE_VERSION > 305    
     QRect screen = QApplication::desktop()->availableGeometry( const_cast<QComboView*>(this) );
+#else
+    QRect screen = geometry();
+#endif    
 
     int sx = screen.x();        // screen pos
     int sy = screen.y();

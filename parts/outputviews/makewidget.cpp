@@ -641,7 +641,7 @@ void MakeWidget::slotDocumentOpened( const QString & filename )
 
 	connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(slotDocumentClosed(QObject*)) );
 
-	for (QValueVector<MakeItem*>::Iterator it = m_items.begin(); it != m_items.end(); ++it) {
+	for (QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
 		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
 
 		if (!e || e->m_cursor) continue;
@@ -682,7 +682,7 @@ void MakeWidget::slotDocumentClosed(QObject* doc)
 {
 	KTextEditor::Document* document = static_cast<KTextEditor::Document*>(doc);
 
-	for (QValueVector<MakeItem*>::Iterator it = m_items.begin(); it != m_items.end(); ++it) {
+	for (QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
 		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
 
 		if (!e || e->m_doc != document) continue;
