@@ -336,7 +336,7 @@ void ProjectManager::closeProject()
 
 bool ProjectManager::closeProjectSources()
 {
-  QStringList sources = API::getInstance()->project()->allSourceFiles();
+  QStringList sources = API::getInstance()->project()->allFiles();
   return PartController::getInstance()->closeDocuments(sources);
 }
 

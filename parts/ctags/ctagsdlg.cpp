@@ -574,7 +574,7 @@ bool CTagsDialog::createTagsFile()
     cmd += m_part->project()->projectDirectory();
     cmd += " && ctags -n ";
 
-    QStringList l = m_part->project()->allSourceFiles();
+    QStringList l = m_part->project()->allFiles();
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         cmd += (*it);

@@ -319,7 +319,7 @@ void PHPSupportPart::initialParse()
     if (project()) {
       //  kdDebug(9016) << "project" << endl;
         kapp->setOverrideCursor(waitCursor);
-        QStringList files = project()->allSourceFiles();
+        QStringList files = project()->allFiles();
 	int n = 0;
         QProgressBar *bar = new QProgressBar(files.count(), topLevel()->statusBar());
         bar->setMinimumWidth(120);
@@ -364,7 +364,7 @@ void PHPSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9018) << "savedFile()" << endl;
 
-    if (project()->allSourceFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName)) {
         maybeParse(fileName);
         emit updatedSourceInfo();
     }

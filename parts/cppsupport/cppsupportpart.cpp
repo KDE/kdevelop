@@ -32,7 +32,6 @@
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
-#include <kregexp.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
@@ -249,8 +248,9 @@ void CppSupportPart::projectOpened()
     m_pCCParser   = new CClassParser( ccClassStore( ) );
     m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
 
-    connect( m_pCompletion, SIGNAL( setCodeHintingText( const QString& ) ),
-	     this, SLOT( slotCodeHintingText( const QString& ) ) );
+    // ???
+    //    connect( m_pCompletion, SIGNAL( setCodeHintingText( const QString& ) ),
+    //	     this, SLOT( slotCodeHintingText( const QString& ) ) );
 
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
@@ -323,12 +323,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	if (str.isEmpty())
 	  return;
 
-        //        int col = econtext->col();
-        //        KRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
-        KRegExp re(" *#include *[<\"](.*)[>\"] *");
-        if (re.match(str.latin1()) &&
-            !findHeader(project()->allSourceFiles(), re.group(1)).isEmpty()) {
-            popupstr = re.group(1);
+        QRegExp re("[ \t]*#include *[<\"](.*)[>\"][ \t]*");
+        if (re.exactMatch(str) &&
+            !findHeader(project()->allFiles(), re.cap(1)).isEmpty()) {
+            popupstr = re.cap(1);
 	    popup->insertSeparator();
             popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
                                this, SLOT(slotGotoIncludeFile()) );
@@ -438,7 +436,7 @@ CppSupportPart::initialParse( )
         kdDebug( 9007 ) << "no persistant classstore - starting to parse" << endl;
 	kapp->setOverrideCursor( waitCursor );
 
-        QStringList files = project( )->allSourceFiles( );
+        QStringList files = project( )->allFiles( );
 
         QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
 	bar->setMinimumWidth( 120 );
@@ -582,7 +580,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "savedFile()" << endl;
 
-    if (project()->allSourceFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName)) {
 	// changed - daniel
         maybeParse( fileName, classStore( ), m_pParser );
         emit updatedSourceInfo();
@@ -627,7 +625,7 @@ void CppSupportPart::slotSwitchHeader()
 
 void CppSupportPart::slotGotoIncludeFile()
 {
-    QString fileName = findHeader(project()->allSourceFiles(), popupstr);
+    QString fileName = findHeader(project()->allFiles(), popupstr);
     if (!fileName.isEmpty())
         partController()->editDocument(fileName, 0);
 

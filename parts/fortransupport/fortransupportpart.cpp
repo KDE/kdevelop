@@ -134,7 +134,7 @@ void FortranSupportPart::slotFtnchek()
     else
         cmdline += DomUtil::readEntry(dom, "/kdevfortransupport/ftnchek/portabilityonly") + " ";
 
-    QStringList list = project()->allSourceFiles();
+    QStringList list = project()->allFiles();
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         QFileInfo fi(*it);
@@ -199,7 +199,7 @@ void FortranSupportPart::initialParse()
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
-        QStringList files = project()->allSourceFiles();
+        QStringList files = project()->allFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
             kdDebug(9019) << "maybe parse " << (*it) << endl;
             maybeParse(*it);
@@ -233,7 +233,7 @@ void FortranSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9019) << "savedFile()" << endl;
 
-    if (project()->allSourceFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName)) {
         maybeParse(fileName);
         emit updatedSourceInfo();
     }

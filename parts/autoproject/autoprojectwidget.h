@@ -68,10 +68,15 @@ public:
     SubprojectItem(QListView *parent, const QString &text);
     SubprojectItem(SubprojectItem *parent, const QString &text);
 
+    /* name of the directory */
     QString subdir;
+    /* absolute path */
     QString path;
+    /* mapping from prefix to path */
     QMap<QString, QString> prefixes;
+    /* mapping from variable name to value */
     QMap<QString, QString> variables;
+    /* list of targets */
     QList<TargetItem> targets;
 
 private:
@@ -93,8 +98,12 @@ private:
 class TargetItem : public ProjectItem
 {
 public:
-    TargetItem(QListView *lv, bool group, const QString &text);
+    enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
     
+    TargetItem(QListView *lv, bool group, const QString &text);
+
+    // Target kind - not used currently
+    TargetKind kind;
     // Name of target, e.g. foo
     QString name;
     // One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
@@ -146,7 +155,7 @@ public:
     /**
      * A list of all files that belong to the project
      **/
-    QStringList allSourceFiles();
+    QStringList allFiles();
     /**
      * The top level directory of the project.
      **/
@@ -229,10 +238,12 @@ private slots:
 private:
     void parsePrimary(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
-    void parseSubdirs(SubprojectItem *item,
+    void parseKDEICON(SubprojectItem *item,
                       const QString &lhs, const QString &rhs);
     void parsePrefix(SubprojectItem *item,
                      const QString &lhs, const QString &rhs);
+    void parseSubdirs(SubprojectItem *item,
+                      const QString &lhs, const QString &rhs);
     void parse(SubprojectItem *item);
 
     QToolButton* subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton, *addTargetButton, *addServiceButton, *addApplicationButton, *buildSubprojectButton, *targetOptionsButton, *addNewFileButton, *addExistingFileButton, *buildTargetButton, *removeFileButton;

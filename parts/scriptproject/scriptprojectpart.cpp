@@ -168,7 +168,7 @@ QString ScriptProjectPart::activeDirectory()
 }
 
 
-QStringList ScriptProjectPart::allSourceFiles()
+QStringList ScriptProjectPart::allFiles()
 {
     QStringList res;
 

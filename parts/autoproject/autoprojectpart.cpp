@@ -188,9 +188,9 @@ QString AutoProjectPart::activeDirectory()
 }
 
 
-QStringList AutoProjectPart::allSourceFiles()
+QStringList AutoProjectPart::allFiles()
 {
-    return m_widget->allSourceFiles();
+    return m_widget->allFiles();
 }
 
 

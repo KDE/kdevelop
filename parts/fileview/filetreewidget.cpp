@@ -196,7 +196,7 @@ bool FileTreeWidget::matchesHidePattern(const QString &fileName)
 
 void FileTreeWidget::hideOrShow()
 {
-    QStringList projectFiles = m_part->project()->allSourceFiles();
+    QStringList projectFiles = m_part->project()->allFiles();
     
     QListViewItemIterator it(this);
     for (; it.current(); ++it) {

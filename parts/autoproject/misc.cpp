@@ -88,7 +88,8 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QStr
         
         if (re.exactMatch(line)) {
             QString lhs = re.cap(1);
-            QString rhs = re.cap(2);
+            // The need for stripWhitespace seems to be a Qt bug.
+            QString rhs = re.cap(2).stripWhiteSpace();
             variables->insert(lhs, rhs);
         }
     }

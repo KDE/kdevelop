@@ -127,7 +127,7 @@ void PythonSupportPart::initialParse()
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
-        QStringList files = project()->allSourceFiles();
+        QStringList files = project()->allFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
             kdDebug(9014) << "maybe parse " << (*it) << endl;
             maybeParse(*it);
@@ -161,7 +161,7 @@ void PythonSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9014) << "savedFile()" << endl;
 
-    if (project()->allSourceFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName)) {
         maybeParse(fileName);
         emit updatedSourceInfo();
     }

@@ -50,11 +50,11 @@ public:
      */
     virtual QString activeDirectory() = 0;
     /**
-     * Returns a list of all source files.
+     * Returns a list of all files in the project.
      * TODO: This is currently a bit broken because the
      * autoproject part doesn't return header files here.
      */
-    virtual QStringList allSourceFiles() = 0;
+    virtual QStringList allFiles() = 0;
     /**
      * Adds a file to the project. The given file name
      * must be relative to the project directory.

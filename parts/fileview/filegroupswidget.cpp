@@ -67,7 +67,7 @@ bool FileViewFolderItem::matches(const QString &fileName)
         // The regexp objects could be created already
         // in the constructor
         QRegExp re(*it, true, true);
-        if (re.search(fileName) == 0)
+        if (re.exactMatch(fileName))
             return true;
     }
 
@@ -190,7 +190,7 @@ void FileGroupsWidget::refresh()
         lastGroup = newItem;
     }
 
-    QStringList allFiles = m_part->project()->allSourceFiles();
+    QStringList allFiles = m_part->project()->allFiles();
     QStringList::ConstIterator fit;
     for (fit = allFiles.begin(); fit != allFiles.end(); ++fit) {
         QListViewItem *item = firstChild();

@@ -168,7 +168,7 @@ QStringList TrollProjectWidget::allSubprojects()
 }
 
 
-QStringList TrollProjectWidget::allSourceFiles()
+QStringList TrollProjectWidget::allFiles()
 {
     QStack<QListViewItem> s;
     QStringList res;
@@ -185,10 +185,8 @@ QStringList TrollProjectWidget::allSourceFiles()
             GroupItem::GroupType type = (*tit)->groupTyp;
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
                 QListIterator<FileItem> fit(tit.current()->files);
-                for (; fit.current(); ++fit) {
-                    QString fullname = path + "/" + (*fit)->name;
-                    res += fullname;
-                }
+                for (; fit.current(); ++fit)
+                    res.append(path + "/" + (*fit)->name);
             }
         }
     }

@@ -128,9 +128,9 @@ QString TrollProjectPart::activeDirectory()
 }
 
 
-QStringList TrollProjectPart::allSourceFiles()
+QStringList TrollProjectPart::allFiles()
 {
-    return m_widget->allSourceFiles();
+    return m_widget->allFiles();
 }
 
 

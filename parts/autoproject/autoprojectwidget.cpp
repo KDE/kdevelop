@@ -332,7 +332,7 @@ void AutoProjectWidget::openProject(const QString &dirName)
     item->path = dirName;
     parse(item);
     item->setOpen(true);
-    item->setSelected(true);
+    overview->setSelected(item, true);
 }
 
 
@@ -383,10 +383,10 @@ QStringList AutoProjectWidget::allLibraries()
 }
 
 
-QStringList AutoProjectWidget::allSourceFiles()
+QStringList AutoProjectWidget::allFiles()
 {
     QStack<QListViewItem> s;
-    QStringList res;
+    QStringList list;
     
     for ( QListViewItem *item = overview->firstChild(); item;
           item = item->nextSibling()? item->nextSibling() : s.pop() ) {
@@ -398,16 +398,23 @@ QStringList AutoProjectWidget::allSourceFiles()
         QListIterator<TargetItem> tit(spitem->targets);
         for (; tit.current(); ++tit) {
             QString primary = (*tit)->primary;
-            if (primary == "PROGRAMS" || primary == "LIBRARIES"
-                || primary == "LTLIBRARIES" || primary == "JAVA") {
+            //            if (primary == "PROGRAMS" || primary == "LIBRARIES"
+            //                || primary == "LTLIBRARIES" || primary == "JAVA") {
                 QListIterator<FileItem> fit(tit.current()->sources);
-                for (; fit.current(); ++fit) {
-                    QString fullname = path + "/" + (*fit)->name;
-                    res += fullname;
-                }
-            }
+                for (; fit.current(); ++fit)
+                    list.append(path + "/" + (*fit)->name);
+                //            }
         }
     }
+
+    // Files may be in multiple targets, so we have to remove
+    // duplicates
+    QStringList res;
+    
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        if (!res.contains(*it))
+            res.append(*it);
     
     return res;
 }
@@ -459,19 +466,11 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
                 continue;
             QString currentTargetPath = (path + "/" + (*tit)->name).mid(prefixlen);
             bool hasTarget = (targetPath == currentTargetPath);
-            kdDebug(9020) << "Compare " << targetPath
-                          << " with " << currentTargetPath
-                          << ", name: " << (*tit)->name
-                          << ", prefix: " << (*tit)->prefix
-                          << ", primary: " << (*tit)->primary << endl;
             (*tit)->setBold(hasTarget);
             if (hasTarget) {
                 m_activeSubproject = spitem;
                 m_activeTarget = (*tit);
-                if (m_shownSubproject != m_activeSubproject) {
-                    overview->setSelected(spitem, true);
-                    //                    slotItemExecuted(spitem);
-                }
+                overview->setSelected(m_activeSubproject, true);
             } else {
                 details->viewport()->update();
             }
@@ -880,6 +879,8 @@ void AutoProjectWidget::emitRemovedFile(const QString &name)
 void AutoProjectWidget::parsePrimary(SubprojectItem *item,
                                      const QString &lhs, const QString &rhs)
 {
+    kdDebug(9020) << "parsePrimary" << endl;
+    
     // Parse line foo_bar = bla bla
     int pos = lhs.findRev('_');
     QString prefix = lhs.left(pos);
@@ -960,6 +961,54 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
 }
 
 
+void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
+                                     const QString &lhs, const QString &rhs)
+{
+    // Parse a line foo_ICON = bla bla
+
+    int pos = lhs.find("_ICON");
+    QString prefix = lhs.left(pos);
+    if (prefix == "KDE")
+        prefix = "kde_icon";
+    
+    QString primary = "DATA";
+    
+    TargetItem *titem = createTargetItem("", prefix, primary);
+    item->targets.append(titem);
+
+    QDir d(item->path);
+    QStringList entryList = d.entryList(QDir::Files);
+    QStringList l;
+    
+    QString regexp;
+    
+    if (rhs == "AUTO") {
+        kdDebug(9020) << "icon auto" << endl;
+        regexp = ".*\\.(png|mng|xpm)";
+    } else {
+        kdDebug(9020) << "icon apps" << endl;
+        QStringList appNames = QStringList::split(QRegExp("[ \t\n]"), rhs);
+        regexp = ".*(-" + appNames.join("|-") + ")\\.(png|mng|xpm)";
+    }
+    
+    kdDebug(9020) << "Filtering with regexp " << regexp << endl;
+    QRegExp re(regexp);
+    
+    QStringList::ConstIterator it1;
+    for (it1 = entryList.begin(); it1 != entryList.end(); ++it1) {
+        //        kdDebug(9020) << "Match " << (*it1) << " is " << re.exactMatch(*it1) << endl;
+        if (re.exactMatch(*it1))
+            l.append(*it1);
+    }
+        
+    QStringList::ConstIterator it2;
+    for (it2 = l.begin(); it2 != l.end(); ++it2) {
+        FileItem *fitem = createFileItem(*it2);
+        titem->sources.append(fitem);
+    }
+}
+    
+
 void AutoProjectWidget::parsePrefix(SubprojectItem *item,
                                     const QString &lhs, const QString &rhs)
 {
@@ -977,25 +1026,35 @@ void AutoProjectWidget::parseSubdirs(SubprojectItem *item,
 
     QString subdirs = rhs;
     
-    // Take care of KDE hacks
+    // Take care of KDE hacks:
+    // TOPSUBDIRS is an alias for all directories
+    // listed in the subdirs file
     if (subdirs.find("$(TOPSUBDIRS)") != -1) {
-        QString dirs;
+        QStringList dirs;
         QFile subdirsfile(item->path + "/subdirs");
         if (subdirsfile.open(IO_ReadOnly)) {
             QTextStream subdirsstream(&subdirsfile);
-            while (!subdirsstream.atEnd()) {
-                QString dir = subdirsstream.readLine();
-                dirs.append(dir);
-                dirs.append(" ");
-            }
+            while (!subdirsstream.atEnd())
+                dirs.append(subdirsstream.readLine());
             subdirsfile.close();
         }
-        subdirs.replace(QRegExp("\\$\\(TOPSUBDIRS\\)"), dirs);
+        subdirs.replace(QRegExp("\\$\\(TOPSUBDIRS\\)"), dirs.join(" "));
     }
+
+    // AUTODIRS is an alias for all subdirectories
+    if (subdirs.find("$(AUTODIRS)") != -1) {
+        QDir d(item->path);
+        QStringList dirs = d.entryList(QDir::Dirs);
+        dirs.remove(".");
+        dirs.remove("..");
+        dirs.remove("CVS");
+        subdirs.replace(QRegExp("\\$\\(AUTODIRS\\)"), dirs.join(" "));
+    }
+    
     // Do something smarter here
-    subdirs.replace(QRegExp("\\$\\(AUTODIRS\\)"), "");
     subdirs.replace(QRegExp("\\$\\(COMPILE_FIRST\\)"), "");
     subdirs.replace(QRegExp("\\$\\(COMPILE_LAST\\)"), "");
+    
     QStringList l = QStringList::split(QRegExp("[ \t]"), subdirs);
     l.sort();
     QStringList::Iterator it;
@@ -1040,7 +1099,9 @@ void AutoProjectWidget::parse(SubprojectItem *item)
     for (it=item->variables.begin(); it!=item->variables.end(); ++it) {
         QString lhs = it.key();
         QString rhs = it.data();
-        if (lhs.find('_') > 0)
+        if (lhs.right(5) == "_ICON")
+            parseKDEICON(item, lhs, rhs);
+        else if (lhs.find('_') > 0)
             parsePrimary(item, lhs, rhs);
         else if (lhs.right(3) == "dir")
             parsePrefix(item, lhs, rhs);

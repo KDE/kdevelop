@@ -1,3 +1,11 @@
+2002-04-28  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Renamed KDevProject::allSourceFiles() to allFiles(),
+	  as it isn't restricted to sources. It doesn't contain
+	  duplicates anymore
+	* Handle AUTODIRS
+	* Handle foo_ICON
+
 2002-04-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
 	
 	* Added a part providing a history, allowing you to go

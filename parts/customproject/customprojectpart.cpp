@@ -206,7 +206,7 @@ QString CustomProjectPart::activeDirectory()
 }
 
 
-QStringList CustomProjectPart::allSourceFiles()
+QStringList CustomProjectPart::allFiles()
 {
     QStringList res;
 
