@@ -179,6 +179,9 @@ int main( int argc, char* argv[] )
        } else if( s == "-a" || s == "--all" ){
 	   parseAllFiles = true;
 	   continue;
+       } else if( s == "-f" || s == "--fast" ){
+	   driver.setResolveDependencesEnabled( false );	   
+	   continue;
        }
 
         QDir dir( s );
