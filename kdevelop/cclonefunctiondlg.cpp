@@ -29,6 +29,7 @@
 static const QString templates("Templates");
 
 enum templatetype {
+  c_copy,            /* copy constructor */
   c_unaer_member,    /* class operator@ () */
   c_member,          /* class operator@ (class) */
   c_bin_compare,   /* friend bool operator@ (class, class) */
@@ -42,6 +43,7 @@ static struct {
   QString name;
   templatetype typ;
 } templatesdata[] = {
+ { "", c_copy },
 
  { "!",  c_unaer_member },
  { "~",  c_unaer_member },
@@ -198,6 +200,9 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
     for(int i=0; i < templatescount; i++) {
       QString op = templatesdata[i].name;
       switch (templatesdata[i].typ) {
+        case c_copy:  /* copy constructor */
+          methods->insertItem(" "+classname + oparg1);
+          break;
         case c_unaer_member:    /* class operator@ () */
           methods->insertItem(classname + "& operator " + op + noarg);
           break;
@@ -220,11 +225,11 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
           break;
 
         case inp:         /* oper >> */
- 	        methods->insertItem(QString("friend istream& operator << (istream& , "+ classname + "& )"));
+ 	        methods->insertItem(QString("friend istream& operator >> (istream& , "+ classname + "& )"));
           break;
 
         case outp:         /* oper << */
-       	  methods->insertItem(QString("friend ostream& operator >> (ostream& , const"+ classname + "& )"));
+       	  methods->insertItem(QString("friend ostream& operator << (ostream& , const"+ classname + "& )"));
           break;
       }
     }

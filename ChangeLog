@@ -1,3 +1,9 @@
+2001-06-01  jbb <jbb@kdevelop.org>
+    * Patch from August Hörandl <august.hoerandl@gmx.at>
+        just a little "adjustment" to the clone functionalities "templates"
+        - added the copy constructor
+        - corrected operator << and >>
+
 2001-06-01  rokrau@yahoo.com
     * initial Fortran support, Fortran files are recognized as source files
       instead of data files and they can be compiled
