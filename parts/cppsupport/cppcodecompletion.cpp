@@ -828,10 +828,10 @@ CppCodeCompletion::completeText( )
 	    computeSignatureList( signatureList, word, type );
 	}
 	
-	if( this_type.size() )
+	if( !this_type.isEmpty() && expr.isEmpty() )
 	    computeSignatureList( signatureList, word, this_type );
 	    
-	if( signatureList.size() ){
+	if( !signatureList.isEmpty() ){
 	    unique( signatureList );
 	    qHeapSort( signatureList );
 	    m_activeCompletion->showArgHint( signatureList, "()", "," );
