@@ -64,10 +64,18 @@ void AStylePart::beautifySource()
   while (formatter.hasMoreLines())
 	os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
 
-  // workaround for kate clearing undo history on setText()
+// pre 3.1.3 katepart clears undo history on setText()
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION > KDE_MAKE_VERSION(3,1,2)
+  iface->setText( output );
+# else
   iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
   iface->insertText( 0, 0, output);
-
+# endif
+#else
+  iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
+  iface->insertText( 0, 0, output);
+#endif
 }
 
 
