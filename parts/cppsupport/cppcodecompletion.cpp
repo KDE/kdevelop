@@ -260,47 +260,6 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		}
 	}
 
-	if ( strCurLine.right ( 1 ) == "x" )
-	{
-		QFile f( "xxx.txt" );
-
-		if( f.open( IO_WriteOnly ) ){
-			QDataStream s( &f );
-			ParsedClass* c;
-			QStringList* l = m_pStore->getSortedClassNameList( );
-			for( int i = 0; i < l->count( ); i++ ){
-				c = m_pStore->getClassByName( (*l->at( i )) );
-				s << *c;
-			}
-
-
-			f.close();
-
-			f.open ( IO_ReadOnly );
-			QDataStream t ( &f);
-
-			for ( int i = l->count(); i > 0; i-- )
-			{
-				t >> *c;
-				kdDebug ( 9007 ) << "Names of serialized classes: " << c->name() << endl;
-			}
-
-		f.close( );
-
-		}
-	}
-
-/*	if ( strCurLine.right ( 1 ) == "y" )
-	{
-		QFile f ("xxx.txt");
-
-		if ( f.open ( IO_ReadOnly ) )
-		{
-			QDataStream s ( &f);
-			ParsedClass* c;
-*/
-		
-
 /*	if ( strCurLine.right ( 1 ) == "." )
 	{
 		int nNodePos = getNodePos ( nLine, nCol );
