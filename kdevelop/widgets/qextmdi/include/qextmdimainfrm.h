@@ -159,6 +159,7 @@ protected:
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::QextMdiFrameDecor   m_frameDecoration;
+   bool                    m_bSDIApplication;
    KDockWidget*            m_pDockbaseAreaOfDocumentViews;
    KDockWidget*            m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
@@ -230,7 +231,7 @@ public:
    /**
    * Returns the height of the taskbar.
    */
-   virtual int taskBarHeight() { return m_pTaskBar->height(); };
+   virtual int taskBarHeight() { return m_pTaskBar ? m_pTaskBar->height() : 0; };
    /**
    * Sets an offset value that is used on @ref QextMdiMainFrm::detachWindow . The undocked window
    * is visually moved on the desktop by this offset.
@@ -296,6 +297,10 @@ public:
    * @return the decoration of the window frame of docked (attached) MDI views
    */
    static int frameDecorOfAttachedViews() { return m_frameDecoration; };
+   /**
+   *
+   */
+   void fakeSDIApplication();
 
 public slots:
    /**
