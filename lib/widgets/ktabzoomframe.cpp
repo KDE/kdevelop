@@ -97,6 +97,13 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   d->m_dockButton->setPixmap(QPixmap(sticky));
   d->m_dockButton->setFixedSize(12,12);
   d->m_dockButton->setToggleButton(true);
+
+  QPalette pal = d->m_dockButton->palette();
+  QColorGroup cg = pal.active();
+  cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
+  pal.setActive(cg) ;
+  d->m_dockButton->setPalette(pal);
+
   hbox->addWidget(d->m_dockButton);
 
   connect(d->m_dockButton, SIGNAL(toggled(bool)), this, SLOT(slotDockButtonToggled(bool)));
@@ -105,6 +112,8 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
 
   d->m_closeButton = new QToolButton(arrow, f);
   d->m_closeButton->setFixedSize(12,12);
+  d->m_closeButton->setPalette(pal);
+
   hbox->addWidget(d->m_closeButton);
 
   connect(d->m_closeButton, SIGNAL(clicked()), this, SLOT(slotCloseButtonClicked()));
