@@ -67,15 +67,14 @@ PythonColorizer::PythonColorizer( QEditor* editor )
     : QSourceColorizer( editor )
 {
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "#.*", Comment, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
+    context0->appendChild( new StartsWithHLItem( "#", Comment, 0 ) );
+    context0->appendChild( new WhiteSpacesHLItem( Normal, 0 ) );
     context0->appendChild( new StringHLItem( "'''", String, 3 ) );
     context0->appendChild( new StringHLItem( "\"\"\"", String, 4 ) );
     context0->appendChild( new StringHLItem( "\"", String, 1 ) );
     context0->appendChild( new StringHLItem( "'", String, 2 ) );
-    context0->appendChild( new KeywordsHLItem( python_keywords, Keyword, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
+    context0->appendChild( new KeywordsHLItem( python_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new NumberHLItem( Constant, 0 ) );
 
     HLItemCollection* context1 = new HLItemCollection( String );
     context1->appendChild( new StringHLItem( "\\\\", String, 1 ) );

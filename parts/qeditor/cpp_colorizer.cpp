@@ -51,6 +51,44 @@ static const char *cpp_keywords[] = {
     0
 };
 
+class CppPreprocHLItem: public HLItem{
+public:
+    CppPreprocHLItem( int state, int context )
+        : HLItem( state, context ) {}
+
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "CppPreprocHLItem::checkHLItem" << endl;
+	int start_pos = pos;
+	
+	while( (pos<length) && buffer[pos].isSpace() )
+	    ++pos;
+	
+	if( (pos < length) && buffer[pos] == '#' )
+	    return pos + 1;
+
+	return start_pos;
+    }
+};
+
+class CppPreprocLineHLItem: public HLItem{
+public:
+    CppPreprocLineHLItem( int state, int context )
+        : HLItem( state, context ) {}
+
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "CppPreprocLineHLItem::checkHLItem" << endl;
+	int end_pos = length - 1;
+	
+	while( (end_pos>=0) && buffer[end_pos].isSpace() )
+	    --end_pos;
+	
+	if( (end_pos >= 0) && buffer[end_pos] == '\\' )
+	    return length;
+	
+	return pos;
+    }
+};
+
 using namespace std;
 
 CppColorizer::CppColorizer( QEditor* editor )
@@ -58,16 +96,15 @@ CppColorizer::CppColorizer( QEditor* editor )
 {
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "^\\s*#.", PreProcessor, 4 ) );
-    context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
+    context0->appendChild( new CppPreprocHLItem( PreProcessor, 4 ) );
+    context0->appendChild( new WhiteSpacesHLItem( Normal, 0 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
-    context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
-    context0->appendChild( new KeywordsHLItem( cpp_keywords, Keyword, 0 ) );
-    context0->appendChild( new RegExpHLItem( "0[x|X]\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
+    context0->appendChild( new StartsWithHLItem( "//", Comment, 0 ) );
+    context0->appendChild( new KeywordsHLItem( cpp_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new HexHLItem( Constant, 0 ) );
+    context0->appendChild( new NumberHLItem( Constant, 0 ) );
 
     HLItemCollection* context1 = new HLItemCollection( String );
     context1->appendChild( new StringHLItem( "\\\\", String, 1 ) );
@@ -83,8 +120,8 @@ CppColorizer::CppColorizer( QEditor* editor )
     context3->appendChild( new StringHLItem( "*/", Comment, 0 ) );
 
     HLItemCollection* context4 = new HLItemCollection( PreProcessor );
-    context4->appendChild( new RegExpHLItem( ".*\\\\\\s*$", PreProcessor, 4 ) );
-    context4->appendChild( new RegExpHLItem( ".*", PreProcessor, 0 ) );
+    context4->appendChild( new CppPreprocLineHLItem( PreProcessor, 4 ) );
+    context4->appendChild( new StartsWithHLItem( "", PreProcessor, 0 ) );
 
 
     m_items.append( context0 );

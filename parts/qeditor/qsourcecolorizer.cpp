@@ -101,71 +101,77 @@ void QSourceColorizer::updateStyles( QMap<QString, QPair<QFont, QColor> >& value
 
 
 void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
-                                bool invalidate )
+				bool invalidate )
 {
     int state = 0;
-    int pos = 0;
     int startLevel = 0;
-
+    
     if( parag->prev() ){
-        if( parag->prev()->endState() == -1 )
-            process( doc, parag->prev(), 0, FALSE );
-        state = parag->prev()->endState();
-        startLevel = ((ParagData*) parag->prev()->extraData())->level();
+	if( parag->prev()->endState() == -1 )
+	    process( doc, parag->prev(), 0, FALSE );
+	state = parag->prev()->endState();
+	startLevel = ((ParagData*) parag->prev()->extraData())->level();
     }
-
+    
     ParagData* extra = (ParagData*) parag->extraData();
     if( extra ){
-        extra->clear();
+	extra->clear();
     } else {
-        extra = new ParagData();
-        parag->setExtraData( extra );
+	extra = new ParagData();
+	parag->setExtraData( extra );
     }
-
+    
     HLItemCollection* ctx = m_items.at( state );
-    while( pos < parag->length() ){
-        int attr = 0;
-        int next = state;
-        int npos = ctx->checkHL( doc, parag, pos, &attr, &next );
-        if( npos > pos ){
-            state = next;
-            ctx = m_items.at( state );
-            parag->setFormat( pos, npos, format(attr) );
-            pos = npos;
-        } else {
-            QChar ch = parag->at( pos )->c;
-            int a = ctx->attr();
-            if( !a ){
-                if( m_left.find(ch) != -1 ){
-                    extra->add( Symbol::Left, ch, pos );
-                } else if( m_right.find(ch) != -1 ){
-                    extra->add( Symbol::Right, ch, pos );
-                }
-            }
-            parag->setFormat( pos, pos+1, format(a) );
-            ++pos;
-        }
+    QString s = parag->string()->toString();
+    s.truncate( s.length() - 1 );
+    const QChar* buffer = s.unicode();
+    int length = s.length();
+    
+    int pos = 0;
+    while( pos < length ){
+	int attr = 0;
+	int next = state;
+	
+	int npos = ctx->checkHL( buffer, pos, s.length(), &attr, &next );
+	if( npos > pos ){
+	    state = next;
+	    ctx = m_items.at( state );
+	    parag->setFormat( pos, npos, format(attr) );
+	    pos = npos;
+	} else {
+	    const QChar& ch = buffer[ pos ];
+	    int a = ctx->attr();
+	    if( !a ){
+		if( m_left.find(ch) != -1 ){
+		    extra->add( Symbol::Left, ch, pos );
+		} else if( m_right.find(ch) != -1 ){
+		    extra->add( Symbol::Right, ch, pos );
+		}
+	    }
+	    parag->setFormat( pos, pos+1, format(a) );
+	    ++pos;
+	}
     }
-
+    
     int oldState = parag->endState();
-
+    
     if( state != oldState ){
-        parag->setEndState( state );
+	parag->setEndState( state );
     }
-
+    
     int oldLevel = extra->level();
     int level = computeLevel( parag, startLevel );
     if( level != oldLevel ){
-        extra->setLevel( level > 0 ? level : 0 );
+	extra->setLevel( level > 0 ? level : 0 );
     }
     
     parag->setFirstPreProcess( FALSE );
-
+    
     QTextParagraph *p = parag->next();
     if ( ((oldLevel != level) ||
 	  (!!oldState || !!parag->endState()) && oldState != parag->endState()) &&
 	 invalidate && p && !p->firstPreProcess() && p->endState() != -1 ) {
-		
+	
 	kdDebug(9032) << "invalidate!!!" << endl;
 	while ( p ) {
 	    if ( p->endState() == -1 )
@@ -174,13 +180,13 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
 	    p = p->next();
 	}
     }
-
+    
 #if 0
     if ( invalidate && parag->next() &&
-         (state != oldState || level != oldLevel) &&
+	 (state != oldState || level != oldLevel) &&
 	 !parag->next()->firstPreProcess() &&
-         parag->next()->endState() != -1 ) {
-      kdDebug(9032) << "invalidate!!" << endl;
+	 parag->next()->endState() != -1 ) {
+	kdDebug(9032) << "invalidate!!" << endl;
 	parag->next()->setEndState( -1 );
     }
 #endif

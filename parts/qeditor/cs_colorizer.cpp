@@ -123,15 +123,14 @@ CSharpColorizer::CSharpColorizer( QEditor* editor )
     HLItemCollection* context0 = new HLItemCollection( 0 );
 
     context0->appendChild( new RegExpHLItem( "^\\s*#", PreProcessor, 4 ) );
-    context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
+    context0->appendChild( new WhiteSpacesHLItem( Normal, 0 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
-    context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
-    context0->appendChild( new KeywordsHLItem( cs_keywords, Keyword, 0 ) );
-    context0->appendChild( new RegExpHLItem( "0[x|X]\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
+    context0->appendChild( new StartsWithHLItem( "//", Comment, 0 ) );
+    context0->appendChild( new KeywordsHLItem( cs_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new HexHLItem( Constant, 0 ) );
+    context0->appendChild( new NumberHLItem( Constant, 0 ) );
     context0->appendChild( new RegExpHLItem("@[_\\w]+", Normal, 0) );
 
     HLItemCollection* context1 = new HLItemCollection( String );
@@ -149,7 +148,7 @@ CSharpColorizer::CSharpColorizer( QEditor* editor )
 
     HLItemCollection* context4 = new HLItemCollection( PreProcessor );
     context4->appendChild( new RegExpHLItem( ".*\\\\\\s*$", PreProcessor, 4 ) );
-    context4->appendChild( new RegExpHLItem( ".*", PreProcessor, 0 ) );
+    context4->appendChild( new StartsWithHLItem( "", PreProcessor, 0 ) );
 
 
     m_items.append( context0 );

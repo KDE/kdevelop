@@ -92,9 +92,9 @@ JspColorizer::JspColorizer( QEditor* editor )
     // xml
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "<!--", Comment, 1 ) );
-    context0->appendChild( new RegExpHLItem( "<%", Comment, 4 ) );
-    context0->appendChild( new RegExpHLItem( "<", Normal, 2 ) );
+    context0->appendChild( new StringHLItem( "<!--", Comment, 1 ) );
+    context0->appendChild( new StringHLItem( "<%", Comment, 4 ) );
+    context0->appendChild( new StringHLItem( "<", Normal, 2 ) );
     context0->appendChild( new RegExpHLItem( "&[\\w|_|!]+;", Constant, 0 ) );
 
     // comment context
@@ -114,14 +114,13 @@ JspColorizer::JspColorizer( QEditor* editor )
     
     // default context
     HLItemCollection* context4 = new HLItemCollection( Normal );
-    context4->appendChild( new RegExpHLItem( "%>", Comment, 0 ) );
-    context4->appendChild( new RegExpHLItem( "//.*", Comment, 4 ) );
+    context4->appendChild( new StringHLItem( "%>", Comment, 0 ) );
+    context4->appendChild( new StartsWithHLItem( "//", Comment, 4 ) );
     context4->appendChild( new StringHLItem( "/*", Comment, 5 ) );
     context4->appendChild( new StringHLItem( "\"", String, 6 ) );
     context4->appendChild( new StringHLItem( "'", String, 7 ) );
-    context4->appendChild( new KeywordsHLItem( jsp_keywords, Keyword, 4 ) );
-    context4->appendChild( new RegExpHLItem( "\\d+", Constant, 4 ) );
-    context4->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 4 ) );
+    context4->appendChild( new KeywordsHLItem( jsp_keywords, Keyword, Normal, 4 ) );
+    context4->appendChild( new NumberHLItem( Constant, 4 ) );
 
     // comment context
     HLItemCollection* context5 = new HLItemCollection( Comment );

@@ -29,7 +29,7 @@
 #include <qmap.h>
 #include <qregexp.h>
 #include <qpair.h>
-
+#include <kdebug.h>
 
 #define DECLARE_FORMAT_ITEM(type, id, f, c)\
 {\
@@ -60,39 +60,14 @@ public:
         : m_state( state ), m_context( context ) {}
     virtual ~HLItem() {}
 
-    virtual bool checkStart( const QChar& ) const { return TRUE; }
-    virtual bool checkEnd( const QChar& ) const { return TRUE; }
-
     virtual int attr() const { return m_state; }
     virtual int context() const { return m_context; }
 
-    virtual int checkHL( QTextDocument*, QTextParagraph*, int pos, int*, int* ) =0;
+    virtual int checkHL( const QChar* buffer, int pos, int length, int*, int* ) = 0;
 
 private:
     int m_state;
     int m_context;
-};
-
-
-class IdentifierHLItem: public HLItem{
-public:
-    IdentifierHLItem( int state, int context )
-        : HLItem( state, context ) {}
-
-    bool checkStart( const QChar& ch ) const {
-        return ch.isLetter() || ch == '_';
-    }
-
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        while( pos < p->length() ){
-            QChar ch = p->string()->at(pos).c;
-            if( ch.isLetterOrNumber() || ch == '_' )
-                ++pos;
-            else
-                break;
-        }
-        return pos;
-    }
 };
 
 class NumberHLItem: public HLItem{
@@ -100,81 +75,90 @@ public:
     NumberHLItem( int state, int context )
         : HLItem( state, context ) {}
 
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        while( pos < p->length() ){
-            if( p->string()->at(pos).c.isNumber() )
-                ++pos;
-            else
-                break;
-        }
-        return pos;
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "NumberHLItem::checkHLItem" << endl;
+	while( pos<length && buffer[pos].isNumber() ){
+	    ++pos;
+	}
+	return pos;
     }
 };
 
-class CommentHLItem: public HLItem{
+class WhiteSpacesHLItem: public HLItem{
 public:
-    CommentHLItem( const QChar ch, int state, int context )
-        : HLItem( state, context ), m_char1( ch ) {}
+    WhiteSpacesHLItem( int state, int context )
+        : HLItem( state, context ) {}
 
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        QChar ch = p->string()->at( pos ).c;
-        if( ch == m_char1 )
-            return p->length();
-        return pos;
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "WhiteSpacesHLItem::checkHLItem" << endl;
+	while( (pos<length) && buffer[pos].isSpace() ){
+	    ++pos;
+	}
+	return pos;
     }
-
-private:
-    QChar m_char1;
 };
-
 
 class KeywordsHLItem: public HLItem{
 public:
-    KeywordsHLItem( const char** keywords, int state, int context )
-        : HLItem( state, context ) {
+    KeywordsHLItem( const char** keywords, int state, int ide_state, int context )
+        : HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state) {
             int i = 1;
             while( *keywords ){
                 m_keywords.insert( QString(*keywords++), i++ );
             }
     }
+    
+    int attr() const { return m_ok ? m_state : m_ide_state; }
 
-    bool checkStart( const QChar& ch ) const {
-        return ch.isLetter() || ch == '_';
-    }
-
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        int save_pos = pos;
-        QString word;
-        while( pos < p->length() ){
-            QChar ch = p->string()->at(pos).c;
-            if( ch.isLetterOrNumber() || ch == '_' ){
-                word += ch;
-                ++pos;
-            } else
-                break;
-        }
-
-        if( m_keywords.contains(word) )
-            return pos;
-        return save_pos;
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "KeywordsHLItem::checkHLItem" << endl;
+	
+	int start_pos = pos;
+	
+	while( (pos<length) && (buffer[pos].isLetterOrNumber() || buffer[pos] == '_') )
+	    ++pos;
+	
+	if( start_pos != pos )
+	    m_ok = m_keywords.contains( QString(buffer+start_pos, pos-start_pos) );
+	
+	return pos;
     }
 
 private:
     QMap<QString, int> m_keywords;
+    bool m_ok;
+    int m_state;
+    int m_ide_state;
+};
+
+class StartsWithHLItem: public HLItem{
+public:
+    StartsWithHLItem( const QString& s, int state, int context )
+        : HLItem( state, context ), m_text(s) {}
+    
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "StartsWithHLItem::checkHLItem" << endl;    
+	if( (length - pos) >= m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
+	    return length;
+	
+	return pos;
+    }
+    
+private:
+    QString m_text;
 };
 
 class StringHLItem: public HLItem{
 public:
     StringHLItem( const QString& text, int state, int context )
         : HLItem( state, context ), m_text(text) {}
-
-    QString text() const { return m_text; }
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        QString s = p->string()->toString();
-        s.truncate( s.length() - 1 );
-        if( s.mid( pos, m_text.length() ) == m_text )
-            return pos + m_text.length();
-        return pos;
+    
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+        //kdDebug(9032) << "StringHLItem::checkHLItem" << endl;    
+	if( (length - pos) >= m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
+	   return pos + m_text.length();
+	   
+	return pos;
     }
 
 private:
@@ -186,50 +170,72 @@ public:
     RegExpHLItem( QString pattern, int state, int context )
         : HLItem( state, context ), m_rx( pattern ) {}
 
-    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
-        QString s = p->string()->toString();
-        s.truncate( s.length() - 1 );
-        int idx = m_rx.search(s, pos);
-        if( idx == pos )
-            return pos + m_rx.matchedLength();
-        return pos;
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	//kdDebug(9032) << "RegExpHLItem::checkHLItem" << endl;
+	QString s( buffer, length );
+	
+	int idx = m_rx.search(s, pos);
+	if( idx == pos )
+	    return pos + m_rx.matchedLength();
+	
+	return pos;
     }
 
 private:
     QRegExp m_rx;
 };
 
+class HexHLItem: public HLItem{
+public:
+    HexHLItem( int state, int context )
+        : HLItem( state, context ) {}
+									           
+    int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
+	if( (length-pos) > 2 ){
+	    QString s( buffer+pos,2 );
+	    if( s == "0x" || s == "0X" ){
+		pos += 2;
+		while( pos < length ){
+		    const QChar& ch = buffer[ pos ];
+		    if( ch.isNumber() || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
+			++pos;
+		    else
+			break;	
+		}	
+		
+	    }
+	}
+	return pos;
+    }
+};
 
 class HLItemCollection: public HLItem{
 public:
     HLItemCollection( int state=0, int context=0 ): HLItem( state, context )
-       { m_items.setAutoDelete( TRUE ); }
+    { m_items.setAutoDelete( TRUE ); }
 
     void appendChild( HLItem* item ) { m_items.append( item ); }
 
-
-    int checkHL( QTextDocument* doc, QTextParagraph* p, int pos,
-                 int* state, int* next){
-        QListIterator<HLItem> it( m_items );
-        QTextString* s = p->string();
-        QChar ch = s->at( pos ).c;
-
-        while( it.current() ){
-            HLItem* item = it.current();
-            if( item->checkStart( ch ) ){
-                int npos = item->checkHL( doc, p, pos, state, next );
-                if( npos > pos ){
-                    pos = npos;
-                    if( state )
-                        *state = item->attr();
-                    if( next )
-                        *next = item->context();
-                    break;
-                }
-            }
-            ++it;
-        }
-        return pos;
+    int checkHL( const QChar* buffer, int pos, int length, int* state, int* next ){
+	QListIterator<HLItem> it( m_items );
+	
+	while( it.current() ){
+	    HLItem* item = it.current();
+	    
+	    int npos = item->checkHL( buffer, pos, length, state, next );
+		
+	    if( npos > pos ){
+	        pos = npos;
+		if( state )
+		    *state = item->attr();
+		if( next )
+		    *next = item->context();
+		break;
+	    }
+	    ++it;
+	}
+	
+	return pos;
     }
 
 private:

@@ -90,13 +90,12 @@ JavaColorizer::JavaColorizer( QEditor* editor )
 {
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
+    context0->appendChild( new StartsWithHLItem( "//", Comment, 0 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "'", String, 3 ) );
-    context0->appendChild( new KeywordsHLItem( java_keywords, Keyword, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
+    context0->appendChild( new KeywordsHLItem( java_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new NumberHLItem(  Constant, 0 ) );
 
     // comment context
     HLItemCollection* context1 = new HLItemCollection( Comment );
