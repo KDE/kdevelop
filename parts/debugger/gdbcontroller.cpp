@@ -1068,7 +1068,7 @@ void GDBController::slotStart(const QString& shell, const QString &application)
                                    "Check the settings on /dev/tty* and /dev/pty*\n"
                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
                                    "and/or add the user to the tty group using "
-                                   "\"usermod -G tty username\"".));
+                                   "\"usermod -G tty username\"."));
         
         delete tty_;
         tty_ = 0;
