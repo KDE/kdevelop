@@ -72,7 +72,6 @@ class DlgEdit;
 #include "cimport.h"
 #include "structdef.h"
 #include "resource.h"
-#include "./print/cprintdlg.h"
 
 class CParsedMethod;
 class CParsedClass;

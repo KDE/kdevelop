@@ -128,15 +128,10 @@ void CKDevelop::slotAddExistingFiles(){
   ProjectFileType type = DATA;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
-  QStrList files;
   QString str_files = m_add_dlg->source_edit->text();
-  StringTokenizer str_token;
-    
-  str_token.tokenize(str_files,",");
-  while(str_token.hasMoreTokens()){
-    token = str_token.nextToken();
-    files.append(token);
-  }
+
+  QStringList files = QStringList::split(str_files, ",");
+
   QString dest = m_add_dlg->destination_edit->text();
   if(dest.right(1) != "/"){ // I hope it works now -Sandy
     dest = dest + "/";
@@ -154,11 +149,13 @@ void CKDevelop::slotAddExistingFiles(){
   i=0;
   progress.setProgress( i);
 
-  for(file = files.first(); file !=0;file = files.next()){
+  QStringList::ConstIterator it;
+  for(it = files.begin(); it != files.end(); ++it) {
+    file = *it;
     i++;
     copy = false;
     progress.setProgress( i );
-    if (!QFile::exists((const char*)file)) {
+    if (!QFile::exists(file)) {
         KMessageBox::sorry(this, i18n("File %1does not exist!").arg(file));
         continue;
     }
