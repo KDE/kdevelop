@@ -1,4 +1,4 @@
-
+%{TEMPLATE_FOR_c}
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

@@ -390,11 +390,13 @@ void AppWizardDialog::accept()
         KTempFile *tempFile = new KTempFile();
         m_tempFiles.append(tempFile);
 
-        QFile f;
-        f.open(IO_WriteOnly, tempFile->handle());
-        QTextStream temps(&f);
-        temps << (*it).edit->text();
-        f.flush();
+		QString templateText( (*it).edit->text() );
+		QFile f;
+		f.open(IO_WriteOnly, tempFile->handle());
+		QTextStream temps(&f);
+		temps << templateText;
+		f.flush();
+		subMap.insert( QString( "TEMPLATE_FOR_%1" ).arg( (*it).suffix ), templateText );
 
 		installFile file;
 		file.source = tempFile->name();
