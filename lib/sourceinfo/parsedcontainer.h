@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -27,9 +27,7 @@
 #include "parsedattribute.h"
 #include "parsedmethod.h"
 
-class ParsedStruct;
 class ParsedClass;
-
 
 /**
  * Function that takes a dictionary iterator and returns 
@@ -132,7 +130,7 @@ protected:
     QDict<ParsedMethod> methodsByNameAndArg;
     
     /** All structures declared in this class. */
-    QDict<ParsedStruct> structs;
+    QDict<ParsedClass> structs;
     
 public:
     
@@ -143,13 +141,13 @@ public:
     QDictIterator<ParsedAttribute> attributeIterator;
     
     /** Iterator for the structures. */
-    QDictIterator<ParsedStruct> structIterator;
+    QDictIterator<ParsedClass> structIterator;
     
     /**
      * Adds a struct. 
      * @param aStruct The structure to add to the container.
      */
-    void addStruct(ParsedStruct *aStruct);
+    void addStruct(ParsedClass *aStruct);
     
     /**
      * Adds an attribute. 
@@ -188,7 +186,7 @@ public:
      * @param aName Name of the struct to fetch.
      * @return Pointer to the struct or NULL if not found.
      */
-    ParsedStruct *getStructByName(const QString &aName);
+    ParsedClass *getStructByName(const QString &aName);
     
     /**
      * Get a attribute by using its' name. 
@@ -222,7 +220,7 @@ public:
     QStringList getSortedStructNameList();
     
     /** Gets all structs in sorted order. */
-    QValueList<ParsedStruct*> getSortedStructList();
+    QValueList<ParsedClass*> getSortedStructList();
 
     /**
      * Does a attribute exist in the store? 
@@ -275,7 +273,5 @@ public:
 
 QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
 QDataStream &operator>>(QDataStream &s, ParsedContainer &arg);
-
-#include "parsedstruct.h"
 
 #endif

@@ -283,8 +283,8 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         // Add structs
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Structs"));
         ilastItem = 0;
-        QValueList<ParsedStruct*> structList = store->getSortedStructList();
-        QValueList<ParsedStruct*>::ConstIterator it;
+        QValueList<ParsedClass*> structList = store->getSortedStructList();
+        QValueList<ParsedClass*>::ConstIterator it;
         for (it = structList.begin(); it != structList.end(); ++it)
             ilastItem = new ClassTreeStructItem(lastItem, ilastItem, *it);
         if (fromScratch)

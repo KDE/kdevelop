@@ -63,6 +63,8 @@ private:
     ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );
     ParsedAttribute* findOrInsertAttribute( ParsedClassContainer* scope, const QString& name );
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
+    ParsedClass* getClassByName( ParsedClassContainer* container, const QString& name );
+    ParsedClass* getClassByName( ClassStore* container, const QString& name );
 
 private:
     QString m_fileName;

@@ -4,7 +4,7 @@
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -107,9 +107,9 @@ bool ClassStore::hasStruct(const QString &name)
 }
 
 
-ParsedStruct *ClassStore::getStructByName(const QString &name)
+ParsedClass *ClassStore::getStructByName(const QString &name)
 {
-    QMap<QString, ParsedStruct*>::ConstIterator it;
+    QMap<QString, ParsedClass*>::ConstIterator it;
     it = m_allStructs.find(name);
     return (it != m_allStructs.end())? (*it) : 0;
 }
@@ -119,7 +119,7 @@ QStringList ClassStore::getSortedStructNameList()
 {
     QStringList list;
 
-    QMap<QString, ParsedStruct*>::ConstIterator it;
+    QMap<QString, ParsedClass*>::ConstIterator it;
     for (it = m_allStructs.begin(); it != m_allStructs.end(); ++it)
         list.append(it.key());
     
@@ -128,9 +128,9 @@ QStringList ClassStore::getSortedStructNameList()
 }
 
 
-QValueList<ParsedStruct*> ClassStore::getSortedStructList()
+QValueList<ParsedClass*> ClassStore::getSortedStructList()
 {
-    QValueList<ParsedStruct*> retVal;
+    QValueList<ParsedClass*> retVal;
 
     QStringList list = getSortedStructNameList();
     
@@ -195,7 +195,7 @@ void ClassStore::addClass(ParsedClass *klass)
 }
 
 
-void ClassStore::addStruct(ParsedStruct *strukt)
+void ClassStore::addStruct(ParsedClass *strukt)
 {
     REQUIRE( "Valid struct", strukt != NULL );
     REQUIRE( "Valid structname", !strukt->name().isEmpty() );
@@ -488,7 +488,7 @@ void ClassStore::removeWithReferences(const QString &fileName)
         if ( (*it)->declaredInFile() == fileName )
             m_allClasses.remove( it );
     }
-    for (QMap<QString, ParsedStruct*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it) {
+    for (QMap<QString, ParsedClass*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it) {
         if ( (*it)->declaredInFile() == fileName )
             m_allStructs.remove( it );
     }

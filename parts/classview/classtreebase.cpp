@@ -189,8 +189,8 @@ void ClassTreeScopeItem::setOpen(bool o)
             
         if (features & KDevLanguageSupport::Structs) {
             // Add structs
-            QValueList<ParsedStruct*> structList = pScope->getSortedStructList();
-            QValueList<ParsedStruct*>::ConstIterator it;
+            QValueList<ParsedClass*> structList = pScope->getSortedStructList();
+            QValueList<ParsedClass*>::ConstIterator it;
             for (it = structList.begin(); it != structList.end(); ++it)
                 lastItem = new ClassTreeStructItem(this, lastItem, *it);
         }
@@ -241,8 +241,8 @@ void ClassTreeClassItem::setOpen(bool o)
             lastItem = new ClassTreeClassItem(this, lastItem, *classIt);
 
         // Add nested structs
-        QValueList<ParsedStruct*> structList = pClass->getSortedStructList();
-        QValueList<ParsedStruct*>::ConstIterator structIt;
+        QValueList<ParsedClass*> structList = pClass->getSortedStructList();
+        QValueList<ParsedClass*>::ConstIterator structIt;
         for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
             lastItem = new ClassTreeStructItem(this, lastItem, *structIt);
         
@@ -275,53 +275,12 @@ void ClassTreeClassItem::setOpen(bool o)
     ClassTreeItem::setOpen(o);
 }
 
-
-ClassTreeStructItem::ClassTreeStructItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
-                                         ParsedStruct *parsedStruct)
-    : ClassTreeItem(parent, lastSibling, parsedStruct)
-{
-    setExpandable(true);
-    setPixmap(0, UserIcon("CVstruct", KIcon::DefaultState, ClassViewFactory::instance()));
-}
-
-
-void ClassTreeStructItem::setOpen(bool o)
-{
-    if ( !m_item )
-        return;
-    kdDebug(9003) << (o? "Open struct item" : "Close struct item") << endl;
-    if (o && childCount() == 0) {
-
-        ParsedStruct *pStruct = static_cast<ParsedStruct*>(m_item);
-        ClassTreeItem *lastItem = 0;
-        // Add structs
-        QValueList<ParsedStruct*> structList = pStruct->getSortedStructList();
-        QValueList<ParsedStruct*>::ConstIterator structIt;
-        for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
-            lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
-
-        QValueList<ParsedMethod*> methodList = pStruct->getSortedMethodList();
-        QValueList<ParsedMethod*>::ConstIterator methodIt;
-	for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
-            lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
-
-        QValueList<ParsedAttribute*> attributeList = pStruct->getSortedAttributeList();
-        QValueList<ParsedAttribute*>::ConstIterator attrIt;
-        for (attrIt = attributeList.begin(); attrIt != attributeList.end(); ++attrIt)
-            lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
-	        
-    }
-    
-    ClassTreeItem::setOpen(o);
-}
-
-
 ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                          ParsedMethod *parsedMethod)
     : ClassTreeItem(parent, lastSibling, parsedMethod)
 {
     QString icon;
-    
+
     if ( !parsedMethod )
       return;
 

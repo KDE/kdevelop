@@ -18,7 +18,6 @@
 #include "parseditem.h"
 #include "parsedscopecontainer.h"
 #include "parsedclass.h"
-#include "parsedstruct.h"
 #include "parsedmethod.h"
 #include "parsedattribute.h"
 #include "classviewpart.h"
@@ -197,18 +196,7 @@ private:
 };
 
 
-class ClassTreeStructItem : public ClassTreeItem
-{
-public:
-    ClassTreeStructItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
-                         ParsedStruct *parsedStruct );
-    ~ClassTreeStructItem()
-        {
-        }
-
-    virtual void setOpen(bool o);
-};
-
+typedef ClassTreeClassItem ClassTreeStructItem;
 
 class ClassTreeMethodItem : public ClassTreeItem
 {

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <qstringlist.h>
+#include "parsedclass.h"
 #include "parsedcontainer.h"
 #include "programmingbycontract.h"
 
@@ -77,7 +78,7 @@ ParsedContainer::~ParsedContainer()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedContainer::addStruct( ParsedStruct *aStruct )
+void ParsedContainer::addStruct( ParsedClass *aStruct )
 {
     REQUIRE( "Valid struct", aStruct != NULL );
     REQUIRE( "Valid structname", !aStruct->name().isEmpty() );
@@ -308,10 +309,10 @@ QValueList<ParsedAttribute*> ParsedContainer::getSortedAttributeList()
  *   aName              Name of the struct to fetch.
  *
  * Returns:
- *   ParsedStruct *  The structure.
+ *   ParsedClass *  The structure.
  *   NULL             If not found.
  *-----------------------------------------------------------------*/
-ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
+ParsedClass *ParsedContainer::getStructByName( const QString &aName )
 {
     REQUIRE1( "Valid structname", aName != NULL, NULL );
     REQUIRE1( "Valid structname length", aName.length() > 0, NULL );
@@ -330,7 +331,7 @@ ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QStringList ParsedContainer::getSortedStructNameList()
 {
-    return getSortedIteratorNameList<ParsedStruct>( structIterator );
+    return getSortedIteratorNameList<ParsedClass>( structIterator );
 }
 
 /*---------------------------- ParsedContainer::getSortedStructList()
@@ -342,9 +343,9 @@ QStringList ParsedContainer::getSortedStructNameList()
  * Returns:
  *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QValueList<ParsedStruct*> ParsedContainer::getSortedStructList()
+QValueList<ParsedClass*> ParsedContainer::getSortedStructList()
 {
-    return getSortedDictList<ParsedStruct>( structs );
+    return getSortedDictList<ParsedClass>( structs );
 }
 
 /*--------------------------- ParsedContainer::removeWithReferences()
@@ -379,7 +380,7 @@ void ParsedContainer::removeWithReferences( const QString &aFile )
         attr = attributeIterator.current();
     }
 
-    ParsedStruct *str = structIterator.toFirst();
+    ParsedClass *str = structIterator.toFirst();
     while ( str ) {
         if ( str->declaredInFile() == aFile )
             removeStruct( structIterator.currentKey() );

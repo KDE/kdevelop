@@ -848,7 +848,7 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
     ParsedScopeContainer* pScope = m_pCCStore->globalScope();
     if( pScope ){
 
-        ParsedStruct* pStruct = pScope->getStructByName( strStruct );
+        ParsedClass* pStruct = pScope->getStructByName( strStruct );
         if ( pStruct ){
             QValueList<ParsedAttribute*> attrList = pStruct->getSortedAttributeList();
             QValueList<ParsedAttribute*>::ConstIterator attrIt;

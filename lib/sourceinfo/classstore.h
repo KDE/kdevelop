@@ -82,7 +82,7 @@ public:
      * Returns a class from the store using its scoped
      * name. See getClassByName().
      */
-    ParsedStruct *getStructByName(const QString &name);
+    ParsedClass *getStructByName(const QString &name);
     /**
      * Returns all structs names in alphabetically sorted order.
      * Includes global and namespaced structs.
@@ -91,7 +91,7 @@ public:
     /**
      * Returns all structs in alphabetically sorted order. 
      */
-    QValueList<ParsedStruct*> getSortedStructList();
+    QValueList<ParsedClass*> getSortedStructList();
     /**
      * Checks if a scope exists in the store. The name
      * argument must specify the full scoped name in
@@ -167,7 +167,7 @@ public:
     /**
      * Adds a struct definition. See addClass().
      */
-    void addStruct(ParsedStruct *strukt);
+    void addStruct(ParsedClass *strukt);
     /**
      * Adds a scope definition. Source parsers must use this method
      * so the class store can maintain a list of all scopes. They
@@ -241,10 +241,10 @@ private:
      */
     QMap<QString, ParsedClass*> m_allClasses;
     /**
-     * Mapping from struct name to ParsedStruct objects.
+     * Mapping from struct name to ParsedClass objects.
      * See m_allClasses.
      */
-    QMap<QString, ParsedStruct*> m_allStructs;
+    QMap<QString, ParsedClass*> m_allStructs;
     /**
      * Mapping from scope name to ParsedScopeContainer objects. See
      * also m_allClasses.

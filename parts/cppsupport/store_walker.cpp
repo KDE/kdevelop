@@ -192,7 +192,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     ParsedClass* cl = m_currentClass;
     if( !cl )
-	cl = m_store->getClassByName( scope.join(".") );
+	cl = getClassByName( m_store, scope.join(".") );
 
     ParsedMethod* method = new ParsedMethod();
     method->setName( id );
@@ -292,9 +292,14 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
     
-    bool inStore = m_store->hasClass( klass->path() );
+    bool inStore = false;
+    if( kind == "class" )
+	inStore = m_store->hasClass( klass->path() );
+    else 
+	inStore = m_store->hasStruct( klass->path() );
+    
     if( inStore ){
-	ParsedClass* parsedClassRef = m_store->getClassByName( klass->path() );
+	ParsedClass* parsedClassRef = getClassByName( m_store, klass->path() );	
 	parsedClassRef->setDeclaredOnLine( klass->declaredOnLine() );
 	parsedClassRef->setDeclaredInFile( klass->declaredInFile() );
 	parsedClassRef->setDeclaredInScope( klass->declaredInScope() );
@@ -302,14 +307,24 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	klass = parsedClassRef;	
     }
     
-    if( m_currentClass )
-	m_currentClass->addClass( klass );
-    else
-	m_currentScopeContainer->addClass( klass );
+    if( kind == "class" ){
+	if( m_currentClass )
+	    m_currentClass->addClass( klass );
+	else
+	    m_currentScopeContainer->addClass( klass );
+	
+	if( !inStore )
+	    m_store->addClass( klass );
+    } else {
+	if( m_currentClass )
+	    m_currentClass->addStruct( klass );
+	else
+	    m_currentScopeContainer->addStruct( klass );
+	
+	if( !inStore )
+	    m_store->addStruct( klass );
+    }
     
-    if( !inStore )
-	m_store->addClass( klass );
-
     if( ast->baseClause() )
         parseBaseClause( ast->baseClause(), klass );
 
@@ -647,5 +662,21 @@ void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * kla
 	klass->addParent( parent );
 	++it;
     }
+}
+
+ParsedClass * StoreWalker::getClassByName( ParsedClassContainer * container, const QString & name )
+{
+    ParsedClass* c = container->getClassByName( name );
+    if( !c )
+	c = container->getStructByName( name );
+    return c;
+}
+
+ParsedClass * StoreWalker::getClassByName( ClassStore * container, const QString & name )
+{
+    ParsedClass* c = container->getClassByName( name );
+    if( !c )
+	c = container->getStructByName( name );
+    return c;
 }
 
