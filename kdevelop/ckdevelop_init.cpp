@@ -324,7 +324,8 @@ void CKDevelop::initView()
   main->setEnableDocking(KDockWidget::DockNone);
   outputdock->setEnableDocking(KDockWidget::DockTop|KDockWidget::DockLeft|KDockWidget::DockRight|KDockWidget::DockBottom);
   treedock->setEnableDocking(KDockWidget::DockTop|KDockWidget::DockLeft|KDockWidget::DockRight|KDockWidget::DockBottom);
-
+  outputdock->setDockSite(KDockWidget::DockNone);
+  treedock->setDockSite(KDockWidget::DockNone);
 
   initKeyAccel();
   initMenuBar();
