@@ -132,6 +132,14 @@ kdoc Referenzdateien enthält. Als erstes wird die Qt Klassendokumentation indizi
 KDE Bibliotheken erstellt werden kann. Daher ist es wichtig, das Sie vorher den Pfad zur Qt Dokumentation eingegeben haben, damit 
 qt2kdoc die Dateien finden kann. Schließlich werden die KDE Bibliotheken indiziert und die Dokumentation wird mit den Querverweisen 
 erstellt, um so ein Höchstmaß an Funktionalität beim Browsen zur Verfügung zu stellen.
+<P><B>BEACHTE:</B> Wenn Sie KDoc 2 verwenden, können Sie einen Dokumentationssatz für die Bibliotheken des KDE Basispakets
+und für KOffice hinzufügen. Um dies zu tun, erstellen Sie die KDE Bibliotheksdokumentation wie oben beschrieben. Dann öffnen Sie
+den Dialog erneut und wählen im Stammverzeichnis der Quelldateien den Pfad zur <CODE>kdoc.rules</CODE> Datei des KDEbase- bzw.
+KOfficepakets (für KDEBase ist dies das Verzeichnis der Quellen, für KOffice ist es koffice/lib). Wählen Sie die Option 3 (Alte
+Dokumentation unverändert lassen) und lassen Sie den Ausgabepfad so wie er ist. Dadurch bleibt die KDE Bibliotheksdokumentation
+erhalten und die neue Dokumentation der KDE Bibliotheken (bzw. der KOffice Bibliotheken) wird in diesem Pfad hinzugefügt. Nach der
+Erstellung, stehen die Dokumentationen automatisch im DOC Baum zur Verfügung. Für weitere KDE Pakete, die mit weiteren
+Bibliotheken ausgeliefert werden, sollten Sie nach der <CODE>kdoc.rules</CODE> suchen und die Dokumentation ebenso erzeugen.
 <P>
 <H4>Suchdatenbank erstellen</H4>
 
