@@ -32,6 +32,8 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 {
 	/// @todo could get these from emacs compile.el
 	static ErrorFormat formats[] = {
+		// GCC - another case, eg. for #include "pixmap.xpm" which does not exists
+		ErrorFormat( "([^: \t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 3 ),
 		// GCC
 		ErrorFormat( "([^: \t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
 		//libtool link
