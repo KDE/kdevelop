@@ -208,7 +208,7 @@ QString PascalProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString PascalProjectPart::mainProgram(bool relative = false)
+QString PascalProjectPart::mainProgram(bool relative)
 {
     QDomDocument &dom = *projectDom();
     QString configMainProg = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram", "");
