@@ -1,3 +1,14 @@
+2000-04-06 Walter Tasin  <tasin@kdevelop.de>
+	* some bugfixes for symlink usage inside projects
+          (KDevelop didn't recognized well, if a file, which
+	   has a symlink in it, was changed)
+	* adding pragma directive for Makefile.am
+	  to switch off Makefile.am patching
+	* LFV/RFV update on creation of API/User documentation
+	  or messages
+	* Bugfix #2964: now the path is changed only for the
+	  shell process.
+
 2000-04-05  Ralf Funken <rfunken@kdevelop.de>
 	* Added items for the new debugger feature to en and de manuals.
 
