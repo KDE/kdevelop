@@ -27,7 +27,6 @@
 CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa )
   : QTabDialog( parent, name,TRUE )
 {
-  //  setFixedSize(440,370);
   accel = accel_pa;
   
   setCaption( i18n("KDevelop Setup" ));
@@ -47,7 +46,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   makeSelectLabel->setMargin( -1 );
   
   makeSelectCombo = new QComboBox( FALSE, w1, "makeSelectCombo" );
-  makeSelectCombo->setGeometry( 240, 30, 130, 30 );
+  makeSelectCombo->setGeometry( 270, 30, 130, 30 );
   connect( makeSelectCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsMake(int)) );
   makeSelectCombo->setSizeLimit( 10 );
   makeSelectCombo->setAutoResize( FALSE );
@@ -64,7 +63,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   QButtonGroup* makeGroup;
   makeGroup = new QButtonGroup( w1, "makeGroup" );
-  makeGroup->setGeometry( 10, 10, 370, 60 );
+  makeGroup->setGeometry( 10, 10, 400, 60 );
   makeGroup->setFrameStyle( 49 );
   makeGroup->setTitle(i18n( "Make-Command" ));
   makeGroup->setAlignment( 1 );
@@ -87,7 +86,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   autosaveTimeLabel->setEnabled(autoSave);
   
   autosaveTimeCombo = new QComboBox( FALSE, w1, "autosaveTimeCombo" );
-  autosaveTimeCombo->setGeometry( 240, 140, 130, 30 );
+  autosaveTimeCombo->setGeometry( 270, 140, 130, 30 );
   connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
   autosaveTimeCombo->setSizeLimit( 10 );
   autosaveTimeCombo->setAutoResize( FALSE );
@@ -118,7 +117,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   QButtonGroup* autosaveGroup;
   autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
-  autosaveGroup->setGeometry( 10, 90, 370, 90 );
+  autosaveGroup->setGeometry( 10, 90, 400, 90 );
   autosaveGroup->setFrameStyle( 49 );
   autosaveGroup->setTitle( i18n("Autosave") );
   autosaveGroup->setAlignment( 1 );
@@ -147,7 +146,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
-  autoswitchGroup->setGeometry( 10, 190, 370, 60 );
+  autoswitchGroup->setGeometry( 10, 190, 400, 60 );
   autoswitchGroup->setFrameStyle( 49 );
   autoswitchGroup->setTitle(i18n( "Autoswitch") );
   autoswitchGroup->setAlignment( 1 );
@@ -168,7 +167,10 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   // ****************** the Keys Tab ***************************
 
   dict = new QDict<KKeyEntry>( accel->keyDict() );
-  KKeyChooser* w2 = new KKeyChooser ( dict,this);
+//  KKeyChooser* w2 = new KKeyChooser ( dict,this);
+  QWidget *w2 = new QWidget( this, "keys" );
+  KKeyChooser* w21 = new KKeyChooser ( dict,w2);
+  w21->setGeometry(15,10,395,320);
 
 
   // ****************** the Documentation Tab ********************
@@ -317,7 +319,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   setOkButton(i18n("OK"));
   setCancelButton(i18n("Cancel"));
   connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
-  resize(440,370);
+  resize(440,420);
   
 }
 
