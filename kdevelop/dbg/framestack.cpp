@@ -92,7 +92,7 @@ void FrameStack::parseGDBBacktraceList(char* str)
 
 /***************************************************************************/
 
-QString FrameStack::getFrameParams(int frame)
+QCString FrameStack::getFrameParams(int frame)
 {
   if (currentList_)
   {
@@ -111,7 +111,7 @@ QString FrameStack::getFrameParams(int frame)
               paramStart = paramEnd+1;
               paramEnd = parser.skipDelim(paramStart, '(', ')');
               if (!paramEnd)
-                return QString();
+                return QCString();
             }
           }
 
@@ -123,7 +123,7 @@ QString FrameStack::getFrameParams(int frame)
     }
   }
 
-  return QString();
+  return QCString();
 }
 
 /***************************************************************************/

@@ -23,7 +23,7 @@
 /***************************************************************************/
 /***************************************************************************/
 
-DbgCommand::DbgCommand(const QString& command, bool isRunCmd, bool isInfoCmd, char prompt) :
+DbgCommand::DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd, char prompt) :
   command_(command),
   isRunCmd_(isRunCmd),
   isInfoCmd_(isInfoCmd),
@@ -31,14 +31,7 @@ DbgCommand::DbgCommand(const QString& command, bool isRunCmd, bool isInfoCmd, ch
   waitForReply_(prompt != 0),
   prompt_(prompt)
 {
-}
-
-/***************************************************************************/
-
-QString DbgCommand::cmdToSend()
-{
-    sent_ = true;
-    return command_+"\n";
+  cmdBuffer_ = command_+"\n";
 }
 
 /***************************************************************************/

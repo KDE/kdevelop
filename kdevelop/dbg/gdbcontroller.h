@@ -70,8 +70,8 @@ private:
   void actOnProgramPause(const QString& msg);
   void programNoApp(const QString& msg, bool msgBox);
 
-  void setBreakpoint(const QString& BPSetCmd, int key);
-  void clearBreakpoint(const QString& BPClearCmd);
+  void setBreakpoint(const QCString& BPSetCmd, int key);
+  void clearBreakpoint(const QCString& BPClearCmd);
   void modifyBreakpoint(Breakpoint* BP);
 
   void setStateOn(int stateOn)    { state_ |= stateOn; }
@@ -103,7 +103,7 @@ public slots:
   void slotSelectFrame(int frame);
 
   void slotExpandItem(VarItem* parent);
-  void slotExpandUserItem(VarItem* parent, const QString& userRequest);
+  void slotExpandUserItem(VarItem* parent, const QCString& userRequest);
   void slotSetLocalViewState(bool onOff);
 
 protected slots:

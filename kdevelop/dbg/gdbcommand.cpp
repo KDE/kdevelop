@@ -21,13 +21,19 @@
 
 /***************************************************************************/
 
-QString  GDBCommand::idlePrompt_ = QString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
+QCString  GDBCommand::idlePrompt_ = QCString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
 
 /***************************************************************************/
 
-GDBCommand::GDBCommand(const QString& setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt) :
+GDBCommand::GDBCommand(const QCString& setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt) :
   DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
 {
+  if (prompt_)
+  {
+    cmdBuffer_ = QCString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_) +
+                  command_ +
+                  idlePrompt_;
+  }
 }
 
 /***************************************************************************/
@@ -37,26 +43,11 @@ GDBCommand::~GDBCommand()
 }
 
 /***************************************************************************/
-
-QString GDBCommand::cmdToSend()
-{
-  sent_ = true;
-
-  if (prompt_)
-  {
-    QString startPrompt = QString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_);
-    return startPrompt + command_ + idlePrompt_;
-  }
-
-  return command_+"\n";
-}
-
-/***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
 GDBItemCommand::GDBItemCommand( VarItem* item,
-                                const QString& command,
+                                const QCString& command,
                                 bool isRunCmd,
                                 char prompt) :
   GDBCommand(command, isRunCmd, true, prompt),
@@ -75,8 +66,10 @@ GDBItemCommand::~GDBItemCommand()
 /***************************************************************************/
 
 GDBPointerCommand::GDBPointerCommand(VarItem* item) :
-  GDBItemCommand(item, "print *"+item->fullName(), false,
-                                                  DATAREQUEST)
+  GDBItemCommand(item,
+                  QCString("print *")+QCString(item->fullName().latin1()),
+                  false,
+                  DATAREQUEST)
 {
 }
 
@@ -106,8 +99,8 @@ GDBPointerCommand::~GDBPointerCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QString& setCommand, int key) :
-  GDBCommand(setCommand, false, false, SET_BREAKPT),
+GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QCString& command, int key) :
+  GDBCommand(command, false, false, SET_BREAKPT),
   key_(key)
 {
 }

@@ -32,12 +32,13 @@
 class DbgCommand
 {
 public: 
-  DbgCommand(const QString& command, bool isRunCmd, bool isInfoCmd, char prompt);
+  DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd, char prompt);
   virtual ~DbgCommand() {};
 
-  virtual QString cmdToSend();
+  virtual QCString& cmdToSend()             { sent_ = true;  return cmdBuffer_; }
+  virtual int cmdLength()                   { return cmdBuffer_.length(); }
 
-  QString rawDbgCommand() const             { return command_; }
+  QCString rawDbgCommand() const            { return command_; }
   bool isARunCmd() const                    { return isRunCmd_;}
   bool isAnInfoCmd() const                  { return isInfoCmd_; }
   bool moreToSend() const                   { return !sent_; }
@@ -45,7 +46,8 @@ public:
   bool typeMatch(const char cmdType) const  { return (prompt_ == cmdType); }
 
 protected:
-  QString command_;
+  QCString cmdBuffer_;
+  QCString command_;
   bool    isRunCmd_;
   bool    isInfoCmd_;
   bool    sent_;

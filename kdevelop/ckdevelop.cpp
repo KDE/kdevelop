@@ -1661,8 +1661,8 @@ void CKDevelop::setupInternalDebugger()
 
   connect(  var_viewer->varTree(),  SIGNAL(expandItem(VarItem*)),
             dbgController,          SLOT(slotExpandItem(VarItem*)));
-  connect(  var_viewer->varTree(),  SIGNAL(expandUserItem(VarItem*, const QString&)),
-            dbgController,          SLOT(slotExpandUserItem(VarItem*, const QString&)));
+  connect(  var_viewer->varTree(),  SIGNAL(expandUserItem(VarItem*, const QCString&)),
+            dbgController,          SLOT(slotExpandUserItem(VarItem*, const QCString&)));
   connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool)),
             dbgController,          SLOT(slotSetLocalViewState(bool)));
 

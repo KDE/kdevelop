@@ -18,6 +18,8 @@
 #include "breakpoint.h"
 #include "breakpointdialog.h"
 
+#include <klocale.h>
+
 #include <qfileinfo.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
@@ -99,39 +101,27 @@ QString Breakpoint::text () const
 void Breakpoint::configureDisplay()
 {
   if (s_temporary_)
-    display_ += "\ttemporary";
+    display_ += i18n("\ttemporary");
 
   if (!s_enabled_)
-    display_ += "\tdisabled";
+    display_ += i18n("\tdisabled");
 
   if (!condition_.isEmpty())
-  {
-    QString t(QString().sprintf("\tif %s", condition_.data()));
-    display_ += t;
-  }
+    display_ += i18n("\tif %1").arg(condition_);
 
   if (hits_)
-  {
-    QString t(QString().sprintf("\thits %d", hits_));
-    display_ += t;
-  }
+    display_ += i18n("\thits %1").arg(hits_);
 
   if (ignoreCount_)
-  {
-    QString t(QString().sprintf("\tignore count %d", ignoreCount_));
-    display_ += t;
-  }
+    display_ += i18n("\tignore count %1").arg(ignoreCount_);
 
   if (s_hardwareBP_)
-  {
-    QString t(display_);
-    display_.sprintf("hw %s", t.data());
-  }
+    display_ = i18n("hw %1").arg(display_);
 
   if (dbgId_>0)
   {
     QString t(display_);
-    display_.sprintf("%d %s", dbgId_, t.data());
+    display_ = i18n("%1 %2").arg(dbgId_).arg(display_);
   }
 
   if (s_pending_)
@@ -144,8 +134,7 @@ void Breakpoint::configureDisplay()
     if (s_actionModify_)
       pending += "modify ";
 
-    QString t(display_);
-    display_.sprintf("%s>\t%s", pending.data(), t.data());
+    display_ = i18n("%1>\t%2").arg(pending).arg(display_);
   }
 }
 
@@ -154,7 +143,7 @@ void Breakpoint::configureDisplay()
 QString Breakpoint::dbgRemoveCommand() const
 {
   if (dbgId_>0)
-    return QString().sprintf("delete %d", dbgId_);
+    return i18n("delete %1").arg(dbgId_);
 
   return QString();
 }
@@ -282,11 +271,11 @@ QString FilePosBreakpoint::dbgSetCommand() const
 {
   QString cmdStr;
   if (fileName_ == "")
-    cmdStr.sprintf("break %d",lineNo_);
+    cmdStr = i18n("break %1").arg(lineNo_);
   else
   {
     QFileInfo fi(fileName_);
-    cmdStr.sprintf("break %s:%d", fi.fileName().data(), lineNo_);
+    cmdStr = i18n("break %1:%2").arg(fi.fileName()).arg(lineNo_);
   }
 
   if (isTemporary())
@@ -317,7 +306,7 @@ bool FilePosBreakpoint::match(const Breakpoint* brkpt) const
 
 void FilePosBreakpoint::configureDisplay()
 {
-  display_.sprintf("breakpoint at %s:%d", fileName_.data(), lineNo_);
+  display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
   Breakpoint::configureDisplay();
 }
 
@@ -351,7 +340,7 @@ QString Watchpoint::dbgSetCommand() const
 
 void Watchpoint::configureDisplay()
 {
-  display_.sprintf("watchpoint on %s", varName_.data());
+  display_ = i18n("watchpoint on %1").arg(varName_);
   Breakpoint::configureDisplay();
 }
 

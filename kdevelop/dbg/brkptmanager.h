@@ -51,8 +51,6 @@ private:
   Breakpoint* findId(int id) const;
   Breakpoint* findKey(int BPKey) const;
 
-  void mouseReleaseEvent(QMouseEvent* e);
-  void mouseDoubleClickEvent(QMouseEvent *e);
   void breakpointPopup(Breakpoint *BP);
 
 public slots:
@@ -69,6 +67,10 @@ public slots:
   void slotEditBreakpoint();
   void slotGotoBreakpointSource();
   void slotUnableToSetBPNow(int BPNo);
+
+private slots:
+  void slotRightButtonClicked(QListBoxItem *item, const QPoint &);
+  void slotClicked(QListBoxItem *item);
 
 signals:
   void publishBPState(Breakpoint* brkpt);

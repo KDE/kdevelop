@@ -1110,7 +1110,7 @@ void CKDevelop::initStatusBar()
 {
   m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
   statProg = new QProgressBar(m_statusBar,"Progressbar");
-//  statProg->setFixedWidth( 100 );             // arbitrary width
+  statProg->setFixedWidth( 120 );             // arbitrary width
 //  statProg->setCenterIndicator(true);
 //  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
 //  statProg->setLineWidth(1);

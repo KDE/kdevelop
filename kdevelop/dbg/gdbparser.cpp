@@ -68,7 +68,7 @@ void GDBParser::parseData(TrimmableItem* parent, char * buf,
       dataType = determineType(buf);
     }
 
-    QString value = getValue(&buf, requested);
+    QCString value = getValue(&buf, requested);
     setItem(parent, varName, dataType, value, requested, params);
   }
 }
@@ -77,7 +77,7 @@ void GDBParser::parseData(TrimmableItem* parent, char * buf,
 
 void GDBParser::parseArray(TrimmableItem* parent, char* buf)
 {
-  QString elementRoot = parent->getName() + "[%d]";
+  QString elementRoot = parent->getName() + "[%1]";
   int idx = 0;
   while (*buf)
   {
@@ -86,8 +86,8 @@ void GDBParser::parseArray(TrimmableItem* parent, char* buf)
       return;
 
     DataType dataType = determineType(buf);
-    QString value = getValue(&buf, false);
-    QString varName = QString().sprintf(elementRoot, idx);
+    QCString value = getValue(&buf, false);
+    QString varName = elementRoot.arg(idx);
     setItem(parent, varName, dataType, value, false, false);
 
     int pos = value.find(" <repeats", 0);
@@ -121,7 +121,7 @@ QString GDBParser::getName(char** buf)
 
 // **************************************************************************
 
-QString GDBParser::getValue(char** buf, bool requested)
+QCString GDBParser::getValue(char** buf, bool requested)
 {
   char* start = skipNextTokenStart(*buf);
   *buf = skipTokenValue(start);
@@ -161,7 +161,7 @@ TrimmableItem* GDBParser::getItem(TrimmableItem* parent, DataType dataType,
 // **************************************************************************
 
 void GDBParser::setItem(TrimmableItem* parent, const QString& varName,
-                            DataType dataType, const QString& value,
+                            DataType dataType, const QCString& value,
                             bool requested, bool)
 {
   TrimmableItem* item = getItem(parent, dataType, varName, requested);
@@ -199,7 +199,7 @@ void GDBParser::setItem(TrimmableItem* parent, const QString& varName,
       int pos;
       if ((pos = value.find(':', 0)) != -1)
       {
-        QCString rhs(value.mid(pos+2, value.length()));
+        QCString rhs((value.mid(pos+2, value.length()).data()));
         if (determineType(rhs.data()) != typeValue)
         {
           item->setCache(rhs);
@@ -208,7 +208,7 @@ void GDBParser::setItem(TrimmableItem* parent, const QString& varName,
         }
       }
       item->setText(ValueCol, value);
-      item->setExpandable(value && (value[0] == '@'));
+      item->setExpandable(!value.isEmpty() && (value[0] == '@'));
       break;
    }
 

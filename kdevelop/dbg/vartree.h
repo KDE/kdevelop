@@ -80,7 +80,7 @@ public:
   void trimExcessFrames();
 
   void emitExpandItem(VarItem* item)            { emit expandItem(item); }
-  void emitExpandUserItem(VarItem* item, const QString& request)
+  void emitExpandUserItem(VarItem* item, const QCString& request)
                                                 { emit expandUserItem(item, request);}
   void emitSetLocalViewState(bool localsOn,int frameNo);
 
@@ -96,7 +96,7 @@ signals:
   void toggleWatchVariable(const QString& varName);
   void toggleWatchpoint(const QString& varName);
   void expandItem(VarItem* item);
-  void expandUserItem(VarItem* item, const QString& userRequest);
+  void expandUserItem(VarItem* item, const QCString& userRequest);
   void setLocalViewState(bool localsOn);
   void selectFrame(int frameNo);
 
@@ -129,8 +129,8 @@ public:
   virtual void updateValue(char* /* buf */);
   virtual DataType getDataType() const;
 
-  virtual void setCache(const QString& value);
-  virtual QString getCache();
+  virtual void setCache(const QCString& value);
+  virtual QCString getCache();
   virtual QString key ( int column, bool ascending ) const;
 
 private:
@@ -155,8 +155,8 @@ public:
 
   void updateValue(char* data);
 
-  void setCache(const QString& value);
-  QString getCache();
+  void setCache(const QCString& value);
+  QCString getCache();
 
   void setOpen(bool open);
   void setText (int column, const QString& text);
@@ -183,7 +183,7 @@ public:
   virtual ~FrameRoot();
 
   void setLocals(char* locals);
-  void setParams(const QString& params);
+  void setParams(const QCString& params);
 
   void setOpen(bool open);
 

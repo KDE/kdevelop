@@ -89,7 +89,7 @@ static int chownpty(int fd, int grant)
       ::exit(1);
 
     QString path = locate("exe", BASE_CHOWN);
-    execle(path.data(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
+    execle(path.latin1(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
     ::exit(1); // should not be reached
   }
   if (pid > 0)
@@ -318,12 +318,12 @@ bool STTY::findExternalTTY(const QString &termApp)
     * back the terminal name and then only sits and waits.
     */
 
-    const char* prog      = appName;
+    const char* prog      = appName.latin1();
     QString script = QString("tty>") + QString(fifo) + QString(";"                  // fifo name
                             "trap \"\" INT QUIT TSTP;"	  // ignore various signals
                             "exec<&-;exec>&-;"		        // close stdin and stdout
                             "while :;do sleep 3600;done");
-    const char* scriptStr = script.data();
+    const char* scriptStr = script.latin1();
     const char* end       = 0;
 
     ::execlp( prog,       prog,

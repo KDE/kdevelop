@@ -49,9 +49,9 @@ private:
   char*     skipNextTokenStart(char* buf) const;
 
   QString getName(char** buf);
-  QString getValue(char** buf, bool requested);
+  QCString getValue(char** buf, bool requested);
   void setItem(TrimmableItem* parent, const QString& varName, DataType dataType,
-                const QString& value, bool requested, bool params);
+                const QCString& value, bool requested, bool params);
 };
 
 #endif

@@ -76,14 +76,12 @@ enum GDBCmd
 class GDBCommand : public DbgCommand
 {
 public:
-  GDBCommand(const QString& command, bool isRunCmd=false, bool isInfoCmd=true,
+  GDBCommand(const QCString& command, bool isRunCmd=false, bool isInfoCmd=true,
               char prompt=WAIT);
-	virtual ~GDBCommand();
-	
-	virtual QString cmdToSend();
-	
+  virtual ~GDBCommand();
+
 private:
-  static QString idlePrompt_;
+  static QCString idlePrompt_;
 };
 
 /***************************************************************************/
@@ -92,11 +90,11 @@ private:
 class GDBItemCommand : public GDBCommand
 {
 public:
-  GDBItemCommand( VarItem* item, const QString& command,
+  GDBItemCommand( VarItem* item, const QCString& command,
                   bool isRunCmd=false, char prompt=DATAREQUEST);
-	virtual ~GDBItemCommand();
-	
-	VarItem* getItem()      { return item_; }
+  virtual ~GDBItemCommand();
+
+  VarItem* getItem()      { return item_; }
 
 private:
   VarItem*  item_;
@@ -109,7 +107,7 @@ class GDBPointerCommand : public GDBItemCommand
 {
 public:
   GDBPointerCommand(VarItem* item);
-	virtual ~GDBPointerCommand();
+  virtual ~GDBPointerCommand();
 };
 
 /***************************************************************************/
@@ -128,11 +126,11 @@ public:
 class GDBSetBreakpointCommand : public GDBCommand
 {
 public:
-  GDBSetBreakpointCommand(const QString& setCommand, int key);
-	virtual ~GDBSetBreakpointCommand();
-	
-	int getKey() const        { return key_; }
-	
+  GDBSetBreakpointCommand(const QCString& setCommand, int key);
+  virtual ~GDBSetBreakpointCommand();
+
+  int getKey() const        { return key_; }
+
 private:
   int key_;
 };

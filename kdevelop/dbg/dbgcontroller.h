@@ -92,7 +92,7 @@ public slots:
 
   virtual void slotExpandItem(VarItem* parent)                            = 0;
   virtual void slotExpandUserItem(VarItem* parent,
-                                    const QString& userRequest)           = 0;
+                                    const QCString& userRequest)           = 0;
   
 protected slots:
   virtual void slotDbgStdout(KProcess* proc, char* buf, int buflen)       = 0;

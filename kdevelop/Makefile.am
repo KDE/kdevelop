@@ -55,3 +55,4 @@ messages: rc.cpp
 	 $(XGETTEXT) $$LIST -o $(podir)/kdevelop.pot; \
 	fi
 
+KDE_CXXFLAGS=-DGDB_MONITOR

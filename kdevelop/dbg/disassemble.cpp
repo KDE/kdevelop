@@ -53,13 +53,13 @@ bool Disassemble::displayCurrent()
   ASSERT(address_ >= lower_ || address_ <= upper_);
 
   int line;
-  int addressLength = currentAddress_.length();
+//  int addressLength = currentAddress_.length();
   for (line=0; line < numLines(); line++)
   {
-    if (strncmp(textLine(line), currentAddress_.data(), addressLength) == 0)
+    if (textLine(line).startsWith(currentAddress_))
     {
       // put cursor at start of line and highlight the line
-      setCursorPosition(line, qstrlen(textLine(line)));
+      setCursorPosition(line+1, 0);
       setCursorPosition(line, 0, true);
       return true;;
     }
@@ -97,8 +97,8 @@ void Disassemble::slotDisassemble(char* buf)
 
     if (numLines())
     {
-      lower_ = strtol(textLine(0), 0, 0);
-      upper_ = strtol(textLine(numLines()-1), 0, 0);
+      lower_ = textLine(0).toLong();
+      upper_ = textLine(numLines()-1).toLong();
       displayCurrent();
     }
     else
@@ -127,7 +127,7 @@ void Disassemble::slotShowStepInSource(const QString&, int,
                                         const QString& currentAddress)
 {
   currentAddress_ = currentAddress;
-  address_ = strtol(currentAddress_.data(), 0, 0);
+  address_ = currentAddress_.toLong();
   if (!active_)
     return;
 

@@ -408,17 +408,17 @@ DataType TrimmableItem::getDataType() const
 
 // **************************************************************************
 
-void TrimmableItem::setCache(const QString&)
+void TrimmableItem::setCache(const QCString&)
 {
   ASSERT(false);
 }
 
 // **************************************************************************
 
-QString TrimmableItem::getCache()
+QCString TrimmableItem::getCache()
 {
   ASSERT(false);
-  return QString();
+  return QCString();
 }
 
 // **************************************************************************
@@ -440,7 +440,7 @@ QString TrimmableItem::key (int, bool) const
 
 VarItem::VarItem( TrimmableItem* parent, const QString& varName, DataType dataType) :
   TrimmableItem (parent),
-  cache_(QString()),
+  cache_(QCString()),
   dataType_(dataType),
   highlight_(false)
 {
@@ -465,7 +465,7 @@ QString VarItem::varPath() const
   {
     if (item->getDataType() != typeArray)
     {
-      if (*(item->text(VarNameCol)) != '<')
+      if ((item->text(VarNameCol))[1] != '<')
       {
         QString itemName(item->text(VarNameCol));
         varPath = itemName.replace(QRegExp("^static "), "") + "." + varPath;
@@ -499,7 +499,7 @@ void VarItem::setText ( int column, const QString& data )
   if (column == ValueCol)
   {
     QString oldValue(text(column));
-    if (oldValue)                   // Don't highlight new items
+    if (!oldValue.isEmpty())                   // Don't highlight new items
       highlight_ = (oldValue != QString(data));
   }
 
@@ -535,7 +535,7 @@ void VarItem::updateValue(char* buf)
 
 // **************************************************************************
 
-void VarItem::setCache(const QString& value)
+void VarItem::setCache(const QCString& value)
 {
   cache_ = value;
   setExpandable(true);
@@ -568,7 +568,7 @@ void VarItem::setOpen(bool open)
 
 // **************************************************************************
 
-QString VarItem::getCache()
+QCString VarItem::getCache()
 {
   return cache_;
 }
@@ -582,20 +582,30 @@ void VarItem::checkForRequests()
   // Signature for a QT1.44 QString
   if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0)
     ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName()+QString(".shd.data"));
+                                          fullName().latin1()+QCString(".shd.data"));
 
   // Signature for a QT1.44 QDir
   if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0)
     ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName()+QString(".dPath.shd.data"));
+                                          fullName().latin1()+QCString(".dPath.shd.data"));
 
   // Signature for a QT2.0.x QT2.1 QString
   // TODO - This handling is not that good - but it works sufficiently well
   // at the moment to leave it here, and it won't cause bad things to happen.
   if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
     ((VarTree*)listView())->emitExpandUserItem(this,
-           QString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-           fullName().data()));
+           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           fullName().latin1()));
+
+  // Signature for a QT2.0.x QT2.1 QCString
+  if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0)
+    ((VarTree*)listView())->emitExpandUserItem(this,
+                                          fullName().latin1()+QCString(".shd.data"));
+  // Signature for a QT2.0.x QT2.1 QDir
+  if (strncmp(cache_, "dPath = {d = 0x", 15) == 0)
+    ((VarTree*)listView())->emitExpandUserItem(this,
+           QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           fullName().latin1()));
 }
 
 // **************************************************************************
@@ -675,7 +685,7 @@ void FrameRoot::setLocals(char* locals)
 
 // **************************************************************************
 
-void FrameRoot::setParams(const QString& params)
+void FrameRoot::setParams(const QCString& params)
 {
   setActive();
   params_ = params;

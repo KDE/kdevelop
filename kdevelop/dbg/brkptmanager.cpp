@@ -18,7 +18,6 @@
 #include "brkptmanager.h"
 #include "breakpoint.h"
 
-#include <qlistbox.h>
 #include <qdict.h>
 #include <qheader.h>
 
@@ -38,6 +37,9 @@ BreakpointManager::BreakpointManager(QWidget* parent, const char* name, WFlags f
   activeFlag_(0)
 {
   setCaption("Breakpoint manager");
+  connect(this, SIGNAL(rightButtonClicked(QListBoxItem *, const QPoint & )),
+                SLOT(slotRightButtonClicked(QListBoxItem *, const QPoint & )));
+  connect (this, SIGNAL(clicked(QListBoxItem *)), SLOT(slotClicked(QListBoxItem *)));
 }
 
 /***************************************************************************/
@@ -175,21 +177,21 @@ void BreakpointManager::modifyBreakpoint(int index)
 
 /***************************************************************************/
 
-void BreakpointManager::mouseReleaseEvent(QMouseEvent* e)
+void BreakpointManager::slotRightButtonClicked(QListBoxItem *item, const QPoint &)
 {
-  QListBox::mouseReleaseEvent(e);
-
-  if ((e->state() == RightButton) && (findItem(e->pos().y()) != -1))
-    if (currentItem() >= 0)
-      breakpointPopup((Breakpoint*)item(currentItem()));
+  if (item >= 0)
+    breakpointPopup((Breakpoint*)item);
 }
 
 /***************************************************************************/
 
-void BreakpointManager::mouseDoubleClickEvent(QMouseEvent *e)
+void BreakpointManager::slotClicked(QListBoxItem *item)
 {
-  QListBox::mouseDoubleClickEvent(e);
-  slotGotoBreakpointSource();
+  if (item)
+  {
+    setCurrentItem(item);
+    slotGotoBreakpointSource();
+  }
 }
 
 /***************************************************************************/
@@ -345,7 +347,7 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
   activeFlag_++;
 
   // Try for a little flicker free
-  setAutoUpdate(false);
+//  setAutoUpdate(false);
 
   // skip the first line which is the header
   while (str && (str = strchr(str, '\n')))
@@ -414,7 +416,7 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
     }
   }
 
-  setAutoUpdate(true);
+//  setAutoUpdate(true);
   repaint();
 }
 
