@@ -396,8 +396,6 @@ public:
   void slotTCurrentTab(int item);
 	
   ///////////// -- the methods for the treeview selection
-  /** click action on classviewer CV */
-  void slotClassTreeSelected();
   /** click action on LFV */
   void slotLogFileTreeSelected(QString file);
   /** click action on RFV */
@@ -459,16 +457,27 @@ public:
   /** Added attribute in the classview. */
   void slotCVAddAttribute( CParsedAttribute *aAttr );
   /** The user wants to view the declaration of a method. */
-  void slotCVViewDeclaration();
+  void slotCVViewDeclaration( const char *className, 
+                              const char *declName, 
+                              THType type  );
   /** The user wants to view the definition of a method/attr... */
-  void slotCVViewDefinition();
+  void slotCVViewDefinition( const char *className, 
+                             const char *declName, 
+                             THType type  );
+
+  void CVClassSelected( const char *aName );
+  void CVMethodSelected( const char *aName );
 
   // return the position of the classdeclaration begin
-  void CVGotoDefinition(QListViewItem *item);
-  void CVGotoDeclaration(QListViewItem *item);
+  void CVGotoDefinition( const char *className, 
+                         const char *declName, 
+                         THType type );
+  void CVGotoDeclaration( const char *className, 
+                          const char *declName, 
+                          THType type );
 
-  
   bool  isFileInBuffer(QString abs_filename);
+
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
@@ -485,14 +494,13 @@ public:
 protected:
   virtual void closeEvent(QCloseEvent* e);
   //  void mousePressEvent(QMouseEvent* event);
-  
 
 private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
-	QPopupMenu* bookmarks_menu;
+  QPopupMenu* bookmarks_menu;
   QPopupMenu* project_menu;
   QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
@@ -512,9 +520,9 @@ private:
   QPopupMenu* kdlg_options_menu;
   QPopupMenu* kdlg_help_menu;
 
-	QStrList tools_exe;
-	QStrList tools_entry;
-	QStrList tools_argument;
+  QStrList tools_exe;
+  QStrList tools_entry;
+  QStrList tools_argument;
   	
   KMenuBar* kdev_menubar;
   KMenuBar* kdlg_menubar;
@@ -524,11 +532,17 @@ private:
 
   KNewPanner* view;
   KNewPanner* top_panner;
-  KNewPanner* kdlg_top_panner;  // devides the top_panner for edit and properties widget of the dialogeditor
+  /** Divides the top_panner for edit and properties widget 
+   * of the dialogeditor */
+  KNewPanner* kdlg_top_panner;  
   
-  KDlgEdit* kdlgedit;          // main class for the dialogeditor- handles menu/toolbar etc. events specified for the dialogeditor
+  /** main class for the dialogeditor- 
+   *  handles menu/toolbar etc. events specified for the dialogeditor. */
+  KDlgEdit* kdlgedit;
   
-  bool beep; // set this to true, if you want a beep after a process,slotProcessExited()
+  /** If this to true, the user wants a beep after a 
+   *  process,slotProcessExited() */
+  bool beep; 
   
   
   KIconLoader icon_loader;
@@ -587,10 +601,14 @@ private:
   bool bViewStatusbar;
 
   bool  prev_was_search_result;
+
   // Autosaving elements
-  QTimer* saveTimer; // the timer
-  bool bAutosave;    // enable=true
-  int saveTimeout;   // timeout time
+  /** The autosave timer. */
+  QTimer* saveTimer;
+  /** Tells if autosaving is enabled. */
+  bool bAutosave;
+  /** The autosave interval. */
+  int saveTimeout;
 
   bool bAutoswitch;
   bool bDefaultCV;
