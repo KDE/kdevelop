@@ -137,7 +137,7 @@
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
 
-#define ID_TOOLS_KDLGEDIT           10
+#define ID_TOOLS_KDLGEDIT           15000
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries 
 
@@ -193,6 +193,7 @@
 #define ID_KDLG_FILE_OPEN           20020
 #define ID_KDLG_FILE_CLOSE          20030
 #define ID_KDLG_FILE_SAVE           20040
+#define ID_KDLG_FILE_SAVE_AS           20050
 ///////////////////////////////////////////////////////////////////
 // KDlg-Edit-menu-entries
 #define ID_KDLG_EDIT_UNDO           20110
@@ -202,8 +203,6 @@
 #define ID_KDLG_EDIT_COPY           20140
 #define ID_KDLG_EDIT_PASTE          20150
 #define ID_KDLG_EDIT_DELETE         20155
-
-#define ID_KDLG_EDIT_PROPERTIES     20160
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-View-menu-entries

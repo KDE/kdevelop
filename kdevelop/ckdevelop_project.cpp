@@ -29,6 +29,10 @@
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
 #include "caddnewtranslationdlg.h"
+#include "cerrormessageparser.h"
+#include "./kdlgedit/kdlgeditwidget.h"
+#include "./kdlgedit/kdlgpropwidget.h"
+#include "./kdlgedit/kdlgdialogs.h"
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -199,6 +203,11 @@ bool CKDevelop::slotProjectClose(){
   if(mod){
     // not cancel pressed - project closed
     // clear all widgets
+
+    if(!bKDevelop){
+      //      switchToKDevelop();
+    }
+    //    disableCommand(ID_TOOLS_KDLGEDIT);
     header_widget->clear();
     cpp_widget->clear();
     class_tree->clear();
@@ -208,6 +217,15 @@ bool CKDevelop::slotProjectClose(){
     messages_widget->clear();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
+    kdlg_dialogs_view->clear();
+    
+    kdlg_edit_widget->hide();
+    kdlg_prop_widget->hide();
+    kdlg_tabctl->setTabEnabled("widgets_view",false);
+    kdlg_tabctl->setTabEnabled("dialogs_view",false);
+    kdlg_tabctl->setTabEnabled("items_view",false);
+    kdlg_tabctl->setCurrentTab(1); // dialogs
+    
     
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
@@ -246,6 +264,7 @@ bool CKDevelop::slotProjectClose(){
     setToolMenuProcess(false);  
     disableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_AUTOCONF);
+    disableCommand(ID_KDLG_BUILD_GENERATE);
     
     // prj menu
     disableCommand(ID_PROJECT_CLOSE);
@@ -256,7 +275,7 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-    
+
   }
   slotStatusMsg(IDS_DEFAULT);
   if(mod){
@@ -438,6 +457,7 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 void CKDevelop::slotProjectOpen(){
   QString old_project = "";
 
+  
   if(project){
     old_project = prj->getProjectFile();
     if(!slotProjectClose()){
@@ -450,7 +470,7 @@ void CKDevelop::slotProjectOpen(){
   str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
   if (str.isEmpty() && old_project != ""){
     readProjectFile(old_project);
-		slotViewRefresh();
+    slotViewRefresh();
     return; //cancel
   }
  
@@ -533,7 +553,7 @@ void CKDevelop::slotProjectNewAppl(){
     config->sync();
     readProjectFile(file);
     if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") {
-      slotBuildMessages();
+      slotProjectMessages();
     }
   }
   else if (old_project != ""){ // if cancel load the old project again
@@ -575,13 +595,143 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
     nfile.open(IO_WriteOnly);
     nfile.close();
     addFileToProject(file, PO); 
-    slotBuildMessages();
+    slotProjectMessages();
   }
 }
 void CKDevelop::slotAddFileToProject(QString abs_filename){
   ProjectFileType type = CProject::getType( abs_filename );
 
   addFileToProject(abs_filename, type, true);
+}
+
+void CKDevelop::slotProjectMessages(){
+  if(!CToolClass::searchProgram("xgettext")){
+    return;
+  }
+  error_parser->toogleOff();
+  showOutputView(true);
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Creating pot-file in /po..."));
+  messages_widget->clear();
+  error_parser->toogleOff();
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  shell_process.clearArguments();
+  //shellprocess << make_cmd;
+  shell_process << make_cmd + " messages &&  cd ../po && make merge";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  beep = true;
+}
+
+void CKDevelop::slotProjectAPI(){
+  if(!CToolClass::searchProgram("kdoc")){
+    return;
+  }
+  showOutputView(true);
+
+  setToolMenuProcess(false);
+  error_parser->toogleOff();
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Creating project API-Documentation..."));
+  messages_widget->clear();
+  config->setGroup("Doc_Location");
+  QString doc_kde=config->readEntry("doc_kde");
+  QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
+  QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
+
+  if(doc_kde.isEmpty() || !QFileInfo(kde_ref_file).exists()){
+    KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
+                                                "Please update your documentation with the options\n"
+                                                "given in the KDevelop Setup dialog, Documentation tab.\n\n"
+                                                "Your API-documentation will be created without\n"
+                                                "cross-references to the KDE and Qt libraries."),KMsgBox::EXCLAMATION);
+
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << "-n"+prj->getProjectName();
+    shell_process << "*.h";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+  else if(!QFileInfo(qt_ref_file).exists()){
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
+    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << "-n"+prj->getProjectName();
+    shell_process << "*.h";
+    shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+  else{
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
+    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << "-n"+prj->getProjectName();
+    shell_process << "*.h";
+    shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+}
+
+void CKDevelop::slotProjectManual(){
+  bool ksgml=true;
+  if(!CToolClass::searchProgram("sgml2html")){
+    return;
+  }
+  if(!CToolClass::searchInstProgram("ksgml2html")){
+    ksgml=false;
+    KMsgBox::message(this,i18n("Warning..."),i18n("The program ksgml2html wasn't found, therefore your documentation\nwon't have the usual KDE logo and look.\n\nThe manual will be build using sgml2html."));
+  }
+  
+  showOutputView(true);
+  error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+  setToolMenuProcess(false);
+  //  slotFileSaveAll();
+  slotStatusMsg(i18n("Creating project Manual..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
+  if(ksgml==false){
+    process.clearArguments();
+    process << "sgml2html";
+    process << prj->getSGMLFile();
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
+  else{
+    process.clearArguments();
+    process << "ksgml2html";
+    process << prj->getSGMLFile();
+    process << "en";
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
+}
+
+void CKDevelop::slotProjectMakeDistSourceTgz(){
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
+  showOutputView(true);
+  error_parser->toogleOff();
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Running make dist..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getProjectDir());
+  shell_process.clearArguments();
+  shell_process << make_cmd << " dist";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  beep = true;
 }
 
 /*********************************************************************
@@ -719,27 +869,34 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_CLOSE);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
 
-  if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+  if(prj->isKDEProject() || prj->isQtProject()){
+    enableCommand(ID_TOOLS_KDLGEDIT);
+  }  
+
+  if (prj->isKDEProject()){
+   enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  }
+  else{
     disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   }
-  else{
-    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-  }
-  if(prj->getProjectType() != "normal_empty"){
-    enableCommand(ID_PROJECT_FILE_PROPERTIES);
-    enableCommand(ID_PROJECT_OPTIONS);
-  }
-  else{
+  if(prj->isCustomProject()){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
   }
+  else{
+    enableCommand(ID_PROJECT_FILE_PROPERTIES);
+    enableCommand(ID_PROJECT_OPTIONS);
+  }
   
-
+  if(prj->isKDEProject() || prj->isQtProject()){
+    kdlg_tabctl->setTabEnabled("dialogs_view",true);
+    kdlg_tabctl->setCurrentTab(1); // dialogs
+  
+  }
+  
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_NEW_CLASS);
-  
   enableCommand(ID_PROJECT_WORKSPACES);
-
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 	
@@ -785,7 +942,6 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-
 
 
 

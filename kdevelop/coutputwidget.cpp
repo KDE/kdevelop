@@ -2,7 +2,6 @@
                       coutputwidget.cpp - the output window in KDevelop
                              -------------------                                         
 
-    version              :                                   
     begin                : 5 Aug 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     

@@ -223,7 +223,6 @@ void CKDevelop::switchToKDevelop(){
   kdlg_caption = caption();
   setCaption(kdev_caption);
 
-
   bKDevelop=true;
   this->setUpdatesEnabled(false);
 
@@ -337,7 +336,10 @@ void CKDevelop::switchToKDlgEdit(){
     showOutputView();
   else
     showOutputView(false);
-
+  
+  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
+    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
+  }
   this->setUpdatesEnabled(true);
   this->repaint();
 }
@@ -348,7 +350,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
     if(s_tab_view->getCurrentTab() == CPP){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
-    enableCommand(ID_KDLG_BUILD_GENERATE);
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
     enableCommand(ID_BUILD_DEBUG);
@@ -374,7 +375,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
   else {
     
     // set the popupmenus enable or disable
-    disableCommand(ID_KDLG_BUILD_GENERATE);
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);

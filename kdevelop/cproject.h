@@ -282,8 +282,13 @@ public: // Public queries
   /** Get all po files for this makefile */
   void getPOFiles(QString rel_name_makefileam,QStrList& po_files);
 
+  bool isKDEProject();
+  bool isQtProject();
+  bool isCustomProject();
   /** check if a subdir is in the project (registered). */
   bool isDirInProject(QString rel_name);
+
+  
 
   /** Method that returns the filetype for a given file by looking at 
    * it's extension.

@@ -145,6 +145,7 @@ public:
   KDlgDialogs* kdlg_get_dialogs_view() { return kdlg_dialogs_view; }
   KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
   KStatusBar*  kdlg_get_statusbar() { return kdlg_statusbar; }
+  CTabCtl* kdlg_get_tabctl() { return  kdlg_tabctl;}
   CProject* getProject() {return prj;}
 
 
@@ -261,7 +262,10 @@ public:
   void slotProjectOptions();
   /** selects the project workspace */
   void slotProjectWorkspaces(int);
-  
+  void slotProjectMessages();
+  void slotProjectAPI();
+  void slotProjectManual();
+  void slotProjectMakeDistSourceTgz();
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////
@@ -278,10 +282,7 @@ public:
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
-  void slotBuildMessages();
-  void slotBuildAPI();
-  void slotBuildManual();
-  void slotBuildMakeDistSourceTgz();
+  
   
   ////////////////////////
   // TOOLS-Menu entries

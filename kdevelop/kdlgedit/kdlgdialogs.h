@@ -38,12 +38,16 @@ public:
   /** Get the current popupmenu. */
   virtual KPopupMenu *getCurrentPopup();
   
- signals:
- void kdlgdialogsSelected(QString dialog_file);
+  signals:
+  void kdlgdialogsSelected(QString dialog_file);
+  void newDialog();
 public  slots:
- void slotSelectionChanged( QListViewItem* item);
+void slotSelectionChanged( QListViewItem* item);
+  void slotNewDialog();
 protected:
 CProject*  project;
+  KPopupMenu dialog_pop;
+  QString current_dialog;
 };
 
 #endif

@@ -28,6 +28,7 @@ KDlgDialogs::KDlgDialogs(QWidget *parent, const char *name ) : CTreeView(parent,
   connect(this,
           SIGNAL(selectionChanged(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem *)));
+  initPopups();
 }
 KDlgDialogs::~KDlgDialogs(){
 }
@@ -38,7 +39,7 @@ KDlgDialogs::~KDlgDialogs(){
  ********************************************************************/ 
 void KDlgDialogs::refresh(CProject* prj){
   QListViewItem *top_item;
-  QListViewItem *current_item;
+  QListViewItem *current_item =0;
 
   project = prj;
 
@@ -62,6 +63,8 @@ void KDlgDialogs::refresh(CProject* prj){
 }
 /** Initialize popupmenus. */
 void KDlgDialogs::initPopups(){
+  dialog_pop.setTitle("Dialog");
+  dialog_pop.insertItem(i18n("New Dialog..."),this,SLOT(slotNewDialog()));
 }
   /** Get the current popupmenu. */
 KPopupMenu* KDlgDialogs::getCurrentPopup(){
@@ -76,12 +79,12 @@ KPopupMenu* KDlgDialogs::getCurrentPopup(){
       //      popup = &group_pop;
       break;
     case THC_FILE:
-      //      popup = &file_pop;
+      popup = &dialog_pop;
       break;
     default:
       break;
     }
-
+  
   return popup;
 }
 /*********************************************************************
@@ -91,7 +94,14 @@ KPopupMenu* KDlgDialogs::getCurrentPopup(){
  ********************************************************************/ 
 void KDlgDialogs::slotSelectionChanged( QListViewItem* item)
 {
-  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE )
-    emit kdlgdialogsSelected(project->getProjectDir() + project->getSubDir() + 
-			    QString(item->text(0)).lower() + ".kdevdlg");
+  
+  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ){
+      current_dialog = (project->getProjectDir() + project->getSubDir() 
+			+ QString(item->text(0)).lower() + ".kdevdlg" );
+      emit kdlgdialogsSelected(current_dialog);
+  }
+}
+
+void KDlgDialogs::slotNewDialog(){
+  emit newDialog();
 }

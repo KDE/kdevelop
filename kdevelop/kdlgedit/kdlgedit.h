@@ -42,9 +42,10 @@ void slotFileNew();
   /** an open file dialog with the *.kdevdlg selector */
   void slotFileOpen();
   /** closes the current dialog and dialogfile- including created sourcefiles */
-  void slotFileClose();
+  bool slotFileClose();
   /** save the dialog file -- request if files should be generated and saved */
   void slotFileSave();
+  void slotFileSaveAs();
   
   /** undo the last editing step --this maybe changing properties or movements */
   void slotEditUndo();
@@ -90,6 +91,8 @@ protected:
   QStrList variables;
   /** filled at the generation process, needed for the header*/
   QStrList includes;
+  /** the includes for the data source file, f.e. QPixmap*/
+  QStrList local_includes; 
 };
 
 #endif

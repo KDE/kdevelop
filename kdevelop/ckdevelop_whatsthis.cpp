@@ -37,10 +37,10 @@ void CKDevelop::initWhatsThis(){
 																													"Shows the Open file dialog to "
 																													"select a file to be opened"));
 	
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_OPEN),i18n("Open file\n\n"
+	/*	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_OPEN),i18n("Open file\n\n"
 																													"Shows the Open file dialog to "
 																													"select a *.kdevdlg file to be opened"));
-	
+	*/
 	whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "
 																													"editing view"));
@@ -275,7 +275,7 @@ void CKDevelop::initWhatsThis(){
 
 	// this doesn't work because of the ClickFocus policy of the stdin/stdout widget. NoFocus functions but
 	// disables the functionality of the widget...:-(                                  	
-	/*	whats_this->add(stdin_stdout_widget, i18n("StdIn/StdOut\n\n"
+	/*	whats_this->add(stdin_stdout_widget, i18n("StdOut\n\n"
 		"The Standard Input/Standard Output window is a replacement "
 		"for terminal-based application communication. Running "
 		"terminal applications are using this instead of a terminal window."));

@@ -77,6 +77,7 @@ CKDevelop::CKDevelop(){
   else{
     switchToKDlgEdit();
   }
+
   // initialize properties_view_pos
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     properties_view_pos=kdlg_top_panner->separatorPos();
@@ -581,15 +582,15 @@ void CKDevelop::initMenu(){
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
   project_menu->insertSeparator();
   
-  	project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_PROJECT_MESSAGES);
+  	project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
-			 SLOT(slotBuildAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
+			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
   project_menu->insertItem(i18n("Make &User-Manual"), this, 
-			 SLOT(slotBuildManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
+			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
   QPopupMenu*  p2 = new QPopupMenu;
-  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotBuildMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
+  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
   project_menu->insertItem(i18n("Make D&istribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   project_menu->insertSeparator();
   
@@ -1103,8 +1104,8 @@ if(bKDevelop){
     accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
 
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );
-    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KAccel::Open );
-    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_CLOSE, KAccel::Close );
+    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KAccel::Open );
+    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_CLOSE, KAccel::Close );
     accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KAccel::Save );
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KAccel::Quit );
 

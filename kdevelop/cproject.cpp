@@ -1073,3 +1073,15 @@ QString CProject::readGroupEntry( const char *group, const char *tag )
   config.setGroup( group );
   return config.readEntry( tag );
 }
+bool CProject::isKDEProject(){
+  if (getProjectType() == "normal_kde" || getProjectType() == "mini_kde") return true;
+  return false;
+}
+bool CProject::isQtProject(){
+  if (getProjectType() == "normal_qt") return true;
+  return false;
+}
+bool CProject::isCustomProject(){
+  if(getProjectType() == "normal_empty") return true;
+  return false;
+}

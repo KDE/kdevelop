@@ -54,9 +54,17 @@ void CKDevelop::initKDlg(){
 
   kdlg_top_panner->activate(kdlg_edit_widget,kdlg_prop_widget);// activate the top_panner
 
+  kdlg_edit_widget->hide();
+  kdlg_prop_widget->hide();
+  kdlg_tabctl->setTabEnabled("widgets_view",false);
+  kdlg_tabctl->setTabEnabled("items_view",false);
+  kdlg_tabctl->setTabEnabled("dialogs_view",false);
+  kdlg_tabctl->setCurrentTab(1);// dialogs
+  
   initKDlgKeyAccel();
-  initKDlgMenuBar();
   initKDlgToolBar();
+  initKDlgMenuBar();
+  
   initKDlgStatusBar();
 }
 
@@ -69,16 +77,14 @@ void CKDevelop::initKDlgMenuBar(){
   // File-menu entries
   kdlg_file_menu= new QPopupMenu;
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
-  kdlg_file_menu->insertItem(pix,i18n("&New Dialog"), kdlgedit, SLOT(slotFileNew()), 0,ID_KDLG_FILE_NEW);
+  kdlg_file_menu->insertItem(pix,i18n("&New Dialog..."), kdlgedit, SLOT(slotFileNew()), 0,ID_KDLG_FILE_NEW);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   kdlg_file_menu->insertItem(pix, i18n("&Open..."), kdlgedit, SLOT(slotFileOpen()), 0, ID_KDLG_FILE_OPEN);
   kdlg_file_menu->insertItem(i18n("&Close"), kdlgedit, SLOT(slotFileClose()),0, ID_KDLG_FILE_CLOSE);
   kdlg_file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   kdlg_file_menu->insertItem(pix, i18n("&Save"), kdlgedit, SLOT(slotFileSave()),0, ID_KDLG_FILE_SAVE);
-  kdlg_file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
-  kdlg_file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+  kdlg_file_menu->insertItem(i18n("Save &As..."), kdlgedit, SLOT(slotFileSaveAs()),0 ,ID_KDLG_FILE_SAVE_AS);
   kdlg_file_menu->insertSeparator();
   kdlg_file_menu->insertItem(i18n("&Quit"), this, SLOT(slotFileQuit()), 0, ID_FILE_QUIT);
 
@@ -101,8 +107,6 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_edit_menu->insertItem(pix, i18n("&Copy"), kdlgedit, SLOT(slotEditCopy()), 0, ID_KDLG_EDIT_COPY);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
   kdlg_edit_menu->insertItem(pix, i18n("&Paste"), kdlgedit, SLOT(slotEditPaste()), 0, ID_KDLG_EDIT_PASTE);
-  kdlg_edit_menu->insertSeparator();
-  kdlg_edit_menu->insertItem(i18n("&Properties"), kdlgedit, SLOT(slotEditProperties()), 0, ID_KDLG_EDIT_PROPERTIES);
   kdlg_menubar->insertItem(i18n("&Edit"), kdlg_edit_menu);
 
   ///////////////////////////////////////////////////////////////////
@@ -163,11 +167,17 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
   kdlg_project_menu->insertSeparator();	
-  kdlg_project_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_PROJECT_MESSAGES);
+  kdlg_project_menu->insertItem(i18n("Make &messages"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   kdlg_project_menu->insertItem(i18n("Make &API-Doc"), this,
-				SLOT(slotBuildAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
+				SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
   kdlg_project_menu->insertItem(i18n("Make &User-Manual"), this,
-				SLOT(slotBuildManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
+				SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
+  // submenu for making dists
+
+  QPopupMenu*  p2 = new QPopupMenu;
+  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
+  kdlg_project_menu->insertItem(i18n("Make D&istribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
+  
   kdlg_project_menu->insertSeparator();	
   kdlg_project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  kdlg_project_menu->insertSeparator();		
@@ -277,6 +287,12 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_FILE_NEW);
   disableCommand(ID_FILE_PRINT);
 
+  disableCommand(ID_KDLG_FILE_NEW);
+  disableCommand(ID_KDLG_FILE_OPEN);
+  disableCommand(ID_KDLG_FILE_CLOSE);
+  disableCommand(ID_KDLG_FILE_SAVE);
+  disableCommand(ID_KDLG_FILE_SAVE_AS);
+ 
   disableCommand(ID_VIEW_NEXT_ERROR);
   disableCommand(ID_VIEW_PREVIOUS_ERROR);
 
@@ -315,6 +331,8 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_CONFIGURE);
   
   disableCommand(ID_BUILD_COMPILE_FILE);
+ 
+  disableCommand(ID_KDLG_BUILD_GENERATE);
   
 
   disableCommand(ID_HELP_BACK);

@@ -186,7 +186,6 @@ void CKAppWizard::initPages(){
   page1->title = (i18n("Generate settings"));
   addPage(page1);  
   
-<<<<<<< ckappwizard.cpp
   directoryload = new QPushButton( widget1, "directoryload" );
   directoryload->setGeometry( 440, 50, 30, 30 );
   directoryload->setMinimumSize( 0, 0 );
@@ -1170,7 +1169,7 @@ void CKAppWizard::slotApplicationClicked() {
       okButton->setEnabled(true);
     }
     apphelp->setText (i18n("With this program-typ you can\n"
-			   "generate an empty project with nothing.\n"
+			   "generate an empty project.\n"
 			   "Here you can use your own makefiles and\n"
 			   "kdevelop would not edit your makefiles."));
   }
