@@ -52,7 +52,8 @@ protected:
     /*$PROTECTED_FUNCTIONS$*/
     DocumentationPlugin *activePlugin();
     KListView *activeView();
-    
+    void updateConfigForHTMLParts();
+        
 protected slots:
     /*$PROTECTED_SLOTS$*/
 

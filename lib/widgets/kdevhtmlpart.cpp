@@ -10,6 +10,8 @@
 #include <kiconloader.h>
 #include <kmainwindow.h>
 #include <khtmlview.h>
+#include <khtml_settings.h>
+#include <kconfig.h>
 
 #include <kdevmainwindow.h>
 //#include <partcontroller.h>
@@ -76,6 +78,16 @@ KDevHTMLPart::KDevHTMLPart()
   m_Current = m_history.end();
 //END documentation history stuff  
   
+  //settings:
+  KConfig *appConfig = KGlobal::config();
+  appConfig->setGroup("KHTMLPart");
+  setStandardFont(appConfig->readEntry("StandardFont",
+      settings()->stdFontName()));
+  setFixedFont(appConfig->readEntry("FixedFont",
+      settings()->fixedFontName()));
+  setZoomFactor(appConfig->readEntry("Zoom", "100").toInt());
+  
+  setPluginsEnabled(false);
 }
 
 void KDevHTMLPart::popup( const QString & url, const QPoint & p )

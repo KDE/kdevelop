@@ -253,7 +253,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="0">
+                    <spacer row="3" column="0">
                         <property name="name">
                             <cstring>spacer4</cstring>
                         </property>
@@ -266,7 +266,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>130</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -331,13 +331,179 @@
                             <string>Use KDevelop &amp;Assistant to browse documentation</string>
                         </property>
                     </widget>
+                    <widget class="QGroupBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>groupBox1</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Fonts and Sizes</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Sta&amp;ndard font:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>standardFont_combo</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KFontCombo" row="0" column="1">
+                                <property name="name">
+                                    <cstring>standardFont_combo</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KFontCombo" row="1" column="1">
+                                <property name="name">
+                                    <cstring>fixedFont_combo</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Fi&amp;xed font:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>fixedFont_combo</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textLabel2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Zoom factor:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>zoom_combo</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="2" column="1">
+                                <item>
+                                    <property name="text">
+                                        <string>20</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>40</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>60</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>80</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>90</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>95</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>100</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>105</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>110</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>120</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>140</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>160</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>180</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>200</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>250</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>300</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>zoom_combo</cstring>
+                                </property>
+                                <property name="currentItem">
+                                    <number>6</number>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
                 </grid>
             </widget>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>addCollectionButton</sender>
@@ -390,13 +556,21 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kfontcombo.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kfontcombo.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

@@ -33,8 +33,12 @@
 #include <kstddirs.h>
 #include <kapplication.h>
 #include <kurlrequester.h>
+#include <kfontcombo.h>
+#include <khtml_part.h>
+#include <khtml_settings.h>
 
 #include "kdevdocumentationplugin.h"
+#include "kdevpartcontroller.h"
 
 #include "docconfiglistview.h"
 #include "documentation_part.h"
@@ -99,12 +103,20 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     info_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoInfo));
     
     useAssistant_box->setChecked(m_part->isAssistantUsed());
-	
-	// Having app-specific settings isn't pretty, but this setting is nonsensical in kdevassistant
-	if ( kapp->instanceName().find("kdevassistant") != -1 )
-	{
-		useAssistant_box->hide();
-	}
+    
+    // Having app-specific settings isn't pretty, but this setting is nonsensical in kdevassistant
+    if ( kapp->instanceName().find("kdevassistant") != -1 )
+        useAssistant_box->hide();
+    
+    //font sizes and zoom levels
+    KHTMLPart htmlpart;
+    KConfig *appConfig = KGlobal::config();
+    appConfig->setGroup("KHTMLPart");
+    standardFont_combo->setCurrentText(appConfig->readEntry("StandardFont",
+        htmlpart.settings()->stdFontName()));
+    fixedFont_combo->setCurrentText(appConfig->readEntry("FixedFont",
+        htmlpart.settings()->fixedFontName()));
+    zoom_combo->setCurrentText(appConfig->readEntry("Zoom", "100"));
 }
 
 DocGlobalConfigWidget::~DocGlobalConfigWidget()
@@ -204,7 +216,16 @@ void DocGlobalConfigWidget::accept()
     m_part->setContextFeature(DocumentationPart::GotoInfo, info_box->isChecked());
     
     m_part->setAssistantUsed(useAssistant_box->isChecked());
+
+    //font sizes and zoom levels
+    KConfig *appConfig = KGlobal::config();
+    appConfig->setGroup("KHTMLPart");
+    appConfig->writeEntry("StandardFont", standardFont_combo->currentText());
+    appConfig->writeEntry("FixedFont", fixedFont_combo->currentText());    
+    appConfig->writeEntry("Zoom", zoom_combo->currentText());
     
+    appConfig->sync();
+    updateConfigForHTMLParts();        
     config->sync();
     
     //refill the index
@@ -213,6 +234,29 @@ void DocGlobalConfigWidget::accept()
     {
         kdDebug() << "m_part->m_hasIndex" << endl;
         m_part->m_widget->index()->refill();
+    }
+}
+
+void DocGlobalConfigWidget::updateConfigForHTMLParts()
+{
+    KURL::List urls = m_part->partController()->openURLs();
+    for (KURL::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        KHTMLPart *htmlPart = dynamic_cast<KHTMLPart*>(m_part->partController()->partForURL(*it));
+        if (htmlPart)
+        {
+            KConfig *appConfig = KGlobal::config();
+            appConfig->setGroup("KHTMLPart");
+            htmlPart->setStandardFont(appConfig->readEntry("StandardFont"));
+            htmlPart->setFixedFont(appConfig->readEntry("FixedFont"));
+            //hack to force reloading the page
+            if (htmlPart->zoomFactor() == appConfig->readEntry("Zoom").toInt())
+            {
+                htmlPart->setZoomFactor(htmlPart->zoomFactor()-1);
+                htmlPart->setZoomFactor(htmlPart->zoomFactor()+1);
+            }
+            htmlPart->setZoomFactor(appConfig->readEntry("Zoom").toInt());
+        }
     }
 }
 
