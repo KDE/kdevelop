@@ -87,4 +87,3 @@ void FilePropsPage::slotClassnameChanged(const QString& text){
 }
 
 #include "filepropspage.moc"
-#include "filepropspagebase.moc"

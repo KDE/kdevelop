@@ -149,4 +149,3 @@ void AppWizard::generateFile(QString abs_oldpos,QString abs_newpos){
 }
 
 #include "appwizard.moc"
-#include "appwizardbase.moc"
