@@ -1083,6 +1083,14 @@ void CKDevelop::readOptions(){
   else{
     enableStatusBar();
   }
+	// MDI view taskbar
+  bool mdiViewTaskbar=config->readBoolEntry("show_mdiviewtaskbar",true);
+  if(mdiViewTaskbar){
+    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
+  }
+  else{
+    mdi_main_frame->hideViewTaskBar();
+  }
 	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
@@ -1225,6 +1233,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
+  config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
 #warning FIXME MDI stuff
   //  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());

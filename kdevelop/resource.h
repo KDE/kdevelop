@@ -81,6 +81,7 @@
 #define ID_VIEW_TOOLBAR             12040
 #define ID_VIEW_BROWSER_TOOLBAR     12050
 #define ID_VIEW_STATUSBAR           12060
+#define ID_VIEW_MDIVIEWTASKBAR      12065
 
 #define ID_VIEW_REFRESH             12070
 #define ID_VIEW_PREVIEW             12072

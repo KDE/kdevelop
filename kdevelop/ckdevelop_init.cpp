@@ -328,6 +328,9 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Statusbar"), "Statusbar", 0);
   accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR);
   
+  accel->insertItem( i18n("MDI-View Taskbar"), "MDI-View Taskbar", 0);
+  accel->connectItem( "MDI-View Taskbar", this, SLOT(slotViewTMDIViewTaskbar()), true, ID_VIEW_MDIVIEWTASKBAR);
+  
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
   
   accel->insertItem( i18n("Refresh"), "Refresh", 0);
@@ -562,6 +565,8 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
   view_menu->insertItem(i18n("Status&bar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
+  view_menu->insertItem(i18n("&MDI-View Taskbar"),this,
+			   SLOT(slotViewTMDIViewTaskbar()),0,ID_VIEW_MDIVIEWTASKBAR);
   view_menu->insertSeparator();
   view_menu->insertItem(BarIcon("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
