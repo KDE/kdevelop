@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Tools
+Name=KDevTools
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevtools
+X-KDevelop-Scope=Global 

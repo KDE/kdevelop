@@ -1,0 +1,163 @@
+#include <qapplication.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qlistbox.h>
+#include <qlabel.h>
+
+
+#include <klocale.h>
+#include <kdialog.h>
+#include <kdesktopfile.h>
+#include <kiconloader.h>
+#include <kapp.h>
+
+
+#include "toolsconfig.h"
+#include "treeview.h"
+
+
+ToolsConfig::ToolsConfig(QWidget *parent, const char *name)
+    : QWidget(parent, name), _tree(0)
+{
+  _entries.setAutoDelete(true);
+}
+
+
+void ToolsConfig::showEvent(QShowEvent *e)
+{
+  QWidget::showEvent(e);
+
+  if (!_tree)
+    {
+      QApplication::setOverrideCursor(Qt::waitCursor);
+
+      QHBoxLayout *hbox = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+
+      QVBoxLayout *vbox = new QVBoxLayout(hbox);
+      _tree = new TreeView(this);
+      QLabel *l = new QLabel(_tree, i18n("&Applications"), this);
+      l->show();
+      _tree->show();
+
+      vbox->addWidget(l);
+      vbox->addWidget(_tree);
+
+      vbox = new QVBoxLayout(hbox);
+
+      _toList = new QPushButton(">>", this);
+      _toList->show();
+      vbox->addWidget(_toList);
+
+      connect(_toList, SIGNAL(clicked()), this, SLOT(toList()));
+
+      _toTree = new QPushButton("<<", this);
+      _toTree->show();
+      vbox->addWidget(_toTree);
+
+      connect(_toTree, SIGNAL(clicked()), this, SLOT(toTree()));
+
+      vbox = new QVBoxLayout(hbox);
+      _list = new QListBox(this);
+      l = new QLabel(_list, i18n("&Tools menu"), this);
+      l->show();
+      _list->show();
+      vbox->addWidget(l);
+      vbox->addWidget(_list);
+
+      QApplication::restoreOverrideCursor();
+    }
+
+  fill();
+  checkButtons();
+
+  connect(_tree, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(checkButtons()));
+  connect(_list, SIGNAL(currentChanged(QListBoxItem*)), this, SLOT(checkButtons()));
+}
+
+
+void ToolsConfig::checkButtons()
+{
+  _toList->setEnabled(_tree->selectedItem() && !_tree->selectedItem()->firstChild());
+  _toTree->setEnabled(_list->currentItem() >= 0 || _list->currentItem() < _list->count());
+}
+
+
+void ToolsConfig::fill()
+{
+  _entries.clear();
+
+  KConfig *config = kapp->config();
+  config->setGroup("Tools");
+
+  QStringList list = config->readListEntry("Tools");
+
+  for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+	add(*it);
+}
+
+
+void ToolsConfig::add(const QString &desktopFile)
+{
+  KDesktopFile df(desktopFile, true);
+  if (df.readName().isEmpty())
+    return;
+  
+  Entry *entry = new Entry;
+  
+  if (!df.readIcon().isEmpty())
+    entry->icon = BarIcon(df.readIcon());
+  entry->name = df.readName();
+  entry->desktopFile = desktopFile;
+
+  _entries.append(entry);
+
+  updateList();
+  
+  checkButtons();
+}
+
+
+void ToolsConfig::toList()
+{
+  TreeItem *item = (TreeItem*)_tree->selectedItem();
+  if (item)
+    add(item->file());
+}
+
+
+void ToolsConfig::toTree()
+{
+  _entries.remove(_list->currentItem()); 
+  updateList();
+  checkButtons();
+}
+
+
+void ToolsConfig::accept()
+{
+  KConfig *config = kapp->config();
+  config->setGroup("Tools");
+
+  QStringList l;
+  QListIterator<Entry> it(_entries);
+    for ( ; it.current(); ++it)
+	  l.append(it.current()->desktopFile);
+
+  config->writeEntry("Tools", l);
+  config->sync();
+}
+
+
+void ToolsConfig::updateList()
+{
+  _list->setUpdatesEnabled(false);
+
+  _list->clear();
+
+  QListIterator<Entry> it(_entries);
+  for ( ; it.current(); ++it)
+	_list->insertItem(it.current()->icon, it.current()->name);
+  
+  _list->setUpdatesEnabled(true);
+  _list->repaint();
+}

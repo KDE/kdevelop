@@ -6,5 +6,5 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview \
 	  debugger javadebugger konsole astyle partselector manager \
 	  cppsupport javasupport pythonsupport perlsupport \
 	  autoproject scriptproject \
-	  kwrite-part simple-editor
+	  kwrite-part simple-editor tools
 	  $(PYTHON_SUBDIR)
