@@ -571,8 +571,10 @@ void QextMdiMainFrm::switchToToplevelMode()
       m_oldMainFrmHeight = height();
       if( m_pWinList->count())
          setFixedHeight( height() - m_pMdi->height());
-      else  // consider space for the taskbar
+      else { // consider space for the taskbar
+         QApplication::sendPostedEvents();
          setFixedHeight( height() - m_pMdi->height() + 27);
+      }
    }
    m_bTopLevelMode = true;
    qDebug("ToplevelMode on");
