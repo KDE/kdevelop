@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY $APPNAMELC$ "<application>$APPNAME$ $VERSION$</application>">
-  <!ENTITY kappname "&$APPNAMELC$;"><!-- Do *not* replace kappname-->
+  <!ENTITY %{APPNAMELC} "<application>%{APPNAME} %{VERSION}</application>">
+  <!ENTITY kappname "&%{APPNAMELC};"><!-- Do *not* replace kappname-->
   <!ENTITY package "kde-module"><!-- kdebase, kdeadmin, etc -->
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
@@ -44,15 +44,15 @@ thanks ;-).
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-<title>The &$APPNAMELC$; Handbook</title>
+<title>The &%{APPNAMELC}; Handbook</title>
 
 <authorgroup>
 <author>
 <firstname></firstname>
 <othername></othername>
-<surname>$AUTHOR$</surname>
+<surname>%{AUTHOR}</surname>
 <affiliation>
-<address><email>$EMAIL$</email></address>
+<address><email>%{EMAIL}</email></address>
 </affiliation>
 </author>
 </authorgroup>
@@ -61,8 +61,8 @@ as Authors, publish date, the abstract, and Keywords -->
 
 <copyright>
 <year>1999</year>
-<year>$YEAR$</year>
-<holder>$AUTHOR$</holder>
+<year>%{YEAR}</year>
+<holder>%{AUTHOR}</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
 <!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
@@ -77,13 +77,13 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 Do NOT change these in the translation. -->
 
 <date>2001-10-18</date>
-<releaseinfo>$VERSION$</releaseinfo>
+<releaseinfo>%{VERSION}</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
 <abstract>
 <para>
-&$APPNAMELC$; is an application specially designed to do nothing you would
+&%{APPNAMELC}; is an application specially designed to do nothing you would
 ever want.
 </para>
 </abstract>
@@ -94,7 +94,7 @@ Please at least include KDE, the KDE package it is in, the name
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>$APPNAME$</keyword>
+<keyword>%{APPNAME}</keyword>
 <keyword>nothing</keyword>
 <keyword>nothing else</keyword>
 </keywordset>
@@ -119,13 +119,13 @@ problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
 <para>
-&$APPNAMELC$; is a program that lets you do absolutely nothing. Please report
+&%{APPNAMELC}; is a program that lets you do absolutely nothing. Please report
 any problems or feature requests to the &kde; mailing lists.
 </para>
 </chapter>
 
-<chapter id="using-$APPNAMELC$">
-<title>Using &$APPNAMELC$;</title>
+<chapter id="using-%{APPNAMELC}">
+<title>Using &%{APPNAMELC};</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -137,7 +137,7 @@ your application. -->
 patent issues. -->
 
 <screenshot>
-<screeninfo>Here's a screenshot of &$APPNAMELC$;</screeninfo>
+<screeninfo>Here's a screenshot of &%{APPNAMELC};</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="screenshot.png" format="PNG"/>
@@ -153,8 +153,8 @@ patent issues. -->
 </para>
 
 
-<sect1 id="$APPNAMELC$-features">
-<title>More &$APPNAMELC$; features</title>
+<sect1 id="%{APPNAMELC}-features">
+<title>More &%{APPNAMELC}; features</title>
 
 <para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
@@ -169,7 +169,7 @@ The Squiggle Tool <guiicon><inlinemediaobject>
 	    <phrase>Squiggle</phrase>
 	  </textobject>
 </inlinemediaobject></guiicon> is used to draw squiggly lines all over
-the &$APPNAMELC$; main window. It's not a bug, it's a feature!
+the &%{APPNAMELC}; main window. It's not a bug, it's a feature!
 </para>
 
 </sect1>
@@ -184,8 +184,8 @@ Also include any keys that have a special function but have no equivalent in the
 menus or toolbars. This may not be necessary for small apps or apps with no tool
 or menu bars. -->
 
-<sect1 id="$APPNAMELC$-mainwindow">
-<title>The main &$APPNAMELC$; window</title>
+<sect1 id="%{APPNAMELC}-mainwindow">
+<title>The main &%{APPNAMELC}; window</title>
 
 <sect2>
 <title>The File Menu</title>
@@ -219,7 +219,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &$APPNAMELC$;</para></listitem>
+<listitem><para><action>Quits</action> &%{APPNAMELC};</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -230,7 +230,7 @@ or menu bars. -->
 <title>The <guimenu>Help</guimenu> Menu</title>
 
 <!-- Assuming you have a standard help menu (help, what's this, about -->
-<!-- &$APPNAMELC$;, about KDE) then the documentation is already written. -->
+<!-- &%{APPNAMELC};, about KDE) then the documentation is already written. -->
 <!-- The following entity is valid anywhere that a variablelist is -->
 <!-- valid.  -->
 
@@ -242,14 +242,14 @@ or menu bars. -->
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to &$APPNAMELC$;</title>
+<title>Developer's Guide to &%{APPNAMELC};</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming &$APPNAMELC$; plugins is a joy to behold. Just read through the next
+Programming &%{APPNAMELC}; plugins is a joy to behold. Just read through the next
 66 pages of API's to learn how!
 </para>
 
@@ -404,7 +404,7 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
-<para>My Mouse doesn't work. How do I quit &$APPNAMELC$;?</para>
+<para>My Mouse doesn't work. How do I quit &%{APPNAMELC};?</para>
 </question>
 <answer>
 <para>You silly goose! Check out the <link linkend="commands">Commands
@@ -433,10 +433,10 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-&$APPNAMELC$;
+&%{APPNAMELC};
 </para>
 <para>
-Program copyright $YEAR$ $AUTHOR$ <email>$EMAIL$</email>
+Program copyright %{YEAR} %{AUTHOR} <email>%{EMAIL}</email>
 </para>
 <para>
 Contributors:
@@ -449,7 +449,7 @@ Contributors:
 </para>
 
 <para>
-Documentation copyright $YEAR$ $AUTHOR$ <email>$EMAIL$</email>
+Documentation copyright %{YEAR} %{AUTHOR} <email>%{EMAIL}</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -472,8 +472,8 @@ Documentation copyright $YEAR$ $AUTHOR$ <email>$EMAIL$</email>
 <appendix id="installation">
 <title>Installation</title>
 
-<sect1 id="getting-$APPNAMELC$">
-<title>How to obtain &$APPNAMELC$;</title>
+<sect1 id="getting-%{APPNAMELC}">
+<title>How to obtain &%{APPNAMELC};</title>
 
 <!-- This first entity contains boiler plate for applications that are
 part of KDE CVS.  You should remove it if you are releasing your
@@ -498,22 +498,22 @@ information here.
 -->
 
 <para>
-In order to successfully use &$APPNAMELC$;, you need &kde; 1.1. Foobar.lib is
-required in order to support the advanced &$APPNAMELC$; features. &$APPNAMELC$; uses
+In order to successfully use &%{APPNAMELC};, you need &kde; 1.1. Foobar.lib is
+required in order to support the advanced &%{APPNAMELC}; features. &%{APPNAMELC}; uses
 about 5 megs of memory to run, but this may vary depending on your
 platform and configuration.
 </para>
 
 <para>
-All required libraries as well as &$APPNAMELC$; itself can be found
-on <ulink url="ftp://ftp.$APPNAMELC$.org">The &$APPNAMELC$; home page</ulink>.
+All required libraries as well as &%{APPNAMELC}; itself can be found
+on <ulink url="ftp://ftp.%{APPNAMELC}.org">The &%{APPNAMELC}; home page</ulink>.
 </para>
 
 <!-- For a list of updates, you may refer to the application web site
 or the ChangeLog file, or ... -->
 <para>
 You can find a list of changes at <ulink
-url="http://apps.kde.org/$APPNAMELC$">http://apps.kde.org/$APPNAMELC$</ulink>.
+url="http://apps.kde.org/%{APPNAMELC}">http://apps.kde.org/%{APPNAMELC}</ulink>.
 </para>
 </sect1>
 
@@ -532,7 +532,7 @@ url="http://apps.kde.org/$APPNAMELC$">http://apps.kde.org/$APPNAMELC$</ulink>.
 <title>Configuration</title>
 
 <para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or &$APPNAMELC$; won't work !</para>
+dicer-toaster daemon first, or &%{APPNAMELC}; won't work !</para>
 
 </sect1>
 
