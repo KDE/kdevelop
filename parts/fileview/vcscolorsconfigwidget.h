@@ -28,6 +28,8 @@ struct VCSColors
     QColor updated;
     QColor sticky;
     QColor conflict;
+    QColor needsPatch;
+    QColor needsCheckout;
     QColor unknown;
     QColor defaultColor;
 };

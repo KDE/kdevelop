@@ -95,36 +95,28 @@ void FileViewPart::projectConfigWidget( KDialogBase *dlg )
 
 void FileViewPart::loadSettings()
 {
-    KConfig *cfg = instance()->config();
-    QColor added = QColor( "#CCFF99" ),
+    const QColor added = QColor( "#CCFF99" ),
         updated = QColor( "#FFFFCC" ),
         modified = QColor( "#CCCCFF" ),
         conflict = QColor( "#FF6666" ),
         sticky = QColor( "#FFCCCC" ),
+        needsPatch = QColor( "#FFCCFF" ),
+        needsCheckout = QColor( "#FFCCFF" ),
         unknown = QColor( white ),
         defaultColor = QColor( white );
 
-/*
-    if (cfg->hasGroup( "VCS Colors" ))
-    {
-*/
-        KConfigGroupSaver gs( cfg, "VCS Colors" );
-        vcsColors.added = cfg->readColorEntry( "FileAddedColor", &added );
-        vcsColors.updated = cfg->readColorEntry( "FileUpdatedColor", &updated );
-        vcsColors.sticky = cfg->readColorEntry( "FileStickyColor", &sticky );
-        vcsColors.modified = cfg->readColorEntry( "FileModifiedColor", &modified );
-        vcsColors.conflict = cfg->readColorEntry( "FileConflictColor", &conflict );
-        vcsColors.unknown = cfg->readColorEntry( "FileUnknownColor", &unknown );
-        vcsColors.defaultColor = cfg->readColorEntry( "DefaultColor", &defaultColor );
-/*
-    }
-    else
-    {
-        vcsColors.added = vcsColors.updated = vcsColors.sticky = vcsColors.sticky =
-            vcsColors.modified = vcsColors.conflict = vcsColors.unknown =
-            vcsColors.defaultColor = defaultColor;
-    }
-*/
+    KConfig *cfg = instance()->config();
+
+    KConfigGroupSaver gs( cfg, "VCS Colors" );
+    vcsColors.added = cfg->readColorEntry( "FileAddedColor", &added );
+    vcsColors.updated = cfg->readColorEntry( "FileUpdatedColor", &updated );
+    vcsColors.sticky = cfg->readColorEntry( "FileStickyColor", &sticky );
+    vcsColors.modified = cfg->readColorEntry( "FileModifiedColor", &modified );
+    vcsColors.conflict = cfg->readColorEntry( "FileConflictColor", &conflict );
+    vcsColors.needsPatch = cfg->readColorEntry( "FileNeedsPatchColor", &needsPatch );
+    vcsColors.needsCheckout = cfg->readColorEntry( "FileNeedsCheckoutColor", &needsCheckout );
+    vcsColors.unknown = cfg->readColorEntry( "FileUnknownColor", &unknown );
+    vcsColors.defaultColor = cfg->readColorEntry( "DefaultColor", &defaultColor );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,6 +131,8 @@ void FileViewPart::storeSettings()
     cfg->writeEntry( "FileStickyColor", vcsColors.sticky );
     cfg->writeEntry( "FileModifiedColor", vcsColors.modified );
     cfg->writeEntry( "FileConflictColor", vcsColors.conflict );
+    cfg->writeEntry( "FileNeedsPatchColor", vcsColors.needsPatch );
+    cfg->writeEntry( "FileNeedsCheckoutColor", vcsColors.needsCheckout );
     cfg->writeEntry( "FileUnknownColor", vcsColors.unknown );
     cfg->writeEntry( "DefaultColor", vcsColors.defaultColor );
 }

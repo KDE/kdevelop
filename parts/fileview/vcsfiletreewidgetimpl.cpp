@@ -100,6 +100,12 @@ void VCSFileTreeViewItem::setStatus( const VCSFileInfo::FileState status )
         case VCSFileInfo::Sticky:
             m_statusColor = &FileViewPart::vcsColors.sticky;
             break;
+        case VCSFileInfo::NeedsCheckout:
+            m_statusColor = &FileViewPart::vcsColors.needsCheckout;
+            break;
+        case VCSFileInfo::NeedsPatch:
+            m_statusColor = &FileViewPart::vcsColors.needsPatch;
+            break;
         case VCSFileInfo::Unknown:
             m_statusColor = &FileViewPart::vcsColors.unknown;
             break;
@@ -265,7 +271,7 @@ void VCSFileTreeWidgetImpl::slotToggleShowVCSFields( bool checked )
     else
     {
         setColumnWidth( 3 ,0 ); // Hide columns
-        setColumnWidth( 2 ,0 ); 
+        setColumnWidth( 2 ,0 );
         setColumnWidth( 1, 0 );
         setColumnWidth( 0, contentsWidth() ); // Make the "Filename" column to occupy all the row
         header()->hide();

@@ -38,6 +38,8 @@ VCSColors &VCSColors::operator=( const VCSColors &others )
     conflict = others.conflict;
     modified = others.modified;
     sticky = others.sticky;
+    needsPatch = others.needsPatch;
+    needsCheckout = others.needsCheckout;
     unknown = others.unknown;
     updated = others.updated;
     defaultColor = others.defaultColor;
@@ -69,6 +71,8 @@ void VCSColorsConfigWidget::getColors( VCSColors &vcsColors ) const
     vcsColors.conflict = fileConflictColorCombo->color();
     vcsColors.modified = fileModifiedColorCombo->color();
     vcsColors.sticky = fileStickyColorCombo->color();
+    vcsColors.needsPatch = fileNeedsPatchColorCombo->color();
+    vcsColors.needsCheckout = fileNeedsCheckoutColorCombo->color();
     vcsColors.unknown = fileUnknownColorCombo->color();
     vcsColors.updated = fileUpdatedColorCombo->color();
     vcsColors.defaultColor = defaultColorCombo->color();
@@ -82,6 +86,8 @@ void VCSColorsConfigWidget::setColors( const VCSColors &vcsColors )
     fileConflictColorCombo->setColor( vcsColors.conflict );
     fileModifiedColorCombo->setColor( vcsColors.modified );
     fileStickyColorCombo->setColor( vcsColors.sticky );
+    fileNeedsPatchColorCombo->setColor( vcsColors.needsPatch );
+    fileNeedsCheckoutColorCombo->setColor( vcsColors.needsCheckout );
     fileUnknownColorCombo->setColor( vcsColors.unknown );
     fileUpdatedColorCombo->setColor( vcsColors.updated );
     defaultColorCombo->setColor( vcsColors.defaultColor );
