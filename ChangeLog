@@ -6,6 +6,7 @@
       If you grep, build, debug and valgrind at the same time, you can terminate
       one part only. Single-clicking the stop-button will terminate all active
       jobs as it did before.
+    * Switch syntax highlighting on/off on the fly in diff-part's raw output
 
 2003-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Replace part refinements and bugfixes
