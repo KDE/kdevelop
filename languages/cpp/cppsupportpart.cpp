@@ -519,7 +519,8 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                     "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 
                const FileDom file = codeModel()->fileByName( candidate1 );
-               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
+//               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
+               const FunctionDefinitionList functionDefinitionList = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
                for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
 	           QString text = (*it)->scope().join( "::");
 	           if( !text.isEmpty() )
