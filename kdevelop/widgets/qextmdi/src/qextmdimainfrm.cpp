@@ -663,6 +663,8 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
       m_pCurrentWindow = pWnd;
    }
    else {
+      // XXX TDODO: IMHO it would be sufficient not to call activate() later.
+      //            So we wouldn't need the pWnd->m_bInterruptActivation flag at all.
       pWnd->m_bInterruptActivation = TRUE;
    }
 

@@ -391,8 +391,6 @@ void QextMdiChildView::activate()
    // check if someone wants that we interrupt the method (because it's probably unnecessary)
    if(m_bInterruptActivation) {
       m_bInterruptActivation = FALSE;
-      s_bActivateIsPending = FALSE;
-      return;   // nothing to do, we are the active childview, already
    }
    else {
       if(!m_bFocusInEventIsPending) {
@@ -473,15 +471,13 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    else if(e->type() == QEvent::FocusIn) {
-      if(isAttached()) {
-         if(obj->inherits("QWidget")) {
-            QObjectList *list = queryList( "QWidget" );
-            if(list->find(obj) != -1) {
-               m_focusedChildWidget = (QWidget*)obj;
-            }
+      if(obj->inherits("QWidget")) {
+         QObjectList *list = queryList( "QWidget" );
+         if(list->find(obj) != -1) {
+            m_focusedChildWidget = (QWidget*)obj;
          }
       }
-      else {   // is toplevel
+      if (!isAttached()) {   // is toplevel, for attached views activation is done by frame event filter
          static bool m_bActivationIsPending = FALSE;
          if(!m_bActivationIsPending) {
             m_bActivationIsPending = TRUE;
