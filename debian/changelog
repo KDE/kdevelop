@@ -1,3 +1,17 @@
+gideon (1:2.999-0cvs20030502) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added automake1.7 to the build depends and gideon depends fields
+  * Fixed up the update_doc_index.sh script
+
+ -- Norman Jordan <njordan@debian.org>  Fri,  2 May 2003 09:28:26 -0700
+
+gideon (1:2.999-0cvs20030430) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Wed, 30 Apr 2003 22:37:07 -0700
+
 gideon (1:2.999-0cvs20030429) unstable; urgency=low
 
   * Created a new package gideon-plugins

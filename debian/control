@@ -2,12 +2,12 @@ Source: gideon
 Section: kde
 Priority: optional
 Maintainer: Norman Jordan <njordan@debian.org>
-Build-Depends: debhelper (>> 4.0.0), kdelibs4-dev, gettext, autoconf, automake1.6, kdelibs4-doc | kdelibs-doc, qt-doc | qt3-doc, flex, libdb4.1-dev | libdb4.0-dev | libdb3-dev
+Build-Depends: debhelper (>> 4.0.0), kdelibs4-dev, gettext, autoconf, automake1.6 | automake1.7, kdelibs4-doc | kdelibs-doc, qt-doc | qt3-doc, flex, libdb4.1-dev | libdb4.0-dev | libdb3-dev
 Standards-Version: 3.5.6.0
 
 Package: gideon
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake | automake1.6, kdebase-bin, gideon-data, gideon-plugins
+Depends: ${shlibs:Depends}, autoconf, automake | automake1.6 | automake1.7, kdebase-bin, gideon-data, gideon-plugins
 Recommends: make, gideon-doc
 Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs-dev, kdebase, kdelibs4-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt3-tools, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual
 Description: An IDE for Unix/X11 - development version

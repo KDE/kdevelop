@@ -1,0 +1,3 @@
+debian/tmp/usr/share/services
+debian/tmp/usr/share/servicetypes
+debian/tmp/usr/lib/kde3/*

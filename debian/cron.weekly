@@ -1,0 +1,4 @@
+#!/bin/sh
+# Used to update the documentation index for KDevelop
+
+test -f "/usr/lib/gideon/update_doc_index.sh" && "/usr/lib/gideon/update_doc_index.sh" > /dev/null 2>&1
