@@ -106,7 +106,7 @@
                 <string>Program</string>
             </property>
             <grid>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="1">
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>mainprogram_label</cstring>
                     </property>
@@ -117,7 +117,7 @@
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="1" rowspan="1" colspan="3">
+                <widget class="QLabel" row="0" column="2" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>mainProgram_relativeness_label</cstring>
                     </property>
