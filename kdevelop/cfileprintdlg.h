@@ -28,6 +28,7 @@
 #include <kfiledialog.h>
 #include <kdatepik.h>
 #include <ksimpleconfig.h>
+#include "cdatepikerdlg.h"
 
 /** the KDE-Fileprintdialog
   *@author Stefan Heidrich
@@ -47,7 +48,8 @@ public slots:
  void slotSelfChoosenFileAddClicked();
  void slotSelfChoosenFileCleanClicked();
  void slotSelfChoosenFileDeleteClicked();
- void slotDateDlgClicked();  
+ void slotBeginDateDlgClicked();  
+ void slotEndDateDlgClicked();
  void slotOkClicked();
 
 protected:
@@ -84,9 +86,7 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_142;
     QButtonGroup* qtarch_ButtonGroup_141;
     QButtonGroup* qtarch_ButtonGroup_140;
-    KDatePicker* datepik;
     KSimpleConfig *settings;
-    QWidget *widget,*parent2;
 };
 #endif // CFILEPRINTDLG
 

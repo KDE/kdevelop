@@ -473,9 +473,11 @@ void CFilePrintDlg::init() {
   connect (selfChoosenFilesAddButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileAddClicked()));
   connect (selfChoosenFilesDeleteButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileDeleteClicked()));
   connect(qtarch_ButtonGroup_139,SIGNAL(clicked(int)),SLOT(slotSelfChoosenFilesActive(int)));
-  connect(beginDateButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
-  connect(beginTimeButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
+  connect(beginDateButton,SIGNAL(clicked()),SLOT(slotBeginDateDlgClicked()));
+  connect(beginTimeButton,SIGNAL(clicked()),SLOT(slotEndDateDlgClicked()));
   
+  beginDateButton->setText((QDate::currentDate()).toString());
+  beginTimeButton->setText((QDate::currentDate()).toString());
   mainwidget->show();
 }
 
@@ -483,14 +485,22 @@ void CFilePrintDlg::slotFileCancelClicked() {
   reject();
 }
 
-void CFilePrintDlg::slotDateDlgClicked() {
-  widget = new QWidget();
-  widget->setGeometry(0,0,400,300);
-  datepik = new KDatePicker(this);
-  datepik->resize(300,200);
-  widget->show();
+void CFilePrintDlg::slotBeginDateDlgClicked() {
+  QString text="";
+  CDatepikerDlg datepik;
+  datepik.exec();
+  datepik.getDateString(text);
+  beginDateButton->setText(text);
 }
 
+
+void CFilePrintDlg::slotEndDateDlgClicked() {
+  QString text="";
+  CDatepikerDlg datepik;
+  datepik.exec();
+  datepik.getDateString(text);
+  beginTimeButton->setText(text);
+}
 void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
   if (number==5) {
     selfChoosenFilesPushButton->setEnabled(true);

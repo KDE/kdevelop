@@ -80,7 +80,7 @@ void CKAppWizard::initPages(){
   bgroup = new QButtonGroup(i18n("Application"),widget0);
   bgroup->setGeometry(20,150,180,140);
   kna = new QRadioButton (i18n("KDE-Application"),widget0);
-  kna->setGeometry(30,170,145,30);
+  kna->setGeometry(30,168,145,30);
 //  QToolTip::add(kna,i18n("use for a KDE-Application with toolbar ect."));
   KQuickHelp::add(kna,
 	i18n("Select this to create a complete framework for\n"
@@ -93,7 +93,7 @@ void CKAppWizard::initPages(){
  
   connect(kna,SIGNAL(clicked()),SLOT(slotAppClicked()));
   kma = new QRadioButton (i18n("KDE-Mini-Application"),widget0);
-  kma->setGeometry(30,210,150,30);
+  kma->setGeometry(30,196,150,30);
 //  QToolTip::add(kma,i18n("use for a minimal KDE-Application"));
   KQuickHelp::add(kma,
 	i18n("Select this to create a mini-Application.\n"
@@ -102,8 +102,14 @@ void CKAppWizard::initPages(){
 
   connect(kma,SIGNAL(clicked()),SLOT(slotMiniClicked()));
 
+  qta = new QRadioButton (i18n("Qt-Application"),widget0);
+  qta->setGeometry(30,224,150,30);
+  KQuickHelp::add(qta,
+	i18n("Select this to create a Qt-Application."));
+
+  connect(qta,SIGNAL(clicked()),SLOT(slotQtClicked()));
   ta = new QRadioButton (i18n("C/C++-Application"),widget0);
-  ta->setGeometry(30,250,150,30);
+  ta->setGeometry(30,251,150,30);
   //  QToolTip::add(ta,i18n("use for a minimal C++-Application"));
   KQuickHelp::add(ta,
 	i18n("Select this to create a C/C++-Terminal-Application."));
@@ -111,6 +117,7 @@ void CKAppWizard::initPages(){
   connect(ta,SIGNAL(clicked()),SLOT(slotCPPClicked()));
   bgroup->insert( kna );
   bgroup->insert( kma );
+  bgroup->insert( qta );
   bgroup->insert ( ta );
     
   /************************************************************/
@@ -408,6 +415,9 @@ void CKAppWizard::slotOkClicked() {
   else 
     if (kma->isChecked())
       entries << "mini\n";
+    else if (qta->isChecked()) {
+      entries << "qt\n";
+    }
     else 
       entries << "terminal\n";
   entries << "NAME\n";
@@ -481,6 +491,13 @@ void CKAppWizard::slotOkClicked() {
   } 
   else if (kna->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
+    *p << "cp";
+    *p << copysrc;
+    *p << copydes;
+    p->start(KProcess::Block,KProcess::AllOutput);
+  }
+  else if (qta->isChecked()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
     *p << "cp";
     *p << copysrc;
     *p << copydes;
@@ -611,6 +628,8 @@ void CKAppWizard::slotAppClicked() {
   progicon->setChecked(true);
   miniicon->setEnabled(true);
   miniicon->setChecked(true);
+  miniload->setEnabled(true);
+  iconload->setEnabled(true);
 }
 
 // connection of kma
@@ -625,6 +644,24 @@ void CKAppWizard::slotMiniClicked() {
   progicon->setChecked(true);
   miniicon->setEnabled(true);
   miniicon->setChecked(true);
+  miniload->setEnabled(true);
+  iconload->setEnabled(true);
+}
+
+// connection of qta
+void CKAppWizard::slotQtClicked() {
+  pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
+  widget1b->setBackgroundPixmap(pm);
+  apidoc->setEnabled(true);
+  apidoc->setChecked(true);
+  datalink->setEnabled(true);
+  datalink->setChecked(true);
+  progicon->setEnabled(true);
+  progicon->setChecked(true);
+  miniicon->setEnabled(true);
+  miniicon->setChecked(true);
+  miniload->setEnabled(true);
+  iconload->setEnabled(true);
 }
 
 // connection of ta
@@ -639,6 +676,8 @@ void CKAppWizard::slotCPPClicked() {
   progicon->setChecked(false);
   miniicon->setEnabled(false);
   miniicon->setChecked(false);
+  miniload->setEnabled(false);
+  iconload->setEnabled(false);
 }
 
 // connection of this
@@ -657,6 +696,8 @@ void CKAppWizard::slotDefaultClicked() {
   progicon->setChecked(true);
   gnufiles->setChecked(true);
   userdoc->setChecked(true);
+  miniload->setEnabled(true);
+  iconload->setEnabled(true);
   directoryline->setText(QDir::homeDirPath()+ QString("/"));
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
@@ -766,15 +807,18 @@ void CKAppWizard::slotProcessExited() {
   QString prj_str = directory + "/" + namelow + ".kdevprj";
   project = new CProject(prj_str);
   project->readProject();
-  project->setKDevPrjVersion("0.2");
+  project->setKDevPrjVersion("0.3");
   if (ta->isChecked()) {
     project->setProjectType("normal_cpp");
   }
   else if (kma->isChecked()) {
     project->setProjectType("mini_kde");  
   }
-  else {
+  else if (kna->isChecked()) {
     project->setProjectType("normal_kde");
+  }
+  else {
+    project->setProjectType("normal_qt");
   }
   project->setProjectName (nameline->text());
   project->setSubDir (namelow + "/");
@@ -782,19 +826,22 @@ void CKAppWizard::slotProcessExited() {
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
   if (userdoc->isChecked()) {
-  project->setSGMLFile ("index.sgml");
+    project->setSGMLFile ("index.sgml");
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g -Wall");
-
+  
   if (kna->isChecked()) {
-  project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
+    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
   }
   else if (kma->isChecked()) {
-  project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
+    project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-
+  else if (qta->isChecked()) {
+    project->setLDADD (" -lqt -lXext -lX11");
+  }
+  
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
@@ -837,6 +884,16 @@ void CKAppWizard::slotProcessExited() {
   project->writeMakefileAmInfo (makeAmInfo);
   project->addMakefileAmToProject (makeAmInfo.rel_name);
   
+  if (!(ta->isChecked() || qta->isChecked())) {
+    makeAmInfo.rel_name = "po/Makefile.am";
+    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
+    makeAmInfo.type = "normal";
+    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
+    sub_dir_list.clear();
+    makeAmInfo.sub_dirs = sub_dir_list;
+    project->writeMakefileAmInfo (makeAmInfo);
+    project->addMakefileAmToProject (makeAmInfo.rel_name);
+  }
   TFileInfo fileInfo;
   if (gnufiles->isChecked()) {
   project->addFileToProject ("AUTHORS");
@@ -920,7 +977,7 @@ void CKAppWizard::slotProcessExited() {
   project->writeFileInfo (fileInfo);
   }
 
-  if (kna->isChecked()) {
+  if (kna->isChecked() || qta->isChecked()) {
   project->addFileToProject (namelow + "/" + namelow + "doc.cpp");
   fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
   fileInfo.type = "SOURCE";

@@ -4,6 +4,12 @@
 	* added a QProgressBarDialog to addExistingFiles
 	* fixed the projectversion-bug in the projectoptionsdlg
 
+1999-03-04 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* added the qt-application to the application-wizard
+	* changed the processes.pl
+	* implemented the datepikdlg-button
+	* make some changed in the normal.tar.gz and mini.tar.gz and qt.tar.gz
+	
 1999-03-04  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added waitCursor to the browser widget while loading an URL
   * extended kde-documentation update wether to cross-reference or not,

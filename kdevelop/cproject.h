@@ -67,7 +67,7 @@ struct TWorkspace {
   ** format of the general group:**
   * [General]
   * makefiles: all makefiles in the project
-  * project_type: at the moment "normal_cpp","mini_kde","normal_kde"
+  * project_type: at the moment "normal_cpp","mini_kde","normal_kde","normal_qt"
   * author: name of the author
   * sub_dir: name of main subdir, not "po"
   * project_name: it's clear

@@ -22,8 +22,7 @@ SUBDIRS = tools docs templates toolbar pics kwrite
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
-CXXFLAGS =  -Wall
-LDFLAGS =  
+
 # Which sources should be compiled for kdevelop.
 kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
@@ -35,8 +34,8 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 		   ctoolclass.cpp cdoctreepropdlg.cpp cprintdlg.cpp cfileprintdlg.cpp \
 		   cconfigenscriptdlg.cpp cconfiga2psdlg.cpp ckdevelop_whatsthis.cpp \
-		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp 	ktipofday.cpp \
-		   ckdevinstall.cpp
+		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp ktipofday.cpp \
+		   ckdevinstall.cpp cdatepikerdlg.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
@@ -54,7 +53,8 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
 		cprintdlg.h cfileprintdlg.h cconfigenscriptdlg.h cconfiga2psdlg.h debug.h \
-		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h
+		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
+		cdatepikerdlg.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 
