@@ -121,7 +121,7 @@
                 <string>Show Bookmarked Codeline in Bookmark Panel</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>This decides if the bookmark panel should show the content of the bookmarked line in addion to the line number.&lt;p&gt;This can be made optional depending on the start of the line, typically used for only showing lines containing a comment.</string>
+                <string>This decides if the bookmark panel should show the content of the bookmarked line in addition to the line number.&lt;p&gt;This can be made optional depending on the start of the line, typically used for only showing lines containing a comment.</string>
             </property>
             <vbox>
                 <property name="name">
