@@ -19,12 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
@@ -36,12 +31,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="KURLRequester" row="0" column="1">
                     <property name="name">
                         <cstring>executableEdit</cstring>
@@ -81,12 +71,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>memleakBox</cstring>
@@ -106,9 +91,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <spacer>
                             <property name="name">
                                 <cstring>spacer1</cstring>
@@ -155,9 +138,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <widget class="QLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>textLabel5</cstring>
@@ -209,10 +190,13 @@
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">dialog_widget.ui.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
 <slots>
     <slot access="private" specifier="non virtual">checkBoxToggled()</slot>
     <slot>init()</slot>
 </slots>
-<layoutdefaults spacing="6" margin="11"/>
 </UI>

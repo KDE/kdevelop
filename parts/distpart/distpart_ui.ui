@@ -40,12 +40,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout30</cstring>
@@ -57,9 +52,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>titleLabel</cstring>
@@ -158,12 +151,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QListBox" row="1" column="1" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>srcDistFileListBox</cstring>
@@ -188,9 +176,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QGroupBox">
                                 <property name="name">
                                     <cstring>sourceOptionsGroupBox</cstring>
@@ -202,12 +188,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <property name="margin">
-                                        <number>11</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QCheckBox">
                                         <property name="name">
                                             <cstring>bzipCheckBox</cstring>
@@ -227,9 +208,7 @@
                                             <property name="margin">
                                                 <number>0</number>
                                             </property>
-                                            <property name="spacing">
-                                                <number>6</number>
-                                            </property>
+
                                             <widget class="QLabel">
                                                 <property name="name">
                                                     <cstring>archiveNameLabel</cstring>
@@ -325,12 +304,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QLineEdit" row="5" column="1">
                         <property name="name">
                             <cstring>summaryLineEdit</cstring>
@@ -433,12 +407,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QCheckBox">
                                 <property name="name">
                                     <cstring>devPackageCheckBox</cstring>
@@ -626,12 +595,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>localOptionsGroupBox</cstring>
@@ -651,12 +615,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLayoutWidget">
                                 <property name="name">
                                     <cstring>Layout15</cstring>
@@ -668,9 +627,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>genHTMLCheckBox</cstring>
@@ -734,9 +691,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QPushButton">
                                         <property name="name">
                                             <cstring>genHTMLPushButton</cstring>
@@ -776,12 +731,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QListBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>uploadFileListBox</cstring>
@@ -812,9 +762,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QLabel">
                                         <property name="name">
                                             <cstring>fileSubmissionLabel</cstring>
@@ -885,9 +833,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>uploadCustomCheckBox</cstring>
@@ -971,9 +917,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>okayPushButton</cstring>
@@ -1063,5 +1007,9 @@
     <tabstop>cancelPushButton</tabstop>
     <tabstop>help_PushButton</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

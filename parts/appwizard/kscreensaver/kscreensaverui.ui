@@ -33,12 +33,6 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
             <widget class="QCheckBox" row="0" column="0">
                 <property name="name">
                     <cstring>CheckBox1</cstring>
@@ -55,12 +49,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QPushButton">
                         <property name="name">
                             <cstring>OkayPushButton</cstring>
@@ -82,5 +71,9 @@
         </grid>
     </widget>
 </widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

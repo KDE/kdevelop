@@ -28,12 +28,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
         <spacer row="1" column="0">
             <property name="name">
                 <cstring>Spacer1_2</cstring>
@@ -96,12 +90,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>radioApplication</cstring>
@@ -148,12 +137,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1_2</cstring>
@@ -350,12 +334,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QCheckBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>checkX11</cstring>
@@ -440,12 +419,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>radioDebugMode</cstring>
@@ -544,9 +518,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer2_3</cstring>
@@ -803,9 +775,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer5_2_2</cstring>
@@ -1112,12 +1082,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>GroupBox3</cstring>
@@ -1129,12 +1094,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1</cstring>
@@ -1161,12 +1121,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
                                     <cstring>TextLabel2_2_2</cstring>
@@ -1236,9 +1191,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer2_3_2</cstring>
@@ -1418,9 +1371,7 @@
                             <property name="margin">
                                 <number>11</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1_2_2</cstring>
@@ -1747,7 +1698,11 @@
     <slot>slotStaticLibClicked(int)</slot>
     <slot>slotInstallTargetClicked()</slot>
 </slots>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

@@ -19,12 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QLabel">
             <property name="name">
                 <cstring>cvs_label</cstring>
@@ -148,5 +143,9 @@
 <tabstops>
     <tabstop>cvs_edit</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

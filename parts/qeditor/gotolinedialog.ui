@@ -22,12 +22,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout3</cstring>
@@ -39,9 +34,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>TextLabel2</cstring>
@@ -93,9 +86,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -164,7 +155,11 @@
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">gotolinedialog.ui.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
 <forwards>
     <forward>class QEditor;</forward>
 </forwards>
@@ -177,5 +172,4 @@
     <slot>setEditor( QEditor * editor )</slot>
     <slot>accept()</slot>
 </slots>
-<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -19,12 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buildtool_group</cstring>
@@ -36,12 +31,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>make_button</cstring>
@@ -96,9 +86,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <spacer>
                     <property name="name">
                         <cstring>Spacer38</cstring>
@@ -141,5 +129,10 @@
 <slots>
     <slot access="protected">makeToggled(bool)</slot>
 </slots>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
 </UI>

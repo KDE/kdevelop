@@ -22,12 +22,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>GroupBox1</cstring>
@@ -39,12 +34,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>filename_edit</cstring>
@@ -82,9 +72,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <widget class="QPushButton">
                             <property name="name">
                                 <cstring>icon_button</cstring>
@@ -224,12 +212,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>Layout5</cstring>
@@ -241,9 +224,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <widget class="QListView">
                             <column>
                                 <property name="text">
@@ -282,9 +263,7 @@
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <property name="spacing">
-                                    <number>6</number>
-                                </property>
+
                                 <spacer>
                                     <property name="name">
                                         <cstring>Spacer4</cstring>
@@ -446,9 +425,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -559,5 +536,9 @@
     <slot access="protected">propertyExecuted(QListViewItem*)</slot>
     <slot access="protected">removeTypeClicked()</slot>
 </slots>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

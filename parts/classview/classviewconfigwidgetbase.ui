@@ -19,12 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QLabel" row="2" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>depthLabel</cstring>
@@ -44,12 +39,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>hierarchyButton</cstring>
@@ -82,9 +72,7 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <spacer>
                     <property name="name">
                         <cstring>Spacer1</cstring>
@@ -168,5 +156,10 @@
     <tabstop>flatButton</tabstop>
     <tabstop>depthBox</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
 </UI>

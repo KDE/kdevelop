@@ -19,12 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>checkWordCompletion</cstring>
@@ -182,5 +177,9 @@
     <slot access="protected">removeTemplate()</slot>
     <slot access="protected">selectionChanged()</slot>
 </slots>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

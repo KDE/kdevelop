@@ -27,12 +27,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
+
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>infoGroupBox</cstring>
@@ -56,12 +51,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
+
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>infoLayout1</cstring>
@@ -73,9 +63,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <widget class="QLabel">
                             <property name="name">
                                 <cstring>directoryStaticLabel</cstring>
@@ -129,9 +117,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
+
                         <widget class="KSqueezedTextLabel">
                             <property name="name">
                                 <cstring>directoryLabel</cstring>
@@ -178,9 +164,7 @@
                     <property name="margin">
                         <number>0</number>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>sourceGroupBox</cstring>
@@ -207,12 +191,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                         </vbox>
                     </widget>
                     <widget class="QLayoutWidget">
@@ -226,9 +205,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <spacer>
                                 <property name="name">
                                     <cstring>arrowSpacer1</cstring>
@@ -300,9 +277,7 @@
                     <property name="margin">
                         <number>0</number>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
+
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>Layout9</cstring>
@@ -314,9 +289,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <widget class="QLayoutWidget">
                                 <property name="name">
                                     <cstring>Layout8</cstring>
@@ -328,9 +301,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                     <widget class="QLabel">
                                         <property name="name">
                                             <cstring>destStaticLabel</cstring>
@@ -376,12 +347,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <property name="margin">
-                                        <number>11</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>6</number>
-                                    </property>
+
                                 </vbox>
                             </widget>
                         </vbox>
@@ -397,9 +363,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
+
                             <spacer>
                                 <property name="name">
                                     <cstring>arrowSpacer1_2</cstring>
@@ -532,8 +496,11 @@
 <includes>
     <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
     <include location="global" impldecl="in implementation">kprogress.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
 <includehints>
     <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>ksqueezedtextlabel.h</includehint>

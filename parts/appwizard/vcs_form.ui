@@ -19,12 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
         <widget class="QWidgetStack" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>stack</cstring>
@@ -80,6 +74,8 @@
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">qwidgetstack.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

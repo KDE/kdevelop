@@ -417,7 +417,10 @@
 <includes>
     <include location="local" impldecl="in implementation">addglobaldlg.h</include>
     <include location="local" impldecl="in implementation">fcconfigwidgetbase.ui.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <forwards>
     <forward>class AddGlobalDlg;</forward>
 </forwards>
@@ -438,5 +441,4 @@
     <slot>edittemplate_button_clicked()</slot>
     <slot>removetemplate_button_clicked()</slot>
 </slots>
-<layoutdefaults spacing="6" margin="11"/>
 </UI>
