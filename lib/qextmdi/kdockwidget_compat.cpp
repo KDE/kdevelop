@@ -2633,6 +2633,7 @@ void KDockManager::readConfig(QDomElement &base)
 
 void KDockManager::removeFromAutoCreateList(KDockWidget* pDockWidget)
 {
+    if (!autoCreateDock) return;
     autoCreateDock->setAutoDelete(false);
     autoCreateDock->removeRef(pDockWidget);
     autoCreateDock->setAutoDelete(true);
