@@ -123,6 +123,7 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
       QToolTip( viewport() ),
       activationId_(0),
       currentThread_(-1),
+	  selectedFrame_(0),
 	  watchRoot_(0),
 	  globalRoot_(0)
 {
@@ -165,6 +166,7 @@ void VariableTree::clear()
     }
 	
 	globalRoot_ = 0;
+	selectedFrame_ = 0;
 	return;
 }
 
@@ -235,7 +237,9 @@ void VariableTree::slotPressed(QListViewItem * item)
 			|| item->rtti() == RTTI_WATCH_ROOT
 			|| item->rtti() == RTTI_WATCH_VAR_ITEM )
 	{
-		setSelected(selectedFrame_, true);
+		if (selectedFrame_ != 0) {
+			setSelected(selectedFrame_, true);
+		}
 		return;
 	}
 	
