@@ -36,6 +36,7 @@ public:
 
 k_dcop:
     void queueCommand(const QString &dir, const QString &command);
+    bool isRunning();
 
 private:
     KDevMakeFrontend *m_makeFrontend;

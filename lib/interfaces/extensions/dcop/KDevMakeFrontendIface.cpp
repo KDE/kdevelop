@@ -1,3 +1,5 @@
+
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2001 Bernd Gehrmann <bernd@kdevelop.org>
@@ -36,4 +38,9 @@ KDevMakeFrontendIface::~KDevMakeFrontendIface()
 void KDevMakeFrontendIface::queueCommand(const QString &dir, const QString &command) 
 {
     m_makeFrontend->queueCommand(dir, command);
+}
+
+bool KDevMakeFrontendIface::isRunning( )
+{
+    return m_makeFrontend->isRunning();
 }

@@ -36,6 +36,9 @@ public:
     
     KDevCoreIface( KDevCore *core );
     ~KDevCoreIface();
+    
+k_dcop:
+    void openProject(const QString& projectFileName);
 
 private slots:
     void forwardProjectOpened();

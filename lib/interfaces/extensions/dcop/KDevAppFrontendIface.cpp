@@ -1,3 +1,5 @@
+
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2002 Roberto Raggi <roberto@kdevelop.org>
@@ -24,9 +26,8 @@
 
 
 KDevAppFrontendIface::KDevAppFrontendIface(KDevAppFrontend *appFrontend)
-    : DCOPObject("KDevAppFrontend")
+  : DCOPObject("KDevAppFrontend"), m_appFrontend(appFrontend)
 {
-    m_appFrontend = appFrontend;
 }
 
 
@@ -37,4 +38,29 @@ KDevAppFrontendIface::~KDevAppFrontendIface()
 void KDevAppFrontendIface::startAppCommand(const QString &directory, const QString &command, bool inTerminal)
 {
     m_appFrontend->startAppCommand(directory, command, inTerminal);
+}
+
+void KDevAppFrontendIface::stopApplication( )
+{
+    m_appFrontend->stopApplication();
+}
+
+bool KDevAppFrontendIface::isRunning( )
+{
+    return m_appFrontend->isRunning();
+}
+
+void KDevAppFrontendIface::clearView( )
+{
+    m_appFrontend->clearView();
+}
+
+void KDevAppFrontendIface::insertStderrLine( const QString & line )
+{
+    m_appFrontend->insertStderrLine(line);
+}
+
+void KDevAppFrontendIface::insertStdoutLine( const QString & line )
+{
+    m_appFrontend->insertStdoutLine(line);
 }

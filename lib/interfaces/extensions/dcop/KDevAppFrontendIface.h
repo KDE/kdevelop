@@ -37,7 +37,12 @@ public:
 
 k_dcop:
     void startAppCommand(const QString &directory, const QString &command, bool inTerminal);
-
+    void stopApplication();
+    bool isRunning();
+    void clearView();
+    void insertStderrLine(const QString &line);
+    void insertStdoutLine(const QString &line);
+    
 private:
     KDevAppFrontend *m_appFrontend;
 };

@@ -17,14 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kdevdesignerintegration.h"
+#include "kdevdesignerintegrationiface.h"
+
+class KDevDesignerIntegration::KDevDesignerIntegrationPrivate {
+public:
+  	KDevDesignerIntegrationIface *m_iface;
+};
 
 KDevDesignerIntegration::KDevDesignerIntegration(QObject *parent, const char *name)
  : QObject(parent, name)
 {
+  dptr = new KDevDesignerIntegrationPrivate();
+  
+  dptr->m_iface = new KDevDesignerIntegrationIface(this);
 }
 
 KDevDesignerIntegration::~KDevDesignerIntegration()
 {
+  delete dptr;
 }
 
 #include "kdevdesignerintegration.moc"

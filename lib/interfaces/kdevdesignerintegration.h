@@ -89,6 +89,9 @@ public slots:
     /**Opens the form source.
     @param formName The name of a GUI form.*/
     virtual void openSource(const QString &formName) = 0;
+  private:
+    class KDevDesignerIntegrationPrivate;
+    KDevDesignerIntegrationPrivate *dptr;
 };
 
 #endif

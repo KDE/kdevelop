@@ -21,7 +21,7 @@
 
 #include <dcopobject.h>
 #include <dcopref.h>
-
+#include <kurl.h>
 
 class KDevPartController;
 
@@ -44,6 +44,8 @@ k_dcop:
   void saveAllFiles();
   void revertAllFiles();
 
+  bool closeAllFiles();
+  uint documentState( KURL const & url );
 
 private slots:
 	

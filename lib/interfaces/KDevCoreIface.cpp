@@ -1,3 +1,5 @@
+
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Bernd Gehrmann <bernd@kdevelop.org>
    Copyright (C) 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
@@ -49,5 +51,9 @@ void KDevCoreIface::forwardProjectClosed()
     emitDCOPSignal("projectClosed()", QByteArray());
 }
 
+void KDevCoreIface::openProject( const QString & projectFileName )
+{
+    m_core->openProject(projectFileName);
+}
 
 #include "KDevCoreIface.moc"

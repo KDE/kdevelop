@@ -82,4 +82,14 @@ void KDevPartControllerIface::forwardClosedFile(const KURL &fileName)
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
+bool KDevPartControllerIface::closeAllFiles( )
+{
+  return m_controller->closeAllFiles();
+}
+
+uint KDevPartControllerIface::documentState( KURL const & url )
+{
+  return (uint) m_controller->documentState(url);
+}
+
 #include "KDevPartControllerIface.moc"

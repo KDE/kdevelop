@@ -28,12 +28,13 @@
 #include <urlutil.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
-
+#include "kdevprojectiface.h"
 
 struct KDevProject::Private {
     QMap<QString, QString> m_absToRel;
     QStringList m_symlinkList;
     QTimer *m_timer;
+    KDevProjectIface *m_iface;
 };
 
 KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char *name)
@@ -47,6 +48,7 @@ KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char
     
     d->m_timer = new QTimer(this);
     connect(d->m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
+    d->m_iface = new KDevProjectIface(this);
 }
 
 KDevProject::~KDevProject()
