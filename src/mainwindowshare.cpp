@@ -44,6 +44,7 @@
 #include <kdevpartcontroller.h>
 #include <kdeversion.h>
 #include <kdebug.h>
+#include "partcontroller.h"
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -434,6 +435,8 @@ void MainWindowShare::slotNewToolbarConfig()
   // replug actionlists here...
 
   m_pMainWnd->applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
+
+  PartController::getInstance()->reinstallPopups();
 }
 
 void MainWindowShare::slotKeyBindings()

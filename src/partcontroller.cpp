@@ -465,6 +465,15 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   connect(part, SIGNAL(fileNameChanged(const KURL &)), this, SLOT(slotFileNameChanged()));
 }
 
+void PartController::reinstallPopups( ){
+
+  EditorProxy* editorProxy = EditorProxy::getInstance();
+  QPopupMenu* popup = contextPopupMenu();
+
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
+    editorProxy->installPopup( it.current(), popup );
+}
 
 void PartController::slotUploadFinished()
 {
@@ -495,10 +504,12 @@ void PartController::slotFileNameChanged()
 
 QPopupMenu *PartController::contextPopupMenu()
 {
-  static QPopupMenu *popup = 0;
+  /* static */ QPopupMenu *popup = 0;
 
   if (!popup)
     popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
+
+  kdDebug( 9000 ) << "PartController::contextPopupMenu() will return " << popup << endl;
 
   return popup;
 }

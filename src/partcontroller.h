@@ -53,6 +53,8 @@ public:
 
   KParts::Part *partForURL(const KURL &url);
 
+  void reinstallPopups();
+
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
 public slots:
@@ -107,7 +109,7 @@ private:
   bool closePart(KParts::Part *part);
 
   QPopupMenu *contextPopupMenu();
-
+  
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
 
   void integratePart(KParts::Part *part, const KURL &url, bool isTextEditor=false );
