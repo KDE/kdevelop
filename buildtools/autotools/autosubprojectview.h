@@ -64,6 +64,8 @@ class AutoSubprojectView : public KListView
 		void parseSUBDIRS(SubprojectItem *item,
 						const QString &lhs, const QString &rhs);
 		virtual void focusOutEvent(QFocusEvent *e);
+		void expandCollapse( QListViewItem * item, bool expand );
+		void expandCollapseFirst( QListViewItem * item, bool expand );
 
 	private:
 		AutoProjectWidget* m_widget;
@@ -85,6 +87,8 @@ class AutoSubprojectView : public KListView
         KAction* installSubprojectAction;
         KAction* installSuSubprojectAction;
         KAction* otherAction;
+		KAction* expandAction;
+		KAction* collapseAction;
         
         QStringList m_commandList;
         QValueList<int> m_commandTypeList;
@@ -107,6 +111,8 @@ class AutoSubprojectView : public KListView
         void slotCleanSubproject();
         void slotManageBuildCommands();
         void slotCustomBuildCommand(int);
+		void slotExpandTree();
+		void slotCollapseTree();
 };
 
 #endif

@@ -119,7 +119,7 @@ AutoSubprojectView::~AutoSubprojectView()
 
 void AutoSubprojectView::loadMakefileams ( const QString& dir )
 {
-	SubprojectItem * item = new SubprojectItem( this, m_part->projectDirectory() + "/" + m_part->projectName() + ".kdevelop" );
+	SubprojectItem * item = new SubprojectItem( this, m_part->projectName() );
 	item->setPixmap ( 0, SmallIcon ( "kdevelop" ) );
 	item->subdir = "/";
 	item->path = dir;
@@ -127,6 +127,8 @@ void AutoSubprojectView::loadMakefileams ( const QString& dir )
 	item->setOpen( true );
 
 	setSelected( item, true );
+	
+	expandCollapseFirst( firstChild(), false );
 }
 
 
@@ -184,6 +186,10 @@ void AutoSubprojectView::initActions()
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+
+	expandAction = new KAction( i18n( "Expand Subtree" ), 0, 0, this, SLOT(slotExpandTree()), actions, "expandAction" );
+	collapseAction = new KAction( i18n( "Collapse Subtree" ), 0, 0, this, SLOT(slotCollapseTree()), actions, "collapseAction" );
+
 	otherAction = new KAction( i18n( "Manage Custom Commands..." ), 0, 0,
 		this, SLOT( slotManageBuildCommands() ), actions, "manage custom commands" );
 	otherAction->setWhatsThis(i18n("<b>Manage custom commands</b><p>Allows to create, edit and delete custom build commands which appears in the subproject context menu.<br>"));
@@ -216,11 +222,14 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 	popup.insertSeparator();
 	buildSubprojectAction->plug( &popup );
 	popup.insertSeparator();
-    forceReeditSubprojectAction->plug( &popup );
+	forceReeditSubprojectAction->plug( &popup );
 	cleanSubprojectAction->plug( &popup );
 	popup.insertSeparator();
-    installSubprojectAction->plug( &popup );
-    installSuSubprojectAction->plug( &popup );
+	installSubprojectAction->plug( &popup );
+	installSuSubprojectAction->plug( &popup );
+	popup.insertSeparator();
+	collapseAction->plug( &popup );
+	expandAction->plug( &popup );
 
 	KConfig *config = m_part->instance()->config();
 	bool separate = true;
@@ -962,6 +971,52 @@ void AutoSubprojectView::slotCustomBuildCommand(int val)
 			break;
 	}
 }
+
+void AutoSubprojectView::slotExpandTree()
+{
+	expandCollapseFirst( currentItem(), true );
+}
+
+void AutoSubprojectView::slotCollapseTree()
+{
+	expandCollapseFirst( currentItem(), false );
+}
+
+void AutoSubprojectView::expandCollapseFirst( QListViewItem * item, bool expand )
+{
+	if ( !item ) return;
+	
+	if ( item == firstChild() )	// special case for root node
+	{
+		item = item->firstChild();
+		while ( item )
+		{
+			expandCollapse( item, expand );
+			item = item->nextSibling();
+		}
+	}
+	else
+	{
+		expandCollapse( item, expand );
+	}
+}
+
+void AutoSubprojectView::expandCollapse( QListViewItem * item, bool expand )
+{
+	if ( !item ) return;
+	
+	item->setOpen( expand );
+	
+	item = item->firstChild();
+	while ( item )
+	{
+		expandCollapse( item, expand );
+		item = item->nextSibling();
+	}
+}
+
+
+
 
 #include "autosubprojectview.moc"
 
