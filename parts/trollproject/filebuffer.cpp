@@ -1,7 +1,9 @@
 #include <qtextstream.h>
 #include "filebuffer.h"
+#include <qmessagebox.h>
 
 Caret FileBuffer::findInBuffer(QString subString,const Caret& startPos)
+//=====================================================================
 {
   unsigned int i=startPos.m_row;
   QString line = m_buffer[i++];
@@ -17,7 +19,42 @@ Caret FileBuffer::findInBuffer(QString subString,const Caret& startPos)
   return Caret(-1,-1);
 }
 
+QString FileBuffer::pop(int row)
+//===========================
+{
+  if ((unsigned int)row>=m_buffer.count())
+    return NULL;
+  QStringList::Iterator it=m_buffer.begin();
+  for (int i=0; i<row; ++it,i++);
+  QString ReturnStr = *it;
+  m_buffer.remove(it);
+  return ReturnStr;
+}
+
+void FileBuffer::setValues(QString variable,QStringList values,int valuesPerRow)
+//==============================================================================
+{
+  unsigned int i;
+  QString line = variable + " = ";
+  QString spacing;
+  spacing.fill(' ',line.length());
+  for (i=0; i<values.count(); i++)
+  {
+    line = line + values[i] + " ";
+    if (!((i+1) % valuesPerRow))
+    {
+      if (i != values.count()-1)
+        line = line + "\\";
+      m_buffer.append(line);
+      line = spacing;
+    }
+  }
+  if (i % valuesPerRow)
+    m_buffer.append(line);
+}
+
 QString FileBuffer::getValues(QString variable)
+//=============================================
 {
   Caret curPos(0,0);
   QString valueString="";
@@ -56,6 +93,7 @@ QString FileBuffer::getValues(QString variable)
 }
 
 void FileBuffer::removeValues(QString variable)
+//=============================================
 {
   Caret curPos = Caret(0,0);
   bool finished = false;
@@ -67,13 +105,18 @@ void FileBuffer::removeValues(QString variable)
       finished = true;
       continue;
     }
-    //QString tmp = m_buffer.pop(variablePos.m_row);
-    //while (tmp[tmp.length()-1]=='\\');
-      //tmp = m_buffer.pop(variablePos.m_row);
+    QString line = pop(variablePos.m_row);
+    while (line[line.length()-1]=='\\')
+    {
+      line = pop(variablePos.m_row);
+      if (line.isNull())
+        break;
+    }
   }
 }
 
 void FileBuffer::bufferFile(QString fileName)
+//===========================================
 {
   m_buffer.clear();
   QFile dataFile(fileName);
@@ -91,7 +134,19 @@ void FileBuffer::bufferFile(QString fileName)
   dataFile.close();
 }
 
+void FileBuffer::saveBuffer(QString filename)
+//===========================================
+{
+  QFile dataFile(filename);
+  if (dataFile.open(IO_WriteOnly))
+  {
+    for (unsigned int i=0; i<m_buffer.count(); i++)
+      dataFile.writeBlock((m_buffer[i]+"\n").ascii(),(m_buffer[i]+"\n").length());
+  }
+}
+
 void FileBuffer::dumpBuffer()
+//===========================
 {
   for ( unsigned int i=0; i<m_buffer.count(); i++ )
     printf(m_buffer[i]+"\n");
