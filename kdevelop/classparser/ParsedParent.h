@@ -1,42 +1,20 @@
-/********************************************************************
-* Name    : Definition of a parsed parent                           *
-* ------------------------------------------------------------------*
-* File    : ParsedParent.h                                          *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Mon Mar 15 14:16:46 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Macros:                                                           *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Types:                                                            *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedParent.h  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _PARSEDPARENTS_H_INCLUDED
 #define _PARSEDPARENTS_H_INCLUDED
 
@@ -79,9 +57,9 @@ public: // Public methods
   void out();
 
 public: // Public queries
-  bool isPublic()    { return ( exportattr == PUBLIC ); }
-  bool isProtected() { return ( exportattr == PROTECTED ); }
-  bool isPrivate()   { return ( exportattr == PRIVATE ); }
+  bool isPublic()    { return ( exportattr == CPPUBLIC ); }
+  bool isProtected() { return ( exportattr == CPPROTECTED ); }
+  bool isPrivate()   { return ( exportattr == CPPRIVATE ); }
 
 };
 

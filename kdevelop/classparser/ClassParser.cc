@@ -742,11 +742,12 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   aMethod->setDeclaredInFile( currentFile );
   aMethod->setExport( declaredScope );
   aMethod->setIsStatic( isStatic );
+  aMethod->setIsDestructor( !aMethod->name.isEmpty() && aMethod->name[0] == '~' );
 
   getNextLexem();
 
   // Const method
-  if( lexem == CONST )
+  if( lexem == CPCONST )
   {
     aMethod->setIsConst( true );
     getNextLexem();
@@ -1023,8 +1024,8 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     
     // For classes with no scope identifier at inheritance.
     if( lexem == ID )
-      exportit = PRIVATE;
-    else if( lexem == PUBLIC || lexem == PROTECTED || lexem == PRIVATE )
+      exportit = CPPRIVATE;
+    else if( lexem == CPPUBLIC || lexem == CPPROTECTED || lexem == CPPRIVATE )
     {
       exportit = lexem;
       getNextLexem();
@@ -1146,15 +1147,15 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
 
   switch( lexem )
   {
-    case PUBLIC:
+    case CPPUBLIC:
       declaredScope = PIE_PUBLIC;
       methodType = 0;
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       declaredScope = PIE_PROTECTED;
       methodType = 0;
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       declaredScope = PIE_PRIVATE;
       methodType = 0;
       break;
@@ -1186,7 +1187,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       }
       break;        
     case CPSTRUCT:
-    case CONST:
+    case CPCONST:
     case ID:
       // Ignore everything that hasn't got any scope declarator.
       if( declaredScope != PIE_GLOBAL )
@@ -1284,7 +1285,7 @@ CParsedClass *CClassParser::parseClass()
  *-----------------------------------------------------------------*/
 bool CClassParser::isGenericLexem()
 {
-  return ( lexem == CPENUM || lexem == CPUNION || lexem == STATIC ||
+  return ( lexem == CPENUM || lexem == CPUNION || lexem == CPSTATIC ||
            lexem == CPTYPEDEF || lexem == CPTEMPLATE || lexem == CPTHROW );
 }
 
@@ -1388,7 +1389,7 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
     case CPUNION:
       parseUnion();
       break;
-    case STATIC:
+    case CPSTATIC:
       isStatic = true;
       break;
     case CPTYPEDEF:
@@ -1470,7 +1471,7 @@ void CClassParser::parseTopLevelLexem()
       skipBlock();
       break;
     case CPSTRUCT:
-    case CONST:
+    case CPCONST:
     case ID:
       parseMethodAttributes( &store.globalContainer );
       break;
