@@ -565,4 +565,46 @@ void QEditor::indent()
 	moveCursor( MoveLineEnd, false );
 }
     
+void QEditor::contentsMouseDoubleClickEvent( QMouseEvent * e )
+{
+    if ( e->button() != Qt::LeftButton ) {
+        e->ignore();
+        return;
+    }
+
+    // let the base class do things we maybe don't know
+    KTextEdit::contentsMouseDoubleClickEvent(e);
+
+    // now do our own method of marking text:
+    int para = 0;
+    int index = charAt( e->pos(), &para );
+    setCursorPosition(para, index);
+    
+    QTextCursor* cur = textCursor();
+    QTextCursor c1 = *cur;
+    QTextCursor c2 = *cur;
+    if (c1.paragraph()->at(c1.index())->c.isSpace()) return;
+
+    // find start of text to select..
+    while (c1.index() > 0 && !isDelimiter(c1.paragraph()->at(c1.index()-1)->c)) {
+        c1.gotoLeft();
+    }
+    // find end of text to select..
+    while ( !isDelimiter(c2.paragraph()->at(c2.index())->c) && !c2.atParagEnd() ) {
+        c2.gotoRight();
+        cur->gotoRight();
+    }
+
+    document()->setSelectionStart( QTextDocument::Standard, c1 );
+    document()->setSelectionEnd( QTextDocument::Standard, c2 );
+
+    repaintChanged();
+}
+
+bool QEditor::isDelimiter(const QChar& c)
+{
+    if (c == '_') return false;
+    return !(c.isLetterOrNumber());
+}
+
 #include "qeditor.moc"

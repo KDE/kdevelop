@@ -137,7 +137,8 @@ protected:
     virtual void backspaceIndent( QKeyEvent* );
     int backspace_indentation( const QString &s );
     int backspace_indentForLine( int line );
-
+    void contentsMouseDoubleClickEvent( QMouseEvent *e );
+    bool isDelimiter(const QChar& c);
 
 private:
     ParenMatcher* parenMatcher;
