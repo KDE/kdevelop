@@ -17,8 +17,16 @@
  ***************************************************************************/
 
 
-#include <dlfcn.h>
+#if hpux
+#include <dl.h>
+inline const char *dlerror()
+{
+	return "No dlerror() for HPUX";
+}
 
+#else
+#include <dlfcn.h>
+#endif
 
 #define BEHAVE_REPORTERRORS 1               // Report errors to user by an message box
 #define BEHAVE_IGNOREERRORS 2               // Ingore errors (i.e. while reading the dialog file)
@@ -62,7 +70,11 @@ bool loadKDlgLdrLibrary()
 {
   if (!KDlgLdr_Library)
     {
+#if hpux
+      KDlgLdr_Library = shl_load(KDLGLDR_LIBRARY_NAME,BIND_DEFERRED, 0L);
+#else
       KDlgLdr_Library = dlopen(KDLGLDR_LIBRARY_NAME,RTLD_NOW);
+#endif
       if (!KDlgLdr_Library)
         {
           warning("Error loading dialog loader library. (%s)\n",dlerror());
@@ -70,9 +82,23 @@ bool loadKDlgLdrLibrary()
         }
     }
 
+#if hpux
   #define LOAD_LIB_FNC(fncname, fncptr) \
-       if (!fncptr) { fncptr = dlsym(KDlgLdr_Library, fncname); \
+       if (!fncptr) { \
+         if (shl_findsym((mapped_shl_entry **)&KDlgLdr_Library, fncname, \
+                        TYPE_PROCEDURE, &fncptr) != 0) { \
+	        fncptr = 0; \
+	     } \
+         if (!fncptr) { \
+	       warning("Getting dialog loader library method failed. (%s)",dlerror()); \
+	       return false; \
+	     } \
+	   }
+#else
+  #define LOAD_LIB_FNC(fncname, fncptr) \
+       if (!fncptr) { (void*)fncptr = dlsym(KDlgLdr_Library, fncname); \
         if (!fncptr) { warning("Getting dialog loader library method failed. (%s)",dlerror()); return false; } }
+#endif
 
   LOAD_LIB_FNC(FNC_KDLGLDR_INIT,              KDlgLdr_Init)
   LOAD_LIB_FNC(FNC_KDLGLDR_DELETE,            KDlgLdr_Delete)
