@@ -1,3 +1,6 @@
+2001-08-12  rokrau@yahoo.com
+    * bugfix: removed obsolete library check
+
 2001-08-10  rokrau@yahoo.com
     * Some files were still missing, I have added these now, also there is 
       a modified kdevprj files. Kwrite and friends are taken out of the 

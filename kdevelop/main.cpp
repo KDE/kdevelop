@@ -138,19 +138,19 @@ int main(int argc, char* argv[])
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
 
-  // KDE version check
-  KStandardDirs stddirs;
-  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3");
-  QFileInfo libFI( libPath + "/libkdeui.so.3");
-  QDateTime requiredDate(QDate(2001,5,24), QTime(22,30));
-  if ( libFI.lastModified() < requiredDate) {
-    KMessageBox::sorry(0L,
-                       i18n("KDevelop cannot start :-(\n") +
-                       i18n("because your KDE base library libkdeui.so is too old!\n\n") +
-                       i18n("You need a version newer than %1\n but the detected version is from %2.\n").arg(requiredDate.toString()).arg(libFI.lastModified().toString()),
-                       i18n("KDE version") );
-    ::exit(0);
-  }
+// KDE version check -  no more (rokrau 081201)
+//  KStandardDirs stddirs;
+//  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3");
+//  QFileInfo libFI( libPath + "/libkdeui.so.3");
+//  QDateTime requiredDate(QDate(2001,5,24), QTime(22,30));
+//  if ( libFI.lastModified() < requiredDate) {
+//    KMessageBox::sorry(0L,
+//                       i18n("KDevelop cannot start :-(\n") +
+//                       i18n("because your KDE base library libkdeui.so is too old!\n\n") +
+//                       i18n("You need a version newer than %1\n but the detected version is from %2.\n").arg(requiredDate.toString()).arg(libFI.lastModified().toString()),
+//                       i18n("KDE version") );
+//    ::exit(0);
+//  }
 
   config = KGlobal::config();
   config->setGroup("General Options");
