@@ -59,9 +59,9 @@ public:
   // Variable value handling
   void            removeValues(const QString &variable);
   bool            getValues(const QString &variable,QStringList &plusValues, QStringList &minusValues);
-  void            setValues(const QString &variable,QString values,int valuesPerRow=3)
-                  {setValues(variable,QStringList::split(' ',values),valuesPerRow);}
-  void            setValues(const QString &variable,QStringList values,int valuesPerRow=3);
+  void            setValues(const QString &variable,QString values,int valuesPerRow=3,bool append=false)
+                  {setValues(variable,QStringList::split(' ',values),valuesPerRow,append);}
+  void            setValues(const QString &variable,QStringList values,int valuesPerRow=3,bool append=false);
   bool            getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
 
 private:

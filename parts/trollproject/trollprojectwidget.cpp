@@ -73,7 +73,6 @@ SubprojectItem::SubprojectItem(SubprojectItem *parent, const QString &text,const
     : ProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
-    configuration.m_template = QTMP_APPLICATION;
     init();
 }
 
@@ -84,6 +83,10 @@ SubprojectItem::~SubprojectItem()
 
 void SubprojectItem::init()
 {
+  configuration.m_template = QTMP_APPLICATION;
+  configuration.m_warnings = QWARN_ON;
+  configuration.m_buildMode = QBM_RELEASE;
+  configuration.m_requirements = QD_QT;
   groups.setAutoDelete(true);
   if (scopeString=="")
   {
@@ -348,7 +351,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idBuild = popup.insertItem(SmallIcon("launch"),i18n("Build"));
     int idQmake = popup.insertItem(SmallIcon("launch"),i18n("Run qmake"));
     int idViewProjectFile = popup.insertItem(SmallIcon("document"),i18n("View "+QString(spitem->subdir)+".pro file"));
-    int idTestDlg = popup.insertItem(SmallIcon("folder"),i18n("testDlg"));
+    int idTestDlg = popup.insertItem(SmallIcon("Folder"),i18n("Subproject settings"));
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -400,10 +403,36 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     {
       ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(spitem->configuration));
       dlg->exec();
+      updateProjectConfiguration(spitem);
     }
-
-
 }
+
+void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
+//=======================================================================
+{
+  FileBuffer *Buffer = &(item->m_FileBuffer);
+  QString relpath = item->path.mid(projectDirectory().length());
+  Buffer->removeValues("TEMPLATE");
+  if (item->configuration.m_template == QTMP_APPLICATION)
+    Buffer->setValues("TEMPLATE",QString("app"));
+  if (item->configuration.m_template == QTMP_LIBRARY)
+    Buffer->setValues("TEMPLATE",QString("lib"));
+  if (item->configuration.m_template == QTMP_SUBDIRS)
+    Buffer->setValues("TEMPLATE",QString("subdirs"));
+  Buffer->removeValues("CONFIG");
+  QStringList configList;
+  if (item->configuration.m_buildMode == QBM_RELEASE)
+    configList.append("release");
+  else if (item->configuration.m_buildMode == QBM_DEBUG)
+    configList.append("debug");
+  if (item->configuration.m_warnings == QWARN_ON)
+    configList.append("warn_on");
+  else if (item->configuration.m_warnings == QWARN_OFF)
+    configList.append("warn_off");
+  Buffer->setValues("CONFIG",configList,5,true);
+  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
+}
+
 
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {

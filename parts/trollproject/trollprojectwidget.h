@@ -157,6 +157,7 @@ public:
     FileItem *createFileItem(const QString &name);
 
     void updateProjectFile(QListViewItem *item);
+    void updateProjectConfiguration(SubprojectItem *item);
     void addFileToCurrentSubProject(GroupItem *titem,QString &filename);
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
