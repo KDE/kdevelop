@@ -1059,9 +1059,9 @@ void CKDevelop::create_tags()
   shell_process << m_CTagsCmdLine.fortran_types();
   shell_process << m_CTagsCmdLine.fields();
   shell_process << m_CTagsCmdLine.extra();
-  for ( QStringList::Iterator it  = m_CTagsCmdLine.exclude().begin();
-                              it != m_CTagsCmdLine.exclude().end();
-                            ++it ) {
+  QStringList list = m_CTagsCmdLine.exclude();
+  QStringList::Iterator it = list.begin();
+  for ( ; it !=  list.end(); ++it ) {
       shell_process << (*it);
   }
   shell_process << "-f" ;
