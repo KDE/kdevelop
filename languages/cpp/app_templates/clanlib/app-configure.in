@@ -13,7 +13,7 @@ AC_LANG_CPLUSPLUS
 AC_CHECK_HEADER([ClanLib/application.h], [],
 	AC_MSG_ERROR([Couldn't find Clanlib headers.]))
 
-AC_CHECK_LIB(clanApp, main, , AC_ERROR([Couldn't find Clanlib libraries]), -lclanCore -ldl)
+AC_CHECK_LIB(clanApp, main, , AC_ERROR([Couldn't find Clanlib libraries]), -lclanCore -lclanSignals -ldl)
 
 AC_LANG_RESTORE
 
