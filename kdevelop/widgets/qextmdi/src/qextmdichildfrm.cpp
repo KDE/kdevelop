@@ -28,6 +28,7 @@
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qobjectlist.h>
+#include <qframe.h>
 
 #include <qnamespace.h>
 
@@ -1123,6 +1124,18 @@ void QextMdiChildFrm::redecorateButtons()
    m_pMinimize->setPixmap( *m_pMinButtonPixmap);
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
    m_pUndock->setPixmap( *m_pUndockButtonPixmap);
+}
+
+QRect QextMdiChildFrm::mdiAreaContentsRect() const
+{
+   QFrame* p = (QFrame*)parentWidget();
+   if (p) {
+      return p->contentsRect();
+   }
+   else {
+      QRect empty;
+      return empty;
+   }
 }
 
 #ifndef NO_INCLUDE_MOCFILES
