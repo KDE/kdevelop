@@ -15,15 +15,15 @@ kde2book.index: $(srcdir)/kde2book.index.in
 
 EXTRA_DIST = kde2book.index.in
 
-install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done ; \
-	$(mkinstalldirs) $(DESTDIR)$(htmldir)/graphics ; \
-	for file in graphics/*.gif ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
-
-dist-hook:
-	mkdir -p $(distdir) ; \
-	for file in $(srcdir)/*.html ; do cp -p $$file $(distdir) ; done
+#install-data-local:
+#	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
+#	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done ; \
+#	$(mkinstalldirs) $(DESTDIR)$(htmldir)/graphics ; \
+#	for file in graphics/*.gif ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
+#
+#dist-hook:
+#	mkdir -p $(distdir) ; \
+#	for file in $(srcdir)/*.html ; do cp -p $$file $(distdir) ; done
 
 index:
 	rm -f indextmp.xml kde2book.index ; \

@@ -4,7 +4,7 @@
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cppsupport javasupport pythonsupport perlsupport phpsupport fortransupport \
-	  debugger javadebugger konsole astyle manager tools \
+	  debugger javadebugger konsole astyle manager tools ctags \
 	  autoproject scriptproject \
 	  kwrite-part simple-editor \
 	  $(SCRIPTING_SUBDIR)
