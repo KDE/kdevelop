@@ -2424,7 +2424,7 @@ void KWrite::readConfig(KConfig *config) {
 
   searchFlags = config->readNumEntry("SearchFlags",sfPrompt);
   configFlags = config->readNumEntry("ConfigFlags",
-    cfPersistent | cfRemoveSpaces) & ~cfMark;
+    cfPersistent | cfRemoveSpaces | cfAutoIndent | cfIndentBraces | cfBackspaceIndent) & ~cfMark;
   wrapAt = config->readNumEntry("WrapAt",78);
 }
 

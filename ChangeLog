@@ -2,6 +2,7 @@
     * applied patch of Anders Lynge Esbensen <esban@egmont-kol.dk>: Fixes on docu indexing. Reviewed by Harry.
     * applied printer patch of Walter Tasin: Much improved printing. Reviewed by myself.
     * applied my fixes for page 0 of AppWizard: Ability of resizing, layout and word wrapping fixes. Too trivial for reviewing.
+    * changing the default settings in Options-->Editor to more convinience for novices
 2002-06-06  August Hörandl  <august.hoerandl@gmx.at>
     * fix typo: kbasedoc.h in kdemdi.tar.gz
 2002-06-04  Roland Krause  <roland@ca.wai.com>

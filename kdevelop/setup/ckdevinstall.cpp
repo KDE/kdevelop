@@ -119,7 +119,7 @@ void CKDevInstall::slotFinished()
   if (m_pInstallState->highlightStyle == 0) {  // new KDevelop-2.0 style
     m_config->setGroup("KWrite Options");
     m_config->writeEntry("WrapAt","78");
-    m_config->writeEntry("ConfigFlags","99352");
+    m_config->writeEntry("ConfigFlags","492569");
     m_config->writeEntry("UndoSteps","5000");
     m_config->writeEntry("Highlight","C++");
     m_config->writeEntry("SearchFlags","32");
