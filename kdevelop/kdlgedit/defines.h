@@ -25,7 +25,7 @@
 #define KDLG_DEFINES_H
 
 #define KDLGEDIT_VERSION_STR "0.1alpha"    // version of the dialog editor
-#define KDEVELOP_VERSION_STR "0.4"         // version of kdevelop
+#define KDEVELOP_VERSION_STR "1.1"         // version of kdevelop
 
 #define MAX_WIDGETCOLS_PER_LINE 2          // defines up to which column in the property
 					   // view a widget can be inserted

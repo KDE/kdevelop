@@ -15,8 +15,8 @@
 <P ALIGN="RIGHT">
 
 <A HREF="index-13.html">Next</A>
-<A HREF="index-11.html">Previous</A>
-<A HREF="index.html#toc12">Table of Contents</A>
+ <A HREF="index-11.html">Previous</A>
+ <A HREF="index.html#toc12">Table of Contents</A>
 </P>
 <H3><A NAME="The Internal Debugger"></A> <A NAME="s12">12. The Internal Debugger</A></H3>
 
@@ -196,23 +196,16 @@ source that is in a shared library which has not yet been opened but will be ope
 user sets a breakpoint, we flag this breakpoint as pending, try to set the breakpoint and if gdb says it succeeded then flag it as active. If 
 gdb is not successful then we leave the breakpoint as pending. The next instruction will always be "continue" .
 <P>This is known as "lazy breakpoints"
-<P>You have to be careful, though. If you inadvertantly set a breakpoint in a file that is really outside the program, that is it's neither part of 
-the program nor of any shared library inside the project, then this breakpoint will always be pending. There's nothing you can do about 
-that, because it might be in a shared library.
-<P>Now here's the problem with this. If the user "step"s over code that  contains a library dlopen, then what will happen depends on the code stepped over. 
-The dlopen will be catched by gdb, thus the code will stop. Now there are two possibilities, either there are pending breakpoints, then 
-they will be marked as active and "continue" will lead to there. Or there aren't any pending breakpoints in this frame stack. Then the 
-program will "continue" until it waits for input or it may lead us straight to the end, none of which is what we expected. In this situation, I 
-do not do a continue but leave it stopped with the status line reflecting the stopped state. The frame stack is in the routine that caused 
-the stop.
-<P>There isn't any way around this, but I could alleviate the problem somewhat by only doing a "set stop-on 1" when we have pending 
-breakpoints.
+<P>However, this can lead to a problem when you use the "step over" command and step over code that will load a library. This will trigger a 
+break on the library load, and, normally the debugger would do a "continue" (ie run to the next breakpoint or the end of the code). The user, 
+however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere 
+inside a dlopen command). This is disconcerting but cannot be helped.
 <P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-13.html">Next</A>
-<A HREF="index-11.html">Previous</A>
-<A HREF="index.html#toc12">Table of Contents</A>
+ <A HREF="index-11.html">Previous</A>
+ <A HREF="index.html#toc12">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
