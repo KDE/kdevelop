@@ -113,7 +113,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>E&amp;nvironment</string>
+                        <string>E&amp;nvironment:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>envs_combo</cstring>
