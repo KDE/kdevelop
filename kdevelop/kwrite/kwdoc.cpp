@@ -587,6 +587,8 @@ int KWriteDoc::currentColumn(PointStruc &cursor) {
   TextLine* pTL = contents.at(cursor.y);
   if (pTL)
     return pTL->cursorX(cursor.x, tabChars);
+  else
+    return 0; // will this be realized as error? (Falk)
 }
 
 void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
