@@ -1,0 +1,99 @@
+[AStyle]
+Brackets=Break
+Fill=Tabs
+FillSpaces=2
+IndentBrackets=false
+IndentCases=false
+IndentClasses=false
+IndentLabels=true
+IndentNamespaces=true
+IndentSwitches=false
+KeepBlocks=false
+KeepStatements=false
+MaxStatement=40
+MinConditional=-1
+PadOperators=false
+PadParentheses=false
+Style=UserDefined
+
+[Editor]
+EmbeddedKTextEditor=Embedded KDE Advanced Text Editor Component
+
+[General Options]
+Read Last Project On Startup=true
+
+[GrepDialog]
+LastSearchItems=
+LastSearchPaths=
+
+
+[KFileDialog Speedbar]
+Speedbar IconSize=32
+
+[Mainwindow]
+Height 1024=742
+MenuBar=Enabled
+StatusBar=Enabled
+Width 1280=1019
+
+[Mainwindow Toolbar QextMdiTaskBar]
+Hidden=true
+IconSize=22
+IconText=IconOnly
+Index=0
+NewLine=false
+Offset=-1
+Position=Bottom
+
+[Mainwindow Toolbar buildToolBar]
+Hidden=false
+IconSize=22
+IconText=IconOnly
+Index=2
+NewLine=false
+Offset=-1
+Position=Top
+
+[Mainwindow Toolbar mainToolBar]
+Hidden=false
+IconSize=22
+IconText=IconOnly
+Index=1
+NewLine=false
+Offset=-1
+Position=Top
+
+[Mainwindow Toolbar toolsToolBar]
+Hidden=false
+IconSize=22
+IconText=IconOnly
+Index=3
+NewLine=false
+Offset=-1
+Position=Top
+
+[Plugins]
+KDevAStyle=true
+KDevAbbrev=true
+KDevAppWizard=true
+KDevDocTreeView=true
+KDevEditorChooser=true
+KDevFileSelector=true
+KDevFilter=true
+KDevGrepView=true
+KDevKonsoleView=true
+KDevOpenWith=true
+KDevRegexpTest=true
+KDevTipOfDay=true
+KDevTools=true
+KDevUIChooser=true
+
+[TipOfDay]
+RunOnStart=true
+
+[Tools]
+Tools=
+
+[UI]
+MDI mode=1
+MajorUIMode=mdi
