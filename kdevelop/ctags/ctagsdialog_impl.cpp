@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "../cproject.h"
 #include "ctagsdialog_impl.h"
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -22,7 +23,7 @@
 #include <qlistbox.h>
 #include <kdebug.h>
 
-/* 
+/*
  *  Constructs a searchTagsDialogImpl which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
  *
@@ -32,6 +33,10 @@
 searchTagsDialogImpl::searchTagsDialogImpl( QWidget* parent,  const char* name, bool modal, WFlags fl )
     : searchTagsDialog( parent, name, modal, fl ), m_currentTagList()
 {
+  tagtypeComboBox->insertItem(QString("all"));
+  tagtypeComboBox->insertItem(QString("files"));
+  tagtypeComboBox->insertItem(QString("definitions"));
+  tagtypeComboBox->insertItem(QString("declarations"));
 }
 
 /*  
@@ -68,13 +73,34 @@ void searchTagsDialogImpl::slotClear()
 void searchTagsDialogImpl::slotSearchTag()
 {
   kdDebug() << "searchTagsDialogImpl::slotSearchTag():\n";
-  QString text = searchTagLineEdit->text();
+  QString searchtext = searchTagLineEdit->text();
 
+  CProject* prj = currentProject();
+  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+  if (tagsDB.is_initialized()) {
+    kdDebug() << "found tags data base\n";
+    const CTagList* taglist = tagsDB.ctaglist(searchtext);
+    if (taglist)
+    {
+      int ntags = taglist->count();
+      kdDebug() << "found: " << ntags << " entries for: "
+                << searchtext << "\n";
+      if (taglist->nFileTags()) {
+        kdDebug() << "number of FileTags: " << taglist->nFileTags() << "\n";
+      }
+      if (taglist->nDefinitionTags()) {
+        kdDebug() << "number of DefinitionTags: " << taglist->nDefinitionTags() << "\n";
+      }
+      if (taglist->nDeclarationTags()) {
+        kdDebug() << "number of DeclarationTags: " << taglist->nDeclarationTags() << "\n";
+      }
+      setSearchResult(*taglist);
+    }
+  }
 }
 
 void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
 {
-  tagsListBox->clear();
   searchTagLineEdit->setText(taglist.tag());
   int ntags = taglist.count();
   for (int it=0; it<ntags; ++it)
