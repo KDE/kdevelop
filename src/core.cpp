@@ -178,7 +178,7 @@ void Core::initComponents()
 
     QList<KDevPart> parts =
         PartLoader::loadAllByQuery(QString::fromLatin1("KDevelop/Part"), QString::null, "KDevPart",
-                                   api, this);
+                                   api, this, true);
 
     QListIterator<KDevPart> it(parts);
     for (; it.current(); ++it)

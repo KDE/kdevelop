@@ -13,6 +13,11 @@
 #include <qwidget.h>
 #include <kdebug.h>
 
+
+#include <kconfig.h>
+#include <kapp.h>
+
+
 #include "kdevfactory.h"
 #include "kdevpart.h"
 #include "partloader.h"
@@ -132,8 +137,11 @@ KDevPart *PartLoader::loadByQuery(const QString &serviceType, const QString &con
 
 
 QList<KDevPart> PartLoader::loadAllByQuery(const QString &serviceType, const QString &constraint, const char *className,
-                                           KDevApi *api, QObject *parent)
+                                           KDevApi *api, QObject *parent, bool filter)
 {
+    KConfig *config = kapp->config();
+    config->setGroup("Plugins");
+  
     QList<KDevPart> list;
     
     KTrader::OfferList offers = KTrader::self()->query(serviceType, constraint);
@@ -142,7 +150,10 @@ QList<KDevPart> PartLoader::loadAllByQuery(const QString &serviceType, const QSt
 
     for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it) {
         KService *service = *it;
-        
+
+        if (filter && !config->readBoolEntry(service->name(), true))
+          continue;
+
         QStringList args;
         QVariant prop = service->property("X-KDevelop-Args");
         if (prop.isValid())

@@ -36,8 +36,7 @@ public:
     /**
      * Loads all components returned by a trader query.
      */
-    static QList<KDevPart> loadAllByQuery(const QString &serviceType, const QString &constraint, const char *className,
-                                          KDevApi *api, QObject *parent);
+    static QList<KDevPart> loadAllByQuery(const QString &serviceType, const QString &constraint, const char *className, KDevApi *api, QObject *parent, bool filter=false);
 };
 
 #endif
