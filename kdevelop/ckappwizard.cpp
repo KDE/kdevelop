@@ -2728,28 +2728,34 @@ void CKAppWizard::slotMakeEnd() {
   nametext = nameline->text();
   nametext = nametext.lower();
   directorytext = directoryline->text();
+  QString cvscommand;
 
-  QString cvscommand="cd "+ directorytext + "/" + nametext + "/docs/en && ";
-  TFileInfo fileInfo;
-  QFileInfo gif (directorytext + "/" + nametext + "/docs/en/logotp3.gif");
-  if (gif.exists()) {
-    fileInfo.rel_name = nametext + "/docs/en/logotp3.gif";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    fileInfo.install = true;
-  	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.gif";
-    project->addFileToProject (nametext + "/docs/en/logotp3.gif",fileInfo);
-    cvscommand += "cvs add logotp3.gif && ";
-  }
-  QFileInfo png (directorytext + "/" + nametext + "/docs/en/logotp3.png");
-  if (png.exists()) {
-    fileInfo.rel_name = nametext + "/docs/en/logotp3.png";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    fileInfo.install = true;
-  	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.png";
-    project->addFileToProject (nametext + "/docs/en/logotp3.png",fileInfo);
-    cvscommand += "cvs add logotp3.png && ";
+  if (userdoc->isChecked())
+  {
+    cvscommand="cd "+ directorytext + "/" + nametext + "/docs/en && cvs add index*.html && ";
+    TFileInfo fileInfo;
+    QFileInfo gif (directorytext + "/" + nametext + "/docs/en/logotp3.gif");
+    if (gif.exists())
+    {
+      fileInfo.rel_name = nametext + "/docs/en/logotp3.gif";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = true;
+      fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.gif";
+      project->addFileToProject (nametext + "/docs/en/logotp3.gif",fileInfo);
+      cvscommand += "cvs add logotp3.gif && ";
+    }
+    QFileInfo png (directorytext + "/" + nametext + "/docs/en/logotp3.png");
+    if (png.exists())
+    {
+      fileInfo.rel_name = nametext + "/docs/en/logotp3.png";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = true;
+      fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.png";
+      project->addFileToProject (nametext + "/docs/en/logotp3.png",fileInfo);
+      cvscommand += "cvs add logotp3.png && ";
+    }
   }
   project->writeProject ();
   project->updateMakefilesAm ();
