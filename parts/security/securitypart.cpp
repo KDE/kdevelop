@@ -86,9 +86,8 @@ void SecurityPart::activePartChanged(KParts::Part *part)
     if (dynamic_cast<KTextEditor::EditInterface*>(m_activeEditor))
     {
         m_checker->check();
-        connect(m_activeEditor, 
-            SIGNAL(charactersInteractivelyInserted (int,int,const QString &)), 
-            m_checker, SLOT(refresh( int, int, const QString& )));
+        connect(partController(), SIGNAL(savedFile( const KURL& ) ),
+            m_checker, SLOT(check()));
     }
     else
         m_activeEditor = 0;
