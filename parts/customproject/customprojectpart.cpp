@@ -483,8 +483,9 @@ void CustomProjectPart::updateTargetMenu()
             if (str.contains(re) == 1)
             {
 	        kdDebug(9025) << "Adding target: " << str.simplifyWhiteSpace() << endl;
-		m_targets += str.simplifyWhiteSpace().section(' ', 0, 0);
-		m_targets.truncate( m_targets.length() - 1 ); // strip the colon
+		str += str.simplifyWhiteSpace().section(' ', 0, 0);
+		str.truncate( str.length() - 1 ); // strip the colon
+		m_targets += str;
             }
         }
         f.close();
