@@ -38,6 +38,10 @@ public:
      */
     virtual void remove(const char *filename) = 0;
     /**
+     * Updates a file or directory.
+     */
+    virtual void update(const char *filename) = 0;
+    /**
      * Commits a file to the repository.
      */
     virtual void commit(const char *filename) = 0;

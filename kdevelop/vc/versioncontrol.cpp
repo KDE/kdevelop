@@ -16,25 +16,3 @@ VersionControl *VersionControl::getVersionControl(const char *name)
     else
 	return 0;
 }
-
-
-#if 0
-void VersionControl::add(const char *filename)
-{
-    cerr << "Internal error" << endl;
-    return false;
-}
-
-void VersionControl::remove(const char *filename)
-{
-    cerr << "Internal error" << endl;
-    return false;
-}
-
-
-void isRegistered(const char *filename)
-{
-    cerr << "Internal error" << endl;
-    return false;
-}
-#endif

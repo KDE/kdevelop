@@ -251,14 +251,16 @@ KPopupMenu *CLogFileView::getCurrentPopup()
               bool reg = project->getVersionControl()->isRegistered(getFullFilename(currentItem()));
               int id;
               popup->insertSeparator();
+              id = popup->insertItem( i18n("Update"),
+                                      this, SLOT(slotUpdate()) );
+              popup->setItemEnabled(id, reg);
+              id = popup->insertItem( i18n("Commit"),
+                                      this, SLOT(slotCommit()) );
               id = popup->insertItem( i18n("Add to Repository"),
                                       this, SLOT(slotAddToRepository()) );
               popup->setItemEnabled(id, !reg);
               id = popup->insertItem( i18n("Remove from Repository"),
                                       this, SLOT(slotRemoveFromRepository()) );
-              popup->setItemEnabled(id, reg);
-              id = popup->insertItem( i18n("Commit"),
-                                      this, SLOT(slotCommit()) );
               popup->setItemEnabled(id, reg);
           }
       break;
@@ -482,6 +484,12 @@ void CLogFileView::slotRemoveFromRepository()
     project->getVersionControl()->remove(getFullFilename(currentItem()));
 }
  
+
+void CLogFileView::slotUpdate()
+{
+    project->getVersionControl()->update(getFullFilename(currentItem()));
+}
+
 
 void CLogFileView::slotCommit()
 {

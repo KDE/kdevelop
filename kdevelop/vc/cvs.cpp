@@ -15,7 +15,7 @@ void CVS::add(const char *filename)
     QString command("cd ");
     command += dirpath;
     command += " && cvs add ";
-    command += filename;
+    command += name;
     command += " 2>&1";
 
     ( new CvsDialog(command, i18n("Adding file to repository")) )->show();
@@ -31,11 +31,28 @@ void CVS::remove(const char *filename)
     QString command("cd ");
     command += dirpath;
     command += " && cvs remove -f ";
-    command += filename;
+    command += name;
     command += " 2>&1";
 
     ( new CvsDialog(command, i18n("Removing file from repository")) )->show();
 }
+
+
+void CVS::update(const char *filename)
+{
+    QFileInfo fi(filename);
+    QString dirpath(fi.dirPath());
+    QString name(fi.fileName());
+
+    QString command("cd ");
+    command += dirpath;
+    command += " && cvs update -dP ";
+    command += name;
+    command += " 2>&1";
+
+    ( new CvsDialog(command, i18n("Updating")) )->show();
+}
+
 
 void CVS::commit(const char *filename)
 {
@@ -52,7 +69,7 @@ void CVS::commit(const char *filename)
     command += " && cvs commit -m \"";
     command += d->logMessage();
     command += "\" ";
-    command += filename;
+    command += name;
     command += " 2>&1";
 
     delete d;

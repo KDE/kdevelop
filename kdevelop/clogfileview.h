@@ -82,6 +82,7 @@ protected:
     void slotGroupRemove();
     void slotAddToRepository();
     void slotRemoveFromRepository();
+    void slotUpdate();
     void slotCommit();
     /**  */
 	  void slotShowPath();

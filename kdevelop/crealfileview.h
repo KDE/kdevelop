@@ -81,6 +81,7 @@ protected slots:
   void slotShowFileProperties();
   void slotAddToRepository();
   void slotRemoveFromRepository();
+  void slotUpdate();
   void slotCommit();
 
 private: // Popupmenus

@@ -1,3 +1,8 @@
+1999-07-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* cvs update
+	* Enable 'Commit' always. Otherwise files cannot be removed...
+	* Use relative file names as cvs arguments, as planned...
+
 1999-07-28 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* fixed the changing of the directory after change the directory
 	  in the applicationwizard seperatly
