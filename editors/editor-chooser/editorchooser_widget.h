@@ -10,21 +10,27 @@
 
 class EditorChooserWidget : public EditChooser
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  EditorChooserWidget(QWidget *parent=0, const char *name=0);
+    EditorChooserWidget(QWidget *parent=0, const char *name=0);
 
+public slots:
+    virtual void slotEditPartChanged(const QString &);
 
 private slots:
 
-  void load();
-  void save();
+    void load();
+    void save();
 
-  void accept();
+    void accept();
 
 };
 
 
 #endif
+
+
+
+

@@ -1,5 +1,5 @@
 #include <qcombobox.h>
-
+#include <qbuttongroup.h>
 
 #include <kapplication.h>
 #include <kdeversion.h>
@@ -13,72 +13,81 @@
 
 
 EditorChooserWidget::EditorChooserWidget(QWidget *parent, const char *name)
-  : EditChooser(parent, name)
+        : EditChooser(parent, name)
 {
-  load();
+    load();
 }
 
 
 void EditorChooserWidget::load()
 {
-  EditorPart->clear();
+    EditorPart->clear();
 
-  // ask the trader which editors he has to offer
-  KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
+    // ask the trader which editors he has to offer
+    KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
 
-  // find the editor to use
-  KConfig *config = kapp->config();
-  config->setGroup("Editor");
-  QString editor = config->readPathEntry("EmbeddedKTextEditor");
-  
-  // add the entries to the listview
-  KTrader::OfferList::Iterator it;
-  int index=-1, current=0;
-  for (it = offers.begin(); it != offers.end(); ++it)
-  {
-    EditorPart->insertItem((*it)->name());
-    if ( (*it)->name() == editor )
-      index = current;
-    ++current;
-  }
+    // find the editor to use
+    KConfig *config = kapp->config();
+    config->setGroup("Editor");
+    QString editor = config->readPathEntry("EmbeddedKTextEditor");
 
-  if (index >=0)
-    EditorPart->setCurrentItem(index);
+    // add the entries to the listview
+    KTrader::OfferList::Iterator it;
+    int index=-1, current=0;
+    for (it = offers.begin(); it != offers.end(); ++it)
+    {
+        EditorPart->insertItem((*it)->name());
+        if ( (*it)->name() == editor )
+            index = current;
+        ++current;
+    }
+
+    if (index >=0)
+        EditorPart->setCurrentItem(index);
 }
 
 
 void EditorChooserWidget::save()
 {
-  KConfig *config = kapp->config();   
-  config->setGroup("Editor");
+    KConfig *config = kapp->config();
+    config->setGroup("Editor");
 
-  KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
+    KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
 
-  KTrader::OfferList::Iterator it;
-  for (it = offers.begin(); it != offers.end(); ++it)
-    if ( EditorPart->currentText() == (*it)->name() ) {
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
-#if defined(_KDE_3_1_3_)
-      config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
-#else
-      config->writeEntry("EmbeddedKTextEditor", (*it)->name());
-#endif
-      }
+    KTrader::OfferList::Iterator it;
+    for (it = offers.begin(); it != offers.end(); ++it)
+        if ( EditorPart->currentText() == (*it)->name() )
+        {
+            config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
+        }
 
-  config->sync();
+    config->sync();
 }
 
 
 void EditorChooserWidget::accept()
 {
-  save();
+    save();
+}
+
+void EditorChooserWidget::slotEditPartChanged( const QString & )
+{
+	KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
+
+	KTrader::OfferList::Iterator it;
+	for (it = offers.begin(); it != offers.end(); ++it)
+	{
+		if ( EditorPart->currentText() == (*it)->name() )
+		{
+			external_changes_group->setEnabled( (*it)->desktopEntryName() == "katepart" );
+			return;
+		}
+	}
 }
 
 
 #include "editorchooser_widget.moc"
+
+
+
+
