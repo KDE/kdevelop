@@ -1,0 +1,96 @@
+/***************************************************************************
+            parsedclasscontainer.h - Container that can hold classes   
+                             -------------------
+
+    begin                : 27 Aug 1999                                        
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef _PARSEDCLASSCONTAINER_H_
+#define _PARSEDCLASSCONTAINER_H_
+
+#include "parsedcontainer.h"
+
+class ParsedClass;
+
+/** This class is a container that also can hold classes.
+ * It has a range of functions to work with the classes it holds.
+ *
+ * @author Jonas Nordin
+ */
+class ParsedClassContainer : public ParsedContainer
+{
+
+public: // Constructor & Destructor
+
+  ParsedClassContainer();
+  ~ParsedClassContainer();
+
+protected: // Private attributes
+
+  /** All parsed classes. */
+  QDict<ParsedClass> classes;
+
+public: // Public attributes
+
+  /** Iterator for the classes */
+  QDictIterator<ParsedClass> classIterator;
+
+public: // Public queries
+
+  /** Tells if a class exists in the store. 
+   * @param aName Classname to check if it exists.
+   */
+  bool hasClass( const QString &aName );
+
+  /** Fetches a class from the store by using its' name. 
+   * @param aName Name of the class to fetch.
+   * @return A pointer to the class(not to be deleted) or
+   *  NULL if the class wasn't found.
+   */
+  ParsedClass *getClassByName( const QString &aName );
+
+  /** Get all classes in sorted order. 
+   * @return A list of all classes in alpabetical order. 
+   */
+  QList<ParsedClass> *getSortedClassList();
+
+  /** Get all classnames in sorted order.
+   * @return A list of all classnames in sorted order.
+   */
+  QStrList *getSortedClassNameList(bool useFullPath=false);
+
+public: // Public Methods
+
+  /** Remove all items in the store with references to the file. 
+   * @param aFile The file to check references to.
+   */
+  void removeWithReferences( const QString &aFile );
+
+  /** Add a classdefintion. 
+   * @param aClass Class to add.
+   */
+  void addClass( ParsedClass *aClass );
+
+  /** Remove a class from the store. 
+   * @param aName Name of the class to remove
+   */
+  void removeClass( const QString &aName );
+
+  /** Clear the internal state. */
+  void clear(bool bAutodel=true);
+};
+
+#include "parsedclass.h"
+
+#endif
