@@ -124,30 +124,34 @@ void CClassView::initPopups()
   classPopup.insertSeparator();
   classPopup.insertItem( i18n( "ClassWizard" ), this, SLOT( slotClassWizard()),0, ID_CV_CLASSWIZARD );
 
+  // Struct popup
+  structPopup.setTitle( i18n( "Struct" ) );
+  structPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
+
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()), 0, ID_CV_VIEW_DECLARATION);
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ),0,ID_CV_VIEW_DEFINITION);
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DECLARATION);
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
   methodPopup.insertSeparator();
   methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
+  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
   attributePopup.insertSeparator();
   id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
   attributePopup.setItemEnabled( id, false );
 
   // Slot popup
   slotPopup.setTitle( i18n( "Slot" ) );
-  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
-  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
+  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DECLARATION);
+  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
   slotPopup.insertSeparator();
   slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Signal popup
   signalPopup.setTitle( i18n( "Signal" ) );
-  signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDefinition()),0, ID_CV_VIEW_DEFINITION );
+  signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION );
   signalPopup.insertSeparator();
   signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
@@ -387,13 +391,10 @@ void CClassView::viewGraphicalTree()
  *   -
  *-----------------------------------------------------------------*/
 void CClassView::slotViewDefinition( const char *className, 
-                                 const char *declName, 
-                                 THType type )
+                                     const char *declName, 
+                                     THType type )
 {
-  if( ( className == NULL && declName == NULL ) || 
-      ( className != NULL && !store->hasClass( className ) ) )
-    QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
-  else
+  if( validClassDecl( className, declName, type ) )
     emit selectedViewDefinition( className, declName, type );
 }
 
@@ -410,10 +411,7 @@ void CClassView::slotViewDeclaration( const char *className,
                                       const char *declName, 
                                       THType type )
 {
-  if( ( className == NULL && declName == NULL )  || 
-      ( className != NULL && !store->hasClass( className ) ) )
-    QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
-  else
+  if( validClassDecl( className, declName, type ) )
     emit selectedViewDeclaration( className, declName, type );
 }
 
@@ -467,6 +465,9 @@ KPopupMenu *CClassView::getCurrentPopup()
       break;
     case THCLASS:
       popup = &classPopup;
+      break;
+    case THSTRUCT:
+      popup = &structPopup;
       break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
@@ -739,9 +740,15 @@ void CClassView::buildInitalClassTree()
   //  project->setClassViewTree( str );
 }
 
-/** Create a new ClassTool dialog and setup its' attributes.
- * @return A newly allocated classtool dialog.
- */
+/*-------------------------------- CClassView::createCTDlg()
+ * createCTDlg()
+ *   Create a new ClassTool dialog and setup its' attributes.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   A newly allocated classtool dialog.
+ *-----------------------------------------------------------------*/
 CClassToolDlg *CClassView::createCTDlg()
 {
   CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
@@ -758,6 +765,49 @@ CClassToolDlg *CClassView::createCTDlg()
   ctDlg->setClass( getCurrentClass() );
 
   return ctDlg;
+}
+
+/*-------------------------------------- CClassView::validClassDecl()
+ * validClassDecl()
+ *   Create a new ClassTool dialog and setup its' attributes.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   A newly allocated classtool dialog.
+ *-----------------------------------------------------------------*/
+bool CClassView::validClassDecl( const char *className, 
+                                 const char *declName, 
+                                 THType type )
+{
+  bool retVal = false;
+  QString str = i18n( "No item selected." );
+
+  retVal = !( className == NULL && declName == NULL );
+
+  if( retVal && className != NULL )
+  {
+    str.sprintf( "%s '%s' %s", 
+                 i18n("The class:"), 
+                 className == NULL ? "" : className, 
+                 i18n("couldn't be found."));
+      
+    retVal = store->hasClass( className );
+
+    if( !retVal )
+    {
+      str.sprintf( "%s '%s' %s", 
+                   i18n("The struct:"), 
+                   className == NULL ? "" : className, 
+                   i18n("couldn't be found."));
+      retVal = store->hasStruct( className );
+    }
+  }
+
+  if( !retVal )
+    QMessageBox::warning( this, i18n( "Not found" ), str );
+
+  return retVal;
 }
 
 /*********************************************************************
@@ -950,3 +1000,4 @@ void CClassView::slotClassWizard()
   dlg.setStore( store );
   dlg.exec();
 }
+

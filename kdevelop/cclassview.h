@@ -152,6 +152,9 @@ private: // Popupmenus
   /** Popupmenu for classes. */
   KPopupMenu classPopup;
 
+  /** Popupmenu for structures. */
+  KPopupMenu structPopup;
+
   /** Popupmenu for methods. */
   KPopupMenu methodPopup;
 
@@ -219,6 +222,8 @@ private: // Private methods
 
   /** Return this view as a treestring. */
   const char *asTreeStr();
+
+  bool validClassDecl( const char *className, const char *declName, THType type );
 };
 
 #endif
