@@ -2237,6 +2237,13 @@ void CKDevelop::slotTTabSelected(int item){
 void CKDevelop::slotSTabSelected(int item){
   lasttab = s_tab_view->getCurrentTab();
 
+  if (item == HEADER || item == CPP)
+  {
+   // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
+  enableCommand(ID_FILE_SAVE_AS);
+  enableCommand(ID_FILE_CLOSE);
+  }
+
   if (item == HEADER){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
       if ( bDefaultCV)
@@ -2249,8 +2256,8 @@ void CKDevelop::slotSTabSelected(int item){
     edit_widget->setFocus();
     slotNewUndo();
     slotNewStatus();
+//    setMainCaption();  is called by slotNewStatus()
     slotNewLineColumn();
-    setMainCaption();
   }
   if (item == CPP){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
@@ -2266,20 +2273,26 @@ void CKDevelop::slotSTabSelected(int item){
     edit_widget->setFocus();
     slotNewUndo();
     slotNewStatus();
+//    setMainCaption();  is called by slotNewStatus()
     slotNewLineColumn();
-    setMainCaption();
   }
   if(item == BROWSER){
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
     disableCommand(ID_BUILD_COMPILE_FILE);
+    disableCommand(ID_FILE_SAVE);
+    disableCommand(ID_FILE_SAVE_AS);
+    disableCommand(ID_FILE_CLOSE);
     browser_widget->setFocus();
     setMainCaption(BROWSER);
   }
   if(item == TOOLS){
-		disableCommand(ID_BUILD_COMPILE_FILE);
-                setMainCaption(TOOLS);
-	}
+    disableCommand(ID_BUILD_COMPILE_FILE);
+    disableCommand(ID_FILE_SAVE);
+    disableCommand(ID_FILE_SAVE_AS);
+    disableCommand(ID_FILE_CLOSE);
+    setMainCaption(TOOLS);
+  }
   //  s_tab_current = item;
 
 }
