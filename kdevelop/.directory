@@ -1,25 +1,6 @@
-[KDE Desktop Entry]
-Name=Development
-Name[cs]=Vıvojové nástroje
-Name[da]=Udvikling
-Name[de]=Entwicklung
-Name[eo]=Programado
-Name[es]=Desarrollo
-Name[fi]=Kehitystyökalut
-Name[fr]=Développement
-Name[hr]=Razvoj
-Name[hu]=Fejlesztés
-Name[is]=Şróun
-Name[it]=Sviluppo
-Name[ja]=³«È¯
-Name[no]=Utvikling
-Name[pl]=Narzêdzia programistów
-Name[pt]=Desenvolvimento
-Name[pt_BR]=Desenvolvimento
-Name[ro]=Dezvoltare
-Name[ru]=òÁÚÒÁÂÏÔËÁ
-Name[sk]=Vıvoj
-Name[sl]=Razvoj
-Name[sv]=Utveckling
+[Desktop Entry]
 Icon=development_package.xpm
 MiniIcon=development_package.xpm
+Name=Development
+[URL properties]
+ShowDotFiles=true
