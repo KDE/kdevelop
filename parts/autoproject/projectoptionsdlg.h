@@ -31,27 +31,6 @@ public:
     ProjectOptionsDialog( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
     ~ProjectOptionsDialog();
 
-#if 0
-    QString cCompiler() const;
-    QString cxxCompiler() const;
-    QString f77Compiler() const;
-    void setCCompiler(const QString &str);
-    void setCxxCompiler(const QString &str);
-    void setF77Compiler(const QString &str);
-    QString cCompilerBinary() const;
-    QString cxxCompilerBinary() const;
-    QString f77CompilerBinary() const;
-    void setCCompilerBinary(const QString &str);
-    void setCxxCompilerBinary(const QString &str);
-    void setF77CompilerBinary(const QString &str);
-    QString cFlags() const;
-    QString cxxFlags() const;
-    QString f77Flags() const;
-    void setCFlags(const QString &str);
-    void setCxxFlags(const QString &str);
-    void setF77Flags(const QString &str);
-#endif
-
 private slots:
     void cflagsClicked();
     void cxxflagsClicked();

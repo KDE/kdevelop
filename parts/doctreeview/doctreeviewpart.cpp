@@ -10,11 +10,11 @@
  ***************************************************************************/
 
 #include <qpopupmenu.h>
-#include <qtabdialog.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstddirs.h>
@@ -38,8 +38,8 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(configWidget(QTabDialog*)),
-             this, SLOT(configWidget(QTabDialog*)) );
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             this, SLOT(configWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     
@@ -103,16 +103,11 @@ void DocTreeViewPart::projectClosed()
 }
 
 
-void DocTreeViewPart::configWidget(QTabDialog *dlg)
+void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
-#if 0
     QVBox *vbox = dlg->addVBoxPage(i18n("Documentation tree"));
     DocTreeConfigWidget *w = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-#endif
-    DocTreeConfigWidget *w = new DocTreeConfigWidget(m_widget, dlg, "documentation tree config widget");
-    dlg->addTab(w, i18n("Documentation tree"));
-    connect( dlg, SIGNAL(applyButtonPressed()), w, SLOT(accept()) );
 }
 
 

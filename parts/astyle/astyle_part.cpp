@@ -1,12 +1,11 @@
 #include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qtextstream.h>
-#include <qtabdialog.h>
 
 
 #include <kiconloader.h>
 #include <klocale.h>
-//#include <kdialogbase.h>
+#include <kdialogbase.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 
@@ -40,7 +39,7 @@ AStylePart::AStylePart(KDevApi *api, QObject *parent, const char *name)
 			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
   _action->setEnabled(false);
 
-  connect(core(), SIGNAL(configWidget(QTabDialog*)), this, SLOT(configWidget(QTabDialog*)));
+  connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
 #ifdef NEW_EDITOR
   connect(core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
@@ -114,16 +113,11 @@ void AStylePart::beautifySource()
 #endif
 
 
-void AStylePart::configWidget(QTabDialog *dlg)
+void AStylePart::configWidget(KDialogBase *dlg)
 {
-#if 0
   QVBox *vbox = dlg->addVBoxPage(i18n("Source formatter"));
   AStyleWidget *w = new AStyleWidget(vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-#endif
-  AStyleWidget *w = new AStyleWidget(dlg, "astyle config widget");
-  dlg->addTab(w, i18n("Source formatter"));
-  connect(dlg, SIGNAL(applyButtonPressed()), w, SLOT(accept()));
 }
 
 

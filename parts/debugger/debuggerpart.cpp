@@ -12,7 +12,6 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <qtabdialog.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kfiledialog.h>
@@ -229,8 +228,8 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
     action->setEnabled(false);
     action->setStatusText( i18n("Various views into the application") );
     
-    connect( core(), SIGNAL(projectConfigWidget(QTabDialog*)),
-             this, SLOT(projectConfigWidget(QTabDialog*)) );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( core(), SIGNAL(editedBreakpoint(const QString &, int)),
@@ -251,16 +250,11 @@ DebuggerPart::~DebuggerPart()
 }
 
 
-void DebuggerPart::projectConfigWidget(QTabDialog *dlg)
+void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-#if 0
     QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"));
     DebuggerConfigWidget *w = new DebuggerConfigWidget(*document(), vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-#endif
-    DebuggerConfigWidget *w = new DebuggerConfigWidget(*document(), dlg, "debugger config widget");
-    dlg->addTab(w, i18n("Debugger"));
-    connect( dlg, SIGNAL(applyButtonPressed()), w, SLOT(accept()) );
 }
 
 

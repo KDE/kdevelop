@@ -170,7 +170,7 @@ void Core::initActions()
                           actionCollection(), "project_options" );
     action->setEnabled(false);
 
-    action = new KAction( i18n("&Customize Gideon"), 0,
+    action = new KAction( i18n("&Customize KDevelop"), 0,
                           this, SLOT(slotSettingsCustomize()),
                           actionCollection(), "settings_customize" );
     action->setStatusText( i18n("Lets you customize Gideon") );
@@ -1132,14 +1132,9 @@ void Core::slotDocumentationBufferSelected(const KURL &url)
 
 void Core::slotProjectOptions()
 {
-#if 0
     KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "project options dialog");
-#endif
-    QTabDialog dlg(win, "project options dialog", true);
-    dlg.setCaption("Project Options");
-
     emit projectConfigWidget(&dlg);
     dlg.exec();
 }
@@ -1147,13 +1142,9 @@ void Core::slotProjectOptions()
 
 void Core::slotSettingsCustomize()
 {
-#if 0
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize Gideon"),
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "customization dialog");
-#endif
-    QTabDialog dlg(win, "customization dialog", true);
-    dlg.setCaption("Customize KDevelop");
 
     emit configWidget(&dlg);
     dlg.exec();

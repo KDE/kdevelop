@@ -17,7 +17,7 @@
 #include <qguardedptr.h>
 #include "kdevpart.h"
 
-class QTabDialog;
+class KDialogBase;
 class VariableWidget;
 class BreakpointWidget;
 class FramestackWidget;
@@ -36,7 +36,7 @@ public:
     ~DebuggerPart();
 
 private slots:
-    void projectConfigWidget(QTabDialog*);
+    void projectConfigWidget(KDialogBase *dlg);
     void slotRun();
     void slotExamineCore();
     void slotAttachProcess();

@@ -6,7 +6,7 @@
 #ifndef __KDEVPART_PARTSELECTOR_H__
 #define __KDEVPART_PARTSELECTOR_H__
 
-class QTabDialog;
+class KDialogBase;
 
 #include <kdevpart.h>
 
@@ -23,7 +23,7 @@ public:
 
 private slots:
 
-  void configWidget(QTabDialog *dlg);
+  void configWidget(KDialogBase *dlg);
 
 };
 

@@ -6,7 +6,7 @@
 #ifndef __KDEVPART_ASTYLE_H__
 #define __KDEVPART_ASTYLE_H__
 
-class QTabDialog;
+class KDialogBase;
 #include <kaction.h>
 
 #include <kdevpart.h>
@@ -36,7 +36,7 @@ private slots:
 		  
   void beautifySource();
  
-  void configWidget(QTabDialog *dlg);
+  void configWidget(KDialogBase *dlg);
 
 
 private:

@@ -8,7 +8,7 @@
 #include <qstringlist.h>
 #include "kdevpart.h"
 
-class QTabDialog;
+class KDialogBase;
 
 #ifdef NEW_EDITOR
 namespace KEditor {
@@ -220,12 +220,12 @@ signals:
      * Expects that a configuration page for use in the
      * KDevelop settings dialog is created by the component.
      */
-    void configWidget(QTabDialog *dlg);
+    void configWidget(KDialogBase *dlg);
     /**
      * Expects that a configuration page for use in the
      * Project settings dialog is created by the component.
      */
-    void projectConfigWidget(QTabDialog *dlg);
+    void projectConfigWidget(KDialogBase *dlg);
 };
 
 #endif

@@ -15,7 +15,7 @@
 #include <qguardedptr.h>
 #include "kdevpart.h"
 
-class QTabDialog;
+class KDialogBase;
 class GrepViewWidget;
 
 
@@ -29,7 +29,7 @@ public:
 
 private slots:
     void slotRaiseWidget();
-    void configWidget(QTabDialog *dlg);
+    void configWidget(KDialogBase *dlg);
     void stopButtonClicked();
     void projectOpened();
     void projectClosed();

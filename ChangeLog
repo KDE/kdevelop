@@ -1,3 +1,7 @@
+2001-05-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Back to KDialogBase for configuration dialogs
+
 2001-05-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added a project options dialog to which any
