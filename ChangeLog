@@ -1,3 +1,9 @@
+2003-04-15 Harald Fernengel <harry@kdevelop.org>
+    * The stop-button is now able to stop single parts via drop-down menu.
+      If you grep, build, debug and valgrind at the same time, you can terminate
+      one part only. Single-clicking the stop-button will terminate all active
+      jobs as it did before.
+
 2003-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Replace part refinements and bugfixes
       Tooltips, regexp validation feedback, colorization & gui redraw.
