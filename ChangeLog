@@ -1,3 +1,7 @@
+2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on MDI, some connect()s from init...() moved to DocViewMan::createView()
+    * some bugfixes in the DocViewMan
+
 2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
     * clearBookmarks() is a KWriteDoc method now, KWrite::clearBookmark() just calls its KWriteDoc
     * KWriteDoc: setFileName(), setModified(), setText(), isModified() is public now (for direct access of the document (documents are the central place in an MDI architecture))

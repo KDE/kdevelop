@@ -32,6 +32,8 @@
 #include "khtmlview.h"
 #include "ceditwidget.h"
 #include "docviewman.h"
+#include "./dbg/brkptmanager.h"
+#include "./dbg/vartree.h"
 
 //==============================================================================
 // class implementation
@@ -290,21 +292,47 @@ QWidget* DocViewMan::createView(int docId)
   QListIterator<DocViewNode> itDoc(m_docsAndViews);
   for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
   DocViewNode* pDocViewNode = itDoc.current();
-
   if (!pDocViewNode)
     return 0L; // failed, no such doc found
+
+  // get the type of document
+  int doctype = pDocViewNode->docType;
 
   // cause a view to be created
   QWidget*   pNewView = 0;
 
-  switch (docType( docId)) {
+  switch (doctype) {
   case DocViewMan::Header:
   case DocViewMan::Source:
     {
       KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
       // create the view and add to MDI
-      pNewView = new CEditWidget(0L, "autocreatedview", pDoc, pDocViewNode->docType);
+      CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc, pDocViewNode->docType);
+      pNewView = pEW;
       pNewView->setCaption( pDoc->fileName());
+
+      //connect the editor lookup function with slotHelpSText
+      connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));
+      connect( pEW, SIGNAL(newCurPos()), m_pParent, SLOT(slotNewLineColumn()));
+      connect( pEW, SIGNAL(newStatus()),m_pParent, SLOT(slotNewStatus()));
+      connect( pEW, SIGNAL(clipboardStatus(KWriteView *, bool)), m_pParent, SLOT(slotClipboardChanged(KWriteView *, bool)));
+      connect( pEW, SIGNAL(newUndo()),m_pParent, SLOT(slotNewUndo()));
+      connect( pEW, SIGNAL(bufferMenu(const QPoint&)),m_pParent, SLOT(slotBufferMenu(const QPoint&)));
+      connect( pEW, SIGNAL(grepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
+      connect( pEW->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
+    	// Connect the breakpoint manager to monitor the bp setting - even when the debugging isn't running
+      connect( pEW, SIGNAL(editBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotEditBreakpoint(const QString&,int)));
+      connect( pEW, SIGNAL(toggleBPEnabled(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleBPEnabled(const QString&,int)));
+      connect( pEW, SIGNAL(toggleBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleStdBreakpoint(const QString&,int)));
+      connect( pEW, SIGNAL(clearAllBreakpoints()), m_pParent->getBrkptManager(),   SLOT(slotClearAllBreakpoints()));
+      // connect adding watch variable from the rmb in the editors
+      connect( pEW, SIGNAL(addWatchVariable(const QString&)), m_pParent->getVarViewer()->varTree(), SLOT(slotAddWatchVariable(const QString&)));
+      if (doctype == DocViewMan::Source) {
+        connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
+      }
+      else {
+        connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
+      }
     }
     break;
   case DocViewMan::HTML:
@@ -327,20 +355,21 @@ QWidget* DocViewMan::createView(int docId)
   QApplication::sendPostedEvents();
   pLayout->addWidget( pNewView);
   pMDICover->setName( pNewView->name());
-  m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
   // captions
   QString shortName = pNewView->caption();
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
   pMDICover->setTabCaption( shortName);
+  connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
+          this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  // take it under MDI mainframe control
+  m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
   // show
   pMDICover->show();
 
   // connect signals
 //?       connect(pNewView, SIGNAL(sig_updated(QObject*, int)),
 //?               this, SIGNAL(sig_updated(QObject*, int)));
-  connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
-          this, SLOT(slot_gotFocus(QextMdiChildView*)));
 
   // connect document to view
   if (docId >= 0) {
@@ -380,17 +409,16 @@ void DocViewMan::closeView(QWidget* pView)
   if (!bFound)
     return;
 
+  // the view was found
   // store the current items since lists may change while deleting view and doc
   DocViewNode*   pDocViews = m_docsAndViews.current();
-  // the view was found
+  QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+
   // disconnect the focus signals
-  disconnect(pView->parentWidget(), SIGNAL(gotFocus(QextMdiChildView*)),
-             this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)), this, SLOT(slot_gotFocus(QextMdiChildView*)));
   // remove view list entry
   pViewList->remove(pView);
-
   // remove the view from MDI and delete the view
-  QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
   m_pParent->removeWindowFromMdi( pMDICover);
   delete pMDICover;
 

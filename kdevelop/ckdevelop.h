@@ -215,6 +215,9 @@ public:
   /** Get the current project. */
   CProject* getProject()                 {return prj;}
 
+  /** Get the breakpoint manager */
+  BreakpointManager* getBrkptManager() { return brkptManager; };
+  VarViewer* getVarViewer() { return var_viewer; };
 
  public slots:
 

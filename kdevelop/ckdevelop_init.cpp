@@ -1271,52 +1271,26 @@ void CKDevelop::initConnections(){
   connect(doc_tree, SIGNAL(signalUpdateAPI()), SLOT(slotProjectAPI()));
   connect(doc_tree, SIGNAL(signalUpdateUserManual()), SLOT(slotProjectManual()));
 
+  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
+  connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
+  connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
+  connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));
 
-//FB  //connect the editor lookup function with slotHelpSText
-//FB  connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-//FB  connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-//FB  connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-//FB  connect(cpp_widget, SIGNAL(markStatus(KWriteView *, bool)),
-//FB      this, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
-//FB  connect(cpp_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-//FB      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
-//FB  connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-//FB  connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-//FB  connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//FB  connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-//FB
-//FB  connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-//FB  connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-//FB  connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-//FB  connect(header_widget, SIGNAL(markStatus(KWriteView *, bool)),
-//FB      this, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
-//FB  connect(header_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-//FB      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
-//FB  connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-//FB  connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-//FB  connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//FB  connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-//FB
-//FB  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
-//FB  connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
-//FB  connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
-//FB  connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));
-//FB
-//FB  connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
-//FB  connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-//FB//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-//FB//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
-//FB  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
-//FB  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-//FB  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//FB//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
-//FB
-//FB  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
-//FB  // connect the windowsmenu with a method
-//FB  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
-//FB  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
-//FB
-//FB  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
+  connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
+  connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
+//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
+//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
+  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
+  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
+
+  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
+  // connect the windowsmenu with a method
+  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
+  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
+
+  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
 
 
   // connections for the proc -processes
@@ -1575,27 +1549,6 @@ void CKDevelop::initDebugger()
 
   	// Connect the breakpoint manager to monitor the bp setting - even
   	// when the debugging isn't running
-    // ... Must connect up both editors!!!!!
-//FB    connect(  header_widget,  SIGNAL(editBreakpoint(const QString&,int)),
-//FB              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
-//FB    connect(  cpp_widget,     SIGNAL(editBreakpoint(const QString&,int)),
-//FB              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
-//FB
-//FB    connect(  header_widget,  SIGNAL(toggleBPEnabled(const QString&,int)),
-//FB              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
-//FB    connect(  cpp_widget,     SIGNAL(toggleBPEnabled(const QString&,int)),
-//FB              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
-//FB
-//FB    connect(  header_widget,  SIGNAL(toggleBreakpoint(const QString&,int)),
-//FB              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
-//FB    connect(  cpp_widget,     SIGNAL(toggleBreakpoint(const QString&,int)),
-//FB              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
-//FB
-//FB    connect(  header_widget,  SIGNAL(clearAllBreakpoints()),
-//FB              brkptManager,   SLOT(slotClearAllBreakpoints()));
-//FB    connect(  cpp_widget,     SIGNAL(clearAllBreakpoints()),
-//FB              brkptManager,   SLOT(slotClearAllBreakpoints()));
-
     connect(  var_viewer->varTree(),  SIGNAL(toggleWatchpoint(const QString&)),
               brkptManager,           SLOT(slotToggleWatchpoint(const QString&)));
 
@@ -1613,11 +1566,6 @@ void CKDevelop::initDebugger()
               this,           SLOT(slotDebugBPState(Breakpoint*)));
 
     // connect adding watch variable from the rmb in the editors
-//FB    connect(  header_widget,          SIGNAL(addWatchVariable(const QString&)),
-//FB              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
-//FB    connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
-//FB              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
-
     connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
               frameStack,             SLOT(slotSelectFrame(int)));
   }
