@@ -305,7 +305,7 @@ void MainWindowShare::slotSettings()
     if (TopLevel::mode != TopLevel::AssistantMode)
     {
         dlg.setHelp("setup");
-        QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
+        QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
         gsw = new SettingsWidget(vbox, "general settings widget");
 
         gsw->projects_url->setMode((int)KFile::Directory);

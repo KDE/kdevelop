@@ -152,11 +152,11 @@ void ProjectManager::slotProjectOptions()
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-	QVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
+	QVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-  QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), DesktopIcon("kdf") );
+  QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   vbox = dlg.addVBoxPage(i18n("Languages"));
   LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
