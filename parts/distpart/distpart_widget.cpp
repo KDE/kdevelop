@@ -4,359 +4,602 @@
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
-
+#include <kprocess.h>
+#include <kfiledialog.h>
+#include <kio/netaccess.h>
+#include "kdevproject.h"
+#include "domutil.h"
 
 #include <kdevcore.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
+#include <qnetwork.h>
+#include <qurloperator.h>
 #include "distpart_part.h"
+#include <qdir.h>
+#include <qfile.h>
+#include <qregexp.h>
+#include <qstringlist.h>
+#include "kdevmakefrontend.h"
 
+#include <qerrormessage.h>
 
-DistpartDialog::DistpartDialog(DistpartPart */*part*/)
-	: distpart_ui(0, "distpart widget")
-{
+DistpartDialog::DistpartDialog(DistpartPart *part)
+        : distpart_ui(0, "distpart widget") {
+    m_part = part;
+    tar_proc = new KProcess;
+
     connect(customProjectCheckBox, SIGNAL(toggled(bool) ),
-           this, SLOT(slotcustomProjectCheckBoxChanged()));
+            this, SLOT(slotcustomProjectCheckBoxChanged()));
     connect(uploadCustomCheckBox, SIGNAL(toggled(bool)),
-           this, SLOT(slotuploadCustomCheckBoxChanged()));
+            this, SLOT(slotuploadCustomCheckBoxChanged()));
 
+    connect(okayPushButton, SIGNAL(clicked()),
+            this, SLOT(slotokayPushButtonPressed()));
+    connect(cancelPushButton, SIGNAL(clicked()),
+            this, SLOT(slotcancelPushButtonPressed()));
+    connect(help_PushButton, SIGNAL(clicked()),
+            this, SLOT(slothelp_PushButtonPressed()));
+    connect(createSrcArchPushButton, SIGNAL(clicked()),
+            this, SLOT(slotcreateSrcArchPushButtonPressed()));
+    connect(resetSrcPushButton, SIGNAL(clicked()),
+            this, SLOT(slotresetSrcPushButtonPressed()));
+    connect(buildAllPushButton, SIGNAL(clicked()),
+            this, SLOT(slotbuildAllPushButtonPressed()));
+    connect(exportSPECPushButton, SIGNAL(clicked()),
+            this, SLOT(slotexportSPECPushButtonPressed()));
+    connect(importSPECPushButton, SIGNAL(clicked()),
+            this, SLOT(slotimportPushButtonPressed()));
+    connect(srcPackagePushButton, SIGNAL(clicked()),
+            this, SLOT(slotsrcPackagePushButtonPressed()));
+    connect(genHTMLPushButton, SIGNAL(clicked()),
+            this, SLOT(slotgenHTMLPushButtonPressed()));
+    connect(resetHTMLPushButton, SIGNAL(clicked()),
+            this, SLOT(slotresetHTMLPushButtonPressed()));
+    connect(uploadSubmitPushButton, SIGNAL(clicked()),
+            this, SLOT(slotuploadSubmitPushButtonPressed()));
+    connect(uploadResetPushButton, SIGNAL(clicked()),
+            this, SLOT(slotuploadResetPushButtonPressed()));
+    connect(uploadAddFileToolButton, SIGNAL(clicked()),
+            this, SLOT(slotuploadAddFileToolButtonPressed()));
+    connect(uploadRemoveToolButton, SIGNAL(clicked()),
+            this, SLOT(slotuploadRemoveToolButtonPressed()));
+
+    loadSettings();
+
+    parseDotRpmmacros();
 }
 
 
-DistpartDialog::~DistpartDialog()
-{
+DistpartDialog::~DistpartDialog() {
+    delete tar_proc;
 }
 
 //    QPushButton* okayPushButton;
-void DistpartDialog::slotokayPushButtonPressed()
-{
-   emit okay();
+
+void DistpartDialog::slotokayPushButtonPressed() {
+    storeSettings();
+    accept();
 }
 //    QPushButton* cancelPushButton;
-void DistpartDialog::slotcancelPushButtonPressed()
-{
-   emit cancel();
+
+void DistpartDialog::slotcancelPushButtonPressed() {
+    reject();
 }
 //    QPushButton* help_PushButton;
-void DistpartDialog::slothelp_PushButtonPressed()
-{
-   emit help();
+
+void DistpartDialog::slothelp_PushButtonPressed() {
+    emit help();
 }
 //    QPushButton* createSrcArchPushButton;
-void DistpartDialog::slotcreateSrcArchPushButtonPressed()
-{
+void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
+    QString dist = (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? "make dist-bzip2" : "make dist";
+    QString filename = getappNameFormatLineEditText() + 
+		       "-" + 
+		       getversionLineEditText() + 
+		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
+    QMap<QString,QString>::Iterator it;
+    QString target = ((it = map.find("_sourcedir")) != map.end()) ? (" && mv " + filename + " " + *it + "/") : "";
+    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && " + dist + target);
 }
+
 //    QPushButton* resetSrcPushButton;
-void DistpartDialog::slotresetSrcPushButtonPressed()
-{
-}
+void DistpartDialog::slotresetSrcPushButtonPressed() {}
+
 //    QPushButton* buildAllPushButton;
-void DistpartDialog::slotbuildAllPushButtonPressed()
-{
+void DistpartDialog::slotbuildAllPushButtonPressed() {
+    QMap<QString,QString>::Iterator it;
+    m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -ba " + m_part->project()->projectName() + ".spec");
 }
+
 //    QPushButton* exportSPECPushButton;
-void DistpartDialog::slotexportSPECPushButtonPressed()
-{
+void DistpartDialog::slotexportSPECPushButtonPressed() {
+    QMap<QString,QString>::Iterator it;
+    QString specname = ((it = map.find("_specdir")) != map.end()) ? (*it) : (m_part->project()->projectDirectory());
+    specname += ("/" + m_part->project()->projectName() + ".spec");
+    QFile file(specname);
+
+    if(file.open(IO_WriteOnly)) {
+        QTextStream stream(&file);
+
+        stream << "# This spec file was generated by Gideon" << "\n"
+        << "# Please report any problem to KDevelop Team <kdevelop-devel@kdevelop.org>" << "\n"
+	<< "# Thanks to Matthias Saou for his explanations on http://freshrpms.net/docs/fight.html\n\n";
+	
+        stream << "Name: " << getappNameFormatLineEditText() << "\n";
+        stream << "Version: " << getversionLineEditText() << "\n";
+        stream << "Release: " << getreleaseLineEditText() << "\n";
+        stream << "Vendor: " << getvendorLineEditText() << "\n";
+        stream << "Copyright: " << getlicenseLineEditText() << "\n";
+        stream << "Summary: " << getsummaryLineEditText() << "\n";
+        stream << "Group: " << getgroupLineEditText() << "\n";
+        stream << "Packager: " << getpackagerLineEditText() << "\n";
+        stream << "BuildRoot: " << "%{_tmppath}/%{name}-root" << "\n";
+        stream << "Source: " << getappNameFormatLineEditText() << "-" << getversionLineEditText() 
+	    << ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz") << "\n";
+
+        stream << "\n";
+        stream << "%description\n";
+        stream << getprojectDescriptionMultilineEditText()<< "\n";
+
+        stream << "\n";
+	stream << "%prep\n";
+        stream << "%setup\n";
+        stream << "CFLAGS=\"$RPM_OPT_FLAGS\" CXXFLAGS=\"$RPM_OPT_FLAGS\" ./configure \\" << "\n";
+        stream << "--target=" << getarchComboBoxText() << "\n";
+
+        stream << "\n";
+        stream << "%build\n";
+	stream << "%configure\n";
+	stream << "make\n";
+	
+        stream << "\n";
+        stream << "%install\n";
+	stream << "rm -rf %{buildroot}\n";
+	stream << "%makeinstall\n";
+	
+        stream << "\n";
+        stream << "%clean\n";
+	stream << "rm -rf %{buildroot}\n";
+	
+	stream << "\n";
+	stream << "%post -p /sbin/ldconfig\n";
+
+	stream << "%postun -p /sbin/ldconfig\n";
+	
+	stream << "%files\n";
+	stream << "%defattr(-, root, root)\n";
+	stream << "%doc AUTHORS COPYING ChangeLog NEWS README TODO\n";
+	stream << "%{_bindir}/*\n";
+	stream << "%{_libdir}/*.so.*\n";
+	stream << "%{_datadir}/%{name}\n";
+	stream << "%{_mandir}/man8/*\n";
+	
+	stream << "%changelog\n";
+	stream << getprojectChangelogMultilineEditText() << "\n";
+	
+	
+        file.close();
+    } else {
+        kdDebug() << "TODO : intercept write error in DistpartDialog::slotexportSPECPushButtonPressed()";
+    }
 }
+
 //    QPushButton* importSPECPushButton;
-void DistpartDialog::slotimportPushButtonPressed()
-{
-}
+void DistpartDialog::slotimportPushButtonPressed() {}
+
 //    QPushButton* srcPackagePushButton;
-void DistpartDialog::slotsrcPackagePushButtonPressed()
-{
+void DistpartDialog::slotsrcPackagePushButtonPressed() {
+    QMap<QString,QString>::Iterator it;
+    m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -bs " + m_part->project()->projectName() + ".spec");
 }
+
 //    QPushButton* genHTMLPushButton;
-void DistpartDialog::slotgenHTMLPushButtonPressed()
-{
+void DistpartDialog::slotgenHTMLPushButtonPressed() {}
 
-}
 //    QPushButton* resetHTMLPushButton;
-void DistpartDialog::slotresetHTMLPushButtonPressed()
-{
+void DistpartDialog::slotresetHTMLPushButtonPressed() {}
 
-}
 //    QToolButton* uploadAddFileToolButton;
-void DistpartDialog::slotuploadAddFileToolButtonPressed()
-{
-
+void DistpartDialog::slotuploadAddFileToolButtonPressed() {
+    uploadFileListBox->insertStringList(KFileDialog::getOpenFileNames());
 }
+
 //    QToolButton* uploadRemoveToolButton;
-void DistpartDialog::slotuploadRemoveToolButtonPressed()
-{
-
+void DistpartDialog::slotuploadRemoveToolButtonPressed() {
+    for(unsigned int i=0; i<uploadFileListBox->count(); i++)
+	if (uploadFileListBox->isSelected(i)) uploadFileListBox->removeItem(i);
 }
+
 //    QPushButton* uploadSubmitPushButton;
-void DistpartDialog::slotuploadSubmitPushButtonPressed()
-{
+void DistpartDialog::slotuploadSubmitPushButtonPressed() {
 
+    if(getuploadftpkdeorgCheckBoxState() || getuploadAppsKDEcomCheckBoxState())
+        kdDebug() << "Implement ftp.kde.org & apps.kde.com ftp transfer" << endl;
+    else {
+        for(unsigned int i=0; i<uploadFileListBox->count(); i++)
+	    KIO::NetAccess::copy("file:"+ uploadFileListBox->text(i),getuploadURLLineEditText() + uploadFileListBox->text(i).replace(QRegExp("[^/]*/"),""));
+    }
 }
-//    QPushButton* uploadResetPushButton;
-void DistpartDialog::slotuploadResetPushButtonPressed()
-{
 
+//    QPushButton* uploadResetPushButton;
+void DistpartDialog::slotuploadResetPushButtonPressed() {
+    uploadFileListBox->clear();
 }
 
 // Connect Slots to the following widgets and add
 // accessors and mutators
+
+
 //    QCheckBox* customProjectCheckBox;
-void DistpartDialog::slotcustomProjectCheckBoxChanged()
-{
-  kdDebug () << "New State" << customProjectCheckBox->isChecked() << endl;
-  sourceOptionsGroupBox->setEnabled(customProjectCheckBox->isChecked());
+void DistpartDialog::slotcustomProjectCheckBoxChanged() {
+    kdDebug () << "New State" << customProjectCheckBox->isChecked() << endl;
+    sourceOptionsGroupBox->setEnabled(customProjectCheckBox->isChecked());
 }
-bool DistpartDialog::getcustomProjectCheckBoxState()
-{
+
+bool DistpartDialog::getcustomProjectCheckBoxState() {
     return customProjectCheckBox->isChecked();
 }
-void DistpartDialog::setcustomProjectCheckBoxState(bool state)
-{
+
+void DistpartDialog::setcustomProjectCheckBoxState(bool state) {
     customProjectCheckBox->setChecked(state);
 }
+
 //  QCheckBox* uploadCustomCheckBox;
-void DistpartDialog::slotuploadCustomCheckBoxChanged()
-{
+void DistpartDialog::slotuploadCustomCheckBoxChanged() {
     uploadURLLineEdit->setEnabled(uploadCustomCheckBox->isChecked());
 }
-bool DistpartDialog::getuploadCustomCheckBoxState()
-{
+
+bool DistpartDialog::getuploadCustomCheckBoxState() {
     return uploadCustomCheckBox->isChecked();
 }
-void DistpartDialog::setuploadCustomCheckBoxState(bool state)
-{
+
+void DistpartDialog::setuploadCustomCheckBoxState(bool state) {
     uploadCustomCheckBox->setChecked(state);
 }
 
 // Add accessors and mutators for the following
 
 //   QCheckBox* bzipCheckBox;
-bool DistpartDialog::getbzipCheckBoxState()
-{
+bool DistpartDialog::getbzipCheckBoxState() {
     return bzipCheckBox->isChecked();
 }
-void DistpartDialog::setbzipCheckBoxState(bool state)
-{
+
+void DistpartDialog::setbzipCheckBoxState(bool state) {
     bzipCheckBox->setChecked(state);
 }
+
 //    QCheckBox* appIconCheckBox;
-bool DistpartDialog::getappIconCheckBoxState()
-{
+bool DistpartDialog::getappIconCheckBoxState() {
     return appIconCheckBox->isChecked();
 }
-void DistpartDialog::setappIconCheckBoxState(bool state)
-{
+
+void DistpartDialog::setappIconCheckBoxState(bool state) {
     appIconCheckBox->setChecked(state);
 }
+
 //    QCheckBox* genHTMLCheckBox;
-bool DistpartDialog::getgenHTMLCheckBoxState()
-{
+bool DistpartDialog::getgenHTMLCheckBoxState() {
     return genHTMLCheckBox->isChecked();
 }
-void DistpartDialog::setgenHTMLCheckBoxState(bool state)
-{
+
+void DistpartDialog::setgenHTMLCheckBoxState(bool state) {
     genHTMLCheckBox->setChecked(state);
 }
+
 //    QCheckBox* useRPMInfoCheckBox;
-bool DistpartDialog::getuseRPMInfoCheckBoxState()
-{
+bool DistpartDialog::getuseRPMInfoCheckBoxState() {
     return useRPMInfoCheckBox->isChecked();
 }
-void DistpartDialog::setuseRPMInfoCheckBoxState(bool state)
-{
-     useRPMInfoCheckBox->setChecked(state);
+
+void DistpartDialog::setuseRPMInfoCheckBoxState(bool state) {
+    useRPMInfoCheckBox->setChecked(state);
 }
+
 //    QCheckBox* uploadAppsKDEcomCheckBox;
-bool DistpartDialog::getuploadAppsKDEcomCheckBoxState()
-{
-     return uploadAppsKDEcomCheckBox->isChecked();
+bool DistpartDialog::getuploadAppsKDEcomCheckBoxState() {
+    return uploadAppsKDEcomCheckBox->isChecked();
 }
-void DistpartDialog::setuploadAppsKDEcomCheckBoxState(bool state)
-{
-     uploadAppsKDEcomCheckBox->setChecked(state);
+
+void DistpartDialog::setuploadAppsKDEcomCheckBoxState(bool state) {
+    uploadAppsKDEcomCheckBox->setChecked(state);
 }
+
 //    QCheckBox* uploadftpkdeorgCheckBox;
-bool DistpartDialog::getuploadftpkdeorgCheckBoxState()
-{
+bool DistpartDialog::getuploadftpkdeorgCheckBoxState() {
     return uploadftpkdeorgCheckBox->isChecked();
 }
-void DistpartDialog::setuploadftpkdeorgCheckBoxState(bool state)
-{
+
+void DistpartDialog::setuploadftpkdeorgCheckBoxState(bool state) {
     uploadftpkdeorgCheckBox->setChecked(state);
 }
+
 //    QCheckBox* devPackageCheckBox;
-bool DistpartDialog::getdevPackageCheckBoxState()
-{
+bool DistpartDialog::getdevPackageCheckBoxState() {
     return devPackageCheckBox->isChecked();
 }
-void DistpartDialog::setdevPackageCheckBoxState(bool state)
-{
+
+void DistpartDialog::setdevPackageCheckBoxState(bool state) {
     devPackageCheckBox->setChecked(state);
 }
+
 //    QCheckBox* docsPackageCheckBox;
-bool DistpartDialog::getdocsPackageCheckBoxState()
-{
+bool DistpartDialog::getdocsPackageCheckBoxState() {
     return docsPackageCheckBox->isChecked();
 }
-void DistpartDialog::setdocsPackageCheckBoxState(bool state)
-{
+
+void DistpartDialog::setdocsPackageCheckBoxState(bool state) {
     docsPackageCheckBox->setChecked(state);
 }
-//    QProgressBar* uploadProgressBar;
-int DistpartDialog::getuploadProgressBarProgress()
-{
-    return uploadProgressBar->progress();
-}
-void DistpartDialog::setuploadProgressBarProgress(int progress)
-{
-    uploadProgressBar->setProgress( progress );
-}
+
 //    QLineEdit* archNameFormatLineEdit;
-QString DistpartDialog::getarchNameFormatLineEditText()
-{
+QString DistpartDialog::getarchNameFormatLineEditText() {
     return archNameFormatLineEdit->text();
 }
-void DistpartDialog::setarchNameFormatLineEditText(QString text)
-{
+
+void DistpartDialog::setarchNameFormatLineEditText(QString text) {
     archNameFormatLineEdit->setText(text);
 }
+
 //    QLineEdit* appNameLineEdit;
-QString DistpartDialog::getappNameFormatLineEditText()
-{
+QString DistpartDialog::getappNameFormatLineEditText() {
     return appNameLineEdit->text();
 }
-void DistpartDialog::setappNameFormatLineEditText(QString text)
-{
+
+void DistpartDialog::setappNameFormatLineEditText(QString text) {
     appNameLineEdit->setText(text);
 }
+
 //    QLineEdit* summaryLineEdit;
-QString DistpartDialog::getsummaryLineEditText()
-{
-   return summaryLineEdit->text();
+QString DistpartDialog::getsummaryLineEditText() {
+    return summaryLineEdit->text();
 }
-void DistpartDialog::setsummaryLineEditText(QString text)
-{
-   summaryLineEdit->setText(text);
+
+void DistpartDialog::setsummaryLineEditText(QString text) {
+    summaryLineEdit->setText(text);
 }
-//    QLineEdit* authorLineEdit;
-QString DistpartDialog::getauthorLineEditText()
-{
-   return authorLineEdit->text();
-}
-void DistpartDialog::setauthorLineEditText(QString text)
-{
-   authorLineEdit->setText(text);
-}
+
 //    QLineEdit* groupLineEdit;
-QString DistpartDialog::getgroupLineEditText()
-{
+QString DistpartDialog::getgroupLineEditText() {
     return groupLineEdit->text();
 }
-void DistpartDialog::setgroupLineEditText(QString text)
-{
+
+void DistpartDialog::setgroupLineEditText(QString text) {
     groupLineEdit->setText(text);
 }
+
 //    QLineEdit* releaseLineEdit;
-QString DistpartDialog::getreleaseLineEditText()
-{
-   return releaseLineEdit->text();
+QString DistpartDialog::getreleaseLineEditText() {
+    return releaseLineEdit->text();
 }
-void DistpartDialog::setreleaseLineEditText(QString text)
-{
-   releaseLineEdit->setText(text);
+
+void DistpartDialog::setreleaseLineEditText(QString text) {
+    releaseLineEdit->setText(text);
 }
+
 //    QLineEdit* VersionLineEdit;
-QString DistpartDialog::getversionLineEditText()
-{
-   return versionLineEdit->text();
+QString DistpartDialog::getversionLineEditText() {
+    return versionLineEdit->text();
 }
-void DistpartDialog::setversionLineEditText(QString text)
-{
-     versionLineEdit->setText( text );
+
+void DistpartDialog::setversionLineEditText(QString text) {
+    versionLineEdit->setText( text );
 }
+
 //    QLineEdit* VendorLineEdit;
-QString DistpartDialog::getvendorLineEditText()
-{
+QString DistpartDialog::getvendorLineEditText() {
     return vendorLineEdit->text();
 }
-void DistpartDialog::setvendorLineEditText(QString text)
-{
+
+void DistpartDialog::setvendorLineEditText(QString text) {
     vendorLineEdit->setText(text);
 }
+
 //    QLineEdit* LicenseLineEdit;
-QString DistpartDialog::getlicenseLineEditText()
-{
-   return licenseLineEdit->text();
+QString DistpartDialog::getlicenseLineEditText() {
+    return licenseLineEdit->text();
 }
-void DistpartDialog::setlicenseLineEditText(QString text)
-{
+
+void DistpartDialog::setlicenseLineEditText(QString text) {
     licenseLineEdit->setText(text);
 }
+
 //    QLineEdit* uploadURLLineEdit;
-QString DistpartDialog::getuploadURLLineEditText()
-{
+QString DistpartDialog::getuploadURLLineEditText() {
     return uploadURLLineEdit->text();
 }
-void DistpartDialog::setuploadURLLineEditText(QString text)
-{
-     uploadURLLineEdit->setText(text);
+
+void DistpartDialog::setuploadURLLineEditText(QString text) {
+    uploadURLLineEdit->setText(text);
 }
+
 //    QLineEdit* PackagerLineEdit;
-QString DistpartDialog::getpackagerLineEditText()
-{
-   return packagerLineEdit->text();
+QString DistpartDialog::getpackagerLineEditText() {
+    return packagerLineEdit->text();
 }
-void DistpartDialog::setpackagerLineEditText(QString text)
-{
-   packagerLineEdit->setText(text);
+
+void DistpartDialog::setpackagerLineEditText(QString text) {
+    packagerLineEdit->setText(text);
 }
+
 //    QComboBox* archComboBox;
-QString DistpartDialog::getarchComboBoxText()
-{
-   return archComboBox->currentText();
+QString DistpartDialog::getarchComboBoxText() {
+    return archComboBox->currentText();
 }
-int DistpartDialog::getarchComboBoxItem()
-{
-   return archComboBox->currentItem();
+
+int DistpartDialog::getarchComboBoxItem() {
+    return archComboBox->currentItem();
 }
-void DistpartDialog::setarchComboBoxItem(int item)
-{
-   archComboBox->setCurrentItem( item );
+
+void DistpartDialog::setarchComboBoxItem(int item) {
+    archComboBox->setCurrentItem( item );
 }
+
 //    QListBox* uploadFileListBox;
-QString DistpartDialog::getuploadFileListBoxText()
-{
+QString DistpartDialog::getuploadFileListBoxText() {
     return uploadFileListBox->currentText();
 }
 
-int DistpartDialog::getuploadFileListBoxItem()
-{
+int DistpartDialog::getuploadFileListBoxItem() {
     return uploadFileListBox->currentItem();
 }
-void DistpartDialog::setuploadFileListBoxItem(int item)
-{
+
+void DistpartDialog::setuploadFileListBoxItem(int item) {
     uploadFileListBox->setCurrentItem( item);
 }
+
 //    QListBox* srcDistFileListBox;
-QString DistpartDialog::getsrcDistFileListBoxText()
-{
+QString DistpartDialog::getsrcDistFileListBoxText() {
     return srcDistFileListBox->currentText ();
 }
-int DistpartDialog::getsrcDistFileListBoxItem()
-{
+
+int DistpartDialog::getsrcDistFileListBoxItem() {
     return srcDistFileListBox->currentItem ();
 }
-void DistpartDialog::setsrcDistFileListBoxItem(int item)
-{
+
+void DistpartDialog::setsrcDistFileListBoxItem(int item) {
     srcDistFileListBox->setCurrentItem( item );
 }
+
 //    QMultiLineEdit* projectDescriptionMultilineEdit;
-QString DistpartDialog::getprojectDescriptionMultilineEditText()
-{
+QString DistpartDialog::getprojectDescriptionMultilineEditText() {
     return projectDescriptionMultilineEdit->text();
 }
-void DistpartDialog::setprojectDescriptionMultilineEditText(QString text)
-{
+
+void DistpartDialog::setprojectDescriptionMultilineEditText(QString text) {
     projectDescriptionMultilineEdit->setText(text);
 }
+
+QString DistpartDialog::getprojectChangelogMultilineEditText() {
+    return projectChangelogMultilineEdit->text();
+}
+
+void DistpartDialog::setprojectChangelogMultilineEditText(QString text) {
+    projectChangelogMultilineEdit->setText(text);
+}
+
+void DistpartDialog::loadSettings() {
+    QDomDocument &dom = *m_part->projectDom();
+    dir = m_part->project()->projectDirectory();
+    QDir projectdir(dir);
+    srcDistFileListBox->insertStringList(projectdir.entryList());
+
+    // First Tab
+    setcustomProjectCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/custom",false));
+    slotcustomProjectCheckBoxChanged();
+    setbzipCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/bzip",false));
+    setarchNameFormatLineEditText(DomUtil::readEntry(dom,"/dist/archname"));
+
+
+    // Second Tab
+    setappNameFormatLineEditText(DomUtil::readEntry(dom,"/dist/appname",DomUtil::readEntry(dom,"/general/projectname")));
+    setversionLineEditText(DomUtil::readEntry(dom,"/dist/version",DomUtil::readEntry(dom,"/general/version")));
+    setreleaseLineEditText(DomUtil::readEntry(dom,"/dist/release"));
+    setvendorLineEditText(DomUtil::readEntry(dom,"/dist/vendor"));
+    setlicenseLineEditText(DomUtil::readEntry(dom,"/dist/licence"));
+    setsummaryLineEditText(DomUtil::readEntry(dom,"/dist/summary"));
+    setgroupLineEditText(DomUtil::readEntry(dom,"/dist/group"));
+    setpackagerLineEditText(DomUtil::readEntry(dom,"/dist/packager"));
+    setprojectDescriptionMultilineEditText(DomUtil::readEntry(dom,"/dist/description",DomUtil::readEntry(dom,"/general/description")));
+    setprojectChangelogMultilineEditText(DomUtil::readEntry(dom,"/dist/changelog"));
+    setdevPackageCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/devpackage"));
+    setdocsPackageCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/docspackage"));
+    setappIconCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/appicon"));
+    setarchComboBoxItem(DomUtil::readIntEntry(dom,"/dist/arch"));
+
+    // Third Tab
+    setgenHTMLCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/genHTML"));
+    setuseRPMInfoCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/useRPM"));
+    setuploadftpkdeorgCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/ftpkde"));
+    setuploadAppsKDEcomCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/appskde"));
+    setuploadCustomCheckBoxState(DomUtil::readBoolEntry(dom,"/dist/custom"));
+    slotuploadCustomCheckBoxChanged();
+    setuploadURLLineEditText(DomUtil::readEntry(dom,"/dist/url"));
+}
+
+void DistpartDialog::storeSettings() {
+    QDomDocument &dom = *m_part->projectDom();
+
+    // First Tab
+    DomUtil::writeBoolEntry(dom,"/dist/custom",getcustomProjectCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/bzip",getbzipCheckBoxState());
+    DomUtil::writeEntry(dom,"/dist/archname",getarchNameFormatLineEditText());
+
+    // Second Tab
+    DomUtil::writeEntry(dom,"/dist/appname",getappNameFormatLineEditText());
+    DomUtil::writeEntry(dom,"/dist/version",getversionLineEditText());
+    DomUtil::writeEntry(dom,"/dist/release",getreleaseLineEditText());
+    DomUtil::writeEntry(dom,"/dist/vendor",getvendorLineEditText());
+    DomUtil::writeEntry(dom,"/dist/licence",getlicenseLineEditText());
+    DomUtil::writeEntry(dom,"/dist/summary",getsummaryLineEditText());
+    DomUtil::writeEntry(dom,"/dist/group",getgroupLineEditText());
+    DomUtil::writeEntry(dom,"/dist/packager",getpackagerLineEditText());
+    DomUtil::writeEntry(dom,"/dist/description",getprojectDescriptionMultilineEditText());
+    DomUtil::writeEntry(dom,"/dist/changelog",getprojectChangelogMultilineEditText());    
+    DomUtil::writeBoolEntry(dom,"/dist/devpackage",getdevPackageCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/docspackage",getdocsPackageCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/appicon",getappIconCheckBoxState());
+    DomUtil::writeIntEntry(dom,"/dist/arch",getarchComboBoxItem());
+
+    // Third Tab
+    DomUtil::writeBoolEntry(dom,"/dist/genHTML",getgenHTMLCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/useRPM",getuseRPMInfoCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/ftpkde",getuploadftpkdeorgCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/appskde",getuploadAppsKDEcomCheckBoxState());
+    DomUtil::writeBoolEntry(dom,"/dist/custom",getuploadCustomCheckBoxState());
+    DomUtil::writeEntry(dom,"/dist/url",getuploadURLLineEditText());
+}
+
+void DistpartDialog::parseDotRpmmacros() {
+    QFile dotfile(QDir::homeDirPath() + "/.rpmmacros");
+
+    if (!dotfile.open(IO_ReadOnly)) {
+        QErrorMessage * msg = new QErrorMessage(this);
+        msg->message("It seems you don't have a ~/.rpmmacros\nYou may experience problems building packages.\n");
+        msg->exec();
+        return;
+    }
+    QTextStream stream(&dotfile);
+
+    // Perhaps will it appear as a necessity to parse the global rpm config file?
+
+    // Pre defined macros :
+    map.insert("name",getappNameFormatLineEditText());
+
+    // .rpmmacros parsing :
+    while (!stream.atEnd()) {
+        QString s = stream.readLine();
+        QRegExp re("%([^ \t]*)[ \t][ \t]*([^\t]*)$");
+        if(re.exactMatch(s)) {
+            QRegExp subst("%\\{([^%]*)\\}");
+            QString value = re.cap(2).stripWhiteSpace();
+
+            while(subst.search(value) != -1) {
+                value.replace(QRegExp("%\\{"+subst.cap(1)+"\\}"),*map.find(subst.cap(1)));
+            }
+            map.insert(re.cap(1),value);
+        }
+    }
+    dotfile.close();
+
+    // create directories if necessary :
+    createRpmDirectoryFromMacro("_topdir");
+    createRpmDirectoryFromMacro("_tmppath");
+    createRpmDirectoryFromMacro("_builddir");
+    createRpmDirectoryFromMacro("_rpmdir");
+    createRpmDirectoryFromMacro("_sourcedir");
+    createRpmDirectoryFromMacro("_specdir");
+    createRpmDirectoryFromMacro("_srcrpmdir");
+}
+
+bool DistpartDialog::createRpmDirectoryFromMacro(const QString & name) {
+    QMap<QString,QString>::Iterator it;
+    if((it = map.find(name)) != map.end()) {
+	QDir dir(*it);
+	if (!dir.exists()) return dir.mkdir(*it);
+    }
+    return false;
+}
+
 
 #include "distpart_widget.moc"

@@ -15,19 +15,21 @@
 
 class KDevProject;
 class DistpartPart;
+class QUrlOperator;
+class KProcess;
+
 namespace KParts {
-  class ReadOnlyPart;
+class ReadOnlyPart;
 }
 
 
-class DistpartDialog : public distpart_ui
-{
-  Q_OBJECT
+class DistpartDialog : public distpart_ui {
+    Q_OBJECT
 
 public:
 
-  DistpartDialog(DistpartPart *part);
-  ~DistpartDialog();
+    DistpartDialog(DistpartPart *part);
+    ~DistpartDialog();
 
 signals:
     void okay();
@@ -44,47 +46,48 @@ signals:
     void upload();
     void resetupload();
 
-// Accessors and mutators to control GUI
-// Connect Slots to the following widgets
+    // Accessors and mutators to control GUI
+    // Connect Slots to the following widgets
 
 
 public slots:
-//    QPushButton* okayPushButton;
+    //    QPushButton* okayPushButton;
+
     void slotokayPushButtonPressed();
-//    QPushButton* cancelPushButton;
+    //    QPushButton* cancelPushButton;
     void slotcancelPushButtonPressed();
-//    QPushButton* help_PushButton;
+    //    QPushButton* help_PushButton;
     void slothelp_PushButtonPressed();
-//    QPushButton* createSrcArchPushButton;
+    //    QPushButton* createSrcArchPushButton;
     void slotcreateSrcArchPushButtonPressed();
-//    QPushButton* resetSrcPushButton;
+    //    QPushButton* resetSrcPushButton;
     void slotresetSrcPushButtonPressed();
-//    QPushButton* buildAllPushButton;
+    //    QPushButton* buildAllPushButton;
     void slotbuildAllPushButtonPressed();
-//    QPushButton* exportSPECPushButton;
+    //    QPushButton* exportSPECPushButton;
     void slotexportSPECPushButtonPressed();
-//    QPushButton* importSPECPushButton;
+    //    QPushButton* importSPECPushButton;
     void slotimportPushButtonPressed();
-//    QPushButton* srcPackagePushButton;
+    //    QPushButton* srcPackagePushButton;
     void slotsrcPackagePushButtonPressed();
-//    QPushButton* genHTMLPushButton;
+    //    QPushButton* genHTMLPushButton;
     void slotgenHTMLPushButtonPressed();
-//    QPushButton* resetHTMLPushButton;
+    //    QPushButton* resetHTMLPushButton;
     void slotresetHTMLPushButtonPressed();
-//    QToolButton* uploadAddFileToolButton;
+    //    QToolButton* uploadAddFileToolButton;
     void slotuploadAddFileToolButtonPressed();
-//    QToolButton* uploadRemoveToolButton;
+    //    QToolButton* uploadRemoveToolButton;
     void slotuploadRemoveToolButtonPressed();
-//    QPushButton* uploadSubmitPushButton;
+    //    QPushButton* uploadSubmitPushButton;
     void slotuploadSubmitPushButtonPressed();
-//    QPushButton* uploadResetPushButton;
+    //    QPushButton* uploadResetPushButton;
     void slotuploadResetPushButtonPressed();
 
-// Connect Slots to the following widgets and add
-// accessors and mutators
-//    QCheckBox* customProjectCheckBox;
+    // Connect Slots to the following widgets and add
+    // accessors and mutators
+    //    QCheckBox* customProjectCheckBox;
     void slotcustomProjectCheckBoxChanged();
-//  QCheckBox* uploadCustomCheckBox;
+    //  QCheckBox* uploadCustomCheckBox;
     void slotuploadCustomCheckBoxChanged();
 
 public:
@@ -93,83 +96,95 @@ public:
     bool getuploadCustomCheckBoxState();
     void setuploadCustomCheckBoxState(bool state);
 
-// Add accessors and mutators for the following
+    // Add accessors and mutators for the following
 
-//   QCheckBox* bzipCheckBox;
+    //   QCheckBox* bzipCheckBox;
     bool getbzipCheckBoxState();
     void setbzipCheckBoxState(bool state);
-//    QCheckBox* appIconCheckBox;
+    //    QCheckBox* appIconCheckBox;
     bool getappIconCheckBoxState();
     void setappIconCheckBoxState(bool state);
-//    QCheckBox* genHTMLCheckBox;
+    //    QCheckBox* genHTMLCheckBox;
     bool getgenHTMLCheckBoxState();
     void setgenHTMLCheckBoxState(bool state);
-//    QCheckBox* useRPMInfoCheckBox;
+    //    QCheckBox* useRPMInfoCheckBox;
     bool getuseRPMInfoCheckBoxState();
     void setuseRPMInfoCheckBoxState(bool state);
-//    QCheckBox* uploadAppsKDEcomCheckBox;
+    //    QCheckBox* uploadAppsKDEcomCheckBox;
     bool getuploadAppsKDEcomCheckBoxState();
     void setuploadAppsKDEcomCheckBoxState(bool state);
-//    QCheckBox* uploadftpkdeorgCheckBox;
+    //    QCheckBox* uploadftpkdeorgCheckBox;
     bool getuploadftpkdeorgCheckBoxState();
     void setuploadftpkdeorgCheckBoxState(bool state);
-//    QCheckBox* devPackageCheckBox;
+    //    QCheckBox* devPackageCheckBox;
     bool getdevPackageCheckBoxState();
     void setdevPackageCheckBoxState(bool state);
-//    QCheckBox* docsPackageCheckBox;
+    //    QCheckBox* docsPackageCheckBox;
     bool getdocsPackageCheckBoxState();
     void setdocsPackageCheckBoxState(bool state);
-//    QProgressBar* uploadProgressBar;
-    int getuploadProgressBarProgress();
-    void setuploadProgressBarProgress(int progress);
-//    QLineEdit* archNameFormatLineEdit;
+    //    QLineEdit* archNameFormatLineEdit;
     QString getarchNameFormatLineEditText();
     void setarchNameFormatLineEditText(QString text);
-//    QLineEdit* appNameLineEdit;
+    //    QLineEdit* appNameLineEdit;
     QString getappNameFormatLineEditText();
     void setappNameFormatLineEditText(QString text);
-//    QLineEdit* summaryLineEdit;
+    //    QLineEdit* summaryLineEdit;
     QString getsummaryLineEditText();
     void setsummaryLineEditText(QString text);
-//    QLineEdit* authorLineEdit;
-    QString getauthorLineEditText();
-    void setauthorLineEditText(QString text);
-//    QLineEdit* groupLineEdit;
+    //    QLineEdit* groupLineEdit;
     QString getgroupLineEditText();
     void setgroupLineEditText(QString text);
-//    QLineEdit* releaseLineEdit;
+    //    QLineEdit* releaseLineEdit;
     QString getreleaseLineEditText();
     void setreleaseLineEditText(QString text);
-//    QLineEdit* VersionLineEdit;
+    //    QLineEdit* VersionLineEdit;
     QString getversionLineEditText();
     void setversionLineEditText(QString text);
-//    QLineEdit* VendorLineEdit;
+    //    QLineEdit* VendorLineEdit;
     QString getvendorLineEditText();
     void setvendorLineEditText(QString text);
-//    QLineEdit* LicenseLineEdit;
+    //    QLineEdit* LicenseLineEdit;
     QString getlicenseLineEditText();
     void setlicenseLineEditText(QString text);
-//    QLineEdit* uploadURLLineEdit;
+    //    QLineEdit* uploadURLLineEdit;
     QString getuploadURLLineEditText();
     void setuploadURLLineEditText(QString text);
-//    QLineEdit* PackagerLineEdit;
+    //    QLineEdit* PackagerLineEdit;
     QString getpackagerLineEditText();
     void setpackagerLineEditText(QString text);
-//    QComboBox* archComboBox;
+    //    QComboBox* archComboBox;
     QString getarchComboBoxText();
     int getarchComboBoxItem();
     void setarchComboBoxItem(int item);
-//    QListBox* uploadFileListBox;
+    //    QListBox* uploadFileListBox;
     QString getuploadFileListBoxText();
     int getuploadFileListBoxItem();
     void setuploadFileListBoxItem(int item);
-//    QListBox* srcDistFileListBox;
+    //    QListBox* srcDistFileListBox;
     QString getsrcDistFileListBoxText();
     int getsrcDistFileListBoxItem();
     void setsrcDistFileListBoxItem(int item);
-//    QMultiLineEdit* projectDescriptionMultilineEdit;
+    //    QMultiLineEdit* projectDescriptionMultilineEdit;
     QString getprojectDescriptionMultilineEditText();
     void setprojectDescriptionMultilineEditText(QString text);
+
+    QString getprojectChangelogMultilineEditText();
+    void setprojectChangelogMultilineEditText(QString text);
+    
+
+private:
+    void loadSettings();
+    void storeSettings();
+    
+    void parseDotRpmmacros();
+    bool createRpmDirectoryFromMacro(const QString &);
+    
+    
+    DistpartPart * m_part;
+    QUrlOperator * op;
+    QString dir;
+    KProcess *tar_proc;
+    QMap<QString,QString> map;
 };
 
 

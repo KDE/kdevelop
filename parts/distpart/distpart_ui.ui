@@ -92,6 +92,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QLabel">
                     <property name="name">
@@ -257,6 +263,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>0</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -319,7 +331,7 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QPushButton" row="1" column="1">
+                    <widget class="QPushButton" row="9" column="2">
                         <property name="name">
                             <cstring>srcPackagePushButton</cstring>
                         </property>
@@ -327,7 +339,7 @@
                             <string>Build Source Package</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="2" column="1">
+                    <widget class="QPushButton" row="10" column="2">
                         <property name="name">
                             <cstring>buildAllPushButton</cstring>
                         </property>
@@ -335,7 +347,7 @@
                             <string>Build Source &amp;&amp; Binary Package</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="4" column="1">
+                    <widget class="QPushButton" row="12" column="2">
                         <property name="name">
                             <cstring>importSPECPushButton</cstring>
                         </property>
@@ -343,7 +355,7 @@
                             <string>Import RPM SPEC File</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="3" column="1">
+                    <widget class="QPushButton" row="11" column="2">
                         <property name="name">
                             <cstring>exportSPECPushButton</cstring>
                         </property>
@@ -351,153 +363,98 @@
                             <string>Generate RPM SPEC File</string>
                         </property>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="0" rowspan="5" colspan="1">
+                    <widget class="QLineEdit" row="5" column="1">
                         <property name="name">
-                            <cstring>Layout26</cstring>
+                            <cstring>summaryLineEdit</cstring>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLineEdit" row="5" column="1">
-                                <property name="name">
-                                    <cstring>summaryLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>appNameLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Application name:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="2" column="1">
-                                <property name="name">
-                                    <cstring>releaseLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="4" column="0">
-                                <property name="name">
-                                    <cstring>licenseLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>License:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="5" column="0">
-                                <property name="name">
-                                    <cstring>summaryLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Summary:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="3" column="1">
-                                <property name="name">
-                                    <cstring>vendorLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="7" column="0">
-                                <property name="name">
-                                    <cstring>authorLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Author:</string>
-                                </property>
-                            </widget>
-                            <widget class="QMultiLineEdit" row="10" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>projectDescriptionMultilineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="8" column="0">
-                                <property name="name">
-                                    <cstring>packagerLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Packager:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="8" column="1">
-                                <property name="name">
-                                    <cstring>packagerLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="7" column="1">
-                                <property name="name">
-                                    <cstring>authorLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="6" column="0">
-                                <property name="name">
-                                    <cstring>groupLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Group:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="3" column="0">
-                                <property name="name">
-                                    <cstring>vendorLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Vendor:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>appNameLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>versionLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="9" column="0">
-                                <property name="name">
-                                    <cstring>projectDescriptionLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Description:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="4" column="1">
-                                <property name="name">
-                                    <cstring>licenseLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>releaseLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Release:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="6" column="1">
-                                <property name="name">
-                                    <cstring>groupLineEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>versionLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Version:</string>
-                                </property>
-                            </widget>
-                        </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="0" column="1">
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>appNameLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Application name:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>releaseLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>licenseLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>License:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="5" column="0">
+                        <property name="name">
+                            <cstring>summaryLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Summary:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="3" column="1">
+                        <property name="name">
+                            <cstring>vendorLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="6" column="0">
+                        <property name="name">
+                            <cstring>groupLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Group:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
+                            <cstring>vendorLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Vendor:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="0" column="1">
+                        <property name="name">
+                            <cstring>appNameLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="1" column="1">
+                        <property name="name">
+                            <cstring>versionLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="4" column="1">
+                        <property name="name">
+                            <cstring>licenseLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>releaseLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Release:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="6" column="1">
+                        <property name="name">
+                            <cstring>groupLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>versionLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Version:</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="2" rowspan="9" colspan="1">
                         <property name="name">
                             <cstring>advancedOptionsGroupBox</cstring>
                         </property>
@@ -640,8 +597,53 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>0</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                         </vbox>
+                    </widget>
+                    <widget class="QLineEdit" row="7" column="1">
+                        <property name="name">
+                            <cstring>packagerLineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="7" column="0">
+                        <property name="name">
+                            <cstring>packagerLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Packager:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="8" column="0">
+                        <property name="name">
+                            <cstring>projectDescriptionLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Description :</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="8" column="1">
+                        <property name="name">
+                            <cstring>TextLabel1</cstring>
+                        </property>
+                        <property name="text">
+                            <string>ChangeLog :</string>
+                        </property>
+                    </widget>
+                    <widget class="QMultiLineEdit" row="9" column="0" rowspan="4" colspan="1">
+                        <property name="name">
+                            <cstring>projectDescriptionMultilineEdit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QMultiLineEdit" row="9" column="1" rowspan="4" colspan="1">
+                        <property name="name">
+                            <cstring>projectChangelogMultilineEdit</cstring>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -745,6 +747,12 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>0</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QLayoutWidget">
@@ -857,8 +865,14 @@
                                         <property name="sizeType">
                                             <enum>Minimum</enum>
                                         </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
                                     </spacer>
-                                    <widget class="QToolButton">
+                                    <widget class="QPushButton">
                                         <property name="name">
                                             <cstring>uploadAddFileToolButton</cstring>
                                         </property>
@@ -874,7 +888,7 @@
                                             <string>+</string>
                                         </property>
                                     </widget>
-                                    <widget class="QToolButton">
+                                    <widget class="QPushButton">
                                         <property name="name">
                                             <cstring>uploadRemoveToolButton</cstring>
                                         </property>
@@ -932,6 +946,12 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>0</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
                                     </spacer>
                                     <widget class="QPushButton" row="7" column="0">
                                         <property name="name">
@@ -949,40 +969,12 @@
                                             <string>ftp://username:password@ftp.server.com/path/</string>
                                         </property>
                                     </widget>
-                                    <widget class="QProgressBar" row="6" column="0" rowspan="1" colspan="2">
-                                        <property name="name">
-                                            <cstring>uploadProgressBar</cstring>
-                                        </property>
-                                        <property name="frameShape">
-                                            <enum>Box</enum>
-                                        </property>
-                                        <property name="frameShadow">
-                                            <enum>Sunken</enum>
-                                        </property>
-                                        <property name="progress">
-                                            <number>0</number>
-                                        </property>
-                                        <property name="centerIndicator">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="indicatorFollowsStyle">
-                                            <bool>false</bool>
-                                        </property>
-                                    </widget>
                                     <widget class="QPushButton" row="7" column="1">
                                         <property name="name">
                                             <cstring>uploadResetPushButton</cstring>
                                         </property>
                                         <property name="text">
                                             <string>Reset</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
-                                        <property name="name">
-                                            <cstring>progressLabel</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Progress:</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
@@ -1040,6 +1032,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
@@ -1055,7 +1053,7 @@
 </widget>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="9384">789cdd98db72dbc81186effd14aa9dbbadd4ac08022051a95c883acbd6f9ec542eba07a04452a4241e45a6f2eee999fe076b6fd6b2e4c437592ccafa3498fefb3433807efb75ede6e470edd7df3e4ca634edb935774fe3b55fcbd970b8fcfb3ffef6cf0fbfa4ed35f93f69a76bc92f7ff9f08ba535b776f438aa02982fe074fa05b8b980590fff055e805365db08dc6eb4d7db617ce2b9d16eb84660daf09cac4776b3c849984fa5b2fc46c7a791759c5fc0a9b2b903b7313f8f9c36c2f363b06b16c1bf75e5e67a12d8959175dc9c81d32ca48537c16d7ddeee47ce288ccf95b34cfde507e5bc68a83ffa7c91a488ff040c7fed5dcdeacf108cfcf0b972f48fcbc81a9feb825365b3a59caec37fd84b619f3f82a3fd4c398bf970e002e36791313f8e9718bf8d8cf167e53cce3f0597c84756b3e623556e35307e5db3ce3f00673aceb39ab53f469e9b8d26fac3ad2237b5fe97e014dc02b753addf67b05336184f31df742323df7760f4133d2b67e8573389acfd61603fe6c7dd2be7c827c1dfbc447fb3721dff3e38c63b888c7edf0323dfae1f19e3c7e058af8e721bf669098efd3b8d0c7f4ec0d1de4de0a2cef7129c221ff7e0d8df7b9175dc3d811dfae52e32fafb93728af567cfc0717c5d39cbb45eee4139877f661c59e793536e6558dfa79151cf1e38f637fc6b37106fe4986ff85be7e30a1ceb47356bbca13fd2468cd71e45463fe691d51feb94eb7e1b83b1be795b395b47ff4e94f306e2db898cfda90d2e743e9d29c7f8cd26b880bd7be57601ff0660c443bbca4503f932e00cdc8facf36de8e794c47fadd72338eecfdd9ac338b5c0588ff650396f607c5db91519f6a31e35c1f0dfe435abff97e012fd18ce932c491dfae55639c3fe6967e00c7ca09c67ad66e0cfe012f11c46c6fa9f47ced5fe47e556ec4fe8d7fe75c1f0cf6491d11fa11f33127f343f0fe0025c82a3febdb2f443d033ebe0acc5416f53b9857ea1020cfba6526e63dcb172817ea147708c7faf661d27656aa0df6e6b567fc37acf25bf581fcf60e4cbf695f306f8141ce39f47d6715e44467d32e516f2c323e502f3390597a887518efe991b30f61b731219fd10ea994b3e116f2f72aefe0dc085b2d90697183f578ef935c7ca44a857a7661dbf0657883fd4b7d5cc4b8d97c6caad86b269830bd47b022ec19572017f68a41ced9be7c89a5f73a4cc09f2adf3b9857eb229b840febb358771be0243df9c476eebf3b7ca84fa992765d1537f36c039b88caccfbbe04fbb59dbeb28cb0ba9f223385376a45cc4fc34c0f08f7bca44f027a959c76fc015f85899137d9e97356b7e6e22abbeb902c37f03ff38ea5dd6acf343fc6d16ff959be0027c022e95e95c992ad5e34259f4f4f98bc8451af44660e81907467ce63032fc0ffba3bc5e9698df502e1acabc0bcec0569973f83704c31e2535ab1e2bbb98af61cd3a3ff477e1c4be0bbc032ec03370a9cc2b6526f5873e29cbf1acfe47867ff63a32c63f82e3fcb09e292d4a523e54a686b2b3ca625ffd198073654360d8b35735ebf3717e050ee70d39d90e349e6b3029db29b8527646d925ea0f376a56fd0730ecdbcbc8fabcc1fc12f329ecc79c52c5ea6fa5cc893227e01cbca1ece09f4995a33d636bd6f1153857a6b07eb9147b65e0399894cd145c61fc41d925cadc0413fccd954bf8670b30c6397c3fb98c2b9785f195b24b94f9029c8377c0f1f9b67219fd3b00c33f1bce5b57ca7cf5770a26f016b852b62de512f66951b3da1f2857f0cf2c6bd6f9613f2ac5bf52fd9b28970978079c2b9bbe7205ff4c2f329e0ff6cb4a9ed7bf14f4c0a4cc47e04a99c055a26c5ec004bda2667d3e9cefa2565579b0bfa55c25cafc08ce95cd020c3db31b19e3fbca5dccb7a13ffd68a5fe8fc1a44c07e04ad93495e37cb357b3ce0f7a5db1d60de374a15c8f6f47d67113c7a3fe22b28edb909f6e57b81b780426f010dc553e9d5af333efa049f2d34fbcff188765eb7e6e1cb6b495eddabb9f1ac7bdeda98aed87ebe7d46310541eecd08eeca37dfa19f508b13c8bc2d08eedc44e456586dfcfe4e7ff515fd9b94430b20bfb222a4bbbb21bc17a47e21bfd585c7f12c7c06eda2d51f02adb627947ecef86dc8dec9eddb707f6a3fd640fedd17f15c7a33d16eb5e6524b539919fbdfd537b66cfed85bdb457f6daded85bfbd9aedbc60fc561a49fa63609969b1287af4d6a339bdb966ddbc258630cd96bc3c699d254a66bee7e649d4b2cab50f1a5e80ccdbdd8ed99be19884a6173d178108da1199947f3649ecdd84cde1b47a8c986999a998fc1ccc5fa42ae17b9965ec5ac7cbe4483456343343a66d36cbd7fbf32db92271fc38e44b06bf6cc7e50e99b03db0ed9fa683e994389e4c91c996373624ecdd93be330b20aa512e65c2c2e44e1c22e824a5f22696bb64483cda5b99238aecd8db9359fcdfa3be3684814db269128bcf50bd1694a1c3d5f77b33269a8fa9771642637ad77c5d191fe1d9ab639108d17d1684a1f2f42078f444d2a42167194be1e64e4dd93e58db37c475f75fc5e42956d9981a834d57abdfebd5e4b349c68f8be3a3137d4158d3bbaff7e1c52e97bead92ef545634503c9cbe02b057fbd84f59fd0030da51a1b34925cddd2a3683cd1f36b71d05876f44e586ffeaaec9026c6489f16c1776f59ff5d487c53ead38ce6b48815974cbd88c69256b4f1ed38446321b6bd8f0beaf89f695356413bfc262a8c69cb56b42dd70e6dcb1adda681565ca278a15d89638ff65f8b830ef4125b53b139a48ff449a2d0fc8bef627d26d66772edc87d68fd8c23597f27d2b79944b14bc7729d7c3b0efb24b16fc99ae8d1a9f8e8e338a373ba90bcff6e5def9d70cf652fdea503c996ac0dba148d2b89e29a6e5e89e3963e8bff2b5b99a9ecb4b297d3ba7c7bf56171f6c5bffede914ced86b81351e85233642a95afa9fcd5385ad65b6ccb2ed5914c0ca9602bbd15fdfefa0e99124fc652918c5ed830d131333b2ebfb73e584e72eef29def5dbee79e5859d5be07ff717542e5c6a2915097fb3c909e3ae6071eca29b6f7b6752e31c91ae49158d9fe22965a45ceb05dafc08fe62ae4e98e9fe89a9f594e67c935bf699dcfe4b41df2841f7d46ccf48b08da5e8b1f55c16e49a6bcc2946794f19c1752a78a5fdeb6efca6a1ff29257762be47df5a58aac5055487883fbd24f77dc919eca7893b7ec3228bc69df955826a2b2cd3b74eaebeb63e15d6afb9bfc49bc25578ff7648f1205dee703fec89f6c4f32e5de7a7ec8ba7ff467141fda89a824761c55c8ab8a021ff17150381185533ee37389e1c23ef1e5dbe2e02be95db1e9f72e3e94b5b92356139af3ae69f0351f894a8f6ff844349692a5946ff9336ff145d8f5fa41e5fb7194fe0d8eb6f928a8ac73436c1e89ef899c5d2b3ae526a79a25dae319677c69977ea734dbb2baee39ff7e1cec77dd83b047757c5544a5c56d2e9c75c691499c3f2996be9778df3957f2a5d47a25bbc4ccc86ee62a89e4ee0def577e5d2461170f6bdaebb8aebb73f7aee7faae2fb6074e569c1bba917831118581bd377efd7c966c5692077e2d0ef2f6777d67ca0e393153c9ff95f8e9dfe8b6f9c9a6eed13db9917b767de9e165e8888ebc079f48f52ad91f7c153bf25ebef76a1c4f722e1c8882ac66d93366b6cb5dbbe7c6b2d38ec309286b2374aebf3669ee266eea66a2b4f4441dbe161599f17a3de856d6b7645876e2a6dfbddc3cc4772bef434ddeb5be777bd26357f691738edf5c0f6e215dd1b32b4e24f2afbec5bed15733de126f9ead73f33fbc3f0ea5b33ab6eb2abe72e3a0fe7b1d9fe53b4256ba7b91fda40a2aafaff3d2ba3ff679780f1ecaee3297eb90ff635f92585b720eb58cffa2a8a4aeeef575fee7b7efeaf07d35913c76dcf29bcfca77a5d49fbfb75ffde91e26ef72d20fd26f74681a6efced672596f27bfbd5b76ec9f8506a3e91337fefad73defb7706e3df27b664776dbad55be7bc370ee9ebaeef677fa6feac387ee4febff9bbcfbffefae1dfd19c730e</data>
+        <data format="XPM.GZ" length="9358">789cdd98596fe3c811c7dfe75318db6f8ba05794444a4490075bbe667cdf479087aaa62e4bb2755ab2827cf75477fd9b3b973d47320890e50a333f15bbfe7575939a3f7edfb83d3ddaf8fd8f77b339cdfb6ec3f568baf17bb1188d5efefe8fbffdf3dd6ff5e686fc5f6d5637aabffde5dd6f67f30db771fcf4d8f6e03c984af82ff0025c57b6f7819b49b3d20cf689e7a499b82430bd78ae5622bb59e46a584fac2cdfa87d1a59edfc0cae2b9b36b889f5f5c8f524dc3f06bb5a1ee2bb53ae55aa811d4756bb3905d7d3903c6f829b7abfdd8b9c52b0cf95d354e3e507e52c4f341ebd3fafd691ff3118f1da76c91acf008cfaf099728c8f39b2e6e70a705dd96c29d72b881ffeeaf0cfefc1d17f4d398df520700efb6964ac8ff602f69bc8b03f296771fd09b8403d6a256b3daaca8d04f6ab9275fd3e38553bcf4ad6f9187aae2535cc875b45ae69ff2fc075700a6ed6b57fb760a76c60af63bd2922a3de6d30e6899e9453ccab9944d6f930f01febe33aca19ea4988372b30df46b9cc7f0f1cf3ed47c6bcef82516fd78b0cfb1138f66baddc847f5a82e3fc4e23239e6370f4771d382febbd04d7518f0e38cef76e64b5bb47b0c3bcb42363be3f28d7b1ffec2938daef94d354fbe51e9433c467c691753d917223c5fe3e898c7e76c171be115f3341be9163bd116f598f4b70ec9f2d59f30df3514f62bef63032e6b11e59e3b1a45ccedb188cfdcd2de5b482f99d286709f2db8e8cf32903e7ba9e4e9563fe66139cc35f47b99923be3e18f9d08e729e8073708afaf522eb7a1be6b94e12bff66b048ee7735172b0530ac67eb407ca5902fb9d722332fc473d4ac088dfd44bd6782fc005e6313c4fd26add615e6e94539c9f76064ec1fbca59daa805be0517c8e72032f6ff3c72a6fedf2b37e27c42bf8caf00233e538b8cf908f39892c4a3f57900e7600647fd8eb2cc43d03377e0b4c1416f53b98179a10618fe8d536ec2ee8c728e79a11138e6bf5bb2daad322598b79b9235deb0df33a92ff6c71318f5b23de52c019f8063fef3c86ae74564f4a7a6dc407d78a89c633d57c105ea932bc7f8cc3518e78d398e8c7908fdcca49ec8b71b39d3f8fae05cd9b4c005ec67cab1bee6489908f1ac4b56fb15b88dfc437f1bb5acd07c69acdc48944d06ced1ef09b8003be51cf1d05039fa374f91b5bee65099aba8b7aee706e6c956c139ea5f941cec7c0986be398bdcd4fb6f9409fd338fcaa2a7f1bc80333047d6fb5d88a7592bfdad95e5855479044e959d55ce637deec1888fbbca4488a752b2daafc16df0913257f57e5e96acf5b98eacfae6128cf80de2e3a87751b2ae0ff93759e2574ec039f8185c28d39932b5558f1bcaa2a7f79f47ceeb416f08869e2130f2330791117f381fe5f5b2c0fa7be53c51e61d70aa4c4d65ce10df000c7f542959f58cb28bf51a94acebc37ce74efcbbc0dbe01c3c0317cabc5266423c1f94e5f1acf147467cf62a32ecefc1717dd8cf54cf0b523e50a644999bcae25fe3e983336563c1f0672f4b567b5cdfc6faf0bc2127c781e6730526653b05b761cf955d15f1dc97acfe1fc0f06f2f22ebfd16eb0baca7701e739ddaac76a7cc5565ae8033f08bb2437ca6aa1cfdd966c96a5f8133650afb970bf157049e8349d94cc16dd81f945d5599133021deba7281f86c030c3b87df4f2ee5b64b837da5ecaaca7c0ecec0dbe0787fa65cc4f8f6c188cf86e7ad2b64bdc63b0513780bdc56b6a97201ffb42859fdf795db88cf2c4bd6f5e13c2a24be42e39b281755f0363853363de536e233ddc8b83ff82fda727ff8f700db0593321f82dbca046e5795cd3398a0d72859ef0fcf77516bb7b3e07f4bb95d55e6113853360b30f4cc4e64d8f7943b586fc37c7a6b5be31f834999f6c16d659328c7f566b7645d1ff43ae2ad13ec74ae5cda5b91d56ea23dea2f22abdd86fa743ac29dc043308107e08ef2d9fcd75eff0b0d6b2cfd5a0dcbd6d9c2b67fa946c77655c5f6fcf58b6ad50f2a0f76608776641f7f8546c8e5491406766c27766a1fed0cdfcf7e56f12b1a73c9606817f659549676655fbc77bb96fc863fa7f2158dbeddb45ba2e0555ae2795bfcef84da0dedaeddb3fbf6bdfd600fece17f94c7c81e8977af3294de1ccbdfbdff137b6acfecb9bdb097f6ca5edb1b7b6befecfdcf68884a4ffa50099e13c9c3f7a66a6bb66e539bd9866ddadc587b658c21c3c699c27c63d6bfbecf259755e8f8527406a6639ba66b7aa62f2a0dd1cacd83680cccd08ccca379326333f9098dbe7d315333f33998b9785fc8f52cd7d2ab9895af976818d178118db5d9345b3faa7136372da993cf615b32d831bb662fa8f4ccbed4cb57ebbdf9600e24934773688eccb13931a73faa21bb503a61ce6c26be77cdb95d04959e649269b544c3980b7329795c996b73636ecddd0fe6712f59b44c45b2f0decf4527913cbabeef6665aaa1eb1fe751337593fe503fd632bf0393997dd178168d44e678112678286ad211d3441e1cfa91932523ef9ffc431a729690b3a9e98b4aa2decbfdeff552d120d1f073756caea9108d3675bead219dee50d716d4138d15f5a52efd4f14fcf51cf67f851e6820dd78a1a1d4ea8646a2f1484f6f69d0584ef475d86ffe727640139bcb9c3642ecdeb3feb990fca6d4a319cd69113b2e957a168d25ade8e54d8d85f8f6312e68edff4e9bb20bb2f04d5418d39675d4926b9b5ab2475bd4d78e4b16cfb42379ecd2de5b1ab4af97f89a8acf01bda70f9285d65f6217ef33f13e936b5b3e07d6af38947e1fcbdcd6248b1d3a92ebf8750dfb28b96fc99ee8d289c4e8f338a5333a97baffe95d3fdbe13397b37887f6a55ab237e842342e258b2bba7e238f1bba95f857d699a99cb47296d31ddd4bddd5e3eca33ffd675b2ab513f2ae884221bfd27ca5aa54a3fa9b79a4d67bcce4945a4b2506d4a0a6cc568cfbd34fa8944432968ed4a417395b3a6223bf58beb2433e9d5d9627b9ff2de367973bdc152fab32f6103fae75e8dc58342a54708ffb325347fcc003798aed7edf1e949c640ff250bcb43ecaa5549167d88e57e091b90c756af3235df113cbd3596a6dbe6b9fcfe4693be0098f7c45ccf4a30c32afc52355b05b5229af30e519d578ce0be993e3e7efd1904ce4d4e525afec56a8fbea6315d9a1aa50e117eec93cb5792d3355e34ddeb2cbcf15de7adf958806dce26d3af1fdf5b9f00e65fe43fe49bc25579777e58c1205dee37d7ecf1f6c572af5c5bbecab798ce5e49567141fd889a854ec38aa905715053ee4a3a0702c0a277cca6792c3b97de48befd3e04b995df1e9cf2e3e90bdb92d5e2b34e71d73cf577c282a5dbee663d1584a95aa7cc3b7bcc5e7e1d4eb7daef24acfd9bfc1518b0f83ca1ddf8bcf4389bd22cfae159d70c255ad12edf28c6b7c6197fea4342dd95d1dae7f5b83fda9bb1fcea8b5ef8aa8a49c71839b9c3b6b2ace3f29967e96784f7e57335f48af57724acc8c9c66ce4926ed6f69c8fb95df1795708a873ded75c2eff28eebba9eeb89efbe931de7066e28514c44a16f3bc6ef9f5ba9a6933a98b734c8fbdff1932927e4c44ca5fe9712a77fa36bf1a3adba917b7443f7e47a32c3cb30116b791f3e96ee39391f7c17d7f25ebefb9686dcdf924a55a4cf477266cc6cc185dd75633969c7e109287b234caebf3669ee266eea66a2b4f4446bbe1295e26d0d7f06cbfe960acb499cf8d3cbe15b791f4a78c7fad9ed929fbd11d763e5ed835bc85474ed8a2b92f927bfc55e3b4b784ba279b2e43efdbe2f6f2bf7528bc239be74e3cfac4ff23b4276ba7b96f3c4fda9f2ea3b9c1cd65fee26790f1ec8e93297eb80bf3897fc592acfa1d4f85f144efa4a6f6b7cfdf2531d7e5f4da48e6bb77ced3effbb52fa6f7e4643de8117320f326f7460eeddf8f53b2597f269f5a3ff0620151f48cf27f2ccffe259f4daf5a31ac6bf4f6cc9e99ab8d5afd290b92efc3c7fed99fadfd2f899ebff46e35f7f7df76f97fc358f</data>
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
