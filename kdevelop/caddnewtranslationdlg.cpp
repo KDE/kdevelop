@@ -88,132 +88,132 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 
 
 	if(po_files.contains("br.po") == 0){
-	  lang_combo->insertLanguage("br;Breton");
+	  lang_combo->insertLanguage(i18n("br;Breton"));
 	  lang_list.append("br");
 	}
 	if(po_files.contains("ca.po") == 0){
-	  lang_combo->insertLanguage("ca;Catalan");
+	  lang_combo->insertLanguage(i18n("ca;Catalan"));
 	  lang_list.append("ca");
 	}
 	 if(po_files.contains("cs.po") == 0){
-	  lang_combo->insertLanguage("cs;Czech");
+	  lang_combo->insertLanguage(i18n("cs;Czech"));
 	  lang_list.append("cs");
 	}
 	if(po_files.contains("da.po") == 0){
-	  lang_combo->insertLanguage("da;Danish");
+	  lang_combo->insertLanguage(i18n("da;Danish"));
 	  lang_list.append("da");
 	}
 	if(po_files.contains("de.po") == 0){
-	  lang_combo->insertLanguage("de;German");
+	  lang_combo->insertLanguage(i18n("de;German"));
 	  lang_list.append("de");
 	}
 	if(po_files.contains("el.po") == 0){
-	  lang_combo->insertLanguage("el;Greek");
+	  lang_combo->insertLanguage(i18n("el;Greek"));
 	  lang_list.append("el");
 	}
 	if(po_files.contains("eo.po") == 0){
-	  lang_combo->insertLanguage("eo;Esperanto");
+	  lang_combo->insertLanguage(i18n("eo;Esperanto"));
 	  lang_list.append("eo");
 	}
 	if(po_files.contains("es.po") == 0){
-	  lang_combo->insertLanguage("es;Spanish");
+	  lang_combo->insertLanguage(i18n("es;Spanish"));
 	  lang_list.append("es");
 	}
+	if(po_files.contains("et.po") == 0){
+	  lang_combo->insertLanguage(i18n("et;Estonian"));
+	  lang_list.append("et");
+	}
 	if(po_files.contains("fi.po") == 0){
-	  lang_combo->insertLanguage("fi;Finnish");
+	  lang_combo->insertLanguage(i18n("fi;Finnish"));
 	  lang_list.append("fi");
 	}
 	if(po_files.contains("fr.po") == 0){
-	  lang_combo->insertLanguage("fr;French");
+	  lang_combo->insertLanguage(i18n("fr;French"));
 	  lang_list.append("fr");
 	}
 	if(po_files.contains("he.po") == 0){
-	  lang_combo->insertLanguage("he;Hebrew");
+	  lang_combo->insertLanguage(i18n("he;Hebrew"));
 	  lang_list.append("he");
 	}
 	if(po_files.contains("hr.po") == 0){
-	  lang_combo->insertLanguage("hr;Croatian");
+	  lang_combo->insertLanguage(i18n("hr;Croatian"));
 	  lang_list.append("hr");
 	}
 	if(po_files.contains("hu.po") == 0){
-	  lang_combo->insertLanguage("hu;Hungarian");
+	  lang_combo->insertLanguage(i18n("hu;Hungarian"));
 	  lang_list.append("hu");
 	}
 	if(po_files.contains("is.po") == 0){
-	  lang_combo->insertLanguage("is;Islandic");
+	  lang_combo->insertLanguage(i18n("is;Islandic"));
 	  lang_list.append("po");
 	}
 	if(po_files.contains("it.po") == 0){
-	  lang_combo->insertLanguage("it;Italian");
+	  lang_combo->insertLanguage(i18n("it;Italian"));
 	  lang_list.append("it");
 	}
-	if(po_files.contains("hr.po") == 0){
-	  lang_combo->insertLanguage("hr;Croatian");
-	  lang_list.append("hr");
-	}
 	if(po_files.contains("ja.po") == 0){
-	  lang_combo->insertLanguage("ja;Japanese");
+	  lang_combo->insertLanguage(i18n("ja;Japanese"));
 	  lang_list.append("ja");
  	}
 	if(po_files.contains("ko.po") == 0){
-	  lang_combo->insertLanguage("ko;Korean");
+	  lang_combo->insertLanguage(i18n("ko;Korean"));
 	  lang_list.append("ko");
 	}
 	if(po_files.contains("mk.po") == 0){
-	  lang_combo->insertLanguage("mk;Macedonian");
+	  lang_combo->insertLanguage(i18n("mk;Macedonian"));
 	  lang_list.append("mk");
 	}
 	if(po_files.contains("nl.po") == 0){
-	  lang_combo->insertLanguage("nl;Dutch");
+	  lang_combo->insertLanguage(i18n("nl;Dutch"));
 	  lang_list.append("nl");
 	}
 	if(po_files.contains("no.po") == 0){
-	  lang_combo->insertLanguage("no;Norwegian");
+	  lang_combo->insertLanguage(i18n("no;Norwegian"));
 	  lang_list.append("no");
 	}
 	if(po_files.contains("pl.po") == 0){
-	  lang_combo->insertLanguage("pl;Polish");
+	  lang_combo->insertLanguage(i18n("pl;Polish"));
 	  lang_list.append("pl");
 	}
 	if(po_files.contains("pt.po") == 0){
-	  lang_combo->insertLanguage("pt;Portuguese");
+	  lang_combo->insertLanguage(i18n("pt;Portuguese"));
 	  lang_list.append("pt");
 	}
 	if(po_files.contains("pt_BR.po") == 0){
-	  lang_combo->insertLanguage("pt_BR;Brazil Portuguese");
+	  lang_combo->insertLanguage(i18n("pt_BR;Brazil Portuguese"));
 	  lang_list.append("pt_BR");
 	}
 	if(po_files.contains("ro.po") == 0){
-	  lang_combo->insertLanguage("ro;Romanian");
+	  lang_combo->insertLanguage(i18n("ro;Romanian"));
 	  lang_list.append("ro");
 	}
 	if(po_files.contains("ru.po") == 0){
-	  lang_combo->insertLanguage("ru;Russian");
+	  lang_combo->insertLanguage(i18n("ru;Russian"));
 	  lang_list.append("ru");
 	}
 	if(po_files.contains("sk.po") == 0){
-	  lang_combo->insertLanguage("sk;Slovak");
+	  lang_combo->insertLanguage(i18n("sk;Slovak"));
 	  lang_list.append("sk");
 	}
+	if(po_files.contains("sl.po") == 0){
+	  lang_combo->insertLanguage(i18n("sl;Slovenian"));
+	  lang_list.append("sl");
+	}
 	if(po_files.contains("sv.po") == 0){
-	  lang_combo->insertLanguage("sv;Swedish");
+	  lang_combo->insertLanguage(i18n("sv;Swedish"));
 	  lang_list.append("sv");
 	}
 	if(po_files.contains("tr.po") == 0){
-	  lang_combo->insertLanguage("tr;Turkish");
+	  lang_combo->insertLanguage(i18n("tr;Turkish"));
 	  lang_list.append("tr");
 	}
 	if(po_files.contains("zh_CN.GB2312.po") == 0){
-	  lang_combo->insertLanguage("zh_CN.GB2312;Simplified Chinese");
+	  lang_combo->insertLanguage(i18n("zh_CN.GB2312;Simplified Chinese"));
 	  lang_list.append("zh_CN.GB2312");
 	}
 	if(po_files.contains("zh_TW.Big5.po") == 0){
-	  lang_combo->insertLanguage("zh_TW.Big5;Chinese");
+	  lang_combo->insertLanguage(i18n("zh_TW.Big5;Chinese"));
 	  lang_list.append("zh_TW.Big5");
-	}
-	if(po_files.contains("et.po") == 0){
-	  lang_combo->insertLanguage("et;Estonian");
-	  lang_list.append("et");
 	}
 	if(lang_list.isEmpty()){
 	  KMsgBox::message(0,i18n("Information"),i18n("Your sourcecode is already translated to all supported languages."),KMsgBox::INFORMATION);
