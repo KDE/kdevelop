@@ -308,18 +308,12 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     }
     
     if( kind == "class" ){
-	if( m_currentClass )
-	    m_currentClass->addClass( klass );
-	else
-	    m_currentScopeContainer->addClass( klass );
+	m_currentScopeContainer->addClass( klass );
 	
 	if( !inStore )
 	    m_store->addClass( klass );
     } else {
-	if( m_currentClass )
-	    m_currentClass->addStruct( klass );
-	else
-	    m_currentScopeContainer->addStruct( klass );
+	m_currentScopeContainer->addStruct( klass );
 	
 	if( !inStore )
 	    m_store->addStruct( klass );
@@ -584,8 +578,11 @@ void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMetho
 
 	    ParsedArgument* arg = new ParsedArgument();
 	    
-	    if( param->declarator() )
-		arg->setName( declaratorToString(param->declarator(), QString::null, true) );
+	    if( param->declarator() ){
+		QString text = declaratorToString(param->declarator(), QString::null, true ); 
+		if( !text.isEmpty() )
+		    arg->setName( text );
+	    }
 
 	    arg->setType( typeOfDeclaration(param->typeSpec(), param->declarator()) );
 	    method->addArgument( arg );
