@@ -83,6 +83,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           actionCollection(), "project_addtranslation" );
     action->setToolTip(i18n("Add translation"));
     action->setWhatsThis(i18n("<b>Add translation</b><p>Creates .po file for the selected language."));
+    action->setGroup("autotools");
 
 /*	action = new KAction ( i18n("&Import Existing Files && Directories..."), "", 0,
 							this, SLOT ( slotImportExisting() ),
@@ -99,6 +100,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Build &Active Target"), "make_kdevelop", Key_F7,
                           this, SLOT(slotBuildActiveTarget()),
@@ -108,6 +110,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               "Also builds dependent targets.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
@@ -116,6 +119,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Run Configure"), 0,
                           this, SLOT(slotConfigure()),
@@ -124,12 +128,14 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Run configure</b><p>Executes <b>configure</b> with flags, arguments "
                               "and environment variables specified in the project settings dialog, "
                               "<b>Configure Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Run automake && friends"), 0,
                           this, SLOT(slotMakefilecvs()),
                           actionCollection(), "build_makefilecvs" );
     action->setToolTip(i18n("Run automake && friends"));
     action->setWhatsThis(i18n("<b>Run automake && friends</b><p>Executes<br><b>make -f Makefile.cvs</b><br><b>./configure</b><br>commands from the project directory."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Install"), 0,
                           this, SLOT(slotInstall()),
@@ -138,6 +144,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> command from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Install (as root user)"), 0,
                           this, SLOT(slotInstallWithKdesu()),
@@ -147,6 +154,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
@@ -155,6 +163,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Clean project</b><p>Runs <b>make clean</b> command from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("&Distclean"), 0,
                           this, SLOT(slotDistClean()),
@@ -163,6 +172,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Distclean</b><p>Runs <b>make distclean</b> command from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     action = new KAction( i18n("Make Messages && Merge"), 0,
                           this, SLOT(slotMakeMessages()),
@@ -171,6 +181,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Make messages && merge</b><p>Runs <b>make package-messages</b> command from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+    action->setGroup("autotools");
 
     if (!m_isKDE)
         action->setEnabled(false);
@@ -182,16 +193,18 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                          "Build configuration is a set of build and top source directory settings, "
                                          "configure flags and arguments, compiler flags, etc.<br>"
                                          "Modify build configurations in project settings dialog, <b>Configure Options</b> tab."));
+    buildConfigAction->setGroup("autotools");
 
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute Program"), "exec", Key_F9,
+        action = new KAction( i18n("Execute Program"), "exec", CTRL+Key_F9,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
         action->setToolTip(i18n("Execute program"));
         action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab. "
                                   "If it is not specified then the active target is used to determine the application to run."));
+        action->setGroup("autotools");
     }
 
     connect( buildConfigAction, SIGNAL(activated(const QString&)),
