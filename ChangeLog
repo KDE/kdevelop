@@ -1,6 +1,10 @@
 2002-12-26 Caleb Tennis <caleb@aei-tech.com>
 	* Get AppWizard name and email settings from KDE emaildefaults
           file if it's available
+	* Applied fix to KTabZoomWidget to enable hide button when docked
+	  and set minimum size to 175 (by Dominic Battre)
+	* Applied patch to fileselector to store filter history 
+	  (also by Dominic Battre)
 
 2002-12-23 Caleb Tennis <caleb@aei-tech.com>
 	* Fixed bugs with python support; patches by Julian Rockney
