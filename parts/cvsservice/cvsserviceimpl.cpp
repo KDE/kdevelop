@@ -49,8 +49,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-CvsServiceImpl::CvsServiceImpl( CvsPart *part, const char *name )
-    : CvsPartImpl( part, name? name : "cvsserviceimpl" )
+CvsServiceImpl::CvsServiceImpl( CvsServicePart *part, const char *name )
+    : CvsServicePartImpl( part, name? name : "cvsserviceimpl" )
 {
     if (requestCvsService())
     {
@@ -374,14 +374,14 @@ void CvsServiceImpl::unTag( const KURL::List& urlList )
 
 void CvsServiceImpl::addToIgnoreList( const KURL::List& urlList )
 {
-    CvsPartImpl::addToIgnoreList( projectDirectory(), urlList );
+    CvsServicePartImpl::addToIgnoreList( projectDirectory(), urlList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsServiceImpl::removeFromIgnoreList( const KURL::List& urlList )
 {
-    CvsPartImpl::removeFromIgnoreList( projectDirectory(), urlList );
+    CvsServicePartImpl::removeFromIgnoreList( projectDirectory(), urlList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

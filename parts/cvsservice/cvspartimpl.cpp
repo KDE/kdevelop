@@ -33,16 +33,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Nice name (relative to projectDirectory()) ;-)
-const QString CvsPartImpl::changeLogFileName( "ChangeLog" );
+const QString CvsServicePartImpl::changeLogFileName( "ChangeLog" );
 // Four spaces for every log line (except the first, which includes the
 // developers name)
-const QString CvsPartImpl::changeLogPrependString( "    " );
+const QString CvsServicePartImpl::changeLogPrependString( "    " );
 
 ///////////////////////////////////////////////////////////////////////////////
-// class CvsPartImpl
+// class CvsServicePartImpl
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsPartImpl::CvsPartImpl( CvsPart *part, const char *name )
+CvsServicePartImpl::CvsServicePartImpl( CvsServicePart *part, const char *name )
     : QObject( this, name? name : "cvspartimpl" ),
     m_part( part ), m_widget( 0 )
 {
@@ -50,7 +50,7 @@ CvsPartImpl::CvsPartImpl( CvsPart *part, const char *name )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsPartImpl::~CvsPartImpl()
+CvsServicePartImpl::~CvsServicePartImpl()
 {
     if (processWidget())
     {
@@ -62,14 +62,14 @@ CvsPartImpl::~CvsPartImpl()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op )
+bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op )
 {
-    kdDebug() << "===> CvsPartImpl::prepareOperation(const KURL::List &, CvsOperation)" << endl;
+    kdDebug() << "===> CvsServicePartImpl::prepareOperation(const KURL::List &, CvsOperation)" << endl;
     KURL::List urls = someUrls;
 
     if (!m_part->project())
     {
-        kdDebug(9000) << "CvsPartImpl::prepareOperation(): No project???" << endl;
+        kdDebug(9000) << "CvsServicePartImpl::prepareOperation(): No project???" << endl;
         KMessageBox::sorry( 0, i18n("Open a project first.\nOperation will be aborted.") );
         return false;
     }
@@ -93,7 +93,7 @@ bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op 
     validateURLs( projectDirectory(),  urls, op );
     if (urls.count() <= 0) // who knows? ;)
     {
-        kdDebug(9000) << "CvsPartImpl::prepareOperation(): No valid document URL selected!!!" << endl;
+        kdDebug(9000) << "CvsServicePartImpl::prepareOperation(): No valid document URL selected!!!" << endl;
         KMessageBox::sorry( 0, i18n("None of the file(s) you selected seems to be valid for repository.") );
         return false;
     }
@@ -107,16 +107,16 @@ bool CvsPartImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPartImpl::doneOperation()
+void CvsServicePartImpl::doneOperation()
 {
     // If some kind of clean-up is needed ...
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPartImpl::isRegisteredInRepository( const QString &projectDirectory, const KURL &url )
+bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsPartImpl::isRegisteredInRepository() here! " << endl;
+    kdDebug(9000) << "===> CvsServicePartImpl::isRegisteredInRepository() here! " << endl;
 
     CVSDir cvsdir( url.directory() );
     if (!cvsdir.isValid())
@@ -130,9 +130,9 @@ bool CvsPartImpl::isRegisteredInRepository( const QString &projectDirectory, con
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPartImpl::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op )
+void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op )
 {
-    kdDebug(9000) << "CvsPartImpl::validateURLs() here!" << endl;
+    kdDebug(9000) << "CvsServicePartImpl::validateURLs() here!" << endl;
 
     // If files are to be added, we can avoid to check them to see if they are registered in the
     // repository ;)
@@ -144,7 +144,7 @@ void CvsPartImpl::validateURLs( const QString &projectDirectory, KURL::List &url
     QValueList<KURL>::iterator it = urls.begin();
     while (it != urls.end())
     {
-        if (!CvsPartImpl::isRegisteredInRepository( projectDirectory, (*it) ))
+        if (!CvsServicePartImpl::isRegisteredInRepository( projectDirectory, (*it) ))
         {
             kdDebug(9000) << "Warning: file " << (*it).path() << " does NOT belong to repository and will not be used" << endl;
 
@@ -161,9 +161,9 @@ void CvsPartImpl::validateURLs( const QString &projectDirectory, KURL::List &url
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &url )
+void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsPartImpl::addToIgnoreList() here! " << endl;
+    kdDebug(9000) << "===> CvsServicePartImpl::addToIgnoreList() here! " << endl;
 
     if ( url.path() == projectDirectory )
     {
@@ -175,7 +175,7 @@ void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &
     cvsdir.ignoreFile( url.fileName() );
 }
 
-void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL::List &urls )
+void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const KURL::List &urls )
 {
     for (size_t i=0; i<urls.count(); ++i)
     {
@@ -185,9 +185,9 @@ void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL::
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, const KURL &url )
+void CvsServicePartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsPartImpl::removeFromIgnoreList() here! " << endl;
+    kdDebug(9000) << "===> CvsServicePartImpl::removeFromIgnoreList() here! " << endl;
 
     QStringList ignoreLines;
 
@@ -195,7 +195,7 @@ void CvsPartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, con
     cvsdir.doNotIgnoreFile( url.fileName() );
 }
 
-void CvsPartImpl::removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls )
+void CvsServicePartImpl::removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls )
 {
     for (size_t i=0; i<urls.count(); ++i)
     {
@@ -205,7 +205,7 @@ void CvsPartImpl::removeFromIgnoreList( const QString &projectDirectory, const K
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPartImpl::isValidDirectory( const QDir &dir ) const
+bool CvsServicePartImpl::isValidDirectory( const QDir &dir ) const
 {
     CVSDir cvsdir( dir );
 
@@ -214,35 +214,35 @@ bool CvsPartImpl::isValidDirectory( const QDir &dir ) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsProcessWidget *CvsPartImpl::processWidget() const
+CvsProcessWidget *CvsServicePartImpl::processWidget() const
 {
     return m_widget;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevMainWindow *CvsPartImpl::mainWindow() const
+KDevMainWindow *CvsServicePartImpl::mainWindow() const
 {
     return m_part->mainWindow();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString CvsPartImpl::projectDirectory() const
+QString CvsServicePartImpl::projectDirectory() const
 {
     return m_part->project()->projectDirectory();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevCore *CvsPartImpl::core() const
+KDevCore *CvsServicePartImpl::core() const
 {
     return m_part->core();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevDiffFrontend *CvsPartImpl::diffFrontend() const
+KDevDiffFrontend *CvsServicePartImpl::diffFrontend() const
 {
     return m_part->diffFrontend();
 }

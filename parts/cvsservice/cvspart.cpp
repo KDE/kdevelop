@@ -79,14 +79,14 @@ bool g_projectWasJustCreated = false;
 // Plugin factory
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef KGenericFactory<CvsPart> CvsFactory;
+typedef KGenericFactory<CvsServicePart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( "kdevcvsservice" ) );
 
 ///////////////////////////////////////////////////////////////////////////////
-// class CvsPart
+// class CvsServicePart
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
+CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QStringList & )
     : KDevVersionControl( "KDevCvsServicePart", "kdevcvsservicepart", parent,
         name ? name : "CvsService" ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
@@ -106,7 +106,7 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsPart::~CvsPart()
+CvsServicePart::~CvsServicePart()
 {
     delete m_cvsConfigurationForm;
     delete m_impl;
@@ -114,7 +114,7 @@ CvsPart::~CvsPart()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::init()
+void CvsServicePart::init()
 {
     setupActions();
 
@@ -142,7 +142,7 @@ void CvsPart::init()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::setupActions()
+void CvsServicePart::setupActions()
 {
     actionCommit = new KAction( i18n("&Commit to repository"), 0, this,
         SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
@@ -194,16 +194,16 @@ void CvsPart::setupActions()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::fetchFromRepository()
+void CvsServicePart::fetchFromRepository()
 {
     m_impl->checkout();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::createNewProject( const QString &dirName )
+void CvsServicePart::createNewProject( const QString &dirName )
 {
-    kdDebug( 9000 ) << "====> CvsPart::createNewProject( const QString& )" << endl;
+    kdDebug( 9000 ) << "====> CvsServicePart::createNewProject( const QString& )" << endl;
 
     if (!m_cvsConfigurationForm)
         return;
@@ -225,7 +225,7 @@ void CvsPart::createNewProject( const QString &dirName )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::projectConfigWidget( KDialogBase *dlg )
+void CvsServicePart::projectConfigWidget( KDialogBase *dlg )
 {
     QVBox *vbox = dlg->addVBoxPage( i18n("CvsService") );
     CvsOptionsWidget *w = new CvsOptionsWidget( (QWidget *)vbox, "cvs config widget" );
@@ -234,7 +234,7 @@ void CvsPart::projectConfigWidget( KDialogBase *dlg )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QWidget* CvsPart::newProjectWidget( QWidget *parent )
+QWidget* CvsServicePart::newProjectWidget( QWidget *parent )
 {
     m_cvsConfigurationForm = new CvsForm( parent, "cvsform" );
     return m_cvsConfigurationForm;
@@ -242,7 +242,7 @@ QWidget* CvsPart::newProjectWidget( QWidget *parent )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
+void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
 {
     if (context->hasType( Context::FileContext ))
     {
@@ -289,9 +289,9 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::urlFocusedDocument( KURL &url )
+bool CvsServicePart::urlFocusedDocument( KURL &url )
 {
-    kdDebug(9000) << "CvsPartImpl::retrieveUrlFocusedDocument() here!" << endl;
+    kdDebug(9000) << "CvsServicePartImpl::retrieveUrlFocusedDocument() here!" << endl;
     KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
     if ( part )
     {
@@ -310,28 +310,28 @@ bool CvsPart::urlFocusedDocument( KURL &url )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::isValidDirectory( const QDir &dir ) const
+bool CvsServicePart::isValidDirectory( const QDir &dir ) const
 {
     return m_impl->isValidDirectory( dir );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionLogin()
+void CvsServicePart::slotActionLogin()
 {
     m_impl->login();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionLogout()
+void CvsServicePart::slotActionLogout()
 {
     m_impl->logout();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionCommit()
+void CvsServicePart::slotActionCommit()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -342,7 +342,7 @@ void CvsPart::slotActionCommit()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionUpdate()
+void CvsServicePart::slotActionUpdate()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -353,7 +353,7 @@ void CvsPart::slotActionUpdate()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionAdd()
+void CvsServicePart::slotActionAdd()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -364,7 +364,7 @@ void CvsPart::slotActionAdd()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionAddBinary()
+void CvsServicePart::slotActionAddBinary()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -375,7 +375,7 @@ void CvsPart::slotActionAddBinary()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionRemove()
+void CvsServicePart::slotActionRemove()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -386,7 +386,7 @@ void CvsPart::slotActionRemove()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionRemoveSticky()
+void CvsServicePart::slotActionRemoveSticky()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -397,7 +397,7 @@ void CvsPart::slotActionRemoveSticky()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionLog()
+void CvsServicePart::slotActionLog()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -408,7 +408,7 @@ void CvsPart::slotActionLog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionDiff()
+void CvsServicePart::slotActionDiff()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -419,7 +419,7 @@ void CvsPart::slotActionDiff()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionTag()
+void CvsServicePart::slotActionTag()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -430,7 +430,7 @@ void CvsPart::slotActionTag()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionUnTag()
+void CvsServicePart::slotActionUnTag()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -441,7 +441,7 @@ void CvsPart::slotActionUnTag()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionAddToIgnoreList()
+void CvsServicePart::slotActionAddToIgnoreList()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -452,7 +452,7 @@ void CvsPart::slotActionAddToIgnoreList()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionRemoveFromIgnoreList()
+void CvsServicePart::slotActionRemoveFromIgnoreList()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
@@ -463,91 +463,91 @@ void CvsPart::slotActionRemoveFromIgnoreList()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotCommit()
+void CvsServicePart::slotCommit()
 {
     m_impl->commit( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotUpdate()
+void CvsServicePart::slotUpdate()
 {
     m_impl->update( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotAdd()
+void CvsServicePart::slotAdd()
 {
     m_impl->add( m_urls, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotAddBinary()
+void CvsServicePart::slotAddBinary()
 {
     m_impl->add( m_urls, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotRemove()
+void CvsServicePart::slotRemove()
 {
     m_impl->remove( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotRemoveSticky()
+void CvsServicePart::slotRemoveSticky()
 {
     m_impl->removeStickyFlag( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotLog()
+void CvsServicePart::slotLog()
 {
     m_impl->log( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotDiff()
+void CvsServicePart::slotDiff()
 {
     m_impl->diff( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotTag()
+void CvsServicePart::slotTag()
 {
     m_impl->tag( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotUnTag()
+void CvsServicePart::slotUnTag()
 {
     m_impl->unTag( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotAddToIgnoreList()
+void CvsServicePart::slotAddToIgnoreList()
 {
     m_impl->addToIgnoreList( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotRemoveFromIgnoreList()
+void CvsServicePart::slotRemoveFromIgnoreList()
 {
     m_impl->removeFromIgnoreList( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotStopButtonClicked( KDevPlugin* which )
+void CvsServicePart::slotStopButtonClicked( KDevPlugin* which )
 {
     if ( which != 0 && which != this )
         return;
@@ -557,9 +557,9 @@ void CvsPart::slotStopButtonClicked( KDevPlugin* which )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotAddFilesToProject( const QStringList &filesToAdd )
+void CvsServicePart::slotAddFilesToProject( const QStringList &filesToAdd )
 {
-    kdDebug( 9000 ) << "====> CvsPart::slotAddFilesToProject(const QStringList &)" << endl;
+    kdDebug( 9000 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want to be added to CVS repository too?"),
@@ -579,9 +579,9 @@ void CvsPart::slotAddFilesToProject( const QStringList &filesToAdd )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
+void CvsServicePart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
 {
-    kdDebug( 9000 ) << "====> CvsPart::slotRemovedFilesFromProject( const QStringList &)" << endl;
+    kdDebug( 9000 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
@@ -601,9 +601,9 @@ void CvsPart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotProjectOpened()
+void CvsServicePart::slotProjectOpened()
 {
-    kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << endl;
+    kdDebug(9000) << "CvsServicePart::slotProjectOpened() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );
@@ -630,9 +630,9 @@ void CvsPart::slotProjectOpened()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotProjectClosed()
+void CvsServicePart::slotProjectClosed()
 {
-    kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << endl;
+    kdDebug(9000) << "CvsServicePart::slotProjectClosed() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );

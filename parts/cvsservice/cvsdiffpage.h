@@ -21,8 +21,6 @@ class QTextEdit;
 
 /**
 Implementation for the form displaying 'cvs diff' output.
-
-@author KDevelop Authors
 */
 class CVSDiffPage : public QWidget, public DCOPObject
 {

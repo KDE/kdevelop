@@ -43,7 +43,7 @@ int g_dcopErrCounter = 0;
 #endif
 
 
-CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name )
+CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsServicePart *part, QWidget *parent, const char *name )
     : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_service( service ), m_job( 0 )
 {
     setReadOnly( true );

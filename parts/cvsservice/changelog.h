@@ -17,7 +17,7 @@
 /**
 A class which abstracts the building of an entry in the ChangeLog file (it formats name, e-mail and text).
 
-@author KDevelop Authors
+@author Mario Scalas
 */
 struct ChangeLogEntry
 {

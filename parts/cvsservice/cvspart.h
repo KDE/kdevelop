@@ -33,24 +33,19 @@ class CheckoutDialog;
 
 class CvsService_stub;
 class Repository_stub;
-class CvsPartImpl;
+class CvsServicePartImpl;
 
-/**
-* Implementation for the CvsPart command line tool wrapper: it let to do all common
-* used cvs operations (add, commit, remove, ...).
-* @todo Additional slots for more complex stuff as status, revert, patch creation, ...
-*/
-class CvsPart : public KDevVersionControl
+class CvsServicePart : public KDevVersionControl
 {
     Q_OBJECT
 
-    friend class CvsPartImpl;
+    friend class CvsServicePartImpl;
 
 public:
     //! Standard constructor.
-    CvsPart( QObject *parent, const char *name, const QStringList & );
+    CvsServicePart( QObject *parent, const char *name, const QStringList & );
     //! Destructor.
-    virtual ~CvsPart();
+    virtual ~CvsServicePart();
 
     /**
     * Returns the configuration widget (for properly configuring the project to
@@ -153,7 +148,7 @@ private:
         *actionLogin,
         *actionLogout;
 
-    CvsPartImpl *m_impl;
+    CvsServicePartImpl *m_impl;
 };
 
 #endif

@@ -21,7 +21,7 @@ class CVSLogPage;
 /**
 Implementation for the form displaying 'cvs log' output.
 
-@author KDevelop Authors
+@author Mario Scalas
 */
 class CVSLogDialog : public KDialogBase
 {

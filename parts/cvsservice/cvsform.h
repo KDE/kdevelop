@@ -17,8 +17,6 @@
 /**
 An instance of this class is used by the AppWizard to collect
 information about setting up the cvs repository.
-
-@author KDevelop Authors
 */
 class CvsForm : public CvsFormBase
 {

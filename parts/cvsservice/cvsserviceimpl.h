@@ -26,11 +26,11 @@ class Repository_stub;
 *
 * @author Mario Scalas
 */
-class CvsServiceImpl : public CvsPartImpl
+class CvsServiceImpl : public CvsServicePartImpl
 {
     Q_OBJECT
 public:
-    CvsServiceImpl( CvsPart *part, const char *name=0 );
+    CvsServiceImpl( CvsServicePart *part, const char *name=0 );
     virtual ~CvsServiceImpl();
 
     // Implementation of CvsOperations

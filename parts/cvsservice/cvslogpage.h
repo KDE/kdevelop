@@ -22,7 +22,7 @@ class QTextBrowser;
 /**
 Implementation for the form displaying 'cvs log' output.
 
-@author KDevelop Authors
+@author Mario Scalas
 */
 class CVSLogPage : public QVBox, public DCOPObject
 {
@@ -41,7 +41,7 @@ k_dcop:
     void slotReceivedErrors( QString someErrors );
 
 signals:
-    // Emitted when the user click upon a link
+    //! Emitted when the user click upon a link
     void diffRequested( const QString &revA, const QString &revB );
 
 private slots:

@@ -17,11 +17,6 @@
 #include <qwidget.h>
 #include "cvsoptionswidgetbase.h"
 
-/**
- *
- * KDevelop Authors
- **/
-
 class QLabel;
 class QLineEdit;
 class QVBoxLayout;

@@ -17,7 +17,7 @@
 
 #include <dcopobject.h>
 
-class CvsPart;
+class CvsServicePart;
 class DCOPRef;
 class CvsJob_stub;
 class CvsService_stub;
@@ -28,7 +28,7 @@ class CvsProcessWidget : public QTextEdit, public DCOPObject
     K_DCOP
     Q_OBJECT
 public:
-    CvsProcessWidget( CvsService_stub *service, CvsPart *part,
+    CvsProcessWidget( CvsService_stub *service, CvsServicePart *part,
         QWidget *parent, const char *name );
     virtual ~CvsProcessWidget();
 
@@ -47,7 +47,7 @@ public:
     QStringList errors() const { return m_errors; }
 
 k_dcop:
-    // Connect this part with job's DCOP reference
+    //! Connect this part with job's DCOP reference
     void slotJobExited( bool normalExit, int exitStatus );
     void slotReceivedOutput( QString someOutput );
     void slotReceivedErrors( QString someErrors );
@@ -60,12 +60,12 @@ private:
     void showError( const QStringList &msg  );
     void showOutput( const QStringList &msg  );
 
-    CvsPart *m_part;
+    CvsServicePart *m_part;
     CvsService_stub *m_service;
     CvsJob_stub *m_job;
 
-    // A temporary buffer for storing characters as they arrive. CVS is not
-    // kind enough to present us whole strings :-(
+    //! A temporary buffer for storing characters as they arrive. CVS is not
+    //! kind enough to present us whole strings :-(
     QString m_outputBuffer,
         m_errorBuffer;
 

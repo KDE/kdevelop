@@ -26,14 +26,14 @@ class CommitDialog : public QDialog
 public:
     CommitDialog();
 
-    // Returns the text of the log
+    //! Returns the text of the log
     QStringList logMessage() const;
-    // Returns true if the user requests the log message to be added to the general
-    // Changelog file
+    //! Returns true if the user requests the log message to be added to the general
+    //! Changelog file
     bool mustAddToChangeLog() const;
 
 protected slots:
-    // Override: must check for message not being void.
+    //! Override: must check for message not being void.
     virtual void accept();
 
 private:

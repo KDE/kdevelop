@@ -1,0 +1,58 @@
+/** \class CvsServicePart
+This is an experimental attempt to integrate Cervisia HEAD's cvsservice into gideon (read FAQ).
+This part _does_ require cvsservice being installed on
+your system: I'm not an auto* wizard so you have to manually pass to the
+configure script the options:<br>
+<code>
+    --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
+</code>
+(where $HOME/kde is where I install my own kde stuff so I don't mess with working kde installation)
+
+<b>WARNING:</b> Keep in mind that there are incoming changes in cvsservice architecture
+which could make this part quite subject to heavy modifications.
+<b>WARNING2:</b> If it doesn't compile try to update your cvsservice.
+
+Implementation of this component is done by:
+  - class CvsServicePart, which does provide integration within gideon, set-up GUI
+    integration, forward cvs commands to the implementation (m_impl). It does also
+    intercepts signals like "new files added to project" and "... removed from ...".
+  - class CvsServicePartImpl & CvsServiceImpl do implement the actus feature: more general
+    functions (like checking for whether files are in repository, provide checks
+    on file lists, ...) so that it can be used for other implementations: currently
+    I've only provided that using CvsService from Cervisia HEAD.
+  - class CvsProcessWidget provides output wrapping for commands (ok, it is useful
+    for debugging too ;-). This seems to be pretty *** buggy *** and needs to be
+    fixed.
+  - class CvsOptions provides info about the user preferences when executing commands:
+    settings are stored in myprj.kdevses file, loaded when project is opened and
+    saved when project is closed.
+  - There is a bunch of dialog classes for collecting useful data about the operations
+    one wants to perform: the only exception is LogForm which does perform some
+    complex text parsing and so encapsulates much logic (It was already made in this
+    way: I simply ported to CvsService ;-)
+
+
+\authors <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\maintainer <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\feature because this is a (buggy) direct conversion, as in parts/cvs (MarioS: this is a strange feature!)
+\feature it is possbile to 'add as binary' files to repository
+\feature checkout from remote repository ability added to the appwizard/importdlg
+\feature should handle :ext: repositories thanks to cvsservice
+\feature can tag / un-tag files
+\feature Can revert and diff between specific releases
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+
+\requirement <a href="http://www.cvshome.org">CVS</a> >= 1.10.6
+\requirement Cervisia >= 2.1 (from kdesdk package included in <a href="http://www.kde.org">KDE</a> >= 3.2)
+
+\todo Test with SSH repositories!
+\todo Share a common outputview between VCS: CvsProcessWidget should be reworked :-/
+\todo Additional slots for more complex stuff as status, revert, patch creation, ...
+
+\faq <b>Does cvsservicepart support login with :pserver: or :ext: ?</b>
+   Well, I dunno ;-) I have no ssh repositories to test so feel free to provide feedback on the subject :-)
+
+*/

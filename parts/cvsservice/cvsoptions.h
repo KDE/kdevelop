@@ -12,7 +12,7 @@
 #include <qstring.h>
 #include <qdom.h>
 
-class CvsPart;
+class CvsServicePart;
 class KConfig;
 class KDevProject;
 
@@ -88,7 +88,7 @@ private:
     QString m_location;
     unsigned int m_compressionLevel;
     unsigned int m_contextLines;
-    // So we can access cvssservice configuration (repositories first of all)
+    //! So we can access cvssservice configuration (repositories first of all)
     KConfig *m_serviceConfig;
 
     static CvsOptions *m_instance;
