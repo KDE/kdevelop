@@ -169,7 +169,7 @@ void AddTargetDialog::accept()
 	QString ldflags = flagslist.join(" ");
 
 	TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
-	m_detailsView->insertItem ( titem );
+	// m_detailsView->insertItem ( titem );
 	m_subproject->targets.append(titem);
 
 	QString canonname = AutoProjectTool::canonicalize(name);
