@@ -193,6 +193,8 @@ bool Parser::skipUntilStatement()
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
     
+    lex->nextToken();
+    
     while( !lex->lookAhead(0).isNull() ){
 	switch( lex->lookAhead(0) ){
 		case ';':
