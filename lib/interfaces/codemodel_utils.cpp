@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2003 Alexander Dymo <adymo@kdevelop.org>
+    Copyright (C) 2004 Jonas Jacobi <j.jacobi@gmx.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -309,6 +310,102 @@ bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefi
 		return true;
 	}
 	return false;
+}
+
+ClassDom findClassByPosition( NamespaceModel* nameSpace, int line, int col )
+{
+	if (nameSpace == 0)
+		return 0;
+		
+	NamespaceList nsList = nameSpace->namespaceList();
+	for (NamespaceList::iterator i = nsList.begin(); i != nsList.end(); ++i)
+	{
+		ClassDom result = findClassByPosition(*i, line, col);
+		if (result != 0)
+		return result;
+	}
+		
+	ClassList classes = nameSpace->classList();
+	for(ClassList::iterator i = classes.begin(); i != classes.end(); ++i)
+	{
+		ClassDom result = findClassByPosition( *i, line, col );
+		if (result != 0)
+		return result;
+	}
+	
+	return 0;
+}
+
+ClassDom findClassByPosition( ClassModel* aClass, int line, int col )
+{
+	if (aClass == 0)
+		return 0;
+	
+	ClassList classes = aClass->classList();
+	for(ClassList::iterator i = classes.begin(); i != classes.end(); ++i)
+	{
+		ClassDom result = findClassByPosition( *i, line, col );
+		if (result != 0)
+		return result;
+	}
+		
+	int startLine, startCol;
+	aClass->getStartPosition(&startLine, &startCol);
+	
+	if (startLine <= line)
+	{
+		int endLine, endCol;
+		aClass->getEndPosition(&endLine, &endCol);
+		if (endLine >= line)
+		return (aClass);
+	}
+	
+	return 0;
+}
+
+int findLastMethodLine( ClassDom aClass, CodeModelItem::Access access )
+{	
+	int point = -1;
+	
+	const FunctionList functionList = aClass->functionList();
+	for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
+	{
+		int funEndLine, funEndColumn;
+		(*it)->getEndPosition( &funEndLine, &funEndColumn );
+		
+		if ((*it)->access() == access && point < funEndLine)
+		point = funEndLine;
+	}
+		
+	return point;
+}
+	
+int findLastVariableLine( ClassDom aClass, CodeModelItem::Access access )
+{
+	int point = -1;
+	
+	const VariableList varList = aClass->variableList();
+	for( VariableList::ConstIterator it= varList.begin(); it!= varList.end(); ++it )
+	{
+		int varEndLine, varEndColumn;
+		(*it)->getEndPosition( &varEndLine, &varEndColumn );
+		
+		if ((*it)->access() == access && point < varEndLine)
+		point = varEndLine;
+	}
+		
+	return point;
+}
+
+QString accessSpecifierToString( CodeModelItem::Access access )
+{
+  switch(access)
+  {
+	case CodeModelItem::Public: return "public";
+	case CodeModelItem::Protected: return "protected";
+	case CodeModelItem::Private: return "private";
+	default: return "unknown";
+  }
 }
 
 }//end of namespace CodeModeUtils

@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
+    Copyright (C) 2004 Jonas Jacobi<j.jacobi@gmx.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -138,9 +139,6 @@ added to the result list otherwise it is skipped.
 @param fun The function definition.
 @param lst The reference to a list of function definitions. Will be filled by this function.*/
 template <class Pred> void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, FunctionDefinitionList & lst );
-
-
-
 
 /**Finds function declarations which match given predicate in files. 
     
@@ -382,6 +380,47 @@ private:
 FunctionList allFunctions(const FileDom &dom);
 AllFunctions allFunctionsDetailed(const FileDom &dom);
 AllFunctionDefinitions allFunctionDefinitionsDetailed(const FileDom &dom);
+
+/**
+ * Find a class by its position in a file(position inside the part of the file, where the class is declared).
+ * In the case of nested classes the innermost class which is declared at/around the provided position.
+ * @param nameSpace A namespace to search for the class
+ * @param line a linenumber inside the class declaration
+ * @param col the colum of line.
+ * @return The innermost class, which is declared at/around position defined with line / col, or 0 if no class is found
+ * @author Jonas Jacobi <j.jacobi@gmx.de>
+ */
+ClassDom findClassByPosition( NamespaceModel* nameSpace, int line, int col );
+
+/**
+ * Same as above, just searches inside a class instead of a namespace. 
+ */
+ClassDom findClassByPosition( ClassModel* aClass, int line, int col );
+
+/**
+ * Finds the last occurrence (line of file wise) of a method inside a class declaration with specific access specificer.
+ * This can be used e.g. to find a position to new methods to the class
+ * @param aClass class to search for method
+ * @param access the access specifier with which methods are searched for
+ * @return The last line a Method with access specifier access is found, 
+ * or -1 if no method with that access specifier was found
+ * @author Jonas Jacobi <j.jacobi@gmx.de>
+ */
+int findLastMethodLine( ClassDom aClass, CodeModelItem::Access access );
+
+/**
+ * Same as above, but finds a membervariable instead of a method
+ */
+int findLastVariableLine( ClassDom aClass, CodeModelItem::Access access );
+	
+/**
+ * Get the string representation of an accesss pecifier
+ * @param access access specifier to get a string representation of.
+ * @return string representation of access (e.g. "public")
+ * @author Jonas Jacobi <j.jacobi@gmx.de>
+ */
+QString accessSpecifierToString( CodeModelItem::Access access );
+
 }
 
 #endif
