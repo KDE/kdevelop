@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The User Manual to KDevelop: Overview</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
-<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -32,18 +32,13 @@ window for headers and any other text files like the documentation sgml's, then 
 followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconedit
 and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the registration
 of third-party programs can easily be done by a configuration dialog (see 
-<A HREF="index-12.html#General Configuration">General Configuration</A>
-). For a description of
-the Editor windows functionality, see chapter 7,
-<A HREF="index-7.html#Working with the Editor">Working with the Editor</A>
-, and for the
-Helpbrowser, you should look at section 
-<A HREF="index-6.html#Using the Documentation Browser">Using the Documentation Browser</A>
-.
-<P>
+<A HREF="index-12.html#General Configuration">General Configuration</A>). For a description of the Editor windows functionality, see chapter 
+<A HREF="index-7.html#Working with the Editor">Working with the Editor</A>, and for the Helpbrowser, you should look at section 
+<A HREF="index-6.html#Using the Documentation Browser">Using the Documentation Browser</A>.
 <H3><A NAME="ss5.2">5.2 The Classbrowser and Fileviewers</A>
 </H3>
 
+<P>
 <P>
 <H4>The Class Viewer</H4>
 
@@ -54,8 +49,7 @@ headerfile containing the class and set the cursor to the class declaration begi
 implementation file and place the cursor at the function header.        For elements, KDevelop will look for the header file and place
 the cursor at the line the element is declarated.       The classviewer also provides popup-menus that offer more specified options,
 see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>
- for more detailed information.
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A> for more detailed information.
 <P>
 <H4>The Logical File Viewer</H4>
 
@@ -80,7 +74,7 @@ documentation packages.
 <H3><A NAME="ss5.3">5.3 Output window</A>
 </H3>
 
-<P> The Output window is separated as well into a messages window, a stdin/stdout
+<P>The Output window is separated as well into a messages window, a stdin/stdout
 window and a stderr window for the following necessities:
 <UL>
 <LI> messages window:   displays all output of the compiler. Clicking on error messages will change the edit widget to set the
@@ -95,6 +89,7 @@ such as make or a terminal application.</LI>
 <H3><A NAME="ss5.4">5.4 Menubar Commands</A>
 </H3>
 
+<P>
 <P>
 <H4>File Management and Printing</H4>
 
@@ -122,7 +117,6 @@ lpr<P>
 <LI><B>Quit                     Ctrl+Q</B> Exits KDevelop. If files are changed, you will be asked if you want to save these files.<P>
 </LI>
 </UL>
-<P>
 <P>
 <P>
 <H4>Editing Files</H4>
@@ -293,7 +287,6 @@ classes.<P>
 </LI>
 <LI><B>Make User-Manual</B> runs ksgml2html on your manual sgml file, creating a HTML user manual. If ksgml2html is not installed,
 sgml2html will be used to do this.<P>
-<P>
 </LI>
 </UL>
 <P>
@@ -304,17 +297,13 @@ sgml2html will be used to do this.<P>
 the following programs if installed: KDbg, KIconEdit and KTranslator. These are checked by the KDevelop installation program and
 inserted in the given order into the menu. Invoking a tool will open the "Tools"-window and start the selected program inside this
 window. The Tools menu can be edited by the Tools-entry in the Options-menu; see 
-<A HREF="index-12.html#Configuring the &quot;Tools&quot; Menu">Configuring the &quot;Tools&quot; Menu</A>
-).
-<P>
+<A HREF="index-12.html#Configuring the &quot;Tools&quot; Menu">Configuring the &quot;Tools&quot; Menu</A>).
 <H4>Changing KDevelop's settings</H4>
 
 <P>The Options-menu contains all entries for invoking configuration dialogs with which you can change KDevelop's default settings.
 Major settings like those for the editor or printing have their own entries; general settings of KDevelop's behavoir can be made
 with the 
-<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A>
- dialog.
-<P>
+<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A> dialog.
 <UL>
 <LI><B>Editor...</B> Allows the configuration of the editor's behavoir like word-breaking, selections etc.<P>
 </LI>
@@ -346,6 +335,7 @@ HTML-library documentation and the rebuilding of the search index for the Helpbr
 
 <P>The Window menu contains a list with all currently open files. This allows a quick swith to another file you're currently working
 on.
+<P>
 <H4>Managing Bookmarks</H4>
 
 <P>The Bookmarks menu is intended for adding and removing bookmarks you want to set in the current editing file. As KDevelop uses two
@@ -418,8 +408,10 @@ email-adresses as well as reference to third-party software used in KDevelop.</L
 You should see section 
 <A HREF="index-12.html#Changing Keyboard Shortcuts">Changing Keyboard Shortcuts</A> for a detailed explanation how
 to change assigned values to commands.
+<P>
 <H4>Shortcuts for Text Processing</H4>
 
+<P>
 <P>
 <H4>Cursor Movements</H4>
 
@@ -441,6 +433,7 @@ to the end of the current file                   CTRL+PageDown
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Text Selections</H4>
 
 <P>
@@ -461,6 +454,7 @@ to the end of the current file                   CTRL+SHIFT+PageDown
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Inserting and Copying Text, Tabulators</H4>
 
 <P>
@@ -478,6 +472,7 @@ tabulator                                        TAB
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Deleting Text</H4>
 
 <P>
@@ -488,6 +483,7 @@ delete letter right of cursor position           Delete
 delete selected text                             Select text, then Backspace
 </PRE>
 <HR>
+<P>
 <P>
 <H4>Searching Text within the Editor</H4>
 
@@ -503,6 +499,7 @@ locate previous error                            SHIFT+F4
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Searching Text with the Documentation Browser</H4>
 
 <P>
@@ -514,6 +511,7 @@ display next search hit on the same page         F3
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Managing Bookmarks</H4>
 
 <P>
@@ -524,6 +522,7 @@ clear bookmark list                              STRG+SHIFT+C
 </PRE>
 <HR>
 <P>     
+<P>
 <H4>Shortcuts for Toolbar Symbols</H4>
 
 <P>
@@ -546,6 +545,7 @@ Symbol "Search Marked Text"                      F2
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Window Management</H4>
 
 <P>
@@ -558,6 +558,7 @@ Change to Tools window                           STRG+4
 </PRE>
 <HR>
 <P>
+<P>
 <H4>Shortcuts to Compilation Processes</H4>
 
 <P>
@@ -569,8 +570,6 @@ Execute target after Build process               STRG+F9
 Exectue target with Arguments                    ALT+F10
 </PRE>
 <HR>
-<P>
-<P>
 <P>
 <P ALIGN="RIGHT">
 

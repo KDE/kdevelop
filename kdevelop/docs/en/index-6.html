@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The User Manual to KDevelop: The Helpsystem</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
-<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -49,6 +49,7 @@ for the dialog's options within the provided online-manual in the help-browser.
 
 <P>The statusbar of KDevelop offers you many fuctions that inform you about the current activity state as well as "status messages"
 offering a short description for commands.
+<P>
 <H4>Statusbar Entries</H4>
 
 <P>The Statusbar contains:
@@ -114,12 +115,12 @@ documentation.
 
 <P>To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
 classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A>. For the generation of an API (Application Programming Interface) Documentation for your project's classes,
-KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of the project
-plus the addition of a cross-reference to the Qt and KDE-libraries if those are available in the Helpbrowser. For the generation
-of the project handbooks, you should have ksgml2html (provided with the KDE-SDK) and, as a minimum, SGML-tools installed on your
-system. To extend and change your project's online-documentation, you have to edit the documentation file for your project by
-selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
+<A HREF="index-12.html#General Configuration">KDevelop Setup</A>. For the generation of an API (Application Programming Interface) Documentation for your
+project's classes, KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of
+the project plus the addition of a cross-reference to the Qt and KDE-libraries if those are available in the Helpbrowser. For the
+generation of the project handbooks, you should have ksgml2html (provided with the KDE-SDK) and, as a minimum, SGML-tools
+installed on your system. To extend and change your project's online-documentation, you have to edit the documentation file for your
+project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
 formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
 is used to create a personal search-index for your documentation automatically. The index is generally build during the
 installation process, but can also be build with the 
@@ -130,19 +131,20 @@ the provided search functions see
 
 <P>The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
 the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
-installation, configuration, available functionality and introduction to application development. The second book is "The KDevelop
-Programming Handbook" in it's first edition. The programming handbook covers most questions related to the creation and extension
-of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications created
-with the Qt- and/or KDE-libraries have to offer as well as given a guideline for ensuring KDE-compliance, which covers the same
-instructions given on the internet site of 
-<A HREF="http://developer.kde.org">developer.kde.org</A>
+installation, configuration, available functionality and introduction to application development. The second book is <EM>The
+KDevelop Programming Handbook</EM> in it's first edition. The programming handbook covers most questions related to the creation and
+extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications
+created with the Qt- and/or KDE-libraries have to offer as well as given a guideline for ensuring KDE-compliance, which
+covers the same instructions given on the internet site of 
+<A HREF="http://developer.kde.org">http://developer.kde.org</A>
 However, the programming handbook cannot replace any additonal documentation available in printed or electronic form about the C++
 programming language as well as about the usage of the Qt-library in certain terms.
-<P>The C/C++-Reference used with KDevelop is currently only available on the 
-<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">KDevelop homepage</A> can be installed easily by downloading
-and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you only have to untar it with <CODE>tar zxvf
-c_c++_reference.tar.gz</CODE>, automatically placing it in the documentation directory of KDevelop. For uninstalling the reference
-documentation you just have to delete the "reference" folder under ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+<P>The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at 
+<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A>.
+It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to
+untar it as root with <CODE>tar zxvf c_c++_reference.tar.gz</CODE>, the reference will then be copied the documentation
+directory of KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
+($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 <P>The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
 The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
 manually in the 

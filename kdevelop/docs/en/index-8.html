@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The User Manual to KDevelop: Projects</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
-<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -21,9 +21,11 @@
 <H3><A NAME="Projects"></A> <A NAME="s8">8. Projects</A></H3>
 
 <P>
+<P>
 <H3><A NAME="ss8.1">8.1 Projecttypes</A>
 </H3>
 
+<P>
 <P>
 <H4>Programs</H4>
 
@@ -33,9 +35,10 @@ information for your files like the file properties, install path, distribution 
 file properties allows you to keep track of where the files should go.
 <P>With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard
 generates three kinds of fram applications, as:
+<P>
 <UL>
 <LI>a single document interface (SDI) KDE-application including a menubar, a toolbar and a statusbar. It contains basic control
-resource management to allow extending the frame application into a unique KDE 1.1 application. The application frame also
+resource management to allow extending the frame application into a unique KDE application. The application frame also
 contains statusbar help messages as known from commercial products just like KDevelop itself. From the programmer's point of view,
 it is based on three application-specific classes leaning on the MVC-concept (Model-View-Controller). Technically, the base
 classes may not be viewed that way, but it's construction is at least created most logical to create applications with a GUI.
@@ -54,7 +57,7 @@ remove the "Hello World" line in main() and construct your classes the same way 
 For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select "New".
 The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
 type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your
-existing project and choose "Project"->"Add file(s)"->"Add existing file(s)" to copy the sources into your new project directory.
+existing project and choose "Project"-&gt;"Add file(s)"-&gt;"Add existing file(s)" to copy the sources into your new project directory.
 Note that your Makefile.am's will be changed by KDevelop and you probably will have to change or delete some entries to provide
 clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
 matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
@@ -64,11 +67,13 @@ application and delete the created source and header files. Then you can add exi
 <P>
 <H4>Libraries</H4>
 
+<P>
 <P>This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
 KDevelop.
 <P>
 <H4>Multiple Targets</H4>
 
+<P>
 <P>For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
 targets like packages containing several applications. As commands like "Execute" or the classbrowser require that only one
 target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
@@ -81,10 +86,11 @@ target independently by its project file; this also allows executing and debuggi
 <H3><A NAME="ss8.2">8.2 New Projects</A>
 </H3>
 
+<P>
 <P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
 framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
-section of this handbook. For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a
-complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
+section of this handbook. For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing
+a complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
 and statusbar, the mainwindow inherits the KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This
 type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
 existing code provided by the framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies
@@ -105,8 +111,7 @@ Email adress are asked for inserting them in header and cpp templates on top of 
 <P>KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
 change that to just start the IDE without any project. To prevent the default behavoir, disable the "Load last project" option in
 the 
-<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A>
- dialog.
+<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A> dialog.
 <P>To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
 got another project currently open, this will be closed. If your current project then contains files that aren't saved, you are
 asked to save all changed files. Thereby, you can select which file to save and which you want to close without saving, or to save
@@ -115,8 +120,8 @@ all at once.
 project files have the <EM>*.kdevprj</EM> mime-type which is also displayed by a project icon. Select the project file and press
 "Open". When loading a project, the Classbrowser scans all files and builds the initial classtree, so you can start working on the
 project by using the classbrowser directly.
-<P>Another comfortable way to open a project is to select the project file in the KFM, the KDE File Manager. This will start KDevelop
-with loading the selected project file. You could as well open a project by commandline, entering <CODE>kdevelop
+<P>Another comfortable way to open a project is to select the project file in the KFM, the KDE File Manager. This will start
+KDevelop with loading the selected project file. You could as well open a project by commandline, entering <CODE>kdevelop
 projectname.kdevprj</CODE>.
 <P>When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any projectfiles.
 Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
@@ -130,20 +135,17 @@ sources and adding classes, pixmaps, pictures and whatelse you project needs. No
 default project after its generation by menus and dialogs according to your needs. The next section therefore describes how you
 can add existing files and classes as well as creating new files. This is needed for building your project, but this won't help
 you for the installation process by the end-user. Therefore, section 
-<A HREF="#Setting Project File Options">Setting Project File Options</A>
- describes how to set
-File Properties especially for additional files that you want make to install, like documentation or pixmaps.
-<P>Another part in project maintaining is adding translations for applications that support internationalization, which is described
+<A HREF="#Setting Project File Options">Setting Project File Options</A> describes how to set File Properties especially for additional files that you want make to install, like documentation or
+pixmaps.
+Another part in project maintaining is adding translations for applications that support internationalization, which is described
 in 
-<A HREF="#Adding Translations">Adding Translations</A>
-.
+<A HREF="#Adding Translations">Adding Translations</A>.
 <P>
-<A HREF="#Extending the Project Documentation">Extending the Project Documentation</A>
- covers questions on how to create a good set of documentation for online help
-enabling the end-user to help himself in case of troubles as well as how to use your product.
+<A HREF="#Extending the Project Documentation">Extending the Project Documentation</A> covers questions on how to create a good set
+of documentation for online help enabling the end-user to help himself in case of troubles as well as how to use your product.
 <P>Finally, 
-<A HREF="#Project Hacking">Project Hacking</A>
- describes how you can eventually work around the KDevelop project management in special cases.
+<A HREF="#Project Hacking">Project Hacking</A> describes how you can eventually work around the KDevelop project
+management in special cases.
 <P>
 <H4><A NAME="Adding Files and Classes"></A> Adding and Removing Files and Classes</H4>
 
@@ -163,8 +165,7 @@ will be added to the project and the destination directory. Mind that the files 
 added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
 case you want to add e.g. pixmaps that have to be installed by the end-user, you should update the File Properties for the added
 file and specify the installation path (see 
-<A HREF="#Setting Project File Options">Setting Project File Options</A>
-<P>To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
+<A HREF="#Setting Project File Options">Setting Project File Options</A><P>To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
 dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
 file icon) and press the right mouse button to get the popup-menu. Then select "Add".
 <P>Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
@@ -179,10 +180,50 @@ files in groups as they are sorted in the LFV and displays the file properties l
 included in the project as well as the installation path if the file is going to be installed by the end-user's make install
 command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
 project is build and installed by end users, so you have to set up those locations. For standard KDE location macros you should
-look in your Makefile.am where the location macros are specified. 
+look in your Makefile.am where the location macros are specified.
+<P>
+<P>
 <H4><A NAME="Adding Translations"></A> Adding Translations</H4>
 
-<P>
+<P>As KDE allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
+that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
+this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <CODE>de</CODE> for german, to the
+<CODE>docs</CODE> directory of your project and copy the english documentation into that directory. Then you would generate the
+documentation and set all project file options for the installation directories. Then you could start translating the sgml file to
+your desired language and regenerate the documentation; then you're done.
+For the application, this seems a bit more difficult for the programmer. Now, we want to explain how to enable
+internationalization support for your application and how to add the languages you want to support.
+<P>First, you have to enclose all visible strings of your application that appear in bars or dialogs with the <CODE>i18n()</CODE> macro.
+This macro is a replacement for the function <CODE>klocale->tranlate()</CODE> of the KLocale class and much easier to use. As this macro
+is declared in the <CODE>kapp.h</CODE> include file, you have to add <CODE>#include &lt;kapp.h&gt;</CODE> to the source file or the class
+declaration file of the class that makes use of the macro. Also it should be mentioned, that although <CODE>i18n()</CODE> is a macro and
+therefore you could think about using the original function, this won't work because the strings that are set up for translation
+have to be read out of the sources and get stored in the application's translation file (&lt;YourApp&gt;.pot in the /po
+subdirectory). This task is done by the program xgettext, and to do this, you would enter <CODE>make messages</CODE> in your prject
+directory containing the sources. As xgettext depends on the <CODE>i18n()</CODE> macro, the original function won't do the job.
+<P>For translations themselves, you first have to create the message file containing all strings that are used in your sources with
+the <CODE>i18n()</CODE> macro. This can be done by choosing "Make Messages and merge" from the Build-menu.
+Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
+Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
+entries for the filename of the string and the line where the original string is placed. Then you will see a <CODE>msgid</CODE> line
+containing the string to translate, followed by <CODE>msgstr</CODE>. The msgstr line is mostly empty except for the translations already
+provided by the KDE-libraries. Those have to be filled with the according translations of your language.
+<P>You could think about writing the translations by hand, which can also be done. But the KDE-SDK offers the use of the program
+KTranslator, which ready the already existing files from other applications installed on the system, so you can reuse already
+translated strings to support your language.
+<P>To access KTranslator, the easiest way is selecting a &lt;language&gt;.po file in the /po directory either in the LFV or in the
+RFV. This opens KTranslator and lets you do the translating easiely. Mind that you have to set up KTranslator's properties
+yourself to include the author name and the language as well as the destination file. KTranslator by default only opens your
+translation file.
+<P>For all translation files, <CODE>make</CODE> uses the program <CODE>msgfmt</CODE> to format your message files to use with the binary, but you
+don't have to take care for that, as well as specifying the destination directory for installing the translation files; this is
+all done by KDevelop automatically.
+<P>For more information about internationalization support, see 
+<A HREF="http://www.kde.org">http://www.kde.org</A>; a lot
+of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
+could write to and who will help you with this. Also read 
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A> and <EM>The KDevelop
+Programming Handbook</EM> where questions about internationalization are covered again.
 <P>
 <H4><A NAME="Extending the Project Documentation"></A> Extending the Project Documentation</H4>
 
@@ -230,9 +271,8 @@ is set to use debugging by the -g flag, and warnings are set to the standard, -W
 and detect constructions that may cause program errors. For some applications, you would need additional compiler or linker flags,
 especially if you're using libraries that are not currently included by the linker. Then you need to update the project by
 configuring the correct settings with the Project Options dialog. See 
-<A HREF="index-9.html#Build Settings">Build Settings</A>
- for more information how and where
-to set Compiler Options, Warnings and Linker Options.
+<A HREF="index-9.html#Build Settings">Build Settings</A> for more
+information how and where to set Compiler Options, Warnings and Linker Options.
 <P>
 <H3><A NAME="ss8.6">8.6 External Projects</A>
 </H3>
@@ -243,8 +283,6 @@ compilation and construction files to the new project directory and choose "Add 
 will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
 compiled and installed after the conversion to ensure the project's consistancy.
-<P>
-<P>
 <P>
 <P ALIGN="RIGHT">
 

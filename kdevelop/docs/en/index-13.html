@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The User Manual to KDevelop: Questions and Answers</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
-<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -49,9 +49,9 @@ library (./configure --with-libjpeg --with-libgif).</LI>
 <BLOCKQUOTE><CODE>
 <PRE>
 make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
- cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
- aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
- make[2]: *** [Makefile.in] Error 1
+cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
+aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+make[2]: *** [Makefile.in] Error 1
 </PRE>
 </CODE></BLOCKQUOTE>
 
@@ -84,8 +84,8 @@ AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 <P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
 <BLOCKQUOTE><CODE>
 <PRE>
- /usr/lib/libqt.so:
- warning: multiple common of `QArrayT&lt;char&gt; type_info node'
+/usr/lib/libqt.so:
+warning: multiple common of `QArrayT&lt;char&gt; type_info node'
 ckdevelop.o: warning: previous common is here
 ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
 ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
@@ -122,7 +122,7 @@ added files will be included as well.
 <P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
 <P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
 automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
-according *.moc.cpp file and rebuild the project. >
+according *.moc.cpp file and rebuild the project.
 <P>
 <P ALIGN="RIGHT">
 

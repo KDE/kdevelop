@@ -3,8 +3,8 @@
 <HEAD>
 <TITLE>The User Manual to KDevelop: Development with KDevelop</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
-<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -22,13 +22,12 @@
 
 <P>In this chapter you will get a general overview how you can use KDevelop and the internal Dialogeditor to create own applications.
 Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
-programming, you should read <B>"The KDevelop Programming Handbook"</B>, which describes some basics for program design and shows a
+programming, you should read <EM>"The KDevelop Programming Handbook"</EM>, which describes some basics for program design and shows a
 more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way applications are
-created using KDevelop. Also you should have read chapter 3, 
+created using KDevelop. Also you should have read chapter 
 <A HREF="index-3.html#Programs">Programs</A> to gain a general understanding
 why Unix applications should make use of provided development tools; this will make things easier when you hit references to what
 Makefiles are etc.
-<P>
 <P>
 <H3><A NAME="ss4.1">4.1 What are KDevelop Project Applications ?</A>
 </H3>
@@ -71,6 +70,7 @@ one or the other way.
 <H4>Programming Environment and Dialogeditor</H4>
 
 <P>
+<P>
 <H4>The Programming Environment</H4>
 
 <P>The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
@@ -83,11 +83,11 @@ don't have to watch for several ones spread all over your desktop.
 <P>
 <H4>The Dialogeditor</H4>
 
-<P>KDevelop's build-in dialogeditor offers a simple way of designing user interfaces with the Qt and KDE libraries. It's simple way
-to do almost everything with the mouse allows a rapid construction of dialogs and main views for applications and their direct
-transformation into C++ code, which is directly added to the project. As the dialogeditor is embedded into the rest of KDevelop's
-user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a dialog,
-generation of the code output and it's direct testing within the program by the availability of the make-commands and you still
+<P>KDevelop's build-in dialogeditor offers a simple way of designing user interfaces with the Qt and KDE libraries. It's
+simple way to do almost everything with the mouse allows a rapid construction of dialogs and main views for applications and their
+direct transformation into C++ code, which is directly added to the project. As the dialogeditor is embedded into the rest of
+KDevelop's user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a
+dialog, generation of the code output and it's direct testing within the program by the availability of the make-commands and you still
 can control the compiler output without having to switch back to the programming view. For a detailed description, see 
 <A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
 .
@@ -95,14 +95,14 @@ can control the compiler output without having to switch back to the programming
 <H4>KAppWizard and the Classtools</H4>
 
 <P>The KAppWizard and the Classtools provided for project generation and automatic code extension are intended to make the
-creation of applications as easy and safe as possible and offers a good way for beginners in Qt/KDE programming to start actually
-working themselves into the details of GUI application design, as results can be achieved very quickly.
+creation of applications as easy and safe as possible and offers a good way for beginners in Qt/KDE programming to start
+actually working themselves into the details of GUI application design, as results can be achieved very quickly.
 <P>
 <H4>KAppWizard</H4>
 
 <P>KAppWizard is intended to create full-functional application projects that are ready-to-run by using GNU-standard tools and, for
-GUI-programs, taking advantage of the KDE and Qt libraries. By specifying only the information that is required as a minimum,
-users are enabled to start working at a new project within seconds. Calling KAppWizard should be the first step to be done for
+GUI-programs, taking advantage of the KDE and Qt libraries. By specifying only the information that is required as a
+minimum, users are enabled to start working at a new project within seconds. Calling KAppWizard should be the first step to be done for
 creating a new application with KDevelop.
 <P>KAppWizard provides you a so-called application skeleton with all needed C++ source code files for a running application. After
 you specified a projectname and set the needed preferences, your new project will be generated and you have a completely new
@@ -147,9 +147,7 @@ scans all files for methods and classes and makes them available by graphical sy
 specialized functionality to work with the sources by focusing on the classes and functions.
 <P>Selecting a class will result in opening the file that contains the declaration; on methods and functions this will
 show you the implementation. For a full description, see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>
-<P>
-<P>
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A><P>
 <H3><A NAME="ss4.3">4.3 The Development Process</A>
 </H3>
 
@@ -173,7 +171,6 @@ use, you can choose those files as well. The last page contains an output window
 in the output window, the KAppWizard is finished and you can select "Exit" to return to the Programming Environment. To build the
 binary, choose "Make" from the Build-menu or choose the according button in the toolbar. You can as well test the functions already
 present by choosing "Execute" from the Build-menu.
-<P>
 <P>
 <H4>Developing an Application</H4>
 
@@ -201,11 +198,11 @@ changing values like the brush width in a paint application. This can be done ea
 how do you create those good-looking dialogs ? As the Qt library is a GUI toolkit, it provides a base set of so-called "widgets"
 like labels displaying plain text, lineedits for text input and buttons for navigation and selection commands. Besides these
 "low-level" parts of user interfaces, standard dialogs are provided and are ready to use such as printing dialogs. The
-KDE-libraries then are based on the Qt-library and contain replacements for certain dialogs as well as additional widgets that can
-be used in your application. So, when you start designing your applications behavior towards the user, you should make yourself
-comfortable with the widgets provided with Qt and KDE. The online-documentation of Qt offers screenshots for most of them, so you
-should have a look there first. Then we advise to have a closer look at the KDE-UI library, offering other widgets. Libraries like
-the KHTML library contains very specialized widgets that a lot of programs make use of. It just simplifies application design like
+KDE-libraries then are based on the Qt-library and contain replacements for certain dialogs as well as additional widgets that
+can be used in your application. So, when you start designing your applications behavior towards the user, you should make yourself
+comfortable with the widgets provided with Qt and KDE. The online-documentation of Qt offers screenshots for most of them,
+so you should have a look there first. Then we advise to have a closer look at the KDE-UI library, offering other widgets. Libraries
+like the KHTML library contains very specialized widgets that a lot of programs make use of. It just simplifies application design like
 the predefined dialogs provided with Qt. For your own dialogs, those low-level widgets are the one you need. A dialog merely
 consists by a collection of different widgets combined together building the interface and is technically programmed by C++ code
 in a class that is derived from QWidget or a more specialized dialog class that inherits QWidget. The program using the widget
@@ -220,9 +217,8 @@ the Dialogeditor and the project management will take care of the rest. You can 
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
-, examples and guidelines can also be found in
-<EM>"The KDevelop Programming Handbook"</EM>.
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, examples and guidelines can also be found in
+<EM>The KDevelop Programming Handbook</EM>.
 <P>
 <H4>Binding New Elements</H4>
 
@@ -240,7 +236,6 @@ functions.
 <P>To build your main-view, the generated source code for your application already contains a class in the form of
 &lt;YourApplication&gt;View which inherits the QWidget class (this is the minimal class that handles visual interfaces in Qt and
 therefore in KDE as well). In general, there are three different ways how to extend the given class:
-<P>
 <UL>
 <LI>remove the document-view structure and use one of the predefined "big" widgets already containing a lot of functionality-
 just remove the View-class and replace the view-object by another.</LI>
@@ -292,8 +287,7 @@ the declaration of member functions. Then, the addition of members are done grap
 place you would have to add your entries. Finally, you can get an even more specialized view of your project's classes by the
 Classtool dialog, providing you trees that show the usage, contents and inheritance of classes and their objects. For more
 detailed information, see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>
-.
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>.
 <P>
 <H4>Building and Executing your Application</H4>
 
@@ -312,8 +306,7 @@ your program as well as locating errors in the sourcecode.
 </UL>
 
 For more information about the build-process, see 
-<A HREF="index-8.html#Projects">Projects</A>
-.
+<A HREF="index-8.html#Projects">Projects</A>.
 <P>
 <H4>Searching Program Errors</H4>
 
@@ -322,12 +315,11 @@ because they result from a wrong syntax of the sources) or during the execution 
 removed by the programmer. For locating errors, the developer needs the information what exactly caused its occurance. As
 mentioned, the compiler is able to detect syntax errors himself, resulting in that the executable can't be build (this can also
 happen by the linker when he detects "unresolved symbols"-see 
-<A HREF="index-9.html#Linker Options">Linker Options</A>
-). As he gives out a description of the
-error as detailed as possible, the error can be found and removed. During the build-process, you will see the output window pop up
-showing you what your make-tool and the compiler has to say. In case of errors or warnings, just press the mouse button over the
-error line and the editor will open the affected file and sets the cursor to the errorline. This can also be done by the entries
-in the "View"-menu, "Next Error" and "Previous Error" or by the according keyboard shortcuts. You will find that this is very
+<A HREF="index-9.html#Linker Options">Linker Options</A>). As he gives out a
+description of the error as detailed as possible, the error can be found and removed. During the build-process, you will see the output
+window pop up showing you what your make-tool and the compiler has to say. In case of errors or warnings, just press the mouse button
+over the error line and the editor will open the affected file and sets the cursor to the errorline. This can also be done by the
+entries in the "View"-menu, "Next Error" and "Previous Error" or by the according keyboard shortcuts. You will find that this is very
 functional and saves a lot of time to get to the error, thus for removing the cause your knowledge as a programmer is asked.
 <P>Runtime Errors, which occur during execution and will mostly result in a segmentation fault, are sometimes hard to find.
 Therefore, you can enable the compiler to add information within the binary to watch the execution by the sourcecode. A debugger
@@ -337,8 +329,7 @@ the real cause is another task; it depends on the programmer to locate this. The
 GNU compiler and programs like <EM>ddd</EM> or <EM>KDbg</EM> are frontends that allow an easier use. KDevelop therefore uses KDbg and lets
 you invoke the debugging process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
 information about debugging applications, see 
-<A HREF="index-8.html#Projects">Projects</A>
- and <EM>The KDevelop Programming Handbook</EM>.
+<A HREF="index-8.html#Projects">Projects</A> and <EM>The KDevelop Programming Handbook</EM>.
 <P>
 <H3><A NAME="ss4.4">4.4 Additional Information</A>
 </H3>
@@ -350,15 +341,14 @@ in other documentations:
 <LI><EM>The KDevelop Programming Handbook</EM>, covering a complete introduction into GUI application design and programming with
 the Qt and KDE libraries,</LI>
 <LI>this handbook, sections 
-<A HREF="index-5.html#Overview">Overview</A>
- to 
-<A HREF="index-8.html#Projects">Projects</A>
-, describing all availiable functions within KDevelop,</LI>
+<A HREF="index-5.html#Overview">Overview</A> to 
+<A HREF="index-8.html#Projects">Projects</A>, describing all availiable
+functions within KDevelop, </LI>
 <LI>this handbook, section 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
-, adressing the use of the dialogeditor to create your own widgets,</LI>
-<LI>The <EM>Online-Reference Documentation</EM> to the Qt library, which covers examples of using the Qt GUI-toolkit as well as a
-class reference and screenshots for the most important ready-to-use widgets included,</LI>
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, adressing the use of the
+dialogeditor to create your own widgets, </LI>
+<LI>The <EM>Online-Reference Documentation</EM> to the Qt library, which covers examples of
+using the Qt GUI-toolkit as well as a class reference and screenshots for the most important ready-to-use widgets included,</LI>
 <LI>The <EM>KDE-library Class-Reference</EM>, generated automatically by KDevelop from the KDE-library sources, containing
 descriptions for all classes and widgets including example code for their use,</LI>
 <LI>on the Internet, see:
@@ -370,7 +360,7 @@ descriptions for all classes and widgets including example code for their use,</
 <LI>
 <A HREF="http://developer.kde.org">http://developer.kde.org</A> for additonal references to KDE application development.</LI>
 <LI>on the KDevelop homepage 
-<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A></LI>
+<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A> </LI>
 </UL>
 </LI>
 </UL>
