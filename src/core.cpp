@@ -58,16 +58,16 @@
 Core::Core()
     : KDevCore(), _editor(0)
 {
-    api = new KDevApi();
+	api = new KDevApi();
     api->core = this;
     api->classStore = new ClassStore();
     api->projectDom = 0;
     api->project = 0;
 
-    win = new TopLevel();
+	win = new TopLevel();
     kapp->setMainWidget(win);
 
-    dcopIface = new KDevCoreIface(this);
+	dcopIface = new KDevCoreIface(this);
     //    kapp->dcopClient()->attach();
     kapp->dcopClient()->registerAs("gideon");
 
@@ -84,7 +84,8 @@ Core::Core()
              this, SLOT(partCountChanged()));
 
     initActions();
-    win->createGUI(0);
+
+	win->createGUI(0);
 
     // create editor object
     (void) editor();
@@ -647,10 +648,14 @@ void Core::openProject()
 
     QFileInfo fi(projectFile);
     QString projectDir = fi.dirPath();
-    kdDebug(9000) << "projectDir: " << projectDir << endl;
+	QString projectName = fi.baseName();
+    kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
     if (api->project)
+	{
         api->project->openProject(projectDir);
+		api->project->setProjectName ( projectName );
+	}
     emit projectOpened();
     _recentProjectAction->addURL(projectFile);
 
