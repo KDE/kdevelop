@@ -303,7 +303,7 @@ void CKDevelop::slotFileCloseAll()
 bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   // if edit_widget isn't shown don't proceed
   if (edit_widget==0l)
-     return;
+     return false;
 
   QString filename=edit_widget->getName();
   TEditInfo* actual_info;
@@ -477,11 +477,13 @@ void CKDevelop::slotFileQuit(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotEditUndo(){
-  edit_widget->undo();
+ if(edit_widget != 0L)
+   edit_widget->undo();
 }
 
 
 void CKDevelop::slotEditRedo(){
+ if(edit_widget != 0L)
   edit_widget->redo();
 }
 void CKDevelop::slotEditUndoHistory(){
@@ -491,6 +493,10 @@ void CKDevelop::slotEditUndoHistory(){
 }
 
 void CKDevelop::slotEditCut(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
+
   slotStatusMsg(i18n("Cutting..."));
   edit_widget->cut();
   slotStatusMsg(i18n("Ready."));
@@ -511,6 +517,9 @@ void CKDevelop::slotEditCopy(){
 
 
 void CKDevelop::slotEditPaste(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
   slotStatusMsg(i18n("Pasting selection..."));
   edit_widget->paste();
   slotStatusMsg(i18n("Ready."));
@@ -518,6 +527,9 @@ void CKDevelop::slotEditPaste(){
 
 
 void CKDevelop::slotEditInsertFile(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
   slotStatusMsg(i18n("Inserting file contents..."));
   edit_widget->insertFile();
   slotStatusMsg(i18n("Ready."));
@@ -525,6 +537,9 @@ void CKDevelop::slotEditInsertFile(){
 
 
 void CKDevelop::slotEditSearch(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
   slotStatusMsg(i18n("Searching..."));
   edit_widget->search();
   slotStatusMsg(i18n("Ready."));
@@ -537,7 +552,9 @@ void CKDevelop::slotEditRepeatSearch(){
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
   else{
-    edit_widget->searchAgain();
+  // if edit_widget isn't shown don't proceed
+    if (edit_widget!=0l)
+     edit_widget->searchAgain();
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -578,9 +595,13 @@ void CKDevelop::slotEditSearchText(){
     browser_widget->getSelectedText(text);
   }
   else{
-    text = edit_widget->markedText();
-    if(text == ""){
-      text = edit_widget->currentWord();
+     // if edit_widget isn't shown don't proceed
+    if (edit_widget!=0l)
+    {
+      text = edit_widget->markedText();
+      if(text == ""){
+        text = edit_widget->currentWord();
+      }
     }
   }
   slotEditSearchInFiles(text);
@@ -588,6 +609,10 @@ void CKDevelop::slotEditSearchText(){
 }
 
 void CKDevelop::slotEditReplace(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
+
   slotStatusMsg(i18n("Replacing..."));
   edit_widget->replace();
   slotStatusMsg(i18n("Ready."));
@@ -595,11 +620,15 @@ void CKDevelop::slotEditReplace(){
 
 
 void CKDevelop::slotEditSpellcheck(){
+  if (edit_widget!=0l)
 	edit_widget->spellcheck();
 }
 
 
 void CKDevelop::slotEditSelectAll(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
   slotStatusMsg(i18n("Selecting all..."));
   edit_widget->selectAll();
   slotStatusMsg(i18n("Ready."));
@@ -610,6 +639,7 @@ void CKDevelop::slotEditSelectAll(){
 
 
 void CKDevelop::slotEditDeselectAll(){
+  if (edit_widget!=0l)
     edit_widget->deselectAll();
 }
 
@@ -618,6 +648,9 @@ void CKDevelop::slotEditDeselectAll(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotViewGotoLine(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
   slotStatusMsg(i18n("Switching to selected line..."));
   edit_widget->gotoLine();
   slotStatusMsg(i18n("Ready."));
@@ -1520,12 +1553,17 @@ void CKDevelop::slotHelpSearchText(){
     browser_widget->getSelectedText(text);
   }
   else{
-    text = edit_widget->markedText();
-    if(text == ""){
-      text = edit_widget->currentWord();
+    // if edit_widget isn't shown don't proceed
+    if (edit_widget!=0l)
+    {
+      text = edit_widget->markedText();
+      if(text == ""){
+        text = edit_widget->currentWord();
+      }
     }
   }
 
+  if (!text.isEmpty())
   slotHelpSearchText(text);
 }
 
@@ -2010,7 +2048,7 @@ void CKDevelop::slotNewLineColumn()
 } 
 void CKDevelop::slotNewUndo(){
   int state;
-  state = edit_widget->undoState();
+  state = (edit_widget) ? edit_widget->undoState() : 0;
   //undo
   if(state & 1){
     enableCommand(ID_EDIT_UNDO);
