@@ -26,7 +26,6 @@
 #include <qmap.h>
 #include <qvaluestack.h>
 #include <qpair.h>
-#include <qdeepcopy.h>
 #include <qptrvector.h>
 
 enum Type {
