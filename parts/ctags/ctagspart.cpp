@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <qregexp.h>
+#include <ktempfile.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -294,26 +295,28 @@ bool CTagsPart::loadTagsFile()
 bool CTagsPart::createTagsFile()
 {
 	kdDebug(9022) << "create tags file" << endl;
-	
+
 	KProcess proc;
 	proc.setWorkingDirectory( project()->projectDirectory() );
+
+	QStringList l = project()->allFiles();
+
+        KTempFile ifile;
+        QTextStream& is = *ifile.textStream();
+        is << l.join( "\n" );
+        is << "\n";
+        ifile.close();
 
 	proc << "ctags";
 	proc << "-n";
 	proc << "--c++-types=+px";
-	
-	QStringList l = project()->allFiles();
-	QStringList::ConstIterator it;
-	for (it = l.begin(); it != l.end(); ++it) 
-	{
-		proc << *it;
-	}
+        proc << "-L" << ifile.name();
 
-    QApplication::setOverrideCursor(Qt::waitCursor);
-    bool success = proc.start(KProcess::Block);
-    QApplication::restoreOverrideCursor();
-    
-    return success;
+       QApplication::setOverrideCursor(Qt::waitCursor);
+       bool success = proc.start(KProcess::Block);
+       QApplication::restoreOverrideCursor();
+
+       return success;
 }
 
 #include "ctagspart.moc"
