@@ -275,8 +275,11 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   edit_widget->setCursorPosition( atLine, 0 );
   edit_widget->toggleModified( true );
 
-  // Switch to the .cpp file and add the code if it isn't a signal.
-  if( !aMethod->isSignal )
+  // Get the code for the .cpp file.
+  aMethod->asCppCode( toAdd );
+
+  // Switch to the .cpp file and add the code if some code was generated.
+  if( !toAdd.isEmpty() )
   {
     switchToFile( aClass->definedInFile );
 
