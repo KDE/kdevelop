@@ -5,7 +5,7 @@
 
 Project templates provide the developer with a basic application framework.
 This is necessary for rapid application development (RAD) and makes it even possible
-for an unexperienced 3rd party developer to create standard conforming
+for an inexperienced 3rd party developer to create standard conforming
 applications like kedit as well as plugins for example for kdevelop or noatun.\n\n
 \ref templates_1\n
     - \ref templates_1_1
