@@ -32,6 +32,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <kquickhelp.h>
+#include <qlistview.h>
 
 /** 
  * Dlg for changing the properties of a file in an existing project
@@ -44,7 +45,7 @@ public:
 	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0);
 	~CFilePropDlg();
  public slots:
-void slotSingleSelected(int index);
+void slotSelectionChanged(QListViewItem* item );
   void  slotInstallCheckToogled(bool on);
   void slotOk();
 

@@ -26,13 +26,14 @@
 #include <kapp.h>
 #include "cproject.h"
 #include <kpopmenu.h>
+#include <qlistview.h>
 
 /** the logical-file-view,draw the contents of 
   * a cprojectinfo into a tree
   *@author Sandy Meier
   */
 
-class CLogFileView : public KTreeList {
+class CLogFileView : public QListView {
   Q_OBJECT 
 public: 
   /** construtor */
@@ -42,15 +43,16 @@ public:
 
 /** starts the refresh */
   void refresh(CProject* prj);
-  bool isGroup(int index);
-  bool isFile(int index);
+  bool isGroup(QListViewItem* item);
+  bool isFile(QListViewItem* item);
   bool leftButton();
   bool rightButton();
   protected:
   void mousePressEvent(QMouseEvent* event);
   void split(QString str,QStrList& filters);
- protected slots:
-  void  slotSingleSelected(int index);
+  protected slots:
+      void  slotRightButtonPressed( QListViewItem *,const QPoint &,int);
+  void  slotSelectionChanged( QListViewItem *);
   void slotNewClass();
   void slotNewFile();
   void slotNewGroup();
@@ -59,12 +61,14 @@ public:
   void slotFileDelete();
   void slotGroupProp();
   void slotGroupRemove();
+  
   signals:
   void selectedNewClass();
   void selectedNewFile();
   void selectedFileProp();
   void selectedFileRemove();
   void selectedGroupProp();
+  void  logFileTreeSelected(QListViewItem*);
 protected:
 KIconLoader* icon_loader;
   KPopupMenu*  file_pop;
@@ -74,7 +78,6 @@ KIconLoader* icon_loader;
   bool right_button;
   QPoint mouse_pos; // the position at the last mousepress-event
   CProject* project;
-
 
 };
 #endif

@@ -1617,21 +1617,15 @@ void CKDevelop::slotMenuBuffersSelected(int id){
 }
 
 
-void CKDevelop::slotLogFileTreeSelected(int index){
+void CKDevelop::slotLogFileTreeSelected(QListViewItem* item){
   // no action on Project or Group click with left button
   //  cerr << "SELECTED\n";
-  if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action on child
-  if(!(log_file_tree->isFile(index))) return; // it is not file
+ //  if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action on child
 
+  if(!(log_file_tree->isFile(item))) return; // it is not file
   if(!log_file_tree->leftButton()) return; // right button: return
-  KPath* path;
-  QString* str;
-  path = log_file_tree->itemPath(index);
-  str = path->pop();
 
-
-
-  switchToFile(prj->getProjectDir() + *str);
+  switchToFile(prj->getProjectDir() + item->text(0));
   //  cerr << "SELECTED2\n";
 }
 

@@ -19,7 +19,6 @@
 #define CDOCTREE_H
 
 #include <qwidget.h>
-#include <ktreelist.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include "cproject.h"

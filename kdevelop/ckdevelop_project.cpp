@@ -406,8 +406,8 @@ void CKDevelop::slotProjectAddExistingFiles(){
 }
 
 void CKDevelop::slotProjectRemoveFile(){
-  QString name = log_file_tree->getCurrentItem()->getText();
-  delFileFromProject(name);
+    QString name = log_file_tree->currentItem()->text(0);
+    delFileFromProject(name);
 }
 
 void CKDevelop::slotProjectOptions(){
@@ -572,6 +572,7 @@ void CKDevelop::slotProjectNewClass(){
     prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);
    
     prj->updateMakefilesAm();
+    
     slotViewRefresh();
   }
 }

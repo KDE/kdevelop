@@ -169,10 +169,11 @@ void CDocTree::slotRightButtonPressed( QListViewItem *item,const QPoint &,int){
     setCurrentItem(item);
     if(text == i18n("Others") ){
       others_pop->popup(this->mapToGlobal(mouse_pos));
-     
+      setSelected(item,true);
     }
     else if(QString(item->parent()->text(0)) == i18n("Others")){
       doc_pop->popup(this->mapToGlobal(mouse_pos));
+      setSelected(item,true);
     }
   }
   

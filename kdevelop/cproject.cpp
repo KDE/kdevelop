@@ -430,7 +430,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info){
   // save the $ because kconfig removes one
   info.install_location.replace("[\\$]","$$");
   config->writeEntry("install_location",info.install_location);
-
+  config->sync();
   return new_subdir;
 }
 void CProject::removeFileFromProject(QString rel_name){

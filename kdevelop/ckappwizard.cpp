@@ -374,8 +374,9 @@ void CKAppWizard::slotDirDialogClicked() {
 void CKAppWizard::slotHeaderDialogClicked() {
   headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true,true);
   headerdialog->setCaption (i18n("Header"));
-  headerdialog->show();
-  hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
+  if(headerdialog->exec()){
+    hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
+  }
   delete (headerdialog);
 }
 
@@ -383,8 +384,9 @@ void CKAppWizard::slotHeaderDialogClicked() {
 void CKAppWizard::slotCppDialogClicked() {
   cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true,true);
   cppdialog->setCaption("Cpp");
-  cppdialog->show();
-  cppedit->loadFile(cppdialog->selectedFile(),cppedit->OPEN_READWRITE);
+  if(cppdialog->exec()){
+    cppedit->loadFile(cppdialog->selectedFile(),cppedit->OPEN_READWRITE);
+  }
   delete (cppdialog);
 }
 

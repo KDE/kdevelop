@@ -51,6 +51,7 @@ class CDocBrowser;
 class CClassView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
+class QListViewItem;
 #include "ceditwidget.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
@@ -349,7 +350,7 @@ public:
   /** click action on classviewer CV */
   void slotClassTreeSelected();
   /** click action on LFV */
-  void slotLogFileTreeSelected(int index);
+  void slotLogFileTreeSelected(QListViewItem* item);
   /** click action on RFV */
   void slotRealFileTreeSelected(int index);
   /** click action on DOC */
