@@ -91,14 +91,17 @@ public:
     void setFileName( const QString &p ) { setText( FILENAME_COLUMN, p ); }
     void setWorkingRev( const QString &p ) { setText( WORKREVISION_COLUMN, p ); }
     void setRepositoryRev( const QString &p ) { setText( REPOREVISION_COLUMN, p ); }
-    void setStatus( const VCSFileInfo::FileStatus status ) { setText( STATUS_COLUMN, VCSFileInfo::vcsState2String( status ) ); }
+    void setStatus( const VCSFileInfo::FileState status ) 
+    { 
+        m_status = status; setText( STATUS_COLUMN, VCSFileInfo::vcsState2String( status ) ); 
+    }
 
 protected:
     virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
 private:
     bool m_isProjectFile;
-    VCSFileInfo::FileStatus m_status;
+    VCSFileInfo::FileState m_status;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
