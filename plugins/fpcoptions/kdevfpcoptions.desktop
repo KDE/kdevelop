@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=fpc
+Comment=Free Pascal Compiler
+Name=FpcOptions
+ServiceTypes=KDevelop/CompilerOptions
+X-KDE-Library=libkdevfpcoptions
+X-KDevelop-Language=Pascal
+X-KDevelop-Args=fpc
+X-KDevelop-Default=true
+
