@@ -558,6 +558,53 @@ void ClassModel::removeVariable( VariableDom var )
     m_variables.remove( var->name() );
 }
 
+EnumList ClassModel::enumList( )
+{
+#if QT_VERSION >= 0x030005
+    return m_enumerators.values();
+#else
+    return QMap_values<QString, EnumDom> (m_enumerators);
+#endif
+}
+
+const EnumList ClassModel::enumList( ) const
+{
+#if QT_VERSION >= 0x030005
+    return m_enumerators.values();
+#else
+    return QMap_values<QString, EnumDom> (m_enumerators);
+#endif
+}
+
+EnumDom ClassModel::enumByName( const QString & name )
+{
+    return m_enumerators.contains( name ) ? m_enumerators[ name ] : EnumDom();
+}
+
+const EnumDom ClassModel::enumByName( const QString & name ) const
+{
+    return m_enumerators.contains( name ) ? m_enumerators[ name ] : EnumDom();
+}
+
+bool ClassModel::hasEnum( const QString & name ) const
+{
+    return m_enumerators.contains( name );
+}
+
+bool ClassModel::addEnum( EnumDom e )
+{
+    if( e->name().isEmpty() )
+	return false;
+
+    m_enumerators.insert( e->name(), e );
+    return true;
+}
+
+void ClassModel::removeEnum( EnumDom e )
+{
+    m_enumerators.remove( e->name() );
+}
+
 // ------------------------------------------------------------------------
 ArgumentModel::ArgumentModel( CodeModel* model )
     : CodeModelItem( Argument, model)
@@ -820,6 +867,15 @@ void ClassModel::read( QDataStream & stream )
 	var->read( stream );
 	addVariable( var );
     }
+    
+    m_enumerators.clear();
+    stream >> n;
+    for( int i=0; i<n; ++i ){
+	EnumDom e = codeModel()->create<EnumModel>();
+	e->read( stream );
+	addEnum( e );
+    }
+    
 }
 
 void ClassModel::write( QDataStream & stream ) const
@@ -847,6 +903,11 @@ void ClassModel::write( QDataStream & stream ) const
     stream << int( variable_list.size() );
     for( VariableList::ConstIterator it = variable_list.begin(); it!=variable_list.end(); ++it )
 	(*it)->write( stream );
+    
+    const EnumList enum_list = enumList();
+    stream << int( enum_list.size() );
+    for( EnumList::ConstIterator it = enum_list.begin(); it!=enum_list.end(); ++it )
+	(*it)->write( stream );    
 }
 
 void NamespaceModel::read( QDataStream & stream )
@@ -967,5 +1028,101 @@ void VariableModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
     stream << m_access << m_static << m_type;
+}
+
+// -------------------------------------------------------
+EnumModel::EnumModel( CodeModel * model )
+    : CodeModelItem( Enum, model)
+{
+}
+
+int EnumModel::access( ) const
+{
+    return m_access;
+}
+
+void EnumModel::setAccess( int access )
+{
+    m_access = access;
+}
+
+EnumeratorList EnumModel::enumeratorList( )
+{
+#if QT_VERSION >= 0x030005
+    return m_enumerators.values();
+#else
+    return QMap_values<QString, EnumeratorDom> (m_enumerators);
+#endif
+}
+
+const EnumeratorList EnumModel::enumeratorList( ) const
+{
+#if QT_VERSION >= 0x030005
+    return m_enumerators.values();
+#else
+    return QMap_values<QString, EnumeratorDom> (m_enumerators);
+#endif
+}
+
+void EnumModel::addEnumerator( EnumeratorDom enumerator )
+{
+    m_enumerators.insert( enumerator->name(), enumerator );
+}
+
+void EnumModel::read( QDataStream & stream )
+{
+    CodeModelItem::read( stream );
+    stream >> m_access;
+    
+    int n;
+    stream >> n;
+    for( int i=0; i<n; ++i ){
+	EnumeratorDom e = codeModel()->create<EnumeratorModel>();
+	e->read( stream );
+	addEnumerator( e );
+    }
+}
+
+void EnumModel::write( QDataStream & stream ) const
+{
+    CodeModelItem::write( stream );
+    
+    stream << m_access;
+    const EnumeratorList enumerator_list = enumeratorList();
+    stream << int( enumerator_list.size() );
+    for( EnumeratorList::ConstIterator it = enumerator_list.begin(); it!=enumerator_list.end(); ++it )
+	(*it)->write( stream );
+}
+
+EnumeratorModel::EnumeratorModel( CodeModel * model )
+    : CodeModelItem( Enumerator, model )
+{
+}
+
+QString EnumeratorModel::value( ) const
+{
+    return m_value;
+}
+
+void EnumeratorModel::setValue( const QString & value )
+{
+    m_value = value;
+}
+
+void EnumeratorModel::read( QDataStream & stream )
+{
+    CodeModelItem::read( stream );
+    stream >> m_value;
+}
+
+void EnumeratorModel::write( QDataStream & stream ) const
+{
+    CodeModelItem::write( stream );
+    stream << m_value;
+}
+
+void EnumModel::removeEnumerator( EnumeratorDom e )
+{
+    m_enumerators.remove( e->name() );
 }
 

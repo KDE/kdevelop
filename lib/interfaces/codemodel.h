@@ -33,6 +33,8 @@ class FunctionModel;
 class FunctionDefinitionModel;
 class VariableModel;
 class ArgumentModel;
+class EnumModel;
+class EnumeratorModel;
 class QRegExp;
 
 typedef KSharedPtr<CodeModelItem> ItemDom;
@@ -43,6 +45,8 @@ typedef KSharedPtr<FunctionModel> FunctionDom;
 typedef KSharedPtr<FunctionDefinitionModel> FunctionDefinitionDom;
 typedef KSharedPtr<VariableModel> VariableDom;
 typedef KSharedPtr<ArgumentModel> ArgumentDom;
+typedef KSharedPtr<EnumModel> EnumDom;
+typedef KSharedPtr<EnumeratorModel> EnumeratorDom;
 
 typedef QValueList<ItemDom> ItemList;
 typedef QValueList<FileDom> FileList;
@@ -52,6 +56,8 @@ typedef QValueList<FunctionDom> FunctionList;
 typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList;
 typedef QValueList<VariableDom> VariableList;
 typedef QValueList<ArgumentDom> ArgumentList;
+typedef QValueList<EnumDom> EnumList;
+typedef QValueList<EnumeratorDom> EnumeratorList;
 
 template <class ItemList>
 QStringList sortedNameList( const ItemList& lst )
@@ -141,6 +147,8 @@ public:
 	Variable,
 	Argument,
 	FunctionDefinition,
+	Enum,
+	Enumerator,
 
 	Custom = 1000
     };
@@ -183,6 +191,8 @@ public:
     virtual bool isFunctionDefinition() const { return false; }
     virtual bool isVariable() const { return false; }
     virtual bool isArgument() const { return false; }
+    virtual bool isEnum() const { return false; }
+    virtual bool isEnumerator() const { return false; }
     virtual bool isCustom() const { return false; }
 
     virtual void read( QDataStream& stream );
@@ -254,6 +264,14 @@ public:
     bool addVariable( VariableDom var );
     void removeVariable( VariableDom var );
 
+    EnumList enumList();
+    const EnumList enumList() const;
+    bool hasEnum( const QString& name ) const;
+    EnumDom enumByName( const QString& name );
+    const EnumDom enumByName( const QString& name ) const;
+    bool addEnum( EnumDom e );
+    void removeEnum( EnumDom e );
+    
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -264,6 +282,7 @@ private:
     QMap<QString, FunctionList> m_functions;
     QMap<QString, FunctionDefinitionList> m_functionDefinitions;
     QMap<QString, VariableDom> m_variables;
+    QMap<QString, EnumDom> m_enumerators;
 
 private:
     ClassModel( const ClassModel& source );
@@ -471,6 +490,63 @@ private:
 private:
     VariableModel( const VariableModel& source );
     void operator = ( const VariableModel& source );
+    friend class CodeModel;
+};
+
+class EnumModel: public CodeModelItem
+{
+protected:
+    EnumModel( CodeModel* model );
+
+public:
+    typedef EnumDom Ptr;
+
+    virtual bool isEnum() const { return true; }
+
+    int access() const;
+    void setAccess( int access );
+    
+    EnumeratorList enumeratorList();
+    const EnumeratorList enumeratorList() const;
+    void addEnumerator( EnumeratorDom e );
+    void removeEnumerator( EnumeratorDom e );
+
+    virtual void read( QDataStream& stream );
+    virtual void write( QDataStream& stream ) const;
+
+private:
+    int m_access;
+    QMap<QString, EnumeratorDom> m_enumerators;
+
+private:
+    EnumModel( const EnumModel& source );
+    void operator = ( const EnumModel& source );
+    friend class CodeModel;
+};
+
+
+class EnumeratorModel: public CodeModelItem
+{
+protected:
+    EnumeratorModel( CodeModel* model );
+
+public:
+    typedef EnumeratorDom Ptr;
+
+    virtual bool isEnumerator() const { return true; }
+    
+    QString value() const;
+    void setValue( const QString& value );
+
+    virtual void read( QDataStream& stream );
+    virtual void write( QDataStream& stream ) const;
+
+private:
+    QString m_value;
+    
+private:
+    EnumeratorModel( const EnumeratorModel& source );
+    void operator = ( const EnumeratorModel& source );
     friend class CodeModel;
 };
 
