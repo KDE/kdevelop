@@ -333,7 +333,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 // If the current project doesn't support CVS, we don't
 // want to confuse the user with a CVS popup menu.
-if(!isValidDirectory(project()->projectDirectory()))
+if(!project() || !isValidDirectory(project()->projectDirectory()))
   return;
 
     if (context->hasType( Context::FileContext ))
@@ -1046,7 +1046,7 @@ void CvsPart::slotProjectOpened()
     kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
-    if (!isValidDirectory( project()->projectDirectory() ))
+    if (!project() || !isValidDirectory( project()->projectDirectory() ))
     {
         kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
         return;
@@ -1076,7 +1076,7 @@ void CvsPart::slotProjectClosed()
     kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
-    if (!isValidDirectory( project()->projectDirectory() ))
+    if (!project() || !isValidDirectory( project()->projectDirectory() ))
     {
         kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
         return;

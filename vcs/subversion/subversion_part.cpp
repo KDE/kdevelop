@@ -178,7 +178,7 @@ bool subversionPart::isValidDirectory( const QString& dirPath) {
 void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
 // If the current project doesn't support SVN, we don't
 // want to confuse the user with a SVN popup menu.
-if(!isValidDirectory(project()->projectDirectory()))
+if(!project() || !isValidDirectory(project()->projectDirectory()))
   return;
   
 	kdDebug() << "contextMenu()" << endl;
