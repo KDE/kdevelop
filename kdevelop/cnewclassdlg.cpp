@@ -27,33 +27,33 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   prj_info = prj;
   header_modified =false;
   impl_modified = false;
-  setCaption( klocale->translate("Class Generator" ));
+  setCaption(i18n("Class Generator" ));
  
   add_group = new QButtonGroup( this, "add_group" );
   add_group->setGeometry( 260, 210, 230, 120 );
-  add_group->setTitle( "Additional Options" );
+  add_group->setTitle(i18n("Additional Options") );
   
   doc_group = new QButtonGroup( this, "doc_group" );
   doc_group->setGeometry( 15, 210, 230, 120 );
-  doc_group->setTitle( "Documentation" );
+  doc_group->setTitle( i18n("Documentation") );
   
   inher_group = new QButtonGroup( this, "inher_group" );
   inher_group->setGeometry( 260, 80, 230, 120 );
-  inher_group->setTitle( "Inheritence" );
+  inher_group->setTitle( i18n("Inheritence") );
   
   baseclass_group = new QButtonGroup( this, "baseclass_group" );
   baseclass_group->setGeometry( 260, 10, 230, 60 );
-  baseclass_group->setTitle( "Baseclass" );
+  baseclass_group->setTitle(i18n( "Baseclass") );
   baseclass_group->setAlignment( 1 );
   
   files_group = new QButtonGroup( this, "files_group" );
   files_group->setGeometry( 15, 80, 230, 120 );
-  files_group->setTitle( "Files" );
+  files_group->setTitle( i18n("Files") );
   files_group->setAlignment( 1 );
   
   classname_group = new QButtonGroup( this, "classname_group" );
   classname_group->setGeometry( 15, 10, 230, 60 );
-  classname_group->setTitle( "Classname" );
+  classname_group->setTitle(i18n("Classname") );
 	
   classname_edit = new QLineEdit( this, "classname_edit" );
   classname_edit->setGeometry( 25, 30, 210, 30 );
@@ -69,36 +69,36 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   
   public_button = new QRadioButton( this, "public_button" );
   public_button->setGeometry( 275, 100, 100, 30 );
-  public_button->setText( "public" );
+  public_button->setText( i18n("public") );
   public_button->setChecked(true);
   
   protected_button = new QRadioButton( this, "protected_button" );
   protected_button->setGeometry( 275, 130, 70, 30 );
-  protected_button->setText( "protected" );
+  protected_button->setText( i18n("protected") );
   
   private_button = new QRadioButton( this, "private_button" );
   private_button->setGeometry( 275, 160, 100, 30 );
-  private_button->setText( "private" );
+  private_button->setText( i18n("private") );
 	
   impl_edit = new QLineEdit( this, "impl_edit" );
   impl_edit->setGeometry( 85, 155, 150, 30 );
  
   header_label = new QLabel( this, "header_label" );
   header_label->setGeometry( 25, 100, 50, 30 );
-  header_label->setText( "Header" );
+  header_label->setText( i18n("Header") );
   
   impl_label = new QLabel( this, "impl_label" );
   impl_label->setGeometry( 25, 155, 60, 30 );
-  impl_label->setText( "Impl." );
+  impl_label->setText( i18n("Impl.") );
   
   template_check = new QCheckBox( this, "template_check" );
   template_check->setGeometry( 275, 240, 170, 30 );
-  template_check->setText( "use header/cpp-templates" );
+  template_check->setText( i18n("use header/cpp-templates") );
   template_check->setChecked(true);
   
   qwidget_check = new QCheckBox( this, "qwidget_check" );
   qwidget_check->setGeometry( 275, 280, 210, 30 );
-  qwidget_check->setText( "generate a QWidget-Childclass" );
+  qwidget_check->setText( i18n("generate a QWidget-Childclass") );
   
   add_group->insert( template_check );
   add_group->insert( qwidget_check );
@@ -114,8 +114,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   
   cancel_button = new QPushButton( this, "cancel_button" );
   cancel_button->setGeometry( 275, 340, 100, 30 );
-  cancel_button->setText("Cancel");
-
+  cancel_button->setText(i18n("Cancel")); 
   setFixedSize( 505,380 );
 
   connect(classname_edit,SIGNAL(textChanged(const char*)),SLOT(slotClassEditChanged(const char*)));
@@ -136,23 +135,23 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 void CNewClassDlg::ok(){
   QString text = classname_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,"Error...","You must enter a classname!",KMsgBox::EXCLAMATION);
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a classname!"),KMsgBox::EXCLAMATION);
     return;
    }
   text = header_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,"Error...","You must enter a name for the header-file!",KMsgBox::EXCLAMATION);
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file!"),KMsgBox::EXCLAMATION);
     return;
    }
   text = impl_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,"Error...","You must enter a name for the implementation-file!"
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the implementation-file!")
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
   text = baseclass_edit->text(); 
   if (text.isEmpty() && qwidget_check->isChecked()){
-    KMsgBox::message(this,"Error...","You must enter a name for the baseclass!"
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the baseclass!")
 		     ,KMsgBox::EXCLAMATION);
     return;
   }

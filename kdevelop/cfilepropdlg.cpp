@@ -25,7 +25,7 @@
 
 CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : QDialog(parent,name,true) {
   this->prj = prj; // save the pointer
-  setCaption("File Properties");
+  setCaption(i18n("File Properties"));
  
   
   
@@ -38,7 +38,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	distribution_group->setFontPropagation( QWidget::NoChildren );
 	distribution_group->setPalettePropagation( QWidget::NoChildren );
 	distribution_group->setFrameStyle( 49 );
-	distribution_group->setTitle( "Distribution" );
+	distribution_group->setTitle(i18n("Distribution") );
 	distribution_group->setAlignment( 1 );
 
 	type_group = new QButtonGroup( this, "type_group" );
@@ -50,7 +50,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	type_group->setFontPropagation( QWidget::NoChildren );
 	type_group->setPalettePropagation( QWidget::NoChildren );
 	type_group->setFrameStyle( 49 );
-	type_group->setTitle( "Filetype" );
+	type_group->setTitle(i18n("Filetype") );
 	type_group->setAlignment( 1 );
 
 	installion_group = new QButtonGroup( this, "installion_group" );
@@ -62,7 +62,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	installion_group->setFontPropagation( QWidget::NoChildren );
 	installion_group->setPalettePropagation( QWidget::NoChildren );
 	installion_group->setFrameStyle( 49 );
-	installion_group->setTitle( "Installation" );
+	installion_group->setTitle(i18n("Installation") );
 	installion_group->setAlignment( 1 );
 
 	file_group = new QButtonGroup( this, "file_group" );
@@ -74,7 +74,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	file_group->setFontPropagation( QWidget::NoChildren );
 	file_group->setPalettePropagation( QWidget::NoChildren );
 	file_group->setFrameStyle( 49 );
-	file_group->setTitle( "File" );
+	file_group->setTitle(i18n("File") );
 	file_group->setAlignment( 1 );
 
 	log_tree = new CLogFileView( this, "log_tree" );
@@ -118,7 +118,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	install_loc_label->setBackgroundMode( QWidget::PaletteBackground );
 	install_loc_label->setFontPropagation( QWidget::NoChildren );
 	install_loc_label->setPalettePropagation( QWidget::NoChildren );
-	install_loc_label->setText( "Install-location:" );
+	install_loc_label->setText(i18n("Install-location:") );
 	install_loc_label->setAlignment( 289 );
 	install_loc_label->setMargin( -1 );
 
@@ -130,7 +130,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	size_label->setBackgroundMode( QWidget::PaletteBackground );
 	size_label->setFontPropagation( QWidget::NoChildren );
 	size_label->setPalettePropagation( QWidget::NoChildren );
-	size_label->setText( "Size:" );
+	size_label->setText(i18n("Size:") );
 	size_label->setAlignment( 289 );
 	size_label->setMargin( -1 );
 
@@ -142,7 +142,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	name_label->setBackgroundMode( QWidget::PaletteBackground );
 	name_label->setFontPropagation( QWidget::NoChildren );
 	name_label->setPalettePropagation( QWidget::NoChildren );
-	name_label->setText( "Name:" );
+	name_label->setText(i18n("Name:") );
 	name_label->setAlignment( 289 );
 	name_label->setMargin( -1 );
 
@@ -154,7 +154,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	incdist_check->setBackgroundMode( QWidget::PaletteBackground );
 	incdist_check->setFontPropagation( QWidget::NoChildren );
 	incdist_check->setPalettePropagation( QWidget::NoChildren );
-	incdist_check->setText( "include in distribution" );
+	incdist_check->setText(i18n("include in distribution") );
 	incdist_check->setAutoRepeat( FALSE );
 	incdist_check->setAutoResize( FALSE );
 
@@ -166,7 +166,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	install_check->setBackgroundMode( QWidget::PaletteBackground );
 	install_check->setFontPropagation( QWidget::NoChildren );
 	install_check->setPalettePropagation( QWidget::NoChildren );
-	install_check->setText( "install" );
+	install_check->setText(i18n("install") );
 	install_check->setAutoRepeat( FALSE );
 	install_check->setAutoResize( FALSE );
 
@@ -190,7 +190,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
 	cancel_button->setFontPropagation( QWidget::NoChildren );
 	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( "Cancel" );
+	cancel_button->setText(i18n("Cancel") );
 	cancel_button->setAutoRepeat( FALSE );
 	cancel_button->setAutoResize( FALSE );
 
@@ -202,7 +202,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	name_e_label->setBackgroundMode( QWidget::PaletteBackground );
 	name_e_label->setFontPropagation( QWidget::NoChildren );
 	name_e_label->setPalettePropagation( QWidget::NoChildren );
-	name_e_label->setText( "Untitled" );
+	name_e_label->setText(i18n("Untitled") );
 	name_e_label->setAlignment( 289 );
 	name_e_label->setMargin( -1 );
 

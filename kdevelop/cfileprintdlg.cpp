@@ -19,6 +19,7 @@
 #include <qlabel.h>
 #include <qbttngrp.h>
 #include <iostream.h>
+#include <kapp.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -43,7 +44,7 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_143->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_143->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_143->setFrameStyle( 49 );
-	qtarch_ButtonGroup_143->setTitle( "Self choosen files" );
+	qtarch_ButtonGroup_143->setTitle(i18n( "Self choosen files") );
 	qtarch_ButtonGroup_143->setAlignment( 1 );
 
 	qtarch_ButtonGroup_140 = new QButtonGroup( this, "ButtonGroup_140" );
@@ -55,7 +56,7 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_140->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_140->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_140->setFrameStyle( 49 );
-	qtarch_ButtonGroup_140->setTitle( "Changed files" );
+	qtarch_ButtonGroup_140->setTitle(i18n("Changed files") );
 	qtarch_ButtonGroup_140->setAlignment( 1 );
 
 	qtarch_ButtonGroup_141 = new QButtonGroup( this, "ButtonGroup_141" );
@@ -67,7 +68,7 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_141->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_141->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_141->setFrameStyle( 49 );
-	qtarch_ButtonGroup_141->setTitle( "Time" );
+	qtarch_ButtonGroup_141->setTitle(i18n("Time"));
 	qtarch_ButtonGroup_141->setAlignment( 1 );
 
 	qtarch_ButtonGroup_142 = new QButtonGroup( this, "ButtonGroup_142" );
@@ -79,7 +80,7 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_142->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_142->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_142->setFrameStyle( 49 );
-	qtarch_ButtonGroup_142->setTitle( "Date" );
+	qtarch_ButtonGroup_142->setTitle(i18n("Date") );
 	qtarch_ButtonGroup_142->setAlignment( 1 );
 
 	QButtonGroup* qtarch_ButtonGroup_139;
@@ -92,7 +93,7 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_139->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_139->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_139->setFrameStyle( 49 );
-	qtarch_ButtonGroup_139->setTitle( "File selection" );
+	qtarch_ButtonGroup_139->setTitle( i18n("File selection") );
 	qtarch_ButtonGroup_139->setAlignment( 1 );
 
 	selfChoosenFilesMultiLine = new QListBox( this, "selfChoosenFilesMultiLine" );
@@ -115,7 +116,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesCleanButton->setBackgroundMode( QWidget::PaletteBackground );
 	selfChoosenFilesCleanButton->setFontPropagation( QWidget::NoChildren );
 	selfChoosenFilesCleanButton->setPalettePropagation( QWidget::NoChildren );
-	selfChoosenFilesCleanButton->setText( "clean" );
+	selfChoosenFilesCleanButton->setText(i18n("clean") );
 	selfChoosenFilesCleanButton->setAutoRepeat( FALSE );
 	selfChoosenFilesCleanButton->setAutoResize( FALSE );
 	connect (selfChoosenFilesCleanButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileCleanClicked()));
@@ -128,7 +129,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesDeleteButton->setBackgroundMode( QWidget::PaletteBackground );
 	selfChoosenFilesDeleteButton->setFontPropagation( QWidget::NoChildren );
 	selfChoosenFilesDeleteButton->setPalettePropagation( QWidget::NoChildren );
-	selfChoosenFilesDeleteButton->setText( "delete" );
+	selfChoosenFilesDeleteButton->setText(i18n("delete") );
 	selfChoosenFilesDeleteButton->setAutoRepeat( FALSE );
 	selfChoosenFilesDeleteButton->setAutoResize( FALSE );
 	connect (selfChoosenFilesDeleteButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileDeleteClicked()));
@@ -141,7 +142,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesAddButton->setBackgroundMode( QWidget::PaletteBackground );
 	selfChoosenFilesAddButton->setFontPropagation( QWidget::NoChildren );
 	selfChoosenFilesAddButton->setPalettePropagation( QWidget::NoChildren );
-	selfChoosenFilesAddButton->setText( "add" );
+	selfChoosenFilesAddButton->setText(i18n("add") );
 	selfChoosenFilesAddButton->setAutoRepeat( FALSE );
 	selfChoosenFilesAddButton->setAutoResize( FALSE );
 	connect (selfChoosenFilesAddButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileAddClicked()));
@@ -154,7 +155,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_77->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_77->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_77->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_77->setText( "between" );
+	qtarch_Label_77->setText( i18n("between") );
 	qtarch_Label_77->setAlignment( 289 );
 	qtarch_Label_77->setMargin( -1 );
 
@@ -166,7 +167,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_78->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_78->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_78->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_78->setText( "since" );
+	qtarch_Label_78->setText(i18n("since") );
 	qtarch_Label_78->setAlignment( 289 );
 	qtarch_Label_78->setMargin( -1 );
 
@@ -204,8 +205,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_79->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_79->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_79->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_79->setText( "file" );
-	qtarch_Label_79->setAlignment( 289 );
+	qtarch_Label_79->setText(i18n("file") ); qtarch_Label_79->setAlignment( 289 );
 	qtarch_Label_79->setMargin( -1 );
 
 	currentButton = new QRadioButton( this, "currentButton" );
@@ -216,7 +216,7 @@ void CFilePrintDlg::init() {
 	currentButton->setBackgroundMode( QWidget::PaletteBackground );
 	currentButton->setFontPropagation( QWidget::NoChildren );
 	currentButton->setPalettePropagation( QWidget::NoChildren );
-	currentButton->setText( "current" );
+	currentButton->setText(i18n("current") );
 	currentButton->setAutoRepeat( FALSE );
 	currentButton->setAutoResize( FALSE );
 
@@ -228,7 +228,7 @@ void CFilePrintDlg::init() {
 	allInBufferButton->setBackgroundMode( QWidget::PaletteBackground );
 	allInBufferButton->setFontPropagation( QWidget::NoChildren );
 	allInBufferButton->setPalettePropagation( QWidget::NoChildren );
-	allInBufferButton->setText( "all in buffer" );
+	allInBufferButton->setText(i18n("all in buffer") );
 	allInBufferButton->setAutoRepeat( FALSE );
 	allInBufferButton->setAutoResize( FALSE );
 
@@ -240,7 +240,7 @@ void CFilePrintDlg::init() {
 	allInProjectButton->setBackgroundMode( QWidget::PaletteBackground );
 	allInProjectButton->setFontPropagation( QWidget::NoChildren );
 	allInProjectButton->setPalettePropagation( QWidget::NoChildren );
-	allInProjectButton->setText( "all in project" );
+	allInProjectButton->setText(i18n("all in project") );
 	allInProjectButton->setAutoRepeat( FALSE );
 	allInProjectButton->setAutoResize( FALSE );
 
@@ -252,7 +252,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesButton->setBackgroundMode( QWidget::PaletteBackground );
 	selfChoosenFilesButton->setFontPropagation( QWidget::NoChildren );
 	selfChoosenFilesButton->setPalettePropagation( QWidget::NoChildren );
-	selfChoosenFilesButton->setText( "self choosen files" );
+	selfChoosenFilesButton->setText(i18n("self choosen files") );
 	selfChoosenFilesButton->setAutoRepeat( FALSE );
 	selfChoosenFilesButton->setAutoResize( FALSE );
 
@@ -264,7 +264,7 @@ void CFilePrintDlg::init() {
 	changedFilesButton->setBackgroundMode( QWidget::PaletteBackground );
 	changedFilesButton->setFontPropagation( QWidget::NoChildren );
 	changedFilesButton->setPalettePropagation( QWidget::NoChildren );
-	changedFilesButton->setText( "changed files" );
+	changedFilesButton->setText(i18n("changed files") );
 	changedFilesButton->setAutoRepeat( FALSE );
 	changedFilesButton->setAutoResize( FALSE );
 
@@ -289,7 +289,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_80->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_80->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_80->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_80->setText( "and" );
+	qtarch_Label_80->setText(i18n("and") );
 	qtarch_Label_80->setAlignment( 289 );
 	qtarch_Label_80->setMargin( -1 );
 
@@ -301,7 +301,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_81->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_81->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_81->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_81->setText( "since" );
+	qtarch_Label_81->setText(i18n("since") );
 	qtarch_Label_81->setAlignment( 289 );
 	qtarch_Label_81->setMargin( -1 );
 
@@ -326,7 +326,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_83->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_83->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_83->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_83->setText( "between" );
+	qtarch_Label_83->setText( i18n("between") );
 	qtarch_Label_83->setAlignment( 289 );
 	qtarch_Label_83->setMargin( -1 );
 
@@ -377,7 +377,7 @@ void CFilePrintDlg::init() {
 	qtarch_Label_84->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_84->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_84->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_84->setText( "and" );
+	qtarch_Label_84->setText(i18n("and") );
 	qtarch_Label_84->setAlignment( 289 );
 	qtarch_Label_84->setMargin( -1 );
 
@@ -416,7 +416,7 @@ void CFilePrintDlg::init() {
 	okButton->setText(("Ok"));
 	okButton->setGeometry( 20, 440, 100, 30 );
 	cancelButton = new QPushButton( mainwidget, "cancelButton" );
-	cancelButton->setText(("Cancel"));
+	cancelButton->setText(i18n("Cancel"));
 	cancelButton->setGeometry( 140, 440, 100, 30 );
 	connect(cancelButton,SIGNAL(clicked()),SLOT(slotFileCancelClicked()));
 

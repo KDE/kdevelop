@@ -40,7 +40,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_3->setFrameStyle( 49 );
-	qtarch_ButtonGroup_3->setTitle( "Index Options" );
+	qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
 	qtarch_ButtonGroup_3->setAlignment( 1 );
 
 	QButtonGroup* qtarch_ButtonGroup_2;
@@ -53,7 +53,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_2->setFrameStyle( 49 );
-	qtarch_ButtonGroup_2->setTitle( "additional directories to index" );
+	qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
 	qtarch_ButtonGroup_2->setAlignment( 1 );
 
 	QButtonGroup* qtarch_ButtonGroup_1;
@@ -66,7 +66,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_1->setFrameStyle( 49 );
-	qtarch_ButtonGroup_1->setTitle( "Index Size" );
+	qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
 	qtarch_ButtonGroup_1->setAlignment( 1 );
 
 	kde_checkbox = new QCheckBox( this, "CheckBox_1" );
@@ -77,7 +77,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	kde_checkbox->setBackgroundMode( QWidget::PaletteBackground );
 	kde_checkbox->setFontPropagation( QWidget::NoChildren );
 	kde_checkbox->setPalettePropagation( QWidget::NoChildren );
-	kde_checkbox->setText( "index the KDE documentation" );
+	kde_checkbox->setText(i18n("index the KDE documentation") );
 	kde_checkbox->setAutoRepeat( FALSE );
 	kde_checkbox->setAutoResize( FALSE );
 	kde_checkbox->setChecked( TRUE );
@@ -90,7 +90,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qt_checkbox->setBackgroundMode( QWidget::PaletteBackground );
 	qt_checkbox->setFontPropagation( QWidget::NoChildren );
 	qt_checkbox->setPalettePropagation( QWidget::NoChildren );
-	qt_checkbox->setText( "index the QT documentation" );
+	qt_checkbox->setText( i18n("index the QT documentation") );
 	qt_checkbox->setAutoRepeat( FALSE );
 	qt_checkbox->setAutoResize( FALSE );
 	qt_checkbox->setChecked( TRUE );
@@ -103,7 +103,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	tiny_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	tiny_radio_button->setFontPropagation( QWidget::NoChildren );
 	tiny_radio_button->setPalettePropagation( QWidget::NoChildren );
-	tiny_radio_button->setText( "tiny size" );
+	tiny_radio_button->setText(i18n("tiny size") );
 	tiny_radio_button->setAutoRepeat( FALSE );
 	tiny_radio_button->setAutoResize( FALSE );
 	tiny_radio_button->setChecked( TRUE );
@@ -116,7 +116,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	small_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	small_radio_button->setFontPropagation( QWidget::NoChildren );
 	small_radio_button->setPalettePropagation( QWidget::NoChildren );
-	small_radio_button->setText( "small size" );
+	small_radio_button->setText(i18n("small size") );
 	small_radio_button->setAutoRepeat( FALSE );
 	small_radio_button->setAutoResize( FALSE );
 
@@ -128,7 +128,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	medium_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	medium_radio_button->setFontPropagation( QWidget::NoChildren );
 	medium_radio_button->setPalettePropagation( QWidget::NoChildren );
-	medium_radio_button->setText( "medium size" );
+	medium_radio_button->setText(i18n("medium size") );
 	medium_radio_button->setAutoRepeat( FALSE );
 	medium_radio_button->setAutoResize( FALSE );
 
@@ -152,7 +152,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
 	cancel_button->setFontPropagation( QWidget::NoChildren );
 	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( "Cancel" );
+	cancel_button->setText( i18n("Cancel") );
 	cancel_button->setAutoRepeat( FALSE );
 	cancel_button->setAutoResize( FALSE );
 
@@ -188,7 +188,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	add_button->setBackgroundMode( QWidget::PaletteBackground );
 	add_button->setFontPropagation( QWidget::NoChildren );
 	add_button->setPalettePropagation( QWidget::NoChildren );
-	add_button->setText( "add" );
+	add_button->setText(i18n("add") );
 	add_button->setAutoRepeat( FALSE );
 	add_button->setAutoResize( FALSE );
 
@@ -200,7 +200,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	remove_button->setBackgroundMode( QWidget::PaletteBackground );
 	remove_button->setFontPropagation( QWidget::NoChildren );
 	remove_button->setPalettePropagation( QWidget::NoChildren );
-	remove_button->setText( "remove" );
+	remove_button->setText(i18n("remove") );
 	remove_button->setAutoRepeat( FALSE );
 	remove_button->setAutoResize( FALSE );
 
@@ -264,12 +264,12 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
   QString filename = conf->readEntry("doc_kde") +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
-    KMsgBox::message(0,"No Database created!","The KDE-Documentation-Path isn't set correctly.");
+    KMsgBox::message(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
     return;
   }
   filename = conf->readEntry("doc_qt") +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
-    KMsgBox::message(0,"No Database created!","The Qt-Documentation-Path isn't set correctly.");
+    KMsgBox::message(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
     return;
   }
   

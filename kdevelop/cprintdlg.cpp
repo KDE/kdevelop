@@ -24,6 +24,7 @@
 #include <qbttngrp.h>
 #include <iostream.h>
 #include <string.h>
+#include <kapp.h>
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -51,7 +52,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_35->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_35->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_35->setFrameStyle( 49 );
-  qtarch_ButtonGroup_35->setTitle(( "Outputmedia" ));
+  qtarch_ButtonGroup_35->setTitle(i18n( "Outputmedia" ));
   qtarch_ButtonGroup_35->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_8;
@@ -64,7 +65,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_8->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_8->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_8->setFrameStyle( 49 );
-  qtarch_ButtonGroup_8->setTitle(( "Outprinting" ));
+  qtarch_ButtonGroup_8->setTitle(i18n( "Outprinting" ));
   qtarch_ButtonGroup_8->setAlignment( 1 );
   
   qtarch_ButtonGroup_9 = new QButtonGroup( printwidget, "ButtonGroup_9" );
@@ -76,7 +77,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_9->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_9->setFrameStyle( 49 );
-  qtarch_ButtonGroup_9->setTitle(( "Pretty-print" ));
+  qtarch_ButtonGroup_9->setTitle(i18n( "Pretty-print" ));
   qtarch_ButtonGroup_9->setAlignment( 1 );
   
   qtarch_ButtonGroup_34 = new QButtonGroup( printwidget, "ButtonGroup_34" );
@@ -88,7 +89,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_34->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_34->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_34->setFrameStyle( 49 );
-  qtarch_ButtonGroup_34->setTitle(( "Pretty-print mode" ));
+  qtarch_ButtonGroup_34->setTitle(i18n( "Pretty-print mode" ));
   qtarch_ButtonGroup_34->setAlignment( 1 );
   
   qtarch_ButtonGroup_11 = new QButtonGroup( printwidget, "ButtonGroup_11" );
@@ -100,7 +101,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_11->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_11->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_11->setFrameStyle( 49 );
-  qtarch_ButtonGroup_11->setTitle(( "Pages" ));
+  qtarch_ButtonGroup_11->setTitle(i18n( "Pages" ));
   qtarch_ButtonGroup_11->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_10;
@@ -113,7 +114,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_10->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_10->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_10->setFrameStyle( 49 );
-  qtarch_ButtonGroup_10->setTitle(( "Page printing" ));
+  qtarch_ButtonGroup_10->setTitle(i18n( "Page printing" ));
   qtarch_ButtonGroup_10->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_7;
@@ -126,7 +127,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_7->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_7->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_7->setFrameStyle( 49 );
-  qtarch_ButtonGroup_7->setTitle(( "Copy" ));
+  qtarch_ButtonGroup_7->setTitle(i18n( "Copy" ));
   qtarch_ButtonGroup_7->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_5;
@@ -139,7 +140,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_5->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_5->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_5->setFrameStyle( 49 );
-  qtarch_ButtonGroup_5->setTitle(( "Printer" ));
+  qtarch_ButtonGroup_5->setTitle(i18n( "Printer" ));
   qtarch_ButtonGroup_5->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_6;
@@ -152,7 +153,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_6->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_6->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_6->setFrameStyle( 49 );
-  qtarch_ButtonGroup_6->setTitle(( "Outputlocation" ));
+  qtarch_ButtonGroup_6->setTitle(i18n( "Outputlocation" ));
   qtarch_ButtonGroup_6->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_4;
@@ -165,7 +166,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_4->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_4->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_4->setFrameStyle( 49 );
-  qtarch_ButtonGroup_4->setTitle(( "Default printsettings" ));
+  qtarch_ButtonGroup_4->setTitle(i18n( "Default printsettings" ));
   qtarch_ButtonGroup_4->setAlignment( 1 );
   
   //QButtonGroup* qtarch_ButtonGroup_3;
@@ -178,7 +179,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_3->setFrameStyle( 49 );
-  qtarch_ButtonGroup_3->setTitle(( "Outputformat" ));
+  qtarch_ButtonGroup_3->setTitle(i18n( "Outputformat" ));
   qtarch_ButtonGroup_3->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_2;
@@ -191,7 +192,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_2->setFrameStyle( 49 );
-  qtarch_ButtonGroup_2->setTitle(( "Program" ));
+  qtarch_ButtonGroup_2->setTitle(i18n( "Program" ));
   qtarch_ButtonGroup_2->setAlignment( 1 );
   
   paperFormatGroup = new QButtonGroup( printwidget, "PaperFormatGroup" );
@@ -203,7 +204,7 @@ void CPrintDlg::init(){
   paperFormatGroup->setFontPropagation( QWidget::NoChildren );
   paperFormatGroup->setPalettePropagation( QWidget::NoChildren );
   paperFormatGroup->setFrameStyle( 49 );
-  paperFormatGroup->setTitle(( "Paper format" ));
+  paperFormatGroup->setTitle(i18n( "Paper format" ));
   paperFormatGroup->setAlignment( 1 );
   
   printingConfButton = new QPushButton( printwidget, "printingConfButton" );
@@ -214,7 +215,7 @@ void CPrintDlg::init(){
   printingConfButton->setBackgroundMode( QWidget::PaletteBackground );
   printingConfButton->setFontPropagation( QWidget::NoChildren );
   printingConfButton->setPalettePropagation( QWidget::NoChildren );
-  printingConfButton->setText(( "printing..." ));
+  printingConfButton->setText(i18n( "printing..." ));
   printingConfButton->setAutoRepeat( FALSE );
   printingConfButton->setAutoResize( FALSE );
   connect (printingConfButton,SIGNAL(clicked()),SLOT(slotPrintingConfClicked()));  
@@ -268,7 +269,7 @@ void CPrintDlg::init(){
   qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_1->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_1->setText(( "printername" ));
+  qtarch_Label_1->setText(i18n( "printername" ));
   qtarch_Label_1->setAlignment( 289 );
   qtarch_Label_1->setMargin( -1 );
   
@@ -349,7 +350,7 @@ void CPrintDlg::init(){
   prettyPrintCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyPrintCheckBox->setFontPropagation( QWidget::NoChildren );
   prettyPrintCheckBox->setPalettePropagation( QWidget::NoChildren );
-  prettyPrintCheckBox->setText(( "pretty-print" ));
+  prettyPrintCheckBox->setText(i18n( "pretty-print" ));
   prettyPrintCheckBox->setAutoRepeat( FALSE );
   prettyPrintCheckBox->setAutoResize( FALSE );
   connect (prettyPrintCheckBox,SIGNAL(toggled(bool)),SLOT(slotPrettyPrintClicked(bool)));
@@ -362,7 +363,7 @@ void CPrintDlg::init(){
   prettyColorCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyColorCheckBox->setFontPropagation( QWidget::NoChildren );
   prettyColorCheckBox->setPalettePropagation( QWidget::NoChildren );
-  prettyColorCheckBox->setText(( "color" ));
+  prettyColorCheckBox->setText(i18n( "color" ));
   prettyColorCheckBox->setAutoRepeat( FALSE );
   prettyColorCheckBox->setAutoResize( FALSE );
   
@@ -416,7 +417,7 @@ void CPrintDlg::init(){
   filesConfButton->setBackgroundMode( QWidget::PaletteBackground );
   filesConfButton->setFontPropagation( QWidget::NoChildren );
   filesConfButton->setPalettePropagation( QWidget::NoChildren );
-  filesConfButton->setText(( "files..." ));
+  filesConfButton->setText(i18n( "files..." ));
   filesConfButton->setAutoRepeat( FALSE );
   filesConfButton->setAutoResize( FALSE );
   connect (filesConfButton, SIGNAL(clicked()),SLOT(slotFilesConfClicked()));
@@ -485,7 +486,7 @@ void CPrintDlg::init(){
   printToFileButton->setBackgroundMode( QWidget::PaletteBackground );
   printToFileButton->setFontPropagation( QWidget::NoChildren );
   printToFileButton->setPalettePropagation( QWidget::NoChildren );
-  printToFileButton->setText(( "print to file" ));
+  printToFileButton->setText(i18n( "print to file" ));
   printToFileButton->setAutoRepeat( FALSE );
   printToFileButton->setAutoResize( FALSE );
   connect (printToFileButton,SIGNAL(toggled(bool)),SLOT(slotPrintToFileClicked(bool)));
@@ -501,7 +502,7 @@ void CPrintDlg::init(){
   okButton->setText(("Ok"));
   okButton->setGeometry( 20, 440, 100, 30 );
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
-  cancelButton->setText(("Cancel"));
+  cancelButton->setText(i18n("Cancel"));
   cancelButton->setGeometry( 140, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
 
@@ -616,7 +617,7 @@ void CPrintDlg::slotPrintingConfClicked() {
   printconf->resize(610,510);
   printconf->setCancelButton();
   printconf->setDefaultButton();
-  printconf->setApplyButton("Preview");
+  printconf->setApplyButton(i18n("Preview"));
   printconf->exec(); 
 }
 

@@ -40,7 +40,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   install_box->setFontPropagation( QWidget::NoChildren );
   install_box->setPalettePropagation( QWidget::NoChildren );
   install_box->setFrameStyle( 49 );
-  install_box->setTitle( "Choose installation mode:" );
+  install_box->setTitle(i18n("Choose installation mode:") );
   install_box->setAlignment( 1 );
   
   source_edit = new QLineEdit( this, "source_edit" );
@@ -64,7 +64,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   source_label->setBackgroundMode( QWidget::PaletteBackground );
   source_label->setFontPropagation( QWidget::NoChildren );
   source_label->setPalettePropagation( QWidget::NoChildren );
-  source_label->setText( "new KDE Libs sources path:" );
+  source_label->setText(i18n("new KDE Libs sources path:") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
   
@@ -90,7 +90,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   doc_label->setBackgroundMode( QWidget::PaletteBackground );
   doc_label->setFontPropagation( QWidget::NoChildren );
   doc_label->setPalettePropagation( QWidget::NoChildren );
-  doc_label->setText( "new KDE Libs Documentation path:" );
+  doc_label->setText(i18n("new KDE Libs Documentation path:") );
   doc_label->setAlignment( 289 );
   doc_label->setMargin( -1 );
   doc_label->setEnabled(false);
@@ -141,7 +141,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText( "Cancel" );
+  cancel_button->setText(i18n("Cancel"));
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   
@@ -171,7 +171,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   del_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   del_new_radio_button->setFontPropagation( QWidget::NoChildren );
   del_new_radio_button->setPalettePropagation( QWidget::NoChildren );
-  del_new_radio_button->setText( "Delete old Documentation and install to new Documentation path" );
+  del_new_radio_button->setText(i18n("Delete old Documentation and install to new Documentation path") );
   del_new_radio_button->setAutoRepeat( FALSE );
   del_new_radio_button->setAutoResize( FALSE );
   KQuickHelp::add(del_new_radio_button,
@@ -188,7 +188,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   leave_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   leave_new_radio_button->setFontPropagation( QWidget::NoChildren );
   leave_new_radio_button->setPalettePropagation( QWidget::NoChildren );
-  leave_new_radio_button->setText( "Leave old Documention untouched and install to new Documention path" );
+  leave_new_radio_button->setText(i18n("Leave old Documention untouched and install to new Documention path") );
   leave_new_radio_button->setAutoRepeat( FALSE );
   leave_new_radio_button->setAutoResize( FALSE );
   KQuickHelp::add(leave_new_radio_button,

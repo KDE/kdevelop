@@ -31,7 +31,7 @@
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
-  setCaption("Add existing files to project...");
+  setCaption(i18n("Add existing files to project..."));
   source_edit = new QLineEdit( this, "source_edit" );
   source_edit->setGeometry( 120, 30, 220, 30 );
   source_edit->setMinimumSize( 0, 0 );
@@ -54,7 +54,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_label->setBackgroundMode( QWidget::PaletteBackground );
   source_label->setFontPropagation( QWidget::NoChildren );
   source_label->setPalettePropagation( QWidget::NoChildren );
-  source_label->setText( "Sourcefile(s):" );
+  source_label->setText(i18n("Sourcefile(s):") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
   
@@ -81,7 +81,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_label->setBackgroundMode( QWidget::PaletteBackground );
   destination_label->setFontPropagation( QWidget::NoChildren );
   destination_label->setPalettePropagation( QWidget::NoChildren );
-  destination_label->setText( "Destinationdir:" );
+  destination_label->setText(i18n("Destinationdir:") );
   destination_label->setAlignment( 289 );
   destination_label->setMargin( -1 );
   
@@ -143,7 +143,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText( "Cancel" );
+  cancel_button->setText(i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   

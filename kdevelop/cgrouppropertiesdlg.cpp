@@ -19,6 +19,7 @@
 
 
 #include "cgrouppropertiesdlg.h"
+#include <kapp.h>
 
 CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   
@@ -58,7 +59,7 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   name_label->setBackgroundMode( QWidget::PaletteBackground );
   name_label->setFontPropagation( QWidget::NoChildren );
   name_label->setPalettePropagation( QWidget::NoChildren );
-  name_label->setText( "Groupname:" );
+  name_label->setText(i18n("Groupname:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
 
@@ -71,7 +72,7 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   filter_label->setBackgroundMode( QWidget::PaletteBackground );
   filter_label->setFontPropagation( QWidget::NoChildren );
   filter_label->setPalettePropagation( QWidget::NoChildren );
-  filter_label->setText( "Filters:" );
+  filter_label->setText(i18n("Filters:") );
   filter_label->setAlignment( 289 );
   filter_label->setMargin( -1 );
   
@@ -97,7 +98,7 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText( "Cancel" );
+  cancel_button->setText(i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   

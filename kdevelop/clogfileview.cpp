@@ -190,7 +190,7 @@ void CLogFileView::slotGroupProp(){
   QString filter_str,str;
   QString name = getCurrentItem()->getText();
   CGroupPropertiesDlg dlg;
-  dlg.setCaption("Group Properties...");
+  dlg.setCaption(i18n("Group Properties..."));
   dlg.name_edit->setText(name);
   dlg.name_edit->setEnabled(false);
   
@@ -212,7 +212,7 @@ void CLogFileView::slotNewGroup(){
   CGroupPropertiesDlg dlg;
   QString current_group = getCurrentItem()->getText();
   QStrList filters;
-  dlg.setCaption("New Group ...");
+  dlg.setCaption(i18n("New Group ..."));
   if(dlg.exec()){// if clicked ok
     QString ace_group;
     QString name = dlg.name_edit->text();

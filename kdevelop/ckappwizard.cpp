@@ -347,7 +347,7 @@ void CKAppWizard::initPages(){
 // connection to directoryload
 void CKAppWizard::slotDirDialogClicked() {
   dirdialog = new KDirDialog(directoryline->text(),this,"Directory");
-  dirdialog->setCaption ("Directory");
+  dirdialog->setCaption (i18n("Directory"));
   dirdialog->show();
   dir = dirdialog->dirPath();
   directoryline->setText(dir);
@@ -357,7 +357,7 @@ void CKAppWizard::slotDirDialogClicked() {
 // connection of hload
 void CKAppWizard::slotHeaderDialogClicked() {
   headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true,true);
-  headerdialog->setCaption ("Header");
+  headerdialog->setCaption (i18n("Header"));
   headerdialog->show();
   hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
   delete (headerdialog);

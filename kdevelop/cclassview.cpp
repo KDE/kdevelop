@@ -37,7 +37,7 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
   left_button = true;
   right_button = false;
   class_pop = new KPopupMenu();
-  class_pop->setTitle("Class:");
+  class_pop->setTitle(i18n("Class:"));
   class_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
   class_pop->insertSeparator();
   class_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
@@ -50,7 +50,7 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
 
 
   member_pop = new KPopupMenu();
-  member_pop->setTitle("Method:");
+  member_pop->setTitle(i18n("Method:"));
   member_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
   member_pop->insertItem(i18n("Definition"),this,SLOT(slotViewDefinition()));
   member_pop->insertSeparator();
@@ -58,7 +58,7 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
   member_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
 
   project_pop = new KPopupMenu();
-  project_pop->setTitle("Project:");
+  project_pop->setTitle(i18n("Project:"));
   project_pop->insertItem(i18n("New File..."),this,SLOT(slotFileNew()));
   project_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
   project_pop->insertSeparator();

@@ -10,10 +10,11 @@ small patches and bugfixes:
 -Jost Schenk <Jost@Schenk.de>
 -David Barth <dbarth@videotron.ca>
 
-Translation:
+Translations:
 
-Ilmar Habibulin <ilmar@ints.ru> - russian 
-
+Ilmar Habibulin <ilmar@ints.ru>              - russian 
+Steen Rabol <rabol@get2net.dk>               - danish
+Martin Piskernig <martin.piskernig@stuwo.at> - german
 
 KDevelop contains sourcecode from KWrite 0.97 
 (c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>

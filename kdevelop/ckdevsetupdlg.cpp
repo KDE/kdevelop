@@ -27,14 +27,14 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name )
   setFixedSize(462,218);
   
 
-  setCaption( klocale->translate("KDevelop Setup" ));
+  setCaption( i18n("KDevelop Setup" ));
   KApplication *app=KApplication::getKApplication();
   config=app->getConfig();
   
   
   // ****************** the Doc_LOcation_DLG ********************
   QWidget *w = new QWidget( this, "page one" );    
-  config->setGroup("Doc_Location");
+  config->setGroup(i18n("Doc_Location"));
 
 
   KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
@@ -60,7 +60,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name )
   QLabel* qt_label;
   qt_label = new QLabel( w, "qt_label" );
   qt_label->setGeometry( 10, 30, 90, 30 );
-  qt_label->setText( "Qt-Library Doc:" );
+  qt_label->setText( i18n("Qt-Library Doc:") );
   
 
   KQuickHelp::add(qt_edit,
@@ -88,7 +88,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name )
   QLabel* kde_label;
   kde_label = new QLabel( w, "kde_label" );
   kde_label->setGeometry( 10, 80, 130, 30 );
-  kde_label->setText( "KDE Library Doc:" );
+  kde_label->setText( i18n("KDE Library Doc:") );
 
   KQuickHelp::add(kde_edit,
   KQuickHelp::add(kde_button,
@@ -120,7 +120,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name )
 void CKDevSetupDlg::ok(){
   
   QString text;
-  config->setGroup("Doc_Location");
+  config->setGroup(i18n("Doc_Location"));
   text = qt_edit->text();
   config->writeEntry("doc_qt",text);
   text = kde_edit->text();
@@ -135,7 +135,7 @@ void CKDevSetupDlg::slotQtClicked(){
   dir = KFileDialog::getDirectory(config->readEntry("doc_qt"));
   if (!dir.isEmpty()){
   qt_edit->setText(dir);
-  config->setGroup("Doc_Location");
+  config->setGroup(i18n("Doc_Location"));
   config->writeEntry("doc_qt",dir);
   }
 }
@@ -144,7 +144,7 @@ void CKDevSetupDlg::slotKDEClicked(){
   dir = KFileDialog::getDirectory(config->readEntry("doc_kde"));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
-    config->setGroup("Doc_Location");
+    config->setGroup(i18n("Doc_Location"));
     config->writeEntry("doc_kde",dir);
   }
 }

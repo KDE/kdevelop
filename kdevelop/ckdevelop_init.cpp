@@ -263,10 +263,10 @@ void CKDevelop::init(){
 
   
 
-  s_tab_view->addTab(header_widget,"Header/Resource Files");
-  s_tab_view->addTab(cpp_widget,"C/C++ Files");
-  s_tab_view->addTab(browser_widget,"Documentation-Browser");
-  s_tab_view->addTab(swallow_widget,"Tools");
+  s_tab_view->addTab(header_widget,i18n("Header/Resource Files"));
+  s_tab_view->addTab(cpp_widget,i18n("C/C++ Files"));
+  s_tab_view->addTab(browser_widget,i18n("Documentation-Browser"));
+  s_tab_view->addTab(swallow_widget,i18n("Tools"));
 
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   view->activate(top_panner,o_tab_view); 
@@ -481,7 +481,7 @@ void CKDevelop::initMenu(){
   
   project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
-  project_menu->insertItem("&Add File(s) to Project",p2,ID_PROJECT_ADD_FILE);
+  project_menu->insertItem(i18n("&Add File(s) to Project"),p2,ID_PROJECT_ADD_FILE);
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
   //project_menu->insertSeparator();
@@ -596,9 +596,9 @@ void CKDevelop::initMenu(){
 
 
   QPopupMenu* make = new QPopupMenu;
-  make->insertItem(i18n("&Make"),ID_OPTIONS_MAKE_MAKE);
-  make->insertItem(i18n("&Gmake"),ID_OPTIONS_MAKE_GMAKE);
-  make->insertItem(i18n("&Dmake"),ID_OPTIONS_MAKE_DMAKE);
+  make->insertItem("&Make",ID_OPTIONS_MAKE_MAKE);
+  make->insertItem("&Gmake",ID_OPTIONS_MAKE_GMAKE);
+  make->insertItem("&Dmake",ID_OPTIONS_MAKE_DMAKE);
   options_menu->insertItem("Make-&Command..",make,ID_OPTIONS_MAKE);
   connect(make, SIGNAL(activated(int)), SLOT(slotOptionsMake(int)));
   

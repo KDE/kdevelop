@@ -1,7 +1,11 @@
+1999-02-16  Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commit  the i18n() patches and the german translation by Martin Piskernig 
+	<martin.piskernig@stuwo.at>
+	
 1999-02-15  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* added the connection between buttons and dialogs to the printingdialogs
 
-1999-02-16  Sandy Meier  <smeier@rz.uni-potsdam.de>
+1999-02-15  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* replaced all cerr/cout with the powerfull KDEBUG macros, see debug.h and 
 	 $KDEDIR/share/doc/HTML/default/kdelibs/kdebug.html for more informations
 	* added CKDevelop::showOutputView(bool) and remove some doubled sourcecodes

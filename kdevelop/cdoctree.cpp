@@ -26,11 +26,11 @@ CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : KTreeList(
   left_button = true;
   right_button = false;
   others_pop = new KPopupMenu();
-  others_pop->setTitle("Others:");
+  others_pop->setTitle(i18n("Others:"));
   others_pop->insertItem(i18n("Add Entry..."),this,SLOT(slotAddDocumentation()));
   
   doc_pop = new KPopupMenu();
-  doc_pop->setTitle("Others:");
+  doc_pop->setTitle(i18n("Others:"));
   doc_pop->insertItem(i18n("Add Entry..."),this,SLOT(slotAddDocumentation()));
   doc_pop->insertItem(i18n("Remove Entry"),this,SLOT(slotRemoveDocumentation()));
   doc_pop->insertSeparator();
@@ -141,7 +141,7 @@ void CDocTree::slotSingleSelected(int index){
 
 void CDocTree::slotAddDocumentation(){
   CDocTreePropDlg dlg;
-  dlg.setCaption("Add Entry...");
+  dlg.setCaption(i18n("Add Entry..."));
   QStrList others_list;
   int pos;
   if(dlg.exec()){
@@ -183,7 +183,7 @@ void CDocTree::slotDocumentationProp(){
   QString filename = config_kdevelop->readEntry(name);
 
   CDocTreePropDlg dlg;
-  dlg.setCaption("Properties...");
+  dlg.setCaption(i18n("Properties..."));
   dlg.name_edit->setText(name);
   dlg.name_edit->setEnabled(false);
   dlg.file_edit->setText(filename);

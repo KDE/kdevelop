@@ -18,6 +18,7 @@
 
 #include "cdoctreepropdlg.h"
 #include <kfiledialog.h>
+#include <kapp.h>
 
 CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   name_edit = new QLineEdit( this, "name_edit" );
@@ -54,7 +55,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   name_label->setBackgroundMode( QWidget::PaletteBackground );
   name_label->setFontPropagation( QWidget::NoChildren );
   name_label->setPalettePropagation( QWidget::NoChildren );
-  name_label->setText( "Name:" );
+  name_label->setText(i18n("Name:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
   
@@ -66,7 +67,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_label->setBackgroundMode( QWidget::PaletteBackground );
   file_label->setFontPropagation( QWidget::NoChildren );
   file_label->setPalettePropagation( QWidget::NoChildren );
-  file_label->setText( "File:" );
+  file_label->setText(i18n("File:") );
   file_label->setAlignment( 289 );
   file_label->setMargin( -1 );
   
@@ -90,7 +91,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText( "Cancel" );
+  cancel_button->setText( i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   

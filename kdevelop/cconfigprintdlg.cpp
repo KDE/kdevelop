@@ -18,6 +18,7 @@
 #include "cconfigprintdlg.h"
 #include <qlabel.h>
 #include <qbttngrp.h>
+#include <kapp.h>
 
 CConfigPrintDlg::CConfigPrintDlg(QWidget* parent,const char* name,int prog) : QTabDialog(parent, name, true){
   init(prog);
@@ -230,7 +231,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_59->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_59->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_59->setFrameStyle( 49 );
-    qtarch_ButtonGroup_59->setTitle( "Header settings" );
+    qtarch_ButtonGroup_59->setTitle(i18n( "Header settings") );
     qtarch_ButtonGroup_59->setAlignment( 1 );
     
     qtarch_ButtonGroup_62 = new QButtonGroup( parent, "ButtonGroup_62" );
@@ -242,7 +243,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_62->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_62->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_62->setFrameStyle( 49 );
-    qtarch_ButtonGroup_62->setTitle( "Fancy header" );
+    qtarch_ButtonGroup_62->setTitle( i18n("Fancy header") );
     qtarch_ButtonGroup_62->setAlignment( 1 );
     
     qtarch_ButtonGroup_61 = new QButtonGroup( parent, "ButtonGroup_61" );
@@ -254,7 +255,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_61->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_61->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_61->setFrameStyle( 49 );
-    qtarch_ButtonGroup_61->setTitle( "Login" );
+    qtarch_ButtonGroup_61->setTitle( i18n("Login") );
     qtarch_ButtonGroup_61->setAlignment( 1 );
     
     qtarch_ButtonGroup_60 = new QButtonGroup( parent, "ButtonGroup_60" );
@@ -266,7 +267,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_60->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_60->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_60->setFrameStyle( 49 );
-    qtarch_ButtonGroup_60->setTitle( "Headertext" );
+    qtarch_ButtonGroup_60->setTitle( i18n("Headertext") );
     qtarch_ButtonGroup_60->setAlignment( 1 );
     
     headerButton = new QCheckBox( parent, "headerButton" );
@@ -277,7 +278,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     headerButton->setBackgroundMode( QWidget::PaletteBackground );
     headerButton->setFontPropagation( QWidget::NoChildren );
     headerButton->setPalettePropagation( QWidget::NoChildren );
-    headerButton->setText( "header" );
+    headerButton->setText( i18n("header") );
     headerButton->setAutoRepeat( FALSE );
     headerButton->setAutoResize( FALSE );
     if (prog==1) {
@@ -308,7 +309,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     headertextButton->setBackgroundMode( QWidget::PaletteBackground );
     headertextButton->setFontPropagation( QWidget::NoChildren );
     headertextButton->setPalettePropagation( QWidget::NoChildren );
-    headertextButton->setText( "headertext" );
+    headertextButton->setText( i18n("headertext") );
     headertextButton->setAutoRepeat( FALSE );
     headertextButton->setAutoResize( FALSE );
     if (prog==1) {
@@ -325,7 +326,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     loginButton->setBackgroundMode( QWidget::PaletteBackground );
     loginButton->setFontPropagation( QWidget::NoChildren );
     loginButton->setPalettePropagation( QWidget::NoChildren );
-    loginButton->setText( "login" );
+    loginButton->setText( i18n("login") );
     loginButton->setAutoRepeat( FALSE );
     loginButton->setAutoResize( FALSE );
     if (prog!=1) {
@@ -354,7 +355,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_19->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_19->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_19->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_19->setText( "position" );
+    qtarch_Label_19->setText(i18n("position") );
     qtarch_Label_19->setAlignment( 289 );
     qtarch_Label_19->setMargin( -1 );
     
@@ -366,7 +367,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_20->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_20->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_20->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_20->setText( "text" );
+    qtarch_Label_20->setText( i18n("text") );
     qtarch_Label_20->setAlignment( 289 );
     qtarch_Label_20->setMargin( -1 );
     
@@ -378,7 +379,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_24->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_24->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_24->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_24->setText( "position" );
+    qtarch_Label_24->setText( i18n("position") );
     qtarch_Label_24->setAlignment( 289 );
     qtarch_Label_24->setMargin( -1 );
     
@@ -404,7 +405,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     fancyHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
     fancyHeaderButton->setFontPropagation( QWidget::NoChildren );
     fancyHeaderButton->setPalettePropagation( QWidget::NoChildren );
-    fancyHeaderButton->setText( "fancy header" );
+    fancyHeaderButton->setText( i18n("fancy header") );
     fancyHeaderButton->setAutoRepeat( FALSE );
     fancyHeaderButton->setAutoResize( FALSE );
     
@@ -417,7 +418,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_65->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_65->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_65->setFrameStyle( 49 );
-    qtarch_ButtonGroup_65->setTitle( "Filename" );
+    qtarch_ButtonGroup_65->setTitle( i18n("Filename") );
     qtarch_ButtonGroup_65->setAlignment( 1 );
     
     filenameLine = new QCheckBox( parent, "filenameLine" );
@@ -428,7 +429,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     filenameLine->setBackgroundMode( QWidget::PaletteBackground );
     filenameLine->setFontPropagation( QWidget::NoChildren );
     filenameLine->setPalettePropagation( QWidget::NoChildren );
-    filenameLine->setText( "filename" );
+    filenameLine->setText( i18n("filename") );
     filenameLine->setAutoRepeat( FALSE );
     filenameLine->setAutoResize( FALSE );
     if (prog!=1) {
@@ -443,7 +444,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_21->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_21->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_21->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_21->setText( "size of filename" );
+    qtarch_Label_21->setText( i18n("size of filename") );
     qtarch_Label_21->setAlignment( 289 );
     qtarch_Label_21->setMargin( -1 );
     
@@ -455,7 +456,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_25->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_25->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_25->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_25->setText( "position" );
+    qtarch_Label_25->setText( i18n("position") );
     qtarch_Label_25->setAlignment( 289 );
     qtarch_Label_25->setMargin( -1 );
     
@@ -495,7 +496,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_ButtonGroup_66->setFontPropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_66->setPalettePropagation( QWidget::NoChildren );
     qtarch_ButtonGroup_66->setFrameStyle( 49 );
-    qtarch_ButtonGroup_66->setTitle( "Hostname" );
+    qtarch_ButtonGroup_66->setTitle(i18n("Hostname") );
     qtarch_ButtonGroup_66->setAlignment( 1 );
     
     hostnameButton = new QCheckBox( parent, "hostnameButton" );
@@ -506,7 +507,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     hostnameButton->setBackgroundMode( QWidget::PaletteBackground );
     hostnameButton->setFontPropagation( QWidget::NoChildren );
     hostnameButton->setPalettePropagation( QWidget::NoChildren );
-    hostnameButton->setText( "hostname" );
+    hostnameButton->setText(i18n("hostname") );
     hostnameButton->setAutoRepeat( FALSE );
     hostnameButton->setAutoResize( FALSE );
     if (prog!=1) {
@@ -521,7 +522,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_23->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_23->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_23->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_23->setText( "size of hostname " );
+    qtarch_Label_23->setText(i18n("size of hostname ") );
     qtarch_Label_23->setAlignment( 289 );
     qtarch_Label_23->setMargin( -1 );
     
@@ -533,7 +534,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_22->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_22->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_22->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_22->setText( "position" );
+    qtarch_Label_22->setText( i18n("position") );
     qtarch_Label_22->setAlignment( 289 );
     qtarch_Label_22->setMargin( -1 );
     
@@ -586,7 +587,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_78->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_78->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_78->setFrameStyle( 49 );
-	qtarch_ButtonGroup_78->setTitle( "Current time" );
+	qtarch_ButtonGroup_78->setTitle(i18n("Current time") );
 	qtarch_ButtonGroup_78->setAlignment( 1 );
 
 	qtarch_ButtonGroup_77 = new QButtonGroup( parent, "ButtonGroup_77" );
@@ -598,7 +599,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_77->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_77->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_77->setFrameStyle( 49 );
-	qtarch_ButtonGroup_77->setTitle( "Modification time" );
+	qtarch_ButtonGroup_77->setTitle(i18n("Modification time") );
 	qtarch_ButtonGroup_77->setAlignment( 1 );
 
 	qtarch_ButtonGroup_87 = new QButtonGroup( parent, "ButtonGroup_87" );
@@ -610,7 +611,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_87->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_87->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_87->setFrameStyle( 49 );
-	qtarch_ButtonGroup_87->setTitle( "Format" );
+	qtarch_ButtonGroup_87->setTitle(i18n("Format") );
 	qtarch_ButtonGroup_87->setAlignment( 1 );
 
 	qtarch_ButtonGroup_88 = new QButtonGroup( parent, "ButtonGroup_88" );
@@ -622,7 +623,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_88->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_88->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_88->setFrameStyle( 49 );
-	qtarch_ButtonGroup_88->setTitle( "Position" );
+	qtarch_ButtonGroup_88->setTitle(i18n("Position") );
 	qtarch_ButtonGroup_88->setAlignment( 1 );
 
 	qtarch_ButtonGroup_89 = new QButtonGroup( parent, "ButtonGroup_89" );
@@ -634,7 +635,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_89->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_89->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_89->setFrameStyle( 49 );
-	qtarch_ButtonGroup_89->setTitle( "Format" );
+	qtarch_ButtonGroup_89->setTitle(i18n("Format") );
 	qtarch_ButtonGroup_89->setAlignment( 1 );
 
 	qtarch_ButtonGroup_90 = new QButtonGroup( parent, "ButtonGroup_90" );
@@ -646,7 +647,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_90->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_90->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_90->setFrameStyle( 49 );
-	qtarch_ButtonGroup_90->setTitle( "Position" );
+	qtarch_ButtonGroup_90->setTitle(i18n("Position") );
 	qtarch_ButtonGroup_90->setAlignment( 1 );
 
 	qtarch_ButtonGroup_76 = new QButtonGroup( parent, "ButtonGroup_76" );
@@ -658,7 +659,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_76->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_76->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_76->setFrameStyle( 49 );
-	qtarch_ButtonGroup_76->setTitle( "Modification date" );
+	qtarch_ButtonGroup_76->setTitle( i18n("Modification date") );
 	qtarch_ButtonGroup_76->setAlignment( 1 );
 
 	qtarch_ButtonGroup_86 = new QButtonGroup( parent, "ButtonGroup_86" );
@@ -670,7 +671,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_86->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_86->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_86->setFrameStyle( 49 );
-	qtarch_ButtonGroup_86->setTitle( "Format" );
+	qtarch_ButtonGroup_86->setTitle( i18n("Format") );
 	qtarch_ButtonGroup_86->setAlignment( 1 );
 
 	qtarch_ButtonGroup_85 = new QButtonGroup( parent, "ButtonGroup_85" );
@@ -682,7 +683,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_85->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_85->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_85->setFrameStyle( 49 );
-	qtarch_ButtonGroup_85->setTitle( "Position" );
+	qtarch_ButtonGroup_85->setTitle( i18n("Position") );
 	qtarch_ButtonGroup_85->setAlignment( 1 );
 
 	qtarch_ButtonGroup_74 = new QButtonGroup( parent, "ButtonGroup_74" );
@@ -694,7 +695,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_74->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_74->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_74->setFrameStyle( 49 );
-	qtarch_ButtonGroup_74->setTitle( "Current date" );
+	qtarch_ButtonGroup_74->setTitle( i18n("Current date") );
 	qtarch_ButtonGroup_74->setAlignment( 1 );
 
 	qtarch_ButtonGroup_84 = new QButtonGroup( parent, "ButtonGroup_84" );
@@ -706,7 +707,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_84->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_84->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_84->setFrameStyle( 49 );
-	qtarch_ButtonGroup_84->setTitle( "Format" );
+	qtarch_ButtonGroup_84->setTitle(i18n("Format") );
 	qtarch_ButtonGroup_84->setAlignment( 1 );
 
 	qtarch_ButtonGroup_75 = new QButtonGroup( parent, "ButtonGroup_75" );
@@ -718,7 +719,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_75->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_75->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_75->setFrameStyle( 49 );
-	qtarch_ButtonGroup_75->setTitle( "Position" );
+	qtarch_ButtonGroup_75->setTitle(i18n("Position") );
 	qtarch_ButtonGroup_75->setAlignment( 1 );
 
 	qtarch_ButtonGroup_72 = new QButtonGroup( parent, "ButtonGroup_72" );
@@ -730,7 +731,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_72->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_72->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_72->setFrameStyle( 49 );
-	qtarch_ButtonGroup_72->setTitle( "AM/PM" );
+	qtarch_ButtonGroup_72->setTitle(i18n("AM/PM") );
 	qtarch_ButtonGroup_72->setAlignment( 1 );
 
 	qtarch_ButtonGroup_71 = new QButtonGroup( parent, "ButtonGroup_71" );
@@ -742,7 +743,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_71->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_71->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_71->setFrameStyle( 49 );
-	qtarch_ButtonGroup_71->setTitle( "AM/PM" );
+	qtarch_ButtonGroup_71->setTitle(i18n("AM/PM") );
 	qtarch_ButtonGroup_71->setAlignment( 1 );
 
 	currentDateButton = new QCheckBox( parent, "currentDateButton" );
@@ -753,7 +754,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	currentDateButton->setBackgroundMode( QWidget::PaletteBackground );
 	currentDateButton->setFontPropagation( QWidget::NoChildren );
 	currentDateButton->setPalettePropagation( QWidget::NoChildren );
-	currentDateButton->setText( "current date" );
+	currentDateButton->setText( i18n("current date") );
 	currentDateButton->setAutoRepeat( FALSE );
 	currentDateButton->setAutoResize( FALSE );
 	if (prog!=1) {
@@ -771,7 +772,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	modificationDateButton->setBackgroundMode( QWidget::PaletteBackground );
 	modificationDateButton->setFontPropagation( QWidget::NoChildren );
 	modificationDateButton->setPalettePropagation( QWidget::NoChildren );
-	modificationDateButton->setText( "modification date" );
+	modificationDateButton->setText( i18n("modification date") );
 	modificationDateButton->setAutoRepeat( FALSE );
 	modificationDateButton->setAutoResize( FALSE );
 	if (prog!=1) {
@@ -786,7 +787,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	currentTimeButton->setBackgroundMode( QWidget::PaletteBackground );
 	currentTimeButton->setFontPropagation( QWidget::NoChildren );
 	currentTimeButton->setPalettePropagation( QWidget::NoChildren );
-	currentTimeButton->setText( "current time" );
+	currentTimeButton->setText( i18n("current time") );
 	currentTimeButton->setAutoRepeat( FALSE );
 	currentTimeButton->setAutoResize( FALSE );
 	if (prog!=1) {
@@ -804,7 +805,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	modificationTimeButton->setBackgroundMode( QWidget::PaletteBackground );
 	modificationTimeButton->setFontPropagation( QWidget::NoChildren );
 	modificationTimeButton->setPalettePropagation( QWidget::NoChildren );
-	modificationTimeButton->setText( "modification time" );
+	modificationTimeButton->setText( i18n("modification time") );
 	modificationTimeButton->setAutoRepeat( FALSE );
 	modificationTimeButton->setAutoResize( FALSE );
 	if (prog!=1) {
@@ -967,7 +968,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_20->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_20->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_20->setFrameStyle( 49 );
-	qtarch_ButtonGroup_20->setTitle( "Font and TAB" );
+	qtarch_ButtonGroup_20->setTitle(i18n("Font and TAB") );
 	qtarch_ButtonGroup_20->setAlignment( 1 );
 
 	QButtonGroup* qtarch_ButtonGroup_21;
@@ -980,7 +981,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_21->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_21->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_21->setFrameStyle( 49 );
-	qtarch_ButtonGroup_21->setTitle( "Textprinting" );
+	qtarch_ButtonGroup_21->setTitle( i18n("Textprinting") );
 	qtarch_ButtonGroup_21->setAlignment( 1 );
 
 	qtarch_ButtonGroup_51 = new QButtonGroup( parent, "ButtonGroup_51" );
@@ -992,7 +993,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_51->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_51->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_51->setFrameStyle( 49 );
-	qtarch_ButtonGroup_51->setTitle( "Other options" );
+	qtarch_ButtonGroup_51->setTitle(i18n("Other options") );
 	qtarch_ButtonGroup_51->setAlignment( 1 );
 
 	qtarch_ButtonGroup_52 = new QButtonGroup( parent, "ButtonGroup_52" );
@@ -1004,7 +1005,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_52->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_52->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_52->setFrameStyle( 49 );
-	qtarch_ButtonGroup_52->setTitle( "Highlight bars" );
+	qtarch_ButtonGroup_52->setTitle(i18n("Highlight bars") );
 	qtarch_ButtonGroup_52->setAlignment( 1 );
 
 	qtarch_Label_14 = new QLabel( parent, "Label_14" );
@@ -1015,7 +1016,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_14->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_14->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_14->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_14->setText( "cycle of change" );
+	qtarch_Label_14->setText(i18n("cycle of change") );
 	qtarch_Label_14->setAlignment( 289 );
 	qtarch_Label_14->setMargin( -1 );
 
@@ -1028,7 +1029,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_53->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_53->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_53->setFrameStyle( 49 );
-	qtarch_ButtonGroup_53->setTitle( "Wrapped line" );
+	qtarch_ButtonGroup_53->setTitle(i18n("Wrapped line") );
 	qtarch_ButtonGroup_53->setAlignment( 1 );
 
 	QButtonGroup* qtarch_ButtonGroup_33;
@@ -1041,7 +1042,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_33->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_33->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_33->setFrameStyle( 49 );
-	qtarch_ButtonGroup_33->setTitle( "Numbering & border" );
+	qtarch_ButtonGroup_33->setTitle(i18n("Numbering & border") );
 	qtarch_ButtonGroup_33->setAlignment( 1 );
 
 	bordersButton = new QCheckBox( parent, "bordersButton" );
@@ -1052,7 +1053,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	bordersButton->setBackgroundMode( QWidget::PaletteBackground );
 	bordersButton->setFontPropagation( QWidget::NoChildren );
 	bordersButton->setPalettePropagation( QWidget::NoChildren );
-	bordersButton->setText( "borders" );
+	bordersButton->setText( i18n("borders") );
 	bordersButton->setAutoRepeat( FALSE );
 	bordersButton->setAutoResize( FALSE );
 
@@ -1064,7 +1065,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	tocButton->setBackgroundMode( QWidget::PaletteBackground );
 	tocButton->setFontPropagation( QWidget::NoChildren );
 	tocButton->setPalettePropagation( QWidget::NoChildren );
-	tocButton->setText( "table of contents" );
+	tocButton->setText( i18n("table of contents") );
 	tocButton->setAutoRepeat( FALSE );
 	tocButton->setAutoResize( FALSE );
 
@@ -1076,7 +1077,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	markedWrappedLinesButton->setBackgroundMode( QWidget::PaletteBackground );
 	markedWrappedLinesButton->setFontPropagation( QWidget::NoChildren );
 	markedWrappedLinesButton->setPalettePropagation( QWidget::NoChildren );
-	markedWrappedLinesButton->setText( "marked wrapped lines" );
+	markedWrappedLinesButton->setText(i18n("marked wrapped lines") );
 	markedWrappedLinesButton->setAutoRepeat( FALSE );
 	markedWrappedLinesButton->setAutoResize( FALSE );
 	connect (markedWrappedLinesButton,SIGNAL(clicked()),SLOT(slotWrappedLinesClicked()));
@@ -1090,7 +1091,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_label->setText( "lines per page" );
+	qtarch_label->setText(i18n("lines per page") );
 	qtarch_label->setAlignment( 289 );
 	qtarch_label->setMargin( -1 );
 
@@ -1102,7 +1103,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	numberingPagesButton->setBackgroundMode( QWidget::PaletteBackground );
 	numberingPagesButton->setFontPropagation( QWidget::NoChildren );
 	numberingPagesButton->setPalettePropagation( QWidget::NoChildren );
-	numberingPagesButton->setText( "numbering pages" );
+	numberingPagesButton->setText(i18n("numbering pages") );
 	numberingPagesButton->setAutoRepeat( FALSE );
 	numberingPagesButton->setAutoResize( FALSE );
 
@@ -1115,7 +1116,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_8->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_8->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_8->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_8->setText( "characters per line" );
+	qtarch_Label_8->setText(i18n("characters per line") );
 	qtarch_Label_8->setAlignment( 289 );
 	qtarch_Label_8->setMargin( -1 );
 
@@ -1127,7 +1128,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	numberingLineButton->setBackgroundMode( QWidget::PaletteBackground );
 	numberingLineButton->setFontPropagation( QWidget::NoChildren );
 	numberingLineButton->setPalettePropagation( QWidget::NoChildren );
-	numberingLineButton->setText( "numbering lines" );
+	numberingLineButton->setText(i18n("numbering lines") );
 	numberingLineButton->setAutoRepeat( FALSE );
 	numberingLineButton->setAutoResize( FALSE );
 
@@ -1205,7 +1206,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_13->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_13->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_13->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_13->setText( "value for wrapped line" );
+	qtarch_Label_13->setText(i18n("value for wrapped line") );
 	qtarch_Label_13->setAlignment( 289 );
 	qtarch_Label_13->setMargin( -1 );
 
@@ -1230,7 +1231,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	highlightBarsButton->setBackgroundMode( QWidget::PaletteBackground );
 	highlightBarsButton->setFontPropagation( QWidget::NoChildren );
 	highlightBarsButton->setPalettePropagation( QWidget::NoChildren );
-	highlightBarsButton->setText( "highlight bars" );
+	highlightBarsButton->setText( i18n("highlight bars") );
 	highlightBarsButton->setAutoRepeat( FALSE );
 	highlightBarsButton->setAutoResize( FALSE );
 	connect (highlightBarsButton,SIGNAL(clicked()),SLOT(slotHighlightBarsClicked()));
@@ -1243,7 +1244,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	interpretButton->setBackgroundMode( QWidget::PaletteBackground );
 	interpretButton->setFontPropagation( QWidget::NoChildren );
 	interpretButton->setPalettePropagation( QWidget::NoChildren );
-	interpretButton->setText( "interpret TAB, BS and FF" );
+	interpretButton->setText( i18n("interpret TAB, BS and FF") );
 	interpretButton->setAutoRepeat( FALSE );
 	interpretButton->setAutoResize( FALSE );
 
@@ -1255,7 +1256,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	cutLinesButton->setBackgroundMode( QWidget::PaletteBackground );
 	cutLinesButton->setFontPropagation( QWidget::NoChildren );
 	cutLinesButton->setPalettePropagation( QWidget::NoChildren );
-	cutLinesButton->setText( "cut lines" );
+	cutLinesButton->setText(i18n("cut lines") );
 	cutLinesButton->setAutoRepeat( FALSE );
 	cutLinesButton->setAutoResize( FALSE );
 	if (prog!=1) {
@@ -1270,7 +1271,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	replaceButton->setBackgroundMode( QWidget::PaletteBackground );
 	replaceButton->setFontPropagation( QWidget::NoChildren );
 	replaceButton->setPalettePropagation( QWidget::NoChildren );
-	replaceButton->setText( "replace non-printing character by space" );
+	replaceButton->setText( i18n("replace non-printing character by space" ));
 	replaceButton->setAutoRepeat( FALSE );
 	replaceButton->setAutoResize( FALSE );
 
@@ -1282,7 +1283,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	printAsISOLatin->setBackgroundMode( QWidget::PaletteBackground );
 	printAsISOLatin->setFontPropagation( QWidget::NoChildren );
 	printAsISOLatin->setPalettePropagation( QWidget::NoChildren );
-	printAsISOLatin->setText( "print non ascii character as ISO Latin 1" );
+	printAsISOLatin->setText(i18n("print non ascii character as ISO Latin 1"));
 	printAsISOLatin->setAutoRepeat( FALSE );
 	printAsISOLatin->setAutoResize( FALSE );
 
@@ -1294,7 +1295,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	boltFontButton->setBackgroundMode( QWidget::PaletteBackground );
 	boltFontButton->setFontPropagation( QWidget::NoChildren );
 	boltFontButton->setPalettePropagation( QWidget::NoChildren );
-	boltFontButton->setText( "bold font" );
+	boltFontButton->setText( i18n("bold font") );
 	boltFontButton->setAutoRepeat( FALSE );
 	boltFontButton->setAutoResize( FALSE );
 
@@ -1307,7 +1308,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_2->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_2->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_2->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_2->setText( "set TAB size" );
+	qtarch_Label_2->setText( i18n("set TAB size") );
 	qtarch_Label_2->setAlignment( 289 );
 	qtarch_Label_2->setMargin( -1 );
 
@@ -1319,8 +1320,8 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_3->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_3->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_3->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_3->setText( "font for a2ps" );
-	qtarch_Label_3->setAlignment( 289 );
+	qtarch_Label_3->setText( i18n("font for a2ps") );
+        qtarch_Label_3->setAlignment( 289 );
 	qtarch_Label_3->setMargin( -1 );
 
 	qtarch_Label_4 = new QLabel( parent, "Label_4" );
@@ -1331,7 +1332,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_4->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_4->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_4->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_4->setText( "font for header" );
+	qtarch_Label_4->setText( i18n("font for header") );
 	qtarch_Label_4->setAlignment( 289 );
 	qtarch_Label_4->setMargin( -1 );
 
@@ -1343,7 +1344,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_5->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_5->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_5->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_5->setText( "font for body" );
+	qtarch_Label_5->setText(i18n("font for body") );
 	qtarch_Label_5->setAlignment( 289 );
 	qtarch_Label_5->setMargin( -1 );
 
@@ -1431,7 +1432,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_138->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_138->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_138->setFrameStyle( 49 );
-	qtarch_ButtonGroup_138->setTitle( "Underlaytext" );
+	qtarch_ButtonGroup_138->setTitle(i18n("Underlaytext") );
 	qtarch_ButtonGroup_138->setAlignment( 1 );
 
 	qtarch_ButtonGroup_137 = new QButtonGroup( parent, "ButtonGroup_137" );
@@ -1443,7 +1444,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_137->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_137->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_137->setFrameStyle( 49 );
-	qtarch_ButtonGroup_137->setTitle( "Underlaystyle" );
+	qtarch_ButtonGroup_137->setTitle(i18n("Underlaystyle") );
 	qtarch_ButtonGroup_137->setAlignment( 1 );
 
 	qtarch_ButtonGroup_136 = new QButtonGroup( parent, "ButtonGroup_136" );
@@ -1455,7 +1456,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_136->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_136->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_136->setFrameStyle( 49 );
-	qtarch_ButtonGroup_136->setTitle( "Underlayangle" );
+	qtarch_ButtonGroup_136->setTitle(i18n("Underlayangle") );
 	qtarch_ButtonGroup_136->setAlignment( 1 );
 
 	qtarch_ButtonGroup_135 = new QButtonGroup( parent, "ButtonGroup_135" );
@@ -1467,7 +1468,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_135->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_135->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_135->setFrameStyle( 49 );
-	qtarch_ButtonGroup_135->setTitle( "Underlaygray" );
+	qtarch_ButtonGroup_135->setTitle( i18n("Underlaygray") );
 	qtarch_ButtonGroup_135->setAlignment( 1 );
 
 	qtarch_ButtonGroup_134 = new QButtonGroup( parent, "ButtonGroup_134" );
@@ -1479,7 +1480,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_134->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_134->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_134->setFrameStyle( 49 );
-	qtarch_ButtonGroup_134->setTitle( "Underlayfont" );
+	qtarch_ButtonGroup_134->setTitle( i18n("Underlayfont") );
 	qtarch_ButtonGroup_134->setAlignment( 1 );
 
 	qtarch_ButtonGroup_131 = new QButtonGroup( parent, "ButtonGroup_131" );
@@ -1491,7 +1492,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_131->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_131->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_131->setFrameStyle( 49 );
-	qtarch_ButtonGroup_131->setTitle( "Underlayposition" );
+	qtarch_ButtonGroup_131->setTitle( i18n("Underlayposition") );
 	qtarch_ButtonGroup_131->setAlignment( 1 );
 
 	qtarch_ButtonGroup_132 = new QButtonGroup( parent, "ButtonGroup_132" );
@@ -1503,7 +1504,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_132->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_132->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_132->setFrameStyle( 49 );
-	qtarch_ButtonGroup_132->setTitle( "Y-Position" );
+	qtarch_ButtonGroup_132->setTitle( i18n("Y-Position") );
 	qtarch_ButtonGroup_132->setAlignment( 1 );
 
 	qtarch_ButtonGroup_133 = new QButtonGroup( parent, "ButtonGroup_133" );
@@ -1515,7 +1516,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_ButtonGroup_133->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_133->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_133->setFrameStyle( 49 );
-	qtarch_ButtonGroup_133->setTitle( "X-Position" );
+	qtarch_ButtonGroup_133->setTitle( i18n("X-Position") );
 	qtarch_ButtonGroup_133->setAlignment( 1 );
 
 	underlayButton = new QCheckBox( parent, "underlayButton" );
@@ -1526,7 +1527,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	underlayButton->setBackgroundMode( QWidget::PaletteBackground );
 	underlayButton->setFontPropagation( QWidget::NoChildren );
 	underlayButton->setPalettePropagation( QWidget::NoChildren );
-	underlayButton->setText( "underlay" );
+	underlayButton->setText( i18n("underlay") );
 	underlayButton->setAutoRepeat( FALSE );
 	underlayButton->setAutoResize( FALSE );
 	connect (underlayButton,SIGNAL(clicked()),SLOT(slotUnderlayButtonClicked()));
@@ -1539,7 +1540,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_70->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_70->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_70->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_70->setText( "underlaystyle" );
+	qtarch_Label_70->setText( i18n("underlaystyle") );
 	qtarch_Label_70->setAlignment( 289 );
 	qtarch_Label_70->setMargin( -1 );
 
@@ -1551,7 +1552,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_71->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_71->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_71->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_71->setText( "angle" );
+	qtarch_Label_71->setText( i18n("angle") );
 	qtarch_Label_71->setAlignment( 289 );
 	qtarch_Label_71->setMargin( -1 );
 
@@ -1563,7 +1564,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_72->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_72->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_72->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_72->setText( "position" );
+	qtarch_Label_72->setText( i18n("position") );
 	qtarch_Label_72->setAlignment( 289 );
 	qtarch_Label_72->setMargin( -1 );
 
@@ -1575,7 +1576,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_73->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_73->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_73->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_73->setText( "font" );
+	qtarch_Label_73->setText(i18n("font") );
 	qtarch_Label_73->setAlignment( 289 );
 	qtarch_Label_73->setMargin( -1 );
 
@@ -1667,7 +1668,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	underlayAngleDefault->setBackgroundMode( QWidget::PaletteBackground );
 	underlayAngleDefault->setFontPropagation( QWidget::NoChildren );
 	underlayAngleDefault->setPalettePropagation( QWidget::NoChildren );
-	underlayAngleDefault->setText( "default" );
+	underlayAngleDefault->setText( i18n("default") );
 	underlayAngleDefault->setAutoRepeat( FALSE );
 	underlayAngleDefault->setAutoResize( FALSE );
 	connect (underlayAngleDefault,SIGNAL(clicked()),SLOT(slotUnderlayAngleDefaultClicked()));
@@ -1693,7 +1694,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	underlayPositionDefaultButton->setBackgroundMode( QWidget::PaletteBackground );
 	underlayPositionDefaultButton->setFontPropagation( QWidget::NoChildren );
 	underlayPositionDefaultButton->setPalettePropagation( QWidget::NoChildren );
-	underlayPositionDefaultButton->setText( "default" );
+	underlayPositionDefaultButton->setText(i18n("default") );
 	underlayPositionDefaultButton->setAutoRepeat( FALSE );
 	underlayPositionDefaultButton->setAutoResize( FALSE );
 	connect (underlayPositionDefaultButton,SIGNAL(clicked()),SLOT(slotUnderlayPositionDefaultClicked()));
@@ -1706,7 +1707,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_75->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_75->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_75->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_75->setText( "underlaytext" );
+	qtarch_Label_75->setText(i18n("underlaytext") );
 	qtarch_Label_75->setAlignment( 289 );
 	qtarch_Label_75->setMargin( -1 );
 

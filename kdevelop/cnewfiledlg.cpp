@@ -27,7 +27,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   : QDialog(parent,name,modal,f){
   
   prj = p_prj;
-  setCaption("New File...");    
+  setCaption(i18n("New File..."));    
 
 button_group = new QButtonGroup( this, "button_group" );
 	button_group->setGeometry( 20, 200, 430, 140 );
@@ -38,7 +38,7 @@ button_group = new QButtonGroup( this, "button_group" );
 	button_group->setFontPropagation( QWidget::NoChildren );
 	button_group->setPalettePropagation( QWidget::NoChildren );
 	button_group->setFrameStyle( 49 );
-	button_group->setTitle( "Project Options" );
+	button_group->setTitle( i18n("Project Options" ));
 	button_group->setAlignment( 1 );
 
   
@@ -55,7 +55,7 @@ button_group = new QButtonGroup( this, "button_group" );
 	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
 	check_use_template->setFontPropagation( QWidget::NoChildren );
 	check_use_template->setPalettePropagation( QWidget::NoChildren );
-	check_use_template->setText( "use Template" );
+	check_use_template->setText(i18n("use Template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
 
@@ -67,7 +67,7 @@ button_group = new QButtonGroup( this, "button_group" );
 	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
 	check_add_project->setFontPropagation( QWidget::NoChildren );
 	check_add_project->setPalettePropagation( QWidget::NoChildren );
-	check_add_project->setText( "add to Project" );
+	check_add_project->setText(i18n("add to Project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
 
@@ -104,7 +104,7 @@ ok = new QPushButton( this, "ok" );
 	cancel->setBackgroundMode( QWidget::PaletteBackground );
 	cancel->setFontPropagation( QWidget::NoChildren );
 	cancel->setPalettePropagation( QWidget::NoChildren );
-	cancel->setText( "Cancel" );
+	cancel->setText(i18n("Cancel") );
 	cancel->setAutoRepeat( FALSE );
 	cancel->setAutoResize( FALSE );
 
@@ -121,7 +121,7 @@ ok = new QPushButton( this, "ok" );
 	label_filename->setBackgroundMode( QWidget::PaletteBackground );
 	label_filename->setFontPropagation( QWidget::NoChildren );
 	label_filename->setPalettePropagation( QWidget::NoChildren );
-	label_filename->setText( "Filename:" );
+	label_filename->setText( i18n("Filename:") );
 	label_filename->setAlignment( 289 );
 	label_filename->setMargin( -1 );
 
@@ -158,7 +158,7 @@ ok = new QPushButton( this, "ok" );
 	location_label->setBackgroundMode( QWidget::PaletteBackground );
 	location_label->setFontPropagation( QWidget::NoChildren );
 	location_label->setPalettePropagation( QWidget::NoChildren );
-	location_label->setText( "Location:" );
+	location_label->setText(i18n("Location:") );
 	location_label->setAlignment( 289 );
 	location_label->setMargin( -1 );
 
@@ -194,9 +194,9 @@ ok = new QPushButton( this, "ok" );
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
   
-  tab->addTab(list_cpp,"General");
-  tab->addTab(list_manuals,"Manuals");
-  tab->addTab(list_linux,"Linux/KDE");
+  tab->addTab(list_cpp,i18n("General"));
+  tab->addTab(list_manuals,i18n("Manuals"));
+  tab->addTab(list_linux,i18n("Linux/KDE"));
   
   resize( 470,410 );
   setMinimumSize( 0, 0 );
