@@ -1,4 +1,4 @@
-/** class CppSupportPart
+/** \class CppSupportPart
 Provides C/C++ language support for KDevelop.
 
 Well the first thing you should read is lib/catalog it contains the source of the persistant class store
