@@ -49,7 +49,6 @@ CppNewClassDialog::~CppNewClassDialog()
 
 void CppNewClassDialog::nameHandlerChanged(const QString &text)
 {
-	qDebug("Changing name handler %s", text.latin1());
 	DomUtil::writeEntry( *m_part->projectDom(), "/cppsupportpart/newclass/filenamesetting",text);
 	m_parse = text;
 	classNameChanged(classname_edit->text());
