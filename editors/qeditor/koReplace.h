@@ -209,7 +209,7 @@ public:
      * @param index The starting index where there is word found.
      * @param matchedlength The length of word found
      */
-    virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
+    virtual bool validateMatch( const QString &text, int index, int matchedlength ); 
 
 
     /**

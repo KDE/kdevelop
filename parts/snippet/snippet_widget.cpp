@@ -144,8 +144,8 @@ void SnippetWidget::slotEdit()
 }
 
 
+//  \fn SnippetWidget::slotListDblClicked()
 /*!
-    \fn SnippetWidget::slotListDblClicked()
     On a DoubleClick the clicked snippet gets inserted at the
     aktual cursor position of the active view
 */

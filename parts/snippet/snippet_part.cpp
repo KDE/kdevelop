@@ -61,7 +61,7 @@ SnippetPart::~SnippetPart()
 }
 
 /*!
-    \fn SnippetPart::aboutData( )
+    \fn SnippetPart::aboutData()
  */
 KAboutData* SnippetPart::aboutData()
 {

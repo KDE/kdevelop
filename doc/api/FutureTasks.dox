@@ -37,7 +37,7 @@
       - YaccLanguageSupport
       - YaccBackgroundParser
       - YaccProblemReporter
-     - There is a possibility to create even something like
+    - There is a possibility to create even something like
       - LanguageSupportBase
 
     Look at java, pascal and ada support parts to get more inspiration. 

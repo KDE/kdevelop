@@ -40,6 +40,11 @@ KoReplaceDialog::~KoReplaceDialog()
 {
 }
 
+bool KoReplace::validateMatch( const QString & /*text*/, int /*index*/, int /*matchedlength*/ )
+{
+    return true;
+}
+
 long KoReplaceDialog::options() const
 {
     long options = 0;
