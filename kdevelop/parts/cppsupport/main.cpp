@@ -42,7 +42,7 @@ CppSupportFactory::~CppSupportFactory()
 QObject *CppSupportFactory::create(QObject *parent, const char *name,
                                    const char *classname, const QStringList &args)
 {
-    kdDebug(9006) << "Building CppSupport" << endl;
+    kdDebug(9007) << "Building CppSupport" << endl;
     
     QObject *obj = new CppSupport(parent, name);
     emit objectCreated(obj);

@@ -95,7 +95,7 @@ QString CToolClass::locatehtml(const QString &filename)
     QString path = locate("html", KGlobal::locale()->language() + '/' + filename);
     if (path.isNull())
        path = locate("html", "default/" + filename);
-	cerr << path;
+
     return path;
 }
 

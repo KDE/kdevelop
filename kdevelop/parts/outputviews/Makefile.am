@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib $(all_includes)
 
 lib_LTLIBRARIES = libkdevoutputviews.la
 libkdevoutputviews_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevoutputviews_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KDEUI)
+libkdevoutputviews_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
 libkdevoutputviews_la_SOURCES = main.cpp outputviews.cpp makewidget.cpp appoutputwidget.cpp 
 

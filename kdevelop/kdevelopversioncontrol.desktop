@@ -5,6 +5,3 @@ Name=KDevelop Version Control Interface
 
 [PropertyDef::X-KDevelop-Args]
 Type=QString
-
-[PropertyDef::X-KDevelop-VersionControlSystem]
-Type=QString

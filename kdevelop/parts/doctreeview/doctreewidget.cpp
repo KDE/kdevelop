@@ -199,7 +199,7 @@ void DocTreeKDevelopFolder::refresh()
             QString filename = CToolClass::locatehtml("kdevelop/" + docconfig.readEntry("Path"));
             bool expandable = docconfig.readBoolEntry("Expandable");
             (void) new DocTreeKDevelopBook(this, name, filename, expandable);
-            kdDebug(9002) << "Insert " << name << endl;
+            kdDebug(9002) << "Insert " << name << " from file " << filename << endl;
         }
 }
     
@@ -328,7 +328,7 @@ void DocTreeKDELibsFolder::refresh()
                 QString::null : (idx_path + "/" + (*it) + ".kdoc");
             if (QFileInfo(filename).exists())
                 (void) new DocTreeKDELibsBook(this, name, filename, idxfilename);
-            kdDebug(9002) << "Insert " << name << endl;
+            kdDebug(9002) << "Insert " << name << " from file " << filename << endl;
         }
 }
     

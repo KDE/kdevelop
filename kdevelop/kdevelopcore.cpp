@@ -165,18 +165,16 @@ void KDevelopCore::loadInitialComponents()
 }
 
 
-void KDevelopCore::loadVersionControl(const QString &vcsystem)
+void KDevelopCore::loadVersionControl(const QString &name)
 {
-    QString constraint = QString("[X-KDevelop-VersionControlSystem] == '%1'").arg(vcsystem);
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", constraint);
-    if (offers.isEmpty()) {
+    KService::Ptr service = KService::serviceByName(name);
+    if (!service) {
         KMessageBox::sorry(m_kdevelopgui,
-                           i18n("No version control component for %1 found").arg(vcsystem));
+                           i18n("No version control component %1 found").arg(name));
         return;
     }
 
-    KService *service = *offers.begin();
-    kdDebug(9000) << "Found VersionControl Component " << service->name() << endl;
+    kdDebug(9000) << "Loading VersionControl Component " << service->name() << endl;
 
     KLibFactory *factory = KLibLoader::self()->factory(service->library());
 
@@ -288,13 +286,13 @@ void KDevelopCore::loadProject(const QString &fileName)
     m_project = new CProject("../kdevelop.kdevprj");
     // project must define a version control system
     // hack until implemented
-    QString vcsystem = QString::fromLatin1("CVS");
+    QString vcservice = QString::fromLatin1("CVSInterface");
     QString lang = QString::fromLatin1("C++");
     // name will be stored in the projectspace file
     QString projectspace = QString::fromLatin1("KDE");
     
     loadProjectSpace(projectspace);
-    loadVersionControl(vcsystem);
+    loadVersionControl(vcservice);
     loadLanguageSupport(lang);
 
     QListIterator<KDevComponent> it1(m_components);

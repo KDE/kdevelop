@@ -1,3 +1,9 @@
+2000-07-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Use KService::serviceByName() instead of KTrader for
+	  loading the version control interface. As the user
+	  chooses this in some dialog, it is known by name.
+	* Avoid lengthy link lines caused by libtool dependencies
+
 2000-07-20  Sandy Meier  <smeier@kdevelop.org>
 	* converted kdeprojectspace to kpart/kdevcomponent
 	* added some servicetypes for the projectmanagement

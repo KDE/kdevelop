@@ -1,8 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=Interface to the Concurrent Versions Interface
+Comment=Concurrent Versions System (CVS)
 Name=CVSInterface
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevcvsinterface
-X-KDevelop-VersionControlSystem=CVS

@@ -14,9 +14,3 @@ METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevgccoptions.desktop kdevgppoptions.desktop
-
-# Only for testing purposes
-bin_PROGRAMS = test
-test_SOURCES = test.cpp
-test_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
-test_LDADD = $(top_builddir)/kdevelop/plugin/gccoptions/libkdevgccoptions.la

@@ -37,7 +37,7 @@ private:
     void initActions();
     void initComponent(KDevComponent *component);
     
-    void loadVersionControl(const QString &vcsystem);
+    void loadVersionControl(const QString &name);
     void unloadVersionControl();
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
