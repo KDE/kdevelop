@@ -730,12 +730,16 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
   //connect( pEW, SIGNAL(bufferMenu(const QPoint&)),m_pParent, SLOT(slotBufferMenu(const QPoint&)));
   connect( pEW, SIGNAL(grepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
   connect( pEW->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
-  // Connect the breakpoint manager to monitor the bp setting - even when the debugging isn't running
-  connect( pEW, SIGNAL(editBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotEditBreakpoint(const QString&,int)));
-  connect( pEW, SIGNAL(toggleBPEnabled(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleBPEnabled(const QString&,int)));
-  connect( pEW, SIGNAL(toggleBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleStdBreakpoint(const QString&,int)));
-  connect( pEW, SIGNAL(clearAllBreakpoints()), m_pParent->getBrkptManager(),   SLOT(slotClearAllBreakpoints()));
-  connect( pEW, SIGNAL(runToCursor(const QString&, int)), m_pParent, SLOT(slotDebugRunUntil(const QString&, int)));
+  if (m_pParent->getBrkptManager()) {
+    // Connect the breakpoint manager to monitor the bp setting - even when the debugging isn't running
+    connect( pEW, SIGNAL(editBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotEditBreakpoint(const QString&,int)));
+    connect( pEW, SIGNAL(toggleBPEnabled(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleBPEnabled(const QString&,int)));
+    connect( pEW, SIGNAL(toggleBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleStdBreakpoint(const QString&,int)));
+    connect( pEW, SIGNAL(clearAllBreakpoints()), m_pParent->getBrkptManager(), SLOT(slotClearAllBreakpoints()));
+    connect( pEW, SIGNAL(runToCursor(const QString&, int)), m_pParent, SLOT(slotDebugRunUntil(const QString&, int)));
+  } else {
+    kdDebug() << "WARNING: DocViewMan::createEditView: Could not get Breakpoint-Manager!" << endl;
+  }
 
   // connect adding watch variable from the rmb in the editors
   if (m_pParent->getVarViewer()) {
