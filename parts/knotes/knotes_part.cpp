@@ -171,6 +171,9 @@ void KNotesPart::slotNoteRenamed(QIconViewItem *item, const QString& text)
     if ( kapp->dcopClient()->send( "knotes", "KNotesIface", "setName(QString, QString)", data ) )
 	kdDebug() << "Rename Note!" << endl;
     
+    // reinit knotes and refetch notes
+    initKNotes();
+    
     m_iconView->arrangeItemsInGrid();
 }
 
