@@ -226,7 +226,7 @@ void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);
     m_contextPopup = popup;
-    m_contextFileName = fcontext->urls().first().fileName();
+    m_contextFileName = fcontext->urls().first().path();
     
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
