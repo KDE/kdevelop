@@ -531,36 +531,35 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	ptr = readWhiteSpaces( ptr, false );
 	if( isValid(ptr) ) {
 	    Macro m;
-	    
+
 	    const QChar* startMacroName = ptr;
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	    m.setName( macroName );
-	    
-	    ptr = readWhiteSpaces( ptr, false );
+
 	    if( isValid(ptr) && *ptr == '(' ){
 		m.setHasArguments( true );
 		++ptr;
-		
+
 		while( isValid(ptr) && *ptr != ')' ){
 		    ptr = readWhiteSpaces( ptr, false );
 		    const QChar* startArg = ptr;
 		    ptr = readIdentifier( ptr );
 		    QString arg( startArg, int(ptr-startArg) );
-		    
+
 		    m.addArgument( arg );
-		    
+
 		    ptr = readWhiteSpaces( ptr, false );
 		    if( !isValid(ptr) || *ptr != ',' )
 			break;
-		    
+
 		    ++ptr; // skip ','
 		}
-		
+
 		if( isValid(ptr) && *ptr == ')' )
-		    ++ptr; // skip ')'		
+		    ++ptr; // skip ')'
 	    }
-	    
+
 	    ptr = readWhiteSpaces( ptr, false );
 	    QString body;
 	    while( isValid(ptr) && *ptr != "\n" ){
@@ -600,7 +599,7 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	}
-	
+
 	m_directiveStack.push( PreProc_in_group );
     } else if( directive == "ifndef" ){
 	ptr = readWhiteSpaces( ptr, false );
@@ -609,7 +608,7 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	}
-	
+
 	m_directiveStack.push( PreProc_in_group );
     } else if( directive == "elif" ){
 	ptr = readWhiteSpaces( ptr, false );
@@ -618,30 +617,30 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	}
-	
+
 	// ignore elif
 	(void) m_directiveStack.pop();
-	m_directiveStack.push( PreProc_skip );	
+	m_directiveStack.push( PreProc_skip );
     } else if( directive == "else" ){
 	// ignore else
 	int st = m_directiveStack.top();
 	(void) m_directiveStack.pop();
 	m_directiveStack.push( st == PreProc_skip ? PreProc_in_group : PreProc_skip );
-    } else if( directive == "endif" ){	
+    } else if( directive == "endif" ){
 	(void) m_directiveStack.pop();
     }
-    
+
     while( isValid(ptr) ){
 	// skip line
 	const QChar* base = ptr;
 	while( isValid(ptr) && *ptr != '\n' )
 	    NEXT_CHAR( ptr );
-	
+
 	QString line( base, ptr - base );
 	line = line.stripWhiteSpace();
 	if( !line.endsWith("\\") )
 	    break;
-	
+
 	if( isValid(ptr) ){
 	    NEXT_CHAR( ptr ); // skip \n
 	}
