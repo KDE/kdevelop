@@ -17,14 +17,13 @@
 
 class BackgroundParser: public QThread{
 public:
-    BackgroundParser( class CppSupportPart*, const QString& source, const QString& filename );
+    BackgroundParser( class CppSupportPart*, const QString& filename );
     virtual ~BackgroundParser();
 
     virtual void run();
 
 private:
     class CppSupportPart* m_cppSupport;
-    QString m_source;
     QString m_fileName;
 };
 

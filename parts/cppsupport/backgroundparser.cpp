@@ -17,11 +17,8 @@
 
 #include <kdebug.h>
 
-BackgroundParser::BackgroundParser( CppSupportPart* part,
-				    const QString& source,
-				    const QString& filename )
+BackgroundParser::BackgroundParser( CppSupportPart* part, const QString& filename )
     : m_cppSupport(part),
-      m_source( source.unicode(), source.length() ),
       m_fileName( filename.unicode(), filename.length() )
 {
 }

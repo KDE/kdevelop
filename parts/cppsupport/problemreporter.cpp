@@ -70,7 +70,7 @@ public:
 				return 0;
 			return( a > b ? -1 : 1 );
 		}
-		return QListViewItem::compare( item, column, ascending );
+		return KListViewItem::compare( item, column, ascending );
 	}
 
 };
@@ -78,7 +78,6 @@ public:
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
     : KListView( parent, name ),
       m_cppSupport( part ),
-      m_editor( 0 ),
       m_document( 0 ),
       m_markIface( 0 ),
       m_bgParser( 0 )
@@ -122,7 +121,7 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( !part )
 	return;
     
-    if( m_editor ){
+    if( m_document ){
 	reparse();
 	disconnect( m_document, 0, this, 0 );
     }
@@ -134,14 +133,8 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 		
 	if( m_cppSupport->fileExtensions().contains(QFileInfo(m_filename).extension()) ){
 	    
-	    m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
-	    if( !m_editor )
-		return;
-	    
-	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-	    
-	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-	    
+	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );	    
+	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );	    
 	    m_timer->changeInterval( m_delay );
 	}
     }
@@ -156,43 +149,40 @@ void ProblemReporter::slotTextChanged()
 void ProblemReporter::reparse()
 {
     kdDebug(9007) << "ProblemReporter::reparse()" << endl;
-
-    if( !m_editor )
-        return;
-
+    
     m_timer->stop();
-
+    
     if( m_bgParser ) {
-        if( m_bgParser->running() ) {
-            m_timer->changeInterval( m_delay );
-            return;
-        }
-
-        delete( m_bgParser );
-        m_bgParser = 0;
+	if( m_bgParser->running() ) {
+	    m_timer->changeInterval( m_delay );
+	    return;
+	}
+	
+	delete( m_bgParser );
+	m_bgParser = 0;
     }
-
+    
     QListViewItem* current = firstChild();
     while( current ){
-        QListViewItem* i = current;
-        current = current->nextSibling();
-
-        if( i->text(1) == m_filename )
-            delete( i );
+	QListViewItem* i = current;
+	current = current->nextSibling();
+	
+	if( i->text(1) == m_filename )
+	    delete( i );
     }
-
-	if( m_markIface ){
-		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-		QPtrListIterator<KTextEditor::Mark> it( marks );
-		while( it.current() ){
-			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType10 );
-			++it;
-		}
+    
+    if( m_markIface ){
+	QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
+	QPtrListIterator<KTextEditor::Mark> it( marks );
+	while( it.current() ){
+	    m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType10 );
+	    ++it;
 	}
-		
-    m_bgParser = new BackgroundParser( m_cppSupport, m_editor->text(), m_filename );
+    }
+    
+    m_bgParser = new BackgroundParser( m_cppSupport, m_filename );
     m_bgParser->start();
-
+    
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -204,13 +194,13 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 }
 
 void ProblemReporter::reportError( QString message,
-                                   QString filename,
-                                   int line, int column )
+				   QString filename,
+				   int line, int column )
 {
     if( m_markIface ){
 	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
     }	
-	
+    
     new ProblemItem( this,
 		     "error",
 		     filename,
@@ -274,9 +264,8 @@ void ProblemReporter::slotPartRemoved( KParts::Part* part )
 {
     kdDebug(9007) << "ProblemReporter::slotPartRemoved()" << endl;
     if( part == m_document ){
-        m_document = 0;
-        m_editor = 0;
-        m_timer->stop();
+	m_document = 0;
+	m_timer->stop();
     }
 }
 
