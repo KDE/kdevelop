@@ -707,21 +707,29 @@ void DocTreeProjectFolder::refresh()
 class DocTreeQtFolder : public DocTreeItem
 {
 public:
-    DocTreeQtFolder(KListView *parent, const QString &_fileName, const QString &context);
+    DocTreeQtFolder(KListView *parent, const QString &context);
     void refresh();
 private:
     QString filename;
 };
 
-DocTreeQtFolder::DocTreeQtFolder(KListView *parent, const QString &_fileName,
+DocTreeQtFolder::DocTreeQtFolder(KListView *parent, 
     const QString &context)
     : DocTreeItem(parent, Folder, i18n("Qt"), context)
 {
-    filename = _fileName;
+//    filename = _fileName;
 }
 
 void DocTreeQtFolder::refresh()
 {
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    if(config) 
+    {
+        config->setGroup("General");
+        QString tmp = config->readEntry("qtdocdir", QT_DOCDIR);
+        if (!tmp.isEmpty())  filename = tmp + QString("/qt.xml");
+    }
+    
     QFileInfo fi(filename);
 
     QFile f(filename);
@@ -735,6 +743,7 @@ void DocTreeQtFolder::refresh()
         kdDebug(9002) << "Not a valid DCF file: " << filename << endl;
         return;
     }
+    DocTreeItem::clear();
 
     f.close();
 
@@ -874,7 +883,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
             if (!qtdocdir.isEmpty())
             {
-                folder_qt = new DocTreeQtFolder(docView, qtdocdir+"/qt.xml", "ctx_qt");
+                folder_qt = new DocTreeQtFolder(docView, "ctx_qt");
                 if (folder_qt)
                 {
                     folder_qt->setFileName(qtdocdir + "/index.html");
@@ -1049,7 +1058,6 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         return;
     contextItem = item;
     KPopupMenu popup(i18n("Documentation Tree"), this);
-    popup.insertItem(i18n("Properties..."), this, SLOT(slotConfigure()));
 
     DocTreeItem *dItem = dynamic_cast<DocTreeItem*>( item );
     DocumentationContext dcontext( dItem->fileName(), "" );
@@ -1058,6 +1066,11 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     while(i->parent()) // go to folder
     {
         i = i->parent();
+    }
+    if ( i == folder_project ) {
+        popup.insertItem(i18n("Project Properties"), this, SLOT(slotConfigureProject()));
+    } else {
+        popup.insertItem(i18n("Properties"), this, SLOT(slotConfigure()));
     }
     if ( i != folder_bookmarks && dItem && !dItem->fileName().isEmpty() )
     {
@@ -1076,13 +1089,24 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
 
 void DocTreeViewWidget::slotConfigure()
 {
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize Documentation Tree"),
+    KDialogBase dlg(KDialogBase::Tabbed, i18n("Customize Documentation Tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");
 
     QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree: Global"));
     DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget( m_part, this, vbox1, "doctreeview global config widget");
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
+
+    dlg.exec();
+
+    delete w1;
+}
+
+void DocTreeViewWidget::slotConfigureProject()
+{
+    KDialogBase dlg(KDialogBase::Tabbed, i18n("Customize Documentation Tree"),
+                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
+                    "customization dialog");
 
     DocTreeProjectConfigWidget *w2 = 0;
 
@@ -1091,13 +1115,11 @@ void DocTreeViewWidget::slotConfigure()
       w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
       connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
     }
-
     dlg.exec();
-
-    delete w1;
     if(w2)
       delete w2;
 }
+
 
 void DocTreeViewWidget::configurationChanged()
 {
@@ -1117,6 +1139,7 @@ void DocTreeViewWidget::refresh()
         folder_kdelibs->refresh();
     if( folder_qt )
         folder_qt->refresh();
+    
 
     DocTreeTocFolder *item;
     for ( item = folder_toc.first(); item; item = folder_toc.next() )

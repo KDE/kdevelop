@@ -54,18 +54,19 @@ public:
 private slots:
     void refresh();
     void slotConfigure();
+    void slotConfigureProject();
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-	void slotJumpToNextMatch();
-	void slotJumpToPrevMatch();
-	void slotStartSearching();
-	void slotHistoryReturnPressed ( const QString& );
-	void slotSelectionChanged ( QListViewItem* );
-	void slotAddBookmark();
-	void slotRemoveBookmark();
+    void slotJumpToNextMatch();
+    void slotJumpToPrevMatch();
+    void slotStartSearching();
+    void slotHistoryReturnPressed ( const QString& );
+    void slotSelectionChanged ( QListViewItem* );
+    void slotAddBookmark();
+    void slotRemoveBookmark();
 
 protected:
-	void searchForItem ( const QString& );
+    void searchForItem ( const QString& );
     bool initKDocKDELibs();
 
 private: 
@@ -83,16 +84,16 @@ private:
     QPtrList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
 
-	QHBox* searchToolbar;
+    QHBox* searchToolbar;
 
-	QToolButton* docConfigButton;
-	QToolButton* prevButton;
-	QToolButton* nextButton;
-	QToolButton* startButton;
-	KHistoryCombo* completionCombo;
-	
-	DocTreeItem* m_activeTreeItem;
-	
-	KAction* docConfigAction;
+    QToolButton* docConfigButton;
+    QToolButton* prevButton;
+    QToolButton* nextButton;
+    QToolButton* startButton;
+    KHistoryCombo* completionCombo;
+    
+    DocTreeItem* m_activeTreeItem;
+    
+    KAction* docConfigAction;
 };
 #endif

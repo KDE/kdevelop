@@ -66,15 +66,6 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 
     KAction *action;
 
-//    action = new KAction( i18n("Lookup in &Index..."), 0,
-//                          this, SLOT(slotDocumentationIndex()),
-//                          actionCollection(), "help_lookupindex" );
-//    action->setStatusText( i18n("Allows you to lookup a term in the documentation index") );
-//    action->setWhatsThis( i18n("Lookup in documentation index\n\n"
-//                               "Opens the documentation index dialog. There you "
-//                               "can enter a term to lookup in the various indices "
-//                               "of the installed documentation.") );
-
     action = new KAction( i18n("Full Text &Search..."), 0,
                           this, SLOT(slotSearchDocumentation()),
                           actionCollection(), "help_fulltextsearch" );
@@ -91,13 +82,6 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                           actionCollection(), "help_manpage" );
     action->setStatusText( i18n("Show a manpage") );
     
-#if 0
-    // No longer necessary since the dock widgets are gone :-)
-    action = new KAction( i18n("&Documentation Tree"), 0,
-                          this, SLOT(slotRaiseWidget()),
-                          actionCollection(), "window_doctreeview" );
-    action->setStatusText( i18n("Brings the documentation tree to the foreground.") );
-#endif
 }
 
 
@@ -110,8 +94,6 @@ DocTreeViewPart::~DocTreeViewPart()
 void DocTreeViewPart::projectOpened()
 {
     m_widget->projectChanged(project());
-//    if (m_indexDialog)
-//        m_indexDialog->projectChanged();
 }
 
 
@@ -156,8 +138,6 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             popup->insertSeparator();
             popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
-//            popup->insertItem( i18n("Lookup in index: %1").arg(ident),
-//                               this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Goto manpage: %1").arg(ident),
                                this, SLOT(slotContextGotoManpage()) );
         }
@@ -169,23 +149,11 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = selection;
             QString squeezed = KStringHandler::csqueeze(selection, 20);
             popup->insertSeparator();
-//            popup->insertItem( i18n("Lookup in index: %1").arg(squeezed),
-//                               this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
         }
     }
 } 
-
-/*
-void DocTreeViewPart::slotDocumentationIndex()
-{
-    if (!m_indexDialog)
-        m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
-
-    m_indexDialog->show();
-}
-*/
 
 void DocTreeViewPart::slotSearchDocumentation()
 {
@@ -196,7 +164,6 @@ void DocTreeViewPart::slotSearchDocumentation()
     }
 }
 
-
 void DocTreeViewPart::slotManpage()
 {
     bool ok;
@@ -206,7 +173,6 @@ void DocTreeViewPart::slotManpage()
         partController()->showDocument(KURL(url));
     }
 }
-
 
 void DocTreeViewPart::slotRaiseWidget()
 {
@@ -219,17 +185,6 @@ void DocTreeViewPart::slotContextGotoManpage()
     QString url = QString::fromLatin1("man:/%1").arg(m_popupstr);
     partController()->showDocument(KURL(url));
 }
-
-
-/*void DocTreeViewPart::slotContextLookupIndex()
-{
-    if (!m_indexDialog)
-        m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
-
-    m_indexDialog->lookup(m_popupstr);
-    m_indexDialog->show();
-}
-*/
 
 void DocTreeViewPart::slotContextFulltextSearch()
 {
