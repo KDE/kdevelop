@@ -1,3 +1,6 @@
+2004-02-15 Amilcar Lucas <a.lucas@tu-bs.de>
+    * Updated support for Doxygen 1.3.6
+
 2004-02-07 jbb <jbb@kdevelop.org>
     * Robert Gruber's patch
         - fix whatis when toggling to hex display
@@ -5,7 +8,7 @@
 
 2004-02-07 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Moved all of the plugin loading logic to PluginController
-	* Moved FileCreatePart to the globally loaded "default parts"
+    * Moved FileCreatePart to the globally loaded "default parts"
 
 2004-02-06 jbb <jbb@kdevelop.org>
     * Add (global) Output radix to debugger options.

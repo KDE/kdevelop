@@ -34,6 +34,7 @@ QString message(const QCString &key)
     addMessage("USE_WINDOWS_ENCODING", i18n("Use MS Windows(tm) font encoding"));
     addMessage("BRIEF_MEMBER_DESC", i18n("Include brief member descriptions"));
     addMessage("REPEAT_BRIEF", i18n("Repeat brief member descriptions"));
+    addMessage("ABBREVIATE_BRIEF", i18n("Strip words in brief description"));
     addMessage("ALWAYS_DETAILED_SEC", i18n("Always include detailed section"));
     addMessage("INLINE_INHERITED_MEMB", i18n("Inline inherited members"));
     addMessage("FULL_PATH_NAMES", i18n("Always use full path names"));
@@ -68,6 +69,7 @@ QString message(const QCString &key)
     addMessage("SHOW_INCLUDE_FILES", i18n("Show included files"));
     addMessage("INLINE_INFO", i18n("Make inline functions"));
     addMessage("SORT_MEMBER_DOCS", i18n("Sort member documentation alphabetically"));
+    addMessage("SORT_BRIEF_DOCS", i18n("Sort brief documentation alphabetically"));
     addMessage("ENABLED_SECTIONS", i18n("Enable conditional sections"));
     addMessage("GENERATE_TODOLIST", i18n("Generate TODO-list"));
     addMessage("GENERATE_TESTLIST", i18n("Generate Test-list"));
@@ -190,6 +192,7 @@ QString message(const QCString &key)
     addMessage("XML_OUTPUT", i18n("XML output directory"));
     addMessage("XML_SCHEMA", i18n("XML schema"));
     addMessage("XML_DTD", i18n("XML DTD file"));
+    addMessage("XML_PROGRAMLISTING", i18n("Dump program listings to the XML output"));
 
     //---------------------------------------------------------------------------
     // configuration options for the AutoGen Definitions output
