@@ -1801,7 +1801,7 @@ dnl dependecies between AC_PROG_CPP and AC_PROG_CC (or is it automake?)
     if test "$GXX" = "yes"; then
        CXXFLAGS="$CXXFLAGS"
 
-       if test true || test "$kde_use_debug_code" = "yes"; then
+       if test "$kde_use_debug_code" = "yes"; then
 	 CXXFLAGS="$CXXFLAGS -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
 
          KDE_CHECK_COMPILER_FLAG(Wno-long-long,
