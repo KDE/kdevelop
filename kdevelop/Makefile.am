@@ -1,14 +1,17 @@
 SUBDIRS = widgets lib plugin parts templates kwrite_part
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
-	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \
+	   -I$(top_srcdir)/kdevelop/lib/ComponentManager \
+	   -I$(top_srcdir)/kdevelop/lib/ComponentManager/Components \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement/ProjectOptions \
+	   -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
 	   -I$(top_srcdir)/kdevelop/widgets/qextmdi/include \
-	   -I$(top_builddir)/kdevelop/lib/projectmanagement \
-	   -I$(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions \
-	   -I$(top_builddir)/kdevelop/lib/projectmanagement/KDevCompiler \
 	   $(all_includes)
+
+#####-I$(top_builddir)/kdevelop/lib/projectmanagement \
+#####-I$(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions \
+#####-I$(top_builddir)/kdevelop/lib/projectmanagement/KDevCompiler \
 
 LFLAGS = -+
 
@@ -18,7 +21,7 @@ bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
 kdevelop_SOURCES = main.cpp kdevelopcore.cpp newprojectdlg.cpp kdevelop.cpp \
-        kdevelopfactory.cpp partloader.cpp \
+        kdevelopfactory.cpp \
 		    newprojectdlgbase.ui \
 	KDevelopIface.skel KDevelopIface.cpp
 
@@ -33,7 +36,7 @@ kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
                  $(top_builddir)/kdevelop/widgets/qextmdi/src/libkdevqextmdi.la
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopfactory.h kdevelopcore.h partloader.h \
+noinst_HEADERS = kdevelop.h kdevelopfactory.h kdevelopcore.h \
                  newprojectdlg.h newprojectdlgbase.h \
 		 KDevelopIface.h
 
