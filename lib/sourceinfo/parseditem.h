@@ -21,7 +21,6 @@
 #include <qdatastream.h>
 #include <qstring.h>
 #include <qtextstream.h>
-#include <iostream>
 
 /** The type of a ParsedItem. */
 enum PIType { 

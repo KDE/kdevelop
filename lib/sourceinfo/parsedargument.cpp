@@ -16,10 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
-//#include <qdatastream.h>
-#include <kdebug.h>
-#include <qstring.h>
 #include "parsedargument.h"
 #include "programmingbycontract.h"
 

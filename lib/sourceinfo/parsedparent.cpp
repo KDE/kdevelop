@@ -16,7 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
 #include <kdebug.h>
 #include "parsedparent.h"
 

@@ -26,7 +26,6 @@
 
 class ClassStoreIface;
 
-
 /**
  * This class has the ability to store and fetch parsed items. 
  *

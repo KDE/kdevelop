@@ -20,7 +20,6 @@
 
 #include "parseditem.h"
 
-
 /**
  * Represents an attribute and all data for the attribute. 
  * 

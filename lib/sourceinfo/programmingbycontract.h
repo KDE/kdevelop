@@ -17,21 +17,21 @@
  ***************************************************************************/
 #ifndef _PROGRAMMINGBYCONTRACT_H_
 #define _PROGRAMMINGBYCONTRACT_H_
-
+#include <kdebug.h>
 //#ifdef ASSERTIONS
 #define REQUIRE( TAG, REQ ) \
 if( !(REQ) ) \
 { \
-  cerr << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
-  cerr << "  " << TAG << ": " << #REQ << endl; \
+  kdDebug(9005) << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
+  kdDebug(9005) << "  " << TAG << ": " << #REQ << endl; \
   return; \
 }
 
 #define REQUIRE1( TAG, REQ, RETVAL ) \
 if( !(REQ) ) \
 { \
-  cerr << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
-  cerr << "  " << TAG << ": " << #REQ << endl; \
+  kdDebug(9005) << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
+  kdDebug(9005) << "  " << TAG << ": " << #REQ << endl; \
   return RETVAL; \
 }
 /*#else

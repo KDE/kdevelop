@@ -18,8 +18,6 @@
 #include "parseditem.h"
 #include "programmingbycontract.h"
 
-using namespace std;
-
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *

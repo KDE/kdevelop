@@ -15,12 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include "parsedcontainer.h"
 #include "programmingbycontract.h"
-
-using namespace std;
 
 /*********************************************************************
  *                                                                   *
@@ -38,7 +35,8 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedContainer::ParsedContainer()
-    : methods(),
+    : ParsedItem(),
+      methods(),
       attributes(),
       structs(),
       methodIterator( methods ),

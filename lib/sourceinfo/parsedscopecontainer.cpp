@@ -21,8 +21,6 @@
 #include "parsedscopecontainer.h"
 #include "programmingbycontract.h"
 
-using namespace std;
-
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -39,7 +37,8 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedScopeContainer::ParsedScopeContainer()
-    : scopes(),
+    : ParsedClassContainer(),
+      scopes(),
       scopeIterator( scopes )
 {
     setItemType( PIT_SCOPE );

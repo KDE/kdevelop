@@ -16,11 +16,7 @@
  ***************************************************************************/
 
 #include "classtreenode.h"
-#include <kdebug.h>
-//#include <iostream.h>
 #include "programmingbycontract.h"
-
-using namespace std;
 
 /*********************************************************************
  *                                                                   *

@@ -22,7 +22,6 @@
 #include <qptrlist.h>
 #include "parsedclass.h"
 
-
 /**
  * Representation of a class as a node in a tree.
  */

@@ -16,13 +16,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <iostream>
 #include <qstring.h>
 #include <kdebug.h>
 #include "parsedattribute.h"
-
-using namespace std;
 
 /*********************************************************************
  *                                                                   *
@@ -39,7 +35,7 @@ using namespace std;
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedAttribute::ParsedAttribute()
+ParsedAttribute::ParsedAttribute() : ParsedItem()
 {
     setItemType( PIT_ATTRIBUTE );
     _isConst = false;

@@ -16,14 +16,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
-#include <stdio.h>
 #include <qdatastream.h>
 #include <qregexp.h>
 #include <kdebug.h>
 #include "parsedmethod.h"
-
-using namespace std;
 
 /*********************************************************************
  *                                                                   *
@@ -40,7 +36,7 @@ using namespace std;
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedMethod::ParsedMethod()
+ParsedMethod::ParsedMethod() : ParsedAttribute()
 {
     setItemType( PIT_METHOD );
     arguments.setAutoDelete( true );

@@ -21,7 +21,6 @@
 #include <qstring.h>
 #include "parseditem.h"
 
-
 /** Represents the parent to a class. */
 class ParsedParent
 {

@@ -16,13 +16,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
 #include <qregexp.h>
 #include "parsedclass.h"
 #include "parsedclasscontainer.h"
 #include "programmingbycontract.h"
-
-using namespace std;
 
 /*********************************************************************
  *                                                                   *
@@ -40,7 +37,8 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedClassContainer::ParsedClassContainer()
-    : classes(),
+    : ParsedContainer(),
+      classes(),
       classIterator( classes )
 {
     classes.setAutoDelete( false );
