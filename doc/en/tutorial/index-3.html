@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE Application Tutorials: Building the Qt Tutorials</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="KDE, KDevelop">
+<META NAME="description" CONTENT="The KDE Application Tutorials">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<H3><A NAME="s3">3. Building the Qt Tutorials</A></H3>
+
+<P>
+<H3><A NAME="ss3.1">3.1 Step One: Hello World!</A>
+</H3>
+
+<P>As the previous chapter explains, we created a project called <CODE>MyWidget</CODE>- now, when looking at the first tutorial page of the Qt
+documentation, you will see that the first application only uses a <CODE>main()</CODE> function. Therefore, we only have to change the given
+<CODE>main()</CODE> function of our generated project to get the first tutorial step running.
+<P>To access the <CODE>main()</CODE> function, select it from the classviewer's "Globals" folder, which contains a subfolder for "Functions" where
+all non-class functions are listed. This will open the file <CODE>main.cpp</CODE> in the "C/C++ Files" window and the editing cursor is already
+set in front of the first line of <CODE>main()</CODE>.
+<P>
+<H4>What to change first</H4>
+
+<P>We could start changing the given code towards the desired one which is listed in the tutorial- but it can be even easier. Select the
+contents of the <CODE>main()</CODE> function with the mouse or by holding the Shift-key pressed while selecting the lines with the down-arrow
+key. Then select "Cut" from the "Edit" menu or press the DEL-key to remove the selected code. This will clear the main function and we
+can start from scratch to build our first tutorial.
+<P>
+<H4>Entering the tutorial code</H4>
+
+<P>Now, to insert the code from the tutorial, you could first read it carefully and try to remember which line contained which code. Then,
+after reading the tutorial's line-by-line description, you could use it as an example to write the tutorial by yourself.
+<P>Those who want to go the easy way: select the contents of the listed <CODE>main()</CODE> function in the documentation browser and press the
+"Copy"-icon from the toolbar. Optionally, you could use the context-menu or the according entry in the "Edit" menu. This will copy the
+selection into the clipboard and, after switching back to the sourcecode window, can be inserted with "Paste" (either from the context
+menu, the toolbar icon or the according entry in the "Edit" menu).
+<P>Finally, add the according header files outside the <CODE>main()</CODE> function:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;qapplication.h>
+#include &lt;qpushbutton.h>
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>That's it ! The source code is done for your first tutorial application.
+<P>
+<H4>Building Hello World!</H4>
+
+<P>To build the first tutorial, select "Make" from the "Build" menu or press the according toolbar icon. Optionally, you could choose
+"Execute" as well, which results in running the application after the build was successful.
+<P>If the build stops due to an error, be assured the fault was on the programmer's side, not on the tutorial ! This would be sad to
+search for an error just when you decided to program for KDE and/or Qt, but you can use this to train yourself to use KDevelop. Now, to
+find an error, you have two options: either select the according error message in the output window, which will bring you to the
+according line the error occured, or press the F4 key; optionally you could use the "Next Error" entry in the "View" menu.
+<P>
+<H4>Exercises</H4>
+
+<P>You may ask "Exercises ? This one was so simple, I don't need to excercise !", but be assured, things will get more complicated. This
+one was the easiest example, but the more complex they will get the more thinking is asked on your side to understand and follow the
+tutorial steps. Also the excercises will enable you to learn how to acutally use KDevelop and it's features.
+<P>To teach yourself more with the first tutorial, you should try to do the following changes to the given code and see how this will
+influence the application behavoir:
+<P>
+<OL>
+<LI>change the pushbutton to a QLabel.</LI>
+<LI>use <CODE>setText()</CODE> instead of directly setting the text in the pushbutton's constructor</LI>
+<LI>use <CODE>QPushButton::resize ( const QSize &amp; s )</CODE> instead of setting the size by width and height directly. Create a <CODE>QSize</CODE>
+instance first that contains the size</LI>
+<LI>play with the sizes to see which is width and heigth</LI>
+</OL>
+<P>
+<H3><A NAME="ss3.2">3.2 Step 2 and 3: Extensions</A>
+</H3>
+
+<P>The tutorial steps 2 and 3 are extending the facilities of the first tutorial. There, you will learn about signals and slots as well as
+parent-child relationships between widgets.
+<P>Now, why is it important to learn about that ? Well, the signals and slots are building the technology which make the difference when
+comparing the Qt library to other widget library.  Whenever you will hit an implementation problem where you want to communicate
+between objects, this will make your work incredible short and nothing serious will happen if something went wrong, even misconnections
+don't lead to a segmentation fault. This is the strength of the Qt library and a lot of KDE/Qt developer's won't want to miss it
+anymore because of it's flexibility. Understanding the signal/slot mechanism therefore is essential to create any KDE/Qt application.
+<P>Another thing to watch out for is the fact that the button terminates the <CODE>QApplication</CODE> instance by calling <CODE>quit()</CODE>. You will
+meet <CODE>quit()</CODE> again when working with <CODE>QApplication</CODE>'s KDE-pendant, <CODE>KApplication</CODE>
+<P>
+<H3><A NAME="ss3.3">3.3 Writing your own Widgets</A>
+</H3>
+
+<P>Now, after having successfully modified and extended the <CODE>main()</CODE> function, you will hit the point to create a new widget- a unique
+widget that only can be constructed with the class you're about to write in step 4.  Actually, the class has been created by the
+application wizard for you, so there is not much to add- just that you have to insert the code that lesson 4 places in the
+<CODE>main.cpp</CODE> file into the <CODE>MyWidget</CODE> classes' header and implementation file. Fortunately, you only have to add the implementation
+to the constructor code.
+<P>To access the constructor, select it from the classviewer. This will automatically bring you to the implementation where you have to
+add the code.
+<P>Here, you only have to watch out for the include of <CODE>qfont.h</CODE>- <CODE>QFont</CODE> is only used in the constructor code of <CODE>MyWidget</CODE>.
+Therefore, add <CODE>#include &lt;qfont.h&gt;</CODE> to the top of the <CODE>mywidget.cpp</CODE> file.
+<P>To run the new application, just hit "Execute". This will result in compling the changes after an autosaving.
+<P>
+<H3><A NAME="ss3.4">3.4 Extending the Widget Class</A>
+</H3>
+
+<P>Now, in lesson 5 the target is to extend the widget class. Therefore, you will learn about virtual functions as well. Here, the
+<CODE>resizeEvent()</CODE> is reimplemented. What is important to learn here (besides extending a class) is that Qt works with user events by
+virtual functions that take an event as a parameter. Therefore, you should make yourself comfortable with the following classes of the
+Qt library:
+<P>
+<UL>
+<LI>QEvent</LI>
+<LI>QChildEvent</LI>
+<LI>QCloseEvent</LI>
+<LI>QFocusEvent</LI>
+<LI>QKeyEvent</LI>
+<LI>QMouseEvent</LI>
+<LI>QMoveEvent</LI>
+<LI>QPaintEvent</LI>
+<LI>QResizeEvent</LI>
+<LI>QTimerEvent</LI>
+</UL>
+<P>Whenever writing custom widgets, especially view areas of applications, you will have to overwrite the default implementation of the
+widget's event-methods by your own for certain events that have to be processed. Those would be e.g.
+<P><CODE>virtual void mousePressEvent ( QMouseEvent * )</CODE> for processing a mouse event to pop up a context menu. In the implementation, you
+have to insert a formal parameter into the function header, most developers either use <CODE>event</CODE> or just <CODE>e</CODE> as the parameter name.
+<P>Then, you can process the event's parameters. For a <CODE>QMouseEvent</CODE>, you have to ask if the right, middle or left mouse button was the
+one that caused the event.
+<P>
+<H3><A NAME="ss3.5">3.5 Adding a new Class</A>
+</H3>
+
+<P>With lesson 6, you will have to add a class to the tutorial application. Now, normally you would think "I just will create a header
+file and an implementation file- then I'm done"- but KDevelop will make it easier for you. When adding a class, you should always use
+the Classgenerator. This will do all the work for you so you just will have to add the specific code.
+<P>To add a class with the Classgenerator, choose "Project"-"New Class", which will open a dialog to enter all needed values for the class
+you want to add. The first thing we have to insert is the classname. The tutorial name this <CODE>LCDRange</CODE>, so this has to be inserted
+first. Then proceed to the baseclass. The baseclass is the one that the new class inherits. Looking at the tutorial (Qt 1.42), this is
+<CODE>QWidget</CODE>.  Now, as most GUI classes to add would inherit QWidget, the Classgenerator makes it even easier. Leave the baseclass
+empty and instead check "QWidget child class" in the "Additional Options" section. This will automatically add the required
+<CODE>Q_OBJECT</CODE> macro to the headerfile to add slots and signals later (which is required in chapter 7).
+<P>As the filenames are automatically inserted, you don't have to care for that. The only thing that we would suggest adding is the
+documentation. It is always a good style to add a desciptive documentation to the class, especially as the classname <CODE>LCDRange</CODE>
+doesn't inform you specifically about the purpose of the widget.
+<P>
+<H3><A NAME="ss3.6">3.6 Step 7-14</A>
+</H3>
+
+<P>For the rest of the tutorial steps, you are prepared and know everything you have to know- adding the classes required and doing the
+changes.
+<P>After each change you should do a new build and check your code for errors. Run the application and follow it's execution;
+additionally, you should play with KDevelop's options for "Build"- execute the application with a commandline argument such as
+--geometry and debug it with KDbg in the Tools-window. Then you should be able to proceed with the Qt examples that will be discussed
+in the next chapter.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDevelop Programming Handbook: Class Documentation with KDoc</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="KDE, KDevelop">
+<META NAME="description" CONTENT="The KDevelop Programming Handbook">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Next</A>
+ <A HREF="index-9.html">Previous</A>
+ <A HREF="index.html#toc10">Table of Contents</A>
+</P>
+<H3><A NAME="s10">10. Class Documentation with KDoc</A></H3>
+
+<P>Another important part of the documentation is including a descriptive help for your class interfaces. This will allow you and other
+programmers to use your classes by reading the HTML class documentation that can be created with <CODE>KDoc</CODE>. KDevelop supports the use
+of <CODE>KDoc</CODE> completely by creating the KDE-library documentation, also your application frameworks are already documented. To work
+yourself into the provided code, it would be a good start to read the included documentation online. The following describes what to do
+to get the API documentation, where KDevelop helps you add it and what kind of special tags <CODE>KDoc</CODE> provides additionally.
+<P>
+<H3><A NAME="ss10.1">10.1 How to use KDevelop's Documentation features</A>
+</H3>
+
+<P>To create the API documentation after you generated a project, select "Make API-Doc" from the "Project" menu. This will process all
+header files and create the HTML output. Then you can access the documentation by selecting "API-Documentation" from the Help-menu or
+the according book symbol in the Documentation tree, folder "Current Project".
+<P>The documentation is already cross-referenced to the KDE and Qt online-class documentation, so you can follow the inheritance easily
+with the inheritance overview. This may help you getting started with the KDE and Qt documentation as well.
+<P>
+<P>
+<H3><A NAME="ss10.2">10.2 Adding Class and Member Documentation</A>
+</H3>
+
+<P>As KDevelop provides all means to add code automatically, it also offers direct documentation. Whenever you're using the Class
+Generator by choosing "Project"->"New Class", add a descriptive help message to the documentation field. This will add the
+documentation to the class header.
+<P>When adding class member functions and attributes with the classtools, add the member documentation to the according documentation
+fields as well.
+<P>You may think that documentation is a part of the development process that isn't very necessary. But remember that the more your
+project grows and the more people take part on the development process, class documentation is the best help to save time. If
+developers have to guess by method names what exactly the method does, it is even more likely that the meaning is misunderstood and the
+method apparently doesn't do the job a developer guessed it would do. Therefore keep track of your documentation and rebuild it as
+often as possible.
+<P>Besides this, the documentation files are NOT included into the project, nor do they have any internationalization support. Therefore
+all API documentation should be held in English to allow international development groups to work with your sources.
+<P>Whenever you may want to add documentation by hand into the header file, just add the documentation <B>above</B> the method or class in a
+C-comment style with the difference that the first line has to begin with a slash and a double asterisk.
+<P>Example:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+  /** enables menuentries/toolbar items
+        */
+  void enableCommand(int id_);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>
+<H3><A NAME="ss10.3">10.3 Special Tags</A>
+</H3>
+
+<P><B>NOTE:</B> The following documentation of this chapter is taken from the KDoc documentation provided with KDoc by
+Sirtaj S. Kang 
+<A HREF="mailto:taj@.kde.org">taj@.kde.org</A>), author of KDoc; Copyright (c) 1997
+<P>The documentation is a mixture of:
+<P>
+<UL>
+<LI>Normal text. Paragraphs must be separated by at least one blank line.
+</LI>
+<LI>text of the form
+<HR>
+<PRE>
+&lt;pre&gt;
+.....code fragments....
+&lt;/pre&gt;
+</PRE>
+<HR>
+</LI>
+<LI>Various tags of the form:
+<BLOCKQUOTE><CODE>
+<PRE>
+@tagname [tag parameters]
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+</UL>
+<P>
+<P>The valid tags for each type of source code entity are:
+<P>
+<UL>
+<LI>Classes
+<BLOCKQUOTE><CODE>
+<PRE>
+  @short [one sentence of text]
+    A short description of the class
+  @author [one sentence of text]
+    Class author
+  @version [once sentence of text]
+    Class version (I normally set this to the RCS/CVS tag "Id")
+  @see [one or more references to classes or methods]   
+    References to other related documentation.
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Methods
+
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+    as above
+  @return [one sentence]
+    A sentence describing the return value
+  @param [param name identifier] [param description]
+    Describe a parameter. The param description can span multiple
+    lines and will be terminated by a blank line, the end of the
+    comment, or another param entry. For this reason, param entries
+    should normally be the last part of the doc comment.
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Constants, Enums, Properties
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+    as above
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+<LI>ALSO <CODE>@ref</CODE>
+As a departure from the javadoc format, the metatag "@ref" has the same format as @see, but can appear anywhere in the documentation
+(all other tags must appear on a line by themselves).</LI>
+</UL>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Next</A>
+ <A HREF="index-9.html">Previous</A>
+ <A HREF="index.html#toc10">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
