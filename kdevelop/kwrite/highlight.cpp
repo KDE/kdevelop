@@ -1,5 +1,7 @@
 #include <string.h>
-
+#ifdef(_UNIXWARE7)
+#include <strings.h>
+#endif
 //#include <qcombo.h>
 #include <qgrpbox.h>
 #include <qtstream.h>
