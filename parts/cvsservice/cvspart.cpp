@@ -946,7 +946,7 @@ void CvsPart::slotProjectClosed()
 
 void CvsPart::slotJobFinished( bool normalExit, int exitStatus )
 {
-    // @todo Display something ?
+    // @todo Display something
 }
 
 ///////////////////////////////////////////////////////////////////////////////
