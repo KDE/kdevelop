@@ -540,19 +540,19 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 
 KTextEditor::Editor * PartController::createEditorPart( bool activate )
 {
+	activate = true;
 	
 	if ( !_editorFactory )
 	{
 		kapp->config()->setGroup("Editor");
 		QString preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
+		if ( preferred != "kyzispart" ) //if we are not using kyzis => Don't create non-wrapped views for now, avoid two paths (== two chances for bad bugs)
+			activate = false;
 		
 		_editorFactory = findPartFactory( "text/plain", "KTextEditor/Document", preferred );
 		
 		if ( !_editorFactory ) return 0L;
 	}
-	
-	// Don't create non-wrapped views for now, avoid two paths (== two chances for bad bugs)
-	activate = false;
 	
 	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, activate ? "KTextEditor/Editor" : "KTextEditor::Document" ) );
 }
