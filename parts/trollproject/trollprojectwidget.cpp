@@ -1118,7 +1118,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idRemoveFile = popup.insertItem(i18n("Remove File"));
         int idFileProperties = popup.insertItem(i18n("Properties..."));
         int idViewUIH = popup.insertItem(i18n("Open ui.h File"));
-        if(!fitem->name.contains("ui")) popup.removeItem(idViewUIH);
+        if(!fitem->name.contains(".ui")) popup.removeItem(idViewUIH);
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
