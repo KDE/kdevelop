@@ -330,11 +330,6 @@ void TopLevelSDI::slotSettings()
   config->setGroup("General Options");
   gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
 
-
-  vbox = dlg.addVBoxPage(i18n("Plugins"));
-  PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
-  connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-
   Core::getInstance()->doEmitConfigWidget(&dlg);
   dlg.exec();
 

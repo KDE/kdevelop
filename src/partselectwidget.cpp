@@ -139,6 +139,7 @@ void PartSelectWidget::accept()
         saveGlobalConfig();
     else
         saveProjectConfig();
+    emit accepted();
 }
 
 #include "partselectwidget.moc"

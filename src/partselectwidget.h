@@ -33,6 +33,9 @@ public:
 public slots:
    void accept();
 
+signals:
+   void accepted();
+   
 private:
     enum Scope { Global, Project };
 

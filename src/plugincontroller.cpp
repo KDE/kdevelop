@@ -1,5 +1,5 @@
 #include <qfile.h>
-
+#include <qvbox.h>
 
 #include <kapp.h>
 #include <klibloader.h>
@@ -12,6 +12,7 @@
 #include <kparts/componentfactory.h>
 #include <assert.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 
 #include "kdevapi.h"
 #include "kdevplugin.h"
@@ -19,11 +20,10 @@
 #include "kdevappfrontend.h"
 #include "kdevdifffrontend.h"
 
-
 #include "core.h"
 #include "api.h"
 #include "toplevel.h"
-
+#include "partselectwidget.h"
 
 #include "plugincontroller.h"
 #include "plugincontroller.moc"
@@ -65,7 +65,9 @@ PluginController *PluginController::getInstance()
 PluginController::PluginController()
   : QObject()
 {
-  s_instance = this;
+  m_globalParts.setAutoDelete( true );
+  connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
+           this, SLOT(slotConfigWidget(KDialogBase*)) );
 }
 
 
@@ -113,28 +115,36 @@ void PluginController::loadDefaultParts()
 
 void PluginController::loadGlobalPlugins()
 {
-
   KTrader::OfferList globalOffers = pluginServices( "Global" );
   KConfig *config = KGlobal::config();
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
     config->setGroup("Plugins");
-    if (!config->readBoolEntry((*it)->name(), true))
-       continue;
+    
+    QString name = (*it)->name();
+    
+    // Unload it if it is marked as ignored and loaded
+    if (!config->readBoolEntry( name, true)) {
+      KXMLGUIClient* part = m_globalParts[name];
+      if( part ) {
+        removePart( part );
+        m_globalParts.remove( name );
+      }
+      continue;
+    }
 
-    if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
-      assert( false );
-    } else {
+    // Check if it is already loaded
+    if( m_globalParts[ name ] != 0 )
+      continue;
+      
+    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
-	emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
+    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
 
-        QStringList args = argumentsFromService( *it );
-
-        KDevPlugin *plugin = KParts::ComponentFactory
-	        ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
-                                                     args );
-        if ( plugin )
-            integratePart( plugin );
+    KDevPlugin *plugin = loadPlugin( *it );
+    if ( plugin ) {
+       m_globalParts.insert( name, plugin );
+       integratePart( plugin );
     }
   }
 }
@@ -147,11 +157,6 @@ KService::List PluginController::pluginServices( const QString &scope )
 	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1'" ).arg( scope );
     return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ), 
 	                           constraint );
-}
-
-void PluginController::integratePart(KXMLGUIClient *part)
-{
-  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }
 
 KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
@@ -171,4 +176,22 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
     if ( prop.isValid() )
         args = QStringList::split( " ", prop.toString() );
     return args;
+}
+
+void PluginController::slotConfigWidget( KDialogBase* dlg )
+{
+  QVBox *vbox = dlg->addVBoxPage(i18n("Plugins"));
+  PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
+  connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+  connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );
+}
+
+void PluginController::integratePart(KXMLGUIClient *part)
+{
+  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
+}
+
+void PluginController::removePart(KXMLGUIClient *part)
+{
+  TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
 }

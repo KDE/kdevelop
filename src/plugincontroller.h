@@ -1,21 +1,20 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
-
 #include <qobject.h>
-
+#include <qdict.h>
 
 #include <kservice.h>
 
 class KXMLGUIClient;
 class KService;
 class KDevPlugin;
-
+class KDialogBase;
 
 class PluginController : public QObject
 {
   Q_OBJECT
-	
+
 public:
 
   ~PluginController();
@@ -31,27 +30,26 @@ public:
 
   void loadInitialPlugins();
 
+  void integratePart(KXMLGUIClient *part);
+  void removePart(KXMLGUIClient* part);
 
 signals:
-
   void loadingPlugin(const QString &plugin);
-  
 
 protected:
-
   PluginController();
 
-
-private:
-
+private slots:
+  void slotConfigWidget( KDialogBase* );
   void loadGlobalPlugins();
+  
+private:
   void loadDefaultParts();
 
-  void integratePart(KXMLGUIClient *part);
-
+  QDict<KXMLGUIClient> m_globalParts;
+  
   static PluginController *s_instance;
 
 };
-
 
 #endif

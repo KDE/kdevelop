@@ -1,3 +1,10 @@
+2002-08-30 John Firebaugh <jfirebaugh@kde.org>
+     * Implemented dynamic loading/unloading of plugins.
+       Some project plugins need to be fixed; I guess they expect to
+       get a projectLoaded signal, but a project is already loaded.
+       Might want to eventually refactor plugin loading code in
+       projectmanager to plugincontroller.
+
 2002-08-30 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
      * removed trollproject runoptionwidget using common lib/project/runoptionswidget
      * added browse button to common runoptionwidget

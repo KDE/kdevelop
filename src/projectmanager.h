@@ -34,18 +34,15 @@ public:
   void createActions( KActionCollection* ac );
 
 public slots:
-
   void loadProject( const KURL& url);
-  void loadRecentProject( const KURL& url);
   void closeProject();
 
 private slots:
-
   void slotOpenProject();
   void slotProjectOptions();
+  void loadLocalParts();
 
 private:
-
   ProjectManager();
 
   void setupActions();
@@ -55,7 +52,6 @@ private:
 
   void loadProjectPart();
   void loadLanguageSupport();
-  void loadLocalParts();
   void unloadLocalParts();
   void unloadLanguageSupport();
   void saveProjectFile();
@@ -66,9 +62,6 @@ private:
   void checkNewService(const KService::Ptr &service);
 
   bool loadService( const KService::Ptr &service );
-
-  void integratePart(KXMLGUIClient *part);
-  void removePart(KXMLGUIClient *part);
 
   ProjectInfo *m_info;
 

@@ -47,7 +47,7 @@ public:
   QDomDocument m_document;
   QString      m_projectPlugin, m_language;
   QStringList  m_ignoreParts, m_loadParts, m_keywords;
-  QPtrList<KXMLGUIClient> m_localParts;
+  QDict<KXMLGUIClient> m_localParts;
 
 };
 
@@ -90,7 +90,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
   m_openRecentProjectAction =
     new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
-                          this, SLOT(loadRecentProject(const KURL &)),
+                          this, SLOT(loadProject(const KURL &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
 
@@ -125,7 +125,8 @@ void ProjectManager::slotProjectOptions()
 
   QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-  connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+  connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+  connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
 
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
@@ -167,45 +168,6 @@ void ProjectManager::loadDefaultProject()
   }
 }
 
-void ProjectManager::loadRecentProject(const KURL &url)
-{
-  QString fileName = url.path();
-
-  closeProject();
-
-  m_info = new ProjectInfo;
-
-  if (!loadProjectFile(fileName))
-  {
-    delete m_info;
-    m_info = 0;
-
-    if(KMessageBox::questionYesNo(TopLevel::getInstance()->main(), i18n("Do you want to remove it from the list?"))==
-       KMessageBox::Yes)
-    {
-      m_openRecentProjectAction->removeURL(url);
-      saveSettings();
-     }
-  return;
-  }
-
-  m_info->m_fileName = fileName;
-
-  getGeneralInfo();
-
-  loadProjectPart();
-  loadLanguageSupport();
-  loadLocalParts();
-
-  initializeProjectSupport();
-
-  ProjectWorkspace::restore();
-
-  m_openRecentProjectAction->addURL(KURL(projectFile()));
-  m_closeProjectAction->setEnabled(true);
-  m_projectOptionsAction->setEnabled(true);
-}
-
 void ProjectManager::loadProject(const KURL &url)
 {
   QString fileName = url.path();
@@ -213,11 +175,14 @@ void ProjectManager::loadProject(const KURL &url)
   closeProject();
 
   m_info = new ProjectInfo;
+  m_info->m_localParts.setAutoDelete( true );
 
   if (!loadProjectFile(fileName))
   {
     delete m_info;
     m_info = 0;
+    m_openRecentProjectAction->removeURL(url);
+    saveSettings();
     return;
   }
 
@@ -320,7 +285,7 @@ void ProjectManager::loadProjectPart()
       return;
 
     API::getInstance()->setProject( projectPart );
-    integratePart( projectPart );
+    PluginController::getInstance()->integratePart( projectPart );
   }
   else
     KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No project management plugin %1 found.").arg(m_info->m_projectPlugin));
@@ -348,18 +313,39 @@ void ProjectManager::loadLanguageSupport()
       return;
 
     API::getInstance()->setLanguageSupport( langSupport );
-    integratePart( langSupport );
+    PluginController::getInstance()->integratePart( langSupport );
 }
 
+void ProjectManager::unloadLanguageSupport()
+{
+  if (API::getInstance()->languageSupport())
+  {
+    PluginController::getInstance()->removePart(API::getInstance()->languageSupport());
+    delete API::getInstance()->languageSupport();
+    API::getInstance()->setLanguageSupport(0);
+  }
+}
 
 void ProjectManager::loadLocalParts()
 {
+  // Make sure to refresh load/ignore lists
+  getGeneralInfo();
+  
   KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
   for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
   {
-    if (m_info->m_ignoreParts.contains((*it)->name()))
+    QString name = (*it)->name();
+    
+    // Unload it if it is marked as ignored and loaded
+    if (m_info->m_ignoreParts.contains(name)) {
+      KXMLGUIClient* part = m_info->m_localParts[name];
+      if( part ) {
+        PluginController::getInstance()->removePart( part );
+        m_info->m_localParts.remove( name );
+      }
       continue;
-
+    }
+    
     if (m_info->m_loadParts.contains((*it)->name()))
       loadService( *it );
     else
@@ -367,6 +353,14 @@ void ProjectManager::loadLocalParts()
   }
 }
 
+void ProjectManager::unloadLocalParts()
+{
+  for( QDictIterator<KXMLGUIClient> it( m_info->m_localParts ); !it.isEmpty(); )
+  {
+    PluginController::getInstance()->removePart( *it );
+    m_info->m_localParts.remove( it.currentKey() );
+  }
+}
 
 void ProjectManager::checkNewService(const KService::Ptr &service)
 {
@@ -422,28 +416,17 @@ void ProjectManager::initializeProjectSupport()
 
 bool ProjectManager::loadService( const KService::Ptr &service ) 
 {
+  // Check if it is already loaded
+  if( m_info->m_localParts[ service->name() ] != 0 ) return false;
+  
   KXMLGUIClient *part = PluginController::loadPlugin( service ); 
   if ( !part ) return false;
 
-  integratePart( part );
-  m_info->m_localParts.append( part );
+  PluginController::getInstance()->integratePart( part );
+  m_info->m_localParts.insert( service->name(), part );
 
   return true;
 }
-
-void ProjectManager::integratePart(KXMLGUIClient *part)
-{
-  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
-}
-
-
-void ProjectManager::removePart(KXMLGUIClient *part)
-{
-  TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
-   
-  delete part;
-}
-
 
 void ProjectManager::closeProject()
 {
@@ -465,7 +448,8 @@ void ProjectManager::closeProject()
     unloadLanguageSupport();
     saveProjectFile();
 
-    removePart(API::getInstance()->project());
+    PluginController::getInstance()->removePart(API::getInstance()->project());
+    delete API::getInstance()->project();
     API::getInstance()->setProject(0);
   }
 
@@ -484,26 +468,6 @@ bool ProjectManager::closeProjectSources()
 {
   QStringList sources = API::getInstance()->project()->allFiles();
   return PartController::getInstance()->closeDocuments(sources);
-}
-
-
-void ProjectManager::unloadLocalParts()
-{
-  while (!m_info->m_localParts.isEmpty())
-  {
-    removePart(m_info->m_localParts.first());
-    m_info->m_localParts.removeFirst();
-  }
-}
-
-
-void ProjectManager::unloadLanguageSupport()
-{
-  if (API::getInstance()->languageSupport())
-  {
-    removePart(API::getInstance()->languageSupport());
-    API::getInstance()->setLanguageSupport(0);
-  }
 }
 
 
