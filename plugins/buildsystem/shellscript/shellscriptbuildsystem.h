@@ -13,9 +13,6 @@
 
 #include <kdevbuildsystem.h>
 
-/**
-@author KDevelop Authors
-*/
 class ShellScriptBuildSystem : public KDevBuildSystem
 {
     Q_OBJECT

@@ -20,18 +20,10 @@ QString BuildBaseItem::path( )
     QString p;
     while (it)
     {
-        qWarning( "adding path %s", it->name().latin1());
-        qWarning( "1") ;
         if (!p.isEmpty())
-        {
-            qWarning( "2") ;
             p.prepend("/");
-        }
-        qWarning( "3") ;
         p.prepend(it->name());
-        qWarning( "4") ;
         it = it->parent();
-        qWarning( "5") ;
     }
     return p;
 }

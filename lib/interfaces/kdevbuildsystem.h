@@ -150,6 +150,13 @@ public:
     virtual QDomDocument configuration() = 0;
 };
 
+/**
+    Interface to a build system plugin for KDevelop Generic Project Manager.
+    Generic project manager is a project manager that offers an unique interface
+    to various build systems like make, ant, cook, shell scripts, etc.
+    KDevBuildSystem is an interface for the generic build operations that are
+    necessary for a build system plugin to work with generic manager.
+*/
 class KDevBuildSystem : public QObject
 {
     Q_OBJECT
