@@ -36,8 +36,8 @@
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
-    nameLabel->setText( i18n("Class name:") );
-    itemListLabel->setText( i18n("Class list:") );
+    nameLabel->setText( i18n("File name:") );
+    itemListLabel->setText( i18n("File list:") );
 
     m_fileList = m_part->project()->allFiles();
 
