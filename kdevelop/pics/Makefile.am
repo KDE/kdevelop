@@ -1,5 +1,5 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = mini 
+SUBDIRS = misc toolbar mini 
 
 ####### kdevelop will overwrite this part!!! (end)############

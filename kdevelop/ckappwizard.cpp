@@ -1340,27 +1340,37 @@ void CKAppWizard::generateEntries(const QString &filename) {
 
 void CKAppWizard::okPermited()
 {
-  m_cancelButton->setFixedWidth(75);
+//  m_cancelButton->setFixedWidth(75);
   m_cancelButton->setEnabled(false);
-//  m_defaultButton->setEnabled(false);
+  m_defaultButton->setEnabled(false);
 
   m_cancelButton->setText(i18n("Exit"));
   errOutput->clear();
   output->clear();
-  QDir kdevelop;
 
-  kdevelop.setPath(QDir::homeDirPath() + "/.kde/share/apps");
-  if (!kdevelop.exists()) {
-    kdevelop.mkdir (QDir::homeDirPath() + "/.kde/share/apps");
+  QString outPath=locateLocal("appdata","");
+  KStandardDirs::makeDir(outPath);
+  cppedit->setName(outPath+"/cpp");
+  cppedit->setEdited(true);
+  {
+    QFile fileIODev(outPath+"/cpp");
+    if (fileIODev.open(IO_ReadWrite))
+    {
+      QTextStream textStream(&fileIODev);
+      cppedit->saveText(&textStream);
+    }
   }
-  kdevelop.setPath(QDir::homeDirPath());
-  kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
-  cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
-#warning FIXME  cppedit->toggleModified(true);
-#warning FIXME  cppedit->doSave();
-  hedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/header");
-#warning FIXME  hedit->toggleModified(true);
-#warning FIXME  hedit->doSave();
+
+  hedit->setName(outPath+"/header");
+  hedit->setEdited(true);
+  {
+    QFile fileIODev(outPath+"/header");
+    if (fileIODev.open(IO_ReadWrite))
+    {
+      QTextStream textStream(&fileIODev);
+      hedit->saveText(&textStream);
+    }
+  }
 
   // making the entries-filename unique... so two Kdevelops on the same
   //  account can let run the ApplicationWizard concurrent
