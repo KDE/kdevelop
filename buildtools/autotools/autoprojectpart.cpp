@@ -93,11 +93,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action->setWhatsThis(i18n("<b>Add translation</b><p>Creates .po file for the selected language."));
     action->setGroup("autotools");
 
-/*	action = new KAction ( i18n("&Import Existing Files && Directories..."), "", 0,
-							this, SLOT ( slotImportExisting() ),
-							actionCollection(), "project_importexisting" );
-	action->setStatusText ( i18n ( "Import existing files and directories to the currently loaded project" ) );
-*/
+
     if (!m_isKDE)
         action->setEnabled(false);
 
@@ -226,7 +222,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     _configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, info()->icon() );
     _configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, info()->icon() );
     _configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, info()->icon() );
-    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+             this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
@@ -246,61 +243,38 @@ AutoProjectPart::~AutoProjectPart()
 	delete _configProxy;
 }
 
-/*void AutoProjectPart::slotImportExisting()
-{
-	ImportExistingDlg( this, m_widget, "import_existing", true ).exec();
-}*/
-/*
-void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
-{
-    QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Configure Options"));
-    ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
-    connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
-    QDomDocument &dom = *projectDom();
-    if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
-        //ok we handle the execute in this kpart
-        vbox = dlg->addVBoxPage(i18n("Run Options"));
-        RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
-        w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
-        connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
-    }
-    vbox = dlg->addVBoxPage(i18n("Make Options"));
-    MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", vbox);
-    connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
-}
-*/
 
 void AutoProjectPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int pagenumber )
 {
-	switch ( pagenumber )
-	{
-		case CONFIGURE_OPTIONS:
-		{
-	    	ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, page );
-			connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
-		}
-		break;
+    switch ( pagenumber )
+    {
+    case CONFIGURE_OPTIONS:
+        {
+            ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, page );
+            connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
+        }
+        break;
 
-		case RUN_OPTIONS:
-		{
-			QDomDocument &dom = *projectDom();
-			if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
-				//ok we handle the execute in this kpart
-				RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), page );
-				w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
-				connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
-			}
-		}
-		break;
+    case RUN_OPTIONS:
+        {
+            QDomDocument &dom = *projectDom();
+            if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default"))
+            {
+                //ok we handle the execute in this kpart
+                RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), page );
+                w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
+                connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+            }
+        }
+        break;
 
-		case MAKE_OPTIONS:
-		{
-			MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", page );
-			connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
-		}
-		break;
-	}
+    case MAKE_OPTIONS:
+        {
+            MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", page );
+            connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
+        }
+        break;
+    }
 }
 
 void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
@@ -503,16 +477,10 @@ QString AutoProjectPart::makeEnvironment() const
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
-    for (it = envvars.begin(); it != envvars.end(); ++it) {
+    for (it = envvars.begin(); it != envvars.end(); ++it)
+    {
         environstr += (*it).first;
         environstr += "=";
-/*
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-*/
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
@@ -522,47 +490,47 @@ QString AutoProjectPart::makeEnvironment() const
 
 void AutoProjectPart::addFile(const QString &fileName)
 {
-	QStringList fileList;
-	fileList.append ( fileName );
+    QStringList fileList;
+    fileList.append ( fileName );
 
-	this->addFiles ( fileList );
+    this->addFiles ( fileList );
 }
 
 void AutoProjectPart::addFiles ( const QStringList& fileList )
 {
-	QString directory, name;
-	QStringList::ConstIterator it;
-	bool messageBoxShown = false;
+    QString directory, name;
+    QStringList::ConstIterator it;
+    bool messageBoxShown = false;
 
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-		int pos = ( *it ).findRev('/');
-		if (pos != -1)
-		{
-			directory = ( *it ).left(pos);
-			name = ( *it ).mid(pos+1);
-		}
-		else
-		{
-                        directory = "";
-			name = ( *it );
-		}
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        int pos = ( *it ).findRev('/');
+        if (pos != -1)
+        {
+            directory = ( *it ).left(pos);
+            name = ( *it ).mid(pos+1);
+        }
+        else
+        {
+            directory = "";
+            name = ( *it );
+        }
 
-		if (directory != m_widget->activeDirectory() ||
-			directory.isEmpty())
-		{
-			if ( !messageBoxShown )
-			{
-				KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory.\n"
-									"You should 'activate' the target you're currently working on in Automake Manager.\n"
-									"Just right-click a target and choose 'Make Target Active'."),
-									i18n ( "No Active Target Found" ), "No automake manager active target warning" );
-				messageBoxShown = true;
-			}
-		}
-	}
+        if (directory != m_widget->activeDirectory() ||
+                directory.isEmpty())
+        {
+            if ( !messageBoxShown )
+            {
+                KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory.\n"
+                                                        "You should 'activate' the target you're currently working on in Automake Manager.\n"
+                                                        "Just right-click a target and choose 'Make Target Active'."),
+                                         i18n ( "No Active Target Found" ), "No automake manager active target warning" );
+                messageBoxShown = true;
+            }
+        }
+    }
 
-	m_widget->addFiles(fileList);
+    m_widget->addFiles(fileList);
 }
 
 void AutoProjectPart::removeFile(const QString &fileName)
@@ -590,7 +558,8 @@ QStringList AutoProjectPart::allBuildConfigs() const
 
     QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
     QDomElement childEl = node.firstChild().toElement();
-    while (!childEl.isNull()) {
+    while (!childEl.isNull())
+    {
         QString config = childEl.tagName();
         kdDebug(9020) << k_funcinfo << "Found config " << config << endl;
         if (config != "default")
@@ -646,22 +615,26 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     QString preCommand;
     QFileInfo fi1();
     if ( !QFile::exists(dir + "/GNUmakefile") && !QFile::exists(dir + "/makefile")
-         && ! QFile::exists(dir + "/Makefile") ) {
-        if (!QFile::exists(buildDirectory() + "/configure")) {
+            && ! QFile::exists(dir + "/Makefile") )
+    {
+        if (!QFile::exists(buildDirectory() + "/configure"))
+        {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
-                                                              "and no configure script for this project.\n"
-                                                              "Run automake & friends and configure first?"));
+                                               "and no configure script for this project.\n"
+                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
-              return QString::null;
+                return QString::null;
             preCommand = makefileCvsCommand();
             if (preCommand.isNull())
-              return QString::null;
+                return QString::null;
             preCommand += " && ";
             preCommand += configureCommand() + " && ";
-        } else {
+        }
+        else
+        {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"));
             if (r == KMessageBox::No)
-              return QString::null;
+                return QString::null;
             preCommand = configureCommand() + " && ";
         }
     }
@@ -671,7 +644,8 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     int prio = DomUtil::readIntEntry(dom, "/kdevautoproject/make/prio");
     QString nice;
     kdDebug(9020) << k_funcinfo << "nice = " << prio<< endl;
-    if (prio != 0) {
+    if (prio != 0)
+    {
         nice = QString("nice -n%1 ").arg(prio);
     }
 
@@ -680,7 +654,8 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/make/abortonerror"))
         cmdline += " -k";
     int jobs = DomUtil::readIntEntry(dom, "/kdevautoproject/make/numberofjobs");
-    if (jobs != 0) {
+    if (jobs != 0)
+    {
         cmdline += " -j";
         cmdline += QString::number(jobs);
     }
@@ -720,52 +695,62 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 {
 
-  QString addstr = (titem->primary == "PROGRAMS")? titem->ldadd : titem->libadd;
-  QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr); // list of dependencies
-  QString tdir;          // temp target directory
-  QString tname;         // temp target name
-  QString tcmd;          // temp command line
-  QStringList::Iterator l2it;
-  for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
-    QString dependency = *l2it;
-    if (dependency.startsWith("$(top_builddir)/")) {
-       // These are the internal libraries
-      dependency.remove("$(top_builddir)/");
+    QString addstr = (titem->primary == "PROGRAMS")? titem->ldadd : titem->libadd;
+    QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr); // list of dependencies
+    QString tdir;          // temp target directory
+    QString tname;         // temp target name
+    QString tcmd;          // temp command line
+    QStringList::Iterator l2it;
+    for (l2it = l2.begin(); l2it != l2.end(); ++l2it)
+    {
+        QString dependency = *l2it;
+        if (dependency.startsWith("$(top_builddir)/"))
+        {
+            // These are the internal libraries
+            dependency.remove("$(top_builddir)/");
 
-      tdir = buildDirectory();
-      if (!tdir.endsWith("/") && !tdir.isEmpty())
-        tdir += "/";
-      int pos = dependency.findRev('/');
-      if (pos == -1) {
-        tname = dependency;
-      } else {
-        tdir += dependency.left(pos+1);
-        tname = dependency.mid(pos+1);
-      }
-      kdDebug(9020) << "Scheduling : <" << tdir << ">  target <" << tname << ">" << endl;
+            tdir = buildDirectory();
+            if (!tdir.endsWith("/") && !tdir.isEmpty())
+                tdir += "/";
+            int pos = dependency.findRev('/');
+            if (pos == -1)
+            {
+                tname = dependency;
+            }
+            else
+            {
+                tdir += dependency.left(pos+1);
+                tname = dependency.mid(pos+1);
+            }
+            kdDebug(9020) << "Scheduling : <" << tdir << ">  target <" << tname << ">" << endl;
 
-      // Recursively queue the dependencies for building
-      SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
-      if (spi) {
-        QPtrList< TargetItem > tl = spi->targets;
-        // Cycle through the list of targets to find the one we're looking for
-        TargetItem *ti = tl.first();
-        do {
-          if (ti->name == tname) {
-            // found it: queue it and stop looking
-            queueInternalLibDependenciesBuild(ti);
-            break;
-          }
-          ti = tl.next();
-        } while (ti);
-      }
+            // Recursively queue the dependencies for building
+            SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
+            if (spi)
+            {
+                QPtrList< TargetItem > tl = spi->targets;
+                // Cycle through the list of targets to find the one we're looking for
+                TargetItem *ti = tl.first();
+                do
+                {
+                    if (ti->name == tname)
+                    {
+                        // found it: queue it and stop looking
+                        queueInternalLibDependenciesBuild(ti);
+                        break;
+                    }
+                    ti = tl.next();
+                }
+                while (ti);
+            }
 
-      tcmd = constructMakeCommandLine(tdir, tname);
-      if (!tcmd.isNull()) {
-        makeFrontend()->queueCommand( tdir, tcmd);
-      }
+            tcmd = constructMakeCommandLine(tdir, tname);
+            if (!tcmd.isNull())
+            {
+                makeFrontend()->queueCommand( tdir, tcmd);
+            }
+        }
     }
-  }
 }
 
 
@@ -773,7 +758,8 @@ void AutoProjectPart::slotBuild()
 {
     //m_lastCompilationFailed = false;
 
-    if( m_needMakefileCvs ){
+    if( m_needMakefileCvs )
+    {
         slotMakefilecvs();
         slotConfigure();
         m_needMakefileCvs = false;
@@ -786,40 +772,41 @@ void AutoProjectPart::slotBuild()
 void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
 {
 
-  if ( !titem )
-    return;
+    if ( !titem )
+        return;
 
-  //m_lastCompilationFailed = false;
+    //m_lastCompilationFailed = false;
 
-  // Calculate the complete name of the target and store it in name
-  QString name = titem->name;
-  if ( titem->primary == "KDEDOCS" )
-    name = "index.cache.bz2";
+    // Calculate the complete name of the target and store it in name
+    QString name = titem->name;
+    if ( titem->primary == "KDEDOCS" )
+        name = "index.cache.bz2";
 
-  // Calculate the full path of the target and store it in path
-  QString path = buildDirectory();
-  if (!path.endsWith("/") && !path.isEmpty())
-    path += "/";
-  if (relpath.at(0) == '/')
-    path += relpath.mid(1);
-  else
-    path += relpath;
+    // Calculate the full path of the target and store it in path
+    QString path = buildDirectory();
+    if (!path.endsWith("/") && !path.isEmpty())
+        path += "/";
+    if (relpath.at(0) == '/')
+        path += relpath.mid(1);
+    else
+        path += relpath;
 
-  // Save all files once
-  partController()->saveAllFiles();
+    // Save all files once
+    partController()->saveAllFiles();
 
-  // Add the make command for the libraries that the target depends on to the make frontend queue
-  // if this recursive behavour is un-wanted comment the next line
-  queueInternalLibDependenciesBuild(titem);
+    // Add the make command for the libraries that the target depends on to the make frontend queue
+    // if this recursive behavour is un-wanted comment the next line
+    queueInternalLibDependenciesBuild(titem);
 
-  // Calculate the "make" command line for the target
-  QString tcmd = constructMakeCommandLine( path, name );
+    // Calculate the "make" command line for the target
+    QString tcmd = constructMakeCommandLine( path, name );
 
-  // Call make
-  if (!tcmd.isNull()) {
-    m_buildCommand = tcmd;
-    makeFrontend()->queueCommand( path, tcmd);
-  }
+    // Call make
+    if (!tcmd.isNull())
+    {
+        m_buildCommand = tcmd;
+        makeFrontend()->queueCommand( path, tcmd);
+    }
 }
 
 
@@ -1056,43 +1043,43 @@ void AutoProjectPart::slotExecute()
 
 void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
 {
-	partController()->saveAllFiles();
-	
-	bool is_dirty = false;
-	QDateTime t = QFileInfo(dir , titem->name ).lastModified();	
-	QPtrListIterator<FileItem> it( titem->sources );
-	for( ; it.current() ; ++it )
-	{
-		if( t < QFileInfo(dir , (*it)->name).lastModified())
-			is_dirty = true;
-	}
-	
-	
-	if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && is_dirty )
-	{	
-		connect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild(const QString&)) );
-		connect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed(const QString&)) );		
-		m_executeTargetAfterBuild.first = dir;
-		m_executeTargetAfterBuild.second = const_cast<TargetItem*>(titem);
-		
-		QString relpath = dir.path().mid( projectDirectory().length() );
-		buildTarget(relpath, const_cast<TargetItem*>(titem));
-		return;	
-	}
-	
-	
-	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
-	
-	QString program = environString();
-	if(!titem->name.startsWith("/"))
-	  program += "./";
-	program += titem->name;	
-	
-	QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
-	
-	program += " " + args;
-	
-	appFrontend()->startAppCommand(dir.path(), program ,inTerminal);
+    partController()->saveAllFiles();
+
+    bool is_dirty = false;
+    QDateTime t = QFileInfo(dir , titem->name ).lastModified();
+    QPtrListIterator<FileItem> it( titem->sources );
+    for( ; it.current() ; ++it )
+    {
+        if( t < QFileInfo(dir , (*it)->name).lastModified())
+            is_dirty = true;
+    }
+
+
+    if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && is_dirty )
+    {
+        connect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild(const QString&)) );
+        connect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed(const QString&)) );
+        m_executeTargetAfterBuild.first = dir;
+        m_executeTargetAfterBuild.second = const_cast<TargetItem*>(titem);
+
+        QString relpath = dir.path().mid( projectDirectory().length() );
+        buildTarget(relpath, const_cast<TargetItem*>(titem));
+        return;
+    }
+
+
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
+
+    QString program = environString();
+    if(!titem->name.startsWith("/"))
+        program += "./";
+    program += titem->name;
+
+    QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
+
+    program += " " + args;
+
+    appFrontend()->startAppCommand(dir.path(), program ,inTerminal);
 
 }
 
@@ -1287,29 +1274,29 @@ KDevProject::Options AutoProjectPart::options() const
 
 QStringList recursiveATFind( const QString &currDir, const QString &baseDir )
 {
-	kdDebug() << "Dir " << currDir << endl;
-	QStringList fileList;
+    kdDebug() << "Dir " << currDir << endl;
+    QStringList fileList;
 
-	if( !currDir.contains( "/..") && !currDir.contains("/.") )
-	{
-		QDir dir(currDir);
-		QStringList dirList = dir.entryList(QDir::Dirs );
-		QStringList::Iterator idx = dirList.begin();
-		for( ; idx != dirList.end(); ++idx )
-		{
-			fileList += recursiveATFind( currDir + "/" + (*idx),baseDir );
-		}
-		QStringList newFiles = dir.entryList("*.am *.in");
-		idx = newFiles.begin();
-		for( ; idx != newFiles.end(); ++idx )
-		{
-			QString file = currDir + "/" + (*idx);
-			fileList.append( file.remove( baseDir ) );
-		}
-	}
+    if( !currDir.contains( "/..") && !currDir.contains("/.") )
+    {
+        QDir dir(currDir);
+        QStringList dirList = dir.entryList(QDir::Dirs );
+        QStringList::Iterator idx = dirList.begin();
+        for( ; idx != dirList.end(); ++idx )
+        {
+            fileList += recursiveATFind( currDir + "/" + (*idx),baseDir );
+        }
+        QStringList newFiles = dir.entryList("*.am *.in");
+        idx = newFiles.begin();
+        for( ; idx != newFiles.end(); ++idx )
+        {
+            QString file = currDir + "/" + (*idx);
+            fileList.append( file.remove( baseDir ) );
+        }
+    }
 
 
-	return fileList;
+    return fileList;
 }
 
 /*!
@@ -1317,50 +1304,50 @@ QStringList recursiveATFind( const QString &currDir, const QString &baseDir )
  */
 QStringList AutoProjectPart::distFiles() const
 {
-	QStringList sourceList = allFiles();
-	// Scan current source directory for any .pro files.
-	QString projectDir = projectDirectory();
-	QDir dir(projectDir);
-	QDir admin(projectDir +"/admin");
-	QStringList files = dir.entryList( "Makefile.cvs Makefile.am configure* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in acinclude.m4 config.h.in Makefile.in");
-	QStringList adminFiles = admin.entryList(QDir::Files);
-	QStringList::Iterator idx = adminFiles.begin();
-	for( ; idx != adminFiles.end(); ++idx)
-	{
-		files.append( "admin/" + (*idx) );
-	}
-	QStringList srcDirs = dir.entryList(QDir::Dirs);
-	idx = srcDirs.begin();
-	for(; idx != srcDirs.end(); ++idx)
-	{
-		sourceList += recursiveATFind( projectDirectory() + "/" + (*idx), projectDirectory());
-	}
-	return sourceList + files;
+    QStringList sourceList = allFiles();
+    // Scan current source directory for any .pro files.
+    QString projectDir = projectDirectory();
+    QDir dir(projectDir);
+    QDir admin(projectDir +"/admin");
+    QStringList files = dir.entryList( "Makefile.cvs Makefile.am configure* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in acinclude.m4 config.h.in Makefile.in");
+    QStringList adminFiles = admin.entryList(QDir::Files);
+    QStringList::Iterator idx = adminFiles.begin();
+    for( ; idx != adminFiles.end(); ++idx)
+    {
+        files.append( "admin/" + (*idx) );
+    }
+    QStringList srcDirs = dir.entryList(QDir::Dirs);
+    idx = srcDirs.begin();
+    for(; idx != srcDirs.end(); ++idx)
+    {
+        sourceList += recursiveATFind( projectDirectory() + "/" + (*idx), projectDirectory());
+    }
+    return sourceList + files;
 }
 
 void AutoProjectPart::startSimpleMakeCommand( const QString & dir, const QString & command, bool withKdesu )
 {
-	if (partController()->saveAllFiles()==false)
-		return; //user cancelled
-	
-//	m_buildCommand = constructMakeCommandLine(dir, target);
-	
-	QString cmdline = command;
-	cmdline.prepend(makeEnvironment());
-	
-	QString dircmd = "cd ";
-	dircmd += KProcess::quote(dir);
-	dircmd += " && ";
-	
-	m_buildCommand = dircmd + cmdline;
-	
-	if (withKdesu)
-		m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
-	
-	if (!m_buildCommand.isNull())
-		makeFrontend()->queueCommand(dir, m_buildCommand);
+    if (partController()->saveAllFiles()==false)
+        return; //user cancelled
+
+    //	m_buildCommand = constructMakeCommandLine(dir, target);
+
+    QString cmdline = command;
+    cmdline.prepend(makeEnvironment());
+
+    QString dircmd = "cd ";
+    dircmd += KProcess::quote(dir);
+    dircmd += " && ";
+
+    m_buildCommand = dircmd + cmdline;
+
+    if (withKdesu)
+        m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
+
+    if (!m_buildCommand.isNull())
+        makeFrontend()->queueCommand(dir, m_buildCommand);
 }
 
 #include "autoprojectpart.moc"
 
-// kate: space-indent off; indent-width 8; tab-width 8; show-tabs on;
+// kate: space-indent on; indent-width 4;
