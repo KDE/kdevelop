@@ -119,6 +119,13 @@ public: // Public queries
                                   QList<CParsedMethod> *implList,
                                   QList<CParsedMethod> *availList );
 
+  /**
+   * Get all global structures not declared in a scope.
+   * 
+   * @return A sorted list of global structures.
+   */
+  QList<CParsedStruct> *getSortedStructList();
+
 public: // Public Methods
 
   /** Remove all parsed classes. */
