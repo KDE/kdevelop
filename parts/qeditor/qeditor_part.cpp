@@ -96,7 +96,7 @@ using namespace std;
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           QObject *parent, const char *name,
                           const QStringList & /*args*/ )
-    : KTextEditor::Document( parent, name )
+    : KTextEditor::Document( parent, name ), m_editor( 0 )
 {
     kdDebug() << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
@@ -394,7 +394,11 @@ bool QEditorPart::removeLine( unsigned int line )
 
 KTextEditor::View* QEditorPart::createView( QWidget *parent, const char *name )
 {
-    KTextEditor::View* pView = new QEditorView( this, parent, name );
+    QEditorView* pView = new QEditorView( this, parent, name );
+    if( m_editor ){
+        pView->editor()->setDocument( m_editor->editor()->document() );
+    }
+
     m_views.append( pView );
     return pView;
 }
