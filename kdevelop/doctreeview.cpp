@@ -632,7 +632,7 @@ void DocTreeKDELibsFolder::refresh()
 
 #ifdef WITH_KDOC2
     // if we have kdoc2 index files, get the reference directory 
-    QString docu_dir, index_path, libname;
+    QString docu_dir, index_path, libname, msg;
     KConfig* config=kapp->getConfig();
     config->setGroup("Doc_Location");
     docu_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
@@ -651,7 +651,8 @@ void DocTreeKDELibsFolder::refresh()
         if(!libname.contains("qt.kdoc") && fi->isFile()) // exclude qt.kdoc || qt.kdoc.gz and everything except files
         {
           libname=fi->baseName();  // get only the base of the filename as library name
-          list.append(new DocTreeKDELibsBook(this, libname+ i18n("-Library"), libname)); // append to the doctree
+          msg.sprintf(i18n("%s-Library"),libname.data());
+          list.append(new DocTreeKDELibsBook(this, msg, libname)); // append to the doctree
         }
         ++it; // increase the iterator
       }
