@@ -18,6 +18,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qfile.h>
+#include <qtimer.h>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -116,6 +117,8 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const QVa
 		++it;
 	}
   
+	QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+
   return true;
 }
 
@@ -161,6 +164,22 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
+  
+  // we should restore every view, but right now we only support a single view per document
+  // so use this simple method for now
+
+	if ( nNrOfViews > 0 )
+	{
+		QDomElement viewEl = docEl.firstChild().toElement();
+		DocumentData dd;
+		dd.context = docEl.attribute("context");
+		dd.line = viewEl.attribute("line", "0").toInt();
+		dd.url = url;
+		
+		_docDataList << dd;
+	}  
+  
+/*  
   // loop over all views of this document
   int nView = 0;
 
@@ -202,7 +221,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 ////    }
 ////    pFocusedView->setFocus();
 ////  }
-
+*/
 }
 
 //---------------------------------------------------------------------------
@@ -347,5 +366,25 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
   initXMLTree();  // clear and initialize the tree again
 
   return true;
+}
+
+
+void ProjectSession::loadDocument( )
+{
+	if ( !_docDataList.isEmpty() )
+	{
+		DocumentData & dd = _docDataList.first();
+		if ( dd.context.isEmpty() )
+		{
+			PartController::getInstance()->editDocument( dd.url, dd.line );
+		}
+		else
+		{
+			PartController::getInstance()->showDocument( dd.url );
+		}
+		_docDataList.pop_front();
+		
+		QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+	}
 }
 

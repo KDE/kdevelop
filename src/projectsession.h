@@ -53,6 +53,12 @@ signals:
   void sig_restoreAdditionalViewProperties(const QString& viewName, const QDomElement* el);
   void sig_saveAdditionalViewProperties(const QString& viewName, QDomElement* el);
 
+private slots:
+  /**
+   * This slot loads one document from _docDataList and sets a timer to load the next 
+   */
+  void loadDocument();  
+  
 private:
   /** Restores the part of the project session that concerns to the documents (files). */
   void recreateDocs(QDomElement& el);
@@ -65,6 +71,17 @@ private:
 private:
   /** the XML document object controlling the XML tree. */
   QDomDocument domdoc;
+  
+  struct DocumentData
+  {
+	  DocumentData() : line(0) {}
+	  KURL url;
+	  int line;
+	  QString context;
+  };
+  
+  QValueList<DocumentData> _docDataList;
+  
 };
 
 #endif // _PROJECTSESSION_H_
