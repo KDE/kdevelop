@@ -138,6 +138,23 @@ void AddTargetDialog::accept()
 	case 6: primary = "JAVA";        break;
 	default: ;
 	}
+	
+	if (primary == "DATA"){
+	    // DATA does not need a name; DATA may already exist.
+	    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, true);
+	    QPtrListIterator<TargetItem> it( m_subproject->targets );
+	    for( ; it.current(); ++it ){
+		if( (*it)->text(0) == titem->text(0) ){
+		    // FIXME: Add message box here, after string-freeze is over
+		    //        something like: "This data target already exists."
+		    QDialog::accept();
+		    return;
+		}
+	    }
+	    m_subproject->targets.append( titem );
+	    QDialog::accept();
+	    return;
+	}
 
 	if (name.isEmpty()) {
 		KMessageBox::sorry(this, i18n("You have to give the target a name!"));
