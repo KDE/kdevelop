@@ -2585,7 +2585,7 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (generatesource->isChecked() &&!kickeritem->isSelected()&&!kpartitem->isSelected()
-  	&&!kioslaveitem->isSelected()&&!kthemeitem->isSelected() )
+  	&&!kioslaveitem->isSelected()&&!kthemeitem->isSelected()&&  !kcmoduleitem->isSelected())
   {
     QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : "cpp";
     fileInfo.rel_name = namelow + "/main."+extension;

@@ -1,4 +1,9 @@
-2001-05-08  rokrau@yahoo.com
+2001-05-09  Ralf Nolden <nolden@kde.org>
+    * fixed up the kcmodule errors, works now. TODO would be the binary 
+	(standalone) and the desktop file but I think the users will find out 
+	about that themselves.
+
+ 2001-05-08  rokrau@yahoo.com
     * added F12 for switch to header/source
     * added Edit menu entries for CTags related functionality
 
