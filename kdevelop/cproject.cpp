@@ -627,7 +627,7 @@ void CProject::updateMakefileAm(QString makefile){
   QString str2;
   QString dist_str;
   QTextStream stream(&file);
-  bool found=false;
+  bool found=false, customfile=false;
 
   QString libname;
   QStrList static_libs;
@@ -647,9 +647,14 @@ void CProject::updateMakefileAm(QString makefile){
   }
   file.close();
 
+  for(str = list.first(); !customfile && str != 0;str = list.next()){
+    if (str.find(QRegExp("\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
+      customfile=true;
+  }
+
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str != 0;str = list.next()){ // every line
-      if(str == "####### kdevelop will overwrite this part!!! (begin)##########"){
+      if(!customfile && str == "####### kdevelop will overwrite this part!!! (begin)##########"){
  	stream << str << "\n";
 	
 	//***************************generate needed things for the main makefile*********
@@ -822,10 +827,11 @@ void CProject::updateMakefileAm(QString makefile){
 	stream << "\n";	
 	found = true;
       }
-      if(found == false){
+
+    if(found == false){
 	stream << str +"\n";
       }
-    if(str =="####### kdevelop will overwrite this part!!! (end)############"){
+    if(!customfile && str =="####### kdevelop will overwrite this part!!! (end)############"){
       stream << str + "\n";
       found = false;
     } 
@@ -959,7 +965,8 @@ void CProject::setKDevelopWriteArea(QString makefile){
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
   QStrList list;
-  bool found = false;
+
+  bool found = false, customfile=false;
   QTextStream stream(&file);
   QString str;
   
@@ -970,11 +977,13 @@ void CProject::setKDevelopWriteArea(QString makefile){
   }
   file.close();
   for(str = list.first();str != 0;str = list.next()){
+    if (str.find(QRegExp("\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
+      customfile=true;
     if (str == "####### kdevelop will overwrite this part!!! (begin)##########"){
       found = true;
     }
   }
-  if(!found){
+  if(!found && !customfile){
     // create the writeable area
     file.open(IO_WriteOnly);
     stream << "####### kdevelop will overwrite this part!!! (begin)##########\n";
