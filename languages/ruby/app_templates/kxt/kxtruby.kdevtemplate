@@ -124,7 +124,7 @@ Dest=%{dest}/src/%{APPNAMELC}view.rb
 [FILE18]
 Type=install
 Source=%{src}/appview_base.ui
-Dest=%{dest}/src/%{APPNAMELC}view_base.rb
+Dest=%{dest}/src/appview_base.ui
 
 [FILE19]
 Type=install

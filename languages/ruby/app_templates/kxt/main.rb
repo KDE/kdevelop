@@ -7,7 +7,7 @@ require 'prefs-base.rb'
 require 'prefs.rb'
 require 'settings.rb'
 require 'appview_base.rb'
-require 'appview.rb'
+require '%{APPNAMELC}view.rb'
 
 description = I18N_NOOP("A KDE Application")
 version = "%{VERSION}"

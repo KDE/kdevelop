@@ -18,7 +18,7 @@ class %{APPNAMESC} < KDE::MainWindow
     def initialize()
         super( nil, "%{APPNAMESC}" )
         Settings.instance.readConfig
-        @view = %{APPNAMESC}View(self)
+        @view = %{APPNAMESC}View.new(self)
         @printer = nil
 
         # accept dnd
