@@ -530,7 +530,7 @@ void DebuggerPart::stopDebugger()
     
     breakpointWidget->reset();
     framestackWidget->clear();
-    //variableWidget->clear();	//any reason why this should be cleared? It removes the watched variables, which is bad. (Andras)
+    variableWidget->clear();
     disassembleWidget->clear();
     disassembleWidget->slotActivate(false);
     

@@ -65,7 +65,21 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
 void VariableWidget::clear()
 {
-  varTree_->clear();
+//  varTree_->clear();
+  QListViewItemIterator it(varTree_);
+  while (it.current())
+  {
+    kdDebug(24000) << "item: " << it.current()->text(0) << "\n";
+    if (!dynamic_cast<WatchRoot*>(varTree_->findRoot(it.current())))
+    {
+      QListViewItem *item = it.current();
+      delete item;
+    } else
+    {
+      ++it;
+    }
+  }
+
 }
 
 // **************************************************************************
@@ -129,16 +143,16 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 {
     if (!item)
         return;
-    
+
     setSelected(item, true);    // Need to select this item.
 
     if (item->parent()) {
         KPopupMenu popup(item->text(VarNameCol), this);
-        int idRemoveWatch = -1;
+        int idRemoveWatch = -2;
         if (dynamic_cast<WatchRoot*>(findRoot(item)))
             idRemoveWatch = popup.insertItem( i18n("Remove watch variable") );
         int idToggleWatch = popup.insertItem( i18n("Toggle watchpoint") );
-        
+
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch)
@@ -175,11 +189,11 @@ void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
                 localsOn = true;
                 break;
             }
-            
+
             sibling = sibling->nextSibling();
         }
     }
-    
+
     emit setLocalViewState(localsOn);
     emit selectFrame(frameNo, threadNo);
 }
@@ -191,7 +205,7 @@ QListViewItem *VariableTree::findRoot(QListViewItem *item) const
 {
     while (item->parent())
         item = item->parent();
-    
+
     return item;
 }
 
@@ -200,17 +214,17 @@ QListViewItem *VariableTree::findRoot(QListViewItem *item) const
 VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 {
     QListViewItem *sibling = firstChild();
-    
+
     // frames only exist on th top level so we only need to
     // check the siblings
     while (sibling) {
         VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (sibling);
         if (frame && frame->matchDetails(frameNo, threadNo))
             return frame;
-        
+
         sibling = sibling->nextSibling();
     }
-    
+
     return 0;
 }
 
@@ -219,14 +233,14 @@ VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 WatchRoot *VariableTree::findWatch()
 {
     QListViewItem *sibling = firstChild();
-    
+
     while (sibling) {
         if (WatchRoot *watch = dynamic_cast<WatchRoot*> (sibling))
             return watch;
-        
+
         sibling = sibling->nextSibling();
     }
-    
+
     return new WatchRoot(this);
 }
 
@@ -235,10 +249,10 @@ WatchRoot *VariableTree::findWatch()
 void VariableTree::trim()
 {
     QListViewItem *child = firstChild();
-    
+
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
-        
+
         // don't trim the watch root
         if (!(dynamic_cast<WatchRoot*> (child))) {
             if (TrimmableItem *item = dynamic_cast<TrimmableItem*> (child)) {
@@ -257,7 +271,7 @@ void VariableTree::trim()
 void VariableTree::trimExcessFrames()
 {
     QListViewItem *child = firstChild();
-    
+
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
         if (VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (child)) {
@@ -276,7 +290,7 @@ QListViewItem *VariableTree::lastChild() const
     if (child)
         while (QListViewItem *nextChild = child->nextSibling())
             child = nextChild;
-    
+
     return child;
 }
 
@@ -329,7 +343,7 @@ QListViewItem *TrimmableItem::lastChild() const
     if (child)
         while (QListViewItem *nextChild = child->nextSibling())
             child = nextChild;
-    
+
     return child;
 }
 
@@ -338,7 +352,7 @@ QListViewItem *TrimmableItem::lastChild() const
 TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) const
 {
     QListViewItem *child = firstChild();
-    
+
     // Check the siblings on this branch
     while (child) {
         if (child->text(VarNameCol) == match) {
@@ -346,10 +360,10 @@ TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) con
                 if (item->getDataType() == type)
                     return item;
         }
-        
+
         child = child->nextSibling();
     }
-    
+
     return 0;
 }
 
@@ -358,7 +372,7 @@ TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) con
 void TrimmableItem::trim()
 {
     QListViewItem *child = firstChild();
-    
+
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
         if (TrimmableItem *item = dynamic_cast<TrimmableItem*>(child)) {
@@ -435,7 +449,7 @@ QString VarItem::varPath() const
 {
     QString vPath("");
     const VarItem *item = this;
-    
+
     // This stops at the root item (FrameRoot or WatchRoot)
     while ((item = dynamic_cast<const VarItem*> (item->parent()))) {
         if (item->getDataType() != typeArray) {
@@ -448,7 +462,7 @@ QString VarItem::varPath() const
             }
         }
     }
-    
+
     return vPath;
 }
 
@@ -460,10 +474,10 @@ QString VarItem::fullName() const
     QString vPath = varPath();
     if (itemName[0] == '<')
         return vPath;
-    
+
     if (vPath.isEmpty())
         return itemName.replace(QRegExp("^static "), "");
-    
+
     return varPath() + "." + itemName.replace(QRegExp("^static "), "");
 }
 
@@ -475,14 +489,14 @@ void VarItem::setText(int column, const QString &data)
         waitingForData();
         ((VariableTree*)listView())->expandItem(this);
     }
-    
+
     setActive();
     if (column == ValueCol) {
         QString oldValue(text(column));
         if (!oldValue.isEmpty())                   // Don't highlight new items
             highlight_ = (oldValue != QString(data));
     }
-    
+
     QListViewItem::setText(column, data);
     repaint();
 }
@@ -492,12 +506,12 @@ void VarItem::setText(int column, const QString &data)
 void VarItem::updateValue(char *buf)
 {
     TrimmableItem::updateValue(buf);
-    
+
     // Hack due to my bad QString implementation - this just tidies up the display
     if ((strncmp(buf, "There is no member named len.", 29) == 0) ||
         (strncmp(buf, "There is no member or method named len.", 39) == 0))
         return;
-    
+
     if (*buf == '$') {
         if (char *end = strchr(buf, '='))
             buf = end+2;
@@ -507,14 +521,14 @@ void VarItem::updateValue(char *buf)
         dataType_ = GDBParser::getGDBParser()->determineType(buf);
         if (dataType_ == typeArray)
             buf++;
-        
+
         // Try fixing a format string here by overriding the dataType calculated
         // from this data
         QString varName = getName();
         if (dataType_ == typePointer && varName[0] == '/')
             dataType_ = typeValue;
     }
-    
+
     GDBParser::getGDBParser()->parseData(this, buf, true, false);
     setActive();
 }
@@ -564,21 +578,21 @@ QCString VarItem::getCache()
 void VarItem::checkForRequests()
 {
     // TODO - hardcoded for now - these should get read from config
-    
+
     // Signature for a QT1.44 QString
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
                                                          fullName().latin1()+QCString(".shd.data"));
     }
-    
+
     // Signature for a QT1.44 QDir
     if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
                                                          fullName().latin1()+QCString(".dPath.shd.data"));
     }
-    
+
     // Signature for a QT2.x QT3.x QString
     // TODO - This handling is not that good - but it works sufficiently well
     // at the moment to leave it here, and it won't cause bad things to happen.
@@ -589,14 +603,14 @@ void VarItem::checkForRequests()
                                                          QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
                                                                             fullName().latin1()));
     }
-    
+
     // Signature for a QT2.0.x QT2.1 QCString
     if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
                                                          fullName().latin1()+QCString(".shd.data"));
     }
-    
+
     // Signature for a QT2.0.x QT2.1 QDir
     if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
         waitingForData();
@@ -622,7 +636,7 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 {
     if ( !p )
         return;
-    
+
     if (column == ValueCol && highlight_) {
         QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
                            cg.dark(), cg.mid(), red, cg.base());
@@ -657,11 +671,11 @@ VarFrameRoot::~VarFrameRoot()
 void VarFrameRoot::setLocals(char *locals)
 {
     ASSERT(isActive());
-    
+
     // "No symbol table info available" or "No locals."
     bool noLocals = (locals &&  (strncmp(locals, "No ", 3) == 0));
     setExpandable(!params_.isEmpty() || !noLocals);
-    
+
     if (noLocals) {
         locals_ = "";
         if (locals)
@@ -669,10 +683,10 @@ void VarFrameRoot::setLocals(char *locals)
                 *end = 0;      // clobber the new line
     } else
         locals_ = locals;
-    
+
     if (!isExpandable() && noLocals)
         setText( ValueCol, locals );
-    
+
     needLocals_ = false;
     if (isOpen())
         setOpen(true);
@@ -695,16 +709,16 @@ void VarFrameRoot::setOpen(bool open)
 {
     bool localStateChange = (isOpen() != open);
     QListViewItem::setOpen(open);
-    
+
     if (localStateChange)
         ((VariableTree*)listView())->setLocalViewState(open, frameNo_, threadNo_);
-    
+
     if (!open)
         return;
-    
+
     GDBParser::getGDBParser()->parseData(this, params_.data(), false, true);
     GDBParser::getGDBParser()->parseData(this, locals_.data(), false, false);
-    
+
     locals_ = QCString();
     params_ = QCString();
 }
