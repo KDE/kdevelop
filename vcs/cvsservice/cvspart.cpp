@@ -289,7 +289,8 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
         {
             kdDebug(9006) << "Requested for an EditorContext" << endl;
             const EditorContext *editorContext = static_cast<const EditorContext*>( context );
-            m_urls << editorContext->url();
+//            m_urls << editorContext->url(); // this can't be right?
+            m_urls = editorContext->url();
         }
         // THis stuff should end up into prepareOperation()
         URLUtil::dump( m_urls );
