@@ -28,13 +28,14 @@
 <A HREF="http://www.kde.org/current.html">http://www.kde.org/current.html</A> or on the KDevelop
 homepage at 
 <A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>. KDevelop is also available on Linux distributions, such
-as SuSE 6.1.
+as SuSE 6.3.
 <P>We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
 KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
 into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
-KDoc and KDbg.
+KDoc and KDbg. All needed applications for KDE development are also packed in the KDK (KDE Development Kit) package
+available on the KDevelop homepage.
 <P>If you're experiencing problems with compiling or using KDevelop, please read the 
-<A HREF="index-14.html#Questions and Answers">Questions and Answers</A> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
+<A HREF="index-15.html#Questions and Answers">Questions and Answers</A> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
 subscribe to the KDevelop mailing list at 
 <A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A> by sending a mail with an empty header and "subscribe" as contents. Requests and problem report
 should only target the usage of the KDevelop IDE and not towards any questions that regard any implementation problem you may have
@@ -76,6 +77,7 @@ as distribution packages and thereby can be installed easily.
 <LI>ghostview or kghostview for printing preview</LI>
 <LI>glimpse 4.0 for the search index, available at 
 <A HREF="http://glimpse.cs.arizona.edu">http://glimpse.cs.arizona.edu</A></LI>
+<LI>Ht://Dig for commercial use of KDevelop due to license issues in connection with glimpse.</LI>
 <LI>sgmltools 1.0, available at 
 <A HREF="http://www.sgmltools.org">http://www.sgmltools.org</A></LI>
 <LI>KDE-SDK (<B>KDE S</B>oftware <B>D</B>evelopment <B>K</B>it), which includes KDoc, KSgml2Html, KTranslator
@@ -87,13 +89,15 @@ as distribution packages and thereby can be installed easily.
 <A HREF="http://www.kde.org">http://www.kde.org</A>)</LI>
 </UL>
 <P>KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM.
+200 MMX, 128MB RAM. User reports show successful compiling and use under OpenBSD, NetBSD, HP-UX and various other Unices such as
+UnixWare 7, mostly providing KDevelop with their distributions.
 <P>As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including a2ps and enscript as packages or
 rpm's, so you should have no problem installing the required third-party software.
 <P><B>Documentation:</B>        
 <P>For creating the KDE library documentation, you need the kdelibs package in source available on your
 system as provided by the KDE project or included with the source packages of your distribution and <B>KDoc</B> (included in the
-KDE-SDK).
+KDE-SDK). Optionally we're offering a packaged version of the KDE library documentation on our homepage as well for those users
+that have trouble generating the documentation from the KDE libs sources.
 <P>Also we're offering a C/C++ Reference on our homepage at 
 <A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>
 that is integrated into the documentation browser after it's installation. Download the package and copy the source file as
@@ -101,6 +105,9 @@ that is integrated into the documentation browser after it's installation. Downl
 documentation tree; otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
 download and describes the installation process. 
 <H3><A NAME="ss2.3">2.3 Compilation and Installation</A>
+</H3>
+
+<H3><A NAME="ss2.4">2.4 Compilation</A>
 </H3>
 
 <P>In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
@@ -115,9 +122,81 @@ download and describes the installation process.
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
+<P>Options:
+<P>The configure script allows appending a set of commandline options which can be obtained when calling configure with -help:
 <P>
+<BLOCKQUOTE><CODE>
+<PRE>
+rnolden@Nolden:~/kde_11/kdevelop > ./configure -help
+Usage: configure [options] [host]
+Options: [defaults in brackets after descriptions]
+Configuration:
+  --cache-file=FILE       cache test results in FILE
+  --help                  print this message
+  --no-create             do not create output files
+  --quiet, --silent       do not print `checking...' messages
+  --version               print the version of autoconf that created configure
+Directory and file names:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/opt/kde]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [same as prefix]
+  --bindir=DIR            user executables in DIR [EPREFIX/bin]
+  --sbindir=DIR           system admin executables in DIR [EPREFIX/sbin]
+  --libexecdir=DIR        program executables in DIR [EPREFIX/libexec]
+  --datadir=DIR           read-only architecture-independent data in DIR
+                          [PREFIX/share]
+  --sysconfdir=DIR        read-only single-machine data in DIR [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data in DIR
+                          [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data in DIR [PREFIX/var]
+  --libdir=DIR            object code libraries in DIR [EPREFIX/lib]
+  --includedir=DIR        C header files in DIR [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc in DIR [/usr/include]
+  --infodir=DIR           info documentation in DIR [PREFIX/info]
+  --mandir=DIR            man documentation in DIR [PREFIX/man]
+  --srcdir=DIR            find the sources in DIR [configure dir or ..]
+  --program-prefix=PREFIX prepend PREFIX to installed program names
+  --program-suffix=SUFFIX append SUFFIX to installed program names
+  --program-transform-name=PROGRAM
+                          run sed PROGRAM on installed program names
+Host type:
+  --build=BUILD           configure for building on BUILD [BUILD=HOST]
+  --host=HOST             configure for HOST [guessed]
+  --target=TARGET         configure for TARGET [TARGET=HOST]
+Features and packages:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --x-includes=DIR        X include files are in DIR
+  --x-libraries=DIR       X library files are in DIR
+--enable and --with options recognized:
+  --enable-debug          creates debugging code [default=no]
+  --enable-strict         compiles with strict compiler options (may not work!)
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --disable-libtool-lock  force libtool not to do file locking
+  --disable-nls           do not use Native Language Support
+  --with-extra-includes=DIR
+                          adds non standard include paths
+  --with-extra-libs=DIR   adds non standard library paths
+  --with-qt-dir=DIR       where the root of Qt is installed
+  --with-qt-includes=DIR  where the Qt includes are.
+  --with-qt-libraries=DIR where the Qt library is installed.
+  --disable-path-check    don't try to find out, where to install
+  --disable-rpath         do not use the rpath feature of ld
+  --with-qtdoc-dir=DIR     where the Qt documentation is installed
+  --with-kdelibsdoc-dir=DIR   where the kdelibs documentation is installed
+  --with-kdocindex-dir=DIR    where the kdoc index files are
+  --enable-docbase        enable Debian docbase support
+  --enable-kdoc2        enable kdoc2 support
+</PRE>
+</CODE></BLOCKQUOTE>
+
+You can append any of these options before calling make to build KDevelop. Ususally none of these are required for a normal install.
 <P>
-<P>Since KDevelop uses <CODE>autoconf</CODE> you should have not trouble compiling it.
 <P>In order to compile the KDevelop CVS snapshot, type the following :
 <BLOCKQUOTE><CODE>
 <PRE>
@@ -130,9 +209,11 @@ download and describes the installation process.
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
+<P>Mind that KDevelop is present in the KDE CVS in two versions, one in the HEAD branch currently under heavy development for KDE 2 and
+the current KDE 1.x version available with the -r KDEVELOP_1_0 tag.
 <P>If your system's make-command is <CODE>gmake</CODE>, type <CODE>gmake</CODE> instead of <CODE>make</CODE>.
 <P>
-<H3><A NAME="ss2.4">2.4 Starting KDevelop</A>
+<H3><A NAME="ss2.5">2.5 Starting KDevelop</A>
 </H3>
 
 <P>If you use KDE as your window manager, KDevelop can be started by choosing
@@ -166,7 +247,7 @@ any time either by entering
 </CODE></BLOCKQUOTE>
 <P>or, when using KDE, by choosing "K"-&gt;"Applications"-&gt;"KDevelop"-&gt;"Setup".
 <P>
-<H3><A NAME="The Installation Program"></A> <A NAME="ss2.5">2.5 The Installation Program</A>
+<H3><A NAME="The Installation Program"></A> <A NAME="ss2.6">2.6 The Installation Program</A>
 </H3>
 
 <P>KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
@@ -193,9 +274,10 @@ setup again.
 </LI>
 <LI> Checking for KDbg, KIconEdit and KTranslator.  We encourage you to install those programs as they are good
 helpers for creating complete KDE-applications. Note that KDbg is used directly for debugging your current project within
-KDevelop; KIconEdit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconEdit and KTranslator
-are then configured to be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the
-Tools-menu by selecting "Tools..." in the Options menu later.
+KDevelop but not required as KDevelop comes along with an integrated debugger frontend; KIconEdit is used to display and edit
+pixmaps selected in the file-viewer trees. The programs KDbg, KIconEdit and KTranslator are then configured to
+be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the Tools-menu by
+selecting "Tools..." in the Options menu later.
 </LI>
 <LI> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
@@ -241,7 +323,7 @@ can select the directories and add them to the indexing process as well.
 </LI>
 <LI> If all installation steps were done correctly,  a final message states that KDevelop will be started
 after pressing OK. Mind that you can set up additional options like auto saving in the
-<A HREF="index-13.html#General Configuration">KDevelop Setup</A> dialog that can be accessed through the options menu.</LI>
+<A HREF="index-14.html#General Configuration">KDevelop Setup</A> dialog that can be accessed through the options menu.</LI>
 </OL>
 <P><B>Cancel:</B>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
 to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
