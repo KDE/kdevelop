@@ -22,7 +22,6 @@
 #include "ast.h"
 #include "ast_utils.h"
 #include "realtime_classbrowser.h"
-#include "addclassattributedlg.h"
 #include "cppnewclassdlg.h"
 #include "cppcodecompletion.h"
 #include "ccconfigwidget.h"
