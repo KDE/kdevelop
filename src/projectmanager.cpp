@@ -193,6 +193,7 @@ bool ProjectManager::loadProject(const KURL &url)
   loadLocalParts();
 
   Core::getInstance()->doEmitProjectOpened();
+
   ProjectWorkspace::restore();
 
   m_openRecentProjectAction->addURL(KURL(projectFile()));
@@ -216,6 +217,8 @@ bool ProjectManager::closeProject()
 
   Core::getInstance()->doEmitProjectClosed();
 
+  TopLevel::getInstance()->prepareToCloseViews();
+  
   unloadLocalParts();
   unloadLanguageSupport();
   unloadProjectPart();

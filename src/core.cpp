@@ -53,8 +53,6 @@ void Core::slotQuit()
   config->setGroup("General Options");
   config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile());
 
-  TopLevel::getInstance()->prepareToClose();
-  
   if ( ProjectManager::getInstance()->projectLoaded() )
     if ( !ProjectManager::getInstance()->closeProject() )
       return;

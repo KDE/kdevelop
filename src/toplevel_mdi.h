@@ -47,7 +47,7 @@ public:
 
   void init();
 
-  void prepareToClose();
+  void prepareToCloseViews();
   void realClose();
 
   /** Reimplemented from QextMdiChildView to handle save prompt */
@@ -111,6 +111,7 @@ private slots:
   void slotShowMenuBar();
   void slotNewToolbarConfig();
   void slotConfigureToolbars();
+  void slotReactToProjectOpened();
   
 private:
   

@@ -253,7 +253,7 @@ bool TopLevelMDI::queryClose()
 }
 
 
-void TopLevelMDI::prepareToClose()
+void TopLevelMDI::prepareToCloseViews()
 {
   writeDockConfig();
 }
@@ -290,6 +290,8 @@ void TopLevelMDI::createFramework()
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(createGUI(KParts::Part*)));
+  connect( Core::getInstance(), SIGNAL(projectOpened()),
+           this, SLOT(slotReactToProjectOpened()) );
 
   setMenuForSDIModeSysButtons(menuBar());
 }
@@ -528,13 +530,13 @@ void TopLevelMDI::setViewAvailable(QWidget *pView, bool bEnabled)
 
 void TopLevelMDI::removeView(QWidget *view)
 {
-  if (!view)
+  if (!view) {
     return;
+  }
 
   QextMdiChildView *wrapper = m_widgetMap[view];
 
-  if (wrapper)
-  {
+  if (wrapper) {
     removeWindowFromMdi(wrapper);
 
     m_selectViews.remove(wrapper);
@@ -544,20 +546,21 @@ void TopLevelMDI::removeView(QWidget *view)
     m_widgetMap.remove(view);
     m_childViewMap.remove(wrapper);
 
-    // Find the KDockWidget which covers the QextMdiChildView to remove.
-    // Undock the KDockWidget if there is one.
-    // This will remove the corresponding tab from the output and tree views.
-    KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
-    if (pDock)
-    {
-      pDock->undock();
-    }
-
     // Note: this reparenting is necessary. Otherwise, the view gets
     // deleted twice: once when the wrapper is deleted, and the second
     // time when the part is deleted.
     view->reparent(this, QPoint(0,0), false);
 
+    // Find the KDockWidget which covers the QextMdiChildView to remove and delete.
+    // Undock the KDockWidget if there is one.
+    // This will remove the corresponding tab from the output and tree views.
+    KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
+    if (pDock) {
+      pDock->undock();
+      delete pDock;
+    }
+
+    // QextMDI removes and deletes the wrapper widget
     closeWindow(wrapper);
   }
 }
@@ -597,7 +600,6 @@ void TopLevelMDI::loadSettings()
 {
   ProjectManager::getInstance()->loadSettings();
   loadMDISettings();
-  readDockConfig();
   applyMainWindowSettings(kapp->config(), "Mainwindow");
 }
 
@@ -1116,20 +1118,38 @@ KParts::ReadOnlyPart * TopLevelMDI::getPartFromWidget(const QWidget * pWidget) c
   return (0L);
 }
 
-void TopLevelMDI::switchToToplevelMode(void)
+void TopLevelMDI::switchToToplevelMode()
 {
   saveMDISettings();
   QextMdiMainFrm::switchToToplevelMode();
 }
 
-void TopLevelMDI::switchToChildframeMode(void)
+void TopLevelMDI::switchToChildframeMode()
 {
   saveMDISettings();
   QextMdiMainFrm::switchToChildframeMode();
 }
-void TopLevelMDI::switchToTabPageMode(void)
+
+void TopLevelMDI::switchToTabPageMode()
 {
   saveMDISettings();
   QextMdiMainFrm::switchToTabPageMode();
 }
+
+void TopLevelMDI::slotReactToProjectOpened()
+{
+  readDockConfig();
+
+  // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
+  // We must hide the unavailable views again because they are somehow shown again here
+  // (unfortunately, we can't avoid the flickering which is a result of that show()-hide() calling)
+  QPtrListIterator<QextMdiChildView> it(m_unavailableViews);
+  for (; it.current(); ++it) {
+    KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(*it);
+    if (pWrappingDockWidget) {
+      pWrappingDockWidget->hide();
+    }
+  }
+}
+
 #include "toplevel_mdi.moc"

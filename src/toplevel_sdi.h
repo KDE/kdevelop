@@ -42,7 +42,7 @@ public:
 
   void init();
 
-  void prepareToClose();
+  void prepareToCloseViews();
   void realClose();
 
 signals:

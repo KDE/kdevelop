@@ -127,7 +127,7 @@ bool TopLevelSDI::queryClose()
 }
 
 
-void TopLevelSDI::prepareToClose()
+void TopLevelSDI::prepareToCloseViews()
 {
   // seems there's nothing to do here
 }

@@ -408,7 +408,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       }
       if (pTargetDock)
          pCover->manualDock( pTargetDock, pos, percent);
-      pCover->show();
+//check      pCover->show();
    }
 }
 

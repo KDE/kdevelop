@@ -1,3 +1,7 @@
+2002-11-26 F@lk Brettschneider <falk@kdevelop.org>
+    * bugfixes in TopLevelMDI; Remove the docking section from gideonrc!
+      Then the state of tool-views should be properly restored when starting
+    
 2002-11-24 Harald Fernengel <harry@kdevelop.org>
     * Added QRegExp and KRegExp to RegExpTester
 
