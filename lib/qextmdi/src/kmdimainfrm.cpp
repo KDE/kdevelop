@@ -1005,6 +1005,9 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KMdiDockWidget>* pRootDockWidgetL
    const int windowTitleHeight = 10; // @todo:    -"-
 
    QObjectList* pObjList = queryList( "KDockWidget");
+   if (pObjList->isEmpty()) {
+      pObjList = queryList( "KDockWidget_Compat::KDockWidget");
+   }
    QObjectListIt it( *pObjList);
    QObject* pObj;
    // for all dockwidgets (which are children of this mainwindow)
@@ -1016,7 +1019,7 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KMdiDockWidget>* pRootDockWidgetL
       QWidget* pW = pDockW;
       // find the oldest ancestor of the current dockwidget that can be undocked
       while (!pW->isTopLevel()) {
-         if (pW->inherits("KDockWidget")) {
+         if (pW->inherits("KDockWidget") || pW->inherits("KDockWidget_Compat::KDockWidget")) {
             pUndockCandidate = (KDockWidget*) pW;
             if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
                pRootDockW = pUndockCandidate;
