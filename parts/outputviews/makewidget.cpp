@@ -629,45 +629,40 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         fn = info.absFilePath();
         kdDebug(9004) << "Path: " << fn << endl;
         items.append(new MakeItem(parags, fn, row, text));
-	insertLine2(line, Error);
+	type = Error;
     }
-    else if (m_bShortCompilerOutput && m_compileFile1.search(line) != -1) {
-	QString tool;
-	if (!line.startsWith("g++")) { tool = "(libtool)"; }
-	insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile1.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+    else if (m_bShortCompilerOutput) {
+	if (m_compileFile1.search(line) != -1) {
+	    QString tool;
+	    if (!line.startsWith("g++")) { tool = "(libtool)"; }
+	    insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile1.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	}
+	else if (m_compileFile3.search(line) != -1) {
+	    int i = line.findRev(" ");
+	    QString filename = line.right(line.length()-i);
+	    QString tool;
+	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	    insertLine2(i18n("compiling <b>%1</b> %2").arg(filename).arg(tool), StyledDiagnostic);
+	}
+	else if (m_compileFile2.search(line) != -1) {
+	    QString tool;
+	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	    insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile2.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	}
+	else if (m_mocFile.search(line) != -1) {
+	    insertLine2(i18n("generating <b>%1</b> (moc)").arg(m_mocFile.cap(m_fileNameGroup)), StyledDiagnostic);
+	}
+	else if (m_linkFile.search(line) != -1) {
+	    QString tool;
+	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	    insertLine2(i18n("linking <b>%1</b> %2").arg(m_linkFile.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	}
+	else if (m_installFile.search(line) != -1) {
+	    insertLine2(i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup)), StyledDiagnostic);
+	}
 	return;
     }
-    else if (m_bShortCompilerOutput && m_compileFile3.search(line) != -1) {
-	int i = line.findRev(" ");
-	QString filename = line.right(line.length()-i);
-	QString tool;
-	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(i18n("compiling <b>%1</b> %2").arg(filename).arg(tool), StyledDiagnostic);
-	return;
-    }
-    else if (m_bShortCompilerOutput && m_compileFile2.search(line) != -1) {
-	QString tool;
-	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile2.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
-	return;
-    }
-    else if (m_bShortCompilerOutput && m_mocFile.search(line) != -1) {
-	insertLine2(i18n("generating <b>%1</b> (moc)").arg(m_mocFile.cap(m_fileNameGroup)), StyledDiagnostic);
-	return;
-    }
-   else if (m_bShortCompilerOutput && m_linkFile.search(line) != -1) {
-	QString tool;
-	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(i18n("linking <b>%1</b> %2").arg(m_linkFile.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
-	return;
-    }
-    else if (m_bShortCompilerOutput && m_installFile.search(line) != -1) {
-	insertLine2(i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup)), StyledDiagnostic);
-	return;
-    }
-    else {
-	insertLine2(line, type);
-    }
+    insertLine2(line, type);
 }
 
 void MakeWidget::paletteChange(const QPalette& /*oldPalette*/)
