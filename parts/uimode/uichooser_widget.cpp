@@ -69,8 +69,6 @@ void UIChooserWidget::save()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  config->writeEntry("MajorUIMode", "QextMDI");
-
   if (modeTab->isChecked())
     config->writeEntry("MDIMode", KMdi::TabPageMode);
   else if (modeToplevel->isChecked())
