@@ -174,7 +174,9 @@ void NewMainWindow::init() {
 	
 	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
-	   
+	
+	Core::getInstance()->loadLicenses();
+	
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
 	if ( tabWidget() )
 	{
