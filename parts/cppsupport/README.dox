@@ -1,0 +1,31 @@
+/** class CppSupportPart
+Provides C/C++ language support for KDevelop.
+
+Well the first thing you should read is lib/catalog it contains the source of the persistant class store
+after that parts/cppsupport/tag_creator.*
+it is the component that stores the informations collected by the c++ parser into the PCS
+then you can play with KDevPCSImporter the code of the dialog is in parts/cppsupport/createpcsdialog* and plugins/pcsimporter/*
+and of course lib/interfaces/kdevpcsimporter.*
+and if you want play with the c++ parser go to lib/cppparser/, the best is to start to read driver.*
+
+
+\authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
+
+\maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
+
+\feature supports C/C++ language
+\feature Feature Nr. 2
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cppsupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug Bug number 2
+
+\note
+Add notes here
+\verbatim
+Put verbatin code here if you need
+\endverbatim
+
+\faq <b>How does this work</b> I have no clue. Ask roberto! :)
+\faq <b>How does r++ work</b> I have no clue. Ask roberto! :)
+
+*/
