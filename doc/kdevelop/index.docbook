@@ -225,7 +225,7 @@ Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protoc
 There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly. Yet it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
 </para>
 <para>
-For more information, see <citetitle>The DCOP Desktop COmmunication Protocol library</citetitle> API reference of the &kde; dcop library.
+For more information, see <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html"><citetitle>The DCOP Desktop COmmunication Protocol library</citetitle></ulink> API reference of the &kde; dcop library.
 </para>
 </sect1> <!--  unixdev-dcop -->
 
@@ -843,7 +843,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 </para>
 
 <sect1 id="uimodes-overview">
-<title>Availabe user interface modes</title>
+<title>Available user interface modes</title>
 
 <para>
 &kdevelop; offers developers four separate user interface modes (click on the mode name to view an example):
@@ -1321,7 +1321,7 @@ Initially there is <quote>None</quote> selected in the <guilabel>Version control
 <formalpara>
 <title>Using CVS</title>
 <para>
-Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. Currently only <quote>&cvs;</quote> is availabe. If you select this, the &appwizard; will redisplay the page, now showing a series of fields you must fill in.
+Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. Currently only <quote>&cvs;</quote> is available. If you select this, the &appwizard; will redisplay the page, now showing a series of fields you must fill in.
 </para>
 </formalpara>
 
