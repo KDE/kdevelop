@@ -71,9 +71,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     m_appsInfo.setAutoDelete(true);
     m_tempFiles.setAutoDelete(true);
 
-    KConfig *gConfig = kapp->config();
-    gConfig->setGroup("General Options");
-    QString defaultProjectsDir = gConfig->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
