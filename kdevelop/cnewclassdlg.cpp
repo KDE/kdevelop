@@ -122,7 +122,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                 "after the class is created.")));
 	
   inher_group = new QButtonGroup( this, "inher_group" );
-  inher_group->setTitle( i18n("Inheritence") );
+  inher_group->setTitle( i18n("Inheritance") );
   main_layout->addWidget( inher_group, 1, 1 );
 
   layout = new QVBoxLayout( inher_group, LAYOUT_BORDER );
