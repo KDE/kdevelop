@@ -35,7 +35,7 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) :
 {
     resize(250,120);
     setCaption(i18n("Search for Help on..."));
-    setIcon(SmallIcon("contents"));
+    setIcon(SmallIcon("filefind"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
     QHBoxLayout *hl = new QHBoxLayout( 15 );

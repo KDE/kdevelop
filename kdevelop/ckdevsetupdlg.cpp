@@ -471,7 +471,8 @@ void CKDevSetupDlg::addDebuggerTab()
   bool dbgFloatingToolbar   = config->readBoolEntry("Enable floating toolbar", false);
   bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
-  debuggerPage = addPage(i18n("Debugger"));
+  QFrame* debuggerPage = addPage(i18n("Debugger"),i18n("Debugger Settings"),
+		KGlobal::instance()->iconLoader()->loadIcon( "debugger", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(debuggerPage,3,1,15,7);
   dbgExternalCheck = new QCheckBox( debuggerPage, "dbgExternal" );
   grid->addWidget(dbgExternalCheck,0,0);
