@@ -43,6 +43,7 @@
 #include "kdevproject.h"
 
 #include "urlfileutilities.h"
+#include "cvsentry.h"
 #include "cvspart.h"
 #include "cvswidget.h"
 #include "cvs_commonoptions.h"
@@ -63,6 +64,8 @@ struct CvsPart::Private
 {
 	Private( CvsPart *part ) : invokedFromMenu( true ),
 		proc( 0 ),
+		actionCommit( 0 ), actionDiff( 0 ),	actionLog( 0 ),	actionAdd( 0 ),	actionRemove( 0 ),
+		actionUpdate( 0 ), actionReplace( 0 ),
 		owner( part )
 	{}
 
@@ -259,7 +262,8 @@ bool CvsPart::Private::isRegisteredInRepository()
 	// That is: <slash><filename><slash>...
 	// So we just properly "escape" the filename so that "Makefile" does not
 	// match with "Makefile.am" ;-)
-	QString whatToSearch = "/" + pathUrl.fileName() + "/";
+//	QString whatToSearch = "/" + pathUrl.fileName() + "/";
+//	QString whatToSearch = pathUrl.fileName();
 
 	kdDebug(9000) << "===> pathUrl.path()      = " << pathUrl.path() << endl;
 	kdDebug(9000) << "===> dirName             = " << dirName << endl;
@@ -271,12 +275,16 @@ bool CvsPart::Private::isRegisteredInRepository()
 	if (f.open( IO_ReadOnly ))
 	{
 		QTextStream t( &f );
-		QString s;
-		while (!t.eof() && !found)
+//		QString s;
+		CvsEntry cvsEntry;
+//		while (!t.eof() && !found)
+		while (cvsEntry.read( t ) && !found)
 		{
-			s = t.readLine();
-			kdDebug(9000) << "===> Analyzing line: " << s << endl;
-			if (s.find( whatToSearch ) > -1)
+//			s = t.readLine();
+//			kdDebug(9000) << "===> Analyzing line: " << s << endl;
+
+//			if (s.find( whatToSearch ) > -1)
+			if (cvsEntry.fileName == pathUrl.fileName())
 			{
 				kdDebug(9000) << "===> Wow!! *** Found it!!! *** " << endl;
 				found = true;
@@ -330,8 +338,8 @@ void CvsPart::Private::diffFinished( const QString& diff, const QString& err )
 // class CvsPart
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsPart::CvsPart( QObject *parent, const char *fileName, const QStringList & )
-	: KDevVersionControl( "CVS", "cvs", parent, fileName ? fileName : "CvsPart" ),
+CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
+	: KDevVersionControl( "KDevCvsPart", "kdevcvspart", parent, name ? name : "CVS" ),
 	d( new Private(this) )
 {
 	setInstance( CvsFactory::instance() );
@@ -348,7 +356,7 @@ CvsPart::CvsPart( QObject *parent, const char *fileName, const QStringList & )
 		this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
 	d->m_widget = new CvsWidget( this );
-	mainWindow()->embedOutputView( d->m_widget, i18n("CVS"), i18n("cvs output") );
+	mainWindow()->embedOutputView( d->m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
