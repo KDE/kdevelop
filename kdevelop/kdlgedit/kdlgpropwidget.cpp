@@ -34,6 +34,82 @@
 #include "defines.h"
 
 
+struct PropHelp
+{
+  QString type;
+  QString name;
+  QString help;
+};
+
+PropHelp PropHelps[100];
+
+void setPropHelp(int nr, QString type, QString name, QString help)
+{
+  PropHelps[nr].type = type;
+  PropHelps[nr].name = name;
+  PropHelps[nr].help = help;
+}
+
+void fillHelps()
+{
+  int nr = 0;
+  setPropHelp(nr++, "",                "General",         i18n("<i>Group</i>\n\nThis group contains general properties like <i>Name</i>or <i>Text</i>."));
+  setPropHelp(nr++, "",                "Geometry",        i18n("<i>Group</i>\n\nThis group contains properties having to do with the placement of the item like <i>Width</i>or <i>Height</i>."));
+  setPropHelp(nr++, "",                "Appearance",      i18n("<i>Group</i>\n\nThis group contains properties having to do with how the item will appear in the dialog.\n\n<i>Pixmap</i>is an example for such an appearance property."));
+  setPropHelp(nr++, "",                "C++ Code",        i18n("<i>Group</i>\n\nThis group is a special one. It contains properties which do not effect on the item in the dialog editor but in the running program.\n\nThat means if you change them you will not see any difference in the editor but there can be a big difference in the running program.\n\n<i>Connections</i>might be a pretty good example."));
+
+  setPropHelp(nr++, "",                "Name",            i18n("<i>Class : Any</i>\n\nHelps to identify an dialog item i.e. for runtime loaded dialogs. In addition, if the constructor of the destination class has a \"name\" argument it is set to this value."));
+  setPropHelp(nr++, "",                "IsHidden",        i18n("<i>Class : Any</i>\n\nIf this property is set to <i>true</i>the item will not be visible in the editor and in the program.") );
+  setPropHelp(nr++, "",                "IsEnabled",       i18n("<i>Class : Any</i>\n\nIf disabled (=<i>false</i>) the widget will not handle user events (i.e. mouse or keyboard events).") );
+
+  setPropHelp(nr++, "",                "VarName",         i18n("<i>Class : Any</i>\n\nUsed for generating sources. Defines the variable later containing the items' pointer.") );
+  setPropHelp(nr++, "",                "Connections",     i18n("<i>Class : Any</i>\n\nDefines the <i>SIGNAL/SLOT</i>connections for this item. (Only has effects in programs, not in this editor)") );
+  setPropHelp(nr++, "",                "ResizeToParent",  i18n("<i>Class : Any</i>\n\nIs <i>true</i>this item will fill out the whole of his parent window. (Only has effects in programs, not in this editor)") );
+  setPropHelp(nr++, "",                "AcceptsDrops",    i18n("<i>Class : Any</i>\n\nIf enabled (=<i>true</i>) the widget will accept drops from the drag&drop mechanism. (Only has effects in programs, not in this editor)") );
+  setPropHelp(nr++, "",                "HasFocus",        i18n("<i>Class : Any</i>\n\nIf <i>true</i>and if it is the only widget whose \'HasFocus\' property is enabled it will have the focus by default.\n\n<b><u>Note</u></b>: Only one widget can have focus at the same time. So do <i>not</i>enable this property for more than one dialog item !") );
+  setPropHelp(nr++, "",                "FocusProxy",      i18n("<i>Class : Any</i>\n\nIf you enter a widgets' variable name here it will be the focus proxy for this item (which means, if the widget you´ve entered gets the focus it transfers it to this widget)") );
+
+  setPropHelp(nr++, "",                "X",               i18n("<i>Class : Any</i>\n\nThe X coordinate of the widget relative to its parent widget.") );
+  setPropHelp(nr++, "",                "Y",               i18n("<i>Class : Any</i>\n\nThe Y coordinate of the widget relative to its parent widget.") );
+  setPropHelp(nr++, "",                "Width",           i18n("<i>Class : Any</i>\n\nThe width of the widget.") );
+  setPropHelp(nr++, "",                "Height",          i18n("<i>Class : Any</i>\n\nThe height of the widget.") );
+  setPropHelp(nr++, "",                "MinWidth",        i18n("<i>Class : Any</i>\n\nDefines the minimum width of the widget. The widget than cannot become smaller than this value.") );
+  setPropHelp(nr++, "",                "MinHeight",       i18n("<i>Class : Any</i>\n\nDefines the minimum height of the widget. The widget than cannot become smaller than this value.") );
+  setPropHelp(nr++, "",                "MaxWidth",        i18n("<i>Class : Any</i>\n\nDefines the maximum width of the widget. The widget than cannot become larger than this value.") );
+  setPropHelp(nr++, "",                "MaxHeight",       i18n("<i>Class : Any</i>\n\nDefines the maximum height of the widget. The widget than cannot become larger than this value.") );
+  setPropHelp(nr++, "",                "IsFixedSize",     i18n("<i>Class : Any</i>\n\nIf <i>true</i>the widget size cannot be changed.") );
+  setPropHelp(nr++, "",                "SizeIncX",        i18n("<i>Class : Any</i>\n\nSets in how many pixel steps the item should be resized.") );
+  setPropHelp(nr++, "",                "SizeIncY",        i18n("<i>Class : Any</i>\n\nSets in how many pixel steps the item should be resized.") );
+
+  setPropHelp(nr++, "",                "BgMode",          i18n("<i>Class : Any</i>\n\nThe background mode of the widget.") );
+  setPropHelp(nr++, "",                "BgColor",         i18n("<i>Class : Any</i>\n\nThe background color of the widget. Overrides the BgMode property.") );
+  setPropHelp(nr++, "",                "BgPalColor",      i18n("<i>Class : Any</i>\n\nThe (background) palette color. This more recent method for BgColor also changes the frames etc.") );
+  setPropHelp(nr++, "",                "BgPixmap",        i18n("<i>Class : Any</i>\n\nSpecifies the file which should be used as background pixmap. Note that not all widgets run correctly with background images. (i.e. the QLineEdit)") );
+  setPropHelp(nr++, "",                "MaskBitmap",      i18n("<i>Class : Any</i>\n\nSpecifies the file which should be used as mask bitmap. Note that this operation can be pretty slow.") );
+  setPropHelp(nr++, "",                "Font",            i18n("<i>Class : Any</i>\n\nSets the font which should be used for drawing text in the widget.") );
+  setPropHelp(nr++, "",                "Cursor",          i18n("<i>Class : Any</i>\n\nSets the cursor which should appear when moving the mouse pointer over the widget.") );
+
+  setPropHelp(nr++, "QPushButton",     "Text",            i18n("<i>Class : QPushButton</i>\n\nThe text which will appear on the button.") );
+  setPropHelp(nr++, "QPushButton",     "isDefault",       i18n("<i>Class : QPushButton</i>\n\nWhen enabled, the button will be the default button. That means if the user presses return this button will receive the clicked() signal. Note that only one button can be the default button and that this value is only valid in dialogs.") );
+  setPropHelp(nr++, "QPushButton",     "isAutoDefault",   i18n("<i>Class : QPushButton</i>\n\nWhen enabled, the button will be an auto default button. An auto-default button becomes the default push button automatically when it receives the keyboard input focus.") );
+  setPropHelp(nr++, "QPushButton",     "isToggleButton",  i18n("<i>Class : QPushButton</i>\n\nWhen enabled, the button keeps pressed until it is pressed again.") );
+  setPropHelp(nr++, "QPushButton",     "isToggledOn",     i18n("<i>Class : QPushButton</i>\n\nWhen enabled, and isToggleButton is also enabled the button will be toggled down by default.") );
+  setPropHelp(nr++, "QPushButton",     "isMenuButton",    i18n("<i>Class : QPushButton</i>\n\nTells this button to draw a menu indication triangle if enabled, and to not draw one if disabled.") );
+  setPropHelp(nr++, "QPushButton",     "isAutoResize",    i18n("<i>Class : QPushButton</i>\n\nWhen enabled, the button will resize itself whenever the contents change.") );
+  setPropHelp(nr++, "QPushButton",     "isAutoRepeat",    i18n("<i>Class : QPushButton</i>\n\nWhen enabled, the clicked() signal is emitted at regular intervals while the buttons is down. Note that this property does not have any effect if isToggleButton is enabled.") );
+  setPropHelp(nr++, "QPushButton",     "Pixmap",          i18n("<i>Class : QPushButton</i>\n\nThe pixmap which will appear on the button. Leave it empty if you don't want a pixmap on the button.") );
+
+  setPropHelp(nr++, "QLineEdit",       "Text",            i18n("<i>Class : QLineEdit</i>\n\nThis text is set to the lineedit after it is created.") );
+  setPropHelp(nr++, "QLineEdit",       "hasFrame",        i18n("<i>Class : QLineEdit</i>\n\nSets the singleline editor to draw itself inside a two-pixel frame if enabled, otherwise to draw itself without any frame.") );
+  setPropHelp(nr++, "QLineEdit",       "MaxLength",       i18n("<i>Class : QLineEdit</i>\n\nSets the maximum length of the text in the editor.") );
+  setPropHelp(nr++, "QLineEdit",       "CursorPositon",   i18n("<i>Class : QLineEdit</i>\n\nSet the cursor position for this line edit.") );
+  setPropHelp(nr++, "QLineEdit",       "isTextSelected",  i18n("<i>Class : QLineEdit</i>\n\nWhen enabled the text is initially selected.") );
+
+  setPropHelp(nr, QString(),QString(),QString());
+}
+
+
+
 bool isValueTrue(QString val)
 {
   QString v(val.upper());
@@ -74,36 +150,125 @@ void AdvListView::mousePressEvent ( QMouseEvent *e )
     {
       QPopupMenu *phelp = new QPopupMenu;
       phelp->insertItem( i18n("&Help"), this, SLOT(help()) );
-      QPoint p(mapFromGlobal (QCursor::pos()));
-      p.setY(p.y()-header()->height());
-      p.setX(0);
-      if (itemAt(p))
-        phelp->exec(QCursor::pos());
+//      QPoint p(viewport()->mapFromGlobal (QCursor::pos()));
+    //  QPoint p(QCursor::pos()); //mapFromGlobal (QCursor::pos()));
+//      p.setY(p.y()-header()->height());
+//      p.setX(0);
+//      if (itemAt(p))
+//        phelp->exec(QCursor::pos());
+//      return;
+help();
     }
   else
     {
       updateWidgets();
     }
 }
+#include <kquickhelp.h>
+
+void AdvListView::linkclicked(QString str)
+{
+  if (str.upper() == "KDEV")
+    pCKDevel->slotHelpContents();
+  if (str.upper() == "KDECORE")
+    pCKDevel->slotHelpKDECoreLib();
+  if (str.upper() == "KDEUI")
+    pCKDevel->slotHelpKDEGUILib();
+  if (str.upper() == "KDEKFILELIB")
+    pCKDevel->slotHelpKDEKFileLib();
+  if (str.upper() == "KDEHTML")
+    pCKDevel->slotHelpKDEHTMLLib();
+  if (str.upper() == "QT")
+    pCKDevel->slotHelpQtLib();
+  if (str.upper() == "C")
+    pCKDevel->slotHelpReference();
+  if (str.upper() == "ABOUT")
+    pCKDevel->slotHelpAbout();
+  if (str.upper() == "HOMEPAGE")
+    pCKDevel->slotHelpHomepage();
+  if (str.upper() == "MANUAL")
+    pCKDevel->slotHelpManual();
+  if (str.upper() == "KDEWEB")
+    {
+      // lets give this URL to kfm, he knows better what
+      // to do with it
+      if(vfork() > 0) {
+	// drop setuid, setgid
+	setgid(getgid());
+	setuid(getuid());
+	
+	execlp("kfmclient", "kfmclient", "exec", QString("http://www.kde.org").data(), 0);
+	_exit(0);
+      }
+    }
+
+}
 
 void AdvListView::help()
 {
-  QPoint p(mapFromGlobal (QCursor::pos()));
-  p.setY(p.y()-header()->height());
-  p.setX(0);
+  QPoint p(viewport()->mapFromGlobal (QCursor::pos()));
+//  p.setY(p.y()-header()->height());
+//  p.setX(0);
   AdvListViewItem *it = (AdvListViewItem*)itemAt(p);
   if (it)
     {
       KDlgItem_Base *bi = pCKDevel->kdlg_get_edit_widget()->selectedWidget();
-      QString helptext = i18n("Sorry, there is no help available for this property.");
+      QString st = i18n("Sorry, there is no help available for this property.");
       if (bi)
         {
-          QString str(bi->getProps()->getHelp( it->text(0) ));
-          if (str.length()!=0)
-            helptext = str;
+          PropHelp *pph = &PropHelps[0];
+          int a = 0;
+          while (!pph->name.isNull())
+            {
+              if (pph->name.upper() == QString(it->text(0)).upper())
+                {
+                  if ((pph->type.isEmpty()) || (pph->type.upper() == bi->itemClass().upper()))
+                    {
+                      st = pph->help;
+                      break;
+                    }
+                }
+              pph = &PropHelps[++a];
+            }
+
         }
 
-      QMessageBox::information( this, it->text(0), helptext);
+      st = st + i18n("\n\n<i><->See also: <link kdev>KDevelop Manual</link>, <link qt>Qt API</link>, <link kdeui>KDE User Interfaces</link>, <link KDEWEB>KDE Website</link><+></i>");
+
+      QString helptext = "";
+      QString lastword = "";
+      int linelen = 0;
+      int i;
+      int istag = 0;
+      for (i=0; i<=(signed)st.length(); i++)
+        {
+          QString ch = st.mid(i,1);
+          if (istag==0)
+            linelen++;
+          lastword = lastword+ch;
+          if (ch == "<")
+            istag++;
+          if (ch == ">")
+            istag--;
+          if (ch == " ")
+            {
+              helptext = helptext + lastword;
+              lastword = "";
+            }
+          if ((linelen>40) && ((lastword.length()<40) && (ch != " ")))
+            {
+              linelen = 0;
+              helptext = helptext+"\n";
+            }
+          if (ch == "\n")
+            linelen = 0;
+        }
+
+      helptext = helptext + lastword;
+
+      KQuickHelpWindow *qhw = new KQuickHelpWindow();
+      connect(qhw, SIGNAL(hyperlink(QString)), SLOT(linkclicked(QString)));
+      qhw->popup(QString("<b><brown>")+it->text(0)+QString("</b><black>\n\n") + helptext, QCursor::pos().x(),QCursor::pos().y());
     }
 }
 
@@ -486,6 +651,8 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
 
 KDlgPropWidget::KDlgPropWidget(CKDevelop* parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
+  fillHelps();
+
   pCKDevel = parCKD;
   lv = new AdvListView(parCKD, this);
   lv->addColumn(i18n("Property"));
@@ -509,6 +676,9 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   int grpsCnt = 0;
   int numGrp;
 
+  KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
+
+  QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
 
   KDlgPropertyEntry *prop;
   int i,n;
@@ -529,7 +699,10 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           numGrp = grpsCnt++;
           grps[numGrp] = prop->group;
           if (grps[numGrp].length()!=0)
-            grpLvis[numGrp] = new AdvListViewItem(lv,grps[numGrp],"");
+            {
+              grpLvis[numGrp] = new AdvListViewItem(lv,grps[numGrp],"");
+              grpLvis[numGrp]->setPixmap(0,folder_pix);
+            }
           else
             continue;
         }
@@ -612,7 +785,7 @@ void AdvLvi_Base::refreshItem()
 {
   KDlgItem_Base *selit = pCKDevel->kdlg_get_edit_widget()->selectedWidget();
   if (selit)
-    selit->repaintItem(selit->getItem());
+    ((KDlgItem_Widget*)selit)->repaintItem((QFrame*)selit->getItem());
 
   if (propEntry->name.upper() == "NAME")
     pCKDevel->kdlg_get_items_view()->refreshList();
@@ -663,7 +836,9 @@ AdvLvi_Int::AdvLvi_Int(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dp
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 
   up = new QPushButton("",this);
+  up->setAutoRepeat(true);
   down = new QPushButton("",this);
+  down->setAutoRepeat(true);
   connect(up, SIGNAL(clicked()), SLOT(valInc()));
   connect(down, SIGNAL(clicked()), SLOT(valDec()));
 }

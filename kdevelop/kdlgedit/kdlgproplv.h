@@ -95,6 +95,7 @@ class AdvListView : public QListView
     CKDevelop *pCKDevel;
   public slots:
     void help();
+    void linkclicked(QString);
 };
 
 

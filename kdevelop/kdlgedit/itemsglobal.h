@@ -182,8 +182,8 @@ class KDlgPropertyBase
     /**
      * sets all entries of a propertyentry in one step.
     */
-    void setProp(int nr, QString name, QString value, QString group, int allowed, QString help = QString())
-       { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; helps[nr] = help; }
+    void setProp(int nr, QString name, QString value, QString group, int allowed)
+       { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; }
 
     void setProp_Name   (int nr, QString name)  { testIfNrIsValid(nr); props[nr].name = name; }
     void setProp_Value  (int nr, QString value) { testIfNrIsValid(nr); props[nr].value = value; }
@@ -202,8 +202,8 @@ class KDlgPropertyBase
     /**
      * Adds a property to the end of the list.
     */
-    void addProp(QString name, QString value, QString group, int allowed, QString help = QString())
-       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed,help); }
+    void addProp(QString name, QString value, QString group, int allowed )
+       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed); }
 
     /**
      * Returns an integer of the value field of a property. If there is no valid integer is entered it returns <i>defaultval</i>.
@@ -211,13 +211,8 @@ class KDlgPropertyBase
     int getIntFromProp(int nr, int defaultval=0);
     int getIntFromProp(QString name, int defaultval=0);
 
-    /**
-     * Gets a help string to property <i>name</i>.
-    */
-    QString getHelp(QString name);
   protected:
     KDlgPropertyEntry props[MAX_ENTRYS_PER_WIDGET];
-    QString helps[MAX_ENTRYS_PER_WIDGET];
     int numEntrys;
 };
 

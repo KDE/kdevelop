@@ -1,3 +1,9 @@
+1999-04-10 Pascal Krahmer <pascal@beast.de>
+        * added GREAT quickhelp for property entrys (try rightclicking one ! Really great work of myself ;-)
+        * moved help texts out of kdlgpropertydatabase class in order to save much memory
+        * added special properties to button and lineedit
+        * some other stuff I´ve forgotten 8-b
+
 1999-04-09 Pascal Krahmer <pascal@beast.de>
         * fixed some bug in the save/open methods.
         * added documentation to most classes.

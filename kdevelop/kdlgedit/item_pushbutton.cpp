@@ -33,7 +33,6 @@ KDlgItem_PushButton::MyWidget::MyWidget(KDlgItem_PushButton* wid, QWidget* paren
   isMainwidget = false;
 }
 
-
 void KDlgItem_PushButton::MyWidget::paintEvent ( QPaintEvent *e )
 {
   QPushButton::paintEvent(e);
@@ -45,6 +44,7 @@ void KDlgItem_PushButton::MyWidget::paintEvent ( QPaintEvent *e )
 KDlgItem_PushButton::KDlgItem_PushButton( KDlgEditWidget* editwid, QWidget *parent , const char* name )
   : KDlgItem_Base(editwid, parent,false,name)
 {
+  addMyPropEntrys();
   parentWidgetItem = 0;
   item = new MyWidget(this, parent);
   item->show();
@@ -52,12 +52,46 @@ KDlgItem_PushButton::KDlgItem_PushButton( KDlgEditWidget* editwid, QWidget *pare
   repaintItem();
 }
 
+void KDlgItem_PushButton::addMyPropEntrys()
+{
+
+  props->addProp("Text",           "Button",       "General",        ALLOWED_STRING);
+  props->addProp("isDefault",      "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoDefault" , "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggleButton", "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggledOn",    "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isMenuButton",   "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "FALSE",        "General",        ALLOWED_BOOL);
+
+  props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
+}
+
 void KDlgItem_PushButton::repaintItem(QPushButton *it)
 {
-  QWidget *itm = it ? it : item;
+  QPushButton *itm = it ? it : item;
 
   if ((!itm) || (!props))
     return;
 
   KDlgItem_Base::repaintItem(itm);
+
+  #define strIsDef(s) (!Prop2Str(s).isNull())
+
+  if (strIsDef("Text"))
+    itm->setText(Prop2Str("Text"));
+
+  if (Prop2Str("Pixmap").isEmpty())
+    {
+      if (itm->pixmap())
+        itm->setPixmap(QPixmap());
+    }
+  else
+    itm->setPixmap(QPixmap(Prop2Str("Pixmap")));
+
+  itm->setDefault(Prop2Bool("isDefault") == 1 ? TRUE : FALSE);
+  itm->setIsMenuButton(Prop2Bool("isMenuButton") == 1 ? TRUE : FALSE);
+  itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
+  itm->setToggleButton(Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE);
+  itm->setOn((Prop2Bool("isToggledOn") == 1 ? TRUE : FALSE) && (Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE));
 }

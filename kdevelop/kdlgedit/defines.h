@@ -44,8 +44,8 @@
 #define ALLOWED_CURSOR      8
 #define ALLOWED_BGMODE      9
 
-#define RULER_WIDTH  22                    // width of the vertical ruler
-#define RULER_HEIGHT  22                   // height of the horizontal ruler
+#define RULER_WIDTH  20                    // width of the vertical ruler
+#define RULER_HEIGHT  20                   // height of the horizontal ruler
 
 // defines the point the user has clicked on the widget in order to move/resize it
 #define RESIZE_MOVE            0

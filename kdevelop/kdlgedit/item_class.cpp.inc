@@ -61,6 +61,7 @@
     virtual void select() { if (item) item->select(); }
     virtual void selectMe() { if (item) item->selectMe(); }
     virtual void deselect() { if (item) item->deselect(); }
+    virtual void addMyPropEntrys();
     KDlgItem_Widget *parentWidgetItem;
 
 #undef classdesc

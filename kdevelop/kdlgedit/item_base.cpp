@@ -19,6 +19,7 @@
 #include "items.h"
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qbitmap.h>
 #include "itemsglobal.h"
 
 KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool ismainwidget, const char* name )
@@ -52,6 +53,30 @@ void KDlgItem_Base::deleteMyself()
   }
 
   childs->clear();
+}
+
+int KDlgItem_Base::Prop2Bool(QString name)
+{
+  if (props->getProp(name))
+    return KDlgItemsIsValueTrue( props->getProp(name)->value );
+  else
+    return -1;
+}
+
+int KDlgItem_Base::Prop2Int(QString name, int defaultval)
+{
+  if (props->getProp(name))
+    return props->getIntFromProp(name,defaultval);
+  else
+    return defaultval;
+}
+
+QString KDlgItem_Base::Prop2Str(QString name)
+{
+  if (props->getProp(name))
+    return props->getProp(name)->value;
+  else
+    return QString();
 }
 
 void KDlgItem_Base::repaintItem(QWidget *it)
@@ -108,4 +133,10 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setBackgroundPixmap( QPixmap( str ) );
   else
     itm->setBackgroundPixmap( QPixmap() );
+
+  setStr2Prop("MaskBitmap");
+  if (strNotEmpty(str))
+    itm->setMask( QBitmap( str ) );
+  else
+    itm->setMask( QBitmap() );
 }

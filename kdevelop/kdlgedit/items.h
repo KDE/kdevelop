@@ -117,6 +117,11 @@ class KDlgItem_Base : public QObject
 
     bool isMainWidget;
   protected:
+    int Prop2Bool(QString name);
+    int Prop2Int(QString name, int defaultval=0);
+    QString Prop2Str(QString name);
+
+
     KDlgItemDatabase *childs;
     QWidget *item;
     KDlgPropertyBase *props;

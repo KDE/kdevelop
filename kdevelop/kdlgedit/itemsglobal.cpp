@@ -160,18 +160,6 @@ int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
   return defaultval;
 }
 
-QString KDlgPropertyBase::getHelp(QString name)
-{
-  int i;
-  for (i=0; i<=getEntryCount(); i++)
-    {
-      if ((getProp(i)) && (getProp(i)->name.upper() == name.upper()))
-        return helps[i];
-    }
-
-  return QString(i18n("Sorry, there is no help available for this property"));
-}
-
 void KDlgPropertyBase::setProp_Name   (QString n, QString name)
 {
   int i;
@@ -208,35 +196,36 @@ void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
 
 void KDlgPropertyBase::fillWithStandardEntrys()
 {
-  addProp("Name",               "NoName",       "General",        ALLOWED_STRING,       i18n("Helps to identify an dialog item i.e. for runtime loaded dialogs. In addition, if the constructor of the destination class has a \"name\" argument it is set to this value."));
-  addProp("IsHidden",           "FALSE",        "General",        ALLOWED_BOOL,         i18n("If this property is set to \"TRUE\" the item will not be visible in the editor and in the program."));
-  addProp("IsEnabled",          "TRUE",         "General",        ALLOWED_BOOL,         i18n("If disabled (=\"FALSE\") the widget will not handle user events (i.e. mouse or keyboard events)."));
+  addProp("Name",               "NoName",       "General",        ALLOWED_STRING);
+  addProp("IsHidden",           "FALSE",        "General",        ALLOWED_BOOL);
+  addProp("IsEnabled",          "TRUE",         "General",        ALLOWED_BOOL);
 
-  addProp("VarName",            "",             "C++ Code",       ALLOWED_STRING,       i18n("Used for generating sources. Defines the variable later containing the items' pointer."));
-  addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS,  i18n("Defines the SIGNAL/SLOT connections for this item. (Only has effects in programs, not in this editor)"));
-  addProp("ResizeToParent",     "FALSE",        "C++ Code",       ALLOWED_BOOL,         i18n("Is \"TRUE\" this item will fill out the whole of his parent window. (Only has effects in programs, not in this editor)"));
-  addProp("AcceptsDrops",       "FALSE",        "C++ Code",       ALLOWED_BOOL,         i18n("If enabled (=\"TRUE\") the widget will accept drops from the drag&drop mechanism. (Only has effects in programs, not in this editor)"));
-  addProp("HasFocus",           "TRUE",         "C++ Code",       ALLOWED_BOOL,         i18n("If \"TRUE\" and if it is the only widget whose \'HasFocus\' property is enabled it will have the focus by default.\n\nNOTE: Only one widget can have focus at the same time. So do NOT enable this property for more than one dialog item !"));
-  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING,       i18n("If you enter a widgets' variable name here it will be the focus proxy for this item (which means, if the widget you´ve entered gets the focus it transfers it to this widget)"));
+  addProp("VarName",            "",             "C++ Code",       ALLOWED_STRING);
+  addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
+  addProp("ResizeToParent",     "FALSE",        "C++ Code",       ALLOWED_BOOL);
+  addProp("AcceptsDrops",       "FALSE",        "C++ Code",       ALLOWED_BOOL);
+  addProp("HasFocus",           "TRUE",         "C++ Code",       ALLOWED_BOOL);
+  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
 
-  addProp("X",                  "10",           "Geometry",       ALLOWED_INT,          i18n("The X coordinate of the widget relative to its parent widget."));
-  addProp("Y",                  "10",           "Geometry",       ALLOWED_INT,          i18n("The Y coordinate of the widget relative to its parent widget."));
-  addProp("Width",              "100",          "Geometry",       ALLOWED_INT,          i18n("The width of the widget."));
-  addProp("Height",             "30",           "Geometry",       ALLOWED_INT,          i18n("The height of the widget."));
-  addProp("MinWidth",           "0",            "Geometry",       ALLOWED_INT,          i18n("Defines the minimum width of the widget. The widget than cannot become smaller than this value."));
-  addProp("MinHeight",          "0",            "Geometry",       ALLOWED_INT,          i18n("Defines the minimum height of the widget. The widget than cannot become smaller than this value."));
-  addProp("MaxWidth",           "",             "Geometry",       ALLOWED_INT,          i18n("Defines the maximum width of the widget. The widget than cannot become larger than this value."));
-  addProp("MaxHeight",          "",             "Geometry",       ALLOWED_INT,          i18n("Defines the maximum height of the widget. The widget than cannot become larger than this value."));
-  addProp("IsFixedSize",        "FALSE",        "Geometry",       ALLOWED_BOOL,         i18n("If \"TRUE\" the widget size cannot be changed."));
-  addProp("SizeIncX",           "",             "Geometry",       ALLOWED_INT,          i18n("Sets in how many pixel steps the item should be resized."));
-  addProp("SizeIncY",           "",             "Geometry",       ALLOWED_INT,          i18n("Sets in how many pixel steps the item should be resized."));
+  addProp("X",                  "10",           "Geometry",       ALLOWED_INT);
+  addProp("Y",                  "10",           "Geometry",       ALLOWED_INT);
+  addProp("Width",              "100",          "Geometry",       ALLOWED_INT);
+  addProp("Height",             "30",           "Geometry",       ALLOWED_INT);
+  addProp("MinWidth",           "0",            "Geometry",       ALLOWED_INT);
+  addProp("MinHeight",          "0",            "Geometry",       ALLOWED_INT);
+  addProp("MaxWidth",           "",             "Geometry",       ALLOWED_INT);
+  addProp("MaxHeight",          "",             "Geometry",       ALLOWED_INT);
+  addProp("IsFixedSize",        "FALSE",        "Geometry",       ALLOWED_BOOL);
+  addProp("SizeIncX",           "",             "Geometry",       ALLOWED_INT);
+  addProp("SizeIncY",           "",             "Geometry",       ALLOWED_INT);
 
-  addProp("BgMode",             "",             "Appearance",     ALLOWED_BGMODE,       i18n("The background mode of the widget."));
-  addProp("BgColor",            "",             "Appearance",     ALLOWED_COLOR,        i18n("The background color of the widget. Overrides the BgMode property."));
-  addProp("BgPalColor",         "",             "Appearance",     ALLOWED_COLOR,        i18n("The (background) palette color. This more recent method for BgColor also changes the frames etc."));
-  addProp("BgPixmap",           "",             "Appearance",     ALLOWED_FILE,         i18n("Specifies the file which should be used as background pixmap. Note that not all widgets run correctly with background images. (i.e. the QLineEdit)"));
-  addProp("Font",               "",             "Appearance",     ALLOWED_FONT,         i18n("Sets the font which should be used for drawing text in the widget."));
-  addProp("Cursor",             "",             "Appearance",     ALLOWED_CURSOR,       i18n("Sets the cursor which should appear when moving the mouse pointer over the widget."));
+  addProp("BgMode",             "",             "Appearance",     ALLOWED_BGMODE);
+  addProp("BgColor",            "",             "Appearance",     ALLOWED_COLOR);
+  addProp("BgPalColor",         "",             "Appearance",     ALLOWED_COLOR);
+  addProp("BgPixmap",           "",             "Appearance",     ALLOWED_FILE);
+  addProp("MaskBitmap",         "",             "Appearance",     ALLOWED_FILE);
+  addProp("Font",               "",             "Appearance",     ALLOWED_FONT);
+  addProp("Cursor",             "",             "Appearance",     ALLOWED_CURSOR);
 }
 
 

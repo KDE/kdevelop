@@ -32,7 +32,6 @@ KDlgItem_LineEdit::MyWidget::MyWidget(KDlgItem_LineEdit* wid, QWidget* parent, c
   setCursor(arrowCursor);
 }
 
-
 void KDlgItem_LineEdit::MyWidget::paintEvent ( QPaintEvent *e )
 {
   QLineEdit::paintEvent(e);
@@ -49,14 +48,51 @@ KDlgItem_LineEdit::KDlgItem_LineEdit( KDlgEditWidget* editwid, QWidget *parent ,
   item->show();
   item->setMouseTracking(true);
   repaintItem();
+  addMyPropEntrys();
+}
+
+void KDlgItem_LineEdit::addMyPropEntrys()
+{
+  if (!props)
+    return;
+
+  props->addProp("Text",           "",       "General",        ALLOWED_STRING);
+  props->addProp("hasFrame",       "TRUE",   "General",        ALLOWED_BOOL);
+  props->addProp("MaxLength",      "",       "General",        ALLOWED_INT);
+  props->addProp("CursorPositon",  "",       "General",        ALLOWED_INT);
+  props->addProp("isTextSelected", "FALSE",  "General",        ALLOWED_BOOL);
 }
 
 void KDlgItem_LineEdit::repaintItem(QLineEdit *it)
 {
-  QWidget *itm = it ? it : item;
+  QLineEdit *itm = it ? it : item;
 
   if ((!itm) || (!props))
     return;
 
   KDlgItem_Base::repaintItem(itm);
+
+  #define strIsDef(s) (!Prop2Str(s).isNull())
+  #define intIsDef(s) (!Prop2Str(s).isEmpty())
+
+  if (strIsDef("Text"))
+    itm->setText(Prop2Str("Text"));
+
+  if (intIsDef("MaxLength"))
+    itm->setMaxLength(Prop2Int("MaxLength",32767));
+  else
+    itm->setMaxLength(32767);
+
+  if (intIsDef("CursorPosition"))
+    itm->setCursorPosition(Prop2Int("CursorPosition",32767));
+  else
+    itm->setCursorPosition(0);
+
+  itm->setFrame(Prop2Bool("hasFrame") == 1 ? TRUE : FALSE);
+
+  if (Prop2Bool("isTextSelected") == 1)
+    itm->selectAll();
+  else
+    itm->deselect();
+
 }

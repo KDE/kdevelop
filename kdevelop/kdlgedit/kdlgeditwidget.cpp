@@ -66,6 +66,10 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   rulv->setRange(0,300);
   rulv->setOffset(0);
   rulv->setPixelPerMark(5);
+
+  QFrame *edgeFrame = new QFrame(this);
+  edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
+  edgeFrame->setFrameStyle(rulh->frameStyle());
 }
 
 KDlgEditWidget::~KDlgEditWidget()
@@ -393,8 +397,8 @@ void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
 {
   QWidget::resizeEvent(e);
 
-  rulh->setGeometry(RULER_WIDTH,0,  width()-RULER_WIDTH, 20);
-  rulv->setGeometry(0,RULER_HEIGHT, 20, height()-RULER_HEIGHT);
+  rulh->setGeometry(RULER_WIDTH,0,  width()-RULER_WIDTH, RULER_HEIGHT);
+  rulv->setGeometry(0,RULER_HEIGHT, RULER_WIDTH, height()-RULER_HEIGHT);
 }
 
 

@@ -44,33 +44,10 @@ KDlgItem_Widget::MyWidget::MyWidget( KDlgItem_Widget* wid, QWidget* parent , boo
   show();
 }
 
-
-
-/*void KDlgItem_Widget::MyWidget::mouseMoveEvent ( QMouseEvent *e )
+void KDlgItem_Widget::addMyPropEntrys()
 {
-  moveRulers(e);
+}
 
-  if (!isMBPressed)
-    return;
-
-  if (e->pos() == lastPnt)
-    return;
-
-  int x = origRect.x();
-  int y = origRect.y();
-  int w = origRect.width();
-  int h = origRect.height();
-  int diffx = e->globalPos().x() - startPnt.x();
-  int diffy = e->globalPos().y() - startPnt.y();
-  bool noMainWidget;
-
-  noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy);
-
-  if ((!noMainWidget) || (!parentObject->isMainWidget))
-    setGeometry(x,y,w,h);
-
-  lastPnt = e->pos();
-} */
 
 void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
 {
