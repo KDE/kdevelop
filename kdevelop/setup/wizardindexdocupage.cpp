@@ -56,7 +56,7 @@ WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, cons
 		  setValid(false);	// disable the Next button, will be enabled again when indexing has finished
 		
 		  QWidget* wdg = new QWidget(m_vbox);
-  		QVBoxLayout* vl = new QVBoxLayout(wdg);
+  		QVBoxLayout* vl = new QVBoxLayout(wdg, 15, 7);
       label = new QLabel(i18n("Now KDevelop will perform the last step of the installation process with indexing your documentation."
                               "This will provide an extended help functionality and will give you the information you need."), wdg);
       label->setAlignment(WordBreak);

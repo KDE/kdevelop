@@ -42,13 +42,11 @@
 #endif
 
 
-CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir, const QString& qtDocDir, QWidget *parent, const char *name) : QWidget(parent,name)
+CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir, const QString& qtDocDir, QWidget *parent, bool bShowCancelButton, const char *name) : QWidget(parent,name)
 {
   kde_doc_path = kdeDocDir;
   qt_doc_path = qtDocDir;
   m_proc = proc;
-
-  setCaption(i18n("KDE Library Documentation Update..."));
 
   QVBoxLayout* vl1 = new QVBoxLayout(this, 15, 7);
 
@@ -142,6 +140,8 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
   bb->addStretch();
   ok_button =bb->addButton( i18n("Create") );
   ok_button->setDefault( true );
+	if (bShowCancelButton)
+	  cancel_button  = bb->addButton( i18n("Cancel") );	
 
   vl1->addWidget(bb);
 

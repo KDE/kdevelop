@@ -80,6 +80,7 @@
 #include <kstddirs.h>
 #include <ktabctl.h>
 #include <knotifyclient.h>
+#include <kbuttonbox.h>
 
 #include <qclipbrd.h>
 #include <qdir.h>
@@ -95,6 +96,7 @@
 #include <qtextstream.h>
 #include <qtoolbar.h>
 #include <qwhatsthis.h>
+#include <qlayout.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -2146,19 +2148,29 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   }
   slotStatusMsg(i18n("Updating KDE-Libs documentation..."));
   config->setGroup("Doc_Location");
-//TEMPORARILY_DISABLED  CUpdateKDEDocDlg dlg(&shell_process, config, this,"test");
-//TEMPORARILY_DISABLED  if(dlg.exec()){
-//TEMPORARILY_DISABLED    slotStatusMsg(i18n("Generating Documentation..."));
-//TEMPORARILY_DISABLED    setToolMenuProcess(false);
-//TEMPORARILY_DISABLED    if (dlg.isUpdated())
-//TEMPORARILY_DISABLED    {
-//TEMPORARILY_DISABLED        config->writeEntry("doc_kde",dlg.getDocPath());
-//TEMPORARILY_DISABLED        config->sync();
-//TEMPORARILY_DISABLED        // doc_tree->refresh(prj);
-//TEMPORARILY_DISABLED        // doing this by next_job ... if the documentation generation has finished
-//TEMPORARILY_DISABLED  next_job="doc_refresh";
-//TEMPORARILY_DISABLED    }
-//TEMPORARILY_DISABLED  }
+  QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
+  QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
+
+	QDialog parentDlg(this, "update_kde_doc_parentdlg", true);
+  parentDlg.setCaption(i18n("KDE Library Documentation Update..."));
+  CUpdateKDEDocDlg embeddedDlg(&shell_process, kdeDocu, qtDocu, &parentDlg, true, "update_kde_doc_dlg");
+	QObject::connect(	embeddedDlg.cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()) );
+
+	QVBoxLayout* vbl = new QVBoxLayout(&parentDlg);
+	vbl->addWidget(&embeddedDlg);
+
+	if (parentDlg.exec()){
+    slotStatusMsg(i18n("Generating Documentation..."));
+    setToolMenuProcess(false);
+    if (embeddedDlg.isUpdated())
+    {
+        config->writeEntry("doc_kde",embeddedDlg.getDocPath());
+        config->sync();
+        // doc_tree->refresh(prj);
+        // doing this by next_job ... if the documentation generation has finished
+  			next_job="doc_refresh";
+    }
+  }
 }
 void CKDevelop::slotOptionsCreateSearchDatabase(){
   bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
@@ -2170,10 +2182,28 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
     return;
   }
 
-//TEMPORARILY_DISABLED  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
-//TEMPORARILY_DISABLED  if(dlg.exec()){
-//TEMPORARILY_DISABLED    slotStatusMsg(i18n("Creating Search Database..."));
-//TEMPORARILY_DISABLED  }
+  QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
+  QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
+
+	QDialog parentDlg(this, "create_doc_database_parentdlg", true);
+  parentDlg.setCaption(i18n("Create Search Database..."));
+  CCreateDocDatabaseDlg embeddedDlg(&parentDlg,"create_doc_database_dlg",&shell_process,kdeDocu,qtDocu,foundGlimpse, foundHtDig, false);
+
+  KButtonBox bb( &parentDlg);
+  bb.addStretch();
+  QPushButton* ok_button  = bb.addButton( i18n("OK") );
+  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );	
+  ok_button->setDefault(true);
+  connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
+  connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
+
+	QVBoxLayout* vbl = new QVBoxLayout(&parentDlg, 15, 6);
+	vbl->addWidget(&embeddedDlg);
+	vbl->addWidget(&bb);
+
+  if (parentDlg.exec()){
+    slotStatusMsg(i18n("Creating Search Database..."));
+  }
 
   return;
 

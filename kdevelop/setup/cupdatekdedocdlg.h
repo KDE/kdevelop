@@ -38,7 +38,7 @@ class QRadioButton;
 class CUpdateKDEDocDlg : public QWidget {
    Q_OBJECT
 public: 
-   CUpdateKDEDocDlg(KShellProcess* proc=0, const QString& kdeDocDir = QString::null, const QString& qtDocDir = QString::null, QWidget *parent=0, const char *name=0);
+   CUpdateKDEDocDlg(KShellProcess* proc=0, const QString& kdeDocDir = QString::null, const QString& qtDocDir = QString::null, QWidget *parent=0, bool bShowCancelButton = false, const char *name=0);
   ~CUpdateKDEDocDlg();
   bool isUpdated() const {return bUpdated;};
   QString getDocPath() const {return kde_doc_path;};

@@ -63,11 +63,11 @@ void CKDevInstall::slotReceivedStderr(KProcess*,char* buffer, int count)
   qDebug(test);
 }
 
-CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
+CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
 : QWizard(parent,name)
   ,m_pInstallState(0L)
 {
-  m_config = KGlobal::config();
+  m_config = config;
 
   //  test also autoconfified documentation path
   m_config->setGroup("Doc_Location");
@@ -422,6 +422,7 @@ void CKDevInstall::slotFinished()
   KProcess kdevelopTheProgram;
   kdevelopTheProgram.setExecutable("kdevelop");
   if (!kdevelopTheProgram.start()) {
+		qDebug("couldn't start kdevelop :-(");
   }
   qApp->quit();
 }

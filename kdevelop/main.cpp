@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
   {
     if (bInstall)
     {
-      CKDevInstall* install = new CKDevInstall(0,"install");
+      CKDevInstall* install = new CKDevInstall(0,"install", config);
       a.setMainWidget(install);
       install->show();
       int retVal = a.exec();

@@ -39,15 +39,16 @@ class CCreateDocDatabaseDlg : public QWidget  {
    Q_OBJECT
 public: 
 	CCreateDocDatabaseDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0, const QString& kdeDocDir = QString::null, const QString& qtDocDir = QString::null,
-		bool foundGlimpse=false, bool foundHtDig=false);
+		bool foundGlimpse=false, bool foundHtDig=false, bool bShowIndexingButton = true);
 	~CCreateDocDatabaseDlg();
 	
+public slots:
+  void slotOkClicked();
+
 signals:
 	void indexingFinished(const QString&);
 	
 protected slots:
-
-  void slotOkClicked();
   void slotAddButtonClicked();
   void slotRemoveButtonClicked();
   void slotDirButtonClicked();

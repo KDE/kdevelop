@@ -1,5 +1,7 @@
 2001-06-10  F@lk Brettschneider <falk@kdevelop.org>
    * splitted setup/ckdevinstall.h in several headers, more bugfixes for libkdevelopsetup.so
+   * activated fixed creation of kdelibs docu and indexing of docu again
+   * CTabCtl removed from CVS (KDockWidget takes the part now)
    
 2001-06-09  F@lk Brettschneider <falk@kdevelop.org>
    * bugfix: restore geometry on project session loading

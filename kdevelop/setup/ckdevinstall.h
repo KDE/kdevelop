@@ -47,7 +47,7 @@ class CKDevInstall : public QWizard
 {
    Q_OBJECT
 public:
-	CKDevInstall(QWidget *parent=0, const char *name=0);
+	CKDevInstall(QWidget *parent=0L, const char *name=0, KConfig* config = 0L);
 	~CKDevInstall();
 
 protected slots:

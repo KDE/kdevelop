@@ -45,14 +45,13 @@
 
 //#include <iostream.h>
 
-CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,const QString& kdeDocDir, const QString& qtDocDir, bool foundGlimpse,bool foundHtDig) : QWidget(parent,name)
+CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,const QString& kdeDocDir, const QString& qtDocDir, bool foundGlimpse,bool foundHtDig, bool bShowIndexingButton) : QWidget(parent,name)
 {
   m_kdeDocDir = kdeDocDir;
   m_qtDocDir = qtDocDir;
 
-  setCaption(i18n("Create Search Database..."));
   m_proc = proc;
-  QGridLayout *grid2 = new QGridLayout(this,2,3,15,7);
+  QGridLayout *grid2 = new QGridLayout(this,2,3,0,7);
 
   //-----search engine group-----
   QButtonGroup* searcheng_ButtonGroup;
@@ -111,15 +110,18 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   kde_checkbox->setText(i18n("index the KDE documentation") );
   kde_checkbox->setChecked( TRUE );
 
-  ok_button  = new QPushButton(i18n("Start indexing"), wdg);
-  ok_button->setDefault(true);
+	if (bShowIndexingButton) {
+	  ok_button  = new QPushButton(i18n("Start indexing"), wdg);
+  	ok_button->setDefault(true);
+	}
 
   grid1 = new QGridLayout(qtarch_ButtonGroup_3,2,1,15,7);
   grid1->addWidget(qt_checkbox,0,0);
   grid1->addWidget(kde_checkbox,1,0);
   QVBoxLayout* vl = new QVBoxLayout(wdg,0,7);
   vl->addWidget(qtarch_ButtonGroup_3);
-  vl->addWidget(ok_button);
+	if (bShowIndexingButton)
+	  vl->addWidget(ok_button);
   grid2->addWidget(wdg, 0, 2);
 
   // ------- additional dirs group --------------
@@ -153,7 +155,8 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   resize(sizeHint());
 
  /*****************Connections******************/
- connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
+ if (bShowIndexingButton)
+	 connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
  connect(add_button,SIGNAL(clicked()),SLOT(slotAddButtonClicked()));
  connect(remove_button,SIGNAL(clicked()),SLOT(slotRemoveButtonClicked()));
  connect(dir_button,SIGNAL(clicked()),SLOT(slotDirButtonClicked()));
