@@ -123,9 +123,16 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	handleDirective( directive );
     } else if( m_startLine && m_skipping[ m_ifLevel ] ){
 	// skip line and continue
-	while( !currentChar().isNull() && currentChar() != '\n' )
-	    nextChar();
-	/* skip */
+        m_startLine = false;
+        int d = m_preprocessorEnabled;
+        disablePreprocessor();
+	while( !currentChar().isNull() && currentChar() != '\n' ){
+            Token tok;
+            nextToken( tok, true );
+        }
+        m_startLine = true;
+        m_preprocessorEnabled = d;
+        return;
     } else if( ch == '\'' ){
 	int start = currentPosition();
 	readCharLiteral();
