@@ -1,3 +1,11 @@
+2000-03-04  Ralf Funken <rfunken@kdevelop.de>
+
+	* Updated german manual
+        * Updated german welcome
+        * Updated de.po
+        * Translated remaining chapters of the german tutorial
+          german tutorial completed :-)
+
 2000-03-04  Ralf Nolden <rnolden@kdevelop.de>
 
 	* fixed another i18n bug...the about dialog ;-) 
