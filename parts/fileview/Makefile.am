@@ -10,7 +10,7 @@ libkdevfileview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevfilegroups_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevfilegroups_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevfileview_la_SOURCES = fileviewpart.cpp filetreewidget.cpp
+libkdevfileview_la_SOURCES = fileviewpart.cpp filetreewidget.cpp partwidget.cpp
                              
 libkdevfilegroups_la_SOURCES = filegroupswidget.cpp addfilegroupdlg.cpp filegroupsconfigwidget.cpp filegroupsconfigwidgetbase.ui filegroupspart.cpp
 

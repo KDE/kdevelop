@@ -10,10 +10,11 @@
  ***************************************************************************/
 
 #include "fileviewpart.h"
-#include "fileviewpart.moc"
 
 #include <qwhatsthis.h>
 #include <qvbox.h>
+#include <qtoolbutton.h>
+#include <kcombobox.h>
 #include <qtimer.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -25,37 +26,45 @@
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
 
+#include "partwidget.h"
 #include "filetreewidget.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// class factory
+///////////////////////////////////////////////////////////////////////////////
 
 typedef KGenericFactory<FileViewPart> FileViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) );
 
+///////////////////////////////////////////////////////////////////////////////
+// class FileTreeWidget
+///////////////////////////////////////////////////////////////////////////////
+
 FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("FileView", "fileview", parent, name ? name : "FileViewPart")
+    : KDevPlugin("FileView", "fileview", parent, name ? name : "FileViewPart"),
+    m_widget( 0 )
 {
     setInstance(FileViewFactory::instance());
     //    setXMLFile("kdevfileview.rc");
-    
-    m_filetree = new FileTreeWidget(this);
-    m_filetree->setCaption(i18n("File Tree"));
-    m_filetree->setIcon(SmallIcon("folder"));
-    QWhatsThis::add(m_filetree, i18n("File Tree\n\n"
-                                     "The file viewer shows all files of the project "
-                                     "in a tree layout."));
-    mainWindow()->embedSelectView(m_filetree, i18n("File Tree"), i18n("view on the project directory"));
-        
+
+    m_widget = new PartWidget( this );
+
+    mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("view on the project directory") );
+
     // File tree
     connect( project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
-             m_filetree, SLOT( addProjectFiles( const QStringList & ) ) );
+             m_widget->m_filetree, SLOT( addProjectFiles( const QStringList & ) ) );
     connect( project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
-             m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
+             m_widget->m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
 
-    m_filetree->openDirectory(project()->projectDirectory());
+    m_widget->m_filetree->openDirectory(project()->projectDirectory());
 }
 
 FileViewPart::~FileViewPart()
 {
-    if (m_filetree)
-        mainWindow()->removeView(m_filetree);
-    delete m_filetree;
+    if (m_widget)
+        mainWindow()->removeView( m_widget );
+    delete m_widget;
 }
+
+#include "fileviewpart.moc"

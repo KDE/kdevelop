@@ -24,14 +24,22 @@ class FileTreeWidget : public KFileTreeView
     friend class MyFileTreeViewItem;
 
 public:
-    FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
-    ~FileTreeWidget();
+    FileTreeWidget( FileViewPart *part, QWidget *parent, const char *name=0 );
+    virtual ~FileTreeWidget();
+
     void openDirectory(const QString &dirName);
     bool shouldBeShown( KFileTreeViewItem* item );
+
+    bool showVCSFields() const;
+    bool showNonProjectFiles() const;
+
     QString projectDirectory();
     QStringList projectFiles();
 
     KURL::List selectedPathUrls();
+
+    void applyFilters( const QStringList &filtersList );
+    const QStringList &filters() const;
 
 public slots:
     void hideOrShow();
@@ -41,10 +49,11 @@ public slots:
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotToggleShowNonProjectFiles();
-    void slotReloadTree();
-
     void slotSelectionChanged();
+
+    void slotReloadTree();
+    void slotToggleShowNonProjectFiles();
+    void slotToggleShowVCSFields();
 
 private:
     bool matchesHidePattern(const QString &fileName);
@@ -52,11 +61,16 @@ private:
     FileViewPart *m_part;
     KFileTreeBranch * m_rootBranch;
 
+    // @fixme Is this guard really useful?
+    bool m_isReloadingTree;
+
     QStringList m_hidePatterns;
     QStringList m_projectFiles;
-    bool m_showNonProjectFiles;
 
     QPtrList<KFileTreeViewItem> m_selectedItems;
+
+    class KToggleAction *m_actionToggleShowVCSFields,
+        *m_actionToggleShowNonProjectFiles;
 };
 
 #endif

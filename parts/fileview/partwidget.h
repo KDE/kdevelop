@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by KDevelop authors                                *
+ *   kdevelop-devel@kde.org                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,24 +9,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWPART_H_
-#define _FILEVIEWPART_H_
+#ifndef _FILEVIEWPARTWIDGET_H_
+#define _FILEVIEWPARTWIDGET_H_
 
-#include <qguardedptr.h>
-#include "kdevplugin.h"
+#include <qvbox.h>
 
-class PartWidget;
+class FileViewPart;
 
-class FileViewPart : public KDevPlugin
+class PartWidget : public QVBox
 {
     Q_OBJECT
-
 public:
-    FileViewPart( QObject *parent, const char *name, const QStringList & );
-    ~FileViewPart();
+    PartWidget( FileViewPart *part, QWidget *parent = 0 );
+    virtual ~PartWidget();
+
+    class FileTreeWidget *m_filetree;
+    // Support for filters
+    class KHistoryCombo *m_filter;
+    class QToolButton *m_btnFilter;
+
+private slots:
+    void slotFilterChange( const QString & nf );
+    void slotBtnFilterClick();
 
 private:
-    QGuardedPtr<PartWidget> m_widget;
+    FileViewPart *m_part;
+    QString m_lastFilter;
 };
 
 #endif
