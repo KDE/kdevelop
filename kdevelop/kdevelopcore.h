@@ -14,7 +14,7 @@
 
 
 #include <kdevelopcorebase.h>
-
+#include "KDevComponentManager.h"
 
 class KDevelop;
 class KDevComponent;
@@ -53,6 +53,13 @@ public:
     virtual void readProperties (KConfig *pConfig);
 
     KDevViewHandler* viewHandler();
+    KDevComponentManager* m_pKDevComponentManager;
+
+signals:
+	void sigStopButtonClicked();
+	void sigProjectSpaceClosed();
+	void sigProjectSpaceOpened();
+	void sigConfigWidgetRequested(KDialogBase* pDlg);
 
 private:
     void initActions();
@@ -79,7 +86,6 @@ private slots:
 
 private:
     KDevelop *m_pKDevelopGUI;
-    KDevApi *m_api;
     KDevelopIface *m_dcop;
 };
 

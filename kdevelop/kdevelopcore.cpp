@@ -17,31 +17,36 @@
 #include <qdom.h>
 #include <qobjectlist.h>
 #include <kmessagebox.h>
-#include "classstore.h"
-#include "ProjectOptionsDlg.h"
-#include "kdevelop.h"
-#include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
 #include "kdevlanguagesupport.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "kdeveditormanager.h"
-#include "kdevelopcore.h"
 #include "kdevviewhandler.h"
+#include "ProjectOptionsDlg.h"
+#include "kdevelop.h"
+#include "kdevcomponent.h"
+#include "kdevelopcore.h"
 #include "projectspace.h"
-#include "kdevapi.h"
-#include "partloader.h"
 #include "newprojectdlg.h"
 #include "KDevelopIface.h"
-
+#include "klibloader.h"
+#include "KDevComponentManager.h"
+#include "KDevClassStore.h"
 
 KDevelopCore::KDevelopCore(KDevelop *pGUI)
 :KDevelopCoreBase (pGUI, "kdevelop core") ,m_pKDevelopGUI(pGUI)
 {
     m_dcop = new KDevelopIface(this);
-    m_api = new KDevApi();
-    m_api->classStore = new ClassStore();
     initActions();
+
+    m_pKDevComponentManager = new KDevComponentManager();
+    QObject *dummyObj = m_pKDevComponentManager->loadByName(m_pKDevelopGUI, "SourceInfo", "KDevClassStore");
+    kdDebug(9000) << "KDevelopCore::constructor: classstore made " <<  endl;
+    connect(this, SIGNAL(sigStopButtonClicked()), m_pKDevComponentManager, SLOT(slotStopButtonClicked()));
+    connect(this, SIGNAL(sigProjectSpaceClosed()), m_pKDevComponentManager, SLOT(slotProjectSpaceClosed()));
+    connect(this, SIGNAL(sigProjectSpaceOpened()), m_pKDevComponentManager, SLOT(slotProjectSpaceOpened()));
+    connect(this, SIGNAL(sigConfigWidgetRequested(KDialogBase*)), m_pKDevComponentManager, SLOT(slotConfigWidgetRequested(KDialogBase*)));
 }
 
 
@@ -67,9 +72,7 @@ void KDevelopCore::initComponent(KDevComponent *pComponent)
     connect( pComponent, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
              m_pKDevelopGUI, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
 
-    pComponent->setupInternal(this, m_api);
     pComponent->setupGUI();
-    m_components.append(pComponent);
     m_pKDevelopGUI->guiFactory()->addClient(pComponent);
 }
 
@@ -125,22 +128,19 @@ void KDevelopCore::initActions()
 void KDevelopCore::loadGlobalComponents()
 {
     // All generic components
-    QObjectList list = PartLoader::loadAllByQuery(m_pKDevelopGUI,
-                                                  "KDevelop/Component",
-                                                  QString::null,
-                                                  "KDevComponent");
+    QObjectList list = m_pKDevComponentManager->loadAllByQuery(m_pKDevelopGUI, "KDevelop/Component",
+                                      QString::null,  "KDevComponent");
     QObjectListIt it(list);
-    for (; it.current(); ++it) 
+    for (; it.current(); ++it)
         initComponent(static_cast<KDevComponent*>(it.current()));
 
     // Editor manager component
-    QObject *emObj = PartLoader::loadByQuery(m_pKDevelopGUI,
+    QObject *emObj = m_pKDevComponentManager->loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/EditorManager"),
                                              QString::null,
                                              "KDevEditorManager");
     if (emObj) {
-        m_api->editorManager = static_cast<KDevEditorManager*>(emObj);
-        initComponent(m_api->editorManager);
+        initComponent(static_cast<KDevComponent*>(emObj));
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid editor manager component found"));
@@ -149,19 +149,8 @@ void KDevelopCore::loadGlobalComponents()
 }
 
 
-void KDevelopCore::unloadGlobalComponents()
-{
-    // Editor manager component
-    if (m_api->editorManager) {
-        m_components.remove(m_api->editorManager);
-        delete m_api->editorManager;
-        m_api->editorManager = 0;
-    }
-
-    // All generic components
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it)
-        delete it.current();
+void KDevelopCore::unloadGlobalComponents(){
+	m_pKDevComponentManager->removeAllComponents();
 }
 
 
@@ -169,26 +158,24 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
 {
     // Project space component
     QString psService = ProjectSpace::projectSpacePluginName(fileName);
-    QObject *psObj = PartLoader::loadByName(m_pKDevelopGUI, psService, "ProjectSpace");
+    QObject *psObj = m_pKDevComponentManager->loadByName(m_pKDevelopGUI, psService, "ProjectSpace");
     if (!psObj) {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid project space component %1 found").arg(psService));
         return false;
     }
-    m_api->projectSpace = static_cast<ProjectSpace*>(psObj);
-    initComponent(m_api->projectSpace);
-    m_api->projectSpace->readConfig(fileName);
-    m_api->projectSpace->dump();
+    initComponent(static_cast<ProjectSpace*>(psObj));
+    static_cast<ProjectSpace*>(psObj)->readConfig(fileName);
+    static_cast<ProjectSpace*>(psObj)->dump();
 
     // Language support component
-    QString lang = m_api->projectSpace->programmingLanguage();
-    QObject *lsObj = PartLoader::loadByQuery(m_pKDevelopGUI,
+    QString lang = static_cast<ProjectSpace*>(psObj)->programmingLanguage();
+    QObject *lsObj = m_pKDevComponentManager->loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/LanguageSupport"),
                                              QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(lang),
                                              "KDevLanguageSupport");
     if (lsObj) {
-        m_api->languageSupport = static_cast<KDevLanguageSupport*>(lsObj);
-        initComponent(m_api->languageSupport);
+        initComponent(static_cast<KDevLanguageSupport*>(lsObj));
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No language support component for %1 found").arg(lang));
@@ -197,10 +184,9 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     // Version control component (name should be retrieved from project space)
     QString vcService = QString::fromLatin1("CVSInterface");
     if (!vcService.isNull()) {
-        QObject *vcObj = PartLoader::loadByName(m_pKDevelopGUI, vcService, "KDevVersionControl");
+        QObject *vcObj = m_pKDevComponentManager->loadByName(m_pKDevelopGUI, vcService, "KDevVersionControl");
         if (vcObj) {
-            m_api->versionControl = static_cast<KDevVersionControl*>(vcObj);
-            initComponent(m_api->versionControl);
+            initComponent(static_cast<KDevVersionControl*>(vcObj));
         } else {
             KMessageBox::sorry(m_pKDevelopGUI,
                                i18n("No valid version control component %1 found").arg(vcService));
@@ -208,38 +194,34 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     }
 
     // Make frontend component
-    QObject *mfObj = PartLoader::loadByQuery(m_pKDevelopGUI,
+    QObject *mfObj = m_pKDevComponentManager->loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/MakeFrontend"),
                                              QString::null,
                                              "KDevMakeFrontend");
     if (mfObj) {
-        m_api->makeFrontend = static_cast<KDevMakeFrontend*>(mfObj);
-        initComponent(m_api->makeFrontend);
+        initComponent(static_cast<KDevMakeFrontend*>(mfObj));
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid make frontend component found"));
     }
 
     // Application frontend component
-    QObject *afObj = PartLoader::loadByQuery(m_pKDevelopGUI,
+    QObject *afObj = m_pKDevComponentManager->loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/AppFrontend"),
                                              QString::null,
                                              "KDevAppFrontend");
     if (afObj) {
-        m_api->appFrontend = static_cast<KDevAppFrontend*>(afObj);
-        initComponent(m_api->appFrontend);
+        initComponent(static_cast<KDevAppFrontend*>(afObj));
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid application frontend component found"));
     }
 
     // Notification to the components of the project space opening.
-    QListIterator<KDevComponent> it1(m_components);
-    for (; it1.current(); ++it1)
-        (*it1)->projectSpaceOpened();
-    
+		emit(sigProjectSpaceOpened());
+		
     // Restore window layout
-    QDomElement docel = m_api->projectSpace->readUserDocument()->documentElement();
+    QDomElement docel = static_cast<ProjectSpace*>(psObj)->readUserDocument()->documentElement();
     QDomElement layoutel = docel.namedItem("Layout").toElement();
     if (!layoutel.isNull())
         m_pKDevelopGUI->readDockConfig(layoutel);
@@ -258,11 +240,11 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
 void KDevelopCore::closeProjectSpace()
 {
     kdDebug(9000) << "KDevelopCore::closeProjectSpace" << endl;
-    if (!m_api->projectSpace)
+    if (!m_pKDevComponentManager->component("ProjectSpace"))
         return;
     
     // Save window layout
-    QDomElement docel = m_api->projectSpace->readUserDocument()->documentElement();
+    QDomElement docel = static_cast<ProjectSpace*>(m_pKDevComponentManager->component("ProjectSpace"))->readUserDocument()->documentElement();
     QDomElement layoutel = docel.namedItem("Layout").toElement();
     if (layoutel.isNull()) {
         layoutel = docel.ownerDocument().createElement("Layout");
@@ -271,20 +253,12 @@ void KDevelopCore::closeProjectSpace()
     m_pKDevelopGUI->writeDockConfig(layoutel);
 
     // Language support component
-    if (m_api->languageSupport) {
-        m_components.remove(m_api->languageSupport);
-        delete m_api->languageSupport;
-        m_api->languageSupport = 0;
-    }
+    m_pKDevComponentManager->removeComponent("KDevLanguageSupport");
 
     // Version control component
-    if (m_api->versionControl) {
-        m_components.remove(m_api->versionControl);
-        delete m_api->versionControl;
-        m_api->versionControl = 0;
-    }
+    m_pKDevComponentManager->removeComponent("KDevVersionControl");
 
-    m_api->classStore->wipeout();
+    static_cast<KDevClassStore*>(m_pKDevComponentManager->component("KDevClassStore"))->wipeout();
 
     // Project space component
 /*    QListIterator<KDevComponent> it4(m_components);
@@ -292,15 +266,11 @@ void KDevelopCore::closeProjectSpace()
         (*it4)->projectSpaceOpened();*/
     
     // Let all the components respond to the closure of the project space.
-    QListIterator<KDevComponent> it5(m_components);
-    for (; it5.current(); ++it5)
-        (*it5)->projectSpaceClosed();
+    emit(sigProjectSpaceClosed());
+	
+    static_cast<ProjectSpace*>(m_pKDevComponentManager->component("ProjectSpace"))->saveConfig();
+    m_pKDevComponentManager->removeComponent("ProjectSpace");
 
-    m_api->projectSpace->saveConfig();
-    m_components.remove(m_api->projectSpace);
-    delete m_api->projectSpace;
-    m_api->projectSpace = 0;
-    
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("project_close")->setEnabled(false);
 }
@@ -362,10 +332,10 @@ void KDevelopCore::slotFileNew()
 void KDevelopCore::slotProjectNew()
 {
     // if m_pProjectSpace == 0, create a new one
-    NewProjectDlg* pDlg = new NewProjectDlg(m_api->projectSpace);
+    NewProjectDlg* pDlg = new NewProjectDlg(this);
     if (pDlg->exec()) {
         if (pDlg->newProjectSpaceCreated()) {
-            closeProjectSpace();
+            //closeProjectSpace(); // already happenned in newprojectdlg
             QString file = pDlg->projectSpaceFile();
             kdDebug(9000) << "FILE" << file << endl;
             openProjectSpace(file);
@@ -415,8 +385,8 @@ void KDevelopCore::slotProjectClose()
 void KDevelopCore::slotProjectOptions()
 {
   ProjectOptionsDlg *pDlg;
-	if (m_api->projectSpace){
-  	pDlg = new ProjectOptionsDlg(m_pKDevelopGUI, "project options dialog", m_api->projectSpace);
+	if (static_cast<ProjectSpace*>(m_pKDevComponentManager->component("ProjectSpace"))){
+  	pDlg = new ProjectOptionsDlg(m_pKDevelopGUI, "project options dialog", static_cast<ProjectSpace*>(m_pKDevComponentManager->component("ProjectSpace")));
   	pDlg->exec();
   	delete pDlg;
   }else{
@@ -425,11 +395,9 @@ void KDevelopCore::slotProjectOptions()
 }
 
 
-void KDevelopCore::slotStop()
-{
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it)
-        (*it)->stopButtonClicked();
+void KDevelopCore::slotStop(){
+	//let all component know this
+	emit(sigStopButtonClicked());
 }
 
 
@@ -438,12 +406,10 @@ void KDevelopCore::slotOptionsKDevelopSetup()
     KDialogBase *pDlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
                                         KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pKDevelopGUI,
                                         "customize dialog");
-
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it) {
-        (*it)->configWidgetRequested(pDlg);
-    }
-
+	
+    // configwidget signal
+    emit(sigConfigWidgetRequested(pDlg));
+	
     pDlg->exec();
     delete pDlg;
 }
@@ -455,19 +421,19 @@ void KDevelopCore::running(bool runs)
     const KDevComponent *comp = static_cast<const KDevComponent*>(sender());
 
     if (runs)
-        m_runningComponents.append(comp);
+        m_pKDevComponentManager->addRunningComponent(comp);
     else
-        m_runningComponents.remove(comp);
+        m_pKDevComponentManager->removeRunningComponent(comp);
 
     kdDebug(9000) << "Running components:" << endl;
-    if (m_runningComponents.isEmpty())
+    if (m_pKDevComponentManager->runningComponents().isEmpty())
         kdDebug(9000) << "--empty--" << endl;
-    QListIterator<KDevComponent> it(m_runningComponents);
+    QListIterator<KDevComponent> it(m_pKDevComponentManager->runningComponents());
     for (; it.current(); ++it)
         kdDebug(9000) << it.current()->name() << endl;
 
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-    pAC->action("stop_everything")->setEnabled(!m_runningComponents.isEmpty());
+    pAC->action("stop_everything")->setEnabled(!m_pKDevComponentManager->runningComponents().isEmpty());
 }
 
 
@@ -481,11 +447,13 @@ KDevViewHandler* KDevelopCore::viewHandler()
 void KDevelopCore::needKDevNodeActions(KDevNode* pNode, QList<KAction> *pList)
 {
     pList->clear();
-        
-    QListIterator<KDevComponent> it(m_components);
+
+    // This is not supposed to be done here. Components should be reached only by KDevComponentManager
+    // Only for now! :-( should be rewritten some time in the componentmanager
+    QListIterator<KDevComponent> it(m_pKDevComponentManager->allComponents());
     for (; it.current(); ++it){ // ask every component
         QList<KAction> pSingleList = (*it)->kdevNodeActions(pNode);
-        if (it.current() != m_components.first()
+        if (it.current() != m_pKDevComponentManager->allComponents().first()
             && !pSingleList.isEmpty())
             pList->append(new KActionSeparator(0));
         QListIterator<KAction> it(pSingleList);
