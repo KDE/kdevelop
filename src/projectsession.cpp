@@ -34,7 +34,7 @@
 #include "kdevplugin.h"
 
 #include "projectsession.h"
-
+#include "projectsession.moc"
 //---------------------------------------------------------------------------
 ProjectSession::ProjectSession()
 {
@@ -134,8 +134,8 @@ void ProjectSession::recreateDocs(QDomElement& el)
   int nDoc = 0;
   QDomElement docEl;
   for (docEl = docsAndViewsEl.firstChild().toElement(), nDoc = 0;
-       nDoc < nNrOfDocs; 
-       nDoc++, docEl = docEl.nextSibling().toElement()) 
+       nDoc < nNrOfDocs;
+       nDoc++, docEl = docEl.nextSibling().toElement())
   {
     // read the document name and type
     QString docName = docEl.attribute( "URL", "");
@@ -168,7 +168,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
   if (docEl.hasAttribute("context")) {
     context = docEl.attribute("context");
   }
-  
+
   for (viewEl = docEl.firstChild().toElement(), nView = 0; nView < nNrOfViews; nView++, viewEl = viewEl.nextSibling().toElement()) {
 
 ////    // is it the focused view? (XXX well, this only refers to the module instance)
@@ -330,7 +330,7 @@ bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDev
       pluginListEl.appendChild(pluginEl);
     }
   }
-  
+
   // Write it out to the session file on disc
   QFile f(sessionFileName);
   if ( f.open(IO_WriteOnly) ) {    // file opened successfully
