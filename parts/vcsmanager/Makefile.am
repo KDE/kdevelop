@@ -16,4 +16,4 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevvcsmanager.desktop
 
 rcdir = $(kde_datadir)/kdevvcsmanager
-rc_DATA = kdevvcsmanager.rc
+
