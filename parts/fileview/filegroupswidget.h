@@ -35,7 +35,8 @@ private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotToggleShowNonProjectFiles();
-
+    void slotToggleDisplayLocation();
+    
 protected:
     void addFile(const QString &fileName);
     void removeFile(const QString &fileName);
@@ -45,6 +46,9 @@ private:
     FileGroupsPart *m_part;
 
     class KToggleAction *m_actionToggleShowNonProjectFiles;
+    class KToggleAction *m_actionToggleDisplayLocation;
+    int LocationID;
 };
 
 #endif
+

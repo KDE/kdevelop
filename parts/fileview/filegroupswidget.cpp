@@ -43,6 +43,34 @@ static const char *translations[] = {
     I18N_NOOP("Others")
 };
 
+class FileComparator {
+public:
+	virtual ~FileComparator(){
+	};
+	virtual bool matches(const QString& name) const = 0;
+};
+
+class RegExpComparator : public FileComparator {
+public:
+	RegExpComparator(const QString& pattern) : m_exp(pattern, true, true){
+	}
+	bool matches(const QString& name) const{
+		return m_exp.exactMatch(name);
+	}
+private:
+	const QRegExp m_exp;
+};
+
+class EndingComparator : public FileComparator {
+public:
+	EndingComparator(const QString& pattern) : m_pattern ( pattern){
+	}
+	bool matches(const QString& name) const{
+		return name.endsWith(m_pattern);
+	}
+private:
+	const QString m_pattern;
+};
 
 class FileViewFolderItem : public QListViewItem
 {
@@ -51,7 +79,7 @@ public:
     bool matches(const QString &fileName);
 
 private:
-    QStringList patterns;
+    QPtrList<FileComparator> m_patterns;
 };
 
 
@@ -59,7 +87,30 @@ FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, c
     : QListViewItem(parent, name)
 {
     setPixmap(0, SmallIcon("folder"));
-    patterns = QStringList::split(';', pattern);
+    m_patterns.setAutoDelete(true);
+    QStringList patternstring = QStringList::split(';', pattern);
+    QStringList::ConstIterator theend = patternstring.end();
+    for (QStringList::ConstIterator ci = patternstring.begin(); ci != theend; ++ci)
+	{
+		QString pattern = *ci;
+		QString tail = pattern.right( pattern.length() - 1 );
+
+		if ( (tail).contains('*') || pattern.contains('?') || pattern.contains('[') || pattern.contains(']') )
+		{
+			m_patterns.append( new RegExpComparator( pattern ) );
+		}
+		else
+		{
+			if ( pattern.startsWith("*") )
+			{
+				m_patterns.append( new EndingComparator( tail ) );
+			}
+			else
+			{
+				m_patterns.append( new EndingComparator( pattern ) );
+			}
+		}
+    }
 }
 
 
@@ -68,14 +119,10 @@ bool FileViewFolderItem::matches(const QString &fileName)
     // Test with the file path, so that "*ClientServer/*.h" patterns work
     QString fName = QFileInfo(fileName).filePath();
 
-    QStringList::ConstIterator it;
-    for (it = patterns.begin(); it != patterns.end(); ++it) {
-        // The regexp objects could be created already
-        // in the constructor
-        QRegExp re(*it, true, true);
-        if (re.exactMatch(fName))
-            return true;
-    }
+    QPtrList<FileComparator>::ConstIterator theend = m_patterns.end();
+    for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci)
+    	if ((*ci)->matches(fName))
+		return true;
 
     return false;
 }
@@ -104,14 +151,21 @@ FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fil
 
 FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     : KListView(0, "file view widget"),
-    m_actionToggleShowNonProjectFiles( 0 )
+    m_actionToggleShowNonProjectFiles( 0 ), m_actionToggleDisplayLocation( 0 )
 {
+    /*
+	Setting Location ID to -1 so I can check if it has been loaded later.
+	If I dont, it will remove the name column and this is not too good :-)
+	Is there any better way to do this?
+    */
+    LocationID=-1;
+    
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
     addColumn(i18n("Name"));
-    addColumn(i18n("Location"));
+//    addColumn(i18n("Location"));
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -124,11 +178,16 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
+    m_actionToggleDisplayLocation = new KToggleAction( i18n("Display Location Column"), KShortcut(),
+        this, SLOT(slotToggleDisplayLocation()), this, "actiontoggleshowlocation" );
+    m_actionToggleDisplayLocation->setWhatsThis(i18n("<b>Display the Location Column</b><p>Displays a columne with the location of the files."));
+
     m_part = part;
     (void) translations; // supress compiler warning
 
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/groups/hidenonprojectfiles") );
+    m_actionToggleDisplayLocation->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/groups/hidenonlocation") );
 }
 
 
@@ -136,6 +195,7 @@ FileGroupsWidget::~FileGroupsWidget()
 {
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::writeBoolEntry( dom, "/kdevfileview/groups/hidenonprojectfiles", !m_actionToggleShowNonProjectFiles->isChecked() );
+    DomUtil::writeBoolEntry( dom, "/kdevfileview/groups/hidenonlocation", !m_actionToggleDisplayLocation->isChecked() );
 }
 
 
@@ -153,19 +213,18 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
         return;
 
     FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(item);
-    m_part->partController()->editDocument(QString("file://") + m_part->project()->projectDirectory() + "/" + fgfitem->fileName());
+    m_part->partController()->editDocument(KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + fgfitem->fileName() ));
     m_part->mainWindow()->lowerView(this);
 }
 
 
 void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
-    if (!item)
-        return;
     KPopupMenu popup(i18n("File Groups"), this);
     /// @todo Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
-    popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Cusomtize File Groups</b> dialog where the groups can be managed."));
+    popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Customize File Groups</b> dialog where the groups can be managed."));
+    if (item) {
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
@@ -184,7 +243,9 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         FileContext context(file_list);
         m_part->core()->fillContextMenu(&popup, &context);
     }
+    }
     m_actionToggleShowNonProjectFiles->plug( &popup );
+    m_actionToggleDisplayLocation->plug( &popup );
 
     int res = popup.exec(p);
     if (res == customizeId) {
@@ -214,7 +275,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 		}
 		++it;
 	}
-	
+
 	// append the project relative directory path to all files in the current directory
 	QStringList dirlist = QDir( dir ).entryList( QDir::Files );
 	QValueListIterator<QString> itt = dirlist.begin();
@@ -230,7 +291,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 		}
 		++itt;
 	}
-	
+
 	return filelist;
 }
 
@@ -239,6 +300,16 @@ void FileGroupsWidget::refresh()
     while (firstChild())
         delete firstChild();
 
+    if (m_actionToggleDisplayLocation->isChecked()) {
+        // Display the Location column
+	LocationID=addColumn(i18n("Location"));
+    }
+    else {
+        // Remove the Location column
+	//Need to check if the ID exists, if not do nothing!!
+	if (LocationID!=-1)
+	    removeColumn(LocationID);
+    }
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::PairList list =
         DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group", "name", "pattern");
@@ -354,5 +425,11 @@ void FileGroupsWidget::slotToggleShowNonProjectFiles()
     refresh();
 }
 
+void FileGroupsWidget::slotToggleDisplayLocation()
+{
+    refresh();
+}
+
 
 #include "filegroupswidget.moc"
+
