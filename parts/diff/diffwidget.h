@@ -48,6 +48,7 @@ protected:
 private slots:
   void popupActivated( int );
   void toggleSyntaxHighlight();
+  void saveAs();
 
 private:
   static void searchExtParts();

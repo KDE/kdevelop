@@ -13,6 +13,7 @@
 #include <qtextedit.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
+#include <qfile.h>
 
 #include <kconfig.h>
 #include <kapplication.h>
@@ -20,7 +21,10 @@
 #include <kservice.h>
 #include <ktempfile.h>
 #include <kpopupmenu.h>
- 
+#include <kiconloader.h>
+#include <kfiledialog.h> 
+#include <kmessagebox.h>
+
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
 
@@ -64,9 +68,6 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
   
   int i = 0;
 
-  if ( extParts.isEmpty() )
-    return popup;
-
   for ( QStringList::Iterator it = extParts.begin(); it != extParts.end(); ++it ) {
     popup->insertItem( i18n( "Show in %1" ).arg( *it ), i + POPUP_BASE, i );
     i++;
@@ -75,11 +76,34 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
     popup->insertSeparator( i );
   connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
 
-  popup->insertItem( i18n( "Highlight Syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 0 );
-  popup->setItemChecked( POPUP_BASE - 1, _highlight );
+  popup->insertItem( SmallIconSet( "filesaveas" ), i18n( "&Save As..." ), this, SLOT(saveAs()), CTRL + Key_S, POPUP_BASE - 2, 0 );
+  popup->setItemEnabled( POPUP_BASE - 2, length() > 0 );
+    
   popup->insertSeparator( 1 );
 
+  popup->insertItem( i18n( "Highlight syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 2 );
+  popup->setItemChecked( POPUP_BASE - 1, _highlight );
+  popup->insertSeparator( 3 );
+
   return popup;
+}
+
+void KDiffTextEdit::saveAs()
+{
+  QString fName = KFileDialog::getSaveFileName();
+  if ( fName.isEmpty() )
+    return;
+
+  QFile f( fName );
+  if ( f.open( IO_WriteOnly ) ) {
+    QTextStream stream( &f );
+    int pCount = paragraphs();
+    for ( int i = 0; i < pCount; ++i )
+      stream << text( i ) << "\n";
+    f.close();
+  } else {
+    KMessageBox::sorry( 0, i18n("Unable to open file."), i18n("Diff Frontend") );
+  }
 }
 
 void KDiffTextEdit::toggleSyntaxHighlight()
