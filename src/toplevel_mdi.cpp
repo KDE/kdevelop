@@ -421,11 +421,20 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QStrin
   QextMdiChildView *child = wrapper(view, name);
   m_captionDict.insert(fullName, child);
 
-  unsigned int mdiFlags = QextMdi::StandardAdd;
-
-  addWindow(child, QPoint(0,0), mdiFlags);
-
+  unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::UseQextMDISizeHint;
+  addWindow(child, mdiFlags);
+  
   m_partViews.append(child);
+  
+  // hack for a strange geometry problem (otherwise the childview doesn't move to the right position in the childframe)
+  if ((mdiMode() == QextMdi::ChildframeMode) && isInMaximizedChildFrmMode()) {
+    QWidget* v;
+    if (child->mdiParent()) { v = child->mdiParent(); }
+    else { v = child; }
+    QRect geom = v->geometry();
+    v->setGeometry(geom.left(),geom.top(),geom.width()+1,geom.height()+1);
+    v->setGeometry(geom.left(),geom.top(),geom.width(),geom.height());
+  }
 }
 
 /** Adds a tool view window to the output or tree views
