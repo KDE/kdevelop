@@ -95,6 +95,7 @@ void RTClassBrowser::parseTypedef( TypedefAST* ast )
 
 void RTClassBrowser::parseTemplateDeclaration( TemplateDeclarationAST* ast )
 {
+    parseDeclaration( ast->declaration() );
     TreeParser::parseTemplateDeclaration( ast );
 }
 
