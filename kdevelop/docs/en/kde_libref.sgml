@@ -297,9 +297,29 @@ control elements that the Qt library provides, KDE offers:
 
 <sect>General Purpose Classes
 <p>
-<sect1>Files
+<sect1>Files and Directories
 <p>
+Qt already offers a set of classes to work with files and directories. Those classes are:
+
+<itemize>
+<item><tt/QDir/
+<item><tt/QFileInfo/
+<item><tt/QFile/
+<item><tt/QFileDialog/
+</itemize>
+
+A comparable and extended technology has been introduced by the KDE libraries and have a similar usage like the corresponding classes
+of Qt. Those are:
+
+<itemize>
+<item><tt/KDir/
+<item><tt/KFileInfo/
+<item><tt/KFileDialog/
+<item><tt/KFilePreviewDialog/
+</itemize>
+
 For loading and saving files, use the class <tt/QFile/ which operates with streams.
+
 <sect1>Data Objects
 <p>
 The Qt library supports data objects by classes that offer handling of lists, arrays, streams, strings and the like. See the Qt
@@ -1713,6 +1733,177 @@ efforts. You should always first look for an already existing solution for gener
 implement a new dialog from scratch. Further, you don't have to care about internationalization as these dialogs are part of the KDE
 libraries and are already translated.
 
+<sect>KMsgBox
+<p>
+The <tt/KMsgBox/ class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
+advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavior by
+setting text, window text, symbol and button text.
+
+<itemize>
+<item>message(): providing a single message box with an OK button to inform the user
+<item>yesNo(): provides a yes/no question box.
+<item>yesNoCancel(): provides a yes/no/cancel box with three buttons. Used e.g. to quit an application with the question: Document has
+been modified. Would you like to save changes ?. Then the yes-button would mean saving changes and exiting the application, no would
+mean exit without saving and cancel would stop any exiting and just returns.
+</itemize>
+
+If this doesn't match your actual need, you could as well create a new KMsgBox instance that can have up to four buttons. This can be
+used by applications that have multiple open files but don't want the user to ask if he would like to save changes for each file
+separately; therefore these will need a button "Save All" or something. Then you could program the dialog towards your needs like the
+static methods and will receive the correct result.
+
+As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
+compare with <tt/if()/ for the actions to execute.
+
+<sect>KQuickHelp
+<p>
+
+The <tt/KQuickHelp/ class provides a good way to add quick-help dialogs to widgets. The user can access the quick-help by a
+context-menu entry "Quick-Help" and is therefore easy to use and gives enough information where a Help-button for the manuals would be
+too much and a <tt/QToolTip/ would be too less. The reason I include <tt/KQuickHelp/ into the provided dialogs is that the
+class-documentation itself contains example usage, but doesn't cover all formatting possibilities, therefore these are listed in detail
+here.
+
+<sect1>Usage
+<p>
+A quick-help window therefore can always be added to a widget by using the static method <tt/add()/, also one help message can be used
+for more than one widget. The example shows this by adding one message that applies to two widgets that are providing a funcitionality
+that depends on each other:
+
+<code>
+#include <kquickhelp.h>
+#include <kapp.h>
+#include "mydialog.h"
+
+MyDialog::MyDialog(QWidget* parent, const char* name): QDialog(parent, name)
+{
+
+  file_lineedit= new QLineEdit(this, "file_lineedit");
+  file_select_button= new QPushButton(this, "file_select_button");
+
+  KQuickHelp::add(file_lineedit,
+  KQuickHelp::add(file_select_button, i18n("Select the filename to process.\n"
+                                           "You can use the lineedit or the\n"
+                                           "button to select the filename.")));
+}
+</code>
+
+<sect1>Text Formatting
+<p>
+
+The text inside your quick-help window can also be formatted to fit various needs, even hyperlinks. Using the KDE-FSSTD, you can also
+access your online-documentation to provide a link for further information by just using your html filename. This is considered a nice
+way to give the user the best information in some cases where the purpose of certain functions is too difficult to explain in a
+quick-help window.
+
+The followindg list contains the valid tags for text formatting:
+
+<code>
+Font Attributes           Tag                                         Short-form Tag
+
+bold font                 &lt;bold&gt;&lt;/bold&gt;                   &lt;b&gt;&lt;/b&gt;
+italic font               &lt;italic&gt;&lt;/italic&gt;               &lt;i&gt;&lt;/i&gt;
+underlines                &lt;underline&gt;&lt;/underline&gt;         &lt;u&gt;&lt;/u&gt;
+</code>
+
+<code>
+Font Size                 Tag                                         Short-form Tag
+
+increase                  &lt;FONTSIZE +&gt;                          &lt;+&gt;
+decrease                  &lt;FONTSIZE -&gt;                          &lt;-&gt;
+</code>
+
+<code>
+Font Selection            Tag                                         Short-form Tag
+
+default font              &lt;FONT DEFAULT&gt;                        &lt;DEFAULT&gt;
+fixed font                &lt;FONT FIXED&gt;                          &lt;FIXED&gt;
+</code>
+
+<code>
+Indentation               Tag                                         Short-form Tag
+
+right indent              &lt;INDENT +&gt;                            &lt;i+&gt;
+left indent               &lt;INDENT -&gt;                            &lt;i-&gt;
+</code>
+
+<code>
+Color
+
+RGB color                 &lt;COLOR #&gt;
+red text                  &lt;COLOR RED&gt;                           &gt;&lt;red&gt;
+green text                &lt;COLOR GREEN&gt;                         &lt;green&gt;
+blue text                 &lt;COLOR BLUE&gt;                          &lt;blue&gt;
+white text                &lt;COLOR WHITE&gt;                         &lt;white&gt;
+yellow text               &lt;COLOR YELLOW&gt;                        &lt;yellow&gt;
+black text                &lt;COLOR BLACK&gt;                         &lt;black&gt;
+brown text                &lt;COLOR BROWN&gt;                         &lt;brown&gt;
+magenta text              &lt;COLOR MAGENTA&gt;                       &lt;magenta&gt;
+cyan text                 &lt;COLOR CYAN&gt;                          &lt;cyan&gt;
+</code>
+
+<code>
+Newline                   &lt;br&gt;
+Hyperlinks                &lt;link linkname&gt;&lt;/link&gt;
+</code>
+
+Thereby, valid <tt/linkname/s are:
+
+<itemize>
+<item>http://yourlink
+<item>info://yourlink
+<item>ftp://yourlink
+<item>file://yourlink
+<item>mailto:your_address@your_domain
+</itemize>
+These links will be opened using the <tt/kfm/ (KDE File Manager). All other linknames assume that you want to access your application's
+online-help documentation and therefore use the <tt/linkname/ as the file you want to access and tries to open it with the KDEHelp
+program.
+
+
+<sect>File Dialogs
+<p>
+As the <tt/kfile/ library provides several dialogs for retrieving filenames as well as directories, those have to be separated towards
+which class and method to use for which purpose.
+
+Generally, the <tt/kfile/ library offers:
+<itemize>
+<item>a <tt/KFileDialog/ class, which is a specialized <tt/KFileBaseDialog/ and provides the most needed static methods to retrieve
+filenames.
+<item>the <tt/KFileDialog/ class itself, which can be subclassed but also be used for retrieving several filenames and directories.
+<item>the <tt/KFilePreviewDialog/ class, which offers file-dialogs that can display selected files by their contents if the developer
+provides a preview module that is able to show a preview of the filecontents
+</itemize>
+
+For general file/directory services, the classes <tt/KFileInfo/ and <tt/KDir/ can be used.
+
+The following sections will discuss the usage and handling of the according file-dialogs in applications.
+
+<sect1>KFileDialog
+<p>
+
+The <tt/KFileDialog/ class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
+creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
+filename to save files to.
+
+The following examples show the usage for each purpose:
+
+<tscreen><verb>
+// request a filename to open
+
+QString open_filename;
+
+open_filename=
+QString getOpenFileName(const char *dir= 0, const char *filter= 0, QWidget *parent= 0, const char *name= 0)
+</verb></tscreen>
+
+<sect1>KFileBaseDialog
+<p>
+
+<sect1>KFilePreviewDialog
+<p>
+
+
 <sect>KColorDialog
 <p>
 The <tt/KColorDialog/ provides an easy-to use interface to receive color values from the user. Color values are always requested, if
@@ -1740,13 +1931,6 @@ This creates an instance of QColor to store a color value and by calling the sta
 value. The returned integer value will probably be of no interest - its the result code of <tt/QDialog/ that specifies the dialog has
 been exited via the OK or Cancel button.
 
-<sect>KWizard
-<p>
-The <tt/KWizard/ class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
-the wizard dialog provides the necessary buttons and draws the according page numbers already, so that you only have to construct your
-widgets you want to use as the single pages for the dialog and insert them in the order you want the user to proceed while calling the
-wizard.
-
 
 <sect>KFontDialog
 <p>
@@ -1763,33 +1947,12 @@ device links. Then the values for the link are displayed on the according button
 stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
 device.
 
-<sect>KMsgBox
+<sect>KWizard
 <p>
-The <tt/KMsgBox/ class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
-advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavior by
-setting text, window text, symbol and button text.
-
-<itemize>
-<item>message(): providing a single message box with an OK button to inform the user
-<item>yesNo(): provides a yes/no question box.
-<item>yesNoCancel(): provides a yes/no/cancel box with three buttons. Used e.g. to quit an application with the question: Document has
-been modified. Would you like to save changes ?. Then the yes-button would mean saving changes and exiting the application, no would
-mean exit without saving and cancel would stop any exiting and just returns.
-</itemize>
-
-If this doesn't match your actual need, you could as well create a new KMsgBox instance that can have up to four buttons. This can be
-used by applications that have multiple open files but don't want the user to ask if he would like to save changes for each file
-separately; therefore these will need a button "Save All" or something. Then you could program the dialog towards your needs like the
-static methods and will receive the correct result.
-
-As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
-compare with <tt/if()/ for the actions to execute.
-
-<sect>KFileDialog
-<p>
-The <tt/KFileDialog/ class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
-creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
-filename to save files to.
+The <tt/KWizard/ class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
+the wizard dialog provides the necessary buttons and draws the according page numbers already, so that you only have to construct your
+widgets you want to use as the single pages for the dialog and insert them in the order you want the user to proceed while calling the
+wizard.
 
 
 <sect>KSpellDlg
@@ -1945,6 +2108,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
 
 
 

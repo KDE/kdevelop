@@ -30,7 +30,192 @@ efforts. You should always first look for an already existing solution for gener
 implement a new dialog from scratch. Further, you don't have to care about internationalization as these dialogs are part of the KDE
 libraries and are already translated.
 <P>
-<H3><A NAME="ss6.1">6.1 KColorDialog</A>
+<H3><A NAME="ss6.1">6.1 KMsgBox</A>
+</H3>
+
+<P>The <CODE>KMsgBox</CODE> class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
+advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavior by
+setting text, window text, symbol and button text.
+<P>
+<UL>
+<LI>message(): providing a single message box with an OK button to inform the user</LI>
+<LI>yesNo(): provides a yes/no question box.</LI>
+<LI>yesNoCancel(): provides a yes/no/cancel box with three buttons. Used e.g. to quit an application with the question: Document has
+been modified. Would you like to save changes ?. Then the yes-button would mean saving changes and exiting the application, no would
+mean exit without saving and cancel would stop any exiting and just returns.</LI>
+</UL>
+<P>If this doesn't match your actual need, you could as well create a new KMsgBox instance that can have up to four buttons. This can be
+used by applications that have multiple open files but don't want the user to ask if he would like to save changes for each file
+separately; therefore these will need a button "Save All" or something. Then you could program the dialog towards your needs like the
+static methods and will receive the correct result.
+<P>As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
+compare with <CODE>if()</CODE> for the actions to execute.
+<P>
+<H3><A NAME="ss6.2">6.2 KQuickHelp</A>
+</H3>
+
+<P>
+<P>The <CODE>KQuickHelp</CODE> class provides a good way to add quick-help dialogs to widgets. The user can access the quick-help by a
+context-menu entry "Quick-Help" and is therefore easy to use and gives enough information where a Help-button for the manuals would be
+too much and a <CODE>QToolTip</CODE> would be too less. The reason I include <CODE>KQuickHelp</CODE> into the provided dialogs is that the
+class-documentation itself contains example usage, but doesn't cover all formatting possibilities, therefore these are listed in detail
+here.
+<P>
+<H4>Usage</H4>
+
+<P>A quick-help window therefore can always be added to a widget by using the static method <CODE>add()</CODE>, also one help message can be used
+for more than one widget. The example shows this by adding one message that applies to two widgets that are providing a funcitionality
+that depends on each other:
+<P>
+<HR>
+<PRE>
+#include &lt;kquickhelp.h>
+#include &lt;kapp.h>
+#include "mydialog.h"
+
+MyDialog::MyDialog(QWidget* parent, const char* name): QDialog(parent, name)
+{
+
+  file_lineedit= new QLineEdit(this, "file_lineedit");
+  file_select_button= new QPushButton(this, "file_select_button");
+
+  KQuickHelp::add(file_lineedit,
+  KQuickHelp::add(file_select_button, i18n("Select the filename to process.\n"
+                                           "You can use the lineedit or the\n"
+                                           "button to select the filename.")));
+}
+</PRE>
+<HR>
+<P>
+<H4>Text Formatting</H4>
+
+<P>
+<P>The text inside your quick-help window can also be formatted to fit various needs, even hyperlinks. Using the KDE-FSSTD, you can also
+access your online-documentation to provide a link for further information by just using your html filename. This is considered a nice
+way to give the user the best information in some cases where the purpose of certain functions is too difficult to explain in a
+quick-help window.
+<P>The followindg list contains the valid tags for text formatting:
+<P>
+<HR>
+<PRE>
+Font Attributes           Tag                                         Short-form Tag
+
+bold font                 &lt;bold&gt;&lt;/bold&gt;                   &lt;b&gt;&lt;/b&gt;
+italic font               &lt;italic&gt;&lt;/italic&gt;               &lt;i&gt;&lt;/i&gt;
+underlines                &lt;underline&gt;&lt;/underline&gt;         &lt;u&gt;&lt;/u&gt;
+</PRE>
+<HR>
+<P>
+<HR>
+<PRE>
+Font Size                 Tag                                         Short-form Tag
+
+increase                  &lt;FONTSIZE +&gt;                          &lt;+&gt;
+decrease                  &lt;FONTSIZE -&gt;                          &lt;-&gt;
+</PRE>
+<HR>
+<P>
+<HR>
+<PRE>
+Font Selection            Tag                                         Short-form Tag
+
+default font              &lt;FONT DEFAULT&gt;                        &lt;DEFAULT&gt;
+fixed font                &lt;FONT FIXED&gt;                          &lt;FIXED&gt;
+</PRE>
+<HR>
+<P>
+<HR>
+<PRE>
+Indentation               Tag                                         Short-form Tag
+
+right indent              &lt;INDENT +&gt;                            &lt;i+&gt;
+left indent               &lt;INDENT -&gt;                            &lt;i-&gt;
+</PRE>
+<HR>
+<P>
+<HR>
+<PRE>
+Color
+
+RGB color                 &lt;COLOR #&gt;
+red text                  &lt;COLOR RED&gt;                           &gt;&lt;red&gt;
+green text                &lt;COLOR GREEN&gt;                         &lt;green&gt;
+blue text                 &lt;COLOR BLUE&gt;                          &lt;blue&gt;
+white text                &lt;COLOR WHITE&gt;                         &lt;white&gt;
+yellow text               &lt;COLOR YELLOW&gt;                        &lt;yellow&gt;
+black text                &lt;COLOR BLACK&gt;                         &lt;black&gt;
+brown text                &lt;COLOR BROWN&gt;                         &lt;brown&gt;
+magenta text              &lt;COLOR MAGENTA&gt;                       &lt;magenta&gt;
+cyan text                 &lt;COLOR CYAN&gt;                          &lt;cyan&gt;
+</PRE>
+<HR>
+<P>
+<HR>
+<PRE>
+Newline                   &lt;br&gt;
+Hyperlinks                &lt;link linkname&gt;&lt;/link&gt;
+</PRE>
+<HR>
+<P>Thereby, valid <CODE>linkname</CODE>s are:
+<P>
+<UL>
+<LI>http://yourlink</LI>
+<LI>info://yourlink</LI>
+<LI>ftp://yourlink</LI>
+<LI>file://yourlink</LI>
+<LI>mailto:your_address@your_domain</LI>
+</UL>
+
+These links will be opened using the <CODE>kfm</CODE> (KDE File Manager). All other linknames assume that you want to access your application's
+online-help documentation and therefore use the <CODE>linkname</CODE> as the file you want to access and tries to open it with the KDEHelp
+program.
+<P>
+<P>
+<H3><A NAME="ss6.3">6.3 File Dialogs</A>
+</H3>
+
+<P>As the <CODE>kfile</CODE> library provides several dialogs for retrieving filenames as well as directories, those have to be separated towards
+which class and method to use for which purpose.
+<P>Generally, the <CODE>kfile</CODE> library offers:
+<UL>
+<LI>a <CODE>KFileDialog</CODE> class, which is a specialized <CODE>KFileBaseDialog</CODE> and provides the most needed static methods to retrieve
+filenames.</LI>
+<LI>the <CODE>KFileDialog</CODE> class itself, which can be subclassed but also be used for retrieving several filenames and directories.</LI>
+<LI>the <CODE>KFilePreviewDialog</CODE> class, which offers file-dialogs that can display selected files by their contents if the developer
+provides a preview module that is able to show a preview of the filecontents</LI>
+</UL>
+<P>For general file/directory services, the classes <CODE>KFileInfo</CODE> and <CODE>KDir</CODE> can be used.
+<P>The following sections will discuss the usage and handling of the according file-dialogs in applications.
+<P>
+<H4>KFileDialog</H4>
+
+<P>
+<P>The <CODE>KFileDialog</CODE> class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
+creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
+filename to save files to.
+<P>The following examples show the usage for each purpose:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+// request a filename to open
+
+QString open_filename;
+
+open_filename=
+QString getOpenFileName(const char *dir= 0, const char *filter= 0, QWidget *parent= 0, const char *name= 0)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H4>KFileBaseDialog</H4>
+
+<P>
+<P>
+<H4>KFilePreviewDialog</H4>
+
+<P>
+<P>
+<P>
+<H3><A NAME="ss6.4">6.4 KColorDialog</A>
 </H3>
 
 <P>The <CODE>KColorDialog</CODE> provides an easy-to use interface to receive color values from the user. Color values are always requested, if
@@ -56,16 +241,8 @@ int result = KColorDialog::getColor( myColor );
 value. The returned integer value will probably be of no interest - its the result code of <CODE>QDialog</CODE> that specifies the dialog has
 been exited via the OK or Cancel button.
 <P>
-<H3><A NAME="ss6.2">6.2 KWizard</A>
-</H3>
-
-<P>The <CODE>KWizard</CODE> class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
-the wizard dialog provides the necessary buttons and draws the according page numbers already, so that you only have to construct your
-widgets you want to use as the single pages for the dialog and insert them in the order you want the user to proceed while calling the
-wizard.
 <P>
-<P>
-<H3><A NAME="ss6.3">6.3 KFontDialog</A>
+<H3><A NAME="ss6.5">6.5 KFontDialog</A>
 </H3>
 
 <P>The <CODE>KFontDialog</CODE> will retrieve you a value for a font currently avaliable on the system. Therefore using the fontdialog will mostly
@@ -73,7 +250,7 @@ only make sense where you will need a font; the most recent usage is made by tex
 widget as well as into a picture.
 <P>
 <P>
-<H3><A NAME="ss6.4">6.4 KIconLoaderDialog</A>
+<H3><A NAME="ss6.6">6.6 KIconLoaderDialog</A>
 </H3>
 
 <P>For applications requiring an icon selection, KDE provides the <CODE>KIconLoaderDialog</CODE>. The main purpose is to select an icon on the
@@ -82,48 +259,28 @@ device links. Then the values for the link are displayed on the according button
 stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
 device.
 <P>
-<H3><A NAME="ss6.5">6.5 KMsgBox</A>
+<H3><A NAME="ss6.7">6.7 KWizard</A>
 </H3>
 
-<P>The <CODE>KMsgBox</CODE> class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
-advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavior by
-setting text, window text, symbol and button text.
-<P>
-<UL>
-<LI>message(): providing a single message box with an OK button to inform the user</LI>
-<LI>yesNo(): provides a yes/no question box.</LI>
-<LI>yesNoCancel(): provides a yes/no/cancel box with three buttons. Used e.g. to quit an application with the question: Document has
-been modified. Would you like to save changes ?. Then the yes-button would mean saving changes and exiting the application, no would
-mean exit without saving and cancel would stop any exiting and just returns.</LI>
-</UL>
-<P>If this doesn't match your actual need, you could as well create a new KMsgBox instance that can have up to four buttons. This can be
-used by applications that have multiple open files but don't want the user to ask if he would like to save changes for each file
-separately; therefore these will need a button "Save All" or something. Then you could program the dialog towards your needs like the
-static methods and will receive the correct result.
-<P>As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
-compare with <CODE>if()</CODE> for the actions to execute.
-<P>
-<H3><A NAME="ss6.6">6.6 KFileDialog</A>
-</H3>
-
-<P>The <CODE>KFileDialog</CODE> class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
-creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
-filename to save files to.
+<P>The <CODE>KWizard</CODE> class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
+the wizard dialog provides the necessary buttons and draws the according page numbers already, so that you only have to construct your
+widgets you want to use as the single pages for the dialog and insert them in the order you want the user to proceed while calling the
+wizard.
 <P>
 <P>
-<H3><A NAME="ss6.7">6.7 KSpellDlg</A>
+<H3><A NAME="ss6.8">6.8 KSpellDlg</A>
 </H3>
 
 <P>
 <P>(kspell) spell checking dialog for use with Ispell
 <P>
-<H3><A NAME="ss6.8">6.8 DatePickerDialog</A>
+<H3><A NAME="ss6.9">6.9 DatePickerDialog</A>
 </H3>
 
 <P>
 <P>(kab) date selection dialog
 <P>
-<H3><A NAME="ss6.9">6.9 Qt Dialogs</A>
+<H3><A NAME="ss6.10">6.10 Qt Dialogs</A>
 </H3>
 
 <P>
