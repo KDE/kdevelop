@@ -8,6 +8,7 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/selectioninterface.h>
 
 #include "partcontroller.h"
 #include "core.h"
@@ -103,30 +104,37 @@ void EditorProxy::popupAboutToShow()
   if (!ro_part->widget())
     return;
 
+  SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
   ViewCursorInterface *cursorIface = dynamic_cast<ViewCursorInterface*>(ro_part->widget());
   EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
 
-  if (!cursorIface || !editIface || !ro_part)
+  QString wordstr, linestr;
+  uint line, col;
+  line = col = 0;
+  if( selectIface && selectIface->hasSelection() )
   {
-    Core::getInstance()->fillContextMenu(popup, 0);
+    wordstr = selectIface->selection();
+    // Why doesn't SelectionInterface have a way to get the bounds?
   }
-  else
+  if( cursorIface && editIface )
   {
-    uint line, col;
     cursorIface->cursorPosition(&line, &col);
-    QString linestr = editIface->textLine(line);
-    int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
-    int endPos = startPos;
-    while (startPos >= 0 && linestr[startPos].isLetter())
-        startPos--;
-    while (endPos < (int)linestr.length() && linestr[endPos].isLetter())
-        endPos++;
-    QString wordstr = (startPos==endPos)?
-        QString() : linestr.mid(startPos+1, endPos-startPos-1);
+    linestr = editIface->textLine(line);
+    if( wordstr.isEmpty() ) {
+      int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
+      int endPos = startPos;
+      while (startPos >= 0 && linestr[startPos].isLetter())
+          startPos--;
+      while (endPos < (int)linestr.length() && linestr[endPos].isLetter())
+          endPos++;
+      wordstr = (startPos==endPos)?
+          QString() : linestr.mid(startPos+1, endPos-startPos-1);  
+    }
     kdDebug(9000) << "Word:" << wordstr << ":" << endl;
-    EditorContext context(ro_part->url(), line, col,
-                          linestr, wordstr);
+    EditorContext context(ro_part->url(), line, col, linestr, wordstr);
     Core::getInstance()->fillContextMenu(popup, &context);
+  } else {
+    Core::getInstance()->fillContextMenu(popup, 0);
   }
   
   // Remove redundant separators (any that are first, last, or doubled)
