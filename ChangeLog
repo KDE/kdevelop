@@ -1,3 +1,10 @@
+2003-02-11  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* parts/filecreate:
+          - fix: Add cpp and h types by default when there is
+            no template directory in project
+        * lib/structure:
+          - don't install test binary
+
 2003-02-11 F@lk Brettschneider <falk@kdevelop.org>
 	* took the patch of Jens Zurheide (Thanks jens.zurheide@gmx.de!) and modified it a bit.
 	  Additionally to the already existing ALT+Left/Right switching (which switches the views
