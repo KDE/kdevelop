@@ -1025,11 +1025,11 @@ void CKDevelop::slotBuildCompileFile(){
     cwd = QDir(cwd).absPath();
     // Invoke make with proper options
     debug("run: %s in: %s", make_cmd.data(), cwd.data());
-#if QT_VERSION < 300
-    // TODO: set working directory of process, how to do?
-#else
+  #if QT_VERSION < 300
+    QDir::setCurrent(cwd);
+  #else
     process.setWorkingDirectory(cwd);
-#endif
+  #endif
     process << make_cmd;
     QString makeOptions = prj->getMakeOptions();
     if (gotMakefile &&
