@@ -47,6 +47,9 @@ public slots:
 signals:
   void disassemble(const QString& start, const QString& end);
 
+protected:
+  virtual void showEvent(QShowEvent*);
+
 private:
   bool    active_;
   long    lower_;

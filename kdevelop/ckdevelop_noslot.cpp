@@ -823,9 +823,6 @@ void CKDevelop::adjustTOutputToolButtonState()
 
 void CKDevelop::readOptions()
 {
-  //default geometry on first startup, saved geometry is set by applyMainWindowSettings afterwards
-//  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
-//  showMaximized();
   applyMainWindowSettings(config);
 
   config->setGroup("General Options");

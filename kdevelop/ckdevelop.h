@@ -603,9 +603,6 @@ public:
   void slotToolbarClicked(int);
   /** click on the main window tabs: header, source,documentation or tools*/
   void slotViewSelected(QWidget* pView/*, int docType*/);
-  /** click on the output window tabs: messages, stdout, stderr, breakpoint,
-      disassemble, frame stack*/
-  void slotOTabSelected(int item);
 
   /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);

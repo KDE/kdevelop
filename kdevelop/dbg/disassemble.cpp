@@ -154,4 +154,11 @@ void Disassemble::getNextDisplay()
 }
 
 /***************************************************************************/
+
+void Disassemble::showEvent(QShowEvent*)
+{
+  slotActivate(true);
+}
+
+/***************************************************************************/
 #include "disassemble.moc"

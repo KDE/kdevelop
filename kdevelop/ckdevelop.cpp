@@ -3585,15 +3585,6 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
   }
 }
 
-void CKDevelop::slotOTabSelected(int item)
-{
-  if (disassemble)
-    disassemble->slotActivate(item == DISASSEMBLE);
-  else
-    if (item == DISASSEMBLE)
-      dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-}
-
 void CKDevelop::slotLogFileTreeSelected(QString file){
   switchToFile(file);
 }
