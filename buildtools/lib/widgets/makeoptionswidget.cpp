@@ -36,7 +36,7 @@ MakeOptionsWidget::MakeOptionsWidget(QDomDocument &dom, const QString &configGro
     env_var_group->setColumnLayout( 1, Qt::Vertical );
     m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup + "/make/envvars", env_var_group );
 
-    abort_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/abortonerror"));
+    abort_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/abortonerror", true ));
     jobs_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(dom, configGroup + "/make/makebin"));
