@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   KGlobal::config()->setGroup("General Options");
   bool bInstall=KGlobal::config()->readBoolEntry("Install",true);
   if (argc > 1 ){
-    if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
+    if( QString(argv[1]) == "-setup") bInstall = true; // start the setupwizard
   }
 
   if (a.isRestored()){

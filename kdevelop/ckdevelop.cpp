@@ -2718,57 +2718,35 @@ void CKDevelop::slotHelpSearch()
 }
 
 
-void CKDevelop::showDocHelp(const char *bookname)
+void CKDevelop::showDocHelp(const QString& filename)
 {
-  QString strpath = locate("html", ".");
-  QString file;
-  // first try the locale setting
-  file = strpath + KGlobal::locale()->language() + '/' + bookname +"/index.html";
-  
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = strpath + "default/" + bookname +"/index.html";
-  }
-  slotURLSelected(browser_widget, file, 1, "test");  
+  QString file = DocTreeKDevelopBook::locatehtml(filename);
+  if (!file.isEmpty())
+    slotURLSelected(browser_widget, file, 1, "test");
 }
 
 void CKDevelop::slotHelpContents(){
-  showDocHelp("kdevelop");  
+  showDocHelp("index.html");
 }
 
 void CKDevelop::slotHelpProgramming(){
-  showDocHelp("kdevelop/programming");  
+  showDocHelp("programming/index.html");
 }
 
 void CKDevelop::slotHelpTutorial(){
-  showDocHelp("kdevelop/tutorial");  
+  showDocHelp("tutorial/index.html");
 }
 
 void CKDevelop::slotHelpKDELibRef(){
-  showDocHelp("kdevelop/kde_libref");  
+  showDocHelp("kde_libref/index.html");
 }
 
 void CKDevelop::slotHelpKDE2DevGuide(){
-  showDocHelp("kdevelop/addendum");  
+  showDocHelp("addendum/index.html");
 }
 
-void CKDevelop::slotHelpReference(){
-
-  QString file;
-  // first try the locale setting
-  file = locate("html", KGlobal::locale()->language() + "/kdevelop/reference/C/cref.html");
-
-  if (file.isEmpty())
-    file = locate("html", "default/kdevelop/reference/C/cref.html");
-
-  if (file.isEmpty())
-    file = locate("html", KGlobal::locale()->language() + "/kdevelop/cref.html");
-
-  // not found: last chance
-  if (file.isEmpty())
-    file = locate("html",  "default/kdevelop/cref.html");
-
-  slotURLSelected(browser_widget, file,1,"test");
+void CKDevelop::slotHelpReference() {
+  showDocHelp("reference/C/cref.html");
 }
 
 void CKDevelop::slotHelpTipOfDay(){
@@ -2779,14 +2757,6 @@ void CKDevelop::slotHelpTipOfDay(){
 }
 
 void CKDevelop::slotHelpHomepage(){
-//  if(vfork() > 0) {
-//    // drop setuid, setgid
-//    setgid(getgid());
-//    setuid(getuid());
-//
-////    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
-//    _exit(0);
-//  }
     new KRun("http://www.kdevelop.org");
 }
 
@@ -3157,6 +3127,10 @@ void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
 //  if(!bKDevelop)
 //    switchToKDevelop();
   //showOutputView(false);
+
+  if (url.isEmpty())
+    return;
+
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->view()->setFocus();
   QString url_str = url;
@@ -3171,30 +3145,11 @@ void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
     browser_widget->showURL(url_str); // without reload if equal
   }
 
-/*  if (!history_list.isEmpty()){
-    enableCommand(ID_HELP_BACK);
-  }
-*/
-
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
   if (str.contains("kdevelop/search_result.html")){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
-/*  // insert into the history-list
-  if(QString(url).left(7) != "http://"){ // http aren't added to the history list
-
-    int cur =  history_list.at(); // get the current index
-    if(cur == -1){
-      history_list.append(url);
-      history_title_list.append(browser_widget->currentTitle());
-    }
-    else{
-      history_list.insert(cur+1,url);
-      history_title_list.insert(cur+1, browser_widget->currentTitle());
-    }
-  }
-*/  
 }
 
 void CKDevelop::slotURLonURL(const QString& url )

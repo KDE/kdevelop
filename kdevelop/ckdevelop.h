@@ -529,7 +529,7 @@ public:
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
   /** switches to the handbook selected: manual, programming, tutorial... */  
-  void showDocHelp(const char *bookname);
+  void showDocHelp(const QString& bookname);
 
   void slotGrepDialogItemSelected(QString filename,int linenumber);
   

@@ -100,6 +100,9 @@ void CDocBrowser::slotViewInKFM()
 
 void CDocBrowser::showURL(const QString& url, bool reload)
 {
+  if (url.isEmpty())
+    return;
+
   complete_url=url;
 
   // in some cases KHTMLView return "file:/file:/...." (which might be a bug in kdoc?)

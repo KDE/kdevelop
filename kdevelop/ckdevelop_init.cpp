@@ -884,15 +884,15 @@ void CKDevelop::initMenuBar(){
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
   help_menu->insertItem(BarIcon("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(BarIcon("kdehelp"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(BarIcon("kdehelp"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
-  help_menu->insertItem(BarIcon("kdehelp"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
-  help_menu->insertItem(BarIcon("kdehelp"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
-  help_menu->insertItem(BarIcon("kdehelp"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
-  help_menu->insertItem(BarIcon("kdehelp"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
+  help_menu->insertItem(BarIcon("mini-book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help_menu->insertItem(BarIcon("mini-book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
+  help_menu->insertItem(BarIcon("mini-book1"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help_menu->insertItem(BarIcon("mini-book1"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
+  help_menu->insertItem(BarIcon("mini-book1"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertSeparator();	
 	help_menu->insertItem(BarIcon("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
-  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertItem(BarIcon(""), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertItem(BarIcon("filemail"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
@@ -1079,7 +1079,7 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("stop"),ID_HELP_BROWSER_STOP, false,i18n("Stop"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("reload_page"),ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
-	toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("start_page"), ID_HELP_CONTENTS, true, i18n("User Manual"));
+	toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("mini-book1"), ID_HELP_CONTENTS, true, i18n("User Manual"));
 	
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
