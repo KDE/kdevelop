@@ -414,7 +414,7 @@ void DocTreeGlobalConfigWidget::doxygenremove_button_clicked( )
 
 void DocTreeGlobalConfigWidget::qtdocsadd_button_clicked( )
 {
-    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", AddDocItemDialog::Qt);
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "*.xml *.dcf", AddDocItemDialog::Qt);
     if (dialog->exec())
         new KListViewItem(qtdocs_view, dialog->title(), dialog->url());
     delete dialog;
