@@ -205,6 +205,11 @@ QString ProjectSpace::author(){
   return m_author;
 }
 
+/** Fetch the author's initials. stored in the *_user files*/
+QString ProjectSpace::initials(){
+  return m_initials;
+}
+
 /** Fetch the authors eMail-address,  stored in the *_user files */
 QString ProjectSpace::email(){
   return m_email;
@@ -235,6 +240,14 @@ void ProjectSpace::setVCSystem(QString /*vcsystem*/){
 void ProjectSpace::setAuthor(QString name){
   m_author = name;
 }
+
+
+/** stored in the *_user files*/
+void ProjectSpace::setInitials(QString initials)
+{
+  m_initials = initials;
+}
+
 
 /** set the email, stored in the *_user file */
 void ProjectSpace::setEmail(QString email){

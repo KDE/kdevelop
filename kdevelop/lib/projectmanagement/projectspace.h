@@ -81,6 +81,8 @@ class ProjectSpace : public KDevComponent {
   void setVCSystem(QString vcsystem);
   /** stored in the user file*/
   void setAuthor(QString name);
+  /** The author's initials. Stored in the user file*/
+  void setInitials(QString initials);
   /** set the email, stored in the user file */
   void setEmail(QString email);
   void setCompany(QString company);
@@ -97,6 +99,8 @@ class ProjectSpace : public KDevComponent {
   QString VCSystem();
   /** Fetch the authors name. stored in the *_local files*/
   QString author();
+  /** Fetch the author's initials. stored in the *_local files*/
+  QString initials();
   /** Fetch the authors eMail-address,  stored in the *_local files */
   QString email();
   QString company();
@@ -166,9 +170,11 @@ protected:
   QString m_version;
 
   // current User profile
-  QString m_email;
-  QString m_company;
-  QString m_author;
+  QString m_email;      // Author e-mail address.
+  QString m_company;    // Company name.
+  QString m_author;     // Author name.
+  QString m_initials;     // Author Initials.
+
  private:
   void fillActiveProjectPopupMenu();
   
