@@ -677,7 +677,7 @@ void CClassView::buildInitalClassTree()
   str = i18n( CLASSROOTNAME );
   classesItem = treeH->addRoot( str, THFOLDER );
 
-  list = store->getSortedClasslist();
+  list = store->getSortedClassList();
   projDir = project->getProjectDir();
 
   // Add all parsed classes to the correct list;
@@ -775,10 +775,10 @@ void CClassView::slotClassViewSelected()
 
   type = treeH->itemType();
 
-  // Only react on clicks on the left mousebutton.
+  // Take care of left-button clicks.
   if( mouseBtn == LeftButton && type != THFOLDER )
   {
-    if( type == THCLASS || type == THSTRUCT ||
+    if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
         type == THPRIVATE_ATTR || type == THPUBLIC_SIGNAL ||
         type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL )
@@ -786,9 +786,9 @@ void CClassView::slotClassViewSelected()
     else
       slotViewDefinition();
   }
-  else if( mouseBtn == MidButton && type != THFOLDER )
+  else if( mouseBtn == MidButton && type != THFOLDER ) // Middle button clicks
   {
-    if( type == THCLASS || type == THSTRUCT ||
+    if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
         type == THPRIVATE_ATTR  || type == THPUBLIC_SIGNAL ||
         type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL)
