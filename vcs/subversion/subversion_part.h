@@ -50,7 +50,7 @@ public:
 		KURL baseURL() { return base; }
 
 signals:
-		void finishedFetching( QString destinationDir );
+//		void finishedFetching( QString destinationDir );
 
 private slots:
 		void contextMenu( QPopupMenu *popup, const Context *context );

@@ -27,6 +27,8 @@ subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const 
  : QTextEdit(parent, name)
 {
 	m_part = part;
+	setReadOnly( true );
+	setTextFormat( Qt::LogText );
 }
 
 subversionWidget::~subversionWidget()

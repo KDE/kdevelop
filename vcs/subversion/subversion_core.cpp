@@ -34,17 +34,17 @@ using namespace KIO;
 subversionCore::subversionCore(subversionPart *part)
 	: QObject(this, "subversion core") {
 		m_part = part;
-		m_widget = new subversionWidget(part, 0 , "processwidget");
+		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
 	}
 
 subversionCore::~subversionCore() {
 	if ( processWidget() ) {
-		(( KDevMainWindow *) m_part->mainWindow() )->removeView( m_widget );
+		m_part->mainWindow()->removeView( m_widget );
 		delete m_widget;
 	}
 }
 
-QWidget *subversionCore::processWidget() {
+subversionWidget *subversionCore::processWidget() const {
 	return m_widget;
 }
 

@@ -36,7 +36,7 @@ public:
 		  
   subversionCore(subversionPart *part);
   ~subversionCore();
-	QWidget *processWidget();
+	subversionWidget *processWidget() const;
 	void update( const KURL::List&);
 	void checkout();
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
@@ -50,7 +50,7 @@ signals:
 	
 private:
 
-	subversionWidget *m_widget;
+	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
 

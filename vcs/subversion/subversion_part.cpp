@@ -40,6 +40,7 @@
 #include <kurlrequester.h>
 #include <qradiobutton.h>
 #include <kdebug.h>
+#include <qwidget.h>
 
 typedef KGenericFactory<subversionPart> subversionFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( "kdevsubversion" ) );
@@ -47,13 +48,30 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( "kdevsubversio
 //bool g_projectWasJustCreated = false;
 
 subversionPart::subversionPart(QObject *parent, const char *name, const QStringList& )
-	: KDevVersionControl("subversion", "subversion", parent, name ? name : "Subversion" ) {
+	: KDevVersionControl("KDevsubversionPart", "kdevsubversionpart", parent, name ? name : "Subversion" ) {
 	setInstance(subversionFactory::instance());
 	setXMLFile("kdevpart_subversion.rc");
 
 	m_impl = new subversionCore( this );
 
-	m_impl->processWidget()->setIcon( SmallIcon("db") );
+	m_checkout_recurse = true;
+	m_update_recurse = true;
+	m_switch_recurse = true;
+	m_add_recurse = true;
+	m_remove_force = true;
+	m_commit_recurse = true;
+	m_diff_recurse = true;
+	m_merge_recurse = true;
+	m_merge_overwrite = true;
+	m_relocate_recurse = true;
+	m_revert_recurse = true;
+	m_resolve_recurse = true;
+	m_move_force = true;
+	m_propset_recurse = true;
+	m_propget_recurse = true;
+	m_proplist_recurse = true;
+
+	//m_impl->processWidget()->setIcon( SmallIcon("db") );
 
 	setupActions();
 
@@ -66,14 +84,14 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 	connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
-	mainWindow()->embedOutputView( m_impl->processWidget(), "Subversion", i18n( "Subversion messages" ) );
+	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
 	setVersionControl( this );
 }
 
 subversionPart::~subversionPart() {
-	delete m_impl;
-	if ( m_projWidget ) 
+	if ( m_projWidget )
 		delete m_projWidget;
+	delete m_impl;
 }
 
 void subversionPart::setupActions() {
@@ -210,6 +228,7 @@ void subversionPart::slotActionUpdate() {
 }
 
 void subversionPart::slotProjectOpened() {
+	kdDebug() << "subversion :projectOpened" << endl;
 /*	if ( g_projectWasJustCreated ) {
 		//saveOptions();
 		g_projectWasJustCreated = false;
@@ -221,6 +240,7 @@ void subversionPart::slotProjectOpened() {
 }
 
 void subversionPart::slotProjectClosed() {
+	kdDebug() << "subversion :projectClosed" << endl;
 	//saveOptions();
 	//FIXME
 	//disconnect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
