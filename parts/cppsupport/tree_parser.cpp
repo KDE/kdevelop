@@ -129,9 +129,6 @@ void TreeParser::parseTemplateDeclaration( TemplateDeclarationAST* decl )
 void TreeParser::parseSimpleDeclaration( SimpleDeclarationAST* decl )
 {
     //kdDebug(9007) << "TreeParser::parseSimpleDeclaration()" << endl;
-    TypeSpecifierAST* typeSpec = decl->typeSpec();
-    if( typeSpec && !decl->initDeclaratorList() )
-        parseTypeSpecifier( typeSpec );
 }
 
 void TreeParser::parseFunctionDefinition( FunctionDefinitionAST* def )

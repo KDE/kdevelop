@@ -1263,9 +1263,8 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 
     lex->nextToken();
 
-    if( lex->lookAhead(0) == Token_identifier ){
-	lex->nextToken();
-    }
+    NameAST::Node name;
+    parseName( name );
 
     if( lex->lookAhead(0) != '{' ){
 	lex->setIndex( start );
@@ -1274,6 +1273,7 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
     lex->nextToken();
 
     EnumSpecifierAST::Node ast = CreateNode<EnumSpecifierAST>();
+    ast->setName( name );
 
     EnumeratorAST::Node enumerator;
     if( parseEnumerator(enumerator) ){

@@ -389,8 +389,10 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 void CppSupportPart::activePartChanged(KParts::Part *part)
 {
     kdDebug(9032) << "CppSupportPart::activePartChanged()" << endl;
-    
+
     bool enabled = false;
+
+    m_structureView->clear();
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
