@@ -30,7 +30,7 @@ namespace RDBDebugger
 namespace RDBParser
 {
     void parseVariables(LazyFetchItem *parent, char *buf);
-    void parseExpandedVariable(LazyFetchItem *parent, char *buf);
+    void parseExpandedVariable(VarItem *parent, char *buf);
     DataType determineType(char *buf);
     void setItem(	LazyFetchItem *parent, const QString &varName, 
 					DataType dataType, const QCString &value );

@@ -203,6 +203,23 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     }
 }
 
+// The debugger has moved onto the next program pause, so invalidate 
+// everything in the Variable Tree
+void VariableTree::nextActivationId() 
+{ 
+	activationId_++; 
+	globalRoot()->setActivationId();
+	watchRoot()->setActivationId();
+	// ..but that's only the Watch and Global roots
+	//
+	// VarFrameRoot frames in the Variable Tree are set active by the
+	// Frame Stack widget when it parses the backtrace from the 'where' 
+	// command after the pause
+	//
+	// After that, any frames which aren't marked as active must have gone
+	// out of scope, and can be pruned.
+}
+
 // **************************************************************************
 
 void VariableTree::slotAddWatchExpression(const QString &watchVar)
@@ -296,7 +313,7 @@ void VariableTree::prune()
 
 // **************************************************************************
 
-void VariableTree::pruneExcessFrames()
+void VariableTree::pruneInactiveFrames()
 {
 	viewport()->setUpdatesEnabled(false);
     QListViewItem *child = firstChild();
@@ -312,6 +329,7 @@ void VariableTree::pruneExcessFrames()
 		
         child = nextChild;
     }
+	
     viewport()->setUpdatesEnabled(true);
     repaint();
 }
@@ -445,7 +463,7 @@ VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataTyp
 		key_.prepend("1004");
 	}
 
-    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;	
+//    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;	
 }
 
 // **************************************************************************
@@ -637,13 +655,13 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 
 QString VarItem::tipText() const
 {
-    const unsigned int maxTooltipSize = 70;
+    const unsigned int MAX_TOOLTIP_SIZE = 70;
     QString tip = text(VALUE_COLUMN);
 
-    if (tip.length() < maxTooltipSize) {
+    if (tip.length() < MAX_TOOLTIP_SIZE) {
 	    return tip;
     } else {
-	    return tip.mid( 0, maxTooltipSize - 1 ) + " [...]";
+	    return tip.mid(0, MAX_TOOLTIP_SIZE - 1) + " [...]";
 	}
 }
 

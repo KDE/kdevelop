@@ -192,17 +192,30 @@ class Context
     end
   end
 
+  # Prevent the 'var *' commands from expanding Arrays and Hashes
+  # This could be done by redefining inspect, but that would affect
+  # everywhere not just here and in the pp command.
+  def debug_inspect(obj)
+  	if obj.kind_of? Array
+		"Array (%d element(s))" % obj.length
+	elsif obj.kind_of? Hash
+		"Hash (%d element(s))" % obj.length
+	else
+		obj.inspect
+	end
+  end
+  
   def var_list(ary, binding)
     ary.sort!
     for v in ary
-      stdout.printf "  %s => %s\n", v, eval(v, binding).inspect
+       stdout.printf "  %s => %s\n", v, debug_inspect(eval(v, binding))
     end
   end
 
   def const_list(ary, obj)
     ary.sort!
     for c in ary
-      stdout.printf "  %s => %s\n", c, obj.module_eval(c).inspect
+      stdout.printf "  %s => %s\n", c, debug_inspect(obj.module_eval(c))
     end
   end
 
@@ -550,11 +563,9 @@ class Context
 	when /^\s*pp\s+/
 	  obj = debug_eval($', binding)
 	  if obj.kind_of? Array
-	    stdout.printf "Array (%d element(s))\n", obj.length
-	  	obj.each_index { |i| stdout.printf "[%d]=%s\n", i.to_s, obj[i].inspect }
+	  	obj.each_index { |i| stdout.printf "[%d]=%s\n", i.to_s, debug_inspect(obj[i]) }
 	  elsif obj.kind_of? Hash
-	    stdout.printf "Hash (%d element(s))\n", obj.length
-	  	obj.each { |key, value| stdout.printf "[%s]=%s\n", key.inspect, value.inspect }
+	  	obj.each { |key, value| stdout.printf "[%s]=%s\n", key.inspect, debug_inspect(value) }
 	  else
 	    PP.pp(obj, stdout)
 	  end

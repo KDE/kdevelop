@@ -102,7 +102,7 @@ public:
     void clear();
 
     int activationId() const                { return activationId_; }
-    void nextActivationId()                 { activationId_++; }
+    void nextActivationId(); 
 
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
 	
@@ -114,7 +114,7 @@ public:
 
     // Remove items that are not active
     void prune();
-    void pruneExcessFrames();
+    void pruneInactiveFrames();
     void setFetchGlobals(bool fetch);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item

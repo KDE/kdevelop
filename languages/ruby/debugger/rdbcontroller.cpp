@@ -309,8 +309,6 @@ void RDBController::actOnProgramPause(const QString &msg)
 		if (stateIsOn(s_viewGlobals)) {
 			queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
 		}
-		
-		varTree_->watchRoot()->setActivationId();
 		        
 		emit acceptPendingBPs();
     }
@@ -398,7 +396,7 @@ void RDBController::parseBacktraceList(char *buf)
     frameStack_->parseRDBBacktraceList(buf);
     if (backtraceDueToProgramStop_)
     {
-        varTree_->pruneExcessFrames();
+        varTree_->pruneInactiveFrames();
         VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
     	if (frame == 0) {
         	frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
