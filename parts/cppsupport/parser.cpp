@@ -271,10 +271,7 @@ bool Parser::parseLinkageSpecification()
     }
     lex->nextToken();
 
-
-    if( lex->lookAhead(0) == Token_string_literal ){
-        lex->nextToken(); // skip string literal
-    }
+    parseStringLiteral();
 
     if( lex->lookAhead(0) == '{' ){
         if( parseLinkageBody() ){
@@ -517,8 +514,7 @@ bool Parser::parseAsmDefinition()
     ADVANCE( Token_asm, "asm" );
     ADVANCE( '(', '(' );
 
-    MATCH( Token_string_literal, "string literal" );
-    lex->nextToken();
+    parseStringLiteral();
 
     ADVANCE( ')', ')' );
     ADVANCE( ';', ';' );
@@ -2035,4 +2031,21 @@ bool Parser::parseUnqualiedName()
 void Parser::dump()
 {
     kdDebug(9007) << dom->toString() << endl;
+}
+
+bool Parser::parseStringLiteral()
+{
+    while( !lex->lookAhead(0).isNull() ) {
+        if( lex->lookAhead(0) == Token_identifier &&
+            lex->lookAhead(0).toString() == "L" &&
+            lex->lookAhead(1) == Token_string_literal ) {
+
+            lex->nextToken();
+            lex->nextToken();
+        } else if( lex->lookAhead(0) == Token_string_literal ) {
+            lex->nextToken();
+        } else
+            return false;
+    }
+    return true;
 }

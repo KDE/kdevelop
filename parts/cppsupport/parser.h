@@ -60,6 +60,7 @@ public /*rules*/ :
     bool parseNestedNameSpecifier();
     bool parseQualifiedName();
     bool parseUnqualiedName();
+    bool parseStringLiteral();
     bool parseName();
     bool parseOperatorFunctionId();
     bool parseTemplateArgumentList();
