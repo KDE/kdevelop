@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdichildfrmcaption.cpp
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -12,7 +12,7 @@
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdichildview.cpp
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -8,11 +8,12 @@
 //    changes              : 09/1999       by Falk Brettschneider to create a
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           02/2000       by Massimo Morin (mmorin@schedsys.com)
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -34,17 +35,21 @@
 
 //============ QextMdiChildView ============//
 
-QextMdiChildView::QextMdiChildView( const QString& name, QWidget* parentWidget)
-: QWidget(parentWidget),
+QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, WFlags f)
+: QWidget(parentWidget, name, f),
   m_focusedChildWidget(0),
   m_firstFocusableChildWidget(0),
   m_lastFocusableChildWidget(0)
 {
-   if( name)
-      m_szCaption = name;
+   setGeometry( 0, 0, 0, 0);  // reset
+   if( caption) 
+      m_szCaption = caption;
    else
       m_szCaption = QString(tr("Unnamed"));
-   //F.B.	setMinimumSize(QSize(QEXTMDI_CHILDVIEW_MIN_WIDTH,QEXTMDI_CHILDVIEW_MIN_HEIGHT));
+
+   // mmorin
+   m_sTabCaption = m_szCaption;
+
    setFocusPolicy(ClickFocus);
 }
 
@@ -90,14 +95,14 @@ void QextMdiChildView::maximize(){ maximize(true); }
 
 void QextMdiChildView::attach()
 {
-   emit attachWindow(this,true,true,0);
+   emit attachWindow(this,true);
 }
 
 //============== detach =================//
 
 void QextMdiChildView::detach()
 {
-   emit detachWindow(this);
+   emit detachWindow(this, true);
 }
 
 //=============== isMinimized ? =================//
@@ -141,17 +146,24 @@ void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
 void QextMdiChildView::youAreDetached()
 {
 	setCaption(m_szCaption);
+	
+	setTabCaption(m_sTabCaption);
 	if(myIconPtr())setIcon(*(myIconPtr()));
 	setFocusPolicy(QWidget::StrongFocus);
 }
 
-//================ setWindowCaption ================//
-
-void QextMdiChildView::setWindowCaption(const QString& szCaption)
+//================ setCaption ================//
+// this set the caption of only the window
+void QextMdiChildView::setCaption(const QString& szCaption)
 {
+  // this will work only for window
 	m_szCaption=szCaption;
-	if(mdiParent())mdiParent()->setCaption(m_szCaption);
-	else setCaption(m_szCaption);
+	if (mdiParent()) {
+	  mdiParent()->setCaption(m_szCaption);
+	} else {
+	  //  sorry have to call the parent one
+	  QWidget::setCaption(m_szCaption);
+	}
 	emit windowCaptionChanged(m_szCaption);
 }
 
@@ -330,4 +342,15 @@ void QextMdiChildView::setFirstFocusableChildWidget(QWidget* firstFocusableChild
 void QextMdiChildView::setLastFocusableChildWidget(QWidget* lastFocusableChildWidget)
 {
    m_lastFocusableChildWidget = lastFocusableChildWidget;
+}
+/** Set a new value of  the task bar button caption  */
+void QextMdiChildView::setTabCaption (const QString& stbCaption){
+
+  m_sTabCaption = stbCaption;
+  emit tabCaptionChanged(m_sTabCaption);
+
+}
+void QextMdiChildView::setMDICaption (const QString& caption) {
+  setCaption(caption);
+  setTabCaption(caption);
 }

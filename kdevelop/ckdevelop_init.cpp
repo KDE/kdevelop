@@ -213,10 +213,10 @@ void CKDevelop::initView(){
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   browser_widget = browser_view->browser;
   mdi_main_frame->addWindow(browser_view, // the view pointer
-                            true,         // show it
-			    true,         // attach it
-			    true,         // show it maximized
-			    0);           // initial geometry rectangle, 0 means minimumSize()
+                            false,        // show it
+			    true);        // attach it
+  browser_view->maximize();
+  browser_view->show();
 
   prev_was_search_result= false;
   //init

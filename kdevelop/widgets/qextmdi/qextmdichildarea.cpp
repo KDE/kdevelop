@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdichildarea.cpp
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -12,7 +12,7 @@
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -83,6 +83,9 @@ QextMdiChildArea::~QextMdiChildArea()
 
 void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade)
 {
+	// (mmorin)
+	// carefull here I suggest to take out the code for cascading and maximizing
+	// this is left to the at/detach win
 	QextMdiChildFrm * top=topChild();
 	if(bShow)m_pZ->append(lpC); //visible -> first in the Z order
 	else m_pZ->insert(0,lpC); //hidden -> last in the Z order

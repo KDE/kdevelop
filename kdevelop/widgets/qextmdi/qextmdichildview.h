@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdichildview.h
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -8,11 +8,12 @@
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                         : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -48,10 +49,11 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
 	Q_OBJECT
 
 public:		// Consruction & Destruction
-	QextMdiChildView( const QString& name, QWidget* parentWidget = 0);
+	QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0L);
 	~QextMdiChildView();
 protected:		// Fields
 	QString     m_szCaption;
+  	QString     m_sTabCaption;
 	QWidget*    m_focusedChildWidget;
 	QWidget*    m_firstFocusableChildWidget;
 	QWidget*    m_lastFocusableChildWidget;
@@ -79,12 +81,21 @@ public:     // Methods
 	 * (inline)
 	 */
 	const QString& caption();
+  	const QString& tabCaption();
 	/**
 	 * Sets the window caption string...<br>
 	 * Calls updateButton on the taskbar button if it has been set.<br>
 	 */
-	virtual void setWindowCaption(const QString& szCaption);
-	/**
+	virtual void setCaption(const QString& szCaption);
+
+	/** Set the caption of the button referring to this window */
+  virtual void setTabCaption(const QString& caption);
+
+  /** Set the caption of both window and button on the taskbar (they are going to be the same) */
+  virtual void setMDICaption(const QString &caption);
+
+  // I need this for setting both....
+        /**
 	 * Returns the QextMdiChildFrm parent widget (or 0 if the window is not attached)
 	 */
 	QextMdiChildFrm *mdiParent();
@@ -157,6 +168,7 @@ public slots:
 	virtual void restore();    //Useful only when attached
 	virtual void youAreAttached(QextMdiChildFrm *lpC);
 	virtual void youAreDetached();
+
  protected:	// Protected methods
 	/**
 	 * Ignores the event and calls QextMdiMainFrm::childWindowCloseRequest
@@ -167,17 +179,27 @@ public slots:
    virtual void focusInEvent(QFocusEvent *);
 	
  signals:
-	void attachWindow( QextMdiChildView*,bool,bool,QRect*);
-	void detachWindow( QextMdiChildView*);
+	void attachWindow( QextMdiChildView*,bool);
+	void detachWindow( QextMdiChildView*,bool);
 	void focusInEventOccurs( QextMdiChildView*);
 	void childWindowCloseRequest( QextMdiChildView*);
-	void windowCaptionChanged( const QString&);
+	
+  /** signal emitted when the window caption is changed via setCaption() or setMDICaption() */
+  void windowCaptionChanged( const QString&);
+
+  /** signal emitted  when the window caption is changed via setTabCaption() or setMDICaption() */
+  void tabCaptionChanged( const QString&);
+  
 	void mdiParentNowMaximized();
 	void mdiParentNoLongerMaximized(QextMdiChildFrm*);
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }
+// I don't know how to deal with this...
+/** Return the caption of the child window (this is differnet from the caption on the button on the taskbar) */
 inline const QString& QextMdiChildView::caption(){ return m_szCaption; }
+/** Retrun the caption of the button on hte task bar */
+inline const QString& QextMdiChildView::tabCaption(){ return m_sTabCaption; }
 inline QextMdiChildFrm *QextMdiChildView::mdiParent(){ return (QextMdiChildFrm *)parent(); }
 
 #endif //_QEXTMDICHILDVIEW_H_

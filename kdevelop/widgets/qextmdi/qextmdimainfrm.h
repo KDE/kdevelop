@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdimainfrm.h
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -8,11 +8,12 @@
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                         : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -37,6 +38,10 @@
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
+
+#include "qextmdiiterator.h"
+#include "qextmdilistiterator.h"
+#include "qextmdinulliterator.h"
 
 /**
  * @short Internal class
@@ -93,19 +98,27 @@ protected:
 
 // methods
 public:
-	QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
-	~QextMdiMainFrm();
-	QextMdiChildView * activeWindow();
-	virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = false);
-	virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = true);
-	virtual void applyOptions();
-	QextMdiChildView * findWindow(const QString& caption);
-	bool windowExists(QextMdiChildView *pWnd);
-	virtual void switchWindows(bool bRight);
+   QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
+   ~QextMdiMainFrm();
+   QextMdiChildView * activeWindow();
+   virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = false);
+   virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = true);
+   virtual void applyOptions();
+   QextMdiChildView * findWindow(const QString& caption);
+   bool windowExists(QextMdiChildView *pWnd);
+   virtual void switchWindows(bool bRight);
    virtual bool event(QEvent* e);
    virtual void setSysButtonsAtMenuPosition();
-	virtual int taskBarHeight() { return m_pTaskBar->height(); };
-	virtual void setUndockPositioningOffset( QPoint offset) { m_undockPositioningOffset = offset; };
+   virtual int taskBarHeight() { return m_pTaskBar->height(); };
+   virtual void setUndockPositioningOffset( QPoint offset) { m_undockPositioningOffset = offset; };
+
+  QextMdiIterator<QextMdiChildView*>* createIterator() {
+    if ( m_pWinList == 0L) {
+      return new QextMdiNullIterator<QextMdiChildView*>();
+    } else {
+      return new QextMdiListIterator<QextMdiChildView, QextMdiChildView*>( *m_pWinList);
+    }
+  }
 
 public slots:
    /**
@@ -113,7 +126,7 @@ public slots:
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
     */
-	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach, bool bMaximized, QRect* pNormalSizeRect = 0);
+	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = true);
    /**
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
@@ -133,12 +146,12 @@ public slots:
     * Doesn't work on QextMdiChildView which aren't added to the MDI system.
     * Use addWindow() for that.
     */
-	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow,bool overrideGeometry,QRect *r);
+	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=true);
    /**
     * Makes a docked QextMdiChildView undocked.
     * The view window still remains under the main frame's MDI control.
     */
-	virtual void detachWindow(QextMdiChildView *pWnd);
+	virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=true);
 	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 	/** ... */
 ///	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
@@ -169,7 +182,7 @@ protected:
 	virtual void focusInEvent(QFocusEvent *);
 	virtual void createTaskBar();
 	virtual void createMdiManager();
-   virtual void raiseTopLevelWidget(QWidget * ptr);
+
    /**
     * Returns a popup menu that contains the MDI controlled view list.
     * Additionally, this menu provides some placing actions for these views.

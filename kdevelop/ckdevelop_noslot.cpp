@@ -152,7 +152,7 @@ bool CKDevelop::fileSaveAs(){
    }
    while(msg_result == KMessageBox::No);
    
-   editor_view->setWindowCaption(QFileInfo(name).fileName());
+   editor_view->setMDICaption(QFileInfo(name).fileName());
    editor_view->currentEditor()->setName(name);
    editor_view->currentEditor()->doSave();
   
@@ -364,10 +364,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   
 #warning FIXME size handling when adding MDI views
       mdi_main_frame->addWindow( new_dialogview,  // the view pointer
-				 true,            // show it
-				 true,            // attach it
-				 true,            // show it maximized
-				 0);              // initial geometry rectangle, 0 means minimumSize()
+				 false,            // show it
+				 true);           // attach it
+      new_dialogview->maximize();
+      new_dialogview->show();
+      				 
       if(maximize){
 	  new_dialogview->maximize(true);
       }
@@ -445,10 +446,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   
 #warning FIXME size handling when adding MDI views
   mdi_main_frame->addWindow( new_editorview,  // the view pointer
-                             true,            // show it
-			     true,            // attach it
-			     true,            // show it maximized
-			     0);              // initial geometry rectangle, 0 means minimumSize()
+                             false,           // show it
+			     true);           // attach it
+  new_editorview->maximize();
+  new_editorview->show();
+  
   if(maximize){
     new_editorview->maximize(true);
   }

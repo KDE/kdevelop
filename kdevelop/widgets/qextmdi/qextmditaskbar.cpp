@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmditaskbar.cpp
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -8,11 +8,12 @@
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           02/2000       by Massimo Morin (mmorin@schedsys.com)
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -155,7 +156,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
 	
 	m_pButtonList->append(b);
 	b->setToggleButton( true);
-	b->setText(win_ptr->caption());
+	b->setText(win_ptr->tabCaption());
 	
    m_pStretchSpace = new QLabel(this, "empty");
    m_pStretchSpace->setText("");
@@ -250,7 +251,7 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
 	   int shw = b->sizeHint().width();
 	   allButtonsWidthHint += shw;
-	}
+	} 
 
    // if there's enough space, use actual width
    if( allButtonsWidthHint <= taskBarWidth - 10) {

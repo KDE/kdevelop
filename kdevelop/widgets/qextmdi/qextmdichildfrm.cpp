@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//    $Id$
+//    filename             : qextmdichildfrm.cpp
 //----------------------------------------------------------------------------
 //    Project              : Qt MDI extension
 //
@@ -12,7 +12,7 @@
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -218,8 +218,7 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 	if(e->state() & LeftButton){
 		if(m_iResizeCorner)
 		   if(m_resizeMode) {
-		      QPoint mousePos( e->pos().x(), e->pos().y());
-		      resizeWindow(m_iResizeCorner, mousePos.x(), mousePos.y());
+		      resizeWindow(m_iResizeCorner, e->pos().x(), e->pos().y());
          }
 	}
 	else {
@@ -238,7 +237,7 @@ void QextMdiChildFrm::leaveEvent(QEvent *)
       if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
    }
 }
-
+#include <iostream.h>
 void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 {
 	QRect resizeRect(x(),y(),width(),height());
@@ -254,7 +253,7 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 	if(minWidth<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minWidth=QEXTMDI_MDI_CHILDFRM_MIN_WIDTH;
 	if(minHeight<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minHeight=QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT;
 
-	QPoint mousePos(xPos+x(),yPos+y());
+	QPoint mousePos( xPos+x(), yPos+y());
 	
 	switch (resizeCorner){
 	case QEXTMDI_RESIZE_LEFT:
@@ -299,7 +298,14 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 		break;
 	}
 
-	setGeometry(resizeRect.x(),resizeRect.y(),resizeRect.width(),resizeRect.height());
+#ifdef _OS_WIN32_
+   MSG msg;
+   while( PeekMessage( &msg, winId(), WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE ) )
+      ;
+#endif
+   QApplication::syncX();
+	
+	setGeometry( resizeRect);
 
 	if(m_state==Maximized){
 		m_state=Normal;
@@ -559,9 +565,10 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
 	
-   if( m_pClient->minimumSize().width() > QEXTMDI_MDI_CHILDFRM_MIN_WIDTH &&
-	   m_pClient->minimumSize().height() > QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT) {
+   if( m_pClient->minimumSize().width() > QEXTMDI_MDI_CHILDFRM_MIN_WIDTH) {
       setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+   }
+	if( m_pClient->minimumSize().height() > QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT) {
       setMinimumHeight( m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
                         m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR);
    }
@@ -571,69 +578,69 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
 void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 {
-	if(!m_pClient)return;
+  if(!m_pClient)return;
 	
-	QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
-   QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
-   QObject::disconnect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
+  QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
+  QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
+  QObject::disconnect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
 	
-	//reparent to desktop widget , no flags , point , show it
-	QDict<FocusPolicy>* pFocPolDict;
-   pFocPolDict = unlinkChildren();
+  //reparent to desktop widget , no flags , point , show it
+  QDict<FocusPolicy>* pFocPolDict;
+  pFocPolDict = unlinkChildren();
 
-   // get name of focused child widget
-   QWidget* focusedChildWidget = m_pClient->focusedChildWidget();
-   const char* nameOfFocusedWidget = "";
-   if( focusedChildWidget != 0)
-      nameOfFocusedWidget = focusedChildWidget->name();
+  // get name of focused child widget
+  QWidget* focusedChildWidget = m_pClient->focusedChildWidget();
+  const char* nameOfFocusedWidget = "";
+  if( focusedChildWidget != 0)
+    nameOfFocusedWidget = focusedChildWidget->name();
 
-	//Kewl...the reparent function has a small prob now..
-	//the new toplelvel widgets gets not reenabled for dnd
-	m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,true);
+  //Kewl...the reparent function has a small prob now..
+  //the new toplelvel widgets gets not reenabled for dnd
+  m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,true);
 
-   // remember the focus policies using the dictionary and reset them
-   QObjectList *list = m_pClient->queryList( "QWidget" );
-   QObjectListIt it( *list );          // iterate over all child widgets of child frame
-   QObject * obj;
-   QWidget* firstFocusableChildWidget = 0;
-   QWidget* lastFocusableChildWidget = 0;
-   while ( (obj=it.current()) != 0 ) { // for each found object...
-      QWidget* widg = (QWidget*)obj;
-      ++it;
-      FocusPolicy* pFocPol = pFocPolDict->find( widg->name()); // remember the focus policy from before the reparent
-      widg->setFocusPolicy( *pFocPol);
-      // reset focus to old position (doesn't work :-( for its own unexplicable reasons)
-      if( widg->name() == nameOfFocusedWidget) {
-         widg->setFocus();
+  // remember the focus policies using the dictionary and reset them
+  QObjectList *list = m_pClient->queryList( "QWidget" );
+  QObjectListIt it( *list );          // iterate over all child widgets of child frame
+  QObject * obj;
+  QWidget* firstFocusableChildWidget = 0;
+  QWidget* lastFocusableChildWidget = 0;
+  while ( (obj=it.current()) != 0 ) { // for each found object...
+    QWidget* widg = (QWidget*)obj;
+    ++it;
+    FocusPolicy* pFocPol = pFocPolDict->find( widg->name()); // remember the focus policy from before the reparent
+    widg->setFocusPolicy( *pFocPol);
+    // reset focus to old position (doesn't work :-( for its own unexplicable reasons)
+    if( widg->name() == nameOfFocusedWidget) {
+      widg->setFocus();
+    }
+    // get first and last focusable widget
+    if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
+      if( firstFocusableChildWidget == 0)
+	firstFocusableChildWidget = widg;  // first widget
+      lastFocusableChildWidget = widg; // last widget
+      //qDebug("*** %s (%s)",widg->name(),widg->className());
+    }
+    else {
+      if( widg->focusPolicy() == QWidget::WheelFocus) {
+	if( firstFocusableChildWidget == 0)
+	  firstFocusableChildWidget = widg;  // first widget
+	lastFocusableChildWidget = widg; // last widget
+	//qDebug("*** %s (%s)",widg->name(),widg->className());
       }
-      // get first and last focusable widget
-      if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
-         if( firstFocusableChildWidget == 0)
-            firstFocusableChildWidget = widg;  // first widget
-         lastFocusableChildWidget = widg; // last widget
-         //qDebug("*** %s (%s)",widg->name(),widg->className());
-      }
-      else {
-         if( widg->focusPolicy() == QWidget::WheelFocus) {
-            if( firstFocusableChildWidget == 0)
-               firstFocusableChildWidget = widg;  // first widget
-            lastFocusableChildWidget = widg; // last widget
-            //qDebug("*** %s (%s)",widg->name(),widg->className());
-         }
-      }
-   }
-   delete list;                        // delete the list, not the objects
-   delete pFocPolDict;
+    }
+  }
+  delete list;                        // delete the list, not the objects
+  delete pFocPolDict;
 
-   // reset first and last focusable widget
-   m_pClient->setFirstFocusableChildWidget( firstFocusableChildWidget);
-   m_pClient->setLastFocusableChildWidget( lastFocusableChildWidget);
+  // reset first and last focusable widget
+  m_pClient->setFirstFocusableChildWidget( firstFocusableChildWidget);
+  m_pClient->setLastFocusableChildWidget( lastFocusableChildWidget);
 
-   // reset the focus policy of the view
-   m_pClient->setFocusPolicy(QWidget::ClickFocus);
+  // reset the focus policy of the view
+  m_pClient->setFocusPolicy(QWidget::ClickFocus);
 
-   // lose information about the view (because it's undocked now)
-	m_pClient=0;
+  // lose information about the view (because it's undocked now)
+  m_pClient=0;
 }
 
 //============== linkChildren =============//
@@ -649,8 +656,6 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
       FocusPolicy* pFocPol = pFocPolDict->find(widg->name()); // remember the focus policy from before the reparent
       if( pFocPol != 0)
          widg->setFocusPolicy( *pFocPol);
-      else
-         qDebug("Warning: no such entry in widget-name list (QextMdiChildFrm::linkChildren). Should not happen!");
       widg->installEventFilter(this);
    }
    delete list;                        // delete the list, not the objects
@@ -756,6 +761,13 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 			height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR)
 			);
 	}
+
+#ifdef _OS_WIN32_
+   MSG msg;
+   while( PeekMessage( &msg, winId(), WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE ) )
+      ;
+#endif
+   QApplication::syncX();
 }
 
 //============= eventFilter ===============//
@@ -767,6 +779,16 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       QWidget* w = (QWidget*) obj;
       if( (w->parent() != m_pCaption) && (w != m_pCaption))
          w->setFocus();
+   }
+   else if( (e->type() == QEvent::Resize) && (((QWidget*)obj) == m_pClient) ) {
+      QResizeEvent* re = (QResizeEvent*)e;
+      if ( re->size() != m_pClient->size()){
+      	int captionHeight = m_pCaption->heightHint();
+         QSize newSize( re->size().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+         re->size().height() + captionHeight + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER );
+         resize( newSize );
+         QApplication::syncX();
+      }
    }
 
    return false;                           // standard event processing
