@@ -1,3 +1,7 @@
+2002-02-12  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: $ duplication on install directories on file property dialog
+    * strange install location for index.docbook removed
+    
 2002-02-12  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: coloured output also for the KDE 3 version
     * bugfix: disabled text expansion with Tab key (broke Tab-character insertion)
