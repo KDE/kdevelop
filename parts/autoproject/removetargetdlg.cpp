@@ -41,8 +41,8 @@
 #include "autoprojectwidget.h"
 
 
-RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
-								TargetItem *titem, QWidget* parent = 0, const char* name = 0 )
+RemoveTargetDialog::RemoveTargetDialog( AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
+					TargetItem *titem, QWidget* parent, const char* name )
   : RemoveTargetDlgBase ( parent, name, true, 0 )
 {
     removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b><br>with <b>all files</b> that are attached to it<br>and <b>all dependencies</b>?" ).arg ( titem->name ) );
