@@ -143,3 +143,5 @@
     - Extend KDevPlugin-API in order to have a preferred border for at
       least the selection parts (Automake Manager, Class Browser, File
       Groups, etc...)
+
+*/
