@@ -139,7 +139,8 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_breakOnLoadingLibrary_(true),
   config_forceBPSet_(true),
   config_displayStaticMembers_(false),
-  config_asmDemangle_(true)
+  config_asmDemangle_(true),
+  config_gdbPath_()
 {
   KConfig* config = kapp->getConfig();
   config->setGroup("Debug");
@@ -149,6 +150,7 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_asmDemangle_           = !config->readBoolEntry("Display mangled names", true);
   config_breakOnLoadingLibrary_ = config->readBoolEntry("Break on loading libs", true);
   config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
+  config_gdbPath_               = config->readEntry("GDB path", "");
 
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
@@ -1170,7 +1172,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
             this,         SLOT(slotDbgProcessExited(KProcess*)));
 
   // fires up gdb under the process
-  *dbgProcess_<<"gdb"<<"-fullname"<<"-nx"<<"-quiet";
+  *dbgProcess_<<config_gdbPath_+QString("gdb")<<"-fullname"<<"-nx"<<"-quiet";
 
   dbgProcess_->start( KProcess::NotifyOnExit,
                       KProcess::Communication(KProcess::All));

@@ -150,10 +150,11 @@ private:
   QString           badCore_;
 
   // Configuration values
-  bool config_breakOnLoadingLibrary_;
-  bool config_forceBPSet_;
-  bool config_displayStaticMembers_;
-  bool config_asmDemangle_;
+  bool    config_breakOnLoadingLibrary_;
+  bool    config_forceBPSet_;
+  bool    config_displayStaticMembers_;
+  bool    config_asmDemangle_;
+  QString config_gdbPath_;
 };
 
 #endif
