@@ -59,7 +59,7 @@ public:
     /**
     * Fetch a module from remote repository, so it can be used for importing
     */
-    virtual void fetchFromRepository();
+    virtual bool fetchFromRepository();
     /**
     * @return the info provider for VCS sandboxes
     */

@@ -62,11 +62,11 @@ void KDevVersionControl::createNewProject( const QString&/* dir*/ )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void KDevVersionControl::fetchFromRepository()
+bool KDevVersionControl::fetchFromRepository()
 {
     KMessageBox::sorry( mainWindow()->main(), i18n( "Not implemented." ) );
 
-    return;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -361,7 +361,9 @@ void ImportDialog::slotFetchModulesFromRepository()
     connect( vcs, SIGNAL(finishedFetching(QString)),
         this, SLOT(slotFinishedCheckout(QString)) );
 
-    vcs->fetchFromRepository();
+    //restore cursor if we can't fetch repository
+    if ( !vcs->fetchFromRepository() )
+        setCursor( KCursor::arrowCursor() );
 }
 
 

@@ -40,7 +40,7 @@ public:
 		void setupActions();
 		QWidget* newProjectWidget( QWidget* parent );
 		void createNewProject( const QString& dirname );
-		void fetchFromRepository();
+		bool fetchFromRepository();
 		KDevVCSFileInfoProvider * fileInfoProvider() const;
 		bool isValidDirectory( const QString& dirPath);
 		bool urlFocusedDocument( KURL &url );

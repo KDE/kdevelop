@@ -154,8 +154,9 @@ void subversionPart::createNewProject( const QString& dirname ) {
 
 }
 
-void subversionPart::fetchFromRepository() {
+bool subversionPart::fetchFromRepository() {
 	m_impl->checkout();
+        return true;
 }
 
 KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {

@@ -56,7 +56,7 @@ public:
     /**
     * Fetch a module from remote repository, so it can be used for importing
     */
-    virtual void fetchFromRepository();
+    virtual bool fetchFromRepository();
     /**
     * @return the file info provider for this version control (0 if none is available)
     */
