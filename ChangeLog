@@ -1,3 +1,7 @@
+1999-09-17 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* fixed i18n("") problem in kdlgedit, I got this bugreport by someone, 
+	but I lost his email.:-( Sorry.
+
 1999-09-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed documentation bug #1917
 	* Removed --with-install-root option

@@ -99,17 +99,22 @@ void KDlgPropertyBase::dumpPropCall(QTextStream *stream, QString methname,
 void KDlgPropertyBase::dumpStringPropCall(QTextStream *stream, QString methname,
 					  QString name, bool withi18n)
 {
-    QString contents = getPropValue(name);
-    if (withi18n)
-	{
-	    contents.prepend("i18n(\"");
-	    contents.append("\")");
-	}
-    else{
-	contents.prepend("\"");
-	contents.append("\"");
+  QString contents = getPropValue(name);
+  if (withi18n)
+    {
+      if(contents != ""){
+	contents.prepend("i18n(\"");
+	contents.append("\")");
+      }
+      else{
+	return; // no dump
+      }
     }
-    dumpPropCall(stream, methname, contents);
+  else{
+    contents.prepend("\"");
+    contents.append("\"");
+  }
+  dumpPropCall(stream, methname, contents);
 }
 
 
