@@ -1,3 +1,9 @@
+kdevelop (1:0.4-19990728-1) unstable; urgency=low
+
+  * Added further manuals to doc-base
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Wed, 28 Jul 1999 23:29:03 +0200
+
 kdevelop (1:0.4-19990716-1) unstable; urgency=low
 
   * Call ldconfig in postinst

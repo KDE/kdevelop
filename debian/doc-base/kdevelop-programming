@@ -1,0 +1,9 @@
+Document: kdevelop-programming
+Title: The KDevelop Programming Handbook
+Author: Ralf Nolden
+Abstract: This is the programming handbook for the KDevelop IDE.
+Section: Apps/Programming
+
+Format: HTML
+Index: /usr/doc/kde/HTML/en/kdevelop/programming/index.html
+Files: /usr/doc/kde/HTML/en/kdevelop/programming/*.html
