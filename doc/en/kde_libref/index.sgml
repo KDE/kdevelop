@@ -69,8 +69,8 @@ ask "Hey, Qt's 2.0 version is released already, why not talk only about that ?" 
 for a KDE 1.x reference.
 
 The issues that lead to this are first of all that developers should consider the KDE 1.x series the stable desktop and development
-environment. As long as KDE 2 (which introduces Qt 2.0 as well) is under development, programmers will have a hard time to follow the
-changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
+environment. As long as KDE 2 (which will introduce Qt 2.0 as well) is under development, programmers will have a hard time to follow
+the changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
 covered by the KDE core team that ensure the KDE 2 libraries will work - the KDE itself as well as the supplying applications and the
 KOffice suite. Nevertheless, developers who are starting or developing projects for KDE now have the choice and those that want to rely
 on the stable environment will also want to port their applications to KDE 2 to make it usable on one hand and to implement
@@ -426,7 +426,7 @@ collected in the KDE Control Center) such as keyboard accelerator configuration 
 Corresponding to the Qt class, the <tt/KApplication/ class provides a static function to access the application object within the
 application, <tt/KApplication::getKApplication()/. This solves the problem to pass the pointer to the application object. Further, the
 include file <tt/kapp.h/ provides a macro that can be used instead of the static function, <tt/kapp/. Whenever you need to access the
-application object, use this macro.<footnote>In KDE 2, the application object can be retrieved with <tt/KGlobal::kApp()/.</footnote>
+application object, use this macro.<footnote>In KDE 2, the application object can be retrieved with <tt/KApplication::kApplication()/.</footnote>
 
 The <tt/KApplication/ object itself provides a set of instances that are commonly used in KDE applications and lets the programmer
 access them by functions. You will make extensive use of them as they avoid creating own instances. The following objects are
@@ -549,8 +549,8 @@ Now, when it comes to your own processing of commandlines, you can either access
 to exclude any of the above values in the <tt/main()/ function. Within the application itself (e.g. the mainwindow class),
 <tt/QApplication/ provides the methods <tt/argc()/ and <tt/argv()/ to process any other options given at the commandline. These can be
 accessed by the argument number, whereby the argument <tt/kapp->argv()[0]/ is the application name; any other following arguments can
-be processed with <tt/kapp->argv()[number]/.<footnote>KDE 2 has an additional class, <tt/KStartParams/, to parse additional
-command-line parameters.</footnote>
+be processed with <tt/kapp->argv()[number]/.<footnote>KDE 2 has an additional class, <tt/KCmdLineArgs/, to parse additional
+command-line parameters, which is already used by KDevelop´s KDE 2 frameworks.</footnote>
 
 <comment>The <tt/KApplication/ class uses different methods to change the application's style, fonts and colors by X11 Atoms which
 call all open KDE applications to change their values recursively throughout all widgets. This is done automatically when the user
@@ -1934,7 +1934,7 @@ static methods and will receive the correct result.
 As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
 compare with <tt/if()/ for the actions to execute.
 <footnote>The KDE 2 API contains a modified version of <tt/KMsgBox/, <tt/KMessageBox/. It provides a similar functionality; the 1.x API
-is no longer available. As a replacement, you can use <tt/QMessageBox/ as well, providing static methods as well.</footnote>
+is no longer available. As a replacement, you can use <tt/QMessageBox/, providing static methods as well.</footnote>
 
 <sect>KQuickHelp
 <p>

@@ -173,17 +173,244 @@ void KScribbleApp::initToolBar()
 
 Here, we use the methods of KToolBar to insert buttons. The first argument, BarIcon(), tells the method to load the icon for the
 button. What seems unusual is that we don't have to care for the file extension. The preferred format for KDE 2 is *.PNG, but it works
-with xpm's as well as KIconEdit doesn't offer PNG format saving. (You could use ImageMagick for that as well which can do that- or use
-KScribble in a later step to convert your icons to PNG !)
+with xpm's as well. (You could use ImageMagick for that as well which can do that- or use KScribble in a later step to convert your icons to PNG !)
 <P>The second argument is again the ID. The commands are then automatically activated, as the toolBar() is already connected to the same
-methods the menubar is for signal activated(). The third argument stands for "available" when true, "deactivated" when false; as we
+methods as the menubar is for signal activated(). The third argument stands for "available" when true, "deactivated" when false; as we
 want to have these available, we set this to true. At last, we add a tooltip for the the buttons, which we also embrace with i18n() to
 allow internationalization.
 <P>Now you're done for now- the GUI is extended at least visually. You can compile and run KScribble again and see how it looks like- of
-course the new items in the menubar and toolbar can't execute any action - that is what we're going to add in the next chapter.
+course the new items in the menubar and toolbar can't execute any action - that is what we're going to add in the next section.
 You will also note that the toolbar icons we added are not displayed - which is because we didn't install KScribble and so they can't
 be found. All other used icons are already shipped with the KDE libraries, so these are already visible.
 <P>
+<P>
+<P>
+<H3><A NAME="ss7.3">7.3 Creating the Pen Width Dialog</A>
+</H3>
+
+<P>As we´ve already created the according menubar and toolbar commands, we now have to build the first dialog to set the pen width. For
+this, select "New" from the KDevelop "File" menu and select "Qt/KDE Dialog". Then enter the dialog file name as <CODE>kpenbrushdlg</CODE>,
+the extension will be automatically added. Enter "OK" and the dialogeditor opens an empty widget that will be our dialog background.
+When constructing a dialog, we have to think about what is really needed by the user; here, we need a label to display what will be
+set; a spinbox with up and down buttons to set the pen width value and three buttons, one for resetting the pen width to the default
+value, one to cancel the dialog and one for taking over the new value - the OK button. In this order we will add the items to the
+dialog - which is important because the tab-focus follows the order by which the widgets are created. So if you´re starting with the OK
+button, then the spinbox and then the cancel button, the input focus will change from the ok button to the spinbox and then to the
+cancel button - which is not what the user expects. The tab focus should follow the widget´s items top-down from left to right, so we
+have to construct the dialog in this order as well. To add items to the dialog, select the "Widgets" tab on the left pane. There you
+have all available widgets present by icons to construct your dialog. Pressing a widget button will create the new item and place it at
+the top-left corner of the widget. From there, you can place it with the mouse to the position you would like it to show up. Further,
+when a widget item is selected, you can set the according values in the "Widget Properties" pane on the right.
+<P><B>The Label:</B> press the "QLabel" button on the "Widgets" tab and place it at position x:50, y:20. Then select the "General"
+section in the widget properties pane. Change the text in properity "Text" from "Label" to "Pen Width:". Adjust the width of the label
+to a width that matches the label contents in x-direction; a width of 120 should last. You can do this either by using the mouse or set
+the value in the "Geometry" section of the properties.
+<P><B>The Spinbox:</B> press the "QSpinBox" button on the "Widgets" tab and place it at the right of the label we created in the last
+step. Now set the variable name in section "C++Code" to "width_spbox". The minimum and maximum values are 1 and 100, which should last
+for setting the brush width.
+<P><B>The Buttons:</B> finally, we need the mentioned three buttons. The leftmost button will be the default button. Create a
+QPushbutton and place it somewhere nicely on the bottom of the dialog, set the variable name to "default_btn" and the button text to
+"Default". Proceed with the OK button with variable name "ok_btn" and the cancel button with variable name "cancel_btn" and set the
+button text to "&amp;OK" and "&amp;Cancel".
+<P>If you´re fine with the layout of the dialog, choose "Generate complete sources" from the Build menu and set the classname to
+"KPenBrushDlg", the inheritance to QDialog. After pressing "OK", the sources for the dialog are created and added to the project. Now
+you can return to the editor view in KDevelop and we can add the code needed to give the dialog some execution purpose.
+<P>
+<H3><A NAME="ss7.4">7.4 Connections and Setting Up</A>
+</H3>
+
+<P>After we have created the GUI of the dialog, we have to add some functionality to the buttons and provide ways to set and retrieve the
+selected value of the spinbox - because we want the dialog to display the current value when it gets called and to access the selected
+value when the user pressed the OK button to quit the dialog.
+<P>In the generated class for the dialog, <CODE>KPenBrushDlg</CODE>, you can see one method besides the constructor and the destructor,
+<CODE>initDialog()</CODE>. This method implements the whole GUI construction, so we don´t have to care for that anymore and we can go
+directly to add the usual connections for the push buttons first. Add the lines marked by arrows to the constructor of the
+dialog:
+<P>
+<HR>
+<PRE>
+KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name) : QDialog(parent,name,true){
+        initDialog();
+
+->      connect(default_btn, SIGNAL(clicked()), this, SLOT(slotDefault()));
+->      connect(ok_btn, SIGNAL(clicked()), this, SLOT(accept()));
+->      connect(cancel_btn, SIGNAL(clicked()), this, SLOT(reject()));
+}
+</PRE>
+<HR>
+<P>This provides the functionality for the buttons on the bottom of the dialog when the user clicks the button. First, we set the default
+button to execute a slot called slotDefault(). This slot is still to be implemented below, where we will set the default value of the
+spinbox directly.
+The sectond connect() call connects the ok button to call the slot accept() provided by QDialog, as well as the cancel button gets
+connected to QDialog´s slot reject(). This will both close the dialog and will set the result value which we will use later when we
+implement the method that calls the dialog to determine if we want to use the value set or to ignore any changes.
+<P>Now we have to add two methods to set and retrieve the spinbox value:
+<P>
+<HR>
+<PRE>
+void setCurrent(int curr){ width_spbox->setValue(curr); }
+int width() { return width_spbox->value(); };
+</PRE>
+<HR>
+<P>Add these methods to the class declaration with the modifier "public", as we want to set and retrieve the values when we call the
+dialog to show up. The setCurrent() method will be used to set the current value the pen has, the width() method returns us the
+selected with when the user presses OK and we want to know which value has been chosen.
+<P>Last but not least, we need to implement the slotDefault() method:
+<P>
+<HR>
+<PRE>
+//kpenbrushdlg.h:
+//method declaration:
+
+public slots:
+  void slotDefault();
+
+//kpenbrushdlg.cpp:
+//method implementation:
+
+void KPenBrushDlg::slotDefault()
+{
+  width_spbox->setValue(3);
+}
+</PRE>
+<HR>
+<P>This will set the default value to 3 pixels for the pen.
+<P>Now we´re ready with our first dialog and we can turn to over to the other application classes to adapt some things and add the method
+calls to invoke the dialog.
+<P>
+<H3><A NAME="ss7.5">7.5 Calling the Dialogs</A>
+</H3>
+
+<P>As you may guess, calling the dialogs means that we will not only implement calling our width selection dialog but also add the method
+for selecting the pen color, but one after another. First, create a method slotPenBrush() in the class KScribbleApp:
+<P>
+<HR>
+<PRE>
+void KScribbleApp::slotPenBrush()
+{
+  slotStatusMsg(i18n("Setting brush width..."));
+
+  // get one window with document for a current pen width
+  QWidgetList windows = pWorkspace->clientList();
+  KScribbleView* m = (KScribbleView*)windows.at(0);
+        KScribbleDoc* pDoc = m->getDocument();
+  int curr_width=pDoc->penWidth();
+
+  // create the dialog, get the new width and set the pen width for all documents
+  KPenBrushDlg* dlg= new KPenBrushDlg(this);
+  dlg->setCurrent(curr_width);
+  if(dlg->exec()){
+    int width=dlg->width();
+        for ( int i = 0; i &lt; int(windows.count()); ++i )
+        {
+        m = (KScribbleView*)windows.at(i);
+        if ( m )
+        {
+                pDoc = m->getDocument();
+        pDoc->setPenWidth(width);
+        }
+        }
+  }
+  slotStatusMsg(i18n("Ready."));
+}
+</PRE>
+<HR>
+
+Here, we first have to access the window list and retrieve a pointer to a document - which can be a document of any window, because all
+documents should have the same current pen width. Then we create an integer variable curr_width that stores the current pen width.
+<P>Now we can call the dialog by creating the dlg instance of KPenBrushDlg. Then we set the current pen width by calling
+dlg->setCurrent(), which method we added to the dialog.
+By calling dlg->exec() we invoke the dialog. The if() statement ensures that the following code is only executed when the result code
+of the dialog has the accept flag set - which means, the code is executed if the user pressed the OK button on the dialog.
+<P>Assuming the user changed the value and pressed OK, we have to set all documents to use the new pen width. For that we use the for()
+loop and set every document´s pen width to the width variable we retrieved before with dlg->width().
+<P>We don´t have implemented the method <CODE>setPenWidth()</CODE> in the document class, so we´ll do this right now:
+<P>
+<HR>
+<PRE>
+
+kscribbledoc.h:
+
+public:
+  void setPenWidth( int w ){ pen.setWidth( w ); }
+</PRE>
+<HR>
+<P>What is missing to execute any action is to add the methods that shall be called when the menu items are activated or the toolbar
+buttons pressed. For this, we have to add the ID´s to the slot commandCallback(), which selects and executes the according methods we
+want to call if a menu or toolbar item was chosen:
+<P>
+<HR>
+<PRE>
+void KScribbleApp::commandCallback(int id_)
+{
+  switch (id_)
+  {
+    case ID_PEN_BRUSH:
+      slotPenBrush();
+      break;
+
+    case ID_PEN_COLOR:
+      slotPenColor();
+      break;
+....
+  }
+}
+</PRE>
+<HR>
+<P>This addition also adds the slotPenColor() method to the execution list to set the pen color, which we will implement now:
+<P>
+<HR>
+<PRE>
+void KScribbleApp::slotPenColor()
+{
+  slotStatusMsg(i18n("Selecting pen color..."));
+
+  QColor myColor;
+  int result = KColorDialog::getColor( myColor, this );
+  if ( result == KColorDialog::Accepted )
+  {
+    QWidgetList windows = pWorkspace->clientList();
+    KScribbleDoc* pDoc;
+    KScribbleView* m;
+    for ( int i = 0; i &lt; int(windows.count()); ++i )
+    {
+      m = (KScribbleView*)windows.at(i);
+      if ( m )
+      {
+        pDoc = m->getDocument();
+        pDoc->setPenColor(myColor);
+      }
+    }
+  }
+  slotStatusMsg(i18n("Ready."));
+}
+</PRE>
+<HR>
+
+When looking at the code, we see that we use another new method of KScribbleDoc to set the pen color. This one has to be implemented as
+well:
+<HR>
+<PRE>
+kscribbledoc.h:
+
+    /** sets the pen color */
+    void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
+</PRE>
+<HR>
+<P>Watch out for adding the declaration of the two new methods slotPenBrush() and slotPenColor() to the class KScribbleApp, so our class
+knows about these methods.
+<P>Now you´re ready ! Let´s summarize what we´ve done in this chapter:
+<UL>
+<LI> we first added menubar and toolbar commands/items for two dialogs that we want to call;</LI>
+<LI> then we created the first dialog to set the pen width with the KDevelop dialogeditor</LI>
+<LI> after that we created the methods we want to call by the menubar/toolbar items which invoke the dialogs and set the poperties we
+wanted to change</LI>
+<LI> finally, we added the needed set functions to the document so we are able to change the values after the dialogs get executed.</LI>
+</UL>
+<P>By this structure, you are provided the general way how to extend your application with more functionality and manipulating settings
+that influence the behavoir of the document and view interaction.
+<P>We´re now at the end of our tutorial to build KScribble. I hope you have enjoyed learning a bit more about KDE and Qt coding with
+KDevelop - and there´s yet more to come with the KDE 2 version, so STAY TUNED !!!
 <P>
 <P>
 <P ALIGN="RIGHT">
