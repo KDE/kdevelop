@@ -49,7 +49,7 @@ public:
   void storeState(CProject* prj);
   
   /** set the filename that will be selected after a refresh*/
-  void setPreSelectedItem(QString rel_filename);
+  void setPreSelectedItem(const QString& rel_filename);
   /** select the first item, after a refresh*/
   void setFirstItemSelected();
 
@@ -89,7 +89,7 @@ protected:
  signals:
     void selectedNewClass();
     void selectedNewFile();
-    void showFileProperties(QString file);
+    void showFileProperties(const QString& file);
     void selectedFileRemove(QString file);
     /**
      * This signal is a helper to remove the file also from the actual editlist

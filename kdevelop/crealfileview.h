@@ -76,7 +76,7 @@ signals:
    * This signal is emitted when the "File Properties..." entry of the context
    * menu is selected. It gives back the selected filename relative to the
    * project directory. */
-  void showFileProperties(QString filename);
+  void showFileProperties(const QString& filename);
 
   void commitFileToVCS(QString file);
   void updateFileFromVCS(QString file);

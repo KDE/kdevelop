@@ -355,7 +355,7 @@ public:
   /** opens the properties dialog for the project files */
   void slotProjectFileProperties();
   /** opens the properties dialog for project files,rel_name is selected, used by RFV,LFV*/
-  void slotShowFileProperties(QString rel_name);
+  void slotShowFileProperties(const QString& rel_name);
   /** opens the project options dialog */
   void slotProjectOptions();
   /** selects the project workspace */
@@ -599,9 +599,9 @@ public:
 
   //////////////// -- the methods for the statusbar items
   /** change the status message to text */
-  void slotStatusMsg(const char *text);
+  void slotStatusMsg(const QString& text);
   /** change the status message of the whole statusbar temporary */
-  void slotStatusHelpMsg(const char *text);
+  void slotStatusHelpMsg(const QString& text);
   /** switch argument for Statusbar help entries on slot selection */
   void statusCallback(int id_);
   /** change Statusbar status of INS and OVR */

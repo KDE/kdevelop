@@ -44,7 +44,7 @@
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
-CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QString preselecteditem )
+CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, const QString& preselecteditem )
         : QDialog(parent,name,true)
 {
   this->prj = prj; // save the pointer

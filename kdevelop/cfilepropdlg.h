@@ -45,7 +45,7 @@ class QPushButton;
 class CFilePropDlg : public QDialog  {
   Q_OBJECT
 public:
-	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0,QString preselecteditem="");
+	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0,const QString& preselecteditem=QString::null);
 	~CFilePropDlg();
  public slots:
   void slotSelectionChanged(QListViewItem* item );

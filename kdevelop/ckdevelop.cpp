@@ -2973,24 +2973,20 @@ void CKDevelop::slotClassbrowserNewSlot()
 // Other slots and functions needed
 /////////////////////////////////////////////////////////////////////
 
-void CKDevelop::slotStatusMsg(const char *text)
+void CKDevelop::slotStatusMsg(const QString& text)
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
-//  statusBar()->clear();
-//    statProg->hide();
-    statProg->reset();
-    m_statusLabel->setText(text );
+  statProg->reset();
+  m_statusLabel->setText(text );
 }
 
 
-void CKDevelop::slotStatusHelpMsg(const char *text)
+void CKDevelop::slotStatusHelpMsg(const QString& text)
 {
   ///////////////////////////////////////////////////////////////////
-    // change status message of whole statusbar temporary (text, msec)
-    statusBar()->message(text, 2000);
-//    QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
-
+  // change status message of whole statusbar temporary (text, msec)
+  statusBar()->message(text, 2000);
 }
 
 void CKDevelop::enableCommand(int id_)
@@ -3150,13 +3146,9 @@ void CKDevelop::slotURLonURL(const QString& url )
     url_str=corr;
 
   if ( url_str )
-  {
     m_statusLabel->setText(url_str );
-  }
   else
-  {
     m_statusLabel->setText(i18n("Ready.") );
-  }
 }
 
 void CKDevelop::slotDocumentDone()

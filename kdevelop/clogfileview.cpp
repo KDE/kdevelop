@@ -199,7 +199,7 @@ void CLogFileView::refresh(CProject* prj)
 }
 /** set the filename that will be selected after a refresh*/
 
-void CLogFileView::setPreSelectedItem(QString rel_filename){
+void CLogFileView::setPreSelectedItem(const QString& rel_filename){
   preselectitem = rel_filename;
 }
 
