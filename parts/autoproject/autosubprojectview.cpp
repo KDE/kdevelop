@@ -17,6 +17,7 @@
 /** Qt */
 #include <qregexp.h>
 #include <qcheckbox.h>
+#include <qstringlist.h>
 
 /** KDE Libs */
 #include <kaction.h>
@@ -307,7 +308,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 	
 	list.remove( it );
 	parent->variables[ "SUBDIRS" ] = list.join( " " );
-	
+
 	parent->listView()->setSelected( parent, true );
 	kapp->processEvents( 500 );
 	
@@ -320,6 +321,32 @@ void AutoSubprojectView::slotRemoveSubproject()
 	if( m_widget->activeSubproject() == spitem ){
 	    m_widget->setActiveSubproject( 0 );
 	}
+
+	// Adjust AC_OUTPUT in configure.in
+	if ( !m_part->isKDE() ) {
+
+		QString projroot = m_part->projectDirectory() + "/";
+		QString subdirectory = spitem->path;
+		QString relpath = subdirectory.replace(0, projroot.length(),"");
+
+		QString configurein = projroot + "configure.in";
+
+		QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
+
+		QStringList::iterator it;
+
+		for ( it = list.begin(); it != list.end(); it++ ) {
+			QString current = (QString) (*it);
+			QRegExp path_regex(relpath);
+			if ( path_regex.search(current) >= 0) {
+				list.remove(it);
+				break;
+			}
+		}
+		AutoProjectTool::configureinSaveMakefiles(configurein, list);
+
+	}
+
 	// remove all targets
 	spitem->targets.setAutoDelete( true );
 	spitem->targets.clear();

@@ -38,7 +38,19 @@ public:
      */
     static void parseMakefileam(const QString &filename, QMap<QString,QString> *variables);
     static void modifyMakefileam(const QString &filename, QMap<QString,QString> variables);
-	static void removeFromMakefileam(const QString &filename, QMap<QString,QString> variables);
+    static void removeFromMakefileam(const QString &filename, QMap<QString,QString> variables);
+
+    /**
+     * Parses configure.in and splits AC_OUTPUT into a QStringList
+     */
+    static QStringList configureinLoadMakefiles(QString configureinpath);
+
+    /**
+     * Recieves a QStringList and puts it into
+     * configure.in as arguments to AC_OUTPUT
+     */
+    static void configureinSaveMakefiles(QString configureinpath, QStringList makefiles);
+
 };
 
 

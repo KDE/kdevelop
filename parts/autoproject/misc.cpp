@@ -219,3 +219,85 @@ void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QStr
 	
 	QDir().rename ( fileName + "#", fileName );
 }
+
+
+QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
+{
+	QFile configurein(configureinpath);
+
+	configurein.open ( IO_ReadOnly );
+	//if ( !configurein.open( IO_ReadOnly ) )
+	//  what should I return ??
+
+	QTextStream stream( &configurein);
+	QStringList list;
+
+	QString ac_match("^AC_OUTPUT");
+
+	QRegExp ac_regex(ac_match);
+
+	while ( !stream.eof() ) {
+		QString line = stream.readLine();
+		if ( ac_regex.search(line) >= 0 ) {
+			QRegExp open("\\(");
+			QRegExp close("\\)");
+			line = line.replace(ac_regex.search(line), ac_match.length() - 1, "");
+
+			if (open.search(line) >= 0)
+				line = line.replace(open.search(line), 1, "");
+
+			if (close.search(line) >= 0)
+				line = line.replace(close.search(line), 1, "");
+
+			list = QStringList::split(" ", line);
+			break;
+		}
+	}
+
+	configurein.close();
+
+	// make a new object on the heap
+	return list;
+
+}
+
+void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringList makefiles)
+{
+	// read configure.in into buffer origfilecontent
+	QFile configurein(configureinpath);
+
+	configurein.open ( IO_ReadOnly );
+
+	QTextStream instream( &configurein);
+
+	QStringList origfilecontent;
+
+	while ( !instream.eof() ) {
+		QString line = instream.readLine();
+		origfilecontent.push_back(line);
+	}
+
+	configurein.close();
+
+
+	// put origfilecontent back into configure.in
+	configurein.open ( IO_WriteOnly );
+	QTextStream outstream( &configurein);
+
+	QStringList::iterator it;
+	for ( it = origfilecontent.begin(); it != origfilecontent.end(); it++ ) {
+		QRegExp ac_regexp("^AC_OUTPUT");
+		QString currline = (QString) (*it);
+
+		if ( ac_regexp.search(currline) >= 0 ) {
+			QString acline("AC_OUTPUT(");
+			acline = acline.append(makefiles.join(" "));
+			acline = acline.append(")");
+			outstream << acline << "\n";
+		}
+		else
+			outstream << currline << "\n";
+	}
+
+	configurein.close();
+}

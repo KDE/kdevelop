@@ -59,10 +59,10 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     setXMLFile("kdevautoproject.rc");
 
     m_executeAfterBuild = false;
-    bool kde = (args[0] == "kde");
+    m_isKDE = (args[0] == "kde");
     m_needMakefileCvs = false;
 
-    m_widget = new AutoProjectWidget(this, kde);
+    m_widget = new AutoProjectWidget(this, m_isKDE);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Automake Manager"));
     QWhatsThis::add(m_widget, i18n("Automake Manager\n\n"
@@ -84,7 +84,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 							actionCollection(), "project_importexisting" );
 	action->setStatusText ( i18n ( "Import existing files and directories to the currently loaded project" ) );
 */
-	if (!kde)
+    if (!m_isKDE)
         action->setEnabled(false);
 
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
@@ -127,7 +127,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotMakeMessages()),
                           actionCollection(), "build_messages" );
 
-    if (!kde)
+    if (!m_isKDE)
         action->setEnabled(false);
 
     buildConfigAction = new KSelectAction( i18n("Build Configuration"), 0,
@@ -918,5 +918,9 @@ void AutoProjectPart::needMakefileCvs( )
     m_needMakefileCvs = true;
 }
 
+bool AutoProjectPart::isKDE()
+{
+    return m_isKDE;
+}
 
 #include "autoprojectpart.moc"

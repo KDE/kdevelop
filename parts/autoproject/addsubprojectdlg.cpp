@@ -14,6 +14,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+#include <qstringlist.h>
 #include <qtextstream.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -137,6 +138,21 @@ void AddSubprojectDialog::accept()
         QTextStream stream(&f);
         stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl << "METASOURCES = AUTO" << endl;
         f.close();
+    }
+
+
+
+    // if !isKDE: add the new sub-proj to configure.in
+    if ( !m_part->isKDE() ) {
+        QString projroot = m_part->projectDirectory() + "/";
+        QString subdirectory = dir.path();
+        QString relpath = subdirectory.replace(0, projroot.length(),"");
+
+        QString configurein = projroot + "configure.in";
+
+        QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
+        list.push_back( relpath + "/Makefile" );
+        AutoProjectTool::configureinSaveMakefiles(configurein, list);
     }
 
 #if 0

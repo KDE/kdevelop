@@ -70,6 +70,7 @@ public:
 
     void needMakefileCvs();
     bool isDirty();
+    bool isKDE();
 
 protected:
     /**
@@ -114,6 +115,7 @@ private:
     QString m_buildCommand;
     bool m_needMakefileCvs;
     bool m_lastCompilationFailed;
+    bool m_isKDE;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
