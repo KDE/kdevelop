@@ -1,9 +1,9 @@
-
 2000-01-22 Benoit Cerrina <benoit.cerrina@writeme.com>
 	* fixed bug in class parser regarding incorectly parsed operator implementations
 
 2000-01-22 Ralf Funken <funken.ruk@netcologne.de>
 	* updated de.po
+	* removed all a2ps entries in the en and de manuals
 
 2000-01-22 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed bug in appwizard, now generating projects works again for all projects.

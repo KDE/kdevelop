@@ -148,7 +148,7 @@ name="http://www.gnu.org">
 <p>
 <bf>Optional:</bf>
 <itemize>
-<item>a2ps oder enscript zur Nutzung der Druckfunktionen
+<item>enscript zur Nutzung der Druckfunktionen
 <item>ghostview oder kghostview zur Druckvorschau
 <item>glimpse 4.0 für die Nutzung des Suchindexes, erhältlich auf <htmlurl url="http://glimpse.cs.arizona.edu"
 name="http://glimpse.cs.arizona.edu">
@@ -163,7 +163,7 @@ name="http://members.telecom.at/~johsixt/kdbg.html">
 KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM und FreeBSD 3.0-Release, SuSE Linux 6.0 auf Intel Pentium
 200 MMX, 128 MB Ram.
 
-Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive a2ps und enscript als Pakete oder
+Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive enscript als Pakete oder
 RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
 
 <bf>Dokumentation:</bf>	
@@ -260,7 +260,7 @@ ist, vornehmen; eine Einführung zu Entwicklung unter Unix befindet sich im Absch
 <item> Prüfen nach KDoc und Glimpse. Diese werden das Erzeugen einer neuen <idx/KDE-Bibliothek/s Dokumentation und eines Suchindexes
 in einem späteren Einstellungsschritt ermöglichen, wenn sie gefunden werden.
 
-<item> Prüfen nach a2ps und enscript, um sicherzustellen, das die Druckfunktionen verfügbar sind. Eines dieser Programme muß
+<item> Prüfen nach enscript, um sicherzustellen, das die Druckfunktionen verfügbar sind. Eines dieser Programme muß
 installiert sein, um korrektes Drucken zu ermöglichen. Wenn keines installiert ist, können Sie dies jederzeit nachholen um das Drucken
 zu ermöglichen, ohne das Setup erneut durchzuführen.
 
@@ -967,7 +967,7 @@ As..." dialog will be opened to let you choose a path and filename for the file 
 <item><bf/Speichern unter.../ öffnet den "Speichere Datei unter..." Dialog, indem Sie der Datei unter einen neuen Namen abspeichern
 können.<p>
 <item><bf/Alles speichern/ Speichert alle geänderten Dateien<p>
-<item><bf/Drucken...	STRG+P/ Öffnet den "Drucke Datei" Dialog, in dem Sie die Druckereinstellung für die Verwendung von a2ps, enscript
+<item><bf/Drucken...	STRG+P/ Öffnet den "Drucke Datei" Dialog, in dem Sie die Druckereinstellung für die Verwendung von enscript
 oder lpr festlegen, um dann zu drucken.<p>
 <item><bf/Verlassen  STRG+Q/ Beendet KDevelop. Wenn Dateien geändert wurden, werden Sie aufgefordert, diese zu speichern.<p>
 </itemize>
@@ -1117,7 +1117,6 @@ ein.<p>
 <item><bf/Drucker konfigurieren.../ Enthält die Einträge der Drucker-Konfigurationsdialoge entsprechend den verwendteten
 Druckprogrammen.<p>
 <itemize>
-<item><bf/a2ps/ Konfiguriert den Drucker zur Benutzung von a2ps. Für weitere Informationen sehen Sie nach unter "Drucken".<p>
 <item><bf/enscript/Konfiguriert den Drucker zur Benutzung von enscript. Für weitere Informationen sehen Sie nach unter "Drucken".<p>
 </itemize>
 <item><bf/Werkzeuge.../ Öffnet den Toolsmenu Konfigurations-Dialog. Hier können Sie das "Werkzeuge"-Menü bearbeiten, indem Sie
@@ -1946,60 +1945,20 @@ weiterführen möchten. Sind Sie mit dem ersetzen fertig, wählen Sie "Abbrechen".
 
 <sect>Drucken
 <p>
-As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new printing utility which makes use of two common printing programs available for Unix-Systems, <em/a2ps/ (ASCII-to-Postscript) and
-<em/enscript/. Besides these, you can also print by directly using lpr (the lineprinter device). As using a2ps or enscript offers the
-most options towards printing, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before printing, you should have a look at the available
-configuration dialogs to prepare the output according to your needs. The following section describes how to configure KDevelop for
-printing files.
+Da KDevelop so entworfen wurde, daß Entwicklern der bestmögliche Zugriff auf Dateien und Informationen ermöglicht wird, um so 
+die Anzahl der Entwicklungszyklen zu verringern, enthält es auch ein Druck Utility das Gebrauch von <em/enscript/ macht. 
+Außerdem können Sie auch mit Hilfe von lpr direkt auf dem Druckerport ausgeben. Da die Verwendung von enscript ein Höchstmaß 
+an Druckeroptionen zur Verfügung stellt, sollten Sie es installieren. Es wird bei den meisten Distributionen mitgeliefert, es sollte 
+also kein Problem sein es zu bekommen. Bevor Sie jedoch drucken, sollten Sie einen Blick auf die verfügbaren 
+Konfigurationsdialoge werfen, um die Ausgabe Ihren Bedürfnissen anzupassen. Der folgende Abschnitt beschreibt die Konfiguration 
+von KDevelop zum Ausdrucken von Dateien.
 
 <sect1>Druckerkonfiguration
 <p>
-Die Druckprogramme können beide über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; auf dem Druckdialog wählen Sie das
+Das Druckprogramm kann über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; in dem Druckdialog wählen Sie das
 zu verwendende Programm über die Combobox in der linken oberen Ecke. Dann betätigen Sie die Schaltfläche "Einstellungen" auf der
-rechten Seite. Dies öffnet den Konfigurationsdialog des gewählten Programms. Sie können die Programme ebenfalls konfigurieren, indem
-Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" das zu verwendende Programm auswählen (a2ps oder enscript).
-
-<sect2>Die a2ps Konfigurationseinstellungen
-<p>
-<sect3>Druck
-<p>
-<itemize>
-<item><bf/Kopf:/ fügt der Seite einen Kopfrahmen hinzu
-<item><bf/Dateiname:/ verwendet den Dateinamen als Text des Kopfrahmens
-<item><bf/Login:/ fügt die User ID auf der rechten oberen Ecke der Seite hinzu
-<item><bf/Rahmen:/ zeichnet einen Rahmen um die Textseite
-<item><bf/Datum & Zeit:/ fügt Datum und Uhrzeit des Drucks ein
-<item><bf/Dateien ausrichten:/ Druckt Dateien auf die gleiche Seite, verfügbar bei Zwei-Seiten Druck
-<item><bf/TAB-Größe:/ setzt die zu verwendende Weite von Tabulatoren
-<item><bf/Kopftext:/ Verfügbar, wenn Dateiname nicht verwendet wird und erlaubt das Einfügen von Text im Kopfrahmen
-<item><bf/Schriftgröße:/ Setzt die zu verwendende Schriftgröße des Textes. Standardeinstellung beträt 9
-</itemize>
-
-<sect3>Textdruck
-<p>
-<itemize>
-<item><bf/Zeilen abschneiden:/ schneidet das Ende der Zeile ab, wenn sie über den Seitenrand hinausragt. Zeilen werden umgebrochen,
-wenn "Zeilen abschneiden" deaktiviert ist.
-<item><bf/Interpretiere TAB, BS and FF:/ interpretiert TAB, Backspace und FastForward Zeichen.
-<item><bf/Ersetze nicht-druckbare Zeichen durch Leere:/ ersetzt nicht-durckbare Zeichen durch Leerzeichen
-<item><bf/Drucke Nicht-ASCII Zeichen als ISO-Latin 1:/ druckt Zeichen, die nicht im ASCII Zeichensatz enthalten sind, im ISO-Latin 1
-Ausgabemodus.
-<item><bf/Fettdruck:/ Druckt den ganzen Text in Fettdruck
-</itemize>
-
-<sect3>Numerierung
-<p>
-<itemize>
-<item><bf/Zeilen numerieren:/	numeriert alle Zeilen
-<item><bf/Seiten numerieren:/ erlaubt Seitennumerierung nach Modus:
-  <itemize>
-  <item><bf/Dateien einzeln:/ numeriert die Seiten jeder Datei einzeln beginnend mit 1
-  <item><bf/Dateien zusammen:/ numeriert alle Seiten der Druckausgabe aufeinander folgend
-  </itemize>
-<item><bf/Zeilen pro Seite:/ stellt die maximale Anzahl an Zeilen pro Seite ein
-</itemize>
+rechten Seite. Dies öffnet den Konfigurationsdialog des Programms. Sie können das Programm ebenfalls konfigurieren, indem
+Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" enscript auswählen .
 
 <sect2>Die enscript Konfigurationseinstellungen
 <p>
@@ -2115,7 +2074,7 @@ Ausgabemodus.
 <sect2>Einstellungen zum Sofort-Druck
 <p>
 <itemize>
-<item><bf/Programm:/ das zu verwendende Druckprogramm: a2ps, enscript oder lpr
+<item><bf/Programm:/ das zu verwendende Druckprogramm: enscript oder lpr
 <item><bf/Drucker:/ den zu verwendenden Drucker
 <item><bf/in Datei drucken:/ Ausgabe in Datei umleiten
 <item><bf/Papierformat:/ Papierformat in Hochformat oder Querformat verwenden
@@ -3652,6 +3611,8 @@ Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>
 Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
 
 Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+
+Ralf Funken         <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger Work )
 
 Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
 

@@ -153,7 +153,7 @@ as distribution packages and thereby can be installed easily.
 <p>
 <bf>Optional:</bf>
 <itemize>
-<item><idx/a2ps/ or <idx/enscript/ for <idx/printing/ support
+<item><idx/enscript/ for <idx/printing/ support
 <item>ghostview or kghostview for <idx/printing/ preview
 <item><idx/glimpse/ 4.0 for the <idx/search index/, available at <url url="http://glimpse.cs.arizona.edu">
 <item>sgmltools 1.0, available at <url url="http://www.sgmltools.org">
@@ -166,7 +166,7 @@ as distribution packages and thereby can be installed easily.
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
 200 MMX, 128MB RAM.
 
-As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/a2ps/ and <idx/enscript/ as packages or
+As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/enscript/ as packages or
 rpm's, so you should have no problem installing the required third-party software.
 
 <bf>Documentation:</bf>	
@@ -257,8 +257,8 @@ explained in section <ref id="Programs" name="Programs">.
 <item> Checking for <idx/KDoc/ and <idx/glimpse/.  Those will allow to create a new <idx/KDE-Library/ documentation and a <idx/search index/
 automatically in a later <idx/setup/ step if found.
 
-<item> Checking for <idx/a2ps/ and <idx/enscript/ to ensure that <idx/printing/ is available.  Either one of these programs have to be installed to
-allow correct <idx/printing/. If neither program is installed, you can do this at any time later on at your option without having to run the
+<item> Checking for <idx/enscript/ to ensure that <idx/printing/ is available.  This program has to be installed to
+allow correct <idx/printing/. If it isn't installed, you can do this at any time later on at your option without having to run the
 <idx/setup/ again.
 
 <item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
@@ -908,7 +908,7 @@ and the filename has to be given as well as the path where the file will be crea
 dialog will be opened to let you choose a path and filename for the file to be saved.<p>
 <item><bf/Save As.../ Opens the "Save File As..." dialog to let you save the current file under a new filename<p>
 <item><bf/Save All/ Saves all changed files<p>
-<item><bf/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for <idx/printing/ either using <idx/a2ps/, <idx/enscript/ or
+<item><bf/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for <idx/printing/ either using <idx/enscript/ or
 lpr<p>
 <item><bf/Quit			Ctrl+Q/ Exits KDevelop. If files are changed, you will be asked if you want to save these files.<p>
 </itemize>
@@ -1058,10 +1058,9 @@ with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
 languages, including <idx/HTML/.<p>
 <item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal <idx/Helpbrowser/<p>
-<item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s according to the used <idx/printing/ program, <idx/a2ps/
-or <idx/enscript/.<p>
+<item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s.
+<p>
 <itemize>
-<item><bf/<idx/a2ps// Configures the printer for use with <idx/a2ps/. See Printing for more information.<p>
 <item><bf/<idx/enscript// Configures the printer for use with <idx/enscript/. See Printing for more information.<p>
 </itemize>
 <item><bf/<idx/Tools/.../ Opens the Configure <idx/Tools/ dialog. Here, you can configure the "<idx/Tools/" menu by adding or removing programs that will
@@ -1871,58 +1870,19 @@ search again from the beginning. If you're finished, select "Cancel".
 <sect>Printing
 <p>
 As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new <idx/printing/ utility which makes use of two common <idx/printing/ programs available for Unix-Systems, <em/<idx/a2ps// (ASCII-to-Postscript) and
-<em/<idx/enscript//. Besides these, you can also print by directly using lpr (the lineprinter device). As using <idx/a2ps/ or <idx/enscript/ offers the
-most options towards <idx/printing/, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before <idx/printing/, you should have a look at the available
-<idx/configuration dialog/s to prepare the <idx/output/ according to your needs. The following section describes how to configure KDevelop for
-<idx/printing/ files.
+a new printing utility which makes use of <em/enscript/, a common printing program available for Unix-Systems. 
+Besides, you can also print by directly using lpr (the lineprinter device). As using enscript offers the
+most options towards printing, you should install it on your system; it is usually shipped with
+distributions, so you shouldn't have any problem to get it. But before printing, you should have a look at the available
+configuration dialog to prepare the output according to your needs. The following section describes how to configure KDevelop for
+printing files.
 
 <sect1>Configuring the Printer
 <p>
-The <idx/printing/ programs can both be configured by selecting "Print" from the <idx/"File"-menu/; on the <idx/printing/ dialog,
+The <idx/printing/ program can be configured by selecting "Print" from the <idx/"File"-menu/; on the <idx/printing/ dialog,
 select the program by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the
-configuration for the selected program that will be used. Another way to configure the programs are selecting "Printer
-Configuration..." from the "Options"-menu; then select "<idx/a2ps/" or "<idx/enscript/".
-
-<sect2>The <idx/a2ps/ Configuration Options
-<p>
-<sect3>Printing
-<p>
-<itemize>
-<item><bf/header:/  adds a header frame to the page
-<item><bf/filename:/  if checked, the header frame will contain the filename as its text
-<item><bf/login:/  adds the User ID to the right upper corner of the page
-<item><bf/borders:/  adds frame borders to the text page
-<item><bf/Date & Time:/  adds the <idx/printing/ date and time
-<item><bf/align files:/  prints out files on the same page, available for two-page <idx/printing/ mode
-<item><bf/set TAB size:/  sets the TAB size for <idx/printing/ TABs
-<item><bf/headertext:/ available, if filename is deselected and allows inserting another text to the header frame
-<item><bf/fontsize:/  sets the fontsize for the text. The default fontsize is 9
-</itemize>
-
-<sect3>Text<idx/printing/
-<p>
-<itemize>
-<item><bf/cut lines:/  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.
-<item><bf/interpret TAB, BS and FF:/ interpret TAB, Backspace and FastForward characters.
-<item><bf/replace non-<idx/printing/ character by space:/ if the file contains non-printable characters, those will be replaced by space
-characters.
-<item><bf/print non-ASCII character as ISO-Latin 1:/ prints characters not included in the ASCII format in ISO-Latin 1 mode <idx/output/
-<item><bf/bold font:/ prints the whole text in bold font mode.
-</itemize>
-
-<sect3>Numbering
-<p>
-<itemize>
-<item><bf/numbering lines:/  numbers all lines top-down if enabled
-<item><bf/numbering pages:/ allows selecting page-numbering mode by:
-  <itemize>
-  <item><bf/file single:/ numbers each file's pages beginning with 1
-  <item><bf/file together:/  appends all following pages after the first for page numbering
-  </itemize>
-<item><bf/lines per page:/  sets the maximum lines per page to be printed.
-</itemize>
+configuration for the program.  Another way to configure the program is selecting "Printer
+Configuration..." from the "Options"-menu; then select "<idx/enscript/".
 
 <sect2>The <idx/enscript/ Configuration Options
 <p>
@@ -2038,7 +1998,7 @@ characters.
 <sect2>Direct Printing Options
 <p>
 <itemize>
-<item><bf/Program:/ sets the <idx/printing/ program to be used for <idx/printing/: <idx/a2ps/, <idx/enscript/ or lpr
+<item><bf/Program:/ sets the <idx/printing/ program to be used for <idx/printing/: <idx/enscript/ or lpr
 <item><bf/Printer:/ sets the printer to be used for <idx/printing/
 <item><bf/Output location:/ for <idx/printing/ into a file, select the <idx/output/ location
 <item><bf/Orientation:/ sets the orientation for <idx/printing/, either landscape or portrait
