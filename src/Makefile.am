@@ -10,7 +10,7 @@ kdevelop_SOURCES = core.cpp partcontroller.cpp projectmanager.cpp \
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevelop_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
+kdevelop_LDADD =  $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
 
 rcdir = $(kde_datadir)/kdevelop
 rc_DATA = kdevelopui.rc eventsrc

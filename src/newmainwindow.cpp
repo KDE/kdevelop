@@ -62,6 +62,7 @@
 #include "core.h"
 #include "settingswidget.h"
 #include "statusbar.h"
+
 #include "kpopupmenu.h"
 #include "documentationpart.h"
 #include "editorproxy.h"
@@ -318,9 +319,8 @@ KMainWindow *NewMainWindow::main() {
     return this;
 }
 
-
 void NewMainWindow::createStatusBar() {
-    (void) new StatusBar(this);
+    (void) new KDevStatusBar(this);
 //    QMainWindow::statusBar();
 }
 

@@ -21,13 +21,13 @@ namespace KTextEditor { class ViewStatusMsgInterface; }
 namespace KTextEditor { class ViewCursorInterface; }
 namespace KParts { class Part; }
 
-class StatusBar : public KStatusBar
+class KDevStatusBar : public KStatusBar
 {
     Q_OBJECT
 
 public:
-    StatusBar( QWidget *parent=0, const char *name=0 );
-    ~StatusBar();
+    KDevStatusBar( QWidget *parent=0, const char *name=0 );
+    ~KDevStatusBar();
     void addWidget ( QWidget *widget, int stretch = 0, bool permanent = FALSE );
 
 private slots:

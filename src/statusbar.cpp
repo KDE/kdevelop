@@ -31,7 +31,7 @@
 #include "statusbar.h"
 #include "partcontroller.h"
 
-StatusBar::StatusBar(QWidget *parent, const char *name)
+KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
     : KStatusBar(parent, name), _cursorIface(0), _activePart(0)
 {
 	QWidget * w = new QWidget( this );
@@ -48,10 +48,10 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 }
 
 
-StatusBar::~StatusBar()
+KDevStatusBar::~KDevStatusBar()
 {}
 
-void StatusBar::activePartChanged(KParts::Part *part)
+void KDevStatusBar::activePartChanged(KParts::Part *part)
 {
 	if ( _activePart && _activePart->widget() )
 		disconnect( _activePart->widget(), 0, this, 0 );
@@ -84,7 +84,7 @@ void StatusBar::activePartChanged(KParts::Part *part)
 	}
 }
 
-void StatusBar::cursorPositionChanged()
+void KDevStatusBar::cursorPositionChanged()
 {
   if (_cursorIface)
   {
@@ -94,18 +94,18 @@ void StatusBar::cursorPositionChanged()
   }
 }
 
-void StatusBar::setStatus(const QString &str)
+void KDevStatusBar::setStatus(const QString &str)
 {
 	_status->setText(str);
 }
 
 
-void StatusBar::setCursorPosition(int line, int col)
+void KDevStatusBar::setCursorPosition(int line, int col)
 {
 	_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
-void StatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
+void KDevStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
 	KStatusBar::addWidget(widget,stretch,permanent);
 
