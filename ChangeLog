@@ -1,3 +1,8 @@
+2000-03-30 Sandy Meier   <smeier@kdevelop.de>
+	* small fix in dialogeditor (no preview for fixed size)
+	* commited patch by Florent Pillet <florent.pillet@opteway.com>, 
+	it fix some sporadic segfaults in KDevelop. Heh, no worry there weren't so much :-)
+
 2000-03-29 Walter Tasin  <tasin@kdevelop.de>
 	* correcting some other stuff on the application wizard:
 	* API documentation will not be included in the repository

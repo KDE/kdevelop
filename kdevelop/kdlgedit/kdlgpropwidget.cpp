@@ -456,7 +456,11 @@ AdvListViewItem::~AdvListViewItem()
 
 void AdvListViewItem::init()
 {
-  clearAllColumnWidgets();
+  //  clearAllColumnWidgets();
+  for (int i = 0; i < MAX_WIDGETCOLS_PER_LINE; i++) {
+         colwid[i] = NULL;
+         colactivated[i] = false;
+ }
 }
 		
 void AdvListViewItem::hideWidgets()
