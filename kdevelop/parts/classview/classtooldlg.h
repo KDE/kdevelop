@@ -52,6 +52,8 @@ public: // Public methods to set attribute values
 public slots:
   void setLanguageSupport(KDevLanguageSupport *ls);
 
+  void viewNone();
+    
   /** View the parents of the current class. */
   void viewParents();
 

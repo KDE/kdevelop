@@ -62,12 +62,6 @@ MakeWidget::~MakeWidget()
 {}
 
 
-void MakeWidget::setEditorManager(KDevEditorManager *em)
-{
-    m_editormanager = em;
-}
-
-
 void MakeWidget::startJob(const QString &dir, const QString &command)
 {
     ProcessView::startJob(dir, command);
@@ -137,7 +131,7 @@ void MakeWidget::lineHighlighted(int line)
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
     if (i->isCustomItem()) {
         MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-        m_editormanager->gotoSourceFile(gi->filename(), gi->linenumber());
+        m_part->editorManager()->gotoSourceFile(gi->filename(), gi->linenumber());
     }
 }
 

@@ -55,7 +55,7 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     initQextMDI();
 
     // load all kpart components and let them create their partial GUI
-    m_pCore->loadInitialComponents();
+    m_pCore->loadGlobalComponents();
 
     // Default is: switch to editor mode in Childframe mode
     KConfig* pConfig = kapp->config();

@@ -492,6 +492,7 @@ void ClassTreeBase::slotClassTool()
 {
     ClassToolDialog *dlg = new ClassToolDialog(m_part);
     dlg->setClassName(contextItem->scopedText());
+    dlg->viewNone();
 }
 
 #include "classtreebase.moc"

@@ -23,7 +23,7 @@
 
 
 MakeView::MakeView(QObject *parent, const char *name)
-    : KDevMakeFrontend(parent,  name)
+    : KDevMakeFrontend(parent, name)
 {
     setInstance(OutputFactory::instance());
     setXMLFile("kdevmakeview.rc");
@@ -77,7 +77,7 @@ void MakeView::executeMakeCommand(const QString &command)
 
 
 AppOutputView::AppOutputView(QObject *parent, const char *name)
-    : KDevAppFrontend(parent,  name)
+    : KDevAppFrontend(parent, name)
 {
     setInstance(OutputFactory::instance());
 }

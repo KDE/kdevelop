@@ -1,6 +1,15 @@
+2000-12-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Load editor manager at startup
+	* Initialize app frontend once instead of make frontend twice ;-)
+	* Initialize class combo in class tool
+	* Fixed MethodListAction::refresh() to always
+	  set the current item
+	  
+
 2000-12-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Further KDevComponent minimization. All components
 	  can now be accessed already in setupGUI()
+	* Picking the fruit: Generic dcop interfaces for KDevEditorManager and KDevMakeFrontend
 
 2000-12-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Removed many methods from KDevComponents, now using

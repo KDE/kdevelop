@@ -22,10 +22,9 @@ class ClassStore;
 class ClassListAction : public KSelectAction
 {
 public:
-    ClassListAction(const QString &text, int accel,
+    ClassListAction(ClassStore *store, const QString &text, int accel,
                     const QObject *receiver, const char *slot,
                     QObject *parent, const char *name);
-    void setClassStore(ClassStore *store);
     void setCurrentItem(const QString &item);
     void refresh();
     
@@ -37,10 +36,9 @@ private:
 class MethodListAction : public KSelectAction
 {
 public:
-    MethodListAction(const QString &text, int accel,
+    MethodListAction(ClassStore *store, const QString &text, int accel,
                      const QObject *receiver, const char *slot,
                      QObject *parent, const char *name);
-    void setClassStore(ClassStore *store);
     void refresh(const QString &className);
 
 private:

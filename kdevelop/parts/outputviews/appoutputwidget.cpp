@@ -52,4 +52,5 @@ void AppOutputWidget::stopButtonClicked()
         insertItem(i18n("Killed process."));
     }
 }
+
 #include "appoutputwidget.moc"

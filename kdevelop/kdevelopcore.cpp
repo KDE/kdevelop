@@ -46,7 +46,9 @@ KDevelopCore::KDevelopCore(KDevelop *pGUI)
 
 
 KDevelopCore::~KDevelopCore()
-{}
+{
+    unloadGlobalComponents();
+}
 
 
 void KDevelopCore::initComponent(KDevComponent *pComponent)
@@ -123,7 +125,7 @@ void KDevelopCore::readProperties(KConfig* pConfig){
 }
 
 
-void KDevelopCore::loadInitialComponents()
+void KDevelopCore::loadGlobalComponents()
 {
     // All generic components
     QObjectList list = PartLoader::loadAllByQuery(m_pKDevelopGUI,
@@ -133,6 +135,36 @@ void KDevelopCore::loadInitialComponents()
     QObjectListIt it(list);
     for (; it.current(); ++it) 
         initComponent(static_cast<KDevComponent*>(it.current()));
+
+    // Editor manager component
+    QObject *emObj = PartLoader::loadByQuery(m_pKDevelopGUI,
+                                             QString::fromLatin1("KDevelop/EditorManager"),
+                                             QString::null,
+                                             "KDevEditorManager");
+    if (emObj) {
+        m_api->editorManager = static_cast<KDevEditorManager*>(emObj);
+        initComponent(m_api->editorManager);
+    } else {
+        KMessageBox::sorry(m_pKDevelopGUI,
+                           i18n("No valid editor manager component found"));
+    }
+
+}
+
+
+void KDevelopCore::unloadGlobalComponents()
+{
+    // Editor manager component
+    if (m_api->editorManager) {
+        m_components.remove(m_api->editorManager);
+        delete m_api->editorManager;
+        m_api->editorManager = 0;
+    }
+
+    // All generic components
+    QListIterator<KDevComponent> it(m_components);
+    for (; it.current(); ++it)
+        delete it.current();
 }
 
 
@@ -178,19 +210,6 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
         }
     }
 
-    // Editor manager component
-    QObject *emObj = PartLoader::loadByQuery(m_pKDevelopGUI,
-                                             QString::fromLatin1("KDevelop/EditorManager"),
-                                             QString::null,
-                                             "KDevEditorManager");
-    if (emObj) {
-        m_api->editorManager = static_cast<KDevEditorManager*>(emObj);
-        initComponent(m_api->editorManager);
-    } else {
-        KMessageBox::sorry(m_pKDevelopGUI,
-                           i18n("No valid editor manager component found"));
-    }
-
     // Make frontend component
     QObject *mfObj = PartLoader::loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/MakeFrontend"),
@@ -211,7 +230,7 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                                              "KDevAppFrontend");
     if (afObj) {
         m_api->appFrontend = static_cast<KDevAppFrontend*>(afObj);
-        initComponent(m_api->makeFrontend);
+        initComponent(m_api->appFrontend);
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid application frontend component found"));
@@ -253,13 +272,6 @@ void KDevelopCore::closeProjectSpace()
         docel.appendChild(layoutel);
     }
     m_pKDevelopGUI->writeDockConfig(layoutel);
-
-    // Editor manager component
-    if (m_api->editorManager) {
-        m_components.remove(m_api->editorManager);
-        delete m_api->editorManager;
-        m_api->editorManager = 0;
-    }
 
     // Language support component
     if (m_api->languageSupport) {
@@ -420,10 +432,12 @@ void KDevelopCore::running(bool runs)
     else
         m_runningComponents.remove(comp);
 
-    kdDebug(9000) << "Running components" << endl;
+    kdDebug(9000) << "Running components:" << endl;
+    if (m_runningComponents.isEmpty())
+        kdDebug(9000) << "--empty--" << endl;
     QListIterator<KDevComponent> it(m_runningComponents);
     for (; it.current(); ++it)
-        kdDebug(9000) << comp->name() << endl;
+        kdDebug(9000) << it.current()->name() << endl;
 
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("stop_everything")->setEnabled(!m_runningComponents.isEmpty());

@@ -19,20 +19,12 @@
 #include "classactions.h"
 
 
-ClassListAction::ClassListAction(const QString &text, int accel,
+ClassListAction::ClassListAction(ClassStore *store, const QString &text, int accel,
                                  const QObject *receiver, const char *slot,
                                  QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, slot, parent, name)
-{
-    m_store = 0;
-}
+    : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
+{}
  
-
-void ClassListAction::setClassStore(ClassStore *store)
-{
-    m_store = store;
-}
-
 
 void ClassListAction::setCurrentItem(const QString &item)
 {
@@ -44,9 +36,6 @@ void ClassListAction::setCurrentItem(const QString &item)
 
 void ClassListAction::refresh()
 {
-    if (!m_store)
-        return;
-    
     QList<ParsedClass> *classList = m_store->getSortedClassList();
 
     QStringList list;
@@ -57,34 +46,26 @@ void ClassListAction::refresh()
     qHeapSort(list);
 
     int idx = list.findIndex(currentText());
+    if (idx == -1 && !list.isEmpty())
+        idx = 0;
     setItems(list);
     if (idx != -1)
         KSelectAction::setCurrentItem(idx);
+    else if (!list.isEmpty())
 
     delete classList;
 }
 
 
-MethodListAction::MethodListAction(const QString &text, int accel,
+MethodListAction::MethodListAction(ClassStore *store, const QString &text, int accel,
                                    const QObject *receiver, const char *slot,
                                    QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, slot, parent, name)
-{
-    m_store = 0;
-}
-
-
-void MethodListAction::setClassStore(ClassStore *store)
-{
-    m_store = store;
-}
+    : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
+{}
 
 
 void MethodListAction::refresh(const QString &className)
 {
-    if (!m_store)
-        return;
-
     ParsedClass *pc;
     QStringList list;
 
@@ -169,4 +150,5 @@ QPopupMenu *DelayedPopupAction::popupMenu()
     
     return m_popup;
 }
+
 #include "classactions.moc"

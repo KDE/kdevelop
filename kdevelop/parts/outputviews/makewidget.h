@@ -17,7 +17,6 @@
 
 
 class MakeView;
-class KDevEditorManager;
 
 
 class MakeWidget : public ProcessView
@@ -27,7 +26,6 @@ public:
     MakeWidget(MakeView *part);
     ~MakeWidget();
 
-    void setEditorManager(KDevEditorManager *em);
     void startJob(const QString &dir, const QString &command);
 
 public slots:

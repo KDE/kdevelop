@@ -201,8 +201,7 @@ void ClassToolDialog::setLanguageSupport(KDevLanguageSupport *ls)
 {
     if (ls)
         connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(refresh()));
-    if (!m_part->classStore())
-        currentOperation = ViewNone;
+    currentOperation = ViewNone;
 }
 
 
@@ -218,6 +217,13 @@ void ClassToolDialog::setClassName(const QString &name)
 
     if (!name.isEmpty())
         currentClass = m_part->classStore()->getClassByName(name);
+}
+
+
+void ClassToolDialog::viewNone()
+{
+    currentOperation = ViewNone;
+    refresh();
 }
 
 
@@ -300,12 +306,10 @@ void ClassToolDialog::refresh()
     QString oldName = classCombo.currentText();
 
     classCombo.clear();
-    if (m_part->classStore()) {
-        QStrList *list = m_part->classStore()->getSortedClassNameList();
-        classCombo.insertStrList(list);
-        delete list;
-        setClassName(oldName);
-    }
+    QStrList *list = m_part->classStore()->getSortedClassNameList();
+    classCombo.insertStrList(list);
+    delete list;
+    setClassName(oldName);
 
     // Rebuild the tree and caption/button state
     buildTree();

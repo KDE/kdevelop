@@ -65,12 +65,10 @@ void ClassView::setupGUI()
 
     embedWidget(m_classtree, SelectView, i18n("CV"), i18n("class tree view"));
 
-    classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
+    classes_action = new ClassListAction(classStore(), i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
-    classes_action->setClassStore(classStore());
-    methods_action = new MethodListAction(i18n("Methods"), 0, this, SLOT(selectedMethod()),
+    methods_action = new MethodListAction(classStore(), i18n("Methods"), 0, this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");
-    methods_action->setClassStore(classStore());
     popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0, this, SLOT(switchedDeclImpl()),
                                            actionCollection(), "class_wizard");
     setupPopup();
@@ -109,7 +107,8 @@ void ClassView::projectSpaceOpened()
     kdDebug(9003) << "ClassView::projetSpaceOpened()" << endl;
 
     KDevLanguageSupport *ls = languageSupport();
-    connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(updatedSourceInfo()));
+    if (ls)
+        connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(updatedSourceInfo()));
     emit setLanguageSupport(ls);
 
     setupPopup();

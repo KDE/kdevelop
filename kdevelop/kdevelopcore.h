@@ -34,7 +34,9 @@ public:
     KDevelopCore(KDevelop *gui);
     virtual ~KDevelopCore();
 
-    void loadInitialComponents();
+    void loadGlobalComponents();
+    void unloadGlobalComponents();
+
     bool openProjectSpace(const QString &fileName);
     void closeProjectSpace();
     
