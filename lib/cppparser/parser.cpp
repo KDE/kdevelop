@@ -2663,7 +2663,7 @@ bool Parser::parseSwitchStatement( StatementAST::Node& node )
     return true;
 }
 
-bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseLabeledStatement( StatementAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseLabeledStatement()" << endl;
     switch( lex->lookAhead(0) ){
@@ -2675,6 +2675,7 @@ bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
 
 	    StatementAST::Node stmt;
 	    if( parseStatement(stmt) ){
+                node = stmt;
 	        return true;
 	    }
 	}
@@ -2691,6 +2692,7 @@ bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
 
 	StatementAST::Node stmt;
 	if( parseStatement(stmt) ){
+            node = stmt;
 	    return true;
 	}
     }
