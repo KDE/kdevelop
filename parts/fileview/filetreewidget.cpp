@@ -186,11 +186,15 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     m_isReloadingTree( false ),
     m_actionToggleShowVCSFields( 0 ), m_actionToggleShowNonProjectFiles( 0 )
 {
-    setResizeMode(QListView::LastColumn);
-    setSorting(0);
-    addColumn(QString::null);
+    setResizeMode( QListView::LastColumn );
+    setSorting( 0 );
+    setAllColumnsShowFocus( true );
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
+
+    addColumn( "Filename" ); // 0
+    addColumn( "Revision" );  // 1
+    addColumn( "Timestamp" );  // 2
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -520,9 +524,10 @@ void FileTreeWidget::slotToggleShowVCSFields()
     // TODO
     if (showVCSFields())
     {
-        setColumnText( 0, "Filename" ); // First column already added
-        addColumn( "Revision" );  // 1
-        addColumn( "Timestamp" );  // 2
+//        setColumnText( 0, "Filename" ); // First column already added
+//        setColumnWidth( 0, viewport()->width() / 3 ); // "Revision"
+        setColumnWidth( 1, viewport()->width() / 3 ); // "Revision"
+        setColumnWidth( 2, viewport()->width() / 3 ); // "Timestamp"
 
         header()->show();
         triggerUpdate();
@@ -530,9 +535,10 @@ void FileTreeWidget::slotToggleShowVCSFields()
     else
     {
         header()->hide();
-        setColumnText(0, QString::null ); // First column already added
-        removeColumn( 2 );  // Timestamp (yeah, it seems that column to to be removed in a stack-like manner :-/)
-        removeColumn( 1 );  // Revision
+//        setColumnText( 0, QString::null );
+        hideColumn( 2 );
+        hideColumn( 1 );
+        setColumnWidth( 0, viewport()->width() ); // Make the column to occupy all the row
 
         triggerUpdate();
     }
