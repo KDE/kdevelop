@@ -494,7 +494,7 @@ void TopLevelMDI::embedOutputView(QWidget *view, const QString &name, const QStr
 }
 
 
-void TopLevelMDI::setViewVisible(QWidget *pView, bool bEnabled)
+void TopLevelMDI::setViewAvailable(QWidget *pView, bool bEnabled)
 {
   QextMdiChildView* pWrappingView = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
   if (!pWrappingView) return;
@@ -511,6 +511,13 @@ void TopLevelMDI::setViewVisible(QWidget *pView, bool bEnabled)
     else {
       pWrappingDockWidget->undock();
     }
+  }
+
+  if (bEnabled) {
+    m_unavailableViews.remove(pWrappingView);
+  }
+  else {
+    m_unavailableViews.append(pWrappingView);
   }
 }
 
@@ -910,6 +917,9 @@ void TopLevelMDI::fillToolViewsMenu(
   QPtrListIterator<QextMdiChildView> it(*pViews);
   for( ; it.current(); ++it)                                          // Iterate through all views
   {
+     if (m_unavailableViews.find(it.current()) != -1) {
+        continue; // skip this view, it was set to unavailable for the GUI
+     }
      QString Name=it.current()->tabCaption();                       // Get the name of the view
      KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
      ViewMenuActionPrivateData ActionData;

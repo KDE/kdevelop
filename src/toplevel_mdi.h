@@ -35,7 +35,7 @@ public:
   void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);  //!< We do not have a right pane so this is just a wrapper to embedSelectView(
 
   void removeView(QWidget *view);
-  void setViewVisible(QWidget *pView, bool bEnabled);
+  void setViewAvailable(QWidget *pView, bool bEnabled);
   
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
@@ -155,6 +155,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   QPtrList<QextMdiChildView> m_outputViews;        //!< Lists all output views
   QPtrList<QextMdiChildView> m_selectViews;        //!< Lists all select views
   QPtrList<QextMdiChildView> m_partViews;          //!< Lists all part views
+  QPtrList<QextMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
 
   bool m_closing;                                  //!< true if we are about to close or just closing
 

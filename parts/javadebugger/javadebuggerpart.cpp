@@ -69,7 +69,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
     topLevel()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
-    topLevel()->setViewVisible(variableWidget, false);
+    topLevel()->setViewAvailable(variableWidget, false);
     
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -94,7 +94,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "can see the values in any of the "
                                            "previous calling functions."));
     topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"), i18n("debugger function call stack"));
-    topLevel()->setViewVisible(framestackWidget, false);
+    topLevel()->setViewAvailable(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -107,7 +107,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
     topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble"));
-    topLevel()->setViewVisible(disassembleWidget, false);
+    topLevel()->setViewAvailable(disassembleWidget, false);
 
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -317,9 +317,9 @@ void JavaDebuggerPart::startDebugger()
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
     
-    topLevel()->setViewVisible(variableWidget, true);
-    topLevel()->setViewVisible(framestackWidget, true);
-    topLevel()->setViewVisible(disassembleWidget, true);
+    topLevel()->setViewAvailable(variableWidget, true);
+    topLevel()->setViewAvailable(framestackWidget, true);
+    topLevel()->setViewAvailable(disassembleWidget, true);
 
     // Floatinging tool bar can wait until later :-)
     //    if (enableFloatingToolBar) {
@@ -362,9 +362,9 @@ void JavaDebuggerPart::slotStop()
     ac->action("debug_stepout")->setEnabled(false);
     ac->action("debug_memview")->setEnabled(false);
 
-    topLevel()->setViewVisible(variableWidget, false);
-    topLevel()->setViewVisible(framestackWidget, false);
-    topLevel()->setViewVisible(disassembleWidget, false);
+    topLevel()->setViewAvailable(variableWidget, false);
+    topLevel()->setViewAvailable(framestackWidget, false);
+    topLevel()->setViewAvailable(disassembleWidget, false);
 
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);

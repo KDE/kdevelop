@@ -269,7 +269,7 @@ void TopLevelSDI::removeView(QWidget *)
 {
 }
 
-void TopLevelSDI::setViewVisible(QWidget * /*pView*/, bool /*bEnabled*/)
+void TopLevelSDI::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/)
 {
   // TODO: implement me
 }

@@ -89,7 +89,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
     topLevel()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
-    topLevel()->setViewVisible(variableWidget, false);
+    topLevel()->setViewAvailable(variableWidget, false);
 
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -114,7 +114,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "can see the values in any of the "
                                            "previous calling functions."));
     topLevel()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
-    topLevel()->setViewVisible(framestackWidget, false);
+    topLevel()->setViewAvailable(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -127,11 +127,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
     topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble view"));
-    topLevel()->setViewVisible(disassembleWidget, false);
+    topLevel()->setViewAvailable(disassembleWidget, false);
     
     gdbOutputWidget = new ProcessWidget(0);
     topLevel()->embedOutputView(gdbOutputWidget, i18n("GDB"), i18n("GDB output"));
-    topLevel()->setViewVisible(gdbOutputWidget, false);
+    topLevel()->setViewAvailable(gdbOutputWidget, false);
     
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -504,10 +504,10 @@ void DebuggerPart::startDebugger()
                                "been activated or the interrupt was pressed).") );
     
 
-    topLevel()->setViewVisible(variableWidget, true);
-    topLevel()->setViewVisible(framestackWidget, true);
-    topLevel()->setViewVisible(disassembleWidget, true);
-    topLevel()->setViewVisible(gdbOutputWidget, true);
+    topLevel()->setViewAvailable(variableWidget, true);
+    topLevel()->setViewAvailable(framestackWidget, true);
+    topLevel()->setViewAvailable(disassembleWidget, true);
+    topLevel()->setViewAvailable(gdbOutputWidget, true);
     
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
@@ -544,10 +544,10 @@ void DebuggerPart::stopDebugger()
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     
-    topLevel()->setViewVisible(variableWidget, false);
-    topLevel()->setViewVisible(framestackWidget, false);
-    topLevel()->setViewVisible(disassembleWidget, false);
-    topLevel()->setViewVisible(gdbOutputWidget, false);
+    topLevel()->setViewAvailable(variableWidget, false);
+    topLevel()->setViewAvailable(framestackWidget, false);
+    topLevel()->setViewAvailable(disassembleWidget, false);
+    topLevel()->setViewAvailable(gdbOutputWidget, false);
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
