@@ -274,11 +274,11 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
      in order to support completely-out-of-source builds, where nothing, not
      even the kdevelop project files are created in the source directory, Alex <neundorf@kde.org>
      */
-    QString filelistDir=DomUtil::readEntry(dom, "/kdevcustomproject/filelistdirectory");
-    if (filelistDir.isEmpty())
-       filelistDir=dirName;
+    m_filelistDir=DomUtil::readEntry(dom, "/kdevcustomproject/filelistdirectory");
+    if (m_filelistDir.isEmpty())
+       m_filelistDir=dirName;
 
-    QFile f(filelistDir + "/" + projectName + ".filelist");
+    QFile f(m_filelistDir + "/" + projectName + ".filelist");
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {
@@ -353,7 +353,7 @@ void CustomProjectPart::closeProject()
 
 void CustomProjectPart::saveProject()
 {
-    QFile f(m_projectDirectory + "/" + m_projectName + ".filelist");
+    QFile f(m_filelistDir + "/" + m_projectName + ".filelist");
     if (!f.open(IO_WriteOnly))
         return;
 
