@@ -33,8 +33,6 @@ public slots:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
-    void projectOpened();
-    void projectClosed();
 
 private:
     QGuardedPtr<FileTreeWidget> m_filetree;

@@ -52,32 +52,10 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
                                        "in groups which can be configured by you."));
     topLevel()->embedSelectView(m_filegroups, i18n("File Groups"));
 
-    connect( core(), SIGNAL(projectOpened()),
-             this, SLOT(projectOpened()) );
-    connect( core(), SIGNAL(projectClosed()),
-             this, SLOT(projectClosed()) );
+    
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     
-    if( project() )
-        projectOpened();
-}
-
-
-FileViewPart::~FileViewPart()
-{
-    if (m_filetree)
-        topLevel()->removeView(m_filetree);
-    if (m_filegroups)
-    topLevel()->removeView(m_filegroups);
-
-    delete m_filetree;
-    delete m_filegroups;
-}
-
-
-void FileViewPart::projectOpened()
-{
     // File tree
     m_filetree->openDirectory(project()->projectDirectory());
 
@@ -94,10 +72,15 @@ void FileViewPart::projectOpened()
 }
 
 
-void FileViewPart::projectClosed()
+FileViewPart::~FileViewPart()
 {
-    m_filetree->clear();
-    m_filegroups->refresh();
+    if (m_filetree)
+        topLevel()->removeView(m_filetree);
+    if (m_filegroups)
+    topLevel()->removeView(m_filegroups);
+
+    delete m_filetree;
+    delete m_filegroups;
 }
 
 
