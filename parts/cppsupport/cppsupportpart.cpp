@@ -114,6 +114,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
     
     m_astView = new KListView();
+    m_astView->setSorting( -1 );
     m_astView->addColumn( "" );
     m_astView->header()->hide();
     mainWindow()->embedSelectViewRight( m_astView, i18n("AST Debug"), i18n("Show the AST for the current translation unit") );
@@ -1255,7 +1256,7 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 	int endLine, endColumn;
 	node->getStartPosition( &startLine, &startColumn );
 	node->getEndPosition( &endLine, &endColumn );
-	textHint = m_activeEditor->textLine( startLine );
+	textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
     }
     m_backgroundParser->unlock();
 }

@@ -226,7 +226,7 @@ public:
     enum { Type = NodeType_TypeSpecifier };
     
     virtual NameAST* name() { return m_name.get(); }
-    virtual void setName( NameAST::Node& name ) { m_name = name; }
+    virtual void setName( NameAST::Node& name );
 
 public:
     TypeSpecifierAST();
@@ -287,11 +287,15 @@ public:
     AST* classKey();
     void setClassKey( AST::Node& classKey );
         
+    BaseClauseAST* baseClause() { return m_baseClause.get(); }
+    void setBaseClause( BaseClauseAST::Node& baseClause );
+    
     void addDeclaration( DeclarationAST::Node& declaration );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
-    
+        
 private:
     AST::Node m_classKey;
+    BaseClauseAST::Node m_baseClause;
     QPtrList<DeclarationAST> m_declarations;
     
 private:

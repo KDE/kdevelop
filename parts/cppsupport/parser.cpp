@@ -278,15 +278,17 @@ bool Parser::parseName( NameAST::Node& node )
 	lex->nextToken();
     }
     
-    parseNestedNameSpecifier( nestedName );
+    bool hasNestedName = parseNestedNameSpecifier( nestedName );
     if( parseUnqualifiedName(unqualifedName) ){
         //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "----------> name parsed!!" << endl;
 	
 	NameAST::Node ast = CreateNode<NameAST>();
 	node = ast;
 	node->setGlobal( isGlobal );
-	node->setNestedName( nestedName );
+	if( hasNestedName )
+	    node->setNestedName( nestedName );
 	node->setUnqualifedName( unqualifedName );
+	node->setText( toString(start, lex->index()) );
 	UPDATE_POS( node, start, lex->index() );
 	
 	return true;
@@ -1465,24 +1467,25 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 	
     NameAST::Node name;
     parseName( name );
-
+    
     BaseClauseAST::Node bases;
     if( lex->lookAhead(0) == ':' ){      
 	if( !parseBaseClause(bases) ){
 	    skipUntil( '{' );
 	}
     }
-    
+
     if( lex->lookAhead(0) != '{' ){
 	lex->setIndex( start );
 	return false;
     }
-    
+
     ADVANCE( '{', '{' );
-    
+
     ClassSpecifierAST::Node ast = CreateNode<ClassSpecifierAST>();
     ast->setClassKey( classKey );
     ast->setName( name );
+    //ast->setBaseClause( bases );
 
     while( !lex->lookAhead(0).isNull() ){
 	if( lex->lookAhead(0) == '}' )
@@ -1936,11 +1939,11 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	index = lex->index();
 	
 	AST::Node name = CreateNode<AST>();
-	UPDATE_POS( name, start, lex->index() );
 	name->setText( toString(start, lex->index(), "") );
+	UPDATE_POS( name, start, lex->index() );
 	
 	ClassOrNamespaceNameAST::Node classOrNamespaceName( new ClassOrNamespaceNameAST() );
-	classOrNamespaceName->setName( name );
+	//classOrNamespaceName->setName( name );
 	int startId = lex->index();
 		
 	if( lex->lookAhead(1) == '<' ){
@@ -1952,26 +1955,28 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 		lex->setIndex( index );
 		return false;
 	    }
+	    args->setText( toString(startId, lex->index()) );
 	    UPDATE_POS( args, startId, lex->index() );
-	    classOrNamespaceName->setTemplateArgumentList( args );
+	    //classOrNamespaceName->setTemplateArgumentList( args );
 	    
 	    if( lex->lookAhead(0) != '>' ){
 		lex->setIndex( index );
 		return false;
 	    } else {
 	        TemplateArgumentListAST::Node null_args;
-	        classOrNamespaceName->setTemplateArgumentList( null_args );  // remove template argument
+	        //classOrNamespaceName->setTemplateArgumentList( null_args );  // remove template argument
 		lex->nextToken(); // skip >
 	    }
 	    
 	    if ( lex->lookAhead(0) == Token_scope ) {
 	        
+		classOrNamespaceName->setText( toString(startId, lex->index()) );
 	    	UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
 		
 		lex->nextToken();
 		ok = true;
 		
-		node->addClassOrNamespaceName( classOrNamespaceName );
+		//node->addClassOrNamespaceName( classOrNamespaceName );
 		
 	    } else {
 		lex->setIndex( index );
@@ -1981,8 +1986,9 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	} else if( lex->lookAhead(1) == Token_scope ){
 	    lex->nextToken(); // skip name
 	    
+	    classOrNamespaceName->setText( toString(startId, lex->index()) );
 	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
-	    node->addClassOrNamespaceName( classOrNamespaceName );
+	    //node->addClassOrNamespaceName( classOrNamespaceName );
 	    
 	    lex->nextToken(); // skip ::
 	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier ){
@@ -2001,6 +2007,7 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
     }
     
     UPDATE_POS( node, start, lex->index() );
+    node->setText( toString(start,lex->index()) );
     
     return true;
 }

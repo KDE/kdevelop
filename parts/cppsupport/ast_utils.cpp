@@ -18,7 +18,7 @@
 
 AST* findNodeAt( AST* node, int line, int column )
 {
-    kdDebug(9007) << "findNodeAt(" << node << ")" << endl;
+    // kdDebug(9007) << "findNodeAt(" << node << ")" << endl;
 
     if( !node )
 	return 0;
@@ -59,8 +59,14 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
     
-    QString nodeDescription = ast->nodeType() == NodeType_TranslationUnit ? QString::fromLatin1("TranslationUnit") : editIface->textLine( startLine );
-    QListViewItem* item = new QListViewItem( parent, nodeDescription.simplifyWhiteSpace(),
+    QString nodeDescription = ast->text();
+    if( !nodeDescription ){
+	nodeDescription = ast->nodeType() == NodeType_TranslationUnit ? QString::fromLatin1("") : editIface->textLine( startLine ).simplifyWhiteSpace();
+    }
+	
+    nodeDescription += i18n(" [%1]").arg( nodeTypeToString(ast->nodeType()) );
+    
+    QListViewItem* item = new QListViewItem( parent, nodeDescription,
 					     QString::number(startLine), QString::number(startColumn),
 					     QString::number(endLine), QString::number(endColumn) );
     
@@ -77,4 +83,3 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
 	++it;
     }
 }
-

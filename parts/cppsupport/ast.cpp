@@ -398,6 +398,12 @@ TypeSpecifierAST* TypedefAST::typeSpec()
     return m_typeSpec.get();
 }
 
+void TypeSpecifierAST::setName( NameAST::Node& name )
+{
+    m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
+}
+
 void TypedefAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
@@ -565,6 +571,15 @@ void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
 
     declaration->setParent( this );
     m_declarations.append( declaration.release() );
+}
+
+void ClassSpecifierAST::setBaseClause( BaseClauseAST::Node& baseClause )
+{
+    if( m_baseClause.get() )
+	m_baseClause->setParent( 0 );
+
+    m_baseClause = baseClause;
+    m_baseClause->setParent( this );
 }
 
 // ------------------------------------------------------------------------
