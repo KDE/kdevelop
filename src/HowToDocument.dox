@@ -1,0 +1,8 @@
+/** \file HowToDocument.dox
+  * \brief How to document KDevelop parts
+  */
+/** \page howToDocument How to document KDevelop parts
+
+Here Amilcar should describe how to document a KDevelop part using a README.dox file.
+
+*/

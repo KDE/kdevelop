@@ -26,9 +26,11 @@ There is also a \ref LangSupportStatus page.
 \section expand How to expand KDevelop
 
 First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop on:
-  - \ref howToAddNewLanguage
   - \ref howToExtend
+  - \ref howToAddNewLanguage
+  - \ref howToAddTemplates
 
+After you expanded KDevelop capabilities you migth also want to find out \ref howToDocument.
 
 \section PlannedTasks Planned tasks
 
