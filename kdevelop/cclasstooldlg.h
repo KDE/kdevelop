@@ -91,7 +91,7 @@ protected: // Private widgets
   QComboBox classCombo;
   
   QVBoxLayout topLayout;
-  QHBoxLayout comboLayout;
+  QGridLayout comboLayout;
   QHBoxLayout btnLayout;
 
   QPushButton parentsBtn;
@@ -99,6 +99,7 @@ protected: // Private widgets
   QPushButton clientsBtn;
   QPushButton suppliersBtn;
 
+  QLabel filler;
   QPushButton attributesBtn;
   QPushButton methodsBtn;
   QPushButton virtualsBtn;
@@ -152,18 +153,23 @@ private: // Private attribues
 
 private: // Private methods
 
+  /** Set all initial values of all widgets in the dialog. */
   void setWidgetValues();
+  /** Set all signal<->slot mappings. */
   void setCallbacks();
+  /** Read and set the icons of all the buttons in the dialog. */
   void readIcons();
+  /** Set tooltip strings. */
   void setTooltips();
+  /** Make the supplied class the selected one in the classcombo. */
   void setActiveClass( const char *aName );
-
+  
   void addClasses( QList<CParsedClass> *list );
   void addClassAndAttributes( CParsedClass *aClass );
   void addClassAndMethods( CParsedClass *aClass );
   void addAllClassMethods();
   void addAllClassAttributes();
-
+  
   /** Change the caption depending on the current operation. */
   void changeCaption();
 };
