@@ -32,6 +32,12 @@ void KDevelopIface::closeProjectSpace()
 }
 
 
+void KDevelopIface::changeProjectSpace ()
+{
+    m_core->changeProjectSpace();
+}
+
+
 QCStringList KDevelopIface::actions()
 {
     QCStringList list;

@@ -30,6 +30,7 @@ class KDevEditorManager;
 class KDevMakeFrontend;
 class KDevAppFrontend;
 class ProjectSpace;
+class Project;
 class ClassStore;
 class KDialogBase;
 class KAboutData;
@@ -113,6 +114,11 @@ public:
      * configuration to the DOM document, see #projectSpaceClosed()
      */
     virtual void projectSpaceOpened();
+
+    /** When the user switches to a different sub project in their projectspace
+        we will call this routine for each component.
+     */
+    virtual void projectChanged(){};
 
     /** returns some data about this Component, should be static?*/
     virtual KAboutData* aboutPlugin();

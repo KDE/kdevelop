@@ -151,11 +151,11 @@ void BugListComponent::projectSpaceOpened()
     {
         kdDebug(9040) << "BugList::Project Space Write" << endl;
 
-/*        QDomDocument *doc = m_pProjectSpace->readUserDocument();
-        QDomElement rootElement = doc->documentElement();
-        QDomElement elem = doc->createElement("BugList");
-        elem.setAttribute ("test", "value");
-        rootElement.appendChild (elem);*/
+//        QDomDocument *doc = m_pProjectSpace->readUserDocument();
+//        QDomElement rootElement = doc->documentElement();
+//        QDomElement elem = doc->createElement("BugList");
+//        elem.setAttribute ("test", "value");
+//        rootElement.appendChild (elem);
     }
 }
 
@@ -181,6 +181,14 @@ void BugListComponent::projectSpaceClosed()
     }
 
     m_pProjectSpace = NULL;
+}
+
+
+/*  The sub project has changed. Update the filename we will use for
+    the XML file. */
+
+void BugListComponent::projectChanged()
+{
 }
 
 

@@ -6,6 +6,7 @@
 
 class KDevelopCore;
 class KDCOPActionProxy;
+class Project;
 
 
 class KDevelopIface : public DCOPObject
@@ -19,6 +20,11 @@ public:
 k_dcop:
     bool openProjectSpace(const QString &fileName);
     void closeProjectSpace();
+
+    /** They have changed the subproject they are using, we should notify
+        all the components, to give them a chance to react. */
+    void changeProjectSpace ();
+
     QCStringList actions();
     DCOPRef action(const QCString &name);
 

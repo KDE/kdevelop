@@ -179,7 +179,8 @@ bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement)
   projectElement.setAttribute("pluginName",pluginName);
   projectElement.setAttribute("name",m_name);
   projectElement.setAttribute("relativePath",m_relPath);
-  
+  projectElement.setAttribute("bugfile","bugs.xml");
+
 
   // Files tag
   QDomElement filesElement = projectElement.appendChild(doc.createElement("Files")).toElement();

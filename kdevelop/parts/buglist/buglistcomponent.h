@@ -43,6 +43,7 @@ protected:
     virtual void stopButtonClicked();
     virtual void projectSpaceOpened();
     virtual void projectSpaceClosed();
+    virtual void projectChanged();
 
 private:
     BugList         *m_pBugList;        // The main buglist object.

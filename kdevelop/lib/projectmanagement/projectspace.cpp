@@ -147,22 +147,38 @@ void ProjectSpace::addProject(Project* pProject)
   KDevNode* pNode = new KDevNode(m_name,pProject->name());
   emit sigAddedProject(pNode);
 }
+
+
 void ProjectSpace::setCurrentProject(Project* prj){
-  m_pCurrentProject = prj;
-  fillActiveProjectPopupMenu();
+    // Change to the new project.
+    m_pCurrentProject = prj;
+
+    // Notify all components that we are switching current project.
+    // xxx->changeProjectSpace ();
+
+    // Update the popup menu.
+    fillActiveProjectPopupMenu();
 }
 
-void ProjectSpace::setCurrentProject(QString name){
+
+void ProjectSpace::setCurrentProject(QString name)
+{
   Project* pProject;
-  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
-      if(pProject->name() == name){
-	setCurrentProject(pProject);
+
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next())
+  {
+      if(pProject->name() == name)
+      {
+	    setCurrentProject(pProject);
       }
   }  
 }
+
+
 Project* ProjectSpace::currentProject(){
   return m_pCurrentProject;
 }
+
 
 void ProjectSpace::removeProject(QString /*name*/){
 }
@@ -574,6 +590,7 @@ QDomDocument* ProjectSpace::writeGlobalDocument()
   ps.setAttribute("pluginName", pluginName); // the projectspacetype name
   ps.setAttribute("version", m_version);
   ps.setAttribute("lastActiveProject",m_pCurrentProject->name());
+  ps.setAttribute("bugfile","bugs.xml");    //HACK: Add properly into project later.
 
   writeGlobalConfig(*m_pGlobalDoc,ps);
   return m_pGlobalDoc;

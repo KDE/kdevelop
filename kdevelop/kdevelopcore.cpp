@@ -267,6 +267,17 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
 }
 
 
+/*  They have changed the subproject they are using, we should notify
+    all the components, to give them a chance to react. */
+void KDevelopCore::changeProjectSpace ()
+{
+    // Notification
+    QListIterator<KDevComponent> it1(m_components);
+    for (; it1.current(); ++it1)
+        (*it1)->projectChanged();
+}
+
+
 void KDevelopCore::closeProjectSpace()
 {
     kdDebug(9000) << "KDevelopCore::closeProjectSpace" << endl;
