@@ -68,11 +68,12 @@ void PHPSupportPart::projectClosed()
 
 void PHPSupportPart::maybeParse(const QString fileName)
 {
+  //    kdDebug(9007) << "maybeParse()" << endl;
     QFileInfo fi(fileName);
     QString path = fi.filePath();
-    if (fi.extension() == "inc" || fi.extension() == "php" 
-	|| fi.extension() == "html"
-	|| fi.extension() == "php3") {
+    if (fi.extension().contains("inc") || fi.extension().contains("php") 
+	|| fi.extension().contains("html")
+	|| fi.extension().contains("php3")) {
         classStore()->removeWithReferences(fileName);
         parse(fileName);
     }
@@ -84,6 +85,7 @@ void PHPSupportPart::initialParse()
     kdDebug(9016) << "initialParse()" << endl;
     
     if (project()) {
+      //  kdDebug(9016) << "project" << endl;
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allSourceFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
@@ -156,9 +158,9 @@ void PHPSupportPart::parse(const QString &fileName)
 	bracketOpen += line.contains("{");
 	bracketClose += line.contains("}");
 
-	//        kdDebug(9018) << "try match line: " << line << endl;
+	//kdDebug(9018) << "try match line: " << line << endl;
         if (classre.match(line)) {
-	  //kdDebug(9018) << "regex match line: " << line << endl;
+	  //  kdDebug(9018) << "regex match line: " << line << endl;
 	  inClass= true;
 	  bracketOpen = line.contains("{");
 	  bracketClose = line.contains("}");

@@ -1,5 +1,5 @@
 -php syntax highlighting
--integrated preview (webserver support and execution with php.exe)
+-integrated preview (webserver support and execution with php.exe),including error message parser
 -syntax check with php.exe
 -extended classtools (new class,new function...) based on filetemplates
 -debugger and profiler support dbg(http://dd.cron.ru/dbg)
@@ -10,5 +10,4 @@
 -integrated filemanager with ftp client (maybe a konqueror part)
 -code template factory (contains useful php code snippet like array_display,trace,validator)
 -new 'character' based parser, the current is 'line' based
-
 ...
