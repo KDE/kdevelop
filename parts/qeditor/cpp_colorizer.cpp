@@ -68,14 +68,14 @@ CppColorizer::CppColorizer()
 
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "#.*", PreProcessor, 0 ) );
+    context0->appendChild( new RegExpHLItem( "^\\s*#", PreProcessor, 4 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
     context0->appendChild( new RegExpHLItem( "//.*", Comment, 0 ) );
     context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\w+", Normal, 0 ) );
+    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
 
     HLItemCollection* context1 = new HLItemCollection( String );
     context1->appendChild( new StringHLItem( "\\'", String, 1 ) );
@@ -88,10 +88,16 @@ CppColorizer::CppColorizer()
     HLItemCollection* context3 = new HLItemCollection( Comment );
     context3->appendChild( new StringHLItem( "*/", Comment, 0 ) );
 
+    HLItemCollection* context4 = new HLItemCollection( PreProcessor );
+    context4->appendChild( new RegExpHLItem( ".*\\\\\\s*$", PreProcessor, 4 ) );
+    context4->appendChild( new RegExpHLItem( ".*", PreProcessor, 0 ) );
+
+
     m_items.append( context0 );
     m_items.append( context1 );
     m_items.append( context2 );
     m_items.append( context3 );
+    m_items.append( context4 );
 }
 
 CppColorizer::~CppColorizer()

@@ -143,8 +143,8 @@ void QEditorPart::setupActions()
 	KStdAction::paste( m_editor, SLOT(paste()), actionCollection() );
 	KStdAction::selectAll( m_editor, SLOT(selectAll()), actionCollection() );
 	KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
-        KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
-        KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
+	KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
+	KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
 }
 
 void QEditorPart::setReadWrite(bool rw)
@@ -296,7 +296,7 @@ unsigned int QEditorPart::length() const
 int QEditorPart::lineLength( unsigned int line ) const
 {
 	if( int(line) < m_editor->editor()->lines() ){
-		return m_editor->editor()->text( line ).length();
+		return m_editor->editor()->paragraphLength( line );
 	}
 	return -1;
 }
@@ -381,15 +381,14 @@ unsigned int QEditorPart::redoCount() const
 
 unsigned int QEditorPart::undoSteps() const
 {
-#warning "TODO: unsigned int QEditorPart::undoSteps() const"
-	kdDebug() << "QEditorPart::undoSteps() -- not implemented yet!!" << endl;
-	return 0;
+    QTextDocument* textDoc = m_editor->editor()->document();
+    return textDoc->commands()->undoDepth();
 }
 
 void QEditorPart::setUndoSteps( unsigned int steps )
 {
-#warning "TODO: void QEditorPart::setUndoSteps( unsigned int steps )"
-	kdDebug() << "QEditorPart::setUndoSteps() -- not implemented yet!!" << endl;
+    QTextDocument* textDoc = m_editor->editor()->document();
+    textDoc->commands()->setUndoDepth( steps );
 }
 
 void QEditorPart::undo()
@@ -554,8 +553,8 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			unsigned int *matchLen, bool casesensitive, bool backwards )
 {
 #warning "TODO: QEditorPart::searchText()"
-    kdDebug() << "TODO: QEditorPart::searchText()" << endl;
-    return false;
+	kdDebug() << "TODO: QEditorPart::searchText()" << endl;
+	return false;
 }
 
 bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
