@@ -434,14 +434,37 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 }
 
 
+QString MakeWidget::getOutputColor( Type type )
+{
+    QString cName;
+    int h, s, v;
+    bool bright = false;
+
+    // find out whether background is bright or dark
+    paletteBackgroundColor().hsv( &h, &s, &v );
+    if ( v > 127 )
+        bright = true;
+
+    switch ( type ) {
+    case Normal:
+        cName = bright ? "darkBlue" : "lightBlue";
+        break;
+    case Error:
+        cName = bright ? "darkRed" : "lightRed";
+        break;
+    case Diagnostic:
+        cName = bright ? "black" : "white";
+        break;
+    }
+
+    return cName;
+}
+
 void MakeWidget::insertLine2(const QString &line, Type type)
 {
     ++parags;
 
-    QString color =
-        (type==Error)? "darkRed" :
-        (type==Diagnostic)? "black" :
-        "darkBlue";
+    QString color = getOutputColor( type );
     bool move = textCursor()->parag() == document()->lastParag() && textCursor()->atParagEnd();
 
     int paraFrom, indexFrom, paraTo, indexTo;

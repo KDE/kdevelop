@@ -56,6 +56,7 @@ private:
     void insertLine2(const QString &line, Type type);
     bool matchEnterDir( const QString& line, QString& dir );
     bool matchLeaveDir( const QString& line, QString& dir );
+    QString getOutputColor( Type type );
 
     QStringList commandList;
     QStringList dirList;
