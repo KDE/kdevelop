@@ -104,6 +104,12 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_displayStaticMembers_(false),
   config_asm_demangle_(true)
 {
+  KConfig* config = kapp->getConfig();
+  config->setGroup("Debug");
+  ASSERT(!config->readBoolEntry("Use external debugger", false));
+  config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
+  config_asm_demangle_          = !config->readBoolEntry("Display mangled names", true);
+
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),         SLOT(slotDbgStatus(const QString&, int)));
 #endif
