@@ -29,14 +29,15 @@ debian-clean:
 	-rm -f build-stamp
 
 clean: debian-clean
-	-make distclean
-	-rm -f debian/debiandirs debian/menu debian/mailcap
 	if test -d CVS; then \
 	  make -f admin/Makefile.common cvs-clean ;\
+	else \
+	 -make distclean; \
+	 dh_clean ;\
+	 -rm -f debian/debiandirs debian/menu debian/mailcap ;\
+	 -rm -f `find . -name "*~"` ;\
+	 -rm -rf config.log libtool config.status config.cache ;\
 	fi
-	dh_clean
-	-rm -f `find . -name "*~"`
-	-rm -rf config.log libtool config.status config.cache
 	
 binary-indep:	build
 	dh_testroot

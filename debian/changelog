@@ -1,4 +1,12 @@
-kdevelop (1:1.0-20000224-1.0) experimental; urgency=low
+kdevelop-cvs (1:1.1-20000306-1.0) experimental; urgency=low
+ 
+  * New upstream CVS version
+  * Setting package to -cvs for developer testing purposes
+  * Adding in build-depends
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 06 Mar 2000 03:30:00 -0700
+
+kdevelop (1:1.1-20000229-1.0) experimental; urgency=low
 
   * Fixing pathing for doc-base files
   * Minor cleanups 
