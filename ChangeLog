@@ -1,6 +1,9 @@
+2002-05-30  Harald Fernengel <harry@kdevelop.org>
+        * gcc 3.1 compile fix in tokenizer.l
+
 2002-05-28  F@lk Brettschneider <falk@kdevelop.org>
         * stepped to version 2.1.2 (preparing for KDE-3.0.2)
-	
+
 2002-05-19  F@lk Brettschneider <falk@kdevelop.org>
 	* applied patch of Marcus Gruendler which workarounds changed (maybe buggy) Qt behaviour on text output in output tool-view
 	  (reviewed by Harald Fernengel)
