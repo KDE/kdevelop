@@ -926,7 +926,7 @@ void CKDevelop::slotBuildRun()
   int rebuildType;
 
   config->setGroup("MakeOptionsSettings");
-  rebuildType=config->readNumEntry("RebuildType", 0);
+  rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
@@ -954,7 +954,7 @@ void CKDevelop::slotBuildRunWithArgs()
   int rebuildType;
 
   config->setGroup("MakeOptionsSettings");
-  rebuildType=config->readNumEntry("RebuildType", 0);
+  rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
@@ -1435,7 +1435,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
   int rebuildType;
 
   config->setGroup("MakeOptionsSettings");
-  rebuildType=config->readNumEntry("RebuildType", 0);
+  rebuildType=config->readNumEntry("RebuildType", 2);
   if (rebuildType==0 && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
