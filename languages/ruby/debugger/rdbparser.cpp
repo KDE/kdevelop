@@ -130,8 +130,14 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 					
 			while (pos != -1) {
 				varName = ppvalue_re.cap(1);
-				value = ppvalue_re.cap(2).latin1();
-				dataType = determineType(value.data());
+				
+				if (ppref_re.search(ppvalue_re.cap(2)) != -1) {
+					value = (ppref_re.cap(1) + ">").latin1();
+				} else {
+					value = ppvalue_re.cap(2).latin1();
+				}
+				
+				dataType = determineType((char *) ppvalue_re.cap(2).latin1());
 				setItem(parent, varName, dataType, value);
 				
 				pos += ppvalue_re.matchedLength();

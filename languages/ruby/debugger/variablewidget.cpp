@@ -655,7 +655,7 @@ QString VarItem::typeFromValue(const QString& value)
 		return QString("Range");
 	} else if (value == "true" || value == "false") {
 		return QString("Boolean");
-	} else if (  QRegExp("[0-9_]+").exactMatch(value)
+	} else if (  QRegExp("^[-+]?[0-9_]+").exactMatch(value)
 				|| QRegExp("^[-+]?(0x|0|0b|\\?)").search(value) != -1 ) 
 	{
 		return QString("Integer");
