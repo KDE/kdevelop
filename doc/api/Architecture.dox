@@ -15,11 +15,15 @@ The KDevelop 3 source is divided into several parts which correspond to
 subdirectories in the KDevelop project directory. There are several main
 parts to distinguish, mainly:
 
-  - src = The core part of KDevelop
+  - src            = The core part of KDevelop
   - lib/interfaces = Plugin handler interface classes
-  - parts = The various parts using the KParts framework
+  - parts          = The various parts using the KParts framework
+  - languages      = Programming languages \ref language-parts
+  - buildtools     = build tool systems \ref buildtool-parts
+  - vcs            = Version Control Systems \ref vcs-parts
+  - editors        = Code editors \ref editor-parts
   .
-      
+
 \image html Architecture.png
 
 This image is not complete there are parts that are not displayed. See below for a more detailed description.
@@ -46,7 +50,7 @@ access to common window features.
 \subsubsection toplevel The TopLevel Object
 
 There is only one toplevel object of class KDevMainWindow in Gideon. It can
-be accessed through the static function TopLevel::getInstance() (see the 
+be accessed through the static function TopLevel::getInstance() (see the
 TopLevel class).
 
 \subsection parts-overview KDevelop Parts Overview
@@ -58,71 +62,79 @@ be viewed according to their functionalities as follows.
 
 To add support for a new language check this page \ref howToAddProgrammingLanguages
 
-  - parts/adasupport = Support for Ada
+  - languages/ada = Support for Ada
     - (see AdaSupportPart)
     .
-  - parts/bashsupport = Support for bash
+  - languages/bash = Support for bash
     - (see BashSupportPart)
     .
-  - parts/cppsupport = Support for C/C++
+  - languages/cpp = Support for C/C++
     - (see CppSupportPart)
+      - languages/cpp/debugger = GNU Debugger frontend
+        - (see GDBDebugger::DebuggerPart)
+        .
+      .
     .
-  - parts/fortransupport = Support for Fortran
+  - languages/fortran = Support for Fortran
     - (see FortranSupportPart)
     .
-  - parts/haskellsupport = Support for Haskell
+  - languages/haskell = Support for Haskell
     - (see HaskellSupportPart)
     .
-  - parts/javasupport = Support for Java
+  - languages/java = Support for Java
     - (see JavaSupportPart)
+      - languages/java/degugger = Java debugger frontend
+        - (JAVADebugger::JavaDebuggerPart)
+        .
+      .
     .
-  - parts/pascalsupport = Support for Pascal
+  - languages/pascal = Support for Pascal
     - (see PascalSupportPart)
     .
-  - parts/perlsupport = Support for Perl
+  - languages/perl = Support for Perl
     - (see PerlSupportPart)
     .
-  - parts/phpsupport = Support for PHP
+  - languages/php = Support for PHP
     - (see PHPSupportPart)
     .
-  - parts/pythonsupport = Support for Python
+  - languages/python = Support for Python
     - (see PythonSupportPart)
     .
-  - parts/rubysupport = Support for Ruby
+  - languages/ruby = Support for Ruby
     - (see RubySupportPart)
     .
-  - parts/sqlsupport = Support for SQL
+  - languages/sql = Support for SQL
     - (see SQLSupportPart)
     .
-  - parts/xulsupport = Support for XUL
+  - languages/xul = Support for XUL
     - (see XulSupportPart)
     .
   .
 
-\subsubsection build-tools-parts Build tools Parts in KDevelop
+\subsubsection buildtool-parts Build tools Parts in KDevelop
 
-  - parts/adaproject = Ada Project Manager
+  - buildtools/ada = Ada build tool
     - (see AdaProjectPart)
     .
-  - parts/antproject = ANT Project Manager
+  - buildtools/ant = ANT build tool
     - (see AntProjectPart)
     .
-  - parts/autoproject = Automake Project Manager
+  - buildtools/autotools = Autotools build tool
     - (see AutoProjectPart)
     .
-  - parts/customproject = Custom Project Manager
+  - buildtools/custommakefiles = Custom makefiles build tool
     - (see CustomProjectPart)
     .
-  - parts/genericproject = Generic Project Manager
+  - buildtools/generic = Generic build tool
     - (see GenericProjectPart)
     .
-  - parts/pascalproject = Pascal Project Manager
+  - buildtools/pascal = Pascal build tool
     - (see PascalProjectPart)
     .
-  - parts/scriptproject = Script Project Manager
+  - buildtools/script = Script build tool
     - (see ScriptProjectPart)
     .
-  - parts/trollproject = QMake based Project Manager
+  - buildtools/qmake = QMake based build tool
     - (see TrollProjectPart)
     .
   .
@@ -130,22 +142,22 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
 \subsubsection vcs-parts VCS (Version Control System) Parts in KDevelop
 
-  - parts/cervisia = Cervisia Support
+  - vcs/cervisia = Cervisia Support
     - (see CervisiaPart)
     .
-  - parts/clearcase = IBM Rational ClearCase Support
+  - vcs/clearcase = IBM Rational ClearCase Support
     - (see ClearcasePart)
     .
-  - parts/cvs = CVS Support
+  - vcs/cvs = CVS Support
     - (see CvsPart)
     .
-  - parts/cvsservice = cvsservice Support (Cervisia interface)
+  - vcs/cvsservice = cvsservice Support (Cervisia interface)
     - (see CvsServicePart)
     .
-  - parts/perforce = Version managment system perforce integration
+  - vcs/perforce = Version managment system perforce integration
     - (see PerforcePart)
     .
-  - parts/svn = Subversion integration
+  - vcs/svn = Subversion integration
     - (see SvnPart)
     .
   .
@@ -155,13 +167,13 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
 These parts implement a KTextEditor interface.
 
-  - parts/editor-chooser = Chooses an internal text editor
+  - editors/editor-chooser = Chooses an internal text editor
     - (see EditorChooserPart)
     .
-  - parts/nedit = KTextEditor interface for nedit
+  - editors/nedit = KTextEditor interface for nedit
     - (see KNEditFactory, Document, View)
     .
-  - parts/qeditor = QEditor integration
+  - editors/qeditor = QEditor integration
     - (see QEditorPart)
     .
   .
@@ -234,9 +246,6 @@ operation of KDevelop.
   - parts/ctags = CTags frontend
     - (see CTagsPart)
     .
-  - parts/debugger = GNU Debugger Manager
-    - (see GDBDebugger::DebuggerPart and JAVADebugger::JavaDebuggerPart)
-    .
   - parts/diff = Difference viewer
     - (see DiffPart)
     .
@@ -251,9 +260,6 @@ operation of KDevelop.
     .
   - parts/fileview = File groups
     - (see FileViewPart, FileGroupsPart)
-    .
-  - parts/javadebugger = Java debugger frontend
-    - (see JAVADebugger::JavaDebuggerPart)
     .
   - parts/manager = Document manager
     - (see DocManager, ViewManager)

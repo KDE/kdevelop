@@ -17,7 +17,7 @@
   - Syntax highlighter
     - (add to QEditor if not available elsewhere)
 	.
-  - Project manager (make/ant/etc)
+  - Build tool (make/ant/etc)
   - Source file templates
   - Application wizard
   - Source code abbreviations
@@ -113,36 +113,36 @@ reported by a parser and displays it in a problem reporter view.
 
 The language support is important, but it is unusable without a <B>project
 manager</B> that can manage projects written on this language. KDevelop
-currently provides several project managers. They are:
+currently provides several build tools. They are:
 
-  - Automake manager
-    - <code>parts/autoproject</code>
+  - Autotools build tool
+    - <code>buildtools/autoproject</code>
     .
-  - QMake manager
-    - <code>parts/trollproject</code>
+  - QMake build tool
+    - <code>buildtools/trollproject</code>
     .
-  - Generic manager
-    - Offers project manager facilities using project files in xml format (dtd is located in <code>parts/genericproject/kdevxmlproject.dtd</code>). Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins. Build system plugin is an object that implements KDevBuildSystem interface. Build system plugins are located in <code>plugins/buildsystem</code>.
+  - Generic build tool
+    - Offers build tool facilities using project files in xml format (dtd is located in <code>buildtools/generic/kdevxmlproject.dtd</code>). Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins. Build system plugin is an object that implements KDevBuildSystem interface. Build system plugins are located in <code>buildtools/generic/buildsystem</code>.
   .
 
 Also available:
-  - Custom project manager
-    - <code>parts/customproject</code>
+  - Custom makefiles build tool
+    - <code>buildtools/custommakefiles</code>
     - (works with custom makefiles, also has ant support)
     .
-  - Script project manager
-    - <code>parts/scriptproject</code>
-    - (the generic project manager for all scripting languages).
+  - Script build tool
+    - <code>buildtools/script</code>
+    - (the generic build tool for all scripting languages).
     .
-  - <code>parts/pascalproject</code> and
-  - <code>parts/adaproject</code>
-  - <code>parts/haskellproject</code>
+  - <code>buildtools/pascal</code> and
+  - <code>buildtools/ada</code>
+  - <code>buildtools/haskell</code>
   .
 
-(They are deprecated project managers that will be replaced with generic manager).
+(They are deprecated build tools that will be replaced with the generic build tool).
 
-Choose your project manager and if the existing project managers doesn't fit
-in, extend generic project manager via build system plugin.
+Choose your build tool and if the existing build tools doesn't fit
+in, extend generic build tool via build system plugin.
 
 \section Templ Templates
 
@@ -183,6 +183,6 @@ There is an ability to create compiler plugin for KDevelop. Compiler plugin prov
 
 \section MiscInf Other Info
 
-See also <code>HACKING</code> file for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
+See also \ref howToAddPlugins (HowToAddPlugins.dox file) for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
 
 */
