@@ -214,9 +214,6 @@ CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
     m_activeCursor->cursorPositionReal( &line, &column );
     QString textLine = m_activeEditor->textLine( line );
     QString ch = textLine.mid( column-1, 1 );
-
-    if( ch == "(" )
-	completeText();  // show arguments
 }
 
 
@@ -507,7 +504,6 @@ CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 	QString e = *it;
 
 	e = e.stripWhiteSpace();
-	bool onlyStatic = e.find( "::" ) != -1;
 	int leftParen = e.find( "(" );
 
 	if( leftParen != -1 )
@@ -790,7 +786,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		//entry.prefix = meth->type();
 
 		entry.text = meth->name() + "(";
-
+		
 		QString text;
 		for( ParsedArgument *pArg = meth->arguments.first();
 		pArg != 0;
@@ -799,9 +795,13 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 			text += ", ";
 		    text += pArg->toString();
 		}
-		text += ")";
-		entry.postfix = text;
-
+		
+		if( text.isEmpty() ){
+		    entry.text += ")";
+		} else {
+		    text += ")";
+		    entry.postfix = text;
+		}
 		entryList << entry;
 	    }
 	}
@@ -830,8 +830,12 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 			text += ", ";
 		    text += pArg->toString();
 		}
-		text += ")";
-		entry.postfix = text;
+		if( text.isEmpty() ){
+		    entry.text += ")";
+		} else {
+		    text += ")";
+		    entry.postfix = text;
+		}
 		entryList << entry;
 	    }
 	}
@@ -860,8 +864,12 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 			text += ", ";
 		    text += pArg->toString();
 		}
-		text += ")";
-		entry.postfix = text;
+		if( text.isEmpty() ){
+		    entry.text += ")";
+		} else {
+		    text += ")";
+		    entry.postfix = text;
+		}
 		entryList << entry;
 	    }
 	}
