@@ -1,3 +1,8 @@
+2001-06-01  Harald Fernengel  <harry@bnro.de>
+
+    * added parenthesis highlighting code (stole it from quanta, so if it isn't working
+      please don't blame me ;). Very primitive, works only for () [] and {}
+
 2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
     * kdevelop-speed-drop bug fixed (wandering through the popup menu)
     * from-the-department:-"pointers are evil" bug fixed (reported by rokrau)
