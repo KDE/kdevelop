@@ -58,6 +58,16 @@ QString AST::indentation()
 	return result;
 }
 
+bool AST::hasChildren() const
+{
+	return !m_children.isEmpty();
+}
+
+QValueList<AST*> AST::children() const
+{
+	return m_children;
+}
+
 //ProjectAST
 
 void ProjectAST::writeBack(QString &buffer)
