@@ -57,6 +57,8 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 //    watchVarEntry_ = new KLineEdit(this);
 
     QPushButton *addButton = new QPushButton(i18n("&Add"), watchEntry );
+    addButton->adjustSize();
+    addButton->setFixedWidth(addButton->width());
 
     QBoxLayout * vbox = new QVBoxLayout();
 
