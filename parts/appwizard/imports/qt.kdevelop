@@ -29,4 +29,11 @@
    <dbgshell></dbgshell>
   </general>
  </kdevdebugger>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="ui" />
+      <type ext="cpp" />
+      <type ext="h" />
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

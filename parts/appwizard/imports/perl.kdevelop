@@ -15,4 +15,9 @@
    <mainprogram>$APPNAMELC$.pl</mainprogram>
   </run>
  </kdevscriptproject>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="perl"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

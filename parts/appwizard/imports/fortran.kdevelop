@@ -23,4 +23,9 @@
    <dbgshell></dbgshell>
   </general>
  </kdevdebugger>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="f"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

@@ -15,4 +15,9 @@
    <buildtool>ant</buildtool>
   </build>
  </kdevcustomproject>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="php"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

@@ -23,4 +23,11 @@
    <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
+  <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes>
+      <type ext="c" />
+      <type ext="h" />
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>
