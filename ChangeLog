@@ -1,4 +1,8 @@
 2001-03-30  F@lk Brettschneider <falk@kdevelop.org>
+    * cleaned up a little bit
+    * 0L pointer checks for m_docViewManager->currentEditView() added in many slots
+
+2001-03-30  F@lk Brettschneider <falk@kdevelop.org>
     * implemented KDevelop's XML-based session loading&saving (currently MDI stuff, only) in a *.kdevses file
     * why? Answer: To separate stuff from the project which causes CVS merge conflicts when working in teams
     * therefore is class KDevSession now
