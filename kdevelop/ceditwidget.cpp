@@ -119,6 +119,41 @@ void CEditWidget::indent(){
 void CEditWidget::unIndent(){
   KWrite::unIndent();
 }
+void CEditWidget::spellcheck(){
+   kspell= new KSpell (this, "KDevelop: Spellcheck", this,
+		   SLOT (spellcheck2 (KSpell *)));	
+}
+
+void CEditWidget::spellcheck2(KSpell *){
+    if (kspell->isOk())
+      {
+
+//	setReadOnly (TRUE);
+
+/*	connect (kspell, SIGNAL (misspelling (char *, QStrList *, unsigned)),
+		 this, SLOT (misspelling (char *, QStrList *, unsigned)));
+	connect (kspell, SIGNAL (corrected (char *,
+						 char *, unsigned)),
+		 this, SLOT (corrected (char *,
+					char *, unsigned)));
+
+       connect (kspell, SIGNAL (progress (unsigned int)),
+                this, SIGNAL (spellcheck_progress (unsigned int)) );
+
+	connect (kspell, SIGNAL (done(char *)),
+		 this, SLOT (spellResult (char *)));
+	
+	kspell->setProgressResolution (2);
+*/
+	kspell->check (text().data());
+	
+      }
+/*    else
+      {
+	KMsgBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
+			 "Please make sure you have ISpell properly configured and in your PATH.", KMsgBox::STOP);
+      }*/
+}
 
 /** Insert the string at the supplied line. */
 void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
@@ -223,3 +258,4 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+

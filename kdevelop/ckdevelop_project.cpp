@@ -474,6 +474,7 @@ void CKDevelop::slotProjectOpen(){
   if(project){
     old_project = prj->getProjectFile();
     if(!slotProjectClose()){
+			slotViewRefresh();
       return;
     }
   }
@@ -482,6 +483,7 @@ void CKDevelop::slotProjectOpen(){
   str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
   if (str.isEmpty() && old_project != ""){
     readProjectFile(old_project);
+		slotViewRefresh();
     return; //cancel
   }
  
@@ -493,8 +495,11 @@ void CKDevelop::slotProjectOpen(){
 
     KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
     readProjectFile(old_project);
+		slotViewRefresh();
     }
-    
+  	else
+			slotViewRefresh();
+
     slotStatusMsg(IDS_DEFAULT);
   }	
   
@@ -736,7 +741,6 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_BUILD_AUTOCONF);
 	
   project=true;
-  slotViewRefresh();
   return true;
 }
 
@@ -775,6 +779,17 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

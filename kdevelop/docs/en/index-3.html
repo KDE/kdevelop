@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Configuration </TITLE>
+<TITLE>The User Manual to KDevelop: Programs</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,139 +18,20 @@
 <A HREF="index-2.html">Previous</A>
 <A HREF="index.html#toc3">Table of Contents</A>
 </P>
-<H3><A NAME="s3">3. Configuration </A></H3>
+<H3><A NAME="s3">3. Programs</A></H3>
 
-<P>This section describes how to set up KDevelop to make programming a real enjoyment.
-We suggest following each step of configuration in the given order.
+<P>For programming beginners Unix systems seems like a threat as you have to get comfortable with the standard Unix-development
+tools like the compilers, makefiles, automake and autoconf. Additionally, a GUI- what a mass of information to learn and
+understand. Getting used to the programming languages C and C++ alone is work enough for a lot of computer enthusiasts to loose
+interest in computing software. So most of those who are still willing to develop a useful application have to endure the lack
+of an easy-to-use development environment, thus wasting a lot of time creating single files with editors, writing simple Makefiles
+and quarreling with browsers to get access to library documentation, searching header files for functions and classes they want to
+use- if you get that far.
+The K Desktop Environment makes things a lot easier for users as well as for programmers, but doesn't solve all problems. You
+can create a KDE-libs documentation with kdoc, but this is it. Some example programs provided with the kdesdk , giving you a short
+overview about how you may start developing a KDE application, some frame-application generators do the basic work. But what is
+beyond that ? You're still confronted with the problems mentioned above.
 <P>
-<H3><A NAME="ss3.1">3.1 Editor</A>
-</H3>
-
-<P>The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
-The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
-<P>Edit Options:
-<P>Auto Indent:                       this sets the edior to place the cursor below the first literal when a new line is entered.
-Backspace Indent:             this option sets the cursor below the first literal of the line above when backspace is pressed.
-Word Wrap:                        words are taken into the next line after the column set in "Wrap Words At:"
-Replace Tabs                     tabulators in the current text are replaced with tabulators of the "Tab Width:" value
-Remove Trailing Spaces:   removes trailing spaces
-Wrap Cursor:                      sets the cursor to the end of the last line when backspace enters the beginning of a line
-Auto Brackets:                   creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
-<P>Select Options:
-<P>Persistent Selections:        selections made stay marked after setting the cursor to a different place
-Multiple Selections:           allows multiple independent selections within the text
-Vertical Selections:            when selecting multiple lines, the selection is also made horizontal and doesn't cover the whole line
-Delete On Input:                 deletes a selection when writing in the selection.
-Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
-<P>Wrap Words At:                      sets the maximum
-<H3><A NAME="ss3.2">3.2 Editor Colors</A>
-</H3>
-
-<P>The editor allows to configure the general view of the editing field by choosing colors for:
-- background:                the editor's background
-- text background:        the background of displayed text
-- selected:                     the color of selected text to display the selection
-- found:                          the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
-- selected + found:        the color of text selected to search for and found
-<H3><A NAME="ss3.3">3.3 Editor Defaults</A>
-</H3>
-
-<P>The Editor Defaults dialog lets you configure the default values for language items such as keywords etc.
-and the default font style.  When setting up the syntax highlighting (see below), those default values can be used
-to configure standard values configured here.
-<H3><A NAME="ss3.4">3.4 Syntax-Highlighting</A>
-</H3>
-
-<P>The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
-To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
-<H3><A NAME="ss3.5">3.5 Documentation Browser</A>
-</H3>
-
-<P>The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
-Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
-<H3><A NAME="ss3.6">3.6 Printer Setup</A>
-</H3>
-
-<P>The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
-installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
-using the corresponding configuration dialogs.
-<H3><A NAME="ss3.7">3.7 KDevelop Setup</A>
-</H3>
-
-<P>
-<H4>General</H4>
-
-<P>Make-command:
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
-<P>Autosave:
-<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
-<P>
-<P>Autoswitch:
-<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to
-a documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output window turned off.
-<P>
-<P>Startup:
-<P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<H4>Keys</H4>
-
-<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / Ctrl key etc.
-<H4>Documentation</H4>
-
-<P>
-<H4>Directories</H4>
-
-<P>
-<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
-<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the documentation,
-assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the according buttons,
-displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should first enter the next
-configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice, also setting the KDE Library
-Doc path automatically.
-<H4>Options</H4>
-
-<P>
-<H4>Update KDE-Documentation</H4>
-
-<P>
-<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files installed
-on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations.
-<P>This function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package.
-First of, you have to set up the path to your recent kdelibs sources, which is not the include-path for KDE !
-Just enter the path to the sources, like:  /home/rnolden/kdelibs-1.1/ .     Then, you can choose three different installation modes, as:
-<P>- Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation installed
-and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the newly generated
-documentation into the recent path.
-<P>- Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as well as above,
-but gives you the choice to set up a new documentation place.
-<P>- Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of the kdelibs
-documentation for users who didn't have one before and for those who want to keep the last documentation for an older kdelibs version.
-<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for users
-who generate a new documentation from scratch.
-<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the documentation to
-be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure that it can be found by
-qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to give browsing the most functionality.
-<P>
-<P>
-<H4>Create Search Database</H4>
-
-<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a keyword
-interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.  Preset are the
-options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the documentation files were
-set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include directories the user can set up himself
-by the "additional directories to index"-field.  After setting a path to an addional directory, the "Add" - button must be pushed to set
-the path.  A path once set can be removed from the index by selecting the path in the path field and pushing "Remove". Furthermore, the
-user is offered three different modes for the index size: tiny, small and medium.  The higher the index size, the more the index files
-will grow. On the other hand, a search in a bigger searchdatabase will be faster and more successful, so we suggest choosing a "medium" size.
-For using the search function, see section  4.8   Using the Documentation Browser
 <P ALIGN="RIGHT">
 
 <A HREF="index-4.html">Next</A>

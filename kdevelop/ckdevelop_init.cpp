@@ -16,11 +16,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
 #include <iostream.h>
+
+#include <qdir.h>
+#include <qtoolbutton.h>
+#include <qprogressdialog.h>
+
 #include <kmsgbox.h>
 #include <kaccel.h>
-#include <qtoolbutton.h>
+
 #include "./kwrite/kwdoc.h"
 #include "ckdevelop.h"
 #include "cclassview.h"
@@ -489,6 +493,8 @@ void CKDevelop::initMenu(){
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
+//  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
+
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
@@ -661,6 +667,7 @@ void CKDevelop::initMenu(){
 
   options_menu->insertItem(i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
 	options_menu->insertItem(i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
+//  options_menu->insertItem(i18n("&Spellchecker..."),this,SLOT(slotOptionsSpellchecker()),0,ID_OPTIONS_SPELLCHECKER);
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
@@ -864,14 +871,15 @@ void CKDevelop::initToolbar(){
 
 void CKDevelop::initStatusBar(){
   kdev_statusbar= new KStatusBar(this,"KDevelop_statusbar");
-
+/*
   statProg = new KProgress(0,100,0,KProgress::Horizontal,kdev_statusbar,"Progressbar");
   statProg->setBarColor("blue");
   statProg->setBarStyle(KProgress::Solid);  // Solid or Blocked
   statProg->setTextEnabled(false);
   statProg->setBackgroundMode(PaletteBackground);
   statProg->setLineWidth( 1 );                // hehe, this *is* tricky...
-
+*/
+	statProg = new QProgressBar(kdev_statusbar,"Progressbar");
   kdev_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
   kdev_statusbar->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY);
@@ -882,7 +890,7 @@ void CKDevelop::initStatusBar(){
   kdev_statusbar->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY_2);
 
-//  kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);
+  kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);
   kdev_statusbar->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   kdev_statusbar->setInsertOrder(KStatusBar::RightToLeft);
   kdev_statusbar->setAlignment(ID_STATUS_INS_OVR, AlignCenter);
@@ -951,6 +959,9 @@ void CKDevelop::initConnections(){
   connect(browser_widget,SIGNAL(onURL(KHTMLView *, const char *)),this,SLOT(slotURLonURL(KHTMLView *, const char *)));
   connect(browser_widget,SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
 
+  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
+  connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
+  connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
 }
 void CKDevelop::initProject(){
 
@@ -964,12 +975,22 @@ void CKDevelop::initProject(){
 	else
 		filename="";
   QFile file(filename);
-  // cerr << "INITPROJECT: " << filename << endl;
   if (file.exists()){
     if(!(readProjectFile(filename))){
       KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
+		else{
+   	  QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
+		  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
+  		connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
+			progressDlg->setCaption(i18n("Starting..."));
+   		progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
+   	  progressDlg->setProgress(0);
+   	  progressDlg->show();
+      refreshTrees();
+			delete progressDlg;
+		}
     config->setGroup("Files");
     filename = config->readEntry("header_file",i18n("Untitled.h"));
     QFile _file(filename);
@@ -983,7 +1004,6 @@ void CKDevelop::initProject(){
     if (QFile::exists(filename)){
       switchToFile(filename);
     }
-
   }
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
@@ -1116,6 +1136,33 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -245,10 +245,15 @@ void CKDevelop::slotFileSaveAll(){
     }
     //    mod=true;
   }
-  
+
+  statProg->setTotalSteps(edit_infos.count());
+  statProg->show();
+	statProg->setProgress(0);
+	int i=0;
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
-    
+    i++;
+    statProg->setProgress(i);
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
       	switchToFile(actual_info->filename);
@@ -265,6 +270,8 @@ void CKDevelop::slotFileSaveAll(){
       }
     }
   }
+  statProg->hide();
+  statProg->reset();
   if(mod){
     slotViewRefresh();
   }
@@ -359,6 +366,10 @@ void CKDevelop::slotEditIndent(){
 }
 void CKDevelop::slotEditUnindent(){
 	edit_widget->unIndent();
+}
+
+void CKDevelop::slotEditSpellcheck(){
+	edit_widget->spellcheck();
 }
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
@@ -984,6 +995,11 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
 	setToolmenuEntries();
   slotStatusMsg(IDS_DEFAULT);
 }
+
+void CKDevelop::slotOptionsSpellchecker(){
+
+}
+
 void CKDevelop::slotOptionsConfigureEnscript(){
   if (!CToolClass::searchProgram("enscript")) {
     return;
@@ -1582,7 +1598,12 @@ int CKDevelop::searchToolGetNumber(QString str){
   QString sub = str.right((str.length()-pos-2));
   return sub.toInt();
 }
-
+/*
+void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
+  char a = key;
+  appl_process.writeStdin(&a,1);
+}
+*/
 void CKDevelop::slotClickedOnMessagesWidget(){
   TErrorMessageInfo info;
   int x,y;
@@ -2077,6 +2098,14 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
 
 
 

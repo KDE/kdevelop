@@ -30,7 +30,7 @@ KOM/KOffice compliant KDE application and how the generated code structure works
 
 <sect>C/C++ Applications<p>
 <sect1>Generating a terminal application<p>
-Since version 0.3, KDevelop's application generator offers the possiblility to generate a pure C++-terminal based frame application using GNU
+Since version 0.3, KDevelop's application generator offers the possibility to generate a pure C++-terminal based frame application using GNU
 standard development tools. To create a new terminal application, select "KAppWizard" from the Project-menu. On the first page, choose "C/C++-Application"
 and press "Proceed". The next page requires to insert a name for the application as a minimum. Also the program version number, the author's name
 and email-address can be set; this information will be used to generate the handbook anb by the templates for the class generator. "Generate" opens the
@@ -39,13 +39,13 @@ Then choose "Exit" to finish KAppWizard and return to KDevelop. The new project 
 <p>
 To test the frame application,
 either choose "Make" from the Build-menu or press the button with the orange wheel in the toolbar. This invokes the "make"-command for the project and
-builds the application. After the binary is build, the outputwindow will change to the "Stdin/Stdout" tab and shows you the "Hello World!" string.
+builds the application. After the binary is build, the output window will change to the "Stdin/Stdout" tab and shows you the "Hello World!" string.
 	That is actually all the generated project does- the rest is actually programming work for the user.
 
 <sect1>Adding new classes<p>
 The next step would be to create all needed classes with the class generator. To generate a new class, choose "New Class" from the Project-menu,
-opening the class generator dialog. Here, the classname has to be inserted. The classgenerator make an auto-completion for the file names for the
-new class, that is naming the files lowercase to the selected classname; the header using the *.h, the implementation file the *.cpp fileextension.
+opening the class generator dialog. Here, the class name has to be inserted. The class generator make an auto-completion for the file names for the
+new class, that is naming the files lowercase to the selected class name; the header using the *.h, the implementation file the *.DPP file extension.
 After pressing the "OK" button, the new class will be generated and included in the project. That means that the implementation file is included
 into the compile-process by it's addition to the Makefile.am, but the user doesn't have to care for anything as by the next invocation of "Execute"
 or "Make", the new source will be processed as well.

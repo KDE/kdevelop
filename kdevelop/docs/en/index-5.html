@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Questions and Answers</TITLE>
+<TITLE>The User Manual to KDevelop: Overview</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,88 +18,173 @@
 <A HREF="index-4.html">Previous</A>
 <A HREF="index.html#toc5">Table of Contents</A>
 </P>
-<H3><A NAME="s5">5. Questions and Answers</A></H3>
+<H3><A NAME="s5">5. Overview</A></H3>
 
-<P>Q : I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
-A:  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the KDevelop homepage.
-All questions should go there and will be adressed there as well.  If you stick to that, you will get the most help by the developers and all users
-having the same problems, as well as helping to keep the FAQ up to date.
+<P>The KDevelop main working interface is separated in three main windows: the main working field on the upper right, the treeviews on the upper left
+and the outputview on the bottom of the main window. Around that are the menubar, toolbars and the statusbar.Except the menubar, each item can be
+turned on and off to give you a flexible environment.
 <P>
-<P>Q: Wrong JPEG library version: library is 61, caller expects 62
-A:  There are 2 ways.
-<P>1. : When the kdelibs are installed it installs header files for the
-jpeg libraries, these are version 61,  however most distributions
-(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
-from /opt/kde/include. The pukka include  file for version 62 should
-then be picked up. However looking at the  error message above it may
-be the other way round, in any case ensure  you only have on version
-of the header file, the library and that  they are consistent.
-<P>It is useful to use the locate command to verify that I have
-the correct version of a library and header files e.g.
-updatedb
-locate libjpeg
-locate jpeglib
-<P>2: You must recompiled kdesupport without jpeg
-library (configure --with-libjpeg --with-libgif).
+<H3><A NAME="ss5.1">5.1 Main View</A>
+</H3>
+
 <P>
+<P>The main window consists of four tabs for which the first two are for editing purpose. First comes the Header-/Resource window
+for headerfiles and any other files, then the C/C++ window for sourcecodes. These are followed by the Documentation window displaying all documentation
+in HTML-format. At last is the Tools window for the Tools integrated. The Tools are external programs like KIconedit and KDbg and will be displayed
+there. Functionality for joining these Tools with the filenames to be edited will be integrated in time.
+<P>Since we changed the editor from KEdit to KWrite, a lot of functionality was added to KDevelop, such as configurable syntax-highlighting,
+font sizes and colored display. We hope all those who preferred other editors for writing their code are now willing to change to KDevelop completely.
+<H3><A NAME="ss5.2">5.2 The Classviewer and Fileviewers</A>
+</H3>
+
+<P>The classviewer shows the classes of your project under the project item as well as structs.  Opening the tree will show all member
+functions and members with symbols for private, protected and public, so you can see the accessiblility of the member visually without
+switching to the header file.  Selecting the class name will open the according headerfile containing the class and set the cursor to
+the class declaration beginning. Selecting member functions will open the implementation file and place the cursor at the function header.      
+For elements, KDevelop will look for the header file and place the cursor at the line the element is declarated.        Mind that inline-functions
+are not supported by the classviewer.
+<P>The Logical File Viewer (LFV) allows specifying filegroups to which files can be filtered, e.g.  a folder "pixmaps" or "headers".
+Individual groups can be added by the properties entry of the project menu or by a right click on the tree items.  Selecting a file
+will open it in the editing window, which is important e.g. to access the main() function as it isn't a class and so not displayed
+in the classviewer.   Pixmaps will be opened automatically in the Tools-view by KIconedit if it is installed.    The right button menu
+of the LFV allows configuring the file tree as well as adding, deleting or removing files from the project.  The project file and the
+Makefile.am's are updated automatically in that case.
+<H3><A NAME="ss5.3">5.3 Output window</A>
+</H3>
+
 <P>
-<P>Q:  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
-cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
-aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
-make[2]: *** [Makefile.in] Error 1
-A:  Workaround for automake-1.4/automake-2.13 users: Just run
-"aclocal" manually, then it will compile.
+<P>The Output window is separated as well into a messages window, a stdin/stdout window and a stderr window for the following necessities:
+<P>- messages window:   displays all output of the compiler. Clicking on error messages will change the edit widget to set the cursor to the line the compiler found an error.
+- stdin/stdout window: display for terminal based applications you're developing. Running such an application will open the window and allow you interaction like
+starting it in kvt or other consoles.
+- stderr window: displays all the error messages your program produces. This is useful for testing purposes.
+<P>The Output window is programmed to show up each time an external process is called, such as make or a terminal application.
+<H3><A NAME="ss5.4">5.4 Editor</A>
+</H3>
+
+<P>The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
+The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
+<P>Edit Options:
+<P>Auto Indent:                       this sets the edior to place the cursor below the first literal when a new line is entered.
+Backspace Indent:             this option sets the cursor below the first literal of the line above when backspace is pressed.
+Word Wrap:                        words are taken into the next line after the column set in "Wrap Words At:"
+Replace Tabs                     tabulators in the current text are replaced with tabulators of the "Tab Width:" value
+Remove Trailing Spaces:   removes trailing spaces
+Wrap Cursor:                      sets the cursor to the end of the last line when backspace enters the beginning of a line
+Auto Brackets:                   creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+<P>Select Options:
+<P>Persistent Selections:        selections made stay marked after setting the cursor to a different place
+Multiple Selections:           allows multiple independent selections within the text
+Vertical Selections:            when selecting multiple lines, the selection is also made horizontal and doesn't cover the whole line
+Delete On Input:                 deletes a selection when writing in the selection.
+Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
+<P>Wrap Words At:                      sets the maximum
+<H3><A NAME="ss5.5">5.5 Editor Colors</A>
+</H3>
+
+<P>The editor allows to configure the general view of the editing field by choosing colors for:
+- background:                the editor's background
+- text background:        the background of displayed text
+- selected:                     the color of selected text to display the selection
+- found:                          the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
+- selected + found:        the color of text selected to search for and found
+<H3><A NAME="ss5.6">5.6 Editor Defaults</A>
+</H3>
+
+<P>The Editor Defaults dialog lets you configure the default values for language items such as keywords etc.
+and the default font style.  When setting up the syntax highlighting (see below), those default values can be used
+to configure standard values configured here.
+<H3><A NAME="ss5.7">5.7 Syntax-Highlighting</A>
+</H3>
+
+<P>The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
+To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
+<H3><A NAME="ss5.8">5.8 Documentation Browser</A>
+</H3>
+
+<P>The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
+Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
+<H3><A NAME="ss5.9">5.9 Printer Setup</A>
+</H3>
+
+<P>The printer can be configured to use the printing programs a2ps and enscript, so please make sure that either one of them is
+installed on your system. The configuration is almost similar for both programs, but the options must be set differently by
+using the corresponding configuration dialogs.
+<H3><A NAME="ss5.10">5.10 KDevelop Setup</A>
+</H3>
+
 <P>
-<P>Q:  What must i do, if configure said ,that i need giflib23.
-A:  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+<H4>General</H4>
+
+<P>Make-command:
+The General Options dialog lets you configure KDevelop's general settings.
+First, you should set the make-command available on your system. If the selected program does not exist,
+KDevelop will warn you the next time your're invoking a make command.
+<P>Autosave:
+<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
 <P>
-<P>Q: How can I convert a KDevelop 0.2 project to a 0.3 one?
-A: Please change the AC_OUTPUT in the configure.in to a oneline version
-<P>for example:
-old version AC_OUTPUT(Makefile \
-kdevelop/kwrite/Makefile \
-kdevelop/templates/Makefile
-)
-new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+<P>Autoswitch:
+<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to
+a documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output window turned off.
 <P>
+<P>Startup:
+<P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
+Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
+<H4>Keys</H4>
+
+<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
+KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
+configuration can be changed by checking values like the Alt / Ctrl key etc.
+<H4>Documentation</H4>
+
 <P>
-<P>Q:  I  get the following linker errors, what do I have to do to get KDevelop linked ?
-/usr/lib/libqt.so:
-warning: multiple common of `QArrayT type_info node'
-ckdevelop.o: warning: previous common is here
-ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
-ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
-ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
-ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'
-ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
-short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
-exit status  make[2]: ***
-[kdevelop] Error 1  make[2]: Leaving directory
-'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
-make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
-`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
-make: *** [all-recursive-am] Error 2
-<P>A: If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall them.  .:-(
-It's a bug in the SuSE rpm's.
+<H4>Directories</H4>
+
 <P>
-<P>Q: I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
-A:  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
+<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
+is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
+as well as the path to the KDE-library documentation.
+<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
+you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the documentation,
+assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the according buttons,
+displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should first enter the next
+configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice, also setting the KDE Library
+Doc path automatically.
+<H4>Options</H4>
+
 <P>
-<P>Q: If I add files to my project, will they be automatically included and compiled ?
-A: Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new added files will be included as well.
+<H4>Update KDE-Documentation</H4>
+
 <P>
-<P>Q: If I removed a file, I get some weird linker messages. What is wrong with my project ?
-A: If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler automatically on all headers),
-your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the according *.moc.cpp file and rebuild the project.
+<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files installed
+on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations.
+<P>This function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package.
+First of, you have to set up the path to your recent kdelibs sources, which is not the include-path for KDE !
+Just enter the path to the sources, like:  /home/rnolden/kdelibs-1.1/ .     Then, you can choose three different installation modes, as:
+<P>- Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation installed
+and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the newly generated
+documentation into the recent path.
+<P>- Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as well as above,
+but gives you the choice to set up a new documentation place.
+<P>- Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of the kdelibs
+documentation for users who didn't have one before and for those who want to keep the last documentation for an older kdelibs version.
+<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for users
+who generate a new documentation from scratch.
+<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
+reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the documentation to
+be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure that it can be found by
+qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to give browsing the most functionality.
+<H4>Create Search Database</H4>
+
+<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a keyword
+interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.  Preset are the
+options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the documentation files were
+set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include directories the user can set up himself
+by the "additional directories to index"-field.  After setting a path to an addional directory, the "Add" - button must be pushed to set
+the path.  A path once set can be removed from the index by selecting the path in the path field and pushing "Remove". Furthermore, the
+user is offered three different modes for the index size: tiny, small and medium.  The higher the index size, the more the index files
+will grow. On the other hand, a search in a bigger searchdatabase will be faster and more successful, so we suggest choosing a "medium" size.
+For using the search function, see section  4.8   Using the Documentation Browser
 <P ALIGN="RIGHT">
 
 <A HREF="index-6.html">Next</A>

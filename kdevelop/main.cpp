@@ -62,7 +62,6 @@ int main(int argc, char* argv[]) {
 
 		if (argc > 1)
 			kdevelop->slotProjectOpenCmdl(argv[1]);
-	
 		a.getConfig()->setGroup("TipOfTheDay");
 		bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
 		if(showTip){
@@ -78,6 +77,9 @@ int main(int argc, char* argv[]) {
 	int rc = a.exec();
 	return rc;
 }
+
+
+
 
 
 

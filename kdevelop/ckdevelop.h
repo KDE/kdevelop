@@ -31,6 +31,7 @@ class CKDevelop;
 #include <qstrlist.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
+#include <qprogressbar.h>
 
 #include <keditcl.h>
 #include <kapp.h>
@@ -183,6 +184,8 @@ public:
   void slotEditRepeatSearch();
   /** search in files, use grep and find*/
   void slotEditSearchInFiles();
+	/** runs ispell check on the actual editwidget */
+	void slotEditSpellcheck();
   /** opens the search and replace dialog */
   void slotEditReplace();
   void slotEditIndent();
@@ -289,6 +292,8 @@ public:
   void slotOptionsDocBrowser();
   /** shows the Tools-menu configuration dialog */
 	void slotOptionsToolsConfigDlg();
+	/** shows the spellchecker config dialog */
+	void slotOptionsSpellchecker();
 	/** shows the configuration dialog for enscript-printing */
   void slotOptionsConfigureEnscript();
   /** shows the configuration dialog for a2ps printing */
@@ -574,8 +579,8 @@ private:
   bool bAutoswitch;
   bool bDefaultCV;
   bool bKDevelop;
-  KProgress* statProg;
-  //  QProgressBar* statProg;
+//  KProgress* statProg;
+  QProgressBar* statProg;
   //some vars for the searchengine
   QString search_output;
   QString doc_search_text;
@@ -599,6 +604,8 @@ private:
 };
 
 #endif
+
+
 
 
 

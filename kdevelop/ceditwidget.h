@@ -21,6 +21,8 @@
 
 //#include <keditcl.h>
 #include <kapp.h>
+#include <kspell.h>
+
 #include "./kwrite/kwview.h"
 /** an abstraction layer for an editwidget
   *@author Sandy Meier
@@ -46,6 +48,10 @@ public:
   void indent();
   void unIndent();
 
+public slots:
+	void spellcheck();
+	void spellcheck2(KSpell*);
+	
 public: // Public queries
   QString markedText();
   QString getName();
@@ -72,9 +78,16 @@ protected:
   signals:
  void  lookUp(QString text);
  void  bufferMenu(const QPoint&);
+
+private:
+	KSpell *kspell;
+	KSpellConfig *ksc;
+	int spell_offset;
 };
 
 #endif
+
+
 
 
 

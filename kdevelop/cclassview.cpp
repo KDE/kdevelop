@@ -176,7 +176,9 @@ void CClassView::refresh( CProject *proj )
 
   // Parse headerfiles.
   header = proj->getHeaders();
-  progressDlg.setLabelText( i18n("Parsing headers...") );
+
+  // Jonas- commented this out for the use of the progressbar in the statusbar, added the signals -Ralf
+/*  progressDlg.setLabelText( i18n("Parsing headers...") );
   progressDlg.setTotalSteps( header.count() );
   progressDlg.setProgress( 0 );
   progressDlg.show();
@@ -187,11 +189,21 @@ void CClassView::refresh( CProject *proj )
     cp.parse( str );
     i++;
     progressDlg.setProgress( i );
+  }*/
+
+  emit setStatusbarProgressSteps(header.count());
+  i=0;
+  for( str = header.first(); str != NULL; str = header.next() )
+  {
+    debug( "  parsing:[%s]", str );
+    cp.parse( str );
+    i++;
+    emit setStatusbarProgress( i );
   }
-  
+	
   // Parse sourcefiles.
   src = proj->getSources();
-  progressDlg.setLabelText( i18n("Parsing sources...") );
+/*  progressDlg.setLabelText( i18n("Parsing sources...") );
   progressDlg.setTotalSteps( src.count() );
   progressDlg.setProgress( 0 );
   progressDlg.show();
@@ -202,6 +214,18 @@ void CClassView::refresh( CProject *proj )
     cp.parse( str );
     i++;
     progressDlg.setProgress( i );
+  }
+*/
+	emit resetStatusbarProgress();
+  emit setStatusbarProgress( 0 );
+	emit setStatusbarProgressSteps(src.count());
+	i=0;
+  for( str = src.first(); str != NULL; str = src.next() )
+  {
+    debug( "  parsing:[%s]", str );
+    cp.parse( str );
+    i++;
+    emit setStatusbarProgress( i );
   }
 
   refresh();
@@ -729,3 +753,22 @@ void CClassView::slotMoveToFolder()
 //     debug( "Moving items." );
 //   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

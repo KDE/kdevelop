@@ -63,6 +63,10 @@ public: // Public refreshmethods
   /** Refresh a class by using its' name. */
   void refreshClassByName( const char *aName );
 
+signals:
+	void setStatusbarProgressSteps(int);
+	void setStatusbarProgress(int);
+	void resetStatusbarProgress();
 protected: // Protected signals and slots
   protected slots:
     void slotProjectOptions();

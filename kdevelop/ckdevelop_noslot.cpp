@@ -32,13 +32,18 @@ void CKDevelop::refreshTrees(){
   if (!project){
     return; // no project
   }
+  slotStatusMsg(i18n("Scanning project files..."));
+	statProg->show();
   class_tree->refresh(prj);
+	statProg->reset();
+	statProg->hide();
   refreshClassCombo();
   log_file_tree->storeState(prj);
   log_file_tree->refresh(prj);
   real_file_tree->refresh(prj);
   kdlg_dialogs_view->refresh(prj);
- 
+  kdev_statusbar->repaint();
+  slotStatusMsg(IDS_DEFAULT);
 }
  
 
@@ -501,6 +506,17 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
   KTMainWindow::closeEvent(e);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
