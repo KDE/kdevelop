@@ -202,6 +202,9 @@ void CDocBrowser::setDocBrowserOptions(){
   underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
   forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
+  KHTMLWidget* htmlview;
+  htmlview=getKHTMLWidget();
+
   htmlview->setFontSizes( &fSize );
   htmlview->setFixedFont( fixedFont);
   htmlview->setStandardFont( standardFont );
@@ -213,7 +216,13 @@ void CDocBrowser::setDocBrowserOptions(){
 */
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
+  htmlview->setDefaultBGColor(white);
+  htmlview->setDefaultTextColors(black, blue, blue);
+  htmlview->setUnderlineLinks(true);
   htmlview->setURLCursor( KCursor::handCursor() );
+  QWidget::show();
+
+
 }
 
 void CDocBrowser::slotDocFontSize(int size){

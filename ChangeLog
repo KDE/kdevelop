@@ -1,3 +1,6 @@
+1999-09-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* sync'ed documentation with KDEVELOP_1_0 branch
+
 1999-09-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed CDocBrowser: 
 		-inheritance changed to KHTMLView again

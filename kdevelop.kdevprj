@@ -33,9 +33,9 @@ sub_dirs=kdevelop,po
 type=normal
 [Workspace_1]
 browser_file=
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp
-header_file=/home/rnolden/Development/kdevelop/kdevelop/cdocbrowser.h
-openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/cdocbrowser.h,/home/rnolden/Development/kdevelop/kdevelop/cdocbrowser.cpp,/home/rnolden/Development/kdevelop/kdevelop/ctoolclass.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp
+cpp_file=/home/rnolden/Development/kdevelop/kdevelop/main.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp
 show_outputview=false
 show_treeview=true
 [kdevelop.kdevprj]

@@ -62,8 +62,8 @@ und beendet sich.
 </H3>
 
 <P>Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
-ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
-wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
+ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben? Und, müssen Sie dann die Quellen immer wieder übersetzen,
+wenn Sie nur eine Datei geändert haben? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
 und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
 nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <CODE>make</CODE> oder <CODE>gmake</CODE> installiert haben,
 oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
@@ -73,8 +73,8 @@ Das Make-Werkzeug hat noch viele weitere Vorteile und kann zu vielen Zwecken ver
 Sie eine Konsole und geben Sie ein:
 <P><CODE>man make</CODE>
 <P>oder suchen Sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents".
-<P>Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug beötigt, um den Ubersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
-das schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
+<P>Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug benötigt, um den Übersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
+das Schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
 Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im 
 <A HREF="index-12.html#General Configuration">KDevelop Setup</A> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
 Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
@@ -115,11 +115,11 @@ erwähnen die schwierigeren Dinge wie der Installationspfad für Ihr Programm und 
 unter <CODE></CODE>opt/kde/ installiert sein, auf einer anderen aber unter <CODE>usr</CODE>local/kde/. In diesem Fall müßten Sie das Makefile immer
 bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
 <P>Glücklicherweise haben die GNU-Werkzeuge noch mehr zu bieten als das mächtige <CODE>make</CODE>- die allgemein genutzten Pakete automake und
-autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations Design einfach und schnell gemacht werden kann,
+autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations-Design einfach und schnell gemacht werden kann,
 was auch genau den Punkt trifft.
 <P>Der Zweck von <CODE>automake</CODE> ist generell, die sogenannten <CODE>Makefile.in</CODE>'s aus der Datei <CODE>Makefile.am</CODE> zu erstellen, die Sie für
-Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
-Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
+Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht zu verstehen
+ist Komplexität reduziert, die make anbietet, so daß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
 Makefile.
 <P>Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschiedene Makrodateien für das
 Projekt. Diese sind die Makefile.in's, die automake erzeugt hat und eine Datei namesn <CODE>configure.in</CODE>, die auch aus Makros besteht.
@@ -139,11 +139,11 @@ als Ihre eigene portabel sein soll, müssen Sie folgendes ausführen:
 <OL>
 <LI> die Quellen Ihres Projekts schreiben</LI>
 <LI> eine Makefile.am für jedes Unterverzeichnis erstellen, inklusive dem Hauptverzeichnis Ihres Projekts</LI>
-<LI> eine configure.in Datein im Hauptverzeichnis erstellen, das die Makros für die Systemanforderungen enthält</LI>
+<LI> eine configure.in Datei im Hauptverzeichnis erstellen, das die Makros für die Systemanforderungen enthält</LI>
 <LI> automake aufrufen</LI>
 <LI> autoconf aufrufen</LI>
 </OL>
-<P>Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <CODE>configure.in</CODE> und <CODE>Makefile.in</CODE>'s und erzeugt
+<P>Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <CODE>configure.in</CODE> und erzeugt
 das ausführbare Shellscript <CODE>configure</CODE>. Alles, was Sie dann zu tun haben, ist die Ausführung mit <CODE>./configure</CODE>, und das
 Skript wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
 das Projekt zu erstellen.

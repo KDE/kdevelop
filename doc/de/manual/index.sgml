@@ -115,7 +115,7 @@ bezogen werden. Ebenso ist KDevelop auf Linux-Distributionen vorhanden, wie z.B.
 
 Wir bieten außerdem wöchentliche Snapshots des KDevelop CVS Repositories auf unserer Homepage an für die, die auf dem aktuellen Stand
 von KDevelop sein wollen. Für gewöhnlich sind die Snapshots jedoch nicht zur Produktion geeignet, sondern zum Testen neuer Features und
-zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bietne wir verschiedene Software von dritter Seite an, die von
+zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bieten wir verschiedene Software von dritter Seite an, die von
 KDevelop benötigt werden wie KDoc und KDbg.
 
 Wenn Sie Probleme mit der Compilierung oder Benutzung von KDevelop haben, lesen Sie bitte das Kapitel <ref id="Fragen und Antworten"
@@ -125,18 +125,18 @@ behandelt sein, tragen Sie sich in die KDevelop Mailingliste <htmlurl url="mailt
 Anfragen und Problemberichte sollten sich jedoch nur auf die Benutzung der KDevelop Entwicklungsumgebung beziehen und nicht auf ein
 Implementierungsproblem, das bei der Codierung Ihrer eigenen Applikation entstanden ist.
 
-Auch sollten alle Mails, die an diese Mailingliste gerichtet sind, in Englisch gehalten sein, damit alle Teilnehmer sich and der
+Auch sollten alle Mails, die an diese Mailingliste gerichtet sind, in Englisch gehalten sein, damit alle Teilnehmer sich an der
 Diskussion beteiligen können und eine bessere Hilfe bereitstellen können. Die Mailingliste ist ebenso dazu gedacht, Benutzern, die zum
-KDevelop Projekt beitragen möchten ein Forum zu bieten; auch solche Mails sind willkommen, die Lösungen zu Problemen enthalten, die
+KDevelop Projekt beitragen möchten, ein Forum zu bieten; auch solche Mails sind willkommen, die Lösungen zu Problemen enthalten, die
 bei der Benutzung entstanden, damit wir Fehler korrigieren und dies integrieren können, um Anfängern eine noch qualifizierte Hilfe aus
 erster Hand zu bieten.
 
-Ein guter Weg, Probleme zu berichten, ist das übersenden der Ausgabe, die Sie beim starten von KDevelop aus einer Konsole heraus
+Ein guter Weg, Probleme zu berichten, ist das übersenden der Ausgabe, die Sie beim Starten von KDevelop aus einer Konsole heraus
 erhalten, oder den Inhalt des "Meldungen" Fensters von KDevelop in Ihren Bericht zu kopieren.
 
 <sect>Anforderungen
 <p>
-Um KDevelop erfolgreich zu Compilieren und zu Benutzen muß Ihr System die folgenden Programme und Bibliotheken enthalten, die auf den
+Um KDevelop erfolgreich zu compilieren und zu benutzen muß Ihr System die folgenden Programme und Bibliotheken enthalten, die auf den
 meisten Plattformen als Pakete enthalten sind und daher einfach zu installieren sind.
 
 <p>
@@ -169,9 +169,9 @@ name="http://members.telecom.at/~johsixt/kdbg.html">
 </itemize>
 
 KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM und FreeBSD 3.0-Release, SuSE Linux 6.0 auf Intel Pentium
-200 MMX, 128 MB Ram
+200 MMX, 128 MB Ram.
 
-Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive a2ps und enscript als Pakete order
+Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive a2ps und enscript als Pakete oder
 RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
 
 <bf>Dokumentation:</bf>	
@@ -183,7 +183,7 @@ Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf <htmlurl
 url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> an, die
 nach ihrer Installation im Dokumentationsbrowser verfügbar ist. Laden Sie das Paket herunter und kopieren Sie es als <tt/root/ in Ihr
 <idx/KDE/ Verzeichnis und entpacken Sie es mit <tt/tar zxvf c_c++_reference.tar.gz/. Bei Nichtinstallation zeigt die Auswahl der
-Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der Sie das Paket erhalten können und
+Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der Sie das Paket erhalten können, und
 beschreibt den Installationsvorgang.
 
 <sect>Compilierung und Installation
@@ -298,7 +298,7 @@ Generierung mit "Abbrechen" und fahren Sie mit der Erstellung des Suchindexes fo
 KDevelop setzen Sie dann den Pfad zum extrahierten Dokumentationssatz im KDevelop Setup Dialog und erzeugen dann den Suchindex erneut.
 Alle erforderlichen Einstellungen dazu finden Sie im Setup Dialog.
 
-Der "KDE-Bibilotheks-Dokumentation aktualisieren" Dialog ist voreingestellt, die Dokumentation im Verzeichnis
+Der "KDE-Biblotheks-Dokumentation aktualisieren" Dialog ist voreingestellt, die Dokumentation im Verzeichnis
 $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation zu erstellen. Das einzige, was Sie tun müssen, ist den Pfad zum entpackten
 Quellpaket der Bibliotheken mit dem Auswahl-Knopf im oberen Teil des Dialoges anzugeben und mit "OK" zu bestätigen. Als Beispiel sei
 angenommen, das Sie die Bibliothek als kdelibs.tar.gz Paket von <htmlurl url="http://www.kde.org" name="http://www.kde.org"> bezogen
@@ -376,8 +376,8 @@ und beendet sich.
 <sect>Make und Makefiles<label id="Make">
 <p>
 Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
-ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
-wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
+ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben? Und, müssen Sie dann die Quellen immer wieder übersetzen,
+wenn Sie nur eine Datei geändert haben? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
 und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
 nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <tt/make/ oder <tt/gmake/ installiert haben,
 oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
@@ -390,8 +390,8 @@ Sie eine Konsole und geben Sie ein:
 
 oder suchen Sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents".
 
-Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug beötigt, um den Ubersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
-das schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
+Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug benötigt, um den Übersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
+das Schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
 Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="General
 Configuration" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
 Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
@@ -436,12 +436,12 @@ unter <tt//opt/kde/ installiert sein, auf einer anderen aber unter <tt/usr/local
 bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
 
 Glücklicherweise haben die GNU-Werkzeuge noch mehr zu bieten als das mächtige <tt/make/- die allgemein genutzten Pakete automake und
-autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations Design einfach und schnell gemacht werden kann,
+autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations-Design einfach und schnell gemacht werden kann,
 was auch genau den Punkt trifft.
 
 Der Zweck von <tt/automake/ ist generell, die sogenannten <tt/Makefile.in/'s aus der Datei <tt/Makefile.am/ zu erstellen, die Sie für
-Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
-Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
+Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht zu verstehen
+ist Komplexität reduziert, die make anbietet, so daß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
 Makefile.
 
 Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschiedene Makrodateien für das
@@ -464,12 +464,12 @@ als Ihre eigene portabel sein soll, müssen Sie folgendes ausführen:
 <enum>
 <item> die Quellen Ihres Projekts schreiben
 <item> eine Makefile.am für jedes Unterverzeichnis erstellen, inklusive dem Hauptverzeichnis Ihres Projekts
-<item> eine configure.in Datein im Hauptverzeichnis erstellen, das die Makros für die Systemanforderungen enthält
+<item> eine configure.in Datei im Hauptverzeichnis erstellen, das die Makros für die Systemanforderungen enthält
 <item> automake aufrufen
 <item> autoconf aufrufen
 </enum>
 
-Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <tt/configure.in/ und <tt/Makefile.in/'s und erzeugt
+Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <tt/configure.in/ und erzeugt
 das ausführbare Shellscript <tt/configure/. Alles, was Sie dann zu tun haben, ist die Ausführung mit <tt>./configure</tt>, und das
 Skript wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
 das Projekt zu erstellen.

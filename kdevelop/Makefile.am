@@ -41,8 +41,8 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
-	ctoolsconfigdlg.cpp cbugreportdlg.cpp cclasstooltreeview.cpp \
-	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp
+	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp \
+	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 

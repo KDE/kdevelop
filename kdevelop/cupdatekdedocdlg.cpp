@@ -367,7 +367,7 @@ void CUpdateKDEDocDlg::OK(){
   QString cmd;
   if(! qt_test)
       {
-          int qt_set=KMessageBox::yestionYesNo(this, i18n("The Qt documentation path is not set correctly.\n"
+          int qt_set=KMessageBox::questionYesNo(this, i18n("The Qt documentation path is not set correctly.\n"
                                                                "If you want your KDE-library documentation to\n"
                                                                "be cross-referenced to the Qt library, you have\n"
                                                                "to set the correct path to your Qt library\n"

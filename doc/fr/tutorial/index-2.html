@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Tutoriels Applications KDE: Pour Commencer</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Page suivante</A>
+ <A HREF="index-1.html">Page précédente</A>
+ <A HREF="index.html#toc2">Table des matières</A>
+</P>
+<H3><A NAME="s2">2. Pour Commencer</A></H3>
+
+<P>Pour commencer signifie que vous devez avoir installé et configuré KDevelop pour qu'il fonctionne correctement. Assurez-vous que vous avez
+accès à la documentation de référence de Qt en ligne par le menu "Aide" ou le manuel correspondant dans l'arborescence de documentation.
+Lorsque vous regarderez la première page de la documenation de Qt, vous verrez qu'elle contient un lien vers les sections "Tutorials" et
+"Examples". Sous "Tutorials", vous trouverez une introduction en 14 étapes à l'utilisation de la bibliothèque Qt pour construire des 
+applications. Par ailleurs, "Examples" vous conduira à une liste de programmes exemples inclus dans Qt et pris comme référence d'exemple 
+d'utilisation de certaines classes. Maintenant, si vous débutez complètement, vous devriez vous sentir à l'aise
+avec la philosophie de Qt, à savoir fournir une bibliothèque qui offre :
+<UL>
+<LI>une classe d'application de base (<CODE>QApplication</CODE>)</LI>
+<LI>une bibliothèque de widgets pour les interfaces graphiques utilisateur</LI>
+<LI>un ensemble de classes supplémentaires facilitant la gestion des fichiers, du graphisme et des données</LI>
+<LI>un mécanisme signal-slot pour la communication entre objets</LI>
+<LI>la gestion des événements pas des boucles d'événements et des méthodes virtuelles</LI>
+</UL>
+<P>Si cela ne vous dit rien, vous devriez découvrir la bibliothèque Qt dans 
+<A HREF="../programming/index-2.html#ss2.1">Le Manuel de Programmation de KDevelop</A> où les bases d'une application Qt sont décrites en détail. Vous y trouverez
+aussi une introduction sur la différence entre une application Qt et une application KDE, ce qui n'est pas vraiment la première
+étape dans le tutoriel Qt.
+<P>Commencer par apprendre Qt devrait aussi être un bon début pour la programmation d'applications KDE. Nous allons donc créer un
+projet qui aboutira aux applications du tutoriel après édition.
+<P>Pour cela, commencez par lancer KDevelop et sélectionner "Projet" - "Nouveau" dans la barre de menus. L'assistant d'application
+s'ouvre et vouz devez sélectionner le type du projet qui vous voulez construire. Pour les applications Qt, vous choisiriez 
+Application Qt mais nous allons utiliser le type de projet mini-application KDE pour construire nos exemples. La raison est simple : les
+tutoriels de Qt ne contiennent pas beaucoup de code et en choisissant Application Qt dans l'assistant d'application, vous
+auriez à effectuer beaucoup de modifications sur le code fourni pour créer les "vrais" exemples.
+<P>Et comme la mini-application KDE n'est constituée que d'une fenêtre principale et vérifie la bibliothèque Qt et les fichiers d'en-tête,
+cela conviendra parfaitement à nos besoins et ne nécessitera pas trop de modifications.
+<P>Lorsque vous passez à la page suivante de l'assistant, vous devez saisir les informations spécifiques au projet. Vous pouvez laisser
+telles quelles les informations supplémentaires spécifiques à KDE comme la mini-icône, l'icône principale, la documentation, etc. Nous
+remplissons uniquement les informations qui seront utiles à la création d'une base adéquate pour les tutoriels. Comme la structure des
+étapes du tutoriel construit l'étape suivante en partant du code de l'étape précédente, nous pouvons commencer avec <CODE>MyWidget</CODE>>
+comme nom du projet. Cela nous construira déjà la classe de base requise au chapitre 4 donc nous n'aurons plus à nous en préoccuper .
+Comme nous voulons débuter avec la première étape du tutoriel, nous utiliserons '1' comme numéro de projet et nous l'augmenterons
+plus tard en passant à l'étape suivante.
+<P>Ensuite, remplissez les autres informations requises telles que votre nom, votre adresse électronique et le répertoire du projet.
+C'est tout ce dont nous avons besoin et nous pouvons sauter à la page suivante. Insérez ici votre en-tête pour les fichiers d'en-tête
+du projet ou utilisez l'exemple donné. De même pour la quatrième page où vous devez définir l'en-tête des fichiers sources. Enfin, vous
+entrez dans la dernière page où vous devez cliquer sur le bouton "Créer" pour construire le projet. Si le bouton est grisé, recommencez
+depuis la première page et assurez-vous que vous n'avez pas oublié d'insérer une information nécessaire.
+<P>Si tout s'est bien passé, le projet a été créé et la fenêtre des messages de l'assistant d'application doit contenir "PRET" sur
+la dernière ligne. Sélectionnez "Quitter" pour fermer l'assistant.
+<P>Si vous regardez l'arborescence sur la gauche, vous verrez que le projet contient déjà une classe "MyWidget" - parce que nous avons
+choisi ceci comme nom de l'application. En ouvrant "Fonctions" dans le dossier "Globals" du visualiseur de classes, vous verrez que
+l'application contient déjà une fonction <CODE>main()</CODE>> où l'exécution commencera.
+<P>L'application est déjà définie. Vous pourriez faire un "Exécuter" ou "Construire" mais comme nous voulons créer les applications
+du tutoriel, nous pouvons nous lancer et modifier d'abord le code pour créer nos applications exemples - ce que nous ferons à
+la prochaine étape.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Page suivante</A>
+ <A HREF="index-1.html">Page précédente</A>
+ <A HREF="index.html#toc2">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
