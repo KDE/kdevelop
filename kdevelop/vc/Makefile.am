@@ -1,5 +1,5 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-lib_LTLIBRARIES = libvc.la
+lib_LTLIBRARIES = libkdevelopvc.la
 
 
 INCLUDES = $(all_includes)
@@ -7,9 +7,11 @@ INCLUDES = $(all_includes)
 
 LDFLAGS = 
 
-libvc_la_METASOURCES = AUTO
+libkdevelopvc_la_LDFLAGS = -version-info 2:0
 
-libvc_la_SOURCES = versioncontrol.cpp cvsdialog.cpp cvs.cpp commitdialog.cpp 
+libkdevelopvc_la_METASOURCES = AUTO
+
+libkdevelopvc_la_SOURCES = versioncontrol.cpp cvsdialog.cpp cvs.cpp commitdialog.cpp
 
 
 EXTRA_DIST = commitdialog.cpp commitdialog.h cvs.cpp cvs.h cvsdialog.cpp cvsdialog.h versioncontrol.cpp versioncontrol.h 
@@ -26,7 +28,7 @@ include_HEADERS =
 # here you should add all header files, which shouldn´t be installed
 noinst_HEADERS =
 
-libvc_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) $(LDFLAGS)
+libkdevelopvc_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) $(LDFLAGS)
 
 # add here the libraries which have to be include
 # for building the shared lib
@@ -38,5 +40,5 @@ libvc_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOM
 #  in here.
 #  The following line is only a suggestion!
 #
-libvc_la_LIBADD = -lkfile -lkhtml -lkdeui -lkdecore $(LIB_QT)
+libkdevelopvc_la_LIBADD = -lkfile -lkhtml -lkdeui -lkdecore $(LIB_QT)
 

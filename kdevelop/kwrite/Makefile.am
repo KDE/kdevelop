@@ -1,18 +1,12 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-lib_LTLIBRARIES = libkdevelopkwrite.la
-
 
 INCLUDES = $(all_includes)
 
+libkwrite_a_METASOURCES = AUTO
 
-LDFLAGS = 
+noinst_LIBRARIES = libkwrite.a
 
-
-libkdevelopkwrite_la_LDFLAGS = -version-info 2:0
-
-libkdevelopkwrite_la_METASOURCES = AUTO
-
-libkdevelopkwrite_la_SOURCES = kwview.cpp kwdoc.cpp kwdialog.cpp highlight.cpp 
+libkwrite_a_SOURCES = kwview.cpp kwdoc.cpp kwdialog.cpp highlight.cpp 
 
 SUBDIRS = pix 
 
