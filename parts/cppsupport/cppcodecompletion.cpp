@@ -1295,33 +1295,33 @@ QString CppCodeCompletion::typeName( const QString& str )
 
 SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, int line, int col )
 {
-    kdDebug(9007) << "CppCodeCompletion::computeContext() -- main" << endl;
-    Q_ASSERT( ast );
+    kdDebug(9007) << "CppCodeCompletion::computeContext() -- main" << endl;	
 
     SimpleContext* ctx = new SimpleContext();
 
-    // insert function arguments
-    DeclaratorAST* d = ast->initDeclarator()->declarator();
-    ParameterDeclarationClauseAST* clause = d->parameterDeclarationClause();
-    ParameterDeclarationListAST* params = clause->parameterDeclarationList();
-    if( params ){
-        QPtrList<ParameterDeclarationAST> l( params->parameterList() );
-        QPtrListIterator<ParameterDeclarationAST> it( l );
-        while( it.current() ){
-	    ParameterDeclarationAST* param = it.current();
-            ++it;
-
-	    SimpleVariable var;
-	    var.type = typeName( param->typeSpec()->text() );
-	    var.name = declaratorToString( param->declarator(), QString::null, true );
-
-	    if( !var.type.isEmpty() ){
-	        ctx->add( var );
-	        kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
+    if( ast && ast->initDeclarator() && ast->initDeclarator()->declarator() ){
+	DeclaratorAST* d = ast->initDeclarator()->declarator();
+	if( ParameterDeclarationClauseAST* clause = d->parameterDeclarationClause() ){
+	    if( ParameterDeclarationListAST* params = clause->parameterDeclarationList() ){
+		QPtrList<ParameterDeclarationAST> l( params->parameterList() );
+		QPtrListIterator<ParameterDeclarationAST> it( l );
+		while( it.current() ){
+		    ParameterDeclarationAST* param = it.current();
+		    ++it;
+		    
+		    SimpleVariable var;
+		    var.type = typeName( param->typeSpec()->text() );
+		    var.name = declaratorToString( param->declarator(), QString::null, true );
+		    
+		    if( !var.type.isEmpty() ){
+			ctx->add( var );
+			kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
+		    }
+		}
 	    }
-        }
+	}
     }
-
+    
     computeContext( ctx, ast->functionBody(), line, col );
     return ctx;
 }
