@@ -3,6 +3,7 @@
     * regenerated all Makefile.am's from kdevelop.kdevprj.save
       (except widgets/qextmdi/Makefile.am because it needs some tweaking)
     Attention: Do not hack in the paragraphs of Makefile.am's marked with "kdevelop will overwrite this part"!
+    * some accel warnings removed
 
 2002-02-20  Walter Tasin <tasin@kdevelop.org>
     * implementing additional project options 

@@ -135,8 +135,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   config->sync();   // force this to be written back
 
   accel = new CKDevAccel( this);
-  m_docViewManager->initKeyAccel(accel, this);
-
   initView();
   initConnections();
   initStatusBar();

@@ -1451,9 +1451,7 @@ QString DocViewMan::docName(QObject* pDoc) const
 //-----------------------------------------------------------------------------
 void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
 {
-  debug("DocViewMan::installBMPopup");
-
-    // Install editor bookmark popup menu
+  // Install editor bookmark popup menu
   QPopupMenu* code_bookmarks = new QPopupMenu();
 
   connect(code_bookmarks,SIGNAL(aboutToShow()),
@@ -1760,7 +1758,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Insert File"), "InsertFile", 0);
   accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
 
-  accel->connectItem( KStdAccel::Find, this, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
+  accel->connectItem( KStdAccel::Find, this, SLOT(slotEditSearch() ), true, IDK_EDIT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
   accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
@@ -2006,9 +2004,6 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "DebugToggleBreakpoint", m_pParent, SLOT(slotDebugToggleBreakpoint()), true, ID_DEBUG_TOGGLE_BP);
 
   // activation of certain tool-views
-  accel->insertItem( i18n("Goto Previous Window"), "GotoPrevWin", IDK_GOTO_PREVWIN);
-  accel->connectItem("GotoPrevWin", m_pParent, SLOT(activatePrevWin()), true, 0);
-
   accel->insertItem( i18n("class tree"), "ActivateTreeView_Class", ID_ACTIVATETREEVIEW_CLASS);
   accel->connectItem( "ActivateTreeView_Class", m_pParent, SLOT(slotActivateTView_Class()), true, 0);
   accel->insertItem( i18n("files of project"), "ActivateTreeView_LFV", ID_ACTIVATETREEVIEW_LFV);
