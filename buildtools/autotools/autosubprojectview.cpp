@@ -108,6 +108,7 @@ AutoSubprojectView::AutoSubprojectView(AutoProjectWidget* widget, AutoProjectPar
 {
 	m_widget = widget;
 	m_part = part;
+	setAllColumnsShowFocus( true );
 
 	initActions();
 }

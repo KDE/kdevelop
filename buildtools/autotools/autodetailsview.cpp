@@ -56,6 +56,7 @@ AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* par
 {
 	m_widget = widget;
 	m_part = part;
+	setAllColumnsShowFocus( true );
 
 	initActions();
 	QDomDocument &dom = *(m_part->projectDom());
