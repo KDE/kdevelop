@@ -32,8 +32,9 @@ class KArchiveFile;
 #include <klistview.h>
 #include <kiconview.h>
 #include "kdevversioncontrol.h"
+#include "kdevvcsintegrator.h"
 #include "appwizarddlgbase.h"
-//#include "vcs_form.h"
+#include "vcs_form.h"
 #include "autoform.h"
 #include "kdevlicense.h"
 
@@ -142,7 +143,7 @@ private: //methods
 
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
-//    void loadVcs();
+    void loadVcs();
 	void updateNextButtons();
 
 	void populateFavourites();
@@ -174,12 +175,14 @@ private: //data
     QPtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
-//    VcsForm *m_vcsForm;
+    VcsForm *m_vcsForm;
     bool m_pathIsValid;
 	KPopupMenu* m_favouritesMenu;
 	KPopupMenu* m_templatesMenu;
 	
 	QDict<KDevLicense> m_licenses;
+	QDict<KDevVCSIntegrator> m_integrators;
+	QMap<int, VCSDialog*> m_integratorDialogs;
 };
 
 #endif

@@ -265,7 +265,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     dest_edit->setURL(defaultProjectsDir);
     dest_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
-//    loadVcs();
+    loadVcs();
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
@@ -301,37 +301,63 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 AppWizardDialog::~AppWizardDialog()
 {}
-/*
+
 void AppWizardDialog::loadVcs()
 {
-    m_vcsForm = new VcsForm();
+	m_vcsForm = new VcsForm();
+	
+	int i=0;
+	m_vcsForm->combo->insertItem( i18n("no version control system", "None"), i );
+	m_vcsForm->stack->addWidget( 0, i++ );
+	
+	// We query for all vcs integrators for KDevelop
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", "");
+	KTrader::OfferList::const_iterator serviceIt = offers.begin();
+	for (; serviceIt != offers.end(); ++serviceIt)
+	{
+		KService::Ptr service = *serviceIt;
+		kdDebug() << "AppWizardDialog::loadVcs: creating vcs integrator " 
+			<< service->name() << endl;
+		
+		KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
+		if (!factory) {
+			QString errorMessage = KLibLoader::self()->lastErrorMessage();
+			kdDebug() << "There was an error loading the module " << service->name() << endl <<
+			"The diagnostics is:" << endl << errorMessage << endl;
+			exit(1);
+		}
+		QStringList args;
+		QObject *obj = factory->create(0, service->name().latin1(),
+									"KDevVCSIntegrator", args);
+		KDevVCSIntegrator *integrator = (KDevVCSIntegrator*) obj;
 
-    int i=0;
-    m_vcsForm->combo->insertItem( i18n("no version control system", "None"), i );
-    m_vcsForm->stack->addWidget( 0, i++ );
+		if (!integrator)
+			kdDebug() << "    failed to create vcs integrator " << service->name() << endl;
+		else
+		{
+			kdDebug() << "    success" << endl;
+			
+			QString vcsName = service->property("X-KDevelop-VCS").toString();
+			m_vcsForm->combo->insertItem(vcsName, i);
+			m_integrators.insert(vcsName, integrator);
+			
+			VCSDialog *vcs = integrator->integrator(m_vcsForm->stack);
+			if (vcs)
+			{
+				m_integratorDialogs[i] = vcs;
+				QWidget *w = vcs->self();
+				if (w)
+					m_vcsForm->stack->addWidget(w, i++);
+				else
+					kdDebug() << "    integrator widget is 0" << endl;
+			}
+			else
+				kdDebug() << "    integrator is 0" << endl;
+		}
+	}
 
-    // We query for all vcs plugins for KDevelop
-    QStringList availableVcs = m_part->registeredVersionControls();
-
-    for(QStringList::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
-    {
-        KDevVersionControl *vcs = m_part->versionControlByName( (*it) );
-        QString vcsName = vcs->uid();
-
-        QWidget *newProjectWidget = vcs->newProjectWidget( m_vcsForm->stack );
-        if (newProjectWidget) {
-            m_vcsForm->combo->insertItem( vcsName, i );
-            m_vcsForm->stack->addWidget( newProjectWidget, i++ );
-        }
-        else
-        {
-            kdDebug( 9000 ) << "  ** Warning: VCS has not widget. Skipping. " << endl;
-        }
-    }
-
-    addPage( m_vcsForm, i18n("Version Control System") );
+	addPage(m_vcsForm, i18n("Version Control System"));
 }
-*/
 
 void AppWizardDialog::updateNextButtons()
 {
@@ -591,19 +617,7 @@ void AppWizardDialog::accept()
       dest_edit->setFocus();
       return;
     }
-/* 
-    if (m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget())) {
-        KDevVersionControl* pVC = m_part->versionControlByName( m_vcsForm->combo->currentText() );
-        if (pVC) {
-			kdDebug( 9000 ) << "Creating new project with selected VCS ..." << endl;
-            pVC->createNewProject(finalLoc_label->text());
-        }
-		else
-		{
-			kdDebug( 9000 ) << "Could not grab the selected VCS: " << m_vcsForm->combo->currentText() << endl;
-		}
-    }
-*/    
+ 
 //	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	
 	QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
@@ -613,6 +627,21 @@ void AppWizardDialog::accept()
 	}
 
 	openAfterGeneration();
+
+	int id = m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget());
+	if (id)
+	{
+		VCSDialog *vcs = m_integratorDialogs[id];
+		if (vcs)
+		{
+			kdDebug() << "vcs integrator dialog is ready" << endl;
+			vcs->accept();
+		}
+		else
+			kdDebug() << "no vcs integrator dialog" << endl;
+	}
+	else
+		kdDebug() << "vcs integrator wasn't selected" << endl;
 	
 	QWizard::accept();
 }
@@ -871,6 +900,15 @@ void AppWizardDialog::openAfterGeneration()
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
+	//save the selected vcs
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", QString("[X-KDevelop-VCS]=='%1'").arg(m_vcsForm->combo->currentText()));
+	if (offers.count() == 1)
+	{
+		KService::Ptr service = offers.first();
+		DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
+	}
+
+	
 //FIXME PROFILES!!!!!!!!
 //BEGIN Plugin Profile
 
@@ -927,6 +965,11 @@ void AppWizardDialog::pageChanged()
 {
 	kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
 	projectLocationChanged();
+	
+	//it is possible that project name was changed - we need to update all vcs integrator dialogs
+	for (QMap<int, VCSDialog*>::iterator it = m_integratorDialogs.begin();
+		it != m_integratorDialogs.end(); ++it)
+		(*it)->init(getProjectName(), getProjectLocation());
 }
 
 void AppWizardDialog::addTemplateToFavourites()
