@@ -53,6 +53,8 @@
 #include "qextmdilistiterator.h"
 #include "qextmdinulliterator.h"
 
+class QTimer;
+
 /**
  * @short Internal class
  *
@@ -118,6 +120,7 @@ protected:
    QDomDocument*           m_pTempDockSession;
    bool                    m_bClearingOfWindowMenuBlocked;
 
+   QTimer*                 m_pDragEndTimer;
 // methods
 public:
    /**
@@ -467,6 +470,10 @@ protected slots: // Protected slots
    * Popups the "Window" menu. See also @ref QextMdiMainFrm::windowPopup .
    */
    void popupWindowMenu(QPoint p);
+   /**
+   * The timer for main widget moving has elapsed -> send drag end to all concerned views.
+   */
+   void dragEndTimeOut();
 
 signals:
    /** 

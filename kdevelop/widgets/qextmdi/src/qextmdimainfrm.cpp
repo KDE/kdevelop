@@ -34,6 +34,7 @@
 #endif
 #include <qtoolbutton.h>
 #include <qlayout.h>
+#include <qtimer.h>
 
 #include "qextmdimainfrm.h"
 #include "qextmditaskbar.h"
@@ -104,6 +105,7 @@ QextMdi::MdiMode QextMdiMainFrm::m_mdiMode = QextMdi::ChildframeMode;
    ,m_pDockbaseOfTabPage(0L)
    ,m_pTempDockSession(0L)
    ,m_bClearingOfWindowMenuBlocked(FALSE)
+   ,m_pDragEndTimer(0L)
 {
    // Create the local list of windows
    m_pWinList = new QList<QextMdiChildView>;
@@ -145,6 +147,10 @@ QextMdi::MdiMode QextMdiMainFrm::m_mdiMode = QextMdi::ChildframeMode;
 
    // the MDI view taskbar
    createTaskBar();
+
+   // drag end timer
+   m_pDragEndTimer = new QTimer();
+   connect(m_pDragEndTimer, SIGNAL(timeout()), this, SLOT(dragEndTimeOut()));
 }
 
 //============ ~QextMdiMainFrm ============//
@@ -155,6 +161,7 @@ QextMdiMainFrm::~QextMdiMainFrm()
    while((pWnd = m_pWinList->first()))closeWindow(pWnd, FALSE); // without re-layout taskbar!
    emit lastChildViewClosed();
    delete m_pWinList;
+   delete m_pDragEndTimer;
 }
 
 //============ applyOptions ============//
@@ -712,6 +719,35 @@ bool QextMdiMainFrm::event( QEvent* e)
          closeWindow( pWnd);
       return TRUE;
    }
+   // A hack little hack: If MDI child views are moved implicietly by moving 
+   // the main widget the should know this too. Unfortunately there seems to
+   // be no way to catch the move start / move stop situations for the main
+   // widget in a clean way. (There is no MouseButtonPress/Release or 
+   // something like that.) Therefore we do the following: When we get the 
+   // "first" move event we start a timer and interprete it as "drag begin".
+   // If we get the next move event and the timer is running we restart the 
+   // timer and don't do anything else. If the timer elapses (this meens we
+   // haven't had any move event for a while) we interprete this as "drag
+   // end". If the moving didn't stop actually, we will later get another
+   // "drag begin", so we get a drag end too much, but this would be the same
+   // as if the user would stop moving for a little while.
+   // Actually we seem to be lucky that the timer does not elapse while we
+   // are moving -> so we have no obsolete drag end / begin
+   else if( isVisible() && (e->type() == QEvent::Move)) {
+      if (m_pDragEndTimer->isActive()) {
+         // this is not the first move -> stop old timer
+         m_pDragEndTimer->stop();
+      }
+      else {
+         // this is the first move -> send the drag begin to all concerned views 
+         QextMdiChildView* pView;
+         for (m_pWinList->first(); (pView = m_pWinList->current()) != 0L; m_pWinList->next()) {
+            QextMdiChildFrmDragBeginEvent    dragBeginEvent(0L);
+            QApplication::sendEvent(pView, &dragBeginEvent);
+         }
+      }
+      m_pDragEndTimer->start(200, true); // single shot after 200 ms
+   }
 
    return DockMainWindow::event( e);
 }
@@ -724,15 +760,13 @@ bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
          if (m_pCurrentWindow && !m_pCurrentWindow->isHidden() && !m_pCurrentWindow->isAttached() && m_pMdi->topChild()) {
             return TRUE;   // eat the event
          }
-         else {
-            if (m_pMdi) {
-               static bool bFocusTCIsPending = FALSE;
-               if (!bFocusTCIsPending) {
-                  bFocusTCIsPending = TRUE;
-                  m_pMdi->focusTopChild();
-                  bFocusTCIsPending = FALSE;
-               }
-            }
+      }
+      if (m_pMdi) {
+         static bool bFocusTCIsPending = FALSE;
+         if (!bFocusTCIsPending) {
+            bFocusTCIsPending = TRUE;
+            m_pMdi->focusTopChild();
+            bFocusTCIsPending = FALSE;
          }
       }
    }
@@ -1255,6 +1289,7 @@ void QextMdiMainFrm::activateNextWin()
       break;
     }
   }
+  delete it;
 }
 
 /** Activates the previous open view */
@@ -1276,6 +1311,7 @@ void QextMdiMainFrm::activatePrevWin()
       break;
     }
   }
+  delete it;
 }
 
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
@@ -1547,6 +1583,17 @@ void QextMdiMainFrm::popupWindowMenu(QPoint p)
 {
    if (!isFakingSDIApplication()) {
       m_pWindowMenu->popup( p);
+   }
+}
+
+//================ dragEndTimeOut ===============//
+void QextMdiMainFrm::dragEndTimeOut()
+{
+   // send drag end to all concerned views.
+   QextMdiChildView* pView;
+   for (m_pWinList->first(); (pView = m_pWinList->current()) != 0L; m_pWinList->next()) {
+      QextMdiChildFrmDragEndEvent   dragEndEvent(0L);
+      QApplication::sendEvent(pView, &dragEndEvent);
    }
 }
 
