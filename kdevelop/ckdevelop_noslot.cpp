@@ -33,6 +33,7 @@
 #include "docviewman.h"
 #include "kwdoc.h"
 #include "docviewman.h"
+#include "coutputwidget.h"
 
 #include <khtmlview.h>
 #include <kcursor.h>
@@ -803,9 +804,12 @@ void CKDevelop::showTreeView(bool show){
 void CKDevelop::showOutputView(bool show){
   if(bAutoswitch){
     if(show){
-      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-        return; // it's already visible
+      if (isToolViewVisible(messages_widget)) {
+         makeWidgetDockVisible(messages_widget->parentWidget());
       }
+//      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+//        return; // it's already visible
+//      }
       else{
         slotViewTOutputView();
       }
