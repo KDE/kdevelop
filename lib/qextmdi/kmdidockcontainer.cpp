@@ -358,7 +358,7 @@ void KMdiDockContainer::setPixmap(KDockWidget* widget ,const QPixmap& pixmap)
   tab->setIcon(pixmap.isNull()?SmallIcon("misc"):pixmap);
 }
 
-void KMdiDockContainer::save(QDomElement& dockEl) 
+void KMdiDockContainer::save(QDomElement& dockEl)
 {
 	QDomDocument doc=dockEl.ownerDocument();
 	QDomElement el;
@@ -469,7 +469,7 @@ void KMdiDockContainer::load(QDomElement& dockEl)
 void KMdiDockContainer::save(KConfig* cfg,const QString& group_or_prefix)
 {
   QString grp=cfg->group();
-  cfg->deleteGroup(group_or_prefix+QString("%1").arg(parent()->name()));
+  cfg->deleteGroup(group_or_prefix+QString("::%1").arg(parent()->name()));
   cfg->setGroup(group_or_prefix+QString("::%1").arg(parent()->name()));
 
   if (isOverlapMode()) cfg->writeEntry("overlapMode","true");
