@@ -562,7 +562,7 @@ void QEditorView::internalEnsureVisibleBlock( QTextParagraph* p )
     while( lev > 0 ){
         QTextParagraph* parent = p->prev();
 
-        parentLevel = ((ParagData*) parent->extraData())->level();
+        parentLevel = parent ? ((ParagData*) parent->extraData())->level() : 0;
 
         while( parentLevel > lev ){
             parent = parent->prev();
