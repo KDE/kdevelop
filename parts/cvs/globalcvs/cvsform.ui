@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CvsForm</class>
 <widget class="QWidget">
     <property name="name">
@@ -109,5 +109,13 @@
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>root_edit</tabstop>
+    <tabstop>init_check</tabstop>
+    <tabstop>repository_edit</tabstop>
+    <tabstop>vendor_edit</tabstop>
+    <tabstop>message_edit</tabstop>
+    <tabstop>release_edit</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

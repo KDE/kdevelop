@@ -41,14 +41,16 @@ void GlobalCvs::slotImportCvs() {}
 
 QWidget* GlobalCvs::newProjectWidget(QWidget *parent) {
     form = new CvsForm(parent);
-    form->init_check->setEnabled(false);
     return form;
 }
 
 void GlobalCvs::createNewProject(QString dir) {
     if (!form)
         return;
-    QString command = "cd "+ dir +" && cvs -d " + form->root_edit->text() + " import -m '" + form->message_edit->text() + "' "
+    QString init("");
+    if (form->init_check->isChecked())
+    	init = "cvs -d " + form->root_edit->text() + " init && ";
+    QString command = init + "cd "+ dir +" && cvs -d " + form->root_edit->text() + " import -m '" + form->message_edit->text() + "' "
                       + form->repository_edit->text() + " " + form->vendor_edit->text() + " " + form->release_edit->text();
     makeFrontend()->queueCommand(dir,command);
 }
