@@ -28,7 +28,7 @@
 #include "item_all.cpp.inc"
 
 
-ITEMCLASS_NAME::MyWidget::MyWidget(ITEMCLASS_NAME* wid, QWidget* parent, const char* name )
+ITEMCLASS_NAME::MyWidget::MyWidget(ITEMCLASS_NAME* wid, QWidget* parent, const char* /*name*/ )
   : ITEMCLASS_TYPE("K",parent)
 {
   parentObject = wid;

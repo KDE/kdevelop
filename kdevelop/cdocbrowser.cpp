@@ -269,7 +269,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 //	emit enableMenuItems();){
 }
 
-void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint & pnt){
+void CDocBrowser::slotPopupMenu( KHTMLView * /*view*/, const char */*url*/, const QPoint & pnt){
   QString text;
   int pos;
   if(this->isTextSelected()){

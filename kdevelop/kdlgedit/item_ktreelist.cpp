@@ -17,13 +17,14 @@
 
 
 #define DONTINC_ALL
-#define INC_KSEPARATOR
+#define INC_KTREELIST
 #include "items.h"
 #include "itemsglobal.h"
+#include <qpalette.h>
 
-#define CALLER_ITEMCLASS_NAME KDlgItem_KSeparator
-#define ITEMCLASS_NAME KDlgItem_KSeparator
-#define ITEMCLASS_TYPE KSeparator
+#define CALLER_ITEMCLASS_NAME KDlgItem_KTreeList
+#define ITEMCLASS_NAME KDlgItem_KTreeList
+#define ITEMCLASS_TYPE KTreeList
 
 #include "item_all.cpp.inc"
 
@@ -68,7 +69,16 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
-  props->addProp("Orientation",           "Horizontal",       "General",        ALLOWED_ORIENTATION);
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+  props->addProp("isAutoUpdate",       "",              "General",        ALLOWED_BOOL);
+
+  props->addProp("isBottomScrollbar",  "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isScrollBar",        "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isTreeDrawing",      "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isShowItemText",     "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isSmoothScrolling",  "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("TreeListBgColor",    "",              "Appearance",     ALLOWED_COLOR);
+  props->addProp("TreeListPalette",    "",              "Appearance",     ALLOWED_COLOR);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -83,10 +93,4 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   #define strIsDef(s) (!Prop2Str(s).isNull())
   #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
-  if(Prop2Str("Orientation") == "Horizontal"){
-    itm->setOrientation(KSeparator::HLine);
-  }
-  else{
-    itm->setOrientation(KSeparator::VLine);
-  }
 }

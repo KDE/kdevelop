@@ -16,18 +16,18 @@
  ***************************************************************************/
 
 
+#include "kdlgotherdlgs.h"
+#include "../ckdevelop.h"
+#include "kdlgeditwidget.h"
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
 #include <kapp.h>
-#include "kdlgotherdlgs.h"
-#include "kdlgeditwidget.h"
-#include "../ckdevelop.h"
+#include <kquickhelp.h>
 
 
-KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool modal, WFlags f )
+KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool /*modal*/, WFlags /*f*/ )
   : QDialog(parent,name,true)
 {
   int w = 350;
@@ -74,42 +74,41 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool modal,
   pbCancel->setGeometry( w-110, h-40, 100, 30 );
   connect(pbCancel, SIGNAL(clicked()), SLOT(reject()));
 
-  QString text;
-  text = i18n("<brown><b>\"Set Grid\" dialog<black></b>\n\n"
-              "Within this dialog you can set the desired\n"
-              "grip size or disable the grid.\n\n"
-              "KDlgEdit allows you to set the horizontal\n"
-              "and vertical grid size independently. That\n"
-              "means you can set different values for each\n"
-              "direction.");
-  QWhatsThis::add(this, text);
+  KQuickHelp::add(this,
+	i18n("<brown><b>\"Set Grid\" dialog<black></b>\n\n"
+	     "Within this dialog you can set the desired\n"
+	     "grip size or disable the grid.\n\n"
+	     "KDlgEdit allows you to set the horizontal\n"
+	     "and vertical grid size independently. That\n"
+	     "means you can set different values for each\n"
+	     "direction."));
 
-  text = i18n("<brown><b>(Horizontal) Grid Size<black></b>\n\n"
-              "Use this field to set the horizontal grid\n"
-              "size in pixels or, if <i><u>Square Grid</u></i>is\n"
-              "selected, to set both the horizontal and\n"
-              "vertical grid size.\n\n"
-              "A size of zero or one pixel disables the grid.");
-  QWhatsThis::add(lbHGrid, text);
-  QWhatsThis::add(sbHGrid, text);
+  KQuickHelp::add(lbHGrid,
+  KQuickHelp::add(sbHGrid,
+	i18n("<brown><b>(Horizontal) Grid Size<black></b>\n\n"
+	     "Use this field to set the horizontal grid\n"
+	     "size in pixels or, if <i><u>Square Grid</u></i>is\n"
+	     "selected, to set both the horizontal and\n"
+	     "vertical grid size.\n\n"
+	     "A size of zero or one pixel disables the grid.")));
 
-  text = i18n("<brown><b>Vertical Grid Size<black></b>\n\n"
-              "Use this field to set the vertical grid\n"
-              "size in pixels.\n\n"
-              "A size of zero or one pixel disables the grid.");
-  QWhatsThis::add(lbVGrid, text);
-  QWhatsThis::add(sbVGrid, text);
+  KQuickHelp::add(lbVGrid,
+  KQuickHelp::add(sbVGrid,
+	i18n("<brown><b>Vertical Grid Size<black></b>\n\n"
+	     "Use this field to set the vertical grid\n"
+	     "size in pixels.\n\n"
+	     "A size of zero or one pixel disables the grid.")));
 
-  QWhatsThis::add(cbVHSame,
+  KQuickHelp::add(cbVHSame,
 	i18n("<brown><b>Square Grid<black></b>\n\n"
 	     "If enabled the horizontal and vertical\n"
 	     "size will be the same value.\n"));
 
-  QWhatsThis::add(pbOk,
+  KQuickHelp::add(pbOk,
 	i18n("<brown><b>Ok<black></b>\n\n"
 	     "Closes the dialog and uses the changed values."));
 
-  QWhatsThis::add(pbCancel,
+  KQuickHelp::add(pbCancel,
 	i18n("<brown><b>Cancel<black></b>\n\n"
 	     "Closes the dialog <i>without</i>using the changed values."));
 

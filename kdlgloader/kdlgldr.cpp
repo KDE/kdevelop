@@ -159,7 +159,7 @@ long KDlgLoader::openDialog(QString fileName, long flags)
 }
 
 
-long KDlgLoader::freeDialog(long flags)
+long KDlgLoader::freeDialog(long /*flags*/)
 {
 #ifdef dlgldr_wth
   WatchMsg("[freeDialog()]");
@@ -171,7 +171,7 @@ long KDlgLoader::freeDialog(long flags)
 
 
 /** Protected method to read the file from hard drive. */
-long KDlgLoader::readFile(long flags)
+long KDlgLoader::readFile(long /*flags*/)
 {
   dbase->deleteMyself();
 #ifdef dlgldr_wth
