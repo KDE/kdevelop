@@ -39,6 +39,7 @@ FileListWidget::FileListWidget(FileListPart *part)
 	header()->hide();
 	setRootIsDecorated( false );
 	setResizeMode( QListView::LastColumn );
+	setAllColumnsShowFocus( true );
 
 	setSelectionMode( QListView::Extended );
 
