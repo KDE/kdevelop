@@ -288,7 +288,7 @@ void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item)
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("DCF").toElement();
 
-    QDomElement childEl = docEl.lastChild().toElement();
+    QDomElement childEl = docEl.firstChild().toElement();
     while (!childEl.isNull())
     {
         if (childEl.tagName() == "section")
@@ -321,7 +321,7 @@ void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item)
                 grandChild = grandChild.nextSibling().toElement();
             }
         }
-        childEl = childEl.previousSibling().toElement();
+        childEl = childEl.nextSibling().toElement();
     }
 }
 

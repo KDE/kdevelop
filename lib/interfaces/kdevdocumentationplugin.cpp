@@ -130,9 +130,9 @@ void DocumentationCatalogItem::activate()
 
 IndexItem::IndexItem(DocumentationPlugin *plugin, DocumentationCatalogItem *catalog, 
     QListBox *listbox, const QString &text)
-    :QListBoxText(listbox, text, 0)
+    :QListBoxText(listbox, text)
 {
-    plugin->indexes[catalog].prepend(this);
+    plugin->indexes[catalog].append(this);
 }
 
 
