@@ -274,4 +274,3 @@ void %{APPNAME}View::repaint()
 {
     ::close(mFd);
 }
-

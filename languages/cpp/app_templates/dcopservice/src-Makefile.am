@@ -15,4 +15,3 @@ messages: rc.cpp
 
 service_DATA = %{APPNAMELC}.desktop
 servicedir = $(kde_servicesdir)
-

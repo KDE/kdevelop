@@ -1,3 +1,5 @@
+%{CPP_TEMPLATE}
+
 #include "prefs.h"
 #include <kdebug.h>
 

@@ -447,7 +447,7 @@ void AppWizardDialog::accept()
 	}
 	else
 	{
-		KMessageBox::sorry(this, QString( i18n("The template %1 cannot be opened.")).arg( source + "/" + m_pCurrentAppInfo->sourceArchive ) );
+		KMessageBox::sorry(this, i18n("The template %1 cannot be opened.").arg( source + "/" + m_pCurrentAppInfo->sourceArchive ) );
 		templateArchive.close();
 		return;
 	}

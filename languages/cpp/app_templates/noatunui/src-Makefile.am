@@ -19,5 +19,5 @@ plugins_DATA = %{APPNAMELC}.plugin
 
 # kde_services_DATA = %{APPNAMELC}.desktop
 
-# messages: rc.cpp
-#	$(XGETTEXT) *.cpp *.h -o $(podir)/%{APPNAMELC}.pot
+messages: rc.cpp
+	$(XGETTEXT) *.cpp *.h -o $(podir)/%{APPNAMELC}.pot

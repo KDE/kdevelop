@@ -5,6 +5,8 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -191,6 +193,7 @@ extern "C"
 {
     void* init_lib%{APPNAMELC}part()
     {
+	KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
         return new %{APPNAME}PartFactory;
     }
 };

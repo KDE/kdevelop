@@ -10,7 +10,6 @@ INCLUDES         = $(all_includes)
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
-
 # the library search path. 
 %{APPNAMELC}_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
@@ -25,7 +24,7 @@ xdg_apps_DATA = %{APPNAMELC}.desktop
 kde_kcfg_DATA = %{APPNAMELC}.kcfg
 
 # these are the headers for your project
-noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}view.h  prefs.h
+noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}view.h prefs.h
 
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
@@ -39,7 +38,3 @@ kdelnk_DATA = %{APPNAMELC}.desktop
 # this is where the XML-GUI resource file goes
 rcdir = $(kde_datadir)/%{APPNAMELC}
 rc_DATA = %{APPNAMELC}ui.rc
-
-
-
-
