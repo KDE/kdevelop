@@ -15,6 +15,7 @@
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/selectioninterface.h>
 
 #include <kdevcore.h>
 #include <kdevapi.h>
@@ -60,7 +61,15 @@ void AStylePart::beautifySource()
   if (!iface)
     return;
 
-  ASStringIterator is(iface->text());
+    bool has_selection = false;
+    
+  KTextEditor::SelectionInterface *sel_iface
+      = dynamic_cast<KTextEditor::SelectionInterface*>(partController()->activePart());
+  if (sel_iface && sel_iface->hasSelection())
+    has_selection = true;
+
+  //if there is a selection, we only format it.  
+  ASStringIterator is(has_selection ? sel_iface->selection() : iface->text());
   KDevFormatter formatter;
 
   formatter.init(&is);
@@ -73,8 +82,21 @@ void AStylePart::beautifySource()
 
   uint col = 0;
   uint line = 0;
-  cursorPos( partController()->activePart(), &col, &line );
+	
+  if(has_selection) //there was a selection, so only change the part of the text related to it
+  {
+    //remove the final newline character
+    output.setLength(output.length()-1);
+    
+    sel_iface->removeSelectedText();
+    cursorPos( partController()->activePart(), &col, &line );	    
+    iface->insertText( col, line, output);
+    
+    return;
+  }
 
+  cursorPos( partController()->activePart(), &col, &line );	  
+  
 // pre 3.1.3 katepart clears undo history on setText()
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION > KDE_MAKE_VERSION(3,1,2)
