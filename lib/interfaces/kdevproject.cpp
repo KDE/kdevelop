@@ -24,7 +24,7 @@ void KDevProject::changedFiles( const QStringList & fileList )
     emit changedFilesInProject( fileList );
 }
 
-KDevProject::Options KDevProject::options( )
+KDevProject::Options KDevProject::options() const
 {
     return (KDevProject::Options)0;
 }

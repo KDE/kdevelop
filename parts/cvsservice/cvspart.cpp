@@ -334,7 +334,7 @@ void CvsPart::slotActionCommit()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->commit( KURL::KURL(currDocument) );
+        m_impl->commit( currDocument );
     }
 }
 
@@ -345,7 +345,7 @@ void CvsPart::slotActionUpdate()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->update( KURL::KURL(currDocument) );
+        m_impl->update( currDocument );
     }
 }
 
@@ -356,7 +356,7 @@ void CvsPart::slotActionAdd()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->add( KURL::KURL(currDocument), false );
+        m_impl->add( currDocument, false );
     }
 }
 
@@ -367,7 +367,7 @@ void CvsPart::slotActionAddBinary()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->add( KURL::KURL(currDocument), true );
+        m_impl->add( currDocument, true );
     }
 }
 
@@ -378,7 +378,7 @@ void CvsPart::slotActionRemove()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->remove( KURL::KURL(currDocument) );
+        m_impl->remove( currDocument );
     }
 }
 
@@ -389,7 +389,7 @@ void CvsPart::slotActionRevert()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->revert( KURL::KURL(currDocument) );
+        m_impl->revert( currDocument );
     }
 }
 
@@ -400,7 +400,7 @@ void CvsPart::slotActionLog()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->log( KURL::KURL(currDocument) );
+        m_impl->log( currDocument );
     }
 }
 
@@ -411,7 +411,7 @@ void CvsPart::slotActionDiff()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->diff( KURL::KURL(currDocument) );
+        m_impl->diff( currDocument );
     }
 }
 
@@ -422,7 +422,7 @@ void CvsPart::slotActionTag()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->tag( KURL::KURL(currDocument) );
+        m_impl->tag( currDocument );
     }
 }
 
@@ -433,7 +433,7 @@ void CvsPart::slotActionUnTag()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->unTag( KURL::KURL(currDocument) );
+        m_impl->unTag( currDocument );
     }
 }
 
@@ -444,7 +444,7 @@ void CvsPart::slotActionAddToIgnoreList()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->addToIgnoreList( KURL::KURL(currDocument) );
+        m_impl->addToIgnoreList( currDocument );
     }
 }
 
@@ -455,7 +455,7 @@ void CvsPart::slotActionRemoveFromIgnoreList()
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->removeFromIgnoreList( KURL::KURL(currDocument) );
+        m_impl->removeFromIgnoreList( currDocument );
     }
 }
 
@@ -608,10 +608,10 @@ void CvsPart::slotProjectOpened()
     // If createNewProject() has set this var then we have to get it.
     if (g_projectWasJustCreated)
     {
-        options->save( *projectDom() );
+        options->save( project() );
         g_projectWasJustCreated = false;
     }
-    options->load( *projectDom() );
+    options->load( project() );
 
     // When files are added to project they may be added to/removed from repository too
     connect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
@@ -625,7 +625,7 @@ void CvsPart::slotProjectClosed()
     kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    options->save( *projectDom() );
+    options->save( project() );
     delete options;
 }
 

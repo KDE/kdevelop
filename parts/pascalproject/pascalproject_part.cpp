@@ -163,7 +163,7 @@ void PascalProjectPart::closeProject()
 }
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList PascalProjectPart::runEnvironmentVars()
+DomUtil::PairList PascalProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevpascalproject/run/envvars", "envvar", "name", "value");
 }
@@ -178,7 +178,7 @@ DomUtil::PairList PascalProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString PascalProjectPart::runDirectory()
+QString PascalProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -209,7 +209,7 @@ QString PascalProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString PascalProjectPart::mainProgram(bool relative)
+QString PascalProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
     QString configMainProg = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram", "");
@@ -243,12 +243,12 @@ QString PascalProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString PascalProjectPart::runArguments()
+QString PascalProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevpascalproject/run/programargs");
 }
 
-QString PascalProjectPart::mainSource()
+QString PascalProjectPart::mainSource() const
 {
     return projectDirectory() + "/" + m_mainSource;
 }
@@ -258,29 +258,29 @@ void PascalProjectPart::setMainSource(QString fullPath)
     m_mainSource = fullPath.replace(QRegExp(QString(projectDirectory() + QString("/"))),"");
 }
 
-QString PascalProjectPart::projectDirectory()
+QString PascalProjectPart::projectDirectory() const
 {
     return m_projectDir;
 }
 
-QString PascalProjectPart::projectName()
+QString PascalProjectPart::projectName() const
 {
     return m_projectName;
 }
 
-QString PascalProjectPart::activeDirectory()
+QString PascalProjectPart::activeDirectory() const
 {
     QFileInfo fi(mainSource());
     return fi.dirPath(true).replace(QRegExp(projectDirectory()),"");
 }
 
-QString PascalProjectPart::buildDirectory()
+QString PascalProjectPart::buildDirectory() const
 {
     QFileInfo fi(mainSource());
     return fi.dirPath(true);
 }
 
-void PascalProjectPart::listOfFiles(QStringList &result, QString path)
+void PascalProjectPart::listOfFiles(QStringList &result, QString path) const
 {
     QDir d(path);
     if (!d.exists())
@@ -301,7 +301,7 @@ void PascalProjectPart::listOfFiles(QStringList &result, QString path)
     }
 }
 
-QStringList PascalProjectPart::allFiles()
+QStringList PascalProjectPart::allFiles() const
 {
 //    QStringList files;
 
@@ -474,7 +474,7 @@ KDevCompilerOptions *PascalProjectPart::createCompilerOptions(const QString &nam
     return dlg;
 }
 
-QString PascalProjectPart::defaultOptions( const QString compiler )
+QString PascalProjectPart::defaultOptions( const QString compiler ) const
 {
     KConfig *config = KGlobal::config();
     config->setGroup("Pascal Compiler");

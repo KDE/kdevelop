@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jsgaarde@tdcspace.dk                                                  *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,6 +19,7 @@
 #include "kdevsourceformatter.h"
 #include "kdevproject.h"
 #include "filetemplate.h"
+#include "codemodel.h"
 
 #include <qradiobutton.h>
 #include <qstringlist.h>
@@ -130,7 +133,7 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
         reformat_box->setChecked(true);
   }
 
-  ClassStore classcontainer;
+  CodeModel model;
 
   // sync
   while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
@@ -145,43 +148,37 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
       // sync
       while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
           m_cppSupport->backgroundParser()->isEmpty().wait();
-	  
+
       m_cppSupport->backgroundParser()->lock();
       translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
   }
   if( translationUnit ){
-      StoreWalker w( filename + ".h", &classcontainer );
+      StoreWalker w( filename + ".h", &model );
       w.parseTranslationUnit( translationUnit );
   }
   m_cppSupport->backgroundParser()->unlock();
 
   QStringList pathsplit(QStringList::split('/',filename));
 
-  QStringList classes(classcontainer.getSortedClassNameList());
-  typedef QValueList<ParsedMethod*> SlotList;
-  for (uint i=0; i<classes.count(); i++)
+  QString baseClass = readBaseClassName();
+  ClassList myClasses = model.globalNamespace()->classList();
+  for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
   {
-    ParsedClass *cls = classcontainer.getClassByName(classes[i]);
-    m_edClassName->setText(cls->name());
-    m_edFileName->setText(pathsplit[pathsplit.count()-1]);
-    cls->out();
-
-    cls->slotIterator.toFirst();
-    ParsedMethod *method = 0;
-    while ( (method = cls->slotIterator.current()) != 0)
+    kdDebug() << "base class " << baseClass << " class " << (*classIt)->name()
+        << " parents " << (*classIt)->baseClassList().join(",") << endl;
+    if ( (*classIt)->baseClassList().findIndex(baseClass) != -1 )
     {
-      m_parsedMethods << method->name()+"(";
-      ++(cls->slotIterator);
-    }
+      kdDebug() << "base class matched " << endl;
+      m_edClassName->setText((*classIt)->name());
+      m_edFileName->setText(pathsplit[pathsplit.count()-1]);
 
-    cls->methodIterator.toFirst();
-    method = 0;
-    while ( (method = cls->methodIterator.current()) != 0)
-    {
-      m_parsedMethods << method->name()+"(";
-      ++(cls->methodIterator);
+      FunctionList functionList = (*classIt)->functionList();
+      for (FunctionList::const_iterator methodIt = functionList.begin();
+          methodIt != functionList.end(); ++methodIt)
+      {
+        m_parsedMethods << (*methodIt)->name() + "(";
+      }
     }
-
   }
   readUiFile();
   m_btnOk->setEnabled(true);
@@ -398,6 +395,11 @@ void SubclassingDlg::accept()
   {
     loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.h"));
     buffer = FileTemplate::read(m_cppSupport, "h") + buffer;
+    QFileInfo fi(m_filename + ".h");
+    QString module = fi.baseName();
+    QString basefilename = fi.baseName(true);
+    buffer.replace(QRegExp("\\$MODULE\\$"),module);
+    buffer.replace(QRegExp("\\$FILENAME\\$"),basefilename);
   }
   else
     loadBuffer(buffer,m_filename+".h");
@@ -479,6 +481,11 @@ void SubclassingDlg::accept()
   {
     loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.cpp"));
     buffer = FileTemplate::read(m_cppSupport, "cpp") + buffer;
+    QFileInfo fi(m_filename + ".cpp");
+    QString module = fi.baseName();
+    QString basefilename = fi.baseName(true);
+    buffer.replace(QRegExp("\\$MODULE\\$"),module);
+    buffer.replace(QRegExp("\\$FILENAME\\$"),basefilename);
     if ( (m_cppSupport->project()) && (m_cppSupport->project()->options() & KDevProject::UsesAutotoolsBuildSystem))
     {
         buffer += "\n#include \"$NEWFILENAMELC$.moc\"\n";
@@ -526,4 +533,11 @@ void SubclassingDlg::onChangedClassName()
     m_btnOk->setEnabled(false);
   else
     m_btnOk->setEnabled(true);
+}
+
+QString SubclassingDlg::readBaseClassName( )
+{
+  QDomDocument doc;
+  DomUtil::openDOMFile(doc,m_formFile);
+  return DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
 }

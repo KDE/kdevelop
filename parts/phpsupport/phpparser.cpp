@@ -9,23 +9,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
 #include "phpparser.h"
-#include "classstore.h"
-#include "parsedclass.h"
-#include "parsedmethod.h"
-#include "kdevcore.h"
-#include <qfileinfo.h>
-#include <qtextstream.h>
+
+#include <kdevcore.h>
+#include <codemodel.h>
+
 #include <kregexp.h>
 #include <kdebug.h>
 
+#include <qfileinfo.h>
+#include <qtextstream.h>
+
+#include <iostream>
+
 using namespace std;
 
-PHPParser::PHPParser(KDevCore* core,ClassStore* store){
+PHPParser::PHPParser(KDevCore* core,CodeModel* model){
   m_core = core;
-  m_classStore = store;
-  m_classStore->hasClass("test");
+  m_model = model;
 }
 PHPParser::~PHPParser(){
 }
@@ -36,7 +37,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
   KRegExp varre("^[ \t]*var[ \t]*\\$([a-zA-Z_\x7f-\xff][0-9A-Za-z_\x7f-\xff]*)[ \t;=].*$");
   KRegExp createMemberRe("\\$this->([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[\t]*new[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)");
 
-  ParsedClass *lastClass = 0;
+  ClassDom lastClass = 0;
   QString rawline;
   QCString line;
   int lineNo = 0;
@@ -60,74 +61,57 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	inClass= true;
 	bracketOpen = line.contains("{");
 	bracketClose = line.contains("}");
-	lastClass = new ParsedClass;
+	lastClass = m_model->create<ClassModel>();
 	lastClass->setName(classre.group(1));
 
-	lastClass->setDeclaredInFile(fileName);
-	lastClass->setDeclaredOnLine(lineNo);
-
-	lastClass->setDefinedInFile(fileName);
-	lastClass->setDefinedOnLine(lineNo);
+	lastClass->setFileName(fileName);
+	lastClass->setStartPosition(lineNo, 0);
 
 	QString parentStr = classre.group(3);
 	if(!parentStr.isEmpty()){
-	  ParsedParent *parent = new ParsedParent;
-	  parent->setName(parentStr);
-	  parent->setAccess(PIE_PUBLIC);
-	  lastClass->addParent(parent);
+	  lastClass->addBaseClass(parentStr);
 	}
-	if (m_classStore->hasClass(lastClass->name())) {
-	  ParsedClass *old = m_classStore->getClassByName(lastClass->name());
-	  old->setDeclaredOnLine(lastClass->declaredOnLine());
-	  old->setDeclaredInFile(lastClass->declaredInFile());
-	  delete lastClass;
-	  lastClass=0;
-	} else {
-          m_classStore->globalScope()->addClass(lastClass);
-	  m_classStore->addClass(lastClass);
-	}
+
+	m_file->addClass(lastClass);
+
       } else if (createMemberRe.match(line)) {
 	if (lastClass && inClass) {
-	  ParsedAttribute *att = lastClass->getAttributeByName(QString("$") + createMemberRe.group(1));
-	if (att){
-	  att->setType(createMemberRe.group(2));
-	}
+	    if( lastClass->hasVariable(QString("$") + createMemberRe.group(1)) )
+	       lastClass->variableByName(QString("$") + createMemberRe.group(1))->setType(createMemberRe.group(2));
 	}
       } else if (methodre.match(line)) {
 	//	  cerr << "kdevelop (phpsupport): regex match line ( method ): " << line << endl;
-	ParsedMethod *method = new ParsedMethod;
+	FunctionDom method = m_model->create<FunctionModel>();
 	method->setName(methodre.group(1));
-	ParsedArgument* anArg = new ParsedArgument();
+
+	ArgumentDom anArg = m_model->create<ArgumentModel>();
 	QString arguments = methodre.group(2);
 	anArg->setType(arguments.stripWhiteSpace().local8Bit());
 	method->addArgument( anArg );
 
-	method->setDeclaredInFile(fileName);
-	method->setDeclaredOnLine(lineNo);
+	method->setFileName( fileName );
+	method->setStartPosition( lineNo, 0 );
 
-	method->setDefinedInFile(fileName);
-	method->setDefinedOnLine(lineNo);
+	method->setImplementedInFile( fileName );
+	method->setImplementationStartPosition( lineNo, 0 );
+
 	if (lastClass && inClass) {
 	  //	    kdDebug(9018) << "in Class: " << line << endl;
-	  ParsedMethod *old = lastClass->getMethod(method);
-	  if (!old)
-	    lastClass->addMethod(method);
+	  if (!lastClass->hasFunction(method->name()))
+	    lastClass->addFunction(method);
 	} else {
-	  ParsedMethod *old = m_classStore->globalScope()->getMethod(method);
-	  if (!old)
-	    m_classStore->globalScope()->addMethod(method);
+	  if (!m_file->hasFunction(method->name()) )
+	    m_file->addFunction(method);
 	}
       }
       else if (varre.match(line)) {
 	//	  kdDebug(9018) << "###########regex match line ( var ): " << varre.group(1) << endl;
 	if (lastClass && inClass) {
-	  ParsedAttribute* anAttr = new ParsedAttribute();
+	  VariableDom anAttr = m_model->create<VariableModel>();
 	  anAttr->setName(varre.group(1));
-	  anAttr->setDeclaredInFile(fileName);
-	  anAttr->setDeclaredOnLine(lineNo);
-	  anAttr->setDefinedInFile(fileName);
-	  anAttr->setDefinedOnLine(lineNo);
-	  lastClass->addAttribute( anAttr );
+	  anAttr->setFileName(fileName);
+	  anAttr->setStartPosition( lineNo, 0 );
+	  lastClass->addVariable( anAttr );
 	}
       }
 
@@ -149,7 +133,13 @@ void PHPParser::parseFile(const QString& fileName){
    list.append(rawline.stripWhiteSpace().local8Bit());
  }
  f.close();
+
+ m_file = m_model->create<FileModel>();
+ m_file->setName( fileName );
+
  this->parseLines(&list,fileName);
+
+ m_model->addFile( m_file );
 
  /*
   QFile f(QFile::encodeName(fileName));

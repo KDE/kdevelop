@@ -32,11 +32,12 @@
 #include <kregexp.h>
 #include <kstatusbar.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevmainwindow.h"
-#include "kdevpartcontroller.h"
-#include "classstore.h"
+#include <kdevcore.h>
+#include <kdevproject.h>
+#include <kdevmainwindow.h>
+#include <kdevpartcontroller.h>
+#include <codemodel.h>
+#include <domutil.h>
 
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
@@ -48,10 +49,6 @@
 
 #include "phphtmlview.h"
 #include "phperrorview.h"
-
-#include "parsedclass.h"
-#include "parsedmethod.h"
-#include "domutil.h"
 
 
 using namespace std;
@@ -106,8 +103,8 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   connect(configData,  SIGNAL(configStored()),
 	  this, SLOT(slotConfigStored()));
 
-  m_parser = new  PHPParser(core(),classStore());
-  m_codeCompletion = new  PHPCodeCompletion(configData, core(),classStore());
+  m_parser = new  PHPParser(core(),codeModel());
+  m_codeCompletion = new  PHPCodeCompletion(configData, core(),codeModel());
 
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(slotActivePartChanged(KParts::Part *)));
@@ -115,17 +112,17 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 
 
 PHPSupportPart::~PHPSupportPart()
-{    
+{
     delete( m_parser );
     delete( m_codeCompletion );
     delete( configData );
-    
+
     if( m_htmlView ){
 	mainWindow()->removeView( m_htmlView->view() );
 	delete( m_htmlView );
 	m_htmlView = 0;
     }
-    
+
     delete( phpExeProc );
     delete( m_phpErrorView );
     mainWindow()->removeView( m_phpErrorView );
@@ -167,10 +164,14 @@ void PHPSupportPart::slotTextChanged(){
   for(int i=0;i<numLines;i++){
     lines.append(m_editInterface->textLine(i));
   }
-  classStore()->removeWithReferences(fileName);
+
+  if( codeModel()->hasFile(fileName) ){
+      emit aboutToRemoveSourceInfo( fileName );
+      codeModel()->removeFile( codeModel()->fileByName(fileName) );
+  }
   m_parser->parseLines(&lines,fileName);
 
-  emit updatedSourceInfo();
+  emit addedSourceInfo( fileName );
   kdDebug(9018) << "exit text changed" << endl;
 }
 
@@ -195,7 +196,7 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotNewClass(){
-  QStringList classNames = classStore()->getSortedClassNameList();
+  QStringList classNames = sortedNameList( codeModel()->globalNamespace()->classList() );
   PHPNewClassDlg dlg(classNames,project()->projectDirectory());
   dlg.exec();
  }
@@ -348,7 +349,10 @@ void PHPSupportPart::maybeParse(const QString fileName)
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
       kdDebug(9018) << "remove and parse" << fileName.latin1() << endl;
-        classStore()->removeWithReferences(fileName);
+        if( codeModel()->hasFile(fileName) ){
+	    emit aboutToRemoveSourceInfo( fileName );
+	    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+	}
         m_parser->parseFile(fileName);
     }
 }
@@ -396,9 +400,10 @@ void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 	{
 		QFileInfo fileInfo( project()->projectDirectory(), *it );
 		maybeParse( fileInfo.absFilePath() );
+		emit addedSourceInfo( fileInfo.absFilePath() );
 	}
 
-    emit updatedSourceInfo();
+    //emit updatedSourceInfo();
 }
 
 
@@ -411,10 +416,14 @@ void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QFileInfo fileInfo( project()->projectDirectory(), *it );
-		classStore()->removeWithReferences( fileInfo.absFilePath() );
+		QString path = fileInfo.absFilePath();
+		if( codeModel()->hasFile(path) ){
+		    emit aboutToRemoveSourceInfo( path );
+		    codeModel()->removeFile( codeModel()->fileByName(path) );
+		}
 	}
 
-    emit updatedSourceInfo();
+    //emit updatedSourceInfo();
 }
 
 
@@ -424,7 +433,7 @@ void PHPSupportPart::savedFile(const QString &fileName)
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
-        emit updatedSourceInfo();
+        emit addedSourceInfo( fileName );
     }
 }
 

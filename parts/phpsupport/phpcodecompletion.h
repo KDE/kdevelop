@@ -18,6 +18,8 @@
 #ifndef PHPCODECOMPLETION_H
 #define PHPCODECOMPLETION_H
 
+#include <codemodel.h>
+
 #include <qobject.h>
 #include <kregexp.h>
 #include <kparts/part.h>
@@ -28,7 +30,6 @@
 
 
 class KDevCore;
-class ClassStore;
 class PHPSupportPart;
 class PHPConfigData;
 
@@ -44,12 +45,12 @@ class FunctionCompletionEntry : public KTextEditor::CompletionEntry {
 class PHPCodeCompletion : public QObject {
   Q_OBJECT
 
-public: 
-  PHPCodeCompletion(PHPConfigData *config, KDevCore* core,ClassStore* store);
+public:
+  PHPCodeCompletion(PHPConfigData *config, KDevCore* core,CodeModel* model);
   ~PHPCodeCompletion();
   void setActiveEditorPart(KParts::Part *part);
 
-protected slots:  
+protected slots:
   void cursorPositionChanged();
   void argHintHided();
   void completionBoxHided();
@@ -74,7 +75,7 @@ protected slots:
   int m_currentLine;
   QValueList<FunctionCompletionEntry> m_globalFunctions;
   KDevCore* m_core;
-  ClassStore* m_classStore;
+  CodeModel* m_model;
   bool m_argWidgetShow;
   bool m_completionBoxShow;
   KTextEditor::EditInterface *m_editInterface;

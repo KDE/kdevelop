@@ -43,6 +43,7 @@ void CvsOptionsWidget::readConfig()
     CvsOptions *options = CvsOptions::instance();
 
     this->setCvsRshEnvVar( options->cvsRshEnvVar() );
+    this->setServerLocation( options->location() );
     this->setPruneEmptyDirWhenUpdating( options->pruneEmptyDirsWhenUpdate() );
     this->setCreateNewDirWhenUpdating( options->createDirsWhenUpdate() );
     this->setRecursiveWhenUpdating( options->recursiveWhenUpdate() );
@@ -58,6 +59,7 @@ void CvsOptionsWidget::storeConfig()
     CvsOptions *options = CvsOptions::instance();
 
     options->setCvsRshEnvVar( this->cvsRshEnvVar() );
+    options->setLocation( this->serverLocation() );
     options->setPruneEmptyDirsWhenUpdate( this->pruneEmptyDirWhenUpdating() );
     options->setCreateDirsWhenUpdate( this->createNewDirWhenUpdating() );
     options->setRecursiveWhenUpdate( this->recursiveWhenUpdating() );
@@ -131,6 +133,13 @@ void CvsOptionsWidget::setCvsRshEnvVar( const QString &p )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void CvsOptionsWidget::setServerLocation( const QString &p )
+{
+    this->serverLocationEdit->setText( p );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 bool CvsOptionsWidget::pruneEmptyDirWhenUpdating() const
 {
     return pruneEmptyDirWhenUpdateCheck->isChecked();
@@ -169,6 +178,13 @@ unsigned int CvsOptionsWidget::contextLines() const
 QString CvsOptionsWidget::cvsRshEnvVar() const
 {
     return cvsRshEnvVarEdit->text();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CvsOptionsWidget::serverLocation() const
+{
+    return serverLocationEdit->text();
 }
 
 #include "cvsoptionswidget.moc"

@@ -40,6 +40,9 @@ Currently it supports:
 
 For more info goto: http://www.kdevelop.org
 
+KDevelop uses a plugin based architecture. This will be explained in more
+detail in the next sections. To add a new plugin check this page \ref howToExtend
+
 \section overview Source Overview
 
 \subsection source-division Main Source Divisions

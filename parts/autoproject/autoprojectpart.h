@@ -37,25 +37,25 @@ class AutoProjectPart : public KDevProject
 
 public:
     AutoProjectPart( QObject *parent, const char *name, const QStringList &args );
-    ~AutoProjectPart();
+    virtual ~AutoProjectPart();
 
     /**
      * Implementation of the KDevProject interface.
      */
-    virtual QString projectDirectory();
-    virtual QString projectName();
-    virtual DomUtil::PairList runEnvironmentVars();
-    virtual QString runDirectory();
-    virtual QString mainProgram(bool relative = false);
-    virtual QString runArguments();
-    virtual QString activeDirectory();
-    virtual QStringList allFiles();
+    virtual QString projectDirectory() const;
+    virtual QString projectName() const;
+    virtual DomUtil::PairList runEnvironmentVars() const;
+    virtual QString runDirectory() const;
+    virtual QString mainProgram(bool relative = false) const;
+    virtual QString runArguments() const;
+    virtual QString activeDirectory() const;
+    virtual QStringList allFiles() const;
     virtual void addFile(const QString &fileName);
     virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
     virtual void removeFiles ( const QStringList& fileList );
-    virtual QString buildDirectory();
-    virtual Options options();
+    virtual QString buildDirectory() const;
+    virtual Options options() const;
 
 	/**
 	 * Implementation of the KDevPlugin interface.
@@ -66,15 +66,15 @@ public:
     /**
      * automake specific methods.
      */
-    QStringList allBuildConfigs();
-    QString currentBuildConfig();
-    QString topsourceDirectory();
+    QStringList allBuildConfigs() const;
+    QString currentBuildConfig() const;
+    QString topsourceDirectory() const;
     void startMakeCommand(const QString &dir, const QString &target, bool withKdesu = false);
     void buildTarget(QString relpath, TargetItem* titem);
 
     void needMakefileCvs();
     bool isDirty();
-    bool isKDE();
+    bool isKDE() const;
 
 protected:
     /**
@@ -110,10 +110,12 @@ private:
     QString m_projectName;
     QString m_projectPath;
     KSelectAction *buildConfigAction;
-    QString makeEnvironment();
+
+    QString makeEnvironment() const;
     void setWantautotools();
-    QString makefileCvsCommand();
-    QString configureCommand();
+    QString makefileCvsCommand() const;
+    QString configureCommand() const;
+
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
     QString m_buildCommand;
@@ -126,7 +128,7 @@ private:
     friend class AddSubprojectDialog;
 
     // For make commands queueing
-    QString constructMakeCommandLine(const QString &dir, const QString &target);
+    QString constructMakeCommandLine(const QString &dir, const QString &target) const;
     void queueInternalLibDependenciesBuild(TargetItem* titem);
 };
 

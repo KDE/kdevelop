@@ -33,7 +33,7 @@ class QDomDocument;
 #include "api.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
-#include "classstore.h"
+#include "codemodel.h"
 #include "partselectwidget.h"
 #include "generalinfowidget.h"
 #include "projectsession.h"
@@ -281,8 +281,7 @@ bool ProjectManager::closeProject()
   saveProjectFile();
 
   API::getInstance()->setProjectDom(0);
-  API::getInstance()->classStore()->wipeout();
-  API::getInstance()->ccClassStore()->wipeout();
+  API::getInstance()->codeModel()->wipeout();
 
   delete m_info;
   m_info = 0;

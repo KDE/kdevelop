@@ -51,6 +51,7 @@ public:
 
 private:
   void                  readUiFile();
+  QString               readBaseClassName();
   void                  updateDlg();
   bool                  replaceKeywords(QString &buffer, bool canBeModal=true);
   void                  replace(QString &string, const QString& search, const QString& replace);

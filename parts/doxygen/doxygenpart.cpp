@@ -137,6 +137,7 @@ void DoxygenPart::adjustDoxyfile()
     patterns->addValue("*.patch");
     patterns->addValue("*.moc");
     patterns->addValue("*.xpm");
+    patterns->addValue("*.dox");
   }
 
   // set "Input/RECURSIVE" to recurse into subdirectories

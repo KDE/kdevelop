@@ -54,6 +54,9 @@ public:
     QString cvsRshEnvVar() const;
     void setCvsRshEnvVar( const QString &p );
 
+    QString serverLocation() const;
+    void setServerLocation( const QString &p );
+
 public slots:
     void accept();
 

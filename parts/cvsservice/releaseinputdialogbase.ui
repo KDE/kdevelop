@@ -22,16 +22,48 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel">
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>releaseNameLabel</cstring>
+                <cstring>buttonGroup1</cstring>
             </property>
-            <property name="text">
-                <string>Release name:</string>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignLeft</set>
             </property>
+            <property name="title">
+                <string>Release is</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>tagRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>by tag/branch name</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>dateRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>by date</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="QLineEdit">
             <property name="name">

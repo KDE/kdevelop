@@ -234,20 +234,20 @@ void CustomProjectPart::closeProject()
 }
 
 
-QString CustomProjectPart::projectDirectory()
+QString CustomProjectPart::projectDirectory() const
 {
     return m_projectDirectory;
 }
 
 
-QString CustomProjectPart::projectName()
+QString CustomProjectPart::projectName() const
 {
     return m_projectName;
 }
 
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList CustomProjectPart::runEnvironmentVars()
+DomUtil::PairList CustomProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/run/envvars", "envvar", "name", "value");
 }
@@ -262,7 +262,7 @@ DomUtil::PairList CustomProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString CustomProjectPart::runDirectory()
+QString CustomProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -293,7 +293,7 @@ QString CustomProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString CustomProjectPart::mainProgram(bool relative)
+QString CustomProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
@@ -318,13 +318,13 @@ QString CustomProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString CustomProjectPart::runArguments()
+QString CustomProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 }
 
 
-QString CustomProjectPart::activeDirectory()
+QString CustomProjectPart::activeDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -332,7 +332,7 @@ QString CustomProjectPart::activeDirectory()
 }
 
 
-QStringList CustomProjectPart::allFiles()
+QStringList CustomProjectPart::allFiles() const
 {
 //     QStringList res;
 //
@@ -395,14 +395,14 @@ void CustomProjectPart::removeFiles ( const QStringList& fileList )
 	emit removedFilesFromProject ( fileList );
 }
 
-QString CustomProjectPart::buildDirectory()
+QString CustomProjectPart::buildDirectory() const
 {
     QString dir = DomUtil::readEntry(*projectDom(), "/kdevcustomproject/build/builddir");
     return dir.isEmpty()? projectDirectory() : dir;
 }
 
 
-QString CustomProjectPart::makeEnvironment()
+QString CustomProjectPart::makeEnvironment() const
 {
     // Get the make environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE"

@@ -15,20 +15,20 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <kregexp.h>
-
-class ClassStore;
+#include <codemodel.h>
 
 
 class FixedFormParser
 {
 public:
-    FixedFormParser(ClassStore *classstore);
+    FixedFormParser(CodeModel* model);
 
     void parse(const QString &fileName);
-    
+
 private:
     void process(const QCString &line, const QString &fileName, int lineNum);
-    ClassStore *store;
+    CodeModel* m_model;
+    FileDom m_file;
     KRegExp functionre, subroutinere;
 };
 

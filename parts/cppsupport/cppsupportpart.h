@@ -16,9 +16,8 @@
 #ifndef _CPPSUPPORTPART_H_
 #define _CPPSUPPORTPART_H_
 
-#include "kdevcore.h"
-
-#include "kdevlanguagesupport.h"
+#include <kdevcore.h>
+#include <kdevlanguagesupport.h>
 
 #include <kdialogbase.h>
 #include <qguardedptr.h>
@@ -26,9 +25,6 @@
 #include <qwaitcondition.h>
 #include <qdatetime.h>
 
-class ParsedMethod;
-class ParsedAttribute;
-class ClassStore;
 class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
@@ -77,6 +73,8 @@ public:
     static KConfig *config();
 
     virtual QString formatTag( const Tag& tag );
+    virtual QString formatModelItem( const CodeModelItem *item );
+    virtual void addClass();
 
 signals:
     void fileParsed( const QString& fileName );
@@ -135,7 +133,9 @@ private:
     QString findSourceFile();
     int pcsVersion();
     void setPcsVersion( int version );
-
+    
+    void saveProjectSourceInfo();
+    
     CppCodeCompletion* m_pCompletion;
     CppCodeCompletionConfig* m_pCompletionConfig;
 
@@ -159,6 +159,7 @@ private:
     QPtrList<Catalog> m_catalogList;
     Catalog* m_projectCatalog;
     Driver* m_driver;
+    QString m_projectDirectory;
 
     friend class KDevCppSupportIface;
     friend class CppDriver;

@@ -13,6 +13,10 @@
 
 #include <assert.h>
 
+///////////////////////////////////////////////////////////////////////////////
+// struct KDevPlugin::Private
+///////////////////////////////////////////////////////////////////////////////
+
 struct KDevPlugin::Private
 {
     DCOPClient *dcopClient;
@@ -20,6 +24,10 @@ struct KDevPlugin::Private
     QString pluginName;
     QString icon;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// class KDevPlugin
+///////////////////////////////////////////////////////////////////////////////
 
 KDevPlugin::KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : QObject( parent, name ), d( new Private )
@@ -35,31 +43,43 @@ KDevPlugin::KDevPlugin( const QString& pluginName, const QString& icon, QObject 
     d->dcopClient = 0L;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 KDevPlugin::~KDevPlugin()
 {
    delete( d->dcopClient );
    delete( d );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString KDevPlugin::pluginName() const
 {
     return d->pluginName;
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString KDevPlugin::icon() const
 {
     return d->icon;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString KDevPlugin::shortDescription() const
 {
     return QString::null;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString KDevPlugin::description() const
 {
     return QString::null;
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 DCOPClient* KDevPlugin::dcopClient() const
 {
@@ -72,106 +92,147 @@ DCOPClient* KDevPlugin::dcopClient() const
     return d->dcopClient;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 KDevMainWindow *KDevPlugin::mainWindow()
 {
     return m_api->mainWindow();
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 bool KDevPlugin::mainWindowValid()
 {
     return m_api->mainWindowValid();
 }
 
-KDevCore *KDevPlugin::core()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevCore *KDevPlugin::core() const
 {
     return m_api->core();
 }
 
-KDevProject *KDevPlugin::project()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevProject *KDevPlugin::project() const
 {
     return m_api->project();
 }
 
-ClassStore *KDevPlugin::classStore()
+///////////////////////////////////////////////////////////////////////////////
+
+CodeModel *KDevPlugin::codeModel() const
 {
-    return m_api->classStore();
+    return m_api->codeModel();
 }
 
-/* added by daniel */
-ClassStore* KDevPlugin::ccClassStore( )
-{
-    return m_api->ccClassStore();
-}
+///////////////////////////////////////////////////////////////////////////////
 
 QDomDocument *KDevPlugin::projectDom() const
 {
     return m_api->projectDom();
 }
 
-KDevLanguageSupport *KDevPlugin::languageSupport()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevLanguageSupport *KDevPlugin::languageSupport() const
 {
     return m_api->languageSupport();
 }
 
-KDevMakeFrontend *KDevPlugin::makeFrontend()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevMakeFrontend *KDevPlugin::makeFrontend() const
 {
     return m_api->makeFrontend();
 }
 
-KDevDiffFrontend *KDevPlugin::diffFrontend()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevDiffFrontend *KDevPlugin::diffFrontend() const
 {
     return m_api->diffFrontend();
 }
 
-KDevAppFrontend *KDevPlugin::appFrontend()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevAppFrontend *KDevPlugin::appFrontend() const
 {
     return m_api->appFrontend();
 }
 
-KDevPartController *KDevPlugin::partController()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevPartController *KDevPlugin::partController() const
 {
     return m_api->partController();
 }
 
-KDevDebugger *KDevPlugin::debugger()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevDebugger *KDevPlugin::debugger() const
 {
     return m_api->debugger();
 }
 
-KDevCreateFile *KDevPlugin::createFileSupport()
+///////////////////////////////////////////////////////////////////////////////
+
+KDevCreateFile *KDevPlugin::createFileSupport() const
 {
     return m_api->createFile();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVersionControl *KDevPlugin::versionControl() const
+{
+    return m_api->versionControl();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void KDevPlugin::registerVersionControl( KDevVersionControl *vcs )
 {
-	m_api->registerVersionControl( vcs );
+    m_api->registerVersionControl( vcs );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void KDevPlugin::unregisterVersionControl( KDevVersionControl *vcs )
 {
-	m_api->unregisterVersionControl( vcs );
+    m_api->unregisterVersionControl( vcs );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QStringList KDevPlugin::registeredVersionControls() const
 {
-	return m_api->registeredVersionControls();
+    return m_api->registeredVersionControls();
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 KDevVersionControl *KDevPlugin::versionControlByName( const QString &uid ) const
 {
-	return m_api->versionControlByName( uid );
+    return m_api->versionControlByName( uid );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 {
-  // there's still nothing to do in the base class
+    // there's still nothing to do in the base class
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 {
-  // there's still nothing to do in the base class
+    // there's still nothing to do in the base class
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void KDevPlugin::showPart()
 {
@@ -179,12 +240,16 @@ void KDevPlugin::showPart()
         partController()->showPart( part(), d->pluginName, shortDescription() );
 }
 
-KDevSourceFormatter * KDevPlugin::sourceFormatter( )
+///////////////////////////////////////////////////////////////////////////////
+
+KDevSourceFormatter * KDevPlugin::sourceFormatter( ) const
 {
     return m_api->sourceFormatter();
 }
 
-KDevCodeRepository * KDevPlugin::codeRepository( )
+///////////////////////////////////////////////////////////////////////////////
+
+KDevCodeRepository * KDevPlugin::codeRepository( ) const
 {
     return m_api->codeRepository();
 }

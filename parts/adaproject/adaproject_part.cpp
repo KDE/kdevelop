@@ -162,7 +162,7 @@ void AdaProjectPart::closeProject()
 }
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList AdaProjectPart::runEnvironmentVars()
+DomUtil::PairList AdaProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevadaproject/run/envvars", "envvar", "name", "value");
 }
@@ -177,7 +177,7 @@ DomUtil::PairList AdaProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString AdaProjectPart::runDirectory()
+QString AdaProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -208,7 +208,7 @@ QString AdaProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AdaProjectPart::mainProgram(bool relative)
+QString AdaProjectPart::mainProgram(bool relative) const
 {
     QFileInfo fi(mainSource());
     return buildDirectory() + "/" + fi.baseName();
@@ -237,12 +237,12 @@ QString AdaProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString AdaProjectPart::runArguments()
+QString AdaProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevadaproject/run/programargs");
 }
 
-QString AdaProjectPart::mainSource()
+QString AdaProjectPart::mainSource() const
 {
     return projectDirectory() + "/" + m_mainSource;
 }
@@ -252,29 +252,29 @@ void AdaProjectPart::setMainSource(QString fullPath)
     m_mainSource = fullPath.replace(QRegExp(QString(projectDirectory() + QString("/"))),"");
 }
 
-QString AdaProjectPart::projectDirectory()
+QString AdaProjectPart::projectDirectory() const
 {
     return m_projectDir;
 }
 
-QString AdaProjectPart::projectName()
+QString AdaProjectPart::projectName() const
 {
     return m_projectName;
 }
 
-QString AdaProjectPart::activeDirectory()
+QString AdaProjectPart::activeDirectory() const
 {
     QFileInfo fi(mainSource());
     return fi.dirPath(true).replace(QRegExp(projectDirectory()),"");
 }
 
-QString AdaProjectPart::buildDirectory()
+QString AdaProjectPart::buildDirectory() const
 {
     QFileInfo fi(mainSource());
     return fi.dirPath(true);
 }
 
-void AdaProjectPart::listOfFiles(QStringList &result, QString path)
+void AdaProjectPart::listOfFiles(QStringList &result, QString path) const
 {
     QDir d(path);
     if (!d.exists())
@@ -282,13 +282,13 @@ void AdaProjectPart::listOfFiles(QStringList &result, QString path)
     
     const QFileInfoList *entries = d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden);
     if( !entries )
-	return;
-    
+        return;
+
     QFileInfoListIterator it( *entries );
     while( const QFileInfo* fileInfo = it.current() )
     {
-	++it;
-	
+        ++it;
+
         if (fileInfo->isDir() && fileInfo->filePath() != path)
         {
             kdDebug() << "entering dir " << fileInfo->dirPath() << endl;
@@ -298,11 +298,11 @@ void AdaProjectPart::listOfFiles(QStringList &result, QString path)
         {
             kdDebug() << "adding to result: " << fileInfo->filePath() << endl;
             result << fileInfo->filePath();
-      	}	
+        }
     }
 }
 
-QStringList AdaProjectPart::allFiles()
+QStringList AdaProjectPart::allFiles() const
 {
 //    QStringList files;
 

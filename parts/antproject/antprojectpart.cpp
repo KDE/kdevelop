@@ -159,25 +159,25 @@ void AntProjectPart::closeProject()
 }
 
 
-QString AntProjectPart::projectDirectory()
+QString AntProjectPart::projectDirectory() const
 {
   return m_projectDirectory;
 }
 
 
-QString AntProjectPart::buildDirectory()
+QString AntProjectPart::buildDirectory() const
 {
   return m_projectDirectory;
 }
 
-QString AntProjectPart::projectName()
+QString AntProjectPart::projectName() const
 {
   return m_projectName;
 }
 
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList AntProjectPart::runEnvironmentVars()
+DomUtil::PairList AntProjectPart::runEnvironmentVars() const
 {
     // FIXME: there is no kdevantproject so this will not work !
     return DomUtil::readPairListEntry(*projectDom(), "/kdevantproject/run/envvars", "envvar", "name", "value");
@@ -193,7 +193,7 @@ DomUtil::PairList AntProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString AntProjectPart::runDirectory()
+QString AntProjectPart::runDirectory() const
 {
     return buildDirectory();
     /// FIXME: put the code below into use!
@@ -228,7 +228,7 @@ QString AntProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AntProjectPart::mainProgram(bool relative)
+QString AntProjectPart::mainProgram(bool relative) const
 {
 	return QString::null;
 
@@ -257,21 +257,21 @@ QString AntProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString AntProjectPart::runArguments()
+QString AntProjectPart::runArguments() const
 {
     // FIXME: there is no kdevantproject so this will not work !
     return DomUtil::readEntry(*projectDom(), "/kdevantproject/run/programargs");
 }
 
 
-QString AntProjectPart::activeDirectory()
+QString AntProjectPart::activeDirectory() const
 {
   /// @todo Fix this
   return m_projectDirectory;
 }
 
 
-QStringList AntProjectPart::allFiles()
+QStringList AntProjectPart::allFiles() const
 {
 /* QStringList res;
 

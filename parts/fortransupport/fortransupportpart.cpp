@@ -14,6 +14,8 @@
  ***************************************************************************/
 
 #include "fortransupportpart.h"
+#include "ftnchekconfigwidget.h"
+#include "fixedformparser.h"
 
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -31,16 +33,13 @@
 #include <kgenericfactory.h>
 #include <kaction.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevmakefrontend.h"
-#include "kdevpartcontroller.h"
-#include "classstore.h"
-#include "parsedmethod.h"
-#include "domutil.h"
+#include <kdevcore.h>
+#include <kdevproject.h>
+#include <kdevmakefrontend.h>
+#include <kdevpartcontroller.h>
+#include <domutil.h>
+#include <codemodel.h>
 
-#include "ftnchekconfigwidget.h"
-#include "fixedformparser.h"
 
 
 typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
@@ -169,7 +168,7 @@ void FortranSupportPart::projectOpened()
 
     // We want to parse only after all components have been
     // properly initialized
-    parser = new FixedFormParser(classStore());
+    parser = new FixedFormParser(codeModel());
 
     QTimer::singleShot(0, this, SLOT(initialParse()));
 }
@@ -186,9 +185,13 @@ void FortranSupportPart::maybeParse(const QString fileName)
 {
     QFileInfo fi(fileName);
     QString extension = fi.extension();
-    if (extension == "f77" || extension == "f" || extension == "for"
-        || extension == "ftn") {
-        classStore()->removeWithReferences(fileName);
+    if (extension == "f77" || extension == "f" || extension == "for" || extension == "ftn") {
+
+        if( codeModel()->hasFile(fileName) ){
+            emit aboutToRemoveSourceInfo( fileName );
+	    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+	}
+
         parser->parse(fileName);
     }
 }
@@ -224,10 +227,12 @@ void FortranSupportPart::addedFilesToProject(const QStringList &fileList)
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 	        QFileInfo fileInfo( project()->projectDirectory(), *it );
-		maybeParse( fileInfo.absFilePath() );
+		QString path = fileInfo.absFilePath();
+		maybeParse( path );
+		emit addedSourceInfo( path );
 	}
 
-    emit updatedSourceInfo();
+    //emit updatedSourceInfo();
 }
 
 
@@ -240,10 +245,15 @@ void FortranSupportPart::removedFilesFromProject(const QStringList &fileList)
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QFileInfo fileInfo( project()->projectDirectory(), *it );
-		classStore()->removeWithReferences( fileInfo.absFilePath() );
+		QString path = fileInfo.absFilePath();
+
+		if( codeModel()->hasFile(path) ){
+		    emit aboutToRemoveSourceInfo( path );
+		    codeModel()->removeFile( codeModel()->fileByName(path) );
+		}
 	}
 
-    emit updatedSourceInfo();
+    //emit updatedSourceInfo();
 }
 
 
@@ -253,7 +263,7 @@ void FortranSupportPart::savedFile(const QString &fileName)
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
-        emit updatedSourceInfo();
+        emit addedSourceInfo( fileName );
     }
 }
 

@@ -1,3 +1,5 @@
+#include "codemodel.h"
+
 #include "kdevlanguagesupport.h"
 
 KDevLanguageSupport::KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
@@ -58,6 +60,11 @@ QStringList KDevLanguageSupport::subclassWidget(const QString& /*formName*/)
 QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const QString& /*fileName*/)
 {
     return QStringList();
+}
+
+QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item )
+{
+    return item->name();
 }
 
 #include "kdevlanguagesupport.moc"

@@ -17,6 +17,9 @@
 #include "klistviewaction.h"
 #include "qcomboview.h"
 
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+
 KListViewAction::~KListViewAction()
 {
     delete m_view;
@@ -33,6 +36,16 @@ KListViewAction::KListViewAction(QComboView *view, const QString & text, const K
 QComboView * KListViewAction::view( ) const
 {
     return m_view;
+}
+
+void KListViewAction::setToolTip( const QString & str )
+{
+    QToolTip::add(m_view, str);
+}
+
+void KListViewAction::setWhatsThis( const QString & str )
+{
+    QWhatsThis::add(m_view, str);
 }
 
 

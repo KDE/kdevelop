@@ -19,21 +19,20 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qwidgetstack.h>
+
+#include "codemodel.h"
 #include "cppnewclassdlgbase.h"
 
-class KDevPlugin;
+class KDevLanguageSupport;
 class KDevProject;
-class ParsedMethod;
-class ParsedAttribute;
 class QPopupMenu;
 class KCompletion;
-class ClassStore;
 
 
 template<class T>
 class PCheckListItem: public QCheckListItem{
 public:
-   
+
     PCheckListItem ( T item, QCheckListItem * parent, const QString & text, Type tt = Controller ):
 	QCheckListItem ( parent, text, tt ), m_item(item) {}
 
@@ -101,7 +100,7 @@ class CppNewClassDialog : public CppNewClassDialogBase
     Q_OBJECT
 
 public:
-    CppNewClassDialog(KDevPlugin *part, QWidget *parent=0, const char *name=0);
+    CppNewClassDialog(KDevLanguageSupport *part, QWidget *parent=0, const char *name=0);
     ~CppNewClassDialog();
 
 protected:
@@ -144,20 +143,20 @@ protected:
     virtual void to_constructors_list_clicked();
     virtual void clear_selection_button_clicked();
     virtual void selectall_button_clicked();
-    virtual void updateClassStore();
     virtual void gtk_box_stateChanged(int val);
     virtual void qobject_box_stateChanged(int val);
 
     void reloadAdvancedInheritance(bool clean = false);
     void parseClass(QString clName, QString inheritance);
-    void addToConstructorsList(QCheckListItem *myClass, ParsedMethod *method);
-    void addToMethodsList(QListViewItem *parent, ParsedMethod *method);
-    void addToUpgradeList(QListViewItem *parent, ParsedMethod *method, QString modifier);
-    void addToUpgradeList(QListViewItem *parent, ParsedAttribute *attr, QString modifier);
+    void addToConstructorsList(QCheckListItem *myClass, FunctionDom method);
+    void addToMethodsList(QListViewItem *parent, FunctionDom method);
+    void addToUpgradeList(QListViewItem *parent, FunctionDom method, QString modifier);
+    void addToUpgradeList(QListViewItem *parent, VariableDom attr, QString modifier);
     void clearConstructorsList(bool clean = false);
     void clearMethodsList(bool clean = false);
     void clearUpgradeList(bool clean = false);
-    bool isConstructor(QString className, ParsedMethod *method);
+    bool isConstructor(QString className, const FunctionDom &method);
+    bool isDestructor(QString className, const FunctionDom &method);
 
 private:
 
@@ -167,7 +166,7 @@ private:
     QString m_parse;
     QPopupMenu *accessMenu;
     QPopupMenu *overMenu;
-    KDevPlugin *m_part;
+    KDevLanguageSupport *m_part;
 
     // configuration variables
     QString interface_url;
@@ -175,11 +174,10 @@ private:
     QString interface_suffix;
     QString implementation_suffix;
     bool lowercase_filenames;
-    QStringList parsedClasses;
     QStringList currBaseClasses;
     KCompletion * comp;
 
-    void setCompletion(ClassStore *store);
+    void setCompletion(CodeModel *model);
     void setStateOfInheritanceEditors(bool state, bool hideList = true);
     void setAccessForBase(QString baseclass, QString newAccess);
     void setAccessForItem(QListViewItem *curr, QString newAccess, bool isPublic);
@@ -211,7 +209,7 @@ private:
       void common_text();
       void gen_implementation();
       void gen_interface();
-      void genMethodDeclaration(ParsedMethod *method, QString className, QString templateStr,
+      void genMethodDeclaration(FunctionDom method, QString className, QString templateStr,
         QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName );
 
       void beautifyHeader(QString &templ, QString &headerGuard,
@@ -244,7 +242,7 @@ private:
       QString namespaceBeg, namespaceEnd;
       QString argsH;
       QString argsCpp;
-      
+
       QString advH_public;
       QString advH_public_slots;
       QString advH_protected;
@@ -256,8 +254,8 @@ private:
 
       CppNewClassDialog& dlg;
     };
-        
-        
+
+
     // workaround to make gcc 2.95.x happy
     friend class CppNewClassDialog::ClassGenerator;
 };

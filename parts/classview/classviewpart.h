@@ -1,98 +1,81 @@
-/***************************************************************************
- *   Copyright (C) 1999 by Jonas Nordin                                    *
- *   jonas.nordin@syncom.se                                                *
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ *
+ */
 
-#ifndef _CLASSVIEWPART_H_
-#define _CLASSVIEWPART_H_
+#ifndef __KDEVPART_CLASSVIEW_H__
+#define __KDEVPART_CLASSVIEW_H__
 
-#include <qguardedptr.h>
-#include <kgenericfactory.h>
-#include "kdevplugin.h"
 #include "kdevlanguagesupport.h"
 
+#include <qguardedptr.h>
+#include <kdevplugin.h>
+#include <codemodel.h>
 
-class KDialogBase;
-class ClassTreeWidget;
-class ClassToolDialog;
-class HierarchyDialog;
-class ClassStore;
-class ClassListAction;
-class MethodListAction;
-class DelayedPopupAction;
-class ParsedClass;
-
+class ClassViewWidget;
+class KListViewAction;
+class QListViewItem;
+class NamespaceItem;
+class ClassItem;
+class FunctionItem;
+class KToolBarPopupAction;
 
 class ClassViewPart : public KDevPlugin
 {
     Q_OBJECT
-
 public:
-    ClassViewPart( QObject *parent, const char *name, const QStringList & );
-    ~ClassViewPart();
+    ClassViewPart(QObject *parent, const char *name, const QStringList &);
+    virtual ~ClassViewPart();
 
-    enum ItemType { Scope, Class, Struct,
-                    PublicAttr, ProtectedAttr, PrivateAttr, PackageAttr,
-                    PublicMethod, ProtectedMethod, PrivateMethod, PackageMethod,
-                    PublicSlot, ProtectedSlot, PrivateSlot,
-                    Signal, GlobalFunction, GlobalVariable };
-
-    void registerClassToolDialog(ClassToolDialog *dlg);
-    void registerHierarchyDialog(HierarchyDialog *dlg);
-    void unregisterClassToolDialog(ClassToolDialog *dlg);
-    void unregisterHierarchyDialog(HierarchyDialog *dlg);
-    void configChange();
-
-signals:
-    void setLanguageSupport(KDevLanguageSupport *ls);
-    
 private slots:
-    // Connected with core
-    void projectOpened();
-    void projectClosed();
-    void projectConfigWidget(KDialogBase *dlg);
-    // Connected with languageSupport
-    void updatedSourceInfo();
-    // Internal
-    void selectedClass();
-    void selectedMethod();
-    void switchedDeclImpl();
-    void selectedViewHierarchy();
-    void selectedGotoDeclaration();
-    void selectedGotoImplementation();
-    void selectedGotoClassDeclaration();
+    void selectNamespace(QListViewItem*);
+    void selectClass(QListViewItem*);
+    void selectFunction(QListViewItem*);
+    void slotProjectOpened();
+    void slotProjectCloses();
+    void refresh();
+    void switchedViewPopup();
+
+    void goToFunctionDeclaration();
+    void goToFunctionDefinition();
+    void goToClassDeclaration();
+    void goToNamespaceDeclaration();
     void selectedAddClass();
     void selectedAddMethod();
     void selectedAddAttribute();
-    void dumpTree();
-    void initialize();
-    
+
 private:
-    QGuardedPtr<QWidget> m_classtree;
-    QPtrList<QWidget> m_widgets;
-    friend class ClassTreeBase;
-    friend class HierarchyDialog;
-
+    void setupActions();
+    void refreshNamespaces();
+    void refreshClasses(const NamespaceDom &dom);
+    void refreshFunctions(const NamespaceDom &dom);
+    void refreshFunctions(const ClassDom &dom);
+    void processNamespace(NamespaceItem *item);
+    void processClass(ClassItem *item);
+    void processFunction(FunctionItem *item);
     bool langHasFeature(KDevLanguageSupport::Features feature);
-    void setupPopup();
-    ParsedClass *getClass(const QString &className);
-    void gotoDeclaration(const QString &className, const QString &memberName);
-    void gotoImplementation(const QString &className, const QString &memberName);
 
-    ClassListAction* classes_action;
-    MethodListAction* methods_action;
-    DelayedPopupAction *popup_action;
-    bool m_decl_or_impl;
+    QGuardedPtr<ClassViewWidget> m_widget;
+    KListViewAction *m_namespaces;
+    KListViewAction *m_classes;
+    KListViewAction *m_functions;
+    KToolBarPopupAction *m_popupAction;
 };
 
-typedef KGenericFactory<ClassViewPart> ClassViewFactory;
 
 #endif

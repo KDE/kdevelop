@@ -31,7 +31,7 @@ class KDevDiffFrontend;
 class KDevCreateFile;
 class KDevSourceFormatter;
 class KDevCodeRepository;
-class ClassStore;
+class CodeModel;
 
 class DCOPClient;
 class KAboutData;
@@ -41,8 +41,6 @@ namespace KParts
 {
     class Part;
 }
-
-// 2002-02-08 added ccClassStore( ) - daniel
 
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
@@ -141,37 +139,31 @@ public:
     /**
      * Gives a reference to the application core
      */
-    KDevCore *core();
+    KDevCore *core() const;
     /**
      * Gives a reference to the current project component
      */
-    KDevProject *project();
+    KDevProject *project() const;
     /**
      * Gives a reference to the language support component
      */
-    KDevLanguageSupport *languageSupport();
+    KDevLanguageSupport *languageSupport() const;
     /**
      * Gives a reference to the make frontend component
      */
-    KDevMakeFrontend *makeFrontend();
+    KDevMakeFrontend *makeFrontend() const;
     /**
      * Gives a reference to the diff frontend component
      */
-    KDevDiffFrontend *diffFrontend();
+    KDevDiffFrontend *diffFrontend() const;
     /**
      * Gives a reference to the application frontend component
      */
-    KDevAppFrontend *appFrontend();
+    KDevAppFrontend *appFrontend() const;
     /**
      * Gives a reference to the class store
      */
-    ClassStore *classStore();
-
-    /**
-     * Gives a reference to the codecompletion classstore
-     * added by daniel
-     */
-    ClassStore* ccClassStore( );
+    CodeModel *codeModel() const;
 
     /**
      * Gives a reference to the DOM tree that represents
@@ -182,22 +174,22 @@ public:
     /**
      * Returns a reference to the part controller.
      */
-    KDevPartController *partController();
+    KDevPartController *partController() const;
 
     /**
      * Returns a reference to the debugger API.
      */
-    KDevDebugger *debugger();
+    KDevDebugger *debugger() const;
 
     /**
      * Returns a reference to the Create File API.
      */
-    KDevCreateFile *createFileSupport();
+    KDevCreateFile *createFileSupport() const;
 
     /**
      * Returns a reference to the source formatter.
      */
-    KDevSourceFormatter *sourceFormatter();
+    KDevSourceFormatter *sourceFormatter() const;
 
     /**
      * To restore any settings which differs from project to project,
@@ -224,6 +216,11 @@ public:
     void registerVersionControl( KDevVersionControl *vcs );
 
     /**
+     * Add @p vcs to the list of the registered VCS.
+     */
+    KDevVersionControl *versionControl() const;
+
+    /**
      * Returns the Version Control System having the specified uinque identifier @p uid.
      */
     KDevVersionControl *versionControlByName( const QString &uid ) const;
@@ -238,7 +235,10 @@ public:
      */
     void unregisterVersionControl( KDevVersionControl *vcs );
 
-    KDevCodeRepository* codeRepository();
+    /**
+    * @return
+    */
+    KDevCodeRepository* codeRepository() const;
 
 signals:
     /**

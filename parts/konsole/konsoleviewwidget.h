@@ -18,38 +18,24 @@ class QVBoxLayout;
 
 class KonsoleViewWidget : public QWidget
 {
-  Q_OBJECT
-    
+    Q_OBJECT
 public:
-		  
-  KonsoleViewWidget(KonsoleViewPart *part);
-  ~KonsoleViewWidget();
-
+    KonsoleViewWidget(KonsoleViewPart *part);
+    virtual ~KonsoleViewWidget();
 
 public slots:
-
-  void setDirectory(QString dirname);
-
+    void setDirectory(const KURL &dirUrl);
 
 private slots:
+    void activePartChanged(KParts::Part *activatedPart);
+    void partDestroyed();
 
-  void activePartChanged(KParts::Part *part);
-  void partDestroyed();
-
- 
-protected:
- 
-  virtual void showEvent(QShowEvent *ev);
- 
- 
 private:
+    void activate();
 
-  void activate();
-
-  QString url;
-  KParts::ReadOnlyPart *part;
-  QVBoxLayout *vbox;
-
+    KParts::ReadOnlyPart *part;
+    QVBoxLayout *vbox;
+    KonsoleViewPart *owner;
 };
 
 

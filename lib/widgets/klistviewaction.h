@@ -32,6 +32,8 @@ public:
     ~KListViewAction();
 
     QComboView *view() const;
+    void setToolTip(const QString & str);
+    void setWhatsThis(const QString &str);
 
 private:
     QComboView *m_view;

@@ -1,0 +1,22 @@
+/** \file $MODULE$.dox
+  * \brief put an explanation here
+  */
+
+/** \page $MODULE$ put the page title here
+
+\section put_sectionLabelName_here put section name here
+
+bla bla bla <code>this is code</code>, bla bla blaa blaaaaa.
+
+  - This is a item list
+  - This is the second item!
+  .
+
+bla bla <code>BLAAAAAA</code> dsabvlskdbavlikdb.
+
+\subsection put_subSectionLabelName_here put subsection name here
+
+blaaaaa
+
+*/
+

@@ -9,10 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qfile.h>
+#include <qtextstream.h>
+
 #include <kdebug.h>
 #include <kconfig.h>
 
 #include "domutil.h"
+#include "kdevproject.h"
 #include "cvsoptions.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,6 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsOptions *CvsOptions::m_instance = 0;
+QString CvsOptions::invalidLocation( "ERROR-LOCATION-IS-NOT-SET-IN-PROJECT" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsOptions
@@ -74,19 +79,22 @@ CvsOptions* CvsOptions::instance()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsOptions::save( QDomDocument &dom )
+void CvsOptions::save( KDevProject *project )
 {
-    kdDebug( 9999 ) << " **** CvsOptions::save( QDomDocument &) here" << endl;
+    kdDebug( 9999 ) << " **** CvsOptions::save( KDevProject* ) here" << endl;
+    Q_ASSERT( project );
+
+    QDomDocument &dom = *project->projectDom();
 
     DomUtil::writeBoolEntry( dom, "/kdevcvsservice/recursivewhenupdate", recursiveWhenUpdate() );
     DomUtil::writeBoolEntry( dom, "/kdevcvsservice/prunedirswhenupdate", pruneEmptyDirsWhenUpdate() );
     DomUtil::writeBoolEntry( dom, "/kdevcvsservice/createdirswhenupdate", createDirsWhenUpdate() );
     DomUtil::writeBoolEntry( dom, "/kdevcvsservice/recursivewhencommitremove", recursiveWhenCommitRemove() );
     DomUtil::writeEntry( dom, "/kdevcvsservice/revertoptions", revertOptions() );
-    DomUtil::writeEntry( dom, "/kdevcvsservice/location", location() );
+//    DomUtil::writeEntry( dom, "/kdevcvsservice/location", location() );
 
     // [Repository-:ext:anonymous@cvs.ogre.sourceforge.net:/cvsroot/ogrenew]
-    QString groupName = "Repository-" + location();
+    QString groupName = "Repository-" + guessLocation( project->projectDirectory() );
     m_serviceConfig->setGroup( groupName );
 
     m_serviceConfig->writeEntry( "ContextLines", contextLines() );
@@ -96,18 +104,20 @@ void CvsOptions::save( QDomDocument &dom )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsOptions::load( const QDomDocument &dom )
+void CvsOptions::load( KDevProject *project )
 {
-    kdDebug( 9999 ) << " **** CvsOptions::load( const QDomDocument &) here" << endl;
+    kdDebug( 9999 ) << " **** CvsOptions::load( KDevProject* ) here" << endl;
+    Q_ASSERT( project );
+    QDomDocument &dom = *project->projectDom();
 
     m_recursiveWhenUpdate = DomUtil::readBoolEntry( dom, "/kdevcvsservice/recursivewhenupdate", true );
     m_pruneEmptyDirsWhenUpdate = DomUtil::readBoolEntry( dom, "/kdevcvsservice/prunedirswhenupdate", true );
     m_createDirsWhenUpdate = DomUtil::readBoolEntry( dom, "/kdevcvsservice/createdirswhenupdate", true );
     m_recursiveWhenCommitRemove = DomUtil::readBoolEntry( dom, "/kdevcvsservice/recursivewhencommitremove", true );
     m_revertOptions = DomUtil::readEntry( dom, "/kdevcvsservice/revertoptions", default_revert );
-    m_location = DomUtil::readEntry( dom, "/kdevcvsservice/location", "ERROR-LOCATION-IS-NOT-SET-IN-PROJECT" );
+//    m_location = DomUtil::readEntry( dom, "/kdevcvsservice/location", guessLocation( project->projectDirectory() ) );
 
-    QString groupName = "Repository-" + location();
+    QString groupName = "Repository-" + guessLocation( project->projectDirectory() );
     m_serviceConfig->setGroup( groupName );
 
     m_contextLines = m_serviceConfig->readUnsignedNumEntry( "ContextLines", default_contextLines );
@@ -253,4 +263,25 @@ void CvsOptions::setCompressionLevel( unsigned int compressionLevel )
 unsigned int CvsOptions::compressionLevel() const
 {
     return m_compressionLevel;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CvsOptions::guessLocation( const QString &projectDir ) const
+{
+    QString rootFileName( projectDir + "/CVS/Root" );
+
+    QFile f( rootFileName );
+    if (f.open( IO_ReadOnly ))
+    {
+        QTextStream t( &f );
+        QString serverLocation = t.readLine();
+        kdDebug(9000) << "===> Server location guessed: " << serverLocation << endl;
+        return serverLocation;
+    }
+    else
+    {
+        kdDebug(9000) << "===> Error: could not open CVS/Entries!! " << endl;
+        return "Error while guessing repository location!!";
+    }
 }

@@ -14,12 +14,12 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <kdebug.h>
-#include "classstore.h"
+#include <codemodel.h>
 
 
-FixedFormParser::FixedFormParser(ClassStore *classstore)
+FixedFormParser::FixedFormParser(CodeModel* model)
 {
-    store = classstore;
+    m_model = model;
 
     functionre.compile("(integer|real|logical|complex|character|"
                        "double(precision)?)function([^(]+).*");
@@ -46,21 +46,16 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
     else
         return;
 
-    ParsedMethod *method = new ParsedMethod;
+    FunctionDom method = m_model->create<FunctionModel>();
     method->setName(name);
-    method->setDeclaredInFile(fileName);
-    method->setDeclaredOnLine(lineNum);
+    method->setFileName(fileName);
+    method->setStartPosition(lineNum, 0);
 
-    method->setDefinedInFile(fileName);
-    method->setDefinedOnLine(lineNum);
+    method->setImplementedInFile(fileName);
+    method->setImplementationStartPosition(lineNum, 0);
 
-    ParsedMethod *old = store->globalScope()->getMethod(method);
-    if( old ){
-        delete( method );
-        method = old;
-    } else {
-        store->globalScope()->addMethod(method);
-    }
+    if( !m_file->hasFunction(method->name()) )
+        m_file->addFunction(method);
 }
 
 
@@ -70,6 +65,9 @@ void FixedFormParser::parse(const QString &fileName)
     if (!f.open(IO_ReadOnly))
         return;
     QTextStream stream(&f);
+
+    m_file = m_model->create<FileModel>();
+    m_file->setName( fileName );
 
     QCString line;
     int lineNum=0, startLineNum=0;
@@ -92,4 +90,6 @@ void FixedFormParser::parse(const QString &fileName)
     process(line, fileName, startLineNum);
 
     f.close();
+
+    m_model->addFile( m_file );
 }

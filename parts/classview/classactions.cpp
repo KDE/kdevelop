@@ -14,145 +14,11 @@
 #include "classactions.h"
 
 #include <qpopupmenu.h>
-#include <qcombobox.h>
-#include <qstringlist.h>
-#include <qtl.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktoolbar.h>
 
 #include "kdevplugin.h"
-#include "kdevlanguagesupport.h"
-#include "classstore.h"
-
-ClassListAction::ClassListAction(KDevPlugin *part, const QString &text, 
-				 const KShortcut& cut,
-                                 const QObject *receiver, const char *slot,
-                                 KActionCollection *parent, const char *name)
-    : KWidgetAction( m_combo = new QComboBox(), text, cut, 0, 0, parent, name), m_part(part)
-{
-#if (QT_VERSION >= 0x030100)
-    m_combo->setEditable( true );
-    m_combo->setAutoCompletion( true );
-#endif
-    
-    m_combo->setMinimumWidth( 200 );
-    m_combo->setMaximumWidth( 400 );
-    
-    //connect( m_combo, SIGNAL(returnPressed()), receiver, slot );
-    connect( m_combo, SIGNAL(activated(const QString&)), receiver, slot );
-    
-    setShortcutConfigurable( false );
-    setAutoSized( true );
-}
- 
-
-void ClassListAction::setCurrentItem(const QString & /*item*/)
-{
-//    m_combo->setCurrentItem( item );
-}
-
-
-void ClassListAction::setCurrentClassName(const QString &name)
-{
-    setCurrentItem( m_part->languageSupport()->formatClassName(name) );
-}
-
-
-QString ClassListAction::currentClassName()
-{
-    QString text = m_combo->currentText();
-    if (text == i18n("(Globals)"))
-        return QString::null;
-        
-    return m_part->languageSupport()->unformatClassName( text );
-}
-
-
-void ClassListAction::refresh()
-{
-    ClassStore *store = m_part->classStore();
-    KDevLanguageSupport *ls = m_part->languageSupport();
-    
-    QStringList rawList = store->getSortedClassNameList();
-
-    QStringList list;
-    list << i18n("(Globals)");
-
-    QStringList::ConstIterator it;
-    for (it = rawList.begin(); it != rawList.end(); ++it)
-        list << ls->formatClassName(*it);
-
-    m_combo->clear();
-    m_combo->insertStringList( list );
-}
-
-
-MethodListAction::MethodListAction(KDevPlugin *part, const QString &text, const KShortcut& accel,
-                                   const QObject *receiver, const char *slot,
-                                   KActionCollection *parent, const char *name)
-    : KWidgetAction( m_combo = new QComboBox(), text, accel, 0, 0, parent, name), m_part(part)
-{    
-#if (QT_VERSION >= 0x030100)
-    m_combo->setEditable( true );
-    m_combo->setAutoCompletion( true );
-#endif
-    
-    m_combo->setMinimumWidth( 200 );
-    m_combo->setMaximumWidth( 400 );
-    
-    //connect( m_combo, SIGNAL(returnPressed()), receiver, slot );
-    connect( m_combo, SIGNAL(activated(const QString&)), receiver, slot );
-    
-    setShortcutConfigurable( false );
-    setAutoSized( true );
-}
-
-
-static QString method2string( ParsedMethod* pm )
-{
-    return pm->asString();
-}
-
-void MethodListAction::refresh(const QString &className)
-{
-    kdDebug(9003) << "MethodListAction::refresh " << className << endl;
-    ParsedClass *pc;
-    QStringList list;
-
-    ClassStore *store = m_part->classStore();
-
-    if (className.isEmpty()) {
-        // Global functions
-        ParsedScopeContainer *psc = store->globalScope();
-        for (psc->methodIterator.toFirst(); psc->methodIterator.current(); ++psc->methodIterator) {
-            QString str = method2string( psc->methodIterator.current() );
-            list << str;
-        }
-    } else if ((pc = store->getClassByName(className)) != 0) {
-        // Methods of the given class
-        for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
-            QString str = method2string( pc->methodIterator.current() );
-            list << str;
-        }
-        for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
-            QString str = method2string( pc->slotIterator.current() );
-            list << str;
-        }
-    }
-
-    qHeapSort(list);
-    
-    m_combo->clear();
-    m_combo->insertStringList( list );
-}
-
-
-QString MethodListAction::currentMethodName()
-{
-    return m_combo->currentText();
-}
-
 
 DelayedPopupAction::DelayedPopupAction(const QString& text, const QString& pix, const KShortcut& accel,
                                        QObject *receiver, const char *slot,
@@ -175,17 +41,17 @@ int DelayedPopupAction::plug(QWidget *widget, int index)
     if (widget->inherits("KToolBar")) {
         KToolBar *bar = (KToolBar *)widget;
         connect( bar, SIGNAL(destroyed()), this, SLOT(slotDestroyed()) );
-        
+
         int id = KAction::getToolButtonID();
         bar->insertButton(icon(), id, SIGNAL( clicked() ), this,
                           SLOT(slotActivated()), isEnabled(), plainText(),
                           index);
         addContainer(bar, id);
         bar->setDelayedPopup(id, popupMenu(), true);
-        
+
         return containerCount()-1;
     }
-    
+
     return KAction::plug(widget, index);
 }
 

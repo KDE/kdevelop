@@ -22,7 +22,7 @@ class KDevVersionControl;
 class KDevLanguageSupport;
 class KDevMakeFrontend;
 class KDevAppFrontend;
-class ClassStore;
+class CodeModel;
 class KDevPartController;
 class KDevMainWindow;
 class KDevDebugger;
@@ -40,8 +40,6 @@ class KDevApi : public QObject
 {
     Q_OBJECT
 public:
-    typedef QMap<QString,KDevVersionControl*> VersionControlMap;
-
     /**
     * Constructor
     */
@@ -56,47 +54,41 @@ public:
     * Returns a reference to the main window.
     * @see KDevMainWindow
     */
-    virtual KDevMainWindow *mainWindow() = 0;
+    virtual KDevMainWindow *mainWindow() const = 0;
 
     /**
     * Check if the main window is valid
     */
-    virtual bool mainWindowValid() = 0;
+    virtual bool mainWindowValid() const = 0;
 
     /**
     * Returns a reference to the part controller component, which permits
     * access to the current active parts (or components).
     * @see KDevPartController
     */
-    virtual KDevPartController *partController() = 0;
+    virtual KDevPartController *partController() const = 0;
 
     /**
     * Returns a reference to core object which provides basic functionalities
     * for inter-parts communications / cooperation.
     */
-    virtual KDevCore *core() = 0;
+    virtual KDevCore *core() const = 0;
 
     /**
     * Returns a reference to encharged class store object.
     */
-    virtual ClassStore *classStore() = 0;
-
-    /**
-    * Returns a reference to the encharged class store used for code completion
-    * feature.
-    */
-    virtual ClassStore *ccClassStore() = 0;
+    virtual CodeModel *codeModel() const = 0;
 
     /**
     * Returns a reference to the debugger component.
     */
-    virtual KDevDebugger *debugger() = 0;
+    virtual KDevDebugger *debugger() const = 0;
 
     /**
     * Returns a reference to Document Object Model for the current project, or null
     * if not project loaded.
     */
-    QDomDocument *projectDom();
+    QDomDocument *projectDom() const;
     /**
     * Set the Document Object Model for the current project.
     * @param dom
@@ -107,7 +99,7 @@ public:
     * Returns a reference to current project, or null if no project is loaded.
     * @ref KDeveProject
     */
-    KDevProject *project();
+    KDevProject *project() const;
     /**
     * Set the current project.
     * @param project
@@ -119,7 +111,7 @@ public:
     * and display output messages in its widget; null if none is found.
     * @ref KDevMakeFrontend
     */
-    KDevMakeFrontend *makeFrontend();
+    KDevMakeFrontend *makeFrontend() const;
     /**
     * Set the make front-end to use.
     * @param makeFrontend
@@ -131,7 +123,7 @@ public:
     * running application's output messages in its widget; null if none is found.
     * @ref KDevMakeFrontend
     */
-    KDevAppFrontend *appFrontend();
+    KDevAppFrontend *appFrontend() const;
     /**
     * Set the application front-end to use.
     * @param appFrontend
@@ -141,12 +133,23 @@ public:
     /**
     * Returns the module encharged for supporting the language(s) used in the project.
     */
-    KDevLanguageSupport *languageSupport();
+    KDevLanguageSupport *languageSupport() const;
     /**
     * Set the object charged of providing handling for the source files.
     * @param languageSupport
     */
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
+
+    /**
+    * Returns a reference to the version control used.
+    * @return
+    */
+    KDevVersionControl *versionControl() const;
+    /**
+    * Set the default version control.
+    * @param vcs
+    */
+    void setVersionControl( KDevVersionControl *vcs );
 
     /**
     * Dinamically add a new Version Control plug-in to the IDE (several may
@@ -171,7 +174,7 @@ public:
     * @param  uid unique identifier of the VCS to unload, as returned by
     *         @see KDevVersionControl::uid().
     */
-    KDevVersionControl *versionControlByName( const QString &uid );
+    KDevVersionControl *versionControlByName( const QString &uid ) const;
 
     /**
     * Returns the reference to the current diff frontend, which basically
@@ -179,12 +182,12 @@ public:
     * "cvs diff" commands.
     * @see KDevDiffFrontend
     */
-    KDevDiffFrontend *diffFrontend();
+    KDevDiffFrontend *diffFrontend() const;
     /**
     * Set the diff front-end to use (currently only one is provided).
     * @param diffFrontend
     */
-    void setDiffFrontend(KDevDiffFrontend *diffFrontend);
+    void setDiffFrontend( KDevDiffFrontend *diffFrontend );
 
     /**
     * The kind of objects returned by this method provides widgets and methods
@@ -192,19 +195,19 @@ public:
     * templates.
     * @see KDevCreateFile
     */
-    KDevCreateFile *createFile();
+    KDevCreateFile *createFile() const;
     /**
     * Set the object encharged for creating new files from templates.
     * @param dom
     */
-    void setCreateFile(KDevCreateFile *createFile);
+    void setCreateFile( KDevCreateFile *createFile );
 
     /**
     * KDevSourceFormatter objects provides the ability to apply different
     * standard formatting to the source or let the user to customize his own.
     * @see KDevSourceFormatter
     */
-    KDevSourceFormatter *sourceFormatter();
+    KDevSourceFormatter *sourceFormatter() const;
     /**
     * Set the Document Object Model for the current project.
     * @param dom
@@ -215,7 +218,7 @@ public:
     * KDevSourceRepository objects provides connections to the interested
     * modules so they can know about what happens to code Catalogs
     */
-    KDevCodeRepository *codeRepository();
+    KDevCodeRepository *codeRepository() const;
 
 private:
     KDevApiPrivate *d;

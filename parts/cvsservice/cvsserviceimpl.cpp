@@ -56,6 +56,11 @@ CvsServiceImpl::CvsServiceImpl( CvsPart *part, const char *name )
     {
         m_widget = new CvsProcessWidget( m_cvsService, part, 0, "cvsprocesswidget" );
     }
+    else
+    {
+        kdDebug() << "CvsServiceImpl::CvsServiceImpl(): somebody kills me because"
+            "I could not request a valid CvsService!!!! :-((( " << endl;
+    }
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 }
@@ -117,7 +122,7 @@ void CvsServiceImpl::checkout()
 void CvsServiceImpl::commit( const KURL::List& urlList )
 {
     kdDebug(9000) << "CvsServiceImpl::commit() here!" << endl;
-	kdDebug(9000) << "Commit requested for " << urlList.count() << " file(s)." << endl;
+    kdDebug(9000) << "Commit requested for " << urlList.count() << " file(s)." << endl;
 
     if (!prepareOperation( urlList, opCommit ))
         return;
@@ -163,8 +168,17 @@ void CvsServiceImpl::update( const KURL::List& urlList )
     if (!prepareOperation( urlList, opCommit ))
         return;
 
-//    CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, QString::null );
+    CvsOptions *options = CvsOptions::instance();
+    ReleaseInputDialog dlg( i18n("Update to release: leave empty for HEAD"),
+        mainWindow()->main()->centralWidget(), false );
+    if (dlg.exec() == QDialog::Rejected)
+        return;
+
+    DCOPRef cvsJob = m_cvsService->update( m_fileList,
+        options->recursiveWhenUpdate(),
+        options->createDirsWhenUpdate(),
+        options->pruneEmptyDirsWhenUpdate(),
+        dlg.release() ); // Or QString::null for HEAD
 
     processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
@@ -198,7 +212,7 @@ void CvsServiceImpl::remove( const KURL::List& urlList )
     if (!prepareOperation( urlList, opRemove ))
         return;
 
-    DCOPRef cvsJob = m_cvsService->remove( m_fileList, true  );
+    DCOPRef cvsJob = m_cvsService->remove( m_fileList, true );
 
     processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
@@ -219,18 +233,12 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
     CvsOptions *options = CvsOptions::instance();
     QString revertOptions = options->revertOptions();
 
-    ReleaseInputDialog dlg(
-        i18n("Release / tag to revert"),
-        mainWindow()->main()->centralWidget()
-    );
+    ReleaseInputDialog dlg( i18n("Revert to another release ..."),
+        mainWindow()->main()->centralWidget() );
     if (dlg.exec() == QDialog::Rejected)
         return;
-    if (!dlg.releaseTag().isEmpty())
-    {
-        QString releaseOption = " -r " + dlg.releaseTag();
-        revertOptions += releaseOption;
-    }
 
+    revertOptions += dlg.release();
     DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, revertOptions );
 
     processWidget()->startJob( cvsJob );

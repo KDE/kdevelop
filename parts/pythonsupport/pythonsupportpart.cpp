@@ -10,6 +10,14 @@
  ***************************************************************************/
 
 #include "pythonsupportpart.h"
+#include "pythonconfigwidget.h"
+
+#include <kdevcore.h>
+#include <kdevproject.h>
+#include <kdevappfrontend.h>
+#include <kdevpartcontroller.h>
+#include <codemodel.h>
+#include <domutil.h>
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -25,17 +33,6 @@
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
-
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevappfrontend.h"
-#include "kdevpartcontroller.h"
-#include "classstore.h"
-#include "domutil.h"
-
-#include "pythonconfigwidget.h"
-#include "parsedclass.h"
-#include "parsedmethod.h"
 
 
 typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
@@ -115,8 +112,13 @@ void PythonSupportPart::maybeParse(const QString fileName)
 {
     QFileInfo fi(fileName);
     if (fi.extension() == "py") {
-        classStore()->removeWithReferences(fileName);
-        parse(fileName);
+
+	if( codeModel()->hasFile(fileName) ){
+	    emit aboutToRemoveSourceInfo( fileName );
+	    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+	}
+
+        parse( fileName );
     }
 }
 
@@ -149,10 +151,12 @@ void PythonSupportPart::addedFilesToProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+		QString fileName = project()->projectDirectory() + "/" + ( *it );
+		maybeParse( fileName );
+		emit addedSourceInfo( fileName );
 	}
 
-    emit updatedSourceInfo();
+    //emit updatedSourceInfo();
 }
 
 
@@ -164,10 +168,15 @@ void PythonSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+		QString fileName = project()->projectDirectory() + "/" + ( *it );
+
+		if( codeModel()->hasFile(fileName) ){
+		    emit aboutToRemoveSourceInfo( fileName );
+		    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+		}
 	}
 
-	emit updatedSourceInfo();
+	//emit updatedSourceInfo();
 }
 
 
@@ -177,7 +186,7 @@ void PythonSupportPart::savedFile(const QString &fileName)
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
-        emit updatedSourceInfo();
+        emit addedSourceInfo( fileName );
     }
 }
 
@@ -194,6 +203,11 @@ KMimeType::List PythonSupportPart::mimeTypes( )
     KMimeType::Ptr mime = KMimeType::mimeType( "text/x-python" );
     if( mime )
 	list << mime;
+
+    mime = KMimeType::mimeType( "application/x-python" );
+    if( mime )
+        list << mime;
+
     return list;
 }
 
@@ -207,7 +221,10 @@ void PythonSupportPart::parse(const QString &fileName)
     KRegExp classre("^[ \t]*class[ \t]+([A-Za-z0-9_]+)[ \t]*(\\(([A-Za-z0-9_, \t]+)\\))?.*$");
     KRegExp methodre("^[ \t]*def[ \t]+([A-Za-z0-9_]+).*$");
 
-    ParsedClass *lastClass = 0;
+    FileDom m_file = codeModel()->create<FileModel>();
+    m_file->setName( fileName );
+
+    ClassDom lastClass;
     QString rawline;
     QCString line;
     int lineNo = 0;
@@ -216,58 +233,45 @@ void PythonSupportPart::parse(const QString &fileName)
         line = rawline.stripWhiteSpace().local8Bit();
         if (classre.match(line)) {
 
-            lastClass = new ParsedClass;
+            lastClass = codeModel()->create<ClassModel>();
             lastClass->setName(classre.group(1));
-            lastClass->setDefinedInFile(fileName);
-            lastClass->setDefinedOnLine(lineNo);
+	    lastClass->setFileName( fileName );
+	    lastClass->setStartPosition( lineNo, 0 );
 
             QStringList parentList = QStringList::split(",", classre.group(3));
             QStringList::ConstIterator it;
             for (it = parentList.begin(); it != parentList.end(); ++it) {
-                ParsedParent *parent = new ParsedParent;
-                parent->setName((*it).stripWhiteSpace());
-                parent->setAccess(PIE_PUBLIC);
-                kdDebug(9014) << "Add parent" << parent->name() << endl;
-                lastClass->addParent(parent);
+                QString baseName = (*it).stripWhiteSpace();
+                kdDebug(9014) << "Add parent" << baseName << endl;
+                lastClass->addBaseClass( baseName );
             }
 
-           if (classStore()->hasClass(lastClass->name())) {
-                ParsedClass *old = classStore()->getClassByName(lastClass->name());
-                old->setDeclaredOnLine(lastClass->declaredOnLine());
-                old->setDeclaredInFile(lastClass->declaredInFile());
-                delete lastClass;
+           if (m_file->hasClass(lastClass->name())) {
+                ClassDom old = m_file->classByName( lastClass->name() )[ 0 ];
+		old->setFileName( lastClass->fileName() );
+
+		int line, col;
+		lastClass->getStartPosition( &line, &col );
+		old->setStartPosition( line, col );
+
                 lastClass = old;
             } else {
                 kdDebug(9014) << "Add class " << lastClass->name() << endl;
-                classStore()->globalScope()->addClass(lastClass);
-                classStore()->addClass(lastClass);
+                m_file->addClass( lastClass );
             }
 
         } else if (methodre.match(line)) {
 
-            ParsedMethod *method = new ParsedMethod;
+            FunctionDom method = codeModel()->create<FunctionModel>();
             method->setName(methodre.group(1));
-            method->setDefinedInFile(fileName);
-            method->setDefinedOnLine(lineNo);
+	    method->setFileName( fileName );
+            method->setStartPosition( lineNo, 0 );
 
             if (lastClass && rawline.left(3) != "def") {
-                ParsedMethod *old = lastClass->getMethod(method);
-                kdDebug(9014) << "Add class method " << method->name() << endl;
-                if( old ){
-                    delete( method );
-                    method = old;
-                } else {
-                    lastClass->addMethod(method);
-                }
-            } else {
-                ParsedMethod *old = classStore()->globalScope()->getMethod(method);
-                kdDebug(9014) << "Add global method " << method->name() << endl;
-                if( old ){
-                    delete( method );
-                    method = old;
-                } else {
-                    classStore()->globalScope()->addMethod(method);
-                }
+	        if( !lastClass->hasFunction(method->name()) )
+                    lastClass->addFunction( method );
+            } else if( !m_file->hasFunction(method->name()) ){
+                m_file->addFunction( method );
                 lastClass = 0;
             }
 
@@ -276,6 +280,8 @@ void PythonSupportPart::parse(const QString &fileName)
     }
 
     f.close();
+
+    codeModel()->addFile( m_file );
 }
 
 

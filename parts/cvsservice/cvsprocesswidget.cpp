@@ -29,9 +29,19 @@
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 
+// Undef
+#define MYDCOPDEBUG
+
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsProcessWidget
 ///////////////////////////////////////////////////////////////////////////////
+
+#ifdef MYDCOPDEBUG
+int g_dcopExitCounter = 0;
+int g_dcopOutCounter = 0;
+int g_dcopErrCounter = 0;
+#endif
+
 
 CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name )
     : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_service( service ), m_job( 0 ),
@@ -57,7 +67,7 @@ CvsProcessWidget::~CvsProcessWidget()
 {
     if (m_job)
     {
- 	delete m_job;
+        delete m_job;
     }
 }
 
@@ -97,6 +107,7 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
         m_job = 0;
     }
     m_job = new CvsJob_stub( aJob.app(), aJob.obj() );
+
     // establish connections to the signals of the cvs m_job
     connectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
     connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
@@ -111,7 +122,13 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
     // disconnect 3rd party slots from our signals
     disconnect( SIGNAL(jobFinished(bool, int)) );
 
-    append( "<infotag>Started job: " + cmdLine + " </infotag>" );
+    showInfo( i18n("Started job: ") + cmdLine );
+
+#ifdef MYDCOPDEBUG
+    g_dcopExitCounter = 0;
+    g_dcopOutCounter = 0;
+    g_dcopErrCounter = 0;
+#endif
 
     return m_job->execute();
 }
@@ -123,12 +140,16 @@ void CvsProcessWidget::cancelJob()
     kdDebug() << "CvsProcessWidget::cancelJob() here!" << endl;
 
     if (!m_job)
-        return;         
+        return;
     m_job->cancel();
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
     delete m_job; m_job = 0;
 
-    append( "<infotag>Job canceled by user request</infotag>" );
+    showInfo( i18n("*** Job canceled by user request ***") );
 
+    m_part->mainWindow()->statusBar()->message( i18n("CVS Job canceled") );
     m_part->mainWindow()->raiseView( this );
     m_part->core()->running( m_part, true );
 }
@@ -138,12 +159,19 @@ void CvsProcessWidget::cancelJob()
 void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 {
     kdDebug() << "CvsProcessWidget::slotJobExited(bool, int) here!" << endl;
+#ifdef MYDCOPDEBUG
+    g_dcopExitCounter++;
+    kdDebug() << "MYDCOPDEBUG: dcopExitCounter == " << g_dcopExitCounter << endl;
+#endif
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
+    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
 
-    QString exitMsg = "<infotag>Job finished with exitCode == %1</infotag>";
-    append( exitMsg.arg( exitStatus) );
+    QString exitMsg = i18n("Job finished with exitCode == %1");
+    showInfo( exitMsg.arg( exitStatus) );
 
     m_part->core()->running( m_part, false );
-    m_part->mainWindow()->statusBar()->message( "Done CVS command ...", 2000 );
+    m_part->mainWindow()->statusBar()->message( i18n("Done CVS command ..."), 2000 );
 
     emit jobFinished( normalExit, exitStatus );
 }
@@ -153,11 +181,13 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 {
     kdDebug() << "CvsProcessWidget::slotReceivedOutput(QString)  here!" << endl;
-
-    kdDebug() << "OUTPUT: " << someOutput << endl;
+#ifdef MYDCOPDEBUG
+    g_dcopOutCounter++;
+    kdDebug() << "MYDCOPDEBUG: dcopOutCounter == " << g_dcopOutCounter << endl;
+#endif
 
     m_output += someOutput;
-    append( "<goodtag>" + someOutput + "</goodtag>" );
+    showOutput( someOutput );
     scrollToBottom();
 }
 
@@ -166,11 +196,36 @@ void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 void CvsProcessWidget::slotReceivedErrors( QString someErrors )
 {
     kdDebug() << "CvsProcessWidget::slotReceivedErrors(QString)  here!" << endl;
-    kdDebug() << "ERRORS: " << someErrors << endl;
+#ifdef MYDCOPDEBUG
+    g_dcopErrCounter++;
+    kdDebug() << "MYDCOPDEBUG: dcopErrCounter == " << g_dcopErrCounter << endl;
+#endif
 
     m_errors += someErrors;
-    append( "<errortag>" + someErrors + "</errortag>" );
+    showError( someErrors );
     scrollToBottom();
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsProcessWidget::showInfo( const QString &msg )
+{
+    append( "<infotag>" + msg + "</infotag>" );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsProcessWidget::showError( const QString &msg )
+{
+    append( "<errortag>" + msg + "</errortag>" );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsProcessWidget::showOutput( const QString &msg )
+{
+    append( "<goodtag>" + msg + "</goodtag>" );
+}
+
 
 #include "cvsprocesswidget.moc"

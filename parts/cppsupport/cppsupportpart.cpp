@@ -20,20 +20,23 @@
 #include "store_walker.h"
 #include "ast.h"
 #include "ast_utils.h"
-#include "cppnewclassdlg.h"
 #include "cppcodecompletion.h"
 #include "ccconfigwidget.h"
-#include "subclassingdlg.h"
-#include "addmethoddialog.h"
-#include "addattributedialog.h"
 #include "KDevCppSupportIface.h"
 #include "cppsupportfactory.h"
-#include "classgeneratorconfig.h"
 #include "catalog.h"
 #include "cpp_tags.h"
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
 #include "tag_creator.h"
+
+// wizards
+#include "cppnewclassdlg.h"
+#include "subclassingdlg.h"
+#if 0
+#include "addmethoddialog.h"
+#include "addattributedialog.h"
+#endif
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -82,14 +85,10 @@
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevmainwindow.h>
-#include <classstore.h>
 #include <kdevpartcontroller.h>
 #include <kdevmakefrontend.h>
 #include <kdevcoderepository.h>
 
-#include <parsedclass.h>
-#include <parsedattribute.h>
-#include <parsedmethod.h>
 #include <domutil.h>
 #include <config.h>
 
@@ -117,7 +116,7 @@ public:
 
     void fileParsed( const QString& fileName )
     {
-	kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
+	//kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
 	TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
 
         if( cppSupport()->problemReporter() ){
@@ -131,8 +130,14 @@ public:
 	    }
 	}
 
-	cppSupport()->removeWithReferences( fileName );
-	StoreWalker walker( fileName, cppSupport()->classStore() );
+	StoreWalker walker( fileName, cppSupport()->codeModel() );
+
+	if( cppSupport()->codeModel()->hasFile(fileName) ){
+	    FileDom file = cppSupport()->codeModel()->fileByName( fileName );
+	    cppSupport()->removeWithReferences( fileName );
+	    walker.buildImplementationMap( file );
+	}
+
 	walker.parseTranslationUnit( ast.get() );
 	remove( fileName );
     }
@@ -253,30 +258,43 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
-    kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
+    //kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
 
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
 
-	kdDebug(9007) << "----------> file " << fileName << " parsed" << endl;
+	//kdDebug(9007) << "----------> file " << fileName << " parsed" << endl;
 
         if( m_problemReporter ){
 	    m_problemReporter->removeAllProblems( fileName );
 
+	    bool hasErrors = false;
 	    QValueList<Problem> problems = event->problems();
 	    QValueList<Problem>::ConstIterator it = problems.begin();
 	    while( it != problems.end() ){
 	        const Problem& p = *it++;
+		if( p.level() == Problem::Level_Error )
+		    hasErrors = true;
+
 	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
-#if 0
+#if 1
 	    m_backgroundParser->lock();
 	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
-		removeWithReferences( fileName );
-		StoreWalker walker( fileName, cppSupport()->classStore() );
-		walker.parseTranslationUnit( ast );
+
+		if( !hasErrors ){
+		    StoreWalker walker( fileName, codeModel() );
+
+		    if( codeModel()->hasFile(fileName) ){
+			FileDom file = codeModel()->fileByName( fileName );
+			removeWithReferences( fileName );
+			walker.buildImplementationMap( file );
+		    }
+		    walker.parseTranslationUnit( ast );
+		    emit addedSourceInfo( fileName );
+		}
 	    }
 	    m_backgroundParser->unlock();
 #endif
@@ -295,9 +313,11 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
 {
+#if 0
   QVBox *vbox = dlg->addVBoxPage(i18n("C++ New Class Generator"));
   ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
+#endif
 }
 
 void CppSupportPart::activePartChanged(KParts::Part *part)
@@ -314,8 +334,8 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     m_activeFileName = QString::null;
 
     if (doc) {
-	m_activeFileName = doc->url().path();
-        QFileInfo fi(doc->url().path());
+	m_activeFileName = QDir( doc->url().path() ).canonicalPath();
+        QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
             enabled = true;
@@ -348,9 +368,11 @@ CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
+    m_projectDirectory = QDir( project()->projectDirectory() ).canonicalPath();
+
     m_projectCatalog = new Catalog();
 #if 0
-    m_projectCatalog->open( project()->projectDirectory() + "/project.db" );
+    m_projectCatalog->open( m_projectDirectory + "/project.db" );
 
     QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
     for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
@@ -368,7 +390,7 @@ CppSupportPart::projectOpened( )
     connect( project(), SIGNAL(projectCompiled()),
 	     this, SLOT(slotProjectCompiled()) );
 
-    QDir::setCurrent( project()->projectDirectory() );
+    QDir::setCurrent( m_projectDirectory );
 
     m_timestamp.clear();
 
@@ -386,7 +408,9 @@ void
 CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
-
+    
+    saveProjectSourceInfo();
+    
     m_pCompletionConfig->store();
 
     if( m_backgroundParser )
@@ -464,71 +488,46 @@ static QStringList reorder(const QStringList &list)
 
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
-
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-//	QFileInfo fileInfo( d, *it );
-        QString fullPath = *it;
-        if (!fullPath.contains(project()->projectDirectory()))
-            fullPath.prepend(project()->projectDirectory() + "/");
-        fullPath = QDir::cleanDirPath(fullPath);
-        QFileInfo fileInfo(fullPath);
-	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath()
-        << " origin: " << *it << endl;
+	QString path = QDir( m_projectDirectory + "/" + (*it) ).canonicalPath();
 
-	// changed - daniel
-	QString path = fileInfo.absFilePath();
 	maybeParse( path );
-
-	//partController()->editDocument ( KURL ( path ) );
+	emit addedSourceInfo( path );
     }
-
-    emit updatedSourceInfo();
 }
 
 void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
-
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-	QFileInfo fileInfo( d, *it );
-	kdDebug(9007) << "removedFilesFromProject(): " << fileInfo.absFilePath() << endl;
+	QString path = QDir( m_projectDirectory + "/" + *it ).canonicalPath();
 
-	QString path = fileInfo.absFilePath();
-	removeWithReferences(path);
+	removeWithReferences( path );
 	m_backgroundParser->removeFile( path );
     }
-
-    emit updatedSourceInfo();
 }
 
 void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 {
-    QStringList::ConstIterator it;
-    QDir d( project()->projectDirectory() );
-
-    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-        QFileInfo fileInfo( d, *it );
-        kdDebug(9007) << "changedFilesInProject() " << fileInfo.absFilePath() << endl;
-        maybeParse( fileInfo.absFilePath() );
+	QString path = QDir( m_projectDirectory + "/" + *it ).canonicalPath();
+
+	maybeParse( path );
+	emit addedSourceInfo( path );
     }
-    emit updatedSourceInfo();
 }
 
 void CppSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
+    kdDebug(9007) << "savedFile(): " << fileName.mid ( m_projectDirectory.length() + 1 ) << endl;
 
     QStringList projectFileList = project()->allFiles();
-    if (projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
+    if (projectFileList.contains(fileName.mid ( m_projectDirectory.length() + 1 ))) {
 	maybeParse( fileName );
+	emit addedSourceInfo( fileName );
     }
-    emit updatedSourceInfo();
 }
 
 QString CppSupportPart::findSourceFile()
@@ -617,7 +616,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 {
     if (withcpp)
         return Features(Classes | Structs | Functions | Variables | Namespaces | Declarations
-                        | Signals | Slots | AddMethod | AddAttribute);
+                        | Signals | Slots | AddMethod | AddAttribute | NewClass);
     else
         return Features (Structs | Functions | Variables | Declarations);
 }
@@ -652,6 +651,8 @@ void CppSupportPart::slotNewClass()
 
 void CppSupportPart::addMethod(const QString &className)
 {
+    /// @todo ROBE implement me
+#if 0
     ParsedClass* pc = classStore()->getClassByName( className );
     if (!pc) {
 	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
@@ -660,10 +661,13 @@ void CppSupportPart::addMethod(const QString &className)
 
     AddMethodDialog dlg( this, pc, mainWindow()->main() );
     dlg.exec();
+#endif
 }
 
 void CppSupportPart::addAttribute(const QString &className)
 {
+    /// @todo ROBE implement me
+#if 0
     ParsedClass *pc = classStore()->getClassByName(className);
 
     if (!pc) {
@@ -673,6 +677,7 @@ void CppSupportPart::addAttribute(const QString &className)
 
     AddAttributeDialog dlg( this, pc, mainWindow()->main() );
     dlg.exec();
+#endif
 }
 
 void CppSupportPart::slotCompleteText()
@@ -720,15 +725,34 @@ CppSupportPart::parseProject( )
     mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
 
+    QDir d( m_projectDirectory );
+    
+    QDataStream stream;
+    QMap< QString, QPair<uint, Q_LONG> > pcs;
+    
+    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
+    if( f.open(IO_ReadOnly) ){
+	stream.setDevice( &f );
+	int numFiles = 0;
+	stream >> numFiles;
+    
+	for( int i=0; i<numFiles; ++i ){
+	    QString fn;
+	    uint ts;
+	    Q_LONG offset;
+	    
+	    stream >> fn >> ts >> offset;
+	    pcs[ fn ] = qMakePair( ts, offset );
+	}
+    }
+ 
     int n = 0;
-    QDir d( project()->projectDirectory() );
-
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
-            QString absFilePath = fileInfo.absFilePath();
+            QString absFilePath = QDir( fileInfo.absFilePath() ).canonicalPath();
 
 	    if( (n%5) == 0 ){
 	        kapp->processEvents();
@@ -744,7 +768,14 @@ CppSupportPart::parseProject( )
 		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
 		    continue;
 
-		m_driver->parseFile( absFilePath );
+		if( pcs.contains(absFilePath) && t.toTime_t() == pcs[absFilePath].first ){
+		    stream.device()->at( pcs[absFilePath].second );
+		    FileDom file = codeModel()->create<FileModel>();
+		    file->read( stream );
+		    codeModel()->addFile( file );
+		} else {
+		    m_driver->parseFile( absFilePath );
+		}
 
 		m_timestamp[ absFilePath ] = t;
 	    }
@@ -778,20 +809,21 @@ CppSupportPart::maybeParse( const QString& fileName )
         return;
 
     QFileInfo fileInfo( fileName );
+    QString path = QDir( fileName ).canonicalPath();
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
-	removeWithReferences( fileName );
+	removeWithReferences( path );
 	return;
     }
 
-    QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+    QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
     if( it != m_timestamp.end() && *it == t ){
 	return;
     }
 
-    m_timestamp[ fileName ] = t;
-    m_driver->parseFile( fileName );
+    m_timestamp[ path ] = t;
+    m_driver->parseFile( path );
 }
 
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
@@ -874,11 +906,11 @@ void CppSupportPart::slotMakeMember()
 		while( type_it.current() ){
 		    declStr += type_it.current()->text();
 		    ++type_it;
-		    
+
 		    if( type_it.current() )
 			declStr += QString::fromLatin1( ", " );
 		}
-		    
+
 		declStr += QString::fromLatin1(" )");
 	    }
 
@@ -945,7 +977,7 @@ void CppSupportPart::partRemoved( KParts::Part* part )
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>( part );
     if( doc ){
-	QString fileName = doc->url().path();
+	QString fileName = QDir(doc->url().path()).canonicalPath();
 	if( !fileName.isEmpty() )
 	    m_backgroundParser->removeFile( fileName );
     }
@@ -967,13 +999,14 @@ QStringList CppSupportPart::modifiedFileList()
 	QString fileName = *it;
 	++it;
 
-	QFileInfo fileInfo( project()->projectDirectory(), fileName );
+	QFileInfo fileInfo( m_projectDirectory, fileName );
 
 	if( !fileExtensions().contains(fileInfo.extension()) )
 	    continue;
 
 	QDateTime t = fileInfo.lastModified();
-	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( fileInfo.absFilePath() );
+	QString path = QDir(fileInfo.absFilePath()).canonicalPath();
+	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;
 
@@ -1119,8 +1152,19 @@ void CppSupportPart::codeCompletionConfigStored( )
 
 void CppSupportPart::removeWithReferences( const QString & fileName )
 {
-    classStore()->removeWithReferences( fileName );
+    //kdDebug(9007) << "------> remove with references: " << fileName << endl;
+    //kdDebug(9007) << "-------> file is stored: " << codeModel()->hasFile(fileName) << endl;
+
+    m_timestamp.remove( fileName );
+    if( !codeModel()->hasFile(fileName) )
+        return;
+
+    emit aboutToRemoveSourceInfo( fileName );
+
+    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+
 #if 0
+    classStore()->removeWithReferences( fileName );
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "fileName", fileName );
     m_projectCatalog->removeItems( args );
@@ -1133,5 +1177,81 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
     return fileExtensions().contains( fileInfo.extension() ) && !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }
 
+QString CppSupportPart::formatModelItem( const CodeModelItem *item )
+{
+    if (item->isFunction())
+    {
+        const FunctionModel *model = dynamic_cast<const FunctionModel*>(item);
+        if (!model)
+            return "";
+        QString function;
+        QString args;
+        ArgumentList argumentList = model->argumentList();
+        for (ArgumentList::const_iterator it = argumentList.begin(); it != argumentList.end(); ++it)
+        {
+            args.isEmpty() ? args += "" : args += ", " ;
+            args += formatModelItem((*it).data());
+        }
+        function += (model->isVirtual() ? QString("virtual ") : QString("") ) + model->resultType() + " " +
+	    model->name() + "(" + args + ")" + (model->isConstant() ? QString(" const") : QString("") ) +
+            (model->isAbstract() ? QString(" = 0") : QString("") );
+        return function;
+    }
+    else if (item->isVariable())
+    {
+        const VariableModel *model = dynamic_cast<const VariableModel*>(item);
+        if (!model)
+            return "";
+        return model->type() + " " + model->name();
+    }
+    else if (item->isArgument())
+    {
+        const ArgumentModel *model = dynamic_cast<const ArgumentModel*>(item);
+        return model->type() + " " + model->name() + ( model->name().isEmpty() || model->defaultValue().isEmpty() ? QString("") : QString(" = ") + model->defaultValue() );
+    }
+    else
+        return KDevLanguageSupport::formatModelItem(item);
+}
+
+void CppSupportPart::addClass( )
+{
+    slotNewClass();
+}
+
+void CppSupportPart::saveProjectSourceInfo( )
+{
+    const FileList fileList = codeModel()->fileList();
+    
+    if( !project() || fileList.isEmpty() )
+	return;
+    
+    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
+    if( !f.open( IO_WriteOnly ) )
+	return;
+    
+    QDataStream stream( &f );
+    QMap<QString, Q_ULONG> offsets;
+    
+    stream << int( fileList.size() );
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+	const FileDom dom = (*it);
+	stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+	offsets.insert( dom->name(), stream.device()->at() );
+	stream << (Q_ULONG)0; // dummy offset
+    }
+    
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+	const FileDom dom = (*it);
+	int offset = stream.device()->at();
+	
+	dom->write( stream );
+	
+	int end = stream.device()->at();
+	
+	stream.device()->at( offsets[dom->name()] );
+	stream << offset;
+	stream.device()->at( end );
+    }    
+}
 
 #include "cppsupportpart.moc"

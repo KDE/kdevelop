@@ -35,22 +35,22 @@ public:
 
     /**Returns the name of the main source file without extension.
        We assume that all Ada compilers call the binary that way.  */
-    virtual QString mainProgram(bool relative = false);
+    virtual QString mainProgram(bool relative = false) const;
     /**Main source file (like src/main.adb)*/
-    virtual QString mainSource();
+    virtual QString mainSource() const;
     virtual void setMainSource(QString fullPath);
 
-    virtual QString projectDirectory();
-    virtual QString projectName();
-    virtual QString activeDirectory();
+    virtual QString projectDirectory() const;
+    virtual QString projectName() const;
+    virtual QString activeDirectory() const;
     /**The location of the main source file*/
-    virtual QString buildDirectory();
-    virtual QString runDirectory();
-    virtual QString runArguments();
-    virtual DomUtil::PairList runEnvironmentVars();
+    virtual QString buildDirectory() const;
+    virtual QString runDirectory() const;
+    virtual QString runArguments() const;
+    virtual DomUtil::PairList runEnvironmentVars() const;
 
     /**Returns everything in the project directory*/
-    virtual QStringList allFiles();
+    virtual QStringList allFiles() const;
     /**This does absolutelly nothing*/
     virtual void addFile(const QString &fileName);
     /**This does absolutelly nothing*/
@@ -80,7 +80,7 @@ private slots:
 private:
     QGuardedPtr<AdaProjectWidget> m_widget;
 
-    void listOfFiles(QStringList &result, QString path);
+    void listOfFiles(QStringList &result, QString path) const;
 
     QString m_buildDir;
     QString m_projectDir;

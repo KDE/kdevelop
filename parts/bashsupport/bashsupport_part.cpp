@@ -2,6 +2,8 @@
 * $Id$
 *  Copyright (C) 2003 Ian Reinhart Geiser <geiseri@kde.org>
 */
+#include "bashsupport_part.h"
+
 #include <qwhatsthis.h>
 
 #include <qfileinfo.h>
@@ -11,8 +13,6 @@
 #include <kapplication.h>
 #include <kregexp.h>
 #include <qregexp.h>
-
-#include "classstore.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -24,15 +24,14 @@
 #include <kdialogbase.h>
 
 
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-#include "kdevlanguagesupport.h"
-#include "kdevpartcontroller.h"
-#include "kdevproject.h"
-#include "kdevappfrontend.h"
-
-#include "bashsupport_part.h"
-#include "domutil.h"
+#include <kdevcore.h>
+#include <kdevmainwindow.h>
+#include <kdevlanguagesupport.h>
+#include <kdevpartcontroller.h>
+#include <kdevproject.h>
+#include <kdevappfrontend.h>
+#include <domutil.h>
+#include <codemodel.h>
 
 typedef KGenericFactory<BashSupportPart> BashSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( "kdevbashsupport" ) );
@@ -157,10 +156,14 @@ void BashSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+		QString fileName = project()->projectDirectory() + "/" + ( *it );
+		if( codeModel()->hasFile(fileName) ){
+		    emit aboutToRemoveSourceInfo( fileName );
+		    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+		}
 	}
 
-	emit updatedSourceInfo();
+	//emit updatedSourceInfo();
 }
 
 void BashSupportPart::savedFile(const QString &fileName)
@@ -170,7 +173,7 @@ void BashSupportPart::savedFile(const QString &fileName)
 	if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 )))
 	{
 		parse(fileName);
-		emit updatedSourceInfo();
+		emit addedSourceInfo( fileName );
 	}
 }
 
@@ -192,7 +195,14 @@ void BashSupportPart::parse(const QString &fileName)
 	m_vars.clear();
 	if (fi.extension() == "sh")
 	{
-		classStore()->removeWithReferences(fileName);
+		if( codeModel()->hasFile(fileName) ){
+		    emit aboutToRemoveSourceInfo( fileName );
+		    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+		}
+
+		FileDom m_file = codeModel()->create<FileModel>();
+		m_file->setName( fileName );
+
 		m_vars.clear();
 		QFile f(QFile::encodeName(fileName));
 		if (!f.open(IO_ReadOnly))
@@ -200,9 +210,10 @@ void BashSupportPart::parse(const QString &fileName)
 		QString rawline;
 		QString line;
 		uint lineNo = 0;
-		KRegExp methodre("\\b([\\d\\w]+[\\s]*)\\([\\s]*\\)");
-		KRegExp varre("\\b([\\d\\w]+)([=])");
-		KRegExp forvarre("\\b(for\\b[\\s]+)(\\b[\\d\\w]+\\b)([\\s]+in\\b[\\s]+\\$)");
+		//KRegExp methodre("\\b([\\d\\w]+[\\s]*)\\([\\s]*\\)");
+		QRegExp methodre("^\\s*(\\w+)\\s*\\(\\s*\\)");
+		QRegExp varre( "^\\s*(\\w+)[=]" );
+		QRegExp forvarre("^\\sfor\\s+\\w+\\s+in\\s+");
 
 		QTextStream stream(&f);
 		while (!stream.atEnd())
@@ -210,45 +221,38 @@ void BashSupportPart::parse(const QString &fileName)
 			 rawline = stream.readLine();
        			 line = rawline.stripWhiteSpace().local8Bit();
 			 kdDebug() << "Trying line: " << line << endl;
-			 if (methodre.match(line))
+			 if (methodre.search(line) != -1)
 			 {
-				ParsedMethod *method = new ParsedMethod;
-				method->setName(methodre.group(1));
-				method->setDefinedInFile(fileName);
-				method->setDefinedOnLine(lineNo);
+				FunctionDom method = codeModel()->create<FunctionModel>();
+				method->setName(methodre.cap(1));
+				method->setFileName(fileName);
+				method->setStartPosition(lineNo, 0);
 
-				ParsedMethod *old = classStore()->globalScope()->getMethod(method);
-
-				if( old )
-				{
-					delete( method );
-					method = old;
-				}
-				else
-				{
+				if( !m_file->hasFunction(method->name()) ){
 					kdDebug() << "Add global method " << method->name() << endl;
-					classStore()->globalScope()->addMethod(method);
+					m_file->addFunction( method );
 				}
 			}
-			else if(varre.match(line))
+			else if(varre.search(line) != -1)
 			{
-				addAttribute(varre.group(1), fileName ,lineNo);
+				addAttribute(varre.cap(1), m_file, lineNo);
 			}
-			else if(forvarre.match(line))
+			else if(forvarre.search(line) != -1)
 			{
-				addAttribute(forvarre.group(2), fileName ,lineNo);
+				addAttribute(forvarre.cap(1), m_file, lineNo);
 			}
 			++lineNo;
 		}
 		f.close();
 
-		QValueList<ParsedAttribute*> attrList = classStore()->globalScope()->getSortedAttributeList();
-		QValueList<ParsedAttribute*>::ConstIterator it;
-		for (it = attrList.begin(); it != attrList.end(); ++it)
+		VariableList attrList = codeModel()->globalNamespace()->variableList();
+		for (VariableList::Iterator it = attrList.begin(); it != attrList.end(); ++it)
 			m_vars.append((*it)->name());
-			m_cc->setVars(m_vars);
+		m_cc->setVars(m_vars);
 
+		codeModel()->addFile( m_file );
 	}
+
 }
 
 void BashSupportPart::slotActivePartChanged(KParts::Part *part)
@@ -257,26 +261,17 @@ void BashSupportPart::slotActivePartChanged(KParts::Part *part)
 	m_cc->setActiveEditorPart(part);
 }
 
-void BashSupportPart::addAttribute(const QString &name, const QString &fileName, uint lineNo)
+void BashSupportPart::addAttribute(const QString &name, FileDom file, uint lineNo)
 {
-	ParsedAttribute *var = new ParsedAttribute;
+	VariableDom var = codeModel()->create<VariableModel>();
 	var->setName(name);
-	var->setDefinedInFile(fileName);
-	var->setDefinedOnLine(lineNo);
-	var->setDefinedInFile(fileName);
-	var->setDefinedOnLine(lineNo);
+	var->setFileName(file->name());
+	var->setStartPosition( lineNo, 0 );
 	var->setType(i18n("Variable"));
-	ParsedAttribute *old = classStore()->globalScope()->getAttributeByName(var->name());
 
-	if( old )
-	{
-		delete( var );
-		var = old;
-	}
-	else
-	{
+	if( !file->hasVariable(var->name()) ){
 		kdDebug() << "Add global attribute " << var->name() << endl;
-		classStore()->globalScope()->addAttribute(var);
+		file->addVariable(var);
 	}
 }
 

@@ -30,6 +30,7 @@
 #include <kfileitem.h>
 #include <kurlrequester.h>
 #include <klistview.h>
+#include <knuminput.h>
 
 // gideon includes
 #include <domutil.h>
@@ -45,9 +46,12 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
-    
+
     initFileTemplatesTab( );
     initCodeCompletionTab( );
+
+    inputCodeCompletion->setRange( 0, 2000, 100 );
+    inputArgumentsHint->setRange( 0, 2000, 100 );
 }
 
 void CCConfigWidget::initFileTemplatesTab( )
@@ -77,28 +81,28 @@ void CCConfigWidget::saveFileTemplatesTab( )
 void CCConfigWidget::initCodeCompletionTab( )
 {
     advancedOptions->header()->hide();
-    
+
     CppCodeCompletionConfig* c = m_pPart->codeCompletionConfig();
-    
-    sliderCodeCompletion->setValue( c->codeCompletionDelay() );
-    sliderArgumentsHint->setValue( c->argumentsHintDelay() );
+
+    inputCodeCompletion->setValue( c->codeCompletionDelay() );
+    inputArgumentsHint->setValue( c->argumentsHintDelay() );
     checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
     checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
-    
-    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion Options") );
+
+    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion options") );
     codeCompletionOptions->setExpandable( true );
-    
-    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint Options") );
-    
+
+    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint options") );
+
     m_includeGlobalFunctions = new QCheckListItem( codeCompletionOptions, i18n("Include Global Functions"), QCheckListItem::CheckBox );
     m_includeGlobalFunctions->setOn( c->includeGlobalFunctions() );
-    
+
     m_includeTypes = new QCheckListItem( codeCompletionOptions, i18n("Include Types"), QCheckListItem::CheckBox );
     m_includeTypes->setOn( c->includeTypes() );
-    
+
     m_includeEnums = new QCheckListItem( codeCompletionOptions, i18n("Include Enums"), QCheckListItem::CheckBox );
     m_includeEnums->setOn( c->includeEnums() );
-    
+
     m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
     m_includeTypedefs->setOn( c->includeTypedefs() );
 }
@@ -106,18 +110,18 @@ void CCConfigWidget::initCodeCompletionTab( )
 void CCConfigWidget::saveCodeCompletionTab( )
 {
     CppCodeCompletionConfig* c = m_pPart->codeCompletionConfig();
-    
-    c->setCodeCompletionDelay( sliderCodeCompletion->value() );
-    c->setArgumentsHintDelay( sliderArgumentsHint->value() );
-    
+
+    c->setCodeCompletionDelay( inputCodeCompletion->value() );
+    c->setArgumentsHintDelay( inputArgumentsHint->value() );
+
     c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
     c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
-    
+
     c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isOn() );
     c->setIncludeTypes( m_includeTypes->isOn() );
     c->setIncludeEnums( m_includeEnums->isOn() );
     c->setIncludeTypedefs( m_includeTypedefs->isOn() );
-    
+
     c->store();
 }
 

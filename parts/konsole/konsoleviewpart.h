@@ -11,18 +11,13 @@ class KonsoleViewWidget;
 
 class KonsoleViewPart : public KDevPlugin
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-   
-  KonsoleViewPart(QObject *parent, const char *name, const QStringList &);
-  ~KonsoleViewPart();
+    KonsoleViewPart(QObject *parent, const char *name, const QStringList &);
+    virtual ~KonsoleViewPart();
 
-  
 private:
-    
-  QGuardedPtr<KonsoleViewWidget> m_widget;
-
+    QGuardedPtr<KonsoleViewWidget> m_widget;
 };
 
 #endif

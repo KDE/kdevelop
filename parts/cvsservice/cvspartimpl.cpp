@@ -13,7 +13,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kparts/part.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
@@ -181,7 +180,6 @@ void CvsPartImpl::validateURLs( const QString &projectDirectory, KURL::List &url
             ++it;
         }
     }
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,420 +1,742 @@
-/***************************************************************************
- *   Copyright (C) 1999 by Jonas Nordin                                    *
- *   jonas.nordin@syncom.se                                                *
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
- *   Eray Ozkural <erayo@cs.bilkent.edu.tr>                                *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ *
+ * Partially based on KDE Studio ClassListView http://www.thekompany.com/projects/kdestudio/
+ */
 
+#include "classviewpart.h"
 #include "classviewwidget.h"
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
+#include <kiconloader.h>
 #include <kinstance.h>
+#include <kurl.h>
+#include <kaction.h>
 #include <kpopupmenu.h>
+#include <kconfig.h>
+
+#include <kdevcore.h>
+#include <kdevlanguagesupport.h>
+#include <kdevproject.h>
+#include <kdevpartcontroller.h>
+#include <codemodel.h>
+
+#include <klocale.h>
 #include <kdebug.h>
 
-#include "kdevlanguagesupport.h"
-#include "kdevproject.h"
-#include "domutil.h"
+#include <qheader.h>
+#include <qdir.h>
 
-#include "classstore.h"
-#include "classtooldlg.h"
-#include "classviewpart.h"
-
-
-ClassViewWidget::ClassViewWidget(ClassViewPart *part)
-    : ClassTreeBase(part, 0, "class tree widget")
+ClassViewWidget::ClassViewWidget( ClassViewPart * part )
+    : KListView( 0, "ClassViewWidget" ), m_part( part ), m_projectDirectoryLength( 0 )
 {
-    connect( part, SIGNAL(setLanguageSupport(KDevLanguageSupport*)),
-             this, SLOT(setLanguageSupport(KDevLanguageSupport*)) );
+    addColumn( "" );
+    header()->hide();
+    setRootIsDecorated( true );
+
+    m_projectItem = 0;
+
+    connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
+    connect( m_part->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+    connect( m_part->core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+
+    QStringList lst;
+    lst << i18n( "KDevelop 3.x mode" ) << i18n( "KDevelop 2.x mode" ) << i18n( "Java like mode" );
+    m_actionViewMode = new KSelectAction( i18n("View Mode"), KShortcut(), m_part->actionCollection(), "classview_mode" );
+    m_actionViewMode->setItems( lst );
+
+    m_actionNewClass = new KAction( i18n("New Class..."), KShortcut(), this, SLOT(slotNewClass()),
+				    m_part->actionCollection(), "classview_new_class" );
+    m_actionAddMethod = new KAction( i18n("Add Method..."), KShortcut(), this, SLOT(slotAddMethod()),
+				    m_part->actionCollection(), "classview_add_method" );
+    m_actionAddAttribute = new KAction( i18n("Add Attribute..."), KShortcut(), this, SLOT(slotAddAttribute()),
+				    m_part->actionCollection(), "classview_add_attribute" );
+ 
+    m_actionOpenDeclaration = new KAction( i18n("Open declaration"), KShortcut(), this, SLOT(slotOpenDeclaration()),
+				    m_part->actionCollection(), "classview_open_declaration" );
+    m_actionOpenImplementation = new KAction( i18n("Open implementation"), KShortcut(), this, SLOT(slotOpenImplementation()),
+				    m_part->actionCollection(), "classview_open_implementation" );
+    
+    KConfig* config = m_part->instance()->config();
+    config->setGroup( "General" );
+    setViewMode( config->readNumEntry( "ViewMode", KDevelop3ViewMode ) );
 }
 
-
-ClassViewWidget::~ClassViewWidget()
-{}
-
-
-KPopupMenu *ClassViewWidget::createPopup()
+ClassViewWidget::~ ClassViewWidget( )
 {
-    KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
-    if (!popup) {
-        popup = new KPopupMenu(i18n("Class View"), this);
+    KConfig* config = m_part->instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "ViewMode", viewMode() );
+    config->sync();
+}
+
+void ClassViewWidget::slotExecuted( QListViewItem* item )
+{
+    if( ClassViewItem* cbitem = dynamic_cast<ClassViewItem*>( item ) ){
+	if( cbitem->hasImplementation() )
+	    cbitem->openImplementation();
+	else 
+	    cbitem->openDeclaration();
     }
-
-    popup->setCheckable(true);
-    int id1 = popup->insertItem( i18n("List by Namespaces"), this, SLOT(slotTreeModeChanged()) );
-//    int id2 = popup->insertItem( i18n("Full Identifier Scopes"), this, SLOT(slotScopeModeChanged()) );
-    KConfig *config = ClassViewFactory::instance()->config();
-    config->setGroup("General");
-    bool byNamespace = config->readBoolEntry("ListByNamespace", false);
-    popup->setItemChecked(id1, byNamespace);
-//    bool identifierScopes = config->readBoolEntry("FullIdentifierScopes", false);
-//    popup->setItemChecked(id2, identifierScopes);
-
-    return popup;
 }
 
-
-void ClassViewWidget::setLanguageSupport(KDevLanguageSupport *ls)
+void ClassViewWidget::clear( )
 {
-    if (ls)
-        disconnect(ls, 0, this, 0);
-    refresh();
+    KListView::clear();
+    removedText.clear();
+    m_projectItem = 0;
 }
-
-
-void ClassViewWidget::slotTreeModeChanged()
-{
-    KConfig *config = ClassViewFactory::instance()->config();
-    config->setGroup("General");
-    config->writeEntry("ListByNamespace", !config->readBoolEntry("ListByNamespace"));
-    buildTree(true);
-}
-
-
-void ClassViewWidget::slotScopeModeChanged()
-{
-    KConfig *config = ClassViewFactory::instance()->config();
-    config->setGroup("General");
-    config->writeEntry("FullIdentifierScopes", !config->readBoolEntry("FullIdentifierScopes"));
-    buildTree(false);
-}
-
 
 void ClassViewWidget::refresh()
 {
-    buildTree(false);
+    if( !m_part->project() )
+	return;
+
+    clear();
+    m_projectItem = new FolderBrowserItem( this, m_part->project()->projectName() );
+    m_projectItem->setOpen( true );
+    blockSignals( true );
+
+    FileList fileList = m_part->codeModel()->fileList();
+    FileList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+	insertFile( (*it)->name() );
+	++it;
+    }
+
+    blockSignals( false );
 }
 
-
-void ClassViewWidget::buildTree(bool fromScratch)
+void ClassViewWidget::slotProjectOpened( )
 {
-    if (!m_part->languageSupport())
-        return;
+    m_projectItem = new FolderBrowserItem( this, m_part->project()->projectName() );
+    m_projectItem->setOpen( true );
 
-    KConfig *config = ClassViewFactory::instance()->config();
-    config->setGroup("General");
-    if (config->readBoolEntry("ListByNamespace", false))
-        buildTreeByNamespace(fromScratch);
+    m_projectDirectory = QDir(m_part->project()->projectDirectory()).canonicalPath();
+    m_projectDirectoryLength = m_projectDirectory.length() + 1;
+
+    connect( m_part->languageSupport(), SIGNAL(updatedSourceInfo()),
+	     this, SLOT(refresh()) );
+    connect( m_part->languageSupport(), SIGNAL(aboutToRemoveSourceInfo(const QString&)),
+	     this, SLOT(removeFile(const QString&)) );
+    connect( m_part->languageSupport(), SIGNAL(addedSourceInfo(const QString&)),
+	     this, SLOT(insertFile(const QString&)) );
+}
+
+void ClassViewWidget::slotProjectClosed( )
+{
+}
+
+void ClassViewWidget::insertFile( const QString& fileName )
+{
+    QString fn = QDir( fileName ).canonicalPath();
+    //kdDebug() << "======================== insertFile(" << fn << ")" << endl;
+
+    FileDom dom = m_part->codeModel()->fileByName( fn );
+    if( !dom )
+	return;
+    
+    if( fn.startsWith(m_projectDirectory) )
+	fn = fn.mid( m_projectDirectoryLength );
+
+    QStringList path;
+
+    switch( viewMode() )
+    {
+    case KDevelop3ViewMode:
+	{
+	    path = QStringList::split( "/", fn );
+	    path.pop_back();
+	}
+	break;
+
+    case KDevelop2ViewMode:
+	{
+	}
+	break;
+
+    case JavaLikeViewMode:
+	{
+	    QStringList l = QStringList::split( "/", fn );
+	    l.pop_back();
+
+	    QString package = l.join(".");
+	    if( !package.isEmpty() )
+		path.push_back( package );
+	}
+	break;
+    }
+
+    m_projectItem->processFile( dom, path );
+}
+
+void ClassViewWidget::removeFile( const QString& fileName )
+{
+    QString fn = QDir( fileName ).canonicalPath();
+    //kdDebug() << "======================== removeFile(" << fn << ")" << endl;
+
+    FileDom dom = m_part->codeModel()->fileByName( fn);
+    if( !dom )
+	return;
+
+    if( fn.startsWith(m_projectDirectory) )
+	fn = fn.mid( m_projectDirectoryLength );
+
+    QStringList path;
+
+    switch( viewMode() )
+    {
+    case KDevelop3ViewMode:
+	{
+	    path = QStringList::split( "/", fn );
+	    path.pop_back();
+	}
+	break;
+
+    case KDevelop2ViewMode:
+	{
+	}
+	break;
+
+    case JavaLikeViewMode:
+	{
+	    QStringList l = QStringList::split( "/", fn );
+	    l.pop_back();
+
+	    QString package = l.join(".");
+	    if( !package.isEmpty() )
+		path.push_back( package );
+	}
+	break;
+    }
+
+    m_projectItem->processFile( dom, path, true );
+}
+
+void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
+{
+    KPopupMenu menu( this );
+
+    ClassViewItem* item = dynamic_cast<ClassViewItem*>( selectedItem() );
+    
+    m_actionOpenDeclaration->setEnabled( item && item->hasDeclaration() );
+    m_actionOpenImplementation->setEnabled( item && item->hasImplementation() );
+    
+    int oldViewMode = viewMode();
+    m_actionOpenDeclaration->plug( &menu );
+    m_actionOpenImplementation->plug( &menu );
+    menu.insertSeparator();
+    
+    m_actionViewMode->plug( &menu );
+    
+    menu.exec( ev->globalPos() );
+
+    if( viewMode() != oldViewMode )
+	refresh();
+
+    ev->consume();
+}
+
+void ClassViewWidget::setViewMode( int mode )
+{
+    m_actionViewMode->setCurrentItem( mode );
+}
+
+int ClassViewWidget::viewMode( ) const
+{
+     return m_actionViewMode->currentItem();
+}
+
+void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remove )
+{
+    if( path.isEmpty() ){
+	NamespaceList namespaceList = file->namespaceList();
+	ClassList classList = file->classList();
+	FunctionList functionList = file->functionList();
+	VariableList variableList = file->variableList();
+
+	for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	    processNamespace( *it, remove );
+	for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	    processClass( *it, remove );
+	for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	    processFunction( *it, remove );
+	for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	    processVariable( *it, remove );
+
+	return;
+    }
+
+    QString current = path.front();
+    path.pop_front();
+
+    FolderBrowserItem* item = m_folders.contains( current ) ? m_folders[ current ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new FolderBrowserItem( this, current );
+	if( listView()->removedText.contains(current) )
+	    item->setOpen( true );
+	m_folders.insert( current, item );
+    }
+
+    item->processFile( file, path, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_folders.remove( current );
+	if( item->isOpen() ){
+	    listView()->removedText << current;
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
+{
+    NamespaceDomBrowserItem* item = m_namespaces.contains( ns->name() ) ? m_namespaces[ ns->name() ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new NamespaceDomBrowserItem( this, ns );
+	if( listView()->removedText.contains(ns->name()) )
+	    item->setOpen( true );
+	m_namespaces.insert( ns->name(), item );
+    }
+
+    NamespaceList namespaceList = ns->namespaceList();
+    ClassList classList = ns->classList();
+    FunctionList functionList = ns->functionList();
+    VariableList variableList = ns->variableList();
+
+    for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	item->processNamespace( *it, remove );
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	item->processClass( *it, remove );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	item->processFunction( *it, remove );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	item->processVariable( *it, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_namespaces.remove( ns->name() );
+	if( item->isOpen() ){
+	    listView()->removedText << ns->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::processClass( ClassDom klass, bool remove )
+{
+    ClassDomBrowserItem* item = m_classes.contains( klass ) ? m_classes[ klass ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new ClassDomBrowserItem( this, klass );
+	if( listView()->removedText.contains(klass->name()) )
+	    item->setOpen( true );
+	m_classes.insert( klass, item );
+    }
+
+    ClassList classList = klass->classList();
+    FunctionList functionList = klass->functionList();
+    VariableList variableList = klass->variableList();
+
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	item->processClass( *it, remove );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	item->processFunction( *it, remove );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	item->processVariable( *it, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_classes.remove( klass );
+	if( item->isOpen() ){
+	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::processFunction( FunctionDom fun, bool remove )
+{
+    FunctionDomBrowserItem* item = m_functions.contains( fun ) ? m_functions[ fun ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new FunctionDomBrowserItem( this, fun );
+	m_functions.insert( fun, item );
+    }
+
+    if( remove ){
+	m_functions.remove( fun );
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::processVariable( VariableDom var, bool remove )
+{
+    VariableDomBrowserItem* item = m_variables.contains( var ) ? m_variables[ var ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new VariableDomBrowserItem( this, var );
+	m_variables.insert( var, item );
+    }
+
+    if( remove ){
+	m_variables.remove( var );
+	delete( item );
+	item = 0;
+    }
+}
+
+// ------------------------------------------------------------------------
+void NamespaceDomBrowserItem::processNamespace( NamespaceDom ns, bool remove )
+{
+    NamespaceDomBrowserItem* item = m_namespaces.contains( ns->name() ) ? m_namespaces[ ns->name() ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new NamespaceDomBrowserItem( this, ns );
+	if( listView()->removedText.contains(ns->name()) )
+	    item->setOpen( true );
+	m_namespaces.insert( ns->name(), item );
+    }
+
+    NamespaceList namespaceList = ns->namespaceList();
+    ClassList classList = ns->classList();
+    FunctionList functionList = ns->functionList();
+    VariableList variableList = ns->variableList();
+
+    for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	item->processNamespace( *it, remove );
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	item->processClass( *it, remove );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	item->processFunction( *it, remove );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	item->processVariable( *it, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_namespaces.remove( ns->name() );
+	if( item->isOpen() ){
+	    listView()->removedText << ns->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void NamespaceDomBrowserItem::processClass( ClassDom klass, bool remove )
+{
+    ClassDomBrowserItem* item = m_classes.contains( klass ) ? m_classes[ klass ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new ClassDomBrowserItem( this, klass );
+	if( listView()->removedText.contains(klass->name()) )
+	    item->setOpen( true );
+	m_classes.insert( klass, item );
+    }
+
+    ClassList classList = klass->classList();
+    FunctionList functionList = klass->functionList();
+    VariableList variableList = klass->variableList();
+
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	item->processClass( *it, remove );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	item->processFunction( *it, remove );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	item->processVariable( *it, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_classes.remove( klass );
+	if( item->isOpen() ){
+	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void NamespaceDomBrowserItem::processFunction( FunctionDom fun, bool remove )
+{
+    FunctionDomBrowserItem* item = m_functions.contains( fun ) ? m_functions[ fun ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new FunctionDomBrowserItem( this, fun );
+	m_functions.insert( fun, item );
+    }
+
+    if( remove ){
+	m_functions.remove( fun );
+	delete( item );
+	item = 0;
+    }
+}
+
+void NamespaceDomBrowserItem::processVariable( VariableDom var, bool remove )
+{
+    VariableDomBrowserItem* item = m_variables.contains( var ) ? m_variables[ var ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new VariableDomBrowserItem( this, var );
+	m_variables.insert( var, item );
+    }
+
+    if( remove ){
+	m_variables.remove( var );
+	delete( item );
+	item = 0;
+    }
+}
+
+// ------------------------------------------------------------------------
+void ClassDomBrowserItem::processClass( ClassDom klass, bool remove )
+{
+    ClassDomBrowserItem* item = m_classes.contains( klass ) ? m_classes[ klass ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new ClassDomBrowserItem( this, klass );
+	if( listView()->removedText.contains(klass->name()) )
+	    item->setOpen( true );
+	m_classes.insert( klass, item );
+    }
+
+    ClassList classList = klass->classList();
+    FunctionList functionList = klass->functionList();
+    VariableList variableList = klass->variableList();
+
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+	item->processClass( *it, remove );
+    for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
+	item->processFunction( *it, remove );
+    for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
+	item->processVariable( *it, remove );
+
+    if( remove && item->childCount() == 0 ){
+	m_classes.remove( klass );
+	if( item->isOpen() ){
+	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void ClassDomBrowserItem::processFunction( FunctionDom fun, bool remove )
+{
+    FunctionDomBrowserItem* item = m_functions.contains( fun ) ? m_functions[ fun ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new FunctionDomBrowserItem( this, fun );
+	m_functions.insert( fun, item );
+    }
+
+    if( remove ){
+	m_functions.remove( fun );
+	delete( item );
+	item = 0;
+    }
+}
+
+void ClassDomBrowserItem::processVariable( VariableDom var, bool remove )
+{
+    VariableDomBrowserItem* item = m_variables.contains( var ) ? m_variables[ var ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new VariableDomBrowserItem( this, var );
+	m_variables.insert( var, item );
+    }
+
+    if( remove ){
+	m_variables.remove( var );
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::setup( )
+{
+    ClassViewItem::setup();
+    setPixmap( 0, SmallIcon("folder") );
+    setExpandable( true );
+}
+
+void NamespaceDomBrowserItem::setup( )
+{
+    ClassViewItem::setup();
+    setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, listView()->m_part->instance()) );
+    setExpandable( true );
+
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    setText( 0, txt );
+}
+
+void ClassDomBrowserItem::setup( )
+{
+    ClassViewItem::setup();
+    setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, listView()->m_part->instance()) );
+    setExpandable( true );
+
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    setText( 0, txt );
+}
+
+void FunctionDomBrowserItem::setup( )
+{
+    ClassViewItem::setup();
+
+    QString iconName;
+    if( m_dom->access() == CodeModelItem::Private )
+        iconName = "CVprivate_meth";
+    else if( m_dom->access() == CodeModelItem::Protected )
+        iconName = "CVprotected_meth";
     else
-        buildTreeByCategory(fromScratch);
+        iconName = "CVpublic_meth";
+
+    setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
+
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    setText( 0, txt );
 }
 
-
-/**
- * Determines the folder where a class defined in file fileName
- * is stored. This works by removing n levels below the project
- * directory, if it is in a subdirectory that deep. Otherwise a
- * null string is returned.
- * Examples:
- *   determineFolder("/proj/src/include/foo.cpp", "/proj", 2) => "src/include"
- *   determineFolder("/proj/src/bla.cpp, "/proj", 2) => null
- *   determineFolder("/proj/bar.cpp", "/proj", 2) => null
- */
-QString ClassViewWidget::determineFolder(QString fileName, QString projectDir, int levels)
+void FunctionDomBrowserItem::openDeclaration()
 {
-    projectDir += "/";
-    if (!fileName.startsWith(projectDir))
-        return QString::null;
-    fileName.remove(0, projectDir.length()); // get relative path
-    int pos;
-    if (levels != -1) { // we're given a specific level
-        pos = fileName.find('/');
-        if (pos == -1)
-            return QString::null;
-        while (--levels > 0) {
-            pos = fileName.find('/', pos+1);
-            if (pos == -1)
-                return QString::null;
-        }
-   }
-   else { // get the complete relative dir
-    pos = fileName.findRev('/');
-    if (pos == -1)
-        return QString::null;
-   }
-   return fileName.left(pos);
+    int startLine, startColumn;
+    m_dom->getStartPosition( &startLine, &startColumn );
+    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
-
-/**
- * Creates a hierarchy of folder items with the given dirNames.
- * The hierarchy is built up below the parent argument.
- * The output argument folders is filled with a mapping from
- * folder names to their list view items.
- * @param classes organizer item for classes
- * @param dirNames a sorted list of paths
- * @param folders a map from paths to tree items
- */
-void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
-                                                const QStringList &dirNames,
-                                                QMap<QString, ClassTreeItem*> *folders)
+void FunctionDomBrowserItem::openImplementation()
 {
-    // using a dictionary is the best solution to track last items
-    // for the hierarchical order that we want to preserve
-    // since dirNames comes sorted each folder will be automatically sorted
-    QMap<ClassTreeItem*, ClassTreeItem*> lastItems;
-    lastItems[classes] = 0;
-    QStringList::ConstIterator sit;
-    for (sit = dirNames.begin(); sit != dirNames.end(); ++sit) {
-        QStringList l = QStringList::split('/', *sit);
-        QStringList::ConstIterator i;
-        QString path;
-        for (i = l.begin(); i != l.end(); ++i) {  // for each directory component
-            const QString & dir = *i;
-            ClassTreeItem *parent;
-            QMap<QString, ClassTreeItem*>::iterator folder = folders->find(path);
-            if (folder!=folders->end())
-                parent = *folder;
-            else
-                parent = classes;
-            if (!path.isEmpty())
-                path += '/';
-            path += dir;
-            if (folders->find(path)==folders->end()) { // new folder
-                ClassTreeItem* item =                 // create new item
-                    new ClassTreeOrganizerItem(parent,lastItems[parent],dir);
-              (*folders)[path] = item;              // insert folder
-              lastItems[parent] = item;            // set last item of parent
-            }
-        }
-    }
+    int startLine, startColumn;
+    m_dom->getImplementationStartPosition( &startLine, &startColumn );
+    listView()->m_part->partController()->editDocument( KURL(m_dom->implementedInFile()), startLine );
 }
 
-
-/**
- * Creates a flat list of folder items.
- */
-void ClassViewWidget::buildClassFolderFlatList(ClassTreeItem *organizerItem,
-                                               const QStringList &dirNames,
-                                               QMap<QString, ClassTreeItem*> *folders)
+void VariableDomBrowserItem::setup( )
 {
-    ClassTreeItem *lastItem = 0;
+    ClassViewItem::setup();
+    QString iconName;
+    if( m_dom->access() == CodeModelItem::Private )
+        iconName = "CVprivate_var";
+    else if( m_dom->access() == CodeModelItem::Protected )
+        iconName = "CVprotected_var";
+    else
+        iconName = "CVpublic_var";
 
-    QStringList::ConstIterator it;
-    for (it = dirNames.begin(); it != dirNames.end(); ++it) {
-        lastItem = new ClassTreeOrganizerItem(organizerItem, lastItem, *it);
-        folders->insert(*it, lastItem);
-    }
+    setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
+
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    setText( 0, txt );
 }
 
-
-void ClassViewWidget::buildTreeByCategory(bool fromScratch)
+void VariableDomBrowserItem::openDeclaration()
 {
-    TreeState oldTreeState;
-    if (!fromScratch)
-        oldTreeState = treeState();
+    int startLine, startColumn;
+    m_dom->getStartPosition( &startLine, &startColumn );
 
-    clear();
-
-    ClassStore *store = m_part->classStore();
-    ParsedScopeContainer *globalScope = store->globalScope();
-
-    ClassTreeItem *ilastItem, *lastItem = 0;
-
-    KDevLanguageSupport::Features features = m_part->languageSupport()->features();
-
-    if (features & KDevLanguageSupport::Classes) {
-        // Add classes
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Classes"));
-
-        QDomDocument &dom = *m_part->projectDom();
-        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
-        int depth = 0;
-        if (!foldersAsHierarchy) {
-            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders", 0);
-            if (depth == 0)
-                depth = 2;
-        }
-
-        QValueList<ParsedClass*> classList = store->getSortedClassList();
-        QValueList<ParsedClass*>::ConstIterator it;
-
-                // Make a list of all directories under the project directory
-        QString projectDir = m_part->project()->projectDirectory();
-        QStringList dirNames;
-        if (foldersAsHierarchy)
-            depth = -1;  // don't consider depth if hierarchical view
-        for (it = classList.begin(); it != classList.end(); ++it) {
-            QString fileName = (*it)->definedInFile();
-            QString dirName = determineFolder(fileName, projectDir, depth);
-            if (!dirName.isNull() && !dirNames.contains(dirName))
-                dirNames.append(dirName);
-        }
-        dirNames.sort(); // we insert in sorted order
-
-        // Create folders
-        QMap<QString, ClassTreeItem*> folders;
-        if (foldersAsHierarchy)
-            buildClassFolderHierarchy(lastItem, dirNames, &folders);
-        else
-            buildClassFolderFlatList(lastItem, dirNames, &folders);
-
-        ilastItem = 0;
-        // Put classes into folders (if appropriate) or directly into the organizer item
-        for (it = classList.begin(); it != classList.end(); ++it) {
-            QString fileName = (*it)->definedInFile();
-            QString dirName = determineFolder(fileName, projectDir, depth);
-            // kdDebug(9003) << "inserting " << fileName << " into " << dirName << endl;
-            QMap<QString, ClassTreeItem*>::ConstIterator fit = folders.find(dirName);
-            if (fit == folders.end())
-                ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
-            else {
-                //kdDebug(9003) << "found folder" << endl;
-                QListViewItem *iilastItem = (*fit)->firstChild();
-                while (iilastItem && iilastItem->nextSibling())
-                    iilastItem = iilastItem->nextSibling();
-                new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it);
-            }
-        }
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (features & KDevLanguageSupport::Structs) {
-        // Add classes
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Struct"));
-
-        QDomDocument &dom = *m_part->projectDom();
-        bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
-        int depth = 0;
-        if (!foldersAsHierarchy) {
-            depth = DomUtil::readIntEntry(dom, "/kdevclassview/depthoffolders", 0);
-            if (depth == 0)
-                depth = 2;
-        }
-
-        QValueList<ParsedClass*> classList = store->getSortedStructList();
-        QValueList<ParsedClass*>::ConstIterator it;
-
-                // Make a list of all directories under the project directory
-        QString projectDir = m_part->project()->projectDirectory();
-        QStringList dirNames;
-        if (foldersAsHierarchy)
-            depth = -1;  // don't consider depth if hierarchical view
-        for (it = classList.begin(); it != classList.end(); ++it) {
-            QString fileName = (*it)->definedInFile();
-            QString dirName = determineFolder(fileName, projectDir, depth);
-            if (!dirName.isNull() && !dirNames.contains(dirName))
-                dirNames.append(dirName);
-        }
-        dirNames.sort(); // we insert in sorted order
-
-        // Create folders
-        QMap<QString, ClassTreeItem*> folders;
-        if (foldersAsHierarchy)
-            buildClassFolderHierarchy(lastItem, dirNames, &folders);
-        else
-            buildClassFolderFlatList(lastItem, dirNames, &folders);
-
-        ilastItem = 0;
-        // Put classes into folders (if appropriate) or directly into the organizer item
-        for (it = classList.begin(); it != classList.end(); ++it) {
-            QString fileName = (*it)->definedInFile();
-            QString dirName = determineFolder(fileName, projectDir, depth);
-            // kdDebug(9003) << "inserting " << fileName << " into " << dirName << endl;
-            QMap<QString, ClassTreeItem*>::ConstIterator fit = folders.find(dirName);
-            if (fit == folders.end())
-                ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it, true);
-            else {
-                //kdDebug(9003) << "found folder" << endl;
-                QListViewItem *iilastItem = (*fit)->firstChild();
-                while (iilastItem && iilastItem->nextSibling())
-                    iilastItem = iilastItem->nextSibling();
-                new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it, true);
-            }
-        }
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (features & KDevLanguageSupport::Functions) {
-        // Add functions
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Global Functions"));
-        ilastItem = 0;
-        QValueList<ParsedMethod*> methodList = globalScope->getSortedMethodList();
-        QValueList<ParsedMethod*>::ConstIterator it;
-        for (it = methodList.begin(); it != methodList.end(); ++it)
-            ilastItem = new ClassTreeMethodItem(lastItem, ilastItem, *it);
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (features & KDevLanguageSupport::Variables) {
-        // Add attributes
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Global Variables"));
-        ilastItem = 0;
-        QValueList<ParsedAttribute*> attrList = globalScope->getSortedAttributeList();
-        QValueList<ParsedAttribute*>::ConstIterator it;
-        for (it = attrList.begin(); it != attrList.end(); ++it)
-            ilastItem = new ClassTreeAttrItem(lastItem, ilastItem, *it);
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (features & KDevLanguageSupport::Namespaces) {
-        // Add namespaces
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Namespaces"));
-        ilastItem = 0;
-        QValueList<ParsedScopeContainer*> scopeList = store->getSortedScopeList();
-        QValueList<ParsedScopeContainer*>::ConstIterator it;
-        for (it = scopeList.begin(); it != scopeList.end(); ++it)
-            ilastItem = new ClassTreeScopeItem(lastItem, ilastItem, *it);
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (features & KDevLanguageSupport::Scripts) {
-        // Add scripts
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Scripts"));
-        ilastItem = 0;
-        QValueList<ParsedScript*> scriptList = store->getSortedScriptList();
-        QValueList<ParsedScript*>::ConstIterator it;
-        for (it = scriptList.begin(); it != scriptList.end(); ++it)
-            ilastItem = new ClassTreeScriptItem(lastItem, ilastItem, *it);
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
-
-    if (!fromScratch)
-        setTreeState(oldTreeState);
+    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
-
-void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
+void VariableDomBrowserItem::openImplementation()
 {
-    TreeState oldTreeState;
-    if (!fromScratch)
-        oldTreeState = treeState();
+}
 
-    clear();
+QString FolderBrowserItem::key( int , bool ) const
+{
+    return "0 " + text( 0 );
+}
 
-    ClassTreeItem *lastItem = 0;
+QString NamespaceDomBrowserItem::key( int , bool ) const
+{
+    return "1 " + text( 0 );
+}
 
-    // Global namespace
-    lastItem = new ClassTreeScopeItem(this, lastItem, m_part->classStore()->globalScope());
-    if (fromScratch)
-        lastItem->setOpen(true);
+QString ClassDomBrowserItem::key( int , bool ) const
+{
+    return "2 " + text( 0 );
+}
 
-    // Namespaces just below the global one
-    QValueList<ParsedScopeContainer*> scopeList = m_part->classStore()->globalScope()->getSortedScopeList();
-    QValueList<ParsedScopeContainer*>::ConstIterator it;
-    for (it = scopeList.begin(); it != scopeList.end(); ++it) {
-        lastItem = new ClassTreeScopeItem(this, lastItem, *it);
-        if (fromScratch)
-            lastItem->setOpen(true);
-    }
+QString FunctionDomBrowserItem::key( int , bool ) const
+{
+    return "3 " + text( 0 );
+}
 
-    if (!fromScratch)
-        setTreeState(oldTreeState);
+QString VariableDomBrowserItem::key( int , bool ) const
+{
+    return "4 " + text( 0 );
+}
+
+void ClassViewWidget::slotNewClass( )
+{
+    if( m_part->languageSupport()->features() & KDevLanguageSupport::NewClass )
+	m_part->languageSupport()->addClass();
+}
+
+void ClassViewWidget::slotAddMethod( )
+{
+}
+
+void ClassViewWidget::slotAddAttribute( )
+{
+}
+
+void ClassViewWidget::slotOpenDeclaration( )
+{
+    static_cast<ClassViewItem*>( selectedItem() )->openDeclaration();
+}
+
+void ClassViewWidget::slotOpenImplementation( )
+{
+    static_cast<ClassViewItem*>( selectedItem() )->openImplementation();
+}
+
+void ClassDomBrowserItem::openDeclaration( )
+{
+    int startLine, startColumn;
+    m_dom->getStartPosition( &startLine, &startColumn );
+    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
 #include "classviewwidget.moc"
+

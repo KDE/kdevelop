@@ -11,6 +11,7 @@
 
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qradiobutton.h>
 
 #include "releaseinputdialog.h"
 
@@ -18,10 +19,12 @@
 // class ReleaseInputDialog
 ///////////////////////////////////////////////////////////////////////////////
 
-ReleaseInputDialog::ReleaseInputDialog( const QString &releaseMsg, QWidget* parent, const char* name )
-	: ReleaseInputDialogBase( parent, name, true, 0 )
+ReleaseInputDialog::ReleaseInputDialog( const QString &releaseMsg, QWidget* parent,
+    bool enforceNotNullInput )
+    : ReleaseInputDialogBase( parent, "releaseinputdialog", true, 0 ),
+    m_enforceNullInput( enforceNotNullInput )
 {
-	setReleaseMsg( releaseMsg );
+    this->setCaption( releaseMsg );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,17 +35,46 @@ ReleaseInputDialog::~ReleaseInputDialog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void ReleaseInputDialog::setReleaseMsg( const QString &msg )
+QString ReleaseInputDialog::release() const
 {
-	this->releaseNameLabel->setText( msg );
+    // Can be a date or a tag/branch name
+    QString releaseInfo = this->releaseLineEdit->text();
+    // Avoid adding "-opt" to a null input
+    if (releaseInfo.isEmpty())
+        return QString::null;
+
+    if (isDate())
+        return  "-D " + releaseInfo;
+    else
+        return  "-r " + releaseInfo;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString ReleaseInputDialog::releaseTag() const
+bool ReleaseInputDialog::isTag() const
 {
-	return this->releaseLineEdit->text();
+    return this->tagRadio->isChecked();
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool ReleaseInputDialog::isDate() const
+{
+    return this->dateRadio->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void ReleaseInputDialog::accept()
+{
+    if (m_enforceNullInput && this->releaseLineEdit->text().isEmpty())
+        return;
+
+    QDialog::accept();
+}
+
+
 
 #include "releaseinputdialog.moc"
 

@@ -6,10 +6,6 @@
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 ** Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
 **
-** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
-** LICENSE.QPL included in the packaging of this file.
-**
 ** This file may be distributed and/or modified under the terms of the
 ** GNU General Public License version 2 as published by the Free Software
 ** Foundation and appearing in the file LICENSE.GPL included in the
@@ -60,6 +56,7 @@ public:
 
     QListViewItem *currentItem() const;
     virtual void setCurrentItem( QListViewItem * );
+    virtual void setCurrentActiveItem( QListViewItem * );
 
     bool	autoResize()	const;
     virtual void setAutoResize( bool );

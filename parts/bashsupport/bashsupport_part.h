@@ -13,8 +13,9 @@
 #include <kprocess.h>
 #include <kdialogbase.h>
 
-#include "kdevplugin.h"
-#include "kdevlanguagesupport.h"
+#include <codemodel.h>
+#include <kdevplugin.h>
+#include <kdevlanguagesupport.h>
 
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/viewcursorinterface.h>
@@ -72,7 +73,7 @@ class BashSupportPart : public KDevLanguageSupport
 		void startApplication(const QString &program);
 		QString interpreter();
 		void parse(const QString &fileName);
-		void addAttribute(const QString &name, const QString &fileName, uint line);
+		void addAttribute(const QString &name, FileDom file, uint line);
 		BashCodeCompletion *m_cc;
 		QStringList m_vars;
 

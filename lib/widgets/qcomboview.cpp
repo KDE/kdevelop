@@ -6,10 +6,6 @@
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 ** Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
 **
-** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
-** LICENSE.QPL included in the packaging of this file.
-**
 ** This file may be distributed and/or modified under the terms of the
 ** GNU General Public License version 2 as published by the Free Software
 ** Foundation and appearing in the file LICENSE.GPL included in the
@@ -619,6 +615,29 @@ void QComboView::wheelEvent( QWheelEvent *e )
     }
 }
 
+int childCount(QListViewItem *it)
+{
+    int count = 1;
+    QListViewItem * myChild = it->firstChild();
+    while( myChild ) {
+        count += childCount(myChild);
+        myChild = myChild->nextSibling();
+    }
+    return count;
+}
+
+int childCount(QListView *lv)
+{
+    int count = 0;
+    QListViewItem * myChild = lv->firstChild();
+    while( myChild ) {
+        count += childCount(myChild);
+//        count += 1;
+        myChild = myChild->nextSibling();
+    }
+    return count;
+}
+
 /*!
   \internal
    Calculates the listbox height needed to contain all items, or as
@@ -631,17 +650,24 @@ static int listHeight( QListView *l, int sl )
     else*/
 
     int prefH = 0;
-    if ( l->childCount() > 0 )
-        prefH = l->childCount() * l->firstChild()->height();
+    int ch = childCount(l);
+    ch = QMIN(ch, 10);
+    if (l->firstChild())
+    {
+        prefH = ch * l->firstChild()->height();
+        qWarning("!!!!!!!!!!!!!!firstChild height %d", l->firstChild()->height());
+    }
+    else
+        prefH = l->sizeHint().height();
 
     if (l->header()->isVisible())
-        prefH += l->header()->sizeHint().height() + 5;
-    else
-        prefH += 5;
+        prefH += l->header()->sizeHint().height();
 
-    return prefH < l->sizeHint().height() ? prefH : l->sizeHint().height();
+//    return prefH < l->sizeHint().height() ? prefH : l->sizeHint().height();
+    qWarning("!!!!!!!!!!!!!!pref size %d for %d items", prefH, ch);
+
+    return prefH;
 }
-
 
 /*!
     Pops up the combobox popup list.
@@ -663,11 +689,11 @@ void QComboView::popup()
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
     int h = listHeight( lb, d->sizeLimit ) + 2;
-#if KDE_VERSION > 305    
+#if KDE_VERSION > 305
     QRect screen = QApplication::desktop()->availableGeometry( const_cast<QComboView*>(this) );
 #else
     QRect screen = geometry();
-#endif    
+#endif
 
     int sx = screen.x();        // screen pos
     int sy = screen.y();
@@ -709,14 +735,14 @@ void QComboView::popup()
     lb->blockSignals( block );
     lb->setVScrollBarMode(QScrollView::Auto);
 
-#ifndef QT_NO_EFFECTS
+//#ifndef QT_NO_EFFECTS
     if ( QApplication::isEffectEnabled( UI_AnimateCombo ) ) {
         if ( lb->y() < mapToGlobal(QPoint(0,0)).y() )
         qScrollEffect( lb, QEffects::UpScroll );
         else
         qScrollEffect( lb );
     } else
-#endif
+//#endif
         lb->show();
     d->poppedUp = TRUE;
 }
@@ -1408,6 +1434,30 @@ void QComboView::setCurrentText( const QString& txt )
 void QComboView::checkState( QListViewItem * item)
 {
     item->setOpen(!item->isOpen());
+}
+
+void QComboView::setCurrentActiveItem( QListViewItem * item )
+{
+    if ( item == d->current && !d->ed ) {
+        return;
+    }
+
+    d->current = item;
+    d->completeAt = 0;
+    if ( d->ed ) {
+        d->ed->setText( item->text(0) );
+        d->updateLinedGeometry();
+    }
+    if ( d->listView() ) {
+        d->listView()->setCurrentItem( item );
+    } else {
+        internalHighlight( item );
+        internalActivate( item );
+    }
+
+    currentChanged();
+
+    d->listView()->ensureItemVisible(item);
 }
 
 #include "qcomboview.moc"

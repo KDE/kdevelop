@@ -27,6 +27,7 @@
 #include <qtextedit.h>
 #include <qrect.h>
 #include <qstyle.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -38,14 +39,12 @@
 #include <klineedit.h>
 #include <kdeversion.h>
 
-#include "kdevplugin.h"
+#include "kdevlanguagesupport.h"
 #include "kdevproject.h"
 #include "kdevsourceformatter.h"
 #include "domutil.h"
 #include "filetemplate.h"
 
-#include "classstore.h"
-#include "parsedmethod.h"
 #include "classgeneratorconfig.h"
 
 QString QRegExp_escape(const QString& str )
@@ -67,7 +66,7 @@ QString QRegExp_escape(const QString& str )
 #endif
 }
 
-CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const char *name)
+CppNewClassDialog::CppNewClassDialog(KDevLanguageSupport *part, QWidget *parent, const char *name)
 	: CppNewClassDialogBase(parent, name)
 {
     headerModified = false;
@@ -105,8 +104,7 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
         this, SLOT(replaceFunctionality()), 0, 12);
 
     comp = basename_edit->completionObject();
-    setCompletion(m_part->classStore());
-    setCompletion(m_part->ccClassStore());
+    setCompletion(m_part->codeModel());
     classname_edit->setFocus();
 }
 
@@ -116,12 +114,11 @@ CppNewClassDialog::~CppNewClassDialog()
     delete comp;
 }
 
-void CppNewClassDialog::setCompletion(ClassStore *store)
+void CppNewClassDialog::setCompletion(CodeModel *model)
 {
-  QValueList<ParsedClass*> classlist = store->getSortedClassList();
-  QValueList<ParsedClass*>::iterator it;
-  for ( it = classlist.begin(); it != classlist.end(); ++it )
-    comp->addItem((*it)->name());
+    QStringList classNames = sortedNameList( model->globalNamespace()->classList() );
+    for (QStringList::const_iterator it = classNames.begin(); it != classNames.end(); ++it)
+        comp->addItem(*it);
 }
 
 void CppNewClassDialog::nameHandlerChanged(const QString &text)
@@ -185,6 +182,8 @@ void CppNewClassDialog::baseclassname_changed(const QString &text)
                 break;
             default:;
         }
+        if (header.contains(QRegExp("::")))
+            header = header.left(header.find(QRegExp("::"))) + interface_suffix;
         header = header.replace(QRegExp(" *<.*>"), "");
         baseinclude_edit->setText(header);
     }
@@ -679,37 +678,51 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
 {
     QString templateAdd = templateActualParamsFormatted(clName);
     removeTemplateParams(clName);
-    ParsedClass * myClass = m_part->classStore()->getClassByName(clName);
-    if (! myClass)
-        myClass = m_part->ccClassStore()->getClassByName(clName);
-    if (myClass)
+    ClassList myClasses = m_part->codeModel()->globalNamespace()->classByName(clName);
+    for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
     {
-        PCheckListItem<ParsedClass*> *it = new PCheckListItem<ParsedClass*>(myClass, constructors_view, myClass->name());
+        PCheckListItem<ClassDom> *it = new PCheckListItem<ClassDom>(*classIt, constructors_view, (*classIt)->name());
         it->templateAddition = templateAdd;
-        PListViewItem<ParsedClass*> *over = new PListViewItem<ParsedClass*>(myClass, methods_view, myClass->name());
+        PListViewItem<ClassDom> *over = new PListViewItem<ClassDom>(*classIt, methods_view, (*classIt)->name());
         over->templateAddition = templateAdd;
         QListViewItem *over_methods = new QListViewItem(over, i18n("Methods"));
         QListViewItem *over_slots = new QListViewItem(over, i18n("Slots (Qt-specific)"));
-        PListViewItem<ParsedClass*> *access = new PListViewItem<ParsedClass*>(myClass, access_view, myClass->name());
+        PListViewItem<ClassDom> *access = new PListViewItem<ClassDom>(*classIt, access_view, (*classIt)->name());
         QListViewItem *access_methods = new QListViewItem(access, i18n("Methods"));
         QListViewItem *access_slots = new QListViewItem(access, i18n("Slots (Qt-specific)"));
         QListViewItem *access_attrs = new QListViewItem(access, i18n("Attributes"));
 
-        ParsedMethod *method = 0;
-        myClass->methodIterator.toFirst();
-        while ( (method = myClass->methodIterator.current()) != 0)
+        FunctionList functionList = (*classIt)->functionList();
+        for (FunctionList::const_iterator methodIt = functionList.begin();
+            methodIt != functionList.end(); ++methodIt)
         {
-            if (isConstructor(myClass->name(), method))
-//            if (method->isConstructor())
+            if (isConstructor((*classIt)->name(), *methodIt))
             {
-                addToConstructorsList(it, method);
+                addToConstructorsList(it, *methodIt);
+            }
+            else if ((*methodIt)->isSlot())
+            {
+                addToMethodsList(over_slots, *methodIt);
+
+                if ((*methodIt)->access() != CodeModelItem::Private)
+                {
+                    QString inhModifier;
+                    //protected inheritance gives protected attributes
+                    if (inheritance.contains("protected")) inhModifier = "protected";
+                    //private inheritance gives private attributes
+                    else if (inheritance.contains("private")) inhModifier = "private";
+                    //public inheritance gives protected and public attributes
+                    else if (inheritance.contains("public")) inhModifier = (*methodIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                    addToUpgradeList(access_slots, *methodIt, inhModifier );
+                }
             }
             else
             {
-                addToMethodsList(over_methods, method);
+                if (!isDestructor((*classIt)->name(), *methodIt))
+                    addToMethodsList(over_methods, *methodIt);
 
                 // display only public and protected methods of the base class
-                if ( (!method->isDestructor()) && (!method->isPrivate()) )
+                if ( (!isDestructor((*classIt)->name(), *methodIt)) && ((*methodIt)->access() != CodeModelItem::Private) )
                 {
                     // see what modifier is given for the base class
                     QString inhModifier;
@@ -718,18 +731,17 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
                     //private inheritance gives private methods
                     else if (inheritance.contains("private")) inhModifier = "private";
                     //public inheritance gives protected and public methods
-                    else if (inheritance.contains("public")) inhModifier = method->isPublic() ? "public" : "protected";
-                    addToUpgradeList(access_methods, method, inhModifier );
+                    else if (inheritance.contains("public")) inhModifier = (*methodIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                    addToUpgradeList(access_methods, *methodIt, inhModifier );
                 }
             }
-            ++(myClass->methodIterator);
         }
 
-        ParsedAttribute *attr = 0;
-        myClass->attributeIterator.toFirst();
-        while ( (attr = myClass->attributeIterator.current()) != 0 )
+        VariableList variableList = (*classIt)->variableList();
+        for (VariableList::const_iterator varIt = variableList.begin();
+            varIt != variableList.end(); ++varIt)
         {
-            if (!attr->isPrivate())
+            if ((*varIt)->access() != CodeModelItem::Private)
             {
                 QString inhModifier;
                 //protected inheritance gives protected attributes
@@ -737,42 +749,21 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
                 //private inheritance gives private attributes
                 else if (inheritance.contains("private")) inhModifier = "private";
                 //public inheritance gives protected and public attributes
-                else if (inheritance.contains("public")) inhModifier = attr->isPublic() ? "public" : "protected";
-                addToUpgradeList(access_attrs, attr, inhModifier );
+                else if (inheritance.contains("public")) inhModifier = (*varIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                addToUpgradeList(access_attrs, *varIt, inhModifier );
             }
-            ++(myClass->attributeIterator);
         }
-
-        ParsedMethod *slot = 0;
-        myClass->slotIterator.toFirst();
-        while ( (slot = myClass->slotIterator.current()) != 0 )
-        {
-            addToMethodsList(over_slots, slot);
-
-            if (!slot->isPrivate())
-            {
-                QString inhModifier;
-                //protected inheritance gives protected attributes
-                if (inheritance.contains("protected")) inhModifier = "protected";
-                //private inheritance gives private attributes
-                else if (inheritance.contains("private")) inhModifier = "private";
-                //public inheritance gives protected and public attributes
-                else if (inheritance.contains("public")) inhModifier = slot->isPublic() ? "public" : "protected";
-                addToUpgradeList(access_slots, slot, inhModifier );
-            }
-            ++(myClass->slotIterator);
-        }
-
-        parsedClasses << clName;
     }
 }
 
-bool CppNewClassDialog::isConstructor(QString className, ParsedMethod *method)
+bool CppNewClassDialog::isConstructor(QString className, const FunctionDom &method)
 {
 //  regexp:  myclass\\s*\\(\\s*(const)?\\s*myclass\\s*&[A-Za-z_0-9\\s]*\\) is for copy constructors
     if ( (className == method->name()) )
     {
-        if ( method->asString().contains(QRegExp(className + "\\s*\\(\\s*(const)?\\s*" + className + "\\s*&[A-Za-z_0-9\\s]*\\)", true, false)) )
+        qWarning("1x");
+        if ( (method->argumentList().count() == 1) && (m_part->formatModelItem(method->argumentList()[0].data()).contains(QRegExp(" *(const)? *" + className + " *& *"))) )
+//        if ( method->asString().contains(QRegExp(className + "\\s*\\(\\s*(const)?\\s*" + className + "\\s*&[A-Za-z_0-9\\s]*\\)", true, false)) )
             return false;
         else
             return true;
@@ -781,29 +772,26 @@ bool CppNewClassDialog::isConstructor(QString className, ParsedMethod *method)
         return false;
 }
 
-void CppNewClassDialog::addToConstructorsList(QCheckListItem *myClass, ParsedMethod *method)
+void CppNewClassDialog::addToConstructorsList(QCheckListItem *myClass, FunctionDom method)
 {
-    /*UNUSED! PCheckListItem<ParsedMethod*> *it = */ new PCheckListItem<ParsedMethod*>(method, myClass, method->asString(), QCheckListItem::RadioButton);
+    new PCheckListItem<FunctionDom>(method, myClass, m_part->formatModelItem(method.data()), QCheckListItem::RadioButton);
 }
 
-void CppNewClassDialog::addToMethodsList(QListViewItem *parent, ParsedMethod *method)
+void CppNewClassDialog::addToMethodsList(QListViewItem *parent, FunctionDom method)
 {
-    if (!method->isDestructor())
-    {
-        PCheckListItem<ParsedMethod*> *it = new PCheckListItem<ParsedMethod*>(method, parent, method->asString(), QCheckListItem::CheckBox);
-        it->setText(1, i18n("extend"));
-    }
+    PCheckListItem<FunctionDom> *it = new PCheckListItem<FunctionDom>(method, parent, m_part->formatModelItem(method.data()), QCheckListItem::CheckBox);
+    it->setText(1, i18n("extend"));
 }
 
-void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, ParsedMethod *method, QString modifier)
+void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, FunctionDom method, QString modifier)
 {
-    PListViewItem<ParsedMethod*> *it = new PListViewItem<ParsedMethod*>(method, parent, method->asString());
+    PListViewItem<FunctionDom> *it = new PListViewItem<FunctionDom>(method, parent, m_part->formatModelItem(method.data()));
     it->setText(1, modifier);
 }
 
-void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, ParsedAttribute *attr, QString modifier)
+void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, VariableDom attr, QString modifier)
 {
-    PListViewItem<ParsedAttribute*> *it = new PListViewItem<ParsedAttribute*>(attr, parent, attr->asString());
+    PListViewItem<VariableDom> *it = new PListViewItem<VariableDom>(attr, parent, m_part->formatModelItem(attr.data()));
     it->setText(1, modifier);
 }
 
@@ -812,8 +800,8 @@ void CppNewClassDialog::clear_selection_button_clicked()
     QListViewItemIterator it( constructors_view );
     while ( it.current() )
     {
-        PCheckListItem<ParsedMethod*> *curr;
-        if ( (curr = dynamic_cast<PCheckListItem<ParsedMethod*>* >(it.current()) ) )
+        PCheckListItem<FunctionDom> *curr;
+        if ( (curr = dynamic_cast<PCheckListItem<FunctionDom>* >(it.current()) ) )
             curr->setOn(false);
         ++it;
     }
@@ -873,12 +861,12 @@ void CppNewClassDialog::setAccessForBase(QString baseclass, QString newAccess)
         {
             if ( !it.current()->text(1).isNull() )
             {
-                PListViewItem<ParsedAttribute*> *curr;
-                PListViewItem<ParsedMethod*> *curr_m;
-                if ( (curr = dynamic_cast<PListViewItem<ParsedAttribute*>* >(it.current())) )
-                    setAccessForItem(curr, newAccess, curr->item()->isPublic());
-                else if ( (curr_m = dynamic_cast<PListViewItem<ParsedMethod*>* >(it.current())) )
-                    setAccessForItem(curr_m, newAccess, curr_m->item()->isPublic());
+                PListViewItem<VariableDom> *curr;
+                PListViewItem<FunctionDom> *curr_m;
+                if ( (curr = dynamic_cast<PListViewItem<VariableDom>* >(it.current())) )
+                    setAccessForItem(curr, newAccess, curr->item()->access() == CodeModelItem::Public);
+                else if ( (curr_m = dynamic_cast<PListViewItem<FunctionDom>* >(it.current())) )
+                    setAccessForItem(curr_m, newAccess, curr->item()->access() == CodeModelItem::Public);
             }
             ++it;
         }
@@ -936,10 +924,10 @@ void CppNewClassDialog::selectall_button_clicked()
     QListViewItemIterator it( constructors_view );
     while ( it.current() )
     {
-	PCheckListItem<ParsedMethod*> *curr;
-	if ( (curr = dynamic_cast<PCheckListItem<ParsedMethod*>* >(it.current()) ) )
-	    curr->setOn(true);
-	++it;
+        PCheckListItem<FunctionDom> *curr;
+        if ( (curr = dynamic_cast<PCheckListItem<FunctionDom>* >(it.current()) ) )
+            curr->setOn(true);
+        ++it;
     }
 }
 
@@ -958,41 +946,43 @@ void CppNewClassDialog::to_constructors_list_clicked()
     QListViewItemIterator it( constructors_view );
     while ( it.current() )
     {
-        PCheckListItem<ParsedMethod*> *curr;
-        if ( (curr = dynamic_cast<PCheckListItem<ParsedMethod*>* >(it.current())) )
+        PCheckListItem<FunctionDom> *curr;
+        if ( (curr = dynamic_cast<PCheckListItem<FunctionDom>* >(it.current())) )
         {
             if (curr->isOn() && curr->parent())
             {
                 //fill the base classes list
                 base += base.isEmpty() ? ": " : ", ";
                 base += curr->parent()->text(0);
-                PCheckListItem<ParsedClass*> *p;
-                if ( (p = dynamic_cast<PCheckListItem<ParsedClass*>* >(curr->parent())) )
+                PCheckListItem<ClassDom> *p;
+                if ( (p = dynamic_cast<PCheckListItem<ClassDom>* >(curr->parent())) )
                 {
                     base += p->templateAddition;
                 }
                 params_h += params_h.isEmpty() ? "" : ", ";
 
                 //fill arguments for both constructor and base class initializer
-                //parser does not allow to process default values now ?!
-                ParsedArgument *arg;
                 QString cparams;
                 QString bparams;
-                for (arg = curr->item()->arguments.first(); arg; arg = curr->item()->arguments.next())
+                ArgumentList argumentList = curr->item()->argumentList();
+                for (ArgumentList::const_iterator argIt = argumentList.begin();
+                    argIt != argumentList.end(); ++argIt)
                 {
                     bparams += bparams.isEmpty() ? "" : ", ";
                     cparams += cparams.isEmpty() ? "" : ", ";
-                    cparams += arg->type() + " ";
-                    if (arg->name().isNull())
+                    cparams += (*argIt)->type() + " ";
+                    if ((*argIt)->name().isEmpty())
                     {
                         cparams += QString("arg%1").arg(unnamed);
                         bparams += QString("arg%1").arg(unnamed++);
                     }
                     else
                     {
-                        bparams += arg->name();
-                        cparams += arg->name();
+                        bparams += (*argIt)->name();
+                        cparams += (*argIt)->name();
                     }
+                    if (!(*argIt)->defaultValue().isEmpty())
+                        bparams += " = " + (*argIt)->defaultValue();
                 }
                 params_h += cparams;
                 params_cpp = params_h;
@@ -1009,11 +999,19 @@ void CppNewClassDialog::to_constructors_list_clicked()
     constructors_cpp_edit->append(constructor_cpp);
 }
 
-void CppNewClassDialog::updateClassStore()
-{
-}
 
 
+/* ----------------------------------------------------------
+   ----------------------------------------------------------
+   ----------------------------------------------------------
+   ----------------------------------------------------------
+
+    class CppNewClassDialog::ClassGenerator
+
+   ----------------------------------------------------------
+   ----------------------------------------------------------
+   ----------------------------------------------------------
+   ---------------------------------------------------------- */
 
 
 bool CppNewClassDialog::ClassGenerator::validateInput()
@@ -1159,24 +1157,24 @@ void CppNewClassDialog::ClassGenerator::common_text()
   QListViewItemIterator it( dlg.methods_view );
   while ( it.current() )
   {
-    PCheckListItem<ParsedMethod*> *curr;
-    if ( (curr = dynamic_cast<PCheckListItem<ParsedMethod*>* >(it.current())) )
+    PCheckListItem<FunctionDom> *curr;
+    if ( (curr = dynamic_cast<PCheckListItem<FunctionDom>* >(it.current())) )
     {
       if (curr->isOn() && (curr->parent()) && (curr->parent()->parent()))
       {
         QString *adv_h = 0;
-        if (curr->item()->isPrivate())
+        if (curr->item()->access() == CodeModelItem::Private)
           adv_h = curr->item()->isSlot() ? &advH_private_slots : &advH_private;
-        if (curr->item()->isProtected())
+        if (curr->item()->access() == CodeModelItem::Protected)
           adv_h = curr->item()->isSlot() ? &advH_protected_slots : &advH_protected;
-        if (curr->item()->isPublic())
+        if (curr->item()->access() == CodeModelItem::Public)
           adv_h = curr->item()->isSlot() ? &advH_public_slots : &advH_public;
 
 //        if (advCpp.isNull()) advCpp += "\n\n";
 
         QString bcName = curr->parent()->parent()->text(0);
-        PListViewItem<ParsedClass*> *bc;
-        if ( (bc = dynamic_cast<PListViewItem<ParsedClass*>* >(curr->parent()->parent())) )
+        PListViewItem<ClassDom> *bc;
+        if ( (bc = dynamic_cast<PListViewItem<ClassDom>* >(curr->parent()->parent())) )
         {
             bcName += bc->templateAddition;
         }
@@ -1191,9 +1189,9 @@ void CppNewClassDialog::ClassGenerator::common_text()
   QListViewItemIterator ita( dlg.access_view );
   while ( ita.current() )
   {
-    PListViewItem<ParsedAttribute*> *curr;
-    PListViewItem<ParsedMethod*> *curr_m;
-    if ( (curr = dynamic_cast<PListViewItem<ParsedAttribute*>* >(ita.current())) )
+    PListViewItem<VariableDom> *curr;
+    PListViewItem<FunctionDom> *curr_m;
+    if ( (curr = dynamic_cast<PListViewItem<VariableDom>* >(ita.current())) )
     {
         if ((!curr->text(2).isNull()) && (curr->parent()) && (curr->parent()->parent()) )
         {
@@ -1208,7 +1206,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
             *adv_h += QString("    using ") + curr->parent()->parent()->text(0) + "::"  + curr->item()->name() + ";\n";
         }
     }
-    else if ( (curr_m = dynamic_cast<PListViewItem<ParsedMethod*>* >(ita.current())) )
+    else if ( (curr_m = dynamic_cast<PListViewItem<FunctionDom>* >(ita.current())) )
     {
         if ((!curr_m->text(2).isNull())  && (curr_m->parent()) && (curr_m->parent()->parent()) )
         {
@@ -1239,7 +1237,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
   advCpp.replace(e, QString::null);
 }
 
-void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *method,
+void CppNewClassDialog::ClassGenerator::genMethodDeclaration(FunctionDom method,
     QString className, QString templateStr, QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName )
 {
 /*    if ((*adv_h).isNull())
@@ -1249,35 +1247,39 @@ void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *metho
         methodName = "operator" + methodName;
     *adv_h += "    " + (method->isVirtual() ? QString("virtual ") : QString(""))
         + (method->isStatic() ? QString("static ") : QString(""))
-        + method->type() + " " + methodName + "(";
+        + method->resultType() + " " + methodName + "(";
     if (!templateStr.isEmpty())
         *adv_cpp += templateStr + "\n";
-    *adv_cpp += method->type() + " " + className + templateParams + "::" + methodName + "(";
+    *adv_cpp += method->resultType() + " " + className + templateParams + "::" + methodName + "(";
 
-    ParsedArgument *arg;
     QString bparams;
     QString cparams;
     int unnamed = 1;
-    for (arg = method->arguments.first(); arg; arg = method->arguments.next())
+
+    ArgumentList argumentList = method->argumentList();
+    for (ArgumentList::const_iterator argIt = argumentList.begin();
+        argIt != argumentList.end(); ++argIt)
     {
         bparams += bparams.isEmpty() ? "" : ", ";
         cparams += cparams.isEmpty() ? "" : ", ";
-        cparams += arg->type() + " ";
-        if (arg->name().isNull())
+        cparams += (*argIt)->type() + " ";
+        if ((*argIt)->name().isEmpty())
         {
             cparams += QString("arg%1").arg(unnamed);
             bparams += QString("arg%1").arg(unnamed++);
         }
         else
         {
-            bparams += arg->name();
-            cparams += arg->name();
+            bparams += (*argIt)->name();
+            cparams += (*argIt)->name();
         }
+        if (!(*argIt)->defaultValue().isEmpty())
+            bparams += " " + (*argIt)->defaultValue();
     }
-    *adv_h += cparams + ")" + (method->isConst() ? " const" : "") + ";\n";
-    *adv_cpp += cparams + ")" + (method->isConst() ? " const" : "") + "\n{\n";
+    *adv_h += cparams + ")" + (method->isConstant() ? " const" : "") + ";\n";
+    *adv_cpp += cparams + ")" + (method->isConstant() ? " const" : "") + "\n{\n";
     if (extend)
-        *adv_cpp += ((method->type() == "void") ? "    " : "    return ") +
+        *adv_cpp += ((method->resultType() == "void") ? "    " : "    return ") +
                     baseClassName + "::" + methodName + "(" + bparams + ");\n";
     *adv_cpp += "}\n\n";
 }
@@ -1779,6 +1781,13 @@ QString CppNewClassDialog::templateActualParamsFormatted( const QString & name)
 void CppNewClassDialog::removeTemplateParams( QString & name)
 {
   name.replace(QRegExp("<.*> *"), "");
+}
+
+bool CppNewClassDialog::isDestructor( QString className, const FunctionDom &method )
+{
+    if (m_part->formatModelItem(method.data()).contains(QRegExp(" *~ *"+className)))
+        return true;
+    return false;
 }
 
 #include "cppnewclassdlg.moc"

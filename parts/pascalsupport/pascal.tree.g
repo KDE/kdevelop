@@ -18,7 +18,7 @@
 //
 
 header "pre_include_hpp" {
-        #include "classstore.h"
+	#include <codemodel.h>
         #include "PascalAST.hpp"
 
         #include <qstring.h>
@@ -27,11 +27,7 @@ header "pre_include_hpp" {
 }
 
 header "post_include_hpp" {
-        #include <parsedmethod.h>
-        #include <parsedclass.h>
-        #include <parsedattribute.h>
-        #include <parsedargument.h>
-
+	#include <codemodel.h>
         #include <kdebug.h>
 }
 
@@ -52,32 +48,25 @@ options {
 private:
         QString m_fileName;
         QStringList m_currentScope;
-        ClassStore* m_store;
-        ParsedClassContainer* m_currentContainer;
-        ParsedClass* m_currentClass;
-        PIAccess m_currentAccess;
+        int m_currentAccess;
         int m_anon;
+	CodeModel* m_model;
 
 public:
-        void setClassStore( ClassStore* store )                 { m_store = store; }
-        ClassStore* classStore()                                { return m_store; }
-        const ClassStore* classStore() const                    { return m_store; }
+        void setCodeModel( CodeModel* model )			{ m_model = model; }
+        CodeModel* codeModel()					{ return m_model; }
+        const CodeModel* codeModel() const			{ return m_model; }
 
-        QString fileName() const        { return m_fileName; }
-        void setFileName( const QString& fileName ) { m_fileName = fileName; }
+        QString fileName() const				{ return m_fileName; }
+        void setFileName( const QString& fileName )		{ m_fileName = fileName; }
 
         void init(){
                 m_currentScope.clear();
-                m_currentContainer = m_store->globalScope();
-                m_currentClass = 0;
-                m_currentAccess = PIE_PUBLIC;
+                m_currentAccess = CodeModelItem::Public;
                 m_anon = 0;
-                m_store->removeWithReferences( m_fileName );
         }
 
-        void wipeout()                                          { m_store->wipeout(); }
-        void out()                                              { m_store->out(); }
-        void removeWithReferences( const QString& fileName )    { m_store->removeWithReferences( fileName ); }
+        void wipeout()						{ m_model->wipeout(); }
 }
 
 program
@@ -156,7 +145,7 @@ typeDefinitionPart
 
 typeDefinition
     : #(TYPEDECL IDENT
-      ( type 
+      ( type
       | #(FUNCTION (formalParameterList)? resultType)
       | #(PROCEDURE (formalParameterList)?)
       )

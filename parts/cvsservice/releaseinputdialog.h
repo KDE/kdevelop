@@ -23,16 +23,37 @@ class ReleaseInputDialog : public ReleaseInputDialogBase
   Q_OBJECT
 
 public:
-	/**
-	* @param releaseMsg the custom message to display when prompting the user
-	* @param parent
-	* @param name
-	*/
-	ReleaseInputDialog( const QString &releaseMsg, QWidget* parent = 0, const char* name = 0);
-	virtual ~ReleaseInputDialog();
+    /**
+    * C-tor
+    * @param releaseMsg the custom message to display when prompting the user
+    * @param parent
+    * @param name
+    * @param enforceNotNullInput the dialog will accept only not null input
+    */
+    ReleaseInputDialog( const QString &releaseMsg, QWidget* parent = 0,
+        bool enforceNotNullInput = true );
+    /**
+    * Destructor
+    */
+    virtual ~ReleaseInputDialog();
 
-	void setReleaseMsg( const QString &msg );
-	QString releaseTag() const;
+    /**
+    * @return a QString formatted as "-r <RELEASE-TAG> " or "-D <RELEASE-DATE> "
+    *         so it can be embedded in the command line.
+    */
+    QString release() const;
+
+protected slots:
+    /**
+    * Redefined so we can accept only valid (not null) input by the user
+    */
+    virtual void accept();
+
+private:
+    bool isTag() const;
+    bool isDate() const;
+
+    bool m_enforceNullInput;
 };
 
 #endif

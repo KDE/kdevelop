@@ -1,5 +1,5 @@
 #include "core.h"
-#include "classstore.h"
+#include "codemodel.h"
 #include "partcontroller.h"
 #include "toplevel.h"
 #include "debugger.h"
@@ -9,41 +9,35 @@
 API *API::s_instance = 0;
 
 
-KDevMainWindow *API::mainWindow()
+KDevMainWindow *API::mainWindow() const
 {
   return TopLevel::getInstance();
 }
 
-bool API::mainWindowValid()
+bool API::mainWindowValid() const
 {
   return TopLevel::mainWindowValid();
 }
 
-KDevPartController *API::partController()
+KDevPartController *API::partController() const
 {
   return PartController::getInstance();
 }
 
 
-KDevCore *API::core()
+KDevCore *API::core() const
 {
   return Core::getInstance();
 }
 
 
-ClassStore *API::classStore()
+CodeModel *API::codeModel() const
 {
   return m_classStore;
 }
 
 
-ClassStore *API::ccClassStore()
-{
-  return m_ccClassStore;
-}
-
-
-KDevDebugger *API::debugger()
+KDevDebugger *API::debugger() const
 {
   return Debugger::getInstance();
 }
@@ -60,12 +54,13 @@ API *API::getInstance()
 API::API()
   : KDevApi()
 {
-  m_classStore = new ClassStore();
-  m_ccClassStore = new ClassStore();
+  m_classStore = new CodeModel();
 }
 
 
 API::~API()
 {
+  delete( m_classStore );
+  m_classStore = 0;
 }
 

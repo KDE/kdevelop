@@ -212,20 +212,20 @@ void AutoProjectPart::closeProject()
 }
 
 
-QString AutoProjectPart::projectDirectory()
+QString AutoProjectPart::projectDirectory() const
 {
     return m_projectPath;
 }
 
 
-QString AutoProjectPart::projectName()
+QString AutoProjectPart::projectName() const
 {
     return m_projectName;
 }
 
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList AutoProjectPart::runEnvironmentVars()
+DomUtil::PairList AutoProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/run/envvars", "envvar", "name", "value");
 }
@@ -242,7 +242,7 @@ DomUtil::PairList AutoProjectPart::runEnvironmentVars()
   *   if /kdevautoproject/run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString AutoProjectPart::runDirectory()
+QString AutoProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -278,7 +278,7 @@ QString AutoProjectPart::runDirectory()
   *   if /kdevautoproject/run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AutoProjectPart::mainProgram(bool relative)
+QString AutoProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
@@ -330,19 +330,19 @@ QString AutoProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString AutoProjectPart::runArguments()
+QString AutoProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 }
 
 
-QString AutoProjectPart::activeDirectory()
+QString AutoProjectPart::activeDirectory() const
 {
     return m_widget->activeDirectory();
 }
 
 
-QStringList AutoProjectPart::allFiles()
+QStringList AutoProjectPart::allFiles() const
 {
     return m_widget->allFiles();
 }
@@ -361,7 +361,7 @@ void AutoProjectPart::setWantautotools()
 }
 
 
-QString AutoProjectPart::makeEnvironment()
+QString AutoProjectPart::makeEnvironment() const
 {
     // Get the make environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
@@ -450,7 +450,7 @@ void AutoProjectPart::removeFiles ( const QStringList& fileList )
 	emit removedFilesFromProject ( fileList );
 }
 
-QStringList AutoProjectPart::allBuildConfigs()
+QStringList AutoProjectPart::allBuildConfigs() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -471,7 +471,7 @@ QStringList AutoProjectPart::allBuildConfigs()
 }
 
 
-QString AutoProjectPart::currentBuildConfig()
+QString AutoProjectPart::currentBuildConfig() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -483,7 +483,7 @@ QString AutoProjectPart::currentBuildConfig()
 }
 
 
-QString AutoProjectPart::buildDirectory()
+QString AutoProjectPart::buildDirectory() const
 {
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
@@ -496,7 +496,7 @@ QString AutoProjectPart::buildDirectory()
         return projectDirectory() + "/" + builddir;
 }
 
-QString AutoProjectPart::topsourceDirectory()
+QString AutoProjectPart::topsourceDirectory() const
 {
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
@@ -509,7 +509,7 @@ QString AutoProjectPart::topsourceDirectory()
         return projectDirectory() + "/" + topsourcedir;
 }
 
-QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QString &target)
+QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QString &target) const
 {
 
     QString preCommand;
@@ -568,10 +568,10 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     m_buildCommand = constructMakeCommandLine(dir, target);
 
     if (withKdesu)
-	m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
+        m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
 
     if (!m_buildCommand.isNull())
-      makeFrontend()->queueCommand(dir, m_buildCommand);
+         makeFrontend()->queueCommand(dir, m_buildCommand);
 }
 
 
@@ -589,15 +589,15 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
   for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
     QString dependency = *l2it;
     if (dependency.startsWith("$(top_builddir)/")) {
-      // These are the internal libraries
+        // These are the internal libraries
 #if KDE_VERSION > 305
-      dependency.remove("$(top_builddir)/");
+        dependency.remove("$(top_builddir)/");
 #else
-      QString topBuildDirStr("$(top_builddir)/");
-      int i = dependency.find(topBuildDirStr);
-      if (i != -1) {
-	  dependency.remove(i, i + topBuildDirStr.length() - 1);
-      }
+        QString topBuildDirStr("$(top_builddir)/");
+        int i = dependency.find(topBuildDirStr);
+        if (i != -1) {
+        dependency.remove(i, i + topBuildDirStr.length() - 1);
+    }
 #endif
       tdir = buildDirectory();
       if (!tdir.endsWith("/") && !tdir.isEmpty())
@@ -641,9 +641,9 @@ void AutoProjectPart::slotBuild()
     //m_lastCompilationFailed = false;
 
     if( m_needMakefileCvs ){
-	slotMakefilecvs();
-	slotConfigure();
-	m_needMakefileCvs = false;
+        slotMakefilecvs();
+        slotConfigure();
+        m_needMakefileCvs = false;
     }
 
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
@@ -733,7 +733,7 @@ void AutoProjectPart::slotCompileFile()
     startMakeCommand(buildDir, target);
 }
 
-QString AutoProjectPart::configureCommand()
+QString AutoProjectPart::configureCommand() const
 {
     QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
@@ -798,7 +798,7 @@ void AutoProjectPart::slotConfigure()
     makeFrontend()->queueCommand(buildDirectory(), cmdline);
 }
 
-QString AutoProjectPart::makefileCvsCommand()
+QString AutoProjectPart::makefileCvsCommand() const
 {
     QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
@@ -969,26 +969,26 @@ void AutoProjectPart::slotBuildConfigAboutToShow()
 
 void AutoProjectPart::restorePartialProjectSession ( const QDomElement* el )
 {
-	m_widget->restoreSession ( el );
+    m_widget->restoreSession ( el );
 }
 
 void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
 {
-	QDomDocument domDoc = el->ownerDocument();
+    QDomDocument domDoc = el->ownerDocument();
 
-	KMessageBox::information ( 0, "Hallo, Welt!" );
+    KMessageBox::information ( 0, "Hallo, Welt!" );
 
-	kdDebug ( 9000 ) << "*********************************************** 1) AutoProjectPart::savePartialProjectSession()" << endl;
+    kdDebug ( 9000 ) << "*********************************************** 1) AutoProjectPart::savePartialProjectSession()" << endl;
 
-	if ( domDoc.isNull() )
-	{
-		kdDebug ( 9000 ) << "*********************************************** 2) AutoProjectPart::savePartialProjectSession()" << endl;
-		return;
-	}
+    if ( domDoc.isNull() )
+    {
+        kdDebug ( 9000 ) << "*********************************************** 2) AutoProjectPart::savePartialProjectSession()" << endl;
+        return;
+    }
 
-	kdDebug ( 9000 ) << "*********************************************** 3) AutoProjectPart::savePartialProjectSession()" << endl;
+    kdDebug ( 9000 ) << "*********************************************** 3) AutoProjectPart::savePartialProjectSession()" << endl;
 
-	m_widget->saveSession ( el );
+    m_widget->saveSession ( el );
 }
 
 void AutoProjectPart::slotCommandFinished( const QString& command )
@@ -996,7 +996,7 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     kdDebug(9020) << k_funcinfo << endl;
 
     if( m_buildCommand != command )
-	return;
+        return;
 
     m_buildCommand = QString::null;
 
@@ -1005,9 +1005,9 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
         QString fileName = *it;
-	++it;
+        ++it;
 
-	m_timestamp[ fileName ] = QFileInfo( projectDirectory(), fileName ).lastModified();
+        m_timestamp[ fileName ] = QFileInfo( projectDirectory(), fileName ).lastModified();
     }
 
     emit projectCompiled();
@@ -1016,8 +1016,8 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     m_lastCompilationFailed = false;
 
     if( m_executeAfterBuild ){
-	slotExecute();
-	m_executeAfterBuild = false;
+        slotExecute();
+        m_executeAfterBuild = false;
     }
 }
 
@@ -1036,13 +1036,13 @@ bool AutoProjectPart::isDirty()
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
         QString fileName = *it;
-	++it;
+        ++it;
 
-	QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
-	QDateTime t = QFileInfo( projectDirectory(), fileName ).lastModified();
-	if( it == m_timestamp.end() || *it != t ){
-	    return true;
-	}
+        QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+        QDateTime t = QFileInfo( projectDirectory(), fileName ).lastModified();
+        if( it == m_timestamp.end() || *it != t ){
+            return true;
+        }
     }
 
     return false;
@@ -1053,12 +1053,12 @@ void AutoProjectPart::needMakefileCvs( )
     m_needMakefileCvs = true;
 }
 
-bool AutoProjectPart::isKDE()
+bool AutoProjectPart::isKDE() const
 {
     return m_isKDE;
 }
 
-KDevProject::Options AutoProjectPart::options( )
+KDevProject::Options AutoProjectPart::options() const
 {
     return UsesAutotoolsBuildSystem;
 }

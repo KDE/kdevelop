@@ -61,9 +61,6 @@ in the bug database (http://bugs.kde.org)
 
 UIs that intuitively ought to be there
 
-* automakemanager:
-  - install, etc. targets besides "build" for subproject menus & toolbar
-
 * IDEAl UI-mode:
    -> Extend KDevPlugin-API in order to have a preferred border for at least the selection parts
        (Automake Manager, Class Browser, File Groups, etc...)

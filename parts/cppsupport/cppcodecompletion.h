@@ -20,24 +20,23 @@
 #ifndef __CPPCODECOMPLETION_H__
 #define __CPPCODECOMPLETION_H__
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qtimer.h>
-#include <qguardedptr.h>
+#include "cppsupportpart.h"
+
+#include <ast.h>
+#include <codemodel.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include "cppsupportpart.h"
-#include "ast.h"
+#include <qobject.h>
+#include <qstringlist.h>
+#include <qtimer.h>
+#include <qguardedptr.h>
 
-class ParsedClass;
-class ParsedClassContainer;
-class ParsedScopeContainer;
 class CodeInformationRepository;
-class CppCodeCompletionData;
 class SimpleContext;
+class CppCodeCompletionData;
 
 class CppCodeCompletion : public QObject
 {
@@ -74,23 +73,23 @@ private:
     QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx=0 );
     
     QStringList typeOf( const QValueList<Tag>& tags );
-    QStringList typeOf( const QString& name, ParsedClass* klass );
-    QStringList typeOf( const QString& name, ParsedScopeContainer* scope );
-    QStringList typeOf( const QString& name, const QValueList<ParsedMethod*>& methods );
+    QStringList typeOf( const QString& name, ClassDom klass );
+    QStringList typeOf( const QString& name, NamespaceDom scope );
+    QStringList typeOf( const QString& name, const FunctionList& methods );
     
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ParsedClass* klass );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ParsedScopeContainer* scope );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedMethod*>& methods );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedAttribute*>& attributes );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedClass*>& lst );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedScopeContainer*>& lst );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst );
     
     void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
-    void computeSignatureList( QStringList& signatureList, const QString& name, ParsedClass* klass );
-    void computeSignatureList( QStringList& signatureList, const QString& name, const QValueList<ParsedMethod*>& methods );
+    void computeSignatureList( QStringList& signatureList, const QString& name, ClassDom klass );
+    void computeSignatureList( QStringList& signatureList, const QString& name, const FunctionList& methods );
     void computeSignatureList( QStringList& signatureList, const QString& name, QValueList<Tag>& tags );
     
     SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
@@ -106,6 +105,7 @@ private:
 
     QString getText( int startLine, int startColumn, int endLine, int endColumn );
     
+    ClassDom findContainer( const QString& name, NamespaceDom container=0, bool includeImports=false );    
     QString findClass( const QString& className );
 
 private:

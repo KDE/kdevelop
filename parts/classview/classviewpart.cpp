@@ -1,128 +1,190 @@
-/***************************************************************************
- *   Copyright (C) 1999 by Jonas Nordin                                    *
- *   jonas.nordin@syncom.se                                                *
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
+ *  Copyright (C) 2003 Alexander Dymo (cloudtemple@mksat.net)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ *
+ */
 
-#include "classviewpart.h"
-
-#include <qtimer.h>
-#include <qpopupmenu.h>
-#include <qvbox.h>
 #include <qwhatsthis.h>
-#include <kaction.h>
-#include <kdebug.h>
-#include <kdialogbase.h>
+#include <qlistview.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kcompletionbox.h>
+#include <kgenericfactory.h>
+#include <kpopupmenu.h>
 
-#include "kdevcore.h"
-#include "kdevlanguagesupport.h"
-#include "kdevmainwindow.h"
-#include "kdevpartcontroller.h"
-#include "classstore.h"
+#include <kdevcore.h>
+#include <kdevmainwindow.h>
+#include <kdevlanguagesupport.h>
+#include <qcomboview.h>
+#include <kdevpartcontroller.h>
 
 #include "classviewwidget.h"
-#include "classviewconfigwidget.h"
-#include "classactions.h"
-#include "classtooldlg.h"
-#include "hierarchydlg.h"
+#include "classviewpart.h"
 
+#include "klistviewaction.h"
 
+class NamespaceItem: public QListViewItem{
+public:
+    NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    NamespaceDom dom() const
+    {
+        return m_dom;
+    }
+    virtual void setup()
+    {
+        QListViewItem::setup();
+        setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, m_part->instance()) );
+    }
+private:
+    NamespaceDom m_dom;
+    ClassViewPart *m_part;
+};
+
+class ClassItem: public QListViewItem{
+public:
+    ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    ClassDom dom() const
+    {
+        return m_dom;
+    }
+    virtual void setup()
+    {
+        QListViewItem::setup();
+        setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, m_part->instance()) );
+    }
+private:
+    ClassDom m_dom;
+    ClassViewPart *m_part;
+};
+
+class FunctionItem: public QListViewItem{
+public:
+    FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom)
+        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
+    FunctionDom dom() const
+    {
+        return m_dom;
+    }
+    virtual void setup()
+    {
+        QListViewItem::setup();
+        QString iconName;
+        if( m_dom->access() == CodeModelItem::Private )
+            iconName = "CVprivate_meth";
+        else if( m_dom->access() == CodeModelItem::Protected )
+            iconName = "CVprotected_meth";
+        else
+            iconName = "CVpublic_meth";
+        setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, m_part->instance()) );
+    }
+private:
+    FunctionDom m_dom;
+    ClassViewPart *m_part;
+};
+
+typedef KGenericFactory<ClassViewPart> ClassViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
 
-ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart")
+ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
+    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" )
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
-    
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
-    connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-             this, SLOT(projectConfigWidget(KDialogBase*)) );
 
-    m_classtree = new ClassViewWidget(this);
-    m_classtree->setIcon(UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
-    m_classtree->setCaption(i18n("Class View"));
-    QWhatsThis::add(m_classtree, i18n("Class View\n\n"
-                                      "The class viewer shows all classes, methods and variables "
-                                      "of the source files and allows switching to declarations "
-                                      "and implementations. The right button popup menu allows more specialized "
-                                      "functionality."));
+    setupActions();
 
-    mainWindow()->embedSelectView(m_classtree, i18n("Classes"), i18n("class browser"));
+    m_widget = new ClassViewWidget(this);
 
-    classes_action = new ClassListAction(this, i18n("Classes"), 0,
-                                         this, SLOT(selectedClass()),
-                                         actionCollection(), "class_combo");
+    mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
 
-    methods_action = new MethodListAction(this, i18n("Methods"), 0,
-                                          this, SLOT(selectedMethod()),
-                                          actionCollection(), "method_combo");        
-
-    
-    popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0,
-                                           this, SLOT(switchedDeclImpl()),
-                                           actionCollection(), "class_wizard");    
-    
-    setupPopup();
-    m_decl_or_impl = false;
-    
-    if( project() )
-        projectOpened();
+    connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+    connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 }
 
 
 ClassViewPart::~ClassViewPart()
 {
-    for (QWidget *w=m_widgets.first(); w != 0; w = m_widgets.next())
-      mainWindow()->removeView(w);
-    mainWindow()->removeView(m_classtree);
-
-    // In contrast to other widgets, we can have any number of class tool
-    // dialogs. That's why we don't use QGuardedPtr here, but instead let
-    // the dialogs register() and unregister() themselves.
-    m_widgets.setAutoDelete(true);
-    delete m_classtree;
+    mainWindow()->removeView( m_widget );
+    delete (ClassViewWidget*) m_widget;
 }
 
-
-bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
+void ClassViewPart::slotProjectOpened( )
 {
-    bool result = false;
-    if (languageSupport())
-        result = (feature & languageSupport()->features());
-    return result;
+    refresh();
+    connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
 }
 
-
-void ClassViewPart::setupPopup()
+void ClassViewPart::slotProjectCloses( )
 {
-    QPopupMenu *popup = popup_action->popupMenu();
+    disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
+    m_namespaces->view()->clear();
+    m_classes->view()->clear();
+    m_functions->view()->clear();
+}
 
-    popup->clear();
+void ClassViewPart::setupActions( )
+{
+    m_namespaces = new KListViewAction( new QComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
+    connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
+    m_namespaces->setToolTip(i18n("Namespaces"));
+    m_namespaces->setWhatsThis(i18n("<b>Namespace Selector</b>\nSelect a namespace to view classes and functions contained in it."));
 
-    if (langHasFeature(KDevLanguageSupport::Declarations))
-        popup->insertItem(i18n("Go to Declaration"), this, SLOT(selectedGotoDeclaration()));
+    m_classes = new KListViewAction( new QComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
+    connect( m_classes->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(QListViewItem*)) );
+    m_classes->setToolTip(i18n("Classes"));
+    m_classes->setWhatsThis(i18n("<b>Class Selector</b>\nSelect a class to view it's members."));
 
-    popup->insertItem(i18n("Go to Implementation"), this, SLOT(selectedGotoImplementation()));
-    popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(selectedGotoClassDeclaration()));
-    popup->insertItem(i18n("View Class Hierarchy"), this, SLOT(selectedViewHierarchy()));
-    //    popup->insertItem("Dump Class Tree on Console", this, SLOT(dumpTree()));
+    m_functions = new KListViewAction( new QComboView(true), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo" );
+    connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );
+    m_functions->setToolTip(i18n("Functions"));
+    m_functions->setWhatsThis(i18n("<b>Function Selector</b>\nSelect a function to jump to it's definition or declaration."));
+
+    m_namespaces->view()->setMinimumWidth(150);
+    m_classes->view()->setMinimumWidth(150);
+    m_functions->view()->setMinimumWidth(300);
+
+    m_popupAction  = new KToolBarPopupAction(i18n("Class Browser Actions"), "classwiz", 0,
+                                           this, SLOT(switchedViewPopup()),
+                                           actionCollection(), "view_popup");
+    m_popupAction->setToolTip(i18n("Class Browser Actions"));
+    KPopupMenu *popup = m_popupAction->popupMenu();
+    //TODO: check if language support has namespaces, classes, etc.
+//    KDevLanguageSupport::Features features = languageSupport()->features();
+    popup->insertItem(i18n("Go to Function Declaration"), this, SLOT(goToFunctionDeclaration()));
+    popup->insertItem(i18n("Go to Function Definition"), this, SLOT(goToFunctionDefinition()));
+    popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(goToClassDeclaration()));
+
+    //TODO: not applicable to c++ but can be useful for ada and pascal where namespace is contained
+    //in a single compilation unit
+    popup->insertItem(i18n("Go to Namespace Declaration"), this, SLOT(goToNamespaceDeclaration()));
 
     bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
     bool hasAddAttribute = langHasFeature(KDevLanguageSupport::AddAttribute);
     bool hasNewClass = langHasFeature(KDevLanguageSupport::NewClass);
-    if (hasAddMethod || hasAddAttribute || hasNewClass) 
+    if (hasAddMethod || hasAddAttribute || hasNewClass)
         popup->insertSeparator();
     if (hasNewClass)
         popup->insertItem(SmallIcon("classnew"), i18n("Add Class..."), this, SLOT(selectedAddClass()));
@@ -132,323 +194,223 @@ void ClassViewPart::setupPopup()
         popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
 }
 
-
-void ClassViewPart::projectConfigWidget(KDialogBase *dlg)
+void ClassViewPart::refresh( )
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Class View"));
-    ClassViewConfigWidget *w = new ClassViewConfigWidget(this, vbox, "class view config widget");
-    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    refreshNamespaces();
 }
 
-
-void ClassViewPart::configChange()
+void ClassViewPart::refreshNamespaces( )
 {
-    emit setLanguageSupport(languageSupport());
+    m_namespaces->view()->clear();
+
+    NamespaceItem *global_item = new NamespaceItem( this, m_namespaces->view()->listView(), i18n("(Global Namespace)"), codeModel()->globalNamespace() );
+    NamespaceList namespaces = codeModel()->globalNamespace()->namespaceList();
+    for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
+    {
+        NamespaceItem *item = new NamespaceItem(this, m_namespaces->view()->listView(), languageSupport()->formatModelItem(*it), *it);
+        item->setOpen(true);
+        processNamespace(item);
+    }
+    m_namespaces->view()->setCurrentActiveItem(global_item);
 }
 
-
-void ClassViewPart::projectOpened()
+void ClassViewPart::refreshClasses( const NamespaceDom &dom )
 {
-    kdDebug(9003) << "ClassViewPart::projectSpaceOpened()" << endl;
+    m_classes->view()->clear();
 
-    KDevLanguageSupport *ls = languageSupport();
-    if (ls)
-        connect(ls, SIGNAL(updatedSourceInfo()), this, SLOT(updatedSourceInfo()));
-    QTimer::singleShot( 0, this, SLOT(initialize()) );
+    m_classes->view()->setCurrentText(i18n("(Classes)"));
+//    QListViewItem *global_item = new QListViewItem( m_classes->view()->listView(), i18n("Global") );
+    ClassList classes = dom->classList();
+    for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
+    {
+        ClassItem *item = new ClassItem(this, m_classes->view()->listView(), languageSupport()->formatModelItem(*it), *it);
+        item->setOpen(true);
+        processClass(item);
+    }
+//    m_classes->view()->setCurrentItem(global_item);
 }
 
-
-void ClassViewPart::projectClosed()
+void ClassViewPart::refreshFunctions( const ClassDom & dom )
 {
-    emit setLanguageSupport(0);
-    setupPopup();
-    updatedSourceInfo();
-}
+    m_functions->view()->clear();
 
-
-void ClassViewPart::updatedSourceInfo()
-{
-    classes_action->refresh();
-    methods_action->refresh(classes_action->currentClassName());
-    ClassViewWidget* w = dynamic_cast<ClassViewWidget*>((QWidget*)m_classtree);
-    if ( w )
-        w->refresh();
-}
-
-
-void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
-{
-    m_widgets.append(dlg);
-    dlg->setIcon(UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
-    mainWindow()->embedSelectView(dlg, i18n("Classtools"), i18n("classtools"));
-    mainWindow()->raiseView(dlg);
-}
-
-
-void ClassViewPart::registerHierarchyDialog(HierarchyDialog *dlg)
-{
-    m_widgets.append(dlg);
-}
-
-
-void ClassViewPart::unregisterClassToolDialog(ClassToolDialog *dlg)
-{
-    m_widgets.removeRef(dlg);
-}
-
-
-void ClassViewPart::unregisterHierarchyDialog(HierarchyDialog *dlg)
-{
-    m_widgets.removeRef(dlg);
-}
-
-
-/**
- * The user selected a class in the toolbar class combo.
- */
-void ClassViewPart::selectedClass()
-{
-    QString className = classes_action->currentClassName();
-    
-    kdDebug(9003) << "Class selected: " << className << endl;
-    methods_action->refresh(className);
-}
-
-
-/**
- * The user selected a method in the toolbar method combo.
- */
-void ClassViewPart::selectedMethod()
-{
-    QString className = classes_action->currentClassName();
-    QString methodName = methods_action->currentMethodName();
-
-    kdDebug(9003) << "ClassViewPart::selectedMethod" << endl;
-    m_decl_or_impl = true;
-    gotoImplementation(className, methodName);
-}
-
-
-/**
- * The user clicked on the class wizard button.
- */
-void ClassViewPart::switchedDeclImpl()
-{
-    QString className = classes_action->currentClassName();
-    QString methodName = methods_action->currentMethodName();
-
-    kdDebug(9003) << "ClassViewPart::switchedDeclImpl" << endl;
-    if (m_decl_or_impl) {
-        m_decl_or_impl = false;
-        gotoDeclaration(className, methodName);
-    } else {
-        m_decl_or_impl = true;
-        gotoImplementation(className, methodName);
+    m_functions->view()->setCurrentText(i18n("(Functions)"));
+    FunctionList functions = dom->functionList();
+    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
+    {
+        FunctionItem *item = new FunctionItem(this, m_functions->view()->listView(), languageSupport()->formatModelItem(*it), *it);
+        item->setOpen(true);
+        processFunction(item);
     }
 }
 
-
-/**
- * The user selected "View class hierarchy" from the delayed class wizard popup.
- */
-void ClassViewPart::selectedViewHierarchy()
+void ClassViewPart::refreshFunctions( const NamespaceDom & dom )
 {
-    HierarchyDialog *dlg = new HierarchyDialog(this);
-    dlg->show();
+    m_functions->view()->clear();
+
+    m_functions->view()->setCurrentText(i18n("(Functions)"));
+    FunctionList functions = dom->functionList();
+    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
+    {
+        FunctionItem *item = new FunctionItem(this, m_functions->view()->listView(), languageSupport()->formatModelItem(*it), *it);
+        item->setOpen(true);
+        processFunction(item);
+    }
 }
 
-
-/**
- * The user selected "Goto declaration" from the delayed class wizard popup.
- */
-void ClassViewPart::selectedGotoDeclaration()
+void ClassViewPart::selectNamespace( QListViewItem * item )
 {
-    QString className = classes_action->currentClassName();
-    QString methodName = methods_action->currentMethodName();
-
-    gotoDeclaration(className, methodName);
+    NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
+    if (!ni)
+        return;
+    refreshClasses(ni->dom());
+    refreshFunctions(ni->dom());
 }
 
-
-/**
- * The user selected "Goto class declaration" from the delayed class wizard popup.
- */
-void ClassViewPart::selectedGotoClassDeclaration()
+void ClassViewPart::selectClass( QListViewItem * item )
 {
-    QString className = classes_action->currentClassName();
-
-    gotoDeclaration(className, QString::null);
+    ClassItem *ci = dynamic_cast<ClassItem*>(item);
+    if (!ci)
+        return;
+    refreshFunctions(ci->dom());
 }
 
-
-/**
- * The user selected "Goto implementation" from the delayed class wizard popup.
- */
-void ClassViewPart::selectedGotoImplementation()
+void ClassViewPart::selectFunction( QListViewItem * item )
 {
-    QString className = classes_action->currentClassName();
-    QString methodName = methods_action->currentMethodName();
-
-    gotoImplementation(className, methodName);
+    FunctionItem *fi = dynamic_cast<FunctionItem*>(item);
+    if (!fi)
+        return;
+    int startLine, startColumn;
+    fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
+    if (startLine != 0)
+        partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
+    else
+    {
+        fi->dom()->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }
 }
 
+void ClassViewPart::processNamespace( NamespaceItem * item )
+{
+    NamespaceList namespaces = item->dom()->namespaceList();
+    for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
+    {
+        NamespaceItem *newitem = new NamespaceItem(this, item, languageSupport()->formatModelItem(*it), *it);
+        newitem->setOpen(true);
+        processNamespace(newitem);
+    }
+}
 
-/**
- * The user selected "New class..." from the delayed class wizard popup.
- */
-void ClassViewPart::selectedAddClass()
+void ClassViewPart::processClass( ClassItem * item )
+{
+    ClassList classes = item->dom()->classList();
+    for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
+    {
+        ClassItem *newitem = new ClassItem(this, item, languageSupport()->formatModelItem(*it), *it);
+        newitem->setOpen(true);
+        processClass(newitem);
+    }
+}
+
+void ClassViewPart::processFunction( FunctionItem * item )
+{
+    //TODO: allow nested functions (adymo: Pascal has nested procedures and functions)
+/*    FunctionList functions = item->dom()->functionList();
+    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
+    {
+        FunctionItem *newitem = new FunctionItem(item, languageSupport()->formatModelItem(*it), *it);
+        newitem->setOpen(true);
+        processFunction(newitem);
+    }*/
+}
+
+void ClassViewPart::switchedViewPopup( )
+{
+}
+
+bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
+{
+    bool result = false;
+    if (languageSupport())
+        result = (feature & languageSupport()->features());
+    return result;
+}
+
+void ClassViewPart::goToFunctionDeclaration( )
+{
+    if ( m_functions->view()->currentItem() )
+    {
+        FunctionItem *fi = dynamic_cast<FunctionItem*>(m_functions->view()->currentItem());
+        if (!fi)
+            return;
+        int startLine, startColumn;
+        fi->dom()->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }
+}
+
+void ClassViewPart::goToFunctionDefinition( )
+{
+    if ( m_functions->view()->currentItem() )
+    {
+        FunctionItem *fi = dynamic_cast<FunctionItem*>(m_functions->view()->currentItem());
+        if (!fi)
+            return;
+        int startLine, startColumn;
+        fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
+    }
+}
+
+void ClassViewPart::goToClassDeclaration( )
+{
+    if ( m_classes->view()->currentItem() )
+    {
+        ClassItem *fi = dynamic_cast<ClassItem*>(m_classes->view()->currentItem());
+        if (!fi)
+            return;
+        int startLine, startColumn;
+        fi->dom()->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }
+}
+
+void ClassViewPart::goToNamespaceDeclaration( )
+{
+    if ( m_namespaces->view()->currentItem() )
+    {
+        NamespaceItem *fi = dynamic_cast<NamespaceItem*>(m_namespaces->view()->currentItem());
+        if (!fi)
+            return;
+        int startLine, startColumn;
+        fi->dom()->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }
+}
+
+void ClassViewPart::selectedAddClass( )
 {
     if (languageSupport())
         languageSupport()->addClass();
 }
 
-
-/**
- * The user selected "Add method..." from the delayed class wizard popup.
- */
-void ClassViewPart::selectedAddMethod()
+void ClassViewPart::selectedAddMethod( )
 {
+    ClassItem *ci = dynamic_cast<ClassItem*>(m_classes->view()->currentItem());
+    if (!ci)
+        return;
     if (languageSupport())
-        languageSupport()->addMethod(classes_action->currentClassName());
+        languageSupport()->addMethod(ci->dom()->name());
 }
 
-
-/**
- * The user selected "Add attribute..." from the delayed class wizard popup.
- */
-void ClassViewPart::selectedAddAttribute()
+void ClassViewPart::selectedAddAttribute( )
 {
+    ClassItem *ci = dynamic_cast<ClassItem*>(m_classes->view()->currentItem());
+    if (!ci)
+        return;
     if (languageSupport())
-        languageSupport()->addAttribute(classes_action->currentClassName());
-}
-
-
-// Only for debugging
-void ClassViewPart::dumpTree()
-{
-    classStore()->out();
-}
-
-
-ParsedClass *ClassViewPart::getClass(const QString &className)
-{
-    if (className.isEmpty())
-        return 0;
-
-    kdDebug(9003) << "ClassViewPart::getClass " << className << endl;
-    ParsedClass *pc = classStore()->getClassByName(className);
-    if (pc && !pc->isSubClass())
-        classes_action->setCurrentClassName(className);
-    
-    return pc;
-}
-
-
-void ClassViewPart::gotoDeclaration(const QString &className, const QString &methodName)
-{
-    kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << methodName << endl;
-
-    QString toFile;
-    int toLine = -1;
-    
-    if (className.isEmpty()) {
-        if (methodName.isEmpty())
-            return;
-
-        // Global function
-        ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
-        if (!pm)
-            return;
-        
-        toFile = pm->declaredInFile();
-        toLine = pm->declaredOnLine();
-    } else {
-        // Either the class itself or a member function
-        ParsedClass *pc = getClass(className);
-        if (!pc)
-            return;
-        
-        if (methodName.isEmpty()) {
-            // Class itself
-            toFile = pc->declaredInFile();
-            toLine = pc->declaredOnLine();
-        } else {
-            // Method of the class
-            ParsedMethod *pm = pc->getMethodByNameAndArg(methodName);
-            if (!pm)
-                pm = pc->getSlotByNameAndArg(methodName);
-            if (!pm)
-                pm = pc->getSignalByNameAndArg(methodName);
-            if (!pm)
-                return;
-            
-            toFile = pm->declaredInFile();
-            toLine = pm->declaredOnLine();
-        }
-    }
-
-    if (toLine != -1) {
-        kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
-	partController()->editDocument(toFile, toLine);
-    }
-}
-
-
-void ClassViewPart::gotoImplementation(const QString &className, const QString &methodName)
-{
-    kdDebug(9003) << "ClassViewPart::gotoImplementation " << className << "::" << methodName << endl;
-
-    QString toFile;
-    int toLine = -1;
-    
-    if (className.isEmpty()) {
-        if (methodName.isEmpty())
-            return;
-        
-        // Global function
-        ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
-        if (!pm)
-            return;
-        
-        toFile = pm->definedInFile();
-        toLine = pm->definedOnLine();
-    } else {
-        // Either the class itself or a member function
-        ParsedClass *pc = getClass(className);
-        if (!pc)
-            return;
-        
-        if (methodName.isEmpty()) {
-            // Class itself
-            // => does not have an implementation, so go to declaration
-            toFile = pc->definedInFile();
-            toLine = pc->definedOnLine();
-        } else {
-            // Method of the class
-            ParsedMethod *pm = pc->getMethodByNameAndArg(methodName);
-            if (!pm)
-                pm = pc->getSlotByNameAndArg(methodName);
-            if (!pm)
-                pm = pc->getSignalByNameAndArg(methodName);
-            if (!pm)
-                return;
-            
-            toFile = pm->definedInFile();
-            toLine = pm->definedOnLine();
-        }
-    }
-
-    if (toLine != -1) {
-        kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
-	partController()->editDocument(toFile, toLine);
-    }
-}
-
-void ClassViewPart::initialize( )
-{
-    updatedSourceInfo();
-    emit setLanguageSupport( languageSupport() );
-    setupPopup();
+        languageSupport()->addAttribute(ci->dom()->name());
 }
 
 #include "classviewpart.moc"

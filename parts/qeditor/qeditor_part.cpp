@@ -513,7 +513,7 @@ void QEditorPart::setupHighlighting()
     mode = new HLMode;
     mode->name = "qmake";
     mode->section = "Programming";
-    mode->extensions = QStringList() << "*.pro" << "*Makefile" << "*Makefile.am" << "*Makefile.in";
+    mode->extensions = QStringList() << "*.pro" << "*.sh" << "*Makefile" << "*Makefile.am" << "*Makefile.in";
     m_modes.append( mode );
 
     mode = new HLMode;

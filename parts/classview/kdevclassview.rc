@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevClassView" version="2" newline="true">
+<kpartgui name="KDevClassView" version="3" newline="true">
 <ToolBar name="browserToolBar">
   <text>Browser Toolbar</text>
-  <Action name="class_combo" />
-  <Action name="method_combo" />
-  <Action name="class_wizard" />
+  <Action name="namespaces_combo" />
+  <Action name="classes_combo" />
+  <Action name="functions_combo" />
+  <Action name="view_popup" />
   <Separator/>
 </ToolBar>
 </kpartgui>

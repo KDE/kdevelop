@@ -25,40 +25,6 @@ using namespace KDevCompat;
 class KDevPlugin;
 class QComboBox;
 
-class ClassListAction : public KWidgetAction
-{
-public:
-    ClassListAction( KDevPlugin *part, const QString &text, const KShortcut& cut,
-                     const QObject *receiver, const char *slot,
-                     KActionCollection *parent, const char *name );
-    void setCurrentClassName(const QString &name);
-    QString currentClassName();
-    void refresh();
-    
-private:
-    QString currentText(); // only here for preventing its public use
-    void setCurrentItem(const QString &item);
-    KDevPlugin *m_part;
-    QComboBox* m_combo;
-};
-
-
-class MethodListAction : public KWidgetAction
-{
-public:
-    MethodListAction( KDevPlugin *part, const QString &text, const KShortcut& cut,
-                      const QObject *receiver, const char *slot,
-                      KActionCollection *parent, const char *name );
-    void refresh(const QString &className);
-    QString currentMethodName();
-    
-private:
-    QString currentText(); // only here for preventing its public use
-    KDevPlugin *m_part;
-    QComboBox* m_combo;
-};
-
-
 class DelayedPopupAction : public KAction
 {
     Q_OBJECT
@@ -68,7 +34,7 @@ public:
                         QObject *receiver, const char *slot,
                         KActionCollection *parent, const char* name );
     ~DelayedPopupAction();
-    
+
     virtual int plug(QWidget *widget, int index=-1);
     virtual void unplug(QWidget *widget);
 

@@ -159,25 +159,25 @@ void ScriptProjectPart::closeProject()
 }
 
 
-QString ScriptProjectPart::projectDirectory()
+QString ScriptProjectPart::projectDirectory() const
 {
     return m_projectDirectory;
 }
 
 
-QString ScriptProjectPart::buildDirectory()
+QString ScriptProjectPart::buildDirectory() const
 {
     return m_projectDirectory;
 }
 
-QString ScriptProjectPart::projectName()
+QString ScriptProjectPart::projectName() const
 {
     return m_projectName;
 }
 
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList ScriptProjectPart::runEnvironmentVars()
+DomUtil::PairList ScriptProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevscriptproject/run/envvars", "envvar", "name", "value");
 }
@@ -192,7 +192,7 @@ DomUtil::PairList ScriptProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString ScriptProjectPart::runDirectory()
+QString ScriptProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -223,7 +223,7 @@ QString ScriptProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString ScriptProjectPart::mainProgram(bool relative)
+QString ScriptProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
@@ -248,13 +248,13 @@ QString ScriptProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString ScriptProjectPart::runArguments()
+QString ScriptProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevscriptproject/run/programargs");
 }
 
 
-QString ScriptProjectPart::activeDirectory()
+QString ScriptProjectPart::activeDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -262,7 +262,7 @@ QString ScriptProjectPart::activeDirectory()
 }
 
 
-QStringList ScriptProjectPart::allFiles()
+QStringList ScriptProjectPart::allFiles() const
 {
 /*    QStringList res;
 

@@ -5,37 +5,36 @@
 #include "kdevapi.h"
 
 
-class ClassStore;
+class CodeModel;
 
 
 class API : public KDevApi
 {
 public:
 
-  virtual KDevMainWindow *mainWindow();
-  virtual bool mainWindowValid();
-  virtual KDevPartController *partController();
-  virtual KDevCore *core();
-  virtual ClassStore *classStore();
-  virtual ClassStore *ccClassStore();
-  virtual KDevDebugger *debugger();
+  virtual KDevMainWindow *mainWindow() const;
+  virtual bool mainWindowValid() const;
+  virtual KDevPartController *partController() const;
+  virtual KDevCore *core() const;
+  virtual CodeModel *codeModel() const;
+  virtual KDevDebugger *debugger() const;
 
-  
+
   static API *getInstance();
 
   ~API();
 
-  
+
 protected:
 
   API();
 
-  
+
 private:
 
   static API *s_instance;
 
-  ClassStore *m_classStore, *m_ccClassStore;
+  CodeModel *m_classStore;
 
 };
 

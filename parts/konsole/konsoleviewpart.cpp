@@ -17,20 +17,20 @@ K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Konsole", "konsole", parent, name ? name : "KonsoleViewPart")
 {
-  m_widget = new KonsoleViewWidget(this);
-  
+    m_widget = new KonsoleViewWidget(this);
+
     QWhatsThis::add(m_widget, i18n("Konsole\n\n"
-                                   "This window contains an embedded konsole "
-				   "window. It will try to follow you when "
-				   "you navigate in the source directories"));
-  
-  mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("embedded console window"));
+        "This window contains an embedded konsole window. It will try to follow you when "
+        "you navigate in the source directories")
+    );
+
+    mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("embedded console window"));
 }
 
 
 KonsoleViewPart::~KonsoleViewPart()
 {
-  delete m_widget;
+    delete m_widget;
 }
 
 

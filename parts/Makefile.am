@@ -5,6 +5,7 @@
 #kdevelop: SCRIPTING_SUBDIR = scripting
 #kdevelop: QEDITOR_SUBDIR = qeditor
 #kdevelop: SVN_SUBDIR = svn
+#kdevelop: TODO_SUBDIRS = adasupport perlsupport javasupport
 
 if include_scripting
 SCRIPTING_SUBDIR = scripting
@@ -22,14 +23,16 @@ if include_cvsservice
 CVSSERVICE_SUBDIR = cvsservice
 endif
 
+TODO_SUBDIRS = adasupport perlsupport javasupport
+
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
-    adaproject adasupport cppsupport pythonsupport perlsupport phpsupport fortransupport \
+    adaproject cppsupport \
     autoproject scriptproject trollproject customproject \
-    cvs perforce clearcase antproject diff valgrind sqlsupport \
+    cvs perforce clearcase antproject diff valgrind \
     debugger distpart konsole astyle tools ctags regexptest doxygen \
     manager fileselector visualboyadvance tipofday abbrev filter \
     uimode editor-chooser openwith history filecreate \
-    texttools javasupport javadebugger replace rubysupport closer \
-    bashsupport pascalsupport pascalproject \
+    texttools javadebugger replace closer \
+    pascalproject pascalsupport pythonsupport rubysupport bashsupport fortransupport phpsupport \
     partexplorer bookmarks fullscreen $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR) $(CVSSERVICE_SUBDIR)
 

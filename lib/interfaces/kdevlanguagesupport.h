@@ -11,6 +11,7 @@
 #include "kdevplugin.h"
 
 class Tag;
+class CodeModelItem;
 
 class KDevLanguageSupport : public KDevPlugin
 {
@@ -44,6 +45,10 @@ public:
      * Formats a Tag as used by the class store to the human-readable convention.
      */
     virtual QString formatTag( const Tag& tag );
+    /**
+     * Formats a CodeModelItem as used by the CodeModel to the human-readable convention.
+     */
+    virtual QString formatModelItem( const CodeModelItem *item );
 
     /**
      * Formats a canonicalized class path as used by the class store
@@ -98,6 +103,21 @@ signals:
      * modified
      */
     void updatedSourceInfo();
+
+    /**
+     * Emitted before remove the file from the classstore
+     */
+    void aboutToRemoveSourceInfo( const QString& fileName );
+
+    /**
+     * Emitted when a file has been removed from the classstore
+     */
+    void removedSourceInfo( const QString& fileName );
+
+    /**
+     * Emitted when a file has been added Emitted when a file has been removed from the classstorefrom the classstore
+     */
+    void addedSourceInfo( const QString& fileName );
 };
 
 

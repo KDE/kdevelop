@@ -190,25 +190,25 @@ void TrollProjectPart::closeProject()
 }
 
 
-QString TrollProjectPart::projectDirectory()
+QString TrollProjectPart::projectDirectory() const
 {
   return m_widget->projectDirectory();
 }
 
 
-QString TrollProjectPart::buildDirectory()
+QString TrollProjectPart::buildDirectory() const
 {
   return m_widget->projectDirectory();
 }
 
-QString TrollProjectPart::projectName()
+QString TrollProjectPart::projectName() const
 {
     return m_projectName;
 }
 
 
 /** Retuns a PairList with the run environment variables */
-DomUtil::PairList TrollProjectPart::runEnvironmentVars()
+DomUtil::PairList TrollProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevtrollproject/run/envvars", "envvar", "name", "value");
 }
@@ -223,7 +223,7 @@ DomUtil::PairList TrollProjectPart::runEnvironmentVars()
   *   if run/directoryradio == custom
   *        The custom directory absolute path
   */
-QString TrollProjectPart::runDirectory()
+QString TrollProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -254,7 +254,7 @@ QString TrollProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString TrollProjectPart::mainProgram(bool relative)
+QString TrollProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
@@ -279,13 +279,13 @@ QString TrollProjectPart::mainProgram(bool relative)
 
 
 /** Retuns a QString with the run command line arguments */
-QString TrollProjectPart::runArguments()
+QString TrollProjectPart::runArguments() const
 {
     return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
 }
 
 
-QString TrollProjectPart::activeDirectory()
+QString TrollProjectPart::activeDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
@@ -293,7 +293,7 @@ QString TrollProjectPart::activeDirectory()
 }
 
 
-QStringList TrollProjectPart::allFiles()
+QStringList TrollProjectPart::allFiles() const
 {
     return m_widget->allFiles();
 }

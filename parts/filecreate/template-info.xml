@@ -123,6 +123,9 @@
       <type ext="yy" name="bison C++ source" create="template" icon="source_y">
         <descr>A new empty bison C++ source source file.</descr>
       </type>
+      <type ext="dox" name="Doxygen documentation page" create="template" icon="document">
+        <descr>A new empty Doxygen documentation page.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>

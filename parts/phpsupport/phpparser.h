@@ -12,24 +12,28 @@
 #ifndef PHPPARSER_H
 #define PHPPARSER_H
 
+#include <codemodel.h>
+
 #include <qstring.h>
 #include <qstringlist.h>
+
 class KDevCore;
-class ClassStore;
+
 /**
   *@author Sandy Meier
   */
 
 class PHPParser {
-public: 
-	PHPParser(KDevCore* core,ClassStore* store);
+public:
+	PHPParser(KDevCore* core,CodeModel* model);
 	~PHPParser();
 	void parseFile(const QString& fileName);
 	void parseLines(QStringList* lines,const QString& fileName);
 
  private:
-  ClassStore* m_classStore;
+  CodeModel* m_model;
   KDevCore* m_core;
+  FileDom m_file;
 };
 
 #endif

@@ -13,23 +13,18 @@
 #define __store_walker_h
 
 #include "tree_parser.h"
-
+#include <codemodel.h>
 #include <qstringlist.h>
-#include <classstore.h>
-
-class ParsedContainer;
-class ParsedClassContainer;
-class ParsedScopeContainer;
-class ParsedClass;
-class ParsedAttribute;
-class ParsedMethod;
+#include <qvaluestack.h>
 
 class StoreWalker: public TreeParser
 {
 public:
-    StoreWalker( const QString& fileName, ClassStore* store );
+    StoreWalker( const QString& fileName, CodeModel* store );
     virtual ~StoreWalker();
 
+    void buildImplementationMap( FileDom file );
+    
     // translation-unit
     virtual void parseTranslationUnit( TranslationUnitAST* );
 
@@ -56,32 +51,64 @@ public:
     virtual void parseTypeDeclaratation( TypeSpecifierAST* typeSpec );
     virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
-    virtual void parseFunctionArguments( DeclaratorAST* declarator, ParsedMethod* method );
-    virtual void parseBaseClause( BaseClauseAST* baseClause, ParsedClass* klass );
+    virtual void parseFunctionArguments( DeclaratorAST* declarator, FunctionDom method );
+    virtual void parseBaseClause( BaseClauseAST* baseClause, ClassDom klass );
 
 private:
-    ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );
-    ParsedAttribute* findOrInsertAttribute( ParsedClassContainer* scope, const QString& name );
+    NamespaceDom findOrInsertNamespace( NamespaceAST* ast, const QString& name );
+    VariableDom findOrInsertAttribute( AST* decl, ClassDom scope, const QString& name );
 
-    ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container=0, bool includeImports=false );
-    ParsedScopeContainer* currentScope();
+    ClassDom findContainer( const QString& name, NamespaceDom container=0, bool includeImports=false );
 
-    QString scopeOfDeclarator( DeclaratorAST* d );
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
+    QString scopeOfName( NameAST* id );
+    QString scopeOfDeclarator( DeclaratorAST* d );
+
+    static QString toString( const FunctionDom& fun );
+
+    void findFunctions( const QString& proto, FunctionList& lst );
+    void findFunctions( const QString& proto, const NamespaceList& namespaceList, FunctionList& lst );
+    void findFunctions( const QString& proto, const NamespaceDom& ns, FunctionList& lst );
+    void findFunctions( const QString& proto, const ClassList& classList, FunctionList& lst );
+    void findFunctions( const QString& proto, const ClassDom& klass, FunctionList& lst );
+    void findFunctions( const QString& proto, const FunctionList& functionList, FunctionList& lst );
+    void findFunctions( const QString& proto, const FunctionDom& fun, FunctionList& lst );
+    
+    struct ImplementationInfo
+    {
+	QString fileName;
+	int startLine, startColumn;
+	int endLine, endColumn;
+	
+	ImplementationInfo()
+	    : startLine( 0 ), startColumn( 0 ), endLine( 0 ), endColumn( 0 ) {}
+    };
+    
+    void buildImplementationMap( FileDom file, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( NamespaceDom ns, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( ClassDom klass, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( FunctionDom fun, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( VariableDom var, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( const NamespaceList& namespaceList, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( const ClassList& classList, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( const FunctionList& functionList, QStringList& scope, QMap<QString, ImplementationInfo>& map );
+    void buildImplementationMap( const VariableList& variableList, QStringList& scope, QMap<QString, ImplementationInfo>& map );
 
 private:
+    FileDom m_file;
     QString m_fileName;
     QStringList m_currentScope;
-    ClassStore* m_store;
+    CodeModel* m_store;
     QValueList<QStringList> m_imports;
-    ParsedClassContainer* m_currentContainer;
-    ParsedClass* m_currentClass;
-    ParsedScopeContainer* m_currentScopeContainer;
-    PIAccess m_currentAccess;
+    int m_currentAccess;
     bool m_inSlots;
     bool m_inSignals;
     int m_anon;
-
+    
+    QValueStack<NamespaceDom> m_currentNamespace;
+    QValueStack<ClassDom> m_currentClass;
+    QMap< QString, ImplementationInfo > m_implementationMap;
+    
 private:
     StoreWalker( const StoreWalker& source );
     void operator = ( const StoreWalker& source );

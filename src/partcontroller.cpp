@@ -225,7 +225,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
     path = QDir(path).canonicalPath();
     if ( !path.isEmpty() )
       url.setPath(path);
-  }    
+  }
 
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
@@ -249,11 +249,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   kdDebug(9000) << "mimeType = " << mimeType << endl;
 
   if (mimeType.startsWith("text/")
-      || mimeType == "application/x-zerosize"
-      || mimeType == "application/x-desktop"
-      || mimeType == "application/x-kdevelop" || mimeType == "application/x-kdevelop-project"
-      || mimeType == "image/x-xpm"
-      || mimeType == "application/x-perl")
+      || mimeType.startsWith("application/x-")
+      || mimeType == "image/x-xpm")
   {
       mimeType = "text/plain";
       kapp->config()->setGroup("Editor");
@@ -993,7 +990,7 @@ bool PartController::isDirty( KParts::ReadOnlyPart* part )
 
   if ( accessTimeMap.contains( part ) )
     return ( accessTimeMap[ part ] < dirWatcher->ctime( part->url().path() ) );
- 
+
   accessTimeMap[ part ] = dirWatcher->ctime( part->url().path() );
   return false;
 }

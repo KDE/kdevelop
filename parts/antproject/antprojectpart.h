@@ -53,15 +53,15 @@ protected:
   virtual void openProject(const QString &dirName, const QString &projectName);
   virtual void closeProject();
 
-  virtual QString projectDirectory();
-  virtual QString projectName();
-  virtual QString mainProgram(bool relative = false);
-  virtual QString activeDirectory();
-  virtual QStringList allFiles();
-  virtual QString buildDirectory();
-  virtual QString runDirectory();
-  virtual QString runArguments();
-  virtual DomUtil::PairList runEnvironmentVars();
+  virtual QString projectDirectory() const;
+  virtual QString projectName() const;
+  virtual QString mainProgram(bool relative = false) const;
+  virtual QString activeDirectory() const;
+  virtual QStringList allFiles() const;
+  virtual QString buildDirectory() const;
+  virtual QString runDirectory() const;
+  virtual QString runArguments() const;
+  virtual DomUtil::PairList runEnvironmentVars() const;
 
   virtual void addFile(const QString &fileName);
   virtual void addFiles ( const QStringList &fileList );
@@ -73,7 +73,7 @@ private slots:
 
   void slotBuild();
   void slotTargetMenuActivated(int id);
-  
+
   void projectConfigWidget(KDialogBase *dlg);
   void contextMenu(QPopupMenu *popup, const Context *context);
 
@@ -99,7 +99,7 @@ private:
   AntOptions m_antOptions;
 
   KAction *m_buildProjectAction;
- 
+
   QPopupMenu *m_targetMenu;
 
   AntOptionsWidget *m_antOptionsWidget;

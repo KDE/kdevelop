@@ -343,7 +343,8 @@ void MainWindowShare::slotSettings()
     QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
     config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
     config->sync();
-    API::getInstance()->makeFrontend()->updateSettingsFromConfig();
+    if( API::getInstance()->makeFrontend() )
+        API::getInstance()->makeFrontend()->updateSettingsFromConfig();
 }
 
 void MainWindowShare::slotConfigureEditors()

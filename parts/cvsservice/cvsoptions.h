@@ -14,6 +14,7 @@
 
 class CvsPart;
 class KConfig;
+class KDevProject;
 
 /* This class represents the command line options for the used cvs commands.
  * It uses the singleton pattern.
@@ -24,10 +25,13 @@ class CvsOptions
 public:
     static CvsOptions *instance();
 
+    static QString invalidLocation;
+
     virtual ~CvsOptions();
 
-    void save( QDomDocument &dom );
-    void load( const QDomDocument &dom );
+    void save( KDevProject *project );
+    // @fixme: parameter should be const!!
+    void load( KDevProject *project );
 
     void setRecursiveWhenCommitRemove( bool b );
     bool recursiveWhenCommitRemove() const;
@@ -49,6 +53,11 @@ public:
 
     void setCvsRshEnvVar( const QString &p );
     QString cvsRshEnvVar();
+
+    /**
+    * Will try to determine location by using CVS/Root file
+    */
+    QString guessLocation( const QString &projectDir ) const;
 
     /**
     * Set server path string (this should be called by the part when a new project

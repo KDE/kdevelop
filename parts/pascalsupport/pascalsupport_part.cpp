@@ -21,10 +21,10 @@
 
 #include <antlr/ASTFactory.hpp>
 
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-#include "kdevpartcontroller.h"
-#include "kdevproject.h"
+#include <kdevcore.h>
+#include <kdevmainwindow.h>
+#include <kdevpartcontroller.h>
+#include <kdevproject.h>
 
 #include "pascalsupport_part.h"
 #include "problemreporter.h"
@@ -212,7 +212,7 @@ void PascalSupportPart::parse( const QString & fileName )
             kdDebug(9013) << "-------------------> start StoreWalker" << endl;
             PascalStoreWalker walker;
             walker.setFileName( fileName );
-            walker.setClassStore( classStore() );
+            walker.setCodeModel( codeModel() );
             walker.program( ast );
         }
 

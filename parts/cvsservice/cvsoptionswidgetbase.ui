@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>497</width>
-            <height>441</height>
+            <width>495</width>
+            <height>430</height>
         </rect>
     </property>
     <property name="caption">
@@ -55,6 +55,19 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Set this option to "ssh" to use ssh as remote shell for CVS. Note that you need password-less login (see the ssh howtos how to generate a public/private key pair) otherwise CVS will just hang forever.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>CVS Server location</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>serverLocationEdit</cstring>
                     </property>
                 </widget>
             </vbox>
