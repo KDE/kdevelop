@@ -31,6 +31,7 @@
   *@author Omid Givi
   */
 
+class GeneralTabLd;
 class KDETabLd;
 class MiscTabLd;
 
@@ -49,6 +50,18 @@ public slots:
     void slotButtonApplyClicked();
 private:
 	KDevLinker* m_pKDevLinker;
+};
+
+class GeneralTabLd : public QWidget{
+public:
+  GeneralTabLd(QWidget *parent=0, const char *name=0 );
+  ~GeneralTabLd();
+
+  void readFlags(QStringList *str);
+  void writeFlags(QStringList *str);
+
+private:
+  FlagCheckBoxController *controller;
 };
 
 class KDETabLd : public QWidget{
@@ -85,6 +98,7 @@ public:
   QString setFlags(const QString &flags);
 
 private:
+  GeneralTabLd *generaltab;
   KDETabLd *kdetab;
   MiscTabLd *misctab;
 };

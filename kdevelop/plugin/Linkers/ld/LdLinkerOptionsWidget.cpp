@@ -71,6 +71,31 @@ void LdLinkerOptionsWidget::setLinker(KDevLinker* kdl){
 	m_pKDevLinker = kdl;
 }
 
+GeneralTabLd::GeneralTabLd(QWidget *parent, const char *name)
+    : QWidget(parent, name), controller(new FlagCheckBoxController)
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+
+    new FlagCheckBox(this, controller, "-static", i18n("Prevent using shared libraries"));
+    new FlagCheckBox(this, controller, "-s", i18n("remove all symbol table and relocation information from the executable"));
+}
+
+
+GeneralTabLd::~GeneralTabLd(){
+    delete controller;
+}
+
+
+void GeneralTabLd::readFlags(QStringList *list){
+    controller->readFlags(list);
+}
+
+
+void GeneralTabLd::writeFlags(QStringList *list){
+    controller->writeFlags(list);
+}
+
 KDETabLd::KDETabLd(QWidget *parent, const char *name)
     : QWidget(parent, name), controller(new FlagCheckBoxController)
 {
@@ -135,10 +160,13 @@ LdOptionsDlg::LdOptionsDlg(QWidget *parent, const char *name)
 {
     QVBox *vbox;
 
-    vbox = addVBoxPage(i18n("KDE"));
+    vbox = addVBoxPage(i18n("General"));
+    generaltab = new GeneralTabLd(vbox, "General tab");
+
+    vbox = addVBoxPage(i18n("KDE Libriaries"));
     kdetab = new KDETabLd(vbox, "KDE tab");
 
-    vbox = addVBoxPage(i18n("Misc"));
+    vbox = addVBoxPage(i18n("Other Libraries"));
     misctab = new MiscTabLd(vbox, "Misc tab");
 }
 
@@ -151,6 +179,7 @@ QString LdOptionsDlg::flags() const
 {
     QStringList flaglist;
 
+    generaltab->writeFlags(&flaglist);
     kdetab->writeFlags(&flaglist);
     misctab->writeFlags(&flaglist);
 
@@ -169,6 +198,7 @@ QString LdOptionsDlg::setFlags(const QString &flags)
 {
     QStringList flaglist = QStringList::split(" ", flags);
 
+    generaltab->readFlags(&flaglist);
     kdetab->readFlags(&flaglist);
     misctab->readFlags(&flaglist);
 
