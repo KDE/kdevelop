@@ -1,6 +1,8 @@
 2002-12-18 F@lk Brettschneider <falk@kdevelop.org>
 	* QEditor: can now delete words via Ctrl+Backspace and Ctrl+Del
-    
+	* new class TopLevelShare, moved doubled stuff to it from the 2 main widget classes
+	* implemented tool-/status-/view-bar on/off actions in 'Settings' menu
+        
 2002-12-18  Victor Röder  <victor_roeder@gmx.de>
 	* Added "Choose Target Dialog"
 	* Added SLOTS for removing/adding many files
