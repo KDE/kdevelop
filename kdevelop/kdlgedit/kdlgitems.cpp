@@ -22,6 +22,7 @@
 #include <kapp.h>
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
+#include "item_widget.h"
 
 KDlgItems::KDlgItems(QWidget *parent, const char *name ) : QWidget(parent,name)
 {
@@ -90,10 +91,10 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd)
   if ((!wd) || (!wd->getChildDb()))
     return;
 
-  KDlgItem_Widget *w = (KDlgItem_Widget*)wd->getChildDb()->getFirst();
+//  KDlgItem_Widget *w = (KDlgItem_Widget*)wd->getChildDb()->getFirst();
 //  do {
-    if ((w) && (w->getProps()))
-      if (w->getProps()) w->getProps()->getProp(1);
+//    if (w)
+//      if (w->getProps()) w->getProps()->getProp(1);
 //      printf("****** %s\n",(const char*)w->getProps()->getProp(1));
 //    w = (KDlgItem_Widget*)wd->getChildDb()->getNext();
 //  } while (w);

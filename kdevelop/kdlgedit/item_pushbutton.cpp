@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdlgdialogs.h  -  description                              
+                     item_pushbutton.cpp  -  description
                              -------------------                                         
-    begin                : Wed Mar 17 1999                                           
+    begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
     email                : pascal@beast.de
  ***************************************************************************/
@@ -16,20 +16,40 @@
  ***************************************************************************/
 
 
-#ifndef KDLGDIALOGS_H
-#define KDLGDIALOGS_H
+#include "item_pushbutton.h"
+#include <qpushbutton.h>
+#include "itemsglobal.h"
 
-#include <qwidget.h>
 
-/**
-  *@author Pascal Krahmer <pascal@beast.de>
-  */
+KDlgItem_PushButton::MyWidget::MyWidget(QWidget* parent, const char* name )
+  : QPushButton("Button", parent,name)
+{
+}
 
-class KDlgDialogs : public QWidget  {
-   Q_OBJECT
-public: 
-	KDlgDialogs(QWidget *parent=0, const char *name=0);
-	~KDlgDialogs();
-};
 
-#endif
+void KDlgItem_PushButton::MyWidget::paintEvent ( QPaintEvent *e )
+{
+  QPushButton::paintEvent(e);
+
+  if (isItemActive)
+    KDlgItemsPaintRects(this,e);
+}
+
+KDlgItem_PushButton::KDlgItem_PushButton( QWidget *parent , const char* name )
+  : KDlgItem_Base(0,false,name)
+{
+  item = new MyWidget(parent);
+//  item->setGeometry(10,10,100,50);
+  item->show();
+  repaintItem();
+}
+
+void KDlgItem_PushButton::repaintItem(QPushButton *it)
+{
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  KDlgItem_Base::repaintItem(itm);
+}

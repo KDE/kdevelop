@@ -19,6 +19,12 @@
 #include "kdlgpropwidget.h"
 #include "kdlgproplvis.h"
 #include <kcolorbtn.h>
+#include <qlistview.h>
+#include <qlineedit.h>
+#include <qcombobox.h>
+#include <kfiledialog.h>
+#include <stdio.h>
+#include "kdlgproplv.h"
 
 AdvListView::AdvListView( QWidget * parent , const char * name )
   : QListView( parent, name )
@@ -417,6 +423,13 @@ AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, const char *name )
 //  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );
 }
 
+QString AdvLvi_ExtEdit::getText()
+{
+  if (leInput)
+    return leInput->text();
+  else
+    return QString();
+}
 
 void AdvLvi_ExtEdit::resizeEvent ( QResizeEvent *e )
 {
@@ -462,7 +475,13 @@ void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
     cbBool->setGeometry(0,0,width(),height()+1);
 }
 
-
+QString AdvLvi_Bool::getText()
+{
+  if (cbBool)
+    return cbBool->currentItem() ? "FALSE" : "TRUE";
+  else
+    return QString();
+}
 
 AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, const char *name)
   : AdvLvi_Base( parent, name )

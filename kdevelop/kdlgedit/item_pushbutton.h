@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdlgdialogs.h  -  description                              
+                          item_pushbutton.h  -  description
                              -------------------                                         
-    begin                : Wed Mar 17 1999                                           
+    begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
     email                : pascal@beast.de
  ***************************************************************************/
@@ -16,20 +16,49 @@
  ***************************************************************************/
 
 
-#ifndef KDLGDIALOGS_H
-#define KDLGDIALOGS_H
+#ifndef ITEM_PUSHBUTTON_H
+#define ITEM_PUSHBUTTON_H
 
-#include <qwidget.h>
+#include "item_base.h"
+#include <qpushbutton.h>
+#include <qpainter.h>
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
-class KDlgDialogs : public QWidget  {
-   Q_OBJECT
-public: 
-	KDlgDialogs(QWidget *parent=0, const char *name=0);
-	~KDlgDialogs();
+
+class KDlgItem_PushButton : public KDlgItem_Base
+{
+  Q_OBJECT
+  protected:
+    class MyWidget : public QPushButton
+    {
+      public:
+        MyWidget(QWidget* parent = 0, const char* name = 0);
+
+        bool isItemActive;
+      protected:
+        virtual void paintEvent ( QPaintEvent * );
+        virtual void mousePressEvent ( QMouseEvent * ) { isItemActive = !isItemActive; repaint(); }
+    };
+
+    MyWidget *item;
+
+  public:
+    KDlgItem_PushButton( QWidget *parent = 0, const char* name = 0 );
+    virtual ~KDlgItem_PushButton() {}
+
+    virtual QString itemClass() { return QString("PushButton"); }
+
+    virtual MyWidget* getItem() { return item; }
+    virtual void repaintItem(QPushButton *it = 0);
 };
 
+
 #endif
+
+
+
+
+

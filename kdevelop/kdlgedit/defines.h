@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdlgdialogs.h  -  description                              
+                          defines.h  -  description
                              -------------------                                         
-    begin                : Wed Mar 17 1999                                           
+    begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
     email                : pascal@beast.de
  ***************************************************************************/
@@ -16,20 +16,30 @@
  ***************************************************************************/
 
 
-#ifndef KDLGDIALOGS_H
-#define KDLGDIALOGS_H
+#ifndef KDLG_DEFINES_H
+#define KDLG_DEFINES_H
 
-#include <qwidget.h>
+#define MAX_WIDGETCOLS_PER_LINE 4
 
-/**
-  *@author Pascal Krahmer <pascal@beast.de>
-  */
+#define MAX_WIDGETS_PER_DIALOG 128
+#define MAX_ENTRYS_PER_WIDGET 64
+                      	
+#define ALLOWED_STRING      1
+#define ALLOWED_BOOL        2
+#define ALLOWED_INT         3
+#define ALLOWED_FILE        4
+#define ALLOWED_COLOR       5
+#define ALLOWED_FONT        6
+#define ALLOWED_CONNECTIONS 7
+#define ALLOWED_CURSOR      8
+#define ALLOWED_BGMODE      9
 
-class KDlgDialogs : public QWidget  {
-   Q_OBJECT
-public: 
-	KDlgDialogs(QWidget *parent=0, const char *name=0);
-	~KDlgDialogs();
-};
+#define RULER_WIDTH  20
+#define RULER_HEIGHT  20
 
 #endif
+
+
+
+
+

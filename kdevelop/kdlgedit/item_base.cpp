@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdlgdialogs.h  -  description                              
+                         item_base.cpp  -  description
                              -------------------                                         
-    begin                : Wed Mar 17 1999                                           
+    begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
     email                : pascal@beast.de
  ***************************************************************************/
@@ -16,20 +16,31 @@
  ***************************************************************************/
 
 
-#ifndef KDLGDIALOGS_H
-#define KDLGDIALOGS_H
-
+#include "item_base.h"
 #include <qwidget.h>
+#include "itemsglobal.h"
 
-/**
-  *@author Pascal Krahmer <pascal@beast.de>
-  */
+KDlgItem_Base::KDlgItem_Base( QWidget *parent , bool ismainwidget, const char* name )
+  : QObject(parent,name)
+{
+  isMainWidget = ismainwidget;
+  item = new QWidget(parent);
+  item->setMouseTracking(true);
+  item->setBackgroundMode(QWidget::PaletteDark);
 
-class KDlgDialogs : public QWidget  {
-   Q_OBJECT
-public: 
-	KDlgDialogs(QWidget *parent=0, const char *name=0);
-	~KDlgDialogs();
-};
+  props = new KDlgPropertyBase();
+  repaintItem();
+}
 
-#endif
+void KDlgItem_Base::repaintItem(QWidget *it)
+{
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  itm->setGeometry(isMainWidget ? RULER_WIDTH : props->getIntFromProp("X",itm->x()),
+                   isMainWidget ? RULER_HEIGHT : props->getIntFromProp("Y",itm->y()),
+                   props->getIntFromProp("Width",itm->width()),
+                   props->getIntFromProp("Height",itm->height()));
+}

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdlgdialogs.h  -  description                              
+                          item_base.h  -  description
                              -------------------                                         
-    begin                : Wed Mar 17 1999                                           
+    begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
     email                : pascal@beast.de
  ***************************************************************************/
@@ -16,20 +16,44 @@
  ***************************************************************************/
 
 
-#ifndef KDLGDIALOGS_H
-#define KDLGDIALOGS_H
+#ifndef ITEM_BASE_H
+#define ITEM_BASE_H
 
-#include <qwidget.h>
+#include <qobject.h>
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
-class KDlgDialogs : public QWidget  {
-   Q_OBJECT
-public: 
-	KDlgDialogs(QWidget *parent=0, const char *name=0);
-	~KDlgDialogs();
+
+class KDlgPropertyBase;
+
+
+class KDlgItem_Base : public QObject
+{
+  Q_OBJECT
+  public:
+    KDlgItem_Base( QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
+    virtual ~KDlgItem_Base() {}
+
+    virtual QString itemClass() { return QString("[Base]"); }
+
+    virtual QWidget *getItem() { return item; }
+    virtual void repaintItem(QWidget *it = 0);
+
+    KDlgPropertyBase *getProps() { return props; }
+
+
+  protected:
+    QWidget *item;
+    KDlgPropertyBase *props;
+    bool isMainWidget;
 };
 
+
 #endif
+
+
+
+
+
