@@ -27,6 +27,7 @@
 #include <kmsgbox.h>
 #include <kprocess.h>
 
+#include <qregexp.h>
 #include <qstring.h>
 
 #include <iostream>
@@ -385,7 +386,7 @@ void GDBController::executeCmd()
     setStateOff(s_appNotStarted|s_programExited|s_silent);
   }
 
-  GDB_DISPLAY("[gdb]<< "+cmdStr);
+  GDB_DISPLAY(cmdStr);
   if (!stateIsOn(s_silent))
     emit dbgStatus ("", state_);
 }
@@ -1371,7 +1372,7 @@ void GDBController::slotSetLocalViewState(bool onOff, int frameNo)
   else
     setStateOff(s_viewLocals);
 
-  GDB_DISPLAY(onOff ? "<Locals ON>": "<Locals OFF>");
+  DBG_DISPLAY(onOff ? "<Locals ON>": "<Locals OFF>");
 
   slotSelectFrame(frameNo);
 }
@@ -1381,7 +1382,11 @@ void GDBController::slotSetLocalViewState(bool onOff, int frameNo)
 // Data from gdb gets processed here.
 void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
 {
-  GDB_DISPLAY("[gdb]>> "+QString(buf, buflen+1));
+#ifdef GDB_MONITOR
+  QString msg(buf, buflen+1);
+  msg.replace(QRegExp("\032."),"\n(gdb) ");
+  GDB_DISPLAY(msg);
+#endif
 
   // Allocate some buffer space, if adding to this buffer will exceed it
   if (gdbOutputLen_+buflen+1 > gdbSizeofBuf_)
@@ -1418,7 +1423,7 @@ void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
 /*void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
   QString bufData(buf, buflen+1);
-  GDB_DISPLAY(QString("[gdb] STDERR: ")+bufData);
+  DBG_DISPLAY(QString("[gdb] STDERR: ")+bufData);
   char* found;
 //  if ((found = strstr(buf, "No symbol table is loaded")))
 //    emit dbgStatus (QString("No symbol table is loaded"), state_);
@@ -1465,7 +1470,7 @@ void GDBController::slotDbgProcessExited(KProcess* proc)
   state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
   emit dbgStatus (QString("Process exited"), state_);
 
-  GDB_DISPLAY(QString("[gdb] Process exited"));
+  DBG_DISPLAY(QString("[gdb] Process exited"));
 }
 
 // **************************************************************************
