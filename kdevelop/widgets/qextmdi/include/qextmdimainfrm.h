@@ -465,6 +465,10 @@ signals:
    * Signals that the Toplevel mode has been left
    */
    void leftTopLevelMode();
+   /**
+   * Signals that a child view has been detached (undocked to desktop)
+   */
+   void childViewIsDetachedNow(QWidget*);
 };
 
 #endif //_QEXTMDIMAINFRM_H_

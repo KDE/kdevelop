@@ -418,6 +418,8 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 //============= detachWindow ==============//
 void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 {
+   if (!pWnd->isAttached()) return;
+
    pWnd->removeEventFilter(this);
    pWnd->youAreDetached();
    // this is only if it was attached and you want to detach it
@@ -438,6 +440,8 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
    if (bShow) {
       activateView(pWnd);
    }
+
+   emit childViewIsDetachedNow(pWnd);
 }
 
 //============== removeWindowFromMdi ==============//
