@@ -3581,7 +3581,9 @@ void Config::create()
   cb = addBool(
                     "SOURCE_BROWSER",
                     "If the SOURCE_BROWSER tag is set to YES then a list of source files will \n"
-                    "be generated. Documented entities will be cross-referenced with these sources. \n",
+                    "be generated. Documented entities will be cross-referenced with these sources. \n"
+		    "Note: To get rid of all source code in the generated output, make sure also \n"
+		    "VERBATIM_HEADERS is set to NO. \n",
                     FALSE
                  );
   cb = addBool(
@@ -4014,6 +4016,16 @@ void Config::create()
 		    "syntax of the XML files. \n"
                  );
   cs->addDependency("GENERATE_XML");
+  cb = addBool(
+                    "XML_PROGRAMLISTING",
+                    "If the XML_PROGRAMLISTING tag is set to YES Doxygen will \n"
+                    "dump the program listings (including syntax highlighting \n"
+		    "and cross-referencing information) to the XML output. Note that \n"
+		    "enabling this will significantly increase the size of the XML output. \n",
+                    TRUE
+                 );
+  cb->addDependency("GENERATE_XML");
+
   //--------------------------------------------------------------------------
   addInfo(  "DEF","configuration options for the AutoGen Definitions output");
   //--------------------------------------------------------------------------
