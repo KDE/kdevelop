@@ -66,6 +66,7 @@ class CEditWidget;
 //#include "clogfileview.h"
 #include "ctreehandler.h"
 #include "cproject.h"
+#include "cimport.h"
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
@@ -307,6 +308,8 @@ public:
   void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
   void slotProjectOpenCmdl(QString prjfile);
+  /** imports an automake project */
+  void slotProjectImport();
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   /** add a new file to the project-same as file new */

@@ -549,7 +549,7 @@ void CKDevelop::initMenuBar(){
   recent_projects_menu = new QPopupMenu();
   connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
   project_menu->insertItem(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
-
+  project_menu->insertItem(i18n(":Import..."), this, SLOT(slotProjectImport()),0,ID_PROJECT_IMPORT );
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   project_menu->insertSeparator();

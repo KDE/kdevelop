@@ -51,6 +51,9 @@
  *                                                                   *
  ********************************************************************/ 
 
+void CKDevelop::slotProjectImport()
+{}
+
 bool CKDevelop::slotProjectClose(){
   // R.Nolden 03.02.99
   slotStatusMsg(i18n("Closing project..."));
