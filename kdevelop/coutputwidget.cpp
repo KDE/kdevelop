@@ -60,7 +60,7 @@ void COutputWidget::insertAtEnd(const QString& s)
 // It was useful to use the QMultiLineEdit code as it supports text selection within
 // the widget, especially multiline text selection. Using a QListView as we were
 // previously, was also a problem as it slowed down significantly when the list
-// became large and we we're displaying the newly appended text.
+// became large and we were displaying the newly appended text.
 //
 // Not the most wonderful code in the world :((
 // A big chunk of QMultiLineEdit was copied here and modified so that we can
@@ -77,6 +77,7 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   m_leaveDir("[^\n]*: Leaving directory `([^\n]*)'\n"),
   m_errorGcc("([^: \t]+):([0-9]+)[:,].*")
 {
+  it = m_errorMap.begin();
 //  setReadOnly(true);
 }
 
@@ -167,14 +168,17 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
 
 void CMakeOutputWidget::viewNextError()
 {
-  while (++it != m_errorMap.end())
+  if (!m_errorMap.isEmpty())
   {
-    ErrorDetails errorDetails = it.data();
-    if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
+    while (++it != m_errorMap.end())
     {
-      selectLine(it.key());
-      emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
-      return;
+      ErrorDetails errorDetails = it.data();
+      if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
+      {
+        selectLine(it.key());
+        emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
+        return;
+      }
     }
   }
   kapp->beep();
@@ -184,14 +188,17 @@ void CMakeOutputWidget::viewNextError()
 
 void CMakeOutputWidget::viewPreviousError()
 {
-  while (--it != m_errorMap.begin())
+  if (!m_errorMap.isEmpty())
   {
-    ErrorDetails errorDetails = it.data();
-    if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
+    while (--it != m_errorMap.begin())
     {
-      selectLine(it.key());
-      emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
-      return;
+      ErrorDetails errorDetails = it.data();
+      if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
+      {
+        selectLine(it.key());
+        emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
+        return;
+      }
     }
   }
   kapp->beep();

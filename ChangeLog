@@ -1,3 +1,6 @@
+2001-06-04  jbb <jbb@kdevelop.org>
+    * bugfix: crash when typing F4 on empty project
+    
 2001-06-02  rokrau@yahoo.com
     * some minor reorganization of the ctags code and a little enhancement
       so that not only cpp files but also cxx files are found in header/source
