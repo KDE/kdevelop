@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
   static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment.");
   KAboutData aboutData("kdevelop", I18N_NOOP("KDevelop"),
                        VERSION, description, KAboutData::License_GPL,
-                       I18N_NOOP("(c) 1999-2003, The KDevelop developers"), "", "http://www.kdevelop.org");
+                       I18N_NOOP("(c) 1999-2004, The KDevelop developers"), "", "http://www.kdevelop.org");
   aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "cloudtemple@mksat.net");
   aboutData.addAuthor("Amilcar do Carmo Lucas", I18N_NOOP("Release coordinator, API documentation, Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
   aboutData.addAuthor("Bernd Gehrmann", I18N_NOOP("Initial idea, basic architecture, much initial source code"), "bernd@kdevelop.org");
@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Yann Hodique", I18N_NOOP("Patches"), "Yann.Hodique@lifl.fr");
   aboutData.addCredit("Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
+  aboutData.addCredit("Sascha Cunz" , I18N_NOOP("Cleanup and bugfixes for qEditor, AutoMake and much other stuff"), "mail@sacu.de");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
