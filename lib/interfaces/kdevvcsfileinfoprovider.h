@@ -69,7 +69,7 @@ public:
     * <b>Sync interface</b>
     * Status for the local files in the specified directory: the info are collected locally so they are
     * necessarly in sync with the repository
-    * @param dirPath directory to stat
+    * @param dirPath relative (to project dir) directory path to stat
     * @return status for all <u>registered</u> files
     */
     virtual VCSFileInfoMap status( const QString &dirPath ) const = 0;
@@ -79,7 +79,7 @@ public:
     * Start a request for directory status to the remote repository. Requests and answers are asynchronous
     * for obvious reasons: the caller must connect the statusReady() signal and check for the return
     * value of this method.
-    * @param dirPath the directory which status you are asking for
+    * @param dirPath the (relative to project directory) directory which status you are asking for
     * @param callerData a pointer to some data you want the provider will return to you when it has done
     * @return true if the request has been successfully started, false otherwise
     */
@@ -102,7 +102,7 @@ private:
     struct Private;
     Private *d;
 
-    // Verboten!
+    //! Verboten!
 private:
     KDevVCSFileInfoProvider( const KDevVCSFileInfoProvider & );
     KDevVCSFileInfoProvider &operator=( const KDevVCSFileInfoProvider & );
