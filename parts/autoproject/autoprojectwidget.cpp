@@ -475,7 +475,10 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
 
 QString AutoProjectWidget::activeDirectory()
 {
-    return m_activeSubproject->path.mid(projectDirectory().length()+1);
+    if( m_activeSubproject )
+        return m_activeSubproject->path.mid(projectDirectory().length()+1);
+    else
+        return QString::null;
 }
 
 
