@@ -1,5 +1,6 @@
 2002-03-02  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added cast support
+    * bugfix: Argument info disappears, when I start to write the arguments.
 	
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: now code completions works inside functions

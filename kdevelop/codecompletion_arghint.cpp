@@ -208,60 +208,95 @@ void KDevArgHint::reset()
 
 void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 {
-	if ( m_nCurLine == 0 )
-		m_nCurLine = nLine;
+    if ( m_nCurLine == 0 ){
+        m_nCurLine = nLine;
+    }
 
-	if ( m_nCurLine > 0 && m_nCurLine != nLine)
-	{
-            //kdDebug() << "-----------> case 1" << endl;
-		hide();
-		emit argHintHided();
-		return;
-	}
+    if( m_nCurCol == 0 ){
+        m_nCurCol = nCol - 1;
+    }
+
+
+    int nCountDelimiter = 0;
+    int count = 1;
+    //kdDebug() << "m_nCurCol = " << m_nCurCol << " - nCol = " << nCol << endl;
+    //kdDebug() << "count = " << count << endl;
+
+    QString strCurLine = m_edit->textLine( nLine );
+    QString text = strCurLine.mid( m_nCurCol, nCol - m_nCurCol );
+    QRegExp strconst_rx( "\"[^\"]*\"" );
+    QRegExp chrconst_rx( "'[^']*'" );
+
+    text = text
+        .replace( strconst_rx, "\"\"" )
+        .replace( chrconst_rx, "''" );
+
+    //kdDebug() << "text = " << text << endl;
+
+    int index = 0;
+    while( index < (int)text.length() ){
+        if( text[index] == '(' ){
+            ++count;
+        } else if( text[index] == ')' ){
+            --count;
+        } else if( count==1 && text[index] == ',' ){
+            ++nCountDelimiter;
+        }
+        ++index;
+    }
+
+    if( (m_nCurLine > 0 && m_nCurLine != nLine) ||
+        (nCol < m_nCurCol) ||
+        (count == 0) )
+    {
+        //kdDebug() << "-----------> case 1" << endl;
+        m_nCurLine = m_nCurCol = 0;
+        hide();
+        emit argHintHided();
+        return;
+    }
+
+    setCurArg ( nCountDelimiter + 1 );
+
+
+
 
 #if 0
-	if ( m_edit->doc()->hasMarkedText() )
-	{
-		hide();
-		emit argHintHided();
-		return;
-	}
-#endif
+    QString strCurLine = m_edit->textLine( nLine );
+    strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
+    //strCurLine = strCurLine.left ( nCol );
+    QString strLineToCursor = strCurLine.left ( nCol );
+    QString strLineAfterCursor = strCurLine.mid ( nCol, ( strCurLine.length() - nCol ) );
 
-	QString strCurLine = m_edit->textLine( nLine );
-	strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
-	//strCurLine = strCurLine.left ( nCol );
-	QString strLineToCursor = strCurLine.left ( nCol );
-	QString strLineAfterCursor = strCurLine.mid ( nCol, ( strCurLine.length() - nCol ) );
+    // only for testing
+    //strCurLine = strLineToCursor;
 
-	// only for testing
-	//strCurLine = strLineToCursor;
+    int nBegin = strLineToCursor.findRev ( m_strArgWrapping[0] );
 
-	int nBegin = strLineToCursor.findRev ( m_strArgWrapping[0] );
-
-	if ( nBegin == -1 || // the first wrap was not found
-	nBegin != -1 && strLineToCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // || // the first and the second wrap were found before the cursor
+    if ( nBegin == -1 || // the first wrap was not found
+         nBegin != -1 && strLineToCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // || // the first and the second wrap were found before the cursor
 	//nBegin != -1 && strLineAfterCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // the first wrap was found before the cursor and the second beyond
-	{
-		hide();
-                //kdDebug() << "m_strArgWrapping = " << m_strArgWrapping << endl;
-                //kdDebug() << "nBegin = " << nBegin << endl;
-                //kdDebug() << "-----------> case 2" << endl;
-		emit argHintHided();
-		//m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
-	}
+    {
+        hide();
+        //kdDebug() << "m_strArgWrapping = " << m_strArgWrapping << endl;
+        //kdDebug() << "nBegin = " << nBegin << endl;
+        //kdDebug() << "-----------> case 2" << endl;
+        emit argHintHided();
+        //m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
+    }
 
-	int nCountDelimiter = 0;
+    int nCountDelimiter = 0;
 
-	while ( nBegin != -1 )
-	{
-	  nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
+    while ( nBegin != -1 )
+    {
+        nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
 
-		if ( nBegin != -1 )
-			nCountDelimiter++;
-	}
+        if ( nBegin != -1 )
+            nCountDelimiter++;
+    }
 
-	setCurArg ( nCountDelimiter + 1 );
+    setCurArg ( nCountDelimiter + 1 );
+#endif
 }
 
 void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )

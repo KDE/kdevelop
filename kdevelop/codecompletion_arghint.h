@@ -80,6 +80,7 @@ private:
     int m_nNumFunc;
     int m_nCurArg;
     int m_nCurLine;
+    int m_nCurCol;
 
     bool m_bMarkingEnabled;
 

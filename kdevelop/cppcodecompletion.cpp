@@ -351,7 +351,9 @@ void CppCodeCompletion::showArgHint ( QStringList functionList, const QString& s
 void CppCodeCompletion::slotCursorPosChanged()
 {
     QPoint pos = m_edit->view()->cursorPosition();
-    m_pArgHint->cursorPositionChanged ( pos.y(), pos.x() );
+    if( m_pArgHint->isVisible() ){
+        m_pArgHint->cursorPositionChanged ( pos.y(), pos.x() );
+    }
 }
 
 
