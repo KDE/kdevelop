@@ -16,9 +16,9 @@
 #include <kicontheme.h>
 #include <kiconloader.h>
 
-#include "ktabwidget.h"
+#include "kdevtabwidget.h"
 
-KTabWidget::KTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,name)
+KDevTabWidget::KDevTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,name)
 {
   m_pTabBar = new KTabBar(this, "tabbar");
   setTabBar(m_pTabBar);
@@ -55,7 +55,7 @@ void KTabBar::mousePressEvent(QMouseEvent *e)
     QTab *tab = selectTab(e->pos() );
     if( tab == 0L ) return;
     
-    m_pPage = ((KTabWidget*)parent())->page(indexOf(tab->identifier() ) );
+    m_pPage = ((KDevTabWidget*)parent())->page(indexOf(tab->identifier() ) );
     if(m_pPage == 0L) return;
 
     m_pPopupMenu->exec(mapToGlobal(e->pos()));
@@ -63,4 +63,4 @@ void KTabBar::mousePressEvent(QMouseEvent *e)
   QTabBar::mousePressEvent(e);
 }
 
-#include "ktabwidget.moc"
+#include "kdevtabwidget.moc"

@@ -36,12 +36,12 @@ private:
   QWidget *m_pPage;
 };
 
-class KTabWidget : public QTabWidget
+class KDevTabWidget : public QTabWidget
 {
   Q_OBJECT
   
 public:
-  KTabWidget(QWidget *parent=0, const char *name=0);
+  KDevTabWidget(QWidget *parent=0, const char *name=0);
 signals:
   void closeWindow(const QWidget *);
   void closeOthers(QWidget *);
