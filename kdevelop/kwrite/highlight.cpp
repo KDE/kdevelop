@@ -66,6 +66,15 @@ const char *cppKeywords[] = {
 const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
 
+const char *idlKeywords[] = {
+  "module", "interface", "struct", "case", "enum", "typedef", "signal", "slot",
+  "attribute", "readonly", "context", "oneway", "union", "in", "out", "inout",
+  0L};
+
+const char *idlTypes[] = {
+  "long", "short", "unsigned", "double", "octet", "sequence", "char", "wchar",
+  "string", "wstring", "any", "fixed", "Object", "void", "boolean", 0L};
+
 
 const char *javaKeywords[] = {
   "abstract", "break", "case", "cast", "catch", "class", "continue",
@@ -1158,6 +1167,18 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(cppTypes);
 }
 
+IdlHighlight::IdlHighlight(const char *name) : CHighlight(name) {
+  dw = "*.idl";
+  dm = "text/x-idl-src";
+}
+
+IdlHighlight::~IdlHighlight() {
+}
+
+void IdlHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
+  keyword->addList(idlKeywords);
+  dataType->addList(idlTypes);
+}
 
 JavaHighlight::JavaHighlight(const char *name) : CHighlight(name) {
   dw = "*.java";
@@ -1717,6 +1738,7 @@ HlManager::HlManager() : QObject(0L) {
   hlList.append(new PerlHighlight(  "Perl"     ));
   hlList.append(new SatherHighlight("Sather"   ));
   hlList.append(new LatexHighlight( "Latex"    ));
+  hlList.append(new IdlHighlight("IDL"));
 }
 
 HlManager::~HlManager() {

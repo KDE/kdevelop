@@ -418,6 +418,14 @@ class CppHighlight : public CHighlight {
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
 };
 
+class IdlHighlight : public CHighlight {
+  public:
+    IdlHighlight(const char *name);
+    virtual ~IdlHighlight();
+  protected:
+    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
+};
+
 class JavaHighlight : public CHighlight {
   public:
     JavaHighlight(const char *name);

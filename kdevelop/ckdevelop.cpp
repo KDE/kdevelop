@@ -1171,10 +1171,9 @@ void CKDevelop::slotOptionsConfigureA2ps(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
-  CKDevSetupDlg setup(this, accel, cmdMngr, "Setup");
-  //CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel); //delete?
+  CKDevSetupDlg* setup = new CKDevSetupDlg(this, accel, cmdMngr, "Setup");
   //setup->show();
-	if (setup.exec()) {
+  if (setup->exec()) {
     // kwrite keys
     cmdMngr.changeAccels();
     cmdMngr.writeConfig(kapp->getConfig());
@@ -1182,9 +1181,11 @@ void CKDevelop::slotOptionsKDevelop(){
     // cancel keys
     cmdMngr.restoreAccels();
   }
-	
-	accel->readSettings();
-	setKeyAccel();
+
+  delete setup;
+  	
+  accel->readSettings();
+  setKeyAccel();
   slotStatusMsg(i18n("Ready."));
 }
 // slots needed by the KDevelop Setup
