@@ -1361,15 +1361,7 @@ void QextMdiMainFrm::activateView(int index)
       pTab->setCurrentPage(index);
 #else
       KDockTabCtl* pTab = (KDockTabCtl*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
-      QWidget* pPage = pTab->getFirstPage();
-      int i = 0;
-      while (pPage && (i < index)) {
-         pPage = pTab->getNextPage(pPage);
-         i++;
-      }
-      if (pPage) {
-         pTab->setVisiblePage(pPage);
-      }
+      pTab->setVisiblePage(index);
 #endif
    }
 }
