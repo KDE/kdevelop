@@ -22,10 +22,14 @@
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
-#include <ceditwidget.h>
+//#include <ceditwidget.h>
 #include "classparser/ProgrammingByContract.h"
 #include "docviewman.h"
 
+#include <../../kate-cvs/interfaces/document.h>
+#include <../../kate-cvs/interfaces/view.h>
+
+#include <qlistbox.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -323,9 +327,11 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   }
 
   // Add the declaration.
-  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
-  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
-  m_docViewManager->currentEditView()->toggleModified( true );
+  Kate::View* pView = m_docViewManager->currentEditView();
+  Kate::Document* pDoc = pView->getDoc();
+  pDoc->insertLine( toAdd, atLine );
+  pView->setCursorPosition( atLine, 0 );
+  pDoc->setModified( true );
 
   // Get the code for the .cpp file.
   aMethod->asCppCode( toAdd );
@@ -349,9 +355,11 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
 	 //kdDebug() << "fixed cpp code : " << toAdd.data() << endl;	
     // Add the code to the file.
 
-    m_docViewManager->currentEditView()->append( toAdd );
-    m_docViewManager->currentEditView()->setCursorPosition( m_docViewManager->currentEditView()->lines() - 1, 0 );
-    m_docViewManager->currentEditView()->toggleModified( true );
+    Kate::View* pView = m_docViewManager->currentEditView();
+    Kate::Document* pDoc = pView->getDoc();
+    pDoc->insertLine( toAdd, -1 );
+    pView->setCursorPosition( pView->numLines()-1 , 0 );
+    pDoc->setModified( true );
   }
 }
 
@@ -431,8 +439,10 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   }
 
   // Add the code to the file.
-  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
-  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
+  Kate::View* pView = m_docViewManager->currentEditView();
+  Kate::Document* pDoc = pView->getDoc();
+  pDoc->insertLine( toAdd, atLine );
+  pView->setCursorPosition( atLine, 0 );
 
   // Delete the genererated attribute
   delete aAttr;
@@ -511,8 +521,10 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
   }
 
   // Add the code to the file.
-  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
-  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
+  Kate::View* pView = m_docViewManager->currentEditView();
+  Kate::Document* pDoc = pView->getDoc();
+  pDoc->insertLine( toAdd, atLine );
+  pView->setCursorPosition( atLine, 0 );
   slotFileSave();
   if( !aAttr -> isStatic )
   {
@@ -549,8 +561,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
         Line -= 1;
         switchToFile( File, Line );
         toAdd = aAttr -> type + " " + aClass -> name + "::" + aAttr -> name + ";\n";
-        m_docViewManager->currentEditView()->insertAtLine( toAdd, Line );
-        m_docViewManager->currentEditView()->setCursorPosition( Line, 0 );
+        pDoc->insertLine( toAdd, atLine );
+        pView->setCursorPosition( atLine, 0 );
     }
   }
 
@@ -570,8 +582,10 @@ void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString&
     }
    QString str = "\t" + toAdd + "\n";
     switchToFile ( aClass -> definedInFile );
-    m_docViewManager->currentEditView()->insertAtLine( str, atLine );
-    m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
+    Kate::View* pView = m_docViewManager->currentEditView();
+    Kate::Document* pDoc = pView->getDoc();
+    pDoc->insertLine( toAdd, atLine );
+    pView->setCursorPosition( atLine, 0 );
     slotFileSave();
 }
 
@@ -620,9 +634,12 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
       {
         // Start by deleting the declaration.
         switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
-        m_docViewManager->currentEditView()->deleteInterval( aMethod->declaredOnLine,
-                                                             aMethod->declarationEndsOnLine );
-
+        Kate::View* pView = m_docViewManager->currentEditView();
+        Kate::Document* pDoc = pView->getDoc();
+        for (int il=aMethod->declaredOnLine; il<aMethod->declarationEndsOnLine; ++il)
+        {
+          pDoc->removeLine( il );
+        }
         // Comment out the definition if it isn't a signal.
         if( !aMethod->isSignal )
         {
@@ -630,7 +647,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
           for( line = aMethod->definedOnLine; 
                line <= aMethod->definitionEndsOnLine;
                line++ )
-            m_docViewManager->currentEditView()->insertAtLine( i18n("//Del by KDevelop: "), line );
+            pDoc->insertLine( i18n("//Del by KDevelop: "), line );
         }
       }
     }

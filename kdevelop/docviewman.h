@@ -1,6 +1,6 @@
 /***************************************************************************
   docviewman.h  -  MDI manager for
-                   document classes of KDevelop (KWriteDocs, CDocBrowser)
+                   document classes of KDevelop (Kate::Documents, CDocBrowser)
                    and view classes of KDevelop (CEditWidget, KHTMLView)
                              -------------------
 
@@ -29,8 +29,9 @@
 #include "highlight.h"
 #include "cproject.h"
 
-class KWriteDoc;
-class CEditWidget;
+namespace KParts { class Factory; }
+namespace Kate { class Document;
+                 class View; }
 class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
@@ -40,7 +41,7 @@ class CKDevAccel;
 // class DocViewMan
 //-----------------------------------------------------------------------------
 /** 
-  MDI manager for document classes of KDevelop (KWriteDocs, CDocBrowser)
+  MDI manager for document classes of KDevelop (Kate::Documents, CDocBrowser)
   and view classes of KDevelop (CEditWidget, KHTMLView).
 */
 class DocViewMan : public QObject
@@ -72,14 +73,14 @@ public:
   /** */
   void doOptionsEditor();
   /** */
-  void doOptionsEditorColors();  
+  //void doOptionsEditorColors();
   /** */
-  void doOptionsSyntaxHighlightingDefaults();
+  //void doOptionsSyntaxHighlightingDefaults();
   /** */  
-  void doOptionsSyntaxHighlighting();
+  //void doOptionsSyntaxHighlighting();
 
   /** */  
-  void doTakeOverOfEditorOptions(CEditWidget* pView = 0L);
+  void doTakeOverOfEditorOptions(Kate::View* pView = 0L);
 
   /** Get the modified files and ask if they should be saved */
   void saveModifiedFiles();
@@ -88,7 +89,7 @@ public:
   void reloadModifiedFiles();
 
   /** */
-  int checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck = true, CEditWidget* pCurEditView = 0L);
+  int checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck = true, Kate::View* pCurEditView = 0L);
 
   /** */
   bool doFileClose();
@@ -104,16 +105,16 @@ public:
   ///////////////////////////
 
   /** */
-	void doBookmarksToggle();
+  void doBookmarksToggle();
 
   /** */
-	void doBookmarksClear();
+  void doBookmarksClear();
 
   /** */
-	void doBookmarksNext();
+  void doBookmarksNext();
 
   /** */
-	void doBookmarksPrevious();
+  void doBookmarksPrevious();
 
   /** */
   void doClearBookmarks();
@@ -122,22 +123,22 @@ public:
   void installBMPopup(QPopupMenu *p);
 
   /** */
-	void connectBMPopup();
+  void connectBMPopup();
 
   /** */
-	void readBookmarkConfig(KConfig* theConfig);
+  void readBookmarkConfig(KConfig* theConfig);
   /** */
-	void writeBookmarkConfig(KConfig* theConfig);
+  void writeBookmarkConfig(KConfig* theConfig);
 
   /** */
-    QString getBrowserMenuItem(int index);
+  QString getBrowserMenuItem(int index);
 
   ///////////////////////////
   // Doc stuff
   ///////////////////////////
 
   /** Get the document of the currently focused CEditWidget view. */
-  KWriteDoc* currentEditDoc() { return m_pCurEditDoc; };
+  Kate::Document* currentEditDoc() { return m_pCurEditDoc; };
   /** Get the document of the currently focused KHTMLView view. */
   CDocBrowser* currentBrowserDoc() { return m_pCurBrowserDoc; };
 
@@ -149,19 +150,19 @@ public:
   bool curDocIsCppFile();
 
   /** */
-  ProjectFileType getKWriteDocType(KWriteDoc* pDoc);
+  ProjectFileType getKWriteDocType(Kate::Document* pDoc);
 
-  /** Get a list of all the KWriteDoc */
-  QList<KWriteDoc> getKWriteDocList() const;
+  /** Get a list of all the Kate::Document */
+  QList<Kate::Document> getKWriteDocList() const;
   /** Get a list of all the DocBrowser */
   QList<CDocBrowser> getDocBrowserList() const;
 
   /** Retrieves the document found by its filename */
   QObject* findDocFromFilename(const QString& strFileName) const;
-  /** Retrieves the KWriteDoc found by its filename */
-  KWriteDoc* findKWriteDoc(const QString& strFileName) const;
-  /** Find if there is another KWriteDoc in the doc list */
-  KWriteDoc* findKWriteDoc();
+  /** Retrieves the Kate::Document found by its filename */
+  Kate::Document* findKWriteDoc(const QString& strFileName) const;
+  /** Find if there is another Kate::Document in the doc list */
+  Kate::Document* findKWriteDoc();
   /** Find if there is another CDocBrowser in the doc list */
   CDocBrowser* findCDocBrowser();
   /** Get the name of a document */
@@ -172,20 +173,22 @@ public:
   /** Close a browser document, causes all views to be closed. */
   void closeCDocBrowser(CDocBrowser* pDoc);
   /** Close an editor document, causes all views to be closed. */
-  void closeKWriteDoc(KWriteDoc* pDoc);
+  void closeKWriteDoc(Kate::Document* pDoc);
 
   /** */
   CDocBrowser* createCDocBrowser(const QString& url);
   /** */
-  KWriteDoc* createKWriteDoc(const QString& strFileName);
+  Kate::Document* createKWriteDoc(const QString& strFileName);
 
-  /** Load edit document from file. */
-  void loadKWriteDoc(KWriteDoc* pDoc, 
-                     const QString& strFileName, 
-                     int /*mode*/);
+// not called anymore (rokrau 6/25/01)
+//  /** Load edit document from file. */
+//  void loadKWriteDoc(Kate::Document* pDoc,
+//                     const QString& strFileName,
+//                     int /*mode*/);
 
+// not called anymore (rokrau 6/25/01)
   /** Save edit document in a file */
-  bool saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName);
+  //bool saveKWriteDoc(Kate::Document* pDoc, const QString& strFileName);
 
   /** @return the number of documents */
   int docCount() const;
@@ -196,7 +199,7 @@ public:
 
   /** Get the currently focused CEditWidget view 
       (Note: not the covering MDI widgets but the embedded view) */
-  CEditWidget* currentEditView() { return m_pCurEditView; };
+  Kate::View* currentEditView() { return m_pCurEditView; };
   /** Get the currently focused KHTMLView view 
       (Note: not the covering MDI widgets but the embedded view) */
   KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
@@ -207,17 +210,17 @@ public:
   /** */
   void doCreateNewView();
   /** */
-  CEditWidget* createEditView(KWriteDoc* pDoc, bool bShow);
+  Kate::View* createEditView(Kate::Document* pDoc, bool bShow);
   /** */
   KHTMLView* createBrowserView(CDocBrowser* pDoc, bool bShow);
   /** get the first edit view for an edit document */
-  CEditWidget* getFirstEditView(KWriteDoc* pDoc) const;
+  Kate::View* getFirstEditView(Kate::Document* pDoc) const;
 
   /** Close a view, automatically disconnects document. */
   bool closeView(QWidget* pView);
 
   /** */
-  void closeEditView(CEditWidget* pView);
+  void closeEditView(Kate::View* pView);
   /** */
   void closeBrowserView(KHTMLView* pView);
 
@@ -309,7 +312,7 @@ signals:
 private:
 
   /** List of all documents */
-  QList<QObject> m_documentList;
+  QList<QObject>            m_documentList;
 
   /** List of the focused views, the view at the end is the recently
       focused view */
@@ -322,12 +325,14 @@ private:
   QStrList                  m_docBookmarksTitleList;
   QPopupMenu*               m_pDocBookmarksMenu;
 
-  KWriteDoc*                m_pCurEditDoc;
-  CEditWidget*              m_pCurEditView;
+  Kate::Document*           m_pCurEditDoc;
+  Kate::View*               m_pCurEditView;
   CDocBrowser*              m_pCurBrowserDoc;
   KHTMLView*                m_pCurBrowserView;
 
   bool                      m_curIsBrowser;
+
+  KParts::Factory*          m_pKateFactory;
 };
 
 #endif //DOCVIEWMAN_H

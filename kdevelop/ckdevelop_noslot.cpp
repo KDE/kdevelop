@@ -21,7 +21,7 @@
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
 #include "ctoolclass.h"
@@ -33,8 +33,11 @@
 #include "./dbg/disassemble.h"
 #include "ckonsolewidget.h"
 #include "docviewman.h"
-#include "kwdoc.h"
-#include "docviewman.h"
+//#include "kwdoc.h"
+#include <../../kate-cvs/interfaces/document.h>
+#include <../../kate-cvs/interfaces/view.h>
+
+
 #include "coutputwidget.h"
 
 #include <khtmlview.h>
@@ -164,14 +167,18 @@ bool CKDevelop::isProjectDirty()
     if (*filename!='\0' && CProject::getType(filename)!=DATA &&
            CProject::getType(filename)!=KDEV_DIALOG)
     {
-      KWriteDoc* pDoc = m_docViewManager->findKWriteDoc(prjDir+filename);
+      Kate::Document* pDoc = m_docViewManager->findKWriteDoc(prjDir+filename);
       QFileInfo src_info(prjDir + filename);
 
       if (pDoc)
       {
         // here we are... having the file already opened
         if (pDoc->isModified() 
-        || bin_info.lastModified() < pDoc->getLastFileModifDate())
+        // i took this out because we dont have a way to check the date
+        // the document was modified last anylonger, it is probably the
+        // same to check the filename's QFileInfo i suppose. So this may
+        // very likely break something. (rokrau 6/28/01)
+        /*|| bin_info.lastModified() < pDoc->getLastFileModifDate()*/)
           isClean=false;
       }
       /* here only the check if the file would be younger than the target file
@@ -200,7 +207,7 @@ bool CKDevelop::isProjectDirty()
 void CKDevelop::setMainCaption(int item)
 {
   QString capt=QString::null;
-  CEditWidget* pCEW = m_docViewManager->currentEditView();
+  Kate::View* pCEW = m_docViewManager->currentEditView();
   switch(item)
   {
   case BROWSER:
@@ -219,7 +226,7 @@ void CKDevelop::setMainCaption(int item)
   default:
     if (pCEW) {
       //capt = QFileInfo(pCEW->getName()).fileName();
-      QString name=pCEW->getName();
+      QString name=pCEW->getDoc()->docName();
       int len=name.length();
       int ip=name.findRev("/",-1);
       capt = name.right(len-ip-1);
@@ -277,10 +284,11 @@ bool CKDevelop::fileSaveAs(){
   QString name, oldName;
   int message_result=KMessageBox::Yes; // simulate ok state... this could change by one of the following messageboxes
 
-  if (!m_docViewManager->currentEditView())
+  Kate::View* pView=m_docViewManager->currentEditView();
+  if (!pView)
     return false;
 
-  oldName = m_docViewManager->currentEditView()->getName();
+  oldName = pView->getDoc()->docName();
   if (bAutosave)
     saveTimer->stop();
 
@@ -300,7 +308,7 @@ bool CKDevelop::fileSaveAs(){
     }
 
     // check if the extension is changed and the widget or program to view must change
-    if (CProject::getType(name)!=CProject::getType(m_docViewManager->currentEditView()->getName()))
+    if (CProject::getType(name)!=CProject::getType(pView->getDoc()->docName()))
       message_result = KMessageBox::warningYesNoCancel(this,
                             i18n("Do you really want to save the file\nas another type of document?"),
                             i18n("Save as new type of document?"));
@@ -325,13 +333,16 @@ bool CKDevelop::fileSaveAs(){
 
   // search if we can find a doc with the new desired filename  ...
   // means already loaded
-  KWriteDoc* pActualDoc = m_docViewManager->findKWriteDoc(name);
-  KWriteDoc* pOldDoc = m_docViewManager->findKWriteDoc(oldName);
+  Kate::Document* pActualDoc = m_docViewManager->findKWriteDoc(name);
+  Kate::Document* pOldDoc = m_docViewManager->findKWriteDoc(oldName);
     
   // now that all cancel possibilities are handled simulate a changed file
   // m_docViewManager->currentEditView()->toggleModified(true);
 
-  if (!m_docViewManager->currentEditView()->KWrite::writeFile(name)) {
+  // i hope this works, sometimes i dont understand why saving a document
+  // must be so obfuscated (rokrau 6/28/01)
+  pView->getDoc()->setDocName(name);
+  if (!pView->save()) {
   // if saving failed
       if (bAutosave)
        saveTimer->start(saveTimeout);
@@ -342,7 +353,7 @@ bool CKDevelop::fileSaveAs(){
     // here we are ... saving the file with the same name
     //   so only the modified-flags have to be changed
     pActualDoc->setModified(false);
-    m_docViewManager->currentEditView()->toggleModified(false);
+    m_docViewManager->currentEditView()->setModified(false);
   }
   else {
     // now open this file as new file in edit_infos
