@@ -13,6 +13,7 @@
 #define __cppsupport_events_h
 
 #include "driver.h"
+#include "kdevdeepcopy.h"
 
 #include <qevent.h>
 #include <qvaluelist.h>
@@ -32,14 +33,13 @@ class FileParsedEvent: public QCustomEvent
 {
 public:
     FileParsedEvent( const QString& fileName, const QValueList<Problem>& problems )
-    : QCustomEvent(Event_FileParsed)
+    : QCustomEvent(Event_FileParsed), m_fileName( deepCopy(fileName) )
     {
         // the members are deep copies
-        m_fileName = QString(fileName.ascii());
         QValueListConstIterator<Problem> it = problems.begin();
         while (it != problems.end()) {
             Problem p = *it;
-            m_problems.append(Problem(p.text().ascii(), p.line(), p.column()));
+            m_problems.append(Problem(deepCopy(p.text()), p.line(), p.column()));
             ++it;
         }
     }

@@ -16,6 +16,7 @@
 #include "cppcodecompletion.h"
 #include "driver.h"
 #include "ast_utils.h"
+#include "kdevdeepcopy.h"
 
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
@@ -246,7 +247,7 @@ BackgroundParser::~BackgroundParser()
 void BackgroundParser::addFile( const QString& fileName )
 {
     QMutexLocker locker( &m_mutex );
-    QString fn( fileName.unicode(), fileName.length() );
+    QString fn = deepCopy( fileName );
     bool added = false;
     if( m_fileList.find(fn) == m_fileList.end() ){
         m_fileList.push_back( fn );
@@ -390,7 +391,7 @@ QString BackgroundParser::fileToParse( )
 
     QMutexLocker locker( &m_mutex );
     QString fileName = m_fileList.front();
-    fileName = QString( fileName.unicode(), fileName.length() );
+    fileName = deepCopy( fileName );
     m_fileList.pop_front();
 
     return fileName;

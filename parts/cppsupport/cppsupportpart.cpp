@@ -705,7 +705,7 @@ CppSupportPart::parseProject( )
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
             QString absFilePath = fileInfo.absFilePath();
-            kdDebug(9007) << "parse file" << absFilePath << endl;
+            //kdDebug(9007) << "parse file" << absFilePath << endl;
 
             maybeParse( absFilePath );
 
