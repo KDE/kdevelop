@@ -155,8 +155,8 @@ void CKDevelop::initWhatsThis(){
                 "(by default the internal debugger is used)"
 	       				"All debuggers should allow you to execute your program"
                 "step by step by setting breakpoints in the sourcecode." );
-	whats_this->add(toolBar()->getButton(ID_BUILD_DEBUG),build_debug_str);
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_DEBUG),build_debug_str);
+	whats_this->add(toolBar()->getButton(ID_DEBUG_START),build_debug_str);
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_START),build_debug_str);
 
 	QString build_stop_str=i18n("Stop\n\n"
 								"If activated, the stop-command will interrupt "
