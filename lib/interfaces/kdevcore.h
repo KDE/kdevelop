@@ -41,6 +41,7 @@ class KDevPlugin;
 class KDevLicense;
 class KAction;
 class CodeModelItem;
+class ProjectModelItem;
 
 namespace KParts
 {
@@ -70,6 +71,7 @@ public:
 	EditorContext, 
 	DocumentationContext, 
 	FileContext,
+        ProjectModelItemContext,
 	CodeModelItemContext
     };
 
@@ -284,6 +286,38 @@ private:
 
     CodeModelItemContext( const CodeModelItemContext &);
     CodeModelItemContext &operator=( const CodeModelItemContext &);
+};
+
+/**
+ * A context for the popup menu in project views.
+ */
+class ProjectModelItemContext : public Context
+{
+public:
+    /**
+    * Builds the context.
+    * @param item
+    */
+    ProjectModelItemContext( const ProjectModelItem* item );
+
+    /**
+    * Destructor.
+    */
+    virtual ~ProjectModelItemContext();
+
+    virtual int type() const;
+
+    /**
+    * Returs the code model item for the selected item.
+    */
+    const ProjectModelItem* item() const;
+
+private:
+    class Private;
+    Private *d;
+
+    ProjectModelItemContext( const ProjectModelItemContext &);
+    ProjectModelItemContext &operator=( const ProjectModelItemContext &);
 };
 
 /**

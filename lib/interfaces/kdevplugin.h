@@ -114,7 +114,7 @@ public:
      * Reimplement this method if you want to add your credits to the KDevelop
      * about dialog.
      **/
-    virtual KAboutData* aboutData() { return 0L; };
+    virtual const KAboutData* aboutData() { return 0L; };
 
     /**
      *  reimplement and retun the part here.You can use this method if
