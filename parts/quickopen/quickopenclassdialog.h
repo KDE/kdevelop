@@ -21,29 +21,24 @@
 #ifndef QUICKOPENCLASSDIALOG_H
 #define QUICKOPENCLASSDIALOG_H
 
-#include "quickopenbase.h"
+#include "quickopendialog.h"
 #include <codemodel.h>
 #include <qstringlist.h>
 
 class QuickOpenPart;
-class KCompletion;
 
-class QuickOpenClassDialog : public QuickOpenDialogBase
+class QuickOpenClassDialog : public QuickOpenDialog
 {
     Q_OBJECT
 public:
     QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
     virtual ~QuickOpenClassDialog();
-    /*$PUBLIC_FUNCTIONS$*/
 
 public slots:
-    /*$PUBLIC_SLOTS$*/
     virtual void slotExecuted( QListBoxItem* );
     virtual void slotReturnPressed();
-    virtual void slotTextChanged( const QString& text );
 
 protected:
-    /*$PROTECTED_FUNCTIONS$*/
     void findAllClasses( QStringList& classList );
     void findAllClasses( QStringList& classList, const ClassDom klass );
     void findAllClasses( QStringList& classList, const NamespaceDom ns );
@@ -53,20 +48,9 @@ protected:
     ClassDom findClass( QStringList& path, const ClassDom klass );
 
 protected slots:
-    /*$PROTECTED_SLOTS$*/
-    virtual void reject();
     virtual void accept();
 
-    void moveUpInList();
-    void moveDownInList();
-    void scrollUpInList();
-    void scrollDownInList();
-    void goToBegin();
-    void goToEnd();
-
 private:
-    QuickOpenPart* m_part;
-    KCompletion* m_completion;
     QStringList m_classList;
 };
 

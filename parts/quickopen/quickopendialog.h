@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
+ *  Copyright (C) KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2004
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -22,44 +22,33 @@
 #define QUICKOPENDIALOG_H
 
 #include "quickopenbase.h"
-#include <qstringlist.h>
 
 class QuickOpenPart;
 class KCompletion;
 
 class QuickOpenDialog : public QuickOpenDialogBase
 {
-    Q_OBJECT
+  Q_OBJECT
+
 public:
-    QuickOpenDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
-    virtual ~QuickOpenDialog();
-    /*$PUBLIC_FUNCTIONS$*/
+  QuickOpenDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
+  virtual ~QuickOpenDialog();
 
 public slots:
-    /*$PUBLIC_SLOTS$*/
-    virtual void slotExecuted( QListBoxItem* );
-    virtual void slotReturnPressed();
-    virtual void slotTextChanged( const QString& text );
-
-protected:
-    /*$PROTECTED_FUNCTIONS$*/
-
+  virtual void slotTextChanged(const QString&);
+  
 protected slots:
-    /*$PROTECTED_SLOTS$*/
-    virtual void reject();
-    virtual void accept();
+	virtual void moveUpInList();
+	virtual void moveDownInList();
+	virtual void scrollUpInList();
+	virtual void scrollDownInList();
+	virtual void goToBegin();
+	virtual void goToEnd();
+	
+protected:
+	KCompletion* m_completion;
+	QuickOpenPart* m_part;
 
-    void moveUpInList();
-    void moveDownInList();
-    void scrollUpInList();
-    void scrollDownInList();
-    void goToBegin();
-    void goToEnd();
-
-private:
-    QuickOpenPart* m_part;
-    KCompletion* m_completion;
-    QStringList m_fileList;
 };
 
 #endif

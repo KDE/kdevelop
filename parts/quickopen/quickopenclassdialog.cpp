@@ -18,9 +18,6 @@
  *
  */
 
-#include "quickopenclassdialog.h"
-#include "quickopen_part.h"
-
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
 
@@ -33,30 +30,11 @@
 #include <qregexp.h>
 #include <qlabel.h>
 
-#if QT_VERSION < 0x030100
-/* original source from qt-3.2.1/src/widgets/qlistbox.cpp
-QListBoxItem* QListBox::selectedItem() const
-{
-    if ( d->selectionMode != Single )
-	return 0;
-    if ( isSelected( currentItem() ) )
-	return  d->current;
-    return 0;
-}
-*/
-QListBoxItem* QListBox_selectedItem(QListBox* cpQListBox)
-{
-    if ( cpQListBox->selectionMode() != QListBox::Single )
-    return 0;
-    if ( cpQListBox->isSelected( cpQListBox->currentItem() ) )
-    return  cpQListBox->item(cpQListBox->currentItem());
-    return 0;
-}
-#endif
-
+#include "quickopenclassdialog.h"
+#include "quickopen_part.h"
 
 QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
-    : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
+    : QuickOpenDialog( part, parent, name, modal, fl )
 {
     nameLabel->setText( i18n("Class &name:") );
     itemListLabel->setText( i18n("Class &list:") );
@@ -72,13 +50,6 @@ QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent,
 
     itemList->insertStringList( m_classList );
     itemList->setCurrentItem(0);
-
-    connect(nameEdit, SIGNAL(upPressed()), this, SLOT(moveUpInList()));
-    connect(nameEdit, SIGNAL(downPressed()), this, SLOT(moveDownInList()));
-    connect(nameEdit, SIGNAL(pgupPressed()), this, SLOT(scrollUpInList()));
-    connect(nameEdit, SIGNAL(pgdownPressed()), this, SLOT(scrollDownInList()));
-    connect(nameEdit, SIGNAL(homePressed()), this, SLOT(goToBegin()));
-    connect(nameEdit, SIGNAL(endPressed()), this, SLOT(goToEnd()));
 }
 
 QuickOpenClassDialog::~QuickOpenClassDialog()
@@ -87,24 +58,14 @@ QuickOpenClassDialog::~QuickOpenClassDialog()
     m_completion = 0;
 }
 
-/*$SPECIALIZATION$*/
 void QuickOpenClassDialog::slotExecuted( QListBoxItem* /*item*/ )
 {
     accept();
 }
 
-void QuickOpenClassDialog::reject()
-{
-    QDialog::reject();
-}
-
 void QuickOpenClassDialog::accept()
 {
-#if QT_VERSION >= 0x030100
     if( QListBoxItem* item = itemList->selectedItem() )
-#else
-    if( QListBoxItem* item = QListBox_selectedItem(itemList) )
-#endif
     {
         ClassDom klass = findClass( item->text() );
         if( klass )
@@ -121,59 +82,6 @@ void QuickOpenClassDialog::accept()
 void QuickOpenClassDialog::slotReturnPressed( )
 {
     accept();
-}
-
-void QuickOpenClassDialog::slotTextChanged( const QString & text )
-{
-    itemList->clear();
-    itemList->insertStringList( m_completion->substringCompletion(text) );
-    itemList->setCurrentItem(0);
-}
-
-void QuickOpenClassDialog::moveUpInList( )
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(itemList->count() - 1);
-    else
-        itemList->setCurrentItem(itemList->currentItem() - 1);
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenClassDialog::moveDownInList( )
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(0);
-    else
-        itemList->setCurrentItem(itemList->currentItem() + 1);
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenClassDialog::scrollUpInList( )
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(itemList->count() - 1);
-    else
-        itemList->setCurrentItem(itemList->currentItem() - (itemList->numItemsVisible()-1));
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenClassDialog::scrollDownInList( )
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(0);
-    else
-        itemList->setCurrentItem(itemList->currentItem() + (itemList->numItemsVisible()-1));
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenClassDialog::goToBegin( )
-{
-    itemList->setCurrentItem(0);
-}
-
-void QuickOpenClassDialog::goToEnd( )
-{
-    itemList->setCurrentItem(itemList->count()-1);
 }
 
 void QuickOpenClassDialog::findAllClasses( QStringList& lst )

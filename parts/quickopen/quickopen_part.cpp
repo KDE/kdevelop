@@ -19,8 +19,9 @@
  */
 
 #include "quickopen_part.h"
-#include "quickopendialog.h"
 #include "quickopenclassdialog.h"
+#include "quickopenfunctiondialog.h"
+#include "quickopenfiledialog.h"
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -44,17 +45,20 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     setInstance(QuickOpenFactory::instance());
     setXMLFile("kdevpart_quickopen.rc");
 
-    m_actionQuickOpen = new KAction( i18n("Quick Open..."), CTRL + SHIFT + Key_O,
-				       this, SLOT(slotQuickOpen()),
+    m_actionQuickOpen = new KAction( i18n("Quick Open File..."), CTRL + SHIFT + Key_O,
+				       this, SLOT(slotQuickFileOpen()),
 				       actionCollection(), "quick_open" );
     m_actionQuickOpen->setToolTip(i18n("Quick open file in project"));
     m_actionQuickOpen->setWhatsThis(i18n("<b>Quick open</b><p>Provides a file name input form with completion listbox to quickly open file in a project."));
 
-    m_actionQuickOpenClass = new KAction( i18n("Find Class..."), CTRL + ALT + Key_C,
+    m_actionQuickOpenClass = new KAction( i18n("Quick Open Class..."), CTRL + ALT + Key_C,
 				          this, SLOT(slotQuickOpenClass()),
 				          actionCollection(), "quick_open_class" );
     m_actionQuickOpenClass->setToolTip(i18n("Find class in project"));
     m_actionQuickOpenClass->setWhatsThis(i18n("<b>Find class</b><p>Provides a class name input form with completion listbox to quickly open a file where the class is defined."));
+
+    m_actionFunctionOpen = new KAction( i18n("Quick Open Method..."), CTRL + ALT + Key_M, this, SLOT(slotQuickOpenFunction()), actionCollection(), "quick_open_function" );
+    m_actionFunctionOpen->setToolTip(i18n("Quick open function in project"));
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
@@ -73,9 +77,9 @@ void QuickOpenPart::slotProjectClosed( )
 {
 }
 
-void QuickOpenPart::slotQuickOpen( )
+void QuickOpenPart::slotQuickFileOpen( )
 {
-    QuickOpenDialog dlg( this, mainWindow()->main() );
+    QuickOpenFileDialog dlg( this, mainWindow()->main() );
     dlg.exec();
 }
 
@@ -85,5 +89,10 @@ void QuickOpenPart::slotQuickOpenClass( )
     dlg.exec();
 }
 
+void QuickOpenPart::slotQuickOpenFunction()
+{
+    QuickOpenFunctionDialog dlg( this, mainWindow()->main() );
+    dlg.exec();
+}
 
 #include "quickopen_part.moc"

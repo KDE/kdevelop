@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
+ *  Copyright (C) KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2004
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -18,38 +18,16 @@
  *
  */
 
-#include "quickopendialog.h"
-#include "quickopen_part.h"
-
-#include <kdevproject.h>
-#include <kdevpartcontroller.h>
+#include <klistbox.h>
+#include <kcompletion.h>
 
 #include "doclineedit.h"
 
-#include <klistbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <qregexp.h>
-#include <qlabel.h>
+#include "quickopendialog.h"
 
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
-    nameLabel->setText( i18n("File &name:") );
-    itemListLabel->setText( i18n("File &list:") );
-
-    m_fileList = m_part->project()->allFiles();
-
-    m_completion = new KCompletion();
-    m_completion->insertItems( m_fileList );
-    m_completion->setIgnoreCase( true );
-
-    nameEdit->setFocus();
-
-    itemList->insertStringList( m_fileList );
-    itemList->setCurrentItem(0);
-
     connect(nameEdit, SIGNAL(upPressed()), this, SLOT(moveUpInList()));
     connect(nameEdit, SIGNAL(downPressed()), this, SLOT(moveDownInList()));
     connect(nameEdit, SIGNAL(pgupPressed()), this, SLOT(scrollUpInList()));
@@ -60,47 +38,16 @@ QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const cha
 
 QuickOpenDialog::~QuickOpenDialog()
 {
-    delete( m_completion );
-    m_completion = 0;
 }
 
-/*$SPECIALIZATION$*/
-void QuickOpenDialog::slotExecuted( QListBoxItem* item )
-{
-    m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + item->text() );
-    accept();
-}
-
-void QuickOpenDialog::reject()
-{
-    QDialog::reject();
-}
-
-void QuickOpenDialog::accept()
-{
-    QDialog::accept();
-}
-
-void QuickOpenDialog::slotReturnPressed( )
-{
-/*    if( m_fileList.contains(nameEdit->text()) ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + nameEdit->text() );
-        accept();
-    }*/
-    if( itemList->currentItem() != -1 ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + itemList->currentText() );
-        accept();
-    }
-}
-
-void QuickOpenDialog::slotTextChanged( const QString & text )
+void QuickOpenDialog::slotTextChanged(const QString & text)
 {
     itemList->clear();
     itemList->insertStringList( m_completion->substringCompletion(text) );
     itemList->setCurrentItem(0);
 }
 
-void QuickOpenDialog::moveUpInList( )
+void QuickOpenDialog::moveUpInList()
 {
     if (itemList->currentItem() == -1)
         itemList->setCurrentItem(itemList->count() - 1);
@@ -109,7 +56,7 @@ void QuickOpenDialog::moveUpInList( )
     itemList->ensureCurrentVisible();
 }
 
-void QuickOpenDialog::moveDownInList( )
+void QuickOpenDialog::moveDownInList()
 {
     if (itemList->currentItem() == -1)
         itemList->setCurrentItem(0);
@@ -118,7 +65,7 @@ void QuickOpenDialog::moveDownInList( )
     itemList->ensureCurrentVisible();
 }
 
-void QuickOpenDialog::scrollUpInList( )
+void QuickOpenDialog::scrollUpInList()
 {
     if (itemList->currentItem() == -1)
         itemList->setCurrentItem(itemList->count() - 1);
@@ -127,7 +74,7 @@ void QuickOpenDialog::scrollUpInList( )
     itemList->ensureCurrentVisible();
 }
 
-void QuickOpenDialog::scrollDownInList( )
+void QuickOpenDialog::scrollDownInList()
 {
     if (itemList->currentItem() == -1)
         itemList->setCurrentItem(0);
@@ -136,15 +83,16 @@ void QuickOpenDialog::scrollDownInList( )
     itemList->ensureCurrentVisible();
 }
 
-void QuickOpenDialog::goToBegin( )
+void QuickOpenDialog::goToBegin()
 {
-    itemList->setCurrentItem(0);
+	itemList->setCurrentItem(0);
 }
 
-void QuickOpenDialog::goToEnd( )
+void QuickOpenDialog::goToEnd()
 {
-    itemList->setCurrentItem(itemList->count()-1);
+	itemList->setCurrentItem(itemList->count()-1);
 }
+
 
 
 #include "quickopendialog.moc"

@@ -36,12 +36,14 @@ public:
 private slots:
     void slotProjectOpened();
     void slotProjectClosed();
-    void slotQuickOpen();
+    void slotQuickFileOpen();
     void slotQuickOpenClass();
+	void slotQuickOpenFunction();
 
 private:
     KAction* m_actionQuickOpen;
     KAction* m_actionQuickOpenClass;
+	KAction* m_actionFunctionOpen;
 };
 
 
