@@ -292,9 +292,7 @@ void CTreeHandler::readIcons()
   icons[ THPUBLIC_SLOT ] = new QPixmap(pixDir + "CVpublic_slot.xpm");
   icons[ THPROTECTED_SLOT ] = new QPixmap(pixDir + "CVprotected_slot.xpm");
   icons[ THPRIVATE_SLOT ] = new QPixmap(pixDir + "CVprivate_slot.xpm");
-  icons[ THPUBLIC_SIGNAL ] = new QPixmap(pixDir + "CVpublic_signal.xpm");
-  icons[ THPROTECTED_SIGNAL ] = new QPixmap(pixDir + "CVprotected_signal.xpm");
-  icons[ THPRIVATE_SIGNAL ] = new QPixmap(pixDir + "CVprivate_signal.xpm");
+  icons[ THSIGNAL ] = new QPixmap(pixDir + "CVpublic_signal.xpm");
   icons[ THGLOBAL_VARIABLE ] = new QPixmap( pixDir + "CVglobal_var.xpm");
   icons[ THPUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
   icons[ THPROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
@@ -306,6 +304,4 @@ void CTreeHandler::readIcons()
 
   CTreeHandler::iconsRead = true;
 }
-
-
 
