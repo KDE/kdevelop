@@ -236,7 +236,11 @@ void AddMethodDialog::accept()
 
     {
 	    QListViewItem* item = methods->firstChild();
+#if QT_VERSION >= 0x030100
 	    QString className = m_klass->path().replace( QString("."), QString("::") );
+#else
+	    QString className;// =????   FIXME!
+#endif
 	    while( item ){
 		if( item->text(2) == "Friend" || item->text(2) == "Pure Virtual" ){
 		    item = item->nextSibling();
