@@ -1,3 +1,8 @@
+2001-07-26 Sandy Meier   <smeier@kdevelop.org>
+	* kwrite CodeCompletionbox is now useable, maybe someone who want make it more colorful?
+	* php code completion supports (global methods,$this->xxx and $test = new xxx) now, 
+		more will follow
+
 2001-07-26 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* debian packaging for kdevelop-3.0 branch
 	* kwrite: add path kwriteeditor_part for locating syntax.xml
