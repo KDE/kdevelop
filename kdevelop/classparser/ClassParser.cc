@@ -946,12 +946,17 @@ CParsedClass *CClassParser::parseClassHeader()
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
   aClass = new CParsedClass();
-  aClass->setName( getText() );
+  //  aClass->setName( getText() );
   aClass->setDefinedOnLine( getLineno() );
   aClass->setDefinedInFile( currentFile );
   aClass->setDeclaredInFile( currentFile );
   
-  getNextLexem();
+  // Skip stuff before the real classname.
+  while( lexem != 0 && lexem == ID )
+  {
+    aClass->setName( getText() ); 
+    getNextLexem();
+  }
 
   // Check for inheritance
   if( lexem == ':' )
