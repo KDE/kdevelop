@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>RunOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -92,13 +92,31 @@
                 <string>Environment Variables</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>startinterminal_box</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <property name="text">
-                <string>Start in external terminal</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>startinterminal_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start in external terminal</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>autocompile_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Automatically compile before execution</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </vbox>
 </widget>

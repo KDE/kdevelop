@@ -42,6 +42,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
+    autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", true));
 }
 
 
@@ -54,6 +55,7 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autocompile", autocompile_box->isChecked());
 
     m_environmentVariablesWidget->accept();
 }
