@@ -33,23 +33,6 @@
 
 namespace
 {
-// silly little function to make sure the line numbers get sorted correctly
-QString pad( int number )
-{
-	static const int paddingbase = 5; // surely, noone has files with 100.000+ lines?!
-
-	int x = number;
-	int count = 0;
-	while ( x )
-	{
-		x = x / 10;
-		count++;
-	}
-
-	QString ret;
-	ret.fill( ' ', paddingbase - count);
-	return ret + QString::number( number );
-}
 
 // shamelessly lifted from kdelibs/kate/part/kateviewhelpers.cpp
 static const char* const bookmark_xpm[]={
@@ -81,48 +64,28 @@ public:
 			_url( url ), _line( -1 ), _isBookmark( false )
 	{}
 
-	BookmarkItem( QListViewItem * parent, KURL const & url, QPair<int,QStringList> mark )
-			: QListViewItem( parent, pad( mark.first +1 ) ),
+	BookmarkItem( QListViewItem * parent, KURL const & url, QPair<int,QString> mark )
+			: QListViewItem( parent, QString::number( mark.first +1 ).rightJustify( 5 ) ),
 			_url( url ), _line( mark.first ), _isBookmark( true ) 
 	{
-		QStringList & list = mark.second;
+		BookmarksWidget * lv = static_cast<BookmarksWidget*>( listView() );
+		BookmarksConfig::CodeLineType codeline = lv->config()->codeline();
 		
-		uint center = ( list.count() / 2 );	// note: count is always an odd number
-
-		_code = "<qt><table><tr><td><pre>";
-		for ( uint i = 0; i < list.count(); i++)
-		{
-			QString temp = QStyleSheet::escape( list[i] );
-			
-			if ( i == center )
-			{
-				temp = "<b>" + temp + "</b>";
-			}
-			_code += temp + "\n";
-		}
-		_code += "</pre></td></tr></table></qt>";
-		
-		// @todo fix this - friend classes are ugly
-		BookmarksWidget * w = static_cast<BookmarksWidget*> ( listView() );
-		uint codeline = w->_part->config()->codeline();
-		
-		if ( codeline == 0 )
+		if ( codeline == BookmarksConfig::Never )
 		{
 			return;
 		}
 			
-		QString centerLine = list[ center ].stripWhiteSpace();
-		
-		if ( codeline == 1 )
+		if ( codeline == BookmarksConfig::Token )
 		{
-			if ( centerLine.startsWith( "//") )
+			if ( mark.second.startsWith( lv->config()->token() ) )
 			{
-				setText( 0, text( 0 ) + "   " + centerLine );
+				setText( 0, text( 0 ) + "  " + mark.second );
 			}
 			return;
 		}
 		
-		setText( 0, text( 0 ) + "   " + centerLine );
+		setText( 0, text( 0 ) + "  " + mark.second );
 	}
 
 	KURL url()
@@ -138,7 +101,23 @@ public:
 	{
 		if ( _isBookmark )
 		{
-			return _code;
+			BookmarksWidget * w = static_cast<BookmarksWidget*> ( listView() );
+			QStringList list = w->getContext( _url, _line );
+			
+			QString code = "<qt><table><tr><td><pre>";
+			for ( uint i = 0; i < list.count(); i++)
+			{
+				QString temp = QStyleSheet::escape( list[i] );
+				
+				if ( i == (list.count() / 2) )	// count() is always odd
+				{
+					temp = "<b>" + temp + "</b>";
+				}
+				code += temp + "\n";
+			}
+			code += "</pre></td></tr></table></qt>";
+
+			return code;
 		}
 		else
 		{
@@ -169,7 +148,8 @@ BookmarksWidget::BookmarksWidget(BookmarksPart *part)
 	setRootIsDecorated( true );
 	setResizeMode( QListView::LastColumn );
 
-	connect( this, SIGNAL( clicked( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 	connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
 		this, SLOT( popupMenu(QListViewItem *, const QPoint & , int ) ) );
 }
@@ -231,7 +211,7 @@ void BookmarksWidget::createURL( EditorData * data )
 		file->setOpen( true );
 		file->setPixmap( 0, SmallIcon( "document" ) );
 
-		QValueListIterator< QPair<int,QStringList> > it = data->marks.begin();
+		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 		while ( it != data->marks.end() )
 		{
 			QListViewItem * item = new BookmarkItem( file, data->url, *it );
@@ -251,8 +231,6 @@ bool BookmarksWidget::removeURL( KURL const & url )
 		BookmarkItem * bm = static_cast<BookmarkItem*>(item);
 		if ( bm->url() == url )
 		{
-//			kdDebug(0) << "node found. deleting!" << endl;
-
 			delete item;
 			return true;
 		}
@@ -314,5 +292,17 @@ void BookmarksWidget::itemClicked( QListViewItem * clickedItem )
 
 }
 
+BookmarksConfig * BookmarksWidget::config( )
+{
+	return _part->config();
+}
+
+QStringList BookmarksWidget::getContext( KURL const & url, unsigned int line )
+{
+	return _part->getContext( url, line, config()->context() );
+}
+
 
 #include "bookmarks_widget.moc"
+
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;
