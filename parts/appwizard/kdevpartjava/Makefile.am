@@ -20,3 +20,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kdevpartjavadir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kdevpartjavadir)/script
+	rm script.local

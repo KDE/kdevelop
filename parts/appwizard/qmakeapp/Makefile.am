@@ -21,3 +21,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(qmakeappdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(qmakeappdir)/script
+	rm script.local

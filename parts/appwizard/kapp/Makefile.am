@@ -8,7 +8,6 @@ kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
 	    kapp.png app.kdevelop subdirs
 template_DATA = kapp
 
-
 DISTCLEANFILES = script.local
 EXTRA_DIST = script
 
@@ -21,3 +20,5 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kappdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kappdir)/script
+	rm script.local
+

@@ -19,3 +19,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kickerdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kickerdir)/script
+	rm script.local

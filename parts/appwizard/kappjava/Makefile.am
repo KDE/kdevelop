@@ -20,3 +20,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kappjavadir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kappjavadir)/script
+	rm script.local

@@ -8,6 +8,8 @@ kdevpart_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
 		kdevpart_part.rc kdevpart.desktop app.kdevelop
 template_DATA = kdevpart
 
+noinst_SCRIPTS = script.local
+
 DISTCLEANFILES = script.local
 EXTRA_DIST = script
 
@@ -20,3 +22,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kdevpartdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kdevpartdir)/script
+	rm script.local

@@ -18,3 +18,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(pythonhellodir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(pythonhellodir)/script
+	rm script.local

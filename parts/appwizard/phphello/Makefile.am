@@ -18,3 +18,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(phphellodir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(phphellodir)/script
+	rm script.local

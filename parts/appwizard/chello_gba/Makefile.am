@@ -18,4 +18,4 @@ script.local: ${srcdir}/script
 
 install-data-local: script.local
 	$(INSTALL_DATA) script.local $(DESTDIR)$(chellogbadir)/script
-
+	rm script.local

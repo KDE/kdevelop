@@ -18,3 +18,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(pyqtdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(pyqtdir)/script
+	rm script.local

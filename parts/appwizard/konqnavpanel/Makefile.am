@@ -19,3 +19,4 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(konqnavpaneldir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(konqnavpaneldir)/script
+	rm script.local

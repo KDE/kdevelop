@@ -18,3 +18,4 @@ script.local: ${srcdir}/script
 
 install-data-local: script.local
 	$(INSTALL_DATA) script.local $(DESTDIR)$(cpphellodir)/script
+	rm script.local
