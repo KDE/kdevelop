@@ -242,7 +242,7 @@ void RubySupportPart::parse(const QString &fileName)
       
 	  lastMethod = method;
 	  
-      if (lastClass != 0 && rawline.left(3) != "def") {
+      if (lastClass != 0) {
 		QStringList scope( lastClass->name() );
 		method->setScope( scope );
 		methodDecl->setScope( scope );
