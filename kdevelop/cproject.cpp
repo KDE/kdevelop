@@ -811,7 +811,7 @@ void CProject::updateMakefileAm(const QString& makefile)
 
   for(str = list.first(); !customfile && str != 0;str = list.next())
   {
-    if (str.find(QRegExp("\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
+    if (str.find(QRegExp("^\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
       customfile=true;
   }
 
@@ -824,6 +824,7 @@ void CProject::updateMakefileAm(const QString& makefile)
         stream << str << "\n";
 
         //***************************generate needed things for the main makefile*********
+        config->setGroup(makefile);
         if (config->readEntry("type") == "prog_main")
         { // the main makefile
           stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
@@ -1006,6 +1007,7 @@ void CProject::updateMakefileAm(const QString& makefile)
         }
 
         //***************************generate needed things for a po makefile*********
+        config->setGroup(makefile);
         if (config->readEntry("type") == "po" && (!isKDE2Project()))
         { // a po makefile - KDE2 Projects have PO_FILES=AUTO in it.
           getPOFiles(makefile,po_files);
