@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Simple Bash Shell Script
+Category=Shell
+Comment=This generates a simplistic 'Hello world' program in Bash shell
+FileTemplates=sh,ShellStyle
