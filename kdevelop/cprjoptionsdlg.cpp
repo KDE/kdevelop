@@ -1511,7 +1511,7 @@ bool CPrjOptionsDlg::needConfigureInUpdate()
 void CPrjOptionsDlg::slotBinaryClicked()
 {
   QString dir;
-  dir = KFileDialog::getOpenFileName(prj_info->getBinPROGRAM());
+  dir = KFileDialog::getOpenFileName(prj_info->getProjectDir() + prj_info->pathToBinPROGRAM() + "/" + prj_info->getBinPROGRAM());
   if (!dir.isEmpty()){
     bool isRelativePath = false;
     if (dir.length() > 0)
