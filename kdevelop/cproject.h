@@ -210,8 +210,9 @@ public: // Methods to store project options
 
   void setPathToBinPROGRAM(const char *name)  { writeGroupEntry( "Config for BinMakefileAm", "path_to_bin_program", name ); }
 
-  void setDirWhereMakeWillBeCalled(const char *name)        { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
+  void setLibtoolDir(const QString& dir)      { writeGroupEntry( "Config for BinMakefileAm", "libtool_dir", dir); }
 
+  void setDirWhereMakeWillBeCalled(const char *name)  { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
 
   /** Store all open groups in the LFV*/
   void setLFVOpenGroups(QStrList groups);
@@ -281,6 +282,12 @@ public: // Methods to fetch project options
   QString pathToBinPROGRAM()  { return readGroupEntry( "Config for BinMakefileAm", "path_to_bin_program" ); }
 
   QString getDirWhereMakeWillBeCalled(QString defaultStr);
+
+  QString getExecutable();
+
+  QString getLibtoolDir();
+
+  QString getLibtool();
 
   /** Fetch all groups in the logic file view. */
   void getLFVGroups(QStrList& groups);
@@ -405,6 +412,13 @@ public: // Public methods
  */
   void getTSFiles(QString makefileam, QStrList& ts_files);
 
+  QString getRunFromDir();
+
+  /**
+  * checks to see if the named file is a shell script
+  * mainly used to see if we need to run the libtool wrapper
+  */
+  bool isAScript(const QString &filename);
 
 protected:
 
@@ -417,7 +431,7 @@ protected:
   /** Read an entry from the project file and return it.
    * @param group Name of the group.
    * @param tag   The value-tag e.g version. */
-  QString readGroupEntry( const char *group, const char *tag );
+  QString readGroupEntry( const QString& group, const QString& tag, const QString& defaultValue = QString::null);
 
   void setSourcesHeaders();
   void getAllStaticLibraries(QStrList& libs);

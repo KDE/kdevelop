@@ -21,6 +21,7 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
+#include <kconfigbase.h>
 #include <kapp.h>
 #include "vc/versioncontrol.h"
 #include "debug.h"
@@ -102,12 +103,12 @@ void CProject::setVCSystem(const char *vcsystem)
 
 
 void CProject::setLFVOpenGroups(QStrList groups){
-  config.setGroup( "General" );
+  config.setGroup("General");
   config.writeEntry( "lfv_open_groups", groups );
 }
 
 void CProject::setShortInfo(QStrList short_info){
-  config.setGroup( "General" );
+  config.setGroup("General");
   config.writeEntry( "short_info", short_info );
 }
 
@@ -147,7 +148,7 @@ void CProject::setFilters(QString group,QStrList& filters){
 }
 
 void CProject::writeFileInfo(TFileInfo info){
-  config.setGroup( info.rel_name );
+  config.setGroup(info.rel_name);
   config.writeEntry("type", getTypeString( info.type ) );
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
@@ -157,7 +158,7 @@ void CProject::writeFileInfo(TFileInfo info){
 }
 
 void CProject::writeDialogFileInfo(TDialogFileInfo info){
-  config.setGroup( info.rel_name );
+  config.setGroup(info.rel_name);
   config.writeEntry("type", "KDEV_DIALOG" );
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
@@ -189,7 +190,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
 
 void CProject::getLFVOpenGroups(QStrList& groups){
   config.setGroup("General");
-  config.readListEntry("lfv_open_groups",groups);  
+  config.readListEntry("lfv_open_groups",groups);
 }
 
 void CProject::getLFVGroups(QStrList& groups){
@@ -222,7 +223,7 @@ QString CProject::getLDADD(){
 }
 bool CProject::getModifyMakefiles(){
     config.setGroup("General");
-    return config.readBoolEntry("modifyMakefiles",true); 
+    return config.readBoolEntry("modifyMakefiles",true);
 }
 
 QString CProject::getCXXFLAGS(){
@@ -271,9 +272,10 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
 
 QString CProject::getDirWhereMakeWillBeCalled(QString defaultStr)
 {
-  QString userDefined = readGroupEntry( "General", "dir_where_make_will_be_called" );
-  return  userDefined.isEmpty() ? defaultStr : userDefined;
+  return readGroupEntry( "General", "dir_where_make_will_be_called", defaultStr);
 }
+
+
 
 /*********************************************************************
  *                                                                   *
@@ -1409,11 +1411,14 @@ void CProject::writeGroupEntry( const char *group, const char *tag, const char *
  * Returns:
  *   QString        The value.
  *-----------------------------------------------------------------*/
-QString CProject::readGroupEntry( const char *group, const char *tag )
+QString CProject::readGroupEntry( const QString& group, const QString& tag, const QString& defaultValue )
 {
-  config.setGroup( group );
-  return config.readEntry( tag,"" );
+//  KConfigGroupSaver (&config, group);
+  config.setGroup(group);
+  QString value = config.readEntry( tag, defaultValue);
+  return value;
 }
+
 bool CProject::isKDEProject()
 {
   if (getProjectType() == "normal_kde" || getProjectType() == "mini_kde" || getProjectType() == "normalogl_kde")
@@ -1443,3 +1448,87 @@ bool CProject::isCustomProject(){
   return false;
 }
 
+// **************************************************************************
+
+QString CProject::getExecutable()
+{
+  QString underDir=pathToBinPROGRAM();
+  if (underDir.isEmpty())
+    underDir = getProjectDir() + getSubDir();
+
+  if (underDir.isEmpty())
+    underDir = "./";
+
+  if (underDir.right(1) != "/")
+    underDir+="/";
+
+  QString exe = underDir+getBinPROGRAM();
+  return exe;
+}
+
+// **************************************************************************
+
+QString CProject::getLibtoolDir()
+{
+  if (isAScript(getExecutable()))
+  {
+    QString dir = readGroupEntry( "Config for BinMakefileAm", "libtool_dir", getProjectDir());
+    if (!dir.isEmpty() && dir.right(1) != "/")
+      dir+="/";
+    if (QFile::exists(dir+"libtool"))
+      return dir;
+  }
+  return QString::null;
+}
+
+// **************************************************************************
+
+QString CProject::getLibtool()
+{
+  QString libtool = getLibtoolDir();
+  if (!libtool.isEmpty())
+    return libtool+"libtool";
+  return QString::null;
+}
+
+// **************************************************************************
+
+// The directory that the program will be run from.
+QString CProject::getRunFromDir()
+{
+  QString underDir=pathToBinPROGRAM();
+  if (underDir.isEmpty())
+  {
+    underDir = getProjectDir();
+    if (!isCustomProject())
+      underDir += getSubDir();
+  }
+  return underDir;
+}
+
+/*---------------------------------------- isAScript()
+ * bool CProject::isAScript()
+ *
+ *  checks the file if it is a script
+ *
+ * Returns:
+ *       returns true if it is a script file
+ *-----------------------------------------------------------------*/
+bool CProject::isAScript(const QString &filename)
+{
+  bool bIsWrapper=false;
+  int ch;
+  QFile executable(filename);
+
+  if (executable.open(IO_ReadOnly))
+  {
+   while ((ch=executable.getch())==' ' || ch=='\n' || ch=='\t');
+
+   if (ch == '#')
+    if (executable.getch() == '!')
+       bIsWrapper=true;
+   executable.close();
+  }
+
+  return bIsWrapper;
+}

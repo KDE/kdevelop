@@ -148,6 +148,7 @@ private:
 	KConfig *settings;
   // Binary path
   QLineEdit* binary_edit;
+  QLineEdit* libtool_edit;
 
 	
 protected slots:
@@ -157,6 +158,7 @@ protected slots:
   void slotOptimize_level_changed(int v);
   void slotDebug_level_changed(int v);
   void slotBinaryClicked();
+  void slotLibtoolClicked();
   void slotFileDialogMakeStartPointClicked();
 };
 

@@ -1173,11 +1173,10 @@ void GDBController::modifyBreakpoint(Breakpoint* BP)
 void GDBController::slotStart(const QString& application, const QString& args, const QString &sDbgShell)
 {
   badCore_ = QString();
-  QString appName("konsole");
 
   ASSERT (!dbgProcess_ && !tty_);
 
-  tty_ = new STTY(config_dbgTerminal_, appName);
+  tty_ = new STTY(config_dbgTerminal_, "konsole");
   if (!config_dbgTerminal_)
   {
     connect( tty_, SIGNAL(OutOutput( const char* )), SIGNAL(ttyStdout( const char* )) );
@@ -1198,7 +1197,7 @@ void GDBController::slotStart(const QString& application, const QString& args, c
     return;
   }
 
-  GDB_DISPLAY("Starting GDB\n");
+  GDB_DISPLAY("\nStarting GDB - app:["+application+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
   dbgProcess_ = new KProcess;
 
   connect(  dbgProcess_,  SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1213,17 +1212,11 @@ void GDBController::slotStart(const QString& application, const QString& args, c
   connect(  dbgProcess_,  SIGNAL(processExited(KProcess*)),
             this,         SLOT(slotDbgProcessExited(KProcess*)));
 
-  // fires up gdb under the process
   if (!sDbgShell.isEmpty())
-    *dbgProcess_  << "/bin/sh"
-                  << "-c"
-                  << sDbgShell;
-
- *dbgProcess_ << config_gdbPath_+"gdb"
-              << application
-              << "-fullname"
-              << "-nx"
-              << "-quiet";
+   *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_gdbPath_+
+      "gdb "+application+" -fullname -nx -quiet";
+  else
+   *dbgProcess_<<config_gdbPath_+QString("gdb")<<application<<"-fullname"<<"-nx"<<"-quiet";
 
   dbgProcess_->start( KProcess::NotifyOnExit,
                       KProcess::Communication(KProcess::All));

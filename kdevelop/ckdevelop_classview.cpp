@@ -856,7 +856,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   }
   lb->sort();
 
-  for( aClass->slotIterator.toFirst(); 
+  for( aClass->slotIterator.toFirst();
        aClass->slotIterator.current();
        ++aClass->slotIterator )
   {

@@ -190,33 +190,6 @@ bool CKDevelop::isProjectDirty()
   return !isClean;
 }
 
-/*---------------------------------------- isAScript()
- * bool CKDevelop::isAScript()
- *
- *  checks the file if it is a script
- *
- * Returns:
- *       returns true if it is a script file
- *-----------------------------------------------------------------*/
-bool CKDevelop::isAScript(const QString &filename)
-{
-  bool bIsWrapper=false;
-  int ch;
-  QFile executable(filename);
-
-  if (executable.open(IO_ReadOnly))
-  {
-   while ((ch=executable.getch())==' ' || ch=='\n' || ch=='\t');
-
-   if (ch == '#')
-    if (executable.getch() == '!')
-       bIsWrapper=true;
-   executable.close();
-  }
-
-  return bIsWrapper;
-}
-
 void CKDevelop::removeFileFromEditlist(const char *filename){
   TEditInfo* actual_info;
 

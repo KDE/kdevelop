@@ -138,11 +138,6 @@ public:
    */
   bool isProjectDirty();
 
-  /** checks the named file
-   *  if it is a shell script
-   */
-  bool isAScript(const QString &);
-
   /*
      parses only the files listed in the stringlist
   */

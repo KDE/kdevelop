@@ -1386,15 +1386,16 @@ void CPrjOptionsDlg::addMakePage()
 //
 void CPrjOptionsDlg::addBinPage()
 {
-  QFrame* binaryOptions = addPage(i18n("Binary"),  i18n("Binary Program to start"),KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ));
-  QGridLayout *grid = new QGridLayout( binaryOptions ,3,1,15,7);
+  QFrame* binaryOptions = addPage(i18n("Binary"),  i18n("Binary Program to start"),
+                                  KGlobal::instance()->iconLoader()->loadIcon( "exec",
+                                  KIcon::NoGroup, KIcon::SizeMedium ));
+
+  QGridLayout *grid = new QGridLayout( binaryOptions ,3,2,15,7);
+
   QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
   grid->addWidget(binary_box,0,0);
-  binary_box->setTitle(i18n("Name"));
+  binary_box->setTitle(i18n("Binary details"));
 
- 
-//  binary->setMinimumSize(0,0);
-  
   QGridLayout *grid1 = new QGridLayout( binary_box ,2,2,15,7);
   QLabel* binary = new QLabel(binary_box,"binary_label");
   binary->setText(i18n("Path and Filename of binary:"));
@@ -1426,8 +1427,52 @@ void CPrjOptionsDlg::addBinPage()
   QWhatsThis::add(binary, binaryMsg);
 
   connect(binary_button,SIGNAL(clicked()),SLOT(slotBinaryClicked()));
+
+// **************************************************************************
+
+  QGroupBox* libtool_box= new QGroupBox(binaryOptions,"libtool_box");
+  grid->addWidget(libtool_box,2,0);
+  libtool_box->setTitle(i18n("Libtool details"));
+
+  QGridLayout *grid2 = new QGridLayout( libtool_box ,2,2,15,7);
+  QLabel* libtool = new QLabel(libtool_box,"libtool_label");
+  libtool->setText(i18n("Path of libtool:"));
+  grid2->addWidget(libtool,0,0);
+  libtool_edit= new QLineEdit(libtool_box,"libtool_edit");
+  grid2->addWidget(libtool_edit,1,0);
+
+  QString libtoolDir = prj_info->getLibtoolDir();
+//  if (libtoolDir.isEmpty())
+//  {
+//    libtoolDir = prj_info->getProjectDir() + prj_info->getSubDir();
+//    if (libtoolDir[0] == '/')
+//      libtoolDir = CToolClass::getRelativePath(prj_info->getProjectDir(), libtoolDir);
+//  }
+//
+//  if (libtoolDir.right(1)!="/")
+//    libtoolDir+="/";
+
+  libtool_edit->setText(libtoolDir);
+
+  QPushButton* libtool_button= new QPushButton(libtool_box,"libtool_button");
+  libtool_button->setPixmap(SmallIcon("fileopen"));
+  grid2->addWidget(libtool_button,1,1);
+
+  QString libtoolMsg = i18n("Set the path where the libtool is that wraps the executable\n"
+                            "when started on Run or Debug. Hint: Use a relative path starting\n"
+                            "from your project base directory to be location independent.");
+  QWhatsThis::add(libtool_edit, libtoolMsg);
+  QWhatsThis::add(libtool_button, libtoolMsg);
+  QWhatsThis::add(libtool, libtoolMsg);
+
+  connect(libtool_button,SIGNAL(clicked()),SLOT(slotLibtoolClicked()));
+
+// **************************************************************************
+
   if (!prj_info->isCustomProject())
+  {
     binaryOptions->setEnabled(false);
+  }
 }
 
 void CPrjOptionsDlg::slotOptimize_level_changed(int v) {
@@ -1777,13 +1822,15 @@ void CPrjOptionsDlg::ok(){
       // absolute directory path here.
       if (makeDir[0] == '/')
       {
-        if(KMessageBox::warningYesNo(this,
+        if (KMessageBox::warningYesNo(this,
                     i18n("The path\n\n") + makeDir +
-                      i18n("\n\nwhich you set as directory where make should "
-                            "run is not a relative path.\nThis can cause problems, "
-                            "if you move the project. What path do you want to save "
-                            "to your project file?"), i18n("Path decision"),
-                    i18n("&Absolute path"), i18n("&Relative path")))
+                      i18n("\n\nwhich you set as directory where make should\n"
+                            "run is not a relative path.\nThis can cause problems,\n"
+                            "if you move the project. What path do you want to save\n"
+                            "to your project file?"),
+                    i18n("Path decision"),
+                    i18n("&Relative path"),
+                    i18n("&Absolute path")) == KMessageBox::Yes)
         {
           makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
         }
@@ -1799,24 +1846,26 @@ void CPrjOptionsDlg::ok(){
     if (binaryPath[0] == '/') {
       if(KMessageBox::warningYesNo(this,
                 i18n("The path\n\n") + binaryPath +
-                i18n("\n\nto your binary which should be run on 'Execute' "
-                      "is not a relative path. This can cause problems, "
-                      "if you move the project. What path do you want to "
-                      "save to your project file?"),i18n("Path decision"),
-                i18n("&Absolute path"),i18n("&Relative path")))
+                i18n("\n\nto your binary which should be run on 'Execute'\n"
+                      "is not a relative path. This can cause problems,\n"
+                      "if you move the project. What path do you want to\n"
+                      "save to your project file?"),
+                i18n("Path decision"),
+                i18n("&Relative path"),
+                i18n("&Absolute path")) == KMessageBox::Yes)
         binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
     }
   }
   // split the path into dir and program
   QFileInfo fileInfo( binaryPath );
 
-  //****** TODO remove - debug statements
-  QString binaryDir = fileInfo.dirPath();
-  QString binaryProgram = fileInfo.fileName();
-  // ******************
-
   prj_info->setBinPROGRAM( fileInfo.fileName() );
   prj_info->setPathToBinPROGRAM( fileInfo.dirPath() );
+
+  QString libtoolDir = libtool_edit->text();
+  prj_info->setLibtoolDir(libtoolDir);
+
+  /***************************************/
 
   // write it to the disk
   prj_info->writeProject();
@@ -1850,16 +1899,46 @@ void CPrjOptionsDlg::slotBinaryClicked(){
     if (!isRelativePath) {
       if(KMessageBox::warningYesNo(this,
                               i18n("The path\n\n") + dir +
-                                i18n("\n\nto your binary which should be run on "
-                                "'Execute' is not a relative path. This can cause "
-                                "problems, if you move the project. What path do "
+                                i18n("\n\nto your binary which should be run on\n"
+                                "'Execute' is not a relative path. This can cause\n"
+                                "problems, if you move the project. What path do\n"
                                 "you want to save to your project file?"),
                               i18n("Path decision"),
-                              i18n("&Absolute path"),
-                              i18n("&Relative path")))
+                              i18n("&Relative path"),
+                              i18n("&Absolute path")) == KMessageBox::Yes)
         dir = CToolClass::getRelativePath(prj_info->getProjectDir(), dir);
     }
     binary_edit->setText(dir);
+  }
+}
+
+void CPrjOptionsDlg::slotLibtoolClicked()
+{
+  QString dir;
+  dir = KFileDialog::getExistingDirectory(prj_info->getLibtoolDir());
+  if (!dir.isEmpty())
+  {
+    bool isRelativePath = false;
+    if (dir.length() > 0)
+      if ('/' != dir[0])
+        isRelativePath = true;
+
+    if (!isRelativePath)
+    {
+      if(KMessageBox::warningYesNo(this,
+                              i18n("The path\n\n") + dir +
+                                i18n("\n\nto the libtool script which should be run on\n"
+                                "'Execute' is not a relative path. Often this is a good\n"
+                                "idea, but it may cause problems if you move the project.\n"
+                                "What path do you want to save to your project file?"),
+                              i18n("Path decision"),
+                              i18n("&Relative path"),
+                              i18n("&Absolute path")) == KMessageBox::Yes)
+      {
+        dir = CToolClass::getRelativePath(prj_info->getProjectDir(), dir);
+      }
+    }
+    libtool_edit->setText(dir);
   }
 }
 
@@ -1875,13 +1954,13 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
     if (!isRelativePath) {
       if(KMessageBox::warningYesNo(this,
                               i18n("The path\n\n") + file +
-                              i18n("\n\nwhich you set as directory where make should "
-                                "run is not a relative path. This can cause problems, "
-                                "if you move the project. What path do you want "
+                              i18n("\n\nwhich you set as directory where make should\n"
+                                "run is not a relative path. This can cause problems,\n"
+                                "if you move the project. What path do you want\n"
                                 "to save to your project file?"),
                               i18n("Path decision"),
-                              i18n("&Absolute path"),
-                              i18n("&Relative path")))
+                              i18n("&Relative path"),
+                              i18n("&Absolute path")) == KMessageBox::Yes)
         file = CToolClass::getRelativePath(prj_info->getProjectDir(), file);
     }
     m_makestartpoint_line->setText(file);

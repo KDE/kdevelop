@@ -455,7 +455,7 @@ void CKDevelop::slotFileSaveAll()
         if (file_info.lastModified() != actual_info->last_modified)
         {
           qYesNo = KMessageBox::questionYesNo(this,
-                                QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),
+                                i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
                                 i18n("File modified"));
         }
 
@@ -976,19 +976,17 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   bool bContinue=true;
    // rest from the buildRun
   appl_process.clearArguments();
-  QDir::setCurrent(prj->getProjectDir());
 
-  QString underDir=prj->pathToBinPROGRAM();
-  if (underDir.isEmpty())
-    underDir = prj->getProjectDir() + prj->getSubDir();
-  if (!underDir.isEmpty() && underDir.right(1)!="/")
-    underDir+="/";
+  QString runFromDir = prj->getRunFromDir();
+  QDir::setCurrent(runFromDir);
+
+  QString libtool     = prj->getLibtool();
+  QString binProgram  = prj->getExecutable();
 
   stdin_stdout_widget->clear();
   stderr_widget->clear();
 
   QString args = prj->getExecuteArgs();
-  QString program = "./"+prj->getBinPROGRAM();
 
   if(bWithArgs)
   {
@@ -999,7 +997,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
         prj->setExecuteArgs(args);
         if(!args.isEmpty())
         {
-          program = program+" "+args;
+          binProgram = binProgram+" "+args;
         }
     }
     else
@@ -1008,14 +1006,13 @@ void CKDevelop::slotStartRun(bool bWithArgs)
 
   if (bContinue)
   {
-    slotStatusMsg(i18n("Running ")+underDir+program);
+    slotStatusMsg(i18n("Running %1 (from %2)").arg(prj->getBinPROGRAM()).arg(runFromDir));
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
-        QDir::setCurrent(underDir);
        o_tab_view->setCurrentTab(STDINSTDOUT);
        QString term = "xterm";
-       QString exec_str = term + " -e sh -c '" + program + "'";
+       QString exec_str = term + " -e sh -c '" + binProgram + "'";
 
        if(CToolClass::searchInstProgram("konsole"))
        {
@@ -1023,57 +1020,47 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        }
        if(CToolClass::searchInstProgram("ksh"))
        {
-         exec_str = term + " -e ksh -c '" + program +
+         exec_str = term + " -e ksh -c '" + binProgram +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        if(CToolClass::searchInstProgram("csh"))
        {
-         exec_str = term +" -e csh -c '" + program +
+         exec_str = term +" -e csh -c '" + binProgram +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("tcsh"))
        {
-          exec_str =  term +" -e tcsh -c '" + program +
+          exec_str =  term +" -e tcsh -c '" + binProgram +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("bash"))
        {
-          exec_str =  term +" -e bash -c '" + program +
+          exec_str =  term +" -e bash -c '" + binProgram +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
        cerr << endl << "EXEC:" << exec_str;
     }
     else if (prj->isKDE2Project()) {
-       //a KDE2 application
-       // set the underDir the current dir, otherwise the resource file for XML
-       // GUI
-       // set the underDir the current dir, otherwise the resource file for XML
-       // GUI construction isn´t loaded on KDE 2 apps.
-       // the current dir is resetted to the project dir at the end of this 
-       // function after the kprocess call.
-       QDir::setCurrent(underDir);
-
        const QString oldGroup = config->group();
        config->setGroup("QT2");
        QString kde2dir =  QString("KDEDIRS=") + config->readEntry("kde2dir") + " ";
        config->setGroup(oldGroup);
 
-       appl_process << kde2dir << program;
-       cerr << endl << "EXEC:" << kde2dir << program;
+       appl_process << kde2dir << binProgram;
+       cerr << endl << "EXEC:" << kde2dir << binProgram;
        o_tab_view->setCurrentTab(STDERR);
     }
     else if(prj->isKDEProject() || prj->isQtProject() || prj->isQt2Project())
     {
-      QDir::setCurrent(underDir);
-      appl_process << program;
-      cerr << endl << "EXEC:" << program;
+      appl_process << binProgram;
+      cerr << endl << "EXEC:" << binProgram;
       o_tab_view->setCurrentTab(STDERR);
     }
     else
     {
-      appl_process << underDir + program;
-      cerr << endl << "EXEC:" << underDir + program;
+      appl_process << binProgram;
+      cerr << endl << "EXEC:" << binProgram;
       o_tab_view->setCurrentTab(STDERR);
     }
 
@@ -1346,17 +1333,11 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 
 void CKDevelop::slotDebugAttach()
 {
-  QDir::setCurrent(prj->getProjectDir());
+  QDir::setCurrent(prj->getRunFromDir());
   if (dbgInternal)
   {
-    QString underDir=prj->pathToBinPROGRAM();
-    if (underDir.isEmpty())
-      underDir = prj->getProjectDir() + prj->getSubDir();
-    if (!underDir.isEmpty() && underDir.right(1)!="/")
-      underDir+="/";
-
-    QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram="./"+prj->getBinPROGRAM();
+    QString libtool     = prj->getLibtool();;
+    QString binProgram  = prj->getExecutable();
 
     if (dbgController)
       slotDebugStop();
@@ -1369,25 +1350,12 @@ void CKDevelop::slotDebugAttach()
     {
       if (int pid = psDlg.pidSelected())
       {
-        slotStatusMsg(QString().sprintf(i18n("Attach to process %d in %s"),
-                            pid, dbgExternalCmd.data()));
-
+        slotStatusMsg(i18n("Attach to process %1 in %2").arg(pid).arg(dbgExternalCmd));
         setupInternalDebugger();
-        if(prj->isCustomProject()){
-          dbgController->slotStart(underDir+binProgram, QString(),
-               (isAScript(binProgram)) ? libtool : QString());
-          dbgController->slotAttachTo(pid);
-        }
-        else{
-          // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
-          // the current dir is resetted to the project dir at the end of this function after the kprocess call.
-          QDir::setCurrent(underDir);
-          dbgController->slotStart(binProgram, QString(),
-               (isAScript(binProgram)) ? libtool : QString());
-          dbgController->slotAttachTo(pid);
-          QDir::setCurrent(prj->getProjectDir());
-        }
-     }
+        dbgController->slotStart(binProgram, QString(), libtool);
+        dbgController->slotAttachTo(pid);
+        QDir::setCurrent(prj->getProjectDir());
+      }
     }
   }
   else
@@ -1397,17 +1365,12 @@ void CKDevelop::slotDebugAttach()
 
 void CKDevelop::slotDebugExamineCore()
 {
-  QDir::setCurrent(prj->getProjectDir());
+  QString runFromDir = prj->getRunFromDir();
+  QDir::setCurrent(runFromDir);
   if (dbgInternal)
   {
-    QString underDir=prj->pathToBinPROGRAM();
-    if (underDir.isEmpty())
-      underDir = prj->getProjectDir() + prj->getSubDir();
-    if (!underDir.isEmpty() && underDir.right(1)!="/")
-      underDir+="/";
-
-    QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram="./"+prj->getBinPROGRAM();
+    QString libtool     = prj->getLibtool();;
+    QString binProgram  = prj->getExecutable();
 
     if (dbgController)
       slotDebugStop();
@@ -1418,21 +1381,11 @@ void CKDevelop::slotDebugExamineCore()
     {
       if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"core"))
       {
-        slotStatusMsg(QString().sprintf(i18n("Examine core file %s in %s"),
-                                coreFile.data(), dbgExternalCmd.data()));
-
+        slotStatusMsg(i18n("Examine core file %1 in %2").arg(coreFile).arg(dbgExternalCmd));
         setupInternalDebugger();
-        if(prj->isCustomProject()){
-         dbgController->slotStart(underDir+binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
-        }
-        else{
-        QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
-        }
-         dbgController->slotCoreFile(coreFile);
-        QDir::setCurrent(prj->getProjectDir());
+        dbgController->slotStart(binProgram, QString(), libtool);
+        dbgController->slotCoreFile(coreFile);
+//        QDir::setCurrent(prj->getProjectDir());
      }
     }
   }
@@ -1452,9 +1405,7 @@ void CKDevelop::slotDebugNamedFile()
     {
       if (QString debugFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*"))
       {
-        slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
-                          debugFile.data(), dbgExternalCmd.data()));
-
+        slotStatusMsg(i18n("Debugging %1 in %2").arg(debugFile).arg(dbgExternalCmd));
         setupInternalDebugger();
         QDir::setCurrent(debugFile);
         dbgController->slotStart(debugFile, prj->getDebugArgs());
@@ -1519,19 +1470,13 @@ void CKDevelop::slotDebugRunWithArgs()
 
 void CKDevelop::slotStartDebugRunWithArgs()
 {
-  QDir::setCurrent(prj->getProjectDir());
-  QString underDir=prj->pathToBinPROGRAM();
-  if (underDir.isEmpty())
-    underDir = prj->getProjectDir() + prj->getSubDir();
-  if (!underDir.isEmpty() && underDir.right(1)!="/")
-    underDir+="/";
-
-  QString binProgram="./"+prj->getBinPROGRAM();
-  QString libtool= prj->getProjectDir() +"libtool";
+  QDir::setCurrent(prj->getRunFromDir());
+  QString libtool     = prj->getLibtool();;
+  QString binProgram  = prj->getExecutable();
 
   QString args=prj->getDebugArgs();
   if (args.isEmpty())
-    QString args=prj->getExecuteArgs();
+    args=prj->getExecuteArgs();
 
   CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Debug with arguments"), args);
   if (argdlg.exec())
@@ -1540,38 +1485,27 @@ void CKDevelop::slotStartDebugRunWithArgs()
     prj->setDebugArgs(args);    
     prj->writeProject();
 
-    slotStatusMsg(i18n("Debug with arguments"));
     stdin_stdout_widget->clear();
     stderr_widget->clear();
 
+    slotStatusMsg(i18n("Debugging %1 (with arg %2 %3)")
+                        .arg(prj->getBinPROGRAM())
+                        .arg(args)
+                        .arg(libtool.isEmpty()? "" : " with libtool"));
+
     setupInternalDebugger();
-    if(prj->isCustomProject()){
-      dbgController->slotStart(underDir+binProgram, args,
-               (isAScript(binProgram)) ? libtool : QString());
-    }
-    else{
-      QDir::setCurrent(underDir);
-      dbgController->slotStart(binProgram, args,
-               (isAScript(binProgram)) ? libtool : QString());
-    }
+    dbgController->slotStart(binProgram, args, libtool);
     brkptManager->slotSetPendingBPs();
-    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
   }
 }
 
 void CKDevelop::slotStartDebug()
 {
-  QDir::setCurrent(prj->getProjectDir());
-
-  QString underDir=prj->pathToBinPROGRAM();
-  if (underDir.isEmpty())
-    underDir = prj->getProjectDir() + prj->getSubDir();
-  if (!underDir.isEmpty() && underDir.right(1)!="/")
-    underDir+="/";
-
-  QString binProgram="./"+prj->getBinPROGRAM();
-  QString libtool= prj->getProjectDir() +"libtool";
+  QString runFromDir = prj->getRunFromDir();
+  QDir::setCurrent(runFromDir);
+  QString libtool     = prj->getLibtool();;
+  QString binProgram  = prj->getExecutable();
 
   // if we can run the application, so we can clear the Makefile.am-changed-flag
   prj->clearMakefileAmChanged();
@@ -1584,18 +1518,14 @@ void CKDevelop::slotStartDebug()
     stdin_stdout_widget->clear();
     stderr_widget->clear();
 
+    slotStatusMsg(i18n("Debugging %1 (from %2 %3) in internal debugger")
+                          .arg(prj->getBinPROGRAM())
+                          .arg(runFromDir)
+                          .arg(libtool.isEmpty()? "" : " with libtool")
+);
     setupInternalDebugger();
-    if(prj->isCustomProject()){
-      dbgController->slotStart(underDir+binProgram, QString(),
-               (isAScript(binProgram)) ? libtool : QString());
-    }
-    else{
-      QDir::setCurrent(underDir);
-      dbgController->slotStart(binProgram, QString(),
-               (isAScript(binProgram)) ? libtool : QString());
-    }
+    dbgController->slotStart(binProgram, QString(), libtool);
     brkptManager->slotSetPendingBPs();
-    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
     return;
   }
@@ -1604,8 +1534,10 @@ void CKDevelop::slotStartDebug()
     return;
   }
 
-  slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
-                binProgram.data(), dbgExternalCmd.data()));
+  slotStatusMsg(i18n("Debugging %1 (from %2) in %3")
+                    .arg(prj->getBinPROGRAM())
+                    .arg(runFromDir)
+                    .arg(dbgExternalCmd));
 
   KShellProcess process("/bin/sh");
   process << dbgExternalCmd+ " " + binProgram;
@@ -1657,8 +1589,7 @@ void CKDevelop::setupInternalDebugger()
     return;
   
   saveTimer->stop();  // stop the autosaving
-  slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
-                  (prj->getBinPROGRAM()).data()));
+//  slotStatusMsg(i18n("Running %1 (from %2) in internal debugger").arg(prj->getBinPROGRAM()).arg(prj->getRunFromDir()));
 
   dbgController = new GDBController(var_viewer->varTree(), frameStack);
   dbgShuttingDown = false;
@@ -3084,9 +3015,7 @@ void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 void CKDevelop::slotNewLineColumn()
 {
   QString linenumber;
-  linenumber.sprintf(i18n("Line: %d Col: %d"), 
-           edit_widget->currentLine() +1,
-      edit_widget->currentColumn() +1);
+  linenumber = i18n("Line: %1 Col: %2").arg(edit_widget->currentLine() +1).arg(edit_widget->currentColumn() +1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
