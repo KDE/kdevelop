@@ -31,6 +31,7 @@ struct EditorData
 };
 
 class BookmarksWidget;
+class QDomElement;
 
 class BookmarksPart : public KDevPlugin
 {
@@ -41,11 +42,11 @@ public:
 	BookmarksPart(QObject *parent, const char *name, const QStringList &);
 	~BookmarksPart();
 
-private slots:
-	// connected to core
-	void projectOpened();
-	void projectClosed();
+	// reimplemented from KDevPlugin
+	void restorePartialProjectSession( const QDomElement * el );
+	void savePartialProjectSession( QDomElement * el );
 
+private slots:
 	// connected to partcontroller
 	void partAdded( KParts::Part * part );
 
@@ -66,11 +67,15 @@ private:
 	EditorData * storeBookmarksForURL( KParts::ReadOnlyPart * );
 	void storeBookmarksForAllURLs();
 
+	void updateContextStringForURL( EditorData * );
+	void updateContextStringForAll();
+
 	KParts::ReadOnlyPart * partForURL( KURL const & url );
 
 	QGuardedPtr<BookmarksWidget> _widget;
 	QDict<EditorData> _editorMap;
-	bool _settingMarks;
+	uint _context;	// the number of lines of 'context' to use in bookmark tooltip
+	bool _settingMarks;	//	are we currently in the process of setting bookmarks?
 };
 
 

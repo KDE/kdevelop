@@ -7,5 +7,5 @@ Name=KDevBookmarks
 GenericName=Persistant Source Bookmarks
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
-X-KDevelop-Scope=Global
+X-KDevelop-Scope=Project
 X-KDE-Library=libkdevbookmarks

@@ -145,7 +145,6 @@ void BookmarksWidget::update( QDict<EditorData> const & map )
 		}
 		++it;
 	}
-
 }
 
 void BookmarksWidget::updateURL( EditorData * data )
@@ -163,6 +162,7 @@ void BookmarksWidget::createURL( EditorData * data )
 {
 	kdDebug(0) << "BookmarksWidget::createURL()" << endl;
 
+//	if ( data && !data->marks.isEmpty() )
 	if ( data )
 	{
 		QListViewItem * file = new BookmarkItem( this, data->url );

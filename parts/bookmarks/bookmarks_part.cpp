@@ -23,6 +23,7 @@
 #include <kdevpartcontroller.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
+#include "domutil.h"
 
 #include "bookmarks_widget.h"
 #include "bookmarks_part.h"
@@ -52,9 +53,6 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_settingMarks = false;
 
-	connect( core(), SIGNAL( projectOpened() ), this, SLOT( projectOpened() ) );
-	connect( core(), SIGNAL( projectClosed() ), this, SLOT( projectClosed() ) );
-
 	connect( partController(), SIGNAL( partAdded( KParts::Part * ) ), this, SLOT( partAdded( KParts::Part * ) ) );
 
 	connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
@@ -62,13 +60,11 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
 		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
 
-	// if there is a project loaded, read bookmarks from project file
+	_context = 3; 	// TODO make this a setting
 
-	// then ... setBookmarksForAllURLs();
-
-	// and ... storeBookmarksForAllURLs();
-
-
+	storeBookmarksForAllURLs();
+	updateContextStringForAll();
+	_widget->update( _editorMap );
 }
 
 BookmarksPart::~BookmarksPart()
@@ -98,7 +94,7 @@ void BookmarksPart::reload()
 {
 	kdDebug(0) << "BookmarksPart::reload()" << endl;
 
-    QObject * senderobj = const_cast<QObject*>( sender() );
+	QObject * senderobj = const_cast<QObject*>( sender() );
 	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj ) )
 	{
 		setBookmarksForURL( ro_part );
@@ -109,7 +105,7 @@ void BookmarksPart::marksChanged()
 {
 	kdDebug(0) << "BookmarksPart::marksChanged()" << endl;
 
-    QObject * senderobj = const_cast<QObject*>( sender() );
+	QObject * senderobj = const_cast<QObject*>( sender() );
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj );
 	KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface*>( senderobj );
 
@@ -122,23 +118,13 @@ void BookmarksPart::marksChanged()
 
 			if ( EditorData * data = storeBookmarksForURL( ro_part ) )
 			{
+				updateContextStringForURL( data );
 				_widget->updateURL( data );
 			}
 			else
 			{
 				_widget->removeURL( ro_part->url() );
 			}
-		}
-		else
-		{
-			kdDebug(0) << "ReadOnlyPart == " << ro_part << endl
-				<< "MarkInterface == " << mi << endl
-				<< "examining all loaded parts instead" << endl;
-
-			storeBookmarksForAllURLs();
-			_widget->update( _editorMap );
-
-			return;
 		}
 	}
 	else
@@ -147,18 +133,84 @@ void BookmarksPart::marksChanged()
 	}
 }
 
-void BookmarksPart::projectOpened()
+void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 {
-	kdDebug(0) << "BookmarksPart::projectOpened()" << endl;
+	kdDebug(0) << "BookmarksPart::restorePartialProjectSession()" << endl;
 
-	// here we need to retrieve saved bookmarks
+	if ( ! el ) return;
+
+	QDomElement bookmarksList = el->namedItem( "bookmarks" ).toElement();
+	if ( bookmarksList.isNull() ) return;
+
+	QDomElement bookmark = bookmarksList.firstChild().toElement();
+	while ( ! bookmark.isNull() )
+	{
+		QString path = bookmark.attribute( "url" );
+		if ( path != QString::null )
+		{
+			EditorData * data = new EditorData;
+			data->url.setPath( path );
+
+			QDomElement mark = bookmark.firstChild().toElement();
+			while ( ! mark.isNull() )
+			{
+				QString line = mark.attribute( "line" );
+				if ( line != QString::null )
+				{
+					data->marks.append( qMakePair( line.toInt(), QString::null ) );
+				}
+				mark = mark.nextSibling().toElement();
+			}
+
+			if ( ! data->marks.isEmpty() )
+			{
+				_editorMap.insert( data->url.path(), data );
+			}
+			else
+			{
+				delete data;
+			}
+		}
+		bookmark = bookmark.nextSibling().toElement();
+	}
+	setBookmarksForAllURLs();
+	updateContextStringForAll();
+	_widget->update( _editorMap );
 }
 
-void BookmarksPart::projectClosed()
+void BookmarksPart::savePartialProjectSession( QDomElement * el )
 {
-	kdDebug(0) << "BookmarksPart::projectClosed()" << endl;
+	kdDebug(0) << "BookmarksPart::savePartialProjectSession()" << endl;
 
-	// here we need to save bookmarks
+	if ( ! el ) return;
+
+    QDomDocument domDoc = el->ownerDocument();
+    if ( domDoc.isNull() ) return;
+
+	QDomElement bookmarksList = domDoc.createElement( "bookmarks" );
+
+	QDictIterator<EditorData> it( _editorMap );
+	while ( it.current() )
+	{
+		QDomElement bookmark = domDoc.createElement( "bookmark" );
+		bookmark.setAttribute( "url", it.current()->url.path() );
+		bookmarksList.appendChild( bookmark );
+
+		QValueListIterator< QPair<int,QString> > it2 = it.current()->marks.begin();
+		while ( it2 != it.current()->marks.end() )
+		{
+			QDomElement line = domDoc.createElement( "mark" );
+			line.setAttribute( "line", (*it2).first );
+			bookmark.appendChild( line );
+			++it2;
+		}
+		++it;
+	}
+
+	if ( ! bookmarksList.isNull() )
+	{
+		el->appendChild( bookmarksList );
+	}
 }
 
 void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
@@ -188,8 +240,60 @@ void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
 			}
 			++it;
 		}
-		setBookmarksForURL( partForURL( url ) );
-		_widget->updateURL( data );
+
+		if ( data->marks.isEmpty() )
+		{
+			removeAllBookmarksForURL( url );
+		}
+		else
+		{
+			setBookmarksForURL( partForURL( url ) );
+			_widget->updateURL( data );
+		}
+	}
+}
+
+void BookmarksPart::updateContextStringForURL( EditorData * data )
+{
+	KTextEditor::EditInterface * ed =
+		dynamic_cast<KTextEditor::EditInterface *>( partForURL( data->url ) );
+
+	if ( ! ( data && ed ) )	return;
+
+	QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+	while ( it != data->marks.end() )
+	{
+		uint line = (*it).first;
+		QString textLine;
+
+		uint startline = _context > line ? 0 : line - _context;
+		uint endline = ( line + _context > ed->numLines() ) ? ed->numLines() : line + _context;
+
+		for ( uint i = startline; i <= endline; i++ )
+		{
+			if ( i != startline )
+			{
+				textLine += "\n";
+			}
+			textLine += ed->textLine( i );
+		}
+
+		(*it).second = textLine;
+
+		++it;
+	}
+}
+
+void BookmarksPart::updateContextStringForAll()
+{
+	QDictIterator<EditorData> it( _editorMap );
+	while ( it.current() )
+	{
+		if ( ! it.current()->marks.isEmpty() )
+		{
+			updateContextStringForURL( it.current() );
+		}
+		++it;
 	}
 }
 
@@ -223,8 +327,6 @@ bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 
 EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
-	KTextEditor::EditInterface * ed = dynamic_cast<KTextEditor::EditInterface *>( ro_part );
-
 	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>( ro_part ) )
 	{
 		EditorData * data = new EditorData;
@@ -242,16 +344,9 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 		{
 			if ( it.current()->type == KTextEditor::MarkInterface::markType01 )
 			{
-				int line = it.current()->line;
-				QString textLine;
-				if ( ed )
-				{
-					textLine = ed->textLine( line );
-				}
-
+			    int line = it.current()->line;
 				kdDebug(0) << "Found bookmark. Line: " << line << endl;
-
-				data->marks.append( qMakePair( line, textLine) );
+				data->marks.append( qMakePair( line, QString::null ) );
 			}
 			++it;
 		}
@@ -268,7 +363,6 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 			delete data;
 			data = 0;
 		}
-		kdDebug(0) << "_editorMap.count(): " << _editorMap.count() << endl;
 		return data;
 	}
 	return 0;
@@ -309,17 +403,17 @@ void BookmarksPart::storeBookmarksForAllURLs()
 // reimplemented from PartController::partForURL to avoid linking
 KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 {
-    QPtrListIterator<KParts::Part> it( *partController()->parts() );
-    while( it.current() )
-    {
-        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-        if (ro_part && url == ro_part->url())
-        {
-            return ro_part;
-        }
-        ++it;
-    }
-    return 0;
+	QPtrListIterator<KParts::Part> it( *partController()->parts() );
+	while( it.current() )
+	{
+		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+		if (ro_part && url == ro_part->url())
+		{
+			return ro_part;
+		}
+		++it;
+	}
+	return 0;
 }
 
 
