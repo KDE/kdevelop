@@ -30,7 +30,8 @@ scriptingGlobalConfig::scriptingGlobalConfig(scriptingPart *part, QWidget *paren
     // read kconfig and post list to the m_dirs
     KConfig *cfg = kapp->config();
      QStringList searchDirs = cfg->readListEntry("SearchDirs");
-    m_dirs->setItems(searchDirs);
+    m_dirs->clear();
+    m_dirs->insertStringList(searchDirs);
 }
 
 void scriptingGlobalConfig::accept()
