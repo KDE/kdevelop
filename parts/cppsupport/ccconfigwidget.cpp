@@ -292,9 +292,9 @@ void CCConfigWidget::interfaceFile()
         char *buf = new char[size];
         f.readBlock(&buf[0], size);
         QString text = QString::fromLocal8Bit(buf, size);
-        delete[] buf;
-        f.close();
-        interface_file->setText(buf);
+	f.close();
+        interface_file->setText(text);
+	delete[] buf;
     }
 }
 
@@ -306,9 +306,9 @@ void CCConfigWidget::implementationFile()
         char *buf = new char[size];
         f.readBlock(&buf[0], size);
         QString text = QString::fromLocal8Bit(buf, size);
-        delete[] buf;
         f.close();
         implementation_file->setText(text);
+	delete[] buf;
     }
 }
 
@@ -409,6 +409,7 @@ CCConfigWidget::slotSetCHWindow( )
 
 void CCConfigWidget::slotEnableChooseFiles(bool c)
 {
+    choose_files->setChecked(c);
     template_groups->setEnabled(!c);
     interface_url->setEnabled(c);
     implementation_url->setEnabled(c);

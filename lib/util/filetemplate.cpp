@@ -20,22 +20,22 @@
 #include "domutil.h"
 
 
-bool FileTemplate::exists(KDevPlugin *part, const QString &name)
+bool FileTemplate::exists(KDevPlugin *part, const QString &name, Policy p)
 {
     KDevProject *project = part->project();
-    QString fileName = project->projectDirectory() + "/templates/" + name;
+    QString fileName = (p == Default) ? (project->projectDirectory() + "/templates/" + name) : name;
 
     return QFile::exists(fileName);
 }
 
 
-QString FileTemplate::read(KDevPlugin *part, const QString &name)
+QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
 {
     KDevProject *project = part->project();
     QDomDocument &dom = *part->projectDom();
     
-    QString fileName = project->projectDirectory() + "/templates/" + name;
-
+    QString fileName = (p == Default) ? (project->projectDirectory() + "/templates/" + name) : name;
+    
     QFile f(fileName);
     if (!f.open(IO_ReadOnly))
         return QString::null;
@@ -59,9 +59,9 @@ QString FileTemplate::read(KDevPlugin *part, const QString &name)
 
 
 bool FileTemplate::copy(KDevPlugin *part, const QString &name,
-                        const QString &dest)
+                        const QString &dest, Policy p)
 {
-    QString text = read(part, name);
+    QString text = read(part, name, p);
 
     QFile f(dest);
     if (!f.open(IO_WriteOnly))

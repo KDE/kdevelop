@@ -1303,6 +1303,18 @@
         <slot>interfaceFile()</slot>
     </connection>
     <connection>
+        <sender>implementation_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>implementationFile()</slot>
+    </connection>
+    <connection>
+        <sender>implementation_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>implementationFile()</slot>
+    </connection>
+    <connection>
         <sender>cbEnablePCS</sender>
         <signal>clicked()</signal>
         <receiver>CCConfigWidgetBase</receiver>

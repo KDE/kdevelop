@@ -124,9 +124,13 @@ void CppNewClassDialog::accept()
     QString doc = documentation_edit->text();
 
     QString istr;
-    if (filetemplate_box->isChecked())
-        istr = FileTemplate::read(m_part, "cpp");
-
+    if (filetemplate_box->isChecked()) {
+	QDomDocument dom = *m_part->projectDom();
+	if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
+	    istr = FileTemplate::read(m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/implementationURL",""), FileTemplate::Custom);
+        else
+	    istr = FileTemplate::read(m_part, "cpp");
+    }
     if (objc) {
         istr += QString("\n"
                        "#include \"$HEADER$\"\n"
@@ -161,7 +165,8 @@ void CppNewClassDialog::accept()
     istr.replace(QRegExp("\\$CLASSNAME\\$"), className);
     istr.replace(QRegExp("\\$BASECLASS\\$"), baseName);
     istr.replace(QRegExp("\\$ARGS\\$"), args);
-
+    istr.replace(QRegExp("\\$FILENAME\\$"), implementation);
+    
     QFile ifile(implementationPath);
     if (!ifile.open(IO_WriteOnly)) {
         KMessageBox::error(this, "Cannot write to implementation file");
@@ -172,9 +177,14 @@ void CppNewClassDialog::accept()
     ifile.close();
     
     QString hstr;
-    if (filetemplate_box->isChecked())
-        hstr = FileTemplate::read(m_part, "templates/h");
-
+    if (filetemplate_box->isChecked()) {
+	QDomDocument dom = *m_part->projectDom();
+	if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
+	    hstr = FileTemplate::read(m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/interfaceURL",""), FileTemplate::Custom);
+	else
+	    hstr = FileTemplate::read(m_part, "h");
+    }
+    
     if (objc) {
         hstr += QString("\n"
                         "#ifndef _$HEADERGUARD$_\n"
@@ -256,7 +266,8 @@ void CppNewClassDialog::accept()
     hstr.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
     hstr.replace(QRegExp("\\$QOBJECT\\$"), qobject);
     hstr.replace(QRegExp("\\$ARGS\\$"), args);
-
+    hstr.replace(QRegExp("\\$FILENAME\\$"), header);
+    
     QFile hfile(headerPath);
     if (!hfile.open(IO_WriteOnly)) {
         KMessageBox::error(this, "Cannot write to header file");
