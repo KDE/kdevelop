@@ -24,3 +24,11 @@ ADD_LIBRARY(docchmplugin SHARED ${docchmplugin_LIB_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docchmplugin_LIB_SRCS
+#docchmplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docchmplugin_LIB_SRCS})
+#
+#ADD_LIBRARY(docchmplugin SHARED ${docchmplugin_LIB_SRCS})
+#

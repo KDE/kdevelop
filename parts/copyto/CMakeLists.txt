@@ -5,11 +5,11 @@ copytodialog.cpp
 
 KDE_AUTOMOC(${kdevcopyto_PART_SRCS})
 
-SET(
+SET( kdevcopyto_UI
 copytodlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevcopyto_PART_SRCS ${kdevcopyto_UI}
+KDE_ADD_UI_FILES(kdevcopyto_PART_SRCS ${kdevcopyto_UI} )
 
 ADD_LIBRARY(kdevcopyto SHARED ${kdevcopyto_PART_SRCS})
 
@@ -36,3 +36,18 @@ ADD_LIBRARY(kdevcopyto SHARED ${kdevcopyto_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevcopyto_PART_SRCS
+#copyto_part.cpp
+#copytodialog.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevcopyto_PART_SRCS})
+#
+#SET( kdevcopyto_UI
+#copytodlgbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevcopyto_PART_SRCS ${kdevcopyto_UI} )
+#
+#ADD_LIBRARY(kdevcopyto SHARED ${kdevcopyto_PART_SRCS})
+#

@@ -1,4 +1,7 @@
-SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview 			fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen 			fileselector tipofday filter uimode openwith texttools replace partexplorer 			quickopen snippet filelist ctags2 documentation scripting vcsmanager security )
+SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview fullscreen outputviews grepview valgrind distpart
+ konsole tools regexptest doxygen fileselector tipofday filter openwith texttools replace partexplorer quickopen snippet
+ filelist ctags2 documentation scripting vcsmanager security)
+# uimode)
 
 
 
@@ -19,10 +22,5 @@ SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview 		
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview  			fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen  			fileselector tipofday filter uimode openwith texttools replace partexplorer  			quickopen snippet filelist ctags2 documentation scripting vcsmanager security )
 #
-#SUBDIRS(abbrev appwizard annotation astyle bookmarks classview diff)
-#
-#SET(XXX filecreate fileview
-#fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen
-#fileselector tipofday filter uimode openwith texttools replace partexplorer
-#quickopen filelist ctags2 documentation)

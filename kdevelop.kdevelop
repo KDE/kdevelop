@@ -1,9 +1,9 @@
 <!DOCTYPE kdevelop>
 <kdevelop>
   <general>
-    <projectmanagement>KDevCustomProject</projectmanagement>
-    <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-    <absoluteprojectpath>true</absoluteprojectpath>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+  <absoluteprojectpath>true</absoluteprojectpath>
     <author>KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
     <version>CVS</version>
@@ -115,9 +115,9 @@
       </runarguments>
     </run>
     <general>
-      <projectmanagement>KDevCustomProject</projectmanagement>
-      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-      <absoluteprojectpath>true</absoluteprojectpath>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+  <absoluteprojectpath>true</absoluteprojectpath>
       <useconfiguration>default</useconfiguration>
       <activetarget>parts/annotation/libkdevannotation.la</activetarget>
     </general>
@@ -212,9 +212,9 @@
   </kdevcvsservice>
   <kdevdebugger>
     <general>
-      <projectmanagement>KDevCustomProject</projectmanagement>
-      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-      <absoluteprojectpath>true</absoluteprojectpath>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+  <absoluteprojectpath>true</absoluteprojectpath>
       <programargs/>
       <gdbpath/>
       <dbgshell>libtool</dbgshell>
@@ -239,6 +239,7 @@
     </projectdoc>
   </kdevdocumentation>
   <kdevcustomproject>
+    <filelistdirectory>/usr/src/kde3-HEAD/kdevelop</filelistdirectory>
     <run>
       <directoryradio>executable</directoryradio>
     </run>

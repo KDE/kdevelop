@@ -22,3 +22,11 @@ ADD_LIBRARY(docdjvuplugin SHARED ${docdjvuplugin_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docdjvuplugin_PART_SRCS
+#docdjvuplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docdjvuplugin_PART_SRCS})
+#
+#ADD_LIBRARY(docdjvuplugin SHARED ${docdjvuplugin_PART_SRCS})
+#

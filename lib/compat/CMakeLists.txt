@@ -1,4 +1,4 @@
-ADD_LIBRARY(kdevcompat STATIC ${kdevcompat_STAT_SRCS})
+#ADD_LIBRARY(kdevcompat STATIC ${kdevcompat_STAT_SRCS})
 
 
 
@@ -11,7 +11,4 @@ ADD_LIBRARY(kdevcompat STATIC ${kdevcompat_STAT_SRCS})
 #noinst_LTLIBRARIES = libkdevcompat.la
 #
 #libkdevcompat_la_SOURCES = 
-
-#######################
-#previous CMakeLists.txt contents follow:
 

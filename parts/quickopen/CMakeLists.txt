@@ -9,12 +9,14 @@ quickopenfunctionchooseform.cpp
 
 KDE_AUTOMOC(${kdevquickopen_PART_SRCS})
 
-SET(
+SET( kdevquickopen_UI
 quickopenbase.ui
 quickopenfunctionchooseformbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevquickopen_PART_SRCS ${kdevquickopen_UI}
+KDE_ADD_UI_FILES(kdevquickopen_PART_SRCS ${kdevquickopen_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
 
 ADD_LIBRARY(kdevquickopen SHARED ${kdevquickopen_PART_SRCS})
 
@@ -39,7 +41,3 @@ ADD_LIBRARY(kdevquickopen SHARED ${kdevquickopen_PART_SRCS})
 #rcdir = $(kde_datadir)/kdevquickopen
 #rc_DATA = kdevpart_quickopen.rc
 #noinst_HEADERS = quickopendialog.h quickopenclassdialog.h quickopenfiledialog.h quickopenfunctiondialog.h quickopenfunctionchooseform.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

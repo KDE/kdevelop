@@ -6,6 +6,8 @@ diffwidget.cpp
 
 KDE_AUTOMOC(${kdevdiff_PART_SRCS})
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
+
 ADD_LIBRARY(kdevdiff SHARED ${kdevdiff_PART_SRCS})
 
 
@@ -30,20 +32,3 @@ ADD_LIBRARY(kdevdiff SHARED ${kdevdiff_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevdiff
 #rc_DATA = kdevdiff.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevdiff_SRCS 
-#diffpart.cpp
-#diffdlg.cpp
-#diffwidget.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevdiff_SRCS})
-#
-#INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions)
-#
-##INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras  ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
-#
-#ADD_LIBRARY(kdevdiff SHARED ${kdevdiff_SRCS})

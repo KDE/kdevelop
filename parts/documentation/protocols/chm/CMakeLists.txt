@@ -35,3 +35,11 @@ ADD_LIBRARY(kchmpart SHARED ${kchmpart_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kchmpart_PART_SRCS
+#kchmpart.cpp
+#)
+#
+#KDE_AUTOMOC(${kchmpart_PART_SRCS})
+#
+#ADD_LIBRARY(kchmpart SHARED ${kchmpart_PART_SRCS})
+#

@@ -1,4 +1,6 @@
-SUBDIRS( interfaces widgets util $(QEXTMDI_SUBDIR) antlr catalog 	cppparser $(COMPAT_SUBDIR) astyle  )
+#SET(QEXTMDI_SUBDIR qextmdi)
+
+SUBDIRS( interfaces widgets util ${QEXTMDI_SUBDIR} antlr catalog cppparser ${COMPAT_SUBDIR} astyle  )
 
 SET(kdevelop_LIB_SRCS
 dummy.cpp

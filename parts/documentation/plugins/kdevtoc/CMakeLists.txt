@@ -24,3 +24,11 @@ ADD_LIBRARY(dockdevtocplugin SHARED ${dockdevtocplugin_LIB_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(dockdevtocplugin_LIB_SRCS
+#dockdevtocplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${dockdevtocplugin_LIB_SRCS})
+#
+#ADD_LIBRARY(dockdevtocplugin SHARED ${dockdevtocplugin_LIB_SRCS})
+#

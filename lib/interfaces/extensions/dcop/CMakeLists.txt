@@ -1,9 +1,13 @@
 SET(kdevdcopextensions_STAT_SRCS
 KDevAppFrontendIface.cpp
 KDevMakeFrontendIface.cpp
-KDevAppFrontendIface.skel
-KDevMakeFrontendIface.skel
 )
+
+SET(kdevdcopextensions_DCOP_SRCS KDevAppFrontendIface.h KDevMakeFrontendIface.h )
+
+KDE_ADD_DCOP_SKELS(kdevdcopextensions_STAT_SRCS ${kdevdcopextensions_DCOP_SRCS})
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 KDE_AUTOMOC(${kdevdcopextensions_STAT_SRCS})
 
@@ -23,18 +27,3 @@ ADD_LIBRARY(kdevdcopextensions STATIC ${kdevdcopextensions_STAT_SRCS})
 #
 #dcopincludeextdir = $(includedir)/kdevelop/interfaces/extensions/dcop
 #dcopincludeext_HEADERS = KDevAppFrontendIface.h KDevMakeFrontendIface.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#
-#SET(kdevdcopextensions_SRCS KDevAppFrontendIface.cpp KDevMakeFrontendIface.cpp )
-#
-#
-#SET(kdevdcopextensions_DCOP_SRCS KDevAppFrontendIface.h KDevMakeFrontendIface.h )
-#
-#KDE_ADD_DCOP_SKELS(kdevdcopextensions_SRCS ${kdevdcopextensions_DCOP_SRCS})
-#
-#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
-#
-#ADD_LIBRARY(kdevdcopextensions ${kdevdcopextensions_SRCS})

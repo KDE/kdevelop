@@ -29,3 +29,11 @@ ADD_LIBRARY(kdevfullscreen SHARED ${kdevfullscreen_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevfullscreen_PART_SRCS
+#fullscreen_part.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfullscreen_PART_SRCS})
+#
+#ADD_LIBRARY(kdevfullscreen SHARED ${kdevfullscreen_PART_SRCS})
+#

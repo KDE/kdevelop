@@ -8,12 +8,12 @@ annotationitem.cpp
 
 KDE_AUTOMOC(${kdevannotation_PART_SRCS})
 
-SET(
+SET( kdevannotation_UI
 annotationglobalconfigbase.ui
 annotationprojectconfigbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevannotation_PART_SRCS ${kdevannotation_UI}
+KDE_ADD_UI_FILES(kdevannotation_PART_SRCS ${kdevannotation_UI} )
 
 ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
 
@@ -46,7 +46,7 @@ ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
-#SET(kdevannotation_SRCS 
+#SET(kdevannotation_PART_SRCS
 #annotationpart.cpp
 #annotationwidget.cpp
 #annotationglobalconfig.cpp
@@ -54,10 +54,14 @@ ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
 #annotationitem.cpp
 #)
 #
-#KDE_ADD_UI_FILES(kdevannotation_SRCS  annotationglobalconfigbase.ui annotationprojectconfigbase.ui )
+#KDE_AUTOMOC(${kdevannotation_PART_SRCS})
 #
-#KDE_AUTOMOC(${kdevannotation_SRCS})
+#SET( kdevannotation_UI
+#annotationglobalconfigbase.ui
+#annotationprojectconfigbase.ui
+#)
 #
-##INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras  ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
+#KDE_ADD_UI_FILES(kdevannotation_PART_SRCS ${kdevannotation_UI} )
 #
-#ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_SRCS})
+#ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
+#

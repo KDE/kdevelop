@@ -4,22 +4,26 @@ pcombobox.cpp
 pdummywidget.cpp
 ppointedit.cpp
 propertymachinefactory.cpp
-pstringlistedit.cppmultiproperty.cpp
+pstringlistedit.cpp
+multiproperty.cpp
 pcursoredit.cpp
 pfontbutton.cpp
 prectedit.cpp
 propertywidget.cpp
-psymbolcombo.cpppcheckbox.cpp
+psymbolcombo.cpp
+pcheckbox.cpp
 pdateedit.cpp
 pfontcombo.cpp
 property.cpp
 psizeedit.cpp
-purledit.cpppcolorbutton.cpp
+purledit.cpp
+pcolorbutton.cpp
 pdatetimeedit.cpp
 plineedit.cpp
 propertyeditor.cpp
 psizepolicyedit.cpp
-pyesnobutton.cpppcolorcombo.cpp
+pyesnobutton.cpp
+pcolorcombo.cpp
 pdoublenuminput.cpp
 ppixmapedit.cpp
 propertylist.cpp
@@ -28,6 +32,8 @@ propertywidgetproxy.cpp
 plinestyleedit.cpp
 qeditlistbox.cpp
 )
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 KDE_AUTOMOC(${kdevpropertyeditor_LIB_SRCS})
 
@@ -55,48 +61,3 @@ ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_LIB_SRCS})
 #DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils
 #DOXYGEN_PROJECTNAME = KDevelop Property Editing Library
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevpropertyeditor_SRCS
-#childproperty.cpp
-#pcombobox.cpp   
-#pdummywidget.cpp  
-#ppointedit.cpp     
-#propertymachinefactory.cpp  
-#pstringlistedit.cpp
-#multiproperty.cpp  
-#pcursoredit.cpp      
-#pfontbutton.cpp   
-#prectedit.cpp       
-#propertywidget.cpp          
-#psymbolcombo.cpp
-#pcheckbox.cpp     
-#pdateedit.cpp        
-#pfontcombo.cpp    
-#property.cpp        
-#psizeedit.cpp               
-#purledit.cpp
-#pcolorbutton.cpp   
-#pdatetimeedit.cpp    
-#plineedit.cpp     
-#propertyeditor.cpp  
-#psizepolicyedit.cpp         
-#pyesnobutton.cpp
-#pcolorcombo.cpp    
-#pdoublenuminput.cpp  
-#ppixmapedit.cpp   
-#propertylist.cpp    
-#pspinbox.cpp 
-#propertywidgetproxy.cpp 
-#plinestyleedit.cpp 
-#qeditlistbox.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevpropertyeditor_SRCS})
-#
-#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-#
-#ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_SRCS})
-#

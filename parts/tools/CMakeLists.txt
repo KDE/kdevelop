@@ -7,12 +7,14 @@ kapplicationtree.cpp
 
 KDE_AUTOMOC(${kdevtools_PART_SRCS})
 
-SET(
+SET( kdevtools_UI
 toolsconfigwidgetbase.ui
 addtooldlg.ui
 )
 
-KDE_ADD_UI_FILES(kdevtools_PART_SRCS ${kdevtools_UI}
+KDE_ADD_UI_FILES(kdevtools_PART_SRCS ${kdevtools_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevtools SHARED ${kdevtools_PART_SRCS})
 
@@ -36,7 +38,3 @@ ADD_LIBRARY(kdevtools SHARED ${kdevtools_PART_SRCS})
 #
 #rc_DATA = kdevpart_tools.rc
 #rcdir = $(kde_datadir)/kdevtools
-
-#######################
-#previous CMakeLists.txt contents follow:
-

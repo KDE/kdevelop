@@ -15,13 +15,15 @@ filecreate_newfile.cpp
 
 KDE_AUTOMOC(${kdevfilecreate_PART_SRCS})
 
-SET(
+SET( kdevfilecreate_UI
 fcconfigwidgetbase.ui
 fctypeeditbase.ui
 fctemplateeditbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI}
+KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
 
@@ -53,3 +55,30 @@ ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SUBDIRS( file-templates )
+#
+#SET(kdevfilecreate_PART_SRCS
+#filecreate_part.cpp
+#filecreate_listitem.cpp
+#filecreate_widget3.cpp
+#filecreate_widget2.cpp
+#filecreate_filetype.cpp
+#filecreate_filedialog.cpp
+#fcconfigwidget.cpp
+#fctypeedit.cpp
+#fctemplateedit.cpp
+#filecreate_newfile.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfilecreate_PART_SRCS})
+#
+#SET( kdevfilecreate_UI
+#fcconfigwidgetbase.ui
+#fctypeeditbase.ui
+#fctemplateeditbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI} )
+#
+#ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
+#

@@ -5,11 +5,13 @@ uichooser_widget.cpp
 
 KDE_AUTOMOC(${kdevuichooser_PART_SRCS})
 
-SET(
+SET( kdevuichooser_UI
 uichooser.ui
 )
 
-KDE_ADD_UI_FILES(kdevuichooser_PART_SRCS ${kdevuichooser_UI}
+KDE_ADD_UI_FILES(kdevuichooser_PART_SRCS ${kdevuichooser_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/qextmdi/)
 
 ADD_LIBRARY(kdevuichooser SHARED ${kdevuichooser_PART_SRCS})
 
@@ -29,8 +31,4 @@ ADD_LIBRARY(kdevuichooser SHARED ${kdevuichooser_PART_SRCS})
 #
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdevuichooser.desktop
-#
-
-#######################
-#previous CMakeLists.txt contents follow:
 

@@ -24,11 +24,3 @@ ADD_LIBRARY(kinterfacedesigner SHARED ${kinterfacedesigner_LIB_SRCS})
 #DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils
 #DOXYGEN_PROJECTNAME = KInterfaceDesigner Library
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#
-#KDE_AUTOMOC(designer.cpp)
-#
-#ADD_LIBRARY(kinterfacedesigner designer.cpp)

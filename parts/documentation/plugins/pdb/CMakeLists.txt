@@ -22,3 +22,11 @@ ADD_LIBRARY(docpdbplugin SHARED ${docpdbplugin_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docpdbplugin_PART_SRCS
+#docpdbplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docpdbplugin_PART_SRCS})
+#
+#ADD_LIBRARY(docpdbplugin SHARED ${docpdbplugin_PART_SRCS})
+#

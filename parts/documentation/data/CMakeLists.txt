@@ -8,7 +8,3 @@
 #picsdir = $(kde_datadir)/kdevdocumentation/pics
 #html_DATA =  long.html nomatch.html short.html syntax.html wrapper.html
 #pics_DATA =  checked.xpm htdig.png star.png star_blank.png unchecked.xpm
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -36,22 +36,3 @@ ADD_LIBRARY(kdevutil STATIC ${kdevutil_STAT_SRCS})
 #include ../../Doxyfile.am
 #
 #noinst_HEADERS = settings.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevutils_SRCS 
-#domutil.cpp 
-#execcommand.cpp 
-#filetemplate.cpp
-#urlutil.cpp 
-#configwidgetproxy.cpp
-#rurl.cpp
-#kscriptactionmanager.cpp
-#settings.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevutils_SRCS})
-#
-#ADD_LIBRARY(kdevutils SHARED ${kdevutils_SRCS})
-#

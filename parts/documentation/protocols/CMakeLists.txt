@@ -12,3 +12,5 @@ SUBDIRS( chm )
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SUBDIRS( chm )
+#

@@ -28,3 +28,11 @@ ADD_LIBRARY(docqtplugin SHARED ${docqtplugin_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docqtplugin_PART_SRCS
+#docqtplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docqtplugin_PART_SRCS})
+#
+#ADD_LIBRARY(docqtplugin SHARED ${docqtplugin_PART_SRCS})
+#

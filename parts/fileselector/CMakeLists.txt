@@ -35,3 +35,14 @@ ADD_LIBRARY(kdevfileselector SHARED ${kdevfileselector_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevfileselector_PART_SRCS
+#fileselector_part.cpp
+#fileselector_widget.cpp
+#kactionselector.cpp
+#kbookmarkhandler.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfileselector_PART_SRCS})
+#
+#ADD_LIBRARY(kdevfileselector SHARED ${kdevfileselector_PART_SRCS})
+#

@@ -8,12 +8,12 @@ snippetconfig.cpp
 
 KDE_AUTOMOC(${kdevsnippet_PART_SRCS})
 
-SET(
+SET( kdevsnippet_UI
 snippetdlg.ui
 snippetsettingsbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevsnippet_PART_SRCS ${kdevsnippet_UI}
+KDE_ADD_UI_FILES(kdevsnippet_PART_SRCS ${kdevsnippet_UI} )
 
 ADD_LIBRARY(kdevsnippet SHARED ${kdevsnippet_PART_SRCS})
 
@@ -41,3 +41,22 @@ ADD_LIBRARY(kdevsnippet SHARED ${kdevsnippet_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevsnippet_PART_SRCS
+#snippet_part.cpp
+#snippet_widget.cpp
+#snippetitem.cpp
+#snippetsettings.cpp
+#snippetconfig.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevsnippet_PART_SRCS})
+#
+#SET( kdevsnippet_UI
+#snippetdlg.ui
+#snippetsettingsbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevsnippet_PART_SRCS ${kdevsnippet_UI} )
+#
+#ADD_LIBRARY(kdevsnippet SHARED ${kdevsnippet_PART_SRCS})
+#

@@ -11,3 +11,5 @@ SUBDIRS( qt doxygen devhelp kdevtoc chm custom )
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SUBDIRS( qt doxygen devhelp kdevtoc chm custom )
+#

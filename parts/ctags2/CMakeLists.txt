@@ -9,12 +9,14 @@ ctags2_settingswidget.cpp
 
 KDE_AUTOMOC(${kdevctags2_PART_SRCS})
 
-SET(
+SET( kdevctags2_UI
 ctags2_widgetbase.ui
 ctags2_settingswidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevctags2_PART_SRCS ${kdevctags2_UI}
+KDE_ADD_UI_FILES(kdevctags2_PART_SRCS ${kdevctags2_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevctags2 SHARED ${kdevctags2_PART_SRCS})
 
@@ -43,7 +45,3 @@ ADD_LIBRARY(kdevctags2 SHARED ${kdevctags2_PART_SRCS})
 #
 #noinst_HEADERS = ctags2_widget.h tags.h readtags.h ctagskinds.h \
 #	ctags2_settingswidget.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

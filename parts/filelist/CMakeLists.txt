@@ -32,3 +32,13 @@ ADD_LIBRARY(kdevfilelist SHARED ${kdevfilelist_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevfilelist_PART_SRCS
+#filelist_part.cpp
+#filelist_widget.cpp
+#filelist_item.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfilelist_PART_SRCS})
+#
+#ADD_LIBRARY(kdevfilelist SHARED ${kdevfilelist_PART_SRCS})
+#

@@ -24,3 +24,11 @@ ADD_LIBRARY(docdevhelpplugin SHARED ${docdevhelpplugin_LIB_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docdevhelpplugin_LIB_SRCS
+#docdevhelpplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docdevhelpplugin_LIB_SRCS})
+#
+#ADD_LIBRARY(docdevhelpplugin SHARED ${docdevhelpplugin_LIB_SRCS})
+#

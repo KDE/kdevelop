@@ -24,3 +24,11 @@ ADD_LIBRARY(doccustomplugin SHARED ${doccustomplugin_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(doccustomplugin_PART_SRCS
+#doccustomplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${doccustomplugin_PART_SRCS})
+#
+#ADD_LIBRARY(doccustomplugin SHARED ${doccustomplugin_PART_SRCS})
+#

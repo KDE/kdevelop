@@ -6,9 +6,7 @@ kdevproject.cpp
 kdevlanguagesupport.cpp
 kdevpartcontroller.cpp
 kdevapi.cpp
-KDevCoreIface.skel
 kdevmainwindow.cpp
-KDevPartControllerIface.skel
 kdevplugin.cpp
 kdevcoderepository.cpp
 codemodel.cpp
@@ -20,12 +18,21 @@ kdevplugininfo.cpp
 KDevCoreIface.cpp
 KDevPartControllerIface.cpp
 katedocumentmanagerinterface.cpp
-katedocumentmanagerinterface.skel
 kdevprojectiface.cpp
-kdevprojectiface.skel
 kdevdesignerintegrationiface.cpp
-kdevdesignerintegrationiface.skel
 )
+
+SET(kdevinterfaces_DCOP_SRCS
+KDevCoreIface.h
+KDevPartControllerIface.h
+katedocumentmanagerinterface.h
+kdevprojectiface.h
+kdevdesignerintegrationiface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevinterfaces_STAT_SRCS ${kdevinterfaces_DCOP_SRCS})
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ )
 
 KDE_AUTOMOC(${kdevinterfaces_STAT_SRCS})
 
@@ -106,10 +113,6 @@ ADD_LIBRARY(kdevinterfaces STATIC ${kdevinterfaces_STAT_SRCS})
 #kdevdesignerintegrationiface.h
 #)
 #
-#KDE_AUTOMOC(${kdevinterfaces_SOURCES})
-#
 #KDE_ADD_DCOP_SKELS(kdevinterfaces_SOURCES ${kdevinterfaces_DCOP_SRCS})
 #
 #INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/external/ )
-#
-#ADD_LIBRARY(kdevinterfaces STATIC ${kdevinterfaces_SOURCES})

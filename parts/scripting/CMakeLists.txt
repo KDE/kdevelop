@@ -5,11 +5,11 @@ scriptingglobalconfig.cpp
 
 KDE_AUTOMOC(${kdevscripting_PART_SRCS})
 
-SET(
+SET( kdevscripting_UI
 scriptingglobalconfigbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevscripting_PART_SRCS ${kdevscripting_UI}
+KDE_ADD_UI_FILES(kdevscripting_PART_SRCS ${kdevscripting_UI} )
 
 ADD_LIBRARY(kdevscripting SHARED ${kdevscripting_PART_SRCS})
 
@@ -41,3 +41,18 @@ ADD_LIBRARY(kdevscripting SHARED ${kdevscripting_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevscripting_PART_SRCS
+#scriptingpart.cpp
+#scriptingglobalconfig.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevscripting_PART_SRCS})
+#
+#SET( kdevscripting_UI
+#scriptingglobalconfigbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevscripting_PART_SRCS ${kdevscripting_UI} )
+#
+#ADD_LIBRARY(kdevscripting SHARED ${kdevscripting_PART_SRCS})
+#

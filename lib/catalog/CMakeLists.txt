@@ -21,9 +21,3 @@ ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Catalog Library
 #DOXYGEN_DOCDIRPREFIX = kdev
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#
-#ADD_LIBRARY(kdevcatalob SHARED tag.cpp)

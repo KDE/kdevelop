@@ -13,6 +13,7 @@ class BuildTarget
       @type=type
       @sources=Array.new
       @uis=Array.new
+      @skels=Array.new
       @am=Array.new
    end
    
@@ -20,13 +21,15 @@ class BuildTarget
       files.split.each do |currentSource|
          if currentSource =~ /^\S+\.ui$/
             @uis.push(currentSource)
+         elsif currentSource =~ /^(\S+)\.skel$/
+            @skels.push($1+".h")
          else
             @sources.push(currentSource)
          end
       end
    end
    
-   attr_reader :name, :type, :sources, :uis
+   attr_reader :name, :type, :sources, :uis, :skels
    
 end
 
@@ -53,9 +56,9 @@ class CMakeFile
          appendNextLine=(line[line.length-2, 1]=='\\')
          
          if appendNextLine
-            cummLine+=line[0, line.length-2]
+            cummLine+=" "+line[0, line.length-2]
          else
-            cummLine+=line[0, line.length-1]
+            cummLine+=" "+line[0, line.length-1]
             if not cummLine.empty? 
                evalLine(cummLine)
                cummLine=""
@@ -179,6 +182,7 @@ class CMakeFile
             srcsName=buildTarget.name+"_SRCS"
          end
          uisName=buildTarget.name+"_UI"
+         skelsName=buildTarget.name+"_DCOP_SRCS"
          
          if not buildTarget.sources.empty?   
             file.printf("SET(%s\n", srcsName)
@@ -190,11 +194,19 @@ class CMakeFile
          end
          
          if not buildTarget.uis.empty?
-            file.printf("SET(\n")
+            file.printf("SET( %s\n", uisName)
             buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
             file.printf(")\n\n")
             
-            file.printf("KDE_ADD_UI_FILES(%s ${%s}\n\n", srcsName, uisName)
+            file.printf("KDE_ADD_UI_FILES(%s ${%s} )\n\n", srcsName, uisName)
+         end
+         
+         if not buildTarget.skels.empty?
+            file.printf("SET( %s\n", skelsName)
+            buildTarget.skels.each{ |currentFile| file.printf("%s\n", currentFile)}
+            file.printf(")\n\n")
+            
+            file.printf("KDE_ADD_DCOP_SKELS(%s ${%s})\n\n", srcsName, skelsName)
          end
          
          if buildTarget.type==SharedLib 
@@ -209,7 +221,7 @@ class CMakeFile
       end
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
-      if !prevLines.empty? do
+      if !prevLines.empty? 
          file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
          prevLines.each{ |line| file.printf("#%s", line)}
       end

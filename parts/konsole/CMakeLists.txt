@@ -30,3 +30,12 @@ ADD_LIBRARY(kdevkonsoleview SHARED ${kdevkonsoleview_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevkonsoleview_PART_SRCS
+#konsoleviewpart.cpp
+#konsoleviewwidget.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevkonsoleview_PART_SRCS})
+#
+#ADD_LIBRARY(kdevkonsoleview SHARED ${kdevkonsoleview_PART_SRCS})
+#

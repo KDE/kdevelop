@@ -7,6 +7,8 @@ navigator.cpp
 viewcombos.cpp
 )
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
+
 KDE_AUTOMOC(${kdevclassview_PART_SRCS})
 
 ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_PART_SRCS})
@@ -42,23 +44,3 @@ ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_PART_SRCS})
 #	$(QTDIR)/bin/moc digraphview.h > digraphview.moc ; \
 #	g++ digraphview.cpp -I$(QTDIR)/include -L$(QTDIR)/lib -L/usr/X11R6/lib -lqt -lX11 -lXext -o foo
 #noinst_HEADERS = viewcombos.h navigator.h 
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevclassview_SRCS 
-#classviewpart.cpp
-#classviewwidget.cpp
-#digraphview.cpp
-#hierarchydlg.cpp
-#navigator.cpp
-#viewcombos.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevclassview_SRCS})
-#
-#INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
-#
-##INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras  ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
-#
-#ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_SRCS})

@@ -44,7 +44,3 @@
 #	admin.kdevtemplate gnu.kdevtemplate dockbook.kdevtemplate\
 #	incadmin.kdevtemplate gnome2.kdevtemplate
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

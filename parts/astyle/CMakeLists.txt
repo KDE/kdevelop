@@ -6,11 +6,13 @@ astyle_adaptor.cpp
 
 KDE_AUTOMOC(${kdevastyle_PART_SRCS})
 
-SET(
+SET( kdevastyle_UI
 astyleconfig.ui
 )
 
-KDE_ADD_UI_FILES(kdevastyle_PART_SRCS ${kdevastyle_UI}
+KDE_ADD_UI_FILES(kdevastyle_PART_SRCS ${kdevastyle_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/astyle/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_PART_SRCS})
 
@@ -38,18 +40,19 @@ ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
-#SET(kdevastyle_SRCS 
+#SET(kdevastyle_PART_SRCS
 #astyle_part.cpp
 #astyle_widget.cpp
 #astyle_adaptor.cpp
 #)
 #
-#KDE_ADD_UI_FILES(kdevastyle_SRCS astyleconfig.ui )
+#KDE_AUTOMOC(${kdevastyle_PART_SRCS})
 #
-#KDE_AUTOMOC(${kdevastyle_SRCS})
+#SET( kdevastyle_UI
+#astyleconfig.ui
+#)
 #
-#INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/astyle)
+#KDE_ADD_UI_FILES(kdevastyle_PART_SRCS ${kdevastyle_UI} )
 #
-##INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras  ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
+#ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_PART_SRCS})
 #
-#ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_SRCS})

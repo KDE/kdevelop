@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/dcop/ ${CMAKE_SOURCE_DIR}/lib/widgets/ )
+
 SET(kdevmakeview_PART_SRCS
 makeviewpart.cpp
 makewidget.cpp
@@ -12,11 +14,11 @@ otherfilter.cpp
 
 KDE_AUTOMOC(${kdevmakeview_PART_SRCS})
 
-SET(
+SET( kdevmakeview_UI
 filterdlg.ui
 )
 
-KDE_ADD_UI_FILES(kdevmakeview_PART_SRCS ${kdevmakeview_UI}
+KDE_ADD_UI_FILES(kdevmakeview_PART_SRCS ${kdevmakeview_UI} )
 
 ADD_LIBRARY(kdevmakeview SHARED ${kdevmakeview_PART_SRCS})
 
@@ -34,11 +36,11 @@ otherfilter.cpp
 
 KDE_AUTOMOC(${kdevappview_PART_SRCS})
 
-SET(
+SET( kdevappview_UI
 filterdlg.ui
 )
 
-KDE_ADD_UI_FILES(kdevappview_PART_SRCS ${kdevappview_UI}
+KDE_ADD_UI_FILES(kdevappview_PART_SRCS ${kdevappview_UI} )
 
 ADD_LIBRARY(kdevappview SHARED ${kdevappview_PART_SRCS})
 
@@ -82,7 +84,4 @@ ADD_LIBRARY(kdevappview SHARED ${kdevappview_PART_SRCS})
 #libkdevappview_la_SOURCES = appoutputviewpart.cpp appoutputwidget.cpp directorystatusmessagefilter.cpp \
 #	outputfilter.cpp compileerrorfilter.cpp commandcontinuationfilter.cpp makeitem.cpp \
 #	makeactionfilter.cpp otherfilter.cpp filterdlg.ui
-
-#######################
-#previous CMakeLists.txt contents follow:
 

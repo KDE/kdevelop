@@ -33,3 +33,12 @@ ADD_LIBRARY(kdevtexttools SHARED ${kdevtexttools_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevtexttools_PART_SRCS
+#texttoolspart.cpp
+#texttoolswidget.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevtexttools_PART_SRCS})
+#
+#ADD_LIBRARY(kdevtexttools SHARED ${kdevtexttools_PART_SRCS})
+#

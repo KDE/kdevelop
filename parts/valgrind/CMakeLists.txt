@@ -7,11 +7,11 @@ valgrinditem.cpp
 
 KDE_AUTOMOC(${kdevvalgrind_PART_SRCS})
 
-SET(
+SET( kdevvalgrind_UI
 dialog_widget.ui
 )
 
-KDE_ADD_UI_FILES(kdevvalgrind_PART_SRCS ${kdevvalgrind_UI}
+KDE_ADD_UI_FILES(kdevvalgrind_PART_SRCS ${kdevvalgrind_UI} )
 
 ADD_LIBRARY(kdevvalgrind SHARED ${kdevvalgrind_PART_SRCS})
 
@@ -38,3 +38,20 @@ ADD_LIBRARY(kdevvalgrind SHARED ${kdevvalgrind_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevvalgrind_PART_SRCS
+#valgrind_part.cpp
+#valgrind_widget.cpp
+#valgrind_dialog.cpp
+#valgrinditem.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevvalgrind_PART_SRCS})
+#
+#SET( kdevvalgrind_UI
+#dialog_widget.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevvalgrind_PART_SRCS ${kdevvalgrind_UI} )
+#
+#ADD_LIBRARY(kdevvalgrind SHARED ${kdevvalgrind_PART_SRCS})
+#

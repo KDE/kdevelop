@@ -22,3 +22,11 @@ ADD_LIBRARY(docpdfplugin SHARED ${docpdfplugin_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docpdfplugin_PART_SRCS
+#docpdfplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docpdfplugin_PART_SRCS})
+#
+#ADD_LIBRARY(docpdfplugin SHARED ${docpdfplugin_PART_SRCS})
+#

@@ -64,7 +64,6 @@ ENDMACRO(KDE_ADD_MOC_FILES)
 MACRO(KDE_CREATE_AUTOMOC_FILES )
    FOREACH (_current_FILE ${ARGN})
       GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-      GET_FILENAME_COMPONENT(_ext ${_current_FILE} EXT)
       SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
       SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
 
@@ -116,34 +115,37 @@ MACRO(KDE_AUTOMOC)
    SET(_matching_FILES )
    FOREACH (_current_FILE ${ARGN})
       IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
-         GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-         SET(_moc ${_basename}.moc)
       
          FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} _contents)
-      
-         STRING(REGEX MATCH "#include.+${_moc}" _match "${_contents}")
-
+         
+         STRING(REGEX MATCHALL "#include +[^ ]+\\.moc[\">]" _match "${_contents}")
          IF(_match)
+            FOREACH (_current_MOC_INC ${_match})
+               STRING(REGEX MATCH "[^ <\"]+\\.moc" _current_MOC "${_current_MOC_INC}")
+            
+               GET_FILENAME_COMPONENT(_basename ${_current_MOC} NAME_WE)
+               SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
+               SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/${_current_MOC})
 
-            SET(_moc_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
-            SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
+               ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
+                  COMMAND moc
+                  ARGS ${_header} -o ${_moc}
+                  DEPENDS ${_header}
+               )                
 
-            ADD_CUSTOM_COMMAND(OUTPUT ${_moc_FILE}
-               COMMAND moc
-               ARGS ${_header} -o ${_moc_FILE}
-              DEPENDS ${_header}
-            )                
-
-            ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc_FILE})
-
-
-#            MESSAGE(STATUS "matches: "${_current_FILE})
-#            SET(_matching_FILES ${_matching_FILES}  ${_current_FILE})
-#            KDE_CREATE_AUTOMOC_FILES(${_current_FILE})      
+               ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
+  
+            ENDFOREACH (_current_MOC_INC)
          ENDIF(_match)
+         
+#         GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
+#         SET(_moc ${_basename}.moc)
+#         STRING(REGEX MATCH "#include.+${_moc}" _match "${_contents}")
+#         IF(_match)
+#            KDE_CREATE_AUTOMOC_FILES(${_current_FILE})      
+#         ENDIF(_match)
+      
       ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
    ENDFOREACH (_current_FILE)
-#   MESSAGE(STATUS "files: "${_matching_FILES})   
-#   KDE_CREATE_AUTOMOC_FILES(${_matching_FILES})
 ENDMACRO(KDE_AUTOMOC)
 

@@ -8,7 +8,3 @@
 #kdevelopdatadir = ${kde_datadir}/kdevelop
 #licensesdir = ${kdevelopdatadir}/licenses
 #licenses_DATA = GPL LGPL BSD QPL GPL+Qt-Exception
-
-#######################
-#previous CMakeLists.txt contents follow:
-

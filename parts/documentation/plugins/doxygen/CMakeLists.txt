@@ -27,3 +27,11 @@ ADD_LIBRARY(docdoxygenplugin SHARED ${docdoxygenplugin_LIB_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(docdoxygenplugin_LIB_SRCS
+#docdoxygenplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${docdoxygenplugin_LIB_SRCS})
+#
+#ADD_LIBRARY(docdoxygenplugin SHARED ${docdoxygenplugin_LIB_SRCS})
+#

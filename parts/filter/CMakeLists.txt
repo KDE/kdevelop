@@ -3,10 +3,15 @@ filterpart.cpp
 shellfilterdlg.cpp
 shellinsertdlg.cpp
 kdevfilterIface.cpp
-kdevfilterIface.skel
 )
 
 KDE_AUTOMOC(${kdevfilter_PART_SRCS})
+
+SET( kdevfilter_DCOP_SRCS
+kdevfilterIface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevfilter_PART_SRCS ${kdevfilter_DCOP_SRCS})
 
 ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
 
@@ -35,3 +40,20 @@ ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevfilter_PART_SRCS
+#filterpart.cpp
+#shellfilterdlg.cpp
+#shellinsertdlg.cpp
+#kdevfilterIface.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfilter_PART_SRCS})
+#
+#SET( kdevfilter_DCOP_SRCS
+#kdevfilterIface.h
+#)
+#
+#KDE_ADD_DCOP_SKELS(kdevfilter_PART_SRCS ${kdevfilter_DCOP_SRCS})
+#
+#ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
+#

@@ -1,4 +1,15 @@
-SUBDIRS( bdb lib parts languages buildtools editors vcs src pics doc mimetypes embedded kdevdesigner )
+PROJECT(kdevelop)
+
+INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDE.cmake)
+INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDEMacros.cmake)
+
+SET(CMAKE_SKIP_RULE_DEPENDENCY 1)
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
+
+SUBDIRS( bdb lib parts)
+# languages buildtools editors vcs src pics doc mimetypes embedded kdevdesigner )
 
 
 
@@ -82,19 +93,3 @@ SUBDIRS( bdb lib parts languages buildtools editors vcs src pics doc mimetypes e
 #DOXYGEN_EMPTY = YES
 #DOXYGEN_PROJECTNAME = KDevelop Platform API
 #include Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#PROJECT(kdevelop)
-#
-#INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDE.cmake)
-#INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDEMacros.cmake)
-#
-#SET(CMAKE_VERBOSE_MAKEFILE ON)
-#
-#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
-#
-#SUBDIRS( bdb lib parts)
-#
-##SUBDIRS( bdb lib parts languages buildtools editors vcs src pics doc mimetypes embedded kdevdesigner)

@@ -6,6 +6,8 @@ grepdlg.cpp
 
 KDE_AUTOMOC(${kdevgrepview_PART_SRCS})
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/widgets/)
+
 ADD_LIBRARY(kdevgrepview SHARED ${kdevgrepview_PART_SRCS})
 
 
@@ -31,7 +33,3 @@ ADD_LIBRARY(kdevgrepview SHARED ${kdevgrepview_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevgrepview
 #rc_DATA = kdevgrepview.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

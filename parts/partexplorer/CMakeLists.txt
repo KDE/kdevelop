@@ -5,11 +5,11 @@ partexplorer_plugin.cpp
 
 KDE_AUTOMOC(${kdevpartexplorer_PART_SRCS})
 
-SET(
+SET( kdevpartexplorer_UI
 partexplorerformbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevpartexplorer_PART_SRCS ${kdevpartexplorer_UI}
+KDE_ADD_UI_FILES(kdevpartexplorer_PART_SRCS ${kdevpartexplorer_UI} )
 
 ADD_LIBRARY(kdevpartexplorer SHARED ${kdevpartexplorer_PART_SRCS})
 
@@ -38,3 +38,18 @@ ADD_LIBRARY(kdevpartexplorer SHARED ${kdevpartexplorer_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevpartexplorer_PART_SRCS
+#partexplorerform.cpp
+#partexplorer_plugin.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevpartexplorer_PART_SRCS})
+#
+#SET( kdevpartexplorer_UI
+#partexplorerformbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevpartexplorer_PART_SRCS ${kdevpartexplorer_UI} )
+#
+#ADD_LIBRARY(kdevpartexplorer SHARED ${kdevpartexplorer_PART_SRCS})
+#

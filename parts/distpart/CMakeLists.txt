@@ -8,11 +8,13 @@ specsupport.cpp
 
 KDE_AUTOMOC(${kdevdistpart_PART_SRCS})
 
-SET(
+SET( kdevdistpart_UI
 distpart_ui.ui
 )
 
-KDE_ADD_UI_FILES(kdevdistpart_PART_SRCS ${kdevdistpart_UI}
+KDE_ADD_UI_FILES(kdevdistpart_PART_SRCS ${kdevdistpart_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevdistpart SHARED ${kdevdistpart_PART_SRCS})
 
@@ -36,7 +38,4 @@ ADD_LIBRARY(kdevdistpart SHARED ${kdevdistpart_PART_SRCS})
 #
 #rc_DATA = kdevpart_distpart.rc
 #rcdir = $(kde_datadir)/kdevdistpart
-
-#######################
-#previous CMakeLists.txt contents follow:
 

@@ -5,11 +5,11 @@ regexptestdlg.cpp
 
 KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
 
-SET(
+SET( kdevregexptest_UI
 regexptestdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI}
+KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI} )
 
 ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
 
@@ -38,3 +38,18 @@ ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevregexptest_PART_SRCS
+#regexptestpart.cpp
+#regexptestdlg.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
+#
+#SET( kdevregexptest_UI
+#regexptestdlgbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI} )
+#
+#ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
+#

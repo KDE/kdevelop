@@ -38,3 +38,11 @@ ADD_LIBRARY(kdevtipofday SHARED ${kdevtipofday_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevtipofday_PART_SRCS
+#tipofday_part.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevtipofday_PART_SRCS})
+#
+#ADD_LIBRARY(kdevtipofday SHARED ${kdevtipofday_PART_SRCS})
+#

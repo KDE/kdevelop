@@ -29,3 +29,11 @@ ADD_LIBRARY(documentation_interfaces SHARED ${documentation_interfaces_LIB_SRCS}
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(documentation_interfaces_LIB_SRCS
+#kdevdocumentationplugin.cpp
+#)
+#
+#KDE_AUTOMOC(${documentation_interfaces_LIB_SRCS})
+#
+#ADD_LIBRARY(documentation_interfaces SHARED ${documentation_interfaces_LIB_SRCS})
+#

@@ -8,11 +8,11 @@ replacedlgimpl.cpp
 
 KDE_AUTOMOC(${kdevreplace_PART_SRCS})
 
-SET(
+SET( kdevreplace_UI
 replacedlg.ui
 )
 
-KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI}
+KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI} )
 
 ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
 
@@ -40,3 +40,21 @@ ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevreplace_PART_SRCS
+#replace_part.cpp
+#replace_widget.cpp
+#replaceitem.cpp
+#replaceview.cpp
+#replacedlgimpl.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevreplace_PART_SRCS})
+#
+#SET( kdevreplace_UI
+#replacedlg.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI} )
+#
+#ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
+#

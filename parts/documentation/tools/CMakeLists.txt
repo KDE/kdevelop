@@ -11,3 +11,5 @@ SUBDIRS( htdig )
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SUBDIRS( htdig )
+#

@@ -16,13 +16,12 @@ find_documentation_options.cpp
 selecttopic.cpp
 docprojectconfigwidget.cpp
 KDevDocumentationIface.cpp
-KDevDocumentationIface.skel
 addcatalogdlg.cpp
 )
 
 KDE_AUTOMOC(${kdevdocumentation_PART_SRCS})
 
-SET(
+SET( kdevdocumentation_UI
 docglobalconfigwidgetbase.ui
 editcatalogdlgbase.ui
 editbookmarkdlg.ui
@@ -33,7 +32,15 @@ docprojectconfigwidgetbase.ui
 addcatalogdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevdocumentation_PART_SRCS ${kdevdocumentation_UI}
+KDE_ADD_UI_FILES(kdevdocumentation_PART_SRCS ${kdevdocumentation_UI} )
+
+SET( kdevdocumentation_DCOP_SRCS
+KDevDocumentationIface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevdocumentation_PART_SRCS ${kdevdocumentation_DCOP_SRCS})
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/parts/documentation/interfaces/)
 
 ADD_LIBRARY(kdevdocumentation SHARED ${kdevdocumentation_PART_SRCS})
 
@@ -73,7 +80,3 @@ ADD_LIBRARY(kdevdocumentation SHARED ${kdevdocumentation_PART_SRCS})
 #
 #DOXYGEN_EMPTY = YES
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

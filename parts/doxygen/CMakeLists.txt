@@ -9,6 +9,8 @@ messages.cpp
 
 KDE_AUTOMOC(${kdevdoxygen_PART_SRCS})
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/src/)
+
 ADD_LIBRARY(kdevdoxygen SHARED ${kdevdoxygen_PART_SRCS})
 
 
@@ -34,7 +36,3 @@ ADD_LIBRARY(kdevdoxygen SHARED ${kdevdoxygen_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevdoxygen
 #rc_DATA = kdevdoxygen.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

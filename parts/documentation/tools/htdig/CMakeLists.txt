@@ -1,4 +1,4 @@
-ADD_EXECUTABLE(kdevelop-htdig ${kdevelop-htdig_SRCS})
+ADD_EXECUTABLE(kdevelop-htdig htdigindex.cpp)
 
 
 
@@ -14,3 +14,5 @@ ADD_EXECUTABLE(kdevelop-htdig ${kdevelop-htdig_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#ADD_EXECUTABLE(kdevelop-htdig ${kdevelop-htdig_SRCS})
+#

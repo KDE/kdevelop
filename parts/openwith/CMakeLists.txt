@@ -29,3 +29,11 @@ ADD_LIBRARY(kdevopenwith SHARED ${kdevopenwith_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevopenwith_PART_SRCS
+#openwithpart.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevopenwith_PART_SRCS})
+#
+#ADD_LIBRARY(kdevopenwith SHARED ${kdevopenwith_PART_SRCS})
+#

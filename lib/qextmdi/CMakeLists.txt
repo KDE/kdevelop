@@ -17,6 +17,8 @@ kmultitabbar.cpp
 
 KDE_AUTOMOC(${kdevelopqextmdi_STAT_SRCS})
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/res/ ${CMAKE_CURRENT_SOURCE_DIR}/)
+
 ADD_LIBRARY(kdevelopqextmdi STATIC ${kdevelopqextmdi_STAT_SRCS})
 
 
@@ -45,7 +47,4 @@ ADD_LIBRARY(kdevelopqextmdi STATIC ${kdevelopqextmdi_STAT_SRCS})
 #METASOURCES = AUTO
 #
 ##AM_CXXFLAGS = -DNO_INCLUDE_MOCFILES
-
-#######################
-#previous CMakeLists.txt contents follow:
 

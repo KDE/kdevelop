@@ -1,4 +1,4 @@
-SUBDIRS( . imports common licenses )
+SUBDIRS( imports common licenses )
 
 SET(kdevappwizard_PART_SRCS
 appwizardfactory.cpp
@@ -14,14 +14,16 @@ profilesupport.cpp
 
 KDE_AUTOMOC(${kdevappwizard_PART_SRCS})
 
-SET(
+SET( kdevappwizard_UI
 filepropspagebase.ui
 appwizarddlgbase.ui
 importdlgbase.ui
 vcs_form.ui
 )
 
-KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI}
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extras/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
+
+KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI} )
 
 ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
 
@@ -60,21 +62,30 @@ ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
-#SET(kdevappwizard_SRCS 
-#appwizardfactory.cpp 
+#SUBDIRS( . imports common licenses )
+#
+#SET(kdevappwizard_PART_SRCS
+#appwizardfactory.cpp
 #appwizardpart.cpp
 #appwizarddlg.cpp
 #importdlg.cpp
-#filepropspage.cpp 
+#filepropspage.cpp
 #misc.cpp
-#kdevfile.cpp 
-#kdevlicense.cpp 
-#profilesupport.cpp )
+#kdevfile.cpp
+#kdevlicense.cpp
+#profilesupport.cpp
+#)
 #
-#KDE_ADD_UI_FILES(kdevappwizard_SRCS filepropspagebase.ui appwizarddlgbase.ui importdlgbase.ui vcs_form.ui )
+#KDE_AUTOMOC(${kdevappwizard_PART_SRCS})
 #
-#KDE_AUTOMOC(${kdevappwizard_SRCS})
+#SET( kdevappwizard_UI
+#filepropspagebase.ui
+#appwizarddlgbase.ui
+#importdlgbase.ui
+#vcs_form.ui
+#)
 #
-#INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras  ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/widgets)
+#KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI} )
 #
-#ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_SRCS})
+#ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
+#

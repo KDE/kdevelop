@@ -11,11 +11,11 @@ fileitemfactory.cpp
 
 KDE_AUTOMOC(${kdevfileview_PART_SRCS})
 
-SET(
+SET( kdevfileview_UI
 vcscolorsconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI}
+KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI} )
 
 ADD_LIBRARY(kdevfileview SHARED ${kdevfileview_PART_SRCS})
 
@@ -28,11 +28,13 @@ filegroupspart.cpp
 
 KDE_AUTOMOC(${kdevfilegroups_PART_SRCS})
 
-SET(
+SET( kdevfilegroups_UI
 filegroupsconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevfilegroups_PART_SRCS ${kdevfilegroups_UI}
+KDE_ADD_UI_FILES(kdevfilegroups_PART_SRCS ${kdevfilegroups_UI} )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ )
 
 ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
 
@@ -70,3 +72,41 @@ ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevfileview_PART_SRCS
+#fileviewpart.cpp
+#filetreewidget.cpp
+#partwidget.cpp
+#vcscolorsconfigwidget.cpp
+#stdfiletreewidgetimpl.cpp
+#filetreeviewwidgetimpl.cpp
+#vcsfiletreewidgetimpl.cpp
+#fileitemfactory.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfileview_PART_SRCS})
+#
+#SET( kdevfileview_UI
+#vcscolorsconfigwidgetbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI} )
+#
+#ADD_LIBRARY(kdevfileview SHARED ${kdevfileview_PART_SRCS})
+#
+#SET(kdevfilegroups_PART_SRCS
+#filegroupswidget.cpp
+#addfilegroupdlg.cpp
+#filegroupsconfigwidget.cpp
+#filegroupspart.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevfilegroups_PART_SRCS})
+#
+#SET( kdevfilegroups_UI
+#filegroupsconfigwidgetbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevfilegroups_PART_SRCS ${kdevfilegroups_UI} )
+#
+#ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
+#

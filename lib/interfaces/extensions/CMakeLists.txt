@@ -33,14 +33,3 @@ ADD_LIBRARY(kdevextensions STATIC ${kdevextensions_STAT_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Extension Interfaces Library
 #DOXYGEN_DOCDIRPREFIX = kdev
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SUBDIRS(dcop)
-#
-#SET(kdevextensions_SRCS kdevappfrontend.cpp kdevmakefrontend.cpp)
-#
-#KDE_AUTOMOC(${kdevextensions_SRCS})
-#
-#ADD_LIBRARY(kdevextensions STATIC ${kdevextensions_SRCS})

@@ -1,3 +1,7 @@
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../)
+
+ADD_DEFINITIONS(-fexceptions)
+
 SET(antlr_STAT_SRCS
 ANTLRUtil.cpp
 ASTFactory.cpp
@@ -45,39 +49,3 @@ ADD_LIBRARY(antlr STATIC ${antlr_STAT_SRCS})
 #
 #libantlr_la_SOURCES = ANTLRUtil.cpp ASTFactory.cpp ASTNULLType.cpp ASTRefCount.cpp BaseAST.cpp BitSet.cpp CharBuffer.cpp CharScanner.cpp CommonAST.cpp CommonASTWithHiddenTokens.cpp CommonHiddenStreamToken.cpp CommonToken.cpp InputBuffer.cpp LLkParser.cpp MismatchedCharException.cpp MismatchedTokenException.cpp NoViableAltException.cpp NoViableAltForCharException.cpp Parser.cpp RecognitionException.cpp String.cpp Token.cpp TokenBuffer.cpp TokenStreamBasicFilter.cpp TokenStreamHiddenTokenFilter.cpp TokenStreamSelector.cpp TreeParser.cpp
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../)
-#
-#ADD_DEFINITIONS(-fexceptions)
-#
-#ADD_LIBRARY(antlr STATIC  
-#ANTLRUtil.cpp 
-#ASTFactory.cpp 
-#ASTNULLType.cpp 
-#ASTRefCount.cpp 
-#BaseAST.cpp 
-#BitSet.cpp 
-#CharBuffer.cpp 
-#CharScanner.cpp 
-#CommonAST.cpp 
-#CommonASTWithHiddenTokens.cpp 
-#CommonHiddenStreamToken.cpp 
-#CommonToken.cpp 
-#InputBuffer.cpp 
-#LLkParser.cpp 
-#MismatchedCharException.cpp 
-#MismatchedTokenException.cpp 
-#NoViableAltException.cpp 
-#NoViableAltForCharException.cpp 
-#Parser.cpp 
-#RecognitionException.cpp 
-#String.cpp 
-#Token.cpp 
-#TokenBuffer.cpp 
-#TokenStreamBasicFilter.cpp 
-#TokenStreamHiddenTokenFilter.cpp 
-#TokenStreamSelector.cpp 
-#TreeParser.cpp
-#)

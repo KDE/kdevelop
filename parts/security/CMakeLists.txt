@@ -29,3 +29,13 @@ ADD_LIBRARY(kdevsecurity SHARED ${kdevsecurity_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevsecurity_PART_SRCS
+#securitypart.cpp
+#securitywidget.cpp
+#securitychecker.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevsecurity_PART_SRCS})
+#
+#ADD_LIBRARY(kdevsecurity SHARED ${kdevsecurity_PART_SRCS})
+#

@@ -17,7 +17,6 @@ KDE_AUTOMOC(${kdevwidgets_LIB_SRCS})
 ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 
 
-
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/interfaces $(all_includes)
@@ -47,24 +46,3 @@ ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Widgets Library
 #DOXYGEN_DOCDIRPREFIX = kdev
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SUBDIRS(propeditor)
-#
-#SET(kdevwidgets_SRCS 
-#flagboxes.cpp 
-#qcomboview.cpp
-#klistviewaction.cpp
-#kcomboview.cpp
-#resizablecombo.cpp
-#kdevhtmlpart.cpp
-#processlinemaker.cpp
-#processwidget.cpp
-#ksavealldialog.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevwidgets_SRCS})
-#
-#ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_SRCS})

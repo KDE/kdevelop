@@ -5,11 +5,11 @@ vcsmanagerprojectconfig.cpp
 
 KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
 
-SET(
+SET( kdevvcsmanager_UI
 vcsmanagerprojectconfigbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI}
+KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI} )
 
 ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
 
@@ -40,3 +40,18 @@ ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
 #######################
 #previous CMakeLists.txt contents follow:
 
+#SET(kdevvcsmanager_PART_SRCS
+#vcsmanagerpart.cpp
+#vcsmanagerprojectconfig.cpp
+#)
+#
+#KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
+#
+#SET( kdevvcsmanager_UI
+#vcsmanagerprojectconfigbase.ui
+#)
+#
+#KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI} )
+#
+#ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
+#
