@@ -38,7 +38,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setCaption( nm );
   topLevel()->embedOutputView( diffWidget, nm );
 
-  (void) new KAction( i18n("Difference viewer..."), 0,
+  (void) new KAction( i18n("Difference Viewer..."), 0,
                         this, SLOT(slotExecDiff()),
                         actionCollection(), "tools_diff" );
 }
@@ -77,7 +77,7 @@ void DiffPart::showDiff( const QString& diff )
 
 void DiffPart::slotExecDiff()
 {
-  KURL url = KFileDialog::getOpenURL( QString::null, QString::null, 0, i18n("Please select a patch file") );
+  KURL url = KFileDialog::getOpenURL( QString::null, QString::null, 0, i18n("Please Select Patch File") );
 
   if ( url.isEmpty() )
     return;
