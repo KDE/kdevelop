@@ -39,12 +39,13 @@ KonsoleViewWidget::~KonsoleViewWidget()
 
 void KonsoleViewWidget::show()
 {
-  activate();
-  QWidget::show();
+    activate();
+    QWidget::show();
 }
 
 void KonsoleViewWidget::activate()
 {
+    kdDebug(9035) << k_funcinfo << endl;
     if (part)
         return;
 
@@ -74,12 +75,12 @@ void KonsoleViewWidget::activate()
 
 void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
 {
-    kdDebug() << "KonsoleViewWidget::activePartChanged()" << endl;
+    kdDebug(9035) << k_funcinfo << endl;
     KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(activatedPart);
 
     if (ro_part && !ro_part->url().isLocalFile())
     {
-        kdDebug() << " ===> Hmmm ... part is null or not local ... :-/" << endl;
+        kdDebug(9035) << k_funcinfo << "part is null or not local" << endl;
         return;
     }
     QString dir;
@@ -88,7 +89,7 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
     else if (owner->project())
         dir = owner->project()->projectDirectory();
 
-    kdDebug() << " ===> Changing dir to " << dir << endl;
+    kdDebug(9035) << k_funcinfo "Changing dir to " << dir << endl;
     if (dir.isEmpty())
         return;
     setDirectory( KURL(dir) );
@@ -96,13 +97,12 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
 
 void KonsoleViewWidget::setDirectory(const KURL &dirUrl)
 {
-    kdDebug() << "KonsoleViewWidget::setDirectory()" << endl;
-    kdDebug() << " ===> part is " << (long)part << endl;
+    kdDebug(9035) << k_funcinfo << "part is " << (long)part << endl;
 
     if (part && dirUrl != part->url())
     {
-        kdDebug() << " ===> Changing dirUrl.path() == " << dirUrl.path() << endl;
-        kdDebug() << " ===> Changing part->url.path() == " << part->url().path() << endl;
+        kdDebug(9035) << k_funcinfo << "Changing dirUrl.path() == " << dirUrl.path() << endl;
+        kdDebug(9035) << k_funcinfo << "Changing part->url.path() == " << part->url().path() << endl;
 
         part->openURL( dirUrl );
     }
@@ -111,7 +111,7 @@ void KonsoleViewWidget::setDirectory(const KURL &dirUrl)
 void KonsoleViewWidget::partDestroyed()
 {
     part = 0;
-	activate();
+    activate();
 }
 
 

@@ -35,7 +35,7 @@ public:
     virtual ~KonsoleViewWidget();
 
     virtual void show();
-    
+
 public slots:
     void setDirectory(const KURL &dirUrl);
 
