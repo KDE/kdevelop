@@ -2,7 +2,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/sourceinfo \
 	   -I$(top_srcdir)/lib/util \
 	   -I$(top_srcdir)/lib \
-	   -I$(top_srcdir)/lib/qextmdi/include \
+	   $(KDEVMDI_INCLUDES) \
 	   -I$(top_srcdir)/lib/structure \
 	   $(all_includes)
 
@@ -22,7 +22,7 @@ gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 	       	$(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) \
 		-lktexteditor \
 		$(top_builddir)/lib/interfaces/libkdevinterfaces.la \
-		$(top_builddir)/lib/qextmdi/src/libkdevelopqextmdi.la \
+		$(LIB_KDEVMDI) \
 		$(top_builddir)/lib/libkdevelop.la
 
 rcdir = $(kde_datadir)/gideon
