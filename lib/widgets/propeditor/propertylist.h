@@ -32,7 +32,7 @@ class Property;
 class MultiProperty;
 
 /** @file propertylist.h
-@short Contains @ref PropertyList class.
+@short Contains @ref PropertyLib::PropertyList class.
 */
 
 /**
@@ -42,11 +42,11 @@ Every object in a program should operate with properties through
 this list in order to:
 - be informed about property changes
 - allow property lists intersections
-- display properties in the property editor widget (see @ref PropertyEditor).
+- display properties in the property editor widget (see @ref PropertyLib::PropertyEditor).
 .
 
 PropertyList owns properties and deletes them itself. For a list that does not own
-it's properties, look at @ref PropertyBuffer class.
+it's properties, look at @ref PropertyLib::PropertyBuffer class.
 
 PropertyList is also capable of grouping properties.
 You can have unsorted list of groups of properties or a plain
@@ -129,7 +129,7 @@ friend class PropertyBuffer;
 /**
 @short The list of properties which does not own them.
 
-This class acts as @ref PropertyList but it does not delete properties
+This class acts as @ref PropertyLib::PropertyList but it does not delete properties
 in destructor (i.e. it does not own properties).
 This class should be used to store results of property intersections.
 
@@ -152,7 +152,7 @@ public:
     /**Constructs an empty property buffer.*/
     PropertyBuffer();
 
-    /**Intersects with other @ref PropertyList.*/
+    /**Intersects with other @ref PropertyLib::PropertyList.*/
     virtual void intersect(const PropertyList *list);
 };
 

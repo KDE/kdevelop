@@ -29,7 +29,7 @@ class QString;
 namespace PropertyLib{
 
 /** @file property.h
-@short Contains @ref Property class and @ref PropertyType enum.
+@short Contains @ref PropertyLib::Property class and @ref PropertyLib::PropertyType enum.
 */
 
 /**
@@ -39,7 +39,7 @@ It includes support for QStringList properties, an i18n'ed label and stores an o
 
 Contains name, type and value.
 
-Type can be one of predefined types (including standard @ref QVariant types) by @ref PropertyType 
+Type can be one of predefined types (including standard @ref QVariant types) by @ref PropertyLib::PropertyType 
 enum or custom user type. User defined types should have values more than 3000.
 
 Value is a @ref QVariant.

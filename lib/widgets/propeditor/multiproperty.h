@@ -37,7 +37,7 @@ class PropertyList;
 /**
 @short Holds a list of properties with the same name and type.
 
-It is used by @ref PropertyList to store properties. Generally, @ref PropertyList
+It is used by @ref PropertyLib::PropertyList to store properties. Generally, @ref PropertyLib::PropertyList
 stores a list of multiproperties instead of properties. This allows working
 with many properties of the same name and type at the same type.
 

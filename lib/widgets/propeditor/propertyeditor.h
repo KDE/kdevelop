@@ -37,7 +37,7 @@ class MultiProperty;
 struct Machine;
 
 /** @file propertyeditor.h
-@short Contains @ref PropertyEditor class.
+@short Contains @ref PropertyLib::PropertyEditor class.
 */
 
 /**

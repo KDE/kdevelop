@@ -18,44 +18,44 @@ the properties of currently selected build item in property editor.
 This PropertyEditor library is a redesign of Kugar property editing library 
 with the goal to be more generic and extensible.
 
-Library provides a @ref Property class which stores property name, value and some
+Library provides a @ref PropertyLib::Property class which stores property name, value and some
 more important information like description or the list of possible values.
-Using @ref Property class adds more overhead over Q_PROPERTY but provides more
-flexibility. You can subclass @ref Property and create your custom properties.
-Custom properties can have either predefined type (see @ref PropertyType) or
+Using @ref PropertyLib::Property class adds more overhead over Q_PROPERTY but provides more
+flexibility. You can subclass @ref PropertyLib::Property and create your custom properties.
+Custom properties can have either predefined type (see @ref PropertyLib::PropertyType) or
 custom type. Custom type should be used if a custom property editor widget is
 necessary.
 
-Properties are organized into lists. @ref PropertyList is designed
+Properties are organized into lists. @ref PropertyLib::PropertyList is designed
 to store such lists in most efficient manner. It also allows to group
 properties (for example think about "geometrical" properties like "x", "y", etc.).
 
-Property lists can be displayed in @ref PropertyEditor widget which will
-display them in a table form. Note that @ref PropertyEditor takes not
-a @ref PropertyList object, but @ref PropertyAccessor instead.
+Property lists can be displayed in @ref PropertyLib::PropertyEditor widget which will
+display them in a table form. Note that @ref PropertyLib::PropertyEditor takes not
+a @ref PropertyLib::PropertyList object, but @ref PropertyLib::PropertyAccessor instead.
 
-@ref PropertyAccessor is designed to provide a method to access an intersection
+@ref PropertyLib::PropertyAccessor is designed to provide a method to access an intersection
 of property lists. For example, let's consider object A with property list a_list
 abd object B with list b_list. Now let's imagine we want to display common properties
-from a_list and b_list in one @ref PropertyEditor widget. Obviously, we need to
+from a_list and b_list in one @ref PropertyLib::PropertyEditor widget. Obviously, we need to
 "intersect" a_list with b_list and display the result of intersection.
-This is why @ref PropertyAccessor is used for editing. If we change
-the value of a property in the editor, @ref PropertyAccessor will update
+This is why @ref PropertyLib::PropertyAccessor is used for editing. If we change
+the value of a property in the editor, @ref PropertyLib::PropertyAccessor will update
 both properties from underlying a_list and b_list.
 
-@ref PropertyEditor at the same time shows only one editor for selected
-property in the list. Each @ref PropertyType has corresponding @ref PropertyWidget
+@ref PropertyLib::PropertyEditor at the same time shows only one editor for selected
+property in the list. Each @ref PropertyLib::PropertyType has corresponding @ref PropertyLib::PropertyWidget
 which displays property editor or draws a property in the list if it is not edited.
-More exactly, if @ref PropertyEditor needs to display editor widget, it displays
-@ref PropertyWidget, else it calls @ref PropertyWidget::drawViewer function.
-Custom property widgets should be subclasses of @ref PropertyWidget.
+More exactly, if @ref PropertyLib::PropertyEditor needs to display editor widget, it displays
+@ref PropertyLib::PropertyWidget, else it calls @ref PropertyLib::PropertyWidget::drawViewer function.
+Custom property widgets should be subclasses of @ref PropertyLib::PropertyWidget.
 
 To create property widgets at runtime, a factory is used. Factory class is
-called @ref PropertyMachineFactory. Static function @ref PropertyMachineFactory::getInstance
+called @ref PropertyLib::PropertyMachineFactory. Static function @ref PropertyLib::PropertyMachineFactory::getInstance
 can be used to obtain the reference to the factory instance. Factory creates and returns
 so-called @ref Machine for each registered property type (either predefined or user defined).
 
-@ref Machine contains @ref PropertyWidget and a list of "detailed" machines.
+@ref Machine contains @ref PropertyLib::PropertyWidget and a list of "detailed" machines.
 Usually only property widget is necessary for a property but there are 
 complex properties like "Font" for example. We would like to see separate editors
 for font family, size, etc. and a button to choose all of these in the dialog.
