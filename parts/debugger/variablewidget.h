@@ -150,7 +150,7 @@ public:
     virtual QString key( int column, bool ascending ) const;
 
     // jw
-    virtual void handleDoubleClicked(const QPoint &pos, int c) {}
+    virtual void handleDoubleClicked(const QPoint &, int ) {}
 
 protected:
 

@@ -260,11 +260,6 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
       docker_(0),
       dockWindow_(new KSystemTray(parent))
 {
-    setFrameStyle( QFrame::Box | QFrame::Raised );
-    setFocusPolicy(NoFocus);
-    setLineWidth(1);
-    setMidLineWidth(2);
-
     winModule_  = new KWinModule(this);
     docker_ = new DbgDocker(parent, this, BarIcon("dbgnext"));
     connect(docker_, SIGNAL(clicked()), part_, SLOT(slotStepOver()));
@@ -276,8 +271,14 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     // This widget is closed when the debugger finishes i.e. they press "Stop"
 
     // Do we need NoFocus???
-    KWin::setState(winId(), NET::StaysOnTop | NET::Modal);
-    KWin::setType(winId(), NET::Override);    // So it has no decoration
+    KWin::setState(winId(), NET::StaysOnTop | NET::Modal | NET::SkipTaskbar);
+//    KWin::setType(winId(), NET::Override);    // So it has no decoration
+    KWin::setType(winId(), NET::Dock);
+
+    setFocusPolicy(NoFocus);
+    setFrameStyle( QFrame::Box | QFrame::Plain );
+    setLineWidth(4);
+    setMidLineWidth(0);
 
     QBoxLayout* topLayout     = new QVBoxLayout(this);
 
@@ -338,22 +339,22 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     nextLayout->addWidget(bNext);
     nextLayout->addWidget(bNexti);
 
-    int w = QMAX(bRun->sizeHint().width(), bFinish->sizeHint().width());
-    w = QMAX(w, bInterrupt->sizeHint().width());
-    w = QMAX(w, bView->sizeHint().width());
+//     int w = QMAX(bRun->sizeHint().width(), bFinish->sizeHint().width());
+//     w = QMAX(w, bInterrupt->sizeHint().width());
+//     w = QMAX(w, bView->sizeHint().width());
 
     // they should have the same height, so don't be too fussy
-    int h = bFinish->sizeHint().height();
+//     int h = bFinish->sizeHint().height();
+//
+//     bNext->setMinimumHeight(h);
+//     bNexti->setMinimumHeight(h);
+//     bStep->setMinimumHeight(h);
+//     bStepi->setMinimumHeight(h);
+//     bKDevFocus_->setMinimumHeight(h);
+//     bPrevFocus_->setMinimumHeight(h);
 
-    bNext->setMinimumHeight(h);
-    bNexti->setMinimumHeight(h);
-    bStep->setMinimumHeight(h);
-    bStepi->setMinimumHeight(h);
-    bKDevFocus_->setMinimumHeight(h);
-    bPrevFocus_->setMinimumHeight(h);
-
-    setMinimumSize(w+10, h*7);
-    setMaximumSize(w+10, h*7);
+//    setMinimumSize(w+10, h*7);
+//    setMaximumSize(w+10, h*7);
 
     setAppIndicator(appIsActive_);
     topLayout->activate();

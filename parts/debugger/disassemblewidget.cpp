@@ -123,15 +123,18 @@ void DisassembleWidget::slotActivate(bool activate)
     if (active_ != activate)
     {
         active_ = activate;
-        if (active_)
-            getNextDisplay();
+        if (active_ && address_)
+        {
+            if (address_ < lower_ || address_ > upper_ || !displayCurrent())
+                getNextDisplay();
+        }
     }
 }
 
 /***************************************************************************/
 
-void DisassembleWidget::slotShowStepInSource(const QString &, int,
-        const QString &currentAddress)
+void DisassembleWidget::slotShowStepInSource(   const QString &, int,
+                                                const QString &currentAddress)
 {
     kdDebug(9012) << "DisasssembleWidget::slotShowStepInSource()" << endl;
 

@@ -1,6 +1,6 @@
 /***************************************************************************
-    begin                : Tue Aug 10 1999
-    copyright            : (C) 1999 by John Birch
+    begin                : Tue May 13 2003
+    copyright            : (C) 2003 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
 
@@ -16,8 +16,9 @@
 #ifndef _BREAKPOINT_H_
 #define _BREAKPOINT_H_
 
+#include <klocale.h>
+
 #include <qstring.h>
-#include <qlistbox.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -25,6 +26,15 @@
 
 namespace GDBDebugger
 {
+
+enum BP_TYPES
+{
+    BP_TYPE_Invalid,
+    BP_TYPE_FilePos,
+    BP_TYPE_Watchpoint,
+    BP_TYPE_Address,
+    BP_TYPE_Function
+};
 
 class Breakpoint
 {
@@ -35,54 +45,68 @@ public:
     virtual QString dbgSetCommand() const                 = 0;
     virtual QString dbgRemoveCommand() const;
     virtual bool match(const Breakpoint* brkpt) const     = 0;
-    virtual bool modifyDialog();
     virtual void reset();
 
-    QString statusString() const;
-
     void setActive(int active, int id);
-    bool isActive(int active) const  {  return (  (active_ == active) ||
-                                                  (s_pending_ && !s_actionClear_) ); }
+    bool isActive(int active) const                 { return (active_ == active); }
+    void setEnabled(bool enabled)                   { s_changedEnable_ = (s_enabled_ != enabled);
+                                                      s_enabled_ = enabled; }
+    bool isEnabled() const                          { return s_enabled_; }
+    void setTemporary(bool temporary)               { s_temporary_ = temporary; }
+    bool isTemporary() const                        { return s_temporary_; }
+    void setHardwareBP(bool hardwareBP)             { s_hardwareBP_ = hardwareBP; }
+    bool isHardwareBP() const                       { return s_hardwareBP_; }
+    void setIgnoreCount(int ignoreCount)            { s_changedIgnoreCount_ =
+                                                          (ignoreCount_ != ignoreCount);
+                                                      ignoreCount_ = ignoreCount; }
+    int ignoreCount() const                         { return ignoreCount_; }
+    void setAddress(const QString &address)         { address_ = address; }
+    QString address() const                         { return address_; }
+    void setConditional(const QString &condition)   { s_changedCondition_ =
+                                                          (condition_ != condition);
+                                                      condition_ = condition; }
+    QString conditional() const                     { return condition_; }
 
-    void setEnabled(bool enabled)                 { s_changedEnable_ = (s_enabled_ != enabled);             s_enabled_ = enabled; }
-    bool isEnabled() const                        { return s_enabled_; }
-    void setTemporary(bool temporary)             { s_temporary_ = temporary; }
-    bool isTemporary() const                      { return s_temporary_; }
-    void setHardwareBP(bool hardwareBP)           { s_hardwareBP_ = hardwareBP; }
-    bool isHardwareBP() const                     { return s_hardwareBP_; }
-    void setIgnoreCount(int ignoreCount)          { s_changedIgnoreCount_ = (ignoreCount_ != ignoreCount);  ignoreCount_ = ignoreCount; }
-    int ignoreCount() const                       { return ignoreCount_; }
-    void setAddress(const QString &address)       { address_ = address; }
-    QString address() const                       { return address_; }
-    void setConditional(const QString &condition) { s_changedCondition_ = (condition_ != condition);        condition_ = condition; }
-    QString conditional() const                   { return condition_; }
+    bool changedCondition() const                   { return s_changedCondition_; }
+    bool changedIgnoreCount() const                 { return s_changedIgnoreCount_; }
+    bool changedEnable() const                      { return s_changedEnable_; }
 
-    bool changedCondition() const                 { return s_changedCondition_; }
-    bool changedIgnoreCount() const               { return s_changedIgnoreCount_; }
-    bool changedEnable() const                    { return s_changedEnable_; }
+    void setPending(bool pending)                   { s_pending_ = pending; }
+    bool isPending() const                          { return s_pending_; }
+    void setActionAdd(bool actionAdd)               { s_actionDie_ = false;
+                                                      s_actionAdd_ = actionAdd; }
+    bool isActionAdd() const                        { return s_actionAdd_; }
+    void setActionClear(bool actionClear)           { s_actionClear_ = actionClear; }
+    bool isActionClear() const                      { return s_actionClear_; }
+    void setActionModify(bool actionModify)         { s_actionDie_ = false;
+                                                      s_actionModify_ = actionModify; }
+    bool isActionModify() const                     { return s_actionModify_; }
+    void setDbgProcessing(bool dbgProcessing)       { s_dbgProcessing_ = dbgProcessing; }
+    bool isDbgProcessing() const                    { return s_dbgProcessing_; }
+    void setActionDie()                             { s_actionDie_ = true;
+                                                      s_actionClear_ = false; }
+    bool isActionDie() const                        { return s_actionDie_; }
 
-    void setPending(bool pending)                 { s_pending_ = pending; }
-    bool isPending() const                        { return s_pending_; }
-    void setActionAdd(bool actionAdd)             { s_actionAdd_ = actionAdd; }
-    bool isActionAdd() const                      { return s_actionAdd_; }
-    void setActionClear(bool actionClear)         { s_actionClear_ = actionClear; }
-    bool isActionClear() const                    { return s_actionClear_; }
-    void setActionModify(bool actionModify)       { s_actionModify_ = actionModify; }
-    bool isActionModify() const                   { return s_actionModify_; }
-    void setDbgProcessing(bool dbgProcessing)     { s_dbgProcessing_ = dbgProcessing; }
-    bool isDbgProcessing() const                  { return s_dbgProcessing_; }
-    void setActionDie()                           { s_actionDie_ = true; s_actionClear_ = false; }
-    bool isActionDie() const                      { return s_actionDie_; }
+    int key() const                                 { return key_; }
+    void setDbgId(int dbgId)                        { dbgId_ = dbgId; }
+    int  dbgId() const                              { return dbgId_; }
+    void setHits(int hits)                          { hits_ = hits; }
+    int  hits() const                               { return hits_; }
 
-    int key() const                               { return key_; }
-    void setDbgId(int dbgId)                      { dbgId_ = dbgId; }
-    int  dbgId() const                            { return dbgId_; }
-    void setHits(int hits)                        { hits_ = hits; }
-    int  hits() const                             { return hits_; }
+    virtual BP_TYPES type() const                   { return BP_TYPE_Invalid; }
+    virtual QString displayType() const             { return i18n( "Invalid" ); }
 
-    virtual bool hasSourcePosition() const;
-    virtual QString fileName() const;
-    virtual int lineNum() const;
+    virtual QString fileName() const                { return ""; }
+    virtual int lineNum() const                     { return 0; }
+    virtual QString varName() const                 { return ""; }
+    virtual QString breakAddress() const            { return ""; }
+    virtual void setFileName(const QString&)        {}
+    virtual void setVarName(const QString&)         {}
+    virtual void setBreakAddress(const QString&)    {}
+    virtual void setLineNum(int)                    {}
+    virtual QString location(bool compact=true)     { return ""; }
+    virtual void setLocation(const QString& )       {}
+    virtual bool isValid() const                    = 0;
 
 private:
     bool s_pending_             :1;
@@ -107,6 +131,7 @@ private:
     int ignoreCount_;
     QString address_;
     QString condition_;
+    QString type_;
 };
 
 /***************************************************************************/
@@ -121,9 +146,15 @@ public:
     virtual QString dbgSetCommand() const;
     virtual bool match(const Breakpoint *brkpt) const;
 
-    QString fileName() const          { return fileName_; }
-    int lineNum() const               { return lineNo_; }
-    bool hasSourcePosition() const    { return true; }
+    BP_TYPES type () const                      { return BP_TYPE_FilePos; }
+    QString displayType() const                 { return i18n( "File:line" ); }
+    void setFileName(const QString& fileName)   { fileName_ = fileName; }
+    QString fileName() const                    { return fileName_; }
+    void setLineNum(int lineNum)                { lineNo_ = lineNum; }
+    int lineNum() const                         { return lineNo_; }
+    QString location(bool compact=true);
+    void setLocation(const QString& location);
+    bool isValid() const                        { return lineNo_>0 && !fileName_.isEmpty(); }
 
 private:
     QString fileName_;
@@ -138,7 +169,6 @@ private:
 //  RegExpBreakpoint(bool temporary=false, bool enabled=true);
 //  virtual ~RegExpBreakpoint();
 //  virtual QString dbgSetCommand() const;
-//  virtual void configureDisplay();
 //};
 /***************************************************************************/
 /***************************************************************************/
@@ -161,6 +191,7 @@ private:
 //  virtual ~ExitBreakpoint();
 //  virtual QString dbgSetCommand() const;
 //  bool match(const Breakpoint* brkpt) const;
+//  virtual void configureDisplay();
 //};
 /***************************************************************************/
 /***************************************************************************/
@@ -173,14 +204,65 @@ public:
     virtual QString dbgSetCommand() const;
     bool match(const Breakpoint *brkpt) const;
 
+    BP_TYPES type () const                      { return BP_TYPE_Watchpoint; }
+    QString displayType() const                 { return i18n("Watchpoint"); }
+    void setVarName(const QString& varName)     { varName_ = varName; }
+    QString varName() const                     { return varName_; }
+    QString location(bool)                      { return varName_; }
+    void setLocation(const QString& location)   { varName_ = location; }
+    bool isValid() const                        { return !varName_.isEmpty(); }
+
 private:
     QString varName_;
 };
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+class AddressBreakpoint : public Breakpoint
+{
+public:
+    AddressBreakpoint(const QString &breakAddress, bool temporary=false, bool enabled=true);
+    virtual ~AddressBreakpoint();
+    virtual QString dbgSetCommand() const;
+    bool match(const Breakpoint *brkpt) const;
+
+    BP_TYPES type () const                              { return BP_TYPE_Address; }
+    QString displayType() const                         { return i18n("Address"); }
+    void setBreakAddress(const QString& breakAddress)   { m_breakAddress = breakAddress; }
+    QString breakAddress() const                        { return m_breakAddress; }
+    QString location(bool)                              { return m_breakAddress; };
+    void setLocation(const QString& location)           { m_breakAddress = location; }
+    bool isValid() const                                { return !m_breakAddress.isEmpty(); }
+
+private:
+    QString m_breakAddress;
+};
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+class FunctionBreakpoint : public Breakpoint
+{
+public:
+    FunctionBreakpoint(const QString &functionName, bool temporary=false, bool enabled=true);
+    virtual ~FunctionBreakpoint();
+    virtual QString dbgSetCommand() const;
+    bool match(const Breakpoint *brkpt) const;
+
+    BP_TYPES type () const                              { return BP_TYPE_Function; }
+    QString displayType() const                         { return i18n("Method()"); }
+    void setfunctionName(const QString& functionName)   { m_functionName = functionName; }
+    QString functionName() const                        { return m_functionName; }
+    QString location(bool)                              { return m_functionName; };
+    void setLocation(const QString& location)           { m_functionName = location; }
+    bool isValid() const                                { return !m_functionName.isEmpty(); }
+
+private:
+    QString m_functionName;
+};
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
 
 }
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
-    begin                : Sun Aug 8 1999
-    copyright            : (C) 1999 by John Birch
+    begin                : Tue May 13 2003
+    copyright            : (C) 2003 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
 
@@ -14,23 +14,23 @@
  ***************************************************************************/
 
 #include "breakpoint.h"
-#include "breakpointdlg.h"
 
 #include <klocale.h>
 
 #include <qfileinfo.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
+#include <qregexp.h>
 #include <qstring.h>
 
 #include <stdio.h>
 
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+
 namespace GDBDebugger
 {
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
 
 static int BPKey_ = 0;
 
@@ -40,7 +40,7 @@ static int BPKey_ = 0;
 
 Breakpoint::Breakpoint(bool temporary, bool enabled)
     : s_pending_(true),
-      s_actionAdd_(false),
+      s_actionAdd_(true),
       s_actionClear_(false),
       s_actionModify_(false),
       s_actionDie_(false),
@@ -54,9 +54,9 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
       dbgId_(-1),
       hits_(0),
       key_(BPKey_++),
-      active_(0),
+      active_(-1),
       ignoreCount_(0),
-      condition_(QString::null)
+      condition_("")
 {
 }
 
@@ -68,62 +68,12 @@ Breakpoint::~Breakpoint()
 
 /***************************************************************************/
 
-QString Breakpoint::statusString() const
-{
-    if( !s_enabled_ )
-        return i18n("Disabled");
-    if( s_pending_ ) {
-        if (s_actionAdd_)
-            return i18n("Pending Add");
-        if (s_actionClear_)
-            return i18n("Pending Clear");
-        if (s_actionModify_)
-            return i18n("Pending Modify");
-    }
-    return i18n("Active");
-}
-
-// void Breakpoint::configureDisplay()
-// {
-//     if (s_temporary_)
-//         display_ += i18n("\ttemporary");
-//
-//     if (ignoreCount_)
-//         display_ += i18n("\tignore count %1").arg(ignoreCount_);
-//
-//     if (s_hardwareBP_)
-//         display_ = i18n("hw %1").arg(display_);
-// }
-
-/***************************************************************************/
-
 QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
         return QString("delete %1").arg(dbgId_); // gdb command - not translatable
 
     return QString();
-}
-
-/***************************************************************************/
-
-bool Breakpoint::hasSourcePosition() const
-{
-    return false;
-}
-
-/***************************************************************************/
-
-QString Breakpoint::fileName() const
-{
-    return QString();
-}
-
-/***************************************************************************/
-
-int Breakpoint::lineNum() const
-{
-    return 0;
 }
 
 /***************************************************************************/
@@ -142,6 +92,7 @@ void Breakpoint::reset()
     s_dbgProcessing_      = false;
     s_hardwareBP_         = false;
     hits_                 = 0;
+    active_               = -1;
 }
 
 /***************************************************************************/
@@ -166,20 +117,6 @@ void Breakpoint::setActive(int active, int id)
         s_changedIgnoreCount_ = false;
         s_changedEnable_      = false;
     }
-}
-/***************************************************************************/
-
-bool Breakpoint::modifyDialog()
-{
-    BPDialog* modifyBPDialog = new BPDialog(this);
-    if (modifyBPDialog->exec()) {
-        setConditional(modifyBPDialog->getConditional());
-        setIgnoreCount(modifyBPDialog->getIgnoreCount());
-        setEnabled(modifyBPDialog->isEnabled());
-    }
-
-    delete modifyBPDialog;
-    return (s_changedCondition_ || s_changedIgnoreCount_ || s_changedEnable_);
 }
 
 /***************************************************************************/
@@ -238,12 +175,32 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 /***************************************************************************/
 
-// void FilePosBreakpoint::configureDisplay()
-// {
-//     display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
-//     Breakpoint::configureDisplay();
-// }
+QString FilePosBreakpoint::location(bool compact)
+{
+    if (compact)
+        return QFileInfo(fileName_).fileName()+":"+QString::number(lineNo_);
 
+    return fileName_+":"+QString::number(lineNo_);
+}
+
+/***************************************************************************/
+
+void FilePosBreakpoint::setLocation(const QString& location)
+{
+    QRegExp regExp1("(.*):(\\d+)$");
+    regExp1.setMinimal(true);
+    if ( regExp1.search(location, 0) >= 0 )
+    {
+        QString t = regExp1.cap(1);
+        QString dirPath = QFileInfo(t).dirPath();
+        if ( dirPath == "." )
+            fileName_ = QFileInfo(fileName_).dirPath()+"/"+regExp1.cap(1);
+        else
+            fileName_ = regExp1.cap(1);
+
+        lineNo_ = regExp1.cap(2).toInt();
+    }
+}
 
 /***************************************************************************/
 /***************************************************************************/
@@ -270,14 +227,6 @@ QString Watchpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-// void Watchpoint::configureDisplay()
-// {
-//    display_ = i18n("watchpoint on %1").arg(varName_);
-//    Breakpoint::configureDisplay();
-// }
-
-/***************************************************************************/
-
 bool Watchpoint::match(const Breakpoint* brkpt) const
 {
     // simple case
@@ -291,6 +240,86 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 
     // member case
     return (varName_ == check->varName_);
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+AddressBreakpoint::AddressBreakpoint(const QString& breakAddress, bool temporary, bool enabled)
+    : Breakpoint(temporary, enabled),
+      m_breakAddress(breakAddress)
+{
+}
+
+/***************************************************************************/
+
+AddressBreakpoint::~AddressBreakpoint()
+{
+}
+
+/***************************************************************************/
+
+QString AddressBreakpoint::dbgSetCommand() const
+{
+    return QString("break ")+m_breakAddress;    // gdb command - not translatable
+}
+
+/***************************************************************************/
+
+bool AddressBreakpoint::match(const Breakpoint* brkpt) const
+{
+    // simple case
+    if (this == brkpt)
+        return true;
+
+    // Type case
+    const AddressBreakpoint *check = dynamic_cast<const AddressBreakpoint*>(brkpt);
+    if (!check)
+        return false;
+
+    // member case
+    return (m_breakAddress == check->m_breakAddress);
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+FunctionBreakpoint::FunctionBreakpoint(const QString& functionName, bool temporary, bool enabled)
+    : Breakpoint(temporary, enabled),
+      m_functionName(functionName)
+{
+}
+
+/***************************************************************************/
+
+FunctionBreakpoint::~FunctionBreakpoint()
+{
+}
+
+/***************************************************************************/
+
+QString FunctionBreakpoint::dbgSetCommand() const
+{
+    return QString("break ")+m_functionName;    // gdb command - not translatable
+}
+
+/***************************************************************************/
+
+bool FunctionBreakpoint::match(const Breakpoint* brkpt) const
+{
+    // simple case
+    if (this == brkpt)
+        return true;
+
+    // Type case
+    const FunctionBreakpoint *check = dynamic_cast<const FunctionBreakpoint*>(brkpt);
+    if (!check)
+        return false;
+
+    // member case
+    return (m_functionName == check->m_functionName);
 }
 
 /***************************************************************************/
@@ -313,14 +342,6 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 //QString ExitBreakpoint::dbgSetCommand() const
 //{
 //  return "";
-//}
-//
-///***************************************************************************/
-//
-//void ExitBreakpoint::configureDisplay()
-//{
-//  *display_ = 0;
-//  Breakpoint::configureDisplay();
 //}
 //
 ///***************************************************************************/
@@ -372,14 +393,6 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 ////  return "";
 ////}
 //
-///***************************************************************************/
-//
-//void RegExpBreakpoint::configureDisplay()
-//{
-//  *display_ = 0;
-//  Breakpoint::configureDisplay();
-//}
-//
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -410,14 +423,6 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 ////{
 ////  return "";
 ////}
-//
-///***************************************************************************/
-//
-//void CatchBreakpoint::configureDisplay()
-//{
-//  *display_ = 0;
-//  Breakpoint::configureDisplay();
-//}
 //
 /***************************************************************************/
 /***************************************************************************/

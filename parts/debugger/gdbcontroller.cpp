@@ -61,7 +61,7 @@ using namespace std;
 //              dependent on this reflecting the correct state. For instance,
 //              if the app is busy but we don't think so, then we lose control
 //              of the app. The only way to get out of these situations is to
-//              delete (stop) the controller.rawData
+//              delete (stop) the controller.
 // currentFrame_
 //            - Holds the frame number where and locals/variable information will
 //              go to
@@ -147,19 +147,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_gdbPath_(),
         config_programArgs_()
 {
-    reConfig();
-
-#if defined (GDB_MONITOR)
-
-    connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
-              SLOT(slotDbgStatus(const QString&, int)));
-#endif
-#if defined (DBG_MONITOR)
-
-    connect(  this,   SIGNAL(showStepInSource(const QString&, int, const QString&)),
-              SLOT(slotStepInSource(const QString&,int)));
-#endif
-
+    configure();
     cmdList_.setAutoDelete(true);
 }
 
@@ -177,7 +165,7 @@ GDBController::~GDBController()
 
 // **************************************************************************
 
-void GDBController::reConfig()
+void GDBController::configure()
 {
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
     config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
@@ -619,7 +607,9 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
-    if (strncmp(buf, "Brea", 4) == 0)
+    if (strncmp(buf, "Brea", 4) == 0 ||
+        strncmp(buf, "Watc", 4) == 0 ||
+        strncmp(buf, "Hard", 4) == 0)
     {
         // Starts with "Brea" so assume "Breakpoint" and just get a full
         // breakpoint list. Note that the state is unchanged.
@@ -1125,7 +1115,7 @@ void GDBController::clearBreakpoint(const QCString &BPClearCmd)
 void GDBController::modifyBreakpoint( const Breakpoint& BP )
 {
     Q_ASSERT(BP.isActionModify());
-    if (BP.dbgId())
+    if (BP.dbgId()>0)
     {
         if (BP.changedCondition())
             queueCmd(new GDBCommand(QCString().sprintf("condition %d %s",
@@ -1523,9 +1513,12 @@ void GDBController::slotBPState( const Breakpoint& BP )
             clearBreakpoint(BP.dbgRemoveCommand().latin1());
             //            BP.setDbgProcessing(true);
         }
-        else if (BP.isActionModify())
+        else
         {
-            modifyBreakpoint(BP); // Note: DbgProcessing gets set in modify fn
+            if (BP.isActionModify())
+            {
+                modifyBreakpoint(BP); // Note: DbgProcessing gets set in modify fn
+            }
         }
     }
 
@@ -1951,53 +1944,6 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
     kdDebug(9012) << "Using default: " << cmd;
     queueCmd(new GDBCommand(QCString(cmd), NOTRUNCMD, INFOCMD, USERCMD));
 }
-
-// **************************************************************************
-
-// These are here for debug display. I wanted them to be removed if DBG_MONITOR
-// wasn't defined but qt's moc has problems with that.
-#if defined(DBG_MONITOR)
-void GDBController::slotStepInSource(const QString &fileName, int lineNum)
-{
-    DBG_DISPLAY((QString("(Show step in source) ")+fileName+QString(":")+
-                        QString().setNum(lineNum)).data());
-}
-
-// **************************************************************************
-
-void GDBController::slotDbgStatus(const QString &status, int state)
-{
-    QString s("(status) ");
-    if (!state)
-        s += QString("<program paused>");
-    if (state & s_dbgNotStarted)
-        s += QString("<dbg not started>");
-    if (state & s_appNotStarted)
-        s += QString("<app not started>");
-    if (state & s_appBusy)
-        s += QString("<app busy>");
-    if (state & s_waitForWrite)
-        s += QString("<wait for write>");
-    if (state & s_programExited)
-        s += QString("<program exited>");
-    if (state & s_silent)
-        s += QString("<silent>");
-    if (state & s_viewLocals)
-        s += QString("<viewing locals>");
-
-    DBG_DISPLAY((s+status).data());
-}
-#else
-
-void GDBController::slotStepInSource(const QString&, int)
-{}
-
-// **************************************************************************
-
-void GDBController::slotDbgStatus(const QString&, int)
-{}
-
-#endif
 
 }
 

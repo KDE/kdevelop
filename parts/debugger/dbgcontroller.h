@@ -72,7 +72,7 @@ protected:
     virtual char *parse(char *str)                                          = 0;
 
 public slots:
-    virtual void reConfig()                                                 = 0;
+    virtual void configure()                                                 = 0;
 
     virtual void slotStart(const QString& shell, const QString &application)= 0;
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
@@ -112,7 +112,6 @@ protected slots:
     virtual void slotDbgProcessExited(KProcess *proc)                       = 0;
 
 signals:
-    void rawData              (const QString &rawData);
     void gotoSourcePosition   (const QString &fileName, int lineNum);
     void rawGDBBreakpointList (char *buf);
     void rawGDBBreakpointSet  (char *buf, int key);

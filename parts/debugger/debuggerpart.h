@@ -29,7 +29,7 @@ class ProcessLineMaker;
 namespace GDBDebugger
 {
 
-class BreakpointWidget;
+class GDBBreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
@@ -82,7 +82,7 @@ private:
     void setupController();
 
     QGuardedPtr<VariableWidget> variableWidget;
-    QGuardedPtr<BreakpointWidget> breakpointWidget;
+    QGuardedPtr<GDBBreakpointWidget> gdbBreakpointWidget;
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     QGuardedPtr<GDBOutputWidget> gdbOutputWidget;

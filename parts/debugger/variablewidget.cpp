@@ -31,12 +31,6 @@
 
 #include <qpoint.h>
 
-#if defined(DBG_MONITOR)
-  #define DBG_DISPLAY(X)          {emit rawData(QString(X));}
-#else
-  #define DBG_DISPLAY(X)          {;}
-#endif
-
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -624,7 +618,7 @@ void VarItem::updateType(char *buf)
 
 // **************************************************************************
 
-void VarItem::handleDoubleClicked(const QPoint &pos, int c)
+void VarItem::handleDoubleClicked(const QPoint &/*pos*/, int c)
 {
     kdDebug(9012) << " ### VarItem::handleDoubleClicked 1" << endl;
     if (c == VarTypeCol || c == ValueCol)

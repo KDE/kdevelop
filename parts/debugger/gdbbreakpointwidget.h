@@ -1,6 +1,6 @@
 /***************************************************************************
-    begin                : Sun Aug 8 1999
-    copyright            : (C) 1999 by John Birch
+    begin                : Tue May 13 2003
+    copyright            : (C) 2003 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
 
@@ -13,50 +13,45 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _BREAKPOINTWIDGET_H_
-#define _BREAKPOINTWIDGET_H_
+#ifndef _GDBBreakpointWidget_H_
+#define _GDBBreakpointWidget_H_
 
-#include <klistview.h>
+#include <qhbox.h>
+
+class QDomElement;
+class QToolButton;
+class QTable;
+
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
 
 namespace GDBDebugger
 {
-
 class Breakpoint;
-class BreakpointItem;
+class BreakpointTableRow;
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-//TODO derive a GDB specific manager to handle the GDB specific
-// data in the parsers!!
-
-class BreakpointWidget : public KListView
+class GDBBreakpointWidget : public QHBox
 {
     Q_OBJECT
 
 public:
-    BreakpointWidget( QWidget* parent=0, const char* name=0 );
-    virtual ~BreakpointWidget();
+    GDBBreakpointWidget( QWidget* parent=0, const char* name=0 );
+    virtual ~GDBBreakpointWidget();
 
-    const QPtrList<Breakpoint> breakpoints();
+    void reset();
 
-    enum Column {
-        Status     = 0,
-        File       = 1,
-        Line       = 2,
-        Hits       = 3,
-        Condition  = 4
-    };
+    void savePartialProjectSession(QDomElement* el);
+    void restorePartialProjectSession(const QDomElement* el);
+
 
 public slots:
-    void reset();
-    void refreshBP(const QString &filename);
-
     // Connected to from the editor widget:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
-    void slotEditBreakpoint(const QString &fileName, int lineNum);
     void slotToggleBreakpointEnabled(const QString &fileName, int lineNum);
+
+    // Connected to from the variable widget:
+    void slotToggleWatchpoint(const QString &varName);
 
     // Connected to from the dbgcontroller:
     void slotSetPendingBPs();
@@ -64,35 +59,46 @@ public slots:
     void slotParseGDBBrkptList(char *str);
     void slotParseGDBBreakpointSet(char *str, int BPKey);
 
+    void slotRefreshBP(const QString &filename);
+
 private slots:
-    void slotExecuted(QListViewItem *item);
-    void slotContextMenu(QListViewItem *item);
-    void slotItemRenamed(QListViewItem *item, int col, const QString& text);
+    void slotRemoveBreakpoint();
+    void slotRemoveAllBreakpoints();
+    void slotEditBreakpoint(const QString &fileName, int lineNum);
+    void slotEditBreakpoint();
+    void slotAddBlankBreakpoint(int idx);
+    void slotRowSelected(int row, int col, int button, const QPoint & mousePos);
+    void slotEditRow(int row, int col, const QPoint & mousePos);
+    void slotNewValue(int row, int col);
 
 signals:
-    void publishBPState( const Breakpoint& );
-    void refreshBPState( const Breakpoint& );
+    void publishBPState(const Breakpoint& brkpt);
+    void refreshBPState(const Breakpoint& brkpt);
     void gotoSourcePosition(const QString &fileName, int lineNum);
     void clearAllBreakpoints();
 
 private:
-    friend class BreakpointItem;
-
-    BreakpointItem* find(const Breakpoint& BP) const;
-    BreakpointItem* findId(int id) const;
-    BreakpointItem* findKey(int BPKey) const;
+    BreakpointTableRow* find(Breakpoint *bp);
+    BreakpointTableRow* findId(int id);
+    BreakpointTableRow* findKey(int BPKey);
 
     void setActive();
-    void removeAllBreakpoints();
+    BreakpointTableRow* addBreakpoint(Breakpoint *bp);
+    void removeBreakpoint(BreakpointTableRow* btr);
 
 private:
-    int activeFlag_;
+    QTable*         m_table;
+
+    QToolButton*    m_add;
+    QToolButton*    m_delete;
+    QToolButton*    m_edit;
+    QToolButton*    m_removeAll;
 };
 
-}
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
+}
 
 #endif

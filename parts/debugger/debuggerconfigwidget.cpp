@@ -30,11 +30,12 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
 
-    programArgs_edit->setText(             DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
-    gdbPath_edit->setText(                 DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
+    programArgs_edit->setText(  DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
+    gdbPath_edit->setText(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
 
-    QString shell =                        DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
-    if( shell == QString("no_value") ) {
+    QString shell =             DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
+    if( shell == QString("no_value") )
+    {
         QFileInfo info( part->project()->buildDirectory() + "/libtool" );
         if( info.exists() ) {
             shell = "libtool";
@@ -45,7 +46,7 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
                 shell = "../libtool";
             } else {
                 // Give up.
-                shell = QString::null;	   
+                shell = QString::null;
             }
         }
     }
