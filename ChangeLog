@@ -1,3 +1,16 @@
+2004-04-22 Alexander Dymo <cloudtemple@mksat.net>
+    * Added brand new "Look in documentation" function that puts the term under the cursor into the
+      documentation index tab and looks up for this term in the index.
+    * Added "Search in Documentation" and "Look in Documentation" menu items into the "Help" menu 
+      with shortcuts <Ctrl+Alt+S> and <Ctrl+Alt+I> respectively.
+    * Implemented "Goto manpage" and added "Goto infopage" function in the "Help" and editor context menus.
+    * Improved "Add bookmark" function - it now recognizes embedded html part and sets the bookmark title 
+      to the title of an opened document.
+    * Use also a default KDE shortcut for popup menu to open editor context menu.
+
+2004-04-21 Alexander Dymo <cloudtemple@mksat.net>
+    * Added Gtk-- application template by Andrew Patterson.
+
 2004-04-20 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Wired up katepart's editor context menu - we now finally have copy/paste in the context menu.
     * Added a keyboard shortcut to open the editor context menu. (CTRL+Return)
