@@ -35,7 +35,7 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedStruct::ParsedStruct()
+ParsedStruct::ParsedStruct() : ParsedContainer()
 {
     setItemType( PIT_STRUCT );
 }
