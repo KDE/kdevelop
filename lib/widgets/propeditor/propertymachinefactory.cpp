@@ -128,7 +128,7 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             spValues[i18n("Maximum")] = QSizePolicy::Maximum;
             spValues[i18n("Preferred")] = QSizePolicy::Preferred;
             spValues[i18n("Expanding")] = QSizePolicy::Expanding;
-            spValues[i18n("Minumum Expanding")] = QSizePolicy::MinimumExpanding;
+            spValues[i18n("Minimum Expanding")] = QSizePolicy::MinimumExpanding;
             spValues[i18n("Ignored")] = QSizePolicy::Ignored;
         
             Machine *mach = new Machine(new PSizePolicyEdit(property, spValues));

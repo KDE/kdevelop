@@ -79,7 +79,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Directory where &amp;gdb resides (eg /usr/bin/):</string>
+                <string>Directory where &amp;gdb resides (e.g. /usr/bin/):</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>gdbPath_edit</cstring>
