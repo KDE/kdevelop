@@ -197,7 +197,7 @@ path_to_bin_program=./src
 [General]
 AMChanged=false
 author=KDevelop Authors
-configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux\s
+configure_args=
 dir_where_make_will_be_called=./
 email=kdevelop-devel@kdevelop.org
 kdevprj_version=1.3

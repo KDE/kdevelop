@@ -44,7 +44,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                         "open the corresponding source file and set the "
                         "cursor to the line with the match." ));
 
-    mainWindow()->embedOutputView( m_widget, "Replace", "project wide string replacement" );
+    mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("project wide string replacement") );
 
     KAction * action = new KAction(i18n("Search-Select-Replace..."), "replace project",
                                    CTRL+ALT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
