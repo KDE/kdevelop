@@ -15,7 +15,7 @@ install( "${src}/template-kscreensaver/kscreensaver.kdevelop",    "${dest}/${APP
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
 mkdir( "${dest}/po", 0777 );
-install( "${src}/template-common/app.lsm",             "${dest}/src/${APPNAMELC}.lsm" );
+install( "${src}/template-common/kde-app.lsm", "${dest}/src/${APPNAMELC}.lsm" );
 install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.am",     "${dest}/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.cvs",    "${dest}/Makefile.cvs" );
