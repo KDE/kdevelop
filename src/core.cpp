@@ -344,7 +344,7 @@ KEditor::Editor *Core::editor()
   // find the preferred editor
   KConfig *config = kapp->config();
   config->setGroup("Editor");
-  QString editor = config->readEntry("EmbeddedEditor");
+  QString editor = config->readEntry("EmbeddedEditor", "KWriteEditorPart");
   
   // ask the trader about the editors, using the preferred one if available
   KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString("Name == '%1'").arg(editor));
