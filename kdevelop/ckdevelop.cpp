@@ -2818,9 +2818,16 @@ void CKDevelop::disableCommand(int id_)
 
 void CKDevelop::slotNewStatus()
 {
+//  kdDebug() << "*** slotNewStatus()" << endl;
   int config = 0;
-  if (m_docViewManager->currentEditView())
+  if (m_docViewManager->currentEditView()) {
     config = m_docViewManager->currentEditView()->config();
+    if (m_docViewManager->currentEditView()->isModified()) {
+      enableCommand(ID_FILE_SAVE);
+    } else {
+      disableCommand(ID_FILE_SAVE);
+    }
+  }
   statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
 //?????  setMainCaption();
