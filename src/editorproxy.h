@@ -9,7 +9,7 @@ class QPopupMenu;
 
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
 #include <ktexteditor/markinterfaceextension.h>
 #endif
 

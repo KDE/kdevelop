@@ -101,7 +101,7 @@ void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
 
 void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction action )
 {
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
   if( !sender()->inherits("KTextEditor::Document") )
     return;
   KTextEditor::Document* doc = (KTextEditor::Document*) sender();
@@ -125,7 +125,7 @@ void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction 
 
 void Debugger::partAdded( KParts::Part* part )
 {
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
   MarkInterfaceExtension *iface = dynamic_cast<MarkInterfaceExtension*>(part);
   if( !iface )
     return;
