@@ -40,8 +40,6 @@ private slots:
 
 private:
 
-  void addSeparator();
-
   KTabZoomBarPrivate *d;
 
 };

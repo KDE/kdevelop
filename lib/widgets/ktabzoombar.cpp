@@ -23,7 +23,6 @@ public:
   QBoxLayout                 *m_layout;
   QSignalMapper              *m_mapper;
   QIntDict<KTabZoomButton>   m_buttons;
-  QIntDict<QFrame>           m_frames;
   int                        m_count;
 
 };
@@ -41,7 +40,6 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
   {
     setFixedWidth(fontMetrics().height() + 2);
     d->m_layout = new QVBoxLayout(this);
-    addSeparator();
     d->m_layout = new QVBoxLayout(d->m_layout);
     d->m_layout->setDirection(QBoxLayout::BottomToTop);
   }
@@ -49,7 +47,6 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
   {
     setFixedHeight(fontMetrics().height() + 2);
     d->m_layout = new QHBoxLayout(this);
-    addSeparator();
     d->m_layout = new QHBoxLayout(d->m_layout);
     d->m_layout->setDirection(QBoxLayout::RightToLeft);
   }
@@ -59,12 +56,6 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
 
   d->m_mapper = new QSignalMapper(this);
   connect(d->m_mapper, SIGNAL(mapped(int)), this, SLOT(toggled(int)));
-
-  // TODO: Currently, it is a hack how the separators between
-  // the buttons get deleted when a button gets deleted. Clean UP!
-  d->m_count = 0;
-  addSeparator();
-  d->m_count = 1;
 }
 
 
@@ -76,8 +67,6 @@ KTabZoomBar::~KTabZoomBar()
 
 int KTabZoomBar::addTab(QTab *tab)
 {
-  addSeparator();
-
   KTabZoomButton *btn = new KTabZoomButton(tab->text(), this, d->m_tabPosition);
   d->m_layout->addWidget(btn);
   btn->show();
@@ -103,28 +92,6 @@ void KTabZoomBar::removeTab(int index)
 
   delete button;
   d->m_buttons.remove(index);
-
-  QFrame *f = d->m_frames[index];
-  if (!f)
-    return;
-
-  delete f;
-  d->m_frames.remove(index);
-}
-
-
-void KTabZoomBar::addSeparator()
-{
-  QFrame *f = new QFrame(this);
-  f->setFrameShadow(QFrame::Sunken);
-  if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
-    f->setFrameShape(QFrame::HLine);
-  else
-    f->setFrameShape(QFrame::VLine);
-  f->show();
-  d->m_layout->addWidget(f);
-
-  d->m_frames.insert(d->m_count, f);
 }
 
 
