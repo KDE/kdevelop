@@ -31,7 +31,6 @@ MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QStr
 MakeActionFilter::MakeActionFilter( OutputFilter& next )
 	: OutputFilter( next )
 {
-//#define DEBUG
 
 #ifdef DEBUG
 	test();
@@ -54,7 +53,7 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("linking"), "g++", "g\\+\\+\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("linking"), "gcc", "g\\c\\c\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
-		ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
+		ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
 
@@ -91,7 +90,7 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 
 	while ( !format->action.isNull() )
 	{
-		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
+//		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
 		QRegExp& regExp = format->expression;
 		if ( regExp.search( line ) != -1 )
 		{
@@ -209,6 +208,12 @@ void MakeActionFilter::test()
 	<< TestItem(
 		"/usr/local/kde/bin/dcopidl2cpp --c++-suffix cpp --no-signals --no-stub KDevAppFrontendIface.kidl",
 		"compiling", "dcopidl2cpp", "KDevAppFrontendIface.kidl" )
+	<< TestItem( //install 
+		"/usr/bin/install -c -p -m 644 /home/andris/development/quanta/quanta/kommander/editor/kmdr-editor.desktop "
+		"/opt/kde3/share/applnk/Editors/kmdr-editor.desktop", "installing", "", "/opt/kde3/share/applnk/Editors/kmdr-editor.desktop")
+	<< TestItem( //libtool install 
+		"/bin/sh ../../libtool --silent --mode=install /usr/bin/install -c -p libkommanderwidgets.la "
+		"/opt/kde3/lib/libkommanderwidgets.la", "installing", "", "/opt/kde3/lib/libkommanderwidgets.la")
 	;
 
 	QValueList<TestItem>::const_iterator it = testItems.begin();
@@ -238,7 +243,7 @@ void MakeActionFilter::test()
 			                << (*it).file << ", got " << actionItem->m_file << endl;
 			kdError( 9004 ) << (*it).line << endl;
 		} else
-		kdDebug( 9004 ) << "Test passed, " << actionItem->m_file << " (" << actionItem->m_tool << ") found." << endl;
+		kdDebug( 9004 ) << "Test passed, " << actionItem->m_file << " (" << actionItem->m_action << ": " << actionItem->m_tool << ") found." << endl;
 		if ( actionItem != NULL )
 			delete actionItem;
 	}
