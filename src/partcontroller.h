@@ -61,6 +61,7 @@ private slots:
 
   void slotPartAdded(KParts::Part *part);
   void slotPartRemoved(KParts::Part *part);
+  void slotActivePartChanged(KParts::Part *part);
 
   void slotBufferSelected();
   void slotSaveAllFiles();

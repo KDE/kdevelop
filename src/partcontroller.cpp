@@ -68,6 +68,7 @@ PartController::PartController(QWidget *parent)
 {
   connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
+  connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
 
   setupActions();
 }
@@ -269,7 +270,8 @@ void PartController::updateBufferMenu()
   {
     QString name = it.current()->url().url();
 
-    KAction *action = new KAction(name, 0, 0, name.latin1());
+    KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
+    action->setChecked(it.current()->part() == activePart());
     connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
     bufferActions.append(action);
   }
@@ -285,8 +287,10 @@ void PartController::slotBufferSelected()
     if (it.current()->isEqual(KURL(sender()->name())))
     {
       activatePart(it.current()->part());
-      return;
+      break;
     }
+
+  updateBufferMenu();
 }
 
 
@@ -343,6 +347,12 @@ void PartController::slotPartAdded(KParts::Part *part)
 {
   updateBufferMenu();
   updateMenuItems();
+}
+
+
+void PartController::slotActivePartChanged(KParts::Part *)
+{
+  updateBufferMenu();
 }
 
 
