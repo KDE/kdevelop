@@ -44,7 +44,16 @@
                         <number>0</number>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+
+                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>layout2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                <widget class="QRadioButton">
                     <property name="name">
                         <cstring>buildDirectory_radio</cstring>
                     </property>
@@ -58,7 +67,7 @@
                         <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="2" rowspan="1" colspan="2">
+                <widget class="KSqueezedTextLabel">
                     <property name="name">
                         <cstring>buildDirectory_label</cstring>
                     </property>
@@ -66,6 +75,9 @@
                         <cstring>buildDirectory_radio</cstring>
                     </property>
                 </widget>
+                    </hbox>
+                </widget>
+
                 <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
                         <cstring>customDirectory_radio</cstring>
@@ -253,6 +265,7 @@
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in declaration">ksqueezedtextlabel.h</include>
 </includes>
 <slots>
     <slot>directoryRadioChanged()</slot>
