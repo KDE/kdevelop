@@ -29,6 +29,7 @@
 #include "core.h"
 #include "editorproxy.h"
 #include "documentationpart.h"
+#include "ksavealldialog.h"
 
 #include "partcontroller.h"
 
@@ -396,19 +397,22 @@ void PartController::slotSaveAllFiles()
 }
 
 
+void PartController::saveFile(KParts::Part *part)
+{
+  if ( part && part->inherits("KParts::ReadWritePart") ) {
+    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
+    if( rw_part->isModified() ){
+      rw_part->save();
+      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
+    }
+  }
+}
+
 void PartController::saveAllFiles()
 {
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
-    if (it.current()->inherits("KParts::ReadWritePart"))
-    {
-      KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
-      if( rw_part->isModified() ){
-          rw_part->save();
-          TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
-      }
-
-    }
+    saveFile( it.current() );
 }
 
 
@@ -417,16 +421,22 @@ void PartController::slotRevertAllFiles()
   revertAllFiles();
 }
 
+void PartController::revertFile(KParts::Part *part)
+{
+  if ( !part )
+    return;
+
+  if (part->inherits("KParts::ReadWritePart")) {
+      KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
+      rw_part->openURL(rw_part->url());
+    }
+}
 
 void PartController::revertAllFiles()
 {
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
-    if (it.current()->inherits("KParts::ReadWritePart"))
-    {
-      KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
-      rw_part->openURL(rw_part->url());
-    }
+    revertFile( it.current() );
 }
 
 
@@ -436,8 +446,34 @@ void PartController::slotCloseWindow()
 }
 
 
+QStringList PartController::getModifiedDocuments( KParts::Part* excludeMe )
+{
+  QStringList modFiles;
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it) {
+    if (it.current()->inherits("KParts::ReadWritePart")) {
+      KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
+      if ( rw_part->isModified() && rw_part != excludeMe )
+        modFiles << rw_part->url().url();
+    }
+  }
+  return modFiles;
+}
+
 void PartController::slotCloseAllWindows()
 {
+  QStringList modFiles = getModifiedDocuments();
+  if ( modFiles.count() > 1 ) {
+    KSaveAllDialog* sad = new KSaveAllDialog( modFiles, TopLevel::getInstance()->main() );
+    sad->exec();
+    if ( sad->result() == KSaveAllDialog::Cancel )
+      return;
+    else if ( sad->result() == KSaveAllDialog::Revert )
+      revertAllFiles();
+    else if ( sad->result() == KSaveAllDialog::SaveAll )
+      saveAllFiles();
+  }
+
   while (parts()->count() > 0)
     closePart(parts()->getFirst());
 }
@@ -447,6 +483,18 @@ void PartController::slotCloseOtherWindows()
 {
   if (!activePart())
     return;
+
+  QStringList modFiles = getModifiedDocuments( activePart() );
+  if ( modFiles.count() > 1 ) {
+    KSaveAllDialog* sad = new KSaveAllDialog( modFiles, TopLevel::getInstance()->main() );
+    sad->exec();
+    if ( sad->result() == KSaveAllDialog::Cancel )
+      return;
+    else if ( sad->result() == KSaveAllDialog::Revert )
+      revertAllFiles();
+    else if ( sad->result() == KSaveAllDialog::SaveAll )
+      saveAllFiles();
+  }  
 
   while (parts()->count() > 1)
   {
@@ -489,12 +537,38 @@ void PartController::slotOpenRecent( const KURL& url )
 bool PartController::closeDocuments(const QStringList &documents)
 {
   QStringList::ConstIterator it;
+  KSaveAllDialog::SaveAllResult result = KSaveAllDialog::Cancel;
+
+  QStringList modFiles;
+  for (it=documents.begin(); it != documents.end(); ++it) {
+    KParts::Part *part = partForURL(KURL(*it));
+    if ( part && part->inherits("KParts::ReadWritePart") && ((KParts::ReadWritePart*)part)->isModified() )
+      modFiles << (*it);
+  }
+
+  if ( modFiles.count() > 1 ) {
+    KSaveAllDialog* sad = new KSaveAllDialog( modFiles, TopLevel::getInstance()->main() );
+    sad->exec();
+    if ( sad->result() == KSaveAllDialog::Cancel )
+      return false;
+    else if ( sad->result() == KSaveAllDialog::Revert )
+      result = KSaveAllDialog::Revert;
+    else if ( sad->result() == KSaveAllDialog::SaveAll )
+      result = KSaveAllDialog::SaveAll;
+  }
+
   for (it=documents.begin(); it != documents.end(); ++it)
   {
     KParts::Part *part = partForURL(KURL(*it));
 
     if (!part)
       continue;
+
+    if ( result == KSaveAllDialog::SaveAll ) {
+      saveFile( part );
+    } else if ( result == KSaveAllDialog::Revert ) {
+      revertFile( part );
+    }
 
     if(!closePart(part))
       return false;

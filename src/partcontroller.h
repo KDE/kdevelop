@@ -98,6 +98,11 @@ private:
 
   void editText(const KURL &url, int num);
 
+  // returns a list of modified documents
+  QStringList getModifiedDocuments( KParts::Part* excludeMe = 0 );
+  void revertFile(KParts::Part *part);
+  void saveFile(KParts::Part *part);
+
   static PartController *s_instance;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
