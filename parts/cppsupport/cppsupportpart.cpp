@@ -123,7 +123,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     QFont f = m_structureView->font();
     f.setPointSize( 8 );
     m_structureView->setFont( f );
-    m_structureView->setSorting( -1 );
+    m_structureView->setSorting( 0 );
     m_structureView->addColumn( "" );
     m_structureView->header()->hide();
     mainWindow()->embedSelectViewRight( m_structureView, i18n("File Structure"), i18n("Show the structure for the current source unit") );
@@ -226,7 +226,7 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
-    if( ev->type() == Event_FoundProblems && m_problemReporter ){
+    if( ev->type() == int(Event_FoundProblems) && m_problemReporter ){
 	m_backgroundParser->lock();
 	FoundProblemsEvent* event = (FoundProblemsEvent*) ev;
 	QString fileName = event->fileName();
@@ -249,7 +249,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	}
 
 	m_backgroundParser->unlock();
-    } else if( ev->type() == Event_FileParsed ){
+    } else if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
 	emit fileParsed( fileName );

@@ -17,7 +17,7 @@
 #include <qevent.h>
 #include <qvaluelist.h>
 
-enum
+enum 
 {
     Event_FoundProblems = QEvent::User + 1000,
     Event_FileParsed
