@@ -800,7 +800,6 @@ void CppSupportPart::initialParse( )
     }
 
     parseProject( );
-    emit updatedSourceInfo();
     m_valid = true;
     return;
 }
