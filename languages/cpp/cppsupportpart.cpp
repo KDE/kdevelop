@@ -833,6 +833,7 @@ uint toTime_t(QDateTime t)
 bool
 CppSupportPart::parseProject( bool force )
 {
+        kdDebug( 9007 ) << "CppSupportPart::parseProject 1" << endl;
     mainWindow()->statusBar()->message( i18n("Updating...") );
 
     kapp->setOverrideCursor( waitCursor );
@@ -866,19 +867,23 @@ CppSupportPart::parseProject( bool force )
 			}
 		}
     }
+        kdDebug( 9007 ) << "CppSupportPart::parseProject 2" << endl;
 
 	_jd->files = reorder( modifiedFileList() );
+        kdDebug( 9007 ) << "CppSupportPart::parseProject 3" << endl;
 
     QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
     bar->setCenterIndicator( true );
     mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
+        kdDebug( 9007 ) << "CppSupportPart::parseProject 4" << endl;
 	
 	_jd->progressBar = bar;
 	_jd->dir.setPath( m_projectDirectory );
 	_jd->it = _jd->files.begin();
 
+        kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT(slotParseFiles()) );
 	
 	return true;
