@@ -60,7 +60,10 @@ void KTipofDay::slotOK()
 
 void KTipofDay::slotNext()
 {
-  QString file=locate("html", "default/kdevelop/tip.database");
+	
+  QString file=locate("html", KGlobal::locale()->language()+"/kdevelop/tip.database");
+  if(!QFileInfo(file).exists())
+  	file=locate("html", "default/kdevelop/tip.database");
 
   if( file.isEmpty() ){
     tip_label->setText(i18n("Tipdatabase not found ! Please check your installation."));
