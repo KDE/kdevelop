@@ -674,24 +674,28 @@ void CKDevelop::slotViewTTreeView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
-    tree_view_pos=top_panner->sizes()[0];
+/*  tree_view_pos=top_panner->sizes()[0];
     QValueList<int> sizes;
     sizes << 0;
     top_panner->setSizes(sizes);
+*/
+    t_tab_view->hide();
   }
   else{
-    QValueList<int> sizes;
+    t_tab_view->show();
+/*    QValueList<int> sizes;
     sizes << tree_view_pos;
     top_panner->setSizes(sizes);
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+*/    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
   }
-  QRect rMainGeom= top_panner->geometry();
+/*  QRect rMainGeom= top_panner->geometry();
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
   top_panner->resize(rMainGeom.width(),rMainGeom.height());
-}
+
+*/}
 
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -699,23 +703,27 @@ void CKDevelop::slotViewTOutputView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->sizes()[0];
+/*    output_view_pos=view->sizes()[0];
     QValueList<int> sizes;
     sizes << 100;
     view->setSizes(sizes);
+*/
+    o_tab_view->hide();
   }
   else{
-    QValueList<int> sizes;
+/*    QValueList<int> sizes;
     sizes << output_view_pos;
     view->setSizes(sizes);
+*/    o_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
-  QRect rMainGeom= view->geometry();
+/*  QRect rMainGeom= view->geometry();
   view->resize(rMainGeom.width()+1,rMainGeom.height());
   view->resize(rMainGeom.width(),rMainGeom.height());
+*/
 }
 
 
