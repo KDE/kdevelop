@@ -226,7 +226,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Source Options:</string>
+                                    <string>Source Options</string>
                                 </property>
                                 <vbox>
                                     <property stdset="1">

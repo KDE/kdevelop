@@ -116,7 +116,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
-    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code generation"), this);
+    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code Generation"), this);
     if (type != GccOptionsPlugin::GPP) {
     new FlagCheckBox(codegen_group, controller,
                      "-fexceptions",        i18n("Enable exception handling."),
@@ -275,7 +275,7 @@ G77Tab::G77Tab(QWidget *parent, const char *name)
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
-    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code generation"), this);
+    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code Generation"), this);
     new FlagCheckBox(codegen_group, controller,
                      "-fno-automatic",    i18n("Treat local variables as if SAVE statement had been specified."));
     new FlagCheckBox(codegen_group, controller,

@@ -42,7 +42,7 @@
                     <cstring>boxAccess</cstring>
                 </property>
                 <property name="title">
-                    <string>Access:</string>
+                    <string>Access</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Access to this Method</string>
@@ -91,7 +91,7 @@
                     <cstring>boxType</cstring>
                 </property>
                 <property name="title">
-                    <string>Type:</string>
+                    <string>Type</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Select the type of function</string>
@@ -140,7 +140,7 @@
                     <cstring>boxModifiers</cstring>
                 </property>
                 <property name="title">
-                    <string>Modifiers:</string>
+                    <string>Modifiers</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Additional properties</string>
@@ -221,7 +221,7 @@
                     <cstring>GroupType</cstring>
                 </property>
                 <property name="title">
-                    <string>Type:</string>
+                    <string>Type</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Return type of the method</string>
@@ -248,7 +248,7 @@
                     <cstring>GroupName</cstring>
                 </property>
                 <property name="title">
-                    <string>Name:</string>
+                    <string>Name</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Name of the method</string>
@@ -285,7 +285,7 @@
             </rect>
         </property>
         <property name="title">
-            <string>Parameters:</string>
+            <string>Parameters</string>
         </property>
         <property name="toolTip" stdset="0">
             <string>Parameters of the method</string>
@@ -579,7 +579,7 @@
             </rect>
         </property>
         <property name="title">
-            <string>Documentation:</string>
+            <string>Documentation</string>
         </property>
         <property name="toolTip" stdset="0">
             <string></string>

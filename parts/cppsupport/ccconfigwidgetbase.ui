@@ -469,7 +469,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Show Code Hinting In:</string>
+                        <string>Show Code Hinting In</string>
                     </property>
                     <grid>
                         <property name="name">

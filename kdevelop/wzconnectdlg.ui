@@ -24,7 +24,7 @@ All in one dialog.</comment>
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Class Properties:</string>
+        <string>Class Properties</string>
     </property>
     <property stdset="1">
         <name>sizeGripEnabled</name>
@@ -267,7 +267,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Type:</string>
+                            <string>Type</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -295,7 +295,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Access:</string>
+                            <string>Access</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -353,7 +353,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Modifiers:</string>
+                            <string>Modifiers</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -396,7 +396,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Name:</string>
+                            <string>Name</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -435,7 +435,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Documentation:</string>
+                            <string>Documentation</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -463,7 +463,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Properties:</string>
+                            <string>Properties</string>
                         </property>
                         <property stdset="1">
                             <name>enabled</name>
@@ -535,7 +535,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Declaration:</string>
+                            <string>Declaration</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -563,7 +563,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Type:</string>
+                            <string>Type</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -602,7 +602,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Access:</string>
+                            <string>Access</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -729,7 +729,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Documentation:</string>
+                            <string>Documentation</string>
                         </property>
                         <hbox>
                             <property stdset="1">
@@ -910,7 +910,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>New Signal Settings:</string>
+                            <string>New Signal Settings</string>
                         </property>
                         <property stdset="1">
                             <name>enabled</name>
@@ -933,7 +933,7 @@ All in one dialog.</comment>
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Declare in Section:</string>
+                                    <string>Declare in Section</string>
                                 </property>
                                 <hbox>
                                     <property stdset="1">
@@ -1001,7 +1001,7 @@ All in one dialog.</comment>
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Declaration:</string>
+                                    <string>Declaration</string>
                                 </property>
                                 <hbox>
                                     <property stdset="1">
@@ -1092,7 +1092,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>New Slot Settings:</string>
+                            <string>New Slot Settings</string>
                         </property>
                         <property stdset="1">
                             <name>enabled</name>
@@ -1115,7 +1115,7 @@ All in one dialog.</comment>
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Access:</string>
+                                    <string>Access</string>
                                 </property>
                                 <hbox>
                                     <property stdset="1">
@@ -1173,7 +1173,7 @@ All in one dialog.</comment>
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Modifiers:</string>
+                                    <string>Modifiers</string>
                                 </property>
                                 <hbox>
                                     <property stdset="1">
@@ -1244,7 +1244,7 @@ All in one dialog.</comment>
                                 </property>
                                 <property stdset="1">
                                     <name>title</name>
-                                    <string>Declaration:</string>
+                                    <string>Declaration</string>
                                 </property>
                                 <hbox>
                                     <property stdset="1">
@@ -1289,7 +1289,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Slot Members:</string>
+                            <string>Slot Members</string>
                         </property>
                         <grid>
                             <property stdset="1">
@@ -1393,7 +1393,7 @@ All in one dialog.</comment>
                         </property>
                         <property stdset="1">
                             <name>title</name>
-                            <string>Implement in a new Method ( function member):</string>
+                            <string>Implement in a New Method (function member)</string>
                         </property>
                         <widget>
                             <class>QLabel</class>

@@ -75,7 +75,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
 
   QWidget* wdg2 = new QWidget(this);
   install_box = new QButtonGroup( wdg2, "install_box" );
-  install_box->setTitle(i18n("Choose Installation Mode:") );
+  install_box->setTitle(i18n("Choose Installation Mode") );
   QHBoxLayout* hl2 = new QHBoxLayout(wdg2);
   vl1->addWidget(wdg2);
   hl2->addWidget(install_box);

@@ -221,7 +221,7 @@ void CKDevelop::slotFileSave()
 }
 
 void CKDevelop::slotFileSaveAs(){
-    slotStatusMsg(i18n("Save file as..."));
+    slotStatusMsg(i18n("Saving file as..."));
 
     fileSaveAs();
 
