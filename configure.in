@@ -63,6 +63,7 @@ dnl add here all your Makefiles. This are created by configure
 AC_OUTPUT(
 Makefile
 kdevelop/Makefile \
+kdevelop/widgets/qextmdi/Makefile \
 kdevelop/plugin/Makefile \
 kdevelop/plugin/print/Makefile \
 kdevelop/plugin/projectmanagement/Makefile \
@@ -77,6 +78,7 @@ kdevelop/parts/grepview/Makefile \
 kdevelop/parts/doctreeview/Makefile \
 kdevelop/parts/classview/Makefile \
 kdevelop/parts/outputviews/Makefile \
+kdevelop/parts/qextmdimainfrmview/Makefile \
 kdevelop/lib/Makefile \
 kdevelop/lib/projectmanagement/Makefile \
 kdevelop/classparser/Makefile \
