@@ -44,6 +44,7 @@ private:
     GrepDialog *grepdlg;
     GrepViewPart *m_part;
     int m_matchCount;
+    QString _lastfilename;
 };
 
 #endif

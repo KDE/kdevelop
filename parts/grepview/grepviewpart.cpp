@@ -124,13 +124,19 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void GrepViewPart::slotGrep()
 {
-    m_widget->showDialog();
+	if ( !m_widget->isRunning() )
+	{
+		m_widget->showDialog();
+	}
 }
 
 
 void GrepViewPart::slotContextGrep()
 {
-    m_widget->showDialogWithPattern(m_popupstr);
+	if ( !m_widget->isRunning() )
+	{
+		m_widget->showDialogWithPattern(m_popupstr);
+	}
 }
 
 #include "grepviewpart.moc"
