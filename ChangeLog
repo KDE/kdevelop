@@ -1,4 +1,8 @@
-1999-07-18 Walter Tasin  <tasin@e-technik.fh-muenchen.de> 
+1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added Kurt Granroth's IOSlaves article to KDE 2 Handbook
+  * converted english docs to use the png logo
+
+1999-07-18 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* fixed problem with saving and closing project
         * inserting messagebox on exit KDevelop,
           if something is changed in the edit-windows (w/o opened project)
