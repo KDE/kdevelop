@@ -3,6 +3,12 @@
           to move the slider to the right and back to the left for now :-( )
           ToDo : painting the pixmaps for the buttons (anyone interested in doing that ?)
 
+1999-03-30  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	
+	* implemented preselected items in the fileproperties dialog (from mainmenu and context menu)
+	* commited first version of the error-message-"parser"
+	* implemented a nice autocompletion in the new file dialog :-)
+
 1999-03-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added commandline options to run a project program
 

@@ -52,6 +52,7 @@ class CClassView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
+class CErrorMessageParser;
 #include "ceditwidget.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
@@ -528,6 +529,7 @@ private:
   int properties_view_pos;
   int workspace;
 
+  CErrorMessageParser* error_parser;
   QString version;
   QString kdev_caption;
   QString kdlg_caption;

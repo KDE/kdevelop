@@ -40,7 +40,10 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name)
  
   connect(this,
           SIGNAL(selectionChanged(QListViewItem*)),
-          SLOT(slotSelectionChanged(QListViewItem *)));  
+          SLOT(slotSelectionChanged(QListViewItem *)));
+
+  preselectitem = ""; // no preselect
+  firstitemselect = false;
 }
 
 CLogFileView::~CLogFileView(){
@@ -99,6 +102,7 @@ void CLogFileView::refresh(CProject* prj)
 
   QListViewItem *lastGrp;
   QListViewItem *top_item;
+  QListViewItem *current_item;
   QStrList files;
   QStrList groups;
   QStrList filters;
@@ -108,6 +112,7 @@ void CLogFileView::refresh(CProject* prj)
   char *filter_str;
   char *temp_str;
   QString filename;
+  bool item_already_selected = false;
 
   // Remove all entries.
   treeH->clear();
@@ -148,7 +153,12 @@ void CLogFileView::refresh(CProject* prj)
         // If found
         if( filename.find( filter_exp ) != -1)
         {
-          treeH->addItem( filename, THC_FILE, lastGrp );
+          current_item = treeH->addItem( filename, THC_FILE, lastGrp );
+	  if(firstitemselect == true && item_already_selected == false){
+	    setSelected(current_item,true);
+	    item_already_selected = true;
+	  }
+	  if(filename == preselectitem) setSelected(current_item,true);
           temp_files.append(filename);
         }
       }
@@ -169,13 +179,32 @@ void CLogFileView::refresh(CProject* prj)
   }
 
   setOpen(top_item, true);
+
+  preselectitem =""; // no preselect on the next refresh
+  popupmenu_disable = false;
+}
+/** set the filename that will be selected after a refresh*/
+
+void CLogFileView::setPreSelectedItem(QString rel_filename){
+  preselectitem = rel_filename;
+}
+/** select the first item, after a refresh*/
+void CLogFileView::setFirstItemSelected(){
+  firstitemselect = true;
+}
+
+/** disabled the popupmenus, used in cfilepropdialog */
+void CLogFileView::setPopupMenusDisabled(){
+  popupmenu_disable = true;
 }
 
 /** Get the current popupmenu. */
 KPopupMenu *CLogFileView::getCurrentPopup()
 {
+  if(popupmenu_disable == true) return 0; // popupmenu
+  
   KPopupMenu *popup = NULL;
-
+  
   switch( treeH->itemType() )
   {
     case THPROJECT:

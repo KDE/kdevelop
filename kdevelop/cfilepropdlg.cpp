@@ -23,12 +23,10 @@
 #include <qfileinfo.h>
 #include "debug.h"
 
-CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : QDialog(parent,name,true) {
+CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QString preselecteditem ) : QDialog(parent,name,true) {
   this->prj = prj; // save the pointer
   setCaption(i18n("File Properties"));
  
-  
-  
   distribution_group = new QButtonGroup( this, "distribution_group" );
   distribution_group->setGeometry( 340, 140, 310, 60 );
   distribution_group->setMinimumSize( 0, 0 );
@@ -76,9 +74,16 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
   file_group->setFrameStyle( 49 );
   file_group->setTitle(i18n("File") );
   file_group->setAlignment( 1 );
+
   
   log_tree = new CLogFileView( this, "log_tree" );
   log_tree->setGeometry( 20, 20, 300, 320 );
+  if(preselecteditem != ""){
+    log_tree->setPreSelectedItem(preselecteditem);
+  }
+  else{
+    log_tree->setFirstItemSelected(); // select the first item
+      }
   log_tree->refresh(prj);
   
   type_combo = new QComboBox( FALSE, this, "type_combo" );
@@ -260,6 +265,13 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
   connect(ok_button,SIGNAL(clicked()),SLOT(slotOk()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
   saved_info = 0;
+
+  
+  QListViewItem* selecteditem = log_tree->currentItem();
+  slotSelectionChanged(selecteditem);
+  
+
+  log_tree->setPopupMenusDisabled(); // disabled menus in the logtree
 }
 CFilePropDlg::~CFilePropDlg(){
 }

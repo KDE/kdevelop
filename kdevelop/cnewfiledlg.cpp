@@ -205,13 +205,27 @@ ok = new QPushButton( this, "ok" );
   connect(cancel,SIGNAL(clicked()),SLOT(reject()));
   connect(loc_button,SIGNAL(clicked()),SLOT(slotLocButtonClicked()));
   connect(check_add_project,SIGNAL(clicked()),SLOT(slotAddToProject()));
+  connect(edit,SIGNAL(textChanged (const char *)),SLOT(slotEditTextChanged(const char*)));
 
+  connect(list_linux,SIGNAL(highlighted(int)),SLOT(slotListHighlighted(int)));
+  connect(list_cpp,SIGNAL(highlighted(int)),SLOT(slotListHighlighted(int)));
+  connect(list_manuals,SIGNAL(highlighted(int)),SLOT(slotListHighlighted(int)));
   //always default, add to Project
   check_add_project->setChecked(true);
+
+  autocompletion = true;
 }
 
 void CNewFileDlg::slotTabSelected(int item){
-  
+  if(current == 0){ //cpp
+    slotListHighlighted(list_cpp->currentItem());
+  }
+  if(current == 1){ // manuals
+    slotListHighlighted(list_manuals->currentItem());
+  }
+  if(current == 2){ // linux
+    slotListHighlighted(list_linux->currentItem());
+  }
   current = item;
 }
 void CNewFileDlg::slotOKClicked(){
@@ -381,4 +395,43 @@ void CNewFileDlg::slotAddToProject(){
     prj_loc_edit->setEnabled(false);
     loc_button->setEnabled(false);
   }
+}
+
+void CNewFileDlg::slotEditTextChanged(const char* text){
+  QString filetype = fileType();
+  if(autocompletion){
+
+    if (filetype != "TEXTFILE" ) {
+      autocompletion = false;
+      
+      if (filetype == "HEADER" ) {
+	edit->setText(text + QString(".h"));
+      }
+      if (filetype == "CPP" ) {
+	edit->setText(text + QString(".cpp"));
+      }
+      if (filetype == "KDELNK" ) {
+	edit->setText(text + QString(".kdelnk"));
+      }
+      if (filetype == "EN_SGML" ) {
+	edit->setText(text + QString(".sgml"));
+      }
+      if (filetype == "LSM" ) {
+	edit->setText(text + QString(".lsm"));
+      }
+      if (filetype == "ICON" ) {
+      edit->setText(text + QString(".xpm"));
+      }
+      if (filetype == "KDELNK" ) {
+	edit->setText(text + QString(".kdelnk"));
+      }
+      edit->setCursorPosition(1);
+    }
+    
+  }
+}
+void CNewFileDlg::slotListHighlighted(int){
+  edit->clear();
+  edit->setFocus();
+  autocompletion = true;
 }

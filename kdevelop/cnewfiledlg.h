@@ -54,8 +54,12 @@ public:
   void slotOKClicked();
   void slotLocButtonClicked();
   void slotAddToProject();
+  void slotEditTextChanged(const char* text);
+  void slotListHighlighted(int);
   
 protected:
+  /** if true, it helps while typeing */
+  bool  autocompletion;
   CProject* prj;
   QLineEdit* prj_loc_edit;
   QPushButton* loc_button;

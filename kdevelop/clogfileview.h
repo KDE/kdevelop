@@ -43,6 +43,14 @@ public:
     
   /** starts the refresh */
   void refresh(CProject* prj);
+  
+  /** set the filename that will be selected after a refresh*/
+  void setPreSelectedItem(QString rel_filename);
+  /** select the first item, after a refresh*/
+  void setFirstItemSelected();
+
+  /** disabled the popupmenus, used in cfilepropdialog */
+  void setPopupMenusDisabled();
 
 protected: // Implementations of virtual methods.
 
@@ -77,7 +85,10 @@ protected:
   KPopupMenu file_pop;
   KPopupMenu group_pop;  
   KPopupMenu project_pop;
+  bool popupmenu_disable;
+  bool firstitemselect;
 
   CProject* project;
+  QString preselectitem;
 };
 #endif

@@ -27,6 +27,7 @@
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"
+#include "cerrormessageparser.h"
 
 CKDevelop::CKDevelop(){
   QString filename;
@@ -76,7 +77,7 @@ CKDevelop::CKDevelop(){
     properties_view_pos=config->readNumEntry("properties_view_pos", 80);
   }
 
-
+  error_parser = new CErrorMessageParser;
 }
 
 

@@ -48,6 +48,7 @@
 #include "debug.h"
 #include "./kwrite/kwdoc.h"
 #include "kswallow.h"
+#include "cerrormessageparser.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1471,6 +1472,9 @@ void CKDevelop::slotClickedOnMessagesWidget(){
     edit_widget->setCursorPosition(error_line-1,0);
     edit_widget->setFocus();
   }
+
+  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  //  error_parser->out();
 
 }
 void CKDevelop::slotProcessExited(KProcess* proc){

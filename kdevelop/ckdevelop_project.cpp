@@ -268,6 +268,7 @@ bool CKDevelop::slotProjectClose(){
     project=false;
     prj->valid = false;
     delete prj;
+    prj = 0;
     
     switchToFile(header_widget->getName());
     
@@ -583,7 +584,7 @@ void CKDevelop::slotProjectFileProperties(){
 }
 
 void CKDevelop::slotShowFileProperties(QString rel_name){
-  CFilePropDlg dlg(this,"DLG",prj);
+  CFilePropDlg dlg(this,"DLG",prj,rel_name);
   dlg.show();
 }
 
