@@ -74,7 +74,7 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 
 	CppCodeCompletionParser parser ( pEditIface, m_pStore );
 	parser.setLine ( pEditIface->line ( nLine ) );
-	//kdDebug ( 9007 ) << parser.getCompletionText ( nCol ) << " => " << parser.getNodePos ( nCol ) << endl;
+	kdDebug ( 9007 ) << parser.getNodePos ( nCol ) << endl << parser.getNodeText ( parser.getNodePos ( nCol ) ) << endl << parser.getNodeDelimiter ( parser.getNodePos ( nCol ) ) << endl << parser.getCompletionText ( nCol ) << endl;
 
 
 	//kdDebug ( 9007 ) << "!!!!!!!!!!!Afterwards!!!!!!!!!!!!!!!!" << endl;

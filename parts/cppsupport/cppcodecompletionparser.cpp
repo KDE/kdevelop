@@ -91,11 +91,104 @@ int CppCodeCompletionParser::getNodePos ( int nCol )
 
 QString CppCodeCompletionParser::getNodeText ( int nNode )
 {
+	if ( nNode <= 0 )
+		return "";
+
+	int nFrom = 0;
+	int nTo = 0;
+	int nNodePos = 0;
+
+	while ( nTo < m_strCurLine.length() )
+	{
+		if ( m_strCurLine[nTo] == '.' )
+		{
+			nNodePos++;
+
+			if ( nNodePos < nNode )
+				nFrom = nTo + 1;
+		}
+
+		if ( m_strCurLine[nTo] == '-' && m_strCurLine[nTo + 1] == '>' ||
+			m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
+		{
+			nNodePos++;
+
+			if ( nNodePos < nNode )
+				nFrom = nTo + 2;
+		}
+
+		//kdDebug ( 9007 ) << "nNodePos: " << nNodePos << " nNode: " << nNode << endl;
+
+		if ( nNodePos == nNode )
+		{
+			for ( nTo = nFrom; nTo < m_strCurLine.length(); nTo++ )
+			{
+				if ( m_strCurLine[nTo] == '.' )
+				{
+					return m_strCurLine.mid ( nFrom, ( nTo - nFrom ) );
+				}
+
+				if ( m_strCurLine[nTo] == '-' && m_strCurLine[nTo + 1] == '>' ||
+					m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
+				{
+					return m_strCurLine.mid ( nFrom, ( nTo - nFrom ) );
+				}
+			}
+		}
+
+		nTo++;
+
+		//kdDebug ( 9007 ) << "getNodeText::while" << endl;
+	}
+
 	return "";
 }
 
 QString CppCodeCompletionParser::getNodeDelimiter ( int nNode )
 {
+	if ( nNode <= 0 )
+		return "";
+
+	int nFrom = 0;
+	int nTo = 0;
+	int nNodePos = 0;
+
+	while ( nTo < m_strCurLine.length() )
+	{
+		if ( m_strCurLine[nTo] == '.' ||
+			m_strCurLine[nTo] == '-' && m_strCurLine[nTo + 1] == '>' ||
+			m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
+		{
+			nNodePos++;
+
+			if ( nNodePos < nNode )
+				nFrom = nTo + 1;
+		}
+
+		//kdDebug ( 9007 ) << "nNodePos: " << nNodePos << " nNode: " << nNode << endl;
+
+		if ( nNodePos == nNode )
+		{
+			for ( nTo = nFrom; nTo < m_strCurLine.length(); nTo++ )
+			{
+				if ( m_strCurLine[nTo] == '.' )
+				{
+					return m_strCurLine.mid ( nTo, 1 );
+				}
+
+				if ( m_strCurLine[nTo] == '-' && m_strCurLine[nTo + 1] == '>' ||
+					m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
+				{
+					return m_strCurLine.mid ( nTo, 2 );
+				}
+			}
+		}
+
+		nTo++;
+
+		//kdDebug ( 9007 ) << "getNodeText::while" << endl;
+	}
+
 	return "";
 }
 
