@@ -1,3 +1,5 @@
+
+
 1999-08-15 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* reorganize of enable/disable edit commands like copy/cut/paste
 	  now they are only active, if you can perform these commands
@@ -6,6 +8,10 @@
 	* commited bugfix by Juergen Vigina, fixed problem in KDlgPropertyBase::dumpFontPropCall
 	* fixed problem in KDlgEdit::generateKLedLamp
 
+1999-08-11 John R. Zedlewski" <zedlwski@princeton.edu>
+         * Added IDL highlighting
+	 * Can now use the variables %S, %H, and %D in the tools dialog to represent the current source file name(%S), header file name(%H), or project directory(%D)
+	
 1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* deactivating 'file save', if file in edit window isn't modified
 	* deactivating certain file commands, if Doc- or Tools-Tab is active
