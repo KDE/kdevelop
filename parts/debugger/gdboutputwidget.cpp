@@ -154,3 +154,4 @@ void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
 }
 
 #include "gdboutputwidget.moc"
+

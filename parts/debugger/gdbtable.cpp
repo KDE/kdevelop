@@ -11,13 +11,13 @@
 
 namespace GDBDebugger {
 
-GDBTable::GDBTable( int numRows, int numCols, QWidget * parent, const char * name )
-    : QTable(numRows, numCols, parent, name)
+GDBTable::GDBTable(QWidget *parent, const char *name)
+ : QTable(parent, name)
 {
 }
 
-GDBTable::GDBTable(QWidget *parent, const char *name)
- : QTable(parent, name)
+GDBTable::GDBTable(int nr, int nc, QWidget * parent, const char * name)
+ : QTable(nr, nc, parent, name)
 {
 }
 
@@ -52,3 +52,4 @@ void GDBTable::keyPressEvent( QKeyEvent * e )
 }
 
 #include "gdbtable.moc"
+
