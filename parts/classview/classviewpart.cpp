@@ -133,7 +133,6 @@ ClassViewPart::~ClassViewPart()
 
 void ClassViewPart::slotProjectOpened( )
 {
-    refresh();
     connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
 }
 
@@ -170,6 +169,7 @@ void ClassViewPart::setupActions( )
                                            this, SLOT(switchedViewPopup()),
                                            actionCollection(), "view_popup");
     m_popupAction->setToolTip(i18n("Class Browser Actions"));
+    m_popupAction->setDelayed(false);
     KPopupMenu *popup = m_popupAction->popupMenu();
     //TODO: check if language support has namespaces, classes, etc.
 //    KDevLanguageSupport::Features features = languageSupport()->features();
@@ -179,7 +179,8 @@ void ClassViewPart::setupActions( )
 
     //TODO: not applicable to c++ but can be useful for ada and pascal where namespace is contained
     //in a single compilation unit
-    popup->insertItem(i18n("Go to Namespace Declaration"), this, SLOT(goToNamespaceDeclaration()));
+    //FIXME: commented out till the time when it be needed
+//    popup->insertItem(i18n("Go to Namespace Declaration"), this, SLOT(goToNamespaceDeclaration()));
 
     bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
     bool hasAddAttribute = langHasFeature(KDevLanguageSupport::AddAttribute);
@@ -204,6 +205,7 @@ void ClassViewPart::refreshNamespaces( )
     m_namespaces->view()->clear();
 
     NamespaceItem *global_item = new NamespaceItem( this, m_namespaces->view()->listView(), i18n("(Global Namespace)"), codeModel()->globalNamespace() );
+    global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, instance()) );
     NamespaceList namespaces = codeModel()->globalNamespace()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
@@ -211,6 +213,7 @@ void ClassViewPart::refreshNamespaces( )
         item->setOpen(true);
         processNamespace(item);
     }
+    qWarning("ClassViewPart: setCurrentActiveItem(global_item)");
     m_namespaces->view()->setCurrentActiveItem(global_item);
 }
 
