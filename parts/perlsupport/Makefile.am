@@ -1,6 +1,7 @@
 # Here resides the Perl support part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/sourceinfo 	   -I$(top_srcdir)/lib/util 	   $(all_includes)
+SUBDIRS = file_templates
 
 kde_module_LTLIBRARIES = libkdevperlsupport.la kio_perldoc.la
 libkdevperlsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
