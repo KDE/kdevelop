@@ -262,7 +262,6 @@ void BackgroundParser::run()
 	    if( m_fileList.isEmpty() )
 	        m_isEmpty.wakeAll();
 	}
-        m_cppSupport->emitFileParsed( fileName );
     }
 
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;

@@ -76,8 +76,6 @@ public:
 
     static KConfig *config();
 
-    void emitFileParsed( const QString& fileName );
-
     virtual QString formatTag( const Tag& tag );
 
 signals:

@@ -308,6 +308,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    m_backgroundParser->unlock();	    
 #endif
 	}	
+	emit fileParsed( fileName );
     }
 }
 
@@ -1091,11 +1092,6 @@ KMimeType::List CppSupportPart::mimeTypes( )
 	list << mime;
 
     return list;
-}
-
-void CppSupportPart::emitFileParsed( const QString & fileName )
-{
-    emit fileParsed( fileName );
 }
 
 int CppSupportPart::pcsVersion()
