@@ -29,7 +29,7 @@
 #ifndef _QEXTMDIMAINFRM_H_
 #define _QEXTMDIMAINFRM_H_
 
-#ifndef NO_KDE2
+#ifndef NO_KDE
 #include <kmainwindow.h>
 #include <kmenubar.h>
 #include <kpopupmenu.h>
@@ -40,11 +40,7 @@
 #include "dummykpartsdockmainwindow.h"
 #endif
 
-#if QT_VERSION < 300
-# include <qlist.h>
-#else
-# include <qptrlist.h>
-#endif
+#include <qptrlist.h>
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdom.h>
@@ -123,7 +119,7 @@ public:
   *
   * Additionally, here's a hint how to restore the mainframe's settings from config file:
   * <PRE>
-  * #ifdef NO_KDE2 // KDE2 comes with its own style
+  * #ifdef NO_KDE // KDE2 comes with its own style
   *    int guiStyle = config->readIntEntry( "mainmodule session", "GUI style", 0);
   *    mainframe->setGUIStyle( guiStyle);
   * #endif
@@ -213,11 +209,7 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KParts::DockMainWindow
 protected:
    QextMdiChildArea        *m_pMdi;
    QextMdiTaskBar          *m_pTaskBar;
-#if QT_VERSION < 300
-   QList<QextMdiChildView> *m_pWinList;
-#else
    QPtrList<QextMdiChildView> *m_pWinList;
-#endif
    QextMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
@@ -225,7 +217,7 @@ protected:
    QPopupMenu              *m_pDockMenu;
    QPopupMenu              *m_pMdiModeMenu;
    QPopupMenu              *m_pPlacingMenu;
-#ifdef NO_KDE2
+#ifdef NO_KDE
    QMenuBar                *m_pMainMenuBar;
 #else
    KMenuBar                *m_pMainMenuBar;
@@ -382,7 +374,7 @@ public:
    * If no such menu is given, QextMDI simply overlays the buttons
    * at the upper right-hand side of the main widget.
    */
-#ifndef NO_KDE2
+#ifndef NO_KDE
    virtual void setMenuForSDIModeSysButtons( KMenuBar* = 0);
 #else
    virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
@@ -409,11 +401,7 @@ public:
    /**
    *
    */
-#if QT_VERSION < 300
-   void findRootDockWidgets(QList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
-#else
    void findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
-#endif
 
 public slots:
    /**
@@ -434,6 +422,11 @@ public slots:
    * See the method above for more details. Additionally, it sets the geometry.
    */
    virtual void addWindow( QextMdiChildView* pView, QRect rectNormal, int flags = QextMdi::StandardAdd);
+   /**
+   * Usually called from @ref addWindow() when adding a tool view window. It reparents the given widget
+   * as toplevel and stay-on-top on the application's main widget.
+   */
+   virtual void addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L, int percent = 50, const QString& tabToolTip = 0, const QString& tabCaption = 0);
    /**
    * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
    * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
@@ -570,11 +563,6 @@ protected:
    * Creates the MDI view area and connects some signals and slots with the QextMdiMainFrm widget.
    */
    virtual void createMdiManager();
-   /** 
-   * Usually called from @ref addWindow() when adding a tool view window. It reparents the given widget
-   * as toplevel and stay-on-top on the application's main widget.
-   */
-   virtual void addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L, int percent = 50, const QString& tabToolTip = 0, const QString& tabCaption = 0);
    /**
    * prevents fillWindowMenu() from m_pWindowMenu->clear(). You have to care for it by yourself.
    * This is useful if you want to add some actions in your overridden fillWindowMenu() method.
@@ -615,7 +603,10 @@ protected slots: // Protected slots
    * The timer for main widget moving has elapsed -> send drag end to all concerned views.
    */
    void dragEndTimeOut();
-
+   /**
+   * internally used to handle click on view close button (TabPage mode, only)
+   */
+   void closeViewButtonPressed();
 signals:
    /** 
    * Signals the last attached @ref QextMdiChildView has been closed 

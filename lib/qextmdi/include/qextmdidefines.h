@@ -28,6 +28,11 @@
 
 #include <qglobal.h>
 
+#ifdef NO_KDE2
+#undef NO_KDE
+#define NO_KDE
+#endif
+
 #define QEXTMDI_MDI_CHILDFRM_SEPARATOR 2
 #define QEXTMDI_MDI_CHILDFRM_BORDER 3
 #define QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER 6
@@ -78,8 +83,8 @@ namespace QextMdi
    enum FrameDecor {
       Win95Look = 0,
       KDE1Look  = 1,
-      KDE2Look  = 2,
-      KDE2LaptopLook = 3
+      KDELook  = 2,
+      KDELaptopLook = 3
    };
 
    enum MdiMode {

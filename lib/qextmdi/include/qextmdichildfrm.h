@@ -27,11 +27,7 @@
 #ifndef _QEXTMDICHILDFRM_H_
 #define _QEXTMDICHILDFRM_H_
 
-#if QT_VERSION < 300
-# include <qlist.h>
-#else
-# include <qptrlist.h>
-#endif
+#include <qptrlist.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>

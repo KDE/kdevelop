@@ -47,11 +47,7 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
    m_captionActiveForeColor = colorGroup().highlightedText();//QColor(255,255,255);
    m_captionInactiveBackColor = QColor(160,160,160);
    m_captionInactiveForeColor = QColor( 55, 55, 55);
-#if QT_VERSION < 300
-   m_pZ = new QList<QextMdiChildFrm>;
-#else
    m_pZ = new QPtrList<QextMdiChildFrm>;
-#endif
    m_pZ->setAutoDelete(TRUE);
    setFocusPolicy(ClickFocus);
    m_defaultChildFrmSize = QSize(400,300);
@@ -195,9 +191,6 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       else {
          lpC->raise();
       }
-      if (bSetFocus) {
-//TEST         if(!lpC->hasFocus())lpC->setFocus();
-      }
       QFocusEvent::setReason(QFocusEvent::Other);
       lpC->m_pClient->setFocus();
    }
@@ -304,12 +297,8 @@ void QextMdiChildArea::focusTopChild()
       if(pC != lpC)pC->m_pCaption->setActive(FALSE);
    }
    lpC->raise();
-   if(!lpC->hasFocus()) {
-//TEST      lpC->setFocus();
-   }
    if (!lpC->m_pClient->hasFocus()) {
       lpC->m_pClient->activate();
-//TEST      lpC->m_pClient->setFocus();
    }
 }
 
@@ -318,11 +307,7 @@ void QextMdiChildArea::focusTopChild()
 void QextMdiChildArea::cascadeWindows()
 {
    int idx=0;
-#if QT_VERSION < 300
-   QList<QextMdiChildFrm> list(*m_pZ);
-#else
    QPtrList<QextMdiChildFrm> list(*m_pZ);
-#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
@@ -341,11 +326,7 @@ void QextMdiChildArea::cascadeWindows()
 void QextMdiChildArea::cascadeMaximized()
 {
    int idx=0;
-#if QT_VERSION < 300
-   QList<QextMdiChildFrm> list(*m_pZ);
-#else
    QPtrList<QextMdiChildFrm> list(*m_pZ);
-#endif
 
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
@@ -368,11 +349,7 @@ void QextMdiChildArea::cascadeMaximized()
 void QextMdiChildArea::expandVertical()
 {
    int idx=0;
-#if QT_VERSION < 300
-   QList<QextMdiChildFrm> list(*m_pZ);
-#else
    QPtrList<QextMdiChildFrm> list(*m_pZ);
-#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
@@ -389,11 +366,7 @@ void QextMdiChildArea::expandVertical()
 void QextMdiChildArea::expandHorizontal()
 {
    int idx=0;
-#if QT_VERSION < 300
-   QList<QextMdiChildFrm> list(*m_pZ);
-#else
    QPtrList<QextMdiChildFrm> list(*m_pZ);
-#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
@@ -490,7 +463,6 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
       }
    }
    if (lpTop)
-//TEST      lpTop->setFocus();
       lpTop->m_pClient->activate();
 }
 //============ tileAnodine ============//
@@ -541,7 +513,6 @@ void QextMdiChildArea::tileAnodine()
    }
    delete[] numRows;
    if (lpTop) {
-//TEST      lpTop->setFocus();
       lpTop->m_pClient->activate();
    }
 }
@@ -577,7 +548,6 @@ void QextMdiChildArea::tileVertically()
       }
    }
    if (lpTop) {
-//TEST      lpTop->setFocus();
       lpTop->m_pClient->activate();
    }
 }

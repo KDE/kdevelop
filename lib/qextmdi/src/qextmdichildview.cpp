@@ -583,11 +583,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       if ((pNewChild != 0L) && (pNewChild->isWidgetType()))
       {
          QWidget* pNewWidget = (QWidget*)pNewChild;
-#if QT_VERSION < 300
-         if (pNewWidget->testWFlags(WType_Modal))
-#else
          if (pNewWidget->testWFlags(Qt::WType_Dialog | Qt::WShowModal))
-#endif
              return FALSE;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code

@@ -172,7 +172,7 @@ int QextMdiChildFrmCaption::heightHint()
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
       if(hght<20)hght=20;
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
       if(hght<16)hght=16;
    }
    else {   // kde2laptop look
@@ -201,7 +201,7 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
       r.setLeft(r.left()+m_pParent->icon()->width()+3);
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look)
       r.setLeft(r.left()+22);
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look)
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook)
       r.setLeft(r.left()+m_pParent->icon()->width()+3);
    else  // kde2laptop look
       r.setLeft(r.left()+30);

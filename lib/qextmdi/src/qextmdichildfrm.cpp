@@ -902,20 +902,20 @@ void QextMdiChildFrm::doResize()
       frmIconOffset = 0;
       pIconWidget = m_pUnixIcon;
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
       buttonWidth  += 3;
       buttonHeight += 3;
       heightOffset -= 1;
       m_pUnixIcon->hide();
    }
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::KDE2LaptopLook) {
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::KDELaptopLook) {
       pIconWidget->setGeometry(frmIconOffset,captionHeight/2-frmIconHeight/2,frmIconWidth,frmIconHeight);
       m_pClose->setGeometry((captionWidth-buttonWidth)-rightOffset1,heightOffset,buttonWidth,buttonHeight);
       m_pMaximize->setGeometry((captionWidth-(buttonWidth*2))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
       m_pMinimize->setGeometry((captionWidth-(buttonWidth*3))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
       m_pUndock->setGeometry((captionWidth-(buttonWidth*4))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
    }
-   else {   // KDE2LaptopLook
+   else {   // KDELaptopLook
       m_pWinIcon->hide();
       m_pUnixIcon->hide();
       buttonHeight += 5;
@@ -968,9 +968,9 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                // in case we didn't click on the icon button
                QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
                QApplication::sendEvent(qApp->mainWidget(), pFE);
-               if (m_pClient) {//TEST && !((QWidget*)obj)->hasFocus())
+               if (m_pClient) {
                   m_pClient->activate();
-							 }
+               }
                QWidget* w = (QWidget*) obj;
                if( (w->parent() != m_pCaption) && (w != m_pCaption)) {
                   if ((w->focusPolicy() == QWidget::ClickFocus) || (w->focusPolicy() == QWidget::StrongFocus)) {
@@ -1190,7 +1190,7 @@ void QextMdiChildFrm::redecorateButtons()
       m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
       m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
       m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
       m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
       m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
@@ -1205,7 +1205,6 @@ void QextMdiChildFrm::redecorateButtons()
       m_pUndockButtonPixmap = new QPixmap( kde2laptop_undockbutton);
    }
 
-#if QT_VERSION > 209
    m_pUnixIcon->setAutoRaise(TRUE);
    if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
       m_pMinimize->setAutoRaise(TRUE);
@@ -1219,7 +1218,6 @@ void QextMdiChildFrm::redecorateButtons()
       m_pClose->setAutoRaise(FALSE);
       m_pUndock->setAutoRaise(FALSE);
    }
-#endif
 
    if (m_pClient && m_pClient->icon()) {
       m_pWinIcon->setPixmap( *(m_pClient)->icon());

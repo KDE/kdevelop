@@ -27,16 +27,12 @@
 #ifndef _QEXTMDITASKBAR_H_
 #define _QEXTMDITASKBAR_H_
 
-#ifdef NO_KDE2
+#ifdef NO_KDE
 #include "dummyktoolbar.h"
 #else
 #include <ktoolbar.h>
 #endif
-#if QT_VERSION < 300
-# include <qlist.h>
-#else
-# include <qptrlist.h>
-#endif
+#include <qptrlist.h>
 #include <qpixmap.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -191,11 +187,7 @@ protected:
    * A list of taskbar buttons.
    * Note: Each button stands for one MDI view (toolviews doesn't have got a taskbar button). 
    */
-#if QT_VERSION < 300
-   QList<QextMdiTaskBarButton>*  m_pButtonList;
-#else
    QPtrList<QextMdiTaskBarButton>*  m_pButtonList;
-#endif
    /**
    * The belonging MDI mainframe (parent widget of this)
    */
