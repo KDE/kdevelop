@@ -125,7 +125,11 @@ QString SpecSupport::getInfo(QString s, QString motif) {
 
 //    QPushButton* importSPECPushButton;
 void SpecSupport::slotimportSPECPushButtonPressed() {
-    QFile file(KFileDialog::getOpenFileName(dir,"*.spec"));
+       QString fileName = KFileDialog::getOpenFileName(dir,"*.spec");
+       if( fileName.isEmpty())
+               return;
+    QFile file(fileName);
+ 
     if(file.open(IO_ReadOnly)) {
         QTextStream stream(&file);
 
