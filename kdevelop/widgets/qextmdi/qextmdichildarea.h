@@ -143,12 +143,16 @@ protected:	// Protected methods
 	void undockWindow(QWidget *lpC);
 protected slots:
 	void menuActivated(int id);
+
 signals:
-  void topChildChanged(QextMdiChildView*);
+   void topChildChanged(QextMdiChildView*);
 	void closeActiveView();
 	void closeAllViews();
 	void switchToToplevelMode();
 	void switchToChildframeMode();
+   void insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*);
+   void updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*);
+   void removeSysButtonsFromMainMenu();
 };
 
 #endif   // _QEXTMDICHILDAREA_H_
