@@ -198,11 +198,6 @@ public:
     KDevCreateFile *createFileSupport() const;
 
     /**
-     * Returns a reference to the source formatter.
-     */
-    KDevSourceFormatter *sourceFormatter() const;
-
-    /**
      * To restore any settings which differs from project to project,
      * you can override this base class method to read in from a certain subtree
      * of the project session file.
@@ -231,6 +226,33 @@ public:
     */
     KDevCodeRepository* codeRepository() const;
 
+    /**
+    * Same as @ref extension(const QString & serviceType) but has one template argument.
+    * Template argument is used as a type to cast the result to. This is useful if extension
+    * is derived from a certain abstract base class.
+    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
+    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
+    */
+    template <class Extension>
+    Extension *extension(const QString &serviceType)
+    {
+        KDevPlugin *plugin = m_api->queryForExtension(serviceType);
+        if (plugin)
+            return static_cast<Extension*>(plugin);
+        else
+            return 0;
+    }
+
+    /** @anchor extension
+    * Queries for the plugin which supports given service type.
+    * All already loaded plugins will be queried and the first one to support the service type
+    * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+    * required in .desktop file for that plugin.
+    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
+    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
+    */
+    KDevPlugin *extension(const QString &serviceType);
+        
 signals:
     /**
      * Emitted when the part will be shown. If you really want to avoid that

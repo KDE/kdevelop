@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,11 +24,10 @@
 class KDevSourceFormatter : public KDevPlugin
 {
 public:
-    KDevSourceFormatter(const QString& pluginName, const QString& icon, QObject* parent, const char* name);
+    KDevSourceFormatter(const QString& pluginName, const QString& icon, QObject* parent, const char* name)
+	:KDevPlugin(pluginName, icon, parent, name) {}
 
-    ~KDevSourceFormatter();
-
-    virtual QString formatSource(const QString text);
+    virtual QString formatSource(const QString text) = 0;
 };
 
 #endif

@@ -36,8 +36,8 @@ class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
-class KDevSourceFormatter;
 class KDevCodeRepository;
+class KDevPlugin;
 
 class KDevApiPrivate;
 
@@ -211,23 +211,21 @@ public:
     void setCreateFile( KDevCreateFile *createFile );
 
     /**
-    * KDevSourceFormatter objects provides the ability to apply different
-    * standard formatting to the source or let the user to customize his own.
-    * @see KDevSourceFormatter
+    * Queries for the plugin which supports given service type.
+    * All already loaded plugins will be queried and the first one to support the service type
+    * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+    * required in .desktop file for that plugin.
+    * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
+    * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
     */
-    KDevSourceFormatter *sourceFormatter() const;
-    /**
-    * Set the Document Object Model for the current project.
-    * @param sourceFormatter
-    */
-    void setSourceFormatter(KDevSourceFormatter *sourceFormatter);
+    virtual KDevPlugin *queryForExtension(const QString &serviceType) = 0;
 
     /**
     * KDevSourceRepository objects provides connections to the interested
     * modules so they can know about what happens to code Catalogs
     */
     KDevCodeRepository *codeRepository() const;
-
+    
 private:
     KDevApiPrivate *d;
 };

@@ -240,16 +240,14 @@ void KDevPlugin::showPart()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevSourceFormatter * KDevPlugin::sourceFormatter( ) const
-{
-    return m_api->sourceFormatter();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 KDevCodeRepository * KDevPlugin::codeRepository( ) const
 {
     return m_api->codeRepository();
+}
+
+KDevPlugin * KDevPlugin::extension( const QString & serviceType )
+{
+    return m_api->queryForExtension(serviceType);
 }
 
 #include "kdevplugin.moc"
