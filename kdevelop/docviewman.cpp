@@ -490,7 +490,11 @@ void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
     if (f.open(IO_ReadOnly)) {
       pDoc->loadFile(f);
       f.close();
-      pDoc->updateViews();
+      if (m_pParent->mdiMode() == QextMdi::TabPageMode) {
+         // it seems it's need in TabPage mode but it's dangerous in Childframe mode
+         // needs to be watched
+         pDoc->updateViews();
+      }
     }
   }
 }
