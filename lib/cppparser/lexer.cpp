@@ -154,11 +154,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	readIdentifier();
 	QString ide = m_source.mid( start, currentPosition() - start );
 	int k = Lookup::find( &keyword, ide );
-	if( k != -1 ){
-	    tk = Token( k, start, currentPosition() - start );
-	    tk.setStartPosition( startLine, startColumn );
-	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
+	if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
 
 	    QMap<QString, QString> map;
 
@@ -276,6 +272,10 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    m_currentLine = argsEndAtLine;
 	    m_currentColumn = argsEndAtColumn;
 	    m_endPtr = m_source.length();
+	} else if( k != -1 ){
+	    tk = Token( k, start, currentPosition() - start );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_skipWordsEnabled ){
 	    QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
 	    if( pos != m_words.end() ){
