@@ -52,7 +52,7 @@ PythonPart::PythonPart(KDevApi *api, QObject *parent, const char *name)
 
     python_part = this;
 
-    QString moddir = KGlobal::dirs()->findResourceDir("data", "kdevpython/gideon.py") + "python";
+    QString moddir = KGlobal::dirs()->findResourceDir("data", "kdevpython/gideon.py") + "kdevpython";
     char *env = strdup(QString::fromLatin1("PYTHONPATH=%1").arg(moddir).latin1());
     putenv(env);
     Py_Initialize();
