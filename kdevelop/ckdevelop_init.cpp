@@ -432,6 +432,12 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Add Bookmark"), "Add_Bookmarks", IDK_BOOKMARKS_ADD);
   accel->connectItem( "Add_Bookmarks", this, SLOT(slotBookmarksAdd() ), true, ID_BOOKMARKS_ADD );
 
+  accel->insertItem( i18n("Next Bookmark"), "Next_Bookmarks", IDK_BOOKMARKS_NEXT);
+  accel->connectItem( "Next_Bookmarks", this, SLOT(slotBookmarksNext() ), true, ID_BOOKMARKS_NEXT );
+
+  accel->insertItem( i18n("Previous Bookmark"), "Previous_Bookmarks", IDK_BOOKMARKS_PREVIOUS);
+  accel->connectItem( "Previous_Bookmarks", this, SLOT(slotBookmarksPrevious() ), true, ID_BOOKMARKS_PREVIOUS );
+
   accel->insertItem( i18n("Clear Bookmarks"), "Clear_Bookmarks", IDK_BOOKMARKS_CLEAR);
   accel->connectItem( "Clear_Bookmarks", this, SLOT(slotBookmarksClear() ), true, ID_BOOKMARKS_CLEAR );
 
@@ -684,6 +690,8 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu=new QPopupMenu;
   bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
   bookmarks_menu->insertItem(i18n("&Add Bookmark..."),this,SLOT(slotBookmarksAdd()),0,ID_BOOKMARKS_ADD);
+  bookmarks_menu->insertItem(i18n("&Next Bookmark"),this,SLOT(slotBookmarksNext()),0,ID_BOOKMARKS_NEXT);
+  bookmarks_menu->insertItem(i18n("&Previous Bookmark"),this,SLOT(slotBookmarksPrevious()),0,ID_BOOKMARKS_PREVIOUS);
   bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
   bookmarks_menu->insertSeparator();
 
@@ -1229,6 +1237,8 @@ if(bKDevelop){
     accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
 
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_ADD ,"Add_Bookmarks" );
+    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
+    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
 
     accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );

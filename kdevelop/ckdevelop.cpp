@@ -1624,6 +1624,29 @@ void CKDevelop::slotBoomarksBrowserSelected(int id_){
   slotStatusMsg(i18n("Ready."));
 }	
 
+void CKDevelop::slotBookmarksNext()
+{
+	if(s_tab_view->getCurrentTab()==BROWSER)
+	{
+		// TODO
+	}
+	else
+	{
+		edit_widget->nextBookmark();
+	}
+}
+
+void CKDevelop::slotBookmarksPrevious()
+{
+	if(s_tab_view->getCurrentTab()==BROWSER)
+	{
+		// TODO
+	}
+	else
+	{
+	  edit_widget->previousBookmark();
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // HELP-Menu slots
@@ -3288,6 +3311,8 @@ void CKDevelop::statusCallback(int id_){
 
   ON_STATUS_MSG(ID_BOOKMARKS_SET,													i18n("Sets a bookmark to the current window file"))
   ON_STATUS_MSG(ID_BOOKMARKS_ADD,													i18n("Adds a bookmark to the current window file"))
+  ON_STATUS_MSG(ID_BOOKMARKS_NEXT,												i18n("Goes to the next bookmark in the current window file"))
+  ON_STATUS_MSG(ID_BOOKMARKS_PREVIOUS,										i18n("Goes to the previous bookmark in the current window file"))
   ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmark list for the current window"))
 
   ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switchs to last browser page"))

@@ -212,6 +212,8 @@
 #define ID_BOOKMARKS_SET						17000
 #define ID_BOOKMARKS_ADD						17010
 #define ID_BOOKMARKS_CLEAR					17020
+#define ID_BOOKMARKS_NEXT						17030
+#define ID_BOOKMARKS_PREVIOUS				17040
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
@@ -348,6 +350,9 @@
 
 #define IDK_VIEW_NEXT_ERROR           Key_F4
 #define IDK_VIEW_PREVIOUS_ERROR       SHIFT+Key_F4
+
+#define IDK_BOOKMARKS_NEXT						Key_F5
+#define IDK_BOOKMARKS_PREVIOUS				SHIFT+Key_F5
 
 #define IDK_PROJECT_OPTIONS						Key_F7
 #define IDK_PROJECT_FILE_PROPERTIES		SHIFT+Key_F7

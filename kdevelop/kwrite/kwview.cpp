@@ -2026,20 +2026,25 @@ void KWrite::searchAgain() {
 
 void KWrite::gotoLine() {
   GotoLineDialog *dlg;
-  PointStruc cursor;
 
   dlg = new GotoLineDialog(kWriteView->cursor.y + 1,this);
   if (dlg->exec() == QDialog::Accepted) {
-    cursor.x = 0;
-    cursor.y = dlg->getLine() - 1;
-    kWriteView->updateCursor(cursor);
-    kWriteDoc->unmarkFound();
-    kWriteView->updateView(ufUpdateOnScroll);
-    kWriteDoc->updateViews(kWriteView); //uptade all other views except this one
+		gotoPos(0, dlg->getLine() - 1);
   }
   delete dlg;
 }
 
+void KWrite::gotoPos(int cursorXPos, int cursorYPos)
+{
+	PointStruc cursor;
+	cursor.x = cursorXPos;
+	cursor.y = cursorYPos;
+
+  kWriteView->updateCursor(cursor);
+  kWriteDoc->unmarkFound();
+  kWriteView->updateView(ufUpdateOnScroll);
+  kWriteDoc->updateViews(kWriteView); //uptade all other views except this one
+}
 
 void KWrite::initSearch(SConfig &s, int flags) {
  const char *searchFor = searchForList.getFirst();
@@ -2418,9 +2423,27 @@ void KWrite::nextBookmark()
 			normalizedLine = line % lineCount;
 		}
 		while(normalizedLine != startLine && !bookmarked(normalizedLine));
+
+		gotoPos(0, normalizedLine);
+	}
+}
+
+void KWrite::previousBookmark()
+{
+ 	if(bookmarks.count() > 0)
+	{
+    int startLine = kWriteView->cursor.y;
+		int lineCount = kWriteDoc->lastLine();
+		int line = startLine + lineCount;
+		int normalizedLine;
+		do
+		{
+			line--;
+			normalizedLine = line % lineCount;
+		}
+		while(normalizedLine != startLine && !bookmarked(normalizedLine));
 		
-		kWriteView->cursor.y = normalizedLine;
-		kWriteView->changeYPos(kWriteView->cursor.y);
+		gotoPos(0, normalizedLine);
 	}
 }
 
@@ -2434,26 +2457,6 @@ bool KWrite::bookmarked(int line)
       return true;
   }
 	return false;
-}
-
-void KWrite::previousBookmark()
-{
- 	if(bookmarks.count() > 0)
-	{
-    int startLine = kWriteView->cursor.y;
-		int lineCount = kWriteDoc->lastLine();
-		int line = startLine;
-		int normalizedLine;
-		do
-		{
-			line--;
-			normalizedLine = abs(line % lineCount);
-		}
-		while(normalizedLine != startLine && !bookmarked(normalizedLine));
-		
-		kWriteView->cursor.y = normalizedLine;
-		kWriteView->changeYPos(kWriteView->cursor.y);
-	}
 }
 
 void KWrite::gotoBookmark(int n) {

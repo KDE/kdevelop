@@ -431,6 +431,8 @@ public:
   void slotBookmarksAdd();
   void slotBookmarksClear();
   void slotBoomarksBrowserSelected(int);
+ 	void slotBookmarksNext();
+	void slotBookmarksPrevious();
 
   ////////////////////////
   // HELP-Menu entries
