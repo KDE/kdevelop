@@ -160,6 +160,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
     m_driver = new CppDriver( this );
+    m_problemReporter = 0;
 
     setXMLFile( "kdevcppsupport.rc" );
 
@@ -181,12 +182,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(partRemoved(KParts::Part*)));
 
-    m_problemReporter = new ProblemReporter( this );
-    m_problemReporter->setIcon( SmallIcon("info") );
-    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
-
-    connect( core(), SIGNAL(configWidget(KDialogBase*)),
-             m_problemReporter, SLOT(configWidget(KDialogBase*)) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              this, SLOT(configWidget(KDialogBase*)) );
 
@@ -368,6 +363,14 @@ void CppSupportPart::projectOpened( )
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
     m_projectDirectory = URLUtil::canonicalPath( project()->projectDirectory() );
+    m_projectFileList = project()->allFiles();
+
+    m_problemReporter = new ProblemReporter( this );
+    m_problemReporter->setIcon( SmallIcon("info") );
+    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
+
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             m_problemReporter, SLOT(configWidget(KDialogBase*)) );
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -497,8 +500,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	    return;
 
 	QString popupstr = re.cap(1);
-	QStringList projectFileList = project()->allFiles();
-	m_contextFileName = findHeader(projectFileList, popupstr);
+	m_contextFileName = findHeader(m_projectFileList, popupstr);
 	if (m_contextFileName.isEmpty())
 	    return;
 
@@ -539,6 +541,7 @@ QStringList CppSupportPart::reorder(const QStringList &list)
 
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
+    m_projectFileList = project()->allFiles();
     QStringList files = reorder( fileList );
 
     for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
@@ -552,6 +555,7 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
 void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
+    m_projectFileList = project()->allFiles();
     for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
 	QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
@@ -582,8 +586,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 #if 0  // not needed anymore
     kdDebug(9007) << "savedFile(): " << fileName.mid ( m_projectDirectory.length() + 1 ) << endl;
 
-    QStringList projectFileList = project()->allFiles();
-    if (projectFileList.contains(fileName.mid ( m_projectDirectory.length() + 1 ))) {
+    if (m_projectFileList.contains(fileName.mid ( m_projectDirectory.length() + 1 ))) {
 	maybeParse( fileName );
 	emit addedSourceInfo( fileName );
     }
@@ -1047,7 +1050,7 @@ void CppSupportPart::partRemoved( KParts::Part* part )
     if( KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part ) ){
 
 	QString fileName = doc->url().path();
-	if( fileName.isEmpty() )
+	if( !isValidSource(fileName) )
 	    return;
 
 	QString canonicalFileName = URLUtil::canonicalPath( fileName );
@@ -1066,7 +1069,7 @@ QStringList CppSupportPart::modifiedFileList()
 {
     QStringList lst;
 
-    QStringList fileList = project()->allFiles();
+    QStringList fileList = m_projectFileList;
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
 	QString fileName = *it;
@@ -1239,7 +1242,9 @@ void CppSupportPart::removeWithReferences( const QString & fileName )
 bool CppSupportPart::isValidSource( const QString& fileName ) const
 {
     QFileInfo fileInfo( fileName );
-    return fileExtensions().contains( fileInfo.extension() ) && !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
+    return fileExtensions().contains( fileInfo.extension() )
+	&& m_projectFileList.contains( URLUtil::canonicalPath( fileInfo.absFilePath() ).mid( m_projectDirectory.length() + 1 ) )
+	&& !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }
 
 QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDescription )

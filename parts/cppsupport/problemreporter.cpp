@@ -109,6 +109,8 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
              this, SLOT(slotSelected(QListViewItem*)) );
 
     configure();
+
+    slotActivePartChanged( part->partController()->activePart() );
 }
 
 ProblemReporter::~ProblemReporter()

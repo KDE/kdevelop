@@ -179,6 +179,7 @@ private:
     QPtrList<Catalog> m_catalogList;
     Driver* m_driver;
     QString m_projectDirectory;
+    QStringList m_projectFileList;
 
     ClassDom m_activeClass;
     FunctionDom m_activeFunction;

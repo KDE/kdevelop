@@ -161,6 +161,7 @@ void TagCreator::parseTypedef( TypedefAST* ast )
 	    tag.setFileName( m_fileName );
 	    tag.setName( id );
 	    tag.setScope( m_currentScope );
+            tag.setAttribute( "t", type );
 
 	    int line, col;
 	    initDecl->getStartPosition( &line, &col );
