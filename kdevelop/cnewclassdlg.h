@@ -44,7 +44,7 @@ class CNewClassDlg : public QDialog
 {
     Q_OBJECT
 public:
-    CNewClassDlg( QWidget *parent=0, const char *name=0,CProject* prj=0 , const char *folderName=0);
+    CNewClassDlg( QWidget *parent=0, const char *name=0,CProject* prj=0 );
   QString getHeaderFile();
   QString getImplFile();
 private:
@@ -74,8 +74,6 @@ private:
   QString m_header_file;
   QString m_impl_file;
   CProject* prj_info;
-  /** stores the subdir where the new class will be put */
-  const char * subdirName;
  private slots:
  void        ok();
   void  slotClassEditChanged(const char*);
