@@ -7,6 +7,8 @@
   <primarylanguage>PHP</primarylanguage>
   <ignoreparts>
    <part>KDevFileView</part>
+   <part>KDevDoxygen</part>
+   <part>KDevdistpart</part>
   </ignoreparts>
  </general>
  <kdevscriptproject>
@@ -22,4 +24,11 @@
    <toc>perl</toc>
   </ignoretocs>
  </kdevdoctreeview>
+<kdevphpsupport>
+	<codeHelp>
+	   <codeCompletion>true</codeCompletion>
+	   <codeHinting>true</codeHinting>
+	   <realtimeParsing>false</realtimeParsing>
+	  </codeHelp>
+</kdevphpsupport>
 </kdevelop>
