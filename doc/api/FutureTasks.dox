@@ -22,6 +22,7 @@ There should be base classes for ada, java and pascal language supports - too ma
 
 
 Another tasks:
+  - Show intro page on startup
   - DocTreeView
     - Implement plugin system for doctreeview.
     - improve documentation browsing
@@ -81,6 +82,7 @@ Another tasks:
 
 
 \section misctodo Misc.
+  - Project name should be able to contain spaces
   - Update configure.in when sub projects are added and the project
     doesn't use am_edit
   - Implement Add Plugin
@@ -105,6 +107,9 @@ Another tasks:
       the same border as other items
     - Browser tool bar should truncate long menu entries so it doesn't
       take so much space
+    - Extend KDevPlugin-API in order to have a preferred border for at
+      least the selection parts (Automake Manager, Class Browser, File
+      Groups, etc...)
     .
   - Integrate kontact's TODO-List and knotes plugin. (We need something like a
     server/client system that all the knotes/toto-clients are always synced.)

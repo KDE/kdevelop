@@ -5,8 +5,6 @@
 
 \section fixMajBugs Fixing major/annoying bugs
 
-  - Project name should be able to contain spaces
-  - Show intro page on startup
   - Fix the mess of .kdevelop and .kdevses file.
     - All project wide setings should go into .kdevelop and
     - all session (and personal) options should go into .kdevses file
@@ -32,15 +30,7 @@
     - use kdoc to update Qt/KDE docs
     .
   - Solve the regression bugs. These are the <a href= "http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&priority=HI">ones
-maked with priority "HI" in the bug database</a>
+marked with priority "HI" in the bug database</a>
 
-\section MissingUIs Missing UIs (other than 2)
-UIs that intuitively ought to be there
-
-  - IDEAl UI-mode:
-    - Extend KDevPlugin-API in order to have a preferred border for at
-      least the selection parts (Automake Manager, Class Browser, File
-      Groups, etc...)
-    .
 
 */
