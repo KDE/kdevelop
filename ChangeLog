@@ -1,3 +1,7 @@
+2002-04-10  Simon Hausmann <hausmann@kde.org>
+
+	* ported the appwizard to KDP/KGF
+
 2002-04-09  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* ask user to save modified files before quitting
 
