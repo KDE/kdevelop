@@ -60,7 +60,8 @@ private:
 
   // File Actions
 
-//  KAction* m_paFileNew;
+#ifdef removed
+  //  KAction* m_paFileNew;
   KAction* m_paFileOpen;
   KAction* m_paFileClose;
   KAction* m_paFileCloseAll;
@@ -86,8 +87,11 @@ private:
   KAction* m_paEditSelectAll;
   KAction* m_paEditDeselectAll;
   KAction* m_paEditInvertSelection;
-  // View Actions
+  // ??? View Actions
   KAction* m_paViewGotoLine;
+#endif
+  
+  // View Actions
   KToggleAction* m_paViewTreeView;
   KToggleAction* m_paViewOutputView;
   KToggleAction* m_paViewToolbar;
@@ -167,6 +171,11 @@ private:
   //
   /** The initial dock cover for document views */
   KDockWidget* m_dockbaseAreaOfDocumentViews;
+
+  // TODO: Workaround for bug in dock window stuff when using protected members
+  // DockL and DockB
+  KDockWidget* m_dockOnLeft;
+  KDockWidget* m_dockOnBottom;
 
 private slots:
  void slotProjectNew();

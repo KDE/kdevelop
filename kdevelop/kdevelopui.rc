@@ -3,40 +3,10 @@
  <MenuBar>
   <Menu name="file" >
    <text>&amp;File</text>
-   <Action name="file_new" />
-   <Action name="file_open" />
-   <Action name="file_close" />
-   <Action name="file_close_all" />
-   <Separator/>
-   <Action name="file_save" />
-   <Action name="file_save_as" />
-   <Action name="file_save_all" />
-   <Separator/>
-   <Action name="file_print" />
-   <Separator/>
-   <Action name="file_quit" />
+   <Merge/>
   </Menu>
   <Menu name="edit" >
    <text>&amp;Edit</text>
-   <Action name="edit_undo" />
-   <Action name="edit_redo" />
-   <Action name="edit_undo_history" />
-   <Separator/>
-   <Action name="edit_cut" />
-   <Action name="edit_copy" />
-   <Action name="edit_paste" />
-   <Separator/>
-   <Action name="edit_indent" />
-   <Action name="edit_unindent" />
-   <Separator/>
-   <Action name="edit_comment" />
-   <Action name="edit_uncomment" />
-   <Separator/>
-   <Action name="edit_insert_file" />
-   <Separator/>
-   <Action name="edit_search" />
-   <Action name="edit_repeat_search" />
-   <Action name="edit_replace" />
    <Merge/>
    <Separator/>
    <Action name="edit_select_all" />
@@ -45,8 +15,6 @@
   </Menu>
   <Menu name="view" >
    <text>&amp;View</text>
-   <Action name="view_goto_line" />
-   <Separator/>
    <Merge/>
    <Separator/>
    <Action name="view_treeview" />

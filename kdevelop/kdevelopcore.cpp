@@ -76,20 +76,20 @@ void KDevelopCore::initActions()
 {
     KAction *action;
     
-    action = KStdAction::print( this, SLOT( slotFilePrint() ),
-                                m_kdevelopgui->actionCollection(), "file_print");
-    action->setStatusText( i18n("Prints the current document") );
-    action->setWhatsThis( i18n("Print\n\n"
-                               "Opens the printing dialog. There, you can "
-                               "configure which printing program you wish "
-                               "to use, and print your project files.") );
+//    action = KStdAction::print( this, SLOT( slotFilePrint() ),
+//                                m_kdevelopgui->actionCollection(), "file_print");
+//    action->setStatusText( i18n("Prints the current document") );
+//    action->setWhatsThis( i18n("Print\n\n"
+//                               "Opens the printing dialog. There, you can "
+//                               "configure which printing program you wish "
+//                               "to use, and print your project files.") );
     
-    action = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
-                          m_kdevelopgui->actionCollection(), "file_new");
-    action->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
-    action->setWhatsThis(  i18n("New file\n\n"
-                                "Creates a new file "
-                                "and opens a default view, automatically") );
+//    action = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
+//                          m_kdevelopgui->actionCollection(), "file_new");
+//    action->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
+//    action->setWhatsThis(  i18n("New file\n\n"
+//                                "Creates a new file "
+//                                "and opens a default view, automatically") );
 
     action = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
                           m_kdevelopgui->actionCollection(), "project_open");

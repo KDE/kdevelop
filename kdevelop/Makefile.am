@@ -1,4 +1,4 @@
-SUBDIRS = widgets lib plugin parts tools templates
+SUBDIRS = widgets lib plugin parts tools templates kwrite_part
 
 UIC = uic
 

@@ -36,8 +36,11 @@
 #include "kdevelopcore.h"
 
 
-KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
-  ,m_dockbaseAreaOfDocumentViews(0L)
+KDevelop::KDevelop(const char *name) :
+  KParts::DockMainWindow( name ),
+  m_dockbaseAreaOfDocumentViews(0L),
+  m_dockOnLeft(0L),
+  m_dockOnBottom(0L)
 {
   initActions();
   initHelp();
@@ -61,6 +64,7 @@ void KDevelop::initActions(){
   /////////////////////////////////////
   // File Menu
   ////////////////////////////////////
+#ifdef removed
 //  m_paFileNew = KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new");
   m_paFileOpen = KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
   m_paFileClose = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(),  "file_close");
@@ -109,10 +113,12 @@ void KDevelop::initActions(){
   m_paEditInvertSelection = new KAction( i18n("In&vert Selection"), 0, this, SLOT( slotEditInvertSelection() ),
       actionCollection(), "edit_invert_selection");
 
+#endif
+
   /////////////////////////////////////
   // View Menu
   ////////////////////////////////////
-  m_paViewGotoLine = KStdAction::gotoLine( this, SLOT(  slotViewGotoLine() ), actionCollection(), "view_goto_line");
+//  m_paViewGotoLine = KStdAction::gotoLine( this, SLOT(  slotViewGotoLine() ), actionCollection(), "view_goto_line");
   // Separator
   m_paViewTreeView = new KToggleAction( i18n("&Tree-View"), "tree_win", CTRL+Key_T, actionCollection(), "view_treeview");
   m_paViewOutputView = new KToggleAction( i18n("&Output-View"), "output_win",
@@ -134,7 +140,7 @@ void KDevelop::initActions(){
   ////////////////
 
 
-#if 0
+#ifdef removed
   // Debug Viewers submenu
   m_paViewDebugVar = new KAction( i18n("&Variables"), 0, this, SLOT( slotViewDebugVar() ),
           actionCollection(), "view_debug_variables");
@@ -192,7 +198,7 @@ void KDevelop::initActions(){
   m_paBuildConfigure = new KAction( i18n("C&onfigure..."), 0, this, SLOT( slotBuildConfigure() ),
           actionCollection(), "build_configure");
 
-#if 0
+#ifdef removed
   /////////////////////////////////////
   // Debug Menu
   ////////////////////////////////////
@@ -297,7 +303,7 @@ void KDevelop::initActions(){
 
 }
 
-#if 0
+#ifdef removed
 /** reimplemented from KParts::MainWindow
  */
 void KDevelop::slotSetStatusBarText( const QString &text){
@@ -314,6 +320,7 @@ void KDevelop::initHelp(){
                                   "a new project file. You can choose between "
                                   "several templates for creating the new file.") );
 */
+#ifdef removed
   m_paFileOpen->setStatusText( i18n("Opens an existing file") );
   m_paFileOpen->setWhatsThis( i18n("Open file\n\n"
  																	"Shows the Open file dialog to "
@@ -439,6 +446,7 @@ void KDevelop::initHelp(){
   // View Actions
   m_paViewGotoLine->setStatusText( i18n("Goes to Line Number...") );
 //  m_paViewGotoLine->setWhatsThis(  );
+#endif
 
   m_paViewTreeView->setStatusText( i18n("Enables / disables the treeview") );
   m_paViewTreeView->setWhatsThis( i18n("Tree-View\n\n"
@@ -654,10 +662,13 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
 {
   // document view area has to be created first
   if ((role == KDevComponent::SelectView) || (role == KDevComponent::OutputView))
-    if (!m_dockbaseAreaOfDocumentViews) {
+  {
+    if (!m_dockbaseAreaOfDocumentViews)
+    {
       kdDebug(9000) << "KDevelop::embedWidget failed. (No available KDockWidget to dock to)" << endl;
       return;
     }
+  }
 
   KDockWidget *nextWidget = createDockWidget(QString(w->name()),
                                              w->icon()? *w->icon() : QPixmap(),
@@ -667,41 +678,61 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
   nextWidget->setWidget(w);
   nextWidget->setToolTipString(shortExplanation);
 
-  if (role == KDevComponent::SelectView) {
-    if (DockL.dock)
-      nextWidget->manualDock( DockL.dock, KDockWidget::DockCenter, 35);
+  if (role == KDevComponent::SelectView)
+  {
+    if (m_dockOnLeft)
+      nextWidget->manualDock( m_dockOnLeft, KDockWidget::DockCenter, 35);
     else
       nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 35);
+
     nextWidget->show();
+    m_dockOnLeft = nextWidget; 
   }
-  else if (role == KDevComponent::OutputView) {
-    if (DockB.dock)
-      nextWidget->manualDock( DockB.dock, KDockWidget::DockCenter, 70);
+  else
+  {
+    if (role == KDevComponent::OutputView)
+    {
+      if (m_dockOnBottom)
+        nextWidget->manualDock( m_dockOnBottom, KDockWidget::DockCenter, 70);
+      else
+        nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
+      nextWidget->show();
+      m_dockOnBottom = nextWidget; 
+    }
     else
-      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
-    nextWidget->show();
-  }
-  else if (role == KDevComponent::DocumentView) {
-    // TODO: check the configuration!
-    if( getMainDockWidget()->caption() != QString("default")) {
-      // call the view handler service
-      emit addView( w);
+    {
+      if (role == KDevComponent::DocumentView)
+      {
+        // TODO: check the configuration!
+        if( getMainDockWidget()->caption() != QString("default"))
+        {
+          // call the view handler service
+          emit addView( w);
+        }
+        else
+        {
+          // default: stack dockwidgets
+          m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner | KDockWidget::DockCenter);
+          nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
+        }
+        m_dockOnLeft = nextWidget; 
+      }
+      else
+      {
+        if (role == KDevComponent::AreaOfDocumentViews)
+        {
+          // is the MDI mainframe when using QextMDI or QWorkspace
+          nextWidget->setEnableDocking(KDockWidget::DockNone);
+          nextWidget->setDockSite(KDockWidget::DockCorner);
+          setView(nextWidget);
+          setMainDockWidget( nextWidget );
+          m_dockbaseAreaOfDocumentViews = nextWidget;
+        }
+      }
     }
-    else {
-      // default: stack dockwidgets
-      m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner | KDockWidget::DockCenter);
-      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
-    }
-  }
-  else if (role == KDevComponent::AreaOfDocumentViews) {
-    // is the MDI mainframe when using QextMDI or QWorkspace
-    nextWidget->setEnableDocking(KDockWidget::DockNone);
-    nextWidget->setDockSite(KDockWidget::DockCorner);
-    setView(nextWidget);
-    setMainDockWidget( nextWidget );
-    m_dockbaseAreaOfDocumentViews = nextWidget;
   }
 }
+
 
 void KDevelop::stackView( QWidget* w)
 {
