@@ -275,8 +275,7 @@ public:
     void setLocals();
     void setOpen(bool open);
 
-    void setFrameName(const QString &frameName)
-                { setText(VarNameCol, frameName); setText(ValueCol, ""); }
+    void setFrameName(const QString &frameName);
 
     bool needLocals() const                     { return needLocals_; }
 	

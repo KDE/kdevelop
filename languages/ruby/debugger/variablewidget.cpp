@@ -792,6 +792,15 @@ void VarFrameRoot::setOpen(bool open)
     locals_ = "";
 }
 
+void VarFrameRoot::setFrameName(const QString &frameName)
+{ 
+	if (text(VarNameCol) != frameName) {
+		locals_ = "";
+	}
+	
+	setText(VarNameCol, frameName); 
+	setText(ValueCol, ""); 
+}
 
 // **************************************************************************
 // **************************************************************************
