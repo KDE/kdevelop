@@ -1436,7 +1436,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
 	QStringList fileList;
 
-	if ( project->activeDirectory() == QString::null )
+	if ( project->activeDirectory().isNull() )
 	{
 		fileList.append ( header );
 		fileList.append ( implementation );

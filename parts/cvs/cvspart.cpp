@@ -239,7 +239,7 @@ void CvsPart::slotDiff() {
 }
 
 void CvsPart::slotDiffFinished( const QString& diff, const QString& err ) {
-    if ( diff == QString::null && err == QString::null ) {
+    if ( diff.isNull() && err.isNull() ) {
         kdDebug(9000) << "cvs diff cancelled" << endl;
         return; // user pressed cancel or an error occured
     }

@@ -189,7 +189,7 @@ void PerforcePart::slotDiff()
 
 void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
 {
-    if ( diff == QString::null && err == QString::null ) {
+    if ( diff.isNull() && err.isNull() ) {
         kdDebug(9000) << "p4 diff cancelled" << endl;
         return; // user pressed cancel or an error occured
     }

@@ -101,5 +101,5 @@ QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
     
     // next try global
     QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
-    return globalName == QString::null ? fileName : globalName;
+    return globalName.isNull() ? fileName : globalName;
 }

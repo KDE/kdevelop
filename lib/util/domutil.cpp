@@ -64,7 +64,7 @@ QString DomUtil::readEntryAux(const QDomDocument &doc, const QString &path)
 int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path, int defaultEntry)
 {
     QString entry = readEntryAux(doc, path);
-    if (entry==QString::null)
+    if (entry.isNull())
       return defaultEntry;
     else
       return entry.toInt();
@@ -74,7 +74,7 @@ int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path, int defa
 bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path, bool defaultEntry)
 {
     QString entry = readEntryAux(doc, path);
-    if (entry==QString::null)
+    if (entry.isNull())
       return defaultEntry;
     else
       return entry == "TRUE" || entry == "true";

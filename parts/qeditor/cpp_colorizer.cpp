@@ -155,7 +155,7 @@ void CppColorizer::loadDynamicKeywords()
     
     //kdDebug(9032) << "Highlighting Dir: " << hlFileDir << endl;
     
-    if( hlFileDir == QString::null )
+    if( hlFileDir.isNull() )
 	return;
     
     QDomDocument hlFile( "hlfile" ), curDoc ( "classlist" );

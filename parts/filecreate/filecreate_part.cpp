@@ -139,7 +139,7 @@ void FileCreatePart::slotProjectOpened() {
   // read in global template information
   QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
   QDomDocument globalDom;
-  if (globalXMLFile!=QString::null &&
+  if (!globalXMLFile.isNull() &&
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
     readTypes(globalDom, m_filetypes, false);
   }
@@ -155,7 +155,7 @@ void FileCreatePart::slotProjectOpened() {
       QString subtyperef = element.attribute("subtyperef");
       // if an extension has been specified as enabled, ensure it
       // and all its subtypes are enabled
-      if (subtyperef==QString::null) {
+      if (subtyperef.isNull()) {
         FileType * filetype = getType(ext);
         if (filetype) {
           filetype->setEnabled(true);
@@ -287,7 +287,7 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
   QString subtypeRef = subtRef;
   QString ext = ex;
   int dashPos = ext.find('-');
-  if (dashPos>-1 && subtRef==QString::null) {
+  if (dashPos>-1 && subtRef.isNull()) {
     ext = ex.left(dashPos);
     subtypeRef = ex.mid(dashPos+1);
   }
@@ -297,7 +297,7 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
       filetype;
       filetype=filetypes.next()) {
     if (filetype->ext()==ext) {
-      if (subtypeRef==QString::null) return filetype;
+      if (subtypeRef.isNull()) return filetype;
       QPtrList<FileType> subtypes = filetype->subtypes();
       for(FileType * subtype = subtypes.first();
           subtype;
@@ -323,7 +323,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   FileDialog * fileDialogWidget = NULL;
 
   // If the file type (extension) is unknown, we're going to need to ask
-  if (ext==QString::null) {
+  if (ext.isNull()) {
     m_filedialogFiletype = NULL;
     filetypeWidget = new FriendlyWidget(this);
     connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileType *) ) ,
@@ -333,13 +333,13 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 
 
   // If the directory was supplied, it was relative to the project dir
-  if (dir!=QString::null) dir = project()->projectDirectory() + "/" + dir;
+  if (!dir.isNull()) dir = project()->projectDirectory() + "/" + dir;
 
   // If the file name or path is unknown, we're going to need to ask
-  if (dir==QString::null || name==QString::null) {
+  if (dir.isNull() || name.isNull()) {
 
     // if no path is known, start at project root
-    if (dir==QString::null)
+    if (dir.isNull())
       dir=project()->projectDirectory();
 
     fileDialogWidget = new FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
@@ -411,7 +411,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   kdDebug(9034) << "filename = " << filename << endl;
 
   // add in subtype, if specified
-  if (subtype!=QString::null && subtype!="")
+  if (!subtype.isNull() && subtype!="")
     ext += "-" + subtype;
 
   // create file from template, and add it to the project

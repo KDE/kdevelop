@@ -476,7 +476,7 @@ SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, b
         {
                 SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
                 QString relpath = (spitem->path).mid(prefixLen);
-                relpath = (relpath==QString::null) ? QString("") : relpath;
+                relpath = (relpath.isNull()) ? QString("") : relpath;
                 kdDebug(9020) << " ... checking -" << spitem->path << "-" << endl;
                 kdDebug(9020) << " ... (tailored: -" << relpath << "- against -" << (pathIsAbsolute ? path.mid(prefixLen) : path) << "- )" << endl;
                 if ( relpath == (pathIsAbsolute ? path.mid(prefixLen) : path))
@@ -502,7 +502,7 @@ QString AutoProjectWidget::pathForTarget(const TargetItem *titem) const {
     if (spitem->targets.containsRef(titem)) {
       kdDebug(9020) << "Found it!" << endl;
       QString relpath = (spitem->path).mid(prefixLen);
-      return (relpath==QString::null) ? QString("") : relpath;
+      return (relpath.isNull()) ? QString("") : relpath;
     }
   }
   kdDebug(9020) << "Not found" << endl;

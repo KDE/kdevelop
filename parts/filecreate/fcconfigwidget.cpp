@@ -75,7 +75,7 @@ void FCConfigWidget::loadGlobalConfig(QListView *view, bool checkmarks)
 {
     QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
     QDomDocument globalDom;
-    if (globalXMLFile!=QString::null &&
+    if (!globalXMLFile.isNull() &&
         DomUtil::openDOMFile(globalDom,globalXMLFile)) {
         m_part->readTypes(globalDom, m_globalfiletypes, false);
     }
@@ -94,7 +94,7 @@ void FCConfigWidget::loadGlobalConfig(QListView *view, bool checkmarks)
                 QDomElement element = node.toElement();
                 QString ext = element.attribute("ext");
                 QString subtyperef = element.attribute("subtyperef");
-                if (subtyperef==QString::null)
+                if (subtyperef.isNull())
                 {
                     QListViewItem *it = view->findItem(ext, 0);
                     if (it)

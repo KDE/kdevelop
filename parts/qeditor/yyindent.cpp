@@ -256,7 +256,7 @@ static inline QChar lastParen( const QString& t )
 */
 static inline bool okay( QChar typedIn, QChar okayCh )
 {
-    return typedIn == QChar::null || typedIn == okayCh;
+    return typedIn.isNull() || typedIn == okayCh;
 }
 
 /*

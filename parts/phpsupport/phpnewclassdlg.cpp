@@ -37,7 +37,7 @@ PHPNewClassDlg::PHPNewClassDlg(const QStringList& baseClassNames,const QString& 
 
   // load the class template if available
   QString templateFile = KGlobal::instance()->dirs()->findResource("data","kdevphpsupport/newclasstemplate.txt");
-  if(templateFile != QString::null){
+  if(!templateFile.isNull()){
     QFile file(templateFile);
     QTextStream stream(&file);
     if(file.open(IO_ReadOnly)){ 
