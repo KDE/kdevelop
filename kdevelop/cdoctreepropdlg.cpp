@@ -86,8 +86,8 @@ CDocTreePropDlg::~CDocTreePropDlg(){
 }
 
 void CDocTreePropDlg::slotFileButtonClicked(){
-  QString str=  KFileDialog::getOpenFileName(0,"*.html *.htm",this,"test");
+  KURL str = KFileDialog::getOpenURL(0,"*.html *.htm",this,"test");
   if(!str.isEmpty()){
-    file_edit->setText(str);
+    file_edit->setText(str.path());
   }
 }

@@ -123,7 +123,8 @@ void CKDevelop::setMainCaption(int tab_item){
  *-----------------------------------------------------------------*/
 bool CKDevelop::fileSaveAs(){
 
-   QString name,oldName;
+   QString oldName;
+   KURL name;
    int msg_result = KMessageBox::Ok;
 
    if (bAutosave) saveTimer->stop();
@@ -131,17 +132,22 @@ bool CKDevelop::fileSaveAs(){
    oldName = editor_view->currentEditor()->getName();
 
    do {
-       name = KFileDialog::getSaveFileName(oldName,0,this,oldName);
-       if (name.isNull()){
-	   if (bAutosave) {
-	       saveTimer->start(saveTimeout);
-	   }
+       name = KFileDialog::getSaveURL(oldName,0,this,oldName);
+       if( !name.isLocalFile() )
+       {
+         KMessageBox::sorry( 0L, i18n( "Only local files are supported" ) );
+         return false;
+       }
+       if (name.isEmpty()){
+	    if (bAutosave) {
+	        saveTimer->start(saveTimeout);
+	    }
 	   return false;
        }
-       if(QFile::exists(name)){
+       if(QFile::exists(name.path())){
 	   msg_result=KMessageBox::warningYesNoCancel(this,
 						      i18n("\nThe file\n\n%1\n\nalready exists.\n"
-							   "Do you want overwrite the old one?\n").arg(name));
+							   "Do you want overwrite the old one?\n").arg(name.path()));
 	   
 	   if (msg_result==KMessageBox::Cancel){
 	       if (bAutosave)
@@ -152,8 +158,8 @@ bool CKDevelop::fileSaveAs(){
    }
    while(msg_result == KMessageBox::No);
    
-   editor_view->setMDICaption(QFileInfo(name).fileName());
-   editor_view->currentEditor()->setName(name);
+   editor_view->setMDICaption(QFileInfo(name.path()).fileName());
+   editor_view->currentEditor()->setName(name.path());
    editor_view->currentEditor()->doSave();
   
    slotViewRefresh();

@@ -74,8 +74,8 @@ void CMakeManualDlg::slotOkClicked(){
     accept();
 }
 void CMakeManualDlg::slotFileButtonClicked(){
-    QString str =  KFileDialog::getOpenFileName(0,"*.sgml",this,"test");
+    KURL str =  KFileDialog::getOpenURL(0,"*.sgml",this,"test");
     if(!str.isEmpty()){
-	file_edit->setText(str);
+	file_edit->setText(str.path());
     }    
 }

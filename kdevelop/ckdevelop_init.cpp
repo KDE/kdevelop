@@ -488,7 +488,7 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertSeparator();
   edit_menu->addCommand(ctEditCommands, cmSelectAll,pixmap, this,SLOT(slotEditSelectAll()),ID_EDIT_SELECT_ALL);
-  edit_menu->addCommand(ctEditCommands, cmDeselectAll,pixmap,this,SLOT(slotEditDelectAll()), ID_EDIT_DESELECT_ALL);
+  edit_menu->addCommand(ctEditCommands, cmDeselectAll,pixmap,this,SLOT(slotEditDeselectAll()), ID_EDIT_DESELECT_ALL);
   edit_menu->addCommand(ctEditCommands, cmInvertSelection, ID_EDIT_INVERT_SELECTION);
 
 
@@ -996,7 +996,7 @@ void CKDevelop::initConnections(){
   // the clipboard change signal is not needed in kwrite (jochen)
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(slotClipboardChanged()));
 
-  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
+  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTabSelected(int)));
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));

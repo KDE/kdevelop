@@ -1106,7 +1106,7 @@ void CPrintDlg::slotPrintingConfClicked() {
 }
 
 void CPrintDlg::slotPrintToFileDlgClicked() {
-  printToFileLine->setText(KFileDialog::getOpenFileName());
+  printToFileLine->setText(KFileDialog::getOpenURL().path());
 }
 
 bool CPrintDlg::lookProgram(QString name) {

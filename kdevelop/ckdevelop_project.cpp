@@ -348,16 +348,21 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 
 void CKDevelop::slotProjectOpen(){
   slotStatusMsg(i18n("Opening project..."));
-  QString filename = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+  KURL filename = KFileDialog::getOpenURL(0,"*.kdevprj",this);
+  if( !filename.isLocalFile() )
+  {
+    KMessageBox::sorry( 0L, i18n( "Only local files are supported" ) );
+    return;
+  }
   if (filename.isEmpty())
       return;
   
   if (project && !slotProjectClose())
       return;
  
-  QFileInfo info(filename);
+  QFileInfo info(filename.path());
   if (info.isFile()){
-    if(!(readProjectFile(filename))){
+    if(!(readProjectFile(filename.path()))){
 
     KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                                "Please use only new generated projects!"));

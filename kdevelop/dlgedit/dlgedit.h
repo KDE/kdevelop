@@ -18,6 +18,7 @@
 #ifndef DLGEDIT_H
 #define DLGEDIT_H
 
+#include <qlist.h>
 #include "../component.h"
 #include "widgetsview.h"
 #include "propertyview.h"

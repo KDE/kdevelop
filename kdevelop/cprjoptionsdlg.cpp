@@ -1406,10 +1406,11 @@ void CPrjOptionsDlg::ok5()
 
 // connection to set_modify_dir
 void CPrjOptionsDlg::slotFileDialogClicked() {
-  QString file,dir;
+  QString dir;
+  KURL url;
   dir = prj_info->getProjectDir();
-  file = KFileDialog::getOpenFileName(dir,"*",this,"File");
-  m_set_modify_line->setText(file);
+  url = KFileDialog::getOpenURL(dir,"*",this,"File");
+  m_set_modify_line->setText(url.path());
 }
 
 

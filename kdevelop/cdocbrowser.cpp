@@ -41,7 +41,7 @@
 #include <kcolorbtn.h>
 #include <kcursor.h>
 #include <kprocess.h>
-#include <kio_netaccess.h>
+#include <kio/netaccess.h>
 
 #include "resource.h"
 
@@ -119,7 +119,7 @@ void CDocBrowser::showURL(QString url,bool reload){
 
   if( (url_wo_ref != old_url) || reload){
     QString str="";
-    KIONetAccess::download(url,str);
+    KIO::NetAccess::download(url,str);
     
     //cerr << endl << "STR:" << str;
 
@@ -145,7 +145,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       //      parse();
       show();
 
-      KIONetAccess::removeTempFile(str);
+      KIO::NetAccess::removeTempFile(str);
       file.close();
     }
     else{

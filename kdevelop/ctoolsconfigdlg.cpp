@@ -246,11 +246,11 @@ void CToolsConfigDlg::slotToolMoveDown()
 
 void CToolsConfigDlg::slotToolsExeSelect()
 {
-  QString exe_file_name;
-  exe_file_name = KFileDialog::getOpenFileName();
+  KURL exe_file_name;
+  exe_file_name = KFileDialog::getOpenURL();
   if (!exe_file_name.isEmpty()){
-    QString exe_file=QFileInfo(exe_file_name).fileName();
-    if(!QFileInfo(exe_file_name).isExecutable()){
+    QString exe_file=QFileInfo(exe_file_name.path()).fileName();
+    if(!QFileInfo(exe_file_name.path()).isExecutable()){
       KMessageBox::error(this, i18n("The selected file is not an executable. Please choose an executable filename."));
       return;
     }

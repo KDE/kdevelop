@@ -142,7 +142,7 @@ QString CEditWidget::getName(){
  * Returns:
  *   int          The line at which the file got loaded.
  *-----------------------------------------------------------------*/
-int CEditWidget::loadFile(QString filename, int mode) {
+int CEditWidget::loadFile(QString filename, int) {
   struct stat buf;
   KWrite::loadFile(filename);
   ::stat(filename, &buf);

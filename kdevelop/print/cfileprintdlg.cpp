@@ -736,7 +736,7 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
 }
 
 void CFilePrintDlg::slotSelfChoosenFileButtonClicked() {
-  selfChoosenFileLine->setText(KFileDialog::getOpenFileName());
+  selfChoosenFileLine->setText(KFileDialog::getOpenURL().path());
 }
 
 void CFilePrintDlg::slotSelfChoosenFileAddClicked() {

@@ -2105,28 +2105,38 @@ void KWrite::newDoc() {
 }
 
 void KWrite::open() {
-  QString url;    
+  KURL url;
 
   if (!canDiscard()) return;
 //  if (kWriteDoc->hasFileName()) s = QFileInfo(kWriteDoc->fileName()).dirPath();
 //    else s = QDir::currentDirPath();
 
-  url = KFileDialog::getOpenFileName(kWriteDoc->fileName(),"*",this);
+  url = KFileDialog::getOpenURL(kWriteDoc->fileName(),"*",this);
+  if (!url.isLocalFile())
+  {
+    KMessageBox::sorry( 0L, i18n( "Only local files are supported yet." ));
+    return;
+  }
   if (url.isEmpty()) return;
 //  kapp->processEvents();
-  loadURL(url);
+  loadURL(url.path());
 }
 
 void KWrite::insertFile() {
   if (isReadOnly())
     return;
 
-  QString url;
+  KURL url;
 
-  url = KFileDialog::getOpenFileName(kWriteDoc->fileName(),"*",this);
+  url = KFileDialog::getOpenURL(kWriteDoc->fileName(),"*",this);
+  if (!url.isLocalFile())
+  {
+    KMessageBox::sorry( 0L, i18n( "Only local files are supported yet." ));
+    return;
+  }
   if (url.isEmpty()) return;
 //  kapp->processEvents();
-  loadURL(url,lfInsert);
+  loadURL(url.path(),lfInsert);
 }
 
 KWrite::fileResult KWrite::save() {
@@ -2139,15 +2149,15 @@ KWrite::fileResult KWrite::save() {
 }
 
 KWrite::fileResult KWrite::saveAs() {
-  QString url;
+  KURL u;
   int query;
 
   do {
     query = 0;
-    url = KFileDialog::getSaveFileName(kWriteDoc->fileName(),"*",this);
-    if (url.isEmpty()) return CANCEL;
+    u = KFileDialog::getSaveURL(kWriteDoc->fileName(),"*",this);
+    if (u.isEmpty()) return CANCEL;
 
-    KURL u(url);
+//    KURL u(url);
     if (u.isLocalFile()) {
       QFileInfo info;
       QString name(u.path());
@@ -2164,7 +2174,7 @@ KWrite::fileResult KWrite::saveAs() {
   } while (query == 1);
 
 //  kapp->processEvents();
-  writeURL(url);
+  writeURL(u.path());
   return OK;
 }
 

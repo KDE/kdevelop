@@ -118,17 +118,22 @@ void CKDevelop::slotFileNew(){
 
 
 void CKDevelop::slotFileOpen(){
+    KURL url;
     slotStatusMsg(i18n("Opening file..."));
-    QString str;
     if(project){
-	str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
+	url = KFileDialog::getOpenURL(prj->getProjectDir(),"*",this);
     }
     else{
-    str = KFileDialog::getOpenFileName(0,"*",this);
+    url = KFileDialog::getOpenURL(0,"*",this);
     }  
-    if (!str.isEmpty()) // nocancel
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet" ) );
+      return;
+    }
+    if (!url.isEmpty()) // nocancel
 	{
-	    switchToFile(str);
+	    switchToFile(url.path());
 	}
     slotStatusMsg(i18n("Ready."));
 }

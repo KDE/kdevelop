@@ -29,6 +29,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlistview.h>
+#include <qlist.h>
 
 class CProject;
 class CLogFileView;
