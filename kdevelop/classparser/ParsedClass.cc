@@ -385,7 +385,6 @@ QList<CParsedMethod> *CParsedClass::getVirtualMethodList()
  *-----------------------------------------------------------------*/
 void CParsedClass::out()
 {
-  char buf[10];
   QDictIterator<CParsedAttribute> ait( attributes );
   CParsedParent *aParent;
   CParsedMethod *aMethod;
@@ -393,37 +392,35 @@ void CParsedClass::out()
   char *str;
 
   if( !comment.isEmpty() )
-    cout << comment << "\n";
+    cout << comment << endl;
 
-  sprintf( buf, "%d", declaredOnLine );
-  cout << "Class " << name << " @ line " << buf;
-  sprintf( buf, "%d", declarationEndsOnLine );
-  cout << " - " << buf << "\n";
-  cout << "  Defined in files:\n";
-  cout << "    " << declaredInFile << "\n";
-  cout << "    " << definedInFile << "\n";
-  cout << "  Parents:\n";
+  cout << "Class " << name << " @ line " << declaredOnLine;
+  cout << " - " << declarationEndsOnLine << endl;
+  cout << "  Defined in files:" << endl;
+  cout << "    " << declaredInFile << endl;
+  cout << "    " << definedInFile << endl;
+  cout << "  Parents:" << endl;
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
     aParent->out();
-  cout << "  Friends:\n";
+  cout << "  Friends:" << endl;
   for( str = friends.first(); str != NULL; str = friends.next() )
-    cout << "   " << str << "\n";
-  cout << "  Attributes:\n";
+    cout << "   " << str << endl;
+  cout << "  Attributes:" << endl;
   for( ait.toFirst(); ait.current(); ++ait )
     ait.current()->out();
-  cout << "  Methods:\n";
+  cout << "  Methods:" << endl;
   for( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
     aMethod->out();
-  cout << "  Signals:\n";
+  cout << "  Signals:" << endl;
   for( aMethod = signalList.first(); aMethod != NULL; aMethod = signalList.next() )
     aMethod->out();
-  cout << "  Slots:\n";
+  cout << "  Slots:" << endl;
   for( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
     aMethod->out();
-  cout << "  Signal to slot mappings:\n";
+  cout << "  Signal to slot mappings:" << endl;
   for( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     aSS->out();
-  cout << "  Classes:\n";
+  cout << "  Classes:" << endl;
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )

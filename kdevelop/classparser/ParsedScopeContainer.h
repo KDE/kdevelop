@@ -105,6 +105,12 @@ public: // Public methods
    */
   void clear();
 
+  /**
+   * Output this object to stdout.
+   *
+   */
+  void out();
+
 };
 
 #endif

@@ -178,3 +178,48 @@ QStrList *CParsedScopeContainer::getSortedScopeNameList()
   return getSortedIteratorNameList<CParsedScopeContainer>( scopeIterator );
 }
 
+/*------------------------------------ CParsedScopeContainer::out()
+ * out()
+ *   Output this object to stdout.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedScopeContainer::out()
+{
+  if( !comment.isEmpty() )
+    cout << comment << endl;
+
+  cout << "Namespace " << name << " @ line " << declaredOnLine;
+  cout << " - " << declarationEndsOnLine << endl;
+  cout << "  Defined in files:" << endl;
+  cout << "    " << declaredInFile << endl;
+  cout << "    " << definedInFile << endl;
+  cout << "Namespaces:" << endl;
+  for( scopeIterator.toFirst(); 
+       scopeIterator.current();
+       ++scopeIterator )
+    scopeIterator.current()->out();
+  cout << "Classes:" << endl;
+  for( classIterator.toFirst(); 
+       classIterator.current();
+       ++classIterator )
+    classIterator.current()->out();
+  cout << "Structures:" << endl;
+  for( structIterator.toFirst(); 
+       structIterator.current();
+       ++structIterator )
+    structIterator.current()->out();
+  cout << "Functions:" << endl;
+  for( methodIterator.toFirst(); 
+       methodIterator.current();
+       ++methodIterator )
+    methodIterator.current()->out();
+  cout << "Variables:" << endl;
+  for( attributeIterator.toFirst(); 
+       attributeIterator.current();
+       ++attributeIterator )
+    attributeIterator.current()->out();
+}
