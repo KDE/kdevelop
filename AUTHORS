@@ -44,7 +44,7 @@ Patches:
 SplashScreen:
   Marion Klein <MarionKlein@wanadoo.fr>
 
-KTabBar, bug fixes, Gideon Release:
+KDevTabBar, bug fixes, Gideon Release:
   Caleb Tennis <caleb@aei-tech.com>
 
 PartExplorer, (bugs for) CvsPart:
@@ -53,6 +53,9 @@ PartExplorer, (bugs for) CvsPart:
 Pascal support and project parts, Filecreate GUI,
 Documentation viewer improvements
   Alexander Dymo <cloudtemple@mksat.net>
+
+Application wizard improvementes, application templates, documentation, bug fixes:
+  Dominik Haumann <dhdev@gmx.de>
 
 Other software included in the source package:
 
