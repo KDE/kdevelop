@@ -1,6 +1,7 @@
 kdevelop (1:1.4-final-1) unstable; urgency=low
  
   * New upstream release
+  * Fix kde-i18n conflicts (Closes: #87381)
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 02:06:00 -0700
 

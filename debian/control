@@ -1,12 +1,13 @@
 Source: kdevelop
 Section: devel
 Priority: optional
-Maintainer: Raphael Bossek <raphael.bossek@solutions4linux.de>
+Maintainer: Ivan E. Moore II <rkrusty@debian.org>
 Build-Depends: debhelper, kdelibs-dev (>= 4:2.1.0-0), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc
 Standards-Version: 3.5.0
 
 Package: kdevelop
 Architecture: any
+Replaces: kde-i18n
 Depends: ${shlibs:Depends}, ${perl:Depends}, autoconf, automake, kdebase-libs
 Recommends: make
 Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb
