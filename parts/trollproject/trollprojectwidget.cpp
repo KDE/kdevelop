@@ -132,6 +132,10 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 {
     QSplitter *splitter = new QSplitter(Vertical, this);
 
+    //////////////////
+    // PROJECT VIEW //
+    //////////////////
+
     overviewContainer = new QVBox(splitter,"Projects");
     overviewContainer->setMargin ( 2 );
     overviewContainer->setSpacing ( 2 );
@@ -161,7 +165,8 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectconfButton->setPixmap ( SmallIcon ( "configure.png",22 ) );
     projectconfButton->setText("Configure");
     projectconfButton->setEnabled ( true );
-    // connect toolbar buttons
+
+    // Project button connections
     connect ( buildButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
     connect ( runButton, SIGNAL ( clicked () ), this, SLOT ( slotRunProject () ) );
@@ -174,8 +179,49 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     overview->header()->hide();
     overview->addColumn(QString::null);
 
+    // Project tree connections
+    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
+    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
+    /////////////////
+    // DETAIL VIEW //
+    /////////////////
 
+    // Details tree
+    detailContainer = new QVBox(splitter,"Details");
+    detailContainer->setMargin ( 2 );
+    detailContainer->setSpacing ( 2 );
+
+    // Details Toolbar
+    fileTools = new QHBox(detailContainer,"Detail buttons");
+    fileTools->setMargin ( 2 );
+    fileTools->setSpacing ( 2 );
+
+    // Add existing files button
+    addfilesButton = new QToolButton ( fileTools, "Add existing files" );
+    addfilesButton->setPixmap ( SmallIcon ( "fileopen",22 ) );
+    addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
+    addfilesButton->setEnabled ( true );
+
+    // Add new file button
+    newfileButton = new QToolButton ( fileTools, "Add new file" );
+    newfileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
+    newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
+    newfileButton->setEnabled ( true );
+
+    // remove file button
+    removefileButton = new QToolButton ( fileTools, "remove file" );
+    removefileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
+    removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
+    removefileButton->setEnabled ( true );
+
+    // spacer
+    spacer = new QWidget(fileTools);
+    projectTools->setStretchFactor(spacer, 1);
+
+    // detail tree
     details = new KListView(splitter, "details widget");
     details->setRootIsDecorated(true);
     details->setResizeMode(QListView::LastColumn);
@@ -183,13 +229,12 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     details->header()->hide();
     details->addColumn(QString::null);
 
-    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
-    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    // Detail button connections
+    connect ( addfilesButton, SIGNAL ( clicked () ), this, SLOT ( slotAddFiles () ) );
+    connect ( newfileButton, SIGNAL ( clicked () ), this, SLOT ( slotNewFile () ) );
+    connect ( removefileButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveFile () ) );
 
-    //    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
-    //             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
+    // Detail tree connections
     connect( details, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotDetailsExecuted(QListViewItem*)) );
     connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
@@ -525,6 +570,14 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     configList.append("warn_on");
   else if (item->configuration.m_warnings == QWARN_OFF)
     configList.append("warn_off");
+  if (item->configuration.m_requirements & QD_QT)
+    configList.append("qt");
+  if (item->configuration.m_requirements & QD_OPENGL)
+    configList.append("opengl");
+  if (item->configuration.m_requirements & QD_THREAD)
+    configList.append("thread");
+  if (item->configuration.m_requirements & QD_X11)
+    configList.append("x11");
   Buffer->setValues("CONFIG",configList,5,true);
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
@@ -546,7 +599,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
-void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &filename)
+void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
 {
   FileItem *fitem = createFileItem(filename);
   titem->files.append(fitem);
@@ -562,6 +615,100 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &fi
       titem->owner->forms.append(filename);
       break;
   }
+}
+
+void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename)
+{
+  if (!m_shownSubproject)
+    return;
+  FileItem *fitem = createFileItem(filename);
+  GroupItem *gitem = 0;
+
+  QListIterator<GroupItem> it(m_shownSubproject->groups);
+  for (; it.current(); ++it)
+  {
+    if ((*it)->groupType == gtype)
+    {
+      gitem = *it;
+      break;
+    }
+  }
+  if (!gitem)
+    return;
+  gitem->files.append(fitem);
+  switch (gtype)
+  {
+    case GroupItem::Sources:
+      m_shownSubproject->sources.append(filename);
+      break;
+    case GroupItem::Headers:
+      m_shownSubproject->headers.append(filename);
+      break;
+    case GroupItem::Forms:
+      m_shownSubproject->forms.append(filename);
+      break;
+  }
+}
+
+/**
+* Method adds a file to the current project by grouped
+* by file extension
+*/
+void TrollProjectWidget::addFile(const QString &fileName)
+{
+  if (!m_shownSubproject)
+    return;
+  QStringList splitFile = QStringList::split('.',fileName);
+  QString ext = splitFile[splitFile.count()-1];
+  splitFile = QStringList::split('/',fileName);
+  QString fileWithNoSlash = splitFile[splitFile.count()-1];
+  ext = ext.simplifyWhiteSpace();
+  if (QString("cpp c").find(ext)>-1)
+    addFileToCurrentSubProject(GroupItem::Sources,fileWithNoSlash);
+  else if (QString("hpp h").find(ext)>-1)
+    addFileToCurrentSubProject(GroupItem::Headers,fileWithNoSlash);
+  else if (QString("ui").find(ext)>-1)
+    addFileToCurrentSubProject(GroupItem::Forms,fileWithNoSlash);
+  else
+    addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);
+  updateProjectFile(m_shownSubproject);
+  slotOverviewSelectionChanged(m_shownSubproject);
+}
+
+
+void TrollProjectWidget::slotAddFiles()
+{
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  QString ext = "*.cpp *.c *.hpp *.h *.ui";
+  QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
+                                        "Files ("+ext+")",
+                                        this,
+                                        "Insert existing files",
+                                        TRUE);
+  dialog->setMode(QFileDialog::ExistingFiles);
+  dialog->exec();
+  QStringList files = dialog->selectedFiles();
+  for (unsigned int i=0;i<files.count();i++)
+  {
+    // Copy selected files to current subproject folder
+    QProcess *proc = new QProcess( this );
+    proc->addArgument( "cp" );
+    proc->addArgument( "-f" );
+    proc->addArgument( files[i] );
+    proc->addArgument( projectDirectory()+relpath );
+    proc->start();
+    QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+    // and add them to the filelist
+    addFile(filename);
+  }
+}
+
+void TrollProjectWidget::slotNewFile()
+{
+}
+
+void TrollProjectWidget::slotRemoveFile()
+{
 }
 
 

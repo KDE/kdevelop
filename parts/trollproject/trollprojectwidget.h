@@ -103,7 +103,7 @@ private:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {Sources, Headers, Forms };
+    enum GroupType {NoType, Sources, Headers, Forms };
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
@@ -160,7 +160,9 @@ public:
 
     void updateProjectFile(QListViewItem *item);
     void updateProjectConfiguration(SubprojectItem *item);
-    void addFileToCurrentSubProject(GroupItem *titem,QString &filename);
+    void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
+    void addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename);
+    void addFile(const QString &fileName);
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 
@@ -173,6 +175,9 @@ private slots:
     void slotRebuildProject();
     void slotConfigureProject();
     void slotRunProject();
+    void slotAddFiles();
+    void slotNewFile();
+    void slotRemoveFile();
 
 private:
     void cleanDetailView(SubprojectItem *item);
@@ -183,12 +188,19 @@ private:
 
     QVBox     *overviewContainer;
     KListView *overview;
-    KListView *details;
     QHBox     *projectTools;
     QToolButton *buildButton;
     QToolButton *rebuildButton;
     QToolButton *runButton;
     QToolButton *projectconfButton;
+
+    QVBox     *detailContainer;
+    KListView *details;
+    QHBox     *fileTools;
+    QToolButton *addfilesButton;
+    QToolButton *newfileButton;
+    QToolButton *removefileButton;
+
     SubprojectItem *m_shownSubproject;
     TrollProjectPart *m_part;
 };

@@ -99,7 +99,7 @@ void TrollProjectPart::closeProject()
 
 QString TrollProjectPart::projectDirectory()
 {
-    return m_widget->projectDirectory();
+  return m_widget->subprojectDirectory();
 }
 
 
@@ -131,13 +131,13 @@ QStringList TrollProjectPart::allFiles()
 }
 
 
-void TrollProjectPart::addFile(const QString &/*fileName*/)
+void TrollProjectPart::addFile(const QString &fileName)
 {
-    // FIXME
+  m_widget->addFile(fileName);
 }
 
 
-void TrollProjectPart::removeFile(const QString &/*fileName*/)
+void TrollProjectPart::removeFile(const QString &fileName)
 {
     // FIXME
 }
