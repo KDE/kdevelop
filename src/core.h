@@ -35,10 +35,11 @@ public:
 protected:
     virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
     virtual void raiseWidget(QWidget *w);
-    virtual void gotoSourceFile(const KURL& url, int lineNum=0,
-                                Embedding embed=Replace);
     virtual void gotoDocumentationFile(const KURL& url,
                                        Embedding embed=Replace);
+    virtual void gotoSourceFile(const KURL& url, int lineNum=0,
+                                Embedding embed=Replace);
+    virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0);
     virtual void saveAllFiles();
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);

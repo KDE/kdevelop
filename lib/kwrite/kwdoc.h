@@ -319,7 +319,18 @@ class KWriteDoc : public KTextEditor::Document {
 
     void newBracketMark(PointStruc &, BracketMark &);
 
-  protected:
+    /**
+     * Sets a breakpoint to the line lineNum with some identifier
+     * id. If id is -1, the breakpoint is deleted.
+     */
+    void setBreakpoint(int lineNum, int id, bool enabled, bool pending);
+    /**
+     * Sets the line which is marked as the debugger's execution point.
+     * If lineNum is -1, the mark is cleared.
+     */
+    void setExecutionPoint(int lineNum);
+
+protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
   protected slots:

@@ -3005,6 +3005,36 @@ void KWriteDoc::guiActivateEvent( KParts::GUIActivateEvent *ev )
     emit selectionChanged();
 }
 
+void KWriteDoc::setBreakpoint(int lineNum, int id, bool enabled, bool pending)
+{
+    tagLines(lineNum, lineNum);
+    TextLine *line = getTextLine(lineNum);
+    if (!line)
+        return;
+    line->setBreakpoint(id, enabled, pending);
+    updateViews();
+}
+
+void KWriteDoc::setExecutionPoint(int lineNum)
+{
+    unmarkFound();
+    tagLines(lineNum, lineNum);
+    
+    if (lineNum == -1) {
+        for (TextLine::List::Iterator it = contents.begin();
+             it != contents.end();
+             ++it) {
+            (*it)->setExecutionPoint(false);
+        }
+    } else {
+        TextLine *line = getTextLine(lineNum);
+        if (!line)
+            return;
+        line->setExecutionPoint(true);
+    }
+    updateViews();
+}
+
 KWriteBrowserExtension::KWriteBrowserExtension( KWriteDoc *doc )
 : KParts::BrowserExtension( doc, "kwritebrowserextension" )
 {

@@ -92,15 +92,21 @@ public:
      */
     virtual void raiseWidget(QWidget *) = 0;
     /**
+     * Loads a file into the HTML viewer.
+     */
+    virtual void gotoDocumentationFile(const KURL& url,
+                                       Embedding embed=Replace) = 0;
+    /**
      * Loads a file into the editor and jump to a line number.
      */
     virtual void gotoSourceFile(const KURL& url, int lineNum=0,
                                 Embedding embed=Replace) = 0;
     /**
-     * Loads a file into the HTML viewer.
+     * Goes to a given location in a source file and marks the line.
+     * This is used by the debugger to mark the location where the
+     * the debugger has stopped.
      */
-    virtual void gotoDocumentationFile(const KURL& url,
-                                       Embedding embed=Replace) = 0;
+    virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0) = 0;
     /**
      * Saves all modified buffers.
      */

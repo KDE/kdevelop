@@ -1,6 +1,6 @@
 SUBDIRS = lib parts plugins src doc pics
 
-EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING gideon.lsm admin
+EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING admin
 
 apps_DATA = gideon.desktop
 appsdir = $(kde_appsdir)/Development

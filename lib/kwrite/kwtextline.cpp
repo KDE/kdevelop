@@ -331,3 +331,14 @@ void TextLine::unmarkFound() {
   for (z = 0; z < len; z++) attribs[z] &= ~taFound;
 }
 
+void TextLine::setBreakpoint(int id, bool enabled, bool pending)
+{
+    bpId = id;
+    bpEnabled = enabled;
+    bpPending = pending;
+}
+
+void TextLine::setExecutionPoint(bool b)
+{
+    ep = b;
+}

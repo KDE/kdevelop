@@ -36,6 +36,7 @@
     <text>&amp;Build</text>
     <Merge/>
   </Menu>
+  <Merge/>
   <Menu name="buffers">
     <text>&amp;Buffers</text>
     <ActionList name="buffer_list"/>

@@ -369,6 +369,32 @@ void Core::raiseWidget(QWidget *w)
 }
 
 
+void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
+{
+    kdDebug(9000) << "Goto documentation: " << url.url() << endl;
+
+    // Find a part to load into
+    DocumentationPart *part = 0;
+    KParts::Part *activePart = manager->activePart();
+
+    if (embed == Replace && activePart && activePart->inherits("DocumentationPart"))
+        part = static_cast<DocumentationPart*>(activePart);
+    else {
+        part = createDocumentationPart();
+        if (embed == SplitHorizontal || embed == SplitVertical)
+            win->splitDocumentWidget(part->widget(),
+                                     activePart? activePart->widget() : 0,
+                                     (embed==SplitHorizontal)? Horizontal : Vertical);
+        else
+            win->embedDocumentWidget(part->widget(),
+                                     activePart? activePart->widget() : 0);
+    }
+    
+    part->gotoURL(url);
+    win->raiseWidget(part->widget());
+}
+
+
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 {
     kdDebug(9000) << "Goto source file: " << url.path() << endl;
@@ -416,29 +442,20 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 }
 
 
-void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
+void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
-    kdDebug(9000) << "Goto documentation: " << url.url() << endl;
+    gotoSourceFile(fileName, lineNum);
 
-    // Find a part to load into
-    DocumentationPart *part = 0;
-    KParts::Part *activePart = manager->activePart();
-
-    if (embed == Replace && activePart && activePart->inherits("DocumentationPart"))
-        part = static_cast<DocumentationPart*>(activePart);
-    else {
-        part = createDocumentationPart();
-        if (embed == SplitHorizontal || embed == SplitVertical)
-            win->splitDocumentWidget(part->widget(),
-                                     activePart? activePart->widget() : 0,
-                                     (embed==SplitHorizontal)? Horizontal : Vertical);
-        else
-            win->embedDocumentWidget(part->widget(),
-                                     activePart? activePart->widget() : 0);
-    }
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it)
+        (*it)->setExecutionPoint(-1);
     
-    part->gotoURL(url);
-    win->raiseWidget(part->widget());
+    QListIterator<TextEditorDocument> it2(editedDocs);
+    for (; it2.current(); ++it2)
+        if ((*it2)->fileName() == fileName) {
+            (*it2)->setExecutionPoint(lineNum);
+            break;
+        }
 }
 
 
@@ -703,6 +720,5 @@ void Core::slotWentToSourceFile(const QString &fileName)
 {
     emit wentToSourceFile(fileName);
 }
-
 
 #include "core.moc"

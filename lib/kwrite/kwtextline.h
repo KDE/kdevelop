@@ -331,6 +331,15 @@ public:
     */
     void unmarkFound();
 
+    /**
+     * Sets a breakpoint. Used by KWIconBorder.
+     */
+    void setBreakpoint(int id, bool enabled, bool pending);
+    /**
+     * Sets the debugger execution point. Used by KWIconBorder.
+     */
+    void setExecutionPoint(bool b);
+
   protected:
     /**
       Length of the text line
@@ -356,6 +365,16 @@ public:
       The syntax highlight context
     */
     int ctx;
+    /**
+     * The breakpoint id, -1 if not set.
+     */
+    int bpId;
+    bool bpEnabled;
+    bool bpPending;
+    /**
+     * Is this the execution point?
+     */
+    bool ep;
 };
 
 //text attribute constants
