@@ -16,5 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(cpphellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(cpphellodir)/script
+	$(mkinstalldirs) $(DESTDIR)$(cppcurseshellodir)
+	$(INSTALL_DATA) script.local $(DESTDIR)$(cppcurseshellodir)/script
