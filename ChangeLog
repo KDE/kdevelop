@@ -1,4 +1,8 @@
 2000-05-02  Ralf Funken <RFunken@kdevelop.de>
+	* Telephone hotfix by R. Nolden :
+          Panner not repainted correctly using 800x600, fixed
+
+2000-05-02  Ralf Funken <RFunken@kdevelop.de>
 	* Repeat search activated in browser window
 
 2000-05-03 jbb <jbb@ihug.co.nz>

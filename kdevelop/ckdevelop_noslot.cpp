@@ -895,7 +895,11 @@ void CKDevelop::switchToKDevelop(){
   toolBar()->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
-  setKeyAccel();  // initialize Keys
+  // this toolbar toogle is for placing the panner devider correctly
+  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+
+	setKeyAccel();  // initialize Keys
   ///////// reset bar status ////////////
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
     kdev_statusbar->show();
