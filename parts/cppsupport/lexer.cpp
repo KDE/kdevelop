@@ -373,6 +373,7 @@ int Lexer::macroDefined()
 
 void Lexer::processDefine( Macro& m )
 {
+    m.setFileName( m_driver->currentFileName() );
     readWhiteSpaces( false );
 
     int startMacroName = currentPosition();
