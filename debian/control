@@ -4,8 +4,9 @@ Priority: optional
 Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>
 Standards-Version: 3.0.1
 
-Package: kdevelop
+Package: kdevelop-cvs
 Architecture: any
+Section: devel
 Depends: ${shlibs:Depends}, autoconf, automake, make, ${perl:Depends}
 Suggests: libqt2-dev, qt2-doc, kdelibs-dev, kdelibs-doc, glimpse, kdebase, sgmltools, a2ps, enscript, gv
 Description: An IDE for Unix/X11
