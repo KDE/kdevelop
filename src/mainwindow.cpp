@@ -1149,6 +1149,7 @@ void MainWindow::slotReactToProjectOpened()
   for (; it.current(); ++it) {
     KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(*it);
     if (pWrappingDockWidget) {
+      pWrappingDockWidget->undock();
       pWrappingDockWidget->hide();
     }
   }
