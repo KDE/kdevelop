@@ -1,4 +1,19 @@
 dnl
+dnl If kimgio check succeeded, I assume khtmlw is also present 
+dnl
+
+AC_DEFUN(KDEV_SUBST_KHTMLW,
+[
+   AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
+   if test "$LIBKIMGIO_EXISTS" = "yes"; then
+     LIB_KHTMLW='-lkhtmlw -ljscript'
+   else
+     LIB_KHTMLW=''
+   fi
+   AC_SUBST(LIB_KHTMLW)
+])
+
+dnl
 dnl Check location of Qt documentation
 dnl
 AC_DEFUN(KDEV_PATH_QTDOC,
@@ -7,7 +22,7 @@ AC_MSG_CHECKING([for Qt documentation])
 
 ac_qt_docdirs=""
 AC_ARG_WITH(qtdoc_dir, 
-[  --with-qtdoc-dir=DIR     where the Qt documentation is installed ],
+[  --with-qtdoc-dir=DIR    where the Qt documentation is installed ],
 ac_qt_docdirs=""
 qt_docdirs=""
 [
@@ -15,7 +30,8 @@ qt_docdirs=""
 ],
 )
 
-qt_docdirs="/usr/doc/qt-doc/html /usr/local/qt/html /usr/local/lib/qt/html /usr/lib/qt/doc/html /usr/X11/lib/qt/html /usr/X11/lib/qt/doc/html" 
+qt_docdirs="/usr/doc/qt-doc/html /usr/local/qt/html /usr/local/lib/qt/html /usr/lib/qt/doc/html /usr/X11/lib/qt/html /usr/X11/lib/qt/doc/html /usr/X11R6/share/doc/qt/html"
+test -n "$QTDIR" && qt_docdirs="$QTDIR/html $QTDIR/doc/html $QTDIR/doc $qt_docdirs"
 qt_docdirs="$ac_qt_docdirs $qt_docdirs"
 AC_FIND_FILE(classes.html, $qt_docdirs, qt_docdir)
 AC_MSG_RESULT($qt_docdir)
@@ -43,13 +59,17 @@ kdelibs_docdirs=""
 ],
 )
 
-kdelibs_docdirs="/usr/doc/kdelibs-doc/html"
 if test "${prefix}" = NONE; then
   ac_kde_htmldir="$ac_default_prefix"/share/doc/HTML
 else
   ac_kde_htmldir="$prefix"/share/doc/HTML
 fi
-kdelibs_docdirs="$ac_kdelibs_docdirs $ac_kde_htmldir/default/kdelibs $kdelibs_docdirs"
+
+kdelibs_docdirs="/usr/doc/kdelibs-doc/html"
+if test "$ac_kde_htmldir" != ""; then
+ kdelibs_docdirs="$kdelibs_docdirs $ac_kde_htmldir/default/kdelibs $ac_kde_htmldir/en/kdelibs"
+fi
+kdelibs_docdirs="$ac_kdelibs_docdirs $kdelibs_docdirs"
 AC_FIND_FILE(kdecore/index.html, $kdelibs_docdirs, kdelibs_docdir)
 AC_MSG_RESULT($kdelibs_docdir)
 if test "$kdelibs_docdir" = NO; then
@@ -68,7 +88,8 @@ AC_MSG_CHECKING([for kdoc index])
 
 ac_kdoc_indexdirs=""
 AC_ARG_WITH(kdocindex_dir, 
-[  --with-kdocindex-dir=DIR    where the kdoc index files are ],
+[  --with-kdocindex-dir=DIR    where the kdoc index files are. Obsolete - don't use!
+                              Index files are searched under kdelibsdoc-dir/kdoc-reference ],
 ac_kdoc_indexdirs=""
 kdoc_indexdirs=""
 [
@@ -109,7 +130,6 @@ if test "$enable_docbase" = "yes"; then
 fi
 ])
 
-
 dnl
 dnl Check whether we use kdoc2
 dnl
@@ -117,14 +137,33 @@ AC_DEFUN(KDEV_CHECK_KDOC2,
 [
 AC_MSG_CHECKING(for kdoc2)
 AC_ARG_ENABLE(kdoc2,
-[  --enable-kdoc2        enable kdoc2 support],
-[if test "$enableval" = yes; then
-  enable_kdoc2=yes
-fi],
-enable_kdoc2=no)
+[  --disable-kdoc2          disable kdoc2 support],
+[
+  enable_kdoc2=$enableval
+],
+enable_kdoc2=yes)
 AC_MSG_RESULT($enable_kdoc2)
 
 if test "$enable_kdoc2" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_KDOC2)
+fi
+])
+
+dnl
+dnl Check whether we use parsing on cpp save
+dnl
+AC_DEFUN(KDEV_CHECK_CPP_REPARSE,
+[
+AC_MSG_CHECKING(for cpp-save reparsing)
+AC_ARG_ENABLE(cpp-reparse,
+[  --enable-cpp-reparse          enable reparsing on cpp saving],
+[if test "$enableval" = yes; then
+  enable_cpp_reparse=yes
+fi],
+enable_cpp_reparse=no)
+AC_MSG_RESULT($enable_cpp_reparse)
+
+if test "$enable_cpp_reparse" = "yes"; then
+  AC_DEFINE_UNQUOTED(WITH_CPP_REPARSE)
 fi
 ])
