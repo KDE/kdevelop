@@ -333,6 +333,19 @@ void SubprojectOptionsDialog::addPrefixClicked()
 }
 
 
+void SubprojectOptionsDialog::editPrefixClicked()
+{
+    QListViewItem* lvItem = prefix_listview->currentItem();
+    if ( (prefix_listview->childCount()==0) || (lvItem == 0) )
+        return;
+    AddPrefixDialog dlg(lvItem-> text(0), lvItem-> text(1));
+    dlg.setCaption(i18n("Edit Prefix"));
+    if (!dlg.exec() || dlg.name().isEmpty() || dlg.path().isEmpty() )
+        return;
+   lvItem-> setText(0, dlg.name());
+   lvItem-> setText(1, dlg.path());
+}
+
 void SubprojectOptionsDialog::removePrefixClicked()
 {
     delete prefix_listview->currentItem();

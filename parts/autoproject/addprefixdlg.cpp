@@ -19,18 +19,19 @@
 #include <klocale.h>
 
 
-AddPrefixDialog::AddPrefixDialog(QWidget *parent, const char *name)
+AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEdit,
+        QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
     setCaption(i18n("Add Prefix"));
     
     QLabel *name_label = new QLabel(i18n("&Name:"), this);
-    name_edit = new QLineEdit(this);
+    name_edit = new QLineEdit(nameEdit, this);
     name_edit->setFocus();
     name_label->setBuddy(name_edit);
 
     QLabel *path_label = new QLabel(i18n("&Path:"), this);
-    path_edit = new QLineEdit(this);
+    path_edit = new QLineEdit(pathEdit, this);
     path_label->setBuddy(path_edit);
     QFontMetrics fm(path_edit->fontMetrics());
     path_edit->setMinimumWidth(fm.width('X')*35);

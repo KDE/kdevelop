@@ -1,3 +1,8 @@
+2003-07-25 Gael de Chalendar <Gael . de . Chalendat AT cea . fr>
+    * Added "Edit" buttons to the "Includions" and "Prefixes" tabs of the
+      automake subproject options dialog and to the "Libraries" tab of the
+      automake target options dialog.
+
 2003-07-25 Alexander Dymo <cloudtemple@mksat.net>
     * Added "Force Reedit", "Install" and "Install (as root user)" actions into the subproject
       menu for Automake Manager. Force Reedit is only available for KDE projects.
@@ -18,11 +23,11 @@
 
 2003-07-14 Amilcar Lucas <a.lucas@tu-bs.de>
     * If no Main Program was selected in Project Options...-> Run Options, then use the
-    * currently selected active target. This is valid for execution and for debugging.
-    * So no more need to goto the menu every time you want to debug a new target! Just
-    * activate it and you're done! :)
-    * Currently only in Automake based project because AFAIK it the only one that has
-    * the concept of active targets. Correct me if I'm wrong.
+      currently selected active target. This is valid for execution and for debugging.
+      So no more need to goto the menu every time you want to debug a new target! Just
+      activate it and you're done! :)
+      Currently only in Automake based project because AFAIK it the only one that has
+      the concept of active targets. Correct me if I'm wrong.
 
 2003-07-13 Andras Mantia <amantia@freemail.hu>
      * don't treat libtool link messages for modules as errors.

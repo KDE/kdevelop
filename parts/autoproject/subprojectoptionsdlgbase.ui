@@ -632,6 +632,14 @@
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
+                                    <cstring>editprefix_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
                                     <cstring>removeprefix_button</cstring>
                                 </property>
                                 <property name="text">
@@ -912,6 +920,12 @@
         <receiver>sub project options widget</receiver>
         <slot>addPrefixClicked()</slot>
     </connection>
+    <connection>
+        <sender>editprefix_button</sender>
+        <signal>clicked()</signal>
+        <receiver>sub project options widget</receiver>
+        <slot>editPrefixClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>subprojectoptions_tabwidget</tabstop>
@@ -932,6 +946,7 @@
     <tabstop>outsidemovedown_button</tabstop>
     <tabstop>prefix_listview</tabstop>
     <tabstop>addprefix_button</tabstop>
+    <tabstop>editprefix_button</tabstop>
     <tabstop>removeprefix_button</tabstop>
     <tabstop>okbutton</tabstop>
     <tabstop>cancelbutton</tabstop>
@@ -954,6 +969,7 @@
     <slot access="protected">outsideRemoveClicked()</slot>
     <slot access="protected">removePrefixClicked()</slot>
     <slot access="private">addPrefixClicked()</slot>
+    <slot access="private">editPrefixClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
