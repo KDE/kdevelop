@@ -622,7 +622,7 @@ void CvsServicePartImpl::removeFromIgnoreList( const KURL::List& urlList )
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-* @fixme: Current implementation doesn't use CvsService :-( I just ported the
+* \FIXME Current implementation doesn't use CvsService :-( I just ported the
 * old code which relies on buildcvs.sh script. [marios]
 */
 void CvsServicePartImpl::createNewProject( const QString &dirName,

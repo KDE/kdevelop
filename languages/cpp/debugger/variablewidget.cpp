@@ -791,7 +791,7 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 QString VarItem::tipText() const
 {
     const unsigned int maxTooltipSize = 70;
-    // FIXME: Column #1 is "Value": perhaps some kind of const somewhere is better ...
+    /// \FIXME Column #1 is "Value": perhaps some kind of const somewhere is better ...
     QString tip = text( 1 );
 
     if (tip.length() < maxTooltipSize )

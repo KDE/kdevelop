@@ -224,7 +224,7 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
     else if (stateAsString == "Needs Patch" || stateAsString == "Needs Checkout")
         return VCSFileInfo::Unknown;
     else 
-        return VCSFileInfo::Unknown; // @fixme: exhaust all the previous cases first ;-)
+        return VCSFileInfo::Unknown; /// \FIXME exhaust all the previous cases first ;-)
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -52,12 +52,12 @@ public:
 
     virtual ~RppDriver()
     {
-#if 0 /// FIXME robe
+#if 0 /// \FIXME robe
 	TagCreator::destroyDocumentation();
 #endif
     }
 
-#if 0 /// FIXME robe
+#if 0 /// \FIXME robe
     void addDocDirectory( const QString& dir )
     {
         m_docDirectoryList.append( dir );
@@ -138,7 +138,7 @@ public:
 
 private:
     Catalog* catalog;
-#if 0 /// FIXME
+#if 0 /// \FIXME
     QStringList m_docDirectoryList;
 #endif
 };

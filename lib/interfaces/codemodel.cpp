@@ -89,7 +89,7 @@ void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
     } else if( !target->hasNamespace(source->name()) ){
 	NamespaceDom ns = this->create<NamespaceModel>();
 	ns->setName( source->name() );
-	ns->setFileName( source->fileName() ); // FIXME: ROBE
+	ns->setFileName( source->fileName() ); /// \FIXME ROBE
 	ns->setScope( source->scope() );
 	target->addNamespace( ns );
     }

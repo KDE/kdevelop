@@ -33,7 +33,7 @@ public:
     virtual ~CvsOptions();
 
     void save( KDevProject *project );
-    // @fixme: parameter should be const!!
+    /// \FIXME parameter should be const!!
     void load( KDevProject *project );
 
     void setRecursiveWhenCommitRemove( bool b );

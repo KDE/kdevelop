@@ -55,7 +55,7 @@ AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ClassDom klass,
     
     // setup sourceFile combo
     QMap<QString, bool> m;
-#if 0 /// FIXME: ROBE
+#if 0 /// \FIXME ROBE
     FunctionList l = m_klass->functionList();
     {
 	for( FunctionList::Iterator it = l.begin(); it != l.end(); ++it ){

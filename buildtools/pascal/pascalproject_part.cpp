@@ -234,7 +234,7 @@ QString PascalProjectPart::mainProgram(bool relative) const
     else
         return QDir::cleanDirPath(projectDirectory() + "/" + configMainProg);
 
-    /// FIXME: put the code below into use!
+    /// \FIXME put the code below into use!
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio");
     QString DomMainProgram = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram");
 

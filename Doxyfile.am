@@ -25,6 +25,7 @@ apidox-am-yes:
 		echo "ALIASES               += \"requirement=\xrefitem requirements \\\"Requirement(s)\\\" \\\"Requirements\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"faq=\xrefitem FAQ \\\"F.A.Q.\\\" \\\"F.A.Q.\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"authors=\xrefitem authors \\\"Author(s)\\\" \\\"Authors\\\"\" " >> Doxyfile; \
+		echo "ALIASES               += \"FIXME=\xrefitem fixme \\\"Fixme\\\" \\\"Fixme\\\"\" " >> Doxyfile; \
 		echo "EXTRACT_ALL            = YES" >> Doxyfile; \
 		echo "EXTRACT_PRIVATE        = YES" >> Doxyfile; \
 		echo "EXTRACT_LOCAL_CLASSES  = YES" >> Doxyfile; \

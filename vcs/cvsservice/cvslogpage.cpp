@@ -42,7 +42,7 @@ CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char
     m_textBrowser = new QTextBrowser( this, "logbrowser" );
     thisLayout->add( m_textBrowser );
 
-    // @fixme: a better way?
+    /// \FIXME a better way?
     m_textBrowser->setMinimumWidth(fontMetrics().maxWidth()*40);
     m_textBrowser->setMinimumHeight(fontMetrics().maxWidth()*43);
 
@@ -169,7 +169,7 @@ void CVSLogPage::slotLinkClicked( const QString &link )
     kdDebug(9006) << "CVSLogPage::slotLinkClicked()" << endl;
 
     // The text browser clears the page so we go back to our old one
-    // @fixme: in this way I lose the source
+    /// \FIXME in this way I lose the source
     m_textBrowser->setSource( m_logTextBackup );
 
     QString ver = link.mid( link.findRev( "/" ) + 1 );

@@ -162,7 +162,7 @@ void ClassViewPart::setupActions( )
 
     //@todo not applicable to c++ but can be useful for ada and pascal where namespace is contained
     //in a single compilation unit
-    //FIXME: commented out till the time when it be needed
+    /// \FIXME commented out till the time when it be needed
 //    popup->insertItem(i18n("Go to Namespace Declaration"), this, SLOT(goToNamespaceDeclaration()));
 
     bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
@@ -175,7 +175,7 @@ void ClassViewPart::setupActions( )
         id = popup->insertItem(SmallIcon("classnew"), i18n("New Class..."), this, SLOT(selectedAddClass()));
         popup->setWhatsThis(id, i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
     }
-#if 0 /// FIXME: seems that the 'access attribute' of the 'CodeModel' is wrong!!!!!
+#if 0 /// \FIXME seems that the 'access attribute' of the 'CodeModel' is wrong!!!!!
     if (hasAddMethod)
     {
         id = popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
@@ -229,7 +229,7 @@ void ClassViewPart::selectFunction( QListViewItem * item )
     if (!fi)
         return;
     int startLine, startColumn;
-    // FIXME: ROBE
+    /// \FIXME ROBE
     //fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
     //if (startLine != 0)
     //    partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );

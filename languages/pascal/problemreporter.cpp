@@ -262,7 +262,7 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-    //FIXME: adymo: use problem reporter configuration
+    /// \FIXME adymo: use problem reporter configuration
     Q_UNUSED(dlg);
 /*    QVBox *vbox = dlg->addVBoxPage(i18n("Pascal Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );

@@ -142,7 +142,7 @@ public:
     void push_back( const QString& fileName, bool readFromDisk=false )
     {
 	QMutexLocker locker( &m_mutex );
-	m_fileList.append( qMakePair(fileName, readFromDisk) ); // FIXME: ROBE deepcopy?!
+	m_fileList.append( qMakePair(fileName, readFromDisk) ); /// \FIXME ROBE deepcopy?!
     }
 
     void pop_front()

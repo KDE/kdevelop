@@ -69,7 +69,7 @@ void KDevDriver::setup()
 	addIncludePath( "/usr/include" );
 	addIncludePath( "/usr/local/include" );
 #if KDE_VERSION <= 305
-	return; // FIXME: Roberto, please review! ;-)
+	return; /// \FIXME Roberto, please review! ;-)
 	// If the QProcess from below is executed,
 	// it somehow breaks the gcc call in parts/outputviews/makewidget.cpp. :-(
 	// It then has the effect that KProcess will never exit, at least on KDE-3.0

@@ -81,7 +81,7 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
 
   QDomDocument &dom = *projectDom();
   // Set the default directory radio to "executable"
-  // FIXME: there is no kdevantproject so this will not work !
+  /// \FIXME there is no kdevantproject so this will not work !
   if (DomUtil::readEntry(dom, "/kdevantproject/run/directoryradio") == "" ) {
     DomUtil::writeEntry(dom, "/kdevantproject/run/directoryradio", "executable");
   }
@@ -194,7 +194,7 @@ QString AntProjectPart::projectName() const
 /** Retuns a PairList with the run environment variables */
 DomUtil::PairList AntProjectPart::runEnvironmentVars() const
 {
-    // FIXME: there is no kdevantproject so this will not work !
+    /// \FIXME there is no kdevantproject so this will not work !
     return DomUtil::readPairListEntry(*projectDom(), "/kdevantproject/run/envvars", "envvar", "name", "value");
 }
 
@@ -211,11 +211,11 @@ DomUtil::PairList AntProjectPart::runEnvironmentVars() const
 QString AntProjectPart::runDirectory() const
 {
     return buildDirectory();
-    /// FIXME: put the code below into use!
+    /// \FIXME put the code below into use!
 
     QDomDocument &dom = *projectDom();
 
-    // FIXME: there is no kdevantproject so this will not work !
+    /// \FIXME there is no kdevantproject so this will not work !
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevantproject/run/directoryradio");
     QString DomMainProgram = DomUtil::readEntry(dom, "/kdevantproject/run/mainprogram");
 
@@ -247,10 +247,10 @@ QString AntProjectPart::mainProgram(bool relative) const
 {
 	return QString::null;
 
-    /// FIXME: put the code below into use!
+    /// \FIXME put the code below into use!
     QDomDocument &dom = *projectDom();
 
-    // FIXME: there is no kdevantproject so this will not work !
+    /// \FIXME there is no kdevantproject so this will not work !
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevantproject/run/directoryradio");
     QString DomMainProgram = DomUtil::readEntry(dom, "/kdevantproject/run/mainprogram");
 
@@ -274,14 +274,14 @@ QString AntProjectPart::mainProgram(bool relative) const
 /** Retuns a QString with the run command line arguments */
 QString AntProjectPart::runArguments() const
 {
-    // FIXME: there is no kdevantproject so this will not work !
+    /// \FIXME there is no kdevantproject so this will not work !
     return DomUtil::readEntry(*projectDom(), "/kdevantproject/run/programargs");
 }
 
 
 QString AntProjectPart::activeDirectory() const
 {
-  /// @fixme
+  /// \FIXME
   
 //  return m_projectDirectory;
 

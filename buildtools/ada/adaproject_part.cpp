@@ -220,7 +220,7 @@ QString AdaProjectPart::mainProgram(bool relative) const
     QFileInfo fi(mainSource());
     return buildDirectory() + "/" + fi.baseName();
 
-    /// FIXME: put the code below into use!
+    /// \FIXME put the code below into use!
     QDomDocument &dom = *projectDom();
 
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");

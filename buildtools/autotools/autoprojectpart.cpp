@@ -528,7 +528,7 @@ void AutoProjectPart::removeFile(const QString &fileName)
 
 void AutoProjectPart::removeFiles ( const QStringList& fileList )
 {
-	// FIXME: m_widget->removeFiles does nothing!
+	/// \FIXME m_widget->removeFiles does nothing!
 	m_widget->removeFiles ( fileList );
 
 	emit removedFilesFromProject ( fileList );

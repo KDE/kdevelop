@@ -84,7 +84,7 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 	QTime t;
 	t.start();
 #endif
-	//FIXME: This is very slow, possibly due to the regexr matching. It can take
+	/// \FIXME This is very slow, possibly due to the regexr matching. It can take
 	//900-1000ms to execute on an Athlon XP 2000+, while the UI is completely blocked.
 	int i = 0;
 	ActionFormat* aFormats = actionFormats();

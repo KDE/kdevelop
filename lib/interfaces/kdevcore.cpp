@@ -145,7 +145,7 @@ public:
     }
 
     KURL::List m_urls;
-    // FIXME: the following data members should be removed, but first other
+    /// \FIXME the following data members should be removed, but first other
     // parts should be modified to comply with this change.
     QString m_fileName;
     bool m_isDirectory;

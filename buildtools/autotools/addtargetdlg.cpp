@@ -145,8 +145,8 @@ void AddTargetDialog::accept()
 	    QPtrListIterator<TargetItem> it( m_subproject->targets );
 	    for( ; it.current(); ++it ){
 		if( (*it)->text(0) == titem->text(0) ){
-		    // FIXME: Add message box here, after string-freeze is over
-		    //        something like: "This data target already exists."
+		    /// \FIXME Add message box here, after string-freeze is over
+		    ///        something like: "This data target already exists."
 		    QDialog::accept();
 		    return;
 		}

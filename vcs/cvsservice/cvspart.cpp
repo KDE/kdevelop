@@ -104,8 +104,8 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 
     init();
 
-    // @fixme (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
-    // of KDevVersionControl
+    /// \FIXME (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
+    /// of KDevVersionControl
     setVersionControl( this );
 }
 
@@ -124,7 +124,7 @@ void CvsServicePart::init()
     setupActions();
 
     // Here we change the implementation
-    // @fixme factory pattern here? :-/
+    /// \FIXME factory pattern here? :-/
     m_impl = new CvsServicePartImpl( this );
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
 
@@ -247,7 +247,7 @@ void CvsServicePart::createNewProject( const QString &dirName )
     if (!m_cvsConfigurationForm)
         return;
 
-    // @fixme: actually there is no way to inform that a _new_ ("just created")
+    /// \FIXME actually there is no way to inform that a _new_ ("just created")
     // project has been opened because projectOpened() is emitted after the project
     // has been created :-/ So the only way to inform that slotProjectOpened() to not
     // load default settings (overriding the CvsOptions instance is to set this flag

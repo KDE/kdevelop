@@ -209,7 +209,7 @@ void SubprojectOptionsDialog::storeConfig()
         subProject->prefixes[key] = data;
         replaceMap.insert(key + "dir", data);
     }
-    // FIXME: take removed prefixes into account
+    /// \FIXME take removed prefixes into account
 
     QStringList subdirslist;
     for (QListViewItem *item = buildorder_listview->firstChild();

@@ -263,7 +263,7 @@ void subversionPart::slotProjectOpened() {
 		g_projectWasJustCreated = false;
 	}	*/
 	//loadOptions();
-	//FIXME
+	/// \FIXME slots
 	//connect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
 	//connect( project(), SIGNAL(removedFilesFromProject(const QStringList&)), this, SLOT(slotRemovedFilesFromProject(const QStringList &)) );
 }
@@ -271,7 +271,7 @@ void subversionPart::slotProjectOpened() {
 void subversionPart::slotProjectClosed() {
 	kdDebug() << "subversion :projectClosed" << endl;
 	//saveOptions();
-	//FIXME
+	/// \FIXME slots
 	//disconnect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
 	//disconnect( project(), SIGNAL(removedFilesFromProject(const QStringList&)), this, SLOT(slotRemovedFilesFromProject(const QStringList &)) );
 }

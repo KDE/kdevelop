@@ -467,7 +467,7 @@ void KDevFileSelector::autoSync( KParts::Part *part )
         waitingUrl = u.directory();
     }
 }
-/// FIXME: crash on shutdown
+/// \FIXME crash on shutdown
 void KDevFileSelector::setActiveDocumentDir()
 {
     //kdDebug()<<"KDevFileSelector::setActiveDocumentDir()"<<endl;

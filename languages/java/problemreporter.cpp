@@ -90,7 +90,7 @@ ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const 
         "To add a TODO or FIXME entry, just type<br>"
         "<tt>//@todo my todo</tt><br>"
         "<tt>//TODO: my todo</tt><br>"
-        "<tt>//FIXME: fix this</tt>"));
+        "<tt>//FIXME fix this</tt>"));
 
     addColumn( i18n("Level") );
     addColumn( i18n("File") );
@@ -241,7 +241,7 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Java Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
-    //FIXME: adymo: unused functionality
+    //FIXME adymo: unused functionality
     w->groupBox3->hide();
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));

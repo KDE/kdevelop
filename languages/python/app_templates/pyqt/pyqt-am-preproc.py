@@ -64,7 +64,7 @@ for s in sources:
     py_sources.append(re.sub("\.ui$",".py",s))
     
 # replace dependencies of main target with list of .py sources
-# FIXME: escape target
+# FIXME escape target
 re_maintarget = re.compile("(" + target + ".*?:).*")
 out = []
 for l in mf:

@@ -291,8 +291,8 @@ void ChooseTargetDialog::accept ()
 
 		if ( !found )
 		{
-            //FIXME: a quick hack to prevent adding header files to _SOURCES
-            //and display them in noinst_HEADERS
+            /// \FIXME a quick hack to prevent adding header files to _SOURCES
+            /// and display them in noinst_HEADERS
             if (AutoProjectPrivate::isHeader(fileName) &&
                 ( m_choosenTarget->primary == "PROGRAMS" || m_choosenTarget->primary == "LIBRARIES" ||  m_choosenTarget->primary == "LTLIBRARIES" ) )
             {

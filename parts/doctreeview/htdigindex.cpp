@@ -336,7 +336,7 @@ void ProgressDialog::scanDirectories()
         DocTreeViewTool::getBookmarks(&bookmarksTitle, &bookmarksURL);
         QStringList::ConstIterator it3;
         for (it3 = bookmarksURL.begin(); it3 != bookmarksURL.end(); ++it3) {
-            // FIXME: Perhaps one should consider indexing the whole directory the file
+            /// \FIXME Perhaps one should consider indexing the whole directory the file
             // lives in
             files.append(*it3);
             setFilesScanned(++filesScanned);

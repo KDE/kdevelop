@@ -456,7 +456,7 @@ void GDBController::parseLine(char* buf)
     if (strncmp(buf, "The program no longer exists", 28) == 0)
     {
         programNoApp(QString(buf), false);
-        programHasExited_ = true;   // FIXME: - a nasty switch
+        programHasExited_ = true;   /// \FIXME - a nasty switch
         return;
     }
 
@@ -466,7 +466,7 @@ void GDBController::parseLine(char* buf)
         {
             kdDebug(9012) << "Parsed (exit) <" << QString(buf) << ">" << endl;
             programNoApp(QString(buf), false);
-            programHasExited_ = true;   // FIXME: - a nasty switch
+            programHasExited_ = true;   /// \FIXME - a nasty switch
             return;
         }
 
@@ -483,7 +483,7 @@ void GDBController::parseLine(char* buf)
                 programNoApp(QString(buf), false);
             }
 
-            programHasExited_ = true;   // FIXME: - a nasty switch
+            programHasExited_ = true;   /// \FIXME - a nasty switch
             return;
         }
 
@@ -552,7 +552,7 @@ void GDBController::parseLine(char* buf)
         if ( strncmp(buf, "Cannot find user-level thread for LWP", 37)==0)
         {
             programNoApp(QString(buf), false);
-            programHasExited_ = true;   // FIXME: - a nasty switch
+            programHasExited_ = true;   /// \FIXME - a nasty switch
             return;
         }
 

@@ -89,7 +89,7 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
         "To add a TODO or FIXME entry, just type<br>"
         "<tt>//@todo my todo</tt><br>"
         "<tt>//TODO: my todo</tt><br>"
-        "<tt>//FIXME: fix this</tt>"));
+        "<tt>//FIXME fix this</tt>"));
 
     m_canParseFile = true;
 

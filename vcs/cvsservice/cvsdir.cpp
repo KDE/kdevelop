@@ -287,7 +287,7 @@ void CVSDir::doNotIgnoreFile( const QString &fileName )
 VCSFileInfoMap CVSDir::dirStatus() const
 {
     VCSFileInfoMap vcsInfo;
-    // Convert to VCSFileInfoMap: @fixme : any speed improvement here?
+    /// Convert to VCSFileInfoMap: \FIXME : any speed improvement here?
     QStringList entries = registeredEntryList();
     for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
     {
@@ -305,7 +305,7 @@ VCSFileInfoMap CVSDir::dirStatus() const
 VCSFileInfoMap *CVSDir::cacheableDirStatus() const
 {
     VCSFileInfoMap *vcsInfo = new VCSFileInfoMap;
-    // Convert to VCSFileInfoMap: @fixme : any speed improvement here?
+    /// Convert to VCSFileInfoMap: \FIXME : any speed improvement here?
     QStringList entries = registeredEntryList();
     for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
     {

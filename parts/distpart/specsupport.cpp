@@ -17,7 +17,7 @@
 #include <qtabwidget.h>
 #include <qmessagebox.h>
 
-// @fixme This is at least the fifth place in the kdevelop code something like this exists
+/// \FIXME This is at least the fifth place in the kdevelop code something like this exists
 QString QRegExp_escape(const QString& str )
 {
 #if QT_VERSION >= 0x030100

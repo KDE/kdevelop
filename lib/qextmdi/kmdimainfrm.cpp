@@ -755,7 +755,7 @@ void KMdiMainFrm::detachWindow(KMdiChildView *pWnd, bool bShow)
 void KMdiMainFrm::removeWindowFromMdi(KMdiChildView *pWnd)
 {
    //Closes a child window. sends no close event : simply deletes it
-//#warning FIXME FIXME FIXME
+//#warning fixme fixme fixme
 #if 0
    if (!(m_pWinList->removeRef(pWnd)))
       return;

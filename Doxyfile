@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = "Version 3.0.0a7"
+PROJECT_NUMBER         = "3.0.0b1-CVS"
 OUTPUT_DIRECTORY       = ./apidocs
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -27,7 +27,8 @@ ALIASES                = obsolete=@deprecated \
                          "unmaintained=\xrefitem unmaintained \"Unmaintained\" \"Unmaintained\"" \
                          "requirement=\xrefitem requirements \"Requirement(s)\" \"Requirements\"" \
                          "faq=\xrefitem FAQ \"F.A.Q.\" \"F.A.Q.\"" \
-                         "authors=\xrefitem authors \"Author(s)\" \"Authors\""
+                         "authors=\xrefitem authors \"Author(s)\" \"Authors\"" \
+                         "FIXME=\xrefitem fixme \"Fixme\" \"Fixme\""
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 SUBGROUPING            = YES
@@ -103,7 +104,7 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
                          *.all_cpp.* \
-                         *Iface_skel.cpp \
+                         *face_skel.cpp \
                          *unload.* \
                          */test/* \
                          */tests/*

@@ -674,7 +674,7 @@ void AdaStoreWalker::def_id(RefAdaAST _t) {
 		m_file->addFunction(method);
 		else
 		m_currentContainer->addFunction(method);
-		//FIXME: adymo: is this valid for CodeModel
+		/// \FIXME adymo: is this valid for CodeModel
 		/*	        ParsedMethod *old = m_currentContainer->getMethod (method);
 			        if (old) {
 			          delete (method);
@@ -1224,7 +1224,7 @@ void AdaStoreWalker::def_designator(RefAdaAST _t) {
 			m_file->addFunction(method);
 			else
 			m_currentContainer->addFunction(method);
-			//FIXME: adymo: is this valid for CodeModel
+			/// \FIXME adymo: is this valid for CodeModel
 			/*	      ParsedMethod *old = m_currentContainer->getMethod (method);
 				      if (old) {
 					delete method;

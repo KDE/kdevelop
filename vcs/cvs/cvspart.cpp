@@ -265,7 +265,7 @@ bool CvsPart::prepareOperation( CvsOperation op )
         return false;
     }
     URLUtil::dump( urls );
-    // FIXME: Commented because it may break slotLog() and perhaps some another worker
+    /// \FIXME Commented because it may break slotLog() and perhaps some another worker
 //    quote( this->urls );
 
     return true;
@@ -296,8 +296,8 @@ void CvsPart::createNewProject( const QString& dirName )
         return;
     QString init("");
 
-    // FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
-    // createNewProject() is called _before_ projectOpened() signal is emitted.
+    /// \FIXME Store rsh setting. Here doesn't store it in CvsOptions because:
+    /// createNewProject() is called _before_ projectOpened() signal is emitted.
     g_tempEnvRsh = m_cvsConfigurationForm->cvs_rsh->text();
     QString rsh;
     if ( !g_tempEnvRsh.isEmpty() )
@@ -333,7 +333,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         kdDebug(9000) << "CvsPart::contextMenu()" << endl;
 
         const FileContext *fcontext = static_cast<const FileContext*>( context );
-        // FIXME: Here we must hope that fcontext->fileName() returns an absolute path ;(
+        /// \FIXME Here we must hope that fcontext->fileName() returns an absolute path ;(
 
         // This stuff should end up into prepareOperation()
         urls = fcontext->urls();
@@ -845,7 +845,7 @@ void CvsPart::log( const KURL::List& urlList )
         return;
 
     kdDebug(9000) << "CvsPart::log() here: " << endl;
-    // FIXME: These should be quoted ...
+    /// \FIXME These should be quoted ...
     QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
 
     LogForm* f = new LogForm();

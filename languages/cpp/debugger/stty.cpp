@@ -212,7 +212,7 @@ int STTY::findTTY()
             }
     }
 #endif
-    if (ptyfd < 0) { // Linux, FIXME: Trouble on other systems?
+    if (ptyfd < 0) { /// \FIXME Linux, Trouble on other systems?
         for (const char* s3 = "pqrstuvwxyzabcde"; *s3 != 0; s3++) {
             for (const char* s4 = "0123456789abcdef"; *s4 != 0; s4++) {
                 sprintf(pty_master,"/dev/pty%c%c",*s3,*s4);
