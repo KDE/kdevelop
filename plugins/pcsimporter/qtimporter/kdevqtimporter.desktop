@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=KDevQtImporter
+Comment=KDevelop Qt PCS Importer
+ServiceTypes=KDevelop/PCSImporter
+X-KDE-Library=libkdevqtimporter
+X-KDevelop-PCSImporter=
