@@ -348,6 +348,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
    if (pos == KDockWidget::DockNone) {
       pToolView->reparent(this, WType_TopLevel | WStyle_Dialog, r.topLeft(), pToolView->isVisible());
       QObject::connect( pToolView, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
+      QObject::connect( pToolView, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
       m_pWinList->append(pToolView);
       pToolView->m_bToolView = TRUE;
       pToolView->setGeometry(r);

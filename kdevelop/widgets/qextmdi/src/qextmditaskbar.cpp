@@ -230,8 +230,8 @@ QextMdiTaskBarButton * QextMdiTaskBar::getNextWindowButton(bool bRight,QextMdiCh
 
 void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
 {
-   QextMdiTaskBarButton* newPressedButton = 0;
-   QextMdiTaskBarButton* oldPressedButton = 0;
+   QextMdiTaskBarButton* newPressedButton = 0L;
+   QextMdiTaskBarButton* oldPressedButton = 0L;
    for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
       if( b->m_pWindow == win_ptr)
          newPressedButton = b;
@@ -239,8 +239,8 @@ void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
          oldPressedButton = b;
    }
    
-   if( newPressedButton != oldPressedButton) {
-         if( oldPressedButton != 0)
+   if( newPressedButton != 0L && newPressedButton != oldPressedButton) {
+         if( oldPressedButton != 0L)
             oldPressedButton->toggle();// switch off
          newPressedButton->toggle();   // switch on
          m_pCurrentFocusedWindow = win_ptr;

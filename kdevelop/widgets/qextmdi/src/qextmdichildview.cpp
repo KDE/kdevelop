@@ -490,7 +490,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          }
       }
    }
-   else if((e->type() == QEvent::ChildRemoved)) {
+   else if (e->type() == QEvent::ChildRemoved) {
       // if we lost a child we uninstall ourself as event filter for the lost 
       // child and its children
       QObject* pLostChild = ((QChildEvent*)e)->child();
@@ -518,7 +518,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          delete list;                        // delete the list, not the objects
       }
    }
-   else if((e->type() == QEvent::ChildInserted) && isAttached()) {
+   else if (e->type() == QEvent::ChildInserted) {
       // if we got a new child and we are attached to the MDI system we
       // install ourself as event filter for the new child and its children
       // (as we did when we were added to the MDI system).
@@ -552,6 +552,47 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    return FALSE;                           // standard event processing
+}
+
+//============= insertChild ===============//
+void QextMdiChildView::insertChild(QObject *pChild)
+{
+   QWidget::insertChild(pChild);
+
+   QObjectList *list = pChild->queryList( "QWidget" );
+   list->append(pChild);               // care for the new child too
+   QObjectListIt it( *list );          // iterate over all child widgets
+   QObject * obj;
+   while ( (obj=it.current()) != 0 ) { // for each found object...
+      QWidget* widg = (QWidget*)obj;
+      ++it;
+      if (!(widg->inherits("QPopupMenu"))) {
+         widg->installEventFilter(this);
+         if((widg->focusPolicy() == QWidget::StrongFocus) ||
+            (widg->focusPolicy() == QWidget::TabFocus   ) ||
+            (widg->focusPolicy() == QWidget::WheelFocus ))
+         {
+            if(m_firstFocusableChildWidget == 0) {
+               m_firstFocusableChildWidget = widg;  // first widget
+            }
+            m_lastFocusableChildWidget = widg; // last widget
+         }
+      }
+   }
+   if(m_lastFocusableChildWidget != 0) {
+      if(QString(m_lastFocusableChildWidget->name()) == QString("qt_viewport")) {
+         // bad Qt hack :-( to avoid setting a listbox viewport as last focusable widget
+         it.toFirst();
+         // search widget
+         while( (obj=it.current()) != m_lastFocusableChildWidget) ++it;
+         --it;
+         --it;
+         --it;// three steps back
+         m_lastFocusableChildWidget = (QWidget*) it.current();
+         //qDebug("Qt hack");
+      }
+   }
+   delete list;                        // delete the list, not the objects
 }
 
 /** Interpose in event loop of all current child widgets. Must be recalled after dynamic adding of new child widgets!

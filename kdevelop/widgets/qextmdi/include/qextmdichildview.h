@@ -225,6 +225,13 @@ public:
    */
    void  setRestoreGeometry(const QRect& newRestGeo);
    /**
+   * Calls base class method and installs itself as event filter for the new
+   * child and its grand childs if the inherit QWidget. Since the event 
+   * filter reacts on the child inserted event of all (grand) children all 
+   * future child widgets of the new child will get this event filter too.
+   */
+   virtual void insertChild(QObject *pChild);
+   /**
    * Interpose in event loop of all current child widgets.
    * Must be recalled after dynamic adding of new child widgets!
    */
