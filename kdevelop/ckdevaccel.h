@@ -70,7 +70,7 @@ public:
   void connectItem(const char *action,
                    const QObject *receiver, const char *member,
                    bool activate=true);
-  void connectItem(StdAccel accel,
+  void connectItem(KAccel::StdAccel accel,
                    const QObject *receiver, const char *member,
                    bool activate=true);
   void disconnectItem(const char *action,
