@@ -1,3 +1,6 @@
+2003-02-28  Roberto Raggi <roberto@kdevelop.org>
+	* reenabled java support
+
 2003-02-27  Victor Röder  <victor_roeder@gmx.de>
 * Started to restructure the Autoproject part
 	-> Splitted AutoProjectWidget in
