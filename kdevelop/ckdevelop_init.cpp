@@ -835,7 +835,7 @@ toolBar()->insertWidget(0,20,separatorLine3);
 
   // Class combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),
-                                           ID_CV_TOOLBAR_CLASS_CHOICE,true,
+                                           ID_CV_TOOLBAR_CLASS_CHOICE,false,
                                            SIGNAL(activated(int))
                                            ,this,
                                            SLOT(slotClassChoiceCombo(int)),
@@ -846,7 +846,7 @@ toolBar()->insertWidget(0,20,separatorLine3);
 
   // Method combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),
-                                           ID_CV_TOOLBAR_METHOD_CHOICE,true,
+                                           ID_CV_TOOLBAR_METHOD_CHOICE,false,
                                            SIGNAL(activated(int))
                                            ,this,SLOT(slotMethodChoiceCombo(int)),
                                            true,i18n("Methods"),240 );
