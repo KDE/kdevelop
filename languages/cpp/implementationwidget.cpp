@@ -144,7 +144,7 @@ bool ImplementationWidget::createClass()
     template_h.replace(QRegExp("\\$BASEINCLUDE\\$"), formInfo.baseName()+".h");
     template_h.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
     template_h.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
-    template_h.replace(QRegExp("\\$DEFTEXT\\$"), formInfo.baseName().upper());
+    template_h.replace(QRegExp("\\$DEFTEXT\\$"), fileNameEdit->text().upper());
     
     template_cpp.replace(QRegExp("\\$CLASSINCLUDE\\$"), fileNameEdit->text() + ".h");
     template_cpp.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
