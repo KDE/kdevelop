@@ -135,9 +135,7 @@ private:
   // returns a list of modified documents
   KURL::List modifiedDocuments();
   void clearModified( KURL::List const & filelist );
-//  void saveFiles( KURL::List const & filelist );
-
-//  bool isDirty( KParts::ReadOnlyPart* part );
+  
   bool isDirty( KURL const & url );
     
   void revertFile(KParts::Part *part);
@@ -162,6 +160,8 @@ private:
   KToolBarPopupAction* m_forwardAction;
   
   KDirWatch* dirWatcher;
+  
+  bool m_openNextAsText;
   
   QMap< KURL, QDateTime > accessTimeMap;
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)

@@ -7,6 +7,8 @@
 #include <qlayout.h>
 #include <qmap.h>
 #include <qlabel.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 
 #include <kmimetype.h>
 #include <kservice.h>
@@ -49,16 +51,9 @@
 
 #include "kdevproject.h"
 #include "urlutil.h"
+#include "mimewarningdialog.h"
 
 #include "partcontroller.h"
-
-#ifdef KDE_MAKE_VERSION
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-#  define OLD__KDE
-# endif
-#else
-# define OLD__KDE
-#endif
 
 PartController *PartController::s_instance = 0;
 
@@ -88,6 +83,8 @@ PartController::PartController(QWidget *parent)
   
   m_Current = m_history.end();
   m_isJumping = false;
+  
+  m_openNextAsText = false;
 }
 
 
@@ -330,9 +327,17 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 			return;
 		}
 	}
+	
+	KConfig *config = kapp->config();
+	config->setGroup("General");
+	QStringList texttypeslist = config->readListEntry( "TextTypes" );
+	if ( texttypeslist.contains( MimeType->name() ) )
+	{
+		m_openNextAsText = true;
+	}
   
 	// is this regular text - open in editor
-	if ( MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
+	if ( m_openNextAsText || MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
 	{
 		KTextEditor::Editor * editorpart = createEditorPart();
 
@@ -343,6 +348,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 			integratePart( editorpart, url, true );
 			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
 			addHistoryEntry( url, lineNum, col );
+
+			m_openNextAsText = false;
 
 			return;
 		}
@@ -380,7 +387,30 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	}
 	else
 	{
-		KRun::runURL(url, MimeType->name() );
+		MimeWarningDialog dlg;
+		dlg.text->setText( dlg.text->text().arg(url.path()).arg(MimeType->name()) );
+		
+		if ( dlg.exec() == QDialog::Accepted )
+		{
+			if ( dlg.open_with_kde->isChecked() )
+			{
+				KRun::runURL(url, MimeType->name() );
+			}
+			else
+			{
+				if ( dlg.always_open_as_text->isChecked() )
+				{
+					KConfig *config = kapp->config();  
+					config->setGroup("General");
+					QStringList texttypeslist = config->readListEntry( "TextTypes" );
+					texttypeslist << MimeType->name();
+					config->writeEntry( "TextTypes", texttypeslist );
+				}
+				m_openNextAsText = true;
+				editDocument( url, lineNum, col );
+				m_openNextAsText = false;
+			}
+		}
 	}
 }
 
