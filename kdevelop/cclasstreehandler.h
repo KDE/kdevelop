@@ -18,20 +18,8 @@
 #ifndef _CCLASSTREEHANDLER_H_INCLUDED
 #define _CCLASSTREEHANDLER_H_INCLUDED
 
-#include <kapp.h>
-#include <qlistview.h>
 #include "./classparser/ClassParser.h"
-#include <qpixmap.h> 
-#include <qlist.h>
-
-typedef enum
-{ 
-  PROJECT, CVCLASS, METHOD, ATTRIBUTE, 
-  CVGLOBAL_FUNCTION, CVGLOBAL_VARIABLE,
-  PUBLIC_METHOD, PROTECTED_METHOD, PRIVATE_METHOD, 
-  PUBLIC_ATTR, PROTECTED_ATTR, PRIVATE_ATTR,
-  STRUCT, END_POS
-} CTHType;
+#include "ctreehandler.h"
 
 typedef enum
 {
@@ -41,7 +29,7 @@ typedef enum
   CTHPRIVATE = PRIVATE
 } CTHFilter;
 
-class CClassTreeHandler
+class CClassTreeHandler : public CTreeHandler
 {
 public: // Constructor & destructor
 
@@ -50,29 +38,13 @@ public: // Constructor & destructor
 
 public: // Public methods to set attribute values.
 
-  /** Set the tree to draw in. */
-  void setTree( QListView *aTree );
-
   /** Set the classtore. */
   void setStore( CClassStore *aStore );
 
-  /** Set the last added item. */
-  void setLastItem( QListViewItem *aItem ) { lastItem = aItem; }
-
 public: // Public methods
-
-  /** Clear the view and reset internal state. */
-  void clear();
 
   /** Update methods/attr... of a certain class. */
   void updateClass( CParsedClass *aClass, QListViewItem *parent );
-
-  /** Add an item at root level. */
-  QListViewItem *addRoot( const char *aName, CTHType iconType );
-
-  /** Add an item with the selected icon. */
-  QListViewItem *addItem( const char *aName, CTHType iconType,
-                          QListViewItem *parent );
 
   /** Add a class to the view. */
   QListViewItem *addClass( CParsedClass *aClass, QListViewItem *parent );
@@ -116,31 +88,10 @@ public: // Public methods
   /** Add all signals to the view. */
   void addSignals( CParsedClass *aPC, QListViewItem *parent );
 
-public: // Public queries
-
-  QPixmap *getIcon( CTHType anIcon );
-
 private: // Private attributes
-
-  /** The tree to draw in. */
-  QListView *tree;
-
-  /** The last item added to the tree. */
-  QListViewItem *lastItem;
-
-  /** The last rootitem added to the tree. */
-  QListViewItem *lastRootItem;
 
   /** The classtore. */
   CClassStore *store;
-
-  /** Array containing all pixmaps used */
-  QPixmap **icons;
-
-private: // Private methods
-
-  /** Initalize the icon array and read the icons from disk. */
-  void readIcons();
 
 };
 

@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "cclasstreehandler.h"
-#include <kiconloader.h>
 #include <assert.h>
 
 
@@ -36,11 +35,8 @@
  *   -
  *-----------------------------------------------------------------*/
 CClassTreeHandler::CClassTreeHandler()
+  : CTreeHandler()
 {
-  lastItem = NULL;
-  lastRootItem = NULL;
-
-  readIcons();
 }
 
 /*--------------------------- CClassTreeHandler::~CClassTreeHandler()
@@ -54,10 +50,6 @@ CClassTreeHandler::CClassTreeHandler()
  *-----------------------------------------------------------------*/
 CClassTreeHandler::~CClassTreeHandler()
 {
-  for( int i=0; i<END_POS; i++ )
-    delete icons[ i ];
-
-  delete []icons;
 }
 
 /*********************************************************************
@@ -65,23 +57,6 @@ CClassTreeHandler::~CClassTreeHandler()
  *                    METHODS TO SET ATTRIBUTE VALUES                *
  *                                                                   *
  ********************************************************************/
-
-/*--------------------------------------- CClassTreeHandler::setTree()
- * setTree()
- *   Set the tree to draw in.
- *
- * Parameters:
- *   aTree          The tree.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassTreeHandler::setTree( QListView *aTree )
-{
-  assert( aTree != NULL );
-
-  tree = aTree;
-}
 
 /*--------------------------------------- CClassTreeHandler::setStore()
  * setStore()
@@ -105,38 +80,6 @@ void CClassTreeHandler::setStore( CClassStore *aStore )
  *                          PUBLIC METHODS                           *
  *                                                                   *
  ********************************************************************/
-
-/*--------------------------------------- CClassTreeHandler::getIcon()
- * getIcon()
- *   Get an icon from the handler.
- *
- * Parameters:
- *   anIcon         The icon to fetch
- *
- * Returns:
- *   QPixmap        The icon.
- *-----------------------------------------------------------------*/
-QPixmap *CClassTreeHandler::getIcon( CTHType anIcon )
-{
-  return icons[ anIcon ];
-}
-
-/** Clear the view and reset internal state. */
-/*---------------------------------------- CClassTreeHandler::clear()
- * clear()
- *   Clear the view and reset internal state.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassTreeHandler::clear()
-{
-  tree->clear();
-  lastRootItem=NULL;
-  lastItem=NULL;
-}
 
 /*---------------------------------- CClassTreeHandler::updateClass()
  * updateClass()
@@ -174,71 +117,6 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
   addSignals( aClass, parent );
 }
 
-/*---------------------------------- CClassTreeHandler::addRoot()
- * addRoot()
- *   Add an item to the view at root level.
- *
- * Parameters:
- *   aName        Name of the item.
- *   iconType     The icontype.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QListViewItem *CClassTreeHandler::addRoot( const char *aName, 
-                                           CTHType iconType )
-{
-  assert( aName != NULL );
-
-  QListViewItem *item;
-
-  // Make sure the entry gets added AFTER the last entry.
-  if( lastRootItem != NULL )
-  {
-    item =  new QListViewItem( tree, lastRootItem );
-    item->setText( 0, aName );
-  }
-  else
-    item = new QListViewItem( tree, aName );
-
-  item->setPixmap(0, *(getIcon( iconType )) );
-
-  // Save this as the last entry.
-  lastRootItem = item;
-  lastItem = item;
-
-  return item;
-}
-
-/*---------------------------------- CClassTreeHandler::addItem()
- * addItem()
- *   Add an item to the view with the selected parent and icon.
- *
- * Parameters:
- *   aName        Name of the item.
- *   iconType     The icontype.
- *   parent       The parent item.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QListViewItem *CClassTreeHandler::addItem( const char *aName, 
-                                           CTHType iconType,
-                                           QListViewItem *parent )
-{
-  assert( aName != NULL );
-  assert( parent != NULL );
-
-  QListViewItem *item = new QListViewItem( parent, lastItem );
-  item->setText( 0, aName );
-  item->setPixmap( 0, *(getIcon( iconType )) );
-
-  // Save this as the last entry.
-  lastItem = item;
-
-  return item;
-}
-
 /*---------------------------------- CClassTreeHandler::addClass()
  * addClass()
  *   Add a class to the view. 
@@ -256,7 +134,7 @@ QListViewItem *CClassTreeHandler::addClass( CParsedClass *aClass,
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  return addItem( aClass->name, CVCLASS, parent );
+  return addItem( aClass->name, THCLASS, parent );
 }
 
 /*---------------------------------- CClassTreeHandler::addClass()
@@ -276,7 +154,7 @@ QListViewItem *CClassTreeHandler::addClass( const char *aName,
   assert( aName != NULL );
   assert( parent != NULL );
 
-  return addItem( aName, CVCLASS, parent );
+  return addItem( aName, THCLASS, parent );
 }
 
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()
@@ -349,13 +227,13 @@ void CClassTreeHandler::addMethod( CParsedMethod *aMethod,
   assert( aMethod );
   assert( parent != NULL );
 
-  CTHType type = PUBLIC_METHOD;
+  THType type = THPUBLIC_METHOD;
   QString str;
 
   if( aMethod->isProtected() )
-    type = PROTECTED_METHOD;
+    type = THPROTECTED_METHOD;
   else if( aMethod->isPrivate() )
-    type = PRIVATE_METHOD;
+    type = THPRIVATE_METHOD;
   
   aMethod->toString( str );
   addItem( str, type, parent );
@@ -430,12 +308,12 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr,
   assert( aAttr != NULL );
   assert( parent != NULL );
 
-  CTHType type = PUBLIC_ATTR;
+  THType type = THPUBLIC_ATTR;
   
   if( aAttr->isProtected() )
-    type = PROTECTED_ATTR;
+    type = THPROTECTED_ATTR;
   else if( aAttr->isPrivate() )
-    type = PRIVATE_ATTR;
+    type = THPRIVATE_ATTR;
     
   addItem( aAttr->name, type, parent );
 }
@@ -485,7 +363,7 @@ void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
   QString str;
 
   aMethod->toString( str );
-  addItem( str, CVGLOBAL_FUNCTION, parent );
+  addItem( str, THGLOBAL_FUNCTION, parent );
 }
 
 /*------------------------------------ CClassTreeHandler::addGlobalVar()
@@ -505,8 +383,7 @@ void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
   assert( aAttr != NULL );
   assert( parent != NULL );
 
-  addItem( aAttr->name
-, CVGLOBAL_FUNCTION, parent );
+  addItem( aAttr->name, THGLOBAL_VARIABLE, parent );
 }
 
 /*------------------------------------- CClassTreeHandler::addSlots()
@@ -531,7 +408,7 @@ void CClassTreeHandler::addSlots( CParsedClass *aPC, QListViewItem *parent )
        aMethod = aPC->slotList.next() )
   {
     aMethod->toString( str );
-    addItem( str, STRUCT, parent );
+    addItem( str, THSTRUCT, parent );
   }
 }
 
@@ -557,51 +434,6 @@ void CClassTreeHandler::addSignals( CParsedClass *aPC, QListViewItem *parent )
        aMethod = aPC->signalList.next() )
   {
     aMethod->toString( str );
-    addItem( str, STRUCT, parent );
+    addItem( str, THSTRUCT, parent );
   }
-}
-
-/*********************************************************************
- *                                                                   *
- *                          PRIVATE METHODS                          *
- *                                                                   *
- ********************************************************************/
-
-/*------------------------------------ CClassTreeHandler::readIcons()
- * readIcons()
- *   Read the icons from disk and store them in the class.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassTreeHandler::readIcons()
-{
-  QString PIXPREFIX = "/kdevelop/pics/mini/";
-  QString projIcon = "folder.xpm";
-  QString pixDir;
-  KIconLoader *il;
-
-  // Allocate the array.
-  icons = new QPixmap *[ END_POS ];
-  for( int i=0; i<END_POS; i++ )
-    icons[ i ] = NULL;
-
-  pixDir = KApplication::kde_datadir() + PIXPREFIX;
-
-  il = KApplication::getKApplication()->getIconLoader();
-
-  // Load the icons
-  icons[ PROJECT ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
-  icons[ CVCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
-  icons[ STRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
-  icons[ PUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
-  icons[ PROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
-  icons[ PRIVATE_ATTR ] = new QPixmap(pixDir + "CVprivate_var.xpm");
-  icons[ CVGLOBAL_VARIABLE ] = new QPixmap( pixDir + "CVglobal_var.xpm");
-  icons[ PUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
-  icons[ PROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
-  icons[ PRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
-  icons[ CVGLOBAL_FUNCTION ] = new QPixmap( pixDir + "CVglobal_meth.xpm");
 }
