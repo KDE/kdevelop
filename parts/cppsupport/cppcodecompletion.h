@@ -33,6 +33,7 @@
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qguardedptr.h>
+#include <qregexp.h>
 
 class CodeInformationRepository;
 class SimpleContext;
@@ -73,6 +74,7 @@ private slots:
     void slotTextChanged();
     void slotFileParsed( const QString& fileName );
     void slotTimeout();
+    void computeFileEntryList();
 
 private:
     void setupCodeInformationRepository();
@@ -135,6 +137,9 @@ private:
     CodeInformationRepository* m_repository;
     CppCodeCompletionData* d;
     CompletionMode m_completionMode;
+
+    QRegExp m_includeRx;
+    QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
 };
 
 #endif

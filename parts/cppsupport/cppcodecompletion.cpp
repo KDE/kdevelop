@@ -16,7 +16,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 #include "cppcodecompletion.h"
 #include "cppcodecompletionconfig.h"
 #include "backgroundparser.h"
@@ -51,6 +50,7 @@
 
 #include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
+#include <kdevproject.h>
 
 class SimpleVariable
 {
@@ -242,7 +242,7 @@ static QStringList unique( const QStringList& entryList )
 }
 
 CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
-    : d( new CppCodeCompletionData )
+    : d( new CppCodeCompletionData ), m_includeRx( "^\\s*#\\s*include\\s+[\"<]" )
 {
     m_pSupport = part;
 
@@ -253,6 +253,12 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_ccLine = 0;
     m_ccColumn = 0;
     connect( m_ccTimer, SIGNAL(timeout()), this, SLOT(slotTimeout()) );
+
+    computeFileEntryList();
+
+    CppSupportPart* cppSupport = m_pSupport;
+    connect( cppSupport->project(), SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(computeFileEntryList()) );
+    connect( cppSupport->project(), SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(computeFileEntryList()) );
 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
@@ -372,7 +378,8 @@ void CppCodeCompletion::slotTextChanged()
     m_ccColumn = 0;
 
     if( (m_pSupport->codeCompletionConfig()->automaticCodeCompletion() && (ch == "." || ch2 == "->" || ch2 == "::")) ||
-	(m_pSupport->codeCompletionConfig()->automaticArgumentsHint() && ch == "(") ){
+	(m_pSupport->codeCompletionConfig()->automaticArgumentsHint() && ch == "(") ||
+	(m_pSupport->codeCompletionConfig()->automaticHeaderCompletion() && (ch == "\"" || ch == "<") && m_includeRx.search(strCurLine) != -1 ) ){
 	m_ccLine = nLine;
 	m_ccColumn = nCol;
 	m_ccTimer->start( ch == "(" ? m_pSupport->codeCompletionConfig()->argumentsHintDelay() : m_pSupport->codeCompletionConfig()->codeCompletionDelay(), true );
@@ -577,7 +584,6 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
     return QStringList();
 }
 
-
 void
 CppCodeCompletion::completeText( )
 {
@@ -593,12 +599,19 @@ CppCodeCompletion::completeText( )
 
     QString strCurLine = m_activeEditor->textLine( nLine );
 
+    QString ch = strCurLine.mid( nCol-1, 1 );
+    QString ch2 = strCurLine.mid( nCol-2, 2 );
+
+    if( m_includeRx.search(strCurLine) != -1 ){
+	if( !m_fileEntryList.isEmpty() ){
+	    m_activeCompletion->showCompletionBox( m_fileEntryList, column - m_includeRx.matchedLength() );
+	}
+        return;
+    }
+
     bool showArguments = false;
     bool isInstance = true;
     m_completionMode = NormalCompletion;
-
-    QString ch = strCurLine.mid( nCol-1, 1 );
-    QString ch2 = strCurLine.mid( nCol-2, 2 );
 
     if( ch2 == "->" || ch == "." || ch == "(" ){
 	int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
@@ -1805,6 +1818,24 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 #endif
 
     return c;
+}
+
+void CppCodeCompletion::computeFileEntryList( )
+{
+    m_fileEntryList.clear();
+
+    QStringList fileList = m_pSupport->project()->allFiles();
+    for( QStringList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
+    {
+	if( !m_pSupport->isHeader(*it) )
+	    continue;
+
+        KTextEditor::CompletionEntry entry;
+	entry.text = QFileInfo( *it ).fileName();
+	m_fileEntryList.push_back( entry );
+    }
+    
+    m_fileEntryList = unique( m_fileEntryList );
 }
 
 #include "cppcodecompletion.moc"
