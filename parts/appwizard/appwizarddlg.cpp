@@ -64,6 +64,7 @@
 
 #include <qlayout.h>
 
+#include "profiles.h"
 #include "domutil.h"
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
@@ -605,7 +606,7 @@ void AppWizardDialog::accept()
 		}
     }
 */    
-	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
+//	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	
 	QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
 	for(;cleanIt != cleanUpSubstMap.end(); ++cleanIt )
@@ -872,15 +873,17 @@ void AppWizardDialog::openAfterGeneration()
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
-////////////////////////	
+//BEGIN Plugin Profile
 
-	QStringList loadList = QStringList::split( ',', "KDevBookmarks,KDevCTags2,KDevClassView,KDevFileView,KDevQuickOpen" );
-	QString lang = DomUtil::readEntry(projectDOM, "/general/primarylanguage");
-	if ((lang == "C") || (lang == "C++"))
-		loadList << "KDevDebugger" << "KDevDoxygen";
-	QString bs = DomUtil::readEntry(projectDOM, "/general/projectmanagement");
-	if ((bs == "KDevAutoProject") || (bs == "KDevKDEAutoProject"))
-		loadList << "KDevdistpart";
+	QString category = m_pCurrentAppInfo->category;
+	if ( category.left( 1 ) == "/" )
+	{
+		category = category.right( category.length() -1 );
+	}
+
+	QString profile = Profiles::getProfileForCategory( category );
+	QStringList loadList = Profiles::getPluginsForProfile( profile );
+	
 	QStringList ignoreList;
 
 	KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
@@ -896,7 +899,7 @@ void AppWizardDialog::openAfterGeneration()
 
 	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );
 
-////////////////////////
+//END Plugin Profile
 
 	// write the dom back
 	if( !file.open( IO_WriteOnly ) )
