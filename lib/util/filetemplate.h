@@ -35,6 +35,12 @@ public:
      */
     static QString read(KDevPlugin *part, const QString &name, Policy p = Default);
     /**
+     * Reads a template with the given URL
+     * and makes variable substitutions (like $AUTHOR$ etc.)
+     * in it. The resulting string is returned.
+     */
+    static QString readFile(KDevPlugin *part, const QString &fileName);
+    /**
      * Copies a file template with the given name to the
      * file with the name dest and - while copying -
      * performs variable substitutions.

@@ -10,6 +10,7 @@ libkdevutil_la_SOURCES = processwidget.cpp \
 			 splitter.cpp \
 			 execcommand.cpp \
 			 ksavealldialog.cpp \
-			 filetemplate.cpp
+			 filetemplate.cpp \
+			 locate.cpp
 
 METASOURCES = AUTO
