@@ -128,12 +128,8 @@ private:
      */
     void parseDirectory( const QString &directory, bool withSubDirectories,
                          QProgressBar *bar, QLabel *label );
-    
-    QStringList modifiedFileList();
 
-    QString asHeaderCode(ParsedMethod *pm);
-    QString asCppCode(ParsedMethod *pm);
-    QString asHeaderCode(ParsedAttribute *pa);
+    QStringList modifiedFileList();
 
     QString findSourceFile();
 
@@ -155,7 +151,7 @@ private:
 
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;
-    
+
     QStringList m_projectFileList;
     QMap<QString, QDateTime> m_timestamp;
 };
