@@ -14,7 +14,7 @@
 #ifndef KDICT_H
 #define KDICT_H
 
-#include <ostream>
+#include <iostream>
 #include <kdebug.h>
 
 #include "Trie.h"

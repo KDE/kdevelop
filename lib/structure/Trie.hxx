@@ -16,12 +16,12 @@
 
 #include <vector>
 #include <iterator>
-#include <ostream>
+#include <iostream>
 
 namespace Structure {
 
   using std::vector;
-  using std::iterator;
+  //using std::iterator;
   using std::ostream;
 
   // Generic trie structure
