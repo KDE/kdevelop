@@ -90,7 +90,7 @@ void AppWizardPart::openSpecifiedFiles()
           it != m_openFilesAfterGeneration.end(); ++it ) {
         if ( !(*it).isNull() ) {
             KURL url(m_projectLocation + *it);
-            kdDebug(9010) << "Try to open: " << url << endl;
+            kdDebug(9010) << "Try to open: " << url.url() << endl;
             partController()->editDocument(url);
         }
     }
