@@ -2899,8 +2899,10 @@ void CKDevelop::slotClassbrowserViewDeclaration()
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
-  CVGotoDeclaration( classname, methodname, 
-                     THCLASS, THPUBLIC_METHOD );
+  if(classname==i18n("(Globals"))
+      CVGotoDeclaration( classname, methodname, THFOLDER, THGLOBAL_FUNCTION );
+  else
+    CVGotoDeclaration( classname, methodname, THCLASS, THPUBLIC_METHOD );
 }
 
 /*----------------------- CKDevelop::slotClassbrowserViewDefinition()
@@ -2920,10 +2922,15 @@ void CKDevelop::slotClassbrowserViewDefinition()
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
-  if( methodname.isEmpty() )
-    CVGotoDeclaration( classname, "", THCLASS, THCLASS );
-  else
-    CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
+  if( methodname.isEmpty() && !classname==i18n("(Globals") ){
+      CVGotoDefinition( classname, "", THCLASS, THCLASS );
+  }
+  else{
+    if(classname==i18n("(Globals"))
+      CVGotoDefinition( classname, methodname, THFOLDER, THGLOBAL_FUNCTION );
+    else
+      CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
+  }
 }
 
 /*------------------------------ CKDevelop::slotClassbrowserNewMethod()

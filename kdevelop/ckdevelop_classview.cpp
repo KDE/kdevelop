@@ -68,6 +68,10 @@ void CKDevelop::slotClassChoiceCombo(const QString& text)
   {
     CVRefreshMethodCombo( aClass );
   }
+  if(text==i18n("(Globals)"))
+  {
+    CVRefreshMethodCombo( aClass );
+  }
 }
 
 /*-------------------------------- CKDevelop::slotMethodChoiceCombo()
@@ -87,6 +91,12 @@ void CKDevelop::slotMethodChoiceCombo(const QString& text)
 
   CParsedClass *aClass=NULL;
   aClass = class_tree->store->getClassByName(classname );
+
+  if(classCombo->currentText()==i18n("(Globals)"))
+  {
+    cv_decl_or_impl = true;
+    CVGotoDefinition( classname, text, THFOLDER, THGLOBAL_FUNCTION );
+  }
 
   // Only bother if the methodname is non-empty.
   if( (!text.isEmpty()) && aClass)
@@ -559,6 +569,9 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
   int toLine = -1;
   // to get around the method combo selection, we change the type to attribute if there is one of that name
   aContainer = CVGetContainer( parentPath, parentType );
+  if(!aContainer){
+    itemType=THGLOBAL_FUNCTION;
+  }
 
   // Get the type of declaration at the index.
   switch( itemType )
@@ -586,18 +599,20 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     default:
       debug( "Unknown type %d in CVGotoDefinition.", itemType );
   }
-
   if( aMethod ){
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
     return;
   }
-  else
+  else{
+    CVGotoDeclaration( parentPath,itemName,parentType,itemType );
     debug( "Couldn't find method %s::%s", parentPath, itemName );
-
+    return;
+  }
   // now a new switch for the attributes
-  if(aContainer->hasAttribute(itemName)){
+  if(aContainer->hasAttribute(itemName) ){
     aAttr = aContainer->getAttributeByName( itemName );
   }
+
   // Fetch the line and file from the attribute if the value is set.
   if( aAttr )
   {
@@ -633,6 +648,9 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
   int toLine = -1;
 
   aContainer = CVGetContainer( parentPath, parentType );
+  if(!aContainer){
+    itemType=THGLOBAL_FUNCTION;
+  }
 
   switch( itemType )
   {
@@ -672,10 +690,10 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
         aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
-      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
-      break;
     case THGLOBAL_VARIABLE:
-      aAttr = class_tree->store->globalContainer.getAttributeByName( itemName );
+      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
+      if(!aAttr)
+        aAttr = class_tree->store->globalContainer.getAttributeByName( itemName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDeclaration.", itemType );
@@ -721,6 +739,9 @@ void CKDevelop::CVRefreshClassCombo()
   classCombo->clear();
 
   // Add all classes.
+  classCombo->insertItem(i18n("(Globals)") );
+  class_comp->addItem(i18n("(Globals)"));
+
   classList = class_tree->store->getSortedClassList();
   for( aClass = classList->first(),i=0;
        aClass != NULL;
@@ -745,6 +766,7 @@ void CKDevelop::CVRefreshClassCombo()
 			CVRefreshMethodCombo( aClass );
 			return;
 		}
+
 	}
 	methodCombo->clear();
 }
@@ -763,6 +785,7 @@ void CKDevelop::CVRefreshClassCombo()
 void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
 {
   QListBox *lb;
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString str;
   QString savedMethod;
@@ -774,6 +797,30 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   methodCombo->clear();
   lb = methodCombo->listBox();
   lb->setAutoUpdate( false );
+
+  if((classCombo->currentText()==i18n("(Globals)"))){
+    QList<CParsedMethod> *globalmeth=class_tree->store->globalContainer.getSortedMethodList( );
+    for( globalmeth->first();
+       globalmeth->current();
+       globalmeth->next() )
+      {
+        globalmeth->current()->asString(str);
+        methodCombo->insertItem(SmallIcon("CVglobal_meth"), str );
+        method_comp->addItem(str);
+      }
+    QList<CParsedAttribute> *globalattr=class_tree->store->globalContainer.getSortedAttributeList( );
+    for( globalattr->first();
+       globalattr->current();
+       globalattr->next() )
+      {
+        str=globalattr->current()->name;
+        methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
+        method_comp->addItem(str);
+      }
+    lb->sort();
+    lb->setAutoUpdate( true );
+    return;
+  }
 
   // Add all methods, slots and signals of this class.
   for( aClass->methodIterator.toFirst(); 
