@@ -187,6 +187,13 @@ void ImportDialog::dirChanged()
         scanAutomakeProject(dirName);
         return;
     }
+    
+    // QMake based?
+    files = dir.entryList("*.pro");
+    if (!files.isEmpty()) {
+        setProjectType("qttmake");
+        return;
+    }
 
     // C++?
     if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc")) {
