@@ -41,7 +41,7 @@ PropertyWidgetProxy::~PropertyWidgetProxy()
 
 void PropertyWidgetProxy::setPropertyType(int propertyType)
 {
-    m_propertyType = static_cast<Property::PropertyType>(propertyType);
+    m_propertyType = static_cast<PropertyType>(propertyType);
     setWidget();
 }
 

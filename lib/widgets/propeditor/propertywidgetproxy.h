@@ -60,7 +60,7 @@ private:
     Property *p;
     MultiProperty *mp;
     
-    Property::PropertyType m_propertyType;
+    PropertyType m_propertyType;
     PropertyWidget *m_editor;
     
     QHBoxLayout *m_layout;
