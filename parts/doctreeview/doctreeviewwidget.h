@@ -57,7 +57,6 @@ private slots:
     void refresh();
 	void slotJumpToNextMatch();
 	void slotJumpToPrevMatch();
-	void slotStopSearching();
 	void slotStartSearching();
 	void slotHistoryReturnPressed ( const QString& );
 	void slotSelectionChanged ( QListViewItem* );
@@ -90,7 +89,6 @@ private:
 	QToolButton* prevButton;
 	QToolButton* nextButton;
 	QToolButton* startButton;
-	QToolButton* stopButton;
 	KHistoryCombo* completionCombo;
 	
 	DocTreeItem* m_activeTreeItem;

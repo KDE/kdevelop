@@ -707,8 +707,8 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	docConfigButton->setEnabled ( false );
 	QToolTip::add ( docConfigButton, i18n ( "Customize the select documentation tree..." ) );
 
-    QWidget *spacer = new QWidget(docToolbar);
-    docToolbar->setStretchFactor(spacer, 1);
+	QWidget *spacer = new QWidget(docToolbar);
+	docToolbar->setStretchFactor(spacer, 1);
 
 	showButton = new QToolButton ( docToolbar, "show button" );
 	showButton->setText ( "Search Selected Folder..." );
@@ -727,22 +727,18 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	startButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, startButton->sizePolicy().hasHeightForWidth() ) );
 	QToolTip::add ( startButton, i18n ( "Start searching." ) );
 
-	stopButton = new QToolButton ( searchToolbar, "stop searching" );
-	stopButton->setPixmap ( SmallIcon ( "cancel" ) );
-	stopButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, stopButton->sizePolicy().hasHeightForWidth() ) );
-	stopButton->setEnabled ( false );
-	QToolTip::add ( stopButton, i18n ( "Stop searching." ) );
-////////////////////////////////
 	nextButton = new QToolButton ( searchToolbar, "next match button" );
 	nextButton->setPixmap ( SmallIcon ( "next" ) );
 	nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth() ) );
 	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry." ) );
+	nextButton->setEnabled( false );
 
 	prevButton = new QToolButton ( searchToolbar, "previous match button" );
 	prevButton->setPixmap ( SmallIcon ( "previous" ) );
 	prevButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, prevButton->sizePolicy().hasHeightForWidth() ) );
 	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry." ) );
-//////////////////////////
+	prevButton->setEnabled( false );
+
 	docToolbar->setMaximumHeight ( docConfigButton->height() );
 
 	docView = new KListView ( this, "documentation list view" );
@@ -795,9 +791,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
 	connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
 	connect ( startButton, SIGNAL ( clicked() ), this, SLOT ( slotStartSearching() ) );
-	connect ( stopButton, SIGNAL ( clicked() ), this, SLOT ( slotStopSearching() ) );
 	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotHistoryReturnPressed ( const QString& ) ) );
-//	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotStartSearching() ) );
 
     connect( docView, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -828,24 +822,39 @@ void DocTreeViewWidget::searchForItem ( const QString& currentText )
 
 void DocTreeViewWidget::slotJumpToNextMatch()
 {
-	if( searchResultList.next() ) {}
-	else
-	searchResultList.first();   // wrap around
+	if( searchResultList.next() )
+	{
+		docView->setSelected ( searchResultList.current(), true );
+		docView->ensureItemVisible ( searchResultList.current() );
+		slotItemExecuted ( searchResultList.current() );
+		prevButton->setEnabled( true );
 
-	docView->setSelected ( searchResultList.current(), true );
-	docView->ensureItemVisible ( searchResultList.current() );
-	slotItemExecuted ( searchResultList.current() );
+		if(searchResultList.current() == searchResultList.getLast() )
+			nextButton->setEnabled( false );
+	}
+	else
+	{
+		searchResultList.last();
+	}
+
 }
 
 void DocTreeViewWidget::slotJumpToPrevMatch()
 {        
-	if( searchResultList.prev() ) {}
-	else
-	searchResultList.last();   // wrap around
+	if( searchResultList.prev() )
+	{
+		docView->setSelected ( searchResultList.current(), true );
+		docView->ensureItemVisible ( searchResultList.current() );
+		slotItemExecuted ( searchResultList.current() );
+		nextButton->setEnabled( true );
 
-	docView->setSelected ( searchResultList.current(), true );
-	docView->ensureItemVisible ( searchResultList.current() );
-	slotItemExecuted ( searchResultList.current() );
+		if(searchResultList.current() == searchResultList.getFirst() )
+			prevButton->setEnabled( false );
+	}
+	else
+	{
+		searchResultList.first();
+	 }
 }
 
 void DocTreeViewWidget::slotShowButtonToggled ( bool on )
@@ -868,17 +877,15 @@ void DocTreeViewWidget::slotStartSearching()
 	slotHistoryReturnPressed ( currentText );
 }
 
-void DocTreeViewWidget::slotStopSearching()
-{
-	stopButton->setEnabled ( false );
-}
-
 void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
 {
+	nextButton->setEnabled( false );
+	prevButton->setEnabled( false );
 	searchResultList.clear();
-	stopButton->setEnabled ( true );
 
-	searchForItem( currentText ); //fills searchResultList
+	if( currentText.length() > 0 )
+		searchForItem( currentText ); //fills searchResultList
+
 	
 	if ( searchResultList.count() )
 	{
@@ -886,9 +893,10 @@ void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
 		docView->setSelected ( searchResultList.first(), true );
 		docView->ensureItemVisible (  searchResultList.first() );
 		slotItemExecuted ( searchResultList.first() );
-		stopButton->setEnabled ( false );
-	} else {
-		stopButton->setEnabled ( false );
+	}
+	if ( searchResultList.count() > 1 )
+	{
+		nextButton->setEnabled( true );
 	}
 }
 
