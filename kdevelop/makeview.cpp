@@ -141,7 +141,6 @@ void MakeView::lineHighlighted(int line)
 }
 
 
-#include <iostream.h>
 void MakeView::insertStdoutLine(const QString &line)
 {
     // KRegExp has ERE syntax
@@ -152,13 +151,13 @@ void MakeView::insertStdoutLine(const QString &line)
         {
             QString *dir = new QString(enterDirRx.group(1));
             dirstack.push(dir);
-            cout << "Entering dir: " << *dir << endl;
+            qDebug( "Entering dir: %s", (*dir).ascii() );
         }
     else if (leaveDirRx.match(line))
         {
-            cout << "Leaving dir: " << leaveDirRx.group(1) << endl;
+            qDebug( "Leaving dir: %s", leaveDirRx.group(1) );
             QString *dir = dirstack.pop();
-            cout << "Now: " << *dir << endl;
+            qDebug( "Now: %s", (*dir).ascii() );
             delete dir;
         }
     ProcessView::insertStdoutLine(line);
@@ -193,10 +192,10 @@ void MakeView::insertStderrLine(const QString &line)
         }
     if (hasmatch)
         {
-            cout << "Error in " << fn << " at line: " << row << endl;
+            qDebug( "Error in %s %i", fn.ascii(), row );
             if (dirstack.top())
                 fn.prepend("/").prepend(*dirstack.top());
-            cout << "Path: " << fn << endl;
+            qDebug( "Path: %s", fn.ascii() );
             insertItem(new MakeListBoxItem(line, fn, row));
         }
     else

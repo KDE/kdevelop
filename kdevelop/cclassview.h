@@ -46,6 +46,9 @@ public: // Constructor & Destructor
   ~CClassView();
 
   virtual void projectClosed();
+  virtual void addedFileToProject(const QString &name);
+  virtual void removedFileFromProject(const QString &name);
+  virtual void savedFile(const QString &name);
     
 private: // Private classes
 

@@ -344,10 +344,8 @@ void CKDevelop::slotFileSave(){
 
    saveFileFromTheCurrentEditWidget(); // save the current file
    setInfoModified(filename, editor_view->editor->isModified());
-   // only refresh if header file changed
-   if(CProject::getType(filename)==CPP_HEADER){
-       slotViewRefresh();
-   }
+   ComponentManager::self()->notifySavedFile(filename);
+
    slotStatusMsg(i18n("Ready."));
    QString sHelpMsg = editor_view->editor->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
    slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));

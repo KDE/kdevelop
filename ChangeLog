@@ -1,3 +1,8 @@
+1999-11-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Removed iostream diagnostics with qDebug
+	* Some more methods changed from refreshTrees()
+	  to component system
+
 1999-11-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Solved the 'multiple file personalities' once
 	  and for all, even for hardlinks

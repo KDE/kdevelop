@@ -27,7 +27,6 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <stdio.h>
-#include <iostream.h>
 
 #include "cdoctreepropdlg.h"
 #include "cproject.h"

@@ -240,6 +240,27 @@ void CClassView::projectClosed()
 }
 
 
+void CClassView::addedFileToProject(const QString &name)
+{
+    // This could be much finer-grained...
+    refresh();
+}
+
+
+void CClassView::removedFileFromProject(const QString &name)
+{
+    // This could be much finer-grained...
+    refresh();
+}
+
+
+void CClassView::savedFile(const QString &name)
+{
+    if (CProject::getType(name) == CPP_HEADER)
+        refresh();
+}
+
+
 /*---------------------------------------------- CClassView::refresh()
  * refresh()
  *   Add all classes from the project. Reparse and redraw all classes 

@@ -1290,15 +1290,9 @@ long KDlgLoader::setProperty_kde(QWidget* w, QString name, QString val, QString 
       if (name == "ledcolor")          // LedColor
         {
           if (val.lower() == "yellow")
-            ((KLed*)w)->setColor(KLed::yellow);
-          else if (val.lower() == "orange")
-            ((KLed*)w)->setColor(KLed::orange);
-          else if (val.lower() == "red")
-            ((KLed*)w)->setColor(KLed::red);
+            ((KLed*)w)->setColor(Qt::yellow);
           else if (val.lower() == "green")
-            ((KLed*)w)->setColor(KLed::green);
-          else if (val.lower() == "blue")
-            ((KLed*)w)->setColor(KLed::blue);
+            ((KLed*)w)->setColor(Qt::green);
           Return(KDLGERR_SUCCESS)
         }
     }

@@ -80,8 +80,6 @@ kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
 doc/Makefile \
-doc/nl/Makefile \
-doc/pl/Makefile \
 doc/pt/manual/Makefile \
 doc/pt/programming/Makefile \
 doc/pt/Makefile \
@@ -91,7 +89,6 @@ doc/ru/manual/Makefile \
 doc/ru/programming/Makefile \
 doc/ru/tutorial/Makefile \
 doc/ru/welcome/Makefile \
-doc/sv/Makefile \
 doc/zh_CN.GB2312/Makefile \
 doc/zh_CN.GB2312/welcome/Makefile \
 doc/zh_CN.GB2312/tutorial/Makefile \

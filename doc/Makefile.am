@@ -1,1 +1,1 @@
-SUBDIRS = pl pt sv zh_CN.GB2312 ru nl
+SUBDIRS = pt zh_CN.GB2312 ru

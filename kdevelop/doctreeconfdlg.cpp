@@ -29,7 +29,6 @@
 #include "doctreeconfdlg.h"
 
 
-#include <iostream>
 DocTreeConfigDialog::DocTreeConfigDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
@@ -42,7 +41,7 @@ DocTreeConfigDialog::DocTreeConfigDialog(QWidget *parent, const char *name)
 
     QListView *view = new QListView(this);
     QString path = locate("appdata", "tools/libraries");
-    cout << "path " << path << endl;
+    qDebug( "Path: %s", path.ascii() );
     KSimpleConfig libconfig(path);
     libconfig.setGroup("Libraries");
     QStringList liblist = libconfig.readListEntry("Entries");
@@ -52,7 +51,7 @@ DocTreeConfigDialog::DocTreeConfigDialog(QWidget *parent, const char *name)
 	    QString title = libconfig.readEntry(*it);
             (void) new QCheckListItem(view, *it, QCheckListItem::CheckBox);
             //	    view->insertItem(new KCheckListItem(view, title, *it));
-	    cout << "insert " << (*it) << endl;
+	    qDebug( "Insert %s",  (*it).ascii() );
 	}
    
     readConfig();

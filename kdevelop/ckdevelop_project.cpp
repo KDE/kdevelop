@@ -426,22 +426,24 @@ void CKDevelop::slotProjectNewClass(){
 
     QFileInfo header_info(header_file);
     QFileInfo source_info(source_file);
+    QString header_relname = prj->getSubDir() + header_info.fileName();
+    QString source_relname = prj->getSubDir() + source_info.fileName();
     TFileInfo file_info;
-    file_info.rel_name = prj->getSubDir() + source_info.fileName();
+    file_info.rel_name = source_relname;
     file_info.type = CPP_SOURCE;
     file_info.dist = true;
     file_info.install = false;
-    prj->addFileToProject(prj->getSubDir() + source_info.fileName(),file_info);
+    prj->addFileToProject(source_relname, file_info);
+    ComponentManager::self()->notifyAddedFileToProject(source_relname);
     
-    file_info.rel_name = prj->getSubDir() + header_info.fileName();
+    file_info.rel_name = header_relname;
     file_info.type = CPP_HEADER;
     file_info.dist = true;
     file_info.install = false;
-    prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);
+    prj->addFileToProject(header_relname, file_info);
+    ComponentManager::self()->notifyAddedFileToProject(header_relname);
    
     prj->updateMakefilesAm();
-    
-    slotViewRefresh();
   }
 }
 
@@ -456,40 +458,23 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 }
 
 void CKDevelop::slotProjectOpen(){
-  QString old_project = "";
-
-  
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
-			slotViewRefresh();
-      return;
-    }
-  }
   slotStatusMsg(i18n("Opening project..."));
-  QString str;
-  str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
-  if (str.isEmpty() && old_project != ""){
-    readProjectFile(old_project);
-    slotViewRefresh();
-    return; //cancel
-  }
- 
+  QString filename = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+  if (str.isEmpty())
+      return;
+  
+  if (project && !slotProjectClose())
+      return;
  
   QFileInfo info(str);
-  
   if (info.isFile()){
     if(!(readProjectFile(str))){
 
     KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                                "Please use only new generated projects!"));
-    readProjectFile(old_project);
     }
-    slotViewRefresh();
-
-    slotStatusMsg(i18n("Ready."));
-
     ComponentManager::self()->notifyProjectOpened(prj);
+    slotStatusMsg(i18n("Ready."));
   }	
   
 }
@@ -500,27 +485,18 @@ void CKDevelop::slotProjectOpenRecent(int id_)
 }
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname){
-
-  QString old_project = "";
-
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
+  if (project && !slotProjectClose())
       return;
-    }
-  }
+ 
   prjname.replace(QRegExp("file:"),"");
   
   QFileInfo info(prjname);
-
   if (info.isFile()){
     if(!(readProjectFile(prjname))){
       KMessageBox::sorry(0, "This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                          "Please use only new generated projects!");
-      readProjectFile(old_project);
     }
-
-    slotViewRefresh();
+    ComponentManager::self()->notifyProjectOpened(prj);
     slotStatusMsg(i18n("Ready."));
   }	
 }
@@ -593,14 +569,24 @@ void  CKDevelop::slotProjectWorkspaces(int id){
 
 void CKDevelop::slotProjectAddNewTranslationFile(){
   CAddNewTranslationDlg dlg(this,0,prj);
-  QString file;
   if (dlg.exec()){
-    file = dlg.getLangFile();
-    file = prj->getProjectDir() + "po/" + file;
+    QString rel_name = "po/" + dlg.getLangFile();
+    QString file = prj->getProjectDir() + rel_name;
     QFile nfile(file); // create a empty file
     nfile.open(IO_WriteOnly);
     nfile.close();
-    addFileToProject(file, PO); 
+
+    TFileInfo info;
+    info.rel_name = rel_name;
+    info.type = PO;
+    info.dist = false;
+    info.install = false;
+    info.install_location = "";
+    (void) prj->addFileToProject(rel_name, info);
+    ComponentManager::self()->notifyAddedFileToProject(rel_name);
+
+    prj->writeProject();
+    prj->updateMakefilesAm();
     slotProjectMessages();
   }
 }
