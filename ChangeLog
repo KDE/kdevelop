@@ -1,3 +1,6 @@
+2003-04-23 Roberto Raggi <roberto@kdevelop.org>
+    * fixed the deadlock in the background parser
+
 2003-04-23 Harald Fernengel <harry@kdevelop.org>
     * added SQL support part, including support for multiple connections,
       sending queries and browsing their results
