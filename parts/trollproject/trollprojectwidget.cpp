@@ -1358,6 +1358,9 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
+  subBuffer->removeValues("TRANSLATIONS");
+  subBuffer->setValues("TRANSLATIONS",spitem->translations,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("TRANSLATIONS",spitem->translations_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
 
   if( m_part->isTMakeProject() ) {
@@ -1458,6 +1461,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
       break;
     case GroupItem::Images:
       titem->owner->images.append(filename);
+      break;
+    case GroupItem::Translations:
+      titem->owner->translations.append(filename);
       break;
     case GroupItem::InstallObject:
       titem->str_files.append(filename);
@@ -1570,6 +1576,8 @@ void TrollProjectWidget::addFile(const QString &fileName, bool noPathTruncate)
     addFileToCurrentSubProject(GroupItem::IDLs,fileWithNoSlash);
   else if (QString("jpg png xpm").find(ext)>-1)
     addFileToCurrentSubProject(GroupItem::Images,fileWithNoSlash);
+  else if (QString("ts").find(ext)>-1)
+    addFileToCurrentSubProject(GroupItem::Translations,fileWithNoSlash);
   else
     addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);*/
 
@@ -1887,6 +1895,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             title = i18n("Images");
             ext = "*.jpg *.png *.xpm *.gif";
             break;
+        case GroupItem::Translations:
+            title = i18n("Translations");
+            ext = "*.ts";
+            break;
         case GroupItem::InstallRoot:
             title = i18n("Installs");
             break;
@@ -1904,6 +1916,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Install Object..."));
         int idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Installpattern Item..."));
         int idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose Install Path..."));
+        int idLUpdate;
+        int idLRelease;
 
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         if (titem->groupType == GroupItem::InstallRoot)
@@ -1918,6 +1932,14 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           popup.removeItem(idInsInstallObject);
           popup.removeItem(idInsExistingFile);
           popup.removeItem(idInsNewFile);
+        }
+        else if(titem->groupType == GroupItem::Translations)
+        {
+	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update translation files"));
+	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release binary translations"));
+          popup.removeItem(idInsNewFilepatternItem);
+          popup.removeItem(idInsInstallObject);
+          popup.removeItem(idSetInstObjPath);
         }
         else // File group containing files
         {
@@ -2082,6 +2104,18 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             titem->installs.append(institem);
             slotOverviewSelectionChanged(m_shownSubproject);
           }
+        }
+	if (r == idLUpdate)
+        {
+	   QString cmd = "lupdate ";
+           cmd += m_shownSubproject->pro_file;
+           m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
+        }
+        if (r == idLRelease)
+        {
+	   QString cmd = "lrelease ";
+           cmd += m_shownSubproject->pro_file;
+           m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
         }
     } else if (pvitem->type() == ProjectItem::File) {
 
@@ -2255,6 +2289,9 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
       case GroupItem::Images:
         spitem->images.remove(fitem->text(0));
         break;
+      case GroupItem::Translations:
+        spitem->translations.remove(fitem->text(0));
+        break;
       case GroupItem::IDLs:
         spitem->idls.remove(fitem->text(0));
         break;
@@ -2339,6 +2376,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
     subBuffer->getValues("IMAGES",item->images,item->images_exclude);
+    subBuffer->getValues("TRANSLATIONS",item->translations,item->translations_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
     QStringList installs,installs_exclude;
     subBuffer->getValues("INSTALLS",installs,installs_exclude);
@@ -2389,6 +2427,18 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     item->groups.append(titem);
     if (!item->images.isEmpty()) {
         QStringList l = item->images;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Translations, "TRANSLATIONS",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!item->translations.isEmpty()) {
+        QStringList l = item->translations;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
             FileItem *fitem = createFileItem(*it);
