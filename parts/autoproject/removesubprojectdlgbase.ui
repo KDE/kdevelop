@@ -151,5 +151,23 @@
         </widget>
     </vbox>
 </widget>
+<connections>
+    <connection>
+        <sender>removeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>RemoveSubprojectDlgBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>RemoveSubprojectDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>accept()</slot>
+    <slot>reject()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

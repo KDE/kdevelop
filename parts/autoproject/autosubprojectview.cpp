@@ -16,6 +16,7 @@
 
 /** Qt */
 #include <qregexp.h>
+#include <qcheckbox.h>
 
 /** KDE Libs */
 #include <kaction.h>
@@ -36,14 +37,11 @@
 #include "addservicedlg.h"
 #include "addapplicationdlg.h"
 #include "addexistingdirectoriesdlg.h"
-
 #include "autolistviewitems.h"
-
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
-
 #include "autosubprojectview.h"
-
+#include "removesubprojectdialog.h"
 
 namespace AutoProjectPrivate
 {
@@ -218,7 +216,6 @@ void AutoSubprojectView::slotAddExistingSubproject()
 		emit selectionChanged ( spitem );
 }
 
-
 void AutoSubprojectView::slotAddTarget()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
@@ -279,68 +276,73 @@ void AutoSubprojectView::slotBuildSubproject()
 void AutoSubprojectView::slotRemoveSubproject()
 {
     kdDebug(9020) << "AutoSubprojectView::slotRemoveSubproject()" << endl;
-
+    
     SubprojectItem* spitem = static_cast<SubprojectItem*>( selectedItem() );
     if( !spitem )
 	return;
-
+    
     SubprojectItem* parent = static_cast<SubprojectItem*>( spitem->parent() );
     if( !parent || !parent->listView() || spitem->childCount() != 0 ){
 	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake manager") );
 	return;
     }
-
+    
     // check for config.status
     if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
 	KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
 	return;
     }
-        
+    
     QStringList list = QStringList::split( QRegExp("[ \t]"), parent->variables["SUBDIRS"] );
     QStringList::Iterator it = list.find( spitem->subdir );
     if( it == list.end() ){
-        KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
-        return;
-    }
-    list.remove( it );
-    parent->variables[ "SUBDIRS" ] = list.join( "." );
-    
-    parent->listView()->setSelected( parent, true );
-    kapp->processEvents( 500 );
-    
-    
-    bool removeSources = KMessageBox::warningYesNo( 0, i18n("Do you want to remove the contents of the directory %1?").arg(spitem->path), i18n("Automake manager") ) == KMessageBox::Yes;
-    
-    if( removeSources ){
-	kdDebug(9020) << "remove dir " << spitem->path << endl;
-	AutoProjectPrivate::removeDir( spitem->path );
+	KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
+	return;
     }
     
-    if( m_widget->activeSubproject() == spitem ){
-	m_widget->setActiveSubproject( 0 );
+    RemoveSubprojectDialog dlg;
+    if( dlg.exec() ){
+	
+	bool removeSources = dlg.removeCheckBox->isChecked();
+	
+	list.remove( it );
+	parent->variables[ "SUBDIRS" ] = list.join( "." );
+	
+	parent->listView()->setSelected( parent, true );
+	kapp->processEvents( 500 );
+	
+	
+	if( removeSources ){
+	    kdDebug(9020) << "remove dir " << spitem->path << endl;
+	    AutoProjectPrivate::removeDir( spitem->path );
+	}
+	
+	if( m_widget->activeSubproject() == spitem ){
+	    m_widget->setActiveSubproject( 0 );
+	}
+	// remove all targets
+	spitem->targets.setAutoDelete( true );
+	spitem->targets.clear();
+	delete( spitem );
+	spitem = 0;
+	
+	// Adjust SUBDIRS variable in containing Makefile.am
+	QMap<QString,QString> replaceMap;
+	replaceMap.insert( "SUBDIRS", parent->variables["SUBDIRS"] );
+	AutoProjectTool::modifyMakefileam( parent->path + "/Makefile.am", replaceMap );
+	
+	QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
+	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
+	
+	QString cmdline = "cd ";
+	cmdline += m_part->projectDirectory();
+	cmdline += " && automake ";
+	cmdline += relmakefile;
+	cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
+	cmdline += relmakefile;
+	cmdline += " ./config.status";
+	m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
     }
-    // remove all targets
-    spitem->targets.setAutoDelete( true );
-    spitem->targets.clear();
-    delete( spitem );
-    spitem = 0;
-
-    // Adjust SUBDIRS variable in containing Makefile.am
-    QMap<QString,QString> replaceMap;
-    replaceMap.insert( "SUBDIRS", parent->variables["SUBDIRS"] );
-    AutoProjectTool::modifyMakefileam( parent->path + "/Makefile.am", replaceMap );
-    
-    QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
-    kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
-
-    QString cmdline = "cd ";
-    cmdline += m_part->projectDirectory();
-    cmdline += " && automake ";
-    cmdline += relmakefile;
-    cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
-    cmdline += relmakefile;
-    cmdline += " ./config.status";
-    m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
 }
 
 
