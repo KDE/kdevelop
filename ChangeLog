@@ -1,3 +1,9 @@
+2001-07-26 Victor Röder <victor_roeder@gmx.de>
+	* KDevArgHint added to KWrite-part (widget that shows the function and its needed arguments)
+		Try it and type in 'test(' at the beginning of an empty line in a C++ project!
+	* showArgHint() added to CodeCompletionDocument
+	* added some code to CppCodeCompletion (cppsupport), but only for testing
+
 2001-07-26 Sandy Meier   <smeier@kdevelop.org>
 	* kwrite CodeCompletionbox is now useable, maybe someone who want make it more colorful?
 	* php code completion supports (global methods,$this->xxx and $test = new xxx) now, 
