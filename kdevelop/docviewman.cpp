@@ -781,7 +781,6 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
             "documentation provided with kdevelop as well as "
             "library class documentation created. Use the documentation "
             "tree to switch between various parts of the documentation."));
-  pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
 
   // Cover it by a QextMDI childview and add it to the MDI system
   addQExtMDIFrame(pNewView, bShow, SmallIcon("contents"));
