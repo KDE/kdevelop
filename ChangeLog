@@ -1,3 +1,7 @@
+1999-12-22  Falk Brettschneider  <gigafalk@yahoo.com>
+        * minimized mode of MDI views shows captionbar-windows
+	* Tile Vertically, Iconify All, bugfixes
+
 1999-12-21  Falk Brettschneider  <gigafalk@yahoo.com>
         * maximizing MDI views improved, still waiting for new KMenuBar that inherits QMenuBar ;-)
 	* MDI view taskbar can be switched on/off

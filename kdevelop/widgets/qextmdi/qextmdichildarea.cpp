@@ -127,7 +127,7 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 	}
 	if(bFocusTopChild)focusTopChild();
 	QextMdiChildFrm* pTopChild = 0;
-	if( (pTopChild = topChild()) )
+	if( bWasMaximized && (pTopChild = topChild()) )
       emit nowMaximized();	
 	fillWindowMenu();
 }
@@ -153,7 +153,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 	}
 	if(bFocusTopChild)focusTopChild();
 	QextMdiChildFrm* pTopChild = 0;
-	if( (pTopChild = topChild()) )
+	if( bWasMaximized && (pTopChild = topChild()) )
       emit nowMaximized();	
 	fillWindowMenu();
 }
@@ -200,6 +200,7 @@ void QextMdiChildArea::resizeEvent(QResizeEvent *e)
 			lpC->resize( width() + lpC->width() - lpC->m_pClient->width(),
 							 height() + lpC->height() - lpC->m_pClient->height());
 	}
+	layoutMinimizedChildren();
 	e = 0; // dummy!, only to avoid "unused parameters"
 }
 
@@ -239,8 +240,9 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
 void QextMdiChildArea::fillWindowMenu()
 {
 	m_pWindowMenu->clear();
-	m_pWindowMenu->insertItem(tr("&Close Window"),this, SIGNAL(closeActiveView()));
-	m_pWindowMenu->insertItem(tr("Close &All Windows"), this, SIGNAL(closeAllViews()));
+	m_pWindowMenu->insertItem(tr("&Close"),this, SIGNAL(closeActiveView()));
+	m_pWindowMenu->insertItem(tr("Close &All"), this, SIGNAL(closeAllViews()));
+	m_pWindowMenu->insertItem(tr("&Iconify All"), this, SIGNAL(iconifyAllViews()));
 	m_pWindowMenu->insertSeparator();
 	m_pWindowMenu->insertItem(tr("Ca&scade windows"),this,SLOT(cascadeWindows()));
 	m_pWindowMenu->insertItem(tr("Cascade &maximized"),this,SLOT(cascadeMaximized()));
@@ -248,6 +250,7 @@ void QextMdiChildArea::fillWindowMenu()
 	m_pWindowMenu->insertItem(tr("Expand &horizontal"),this,SLOT(expandHorizontal()));
 	m_pWindowMenu->insertItem(tr("A&nodine's tile"),this,SLOT(tileAnodine()));
 	m_pWindowMenu->insertItem(tr("&Pragma's tile"),this,SLOT(tilePragma()));
+	m_pWindowMenu->insertItem(tr("Tile v&ertically"),this,SLOT(tileVertically()));
 	m_pWindowMenu->insertSeparator();
 	m_pWindowMenu->insertItem(tr("&Toplevel mode"),this, SIGNAL(switchToToplevelMode()));
 	m_pWindowMenu->insertItem(tr("C&hildframe mode"), this, SIGNAL(switchToChildframeMode()));
@@ -280,24 +283,24 @@ void QextMdiChildArea::fillWindowMenu()
 
 		// insert the window entry sorted in alphabetical order
 		unsigned int indx;
-		unsigned int windowItemCount = m_pWindowMenu->count() - 13;
+		unsigned int windowItemCount = m_pWindowMenu->count() - 15;
 		bool inserted = false;
 		QString tmpString;
 		for( indx = 0; indx <= windowItemCount; indx++) {
-			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+13));
+			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+15));
 			if( tmpString.right( tmpString.length()-2) > szItem.right( szItem.length()-2)) {
-				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+13);
+				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+15);
       		if( isTheActiveOne)
-      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+13), true);
+      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+15), true);
 				lpC->setWindowMenuID( i);
 				inserted = true;
 				indx = windowItemCount+1;	// break the loop
 			}
 		}
 		if( !inserted) {	// append it
-			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+13);
+			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+15);
      		if( isTheActiveOne)
-     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+13), true);
+     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+15), true);
 			lpC->setWindowMenuID( i);
 		}
 		i++;
@@ -368,7 +371,7 @@ void QextMdiChildArea::cascadeWindows()
 	while(!list.isEmpty()){
 		QextMdiChildFrm *lpC=list.first();
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			lpC->move(getCascadePoint(idx));
 			lpC->resize(lpC->minimumSize());
 			idx++;
@@ -389,7 +392,7 @@ void QextMdiChildArea::cascadeMaximized()
 	while(!list.isEmpty()){
 		QextMdiChildFrm *lpC=list.first();
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			QPoint pnt(getCascadePoint(idx));
 			lpC->move(pnt);
 			QSize curSize(width()-pnt.x(),height()-pnt.y());
@@ -411,7 +414,7 @@ void QextMdiChildArea::expandVertical()
 	while(!list.isEmpty()){
 		QextMdiChildFrm *lpC=list.first();
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			lpC->setGeometry(lpC->x(),0,lpC->width(),height());
 			idx++;
 		}
@@ -428,7 +431,7 @@ void QextMdiChildArea::expandHorizontal()
 	while(!list.isEmpty()){
 		QextMdiChildFrm *lpC=list.first();
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			lpC->setGeometry(0,lpC->y(),width(),lpC->height());
 			idx++;
 		}
@@ -490,7 +493,7 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
 	for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
 		if(lpC->m_state!=QextMdiChildFrm::Minimized){
 			//restore the window
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			if((curWin%numToHandle)==0)lpC->setGeometry(curX,curY,xQuantum * lastwindw[numToHandle-1],yQuantum);
 			else lpC->setGeometry(curX,curY,xQuantum,yQuantum);
 			//example : 12 windows : 3 cols 3 rows
@@ -546,7 +549,7 @@ void QextMdiChildArea::tileAnodine()
 	int yQuantum=height()/numRows[numCurCol];
 	for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
-			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->setState(QextMdiChildFrm::Normal,false);
+			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			lpC->setGeometry(curX,curY,xQuantum,yQuantum);
 			numCurRow++;
 			curY+=yQuantum;
@@ -563,6 +566,40 @@ void QextMdiChildArea::tileAnodine()
 	if(lpTop)lpTop->setFocus();
 }
 
+//============ tileVertically===========//
+void QextMdiChildArea::tileVertically()
+{
+	QextMdiChildFrm *lpTop=topChild();
+	int numVisible=getVisibleChildCount(); // count visible windows
+	if(numVisible<1)return;
+	
+	int w = width() / numVisible;
+	int lastWidth = 0;
+	if( numVisible > 1)
+   	lastWidth = width() - (w * (numVisible - 1));
+   else
+      lastWidth = w;
+	int h = height();
+	int posX = 0;
+	int countVisible = 0;
+	
+   for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
+      if(lpC->m_state != QextMdiChildFrm::Minimized){
+         if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
+         countVisible++;
+         if( countVisible < numVisible) {
+            lpC->setGeometry( posX, 0, w, h);
+            posX += w;
+         }
+         else { // last visible childframe
+            lpC->setGeometry( posX, 0, lastWidth, h);
+         }
+      }
+   }
+   if(lpTop)lpTop->setFocus();
+}
+
+//============ undockWindow ============//
 void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
 {
    QextMdiChildView* pWnd = (QextMdiChildView*) pWidget;   // bad solution??? F.B.
@@ -574,4 +611,23 @@ void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
    //m_pTaskBar->windowAttached(pWnd,false);
 	destroyChild(lpC,true); //Do not focus the new top child , we loose focus...
 	pWnd->setFocus();
+}
+
+//============ layoutMinimizedChildren ============//
+void QextMdiChildArea::layoutMinimizedChildren()
+{
+   int posX = 0;
+   int posY = height();
+   for(QextMdiChildFrm* child = m_pZ->first(); child ; child = m_pZ->next())
+   {
+      if( child->state() == QextMdiChildFrm::Minimized) {
+      	if( ( posX > 0) && ( posX + child->width() > width()) )
+	      {
+	         posX = 0;
+   	      posY -= child->height();
+   	   }
+      	child->move( posX, posY - child->height());
+	      posX = child->geometry().right();
+	   }
+   }
 }

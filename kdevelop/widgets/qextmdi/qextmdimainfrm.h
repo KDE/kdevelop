@@ -141,6 +141,8 @@ public slots:
 ///	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
    /** close all views */
    virtual void closeAllViews();
+   /** iconfiy all views */
+   virtual void iconifyAllViews();
    /** closes the view of the active (topchild) window */
    virtual void closeActiveView();
    /** undocks all view windows (unix-like) */

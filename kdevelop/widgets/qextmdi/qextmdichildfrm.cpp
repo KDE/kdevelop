@@ -339,6 +339,15 @@ void QextMdiChildFrm::maximizePressed()
 	}
 }
 
+void QextMdiChildFrm::restorePressed()
+{
+   if( m_state == Normal)
+      return;
+   if( m_state == Maximized)
+      emit m_pManager->noLongerMaximized(this);
+   setState(Normal);
+}
+
 //============= minimizePressed ============//
 
 void QextMdiChildFrm::minimizePressed()
@@ -358,27 +367,30 @@ void QextMdiChildFrm::minimizePressed()
 
 void QextMdiChildFrm::closePressed()
 {
-	if(m_pClient)m_pClient->close();
+   if(m_pClient)
+      m_pClient->close();
 }
 
 //============= undockPressed ============//
 
 void QextMdiChildFrm::undockPressed()
 {
-	if(m_pClient)
-	   m_pManager->undockWindow(m_pClient);
+   if(m_pClient) {
+      if( m_state == Minimized)
+         setState( Normal);
+      m_pManager->undockWindow(m_pClient);
+   }
 }
 
 //============ setState =================//
 
 void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 {
-//	debug("set state %d ",state);
 	if(m_state==Normal){ //save the current rect
 		m_restoredRect=QRect(x(),y(),width(),height());
 	}
-	QRect begin(x(),y(),width(),height());
-	QRect end=begin;
+	//QRect begin(x(),y(),width(),height());
+	//QRect end=begin;
 	switch(state){
 		case Normal:
 			switch(m_state){
@@ -389,10 +401,21 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 					m_state=state;
 					break;
 				case Minimized:
-					begin=QRect(x()+width()/2,y()+height()/2,1,1);
-					//F.B. if(bAnimate)m_pManager->animate(begin,end);
+					//begin=QRect(x()+width()/2,y()+height()/2,1,1);
+					//if(bAnimate)m_pManager->animate(begin,end);
+					setMinimumSize(m_oldClientMinSize);
+					if( minimumWidth() == 0)
+					   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
+               if( minimumHeight() == 0)					
+					   setMinimumHeight(QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT);
+               // reset to normal-captionbar
+               m_pMinimize->setPixmap( *m_pMinButtonPixmap);
 					m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-					show();
+               QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+               QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+					
+					setGeometry(m_restoredRect);
+					m_pClient->show();
 					m_state=state;
 					break;
 				case Normal:
@@ -400,22 +423,32 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 			}
 			break;
 		case Maximized:
-			end=QRect(0,0,m_pManager->width(),m_pManager->height());
+			//end=QRect(0,0,m_pManager->width(),m_pManager->height());
 			switch(m_state){
 				case Minimized:
+					//begin=QRect(x()+width()/2,y()+height()/2,1,1);
+					//if(bAnimate)m_pManager->animate(begin,end);
+					setMinimumSize(m_oldClientMinSize);
+					if( minimumWidth() == 0)
+					   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
+					if( minimumHeight() == 0)
+					   setMinimumHeight(QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT);
+               // reset to maximize-captionbar
+					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
+               m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+               QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+               QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+					
 					m_state=state;
-					begin=QRect(x()+width()/2,y()+height()/2,1,1);
-					//F.B. if(bAnimate)m_pManager->animate(begin,end);
 					setGeometry(-m_pClient->x(), -m_pClient->y(),
 									m_pManager->width() + width() - m_pClient->width(),
 									m_pManager->height() + height() - m_pClient->height());
-					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-					show();
+					m_pClient->show();
 					raise();
 					break;
 				case Normal:
 					m_state=state;
-					//F.B. if(bAnimate)m_pManager->animate(begin,end);
+					//if(bAnimate)m_pManager->animate(begin,end);
 					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
 					setGeometry(-m_pClient->x(), -m_pClient->y(),
 									m_pManager->width() + width() - m_pClient->width(),
@@ -428,21 +461,19 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 			}
 			break;
 		case Minimized:
-			end=QRect(x()+width()/2,y()+height()/2,1,1);
+			//end=QRect(x()+width()/2,y()+height()/2,1,1);
 			switch(m_state){
 				case Maximized:
-					hide();
-					//F.B. if(bAnimate)m_pManager->animate(begin,end);
-					setGeometry(m_restoredRect);
 					m_state=state;
+				   switchToMinimizeLayout();
+					//if(bAnimate)m_pManager->animate(begin,end);
 					m_pManager->childMinimized(this,true);
 					break;
 				case Normal:
-				   hide();
-					///+++m_pClient->hide();
-					///+++resize(m_pCaption->width(),m_pCaption->height());
-					//F.B. if(bAnimate)m_pManager->animate(begin,end);
 					m_state=state;
+               m_restoredRect = geometry();
+				   switchToMinimizeLayout();
+					//if(bAnimate)m_pManager->animate(begin,end);
 					m_pManager->childMinimized(this,false);
 					break;
 				case Minimized:
@@ -807,4 +838,29 @@ void QextMdiChildFrm::showSystemMenu()
    popupmenuPosition = QPoint( m_pIcon->pos().x(),
                                m_pIcon->pos().y() + m_pIcon->height() + QEXTMDI_MDI_CHILDFRM_BORDER );
    systemMenu()->popup( mapToGlobal( popupmenuPosition));
+}
+
+void QextMdiChildFrm::switchToMinimizeLayout()
+{
+   int clientMinWidth = m_pClient->minimumWidth();
+   if( clientMinWidth == 0)
+      clientMinWidth = QEXTMDI_MDI_CHILDFRM_MIN_WIDTH;
+   m_pClient->hide();
+
+   m_oldClientMinSize = m_pClient->minimumSize();
+   setMinimumWidth(0);
+   setMinimumHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+
+   m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+
+   // temporary use of minimize button for restore function
+   m_pMinimize->setPixmap( *m_pRestoreButtonPixmap);
+   QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+   QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+
+   // resizing
+   resize( clientMinWidth+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER, minimumHeight());
+
+   // positioning
+   m_pManager->layoutMinimizedChildren();
 }

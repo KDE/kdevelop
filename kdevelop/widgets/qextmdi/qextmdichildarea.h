@@ -125,13 +125,22 @@ public slots:
 	*/
 	void fillWindowMenu();
 	/**
-	* Tile Pragma :)
+	* Tile Pragma
 	*/
 	void tilePragma();
 	/**
-	* Tile Anodine :)
+	* Tile Anodine
 	*/
 	void tileAnodine();
+	/**
+	* Tile Vertically
+	*/
+   void tileVertically();
+	/**
+	* positioning of minimized child frames
+	*/
+   void layoutMinimizedChildren();
+	
 protected:	// Protected methods
 	void tileAllInternal(int maxWnds);
 	virtual void focusInEvent(QFocusEvent *);
@@ -148,6 +157,7 @@ signals: // Signals
    void topChildChanged(QextMdiChildView*);
 	void closeActiveView();
 	void closeAllViews();
+	void iconifyAllViews();
 	void switchToToplevelMode();
 	void switchToChildframeMode();
    /** signalizes that the child frames are no longer maximized */

@@ -121,6 +121,7 @@ void QextMdiMainFrm::createMdiManager()
 //	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
 	QObject::connect( m_pMdi, SIGNAL(closeActiveView()), this, SLOT(closeActiveView()) );
 	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
+	QObject::connect( m_pMdi, SIGNAL(iconifyAllViews()), this, SLOT(iconifyAllViews()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToToplevelMode()), this, SLOT(switchToToplevelMode()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToChildframeMode()), this, SLOT(switchToChildframeMode()) );
    QObject::connect( m_pMdi, SIGNAL(nowMaximized()), this, SLOT(setMaximizeModeOn()) );
@@ -406,6 +407,16 @@ void QextMdiMainFrm::closeAllViews()
 {
 	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
 		w->close();
+	}
+}
+
+/**
+ * iconify all views
+ */
+void QextMdiMainFrm::iconifyAllViews()
+{
+	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
+		w->minimize();
 	}
 }
 

@@ -105,6 +105,7 @@ protected:
    int 				m_windowMenuID;
    /** imitates a system menu for child frame windows */
    QPopupMenu     *m_pSystemMenu;
+   QSize          m_oldClientMinSize;
 
 // methods
 public:
@@ -185,9 +186,11 @@ protected:
    //   virtual bool focusNextPrevChild( bool next ) { return true; };
 	void resizeWindow(int resizeCorner, int x, int y);
 	void setResizeCursor(int resizeCorner);
+   virtual void switchToMinimizeLayout();
 
 protected slots:
 	void maximizePressed();
+	void restorePressed();
 	void minimizePressed();
 	void closePressed();
 	void undockPressed();
