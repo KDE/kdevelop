@@ -8,28 +8,105 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>480</height>
+            <width>514</width>
+            <height>574</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
     </property>
     <property name="caption">
         <string>PartExplorer</string>
     </property>
-    <widget class="QGroupBox">
+    <vbox>
         <property name="name">
-            <cstring>groupBox2</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>170</y>
-                <width>580</width>
-                <height>300</height>
-            </rect>
+        <property name="margin">
+            <number>6</number>
         </property>
-        <property name="title">
-            <string>Results</string>
+        <property name="spacing">
+            <number>3</number>
         </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Query criteria</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>91</y>
+                        <width>418</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Additional costraints (i.e. [X-KDevelop-Scope]='Global')</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEditCostraints</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>114</y>
+                        <width>418</width>
+                        <height>24</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>22</y>
+                        <width>418</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...)</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEditType</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>45</y>
+                        <width>418</width>
+                        <height>24</height>
+                    </rect>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3</cstring>
+            </property>
+            <property name="text">
+                <string>Results:</string>
+            </property>
+        </widget>
         <widget class="KListView">
             <column>
                 <property name="text">
@@ -67,122 +144,54 @@
             <property name="name">
                 <cstring>listViewResults</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>560</width>
-                    <height>260</height>
-                </rect>
-            </property>
         </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>470</width>
-                <height>150</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Query criteria</string>
-        </property>
-        <widget class="QLabel">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>layout25</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>364</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...)</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer17</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>310</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonSearch</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Search</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonClose</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Close</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>90</y>
-                    <width>390</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Additional costraints (i.e. [X-KDevelop-Scope]='Global')</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>lineEditType</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>50</y>
-                    <width>450</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>lineEditCostraints</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>110</y>
-                    <width>450</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>buttonSearch</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>490</x>
-                <y>20</y>
-                <width>101</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Search</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>buttonClose</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>490</x>
-                <y>60</y>
-                <width>101</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Close</string>
-        </property>
-    </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -199,9 +208,6 @@
     <tabstop>listViewResults</tabstop>
     <tabstop>buttonClose</tabstop>
 </tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">partexplorerformbase.ui.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
