@@ -9,17 +9,23 @@ Name[da]=KDevelop sprogstøtte grænseflade
 Name[de]=Schnittstelle für Sprachunterstützung (KDevelop)
 Name[es]=Interfaz del soporte de lenguajes de KDevelop
 Name[et]=KDevelopi keeletoetuse liides
-Name[fr]=Interface du support de langages de KDevelop
+Name[fr]=Interface de la gestion de langages de KDevelop
+Name[hi]=के-डेवलप भाषा समर्थन इंटरफ़ेस
 Name[hu]=KDevelop nyelvtámogatási felület
 Name[it]=Interfaccia KDevelop per il supporto di linguaggio
+Name[nb]=Grensesnitt for språkstøtte i KDevelop
 Name[nl]=KDevelop Interface voor taalondersteuning
+Name[pl]=Interfejs KDevelopa do obsługi języków
 Name[pt]=Interface de Suporte a Linguagens do KDevelop
 Name[pt_BR]=Interface de Suporte à Linguagem do KDevelop
 Name[ru]=Интерфейс языковой поддержки
+Name[sl]=Vmesnik jezikovne podpore za KDevelop
 Name[sr]=KDevelop-ов интерфејс за језичку подршку
+Name[sr@Latn]=KDevelop-ov interfejs za jezičku podršku
 Name[sv]=KDevelop gränssnitt för språkstöd
+Name[ta]=KDevelop  மொழி ஆதரவான இடைவிளிம்பு
 Name[xx]=xxKDevelop Language Support Interfacexx
-Name[zh_CN]=KDevelop语言支持接口
+Name[zh_CN]=KDevelop 语言支持接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

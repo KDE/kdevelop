@@ -9,17 +9,23 @@ Name[da]=Diff-forende grænseflade
 Name[de]=Schnittstelle für Diff-Oberflächen (KDevelop)
 Name[es]=Interfaz del entorno de diff
 Name[et]=Diff kasutajaliides
-Name[fr]=Interface du programme « Diff »
+Name[fr]=Interface du programme « Diff »
+Name[hi]=डिफ़ फ्रन्टएण्ड इंटरफ़ेस
 Name[hu]=Diff-kezelési felület
 Name[it]=Interfaccia a Diff
+Name[nb]=Grensesnitt for å finne forskjeller i filer
 Name[nl]=Diff Frontend-interface
+Name[pl]=Interfejs do programu diff 
 Name[pt]=Interface para o 'Diff'
 Name[pt_BR]=Interface de Frontend do Diff
 Name[ru]=Интерфейс системы нахождения различий
+Name[sl]=Vmesnik za diff
 Name[sr]=Интерфејс diff сучеља
+Name[sr@Latn]=Interfejs diff sučelja
 Name[sv]=Gränssnitt för jämförelse
+Name[ta]=டிப் முன்நிறுத்த இடைமுகம் 
 Name[xx]=xxDiff Frontend Interfacexx
-Name[zh_CN]=Diff前端接口
+Name[zh_CN]=Diff 前端接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
