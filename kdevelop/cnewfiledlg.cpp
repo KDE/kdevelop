@@ -177,20 +177,20 @@ ok = new QPushButton( this, "ok" );
   
   
   list_linux = new QListBox( tab, "list_linux" );
-  list_linux->insertItem( "lsm File - Linux Software Map" );
-  list_linux->insertItem( "kdelnk-File - for the KDE-Menu" );
+  list_linux->insertItem(i18n("lsm File - Linux Software Map"));
+  list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
   list_linux->setMultiSelection( FALSE );
   list_linux->setCurrentItem(0);
   
   list_manuals = new QListBox( tab, "list_manuals" );
-  list_manuals->insertItem( "english (.sgml)" );
+  list_manuals->insertItem("english (.sgml)");
   list_manuals->setMultiSelection( FALSE );
   list_manuals->setCurrentItem(0);
   
   list_cpp = new QListBox( tab, "list_cpp" );
-  list_cpp->insertItem( "C/C++ Header (*.h)" );
-  list_cpp->insertItem( "C/C++ File (*.cpp,*.c,*.cc,*.C)" );
-  list_cpp->insertItem( "Empty Textfile" );
+  list_cpp->insertItem(i18n("C/C++ Header (*.h)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C)"));
+  list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
   
@@ -308,13 +308,13 @@ QString CNewFileDlg::fileType(){
   QString str;
   if (current == 0){ // cpp/header
     str = list_cpp->text(list_cpp->currentItem());
-    if (str == "C/C++ File (*.cpp,*.c,*.cc,*.C)"){
+    if (str == i18n("C/C++ File (*.cpp,*.c,*.cc,*.C)")){
       return "CPP";
     }
-    if (str == "C/C++ Header (*.h)"){
+    if (str == i18n("C/C++ Header (*.h)")){
       return "HEADER";
     }
-    if (str == "Empty Textfile"){
+    if (str == i18n("Empty Textfile")){
       return "TEXTFILE";
     }
   }
@@ -322,17 +322,17 @@ QString CNewFileDlg::fileType(){
   
   if (current == 1){ // manuals
     str = list_manuals->text(list_manuals->currentItem());
-    if (str == "english (.sgml)"){
+    if (str == i18n("english (.sgml)")){
       return "EN_SGML";
     }
   }
   if (current == 2){ // /linux/kde
     str = list_linux->text(list_linux->currentItem());
-    if (str == "kdelnk-File - for the KDE-Menu"){
+    if (str == i18n("kdelnk-File - for the KDE-Menu")){
       return "KDELNK";
     }
     str = list_linux->text(list_linux->currentItem());
-    if (str == "lsm File - Linux Software Map"){
+    if (str == i18n("lsm File - Linux Software Map")){
       return "LSM";
     }
     

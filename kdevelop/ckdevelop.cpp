@@ -602,7 +602,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMsgBox::message(0,"Not found!","\"" + doc_search_text + "\" not found in documenation!",KMsgBox::INFORMATION);
+     KMsgBox::message(0,i18n("Not found!"),"\"" + doc_search_text + i18n("\" not found in documentation!"),KMsgBox::INFORMATION);
     return;
   }
   
@@ -759,7 +759,7 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  slotStatusMsg(i18n("Compiling "+edit_widget->getName()));
+  slotStatusMsg(i18n("Compiling ")+edit_widget->getName());
   messages_widget->clear();
   process.clearArguments();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
@@ -1222,7 +1222,7 @@ void CKDevelop::slotDocTreeSelected(int index){
   QString file;
 
   config->setGroup("Doc_Location");
-  if(*str == "Tutorial"){
+  if(*str == i18n("Tutorial") ){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
     if( !QFileInfo( file ).exists() ){
@@ -1233,7 +1233,7 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
-  if(*str == "Manual"){
+  if(*str == i18n("Manual") ){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/index.html";
     
@@ -1244,43 +1244,43 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
-  if(*str == "Qt-Library"){
+  if(*str == i18n("Qt-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
     return;
   }
-  if(*str == "KDE-Core-Library"){
+  if(*str == i18n("KDE-Core-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdecore/index.html",1,"test");
     return;
   }
-  if(*str == "KDE-UI-Library"){
+  if(*str == i18n("KDE-UI-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeui/index.html",1,"test");
     return;
   }
-  if(*str == "KDE-KFile-Library"){
+  if(*str == i18n("KDE-KFile-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfile/index.html",1,"test");
     return;
   }
-  if(*str == "KDE-HTMLW-Library"){
+  if(*str == i18n("KDE-HTMLW-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtmlw/index.html",1,"test");
      return;
   }
-  if(*str == "KDE-KFM-Library"){
+  if(*str == i18n("KDE-KFM-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfmlib/index.html",1,"test");
      return;
   }
-  if(*str == "KDE-KAB-Library"){
+  if(*str == i18n("KDE-KAB-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kab/index.html",1,"test");
      return;
   }
-  if(*str == "KDE-KSpell-Library"){
+  if(*str == i18n("KDE-KSpell-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kspell/index.html",1,"test");
      return;
   }
-  if(*str == "User-Manual"){
+  if(*str == i18n("User-Manual") ){
     slotDocManual();
      return;
   }
-  if(*str == "API-Documentation"){
+  if(*str == i18n("API-Documentation") ){
     slotDocAPI();
      return;
   }

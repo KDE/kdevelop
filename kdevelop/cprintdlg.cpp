@@ -243,8 +243,8 @@ void CPrintDlg::init(){
   paperCombBox->setPalettePropagation( QWidget::NoChildren );
   paperCombBox->setSizeLimit( 10 );
   paperCombBox->setAutoResize( FALSE );
-  paperCombBox->insertItem(( "portrait" ));
-  paperCombBox->insertItem(( "landscape" ));
+  paperCombBox->insertItem(i18n("portrait"));
+  paperCombBox->insertItem(i18n("landscape"));
   
   programCombBox = new QComboBox( FALSE, printwidget, "programCombBox" );
   programCombBox->setGeometry( 30, 30, 80, 30 );
@@ -323,7 +323,7 @@ void CPrintDlg::init(){
   defaultCombBox->setInsertionPolicy( QComboBox::AtBottom );
   defaultCombBox->setSizeLimit( 10 );
   defaultCombBox->setAutoResize( FALSE );
-  defaultCombBox->insertItem(( "settings" ));
+  defaultCombBox->insertItem(i18n("settings"));
   
   copySpinBox = new QSpinBox( printwidget, "copySpinBox" );
   copySpinBox->setGeometry( 180, 220, 120, 30 );
@@ -378,10 +378,10 @@ void CPrintDlg::init(){
   pageSide->setInsertionPolicy( QComboBox::NoInsertion );
   pageSide->setSizeLimit( 10 );
   pageSide->setAutoResize( FALSE );
-  pageSide->insertItem(( "odd" ));
-  pageSide->insertItem(( "even" ));
-  pageSide->insertItem(( "first half" ));
-  pageSide->insertItem(( "second half" ));
+  pageSide->insertItem(i18n("odd"));
+  pageSide->insertItem(i18n("even"));
+  pageSide->insertItem(i18n("first half"));
+  pageSide->insertItem(i18n("second half"));
   
   sidePerPage = new QComboBox( FALSE, printwidget, "sidePerPage" );
   sidePerPage->setGeometry( 340, 130, 220, 30 );
@@ -393,8 +393,8 @@ void CPrintDlg::init(){
   sidePerPage->setPalettePropagation( QWidget::NoChildren );
   sidePerPage->setSizeLimit( 10 );
   sidePerPage->setAutoResize( FALSE );
-  sidePerPage->insertItem(( "one side of paper" ));
-  sidePerPage->insertItem(( "two side of paper" ));
+  sidePerPage->insertItem(i18n( "one side of paper" ));
+  sidePerPage->insertItem(i18n( "two side of paper" ));
 
   pagePerSide = new QComboBox( FALSE, printwidget, "pagePerSide" );
   pagePerSide->setGeometry( 340, 170, 220, 30 );
@@ -406,8 +406,8 @@ void CPrintDlg::init(){
   pagePerSide->setPalettePropagation( QWidget::NoChildren );
   pagePerSide->setSizeLimit( 10 );
   pagePerSide->setAutoResize( FALSE );
-  pagePerSide->insertItem(( "one page per side" ));
-  pagePerSide->insertItem(( "two pages per side" ));
+  pagePerSide->insertItem(i18n( "one page per side" ));
+  pagePerSide->insertItem(i18n( "two pages per side" ));
   
   filesConfButton = new QPushButton( printwidget, "filesConfButton" );
   filesConfButton->setGeometry( 350, 30, 110, 30 );
@@ -524,17 +524,17 @@ void CPrintDlg::slotProgramActivated(int i) {
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-	if (!(strcmp(defaultCombBox->text(a),"unix manual output"))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
 	  defaultCombBox->removeItem(a);
 	  a--;
 	  j--;
 	}
-	if (!(strcmp(defaultCombBox->text(a),"lineprinter"))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter")))) {
 	  state++;
 	}
       }
       if (state == 0) {
-      defaultCombBox->insertItem( "lineprinter" );
+      defaultCombBox->insertItem(i18n("lineprinter"));
       }
     }
   else 
@@ -551,17 +551,17 @@ void CPrintDlg::slotProgramActivated(int i) {
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-	if (!(strcmp(defaultCombBox->text(a),"lineprinter"))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter")))) {
 	  defaultCombBox->removeItem(a);
 	  a--;
 	  j--;
 	}
-	if (!(strcmp(defaultCombBox->text(a),"unix manual output"))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
 	  state++;
 	}
       }
       if (state == 0) {
-      defaultCombBox->insertItem( "unix manual output" );
+      defaultCombBox->insertItem(i18n("unix manual output"));
       }
     }
 }

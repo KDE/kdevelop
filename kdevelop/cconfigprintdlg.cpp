@@ -37,16 +37,16 @@ CConfigPrintDlg::~CConfigPrintDlg(){
 void CConfigPrintDlg::init(int prog) {
   QWidget *tab1 = new QWidget(this,"header");
   initTab1(tab1,prog);
-  addTab (tab1,"Header");
+  addTab (tab1,i18n("Header"));
   QWidget *tab2 = new QWidget(this,"date & time");
   initTab2(tab2,prog);
-  addTab (tab2,"Date & Time");
+  addTab (tab2,i18n("Date & Time"));
   QWidget *tab3 = new QWidget(this,"layout");
   initTab3(tab3,prog);
-  addTab (tab3,"Layout");
+  addTab (tab3,i18n("Layout"));
   QWidget *tab4 = new QWidget(this,"underlay");
   initTab4(tab4,prog);
-  addTab (tab4,"Underlay");
+  addTab (tab4,i18n("Underlay"));
   if (prog==1) {
     interpretButton->setEnabled(true);
     replaceButton->setEnabled(true);
@@ -343,9 +343,9 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     headertextPosition->setPalettePropagation( QWidget::NoChildren );
     headertextPosition->setSizeLimit( 10 );
     headertextPosition->setAutoResize( FALSE );
-    headertextPosition->insertItem( "left" );
-    headertextPosition->insertItem( "center" );
-    headertextPosition->insertItem( "right" );
+    headertextPosition->insertItem(i18n("left"));
+    headertextPosition->insertItem(i18n("center"));
+    headertextPosition->insertItem(i18n("right"));
     
     qtarch_Label_19 = new QLabel( parent, "Label_19" );
     qtarch_Label_19->setGeometry( 40, 240, 50, 30 );
@@ -393,9 +393,9 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     loginPosition->setPalettePropagation( QWidget::NoChildren );
     loginPosition->setSizeLimit( 10 );
     loginPosition->setAutoResize( FALSE );
-    loginPosition->insertItem( "left" );
-    loginPosition->insertItem( "center" );
-    loginPosition->insertItem( "right" );
+    loginPosition->insertItem(i18n("left"));
+    loginPosition->insertItem(i18n("center"));
+    loginPosition->insertItem(i18n("right"));
     
     fancyHeaderButton = new QCheckBox( parent, "fancyHeaderButton" );
     fancyHeaderButton->setGeometry( 40, 80, 250, 30 );
@@ -470,8 +470,8 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     filenameSize->setPalettePropagation( QWidget::NoChildren );
     filenameSize->setSizeLimit( 10 );
     filenameSize->setAutoResize( FALSE );
-    filenameSize->insertItem( "short" );
-    filenameSize->insertItem( "full" );
+    filenameSize->insertItem(i18n("short"));
+    filenameSize->insertItem(i18n("full"));
 
     filenamePosition = new QComboBox( FALSE, parent, "filenamePosition" );
     filenamePosition->setGeometry( 430, 180, 130, 30 );
@@ -483,9 +483,9 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     filenamePosition->setPalettePropagation( QWidget::NoChildren );
     filenamePosition->setSizeLimit( 10 );
     filenamePosition->setAutoResize( FALSE );
-    filenamePosition->insertItem( "left" );
-    filenamePosition->insertItem( "center" );
-    filenamePosition->insertItem( "right" );
+    filenamePosition->insertItem(i18n("left")); 
+    filenamePosition->insertItem(i18n("center"));
+    filenamePosition->insertItem(i18n("right"));
     
     qtarch_ButtonGroup_66 = new QButtonGroup( parent, "ButtonGroup_66" );
     qtarch_ButtonGroup_66->setGeometry( 310, 240, 260, 170 );
@@ -522,7 +522,7 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     qtarch_Label_23->setBackgroundMode( QWidget::PaletteBackground );
     qtarch_Label_23->setFontPropagation( QWidget::NoChildren );
     qtarch_Label_23->setPalettePropagation( QWidget::NoChildren );
-    qtarch_Label_23->setText(i18n("size of hostname ") );
+    qtarch_Label_23->setText(i18n("size of hostname") );
     qtarch_Label_23->setAlignment( 289 );
     qtarch_Label_23->setMargin( -1 );
     
@@ -548,9 +548,9 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     hostnamePosition->setPalettePropagation( QWidget::NoChildren );
     hostnamePosition->setSizeLimit( 10 );
     hostnamePosition->setAutoResize( FALSE );
-    hostnamePosition->insertItem( "left" );
-    hostnamePosition->insertItem( "center" );
-    hostnamePosition->insertItem( "right" );
+    hostnamePosition->insertItem(i18n("left"));
+    hostnamePosition->insertItem(i18n("center"));
+    hostnamePosition->insertItem(i18n("right"));
     
     hostnameSize = new QComboBox( FALSE, parent, "hostnameSize" );
     hostnameSize->setGeometry( 430, 310, 130, 30 );
@@ -562,8 +562,8 @@ void CConfigPrintDlg::initTab1(QWidget*parent, int prog) {
     hostnameSize->setPalettePropagation( QWidget::NoChildren );
     hostnameSize->setSizeLimit( 10 );
     hostnameSize->setAutoResize( FALSE );
-    hostnameSize->insertItem( "short" );
-    hostnameSize->insertItem( "full" );
+    hostnameSize->insertItem(i18n("short"));
+    hostnameSize->insertItem(i18n("full"));
     
     qtarch_ButtonGroup_59->insert( headertextButton );
     qtarch_ButtonGroup_59->insert( loginButton );
@@ -822,9 +822,9 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	currentTimePosition->setPalettePropagation( QWidget::NoChildren );
 	currentTimePosition->setSizeLimit( 10 );
 	currentTimePosition->setAutoResize( FALSE );
-	currentTimePosition->insertItem( "left" );
-	currentTimePosition->insertItem( "center" );
-	currentTimePosition->insertItem( "right" );
+	currentTimePosition->insertItem(i18n("left"));
+	currentTimePosition->insertItem(i18n("center"));
+	currentTimePosition->insertItem(i18n("right"));
 
 	currentTimeAmpm = new QComboBox( FALSE, parent, "currentTimeAmpm" );
 	currentTimeAmpm->setGeometry( 170, 270, 70, 30 );
@@ -864,9 +864,9 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	currentDatePosition->setPalettePropagation( QWidget::NoChildren );
 	currentDatePosition->setSizeLimit( 10 );
 	currentDatePosition->setAutoResize( FALSE );
-	currentDatePosition->insertItem( "left" );
-	currentDatePosition->insertItem( "center" );
-	currentDatePosition->insertItem( "right" );
+	currentDatePosition->insertItem(i18n("left"));
+	currentDatePosition->insertItem(i18n("center"));
+	currentDatePosition->insertItem(i18n("right"));
 
 	modificationTimeAmpm = new QComboBox( FALSE, parent, "modificationTimeAmpm" );
 	modificationTimeAmpm->setGeometry( 170, 370, 70, 30 );
@@ -904,9 +904,9 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	modificationTimePosition->setPalettePropagation( QWidget::NoChildren );
 	modificationTimePosition->setSizeLimit( 10 );
 	modificationTimePosition->setAutoResize( FALSE );
-	modificationTimePosition->insertItem( "left" );
-	modificationTimePosition->insertItem( "center" );
-	modificationTimePosition->insertItem( "right" );
+	modificationTimePosition->insertItem(i18n("left"));
+	modificationTimePosition->insertItem(i18n("center"));
+	modificationTimePosition->insertItem(i18n("right"));
 
 	modificationTimeFormat = new QComboBox( FALSE, parent, "modificationTimeFormat" );
 	modificationTimeFormat->setGeometry( 430, 370, 130, 30 );
@@ -931,9 +931,9 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	modificationDatePosition->setPalettePropagation( QWidget::NoChildren );
 	modificationDatePosition->setSizeLimit( 10 );
 	modificationDatePosition->setAutoResize( FALSE );
-	modificationDatePosition->insertItem( "left" );
-	modificationDatePosition->insertItem( "center" );
-	modificationDatePosition->insertItem( "right" );
+	modificationDatePosition->insertItem(i18n("left"));
+	modificationDatePosition->insertItem(i18n("center"));
+	modificationDatePosition->insertItem(i18n("right"));
 
 	currentDateFormat = new QComboBox( FALSE, parent, "currentDateFormat" );
 	currentDateFormat->setGeometry( 430, 60, 130, 30 );

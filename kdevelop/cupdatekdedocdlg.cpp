@@ -153,7 +153,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   del_recent_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   del_recent_radio_button->setFontPropagation( QWidget::NoChildren );
   del_recent_radio_button->setPalettePropagation( QWidget::NoChildren );
-  del_recent_radio_button->setText( "Delete old Documentation and install to recent Documentation path" );
+  del_recent_radio_button->setText(i18n("Delete old Documentation and install to recent Documentation path"));
   del_recent_radio_button->setAutoRepeat( FALSE );
   del_recent_radio_button->setAutoResize( FALSE );
   del_recent_radio_button->setChecked( TRUE );

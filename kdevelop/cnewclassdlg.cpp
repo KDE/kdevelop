@@ -92,7 +92,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   impl_label->setText( i18n("Impl.") );
   
   template_check = new QCheckBox( this, "template_check" );
-  template_check->setGeometry( 275, 240, 170, 30 );
+  template_check->setGeometry( 275, 240, 185, 30 );
   template_check->setText( i18n("use header/cpp-templates") );
   template_check->setChecked(true);
   

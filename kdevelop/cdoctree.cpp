@@ -66,40 +66,40 @@ void CDocTree::refresh(CProject* prj){
 
   QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
   QPixmap book_pix = icon_loader->loadMiniIcon("mini-book1.xpm");
-  str = "Documentation";
+  str = i18n("Documentation");
   path.push(&str);   
-  insertItem("Documentation",&folder_pix);
+  insertItem(i18n("Documentation"),&folder_pix);
   
   
   
-  addChildItem("KDevelop",&folder_pix,&path);
-  addChildItem("Qt/KDE Libraries",&folder_pix,&path);
-  addChildItem("Others",&folder_pix,&path);
-  addChildItem("Current Project",&folder_pix,&path);
+  addChildItem(i18n("KDevelop"),&folder_pix,&path);
+  addChildItem(i18n("Qt/KDE Libraries"),&folder_pix,&path);
+  addChildItem(i18n("Others"),&folder_pix,&path);
+  addChildItem(i18n("Current Project"),&folder_pix,&path);
   
 
   //  add KDevelop
-  str_path = "KDevelop";
+  str_path = i18n("KDevelop");
   path.push(&str_path);
-  addChildItem("Manual",&book_pix,&path);
-  addChildItem("Tutorial",&book_pix,&path);
+  addChildItem(i18n("Manual"),&book_pix,&path);
+  addChildItem(i18n("Tutorial"),&book_pix,&path);
  
   
   //  add the Libraries
-  str_path = "Qt/KDE Libraries";
+  str_path = i18n("Qt/KDE Libraries");
   path.pop();
   path.push(&str_path);
-  addChildItem("Qt-Library",&book_pix,&path);
-  addChildItem("KDE-Core-Library",&book_pix,&path);
-  addChildItem("KDE-UI-Library",&book_pix,&path);
-  addChildItem("KDE-KFile-Library",&book_pix,&path);
-  addChildItem("KDE-HTMLW-Library",&book_pix,&path);
-  addChildItem("KDE-KFM-Library",&book_pix,&path);
-  addChildItem("KDE-KAB-Library",&book_pix,&path);
-  addChildItem("KDE-KSpell-Library",&book_pix,&path);
+  addChildItem(i18n("Qt-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-Core-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-UI-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-KFile-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-HTMLW-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-KFM-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-KAB-Library"),&book_pix,&path);
+  addChildItem(i18n("KDE-KSpell-Library"),&book_pix,&path);
 
   // add the others
-  str_path = "Others";
+  str_path = i18n("Others");
   path.pop();
   path.push(&str_path);
 
@@ -113,13 +113,13 @@ void CDocTree::refresh(CProject* prj){
   
   
   // add the Project-Doc
-  str_path = "Current Project";
+  str_path = i18n("Current Project");
   path.pop();
   path.push(&str_path);
   if(project){
     if(prj->valid){
-      addChildItem("User-Manual",&book_pix,&path);
-      addChildItem("API-Documentation",&book_pix,&path);  
+      addChildItem(i18n("User-Manual"),&book_pix,&path);
+      addChildItem(i18n("API-Documentation"),&book_pix,&path);  
     }
   }
   
@@ -150,7 +150,7 @@ void CDocTree::slotAddDocumentation(){
     config_kdevelop->readListEntry("others_list",others_list);
 
     // find the correct place
-    if(QString(getCurrentItem()->getText()) == "Others"){ 
+    if(QString(getCurrentItem()->getText()) == i18n("Others") ){ 
       others_list.insert(0,dlg.name_edit->text());
     }
     else{

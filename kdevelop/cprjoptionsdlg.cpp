@@ -656,7 +656,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
  
   l_remove_symbols=new QCheckBox(w4,"l_remove_symbols");
   l_remove_symbols->setGeometry(20,30,470,20);
-  l_remove_symbols->setText("remove all symbol table and relocation information from the executable");
+  l_remove_symbols->setText(i18n("remove all symbol table and relocation information from the executable"));
   if (ldflags.contains("-s ")) {
     l_remove_symbols->setChecked(true);
     pos=ldflags.find(" -s ");
@@ -671,8 +671,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 			"informations and to remove it with this option."));
   
   l_static=new QCheckBox(w4,"l_static");
-  l_static->setGeometry(20,50,230,20);
-  l_static->setText("prevent using shared libraries");
+  l_static->setGeometry(20,50,360,20);
+  l_static->setText(i18n("prevent using shared libraries"));
   if (ldflags.contains("-static")) {
     l_static->setChecked(true);
     pos=ldflags.find(" -static");
