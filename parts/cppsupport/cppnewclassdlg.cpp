@@ -125,6 +125,7 @@ void CppNewClassDialog::classNameChanged(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 header = header.upper();
                 break;
+	    default:;
         }
         header_edit->setText(header);
     }
@@ -138,6 +139,7 @@ void CppNewClassDialog::classNameChanged(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 implementation = implementation.upper();
                 break;
+	    default:;
         }
         implementation_edit->setText(implementation);
     }
@@ -155,6 +157,7 @@ void CppNewClassDialog::baseclassname_changed(const QString &text)
             case ClassGeneratorConfig::UpperCase:
                 header = header.upper();
                 break;
+	    default:;
         }
         baseinclude_edit->setText(header);
     }
@@ -1084,8 +1087,8 @@ void CppNewClassDialog::ClassGenerator::common_text()
   {
       advConstructorsSource = dlg.constructors_cpp_edit->text();
   }
-  advConstructorsHeader.remove(QRegExp("[\\n ]*$"));
-  advConstructorsSource.remove(QRegExp("[\\n ]*$"));
+  advConstructorsHeader.replace(QRegExp("[\\n ]*$"), QString::null);
+  advConstructorsSource.replace(QRegExp("[\\n ]*$"), QString::null);
   
   //advanced method overriding
 
@@ -1164,14 +1167,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
     ++ita;
   }
 
-
-  advH_public.remove(QRegExp("[\\n ]*$"));
-  advH_public_slots.remove(QRegExp("[\\n ]*$"));
-  advH_protected.remove(QRegExp("[\\n ]*$"));
-  advH_protected_slots.remove(QRegExp("[\\n ]*$"));
-  advH_private.remove(QRegExp("[\\n ]*$"));
-  advH_private_slots.remove(QRegExp("[\\n ]*$"));
-  advCpp.remove(QRegExp("[\\n ]*$"));
+  QRegExp e("[\\n ]*$");
+  advH_public.replace(e, QString::null);
+  advH_public_slots.replace(e, QString::null);
+  advH_protected.replace(e, QString::null);
+  advH_protected_slots.replace(e, QString::null);
+  advH_private.replace(e, QString::null);
+  advH_private_slots.replace(e, QString::null);
+  advCpp.replace(e, QString::null);
 }
 
 void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *method,
@@ -1531,43 +1534,43 @@ void CppNewClassDialog::ClassGenerator::beautifyHeader(QString &templ, QString &
     QString &namespaceEnd)
 {
     if (headerGuard.isEmpty())
-        templ.remove(QRegExp("\\$HEADERGUARD\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$HEADERGUARD\\$[\\n ]*"), QString::null);
     if (includeBaseHeader.isEmpty())
-        templ.remove(QRegExp("\\$INCLUDEBASEHEADER\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$INCLUDEBASEHEADER\\$[\\n ]*"), QString::null);
     if (author.isEmpty())
-        templ.remove(QRegExp("\\$AUTHOR\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$AUTHOR\\$[\\n ]*"), QString::null);
     if (doc.isEmpty())
-        templ.remove(QRegExp("\\$DOC\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$DOC\\$[\\n ]*"), QString::null);
     if (className.isEmpty())
-        templ.remove(QRegExp("\\$CLASSNAME\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$CLASSNAME\\$[\\n ]*"), QString::null);
     if (baseclass.isEmpty())
-        templ.remove(QRegExp("\\$BASECLASS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$BASECLASS\\$[\\n ]*"), QString::null);
     if (inheritance.isEmpty())
-        templ.remove(QRegExp("\\$INHERITANCE\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$INHERITANCE\\$[\\n ]*"), QString::null);
     if (qobjectStr.isEmpty())
-        templ.remove(QRegExp("\\$QOBJECT\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$QOBJECT\\$[\\n ]*"), QString::null);
     if (args.isEmpty())
-        templ.remove(QRegExp("\\$ARGS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$ARGS\\$[\\n ]*"), QString::null);
     if (header.isEmpty())
-        templ.remove(QRegExp("\\$FILENAME\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$FILENAME\\$[\\n ]*"), QString::null);
     if (namespaceBeg.isEmpty())
-        templ.remove(QRegExp("\\$NAMESPACEBEG\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$NAMESPACEBEG\\$[\\n ]*"), QString::null);
     if (constructors.isEmpty())
-        templ.remove(QRegExp("\\$CONSTRUCTORDECLARATIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$CONSTRUCTORDECLARATIONS\\$[\\n ]*"), QString::null);
     if (advH_public.isEmpty())
-        templ.remove(QRegExp("\\$PUBLICDECLARATIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PUBLICDECLARATIONS\\$[\\n ]*"), QString::null);
     if (advH_public_slots.isEmpty())
-        templ.remove(QRegExp("\\$PUBLICSLOTS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PUBLICSLOTS\\$[\\n ]*"), QString::null);
     if (advH_protected.isEmpty())
-        templ.remove(QRegExp("\\$PROTECTEDDECLARATIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PROTECTEDDECLARATIONS\\$[\\n ]*"), QString::null);
     if (advH_protected_slots.isEmpty())
-        templ.remove(QRegExp("\\$PROTECTEDSLOTS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PROTECTEDSLOTS\\$[\\n ]*"), QString::null);
     if (advH_private.isEmpty())
-        templ.remove(QRegExp("\\$PRIVATEDECLARATIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PRIVATEDECLARATIONS\\$[\\n ]*"), QString::null);
     if (advH_private_slots.isEmpty())
-        templ.remove(QRegExp("\\$PRIVATESLOTS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$PRIVATESLOTS\\$[\\n ]*"), QString::null);
     if (namespaceEnd.isEmpty())
-        templ.remove(QRegExp("\\$NAMESPACEEND\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$NAMESPACEEND\\$[\\n ]*"), QString::null);
 }    
     
 
@@ -1575,19 +1578,19 @@ void CppNewClassDialog::ClassGenerator::beautifySource(QString &templ, QString &
     QString &constructors, QString &advCpp, QString &namespaceEnd, QString &implementation)
 {
     if (header.isEmpty())
-        templ.remove(QRegExp("\\$HEADER\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$HEADER\\$[\\n ]*"), QString::null);
     if (className.isEmpty())
-        templ.remove(QRegExp("\\$CLASSNAME\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$CLASSNAME\\$[\\n ]*"), QString::null);
     if (namespaceBeg.isEmpty())
-        templ.remove(QRegExp("\\$NAMESPACEBEG\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$NAMESPACEBEG\\$[\\n ]*"), QString::null);
     if (constructors.isEmpty())
-        templ.remove(QRegExp("\\$CONSTRUCTORDEFINITIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$CONSTRUCTORDEFINITIONS\\$[\\n ]*"), QString::null);
     if (advCpp.isEmpty())
-        templ.remove(QRegExp("\\$DEFINITIONS\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$DEFINITIONS\\$[\\n ]*"), QString::null);
     if (namespaceEnd.isEmpty())
-        templ.remove(QRegExp("\\$NAMESPACEEND\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$NAMESPACEEND\\$[\\n ]*"), QString::null);
     if (implementation.isEmpty())
-        templ.remove(QRegExp("\\$FILENAME\\$[\\n ]*"));
+        templ.replace(QRegExp("\\$FILENAME\\$[\\n ]*"), QString::null);
 }
 
 #include "cppnewclassdlg.moc"
