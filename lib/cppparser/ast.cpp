@@ -127,13 +127,17 @@ AST::AST()
       m_startLine( 0 ), m_startColumn( 0 ),
       m_endLine( 0 ), m_endColumn( 0 )
 {
+#ifndef CPPPARSER_NO_CHILDREN
     m_children.setAutoDelete( false );
+#endif
 }
 
 AST::~AST()
 {
+#ifndef CPPPARSER_NO_CHILDREN
     if( m_parent )
 	m_parent->removeChild( this );
+#endif
 }
 
 void AST::setStartPosition( int line, int col )
@@ -168,14 +172,20 @@ void AST::getEndPosition( int* line, int* col ) const
 
 void AST::setParent( AST* parent )
 {
+#ifndef CPPPARSER_NO_CHILDREN
     if( m_parent )
 	m_parent->removeChild( this );
+#endif
 
     m_parent = parent;
+
+#ifndef CPPPARSER_NO_CHILDREN
     if( m_parent )
 	m_parent->appendChild( this );
+#endif
 }
 
+#ifndef CPPPARSER_NO_CHILDREN
 void AST::appendChild( AST* child )
 {
     m_children.append( child );
@@ -185,6 +195,7 @@ void AST::removeChild( AST* child )
 {
     m_children.remove( child );
 }
+#endif
 
 // ------------------------------------------------------------------------
 NameAST::NameAST()

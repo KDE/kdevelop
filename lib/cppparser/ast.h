@@ -193,9 +193,11 @@ public:
     void setEndPosition( int line, int col );
     void getEndPosition( int* line, int* col ) const;
 
+#ifndef CPPPARSER_NO_CHILDREN
     QPtrList<AST> children() { return m_children; }
     void appendChild( AST* child );
     void removeChild( AST* child );
+#endif
 
     virtual QString text() const { return m_text; }
     virtual void setText( const QString& text ) { m_text = text; }
@@ -206,7 +208,9 @@ private:
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
     QString m_text;
+#ifndef CPPPARSER_NO_CHILDREN
     QPtrList<AST> m_children;
+#endif
 
 private:
     AST( const AST& source );
