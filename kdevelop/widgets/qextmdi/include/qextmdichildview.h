@@ -10,8 +10,9 @@
 //                                         classes and a Qt-based library
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
+//                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2001 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@yahoo.com (Falk Brettschneider)
@@ -86,11 +87,15 @@ protected:
 
 // methods
 public:
-   /** 
+   /**
    * Constructor
    */
-   QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0L);
-   /** 
+   QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   /**
+   * Constructor 2 (sets "Unnamed" as default caption)
+   */
+   QextMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   /**
    * Destructor
    */
    ~QextMdiChildView();
