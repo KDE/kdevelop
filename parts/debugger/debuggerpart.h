@@ -54,7 +54,7 @@ private slots:
     void toggleBreakpoint();
     void contextWatch();
 //    void projectOpened();
-//    void projectClosed();
+    void projectClosed();
     void projectConfigWidget(KDialogBase *dlg);
     void slotActivePartChanged(KParts::Part*);
 
