@@ -8,9 +8,10 @@ INCLUDES= $(all_includes) \
 
 noinst_LTLIBRARIES = libKDevProjectOptions.la
 
-libKDevProjectOptions_la_SOURCES =  ProjectOptionsDlg.cpp InfoPageWidgetBase.ui
+libKDevProjectOptions_la_SOURCES =  ProjectOptionsDlg.cpp ProjectInfoWidgetBase.ui ProjectInfoWidget.cpp \
+																		ProjectSpaceInfoWidgetBase.ui ProjectSpaceInfoWidget.cpp
 
-noinst_HEADERS = InfoPageWidgetBase.h ProjectOptionsDlg.h
+noinst_HEADERS =	ProjectOptionsDlg.h ProjectInfoWidgetBase.h ProjectInfoWidget.h \
+									ProjectSpaceInfoWidgetBase.h ProjectSpaceInfoWidget.h
 
 METASOURCES = AUTO
-
