@@ -8,21 +8,21 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>386</width>
-            <height>505</height>
+            <width>441</width>
+            <height>437</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="QButtonGroup">
             <property name="name">
                 <cstring>UIModeGroup</cstring>
             </property>
@@ -100,7 +100,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout1</cstring>
             </property>
@@ -196,96 +196,109 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QButtonGroup" row="2" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>IDEAlButtonGroup</cstring>
+                <cstring>layout2</cstring>
             </property>
-            <property name="title">
-                <string>Toolview Tab Layout</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Three different modes for the IDEAl toolview tabs. "Text and Icons" is the most informative, but takes a lot of space. Those with a smaller screen will typically want "Icons".</string>
-            </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton">
+                <widget class="QButtonGroup">
                     <property name="name">
-                        <cstring>IconsOnly</cstring>
+                        <cstring>IDEAlButtonGroup</cstring>
                     </property>
-                    <property name="text">
-                        <string>Icons</string>
+                    <property name="title">
+                        <string>Toolview Tab Layout</string>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Three different modes for the IDEAl toolview tabs. "Text and Icons" is the most informative, but takes a lot of space. Those with a smaller screen will typically want "Icons".</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>IconsOnly</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Icons</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>TextOnly</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Text</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>TextAndIcons</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Text and Icons</string>
+                            </property>
+                        </widget>
+                    </vbox>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QGroupBox">
                     <property name="name">
-                        <cstring>TextOnly</cstring>
+                        <cstring>TabbedBrowsingGroup</cstring>
                     </property>
-                    <property name="text">
-                        <string>Text</string>
+                    <property name="title">
+                        <string>Tabbed Browsing</string>
                     </property>
-                    <property name="checked">
-                        <bool>true</bool>
+                    <property name="whatsThis" stdset="0">
+                        <string>Some extra options for the document tabbar.</string>
                     </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>OpenNewTabAfterCurrent</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Open &amp;new tab after current tab</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+N</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>ShowTabIcons</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Show icons on document tabs</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="2" column="0">
+                            <property name="name">
+                                <cstring>ShowCloseTabsButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Show close button in tab bar</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>TextAndIcons</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Text and Icons</string>
-                    </property>
-                </widget>
-            </vbox>
+            </hbox>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>TabbedBrowsingGroup</cstring>
-            </property>
-            <property name="title">
-                <string>Tabbed Browsing</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>OpenNewTabAfterCurrent</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Open &amp;new tab after current tab</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>ShowTabIcons</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show icons on document tabs</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>ShowCloseTabsButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show close button in tab bar</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLabel" row="4" column="0">
+        <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1</cstring>
             </property>
@@ -304,7 +317,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 <set>WordBreak|AlignCenter</set>
             </property>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -395,6 +408,30 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
         <sender>modeToplevel</sender>
         <signal>toggled(bool)</signal>
         <receiver>IDEAlButtonGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabbedBrowsingGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeMDI</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabbedBrowsingGroup</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabbedBrowsingGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeToplevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabbedBrowsingGroup</receiver>
         <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
