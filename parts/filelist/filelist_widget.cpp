@@ -11,13 +11,11 @@
 
 #include <qheader.h>
 #include <qpixmap.h>
-#include <qtimer.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
-//#include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 
@@ -44,10 +42,10 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	setSelectionMode( QListView::Extended );
 
-	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
-	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
-//	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(refreshFileList()) );
-//	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(refreshFileList()) );
+//	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
+//	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
+	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(startRefreshTimer()) );
+	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(startRefreshTimer()) );
 	connect( _part->partController(), SIGNAL( activePartChanged(KParts::Part*) ), this, SLOT( activePartChanged(KParts::Part* )) );
 
 	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
@@ -61,13 +59,21 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
 
-        setItemMargin(10);
-	QTimer::singleShot(0, this, SLOT(refreshFileList()));
+	setItemMargin(10);
+	
+	connect( &m_refreshTimer, SIGNAL(timeout()), this, SLOT(refreshFileList()) );
+	
+	startRefreshTimer();
 }
 
 
 FileListWidget::~FileListWidget()
 {}
+
+void FileListWidget::startRefreshTimer( )
+{
+	m_refreshTimer.start( 100, true );
+}
 
 void FileListWidget::maybeTip( QPoint const & p )
 {
@@ -136,7 +142,7 @@ void FileListWidget::refreshFileList( )
 	activePartChanged( _part->partController()->activePart() );
 }
 
-
+/*
 void FileListWidget::partAdded( KParts::Part * part )
 {
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
@@ -163,7 +169,7 @@ void FileListWidget::partRemoved()
 
 	activePartChanged( _part->partController()->activePart() );
 }
-
+*/
 
 void FileListWidget::itemClicked( QListViewItem * item )
 {
