@@ -152,13 +152,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
       config_gdbPath_(),
       config_programArgs_()
 {
-    config_displayStaticMembers_  = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/staticmembers", false);
-    config_asmDemangle_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/demanglenames", true);
-    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs", true);
-    config_forceBPSet_            = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/allowforcedbpset", true);
-    config_dbgTerminal_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/separatetty", false);
-    config_gdbPath_               = DomUtil::readEntry(projectDom, "/kdevdebugger/general/gdbpath");
-    config_programArgs_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/programargs");
+    reConfig();
     
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
@@ -188,6 +182,11 @@ GDBController::~GDBController()
 
 void GDBController::reConfig()
 {
+    config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
+    config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
+    config_gdbPath_               = DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath");
+    config_programArgs_           = DomUtil::readEntry(dom, "/kdevdebugger/general/programargs");
+    
     bool old_displayStatic        = config_displayStaticMembers_;
     config_displayStaticMembers_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers",false);
     
@@ -672,7 +671,7 @@ void GDBController::parseLine(char* buf)
     }
 
     DBG_DISPLAY("Unparsed (default - busy)<" + QString(buf) + ">");
-    actOnProgramPause(QString(" "));
+    actOnProgramPause(QString());
     return;
   }
 
@@ -705,7 +704,7 @@ void GDBController::parseProgramLocation(char *buf)
     int addressPos=0;
     if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
         ((addressPos  = regExp2.match(buf, 0)) >= 0)) {
-        actOnProgramPause(QString(" "));
+        actOnProgramPause(QString());
         emit showStepInSource(QCString(buf, linePos+1),
                               atoi(buf+linePos+1),
                               QString(buf+addressPos+1));

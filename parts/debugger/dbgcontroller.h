@@ -58,7 +58,6 @@ public:
 
     DbgController();
     virtual ~DbgController();
-    virtual void reConfig()                                                 = 0;
     
     virtual bool stateIsOn( int state )                                     = 0;
     
@@ -67,6 +66,8 @@ protected:
     virtual char *parse(char *str)                                          = 0;
     
 public slots:
+    virtual void reConfig()                                                 = 0;
+    
     virtual void slotStart(const QString& shell, const QString &application)= 0;
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
     virtual void slotAttachTo(int pid)                                      = 0;

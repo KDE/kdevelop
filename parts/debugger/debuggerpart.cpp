@@ -307,6 +307,7 @@ void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
     QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"));
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    connect( dlg, SIGNAL(finished()), controller, SLOT(reConfig()) );
 }
 
 
