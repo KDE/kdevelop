@@ -938,16 +938,21 @@ void CKDevelop::saveOptions(){
 }
 
 bool CKDevelop::queryExit(){
-  saveOptions();
+  kdDebug() << "queryExit()..." << endl;
+  if (!bStartupIsPending) {
+    saveOptions();
+  }
   return true;
 }
 
 bool CKDevelop::queryClose(){
+  kdDebug() << "queryClose()..." << endl;
+
+  if (bStartupIsPending) return true;
+
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
-//FB    config->writeEntry("cpp_file",cpp_widget->getName());
-//FB    config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();

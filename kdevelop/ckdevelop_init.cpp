@@ -76,6 +76,7 @@
 #include <krun.h>
 
 CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
+  ,bStartupIsPending(true)
   ,process("/bin/sh")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
@@ -137,7 +138,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   setKeyAccel();
 
   readOptions();
-  setAutoSaveSettings();
+  setAutoSaveSettings("CKDevelop");
 
   slotViewRefresh();
   if(start_logo)
@@ -160,6 +161,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
 CKDevelop::~CKDevelop()
 {
+  debug("queryClose()...");
   if (config)
   {
     config->setGroup("General Options");

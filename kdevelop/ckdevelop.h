@@ -835,6 +835,11 @@ protected:
    */
   virtual void resizeEvent( QResizeEvent *pRSE);
 
+public:
+  /** this attribute is true from construction until qApp->exec().
+    * In this way we can prevent some actions in queryClose() and queryExit() */
+  bool bStartupIsPending;
+
 private:
   KFileOpenWithHandler fowh;
   //the menus for kdevelop main

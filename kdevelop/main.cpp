@@ -111,6 +111,8 @@ int main(int argc, char* argv[])
     
     if (args->count())
       kdevelop->slotProjectOpenCmdl(args->arg(0));
+
+    kdevelop->bStartupIsPending = false;  // see queryClose()
   }
   
   args->clear();
