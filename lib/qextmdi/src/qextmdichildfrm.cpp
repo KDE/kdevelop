@@ -655,7 +655,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
    }
 
    // memorize the focuses in a dictionary because they will get lost during reparenting
-   QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
+   KDict<FocusPolicy>* pFocPolDict = new KDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over the buttons
@@ -715,7 +715,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
    QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
    
    //reparent to desktop widget , no flags , point , show it
-   QDict<FocusPolicy>* pFocPolDict;
+   KDict<FocusPolicy>* pFocPolDict;
    pFocPolDict = unlinkChildren();
 
    // get name of focused child widget
@@ -723,13 +723,13 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
    const char* nameOfFocusedWidget = "";
    if( focusedChildWidget != 0)
       nameOfFocusedWidget = focusedChildWidget->name();
-   
+
    QSize mins = m_pClient->minimumSize();
    QSize maxs = m_pClient->maximumSize();
    m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,isVisible());
    m_pClient->setMinimumSize(mins.width(),mins.height());
    m_pClient->setMaximumSize(maxs.width(),maxs.height());
-   
+
    // remember the focus policies using the dictionary and reset them
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over all child widgets of child frame
@@ -777,7 +777,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 }
 
 //============== linkChildren =============//
-void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
+void QextMdiChildFrm::linkChildren( KDict<FocusPolicy>* pFocPolDict)
 {
    // reset the focus policies for all widgets in the view (take them from the dictionary)
    QObjectList *list = m_pClient->queryList( "QWidget" );
@@ -820,10 +820,10 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
 
 //============== unlinkChildren =============//
 
-QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
+KDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 {
    // memorize the focuses in a dictionary because they will get lost during reparenting
-   QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
+   KDict<FocusPolicy>* pFocPolDict = new KDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
 
    QObjectList *list = m_pClient->queryList( "QWidget" );

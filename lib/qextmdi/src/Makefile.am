@@ -1,6 +1,6 @@
 # Here resides the qextmdi library.
 
-INCLUDES = -I$(top_srcdir)/lib/qextmdi/include -I$(top_srcdir)/lib/qextmdi/res $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/qextmdi/include -I$(top_srcdir)/lib/qextmdi/res -I$(top_srcdir)/lib/structure $(all_includes)
 
 lib_LTLIBRARIES = libkdevelopqextmdi.la
 libkdevelopqextmdi_la_LDFLAGS = $(all_libraries) -version-info 3:0

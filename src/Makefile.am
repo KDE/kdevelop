@@ -3,6 +3,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/util \
 	   -I$(top_srcdir)/lib \
 	   -I$(top_srcdir)/lib/qextmdi/include \
+	   -I$(top_srcdir)/lib/structure \
 	   $(all_includes)
 
 bin_PROGRAMS = gideon
@@ -16,7 +17,7 @@ gideon_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp \
 		 generalinfowidgetbase.ui generalinfowidget.cpp
 
 gideon_METASOURCES = AUTO
-gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
+gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 	       	$(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) \
 		-lktexteditor \

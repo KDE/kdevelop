@@ -2,7 +2,7 @@
 //
 // C++ Interface for module: Trie
 //
-// Description: 
+// Description:
 //
 //
 // Author: Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
@@ -33,6 +33,12 @@ namespace Structure {
   {
   public:
     typedef std::vector<Trie_Impl*> Subtries;
+
+    // here is the interface of the function class we use
+    //class Node_Function {
+    //public:
+    //	void operator() (Trie_Impl* node)
+    //};
 
     // constructors
     Trie_Impl() : empty_comp(true) {}
@@ -73,7 +79,7 @@ namespace Structure {
     // returns the subtrie node into which it has been inserted
     Trie_Impl* insert(const String& string, const Component & component) {
 //       cout << "insert '" << string << "' component: " << component << endl;
-      if (empty(string)) 
+      if (empty(string))
 	return 0;
       else if (have_symbol(string)) {
 
@@ -96,8 +102,8 @@ namespace Structure {
 	return children.back()->query(rest);
       }
       else {
-	cout << "no symbol!" << " symbol:" << symbol << ", empty?: "
-	     << empty_comp << endl;
+//	cout << "no symbol!" << " symbol:" << symbol << ", empty?: "
+//	     << empty_comp << endl;
 	return 0;
       }
     }
@@ -185,6 +191,15 @@ namespace Structure {
       return count;
     }
 
+    // apply a function to each node
+    template <typename Node_Fun>
+    void apply(Node_Fun& fun) {
+      for (typename Subtries::iterator i=children.begin();
+	   i!=children.end(); i++) {
+        fun(*i);
+      }
+    }
+
     ostream& print(ostream& out) const {
 //       out << " [ " << " sym: " << symbol << " comp: " << component
 // 	  << " empty?: " << empty_comp;
@@ -203,7 +218,7 @@ namespace Structure {
     Subtries children;
   };
 
-  
+
   template <typename Sy, typename St, typename C>
   ostream& operator << (ostream& out, const Trie_Impl<Sy,St,C>& trie)
   {

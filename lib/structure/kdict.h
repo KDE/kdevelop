@@ -24,10 +24,10 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
  public:
   typedef Structure::Trie_Impl<char, QString, type*> Impl;
 
-  KDict(bool cs = true) : Impl(' '), case_sensitive(cs) {
+  KDict(bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {
     // TODO: actually handle case sensitivity
   }
-  KDict(int sz, bool cs = true) : Impl(' '), case_sensitive(cs) {
+  KDict(int sz, bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {
     // this is simply for compatibility, has no function
     depreceated("KDict(int sz,...)");
   }
@@ -35,7 +35,19 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
     kDebug() << "NOT IMPLEMENTED!" << endl;
   }
 
-  ~KDict () {}
+  struct Delete_Pointer {
+    void operator() (Impl* node) {
+      delete node->component;
+    }
+  };
+
+  ~KDict() {
+    if (auto_delete) {
+      Delete_Pointer fun;
+      Impl::apply(fun);
+    }
+  }
+
   //KDict<type> & operator= ( const KDict<type> & dict );
   unsigned int count() const {
     return num_components();
@@ -88,8 +100,16 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
   }
   std::ostream& print(std::ostream& out) const { return Impl::print(out);  }
 
+  bool autoDelete () const {
+    return auto_delete;
+  }
+  void setAutoDelete ( bool enable ) {
+    auto_delete = enable;
+  }
+
  private:
   bool case_sensitive;
+  bool auto_delete;
   void depreceated(const char* f) const {
     kdDebug() << "WARNING: KDict::" << f << " is depreceated!" << endl;
   }

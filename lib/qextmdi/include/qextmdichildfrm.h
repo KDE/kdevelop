@@ -33,9 +33,10 @@
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
-#include <qdict.h>
 #include <qdatetime.h>
 #include <qlayout.h>
+
+#include <kdict.h>
 
 #include "qextmdichildfrmcaption.h"
 
@@ -193,7 +194,7 @@ public:
    * Delicato : destroys this QextMdiChildFrm
    * If a child is still here managed (no recreation was made) it is destroyed too.
    */
-   ~QextMdiChildFrm();  
+   ~QextMdiChildFrm();
    /**
    * Reparents the widget w to this QextMdiChildFrm (if this is not already done)
    * Installs an event filter to catch focus events.
@@ -334,7 +335,7 @@ protected:
    * Override the cursor appearance depending on the widget corner given as parameter 
    */
    void setResizeCursor(int resizeCorner);
-   /** 
+   /**
    * changes from the resize cursor to the normal (previous) cursor
    */
    void unsetResizeCursor();
@@ -361,11 +362,11 @@ protected slots:
    */
    void minimizePressed();
    /** 
-   * Handles a click on the Close button. 
+   * Handles a click on the Close button.
    */
    void closePressed();
-   /** 
-   * Handles a click on the Undock (Detach) button 
+   /**
+   * Handles a click on the Undock (Detach) button
    */
    void undockPressed();
    /**
@@ -375,16 +376,16 @@ protected slots:
 
 protected:
    /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
-   * Install the event filter for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter ) 
+   * Install the event filter for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
    */
-   void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+   void linkChildren( KDict<FocusPolicy>* pFocPolDict);
    /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
-   * Remove all event filters for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter ) 
+   * Remove all event filters for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
    */
-   QDict<QWidget::FocusPolicy>* unlinkChildren();
+   KDict<QWidget::FocusPolicy>* unlinkChildren();
    /** Calculates the corner id for the resize cursor. The return value can be tested for:
    * QEXTMDI_RESIZE_LEFT, QEXTMDI_RESIZE_RIGHT, QEXTMDI_RESIZE_TOP, QEXTMDI_RESIZE_BOTTOM
-   * or an OR'd variant of them for the corners. 
+   * or an OR'd variant of them for the corners.
    */
    int getResizeCorner(int ax,int ay);
 };

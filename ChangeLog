@@ -5,11 +5,15 @@
       anymore :)
 
 2003-02-11  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+        * lib/structure:
+          - Trie: implemented higher order application function
+          - KDict: implement setAutoDelete interface of QDict
+          - don't install test binary
+        * lib/qextmdi:
+          - use KDict instead of QDict, more to come ;)
 	* parts/filecreate:
           - fix: Add cpp and h types by default when there is
             no template directory in project
-        * lib/structure:
-          - don't install test binary
 
 2003-02-11 F@lk Brettschneider <falk@kdevelop.org>
 	* took the patch of Jens Zurheide (Thanks jens.zurheide@gmx.de!) and modified it a bit.
