@@ -64,7 +64,6 @@ public:
 
   QString url;
   KParts::ReadOnlyPart *part;
-  KDevPart *m_part;
 
 };
 
@@ -73,7 +72,6 @@ KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
  : QWidget(0, "konsole widget")
 {
   d = new KonsoleWidgetPrivate;
-  d->m_part = part;
 
   connect(part->core(), SIGNAL(wentToSourceFile(const QString &)),
           this, SLOT(wentToSourceFile(const QString &)));
