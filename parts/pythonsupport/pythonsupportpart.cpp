@@ -48,7 +48,7 @@ PythonSupportPart::~PythonSupportPart()
 
 void PythonSupportPart::projectOpened()
 {
-    kdDebug(9007) << "projectOpened()" << endl;
+    kdDebug(9014) << "projectOpened()" << endl;
 
     connect( project(), SIGNAL(addedFileToProject(const QString &)),
              this, SLOT(addedFileToProject(const QString &)) );

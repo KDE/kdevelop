@@ -23,6 +23,7 @@
 #include <kpopupmenu.h>
 #include <krun.h>
 #include <kparts/partmanager.h>
+#include <kstdaction.h>
 
 #include "splitter.h"
 #include "documentationpart.h"
@@ -67,6 +68,7 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
            "<ToolBar name=\"mainToolBar\" >\n"
            "  <Action name=\"documentation_back\" />\n"
            "  <Action name=\"documentation_forward\" />\n"
+           "  <Action name=\"documentation_find\" />\n"
            "</ToolBar>\n"
            "</kpartgui>"
            );
@@ -83,6 +85,7 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
     connect( backAction->popupMenu(), SIGNAL(activated(int)),
              this, SLOT(backPopupActivated(int)) );
     backAction->setEnabled(false);
+    
     forwAction = new KToolBarPopupAction(i18n("&Forward"), "forward", 0,
                                          this, SLOT(forwActivated()),
                                          actionCollection(), "documentation_forward");
@@ -91,6 +94,8 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
     connect( forwAction->popupMenu(), SIGNAL(activated(int)),
              this, SLOT(forwPopupActivated(int)) );
     forwAction->setEnabled(false);
+    
+    KStdAction::find(this, SLOT(find()), actionCollection(), "documentation_find");
 }
 
 
@@ -267,4 +272,11 @@ void DocumentationPart::forwPopupActivated(int id)
     restoreState();
     updateHistoryAction();
 }
+
+
+void DocumentationPart::find()
+{
+    htmlPart->actionCollection()->action("find")->activate();
+}
+
 #include "documentationpart.moc"

@@ -1,3 +1,18 @@
+2001-05-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Implemented proper comparing of file identities:
+	  Instead of the file name, now devno/inode are compared.
+	  Important for NFS systems, where file names may have
+	  a prefix like /tmp_mnt in some occasions
+	  This was already implemented in the HEAD branch 
+	  before the old one ;-)
+	* Implemented KDevCore::gotoFile() as a generic method
+	  to "go" to a file. Works for arbitrary mime types.
+	* Implemented KDevCore::revertAllFiles()
+	* Warning dialogs when modified files are closed or when
+	  saved/loaded files were modified outside.
+	* Implemented searching html widget
+
 2001-05-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Use flex instead of $(LEX)

@@ -1,6 +1,7 @@
 #ifndef _TEXTEDITOR_H
 #define _TEXTEDITOR_H
 
+#include <sys/stat.h>
 #include "kwview.h"
 #include "kwdoc.h"
 
@@ -40,8 +41,24 @@ public:
     TextEditorDocument();
     ~TextEditorDocument();
 
-    QString fileName() const;
     QList<TextEditorView> editorViews() const;
+    QString fileName() const;
+    bool modifiedOnDisk() const;
+    /**
+     * This method compares the _real_ identity of files. That means,
+     * it returns true even if otherURL is just a symbolic link to
+     * the edited file, or a different file name (which happens often
+     * on NFS systems).
+     */
+    bool isEditing(const KURL &otherURL) const;
+    bool openURL(const KURL &url);
+    bool save();
+    bool saveAs(const KURL &url);
+
+private:
+    dev_t dev;
+    ino_t ino;
+    time_t mtime;
 };
 
 #endif

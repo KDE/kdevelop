@@ -67,9 +67,9 @@ TopLevel::~TopLevel()
 {}
 
 
-void TopLevel::createGUI()
+void TopLevel::createGUI(KParts::Part *part)
 {
-    KParts::MainWindow::createGUI(0);
+    KParts::MainWindow::createGUI(part);
 }
 
 
@@ -225,7 +225,7 @@ void TopLevel::slotOptionsEditToolbars()
 {
     KEditToolbar dlg(factory());
     if (dlg.exec())
-        createGUI();
+        createGUI(0);
 }
 
 #include "toplevel.moc"

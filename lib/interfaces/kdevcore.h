@@ -92,6 +92,14 @@ public:
      */
     virtual void raiseWidget(QWidget *) = 0;
     /**
+     * "Goes" to a file. This is a generic method that is used
+     * e.g. by file trees. For non-text files (i.e. files which
+     * have a mime-type that doesn't start with "text/") it runs
+     * the respective application. Text files are loaded into an
+     * editor via # gotoSourceFile().
+     */
+    virtual void gotoFile(const KURL &url) = 0;
+    /**
      * Loads a file into the HTML viewer.
      */
     virtual void gotoDocumentationFile(const KURL& url,
@@ -112,6 +120,10 @@ public:
      * Saves all modified buffers.
      */
     virtual void saveAllFiles() = 0;
+    /**
+     * Reverts all modified buffers to their version on disk.
+     */
+    virtual void revertAllFiles() = 0;
     /**
      * Sets a breakpoint in the editor document belong to fileName.
      * If id==-1, the breakpoint is deleted.
@@ -155,7 +167,12 @@ signals:
      */
     void savedFile(const QString &fileName);
     /**
+     * Emitted when a file has been loaded.
+     */
+    void loadedFile(const QString &fileName);
+    /**
      * A new file has been displayed in the editor.
+     * Necessary??
      */
     void wentToSourceFile(const QString &fileName);
     /**

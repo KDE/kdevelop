@@ -46,6 +46,7 @@ AppOutputViewPart::AppOutputViewPart(KDevApi *api, QObject *parent, const char *
 AppOutputViewPart::~AppOutputViewPart()
 {
     delete m_widget;
+    delete m_dcop;
 }
 
 

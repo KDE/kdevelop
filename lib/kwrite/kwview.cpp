@@ -1556,7 +1556,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char * name, bool HandleOw
   kspell.kspellon = FALSE;
 
   setFocusProxy( kWriteView );
-  kWriteView->setFocus();
+  //  kWriteView->setFocus(); Huh??? Seems to be nonsense -- Bernd
   if (parent)
     resize(parent->width() -4, parent->height() -4);
 

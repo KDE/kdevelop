@@ -30,7 +30,8 @@ public:
     TopLevel(QWidget* parent=0, const char *name=0);
     ~TopLevel();
 
-    void createGUI();
+    // Updated to public, so it is accessible from the core class
+    void createGUI(KParts::Part *part);
     void closeReal();
 
     StatusBar *statusBar() const

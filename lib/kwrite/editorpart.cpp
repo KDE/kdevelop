@@ -122,9 +122,7 @@ void EditorPart::gotoDocument(TextEditorDocument *doc, int lineNum)
                  this, SLOT(toggleBreakpointEnabled(int)) );
         widget()->setFocusProxy(view);
         view->show();
-        QString caption = doc->fileName();
-        caption.remove(0, 5);
-        setWindowCaption(caption);
+        updateWindowCaption();
         
         kdDebug(9000) << "EditorPart::gotoDoc: " << doc->url().path() << endl;
         delete layout;
@@ -141,6 +139,12 @@ void EditorPart::gotoDocument(TextEditorDocument *doc, int lineNum)
     updateCursorPosition();
     view->setCursorPosition(lineNum, 0);
     view->update();
+}
+
+
+void EditorPart::updateWindowCaption()
+{
+    setWindowCaption(view->editorDocument()->fileName());
 }
 
 
@@ -336,4 +340,5 @@ void EditorPart::slotReplace()
 {
     view->replace();
 }
+
 #include "editorpart.moc"

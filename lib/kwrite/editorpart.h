@@ -32,6 +32,7 @@ public:
     ~EditorPart();
 
     void gotoDocument(TextEditorDocument *doc, int lineNum);
+    void updateWindowCaption();
     TextEditorView *editorView() const;
     TextEditorDocument *editorDocument() const;
 

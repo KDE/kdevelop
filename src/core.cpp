@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kprocess.h>
+#include <krun.h>
 #include <kstdaction.h>
 #include <kstddirs.h>
 #include <ktrader.h>
@@ -33,6 +34,7 @@
 #include "kdevappfrontend.h"
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
+#include "KDevCoreIface.h"
 
 #include "documentationpart.h"
 #include "editorpart.h"
@@ -54,17 +56,21 @@ Core::Core()
 
     win = new TopLevel();
     kapp->setMainWidget(win);
-    kapp->dcopClient();
+
+    dcopIface = new KDevCoreIface(this);
+    //    kapp->dcopClient()->attach();
+    kapp->dcopClient()->registerAs("gideon");
 
     connect( win, SIGNAL(wantsToQuit()),
              this, SLOT(wantsToQuit()) );
-    
+
+    activePart = 0;
     manager = new KParts::PartManager(win);
     connect( manager, SIGNAL(activePartChanged(KParts::Part*)),
-             win, SLOT(createGUI(KParts::Part*)) );
+             this, SLOT(activePartChanged(KParts::Part*)) );
 
     initActions();
-    win->createGUI();
+    win->createGUI(0);
 
     bufferActions.setAutoDelete(true);
     
@@ -78,7 +84,9 @@ Core::Core()
 
 
 Core::~Core()
-{}
+{
+    delete dcopIface;
+}
 
 
 KActionCollection *Core::actionCollection()
@@ -201,7 +209,7 @@ void Core::removeComponents()
 DocumentationPart *Core::createDocumentationPart()
 {
     DocumentationPart *part = new DocumentationPart(win);
-    manager->addPart(part, true);
+    manager->addPart(part, false);
     manager->addManagedTopLevelWidget(part->widget());
     docParts.append(part);
     connect( part, SIGNAL(destroyed()),
@@ -211,6 +219,23 @@ DocumentationPart *Core::createDocumentationPart()
     connect( part, SIGNAL(setStatusBarText(const QString&)),
              win->statusBar(), SLOT(message(const QString&)) );
     return part;
+}
+
+
+void Core::activePartChanged(KParts::Part *part)
+{
+    win->createGUI(part);
+    activePart = part;
+
+    if (activePart && activePart->inherits("EditorPart")) {
+        EditorPart *part = static_cast<EditorPart*>(activePart);
+        TextEditorDocument *doc = part->editorDocument();
+        if (doc->modifiedOnDisk() && KMessageBox::warningYesNo
+            (win, i18n("The file %1 was modified on disk.\n"
+                       "Revert to the version on disk now?").arg(doc->url().url()))) {
+            doc->openURL(doc->url());
+        }
+    }
 }
 
 
@@ -231,7 +256,7 @@ void Core::docContextMenu(QPopupMenu *popup, const QString &url, const QString &
 EditorPart *Core::createEditorPart()
 {
     EditorPart *part = new EditorPart(win);
-    manager->addPart(part, true);
+    manager->addPart(part, false);
     manager->addManagedTopLevelWidget(part->widget());
     editorParts.append(part);
     connect( part, SIGNAL(destroyed()),
@@ -389,14 +414,23 @@ void Core::raiseWidget(QWidget *w)
 }
 
 
+void Core::gotoFile(const KURL &url)
+{
+    QString mimeType = KMimeType::findByURL(url)->name();
+    if (!mimeType.startsWith("text/")) {
+        new KRun(url);
+    } else {
+        gotoSourceFile(url, 0, Replace);
+    }
+}
+
+
 void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
 {
     kdDebug(9000) << "Goto documentation: " << url.url() << endl;
 
     // Find a part to load into
     DocumentationPart *part = 0;
-    KParts::Part *activePart = manager->activePart();
-
     if (embed == Replace && activePart && activePart->inherits("DocumentationPart"))
         part = static_cast<DocumentationPart*>(activePart);
     else {
@@ -418,11 +452,28 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 {
     kdDebug(9000) << "Goto source file: " << url.path() << endl;
-    QString fileName = url.path();
     
+    // See if we have this document already loaded.
+    TextEditorDocument *doc = 0;
+    QListIterator<TextEditorDocument> it2(editedDocs);
+    for (; it2.current(); ++it2) {
+        if ((*it2)->isEditing(url)) {
+            doc = it2.current();
+            break;
+        }
+    }
+
+    if (!doc) {
+        kdDebug(9000) << "Doc not found, loading now" << endl;
+        doc = new TextEditorDocument();
+        doc->openURL(url);
+        editedDocs.append(doc);
+        updateBufferMenu();
+        emit loadedFile(doc->fileName());
+    }       
+
     // Find a part to load into
     EditorPart *part = 0;
-    KParts::Part *activePart = manager->activePart();
     if (embed == Replace && activePart && activePart->inherits("EditorPart")) {
         kdDebug(9000) << "Reusing editor part" << endl;
         part = static_cast<EditorPart*>(activePart);
@@ -438,25 +489,6 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
                                      activePart? activePart->widget() : 0);
     }
     
-    // See if we have this document already loaded.
-    TextEditorDocument *doc = 0;
-    QListIterator<TextEditorDocument> it2(editedDocs);
-    for (; it2.current(); ++it2) {
-        // TODO: Instead of comparing file names, use devno, inode
-        if ((*it2)->fileName() == fileName) {
-            doc = it2.current();
-            break;
-        }
-    }
-
-    if (!doc) {
-        kdDebug(9000) << "Doc not found, loading now" << endl;
-        doc = new TextEditorDocument();
-        doc->openURL(url);
-        editedDocs.append(doc);
-        updateBufferMenu();
-    }       
-
     part->gotoDocument(doc, lineNum);
     win->raiseWidget(part->widget());
 }
@@ -464,6 +496,8 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 
 void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
+    KURL url(fileName);
+    
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it)
         (*it)->setExecutionPoint(-1);
@@ -471,11 +505,11 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
     if (fileName.isEmpty())
         return;
     
-    gotoSourceFile(fileName, lineNum);
+    gotoSourceFile(url, lineNum);
 
     QListIterator<TextEditorDocument> it2(editedDocs);
     for (; it2.current(); ++it2)
-        if ((*it2)->fileName() == fileName) {
+        if ((*it2)->isEditing(url)) {
             (*it2)->setExecutionPoint(lineNum);
             break;
         }
@@ -487,10 +521,31 @@ void Core::saveAllFiles()
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
+        if (doc->isModified() && doc->modifiedOnDisk()) {
+            int res = KMessageBox::warningYesNoCancel
+                (win, i18n("The file %1 was modified on the disk.\n"
+                           "Save anyway?").arg(doc->url().url()));
+            if (res == KMessageBox::Cancel)
+                return;
+            if (res == KMessageBox::Yes) {
+                doc->save();
+                win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
+                emit savedFile(doc->fileName());
+            }
+        }
+    }
+}
+
+
+void Core::revertAllFiles()
+{
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it) {
+        TextEditorDocument *doc = it.current();
         if (doc->isModified()) {
-            doc->saveFile();
-            win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
-            emit savedFile(doc->fileName());
+            doc->openURL(doc->url());
+            win->statusBar()->message(i18n("Reverted %1").arg(doc->fileName()));
+            emit loadedFile(doc->fileName());
         }
     }
 }
@@ -499,10 +554,11 @@ void Core::saveAllFiles()
 void Core::setBreakpoint(const QString &fileName, int lineNum,
                          int id, bool enabled, bool pending)
 {
+    KURL url(fileName);
+    
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
-        // TODO: Instead of comparing file names, use devno, inode
-        if ((*it)->fileName() == fileName) {
+        if ((*it)->isEditing(url)) {
             (*it)->setBreakpoint(lineNum, id, enabled, pending);
             break;
         }
@@ -541,13 +597,30 @@ void Core::openFileInteractionFinished(const QString &fileName)
 
 void Core::saveFileInteractionFinished(const QString &fileName)
 {
-    if (!manager->activePart()->inherits("EditorPart"))
+    if (!activePart->inherits("EditorPart"))
         return;
 
-    EditorPart *part = static_cast<EditorPart*>(manager->activePart());
+    EditorPart *part = static_cast<EditorPart*>(activePart);
     TextEditorDocument *doc = part->editorDocument();
-    doc->setURL(KURL(fileName), false);
-    doc->saveFile();
+
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it)
+        if (it.current() != doc && it.current()->isEditing(fileName)) {
+            KMessageBox::sorry(win, i18n("This filename is already used by another buffer."));
+            return;
+        }
+    
+    QFileInfo fi(fileName);
+    if (fi.exists()) {
+        if (!KMessageBox::warningYesNo
+            (win, i18n("A file with the name %1 already exists.\n"
+                       "Overwrite it?").arg(fileName)))
+            return;
+    }
+    
+    doc->saveAs(KURL(fileName));
+    part->updateWindowCaption();
+    updateBufferMenu();
     win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
     emit savedFile(doc->fileName());
 }
@@ -555,12 +628,17 @@ void Core::saveFileInteractionFinished(const QString &fileName)
 
 void Core::slotOpenFile()
 {
+    
 #if 1
+    
     QString fileName = KFileDialog::getOpenFileName();
-    gotoSourceFile(KURL(fileName), 0);
+    openFileInteractionFinished(fileName);
+    
 #else
+    
+    // currently broken
     FileNameEdit *w = new FileNameEdit(i18n("Open file:"), win->statusBar());
-    KParts::Part *activePart = manager->activePart();
+
     if (activePart && activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
@@ -574,30 +652,44 @@ void Core::slotOpenFile()
 
     connect( w, SIGNAL(finished(const QString &)),
              this, SLOT(openFileInteractionFinished(const QString &)) );
+    
 #endif
+    
 }
 
 
 void Core::slotSaveFile()
 {
     // FIXME: enable/disable this action for active DocumentionPart
-    if (!manager->activePart()->inherits("EditorPart"))
+    if (!activePart->inherits("EditorPart"))
         return;
 
-    EditorPart *part = static_cast<EditorPart*>(manager->activePart());
+    EditorPart *part = static_cast<EditorPart*>(activePart);
     TextEditorDocument *doc = part->editorDocument();
-    saveFileInteractionFinished(doc->fileName());
+    doc->save();
+    win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
+    emit savedFile(doc->fileName());
 }
 
 
 void Core::slotSaveFileAs()
 {
+    
+#if 1
+    
+    QString fileName = KFileDialog::getSaveFileName();
+    saveFileInteractionFinished(fileName);
+    
+#else
+    
+    // currently broken
     // FIXME: enable/disable this action for active DocumentionPart
-    if (!manager->activePart()->inherits("EditorPart"))
+    if (!activePart->inherits("EditorPart"))
         return;
 
     FileNameEdit *w = new FileNameEdit(i18n("Save file as:"), win->statusBar());
-    EditorPart *part = static_cast<EditorPart*>(manager->activePart());
+    
+    EditorPart *part = static_cast<EditorPart*>(activePart());
     TextEditorDocument *doc = part->editorDocument();
     QString fileName = doc->fileName();
     w->setText(fileName);
@@ -606,31 +698,44 @@ void Core::slotSaveFileAs()
 
     connect( w, SIGNAL(finished(const QString &)),
              this, SLOT(saveFileInteractionFinished(const QString &)) );
+    
+#endif
+    
 }
 
 
 void Core::slotCloseWindow()
 {
-    if (manager->activePart())
-        delete manager->activePart()->widget();
+    if (!activePart)
+        return;
+    
+    if (activePart->inherits("EditorPart")) {
+        EditorPart *part = static_cast<EditorPart*>(activePart);
+        TextEditorDocument *doc = part->editorDocument();
+        if (doc->isModified() && !KMessageBox::warningYesNo
+            (win, i18n("The file %1 is modified.\n"
+                       "Close this window anyway?").arg(doc->url().url())))
+            return;
+    }
+
+    delete activePart->widget();
 }
 
 
 void Core::splitWindow(Orientation orient)
 {
-    KParts::Part *activePart = manager->activePart();
     if (!activePart)
         return;
 
     if (activePart->inherits("EditorPart")) {
-        EditorPart *part = static_cast<EditorPart*>(manager->activePart());
+        EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
         EditorPart *newpart = createEditorPart();
         win->splitDocumentWidget(newpart->widget(), activePart->widget(), orient);
         newpart->gotoDocument(doc, 0);
         win->raiseWidget(newpart->widget());
     } else if (activePart->inherits("DocumentationPart")) {
-        DocumentationPart *part = static_cast<DocumentationPart*>(manager->activePart());
+        DocumentationPart *part = static_cast<DocumentationPart*>(activePart);
         KURL url = part->browserURL();
         DocumentationPart *newpart = createDocumentationPart();
         win->splitDocumentWidget(newpart->widget(), activePart->widget(), orient);
@@ -654,13 +759,16 @@ void Core::slotSplitHorizontally()
 
 void Core::slotKillBuffer()
 {
-    KParts::Part *activePart = manager->activePart();
     if (!activePart)
         return;
 
     if (activePart->inherits("EditorPart")) {
-        EditorPart *part = static_cast<EditorPart*>(manager->activePart());
+        EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
+        if (doc->isModified() && !KMessageBox::warningYesNo
+            (win, i18n("The file %1 is modified.\n"
+                       "Close this window anyway?").arg(doc->url().url())))
+            return;
         
         QList<EditorPart> deletedParts;
         
@@ -690,8 +798,22 @@ void Core::slotKillBuffer()
 
 void Core::slotQuit()
 {
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it) {
+        TextEditorDocument *doc = it.current();
+        if (doc->isModified()) {
+            int res = KMessageBox::warningYesNoCancel
+                (win, i18n("The file %1 is modified.\n"
+                           "Save this file now?").arg(doc->url().url()));
+            if (res == KMessageBox::Cancel)
+                return;
+            if (res == KMessageBox::Yes)
+                doc->save();
+        }
+    }
+    
     disconnect( manager, SIGNAL(activePartChanged(KParts::Part*)),
-                win, SLOT(createGUI(KParts::Part*)) );
+                this, SLOT(activePartChanged(KParts::Part*)) );
 
     closeProject();
     removeComponents();

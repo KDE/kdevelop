@@ -17,6 +17,7 @@
 #include "toplevel.h"
 #include "kdevcore.h"
 
+class KDevCoreIface;
 class KDevApi;
 class KDevFactory;
 class TextEditorDocument;
@@ -32,24 +33,25 @@ public:
     Core();
     ~Core();
 
-    KParts::PartManager *partManager() const { return manager; };
-
-
 protected:
     virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
     virtual void raiseWidget(QWidget *w);
+    virtual void gotoFile(const KURL &url);
     virtual void gotoDocumentationFile(const KURL& url,
                                        Embedding embed=Replace);
     virtual void gotoSourceFile(const KURL& url, int lineNum=0,
                                 Embedding embed=Replace);
     virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0);
     virtual void saveAllFiles();
+    virtual void revertAllFiles();
     virtual void setBreakpoint(const QString &fileName, int lineNum,
                                int id, bool enabled, bool pending);
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);
+    virtual KParts::PartManager *partManager() const { return manager; };
 
 private slots:
+    void activePartChanged(KParts::Part *part);
     void docPartDestroyed();
     void docContextMenu(QPopupMenu *popup, const QString &url, const QString &selection);
     void editorPartDestroyed();
@@ -90,6 +92,8 @@ private:
 
     TopLevel *win;
     KParts::PartManager *manager;
+    KParts::Part *activePart;
+    KDevCoreIface *dcopIface;
     KDevApi *api;
     QList<KDevPart> components;
     QList<KDevPart> runningComponents;

@@ -90,4 +90,73 @@ QString TextEditorDocument::fileName() const
 {
     return url().path();
 }
+
+
+bool TextEditorDocument::modifiedOnDisk() const
+{
+    if (!url().isLocalFile())
+        return false;
+    
+    struct stat buf;
+    ::stat(fileName(), &buf);
+    return buf.st_mtime != mtime;
+}
+
+
+bool TextEditorDocument::isEditing(const KURL &otherURL) const
+{
+    if (!url().isLocalFile())
+        return url() == otherURL;
+    
+    struct stat buf;
+    ::stat(otherURL.path(), &buf);
+    return (buf.st_dev == dev) && (buf.st_ino == ino);
+}
+
+
+bool TextEditorDocument::openURL(const KURL &url)
+{
+    bool res = KWriteDoc::openURL(url);
+    if (!res || !url.isLocalFile())
+        return res;
+    
+    struct stat buf;
+    ::stat(url.path(), &buf);
+    ino = buf.st_ino;
+    dev = buf.st_dev;
+    mtime = buf.st_mtime;
+    
+    return res;
+}
+
+
+bool TextEditorDocument::save()
+{
+    bool res = KWriteDoc::save();
+
+    if (!res || !url().isLocalFile())
+        return res;
+    
+    struct stat buf;
+    ::stat(url().path(), &buf);
+    mtime = buf.st_mtime;
+    
+    return res;
+}
+
+
+bool TextEditorDocument::saveAs(const KURL &url)
+{
+    bool res = KWriteDoc::saveAs(url);
+
+    if (!res || !url.isLocalFile())
+        return res;
+    
+    struct stat buf;
+    ::stat(url.path(), &buf);
+    mtime = buf.st_mtime;
+    
+    return res;
+}
+
 #include "texteditor.moc"
