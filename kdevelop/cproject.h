@@ -311,9 +311,9 @@ public: // Public queries
       is resetted after query to get a new situation.
 
       to do so use:
-        clearMakefileAmchanged();
+        clearMakefileAmChanged();
   */
-  bool getMakefileAmChanged() const {return bMakefileamHasChanged; }
+  bool getMakefileAmChanged();
 
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
@@ -383,7 +383,7 @@ public: // Public methods
   *@author Walter Tasin
   */
   QString& setInfosInString(QString& strtemplate, bool basics=true);
-  void clearMakefileAmChanged() {bMakefileamHasChanged=false;};
+  void clearMakefileAmChanged();
 
 
 protected:
@@ -405,9 +405,6 @@ protected:
   QString getName(QString rel_name);
 
 protected: // Protected attributes
-
-  /** help flag to check if a Makefile.am  */
-  bool bMakefileamHasChanged;
 
   /** The actual project file. */
   QString prjfile;
