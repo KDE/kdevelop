@@ -71,7 +71,7 @@ be too special so that the user can implement his own ideas.\n
 \subsubsection templates_1_2b I.2.2. The File template-khello/khello
 
 It may look like this:
-\include khello/khello
+\verbinclude khello/khello
 
 The application wizard looks into this file to get
     - the information where to integrate the plugin into the the listview (<code>Category=</code>)
@@ -96,14 +96,14 @@ The file
 \subsubsection templates_1_2d I.2.4. The File template-khello/src-Makefile.am
 
 This file will be copied to the <code>$PROJECTDIR/src/</code>.
-\include khello/src-Makefile.am
+\verbinclude khello/src-Makefile.am
 
 \subsubsection templates_1_2e I.2.5. The File template-khello/script
 
 The following script is used to install the template and replaces all
 variables by the corresponding value. The result is a hopefully working
 kdevelop project!
-\include khello/script
+\verbinclude khello/script
 \note There are several application templates which use some identical
 files - that's why some files are taken from the <code>"template-common"</code>-directory.
 
@@ -158,7 +158,7 @@ Makefile.in
 script.local
 \endcode
     - <code>"Makefile.am"</code> looks like this:
-    \include khello/Makefile.am
+    \verbinclude khello/Makefile.am
     .
 Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/parts/appwizard/Makefile.am</code>.
 \attention Please test your template whether it installs and behaves correctly!
