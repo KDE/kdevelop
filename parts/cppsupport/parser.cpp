@@ -954,6 +954,13 @@ bool Parser::parseDeclarator( AST::Node& /*node*/ )
 	// TODO: add vector
     }
     
+    bool skipParen = false;
+    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == '(' && lex->lookAhead(2) == '(' ){
+    	lex->nextToken();
+	lex->nextToken();
+	skipParen = true;
+    }
+    
     int index = lex->index();
     if( lex->lookAhead(0) == '(' ){     
 	lex->nextToken();
@@ -976,6 +983,14 @@ bool Parser::parseDeclarator( AST::Node& /*node*/ )
 	AST::Node except;
 	parseExceptionSpecification( except );
     }
+    
+    if( skipParen ){
+    	if( lex->lookAhead(0) != ')' ){
+	    reportError( i18n("')' expected") );
+	} else
+	    lex->nextToken();
+    }
+    
     
     return true;
 }
