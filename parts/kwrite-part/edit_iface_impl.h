@@ -30,6 +30,8 @@ public:
 
   virtual bool hasSelectedText();
 
+private slots:
+  void slotTextChanged();
 
 private:
 

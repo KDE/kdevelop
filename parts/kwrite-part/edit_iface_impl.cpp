@@ -11,7 +11,7 @@
 EditIfaceImpl::EditIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : EditDocumentIface(parent, editor), m_edit(edit)
 {
-  connect(m_edit->doc(),SIGNAL(textChanged()),SIGNAL(textChanged()));
+  connect(m_edit->doc(),SIGNAL(textChanged()),SLOT(slotTextChanged()));
 }
 
 
@@ -97,6 +97,10 @@ bool EditIfaceImpl::hasSelectedText()
 	return (( KWriteDoc* ) m_edit->document())->hasMarkedText();
 }
 
-
+void EditIfaceImpl::slotTextChanged()
+{
+	emit EditDocumentIface::textChanged( document(), m_edit->currentLine(), m_edit->currentColumn());
+	emit EditDocumentIface::textChanged();
+}
 
 #include "edit_iface_impl.moc"

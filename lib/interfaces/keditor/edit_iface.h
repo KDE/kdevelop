@@ -41,8 +41,9 @@ public:
 
   static EditDocumentIface *interface(Document *doc);
  signals:
+  void textChanged(KEditor::Document *doc, int line, int col);
   void textChanged();
-
+  
 private:
 
   EditDocumentDCOPIface *m_dcopIface;

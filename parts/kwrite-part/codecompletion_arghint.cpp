@@ -106,12 +106,14 @@ KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup 
 
 	m_pStateLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
 	m_pStateLabel->setAlignment ( AlignCenter );
-	m_pStateLabel->setFont ( QFont ( "Arial", 10 ) );
+	m_pStateLabel->setFont ( QFont ( "Arial", 10 ) ); // should be optional
 	m_pFuncLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
 	m_pFuncLabel->setAlignment ( AlignCenter );
-	m_pFuncLabel->setFont ( QFont ( "Arial", 10 ) );
+	m_pFuncLabel->setFont ( QFont ( "Arial", 10 ) ); // should be optional
 
-	m_pStateLabel->setFixedSize ( 30, 16 );
+	m_pPrev->setFixedSize ( 16, 16 );
+	m_pStateLabel->setFixedSize ( 36, 16 );
+	m_pNext->setFixedSize ( 16, 16 );
 
 	connect ( m_pPrev, SIGNAL ( clicked() ), this, SLOT ( gotoPrev() ) );
 	connect ( m_pNext, SIGNAL ( clicked() ), this, SLOT ( gotoNext() ) );
@@ -136,12 +138,12 @@ KDevArgHint::~KDevArgHint()
 /** No descriptions */
 void KDevArgHint::gotoPrev()
 {
-  if ( m_nCurFunc > 0 )
-    m_nCurFunc--;
-  else
-    m_nCurFunc = m_nNumFunc - 1;
+	if ( m_nCurFunc > 0 )
+		m_nCurFunc--;
+	else
+		m_nCurFunc = m_nNumFunc - 1;
   
-  updateState();
+	updateState();
 }
 
 /** No descriptions */
@@ -177,6 +179,12 @@ void KDevArgHint::updateState()
 		m_pNext->show();
 		m_pStateLabel->show();
 	}
+
+	m_pPrev->adjustSize();
+	m_pStateLabel->adjustSize();
+	m_pNext->adjustSize();
+	m_pFuncLabel->adjustSize();
+	adjustSize();
 }
 
 void KDevArgHint::reset()
@@ -200,6 +208,7 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 		emit argHintHided();
 		return;
 	}
+
 	KEditor::EditDocumentIface* pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
 	if ( !pEditIface )
 	{
@@ -233,6 +242,7 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 		emit argHintHided();
 		//m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
 	}
+
 	int nCountDelimiter = 0;
 
 	while ( nBegin != -1 )
@@ -334,4 +344,4 @@ QString KDevArgHint::markCurArg()
 	return strFuncText;
 }
 
-#include "codecompletion_arghint.moc"
+//#include "codecompletion_arghint.moc"
