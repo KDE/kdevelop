@@ -38,6 +38,8 @@
 #include "docutils.h"
 #include "contentsview.h"
 
+#include <klocale.h>
+
 FindDocumentation::FindDocumentation(DocumentationWidget* parent, const char* name)
     :FindDocumentationBase(parent, name), 
     man_item(0), info_item(0), index_item(0), google_item(0), contents_item(0),
@@ -169,7 +171,7 @@ void FindDocumentation::searchInInfo()
 
 void FindDocumentation::searchInMan()
 {
-    man_item = new KListViewItem(result_list, last_item , "Manual");
+    man_item = new KListViewItem( result_list, last_item, i18n("Manual") );
     man_item->setOpen(true);
     last_item = man_item;
 
@@ -207,7 +209,7 @@ void FindDocumentation::searchInGoogle()
 
 void FindDocumentation::searchInContents()
 {
-    contents_item = new KListViewItem(result_list, last_item , "Contents");
+    contents_item = new KListViewItem( result_list, last_item, i18n("Contents") );
     contents_item->setOpen(true);
     last_item = contents_item;
 
