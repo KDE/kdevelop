@@ -1,3 +1,7 @@
+2000-06-20 Falk Brettschneider <gigafalk@yahoo.com>
+  * added MDI view title abbreviation feature
+  * more bugfixes in QextMDI (MDI tool view related)
+
 2000-06-19 Ralf Nolden <rnolden@kdevelop.de>
   * added new classes KDevelop and KDevelopFactory. This class will replace CKDevelop and implements the new
     KDE 2 KAction stuff currently. Methods have to be added according to those KActions are connected
