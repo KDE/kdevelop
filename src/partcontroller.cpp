@@ -343,6 +343,9 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 			addHistoryEntry( url, lineNum, col );
 
 			m_openNextAsText = false;
+			
+			m_openRecentAction->addURL( url );
+			m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 
 			return;
 		}
@@ -376,6 +379,9 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 			part->openURL( url );
 			integratePart( part, url, false );
 			addHistoryEntry( url, lineNum, col );
+		
+			m_openRecentAction->addURL( url );
+			m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 		}
 	}
 	else
@@ -986,9 +992,7 @@ void PartController::slotOpenFile()
   for ( KURL::List::Iterator it = fileNames.begin(); it != fileNames.end(); ++it )
   {
     editDocument( *it );
-    m_openRecentAction->addURL( *it );
   }
-  m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 }
 
 void PartController::slotOpenRecent( const KURL& url )
