@@ -219,7 +219,8 @@ void FlagPathEditController::readFlags( QStringList * list )
     for (; it.current(); ++it) {
         FlagPathEdit *peitem = it.current();
 
-        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        QStringList::Iterator sli = list->begin();
+        while ( sli != list->end() )
         {
   //          kdDebug() << "option: " << (*sli) << " flag is: " << peitem->flag << endl;
             if ((*sli).startsWith(peitem->flag))
@@ -227,7 +228,9 @@ void FlagPathEditController::readFlags( QStringList * list )
 //                kdDebug() << "Processing.." << endl;
                 peitem->setText((*sli).replace(QRegExp(peitem->flag),""));
                 sli = list->remove(sli);
+                continue;
             }
+             ++sli;
         }
 /*        QStringList::Iterator sli = list->find(peitem->flag);
         if (sli != list->end()) {
@@ -427,13 +430,16 @@ void FlagEditController::readFlags( QStringList * list )
     for (; it.current(); ++it) {
         FlagListEdit *peitem = it.current();
 
-        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        QStringList::Iterator sli = list->begin();
+        while (sli != list->end())
         {
             if ((*sli).startsWith(peitem->flag))
             {
                 peitem->appendText((*sli).replace(QRegExp(peitem->flag),""));
                 sli = list->remove(sli);
+                continue;
             }
+            ++sli;
         }
     }
 
@@ -442,13 +448,16 @@ void FlagEditController::readFlags( QStringList * list )
     for (; it2.current(); ++it2) {
         FlagSpinEdit *sitem = it2.current();
 
-        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        QStringList::Iterator sli = list->begin();
+        while ( sli != list->end() )
         {
             if ((*sli).startsWith(sitem->flag))
             {
                 sitem->setText((*sli).replace(QRegExp(sitem->flag),""));
                 sli = list->remove(sli);
+                continue;
             }
+            ++sli;
         }
     }
 }
