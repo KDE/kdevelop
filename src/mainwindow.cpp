@@ -40,6 +40,7 @@
 #include <kmessagebox.h>
 #include <kiconloader.h>
 
+#include <kdevproject.h>
 #include "projectmanager.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
@@ -1422,6 +1423,22 @@ void MainWindow::setWindowMenu(QPopupMenu *menu)
     m_pWindowMenu = menu;
     m_pWindowMenu->setCheckable( TRUE);
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
+}
+
+void MainWindow::setCaption( const QString & caption )
+{
+	if ( KDevProject * project = API::getInstance()->project() )
+	{
+		QString projectname = project->projectName();
+		
+		QString suffix(".kdevelop");
+		if ( projectname.endsWith( suffix ) )
+		{
+			projectname.truncate( projectname.length() - suffix.length() );
+		}
+			
+		KMdiMainFrm::setCaption( projectname + " - " + caption );
+	}
 }
 
 #include "mainwindow.moc"

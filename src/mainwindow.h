@@ -87,6 +87,7 @@ public:
 
 public slots:
 
+  void setCaption( const QString &);
   void createGUI(KParts::Part *part);
   void gotoNextWindow();
   void gotoPreviousWindow();
