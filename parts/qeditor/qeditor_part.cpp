@@ -615,27 +615,28 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
     QEditor* ed = m_currentView->editor();
-    QTextParagraph* p = ed->document()->paragAt( startLine );
-    while( p ){
-        QString str = p->string()->toString();
+
+    int line = startLine;
+    while( line>=0 && line<=numLines() ){
+        QString str = textLine( line );
         int pos = -1;
         if( backwards ){
-            pos = regexp.searchRev( str, p->paragId() == (int)startLine ? startCol : p->length() );
+            pos = regexp.searchRev( str, line == (int)startLine ? startCol : str.length() );
         } else {
-            pos = regexp.search( str, p->paragId() == (int)startLine ? startCol : 0 );
+            pos = regexp.search( str, line == (int)startLine ? startCol : 0 );
         }
 
         if( pos != -1 ){
-            *foundAtLine = p->paragId();
+	    *foundAtLine = line;
             *foundAtCol = pos;
             *matchLen = regexp.matchedLength();
             return true;
         }
 
         if( backwards ){
-            p = p->prev();
+	    --line;
         } else {
-            p = p->next();
+	    ++line;
         }
     }
     return false;
@@ -781,7 +782,7 @@ QSourceColorizer* QEditorPart::colorizer() const
 
 QEditorIndenter* QEditorPart::indenter() const
 {
-    return dynamic_cast<QEditorIndenter*>( m_currentView->editor()->document()->indent() );
+    return m_currentView->editor()->indenter();
 }
 
 bool QEditorPart::wordWrap() const

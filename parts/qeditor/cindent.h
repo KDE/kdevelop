@@ -30,7 +30,7 @@ public:
     CIndent( QEditor* );
     virtual ~CIndent();
 
-    void indent( QTextDocument *doc, QTextParagraph *parag, int *oldIndent, int *newIndent );
+    virtual int indentForLine( int line );
     virtual QWidget* createConfigPage( QEditorPart*, KDialogBase* =0, const char* =0 );
     virtual void updateValues( const QMap<QString, QVariant>& );
 };

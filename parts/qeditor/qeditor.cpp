@@ -41,8 +41,6 @@
 **********************************************************************/
 
 #include "qeditor.h"
-#include "cpp_parser.h"
-#include "python_parser.h"
 
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
@@ -58,6 +56,7 @@
 #  include "perl_colorizer.h"
 #endif
 
+#include "qeditor_indenter.h"
 #include "simple_indent.h"
 #include "cindent.h"
 
@@ -74,9 +73,9 @@
 
 using namespace std;
 
-// from trolltech's editor -- START
-static int backspace_indentation( const QString &s, int tabwidth )
+int QEditor::backspace_indentation( const QString &s )
 {
+    int tabwidth = tabStop();
     int i = 0;
     int ind = 0;
     while ( i < (int)s.length() ) {
@@ -94,23 +93,25 @@ static int backspace_indentation( const QString &s, int tabwidth )
 }
 
 
-static int backspace_indentForLine( QTextParagraph* parag, int tabwidth )
+int QEditor::backspace_indentForLine( int line )
 {
-    int line_ind = backspace_indentation( parag->string()->toString(), tabwidth );
+    int tabwidth = tabStop();
+    int line_ind = backspace_indentation( text(line) );
     line_ind = line_ind > 0 ? line_ind-1 : 0;
     int ind = 0;
-    QTextParagraph* p = parag->prev();
-    while( p ){
-	QString raw_text = p->string()->toString();
-	QString line = raw_text.stripWhiteSpace();
-	if( !line.isEmpty() ){
-	    int new_ind = backspace_indentation( raw_text, tabwidth );
+
+    --line;
+    while( line>=0 ){
+        QString raw_text = text( line );
+	QString lineText = raw_text.stripWhiteSpace();
+	if( !lineText.isEmpty() ){
+	    int new_ind = backspace_indentation( raw_text );
 	    if( new_ind < line_ind ){
 		ind = new_ind;
 		break;
 	    }
 	}
-	p = p->prev();
+	--line;
     }
     return ind;
 }
@@ -136,7 +137,6 @@ QEditor::QEditor( QWidget* parent, const char* name )
     m_currentLine = -1;
     m_tabStop = 8;
     m_applicationMenu = 0;
-    m_parser = 0;
     m_recording = FALSE;
     m_keys.setAutoDelete( TRUE );
 
@@ -181,6 +181,8 @@ int QEditor::tabStop() const
 void QEditor::setTabStop( int tabStop )
 {
     m_tabStop = tabStop;
+    if( m_tabStop == 0 )
+        m_tabStop = 8;
 }
 
 void QEditor::keyPressEvent( QKeyEvent* e )
@@ -313,16 +315,17 @@ void QEditor::backspaceIndent( QKeyEvent* e )
 {
     QTextCursor* c = textCursor();
     QTextParagraph* p = c->paragraph();
-    QString raw_text = p->string()->toString();
+    QString raw_text = text( p->paragId() );
     QString line = raw_text.stripWhiteSpace();
 
     if( raw_text.left(c->index()).stripWhiteSpace().isEmpty()
 	&& c->index() > 0 && !hasSelectedText() ){
 	    drawCursor( FALSE );
-	    int oi = backspace_indentation( raw_text, tabStop() );
-	    int ni = backspace_indentForLine( p, tabStop() );
+	    int oi = backspace_indentation( raw_text );
+	    int ni = backspace_indentForLine( p->paragId() );
 
-	    indentLine( p, tabStop(), oi, ni );
+	    if( indenter() )
+	      indenter()->indentLine( p, oi, ni );
 
 	    int idx = c->index();
 	    if ( idx >= oi )
@@ -391,12 +394,7 @@ void QEditor::repaintChanged()
 
 QString QEditor::textLine( uint line ) const
 {
-    if ( int(line) >= lines() )
-	return QString::null;
-
-    QString str = document()->paragAt( line )->string()->toString();
-    str.truncate( str.length() - 1 );
-    return str;
+    return text( line );
 }
 
 void QEditor::setLanguage( const QString& l )
@@ -407,55 +405,44 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( 0 /*new CppParser(this)*/ );
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( 0 /*new CppParser(this)*/ );
     } else if( m_language == "jsp" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new JspColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );	
-        setBackgroundParser( 0 );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( 0 );
 #if defined(HAVE_PERL_MODE)
     } else if( m_language == "perl" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new PerlColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( 0 );
 #endif
     } else if( m_language == "python" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( 0 );
-        //setBackgroundParser( new PythonParser(this) );
     } else if( m_language == "xml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( 0 );
     } else if( m_language == "qmake" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new QMakeColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( 0 );
     } else if( m_language == "ocaml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new OCamlColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( 0 );
     } else {
         setElectricKeys( QString::null );
 	document()->setPreProcessor( 0 );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( 0 );
     }
 
     configChanged();
@@ -503,20 +490,6 @@ void QEditor::setLevel( int line, int lev )
 QSourceColorizer* QEditor::colorizer() const
 {
     return dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
-}
-
-BackgroundParser* QEditor::parser() const
-{
-    return m_parser;
-}
-
-void QEditor::setBackgroundParser( BackgroundParser* parser )
-{
-    if( m_parser ){
-        delete( m_parser );
-        m_parser = 0;
-    }
-    m_parser = parser;
 }
 
 void QEditor::refresh()
@@ -580,4 +553,10 @@ void QEditor::executeMacro()
         QApplication::sendEvent( this, &e );
     }
 }
+
+QEditorIndenter* QEditor::indenter() const
+{
+  return dynamic_cast<QEditorIndenter*>( document()->indent() );
+}
+
 #include "qeditor.moc"

@@ -60,6 +60,7 @@
 #include <qregexp.h>
 #include <qmap.h>
 #include <qvariant.h>
+#include <kdebug.h>
 
 /*
   The indenter avoids getting stuck in almost infinite loops by
@@ -147,7 +148,7 @@ static int columnForIndex( const QString& t, int index )
 	index = t.length();
 
     for ( int i = 0; i < index; i++ ) {
-	if ( t[i] == QChar('\t') ) {
+	if ( t[i].latin1() == '\t' ) {
 	    col = ( (col / ppHardwareTabSize) + 1 ) * ppHardwareTabSize;
 	} else {
 	    col++;

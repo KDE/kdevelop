@@ -124,8 +124,7 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
     }
     
     HLItemCollection* ctx = m_items.at( state );
-    QString s = parag->string()->toString();
-    s.truncate( s.length() - 1 );
+    QString s = m_editor->text( parag->paragId() );
     const QChar* buffer = s.unicode();
     int length = s.length();
     

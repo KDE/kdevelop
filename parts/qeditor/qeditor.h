@@ -57,7 +57,7 @@
 class ParenMatcher;
 class QPopupMenu;
 class QSourceColorizer;
-class BackgroundParser;
+class QEditorIndenter;
 class QEditorKey;
 
 class QEditor: public KTextEdit
@@ -70,13 +70,12 @@ public:
     bool isRecording() const { return m_recording; }
     void setIsRecording( bool b ) { m_recording = b; }
 
+    QEditorIndenter* indenter() const;
+
     QTextCursor* textCursor() const;
 
     QTextDocument* document() const;
     void setDocument( QTextDocument*);
-
-    BackgroundParser* parser() const;
-    void setBackgroundParser( BackgroundParser* );
 
     void drawCursor( bool visible );
     void updateStyles();
@@ -134,10 +133,12 @@ protected:
     virtual bool event( QEvent* );
     virtual void keyPressEvent( QKeyEvent* );
     virtual void backspaceIndent( QKeyEvent* );
+    int backspace_indentation( const QString &s );
+    int backspace_indentForLine( int line );
+
 
 private:
     ParenMatcher* parenMatcher;
-    BackgroundParser* m_parser;
     bool m_tabIndent;
     bool m_completion;
     bool m_backspaceIndent;

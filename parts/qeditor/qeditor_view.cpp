@@ -383,7 +383,6 @@ bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
         if( forw ){
             m_offset = firstIndex;
             QString str = m_currentParag->string()->toString();
-            str.truncate( str.length() - 1 ); // damn trailing space
             ret = process( str.mid( firstIndex ) );
             if (!ret) return false;
         } else {
@@ -411,7 +410,6 @@ bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
         } else {
             m_offset = firstIndex;
             QString str = m_currentParag->string()->toString();
-            str.truncate( str.length() - 1 ); // damn trailing space
             str = str.mid( firstIndex );
             ret = process( str );
         }
