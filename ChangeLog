@@ -1,3 +1,10 @@
+1999-09-07 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* new standard kdelib-doc path defined
+	  now KDevelop searches first /opt/kde/share/doc/HTML/en/kdelibs
+        * bug-fix: using pre-generated kdelib documentation
+          caused error msg. (like: The chosen path does not lead
+	  to the KDE-library documention...)
+
 1999-08-31 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* created new branch for the final version KDEVELOP_1_0
 
