@@ -19,10 +19,11 @@
 	#include "parsedmethod.h"
 	#include "parsedclass.h"
 	#include "parsedattribute.h"
+	#include "parsedargument.h"
 
 	#include <kdebug.h>
 
-#line 26 "JavaStoreWalker.hpp"
+#line 27 "JavaStoreWalker.hpp"
 /** Java 1.2 AST Recognizer Grammar
  *
  * Author:
@@ -38,7 +39,7 @@
  */
 class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
  {
-#line 41 "java.store.g"
+#line 42 "java.store.g"
 
 private:
 	ClassStore* m_store;
@@ -61,7 +62,7 @@ public:
 	void wipeout()						{ m_store->wipeout(); }
 	void out()						{ m_store->out(); }
 	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
-#line 43 "JavaStoreWalker.hpp"
+#line 44 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
 	public: void compilationUnit(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -79,8 +80,8 @@ public:
 	public: void interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 		 ParsedClass* klass 
 	);
-	public: void typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public:  QString  typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public:  QString  typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public:  QString  type(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void builtInType(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -96,7 +97,7 @@ public:
 		 ParsedAttribute* attr 
 	);
 	public: void varInitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public:  ParsedArgument*  parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void objectinitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void initializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void expression(ANTLR_USE_NAMESPACE(antlr)RefAST _t);

@@ -16,12 +16,12 @@ JavaStoreWalker::JavaStoreWalker()
 
 void JavaStoreWalker::compilationUnit(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 	ANTLR_USE_NAMESPACE(antlr)RefAST compilationUnit_AST_in = _t;
-#line 65 "java.store.g"
+#line 66 "java.store.g"
 	ParsedClass* kl;
 #line 22 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
-#line 66 "java.store.g"
+#line 67 "java.store.g"
 		init();
 #line 27 "JavaStoreWalker.cpp"
 		{
@@ -69,7 +69,7 @@ void JavaStoreWalker::compilationUnit(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			if ((_t->getType()==CLASS_DEF||_t->getType()==INTERFACE_DEF)) {
 				kl=typeDefinition(_t);
 				_t = _retTree;
-#line 69 "java.store.g"
+#line 70 "java.store.g"
 				m_store->addClass( kl );
 #line 75 "JavaStoreWalker.cpp"
 			}
@@ -91,7 +91,7 @@ void JavaStoreWalker::compilationUnit(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 
 void JavaStoreWalker::packageDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 	ANTLR_USE_NAMESPACE(antlr)RefAST packageDefinition_AST_in = _t;
-#line 72 "java.store.g"
+#line 73 "java.store.g"
 	QString id;
 #line 97 "JavaStoreWalker.cpp"
 	
@@ -104,7 +104,7 @@ void JavaStoreWalker::packageDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _retTree;
 		_t = __t8;
 		_t = _t->getNextSibling();
-#line 73 "java.store.g"
+#line 74 "java.store.g"
 		m_package = id;
 #line 110 "JavaStoreWalker.cpp"
 	}
@@ -117,7 +117,7 @@ void JavaStoreWalker::packageDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
  QString  JavaStoreWalker::importDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 76 "java.store.g"
+#line 77 "java.store.g"
 	 QString id ;
 #line 123 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST importDefinition_AST_in = _t;
@@ -142,11 +142,11 @@ void JavaStoreWalker::packageDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
 ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 80 "java.store.g"
+#line 81 "java.store.g"
 	ParsedClass* klass ;
 #line 148 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST typeDefinition_AST_in = _t;
-#line 80 "java.store.g"
+#line 81 "java.store.g"
 	QStringList bases; klass=0;
 #line 152 "JavaStoreWalker.cpp"
 	
@@ -165,7 +165,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp4_AST_in = _t;
 			match(_t,IDENT);
 			_t = _t->getNextSibling();
-#line 82 "java.store.g"
+#line 83 "java.store.g"
 			
 									klass = new ParsedClass; 
 									klass->setName( tmp4_AST_in->getText().c_str() );
@@ -175,7 +175,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 #line 176 "JavaStoreWalker.cpp"
 			bases=extendsClause(_t);
 			_t = _retTree;
-#line 89 "java.store.g"
+#line 90 "java.store.g"
 			
 									QStringList::Iterator it = bases.begin();
 									while( it != bases.end() ){
@@ -205,7 +205,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp6_AST_in = _t;
 			match(_t,IDENT);
 			_t = _t->getNextSibling();
-#line 101 "java.store.g"
+#line 102 "java.store.g"
 			
 									klass = new ParsedClass; 
 									klass->setName( tmp6_AST_in->getText().c_str() );
@@ -215,7 +215,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 #line 216 "JavaStoreWalker.cpp"
 			bases=extendsClause(_t);
 			_t = _retTree;
-#line 108 "java.store.g"
+#line 109 "java.store.g"
 			
 									QStringList::Iterator it = bases.begin();
 									while( it != bases.end() ){
@@ -248,7 +248,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 }
 
  QString  JavaStoreWalker::identifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 271 "java.store.g"
+#line 278 "java.store.g"
 	 QString id ;
 #line 254 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST identifier_AST_in = _t;
@@ -262,7 +262,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp7_AST_in = _t;
 			match(_t,IDENT);
 			_t = _t->getNextSibling();
-#line 272 "java.store.g"
+#line 279 "java.store.g"
 			id = tmp7_AST_in->getText().c_str();
 #line 268 "JavaStoreWalker.cpp"
 			break;
@@ -280,7 +280,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			_t = _t->getNextSibling();
 			_t = __t74;
 			_t = _t->getNextSibling();
-#line 273 "java.store.g"
+#line 280 "java.store.g"
 			id += QString(".") + tmp9_AST_in->getText().c_str();
 #line 286 "JavaStoreWalker.cpp"
 			break;
@@ -301,7 +301,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 }
 
  QString  JavaStoreWalker::identifierStar(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 276 "java.store.g"
+#line 283 "java.store.g"
 	 QString id ;
 #line 307 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST identifierStar_AST_in = _t;
@@ -315,7 +315,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp10_AST_in = _t;
 			match(_t,IDENT);
 			_t = _t->getNextSibling();
-#line 277 "java.store.g"
+#line 284 "java.store.g"
 			id = tmp10_AST_in->getText().c_str();
 #line 321 "JavaStoreWalker.cpp"
 			break;
@@ -337,7 +337,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 				ANTLR_USE_NAMESPACE(antlr)RefAST tmp12_AST_in = _t;
 				match(_t,STAR);
 				_t = _t->getNextSibling();
-#line 278 "java.store.g"
+#line 285 "java.store.g"
 				id += QString(".") + tmp12_AST_in->getText().c_str();
 #line 343 "JavaStoreWalker.cpp"
 				break;
@@ -347,7 +347,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 				ANTLR_USE_NAMESPACE(antlr)RefAST tmp13_AST_in = _t;
 				match(_t,IDENT);
 				_t = _t->getNextSibling();
-#line 279 "java.store.g"
+#line 286 "java.store.g"
 				id += QString(".") + tmp13_AST_in->getText().c_str();
 #line 353 "JavaStoreWalker.cpp"
 				break;
@@ -378,7 +378,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 }
 
  QStringList  JavaStoreWalker::modifiers(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 146 "java.store.g"
+#line 147 "java.store.g"
 	 QStringList l ;
 #line 384 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST modifiers_AST_in = _t;
@@ -397,7 +397,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 				m = (_t == ASTNULL) ? ANTLR_USE_NAMESPACE(antlr)nullAST : _t;
 				modifier(_t);
 				_t = _retTree;
-#line 147 "java.store.g"
+#line 148 "java.store.g"
 				l << m->getText().c_str();
 #line 403 "JavaStoreWalker.cpp"
 			}
@@ -421,11 +421,11 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 }
 
  QStringList  JavaStoreWalker::extendsClause(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 165 "java.store.g"
+#line 166 "java.store.g"
 	 QStringList l ;
 #line 427 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST extendsClause_AST_in = _t;
-#line 165 "java.store.g"
+#line 166 "java.store.g"
 	QString id;
 #line 431 "JavaStoreWalker.cpp"
 	
@@ -441,7 +441,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			if ((_t->getType()==IDENT||_t->getType()==DOT)) {
 				id=identifier(_t);
 				_t = _retTree;
-#line 166 "java.store.g"
+#line 167 "java.store.g"
 				l << id;
 #line 447 "JavaStoreWalker.cpp"
 			}
@@ -465,11 +465,11 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 }
 
  QStringList  JavaStoreWalker::implementsClause(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 169 "java.store.g"
+#line 170 "java.store.g"
 	 QStringList l ;
 #line 471 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST implementsClause_AST_in = _t;
-#line 169 "java.store.g"
+#line 170 "java.store.g"
 	QString id;
 #line 475 "JavaStoreWalker.cpp"
 	
@@ -485,7 +485,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(ANTLR_USE_NAMESPACE(antlr)RefAST _
 			if ((_t->getType()==IDENT||_t->getType()==DOT)) {
 				id=identifier(_t);
 				_t = _retTree;
-#line 170 "java.store.g"
+#line 171 "java.store.g"
 				l << id;
 #line 491 "JavaStoreWalker.cpp"
 			}
@@ -512,7 +512,7 @@ void JavaStoreWalker::objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 	 ParsedClass* klass 
 ) {
 	ANTLR_USE_NAMESPACE(antlr)RefAST objBlock_AST_in = _t;
-#line 182 "java.store.g"
+#line 183 "java.store.g"
 	ParsedClass* kl; ParsedMethod* meth; ParsedAttribute* attr;
 #line 518 "JavaStoreWalker.cpp"
 	
@@ -530,7 +530,7 @@ void JavaStoreWalker::objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				meth=ctorDef(_t);
 				_t = _retTree;
-#line 184 "java.store.g"
+#line 185 "java.store.g"
 				klass->addMethod( meth );
 #line 536 "JavaStoreWalker.cpp"
 				break;
@@ -539,7 +539,7 @@ void JavaStoreWalker::objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				meth=methodDef(_t);
 				_t = _retTree;
-#line 185 "java.store.g"
+#line 186 "java.store.g"
 				klass->addMethod( meth );
 #line 545 "JavaStoreWalker.cpp"
 				break;
@@ -548,7 +548,7 @@ void JavaStoreWalker::objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				attr=variableDef(_t);
 				_t = _retTree;
-#line 186 "java.store.g"
+#line 187 "java.store.g"
 				klass->addAttribute( attr );
 #line 554 "JavaStoreWalker.cpp"
 				break;
@@ -558,7 +558,7 @@ void JavaStoreWalker::objBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				kl=typeDefinition(_t);
 				_t = _retTree;
-#line 187 "java.store.g"
+#line 188 "java.store.g"
 				klass->addClass( kl );
 #line 564 "JavaStoreWalker.cpp"
 				break;
@@ -610,7 +610,7 @@ void JavaStoreWalker::interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 	 ParsedClass* klass 
 ) {
 	ANTLR_USE_NAMESPACE(antlr)RefAST interfaceBlock_AST_in = _t;
-#line 174 "java.store.g"
+#line 175 "java.store.g"
 	ParsedMethod* meth; ParsedAttribute* attr;
 #line 616 "JavaStoreWalker.cpp"
 	
@@ -628,7 +628,7 @@ void JavaStoreWalker::interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				meth=methodDecl(_t);
 				_t = _retTree;
-#line 176 "java.store.g"
+#line 177 "java.store.g"
 				klass->addMethod( meth );
 #line 634 "JavaStoreWalker.cpp"
 				break;
@@ -637,7 +637,7 @@ void JavaStoreWalker::interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			{
 				attr=variableDef(_t);
 				_t = _retTree;
-#line 177 "java.store.g"
+#line 178 "java.store.g"
 				klass->addAttribute( attr );
 #line 643 "JavaStoreWalker.cpp"
 				break;
@@ -661,7 +661,10 @@ void JavaStoreWalker::interfaceBlock(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 	_retTree = _t;
 }
 
-void JavaStoreWalker::typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+ QString  JavaStoreWalker::typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+#line 121 "java.store.g"
+	 QString tp ;
+#line 668 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST typeSpec_AST_in = _t;
 	
 	try {      // for error handling
@@ -669,7 +672,7 @@ void JavaStoreWalker::typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		ANTLR_USE_NAMESPACE(antlr)RefAST tmp21_AST_in = _t;
 		match(_t,TYPE);
 		_t = _t->getFirstChild();
-		typeSpecArray(_t);
+		tp=typeSpecArray(_t);
 		_t = _retTree;
 		_t = __t15;
 		_t = _t->getNextSibling();
@@ -680,9 +683,13 @@ void JavaStoreWalker::typeSpec(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
+	return tp ;
 }
 
-void JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+ QString  JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+#line 125 "java.store.g"
+	 QString tp ;
+#line 693 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST typeSpecArray_AST_in = _t;
 	
 	try {      // for error handling
@@ -695,10 +702,13 @@ void JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp22_AST_in = _t;
 			match(_t,ARRAY_DECLARATOR);
 			_t = _t->getFirstChild();
-			typeSpecArray(_t);
+			tp=typeSpecArray(_t);
 			_t = _retTree;
 			_t = __t17;
 			_t = _t->getNextSibling();
+#line 126 "java.store.g"
+			tp += "[]";
+#line 712 "JavaStoreWalker.cpp"
 			break;
 		}
 		case LITERAL_void:
@@ -713,7 +723,7 @@ void JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		case IDENT:
 		case DOT:
 		{
-			type(_t);
+			tp=type(_t);
 			_t = _retTree;
 			break;
 		}
@@ -729,12 +739,13 @@ void JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
+	return tp ;
 }
 
  QString  JavaStoreWalker::type(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 129 "java.store.g"
+#line 130 "java.store.g"
 	 QString tp ;
-#line 738 "JavaStoreWalker.cpp"
+#line 749 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST type_AST_in = _t;
 	ANTLR_USE_NAMESPACE(antlr)RefAST b = ANTLR_USE_NAMESPACE(antlr)nullAST;
 	
@@ -762,9 +773,9 @@ void JavaStoreWalker::typeSpecArray(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			b = (_t == ASTNULL) ? ANTLR_USE_NAMESPACE(antlr)nullAST : _t;
 			builtInType(_t);
 			_t = _retTree;
-#line 131 "java.store.g"
+#line 132 "java.store.g"
 			tp = b->getText().c_str();
-#line 768 "JavaStoreWalker.cpp"
+#line 779 "JavaStoreWalker.cpp"
 			break;
 		}
 		default:
@@ -972,17 +983,13 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::methodDecl(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 206 "java.store.g"
+#line 207 "java.store.g"
 	 ParsedMethod* meth ;
-#line 978 "JavaStoreWalker.cpp"
+#line 989 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST methodDecl_AST_in = _t;
-#line 206 "java.store.g"
-	
-								meth = new ParsedMethod;
-								meth->setDeclaredInFile( getFilename().c_str() );
-								meth->setDefinedInFile( getFilename().c_str() );
-								
-#line 986 "JavaStoreWalker.cpp"
+#line 207 "java.store.g"
+	QString tp; meth = new ParsedMethod;
+#line 993 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST __t46 = _t;
@@ -991,12 +998,19 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _t->getFirstChild();
 		modifiers(_t);
 		_t = _retTree;
-		typeSpec(_t);
+		tp=typeSpec(_t);
 		_t = _retTree;
 		methodHead(_t,meth);
 		_t = _retTree;
 		_t = __t46;
 		_t = _t->getNextSibling();
+#line 209 "java.store.g"
+									
+									meth->setDeclaredInFile( getFilename().c_str() );
+									meth->setDefinedInFile( getFilename().c_str() );
+									meth->setType( tp );
+									
+#line 1014 "JavaStoreWalker.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
@@ -1008,17 +1022,13 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
  ParsedAttribute*  JavaStoreWalker::variableDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 222 "java.store.g"
+#line 225 "java.store.g"
 	 ParsedAttribute* attr ;
-#line 1014 "JavaStoreWalker.cpp"
+#line 1028 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST variableDef_AST_in = _t;
-#line 222 "java.store.g"
-	
-								attr = new ParsedAttribute;
-								attr->setDeclaredInFile( getFilename().c_str() );
-								attr->setDefinedInFile( getFilename().c_str() );
-								
-#line 1022 "JavaStoreWalker.cpp"
+#line 225 "java.store.g"
+	QString tp; attr = new ParsedAttribute;
+#line 1032 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST __t51 = _t;
@@ -1027,7 +1037,7 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _t->getFirstChild();
 		modifiers(_t);
 		_t = _retTree;
-		typeSpec(_t);
+		tp=typeSpec(_t);
 		_t = _retTree;
 		variableDeclarator(_t,attr);
 		_t = _retTree;
@@ -1035,6 +1045,13 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _retTree;
 		_t = __t51;
 		_t = _t->getNextSibling();
+#line 227 "java.store.g"
+		
+									attr->setDeclaredInFile( getFilename().c_str() );
+									attr->setDefinedInFile( getFilename().c_str() );
+									attr->setType( tp );
+									
+#line 1055 "JavaStoreWalker.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
@@ -1046,18 +1063,18 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::ctorDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 194 "java.store.g"
+#line 195 "java.store.g"
 	 ParsedMethod* meth ;
-#line 1052 "JavaStoreWalker.cpp"
+#line 1069 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST ctorDef_AST_in = _t;
-#line 194 "java.store.g"
+#line 195 "java.store.g"
 	
 								meth = new ParsedMethod;
 								meth->setIsConstructor( TRUE );
 								meth->setDeclaredInFile( getFilename().c_str() );
 								meth->setDefinedInFile( getFilename().c_str() );
 								
-#line 1061 "JavaStoreWalker.cpp"
+#line 1078 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST __t44 = _t;
@@ -1083,17 +1100,13 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::methodDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
-#line 214 "java.store.g"
+#line 216 "java.store.g"
 	 ParsedMethod* meth ;
-#line 1089 "JavaStoreWalker.cpp"
+#line 1106 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST methodDef_AST_in = _t;
-#line 214 "java.store.g"
-	
-								meth = new ParsedMethod; 
-								meth->setDeclaredInFile( getFilename().c_str() );	
-								meth->setDefinedInFile( getFilename().c_str() );
-								
-#line 1097 "JavaStoreWalker.cpp"
+#line 216 "java.store.g"
+	QString tp; meth = new ParsedMethod;
+#line 1110 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST __t48 = _t;
@@ -1102,7 +1115,7 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _t->getFirstChild();
 		modifiers(_t);
 		_t = _retTree;
-		typeSpec(_t);
+		tp=typeSpec(_t);
 		_t = _retTree;
 		methodHead(_t,meth);
 		_t = _retTree;
@@ -1128,6 +1141,13 @@ void JavaStoreWalker::modifier(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		}
 		_t = __t48;
 		_t = _t->getNextSibling();
+#line 218 "java.store.g"
+		
+									meth->setDeclaredInFile( getFilename().c_str() );	
+									meth->setDefinedInFile( getFilename().c_str() );
+									meth->setType( tp );
+									
+#line 1151 "JavaStoreWalker.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
@@ -1176,6 +1196,9 @@ void JavaStoreWalker::methodHead(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 	 ParsedMethod* meth 
 ) {
 	ANTLR_USE_NAMESPACE(antlr)RefAST methodHead_AST_in = _t;
+#line 267 "java.store.g"
+	ParsedArgument* p;
+#line 1202 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST tmp49_AST_in = _t;
@@ -1190,8 +1213,11 @@ void JavaStoreWalker::methodHead(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			if (_t == ANTLR_USE_NAMESPACE(antlr)nullAST )
 				_t = ASTNULL;
 			if ((_t->getType()==PARAMETER_DEF)) {
-				parameterDef(_t);
+				p=parameterDef(_t);
 				_t = _retTree;
+#line 268 "java.store.g"
+				meth->addArgument( p );
+#line 1221 "JavaStoreWalker.cpp"
 			}
 			else {
 				goto _loop67;
@@ -1223,11 +1249,11 @@ void JavaStoreWalker::methodHead(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 		}
 		}
 		}
-#line 262 "java.store.g"
+#line 269 "java.store.g"
 		
 				meth->setName( tmp49_AST_in->getText().c_str() );
 			
-#line 1231 "JavaStoreWalker.cpp"
+#line 1257 "JavaStoreWalker.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
@@ -1251,11 +1277,11 @@ void JavaStoreWalker::variableDeclarator(ANTLR_USE_NAMESPACE(antlr)RefAST _t,
 			ANTLR_USE_NAMESPACE(antlr)RefAST tmp51_AST_in = _t;
 			match(_t,IDENT);
 			_t = _t->getNextSibling();
-#line 240 "java.store.g"
+#line 247 "java.store.g"
 			
 										attr->setName( tmp51_AST_in->getText().c_str() );
 										
-#line 1259 "JavaStoreWalker.cpp"
+#line 1285 "JavaStoreWalker.cpp"
 			break;
 		}
 		case LBRACK:
@@ -1318,8 +1344,14 @@ void JavaStoreWalker::varInitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 	_retTree = _t;
 }
 
-void JavaStoreWalker::parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+ ParsedArgument*  JavaStoreWalker::parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
+#line 234 "java.store.g"
+	 ParsedArgument* arg ;
+#line 1351 "JavaStoreWalker.cpp"
 	ANTLR_USE_NAMESPACE(antlr)RefAST parameterDef_AST_in = _t;
+#line 234 "java.store.g"
+	QString tp; arg = new ParsedArgument;
+#line 1355 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
 		ANTLR_USE_NAMESPACE(antlr)RefAST __t53 = _t;
@@ -1328,13 +1360,19 @@ void JavaStoreWalker::parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 		_t = _t->getFirstChild();
 		modifiers(_t);
 		_t = _retTree;
-		typeSpec(_t);
+		tp=typeSpec(_t);
 		_t = _retTree;
 		ANTLR_USE_NAMESPACE(antlr)RefAST tmp55_AST_in = _t;
 		match(_t,IDENT);
 		_t = _t->getNextSibling();
 		_t = __t53;
 		_t = _t->getNextSibling();
+#line 236 "java.store.g"
+									
+									arg->setName( tmp55_AST_in->getText().c_str() );
+									arg->setType( tp );
+									
+#line 1376 "JavaStoreWalker.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
@@ -1342,6 +1380,7 @@ void JavaStoreWalker::parameterDef(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
+	return arg ;
 }
 
 void JavaStoreWalker::objectinitializer(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {

@@ -11,6 +11,7 @@ header "post_include_hpp" {
 	#include "parsedmethod.h"
 	#include "parsedclass.h"
 	#include "parsedattribute.h"
+	#include "parsedargument.h"
 
 	#include <kdebug.h>
 }
@@ -117,13 +118,13 @@ typeDefinition returns [ParsedClass* klass ] { QStringList bases; klass=0; }
 		interfaceBlock[klass] )
 	;
 
-typeSpec
-	:	#(TYPE typeSpecArray)
+typeSpec returns [ QString tp ]
+	:	#(TYPE tp=typeSpecArray)
 	;
 
-typeSpecArray
-	:	#( ARRAY_DECLARATOR typeSpecArray )
-	|	type
+typeSpecArray returns [ QString tp ]
+	:	#( ARRAY_DECLARATOR tp=typeSpecArray ) { tp += "[]"; }
+	|	tp=type
 	;
 
 type returns [ QString tp ]
@@ -203,33 +204,39 @@ ctorDef returns [ ParsedMethod* meth ]
 		)
 	;
 
-methodDecl returns [ ParsedMethod* meth ] 		{ 
-							meth = new ParsedMethod;
+methodDecl returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
+	:	#(METHOD_DEF modifiers tp=typeSpec methodHead[meth])
+							{ 							
 							meth->setDeclaredInFile( getFilename().c_str() );
 							meth->setDefinedInFile( getFilename().c_str() );
+							meth->setType( tp );
 							}
-	:	#(METHOD_DEF modifiers typeSpec methodHead[meth])
 	;
 
-methodDef returns [ ParsedMethod* meth ] 		{ 
-							meth = new ParsedMethod; 
+methodDef returns [ ParsedMethod* meth ]  { QString tp; meth = new ParsedMethod; }
+	:	#(METHOD_DEF modifiers tp=typeSpec methodHead[meth] (slist)?)
+							{
 							meth->setDeclaredInFile( getFilename().c_str() );	
 							meth->setDefinedInFile( getFilename().c_str() );
+							meth->setType( tp );
 							}
-	:	#(METHOD_DEF modifiers typeSpec methodHead[meth] (slist)?)
 	;
 
-variableDef returns [ ParsedAttribute* attr ]
+variableDef returns [ ParsedAttribute* attr ] { QString tp; attr = new ParsedAttribute; }
+	:	#(VARIABLE_DEF modifiers tp=typeSpec variableDeclarator[attr] varInitializer)
 							{
-							attr = new ParsedAttribute;
 							attr->setDeclaredInFile( getFilename().c_str() );
 							attr->setDefinedInFile( getFilename().c_str() );
+							attr->setType( tp );
 							}
-	:	#(VARIABLE_DEF modifiers typeSpec variableDeclarator[attr] varInitializer)
 	;
 
-parameterDef
-	:	#(PARAMETER_DEF modifiers typeSpec IDENT )
+parameterDef returns [ ParsedArgument* arg ] { QString tp; arg = new ParsedArgument; }
+	:	#(PARAMETER_DEF modifiers tp=typeSpec IDENT )
+							{							
+							arg->setName( #IDENT->getText().c_str() );
+							arg->setType( tp );
+							}
 	;
 
 objectinitializer
@@ -257,8 +264,8 @@ arrayInitializer
 	:	#(ARRAY_INIT (initializer)*)
 	;
 
-methodHead [ ParsedMethod* meth ]
-	:	IDENT #( PARAMETERS (parameterDef)* ) (throwsClause)?
+methodHead [ ParsedMethod* meth ] { ParsedArgument* p; }
+	:	IDENT #( PARAMETERS (p=parameterDef { meth->addArgument( p ); } )* ) (throwsClause)?
 	{
 		meth->setName( #IDENT->getText().c_str() );
 	}
