@@ -127,9 +127,9 @@ void AStylePart::activePartChanged(KParts::Part *newPart)
 }
 
 
-#ifdef NEW_EDITOR
 void AStylePart::documentActivated(KEditor::Document *doc)
 {
+#ifdef NEW_EDITOR
   bool enabled = false;
   
   if (doc)
@@ -148,8 +148,8 @@ void AStylePart::documentActivated(KEditor::Document *doc)
   }
 
   _action->setEnabled(enabled);
-}
 #endif
+}
 
 
 #include "astyle_part.moc"
