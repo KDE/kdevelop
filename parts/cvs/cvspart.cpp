@@ -50,6 +50,7 @@ default_remove("-f"),default_diff("-u3 -p"),default_log("") {
 }
 
 CvsPart::~CvsPart() {
+    if (m_widget) topLevel()->removeView(m_widget); // Inform toplevel, that the output view is gone
     delete m_widget;
 }
 
