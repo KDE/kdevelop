@@ -2546,7 +2546,11 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
                                       .arg(fitem->name) +
                                   "</qt>",
                                   i18n("Remove File"),
+#if KDE_IS_VERSION(3,3,0)
                                   KStdGuiItem::remove(),
+#else
+                                  i18n("&Remove"),
+#endif
                                   KStdGuiItem::no(),
                                   "removeFileFromQMakeProject") == KMessageBox::No)
     {
