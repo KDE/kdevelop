@@ -1083,9 +1083,7 @@ void CKDevelop::setDebugMenuProcess(bool enable)
 
   // When starting we turn off the original toolbar start button and startup
   // the debuggers floating toolbar.
-  // Then enable the stop button so they can exit the debugger.
-  toolBar()->setItemEnabled(ID_BUILD_DEBUG, !enable);
-//  toolBar()->setItemEnabled(ID_BUILD_STOP, enable);
+  toolBar()->setItemEnabled(ID_BUILD_DEBUG, !enable && project);
 
   if (enable)
   {
