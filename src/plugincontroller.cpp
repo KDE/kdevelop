@@ -97,7 +97,7 @@ void PluginController::loadGlobalPlugins()
     if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
       KDevPart *part = loadPlugin(*it, "KDevPart", Core::getInstance());
       if (!part)
-        return;
+        continue;
 
       integratePart(part);
     } else {
