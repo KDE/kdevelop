@@ -2238,7 +2238,7 @@ void PropertySizePolicyItem::setValue( const QVariant &v )
     if ( value() == v )
 	return;
 
-    QString s = i18n( "%1/%2/%2/%2" );
+    QString s = i18n( "%1/%2/%3/%4" );
     s = s.arg( size_type_to_string( v.toSizePolicy().horData() ) ).
 	arg( size_type_to_string( v.toSizePolicy().verData() ) ).
 	arg( v.toSizePolicy().horStretch() ).
