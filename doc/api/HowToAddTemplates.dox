@@ -48,8 +48,8 @@ wizard will replace:
 \subsubsection detail_source The Soure Code khello/app.cpp, khello/app.h and khello/main.cpp
 
 This files contain the source code that should not be too special so that the
-user can implement his own imagination.
-There may be variables included (see "Step 2: The Files in Detail").
+user can implement his own ideas.\n
+(There may be variables included - see "Step 2: The Files in Detail").
 
 \subsubsection detail_khello The File khello/khello
 
@@ -63,8 +63,9 @@ The application wizard looks into this file to get
     - and the file templates the project uses (<code>FileTemplates=</code>).
     .
 
-\attention The file <code>khello/khello</code> must have the same name as the directory!
-If the directory is <code>my_template</code> the file must be <code>my_template/my_template</code>.
+\attention The file <code>khello/khello</code> must have the same name as the
+directory! If the directory is <code>my_template</code> the file must be
+<code>my_template/my_template</code>.
 
 \subsubsection detail_addon Some Additional Files
 
@@ -77,15 +78,50 @@ The file
 \subsubsection detail_subdirs The File khello/subdirs
 
 \include khello/subdirs
-This file contains the list of subdirectories and can be found in the project root direcotry.\n
-It is necessary for the autotools.
+This file contains the list of subdirectories and can be found in the project
+root direcotry. It is necessary for the autotools.
 
 \subsubsection detail_src_Makefile The File khello/src-Makefile.am
 
+This file will be copied to the $PROJECTDIR/src/.
 \include khello/src-Makefile.am
 
 \subsubsection detail_script The File khello/script
 
+The following script is used to install the template and replaces all
+variables by the corresponding value. The result is a hopefully working
+kdevelop project!
 \include khello/script
+\note There are several application templates which use some identical
+files - that's why some files are taken from the "template-common"-directory.
 
- */
+\subsection detail_step3 Step 3: Registration/Installation of the Application Template
+
+The easies way to install your template is to provide an "install" script.\n
+Example:
+\code
+#!/bin/sh
+
+if  [ `id -u` = 0 ]; then
+  # we are root so install the template into the global kde directory
+  kde_dir=`kde-config --prefix`
+else
+  # we are a user so install it into $HOME/.kde/share/apps/kdevappwizard directory
+  kde_dir=`kde-config --localprefix`
+fi
+
+# use usual path or another one?
+echo "Install dir [${kde_dir}/share/apps/kdevappwizard]:"
+read newdir
+
+if [ "$newdir"a = a ]; then newdir="${kde_dir}/share/apps/kdevappwizard/"; fi
+
+# install now
+cp -R --target-directory "$newdir" your_template_direcotry
+# the file khello/khello must go to the templates directory.
+mv "$newdir/template-your_template" "$newdir/templates/"
+echo "done"
+\endcode
+\todo test the script in Step 3 :)
+
+*/
