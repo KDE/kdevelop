@@ -209,8 +209,10 @@ class CMakeFile
       end
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
-      file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
-      prevLines.each{ |line| file.printf("#%s", line)}
+      if !prevLines.empty? do
+         file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
+         prevLines.each{ |line| file.printf("#%s", line)}
+      end
    end
 end
 
