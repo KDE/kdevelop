@@ -275,34 +275,18 @@ QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
     operator<<(s, (const ParsedItem&)arg);
 
     s << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
-/*    
-    cerr << "ParsedAttribute <<" << endl;
-    cerr << "---> type     : " << arg.type( ) << endl;
-    cerr << "     isInHFile: " << arg.isInHFile( ) << endl;
-    cerr << "     isStatic : " << arg.isStatic( ) << endl;
-    cerr << "     isConst  : " << arg.isConst( ) << endl;
-    cerr << "     namePos  : " << arg.namePos( ) << endl;
-*/    
+
     return s;
 }
 
 
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg)
 {
-    cerr << "operator >> ParsedAttribute start" << endl;
-
     operator>>(s, (ParsedItem&)arg);
 
     QString type; int isInHFile, isStatic, isConst, posName;
     
     s  >> type >> isInHFile >> isStatic >> isConst >> posName;
-
-    cerr << "  last loaded" << endl;
-    cerr << "  `-> type      : '" << type << "'" << endl;
-    cerr << "  `-> isInHFile : '" << isInHFile << "'" << endl;
-    cerr << "  `-> isStatic  : '" << isStatic << "'" << endl;
-    cerr << "  `-> isConst   : '" << isConst << "'" << endl;
-    cerr << "  `-> posName   : '" << posName << "'" << endl;
 
     arg.setType(type);
     arg.setIsInHFile(isInHFile);
@@ -310,20 +294,5 @@ QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg)
     arg.setIsConst(isConst);
     arg.setNamePos(posName);
 
-    cerr << "operator >> ParsedAttribute end" << endl;
-    return s;
-}
-
-QTextStream& operator << ( QTextStream& s, const ParsedAttribute& arg )
-{
-    operator << ( s, ( const ParsedItem& ) arg );
-    
-    s << "  ParsedAttribute"  << endl;
-    s << "  `-> type     : '" << arg.type( )      << "'" << endl;
-    s << "  `-> isInHFile: '" << arg.isInHFile( ) << "'" << endl;
-    s << "  `-> isStatic : '" << arg.isStatic( )  << "'" << endl;
-    s << "  `-> isConst  : '" << arg.isConst( )   << "'" << endl;
-    s << "  `-> namePos  : '" << arg.namePos( )   << "'" << endl;
-    
     return s;
 }

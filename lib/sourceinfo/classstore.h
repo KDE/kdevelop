@@ -18,12 +18,9 @@
 #ifndef _CLASSTORE_H_
 #define _CLASSTORE_H_
 
-#define VERSION_FILE_FORMAT "0.1"
-
 class QFile;
 
 #include "parsedscopecontainer.h"
-//#include "persistantclassstore.h"
 #include "classtreenode.h"
 
 class ClassStoreIface;
@@ -198,7 +195,7 @@ public:
 
 /* here begins the persistant class store stuff */
 
-public: // Public attributes
+private: // Public attributes
 
   /** Path where the persistant store file will be put. */
   QString m_strPath;
@@ -211,6 +208,9 @@ public: // Public attributes
 
   /** With which mode was the file opened */
   int m_nMode;
+
+  /** Version of the persistant class store file */
+  QString m_strFormatVersion;
 
 public: // Public methods
 
@@ -270,11 +270,8 @@ protected: // Protected methods
 private: // Private attributes
 
 	QFile* m_pFile;
-	QFile* m_pTextFile;
 	
 	QDataStream* m_pStream;
-	QTextStream* m_pTextStream;
-
 };
 
 #endif

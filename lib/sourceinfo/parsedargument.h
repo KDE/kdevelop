@@ -77,6 +77,4 @@ private:
 QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg);
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg);
 
-QTextStream &operator<<(QTextStream &s, const ParsedArgument &arg);
-
 #endif

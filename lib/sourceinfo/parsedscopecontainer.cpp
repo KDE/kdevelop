@@ -276,17 +276,3 @@ QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg)
     return s;
 }
 
-QTextStream& operator << ( QTextStream& s, const ParsedScopeContainer& arg )
-{
-    operator << ( s, ( const ParsedClassContainer& ) arg );
-
-    // Add scopes
-    s << "  ParsedScopeContainer" << endl;
-    s << "  `-> scopes count '" << arg.scopes.count( ) << "'" << endl;
-    
-    QDictIterator<ParsedScopeContainer> scopeIt( arg.scopes );
-    for( ; scopeIt.current( ); ++scopeIt )
-        s << *scopeIt.current( );
-    
-    return s;    
-}

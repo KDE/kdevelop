@@ -280,6 +280,4 @@ public:
 QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
 QDataStream &operator>>(QDataStream &s, ParsedItem &arg);
 
-QTextStream &operator<<(QTextStream &s, const ParsedItem &arg);
-
 #endif 

@@ -55,11 +55,11 @@ ClassStore::ClassStore()
 
 	dcopIface = new ClassStoreIface(this);
 
-	m_pFile = 0;
-	m_bIsOpen = false;
-	
-	m_pTextFile = 0;
+	m_strFormatVersion = "0.1";
 
+	m_pFile = 0;
+	m_pStream = 0;
+	m_bIsOpen = false;
 }
 
 
@@ -777,18 +777,6 @@ bool ClassStore::open ( const QString &aFileName, int nMode )
 	{
 		m_pFile = new QFile ( aFileName );
 
-
-		m_pTextFile = new QFile( aFileName + ".txt" );
-		if( m_pTextFile->open( nMode ) ){
-		    if( nMode == IO_WriteOnly ){
-			m_pTextStream = new QTextStream( m_pTextFile );
-		    }
-		}
-		else {
-		    cerr << "EE: Couldn't open textfile" << endl;
-		    m_pTextFile = 0;
-		}
-		    
 		if ( m_pFile->open ( nMode ) );
 		{
 			m_pStream = new QDataStream ( m_pFile );
@@ -807,36 +795,21 @@ bool ClassStore::open ( const QString &aFileName, int nMode )
 /** Close the file. */
 void ClassStore::close()
 {
-	m_pFile->close();
-	m_pFile = 0;
-	m_bIsOpen = false;
-	
-	if( m_pTextFile ){
-	    m_pTextFile->close( );
-	    m_pTextFile = 0;
+	if ( m_pFile && m_bIsOpen )
+	{
+		m_pFile->close();
+		m_pFile = 0;
+		m_bIsOpen = false;
+		delete m_pStream;
 	}
 }
 
 /** */
 void ClassStore::storeAll()
 {
-	if ( !m_bIsOpen ) return;
+	if ( !m_bIsOpen ) m_pFile->open ( m_nMode );
 
-	m_pFile->close();
-
-	if ( !m_pFile->remove( ) || !m_pTextFile-> remove( ) )
-	{
-		cerr << "Unable the remove class store [text] file!" << endl;
-		return;
-	}
-	else
-	{
-		if ( !m_pFile->open ( m_nMode ) || !m_pTextFile->open( m_nMode ) ) return;
-	}
-
-	QString strFormatVersion = VERSION_FILE_FORMAT;
-
-	( *m_pStream ) << strFormatVersion;
+	( *m_pStream ) << m_strFormatVersion;
 
 	ParsedScopeContainer* pScope;
 	ParsedClass* pClass;
@@ -844,29 +817,10 @@ void ClassStore::storeAll()
 	ParsedAttribute* pAttribute;
 	ParsedStruct* pStruct;
 
-/*	cout << "global container name: " << globalContainer.name() << endl;
-	cout << "global container dol: " << globalContainer.declaredOnLine() << endl;
-	cout << "global container deol: " << globalContainer.declarationEndsOnLine() << endl;
-	cout << "global container dif: " << globalContainer.declaredInFile() << endl;
-	cout << "global container deif: " << globalContainer.definedInFile() << endl;
-*/
 	/* serialize the global scopes, their scopes and their classes, methods, structs, attributes */
 	cerr << "Number of globals to store : " << globalContainer.getSortedScopeList()->count() << endl;
-/*	( *m_pStream ) << globalContainer.getSortedScopeList()->count();
-	for ( globalContainer.scopeIterator.toFirst();
-			globalContainer.scopeIterator.current();
-			++globalContainer.scopeIterator )
-	{
-		pScope = globalContainer.scopeIterator.current();
-
-		storeScope ( pScope );
-	}*/
-
-	cout << "????????????????? STORE ALL OUTPUT ?????????????????" << endl;
 
 	/* serialize global classes */
-	cerr << "Storing classes" << endl;
-	cerr << "Number of classes to store : " << globalContainer.getSortedClassList()->count() << endl;
 	( *m_pStream ) << globalContainer.getSortedClassList()->count();
 	for ( globalContainer.classIterator.toFirst();
 			globalContainer.classIterator.current();
@@ -874,13 +828,9 @@ void ClassStore::storeAll()
 	{
 		pClass = globalContainer.classIterator.current();
 		storeClass ( pClass );
-//		pClass->out();
-//		cout << " ----------------------------------------------" << endl;
 	}
 
 	/* serialize global methods */
-	cerr << "Storing methods" << endl;
-	cerr << "Number of methods to store : " << globalContainer.getSortedMethodList()->count() << endl;	
 	( *m_pStream ) << globalContainer.getSortedMethodList()->count();
 	for ( globalContainer.methodIterator.toFirst();
 			globalContainer.methodIterator.current();
@@ -888,13 +838,9 @@ void ClassStore::storeAll()
 	{
 		pMethod = globalContainer.methodIterator.current();
 		storeMethod ( pMethod );
-//		pMethod->out();
-//		cout << " ----------------------------------------------" << endl;
 	}
 
 	/* serialize global structs */
-	cerr << "Storing structs" << endl;
-	cerr << "Number of structs to store : " << globalContainer.getSortedStructList()->count() << endl;	
 	( *m_pStream ) << globalContainer.getSortedStructList()->count();
 	for ( globalContainer.structIterator.toFirst();
 			globalContainer.structIterator.current();
@@ -902,13 +848,9 @@ void ClassStore::storeAll()
 	{
 		pStruct = globalContainer.structIterator.current();
 		storeStruct ( pStruct );  // this doesn't work yet
-//		pStruct->out();
-//		cout << " ----------------------------------------------" << endl;
 	}
 
 	/* serialize global attributes */
-	cerr << "Storing attributes" << endl;
-	cerr << "Number of attributes to store : " << globalContainer.getSortedAttributeList()->count() << endl;	
 	( *m_pStream ) << globalContainer.getSortedAttributeList()->count();
 	for ( globalContainer.attributeIterator.toFirst();
 			globalContainer.attributeIterator.current();
@@ -916,8 +858,6 @@ void ClassStore::storeAll()
 	{
 		pAttribute = globalContainer.attributeIterator.current();
 		storeAttribute ( pAttribute );
-//		pAttribute->out();
-//		cout << " ----------------------------------------------" << endl;
 	}
 }
 
@@ -928,80 +868,50 @@ void ClassStore::restoreAll()
 
 	( *m_pStream ) >> strFileVersion;
 
-	if ( strFileVersion == VERSION_FILE_FORMAT )
+	if ( strFileVersion == m_strFormatVersion )
 	{
-
-		cout << "!!!!!!!!!!!!!!!!!!!!!!! RESTORE ALL OUTPUT !!!!!!!!!!!!!!!!!" << endl;
-		cout << "clearing classstore" << endl;
 		wipeout( );
-		cout << "cleared classstore" << endl;
-		
+
 		int nCount;
 		( *m_pStream ) >> nCount;
 
-		cout << "Count classes: " << nCount << endl;
-		cerr << "Restoring ParsedClass" << endl;
+		ParsedClass* pc = 0;
 		for ( int i = 0; i < nCount; i++ )
 		{
-			ParsedClass pc;
-			( *m_pStream ) >> pc;
-			cerr << " ### Name of class nr. (" << i << ") : " << pc.name() << endl;
-			cerr << "   # Starting output" << endl;
-			pc.out();
-			cerr << "   # Ending output" << endl;
-//		cout << " ----------------------------------------------" << endl;
-			globalContainer.addClass ( &pc );
+			pc = new ParsedClass();
+			( *m_pStream ) >> ( *pc );
+			globalContainer.addClass ( pc );
+			pc = 0;
 		}
 
 		( *m_pStream ) >> nCount;
-		cout << "Count methods: " << nCount << endl;
-		cerr << "Restoring ParsedMethod" << endl;
+		ParsedMethod* pm = 0;
 		for ( int i = 0; i < nCount; i++ )
 		{
-			ParsedMethod pm;
-			( *m_pStream ) >> pm;
-			cout << " ### Name of method nr. (" << i << ") : " << pm.name() << endl;
-			cerr << "   # Starting output" << endl;			
-			pm.out();
-			cerr << "   # Ending output" << endl;			
-//		cout << " ----------------------------------------------" << endl;
-			globalContainer.addMethod ( &pm );
+			pm = new ParsedMethod();
+			( *m_pStream ) >> ( *pm );
+			globalContainer.addMethod ( pm );
 		}
 
 		( *m_pStream ) >> nCount;
-		cout << "Count structs: " << nCount << endl;
-		cerr << "Restoring ParsedStruct" << endl;
+		ParsedStruct* ps = 0;
 		for ( int i = 0; i < nCount; i++ )
 		{
-			ParsedStruct pc;
-			( *m_pStream ) >> pc;
-			cout << " ### Name of struct nr. (" << i << ") : " << pc.name() << endl;
-			cerr << "   # Starting output" << endl;
-			pc.out();
-			cerr << "   # Ending output" << endl;
-//		cout << " ----------------------------------------------" << endl;
-			globalContainer.addStruct ( &pc );
+			ps = new ParsedStruct();
+			( *m_pStream ) >> ( *ps );
+			globalContainer.addStruct ( ps );
 		}
 
 		( *m_pStream ) >> nCount;
-		cout << "Count attributes: " << nCount << endl;
-		cerr << "Restoring ParsedAttribute" << endl;
+		ParsedAttribute* pa = 0;
 		for ( int i = 0; i < nCount; i++ )
 		{
-			ParsedAttribute pc;
-			( *m_pStream ) >> pc;
-			cout << " ### Name of attribute nr. (" << i << ") : " << pc.name() << endl;
-			cerr << "   # Starting output" << endl;
-			pc.out();
-			cerr << "   # Ending output" << endl;
-//		cout << " ----------------------------------------------" << endl;
-			globalContainer.addAttribute ( &pc );
+			pa = new ParsedAttribute();
+			( *m_pStream ) >> ( *pa );
+			globalContainer.addAttribute ( pa );
 		}
-
-		cerr << "--- complete output from classstore start ---" << endl;
-		//out( );
-		cerr << "--- complete output from classstore end ---" << endl;
 	}
+
 }
 
 /** Has the store been created? */
@@ -1054,7 +964,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 				++pScope->structIterator )
 		{
 			pStruct = pScope->structIterator.current();
-			// storeStruct ( pStruct );  // this doesn't work yet
+			storeStruct ( pStruct );  // this doesn't work yet
 		}
 
 		/* serialize the attributes of current scope */
@@ -1077,23 +987,19 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 void ClassStore::storeClass ( ParsedClass* pClass )
 {
 	if ( m_bIsOpen ) ( *m_pStream ) << ( *pClass );
-	if ( m_bIsOpen ) ( *m_pTextStream ) << ( *pClass );	
 }
 
 void ClassStore::storeMethod ( ParsedMethod* pMethod )
 {
 	if ( m_bIsOpen ) ( *m_pStream ) << ( *pMethod );
-	if ( m_bIsOpen ) ( *m_pTextStream ) << ( *pMethod );	
 }
 
 void ClassStore::storeStruct ( ParsedStruct* pStruct )
 {
 	if ( m_bIsOpen ) ( *m_pStream ) << ( *pStruct );
-	if ( m_bIsOpen ) ( *m_pTextStream ) << ( *pStruct );	
 }
 
 void ClassStore::storeAttribute( ParsedAttribute* pAttribute )
 {
 	if ( m_bIsOpen ) ( *m_pStream ) << ( *pAttribute );
-	if ( m_bIsOpen ) ( *m_pTextStream ) << ( *pAttribute );	
 }

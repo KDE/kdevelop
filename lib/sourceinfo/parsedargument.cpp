@@ -185,33 +185,14 @@ QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
 
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg)
 {
-    cerr << "operator >> ParsedArgument start" << endl;
-
     QString type, name;
     int namePos;
 
     s >> type >> name >> namePos;
     arg.setType( type );
-    
-    if( !name || name == "" ){
-	cerr << "WW: operator >> ParsedArgument name = 0 * correcting" << endl;
-	name = "<<<< ParsedArgument name >>>>";
-    }
-	
-    arg.setName( name );
+
+	arg.setName( name );
     arg.setNamePos( namePos );
 
-    cerr << "argument-name : '" << name << "'" << endl;
-    cerr << "operator >> ParsedArgument end" << endl;
-    return s;
-}
-
-QTextStream& operator << ( QTextStream& s, const ParsedArgument& arg )
-{
-    s << "  ParsedArgument" << endl;
-    s << "  `-> type    : '" << arg.type( )    << "'" << endl;
-    s << "  `-> name    : '" << arg.name( )    << "'" << endl;
-    s << "  `-> namePos : '" << arg.namePos( ) << "'" << endl;
-    
     return s;
 }

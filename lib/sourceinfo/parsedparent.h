@@ -62,6 +62,4 @@ private:
 QDataStream &operator<<(QDataStream &s, const ParsedParent &arg);
 QDataStream &operator>>(QDataStream &s, ParsedParent &arg);
 
-QTextStream &operator<<(QTextStream &s, const ParsedParent &arg);
-
 #endif

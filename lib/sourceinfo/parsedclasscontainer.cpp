@@ -268,18 +268,3 @@ QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg)
 
     return s;
 }
-
-QTextStream& operator << ( QTextStream& s, const ParsedClassContainer& arg )
-{
-    operator << ( s, ( const ParsedContainer& ) arg );
-
-    // Add classes
-    s << "  ParsedClassContainer" << endl;
-    s << "  `-> classes count '" << arg.classes.count( ) << "'" << endl;
-    
-    QDictIterator<ParsedClass> classIt( arg.classes );
-    for( ; classIt.current( ); ++classIt )
-        s << *classIt.current( );
-    
-    return s;
-}
