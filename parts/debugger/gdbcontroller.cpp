@@ -1183,8 +1183,6 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         return;
     }
 
-    DBG_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+
-                "] path:["+config_gdbPath_+"]\n");
     dbgProcess_ = new KProcess;
 
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1200,10 +1198,19 @@ void GDBController::slotStart(const QString& shell, const QString &application)
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
     if (!shell.isEmpty())
-        *dbgProcess_ << "/bin/sh" << "-c"
-        << shell + " " +config_gdbPath_ + "gdb " + application + " -fullname -nx -quiet";
+    {
+        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " +config_gdbPath_
+                      + "gdb " + application + " -fullname -nx -quiet";
+        emit gdbStdout("/bin/sh -c " + shell + " " +config_gdbPath_
+                      + "gdb " + application + " -fullname -nx -quiet");
+    }
     else
-        *dbgProcess_ << config_gdbPath_ + "gdb" << application << "-fullname" << "-nx" << "-quiet";
+    {
+        *dbgProcess_ << config_gdbPath_ + "gdb" << application
+                        << "-fullname" << "-nx" << "-quiet";
+        emit gdbStdout(config_gdbPath_ + " gdb " + application +
+                        " -fullname -nx -quiet");
+    }
 
     dbgProcess_->start( KProcess::NotifyOnExit,
                         KProcess::Communication(KProcess::All));
@@ -1882,10 +1889,63 @@ void GDBController::slotAbortTimedEvent()
 void GDBController::slotUserGDBCmd(const QString& cmd)
 {
     kdDebug(9012) << "Requested user cmd: " << cmd;
-    if (cmd.startsWith("st"))
-        queueCmd(new GDBCommand("step", RUNCMD, NOTINFOCMD, 0));
-    else
-        queueCmd(new GDBCommand(QCString(cmd), NOTRUNCMD, INFOCMD, USERCMD));
+    if (cmd.startsWith("step") || cmd.startsWith("c"))
+    {
+        queueCmd(new GDBCommand(QCString(cmd), RUNCMD, NOTINFOCMD, 0));
+        return;
+    }
+
+    if (cmd.startsWith("info lo"))
+    {
+        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+        return;
+    }
+
+    if (cmd.startsWith("info ar"))
+    {
+        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+        return;
+    }
+
+    if (cmd.startsWith("info th"))
+    {
+        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD), true);
+        return;
+    }
+
+    if (cmd.startsWith("ba") || cmd.startsWith("bt"))
+    {
+        queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
+        return;
+    }
+
+    QRegExp frame("^fr[ame]*\\s+(\\d+)");
+    if ( frame.search(cmd) >= 0 )
+    {
+        slotSelectFrame(frame.cap(1).toInt(), viewedThread_, true);
+        return;
+    }
+
+    QRegExp thread("^th[read]*\\s+(\\d+)");
+    if ( thread.search(cmd) >= 0 )
+    {
+        int threadNo = thread.cap(1).toInt();
+        int frameNo = currentFrame_;
+        if (threadNo != viewedThread_)
+            frameNo = 0;
+
+        slotSelectFrame(frameNo, threadNo, true);
+        return;
+    }
+
+    if (cmd.startsWith("qu"))
+    {
+        slotStop();
+        return;
+    }
+
+    kdDebug(9012) << "Using default: " << cmd;
+    queueCmd(new GDBCommand(QCString(cmd), NOTRUNCMD, INFOCMD, USERCMD));
 }
 
 // **************************************************************************
@@ -1895,7 +1955,8 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
 #if defined(DBG_MONITOR)
 void GDBController::slotStepInSource(const QString &fileName, int lineNum)
 {
-    DBG_DISPLAY((QString("(Show step in source) ")+fileName+QString(":")+QString().setNum(lineNum)).data());
+    DBG_DISPLAY((QString("(Show step in source) ")+fileName+QString(":")+
+                        QString().setNum(lineNum)).data());
 }
 
 // **************************************************************************
