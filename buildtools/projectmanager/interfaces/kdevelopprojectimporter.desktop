@@ -1,0 +1,29 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/ProjectImporter
+X-KDE-Derived=KDevelop/Plugin
+Name=KDevelop Project Importer
+Name[ca]=Importació Project per a KDevelop
+Name[da]=KDevelop Project importør
+Name[de]=Project-Importierer (KDevelop)
+Name[es]=Importación Project de KDevelop
+Name[et]=KDevelopi Project importija
+Name[fr]=Importateur Project de KDevelop
+Name[hi]=के-डेवलप पीसीएस आयातक
+Name[hu]=KDevelop Project-importáló
+Name[nb]=KDevelop Project-importverktøy
+Name[nl]=KDevelop Project importeren
+Name[pl]=KDevelop: import Project
+Name[pt]=Importador de Project do KDevelop
+Name[pt_BR]=Importador Project para o KDevelop
+Name[ru]=Загрузчик в хранилище классов
+Name[sr]=KDevelop-ов Project увозник
+Name[sr@Latn]=KDevelop-ov Project uvoznik
+Name[sv]=KDevelop Project-import
+Name[ta]=KDevelop  project ஏற்றுமதியாளர்
+Name[xx]=xxKDevelop Project Importerxx
+Name[zh_CN]=KDevelop Project导入器
+
+[PropertyDef::X-KDevelop-ProjectImporter]
+Type=QString

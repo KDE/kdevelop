@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=KDevProjectManager
+Comment[pt]=%{APPNAME$}
+Comment[xx]=xxKDevProjectManagerxx
+Name=KDevProjectManager
+Name[sv]=KDevelop KDevProjectManager
+Name[ta]=கெடெவ்KDevProjectManager
+Name[xx]=xxKDevProjectManagerxx
+GenericName=KDevProjectManager
+GenericName[xx]=xxKDevProjectManagerxx
+Icon=kdevelop
+ServiceTypes=KDevelop/Project
+X-KDE-Library=libkdevprojectmanager
+X-KDevelop-Version=2
+
