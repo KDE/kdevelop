@@ -1,3 +1,8 @@
+2003-02-09 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+  * trollprojectpart: The dialog for subclassing widgets based on ui-files now works
+    iteratively, so you can update your subclasses according to the changes made in
+    the ui-files.
+
 2003-02-09 F@lk Brettschneider <falk@kdevelop.org>
 	* bugfix: classview now alphabetically sorted again
 	* KDevPlugin interface extended with 'KDevMakeFrontend* makeFrontend()' which made it
@@ -125,8 +130,8 @@
 2003-01-07  Julian Rockey <linux@jrockey.com>
 	* Added PyQT template (QT application framework for Python) to appwizard
 
-2003-01-06  Victor Röder  <victor_roeder@gmx.de>
-	* Applied patch of Richard Lärkäng for top source directory support (only in Autoprojectpart yet!)
+2003-01-06  Victor Rder  <victor_roeder@gmx.de>
+	* Applied patch of Richard Lï¿½kï¿½g for top source directory support (only in Autoprojectpart yet!)
 	* Applied patch of Hamish Rodda for a more stable PartController::editDocument(...)
 	* Minor changes to Autoprojectpart
 
@@ -189,7 +194,7 @@
 	* new class TopLevelShare, moved doubled stuff to it from the 2 main widget classes
 	* implemented tool-/status-/view-bar on/off actions in 'Settings' menu
 
-2002-12-18  Victor Röder  <victor_roeder@gmx.de>
+2002-12-18  Victor Rder  <victor_roeder@gmx.de>
 	* Added "Choose Target Dialog"
 	* Added SLOTS for removing/adding many files
 	  to KDevProject
@@ -265,7 +270,7 @@
     * ported KDevSession (.kdevses) over from KDevelop-2, now called ProjectSession.
       Not finished but already does what removed ProjectWorkspace did. More to come...
 
-2002-11-28  Victor Röder  <victor_roeder@gmx.de>
+2002-11-28  Victor Rder  <victor_roeder@gmx.de>
     * Added "Remove target" to Automake Manager
     * Minor fixes
 
@@ -297,7 +302,7 @@
     * Added tooltips for IDEAl buttons
     * appwizard now handles special characters better
 
-2002-11-09  August Hörandl  <august.hoerandl@gmx.at>
+2002-11-09  August Hrandl  <august.hoerandl@gmx.at>
     * cppsupport: addclassattributedlg, cppaddmethoddlg und cclonefunctiondlg use
       the classstore (project and pre-parsed libraries) for completion of type names
 
@@ -344,7 +349,7 @@
 	  options in doctreeview config widget; ship html and pic files
 	  for htdig
 
-2002-10-29 Victor Röder <victor_roeder@gmx.de>
+2002-10-29 Victor Rder <victor_roeder@gmx.de>
 	* applied Sebastian Kratzert's search improvements
 	  for the docViewPart
 
@@ -359,7 +364,7 @@
 	* Display a nice error message if gideon cannot
 	  find its plugins.
 
-2002-10-14 Victor Röder <victor_roeder@gmx.de>
+2002-10-14 Victor Rder <victor_roeder@gmx.de>
 	* beautified some dialogs
 	  - cppsupport/cppaddmethoddlgbase.ui
 	  - tools/addtooldlg.ui (again)
@@ -463,7 +468,7 @@
   * trollproject:
         * File exclusion on qmake-scope-level now working
 
-2002-08-18 Victor Röder <victor_roeder@gmx.de>
+2002-08-18 Victor Rder <victor_roeder@gmx.de>
 	* Applied Yann Hodique's cvspart patch
 
 2002-08-09  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
@@ -473,7 +478,7 @@
 2002-08-13 Harald Fernengel <harry@kdevelop.org>
 	* Applied goto next / prev window patch by Yann Hodique
 
-2002-08-11 Victor Röder <victor_roeder@gmx.de>
+2002-08-11 Victor Rder <victor_roeder@gmx.de>
 	* Applied Sebastian Kratzert's search-extension-diff<2>
 
 2002-08-09  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
@@ -484,7 +489,7 @@
 2002-08-06 Harald Fernengel <harry@kdevelop.org>
 	* AppWizard fix, KDevelop plugin template ported to new architecture
 
-2002-08-05 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-08-05 Matthias Hlzer-Klpfel <mhk@kde.org>
 	* Removed kdevelop source, to prepare for an alpha release
 
 2002-08-04 Christian Couder <christian@kdevelop.org>
@@ -510,7 +515,7 @@
 	* Added a part to show diffs either in the widget from Kompare (->KDESDK)
           or in a QTextEdit if Kompare is not installed.
 
-2002-07-27 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-07-27 Matthias Hlzer-Klpfel <mhk@kde.org>
 	* Added a part for ant based projects.
 
 2002-07-24 Roberto Raggi <raggi@cli.di.unipi.it>
@@ -524,7 +529,7 @@
 	* parsing of project directory works again without having persistance :)
 	* fixed some annoying bugs in ccconfigwidget
 
-2002-07-17 Victor Röder <victor_roeder@gmx.de>
+2002-07-17 Victor Rder <victor_roeder@gmx.de>
 	* added a simple search mechanism to the Documentation Browser
 		-> but not really efficient :-(
 		-> TODO: Toy with a few ideas...
@@ -535,12 +540,12 @@
       * The projectmanager now supports qmake scopes
         ( very large step towards completion of the trollprojectpart )
 
-2002-07-15 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-07-15 Matthias Hlzer-Klpfel <mhk@kde.org>
 
 	* Exchanged old javasupport part with the beginnings of a new one,
 	* written entirely in C++.
 
-2002-07-07 Victor Röder <victor_roeder@gmx.de>
+2002-07-07 Victor Rder <victor_roeder@gmx.de>
 	* repaired layouting of some Automake dialogs
 	* adapted the the look of all Automake dialogs
 	* add blue bullet to the make output view
@@ -553,10 +558,10 @@
   * Simple qmake projects can now fully be created and maintained from kdevelop
     Currently working on handling more complicated .pro files with scopes.
 
-2002-06-30 Victor Röder <victor_roeder@gmx.de>
+2002-06-30 Victor Rder <victor_roeder@gmx.de>
 	* continued the import existing dialog
 		-> ONLY adding existing files works at the moment!
-	* add Björn Sahlström's drag 'n drop support to the FileSelector
+	* add Bjrn Sahlstrm's drag 'n drop support to the FileSelector
 		-> see kfilednd*view.* for details
 	* added new bullets to the make outputview
 	* everything needs a little bit code clean-up, so don't worry :-)
@@ -585,13 +590,13 @@
       * .pro file parser rewritten ( trollprojectwidget::parse() )
         * reads forms (.ui files)
 
-2002-06-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-06-28 Matthias Hlzer-Klpfel <mhk@kde.org>
 	* save and restore the dock mode in IDEAl
 
 2002-06-27  F@lk Brettschneider  <falk@kdevelop.org>
 	* avoid library version clash between qextmdi of Gideon and KDevelop-2.1
 
-2002-06-23 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-06-23 Matthias Hlzer-Klpfel <mhk@kde.org>
 
 	* Made doxygen config widget "human readable"
 	* Preset doxygen configuration so it works out of the box
@@ -645,7 +650,7 @@
           (not finished)
         * Add TODO items suggested by Falk
         
-2002-06-12  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-06-12  Matthias Hlzer-Klpfel <mhk@kde.org>
 
 	* Improved buttons in IDEAl mode: added keyboard navigation 
 	  and styleability.
@@ -680,7 +685,7 @@
         * can use kate icon-border menu to enable/disable
         * properly move execution point
 
-2002-06-09  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-06-09  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* partcontroller now compares inodes instead of URLs
 	  when the files are local
 
@@ -744,7 +749,7 @@
 	* qeditor: Implemented markinterface
 	* qeditor: Implemented searchinterface	
 
-2002-05-20  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-05-20  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* Welcome in the 2000's: the Tools menu config
 	  now uses ksycoca...
 
@@ -841,7 +846,7 @@
 	* Handle AUTODIRS
 	* Handle foo_ICON
 	* Handle KDE_DOCS
-2002-04-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-28 Matthias Hlzer-Klpfel <mhk@kde.org>
 	
 	* Added a part providing a history, allowing you to go
 	  back and forward 
@@ -864,13 +869,13 @@
 2002-04-26 Harald Fernengel <harry@kdevelop.org>
         * Added first version of SourceNav Part which adds back/forward tool-buttons for code navigation.
         * Allow user to open more than one file in KFileDialog
-2002-04-25 Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-25 Matthias Hlzer-Klpfel <mhk@kde.org>
 	* started support for debugger handling via the new
 	  KTextEditor interfaces
 	* started with new documentation part handling
 	* added a workaround to open all text files with the
 	  same editor plugin
-2002-04-24 Victor Röder <victor_roeder@gmx.de>
+2002-04-24 Victor Rder <victor_roeder@gmx.de>
 	* renamed Project view to Automake Manager
 	* reorganized Automake Manager
 	* added lowerAllViews() to KDevTopLevel
@@ -921,7 +926,7 @@
 	  dialog when file name extension is unknown
 	* ctags result list is now updated when
 	  any of the selected criteria is changed
-2002-04-17  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-17  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* introduced a facade to access the KTextEditor interfaces
 	* removed some code from PartController that is no longer
 	  needed
@@ -929,7 +934,7 @@
 	* Populate Build->Build Target menu in CustomProject
 	  with targets from Makefile, build.xml resp.
 	* Use kdDebug() more consequently
-2002-04-16  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-16  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* added a bit more context to the EditorContext
 2002-04-15  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Share code between project management parts by
@@ -944,7 +949,7 @@
 	* Added the notion of an activeDirectory() in which
 	  new files are stored
 	* cerr -> kdDebug
-2002-04-15  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-15  Matthias Hlzer-Klpfel <mhk@kde.org>
 
 	* moved window menu code from src to a plugin
 	
@@ -954,7 +959,7 @@
 	* Support for multiple file templates in app wizard
 	* More work on new class dialog
 	* Extended DomUtil to lists and pair lists
-2992-94-14  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2992-94-14  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* Added a new part that provides a "Open with" file menu entry
 	* Fixes for saving project settings on shutdown
 	* Properly enable menu entries when loading "last project"
@@ -973,12 +978,12 @@
 	* More keywords in app wizard
 	* Load Java debugger only for JVM programs
 	  (keyword to be set by app wizard)
-2002-04-10  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-10  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* implemented setting the execution point
 	* move execution point handling from core to part controller
 2002-04-10  Simon Hausmann <hausmann@kde.org>
 	* ported the appwizard to KDP/KGF
-2002-04-09  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-09  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* ask user to save modified files before quitting
 2002-04-09 Roberto Raggi <raggi@cli.di.unipi.it>
 	* fixed crash in KDevDocTree
@@ -1005,7 +1010,7 @@
 	* PluginController: don't bail out of loading of a kdevpart failed
 	* load kdevpart as well as kdevplugin components at the project
 	scope
-2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-08  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again
 	* added DCOP interface for kdevpartcontroller
 2002-04-08  Roberto Raggi <raggi@cli.di.unipi.it>
@@ -1031,34 +1036,34 @@
 2002-04-06  Harald Fernengel <harry@kdevelop.org>
         * ported editor-chooser to KTextEditor and re-enabled it
         * PartController now loads user's favourite editor
-2002-04-06  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-06  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* moved all part handling functions from KDevCore to
 	  KDevPartController
 	* enabled context sensitve popup menus in the text editor
 	* various fixes and workarounds for QextMdi modes
-2002-04-05  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-05  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* commited some patches by Bernd for fixing layout issues
 	* commited a patch by Bernd for reenabling the floating 
 	  debug toolbar
 	* reenabled context menu entries comming from parts
 	* added tiny part to select the UI mode
-2002-04-04  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-04  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* reenabled the RMB menu
 	* fixed the widget deletion when parts are closed
 	* mark the active document in the menu
 	* renamed the "Buffer" menu "Window"
 	* removed the MDI window menu
 	
-2002-04-01  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-01  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* added qextmdi to gideon
 	* made UI model configurable
 	* smaller refactorings in lib/interfaces
 	* moved toplevel view handling out of KDevCore to KDevTopLevel
-2002-03-29  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-03-29  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* migrated all parts to KTextEditor
 	* removed all traces of KEditor
 	* reenabled Tip-of-the-day
-2002-03-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-03-26  Matthias Hlzer-Klpfel <mhk@kde.org>
 	* refactored the core source completely
 	* sneaked in a new UI concept
           (which Harald probably will replace with QextMDI soon)
@@ -1096,7 +1101,7 @@
 2001-12-16  Roland Krause  <rokrau@yahoo.com>
         * Reenabled the kwrite-part,
           works now under KDE-3 with the KTextEditor interface.
-2001-12-15  Victor Röder <victor_roeder@gmx.de>
+2001-12-15  Victor Rder <victor_roeder@gmx.de>
         * Added persistence functionality to the class store
                 - "cooperation" of Bernd, Daniel E. and me
                 - the class store is saved and loaded from a binary file
@@ -1107,7 +1112,7 @@
         project loading after generation...
         * added "void openProject(const QString& projectFileName)" to the KDevCore Interface, used by AppWizard
         * fileselect part reacts now on signal KDevCore::projectOpen()
-2001-12-12  August Hörandl <august.hoerandl@gmx.at>
+2001-12-12  August Hrandl <august.hoerandl@gmx.at>
         * Add method dialog rewritten using designer
 2001-12-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * Added a preliminary Trie code to structure lib
@@ -1124,10 +1129,10 @@
           stream operators to all relevant classes,
           including ParsedItem, and using them in the higher
           level ones
-2001-10-14 Victor Röder <victor_roeder@gmx.de>
+2001-10-14 Victor Rder <victor_roeder@gmx.de>
         * new version of Daniel Engelschalt's CppCCParser
         * KDevArgHint adapts now the font size of the editor        
-2001-10-13 Victor Röder <victor_roeder@gmx.de>
+2001-10-13 Victor Rder <victor_roeder@gmx.de>
         * added an additional signal textChanged with
                 + KEditor::Document*
                 + int line
@@ -1148,14 +1153,14 @@
         * Changed ClassStore API to always use QStringLists instead
           of QStrList
         * Compiles with QT_NO_ASCII_CAST and QT_CLEAN_NAMESPACE now
-2001-09-26 Victor Röder <victor_roeder@gmx.de>
+2001-09-26 Victor Rder <victor_roeder@gmx.de>
         * CppCCParser rewritten by Daniel Engelschalt
         * The affected code for CC is saved in a temporary file now
         * fixed some bugs in CppCodeCompletion
         * This is still very very alpha
 2001-08-22 Sandy Meier <smeier@kdevelop.org>
         * all 1500 php global functions are now available for code completion (incl. prototype) 
-2001-08-10 Victor Röder <victor_roeder@gmx.de>
+2001-08-10 Victor Rder <victor_roeder@gmx.de>
         * reimplemented CppCodeCompletion::getEntryListForClass() and 
           getEntryListForClassOfNamespace()
           both work with the two recursive functions getParent...ListForClass()
@@ -1170,12 +1175,12 @@
         * fix some problems in arghintWidget 
         * added textChanged() signal to the editor interface
         * phpsupport display the parsing progress in the statusbar (code from Matthias)
-2001-08-06 Victor Röder <victor_roeder@gmx.de>
+2001-08-06 Victor Rder <victor_roeder@gmx.de>
         * Implemented several methods in CppCodeCompletionParser
                 getNode...();
         * Extended CppCodeCompletion
                 getEntryListFor...();
-2001-08-04 Victor Röder <victor_roeder@gmx.de>, Daniel Haberkorn <dhaberkorn@gmx.de>
+2001-08-04 Victor Rder <victor_roeder@gmx.de>, Daniel Haberkorn <dhaberkorn@gmx.de>
         * Added CppCodeCompletionParser.cpp + .h (contains only interface definition)
 2001-08-02  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	* Exposed the status bar through the kdevcore interface
@@ -1197,9 +1202,9 @@
         * fix: KEditor::Editor don't emit documentActivated when there
         isn't one.
 
-2001-07-29 Victor Röder <victor_roeder@gmx.de>
+2001-07-29 Victor Rder <victor_roeder@gmx.de>
         * KDevArgHint improved, i.e. positioning, ui
-2001-07-26 Victor Röder <victor_roeder@gmx.de>
+2001-07-26 Victor Rder <victor_roeder@gmx.de>
         * KDevArgHint added to KWrite-part (widget that shows the function
           and its needed arguments)
           Try it and type in 'test(' at the beginning of an empty line in a C++ project!
