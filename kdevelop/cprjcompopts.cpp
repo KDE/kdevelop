@@ -36,6 +36,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 CPrjCompOpts::CPrjCompOpts(CProject* prj,KDevSession* session, const QString& curr, QWidget *parent, const char *name ) :
 CPrjCompOptsDlg(parent,name) {   prj_info = prj;
@@ -178,7 +179,7 @@ void CPrjCompOpts::slotXlibPath(){
 configuration for compiling to the combobox. */
 void CPrjCompOpts::slotConfigAdd(){
 	QString conf=conf_cb->currentText();
-	if(!compconfs.findIndex(conf)==-1){
+	if(compconfs.findIndex(conf) > -1){
 		KMessageBox::error( NULL, i18n( "Can't add configuration %1.\n\n"
 								"The list of available configurations already "
 								"contains the one you wanted to add." ).arg(conf),
