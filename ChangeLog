@@ -1,3 +1,6 @@
+2000-02-16    <smeier@kdevelop.de>
+	* KDevelop compiles again, but there still are some problems with KAccel
+
 2K-02-08 Falk Brettschneider <gigafalk@yahoo.com>
         * QextMDI improved (better switch to toplevel mode)
 

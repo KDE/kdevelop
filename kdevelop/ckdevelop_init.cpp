@@ -34,6 +34,8 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
+#include <kstdaction.h>
+#include <kaction.h>
 
 
 #include "./kwrite/kwdoc.h"
@@ -233,7 +235,6 @@ void CKDevelop::initView(){
 void CKDevelop::initKeyAccel(){
   accel = new CKDevAccel( this );
   //file menu
-  accel->connectItem( KStdAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW);
   accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
   accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
   
@@ -429,6 +430,7 @@ void CKDevelop::initMenuBar(){
 // File-menu entries
   file_menu = new QPopupMenu;
   file_menu->insertItem(BarIcon("filenew"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
+
   file_menu->insertItem(BarIcon("open"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
   file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()), 0, ID_FILE_CLOSE_ALL);
@@ -746,7 +748,7 @@ void CKDevelop::initMenuBar(){
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
   
 
-  disableCommand(ID_FILE_NEW);
+  //  disableCommand(ID_FILE_NEW);
   disableCommand(ID_FILE_PRINT);
   
  

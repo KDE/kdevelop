@@ -671,7 +671,8 @@ private:
    *  process,slotProcessExited() */
   bool beep; 
   
-  
+
+
   KIconLoader icon_loader;
 
   /** search with glimpse */
